@@ -1,0 +1,2763 @@
+{
+  "schema_version": "fastqutils_sheet_v2",
+  "analysis_id": "example195",
+  "task_ref": "source_original_submission",
+  "original_task": {
+    "resource_id": "bvbrc_api",
+    "task_id": "synthetic_task195",
+    "required_application_id": "FastqUtils",
+    "native_application_id": "FastqUtils",
+    "submitted_parameters": {
+      "paired_end_libs": [
+        {
+          "read1": "/fixture/input_R1.fastq",
+          "read2": "/fixture/input_R2.fastq",
+          "platform": "illumina"
+        }
+      ],
+      "single_end_libs": [],
+      "srr_libs": [],
+      "recipe": [
+        "TRIM",
+        "PAIRED_FILTER",
+        "FASTQC",
+        "ALIGN",
+        "SCRUB_HUMAN",
+        "SCRUB_HUMAN"
+      ],
+      "reference_genome_id": "synthetic_reference195",
+      "output_path": "/fixture/output",
+      "output_file": "fixture"
+    },
+    "submitted_start_parameters": {},
+    "scheduler_returned_parameters": null,
+    "effective_parameters": null,
+    "submission_receipt_ref": "source_original_submission",
+    "submission_operation_key": "synthetic:submission195",
+    "submission_source_ref": "source_original_native_request195"
+  },
+  "documents": [
+    {
+      "schema_version": "fastqutils_native_v2",
+      "analysis_id": "example195",
+      "document_id": "before_reads",
+      "artifact": {
+        "id": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+        "source_ref": "source_before_reads195",
+        "content_ref": "artifact_before_reads195",
+        "task_ref": "source_original_submission",
+        "sha256": "461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+        "byte_count": 128,
+        "native_name": "fixture_before_reads",
+        "declared_format": "fastq",
+        "actual_format": "fastq",
+        "compression": "none",
+        "transfer_scope": "complete",
+        "producer_name": null,
+        "producer_version": null,
+        "identity": "handcrafted_synthetic",
+        "document_id": "before_reads",
+        "content_binding": {
+          "source_ref": "source_before_reads195",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_before_reads195",
+          "sha256": "461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "byte_count": 128
+        }
+      },
+      "parse_scope": "complete",
+      "cells": [
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_read_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_read_count",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 8,
+          "native_token": "8",
+          "unit": "reads",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F1",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_base_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_base_count",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 32,
+          "native_token": "32",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F2",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_min_length",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_min_length",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 4,
+          "native_token": "4",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F3",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_max_length",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_max_length",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 4,
+          "native_token": "4",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F4",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "A",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 8,
+          "native_token": "8",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F5",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 1,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "C",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 8,
+          "native_token": "8",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F6",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 2,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "G",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 8,
+          "native_token": "8",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F7",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 3,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "T",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 8,
+          "native_token": "8",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F8",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 4,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "N",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 0,
+          "native_token": "0",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F9",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 5,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "other_iupac",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 0,
+          "native_token": "0",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F10",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 6,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "invalid",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 0,
+          "native_token": "0",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F11",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "fastq_length_histogram_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_length_histogram_count",
+          "axis": {
+            "kind": "length_closed",
+            "label": null,
+            "lower": 4,
+            "upper": 4
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 8,
+          "native_token": "8",
+          "unit": "reads",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F12",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "quality_character_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "quality_character_count",
+          "axis": {
+            "kind": "quality_ascii",
+            "label": null,
+            "lower": 73,
+            "upper": 73
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_quality_characters%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 32,
+          "native_token": "32",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        }
+      ],
+      "categories": [],
+      "raw_blocks": [],
+      "sequence_records": [
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F0",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 0,
+          "title": "r0",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F1",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 1,
+          "title": "r1",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 1,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F2",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 2,
+          "title": "r2",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 2,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F3",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 3,
+          "title": "r3",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 3,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F4",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 4,
+          "title": "r4",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 4,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F5",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 5,
+          "title": "r5",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 5,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F6",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 6,
+          "title": "r6",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 6,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F7",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "ordinal": 7,
+          "title": "r7",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 7,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        }
+      ],
+      "alignment_records": [],
+      "diagnostics": [],
+      "sections": [
+        {
+          "key": "fastq_summary",
+          "ordinal": 0,
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "value",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "state": "complete",
+          "cell_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F2",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F3",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F4",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F9",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F10",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F11",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F12"
+          ],
+          "category_refs": [],
+          "label_refs": [],
+          "raw_block_ordinals": []
+        },
+        {
+          "key": "fastq_records",
+          "ordinal": 0,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "value",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "state": "complete",
+          "cell_refs": [],
+          "category_refs": [],
+          "label_refs": [],
+          "raw_block_ordinals": []
+        }
+      ],
+      "labels": [],
+      "populations": [
+        {
+          "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "kind": "fastq_reads",
+          "scope": "complete",
+          "representation": "emitted_bytes",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F1",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F2",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F3",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F4",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F5",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F6",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F7"
+          ],
+          "parent_population_refs": [],
+          "disjoint_from_refs": [],
+          "pair_key_rule": null,
+          "quality_encoding": "unknown",
+          "encoding_evidence_refs": [],
+          "document_ids": [
+            "before_reads"
+          ],
+          "population_key": "fastq_reads",
+          "population_ordinal": 0,
+          "section_key": null,
+          "section_ordinal": null,
+          "encoding_basis": {
+            "basis": "unknown",
+            "encoding": "unknown",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_locator": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "kind": "fastq_bases",
+          "scope": "complete",
+          "representation": "emitted_bytes",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F1",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F2",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F3",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F4",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F5",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F6",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F7"
+          ],
+          "parent_population_refs": [],
+          "disjoint_from_refs": [],
+          "pair_key_rule": null,
+          "quality_encoding": "unknown",
+          "encoding_evidence_refs": [],
+          "document_ids": [
+            "before_reads"
+          ],
+          "population_key": "fastq_bases",
+          "population_ordinal": 0,
+          "section_key": null,
+          "section_ordinal": null,
+          "encoding_basis": {
+            "basis": "unknown",
+            "encoding": "unknown",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_locator": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_quality_characters%2F0",
+          "association_ref": null,
+          "kind": "fastq_bases",
+          "scope": "complete",
+          "representation": "emitted_bytes",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F1",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F2",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F3",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F4",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F5",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F6",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F7"
+          ],
+          "parent_population_refs": [],
+          "disjoint_from_refs": [],
+          "pair_key_rule": null,
+          "quality_encoding": "unknown",
+          "encoding_evidence_refs": [],
+          "document_ids": [
+            "before_reads"
+          ],
+          "population_key": "fastq_quality_characters",
+          "population_ordinal": 0,
+          "section_key": null,
+          "section_ordinal": null,
+          "encoding_basis": {
+            "basis": "unknown",
+            "encoding": "unknown",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_locator": null
+          }
+        }
+      ],
+      "native_lineage": [],
+      "alignment_headers": [],
+      "reference_dictionary": [],
+      "requirements": []
+    },
+    {
+      "schema_version": "fastqutils_native_v2",
+      "analysis_id": "example195",
+      "document_id": "after_reads",
+      "artifact": {
+        "id": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+        "source_ref": "source_after_reads195",
+        "content_ref": "artifact_after_reads195",
+        "task_ref": "source_original_submission",
+        "sha256": "d298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+        "byte_count": 96,
+        "native_name": "fixture_after_reads",
+        "declared_format": "fastq",
+        "actual_format": "fastq",
+        "compression": "none",
+        "transfer_scope": "complete",
+        "producer_name": null,
+        "producer_version": null,
+        "identity": "handcrafted_synthetic",
+        "document_id": "after_reads",
+        "content_binding": {
+          "source_ref": "source_after_reads195",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_after_reads195",
+          "sha256": "d298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "byte_count": 96
+        }
+      },
+      "parse_scope": "complete",
+      "cells": [
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_read_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_read_count",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 6,
+          "native_token": "6",
+          "unit": "reads",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F1",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_base_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_base_count",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 24,
+          "native_token": "24",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F2",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_min_length",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_min_length",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 4,
+          "native_token": "4",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F3",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "fastq_max_length",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_max_length",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 4,
+          "native_token": "4",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F4",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "A",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 6,
+          "native_token": "6",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F5",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 1,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "C",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 6,
+          "native_token": "6",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F6",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 2,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "G",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 6,
+          "native_token": "6",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F7",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 3,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "T",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 6,
+          "native_token": "6",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F8",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 4,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "N",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 0,
+          "native_token": "0",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F9",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 5,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "other_iupac",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 0,
+          "native_token": "0",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F10",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 6,
+            "field": "fastq_symbol_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_symbol_count",
+          "axis": {
+            "kind": "symbol",
+            "label": "invalid",
+            "lower": null,
+            "upper": null
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 0,
+          "native_token": "0",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F11",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "fastq_length_histogram_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "fastq_length_histogram_count",
+          "axis": {
+            "kind": "length_closed",
+            "label": null,
+            "lower": 4,
+            "upper": 4
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 6,
+          "native_token": "6",
+          "unit": "reads",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        },
+        {
+          "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F12",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "quality_character_count",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "metric": "quality_character_count",
+          "axis": {
+            "kind": "quality_ascii",
+            "label": null,
+            "lower": 73,
+            "upper": 73
+          },
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_quality_characters%2F0",
+          "association_ref": null,
+          "state": "available",
+          "value": 24,
+          "native_token": "24",
+          "unit": "bases",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "diagnostic_codes": [],
+          "section_key": "fastq_summary",
+          "section_ordinal": 0
+        }
+      ],
+      "categories": [],
+      "raw_blocks": [],
+      "sequence_records": [
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F0",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "ordinal": 0,
+          "title": "r0",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 0,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F1",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "ordinal": 1,
+          "title": "r1",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 1,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F2",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "ordinal": 2,
+          "title": "r2",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 2,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F3",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "ordinal": 3,
+          "title": "r3",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 3,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F4",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "ordinal": 4,
+          "title": "r4",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 4,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F5",
+          "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "ordinal": 5,
+          "title": "r5",
+          "sequence": "ACGT",
+          "quality_symbols": "IIII",
+          "phred_values": null,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": 5,
+            "field": "record",
+            "byte_start": null,
+            "byte_end": null
+          }
+        }
+      ],
+      "alignment_records": [],
+      "diagnostics": [],
+      "sections": [
+        {
+          "key": "fastq_summary",
+          "ordinal": 0,
+          "locator": {
+            "member": null,
+            "block": "fastq_summary",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "value",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "state": "complete",
+          "cell_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F1",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F2",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F3",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F4",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F8",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F9",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F10",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F11",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F12"
+          ],
+          "category_refs": [],
+          "label_refs": [],
+          "raw_block_ordinals": []
+        },
+        {
+          "key": "fastq_records",
+          "ordinal": 0,
+          "locator": {
+            "member": null,
+            "block": "fastq_records",
+            "block_ordinal": 0,
+            "row_ordinal": null,
+            "field": "value",
+            "byte_start": null,
+            "byte_end": null
+          },
+          "state": "complete",
+          "cell_refs": [],
+          "category_refs": [],
+          "label_refs": [],
+          "raw_block_ordinals": []
+        }
+      ],
+      "labels": [],
+      "populations": [
+        {
+          "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "kind": "fastq_reads",
+          "scope": "complete",
+          "representation": "emitted_bytes",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F1",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F2",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F3",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F4",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F5"
+          ],
+          "parent_population_refs": [],
+          "disjoint_from_refs": [],
+          "pair_key_rule": null,
+          "quality_encoding": "unknown",
+          "encoding_evidence_refs": [],
+          "document_ids": [
+            "after_reads"
+          ],
+          "population_key": "fastq_reads",
+          "population_ordinal": 0,
+          "section_key": null,
+          "section_ordinal": null,
+          "encoding_basis": {
+            "basis": "unknown",
+            "encoding": "unknown",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_locator": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+          "association_ref": null,
+          "kind": "fastq_bases",
+          "scope": "complete",
+          "representation": "emitted_bytes",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F1",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F2",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F3",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F4",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F5"
+          ],
+          "parent_population_refs": [],
+          "disjoint_from_refs": [],
+          "pair_key_rule": null,
+          "quality_encoding": "unknown",
+          "encoding_evidence_refs": [],
+          "document_ids": [
+            "after_reads"
+          ],
+          "population_key": "fastq_bases",
+          "population_ordinal": 0,
+          "section_key": null,
+          "section_ordinal": null,
+          "encoding_basis": {
+            "basis": "unknown",
+            "encoding": "unknown",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_locator": null
+          }
+        },
+        {
+          "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_quality_characters%2F0",
+          "association_ref": null,
+          "kind": "fastq_bases",
+          "scope": "complete",
+          "representation": "emitted_bytes",
+          "member_artifact_refs": [
+            "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c"
+          ],
+          "member_record_refs": [
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F0",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F1",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F2",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F3",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F4",
+            "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F5"
+          ],
+          "parent_population_refs": [],
+          "disjoint_from_refs": [],
+          "pair_key_rule": null,
+          "quality_encoding": "unknown",
+          "encoding_evidence_refs": [],
+          "document_ids": [
+            "after_reads"
+          ],
+          "population_key": "fastq_quality_characters",
+          "population_ordinal": 0,
+          "section_key": null,
+          "section_ordinal": null,
+          "encoding_basis": {
+            "basis": "unknown",
+            "encoding": "unknown",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_locator": null
+          }
+        }
+      ],
+      "native_lineage": [],
+      "alignment_headers": [],
+      "reference_dictionary": [],
+      "requirements": []
+    }
+  ],
+  "document_resolutions": [
+    {
+      "document_id": "before_reads",
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "before_reads"
+      },
+      "state": "available",
+      "matched_contents": [
+        {
+          "source_ref": "source_before_reads195",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_before_reads195",
+          "sha256": "461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+          "byte_count": 128
+        }
+      ],
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    },
+    {
+      "document_id": "after_reads",
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "after_reads"
+      },
+      "state": "available",
+      "matched_contents": [
+        {
+          "source_ref": "source_after_reads195",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_after_reads195",
+          "sha256": "d298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+          "byte_count": 96
+        }
+      ],
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    }
+  ],
+  "libraries": [
+    {
+      "id": "bvbrc_fastqutils_library:example195/%2Ftasks%2Fsource_original_submission%2Finputs%2Fpaired_end_libs%2F0",
+      "task_ref": "source_original_submission",
+      "input_pointer": "/paired_end_libs/0",
+      "sample_ref": null,
+      "condition_ref": null,
+      "replicate_ref": null,
+      "platform": "illumina",
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "submitted_value": {
+        "read1": "/fixture/input_R1.fastq",
+        "read2": "/fixture/input_R2.fastq",
+        "platform": "illumina"
+      },
+      "metadata_ids": []
+    }
+  ],
+  "stages": [
+    {
+      "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F0",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 0,
+      "requested_token": "TRIM",
+      "mode": "TRIM",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/0",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F1",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 1,
+      "requested_token": "PAIRED_FILTER",
+      "mode": "PAIRED_FILTER",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/1",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F2",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 2,
+      "requested_token": "FASTQC",
+      "mode": "FASTQC",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/2",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F3",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 3,
+      "requested_token": "ALIGN",
+      "mode": "ALIGN",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/3",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F4",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 4,
+      "requested_token": "SCRUB_HUMAN",
+      "mode": "SCRUB_HUMAN",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/4",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:example195/%2Ftasks%2Fsource_original_submission%2Frecipe%2F5",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 5,
+      "requested_token": "SCRUB_HUMAN",
+      "mode": "SCRUB_HUMAN",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/5",
+      "requested_reference_genome_id": "synthetic_reference195"
+    }
+  ],
+  "associations": [],
+  "populations": [
+    {
+      "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "kind": "fastq_reads",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F1",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F2",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F3",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F4",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F5",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F6",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F7"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "before_reads"
+      ],
+      "population_key": "fastq_reads",
+      "population_ordinal": 0,
+      "section_key": null,
+      "section_ordinal": null,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "kind": "fastq_bases",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F1",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F2",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F3",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F4",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F5",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F6",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F7"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "before_reads"
+      ],
+      "population_key": "fastq_bases",
+      "population_ordinal": 0,
+      "section_key": null,
+      "section_ordinal": null,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_quality_characters%2F0",
+      "association_ref": null,
+      "kind": "fastq_bases",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F1",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F2",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F3",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F4",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F5",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F6",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fsequences%2F7"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "before_reads"
+      ],
+      "population_key": "fastq_quality_characters",
+      "population_ordinal": 0,
+      "section_key": null,
+      "section_ordinal": null,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "kind": "fastq_reads",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F1",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F2",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F3",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F4",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F5"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "after_reads"
+      ],
+      "population_key": "fastq_reads",
+      "population_ordinal": 0,
+      "section_key": null,
+      "section_ordinal": null,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "kind": "fastq_bases",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F1",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F2",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F3",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F4",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F5"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "after_reads"
+      ],
+      "population_key": "fastq_bases",
+      "population_ordinal": 0,
+      "section_key": null,
+      "section_ordinal": null,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_quality_characters%2F0",
+      "association_ref": null,
+      "kind": "fastq_bases",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F1",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F2",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F3",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F4",
+        "bvbrc_fastqutils_sequence:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fsequences%2F5"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "after_reads"
+      ],
+      "population_key": "fastq_quality_characters",
+      "population_ordinal": 0,
+      "section_key": null,
+      "section_ordinal": null,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    }
+  ],
+  "measurements": [
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F0",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_read_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_read_count",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 8,
+      "native_token": "8",
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F1",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_base_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_base_count",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 32,
+      "native_token": "32",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F2",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_min_length",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_min_length",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 4,
+      "native_token": "4",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F3",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_max_length",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_max_length",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 4,
+      "native_token": "4",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F4",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "A",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 8,
+      "native_token": "8",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F5",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "C",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 8,
+      "native_token": "8",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F6",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "G",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 8,
+      "native_token": "8",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F7",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "T",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 8,
+      "native_token": "8",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F8",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 4,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "N",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F9",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 5,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "other_iupac",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F10",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 6,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "invalid",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F11",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "fastq_length_histogram_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_length_histogram_count",
+      "axis": {
+        "kind": "length_closed",
+        "label": null,
+        "lower": 4,
+        "upper": 4
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 8,
+      "native_token": "8",
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fcells%2F12",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "quality_character_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "quality_character_count",
+      "axis": {
+        "kind": "quality_ascii",
+        "label": null,
+        "lower": 73,
+        "upper": 73
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fbefore_reads%2Fsha256%2F461ec1eaeffe98b7867e4d3b57481626df68ac7005f06108baea7f895d3b8e72%2Fpopulations%2Ffastq_quality_characters%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 32,
+      "native_token": "32",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F0",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_read_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_read_count",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F1",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_base_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_base_count",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 24,
+      "native_token": "24",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F2",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_min_length",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_min_length",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 4,
+      "native_token": "4",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F3",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "fastq_max_length",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_max_length",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 4,
+      "native_token": "4",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F4",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "A",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F5",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "C",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F6",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "G",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F7",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "T",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F8",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 4,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "N",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F9",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 5,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "other_iupac",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F10",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 6,
+        "field": "fastq_symbol_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_symbol_count",
+      "axis": {
+        "kind": "symbol",
+        "label": "invalid",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F11",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "fastq_length_histogram_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "fastq_length_histogram_count",
+      "axis": {
+        "kind": "length_closed",
+        "label": null,
+        "lower": 4,
+        "upper": 4
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fcells%2F12",
+      "artifact_ref": "bvbrc_fastqutils_artifact:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c",
+      "locator": {
+        "member": null,
+        "block": "fastq_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "quality_character_count",
+        "byte_start": null,
+        "byte_end": null
+      },
+      "metric": "quality_character_count",
+      "axis": {
+        "kind": "quality_ascii",
+        "label": null,
+        "lower": 73,
+        "upper": 73
+      },
+      "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fafter_reads%2Fsha256%2Fd298cd396798ecb87c8c9852a80ae92ba6b5fd51f98d3ba2f9654c363dbab37c%2Fpopulations%2Ffastq_quality_characters%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 24,
+      "native_token": "24",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "fastq_summary",
+      "section_ordinal": 0
+    }
+  ],
+  "categories": [],
+  "supplied_metadata": [
+    {
+      "metadata_id": "retention_assumption",
+      "kind": "lineage_declaration",
+      "evidence": {
+        "content": {
+          "source_ref": "source_lineage195",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_lineage195",
+          "sha256": "ed03e0b5eb72bd2ad95f58ae1cc397932ce47947f8b31be189e2021055b4ce1e",
+          "byte_count": 360
+        },
+        "pointer": "/association"
+      },
+      "value": {
+        "version": "fastqutils_lineage_declaration_v1",
+        "before": {
+          "selection": "semantic",
+          "document_id": "before_reads",
+          "population_key": "fastq_reads",
+          "population_ordinal": 0
+        },
+        "after": {
+          "selection": "semantic",
+          "document_id": "after_reads",
+          "population_key": "fastq_reads",
+          "population_ordinal": 0
+        },
+        "relation": "successor_population",
+        "basis": "explicit_assumption"
+      }
+    }
+  ],
+  "native_lineage": [],
+  "requirements": [],
+  "diagnostics": []
+}

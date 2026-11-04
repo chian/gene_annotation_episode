@@ -1,0 +1,220 @@
+--- literature_experimental_prompt.py before114
++++ literature_experimental_prompt.py after114
+@@ -13,6 +13,7 @@
+     is_row as _ratio_source_row, rows_from_reports as _ratio_source_rows)
+ from .literature_controlled_response_prompt import CONTROLLED_RESPONSE_TASK
+ from .literature_gel_prompt import GEL_TASK
++from . import literature_rate_source_render as _native_rate
+ 
+ from collections.abc import Mapping
+ 
+@@ -76,6 +77,7 @@
+     "report_contract_declaration", "contract_information_profile",
+     "requested_controlled_response_component_keys", "literature_controlled_response_return_bindings",
+     "requested_gel_component_keys", "literature_gel_return_bindings", "literature_gel_return_records",
++    "literature_rate_source_display",
+ })
+ 
+ 
+@@ -186,9 +188,13 @@
+         gel_reports.append({"own_gel_components": own["cells"]})
+     hidden_gel = gel_hidden_records(gel_reports, records,
+         bindings=state.get("literature_gel_return_bindings"))
++    native_rows = list(_native_rate.rows_from_reports(state.get("child_reports", ())))
++    own = (state.get("last_local_outcome") or {}).get("result", {})
++    native_rows.extend(_native_rate.own_rows(own, state.get("literature_rate_source_display", {}).get("cells", ())))
++    hidden_native_rate = _native_rate.hidden_records(native_rows)
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate:
+             continue
+         row = records[reference]
+         selected[reference] = _safe(row)
+@@ -331,11 +337,19 @@
+ 
+ 
+ def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+-        controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None):
++        controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None,
++        native_rate_display=None):
+     if not isinstance(value, Mapping):
+         _section(parts, title, _values(value))
+         return
+     content = value.get("result", value)
++    native_rate_display = native_rate_display or {}
++    native_rows = _native_rate.own_rows(content, native_rate_display.get("cells", ()))
++    if native_rows:
++        _section(parts, title, _values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _native_rate.render_received(parts, native_rows, native_rate_display.get("records", {}),
++            section=_section, table=_table)
++        return
+     from .literature_controlled_response_render import render_own_result as controlled_own, is_row as controlled_row
+     if (isinstance(content, Mapping) and isinstance(content.get("cells"), (tuple, list))
+             and all(controlled_row(row) for row in content["cells"])
+@@ -686,12 +700,13 @@
+         ((r.get("component"), definitions.get(r.get("formula_code"), "unknown")) for r in rows)))
+ 
+ 
+-def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None):
++def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None, native_rate_records=None):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     ratio_source = {}
+     controlled = {}
+     gel = {}
++    native_rate = {}
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+     from .literature_gel_render import is_row as gel_row, render_received as gel_received
+     for report in reports:
+@@ -700,7 +715,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(controlled_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_native_rate.is_row(row) for row in value):
++                for row in value:
++                    native_rate.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(controlled_row(row) for row in value):
+                 for row in value:
+                     controlled.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(gel_row(row) for row in value):
+@@ -757,6 +775,9 @@
+             ordinary.append(remainder)
+     if ordinary:
+         _section(parts, "Admitted requested child returns", _values(ordinary))
++    for rows in native_rate.values():
++        _native_rate.render_received(parts, rows, native_rate_records or records or {},
++            section=_section, table=_table)
+     for sheet_ref, rows in grouped.items():
+         first = rows[0]
+         metadata = {key: value for key, value in first.items() if key not in (
+@@ -877,6 +898,9 @@
+     controlled_bindings = state.get("literature_controlled_response_return_bindings")
+     gel_bindings = state.get("literature_gel_return_bindings")
+     gel_records = {**controlled_records, **state.get("literature_gel_return_records", {})}
++    native_rate_display = state.get("literature_rate_source_display", {})
++    native_rate_records = {**controlled_records, **native_rate_display.get("records", {})}
++    native_rate_display = {**native_rate_display, "records": native_rate_records}
+     if selected:
+         _section(parts, "Relevant received experimental facts", _values(selected))
+     outcome = state.get("last_local_outcome")
+@@ -886,15 +910,17 @@
+         received_controlled_sheets = {row['sheet_ref'] for row in controlled_rows(state.get('child_reports', ()))}
+         from .literature_gel_render import rows_from_reports as gel_rows
+         received_gel_sheets = {row['sheet_ref'] for row in gel_rows(state.get('child_reports', ()))}
++        received_native_rate_sheets = {row['sheet_ref'] for row in _native_rate.rows_from_reports(state.get('child_reports', ()))}
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', _values(_pick(outcome, ('status', 'feedback'))))
+         else:
+             _source_result(parts, outcome, "Last selected action outcome", controlled_records=controlled_records,
+                 controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+-                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records)
++                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
++                native_rate_display=native_rate_display)
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", _values(state["feedback"]))
+     if state.get("current_report_update"):
+@@ -905,7 +931,8 @@
+             for row in working.get(field, ()) if isinstance(row, Mapping) and isinstance(row.get("id"), str)}
+         _received_returns(parts, state["child_reports"], records=records,
+             ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
+-            controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records)
++            controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records,
++            native_rate_records=native_rate_records)
+     pending = state.get("pending_work", {})
+     if pending.get("items"):
+         _section(parts, "Pending assigned work", _values([_pick(row, (
+@@ -914,7 +941,8 @@
+     for result in lookup_results:
+         _source_result(parts, result, "Requested information; continue this decision", controlled_records=controlled_records,
+             controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+-                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records)
++                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
++                native_rate_display=native_rate_display)
+     return "\n".join(parts)
+ 
+ 
+--- literature_reference_parent_prompt.py before114
++++ literature_reference_parent_prompt.py after114
+@@ -131,7 +131,7 @@
+     steering_fields = ("action_yields", "controller", "working_state", "last_local_outcome",
+         "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs",
+         "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
+-        "literature_gel_return_bindings", "literature_gel_return_records")
++        "literature_gel_return_bindings", "literature_gel_return_records", "literature_rate_source_display")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions, descriptor), lookup_results) + '\n\n' + _steering(
+--- literature_episodes.py before114
++++ literature_episodes.py after114
+@@ -252,6 +252,7 @@
+                          "literature_rate_native_inputs.py",
+                          "literature_native_rate_operand_information.py",
+                          "literature_rate_calculations.py", "literature_rate_storage.py",
++                         "literature_rate_source_render.py",
+                          "literature_experimental_prompt.py", "literature_prose_reader.py",
+                          "literature_html_quantity_reader.py",
+                          "literature_activity_calculations.py", "literature_quantity_storage.py",
+@@ -558,6 +559,8 @@
+             result["literature_controlled_response_return_bindings"] = self._controlled_response_bindings(context)
+         if self.gel_population:
+             result.update(self._gel_display_context(context))
++        if self.rate_population:
++            result.update(self._native_rate_display_context(context))
+         return result
+ 
+     def decision_context(self, context, current_view):
+@@ -587,6 +590,8 @@
+         if self.gel_population:
+             result["literature_gel_work"] = {"version": "literature_gel_task_v1"}
+             result.update(self._gel_display_context(context))
++        if self.rate_population:
++            result.update(self._native_rate_display_context(context))
+         return result
+ 
+     def catalog(self, context):
+@@ -814,6 +819,39 @@
+                     raise ContractError("gel_semantic_display_record_mismatch")
+                 records[reference] = record
+         return {"literature_gel_return_bindings": bindings, "literature_gel_return_records": records}
++
++    def _native_rate_display_context(self, context):
++        """Exact owned/admitted rate rows and possessed meaning-record metadata."""
++        from .literature_rate_storage import PROVIDER, NATIVE_RECORD_VERSION, COMPONENTS
++        from .literature_rate_source_render import MEANING_FIELDS
++        repository = self.services.literature_rate_repository().source_projection()
++        rows = list(repository.received_cells(context))
++        for reference in context.received_record_refs:
++            record = self.services.read_record(reference)
++            if (record.get("record_type") == "source" and record.get("provider") == PROVIDER
++                    and record.get("version") == NATIVE_RECORD_VERSION):
++                # fact_cells authenticates original ownership or the exact
++                # receiver subset. A known sheet never expands parent custody.
++                rows.extend(repository.fact_cells(context, [reference], components=COMPONENTS))
++        unique = {}
++        for row in rows:
++            key = (row["sheet_ref"], row["component"])
++            if key in unique and unique[key] != row:
++                raise ContractError("literature_rate_source_display_possession_conflict")
++            unique[key] = row
++        records = {}
++        for row in unique.values():
++            for field, namespace in MEANING_FIELDS.items():
++                reference = row[field]
++                if reference is None:
++                    continue
++                if reference not in context.received_record_refs:
++                    raise ContractError("literature_rate_source_display_record_not_received")
++                record = self._require(reference, context.scope, namespace)
++                if record.get("id") != reference or record.get("record_type") != namespace:
++                    raise ContractError("literature_rate_source_display_record_mismatch")
++                records[reference] = record
++        return {"literature_rate_source_display": {"cells": list(unique.values()), "records": records}}
+ 
+     def _rate_fact_sources(self):
+         from .literature_rate_storage import rate_cells_schema, rate_source_cells_schema

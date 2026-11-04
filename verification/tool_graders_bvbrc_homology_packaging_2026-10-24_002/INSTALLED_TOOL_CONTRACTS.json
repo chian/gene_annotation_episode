@@ -1,0 +1,2624 @@
+[
+  {
+    "description": "Identify candidate functions from the complete returned BV-BRC Homology BLAST hit population, preserving alignments, function assignments, taxa and source measurements.",
+    "input_schema": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "properties": {
+                "request": {
+                  "properties": {
+                    "required_application_id": {
+                      "const": "Homology"
+                    }
+                  }
+                },
+                "resource_id": {
+                  "const": "configured-fixture-api"
+                },
+                "service": {
+                  "const": "bvbrc_appservice"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "constraints": {
+              "type": "object"
+            },
+            "endpoint": {
+              "const": "usable_handoff",
+              "type": "string"
+            },
+            "launch_instructions": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "library_id": {
+                      "pattern": "^launch_instructions_[0-9a-f]{64}$",
+                      "type": "string"
+                    },
+                    "sections": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "entry_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "section_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "sha256": {
+                            "pattern": "^[0-9a-f]{64}$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "entry_id",
+                          "section_id",
+                          "sha256"
+                        ],
+                        "type": "object"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "version": {
+                      "const": "launch_instruction_selection_v1",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "library_id",
+                    "sections"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "request": {
+              "$defs": {
+                "AppServiceRequest": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "definition_inputs": {
+                      "items": {
+                        "$ref": "#/$defs/DefinitionInput"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "effect_contract": {
+                      "const": "selected_api_effects_v1"
+                    },
+                    "input_bindings": {
+                      "items": {
+                        "$ref": "#/$defs/InputBinding"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "parameters": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "required_application_id": {
+                      "$ref": "#/$defs/RequiredApplication"
+                    },
+                    "start_parameters": {
+                      "$ref": "#/$defs/StartParameters"
+                    },
+                    "version": {
+                      "const": "bvbrc_appservice_request_v1"
+                    },
+                    "workspace_targets": {
+                      "items": {
+                        "$ref": "#/$defs/WorkspaceTarget"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "effect_contract",
+                    "required_application_id",
+                    "parameters",
+                    "start_parameters",
+                    "definition_inputs",
+                    "input_bindings",
+                    "workspace_targets"
+                  ],
+                  "type": "object"
+                },
+                "ContentBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "artifact_field": {
+                      "enum": [
+                        "artifact_ref",
+                        "text_ref",
+                        "stdout_ref",
+                        "stderr_ref"
+                      ]
+                    },
+                    "artifact_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "pattern": "^[0-9a-f]{64}$",
+                      "type": "string"
+                    },
+                    "source_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_field",
+                    "artifact_ref",
+                    "sha256",
+                    "byte_count"
+                  ],
+                  "type": "object"
+                },
+                "DefinitionInput": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "evidence": {
+                      "$ref": "#/$defs/SourceEvidence"
+                    }
+                  },
+                  "required": [
+                    "binding_id",
+                    "evidence"
+                  ],
+                  "type": "object"
+                },
+                "InputBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "content": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/ContentBinding"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "inline_value": {
+                      "$ref": "#/$defs/Json"
+                    },
+                    "kind": {
+                      "enum": [
+                        "retained_bytes",
+                        "workspace_object",
+                        "inline_parameter",
+                        "supplied_link"
+                      ]
+                    },
+                    "link_evidence": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/SourceEvidence"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "members": {
+                      "items": {
+                        "$ref": "#/$defs/MemberFact"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "parameter_pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    },
+                    "workspace_path": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "binding_id",
+                    "parameter_pointer",
+                    "kind",
+                    "content",
+                    "workspace_path",
+                    "inline_value",
+                    "link_evidence",
+                    "members"
+                  ],
+                  "type": "object"
+                },
+                "Json": {
+                  "anyOf": [
+                    {
+                      "type": [
+                        "null",
+                        "boolean",
+                        "number",
+                        "string"
+                      ]
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    }
+                  ]
+                },
+                "MemberFact": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidence": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/SourceEvidence"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "length": {
+                      "anyOf": [
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "member_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "member_pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    },
+                    "molecule": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "dna",
+                            "rna",
+                            "protein",
+                            "mixed",
+                            "unknown"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sequence_sha256": {
+                      "anyOf": [
+                        {
+                          "pattern": "^[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "member_id",
+                    "member_pointer",
+                    "length",
+                    "molecule",
+                    "sequence_sha256",
+                    "evidence"
+                  ],
+                  "type": "object"
+                },
+                "RequiredApplication": {
+                  "enum": [
+                    "GenomeAssembly2",
+                    "GenomeAnnotation",
+                    "ComprehensiveGenomeAnalysis",
+                    "Homology",
+                    "Variation",
+                    "TnSeq",
+                    "CodonTree",
+                    "GeneTree",
+                    "CoreGenomeMLST",
+                    "WholeGenomeSNPAnalysis",
+                    "TaxonomicClassification",
+                    "MetagenomeBinning",
+                    "MetagenomicReadMapping",
+                    "RNASeq",
+                    "ViralAssembly",
+                    "GenomeAlignment",
+                    "SARS2Assembly",
+                    "MSA",
+                    "MetaCATS",
+                    "GenomeComparison",
+                    "ComparativeSystems",
+                    "FastqUtils",
+                    "InfluenzaHASubtypeConversion",
+                    "SubspeciesClassification"
+                  ]
+                },
+                "SourceEvidence": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "content": {
+                      "$ref": "#/$defs/ContentBinding"
+                    },
+                    "pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content",
+                    "pointer"
+                  ],
+                  "type": "object"
+                },
+                "StartParameters": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "base_url": {
+                      "type": "string"
+                    },
+                    "constraint": {
+                      "type": "string"
+                    },
+                    "container_id": {
+                      "type": "string"
+                    },
+                    "data_container_id": {
+                      "type": "string"
+                    },
+                    "disable_preflight": {
+                      "type": "integer"
+                    },
+                    "parent_id": {
+                      "type": "string"
+                    },
+                    "preflight_data": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "reservation": {
+                      "type": "string"
+                    },
+                    "user_metadata": {
+                      "type": "string"
+                    },
+                    "user_override": {
+                      "type": "string"
+                    },
+                    "workspace": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "WorkspaceTarget": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "allow_create_parents": {
+                      "type": "boolean"
+                    },
+                    "allow_overwrite": {
+                      "type": "boolean"
+                    },
+                    "input_binding_id": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "metadata": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "purpose": {
+                      "enum": [
+                        "input",
+                        "output_parent",
+                        "assigned_support_object"
+                      ]
+                    },
+                    "target_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "type": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "target_id",
+                    "path",
+                    "type",
+                    "purpose",
+                    "input_binding_id",
+                    "metadata",
+                    "allow_overwrite",
+                    "allow_create_parents"
+                  ],
+                  "type": "object"
+                }
+              },
+              "$id": "urn:gene-annotation:bvbrc-appservice:AppServiceRequest",
+              "$ref": "#/$defs/AppServiceRequest",
+              "$schema": "https://json-schema.org/draft/2020-12/schema"
+            },
+            "resource_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "service": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "version": {
+              "const": "api_service_assignment_v1",
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "resource_id",
+            "service",
+            "request",
+            "endpoint",
+            "constraints"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "handoff_ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "selector": {
+              "$defs": {
+                "AdapterSelection": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "adapter_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "adapter_version": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "parameters": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "adapter_id",
+                    "adapter_version",
+                    "parameters"
+                  ],
+                  "type": "object"
+                },
+                "ContentBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "artifact_field": {
+                      "enum": [
+                        "artifact_ref",
+                        "text_ref",
+                        "stdout_ref",
+                        "stderr_ref"
+                      ]
+                    },
+                    "artifact_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "pattern": "^[0-9a-f]{64}$",
+                      "type": "string"
+                    },
+                    "source_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_field",
+                    "artifact_ref",
+                    "sha256",
+                    "byte_count"
+                  ],
+                  "type": "object"
+                },
+                "DeclaredFormat": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "format": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "mode": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "producer_source_ref": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "transformation_evidence": {
+                      "items": {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "version": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "format",
+                    "version",
+                    "mode",
+                    "producer_source_ref",
+                    "transformation_evidence"
+                  ],
+                  "type": "object"
+                },
+                "Json": {
+                  "anyOf": [
+                    {
+                      "type": [
+                        "null",
+                        "boolean",
+                        "number",
+                        "string"
+                      ]
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    }
+                  ]
+                },
+                "ObjectSelection": {
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "input_binding_id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "kind": {
+                          "const": "original_input"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "input_binding_id"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "original_target"
+                        },
+                        "target_id": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "target_id"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "receipt_row"
+                        },
+                        "receipt_ref": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "row_pointer": {
+                          "pattern": "^(|/.*)$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "receipt_ref",
+                        "row_pointer"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "task_info_object"
+                        },
+                        "receipt_ref": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "receipt_ref"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "manifest_member"
+                        },
+                        "manifest_receipt_ref": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "output_index": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "manifest_receipt_ref",
+                        "output_index"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                },
+                "OutputRequirement": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "declared_format": {
+                      "$ref": "#/$defs/DeclaredFormat"
+                    },
+                    "exact_object": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/ObjectSelection"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "producer_rule_evidence": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/SourceEvidence"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "requirement_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "role": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "requirement_id",
+                    "role",
+                    "required",
+                    "declared_format",
+                    "producer_rule_evidence",
+                    "exact_object"
+                  ],
+                  "type": "object"
+                },
+                "ResultSelector": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "adapter": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/AdapterSelection"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "endpoint": {
+                      "enum": [
+                        "requested_artifacts",
+                        "requested_projection"
+                      ]
+                    },
+                    "requested_schema": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "requirements": {
+                      "items": {
+                        "$ref": "#/$defs/OutputRequirement"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "supplied_capabilities": {
+                      "items": {
+                        "$ref": "#/$defs/SuppliedCapabilityBinding"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "supplied_metadata": {
+                      "items": {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "version": {
+                      "const": "bvbrc_appservice_result_selector_v1"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "endpoint",
+                    "requirements",
+                    "adapter",
+                    "requested_schema",
+                    "supplied_metadata",
+                    "supplied_capabilities"
+                  ],
+                  "type": "object"
+                },
+                "SourceEvidence": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "content": {
+                      "$ref": "#/$defs/ContentBinding"
+                    },
+                    "pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content",
+                    "pointer"
+                  ],
+                  "type": "object"
+                },
+                "SuppliedCapabilityBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "object_selection": {
+                      "$ref": "#/$defs/ObjectSelection"
+                    },
+                    "original_handoff_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "task_association": {
+                      "$ref": "#/$defs/TaskAssociation"
+                    },
+                    "url_evidence": {
+                      "$ref": "#/$defs/SourceEvidence"
+                    }
+                  },
+                  "required": [
+                    "binding_id",
+                    "url_evidence",
+                    "original_handoff_ref",
+                    "object_selection",
+                    "task_association"
+                  ],
+                  "type": "object"
+                },
+                "TaskAssociation": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "byte_version_status": {
+                      "enum": [
+                        "unknown",
+                        "current_bytes_observed",
+                        "producer_bytes_bound"
+                      ]
+                    },
+                    "evidence_ref": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "kind": {
+                      "enum": [
+                        "task_result_manifest",
+                        "task_info_object",
+                        "task_info_folder_member",
+                        "unverified_original_path"
+                      ]
+                    },
+                    "output_path": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "output_uuid": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "pointer": {
+                      "anyOf": [
+                        {
+                          "pattern": "^(|/.*)$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "task_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version_evidence": {
+                      "items": {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "evidence_ref",
+                    "pointer",
+                    "task_id",
+                    "output_path",
+                    "output_uuid",
+                    "byte_version_status",
+                    "version_evidence"
+                  ],
+                  "type": "object"
+                }
+              },
+              "$id": "urn:gene-annotation:homology:selector:database_identification",
+              "$ref": "#/$defs/ResultSelector",
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "allOf": [
+                {
+                  "properties": {
+                    "adapter": {
+                      "properties": {
+                        "adapter_id": {
+                          "const": "bvbrc_homology"
+                        },
+                        "adapter_version": {
+                          "const": "1"
+                        },
+                        "parameters": {
+                          "$defs": {
+                            "ContentBinding": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "artifact_field": {
+                                  "enum": [
+                                    "artifact_ref",
+                                    "text_ref",
+                                    "stdout_ref",
+                                    "stderr_ref"
+                                  ]
+                                },
+                                "artifact_ref": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "byte_count": {
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                "sha256": {
+                                  "pattern": "^[0-9a-f]{64}$",
+                                  "type": "string"
+                                },
+                                "source_ref": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "source_ref",
+                                "artifact_field",
+                                "artifact_ref",
+                                "sha256",
+                                "byte_count"
+                              ],
+                              "type": "object"
+                            },
+                            "SourceEvidence": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "content": {
+                                  "$ref": "#/$defs/ContentBinding"
+                                },
+                                "pointer": {
+                                  "pattern": "^(|/.*)$",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "content",
+                                "pointer"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "$id": "urn:gene-annotation:homology:parameters:database_identification",
+                          "additionalProperties": false,
+                          "properties": {
+                            "artifact_source_refs": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "blast_archive": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "blast_json15_raw": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "blast_tabular": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "blast_tabular_header": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "homology_metadata_json": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "homology_processed_json": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "blast_json15_raw",
+                                "homology_processed_json",
+                                "blast_tabular",
+                                "blast_tabular_header",
+                                "homology_metadata_json",
+                                "blast_archive"
+                              ],
+                              "type": "object"
+                            },
+                            "database_model": {
+                              "anyOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "function_priors": {
+                                      "anyOf": [
+                                        {
+                                          "additionalProperties": {
+                                            "minimum": 0,
+                                            "type": "number"
+                                          },
+                                          "type": "object"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "temperature_bits": {
+                                      "exclusiveMinimum": 0,
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "temperature_bits",
+                                    "function_priors"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "primary_representation": {
+                              "enum": [
+                                "raw",
+                                "processed",
+                                "tabular"
+                              ]
+                            },
+                            "scientific_inputs": {
+                              "anyOf": [
+                                {
+                                  "$ref": "#/$defs/SourceEvidence"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "scientific_mode": {
+                              "const": "database_identification"
+                            },
+                            "tabular_fields": {
+                              "anyOf": [
+                                {
+                                  "const": [
+                                    "qseqid",
+                                    "sseqid",
+                                    "pident",
+                                    "length",
+                                    "mismatch",
+                                    "gapopen",
+                                    "qstart",
+                                    "qend",
+                                    "sstart",
+                                    "send",
+                                    "evalue",
+                                    "bitscore",
+                                    "qlen",
+                                    "slen"
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "version": {
+                              "const": "bvbrc_homology_bundle_parameters_v1"
+                            }
+                          },
+                          "required": [
+                            "version",
+                            "scientific_mode",
+                            "primary_representation",
+                            "artifact_source_refs",
+                            "scientific_inputs",
+                            "tabular_fields",
+                            "database_model"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "adapter_id",
+                        "adapter_version",
+                        "parameters"
+                      ],
+                      "type": "object"
+                    }
+                  }
+                }
+              ]
+            },
+            "version": {
+              "const": "execution_results_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "handoff_ref",
+            "selector"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "instructions": "Select the original query and explicit database or supplied reference population. Retain every returned hit, description and HSP, the program and native thresholds, and any hit limit; the returned population is not the complete database. Supply exact query/member mappings and source-backed function, taxon and reference metadata when available. Never infer a function from a hit title or a metadata join from taxon alone. The numerical sheet retains native scores, coordinate correspondence, coverage denominators, duplicate groups, taxonomy and source measurements. Explicit database-population measurements are needed for representation adjustment. Conditional function weights use inspectable parameters; they are not calibrated annotation probabilities. Missing assignments or population data remain missing. Use the existing launch episode and its selected API child for the original Homology assignment; the supplied invocation contract also includes the existing results assignment. The version field distinguishes these two actual commission payloads. Select native blastp, blastn, blastx, tblastn or tblastx and explicit native input/database parameters. api.bvbrc_appservice.prepare validates the original application and inputs without submitting. workspace_metadata, workspace_create and upload provide separately selected preparation or transfer operations when needed. submit performs the selected start_app2 request and retains its original task identity. Monitoring uses the existing monitor episode and separately selected query_tasks, stdout or stderr observations; logs do not declare execution state, and no polling schedule is prescribed. The results episode can select task_info, workspace_metadata, list_outputs, download_capability and download to acquire the original task manifest and actual output bytes. Preserve original task, Workspace path/UUID and manifest associations. An HTML report, basename or JSON suffix does not identify the numerical format. Declare the actual raw BLAST JSON, transformed Homology JSON or tabular representation and required fields; opaque archives remain unparsed. The bound deterministic parser fills the numerical sheet, and a separate calculator supplies requested quantities during the selected acquisition action. Saved sheets permit explicit recalculation without another service call. Request only the needed numerical fields or conditional distributions through the typed Homology return sources. Full bytes, sheets and components remain retained. Missing inputs become explicit acquisition requirements; partial, failed, unknown and measured zero remain distinct. This library information grants no direct scientific execution and does not establish live service authentication, deployment or annotation correctness.",
+    "invocation_route": {
+      "kind": "commission",
+      "routes": [
+        {
+          "entry_role": "launch",
+          "resource_id": "configured-fixture-api",
+          "resource_role": "launch_api"
+        },
+        {
+          "entry_role": "results",
+          "resource_id": "configured-fixture-api",
+          "resource_role": "results"
+        }
+      ]
+    },
+    "name": "bvbrc.homology.database_identification",
+    "resources": "api"
+  },
+  {
+    "description": "Measure aligned residues, substitutions, gaps and coverage between supplied sequences using BV-BRC Homology BLAST with an explicitly evidenced single-sequence reference.",
+    "input_schema": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "properties": {
+                "request": {
+                  "properties": {
+                    "required_application_id": {
+                      "const": "Homology"
+                    }
+                  }
+                },
+                "resource_id": {
+                  "const": "configured-fixture-api"
+                },
+                "service": {
+                  "const": "bvbrc_appservice"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "constraints": {
+              "type": "object"
+            },
+            "endpoint": {
+              "const": "usable_handoff",
+              "type": "string"
+            },
+            "launch_instructions": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "library_id": {
+                      "pattern": "^launch_instructions_[0-9a-f]{64}$",
+                      "type": "string"
+                    },
+                    "sections": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "entry_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "section_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "sha256": {
+                            "pattern": "^[0-9a-f]{64}$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "entry_id",
+                          "section_id",
+                          "sha256"
+                        ],
+                        "type": "object"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "version": {
+                      "const": "launch_instruction_selection_v1",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "library_id",
+                    "sections"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "request": {
+              "$defs": {
+                "AppServiceRequest": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "definition_inputs": {
+                      "items": {
+                        "$ref": "#/$defs/DefinitionInput"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "effect_contract": {
+                      "const": "selected_api_effects_v1"
+                    },
+                    "input_bindings": {
+                      "items": {
+                        "$ref": "#/$defs/InputBinding"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "parameters": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "required_application_id": {
+                      "$ref": "#/$defs/RequiredApplication"
+                    },
+                    "start_parameters": {
+                      "$ref": "#/$defs/StartParameters"
+                    },
+                    "version": {
+                      "const": "bvbrc_appservice_request_v1"
+                    },
+                    "workspace_targets": {
+                      "items": {
+                        "$ref": "#/$defs/WorkspaceTarget"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "effect_contract",
+                    "required_application_id",
+                    "parameters",
+                    "start_parameters",
+                    "definition_inputs",
+                    "input_bindings",
+                    "workspace_targets"
+                  ],
+                  "type": "object"
+                },
+                "ContentBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "artifact_field": {
+                      "enum": [
+                        "artifact_ref",
+                        "text_ref",
+                        "stdout_ref",
+                        "stderr_ref"
+                      ]
+                    },
+                    "artifact_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "pattern": "^[0-9a-f]{64}$",
+                      "type": "string"
+                    },
+                    "source_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_field",
+                    "artifact_ref",
+                    "sha256",
+                    "byte_count"
+                  ],
+                  "type": "object"
+                },
+                "DefinitionInput": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "evidence": {
+                      "$ref": "#/$defs/SourceEvidence"
+                    }
+                  },
+                  "required": [
+                    "binding_id",
+                    "evidence"
+                  ],
+                  "type": "object"
+                },
+                "InputBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "content": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/ContentBinding"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "inline_value": {
+                      "$ref": "#/$defs/Json"
+                    },
+                    "kind": {
+                      "enum": [
+                        "retained_bytes",
+                        "workspace_object",
+                        "inline_parameter",
+                        "supplied_link"
+                      ]
+                    },
+                    "link_evidence": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/SourceEvidence"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "members": {
+                      "items": {
+                        "$ref": "#/$defs/MemberFact"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "parameter_pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    },
+                    "workspace_path": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "binding_id",
+                    "parameter_pointer",
+                    "kind",
+                    "content",
+                    "workspace_path",
+                    "inline_value",
+                    "link_evidence",
+                    "members"
+                  ],
+                  "type": "object"
+                },
+                "Json": {
+                  "anyOf": [
+                    {
+                      "type": [
+                        "null",
+                        "boolean",
+                        "number",
+                        "string"
+                      ]
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    }
+                  ]
+                },
+                "MemberFact": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidence": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/SourceEvidence"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "length": {
+                      "anyOf": [
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "member_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "member_pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    },
+                    "molecule": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "dna",
+                            "rna",
+                            "protein",
+                            "mixed",
+                            "unknown"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sequence_sha256": {
+                      "anyOf": [
+                        {
+                          "pattern": "^[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "member_id",
+                    "member_pointer",
+                    "length",
+                    "molecule",
+                    "sequence_sha256",
+                    "evidence"
+                  ],
+                  "type": "object"
+                },
+                "RequiredApplication": {
+                  "enum": [
+                    "GenomeAssembly2",
+                    "GenomeAnnotation",
+                    "ComprehensiveGenomeAnalysis",
+                    "Homology",
+                    "Variation",
+                    "TnSeq",
+                    "CodonTree",
+                    "GeneTree",
+                    "CoreGenomeMLST",
+                    "WholeGenomeSNPAnalysis",
+                    "TaxonomicClassification",
+                    "MetagenomeBinning",
+                    "MetagenomicReadMapping",
+                    "RNASeq",
+                    "ViralAssembly",
+                    "GenomeAlignment",
+                    "SARS2Assembly",
+                    "MSA",
+                    "MetaCATS",
+                    "GenomeComparison",
+                    "ComparativeSystems",
+                    "FastqUtils",
+                    "InfluenzaHASubtypeConversion",
+                    "SubspeciesClassification"
+                  ]
+                },
+                "SourceEvidence": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "content": {
+                      "$ref": "#/$defs/ContentBinding"
+                    },
+                    "pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content",
+                    "pointer"
+                  ],
+                  "type": "object"
+                },
+                "StartParameters": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "base_url": {
+                      "type": "string"
+                    },
+                    "constraint": {
+                      "type": "string"
+                    },
+                    "container_id": {
+                      "type": "string"
+                    },
+                    "data_container_id": {
+                      "type": "string"
+                    },
+                    "disable_preflight": {
+                      "type": "integer"
+                    },
+                    "parent_id": {
+                      "type": "string"
+                    },
+                    "preflight_data": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "reservation": {
+                      "type": "string"
+                    },
+                    "user_metadata": {
+                      "type": "string"
+                    },
+                    "user_override": {
+                      "type": "string"
+                    },
+                    "workspace": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "type": "object"
+                },
+                "WorkspaceTarget": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "allow_create_parents": {
+                      "type": "boolean"
+                    },
+                    "allow_overwrite": {
+                      "type": "boolean"
+                    },
+                    "input_binding_id": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "metadata": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "purpose": {
+                      "enum": [
+                        "input",
+                        "output_parent",
+                        "assigned_support_object"
+                      ]
+                    },
+                    "target_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "type": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "target_id",
+                    "path",
+                    "type",
+                    "purpose",
+                    "input_binding_id",
+                    "metadata",
+                    "allow_overwrite",
+                    "allow_create_parents"
+                  ],
+                  "type": "object"
+                }
+              },
+              "$id": "urn:gene-annotation:bvbrc-appservice:AppServiceRequest",
+              "$ref": "#/$defs/AppServiceRequest",
+              "$schema": "https://json-schema.org/draft/2020-12/schema"
+            },
+            "resource_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "service": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "version": {
+              "const": "api_service_assignment_v1",
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "resource_id",
+            "service",
+            "request",
+            "endpoint",
+            "constraints"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "handoff_ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "selector": {
+              "$defs": {
+                "AdapterSelection": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "adapter_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "adapter_version": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "parameters": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "adapter_id",
+                    "adapter_version",
+                    "parameters"
+                  ],
+                  "type": "object"
+                },
+                "ContentBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "artifact_field": {
+                      "enum": [
+                        "artifact_ref",
+                        "text_ref",
+                        "stdout_ref",
+                        "stderr_ref"
+                      ]
+                    },
+                    "artifact_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "pattern": "^[0-9a-f]{64}$",
+                      "type": "string"
+                    },
+                    "source_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_field",
+                    "artifact_ref",
+                    "sha256",
+                    "byte_count"
+                  ],
+                  "type": "object"
+                },
+                "DeclaredFormat": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "format": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "mode": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "producer_source_ref": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "transformation_evidence": {
+                      "items": {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "version": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "format",
+                    "version",
+                    "mode",
+                    "producer_source_ref",
+                    "transformation_evidence"
+                  ],
+                  "type": "object"
+                },
+                "Json": {
+                  "anyOf": [
+                    {
+                      "type": [
+                        "null",
+                        "boolean",
+                        "number",
+                        "string"
+                      ]
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    }
+                  ]
+                },
+                "ObjectSelection": {
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "input_binding_id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "kind": {
+                          "const": "original_input"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "input_binding_id"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "original_target"
+                        },
+                        "target_id": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "target_id"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "receipt_row"
+                        },
+                        "receipt_ref": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "row_pointer": {
+                          "pattern": "^(|/.*)$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "receipt_ref",
+                        "row_pointer"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "task_info_object"
+                        },
+                        "receipt_ref": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "receipt_ref"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "manifest_member"
+                        },
+                        "manifest_receipt_ref": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "output_index": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "manifest_receipt_ref",
+                        "output_index"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                },
+                "OutputRequirement": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "declared_format": {
+                      "$ref": "#/$defs/DeclaredFormat"
+                    },
+                    "exact_object": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/ObjectSelection"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "producer_rule_evidence": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/SourceEvidence"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "requirement_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "role": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "requirement_id",
+                    "role",
+                    "required",
+                    "declared_format",
+                    "producer_rule_evidence",
+                    "exact_object"
+                  ],
+                  "type": "object"
+                },
+                "ResultSelector": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "adapter": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/AdapterSelection"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "endpoint": {
+                      "enum": [
+                        "requested_artifacts",
+                        "requested_projection"
+                      ]
+                    },
+                    "requested_schema": {
+                      "additionalProperties": {
+                        "$ref": "#/$defs/Json"
+                      },
+                      "type": "object"
+                    },
+                    "requirements": {
+                      "items": {
+                        "$ref": "#/$defs/OutputRequirement"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "supplied_capabilities": {
+                      "items": {
+                        "$ref": "#/$defs/SuppliedCapabilityBinding"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "supplied_metadata": {
+                      "items": {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "version": {
+                      "const": "bvbrc_appservice_result_selector_v1"
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "endpoint",
+                    "requirements",
+                    "adapter",
+                    "requested_schema",
+                    "supplied_metadata",
+                    "supplied_capabilities"
+                  ],
+                  "type": "object"
+                },
+                "SourceEvidence": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "content": {
+                      "$ref": "#/$defs/ContentBinding"
+                    },
+                    "pointer": {
+                      "pattern": "^(|/.*)$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content",
+                    "pointer"
+                  ],
+                  "type": "object"
+                },
+                "SuppliedCapabilityBinding": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "object_selection": {
+                      "$ref": "#/$defs/ObjectSelection"
+                    },
+                    "original_handoff_ref": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "task_association": {
+                      "$ref": "#/$defs/TaskAssociation"
+                    },
+                    "url_evidence": {
+                      "$ref": "#/$defs/SourceEvidence"
+                    }
+                  },
+                  "required": [
+                    "binding_id",
+                    "url_evidence",
+                    "original_handoff_ref",
+                    "object_selection",
+                    "task_association"
+                  ],
+                  "type": "object"
+                },
+                "TaskAssociation": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "byte_version_status": {
+                      "enum": [
+                        "unknown",
+                        "current_bytes_observed",
+                        "producer_bytes_bound"
+                      ]
+                    },
+                    "evidence_ref": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "kind": {
+                      "enum": [
+                        "task_result_manifest",
+                        "task_info_object",
+                        "task_info_folder_member",
+                        "unverified_original_path"
+                      ]
+                    },
+                    "output_path": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "output_uuid": {
+                      "anyOf": [
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "pointer": {
+                      "anyOf": [
+                        {
+                          "pattern": "^(|/.*)$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "task_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version_evidence": {
+                      "items": {
+                        "$ref": "#/$defs/SourceEvidence"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "evidence_ref",
+                    "pointer",
+                    "task_id",
+                    "output_path",
+                    "output_uuid",
+                    "byte_version_status",
+                    "version_evidence"
+                  ],
+                  "type": "object"
+                }
+              },
+              "$id": "urn:gene-annotation:homology:selector:pairwise_correspondence",
+              "$ref": "#/$defs/ResultSelector",
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "allOf": [
+                {
+                  "properties": {
+                    "adapter": {
+                      "properties": {
+                        "adapter_id": {
+                          "const": "bvbrc_homology"
+                        },
+                        "adapter_version": {
+                          "const": "1"
+                        },
+                        "parameters": {
+                          "$defs": {
+                            "ContentBinding": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "artifact_field": {
+                                  "enum": [
+                                    "artifact_ref",
+                                    "text_ref",
+                                    "stdout_ref",
+                                    "stderr_ref"
+                                  ]
+                                },
+                                "artifact_ref": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "byte_count": {
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                "sha256": {
+                                  "pattern": "^[0-9a-f]{64}$",
+                                  "type": "string"
+                                },
+                                "source_ref": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "source_ref",
+                                "artifact_field",
+                                "artifact_ref",
+                                "sha256",
+                                "byte_count"
+                              ],
+                              "type": "object"
+                            },
+                            "SourceEvidence": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "content": {
+                                  "$ref": "#/$defs/ContentBinding"
+                                },
+                                "pointer": {
+                                  "pattern": "^(|/.*)$",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "content",
+                                "pointer"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "$id": "urn:gene-annotation:homology:parameters:pairwise_correspondence",
+                          "additionalProperties": false,
+                          "properties": {
+                            "artifact_source_refs": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "blast_archive": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "blast_json15_raw": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "blast_tabular": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "blast_tabular_header": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "homology_metadata_json": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "homology_processed_json": {
+                                  "anyOf": [
+                                    {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "blast_json15_raw",
+                                "homology_processed_json",
+                                "blast_tabular",
+                                "blast_tabular_header",
+                                "homology_metadata_json",
+                                "blast_archive"
+                              ],
+                              "type": "object"
+                            },
+                            "database_model": {
+                              "type": "null"
+                            },
+                            "primary_representation": {
+                              "enum": [
+                                "raw",
+                                "processed",
+                                "tabular"
+                              ]
+                            },
+                            "scientific_inputs": {
+                              "anyOf": [
+                                {
+                                  "$ref": "#/$defs/SourceEvidence"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "scientific_mode": {
+                              "const": "pairwise_correspondence"
+                            },
+                            "tabular_fields": {
+                              "anyOf": [
+                                {
+                                  "const": [
+                                    "qseqid",
+                                    "sseqid",
+                                    "pident",
+                                    "length",
+                                    "mismatch",
+                                    "gapopen",
+                                    "qstart",
+                                    "qend",
+                                    "sstart",
+                                    "send",
+                                    "evalue",
+                                    "bitscore",
+                                    "qlen",
+                                    "slen"
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "version": {
+                              "const": "bvbrc_homology_bundle_parameters_v1"
+                            }
+                          },
+                          "required": [
+                            "version",
+                            "scientific_mode",
+                            "primary_representation",
+                            "artifact_source_refs",
+                            "scientific_inputs",
+                            "tabular_fields",
+                            "database_model"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "adapter_id",
+                        "adapter_version",
+                        "parameters"
+                      ],
+                      "type": "object"
+                    }
+                  }
+                }
+              ]
+            },
+            "version": {
+              "const": "execution_results_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "handoff_ref",
+            "selector"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "instructions": "Supply the query and exactly one reference sequence, with source-backed sequence identities, lengths, molecule types and evidence that the submitted reference population contains only that sequence. One returned hit does not establish a pairwise experiment. Pass the original reference input and its retained member/inventory source through the results selector supplied_metadata. The deterministic check compares complete submitted FASTA, sequence digest, length, molecule and actual native hit identifiers. For retained reference files, supply a source-backed {content, text} value containing the original ContentBinding and complete FASTA text; a remote path alone is insufficient. Any explicit member-to-native mapping must retain its exact native ordinals and ID. Retain every HSP and its actual coordinate correspondence, including translated units, strand, overlapping positions, substitutions and gaps. Coverage uses unique paired positions divided by the full corresponding operand length; span coverage has a different meaning. Keep native alignment scores, but do not use database E-value as paired-sequence relevance. No database function-weight model applies to this mode. Use the existing launch episode and its selected API child for the original Homology assignment; the supplied invocation contract also includes the existing results assignment. The version field distinguishes these two actual commission payloads. Select native blastp, blastn, blastx, tblastn or tblastx and explicit native input/database parameters. api.bvbrc_appservice.prepare validates the original application and inputs without submitting. workspace_metadata, workspace_create and upload provide separately selected preparation or transfer operations when needed. submit performs the selected start_app2 request and retains its original task identity. Monitoring uses the existing monitor episode and separately selected query_tasks, stdout or stderr observations; logs do not declare execution state, and no polling schedule is prescribed. The results episode can select task_info, workspace_metadata, list_outputs, download_capability and download to acquire the original task manifest and actual output bytes. Preserve original task, Workspace path/UUID and manifest associations. An HTML report, basename or JSON suffix does not identify the numerical format. Declare the actual raw BLAST JSON, transformed Homology JSON or tabular representation and required fields; opaque archives remain unparsed. The bound deterministic parser fills the numerical sheet, and a separate calculator supplies requested quantities during the selected acquisition action. Saved sheets permit explicit recalculation without another service call. Request only the needed numerical fields or conditional distributions through the typed Homology return sources. Full bytes, sheets and components remain retained. Missing inputs become explicit acquisition requirements; partial, failed, unknown and measured zero remain distinct. This library information grants no direct scientific execution and does not establish live service authentication, deployment or annotation correctness.",
+    "invocation_route": {
+      "kind": "commission",
+      "routes": [
+        {
+          "entry_role": "launch",
+          "resource_id": "configured-fixture-api",
+          "resource_role": "launch_api"
+        },
+        {
+          "entry_role": "results",
+          "resource_id": "configured-fixture-api",
+          "resource_role": "results"
+        }
+      ]
+    },
+    "name": "bvbrc.homology.pairwise_correspondence",
+    "resources": "api"
+  }
+]

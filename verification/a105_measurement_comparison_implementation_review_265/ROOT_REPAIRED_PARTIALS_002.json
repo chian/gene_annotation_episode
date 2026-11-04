@@ -1,0 +1,37 @@
+{
+  "scope": "independent explicit synthetic regression; no paper or selected episode",
+  "implementation_manifest": "verification/a105_measurement_comparison_components_258/REPAIR_FINAL_PIN_015.json",
+  "implementation_manifest_sha256": "3dafbdff123fbe2102975ec07e8951f8f5b5af5f5e9a35673ba05f2c4fcd0396",
+  "unchanged_shared_manifest_sha256": "3134b4cca86aee474c041219ca1188724eae13f3d5178721b37fa92498802075",
+  "pinned_files_checked_before_and_after": 21,
+  "checks": [
+    {
+      "case": "changed_document_and_matrix",
+      "rejected": true,
+      "code": "comparison_covariance_snapshot_digest_mismatch:covariance"
+    },
+    {
+      "case": "available_without_raw_document",
+      "rejected": true,
+      "code": "comparison_covariance_snapshot_missing:covariance"
+    },
+    {
+      "case": "approximate_coefficient_full_field",
+      "native_left": 20,
+      "native_right": 22,
+      "converted_left": null,
+      "implementation_reason": "uncertain_conversion_unimplemented",
+      "source_callbacks_removed_before_compile": true
+    },
+    {
+      "case": "approximate_coefficient_tight",
+      "native_left": 20,
+      "native_right": 22,
+      "converted_left": null,
+      "implementation_reason": "uncertain_conversion_unimplemented",
+      "source_callbacks_removed_before_compile": true
+    }
+  ],
+  "production_modified": false,
+  "goal_modified": false
+}

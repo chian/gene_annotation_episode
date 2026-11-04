@@ -1,0 +1,2184 @@
+{
+  "schema_version": "fastqutils_native_v2",
+  "analysis_id": "samstat_legacy_evidence",
+  "document_id": "report",
+  "parse_scope": "complete",
+  "artifact": {
+    "id": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+    "source_ref": "source:local_synthetic",
+    "content_ref": "content:979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+    "task_ref": "task:local_synthetic",
+    "sha256": "979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+    "byte_count": 5445,
+    "native_name": "missing_quality.sam.samstat.html",
+    "declared_format": "samstat_html",
+    "actual_format": "samstat_html_2_2_3",
+    "compression": "none",
+    "transfer_scope": "complete",
+    "producer_name": "SAMStat",
+    "producer_version": "2.2.3",
+    "identity": "source_executed_synthetic",
+    "document_id": "report",
+    "content_binding": {
+      "source_ref": "source:local_synthetic",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "content:979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "sha256": "979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "byte_count": 5445
+    }
+  },
+  "cells": [
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F0",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "mappingtableval[1]",
+        "byte_start": 1485,
+        "byte_end": 1486
+      },
+      "metric": "samstat_alignment_bin_count",
+      "axis": {
+        "kind": "mapq",
+        "label": "MAPQ gt 30",
+        "lower": 30,
+        "upper": 255
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "alignment_records",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F1",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "mappingtableval[1]",
+        "byte_start": 1487,
+        "byte_end": 1488
+      },
+      "metric": "samstat_alignment_bin_count",
+      "axis": {
+        "kind": "mapq",
+        "label": "MAPQ lt 30",
+        "lower": 10,
+        "upper": 29
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "alignment_records",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F2",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "mappingtableval[1]",
+        "byte_start": 1489,
+        "byte_end": 1490
+      },
+      "metric": "samstat_alignment_bin_count",
+      "axis": {
+        "kind": "mapq",
+        "label": "MAPQ lt 10",
+        "lower": 0,
+        "upper": 9
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "alignment_records",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F3",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "mappingtableval[1]",
+        "byte_start": 1491,
+        "byte_end": 1492
+      },
+      "metric": "samstat_alignment_bin_count",
+      "axis": {
+        "kind": "native_label",
+        "label": "Unmapped",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "alignment_records",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F4",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 4,
+        "field": "mappingtableval[1]",
+        "byte_start": 1493,
+        "byte_end": 1494
+      },
+      "metric": "samstat_alignment_total_count",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "alignment_records",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F5",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "mappingtableval[2]",
+        "byte_start": 1497,
+        "byte_end": 1504
+      },
+      "metric": "samstat_reported_bin_fraction",
+      "axis": {
+        "kind": "mapq",
+        "label": "MAPQ gt 30",
+        "lower": 30,
+        "upper": 255
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1.0,
+      "native_token": "1.00000",
+      "unit": "fraction",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value",
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F6",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "mappingtableval[2]",
+        "byte_start": 1505,
+        "byte_end": 1512
+      },
+      "metric": "samstat_reported_bin_fraction",
+      "axis": {
+        "kind": "mapq",
+        "label": "MAPQ lt 30",
+        "lower": 10,
+        "upper": 29
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0.0,
+      "native_token": "0.00000",
+      "unit": "fraction",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F7",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "mappingtableval[2]",
+        "byte_start": 1513,
+        "byte_end": 1520
+      },
+      "metric": "samstat_reported_bin_fraction",
+      "axis": {
+        "kind": "mapq",
+        "label": "MAPQ lt 10",
+        "lower": 0,
+        "upper": 9
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0.0,
+      "native_token": "0.00000",
+      "unit": "fraction",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F8",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "mappingtableval[2]",
+        "byte_start": 1521,
+        "byte_end": 1528
+      },
+      "metric": "samstat_reported_bin_fraction",
+      "axis": {
+        "kind": "native_label",
+        "label": "Unmapped",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0.0,
+      "native_token": "0.00000",
+      "unit": "fraction",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F9",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": 4,
+        "field": "mappingtableval[2]",
+        "byte_start": 1529,
+        "byte_end": 1536
+      },
+      "metric": "samstat_reported_bin_fraction",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1.0,
+      "native_token": "1.00000",
+      "unit": "fraction",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F10",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "len_R1__MAPQ_gt_30",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "y",
+        "byte_start": 2401,
+        "byte_end": 2409
+      },
+      "metric": "samstat_length_density",
+      "axis": {
+        "kind": "length_closed",
+        "label": "4.000000",
+        "lower": 4.0,
+        "upper": 4.0
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1.0,
+      "native_token": "1.000000",
+      "unit": "inverse_bp",
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged",
+        "native_estimator",
+        "native_fallback_value"
+      ],
+      "section_key": "samstat_length",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F11",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_A",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "y",
+        "byte_start": 3209,
+        "byte_end": 3210
+      },
+      "metric": "samstat_base_A_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "1",
+        "lower": 1,
+        "upper": 1
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F12",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_A",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "y",
+        "byte_start": 3211,
+        "byte_end": 3212
+      },
+      "metric": "samstat_base_A_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "2",
+        "lower": 2,
+        "upper": 2
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F13",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_A",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "y",
+        "byte_start": 3213,
+        "byte_end": 3214
+      },
+      "metric": "samstat_base_A_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "3",
+        "lower": 3,
+        "upper": 3
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F14",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_A",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "y",
+        "byte_start": 3215,
+        "byte_end": 3216
+      },
+      "metric": "samstat_base_A_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "4",
+        "lower": 4,
+        "upper": 4
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F15",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_C",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "y",
+        "byte_start": 3314,
+        "byte_end": 3315
+      },
+      "metric": "samstat_base_C_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "1",
+        "lower": 1,
+        "upper": 1
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F16",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_C",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "y",
+        "byte_start": 3316,
+        "byte_end": 3317
+      },
+      "metric": "samstat_base_C_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "2",
+        "lower": 2,
+        "upper": 2
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F17",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_C",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "y",
+        "byte_start": 3318,
+        "byte_end": 3319
+      },
+      "metric": "samstat_base_C_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "3",
+        "lower": 3,
+        "upper": 3
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F18",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_C",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "y",
+        "byte_start": 3320,
+        "byte_end": 3321
+      },
+      "metric": "samstat_base_C_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "4",
+        "lower": 4,
+        "upper": 4
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F19",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_G",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "y",
+        "byte_start": 3419,
+        "byte_end": 3420
+      },
+      "metric": "samstat_base_G_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "1",
+        "lower": 1,
+        "upper": 1
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F20",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_G",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "y",
+        "byte_start": 3421,
+        "byte_end": 3422
+      },
+      "metric": "samstat_base_G_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "2",
+        "lower": 2,
+        "upper": 2
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F21",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_G",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "y",
+        "byte_start": 3423,
+        "byte_end": 3424
+      },
+      "metric": "samstat_base_G_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "3",
+        "lower": 3,
+        "upper": 3
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F22",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_G",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "y",
+        "byte_start": 3425,
+        "byte_end": 3426
+      },
+      "metric": "samstat_base_G_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "4",
+        "lower": 4,
+        "upper": 4
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F23",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_T",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "y",
+        "byte_start": 3524,
+        "byte_end": 3525
+      },
+      "metric": "samstat_base_T_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "1",
+        "lower": 1,
+        "upper": 1
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F24",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_T",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "y",
+        "byte_start": 3526,
+        "byte_end": 3527
+      },
+      "metric": "samstat_base_T_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "2",
+        "lower": 2,
+        "upper": 2
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F25",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_T",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "y",
+        "byte_start": 3528,
+        "byte_end": 3529
+      },
+      "metric": "samstat_base_T_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "3",
+        "lower": 3,
+        "upper": 3
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F26",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_T",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "y",
+        "byte_start": 3530,
+        "byte_end": 3531
+      },
+      "metric": "samstat_base_T_count",
+      "axis": {
+        "kind": "base_closed_1",
+        "label": "4",
+        "lower": 4,
+        "upper": 4
+      },
+      "population_ref": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [
+        "samstat_mapq255_merged"
+      ],
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    }
+  ],
+  "categories": [],
+  "raw_blocks": [
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_header",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 0,
+        "byte_end": 5445
+      },
+      "kind": "header",
+      "native_name": "SAMStat 2.2.3 HTML",
+      "parse_status": "complete",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "script",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "inert_bytes",
+        "byte_start": 99,
+        "byte_end": 148
+      },
+      "kind": "unsupported_section",
+      "native_name": "inert script and rendering instructions",
+      "parse_status": "unsupported",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "script",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "inert_bytes",
+        "byte_start": 149,
+        "byte_end": 213
+      },
+      "kind": "unsupported_section",
+      "native_name": "inert script and rendering instructions",
+      "parse_status": "unsupported",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_mapping",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1391,
+        "byte_end": 2246
+      },
+      "kind": "table",
+      "native_name": "mappingtableval",
+      "parse_status": "complete",
+      "field_names": [
+        "counts",
+        "fractions"
+      ]
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "script",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "inert_bytes",
+        "byte_start": 1391,
+        "byte_end": 2246
+      },
+      "kind": "unsupported_section",
+      "native_name": "inert script and rendering instructions",
+      "parse_status": "unsupported",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "len_R1__MAPQ_gt_30",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "series",
+        "byte_start": 2352,
+        "byte_end": 2462
+      },
+      "kind": "record",
+      "native_name": "len_R1__MAPQ_gt_30",
+      "parse_status": "complete",
+      "field_names": [
+        "x",
+        "y",
+        "error_y.array",
+        "name"
+      ]
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "script",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "inert_bytes",
+        "byte_start": 2343,
+        "byte_end": 2858
+      },
+      "kind": "unsupported_section",
+      "native_name": "inert script and rendering instructions",
+      "parse_status": "unsupported",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_A",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "series",
+        "byte_start": 3155,
+        "byte_end": 3258
+      },
+      "kind": "record",
+      "native_name": "bc_R1_MAPQ_gt_30_A",
+      "parse_status": "complete",
+      "field_names": [
+        "x",
+        "y",
+        "error_y.array",
+        "name"
+      ]
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_C",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "series",
+        "byte_start": 3260,
+        "byte_end": 3363
+      },
+      "kind": "record",
+      "native_name": "bc_R1_MAPQ_gt_30_C",
+      "parse_status": "complete",
+      "field_names": [
+        "x",
+        "y",
+        "error_y.array",
+        "name"
+      ]
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_G",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "series",
+        "byte_start": 3365,
+        "byte_end": 3468
+      },
+      "kind": "record",
+      "native_name": "bc_R1_MAPQ_gt_30_G",
+      "parse_status": "complete",
+      "field_names": [
+        "x",
+        "y",
+        "error_y.array",
+        "name"
+      ]
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_T",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "series",
+        "byte_start": 3470,
+        "byte_end": 3573
+      },
+      "kind": "record",
+      "native_name": "bc_R1_MAPQ_gt_30_T",
+      "parse_status": "complete",
+      "field_names": [
+        "x",
+        "y",
+        "error_y.array",
+        "name"
+      ]
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "script",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "inert_bytes",
+        "byte_start": 3146,
+        "byte_end": 4015
+      },
+      "kind": "unsupported_section",
+      "native_name": "inert script and rendering instructions",
+      "parse_status": "unsupported",
+      "field_names": []
+    }
+  ],
+  "sequence_records": [],
+  "alignment_records": [],
+  "diagnostics": [
+    {
+      "code": "samstat_input_scope_unproven",
+      "source_refs": [
+        "source:local_synthetic"
+      ],
+      "locator": null,
+      "affected_refs": []
+    }
+  ],
+  "sections": [
+    {
+      "key": "samstat_header",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F0",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F1",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F2",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F3",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F4"
+      ],
+      "raw_block_ordinals": [
+        0
+      ],
+      "locator": {
+        "member": null,
+        "block": "samstat_header",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 0,
+        "byte_end": 5445
+      }
+    },
+    {
+      "key": "unsupported",
+      "ordinal": 0,
+      "state": "unsupported",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [],
+      "raw_block_ordinals": [
+        1
+      ],
+      "locator": {
+        "member": null,
+        "block": "unsupported",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 99,
+        "byte_end": 148
+      }
+    },
+    {
+      "key": "unsupported",
+      "ordinal": 1,
+      "state": "unsupported",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [],
+      "raw_block_ordinals": [
+        2
+      ],
+      "locator": {
+        "member": null,
+        "block": "unsupported",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 149,
+        "byte_end": 213
+      }
+    },
+    {
+      "key": "samstat_summary",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F5"
+      ],
+      "raw_block_ordinals": [],
+      "locator": {
+        "member": null,
+        "block": "samstat_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1279,
+        "byte_end": 1306
+      }
+    },
+    {
+      "key": "samstat_mapping",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F0",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F1",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F2",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F3",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F4",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F5",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F6",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F7",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F8",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F9"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F6",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F7",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F8",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F9",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F10"
+      ],
+      "raw_block_ordinals": [
+        3,
+        4
+      ],
+      "locator": {
+        "member": null,
+        "block": "samstat_mapping",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1391,
+        "byte_end": 2246
+      }
+    },
+    {
+      "key": "samstat_notes",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F11",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F13"
+      ],
+      "raw_block_ordinals": [],
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 2247,
+        "byte_end": 2275
+      }
+    },
+    {
+      "key": "samstat_length",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F10"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F12"
+      ],
+      "raw_block_ordinals": [
+        5,
+        6
+      ],
+      "locator": {
+        "member": null,
+        "block": "samstat_length",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 2343,
+        "byte_end": 2858
+      }
+    },
+    {
+      "key": "samstat_notes",
+      "ordinal": 1,
+      "state": "complete",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F14",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F19"
+      ],
+      "raw_block_ordinals": [],
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 3055,
+        "byte_end": 3080
+      }
+    },
+    {
+      "key": "samstat_base_start",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F11",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F12",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F13",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F14",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F15",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F16",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F17",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F18",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F19",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F20",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F21",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F22",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F23",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F24",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F25",
+        "bvbrc_fastqutils_cell:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fcells%2F26"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F15",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F16",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F17",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F18"
+      ],
+      "raw_block_ordinals": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "locator": {
+        "member": null,
+        "block": "samstat_base_start",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 3146,
+        "byte_end": 4015
+      }
+    },
+    {
+      "key": "samstat_notes",
+      "ordinal": 2,
+      "state": "complete",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F20",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F21"
+      ],
+      "raw_block_ordinals": [],
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 2,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 4164,
+        "byte_end": 4198
+      }
+    },
+    {
+      "key": "samstat_notes",
+      "ordinal": 3,
+      "state": "complete",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F22",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F23",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F24",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F25",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F26",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F27",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F28",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F29",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F30",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F31",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F32",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F33",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F34",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F35",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F36",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F37",
+        "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F38"
+      ],
+      "raw_block_ordinals": [],
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 4260,
+        "byte_end": 4286
+      }
+    }
+  ],
+  "labels": [
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F0",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "h1",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "input_label",
+        "byte_start": 1144,
+        "byte_end": 1172
+      },
+      "kind": "filename",
+      "value": "missing_quality.sam",
+      "section_key": "samstat_header",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F1",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "producer",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "version",
+        "byte_start": 1269,
+        "byte_end": 1274
+      },
+      "kind": "producer_version",
+      "value": "2.2.3",
+      "section_key": "samstat_header",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F2",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_header",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 221,
+        "byte_end": 241
+      },
+      "kind": "native_label",
+      "value": "\nmissing_quality.sam",
+      "section_key": "samstat_header",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F3",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_header",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 1176,
+        "byte_end": 1225
+      },
+      "kind": "native_label",
+      "value": "File size: 107 bytes, created 2026-10-25 18:09:22",
+      "section_key": "samstat_header",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F4",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_header",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 1232,
+        "byte_end": 1275
+      },
+      "kind": "native_label",
+      "value": "(report produced by: SAMStat version 2.2.3)",
+      "section_key": "samstat_header",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F5",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1279,
+        "byte_end": 1306
+      },
+      "kind": "native_label",
+      "value": "Mapping statistics",
+      "section_key": "samstat_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F6",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "labels",
+        "byte_start": 1425,
+        "byte_end": 1437
+      },
+      "kind": "native_label",
+      "value": "MAPQ gt 30",
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F7",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "labels",
+        "byte_start": 1438,
+        "byte_end": 1450
+      },
+      "kind": "native_label",
+      "value": "MAPQ lt 30",
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F8",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "labels",
+        "byte_start": 1451,
+        "byte_end": 1463
+      },
+      "kind": "native_label",
+      "value": "MAPQ lt 10",
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F9",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "labels",
+        "byte_start": 1464,
+        "byte_end": 1474
+      },
+      "kind": "native_label",
+      "value": "Unmapped",
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F10",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "mappingtableval",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "labels",
+        "byte_start": 1475,
+        "byte_end": 1482
+      },
+      "kind": "native_label",
+      "value": "Total",
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F11",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 2247,
+        "byte_end": 2275
+      },
+      "kind": "native_label",
+      "value": "Length distribution",
+      "section_key": "samstat_notes",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F12",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "len_R1__MAPQ_gt_30",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "name",
+        "byte_start": 2418,
+        "byte_end": 2430
+      },
+      "kind": "native_label",
+      "value": "MAPQ gt 30",
+      "section_key": "samstat_length",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F13",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 2862,
+        "byte_end": 3051
+      },
+      "kind": "native_label",
+      "value": "Density plot of read lengths split by mapping quality. If aligned reads are soft clipped, additional length distribution of the aligned reads are shown (indicated by the 'mapped' keyword). ",
+      "section_key": "samstat_notes",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F14",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 3055,
+        "byte_end": 3080
+      },
+      "kind": "native_label",
+      "value": "Base composition",
+      "section_key": "samstat_notes",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F15",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_A",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "name",
+        "byte_start": 3225,
+        "byte_end": 3228
+      },
+      "kind": "native_label",
+      "value": "A",
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F16",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_C",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "name",
+        "byte_start": 3330,
+        "byte_end": 3333
+      },
+      "kind": "native_label",
+      "value": "C",
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F17",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_G",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "name",
+        "byte_start": 3435,
+        "byte_end": 3438
+      },
+      "kind": "native_label",
+      "value": "G",
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F18",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "bc_R1_MAPQ_gt_30_T",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "name",
+        "byte_start": 3540,
+        "byte_end": 3543
+      },
+      "kind": "native_label",
+      "value": "T",
+      "section_key": "samstat_base_start",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F19",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4019,
+        "byte_end": 4160
+      },
+      "kind": "native_label",
+      "value": "Base composition. Use the toggle box to view composition of reads mapped at different mapping qualities. Soft clipped sequences are excluded.",
+      "section_key": "samstat_notes",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F20",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 2,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 4164,
+        "byte_end": 4198
+      },
+      "kind": "native_label",
+      "value": "Base quality distribution",
+      "section_key": "samstat_notes",
+      "section_ordinal": 2
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F21",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 2,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4202,
+        "byte_end": 4256
+      },
+      "kind": "native_label",
+      "value": "Base quality distribution split up by mapping quality.",
+      "section_key": "samstat_notes",
+      "section_ordinal": 2
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F22",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 4260,
+        "byte_end": 4286
+      },
+      "kind": "native_label",
+      "value": "Error composition",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F23",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4289,
+        "byte_end": 4449
+      },
+      "kind": "native_label",
+      "value": "Distibution of mismatches, insertions and deletions along the read length. Note: if no 'MD' tag is present in the SAM/BAM file no mismatch profile is displayed.",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F24",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4493,
+        "byte_end": 4498
+      },
+      "kind": "native_label",
+      "value": "About",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F25",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4507,
+        "byte_end": 4659
+      },
+      "kind": "native_label",
+      "value": "SAMStat is a basic quality control program for NGS data. It displays information about mapped and unmapped reads to diagnose mapping and other problems.",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F26",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4667,
+        "byte_end": 4707
+      },
+      "kind": "native_label",
+      "value": " The plots on this page were draw using ",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F27",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4756,
+        "byte_end": 4762
+      },
+      "kind": "native_label",
+      "value": "Plotly",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F28",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4766,
+        "byte_end": 4767
+      },
+      "kind": "native_label",
+      "value": ".",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F29",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4810,
+        "byte_end": 4817
+      },
+      "kind": "native_label",
+      "value": "Contact",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F30",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4826,
+        "byte_end": 4865
+      },
+      "kind": "native_label",
+      "value": "SAMStat was developed by Timo Lassmann.",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F31",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4874,
+        "byte_end": 4886
+      },
+      "kind": "native_label",
+      "value": "Please cite:",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F32",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 4895,
+        "byte_end": 5033
+      },
+      "kind": "native_label",
+      "value": "Lassmann et al. (2011) \"SAMStat: monitoring biases in next generation sequencing data.\" Bioinformatics doi:10.1093/bioinformatics/btq614 [",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F33",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 5089,
+        "byte_end": 5103
+      },
+      "kind": "native_label",
+      "value": "PMID: 21088025",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F34",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 5107,
+        "byte_end": 5109
+      },
+      "kind": "native_label",
+      "value": "] ",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F35",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 5153,
+        "byte_end": 5158
+      },
+      "kind": "native_label",
+      "value": "Links",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F36",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 5221,
+        "byte_end": 5243
+      },
+      "kind": "native_label",
+      "value": "SAM/BAM specifications",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F37",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 5308,
+        "byte_end": 5315
+      },
+      "kind": "native_label",
+      "value": "SAMStat",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    },
+    {
+      "id": "bvbrc_fastqutils_label:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Flabels%2F38",
+      "artifact_ref": "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710",
+      "locator": {
+        "member": null,
+        "block": "samstat_notes",
+        "block_ordinal": 3,
+        "row_ordinal": null,
+        "field": "text",
+        "byte_start": 5379,
+        "byte_end": 5385
+      },
+      "kind": "native_label",
+      "value": "Kalign",
+      "section_key": "samstat_notes",
+      "section_ordinal": 3
+    }
+  ],
+  "populations": [
+    {
+      "id": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "unknown",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "samstat_report_records",
+      "population_ordinal": 1,
+      "section_key": "samstat_mapping",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_mapq_ge30%2F1",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "unknown",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [
+        "bvbrc_fastqutils_population:samstat_legacy_evidence/%2Fdocuments%2Freport%2Fsha256%2F979133e17d381f1263aaa9b265c0e495879568110a426b7c46a142640da34710%2Fpopulations%2Fsamstat_report_records%2F1"
+      ],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "samstat_mapq_ge30",
+      "population_ordinal": 1,
+      "section_key": "samstat_length",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    }
+  ],
+  "native_lineage": [],
+  "alignment_headers": [],
+  "reference_dictionary": [],
+  "requirements": []
+}

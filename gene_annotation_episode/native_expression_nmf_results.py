@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 from copy import deepcopy
+import json
 from pathlib import Path
 
 from .communication import plain
@@ -180,6 +181,26 @@ class NativeExpressionNMFResults:
 
     async def execute(self, context, target, tool_name, arguments, operation_key):
         require(self.applies(context))
+        if tool_name == 'execution.results.collect' and type(arguments) is dict and arguments == {}:
+            row = self.store.db.execute('SELECT state,completion,archive FROM runtime_episodes '
+                'WHERE run_id=? AND episode_id=?', (self.owner.run_id, context.episode_id)).fetchone()
+            if (row is not None and row['state'] == 'yielded'
+                    and row['completion'] is not None and row['archive'] is not None):
+                self.receipts._context(context)
+                selected = self.owner._selected_result_action(context.episode_id, operation_key, tool_name, arguments)
+                if selected['result'] is not None and json.loads(selected['result']).get('status') == 'completed':
+                    receipt = self.receipts.read_completed(episode_id=context.episode_id,
+                        operation_key=operation_key, scope=plain(context.scope))
+                    require(same(receipt['intent']['target'], plain(target))
+                        and same(receipt['intent']['assignment'], plain(context.assignment))
+                        and same(receipt['intent']['scope'], plain(context.scope))
+                        and receipt['intent']['original_request_sha256'] == digest(plain(context.request))
+                        and receipt['intent']['run_id'] == context.run_id
+                        and receipt['intent']['episode_id'] == context.episode_id
+                        and receipt['intent']['operation_key'] == operation_key
+                        and receipt['intent']['tool_name'] == tool_name
+                        and same(receipt['intent']['arguments'], arguments), 'nmf_completed_result_mismatch')
+                    return outcome(receipt)
         async with self.receipts.locked_action(context, target=target, tool_name=tool_name,
                 arguments=arguments, operation_key=operation_key) as action:
             staged = self.receipts.read_staged(action)

@@ -1,0 +1,132 @@
+{
+  "schema": "fluorescence_calculation_handoff_v1",
+  "files": [
+    {
+      "path": "gene_annotation_episode/fluorescence_event_calculations.py",
+      "sha256": "196c43d357137403f4d7e4d98eac3d0e506af27e5586b62dbacebdb42e0a2d49",
+      "size_bytes": 32880,
+      "lines": 633,
+      "ast_parse": "passed"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_result_views.py",
+      "sha256": "41b4698b0855cc40356cf43499269d9ab759436a243e72916dae083b09bedb13",
+      "size_bytes": 1706,
+      "lines": 41,
+      "ast_parse": "passed"
+    },
+    {
+      "path": "tests/test_fluorescence_event_calculations.py",
+      "sha256": "b12d66f8e318ead60a70fe51a3c4504795ca4bbfe70056e2a71d608e88407c2b",
+      "size_bytes": 36513,
+      "lines": 604,
+      "ast_parse": "passed"
+    }
+  ],
+  "source_diff": {
+    "path": "verification/tool_graders_fluorescence_calculations_2026-10-28_560/SOURCE_DIFF_001.patch",
+    "sha256": "a1b4daf7b57faf04931f62711e6dd586847f74e91fcd94bccff18d39e89a9d1f"
+  },
+  "contracts": [
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/CORE_CONTRACT_001.md",
+      "sha256": "f7d9def71c6741aa2b7dbc0e61fe4c0a7d3dcd5b34770eb1d01e5543a3f496ca"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_002.md",
+      "sha256": "8e55ea867104f07ed446defd1e94600f32242961d14b7b583a72c0824fd66dd2"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_003.md",
+      "sha256": "09ecfe46fe658f60178ca1d5ba311d9f0e9e6ea704a6ad3e58559ab6c50583dc"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_004.md",
+      "sha256": "1b1e111400fb125dabf7f5f1c2264962863086796fe8b0b1e5f52ae4d807db52"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_005.md",
+      "sha256": "fbc2c562a075a284b9a791613d6af800de4368ebe037c04362a205b2216ef7a9"
+    }
+  ],
+  "owner": "fluorescence_calculations_560",
+  "operations": [
+    "perform_facs_cell_sorting",
+    "analyze_cytokine_production_in_cd4_tcells"
+  ],
+  "ports": [
+    "evaluate_gate_membership(sheet: dict) -> list[dict]",
+    "calculate_fluorescence_sheet(sheet: dict, *, parameters: dict) -> dict",
+    "project_fluorescence_result(sheet: dict, components: dict, *, selection: dict) -> dict"
+  ],
+  "implemented": [
+    "One numerical authority for gate membership/count/fraction/percent/intensity/control/native comparison cells",
+    "Three-valued membership with exact retained original ordinals and explicit root extent",
+    "Selected-only saved-cell deep-copy projection with pagination and no calculation imports"
+  ],
+  "authored_test_file": "tests/test_fluorescence_event_calculations.py",
+  "authored_test_selectors": [
+    "tests/test_fluorescence_event_calculations.py::test_packet548_complete_numerical_cells_and_exact_operands",
+    "tests/test_fluorescence_event_calculations.py::test_missing_eighth_value_requires_explicit_evaluable_denominator",
+    "tests/test_fluorescence_event_calculations.py::test_bounds_pass_all_and_duplicate_values_keep_original_occurrences",
+    "tests/test_fluorescence_event_calculations.py::test_three_valued_ancestry_out_of_declaration_order_and_rejected_population",
+    "tests/test_fluorescence_event_calculations.py::test_false_child_resolves_unknown_ancestor_for_selected_count",
+    "tests/test_fluorescence_event_calculations.py::test_invalid_gate_contracts_reject",
+    "tests/test_fluorescence_event_calculations.py::test_missing_primary_source_or_failed_domain_never_becomes_zero",
+    "tests/test_fluorescence_event_calculations.py::test_empty_source_and_actual_zero_are_distinct_from_missing",
+    "tests/test_fluorescence_event_calculations.py::test_partial_tail_does_not_become_population_but_explicit_subset_is_finite",
+    "tests/test_fluorescence_event_calculations.py::test_derived_domain_correspondence_absent_values_and_exact_intensity_domain",
+    "tests/test_fluorescence_event_calculations.py::test_unavailable_derived_domain_preserves_known_primary_and_missing_intensities",
+    "tests/test_fluorescence_event_calculations.py::test_packet548_signed_control_difference_and_optional_clipping_are_distinct",
+    "tests/test_fluorescence_event_calculations.py::test_control_comparison_requires_documented_same_meaning_at_every_level",
+    "tests/test_fluorescence_event_calculations.py::test_control_fraction_missing_value_uses_same_explicit_denominator_rules",
+    "tests/test_fluorescence_event_calculations.py::test_missing_invalid_selected_intensities_preserve_finite_subset_and_actual_zero",
+    "tests/test_fluorescence_event_calculations.py::test_intensity_overflow_does_not_suppress_representable_mean",
+    "tests/test_fluorescence_event_calculations.py::test_native_comparison_copies_actual_report_and_exact_difference_without_rounding_tolerance",
+    "tests/test_fluorescence_event_calculations.py::test_native_link_does_not_commission_an_unrequested_calculation",
+    "tests/test_fluorescence_event_calculations.py::test_saved_only_recalculation_forbids_files_network_subprocess_and_llm",
+    "tests/test_fluorescence_event_calculations.py::test_projection_copies_exact_saved_cells_and_never_calls_calculator",
+    "tests/test_fluorescence_event_calculations.py::test_projection_scopes_status_and_issues_to_selected_requests_before_pagination",
+    "tests/test_fluorescence_event_calculations.py::test_projection_rejects_wrong_saved_contracts",
+    "tests/test_fluorescence_event_calculations.py::test_conflicting_duplicate_control_request_flags_reject"
+  ],
+  "runtime_verification": "UNRUN: host restricted to standard-library source/AST/hash/file inspection; coordinator bounded runner required",
+  "application_imports_run": false,
+  "pytest_run": false,
+  "native_operations_run": false,
+  "network_calls": false,
+  "scientific_biology_claims": false,
+  "expected_synthetic_examples": [
+    {
+      "selected": 5,
+      "parent": 8,
+      "fraction": 0.625,
+      "percent": 62.5,
+      "intensity_sum": 825,
+      "intensity_mean": 165,
+      "intensity_median": 150
+    },
+    {
+      "missing_eighth": true,
+      "parent_fraction": null,
+      "evaluable_fraction": "5/7",
+      "confirmed_mean": 165
+    },
+    {
+      "target": "2/4",
+      "control": "3/4",
+      "signed_difference": -0.25,
+      "percentage_points": -25,
+      "optional_legacy_clipping": 0
+    }
+  ],
+  "remaining": [
+    "Authentic FCS decoding and requested preparation handling",
+    "Configured resource execution and retained actual artifacts",
+    "Operation and information-library bindings",
+    "Child-owned requested typed return, scientific-parent receipt and closed episode replay",
+    "Actual bounded test execution and any resulting fixes"
+  ],
+  "fixed_progress_or_history_edited": false,
+  "goal_or_scope_files_created": false
+}

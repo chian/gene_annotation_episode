@@ -1,0 +1,80 @@
+............................................F
+=================================== FAILURES ===================================
+_ test_original_descriptor_does_not_authorize_derived_operand[feature-query-align] _
+
+value = {'subject_ref': 'reference_3dc3d84d0e31af7415c2b780', 'kind': 'region', 'segments': [{'start': 0, 'end': 4}], 'strand': '+', ...}
+schema = {'type': 'object', 'properties': {'subject_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Z... '.']}, ...}, 'required': ['subject_ref', 'kind', 'segments', 'strand', 'context_refs'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+source_snapshot/gene_annotation_episode/domain.py:584: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'context_refs': {'description': 'Only actua...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'subject_ref': 'reference_3dc3d84d0e31af7415c2b780', 'kind': 'region', 'segments': [{'start': 0, 'end': 4}], 'strand': '+', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'region' is not one of ['CDS', 'gene', 'tRNA', 'rRNA', 'ncRNA', 'regulatory_element', 'repeat', 'mobile_element', 'protein_domain', 'protein_site', 'sequence_region']
+E           
+E           Failed validating 'enum' in schema['properties']['kind']:
+E               {'enum': ['CDS',
+E                         'gene',
+E                         'tRNA',
+E                         'rRNA',
+E                         'ncRNA',
+E                         'regulatory_element',
+E                         'repeat',
+E                         'mobile_element',
+E                         'protein_domain',
+E                         'protein_site',
+E                         'sequence_region']}
+E           
+E           On instance['kind']:
+E               'region'
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+case = <test_protein_structure_alignment_preflight.PreflightCase object at 0x7f0fa6a8be90>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0fb679ba40>
+nested = False, role = 'query', kind = 'feature'
+
+    @pytest.mark.parametrize("nested", [False, True], ids=["align", "estimate"])
+    @pytest.mark.parametrize("role", ["query", "reference"])
+    @pytest.mark.parametrize("kind", ["feature", "product"])
+    def test_original_descriptor_does_not_authorize_derived_operand(case, monkeypatch, nested, role, kind):
+        descriptor = case.rows[0]["descriptor"]
+>       feature = case.store.put("feature", {"subject_ref": descriptor["reference_ref"], "kind": "region",
+            "segments": [{"start": 0, "end": 4}], "strand": "+", "context_refs": []}, origin="reasoning")
+
+source_snapshot/tests/test_protein_structure_alignment_preflight.py:315: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'subject_ref': 'reference_3dc3d84d0e31af7415c2b780', 'kind': 'region', 'segments': [{'start': 0, 'end': 4}], 'strand': '+', ...}
+schema = {'type': 'object', 'properties': {'subject_ref': {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Z... '.']}, ...}, 'required': ['subject_ref', 'kind', 'segments', 'strand', 'context_refs'], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+source_snapshot/gene_annotation_episode/domain.py:587: ContractError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_alignment_preflight.py::test_original_descriptor_does_not_authorize_derived_operand[feature-query-align]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 44 passed in 109.44s (0:01:49)

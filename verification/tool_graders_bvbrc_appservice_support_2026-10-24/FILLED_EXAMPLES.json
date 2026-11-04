@@ -1,0 +1,387 @@
+{
+  "notice": "All values are controlled synthetic fixtures following retained source contracts. No live service output, scientific measurement, annotation score, custody proof or episode integration is claimed.",
+  "upload_four_bytes": {
+    "status": "ok",
+    "native": {
+      "status": 200,
+      "error": null,
+      "data": {
+        "id": "11111111-2222-3333-4444-555555555555",
+        "file": {
+          "size": 4,
+          "checksum": {
+            "sha256": "1dff3e84fe7877e0673b69bbddcf40124e396e3f9943dd890c91b6a09adb9af0"
+          }
+        }
+      }
+    },
+    "value": {
+      "native_reply": {
+        "status": 200,
+        "error": null,
+        "data": {
+          "id": "11111111-2222-3333-4444-555555555555",
+          "file": {
+            "size": 4,
+            "checksum": {
+              "sha256": "1dff3e84fe7877e0673b69bbddcf40124e396e3f9943dd890c91b6a09adb9af0"
+            }
+          }
+        }
+      },
+      "observed_node_id": "11111111-2222-3333-4444-555555555555",
+      "observed_file_size": 4,
+      "observed_checksums": {
+        "sha256": "1dff3e84fe7877e0673b69bbddcf40124e396e3f9943dd890c91b6a09adb9af0"
+      },
+      "confirmation": "accepted_bytes_match",
+      "checksum_comparisons": [
+        {
+          "algorithm": "sha256",
+          "native_value": "1dff3e84fe7877e0673b69bbddcf40124e396e3f9943dd890c91b6a09adb9af0",
+          "matches_supplied": true
+        }
+      ]
+    },
+    "diagnostics": []
+  },
+  "failed_job_manifest_with_valid_partial_files": {
+    "status": "partial",
+    "native": {
+      "id": "123",
+      "app": {
+        "id": "Homology",
+        "parameters": []
+      },
+      "parameters": {
+        "output_file": "Actual effective name",
+        "bool_value": 1
+      },
+      "output_files": [
+        [
+          "/owner/home/.output/file",
+          "11111111-2222-3333-4444-555555555555"
+        ],
+        [
+          "malformed"
+        ],
+        [
+          "/owner/home/.output/other",
+          "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+        ]
+      ],
+      "success": 0,
+      "start_time": 1000.2,
+      "end_time": 1001.7,
+      "elapsed_time": 1.5,
+      "hostname": "native-host",
+      "job_output": {
+        "native": [
+          0,
+          false,
+          null
+        ]
+      }
+    },
+    "raw_content": {
+      "encoding": "base64",
+      "data": "eyJpZCI6ICIxMjMiLCAiYXBwIjogeyJpZCI6ICJIb21vbG9neSIsICJwYXJhbWV0ZXJzIjogW119LCAicGFyYW1ldGVycyI6IHsib3V0cHV0X2ZpbGUiOiAiQWN0dWFsIGVmZmVjdGl2ZSBuYW1lIiwgImJvb2xfdmFsdWUiOiAxfSwgIm91dHB1dF9maWxlcyI6IFtbIi9vd25lci9ob21lLy5vdXRwdXQvZmlsZSIsICIxMTExMTExMS0yMjIyLTMzMzMtNDQ0NC01NTU1NTU1NTU1NTUiXSwgWyJtYWxmb3JtZWQiXSwgWyIvb3duZXIvaG9tZS8ub3V0cHV0L290aGVyIiwgImFhYWFhYWFhLWJiYmItY2NjYy1kZGRkLWVlZWVlZWVlZWVlZSJdXSwgInN1Y2Nlc3MiOiAwLCAic3RhcnRfdGltZSI6IDEwMDAuMiwgImVuZF90aW1lIjogMTAwMS43LCAiZWxhcHNlZF90aW1lIjogMS41LCAiaG9zdG5hbWUiOiAibmF0aXZlLWhvc3QiLCAiam9iX291dHB1dCI6IHsibmF0aXZlIjogWzAsIGZhbHNlLCBudWxsXX19",
+      "byte_count": 453,
+      "sha256": "49e2770a91d3aa82f880f768790ba6c65ef947493447b780f7ed104c0f1fd0f0"
+    },
+    "value": {
+      "native_task_id": "123",
+      "native_application_id": "Homology",
+      "effective_parameters": {
+        "output_file": "Actual effective name",
+        "bool_value": 1
+      },
+      "effective_parameters_pointer": "/parameters",
+      "outputs": [
+        {
+          "output_index": 0,
+          "pointer": "/output_files/0",
+          "path": "/owner/home/.output/file",
+          "uuid": "11111111-2222-3333-4444-555555555555",
+          "association": {
+            "kind": "task_result_manifest",
+            "evidence_ref": "source:manifest",
+            "pointer": "/output_files/0",
+            "task_id": "123",
+            "output_path": "/owner/home/.output/file",
+            "output_uuid": "11111111-2222-3333-4444-555555555555",
+            "byte_version_status": "unknown",
+            "version_evidence": []
+          }
+        },
+        {
+          "output_index": 2,
+          "pointer": "/output_files/2",
+          "path": "/owner/home/.output/other",
+          "uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "association": {
+            "kind": "task_result_manifest",
+            "evidence_ref": "source:manifest",
+            "pointer": "/output_files/2",
+            "task_id": "123",
+            "output_path": "/owner/home/.output/other",
+            "output_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+            "byte_version_status": "unknown",
+            "version_evidence": []
+          }
+        }
+      ],
+      "success": 0,
+      "object": {
+        "path": "/owner/home/output",
+        "uuid": "11111111-2222-3333-4444-555555555555",
+        "type": "job_result",
+        "metadata_receipt_ref": "support:metadata"
+      }
+    },
+    "records": [
+      {
+        "output_index": 0,
+        "pointer": "/output_files/0",
+        "native_record": [
+          "/owner/home/.output/file",
+          "11111111-2222-3333-4444-555555555555"
+        ],
+        "valid": true,
+        "association": {
+          "kind": "task_result_manifest",
+          "evidence_ref": "source:manifest",
+          "pointer": "/output_files/0",
+          "task_id": "123",
+          "output_path": "/owner/home/.output/file",
+          "output_uuid": "11111111-2222-3333-4444-555555555555",
+          "byte_version_status": "unknown",
+          "version_evidence": []
+        }
+      },
+      {
+        "output_index": 1,
+        "pointer": "/output_files/1",
+        "native_record": [
+          "malformed"
+        ],
+        "valid": false,
+        "association": null
+      },
+      {
+        "output_index": 2,
+        "pointer": "/output_files/2",
+        "native_record": [
+          "/owner/home/.output/other",
+          "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+        ],
+        "valid": true,
+        "association": {
+          "kind": "task_result_manifest",
+          "evidence_ref": "source:manifest",
+          "pointer": "/output_files/2",
+          "task_id": "123",
+          "output_path": "/owner/home/.output/other",
+          "output_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "byte_version_status": "unknown",
+          "version_evidence": []
+        }
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "native_manifest_member_invalid",
+        "phase": "native_decode",
+        "path": "/output_files/1",
+        "severity": "error",
+        "evidence_refs": [
+          "source:manifest"
+        ]
+      },
+      {
+        "code": "output_version_unproven",
+        "phase": "association",
+        "path": "/output_files",
+        "severity": "qualification",
+        "evidence_refs": [
+          "source:manifest"
+        ]
+      }
+    ]
+  },
+  "ignored_range_whole_eight_byte_body": {
+    "status": "ok",
+    "native": {
+      "request": {
+        "kind": "download",
+        "url": "https://controlled.invalid/download/exact-key/file",
+        "requested_byte_range": [
+          2,
+          3
+        ]
+      },
+      "transport": {
+        "status": 200,
+        "headers": {
+          "content-length": "8"
+        },
+        "header_items": [
+          [
+            "content-length",
+            "8"
+          ]
+        ],
+        "effective_url": "https://controlled.invalid/download/exact-key/file",
+        "automatic_redirects": false,
+        "body_complete": true,
+        "received_body_bytes": 8,
+        "request": {
+          "method": "GET",
+          "url": "https://controlled.invalid/download/exact-key/file"
+        }
+      }
+    },
+    "value": {
+      "body_complete": true,
+      "requested_range": [
+        2,
+        3
+      ],
+      "observed_range": null,
+      "received_range": null,
+      "total_size": 8,
+      "metadata_size": 8,
+      "object_complete": "yes",
+      "byte_count": 8,
+      "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b"
+    },
+    "diagnostics": [
+      {
+        "code": "range_ignored",
+        "phase": "transport",
+        "path": "/request/requested_byte_range",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "incomplete_206_two_of_four_response_bytes": {
+    "status": "partial",
+    "native": {
+      "request": {
+        "kind": "download",
+        "url": "https://controlled.invalid/download/exact-key/file",
+        "requested_byte_range": [
+          2,
+          5
+        ]
+      },
+      "transport": {
+        "status": 206,
+        "headers": {
+          "content-range": "bytes 2-5/8",
+          "content-length": "4"
+        },
+        "header_items": [
+          [
+            "content-range",
+            "bytes 2-5/8"
+          ],
+          [
+            "content-length",
+            "4"
+          ]
+        ],
+        "effective_url": "https://controlled.invalid/download/exact-key/file",
+        "automatic_redirects": false,
+        "body_complete": false,
+        "received_body_bytes": 2,
+        "request": {
+          "method": "GET",
+          "url": "https://controlled.invalid/download/exact-key/file"
+        }
+      }
+    },
+    "value": {
+      "body_complete": false,
+      "requested_range": [
+        2,
+        5
+      ],
+      "observed_range": {
+        "start": 2,
+        "end_inclusive": 5,
+        "total_size": 8
+      },
+      "received_range": {
+        "start": 2,
+        "end_inclusive": 3,
+        "total_size": 8
+      },
+      "total_size": 8,
+      "metadata_size": 8,
+      "object_complete": "no",
+      "byte_count": 2,
+      "sha256": "ba464bd29d8e092a7995e35e8ae54f6b5af1ea1773a1a92f42bb2a9ce9e033d1"
+    },
+    "diagnostics": [
+      {
+        "code": "download_incomplete",
+        "phase": "transport",
+        "path": "/transport/headers/content-length",
+        "severity": "error",
+        "evidence_refs": []
+      },
+      {
+        "code": "download_incomplete",
+        "phase": "transport",
+        "path": "",
+        "severity": "error",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "unframed_200_unknown_object_completeness": {
+    "status": "ok",
+    "native": {
+      "request": {
+        "kind": "download",
+        "url": "https://controlled.invalid/download/exact-key/file",
+        "requested_byte_range": null
+      },
+      "transport": {
+        "status": 200,
+        "headers": {},
+        "header_items": [],
+        "effective_url": "https://controlled.invalid/download/exact-key/file",
+        "automatic_redirects": false,
+        "body_complete": true,
+        "received_body_bytes": 4,
+        "request": {
+          "method": "GET",
+          "url": "https://controlled.invalid/download/exact-key/file"
+        }
+      }
+    },
+    "value": {
+      "body_complete": true,
+      "requested_range": null,
+      "observed_range": null,
+      "received_range": null,
+      "total_size": null,
+      "metadata_size": null,
+      "object_complete": "unknown",
+      "byte_count": 4,
+      "sha256": "1dff3e84fe7877e0673b69bbddcf40124e396e3f9943dd890c91b6a09adb9af0"
+    },
+    "diagnostics": [
+      {
+        "code": "object_completeness_unproven",
+        "phase": "association",
+        "path": "",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,2442 @@
+{
+  "status": "Design data examples only; no implementation or model delivery claimed.",
+  "fixture_scope": "Existing scripted Workflow runs over synthetic PDB and interval inputs; retained real local native measurements. This packet reruns no science.",
+  "sources": [
+    {
+      "path": "verification/tool_graders_protein_structure_workflow_2026-10-27_410/check011/temporary/pytest/protein-workflow4100/SAVED_CHECK.json",
+      "sha256": "bbe43b323e2e4b0481fc44dd62d0df47d022732702f3a60c69e5278975d2fde9"
+    },
+    {
+      "path": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/SAVED_CHECK.json",
+      "sha256": "49a714ded87fde3ab24a3bbf75a9c2bd6cff9e59b446e122bcfac9e4f591f8cb"
+    },
+    {
+      "path": "verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check003/temporary/pytest/genomic-overlap4370/CASE.json",
+      "sha256": "f9849dcaf4fb30361400c29591529c7a68831ec7e33c1ed40439c69c02969d2c"
+    }
+  ],
+  "protein": {
+    "display_half": [
+      {
+        "choice": 1,
+        "label": "Observed-polymer protein sequence; PDB chain A, TER segment 0, implicit model 0",
+        "length_amino_acids": 4,
+        "allowed_use": "sequence alignment",
+        "sequence_letters_returned": false
+      },
+      {
+        "choice": 2,
+        "label": "Observed-polymer protein sequence; PDB chain B, TER segment 0, implicit model 0",
+        "length_amino_acids": 4,
+        "allowed_use": "sequence alignment",
+        "sequence_letters_returned": false
+      }
+    ],
+    "model_selection": {
+      "kind": "tool",
+      "tool": "sequence.align",
+      "arguments": {
+        "query_ref": {
+          "received_operand": 1
+        },
+        "reference_ref": {
+          "received_operand": 2
+        },
+        "molecule": "protein",
+        "mode": "global"
+      }
+    },
+    "internal_half": {
+      "receiving_episode_id": "episode_59a941e0266beb22574b2b6e3c0d06d817fa722aad0f61e5703010164a08b996",
+      "entries": [
+        {
+          "choice": 1,
+          "descriptor": {
+            "allowed_uses": [
+              "sequence_align",
+              "structure_correspondence"
+            ],
+            "custody": {
+              "bundle_artifact_ref": "artifact_f57706c2aa85bc53555edc8581c893f0f247a8a28f25d7b6b3f6bcaeda2d7f4b",
+              "handoff_ref": "source_d8d70370cc256fe74316cbf3",
+              "original_request_sha256": "70b0c1b5e7af50b053b3add6859092c6a55dde4dfdb073d6e0313a92d2cdc67b",
+              "result_episode_id": "episode_a34a1e9395e33dc51b81d6197fdf00fc263395e1b8504aa3385f0b829f66584e",
+              "result_operation_key": "protein-structure-workflow410:episode_a34a1e9395e33dc51b81d6197fdf00fc263395e1b8504aa3385f0b829f66584e:0",
+              "result_receipt_key": "protein_structure_result_receipt:0cdda092449ce74a43e7182c7224063a001d5c02ecf2f3b7d44a08b9729521a2",
+              "run_id": "protein-structure-workflow410",
+              "source_ref": "source_3d608824cd17b4252feb42c9"
+            },
+            "reference_ref": "reference_b701a0d294c209723963b478",
+            "residue_map_file": {
+              "artifact_ref": "artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5",
+              "byte_length": 8537,
+              "format": "protein_structure_sequence_v1",
+              "sha256": "54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5"
+            },
+            "selection": {
+              "bfactor_semantics": "unspecified",
+              "ca_selection": {
+                "choices": [],
+                "policy": "unambiguous_only"
+              },
+              "chain_key": {
+                "chain_id": "A",
+                "namespace": "pdb",
+                "ter_segment_ordinal_0based": 0
+              },
+              "data_block": null,
+              "file_identity": {
+                "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+                "byte_length": 365,
+                "format": "pdb_3x_text",
+                "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+              },
+              "model_key": {
+                "native_serial_token": {
+                  "lexeme": null,
+                  "lexical_state": "absent",
+                  "span": null,
+                  "syntax": "absent",
+                  "text": null
+                },
+                "ordinal_0based": 0,
+                "serial_state": "implicit"
+              },
+              "residue_variant_choices": [],
+              "semantics_evidence": null,
+              "sequence_basis": "observed_polymer",
+              "structure_role": "single",
+              "symbol_policy": {
+                "explicit_component_overrides": [],
+                "unknown": "reject"
+              },
+              "zero_occupancy_policy": "exclude"
+            },
+            "sequence_file": {
+              "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+              "byte_length": 4,
+              "format": "ascii_protein_sequence_v1",
+              "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652"
+            },
+            "sequence_length": 4,
+            "structure_file": {
+              "artifact_ref": "artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b",
+              "byte_length": 365,
+              "format": "pdb_3x_text",
+              "sha256": "0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b"
+            },
+            "version": "structure_sequence_descriptor_v1"
+          }
+        },
+        {
+          "choice": 2,
+          "descriptor": {
+            "allowed_uses": [
+              "sequence_align",
+              "structure_correspondence"
+            ],
+            "custody": {
+              "bundle_artifact_ref": "artifact_10e16946f79178e0e23faa6f4edfc0ca26dbba5f094d3d4005e67284e5c83f9c",
+              "handoff_ref": "source_63c4be0c9aad3ae65a9f8c4d",
+              "original_request_sha256": "de1555678f991f689944b5c6515378f0c18f9e7360316726e175fc6920fb2472",
+              "result_episode_id": "episode_6d7ec8ebd01f7334c2b5afdd088c658ab6af0befa3174a2fdf96ab3645242459",
+              "result_operation_key": "protein-structure-workflow410:episode_6d7ec8ebd01f7334c2b5afdd088c658ab6af0befa3174a2fdf96ab3645242459:0",
+              "result_receipt_key": "protein_structure_result_receipt:d2ca00d71e4008d2b976b1c70c8197417491f8a8ddfaa6269bb8b53476a5a061",
+              "run_id": "protein-structure-workflow410",
+              "source_ref": "source_50e1de8614328f2871fc5471"
+            },
+            "reference_ref": "reference_15220dade9ee539ac4cfa890",
+            "residue_map_file": {
+              "artifact_ref": "artifact_029d51431a96c4687aa5d07141549352d3d3d1f6456c2da1bc4124d3a4b209a6",
+              "byte_length": 8549,
+              "format": "protein_structure_sequence_v1",
+              "sha256": "029d51431a96c4687aa5d07141549352d3d3d1f6456c2da1bc4124d3a4b209a6"
+            },
+            "selection": {
+              "bfactor_semantics": "unspecified",
+              "ca_selection": {
+                "choices": [],
+                "policy": "unambiguous_only"
+              },
+              "chain_key": {
+                "chain_id": "B",
+                "namespace": "pdb",
+                "ter_segment_ordinal_0based": 0
+              },
+              "data_block": null,
+              "file_identity": {
+                "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+                "byte_length": 365,
+                "format": "pdb_3x_text",
+                "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+              },
+              "model_key": {
+                "native_serial_token": {
+                  "lexeme": null,
+                  "lexical_state": "absent",
+                  "span": null,
+                  "syntax": "absent",
+                  "text": null
+                },
+                "ordinal_0based": 0,
+                "serial_state": "implicit"
+              },
+              "residue_variant_choices": [],
+              "semantics_evidence": null,
+              "sequence_basis": "observed_polymer",
+              "structure_role": "single",
+              "symbol_policy": {
+                "explicit_component_overrides": [],
+                "unknown": "reject"
+              },
+              "zero_occupancy_policy": "exclude"
+            },
+            "sequence_file": {
+              "artifact_ref": "artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652",
+              "byte_length": 4,
+              "format": "ascii_protein_sequence_v1",
+              "sha256": "964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652"
+            },
+            "sequence_length": 4,
+            "structure_file": {
+              "artifact_ref": "artifact_8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd",
+              "byte_length": 365,
+              "format": "pdb_3x_text",
+              "sha256": "8675477fbd36183f19e5fc1dbf6dd1a45bee6bff751c32382b6bc8e37d33dcbd"
+            },
+            "version": "structure_sequence_descriptor_v1"
+          }
+        }
+      ],
+      "expanded_selection": {
+        "kind": "tool",
+        "tool": "sequence.align",
+        "arguments": {
+          "query_ref": "reference_b701a0d294c209723963b478",
+          "reference_ref": "reference_15220dade9ee539ac4cfa890",
+          "molecule": "protein",
+          "mode": "global"
+        }
+      }
+    }
+  },
+  "genomic_overlap": {
+    "display_half": {
+      "choice": 3,
+      "label": "Saved interval-overlap result for supplied sets A, B and C",
+      "comparisons": [
+        "A–B",
+        "A–C",
+        "B–C"
+      ],
+      "reference_qualification": "same supplied reference",
+      "original_minimum_overlap_bp": 1,
+      "original_minimum_a_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "original_minimum_b_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "measurements": [
+        {
+          "comparison": "A–B",
+          "values": {
+            "selected.selected_pair_count": 2,
+            "selected.selected_pairwise_bp_sum": 8,
+            "unfiltered.combined_union_bp": 15,
+            "unfiltered.intersection_union_bp": 5,
+            "unfiltered.jaccard_bp": {
+              "denominator": 15,
+              "missing_reason": null,
+              "numerator": 5,
+              "value": 0.3333333333333333
+            },
+            "unfiltered.native_pair_count": 2,
+            "unfiltered.pairwise_overlap_bp_sum": 8
+          }
+        },
+        {
+          "comparison": "A–C",
+          "values": {
+            "selected.selected_pair_count": 1,
+            "selected.selected_pairwise_bp_sum": 5,
+            "unfiltered.combined_union_bp": 20,
+            "unfiltered.intersection_union_bp": 5,
+            "unfiltered.jaccard_bp": {
+              "denominator": 20,
+              "missing_reason": null,
+              "numerator": 5,
+              "value": 0.25
+            },
+            "unfiltered.native_pair_count": 1,
+            "unfiltered.pairwise_overlap_bp_sum": 5
+          }
+        },
+        {
+          "comparison": "B–C",
+          "values": {
+            "selected.selected_pair_count": 1,
+            "selected.selected_pairwise_bp_sum": 2,
+            "unfiltered.combined_union_bp": 13,
+            "unfiltered.intersection_union_bp": 2,
+            "unfiltered.jaccard_bp": {
+              "denominator": 13,
+              "missing_reason": null,
+              "numerator": 2,
+              "value": 0.15384615384615385
+            },
+            "unfiltered.native_pair_count": 1,
+            "unfiltered.pairwise_overlap_bp_sum": 2
+          }
+        }
+      ],
+      "saved_sheet_use": "explicit saved-sheet recalculation; contents are not displayed"
+    },
+    "model_assignment": {
+      "version": "execution_results_assignment_v1",
+      "handoff_ref": {
+        "received_operand": 3
+      },
+      "selector": {
+        "comparison_keys": [
+          "AB",
+          "AC",
+          "BC"
+        ],
+        "mode": "saved_sheet_recalculation",
+        "parameters": {
+          "minimum_a_fraction": {
+            "denominator": 1,
+            "numerator": 0
+          },
+          "minimum_b_fraction": {
+            "denominator": 1,
+            "numerator": 0
+          },
+          "minimum_overlap_bp": 4,
+          "version": "genomic_overlap_calculation_parameters_v1"
+        },
+        "projection": {
+          "kind": "pair_metrics",
+          "limit": 3,
+          "measurement_fields": [
+            "unfiltered.native_pair_count",
+            "unfiltered.pairwise_overlap_bp_sum",
+            "unfiltered.intersection_union_bp",
+            "unfiltered.combined_union_bp",
+            "unfiltered.jaccard_bp",
+            "selected.selected_pair_count",
+            "selected.selected_pairwise_bp_sum"
+          ],
+          "occurrence_keys": [],
+          "offset": 0
+        },
+        "saved_sheet_file": {
+          "received_operand": 3
+        },
+        "version": "genomic_overlap_result_selector_v1"
+      }
+    },
+    "internal_half": {
+      "entry": {
+        "choice": 3,
+        "saved_sheet_file": {
+          "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+          "format": "genomic_region_overlap_sheet_v1",
+          "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+          "size_bytes": 28401
+        },
+        "handoff_ref": "source_e9d83bac5878449642579894",
+        "origin_episode_ids": [
+          "episode_4baa7298d980513497659eb7cb8e5d50625d95bbd4610fcec72727eee0107561"
+        ]
+      },
+      "expanded_assignment": {
+        "version": "execution_results_assignment_v1",
+        "handoff_ref": "source_e9d83bac5878449642579894",
+        "selector": {
+          "comparison_keys": [
+            "AB",
+            "AC",
+            "BC"
+          ],
+          "mode": "saved_sheet_recalculation",
+          "parameters": {
+            "minimum_a_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_b_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_overlap_bp": 4,
+            "version": "genomic_overlap_calculation_parameters_v1"
+          },
+          "projection": {
+            "kind": "pair_metrics",
+            "limit": 3,
+            "measurement_fields": [
+              "unfiltered.native_pair_count",
+              "unfiltered.pairwise_overlap_bp_sum",
+              "unfiltered.intersection_union_bp",
+              "unfiltered.combined_union_bp",
+              "unfiltered.jaccard_bp",
+              "selected.selected_pair_count",
+              "selected.selected_pairwise_bp_sum"
+            ],
+            "occurrence_keys": [],
+            "offset": 0
+          },
+          "saved_sheet_file": {
+            "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "format": "genomic_region_overlap_sheet_v1",
+            "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "size_bytes": 28401
+          },
+          "version": "genomic_overlap_result_selector_v1"
+        }
+      },
+      "original_assignment": {
+        "handoff_ref": "source_e9d83bac5878449642579894",
+        "selector": {
+          "comparison_keys": [
+            "AB",
+            "AC",
+            "BC"
+          ],
+          "mode": "native_result",
+          "parameters": {
+            "minimum_a_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_b_fraction": {
+              "denominator": 1,
+              "numerator": 0
+            },
+            "minimum_overlap_bp": 1,
+            "version": "genomic_overlap_calculation_parameters_v1"
+          },
+          "projection": {
+            "kind": "pair_metrics",
+            "limit": 3,
+            "measurement_fields": [
+              "unfiltered.native_pair_count",
+              "unfiltered.pairwise_overlap_bp_sum",
+              "unfiltered.intersection_union_bp",
+              "unfiltered.combined_union_bp",
+              "unfiltered.jaccard_bp",
+              "selected.selected_pair_count",
+              "selected.selected_pairwise_bp_sum"
+            ],
+            "occurrence_keys": [],
+            "offset": 0
+          },
+          "saved_sheet_file": null,
+          "version": "genomic_overlap_result_selector_v1"
+        },
+        "version": "execution_results_assignment_v1"
+      },
+      "original_requested_form": {
+        "type": "object",
+        "properties": {
+          "overlap": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$defs": {
+              "ContigMetadata": {
+                "type": "object",
+                "properties": {
+                  "chromosome": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "length_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sequence_accession_version": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sequence_sha256": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "source_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "chromosome",
+                  "length_bp",
+                  "sequence_accession_version",
+                  "sequence_sha256",
+                  "source_refs"
+                ],
+                "additionalProperties": false
+              },
+              "Failure": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "input_unavailable",
+                      "input_digest_mismatch",
+                      "unsupported_input_format",
+                      "invalid_coordinate",
+                      "zero_width_interval",
+                      "invalid_chromosome_token",
+                      "native_dependency_unavailable",
+                      "native_version_unverified",
+                      "native_nonzero_exit",
+                      "resource_limit",
+                      "native_output_unavailable",
+                      "native_output_partial",
+                      "native_output_malformed",
+                      "native_pair_identity_conflict",
+                      "duplicate_native_pair",
+                      "overlap_width_conflict",
+                      "original_attempt_mismatch",
+                      "artifact_digest_mismatch",
+                      "zero_denominator",
+                      "requested_field_unavailable",
+                      "reference_metadata_conflict",
+                      "reference_identity_unavailable"
+                    ]
+                  },
+                  "stage": {
+                    "enum": [
+                      "input",
+                      "native",
+                      "capture",
+                      "parse",
+                      "calculate",
+                      "project",
+                      "authority"
+                    ]
+                  },
+                  "set_key": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "comparison_key": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "artifact_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "locator": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/Locator"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "field_path": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^/"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "expected_value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/JsonValue"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "observed_value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/JsonValue"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partial_artifact_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "requirement": {
+                    "enum": [
+                      "none",
+                      "complete_input",
+                      "valid_coordinates",
+                      "bound_bedtools",
+                      "original_native_output",
+                      "complete_native_output",
+                      "matching_file_identity",
+                      "nonzero_denominator",
+                      "requested_reference_metadata",
+                      "requested_selected_field",
+                      "native_version_evidence"
+                    ]
+                  }
+                },
+                "required": [
+                  "code",
+                  "stage",
+                  "set_key",
+                  "comparison_key",
+                  "artifact_ref",
+                  "locator",
+                  "field_path",
+                  "expected_value",
+                  "observed_value",
+                  "partial_artifact_refs",
+                  "requirement"
+                ],
+                "additionalProperties": false,
+                "description": "All fields required. Null means this locator or expected/observed scalar is not applicable; it is never a zero measurement. expected_value and observed_value contain copied source/contract values only, never interpretation prose."
+              },
+              "FractionThreshold": {
+                "type": "object",
+                "properties": {
+                  "numerator": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "denominator": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "numerator",
+                  "denominator"
+                ],
+                "additionalProperties": false
+              },
+              "JsonValue": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/JsonValue"
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/JsonValue"
+                    }
+                  }
+                ]
+              },
+              "Locator": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "bed_line"
+                      },
+                      "line_number": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "byte_start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "byte_end": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "line_number",
+                      "byte_start",
+                      "byte_end"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "array_index"
+                      },
+                      "index": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "index"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "NativeFileIdentity": {
+                "type": "object",
+                "properties": {
+                  "artifact_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "size_bytes": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "format": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+                  }
+                },
+                "required": [
+                  "artifact_ref",
+                  "sha256",
+                  "size_bytes",
+                  "format"
+                ],
+                "additionalProperties": false,
+                "description": "Exact shared NativeFileIdentity from packet419. format labels bytes and selects no parser by itself. Media type is a capture-call argument, not part of identity."
+              },
+              "OccurrenceProjectionRow": {
+                "type": "object",
+                "properties": {
+                  "comparison_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "population": {
+                    "enum": [
+                      "unfiltered",
+                      "selected"
+                    ]
+                  },
+                  "set_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "occurrence_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "result_extent": {
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "measurements": {
+                    "$ref": "#/$defs/OccurrenceSelectedMeasurements"
+                  }
+                },
+                "required": [
+                  "comparison_key",
+                  "population",
+                  "set_key",
+                  "occurrence_key",
+                  "result_extent",
+                  "measurements"
+                ],
+                "additionalProperties": false
+              },
+              "OccurrenceSelectedMeasurements": {
+                "type": "object",
+                "properties": {
+                  "span_bp": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "partner_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "covered_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "coverage_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "pair_keys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                    }
+                  }
+                },
+                "additionalProperties": false,
+                "minProperties": 1,
+                "description": "Only explicitly requested fixed occurrence fields occur."
+              },
+              "PairProjectionRow": {
+                "type": "object",
+                "properties": {
+                  "comparison_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "a_set_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "b_set_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "result_extent": {
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "reference_relation": {
+                    "enum": [
+                      "same_supplied_reference",
+                      "different_supplied_references",
+                      "unknown",
+                      "conflicting_metadata"
+                    ]
+                  },
+                  "observed_interpretation": {
+                    "enum": [
+                      "exact_complete_result",
+                      "lower_bound_subset",
+                      "unavailable"
+                    ]
+                  },
+                  "measurements": {
+                    "$ref": "#/$defs/PairSelectedMeasurements"
+                  },
+                  "issues": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Failure"
+                    }
+                  }
+                },
+                "required": [
+                  "comparison_key",
+                  "a_set_key",
+                  "b_set_key",
+                  "result_extent",
+                  "reference_relation",
+                  "observed_interpretation",
+                  "measurements",
+                  "issues"
+                ],
+                "additionalProperties": false
+              },
+              "PairSelectedMeasurements": {
+                "type": "object",
+                "properties": {
+                  "unfiltered.native_pair_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unfiltered.pairwise_overlap_bp_sum": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unfiltered.intersection_union_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unfiltered.combined_union_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unfiltered.jaccard_bp": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "unfiltered.a_union_coverage_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "unfiltered.b_union_coverage_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "unfiltered.a_regions_with_overlap": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unfiltered.b_regions_with_overlap": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unfiltered.a_region_overlap_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "unfiltered.b_region_overlap_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "selected.selected_pair_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "selected.selected_pairwise_bp_sum": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "selected.selected_intersection_union_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "selected.selected_shared_union_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "selected.a_union_coverage_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "selected.b_union_coverage_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "selected.a_regions_with_overlap": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "selected.b_regions_with_overlap": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "selected.a_region_overlap_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "selected.b_region_overlap_fraction": {
+                    "$ref": "#/$defs/Ratio"
+                  },
+                  "observed.observed_pair_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "observed.observed_pairwise_bp_sum": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "observed.observed_intersection_union_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "minProperties": 1,
+                "description": "Only the selector's explicit field names occur. Field names are a fixed per-tool enum, not executable expressions. Ratio values retain numerator and denominator."
+              },
+              "Parameters": {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "const": "genomic_overlap_calculation_parameters_v1"
+                  },
+                  "minimum_overlap_bp": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "minimum_a_fraction": {
+                    "$ref": "#/$defs/FractionThreshold"
+                  },
+                  "minimum_b_fraction": {
+                    "$ref": "#/$defs/FractionThreshold"
+                  }
+                },
+                "required": [
+                  "version",
+                  "minimum_overlap_bp",
+                  "minimum_a_fraction",
+                  "minimum_b_fraction"
+                ],
+                "additionalProperties": false
+              },
+              "Projection": {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "const": "genomic_overlap_projection_v1"
+                  },
+                  "source_sheet_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "parameters": {
+                    "$ref": "#/$defs/Parameters"
+                  },
+                  "kind": {
+                    "enum": [
+                      "pair_metrics",
+                      "set_metrics",
+                      "occurrence_rows"
+                    ]
+                  },
+                  "page": {
+                    "$ref": "#/$defs/ProjectionPage"
+                  },
+                  "result_extent": {
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "reference_relations": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/ReferenceRelation"
+                    }
+                  },
+                  "pair_rows": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PairProjectionRow"
+                    }
+                  },
+                  "set_rows": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/SetProjectionRow"
+                    }
+                  },
+                  "occurrence_rows": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/OccurrenceProjectionRow"
+                    }
+                  },
+                  "failures": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Failure"
+                    }
+                  },
+                  "measurement_fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "version",
+                  "source_sheet_sha256",
+                  "parameters",
+                  "kind",
+                  "page",
+                  "result_extent",
+                  "reference_relations",
+                  "pair_rows",
+                  "set_rows",
+                  "occurrence_rows",
+                  "failures",
+                  "measurement_fields"
+                ],
+                "additionalProperties": false,
+                "description": "Parent-specific selected measurement projection plus necessary identity/extent/reference/denominator qualifications. Full components remain retained. Host hashes and artifact references are storage metadata and excluded from model-facing text."
+              },
+              "ProjectionPage": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "total_rows": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "returned_rows": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "offset",
+                  "limit",
+                  "total_rows",
+                  "returned_rows"
+                ],
+                "additionalProperties": false
+              },
+              "Ratio": {
+                "type": "object",
+                "properties": {
+                  "numerator": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "denominator": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "missing_reason": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "zero_denominator",
+                          "incomplete_input",
+                          "incomplete_native_result",
+                          "unavailable_input",
+                          "unavailable_native_result"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "numerator",
+                  "denominator",
+                  "value",
+                  "missing_reason"
+                ],
+                "additionalProperties": false
+              },
+              "ReferenceMetadata": {
+                "type": "object",
+                "properties": {
+                  "assembly_accession_version": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "assembly_label": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "sequence_dictionary": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/NativeFileIdentity"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "contigs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/ContigMetadata"
+                    }
+                  },
+                  "source_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "assembly_accession_version",
+                  "assembly_label",
+                  "sequence_dictionary",
+                  "contigs",
+                  "source_refs"
+                ],
+                "additionalProperties": false
+              },
+              "ReferenceRelation": {
+                "type": "object",
+                "properties": {
+                  "comparison_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "a_set_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "b_set_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "relation": {
+                    "enum": [
+                      "same_supplied_reference",
+                      "different_supplied_references",
+                      "unknown",
+                      "conflicting_metadata"
+                    ]
+                  },
+                  "basis": {
+                    "enum": [
+                      "supplied_versioned_reference_identity",
+                      "supplied_contig_sequence_identity",
+                      "insufficient_supplied_identity",
+                      "contradictory_supplied_identity"
+                    ]
+                  },
+                  "a_reference": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/ReferenceMetadata"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "b_reference": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/ReferenceMetadata"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "issues": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Failure"
+                    }
+                  }
+                },
+                "required": [
+                  "comparison_key",
+                  "a_set_key",
+                  "b_set_key",
+                  "relation",
+                  "basis",
+                  "a_reference",
+                  "b_reference",
+                  "issues"
+                ],
+                "additionalProperties": false
+              },
+              "SetProjectionRow": {
+                "type": "object",
+                "properties": {
+                  "set_key": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                  },
+                  "result_extent": {
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "measurements": {
+                    "$ref": "#/$defs/SetSelectedMeasurements"
+                  },
+                  "issues": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Failure"
+                    }
+                  }
+                },
+                "required": [
+                  "set_key",
+                  "result_extent",
+                  "measurements",
+                  "issues"
+                ],
+                "additionalProperties": false
+              },
+              "SetSelectedMeasurements": {
+                "type": "object",
+                "properties": {
+                  "input_data_row_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "valid_region_count": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "region_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "summed_region_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "union_bp": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "coordinate_locus_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "duplicate_coordinate_excess": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "minProperties": 1,
+                "description": "Only explicitly requested fixed set fields occur."
+              }
+            },
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Projection"
+            },
+            "x-source": "genomic_overlap_pair_metrics",
+            "$id": "urn:gene-annotation:genomic-overlap:return:fd7e36162a0aaac5e9cfb5ecf6886e4bb1f3c8674e48a9d417ba17485f381ed0"
+          },
+          "saved": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$defs": {
+              "NativeFileIdentity": {
+                "type": "object",
+                "properties": {
+                  "artifact_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "format": "reference",
+                    "x-reference-namespace": "artifact"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "size_bytes": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "format": {
+                    "const": "genomic_region_overlap_sheet_v1"
+                  }
+                },
+                "required": [
+                  "artifact_ref",
+                  "sha256",
+                  "size_bytes",
+                  "format"
+                ],
+                "additionalProperties": false,
+                "description": "Exact shared NativeFileIdentity from packet419. format labels bytes and selects no parser by itself. Media type is a capture-call argument, not part of identity."
+              }
+            },
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/NativeFileIdentity"
+            },
+            "x-source": "genomic_overlap_saved_sheets",
+            "$id": "urn:gene-annotation:genomic-overlap:return:f5362fa0b758db292c3feabd269a846f24f392dd4b4226c15f54adc496dfc583"
+          },
+          "failures": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$defs": {
+              "Failure": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "input_unavailable",
+                      "input_digest_mismatch",
+                      "unsupported_input_format",
+                      "invalid_coordinate",
+                      "zero_width_interval",
+                      "invalid_chromosome_token",
+                      "native_dependency_unavailable",
+                      "native_version_unverified",
+                      "native_nonzero_exit",
+                      "resource_limit",
+                      "native_output_unavailable",
+                      "native_output_partial",
+                      "native_output_malformed",
+                      "native_pair_identity_conflict",
+                      "duplicate_native_pair",
+                      "overlap_width_conflict",
+                      "original_attempt_mismatch",
+                      "artifact_digest_mismatch",
+                      "zero_denominator",
+                      "requested_field_unavailable",
+                      "reference_metadata_conflict",
+                      "reference_identity_unavailable"
+                    ]
+                  },
+                  "stage": {
+                    "enum": [
+                      "input",
+                      "native",
+                      "capture",
+                      "parse",
+                      "calculate",
+                      "project",
+                      "authority"
+                    ]
+                  },
+                  "set_key": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "comparison_key": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "artifact_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "locator": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/Locator"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "field_path": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^/"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "expected_value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/JsonValue"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "observed_value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/JsonValue"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partial_artifact_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "requirement": {
+                    "enum": [
+                      "none",
+                      "complete_input",
+                      "valid_coordinates",
+                      "bound_bedtools",
+                      "original_native_output",
+                      "complete_native_output",
+                      "matching_file_identity",
+                      "nonzero_denominator",
+                      "requested_reference_metadata",
+                      "requested_selected_field",
+                      "native_version_evidence"
+                    ]
+                  }
+                },
+                "required": [
+                  "code",
+                  "stage",
+                  "set_key",
+                  "comparison_key",
+                  "artifact_ref",
+                  "locator",
+                  "field_path",
+                  "expected_value",
+                  "observed_value",
+                  "partial_artifact_refs",
+                  "requirement"
+                ],
+                "additionalProperties": false,
+                "description": "All fields required. Null means this locator or expected/observed scalar is not applicable; it is never a zero measurement. expected_value and observed_value contain copied source/contract values only, never interpretation prose."
+              },
+              "JsonValue": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/JsonValue"
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/JsonValue"
+                    }
+                  }
+                ]
+              },
+              "Locator": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "bed_line"
+                      },
+                      "line_number": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "byte_start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "byte_end": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "line_number",
+                      "byte_start",
+                      "byte_end"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "array_index"
+                      },
+                      "index": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "index"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Failure"
+            },
+            "x-source": "genomic_overlap_failures",
+            "$id": "urn:gene-annotation:genomic-overlap:return:edd5390ebd560224664b2fa5279cb871654824b2f7b01aa88ce6e5fb9307841e"
+          },
+          "completed": {
+            "type": "boolean",
+            "x-source": "execution_completed"
+          }
+        },
+        "required": [
+          "overlap",
+          "saved",
+          "failures",
+          "completed"
+        ],
+        "additionalProperties": false
+      },
+      "original_received_form": {
+        "completed": true,
+        "failures": [],
+        "overlap": [
+          {
+            "failures": [],
+            "kind": "pair_metrics",
+            "measurement_fields": [
+              "unfiltered.native_pair_count",
+              "unfiltered.pairwise_overlap_bp_sum",
+              "unfiltered.intersection_union_bp",
+              "unfiltered.combined_union_bp",
+              "unfiltered.jaccard_bp",
+              "selected.selected_pair_count",
+              "selected.selected_pairwise_bp_sum"
+            ],
+            "occurrence_rows": [],
+            "page": {
+              "limit": 3,
+              "offset": 0,
+              "returned_rows": 3,
+              "total_rows": 3
+            },
+            "pair_rows": [
+              {
+                "a_set_key": "A",
+                "b_set_key": "B",
+                "comparison_key": "AB",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 2,
+                  "selected.selected_pairwise_bp_sum": 8,
+                  "unfiltered.combined_union_bp": 15,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 15,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.3333333333333333
+                  },
+                  "unfiltered.native_pair_count": 2,
+                  "unfiltered.pairwise_overlap_bp_sum": 8
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "A",
+                "b_set_key": "C",
+                "comparison_key": "AC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 5,
+                  "unfiltered.combined_union_bp": 20,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 20,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.25
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 5
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "B",
+                "b_set_key": "C",
+                "comparison_key": "BC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 2,
+                  "unfiltered.combined_union_bp": 13,
+                  "unfiltered.intersection_union_bp": 2,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 13,
+                    "missing_reason": null,
+                    "numerator": 2,
+                    "value": 0.15384615384615385
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 2
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              }
+            ],
+            "parameters": {
+              "minimum_a_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_b_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_overlap_bp": 1,
+              "version": "genomic_overlap_calculation_parameters_v1"
+            },
+            "reference_relations": [
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "B",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AB",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "B",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "BC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              }
+            ],
+            "result_extent": "complete",
+            "set_rows": [],
+            "source_sheet_sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "version": "genomic_overlap_projection_v1"
+          }
+        ],
+        "saved": [
+          {
+            "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "format": "genomic_region_overlap_sheet_v1",
+            "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "size_bytes": 28401
+          }
+        ]
+      },
+      "later_received_form": {
+        "completed": true,
+        "failures": [],
+        "overlap": [
+          {
+            "failures": [],
+            "kind": "pair_metrics",
+            "measurement_fields": [
+              "unfiltered.native_pair_count",
+              "unfiltered.pairwise_overlap_bp_sum",
+              "unfiltered.intersection_union_bp",
+              "unfiltered.combined_union_bp",
+              "unfiltered.jaccard_bp",
+              "selected.selected_pair_count",
+              "selected.selected_pairwise_bp_sum"
+            ],
+            "occurrence_rows": [],
+            "page": {
+              "limit": 3,
+              "offset": 0,
+              "returned_rows": 3,
+              "total_rows": 3
+            },
+            "pair_rows": [
+              {
+                "a_set_key": "A",
+                "b_set_key": "B",
+                "comparison_key": "AB",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 5,
+                  "unfiltered.combined_union_bp": 15,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 15,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.3333333333333333
+                  },
+                  "unfiltered.native_pair_count": 2,
+                  "unfiltered.pairwise_overlap_bp_sum": 8
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "A",
+                "b_set_key": "C",
+                "comparison_key": "AC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 1,
+                  "selected.selected_pairwise_bp_sum": 5,
+                  "unfiltered.combined_union_bp": 20,
+                  "unfiltered.intersection_union_bp": 5,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 20,
+                    "missing_reason": null,
+                    "numerator": 5,
+                    "value": 0.25
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 5
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              },
+              {
+                "a_set_key": "B",
+                "b_set_key": "C",
+                "comparison_key": "BC",
+                "issues": [],
+                "measurements": {
+                  "selected.selected_pair_count": 0,
+                  "selected.selected_pairwise_bp_sum": 0,
+                  "unfiltered.combined_union_bp": 13,
+                  "unfiltered.intersection_union_bp": 2,
+                  "unfiltered.jaccard_bp": {
+                    "denominator": 13,
+                    "missing_reason": null,
+                    "numerator": 2,
+                    "value": 0.15384615384615385
+                  },
+                  "unfiltered.native_pair_count": 1,
+                  "unfiltered.pairwise_overlap_bp_sum": 2
+                },
+                "observed_interpretation": "exact_complete_result",
+                "reference_relation": "same_supplied_reference",
+                "result_extent": "complete"
+              }
+            ],
+            "parameters": {
+              "minimum_a_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_b_fraction": {
+                "denominator": 1,
+                "numerator": 0
+              },
+              "minimum_overlap_bp": 4,
+              "version": "genomic_overlap_calculation_parameters_v1"
+            },
+            "reference_relations": [
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "B",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AB",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "A",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "AC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              },
+              {
+                "a_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "a_set_key": "B",
+                "b_reference": {
+                  "assembly_accession_version": "synthetic-overlap437.1",
+                  "assembly_label": null,
+                  "contigs": [
+                    {
+                      "chromosome": "chr1",
+                      "length_bp": 100,
+                      "sequence_accession_version": null,
+                      "sequence_sha256": null,
+                      "source_refs": [
+                        "source_993ffb50e7f3a8bbec427977"
+                      ]
+                    }
+                  ],
+                  "sequence_dictionary": null,
+                  "source_refs": [
+                    "source_993ffb50e7f3a8bbec427977"
+                  ]
+                },
+                "b_set_key": "C",
+                "basis": "supplied_versioned_reference_identity",
+                "comparison_key": "BC",
+                "issues": [],
+                "relation": "same_supplied_reference"
+              }
+            ],
+            "result_extent": "complete",
+            "set_rows": [],
+            "source_sheet_sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "version": "genomic_overlap_projection_v1"
+          }
+        ],
+        "saved": [
+          {
+            "artifact_ref": "artifact_b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "format": "genomic_region_overlap_sheet_v1",
+            "sha256": "b90910d078d91e50ee892d1a71b5f7b514edb38323a9eedafe1439d1a4afceda",
+            "size_bytes": 28401
+          }
+        ]
+      }
+    },
+    "later_display_half": {
+      "label": "Explicit saved-sheet recalculation; minimum overlap 4 bp; both minimum fractions 0/1",
+      "measurements": [
+        {
+          "comparison": "A–B",
+          "values": {
+            "selected.selected_pair_count": 1,
+            "selected.selected_pairwise_bp_sum": 5,
+            "unfiltered.combined_union_bp": 15,
+            "unfiltered.intersection_union_bp": 5,
+            "unfiltered.jaccard_bp": {
+              "denominator": 15,
+              "missing_reason": null,
+              "numerator": 5,
+              "value": 0.3333333333333333
+            },
+            "unfiltered.native_pair_count": 2,
+            "unfiltered.pairwise_overlap_bp_sum": 8
+          }
+        },
+        {
+          "comparison": "A–C",
+          "values": {
+            "selected.selected_pair_count": 1,
+            "selected.selected_pairwise_bp_sum": 5,
+            "unfiltered.combined_union_bp": 20,
+            "unfiltered.intersection_union_bp": 5,
+            "unfiltered.jaccard_bp": {
+              "denominator": 20,
+              "missing_reason": null,
+              "numerator": 5,
+              "value": 0.25
+            },
+            "unfiltered.native_pair_count": 1,
+            "unfiltered.pairwise_overlap_bp_sum": 5
+          }
+        },
+        {
+          "comparison": "B–C",
+          "values": {
+            "selected.selected_pair_count": 0,
+            "selected.selected_pairwise_bp_sum": 0,
+            "unfiltered.combined_union_bp": 13,
+            "unfiltered.intersection_union_bp": 2,
+            "unfiltered.jaccard_bp": {
+              "denominator": 13,
+              "missing_reason": null,
+              "numerator": 2,
+              "value": 0.15384615384615385
+            },
+            "unfiltered.native_pair_count": 1,
+            "unfiltered.pairwise_overlap_bp_sum": 2
+          }
+        }
+      ]
+    }
+  }
+}

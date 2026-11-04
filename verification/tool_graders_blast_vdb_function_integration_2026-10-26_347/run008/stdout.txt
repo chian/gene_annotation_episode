@@ -1,0 +1,102 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_worker_saved_version_failures_keep_closed_population_reason_without_fallback _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run008/pytest/test_worker_saved_version_fail0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73d662da1a00>
+
+    def test_worker_saved_version_failures_keep_closed_population_reason_without_fallback(tmp_path, monkeypatch):
+        """Checksum-sealed synthetic protocol counterexamples, not received handles."""
+        import hashlib
+        import shutil
+        from gene_annotation_episode import native_blast_database_result_worker as worker
+        from gene_annotation_episode import native_blast_database_metadata as metadata
+        from gene_annotation_episode import native_blast_vdb_function_metadata as function_metadata
+        h, selected = connected_fixture(tmp_path, monkeypatch)
+        try:
+            _, original = capture(h, selected)
+            assert original['complete']
+            grading = _json(h.store, original['preparation']['source_grading_artifact_ref'])['grading']
+            request = _json(h.store, grading['request_artifact_ref'])
+            original_directory = Path(request['output_directory'])
+            forbid_acquisition(h, monkeypatch)
+            def forbidden(*args, **kwargs):
+                raise AssertionError('incompatible saved version attempted acquisition, population or calculation')
+            for module, name in ((worker, 'parse_blast_report_collection'), (worker, '_catalog'),
+                    (worker, 'calculate_native_blast_database_sheets'), (metadata, 'prepare_native_blast_database_inputs'),
+                    (metadata, 'populate_native_blast_database_sheets'), (function_metadata, 'populate_native_blast_vdb_function_sheets')):
+                monkeypatch.setattr(module, name, forbidden)
+            outcomes = {}
+            for defect in ('old_manifest', 'missing_manifest_version', 'old_declared_sheet', 'old_payload_sheet'):
+                directory = tmp_path / defect
+                retained = directory / 'retained'
+                shutil.copytree(original_directory, retained)
+                manifest_path = retained / 'worker-manifest.json'
+                manifest = json.loads(manifest_path.read_bytes())
+                if defect == 'old_manifest':
+                    manifest['version'] = 'native_blast_database_result_worker_manifest_v1'
+                elif defect == 'missing_manifest_version':
+                    del manifest['version']
+                else:
+                    artifact = next(a for a in manifest['artifacts'] if a['role'] == 'sheets')
+                    if defect == 'old_declared_sheet':
+                        artifact['schema'] = 'native_blast_database_sheet_set_v1'
+                    else:
+                        path = retained / artifact['relative_path']
+                        sheet = json.loads(path.read_bytes()); sheet['schema'] = 'native_blast_database_sheet_set_v1'
+                        raw = worker._json_bytes(sheet); path.write_bytes(raw)
+                        artifact.update(sha256=hashlib.sha256(raw).hexdigest(), size_bytes=len(raw))
+                raw = worker._json_bytes(manifest); manifest_path.write_bytes(raw)
+                attempted = deepcopy(request)
+                attempted.update(output_directory=str(directory / 'output'), reuse=dict(manifest_path=str(manifest_path),
+                    manifest_sha256=hashlib.sha256(raw).hexdigest(), manifest_size_bytes=len(raw),
+                    collection_path=str(retained / 'collection.json'), sheets_path=str(retained / 'sheets.json')))
+                request_path = directory / 'request.json'; request_path.write_bytes(worker._json_bytes(attempted))
+                result = worker.run_native_blast_database_result_worker(str(request_path))
+                assert result['status'] == 'failed'
+>               assert {(f['stage'], f['code'], f['detail_code']) for f in result['failures']} == {
+                    ('population', 'native_blast_database_sheet_invalid', 'metadata_shape_invalid')}
+E                   AssertionError: assert {('worker', '...st_conflict')} == {('population...ape_invalid')}
+E                     
+E                     Extra items in the left set:
+E                     ('worker', 'native_blast_database_artifact_identity_mismatch', 'artifact_digest_conflict')
+E                     Extra items in the right set:
+E                     ('population', 'native_blast_database_sheet_invalid', 'metadata_shape_invalid')
+E                     Use -v to get more diff
+
+../../../tests/test_native_blast_vdb_function_recalculation.py:262: AssertionError
+_ test_existing_hsp_family_validates_new_capture_and_saved_projection_adds_no_observation[1] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run008/pytest/test_existing_hsp_family_valid0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73d640baa120>
+temperature = 1
+
+    @pytest.mark.parametrize('temperature', [1, 2])
+    def test_existing_hsp_family_validates_new_capture_and_saved_projection_adds_no_observation(tmp_path, monkeypatch, temperature):
+        from gene_annotation_episode.native_blast_database_result_publication import validate_native_blast_database_observation
+        h, selected = connected_fixture(tmp_path,monkeypatch)
+        selected['projections'].append(dict(family='hsp',rows={'offset':0,'limit':100},metrics=['native_score_bits'],booleans=[]))
+        try:
+            first, original = capture(h,selected)
+            assert original['complete']
+            hsps=original['publication']['rows_by_family']['hsp']
+            assert len(hsps)==4 and all(r['publication_status']=='published' for r in hsps)
+            for row in hsps:
+                checked=validate_native_blast_database_observation(h.store,h.store.get(row['observation_ref']))
+                assert checked['record_key']==row['record_key']
+            h.returned(first)
+            descriptor=h.family.native_blast_database_results.facts(first)[SAVED_INPUT_SOURCE][0]
+            observations=h.store.query_records('observation')['total']
+            forbid_acquisition(h,monkeypatch)
+            second, saved=capture(h,selection(saved=descriptor,temperature=temperature,families=('vdb_function','hsp')),index=2)
+            assert saved['complete'],saved['failures']
+            h.returned(second)
+>           received=h.family.native_blast_database_returns.received_facts(h.root,plain(second.request)['report_contract']['measurements']['schema'])
+                                                                                  ^^^^^
+E           NameError: name 'plain' is not defined
+
+../../../tests/test_native_blast_vdb_function_recalculation.py:203: NameError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_recalculation.py::test_worker_saved_version_failures_keep_closed_population_reason_without_fallback
+FAILED ../../../tests/test_native_blast_vdb_function_recalculation.py::test_existing_hsp_family_validates_new_capture_and_saved_projection_adds_no_observation[1]
+2 failed in 58.33s

@@ -1,0 +1,73 @@
+--- verification/tool_graders_rna_structure_integration_2026-10-26_360/evidence001/source/gene_annotation_episode/native_rna_structure_returns.py	2026-10-26 21:30:05.704831219 -0500
++++ gene_annotation_episode/native_rna_structure_returns.py	2026-10-26 22:55:12.260620503 -0500
+@@ -207,34 +207,54 @@
+         return None
+ 
+     def resolve_saved_rna_input(self, context, descriptor):
++        """Preserve the original single-input assignment restriction."""
+         self.authenticate(context, allow_unsaved=True)
+         if context.role == "results":
+             from .native_rna_structure_result_publication import authenticate_rna_results_commission
+             authenticate_rna_results_commission(self.store, context, allow_unsaved=True)
+         descriptor = validate_saved_rna_input(descriptor)
+-        body = self.results.read_receipt_key(descriptor["result_receipt_key"], context.scope)
+-        self._require(body["assignment"]["selector"]["acquisition"] == "complete_bound_bundle"
+-            and self._equal(self.results.saved_descriptor(body, verify_bytes=False), descriptor), "saved_descriptor_conflict")
+         if context.role == "results":
+             self._require(plain(context.assignment)["handoff_ref"] == descriptor["handoff_ref"]
+                 and plain(context.assignment)["selector"].get("saved_input") == descriptor, "saved_assignment_conflict")
++        return self.authenticate_received_saved_input(context, descriptor)
++
++    def authenticate_received_saved_input(self, context, descriptor):
++        """Prove original receipt and actual delivery, independently of selection.
++
++        The comparison host checks its complete selected-member assignment.
++        This extraction grants no additional artifact or source permissions.
++        """
++        self.authenticate(context, allow_unsaved=True)
++        if context.role == "results":
++            from .native_rna_structure_result_publication import authenticate_rna_results_commission
++            authenticate_rna_results_commission(self.store, context, allow_unsaved=True)
++        descriptor = validate_saved_rna_input(descriptor)
++        body = self.results.read_receipt_key(descriptor["result_receipt_key"], context.scope)
++        self._require(body["assignment"]["selector"]["acquisition"] == "complete_bound_bundle"
++            and self._equal(self.results.saved_descriptor(body, verify_bytes=False), descriptor), "saved_descriptor_conflict")
++        operand_refs = {descriptor[key] for key in ("handoff_ref", "source_ref", "bundle_artifact_ref", "sheet_artifact_ref")}
++        self._received_selected_value(context, descriptor, SAVED_SOURCE, operand_refs,
++            failure_code="saved_input_not_received")
++        return body
++
++    def _received_selected_value(self, context, value, source, operand_refs, *, failure_code):
++        """Reusable original frozen-return lookup; never expand source custody."""
+         # A parent selecting its next child may consume an earlier own received
+         # form. A commissioned child sees only each ancestor's frozen prefix.
+         found = False
+         current, before = context, None
+         receipts = EpisodeReceipts(self.store, self.run_id)
+         known = set(receipts.known(context.episode_id, baseline=context.role == "results"))
+-        operand_refs = {descriptor[key] for key in ("handoff_ref", "source_ref", "bundle_artifact_ref", "sheet_artifact_ref")}
+         while True:
+             for attempt in self._attempts(current):
+                 if before is not None and attempt["decision_index"] >= before:
+                     continue
+                 schema = json.loads(attempt["contract"]).get("measurements", {}).get("schema", {})
+-                if SAVED_SOURCE not in requested_sources(schema):
++                if source not in requested_sources(schema):
+                     continue
+                 child, form, schema = self._attempt(current, attempt["decision_index"])
+                 values = self._validate_historical(child, form, schema, verify_artifacts=False)
+-                if any(self._equal(descriptor, value) for value in values.get(SAVED_SOURCE, [])):
++                if any(self._equal(value, received) for received in values.get(source, [])):
+                     found = True
+                     break
+             if found:
+@@ -247,8 +267,7 @@
+             parent = self.context(manifest["parent_episode_id"])
+             self._require(current.path[:-1] == parent.path, "saved_prefix_conflict")
+             current = parent
+-        self._require(found and operand_refs <= known, "saved_input_not_received")
+-        return body
++        self._require(found and set(operand_refs) <= known, failure_code)
+ 
+ 
+ __all__ = ["NativeRNAStructureReturns", "FACT_SOURCES", "REFERENCE_SOURCE", "SAVED_SOURCE", "requested_sources"]

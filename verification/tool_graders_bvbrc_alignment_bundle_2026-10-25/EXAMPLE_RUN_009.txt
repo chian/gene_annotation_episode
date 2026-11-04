@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/verify_bundle_examples_009.py", line 71, in <module>
+    result = fixture.consume(fields)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_alignment_bundle_resolution.py", line 129, in consume
+    return r.consume_bundle(self.bundle, artifact_bytes=self.raw, supplied_values=self.values,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_resolution.py", line 899, in consume_bundle
+    facts = project_requested_facts(sheet_set=sheet_set, component_set=component_set,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_projection.py", line 33, in call
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_projection.py", line 909, in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_projection.py", line 895, in project
+    fact = self.measurement(selection, request, value) if kind == 'measurement' else self.rows(selection, request, value)
+                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_projection.py", line 695, in rows
+    row = self.test_row(aid, request, value, test); testid = row['test_id']
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_projection.py", line 551, in test_row
+    row = _one([r for r in rows if _test_key({**r, 'category_id': value['category_id']}) == _test_key(selected)])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_projection.py", line 73, in _one
+    _require(len(matches) == 1, 'selected_row_unknown_or_ambiguous')
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_alignment_bundle_projection.py", line 26, in _require
+    raise ValueError('bvbrc_alignment_projection_' + code)
+ValueError: bvbrc_alignment_projection_selected_row_unknown_or_ambiguous

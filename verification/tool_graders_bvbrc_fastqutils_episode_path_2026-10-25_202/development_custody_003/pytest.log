@@ -1,0 +1,556 @@
+FFFFFF...                                                                [100%]
+=================================== FAILURES ===================================
+_ test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[selector] _
+
+self = <gene_annotation_episode.tools.ToolRegistry object at 0x7c4b63c7a3f0>
+name = 'material.parse'
+args = {'material_ref': 'material_5ac9135b4514596f60e0cf3b', 'format': 'text'}
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+operation_key = 'appservice-custody-fixture:episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62:1'
+permitted_record_refs = None
+
+    def execute(self, name: str, args: dict, *, scope: dict | None = None,
+                operation_key: str | None = None, permitted_record_refs=None) -> dict:
+        try:
+>           asyncio.get_running_loop()
+E           RuntimeError: no running event loop
+
+gene_annotation_episode/tools.py:469: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+driver = <test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7c4b6d1b7230>
+mutation = 'selector'
+
+    @pytest.mark.parametrize('mutation', ['selector', 'resource', 'original_parameters', 'commission', 'source', 'binding'])
+    def test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata(driver, mutation):
+        d = driver
+>       d.start(fields=('read_count',), documents=('reads',))
+
+tests/test_bvbrc_fastqutils_episode_flow.py:368: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_episode_flow.py:174: in start
+    parsed = ToolRegistry(self.store, clients=Client()).execute('material.parse', args,
+gene_annotation_episode/tools.py:471: in execute
+    return asyncio.run(self.execute_async(name, args, scope=scope, operation_key=operation_key,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:488: in execute_async
+    return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:650: in _execute_operation_async
+    self._save(operation_key, name, args, scope, result)
+gene_annotation_episode/tools.py:673: in _save
+    (key, result["operation_ref"], name, canonical(args), canonical(scope), canonical(result)))
+                                                          ^^^^^^^^^^^^^^^^
+gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7c4b63c79f10>
+o = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type mappingproxy is not JSON serializable
+
+/usr/lib/python3.12/json/encoder.py:180: TypeError
+_ test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[resource] _
+
+self = <gene_annotation_episode.tools.ToolRegistry object at 0x7c4b63b19c40>
+name = 'material.parse'
+args = {'material_ref': 'material_5ac9135b4514596f60e0cf3b', 'format': 'text'}
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+operation_key = 'appservice-custody-fixture:episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62:1'
+permitted_record_refs = None
+
+    def execute(self, name: str, args: dict, *, scope: dict | None = None,
+                operation_key: str | None = None, permitted_record_refs=None) -> dict:
+        try:
+>           asyncio.get_running_loop()
+E           RuntimeError: no running event loop
+
+gene_annotation_episode/tools.py:469: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+driver = <test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7c4b6ccb1280>
+mutation = 'resource'
+
+    @pytest.mark.parametrize('mutation', ['selector', 'resource', 'original_parameters', 'commission', 'source', 'binding'])
+    def test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata(driver, mutation):
+        d = driver
+>       d.start(fields=('read_count',), documents=('reads',))
+
+tests/test_bvbrc_fastqutils_episode_flow.py:368: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_episode_flow.py:174: in start
+    parsed = ToolRegistry(self.store, clients=Client()).execute('material.parse', args,
+gene_annotation_episode/tools.py:471: in execute
+    return asyncio.run(self.execute_async(name, args, scope=scope, operation_key=operation_key,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:488: in execute_async
+    return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:650: in _execute_operation_async
+    self._save(operation_key, name, args, scope, result)
+gene_annotation_episode/tools.py:673: in _save
+    (key, result["operation_ref"], name, canonical(args), canonical(scope), canonical(result)))
+                                                          ^^^^^^^^^^^^^^^^
+gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7c4b63bbb470>
+o = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type mappingproxy is not JSON serializable
+
+/usr/lib/python3.12/json/encoder.py:180: TypeError
+_ test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[original_parameters] _
+
+self = <gene_annotation_episode.tools.ToolRegistry object at 0x7c4b63df8e00>
+name = 'material.parse'
+args = {'material_ref': 'material_5ac9135b4514596f60e0cf3b', 'format': 'text'}
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+operation_key = 'appservice-custody-fixture:episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62:1'
+permitted_record_refs = None
+
+    def execute(self, name: str, args: dict, *, scope: dict | None = None,
+                operation_key: str | None = None, permitted_record_refs=None) -> dict:
+        try:
+>           asyncio.get_running_loop()
+E           RuntimeError: no running event loop
+
+gene_annotation_episode/tools.py:469: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+driver = <test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7c4b6ccb2510>
+mutation = 'original_parameters'
+
+    @pytest.mark.parametrize('mutation', ['selector', 'resource', 'original_parameters', 'commission', 'source', 'binding'])
+    def test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata(driver, mutation):
+        d = driver
+>       d.start(fields=('read_count',), documents=('reads',))
+
+tests/test_bvbrc_fastqutils_episode_flow.py:368: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_episode_flow.py:174: in start
+    parsed = ToolRegistry(self.store, clients=Client()).execute('material.parse', args,
+gene_annotation_episode/tools.py:471: in execute
+    return asyncio.run(self.execute_async(name, args, scope=scope, operation_key=operation_key,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:488: in execute_async
+    return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:650: in _execute_operation_async
+    self._save(operation_key, name, args, scope, result)
+gene_annotation_episode/tools.py:673: in _save
+    (key, result["operation_ref"], name, canonical(args), canonical(scope), canonical(result)))
+                                                          ^^^^^^^^^^^^^^^^
+gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7c4b63bbbaa0>
+o = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type mappingproxy is not JSON serializable
+
+/usr/lib/python3.12/json/encoder.py:180: TypeError
+_ test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[commission] _
+
+self = <gene_annotation_episode.tools.ToolRegistry object at 0x7c4b63df92b0>
+name = 'material.parse'
+args = {'material_ref': 'material_5ac9135b4514596f60e0cf3b', 'format': 'text'}
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+operation_key = 'appservice-custody-fixture:episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62:1'
+permitted_record_refs = None
+
+    def execute(self, name: str, args: dict, *, scope: dict | None = None,
+                operation_key: str | None = None, permitted_record_refs=None) -> dict:
+        try:
+>           asyncio.get_running_loop()
+E           RuntimeError: no running event loop
+
+gene_annotation_episode/tools.py:469: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+driver = <test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7c4b63c62ff0>
+mutation = 'commission'
+
+    @pytest.mark.parametrize('mutation', ['selector', 'resource', 'original_parameters', 'commission', 'source', 'binding'])
+    def test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata(driver, mutation):
+        d = driver
+>       d.start(fields=('read_count',), documents=('reads',))
+
+tests/test_bvbrc_fastqutils_episode_flow.py:368: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_episode_flow.py:174: in start
+    parsed = ToolRegistry(self.store, clients=Client()).execute('material.parse', args,
+gene_annotation_episode/tools.py:471: in execute
+    return asyncio.run(self.execute_async(name, args, scope=scope, operation_key=operation_key,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:488: in execute_async
+    return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:650: in _execute_operation_async
+    self._save(operation_key, name, args, scope, result)
+gene_annotation_episode/tools.py:673: in _save
+    (key, result["operation_ref"], name, canonical(args), canonical(scope), canonical(result)))
+                                                          ^^^^^^^^^^^^^^^^
+gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7c4b63df9190>
+o = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type mappingproxy is not JSON serializable
+
+/usr/lib/python3.12/json/encoder.py:180: TypeError
+_ test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[source] _
+
+self = <gene_annotation_episode.tools.ToolRegistry object at 0x7c4b63a6a930>
+name = 'material.parse'
+args = {'material_ref': 'material_5ac9135b4514596f60e0cf3b', 'format': 'text'}
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+operation_key = 'appservice-custody-fixture:episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62:1'
+permitted_record_refs = None
+
+    def execute(self, name: str, args: dict, *, scope: dict | None = None,
+                operation_key: str | None = None, permitted_record_refs=None) -> dict:
+        try:
+>           asyncio.get_running_loop()
+E           RuntimeError: no running event loop
+
+gene_annotation_episode/tools.py:469: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+driver = <test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7c4b63b213d0>
+mutation = 'source'
+
+    @pytest.mark.parametrize('mutation', ['selector', 'resource', 'original_parameters', 'commission', 'source', 'binding'])
+    def test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata(driver, mutation):
+        d = driver
+>       d.start(fields=('read_count',), documents=('reads',))
+
+tests/test_bvbrc_fastqutils_episode_flow.py:368: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_episode_flow.py:174: in start
+    parsed = ToolRegistry(self.store, clients=Client()).execute('material.parse', args,
+gene_annotation_episode/tools.py:471: in execute
+    return asyncio.run(self.execute_async(name, args, scope=scope, operation_key=operation_key,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:488: in execute_async
+    return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:650: in _execute_operation_async
+    self._save(operation_key, name, args, scope, result)
+gene_annotation_episode/tools.py:673: in _save
+    (key, result["operation_ref"], name, canonical(args), canonical(scope), canonical(result)))
+                                                          ^^^^^^^^^^^^^^^^
+gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7c4b63b264b0>
+o = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type mappingproxy is not JSON serializable
+
+/usr/lib/python3.12/json/encoder.py:180: TypeError
+_ test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[binding] _
+
+self = <gene_annotation_episode.tools.ToolRegistry object at 0x7c4b63a6bbf0>
+name = 'material.parse'
+args = {'material_ref': 'material_5ac9135b4514596f60e0cf3b', 'format': 'text'}
+scope = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+operation_key = 'appservice-custody-fixture:episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62:1'
+permitted_record_refs = None
+
+    def execute(self, name: str, args: dict, *, scope: dict | None = None,
+                operation_key: str | None = None, permitted_record_refs=None) -> dict:
+        try:
+>           asyncio.get_running_loop()
+E           RuntimeError: no running event loop
+
+gene_annotation_episode/tools.py:469: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+driver = <test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7c4b63bbe510>
+mutation = 'binding'
+
+    @pytest.mark.parametrize('mutation', ['selector', 'resource', 'original_parameters', 'commission', 'source', 'binding'])
+    def test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata(driver, mutation):
+        d = driver
+>       d.start(fields=('read_count',), documents=('reads',))
+
+tests/test_bvbrc_fastqutils_episode_flow.py:368: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_fastqutils_episode_flow.py:174: in start
+    parsed = ToolRegistry(self.store, clients=Client()).execute('material.parse', args,
+gene_annotation_episode/tools.py:471: in execute
+    return asyncio.run(self.execute_async(name, args, scope=scope, operation_key=operation_key,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:488: in execute_async
+    return await self._execute_operation_async(name, args, scope=scope, operation_key=operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:650: in _execute_operation_async
+    self._save(operation_key, name, args, scope, result)
+gene_annotation_episode/tools.py:673: in _save
+    (key, result["operation_ref"], name, canonical(args), canonical(scope), canonical(result)))
+                                                          ^^^^^^^^^^^^^^^^
+gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7c4b63a6e120>
+o = mappingproxy({'subject_refs': ('input_adb7b6266eb34f916e03549e',)})
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type mappingproxy is not JSON serializable
+
+/usr/lib/python3.12/json/encoder.py:180: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_fastqutils_episode_flow.py::test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[selector]
+FAILED tests/test_bvbrc_fastqutils_episode_flow.py::test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[resource]
+FAILED tests/test_bvbrc_fastqutils_episode_flow.py::test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[original_parameters]
+FAILED tests/test_bvbrc_fastqutils_episode_flow.py::test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[commission]
+FAILED tests/test_bvbrc_fastqutils_episode_flow.py::test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[source]
+FAILED tests/test_bvbrc_fastqutils_episode_flow.py::test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[binding]
+6 failed, 3 passed, 5 deselected in 17.83s

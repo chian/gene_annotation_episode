@@ -1,0 +1,82 @@
+{
+  "verification_kind": "static_source_ast_hash_only",
+  "production_module_imports": false,
+  "pytest_executed": false,
+  "native_operations_executed": false,
+  "scientific_results_acquired": false,
+  "files": [
+    {
+      "path": "gene_annotation_episode/fluorescence_event_readers.py",
+      "sha256": "6576ea021dfe286df18e9c81122d7bc4087ceb054481eab6a52d3cdf5ce691fb",
+      "size_bytes": 13878,
+      "line_count": 332,
+      "ast_syntax_valid": true
+    },
+    {
+      "path": "tests/test_fluorescence_event_readers.py",
+      "sha256": "1c4eb0a19117c5d659c6a3e82bb2e368623a6c661c819457ee6306f5fe6cfa8c",
+      "size_bytes": 27121,
+      "line_count": 521,
+      "ast_syntax_valid": true
+    }
+  ],
+  "contracts": [
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/CORE_CONTRACT_001.md",
+      "sha256": "f7d9def71c6741aa2b7dbc0e61fe4c0a7d3dcd5b34770eb1d01e5543a3f496ca"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_002.md",
+      "sha256": "8e55ea867104f07ed446defd1e94600f32242961d14b7b583a72c0824fd66dd2"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_003.md",
+      "sha256": "09ecfe46fe658f60178ca1d5ba311d9f0e9e6ea704a6ad3e58559ab6c50583dc"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_004.md",
+      "sha256": "1b1e111400fb125dabf7f5f1c2264962863086796fe8b0b1e5f52ae4d807db52"
+    },
+    {
+      "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PORT_CLARIFICATIONS_005.md",
+      "sha256": "fbc2c562a075a284b9a791613d6af800de4368ebe037c04362a205b2216ef7a9"
+    }
+  ],
+  "test_selectors": [
+    "tests/test_fluorescence_event_readers.py::test_complete_packet548_operands_keep_identity_metadata_and_unknown_native_count",
+    "tests/test_fluorescence_event_readers.py::test_csv_crlf_quoted_newline_bom_and_decoded_raw_have_exact_byte_locations",
+    "tests/test_fluorescence_event_readers.py::test_unicode_header_and_carriage_return_endings_keep_byte_offsets",
+    "tests/test_fluorescence_event_readers.py::test_explicit_escapes_keep_decoded_tokens_and_multiline_record_locations",
+    "tests/test_fluorescence_event_readers.py::test_exact_missing_tokens_and_finite_conversion_never_change_raw",
+    "tests/test_fluorescence_event_readers.py::test_empty_token_is_missing_only_when_declared_and_blank_rows_are_not_skipped",
+    "tests/test_fluorescence_event_readers.py::test_strict_quote_error_with_closed_record_preserves_unavailable_row_and_next_ordinal",
+    "tests/test_fluorescence_event_readers.py::test_unrecoverable_quoting_preserves_only_confirmed_prefix_and_unknown_total",
+    "tests/test_fluorescence_event_readers.py::test_unrecoverable_first_data_record_keeps_a_valid_empty_prefix",
+    "tests/test_fluorescence_event_readers.py::test_utf8_suffix_retains_complete_records_without_inventing_truncated_last_row",
+    "tests/test_fluorescence_event_readers.py::test_utf8_failure_in_header_is_unavailable",
+    "tests/test_fluorescence_event_readers.py::test_exact_byte_identity_is_required_before_admission",
+    "tests/test_fluorescence_event_readers.py::test_declared_unavailable_domain_is_not_made_available_by_readable_bytes",
+    "tests/test_fluorescence_event_readers.py::test_explicit_dialect_header_and_positional_duplicate_names_are_not_guessed",
+    "tests/test_fluorescence_event_readers.py::test_complete_column_array_cannot_silently_drop_unbound_channels",
+    "tests/test_fluorescence_event_readers.py::test_nonmatching_positional_header_does_not_reassign_columns",
+    "tests/test_fluorescence_event_readers.py::test_short_header_preserves_bound_present_values_without_inventing_a_name",
+    "tests/test_fluorescence_event_readers.py::test_headerless_extra_fields_are_qualified_at_original_positions",
+    "tests/test_fluorescence_event_readers.py::test_complete_empty_csv_does_not_invent_header_or_unknown_population",
+    "tests/test_fluorescence_event_readers.py::test_snapshot_null_bad_cells_and_rows_preserve_original_ordinals",
+    "tests/test_fluorescence_event_readers.py::test_snapshot_nonstandard_json_constants_reject_the_document",
+    "tests/test_fluorescence_event_readers.py::test_snapshot_schema_and_object_keys_are_explicit",
+    "tests/test_fluorescence_event_readers.py::test_snapshot_numeric_overflow_is_an_invalid_cell_and_empty_snapshot_is_complete",
+    "tests/test_fluorescence_event_readers.py::test_snapshot_retains_integral_native_values_without_rounding_through_float",
+    "tests/test_fluorescence_event_readers.py::test_analyte_associations_are_supplied_facts_not_native_label_inference",
+    "tests/test_fluorescence_event_readers.py::test_explicit_prediction_origin_survives_and_inputs_outputs_do_not_alias",
+    "tests/test_fluorescence_event_readers.py::test_derived_correspondence_is_explicit_never_matched_from_equal_values",
+    "tests/test_fluorescence_event_readers.py::test_partial_derived_prefix_may_leave_mapped_rows_unobserved_but_not_invent_them",
+    "tests/test_fluorescence_event_readers.py::test_complete_derived_input_requires_exact_source_row_correspondence",
+    "tests/test_fluorescence_event_readers.py::test_parser_uses_shared_request_validation_and_rejects_nonbytes",
+    "tests/test_fluorescence_event_readers.py::test_reader_does_not_acquire_files_or_import_table_packages",
+    "tests/test_fluorescence_event_readers.py::test_csv_and_snapshot_use_the_same_sheet_and_calculator_for_packet548"
+  ],
+  "runtime_test_selector": "tests/test_fluorescence_event_readers.py",
+  "shared_calculator_test": "tests/test_fluorescence_event_readers.py::test_csv_and_snapshot_use_the_same_sheet_and_calculator_for_packet548",
+  "diff_sha256": "3a8d8c6b3eb9eb175b47d7b46ab6b79db7c23ff587b77fa9e426a5394ca0e669"
+}

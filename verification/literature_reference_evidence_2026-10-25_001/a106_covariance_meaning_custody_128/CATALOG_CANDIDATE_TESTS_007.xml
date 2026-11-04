@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="13" time="47.567" timestamp="2026-10-27T01:45:54.708816-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature]" time="3.201" /><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_strategy]" time="2.982" /><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_search]" time="2.877" /><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_page]" time="1.877" /><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_table]" time="2.679" /><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_ordered]" time="2.901" /><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature_targeted]" time="2.115" /><testcase classname="tests.test_literature_parent_population_information" name="test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity" time="3.428"><failure message="assert [&lt;sqlite3.Row...4a83a60&gt;, ...] == [&lt;sqlite3.Row...3051ff0&gt;, ...]&#10;  &#10;  At index 4 diff: &lt;sqlite3.Row object at 0x74e254a83940&gt; != &lt;sqlite3.Row object at 0x74e233053910&gt;&#10;  Left contains 6 more items, first extra item: &lt;sqlite3.Row object at 0x74e232ee1e40&gt;&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1833/test_explicit_initial_metadata0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x74e233040ef0&gt;
+
+    def test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity(tmp_path, monkeypatch):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, parent = enabled_parent(store, child, args["source_ref"])
+            registry = EpisodeBindingRegistry((binding,))
+            descriptor = binding.as_record()
+            composition = compose_episode_bindings(binding.services, store=store,
+                journal=Journal(store, parent.run_id), execution_backend=None,
+                descriptors=[descriptor], job_episodes=None, resource_estimator=None,
+                role_credit_bindings={})
+            rebuilt, = composition.bindings
+            assert rebuilt.as_record() == descriptor
+    
+            def forbidden(*_args, **_kwargs):
+                raise AssertionError("Capability information must not select or execute work")
+    
+            # In particular, never fabricate a child BindingContext to invoke catalog.
+            monkeypatch.setattr(LiteratureEpisodes, "catalog", forbidden)
+            monkeypatch.setattr(binding.services, "tool_catalog", forbidden)
+            monkeypatch.setattr(binding.services, "execute_tool", forbidden)
+            monkeypatch.setattr(binding.services, "scientific_credit", forbidden)
+            rows_before = store.db.total_changes
+            schema_before = list(store.db.execute("SELECT name FROM sqlite_master ORDER BY name"))
+            original_parent = parent.as_record()
+            information = registry.initial_decision_context(parent)
+            assert rebuilt.initial_decision_context(parent) == information
+            descriptor_info = information["reference_evidence_parent"]
+            assert descriptor_info["source_refs"] == [args["source_ref"]]
+            assert descriptor_info["source_custody"][0]["artifact_ref"] == store.get(args["source_ref"])["artifact_ref"]
+            expected = [{key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]]
+            assert descriptor_info["child_population_operations"] == expected
+            assert all(set(row) == {"name", "description"} for row in expected)
+            assert store.db.total_changes == rows_before
+&gt;           assert list(store.db.execute("SELECT name FROM sqlite_master ORDER BY name")) == schema_before
+E           assert [&lt;sqlite3.Row...4a83a60&gt;, ...] == [&lt;sqlite3.Row...3051ff0&gt;, ...]
+E             
+E             At index 4 diff: &lt;sqlite3.Row object at 0x74e254a83940&gt; != &lt;sqlite3.Row object at 0x74e233053910&gt;
+E             Left contains 6 more items, first extra item: &lt;sqlite3.Row object at 0x74e232ee1e40&gt;
+E             Use -v to get more diff
+
+tests/test_literature_parent_population_information.py:179: AssertionError</failure></testcase><testcase classname="tests.test_literature_parent_population_information" name="test_no_metadata_outside_explicit_received_source_parent_binding" time="2.782" /><testcase classname="tests.test_literature_parent_population_information" name="test_provider_repeats_actual_capabilities_in_task_across_delta_lookup_and_reconstruction[oxygen_measurements]" time="2.670" /><testcase classname="tests.test_literature_parent_population_information" name="test_provider_repeats_actual_capabilities_in_task_across_delta_lookup_and_reconstruction[custom_reference_components]" time="6.035" /><testcase classname="tests.test_literature_parent_population_information" name="test_projection_renders_only_names_and_descriptions_and_preserves_task_dedup" time="3.392" /><testcase classname="tests.test_literature_parent_population_information" name="test_runtime_information_does_not_create_actions_credit_or_change_requested_child_form" time="9.482" /></testsuite></testsuites>

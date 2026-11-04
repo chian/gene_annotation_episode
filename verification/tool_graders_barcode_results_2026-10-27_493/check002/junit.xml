@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="8" failures="0" skipped="0" tests="46" time="217.912" timestamp="2026-10-27T19:18:53.245852-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_barcode_results_worker" name="test_actual_twelve_read_all_counts_distances_tree_and_mapping" time="5.218" /><testcase classname="tests.test_barcode_results_worker" name="test_observed_gzip_and_fastq_formats[test_actual_twelve_read_native1]" time="4.582" /><testcase classname="tests.test_barcode_results_worker" name="test_observed_gzip_and_fastq_formats[test_actual_twelve_read_native2]" time="4.938" /><testcase classname="tests.test_barcode_results_worker" name="test_observed_gzip_and_fastq_formats[test_actual_twelve_read_native3]" time="7.073" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[attempt]" time="9.225" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[request]" time="6.687" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[sample]" time="6.272" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[bytes]" time="6.714" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[writer]" time="6.428" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[driver_start]" time="5.917" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[missing_reads]" time="4.806" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_0-population0-0]" time="5.439" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_1-population1-1]" time="5.251" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_2-population2-1]" time="5.172" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_3-population3-1]" time="5.718" /><testcase classname="tests.test_barcode_results_worker" name="test_native_prefix_is_partial_acquisition_not_complete_population" time="5.431" /><testcase classname="tests.test_barcode_results_worker" name="test_later_native_cluster_failure_preserves_requested_counts[summary-True]" time="4.315" /><testcase classname="tests.test_barcode_results_worker" name="test_later_native_cluster_failure_preserves_requested_counts[clusters-False]" time="6.148" /><testcase classname="tests.test_barcode_results_worker" name="test_saved_recut_without_any_captured_native_scientific_bytes" time="5.542" /><testcase classname="tests.test_barcode_results_worker" name="test_changed_count_population_keeps_counts_and_reports_missing_distances" time="5.443" /><testcase classname="tests.test_barcode_results_worker" name="test_failed_projection_retains_acquisition_for_saved_repair" time="5.125" /><testcase classname="tests.test_barcode_results_worker" name="test_actual_worker_is_bounded_pinned_and_completed_replay_does_not_run" time="16.802" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch0]" time="0.001" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch1]" time="0.001" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch2]" time="0.000" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch3]" time="0.001" /><testcase classname="tests.test_barcode_returns" name="test_requested_projection_grants_no_saved_sheet" time="5.779" /><testcase classname="tests.test_barcode_returns" name="test_projection_only_population_is_inherited_without_an_artifact_grant" time="6.094" /><testcase classname="tests.test_barcode_returns" name="test_forwarded_projection_population_preserves_its_frozen_origin" time="7.520" /><testcase classname="tests.test_barcode_returns" name="test_sheet_possession_requires_original_immediate_child_return" time="5.378" /><testcase classname="tests.test_barcode_returns" name="test_frozen_forwarding_prefix_excludes_later_identical_origin" time="6.312" /><testcase classname="tests.test_barcode_returns" name="test_saved_child_inherits_only_original_receipt_prefix" time="6.272" /><testcase classname="tests.test_barcode_returns" name="test_historical_return_survives_scientific_file_loss" time="5.302" /><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[None]" time="6.596" /><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[declaration]" time="5.994" /><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[frame]" time="5.871" /><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[empty_request]" time="6.178" /><testcase classname="tests.test_barcode_returns" name="test_compact_redelivery_reads_frozen_facts_without_an_observation" time="7.269" /><testcase classname="tests.test_native_barcode_results" name="test_actual_native_capture_and_saved_cut_without_original_data" time="3.037"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_native_barcode_results" name="test_exact_original_replay_uses_no_native_or_new_worker" time="0.000"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_native_barcode_results" name="test_credit_once_and_existing_controller_exact_zero" time="0.000"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_native_barcode_results" name="test_original_authority_rejects_identity_changes[selected_action]" time="0.000"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_native_barcode_results" name="test_original_authority_rejects_identity_changes[committed_outcome]" time="0.000"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_native_barcode_results" name="test_original_authority_rejects_identity_changes[context]" time="0.000"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_native_barcode_results" name="test_original_authority_rejects_identity_changes[target]" time="0.000"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase><testcase classname="tests.test_native_barcode_results" name="test_received_sheet_and_closed_facts_survive_loss_but_new_operand_needs_bytes" time="0.000"><error message="failed on setup with &quot;ValueError: parent must declare the information its child returns&quot;">source_snapshot/tests/test_native_barcode_results.py:184: in case
+    value = ActualHost(tmp_path_factory.mktemp('actual-barcode493-host'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:93: in __init__
+    self.launch = self.commission(self.root, assignment, form_schema(), 0, role='launch_local')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_barcode_results.py:145: in commission
+    contract = TypedReportContract('Return the selected recorded barcode quantities', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+&lt;string&gt;:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns</error></testcase></testsuite></testsuites>

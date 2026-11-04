@@ -1,0 +1,22 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________ test_actual_pre_admission_custody_shape[old_direct] ______________
+source_snapshot/tests/test458_custody_probe.py:117: in test_actual_pre_admission_custody_shape
+    returned, index, context, schema = asyncio.run(old_call(historical)(source,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_composed_assignment_transport_2026-10-27_458/baseline/runtime.py:954: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test458_custody_probe.py:54: in complete
+    raise AssertionError(json.dumps(leaves))
+E   AssertionError: [{"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'parent_id' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'workspace' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'base_url' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'container_id' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'user_metadata' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'reservation' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'data_container_id' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'user_override' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'constraint' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'disable_preflight' is a required property"}, {"instance_path": ["assignment", "request", "start_parameters"], "schema_path": ["properties", "assignment", "anyOf", 0, "properties", "request", "properties", "start_parameters", "required"], "message": "'preflight_data' is a required property"}]
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test458_custody_probe.py::test_actual_pre_admission_custody_shape[old_direct]
+1 failed in 16.00s

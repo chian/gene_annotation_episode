@@ -1,0 +1,173 @@
+{
+  "version": "bvbrc_appservice_artifact_bundle_v1",
+  "original_task": {
+    "resource_id": "bvbrc_api",
+    "task_id": "synthetic_task195",
+    "required_application_id": "FastqUtils",
+    "native_application_id": "FastqUtils",
+    "submitted_parameters": {
+      "paired_end_libs": [
+        {
+          "read1": "/fixture/input_R1.fastq",
+          "read2": "/fixture/input_R2.fastq",
+          "platform": "illumina"
+        }
+      ],
+      "single_end_libs": [],
+      "srr_libs": [],
+      "recipe": [
+        "TRIM",
+        "PAIRED_FILTER",
+        "FASTQC",
+        "ALIGN",
+        "SCRUB_HUMAN",
+        "SCRUB_HUMAN"
+      ],
+      "reference_genome_id": "synthetic_reference195",
+      "output_path": "/fixture/output",
+      "output_file": "fixture"
+    },
+    "submitted_start_parameters": {},
+    "scheduler_returned_parameters": null,
+    "effective_parameters": null,
+    "submission_receipt_ref": "source_original_submission",
+    "submission_operation_key": "synthetic:submission195",
+    "submission_source_ref": "source_original_native_request195"
+  },
+  "artifacts": [
+    {
+      "role": "reads",
+      "source_ref": "source_reads195",
+      "raw_artifact_ref": "artifact_reads195",
+      "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "byte_count": 36,
+      "workspace_object": {
+        "path": "/fixture/output/reads",
+        "uuid": "synthetic_uuid_reads",
+        "type": "file",
+        "metadata_receipt_ref": "source_metadata_receipt_reads"
+      },
+      "task_association": {
+        "kind": "task_result_manifest",
+        "evidence_ref": "source_manifest195",
+        "pointer": "/output_files/0",
+        "task_id": "synthetic_task195",
+        "output_path": "/fixture/output",
+        "output_uuid": null,
+        "byte_version_status": "current_bytes_observed",
+        "version_evidence": []
+      },
+      "transfer": {
+        "receipt_ref": "source_transfer_reads",
+        "body_complete": true,
+        "requested_range": null,
+        "observed_range": null,
+        "total_size": 36,
+        "object_complete": "yes"
+      },
+      "declared_format": {
+        "format": "fastq",
+        "version": null,
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      },
+      "requirement_ids": [
+        "selected_reads"
+      ]
+    },
+    {
+      "role": "hostile",
+      "source_ref": "source_hostile195",
+      "raw_artifact_ref": "artifact_hostile195",
+      "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+      "byte_count": 635,
+      "workspace_object": {
+        "path": "/fixture/output/hostile",
+        "uuid": "synthetic_uuid_hostile",
+        "type": "file",
+        "metadata_receipt_ref": "source_metadata_receipt_hostile"
+      },
+      "task_association": {
+        "kind": "task_result_manifest",
+        "evidence_ref": "source_manifest195",
+        "pointer": "/output_files/1",
+        "task_id": "synthetic_task195",
+        "output_path": "/fixture/output",
+        "output_uuid": null,
+        "byte_version_status": "current_bytes_observed",
+        "version_evidence": []
+      },
+      "transfer": {
+        "receipt_ref": "source_transfer_hostile",
+        "body_complete": true,
+        "requested_range": null,
+        "observed_range": null,
+        "total_size": 635,
+        "object_complete": "yes"
+      },
+      "declared_format": {
+        "format": "hostile_json_1_1_0",
+        "version": "1.1.0",
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      },
+      "requirement_ids": [
+        "selected_hostile"
+      ]
+    }
+  ],
+  "input_bindings": [],
+  "query_bindings": [],
+  "supplied_scientific_metadata": [
+    {
+      "content": {
+        "source_ref": "source_metadata195",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_metadata195",
+        "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+        "byte_count": 451
+      },
+      "pointer": "/declarations/0"
+    },
+    {
+      "content": {
+        "source_ref": "source_metadata195",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_metadata195",
+        "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+        "byte_count": 451
+      },
+      "pointer": "/declarations/1"
+    }
+  ],
+  "supplied_contents": [],
+  "acquisition_receipt_refs": [
+    "source_transfer_reads",
+    "source_transfer_hostile"
+  ],
+  "requested_selector_sha256": "1d856892898f8e560222de515bf57897934b1f82a72b1a8214f9cac405ad27fd",
+  "status": "ok",
+  "missing_requirements": [],
+  "diagnostics": [
+    {
+      "code": "output_version_unproven",
+      "phase": "association",
+      "path": "",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source_reads195"
+      ]
+    },
+    {
+      "code": "output_version_unproven",
+      "phase": "association",
+      "path": "",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source_hostile195"
+      ]
+    }
+  ]
+}

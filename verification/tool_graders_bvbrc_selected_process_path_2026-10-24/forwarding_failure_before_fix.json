@@ -1,0 +1,15 @@
+{
+  "command": ".venv/bin/python -m pytest -q tests/test_bvbrc_selected_process_path.py -k forwards --tb=short -x",
+  "result": "1 failed, 2 deselected in 3.51s",
+  "error_type": "ValueError",
+  "error": "fact binding must name an available top-level source",
+  "path": [
+    "tests/test_bvbrc_selected_process_path.py:163 test_selected_process_forwards_only_parent_requested_count",
+    "gene_annotation_episode/runtime.py:3154 Workflow.selected",
+    "gene_annotation_episode/runtime.py:763 _compile_form",
+    "gene_annotation_episode/runtime.py:745 check"
+  ],
+  "http_requests": 0,
+  "provider_decisions": 0,
+  "scope": "Actual Workflow.selected constructing a scientific_process child with current v3 selector and closed count-only root return form; rejected before execution. No direct-host substitute."
+}

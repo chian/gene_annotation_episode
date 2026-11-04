@@ -1,0 +1,496 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+__ test_six_selected_pbs_children_collect_and_return_original_facts[psiblast] __
+
+schema = {'type': 'object', 'properties': {'field_0': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength'...s': True, 'x-source': 'execution_blast_database_result_refs'}}, 'required': ['field_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+>           _compiled_schema_content(content)
+
+../../../gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192443955696Z/tmp/test_six_selected_pbs_children0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b1b039a1e0>
+program = 'psiblast'
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast', 'rpsblast', 'rpstblastn', 'blastn_vdb', 'tblastn_vdb'])
+    def test_six_selected_pbs_children_collect_and_return_original_facts(tmp_path, monkeypatch, program):
+>       h = SyntheticHost(tmp_path, monkeypatch, program)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:111: in __init__
+    self.launch = self.child(self.root, 'launch', launch, schema_for('execution_blast_database_result_refs'), index=0)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_database_episode_binding.py:134: in child
+    contract = TypedReportContract('Return the explicitly requested frozen values', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:163: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+_ test_six_selected_pbs_children_collect_and_return_original_facts[deltablast] _
+
+schema = {'type': 'object', 'properties': {'field_0': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength'...s': True, 'x-source': 'execution_blast_database_result_refs'}}, 'required': ['field_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+>           _compiled_schema_content(content)
+
+../../../gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192443955696Z/tmp/test_six_selected_pbs_children1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b1d2388bc0>
+program = 'deltablast'
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast', 'rpsblast', 'rpstblastn', 'blastn_vdb', 'tblastn_vdb'])
+    def test_six_selected_pbs_children_collect_and_return_original_facts(tmp_path, monkeypatch, program):
+>       h = SyntheticHost(tmp_path, monkeypatch, program)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:111: in __init__
+    self.launch = self.child(self.root, 'launch', launch, schema_for('execution_blast_database_result_refs'), index=0)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_database_episode_binding.py:134: in child
+    contract = TypedReportContract('Return the explicitly requested frozen values', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:163: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+__ test_six_selected_pbs_children_collect_and_return_original_facts[rpsblast] __
+
+schema = {'type': 'object', 'properties': {'field_0': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength'...s': True, 'x-source': 'execution_blast_database_result_refs'}}, 'required': ['field_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+>           _compiled_schema_content(content)
+
+../../../gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192443955696Z/tmp/test_six_selected_pbs_children2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b1d232e5d0>
+program = 'rpsblast'
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast', 'rpsblast', 'rpstblastn', 'blastn_vdb', 'tblastn_vdb'])
+    def test_six_selected_pbs_children_collect_and_return_original_facts(tmp_path, monkeypatch, program):
+>       h = SyntheticHost(tmp_path, monkeypatch, program)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:111: in __init__
+    self.launch = self.child(self.root, 'launch', launch, schema_for('execution_blast_database_result_refs'), index=0)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_database_episode_binding.py:134: in child
+    contract = TypedReportContract('Return the explicitly requested frozen values', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:163: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+_ test_six_selected_pbs_children_collect_and_return_original_facts[rpstblastn] _
+
+schema = {'type': 'object', 'properties': {'field_0': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength'...s': True, 'x-source': 'execution_blast_database_result_refs'}}, 'required': ['field_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+>           _compiled_schema_content(content)
+
+../../../gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192443955696Z/tmp/test_six_selected_pbs_children3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b1d2388170>
+program = 'rpstblastn'
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast', 'rpsblast', 'rpstblastn', 'blastn_vdb', 'tblastn_vdb'])
+    def test_six_selected_pbs_children_collect_and_return_original_facts(tmp_path, monkeypatch, program):
+>       h = SyntheticHost(tmp_path, monkeypatch, program)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:111: in __init__
+    self.launch = self.child(self.root, 'launch', launch, schema_for('execution_blast_database_result_refs'), index=0)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_database_episode_binding.py:134: in child
+    contract = TypedReportContract('Return the explicitly requested frozen values', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:163: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+_ test_six_selected_pbs_children_collect_and_return_original_facts[blastn_vdb] _
+
+schema = {'type': 'object', 'properties': {'field_0': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength'...s': True, 'x-source': 'execution_blast_database_result_refs'}}, 'required': ['field_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+>           _compiled_schema_content(content)
+
+../../../gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192443955696Z/tmp/test_six_selected_pbs_children4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b1d2350680>
+program = 'blastn_vdb'
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast', 'rpsblast', 'rpstblastn', 'blastn_vdb', 'tblastn_vdb'])
+    def test_six_selected_pbs_children_collect_and_return_original_facts(tmp_path, monkeypatch, program):
+>       h = SyntheticHost(tmp_path, monkeypatch, program)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:111: in __init__
+    self.launch = self.child(self.root, 'launch', launch, schema_for('execution_blast_database_result_refs'), index=0)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_database_episode_binding.py:134: in child
+    contract = TypedReportContract('Return the explicitly requested frozen values', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:163: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+_ test_six_selected_pbs_children_collect_and_return_original_facts[tblastn_vdb] _
+
+schema = {'type': 'object', 'properties': {'field_0': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength'...s': True, 'x-source': 'execution_blast_database_result_refs'}}, 'required': ['field_0'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+>           _compiled_schema_content(content)
+
+../../../gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192443955696Z/tmp/test_six_selected_pbs_children5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73b1d23a2a80>
+program = 'tblastn_vdb'
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast', 'rpsblast', 'rpstblastn', 'blastn_vdb', 'tblastn_vdb'])
+    def test_six_selected_pbs_children_collect_and_return_original_facts(tmp_path, monkeypatch, program):
+>       h = SyntheticHost(tmp_path, monkeypatch, program)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_episode_binding.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_database_episode_binding.py:111: in __init__
+    self.launch = self.child(self.root, 'launch', launch, schema_for('execution_blast_database_result_refs'), index=0)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_blast_database_episode_binding.py:134: in child
+    contract = TypedReportContract('Return the explicitly requested frozen values', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:163: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/communication.py:164: in _compile_closed_schema
+    check(schema, "report")
+../../../gene_annotation_episode/communication.py:139: in check
+    check(child, path + "." + name)
+../../../gene_annotation_episode/communication.py:143: in check
+    check(node["items"], path + "[]")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'string', 'minLength': 1, 'maxLength': 512, 'pattern': '^[^\\n\\r\\u0000]+$', ...}
+path = 'report.field_0[]'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+>           raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E           gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+../../../gene_annotation_episode/communication.py:127: ReportBoundaryError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_six_selected_pbs_children_collect_and_return_original_facts[psiblast]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_six_selected_pbs_children_collect_and_return_original_facts[deltablast]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_six_selected_pbs_children_collect_and_return_original_facts[rpsblast]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_six_selected_pbs_children_collect_and_return_original_facts[rpstblastn]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_six_selected_pbs_children_collect_and_return_original_facts[blastn_vdb]
+FAILED ../../../tests/test_native_blast_database_episode_binding.py::test_six_selected_pbs_children_collect_and_return_original_facts[tblastn_vdb]
+6 failed in 9.79s

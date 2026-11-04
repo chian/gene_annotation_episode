@@ -1,0 +1,56 @@
+tests/test_native_barcode_local.py:13:from gene_annotation_episode.native_barcode_local import prepare_local_barcode, local_barcode_plan
+tests/test_native_barcode_local.py:41:    assert local_barcode_plan(assignment, str(handle.path)) == plan
+tests/test_native_barcode_local.py:89:        local_barcode_plan(other, str(handle.path))
+tests/test_native_barcode_local.py:93:        local_barcode_plan(assignment, str(handle.path))
+tests/test_barcode_input_authority.py:19:from gene_annotation_episode.execution_input_versions import validate_execution_input_versions
+tests/test_barcode_input_authority.py:135:        _barcode_inputs=lambda ctx, assignment: inputs(f, ctx=ctx, assignment=assignment),
+tests/test_barcode_input_authority.py:136:        _barcode_reference_access=lambda *_: None, _atac_reference_access=lambda *_: None,
+tests/test_barcode_input_authority.py:144:    validate_execution_input_versions(owner, versions, f.scope, context=f.root,
+tests/test_barcode_input_authority.py:148:        validate_execution_input_versions(owner, versions, f.scope, context=f.root)
+tests/test_barcode_input_authority.py:152:        validate_execution_input_versions(owner, wrong, f.scope, context=f.root,
+tests/test_barcode_practical_integration.py:123:    plan = operations._barcode_plan(c.assignment, str(c.handle.path), run_id=c.bound.context.run_id,
+tests/test_barcode_shared_registration.py:273:        f.owner._barcode_inputs(f.root, changed)
+tests/test_barcode_shared_registration.py:282:        f.owner._barcode_inputs(f.root, f.assignment)
+tests/test_barcode_shared_registration.py:336:    assert set(f.owner._barcode_inputs(science, f.assignment)) == set(f.references)
+gene_annotation_episode/execution_episodes.py:544:    def _barcode_reference_access(self, context, reference, namespace):
+gene_annotation_episode/execution_episodes.py:562:    def _barcode_selector(assignment):
+gene_annotation_episode/execution_episodes.py:565:    def _retained_barcode_target(self, context, assignment, scope):
+gene_annotation_episode/execution_episodes.py:566:        if not self._barcode_selector(assignment):
+gene_annotation_episode/execution_episodes.py:677:        from .execution_input_versions import validate_execution_input_versions
+gene_annotation_episode/execution_episodes.py:678:        return validate_execution_input_versions(self, versions, scope, context=context,
+gene_annotation_episode/execution_episodes.py:682:    def _barcode_inputs(self, context, assignment):
+gene_annotation_episode/execution_episodes.py:732:                self._barcode_inputs(parent, request)
+gene_annotation_episode/execution_episodes.py:751:            barcode_target = self._retained_barcode_target(parent, selected, scope)
+gene_annotation_episode/execution_episodes.py:797:        self._barcode_inputs(parent, selected)
+gene_annotation_episode/execution_episodes.py:828:                self._barcode_inputs(context, request)
+gene_annotation_episode/execution_episodes.py:841:            if (self._barcode_selector(plain(context.assignment))
+gene_annotation_episode/execution_episodes.py:861:            self._barcode_inputs(context, plain(context.assignment))
+gene_annotation_episode/execution_episodes.py:1202:            if self._barcode_selector(assignment):
+gene_annotation_episode/execution_episodes.py:1252:        barcode = self._retained_barcode_target(context, assignment, context.scope)
+gene_annotation_episode/execution_episodes.py:1333:        if self._barcode_selector(assignment) or native_barcode:
+gene_annotation_episode/execution_episodes.py:1975:        barcode = self._barcode_reference_access(context, reference, namespace)
+gene_annotation_episode/execution_episodes.py:2482:                references.extend(self._barcode_inputs(context, request))
+gene_annotation_episode/execution_episodes.py:2559:            barcode = self._barcode_reference_access(context, reference, namespace)
+gene_annotation_episode/practical_execution_operations.py:467:    def _barcode_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
+gene_annotation_episode/practical_execution_operations.py:470:        from .native_barcode_local import local_barcode_plan
+gene_annotation_episode/practical_execution_operations.py:472:        plan = local_barcode_plan(assignment, execution_id)
+gene_annotation_episode/practical_execution_operations.py:492:            barcode_plan = self._barcode_plan(state.assignment, str(handle.path),
+gene_annotation_episode/practical_execution_operations.py:593:            plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
+gene_annotation_episode/practical_execution_operations.py:839:            plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
+gene_annotation_episode/practical_execution_operations.py:1006:                        strict_owner = self._barcode_plan(state.assignment, str(handle.path),
+gene_annotation_episode/practical_execution_operations.py:1057:                    self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+gene_annotation_episode/practical_execution_operations.py:1078:                    owner = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+gene_annotation_episode/practical_execution_operations.py:1136:                self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+gene_annotation_episode/practical_execution_operations.py:1158:                plan = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+gene_annotation_episode/native_barcode_local.py:36:        'environment': request['environment'], 'native_barcode_plan': RUN_PLAN_FILENAME}
+gene_annotation_episode/native_barcode_local.py:69:            require(local_barcode_plan(state.assignment, str(handle.path)) == plan, 'barcode_original_attempt_mismatch')
+gene_annotation_episode/native_barcode_local.py:87:        local_barcode_plan(state.assignment, str(handle.path))
+gene_annotation_episode/native_barcode_local.py:91:def local_barcode_plan(assignment, execution_id):
+tests/test_native_barcode_results.py:138:            patch.setattr('gene_annotation_episode.native_barcode_local.local_barcode_plan', deny)
+gene_annotation_episode/execution_input_versions.py:15:def validate_execution_input_versions(owner, versions, scope, *, context, atac_assignments=(),
+gene_annotation_episode/execution_input_versions.py:49:        admitted = owner._barcode_inputs(context, assignment)
+gene_annotation_episode/execution_input_versions.py:61:                and owner._barcode_reference_access(context, supplied['reference'], None) is False):
+gene_annotation_episode/native_barcode_driver.py:469:def execute_barcode_plan(plan):
+gene_annotation_episode/native_barcode_driver.py:476:        return execute_barcode_plan(read_json(Path(sys.argv[1]).absolute()))
+gene_annotation_episode/barcode_result_receipts.py:217:            from .native_barcode_local import local_barcode_plan
+gene_annotation_episode/barcode_result_receipts.py:222:            plan = local_barcode_plan(target['assignment'], target['execution_id'])

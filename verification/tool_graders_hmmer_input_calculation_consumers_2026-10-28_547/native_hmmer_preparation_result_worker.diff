@@ -1,0 +1,51 @@
+--- original/gene_annotation_episode/native_hmmer_preparation_result_worker.py
++++ gene_annotation_episode/native_hmmer_preparation_result_worker.py
+@@ -9,9 +9,11 @@
+ from copy import deepcopy
+ import hashlib
+ import json
++import os
+ from pathlib import Path
+ import re
+ import sys
++import tempfile
+ 
+ from .domain import ContractError, canonical
+ from .native_infernal_contracts import finite_json_copy, native_infernal_digest
+@@ -215,8 +217,35 @@
+     return raw
+ 
+ 
++def _immutable_numerical(path, value):
++    """Keep canonical bytes, escaping only otherwise unencodable surrogates.
++
++    Native byte text survives JSON reading followed by surrogateescape encoding.
++    The ordinary practical receipt/digest policy is intentionally unchanged.
++    """
++    payload = (canonical(value) + "\n").encode("utf-8", errors="backslashreplace")
++    descriptor, temporary = tempfile.mkstemp(prefix=".hmmer-numerical-", dir=path.parent)
++    try:
++        with os.fdopen(descriptor, "wb") as stream:
++            stream.write(payload)
++            stream.flush()
++            os.fsync(stream.fileno())
++        try:
++            os.link(temporary, path)
++        except FileExistsError:
++            if path.read_bytes() != payload:
++                raise ValueError("practical_immutable_record_conflict")
++        directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
++        try:
++            os.fsync(directory)
++        finally:
++            os.close(directory)
++    finally:
++        os.unlink(temporary)
++
++
+ def _write(directory, name, value):
+-    _immutable(directory / name, value)
++    _immutable_numerical(directory / name, value)
+     raw = (directory / name).read_bytes()
+     return {"filename": name, "sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)}
+ 

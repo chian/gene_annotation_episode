@@ -1,0 +1,139 @@
+{
+  "scope": "planning_only_no_production_code",
+  "frozen_utc": "2026-10-25T03:14:07.073246+00:00",
+  "original_goal_unchanged": true,
+  "original_objective_and_all_16_principles_reread_verbatim_before_handoff": true,
+  "current_contracts_reread_after_final_reset": true,
+  "source_hash_checks": [
+    {
+      "path": "verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/bvbrc_gene_tree/service-scripts/App-GeneTree.pl",
+      "sha256_verified": true
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/bvbrc_gene_tree/scripts/p3x-build-gene-tree.pl",
+      "sha256_verified": true
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/bvbrc_gene_tree/lib/Tree_Builder.pm",
+      "sha256_verified": true
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/bvbrc_gene_tree/lib/Sequence_Alignment.pm",
+      "sha256_verified": true
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/service-scripts/App-CodonTree.pl",
+      "sha256_verified": true
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/scripts/p3x-build-codon-tree.py",
+      "sha256_verified": true
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/codon_trees/lib/phylocode.py",
+      "sha256_verified": true
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_application_specs/original/GeneTree.json",
+      "sha256_verified": true
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_application_specs/original/CodonTree.json",
+      "sha256_verified": true
+    },
+    {
+      "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+      "sha256_verified": true
+    }
+  ],
+  "additional_source_hash_checks": [
+    {
+      "file": "additional_sources/bvbrc_gene_tree/scripts/p3x-newick-to-phyloxml.pl",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/bvbrc_gene_tree/lib/Phylo_Tree.pm",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/bvbrc_gene_tree/lib/Phylo_Node.pm",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/bvbrc_gene_tree/README.md",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85.xml",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85_RAxML_tree_rell.xml",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/codon_trees/lib/patric_api.py",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/codon_trees/README.md",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    },
+    {
+      "file": "additional_sources/codon_trees/exampleCodonTreeOutput.tgz",
+      "sha256_verified": true,
+      "git_blob_verified": true
+    }
+  ],
+  "archive_files_verified_against_retained_archive": 12,
+  "example_inspection": {
+    "command": ".venv/bin/python verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/inspect_retained_examples.py",
+    "exit_code": 0,
+    "scientific_executable_invoked": false,
+    "new_production_parser_tested": false,
+    "biopython_version": "1.88"
+  },
+  "production_parser_tested": false,
+  "production_calculator_tested": false,
+  "live_service_executed": false,
+  "episode_path_verified": false,
+  "git_status_available": false,
+  "file_identities": {
+    "SOURCE_FINDINGS.md": {
+      "sha256": "a579f631da98bc69a67208cd7e56e2496e75f0f0adc15dead04a014734b6ae8d",
+      "byte_count": 26675
+    },
+    "BOUNDARY_PROPOSAL.md": {
+      "sha256": "21c5a3ad5de12e2b03edcab5b0b24ba5c2640cb0023e0d29368ee40b63503955",
+      "byte_count": 55490
+    },
+    "CONTRACT_SHAPES.md": {
+      "sha256": "9de5ceb9a8e271593a7230585b87f50a4c13f80f10297a1f8090131868b04b7f",
+      "byte_count": 53514
+    },
+    "HANDOFF.md": {
+      "sha256": "6c3ae0e185388188cc8d0643d33af7a1688962dcf3486cde4117dbe3db77ae24",
+      "byte_count": 4306
+    },
+    "NATIVE_EXAMPLE_INSPECTION.json": {
+      "sha256": "1a192bec363e76825fb1c28013becf6630eb817ca9a7c988ebafdc1e0eb34e29",
+      "byte_count": 13805
+    },
+    "SYNTHETIC_NUMERICAL_EXAMPLES.json": {
+      "sha256": "786d459e0431aec61b27fcc97e0801f84656096e980635d6aafa8321c48d127b",
+      "byte_count": 1296
+    },
+    "inspect_retained_examples.py": {
+      "sha256": "0bfb9f1b2323ddd650fa0c1b0f75b6cd277f4fc4ea636aee6a6d8a8db67ed6d2",
+      "byte_count": 8548
+    }
+  }
+}

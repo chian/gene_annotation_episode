@@ -280,6 +280,22 @@ def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
                 result["type"] = "integer"
         if result.get("type") == "object":
             properties = result.get("properties", {})
+            # Durable contracts are canonicalized by key, which otherwise puts
+            # arguments before the operation discriminator in strict output.
+            # Let generation choose the action before producing its operands.
+            # This changes presentation order only, not the admitted contract.
+            first = ('response_type', 'kind', 'type', 'view', 'tool', 'role', 'domain', 'source',
+                     'operation', 'selection')
+            if {'terms', 'source_subjects', 'hypotheses', 'assessments',
+                    'annotation_updates'} <= set(properties):
+                # Match Store.commit_reasoning's dependency order: definitions
+                # precede the hypotheses and assessments that reference them.
+                first = ('structural_proposals', 'terms', 'source_subjects', 'contexts',
+                         'observations', 'hypotheses', 'assessments',
+                         'interpretation_accounts', 'annotation_updates')
+            properties = {key: properties[key] for key in (
+                *(key for key in first if key in properties),
+                *(key for key in properties if key not in first))}
             required = set(value.get("required", []))
             result["properties"] = {key: (item if key in required else
                 {"anyOf": [item, {"type": "null"}]}) for key, item in properties.items()}
@@ -393,8 +409,9 @@ def _decode_action_response(value, schema, *, _legacy_episode_assignments=False)
 
 def _recorded_action_generation_schema(generated, schema):
     """Match only the current and immediately preceding assignment transports."""
-    return (_json(generated) == _json(_action_generation_schema(schema))
-        or _json(generated) == _json(_action_generation_schema(schema, _legacy_episode_assignments=True)))
+    return (_same_action_schema_required_members(generated, _action_generation_schema(schema))
+        or _same_action_schema_required_members(generated,
+            _action_generation_schema(schema, _legacy_episode_assignments=True)))
 
 
 def _recorded_assignment_transport(saved):
@@ -474,9 +491,9 @@ def _decode_recorded_action_response(value, schema, *, recorded_selection=None, 
             continue
         generated = row['request'].get('output_schema', {})
         if exchange_schema is not None:
-            if _json(generated) == _json(_action_generation_schema(exchange_schema)):
+            if _same_action_schema_required_members(generated, _action_generation_schema(exchange_schema)):
                 return decoded
-            if _json(generated) == _json(_action_generation_schema(
+            if _same_action_schema_required_members(generated, _action_generation_schema(
                     exchange_schema, _legacy_episode_assignments=True)):
                 return _decode_action_response(value, schema, _legacy_episode_assignments=True)
             continue
@@ -624,6 +641,8 @@ class ExecutionContextController:
                     raise ValueError('practical_completion_requires_actual_completed_unit')
                 context['practical_completion'] = {**body['practical_completion'],
                     'action_index': index, 'unit_ref': unit_ref.as_record()}
+            if body.get('hpc_continuation') is not None:
+                context['hpc_continuation'] = body['hpc_continuation']
             self.journal.save("runtime_estimation_contexts", {"episode_id": self.episode_id,
                 "decision_index": index, "data": _json(context)})
         # The base controller still owns the only continuation rule. The child
@@ -823,6 +842,15 @@ FACT_MEANINGS = {
 }
 
 
+def common_fact_sources():
+    """Exact host-owned common return types, available to every child role."""
+    return {name: {'type': 'number' if name == 'credit' else 'array',
+        'meaning': FACT_MEANINGS[name],
+        'report_schema': ({'type': 'number', 'x-source': name} if name == 'credit' else
+            {'type': 'array', 'items': {'type': 'string', 'format': 'reference'}, 'x-source': name})}
+        for name in sorted(FACT_SOURCES)}
+
+
 def _references_in(value, record_lookup, *, forms=(), reference_subset=None):
     """Index visible semantic handles without loading source/artifact contents.
 
@@ -980,6 +1008,12 @@ class DecisionSource:
             # Selected manuals are exact immutable assignment operands. Supply
             # their bodies only to new calls; saved calls above keep the context
             # originally dispatched, including an interrupted request.
+            resource_context = self.workflow.resource_context(self)
+            if resource_context is not None:
+                context = {**context, 'resource_context': resource_context}
+            shared_context = self.workflow.shared_information_context(self)
+            if shared_context is not None:
+                context = {**context, 'shared_information_context': shared_context}
             context = {**context,
                 'launch_instruction_library': self.workflow.launch_instructions.context()}
             selected_instructions = self.workflow.launch_instructions.materialize(
@@ -2222,6 +2256,271 @@ class Workflow:
         return ReturnedActionUnit(slot['label'], record, result, request,
             lambda *_: Record(slot['controller_input']), report, decision_index=index)
 
+    def _closed_child_commission(self, source, selection, index):
+        """Replay one wholly closed in-process commission from its real archives.
+
+        This is not admission for another child. The original action, observed
+        input, successful return and both closed records must agree before any
+        assignment preparation, initialization or receipt delivery is skipped.
+        """
+        if (self.execution_binding is not None or self.receipts is None
+                or self.native_timing_information is not None
+                or selection.get('kind') != 'episode_child'):
+            return None
+
+        def require(condition, code):
+            if not condition:
+                raise WorkflowError('closed_commission_' + code)
+
+        def same(left, right):
+            return _json(left) == _json(right)
+
+        def archived(row):
+            descriptor = json.loads(row['archive'])
+            require(type(descriptor) is dict
+                and set(descriptor) == {'file', 'sha256', 'index_sha256'}
+                and type(descriptor['file']) is str
+                and Path(descriptor['file']).name == descriptor['file']
+                and descriptor['file'].endswith('.json')
+                and all(type(descriptor[key]) is str and len(descriptor[key]) == 64
+                    and all(char in '0123456789abcdef' for char in descriptor[key])
+                    for key in ('sha256', 'index_sha256')), 'archive_invalid')
+            reference = self.archive_reference(descriptor)
+            try:
+                value = reference.load()
+            except (OSError, ValueError) as error:
+                raise WorkflowError('closed_commission_archive_invalid') from error
+            completion = json.loads(row['completion'])
+            path = json.loads(row['path'])
+            request = json.loads(row['request'])
+            episode_ref = EpisodeRef(self.run_id, path)
+            require(type(completion) is dict and set(completion) == {'ended_by', 'actions'}
+                and type(completion['actions']) is int and completion['actions'] >= 0
+                and type(value) is dict and type(value.get('units')) is list
+                and type(value.get('units_consumed')) is int
+                and value['units_consumed'] == len(value['units']) == completion['actions']
+                and value.get('ended_by') == completion['ended_by']
+                and same(value.get('request'), request)
+                and same(value.get('goal'), request['goal'])
+                and same(value.get('path'), path)
+                and same(value.get('episode_ref'), episode_ref.as_record())
+                and value.get('episode_id') == episode_ref.episode_id == row['episode_id']
+                and value.get('run_id') == self.run_id == row['run_id']
+                and value.get('scope_level') == path[-1][0]
+                and value.get('scope_key') == path[-1][1], 'archive_conflict')
+            return reference, value
+
+        with self.store.read_snapshot():
+            parent = self.journal.row('runtime_episodes', source.episode_id)
+            if (parent is None or parent['state'] != 'yielded'
+                    or parent['completion'] is None or parent['archive'] is None):
+                return None
+            require(type(index) is int and index >= 0, 'action_index_invalid')
+            action = self.journal.row('runtime_actions', source.episode_id, index)
+            require(action is not None, 'original_action_required')
+            require(same(json.loads(action['action']), selection), 'selection_conflict')
+            if action['result'] is None:
+                return None
+            outcome = json.loads(action['result'])
+            if type(outcome) is not dict or outcome.get('status') != 'completed':
+                return None
+            call = self.journal.row('runtime_model_calls', source.episode_id, index)
+            require(call is not None and call['purpose'] == 'decision'
+                and call['response'] is not None, 'original_call_required')
+            try:
+                original_call = json.loads(call['request'])
+                response = _decode_recorded_action_response(json.loads(call['response']),
+                    original_call['schema'], recorded_selection=selection)
+            except (ValueError, KeyError, TypeError) as error:
+                raise WorkflowError('closed_commission_call_conflict') from error
+            require(same(response.get('selection'), selection), 'call_conflict')
+            role = selection['role']
+            require(role in self.grains and role in self.episode_bindings.roles, 'role_conflict')
+            identity = Episode.identity(self.context, self.grains[role], f'child_{index}',
+                parent_path=source.path)
+            child_row = self.journal.row('runtime_episodes', identity.episode_id)
+            require(child_row is not None, 'original_child_required')
+            if (child_row['state'] != 'yielded' or child_row['completion'] is None
+                    or child_row['archive'] is None):
+                return None
+            specialist = self.specialist(source)
+            allowed = (self.available_child_roles(source) if self.annotation_child_roles is not None else
+                specialist.allowed_children(self.binding_context(source), self.services.capabilities())
+                if specialist is not None else self.episode_bindings.entry_roles)
+            require(role in allowed, 'role_not_available')
+            scope = self.store.validate_scope(selection['scope'], parent_scope=source.scope)
+            from .episode_return_records import EpisodeReturnRecords
+            records = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='closed_commission_')
+            context = self.binding_context(source)
+            records.authenticate(context)
+            attempt = self.store.db.execute('SELECT failure FROM runtime_report_attempts '
+                'WHERE run_id=? AND parent_episode_id=? AND decision_index=?',
+                (self.run_id, source.episode_id, index)).fetchone()
+            if attempt is not None and attempt['failure'] is not None:
+                # Replay the original failed boundary through its ordinary
+                # cached child path before any later report redelivery.
+                return None
+            child, form, schema = records._attempt(context, index)
+            require(child.episode_id == identity.episode_id and child.role == role
+                and same(child.scope, scope), 'child_identity_conflict')
+            assignment = _plain(child.assignment)
+            if role == 'scientific_process':
+                from .scientific_process_records import selector_selection
+                binding = self.scientific_process_binding
+                require(binding is not None and binding.restore_closed_process(child) is not None,
+                    'scientific_request_conflict')
+                binding.validate_context(child)
+                selected_assignment = {**assignment,
+                    'selection': selector_selection(assignment['selection'])}
+                require(same(selection['assignment'], assignment)
+                    or same(selection['assignment'], selected_assignment), 'assignment_conflict')
+            # Other owners may materialize their public selection. The original
+            # action/call above pins the raw representation; the request and
+            # matching parent/child archives below pin its actual materialization.
+            compiled, declaration = self.expanded_contract_form(source, selection, index, role)
+            request_value = _plain(child.request)
+            require(same(compiled, schema)
+                and same(request_value['message'].get('report_contract_declaration'), declaration)
+                and same(request_value['message'].get('initial_report'),
+                    parse_json_object(selection['initial_report_json']))
+                and request_value['report_contract']['decision'] == selection['purpose']
+                and same(EpisodeGoal.child(source.request.goal, objective=selection['goal'],
+                    result_contract=schema).as_record(), request_value['goal']), 'request_conflict')
+            for current in (context, child):
+                require(same(current.request['message'].get('knowledge_inheritance'),
+                    self.receipts.manifest(current.episode_id)), 'inheritance_conflict')
+            references = records.recorded_admission_references(context, form, schema, index)
+            if references is None:
+                # Paged members and old outcomes without a recorded ordinary
+                # receipt projection retain their existing delivery path.
+                return None
+            projected, unsupported = [], []
+            def reference_projection(reference, namespace):
+                if namespace == 'restriction_enzyme' and child.role == 'scientific_process':
+                    from .restriction_mapping_references import RestrictionMappingReferences
+                    return RestrictionMappingReferences(self.store, self.run_id).frozen_reference(
+                        child, reference, namespace)
+                if (isinstance(namespace, str)
+                        and namespace.startswith('native_hmmer_preparation_')):
+                    from .native_hmmer_preparation_returns import IDENTIFIER_NAMESPACES
+                    if namespace in IDENTIFIER_NAMESPACES:
+                        owner = (self.episode_bindings.for_role('results')
+                            if 'results' in self.episode_bindings.roles else None)
+                        reader = getattr(owner, 'native_hmmer_preparation_returns', None)
+                        return (False if reader is None else
+                            reader.frozen_reference(child, reference, namespace))
+                if namespace == 'bvbrc_minhash_genome':
+                    owner = (self.episode_bindings.for_role('results')
+                        if 'results' in self.episode_bindings.roles else None)
+                    execution = getattr(owner, 'api_execution', None)
+                    reader = getattr(execution, 'minhash', None)
+                    return (False if reader is None else
+                        reader.frozen_reference(child, reference, namespace))
+                from .domain import RECORD_SCHEMAS
+                if reference not in references:
+                    return False
+                record = self.store.get(reference)
+                if (not isinstance(record, Mapping) or record.get('id') != reference
+                        or not isinstance(record.get('record_type'), str)):
+                    return False
+                kind = record['record_type']
+                scoped = reference in self.store.reference_subset([reference], scope)
+                if (not scoped and kind == 'artifact' and namespace == 'artifact'
+                        and child.role == 'results'):
+                    # Selected Addgene sequence Files have their original rich
+                    # typed-return owner rather than a semantic record root.
+                    # The child is closed; this owner authenticates its frozen
+                    # acquisition/receipt bindings without reopening native data.
+                    owner = (self.episode_bindings.for_role('results')
+                        if 'results' in self.episode_bindings.roles else None)
+                    execution = getattr(owner, 'api_execution', None)
+                    reader = getattr(execution, 'addgene_returns', None)
+                    scoped = reader is not None and reader.resolve_own(child, reference, namespace) is True
+                if not scoped:
+                    return False
+                execution_alias = {'execution_result': {'source', 'artifact'},
+                    'execution_handoff': {'source'}}.get(namespace)
+                if (namespace in RECORD_SCHEMAS and namespace != kind
+                        or execution_alias is not None and kind not in execution_alias
+                        or namespace == 'subject'
+                            and kind not in {'input', 'feature', 'product', 'read_subject'}):
+                    return False
+                if (kind == 'collection_member' or namespace not in {None, 'record', kind}
+                        and execution_alias is None
+                        and not (namespace == 'subject'
+                            and kind in {'input', 'feature', 'product', 'read_subject'})):
+                    unsupported.append(reference)
+                projected.append(reference)
+                return True
+            try:
+                # The shared semantic validator handles local native $defs and
+                # conditional branches. Declared preparation identifiers resolve
+                # against frozen facts without adding record grants. Live
+                # admission hooks can reopen private producers
+                # or write custody, so they are never called during this replay.
+                validate_form(form, schema, reference_projection)
+            except (ValueError, KeyError, TypeError) as error:
+                raise WorkflowError('closed_commission_reference_projection_conflict') from error
+            if unsupported:
+                return None
+            # Canonical form storage can reorder object properties. Validate
+            # exact reference membership, then retain the original admission
+            # order in the recorded boundary below.
+            require(set(references) == set(projected), 'reference_projection_conflict')
+            require(type(outcome.get('changed_record_refs')) is list
+                and set(outcome['changed_record_refs']) <= set(references), 'changed_references_conflict')
+            frozen = self.journal.row('runtime_forms', child.episode_id)
+            require(frozen is not None and same(json.loads(frozen['form']), form), 'frozen_form_conflict')
+            _, parent_archive = archived(parent)
+            child_reference, child_archive = archived(child_row)
+            observed = list(self.store.db.execute('SELECT unit_index,observation FROM runtime_observations '
+                "WHERE run_id=? AND episode_id=? AND json_extract(observation,'$.decision_index')=?",
+                (self.run_id, source.episode_id, index)))
+            require(len(observed) == 1, 'original_observation_required')
+            sequence = observed[0]['unit_index']
+            require(type(sequence) is int and 0 <= sequence < len(parent_archive['units']),
+                'observation_index_conflict')
+            unit = parent_archive['units'][sequence]
+            unit_ref = UnitRef(EpisodeRef(self.run_id, source.path).episode_id, sequence)
+            require(same(unit.get('unit_ref'), unit_ref.as_record())
+                and unit.get('unit_id') == unit_ref.unit_id
+                and unit.get('unit_label') == f'child_{index}'
+                and same(unit.get('child'), child_archive)
+                and same(unit.get('child_result'), {'form': form})
+                and same(json.loads(observed[0]['observation']), {
+                    'label': unit['unit_label'], 'credit': unit['controller_input'],
+                    'step': unit['controller_step'], 'unit_ref': unit['unit_ref'],
+                    'decision_index': index}), 'observation_conflict')
+            controller_input = unit['controller_input']
+            require(type(controller_input) is dict
+                and type(controller_input.get('credit')) in (int, float)
+                and type(action['credit']) in (int, float)
+                and controller_input['credit'] == action['credit']
+                and type(controller_input.get('estimation_action_index', index)) is int
+                and controller_input.get('estimation_action_index', index) == index, 'credit_conflict')
+            expected_update = dict(record_id=child.episode_id, goal=request_value['goal'],
+                completion={key: child_archive[key] for key in ('ended_by', 'end_reason', 'units_consumed')},
+                controller_input=controller_input, report=form,
+                report_contract=request_value['report_contract'], delivery_failures=[])
+            require(same(unit.get('episode_update'), expected_update), 'delivered_report_conflict')
+
+            def admitted(value):
+                require(same(value, form), 'form_conflict')
+                return references
+
+            contract = TypedReportContract(selection['purpose'], schema, lambda *_: False,
+                recorded_admission=admitted)
+            require(same(contract.as_record(), request_value['report_contract']), 'contract_conflict')
+            request = EpisodeRequest(EpisodeGoal.from_record(request_value['goal']),
+                Record(request_value['message']), contract)
+            record = EpisodeRecord(role, f'child_{index}', child_archive['units_consumed'],
+                child_archive['ended_by'], (), child_archive['controller_state'], request,
+                path=child.path, end_reason=child_archive['end_reason'],
+                episode_ref=EpisodeRef(self.run_id, child.path), archived_record=child_reference)
+            source.last_outcome, source.last_outcome_index = outcome, index
+            return ReturnedActionUnit(unit['unit_label'], record, Record({'form': form}), request,
+                lambda *_: Record(controller_input), lambda *_: form, decision_index=index)
+
     def specialist(self, source):
         path = getattr(source, 'path', ())
         if not path:
@@ -2246,7 +2545,7 @@ class Workflow:
     def freeze_contract_information(self, source, context, schema):
         """Freeze declared instruction contracts, never source facts or work."""
         roles = list(self.available_child_roles(source))
-        facts = {role: _plain(self.report_sources(role)) for role in roles}
+        facts = {role: _plain(self.return_contract_sources(role)) for role in roles}
         return {'version': CONTRACT_INFORMATION_PROFILE, 'permitted_child_roles': roles,
             'fact_sources_by_role': facts, 'fact_sources_sha256': _digest(facts),
             'catalog_sha256': _digest(context.get('tools', [])), 'action_schema_sha256': _digest(schema),
@@ -2466,7 +2765,7 @@ class Workflow:
 
     def permits_common_action(self, source, action):
         if restricted_root(self, source) and action == 'tool':
-            return False
+            return self.receipts is not None
         binding = self.specialist(source)
         if binding is not None:
             return action in binding.permitted_common_actions(self.binding_context(source))
@@ -2592,6 +2891,50 @@ class Workflow:
                      if self.uses_received_record_context(source) else {})
         return self.store.reasoning_view(source.scope, limit=24, **arguments)
 
+    def resource_context(self, source):
+        """Fresh host capacity for parents and children before each new choice.
+
+        Saved decisions retain their original snapshot. Capacity is checked
+        atomically again at native dispatch; a planning view grants no slot.
+        """
+        resources = getattr(self.tools, 'local_resources', None)
+        if resources is None:
+            return None
+        capabilities = []
+        if 'launch' in self.episode_bindings.roles:
+            read = getattr(self.episode_bindings.for_role('launch'), 'capabilities', None)
+            if callable(read):
+                capabilities = list(read())
+        from .workflow_budget import active_budget
+        budget=active_budget()
+        whole={key:budget[key] for key in ('version','limits','disk_bandwidth_enforced')}
+        whole.update(max_concurrent_workflows=1,max_provider_processes_per_coordinator=1,
+            coverage='Python coordinator, provider, native workers, and all descendants')
+        return {'version': 'episode_resource_context_v1', 'local': resources.snapshot(),
+            'whole_workflow':whole,
+            'ordinary_tool_job_limits': self.tools.local_job_policy.to_dict(),
+            **({'operation_limits': self.tools.operation_resource_limits()}
+               if callable(getattr(self.tools, 'operation_resource_limits', None)) else {}),
+            'execution_capabilities': capabilities,
+            'planning': 'The whole-workflow cap includes Python, providers, and every native child. '
+                'Only one workflow may run locally in this Codex window. Parent and child coordinators each retain at most one provider, all inside the same aggregate cap. Other windows have independent slots. Requests exceeding the aggregate cap require an external resource. '
+                'Choose work within all limits. Capacity is shared across local jobs and runs; '
+                'a busy result preserves prepared work for a later retry. Only host admission reserves capacity.'}
+
+    def shared_information_repository(self):
+        if self.receipts is None or not hasattr(self.store, 'db'):
+            return None
+        if not hasattr(self, '_shared_information'):
+            from .shared_information import SharedInformation
+            self._shared_information = SharedInformation(self.store, self.run_id)
+        return self._shared_information
+
+    def shared_information_context(self, source):
+        if source.path[-1][0] not in {'annotation', 'scientific_process', 'improvement'}:
+            return None
+        repository = self.shared_information_repository()
+        return None if repository is None else repository.context_view(self.binding_context(source))
+
     def uses_received_record_context(self, source):
         """Scientific visibility follows custody, not the chosen credit scalar."""
         return self.receipts is not None and self.is_scientific_source(source)
@@ -2599,14 +2942,32 @@ class Workflow:
     def receipt_projection(self, source):
         if not self.is_scientific_source(source):
             return False
-        projector = self.project_child_credit if self.has_child_projection(source) else self.project_credit
+        projector = self.scientific_projector_for_context(self.binding_context(source))
         return bool(getattr(projector, 'requires_episode_receipts', False))
+
+    def scientific_projector_for_context(self, context):
+        binding = (self.episode_bindings.for_role(context.role)
+            if context.role in self.episode_bindings.roles else None)
+        select = getattr(binding, 'credit_projector', None)
+        declared = select(context) if select is not None else None
+        if declared is not None:
+            return declared
+        return (self.project_child_credit if len(context.path) > 1
+            and self.project_child_credit is not None else self.project_credit)
+
+    def projector_receipt_arguments(self, projector, episode_id):
+        if not getattr(projector, 'requires_episode_receipts', False):
+            return {}
+        if self.receipts is None:
+            raise ValueError('numerical_credit_requires_episode_receipts')
+        if getattr(projector, 'requires_known_record_refs', False):
+            return {'known_record_refs': self.receipts.known(episode_id)}
+        return {'known_assessment_refs': self.receipts.known(episode_id, record_type='assessment')}
 
     def projection_arguments(self, source):
         arguments = self.child_credit_arguments(source) if self.has_child_projection(source) else {}
-        if self.receipt_projection(source):
-            arguments['known_assessment_refs'] = self.receipts.known(source.episode_id,
-                                                                    record_type='assessment')
+        projector = self.scientific_projector_for_context(self.binding_context(source))
+        arguments.update(self.projector_receipt_arguments(projector, source.episode_id))
         return arguments
 
     def receive_outcome(self, source, selection, result, index):
@@ -2622,6 +2983,68 @@ class Workflow:
                 references.extend(row['id'] for row in result.get('result', {}).get('records', []))
             self.receipts.receive(source.episode_id, references,
                                   kind='own_action', source_index=index)
+            derived = self.receive_tool_attributions(source, index, kind='own_action')
+            if derived:
+                result['record_refs'] = list(dict.fromkeys([*result.get('record_refs', []), *derived]))
+                references.extend(ref for ref in derived if ref not in references)
+            self.publish_axis_information(source, references)
+
+    def receive_tool_attributions(self, source, index, *, kind):
+        """Derive tool-specific numeric/trait evidence from actual receipts.
+
+        This runs before projection, including after a late sibling delivery.
+        It neither widens the child's typed form nor reads unreceived evidence.
+        The receiver's host derivations are recorded in its action outcome.
+        """
+        callback = getattr(self.tools, 'received_attributions', None)
+        if callback is None or self.receipts is None or source.path[-1][0] not in {'annotation','scientific_process','improvement'}:
+            return []
+        context = self.binding_context(source)
+        known = set(self.receipts.known(source.episode_id))
+        generated, needs = callback(context, known)
+        generated = [ref for ref in generated if ref not in known]
+        if context.role == 'scientific_process':
+            from .shared_information import SharedInformation
+            for request_ref, need in needs:
+                args = {'target_ref':need['target_ref'],
+                    'question':'Supply the specific attribution inputs for this measurement or local trait.',
+                    'required_information':canonical({'measurement_or_request_ref':request_ref,
+                        'policy':need['policy'],'physical_feature_key':need.get('physical_feature_key'),
+                        'missing':need['missing'],
+                        **({'required_operands':need['required_operands']}
+                            if need.get('required_operands') else {})}),
+                    'reason':'Only this measurement/use is unresolved; native evidence and other traits retain their own scores.',
+                    'blocking':False,'available_record_refs':[request_ref]}
+                published = SharedInformation(self.store,self.run_id).execute(context,'shared.request_information',args,
+                    known_record_refs=known,operation_key=f'{self.run_id}:{source.episode_id}:tool_attribution_need:{_digest(args)}')
+                generated.extend(ref for ref in published['record_refs'] if ref not in known)
+        generated = list(dict.fromkeys(generated))
+        if generated:self.receipts.receive(source.episode_id,generated,kind=kind,source_index=index)
+        return generated
+
+    def publish_axis_information(self, source, references):
+        """Share availability after actual receipt, without widening a return."""
+        if self.receipts is None or source.path[-1][0] != 'scientific_process':
+            return
+        context = self.binding_context(source)
+        selection = context.assignment.get('selection', {})
+        axis = selection.get('evidence_axis', selection.get('annotation', {}))
+        axis_id = axis.get('option_id')
+        if axis_id not in {'A102','A103'}:
+            return
+        evidence = [ref for ref in dict.fromkeys(references)
+            if self.store.get(ref).get('provider') != 'episode.shared_information']
+        if not evidence:
+            return
+        material = context.assignment.get('context', {}).get(axis_id.lower()+'_material', {})
+        target = material.get('subject_ref') or _plain(context.scope)['subject_refs'][0]
+        repository = self.shared_information_repository()
+        repository.execute(context, 'shared.publish_information', {'target_ref':target,
+            'evidence_refs':evidence, 'qualification':
+                f'Actual received {axis_id} records are available. Original scopes, subjects, origins, maps and '
+                'qualifications remain in those records; this metadata publication adds no scientific score.'},
+            known_record_refs=self.receipts.known(source.episode_id),
+            operation_key=f'{self.run_id}:{source.episode_id}:{axis_id.lower()}_information:{_digest(sorted(evidence))}')
 
     def receive_native_outcome(self, source, result, index):
         if self.native_timing_information is not None:
@@ -2708,6 +3131,9 @@ class Workflow:
             references.extend(ref for ref in received['native_execution_refs'] if ref not in references)
         self.receipts.receive(source.episode_id, references,
             kind='report_redelivery' if redelivery else 'child_form', source_index=index)
+        references.extend(ref for ref in self.receive_tool_attributions(source,index,
+            kind='report_redelivery' if redelivery else 'child_form') if ref not in references)
+        self.publish_axis_information(source, references)
         return references
 
     def source_credit_view(self, source, *, binding_snapshot=None):
@@ -2784,6 +3210,12 @@ class Workflow:
                 return {'kind': 'monitoring_information_components', 'selected_observations': binding,
                         'received_native_durations': self.native_timing_information.as_record()}
             return binding
+        if specialist is not None:
+            select = getattr(specialist, 'credit_projector', None)
+            context = source if isinstance(source, BindingContext) else self.binding_context(source)
+            declared = select(context) if select is not None else None
+            if declared is not None:
+                return _plain(declared.as_record())
         return self.child_credit_binding if self.has_child_projection(source) else self.credit_binding
 
     def source_controller_credit(self, source):
@@ -2803,6 +3235,10 @@ class Workflow:
 
     def extra_report_sources(self, source):
         return self.report_sources(source.path[-1][0])
+
+    def return_contract_sources(self, grain):
+        """Include common evidence-reference contracts in child discovery."""
+        return common_fact_sources() | self.report_sources(grain)
 
     def report_sources(self, grain):
         sources = runtime_report_sources() | (self.job_episodes.fact_sources(grain) if self.job_episodes else {})
@@ -2881,7 +3317,7 @@ class Workflow:
         if isinstance(axes, Mapping):
             result["axis_components"] = _plain(axes)
         if isinstance(projected, Mapping):
-            for key in ('retained_finding_count', 'inactive_dependencies', 'detail_pages'):
+            for key in ('retained_finding_count', 'inactive_dependencies', 'detail_pages', 'a101_sheet', 'interpretation'):
                 if key in projected:
                     result[key] = _plain(projected[key])
         return result
@@ -2907,6 +3343,10 @@ class Workflow:
         """
         if not isinstance(outcome, Mapping):
             return outcome
+        from .ensembl_acquisition import ensembl_outcome_view
+        ensembl_view = ensembl_outcome_view(outcome)
+        if ensembl_view is not None:
+            return ensembl_view
         batch = outcome.get("published_batch")
         if not isinstance(batch, Mapping) or batch.get("representation") != "native_publications_v1":
             return outcome
@@ -2968,6 +3408,9 @@ class Workflow:
                     from .numerical import YieldController
                     if type(controller) is not YieldController:
                         raise ValueError('practical_binding_requires_explicit_yield_controller')
+                    bind_cost = getattr(callback, 'with_continuation_cost', None)
+                    if bind_cost is not None:
+                        callback = bind_cost(controller.cost)
                     controller = YieldController(controller.epoch, row['initial_credit'],
                         controller.cost, controller.settings, estimate_with_context=callback)
         native = self.has_native_estimation()
@@ -3014,6 +3457,12 @@ class Workflow:
             if action is not None and json.loads(action['action']).get('kind') == 'wait':
                 value['estimation_action_index'] = index
         binding = self.specialist(source)
+        continuation = getattr(binding, 'continuation_for_action', None)
+        if continuation is not None:
+            pending_value = continuation(self.binding_context(source), f'{self.run_id}:{source.episode_id}:{index}')
+            if pending_value is not None:
+                value['hpc_continuation'] = pending_value
+                value['estimation_action_index'] = index
         completion = getattr(binding, 'completion_for_action', None)
         if completion is not None:
             proof = completion(self.binding_context(source), f'{self.run_id}:{source.episode_id}:{index}')
@@ -3058,6 +3507,10 @@ class Workflow:
                     initial_record_refs=getattr(self, 'initial_known_record_refs', None) or ())
                 if verdict is not None:
                     return verdict
+            if context is not None:
+                protein = self.services.protein_structure_reference_access(context, reference, namespace)
+                if protein is not None:
+                    return protein
             if namespace == 'native_event_target':
                 return bool(self.native_event_information is not None and context is not None
                     and self.native_event_information.resolve(context, reference, namespace))
@@ -3130,7 +3583,8 @@ class Workflow:
 
     def catalog(self, scope, source=None):
         if restricted_root(self, source):
-            return []
+            from .shared_information import catalog as shared_catalog
+            return shared_catalog() if self.receipts is not None else []
         catalog = (self.job_episodes.catalog(source) if source is not None and self.is_job_source(source)
                    else self.specialist(source).catalog(self.binding_context(source))
                    if source is not None and self.specialist(source) is not None
@@ -3139,6 +3593,10 @@ class Workflow:
                    if isinstance(catalog, Mapping) else list(catalog))
         knowledge_tools = knowledge_catalog()
         launch_tools = launch_instruction_catalog()
+        from .shared_information import catalog as shared_catalog
+        shared_tools = (shared_catalog() if source is not None
+            and source.path[-1][0] in {'annotation', 'scientific_process', 'improvement'}
+            and self.receipts is not None else [])
         process_tools = []
         if self.scientific_process_binding is not None:
             from .scientific_process_library import catalog as scientific_catalog
@@ -3146,6 +3604,7 @@ class Workflow:
         reserved = {'episode.history', 'episode.credit', 'episode.annotation_score', 'episode.estimate_wait',
                     'episode.monitoring_information', *(item['name'] for item in knowledge_tools),
                     *(item['name'] for item in launch_tools),
+                    *(item['name'] for item in shared_catalog()),
                     *(item['name'] for item in process_tools)}
         if any(item['name'] in reserved for item in entries):
             raise WorkflowError("Episode inspection tools are owned by the current Episode runtime")
@@ -3155,6 +3614,7 @@ class Workflow:
                 entry['knowledge_entry_ids'] = guides
         entries.extend(knowledge_tools)
         entries.extend(launch_tools)
+        entries.extend(shared_tools)
         if self.scientific_library_available(source):
             entries.extend(process_tools)
         if source is not None and self.permits_common_action(source, 'wait'):
@@ -3180,9 +3640,8 @@ class Workflow:
                         "description": "Position in the actual saved publication-ID array for this one prior own action."},
                     "limit": {"type": "integer", "minimum": 1,
                         "description": "Requested publication-ID page size; defaults to max(1, restoration preview_size)."}}}]}})
-        projector = (self.project_child_credit if source is not None and self.has_child_projection(source)
-                     else self.project_credit)
-        if not (source is not None and self.is_job_source(source)) and callable(getattr(projector, "read_details", None)):
+        projector = self.credit_detail_projector(source)
+        if callable(getattr(projector, "read_details", None)):
             entries.append({"name": "episode.credit", "description":
                 "Read the current credit projection for this Episode's fixed scope using this run's actual frozen projector and policy. The explicit limit and offset page source contributions and inactive dependencies independently; each includes its own total and next_offset. Zero limit requests metadata only. These are current source-bound operands, not biological accuracy or newly performed work.",
                 "input_schema": _object({
@@ -3210,6 +3669,21 @@ class Workflow:
             entries = [entry for entry in entries if entry['name'] in permitted | instruction_tools]
         return entries
 
+    def credit_detail_projector(self, source):
+        """The Store/scope detail port belongs to the actual scientific binding.
+
+        Operational specialist projections use their own context/receipt port.
+        They do not acquire a scientific detail reader from the root projector.
+        """
+        if source is not None:
+            if self.is_job_source(source):
+                return None
+            specialist = self.specialist(source)
+            if specialist is not None and specialist.credit_kind(source.path[-1][0]) != 'scientific':
+                return None
+        return (self.scientific_projector_for_context(self.binding_context(source))
+                if source is not None else self.project_credit)
+
     def credit_read(self, source, arguments):
         """Read declared projection details without choosing another score binding.
 
@@ -3218,10 +3692,9 @@ class Workflow:
         Scientific state is unchanged and ordinary action accounting remains
         in DecisionSource.execute, rather than inside this read helper.
         """
-        local = self.has_child_projection(source)
-        return self.projection_read(source, arguments,
-            self.project_child_credit if local else self.project_credit,
-            projector_arguments=self.projection_arguments(source))
+        projector = self.credit_detail_projector(source)
+        return self.projection_read(source, arguments, projector,
+            projector_arguments=self.projection_arguments(source) if projector is not None else {})
 
     def annotation_score_read(self, source, arguments):
         result = self.projection_read(source, arguments, self.project_annotation_score,
@@ -3437,6 +3910,11 @@ class Workflow:
 
     async def execute(self, source, name, arguments, *, decision_index, operation_key,
                       _composition_lookup=False):
+        if restricted_root(self, source) and not _composition_lookup:
+            from .shared_information import TOOLS as shared_tools
+            if self.receipts is None or name not in shared_tools:
+                return {'status':'invalid','record_refs':[],'changed_record_refs':[],'result':None,
+                    'feedback':{'code':'root_tool_requires_shared_coordination_operation'}}
         if source.path[-1][0] == 'scientific_process':
             self.scientific_process_binding.validate_execution_context(self.binding_context(source))
         if _composition_lookup and name in CONTRACT_INFORMATION_OPERATIONS:
@@ -3535,6 +4013,17 @@ class Workflow:
             return self.history_read(source, arguments, before=decision_index)
         if name == "episode.credit":
             return self.credit_read(source, arguments)
+        from .shared_information import TOOLS as shared_tools
+        if name in shared_tools:
+            try:
+                repository = self.shared_information_repository()
+                if repository is None:
+                    raise ContractError('shared_information_receipt_binding_required')
+                return repository.execute(self.binding_context(source), name, arguments,
+                    known_record_refs=self.receipts.known(source.episode_id), operation_key=operation_key)
+            except (ValueError, ValidationError) as error:
+                return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [],
+                    'result': None, 'feedback': {'code': str(error)}}
         if name == 'episode.annotation_score':
             return self.annotation_score_read(source, arguments)
         if name == 'episode.monitoring_information':
@@ -3553,10 +4042,14 @@ class Workflow:
             return result
         specialist = self.specialist(source)
         invocation = getattr(self.tools, 'current_invocation', None)
+        protein_invocation = getattr(self.tools, 'protein_structure_invocation', None)
         with (invocation(self.binding_context(source),
-                read_received=self.services.read_received_molecular_input,
+                read_received=(self.services.read_received_molecular_file_metadata
+                    if name == 'public.ncbi.sra.file' else self.services.read_received_molecular_input),
                 tool_name=name, arguments=arguments, operation_key=operation_key)
-                if callable(invocation) else nullcontext()):
+                if callable(invocation) else nullcontext()), (
+                protein_invocation(self.services.protein_structure_input_authority())
+                if callable(protein_invocation) else nullcontext()):
             if specialist is not None:
                 result = specialist.execute(self.binding_context(source), name, arguments, operation_key)
                 result = await result if inspect.isawaitable(result) else result
@@ -3633,14 +4126,21 @@ class Workflow:
         specialist = self.specialist(source)
         common_actions = (specialist.permitted_common_actions(self.binding_context(source))
                           if specialist is not None else ('tool', 'reason', 'child', 'wait', 'redeliver_report'))
+        gate_reader = getattr(specialist, 'decision_gate', None)
+        gate = gate_reader(self.binding_context(source)) if gate_reader is not None else None
+        if gate is not None:
+            common_actions = tuple(gate['common_actions'])
         if restricted_root(self, source):
-            common_actions = tuple(action for action in common_actions if action != 'tool')
+            if self.receipts is None:
+                common_actions = tuple(action for action in common_actions if action != 'tool')
         options = ([] if self.is_job_source(source) or 'reason' not in common_actions else [_object({"kind": {"type": "string", "const": "reason"},
                             "commit": self.store.reasoning_schema()})])
         if 'wait' in common_actions:
             options.append(_object({'kind': {'type': 'string', 'const': 'wait'},
                                     'condition': _wait_condition_schema()}))
         for item in (self.catalog(source.scope, source=source) if 'tool' in common_actions else ()):
+            if gate is not None and item['name'] not in gate['allowed_tools']:
+                continue
             branch = _object({"kind": {"type": "string", "const": "tool"},
                 "tool": {"type": "string", "const": item["name"]},
                 "arguments": _embedded_tool_schema(item["input_schema"])})
@@ -3674,10 +4174,12 @@ class Workflow:
                     raise WorkflowError('available_child_outside_declared_type_edges')
                 for role in roles:
                     binding = self.episode_bindings.for_role(role)
+                    child_schema = getattr(binding, 'child_assignment_schema', None)
                     properties = {**scientific_child['properties'],
                         'kind': {'type': 'string', 'const': 'episode_child'},
                         'role': {'type': 'string', 'const': role},
-                        'assignment': binding.assignment_schema(role)}
+                        'assignment': (child_schema(self.binding_context(source), role)
+                            if child_schema is not None else binding.assignment_schema(role))}
                     options.append(_object(properties))
         if not self.is_job_source(source) and 'redeliver_report' in common_actions:
             options.append(_object({"kind": {"type": "string", "const": "redeliver_report"},
@@ -3700,6 +4202,13 @@ class Workflow:
                          else selection['kind'])
         if not self.permits_common_action(source, common_action):
             raise ValueError('action_not_available_to_episode')
+        if restricted_root(self, source) and selection['kind'] == 'tool':
+            if selection.get('tool') not in {
+                    item['name'] for item in self.catalog(source.scope, source=source)}:
+                raise ValueError('action_not_available_to_episode')
+        closed = self._closed_child_commission(source, selection, index)
+        if closed is not None:
+            return closed
         if selection['kind'] == 'wait':
             original = self.journal.row('runtime_actions', source.episode_id, index)
             recorded = original is not None and json.loads(original['action']) == selection
@@ -3760,10 +4269,25 @@ class Workflow:
             # assignment. Reject stale or fabricated instruction pins first.
             self.launch_instructions.materialize(selection['assignment'].get('launch_instructions'))
             if binding is self.scientific_process_binding:
+                closed = {}
+                recorded = self.journal.row('runtime_actions', source.episode_id, index)
+                if (recorded is not None and recorded['result'] is not None
+                        and _json(json.loads(recorded['action'])) == _json(selection)
+                        and json.loads(recorded['result']).get('status') == 'completed'):
+                    from .episode_return_records import EpisodeReturnRecords
+                    child_id = Episode.identity(self.context, self.grains[role], f'child_{index}',
+                        parent_path=source.path).episode_id
+                    if self.journal.row('runtime_episodes', child_id) is not None:
+                        records = EpisodeReturnRecords(self.store, self.run_id,
+                            failure_prefix='scientific_closed_')
+                        candidate = records.context(child_id)
+                        read_closed = getattr(self.services, 'scientific_closed_request', None)
+                        if callable(read_closed) and read_closed(candidate) is not None:
+                            closed['closed_context'] = candidate
                 prepared = binding.prepare_invocation(self.binding_context(source), role,
                     selection['assignment'], scope, f'{self.run_id}:{source.episode_id}:{index}',
                     invocation={'objective': selection['goal'], 'purpose': selection['purpose'],
-                        'report_schema': schema, 'initial_report': initial})
+                        'report_schema': schema, 'initial_report': initial}, **closed)
                 episode_assignment = prepared['assignment']
                 scientific_process = prepared['scientific_process']
             else:
@@ -4018,14 +4542,14 @@ class Workflow:
                     details_limit=None, details_offset=0, **self.native_timing_arguments(source))
                 facts['monitoring_information_credit'] = credit_view['monitoring_information_credit']
                 facts['native_execution_measurements'] = native['native_execution_measurements']
+            snapshot = {
+                'completion': (None if completion_record is None else
+                    {'ended_by': completion_record.ended_by, 'end_reason': completion_record.end_reason,
+                     'units_consumed': completion_record.units_consumed}),
+                'own_action_count': (None if completion_record is None else completion_record.units_consumed),
+                'last_outcome_refs': last, 'committed_record_refs': committed,
+                'changed_record_refs': changed, 'report_basis_refs': source.report_basis}
             if specialist is not None:
-                snapshot = {
-                    'completion': (None if completion_record is None else
-                        {'ended_by': completion_record.ended_by, 'end_reason': completion_record.end_reason,
-                         'units_consumed': completion_record.units_consumed}),
-                    'own_action_count': (None if completion_record is None else completion_record.units_consumed),
-                    'last_outcome_refs': last, 'committed_record_refs': committed,
-                    'changed_record_refs': changed, 'report_basis_refs': source.report_basis}
                 if credit_snapshot is not None:
                     snapshot['operational_credit_snapshot'] = credit_snapshot
                 context = self.binding_context(source)
@@ -4036,7 +4560,8 @@ class Workflow:
                         episode_yield=facts['episode_yield'],
                         parent_invocation_ref=self.services.scientific_parent_invocation(context))
                 facts.update(specialist.facts(context, snapshot))
-            received_facts = self.episode_bindings.received_report_facts(self.binding_context(source))
+            received_facts = self.episode_bindings.received_report_facts(self.binding_context(source),
+                completion_snapshot=snapshot)
             if set(received_facts).intersection(facts):
                 raise ValueError('received_report_fact_conflict')
             facts.update(received_facts)
@@ -4083,6 +4608,16 @@ class Workflow:
                 request = EpisodeRequest(goal, Record(message), contract)
                 source = DecisionSource(self, path, request, scope)
         row = self.journal.row("runtime_episodes", identity.episode_id)
+        restore_active = getattr(self.scientific_process_binding, 'restore_saved_process', None)
+        if (name == 'scientific_process' and callable(restore_active)
+                and row is not None and row['state'] == 'active'
+                and row['completion'] is None and row['archive'] is None):
+            restored = restore_active(
+                self.binding_context(source), original_request=json.loads(row['request']))
+            if restored is not None:
+                message['scientific_process'] = restored
+                request = EpisodeRequest(goal, Record(message), contract)
+                source = DecisionSource(self, path, request, scope)
         if row is not None and json.loads(row['request']) != _plain(request.as_record()):
             raise WorkflowError('reconstructed immutable assignment differs')
         if name == 'scientific_process':

@@ -1,0 +1,25 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_actual_nested_initial_name_uses_original_parent_catalog_and_cutoff ____
+source_snapshot/tests/test_restriction_mapping_initial_catalog_736.py:101: in test_actual_nested_initial_name_uses_original_parent_catalog_and_cutoff
+    child=workflow.selected(result.parent.source,selected,2).child
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3760: in selected
+    child = self.build(role, f"child_{index}", selection["goal"], scope,
+source_snapshot/gene_annotation_episode/runtime.py:4069: in build
+    admitted = validate_form(message['initial_report'], initial_schema,
+source_snapshot/gene_annotation_episode/communication.py:590: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:680: in _validate_form
+    _validate_form_semantics(payload, schema, reference_resolver)
+source_snapshot/gene_annotation_episode/communication.py:784: in _validate_form_semantics
+    visit(payload, schema, path, resource)
+source_snapshot/gene_annotation_episode/communication.py:746: in visit
+    visit(child, properties[key], f"{path}.{key}", resource)
+source_snapshot/gene_annotation_episode/communication.py:765: in visit
+    raise ReportBoundaryError(f"{path}: reference is unavailable at this boundary", code="unknown_reference", field=path)
+E   gene_annotation_episode.communication.ReportBoundaryError: report.enzyme: reference is unavailable at this boundary
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_restriction_mapping_initial_catalog_736.py::test_actual_nested_initial_name_uses_original_parent_catalog_and_cutoff
+1 failed in 5.04s

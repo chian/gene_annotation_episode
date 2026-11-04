@@ -1,0 +1,103 @@
+{
+  "recorded_at": "2026-10-25T18:10:27.170748+00:00",
+  "scope": "Design-only closed-form compatibility and retained-artifact read checks; no provider, parser, calculator or live service invoked",
+  "cases": [
+    {
+      "case": "tiny_positive",
+      "value": {
+        "sign": 0,
+        "digits": [
+          1
+        ],
+        "exponent": -900
+      },
+      "result": "accepted"
+    },
+    {
+      "case": "retained_expect",
+      "value": {
+        "sign": 0,
+        "digits": [
+          2
+        ],
+        "exponent": -66
+      },
+      "result": "accepted"
+    },
+    {
+      "case": "canonical_zero",
+      "value": {
+        "sign": 0,
+        "digits": [
+          0
+        ],
+        "exponent": 0
+      },
+      "result": "accepted"
+    },
+    {
+      "case": "coverage_render",
+      "value": {
+        "sign": 0,
+        "digits": [
+          8,
+          8,
+          1,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          7
+        ],
+        "exponent": -18
+      },
+      "result": "accepted"
+    },
+    {
+      "case": "decimal_const",
+      "result": "rejected",
+      "diagnostic": {
+        "category": "report_format",
+        "code": "unrestricted_string",
+        "field": null
+      }
+    },
+    {
+      "case": "decimal_pattern",
+      "result": "rejected",
+      "diagnostic": {
+        "category": "report_format",
+        "code": "invalid_schema",
+        "field": null
+      }
+    },
+    {
+      "case": "raw_pointer_const",
+      "result": "rejected",
+      "diagnostic": {
+        "category": "report_format",
+        "code": "unrestricted_string",
+        "field": null
+      }
+    }
+  ],
+  "native_byte_checks": "passed exact hash, byte count and two original spans",
+  "retained_sheet_checks": "passed selected saved intervals, coverage, resolved identity and unresolved count",
+  "not_verified": [
+    "D/F implementation",
+    "full14-family parent schemas",
+    "host custody or producer evidence",
+    "episode typed return",
+    "live GenomeComparison"
+  ]
+}

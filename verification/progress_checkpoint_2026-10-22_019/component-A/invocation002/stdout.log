@@ -1,0 +1,87 @@
+FF.F.                                                                    [100%]
+=================================== FAILURES ===================================
+__________ test_cached_raw_duration_is_not_registration_identity[nan] __________
+
+env = (<gene_annotation_episode.state.Store object at 0x7e09e5b6ee10>, <test_direct_hmmer_operation_ports.Client object at 0..._07db96a7bc3c50be4ce6fc51d288cbc4bf623b7bf0b9b38a7bc2fa670f72180a', 'registry_ref': 'execution_registry_fixture', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e09e55690a0>
+elapsed = nan
+
+    @pytest.mark.parametrize('elapsed', [float('nan'), float('inf'), 'malformed'])
+    def test_cached_raw_duration_is_not_registration_identity(env, monkeypatch, elapsed):
+        async def run():
+            store, client, ops, order = env
+            original = client.hmmer_result
+            def result(*args, **kwargs):
+                captured = original(*args, **kwargs)
+                native = json.loads(captured.content)
+                native['result']['stats']['elapsed'] = elapsed
+                fields = asdict(captured)
+                # Match the existing provider parser's accepted raw bytes. This
+                # tests operational custody, not downstream scientific publication.
+                fields['content'] = json.dumps(native).encode()
+                return SourceSnapshot(**fields)
+            monkeypatch.setattr(client, 'hmmer_result', result)
+            await completed(env)
+            receipt = ops.read_operation(ops.inspect(order['job_ref'])['result_receipt_refs'][0])
+            assert receipt['outcome'] == 'completed' and receipt['failure'] is None
+        asyncio.run(run())
+>       assert pair(readonly_classification(env, monkeypatch)) == ('registered', None)
+E       AssertionError: assert ('conflict', ...ity_conflict') == ('registered', None)
+E         
+E         At index 0 diff: 'conflict' != 'registered'
+E         Use -v to get more diff
+
+tests/test_direct_hmmer_operation_ports.py:389: AssertionError
+__________ test_cached_raw_duration_is_not_registration_identity[inf] __________
+
+env = (<gene_annotation_episode.state.Store object at 0x7e09e555d1c0>, <test_direct_hmmer_operation_ports.Client object at 0..._07db96a7bc3c50be4ce6fc51d288cbc4bf623b7bf0b9b38a7bc2fa670f72180a', 'registry_ref': 'execution_registry_fixture', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e09e55955e0>
+elapsed = inf
+
+    @pytest.mark.parametrize('elapsed', [float('nan'), float('inf'), 'malformed'])
+    def test_cached_raw_duration_is_not_registration_identity(env, monkeypatch, elapsed):
+        async def run():
+            store, client, ops, order = env
+            original = client.hmmer_result
+            def result(*args, **kwargs):
+                captured = original(*args, **kwargs)
+                native = json.loads(captured.content)
+                native['result']['stats']['elapsed'] = elapsed
+                fields = asdict(captured)
+                # Match the existing provider parser's accepted raw bytes. This
+                # tests operational custody, not downstream scientific publication.
+                fields['content'] = json.dumps(native).encode()
+                return SourceSnapshot(**fields)
+            monkeypatch.setattr(client, 'hmmer_result', result)
+            await completed(env)
+            receipt = ops.read_operation(ops.inspect(order['job_ref'])['result_receipt_refs'][0])
+            assert receipt['outcome'] == 'completed' and receipt['failure'] is None
+        asyncio.run(run())
+>       assert pair(readonly_classification(env, monkeypatch)) == ('registered', None)
+E       AssertionError: assert ('conflict', ...ity_conflict') == ('registered', None)
+E         
+E         At index 0 diff: 'conflict' != 'registered'
+E         Use -v to get more diff
+
+tests/test_direct_hmmer_operation_ports.py:389: AssertionError
+_______________ test_empty_cached_receipt_link_is_invalid_shape ________________
+
+env = (<gene_annotation_episode.state.Store object at 0x7e09e555e600>, <test_direct_hmmer_operation_ports.Client object at 0..._07db96a7bc3c50be4ce6fc51d288cbc4bf623b7bf0b9b38a7bc2fa670f72180a', 'registry_ref': 'execution_registry_fixture', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e09e557f530>
+
+    def test_empty_cached_receipt_link_is_invalid_shape(env, monkeypatch):
+        asyncio.run(completed(env))
+        store, client, ops, order = env
+        store.db.execute("UPDATE public_search_results SET receipt_ref=''")
+>       assert pair(readonly_classification(env, monkeypatch)) == ('conflict', 'identity_conflict')
+E       AssertionError: assert ('conflict', ...n_incomplete') == ('conflict', ...ity_conflict')
+E         
+E         At index 1 diff: 'public_search_registration_incomplete' != 'identity_conflict'
+E         Use -v to get more diff
+
+tests/test_direct_hmmer_operation_ports.py:396: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_direct_hmmer_operation_ports.py::test_cached_raw_duration_is_not_registration_identity[nan]
+FAILED tests/test_direct_hmmer_operation_ports.py::test_cached_raw_duration_is_not_registration_identity[inf]
+FAILED tests/test_direct_hmmer_operation_ports.py::test_empty_cached_receipt_link_is_invalid_shape
+3 failed, 2 passed, 109 deselected in 14.08s

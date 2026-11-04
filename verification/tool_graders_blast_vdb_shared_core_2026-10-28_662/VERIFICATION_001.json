@@ -1,0 +1,724 @@
+{
+  "version": "blast_vdb_shared_core_verification_662_v1",
+  "basis": "Implementation and verification evidence only; original user attachment remains the goal authority.",
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "implemented": "Pure shared VDB operation/extraction/inspection contracts, common symbol authority, exact version dispatch; not full operation integration.",
+  "public_ports": {
+    "gene_annotation_episode/blast_vdb_utility_contracts.py": [
+      {
+        "name": "build_vdb_utility_schemas",
+        "line": 113,
+        "signature": "build_vdb_utility_schemas(base: dict) -> dict"
+      },
+      {
+        "name": "validate_vdb_utility_operation",
+        "line": 177,
+        "signature": "validate_vdb_utility_operation(value: dict) -> dict"
+      },
+      {
+        "name": "validate_vdb_utility_context",
+        "line": 250,
+        "signature": "validate_vdb_utility_context(value: dict, *, operation: dict, database_binding: dict | None=None, operation_input_occurrences: list[dict] | None=None) -> dict"
+      },
+      {
+        "name": "validate_vdb_sequence_extraction",
+        "line": 371,
+        "signature": "validate_vdb_sequence_extraction(value: dict) -> dict"
+      },
+      {
+        "name": "validate_vdb_database_inspection",
+        "line": 442,
+        "signature": "validate_vdb_database_inspection(value: dict) -> dict"
+      }
+    ],
+    "gene_annotation_episode/blast_utility_contracts.py": [
+      {
+        "name": "blast_utility_schema_for_version",
+        "line": 643,
+        "signature": "blast_utility_schema_for_version(version: str) -> dict"
+      },
+      {
+        "name": "blast_utility_record_name_for_version",
+        "line": 649,
+        "signature": "blast_utility_record_name_for_version(version: str) -> str"
+      },
+      {
+        "name": "blast_utility_result_version_for_operation",
+        "line": 654,
+        "signature": "blast_utility_result_version_for_operation(operation: dict) -> str"
+      },
+      {
+        "name": "validate_blast_utility_record",
+        "line": 673,
+        "signature": "validate_blast_utility_record(kind: str, value: dict) -> dict"
+      },
+      {
+        "name": "validate_blast_utility_operation",
+        "line": 694,
+        "signature": "validate_blast_utility_operation(value: dict) -> dict"
+      },
+      {
+        "name": "validate_blast_utility_result",
+        "line": 699,
+        "signature": "validate_blast_utility_result(value: dict) -> dict"
+      }
+    ],
+    "gene_annotation_episode/blast_database_extraction.py": [
+      {
+        "name": "normalize_blast_utility_sequence_symbols",
+        "line": 115,
+        "signature": "normalize_blast_utility_sequence_symbols(original: str, molecule: str) -> tuple[str, int | None]"
+      },
+      {
+        "name": "parse_blastdbcmd_sequences",
+        "line": 135,
+        "signature": "parse_blastdbcmd_sequences(content: bytes, *, occurrence: dict, operation: dict, database_binding: dict, outcome: dict, record_bindings: list[dict] | None=None) -> dict"
+      },
+      {
+        "name": "validate_sequence_extraction",
+        "line": 277,
+        "signature": "validate_sequence_extraction(result: dict) -> dict"
+      }
+    ]
+  },
+  "new_version_registry": {
+    "blast_utility_operation_v3": "Operation",
+    "blast_sequence_extraction_v2": "SequenceExtraction",
+    "blast_database_inspection_v3": "DatabaseInspection",
+    "blast_vdb_utility_context_v1": "VDBUtilityContext"
+  },
+  "schema_builder_keys": [
+    "ArtifactOccurrence",
+    "NativeField",
+    "Operation",
+    "SequenceExtraction",
+    "DatabaseInspection",
+    "VDBUtilityContext",
+    "VDBMember"
+  ],
+  "registry_names": [
+    "ArtifactOccurrence",
+    "NativeOutcome",
+    "UtilityFailure",
+    "ValidationObservation",
+    "DatabaseBinding",
+    "NativeField",
+    "Operation",
+    "SequenceExtraction",
+    "DatabaseInspection",
+    "DatabaseIntegrity",
+    "DatabaseArtifactSet",
+    "PreparedDatabaseProjection",
+    "PreparationDocument",
+    "ParameterObservation",
+    "MaterializationReceipt",
+    "VDBUtilityContext",
+    "VDBMember"
+  ],
+  "new_operation_variants": [
+    "extract_sequences/entries/entry",
+    "extract_sequences/entries/entry_batch",
+    "extract_sequences/all_native_sequences",
+    "extract_sequences/all_references",
+    "info",
+    "paths",
+    "paths_all"
+  ],
+  "operation_database_source_variants": [
+    "db",
+    "dbs_file"
+  ],
+  "new_native_formats": [
+    "blast_vdb_cmd_table_v1",
+    "blast_vdb_info_text_v1",
+    "blast_vdb_paths_text_v1"
+  ],
+  "vdb_context_required_keys": [
+    "version",
+    "source_inputs",
+    "selection_kind",
+    "include_filtered_reads",
+    "entry_identifier_bindings",
+    "member_bindings",
+    "sample_links",
+    "declared_dependencies",
+    "dependency_database_bindings"
+  ],
+  "extraction_additions": [
+    "operation_input_occurrences",
+    "vdb_context",
+    "scope",
+    "stderr_occurrence"
+  ],
+  "extraction_record_addition": "vdb_member; association=not_applicable only for tagged all enumerations",
+  "inspection_additions": [
+    "operation_input_occurrences",
+    "vdb_context",
+    "stderr_occurrence",
+    "path_sections",
+    "path_records"
+  ],
+  "native_fields": [
+    "vdb_selected_inputs",
+    "vdb_resolved_paths",
+    "vdb_sequence_count",
+    "vdb_total_unclipped_bases",
+    "vdb_longest_sequence_bases",
+    "vdb_average_sequence_bases",
+    "vdb_csra_inputs",
+    "vdb_reference_sequence_count",
+    "vdb_reference_total_bases"
+  ],
+  "preservation": {
+    "exact_json_values_equal": true,
+    "serialized_bytes_equal": true,
+    "before": {
+      "path": "verification/tool_graders_blast_vdb_shared_core_2026-10-28_662/legacy_before.json",
+      "sha256": "fd27102634939d495de4b41047cf74bca1b1da824f6f54780debf30957aaac85",
+      "size_bytes": 1930931
+    },
+    "after": {
+      "path": "verification/tool_graders_blast_vdb_shared_core_2026-10-28_662/legacy_after.json",
+      "sha256": "fd27102634939d495de4b41047cf74bca1b1da824f6f54780debf30957aaac85",
+      "size_bytes": 1930931
+    },
+    "before_source_attempt": "check122_vdb_core662_baseline",
+    "final_comparison_attempt": "check122_vdb_core662_relationships",
+    "old_version_schemas": [
+      "blast_utility_operation_v1",
+      "blast_utility_operation_v2",
+      "blast_sequence_extraction_v1",
+      "blast_database_inspection_v1",
+      "blast_database_inspection_v2",
+      "blast_database_integrity_v1",
+      "blast_database_artifact_set_v1",
+      "blast_database_artifact_set_v2",
+      "blast_preparation_document_v1"
+    ],
+    "classic_results": 6,
+    "preparation_documents": 2,
+    "preparation_results": 2,
+    "preparation_operations": 9,
+    "preparation_result_versions": 9,
+    "runtime_comparison": "Current code outputs compared with retained prechange JSON; old snapshot modules were not executed by the comparison."
+  },
+  "verification_runs": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662",
+      "notes": "Incorrect selector included tests/ although runner supplies that prefix; no tests ran. Retained failure receipt, corrected in separately named baseline attempt.",
+      "counts": {},
+      "counts_by_test_file": {},
+      "selected_tests": [
+        "tests/test_blast_vdb_utility_contracts_662.py::test_capture_or_compare_legacy_baseline"
+      ],
+      "receipt": {
+        "returncode": 4,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662/handle.json",
+        "unit": "gene-local-job-1616995128274892bb5a5c2c9599ca62.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "4",
+            "ended": {
+              "at": "2026-10-29T02:41:27.102845+00:00",
+              "monotonic_ns": 1055248800171998,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 3.828569278,
+          "native_returncode": 4,
+          "observed_scratch_bytes": 601735168
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 4,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "receipt_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662/receipt.json",
+        "sha256": "d12c27bec2afeedf164d37f4f0bc1214bee3ea1081f6590e068afa09675b99f4",
+        "size_bytes": 1629
+      },
+      "audit_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662/execution_audit.json",
+        "sha256": "75963178ff47d8b41a960375db33492dcd508dc3d17406e19d3158b56ba298e6",
+        "size_bytes": 156
+      },
+      "case_reports_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662/case_reports.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_baseline",
+      "notes": "Pre-production-change capture of existing schemas and representative outputs; controlled fixture bytes.",
+      "counts": {
+        "passed": 1
+      },
+      "counts_by_test_file": {
+        "tests/test_blast_vdb_utility_contracts_662.py": {
+          "passed": 1
+        }
+      },
+      "selected_tests": [
+        "test_blast_vdb_utility_contracts_662.py::test_capture_or_compare_legacy_baseline"
+      ],
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_baseline/handle.json",
+        "unit": "gene-local-job-c7d0f5d01dc849f48bde39b773083bbd.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T02:42:02.412052+00:00",
+              "monotonic_ns": 1055284109387591,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 3.807401645,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 603799552
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "receipt_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_baseline/receipt.json",
+        "sha256": "f6fd9fe05471b3a0e527ed357628fa05737880d44a5f14ac9e3280fa142fa3ca",
+        "size_bytes": 1636
+      },
+      "audit_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_baseline/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "case_reports_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_baseline/case_reports.jsonl",
+        "sha256": "d21288f50b7541920f54357df28e1a7881b5c2cdfef91de5438fe456caf25e55",
+        "size_bytes": 179
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_after",
+      "notes": "Initial focused core/classic/preparation regression run. 210 passed; two stale test625 expectations failed. No new662, classic626 or preparation647 failure.",
+      "counts": {
+        "passed": 210,
+        "failed": 2
+      },
+      "counts_by_test_file": {
+        "tests/test_blast_vdb_utility_contracts_662.py": {
+          "passed": 48
+        },
+        "tests/test_blast_utility_contracts_625.py": {
+          "failed": 2,
+          "passed": 107
+        },
+        "tests/test_blast_database_extraction_626.py": {
+          "passed": 29
+        },
+        "tests/test_blast_preparation_contracts_647.py": {
+          "passed": 26
+        }
+      },
+      "selected_tests": [
+        "test_blast_vdb_utility_contracts_662.py",
+        "test_blast_utility_contracts_625.py",
+        "test_blast_database_extraction_626.py",
+        "test_blast_preparation_contracts_647.py"
+      ],
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_after/handle.json",
+        "unit": "gene-local-job-ac9a79a0a51347f28eda8b8026b70291.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-29T02:53:19.536504+00:00",
+              "monotonic_ns": 1055961233837523,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 4.51699354,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 606105600
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "receipt_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_after/receipt.json",
+        "sha256": "5038acd1fe41e2485b5d67fd7249dfa4cdb0289bd21115951b04f57a6066cef0",
+        "size_bytes": 1634
+      },
+      "audit_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_after/execution_audit.json",
+        "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+        "size_bytes": 156
+      },
+      "case_reports_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_after/case_reports.jsonl",
+        "sha256": "fa945131de9b442fe147bb1afdf91168d5a6ded0b9ba5798699ff3f8e1a4db94",
+        "size_bytes": 45255
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_relationships",
+      "notes": "Nine selected meaningful relationship cases after final custody/direct-port/path-boundary fixes, including exact legacy comparison. Broad 210-case success was not repeated.",
+      "counts": {
+        "passed": 9
+      },
+      "counts_by_test_file": {
+        "tests/test_blast_vdb_utility_contracts_662.py": {
+          "passed": 9
+        }
+      },
+      "selected_tests": [
+        "test_blast_vdb_utility_contracts_662.py::test_capture_or_compare_legacy_baseline",
+        "test_blast_vdb_utility_contracts_662.py::test_direct_vdb_ports_preserve_common_contract_error_prefix_for_invalid_native_paths",
+        "test_blast_vdb_utility_contracts_662.py::test_capture_unknown_native_outcome_and_missing_entry_preserve_specific_qualifications",
+        "test_blast_vdb_utility_contracts_662.py::test_explicit_association_cannot_erase_exact_duplicate_requests",
+        "test_blast_vdb_utility_contracts_662.py::test_dependency_lists_preserve_database_custody_and_bind_selected_list_ordinals",
+        "test_blast_vdb_utility_contracts_662.py::test_path_dependencies_can_bind_separate_declared_databases_without_alias_inference",
+        "test_blast_vdb_utility_contracts_662.py::test_path_rows_cannot_cross_reported_section_boundaries_or_reorder_headers",
+        "test_blast_vdb_utility_contracts_662.py::test_supplied_full_reference_length_is_distinct_from_returned_native_length",
+        "test_blast_vdb_utility_contracts_662.py::test_paths_preserve_duplicates_empty_sections_and_exact_dependency_links"
+      ],
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_relationships/handle.json",
+        "unit": "gene-local-job-64c5836354b94418b26f5bd2c3841e93.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T02:59:09.447349+00:00",
+              "monotonic_ns": 1056311144676513,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 3.099841226,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 605921280
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "receipt_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_relationships/receipt.json",
+        "sha256": "8bebeadf6f5aab4e5efe2534c4257d660dd09229dc059cb8d3f5b74a914bf69b",
+        "size_bytes": 1641
+      },
+      "audit_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_relationships/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "case_reports_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_relationships/case_reports.jsonl",
+        "sha256": "54d6facc16649296d66e153925061bfb27c259f638409b36ae17114c1bfafa48",
+        "size_bytes": 1938
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_registry",
+      "notes": "Root corrected two obsolete test625 functions. Seven selected cases pass; original malformed blast_database_inspection_v2 now expects schema_invalid, and unknown inspection_v999 remains rejected.",
+      "counts": {
+        "passed": 7
+      },
+      "counts_by_test_file": {
+        "tests/test_blast_utility_contracts_625.py": {
+          "passed": 7
+        }
+      },
+      "selected_tests": [
+        "test_blast_utility_contracts_625.py::test_exported_schemas_are_closed_valid_json_schemas",
+        "test_blast_utility_contracts_625.py::test_result_dispatch_only_admits_exact_result_versions"
+      ],
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_registry/handle.json",
+        "unit": "gene-local-job-27145316d7f147a4b0975664dfc725e4.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T03:02:32.491224+00:00",
+              "monotonic_ns": 1056514188551497,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 5.900338991,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 601980928
+        }
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "receipt_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_registry/receipt.json",
+        "sha256": "d183f965808ea76741622f0a79c7c1226c064f1b78dc81ace06f21ca4b0c633c",
+        "size_bytes": 1636
+      },
+      "audit_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_registry/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "case_reports_pin": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check122_vdb_core662_registry/case_reports.jsonl",
+        "sha256": "81edb112b011269730c23ad8a97f464ce0bfc4250914b3983e0bf4375a55cd6a",
+        "size_bytes": 1522
+      }
+    }
+  ],
+  "historical_failure_resolution": {
+    "root_authored_file": "tests/test_blast_utility_contracts_625.py",
+    "functions": [
+      "test_exported_schemas_are_closed_valid_json_schemas",
+      "test_result_dispatch_only_admits_exact_result_versions"
+    ],
+    "factual_correction": "Initial informal message incorrectly named the stale value2 extraction_v2. Actual original value2 was blast_database_inspection_v2, already occupied by preparation before this work. Malformed known versions correctly raise blast_utility_schema_invalid. No production validator was weakened."
+  },
+  "numerical_examples": [
+    {
+      "input": "acgt",
+      "molecule": "dna",
+      "normalized_sequence": "ACGT",
+      "returned_symbol_count": 4,
+      "meaning": "One existing shared validated sequence symbol calculation."
+    },
+    {
+      "input": "AUN",
+      "molecule": "dna",
+      "normalized_sequence": "AUN",
+      "returned_symbol_count": null,
+      "meaning": "Invalid declared-DNA symbols remain retained; absence of usable count is not zero."
+    },
+    {
+      "supplied_reference_full_length": 19,
+      "native_reported_returned_length": 4,
+      "returned_symbol_count": 4,
+      "meaning": "Source-bound full reference extent and actual returned symbols remain distinct; no genomic range is inferred."
+    },
+    {
+      "native_sequence_count": 3,
+      "native_total_unclipped_bases": 1001,
+      "native_average_sequence_bases": 333,
+      "meaning": "Reported integer average remains 333; no derived length/count replacement."
+    }
+  ],
+  "resource_policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "swap_bytes": 0,
+    "wall_seconds": null,
+    "dependencies_from": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check005/dependencies",
+    "application_imports_and_tests": "bounded529 only",
+    "host_work": "stdlib source inspection, hashing, receipt inspection, evidence and edit staging"
+  },
+  "verification_limits": [
+    "New VDB fixtures are controlled hand-authored contract cases, not native execution or biological measurements.",
+    "Existing extraction626 retained fixture parsing is replay, not a new native command.",
+    "No native BLAST command, acquisition, network lookup or remote execution was performed.",
+    "Core validates typed provenance and explicit relationships; captured-source authenticity is not established by pure contracts."
+  ],
+  "remaining_dependencies": [
+    "Parser663 must consume lexical655 and common normalization/validators, preserve raw rows/diagnostics and exact original source context.",
+    "Native owner must add native_blast_utility_job_v3, precise argv, captured list/entry bytes, VDB operand/inventory and applied offline resolver evidence.",
+    "Original-context worker must authenticate source_ref pointers, sample/member representations, database-side list roles/bytes and dependency declarations against captured original request/metadata.",
+    "Result publication, projection, requested facts, immediate-child return and parent acceptance must carry the saved result union with actual original identity checks.",
+    "Authentic tiny offline VDB fixture and the real child-owned capture/result/return path remain required for operation completion."
+  ],
+  "accounting": {
+    "active_inventory": 305,
+    "completed_operation_count_increment": 0,
+    "inventory_rows_edited": false,
+    "formatters_excluded": true,
+    "original_654_runs_modified": false,
+    "runtime_prompt_or_task_steering_changes": false
+  }
+}

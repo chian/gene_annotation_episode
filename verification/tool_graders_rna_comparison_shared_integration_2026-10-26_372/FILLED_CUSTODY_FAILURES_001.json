@@ -1,0 +1,1269 @@
+{
+  "fixture_provenance": "Actual retained-byte loss/corruption after synthetic original reports were received. Explicit engineering failure horizon closes after one failed collection; no practical completion is asserted. Native observation/capture and new comparison worker are guarded against invocation.",
+  "cases": [
+    {
+      "body": {
+        "anchor_handoff_ref": "source_c837d83b011c2829cf662510",
+        "arguments": {},
+        "assignment_digest": "d928b426513f9e9644b9b786101476c4c9314f1423c4462bee037c3fa0765b65",
+        "calculator_version": "rna_comparison_calculators_v1",
+        "comparison_sheet_artifact_ref": null,
+        "comparison_sheet_sha256": null,
+        "components_artifact_ref": null,
+        "components_sha256": null,
+        "delivery_complete": false,
+        "episode_id": "episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a",
+        "issues": [
+          {
+            "code": "retained_sheet_digest_mismatch",
+            "comparison_id": null,
+            "field": null,
+            "index": null,
+            "member_id": "WT",
+            "selection_id": null,
+            "stage": "input"
+          }
+        ],
+        "operation_key": "rna-comparison-shared372:episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a:0",
+        "original_receipt_keys": [
+          "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+          "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0"
+        ],
+        "preparation_failure": null,
+        "projection_rows": [],
+        "run_id": "rna-comparison-shared372",
+        "scope_key": "dafd3d35b6a506d5feef182d08b1c3445a65e277680e5fcaca725e7e5cbc768d",
+        "selected_action_digest": "7d3ff18a97ca27db07b225160f232484771de4a99800776e4ae5659aa0c5aaf8",
+        "selected_input_digests": [],
+        "selector": {
+          "acquisition": "retained_inputs_only",
+          "parameters": {
+            "arithmetic": "retained_binary64_values_v1",
+            "native_uncertainty_policy": "retain_no_fabricated_transfer",
+            "pair_difference": "alignment_column_pair_sets",
+            "schema": "rna_comparison_parameters_v1",
+            "site_denominator": "decidable_selected_shared_sites",
+            "tie_rule": "exact_selected_numeric_value"
+          },
+          "projections": [
+            {
+              "comparison_ids": [
+                "compare-A"
+              ],
+              "family": "energy_comparison",
+              "include_order": true,
+              "include_tolerance_band": false,
+              "metrics": [
+                "baseline_native_energy",
+                "variant_native_energy",
+                "energy_delta"
+              ],
+              "projection_id": "energy"
+            },
+            {
+              "family": "structures",
+              "fields": [
+                "dot_bracket"
+              ],
+              "member_ids": [
+                "WT",
+                "A"
+              ],
+              "projection_id": "two-structures"
+            },
+            {
+              "comparison_id": "compare-A",
+              "family": "position_changes",
+              "projection_id": "sites",
+              "selection_id": "selected",
+              "transitions": [
+                "unchanged_partner",
+                "lost_pairing"
+              ]
+            }
+          ],
+          "question": {
+            "baseline_member_id": "WT",
+            "comparisons": [
+              {
+                "calculate_pair_changes": true,
+                "comparison_id": "compare-A",
+                "correspondence": {
+                  "kind": "substitution_only",
+                  "substitutions": [
+                    {
+                      "baseline_symbol": "C",
+                      "index": 6,
+                      "variant_symbol": "U"
+                    }
+                  ]
+                },
+                "energy": {
+                  "baseline_absolute_tolerance": null,
+                  "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+                  "normalization": "none",
+                  "quantity": "native_evaluation"
+                },
+                "site_selections": [
+                  {
+                    "combine": "set_union",
+                    "coordinate_member_id": "WT",
+                    "intervals": [],
+                    "positions": [
+                      0,
+                      6
+                    ],
+                    "selection_id": "selected",
+                    "unpaired_region_keys": []
+                  }
+                ],
+                "variant_member_id": "A"
+              }
+            ],
+            "kind": "pairwise",
+            "membership": [
+              {
+                "kind": "saved_sheet",
+                "member_id": "WT",
+                "saved_input": {
+                  "bundle_artifact_ref": "artifact_7ccd43255032839bfa80d80827e25b9a63322b34f26dcd5c12a6692bc154cc7c",
+                  "handoff_ref": "source_f1f4c2f558152e961a8ac5cb",
+                  "mode": "supplied_features",
+                  "operation": "analyze_rna_secondary_structure_features",
+                  "record_key": "WT",
+                  "result_receipt_key": "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+                  "schema": "rna_structure_saved_sheet_input_v1",
+                  "sheet_artifact_ref": "artifact_9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                  "sheet_sha256": "9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                  "source_ref": "source_9d446f1aed252f85ce7478dc"
+                }
+              },
+              {
+                "kind": "saved_sheet",
+                "member_id": "A",
+                "saved_input": {
+                  "bundle_artifact_ref": "artifact_1b82ea77a14d663bf16684ca2d9359595548cae73c738b6496bf18c91df1e6f2",
+                  "handoff_ref": "source_c837d83b011c2829cf662510",
+                  "mode": "supplied_features",
+                  "operation": "analyze_rna_secondary_structure_features",
+                  "record_key": "A",
+                  "result_receipt_key": "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0",
+                  "schema": "rna_structure_saved_sheet_input_v1",
+                  "sheet_artifact_ref": "artifact_34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                  "sheet_sha256": "34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                  "source_ref": "source_54c75bcb1b831e38122f66d9"
+                }
+              }
+            ],
+            "scan": null
+          },
+          "version": "native_rna_structure_comparison_selector_v1"
+        },
+        "tool_name": "execution.results.collect",
+        "version": "rna_structure_comparison_result_receipt_v1"
+      },
+      "histories": {
+        "episode_49e529a9d83aae40f72ccda28fa6b28c4ce377a5556cf5ed1ff095771a02d424": {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'),)",
+          "estimate": {
+            "diagnostics": {
+              "fixture": "scripted_scientific_test_horizon"
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "function": "rna_shared372.workflow_case.<locals>.controller.<locals>.estimate",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "kind": "caller_injected",
+              "template_relationship": "not_inferred"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0
+          ]
+        },
+        "episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a": {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_2'))",
+          "estimate": {
+            "diagnostics": {
+              "fixture": "failed_acquisition_horizon"
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "kind": "caller_injected",
+              "template_relationship": "not_inferred"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0
+          ]
+        },
+        "episode_b06bf36e0cb1bca58724413fee63a765e2f1ab93a4ecaf8dbd0e3baf4ae67065": {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+          "estimate": {
+            "diagnostics": {
+              "fixture": "scripted_scientific_test_horizon"
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "function": "rna_shared372.workflow_case.<locals>.controller.<locals>.estimate",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "kind": "caller_injected",
+              "template_relationship": "not_inferred"
+            },
+            "turns": 3
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934": {
+          "current_credit": 2.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_0'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "00d89cde9a04ea49946dfecc093c51d331468e5d4a85b4054478e255818852c4",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934",
+                "operation_key": "rna-comparison-shared372:episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934:0",
+                "receipt_sha256": "8346f7d33dda83b754a5a0a104a9e7a4983896729357d40735847b8fef997072",
+                "run_id": "rna-comparison-shared372",
+                "validation_keys": [
+                  "original_native_attempt",
+                  "complete_sealed_bundle_acquisition",
+                  "requested_rna_projection_or_explicit_unavailability"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934",
+                "unit_id": "unit_33ca3f9f416d05bcf91e58d935a45b77571c786a99b2da47fb87ed7fa6eadd45",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            2.0
+          ]
+        },
+        "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f": {
+          "current_credit": 2.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_1'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "63d3ae2423583084e1c92be644ff97eec826a06d28098950ee2a0512e4b16e23",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f",
+                "operation_key": "rna-comparison-shared372:episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f:0",
+                "receipt_sha256": "ffd994b2aa7878b33c4590376f49c2c8063fc0c40d8c6cdefc64fe903fa53ef8",
+                "run_id": "rna-comparison-shared372",
+                "validation_keys": [
+                  "original_native_attempt",
+                  "complete_sealed_bundle_acquisition",
+                  "requested_rna_projection_or_explicit_unavailability"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f",
+                "unit_id": "unit_b5555f64b596424a91e69061387895093baaef9c405f4a19154aadd284e82688",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            2.0
+          ]
+        }
+      },
+      "identity": "synthetic_native_reports_actual_Workflow_and_bounded_comparison",
+      "returned": {
+        "comparison": [],
+        "completed": false
+      },
+      "returned_forms": {
+        "episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a": {
+          "comparison": [],
+          "completed": false
+        },
+        "episode_b06bf36e0cb1bca58724413fee63a765e2f1ab93a4ecaf8dbd0e3baf4ae67065": {
+          "comparison": []
+        },
+        "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934": {
+          "completed": true,
+          "failure": [],
+          "saved": [
+            {
+              "bundle_artifact_ref": "artifact_7ccd43255032839bfa80d80827e25b9a63322b34f26dcd5c12a6692bc154cc7c",
+              "handoff_ref": "source_f1f4c2f558152e961a8ac5cb",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "WT",
+              "result_receipt_key": "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+              "sheet_sha256": "9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+              "source_ref": "source_9d446f1aed252f85ce7478dc"
+            }
+          ]
+        },
+        "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f": {
+          "completed": true,
+          "failure": [],
+          "saved": [
+            {
+              "bundle_artifact_ref": "artifact_1b82ea77a14d663bf16684ca2d9359595548cae73c738b6496bf18c91df1e6f2",
+              "handoff_ref": "source_c837d83b011c2829cf662510",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "A",
+              "result_receipt_key": "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+              "sheet_sha256": "34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+              "source_ref": "source_54c75bcb1b831e38122f66d9"
+            }
+          ]
+        }
+      },
+      "selector": {
+        "acquisition": "retained_inputs_only",
+        "parameters": {
+          "arithmetic": "retained_binary64_values_v1",
+          "native_uncertainty_policy": "retain_no_fabricated_transfer",
+          "pair_difference": "alignment_column_pair_sets",
+          "schema": "rna_comparison_parameters_v1",
+          "site_denominator": "decidable_selected_shared_sites",
+          "tie_rule": "exact_selected_numeric_value"
+        },
+        "projections": [
+          {
+            "comparison_ids": [
+              "compare-A"
+            ],
+            "family": "energy_comparison",
+            "include_order": true,
+            "include_tolerance_band": false,
+            "metrics": [
+              "baseline_native_energy",
+              "variant_native_energy",
+              "energy_delta"
+            ],
+            "projection_id": "energy"
+          },
+          {
+            "family": "structures",
+            "fields": [
+              "dot_bracket"
+            ],
+            "member_ids": [
+              "WT",
+              "A"
+            ],
+            "projection_id": "two-structures"
+          },
+          {
+            "comparison_id": "compare-A",
+            "family": "position_changes",
+            "projection_id": "sites",
+            "selection_id": "selected",
+            "transitions": [
+              "unchanged_partner",
+              "lost_pairing"
+            ]
+          }
+        ],
+        "question": {
+          "baseline_member_id": "WT",
+          "comparisons": [
+            {
+              "calculate_pair_changes": true,
+              "comparison_id": "compare-A",
+              "correspondence": {
+                "kind": "substitution_only",
+                "substitutions": [
+                  {
+                    "baseline_symbol": "C",
+                    "index": 6,
+                    "variant_symbol": "U"
+                  }
+                ]
+              },
+              "energy": {
+                "baseline_absolute_tolerance": null,
+                "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+                "normalization": "none",
+                "quantity": "native_evaluation"
+              },
+              "site_selections": [
+                {
+                  "combine": "set_union",
+                  "coordinate_member_id": "WT",
+                  "intervals": [],
+                  "positions": [
+                    0,
+                    6
+                  ],
+                  "selection_id": "selected",
+                  "unpaired_region_keys": []
+                }
+              ],
+              "variant_member_id": "A"
+            }
+          ],
+          "kind": "pairwise",
+          "membership": [
+            {
+              "kind": "saved_sheet",
+              "member_id": "WT",
+              "saved_input": {
+                "bundle_artifact_ref": "artifact_7ccd43255032839bfa80d80827e25b9a63322b34f26dcd5c12a6692bc154cc7c",
+                "handoff_ref": "source_f1f4c2f558152e961a8ac5cb",
+                "mode": "supplied_features",
+                "operation": "analyze_rna_secondary_structure_features",
+                "record_key": "WT",
+                "result_receipt_key": "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+                "schema": "rna_structure_saved_sheet_input_v1",
+                "sheet_artifact_ref": "artifact_9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                "sheet_sha256": "9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                "source_ref": "source_9d446f1aed252f85ce7478dc"
+              }
+            },
+            {
+              "kind": "saved_sheet",
+              "member_id": "A",
+              "saved_input": {
+                "bundle_artifact_ref": "artifact_1b82ea77a14d663bf16684ca2d9359595548cae73c738b6496bf18c91df1e6f2",
+                "handoff_ref": "source_c837d83b011c2829cf662510",
+                "mode": "supplied_features",
+                "operation": "analyze_rna_secondary_structure_features",
+                "record_key": "A",
+                "result_receipt_key": "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0",
+                "schema": "rna_structure_saved_sheet_input_v1",
+                "sheet_artifact_ref": "artifact_34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                "sheet_sha256": "34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                "source_ref": "source_54c75bcb1b831e38122f66d9"
+              }
+            }
+          ],
+          "scan": null
+        },
+        "version": "native_rna_structure_comparison_selector_v1"
+      }
+    },
+    {
+      "body": {
+        "anchor_handoff_ref": "source_1684019b0971532afde6c030",
+        "arguments": {},
+        "assignment_digest": "2aa73b23eab87a11159a5b89f333771b990a34e283739e806fe63986d12f099b",
+        "calculator_version": "rna_comparison_calculators_v1",
+        "comparison_sheet_artifact_ref": null,
+        "comparison_sheet_sha256": null,
+        "components_artifact_ref": null,
+        "components_sha256": null,
+        "delivery_complete": false,
+        "episode_id": "episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a",
+        "issues": [
+          {
+            "code": "retained_sheet_missing",
+            "comparison_id": null,
+            "field": null,
+            "index": null,
+            "member_id": "WT",
+            "selection_id": null,
+            "stage": "input"
+          }
+        ],
+        "operation_key": "rna-comparison-shared372:episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a:0",
+        "original_receipt_keys": [
+          "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+          "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0"
+        ],
+        "preparation_failure": null,
+        "projection_rows": [],
+        "run_id": "rna-comparison-shared372",
+        "scope_key": "dafd3d35b6a506d5feef182d08b1c3445a65e277680e5fcaca725e7e5cbc768d",
+        "selected_action_digest": "7d3ff18a97ca27db07b225160f232484771de4a99800776e4ae5659aa0c5aaf8",
+        "selected_input_digests": [],
+        "selector": {
+          "acquisition": "retained_inputs_only",
+          "parameters": {
+            "arithmetic": "retained_binary64_values_v1",
+            "native_uncertainty_policy": "retain_no_fabricated_transfer",
+            "pair_difference": "alignment_column_pair_sets",
+            "schema": "rna_comparison_parameters_v1",
+            "site_denominator": "decidable_selected_shared_sites",
+            "tie_rule": "exact_selected_numeric_value"
+          },
+          "projections": [
+            {
+              "comparison_ids": [
+                "compare-A"
+              ],
+              "family": "energy_comparison",
+              "include_order": true,
+              "include_tolerance_band": false,
+              "metrics": [
+                "baseline_native_energy",
+                "variant_native_energy",
+                "energy_delta"
+              ],
+              "projection_id": "energy"
+            },
+            {
+              "family": "structures",
+              "fields": [
+                "dot_bracket"
+              ],
+              "member_ids": [
+                "WT",
+                "A"
+              ],
+              "projection_id": "two-structures"
+            },
+            {
+              "comparison_id": "compare-A",
+              "family": "position_changes",
+              "projection_id": "sites",
+              "selection_id": "selected",
+              "transitions": [
+                "unchanged_partner",
+                "lost_pairing"
+              ]
+            }
+          ],
+          "question": {
+            "baseline_member_id": "WT",
+            "comparisons": [
+              {
+                "calculate_pair_changes": true,
+                "comparison_id": "compare-A",
+                "correspondence": {
+                  "kind": "substitution_only",
+                  "substitutions": [
+                    {
+                      "baseline_symbol": "C",
+                      "index": 6,
+                      "variant_symbol": "U"
+                    }
+                  ]
+                },
+                "energy": {
+                  "baseline_absolute_tolerance": null,
+                  "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+                  "normalization": "none",
+                  "quantity": "native_evaluation"
+                },
+                "site_selections": [
+                  {
+                    "combine": "set_union",
+                    "coordinate_member_id": "WT",
+                    "intervals": [],
+                    "positions": [
+                      0,
+                      6
+                    ],
+                    "selection_id": "selected",
+                    "unpaired_region_keys": []
+                  }
+                ],
+                "variant_member_id": "A"
+              }
+            ],
+            "kind": "pairwise",
+            "membership": [
+              {
+                "kind": "saved_sheet",
+                "member_id": "WT",
+                "saved_input": {
+                  "bundle_artifact_ref": "artifact_03dd9d6b1ee617db853cbf64cd34e262dbd7f74a83543bc0973c44066663065d",
+                  "handoff_ref": "source_206d733c1402d1698d3553d5",
+                  "mode": "supplied_features",
+                  "operation": "analyze_rna_secondary_structure_features",
+                  "record_key": "WT",
+                  "result_receipt_key": "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+                  "schema": "rna_structure_saved_sheet_input_v1",
+                  "sheet_artifact_ref": "artifact_9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                  "sheet_sha256": "9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                  "source_ref": "source_bb3d737903f068624c3ee2d1"
+                }
+              },
+              {
+                "kind": "saved_sheet",
+                "member_id": "A",
+                "saved_input": {
+                  "bundle_artifact_ref": "artifact_3d9f0cc5746d2e510d1c6185837d8831e06556b3fdd5cd6b95b5e78a1e235c50",
+                  "handoff_ref": "source_1684019b0971532afde6c030",
+                  "mode": "supplied_features",
+                  "operation": "analyze_rna_secondary_structure_features",
+                  "record_key": "A",
+                  "result_receipt_key": "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0",
+                  "schema": "rna_structure_saved_sheet_input_v1",
+                  "sheet_artifact_ref": "artifact_34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                  "sheet_sha256": "34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                  "source_ref": "source_65cf7115a13f24c655c44adf"
+                }
+              }
+            ],
+            "scan": null
+          },
+          "version": "native_rna_structure_comparison_selector_v1"
+        },
+        "tool_name": "execution.results.collect",
+        "version": "rna_structure_comparison_result_receipt_v1"
+      },
+      "histories": {
+        "episode_49e529a9d83aae40f72ccda28fa6b28c4ce377a5556cf5ed1ff095771a02d424": {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'),)",
+          "estimate": {
+            "diagnostics": {
+              "fixture": "scripted_scientific_test_horizon"
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "function": "rna_shared372.workflow_case.<locals>.controller.<locals>.estimate",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "kind": "caller_injected",
+              "template_relationship": "not_inferred"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0
+          ]
+        },
+        "episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a": {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_2'))",
+          "estimate": {
+            "diagnostics": {
+              "fixture": "failed_acquisition_horizon"
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "kind": "caller_injected",
+              "template_relationship": "not_inferred"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0
+          ]
+        },
+        "episode_b06bf36e0cb1bca58724413fee63a765e2f1ab93a4ecaf8dbd0e3baf4ae67065": {
+          "current_credit": 0.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+          "estimate": {
+            "diagnostics": {
+              "fixture": "scripted_scientific_test_horizon"
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "function": "rna_shared372.workflow_case.<locals>.controller.<locals>.estimate",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "kind": "caller_injected",
+              "template_relationship": "not_inferred"
+            },
+            "turns": 3
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934": {
+          "current_credit": 2.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_0'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "ab1a8ed03804cdaa005ac3f6e479d9c5d4bbec7fe2ab495d84735e7fe1f13cb2",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934",
+                "operation_key": "rna-comparison-shared372:episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934:0",
+                "receipt_sha256": "24729bd19a6a9b2076752c8b7e36c62ddbf2eb5d9c713d70f9a131436d4cdfb1",
+                "run_id": "rna-comparison-shared372",
+                "validation_keys": [
+                  "original_native_attempt",
+                  "complete_sealed_bundle_acquisition",
+                  "requested_rna_projection_or_explicit_unavailability"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934",
+                "unit_id": "unit_33ca3f9f416d05bcf91e58d935a45b77571c786a99b2da47fb87ed7fa6eadd45",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            2.0
+          ]
+        },
+        "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f": {
+          "current_credit": 2.0,
+          "decision": {
+            "continuation_cost": 0.0,
+            "decision_basis": "current_estimator_marginal_credit_upper_bound",
+            "projected_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "stop": true
+          },
+          "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'), ('results', 'child_1'))",
+          "estimate": {
+            "diagnostics": {
+              "completed_acquisition_turns": 1,
+              "completion_action_index": 0,
+              "completion_proof": {
+                "assignment_sha256": "cbc81b271d2bf615b8b10d0de076400a0900b2e99f282ec38ac8666416ca07d9",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f",
+                "operation_key": "rna-comparison-shared372:episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f:0",
+                "receipt_sha256": "f135c20fd5978b9cb3ce9ef2a32f822811dc249759930f45185a1539119185ea",
+                "run_id": "rna-comparison-shared372",
+                "validation_keys": [
+                  "original_native_attempt",
+                  "complete_sealed_bundle_acquisition",
+                  "requested_rna_projection_or_explicit_unavailability"
+                ],
+                "version": "practical_completion_v1"
+              },
+              "completion_unit_ref": {
+                "episode_id": "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f",
+                "unit_id": "unit_b5555f64b596424a91e69061387895093baaef9c405f4a19154aadd284e82688",
+                "unit_index": 0
+              },
+              "fitting_scope": "verified_assignment_endpoint",
+              "history_used": 1
+            },
+            "expected_next_gain": {
+              "alpha": 0.0,
+              "lower": 0.0,
+              "status_code": 0,
+              "uncertainty_code": 0,
+              "upper": 0.0,
+              "value": 0.0
+            },
+            "parameters": {
+              "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+              "subsample_size": 50,
+              "uncertainty_alpha": 0.05,
+              "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+              "window_size": 100
+            },
+            "provenance": {
+              "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+              "completion_proof": "practical_completion_v1",
+              "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+              "continuation": "existing_available_upper_bound_lte_configured_cost",
+              "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+              "raw_history": "unchanged_one_observation_per_completed_own_action",
+              "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+              "version": "verified_practical_endpoint_yield_v1"
+            },
+            "turns": 1
+          },
+          "initial_credit": 0.0,
+          "scores": [
+            2.0
+          ]
+        }
+      },
+      "identity": "synthetic_native_reports_actual_Workflow_and_bounded_comparison",
+      "returned": {
+        "comparison": [],
+        "completed": false
+      },
+      "returned_forms": {
+        "episode_8e11a39901a7e409acffbcde3ab218765f006a765ddea26c374a1b9e5bf2a75a": {
+          "comparison": [],
+          "completed": false
+        },
+        "episode_b06bf36e0cb1bca58724413fee63a765e2f1ab93a4ecaf8dbd0e3baf4ae67065": {
+          "comparison": []
+        },
+        "episode_d2fbc2de3bee5b6f415c96d7f12897dfb8771994edf25659616d43ef707a4934": {
+          "completed": true,
+          "failure": [],
+          "saved": [
+            {
+              "bundle_artifact_ref": "artifact_03dd9d6b1ee617db853cbf64cd34e262dbd7f74a83543bc0973c44066663065d",
+              "handoff_ref": "source_206d733c1402d1698d3553d5",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "WT",
+              "result_receipt_key": "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+              "sheet_sha256": "9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+              "source_ref": "source_bb3d737903f068624c3ee2d1"
+            }
+          ]
+        },
+        "episode_f11e1fe30ee3f2344a144cbb24e4dbfc50b98a7d76ce2b153afa4da869885e1f": {
+          "completed": true,
+          "failure": [],
+          "saved": [
+            {
+              "bundle_artifact_ref": "artifact_3d9f0cc5746d2e510d1c6185837d8831e06556b3fdd5cd6b95b5e78a1e235c50",
+              "handoff_ref": "source_1684019b0971532afde6c030",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "A",
+              "result_receipt_key": "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+              "sheet_sha256": "34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+              "source_ref": "source_65cf7115a13f24c655c44adf"
+            }
+          ]
+        }
+      },
+      "selector": {
+        "acquisition": "retained_inputs_only",
+        "parameters": {
+          "arithmetic": "retained_binary64_values_v1",
+          "native_uncertainty_policy": "retain_no_fabricated_transfer",
+          "pair_difference": "alignment_column_pair_sets",
+          "schema": "rna_comparison_parameters_v1",
+          "site_denominator": "decidable_selected_shared_sites",
+          "tie_rule": "exact_selected_numeric_value"
+        },
+        "projections": [
+          {
+            "comparison_ids": [
+              "compare-A"
+            ],
+            "family": "energy_comparison",
+            "include_order": true,
+            "include_tolerance_band": false,
+            "metrics": [
+              "baseline_native_energy",
+              "variant_native_energy",
+              "energy_delta"
+            ],
+            "projection_id": "energy"
+          },
+          {
+            "family": "structures",
+            "fields": [
+              "dot_bracket"
+            ],
+            "member_ids": [
+              "WT",
+              "A"
+            ],
+            "projection_id": "two-structures"
+          },
+          {
+            "comparison_id": "compare-A",
+            "family": "position_changes",
+            "projection_id": "sites",
+            "selection_id": "selected",
+            "transitions": [
+              "unchanged_partner",
+              "lost_pairing"
+            ]
+          }
+        ],
+        "question": {
+          "baseline_member_id": "WT",
+          "comparisons": [
+            {
+              "calculate_pair_changes": true,
+              "comparison_id": "compare-A",
+              "correspondence": {
+                "kind": "substitution_only",
+                "substitutions": [
+                  {
+                    "baseline_symbol": "C",
+                    "index": 6,
+                    "variant_symbol": "U"
+                  }
+                ]
+              },
+              "energy": {
+                "baseline_absolute_tolerance": null,
+                "compatibility_profile": "vienna_2_7_retained_linear_model_v1",
+                "normalization": "none",
+                "quantity": "native_evaluation"
+              },
+              "site_selections": [
+                {
+                  "combine": "set_union",
+                  "coordinate_member_id": "WT",
+                  "intervals": [],
+                  "positions": [
+                    0,
+                    6
+                  ],
+                  "selection_id": "selected",
+                  "unpaired_region_keys": []
+                }
+              ],
+              "variant_member_id": "A"
+            }
+          ],
+          "kind": "pairwise",
+          "membership": [
+            {
+              "kind": "saved_sheet",
+              "member_id": "WT",
+              "saved_input": {
+                "bundle_artifact_ref": "artifact_03dd9d6b1ee617db853cbf64cd34e262dbd7f74a83543bc0973c44066663065d",
+                "handoff_ref": "source_206d733c1402d1698d3553d5",
+                "mode": "supplied_features",
+                "operation": "analyze_rna_secondary_structure_features",
+                "record_key": "WT",
+                "result_receipt_key": "rna_result_receipt:f9d722f4aedcfc05df02f713f997267d8682d6b54d72ac71586bfce6033e968e",
+                "schema": "rna_structure_saved_sheet_input_v1",
+                "sheet_artifact_ref": "artifact_9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                "sheet_sha256": "9d4a90e0de637d3f3ea558c7b22d08dcc37d7f94369750be4e681ab15ddbadc9",
+                "source_ref": "source_bb3d737903f068624c3ee2d1"
+              }
+            },
+            {
+              "kind": "saved_sheet",
+              "member_id": "A",
+              "saved_input": {
+                "bundle_artifact_ref": "artifact_3d9f0cc5746d2e510d1c6185837d8831e06556b3fdd5cd6b95b5e78a1e235c50",
+                "handoff_ref": "source_1684019b0971532afde6c030",
+                "mode": "supplied_features",
+                "operation": "analyze_rna_secondary_structure_features",
+                "record_key": "A",
+                "result_receipt_key": "rna_result_receipt:92dfce6eab6c2b53a7f7259af50b22023d399f1c23aff308f835dbc686a931f0",
+                "schema": "rna_structure_saved_sheet_input_v1",
+                "sheet_artifact_ref": "artifact_34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                "sheet_sha256": "34980aea4b7c1a808990ba20d0aa2c95a2602f7208106aeea17e580af6f0f043",
+                "source_ref": "source_65cf7115a13f24c655c44adf"
+              }
+            }
+          ],
+          "scan": null
+        },
+        "version": "native_rna_structure_comparison_selector_v1"
+      }
+    }
+  ]
+}

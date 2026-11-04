@@ -1,0 +1,276 @@
+{
+  "activity": "stdlib AST/source reading, file copying and SHA256 only",
+  "application_imports": false,
+  "tests_collected": false,
+  "tests_run": false,
+  "native_execution": false,
+  "compilation": false,
+  "sources": [
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_input_validation.py",
+      "sha256": "6ae6e5c447345863d53088600044e36ba70a56cb9e82644c96ab3cb94a5e5303",
+      "size_bytes": 52864,
+      "definitions": {
+        "_boolean": [
+          53,
+          62
+        ],
+        "_object": [
+          65,
+          66
+        ],
+        "_integer": [
+          69,
+          70
+        ],
+        "_text": [
+          73,
+          74
+        ],
+        "_hex": [
+          77,
+          79
+        ],
+        "_bytes": [
+          82,
+          85
+        ],
+        "_span": [
+          88,
+          90
+        ],
+        "_histogram": [
+          93,
+          94
+        ],
+        "_diagnostic_shape": [
+          97,
+          105
+        ],
+        "_diagnostic": [
+          108,
+          149
+        ],
+        "alphabet_probe_valid": [
+          153,
+          256
+        ],
+        "_envelope": [
+          259,
+          277
+        ],
+        "_events": [
+          280,
+          324
+        ],
+        "_fragments": [
+          327,
+          342
+        ],
+        "_annotations": [
+          345,
+          375
+        ],
+        "_segments": [
+          378,
+          448
+        ],
+        "_native_record": [
+          451,
+          511
+        ],
+        "native_alignment_batch_valid": [
+          515,
+          556
+        ],
+        "_occurrence": [
+          559,
+          567
+        ],
+        "_locator": [
+          570,
+          575
+        ],
+        "_record_identity": [
+          578,
+          586
+        ],
+        "_b1_native": [
+          589,
+          641
+        ],
+        "_usable": [
+          644,
+          652
+        ],
+        "_reader_state": [
+          655,
+          661
+        ],
+        "input_decoding_local_valid": [
+          665,
+          718
+        ],
+        "input_decoding_valid": [
+          722,
+          758
+        ],
+        "_source_alphabet": [
+          761,
+          767
+        ],
+        "_population_valid": [
+          770,
+          780
+        ],
+        "saved_alignment_decoding_valid": [
+          784,
+          930
+        ]
+      },
+      "imports": [
+        "from functools import wraps",
+        "import re",
+        "from .hmmer_alignment_input_alphabet import classify_easel_alphabet_counts",
+        "from .hmmer_alignment_input_types import alignment_input_diagnostic, iter_native_alignment_lines"
+      ]
+    },
+    {
+      "path": "tests/test_hmmer_alignment_input_validation.py",
+      "sha256": "7c31a4538f9cda5700c95ea3c25f73b55f1098235e6c31ca11b439521f273e5f",
+      "size_bytes": 21942,
+      "definitions": {
+        "_pinned": [
+          40,
+          44
+        ],
+        "_case": [
+          47,
+          51
+        ],
+        "_decode": [
+          54,
+          58
+        ],
+        "_occurrence": [
+          61,
+          64
+        ],
+        "_read": [
+          67,
+          75
+        ],
+        "_sheet": [
+          78,
+          93
+        ],
+        "test_retained_scanner_probes": [
+          97,
+          102
+        ],
+        "test_retained_native_batches_and_initial_byte_validation": [
+          106,
+          113
+        ],
+        "test_probe_tampering_rejects_without_mutation": [
+          132,
+          137
+        ],
+        "test_first_success_and_eof_file_bound_are_distinct_from_local_validation": [
+          140,
+          149
+        ],
+        "test_probe_validation_uses_the_one_existing_classifier": [
+          152,
+          158
+        ],
+        "_domain_probe": [
+          161,
+          186
+        ],
+        "test_source_integer_domains_without_allocating_native_size_input": [
+          195,
+          200
+        ],
+        "test_byte_semantics_retains_whole_physical_line_and_prior_counts": [
+          203,
+          210
+        ],
+        "test_native_record_tampering_rejects": [
+          224,
+          227
+        ],
+        "test_generated_gaps_have_no_source_and_annotation_fragments_are_original": [
+          230,
+          240
+        ],
+        "test_aliases_cannot_be_relabeled_as_copies": [
+          243,
+          247
+        ],
+        "test_null_a2m_and_native_status_zero_with_invalid_phylips_geometry": [
+          250,
+          262
+        ],
+        "test_qualified_annotation_bytes_preserve_valid_rows": [
+          267,
+          281
+        ],
+        "test_selex_reset_cursor_can_overlap_inspected_events": [
+          284,
+          290
+        ],
+        "test_local_context_does_not_claim_actual_source_custody": [
+          293,
+          305
+        ],
+        "test_saved_context_tampering_and_registry_independence": [
+          313,
+          318
+        ],
+        "test_explicit_disagreement_and_b1_native_copy_conflict": [
+          321,
+          330
+        ],
+        "test_zero_decoded_and_unperformed_decoding_remain_distinct": [
+          333,
+          342
+        ],
+        "test_source_output_handoff_and_forbidden_direction_metadata": [
+          345,
+          362
+        ],
+        "test_first_record_end_and_whole_source_probe_have_independent_extents": [
+          365,
+          378
+        ],
+        "test_duplicate_and_empty_phylip_names_remain_positional": [
+          381,
+          389
+        ],
+        "test_actual_legacy_sheet_is_valid_without_new_facts_or_classifier_calls": [
+          394,
+          403
+        ],
+        "test_malformed_public_arguments_return_false": [
+          407,
+          412
+        ]
+      },
+      "imports": [
+        "from copy import deepcopy",
+        "import hashlib",
+        "import json",
+        "from pathlib import Path",
+        "from unittest.mock import patch",
+        "import pytest",
+        "from gene_annotation_episode.hmmer_alignment_input_alphabet import classify_easel_alphabet_counts, infer_hmmer_alignment_alphabet",
+        "from gene_annotation_episode.hmmer_alignment_input_blocks import decode_native_block_alignment",
+        "from gene_annotation_episode.hmmer_alignment_input_fasta import decode_native_fasta_alignment",
+        "from gene_annotation_episode.hmmer_alignment_input_phylip import decode_native_phylip_alignment",
+        "from gene_annotation_episode.hmmer_alignment_input_types import alignment_input_diagnostic",
+        "from gene_annotation_episode.hmmer_alignment_input_validation import alphabet_probe_valid, input_decoding_local_valid, input_decoding_valid, native_alignment_batch_valid, saved_alignment_decoding_valid"
+      ]
+    }
+  ]
+}

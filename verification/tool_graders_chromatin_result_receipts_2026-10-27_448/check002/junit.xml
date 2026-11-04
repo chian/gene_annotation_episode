@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="105.448" timestamp="2026-10-27T12:31:34.752682-05:00" hostname="chia-Z590-UD"><testcase classname="verification.tool_graders_chromatin_result_receipts_2026-10-27_448.check002.source_snapshot.tests.test_chromatin_interaction_result_receipts" name="test_actual_native_multiple_tables_duplicate_bytes_and_exact_projection" time="104.715"><failure message="assert [1.5, None, 1.5, None] == [1.5, 1.0, 1.5, 1.0]&#10;  &#10;  At index 1 diff: None != 1.0&#10;  Use -v to get more diff">case = &lt;test_chromatin_interaction_result_receipts.Harness object at 0x79acc4937800&gt;
+
+    def test_actual_native_multiple_tables_duplicate_bytes_and_exact_projection(case):
+        first, second = [r['result'] for r in case.outcomes]
+        bundle, = first['facts'][SAVED_SOURCE]
+        assert len(first['qualified_files']['tables']) == 10
+        assert len(bundle['tables']) == 6
+        assert len({canonical(f) for f in bundle['tables']}) == 3
+        assert first['facts'][SAVED_SOURCE] == second['facts'][SAVED_SOURCE]
+        projection, = first['facts'][PROJECTION_SOURCE]
+        assert projection['population_keys'] == ['p1', 'p0']
+&gt;       assert [r['fields']['fold_enrichment']['value'] for r in projection['rows']] == [1.5, 1.0, 1.5, 1.0]
+E       assert [1.5, None, 1.5, None] == [1.5, 1.0, 1.5, 1.0]
+E         
+E         At index 1 diff: None != 1.0
+E         Use -v to get more diff
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:285: AssertionError</failure></testcase></testsuite></testsuites>

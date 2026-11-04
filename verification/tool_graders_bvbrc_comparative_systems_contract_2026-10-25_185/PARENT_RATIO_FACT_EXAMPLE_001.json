@@ -1,0 +1,73 @@
+{
+  "comparative_ratios": [
+    {
+      "source_ref": "synthetic_original_result",
+      "field": "retained_ec_percent",
+      "value": {
+        "field_id": "retained_ec_percent",
+        "values": [
+          {
+            "numerator": {
+              "state": "available",
+              "value": 3,
+              "unit": "genome_ec_pair",
+              "origin": "derived_retained_records",
+              "population_id": "pathway_native_genomes",
+              "method_id": "distinct_valid_genome_ec_pairs",
+              "input_refs": [
+                {
+                  "kind": "sheet",
+                  "owner_id": "discard_and_dependence",
+                  "pointer": "/association_rows"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "denominator": {
+              "state": "available",
+              "value": 4,
+              "unit": "ec_genome_opportunity",
+              "origin": "derived_retained_records",
+              "population_id": "pathway_native_genomes",
+              "method_id": "opportunity_product",
+              "input_refs": [
+                {
+                  "kind": "sheet",
+                  "owner_id": "discard_and_dependence",
+                  "pointer": "/association_rows"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": []
+            },
+            "scale": 100,
+            "output": {
+              "state": "available",
+              "value": 75.0,
+              "unit": "percent",
+              "origin": "derived_calculation",
+              "population_id": "pathway_native_genomes",
+              "method_id": "ratio",
+              "input_refs": [
+                {
+                  "kind": "sheet",
+                  "owner_id": "discard_and_dependence",
+                  "pointer": "/association_rows"
+                }
+              ],
+              "uncertainty": null,
+              "qualification_codes": [
+                "native_first_object_discard",
+                "native_query_completeness_unknown"
+              ]
+            },
+            "genome_population_id": "pathway_native_genomes",
+            "component_population_id": "pathway_native_ecs"
+          }
+        ],
+        "status": "satisfied"
+      }
+    }
+  ]
+}

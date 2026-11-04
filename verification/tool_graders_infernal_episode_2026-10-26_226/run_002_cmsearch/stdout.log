@@ -1,0 +1,102 @@
+E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_real_selected_program_retained_results_and_two_form_boundaries[cmsearch] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal...aders_infernal_episode_2026-10-26_226/run_002_cmsearch/temporary/pytest'), _retention_count=3, _retention_policy='all')
+request = <SubRequest 'native_case' for <Function test_real_selected_program_retained_results_and_two_form_boundaries[cmsearch]>>
+
+    @pytest.fixture(scope='module', params=['cmsearch', 'cmscan', 'cmalign'])
+    def native_case(tmp_path_factory, request):
+        program = request.param
+        families = {'cmsearch': ['search_hit', 'search_sequence'], 'cmscan': ['search_hit'],
+            'cmalign': ['alignment_sequence', 'alignment_column', 'alignment_pair']}[program]
+        choices = [selector(family, rows={'offset': 0, 'limit': 2} if family in {
+            'alignment_column', 'alignment_pair'} else None) for family in families]
+>       case = run_case(tmp_path_factory.mktemp(program), program, selectors=choices,
+            nested=True, status_first=program == 'cmsearch')
+
+../../../tests/test_native_infernal_results_integration.py:345: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_results_integration.py:277: in run_case
+    flow = Workflow(store, tools, provider, tmp_path / 'run', RUN_ID,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.Workflow object at 0x70b2b9074110>
+store = <gene_annotation_episode.state.Store object at 0x70b2dd098f20>
+tools = <gene_annotation_episode.tools.ToolRegistry object at 0x70b2dd09aa50>
+provider = <test_native_infernal_results_integration.run_case.<locals>.Choices object at 0x70b2b91340b0>
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_002_cmsearch/temporary/pytest/cmsearch0/run')
+run_id = 'native-infernal-episode-226'
+controller_factory = <function run_case.<locals>.controller at 0x70b2b9053560>
+project_credit = <function run_case.<locals>.received_observations at 0x70b2b9051620>
+credit_binding = None, restoration_settings = None
+execution_expectations = None, job_episodes = None, controller_binding = None
+project_child_credit = None, child_credit_binding = None
+resource_estimator = None, project_annotation_score = None
+annotation_score_binding = None, initial_known_record_refs = []
+native_timing_information = None, episode_binding_factories = None
+episode_binding_descriptors = [{'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process', 'implementation_sha256': 'c139904cd...cad31cd96f18deb1676ea3c5996287d440f493c2bc5be4d2e1ac41'}, 'child_roles': ['scientific_process', 'launch', 'results']}}]
+role_credit_bindings = None, job_progress_provider = None
+execution_binding = None
+episode_service_factory = ExecutionServiceFactory(resources=mappingproxy({'here': mappingproxy({'kind': 'local', 'workspace': '/home/chia/repos/...t=2, monitoring_information_unit=1, log_window_bytes=128, log_roles=('stdout', 'stderr'), monitor_outcome_page_size=20)
+episode_service_binding = {'version': 'execution_service_factory_v1', 'resources': {'here': {'kind': 'local', 'workspace': '/home/chia/repos/gen...0dd6955648fbf8a6bdc397801e07e7729282b6fff47f1816629428d9ae7d9'}}]}}, 'initial_information': {}, 'handoff_unit': 3, ...}
+progress_receipt_order = 'received_progress_order_v1'
+episode_record_receipts = True, wait_inputs_version = 'wait_inputs_binding_v2'
+completed_action_inputs_version = 'completed_action_inputs_binding_v1'
+native_job_events = None, episode_service_inputs = 'actual_tool_registry_v1'
+annotation_child_roles = ('scientific_process',), root_role = 'annotation'
+decision_protocol = None, root_action_boundary = 'root_episode_commissioning_v1'
+
+    def __init__(self, store, tools, provider, directory, run_id, controller_factory, project_credit,
+                 credit_binding=None, restoration_settings=None, execution_expectations=None,
+                 job_episodes=None, controller_binding=None, project_child_credit=None,
+                 child_credit_binding=None, resource_estimator=None,
+                 project_annotation_score=None, annotation_score_binding=None,
+                 initial_known_record_refs=None, native_timing_information=None,
+                 episode_binding_factories=None, episode_binding_descriptors=None,
+                 role_credit_bindings=None, job_progress_provider=None, execution_binding=None,
+                 episode_service_factory=None, episode_service_binding=None,
+                 progress_receipt_order='received_progress_order_v1',
+                 episode_record_receipts=False, wait_inputs_version='wait_inputs_binding_v2',
+                 completed_action_inputs_version='completed_action_inputs_binding_v1',
+                 native_job_events=None, episode_service_inputs=None,
+                 annotation_child_roles=None, root_role='annotation', decision_protocol=None,
+                 root_action_boundary=ROOT_BOUNDARY_VERSION):
+        self.root_role = root_role
+        if root_action_boundary not in (None, ROOT_BOUNDARY_VERSION):
+            raise ValueError('unsupported_root_action_boundary')
+        self.root_action_boundary = root_action_boundary
+        self.decision_protocol = _decision_protocol(decision_protocol)
+        self.annotation_child_roles = _annotation_child_roles(annotation_child_roles)
+        native_job_events = native_job_event_configuration(native_job_events)
+        if native_job_events is not None:
+            if job_episodes is None:
+                raise ValueError('native_job_events_requires_job_binding')
+            statistics = getattr(job_episodes, 'statistics', None)
+            if statistics is not None and statistics.resource_id != native_job_events['resource_id']:
+                raise ValueError('native_event_resource_binding_mismatch')
+        self.native_job_events = native_job_events
+        if type(episode_record_receipts) is not bool:
+            raise TypeError('episode_record_receipts_must_be_bool')
+        if episode_record_receipts and (not isinstance(initial_known_record_refs, (list, tuple))
+                or any(not isinstance(ref, str) or not ref for ref in initial_known_record_refs)):
+            raise ValueError('receipt_binding_requires_explicit_initial_known_record_refs')
+        self.episode_record_receipts = episode_record_receipts
+        if wait_inputs_version not in {'wait_inputs_binding_v1', 'wait_inputs_binding_v2'}:
+            raise ValueError('unsupported_wait_inputs_binding')
+        self.wait_inputs_version = wait_inputs_version
+        if completed_action_inputs_version not in {None, 'completed_action_inputs_binding_v1'}:
+            raise ValueError('unsupported_completed_action_inputs_binding')
+        self.completed_action_inputs_version = completed_action_inputs_version
+        self.episode_application_services_binding = service_binding(
+            episode_service_factory, episode_service_binding, inputs=episode_service_inputs)
+        if self.episode_application_services_binding is not None and any(value is not None for value in
+                (episode_binding_factories, episode_binding_descriptors, role_credit_bindings, job_progress_provider)):
+>           raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
+E           ValueError: episode_service_factory_and_direct_services_are_exclusive
+
+../../../gene_annotation_episode/runtime.py:1473: ValueError
+=========================== short test summary info ============================
+ERROR ../../../tests/test_native_infernal_results_integration.py::test_real_selected_program_retained_results_and_two_form_boundaries[cmsearch]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+38 deselected, 1 error in 4.72s

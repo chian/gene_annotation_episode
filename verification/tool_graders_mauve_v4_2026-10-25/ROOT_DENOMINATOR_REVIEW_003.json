@@ -1,0 +1,150 @@
+{
+  "scope": "Root reviewed all four v4 production modules and directly exercised three synthetic source conflicts with both denominator choices.",
+  "finding": "No denominator-cross-contamination defect found: source conflicts invalidate only the source-dependent fraction; native declarations still give 4/12 with the source qualification retained.",
+  "cases": [
+    {
+      "source_problem": "path",
+      "staged_fraction": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "fraction",
+        "origin": "calculated",
+        "numerator": 4,
+        "denominator": null,
+        "population_id": "synthetic:selected-explicit-segments",
+        "method_id": "mauve_v4_coverage_fraction_v1",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "uncertainty": null,
+        "requirement_ids": [
+          "mauve_v4_requirement:62353d735925ca474579d805f18488ada8463e6d1f67995a35ac8f7b9b23a0ed",
+          "mauve_v4_requirement:bd593d6ea91ae4a81cbacf0bac370c1aecf427fbd0c5ec0c31a74a8996f3abdf"
+        ]
+      },
+      "native_fraction": {
+        "value": 0.3333333333333333,
+        "state": "available",
+        "unit": "fraction",
+        "origin": "calculated",
+        "numerator": 4,
+        "denominator": 12,
+        "population_id": "synthetic:selected-explicit-segments",
+        "method_id": "mauve_v4_coverage_fraction_v1",
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": [
+          "mauve_v4_requirement:62353d735925ca474579d805f18488ada8463e6d1f67995a35ac8f7b9b23a0ed"
+        ]
+      },
+      "known_union_bases": 4
+    },
+    {
+      "source_problem": "sequence",
+      "staged_fraction": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "fraction",
+        "origin": "calculated",
+        "numerator": 4,
+        "denominator": 6,
+        "population_id": "synthetic:selected-explicit-segments",
+        "method_id": "mauve_v4_coverage_fraction_v1",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "uncertainty": null,
+        "requirement_ids": [
+          "mauve_v4_requirement:22dded1b1a24e8b8d3f56be2afc6020476604b36c8b08b1de7b8cf2fdfc6f08d"
+        ]
+      },
+      "native_fraction": {
+        "value": 0.3333333333333333,
+        "state": "available",
+        "unit": "fraction",
+        "origin": "calculated",
+        "numerator": 4,
+        "denominator": 12,
+        "population_id": "synthetic:selected-explicit-segments",
+        "method_id": "mauve_v4_coverage_fraction_v1",
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": [
+          "mauve_v4_requirement:22dded1b1a24e8b8d3f56be2afc6020476604b36c8b08b1de7b8cf2fdfc6f08d"
+        ]
+      },
+      "known_union_bases": 4
+    },
+    {
+      "source_problem": "span",
+      "staged_fraction": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "fraction",
+        "origin": "calculated",
+        "numerator": 4,
+        "denominator": 6,
+        "population_id": "synthetic:selected-explicit-segments",
+        "method_id": "mauve_v4_coverage_fraction_v1",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "uncertainty": null,
+        "requirement_ids": [
+          "mauve_v4_requirement:a172c50735cf4932b03492ec4f440e7e738bd73c9eee5c9899fd3d878715920a"
+        ]
+      },
+      "native_fraction": {
+        "value": 0.3333333333333333,
+        "state": "available",
+        "unit": "fraction",
+        "origin": "calculated",
+        "numerator": 4,
+        "denominator": 12,
+        "population_id": "synthetic:selected-explicit-segments",
+        "method_id": "mauve_v4_coverage_fraction_v1",
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": [
+          "mauve_v4_requirement:a172c50735cf4932b03492ec4f440e7e738bd73c9eee5c9899fd3d878715920a"
+        ]
+      },
+      "known_union_bases": 4
+    }
+  ],
+  "source_hashes": {
+    "gene_annotation_episode/mauve_v4_formats.py": "3878bc29717b4f0cb134570bc32f31865081f91516935532f86fe4504ef9ccd8",
+    "gene_annotation_episode/mauve_v4_format_contracts.py": "b48a972d765620cbcd6a6f2b6030e824523727495b6c98a85d82eade9f1152c9",
+    "gene_annotation_episode/mauve_v4_calculators.py": "a97a51b9093bcf5ba1d6b55bdfea9c375bad6b7e63ef2b3accee84a964bad5f6",
+    "gene_annotation_episode/mauve_v4_calculation_contracts.py": "72f940809f249a1164c62443d1005e080e345d4fe63822f8930ae65f6ee5f123",
+    "gene_annotation_episode/bvbrc_genome_alignment_input_contracts.py": "abfde5cddeebff60000e0b777d884398ce96aec3686ceb7b15c181da7e2faf76"
+  },
+  "limits": "No new native execution, provider wiring, task-custody proof or complete episode-path verification."
+}

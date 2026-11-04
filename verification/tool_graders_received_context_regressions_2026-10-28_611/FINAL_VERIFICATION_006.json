@@ -1,0 +1,383 @@
+{
+  "record_type": "final_direct_received_context_verification",
+  "scope": {
+    "authorized_test": "/home/chia/repos/gene_annotation_episode/tests/test_episode_receipts.py::test_different_parent_scalar_does_not_grant_unreceived_information_to_child",
+    "only_authorized_function_and_its_two_unused_imports_changed": true,
+    "untouched_file_remainder_byte_identical": true,
+    "other_eleven_tests_untouched": true,
+    "production_changes_by_this_assignment": false
+  },
+  "final_check": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final",
+    "cases": [
+      {
+        "nodeid": "tests/test_episode_receipts.py::test_different_parent_scalar_does_not_grant_unreceived_information_to_child",
+        "phase": "call",
+        "outcome": "passed",
+        "duration_seconds": 3.799891955917701
+      }
+    ],
+    "receipt": {
+      "returncode": 0,
+      "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/handle.json",
+      "unit": "gene-local-job-735a842259c44e119d2cabe7676a6b25.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-28T20:29:11.294450+00:00",
+            "monotonic_ns": 1032912991775557,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 7.749885958,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 602869760
+      }
+    },
+    "execution_audit": {
+      "pytest_returncode": 0,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "stdout": ".                                                                        [100%]\n1 passed in 5.03s\n",
+    "stderr": "",
+    "selected_request": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/runtime/bin/python",
+        "-B",
+        "-S",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/bounded_entry.py",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final",
+        "check"
+      ],
+      "environment": {
+        "PYTHONPATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/source_snapshot:/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/dependencies",
+        "PYTHONHOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/runtime",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONSAFEPATH": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/temporary",
+        "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/temporary",
+        "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/temporary",
+        "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/cache",
+        "PIP_CACHE_DIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/cache/pip",
+        "HMMER529_ATTEMPT": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final"
+      },
+      "mode": "check",
+      "tests": [
+        "test_episode_receipts.py::test_different_parent_scalar_does_not_grant_unreceived_information_to_child"
+      ],
+      "support_files": [],
+      "support_trees": [],
+      "native_executables": [],
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "swap_bytes": 0
+    },
+    "summary": {
+      "annotation_score_status": "unavailable_no_scorer_bound",
+      "completed_actions": 1,
+      "credit": 0.0,
+      "directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/temporary/pytest/test_different_parent_scalar_d0/run",
+      "ended_by": "yield_stop",
+      "episode_count": 2,
+      "pending_handles": [],
+      "pending_report_deliveries": 0,
+      "run_id": "run_28fc1fcdb7da4136a604e217c49bc9c3",
+      "scientific_completion": "not_established_by_termination",
+      "state": "yielded"
+    },
+    "frozen_test": {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/source_snapshot/tests/test_episode_receipts.py",
+      "sha256": "3453a929b9c7b2e5f0daf71c275b8a77fae9503924a5e2d75ba28d370a13aa62",
+      "size_bytes": 33712
+    },
+    "current_test_matches_frozen": true,
+    "current_runtime_matches_frozen": true
+  },
+  "preserved_prior_check": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check062_received_context_direct",
+    "cases": [
+      {
+        "nodeid": "tests/test_episode_receipts.py::test_different_parent_scalar_does_not_grant_unreceived_information_to_child",
+        "phase": "call",
+        "outcome": "passed",
+        "duration_seconds": 3.942189769935794
+      },
+      {
+        "nodeid": "verification/tool_graders_received_context_regressions_2026-10-28_611/test_saved_failure_evidence.py::test_collect_saved_check061_failures_read_only",
+        "phase": "call",
+        "outcome": "passed",
+        "duration_seconds": 0.07738118199631572
+      }
+    ],
+    "saved_evidence_collector_repeated_in_final_check": false,
+    "meaning": "Initial direct fixture and one read-only saved-row collector passed. Final reviewed fixture is proved only by check065; repeated direct execution is not extra unique test coverage."
+  },
+  "assertions_exercised": [
+    "Two-argument zero-credit parent callable has no requires_episode_receipts attribute and receives its original store/scope arguments.",
+    "Active receipts select received immutable record views at root and child; saved assessment is absent from views, visible references, known assessment sets, inherited baseline and receipt rows.",
+    "Explicit initial_known_record_refs remains empty; direct protocol marker remains absent.",
+    "Both episodes begin at zero and retain exactly one completed action and one zero-delta observation: child hypothesis-only reasoning, root commissioning action.",
+    "Exactly one reasoning commit, zero tool operations, zero decision_input receipts and one successful typed local_progress=0 child report.",
+    "Original saved finding remains unchanged and is still the sole scoped assessment."
+  ],
+  "source_pin_comparison": [
+    {
+      "path": "gene_annotation_episode/runtime.py",
+      "sha256": "e04cb6901cadff47322d76ddfc840eb8f7d1c6015225e73c3bb26df1ddf878ea",
+      "size_bytes": 312099,
+      "before_sha256": "e04cb6901cadff47322d76ddfc840eb8f7d1c6015225e73c3bb26df1ddf878ea",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/composition_information.py",
+      "sha256": "547d93463dced379166874c94ad9801b9c53429a3f4b9fb7ff40f7f1d1b335f4",
+      "size_bytes": 8412,
+      "before_sha256": "547d93463dced379166874c94ad9801b9c53429a3f4b9fb7ff40f7f1d1b335f4",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/credit.py",
+      "sha256": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+      "size_bytes": 3948,
+      "before_sha256": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/episode_receipts.py",
+      "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+      "size_bytes": 11839,
+      "before_sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba",
+      "unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/investigation_progress.py",
+      "sha256": "0844a62450fb81d867b05324245ce8d5d3246da48a11d5075c4be59fc149abf7",
+      "size_bytes": 9992,
+      "before_sha256": "0844a62450fb81d867b05324245ce8d5d3246da48a11d5075c4be59fc149abf7",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_episode_receipts.py",
+      "sha256": "3453a929b9c7b2e5f0daf71c275b8a77fae9503924a5e2d75ba28d370a13aa62",
+      "size_bytes": 33712,
+      "before_sha256": "f38c16a63ebb29f5628f74a1289d7000ccabca5f5f080c697df6a5dcdb0dcbef",
+      "unchanged": false
+    },
+    {
+      "path": "tests/test_runtime_decision_exchanges.py",
+      "sha256": "1de9c644b21943272266be42254e0be8abd8ca89176b0598ead047b7f0b4f5dd",
+      "size_bytes": 21566,
+      "before_sha256": "1de9c644b21943272266be42254e0be8abd8ca89176b0598ead047b7f0b4f5dd",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_runtime.py",
+      "sha256": "5dd5ef0d3fb130344bd0d9e622b5926fbdd64788d3de0ca873f924f72572e35f",
+      "size_bytes": 67750,
+      "before_sha256": "5dd5ef0d3fb130344bd0d9e622b5926fbdd64788d3de0ca873f924f72572e35f",
+      "unchanged": true
+    }
+  ],
+  "original_saved_databases": [
+    {
+      "case_index": 1,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_runtime_credits_only_requ0/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_01.sqlite3",
+      "sha256": "9e32da890adb32bdef958d5671af235e55b1a92bcbc105b0c5eadd98fbcfc010",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 2,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_runtime_credits_only_requ1/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_02.sqlite3",
+      "sha256": "f3b0af60ce6d34bfe53fc66ec7e2da4dc5be02d34b2611ed0e672e15c3ac10cb",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 3,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_native_workbook_pages_ret0/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_03.sqlite3",
+      "sha256": "690697200b92470b948cb52e1d86cdda1833e7ee1451064402fc6929c78524e2",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 4,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_selected_state_read_deliv0/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_04.sqlite3",
+      "sha256": "2f7ebddf3a12f5f9447c530c7da3ddfc9d88465003b355d77aea26197f559624",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 5,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_selected_state_read_deliv1/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_05.sqlite3",
+      "sha256": "ef32a57b392ada5138617df10cf711f8b0367bfa57bd90bf2031c944f5e7443f",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 6,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_different_parent_scalar_d0/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_06.sqlite3",
+      "sha256": "f9a03681594f11a670c197d459ca64e243bebc10f5ac043a625dd1b37152996b",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 7,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_failed_form_repair_and_in0/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_07.sqlite3",
+      "sha256": "01ca9fcd04d34cd0b310524b505030101c4c48253b7830de9cccdae4b57aa168",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 8,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_failed_form_repair_and_in1/workspace/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_08.sqlite3",
+      "sha256": "a84d048736a7e16f470f9b1e882db3d10f45dc03f7ee74af8b9764cb06c330fe",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 9,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_multiple_context_exchange0/state/state.sqlite3",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_09.sqlite3",
+      "sha256": "a1f28a051de87209adadecbe1e31fa67dfa3411e2dc42e3609121986d7df8a84",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 10,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_own_input_detail_requests0/state.db",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_10.sqlite3",
+      "sha256": "2c252f59ab43c9d0e834107d4404939ad582594eacb0fac437248b33b731b8d9",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 11,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_lookup_visible_publicatio0/state.db",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_11.sqlite3",
+      "sha256": "5061567b29637d640c164eb0f94b3aa01a09451645c2eaa930fbcc87e2422d8c",
+      "original_and_staged_unchanged": true
+    },
+    {
+      "case_index": 12,
+      "original": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/temporary/pytest/test_injected_legacy_default_a0/state.db",
+      "staged": "verification/tool_graders_received_context_regressions_2026-10-28_611/saved_inputs/case_12.sqlite3",
+      "sha256": "7ffe543ef699f632b78b25d3f579c81b626b6c7e98b05da0bb2312c61e08e821",
+      "original_and_staged_unchanged": true
+    }
+  ],
+  "review_refinement_to_failure_classification_004": {
+    "cases": [
+      7,
+      8
+    ],
+    "authority": "Root review accepted a valid nonempty reasoning fixture with zero finding gain and requested the same correction for both failed-form tests.",
+    "effective_proposed_repair_not_implemented": "Replace both child episode.credit-as-action and the forbidden final root episode.credit action with legal nonempty hypothesis-only reasoning using supplied or actually received hypotheses. Keep the original finding and original scientific child commit identity unchanged. Preserve both interruption variants, two actual child actions, two actual root actions, four total observations, root decision indices [0,2], root deltas [0,3], two report attempts, and no observation for redelivery. The repaired fixture will contain three actual reasoning commits: original scientific child commit, zero-finding-gain child reasoning, and zero-finding-gain parent reasoning; distinguish those from duplicate scientific work.",
+    "preservation": "Original case004 proposals and saved counts are retained verbatim; this is an additive fixture refinement only."
+  },
+  "classification_evidence": {
+    "json": "verification/tool_graders_received_context_regressions_2026-10-28_611/FAILURE_CLASSIFICATION_004.json",
+    "markdown": "verification/tool_graders_received_context_regressions_2026-10-28_611/FAILURE_CLASSIFICATION_004.md",
+    "saved_rows": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check062_received_context_direct/saved_failure_rows.json",
+    "source_comparison": "verification/tool_graders_received_context_regressions_2026-10-28_611/RUNTIME_COMPARISON_003.json",
+    "new_production_defect_established": false,
+    "earlier_snapshot_test_execution_claimed": false
+  },
+  "remaining_gaps": [
+    "The other eleven failed tests were classified and repair proposals supplied, but their repairs and passing verification are outside this assignment.",
+    "No broader regression-suite pass or completion of the original tool-grader goal is claimed.",
+    "No network, HPC or original native scientific analysis was run."
+  ],
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "evidence_pins": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/receipt.json",
+      "sha256": "1a3b7f7bff2a92a6cca5ba1250f7465a014260c99d3d7d5807391a04849a8526",
+      "size_bytes": 1645
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/case_reports.jsonl",
+      "sha256": "fa3449cf201095bd9d2df5ced97880fb37e99b1b3b9e629afff1e8457dc2d5c7",
+      "size_bytes": 199
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/source_pins_before.json",
+      "sha256": "0012a4b36c6a6919805d53cc375bba73b2c6b9463edfaa6c91fa0501ed23ab7e",
+      "size_bytes": 2400352
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/source_pins_after.json",
+      "sha256": "0012a4b36c6a6919805d53cc375bba73b2c6b9463edfaa6c91fa0501ed23ab7e",
+      "size_bytes": 2400352
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/stdout.txt",
+      "sha256": "dfe2dd114b60e07875b6a7676ee55c6aeccdec04b6a86f188e86824ed47c947e",
+      "size_bytes": 98
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check065_received_context_direct_final/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check062_received_context_direct/saved_failure_rows.json",
+      "sha256": "13e2f39771ba07d78379405a7c3aa11d997bbbe9a8e04b69d6fe21e0e4ba7a23",
+      "size_bytes": 491092
+    },
+    {
+      "path": "verification/tool_graders_received_context_regressions_2026-10-28_611/direct_test_reviewed_repair.diff",
+      "sha256": "32c72f35c37fde36f9dd68c9a171d7b22f7d9f5b2017d24eac464b111fde62f7",
+      "size_bytes": 6324
+    }
+  ]
+}

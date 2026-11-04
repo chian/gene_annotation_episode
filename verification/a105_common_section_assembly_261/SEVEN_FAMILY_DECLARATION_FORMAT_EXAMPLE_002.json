@@ -1,0 +1,643 @@
+{
+  "type": "object",
+  "properties": {
+    "native_parameter": {
+      "$ref": "episode-fact:literature_kinetic_cells"
+    },
+    "precision": {
+      "$ref": "episode-fact:literature_kinetic_summary_precision_cells"
+    },
+    "endpoint_signal": {
+      "$ref": "episode-fact:literature_endpoint_signal_cells"
+    },
+    "product_coupling": {
+      "$ref": "episode-fact:literature_product_coupling_cells"
+    },
+    "calibration": {
+      "$ref": "episode-fact:literature_calibration_recovery_cells"
+    },
+    "within_assay": {
+      "$ref": "episode-fact:literature_compiled_assay_v2_cells"
+    },
+    "comparison": {
+      "$ref": "episode-fact:literature_compiled_assay_v3_cells"
+    },
+    "assessment_context": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "a105_source_evidence_worksheet_v1"
+        },
+        "assertion_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "reference",
+            "x-reference-namespace": "hypothesis"
+          },
+          "uniqueItems": true
+        },
+        "quantity_links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "left": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "native_parameter",
+                      "precision",
+                      "endpoint_signal",
+                      "product_coupling",
+                      "calibration",
+                      "within_assay",
+                      "comparison"
+                    ]
+                  },
+                  "sheet_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "component": {
+                    "type": "string",
+                    "enum": [
+                      "numerator_parameter",
+                      "denominator_parameter",
+                      "parameter_difference",
+                      "parameter_ratio",
+                      "log_parameter_contrast",
+                      "source_reported_parameter",
+                      "source_reported_sd",
+                      "source_source_summary_count",
+                      "source_independent_preparation_count",
+                      "source_statistical_estimator_count",
+                      "source_relative_reported_sd",
+                      "source_mean_variance",
+                      "source_mean_standard_error",
+                      "source_relative_mean_standard_error",
+                      "source_mean_interval_df",
+                      "source_mean_interval_confidence_level",
+                      "source_mean_interval_t_multiplier",
+                      "source_mean_interval_halfwidth",
+                      "source_mean_interval_lower",
+                      "source_mean_interval_upper",
+                      "scenario_reported_parameter",
+                      "scenario_reported_sd",
+                      "scenario_source_summary_count",
+                      "scenario_independent_preparation_count",
+                      "scenario_statistical_estimator_count",
+                      "scenario_relative_reported_sd",
+                      "scenario_mean_variance",
+                      "scenario_mean_standard_error",
+                      "scenario_relative_mean_standard_error",
+                      "scenario_mean_interval_df",
+                      "scenario_mean_interval_confidence_level",
+                      "scenario_mean_interval_t_multiplier",
+                      "scenario_mean_interval_halfwidth",
+                      "scenario_mean_interval_lower",
+                      "scenario_mean_interval_upper",
+                      "total_amplitude",
+                      "corrected_amplitude",
+                      "additional_amplitude",
+                      "retained_fraction",
+                      "additional_fraction",
+                      "total_amplitude_variance",
+                      "corrected_amplitude_variance",
+                      "additional_amplitude_variance",
+                      "retained_fraction_variance",
+                      "additional_fraction_variance",
+                      "reported_product_activity",
+                      "reported_cofactor_activity",
+                      "product_per_cofactor",
+                      "productive_fraction",
+                      "calculated_coupling_percent",
+                      "reported_coupling_percent",
+                      "displayed_coupling_difference_pp",
+                      "reconstructed_product_activity",
+                      "product_per_cofactor_variance",
+                      "productive_fraction_variance",
+                      "productive_fraction_standard_uncertainty",
+                      "nominal",
+                      "measured",
+                      "signed_difference",
+                      "recovery",
+                      "relative_bias",
+                      "percent_bias",
+                      "inverse_recovery",
+                      "reported_measured_spread",
+                      "measured_sd",
+                      "measured_cv",
+                      "reported_recovery",
+                      "displayed_minus_reported_recovery",
+                      "correction_for_other_measurement",
+                      "recovery_variance",
+                      "net_rate",
+                      "contaminant_rate",
+                      "protein_amount",
+                      "condition_test_rate",
+                      "condition_reference_rate",
+                      "attributed_rate",
+                      "condition_response",
+                      "measured_endpoint_per_selected_amount",
+                      "calibrated_measured_endpoint_per_selected_amount",
+                      "corrected_activity",
+                      "effect_variance",
+                      "effect_standard_uncertainty",
+                      "effect_precision",
+                      "source_profile_log_ratio",
+                      "source_presence_index",
+                      "measured_endpoint_per_selected_amount_propagated_variance",
+                      "measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+                      "calibrated_measured_endpoint_per_selected_amount_propagated_variance",
+                      "calibrated_measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+                      "corrected_activity_propagated_variance",
+                      "corrected_activity_propagated_standard_uncertainty",
+                      "estimate_product_reference",
+                      "estimate_product_test",
+                      "estimate_reporter_reference",
+                      "estimate_reporter_test",
+                      "estimate_kcat_reference",
+                      "estimate_kcat_test",
+                      "estimate_Km_reference",
+                      "estimate_Km_test",
+                      "estimate_Kd_reference",
+                      "estimate_Kd_test",
+                      "estimate_free_substrate_reference",
+                      "estimate_free_substrate_test",
+                      "estimate_background_reference",
+                      "estimate_background_test",
+                      "estimate_recovery_reference",
+                      "estimate_recovery_test",
+                      "estimate_active_fraction_reference",
+                      "estimate_active_fraction_test",
+                      "estimate_nuisance_response_reference",
+                      "estimate_nuisance_response_test",
+                      "product_reference_contrast",
+                      "reporter_reference_contrast",
+                      "productive_use_reference_contrast",
+                      "saturation_turnover_reference_contrast",
+                      "low_substrate_efficiency_reference_contrast",
+                      "occupancy_reference",
+                      "occupancy_test",
+                      "occupancy_reference_contrast",
+                      "binding_only_prediction_error",
+                      "post_binding_residual_ratio",
+                      "binding_only_log_residual",
+                      "binding_only_residual_variance",
+                      "binding_only_standardized_residual",
+                      "binding_only_squared_standardized_residual",
+                      "fully_corrected_activity_reference_contrast"
+                    ]
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "enum": [
+                      "cell_value",
+                      "reported_spread",
+                      "reported_count"
+                    ]
+                  }
+                },
+                "required": [
+                  "field",
+                  "sheet_ref",
+                  "component",
+                  "quantity"
+                ],
+                "additionalProperties": false
+              },
+              "right": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "native_parameter",
+                      "precision",
+                      "endpoint_signal",
+                      "product_coupling",
+                      "calibration",
+                      "within_assay",
+                      "comparison"
+                    ]
+                  },
+                  "sheet_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "component": {
+                    "type": "string",
+                    "enum": [
+                      "numerator_parameter",
+                      "denominator_parameter",
+                      "parameter_difference",
+                      "parameter_ratio",
+                      "log_parameter_contrast",
+                      "source_reported_parameter",
+                      "source_reported_sd",
+                      "source_source_summary_count",
+                      "source_independent_preparation_count",
+                      "source_statistical_estimator_count",
+                      "source_relative_reported_sd",
+                      "source_mean_variance",
+                      "source_mean_standard_error",
+                      "source_relative_mean_standard_error",
+                      "source_mean_interval_df",
+                      "source_mean_interval_confidence_level",
+                      "source_mean_interval_t_multiplier",
+                      "source_mean_interval_halfwidth",
+                      "source_mean_interval_lower",
+                      "source_mean_interval_upper",
+                      "scenario_reported_parameter",
+                      "scenario_reported_sd",
+                      "scenario_source_summary_count",
+                      "scenario_independent_preparation_count",
+                      "scenario_statistical_estimator_count",
+                      "scenario_relative_reported_sd",
+                      "scenario_mean_variance",
+                      "scenario_mean_standard_error",
+                      "scenario_relative_mean_standard_error",
+                      "scenario_mean_interval_df",
+                      "scenario_mean_interval_confidence_level",
+                      "scenario_mean_interval_t_multiplier",
+                      "scenario_mean_interval_halfwidth",
+                      "scenario_mean_interval_lower",
+                      "scenario_mean_interval_upper",
+                      "total_amplitude",
+                      "corrected_amplitude",
+                      "additional_amplitude",
+                      "retained_fraction",
+                      "additional_fraction",
+                      "total_amplitude_variance",
+                      "corrected_amplitude_variance",
+                      "additional_amplitude_variance",
+                      "retained_fraction_variance",
+                      "additional_fraction_variance",
+                      "reported_product_activity",
+                      "reported_cofactor_activity",
+                      "product_per_cofactor",
+                      "productive_fraction",
+                      "calculated_coupling_percent",
+                      "reported_coupling_percent",
+                      "displayed_coupling_difference_pp",
+                      "reconstructed_product_activity",
+                      "product_per_cofactor_variance",
+                      "productive_fraction_variance",
+                      "productive_fraction_standard_uncertainty",
+                      "nominal",
+                      "measured",
+                      "signed_difference",
+                      "recovery",
+                      "relative_bias",
+                      "percent_bias",
+                      "inverse_recovery",
+                      "reported_measured_spread",
+                      "measured_sd",
+                      "measured_cv",
+                      "reported_recovery",
+                      "displayed_minus_reported_recovery",
+                      "correction_for_other_measurement",
+                      "recovery_variance",
+                      "net_rate",
+                      "contaminant_rate",
+                      "protein_amount",
+                      "condition_test_rate",
+                      "condition_reference_rate",
+                      "attributed_rate",
+                      "condition_response",
+                      "measured_endpoint_per_selected_amount",
+                      "calibrated_measured_endpoint_per_selected_amount",
+                      "corrected_activity",
+                      "effect_variance",
+                      "effect_standard_uncertainty",
+                      "effect_precision",
+                      "source_profile_log_ratio",
+                      "source_presence_index",
+                      "measured_endpoint_per_selected_amount_propagated_variance",
+                      "measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+                      "calibrated_measured_endpoint_per_selected_amount_propagated_variance",
+                      "calibrated_measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+                      "corrected_activity_propagated_variance",
+                      "corrected_activity_propagated_standard_uncertainty",
+                      "estimate_product_reference",
+                      "estimate_product_test",
+                      "estimate_reporter_reference",
+                      "estimate_reporter_test",
+                      "estimate_kcat_reference",
+                      "estimate_kcat_test",
+                      "estimate_Km_reference",
+                      "estimate_Km_test",
+                      "estimate_Kd_reference",
+                      "estimate_Kd_test",
+                      "estimate_free_substrate_reference",
+                      "estimate_free_substrate_test",
+                      "estimate_background_reference",
+                      "estimate_background_test",
+                      "estimate_recovery_reference",
+                      "estimate_recovery_test",
+                      "estimate_active_fraction_reference",
+                      "estimate_active_fraction_test",
+                      "estimate_nuisance_response_reference",
+                      "estimate_nuisance_response_test",
+                      "product_reference_contrast",
+                      "reporter_reference_contrast",
+                      "productive_use_reference_contrast",
+                      "saturation_turnover_reference_contrast",
+                      "low_substrate_efficiency_reference_contrast",
+                      "occupancy_reference",
+                      "occupancy_test",
+                      "occupancy_reference_contrast",
+                      "binding_only_prediction_error",
+                      "post_binding_residual_ratio",
+                      "binding_only_log_residual",
+                      "binding_only_residual_variance",
+                      "binding_only_standardized_residual",
+                      "binding_only_squared_standardized_residual",
+                      "fully_corrected_activity_reference_contrast"
+                    ]
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "enum": [
+                      "cell_value",
+                      "reported_spread",
+                      "reported_count"
+                    ]
+                  }
+                },
+                "required": [
+                  "field",
+                  "sheet_ref",
+                  "component",
+                  "quantity"
+                ],
+                "additionalProperties": false
+              },
+              "relation": {
+                "type": "string",
+                "enum": [
+                  "same_reported_parameter",
+                  "same_reported_spread",
+                  "same_count_report",
+                  "conditional_precision_of_report",
+                  "unresolved",
+                  "conflicting"
+                ]
+              },
+              "support_record_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "left",
+              "right",
+              "relation",
+              "support_record_refs"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "assertion_links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "selector": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "native_parameter",
+                      "precision",
+                      "endpoint_signal",
+                      "product_coupling",
+                      "calibration",
+                      "within_assay",
+                      "comparison"
+                    ]
+                  },
+                  "sheet_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "component": {
+                    "type": "string",
+                    "enum": [
+                      "numerator_parameter",
+                      "denominator_parameter",
+                      "parameter_difference",
+                      "parameter_ratio",
+                      "log_parameter_contrast",
+                      "source_reported_parameter",
+                      "source_reported_sd",
+                      "source_source_summary_count",
+                      "source_independent_preparation_count",
+                      "source_statistical_estimator_count",
+                      "source_relative_reported_sd",
+                      "source_mean_variance",
+                      "source_mean_standard_error",
+                      "source_relative_mean_standard_error",
+                      "source_mean_interval_df",
+                      "source_mean_interval_confidence_level",
+                      "source_mean_interval_t_multiplier",
+                      "source_mean_interval_halfwidth",
+                      "source_mean_interval_lower",
+                      "source_mean_interval_upper",
+                      "scenario_reported_parameter",
+                      "scenario_reported_sd",
+                      "scenario_source_summary_count",
+                      "scenario_independent_preparation_count",
+                      "scenario_statistical_estimator_count",
+                      "scenario_relative_reported_sd",
+                      "scenario_mean_variance",
+                      "scenario_mean_standard_error",
+                      "scenario_relative_mean_standard_error",
+                      "scenario_mean_interval_df",
+                      "scenario_mean_interval_confidence_level",
+                      "scenario_mean_interval_t_multiplier",
+                      "scenario_mean_interval_halfwidth",
+                      "scenario_mean_interval_lower",
+                      "scenario_mean_interval_upper",
+                      "total_amplitude",
+                      "corrected_amplitude",
+                      "additional_amplitude",
+                      "retained_fraction",
+                      "additional_fraction",
+                      "total_amplitude_variance",
+                      "corrected_amplitude_variance",
+                      "additional_amplitude_variance",
+                      "retained_fraction_variance",
+                      "additional_fraction_variance",
+                      "reported_product_activity",
+                      "reported_cofactor_activity",
+                      "product_per_cofactor",
+                      "productive_fraction",
+                      "calculated_coupling_percent",
+                      "reported_coupling_percent",
+                      "displayed_coupling_difference_pp",
+                      "reconstructed_product_activity",
+                      "product_per_cofactor_variance",
+                      "productive_fraction_variance",
+                      "productive_fraction_standard_uncertainty",
+                      "nominal",
+                      "measured",
+                      "signed_difference",
+                      "recovery",
+                      "relative_bias",
+                      "percent_bias",
+                      "inverse_recovery",
+                      "reported_measured_spread",
+                      "measured_sd",
+                      "measured_cv",
+                      "reported_recovery",
+                      "displayed_minus_reported_recovery",
+                      "correction_for_other_measurement",
+                      "recovery_variance",
+                      "net_rate",
+                      "contaminant_rate",
+                      "protein_amount",
+                      "condition_test_rate",
+                      "condition_reference_rate",
+                      "attributed_rate",
+                      "condition_response",
+                      "measured_endpoint_per_selected_amount",
+                      "calibrated_measured_endpoint_per_selected_amount",
+                      "corrected_activity",
+                      "effect_variance",
+                      "effect_standard_uncertainty",
+                      "effect_precision",
+                      "source_profile_log_ratio",
+                      "source_presence_index",
+                      "measured_endpoint_per_selected_amount_propagated_variance",
+                      "measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+                      "calibrated_measured_endpoint_per_selected_amount_propagated_variance",
+                      "calibrated_measured_endpoint_per_selected_amount_propagated_standard_uncertainty",
+                      "corrected_activity_propagated_variance",
+                      "corrected_activity_propagated_standard_uncertainty",
+                      "estimate_product_reference",
+                      "estimate_product_test",
+                      "estimate_reporter_reference",
+                      "estimate_reporter_test",
+                      "estimate_kcat_reference",
+                      "estimate_kcat_test",
+                      "estimate_Km_reference",
+                      "estimate_Km_test",
+                      "estimate_Kd_reference",
+                      "estimate_Kd_test",
+                      "estimate_free_substrate_reference",
+                      "estimate_free_substrate_test",
+                      "estimate_background_reference",
+                      "estimate_background_test",
+                      "estimate_recovery_reference",
+                      "estimate_recovery_test",
+                      "estimate_active_fraction_reference",
+                      "estimate_active_fraction_test",
+                      "estimate_nuisance_response_reference",
+                      "estimate_nuisance_response_test",
+                      "product_reference_contrast",
+                      "reporter_reference_contrast",
+                      "productive_use_reference_contrast",
+                      "saturation_turnover_reference_contrast",
+                      "low_substrate_efficiency_reference_contrast",
+                      "occupancy_reference",
+                      "occupancy_test",
+                      "occupancy_reference_contrast",
+                      "binding_only_prediction_error",
+                      "post_binding_residual_ratio",
+                      "binding_only_log_residual",
+                      "binding_only_residual_variance",
+                      "binding_only_standardized_residual",
+                      "binding_only_squared_standardized_residual",
+                      "fully_corrected_activity_reference_contrast"
+                    ]
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "enum": [
+                      "cell_value",
+                      "reported_spread",
+                      "reported_count"
+                    ]
+                  }
+                },
+                "required": [
+                  "field",
+                  "sheet_ref",
+                  "component",
+                  "quantity"
+                ],
+                "additionalProperties": false
+              },
+              "assertion_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "reference",
+                "x-reference-namespace": "hypothesis"
+              },
+              "relation": {
+                "type": "string",
+                "enum": [
+                  "measures_asserted_endpoint",
+                  "addresses_named_weakness",
+                  "does_not_establish_assertion",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "support_record_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "selector",
+              "assertion_ref",
+              "relation",
+              "support_record_refs"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "version",
+        "assertion_refs",
+        "quantity_links",
+        "assertion_links"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "native_parameter",
+    "precision",
+    "endpoint_signal",
+    "product_coupling",
+    "calibration",
+    "within_assay",
+    "comparison",
+    "assessment_context"
+  ],
+  "additionalProperties": false
+}

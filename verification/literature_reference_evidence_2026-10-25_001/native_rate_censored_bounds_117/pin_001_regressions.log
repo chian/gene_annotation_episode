@@ -1,0 +1,115 @@
+........................................................................ [ 30%]
+........................................................................ [ 61%]
+.............................................................FF......... [ 92%]
+..................                                                       [100%]
+=================================== FAILURES ===================================
+_ test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart[False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1776/test_actual_provider_text_pres0')
+bounded = False
+
+    @pytest.mark.parametrize("bounded", [False, True])
+    def test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart(tmp_path, bounded):
+        store, context, args = setup_native_store(tmp_path / "state", approximate=not bounded,
+            reference="< approximately 12" if bounded else None)
+        try:
+            services, binding = service_binding(store, context)
+            outcome = asyncio.run(binding.execute(context, "literature.rate.source.populate", args, "selected"))
+            assert outcome["status"] == "completed"
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]),
+                assignment={**plain(context.assignment), "requested_rate_components": ["reference_rate"]})
+            facts = binding.facts(current, {"committed_record_refs": outcome["record_refs"]})
+            assert facts["literature_rate_cells"] == []
+            cells = facts["literature_rate_source_cells"]
+            first = snapshot()
+            first["requested_form"] = obj({"native_components": rate_source_cells_schema()})
+            first["available_report_facts"] = binding.fact_sources("literature")
+            first["literature_assignment"] = plain(context.assignment)
+            first["literature_source_custody"] = []
+            first["last_local_outcome"] = outcome
+            records = [store.get(ref) for ref in outcome["record_refs"]]
+            first["working_state"].update(references=[r for r in records if r["record_type"] == "reference"],
+                contexts=[r for r in records if r["record_type"] == "context"],
+                terms=[r for r in records if r["record_type"] == "term"])
+            second = deepcopy(first)
+            second["last_local_outcome"] = None
+            second["child_reports"] = [{"native_components": cells}]
+            wire, restarted = LiteratureWire(tmp_path / "wire"), LiteratureWire(tmp_path / "restarted")
+            async def exercise():
+                await complete(wire, state_frame(first))
+                await complete(wire, state_frame(second, first))
+                await complete(restarted, state_frame(second))
+            asyncio.run(exercise())
+            for transport in (wire, restarted):
+                for turn in transport.turns_sent():
+                    task, steering = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)
+                    assert "recorded fact from literature_rate_source_cells" in task
+                    assert "enzyme Alpha" in steering and "enzyme Beta" in steering
+                    assert "WT" in steering and "variant" in steering
+                    assert "approximate" in steering and "true" in steering
+                    assert "native_rate_" not in task + steering
+                    for name in ("reference_subject_ref", "test_construct_ref", "reference_preparation_ref"):
+                        assert name in task
+>           assert all("native_components[0].reference_subject_ref" in turn["input"][0]["text"]
+                       for turn in [wire.turns_sent()[-1], restarted.turns_sent()[0]])
+E                      assert False
+E                       +  where False = all(<generator object test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart.<locals>.<genexpr> at 0x73a31a5a8520>)
+
+tests/test_literature_rate_native_integration.py:160: AssertionError
+_ test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart[True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1776/test_actual_provider_text_pres1')
+bounded = True
+
+    @pytest.mark.parametrize("bounded", [False, True])
+    def test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart(tmp_path, bounded):
+        store, context, args = setup_native_store(tmp_path / "state", approximate=not bounded,
+            reference="< approximately 12" if bounded else None)
+        try:
+            services, binding = service_binding(store, context)
+            outcome = asyncio.run(binding.execute(context, "literature.rate.source.populate", args, "selected"))
+            assert outcome["status"] == "completed"
+            current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]),
+                assignment={**plain(context.assignment), "requested_rate_components": ["reference_rate"]})
+            facts = binding.facts(current, {"committed_record_refs": outcome["record_refs"]})
+            assert facts["literature_rate_cells"] == []
+            cells = facts["literature_rate_source_cells"]
+            first = snapshot()
+            first["requested_form"] = obj({"native_components": rate_source_cells_schema()})
+            first["available_report_facts"] = binding.fact_sources("literature")
+            first["literature_assignment"] = plain(context.assignment)
+            first["literature_source_custody"] = []
+            first["last_local_outcome"] = outcome
+            records = [store.get(ref) for ref in outcome["record_refs"]]
+            first["working_state"].update(references=[r for r in records if r["record_type"] == "reference"],
+                contexts=[r for r in records if r["record_type"] == "context"],
+                terms=[r for r in records if r["record_type"] == "term"])
+            second = deepcopy(first)
+            second["last_local_outcome"] = None
+            second["child_reports"] = [{"native_components": cells}]
+            wire, restarted = LiteratureWire(tmp_path / "wire"), LiteratureWire(tmp_path / "restarted")
+            async def exercise():
+                await complete(wire, state_frame(first))
+                await complete(wire, state_frame(second, first))
+                await complete(restarted, state_frame(second))
+            asyncio.run(exercise())
+            for transport in (wire, restarted):
+                for turn in transport.turns_sent():
+                    task, steering = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)
+                    assert "recorded fact from literature_rate_source_cells" in task
+                    assert "enzyme Alpha" in steering and "enzyme Beta" in steering
+                    assert "WT" in steering and "variant" in steering
+                    assert "approximate" in steering and "true" in steering
+                    assert "native_rate_" not in task + steering
+                    for name in ("reference_subject_ref", "test_construct_ref", "reference_preparation_ref"):
+                        assert name in task
+>           assert all("native_components[0].reference_subject_ref" in turn["input"][0]["text"]
+                       for turn in [wire.turns_sent()[-1], restarted.turns_sent()[0]])
+E                      assert False
+E                       +  where False = all(<generator object test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart.<locals>.<genexpr> at 0x73a319946e90>)
+
+tests/test_literature_rate_native_integration.py:160: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_rate_native_integration.py::test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart[False]
+FAILED tests/test_literature_rate_native_integration.py::test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart[True]
+2 failed, 232 passed in 262.14s (0:04:22)

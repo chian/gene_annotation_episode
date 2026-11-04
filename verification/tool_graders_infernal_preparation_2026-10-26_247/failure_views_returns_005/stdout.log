@@ -1,0 +1,28 @@
+........................................................................ [ 34%]
+........................................................................ [ 69%]
+.........................................................F
+=================================== FAILURES ===================================
+_ test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias _
+
+saved = <test_native_infernal_preparation_returns.SavedReturns object at 0x77f88c1c6480>
+
+    def test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias(saved):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+        projection, _, _ = saved.publication(child)
+        original = saved.returned(saved.root, child)
+        numeric = schema_for(*FACT_SOURCES)
+        no_rows = saved.redeliver(saved.root, child, numeric)
+>       assert no_rows == {f'requested_{i}': [] for i in range(3)}
+E       AssertionError: assert {'requested_0...uested_3': []} == {'requested_0...uested_2': []}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Left contains 1 more item:
+E         {'requested_3': []}
+E         Use -v to get more diff
+
+../../../tests/test_native_infernal_preparation_returns.py:613: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_returns.py::test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 201 passed in 286.27s (0:04:46)

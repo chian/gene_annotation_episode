@@ -1,0 +1,531 @@
+.........................FFF......FFF..F...                              [100%]
+=================================== FAILURES ===================================
+_ test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation _
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d1224eb70>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'f2ef2710be9ee76e0de4357cd0980669c43b9c7d4b079540da76802193d5c7bc', 'fields': {'action_yields': {'be...1+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1978/test_two_contracts_and_history0')
+
+    def test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation(tmp_path):
+        provider = PresentedProvider([])
+        store, value, episode, args = workflow(tmp_path, provider)
+        provider.script = iter([information('episode.operation_contract', operation='literature.kinetic.populate'),
+            information('episode.operation_contract', operation='literature.binding.interaction.populate'), lookup(), populate(args)])
+        try:
+>           record = run_child(episode, value)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_contract_information_runtime_059.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_contract_information_runtime_059.py:71: in run_child
+    return asyncio.run(run())
+           ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_contract_information_runtime_059.py:68: in run
+    return await episode.run_async(value.context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1045: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1325: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_contract_information_runtime_059.py:41: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d1224eb70>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'f2ef2710be9ee76e0de4357cd0980669c43b9c7d4b079540da76802193d5c7bc', 'fields': {'action_yields': {'be...1+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+>       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+tests/test_runtime_decision_exchanges.py:100: RuntimeError
+_ test_direct_invocation_needs_no_information_lookup_and_preserves_actual_capabilities[None] _
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d1435c650>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'e9ebdf2c549e8267b62979101d515e005c071dabd7a820645e06d89ff0fa219e', 'fields': {'action_yields': {'be...0+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1978/test_direct_invocation_needs_n0')
+profile = None
+
+    @pytest.mark.parametrize('profile', [None, PROFILE])
+    def test_direct_invocation_needs_no_information_lookup_and_preserves_actual_capabilities(tmp_path, profile):
+        provider = PresentedProvider([])
+        store, value, episode, args = workflow(tmp_path, provider, profile=profile)
+        provider.script = iter([populate(args)])
+        try:
+            actual = value.catalog(episode.source.scope, source=episode.source)
+            old = _population_catalog()
+            selected = [row for row in actual if row['name'].startswith('literature.')]
+            assert [{key: row[key] for key in ('name', 'description', 'input_schema')} for row in selected] == old
+            assert not {'episode.operation_contract', 'episode.return_contract'} & {row['name'] for row in actual}
+>           run_child(episode, value)
+
+tests/test_contract_information_runtime_059.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_contract_information_runtime_059.py:71: in run_child
+    return asyncio.run(run())
+           ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_contract_information_runtime_059.py:68: in run
+    return await episode.run_async(value.context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1045: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1325: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_contract_information_runtime_059.py:41: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d1435c650>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'e9ebdf2c549e8267b62979101d515e005c071dabd7a820645e06d89ff0fa219e', 'fields': {'action_yields': {'be...0+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+>       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+tests/test_runtime_decision_exchanges.py:100: RuntimeError
+_ test_direct_invocation_needs_no_information_lookup_and_preserves_actual_capabilities[operation_contract_information_v1] _
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d11b27650>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'a572fea4c9c45528c25c8a382211470e46d510ffd5442df7ad879fd8df9a2114', 'fields': {'action_yields': {'be...4+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1978/test_direct_invocation_needs_n1')
+profile = 'operation_contract_information_v1'
+
+    @pytest.mark.parametrize('profile', [None, PROFILE])
+    def test_direct_invocation_needs_no_information_lookup_and_preserves_actual_capabilities(tmp_path, profile):
+        provider = PresentedProvider([])
+        store, value, episode, args = workflow(tmp_path, provider, profile=profile)
+        provider.script = iter([populate(args)])
+        try:
+            actual = value.catalog(episode.source.scope, source=episode.source)
+            old = _population_catalog()
+            selected = [row for row in actual if row['name'].startswith('literature.')]
+            assert [{key: row[key] for key in ('name', 'description', 'input_schema')} for row in selected] == old
+            assert not {'episode.operation_contract', 'episode.return_contract'} & {row['name'] for row in actual}
+>           run_child(episode, value)
+
+tests/test_contract_information_runtime_059.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_contract_information_runtime_059.py:71: in run_child
+    return asyncio.run(run())
+           ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_contract_information_runtime_059.py:68: in run
+    return await episode.run_async(value.context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1045: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1325: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_contract_information_runtime_059.py:41: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d11b27650>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'a572fea4c9c45528c25c8a382211470e46d510ffd5442df7ad879fd8df9a2114', 'fields': {'action_yields': {'be...4+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+>       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+tests/test_runtime_decision_exchanges.py:100: RuntimeError
+_ test_original_standalone_reference_scope_and_host_catalog_agreement_are_checked _
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d12823890>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '8c74ae31550fb7b3298dffd4e7a8d3c6aeabd46779d3ffcbb0ca0191c275bf35', 'fields': {'action_yields': {'be...9+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1978/test_original_standalone_refer0')
+
+    def test_original_standalone_reference_scope_and_host_catalog_agreement_are_checked(tmp_path):
+        provider = PresentedProvider([])
+        store, value, episode, args = workflow(tmp_path, provider)
+        provider.script = iter([populate(args)])
+        try:
+>           run_child(episode, value)
+
+tests/test_contract_information_runtime_059.py:178: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_contract_information_runtime_059.py:71: in run_child
+    return asyncio.run(run())
+           ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_contract_information_runtime_059.py:68: in run
+    return await episode.run_async(value.context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1045: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1325: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_contract_information_runtime_059.py:41: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d12823890>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '8c74ae31550fb7b3298dffd4e7a8d3c6aeabd46779d3ffcbb0ca0191c275bf35', 'fields': {'action_yields': {'be...9+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+>       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+tests/test_runtime_decision_exchanges.py:100: RuntimeError
+_ test_interrupted_pending_decision_reconstructs_original_contracts_without_current_factories _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1978/test_interrupted_pending_decis0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x729d1280f5c0>
+
+    def test_interrupted_pending_decision_reconstructs_original_contracts_without_current_factories(tmp_path, monkeypatch):
+        provider = PresentedProvider([], compact_after=(1,))
+        store, value, episode, args = workflow(tmp_path, provider)
+        provider.script = iter([information('episode.operation_contract', operation='literature.kinetic.populate'),
+            information('episode.operation_contract', operation='literature.binding.interaction.populate'), lookup(),
+            OSError('fixture provider lost after answered requests')])
+        try:
+            with pytest.raises(OSError, match='fixture provider lost'):
+                run_child(episode, value)
+            assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 0
+            assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
+            before = deepcopy(value.decision_exchanges.rows(episode.source.episode_id, 0))
+            original_call = dict(value.journal.row('runtime_model_calls', episode.source.episode_id, 0))
+            fresh_provider = PresentedProvider([populate(args)])
+            fresh, child = rebuild(value, episode, fresh_provider)
+            def forbidden(*_a, **_kw):
+                raise AssertionError('Saved pending decision must not reconstruct current declarations')
+            with monkeypatch.context() as patch:
+                for name in ('catalog', 'report_sources', 'action_schema'):
+                    patch.setattr(Workflow, name, forbidden)
+>               result = run_child(child, fresh)
+                         ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_contract_information_runtime_059.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_contract_information_runtime_059.py:71: in run_child
+    return asyncio.run(run())
+           ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_contract_information_runtime_059.py:68: in run
+    return await episode.run_async(value.context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1461: in next
+    "tools": self.workflow.catalog(self.scope, source=self),
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_a = (<gene_annotation_episode.runtime.Workflow object at 0x729d0c603a70>, {'subject_refs': ['input_6171cab31afa0ba24f1102b2']})
+_kw = {'source': <gene_annotation_episode.runtime.DecisionSource object at 0x729d0d003c50>}
+
+    def forbidden(*_a, **_kw):
+>       raise AssertionError('Saved pending decision must not reconstruct current declarations')
+E       AssertionError: Saved pending decision must not reconstruct current declarations
+
+tests/test_contract_information_runtime_059.py:232: AssertionError
+_ test_unknown_wrong_role_and_malformed_information_requests_are_feedback_not_actions _
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d134fac30>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '6e720f7ba61b68dc33c07a58df3b136c045db696bb10a1c9e3693bebe5da2cdc', 'fields': {'action_yields': {'be...1+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1978/test_unknown_wrong_role_and_ma0')
+
+    def test_unknown_wrong_role_and_malformed_information_requests_are_feedback_not_actions(tmp_path):
+        provider = PresentedProvider([])
+        store, value, episode, args = workflow(tmp_path, provider)
+        provider.script = iter([information('episode.operation_contract', operation='absent.operation'),
+            information('episode.return_contract', role='annotation', source='literature_kinetic_cells'),
+            information('episode.return_contract', role='literature_strategy', source='absent_fact'),
+            information('episode.operation_contract', operation='literature.kinetic.populate', extra='rejected'),
+            populate(args)])
+        try:
+>           run_child(episode, value)
+
+tests/test_contract_information_runtime_059.py:289: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_contract_information_runtime_059.py:71: in run_child
+    return asyncio.run(run())
+           ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_contract_information_runtime_059.py:68: in run
+    return await episode.run_async(value.context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1045: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1325: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_contract_information_runtime_059.py:41: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_contract_information_runtime_059.PresentedProvider object at 0x729d134fac30>
+episode_id = 'episode_a870f6e3fdc3f8c28c2d459098ef5bc10e0ff1efb9516fcd753a55735bb2895d'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '6e720f7ba61b68dc33c07a58df3b136c045db696bb10a1c9e3693bebe5da2cdc', 'fields': {'action_yields': {'be...1+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+>       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+tests/test_runtime_decision_exchanges.py:100: RuntimeError
+_ test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1978/test_all_nineteen_original_hos0')
+
+    def test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss(tmp_path):
+        from jsonschema import ValidationError
+        provider = PresentedProvider([])
+        store, value, episode, args = workflow(tmp_path, provider)
+        try:
+            branches = value.action_schema(episode.source)['properties']['selection']['anyOf']
+            populations = [row for row in branches if row.get('properties', {}).get('tool', {}).get('const', '').startswith('literature.')]
+>           assert len(populations) == 19
+E           AssertionError: assert 24 == 19
+E            +  where 24 = len([{'type': 'object', 'properties': {'kind': {'type': 'string', 'const': 'tool'}, 'tool': {'type': 'string', 'const': 'l..., 'additionalProperties': False}}, 'required': ['kind', 'tool', 'arguments'], 'additionalProperties': False, ...}, ...])
+
+tests/test_contract_information_runtime_059.py:355: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_contract_information_runtime_059.py::test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation
+FAILED tests/test_contract_information_runtime_059.py::test_direct_invocation_needs_no_information_lookup_and_preserves_actual_capabilities[None]
+FAILED tests/test_contract_information_runtime_059.py::test_direct_invocation_needs_no_information_lookup_and_preserves_actual_capabilities[operation_contract_information_v1]
+FAILED tests/test_contract_information_runtime_059.py::test_original_standalone_reference_scope_and_host_catalog_agreement_are_checked
+FAILED tests/test_contract_information_runtime_059.py::test_interrupted_pending_decision_reconstructs_original_contracts_without_current_factories
+FAILED tests/test_contract_information_runtime_059.py::test_unknown_wrong_role_and_malformed_information_requests_are_feedback_not_actions
+FAILED tests/test_contract_information_runtime_059.py::test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss
+7 failed, 36 passed in 366.83s (0:06:06)

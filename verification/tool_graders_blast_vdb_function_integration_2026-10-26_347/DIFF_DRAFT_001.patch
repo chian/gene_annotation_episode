@@ -1,0 +1,1512 @@
+--- before/gene_annotation_episode/execution_progress.py
++++ installed/gene_annotation_episode/execution_progress.py
+@@ -338,7 +338,8 @@
+                     'observation_validator': 'gene_annotation_episode.native_blast_standard_database_result_publication.validate_standard_blast_database_observation'}
+             if 'native_blast_database' in target['assignment']['requested_job']:
+                 from .native_blast_database_result_views import (native_blast_database_fact_sources,
+-                    native_blast_database_metric_definitions, validate_native_blast_database_result_selector)
++                    native_blast_database_metric_definitions, validate_native_blast_database_result_selector,
++                    FUNCTION_SELECTOR)
+                 job = target['assignment']['requested_job']['native_blast_database']
+                 value['selected_outputs'] = deepcopy(job['outputs'])
+                 value['database_manifests'] = [deepcopy(row['manifest_file']) for row in job['databases']]
+@@ -361,6 +362,26 @@
+                     'return_fact_sources': list(native_blast_database_fact_sources()),
+                     'scientific_publication': ['qualified_query_hsp', 'source_only'],
+                     'observation_validator': 'gene_annotation_episode.native_blast_database_result_publication.validate_native_blast_database_observation'}
++                selected = value.get('result_selection')
++                if selected is not None and selected['version'] == FUNCTION_SELECTOR:
++                    extractor = value['extractors'][1]
++                    extractor['return_fields'] += ['calculation_input', 'reused_result_receipt']
++                    extractor['calculators'].append(
++                        'gene_annotation_episode.blast_vdb_function_calculators.calculate_blast_vdb_function_components')
++                    extractor['calculation_input'] = deepcopy(selected['calculation_input'])
++                    extractor['calculator_parameters'] = deepcopy(selected['vdb_function_model'])
++                    if selected['calculation_input']['mode'] == 'saved_function_sheet':
++                        for key in ('parser', 'input_population', 'sheet_population'):
++                            del extractor[key]
++                        extractor['saved_input_validation'] = (
++                            'gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns.resolve_saved_function_input')
++                        extractor['calculation_basis'] = 'authenticated_saved_function_sheet_and_original_receipt'
++                        value['status_operations'] = []
++                        value['acquisition_operations'] = ['execution.results.collect']
++                        value['extractors'] = [extractor]
++                    else:
++                        extractor['function_sheet_population'] = (
++                            'gene_annotation_episode.native_blast_vdb_function_metadata.populate_native_blast_vdb_function_sheets')
+             if 'native_blast' in target['assignment']['requested_job']:
+                 from .blast_pairwise_result_views import (FAMILY_SOURCES,
+                     NATIVE_BLAST_RESULT_SELECTOR_SCHEMA, validate_native_blast_result_selector)
+--- before/gene_annotation_episode/native_blast_database_metadata.py
++++ installed/gene_annotation_episode/native_blast_database_metadata.py
+@@ -259,6 +259,9 @@
+ 
+ 
+ def _schema_for(consumer, schema_id):
++    if (consumer, schema_id) == ("vdb_function", "native_blast_vdb_function_metadata_v1"):
++        from .native_blast_vdb_function_metadata import native_blast_vdb_function_metadata_schema
++        return native_blast_vdb_function_metadata_schema()
+     if (consumer, schema_id) == ("sequence_database", _SEQUENCE_V2):
+         return _SEQUENCE_SCHEMA_V2
+     schema = _SCHEMAS.get(consumer)
+@@ -280,7 +283,12 @@
+             ("iteration", "iteration", "gene_annotation_episode.blast_iteration_inputs", "populate_blast_iteration_sheet"),
+             ("vdb", "vdb", "gene_annotation_episode.blast_vdb_inputs", "populate_blast_vdb_sheet"))
+         for schema in [_SCHEMAS[consumer]]]
+-    return rows + [dict(rows[1], schema_id=_SEQUENCE_V2)]
++    return rows + [dict(rows[1], schema_id=_SEQUENCE_V2), dict(consumer="vdb_function",
++        schema_id="native_blast_vdb_function_metadata_v1",
++        validator_module="gene_annotation_episode.native_blast_vdb_function_metadata",
++        validator_function="validate_native_blast_vdb_function_metadata_payload",
++        populator_module="gene_annotation_episode.native_blast_vdb_function_metadata",
++        populator_function="populate_native_blast_vdb_function_sheets")]
+ 
+ 
+ def _copy(value):
+@@ -654,7 +662,7 @@
+ def _validate_catalog(catalog, *, consumers=None):
+     if type(catalog) is not dict or set(catalog) != {"descriptor", "documents", "primary_reports", "bundle_source_ref", "bundle_artifact_ref"}:
+         raise _Invalid("", "document_catalog_fields_invalid")
+-    descriptor_schema = _object(input_key=_TOKEN, consumer=_enum(*(_SCHEMAS if consumers is None else consumers)), schema_id=_TOKEN,
++    descriptor_schema = _object(input_key=_TOKEN, consumer=_enum(*(tuple(_SCHEMAS) + ("vdb_function",) if consumers is None else consumers)), schema_id=_TOKEN,
+         artifact_ref=_TOKEN, sha256=_SHA, size_bytes=_I0, origin=_enum("original_job_input", "selected_results_input"))
+     if not Draft202012Validator(descriptor_schema).is_valid(catalog["descriptor"]):
+         raise _Invalid("", "metadata_descriptor_shape_invalid")
+@@ -679,6 +687,10 @@
+     The caller authenticates descriptor bytes; prepare additionally checks their
+     exact decoded equality. The catalog carries only already authenticated bytes.
+     """
++    if (descriptor["consumer"], descriptor["schema_id"]) == ("vdb_function", "native_blast_vdb_function_metadata_v1"):
++        from .native_blast_vdb_function_metadata import validate_native_blast_vdb_function_metadata_payload
++        return validate_native_blast_vdb_function_metadata_payload(payload, descriptor=descriptor,
++            document_catalog=document_catalog, job=job)
+     value = _copy(payload)
+     result = {k: descriptor[k] for k in ("consumer", "schema_id", "input_key", "artifact_ref", "sha256")}
+     result.update(status="valid", payload=value, normalized=None, normalization_map=[], issues=[])
+--- before/gene_annotation_episode/native_blast_database_result_publication.py
++++ installed/gene_annotation_episode/native_blast_database_result_publication.py
+@@ -23,9 +23,11 @@
+ from .native_blast_database_acquisition import (_attempt, _decode, _retained, _source_payload, _validate_capture)
+ from .native_blast_database_contracts import validate_native_blast_database_bundle
+ from .native_blast_database_result_views import (native_blast_database_fact_sources,
+-    project_native_blast_database_rows, validate_native_blast_database_result_selector)
++    project_native_blast_database_rows, validate_native_blast_database_result_selector,
++    FUNCTION_SELECTOR, saved_function_descriptor)
+ from .native_blast_database_result_worker import (native_blast_database_calculation_identity,
+-    native_blast_database_implementation_identity, native_blast_database_input_identity)
++    native_blast_database_implementation_identity, native_blast_database_input_identity,
++    _FUNCTION_REQUEST, _FUNCTION_MANIFEST, _FUNCTION_SHEETS, _FUNCTION_CALCULATIONS)
+ from .practical_execution_state import _immutable, _read
+ from .tool_grading_artifacts import retain_tool_grading
+ 
+@@ -45,7 +47,10 @@
+ _ROLES_V2 = {**_ROLES_V1, 'sheets': ('sheets.json', 'native_blast_database_sheet_set_v2'),
+     'native_convergence': ('native-convergence.json', 'blast_native_convergence_extraction_v1')}
+ _MANIFEST_ROLES = {'native_blast_database_result_worker_manifest_v1': _ROLES_V1,
+-    'native_blast_database_result_worker_manifest_v2': _ROLES_V2}
++    'native_blast_database_result_worker_manifest_v2': _ROLES_V2,
++    _FUNCTION_MANIFEST: {**_ROLES_V1, 'sheets': ('sheets.json', _FUNCTION_SHEETS),
++        'calculations': ('calculations.json', _FUNCTION_CALCULATIONS),
++        'rows': ('rows.ndjson', 'native_blast_vdb_function_numeric_row_v1')}}
+ _SCIENTIFIC_MODULES = ('native_blast_database_result_worker', 'native_blast_database_result_views',
+     'native_blast_database_metadata', 'native_blast_database_contracts', 'blast_report_collection',
+     'blast_grading_inputs', 'blast_program_context', 'blast_fasta_record_identity', 'blast_sequence_database', 'blast_database_grader',
+@@ -102,8 +107,13 @@
+ 
+ 
+ def _selected_input_refs(selector):
+-    return list(dict.fromkeys([r['artifact_ref'] for r in selector['metadata_inputs']]
+-        + [ref for r in selector['retained_sources'] for ref in (r['source_ref'], r['artifact_ref'])]))
++    references = [r['artifact_ref'] for r in selector['metadata_inputs']]
++    references += [ref for r in selector['retained_sources'] for ref in (r['source_ref'], r['artifact_ref'])]
++    selected = selector.get('calculation_input', {})
++    if selected.get('mode') == 'saved_function_sheet':
++        references += [selected[k + '_artifact_ref'] for k in ('manifest', 'sheets', 'collection')]
++        references.append(selected['original_result_receipt']['source_ref'])
++    return list(dict.fromkeys(references))
+ 
+ 
+ def validate_selected_inputs(store, context, selector, *, handoff_ref=None):
+@@ -118,6 +128,10 @@
+         source = store.get(row['source_ref'])
+         if source.get('record_type') != 'source' or source.get('artifact_ref') != row['artifact_ref']:
+             raise ContractError('native_blast_database_selected_source_artifact_conflict')
++    selected = selector.get('calculation_input', {})
++    if selected.get('mode') == 'saved_function_sheet':
++        for role in ('manifest', 'sheets', 'collection'):
++            _retained(store, selected[role + '_artifact_ref'], sha256=selected[role + '_sha256'])
+     return _selected_input_refs(selector)
+ 
+ 
+@@ -193,7 +207,7 @@
+         'XDG_CACHE_HOME': str(directory / 'cache')}
+ 
+ 
+-def _implementation(directory, policy, *, execution_program):
++def _implementation(directory, policy, *, execution_program, vdb_function=False):
+     """Inventory a fresh import closure, excluding unrelated parent imports."""
+     output = directory / 'implementation.json'
+     if not output.exists():
+@@ -212,6 +226,8 @@
+ '''
+         modules = _SCIENTIFIC_MODULES + (('native_blast_database_convergence', 'blast_native_iteration_records')
+             if execution_program in {'psiblast', 'deltablast'} else ())
++        if vdb_function:
++            modules += ('blast_vdb_function_inputs', 'blast_vdb_function_calculators', 'native_blast_vdb_function_metadata')
+         try:
+             result = run_local_job([sys.executable, '-B', '-c', script, json.dumps(modules), str(output)],
+                 cwd=directory, policy=policy, stdout_path=directory / 'implementation.stdout',
+@@ -314,12 +330,14 @@
+             sha256=bundle_record['sha256'], size_bytes=bundle_record['size']), authenticated_attempt=attempt,
+         artifacts=artifacts, metadata_descriptors=descriptors, retained_sources=retained, subject_snapshots=snapshots,
+         implementation=implementation, sequence_model=job['grading_parameters']['sequence_database_model'], reuse=None)
++    if selector['version'] == FUNCTION_SELECTOR:
++        request.update(version=_FUNCTION_REQUEST, vdb_function_model=deepcopy(selector['vdb_function_model']))
+     # Save the real invalid request before propagating a contract error; never
+     # invent a valid calculation generation or replace a selected model.
+     try:
+         ids = native_blast_database_calculation_identity(input_identity=native_blast_database_input_identity(request),
+             input_implementation_sha256=implementation['manifest_sha256'], sequence_model=request['sequence_model'],
+-            implementation_manifest_sha256=implementation['manifest_sha256'])
++            implementation_manifest_sha256=implementation['manifest_sha256'], vdb_function_model=request.get('vdb_function_model'))
+     except (ValueError, TypeError, KeyError) as error:
+         _immutable(directory / 'invalid-request.json', request)
+         failure = _failure('calculation', 'native_blast_database_calculation_failed', 'calculator_contract_invalid')
+@@ -335,7 +353,12 @@
+     value = _json(store, reference)
+     expected = {'version', 'calculation_id', 'request_sha256', 'status', 'input_identity', 'input_interpretation_id',
+         'input_implementation_sha256', 'implementation_manifest_sha256', 'sequence_model', 'artifacts', 'counts', 'failures'}
++    function_mode = request['version'] == _FUNCTION_REQUEST
++    if function_mode:
++        expected.add('vdb_function_model')
+     if (type(value) is not dict or set(value) != expected or value['version'] not in _MANIFEST_ROLES
++            or function_mode != (value['version'] == _FUNCTION_MANIFEST)
++            or function_mode and (request['bundle']['program'] not in {'blastn_vdb', 'tblastn_vdb'} or value['vdb_function_model'] != request['vdb_function_model'])
+             or value['version'] == 'native_blast_database_result_worker_manifest_v2' and request['bundle']['program'] not in {'psiblast', 'deltablast'}
+             or value['status'] not in {'complete', 'partial', 'failed'} or value['calculation_id'] != request['calculation_id']
+             or value['request_sha256'] != hashlib.sha256((canonical(request) + '\n').encode('utf-8')).hexdigest()
+@@ -348,7 +371,7 @@
+         raise ContractError('native_blast_database_worker_manifest_invalid')
+     ids = native_blast_database_calculation_identity(input_identity=value['input_identity'],
+         input_implementation_sha256=value['input_implementation_sha256'], sequence_model=value['sequence_model'],
+-        implementation_manifest_sha256=value['implementation_manifest_sha256'])
++        implementation_manifest_sha256=value['implementation_manifest_sha256'], vdb_function_model=value.get('vdb_function_model'))
+     if any(value[k] != v for k, v in ids.items()):
+         raise ContractError('native_blast_database_worker_manifest_identity_conflict')
+     roles, seen = _MANIFEST_ROLES[value['version']], set()
+@@ -418,22 +441,128 @@
+     return failures, status
+ 
+ 
+-def prepare_native_blast_database_grading(store, *, context, target, capture, selector, directory, policy):
++def saved_function_input_descriptor(store, body):
++    """Describe one already validated sealed generation, never choose a receipt."""
++    prepared, publication = body['preparation'], body['publication']
++    if prepared is None or publication is None or prepared['worker_manifest_artifact_ref'] is None:
++        raise ContractError('native_blast_database_saved_function_input_unavailable')
++    manifest = _json(store, prepared['worker_manifest_artifact_ref'])
++    if manifest.get('version') != _FUNCTION_MANIFEST or manifest['status'] == 'failed':
++        raise ContractError('native_blast_database_sheet_invalid')
++    value = dict(schema='native_blast_vdb_function_saved_input_v1',
++        original_result_receipt=dict(source_ref=publication['source_ref'], run_id=body['run_id'],
++            episode_id=body['episode_id'], operation_key=body['operation_key'], receipt_sha256=digest(body)),
++        input_interpretation_id=manifest['input_interpretation_id'], original_calculation_id=manifest['calculation_id'])
++    for role, field in (('manifest', 'worker_manifest_artifact_ref'), ('sheets', 'sheets_artifact_ref'), ('collection', 'collection_artifact_ref')):
++        ref = prepared[field]
++        record = store.get(ref)
++        path = _retained(store, ref)
++        if hashlib.sha256(path.read_bytes()).hexdigest() != record['sha256']:
++            raise ContractError('native_blast_database_frozen_artifact_changed')
++        value[role + '_artifact_ref'], value[role + '_sha256'] = ref, record['sha256']
++    return value
++
++
++def _saved_original(store, context, target, selector, body, *, seen=()):
++    """Check exact recorded action and selected generation; no source lookup."""
++    descriptor = saved_function_descriptor(selector['calculation_input'])
++    address = descriptor['original_result_receipt']
++    key = (address['run_id'], address['episode_id'], address['operation_key'])
++    if key in seen or body.get('version') != 'native_blast_database_result_receipt_vdb_function_v1':
++        raise ContractError('native_blast_database_return_unauthorized')
++    authority = EpisodeReturnRecords(store, context.run_id, failure_prefix='native_blast_database_return_')
++    original = authority.context(address['episode_id'])
++    prefix = f"{context.run_id}:{original.episode_id}:"
++    index = address['operation_key'].removeprefix(prefix)
++    if (address['run_id'] != context.run_id or not address['operation_key'].startswith(prefix)
++            or not index.isdecimal() or str(int(index)) != index):
++        raise ContractError('native_blast_database_return_unauthorized')
++    action = store.db.execute('SELECT action,result FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?',
++        (context.run_id, original.episode_id, int(index))).fetchone()
++    outcome = None if action is None or action['result'] is None else json.loads(action['result'])
++    if (outcome is None or outcome.get('status') != 'completed' or outcome.get('result') != body
++            or outcome.get('record_refs') != body['record_refs'] or body['target'] != target
++            or body['run_id'] != address['run_id'] or body['episode_id'] != address['episode_id']
++            or body['operation_key'] != address['operation_key'] or digest(body) != address['receipt_sha256']
++            or json.loads(action['action']) != dict(kind='tool', tool=body['tool_name'], arguments=body['arguments'])
++            or body['assignment'] != plain(original.assignment) or body['scope'] != plain(original.scope)
++            or address['source_ref'] not in body['record_refs']):
++        raise ContractError('native_blast_database_return_unauthorized')
++    store.validate_scope(body['scope'], parent_scope=plain(context.scope))
++    frozen = _validate_preparation(store, original, body['preparation'], _seen=(*seen, key))
++    if saved_function_input_descriptor(store, body) != descriptor:
++        raise ContractError('native_blast_database_return_unauthorized')
++    return frozen
++
++
++def _saved_request(store, context, target, selector, directory, implementation, original_body):
++    _original_commission(store, context)
++    validate_selected_inputs(store, context, selector)
++    frozen = _saved_original(store, context, target, selector, original_body)
++    request = deepcopy(frozen['request'])
++    descriptor = selector['calculation_input']
++    # Retain the exact original sealed files under one immutable local reuse
++    # directory so the worker can verify every named role against its manifest.
++    saved = store.path.resolve() / 'native-blast-database-saved-inputs' / descriptor['manifest_sha256']
++    saved.mkdir(parents=True, exist_ok=True)
++    refs = dict(frozen['grading']['artifact_refs'], manifest=descriptor['manifest_artifact_ref'])
++    roles = _MANIFEST_ROLES[_FUNCTION_MANIFEST]
++    for role, ref in refs.items():
++        name = 'worker-manifest.json' if role == 'manifest' else roles[role][0]
++        raw = _retained(store, ref).read_bytes()
++        if hashlib.sha256(raw).hexdigest() != store.get(ref)['sha256']:
++            raise ContractError('native_blast_database_frozen_artifact_changed')
++        path = saved / name
++        if path.exists():
++            if path.read_bytes() != raw:
++                raise ContractError('native_blast_database_frozen_artifact_changed')
++        else:
++            with path.open('xb') as stream:
++                stream.write(raw)
++    request.update(version=_FUNCTION_REQUEST, implementation=implementation,
++        vdb_function_model=deepcopy(selector['vdb_function_model']), reuse=dict(
++            manifest_path=str(saved / 'worker-manifest.json'), manifest_sha256=descriptor['manifest_sha256'],
++            manifest_size_bytes=store.get(descriptor['manifest_artifact_ref'])['size'],
++            collection_path=str(saved / 'collection.json'), sheets_path=str(saved / 'sheets.json')))
++    ids = native_blast_database_calculation_identity(input_identity=native_blast_database_input_identity(request),
++        input_implementation_sha256=frozen['manifest']['input_implementation_sha256'], sequence_model=request['sequence_model'],
++        implementation_manifest_sha256=implementation['manifest_sha256'], vdb_function_model=request['vdb_function_model'])
++    if ids['input_interpretation_id'] != descriptor['input_interpretation_id']:
++        raise ContractError('native_blast_database_return_unauthorized')
++    request['calculation_id'] = ids['calculation_id']
++    return request, _json(store, frozen['grading']['authenticated_attempt_artifact_ref']), frozen
++
++
++def prepare_native_blast_database_grading(store, *, context, target, capture, selector, directory, policy, original_body=None):
+     directory = Path(directory).resolve(); directory.mkdir(parents=True, exist_ok=True)
+     _policy(policy)
+     selector = validate_native_blast_database_result_selector(selector,
+         program=target['assignment']['requested_job']['native_blast_database']['program'])
+     intent = {'run_id': context.run_id, 'episode_id': context.episode_id, 'scope': plain(context.scope),
+         'assignment': plain(context.assignment), 'target': target, 'capture': capture, 'selector': selector, 'policy': policy.to_dict()}
++    function_mode = selector['version'] == FUNCTION_SELECTOR
++    saved_mode = function_mode and selector['calculation_input']['mode'] == 'saved_function_sheet'
++    if function_mode:
++        intent.update(calculation_input=deepcopy(selector['calculation_input']),
++            reused_result_receipt=deepcopy(selector['calculation_input'].get('original_result_receipt')))
+     _immutable(directory / 'intent.json', intent)
+     if (directory / 'preparation.json').exists():
+         prepared = _read(directory / 'preparation.json')
+         _validate_preparation(store, context, prepared)
+         return prepared
+     implementation = _implementation(directory, policy,
+-        execution_program=target['assignment']['requested_job']['native_blast_database']['program'])
+-    request, witness = _request(store, context, target, capture, selector, directory, implementation)
++        execution_program=target['assignment']['requested_job']['native_blast_database']['program'], vdb_function=function_mode)
++    if saved_mode:
++        request, witness, original_frozen = _saved_request(store, context, target, selector, directory, implementation, original_body)
++        capture = original_frozen['capture']
++    else:
++        request, witness = _request(store, context, target, capture, selector, directory, implementation)
+     generation = store.path.resolve() / 'native-blast-database-generations' / request['calculation_id']
++    if saved_mode:
++        # The scientific calculation identity excludes the transport receipt.
++        # Keep each exact reused manifest's execution receipt independently;
++        # reselecting one generation must not overwrite another's request.
++        generation /= 'saved-' + selector['calculation_input']['manifest_sha256']
+     request['output_directory'] = str(generation / 'output')
+     generation.mkdir(parents=True, exist_ok=True)
+     # Only identical authorized inputs can reuse frozen rows. Selector fields
+@@ -482,7 +611,7 @@
+         if manifest_ref is None:
+             # R atomically renames these filenames individually. Without the
+             # final manifest they are retained diagnostics, never a row source.
+-            roles = _ROLES_V2 if request['bundle']['program'] in {'psiblast', 'deltablast'} else _ROLES_V1
++            roles = _MANIFEST_ROLES[_FUNCTION_MANIFEST] if function_mode else _ROLES_V2 if request['bundle']['program'] in {'psiblast', 'deltablast'} else _ROLES_V1
+             for role, (name, _) in roles.items():
+                 path = generation / 'output' / name
+                 if path.is_file() and not path.is_symlink():
+@@ -502,13 +631,15 @@
+     capture_ref = _json_artifact(store, capture)
+     failures, status = _preparation_failures(manifest, retained['caller_failure'], capture)
+     observation_path = directory.parent / 'observation.json'
+-    if not observation_path.is_file():
++    if not saved_mode and not observation_path.is_file():
+         raise ContractError('native_blast_database_original_observation_required')
+     grading = {'schema': 'native_blast_database_retained_grading_v1', **retained,
+         'authenticated_attempt_artifact_ref': _json_artifact(store, witness),
+-        'observation_artifact_ref': artifact_file(store, observation_path, 'application/json'),
++        'observation_artifact_ref': None if saved_mode else artifact_file(store, observation_path, 'application/json'),
+         'intent_artifact_ref': artifact_file(store, directory / 'intent.json', 'application/json'),
+         'capture_artifact_ref': capture_ref}
++    if saved_mode:
++        grading['original_receipt_artifact_ref'] = _json_artifact(store, original_body)
+     prepared = {'version': PREPARATION_VERSION, 'calculation_id': request['calculation_id'],
+         'bundle_artifact_ref': capture['bundle_artifact_ref'], 'capture_artifact_ref': capture_ref,
+         'worker_manifest_artifact_ref': retained['manifest_artifact_ref'],
+@@ -516,6 +647,9 @@
+             native_artifact_ref=capture['bundle_artifact_ref'], grading=grading),
+         **{field: retained['artifact_refs'].get(role) for role, field in _ARTIFACT_FIELDS.items()},
+         'status': status, 'failures': failures}
++    if function_mode:
++        prepared.update(calculation_input=deepcopy(selector['calculation_input']),
++            reused_result_receipt=deepcopy(selector['calculation_input'].get('original_result_receipt')))
+     if prepared['diagnostics_artifact_ref'] is None:
+         prepared['diagnostics_artifact_ref'] = retained['caller_diagnostics_artifact_ref']
+     _immutable(directory / 'preparation.json', prepared)
+@@ -523,9 +657,14 @@
+     return prepared
+ 
+ 
+-def _validate_preparation(store, context, preparation):
++def _validate_preparation(store, context, preparation, *, _seen=()):
+     expected = {'version', 'calculation_id', 'bundle_artifact_ref', 'capture_artifact_ref', 'worker_manifest_artifact_ref',
+         'source_grading_artifact_ref', 'status', 'failures', *_ARTIFACT_FIELDS.values()}
++    selected = plain(context.assignment)['selector']
++    function_mode = selected['version'] == FUNCTION_SELECTOR
++    saved_mode = function_mode and selected['calculation_input']['mode'] == 'saved_function_sheet'
++    if function_mode:
++        expected.update(('calculation_input', 'reused_result_receipt'))
+     if type(preparation) is not dict or set(preparation) != expected or preparation['version'] != PREPARATION_VERSION:
+         raise ContractError('native_blast_database_preparation_invalid')
+     _original_commission(store, context)
+@@ -539,8 +678,19 @@
+             or intent['scope'] != plain(context.scope) or intent['assignment'] != plain(context.assignment)):
+         raise ContractError('native_blast_database_preparation_owner_conflict')
+     capture = _json(store, preparation['capture_artifact_ref'])
+-    if capture != intent['capture'] or grading['capture_artifact_ref'] != preparation['capture_artifact_ref']:
++    if (not saved_mode and capture != intent['capture'] or grading['capture_artifact_ref'] != preparation['capture_artifact_ref']):
+         raise ContractError('native_blast_database_preparation_capture_conflict')
++    original_frozen = None
++    if function_mode:
++        if any(preparation[k] != intent[k] for k in ('calculation_input', 'reused_result_receipt')) or preparation['calculation_input'] != selected['calculation_input']:
++            raise ContractError('native_blast_database_preparation_owner_conflict')
++        if preparation['reused_result_receipt'] != selected['calculation_input'].get('original_result_receipt'):
++            raise ContractError('native_blast_database_return_unauthorized')
++    if saved_mode:
++        original_frozen = _saved_original(store, context, intent['target'], selected,
++            _json(store, grading['original_receipt_artifact_ref']), seen=_seen)
++        if intent['capture'] is not None or grading['observation_artifact_ref'] is not None or capture != original_frozen['capture']:
++            raise ContractError('native_blast_database_preparation_capture_conflict')
+     _validate_capture(store, capture, target=intent['target'])
+     witness = _json(store, grading['authenticated_attempt_artifact_ref'])
+     attempt = _attempt(intent['target'], witness)
+@@ -561,14 +711,14 @@
+     if (request['calculation_id'] != preparation['calculation_id'] or request['bundle'] != bundle
+             or request['authenticated_attempt'] != attempt or request['bundle_artifact_ref'] != preparation['bundle_artifact_ref']
+             or selector != plain(context.assignment)['selector']
+-            or request['metadata_descriptors'] != _metadata_descriptors(bundle, capture, selector)
++            or request['metadata_descriptors'] != (original_frozen['request']['metadata_descriptors'] if saved_mode else _metadata_descriptors(bundle, capture, selector))
+             or request['sequence_model'] != bundle['requested_job']['native_blast_database']['grading_parameters']['sequence_database_model']):
+         raise ContractError('native_blast_database_frozen_request_conflict')
+     expected_artifacts = [dict(artifact_key=row['artifact_key'], artifact_ref=capture['artifact_refs'][row['artifact_key']],
+         sha256=row['sha256'], size_bytes=row['size_bytes']) for row in bundle['artifacts'] if row['artifact_key'] in capture['artifact_refs']]
+     if [{k: v for k, v in row.items() if k != 'path'} for row in request['artifacts']] != expected_artifacts:
+         raise ContractError('native_blast_database_frozen_artifact_association_conflict')
+-    expected_retained = _retained_catalog(store, selector, request['artifacts'], request['subject_snapshots'])
++    expected_retained = (original_frozen['request']['retained_sources'] if saved_mode else _retained_catalog(store, selector, request['artifacts'], request['subject_snapshots']))
+     if [{k: v for k, v in row.items() if k != 'path'} for row in request['retained_sources']] != [
+             {k: v for k, v in row.items() if k != 'path'} for row in expected_retained]:
+         raise ContractError('native_blast_database_frozen_selected_source_conflict')
+@@ -576,7 +726,7 @@
+     for row in [*request['artifacts'], *request['retained_sources']]:
+         _retained(store, row['artifact_ref'], sha256=row['sha256'], size_bytes=row['size_bytes'])
+     for row in request['subject_snapshots']:
+-        if row['subject_ref'] not in known or not store.reference_subset([row['subject_ref']], plain(context.scope)):
++        if (not saved_mode and row['subject_ref'] not in known) or not store.reference_subset([row['subject_ref']], plain(context.scope)):
+             raise ContractError('native_blast_database_frozen_subject_authority_conflict')
+         _retained(store, row['sequence_artifact_ref'], sha256=row['sequence_sha256'], size_bytes=row['length'])
+     _json(store, grading['worker_receipt_artifact_ref'])
+@@ -591,6 +741,12 @@
+         if preparation['worker_manifest_artifact_ref'] != grading['manifest_artifact_ref']:
+             raise ContractError('native_blast_database_frozen_manifest_conflict')
+         manifest = _manifest(store, preparation['worker_manifest_artifact_ref'], request, grading['artifact_refs'])
++    if function_mode and request.get('vdb_function_model') != selector['vdb_function_model']:
++        raise ContractError('native_blast_database_frozen_request_conflict')
++    if saved_mode:
++        if (request['reuse'] is None or manifest is not None and manifest['input_interpretation_id'] != selected['calculation_input']['input_interpretation_id']
++                or any(request[k] != original_frozen['request'][k] for k in ('bundle', 'bundle_artifact_ref', 'bundle_capture', 'authenticated_attempt', 'artifacts', 'metadata_descriptors', 'retained_sources', 'subject_snapshots', 'sequence_model'))):
++            raise ContractError('native_blast_database_frozen_request_conflict')
+     for role, field in _ARTIFACT_FIELDS.items():
+         expected_ref = grading['artifact_refs'].get(role)
+         if role == 'diagnostics' and expected_ref is None:
+@@ -604,7 +760,7 @@
+     if preparation['failures'] != failures or preparation['status'] != status:
+         raise ContractError('native_blast_database_frozen_preparation_outcome_conflict')
+     return {'grading': grading, 'request': request, 'bundle': bundle, 'capture': capture,
+-        'manifest': manifest, 'observation': _json(store, grading['observation_artifact_ref'])}
++        'manifest': manifest, 'observation': original_frozen['observation'] if saved_mode else _json(store, grading['observation_artifact_ref'])}
+ 
+ 
+ def _full_rows(store, prepared, frozen):
+@@ -821,8 +977,9 @@
+     """The same frozen projection proves writes and byte-exact read-only replay."""
+     source = identity('source', {'origin': 'tool', 'record': _source_payload(frozen['bundle'], frozen['capture'])})
+     all_rows = {(r['family'], r['record_key']): r for r in _full_rows(store, preparation, frozen)}
++    saved_mode = preparation.get('calculation_input', {}).get('mode') == 'saved_function_sheet'
+     documents = None
+-    if projected['families'] and any(f['family'] == 'hsp' and f['rows'] for f in projected['families']):
++    if not saved_mode and projected['families'] and any(f['family'] == 'hsp' and f['rows'] for f in projected['families']):
+         refs = frozen['grading']['artifact_refs']
+         documents = tuple(_json(store, refs[role]) for role in ('inputs', 'collection', 'calculations'))
+     rows, references, failures, diagnostics = {}, [source], [], []
+@@ -831,7 +988,7 @@
+         for selected in family['rows']:
+             row = dict(**selected, source_ref=source, observation_ref=None, subject_ref=None,
+                 reference_refs=[], publication_status='source_only')
+-            if family['family'] == 'hsp':
++            if family['family'] == 'hsp' and not saved_mode:
+                 try:
+                     payload = _hsp_payload(store, context, preparation, frozen,
+                         all_rows[('hsp', selected['record_key'])], documents)
+@@ -933,7 +1090,8 @@
+     if not store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='runtime_actions'").fetchone():
+         raise ContractError('native_blast_database_original_publication_required')
+     actions = store.db.execute("SELECT run_id,episode_id,decision_index,action,result FROM runtime_actions "
+-        "WHERE result IS NOT NULL AND json_extract(result,'$.result.version')='native_blast_database_result_receipt_v1' "
++        "WHERE result IS NOT NULL AND json_extract(result,'$.result.version') IN "
++        "('native_blast_database_result_receipt_v1','native_blast_database_result_receipt_vdb_function_v1') "
+         "AND EXISTS(SELECT 1 FROM json_each(runtime_actions.result,'$.record_refs') WHERE value=?) "
+         "ORDER BY run_id,episode_id,decision_index", (observation['id'],))
+     for action in actions:
+--- before/gene_annotation_episode/native_blast_database_result_views.py
++++ installed/gene_annotation_episode/native_blast_database_result_views.py
+@@ -14,6 +14,9 @@
+ 
+ 
+ _PROGRAMS = ("psiblast", "deltablast", "rpsblast", "rpstblastn", "blastn_vdb", "tblastn_vdb")
++FUNCTION_SELECTOR = "native_blast_database_result_selector_vdb_function_v1"
++FUNCTION_FAMILIES = ("vdb_function_summary", "vdb_function", "vdb_function_contribution", "vdb_function_census")
++SAVED_INPUT_SOURCE = "execution_blast_database_vdb_function_saved_inputs"
+ _BOOLEANS = {
+     "search": ("native_converged", "limit_reached"),
+     "sequence_hit": ("geometry_complete",), "profile_model": ("geometry_complete",),
+@@ -24,6 +27,9 @@
+     "vdb_taxonomy": ("target_independent_of_search",),
+     "vdb_membership": ("complete_for_reported_subjects", "complete_for_origin_members"),
+     "vdb_population": ("population_complete",),
++    "vdb_function_summary": ("report_complete", "metadata_complete", "dependency_complete", "calibrated_annotation_probability"),
++    "vdb_function": ("calibrated_annotation_probability",),
++    "vdb_function_census": ("census_complete",),
+ }
+ 
+ 
+@@ -155,6 +161,26 @@
+     for name, formula in (("added_count", "|L\\E|"), ("removed_count", "|E\\L|"), ("retained_count", "|E intersection L|"), ("earlier_target_count", "|E|"), ("later_target_count", "|L|")):
+         out["iteration_comparison"][name]["formula"] = formula + "; only for the calculator's complete qualified sets"
+     out["sequence_record_quality"] = deepcopy(out["sequence_quality"])
++    add("vdb_function_summary", "source_entity_count eligible_entity_count excluded_entity_count eligible_hsp_count target_unit_count model_group_count unknown_origin_subject_count unassigned_target_unit_count unresolved_sample_entity_count unknown_reference_kernel_fraction",
++        "entity_unit entity_unit entity_unit hsp target_unit model_group_unit hit target_unit entity_unit fraction",
++        "vdb_function.components.strata", "Exact search, assignment scope and literal namespace; observed eligible/excluded source entities and demonstrated targets")
++    add("vdb_function", "function_mass log2_function_mass prior log2_prior conditional_function_weight log2_conditional_function_weight census_function_unit_count census_total_unit_count census_function_fraction census_partition_function_mass representation_rate representation_adjusted_function_weight log2_representation_adjusted_function_weight",
++        "function_mass log2_function_mass fraction log2_fraction fraction log2_fraction model_group_unit model_group_unit fraction function_mass function_rate_unit fraction log2_fraction",
++        "vdb_function.components.strata.functions", "Represented scored functions in one exact search/scope/namespace; qualified complete matching census for corrected cells")
++    add("vdb_function_contribution", "best_bit_score within_group_kernel split_denominator function_baseline_mass global_baseline_mass",
++        "bits kernel_weight kernel_weight function_mass kernel_weight", "vdb_function.components.strata.groups.function_contributions",
++        "One demonstrated target or explicitly selected dependence block and function/unknown bucket")
++    add("vdb_function_census", "base_entity_count target_unit_count model_group_count", "base_entity_unit target_unit model_group_unit",
++        "vdb_function.components.census_results", "Actual retained enumeration, descriptively counted even when incomplete")
++    for family in FUNCTION_FAMILIES:
++        for name, definition in out[family].items():
++            definition.update(missingness="Copy the saved qualification. Positive linear underflow is null with a finite log2 value; mathematical zero remains zero. No publication-time arithmetic.",
++                uncertainty="Not estimated; model-conditional weights are not calibrated annotation probabilities.")
++    for metric, numerator, denominator in (
++            ("conditional_function_weight", "prior_weighted_mass.value", "conditional_weight_denominator.value"),
++            ("representation_adjusted_function_weight", "representation_rate.value", "representation_adjusted_weight_denominator.value")):
++        out["vdb_function"][metric].update(inputs="Saved FunctionComponent." + numerator + " and StratumComponents." + denominator,
++            formula="Copy the saved normalized value and its saved numerator/denominator; never recompute.", denominator=denominator)
+     return out
+ 
+ 
+@@ -198,6 +224,23 @@
+ _INTERVAL = {"type": "array", "prefixItems": [_I0, {"type": "integer", "minimum": 1}], "minItems": 2, "maxItems": 2}
+ _QIDENTITY = _object(dict(artifact_key=_ARTIFACT, record_ordinal=_I0,
+     axis_kind={"enum": ["sequence", "msa_master", "pssm_master"]}, selected_interval=_nullable(_INTERVAL)))
++
++_SAVED_RECEIPT = _object(dict(source_ref=_REF, run_id=_TOKEN, episode_id=_TOKEN,
++    operation_key=_TOKEN, receipt_sha256=_SHA))
++_SAVED_INPUT_FIELDS = dict(original_result_receipt=_SAVED_RECEIPT,
++    manifest_artifact_ref=_REF, manifest_sha256=_SHA, sheets_artifact_ref=_REF, sheets_sha256=_SHA,
++    collection_artifact_ref=_REF, collection_sha256=_SHA, input_interpretation_id=_SHA, original_calculation_id=_SHA)
++_SAVED_INPUT_SCHEMA = _object(dict(schema={"const": "native_blast_vdb_function_saved_input_v1"}, **_SAVED_INPUT_FIELDS))
++_CALCULATION_INPUT = {"oneOf": [_object(dict(mode={"const": "captured_inputs"})),
++    _object(dict(mode={"const": "saved_function_sheet"}, **_SAVED_INPUT_FIELDS))]}
++
++
++def saved_function_descriptor(calculation_input):
++    value = _copy(calculation_input)
++    validate_schema(value, _CALCULATION_INPUT)
++    if value["mode"] != "saved_function_sheet":
++        raise ContractError("native_blast_database_saved_function_input_required")
++    return dict(schema="native_blast_vdb_function_saved_input_v1", **{k: v for k, v in value.items() if k != "mode"})
+ 
+ 
+ def _identities():
+@@ -224,6 +267,12 @@
+         "vdb_population": {**search, "population_source": _PROV, "population_key": _ENTITY}}
+     identities["vdb_population_function"] = {**identities["vdb_population"], "function": _FUNCTION,
+         "assignment_scope": {"enum": ["whole_sequence", "feature", "sample"]}}
++    stratum = {**search, "assignment_scope": {"enum": ["whole_sequence", "feature"]}, "namespace": _TOKEN,
++        "grouping_model": {"enum": ["target_duplicates_only", "known_source_blocks"]}}
++    identities.update(vdb_function_summary=stratum,
++        vdb_function={**stratum, "function": _FUNCTION, "census_key": _nullable(_ENTITY)},
++        vdb_function_contribution={**stratum, "group_key": _ENTITY, "function": _nullable(_FUNCTION)},
++        vdb_function_census={**stratum, "census_key": _ENTITY})
+     for name in ("pssm_matrix", "pssm_position", "pssm_cell"):
+         identities[name] = dict(artifact_key=_ARTIFACT, record_ordinal=_I0)
+         if name != "pssm_matrix":
+@@ -271,18 +320,22 @@
+     names = _BOOLEANS.get(family, ()) if boolean else tuple(_METRICS[family])
+     properties = dict(name={"enum": list(names)} if names else {"not": {}},
+         value={"type": ["boolean" if boolean else "number", "null"]},
+-        status={"enum": list(_STATUS)}, reason={"enum": [r for r in _REASONS if not boolean or r != "unsupported_schema"]},
++        status={"enum": list(_STATUS)}, reason={"enum": [r for r in _REASONS if not boolean or r != "unsupported_schema"] +
++            (["linear_underflow", "arithmetic_out_of_range"] if family in FUNCTION_FAMILIES and not boolean else [])},
+         origin={"enum": list(_ORIGINS)}, component_pointer=_POINTER)
+     if not boolean:
+         properties.update(numerator={"type": ["number", "null"]}, denominator={"type": ["number", "null"]},
+-            unit={"enum": list(_UNITS)}, complete={"type": ["boolean", "null"]})
++            unit={"enum": list(_UNITS) + ("target_unit dependence_block member_instance feature_instance log2_function_mass log2_fraction function_mass_per_target_unit function_mass_per_dependence_block".split() if family in FUNCTION_FAMILIES else [])}, complete={"type": ["boolean", "null"]})
+     schema = _object(properties)
+     schema["allOf"] = [{"if": {"properties": {"value": {"type": "null"}}},
+         "then": {"properties": {"status": {"enum": ["unavailable", "incompatible"]}, "reason": {"not": {"type": "null"}}}},
+         "else": {"properties": {"status": {"const": "available"}, "reason": {"type": "null"}}}}]
+     if not boolean:
+         dynamic = {"query_unit": ["aa", "nt"], "reference_unit": ["aa", "nt", "model_position", "native_reference_position"],
+-            "population_unit": ["member", "sequence_group", "feature", "sample"]}
++            "population_unit": ["member", "sequence_group", "feature", "sample"],
++            "entity_unit": ["member", "feature"], "base_entity_unit": ["member_instance", "feature_instance"],
++            "model_group_unit": ["target_unit", "dependence_block"],
++            "function_rate_unit": ["function_mass_per_target_unit", "function_mass_per_dependence_block"]}
+         schema["allOf"].extend({"if": {"properties": {"name": {"const": name}}},
+             "then": {"properties": {"unit": {"enum": dynamic.get(definition["units"], [definition["units"]])}}}}
+             for name, definition in _METRICS[family].items())
+@@ -293,7 +346,7 @@
+     """Closed FullRow schema. Fact sources add the publication-only fields."""
+     if family not in _METRICS:
+         raise ContractError("native_blast_database_family_invalid")
+-    return deepcopy(_object(dict(schema={"const": "native_blast_database_numeric_row_v1"}, family={"const": family},
++    return deepcopy(_object(dict(schema={"const": "native_blast_vdb_function_numeric_row_v1" if family in FUNCTION_FAMILIES else "native_blast_database_numeric_row_v1"}, family={"const": family},
+         record_key=_ROW_ID, calculation_id=_SHA, identity=_IDENTITIES[family],
+         program={"enum": [p for p in _PROGRAMS if _eligible(family, p)]},
+         context=_object(dict(query_axis_kind={"enum": ["sequence", "msa_master", "pssm_master", None]},
+@@ -301,7 +354,7 @@
+             stage={"enum": ["sequence_database", "domain_database", None]},
+             native_iteration=_nullable({"type": "integer", "minimum": 1}), biological_round=_nullable({"type": "integer", "minimum": 1}))),
+         component_refs=_array(_object(dict(artifact_role={"enum": ["collection", "sheets", "calculations"]}, pointer=_POINTER))),
+-        native_status={"enum": list(_NATIVE_STATUS)}, measurements=_array(_cell_schema(family)), booleans=_array(_cell_schema(family, True)))))
++        native_status={"enum": list(_NATIVE_STATUS) + (["no_eligible_functions"] if family in FUNCTION_FAMILIES else [])}, measurements=_array(_cell_schema(family)), booleans=_array(_cell_schema(family, True)))))
+ 
+ 
+ def _failure_schema():
+@@ -329,6 +382,8 @@
+             ("acquisition", _object({k: {"type": "boolean"} for k in ("acquisition_complete", "projection_complete", "native_execution_successful", "complete")}))):
+         source = "execution_blast_database_" + name
+         sources[source] = dict(type=schema["type"], meaning="Frozen selected native database result " + name + ".", report_schema={**schema, "x-source": source})
++    sources[SAVED_INPUT_SOURCE] = dict(type="array", meaning="Exact admitted immutable VDB function generation available for a separately selected saved calculation.",
++        report_schema={**_array(_SAVED_INPUT_SCHEMA, uniqueItems=True), "x-source": SAVED_INPUT_SOURCE})
+     return deepcopy(sources)
+ 
+ 
+@@ -337,15 +392,26 @@
+     if program not in _PROGRAMS:
+         raise ContractError("native_blast_database_result_program_unsupported")
+     identity = dict(artifact_ref=_REF, sha256=_SHA, size_bytes=_I0)
+-    schema = _object(dict(version={"const": "native_blast_database_result_selector_v1"}, acquisition={"const": "complete_bound_bundle"},
+-        metadata_inputs=_array(_object(dict(input_key=_TOKEN, consumer={"enum": ["query_identity", "sequence_database", "profile", "iteration", "vdb"]}, schema_id=_TOKEN, **identity))),
++    function_mode = selector.get("version") == FUNCTION_SELECTOR if type(selector) is dict else False
++    if function_mode and program not in ("blastn_vdb", "tblastn_vdb"):
++        raise ContractError("native_blast_database_result_program_unsupported")
++    schema = _object(dict(version={"const": FUNCTION_SELECTOR if function_mode else "native_blast_database_result_selector_v1"}, acquisition={"const": "complete_bound_bundle"},
++        metadata_inputs=_array(_object(dict(input_key=_TOKEN, consumer={"enum": ["query_identity", "sequence_database", "profile", "iteration", "vdb"] + (["vdb_function"] if function_mode else [])}, schema_id=_TOKEN, **identity))),
+         retained_sources=_array(_object(dict(source_ref=_REF, **identity))), projections=_array({"oneOf": [_object(dict(family={"const": f},
+             rows={"oneOf": [_object(dict(offset=_I0, limit={"type": "integer", "minimum": 1})), _object(dict(record_keys=_array(_ROW_ID, minItems=1, uniqueItems=True)))]},
+             metrics=_array({"enum": list(_METRICS[f])} if _METRICS[f] else {"not": {}}, uniqueItems=True),
+             booleans=_array({"enum": list(_BOOLEANS[f])} if _BOOLEANS.get(f) else {"not": {}}, uniqueItems=True)))
+-            for f in _METRICS if _eligible(f, program)]}, minItems=1)))
++            for f in _METRICS if _eligible(f, program) and (function_mode or f not in FUNCTION_FAMILIES)]}, minItems=1)))
++    if function_mode:
++        schema["properties"].update(vdb_function_model={"type": "object"}, calculation_input=_CALCULATION_INPUT)
++        schema["required"].extend(("vdb_function_model", "calculation_input"))
+     try:
+         validate_schema(selector, schema)
++        if function_mode:
++            from .blast_vdb_function_calculators import validate_blast_vdb_function_model
++            validate_blast_vdb_function_model(selector["vdb_function_model"])
++            if selector["calculation_input"]["mode"] == "saved_function_sheet" and (selector["metadata_inputs"] or selector["retained_sources"]):
++                raise ValueError("saved_function_input_cannot_add_metadata")
+         if len({p["family"] for p in selector["projections"]}) != len(selector["projections"]):
+             raise ValueError("duplicate_family")
+         for projection in selector["projections"]:
+@@ -456,8 +522,8 @@
+     return dict(schema="native_blast_database_projection_v1", calculation_id=calculation_id, families=output, failures=failures)
+ 
+ 
+-def native_blast_database_metric_definitions():
+-    return deepcopy(_METRICS)
++def native_blast_database_metric_definitions(*, include_vdb_function=True):
++    return deepcopy({k: v for k, v in _METRICS.items() if include_vdb_function or k not in FUNCTION_FAMILIES})
+ 
+ 
+ __all__ = ["validate_native_blast_database_result_selector", "native_blast_database_row_schema",
+--- before/gene_annotation_episode/native_blast_database_result_worker.py
++++ installed/gene_annotation_episode/native_blast_database_result_worker.py
+@@ -32,6 +32,10 @@
+ 
+ _SHEET_KEYS = {"schema", "collection", "prepared_inputs", "derived_search_bindings", "sequence", "profile", "vdb", "pssm", "msa", "iteration", "metadata_parse_results", "metadata_binding_results", "issues"}
+ _CALC_KEYS = {"schema", "sequence_model", "iteration", "profile", "vdb", "pssm", "search_facts", "native_hsp_components", "issues"}
++_FUNCTION_REQUEST = "native_blast_database_result_worker_request_vdb_function_v1"
++_FUNCTION_MANIFEST = "native_blast_database_result_worker_manifest_vdb_function_v1"
++_FUNCTION_SHEETS = "native_blast_database_sheet_set_vdb_function_v1"
++_FUNCTION_CALCULATIONS = "native_blast_database_calculations_vdb_function_v1"
+ _REASON_MAP = {None: "missing_input", "missing_input": "missing_input", "not_measured": "not_measured",
+     "incompatible_input": "incompatible_input", "invalid_native_row": "invalid_native_row", "partial_output": "partial_output",
+     "unsupported_schema": "unsupported_schema", "vdb_function_weight_model_not_defined": "not_measured",
+@@ -147,6 +151,13 @@
+ _DESCRIPTOR = _views._object(dict(input_key=_views._TOKEN,
+     consumer={"enum": ["query_identity", "sequence_database", "profile", "iteration", "vdb"]},
+     schema_id=_views._TOKEN, **_FILE_ID, origin={"enum": ["original_job_input", "selected_results_input"]}))
++
++
++def _descriptor(function_mode=False):
++    value = deepcopy(_DESCRIPTOR)
++    if function_mode:
++        value["properties"]["consumer"]["enum"].append("vdb_function")
++    return value
+ _ATTEMPT = _views._object(dict(identity=_contracts.IDENTITY_SCHEMA, attempt_directory=_ABS, plan_sha256=_views._SHA))
+ _SNAPSHOT_ID = dict(subject_ref=_views._REF, record_type={"enum": ["input", "feature", "product", "read_subject"]},
+     molecule={"enum": ["dna", "rna", "protein"]}, length={"type": "integer", "minimum": 1},
+@@ -184,7 +195,7 @@
+             subject_snapshots=[{k: r[k] for k in _SNAPSHOT_ID} for r in request["subject_snapshots"]])
+         _shape(value, _views._object(dict(version={"const": "native_blast_database_input_identity_v1"}, bundle=_views._object(_FILE_ID),
+             authenticated_attempt=_ATTEMPT, artifacts=_views._array(_views._object(dict(artifact_key=_views._TOKEN, **_FILE_ID))),
+-            metadata_descriptors=_views._array(_DESCRIPTOR), retained_sources=_views._array(_views._object(dict(source_ref=_views._REF, **_FILE_ID))),
++            metadata_descriptors=_views._array(_descriptor(request.get("version") == _FUNCTION_REQUEST)), retained_sources=_views._array(_views._object(dict(source_ref=_views._REF, **_FILE_ID))),
+             subject_snapshots=_views._array(_views._object(_SNAPSHOT_ID)))))
+         _absolute_path(value["authenticated_attempt"]["attempt_directory"])
+     except (KeyError, TypeError) as error:
+@@ -192,13 +203,20 @@
+     return _hash(value)
+ 
+ 
+-def native_blast_database_calculation_identity(*, input_identity, input_implementation_sha256, sequence_model, implementation_manifest_sha256):
++def native_blast_database_calculation_identity(*, input_identity, input_implementation_sha256, sequence_model, implementation_manifest_sha256, vdb_function_model=None):
+     """Separate input interpretation from the selected numerical generation."""
+     for digest in (input_identity, input_implementation_sha256, implementation_manifest_sha256):
+         _shape(digest, _views._SHA)
+     model = _model(sequence_model)
+     interpretation = _hash(dict(version="native_blast_database_interpretation_identity_v1",
+         input_identity=input_identity, input_implementation_sha256=input_implementation_sha256))
++    if vdb_function_model is not None:
++        from .blast_vdb_function_calculators import validate_blast_vdb_function_model
++        function_model = validate_blast_vdb_function_model(vdb_function_model)
++        return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(
++            version="native_blast_vdb_function_calculation_identity_v1", input_interpretation_id=interpretation,
++            base_calculation_contract=dict(schema="native_blast_database_calculations_v1", sequence_model=model),
++            model=function_model, calculator_implementation_identity=implementation_manifest_sha256)))
+     return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version="native_blast_database_calculation_identity_v1",
+         input_interpretation_id=interpretation, sequence_model=model, implementation_manifest_sha256=implementation_manifest_sha256)))
+ 
+@@ -360,6 +378,22 @@
+         raise ValueError("native_blast_database_sheet_set_invalid")
+     if sheet_set.get("schema") == "native_blast_database_sheet_set_v1" and set(sheet_set) == _SHEET_KEYS:
+         return None
++    if sheet_set.get("schema") == _FUNCTION_SHEETS:
++        if (set(sheet_set) != _SHEET_KEYS | {"vdb_function"}
++                or sheet_set["collection"]["invocation"]["execution_program"] not in ("blastn_vdb", "tblastn_vdb")):
++            raise ValueError("native_blast_database_sheet_set_invalid")
++        from .blast_vdb_function_inputs import validate_blast_vdb_function_sheet
++        seen = set()
++        for row in sheet_set["vdb_function"]:
++            if type(row) is not dict or set(row) != {"search_key", "sheet"}:
++                raise ValueError("native_blast_database_sheet_set_invalid")
++            key = canonical(row["search_key"])
++            matches = [r for r in sheet_set["vdb"] if r["search_key"] == row["search_key"]]
++            if key in seen or len(matches) != 1 or row["sheet"]["base_sheet"] != matches[0]["sheet"]:
++                raise ValueError("native_blast_database_sheet_set_invalid")
++            validate_blast_vdb_function_sheet(row["sheet"])
++            seen.add(key)
++        return None
+     if (sheet_set.get("schema") != "native_blast_database_sheet_set_v2"
+             or set(sheet_set) != _SHEET_KEYS | {"native_convergence"}
+             or sheet_set["collection"]["invocation"]["execution_program"] not in ("psiblast", "deltablast")):
+@@ -377,7 +411,7 @@
+     return binding
+ 
+ 
+-def calculate_native_blast_database_sheets(sheet_set, *, sequence_model):
++def calculate_native_blast_database_sheets(sheet_set, *, sequence_model, vdb_function_model=None, saved_calculations=None):
+     """Calculate actual saved populations once, retaining all nested outputs."""
+     sheet_set = _views._copy(sheet_set)
+     _sheet_binding(sheet_set)
+@@ -385,6 +419,30 @@
+     collection = sheet_set["collection"]; program = collection["invocation"]["execution_program"]
+     if program not in _views._PROGRAMS:
+         raise ValueError("native_blast_database_program_unsupported")
++    function_mode = sheet_set["schema"] == _FUNCTION_SHEETS
++    if function_mode:
++        from .blast_vdb_function_calculators import validate_blast_vdb_function_model, calculate_blast_vdb_function_components
++        vdb_function_model = validate_blast_vdb_function_model(vdb_function_model)
++    elif vdb_function_model is not None or saved_calculations is not None:
++        raise ValueError("native_blast_database_sheet_set_invalid")
++    if saved_calculations is not None:
++        out = _views._copy(saved_calculations)
++        if (set(out) != _CALC_KEYS | {"vdb_function_model", "vdb_function"}
++                or out["schema"] != _FUNCTION_CALCULATIONS or out["sequence_model"] != model):
++            raise ValueError("native_blast_database_saved_calculations_invalid")
++        # These are authenticated saved values. No native/base calculator runs.
++        out["vdb_function_model"] = vdb_function_model
++        out["vdb_function"] = []
++        out["issues"] = [r for r in out["issues"] if not r["code"].startswith("blast_vdb_function_")]
++        for row in sheet_set["vdb_function"]:
++            try:
++                component = calculate_blast_vdb_function_components(row["sheet"], model=vdb_function_model)
++            except ValueError as error:
++                out["issues"].append(dict(artifact_key=row["search_key"]["artifact_key"], search_key=deepcopy(row["search_key"]),
++                    code=str(error)))
++            else:
++                out["vdb_function"].append(dict(search_key=deepcopy(row["search_key"]), components=component))
++        return out
+     out = dict(schema="native_blast_database_calculations_v1", sequence_model=model, iteration=None,
+         profile=[], vdb=[], pssm=[], search_facts=[], native_hsp_components=[], issues=[])
+     if program in ("psiblast", "deltablast"):
+@@ -400,7 +458,9 @@
+     else:
+         family, calculator = ("profile", _profile.calculate_blast_profile_components) if program in ("rpsblast", "rpstblastn") else ("vdb", _vdb.calculate_blast_vdb_components)
+         for row in sheet_set[family]:
+-            out[family].append(dict(search_key=deepcopy(row["search_key"]), components=calculator(row["sheet"])))
++            saved_base = [r["sheet"]["base_components"] for r in sheet_set.get("vdb_function", []) if r["search_key"] == row["search_key"]]
++            out[family].append(dict(search_key=deepcopy(row["search_key"]),
++                components=deepcopy(saved_base[0]) if function_mode and len(saved_base) == 1 else calculator(row["sheet"])))
+         seen = {}
+         for sheet in sheet_set["pssm"]:
+             key = sheet["artifact_key"]
+@@ -426,6 +486,16 @@
+             reference_length=length, coordinate_convention="blast_json2" if search["normalized"]["format"] == "json2" else "directional")
+         out["native_hsp_components"].append(dict(row_key=key, component=component,
+             status="unavailable" if native is None else "available" if geometry is not None else "incompatible"))
++    if function_mode:
++        out.update(schema=_FUNCTION_CALCULATIONS, vdb_function_model=vdb_function_model, vdb_function=[])
++        for row in sheet_set["vdb_function"]:
++            try:
++                component = calculate_blast_vdb_function_components(row["sheet"], model=vdb_function_model)
++            except ValueError as error:
++                out["issues"].append(dict(artifact_key=row["search_key"]["artifact_key"], search_key=deepcopy(row["search_key"]),
++                    code=str(error)))
++            else:
++                out["vdb_function"].append(dict(search_key=deepcopy(row["search_key"]), components=component))
+     return out
+ 
+ 
+@@ -888,13 +958,106 @@
+                 b + f"/function_components/{fi}", function, key=key, status=row["status"], population=row["count_unit"])
+ 
+ 
++def _function_cell(name, component, pointer, *, unit=None, complete=None, numerator=None, denominator=None, log=False):
++    """Copy a saved scalar and qualification; no statistical arithmetic here."""
++    if type(component) is dict:
++        value = component["log2_value" if log else "value"]
++        unit = unit or component["unit"]
++        reason = component.get("reason_code", component.get("unavailable_reason"))
++        status = component.get("linear_status", component.get("status"))
++        complete = component.get("complete", complete)
++        numerator = component.get("numerator", numerator)
++        denominator = component.get("denominator", denominator)
++    else:
++        value, reason, status = component, None, None
++    if value is not None:
++        status, reason = "available", None
++    else:
++        suffix = (reason or "").removeprefix("blast_vdb_function_")
++        if log and type(component) is dict and component.get("linear_status") == "zero":
++            reason = "not_measured"
++        elif suffix in {"linear_underflow", "kernel_arithmetic_out_of_range"}:
++            reason = "linear_underflow" if suffix == "linear_underflow" else "arithmetic_out_of_range"
++        elif status == "incompatible" or suffix.endswith(("conflict", "mismatch")):
++            reason = "incompatible_input"
++        else:
++            reason = "missing_input" if suffix else "not_measured"
++        status = "incompatible" if status == "incompatible" else "unavailable"
++    return dict(name=name, value=value, numerator=numerator, denominator=denominator, unit=unit,
++        status=status, reason=reason, origin="derived", complete=complete, component_pointer=pointer)
++
++
++def _vdb_function_rows(builder, component, base):
++    key = component["search_key"]
++    def add(family, ident, status, cells, booleans=(), refs=None):
++        for cell in [*cells, *booleans]:
++            # Exact pointers must resolve, including null-valued cells.
++            _at(builder.calculations, cell["component_pointer"])
++        builder.rows.append(dict(schema="native_blast_vdb_function_numeric_row_v1", family=family,
++            record_key=identity("native_blast_database_row", dict(version="native_blast_database_row_identity_v1",
++                attempt=builder.attempt, family=family, identity=ident)), calculation_id=builder.calculation_id,
++            identity=deepcopy(ident), program=builder.program, context=builder.context(key),
++            component_refs=refs or [dict(artifact_role="calculations", pointer=base)], native_status=status,
++            measurements=cells, booleans=list(booleans)))
++    calibration = _boolean("calibrated_annotation_probability", component["calibrated_annotation_probability"], base + "/calibrated_annotation_probability")
++    aliases = dict(source_entity_count="source_entities", eligible_entity_count="eligible_entities", excluded_entity_count="excluded_entities",
++        eligible_hsp_count="eligible_hsps", target_unit_count="duplicate_target_units", model_group_count="model_groups",
++        unknown_origin_subject_count="unknown_origin_subjects", unassigned_target_unit_count="unassigned_target_units",
++        unresolved_sample_entity_count="unresolved_sample_entities")
++    for si, stratum in enumerate(component["strata"]):
++        pointer = base + f"/strata/{si}"
++        ident = dict(search_key=key, **{k: stratum[k] for k in ("assignment_scope", "namespace", "grouping_model")})
++        group_unit = "target_unit" if stratum["grouping_model"] == "target_duplicates_only" else "dependence_block"
++        units = dict(hsp="hsp", hit="hit", target_unit="target_unit", model_group_unit=group_unit,
++            entity_unit="member" if stratum["assignment_scope"] == "whole_sequence" else "feature")
++        cells = [_function_cell(name, stratum["counts"][field], pointer + "/counts/" + field,
++            unit=units[_views._METRICS["vdb_function_summary"][name]["units"]], complete=stratum["report_complete"])
++            for name, field in aliases.items()]
++        cells.append(_function_cell("unknown_reference_kernel_fraction", stratum["unknown_reference_kernel_fraction"],
++            pointer + "/unknown_reference_kernel_fraction/value", complete=stratum["report_complete"],
++            numerator=stratum["unknown_reference_kernel_mass"]["value"], denominator=stratum["total_reference_kernel_mass"]["value"]))
++        add("vdb_function_summary", ident, stratum["status"], cells,
++            [_boolean(name, stratum[name], pointer + "/" + name) for name in ("report_complete", "metadata_complete", "dependency_complete")] + [calibration])
++        for fi, function in enumerate(stratum["functions"]):
++            fp = pointer + f"/functions/{fi}"
++            cells = []
++            for name in _views._METRICS["vdb_function"]:
++                log = name.startswith("log2_"); field = name.removeprefix("log2_")
++                kwargs = dict(complete=stratum["report_complete"])
++                if log:
++                    kwargs["unit"] = "log2_function_mass" if field == "function_mass" else "log2_fraction"
++                if field == "conditional_function_weight" and not log:
++                    kwargs.update(numerator=function["prior_weighted_mass"]["value"], denominator=stratum["conditional_weight_denominator"]["value"])
++                if field == "representation_adjusted_function_weight" and not log:
++                    kwargs.update(numerator=function["representation_rate"]["value"], denominator=stratum["representation_adjusted_weight_denominator"]["value"])
++                cells.append(_function_cell(name, function[field], fp + "/" + field + ("/log2_value" if log else "/value"), log=log, **kwargs))
++            add("vdb_function", dict(**ident, function=function["function"], census_key=stratum["census_key"]), stratum["status"], cells, [calibration])
++        for gi, group in enumerate(stratum["groups"]):
++            for ci, contribution in enumerate(group["function_contributions"]):
++                cp = pointer + f"/groups/{gi}/function_contributions/{ci}"
++                cells = [_function_cell(name, contribution[name], cp + "/" + name + "/value", complete=stratum["report_complete"])
++                    for name in _views._METRICS["vdb_function_contribution"]]
++                add("vdb_function_contribution", dict(**ident, group_key=group["group_key"], function=contribution["function"]), stratum["status"], cells,
++                    refs=[dict(artifact_role="calculations", pointer=pointer + f"/groups/{gi}")])
++    for ci, census in enumerate(component["census_results"]):
++        cp = base + f"/census_results/{ci}"
++        ident = dict(search_key=key, assignment_scope=census["assignment_scope"], namespace=census["namespace"],
++            grouping_model=component["model"]["grouping_model"], census_key=census["census_key"])
++        cells = [_function_cell(name, census[name], cp + "/" + name + "/value", complete=census["enumeration_complete"])
++            for name in _views._METRICS["vdb_function_census"]]
++        add("vdb_function_census", ident, census["status"], cells,
++            [_boolean("census_complete", census["enumeration_complete"], cp + "/enumeration_complete")])
++
++
+ def build_native_blast_database_rows(*, bundle_identity, calculation_id, sheet_set, calculations):
+     """Build all families from retained components; no reparse or recalculation."""
+     validate_schema(calculation_id, _views._SHA)
+     sheet_set, calculations, bundle_identity = map(_views._copy, (sheet_set, calculations, bundle_identity))
+     _shape(bundle_identity, _contracts.IDENTITY_SCHEMA)
+     _sheet_binding(sheet_set)
+-    if set(calculations) != _CALC_KEYS or calculations["schema"] != "native_blast_database_calculations_v1":
++    function_mode = sheet_set["schema"] == _FUNCTION_SHEETS
++    if (set(calculations) != _CALC_KEYS | ({"vdb_function_model", "vdb_function"} if function_mode else set())
++            or calculations["schema"] != (_FUNCTION_CALCULATIONS if function_mode else "native_blast_database_calculations_v1")):
+         raise ValueError("native_blast_database_row_inputs_invalid")
+     builder = _Rows(bundle_identity, calculation_id, sheet_set, calculations)
+     _search_rows(builder); _hsp_rows(builder)
+@@ -918,6 +1081,8 @@
+         _vdb_rows(builder, row["components"], sheet, f"/vdb/{i}/components", f"/vdb/{j}/sheet")
+     for i, row in enumerate(calculations["pssm"]):
+         _pssm_rows(builder, row["artifact_key"], row["components"], f"/pssm/{i}/components")
++    for i, row in enumerate(calculations.get("vdb_function", [])):
++        _vdb_function_rows(builder, row["components"], f"/vdb_function/{i}/components")
+     seen, rows = {}, []
+     for row in builder.rows:
+         _views._validate_row(row, calculation_id)
+@@ -940,6 +1105,9 @@
+ _ARTIFACT_ROLES_V2 = {**_ARTIFACT_ROLES,
+     "sheets": ("sheets.json", "native_blast_database_sheet_set_v2"),
+     "native_convergence": ("native-convergence.json", "blast_native_convergence_extraction_v1")}
++_ARTIFACT_ROLES_FUNCTION = {**_ARTIFACT_ROLES,
++    "sheets": ("sheets.json", _FUNCTION_SHEETS), "calculations": ("calculations.json", _FUNCTION_CALCULATIONS),
++    "rows": ("rows.ndjson", "native_blast_vdb_function_numeric_row_v1")}
+ 
+ 
+ def _artifact_roles(version):
+@@ -947,30 +1115,43 @@
+         return _ARTIFACT_ROLES
+     if version == "native_blast_database_result_worker_manifest_v2":
+         return _ARTIFACT_ROLES_V2
++    if version == _FUNCTION_MANIFEST:
++        return _ARTIFACT_ROLES_FUNCTION
+     raise ValueError("native_blast_database_manifest_version_invalid")
+ 
+ 
+-def _request_schema():
+-    return _views._object(dict(version={"const": "native_blast_database_result_worker_request_v1"}, calculation_id=_views._SHA,
++def _request_schema(version="native_blast_database_result_worker_request_v1"):
++    function_mode = version == _FUNCTION_REQUEST
++    value = _views._object(dict(version={"const": version}, calculation_id=_views._SHA,
+         bundle=_contracts.NATIVE_BLAST_DATABASE_BUNDLE_SCHEMA, bundle_artifact_ref=_views._REF,
+         bundle_capture=_views._object(dict(path=_ABS, sha256=_views._SHA, size_bytes=_views._I0)),
+         authenticated_attempt=_ATTEMPT, artifacts=_views._array(_views._object(dict(artifact_key=_views._TOKEN, path=_ABS, **_FILE_ID))),
+-        metadata_descriptors=_views._array(_DESCRIPTOR), retained_sources=_views._array(_views._object(dict(source_ref=_views._REF, path=_ABS, **_FILE_ID))),
++        metadata_descriptors=_views._array(_descriptor(function_mode)), retained_sources=_views._array(_views._object(dict(source_ref=_views._REF, path=_ABS, **_FILE_ID))),
+         subject_snapshots=_views._array(_views._object(dict(**_SNAPSHOT_ID, sequence_path=_ABS))),
+         implementation=_views._object(dict(manifest_sha256=_views._SHA, files=_views._array(_views._object(dict(module=_views._TOKEN, path=_ABS, sha256=_views._SHA)), minItems=1))),
+         sequence_model=_MODEL, output_directory=_ABS, reuse=_views._nullable(_views._object(dict(
+             manifest_path=_ABS, manifest_sha256=_views._SHA, manifest_size_bytes=_views._I0, collection_path=_ABS, sheets_path=_ABS)))))
++    if function_mode:
++        value["properties"]["vdb_function_model"] = {"type": "object"}
++        value["required"].append("vdb_function_model")
++    elif version != "native_blast_database_result_worker_request_v1":
++        raise ValueError("native_blast_database_request_version_invalid")
++    return value
+ 
+ 
+ def _manifest_schema(version="native_blast_database_result_worker_manifest_v1"):
+     roles = _artifact_roles(version)
+-    return _views._object(dict(version={"const": version}, calculation_id=_views._SHA,
++    value = _views._object(dict(version={"const": version}, calculation_id=_views._SHA,
+         request_sha256=_views._SHA, status={"enum": ["complete", "partial", "failed"]}, input_identity=_views._SHA,
+         input_interpretation_id=_views._SHA, input_implementation_sha256=_views._SHA, implementation_manifest_sha256=_views._SHA,
+         sequence_model=_MODEL, artifacts=_views._array(_views._object(dict(role={"enum": list(roles)},
+             relative_path=_views._TOKEN, sha256=_views._SHA, size_bytes=_views._I0, schema=_views._TOKEN))),
+         counts=_views._object(dict(searches=_views._I0, native_hsp_slots=_views._I0, numerical_rows=_views._I0)),
+         failures=_views._array(_views._failure_schema())))
++    if version == _FUNCTION_MANIFEST:
++        value["properties"]["vdb_function_model"] = {"type": "object"}
++        value["required"].append("vdb_function_model")
++    return value
+ 
+ 
+ def _decode(raw):
+@@ -1009,7 +1190,7 @@
+ _DEPENDENCY_ROOTS = {"Bio", "numpy", "jsonschema", "jsonschema_specifications", "referencing", "rpds", "attr", "attrs"}
+ 
+ 
+-def _implementation_modules(*, execution_program=None):
++def _implementation_modules(*, execution_program=None, vdb_function=False):
+     """Actual loaded scientific dependency closure, excluding unrelated callers."""
+     names = ["gene_annotation_episode." + name for name in (
+         "native_blast_database_result_worker", "native_blast_database_result_views", "native_blast_database_metadata",
+@@ -1020,6 +1201,9 @@
+     if execution_program in ("psiblast", "deltablast"):
+         names.extend("gene_annotation_episode." + name for name in
+             ("native_blast_database_convergence", "blast_native_iteration_records"))
++    if vdb_function:
++        names.extend("gene_annotation_episode." + name for name in
++            ("blast_vdb_function_inputs", "blast_vdb_function_calculators", "native_blast_vdb_function_metadata"))
+     for name in names:
+         importlib.import_module(name)
+     names.extend(name for name, module in tuple(sys.modules.items()) if name.split(".")[0] in _DEPENDENCY_ROOTS and getattr(module, "__file__", None))
+@@ -1027,7 +1211,7 @@
+     return {name: sys.modules[name] for name in sorted(set(names))}
+ 
+ 
+-def _verify_implementation(implementation, *, execution_program=None):
++def _verify_implementation(implementation, *, execution_program=None, vdb_function=False):
+     expected = native_blast_database_implementation_identity(implementation["files"])
+     if implementation["manifest_sha256"] != expected:
+         raise _WorkerFailure("worker", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/implementation/manifest_sha256")
+@@ -1039,7 +1223,7 @@
+     for name in files:
+         if name not in sys.modules and name.split(".")[0] in _DEPENDENCY_ROOTS:
+             importlib.import_module(name)
+-    modules = _implementation_modules(execution_program=execution_program)
++    modules = _implementation_modules(execution_program=execution_program, vdb_function=vdb_function)
+     if not set(modules) <= set(files):
+         raise _WorkerFailure("worker", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/implementation/files")
+     if Path(__file__).resolve() != Path(files["gene_annotation_episode.native_blast_database_result_worker"]["path"]).resolve():
+@@ -1152,10 +1336,13 @@
+     reused = request["reuse"]
+     raw = _verified_bytes(reused["manifest_path"], reused["manifest_sha256"], reused["manifest_size_bytes"], frozen=True, pointer="/reuse/manifest_path")
+     manifest = _decode(raw); _shape(manifest, _manifest_schema(manifest.get("version")))
++    function_mode = request["version"] == _FUNCTION_REQUEST
++    if function_mode != (manifest["version"] == _FUNCTION_MANIFEST):
++        raise _WorkerFailure("population", "native_blast_database_sheet_invalid", "metadata_shape_invalid", pointer="/reuse")
+     roles = _artifact_roles(manifest["version"])
+     identities = native_blast_database_calculation_identity(input_identity=manifest["input_identity"],
+         input_implementation_sha256=manifest["input_implementation_sha256"], sequence_model=manifest["sequence_model"],
+-        implementation_manifest_sha256=manifest["implementation_manifest_sha256"])
++        implementation_manifest_sha256=manifest["implementation_manifest_sha256"], vdb_function_model=manifest.get("vdb_function_model"))
+     if (manifest["status"] == "failed" or manifest["input_identity"] != input_identity
+             or any(manifest[k] != value for k, value in identities.items())):
+         raise _WorkerFailure("inputs", "native_blast_database_frozen_artifact_changed", "frozen_value_changed", pointer="/reuse")
+@@ -1192,7 +1379,16 @@
+             if (data != _json_bytes(extraction)
+                     or any(artifact[k] != expected[k] for k in ("sha256", "size_bytes"))):
+                 raise _WorkerFailure("inputs", "native_blast_database_frozen_artifact_changed", "frozen_value_changed", pointer="/reuse/native_convergence")
+-    return values["collection"], values["sheets"], manifest["input_implementation_sha256"], manifest["version"]
++    saved_calculations = None
++    if function_mode:
++        artifact = artifacts.get("calculations")
++        if artifact is None:
++            raise _WorkerFailure("population", "native_blast_database_sheet_invalid", "metadata_shape_invalid", pointer="/reuse")
++        path = str(Path(reused["manifest_path"]).parent / artifact["relative_path"])
++        saved_calculations = _decode(_verified_bytes(path, artifact["sha256"], artifact["size_bytes"], frozen=True, pointer="/reuse/calculations"))
++        if saved_calculations.get("schema") != _FUNCTION_CALCULATIONS:
++            raise _WorkerFailure("population", "native_blast_database_sheet_invalid", "metadata_shape_invalid", pointer="/reuse/calculations")
++    return values["collection"], values["sheets"], manifest["input_implementation_sha256"], manifest["version"], saved_calculations
+ 
+ 
+ def _metadata_failures(issues):
+@@ -1216,7 +1412,13 @@
+     request = _decode(request_bytes)
+     if type(request) is dict and "sequence_model" in request:
+         _model(request["sequence_model"])
+-    _shape(request, _request_schema())
++    _shape(request, _request_schema(request.get("version")))
++    function_mode = request["version"] == _FUNCTION_REQUEST
++    if function_mode:
++        from .blast_vdb_function_calculators import validate_blast_vdb_function_model
++        validate_blast_vdb_function_model(request["vdb_function_model"])
++        if request["bundle"]["program"] not in ("blastn_vdb", "tblastn_vdb"):
++            raise ValueError("native_blast_database_program_unsupported")
+     directory = Path(_absolute_path(request["output_directory"]))
+     directory.mkdir(parents=True, exist_ok=True)
+     if any(directory.iterdir()):
+@@ -1225,14 +1427,17 @@
+     input_implementation = request["implementation"]["manifest_sha256"]
+     initial = native_blast_database_calculation_identity(input_identity=input_identity,
+         input_implementation_sha256=input_implementation, sequence_model=request["sequence_model"],
+-        implementation_manifest_sha256=request["implementation"]["manifest_sha256"])
++        implementation_manifest_sha256=request["implementation"]["manifest_sha256"], vdb_function_model=request.get("vdb_function_model"))
+     program = request["bundle"]["requested_job"]["native_blast_database"]["program"]
+-    version = "native_blast_database_result_worker_manifest_v2" if program in ("psiblast", "deltablast") else "native_blast_database_result_worker_manifest_v1"
++    version = _FUNCTION_MANIFEST if function_mode else "native_blast_database_result_worker_manifest_v2" if program in ("psiblast", "deltablast") else "native_blast_database_result_worker_manifest_v1"
+     manifest = dict(version=version, calculation_id=request["calculation_id"],
+         request_sha256=hashlib.sha256(request_bytes).hexdigest(), status="failed", input_identity=input_identity,
+         input_interpretation_id=initial["input_interpretation_id"], input_implementation_sha256=input_implementation,
+         implementation_manifest_sha256=request["implementation"]["manifest_sha256"], sequence_model=deepcopy(request["sequence_model"]),
+         artifacts=[], counts=dict(searches=0, native_hsp_slots=0, numerical_rows=0), failures=[])
++    if function_mode:
++        manifest["vdb_function_model"] = deepcopy(request["vdb_function_model"])
++    saved_calculations = None
+     failures, metadata_issues, errors = manifest["failures"], [], []
+     stage = "capture"
+     def save(role, value):
+@@ -1251,14 +1456,14 @@
+             raise _WorkerFailure("capture", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/bundle_capture")
+         bundle = _contracts.validate_native_blast_database_bundle(request["bundle"],
+             original_job=request["bundle"]["requested_job"]["native_blast_database"], attempt_identity=request["authenticated_attempt"])
+-        _verify_implementation(request["implementation"], execution_program=program)
+-        catalog, contents = _catalog(request, failures)
++        _verify_implementation(request["implementation"], execution_program=program, vdb_function=function_mode)
++        catalog, contents = _catalog(request, failures) if request["reuse"] is None else (None, None)
+         for i, native_failure in enumerate(bundle["failures"]):
+             failures.append(_WorkerFailure("capture", "native_blast_database_capture_incomplete", "artifact_bytes_unavailable",
+                 artifact_key=native_failure["artifact_key"], input_key=native_failure["input_key"], pointer=f"/bundle/failures/{i}").failure)
+         stage = "inputs"
+         if request["reuse"] is not None:
+-            collection, sheets, input_implementation, saved_version = _reuse(request, input_identity)
++            collection, sheets, input_implementation, saved_version, saved_calculations = _reuse(request, input_identity)
+             manifest["version"] = saved_version
+             prepared = sheets["prepared_inputs"]
+         else:
+@@ -1288,9 +1493,16 @@
+                 save_extraction(binding)
+                 options["native_convergence"] = binding
+             sheets = populate_native_blast_database_sheets(collection, prepared_inputs=prepared, artifact_catalog=catalog, **options)
++            if function_mode:
++                from .native_blast_vdb_function_metadata import populate_native_blast_vdb_function_sheets
++                populated = populate_native_blast_vdb_function_sheets(sheets,
++                    prepared_inputs=sheets["prepared_inputs"], artifact_catalog=catalog)
++                sheets.update(schema=_FUNCTION_SHEETS, vdb_function=populated["sheets"])
++                sheets["issues"].extend(populated["issues"])
+             save("sheets", sheets)
+         identities = native_blast_database_calculation_identity(input_identity=input_identity, input_implementation_sha256=input_implementation,
+-            sequence_model=request["sequence_model"], implementation_manifest_sha256=request["implementation"]["manifest_sha256"])
++            sequence_model=request["sequence_model"], implementation_manifest_sha256=request["implementation"]["manifest_sha256"],
++            vdb_function_model=request.get("vdb_function_model"))
+         manifest.update(input_implementation_sha256=input_implementation, input_interpretation_id=identities["input_interpretation_id"])
+         if request["calculation_id"] != identities["calculation_id"]:
+             raise _WorkerFailure("inputs", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/calculation_id")
+@@ -1306,7 +1518,8 @@
+             failures.append(_WorkerFailure("collection", "native_blast_database_report_unreadable", "native_syntax_invalid",
+                 artifact_key=issue.get("artifact_key"), pointer=f"/collection/issues/{i}").failure)
+         stage = "calculation"
+-        calculations = calculate_native_blast_database_sheets(sheets, sequence_model=request["sequence_model"])
++        calculations = calculate_native_blast_database_sheets(sheets, sequence_model=request["sequence_model"],
++            **(dict(vdb_function_model=request["vdb_function_model"], saved_calculations=saved_calculations) if function_mode else {}))
+         save("calculations", calculations)
+         manifest["counts"]["native_hsp_slots"] = len(calculations["native_hsp_components"])
+         for i, issue in enumerate(calculations["issues"]):
+@@ -1320,11 +1533,11 @@
+             index.append(dict(family=row["family"], record_key=row["record_key"], ordinal=ordinal, byte_start=position, byte_end=position + len(data)))
+             chunks.append(data); position += len(data)
+         record = _atomic_bytes(directory, "rows.ndjson", b"".join(chunks))
+-        manifest["artifacts"].append(dict(role="rows", relative_path="rows.ndjson", schema=_ARTIFACT_ROLES["rows"][1], **record))
++        manifest["artifacts"].append(dict(role="rows", relative_path="rows.ndjson", schema=_artifact_roles(manifest["version"])["rows"][1], **record))
+         save("row_index", dict(schema="native_blast_database_row_index_v1", calculation_id=request["calculation_id"], rows=index))
+         manifest["counts"]["numerical_rows"] = len(rows)
+-        save("metric_definitions", _views.native_blast_database_metric_definitions())
+-        _verify_implementation(request["implementation"], execution_program=program)
++        save("metric_definitions", _views.native_blast_database_metric_definitions(include_vdb_function=function_mode))
++        _verify_implementation(request["implementation"], execution_program=program, vdb_function=function_mode)
+         manifest["status"] = "partial" if failures else "complete"
+     except _WorkerFailure as error:
+         failures.append(error.failure)
+--- before/gene_annotation_episode/native_blast_database_results.py
++++ installed/gene_annotation_episode/native_blast_database_results.py
+@@ -16,12 +16,15 @@
+     is_native_blast_database_target, _source_payload, _validate_capture)
+ from .native_blast_database_result_publication import (prepare_native_blast_database_grading,
+     publish_selected_native_blast_database_rows, validate_native_blast_database_publication,
+-    _failure, _json, _json_artifact, _exception_diagnostic, _local_job_failure)
++    _failure, _json, _json_artifact, _exception_diagnostic, _local_job_failure,
++    saved_function_input_descriptor)
+ from .native_blast_database_result_views import (native_blast_database_fact_sources,
+-    validate_native_blast_database_result_selector)
++    validate_native_blast_database_result_selector, FUNCTION_SELECTOR, SAVED_INPUT_SOURCE,
++    saved_function_descriptor, _SAVED_INPUT_SCHEMA)
+ from .practical_execution_state import _immutable, _read
+ 
+ VERSION = 'native_blast_database_result_receipt_v1'
++FUNCTION_VERSION = 'native_blast_database_result_receipt_vdb_function_v1'
+ IDENTIFIER_NAMESPACES = ('native_blast_database_row', 'native_blast_database_artifact_key',
+     'native_blast_database_search_pointer', 'native_blast_database_entity_key')
+ ACQUISITION_SOURCE = 'execution_blast_database_acquisition'
+@@ -31,7 +34,18 @@
+ 
+ def operation_catalog():
+     return [{'name': 'execution.results.status', 'description': 'Observe the exact original database attempt once.', 'input_schema': obj({})},
+-        {'name': 'execution.results.collect', 'description': 'Capture the complete original database bundle and return the assigned frozen numerical view.', 'input_schema': obj({})}]
++        {'name': 'execution.results.collect', 'description': 'Execute the assigned input mode: capture the original database bundle, or calculate the selected VDB model from an exact received saved sheet; return its frozen numerical view.', 'input_schema': obj({})}]
++
++
++def _saved_failure(error):
++    message = str(error)
++    if 'frozen_artifact' in message or message == 'artifact_digest_mismatch':
++        return _failure('worker', 'native_blast_database_frozen_artifact_changed', 'frozen_value_changed')
++    if 'sheet_invalid' in message or 'sheet_schema' in message:
++        return _failure('population', 'native_blast_database_sheet_invalid', 'metadata_shape_invalid')
++    if message.startswith('blast_vdb_function_') and ('model' in message or 'prior' in message):
++        return _failure('calculation', 'native_blast_database_calculation_failed', 'calculator_contract_invalid')
++    return _failure('authority', 'native_blast_database_return_unauthorized', 'scope_or_receipt_conflict')
+ 
+ 
+ def schema_references(value, schema):
+@@ -82,10 +96,13 @@
+         directory.mkdir(parents=True, exist_ok=True)
+         return directory
+ 
+-    def _validate_body(self, body, scope):
++    def _validate_body(self, body, scope, *, _seen=()):
+         expected = {'version', 'run_id', 'episode_id', 'scope', 'assignment', 'operation_key', 'tool_name', 'arguments',
+             'target', 'observation', 'capture', 'preparation', 'publication', 'record_refs', 'failures', 'diagnostic_artifact_refs', 'complete'}
+-        if type(body) is not dict or set(body) != expected or body['version'] != VERSION or body['run_id'] != self.owner.run_id:
++        function_mode = type(body) is dict and body.get('version') == FUNCTION_VERSION
++        if function_mode:
++            expected.update(('calculation_input', 'reused_result_receipt'))
++        if type(body) is not dict or set(body) != expected or body['version'] not in (VERSION, FUNCTION_VERSION) or body['run_id'] != self.owner.run_id:
+             raise ContractError('native_blast_database_result_receipt_invalid')
+         context = self.original_records.context(body['episode_id'])
+         if (context.role != 'results' or plain(context.assignment) != body['assignment']
+@@ -95,8 +112,23 @@
+         target = self.owner.job_progress_provider.targets.read_target(body['assignment']['handoff_ref'], body['scope'])
+         if target != body['target'] or not is_native_blast_database_target(target):
+             raise ContractError('native_blast_database_original_target_conflict')
+-        validate_native_blast_database_result_selector(body['assignment']['selector'],
++        selector = validate_native_blast_database_result_selector(body['assignment']['selector'],
+             program=target['assignment']['requested_job']['native_blast_database']['program'])
++        if function_mode != (selector['version'] == FUNCTION_SELECTOR):
++            raise ContractError('native_blast_database_result_receipt_invalid')
++        saved_mode = function_mode and selector['calculation_input']['mode'] == 'saved_function_sheet'
++        if function_mode and (body['calculation_input'] != selector['calculation_input']
++                or body['reused_result_receipt'] != selector['calculation_input'].get('original_result_receipt')):
++            raise ContractError('native_blast_database_return_unauthorized')
++        if saved_mode:
++            if body['observation'] is not None or body['capture'] is not None:
++                raise ContractError('native_blast_database_saved_capture_conflict')
++            if body['publication'] is not None or body['preparation'] is not None or body['record_refs']:
++                original = self._read_saved_function_input(saved_function_descriptor(body['calculation_input']), scope, _seen=_seen)
++                if original['target'] != target:
++                    raise ContractError('native_blast_database_return_unauthorized')
++                self.owner.native_blast_database_returns.resolve_saved_function_input(context,
++                    saved_function_descriptor(body['calculation_input']))
+         action = self.owner._selected_result_action(body['episode_id'], body['operation_key'], body['tool_name'], body['arguments'])
+         if body['arguments'] != {} or body['tool_name'] not in {r['name'] for r in operation_catalog()}:
+             raise ContractError('native_blast_database_original_operation_conflict')
+@@ -104,7 +136,7 @@
+         if _read(directory / 'receipt.json') != body:
+             raise ContractError('native_blast_database_original_receipt_conflict')
+         intent = {key: body[key] for key in ('target', 'assignment', 'operation_key', 'tool_name', 'arguments', 'scope')}
+-        if _read(directory / 'intent.json') != intent or _read(directory / 'observation.json') != body['observation']:
++        if _read(directory / 'intent.json') != intent or (not saved_mode and _read(directory / 'observation.json') != body['observation']):
+             raise ContractError('native_blast_database_original_action_conflict')
+         if action['result'] is not None:
+             outcome = json.loads(action['result'])
+@@ -169,12 +201,37 @@
+         else:
+             if self.completion(context) is not None:
+                 raise ContractError('execution_results_assignment_already_completed')
+-            if not (directory / 'observation.json').exists():
++            function_mode = selector['version'] == FUNCTION_SELECTOR
++            saved_mode = function_mode and selector['calculation_input']['mode'] == 'saved_function_sheet'
++            if not saved_mode and not (directory / 'observation.json').exists():
+                 _immutable(directory / 'observation.json', self.owner.job_progress_provider.targets.observe_target(target, operation_key=operation_key))
+-            body = dict(version=VERSION, run_id=context.run_id, episode_id=context.episode_id, **intent,
+-                observation=_read(directory / 'observation.json'), capture=None, preparation=None, publication=None,
++            body = dict(version=FUNCTION_VERSION if function_mode else VERSION, run_id=context.run_id, episode_id=context.episode_id, **intent,
++                observation=None if saved_mode else _read(directory / 'observation.json'), capture=None, preparation=None, publication=None,
+                 record_refs=[], failures=[], diagnostic_artifact_refs=[], complete=False)
+-            if tool_name == 'execution.results.collect':
++            if function_mode:
++                body.update(calculation_input=deepcopy(selector['calculation_input']),
++                    reused_result_receipt=deepcopy(selector['calculation_input'].get('original_result_receipt')))
++            if saved_mode and tool_name == 'execution.results.collect':
++                try:
++                    descriptor = saved_function_descriptor(selector['calculation_input'])
++                    original = self.owner.native_blast_database_returns.resolve_saved_function_input(context, descriptor)
++                    if original['target'] != target:
++                        raise ContractError('native_blast_database_return_unauthorized')
++                    prepared = prepare_native_blast_database_grading(self.store, context=context, target=target,
++                        capture=None, selector=selector, directory=directory / 'grading',
++                        policy=LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None), original_body=original)
++                    body['preparation'] = prepared
++                    publication = publish_selected_native_blast_database_rows(self.store, context=context,
++                        preparation=prepared, selector=selector, directory=directory / 'publication')
++                    body.update(publication=publication, record_refs=publication['record_refs'],
++                        failures=publication['failures'], complete=publication['complete'])
++                except (AcquisitionError, ValueError, KeyError, TypeError, OSError) as error:
++                    failure = _local_job_failure(error) if isinstance(error, AcquisitionError) else _saved_failure(error)
++                    body['failures'].append(failure)
++                    body['diagnostic_artifact_refs'].append(_json_artifact(self.store,
++                        {'schema': 'native_blast_database_diagnostics_v1', 'failures': [failure], 'metadata_issues': [],
++                         'errors': [_exception_diagnostic(error)], 'calculation_input': selector['calculation_input']}))
++            elif tool_name == 'execution.results.collect':
+                 capture = capture_native_blast_database_bundle(self.store, target=target,
+                     reader=self.owner.job_progress_provider.targets, operation_key=operation_key, directory=directory / 'capture')
+                 body['capture'] = capture
+@@ -241,6 +298,31 @@
+             return body
+         raise ContractError('not_a_native_blast_database_acquired_result')
+ 
++    def _read_saved_function_input(self, descriptor, scope, *, _seen=()):
++        validate_schema(descriptor, _SAVED_INPUT_SCHEMA)
++        address = descriptor['original_result_receipt']
++        key = (address['run_id'], address['episode_id'], address['operation_key'])
++        if key in _seen or address['run_id'] != self.owner.run_id:
++            raise ContractError('native_blast_database_return_unauthorized')
++        context = self.original_records.context(address['episode_id'])
++        path = self._directory(context) / digest(address['operation_key']) / 'receipt.json'
++        if not path.is_file():
++            raise ContractError('native_blast_database_return_unauthorized')
++        body = _read(path)
++        if (digest(body) != address['receipt_sha256'] or body.get('version') != FUNCTION_VERSION
++                or body.get('run_id') != address['run_id'] or body.get('episode_id') != address['episode_id']
++                or body.get('operation_key') != address['operation_key'] or address['source_ref'] not in body.get('record_refs', [])):
++            raise ContractError('native_blast_database_return_unauthorized')
++        body = self._validate_body(body, scope, _seen=(*_seen, key))
++        action = self.owner._selected_result_action(context.episode_id, body['operation_key'], body['tool_name'], body['arguments'])
++        if action['result'] is None or saved_function_input_descriptor(self.store, body) != descriptor:
++            raise ContractError('native_blast_database_return_unauthorized')
++        return deepcopy(body)
++
++    def read_saved_function_input(self, descriptor: dict, scope: dict) -> dict:
++        """Read one exact durable receipt and its finite authenticated chain."""
++        return self._read_saved_function_input(descriptor, scope)
++
+     def facts(self, context):
+         result, seen = empty_facts(), {}
+         fields = plain(context.request).get('report_contract', {}).get('measurements', {}).get('schema', {}).get('properties', {})
+@@ -254,6 +336,15 @@
+             publication = body['publication']
+             if publication is None:
+                 continue
++            if SAVED_INPUT_SOURCE in requested and body['version'] == FUNCTION_VERSION:
++                try:
++                    descriptor = saved_function_input_descriptor(self.store, body)
++                except ContractError as error:
++                    if str(error) not in {'native_blast_database_saved_function_input_unavailable', 'native_blast_database_sheet_invalid'}:
++                        raise
++                else:
++                    if descriptor not in result[SAVED_INPUT_SOURCE]:
++                        result[SAVED_INPUT_SOURCE].append(descriptor)
+             result[ACQUISITION_SOURCE] = {k: publication[k] for k in result[ACQUISITION_SOURCE]}
+             for family, rows in publication['rows_by_family'].items():
+                 source = 'execution_blast_database_' + family + '_rows'
+@@ -278,6 +369,16 @@
+                 return kind == 'source' if namespace == 'source' else kind in {'input', 'feature', 'product', 'read_subject'} if namespace == 'subject' else True
+             if body['publication'] is None:
+                 continue
++            if body['version'] == FUNCTION_VERSION:
++                try:
++                    descriptor = saved_function_input_descriptor(self.store, body)
++                except ContractError as error:
++                    if str(error) not in {'native_blast_database_saved_function_input_unavailable', 'native_blast_database_sheet_invalid'}:
++                        raise
++                else:
++                    schema = descriptors[SAVED_INPUT_SOURCE]['report_schema']
++                    if any(ref == reference and ns == namespace for ref, ns, _ in schema_references([descriptor], schema)):
++                        return True
+             for family, rows in body['publication']['rows_by_family'].items():
+                 schema = descriptors['execution_blast_database_' + family + '_rows']['report_schema']
+                 if any(ref == reference and ns == namespace for ref, ns, _ in schema_references(rows, schema)):
+@@ -304,6 +405,8 @@
+ 
+     def result_identity(self, reference, scope):
+         body = self.read_result(reference, scope)
++        while body.get('calculation_input', {}).get('mode') == 'saved_function_sheet':
++            body = self.read_saved_function_input(saved_function_descriptor(body['calculation_input']), scope)
+         bundle = _json(self.store, body['capture']['bundle_artifact_ref'])
+         record = self.store.get(reference)
+         if record['record_type'] == 'source':
+@@ -322,7 +425,8 @@
+                     body['tool_name'], body['arguments'])['result'] is not None:
+                 return dict(version='practical_completion_v1', run_id=context.run_id, episode_id=context.episode_id,
+                     assignment_sha256=digest(context.assignment), endpoint='usable_handoff', operation_key=body['operation_key'],
+-                    receipt_sha256=digest(body), validation_keys=['original_native_attempt', 'complete_sealed_bundle_acquisition',
++                    receipt_sha256=digest(body), validation_keys=['original_native_attempt',
++                        'authenticated_saved_function_sheet' if body.get('calculation_input', {}).get('mode') == 'saved_function_sheet' else 'complete_sealed_bundle_acquisition',
+                         'requested_native_numerical_projection'])
+         return None
+ 
+--- before/gene_annotation_episode/native_blast_database_returns.py
++++ installed/gene_annotation_episode/native_blast_database_returns.py
+@@ -12,7 +12,9 @@
+ from .episode_return_records import EpisodeReturnRecords
+ from .execution_contracts import canonical
+ from .form_reference_validation import _binding_key, form_validation_value
+-from .native_blast_database_result_views import native_blast_database_fact_sources
++from .native_blast_database_result_views import native_blast_database_fact_sources, SAVED_INPUT_SOURCE, _SAVED_INPUT_SCHEMA
++from .native_blast_database_result_publication import _known, _original_commission
++from .domain import ContractError, validate_schema
+ from .native_blast_database_results import (ACQUISITION_SOURCE, FAILURE_SOURCE, IDENTIFIER_NAMESPACES,
+     REFERENCE_SOURCE, schema_references)
+ 
+@@ -144,7 +146,7 @@
+             result.extend(ref for ref, _, kind in schema_references(value, schema) if kind == 'reference')
+         return list(dict.fromkeys(result))
+ 
+-    def _received(self, context):
++    def _received(self, context, *, before_index=None):
+         self.authenticate(context, allow_unsaved=True)
+         if context.role not in {'annotation', 'scientific_process'}:
+             return {'groups': {}, 'references': []}
+@@ -154,6 +156,8 @@
+             'WHERE run_id=? AND parent_episode_id=? AND form IS NOT NULL AND failure IS NULL ORDER BY decision_index',
+             (self.run_id, context.episode_id))
+         for row in attempts:
++            if before_index is not None and row['decision_index'] >= before_index:
++                continue
+             schema = json.loads(row['contract']).get('measurements', {}).get('schema', {})
+             if not requested_sources(schema) and not _generic(schema):
+                 continue
+@@ -256,5 +260,40 @@
+             pass
+         return None
+ 
++    def resolve_saved_function_input(self, context, descriptor: dict) -> dict:
++        """Require this exact descriptor in a real earlier return or inheritance.
++
++        The original commission's prefix excludes the new child's own return and
++        every later sibling. Source/artifact possession alone is insufficient.
++        """
++        from method_loop.identities import EpisodeRef
++        validate_schema(descriptor, _SAVED_INPUT_SCHEMA)
++        self.authenticate(context, allow_unsaved=True)
++        refs = self._references({SAVED_INPUT_SOURCE: [descriptor]})
++        if not set(refs) <= _known(self.store, context):
++            raise ContractError('native_blast_database_return_unauthorized')
++        current, before_index = context, None
++        if context.role == 'results':
++            _original_commission(self.store, context)
++        while True:
++            if current.role in {'annotation', 'scientific_process'}:
++                values = self._received(current, before_index=before_index)['groups'].get(SAVED_INPUT_SOURCE, [])
++                if any(self._equal(descriptor, value) for value in values):
++                    body = self.results.read_saved_function_input(descriptor, plain(context.scope))
++                    if context.role == 'results' and body['target'] != self.owner._target(context):
++                        raise ContractError('native_blast_database_return_unauthorized')
++                    return body
++            if len(current.path) < 2:
++                break
++            label = current.path[-1][1]
++            index = label.removeprefix('child_')
++            if not label.startswith('child_') or not index.isdecimal() or str(int(index)) != index:
++                break
++            before_index = int(index)
++            current = self.context(EpisodeRef(self.run_id, current.path[:-1]).episode_id)
++            if not set(refs) <= _known(self.store, current):
++                break
++        raise ContractError('native_blast_database_return_unauthorized')
++
+ 
+ __all__ = ['NativeBLASTDatabaseReturns', 'FACT_SOURCES', 'REFERENCE_SOURCE', 'requested_sources']
+--- before/gene_annotation_episode/native_blast_database_tool_info.py
++++ installed/gene_annotation_episode/native_blast_database_tool_info.py
+@@ -86,6 +86,20 @@
+             "function assignment nor a confidence score. Missing reports, unsuccessful native exits, partial captures and successful "
+             "zero-hit reports remain distinct. Request only the typed facts needed by the receiving episode. Full native artifacts "
+             "and sheets remain retained separately from small typed returns.")
++        if program in {'blastn_vdb', 'tblastn_vdb'}:
++            instructions += (
++                " Candidate-function results require the explicitly selected "
++                "native_blast_database_result_selector_vdb_function_v1, its vdb_function_model and calculation_input. "
++                "The captured_inputs mode accepts source-qualified vdb_function metadata, freezes the full function sheet "
++                "and calls the separate deterministic function calculator. Conditional function weights are model values, "
++                "not calibrated annotation probabilities; full census correction needs actual complete compatible enumeration. "
++                "The saved_function_sheet mode selects the exact generation descriptor previously received through the "
++                "parent's requested execution_blast_database_vdb_function_saved_inputs field. It authenticates the original "
++                "receipt and saved sheet, then applies the selected model without observing the native job, acquiring data, "
++                "parsing reports, populating inputs or recalculating base measurements. New records require a new explicit "
++                "captured input interpretation. Both modes run the bounded numerical worker with 20 GiB RAM, 4 GiB scratch "
++                "and no wall-time cap, and return only the requested typed numerical cells and saved-input descriptors. "
++                "Local database searches remain outside this result calculation operation.")
+         result.append({"name": "native." + program, "description": _DESCRIPTIONS[program], "resources": "hpc",
+             "instructions": instructions, "input_schema": schema,
+             "invocation_route": {"kind": "commission", "routes": [{"entry_role": "launch", "resource_id": resource_id,
+--- before/tests/test_native_blast_database_metadata.py
++++ installed/tests/test_native_blast_database_metadata.py
+@@ -32,8 +32,8 @@
+     return kind + "_" + digest(str(value).encode())[:24]
+ 
+ 
+-def empty_payload(consumer):
+-    schema = m._SCHEMAS[consumer]
++def empty_payload(consumer, schema_id=None):
++    schema = m._SCHEMAS[consumer] if schema_id is None else m._schema_for(consumer, schema_id)
+     return {k: schema["properties"][k]["enum"][0] if k == "schema" else [] for k in schema["properties"]}
+ 
+ 
+@@ -91,10 +91,10 @@
+     return dict(document_key=key, artifact=dict(kind="received", **{k: entry[k] for k in ("source_ref", "artifact_ref", "sha256", "size_bytes")}), format=format)
+ 
+ 
+-def metadata(tmp_path, catalog, consumer, payload, key="metadata", *, raw=None):
++def metadata(tmp_path, catalog, consumer, payload, key="metadata", *, raw=None, schema_id=None):
+     raw = encoded(payload) if raw is None else raw
+     doc = source(tmp_path, catalog, key, raw)
+-    descriptor = dict(input_key=key, consumer=consumer, schema_id=empty_payload(consumer)["schema"],
++    descriptor = dict(input_key=key, consumer=consumer, schema_id=schema_id or empty_payload(consumer)["schema"],
+         **{k: doc["artifact"][k] for k in ("artifact_ref", "sha256", "size_bytes")}, origin="selected_results_input")
+     return dict(descriptor=descriptor, payload=payload)
+ 
+@@ -127,10 +127,10 @@
+     monkeypatch.setattr(socket, "socket", fail)
+ 
+ 
+-@pytest.mark.parametrize("consumer", [r["consumer"] for r in m.metadata_schema_registry()])
+-def test_exact_registry_closed_shapes_pure_and_detached(tmp_path, monkeypatch, consumer):
+-    job, bundle, catalog, _ = fixture(tmp_path)
+-    raw = metadata(tmp_path, catalog, consumer, empty_payload(consumer))
++@pytest.mark.parametrize("consumer,schema_id", [(r["consumer"], r["schema_id"]) for r in m.metadata_schema_registry()])
++def test_exact_registry_closed_shapes_pure_and_detached(tmp_path, monkeypatch, consumer, schema_id):
++    job, bundle, catalog, _ = fixture(tmp_path, "blastn_vdb" if consumer == "vdb_function" else "psiblast")
++    raw = metadata(tmp_path, catalog, consumer, empty_payload(consumer, schema_id), schema_id=schema_id)
+     docs = dict(descriptor=raw["descriptor"], documents=[], primary_reports=[],
+         bundle_source_ref=catalog["bundle_source_ref"], bundle_artifact_ref=catalog["bundle_artifact_ref"])
+     forbid_scoring(monkeypatch)
+@@ -1074,7 +1074,8 @@
+         ("profile", "native_blast_database_profile_metadata_v1"),
+         ("iteration", "native_blast_database_iteration_metadata_v1"),
+         ("vdb", "native_blast_database_vdb_metadata_v1"),
+-        ("sequence_database", "native_blast_database_sequence_metadata_v2")]
++        ("sequence_database", "native_blast_database_sequence_metadata_v2"),
++        ("vdb_function", "native_blast_vdb_function_metadata_v1")]
+     job, bundle, catalog, _ = fixture(tmp_path)
+     payload = fasta_record_payload(tmp_path, catalog)
+     payload["schema"] = "native_blast_database_sequence_metadata_v1"

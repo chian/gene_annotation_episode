@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "input_hashes": {
+    "COMPATIBILITY_RECEIPT_007.json": "8e7639bcaf5ce6d94147b6d3178f4d2fe7097c2e6b2946bfd284a2cf0c5d0a22",
+    "SOURCE_TEXT_007.txt": "7a69039c4333373acb271a30673b17646ca0a1e9ede5b1432fc258523d6e30c9",
+    "SOURCE_COVARIANCE_007.json": "f3ce8ea2edaec2ced377515a37c3508dec39e9ff7869bd1d02788e119abbc4b4",
+    "SOURCE_SHARED_COVARIANCE_007.json": "e30ed09c8664c06b22626351fafe51aec1f39facb2c694a30c8ae8399f99752d",
+    "SELECTED_ARGUMENT_EXAMPLE_007.json": "e42511a32d2db2e130dd16b2ec9b2bdd1ceb7784b0dfff02bd0f758b002babca",
+    "SELECTION_SCHEMA_007.json": "43ca335312c1f2a604ddd5ba5fd9afd391518a831c922013d8820817cf20ebde"
+  },
+  "independent_exact_results": [
+    {
+      "case": "ordinary",
+      "native_contrast": "6",
+      "native_contrast_variance": "17/10",
+      "contrast_unit": "nmol/min/mg",
+      "variance_unit": "(nmol/min/mg)^2",
+      "source_variable_count": 4,
+      "four_role_source_indices": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "case": "shared_control",
+      "native_contrast": "7",
+      "native_contrast_variance": "34/25",
+      "contrast_unit": "nmol/min/mg",
+      "variance_unit": "(nmol/min/mg)^2",
+      "source_variable_count": 3,
+      "four_role_source_indices": [
+        0,
+        1,
+        2,
+        1
+      ]
+    }
+  ],
+  "scientific_source_review": false,
+  "new_reader_execution": false,
+  "scope": "Exact witness/role-map/contrast/covariance/unit oracle on two invented proposal fixtures. No covariance inference or normal-profile claim."
+}

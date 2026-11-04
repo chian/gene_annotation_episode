@@ -1,0 +1,39 @@
+...............................F.................                        [100%]
+=================================== FAILURES ===================================
+_ test_retained_real_alignment_byte_inputs_without_worker_alignment[moving_is_query] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_execution_2026-10-27_390/check004/temporary/pytest/test_retained_real_alignment_b1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a83bd499160>
+orientation = 'moving_is_query'
+
+    @pytest.mark.parametrize("orientation", ["fixed_is_query", "moving_is_query"])
+    def test_retained_real_alignment_byte_inputs_without_worker_alignment(tmp_path, monkeypatch, orientation):
+>       request, inputs = _f.retained_request(orientation=orientation)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_protein_structure_execution.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../fixture_helpers.py:110: in retained_request
+    for i, (role, file) in enumerate(required_input_files(request))]
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_protein_structure_contracts.py:491: in required_input_files
+    request = validate_protein_structure_request(request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_protein_structure_contracts.py:420: in validate_protein_structure_request
+    value = _checked(value, "ScientificRequest")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_protein_structure_contracts.py:390: in _checked
+    _require(_STRICT(protein_structure_execution_schema(type_name)).is_valid(value))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'invalid_schema'
+
+    def _require(condition, code="invalid_schema"):
+        if not condition:
+>           raise ValueError(code)
+E           ValueError: invalid_schema
+
+../../../gene_annotation_episode/native_protein_structure_contracts.py:370: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_protein_structure_execution.py::test_retained_real_alignment_byte_inputs_without_worker_alignment[moving_is_query]
+1 failed, 48 passed in 69.43s (0:01:09)

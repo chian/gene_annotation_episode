@@ -1,0 +1,84 @@
+{
+  "record_type": "additive_R6_accounting_source_locator_correction",
+  "record_id": "R6_ACCOUNTING_CORRECTION_001",
+  "recorded_at_utc": "2026-10-28T13:37:46.232901+00:00",
+  "original_record": "verification/tool_graders_provider_binding_accounting_2026-10-28_574/R6_ACCOUNTING_001.json",
+  "original_sha256": "4b0e2e905c322763c0e4607fac6bc57cc2bca695edee54886e7895402022940d",
+  "original_record_preserved_unchanged": true,
+  "counts_and_completion_findings_changed": false,
+  "corrections": [
+    {
+      "all_string_occurrences_of": "gene_annotation_episode/rfam_batch_publication.py:publish_rfam_batch_acquisition",
+      "correct_source_locator": "gene_annotation_episode/rfam_batch_publication.py:publish_rfam_batch_result",
+      "reason": "Function citation label in the first accounting record was incorrect; the complete publication module had been read. The actual function starts at line246."
+    },
+    {
+      "provider_scope_id": "R6-P12",
+      "field": "supported_current_modes_endpoints[2].endpoint_source",
+      "replace_with": "gene_annotation_episode/rfam_batch_transport.py:RfamBatchHTTP plus gene_annotation_episode/rfam_discovery.py:BASE_URL/result_url/validate_result_url",
+      "reason": "rfam_batch_client.py is not a repository file; the actual transport is rfam_batch_transport.py. Both actual modules were subsequently read in full."
+    },
+    {
+      "provider_scope_id": "R6-P12",
+      "field": "current_acquisition_ports",
+      "replace_with": [
+        "public.rfam.model",
+        "api.rfam.prepare",
+        "api.rfam.submit",
+        "api.rfam.status",
+        "api.rfam.fetch"
+      ],
+      "reason": "List the exact service operation names and replace the descriptive collection label."
+    }
+  ],
+  "additional_Rfam_endpoint_source_facts": [
+    {
+      "operation": "api.rfam.prepare",
+      "endpoint": null,
+      "meaning": "Validate assigned sequence occurrences only; no HTTP request."
+    },
+    {
+      "operation": "api.rfam.submit",
+      "method": "POST",
+      "endpoint": "https://batch.rfam.org/submit-job",
+      "meaning": "Multipart sequence_file; preserve submitted bytes and original handle."
+    },
+    {
+      "operation": "api.rfam.status",
+      "method": "GET",
+      "endpoint": "https://batch.rfam.org/status/{job_id}",
+      "meaning": "One observation of the original job; no internal polling."
+    },
+    {
+      "operation": "api.rfam.fetch",
+      "method": "GET",
+      "endpoint": "https://batch.rfam.org/result/{job_id}",
+      "meaning": "Selected JSON representation only."
+    },
+    {
+      "operation": "api.rfam.fetch",
+      "method": "GET",
+      "endpoint": "https://batch.rfam.org/result/{job_id}/tblout",
+      "meaning": "Selected native table representation only."
+    },
+    {
+      "operation": "api.rfam.fetch",
+      "method": "GET",
+      "endpoint": "https://batch.rfam.org/result/{job_id}/out",
+      "meaning": "Selected native report representation only."
+    }
+  ],
+  "additional_complete_source_reviews": [
+    {
+      "path": "gene_annotation_episode/rfam_batch_transport.py",
+      "sha256": "81972a351f8f2f8b0c58ee4055ff5b574270ce214affeb397351cba9aec10e62",
+      "review": "complete module, read only; no import or execution"
+    },
+    {
+      "path": "gene_annotation_episode/rfam_discovery.py",
+      "sha256": "0c5c8a0407da7cb411b3f27b33087a4f61dc5d0744b83d97934b8815db39f214",
+      "review": "complete module, read only; no import or execution"
+    }
+  ],
+  "unchanged_boundary": "These source-locator corrections do not add live/current completion evidence, aliases, numerical graders or production changes."
+}

@@ -1,0 +1,1539 @@
+{
+  "kind": "synthetic_numerical_examples",
+  "examples": [
+    {
+      "name": "dna_phred33_hand_checked",
+      "inputs": {
+        "sequence": "acgN",
+        "molecule": "dna",
+        "quality": "!+5?",
+        "quality_encoding": "phred33"
+      },
+      "sheet": {
+        "schema": "sequence_composition_sheet_v1",
+        "status": "complete",
+        "sequence": "acgN",
+        "molecule": "dna",
+        "quality": "!+5?",
+        "quality_encoding": "phred33",
+        "length": 4,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1,
+          "N": 1
+        },
+        "composition": {
+          "unambiguous_nucleotide_count": 3,
+          "ambiguous_symbol_count": 1,
+          "gc_count": 2,
+          "gc_denominator": 3,
+          "invalid_symbol_count": 0
+        },
+        "quality_measurements": {
+          "status": "complete",
+          "character_count": 4,
+          "length_matches_sequence": true,
+          "native_score_type": "phred",
+          "native_score_distribution": [
+            {
+              "native_score": 0,
+              "count": 1
+            },
+            {
+              "native_score": 10,
+              "count": 1
+            },
+            {
+              "native_score": 20,
+              "count": 1
+            },
+            {
+              "native_score": 30,
+              "count": 1
+            }
+          ],
+          "decoded_character_count": 4,
+          "invalid_character_count": 0,
+          "invalid_characters": []
+        },
+        "issues": [],
+        "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed",
+        "coordinate_system": "zero_based_offsets_in_supplied_strings"
+      },
+      "scores": {
+        "schema": "sequence_composition_scores_v1",
+        "status": "complete",
+        "length": 4,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1,
+          "N": 1
+        },
+        "unambiguous_nucleotide_count": 3,
+        "ambiguous_symbol_count": 1,
+        "gc_count": 2,
+        "gc_denominator": 3,
+        "ambiguity_fraction": 0.25,
+        "gc_fraction": 0.6666666666666666,
+        "quality_observation_count": 4,
+        "mean_phred": 15.0,
+        "mean_error_probability": 0.27775,
+        "expected_error_count": 1.111,
+        "quality_components": [
+          {
+            "native_score": 0,
+            "count": 1,
+            "phred": 0,
+            "error_probability": 1.0
+          },
+          {
+            "native_score": 10,
+            "count": 1,
+            "phred": 10,
+            "error_probability": 0.1
+          },
+          {
+            "native_score": 20,
+            "count": 1,
+            "phred": 20,
+            "error_probability": 0.01
+          },
+          {
+            "native_score": 30,
+            "count": 1,
+            "phred": 30,
+            "error_probability": 0.001
+          }
+        ],
+        "quality_thresholds": [
+          {
+            "phred_threshold": 20,
+            "count_at_or_above": 2,
+            "fraction_at_or_above": 0.5,
+            "denominator": 4
+          },
+          {
+            "phred_threshold": 30,
+            "count_at_or_above": 1,
+            "fraction_at_or_above": 0.25,
+            "denominator": 4
+          }
+        ],
+        "denominators": {
+          "ambiguity_fraction": 4,
+          "gc_fraction": 3,
+          "mean_phred": 4,
+          "mean_error_probability": 4
+        },
+        "definitions": {
+          "length": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "len(sequence)",
+            "unit": "supplied_symbols"
+          },
+          "symbol_counts": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "count each symbol after ASCII-only uppercase",
+            "unit": "supplied_symbols"
+          },
+          "unambiguous_nucleotide_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+            "unit": "nt"
+          },
+          "ambiguous_symbol_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+            "unit": "supplied_symbols"
+          },
+          "ambiguity_fraction": {
+            "inputs": [
+              "composition.ambiguous_symbol_count",
+              "length"
+            ],
+            "calculation": "ambiguous_symbol_count / length",
+            "unit": "fraction_of_all_supplied_symbols"
+          },
+          "gc_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "C + G for declared dna/rna; otherwise null",
+            "unit": "nt"
+          },
+          "gc_denominator": {
+            "inputs": [
+              "composition.unambiguous_nucleotide_count"
+            ],
+            "calculation": "unambiguous_nucleotide_count",
+            "unit": "nt"
+          },
+          "gc_fraction": {
+            "inputs": [
+              "composition.gc_count",
+              "composition.gc_denominator"
+            ],
+            "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+            "unit": "fraction"
+          },
+          "quality_observation_count": {
+            "inputs": [
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+            "unit": "base_quality_observations"
+          },
+          "quality_components": {
+            "inputs": [
+              "quality_encoding",
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+            "unit": "native_score; phred; probability"
+          },
+          "mean_phred": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * phred) / quality_observation_count",
+            "unit": "phred"
+          },
+          "mean_error_probability": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * error_probability) / quality_observation_count",
+            "unit": "probability"
+          },
+          "expected_error_count": {
+            "inputs": [
+              "quality_components"
+            ],
+            "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+            "unit": "expected_base_call_errors"
+          },
+          "quality_thresholds": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count",
+              "quality_thresholds"
+            ],
+            "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+            "unit": "phred_threshold; observations; fraction",
+            "comparison": "greater_than_or_equal"
+          },
+          "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+          "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+          "uncertainty": null,
+          "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+        },
+        "issues": []
+      }
+    },
+    {
+      "name": "rna_no_quality",
+      "inputs": {
+        "sequence": "ggcuuN",
+        "molecule": "rna"
+      },
+      "sheet": {
+        "schema": "sequence_composition_sheet_v1",
+        "status": "complete",
+        "sequence": "ggcuuN",
+        "molecule": "rna",
+        "quality": null,
+        "quality_encoding": null,
+        "length": 6,
+        "symbol_counts": {
+          "C": 1,
+          "G": 2,
+          "N": 1,
+          "U": 2
+        },
+        "composition": {
+          "unambiguous_nucleotide_count": 5,
+          "ambiguous_symbol_count": 1,
+          "gc_count": 3,
+          "gc_denominator": 5,
+          "invalid_symbol_count": 0
+        },
+        "quality_measurements": {
+          "status": "not_supplied",
+          "character_count": null,
+          "length_matches_sequence": null,
+          "native_score_type": null,
+          "native_score_distribution": null,
+          "decoded_character_count": null,
+          "invalid_character_count": null,
+          "invalid_characters": []
+        },
+        "issues": [],
+        "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed",
+        "coordinate_system": "zero_based_offsets_in_supplied_strings"
+      },
+      "scores": {
+        "schema": "sequence_composition_scores_v1",
+        "status": "complete",
+        "length": 6,
+        "symbol_counts": {
+          "C": 1,
+          "G": 2,
+          "N": 1,
+          "U": 2
+        },
+        "unambiguous_nucleotide_count": 5,
+        "ambiguous_symbol_count": 1,
+        "gc_count": 3,
+        "gc_denominator": 5,
+        "ambiguity_fraction": 0.16666666666666666,
+        "gc_fraction": 0.6,
+        "quality_observation_count": null,
+        "mean_phred": null,
+        "mean_error_probability": null,
+        "expected_error_count": null,
+        "quality_components": null,
+        "quality_thresholds": [
+          {
+            "phred_threshold": 20,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          },
+          {
+            "phred_threshold": 30,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          }
+        ],
+        "denominators": {
+          "ambiguity_fraction": 6,
+          "gc_fraction": 5,
+          "mean_phred": null,
+          "mean_error_probability": null
+        },
+        "definitions": {
+          "length": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "len(sequence)",
+            "unit": "supplied_symbols"
+          },
+          "symbol_counts": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "count each symbol after ASCII-only uppercase",
+            "unit": "supplied_symbols"
+          },
+          "unambiguous_nucleotide_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+            "unit": "nt"
+          },
+          "ambiguous_symbol_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+            "unit": "supplied_symbols"
+          },
+          "ambiguity_fraction": {
+            "inputs": [
+              "composition.ambiguous_symbol_count",
+              "length"
+            ],
+            "calculation": "ambiguous_symbol_count / length",
+            "unit": "fraction_of_all_supplied_symbols"
+          },
+          "gc_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "C + G for declared dna/rna; otherwise null",
+            "unit": "nt"
+          },
+          "gc_denominator": {
+            "inputs": [
+              "composition.unambiguous_nucleotide_count"
+            ],
+            "calculation": "unambiguous_nucleotide_count",
+            "unit": "nt"
+          },
+          "gc_fraction": {
+            "inputs": [
+              "composition.gc_count",
+              "composition.gc_denominator"
+            ],
+            "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+            "unit": "fraction"
+          },
+          "quality_observation_count": {
+            "inputs": [
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+            "unit": "base_quality_observations"
+          },
+          "quality_components": {
+            "inputs": [
+              "quality_encoding",
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+            "unit": "native_score; phred; probability"
+          },
+          "mean_phred": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * phred) / quality_observation_count",
+            "unit": "phred"
+          },
+          "mean_error_probability": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * error_probability) / quality_observation_count",
+            "unit": "probability"
+          },
+          "expected_error_count": {
+            "inputs": [
+              "quality_components"
+            ],
+            "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+            "unit": "expected_base_call_errors"
+          },
+          "quality_thresholds": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count",
+              "quality_thresholds"
+            ],
+            "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+            "unit": "phred_threshold; observations; fraction",
+            "comparison": "greater_than_or_equal"
+          },
+          "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+          "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+          "uncertainty": null,
+          "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+        },
+        "issues": []
+      }
+    },
+    {
+      "name": "protein_ambiguity",
+      "inputs": {
+        "sequence": "ABXZWJOu*",
+        "molecule": "protein"
+      },
+      "sheet": {
+        "schema": "sequence_composition_sheet_v1",
+        "status": "complete",
+        "sequence": "ABXZWJOu*",
+        "molecule": "protein",
+        "quality": null,
+        "quality_encoding": null,
+        "length": 9,
+        "symbol_counts": {
+          "*": 1,
+          "A": 1,
+          "B": 1,
+          "J": 1,
+          "O": 1,
+          "U": 1,
+          "W": 1,
+          "X": 1,
+          "Z": 1
+        },
+        "composition": {
+          "unambiguous_nucleotide_count": null,
+          "ambiguous_symbol_count": 4,
+          "gc_count": null,
+          "gc_denominator": null,
+          "invalid_symbol_count": 0
+        },
+        "quality_measurements": {
+          "status": "not_supplied",
+          "character_count": null,
+          "length_matches_sequence": null,
+          "native_score_type": null,
+          "native_score_distribution": null,
+          "decoded_character_count": null,
+          "invalid_character_count": null,
+          "invalid_characters": []
+        },
+        "issues": [],
+        "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed",
+        "coordinate_system": "zero_based_offsets_in_supplied_strings"
+      },
+      "scores": {
+        "schema": "sequence_composition_scores_v1",
+        "status": "complete",
+        "length": 9,
+        "symbol_counts": {
+          "*": 1,
+          "A": 1,
+          "B": 1,
+          "J": 1,
+          "O": 1,
+          "U": 1,
+          "W": 1,
+          "X": 1,
+          "Z": 1
+        },
+        "unambiguous_nucleotide_count": null,
+        "ambiguous_symbol_count": 4,
+        "gc_count": null,
+        "gc_denominator": null,
+        "ambiguity_fraction": 0.4444444444444444,
+        "gc_fraction": null,
+        "quality_observation_count": null,
+        "mean_phred": null,
+        "mean_error_probability": null,
+        "expected_error_count": null,
+        "quality_components": null,
+        "quality_thresholds": [
+          {
+            "phred_threshold": 20,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          },
+          {
+            "phred_threshold": 30,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          }
+        ],
+        "denominators": {
+          "ambiguity_fraction": 9,
+          "gc_fraction": null,
+          "mean_phred": null,
+          "mean_error_probability": null
+        },
+        "definitions": {
+          "length": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "len(sequence)",
+            "unit": "supplied_symbols"
+          },
+          "symbol_counts": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "count each symbol after ASCII-only uppercase",
+            "unit": "supplied_symbols"
+          },
+          "unambiguous_nucleotide_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+            "unit": "nt"
+          },
+          "ambiguous_symbol_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+            "unit": "supplied_symbols"
+          },
+          "ambiguity_fraction": {
+            "inputs": [
+              "composition.ambiguous_symbol_count",
+              "length"
+            ],
+            "calculation": "ambiguous_symbol_count / length",
+            "unit": "fraction_of_all_supplied_symbols"
+          },
+          "gc_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "C + G for declared dna/rna; otherwise null",
+            "unit": "nt"
+          },
+          "gc_denominator": {
+            "inputs": [
+              "composition.unambiguous_nucleotide_count"
+            ],
+            "calculation": "unambiguous_nucleotide_count",
+            "unit": "nt"
+          },
+          "gc_fraction": {
+            "inputs": [
+              "composition.gc_count",
+              "composition.gc_denominator"
+            ],
+            "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+            "unit": "fraction"
+          },
+          "quality_observation_count": {
+            "inputs": [
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+            "unit": "base_quality_observations"
+          },
+          "quality_components": {
+            "inputs": [
+              "quality_encoding",
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+            "unit": "native_score; phred; probability"
+          },
+          "mean_phred": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * phred) / quality_observation_count",
+            "unit": "phred"
+          },
+          "mean_error_probability": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * error_probability) / quality_observation_count",
+            "unit": "probability"
+          },
+          "expected_error_count": {
+            "inputs": [
+              "quality_components"
+            ],
+            "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+            "unit": "expected_base_call_errors"
+          },
+          "quality_thresholds": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count",
+              "quality_thresholds"
+            ],
+            "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+            "unit": "phred_threshold; observations; fraction",
+            "comparison": "greater_than_or_equal"
+          },
+          "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+          "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+          "uncertainty": null,
+          "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+        },
+        "issues": []
+      }
+    },
+    {
+      "name": "unspecified_molecule",
+      "inputs": {
+        "sequence": "ACGT",
+        "molecule": "unspecified"
+      },
+      "sheet": {
+        "schema": "sequence_composition_sheet_v1",
+        "status": "partial",
+        "sequence": "ACGT",
+        "molecule": "unspecified",
+        "quality": null,
+        "quality_encoding": null,
+        "length": 4,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1,
+          "T": 1
+        },
+        "composition": {
+          "unambiguous_nucleotide_count": null,
+          "ambiguous_symbol_count": null,
+          "gc_count": null,
+          "gc_denominator": null,
+          "invalid_symbol_count": null
+        },
+        "quality_measurements": {
+          "status": "not_supplied",
+          "character_count": null,
+          "length_matches_sequence": null,
+          "native_score_type": null,
+          "native_score_distribution": null,
+          "decoded_character_count": null,
+          "invalid_character_count": null,
+          "invalid_characters": []
+        },
+        "issues": [
+          {
+            "code": "molecule_unspecified"
+          }
+        ],
+        "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed",
+        "coordinate_system": "zero_based_offsets_in_supplied_strings"
+      },
+      "scores": {
+        "schema": "sequence_composition_scores_v1",
+        "status": "partial",
+        "length": 4,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1,
+          "T": 1
+        },
+        "unambiguous_nucleotide_count": null,
+        "ambiguous_symbol_count": null,
+        "gc_count": null,
+        "gc_denominator": null,
+        "ambiguity_fraction": null,
+        "gc_fraction": null,
+        "quality_observation_count": null,
+        "mean_phred": null,
+        "mean_error_probability": null,
+        "expected_error_count": null,
+        "quality_components": null,
+        "quality_thresholds": [
+          {
+            "phred_threshold": 20,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          },
+          {
+            "phred_threshold": 30,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          }
+        ],
+        "denominators": {
+          "ambiguity_fraction": null,
+          "gc_fraction": null,
+          "mean_phred": null,
+          "mean_error_probability": null
+        },
+        "definitions": {
+          "length": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "len(sequence)",
+            "unit": "supplied_symbols"
+          },
+          "symbol_counts": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "count each symbol after ASCII-only uppercase",
+            "unit": "supplied_symbols"
+          },
+          "unambiguous_nucleotide_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+            "unit": "nt"
+          },
+          "ambiguous_symbol_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+            "unit": "supplied_symbols"
+          },
+          "ambiguity_fraction": {
+            "inputs": [
+              "composition.ambiguous_symbol_count",
+              "length"
+            ],
+            "calculation": "ambiguous_symbol_count / length",
+            "unit": "fraction_of_all_supplied_symbols"
+          },
+          "gc_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "C + G for declared dna/rna; otherwise null",
+            "unit": "nt"
+          },
+          "gc_denominator": {
+            "inputs": [
+              "composition.unambiguous_nucleotide_count"
+            ],
+            "calculation": "unambiguous_nucleotide_count",
+            "unit": "nt"
+          },
+          "gc_fraction": {
+            "inputs": [
+              "composition.gc_count",
+              "composition.gc_denominator"
+            ],
+            "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+            "unit": "fraction"
+          },
+          "quality_observation_count": {
+            "inputs": [
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+            "unit": "base_quality_observations"
+          },
+          "quality_components": {
+            "inputs": [
+              "quality_encoding",
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+            "unit": "native_score; phred; probability"
+          },
+          "mean_phred": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * phred) / quality_observation_count",
+            "unit": "phred"
+          },
+          "mean_error_probability": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * error_probability) / quality_observation_count",
+            "unit": "probability"
+          },
+          "expected_error_count": {
+            "inputs": [
+              "quality_components"
+            ],
+            "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+            "unit": "expected_base_call_errors"
+          },
+          "quality_thresholds": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count",
+              "quality_thresholds"
+            ],
+            "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+            "unit": "phred_threshold; observations; fraction",
+            "comparison": "greater_than_or_equal"
+          },
+          "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+          "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+          "uncertainty": null,
+          "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+        },
+        "issues": [
+          {
+            "code": "molecule_unspecified"
+          }
+        ]
+      }
+    },
+    {
+      "name": "solexa_odds",
+      "inputs": {
+        "sequence": "ACG",
+        "molecule": "dna",
+        "quality": ";@J",
+        "quality_encoding": "solexa64",
+        "quality_thresholds": [
+          0,
+          2,
+          3,
+          10,
+          11
+        ]
+      },
+      "sheet": {
+        "schema": "sequence_composition_sheet_v1",
+        "status": "complete",
+        "sequence": "ACG",
+        "molecule": "dna",
+        "quality": ";@J",
+        "quality_encoding": "solexa64",
+        "length": 3,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1
+        },
+        "composition": {
+          "unambiguous_nucleotide_count": 3,
+          "ambiguous_symbol_count": 0,
+          "gc_count": 2,
+          "gc_denominator": 3,
+          "invalid_symbol_count": 0
+        },
+        "quality_measurements": {
+          "status": "complete",
+          "character_count": 3,
+          "length_matches_sequence": true,
+          "native_score_type": "solexa",
+          "native_score_distribution": [
+            {
+              "native_score": -5,
+              "count": 1
+            },
+            {
+              "native_score": 0,
+              "count": 1
+            },
+            {
+              "native_score": 10,
+              "count": 1
+            }
+          ],
+          "decoded_character_count": 3,
+          "invalid_character_count": 0,
+          "invalid_characters": []
+        },
+        "issues": [],
+        "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed",
+        "coordinate_system": "zero_based_offsets_in_supplied_strings"
+      },
+      "scores": {
+        "schema": "sequence_composition_scores_v1",
+        "status": "complete",
+        "length": 3,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1
+        },
+        "unambiguous_nucleotide_count": 3,
+        "ambiguous_symbol_count": 0,
+        "gc_count": 2,
+        "gc_denominator": 3,
+        "ambiguity_fraction": 0.0,
+        "gc_fraction": 0.6666666666666666,
+        "quality_observation_count": 3,
+        "mean_phred": 4.872512429627669,
+        "mean_error_probability": 0.45021867251901626,
+        "expected_error_count": 1.3506560175570488,
+        "quality_components": [
+          {
+            "native_score": -5,
+            "count": 1,
+            "phred": 1.1933104806609456,
+            "error_probability": 0.7597469266479578
+          },
+          {
+            "native_score": 0,
+            "count": 1,
+            "phred": 3.010299956639812,
+            "error_probability": 0.5
+          },
+          {
+            "native_score": 10,
+            "count": 1,
+            "phred": 10.41392685158225,
+            "error_probability": 0.09090909090909091
+          }
+        ],
+        "quality_thresholds": [
+          {
+            "phred_threshold": 0,
+            "count_at_or_above": 3,
+            "fraction_at_or_above": 1.0,
+            "denominator": 3
+          },
+          {
+            "phred_threshold": 2,
+            "count_at_or_above": 2,
+            "fraction_at_or_above": 0.6666666666666666,
+            "denominator": 3
+          },
+          {
+            "phred_threshold": 3,
+            "count_at_or_above": 2,
+            "fraction_at_or_above": 0.6666666666666666,
+            "denominator": 3
+          },
+          {
+            "phred_threshold": 10,
+            "count_at_or_above": 1,
+            "fraction_at_or_above": 0.3333333333333333,
+            "denominator": 3
+          },
+          {
+            "phred_threshold": 11,
+            "count_at_or_above": 0,
+            "fraction_at_or_above": 0.0,
+            "denominator": 3
+          }
+        ],
+        "denominators": {
+          "ambiguity_fraction": 3,
+          "gc_fraction": 3,
+          "mean_phred": 3,
+          "mean_error_probability": 3
+        },
+        "definitions": {
+          "length": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "len(sequence)",
+            "unit": "supplied_symbols"
+          },
+          "symbol_counts": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "count each symbol after ASCII-only uppercase",
+            "unit": "supplied_symbols"
+          },
+          "unambiguous_nucleotide_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+            "unit": "nt"
+          },
+          "ambiguous_symbol_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+            "unit": "supplied_symbols"
+          },
+          "ambiguity_fraction": {
+            "inputs": [
+              "composition.ambiguous_symbol_count",
+              "length"
+            ],
+            "calculation": "ambiguous_symbol_count / length",
+            "unit": "fraction_of_all_supplied_symbols"
+          },
+          "gc_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "C + G for declared dna/rna; otherwise null",
+            "unit": "nt"
+          },
+          "gc_denominator": {
+            "inputs": [
+              "composition.unambiguous_nucleotide_count"
+            ],
+            "calculation": "unambiguous_nucleotide_count",
+            "unit": "nt"
+          },
+          "gc_fraction": {
+            "inputs": [
+              "composition.gc_count",
+              "composition.gc_denominator"
+            ],
+            "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+            "unit": "fraction"
+          },
+          "quality_observation_count": {
+            "inputs": [
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+            "unit": "base_quality_observations"
+          },
+          "quality_components": {
+            "inputs": [
+              "quality_encoding",
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+            "unit": "native_score; phred; probability"
+          },
+          "mean_phred": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * phred) / quality_observation_count",
+            "unit": "phred"
+          },
+          "mean_error_probability": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * error_probability) / quality_observation_count",
+            "unit": "probability"
+          },
+          "expected_error_count": {
+            "inputs": [
+              "quality_components"
+            ],
+            "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+            "unit": "expected_base_call_errors"
+          },
+          "quality_thresholds": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count",
+              "quality_thresholds"
+            ],
+            "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+            "unit": "phred_threshold; observations; fraction",
+            "comparison": "greater_than_or_equal"
+          },
+          "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+          "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+          "uncertainty": null,
+          "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+        },
+        "issues": []
+      }
+    },
+    {
+      "name": "quality_length_mismatch",
+      "inputs": {
+        "sequence": "ACGT",
+        "molecule": "dna",
+        "quality": "II?",
+        "quality_encoding": "phred33"
+      },
+      "sheet": {
+        "schema": "sequence_composition_sheet_v1",
+        "status": "partial",
+        "sequence": "ACGT",
+        "molecule": "dna",
+        "quality": "II?",
+        "quality_encoding": "phred33",
+        "length": 4,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1,
+          "T": 1
+        },
+        "composition": {
+          "unambiguous_nucleotide_count": 4,
+          "ambiguous_symbol_count": 0,
+          "gc_count": 2,
+          "gc_denominator": 4,
+          "invalid_symbol_count": 0
+        },
+        "quality_measurements": {
+          "status": "invalid",
+          "character_count": 3,
+          "length_matches_sequence": false,
+          "native_score_type": "phred",
+          "native_score_distribution": [
+            {
+              "native_score": 30,
+              "count": 1
+            },
+            {
+              "native_score": 40,
+              "count": 2
+            }
+          ],
+          "decoded_character_count": 3,
+          "invalid_character_count": 0,
+          "invalid_characters": []
+        },
+        "issues": [
+          {
+            "code": "quality_sequence_length_mismatch",
+            "sequence_length": 4,
+            "quality_length": 3
+          }
+        ],
+        "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed",
+        "coordinate_system": "zero_based_offsets_in_supplied_strings"
+      },
+      "scores": {
+        "schema": "sequence_composition_scores_v1",
+        "status": "partial",
+        "length": 4,
+        "symbol_counts": {
+          "A": 1,
+          "C": 1,
+          "G": 1,
+          "T": 1
+        },
+        "unambiguous_nucleotide_count": 4,
+        "ambiguous_symbol_count": 0,
+        "gc_count": 2,
+        "gc_denominator": 4,
+        "ambiguity_fraction": 0.0,
+        "gc_fraction": 0.5,
+        "quality_observation_count": null,
+        "mean_phred": null,
+        "mean_error_probability": null,
+        "expected_error_count": null,
+        "quality_components": null,
+        "quality_thresholds": [
+          {
+            "phred_threshold": 20,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          },
+          {
+            "phred_threshold": 30,
+            "count_at_or_above": null,
+            "fraction_at_or_above": null,
+            "denominator": null
+          }
+        ],
+        "denominators": {
+          "ambiguity_fraction": 4,
+          "gc_fraction": 4,
+          "mean_phred": null,
+          "mean_error_probability": null
+        },
+        "definitions": {
+          "length": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "len(sequence)",
+            "unit": "supplied_symbols"
+          },
+          "symbol_counts": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "count each symbol after ASCII-only uppercase",
+            "unit": "supplied_symbols"
+          },
+          "unambiguous_nucleotide_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+            "unit": "nt"
+          },
+          "ambiguous_symbol_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+            "unit": "supplied_symbols"
+          },
+          "ambiguity_fraction": {
+            "inputs": [
+              "composition.ambiguous_symbol_count",
+              "length"
+            ],
+            "calculation": "ambiguous_symbol_count / length",
+            "unit": "fraction_of_all_supplied_symbols"
+          },
+          "gc_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "C + G for declared dna/rna; otherwise null",
+            "unit": "nt"
+          },
+          "gc_denominator": {
+            "inputs": [
+              "composition.unambiguous_nucleotide_count"
+            ],
+            "calculation": "unambiguous_nucleotide_count",
+            "unit": "nt"
+          },
+          "gc_fraction": {
+            "inputs": [
+              "composition.gc_count",
+              "composition.gc_denominator"
+            ],
+            "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+            "unit": "fraction"
+          },
+          "quality_observation_count": {
+            "inputs": [
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+            "unit": "base_quality_observations"
+          },
+          "quality_components": {
+            "inputs": [
+              "quality_encoding",
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+            "unit": "native_score; phred; probability"
+          },
+          "mean_phred": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * phred) / quality_observation_count",
+            "unit": "phred"
+          },
+          "mean_error_probability": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * error_probability) / quality_observation_count",
+            "unit": "probability"
+          },
+          "expected_error_count": {
+            "inputs": [
+              "quality_components"
+            ],
+            "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+            "unit": "expected_base_call_errors"
+          },
+          "quality_thresholds": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count",
+              "quality_thresholds"
+            ],
+            "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+            "unit": "phred_threshold; observations; fraction",
+            "comparison": "greater_than_or_equal"
+          },
+          "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+          "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+          "uncertainty": null,
+          "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+        },
+        "issues": [
+          {
+            "code": "quality_sequence_length_mismatch",
+            "sequence_length": 4,
+            "quality_length": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "valid_empty_population",
+      "inputs": {
+        "sequence": "",
+        "molecule": "dna",
+        "quality": "",
+        "quality_encoding": "phred33"
+      },
+      "sheet": {
+        "schema": "sequence_composition_sheet_v1",
+        "status": "complete",
+        "sequence": "",
+        "molecule": "dna",
+        "quality": "",
+        "quality_encoding": "phred33",
+        "length": 0,
+        "symbol_counts": {},
+        "composition": {
+          "unambiguous_nucleotide_count": 0,
+          "ambiguous_symbol_count": 0,
+          "gc_count": 0,
+          "gc_denominator": 0,
+          "invalid_symbol_count": 0
+        },
+        "quality_measurements": {
+          "status": "complete",
+          "character_count": 0,
+          "length_matches_sequence": true,
+          "native_score_type": "phred",
+          "native_score_distribution": [],
+          "decoded_character_count": 0,
+          "invalid_character_count": 0,
+          "invalid_characters": []
+        },
+        "issues": [],
+        "symbol_normalization": "ascii_letters_uppercase_no_symbols_removed",
+        "coordinate_system": "zero_based_offsets_in_supplied_strings"
+      },
+      "scores": {
+        "schema": "sequence_composition_scores_v1",
+        "status": "complete",
+        "length": 0,
+        "symbol_counts": {},
+        "unambiguous_nucleotide_count": 0,
+        "ambiguous_symbol_count": 0,
+        "gc_count": 0,
+        "gc_denominator": 0,
+        "ambiguity_fraction": null,
+        "gc_fraction": null,
+        "quality_observation_count": 0,
+        "mean_phred": null,
+        "mean_error_probability": null,
+        "expected_error_count": 0.0,
+        "quality_components": [],
+        "quality_thresholds": [
+          {
+            "phred_threshold": 20,
+            "count_at_or_above": 0,
+            "fraction_at_or_above": null,
+            "denominator": 0
+          },
+          {
+            "phred_threshold": 30,
+            "count_at_or_above": 0,
+            "fraction_at_or_above": null,
+            "denominator": 0
+          }
+        ],
+        "denominators": {
+          "ambiguity_fraction": 0,
+          "gc_fraction": 0,
+          "mean_phred": 0,
+          "mean_error_probability": 0
+        },
+        "definitions": {
+          "length": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "len(sequence)",
+            "unit": "supplied_symbols"
+          },
+          "symbol_counts": {
+            "inputs": [
+              "sequence"
+            ],
+            "calculation": "count each symbol after ASCII-only uppercase",
+            "unit": "supplied_symbols"
+          },
+          "unambiguous_nucleotide_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum A,C,G,T for dna; sum A,C,G,U for rna; otherwise null",
+            "unit": "nt"
+          },
+          "ambiguous_symbol_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "sum R,Y,S,W,K,M,B,D,H,V,N for dna/rna; sum B,X,Z,J for protein; unspecified null",
+            "unit": "supplied_symbols"
+          },
+          "ambiguity_fraction": {
+            "inputs": [
+              "composition.ambiguous_symbol_count",
+              "length"
+            ],
+            "calculation": "ambiguous_symbol_count / length",
+            "unit": "fraction_of_all_supplied_symbols"
+          },
+          "gc_count": {
+            "inputs": [
+              "molecule",
+              "symbol_counts"
+            ],
+            "calculation": "C + G for declared dna/rna; otherwise null",
+            "unit": "nt"
+          },
+          "gc_denominator": {
+            "inputs": [
+              "composition.unambiguous_nucleotide_count"
+            ],
+            "calculation": "unambiguous_nucleotide_count",
+            "unit": "nt"
+          },
+          "gc_fraction": {
+            "inputs": [
+              "composition.gc_count",
+              "composition.gc_denominator"
+            ],
+            "calculation": "gc_count / gc_denominator; ambiguous and invalid symbols excluded",
+            "unit": "fraction"
+          },
+          "quality_observation_count": {
+            "inputs": [
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "sum counts only for supported declared encoding and valid quality of matching length",
+            "unit": "base_quality_observations"
+          },
+          "quality_components": {
+            "inputs": [
+              "quality_encoding",
+              "quality_measurements.native_score_distribution"
+            ],
+            "calculation": "phred: Q=native_score, p=10**(-Q/10); solexa: p=1/(1+10**(S/10)), Q=10*log10(1+10**(S/10))",
+            "unit": "native_score; phred; probability"
+          },
+          "mean_phred": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * phred) / quality_observation_count",
+            "unit": "phred"
+          },
+          "mean_error_probability": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count"
+            ],
+            "calculation": "sum(count * error_probability) / quality_observation_count",
+            "unit": "probability"
+          },
+          "expected_error_count": {
+            "inputs": [
+              "quality_components"
+            ],
+            "calculation": "sum(count * error_probability); additive expectation does not assume independence",
+            "unit": "expected_base_call_errors"
+          },
+          "quality_thresholds": {
+            "inputs": [
+              "quality_components",
+              "quality_observation_count",
+              "quality_thresholds"
+            ],
+            "calculation": "count_at_or_above=sum(count where unrounded phred >= threshold); fraction=count/denominator",
+            "unit": "phred_threshold; observations; fraction",
+            "comparison": "greater_than_or_equal"
+          },
+          "missing": "Unavailable measurements and zero-denominator fractions are null. A valid empty quality population has count and expected error sum zero.",
+          "measurement_kind": "Counts are extracted from supplied symbols. Fractions and quality summaries are derived; errors are encoding-implied expectations, not observed errors.",
+          "uncertainty": null,
+          "uncertainty_meaning": "No uncertainty intervals or quality calibration metadata were supplied."
+        },
+        "issues": []
+      }
+    }
+  ]
+}

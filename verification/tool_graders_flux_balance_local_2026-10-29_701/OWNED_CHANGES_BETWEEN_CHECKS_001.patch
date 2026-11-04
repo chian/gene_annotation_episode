@@ -1,0 +1,75 @@
+--- check158/gene_annotation_episode/native_flux_balance_local.py
++++ check158b/gene_annotation_episode/native_flux_balance_local.py
+@@ -169,6 +169,7 @@
+             or (selection is not None and plan["version"] == "flux_balance_run_plan_v2"
+                 and plan["environment_binding"]["selection"] == selection), "fba_environment_selection_invalid")
+     invoke = read_json(confined_file(root, "invoke.json"))
++    require(type(invoke) is dict, "fba_original_control_conflict")
+     input_path = confined_file(root, INPUT_BINDING_FILENAME)
+     file, raw = _input_control(read_json(input_path), invoke.get("native_flux_balance_input_binding_file"), owner=owner)
+     require(read_bytes(input_path) == raw and invoke == _invoke(plan, file), "fba_original_control_conflict")
+@@ -179,6 +180,7 @@
+     require(type(original) is dict and original.get("version") == native.VERSION
+             and original.get("stage") in ("prepared", "submitting", "released")
+             and original.get("command") == flux_balance_driver_argv(plan) and original.get("cwd") == str(root)
++            and type(original.get("metadata")) is dict
+             and canonical(original.get("metadata", {}).get("policy")) == canonical(plan["policy"]),
+             "fba_original_attempt_mismatch")
+     paths = original.get("paths")
+--- check158/tests/test_flux_balance_local_701.py
++++ check158b/tests/test_flux_balance_local_701.py
+@@ -188,7 +188,36 @@
+     assert not case['root'].exists()
+ 
+ 
+-@pytest.mark.parametrize('fault', ['plan', 'invoke', 'input', 'handle_command', 'handle_policy', 'request_hash', 'request_environment', 'duplicate_path', 'outside_path', 'stdout'])
++def test_repeated_reservation_cannot_substitute_another_self_consistent_receipt(setup):
++    case = setup()
++    handle = _prepare(case)
++    before = (case['root'] / INPUT_BINDING_FILENAME).read_bytes()
++    case['receipt']['binding']['request_sha256'] = '9' * 64
++    case['file'] = _control_file(case['receipt'])
++    with pytest.raises(ValueError, match='fba_original_control_conflict'):
++        _prepare(case)
++    assert (case['root'] / INPUT_BINDING_FILENAME).read_bytes() == before
++    assert local_flux_balance_plan(case['state'].assignment, str(handle.path))['requested_job'] == case['state'].assignment['requested_job']
++
++
++def test_exact_controls_survive_failure_before_native_reservation(setup, monkeypatch):
++    case = setup()
++    real_prepare = native.prepare_job
++    def failed_before_reservation(*args, **kwargs):
++        raise OSError('explicit fixture failure before native.prepare_job')
++    monkeypatch.setattr(native, 'prepare_job', failed_before_reservation)
++    with pytest.raises(OSError, match='explicit fixture failure'):
++        _prepare(case)
++    assert not (case['root'] / 'native.json').exists()
++    before = {p.name: p.read_bytes() for p in case['root'].iterdir()}
++    monkeypatch.setattr(native, 'prepare_job', real_prepare)
++    handle = _prepare(case)
++    assert handle.read()['stage'] == 'prepared'
++    assert all((case['root'] / name).read_bytes() == raw for name, raw in before.items())
++    assert case['state'].receipts() == [] and case['state'].completion_proof() is None
++
++
++@pytest.mark.parametrize('fault', ['plan', 'invoke', 'input', 'handle_command', 'handle_policy', 'request_hash', 'request_environment', 'duplicate_path', 'outside_path', 'stdout', 'invoke_null', 'invoke_array', 'metadata_null', 'metadata_array'])
+ def test_existing_reservation_control_and_wrapper_tamper(setup, fault):
+     case = setup()
+     handle = _prepare(case)
+@@ -213,12 +242,16 @@
+         _write(path, value)
+         body['request_sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+         _write(handle.path, body)
++    elif fault in ('invoke_null', 'invoke_array'):
++        _write(case['root'] / 'invoke.json', None if fault == 'invoke_null' else [])
+     else:
+         if fault == 'handle_command': body['command'][0] = '/unselected/python'
+         elif fault == 'handle_policy': body['metadata']['policy']['scratch_bytes'] = 1
+         elif fault == 'duplicate_path': body['paths']['status'] = body['paths']['request']
+         elif fault == 'outside_path': body['paths']['status'] = str(case['root'].parent / 'status')
+         elif fault == 'stdout': body['stdout'] = str(case['root'] / 'other.log')
++        elif fault == 'metadata_null': body['metadata'] = None
++        elif fault == 'metadata_array': body['metadata'] = []
+         _write(handle.path, body)
+     with pytest.raises(ValueError): local_flux_balance_plan(case['state'].assignment, str(handle.path))
+     with pytest.raises(ValueError): _prepare(case)

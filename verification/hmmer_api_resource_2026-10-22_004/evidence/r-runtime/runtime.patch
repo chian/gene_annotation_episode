@@ -1,0 +1,118 @@
+--- frozen003/gene_annotation_episode/runtime.py
++++ final004/gene_annotation_episode/runtime.py
+@@ -34,6 +34,7 @@
+     interpretation_schema, form_with_facts, ReportBoundaryError, REFERENCE_FORMATS)
+ from .boundary_validation import parse_json_object, schema_failure_diagnostic
+ from .acquisition import AcquisitionError
++from .domain import ContractError
+ from . import execution_timing
+ from .execution_expectations import ExecutionExpectations, capture_execution_scopes
+ from .resource_estimation import (FORECAST_REFERENCE_FIELDS, ResourceToolEstimator, recorded_estimate,
+@@ -55,6 +56,9 @@
+ from .wait_estimation_inputs import WaitInputs
+ from .local_return_history import LocalReturnHistory
+ from method_loop.durable import DurableExecutionStore, canonical
++
++_API_PLANNING_FIELDS = ('api_reported_execution_expectations', 'api_reported_execution_forecasts',
++                        'api_execution_options', 'api_timing_planning_disposition')
+ 
+ def _plain(value):
+     if hasattr(value, "as_record"):
+@@ -753,6 +757,10 @@
+                 # outstanding-work input as next(). Saved decisions above
+                 # retain the exact original context instead.
+                 context = {**context, 'pending_work': self.workflow.pending_work(self)}
++            api_proposal = self.workflow.api_execution_planning_context(self,
++                before_decision_index=index)
++            if api_proposal is not None:
++                context = {**context, **api_proposal}
+             binding = self.workflow.execution_expectations
+             if binding is not None and binding.applies(self.path[-1][0]):
+                 planning_scopes = ()
+@@ -800,7 +808,7 @@
+                 context['waiting_support'] = self.workflow.waiting_support(self, context)
+             saved = {"context": context, "schema": schema}
+         has_session = getattr(self.workflow.provider, "has_session", lambda *_: False)
+-        if (not has_session(self.episode_id, "REASONING")
++        if (row is None and not has_session(self.episode_id, "REASONING")
+                 and "restored_episode_history" not in context):
+             # Restore the authoritative scientific/runtime state through the
+             # existing replay path, not by rehydrating all archived contexts.
+@@ -1875,6 +1883,44 @@
+                     raise ValueError('api_timing_outcome_source_required')
+             self.receipts.receive(source.episode_id, references, kind='own_action', source_index=index)
+ 
++    def _validated_api_execution_proposal(self, result, *, selected_arguments, scope):
++        planner = getattr(self.tools, 'api_execution_planner', None)
++        if planner is None:
++            raise ContractError('api_execution_proposal_conflict')
++        from .api_execution_planning import RESULT_VERSION, TARGET
++        if (not isinstance(selected_arguments, Mapping) or selected_arguments.get('tool') != TARGET
++                or not isinstance(result, Mapping) or result.get('version') != RESULT_VERSION
++                or result.get('tool') != TARGET):
++            raise ContractError('api_execution_proposal_conflict')
++        return planner.validate_result(result, selected_arguments=selected_arguments, scope=scope)
++
++    def api_execution_planning_context(self, source, *, before_decision_index):
++        """Project this episode's latest selected proposal without refreshing it."""
++        if getattr(self.tools, 'api_execution_planner', None) is None or not self.is_scientific_source(source):
++            return None
++        row = self.store.db.execute("SELECT action,result FROM runtime_actions WHERE run_id=? "
++            "AND episode_id=? AND decision_index<? AND json_extract(action,'$.kind')='tool' "
++            "AND json_extract(action,'$.tool')='execution.estimate' "
++            "AND json_extract(action,'$.arguments.tool')='public.hmmer.search' "
++            "AND json_extract(result,'$.status')='completed' "
++            "ORDER BY decision_index DESC LIMIT 1",
++            (self.run_id, source.episode_id, before_decision_index)).fetchone()
++        if row is None:
++            return None
++        episode = self.journal.row('runtime_episodes', source.episode_id)
++        if episode is None:
++            raise ContractError('api_execution_proposal_conflict')
++        original_scope = json.loads(episode['request'])['message']['scope']
++        if original_scope != _plain(source.scope):
++            raise ContractError('api_execution_proposal_conflict')
++        action, outcome = json.loads(row['action']), json.loads(row['result'])
++        proposal = self._validated_api_execution_proposal(outcome.get('result'),
++            selected_arguments=action['arguments'], scope=original_scope)
++        if any(outcome.get(key) != proposal[key] for key in _API_PLANNING_FIELDS):
++            raise ContractError('api_execution_proposal_conflict')
++        return {'api_execution_proposal': proposal,
++                **{key: proposal[key] for key in _API_PLANNING_FIELDS}}
++
+     def native_estimation_context(self, source, context):
+         binding = getattr(self.tools, 'native_statistics', None)
+         available = {item['name'] for item in context.get('tools', [])}
+@@ -2726,7 +2772,18 @@
+             execute = getattr(self.tools, "execute_async", self.tools.execute)
+             result = execute(name, arguments, scope=source.scope, operation_key=operation_key)
+             result = await result if inspect.isawaitable(result) else result
+-        if self.resource_estimator is not None:
++        api_planner = getattr(self.tools, 'api_execution_planner', None)
++        payload = result.get('result')
++        api_estimate = (name == 'execution.estimate' and result.get('status') == 'completed'
++            and (arguments.get('tool') == 'public.hmmer.search' or isinstance(payload, Mapping)
++                and (payload.get('version') == 'api_execution_proposal_estimate_v1'
++                     or payload.get('tool') == 'public.hmmer.search')))
++        if api_estimate:
++            proposal = self._validated_api_execution_proposal(payload,
++                selected_arguments=arguments, scope=source.scope)
++            result = {**result, 'result': proposal,
++                      **{key: proposal[key] for key in _API_PLANNING_FIELDS}}
++        elif self.resource_estimator is not None:
+             if name == 'execution.estimate' and result.get('status') == 'completed':
+                 original = result['result']['execution_expectations']
+                 result['native_execution_expectations'] = original
+@@ -2747,8 +2804,10 @@
+         if self.api_timing_reader is not None:
+             call = self.journal.row('runtime_model_calls', source.episode_id, decision_index)
+             context = json.loads(call['request'])['context'] if call is not None else {}
+-            for key in ('api_reported_execution_expectations', 'api_reported_execution_forecasts'):
+-                if key in context:
++            fields = (_API_PLANNING_FIELDS if api_planner is not None else
++                ('api_reported_execution_expectations', 'api_reported_execution_forecasts'))
++            for key in fields:
++                if key in context and (api_planner is None or key not in result):
+                     result[key] = context[key]
+         return result
+ 

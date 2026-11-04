@@ -1,0 +1,64 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_acquisition.py::test_same_selected_capture_resumes_verified_existing_bytes",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_acquisition.py::test_interrupted_capture_changed_prefix_is_preserved_and_not_missing",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_results.py::test_complete_biological_identity_is_required_without_losing_native_rows",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_results.py::test_original_input_store_possession_does_not_authorize_launch",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_results.py::test_original_handoff_must_have_been_received_by_commissioning_parent",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_returns.py::test_frozen_observation_requires_original_commission_handoff_and_record",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200955734400Z/tmp"
+  ],
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 88.996710922,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 1,
+    "observed_scratch_bytes": 42311680,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "SERVICE_RESULT": "exit-code",
+      "ended": {
+        "at": "2026-10-26T20:11:24.838655+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 859046535982586
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 1,
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200955734400Z/stderr.txt",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200955734400Z/stdout.txt"
+}

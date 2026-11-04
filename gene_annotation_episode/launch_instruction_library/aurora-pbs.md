@@ -7,30 +7,35 @@ streaming is enforced by the site. `qstat -Q` lists queues, `qstat -f` exposes
 job details, and `qstat -x` includes retained completed jobs. These are native
 scheduler commands, not additional episode-tool names.
 
-The selected `practical.job.start` action accepts a queue and a list of PBS
-resource strings; the bound account must be `EpiCalib`. For Flare work the
-request needs `filesystems=flare`, the chosen `select=...`, and an explicit
-`walltime=...` meeting the chosen queue's rules. The episode chooses the allowed
-values from the actual job and current information. A PBS walltime request is a
-resource operand, not a new scientific continuation cutoff. Preserve any
-explicit parent queue/allocation constraints.
+The selected `practical.job.start` action accepts explicit `queue` and
+`resources` values. The charging account comes from `configuration.account`,
+which must be `BioReason-Aurora-Test` for new Aurora jobs under the user's
+updated instruction on 2026-11-04 UTC.
+The assignment's `constraints` can fix `account`, `queue`, `resources` and
+`allocation`, or restrict `allowed_accounts` and `allowed_queues`. The binding
+validates those relationships. Work using Flare requires `filesystems=flare`,
+the chosen `select=...` and explicit `walltime=...` meeting the selected queue's
+current rules. Preserve explicit parent queue and allocation constraints.
+A PBS walltime resource operand is separate
+from the scientific episode's continuation expectation.
 
 The [Aurora job guide](https://docs.alcf.anl.gov/aurora/running-jobs-aurora/)
 documents `mpiexec` for compute tasks within the PBS allocation and queue limits
-that vary by queue. Inspect current limits when choosing. The manual test's
+that vary by queue. Inspect current limits when choosing: the manual run's
 one-node `debug` allocation and five-minute request are historical observations,
-not defaults for new jobs. The practical worker executes the assigned argv
-exactly; it does not invent MPI launch options. If that argv needs a launcher
-or a wrapper, it must be prepared consistently with the assigned job rather
-than silently substituted after commissioning.
+not defaults for new jobs. The practical worker executes the assigned `requested_job`
+exactly; it does not invent MPI launch options. If a generic job's `argv` needs
+a launcher or wrapper, it must agree with the original assignment. Registered
+native jobs retain their own closed invocation and software contracts.
 
 For current planning or diagnosis, a selected command can inspect available
-queues, PBS fields, project balances or filesystem measurements. Examples of
-recorded balance commands are `sbank-list-projects -u chian -r aurora` and
-`sbank-list-allocations -u chian -r aurora`. Observe only what is needed and
-retain its time/source. Native queue/priority/resource fields and logs inform
+queues, PBS fields, account balances or filesystem measurements. The selected
+command's actual arguments supply the relevant account and resource. Recorded
+balance commands are `sbank-list-projects -u chian -r aurora` and
+`sbank-list-allocations -u chian -r aurora`; old balances and expiry dates do not
+establish current allocation availability. Retain
+the observation's time and source. Native queue/priority/resource fields and logs inform
 the episode's interpretation; no field alone proves productive execution or a
 stall. Missing fields remain unknown. Keep queue wait, job execution, driver
-duration and turnaround distinct; the manual run recorded different values for
-them. No fixed polling cadence, mandatory probe or scaling law follows from
-these instructions. Source rows A4, A7–A8.
+duration and turnaround distinct. No fixed polling cadence, mandatory probe or
+scaling law follows from these instructions.

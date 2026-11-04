@@ -1,0 +1,17 @@
+{
+  "kind": "test_process_only_projection_baseline",
+  "overridden_module_globals": [
+    "gene_annotation_episode.decision_context.infernal_receiver_context",
+    "gene_annotation_episode.runtime.infernal_receiver_context",
+    "gene_annotation_episode.providers.infernal_receiver_context",
+    "gene_annotation_episode.scientific_process_prompt.infernal_receiver_context"
+  ],
+  "production_files_changed": false,
+  "pytest_arguments": [
+    "/home/chia/repos/gene_annotation_episode/tests/test_runtime_decision_exchanges.py::test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation",
+    "/home/chia/repos/gene_annotation_episode/tests/test_runtime_decision_exchanges.py::test_own_input_detail_requests_stay_inside_pending_decision",
+    "/home/chia/repos/gene_annotation_episode/tests/test_runtime_decision_exchanges.py::test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context",
+    "/home/chia/repos/gene_annotation_episode/tests/test_runtime_decision_exchanges.py::test_injected_legacy_default_and_markerless_resume_do_not_migrate"
+  ],
+  "replacement": "copy.deepcopy"
+}

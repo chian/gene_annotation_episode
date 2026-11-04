@@ -9,6 +9,7 @@ from collections import defaultdict
 from copy import deepcopy
 import hashlib
 import json
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -20,9 +21,12 @@ from gene_annotation_episode.episode_journal import Journal
 from gene_annotation_episode.execution_recording import HomologyStatistics
 from gene_annotation_episode.homology_episodes import HomologyEpisodes, obj
 from gene_annotation_episode.homology_jobs import FileAsset, HomologyJobs, digest
+from gene_annotation_episode.homology_results import HomologyResults, NativePhmmerInput
+from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.local_jobs import LocalJobPolicy
+from gene_annotation_episode.local_resources import DIRECTORY_ENV, LocalResources
 from gene_annotation_episode.materials import artifact_path
-from gene_annotation_episode.native_lifecycle import cancel
+from gene_annotation_episode.native_lifecycle import cancel, prepare_job, release, start_prepared
 from gene_annotation_episode.resource_episodes import HomologyResourceAdapter, ResourceEpisodes, LAUNCH_VERSION, RESULTS_VERSION
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator
 from gene_annotation_episode.run_statistics import RunHistory
@@ -61,7 +65,11 @@ class ResourceServices:
 
 
 @pytest.fixture
-def resources(tmp_path):
+def resources(tmp_path, monkeypatch):
+    # This fixture explicitly tests a two-CPU allocation. Its caller-owned host
+    # budget must permit that allocation; production defaults remain one CPU.
+    monkeypatch.setenv(DIRECTORY_ENV, str(tmp_path/'local-resources'))
+    LocalResources.configured({'cpu_threads': 2})
     with Store(tmp_path / 'workspace') as store:
         target, = store.create_problem(PROJECT / 'cases/gene_001/target.fna',
             molecule='dna', role='gene')['subject_refs']
@@ -427,3 +435,71 @@ def test_unsupported_results_selectors_are_rejected_before_receiving_work(resour
     with pytest.raises(ValueError, match='invalid_resource_selector'):
         resources.adapter.prepare_assignment(context(resources, 'annotation', {}), 'results',
             {'requested_data_selector': selector}, resources.scope, 'invalid-selector')
+
+
+def test_busy_feedback_preserves_original_homology_job_and_retries_after_capacity_frees(resources,tmp_path):
+    r=resources
+    holder_directory=tmp_path/'capacity-holder'
+    holder_directory.mkdir()
+    holder=prepare_job([sys.executable,'-c',
+        "from pathlib import Path\nimport time\nwhile not Path('finish').exists():time.sleep(.01)"],
+        cwd=holder_directory,policy=LocalJobPolicy(64*1024**2,4*1024**2),
+        handle_path=holder_directory/'native.json')
+    try:
+        start_prepared(holder)
+        assignment=r.binding.prepare_assignment(context(r,'launch',r.launch),'launch_local',
+            selected(r),r.scope,'capacity-blocked-assignment')
+        bound=context(r,'launch_local',assignment)
+        source=r.adapter._legacy(bound)
+        job=assignment['adapter_assignment']['job_ref']
+        r.jobs.configure(job,2)
+        r.jobs.stage(job)
+        result=asyncio.run(r.homology.execute(source,'homology.submit',{},operation_key='blocked-submit'))
+        assert result['status']=='failed'
+        feedback=result['feedback']
+        assert feedback['code']=='local_resource_busy'
+        assert feedback['phase']=='local_admission'
+        assert feedback['retryable'] and feedback['retry_same_prepared_job']
+        assert feedback['local_resources']['available']['job_slots']==0
+        assert feedback['job_ref']==job
+        original=r.jobs._handle(job).read()
+        assert original['stage']=='prepared'
+        assert not (r.jobs._directory(job)/'domains.tbl').exists()
+        cancel(holder)
+        result=asyncio.run(r.homology.execute(source,'homology.submit',{},operation_key='retry-submit'))
+        assert result['status']=='completed'
+        assert result['result']['new_submission']
+        assert r.jobs._handle(job).read()['unit']==original['unit']
+        assert r.jobs.db.execute('SELECT count(*) FROM orders').fetchone()[0]==1
+        wait_terminal(r.jobs,job)
+        handoff=asyncio.run(r.homology.execute(source,'homology.check_handoff',{},operation_key='retry-handoff'))
+        inputs=NativePhmmerInput.from_job(r.jobs,handoff['result']['handoff'])
+        parser_directory=tmp_path/'parser-capacity-holder'
+        parser_directory.mkdir()
+        parser_holder=prepare_job([sys.executable,'-c',
+            "from pathlib import Path\nimport time\nwhile not Path('finish').exists():time.sleep(.01)"],
+            cwd=parser_directory,policy=LocalJobPolicy(64*1024**2,4*1024**2),
+            handle_path=parser_directory/'native.json')
+        try:
+            start_prepared(parser_holder)
+            parser=HomologyResults(r.store,policy=r.policy)
+            with pytest.raises(AcquisitionError) as blocked:
+                asyncio.run(parser.extract(inputs,scope=r.scope,limit=10,attempt_key='busy-parser'))
+            assert blocked.value.code=='local_resource_busy'
+            assert r.store.db.execute('SELECT count(*) FROM homology_parse_cache').fetchone()[0]==0
+            assert r.store.db.execute('SELECT count(*) FROM homology_result_snapshots').fetchone()[0]==0
+            parser_handle,=list((r.store.path/'cache/phmmer_results').glob('*/parser.handle.json'))
+            parser_unit=json.loads(parser_handle.read_text())['unit']
+            assert not (parser_handle.parent/'parse_outcome.json').exists()
+            cancel(parser_holder)
+            parsed=asyncio.run(parser.extract(inputs,scope=r.scope,limit=10,attempt_key='retry-parser'))
+            assert parsed['status']=='completed'
+            assert json.loads(parser_handle.read_text())['unit']==parser_unit
+            assert r.store.db.execute('SELECT count(*) FROM homology_parse_cache').fetchone()[0]==1
+            assert r.store.db.execute('SELECT count(*) FROM homology_result_snapshots').fetchone()[0]==1
+        finally:
+            cancel(parser_holder)
+            release(parser_holder)
+    finally:
+        cancel(holder)
+        release(holder)

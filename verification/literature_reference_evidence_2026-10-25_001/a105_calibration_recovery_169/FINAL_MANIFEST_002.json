@@ -1,0 +1,44 @@
+{
+  "supersedes_final_byte_claim_in": "FINAL_MANIFEST_001.json; original retained",
+  "scope": "pure modules only, no integration or A105 adequacy claim",
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/literature_calibration_recovery_inputs.py",
+      "sha256": "8301bd8eaca9f9f77351d0a04afb59a9eb6d6b1efa14788c0dd609314252d0e2"
+    },
+    {
+      "path": "gene_annotation_episode/literature_calibration_recovery_calculations.py",
+      "sha256": "18be66e67f62caff378617067b67dcda62a86ee220d02bda9ab3e051a7a7a9f5"
+    },
+    {
+      "path": "gene_annotation_episode/literature_calibration_recovery_prompt.py",
+      "sha256": "3a83fc07cee20d10ccdd5d4d04e82539cf0be00360048caf229cc95eb8067640"
+    },
+    {
+      "path": "tests/test_literature_calibration_recovery_169.py",
+      "sha256": "21b93cd3d2385ca0d0a49ff72d2ad7a70a56b30bc30d9ca520ada2d7d727ba54"
+    }
+  ],
+  "shared_dependency": {
+    "path": "gene_annotation_episode/literature_partner_source_fields.py",
+    "sha256": "6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8",
+    "owner": "independent171"
+  },
+  "test_proof": {
+    "path": "tests_007.xml",
+    "sha256": "32b29e92af676c0c823a2e66e8177334e0697e5e873f2002b57affef393ab04e",
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "70",
+        "time": "1.074",
+        "timestamp": "2026-10-27T17:31:07.157126-05:00",
+        "hostname": "chia-Z590-UD"
+      }
+    ]
+  },
+  "changes_after_manifest001": "Root-found soft-break numeric-unit clipping fixed by existing _soft_break_numeric_token; all8 additional cases included; one invalid stale-offset test fixture corrected after failed006; no other production changes."
+}

@@ -1,0 +1,52 @@
+{
+  "method": "stdlib AST and byte/hash comparison only; no application imports or tests",
+  "supersedes_static_revision": "STATIC_CHECKS_001.json",
+  "checks": [
+    {
+      "path": "tests/test_fluorescence_prepared_workflow.py",
+      "before_sha256": "801e6215396b061375e2554ea033d8131ceb1c703bd6a025fea96a453bd9e42f",
+      "after_sha256": "a4f2bf1ff99c75594a47a5b1ff07a4f4ced8e30ec02daee5fadbc86bb3f36d82",
+      "after_size_bytes": 36155,
+      "ast_parse": "passed",
+      "changed_functions": [
+        "test_real_v2_resource_custody_and_shared_cells_reach_both_parents"
+      ],
+      "added_functions": [
+        "test_initial_input_custody_from_closed_saved_case"
+      ],
+      "unchanged_functions": [
+        "deny",
+        "episode_rows",
+        "prepared_case",
+        "receipts",
+        "retained_result",
+        "test_closed_workflow_and_returns_replay_after_numerical_payload_withdrawal",
+        "test_missing_compensated_data_preserves_independent_values_and_closed_history",
+        "test_native_domains_event_identity_residue_and_report_provenance",
+        "test_observations_credit_and_practical_terminal_zero_are_unchanged",
+        "test_saved_recalculation_has_no_original_execution_or_unrequested_authority"
+      ]
+    },
+    {
+      "path": "tests/fluorescence_prepared_workflow_support.py",
+      "before_sha256": "ce3d2789569c32f987ad4ddef056358c89081e7e7fa094cd6ba580e3672e0471",
+      "after_sha256": "8a7046eb5f9e9a70cbcf26d381d828fe72e5b2407031361f28ab1165263e4e9c",
+      "after_size_bytes": 17411,
+      "ast_parse": "passed",
+      "changed_functions": [
+        "workflow_case"
+      ],
+      "added_functions": [
+        "assert_initial_input_custody"
+      ],
+      "unchanged_functions": [
+        "artifact_path",
+        "parameters",
+        "register_supplied",
+        "selected_inputs",
+        "selector"
+      ]
+    }
+  ],
+  "workflow_case_change": "exactly two original ACGTACGT literals replaced by TARGET_SEQUENCE, whose value is unchanged"
+}

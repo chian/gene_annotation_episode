@@ -1,0 +1,460 @@
+{
+  "recorded_at": "2026-10-29T14:37:32.942075+00:00",
+  "contracts": [
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_020.md",
+      "sha256": "1330461d50cb9bd41068414dcad52187f59f4c69c63de208ee34ca450749bb66",
+      "size_bytes": 7122
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_020A.md",
+      "sha256": "1d440e0c73116862da3215c6e7d1e12e7e219989ba9f7c4907db843cc855c6d9",
+      "size_bytes": 2401
+    }
+  ],
+  "owned_current": [
+    {
+      "path": "gene_annotation_episode/native_flux_balance_preparation.py",
+      "sha256": "477179e16c272b4ddaee2d2fe41cb33299e3a0b6bc22900e4cc02c251b219198",
+      "size_bytes": 25874
+    },
+    {
+      "path": "tests/test_flux_balance_preparation_703.py",
+      "sha256": "e07e6d99cad1cdaf743b4e580f1e731d2229c77ca1c618aa2a62a9ad0c861fc1",
+      "size_bytes": 24955
+    }
+  ],
+  "checks": [
+    {
+      "attempt": "check160_preparation703",
+      "passed": 36,
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/handle.json",
+        "unit": "gene-local-job-241ac84a31154f6492a99cbe86629dc4.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T14:32:15.305324+00:00",
+              "monotonic_ns": 1097897002652679,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 204.501937318,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 851423232
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/receipt.json",
+          "sha256": "2fbd333001837b788f4f5322b43b2b8a44409522bd1d7ee8a6a94ace7f2d2336",
+          "size_bytes": 1632
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/case_reports.jsonl",
+          "sha256": "bfa15a59da722db77de93c4f80be1d0228b5278ccb4b15f666e8cb55b0fdc129",
+          "size_bytes": 7520
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/junit.xml",
+          "sha256": "43703af2c9b9110fb29065466239b4f410a74d9b9a88ab4d13f76e17c8ba502a",
+          "size_bytes": 5861
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/selected_request.json",
+          "sha256": "c56167347d39d34a61107da31809453b0e5b215fc942bc4ec1fcbbe3d4ab69e1",
+          "size_bytes": 3295
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/stdout.txt",
+          "sha256": "914ec16577ec90f6d73045b2bea75e1557f38fd1e60ba18f617096b50070700d",
+          "size_bytes": 111
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "attempt": "check160b_preparation703",
+      "passed": 3,
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/handle.json",
+        "unit": "gene-local-job-c0151ebb6d114b43b2bfb54fa8ae48d0.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T14:31:55.363234+00:00",
+              "monotonic_ns": 1097877060561068,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 3.891588505,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 755658752
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/receipt.json",
+          "sha256": "7a99cc9f817b93a4959a2a274314248e56e6e7e74799b9b136a5a36492124937",
+          "size_bytes": 1631
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/case_reports.jsonl",
+          "sha256": "6db4fa69e15d0f32acb4a5ab34655dc26ceec94cbba43508dc32c6d5ee5b91bf",
+          "size_bytes": 612
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/junit.xml",
+          "sha256": "38129d86eb6ce3ccb0adcfb7324515b72d7ab7244d074c9d45d6c80240b6f05c",
+          "size_bytes": 697
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/selected_request.json",
+          "sha256": "7c32648a64784a43e66e0cf80c6510680ef6a936416ffc0294358b7d821cd052",
+          "size_bytes": 3592
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/stdout.txt",
+          "sha256": "5dc1959f22fbcb52b8ae3d71a471c99c5e3afd39e999cac6afcd15d353a183a0",
+          "size_bytes": 98
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160b_preparation703/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "attempt": "check160c_preparation703",
+      "passed": 5,
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/handle.json",
+        "unit": "gene-local-job-11c45fc2e834418f8933ad91354b4833.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T14:35:52.105298+00:00",
+              "monotonic_ns": 1098113802626574,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 5.622376959,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 756785152
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/receipt.json",
+          "sha256": "ad8b0933f6dc2c78b94b37a4ffb8049300e1f18b39230b2838f7bbe316ba5143",
+          "size_bytes": 1631
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/case_reports.jsonl",
+          "sha256": "a239583100c1eb8955f00a5257598cc86ca6bcba5edb51d36dff28cd63c60724",
+          "size_bytes": 1054
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/junit.xml",
+          "sha256": "3a0aa4e8c417c0b216504c1f38d68c585a0c7c8e35cdae20c011cd4cab18df49",
+          "size_bytes": 1036
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/selected_request.json",
+          "sha256": "2089babd525c52d65464fd7a0bac5374a7df53767eb2210c5c8dbeac80d9e2cd",
+          "size_bytes": 3836
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/stdout.txt",
+          "sha256": "913ce9fcaf2f3c7e148ffdf71fbdec98fef8b01a3294aa972a2de94ae85f6a55",
+          "size_bytes": 98
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160c_preparation703/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    }
+  ],
+  "cumulative_distinct_passing_cases": 44,
+  "unique_case_ids": [
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[cwd]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[duplicate_path]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[duplicate_pin]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[failure_shape]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[file_format]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[intent_directory]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[outside_path]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[request_env]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[request_raw]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[returncode_bool]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[source_outside]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[swap]",
+    "tests/test_flux_balance_preparation_703.py::test_frozen_execution_contradictions_reject_without_live_work[terminal]",
+    "tests/test_flux_balance_preparation_703.py::test_live_handle_path_shape_fails_before_request_indexing[extra_path]",
+    "tests/test_flux_balance_preparation_703.py::test_live_handle_path_shape_fails_before_request_indexing[missing_request]",
+    "tests/test_flux_balance_preparation_703.py::test_live_handle_path_shape_fails_before_request_indexing[null_request]",
+    "tests/test_flux_balance_preparation_703.py::test_lost_handle_with_native_controls_and_empty_output_cannot_reserve_again",
+    "tests/test_flux_balance_preparation_703.py::test_lost_handle_with_owned_intent_and_partial_output_cannot_reserve_again",
+    "tests/test_flux_balance_preparation_703.py::test_malformed_request_File_retains_structured_failure[None]",
+    "tests/test_flux_balance_preparation_703.py::test_malformed_request_File_retains_structured_failure[file_value1]",
+    "tests/test_flux_balance_preparation_703.py::test_malformed_request_File_retains_structured_failure[file_value2]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[common_overlap]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[execution_symlink]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[memory]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[null_control]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[output_symlink]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[scratch]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[unsealed]",
+    "tests/test_flux_balance_preparation_703.py::test_preflight_does_not_dispatch_or_repair_wrong_boundary[wall]",
+    "tests/test_flux_balance_preparation_703.py::test_prepared_record_contradictions_reject[failure_locator]",
+    "tests/test_flux_balance_preparation_703.py::test_prepared_record_contradictions_reject[output_format]",
+    "tests/test_flux_balance_preparation_703.py::test_prepared_record_contradictions_reject[output_missing]",
+    "tests/test_flux_balance_preparation_703.py::test_prepared_record_contradictions_reject[output_order]",
+    "tests/test_flux_balance_preparation_703.py::test_prepared_record_contradictions_reject[result_selector]",
+    "tests/test_flux_balance_preparation_703.py::test_real_retained688_native_worker_same_numbers_and_replay",
+    "tests/test_flux_balance_preparation_703.py::test_real_saved_worker_common_scratch_root_parameters_and_native_receipt",
+    "tests/test_flux_balance_preparation_703.py::test_saved_closed_replay_without_input_or_current_runtime",
+    "tests/test_flux_balance_preparation_703.py::test_synthetic_closed_partial_collection_preserves_valid_siblings[changed_output]",
+    "tests/test_flux_balance_preparation_703.py::test_synthetic_closed_partial_collection_preserves_valid_siblings[malformed_result]",
+    "tests/test_flux_balance_preparation_703.py::test_synthetic_closed_partial_collection_preserves_valid_siblings[missing_output]",
+    "tests/test_flux_balance_preparation_703.py::test_synthetic_closed_partial_collection_preserves_valid_siblings[missing_result]",
+    "tests/test_flux_balance_preparation_703.py::test_synthetic_closed_partial_collection_preserves_valid_siblings[nonzero]",
+    "tests/test_flux_balance_preparation_703.py::test_synthetic_closed_partial_collection_preserves_valid_siblings[resource]",
+    "tests/test_flux_balance_preparation_703.py::test_synthetic_closed_partial_collection_preserves_valid_siblings[wrong_join]"
+  ],
+  "actual_finite_worker_executions": [
+    {
+      "evidence": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/preparation703-saved-result.json",
+        "sha256": "0b98da57424a7b0637cc1357d1c6d4f09c62c273d7c1cc87533c73507b7cca88",
+        "size_bytes": 343596
+      },
+      "native_unit": "gene-local-job-7ab6ce5189144c8c836cd0eaecbf1431.service",
+      "mode": "saved_sheet_recalculation",
+      "returncode": 0,
+      "common_scratch_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/temporary/pytest/preparation703-saved0/action",
+      "output_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/temporary/pytest/preparation703-saved0/action/worker",
+      "execution_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/temporary/pytest/preparation703-saved0/action/worker.execution",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      },
+      "observed_scratch_bytes": 16433152,
+      "elapsed_service_wall_seconds": 3.200916279,
+      "numerical_example": {
+        "active_count": 1,
+        "native_basis_objective": -4.25,
+        "full_objective": -2.75,
+        "native_solves": 0
+      },
+      "original_scientific_solves": 0
+    },
+    {
+      "evidence": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/preparation703-native-result.json",
+        "sha256": "0cf835eaa0d3fce5ff989217dda7bea44421dd551ba973c2846f9882f4cd7ba6",
+        "size_bytes": 5863524
+      },
+      "native_unit": "gene-local-job-2966e85ab4164b64b5f34b5b5d46dd0a.service",
+      "mode": "native_result",
+      "returncode": 0,
+      "common_scratch_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/temporary/pytest/test_real_retained688_native_w0/action",
+      "output_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/temporary/pytest/test_real_retained688_native_w0/action/worker",
+      "execution_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check160_preparation703/temporary/pytest/test_real_retained688_native_w0/action/worker.execution",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      },
+      "observed_scratch_bytes": 32743424,
+      "elapsed_service_wall_seconds": 8.089705967,
+      "numerical_example": {
+        "objective": 10,
+        "fluxes": [
+          10,
+          10,
+          10
+        ],
+        "variables": 6,
+        "finite_variable_bound_sides": 12,
+        "violations": 0,
+        "native_solves": 0
+      },
+      "original_scientific_solves": 0
+    }
+  ],
+  "actual_finite_worker_count": 2,
+  "original_fba_optimization_calls": 0,
+  "acquisition_calls": 0,
+  "installs_or_downloads": 0,
+  "synthetic_cases": "Explicitly labelled closure/control/failure fixtures reuse recorded structures and real output bytes. Their unit identifiers do not name real native executions; they supply no new scientific measurements.",
+  "current_source_verification": "Only later control validation/pre-reservation guards changed after original160. Final targeted metadata checks reuse original saved execution JSON; exact original actual runs and their artifacts/receipts remain retained.",
+  "native_runtime_limit": "Production adapter verifies selected source/interpreter/dependency/stdlib byte pins before/after. It does not implement a complete nested child mapping/native-library audit. Clean outer529 audits refer to their own verification processes.",
+  "policy_limit": "20GiB cgroup RAM,zero swap,4GiB monitored visible allocated scratch plus per-file rlimit,no wall cap; sampling permits overshoot and is not a filesystem sandbox. Native cwd covers output and.execution siblings together.",
+  "remaining": [
+    "root host commission/input-control authentication and original selected start binding",
+    "result host publication and authenticated typed parent returns",
+    "saved-sheet admission and complete configured native/saved episodes",
+    "closed full episode replay and practical completion/credit",
+    "reviewed TASK/STEERING presentation"
+  ],
+  "whole_tool_completion_increment": 0,
+  "no_live_handles_remaining": true
+}

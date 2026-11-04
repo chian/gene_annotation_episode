@@ -1,0 +1,11 @@
+{
+  "checker_source_sha256": "3cbcfd892909b29ec03314a43acd7b66af69ad89a90a0c81ccff9379918399d8",
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "/tmp/configured-literature-caller-plan-20261022-001-vujlt8m4/verify_plan001.py"
+  ],
+  "command_meaning": "Exact final static-check subcommand from the recorded tool invocation; preceding file-write shell text is not relabelled as a separate saved shell transcript.",
+  "exit_code": 1,
+  "operator_source_sha256": "4969578178bbffc23e042e0cff35cd4b64a9baa655398f7940464b7651136573",
+  "reason": "Static call-name audit incorrectly treated permitted sqlite3 db.execute (queries only on future new inactive outputs) as a forbidden application execute call. No operator or application was executed."
+}

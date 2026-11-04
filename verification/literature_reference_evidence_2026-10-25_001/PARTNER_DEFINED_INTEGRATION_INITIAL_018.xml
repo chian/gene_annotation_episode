@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="12.373" timestamp="2026-10-26T02:50:21.669779-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_partner_defined_integration" name="test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe[nadh]" time="1.248"><failure message="gene_annotation_episode.domain.ContractError: representation_error">value = {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'anchor': {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'artifac...t': 18232, 'end': 18248, ...}, 'reference_type': 'assay', 'accession': 'partner_literal_a30b7058fe2e7421a66298ec', ...}
+schema = {'type': 'object', 'properties': {'reference_type': {'enum': ['sequence', 'protein', 'dna', 'rna', 'assay', 'taxon', ....['reference_type', 'source_ref', 'accession', 'label', 'sequence_ref', 'molecule', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -&gt; None:
+        try:
+&gt;           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:512: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'accession': {'maxLength': 200, 'minLength'...ecker=&lt;FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']&gt;)
+args = ({'source_ref': 'source_cb0ee89770a13dde415ddd00', 'anchor': {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'artifa...: 18232, 'end': 18248, ...}, 'reference_type': 'assay', 'accession': 'partner_literal_a30b7058fe2e7421a66298ec', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+&gt;           raise error
+E           jsonschema.exceptions.ValidationError: 'Fd + Hyd\n7 (14)a' does not match '^[^\\n\\r]+$'
+E           
+E           Failed validating 'pattern' in schema['properties']['label']:
+E               {'maxLength': 512,
+E                'minLength': 1,
+E                'pattern': '^[^\\n\\r]+$',
+E                'type': 'string'}
+E           
+E           On instance['label']:
+E               'Fd + Hyd\n7 (14)a'
+
+.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1570/test_primary_defined_units_are0')
+case = 'nadh'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe(tmp_path, case):
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            repo = LiteraturePartnerRepository(store, context.run_id)
+&gt;           outcome = repo.populate(context, args, 'defined-primary')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_partner_defined_integration.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_partner_storage.py:358: in populate
+    publish("reference", _condition_role(literal, entry))
+gene_annotation_episode/literature_partner_storage.py:349: in publish
+    row = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:1451: in put
+    self._validate_record(kind, record, origin)
+gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'anchor': {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'artifac...t': 18232, 'end': 18248, ...}, 'reference_type': 'assay', 'accession': 'partner_literal_a30b7058fe2e7421a66298ec', ...}
+schema = {'type': 'object', 'properties': {'reference_type': {'enum': ['sequence', 'protein', 'dna', 'rna', 'assay', 'taxon', ....['reference_type', 'source_ref', 'accession', 'label', 'sequence_ref', 'molecule', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -&gt; None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+&gt;           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:515: ContractError</failure></testcase><testcase classname="tests.test_literature_partner_defined_integration" name="test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe[h2]" time="1.306"><failure message="gene_annotation_episode.domain.ContractError: representation_error">value = {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'anchor': {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'artifac...t': 18593, 'end': 18603, ...}, 'reference_type': 'assay', 'accession': 'partner_literal_40d24d6033e6e00a81046e2f', ...}
+schema = {'type': 'object', 'properties': {'reference_type': {'enum': ['sequence', 'protein', 'dna', 'rna', 'assay', 'taxon', ....['reference_type', 'source_ref', 'accession', 'label', 'sequence_ref', 'molecule', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -&gt; None:
+        try:
+&gt;           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:512: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'accession': {'maxLength': 200, 'minLength'...ecker=&lt;FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']&gt;)
+args = ({'source_ref': 'source_cb0ee89770a13dde415ddd00', 'anchor': {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'artifa...: 18593, 'end': 18603, ...}, 'reference_type': 'assay', 'accession': 'partner_literal_40d24d6033e6e00a81046e2f', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+&gt;           raise error
+E           jsonschema.exceptions.ValidationError: 'Fd + Hyd\n5' does not match '^[^\\n\\r]+$'
+E           
+E           Failed validating 'pattern' in schema['properties']['label']:
+E               {'maxLength': 512,
+E                'minLength': 1,
+E                'pattern': '^[^\\n\\r]+$',
+E                'type': 'string'}
+E           
+E           On instance['label']:
+E               'Fd + Hyd\n5'
+
+.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1570/test_primary_defined_units_are1')
+case = 'h2'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe(tmp_path, case):
+        store, context, args = setup_case(tmp_path, case=case)
+        with store:
+            repo = LiteraturePartnerRepository(store, context.run_id)
+&gt;           outcome = repo.populate(context, args, 'defined-primary')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_partner_defined_integration.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_partner_storage.py:358: in populate
+    publish("reference", _condition_role(literal, entry))
+gene_annotation_episode/literature_partner_storage.py:349: in publish
+    row = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:1451: in put
+    self._validate_record(kind, record, origin)
+gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'anchor': {'source_ref': 'source_cb0ee89770a13dde415ddd00', 'artifac...t': 18593, 'end': 18603, ...}, 'reference_type': 'assay', 'accession': 'partner_literal_40d24d6033e6e00a81046e2f', ...}
+schema = {'type': 'object', 'properties': {'reference_type': {'enum': ['sequence', 'protein', 'dna', 'rna', 'assay', 'taxon', ....['reference_type', 'source_ref', 'accession', 'label', 'sequence_ref', 'molecule', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -&gt; None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+&gt;           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:515: ContractError</failure></testcase><testcase classname="tests.test_literature_partner_defined_integration" name="test_primary_defined_units_reach_the_actual_ordinary_parent_form[nadh]" time="4.906"><failure message="ValueError: not enough values to unpack (expected 1, got 0)">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1570/test_primary_defined_units_rea0')
+case = 'nadh'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_primary_defined_units_reach_the_actual_ordinary_parent_form(tmp_path, case):
+        store, context, args = setup_case(tmp_path / 'state', case=case)
+        with store:
+            received = []
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the reported ferredoxin-omission endpoint',
+                'scope': plain(context.scope), 'purpose': 'Return requested native components and limitations',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            action = {'selection': {'kind': 'tool', 'tool': 'literature.partner.source.populate',
+                'arguments': args}, 'report_update': {}}
+    
+            def receive(inputs):
+                form, = inputs['child_reports']
+                check_rows(form['measurements'], case)
+                received.append(form)
+                commit = {key: [] for key in store.reasoning_schema()['required']}
+                selected = deepcopy(args['literals']['subject'])
+                selected.pop('representation')
+                selected['artifact_ref'] = store.get(args['source_ref'])['text_ref']
+                commit['source_subjects'] = [{'alias': 'assayed_complex', 'reference_type': 'assay',
+                    'source_ref': args['source_ref'], 'label': selected['quote'], 'anchor': selected}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+    
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+                provider=ScriptedProvider([commission, action, receive]), run_dir=tmp_path / 'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
+                project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_partner_defined_integration.py:189: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:360: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...e_partner_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+
+    def receive(inputs):
+&gt;       form, = inputs['child_reports']
+        ^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_literature_partner_defined_integration.py:177: ValueError</failure></testcase><testcase classname="tests.test_literature_partner_defined_integration" name="test_primary_defined_units_reach_the_actual_ordinary_parent_form[h2]" time="3.743"><failure message="ValueError: not enough values to unpack (expected 1, got 0)">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1570/test_primary_defined_units_rea1')
+case = 'h2'
+
+    @pytest.mark.parametrize('case', CASES)
+    def test_primary_defined_units_reach_the_actual_ordinary_parent_form(tmp_path, case):
+        store, context, args = setup_case(tmp_path / 'state', case=case)
+        with store:
+            received = []
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the reported ferredoxin-omission endpoint',
+                'scope': plain(context.scope), 'purpose': 'Return requested native components and limitations',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            action = {'selection': {'kind': 'tool', 'tool': 'literature.partner.source.populate',
+                'arguments': args}, 'report_update': {}}
+    
+            def receive(inputs):
+                form, = inputs['child_reports']
+                check_rows(form['measurements'], case)
+                received.append(form)
+                commit = {key: [] for key in store.reasoning_schema()['required']}
+                selected = deepcopy(args['literals']['subject'])
+                selected.pop('representation')
+                selected['artifact_ref'] = store.get(args['source_ref'])['text_ref']
+                commit['source_subjects'] = [{'alias': 'assayed_complex', 'reference_type': 'assay',
+                    'source_ref': args['source_ref'], 'label': selected['quote'], 'anchor': selected}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+    
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+                provider=ScriptedProvider([commission, action, receive]), run_dir=tmp_path / 'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
+                project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_partner_defined_integration.py:189: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:360: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...e_partner_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+
+    def receive(inputs):
+&gt;       form, = inputs['child_reports']
+        ^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_literature_partner_defined_integration.py:177: ValueError</failure></testcase></testsuite></testsuites>

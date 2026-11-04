@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="38" time="256.135" timestamp="2026-10-27T19:09:15.899053-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_barcode_results_worker" name="test_actual_twelve_read_all_counts_distances_tree_and_mapping" time="5.707" /><testcase classname="tests.test_barcode_results_worker" name="test_observed_gzip_and_fastq_formats[test_actual_twelve_read_native1]" time="5.142" /><testcase classname="tests.test_barcode_results_worker" name="test_observed_gzip_and_fastq_formats[test_actual_twelve_read_native2]" time="5.042" /><testcase classname="tests.test_barcode_results_worker" name="test_observed_gzip_and_fastq_formats[test_actual_twelve_read_native3]" time="4.316" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[attempt]" time="4.893" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[request]" time="4.781" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[sample]" time="6.548" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[bytes]" time="4.136" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[writer]" time="4.308" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[driver_start]" time="4.640" /><testcase classname="tests.test_barcode_results_worker" name="test_wrong_original_associations_never_acquire[missing_reads]" time="4.549" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_0-population0-0]" time="4.297" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_1-population1-1]" time="4.398" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_2-population2-1]" time="4.131" /><testcase classname="tests.test_barcode_results_worker" name="test_empty_no_match_and_single_are_complete_qualified_answers[test_empty_unmatched_filtered_3-population3-1]" time="4.023" /><testcase classname="tests.test_barcode_results_worker" name="test_native_prefix_is_partial_acquisition_not_complete_population" time="4.191" /><testcase classname="tests.test_barcode_results_worker" name="test_later_native_cluster_failure_preserves_requested_counts[summary-True]" time="4.049" /><testcase classname="tests.test_barcode_results_worker" name="test_later_native_cluster_failure_preserves_requested_counts[clusters-False]" time="4.398" /><testcase classname="tests.test_barcode_results_worker" name="test_saved_recut_without_any_captured_native_scientific_bytes" time="7.510" /><testcase classname="tests.test_barcode_results_worker" name="test_changed_count_population_keeps_counts_and_reports_missing_distances" time="7.518" /><testcase classname="tests.test_barcode_results_worker" name="test_failed_projection_retains_acquisition_for_saved_repair" time="5.864" /><testcase classname="tests.test_barcode_results_worker" name="test_actual_worker_is_bounded_pinned_and_completed_replay_does_not_run" time="44.526" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch0]" time="0.001" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch1]" time="0.001" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch2]" time="0.000" /><testcase classname="tests.test_barcode_results_worker" name="test_closed_selector[patch3]" time="0.001" /><testcase classname="tests.test_barcode_returns" name="test_requested_projection_grants_no_saved_sheet" time="8.987"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:147: in test_requested_projection_grants_no_saved_sheet
+    child = f.child(f.root, form_schema(PROJECTION_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_projection_only_population_is_inherited_without_an_artifact_grant" time="9.615"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:170: in test_projection_only_population_is_inherited_without_an_artifact_grant
+    first = f.child(f.root, form_schema(PROJECTION_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_forwarded_projection_population_preserves_its_frozen_origin" time="9.245"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:183: in test_forwarded_projection_population_preserves_its_frozen_origin
+    science = f.child(f.root, form_schema(PROJECTION_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_sheet_possession_requires_original_immediate_child_return" time="8.548"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:198: in test_sheet_possession_requires_original_immediate_child_return
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_frozen_forwarding_prefix_excludes_later_identical_origin" time="10.294"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:216: in test_frozen_forwarding_prefix_excludes_later_identical_origin
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_saved_child_inherits_only_original_receipt_prefix" time="9.163"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:235: in test_saved_child_inherits_only_original_receipt_prefix
+    first = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_historical_return_survives_scientific_file_loss" time="7.190"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:247: in test_historical_return_survives_scientific_file_loss
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[None]" time="7.645"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:282: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[declaration]" time="7.682"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:282: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[frame]" time="7.675"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:282: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_full_and_compact_original_contract_validation[empty_request]" time="7.885"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:282: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword</failure></testcase><testcase classname="tests.test_barcode_returns" name="test_compact_redelivery_reads_frozen_facts_without_an_observation" time="10.269"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_barcode_returns.py:308: in test_compact_redelivery_reads_frozen_facts_without_an_observation
+    child = f.child(f.root, form_schema(PROJECTION_SOURCE, SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_barcode_returns.py:99: in child
+    contract = TypedReportContract('Return the selected barcode data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:394: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:369: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:373: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:357: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword</failure></testcase></testsuite></testsuites>

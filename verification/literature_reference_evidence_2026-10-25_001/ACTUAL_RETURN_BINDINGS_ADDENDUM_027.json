@@ -1,0 +1,24 @@
+{
+  "corrects": "ACTUAL_RETURN_BOUNDARIES_027.json attempts.requested_sources",
+  "correction": "That field incorrectly inspected a compiled contract as a raw JSON schema. The empty mapping must not be read as absence of a requested fact binding. The actual compiled information bindings are below. Numerical operation/received counts and empty rate return remain valid.",
+  "actual_bindings": [
+    {
+      "run": "020",
+      "actual_compiled_information_bindings": {
+        "basis_observation_refs": "basis_observation_refs",
+        "endpoint_scope": "endpoint_scope",
+        "literature_rate_cells": "literature_rate_cells",
+        "remaining_issue_codes": "remaining_issue_codes"
+      }
+    },
+    {
+      "run": "023",
+      "actual_compiled_information_bindings": {
+        "interpretation_basis_refs": "interpretation_basis_refs",
+        "source_observation_refs": "source_observation_refs",
+        "unresolved_question_codes": "unresolved_question_codes"
+      }
+    }
+  ],
+  "new_numerical_admission_proved": false
+}

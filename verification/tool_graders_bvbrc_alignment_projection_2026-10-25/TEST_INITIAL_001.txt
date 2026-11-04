@@ -1,0 +1,228 @@
+......FF...FF............FF....F........................................ [ 93%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+_____ test_every_metric_family_copies_actual_cells[aa_two_groups-metacats] _____
+
+case = 'aa_two_groups', provider = 'metacats'
+
+    @pytest.mark.parametrize('case,provider', [('dna','msa'),('protein','msa'),('reference','msa'),('original_coverage','msa'),('composition','msa'),('trees','msa'),('aa_two_groups','metacats'),('aa_three_groups','metacats')])
+    def test_every_metric_family_copies_actual_cells(case,provider):
+>       args=saved(case,provider); fields=metric_fields(args); facts=project(args,fields)
+                                                                     ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: in call
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:847: in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:833: in project
+    fact = self.measurement(selection, request, value) if kind == 'measurement' else self.rows(selection, request, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:513: in measurement
+    return self.cell(aid, cell, population=pid, unit=None if _UNITS[metric] == 'native_unknown' else _UNITS[metric])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:389: in cell
+    _require(unit is None or cell['unit'] == unit, 'cell_unit_conflict')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ok = False, code = 'cell_unit_conflict'
+
+    def _require(ok, code):
+        if not ok:
+>           raise ValueError('bvbrc_alignment_projection_' + code)
+E           ValueError: bvbrc_alignment_projection_cell_unit_conflict
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:26: ValueError
+____ test_every_metric_family_copies_actual_cells[aa_three_groups-metacats] ____
+
+case = 'aa_three_groups', provider = 'metacats'
+
+    @pytest.mark.parametrize('case,provider', [('dna','msa'),('protein','msa'),('reference','msa'),('original_coverage','msa'),('composition','msa'),('trees','msa'),('aa_two_groups','metacats'),('aa_three_groups','metacats')])
+    def test_every_metric_family_copies_actual_cells(case,provider):
+>       args=saved(case,provider); fields=metric_fields(args); facts=project(args,fields)
+                                                                     ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: in call
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:847: in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:833: in project
+    fact = self.measurement(selection, request, value) if kind == 'measurement' else self.rows(selection, request, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:513: in measurement
+    return self.cell(aid, cell, population=pid, unit=None if _UNITS[metric] == 'native_unknown' else _UNITS[metric])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:389: in cell
+    _require(unit is None or cell['unit'] == unit, 'cell_unit_conflict')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ok = False, code = 'cell_unit_conflict'
+
+    def _require(ok, code):
+        if not ok:
+>           raise ValueError('bvbrc_alignment_projection_' + code)
+E           ValueError: bvbrc_alignment_projection_cell_unit_conflict
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:26: ValueError
+_____________ test_exact_native_msa_row_and_field[dna-field2-1-0] ______________
+
+alphabet = 'dna', field = {'kind': 'dna_count', 'symbol': 'Deletion'}, row = 1
+expected = 0
+
+    @pytest.mark.parametrize('alphabet,field,row,expected',[('dna',{'kind':'score'},1,92),('dna',{'kind':'n_sequences'},1,3),('dna',{'kind':'dna_count','symbol':'Deletion'},1,0),('protein',{'kind':'protein_count','detail_index':0},3,1)])
+    def test_exact_native_msa_row_and_field(alphabet,field,row,expected):
+        args=operands(msa_native_fixture(alphabet))
+        selected={'kind':'native_measurement','analysis_id':'analysis','table':slot('analysis','frequency'),'row_index':row,'field':field}
+        fact=project(args,{'number':selected})['number']
+>       assert fact['value']==expected
+E       assert 1 == 0
+
+tests/test_bvbrc_alignment_bundle_projection.py:217: AssertionError
+___________ test_exact_native_msa_row_and_field[protein-field3-3-1] ____________
+
+alphabet = 'protein', field = {'kind': 'protein_count', 'detail_index': 0}
+row = 3, expected = 1
+
+    @pytest.mark.parametrize('alphabet,field,row,expected',[('dna',{'kind':'score'},1,92),('dna',{'kind':'n_sequences'},1,3),('dna',{'kind':'dna_count','symbol':'Deletion'},1,0),('protein',{'kind':'protein_count','detail_index':0},3,1)])
+    def test_exact_native_msa_row_and_field(alphabet,field,row,expected):
+        args=operands(msa_native_fixture(alphabet))
+        selected={'kind':'native_measurement','analysis_id':'analysis','table':slot('analysis','frequency'),'row_index':row,'field':field}
+        fact=project(args,{'number':selected})['number']
+>       assert fact['value']==expected
+E       assert 2 == 1
+
+tests/test_bvbrc_alignment_bundle_projection.py:217: AssertionError
+_________ test_native_metacats_field_selectors[metacats_raw_r-field5] __________
+
+reader = 'metacats_raw_r'
+field = {'kind': 'raw_r_group_count', 'position_1based': 1, 'count_index': 0}
+
+    @pytest.mark.parametrize('reader,field',[('metacats_chisq',{'kind':'chi_square'}),('metacats_chisq',{'kind':'p_value'}),('metacats_chisq',{'kind':'df'}),('metacats_chisq',{'kind':'export_group_count','heading_index':0,'count_index':0}),('metacats_pair',{'kind':'p_value'}),('metacats_raw_r',{'kind':'raw_r_group_count','position_1based':1,'count_index':0})])
+    def test_native_metacats_field_selectors(reader,field):
+        args=saved('aa_two_groups','metacats'); aid,_,_=values(args)
+        slotrow=next(s for s in args['parameters']['artifact_selection'] if s['reader']['reader']==reader and (reader!='metacats_raw_r' or s['reader']['kind']=='omnibus'))
+>       facts=project(args,{'number':{'kind':'native_measurement','analysis_id':aid,'table':slot(aid,slotrow['slot_id']),'row_index':0,'field':field}})
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: in call
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:847: in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:827: in project
+    fact = self.native(selection)
+           ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:574: in native
+    group = _one(collection, **{index_key: field[index_key]})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:73: in _one
+    _require(len(matches) == 1, 'selected_row_unknown_or_ambiguous')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ok = False, code = 'selected_row_unknown_or_ambiguous'
+
+    def _require(ok, code):
+        if not ok:
+>           raise ValueError('bvbrc_alignment_projection_' + code)
+E           ValueError: bvbrc_alignment_projection_selected_row_unknown_or_ambiguous
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:26: ValueError
+____ test_native_underflow_observation_and_calculated_test_remain_distinct _____
+
+    def test_native_underflow_observation_and_calculated_test_remain_distinct():
+        args=saved('native_pair_tail_underflow','metacats');aid,results,requests=values(args)
+        slotrow=next(s for s in args['parameters']['artifact_selection'] if s['reader']['reader']=='metacats_pair')
+        req=next(r for r in requests if r['kind']=='native_statistics'); test=results[req['request_id']]['pairs'][0]
+        fields={'observed':{'kind':'native_measurement','analysis_id':aid,'table':slot(aid,slotrow['slot_id']),'row_index':0,'field':{'kind':'p_value'}},
+            'calculated':selection('statistical_tests',aid,req['request_id'],tests=[{k:test[k] for k in ('category_id','column_0based','kind','group_ids')}])}
+>       facts=project(args,fields)
+              ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_alignment_bundle_projection.py:140: in project
+    answer = p.project_requested_facts(**args,requested_form=form)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:33: in call
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:847: in project_requested_facts
+    requested_form=requested_form, parameters=parameters, provider=provider).project()
+                                                                             ^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:827: in project
+    fact = self.native(selection)
+           ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:565: in native
+    row = _one(rows, row_index=selection['row_index']); indices = []
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:73: in _one
+    _require(len(matches) == 1, 'selected_row_unknown_or_ambiguous')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ok = False, code = 'selected_row_unknown_or_ambiguous'
+
+    def _require(ok, code):
+        if not ok:
+>           raise ValueError('bvbrc_alignment_projection_' + code)
+E           ValueError: bvbrc_alignment_projection_selected_row_unknown_or_ambiguous
+
+gene_annotation_episode/bvbrc_alignment_bundle_projection.py:26: ValueError
+_________ test_all_four_xmfa_routes_and_all_three_coverage_bases[xmfa] _________
+
+case = 'xmfa'
+
+    @pytest.mark.parametrize('case',['xmfa','xmfa_missing_sources','source_distinct_original_occurrences','source_one_missing_source'])
+    def test_all_four_xmfa_routes_and_all_three_coverage_bases(case):
+        args=saved(case);aid,results,requests=values(args);fields={}
+        for request in requests:
+            rid=request['request_id'];kind=request['kind']
+            if kind=='xmfa_column_coordinates': fields[rid]=selection('xmfa_coordinates',aid,rid,cells=request['cells'])
+            elif kind=='xmfa_source_positions': fields[rid]=selection('xmfa_source_positions',aid,rid,queries=request['queries'])
+            elif kind=='xmfa_interval_coverage': fields[rid]=selection('xmfa_coverage',aid,rid,member_numbers=request['selection']['member_numbers'],include_intervals=True,include_original_coverage=True)
+            else:
+                block=results[rid]['blocks'][0]; site=block['sites'][0]
+                metrics=[{'metric':k,'block_index':block['block_index']} for k in ('selected_column_count','present_member_count','zero_member_count','omitted_member_count')]
+                metrics += [{'metric':k,'block_index':block['block_index'],'column_0based':site['column_0based']} for k in ('site_present_member_count','absent_member_count','gap_count','nongap_count','canonical_count','ambiguity_count','other_count','literal_entropy_bits','canonical_entropy_bits','canonical_majority_fraction')]
+                metrics += [{'metric':'symbol_count','block_index':block['block_index'],'column_0based':site['column_0based'],'symbol':site['symbol_counts'][0]['symbol']}]
+                metrics += [{'metric':k,'block_index':block['block_index'],'member_a':1,'member_b':3} for k in ('identical_canonical','substitutions','a_only_gap','b_only_gap','both_gap','ambiguous_or_other','comparable_canonical','identity_fraction')]
+                fields[rid]=selection('xmfa_alignment_measurements',aid,rid,measurements=metrics)
+        facts=project(args,fields)
+        if case=='xmfa':
+            assert [r['known_union_bases'] for r in facts['represented']]==[50,41,49]
+            assert [r['known_union_bases'] for r in facts['multi_member_block']]==[48,0,47]
+            assert [r['known_union_bases'] for r in facts['cooccupied_column']]==[46,0,46]
+>           assert [r['native_position_1based'] for r in facts['xmfa_column_coordinates']]==[48,None,1]
+E           assert [49, None, 2] == [48, None, 1]
+E             
+E             At index 0 diff: 49 != 48
+E             Use -v to get more diff
+
+tests/test_bvbrc_alignment_bundle_projection.py:298: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_every_metric_family_copies_actual_cells[aa_two_groups-metacats]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_every_metric_family_copies_actual_cells[aa_three_groups-metacats]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_exact_native_msa_row_and_field[dna-field2-1-0]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_exact_native_msa_row_and_field[protein-field3-3-1]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_native_metacats_field_selectors[metacats_raw_r-field5]
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_native_underflow_observation_and_calculated_test_remain_distinct
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_all_four_xmfa_routes_and_all_three_coverage_bases[xmfa]
+7 failed, 70 passed in 8.48s

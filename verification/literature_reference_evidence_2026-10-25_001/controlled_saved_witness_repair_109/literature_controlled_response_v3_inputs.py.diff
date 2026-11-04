@@ -1,0 +1,50 @@
+--- before/gene_annotation_episode/literature_controlled_response_v3_inputs.py
++++ after/gene_annotation_episode/literature_controlled_response_v3_inputs.py
+@@ -66,6 +66,12 @@
+     ED['Assignment']=cp(D['Assignment'])
+     ED['ScopeRelationExtraction']=obj({'selection':cp(D['ScopeRelation']),'witnesses':arr(ref('WitnessRecord')),
+         'effective_value':cp(D['ScopeRelation']['properties']['value'])})
++    # Optional only for saved legacy extractions. Live reads retain each local
++    # interpretation's actual witnesses independently of any whole-model request.
++    E['properties']['local_pair_extractions']=arr(obj({'pair_key':T,
++        'admissibility':obj({'selection':cp(D['LocalPairNomination']['properties']['admissibility']),
++            'witnesses':arr(ref('WitnessRecord')),'effective_value':enum('compatible','unknown','conflicting')}),
++        'scope':ref('ScopeRelationExtraction'),'variance_status':ref('InterpretationExtraction')}))
+     ED['CompanionExtraction']=obj({'reading_key':T,'primary_role':enum(*ROLES),'reading':ref('ArmExtraction')})
+     ED['ReconciliationDecision']=obj({'role':enum(*ROLES),'selection':cp(D['ReconciliationNomination']),
+         'witnesses':arr(ref('WitnessRecord')),'reading_selectors':arr(ref('ReadingSelector'),minItems=1),
+@@ -530,21 +536,23 @@
+         document = scope['document']
+         if document is not None and document['source_ref'] not in source_indices:
+             source_indices[document['source_ref']] = len(documents); documents.append(cp(document))
+-    pairs = []
++    pairs, pair_extractions = [], []
+     for i, pair in enumerate(selected['local_pair_assignments']):
+         scope = scopes[('local', i)]
+         document = scope['document']
+         admissibility = _relation(context, pair['admissibility'], 'local_pair_assignments.admissibility')
+         scope_relation = _relation(context, pair['scope'], 'local_pair_assignments.scope')
+         bindings = [b['binding'] for b in scope['bindings']]
+-        variance = shared._interpretation(context, pair['variance_status'], 'local_pair_assignments.variance_status')['effective_value']
++        variance = shared._interpretation(context, pair['variance_status'], 'local_pair_assignments.variance_status')
++        pair_extractions.append({'pair_key': pair['pair_key'], 'admissibility': admissibility,
++            'scope': scope_relation, 'variance_status': variance})
+         pairs.append({'pair_key': pair['pair_key'], 'condition': pair['condition'], 'protein': cp(pair['protein']), 'control': cp(pair['control']),
+             'target': shared._relationships_inputs(relationships)[pair['condition'] + '_target'],
+             'control_application': relationships[pair['condition'] + '_control_application']['effective_value'],
+             'joint_admissibility': admissibility['effective_value'], 'scope_state': scope_relation['effective_value'],
+             'covariance_index': source_indices[document['source_ref']] if document else None,
+             'protein_binding': cp(bindings[0]) if document else None, 'control_binding': cp(bindings[1]) if document else None,
+-            'variance_status': variance})
++            'variance_status': variance['effective_value']})
+     result = {'version': 'controlled_response_source_extraction_v3', 'selection': cp(selected), 'sources': cp(context.roster),
+         'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()},
+         'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective,
+@@ -555,6 +563,7 @@
+         'projection_status': 'ready' if projection is not None else 'unresolved_active_reconciliation', 'final_projection_basis': basis,
+         'reconciliation_decisions': decisions, 'joint_scope_extractions': joint_rows, 'alternative_inputs': alternatives,
+         'partial_calculation_inputs': partial, 'partial_projection_state': partial_state,
++        'local_pair_extractions': pair_extractions,
+         'component_local_inputs': {'version': 'controlled_response_local_inputs_v1', 'readings': local_readings, 'pairs': pairs, 'source_covariances': documents},
+         'covariance_document_scopes': [{'scope': cp(s['scope']), 'document': cp(s['document'])} for s in covariance_scopes]}
+     for record in result['representation_reconciliations']:

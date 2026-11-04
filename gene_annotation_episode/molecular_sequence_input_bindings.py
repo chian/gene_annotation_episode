@@ -17,11 +17,13 @@ from .episode_receipts import EpisodeReceipts
 from .episode_return_records import EpisodeReturnRecords
 from .materials import source_window_selection
 from .molecular_sequence_input_contracts import (
-    RECEIVED_INPUT_VERSION, RECEIVED_FILE_VERSION, NAMESPACES, TAG_KEYS, _file_format,
+    RECEIVED_INPUT_VERSION, RECEIVED_FILE_VERSION, RECEIVED_SOURCE_VERSION,
+    RECEIVED_SUBJECT_VERSION, SUBJECT_NAMESPACES, NAMESPACES, TAG_KEYS, _file_format,
     decode_molecular_sequence_input,
     input_record_digest, molecular_sequence_input_failure,
     unread_molecular_sequence_input_content, validate_molecular_sequence_received_input,
-    validate_molecular_sequence_received_file,
+    validate_molecular_sequence_received_file, validate_molecular_sequence_received_source,
+    validate_molecular_sequence_received_subject,
 )
 from .native_file_capture import NativeFileCaptureError, _metadata, retained_native_file
 from .native_flux_balance_storage import read_bytes
@@ -48,7 +50,7 @@ class MolecularSequenceInputBindings:
         # AppService operand, task, transport or submission method is called.
         self.frames = AppServiceCustody(self.store, self.run_id)
 
-    def _authority(self, context):
+    def _authority(self, context, *, baseline=None):
         _require(isinstance(context, BindingContext) and context.run_id == self.run_id
             and context.path and context.role == context.path[-1][0], "invalid_context")
         receipts = EpisodeReceipts.__new__(EpisodeReceipts)
@@ -102,7 +104,8 @@ class MolecularSequenceInputBindings:
         try:
             scope = self.store.validate_scope(plain(context.scope))
             manifest = receipts.manifest(context.episode_id)
-            known = set(receipts.known(context.episode_id, baseline=context.role in _BASELINE_ROLES))
+            known = set(receipts.known(context.episode_id,
+                baseline=context.role in _BASELINE_ROLES if baseline is None else baseline))
         except (ValueError, KeyError, TypeError) as error:
             raise _InputFailure("invalid_inheritance") from error
         return scope, manifest, known
@@ -117,9 +120,9 @@ class MolecularSequenceInputBindings:
         _require(verdict is None or type(verdict) is bool, "artifact_denied" if artifact else "reference_denied")
         _require(verdict is not False, "artifact_denied" if artifact else "reference_denied")
 
-    def _received_file_item(self, context, reference, namespace, *, file_format):
-        """Select one actual admitted original File within the caller's snapshot."""
-        scope, manifest, known = self._authority(context)
+    def _received_record_item(self, context, reference, namespace, *, baseline=None):
+        """Select admitted record metadata, without inspecting or granting Files."""
+        scope, manifest, known = self._authority(context, baseline=baseline)
         _require(reference in known, "reference_not_received")
         self._access(context, reference, namespace)
         try:
@@ -127,14 +130,26 @@ class MolecularSequenceInputBindings:
         except (ContractError, OSError) as error:
             raise _InputFailure("reference_unavailable") from error
         _require(record.get("id") == reference and record.get("record_type") == namespace, "reference_type_conflict")
-        if namespace == "source":
+        if namespace == "source" or namespace in SUBJECT_NAMESPACES:
             try:
                 _require(bool(self.store.reference_subset([reference], scope)), "scope_denied")
             except ContractError as error:
                 raise _InputFailure("scope_denied") from error
+        if namespace == "source":
             payload = {key: value for key, value in record.items() if key not in ("id", "record_type", "origin")}
             _require(record.get("origin") is not None
                 and identity("source", dict(origin=record["origin"], record=payload)) == reference, "source_identity_conflict")
+        return dict(receiver=dict(run_id=self.run_id, episode_id=context.episode_id,
+            request_sha256=input_record_digest(plain(context.request)), assignment_sha256=input_record_digest(plain(context.assignment))),
+            scope=scope, inheritance_manifest=manifest,
+            witness=dict(reference=reference, namespace=namespace, record=deepcopy(record), record_sha256=input_record_digest(record),
+                record_revision=record.get("revision"), source_version=record.get("version") if namespace == "source" else None)), known
+
+    def _received_file_item(self, context, reference, namespace, *, file_format, baseline=None):
+        """Select one actual admitted original File within the caller's snapshot."""
+        item, known = self._received_record_item(context, reference, namespace, baseline=baseline)
+        record = item["witness"]["record"]
+        if namespace == "source":
             artifact_ref, representation, _ = source_window_selection(record, "original")
             _require(representation == "original" and type(artifact_ref) is str, "artifact_unavailable")
         else:
@@ -147,12 +162,63 @@ class MolecularSequenceInputBindings:
             code = "artifact_identity_conflict" if error.code == "retained_artifact_mismatch" else "artifact_unavailable"
             raise _InputFailure(code) from error
         file = dict(artifact_ref=artifact_ref, sha256=artifact["sha256"], size_bytes=artifact["size"], format=file_format)
-        return dict(receiver=dict(run_id=self.run_id, episode_id=context.episode_id,
-            request_sha256=input_record_digest(plain(context.request)), assignment_sha256=input_record_digest(plain(context.assignment))),
-            scope=scope, inheritance_manifest=manifest,
-            witness=dict(reference=reference, namespace=namespace, record=deepcopy(record), record_sha256=input_record_digest(record),
-                record_revision=record.get("revision"), source_version=record.get("version") if namespace == "source" else None),
-            file=file, artifact_record=artifact, byte_verification="unavailable")
+        item.update(file=file, artifact_record=artifact, byte_verification="unavailable")
+        return item
+
+    def read_received_file_metadata(self, context, reference, namespace, *, file_format):
+        """Authenticate current receipt metadata without opening any File bytes.
+
+        This private port includes admitted work from this episode. The native
+        launch readers retain their original baseline selection. No verified
+        File result or host path is returned by metadata admission alone.
+        """
+        if (type(reference) is not str or not reference or any(c in reference for c in "\0\r\n")
+                or namespace not in NAMESPACES or not _file_format(file_format)):
+            raise ValueError("molecular_sequence_input_invalid_selection")
+        try:
+            with self.store.read_snapshot():
+                return self._received_file_item(context, reference, namespace,
+                    file_format=file_format, baseline=False)
+        except _InputFailure as error:
+            raise ValueError("molecular_sequence_input_" + error.code) from error
+
+    def read_received_source(self, context, reference):
+        """Read admitted Source metadata only; its artifact IDs confer no access.
+
+        A scientific owner must separately authenticate any producer association
+        before privately loading its native/control/grading artifacts. This port
+        requires no associated File access and does not inspect its availability.
+        """
+        if type(reference) is not str or not reference or any(c in reference for c in "\0\r\n"):
+            raise ValueError("molecular_sequence_input_invalid_selection")
+        result = dict(version=RECEIVED_SOURCE_VERSION,
+            selection=dict(reference=reference, namespace="source"), input=None, failure=None)
+        try:
+            with self.store.read_snapshot():
+                result["input"], _ = self._received_record_item(context, reference, "source")
+        except _InputFailure as error:
+            result["input"] = None
+            result["failure"] = molecular_sequence_input_failure(error.code)
+        return validate_molecular_sequence_received_source(result)
+
+    def read_received_subject(self, context, reference, namespace):
+        """Read received sequence-record metadata without opening its bytes.
+
+        Receipt, commission, namespace, permission and scope checks use the
+        same owner as the File and Source readers. This port grants nothing.
+        """
+        if (type(reference) is not str or not reference or any(c in reference for c in "\0\r\n")
+                or namespace not in SUBJECT_NAMESPACES):
+            raise ValueError("molecular_sequence_input_invalid_selection")
+        result = dict(version=RECEIVED_SUBJECT_VERSION,
+            selection=dict(reference=reference, namespace=namespace), input=None, failure=None)
+        try:
+            with self.store.read_snapshot():
+                result["input"], _ = self._received_record_item(context, reference, namespace)
+        except _InputFailure as error:
+            result["input"] = None
+            result["failure"] = molecular_sequence_input_failure(error.code)
+        return validate_molecular_sequence_received_subject(result)
 
     def read_received(self, context, reference, namespace, *, tag_key):
         """Read original bytes only; format=json labels the selected processing.

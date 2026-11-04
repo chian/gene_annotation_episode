@@ -669,6 +669,9 @@ class MonitorEpisodes:
         self._role(role)
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError("operation_key_required")
+        task = getattr(self.services, 'macs2_peak_monitor_task', None)
+        if callable(task):
+            task(parent, assignment=selection)
         value = self._assignment(selection, scope)
         if parent.role == "monitor":
             original = self._assignment(parent.assignment, parent.scope)
@@ -714,13 +717,18 @@ class MonitorEpisodes:
 
     def decision_context(self, context, current_view):
         self._role(context.role)
+        task = getattr(self.services, 'macs2_peak_monitor_task', None)
+        selected_task = task(context) if callable(task) else None
         value = self._assignment(context.assignment, context.scope)
         describe = getattr(self.services, 'describe_progress_target', None)
-        return {"monitor_assignment": value,
+        result = {"monitor_assignment": value,
             "monitor_target_description": describe(value['target_handle'], context.scope) if describe else None,
             "monitor_direct_dependencies": plain(self.services.dependencies(value["target_handle"], context.scope)),
             "monitor_received_progress_refs": self._received(context),
             "monitor_information_meaning": "Exposed direct relationships and already delivered observations. Empty measurements/log windows do not assert absence or a stall."}
+        if selected_task is not None:
+            result['selected_execution_task'] = selected_task
+        return result
 
     def catalog(self, context):
         self._role(context.role)

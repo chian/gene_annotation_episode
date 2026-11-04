@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="63" time="119.500" timestamp="2026-10-29T13:47:09.568833-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_restriction_mapping_references_731" name="test_unrelated_namespace_does_not_authenticate_or_lookup" time="0.000" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_names_do_not_consult_sources[None]" time="1.026" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_names_do_not_consult_sources[]" time="1.337" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_names_do_not_consult_sources[0]" time="1.128" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_names_do_not_consult_sources[True]" time="1.309" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_names_do_not_consult_sources[name4]" time="5.422" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_names_do_not_consult_sources[name5]" time="2.056" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_own_frozen_requested_names_do_not_reconstruct_catalog[True]" time="1.356"><failure message="ValueError: restriction_mapping_reference_requested_source_invalid">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+The above exception was the direct cause of the following exception:
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:55: in _requested
+    return requested_restriction_projections(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_references_731.py:166: in test_own_frozen_requested_names_do_not_reconstruct_catalog
+    assert resolve(case, context) is True
+           ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_references_731.py:140: in resolve
+    return case.reader.resolve(context, name, "restriction_enzyme")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:227: in resolve
+    if reference in self._own_frozen_names(context):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:81: in _own_frozen_names
+    if not isinstance(schema, dict) or _SOURCE not in self._requested(schema):
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:57: in _requested
+    raise ValueError(self.failure_prefix + "requested_source_invalid") from error
+E   ValueError: restriction_mapping_reference_requested_source_invalid</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_own_frozen_requested_names_do_not_reconstruct_catalog[False]" time="1.239"><failure message="ValueError: restriction_mapping_reference_requested_source_invalid">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+The above exception was the direct cause of the following exception:
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:55: in _requested
+    return requested_restriction_projections(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_references_731.py:166: in test_own_frozen_requested_names_do_not_reconstruct_catalog
+    assert resolve(case, context) is True
+           ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_references_731.py:140: in resolve
+    return case.reader.resolve(context, name, "restriction_enzyme")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:227: in resolve
+    if reference in self._own_frozen_names(context):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:81: in _own_frozen_names
+    if not isinstance(schema, dict) or _SOURCE not in self._requested(schema):
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:57: in _requested
+    raise ValueError(self.failure_prefix + "requested_source_invalid") from error
+E   ValueError: restriction_mapping_reference_requested_source_invalid</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_candidate_and_case_mismatch_do_not_authorize_names[BcgI]" time="1.255"><failure message="ValueError: restriction_mapping_reference_requested_source_invalid">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+The above exception was the direct cause of the following exception:
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:55: in _requested
+    return requested_restriction_projections(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_references_731.py:175: in test_candidate_and_case_mismatch_do_not_authorize_names
+    assert resolve(case, context, name) is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_references_731.py:140: in resolve
+    return case.reader.resolve(context, name, "restriction_enzyme")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:227: in resolve
+    if reference in self._own_frozen_names(context):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:81: in _own_frozen_names
+    if not isinstance(schema, dict) or _SOURCE not in self._requested(schema):
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:57: in _requested
+    raise ValueError(self.failure_prefix + "requested_source_invalid") from error
+E   ValueError: restriction_mapping_reference_requested_source_invalid</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_candidate_and_case_mismatch_do_not_authorize_names[ecori]" time="1.239"><failure message="ValueError: restriction_mapping_reference_requested_source_invalid">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+The above exception was the direct cause of the following exception:
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:55: in _requested
+    return requested_restriction_projections(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_references_731.py:175: in test_candidate_and_case_mismatch_do_not_authorize_names
+    assert resolve(case, context, name) is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_references_731.py:140: in resolve
+    return case.reader.resolve(context, name, "restriction_enzyme")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:227: in resolve
+    if reference in self._own_frozen_names(context):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:81: in _own_frozen_names
+    if not isinstance(schema, dict) or _SOURCE not in self._requested(schema):
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:57: in _requested
+    raise ValueError(self.failure_prefix + "requested_source_invalid") from error
+E   ValueError: restriction_mapping_reference_requested_source_invalid</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_candidate_and_case_mismatch_do_not_authorize_names[ECORI]" time="1.305"><failure message="ValueError: restriction_mapping_reference_requested_source_invalid">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+The above exception was the direct cause of the following exception:
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:55: in _requested
+    return requested_restriction_projections(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_references_731.py:175: in test_candidate_and_case_mismatch_do_not_authorize_names
+    assert resolve(case, context, name) is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_references_731.py:140: in resolve
+    return case.reader.resolve(context, name, "restriction_enzyme")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:227: in resolve
+    if reference in self._own_frozen_names(context):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:81: in _own_frozen_names
+    if not isinstance(schema, dict) or _SOURCE not in self._requested(schema):
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:57: in _requested
+    raise ValueError(self.failure_prefix + "requested_source_invalid") from error
+E   ValueError: restriction_mapping_reference_requested_source_invalid</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_candidate_and_case_mismatch_do_not_authorize_names[unknown]" time="1.031"><failure message="ValueError: restriction_mapping_reference_requested_source_invalid">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+The above exception was the direct cause of the following exception:
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:55: in _requested
+    return requested_restriction_projections(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_references_731.py:175: in test_candidate_and_case_mismatch_do_not_authorize_names
+    assert resolve(case, context, name) is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_references_731.py:140: in resolve
+    return case.reader.resolve(context, name, "restriction_enzyme")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:227: in resolve
+    if reference in self._own_frozen_names(context):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:81: in _own_frozen_names
+    if not isinstance(schema, dict) or _SOURCE not in self._requested(schema):
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:57: in _requested
+    raise ValueError(self.failure_prefix + "requested_source_invalid") from error
+E   ValueError: restriction_mapping_reference_requested_source_invalid</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_non_scientific_own_form_is_not_a_source" time="1.303" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_unrequested_facts_and_interpretation_are_not_sources" time="1.038"><failure message="ValueError: restriction_mapping_reference_requested_source_invalid">source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:569: in check
+    raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.candidate: strings need a declared semantic type
+
+The above exception was the direct cause of the following exception:
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:55: in _requested
+    return requested_restriction_projections(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_references_731.py:194: in test_unrequested_facts_and_interpretation_are_not_sources
+    assert resolve(case, context) is False
+           ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_references_731.py:140: in resolve
+    return case.reader.resolve(context, name, "restriction_enzyme")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:227: in resolve
+    if reference in self._own_frozen_names(context):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:81: in _own_frozen_names
+    if not isinstance(schema, dict) or _SOURCE not in self._requested(schema):
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:57: in _requested
+    raise ValueError(self.failure_prefix + "requested_source_invalid") from error
+E   ValueError: restriction_mapping_reference_requested_source_invalid</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_context_authentication_rejects_forgery[run]" time="1.161" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_context_authentication_rejects_forgery[episode]" time="1.295" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_context_authentication_rejects_forgery[role]" time="1.071"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'restriction_mapping_reference_'&#10;  Actual message: 'binding_context_path_must_match_role'">source_snapshot/tests/test_restriction_mapping_references_731.py:204: in test_context_authentication_rejects_forgery
+    with pytest.raises(ValueError, match=PREFIX):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'restriction_mapping_reference_'
+E     Actual message: 'binding_context_path_must_match_role'</failure></testcase><testcase classname="tests.test_restriction_mapping_references_731" name="test_context_authentication_rejects_forgery[scope]" time="1.271" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_context_authentication_rejects_forgery[assignment]" time="1.371" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_context_authentication_rejects_forgery[request]" time="1.237" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_frozen_authority_is_a_specific_failure[form]" time="1.320" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_frozen_authority_is_a_specific_failure[facts]" time="1.245" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_frozen_authority_is_a_specific_failure[selector]" time="1.245" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_malformed_frozen_authority_is_a_specific_failure[value]" time="1.096" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_successful_immediate_scientific_child_grants_requested_name[annotation]" time="1.445" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_successful_immediate_scientific_child_grants_requested_name[launch]" time="1.463" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_successful_immediate_scientific_child_grants_requested_name[results]" time="1.472" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_successful_immediate_scientific_child_grants_requested_name[scientific_process]" time="1.863" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_requested_handle_without_rows_never_grants_catalog[False-False]" time="2.071" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_requested_handle_without_rows_never_grants_catalog[False-True]" time="1.287" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_sibling_form_is_not_a_receipt" time="1.404" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[failure]" time="1.395" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[child_role]" time="1.487" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[literal_form]" time="1.379" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[facts]" time="1.478" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[contract]" time="1.355" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[scope]" time="1.537" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[purpose]" time="1.582" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[selected_role]" time="1.757" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[selected_schema]" time="1.529" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[child_path]" time="1.254" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_admitted_source_requires_original_relationships[run]" time="1.957" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_recorded_redelivery_reuses_original_frozen_source[True]" time="1.831" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_recorded_redelivery_reuses_original_frozen_source[False]" time="2.224" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_redelivery_rejects_changed_origin_or_values[delivery]" time="2.350" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_redelivery_rejects_changed_origin_or_values[origin]" time="2.355" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_redelivery_rejects_changed_origin_or_values[frozen]" time="2.825" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_inheritance_uses_frozen_received_prefix_not_decision_order" time="3.135" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_captured_witness_must_still_match_exact_attempt[form_digest]" time="2.861" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_captured_witness_must_still_match_exact_attempt[contract_digest]" time="2.817" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_captured_witness_must_still_match_exact_attempt[delivery]" time="6.955" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_captured_witness_must_still_match_exact_attempt[child]" time="5.197" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_captured_witness_must_still_match_exact_attempt[deleted]" time="2.859" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_captured_witness_must_still_match_exact_attempt[failed]" time="2.718" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_declared_ancestor_requires_original_manifest_and_prefix[missing]" time="2.634" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_declared_ancestor_requires_original_manifest_and_prefix[changed]" time="2.526" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_declared_ancestor_requires_original_manifest_and_prefix[manifest_deleted]" time="2.550" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_declared_ancestor_requires_original_manifest_and_prefix[wrong_parent]" time="2.543" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_declared_ancestor_requires_original_manifest_and_prefix[cycle]" time="2.617" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_legacy_immediate_forms_do_not_infer_ancestor_receipt[False]" time="2.492" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_legacy_immediate_forms_do_not_infer_ancestor_receipt[True]" time="2.221" /><testcase classname="tests.test_restriction_mapping_references_731" name="test_retained_original728_own_catalog_is_read_only_and_needs_no_dispatch" time="0.269" /></testsuite></testsuites>

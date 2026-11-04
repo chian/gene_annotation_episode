@@ -1,0 +1,17 @@
+--- verified411_runtime
++++ runtime_414
+@@ -179,6 +179,14 @@
+         if self.semantic_validator is not None:
+             self.semantic_validator(admitted)
+         try:
++            if self.semantic_validator is not None:
++                from .protein_structure_report_boundary import (
++                    admit_recorded_protein_report, recorded_protein_fields,
++                )
++                fields = recorded_protein_fields(self.schema)
++                if fields:
++                    return admit_recorded_protein_report(self, admitted, fields=fields,
++                        audit_identifiers=audit_identifiers)
+             return super().admit(admitted, audit_identifiers=audit_identifiers)
+         except ValueError as error:
+             raise ReportBoundaryError("Internal audit identity is unavailable in a scientific form",

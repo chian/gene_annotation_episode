@@ -212,6 +212,10 @@ class HomologyEpisodes:
             sources['job_result_progress'] = {
                 'type': ['object', 'null'],
                 'meaning': ('Recorded acquisition coverage for the last native snapshot selected by this child. '
+                    'Includes snapshot identity, native/parse completion, parsed/acquired row counts, '
+                    'all_parsed_rows_acquired and explicit parse errors. A complete native result with '
+                    'a finished error-free parser and zero parsed/acquired rows is a completed empty '
+                    'search in the selected database, not evidence of a biological function. '
                     'Native ordinals are one-based; intervals are half-open. Acquiring a partial parsed prefix '
                     'is distinct from a complete native result. This is not scientific credit or completion. '
                     'Null when no snapshot was selected or its coverage could not be read.'),
@@ -271,11 +275,8 @@ class HomologyEpisodes:
 
     @staticmethod
     def _query(store, scope, query_ref):
-        query = store.get(query_ref)
-        if (store.subject_unit(query_ref) != 'aa' or not query.get('sequence_ref')
-                or not store.roots(query_ref) or not store.scope_covers(store.coverage(query_ref), scope)):
-            raise ValueError('job_query_must_be_protein_of_assigned_target')
-        return query
+        from .homology_query import protein_query
+        return protein_query(store,scope,query_ref,error_code='job_query_must_be_protein_of_assigned_target')
 
     def prospective_execution_classes(self, store, scope):
         """Caller-resource configurations for actual eligible protein records.
@@ -407,6 +408,15 @@ class HomologyEpisodes:
         return {'credit': value, **information}
 
     def resolve(self, store, scope, value, namespace, *, assignment=None):
+        if assignment is not None and namespace=='subject' and value==assignment.get('query_ref'):
+            # In a native-result contract this is the bound algorithm operand,
+            # which may be an external protein reference. It does not become
+            # an original annotation target or authorize another subject.
+            try:
+                self._query(store,scope,value)
+            except (ValueError,KeyError,ContractError):
+                return False
+            return True
         if assignment is not None and (
                 namespace in {None, 'homology_job'} and value == assignment['job_ref']
                 or namespace in {None, 'job_sample'}
@@ -567,7 +577,11 @@ class HomologyEpisodes:
                                      else 'job_storage_failed' if isinstance(error, sqlite3.Error)
                                      else 'job_control_failed' if isinstance(error, subprocess.SubprocessError)
                                      else str(error) if isinstance(error, ValueError) else 'job_operation_failed'),
-                    'exception_type': type(error).__name__, 'operation': name, 'job_ref': job_ref}}
+                    'exception_type': type(error).__name__, 'operation': name, 'job_ref': job_ref,
+                    **({'phase': error.phase, **{key: error.operational[key]
+                        for key in ('retryable', 'retry_same_prepared_job', 'local_resources')
+                        if key in (error.operational or {})}}
+                        if isinstance(error, AcquisitionError) else {})}}
 
     def latest_sample(self, source, *, include_inherited=False):
         row = source.workflow.store.db.execute('''SELECT json_extract(result,'$.result')

@@ -1,0 +1,196 @@
+{
+  "version": "bvbrc_appservice_artifact_bundle_v1",
+  "original_task": {
+    "resource_id": "bvbrc_api",
+    "task_id": "synthetic_task195",
+    "required_application_id": "FastqUtils",
+    "native_application_id": "FastqUtils",
+    "submitted_parameters": {
+      "paired_end_libs": [
+        {
+          "read1": "/fixture/input_R1.fastq",
+          "read2": "/fixture/input_R2.fastq",
+          "platform": "illumina"
+        }
+      ],
+      "single_end_libs": [],
+      "srr_libs": [],
+      "recipe": [
+        "TRIM",
+        "PAIRED_FILTER",
+        "FASTQC",
+        "ALIGN",
+        "SCRUB_HUMAN",
+        "SCRUB_HUMAN"
+      ],
+      "reference_genome_id": "synthetic_reference195",
+      "output_path": "/fixture/output",
+      "output_file": "fixture"
+    },
+    "submitted_start_parameters": {},
+    "scheduler_returned_parameters": null,
+    "effective_parameters": null,
+    "submission_receipt_ref": "source_original_submission",
+    "submission_operation_key": "synthetic:submission195",
+    "submission_source_ref": "source_original_native_request195"
+  },
+  "artifacts": [
+    {
+      "role": "reads",
+      "source_ref": "source_reads",
+      "raw_artifact_ref": "artifact_reads",
+      "sha256": "c2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da",
+      "byte_count": 36,
+      "workspace_object": {
+        "path": "/fixture/output/reads",
+        "uuid": "synthetic_uuid_reads",
+        "type": "file",
+        "metadata_receipt_ref": "source_metadata_receipt_reads"
+      },
+      "task_association": {
+        "kind": "task_result_manifest",
+        "evidence_ref": "source_manifest195",
+        "pointer": "/output_files/0",
+        "task_id": "synthetic_task195",
+        "output_path": "/fixture/output",
+        "output_uuid": null,
+        "byte_version_status": "current_bytes_observed",
+        "version_evidence": []
+      },
+      "transfer": {
+        "receipt_ref": "source_transfer_reads",
+        "body_complete": true,
+        "requested_range": null,
+        "observed_range": null,
+        "total_size": 36,
+        "object_complete": "yes"
+      },
+      "declared_format": {
+        "format": "fastq",
+        "version": null,
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      },
+      "requirement_ids": [
+        "selected_reads"
+      ]
+    },
+    {
+      "role": "hostile",
+      "source_ref": "source_hostile",
+      "raw_artifact_ref": "artifact_hostile",
+      "sha256": "fe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798",
+      "byte_count": 635,
+      "workspace_object": {
+        "path": "/fixture/output/hostile",
+        "uuid": "synthetic_uuid_reads",
+        "type": "file",
+        "metadata_receipt_ref": "source_metadata_receipt_reads"
+      },
+      "task_association": {
+        "kind": "task_result_manifest",
+        "evidence_ref": "source_manifest195",
+        "pointer": "/output_files/0",
+        "task_id": "synthetic_task195",
+        "output_path": "/fixture/output",
+        "output_uuid": null,
+        "byte_version_status": "current_bytes_observed",
+        "version_evidence": []
+      },
+      "transfer": {
+        "receipt_ref": "source_transfer_hostile",
+        "body_complete": true,
+        "requested_range": null,
+        "observed_range": null,
+        "total_size": 635,
+        "object_complete": "yes"
+      },
+      "declared_format": {
+        "format": "hostile_json_1_1_0",
+        "version": null,
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      },
+      "requirement_ids": [
+        "selected_hostile"
+      ]
+    },
+    {
+      "role": "qc",
+      "source_ref": "source_qc",
+      "raw_artifact_ref": "artifact_qc",
+      "sha256": "f7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41",
+      "byte_count": 233,
+      "workspace_object": {
+        "path": "/fixture/output/qc",
+        "uuid": "synthetic_uuid_reads",
+        "type": "file",
+        "metadata_receipt_ref": "source_metadata_receipt_reads"
+      },
+      "task_association": {
+        "kind": "task_result_manifest",
+        "evidence_ref": "source_manifest195",
+        "pointer": "/output_files/0",
+        "task_id": "synthetic_task195",
+        "output_path": "/fixture/output",
+        "output_uuid": null,
+        "byte_version_status": "current_bytes_observed",
+        "version_evidence": []
+      },
+      "transfer": {
+        "receipt_ref": "source_transfer_qc",
+        "body_complete": true,
+        "requested_range": null,
+        "observed_range": null,
+        "total_size": 233,
+        "object_complete": "yes"
+      },
+      "declared_format": {
+        "format": "fastqc_data_0_12_1",
+        "version": null,
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      },
+      "requirement_ids": [
+        "selected_qc"
+      ]
+    }
+  ],
+  "input_bindings": [],
+  "query_bindings": [],
+  "supplied_scientific_metadata": [
+    {
+      "content": {
+        "source_ref": "source_declarations",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_declarations",
+        "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+        "byte_count": 334
+      },
+      "pointer": "/declarations/0"
+    },
+    {
+      "content": {
+        "source_ref": "source_declarations",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_declarations",
+        "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+        "byte_count": 334
+      },
+      "pointer": "/declarations/1"
+    }
+  ],
+  "supplied_contents": [],
+  "acquisition_receipt_refs": [
+    "source_transfer_reads",
+    "source_transfer_hostile",
+    "source_transfer_qc"
+  ],
+  "requested_selector_sha256": "1d856892898f8e560222de515bf57897934b1f82a72b1a8214f9cac405ad27fd",
+  "status": "ok",
+  "missing_requirements": [],
+  "diagnostics": []
+}

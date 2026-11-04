@@ -1,0 +1,33 @@
+{
+  "case_id": "anonymous-case-03",
+  "evaluation_kind": "deposited intervention RNASeq; service execution deferred",
+  "provenance": {
+    "url": "https://rest.uniprot.org/uniprotkb/A0A0H3C855.fasta",
+    "header": ">tr|A0A0H3C855|A0A0H3C855_CAUVN Chaperone protein ClpB OS=Caulobacter vibrioides (strain NA1000 / CB15N) OX=565050 GN=clpB PE=3 SV=1",
+    "length": 859,
+    "sequence_sha256": "fc617628dabfe37307d97badbe169bcc543f82f7ebeb6d24e9c0ad6cb9d3cbe3"
+  },
+  "input_policy": "Only the raw protein sequence and general A106 instructions enter an episode; these expectations are separate.",
+  "discovery_leads": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13040462/",
+      "pmcid": "PMC13040462"
+    },
+    {
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE312471",
+      "accession": "GSE312471",
+      "bioproject": "PRJNA1373570"
+    }
+  ],
+  "expected_findings": [
+    "Establish NA1000/CB15N ClpB sequence and deletion-subject correspondence.",
+    "Distinguish deletion effects from the heat response and state the selected genotype/temperature contrast.",
+    "The repository lists 14 RNASeq samples: WT and delta-clpB at 30 and 39 degrees C each in three biological replicates, plus two delta-polA samples at 30 degrees C.",
+    "Preserve each selected sample, replicate and sequencing-file association; do not infer a delta-polA 39-degree group.",
+    "The supplied processed file contains gene counts, which require an applicable differential-expression analysis before becoming log effects and estimated variances.",
+    "Keep measured transcript responses separate from direct regulation, protein aggregation and survival phenotypes.",
+    "Preserve the published study and dataset as representations of their original experiments.",
+    "A barcoded TnSeq experiment in the same paper is not automatically a compatible genomic-junction input for the TnSeq application."
+  ],
+  "limitations": "Prepared evaluation case only; no autonomous run or live service success claimed."
+}

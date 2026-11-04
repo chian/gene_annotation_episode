@@ -1,0 +1,48 @@
+--- retained_prechange/native_protein_structure_contracts.py
++++ gene_annotation_episode/native_protein_structure_contracts.py
+@@ -7,6 +7,7 @@
+ 
+ from copy import deepcopy
+ from datetime import datetime
++from functools import lru_cache
+ import math
+ from pathlib import PurePosixPath
+ from typing import Literal, TypeAlias, TypedDict, get_args
+@@ -360,7 +361,9 @@
+     resource["$id"] = "urn:gene-annotation:protein-structure:schema:" + digest(resource)
+     document = {"$schema": "https://json-schema.org/draft/2020-12/schema", "$defs": deepcopy(definitions), "allOf": [resource]}
+     document["$id"] = "urn:gene-annotation:protein-structure:schema:" + digest(document)
+-    return document
++    # The inner resource contains module-owned schema fragments. Callers may
++    # edit their exported document without changing another schema or validator.
++    return deepcopy(document)
+ 
+ 
+ _STRICT = validators.extend(Draft202012Validator, type_checker=Draft202012Validator.TYPE_CHECKER
+@@ -371,6 +374,17 @@
+ def _require(condition, code="invalid_schema"):
+     if not condition:
+         raise ValueError(code)
++
++
++@lru_cache(maxsize=None)
++def _execution_validator(type_name):
++    """Reuse fixed schema construction, never a payload's validation result.
++
++    Only successful, known type names enter this finite cache. Binding-specific
++    schemas are still built from each caller's current supplied bindings.
++    The cached schema is private; public documents are detached copies.
++    """
++    return _STRICT(protein_structure_execution_schema(type_name))
+ 
+ 
+ def _checked(value, type_name):
+@@ -390,7 +404,7 @@
+         elif type(v) is float:
+             _require(math.isfinite(v))
+     plain(value)
+-    _require(_STRICT(protein_structure_execution_schema(type_name)).is_valid(value))
++    _require(_execution_validator(type_name).is_valid(value))
+     return deepcopy(value)
+ 
+ 

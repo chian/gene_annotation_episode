@@ -1,0 +1,27 @@
+.......................................................F...........      [100%]
+=================================== FAILURES ===================================
+__________ test_enumeration_has_no_io_job_model_or_scientific_action ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7109a7574ef0>
+
+    def test_enumeration_has_no_io_job_model_or_scientific_action(monkeypatch):
+        caller = assignment_schema()
+        # These are forbidden-action sentinels, never scientific return mocks.
+        def forbidden(*args, **kwargs):
+            raise AssertionError("information enumeration attempted an action")
+        with monkeypatch.context() as patch:
+            for owner, name in ((builtins, "open"), (io, "open"), (Path, "read_text"),
+                    (Path, "read_bytes"), (Path, "open"), (socket, "create_connection"),
+                    (socket.socket, "connect"), (urllib.request, "urlopen"),
+                    (urllib.request.OpenerDirector, "open"), (subprocess, "Popen"),
+                    (subprocess, "run"), (BVBRCAppServiceService, "prepare"),
+                    (BVBRCAppServiceService, "execute"), (gene, "consume_bundle"),
+                    (codon, "consume_bundle"), (projection, "consume_bundle"),
+                    (resolution, "parse_reader"), (phylogeny_formats, "parse_newick")):
+>               patch.setattr(owner, name, forbidden)
+E               AttributeError: <class 'gene_annotation_episode.api_bvbrc_appservice.BVBRCAppServiceService'> has no attribute 'execute'
+
+tests/test_bvbrc_phylogeny_tool_info.py:275: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_phylogeny_tool_info.py::test_enumeration_has_no_io_job_model_or_scientific_action
+1 failed, 66 passed in 4.12s

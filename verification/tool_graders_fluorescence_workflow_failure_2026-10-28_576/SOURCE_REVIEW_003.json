@@ -1,0 +1,65 @@
+{
+  "version": "fluorescence_workflow_fixture_repair_review_v1",
+  "status": "source_AST_only_awaiting_bounded_rerun",
+  "changed_production_files": [],
+  "changed_model_messages": [],
+  "files": [
+    {
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check026_fluorescence_workflow/source_snapshot/tests/fluorescence_workflow_support.py",
+        "size_bytes": 27055,
+        "sha256": "dc76fe3b68225218ccbe844f9bb14e11a4f5c9865470fb60162af97d1438e22b"
+      },
+      "after": {
+        "path": "tests/fluorescence_workflow_support.py",
+        "size_bytes": 28553,
+        "sha256": "32fe75c2c34306a2064747e758853dd9be3b925aa71948d6be1c347ab03f3fb7"
+      },
+      "ast_sha256": "5184d692f59ff2e76349149d32fc018ad0e5f36107af7e5752404c9391b2afc5"
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check026_fluorescence_workflow/source_snapshot/tests/test_fluorescence_workflow.py",
+        "size_bytes": 24134,
+        "sha256": "9fc90eff213595419348745efe80d21edcc92f319ce3221ead5114aefcbb15f2"
+      },
+      "after": {
+        "path": "tests/test_fluorescence_workflow.py",
+        "size_bytes": 24134,
+        "sha256": "9fc90eff213595419348745efe80d21edcc92f319ce3221ead5114aefcbb15f2"
+      },
+      "ast_sha256": "aa6f6827dda7f2f7bdb83af467446ecd64ec9c699a50fe6aabd447612d61d8cd"
+    }
+  ],
+  "correction": "Assert exact unchanged ordered child reports; verify the successful original and repeated delivery attempts retain identical form and original child; compare all action, observation and closed-form rows immediately before and after redelivery. Keep scientific and numerical assertions unchanged.",
+  "rerun_selector": "tests/test_fluorescence_workflow.py",
+  "exact_rerun_nodes": [
+    "tests/test_fluorescence_workflow.py::test_actual_native_alias_and_shared_cells_reach_requested_parent[facs-csv]",
+    "tests/test_fluorescence_workflow.py::test_unicode_artifacts_keep_numerical_and_control_hashes_distinct[facs-csv]",
+    "tests/test_fluorescence_workflow.py::test_missing_original_bytes_preserve_partial_work_and_original_closed_history[facs-csv]",
+    "tests/test_fluorescence_workflow.py::test_saved_partial_recalculation_and_requested_context_have_no_new_acquisition[facs-csv]",
+    "tests/test_fluorescence_workflow.py::test_one_observation_per_action_original_credit_and_practical_terminal_zero[facs-csv]",
+    "tests/test_fluorescence_workflow.py::test_closed_workflow_and_result_replay_without_producer_or_numerical_bytes[facs-csv]",
+    "tests/test_fluorescence_workflow.py::test_actual_native_alias_and_shared_cells_reach_requested_parent[cytokine-table]",
+    "tests/test_fluorescence_workflow.py::test_unicode_artifacts_keep_numerical_and_control_hashes_distinct[cytokine-table]",
+    "tests/test_fluorescence_workflow.py::test_missing_original_bytes_preserve_partial_work_and_original_closed_history[cytokine-table]",
+    "tests/test_fluorescence_workflow.py::test_saved_partial_recalculation_and_requested_context_have_no_new_acquisition[cytokine-table]",
+    "tests/test_fluorescence_workflow.py::test_one_observation_per_action_original_credit_and_practical_terminal_zero[cytokine-table]",
+    "tests/test_fluorescence_workflow.py::test_closed_workflow_and_result_replay_without_producer_or_numerical_bytes[cytokine-table]"
+  ],
+  "expected_cases": 12,
+  "bounded_runner": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/run_checks.py",
+  "limits": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "swap_bytes": 0,
+    "wall_seconds": null
+  },
+  "tests_executed_by_this_agent": false,
+  "unverified": [
+    "saved partial recalculation",
+    "scientific and root return closure",
+    "closed result and Workflow replay",
+    "new exact-state preservation assertions"
+  ]
+}

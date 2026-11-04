@@ -1,0 +1,625 @@
+{
+  "synthetic_profile_examples": [
+    {
+      "name": "rps_base",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "complete",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": []
+    },
+    {
+      "name": "translated_reverse",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "complete",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 150,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 150,
+          "denominator": 300,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": []
+    },
+    {
+      "name": "delta_qualified_domain",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "complete",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": []
+    },
+    {
+      "name": "delta_unknown_stage",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "unavailable",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": null,
+        "paired_model_positions": null,
+        "query_coverage": {
+          "numerator": null,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": null,
+          "denominator": null,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_stage_unavailable"
+      ]
+    },
+    {
+      "name": "native_model_length_conflict",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": null,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_model_length_conflict"
+      ]
+    },
+    {
+      "name": "unbound_query",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 150,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 150,
+          "denominator": null,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_query_unbound"
+      ]
+    },
+    {
+      "name": "missing_threshold",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_threshold_unavailable"
+      ]
+    },
+    {
+      "name": "wrong_archive_member",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "incompatible",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": null,
+        "paired_model_positions": null,
+        "query_coverage": {
+          "numerator": null,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": null,
+          "denominator": null,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_report_source_conflict"
+      ]
+    },
+    {
+      "name": "zero_hit_report",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "no_reported_hits",
+      "hsp_count": 0,
+      "model_count": 0,
+      "first_model": null,
+      "issue_codes": []
+    },
+    {
+      "name": "missing_report",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "unavailable",
+      "hsp_count": 0,
+      "model_count": 0,
+      "first_model": null,
+      "issue_codes": [
+        "blast_profile_collector_issue",
+        "blast_profile_report_unavailable"
+      ]
+    },
+    {
+      "name": "failed_zero_hit_report",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "unavailable",
+      "hsp_count": 0,
+      "model_count": 0,
+      "first_model": null,
+      "issue_codes": [
+        "blast_profile_native_completion_unavailable",
+        "blast_profile_report_unavailable"
+      ]
+    },
+    {
+      "name": "malformed_table_row",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 150,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 150,
+          "denominator": 300,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_collector_issue",
+        "blast_profile_geometry_incomplete"
+      ]
+    },
+    {
+      "name": "bare_table6",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "complete",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": []
+    },
+    {
+      "name": "old_table_without_layout",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "unavailable",
+      "hsp_count": 0,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": null,
+        "paired_model_positions": null,
+        "query_coverage": {
+          "numerator": null,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": null,
+          "denominator": null,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_description_unavailable",
+        "blast_profile_table_layout_unavailable"
+      ]
+    },
+    {
+      "name": "same_family_models",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "complete",
+      "hsp_count": 2,
+      "model_count": 2,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": []
+    },
+    {
+      "name": "same_version_unknown_release",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_threshold_release_unavailable"
+      ]
+    },
+    {
+      "name": "ambiguous_model_links",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 2,
+      "first_model": {
+        "paired_query_units": null,
+        "paired_model_positions": null,
+        "query_coverage": {
+          "numerator": null,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": null,
+          "denominator": null,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_model_binding_ambiguous"
+      ]
+    },
+    {
+      "name": "source_bound_query_missing_digest",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_query_digest_unavailable"
+      ]
+    },
+    {
+      "name": "tampered_row_map",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "incompatible",
+      "hsp_count": 0,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": null,
+        "paired_model_positions": null,
+        "query_coverage": {
+          "numerator": null,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": null,
+          "denominator": null,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_description_unavailable",
+        "blast_profile_row_map_conflict"
+      ]
+    },
+    {
+      "name": "overlapping_hsp_union",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "complete",
+      "hsp_count": 2,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": []
+    },
+    {
+      "name": "original_malformed_ordinals",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_collector_issue",
+        "blast_profile_geometry_incomplete"
+      ]
+    },
+    {
+      "name": "incomplete_geometry",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "partial",
+      "hsp_count": 2,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 50,
+        "paired_model_positions": 50,
+        "query_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 50,
+          "denominator": 100,
+          "value": null,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": [
+        "blast_profile_alignment_issue",
+        "blast_profile_collector_issue",
+        "blast_profile_geometry_incomplete"
+      ]
+    },
+    {
+      "name": "selected_query",
+      "evidence_kind": "synthetic_profile_context",
+      "status": "complete",
+      "hsp_count": 1,
+      "model_count": 1,
+      "first_model": {
+        "paired_query_units": 30,
+        "paired_model_positions": 30,
+        "query_coverage": {
+          "numerator": 30,
+          "denominator": 100,
+          "value": 0.3,
+          "unit": "fraction"
+        },
+        "model_coverage": {
+          "numerator": 30,
+          "denominator": 100,
+          "value": 0.3,
+          "unit": "fraction"
+        }
+      },
+      "issue_codes": []
+    }
+  ],
+  "retained_geometry": [
+    {
+      "name": "blastn_reverse_json15",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/blastn_reverse_json15/report.json",
+      "sha256": "069a2be76607df9e8cc0952e6b48fa6d9234f9cfa7d7eecb2f9f6d627bdc7dc4",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "blastn_reverse_tabular7",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/blastn_reverse_tabular7/report.tsv",
+      "sha256": "6eecc2640b89e0604e4c88b7ec28be757e45d2e2f0f37cef0b276e07eed6f6e1",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "blastp_gaps_json15",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/blastp_gaps_json15/report.json",
+      "sha256": "09037263ffcce001e901af38ccf957f05cc8dde3db15e482ea7dfa80e9dc6241",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "blastp_gaps_tabular7",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/blastp_gaps_tabular7/report.tsv",
+      "sha256": "ff74f0f3ae2a2453e3b100f9b3f4be8e7be61713be81169a3e5976dc6efbb25d",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "blastx_reverse_json15",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/blastx_reverse_json15/report.json",
+      "sha256": "6466c8285c549f07011fb308812f32cdfd6aa0df5d59b22865aa7fcf82634e7c",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "blastx_reverse_tabular7",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/blastx_reverse_tabular7/report.tsv",
+      "sha256": "0042871f842eb7b93d93a5d9ee492d8401c9c855a42f31ec278707001480086d",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "tblastn_reverse_json15",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/tblastn_reverse_json15/report.json",
+      "sha256": "714c27fd0e99d9bc149748f3b047fbfd74ad84347c14d68b80c036b9b5b2310a",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "tblastn_reverse_tabular7",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/tblastn_reverse_tabular7/report.tsv",
+      "sha256": "715b804d311792fa2c8d9ca70e0460f590599a3f722434f22b2034029f2416db",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 1
+    },
+    {
+      "name": "tblastx_frames_json15",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/tblastx_frames_json15/report.json",
+      "sha256": "4513b87e0a28eb7cf79d2e3ea3e0564ab91e318682d38aed3fb7065616006bfd",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 10
+    },
+    {
+      "name": "tblastx_frames_tabular7",
+      "path": "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures/tblastx_frames_tabular7/report.tsv",
+      "sha256": "01a6cd51c7bbb407ed3856d71bbf96783bcc40b545e26e8a99a6a1887320e8ab",
+      "evidence_kind": "genuine_retained_paired_output_shared_geometry_only",
+      "hsp_count": 10
+    }
+  ],
+  "native_profile_search_observed": false,
+  "live_profile_search_executed": false,
+  "profile_resource_binding_verified": false,
+  "profile_episode_return_verified": false
+}

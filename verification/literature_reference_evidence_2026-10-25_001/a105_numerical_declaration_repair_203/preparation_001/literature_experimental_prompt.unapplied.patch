@@ -1,0 +1,12 @@
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -62,7 +62,8 @@
+ 
+ For a permitted child's declared recorded-fact return type, request episode.return_contract with its role and source. Copy the exact declared projection into your chosen top-level field either literally or by a field containing only $ref with value episode-fact:<source>. The host expands that explicit reference to the original complete closed type before commissioning. Choose your own field names and requested components. Keep bound facts out of initial_report_json and use separate constrained interpretation fields as already instructed."""
+ 
+-SAVED_NUMERICAL_RETURN_TASK = """When requesting saved numerical experimental components from a child, copy the declared projection schema into your chosen top-level return field, including its exact `x-source` selector. Choose the needed components through the child assignment. Keep bound fact fields out of `initial_report_json`; the runtime fills them from saved results. Use separate constrained fields for interpretations and unresolved questions. Do not ask the child to rewrite saved numerical cells as model-authored report values."""
++SAVED_NUMERICAL_RETURN_TASK = """When requesting saved numerical experimental components listed as available recorded return sources, choose a top-level return field whose declaration contains only $ref with the exact value episode-fact:<source>, using that source's declared name. The host expands this explicitly selected declaration to the original complete closed type before commissioning; the numerical sheet itself remains with the host. Choose the needed components through the child assignment. Keep bound fact fields out of initial_report_json; the runtime fills them from saved results. Use separate constrained fields for interpretations and unresolved questions, preserving the parent's requested meanings. Do not ask the child to rewrite saved numerical cells as model-authored report values."""
++
+ 
+ EXPERIMENTAL_TASK = """Evaluate what the assigned experimental evidence establishes about the reference molecule and the assigned functional or structural question. The assigned work and source selection below define the actual experiment or information question; a public searchable target name or an initial target annotation is not required.
+ 

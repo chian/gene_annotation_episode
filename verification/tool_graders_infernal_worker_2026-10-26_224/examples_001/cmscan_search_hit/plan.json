@@ -1,0 +1,553 @@
+{
+  "version": "native_infernal_grading_plan_v1",
+  "bundle": {
+    "artifacts": [
+      {
+        "format": "infernal_stdout",
+        "relative_path": "stdout.log",
+        "role": "stdout",
+        "sha256": "bd7c2a47e6ce6351f53e9b671aa1c1cc1e7c6813fafe166abc4f097cab8bfe33",
+        "size_bytes": 27065
+      },
+      {
+        "format": "text",
+        "relative_path": "stderr.log",
+        "role": "stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      {
+        "format": "infernal_tblout",
+        "relative_path": "hits.tblout",
+        "role": "tblout",
+        "sha256": "63757570e8104a6241ceab294fb84c7ef2addf50e77d8f7fc59ed114b3d19bd7",
+        "size_bytes": 4971
+      }
+    ],
+    "environment": {
+      "LC_ALL": "C",
+      "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/infernal-attempt/tmp",
+      "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/infernal-attempt/tmp",
+      "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/infernal-attempt/tmp",
+      "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/infernal-attempt/cache"
+    },
+    "failures": [],
+    "finished_at": "2026-10-26T01:21:23.810787+00:00",
+    "identity": {
+      "attempt_id": "c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26",
+      "episode_id": "verification-local-child",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/native.json",
+      "operation_key": "selected-native-cmscan",
+      "requested_job_sha256": "62efb56005f0b0d26bde906ca4db2927f12bb74b1d1e2d26db444f30cf3371ce",
+      "resource_id": "local-verification-20GiB-4GiB",
+      "run_id": "native-infernal-222-cmscan"
+    },
+    "inputs": [
+      {
+        "actual_sha256": "69de11fd1a8dc197a306780a53b9417427f83b66002d1c3bb53b42021ce294fd",
+        "artifact_ref": "source_tutorial_models",
+        "expected_sha256": "69de11fd1a8dc197a306780a53b9417427f83b66002d1c3bb53b42021ce294fd",
+        "expected_size_bytes": 256295,
+        "format": "infernal_ascii",
+        "original_path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm",
+        "relative_path": "inputs/models.cm",
+        "role": "models",
+        "size_bytes": 256295
+      },
+      {
+        "actual_sha256": "458183dae273c27cc934236c4ffd1f70f24681028751ad198e7b8a4430ce7c91",
+        "artifact_ref": "source_tutorial_sequences",
+        "expected_sha256": "458183dae273c27cc934236c4ffd1f70f24681028751ad198e7b8a4430ce7c91",
+        "expected_size_bytes": 923,
+        "format": "fasta",
+        "original_path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/mrum-tRNAs10.fa",
+        "relative_path": "inputs/sequences.fa",
+        "role": "sequences",
+        "size_bytes": 923
+      },
+      {
+        "actual_sha256": "8eaf9c22584a4c7d846ae85bbb6a1c5c4452f394d80fbf844e1e40c8551fd683",
+        "artifact_ref": "source_tutorial_models_i1f",
+        "expected_sha256": "8eaf9c22584a4c7d846ae85bbb6a1c5c4452f394d80fbf844e1e40c8551fd683",
+        "expected_size_bytes": 29691,
+        "format": "infernal_i1f",
+        "original_path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1f",
+        "relative_path": "inputs/models.cm.i1f",
+        "role": "models_i1f",
+        "size_bytes": 29691
+      },
+      {
+        "actual_sha256": "078a6c25ce071c2c4081734baa3c27e909d904e9317857f7efa0c71c705a6015",
+        "artifact_ref": "source_tutorial_models_i1i",
+        "expected_sha256": "078a6c25ce071c2c4081734baa3c27e909d904e9317857f7efa0c71c705a6015",
+        "expected_size_bytes": 249,
+        "format": "infernal_i1i",
+        "original_path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1i",
+        "relative_path": "inputs/models.cm.i1i",
+        "role": "models_i1i",
+        "size_bytes": 249
+      },
+      {
+        "actual_sha256": "8408600391c0eaccac5baccb44805e589c9480fc18b977421e9314bf933f3e25",
+        "artifact_ref": "source_tutorial_models_i1m",
+        "expected_sha256": "8408600391c0eaccac5baccb44805e589c9480fc18b977421e9314bf933f3e25",
+        "expected_size_bytes": 180438,
+        "format": "infernal_i1m",
+        "original_path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1m",
+        "relative_path": "inputs/models.cm.i1m",
+        "role": "models_i1m",
+        "size_bytes": 180438
+      },
+      {
+        "actual_sha256": "4adde619c1ae0cb6b6d09e9d14ea90665ec9e2d334fbb678516f26e8d511ebc6",
+        "artifact_ref": "source_tutorial_models_i1p",
+        "expected_sha256": "4adde619c1ae0cb6b6d09e9d14ea90665ec9e2d334fbb678516f26e8d511ebc6",
+        "expected_size_bytes": 61906,
+        "format": "infernal_i1p",
+        "original_path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1p",
+        "relative_path": "inputs/models.cm.i1p",
+        "role": "models_i1p",
+        "size_bytes": 61906
+      }
+    ],
+    "operand_bindings": [
+      {
+        "native_accession": null,
+        "native_name": "tRNA5",
+        "operand_role": "models",
+        "record_ordinal": 0,
+        "reference_ref": "reference_tutorial_model_0",
+        "subject_ref": null
+      },
+      {
+        "native_accession": null,
+        "native_name": "5S_rRNA",
+        "operand_role": "models",
+        "record_ordinal": 1,
+        "reference_ref": "reference_tutorial_model_1",
+        "subject_ref": null
+      },
+      {
+        "native_accession": null,
+        "native_name": "Cobalamin",
+        "operand_role": "models",
+        "record_ordinal": 2,
+        "reference_ref": "reference_tutorial_model_2",
+        "subject_ref": null
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.1",
+        "operand_role": "sequences",
+        "record_ordinal": 0,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_0"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.2",
+        "operand_role": "sequences",
+        "record_ordinal": 1,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_1"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.3",
+        "operand_role": "sequences",
+        "record_ordinal": 2,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_2"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.4",
+        "operand_role": "sequences",
+        "record_ordinal": 3,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_3"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.5",
+        "operand_role": "sequences",
+        "record_ordinal": 4,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_4"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.6",
+        "operand_role": "sequences",
+        "record_ordinal": 5,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_5"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.7",
+        "operand_role": "sequences",
+        "record_ordinal": 6,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_6"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.8",
+        "operand_role": "sequences",
+        "record_ordinal": 7,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_7"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.9",
+        "operand_role": "sequences",
+        "record_ordinal": 8,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_8"
+      },
+      {
+        "native_accession": null,
+        "native_name": "mrum-tRNA.10",
+        "operand_role": "sequences",
+        "record_ordinal": 9,
+        "reference_ref": null,
+        "subject_ref": "subject_tutorial_sequence_9"
+      }
+    ],
+    "program": "cmscan",
+    "realized_argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+      "--cpu",
+      "1",
+      "--tblout",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/infernal-attempt/hits.tblout",
+      "--fmt",
+      "2",
+      "--qformat",
+      "fasta",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/infernal-attempt/inputs/models.cm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmscan/.episode-operations/b824de5dde9ec8488e45f7c8458bbcf997518354748a7c59748a226f132cfd96/c903ff4a185bc9a25b501b99be4ff2fd12c0170b885d2a405d4808374c524e26/infernal-attempt/inputs/sequences.fa"
+    ],
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+        "--cpu",
+        "1",
+        "--tblout",
+        "hits.tblout",
+        "--fmt",
+        "2",
+        "--qformat",
+        "fasta",
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm",
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/mrum-tRNAs10.fa"
+      ],
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "native_infernal": {
+        "environment": {
+          "LC_ALL": "C"
+        },
+        "grading_parameters": {},
+        "metadata": {},
+        "operand_bindings": [
+          {
+            "native_accession": null,
+            "native_name": "tRNA5",
+            "operand_role": "models",
+            "record_ordinal": 0,
+            "reference_ref": "reference_tutorial_model_0",
+            "subject_ref": null
+          },
+          {
+            "native_accession": null,
+            "native_name": "5S_rRNA",
+            "operand_role": "models",
+            "record_ordinal": 1,
+            "reference_ref": "reference_tutorial_model_1",
+            "subject_ref": null
+          },
+          {
+            "native_accession": null,
+            "native_name": "Cobalamin",
+            "operand_role": "models",
+            "record_ordinal": 2,
+            "reference_ref": "reference_tutorial_model_2",
+            "subject_ref": null
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.1",
+            "operand_role": "sequences",
+            "record_ordinal": 0,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_0"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.2",
+            "operand_role": "sequences",
+            "record_ordinal": 1,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_1"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.3",
+            "operand_role": "sequences",
+            "record_ordinal": 2,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_2"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.4",
+            "operand_role": "sequences",
+            "record_ordinal": 3,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_3"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.5",
+            "operand_role": "sequences",
+            "record_ordinal": 4,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_4"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.6",
+            "operand_role": "sequences",
+            "record_ordinal": 5,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_5"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.7",
+            "operand_role": "sequences",
+            "record_ordinal": 6,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_6"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.8",
+            "operand_role": "sequences",
+            "record_ordinal": 7,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_7"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.9",
+            "operand_role": "sequences",
+            "record_ordinal": 8,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_8"
+          },
+          {
+            "native_accession": null,
+            "native_name": "mrum-tRNA.10",
+            "operand_role": "sequences",
+            "record_ordinal": 9,
+            "reference_ref": null,
+            "subject_ref": "subject_tutorial_sequence_9"
+          }
+        ],
+        "operands": [
+          {
+            "artifact_ref": "source_tutorial_models",
+            "format": "infernal_ascii",
+            "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm",
+            "role": "models",
+            "sha256": "69de11fd1a8dc197a306780a53b9417427f83b66002d1c3bb53b42021ce294fd",
+            "size_bytes": 256295
+          },
+          {
+            "artifact_ref": "source_tutorial_sequences",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/mrum-tRNAs10.fa",
+            "role": "sequences",
+            "sha256": "458183dae273c27cc934236c4ffd1f70f24681028751ad198e7b8a4430ce7c91",
+            "size_bytes": 923
+          },
+          {
+            "artifact_ref": "source_tutorial_models_i1f",
+            "format": "infernal_i1f",
+            "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1f",
+            "role": "models_i1f",
+            "sha256": "8eaf9c22584a4c7d846ae85bbb6a1c5c4452f394d80fbf844e1e40c8551fd683",
+            "size_bytes": 29691
+          },
+          {
+            "artifact_ref": "source_tutorial_models_i1i",
+            "format": "infernal_i1i",
+            "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1i",
+            "role": "models_i1i",
+            "sha256": "078a6c25ce071c2c4081734baa3c27e909d904e9317857f7efa0c71c705a6015",
+            "size_bytes": 249
+          },
+          {
+            "artifact_ref": "source_tutorial_models_i1m",
+            "format": "infernal_i1m",
+            "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1m",
+            "role": "models_i1m",
+            "sha256": "8408600391c0eaccac5baccb44805e589c9480fc18b977421e9314bf933f3e25",
+            "size_bytes": 180438
+          },
+          {
+            "artifact_ref": "source_tutorial_models_i1p",
+            "format": "infernal_i1p",
+            "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm.i1p",
+            "role": "models_i1p",
+            "sha256": "4adde619c1ae0cb6b6d09e9d14ea90665ec9e2d334fbb678516f26e8d511ebc6",
+            "size_bytes": 61906
+          }
+        ],
+        "options": [
+          "--cpu",
+          "1"
+        ],
+        "outputs": [
+          {
+            "format": "infernal_stdout",
+            "relative_path": "stdout.log",
+            "role": "stdout"
+          },
+          {
+            "format": "text",
+            "relative_path": "stderr.log",
+            "role": "stderr"
+          },
+          {
+            "format": "infernal_tblout",
+            "relative_path": "hits.tblout",
+            "role": "tblout"
+          }
+        ],
+        "program": "cmscan",
+        "software": {
+          "engine_version": "1.1.5 (caller declaration; native stdout retained separately)",
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+          "sha256": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215"
+        },
+        "table_format": 2,
+        "version": "native_infernal_job_v1"
+      }
+    },
+    "returncode": 0,
+    "software": {
+      "actual_sha256": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215",
+      "declared_engine_version": "1.1.5 (caller declaration; native stdout retained separately)",
+      "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+      "expected_sha256": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215"
+    },
+    "started_at": "2026-10-26T01:21:23.425842+00:00",
+    "table_format": 2,
+    "version": "native_infernal_bundle_v1"
+  },
+  "artifacts": [
+    {
+      "role": "models",
+      "format": "infernal_ascii",
+      "relative_path": "inputs/models.cm",
+      "kind": "input",
+      "artifact_ref": "captured_input_models",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/inputs/models.cm"
+    },
+    {
+      "role": "sequences",
+      "format": "fasta",
+      "relative_path": "inputs/sequences.fa",
+      "kind": "input",
+      "artifact_ref": "captured_input_sequences",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/inputs/sequences.fa"
+    },
+    {
+      "role": "models_i1f",
+      "format": "infernal_i1f",
+      "relative_path": "inputs/models.cm.i1f",
+      "kind": "input",
+      "artifact_ref": "captured_input_models_i1f",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/inputs/models.cm.i1f"
+    },
+    {
+      "role": "models_i1i",
+      "format": "infernal_i1i",
+      "relative_path": "inputs/models.cm.i1i",
+      "kind": "input",
+      "artifact_ref": "captured_input_models_i1i",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/inputs/models.cm.i1i"
+    },
+    {
+      "role": "models_i1m",
+      "format": "infernal_i1m",
+      "relative_path": "inputs/models.cm.i1m",
+      "kind": "input",
+      "artifact_ref": "captured_input_models_i1m",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/inputs/models.cm.i1m"
+    },
+    {
+      "role": "models_i1p",
+      "format": "infernal_i1p",
+      "relative_path": "inputs/models.cm.i1p",
+      "kind": "input",
+      "artifact_ref": "captured_input_models_i1p",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/inputs/models.cm.i1p"
+    },
+    {
+      "role": "stdout",
+      "format": "infernal_stdout",
+      "relative_path": "stdout.log",
+      "kind": "output",
+      "artifact_ref": "captured_output_stdout",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/stdout.log"
+    },
+    {
+      "role": "stderr",
+      "format": "text",
+      "relative_path": "stderr.log",
+      "kind": "output",
+      "artifact_ref": "captured_output_stderr",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/stderr.log"
+    },
+    {
+      "role": "tblout",
+      "format": "infernal_tblout",
+      "relative_path": "hits.tblout",
+      "kind": "output",
+      "artifact_ref": "captured_output_tblout",
+      "path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/native_infernal_result_worker/cmscan/hits.tblout"
+    }
+  ],
+  "directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_worker_2026-10-26_224/examples_001/cmscan_search_hit/graded",
+  "failures": [],
+  "selector": {
+    "version": "native_infernal_result_selector_v1",
+    "acquisition": "complete_bound_bundle",
+    "projection": {
+      "family": "search_hit",
+      "rows": {
+        "offset": 0,
+        "limit": 2
+      },
+      "metrics": [
+        "bitscore",
+        "evalue",
+        "bias_bits",
+        "gc_fraction",
+        "model_span_length",
+        "model_span_fraction",
+        "sequence_span_length",
+        "sequence_span_fraction",
+        "consensus_length",
+        "sequence_length"
+      ]
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema": "blast_vdb_metadata_parse_v1",
+  "format": "blast_vdb_cmd_table",
+  "source_ref": "synthetic:member-sequences",
+  "input_identity": {
+    "sha256": "cb4c9a706866d726f05a4695314ef656b88dffb0ec772a1dcda00f541b5bc3d7",
+    "size_bytes": 37
+  },
+  "native_text": "gnl|SRA|SRR1.1.2\tSRR1.1.2\t8\tacgunrya\n",
+  "parse_context": {
+    "dataset_key": "D0",
+    "selected_input": {
+      "kind": "accession",
+      "value": "SRR1"
+    },
+    "snapshot": {
+      "release": null,
+      "snapshot_id": "snapshot",
+      "manifest_sha256": null
+    },
+    "entry_identifiers": [
+      {
+        "namespace": "NCBI.Seq-id",
+        "value": "SRR1.1.2",
+        "version": null
+      }
+    ],
+    "native_returncode": 0,
+    "producer_complete": true,
+    "include_filtered_reads": false,
+    "reference_selection": false,
+    "outfmt": "%i\t%a\t%l\t%s",
+    "source": {
+      "source_ref": "synthetic:supplied",
+      "pointer": "/extract"
+    }
+  },
+  "records": [
+    {
+      "record_key": {
+        "source_ref": "synthetic:member-sequences",
+        "record_ordinal": 0
+      },
+      "source_entity": {
+        "kind": "member",
+        "identifiers": [
+          {
+            "namespace": "NCBI.Seq-id",
+            "value": "gnl|SRA|SRR1.1.2",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.Seq-id",
+            "value": "SRR1.1.2",
+            "version": null
+          }
+        ],
+        "parent_record_key": null,
+        "dataset_identifier": null,
+        "member_identifier": {
+          "namespace": "NCBI.Seq-id",
+          "value": "SRR1.1.2",
+          "version": null
+        },
+        "sample_identifier": null,
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "blast_vdb_cmd_table",
+      "source_version": "synthetic",
+      "native_record": {
+        "input_text": "gnl|SRA|SRR1.1.2\tSRR1.1.2\t8\tacgunrya\n",
+        "row_ordinal": 0,
+        "line": 1,
+        "values": [
+          "gnl|SRA|SRR1.1.2",
+          "SRR1.1.2",
+          "8",
+          "acgunrya"
+        ],
+        "parse_context": {
+          "dataset_key": "D0",
+          "selected_input": {
+            "kind": "accession",
+            "value": "SRR1"
+          },
+          "snapshot": {
+            "release": null,
+            "snapshot_id": "snapshot",
+            "manifest_sha256": null
+          },
+          "entry_identifiers": [
+            {
+              "namespace": "NCBI.Seq-id",
+              "value": "SRR1.1.2",
+              "version": null
+            }
+          ],
+          "native_returncode": 0,
+          "producer_complete": true,
+          "include_filtered_reads": false,
+          "reference_selection": false,
+          "outfmt": "%i\t%a\t%l\t%s",
+          "source": {
+            "source_ref": "synthetic:supplied",
+            "pointer": "/extract"
+          }
+        }
+      },
+      "source": {
+        "source_ref": "synthetic:member-sequences",
+        "pointer": "/records/0"
+      },
+      "identifiers": [
+        {
+          "namespace": "NCBI.Seq-id",
+          "value": "gnl|SRA|SRR1.1.2",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.Seq-id",
+          "value": "SRR1.1.2",
+          "version": null
+        }
+      ],
+      "sequence": {
+        "symbols": "ACGUNRYA",
+        "molecule": "nt",
+        "length": 8,
+        "sha256": "233ce89edb3275ed2d51e400f99edb1048ae9d4ff6603561c4e85eff07d194d3"
+      },
+      "functions": [],
+      "taxid": null,
+      "taxid_scope": "unknown",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "native_parser",
+      "issues": []
+    }
+  ],
+  "issues": []
+}

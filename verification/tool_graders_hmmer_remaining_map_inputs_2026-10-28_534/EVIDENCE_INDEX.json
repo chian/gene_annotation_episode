@@ -1,0 +1,724 @@
+{
+  "schema": "hmmer_remaining_map_inputs_source_evidence_v1",
+  "packet": 534,
+  "r2_completion_count_delta": 0,
+  "activity": "source and retained-artifact inspection only",
+  "not_performed": [
+    "application imports",
+    "tests",
+    "native commands",
+    "compiler",
+    "network",
+    "jobs",
+    "production edits",
+    "progress edits"
+  ],
+  "native_sources": [
+    {
+      "path": "resources/software/infernal-1.1.5/hmmer/src/alimask.c",
+      "sha256": "504e52c49a249facca5887d96f5efeaaf8012820b47bbe75e782aa14af7034ab",
+      "size_bytes": 25455
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/hmmer/src/hmmbuild.c",
+      "sha256": "3d888557dbffbca23c5067ae78f24b64eb8ee838d855ba3c52715481a46326ee",
+      "size_bytes": 65253
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile.c",
+      "sha256": "8b64bf95f0d6c44e03b0b7136edccd40ce7e1021f21a3052d063e4dd0031de4b",
+      "size_bytes": 67499
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_stockholm.c",
+      "sha256": "a5b8a8f6ce0a2e0f683ba908a1dd352ae0e3704eb3959b7b83c0c1561ef7c574",
+      "size_bytes": 115085
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_afa.c",
+      "sha256": "0fa3d02ccff23cc9b989c22b5408f81dabf38c0538be7958906391deb8988596",
+      "size_bytes": 30568
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_a2m.c",
+      "sha256": "0042c1176e1a2395ffdc30a8faae850c8bceba6d866fe3cae55e2f24f5dc5023",
+      "size_bytes": 45980
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_psiblast.c",
+      "sha256": "1921eb1cf03fcc711cd5b81006c094ae75506f634521f1ea6492be68fb626d06",
+      "size_bytes": 34975
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_selex.c",
+      "sha256": "f7cf9fc982d6989eb318b7c304038e645a2d46061999cfc30ce903b5e5659466",
+      "size_bytes": 52153
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_clustal.c",
+      "sha256": "206157a5b294ddc4276462874a8cc5684159ffa0d41063e1a89dafbcc202aa2d",
+      "size_bytes": 46609
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_phylip.c",
+      "sha256": "ff46bad068613cd5bec9b0eb3eb2abc124e1c50fa25030f511d1247abd41a497",
+      "size_bytes": 78101
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_alphabet.c",
+      "sha256": "9e42b877ebf904015bd7fdddeb274bbd611feadb7ce1d9b7ba334b0ece2c8d0b",
+      "size_bytes": 87682
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_buffer.c",
+      "sha256": "91d88c7fd24177829256819b46dfe27bb198d2c629e501d70bdaaa3063e99ad7",
+      "size_bytes": 117484
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_mem.c",
+      "sha256": "9b7553a49b39872b97a365d8f4842d2afed3add46cdd1aa32caf60b8cecc6b04",
+      "size_bytes": 56332
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa.c",
+      "sha256": "6154a39ce13f20aee668528c287f27725dc4c390a689f8beba65ef305fa8ae0f",
+      "size_bytes": 140417
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/easel.h",
+      "sha256": "e67237dad50a9e19d7b5279e507e0fdbe2c7a58cc2f4814058465376e9613017",
+      "size_bytes": 22227
+    }
+  ],
+  "retained_native_formats": [
+    {
+      "directory": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m",
+      "native_program": "cmemit",
+      "recorded_command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "-a",
+        "-N",
+        "3",
+        "--outformat",
+        "A2M",
+        "--seed",
+        "181",
+        "-o",
+        "emitted.out",
+        "model.cm"
+      ],
+      "recorded_returncode": 0,
+      "recorded_binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+      "evidence_kind": "retained native emission bytes; not HMMER input-reader conformance",
+      "files": [
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m/receipt.json",
+          "sha256": "f6457ff70269f51edef2e55074f61bbe56f07107b5e7f00386c5da47a7406f3b",
+          "size_bytes": 3342
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m/request.json",
+          "sha256": "4c6a041d6ffc5e8a4b8bed9cb610e427786e4eeebbbb4616c200664f984011d2",
+          "size_bytes": 1288
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m/emitted.out",
+          "sha256": "7e85ea14332e2dff9ff62f274e81c07fa59699c96f48236a46a8d41dd2b24197",
+          "size_bytes": 99
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions",
+      "native_program": "cmemit",
+      "recorded_command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "-a",
+        "-N",
+        "5",
+        "--outformat",
+        "A2M",
+        "--exp",
+        "0.5",
+        "--seed",
+        "181",
+        "-o",
+        "emitted.out",
+        "model.cm"
+      ],
+      "recorded_returncode": 0,
+      "recorded_binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+      "evidence_kind": "retained native emission bytes; not HMMER input-reader conformance",
+      "files": [
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/receipt.json",
+          "sha256": "35acdcc3b6505abbf902814c79a789c877c646f0ca975018e71b959a3325e198",
+          "size_bytes": 3373
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/request.json",
+          "sha256": "e4d05557d17a4846358b5b5db48d3c4f7f41c68e46bd37bb174bf59fb36f06df",
+          "size_bytes": 1318
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/emitted.out",
+          "sha256": "4a47f0cd7fad3b309d62e69985932c31b12358e0befa0e78d0d4cb92b7ed22e3",
+          "size_bytes": 170
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal",
+      "native_program": "cmemit",
+      "recorded_command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "-a",
+        "-N",
+        "3",
+        "--outformat",
+        "Clustal",
+        "--seed",
+        "181",
+        "-o",
+        "emitted.out",
+        "model.cm"
+      ],
+      "recorded_returncode": 0,
+      "recorded_binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+      "evidence_kind": "retained native emission bytes; not HMMER input-reader conformance",
+      "files": [
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/receipt.json",
+          "sha256": "c06b4e88f4297548677960b50d8719d15f0e600d374ad52c958d176997917f67",
+          "size_bytes": 3355
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/request.json",
+          "sha256": "d524cbf555ae8e8538dee99eed3534183ae28b6e9b9f7615e628b5765137ce8a",
+          "size_bytes": 1300
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/emitted.out",
+          "sha256": "aacde9e96408bb894a79665ab28dc3c3bbf2a87976123f69052a6f361701821a",
+          "size_bytes": 169
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved",
+      "native_program": "cmemit",
+      "recorded_command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "-a",
+        "-N",
+        "2",
+        "--outformat",
+        "Clustal",
+        "--seed",
+        "181",
+        "-o",
+        "emitted.out",
+        "model.cm"
+      ],
+      "recorded_returncode": 0,
+      "recorded_binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+      "evidence_kind": "retained native emission bytes; not HMMER input-reader conformance",
+      "files": [
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/receipt.json",
+          "sha256": "47e928b427828f30eb2cf74a53e385d681565cf120a3b533ba877fd49eefd73c",
+          "size_bytes": 3321
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/request.json",
+          "sha256": "c51c3fc17e01a0fa185ea6b413ce30b8e03857e8b9fb4eea15fec8e0930f18ae",
+          "size_bytes": 1266
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+          "sha256": "38e73055c801d84b0bafbbbbe35093d7740e324194ef626cbd2268efd20f5c1e",
+          "size_bytes": 354
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip",
+      "native_program": "cmemit",
+      "recorded_command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "-a",
+        "-N",
+        "3",
+        "--outformat",
+        "Phylip",
+        "--seed",
+        "181",
+        "-o",
+        "emitted.out",
+        "model.cm"
+      ],
+      "recorded_returncode": 0,
+      "recorded_binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+      "evidence_kind": "retained native emission bytes; not HMMER input-reader conformance",
+      "files": [
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/receipt.json",
+          "sha256": "c7355198801d8a0d885a058d8d2b60a48770a3cf44fd3e40b261c76997ad181a",
+          "size_bytes": 3351
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/request.json",
+          "sha256": "ed0c702fd8b02c719bb99d1153c2ec705160ba66bec31f4d346f57866561a19f",
+          "size_bytes": 1297
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/emitted.out",
+          "sha256": "2080aeba7e96b2b39127ae483c66b61ff53394a6e2c696203fff88dcb470d649",
+          "size_bytes": 78
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved",
+      "native_program": "cmemit",
+      "recorded_command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "-a",
+        "-N",
+        "2",
+        "--outformat",
+        "Phylip",
+        "--exp",
+        "0.1",
+        "--seed",
+        "181",
+        "-o",
+        "emitted.out",
+        "model.cm"
+      ],
+      "recorded_returncode": 0,
+      "recorded_binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+      "evidence_kind": "retained native emission bytes; not HMMER input-reader conformance",
+      "files": [
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/receipt.json",
+          "sha256": "740938e35763c99702936233fbf4e2ee2515ed9ca4b2573dc420b89d5077aa7e",
+          "size_bytes": 3383
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/request.json",
+          "sha256": "837fba5bc99abe57e13e61d805871e7f411957c2eff9fa0e17b52741331834b2",
+          "size_bytes": 1329
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/emitted.out",
+          "sha256": "f328a9f75340fa0286ffc31428dad984199b09651982d6b8ae50613f52e4342a",
+          "size_bytes": 60
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved",
+      "native_program": "cmemit",
+      "recorded_command": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "-a",
+        "-N",
+        "2",
+        "--outformat",
+        "Phylip",
+        "--seed",
+        "181",
+        "-o",
+        "emitted.out",
+        "model.cm"
+      ],
+      "recorded_returncode": 0,
+      "recorded_binary_sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+      "evidence_kind": "retained native emission bytes; not HMMER input-reader conformance",
+      "files": [
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/receipt.json",
+          "sha256": "08cb2b604ed4dcc5419d455c6beeb7d16d2985f15474f3fdfc937401b054d045",
+          "size_bytes": 3318
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/request.json",
+          "sha256": "be985a223a3b45e6d7ef3352ae299ea399cb41b568d36a2f75847e1bb1fa1091",
+          "size_bytes": 1263
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/emitted.out",
+          "sha256": "1da160dadc5a685c83856a689d40443a2050aecf1c49188ec3b64ae7473ecc75",
+          "size_bytes": 181
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ]
+    }
+  ],
+  "upstream_fixture_sources": [
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/a2m/a2m.good.1",
+      "sha256": "6f144c7e8d59836304b1096fb01246297ebc1ae36548feb4bae7a9e0997f1b70",
+      "size_bytes": 682,
+      "format_family": "a2m",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/a2m/a2m.good.2",
+      "sha256": "ebbe37f07e8e508cc0a2b3309c46f92a958a1e5d190630b61f7ea381db419367",
+      "size_bytes": 409,
+      "format_family": "a2m",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/psiblast/psiblast.good.1",
+      "sha256": "cbd57eab6959a8a9ef8d7de7aff80b1f3eb08e297e02bf9d605382311b68a2e3",
+      "size_bytes": 818,
+      "format_family": "psiblast",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/psiblast/psiblast.good.2",
+      "sha256": "4bdcc103bc1e48fc94fde761e92805029e3d3db179735f3c317053bee23188df",
+      "size_bytes": 446,
+      "format_family": "psiblast",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/00MANIFEST",
+      "sha256": "9e2e831c5d365ac12eb9e348721cdec64ed99c0657bdce8390129cbab9a5dddf",
+      "size_bytes": 1472,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.1",
+      "sha256": "b58aa5d191937cb690cab54aae5b5a03fc7998809e2eb378d182b72eac4c24f3",
+      "size_bytes": 44,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.10",
+      "sha256": "b5e07ba27f5de3a471efb26e4d8268d429355fc1ea0efa588aacfc41ee449d92",
+      "size_bytes": 328,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.11",
+      "sha256": "40d363351c1e3cec043ed37652a7a8dc3f1db01c2e8880d692f217b963deda6d",
+      "size_bytes": 327,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.12",
+      "sha256": "8490f86403281a66672dbd533b54e8cb11bf22c7e7361d4f76f49cd23d5d63cd",
+      "size_bytes": 327,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.13",
+      "sha256": "7e444c8a3f4914496b5baa5801f2733e6a5cfb8fe17b2138442e9f405ecc678b",
+      "size_bytes": 327,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.14",
+      "sha256": "17bd19a25e6a3b047bf32985fc0d97559a407f25308f9a4d7797347812febd60",
+      "size_bytes": 274,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.2",
+      "sha256": "9b6ab1bb69f231682fcd3dd254b8f71040e063525e030262263fbacd762ebc18",
+      "size_bytes": 241,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.3",
+      "sha256": "6a8b4b2e1a205c0d24975226b79412d336f44f4aeb3cc527b6f938806a1e22fb",
+      "size_bytes": 163,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.4",
+      "sha256": "e08dbc49d92d2e4c64c4c184bbfc3e14470f81f380bc97052d19a9322cb5ce49",
+      "size_bytes": 169,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.5",
+      "sha256": "19929707b60548a2774fc5228e3e77cda8199120463a2b28f258b338c64706de",
+      "size_bytes": 196,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.6",
+      "sha256": "9a98eff753c182a9d930215cd90054ba5d6b4c1bd81cbba8030b4b61a25477fe",
+      "size_bytes": 190,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.7",
+      "sha256": "5bbde9a2516033ede19e67292e00269949d89a38afc8c1ecfc80852c90e4ac36",
+      "size_bytes": 298,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.8",
+      "sha256": "b9d137c08110f1577073d23a1f5e4ac35023660629ba5e44a293932058bd63b5",
+      "size_bytes": 190,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.9",
+      "sha256": "d8be9cb690c3fafd59a9863c48126cf189ea735a045bb0dccd75e0c9368ffa39",
+      "size_bytes": 326,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.1",
+      "sha256": "6b689ba1c0c6830a6e4738d712f35afa949aeb316a9d7767242128cc4734d2a0",
+      "size_bytes": 130,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.2",
+      "sha256": "bc1a9b240181e162d57284fbd94b74b3a0d44ed4076ff4b5c9e4ca05bff0efe2",
+      "size_bytes": 974,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.3",
+      "sha256": "f5144577fc39aa34e1dfbb97e8686df4d479d58016c5a28bbfaf553ea7795a4f",
+      "size_bytes": 420,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.4",
+      "sha256": "2c583468c2268306feef69bb9c62cd90e4727738e93a6d24f2d8338ef6fd1d62",
+      "size_bytes": 557,
+      "format_family": "selex",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/clustal/clustal.good.1",
+      "sha256": "6c6602092db1eb5497067eb550b02836fef66d99f1d1c9f1a6cf076c4a6b4acb",
+      "size_bytes": 1125,
+      "format_family": "clustal",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/clustal/clustal.good.2",
+      "sha256": "e77c3caf4d18118927d7ff33aee38ff531e38922b5d56d2a93c5fc7cdd81fb3b",
+      "size_bytes": 689,
+      "format_family": "clustal",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.ambig.1",
+      "sha256": "f0c1a09036749535a93afb09bd5a458efa3480062e5553bb86414149cd18f15c",
+      "size_bytes": 139,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.1",
+      "sha256": "7142b9307fedc44f6e2f805e846858314764732cd77ad593ff3d23e380a3e1d0",
+      "size_bytes": 76,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.10",
+      "sha256": "413f494fe6513a7df01e9d5261df28a4025cd25e5d628309dc95263f139349f5",
+      "size_bytes": 116,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.11",
+      "sha256": "fe61059cb1d60422ce905093eb49727bf34c3760175b908b54f753d0f1a064f2",
+      "size_bytes": 141,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.2",
+      "sha256": "c9920be7669baee73919ce7ae35a919948fe1ad0a69dd89b07ee720c82970b8a",
+      "size_bytes": 77,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.3",
+      "sha256": "f93f14cfaa7f8fa9c47ac6621f6d967430f6b8be4654714477556d7963b50e48",
+      "size_bytes": 73,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.4",
+      "sha256": "228796cd7d13016935b2c3a20b69f51364c812e6d8d44e374ee7ec2d8fe1a463",
+      "size_bytes": 68,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.5",
+      "sha256": "b58481de95289b1de1931ea8fa3bcb7a49f9a256556a14aac16a8bb7ede46076",
+      "size_bytes": 9,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.6",
+      "sha256": "08ab082f5f7b8f82b512a77224e2de4c5959aaac74b6aa6799d5f6f5382e592d",
+      "size_bytes": 39,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.7",
+      "sha256": "c6a4f53c4dc3da8b461531e18c6e6be4ba7c750b4b449b56ca19f4d01d847c34",
+      "size_bytes": 74,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.8",
+      "sha256": "465b78f5987ddc5eb39ba456d9ac823bac91980d6bafc8a5a2254841237058a3",
+      "size_bytes": 73,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.9",
+      "sha256": "9764eeee08b97d81c483194086092ca520fe6039611a4972a8b4ba0027226198",
+      "size_bytes": 72,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.good.1",
+      "sha256": "1129cebe3bc89b90026bdb456971e141ceb167682f6998c78e340128214b95ec",
+      "size_bytes": 296,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.good.2",
+      "sha256": "e298afc6c6da6b2b906068a23974c4ac343b9a04971b077f4c8d84bae55bad24",
+      "size_bytes": 441,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.good.3",
+      "sha256": "d396df9b55e4e3516c87286f4074e200443e55ebd3b755815870587466fc4869",
+      "size_bytes": 1575,
+      "format_family": "phylip",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylips/phylips.good.1",
+      "sha256": "eb02748583ebb035d1f566eb6b263d9b021886ef20e99ae6fceb1813bc7c12af",
+      "size_bytes": 295,
+      "format_family": "phylips",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylips/phylips.good.2",
+      "sha256": "d4fee1f92a4d5646cd617f4acdd9a57893df3b372b6b411ae8550fb988f3aeb8",
+      "size_bytes": 1205,
+      "format_family": "phylips",
+      "evidence_kind": "upstream fixture bytes only; not executed in packet534"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+.........F
+=================================== FAILURES ===================================
+_ test_partial_acquisition_returns_diagnostic_information_without_false_completion[changed_output] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_002/temporary/pytest/test_partial_acquisition_retur1')
+fault = 'changed_output'
+
+    @pytest.mark.parametrize('fault', ['missing_key', 'changed_output'])
+    def test_partial_acquisition_returns_diagnostic_information_without_false_completion(tmp_path, fault):
+        selection = choice_for(native_job('cmemit', 'consensus'))
+        if fault == 'missing_key':
+            selection['projection']['rows'] = {'record_keys': ['explicitly_absent_record']}
+        def change(store, plan):
+            path = Path(plan['attempt_directory']) / 'stdout.log'
+            path.write_bytes(b'changed after sealed producer bundle\n')
+        case = run_case(tmp_path, selectors=[selection], partial=True,
+            before_collection=change if fault == 'changed_output' else None)
+        try:
+            parent, received = assert_accounting(case)
+            body = case.outcomes[0]['result']
+>           assert not body['complete'] and not case.returned[0]['completed']
+E           assert (not True)
+
+../../../tests/test_native_infernal_preparation_results_integration.py:308: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_results_integration.py::test_partial_acquisition_returns_diagnostic_information_without_false_completion[changed_output]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 9 passed in 274.11s (0:04:34)

@@ -1,0 +1,534 @@
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 22%]
+........................................................................ [ 30%]
+........................................................................ [ 37%]
+........................................................................ [ 45%]
+........................................................................ [ 52%]
+........................................................................ [ 60%]
+........................................................................ [ 67%]
+........................................................................ [ 75%]
+........................................................................ [ 83%]
+..................................................................FFFFFF [ 90%]
+FFFFFFFFFFF............................................................. [ 98%]
+..................                                                       [100%]
+=================================== FAILURES ===================================
+___ test_actual_saved_numbers_zero_populations_and_qualified_missing_values ____
+
+    def test_actual_saved_numbers_zero_populations_and_qualified_missing_values():
+>       example = saved_example(selected_fields())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+_ test_only_requested_mean_available_despite_wider_missing_scientific_operands _
+
+    def test_only_requested_mean_available_despite_wider_missing_scientific_operands():
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+_ test_requested_failures_keep_actual_scope_and_do_not_attach_to_unrelated_fields _
+
+    def test_requested_failures_keep_actual_scope_and_do_not_attach_to_unrelated_fields():
+        selections = selected_fields()
+        selections["absent"] = {"kind": "measurement", "target": "track_count", "track_key": "comp_genome_999",
+                                "metric": "reference_input_record_count"}
+>       example = saved_example(selections)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+____ test_missing_target_is_unavailable_not_arbitrary_other_row[selection0] ____
+
+selection = {'kind': 'association', 'association_key': 'comp_genome_2/row/99'}
+
+    @pytest.mark.parametrize("selection", [
+        {"kind": "association", "association_key": "comp_genome_2/row/99"},
+        {"kind": "selection", "association_key": "comp_genome_2/row/99"},
+        {"kind": "measurement", "target": "track_count", "track_key": "comp_genome_999", "metric": "native_bi_count"},
+        {"kind": "population", "target": "inventory", "inventory_key": "absent"},
+    ])
+    def test_missing_target_is_unavailable_not_arbitrary_other_row(selection):
+>       example = saved_example({"missing": selection, "mean": MEAN})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+____ test_missing_target_is_unavailable_not_arbitrary_other_row[selection1] ____
+
+selection = {'kind': 'selection', 'association_key': 'comp_genome_2/row/99'}
+
+    @pytest.mark.parametrize("selection", [
+        {"kind": "association", "association_key": "comp_genome_2/row/99"},
+        {"kind": "selection", "association_key": "comp_genome_2/row/99"},
+        {"kind": "measurement", "target": "track_count", "track_key": "comp_genome_999", "metric": "native_bi_count"},
+        {"kind": "population", "target": "inventory", "inventory_key": "absent"},
+    ])
+    def test_missing_target_is_unavailable_not_arbitrary_other_row(selection):
+>       example = saved_example({"missing": selection, "mean": MEAN})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+____ test_missing_target_is_unavailable_not_arbitrary_other_row[selection2] ____
+
+selection = {'kind': 'measurement', 'target': 'track_count', 'track_key': 'comp_genome_999', 'metric': 'native_bi_count'}
+
+    @pytest.mark.parametrize("selection", [
+        {"kind": "association", "association_key": "comp_genome_2/row/99"},
+        {"kind": "selection", "association_key": "comp_genome_2/row/99"},
+        {"kind": "measurement", "target": "track_count", "track_key": "comp_genome_999", "metric": "native_bi_count"},
+        {"kind": "population", "target": "inventory", "inventory_key": "absent"},
+    ])
+    def test_missing_target_is_unavailable_not_arbitrary_other_row(selection):
+>       example = saved_example({"missing": selection, "mean": MEAN})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+____ test_missing_target_is_unavailable_not_arbitrary_other_row[selection3] ____
+
+selection = {'kind': 'population', 'target': 'inventory', 'inventory_key': 'absent'}
+
+    @pytest.mark.parametrize("selection", [
+        {"kind": "association", "association_key": "comp_genome_2/row/99"},
+        {"kind": "selection", "association_key": "comp_genome_2/row/99"},
+        {"kind": "measurement", "target": "track_count", "track_key": "comp_genome_999", "metric": "native_bi_count"},
+        {"kind": "population", "target": "inventory", "inventory_key": "absent"},
+    ])
+    def test_missing_target_is_unavailable_not_arbitrary_other_row(selection):
+>       example = saved_example({"missing": selection, "mean": MEAN})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+__________ test_saved_corruption_rejected_without_recalculation[fact] __________
+
+what = 'fact'
+
+    @pytest.mark.parametrize("what", ["fact", "status", "task", "bundle", "components_digest", "components_parameters", "wrapper_parameters"])
+    def test_saved_corruption_rejected_without_recalculation(what):
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+_________ test_saved_corruption_rejected_without_recalculation[status] _________
+
+what = 'status'
+
+    @pytest.mark.parametrize("what", ["fact", "status", "task", "bundle", "components_digest", "components_parameters", "wrapper_parameters"])
+    def test_saved_corruption_rejected_without_recalculation(what):
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+__________ test_saved_corruption_rejected_without_recalculation[task] __________
+
+what = 'task'
+
+    @pytest.mark.parametrize("what", ["fact", "status", "task", "bundle", "components_digest", "components_parameters", "wrapper_parameters"])
+    def test_saved_corruption_rejected_without_recalculation(what):
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+_________ test_saved_corruption_rejected_without_recalculation[bundle] _________
+
+what = 'bundle'
+
+    @pytest.mark.parametrize("what", ["fact", "status", "task", "bundle", "components_digest", "components_parameters", "wrapper_parameters"])
+    def test_saved_corruption_rejected_without_recalculation(what):
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+___ test_saved_corruption_rejected_without_recalculation[components_digest] ____
+
+what = 'components_digest'
+
+    @pytest.mark.parametrize("what", ["fact", "status", "task", "bundle", "components_digest", "components_parameters", "wrapper_parameters"])
+    def test_saved_corruption_rejected_without_recalculation(what):
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+_ test_saved_corruption_rejected_without_recalculation[components_parameters] __
+
+what = 'components_parameters'
+
+    @pytest.mark.parametrize("what", ["fact", "status", "task", "bundle", "components_digest", "components_parameters", "wrapper_parameters"])
+    def test_saved_corruption_rejected_without_recalculation(what):
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+___ test_saved_corruption_rejected_without_recalculation[wrapper_parameters] ___
+
+what = 'wrapper_parameters'
+
+    @pytest.mark.parametrize("what", ["fact", "status", "task", "bundle", "components_digest", "components_parameters", "wrapper_parameters"])
+    def test_saved_corruption_rejected_without_recalculation(what):
+>       example = saved_example()
+                  ^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+________ test_every_fact_reference_resolves_to_an_actual_saved_pointer _________
+
+    def test_every_fact_reference_resolves_to_an_actual_saved_pointer():
+>       example = saved_example(selected_fields())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+_____ test_saved_projection_performs_no_parser_calculator_io_or_execution ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x791cc6ef4ef0>
+
+    def test_saved_projection_performs_no_parser_calculator_io_or_execution(monkeypatch):
+>       example = saved_example(selected_fields())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+______ test_changed_parameter_result_keeps_previous_projection_unchanged _______
+
+    def test_changed_parameter_result_keeps_previous_projection_unchanged():
+>       original = saved_example({"selected": {"kind": "measurement", "target": "selection_count", "track_key": "comp_genome_2", "metric": "pass"}})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_projection.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_bundle_projection.py:85: in saved_example
+    assert contracts.validate_provider_sheet(wrapper) == wrapper
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:376: in validate_provider_sheet
+    _validate_resolution(saved, supplied)
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:321: in _validate_resolution
+    _require(content is not None and content["artifact_field"] == "request_ref" and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'saved_identity_conflict'
+path = '/input_resolution/1/content'
+
+    def _require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeBundleError(code if code.startswith("proteome_") else "proteome_" + code, path)
+E           gene_annotation_episode.bvbrc_proteome_bundle_contracts.ProteomeBundleError: proteome_saved_identity_conflict
+
+gene_annotation_episode/bvbrc_proteome_bundle_contracts.py:71: ProteomeBundleError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_actual_saved_numbers_zero_populations_and_qualified_missing_values
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_only_requested_mean_available_despite_wider_missing_scientific_operands
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_requested_failures_keep_actual_scope_and_do_not_attach_to_unrelated_fields
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_missing_target_is_unavailable_not_arbitrary_other_row[selection0]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_missing_target_is_unavailable_not_arbitrary_other_row[selection1]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_missing_target_is_unavailable_not_arbitrary_other_row[selection2]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_missing_target_is_unavailable_not_arbitrary_other_row[selection3]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_corruption_rejected_without_recalculation[fact]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_corruption_rejected_without_recalculation[status]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_corruption_rejected_without_recalculation[task]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_corruption_rejected_without_recalculation[bundle]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_corruption_rejected_without_recalculation[components_digest]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_corruption_rejected_without_recalculation[components_parameters]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_corruption_rejected_without_recalculation[wrapper_parameters]
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_every_fact_reference_resolves_to_an_actual_saved_pointer
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_saved_projection_performs_no_parser_calculator_io_or_execution
+FAILED tests/test_bvbrc_proteome_bundle_projection.py::test_changed_parameter_result_keeps_previous_projection_unchanged
+17 failed, 937 passed in 619.54s (0:10:19)

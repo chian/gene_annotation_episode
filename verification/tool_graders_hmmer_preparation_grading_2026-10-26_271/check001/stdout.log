@@ -1,0 +1,106 @@
+........................................................................ [ 58%]
+......FFFF...F......................................                     [100%]
+=================================== FAILURES ===================================
+____ test_current_native_simulations_preserve_explicit_defaults[0-viterbi] _____
+
+index = 0, mode = 'viterbi'
+
+    @pytest.mark.parametrize("index,mode", enumerate(("viterbi", "msv", "forward", "hybrid")))
+    def test_current_native_simulations_preserve_explicit_defaults(index, mode):
+        args = bundle_arguments(CURRENT / ("test_actual_all_selected_modes" + str(index)) /
+                                "hmmer-preparation-attempt/bundle.json")
+        assert args["operation"]["mode"] == mode
+        assert args["operation"]["settings"]["--fast"] is False
+        assert args["operation"]["settings"]["--tlinear"] is False
+        result = worker.grade_hmmer_preparation(**args)
+        vector = next(r["payload"] for r in result["sheet"]["native_rows"] if r["kind"] == "scores")
+>       assert vector["observed_count"] == vector["declared_population"] == 100
+E       assert 1000 == 100
+
+../../../tests/test_native_hmmer_preparation_worker.py:169: AssertionError
+______ test_current_native_simulations_preserve_explicit_defaults[1-msv] _______
+
+index = 1, mode = 'msv'
+
+    @pytest.mark.parametrize("index,mode", enumerate(("viterbi", "msv", "forward", "hybrid")))
+    def test_current_native_simulations_preserve_explicit_defaults(index, mode):
+        args = bundle_arguments(CURRENT / ("test_actual_all_selected_modes" + str(index)) /
+                                "hmmer-preparation-attempt/bundle.json")
+        assert args["operation"]["mode"] == mode
+        assert args["operation"]["settings"]["--fast"] is False
+        assert args["operation"]["settings"]["--tlinear"] is False
+        result = worker.grade_hmmer_preparation(**args)
+        vector = next(r["payload"] for r in result["sheet"]["native_rows"] if r["kind"] == "scores")
+>       assert vector["observed_count"] == vector["declared_population"] == 100
+E       assert 1000 == 100
+
+../../../tests/test_native_hmmer_preparation_worker.py:169: AssertionError
+____ test_current_native_simulations_preserve_explicit_defaults[2-forward] _____
+
+index = 2, mode = 'forward'
+
+    @pytest.mark.parametrize("index,mode", enumerate(("viterbi", "msv", "forward", "hybrid")))
+    def test_current_native_simulations_preserve_explicit_defaults(index, mode):
+        args = bundle_arguments(CURRENT / ("test_actual_all_selected_modes" + str(index)) /
+                                "hmmer-preparation-attempt/bundle.json")
+        assert args["operation"]["mode"] == mode
+        assert args["operation"]["settings"]["--fast"] is False
+        assert args["operation"]["settings"]["--tlinear"] is False
+        result = worker.grade_hmmer_preparation(**args)
+        vector = next(r["payload"] for r in result["sheet"]["native_rows"] if r["kind"] == "scores")
+>       assert vector["observed_count"] == vector["declared_population"] == 100
+E       assert 1000 == 100
+
+../../../tests/test_native_hmmer_preparation_worker.py:169: AssertionError
+_____ test_current_native_simulations_preserve_explicit_defaults[3-hybrid] _____
+
+index = 3, mode = 'hybrid'
+
+    @pytest.mark.parametrize("index,mode", enumerate(("viterbi", "msv", "forward", "hybrid")))
+    def test_current_native_simulations_preserve_explicit_defaults(index, mode):
+        args = bundle_arguments(CURRENT / ("test_actual_all_selected_modes" + str(index)) /
+                                "hmmer-preparation-attempt/bundle.json")
+        assert args["operation"]["mode"] == mode
+        assert args["operation"]["settings"]["--fast"] is False
+        assert args["operation"]["settings"]["--tlinear"] is False
+        result = worker.grade_hmmer_preparation(**args)
+        vector = next(r["payload"] for r in result["sheet"]["native_rows"] if r["kind"] == "scores")
+>       assert vector["observed_count"] == vector["declared_population"] == 100
+E       assert 1000 == 100
+
+../../../tests/test_native_hmmer_preparation_worker.py:169: AssertionError
+_____ test_fm_independent_symbol_and_byte_counts_without_host_abi_fallback _____
+
+    def test_fm_independent_symbol_and_byte_counts_without_host_abi_fallback():
+        args = selected("makehmmerdb", "build")
+        result = worker.grade_hmmer_preparation(**args)
+        components = rows(result, "database_summary")[0]["components"]
+        assert components["source_symbol_total"]["value"] == 28
+        assert components["actual_database_bytes"]["value"] == 314
+        assert len(args["outputs"]["fm_database"][0]["content"]) == 314
+        fasta = args["inputs"]["sequences"][0]["content"].decode().splitlines()
+        assert sum(len(line) for line in fasta if not line.startswith(">")) == 28
+        args["metadata"] = {}
+        unknown = worker.grade_hmmer_preparation(**args)
+        assert unknown["sheet"]["producer_contract"] is None
+>       assert unknown["sheet"]["database"]["state"] == "unsupported"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'state'
+
+../../../tests/test_native_hmmer_preparation_worker.py:230: KeyError
+=============================== warnings summary ===============================
+../../../.venv/lib/python3.12/site-packages/_pytest/python.py:124
+  /home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/_pytest/python.py:124: PytestRemovedIn10Warning: Passing a non-Collection iterable to parametrize is deprecated.
+  Test: tests/test_native_hmmer_preparation_worker.py::test_current_native_simulations_preserve_explicit_defaults, argvalues type: enumerate
+  Please convert to a list or tuple.
+  See https://docs.pytest.org/en/stable/deprecations.html#parametrize-iterators
+    metafunc.parametrize(*marker.args, **marker.kwargs, _param_mark=marker)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_hmmer_preparation_worker.py::test_current_native_simulations_preserve_explicit_defaults[0-viterbi]
+FAILED ../../../tests/test_native_hmmer_preparation_worker.py::test_current_native_simulations_preserve_explicit_defaults[1-msv]
+FAILED ../../../tests/test_native_hmmer_preparation_worker.py::test_current_native_simulations_preserve_explicit_defaults[2-forward]
+FAILED ../../../tests/test_native_hmmer_preparation_worker.py::test_current_native_simulations_preserve_explicit_defaults[3-hybrid]
+FAILED ../../../tests/test_native_hmmer_preparation_worker.py::test_fm_independent_symbol_and_byte_counts_without_host_abi_fallback
+5 failed, 119 passed, 1 warning in 8.31s

@@ -1,0 +1,1821 @@
+{
+  "version": "fastqutils_metric_specs_v2",
+  "scope": "C-L209-FastqUtils::api",
+  "metrics": [
+    {
+      "metric": "fastq_read_count",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "validated record count"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_reads"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Count complete validated FASTQ records, including zero for a complete empty file.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "FASTQ records supplied in full;193 CONTRACT_001 sections4-6"
+    },
+    {
+      "metric": "fastq_base_count",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "sequence character count"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_bases"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Count all supplied sequence symbols; invalid symbols remain separately counted.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "FASTQ records supplied in full;193 CONTRACT_001 sections4-6"
+    },
+    {
+      "metric": "fastq_symbol_count",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "A",
+        "C",
+        "G",
+        "T",
+        "N",
+        "other_iupac",
+        "invalid"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "symbol"
+      ],
+      "population_keys": [
+        "fastq_bases"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Case-insensitive A/C/G/T/N counts; other IUPAC excludes N. Invalid symbols are not silently assigned to ambiguity.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "FASTQ records supplied in full;193 CONTRACT_001 sections4-6"
+    },
+    {
+      "metric": "fastq_min_length",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "minimum retained sequence length"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_reads"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Observed extrema over validated reads; empty population yields undefined/null, not zero-length read.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "FASTQ records supplied in full;193 CONTRACT_001 sections4-6"
+    },
+    {
+      "metric": "fastq_max_length",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "maximum retained sequence length"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_reads"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Observed extrema over validated reads; empty population yields undefined/null, not zero-length read.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "FASTQ records supplied in full;193 CONTRACT_001 sections4-6"
+    },
+    {
+      "metric": "fastq_length_histogram_count",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "exact sequence length",
+        "read count"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "length_closed"
+      ],
+      "population_keys": [
+        "fastq_reads"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Singleton length bins contain actual read counts.",
+      "denominator": null,
+      "coordinates": "closed native axis bins; BAM positions separately zero-based",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "FASTQ records supplied in full;193 CONTRACT_001 sections4-6"
+    },
+    {
+      "metric": "quality_character_count",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "ASCII quality symbol",
+        "base count"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "quality_ascii"
+      ],
+      "population_keys": [
+        "fastq_quality_characters"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Counts raw quality ASCII symbols without assuming an encoding.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "FASTQ records supplied in full;193 CONTRACT_001 sections4-6"
+    },
+    {
+      "metric": "phred_histogram_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "native numeric Phred quality",
+        "base count"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "quality_score"
+      ],
+      "population_keys": [
+        "bam_quality_bases"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "BAM numeric qualities or SAM QUAL decoded using the SAM-specified Phred+33 representation; missing qualities retained separately, never 255 as Q.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields and BAM quality representation"
+    },
+    {
+      "metric": "verified_pair_count",
+      "formats": [
+        "fastq"
+      ],
+      "section_key": "fastq_summary",
+      "native_fields": [
+        "explicit PairDeclaration",
+        "actual unique paired key correspondence"
+      ],
+      "units": [
+        "pairs"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "verified_read_pairs"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "C metadata structural join count after explicit mate/key declaration and actual one-to-one record matching; never halve read counts.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "193 CONTRACT_001 pairing requirements;195 PORTS_002 join_ref/Metadata.measurements"
+    },
+    {
+      "metric": "fastqc_total_sequences",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_basic_statistics",
+      "native_fields": [
+        "Total Sequences"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Native total excludes filtered sequences; flagged count is separately retained.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/BasicStats.java"
+    },
+    {
+      "metric": "fastqc_flagged_sequences",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_basic_statistics",
+      "native_fields": [
+        "Sequences flagged as poor quality"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Native total excludes filtered sequences; flagged count is separately retained.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/BasicStats.java"
+    },
+    {
+      "metric": "fastqc_total_bases_display",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_basic_statistics",
+      "native_fields": [
+        "Total Bases lexical quantity and suffix"
+      ],
+      "units": [
+        "bp",
+        "kbp",
+        "Mbp",
+        "Gbp"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "native_truncated_display",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Store displayed number with displayed unit and exact token. It is not an exact base denominator.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/BasicStats.java"
+    },
+    {
+      "metric": "fastqc_min_length",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_basic_statistics",
+      "native_fields": [
+        "Sequence length lower"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Native displayed read-length endpoints; keep singleton/range meaning.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/BasicStats.java"
+    },
+    {
+      "metric": "fastqc_max_length",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_basic_statistics",
+      "native_fields": [
+        "Sequence length upper"
+      ],
+      "units": [
+        "bases"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Native displayed read-length endpoints; keep singleton/range meaning.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/BasicStats.java"
+    },
+    {
+      "metric": "fastqc_gc_percent",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_basic_statistics",
+      "native_fields": [
+        "%GC"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_normalized",
+      "precision": "native_truncated_display",
+      "value_domain": "integer_0_100",
+      "interpretation": "Native floor(100*(G+C)/(A+C+G+T)); source zero-denominator fallback0 is qualified, not a true GC estimate.",
+      "denominator": "native A+C+G+T; unavailable as exact count in report",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/BasicStats.java"
+    },
+    {
+      "metric": "fastqc_base_quality_mean",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_quality",
+      "native_fields": [
+        "Mean"
+      ],
+      "units": [
+        "phred"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Grouped means average per-position means; grouped quantiles average source per-position quantiles with >100 observations. Not pooled quantiles or a per-base score histogram.",
+      "denominator": null,
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Native NaN/nonfinite -> null explicit nonfinite_native; no graph recovery from HTML.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerBaseQualityScores.java"
+    },
+    {
+      "metric": "fastqc_base_quality_median",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_quality",
+      "native_fields": [
+        "Median"
+      ],
+      "units": [
+        "phred"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Grouped means average per-position means; grouped quantiles average source per-position quantiles with >100 observations. Not pooled quantiles or a per-base score histogram.",
+      "denominator": null,
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Native NaN/nonfinite -> null explicit nonfinite_native; no graph recovery from HTML.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerBaseQualityScores.java"
+    },
+    {
+      "metric": "fastqc_base_quality_lower_quartile",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_quality",
+      "native_fields": [
+        "Lower Quartile"
+      ],
+      "units": [
+        "phred"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Grouped means average per-position means; grouped quantiles average source per-position quantiles with >100 observations. Not pooled quantiles or a per-base score histogram.",
+      "denominator": null,
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Native NaN/nonfinite -> null explicit nonfinite_native; no graph recovery from HTML.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerBaseQualityScores.java"
+    },
+    {
+      "metric": "fastqc_base_quality_upper_quartile",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_quality",
+      "native_fields": [
+        "Upper Quartile"
+      ],
+      "units": [
+        "phred"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Grouped means average per-position means; grouped quantiles average source per-position quantiles with >100 observations. Not pooled quantiles or a per-base score histogram.",
+      "denominator": null,
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Native NaN/nonfinite -> null explicit nonfinite_native; no graph recovery from HTML.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerBaseQualityScores.java"
+    },
+    {
+      "metric": "fastqc_base_quality_p10",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_quality",
+      "native_fields": [
+        "10th Percentile"
+      ],
+      "units": [
+        "phred"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Grouped means average per-position means; grouped quantiles average source per-position quantiles with >100 observations. Not pooled quantiles or a per-base score histogram.",
+      "denominator": null,
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Native NaN/nonfinite -> null explicit nonfinite_native; no graph recovery from HTML.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerBaseQualityScores.java"
+    },
+    {
+      "metric": "fastqc_base_quality_p90",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_quality",
+      "native_fields": [
+        "90th Percentile"
+      ],
+      "units": [
+        "phred"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_native",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Grouped means average per-position means; grouped quantiles average source per-position quantiles with >100 observations. Not pooled quantiles or a per-base score histogram.",
+      "denominator": null,
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Native NaN/nonfinite -> null explicit nonfinite_native; no graph recovery from HTML.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerBaseQualityScores.java"
+    },
+    {
+      "metric": "fastqc_tile_quality_deviation",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_tile_quality",
+      "native_fields": [
+        "Tile",
+        "Base",
+        "Mean"
+      ],
+      "units": [
+        "phred_deviation"
+      ],
+      "axis_kinds": [
+        "tile_base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_normalized",
+      "precision": "not_reported",
+      "value_domain": "finite_signed_number",
+      "interpretation": "Deviation from equal-tile mean, may be negative. Sample first10000 then every10th read; source tile parsing can omit module.",
+      "denominator": null,
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerTileQualityScores.java"
+    },
+    {
+      "metric": "fastqc_sequence_quality_count",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_sequence_quality",
+      "native_fields": [
+        "Quality",
+        "Count"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "quality_score"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Histogram of integer-truncated per-read mean quality, not per-base qualities or usable Q30 numerator.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerSequenceQualityScores.java"
+    },
+    {
+      "metric": "fastqc_base_content_percent",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_content",
+      "native_fields": [
+        "Base",
+        "G",
+        "A",
+        "T",
+        "C"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_normalized",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Native percentages for each base/position group. Axis label preserves G/A/T/C; do not reconstruct counts or pooled weighted means.",
+      "denominator": "native ACGT count per position; absent from table",
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerBaseSequenceContent.java"
+    },
+    {
+      "metric": "fastqc_n_percent",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_base_n",
+      "native_fields": [
+        "Base",
+        "N-Count"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_normalized",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "N-Count column is percent, not count.",
+      "denominator": "native N + non-N at position",
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/NContent.java"
+    },
+    {
+      "metric": "fastqc_sequence_gc_smoothed_count",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_per_sequence_gc",
+      "native_fields": [
+        "GC Content",
+        "Count"
+      ],
+      "units": [
+        "native_count"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Smoothed fractional histogram. Source truncates long sequences to hundred/thousand boundaries. Not integer read-bucket counts.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/PerSequenceGCContent.java"
+    },
+    {
+      "metric": "fastqc_length_bin_count",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_length_distribution",
+      "native_fields": [
+        "Length",
+        "Count"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "length_closed"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Grouped closed length bins; cannot derive exact bases/mean from nonsingleton bins.",
+      "denominator": null,
+      "coordinates": "closed native axis bins; BAM positions separately zero-based",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/SequenceLengthDistribution.java"
+    },
+    {
+      "metric": "fastqc_total_deduplicated_percent",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_duplication",
+      "native_fields": [
+        "Total Deduplicated Percentage"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "none",
+        "duplication_bin"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Corrected bounded-tracking estimator, not observed distinct molecules; source rawTotal0 fallback100 remains qualified.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/DuplicationLevel.java"
+    },
+    {
+      "metric": "fastqc_duplication_bin_percent",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_duplication",
+      "native_fields": [
+        "Duplication Level",
+        "Percentage of total"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "none",
+        "duplication_bin"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Corrected bounded-tracking estimator, not observed distinct molecules; source rawTotal0 fallback100 remains qualified.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/DuplicationLevel.java"
+    },
+    {
+      "metric": "fastqc_overrepresented_count",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_overrepresented",
+      "native_fields": [
+        "Sequence",
+        "Count"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "sequence"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Count of tracked keys, normally first50bp; first100000 distinct keys tracked. Preserve native Possible Source label as a suggestion.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/OverRepresentedSeqs.java"
+    },
+    {
+      "metric": "fastqc_overrepresented_percent",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_overrepresented",
+      "native_fields": [
+        "Sequence",
+        "Percentage"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "sequence"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_normalized",
+      "precision": "not_reported",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Reported tracked-key percentage; empty complete table means no reported rows, not no contamination.",
+      "denominator": "native total sequence count",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/OverRepresentedSeqs.java"
+    },
+    {
+      "metric": "fastqc_adapter_percent",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1"
+      ],
+      "section_key": "fastqc_adapter_content",
+      "native_fields": [
+        "Position",
+        "native adapter-name column"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "base_closed_1"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_normalized",
+      "precision": "not_reported",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Cumulative exact adapter match detection normalized by total reads then grouped position average; label is exact native adapter name. Short reads can omit table.",
+      "denominator": "native total read count",
+      "coordinates": "closed 1-based native bins",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/AdapterContent.java"
+    },
+    {
+      "metric": "fastqc_kmer_scaled_count",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_kmer_content",
+      "native_fields": [
+        "Sequence",
+        "Count"
+      ],
+      "units": [
+        "scaled_native_count"
+      ],
+      "axis_kinds": [
+        "sequence"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Source samples every50th read, prefix<=500 and reports count()*5; preserve this native scaling without extrapolating whole reads. At most20 reported enriched kmers.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/KmerContent.java"
+    },
+    {
+      "metric": "fastqc_kmer_pvalue",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_kmer_content",
+      "native_fields": [
+        "Sequence",
+        "PValue"
+      ],
+      "units": [
+        "dimensionless"
+      ],
+      "axis_kinds": [
+        "sequence"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Native binomial-tail/multiple-kmer value, multiplied by4**k. Preserve native finite value; not annotation probability or a universal calibrated confidence.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/KmerContent.java"
+    },
+    {
+      "metric": "fastqc_kmer_obs_exp_max",
+      "formats": [
+        "fastqc_data_0_12_1",
+        "fastqc_zip_0_12_1",
+        "fastqc_html_0_12_1"
+      ],
+      "section_key": "fastqc_kmer_content",
+      "native_fields": [
+        "Sequence",
+        "Obs/Exp Max",
+        "Max Obs/Exp Position"
+      ],
+      "units": [
+        "ratio"
+      ],
+      "axis_kinds": [
+        "sequence"
+      ],
+      "population_keys": [
+        "fastqc_module"
+      ],
+      "meaning": "native_normalized",
+      "precision": "not_reported",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Native observed/expected ratio, despite graph label mentioning log2. Preserve position token in label/raw table.",
+      "denominator": "source kmer expected count model",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/FastQC/uk/ac/babraham/FastQC/Modules/KmerContent.java"
+    },
+    {
+      "metric": "trim_processed_count",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_summary",
+      "native_fields": [
+        "sequences processed in total"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "trim_processed"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Input read-record loop count per mate report, distinct from paired validation count.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim()"
+    },
+    {
+      "metric": "trim_removed_short_count",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_summary",
+      "native_fields": [
+        "native removed short labelled counter"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_removed_short"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Preserve each exact printed counter and native label. Different report sections/options remain separate; no assumed disjointness.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim()"
+    },
+    {
+      "metric": "trim_removed_short_percent",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_summary",
+      "native_fields": [
+        "native removed short percentage"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_removed_short"
+      ],
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Single-read trimming percentages use sprintf %.1f; retain lexical precision and N/A.",
+      "denominator": "native sequences processed in this report",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim()"
+    },
+    {
+      "metric": "trim_removed_n_count",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_summary",
+      "native_fields": [
+        "native removed n labelled counter"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_removed_n"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Preserve each exact printed counter and native label. Different report sections/options remain separate; no assumed disjointness.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim()"
+    },
+    {
+      "metric": "trim_removed_n_percent",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_summary",
+      "native_fields": [
+        "native removed n percentage"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_removed_n"
+      ],
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Single-read trimming percentages use sprintf %.1f; retain lexical precision and N/A.",
+      "denominator": "native sequences processed in this report",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim()"
+    },
+    {
+      "metric": "trim_removed_long_count",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_summary",
+      "native_fields": [
+        "native removed long labelled counter"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_removed_long"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Preserve each exact printed counter and native label. Different report sections/options remain separate; no assumed disjointness.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim()"
+    },
+    {
+      "metric": "trim_removed_long_percent",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_summary",
+      "native_fields": [
+        "native removed long percentage"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_removed_long"
+      ],
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Single-read trimming percentages use sprintf %.1f; retain lexical precision and N/A.",
+      "denominator": "native sequences processed in this report",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim()"
+    },
+    {
+      "metric": "trim_validation_pair_count",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_pair_validation",
+      "native_fields": [
+        "Total number of sequences analysed for the sequence pair validation"
+      ],
+      "units": [
+        "pairs"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "trim_pairs_in"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Paired validation loop iterations/read pairs, in second mate report, not individual reads.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b validate_paired_end_files()"
+    },
+    {
+      "metric": "trim_removed_pair_count",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_pair_validation",
+      "native_fields": [
+        "sequence_pairs_removed printed as removed because at least one read shorter"
+      ],
+      "units": [
+        "pairs"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_pairs_removed"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Mixed native counter: increments on length and N-filter branches; excludes too-long counter and zero-length maxn_fraction skip. Preserve native label and trim_pair_counter_mixed; not all pair removals.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b validate_paired_end_files()"
+    },
+    {
+      "metric": "trim_removed_pair_percent",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_pair_validation",
+      "native_fields": [
+        "percentage of sequence_pairs_removed"
+      ],
+      "units": [
+        "percent"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [
+        "trim_pairs_removed"
+      ],
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "value_domain": "nonnegative_number",
+      "interpretation": "Paired-validation percentage uses sprintf %.2f, correcting193 generic one-decimal statement; same mixed-counter qualification.",
+      "denominator": "native pair-validation loop count",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b validate_paired_end_files()"
+    },
+    {
+      "metric": "trim_native_option",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_configuration",
+      "native_fields": [
+        "native numeric option name/value"
+      ],
+      "units": [
+        "phred",
+        "bases",
+        "fraction",
+        "dimensionless"
+      ],
+      "axis_kinds": [
+        "native_label"
+      ],
+      "population_keys": [],
+      "meaning": "native_configuration",
+      "precision": "not_reported",
+      "value_domain": "finite_number",
+      "interpretation": "Source-reported configuration only: quality cutoff=Phred; length/overlap=bases; error-rate option=fraction. Never a measured sequencing error rate; unknown options remain raw labels/blocks.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b trim() and printed configuration"
+    },
+    {
+      "metric": "trim_adapter_detection_count",
+      "formats": [
+        "trim_galore_report_0_6_10"
+      ],
+      "section_key": "trim_adapter_detection",
+      "native_fields": [
+        "adapter label",
+        "literal auto-detection count"
+      ],
+      "units": [
+        "native_count"
+      ],
+      "axis_kinds": [
+        "adapter"
+      ],
+      "population_keys": [],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Source sampling boundary and literal count retained; no whole-input extrapolation or confidence.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/TrimGalore/trim_galore@4edff97d22f3837d42a29e4afbfaeb6e07ffb11b autodetect_adapter_type()"
+    },
+    {
+      "metric": "fastq_pair_left_paired",
+      "formats": [
+        "fastq_pair_stderr_0_3"
+      ],
+      "section_key": "fastq_pair_summary",
+      "native_fields": [
+        "Left paired"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_pair_left_paired"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Exact native read-record counter; not verified unique pair correspondence. Preserve inconsistent/negative/overflow diagnostics without clamping.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/fastq-pair/fastq_pair.c@4f697f0f13d3bfa7840279e9853345f8641cb59d"
+    },
+    {
+      "metric": "fastq_pair_right_paired",
+      "formats": [
+        "fastq_pair_stderr_0_3"
+      ],
+      "section_key": "fastq_pair_summary",
+      "native_fields": [
+        "Right paired"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_pair_right_paired"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Exact native read-record counter; not verified unique pair correspondence. Preserve inconsistent/negative/overflow diagnostics without clamping.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/fastq-pair/fastq_pair.c@4f697f0f13d3bfa7840279e9853345f8641cb59d"
+    },
+    {
+      "metric": "fastq_pair_left_single",
+      "formats": [
+        "fastq_pair_stderr_0_3"
+      ],
+      "section_key": "fastq_pair_summary",
+      "native_fields": [
+        "Left single"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_pair_left_single"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Exact native read-record counter; not verified unique pair correspondence. Preserve inconsistent/negative/overflow diagnostics without clamping.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/fastq-pair/fastq_pair.c@4f697f0f13d3bfa7840279e9853345f8641cb59d"
+    },
+    {
+      "metric": "fastq_pair_right_single",
+      "formats": [
+        "fastq_pair_stderr_0_3"
+      ],
+      "section_key": "fastq_pair_summary",
+      "native_fields": [
+        "Right single"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "fastq_pair_right_single"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Exact native read-record counter; not verified unique pair correspondence. Preserve inconsistent/negative/overflow diagnostics without clamping.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/fastq-pair/fastq_pair.c@4f697f0f13d3bfa7840279e9853345f8641cb59d"
+    },
+    {
+      "metric": "hostile_reads_in",
+      "formats": [
+        "hostile_json_1_1_0"
+      ],
+      "section_key": "hostile_report",
+      "native_fields": [
+        "reads_in"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "hostile_in"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Native primary alignment-record count from samtools -F2304; individual read records, not pairs. Native removed=in-out; no true human-contamination claim.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hostile_1.1.0/src/hostile/lib.py gather_stats_paired/gather_stats_single"
+    },
+    {
+      "metric": "hostile_reads_out",
+      "formats": [
+        "hostile_json_1_1_0"
+      ],
+      "section_key": "hostile_report",
+      "native_fields": [
+        "reads_out"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "hostile_out"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Native primary alignment-record count from samtools -F2304; individual read records, not pairs. Native removed=in-out; no true human-contamination claim.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hostile_1.1.0/src/hostile/lib.py gather_stats_paired/gather_stats_single"
+    },
+    {
+      "metric": "hostile_reads_removed",
+      "formats": [
+        "hostile_json_1_1_0"
+      ],
+      "section_key": "hostile_report",
+      "native_fields": [
+        "reads_removed"
+      ],
+      "units": [
+        "reads"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "hostile_removed"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Native primary alignment-record count from samtools -F2304; individual read records, not pairs. Native removed=in-out; no true human-contamination claim.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hostile_1.1.0/src/hostile/lib.py gather_stats_paired/gather_stats_single"
+    },
+    {
+      "metric": "hostile_removed_proportion",
+      "formats": [
+        "hostile_json_1_1_0"
+      ],
+      "section_key": "hostile_report",
+      "native_fields": [
+        "reads_removed_proportion"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "hostile_in"
+      ],
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "value_domain": "number_0_1",
+      "interpretation": "Native round((reads_in-reads_out)/reads_in,5), with source zero-input fallback0 retained and qualified. Reported native proportion differs from derived undefined zero-denominator result.",
+      "denominator": "same native row reads_in",
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hostile_1.1.0/src/hostile/lib.py gather_stats_paired/gather_stats_single"
+    },
+    {
+      "metric": "bam_record_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "all complete retained records"
+      ],
+      "units": [
+        "alignment_records"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "bam_records"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Counts describe the retained record population. Mapped-only BAM is not an original read denominator; secondary/supplementary records are not independent extra reads.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields and BAM"
+    },
+    {
+      "metric": "bam_primary_record_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "(FLAG & 0x900)==0"
+      ],
+      "units": [
+        "alignment_records"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "bam_records"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Counts describe the retained record population. Mapped-only BAM is not an original read denominator; secondary/supplementary records are not independent extra reads.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields and BAM"
+    },
+    {
+      "metric": "bam_secondary_record_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "(FLAG & 0x100)!=0"
+      ],
+      "units": [
+        "alignment_records"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "bam_records"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Counts describe the retained record population. Mapped-only BAM is not an original read denominator; secondary/supplementary records are not independent extra reads.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields and BAM"
+    },
+    {
+      "metric": "bam_supplementary_record_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "(FLAG & 0x800)!=0"
+      ],
+      "units": [
+        "alignment_records"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "bam_records"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Counts describe the retained record population. Mapped-only BAM is not an original read denominator; secondary/supplementary records are not independent extra reads.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields and BAM"
+    },
+    {
+      "metric": "bam_mapped_primary_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "primary and (FLAG & 4)==0"
+      ],
+      "units": [
+        "alignment_records"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "bam_records"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Counts describe the retained record population. Mapped-only BAM is not an original read denominator; secondary/supplementary records are not independent extra reads.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields and BAM"
+    },
+    {
+      "metric": "bam_mapq_histogram_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "MAPQ0..254",
+        "record count"
+      ],
+      "units": [
+        "alignment_records"
+      ],
+      "axis_kinds": [
+        "mapq"
+      ],
+      "population_keys": [
+        "bam_records"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "MAPQ255 unavailable is counted separately. Numeric MAPQ is native alignment-model output, not gene-function confidence.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields"
+    },
+    {
+      "metric": "bam_mapq_unavailable_count",
+      "formats": [
+        "sam_1_6",
+        "bam_1"
+      ],
+      "section_key": "bam_summary",
+      "native_fields": [
+        "MAPQ==255"
+      ],
+      "units": [
+        "alignment_records"
+      ],
+      "axis_kinds": [
+        "none"
+      ],
+      "population_keys": [
+        "bam_records"
+      ],
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "value_domain": "nonnegative_integer",
+      "interpretation": "Counts describe the retained record population. Mapped-only BAM is not an original read denominator; secondary/supplementary records are not independent extra reads.",
+      "denominator": null,
+      "coordinates": "not_applicable",
+      "uncertainty": "not_reported",
+      "missing_behavior": "Preserve native token and explicit state; absent row is not numerical zero. Partial populations retain partial counts; no whole-population inference.",
+      "reviewed_source": "sources/hts-specs/SAMv1.tex mandatory fields and BAM"
+    }
+  ]
+}

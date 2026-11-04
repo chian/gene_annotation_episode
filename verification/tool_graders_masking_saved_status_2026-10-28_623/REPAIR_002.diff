@@ -1,0 +1,12 @@
+--- before/native_blast_masking_results.py
++++ gene_annotation_episode/native_blast_masking_results.py
+@@ -315,7 +315,8 @@
+             body = self._validate_body(_read(directory / 'receipt.json'), context.scope)
+         else:
+             _require(self.completion(context) is None, 'assignment_already_completed')
+-            prior = self._prior(target, context.scope) if tool_name == 'execution.results.collect' else None
++            prior = (self._prior(target, context.scope)
++                if tool_name == 'execution.results.collect' or selector['mode'] == 'saved_recalculation' else None)
+             if selector['mode'] == 'saved_recalculation':
+                 _require(prior is not None and selector['saved_sheet_ref'] == prior['prepared']['sheet_artifact_ref'],
+                     'received_original_sheet_required')

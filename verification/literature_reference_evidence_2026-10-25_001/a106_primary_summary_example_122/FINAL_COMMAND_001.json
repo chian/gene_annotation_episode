@@ -1,0 +1,35 @@
+{
+  "working_directory": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_primary_summary_example_122/pin_001_basis",
+  "python": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "."
+  },
+  "argv": [
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_literature_perturbation_summary.py",
+    "tests/test_literature_perturbation_summary_integration.py",
+    "tests/test_literature_perturbation_inputs.py",
+    "tests/test_literature_perturbation_calculations.py",
+    "tests/test_literature_perturbation_integration.py",
+    "tests/test_literature_perturbation_interpretation_basis.py",
+    "tests/test_communication.py",
+    "--deselect=tests/test_literature_perturbation_integration.py::test_saved_source_values_exact_typed_subset_and_no_source_reread[True]",
+    "--deselect=tests/test_literature_perturbation_integration.py::test_source_perturbation_selected_in_ordinary_child_and_received_once[True]",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_primary_summary_example_122/FINAL_TESTS_004.xml"
+  ],
+  "stdout": "FINAL_STDOUT_004.txt",
+  "stderr": "FINAL_STDERR_004.txt",
+  "original_terminal_session": 54369,
+  "exit_code": 0,
+  "results": {
+    "passed": 304,
+    "deselected": 2,
+    "seconds": 107.1
+  },
+  "purpose": "Original285A106 compatibility tests plus13basis tests plus6communication tests; actual model calls0"
+}

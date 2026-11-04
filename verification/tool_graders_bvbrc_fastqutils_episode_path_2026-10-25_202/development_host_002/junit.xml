@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="13" time="1535.448" timestamp="2026-10-25T16:59:39.190480-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_actual_host_all_families_saved_reads_and_two_typed_boundaries" time="1040.779" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_partial_transfer_keeps_prefix_and_cannot_complete_original_available_request" time="138.808"><failure message="AssertionError: assert ('missing_value' == 'partial'&#10;  &#10;  - partial&#10;  + missing_value)">driver = &lt;test_bvbrc_fastqutils_episode_flow.FastqDriver object at 0x7f5ef9d37620&gt;
+
+    def test_partial_transfer_keeps_prefix_and_cannot_complete_original_available_request(driver):
+        d = driver
+        d.start(fields=('read_count', 'requirements', 'status'), documents=('reads',))
+        d.acquire_manifest()
+        body = d.acquire_native(data=b'@first\nACGT\n+\nIIII\n@second\nA', complete=False)
+        fact = body['publication']['adapter_result']['facts']['read_count']
+        assert fact['records'][0]['payload']['value'] == 1
+&gt;       assert fact['state'] == 'partial' and fact['satisfied'] is False
+E       AssertionError: assert ('missing_value' == 'partial'
+E         
+E         - partial
+E         + missing_value)
+
+tests/test_bvbrc_fastqutils_episode_flow.py:305: AssertionError</failure></testcase><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_wrong_manifest_task_rejected_before_native_download" time="80.556" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[selector]" time="14.324" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[resource]" time="13.116" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[original_parameters]" time="13.764" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[commission]" time="13.727" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[source]" time="13.399" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_actual_host_rejects_changed_original_inputs_and_unpossessed_metadata[binding]" time="13.931" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_unconfigured_or_wrong_pin_does_not_advertise_scientific_tool[missing]" time="2.609" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_unconfigured_or_wrong_pin_does_not_advertise_scientific_tool[unknown]" time="2.648" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_unconfigured_or_wrong_pin_does_not_advertise_scientific_tool[mismatch]" time="1.378" /><testcase classname="tests.test_bvbrc_fastqutils_episode_flow" name="test_later_interrupted_partial_publication_supersedes_current_but_preserves_admitted_history" time="185.091" /></testsuite></testsuites>

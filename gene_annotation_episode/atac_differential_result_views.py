@@ -3,24 +3,14 @@ from __future__ import annotations
 
 from copy import deepcopy
 from .atac_differential_result_contracts import validate_atac_result_record, CATEGORIES, require
-
-
-def _extent(report):
-    state = report['state']
-    if state['availability'] == 'missing' or state['identity'] == 'mismatch':
-        return 'unavailable'
-    return 'complete' if state['output_extent'] == 'complete' and not report['malformed_data_row_count'] else 'partial'
+from .macs2_peak_components import (
+    _extent, _combined_extent, _native_peaks, native_peak_counts, project_native_peak_window,
+)
 
 
 def native_counts(sheet):
     """Readable occurrence counts per representation; never sum representations."""
-    peaks = []
-    for run in sheet['callpeak_bindings']:
-        for field, representation in (('peaks_xls', 'xls'), ('narrowpeaks', 'narrowpeak'), ('summits', 'summit')):
-            reports = [r for r in sheet[field] if r['callpeak_run_key'] == run['run_key']]
-            extent = _combined_extent([_extent(r) for r in reports])
-            peaks.append(dict(run_key=run['run_key'], representation=representation,
-                count=None if extent == 'unavailable' else sum(r['readable_data_row_count'] for r in reports), extent=extent))
+    peaks = native_peak_counts(sheet)
     regions = []
     for category in CATEGORIES:
         reports = [r for r in sheet['native_differential'] if r['category'] == category]
@@ -29,31 +19,6 @@ def native_counts(sheet):
         regions.append(dict(category=category, count=None if extent == 'unavailable' else sum(r['readable_data_row_count'] for r in reports),
             extent=extent, coordinate_qualification=next(iter(qualifications)) if len(qualifications) == 1 else 'unverified_native_version'))
     return peaks, regions
-
-
-def _combined_extent(extents):
-    return ('unavailable' if not extents or all(e == 'unavailable' for e in extents)
-            else 'complete' if all(e == 'complete' for e in extents) else 'partial')
-
-
-def _native_peaks(sheet, run_keys):
-    for run_key in run_keys:
-        # Each representation has its own native ordinal. Representation order
-        # breaks simultaneous ordinals without conflating the observations.
-        rows = []
-        for representation, field in (('xls', 'peaks_xls'), ('narrowpeak', 'narrowpeaks'), ('summit', 'summits')):
-            for report in sheet[field]:
-                if report['callpeak_run_key'] != run_key or _extent(report) == 'unavailable':
-                    continue
-                geometry = {g['row_ordinal']: g for g in report.get('peak_geometry', [])}
-                for row in report['rows']:
-                    links = [link for link in sheet['peak_links'] if link['callpeak_run_key'] == run_key and link['name'] == row['name']]
-                    require(len(links) <= 1, 'atac_ambiguous_peak_link_record')
-                    rows.append((row['row_ordinal'], ('xls', 'narrowpeak', 'summit').index(representation),
-                        dict(callpeak_run_key=run_key, representation=representation, source=report['artifact'], row=row,
-                             geometry=geometry.get(row['row_ordinal']), peak_link=links[0] if links else None)))
-        for _, _, row in sorted(rows, key=lambda item: item[:2]):
-            yield row
 
 
 def _native_differential(sheet, categories):
@@ -85,10 +50,9 @@ def project_atac_result(sheet, calculations, *, selector, component_rows=None, r
         projection.update(total_rows=0, summary=deepcopy(calculations['summary']), row_extent='complete')
         return validate_atac_result_record('RequestedProjection', projection)
     if kind == 'native_peak_rows':
-        require(set(view['run_keys']) <= {r['run_key'] for r in sheet['callpeak_bindings']}, 'atac_result_unknown_run')
-        selected = [r for field in ('peaks_xls', 'narrowpeaks', 'summits') for r in sheet[field] if r['callpeak_run_key'] in view['run_keys']]
-        extent = _combined_extent([_extent(r) for r in selected]) if view['run_keys'] else 'complete'
-        rows = _native_peaks(sheet, view['run_keys'])
+        projection.update(project_native_peak_window(sheet, run_keys=view['run_keys'],
+            row_window=view['row_window']))
+        return validate_atac_result_record('RequestedProjection', projection)
     elif kind == 'native_differential_rows':
         selected = [r for r in sheet['native_differential'] if r['category'] in view['categories']]
         extent = _combined_extent([_extent(r) for r in selected]) if view['categories'] else 'complete'

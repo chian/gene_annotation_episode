@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="41" time="0.383" timestamp="2026-10-27T17:21:59.501407-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_source_pair_populates_numerical_components" time="0.006" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[pmol-factor0]" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[nmol-factor1]" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[umol-factor2]" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[\xb5mol-factor3]" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_exact_amount_scale_and_unicode[\u03bcmol-factor4]" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[pmol/min]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[nmol/min]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[\xb5mol/min]" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[nmol min\u22121]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_enzyme_activity_spike_is_distinct_control[nmol min&lt;sup&gt;\u22121&lt;/sup&gt;]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unknown_control_preserves_descriptive_pair_without_role_inference" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_conflicting_role_requires_distinct_witnesses_but_keeps_pair" time="0.004" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_known_control_dimension_mismatch_retains_raw_partials" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_spread_is_not_promoted_to_sd_or_cv[SEM]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_spread_is_not_promoted_to_sd_or_cv[unspecified]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_spread_is_not_promoted_to_sd_or_cv[unknown]" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_missing_nominal_preserves_measured_and_sd" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_missing_shared_unit_retains_native_source_literals" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_zero_nominal_does_not_become_infinite_recovery" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_nonpositive_measured_preserved_with_no_inverse_or_cv[0]" time="0.002"><failure message="gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number_selector">measured = '0'
+
+    @pytest.mark.parametrize("measured", ["0", "-2"])
+    def test_nonpositive_measured_preserved_with_no_inverse_or_cv(measured):
+        source = Source(measured=measured)
+&gt;       _, sheet = run(source, source.args(measured=measured))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_calibration_recovery_169.py:200: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_calibration_recovery_169.py:72: in run
+    extracted = read_calibration_recovery_inputs(source.args() if args is None else args, read_source=source.read)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_calibration_recovery_inputs.py:215: in read_calibration_recovery_inputs
+    observations = {name: _read_number(args[name], recovery_unit if name == "reported_recovery" else shared_unit,
+gene_annotation_episode/literature_calibration_recovery_inputs.py:161: in _read_number
+    number = read_source_number(selector, sources=sources,
+gene_annotation_episode/literature_partner_source_fields.py:282: in read_source_number
+    _fail("partial_source_numeric_token", "number_selector")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'partial_source_numeric_token', field = 'number_selector'
+
+    def _fail(code, field):
+&gt;       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number_selector
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError</failure></testcase><testcase classname="tests.test_literature_calibration_recovery_169" name="test_nonpositive_measured_preserved_with_no_inverse_or_cv[-2]" time="0.002"><failure message="gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interval_source_number_unsupported:number">measured = '-2'
+
+    @pytest.mark.parametrize("measured", ["0", "-2"])
+    def test_nonpositive_measured_preserved_with_no_inverse_or_cv(measured):
+        source = Source(measured=measured)
+&gt;       _, sheet = run(source, source.args(measured=measured))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_calibration_recovery_169.py:200: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_calibration_recovery_169.py:72: in run
+    extracted = read_calibration_recovery_inputs(source.args() if args is None else args, read_source=source.read)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_calibration_recovery_inputs.py:215: in read_calibration_recovery_inputs
+    observations = {name: _read_number(args[name], recovery_unit if name == "reported_recovery" else shared_unit,
+gene_annotation_episode/literature_calibration_recovery_inputs.py:161: in _read_number
+    number = read_source_number(selector, sources=sources,
+gene_annotation_episode/literature_partner_source_fields.py:268: in read_source_number
+    relation = _relation(prefix, suffix, role=role)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:227: in _relation
+    _fail("interval_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interval_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+&gt;       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interval_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError</failure></testcase><testcase classname="tests.test_literature_calibration_recovery_169" name="test_shared_original_operand_keys_survive_all_derivatives" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_equal_values_at_different_positions_have_distinct_keys" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_displayed_and_reported_recovery_are_both_preserved" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[&amp;lt;-]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[\u2265-]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[approximately -]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[- or less]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_censoring_and_approximations_are_not_point_operands[-\u201312]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[nmol/min/mg]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[mM]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[nmol/s]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[mmol]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_unsupported_or_cross_field_units_rejected[nmol&lt;/th&gt;&lt;th&gt;/min]" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_clipped_numeric_token_rejected" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_clipped_compound_unit_rejected" time="0.002" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_no_entered_scientific_values_in_arguments" time="0.001" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_mutated_normalized_or_identity_record_rejected" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_calculator_leaves_inputs_unchanged_and_has_no_scientific_io" time="0.003" /><testcase classname="tests.test_literature_calibration_recovery_169" name="test_prompt_preserves_the_three_proposed_paragraphs" time="0.000" /></testsuite></testsuites>

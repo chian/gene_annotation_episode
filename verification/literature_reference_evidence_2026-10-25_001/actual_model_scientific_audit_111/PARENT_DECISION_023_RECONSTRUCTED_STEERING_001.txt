@@ -1,0 +1,656 @@
+STEERING
+
+Own action yields
+
+| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |
+| --- | --- | --- | --- | --- | --- |
+| episode_child/literature | 2 | 0.0 | unavailable | insufficient_completed_actions | 1 |
+| wait | 20 | 0.0 | 0.0032619478535677424 | lower=0.0; upper=0.013759850613211801; approximate Laplace model band; alpha=0.05 | 0 |
+
+Current continuation expectation
+
+| Completed actions | Expected next gain | Uncertainty | Continuation cost |
+| --- | --- | --- | --- |
+| 22 | 0.0026817228281484757 | lower=0.0; upper=0.020149062539020633; approximate Laplace model band; alpha=0.05 | 0.001 |
+
+Relevant received experimental facts
+
+| Field | Supplied value |
+| --- | --- |
+| [0].context_refs | none supplied |
+| [0].id | reference_993d1391e77da80f345afca2 |
+| [0].label | purified butyryl-CoA dehydrogenase/Etf complex |
+| [0].length | unknown |
+| [0].molecule | unknown |
+| [0].origin | tool |
+| [0].reference_type | assay |
+| [0].sequence_ref | unknown |
+| [0].source_ref | source_0b8cba800e58dcd678d58126 |
+| [0].term_refs | none supplied |
+| [1].anchor | unknown |
+| [1].id | term_1b6b60df2c7ca6d44b038c4e |
+| [1].label | H2 formed |
+| [1].namespace | literature_endpoint |
+| [1].origin | tool |
+| [1].source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].term_type | other |
+| [2].context_refs | none supplied |
+| [2].id | reference_dbc906306bf19d2754a8fb68 |
+| [2].label | Ferredoxin reduction (measured via H2 formation in the presence of hydrogenase) |
+| [2].length | unknown |
+| [2].molecule | unknown |
+| [2].origin | tool |
+| [2].reference_type | assay |
+| [2].sequence_ref | unknown |
+| [2].source_ref | source_0b8cba800e58dcd678d58126 |
+| [2].term_refs | none supplied |
+| [3].anchor | unknown |
+| [3].id | term_a045b4f0c5b2608807e7e0ca |
+| [3].label | Sp act (U/mg) |
+| [3].namespace | literature_normalization |
+| [3].origin | tool |
+| [3].source_ref | source_0b8cba800e58dcd678d58126 |
+| [3].term_type | other |
+| [4].attributes | none supplied |
+| [4].context_type | assay_condition |
+| [4].id | context_cf5975314d5d5c269dcbf57e |
+| [4].name | Fd + Hyd |
+| [4].origin | tool |
+| [4].related_refs[0] | reference_993d1391e77da80f345afca2 |
+| [4].related_refs[1] | reference_2dd79abee2678c67e37296ee |
+| [4].related_refs[2] | reference_dbc906306bf19d2754a8fb68 |
+| [4].source_ref | source_0b8cba800e58dcd678d58126 |
+| [5].context_refs | none supplied |
+| [5].id | reference_2dd79abee2678c67e37296ee |
+| [5].label | purified butyryl-CoA dehydrogenase/Etf complex |
+| [5].length | unknown |
+| [5].molecule | unknown |
+| [5].origin | tool |
+| [5].reference_type | assay |
+| [5].sequence_ref | unknown |
+| [5].source_ref | source_0b8cba800e58dcd678d58126 |
+| [5].term_refs | none supplied |
+| [6].attributes | none supplied |
+| [6].context_type | assay_condition |
+| [6].id | context_aaaa274471379a233772ee23 |
+| [6].name | Fd |
+| [6].origin | tool |
+| [6].related_refs[0] | reference_993d1391e77da80f345afca2 |
+| [6].related_refs[1] | reference_2dd79abee2678c67e37296ee |
+| [6].related_refs[2] | reference_dbc906306bf19d2754a8fb68 |
+| [6].source_ref | source_0b8cba800e58dcd678d58126 |
+| [7].attributes | none supplied |
+| [7].context_type | assay_condition |
+| [7].id | context_2468a9eb20024ef2607d117e |
+| [7].name | Hyd |
+| [7].origin | tool |
+| [7].related_refs[0] | reference_993d1391e77da80f345afca2 |
+| [7].related_refs[1] | reference_2dd79abee2678c67e37296ee |
+| [7].related_refs[2] | reference_dbc906306bf19d2754a8fb68 |
+| [7].source_ref | source_0b8cba800e58dcd678d58126 |
+| [8].applicability | scope_limited |
+| [8].assumption_refs | none supplied |
+| [8].condition_refs[0] | observation_566f59f5a69dacad4896df3b |
+| [8].extent_basis | observed_extent |
+| [8].hypothesis_ref | hypothesis_32c5c3e533f9a03ed0df7dc1 |
+| [8].id | assessment_6372608821ed170f8ed4d37d |
+| [8].investigation_finding.qualification.assumption_refs | none supplied |
+| [8].investigation_finding.qualification.context_refs | none supplied |
+| [8].investigation_finding.qualification.kind | conditions_limit_transfer |
+| [8].investigation_finding.replaces_refs | none supplied |
+| [8].investigation_finding.same_source_claim_as_ref | unknown |
+| [8].investigation_finding.source_claim.context_refs | none supplied |
+| [8].investigation_finding.source_claim.predicate | partner_dependence |
+| [8].investigation_finding.source_claim.subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [8].investigation_finding.source_claim.value.roles[0].ref | reference_df0353ec68ca8cc120e1948b |
+| [8].investigation_finding.source_claim.value.roles[0].role | partner |
+| [8].investigation_finding.source_claim.value.type | relation |
+| [8].investigation_finding.status | retained |
+| [8].investigation_finding.withdrawal_reason | not_withdrawn |
+| [8].observation_ref | observation_02efb0df70023bc18faa58c1 |
+| [8].origin | reasoning |
+| [8].relation | strengthens |
+| [9].applicability | scope_limited |
+| [9].assumption_refs | none supplied |
+| [9].condition_refs[0] | observation_566f59f5a69dacad4896df3b |
+| [9].extent_basis | observed_extent |
+| [9].hypothesis_ref | hypothesis_35841093b2cd158f191eba26 |
+| [9].id | assessment_9cd791451fc138cbb7bf9c68 |
+| [9].investigation_finding.qualification.assumption_refs | none supplied |
+| [9].investigation_finding.qualification.context_refs | none supplied |
+| [9].investigation_finding.qualification.kind | conditions_limit_transfer |
+| [9].investigation_finding.replaces_refs | none supplied |
+| [9].investigation_finding.same_source_claim_as_ref | unknown |
+| [9].investigation_finding.source_claim.context_refs | none supplied |
+| [9].investigation_finding.source_claim.predicate | partner_dependence |
+| [9].investigation_finding.source_claim.subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [9].investigation_finding.source_claim.value.roles[0].ref | reference_97183e199695c54d046ac867 |
+| [9].investigation_finding.source_claim.value.roles[0].role | partner |
+| [9].investigation_finding.source_claim.value.type | relation |
+| [9].investigation_finding.status | retained |
+| [9].investigation_finding.withdrawal_reason | not_withdrawn |
+| [9].observation_ref | observation_02efb0df70023bc18faa58c1 |
+| [9].origin | reasoning |
+| [9].relation | strengthens |
+| [10].applicability | scope_limited |
+| [10].assumption_refs | none supplied |
+| [10].condition_refs[0] | observation_566f59f5a69dacad4896df3b |
+| [10].extent_basis | observed_extent |
+| [10].hypothesis_ref | hypothesis_35841093b2cd158f191eba26 |
+| [10].id | assessment_b72d23b8d3d8381a81361ddb |
+| [10].investigation_finding.qualification.assumption_refs | none supplied |
+| [10].investigation_finding.qualification.context_refs | none supplied |
+| [10].investigation_finding.qualification.kind | measurement_does_not_establish_claim |
+| [10].investigation_finding.replaces_refs | none supplied |
+| [10].investigation_finding.same_source_claim_as_ref | unknown |
+| [10].investigation_finding.source_claim.context_refs | none supplied |
+| [10].investigation_finding.source_claim.predicate | partner_dependence |
+| [10].investigation_finding.source_claim.subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [10].investigation_finding.source_claim.value.roles[0].ref | reference_97183e199695c54d046ac867 |
+| [10].investigation_finding.source_claim.value.roles[0].role | partner |
+| [10].investigation_finding.source_claim.value.type | relation |
+| [10].investigation_finding.status | retained |
+| [10].investigation_finding.withdrawal_reason | not_withdrawn |
+| [10].observation_ref | observation_02efb0df70023bc18faa58c1 |
+| [10].origin | reasoning |
+| [10].relation | mixed |
+| [11].accession | source_term_5ad426405ada428224c98e7c |
+| [11].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [11].anchor.end | 19897 |
+| [11].anchor.quote | One unit was equivalent to 1 μmol of NADH oxidized per min, 1 μmol of TTC reduced per min, or 1 μmol of H2 formed per min. |
+| [11].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [11].anchor.start | 19772 |
+| [11].id | term_6b7a2d2648b460f13b6ee728 |
+| [11].label | 1 μmol of H2 formed per min |
+| [11].namespace | source_local |
+| [11].origin | extracted |
+| [11].source_ref | source_0b8cba800e58dcd678d58126 |
+| [11].term_type | unit |
+| [12].accession | source_entity_69b9c8d35ead8520d0b112ec |
+| [12].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [12].anchor.end | 18114 |
+| [12].anchor.quote | purified butyryl-CoA dehydrogenase/Etf complex |
+| [12].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [12].anchor.start | 18068 |
+| [12].context_refs | none supplied |
+| [12].id | reference_2eb4f6565224abec08f433f0 |
+| [12].label | purified butyryl-CoA dehydrogenase/Etf complex |
+| [12].length | unknown |
+| [12].molecule | unknown |
+| [12].origin | extracted |
+| [12].reference_type | complex |
+| [12].sequence_ref | unknown |
+| [12].source_ref | source_0b8cba800e58dcd678d58126 |
+| [12].term_refs | none supplied |
+| [13].accession | source_entity_18e3a9916ff5e1d537ff913e |
+| [13].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [13].anchor.end | 19100 |
+| [13].anchor.quote | hydrogenase (Hyd) from C. pasteurianum |
+| [13].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [13].anchor.start | 19062 |
+| [13].context_refs | none supplied |
+| [13].id | reference_97183e199695c54d046ac867 |
+| [13].label | hydrogenase (Hyd) from C. pasteurianum |
+| [13].length | unknown |
+| [13].molecule | protein |
+| [13].origin | extracted |
+| [13].reference_type | protein |
+| [13].sequence_ref | unknown |
+| [13].source_ref | source_0b8cba800e58dcd678d58126 |
+| [13].term_refs | none supplied |
+| [14].accession | source_entity_72e6e2f45950c196c39f5a1d |
+| [14].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [14].anchor.end | 19054 |
+| [14].anchor.quote | ferredoxin (Fd) |
+| [14].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [14].anchor.start | 19039 |
+| [14].context_refs | none supplied |
+| [14].id | reference_df0353ec68ca8cc120e1948b |
+| [14].label | Fd |
+| [14].length | unknown |
+| [14].molecule | protein |
+| [14].origin | extracted |
+| [14].reference_type | protein |
+| [14].sequence_ref | unknown |
+| [14].source_ref | source_0b8cba800e58dcd678d58126 |
+| [14].term_refs | none supplied |
+| [15].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [15].anchor.end | 19117 |
+| [15].anchor.quote | rmation in the presence of hydrogenase)<br>No addition<br><0.01<br>Fd<br>0.02<br>Hyd<br><0.01<br>Fd + Hyd<br>5<br>Fd + Hyd − crotonyl-CoA<br><0.01<br>Fd + Hyd − FAD<br>2<br>Fd + Hyd − crotonyl-CoA + vinylacetyl-CoA<br>4<br>Fd + Hyd + methyl viologen<br>0.02<br>Open in a new tab<br>a<br>Assays with activity are indicated by bold type. For NADH oxidation each 1-ml assay mixture incubated at 25°C contained 50 mM Tris-HCl (pH 7.5), 0.1 mM NADH, 0.1 mM crotonyl-CoA, 5 μM FAD, 2 mM DTT, 0.01 mg purified butyryl-CoA dehydrogenase/Etf complex, and, where indicated, 20 μM ferredoxin (Fd), 0.4 U hydrogenase (Hyd) from C. pasteurianum, and/or 1 mM met |
+| [15].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [15].anchor.start | 18517 |
+| [15].dependencies[0] | observation_c5c31d8b0de40e978c797c22 |
+| [15].id | observation_02efb0df70023bc18faa58c1 |
+| [15].kind | source_content |
+| [15].measurements | none supplied |
+| [15].origin | extracted |
+| [15].source_ref | source_0b8cba800e58dcd678d58126 |
+| [15].source_subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [15].subject_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [16].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [16].anchor.end | 18517 |
+| [16].anchor.quote | Ferredoxin reduction (measured via H2 fo |
+| [16].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [16].anchor.start | 18477 |
+| [16].dependencies | none supplied |
+| [16].id | observation_c5c31d8b0de40e978c797c22 |
+| [16].kind | source_content |
+| [16].measurements | none supplied |
+| [16].origin | extracted |
+| [16].source_ref | source_0b8cba800e58dcd678d58126 |
+| [16].source_subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [16].subject_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [17].anchor.artifact_ref | artifact_91c0ed6ce15d330e4359a231fe593039ebd72459d1ba1f585482f67fa7f66821 |
+| [17].anchor.end | 92917 |
+| [17].anchor.quote | During purification the butyryl-CoA dehydrogenase/Etf complex partially dissociated into its components, as shown by the finding that fractions containing mainly the 41-kDa subunit and other fractions containing mainly the 36- or 28-kDa subunit were obtained. In the NADH oxidation assay only the complete complex appeared to be active.</p></section> |
+| [17].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [17].anchor.start | 92567 |
+| [17].dependencies | none supplied |
+| [17].id | observation_02f370632db1efe244ab1823 |
+| [17].kind | source_content |
+| [17].measurements | none supplied |
+| [17].origin | extracted |
+| [17].source_ref | source_0b8cba800e58dcd678d58126 |
+| [17].source_subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [17].subject_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [18].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [18].anchor.end | 19897 |
+| [18].anchor.quote | One unit was equivalent to 1 μmol of NADH oxidized per min, 1 μmol of TTC reduced per min, or 1 μmol of H2 formed per min. |
+| [18].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [18].anchor.start | 19772 |
+| [18].dependencies | none supplied |
+| [18].id | observation_0338ce6f80427d2bf7312cad |
+| [18].kind | source_content |
+| [18].measurements | none supplied |
+| [18].origin | extracted |
+| [18].source_ref | source_0b8cba800e58dcd678d58126 |
+| [18].source_subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [18].subject_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [19].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [19].anchor.end | 19897 |
+| [19].anchor.quote | hyl viologen. For TTC reduction each 1-ml assay mixture incubated at 25°C contained 50 mM Tris-HCl (pH 7.5), 0.2 mM NADH, 0.1 mM crotonyl-CoA, 5 μM FAD, 0.4 mM TTC, 2 mM DTT, 0.01 mg purified butyryl-CoA dehydrogenase/Etf complex, and, where indicated, 20 μM ferredoxin. For ferredoxin reduction each 0.5-ml assay mixture incubated at 37°C contained 50 mM Tris-HCl (pH 7.5), 2 mM DTT, 2.5 mM NADH, 1 mM crotonyl-CoA, 10 μM FAD, 0.05 mg purified butyryl-CoA dehydrogenase/Etf complex, and, where indicated, 50 μM ferredoxin, 1.6 U hydrogenase from C. pasteurianum, and/or 1 mM methyl viologen. The reactions were started by addition of crotonyl-CoA. One unit was equivalent to 1 μmol of NADH oxidized per min, 1 μmol of TTC reduced per min, or 1 μmol of H2 formed per min. |
+| [19].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [19].anchor.start | 19117 |
+| [19].dependencies[0] | observation_02efb0df70023bc18faa58c1 |
+| [19].id | observation_566f59f5a69dacad4896df3b |
+| [19].kind | source_content |
+| [19].measurements | none supplied |
+| [19].origin | extracted |
+| [19].source_ref | source_0b8cba800e58dcd678d58126 |
+| [19].source_subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [19].subject_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [20].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [20].anchor.end | 30806 |
+| [20].anchor.quote | Both the absolute and relative values of the specific activities varied from preparation to preparation. This was not only because the enzyme complex was very labile but also because there were inherent difficulties with the activity measurements. Some of the reactions started with a considerable lag period, and the rates of the reactions were not always proportional to the amounts of enzyme added.<br>Ferredoxin-dependent NADH oxidation with crotonyl-CoA.<br>In the absence of ferredoxin and hydrogenas |
+| [20].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [20].anchor.start | 30306 |
+| [20].dependencies[0] | observation_9040aa3ddb913a5da560a002 |
+| [20].id | observation_8423cb0af7d7327b36ea177c |
+| [20].kind | source_content |
+| [20].measurements | none supplied |
+| [20].origin | extracted |
+| [20].source_ref | source_0b8cba800e58dcd678d58126 |
+| [20].source_subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [20].subject_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [21].anchor.artifact_ref | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [21].anchor.end | 30410 |
+| [21].anchor.quote | Both the absolute and relative values of the specific activities varied from preparation to preparation. |
+| [21].anchor.source_ref | source_0b8cba800e58dcd678d58126 |
+| [21].anchor.start | 30306 |
+| [21].dependencies | none supplied |
+| [21].id | observation_9040aa3ddb913a5da560a002 |
+| [21].kind | source_content |
+| [21].measurements | none supplied |
+| [21].origin | extracted |
+| [21].source_ref | source_0b8cba800e58dcd678d58126 |
+| [21].source_subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [21].subject_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [22].context_refs | none supplied |
+| [22].id | hypothesis_32c5c3e533f9a03ed0df7dc1 |
+| [22].origin | reasoning |
+| [22].predicate | partner_dependence |
+| [22].subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [22].value.roles[0].ref | reference_df0353ec68ca8cc120e1948b |
+| [22].value.roles[0].role | partner |
+| [22].value.type | relation |
+| [23].context_refs | none supplied |
+| [23].id | hypothesis_35841093b2cd158f191eba26 |
+| [23].origin | reasoning |
+| [23].predicate | partner_dependence |
+| [23].subject_refs[0] | reference_2eb4f6565224abec08f433f0 |
+| [23].value.roles[0].ref | reference_97183e199695c54d046ac867 |
+| [23].value.roles[0].role | partner |
+| [23].value.type | relation |
+
+Last selected action outcome
+
+| Field | Supplied value |
+| --- | --- |
+| status | completed |
+| record_refs[0] | reference_993d1391e77da80f345afca2 |
+| record_refs[1] | term_1b6b60df2c7ca6d44b038c4e |
+| record_refs[2] | source_0b8cba800e58dcd678d58126 |
+| record_refs[3] | reference_dbc906306bf19d2754a8fb68 |
+| record_refs[4] | term_a045b4f0c5b2608807e7e0ca |
+| record_refs[5] | context_cf5975314d5d5c269dcbf57e |
+| record_refs[6] | reference_2dd79abee2678c67e37296ee |
+| record_refs[7] | source_7b093b3fbc52761ff1c3f07a |
+| record_refs[8] | context_aaaa274471379a233772ee23 |
+| record_refs[9] | source_232ab83c3f1744b92a521189 |
+| record_refs[10] | context_2468a9eb20024ef2607d117e |
+| changed_record_refs[0] | reference_993d1391e77da80f345afca2 |
+| changed_record_refs[1] | term_1b6b60df2c7ca6d44b038c4e |
+| changed_record_refs[2] | reference_dbc906306bf19d2754a8fb68 |
+| changed_record_refs[3] | term_a045b4f0c5b2608807e7e0ca |
+| changed_record_refs[4] | context_cf5975314d5d5c269dcbf57e |
+| changed_record_refs[5] | reference_2dd79abee2678c67e37296ee |
+| changed_record_refs[6] | source_7b093b3fbc52761ff1c3f07a |
+| changed_record_refs[7] | context_aaaa274471379a233772ee23 |
+| changed_record_refs[8] | source_232ab83c3f1744b92a521189 |
+| changed_record_refs[9] | context_2468a9eb20024ef2607d117e |
+
+Selected result fields
+
+| Field | Supplied value |
+| --- | --- |
+| changed_record_refs[0] | reference_993d1391e77da80f345afca2 |
+| changed_record_refs[1] | term_1b6b60df2c7ca6d44b038c4e |
+| changed_record_refs[2] | reference_dbc906306bf19d2754a8fb68 |
+| changed_record_refs[3] | term_a045b4f0c5b2608807e7e0ca |
+| changed_record_refs[4] | context_cf5975314d5d5c269dcbf57e |
+| changed_record_refs[5] | reference_2dd79abee2678c67e37296ee |
+| changed_record_refs[6] | source_7b093b3fbc52761ff1c3f07a |
+| changed_record_refs[7] | context_aaaa274471379a233772ee23 |
+| changed_record_refs[8] | source_232ab83c3f1744b92a521189 |
+| changed_record_refs[9] | context_2468a9eb20024ef2607d117e |
+| pending_work_after_action.captured_at | 2026-10-26T19:46:45.656025+00:00 |
+| pending_work_after_action.items | none supplied |
+| pending_work_after_action.version | pending_work_v1 |
+| record_refs[0] | reference_993d1391e77da80f345afca2 |
+| record_refs[1] | term_1b6b60df2c7ca6d44b038c4e |
+| record_refs[2] | source_0b8cba800e58dcd678d58126 |
+| record_refs[3] | reference_dbc906306bf19d2754a8fb68 |
+| record_refs[4] | term_a045b4f0c5b2608807e7e0ca |
+| record_refs[5] | context_cf5975314d5d5c269dcbf57e |
+| record_refs[6] | reference_2dd79abee2678c67e37296ee |
+| record_refs[7] | source_7b093b3fbc52761ff1c3f07a |
+| record_refs[8] | context_aaaa274471379a233772ee23 |
+| record_refs[9] | source_232ab83c3f1744b92a521189 |
+| record_refs[10] | context_2468a9eb20024ef2607d117e |
+| status | completed |
+
+Admitted requested child returns
+
+| Field | Supplied value |
+| --- | --- |
+| [0].activity_unit_definition | endpoint_specific_definition_established |
+| [0].changed_assessment_refs[0] | assessment_6372608821ed170f8ed4d37d |
+| [0].changed_assessment_refs[1] | assessment_9cd791451fc138cbb7bf9c68 |
+| [0].changed_assessment_refs[2] | assessment_b72d23b8d3d8381a81361ddb |
+| [0].endpoint_scope | multiple_distinct_endpoints |
+| [0].interpretation_basis_refs[0] | input_6e4b60f4ed499afdadd9882d |
+| [0].interpretation_basis_refs[1] | artifact_62930707904f67975532ff43f609f98f64700a9afbbc3c5eb446e02f3a513f26 |
+| [0].interpretation_basis_refs[2] | material_30bcff90bdd43a843675f492 |
+| [0].interpretation_basis_refs[3] | source_8973ba3d948ca383b49c465c |
+| [0].interpretation_basis_refs[4] | source_0b8cba800e58dcd678d58126 |
+| [0].interpretation_basis_refs[5] | artifact_91c0ed6ce15d330e4359a231fe593039ebd72459d1ba1f585482f67fa7f66821 |
+| [0].interpretation_basis_refs[6] | artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f |
+| [0].interpretation_basis_refs[7] | term_6b7a2d2648b460f13b6ee728 |
+| [0].interpretation_basis_refs[8] | reference_2eb4f6565224abec08f433f0 |
+| [0].interpretation_basis_refs[9] | reference_97183e199695c54d046ac867 |
+| [0].interpretation_basis_refs[10] | reference_df0353ec68ca8cc120e1948b |
+| [0].interpretation_basis_refs[11] | observation_02efb0df70023bc18faa58c1 |
+| [0].interpretation_basis_refs[12] | observation_c5c31d8b0de40e978c797c22 |
+| [0].interpretation_basis_refs[13] | observation_02f370632db1efe244ab1823 |
+| [0].interpretation_basis_refs[14] | observation_0338ce6f80427d2bf7312cad |
+| [0].interpretation_basis_refs[15] | observation_566f59f5a69dacad4896df3b |
+| [0].interpretation_basis_refs[16] | observation_8423cb0af7d7327b36ea177c |
+| [0].interpretation_basis_refs[17] | observation_9040aa3ddb913a5da560a002 |
+| [0].interpretation_basis_refs[18] | hypothesis_32c5c3e533f9a03ed0df7dc1 |
+| [0].interpretation_basis_refs[19] | hypothesis_35841093b2cd158f191eba26 |
+| [0].interpretation_basis_refs[20] | assessment_6372608821ed170f8ed4d37d |
+| [0].interpretation_basis_refs[21] | assessment_9cd791451fc138cbb7bf9c68 |
+| [0].interpretation_basis_refs[22] | assessment_b72d23b8d3d8381a81361ddb |
+| [0].partner_arm_design | removal_without_distinct_addback |
+| [0].unresolved_questions[0] | physical_measurement_identity |
+| [0].unresolved_questions[1] | censoring_or_uncertainty |
+| [1].literature_rate_source_cells[0].approximate | false |
+| [1].literature_rate_source_cells[0].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[0].bound | none |
+| [1].literature_rate_source_cells[0].component | reference_rate |
+| [1].literature_rate_source_cells[0].conditional_on | none supplied |
+| [1].literature_rate_source_cells[0].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[0].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[0].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[0].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[0].origin | reported |
+| [1].literature_rate_source_cells[0].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[0].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[0].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[0].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[0].sheet_ref | source_7b093b3fbc52761ff1c3f07a |
+| [1].literature_rate_source_cells[0].status | populated |
+| [1].literature_rate_source_cells[0].test_condition_ref | context_aaaa274471379a233772ee23 |
+| [1].literature_rate_source_cells[0].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[0].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[0].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[0].threshold | unknown |
+| [1].literature_rate_source_cells[0].unavailable_reason | unknown |
+| [1].literature_rate_source_cells[0].unit | umol/min/mg |
+| [1].literature_rate_source_cells[0].value | 5.0 |
+| [1].literature_rate_source_cells[1].approximate | false |
+| [1].literature_rate_source_cells[1].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[1].bound | none |
+| [1].literature_rate_source_cells[1].component | test_rate |
+| [1].literature_rate_source_cells[1].conditional_on | none supplied |
+| [1].literature_rate_source_cells[1].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[1].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[1].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[1].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[1].origin | reported |
+| [1].literature_rate_source_cells[1].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[1].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[1].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[1].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[1].sheet_ref | source_7b093b3fbc52761ff1c3f07a |
+| [1].literature_rate_source_cells[1].status | populated |
+| [1].literature_rate_source_cells[1].test_condition_ref | context_aaaa274471379a233772ee23 |
+| [1].literature_rate_source_cells[1].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[1].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[1].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[1].threshold | unknown |
+| [1].literature_rate_source_cells[1].unavailable_reason | unknown |
+| [1].literature_rate_source_cells[1].unit | umol/min/mg |
+| [1].literature_rate_source_cells[1].value | 0.02 |
+| [1].literature_rate_source_cells[2].approximate | false |
+| [1].literature_rate_source_cells[2].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[2].bound | none |
+| [1].literature_rate_source_cells[2].component | rate_difference |
+| [1].literature_rate_source_cells[2].conditional_on | none supplied |
+| [1].literature_rate_source_cells[2].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[2].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[2].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[2].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[2].origin | derived |
+| [1].literature_rate_source_cells[2].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[2].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[2].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[2].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[2].sheet_ref | source_7b093b3fbc52761ff1c3f07a |
+| [1].literature_rate_source_cells[2].status | populated |
+| [1].literature_rate_source_cells[2].test_condition_ref | context_aaaa274471379a233772ee23 |
+| [1].literature_rate_source_cells[2].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[2].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[2].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[2].threshold | unknown |
+| [1].literature_rate_source_cells[2].unavailable_reason | unknown |
+| [1].literature_rate_source_cells[2].unit | umol/min/mg |
+| [1].literature_rate_source_cells[2].value | 4.98 |
+| [1].literature_rate_source_cells[3].approximate | false |
+| [1].literature_rate_source_cells[3].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[3].bound | none |
+| [1].literature_rate_source_cells[3].component | retained_fraction |
+| [1].literature_rate_source_cells[3].conditional_on | none supplied |
+| [1].literature_rate_source_cells[3].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[3].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[3].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[3].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[3].origin | derived |
+| [1].literature_rate_source_cells[3].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[3].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[3].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[3].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[3].sheet_ref | source_7b093b3fbc52761ff1c3f07a |
+| [1].literature_rate_source_cells[3].status | populated |
+| [1].literature_rate_source_cells[3].test_condition_ref | context_aaaa274471379a233772ee23 |
+| [1].literature_rate_source_cells[3].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[3].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[3].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[3].threshold | unknown |
+| [1].literature_rate_source_cells[3].unavailable_reason | unknown |
+| [1].literature_rate_source_cells[3].unit | fraction |
+| [1].literature_rate_source_cells[3].value | 0.004 |
+| [1].literature_rate_source_cells[4].approximate | false |
+| [1].literature_rate_source_cells[4].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[4].bound | none |
+| [1].literature_rate_source_cells[4].component | fractional_decrease |
+| [1].literature_rate_source_cells[4].conditional_on | none supplied |
+| [1].literature_rate_source_cells[4].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[4].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[4].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[4].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[4].origin | derived |
+| [1].literature_rate_source_cells[4].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[4].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[4].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[4].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[4].sheet_ref | source_7b093b3fbc52761ff1c3f07a |
+| [1].literature_rate_source_cells[4].status | populated |
+| [1].literature_rate_source_cells[4].test_condition_ref | context_aaaa274471379a233772ee23 |
+| [1].literature_rate_source_cells[4].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[4].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[4].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[4].threshold | unknown |
+| [1].literature_rate_source_cells[4].unavailable_reason | unknown |
+| [1].literature_rate_source_cells[4].unit | fraction |
+| [1].literature_rate_source_cells[4].value | 0.996 |
+| [1].literature_rate_source_cells[5].approximate | false |
+| [1].literature_rate_source_cells[5].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[5].bound | none |
+| [1].literature_rate_source_cells[5].component | reference_rate |
+| [1].literature_rate_source_cells[5].conditional_on | none supplied |
+| [1].literature_rate_source_cells[5].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[5].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[5].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[5].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[5].origin | reported |
+| [1].literature_rate_source_cells[5].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[5].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[5].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[5].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[5].sheet_ref | source_232ab83c3f1744b92a521189 |
+| [1].literature_rate_source_cells[5].status | populated |
+| [1].literature_rate_source_cells[5].test_condition_ref | context_2468a9eb20024ef2607d117e |
+| [1].literature_rate_source_cells[5].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[5].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[5].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[5].threshold | unknown |
+| [1].literature_rate_source_cells[5].unavailable_reason | unknown |
+| [1].literature_rate_source_cells[5].unit | umol/min/mg |
+| [1].literature_rate_source_cells[5].value | 5.0 |
+| [1].literature_rate_source_cells[6].approximate | false |
+| [1].literature_rate_source_cells[6].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[6].bound | lt |
+| [1].literature_rate_source_cells[6].component | test_rate |
+| [1].literature_rate_source_cells[6].conditional_on | none supplied |
+| [1].literature_rate_source_cells[6].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[6].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[6].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[6].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[6].origin | reported |
+| [1].literature_rate_source_cells[6].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[6].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[6].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[6].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[6].sheet_ref | source_232ab83c3f1744b92a521189 |
+| [1].literature_rate_source_cells[6].status | unavailable |
+| [1].literature_rate_source_cells[6].test_condition_ref | context_2468a9eb20024ef2607d117e |
+| [1].literature_rate_source_cells[6].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[6].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[6].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[6].threshold | 0.01 |
+| [1].literature_rate_source_cells[6].unavailable_reason | censored_measurement |
+| [1].literature_rate_source_cells[6].unit | umol/min/mg |
+| [1].literature_rate_source_cells[6].value | unknown |
+| [1].literature_rate_source_cells[7].approximate | false |
+| [1].literature_rate_source_cells[7].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[7].bound | none |
+| [1].literature_rate_source_cells[7].component | rate_difference |
+| [1].literature_rate_source_cells[7].conditional_on | none supplied |
+| [1].literature_rate_source_cells[7].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[7].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[7].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[7].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[7].origin | derived |
+| [1].literature_rate_source_cells[7].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[7].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[7].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[7].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[7].sheet_ref | source_232ab83c3f1744b92a521189 |
+| [1].literature_rate_source_cells[7].status | unavailable |
+| [1].literature_rate_source_cells[7].test_condition_ref | context_2468a9eb20024ef2607d117e |
+| [1].literature_rate_source_cells[7].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[7].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[7].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[7].threshold | unknown |
+| [1].literature_rate_source_cells[7].unavailable_reason | censored_measurement |
+| [1].literature_rate_source_cells[7].unit | umol/min/mg |
+| [1].literature_rate_source_cells[7].value | unknown |
+| [1].literature_rate_source_cells[8].approximate | false |
+| [1].literature_rate_source_cells[8].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[8].bound | none |
+| [1].literature_rate_source_cells[8].component | retained_fraction |
+| [1].literature_rate_source_cells[8].conditional_on | none supplied |
+| [1].literature_rate_source_cells[8].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[8].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[8].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[8].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[8].origin | derived |
+| [1].literature_rate_source_cells[8].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[8].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[8].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[8].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[8].sheet_ref | source_232ab83c3f1744b92a521189 |
+| [1].literature_rate_source_cells[8].status | unavailable |
+| [1].literature_rate_source_cells[8].test_condition_ref | context_2468a9eb20024ef2607d117e |
+| [1].literature_rate_source_cells[8].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[8].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[8].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[8].threshold | unknown |
+| [1].literature_rate_source_cells[8].unavailable_reason | censored_measurement |
+| [1].literature_rate_source_cells[8].unit | fraction |
+| [1].literature_rate_source_cells[8].value | unknown |
+| [1].literature_rate_source_cells[9].approximate | false |
+| [1].literature_rate_source_cells[9].assayed_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[9].bound | none |
+| [1].literature_rate_source_cells[9].component | fractional_decrease |
+| [1].literature_rate_source_cells[9].conditional_on | none supplied |
+| [1].literature_rate_source_cells[9].endpoint_ref | term_1b6b60df2c7ca6d44b038c4e |
+| [1].literature_rate_source_cells[9].evidence_source_ref | source_0b8cba800e58dcd678d58126 |
+| [1].literature_rate_source_cells[9].experiment_ref | reference_dbc906306bf19d2754a8fb68 |
+| [1].literature_rate_source_cells[9].normalization_ref | term_a045b4f0c5b2608807e7e0ca |
+| [1].literature_rate_source_cells[9].origin | derived |
+| [1].literature_rate_source_cells[9].reference_condition_ref | context_cf5975314d5d5c269dcbf57e |
+| [1].literature_rate_source_cells[9].reference_construct_ref | unknown |
+| [1].literature_rate_source_cells[9].reference_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[9].reference_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[9].sheet_ref | source_232ab83c3f1744b92a521189 |
+| [1].literature_rate_source_cells[9].status | unavailable |
+| [1].literature_rate_source_cells[9].test_condition_ref | context_2468a9eb20024ef2607d117e |
+| [1].literature_rate_source_cells[9].test_construct_ref | unknown |
+| [1].literature_rate_source_cells[9].test_preparation_ref | reference_2dd79abee2678c67e37296ee |
+| [1].literature_rate_source_cells[9].test_subject_ref | reference_993d1391e77da80f345afca2 |
+| [1].literature_rate_source_cells[9].threshold | unknown |
+| [1].literature_rate_source_cells[9].unavailable_reason | censored_measurement |
+| [1].literature_rate_source_cells[9].unit | fraction |
+| [1].literature_rate_source_cells[9].value | unknown |

@@ -1,0 +1,53 @@
+{
+  "kind": "fixed_gene_run_preparation_observation",
+  "observed_at": "2026-10-20T22:15:01.810492+00:00",
+  "case_ref": "gene_001",
+  "target_ref": "input_a5c60b96717424cdf5138420",
+  "problem_ref": "problem_9d89f9abcb43930a1bb557f1",
+  "target_sequence_sha256": "62930707904f67975532ff43f609f98f64700a9afbbc3c5eb446e02f3a513f26",
+  "case_launch_sha256": "b3552c40c77f43594b3b587e65b3283ac0dce8584d38c95e66d9bdd87ff0dad0",
+  "record_counts": {
+    "collection": 1,
+    "context": 1,
+    "feature": 1,
+    "material": 1,
+    "observation": 21,
+    "parse_attempt": 1,
+    "product": 1,
+    "reference": 17,
+    "source": 47
+  },
+  "assessment_count": 0,
+  "annotation_count": 0,
+  "runtime_tables_present": [],
+  "native_order_count": 0,
+  "runtime_manifest_present": false,
+  "policy_manifest_present": false,
+  "native_limits": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "models": {
+    "connection": {
+      "command": [
+        "codex",
+        "app-server",
+        "--stdio"
+      ]
+    },
+    "FAST": {
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none"
+    },
+    "REASONING": {
+      "model": "gpt-6-sol",
+      "reasoning_effort": "medium"
+    },
+    "routing": {
+      "decide": "REASONING",
+      "child_interpretation": "REASONING"
+    }
+  },
+  "scope_of_observation": "read_only_saved_state_inspection_no_native_or_model_execution"
+}

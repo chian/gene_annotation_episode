@@ -1,0 +1,195 @@
+--- original/gene_annotation_episode/native_hmmer_preparation_result_worker.py
++++ gene_annotation_episode/native_hmmer_preparation_result_worker.py
+@@ -20,6 +20,7 @@
+ from .native_hmmer_preparation_acquisition import (
+     _confined_reader, _decode, _read_record, _shape, validate_original_bundle,
+ )
++from .practical_execution_records import canonical as practical_canonical
+ from .practical_execution_state import _immutable
+ 
+ 
+@@ -218,12 +219,12 @@
+ 
+ 
+ def _immutable_numerical(path, value):
+-    """Keep canonical bytes, escaping only otherwise unencodable surrogates.
++    """Keep practical canonical bytes, escaping unencodable surrogates only.
+ 
+     Native byte text survives JSON reading followed by surrogateescape encoding.
+     The ordinary practical receipt/digest policy is intentionally unchanged.
+     """
+-    payload = (canonical(value) + "\n").encode("utf-8", errors="backslashreplace")
++    payload = (practical_canonical(value) + "\n").encode("utf-8", errors="backslashreplace")
+     descriptor, temporary = tempfile.mkstemp(prefix=".hmmer-numerical-", dir=path.parent)
+     try:
+         with os.fdopen(descriptor, "wb") as stream:
+--- original/tests/test_hmmer_alignment_input_integration.py
++++ tests/test_hmmer_alignment_input_integration.py
+@@ -16,7 +16,8 @@
+ from gene_annotation_episode import native_hmmer_preparation_driver as driver
+ from gene_annotation_episode import native_hmmer_preparation_result_worker as result_worker
+ from gene_annotation_episode import native_hmmer_preparation_worker as worker
+-from gene_annotation_episode.domain import ContractError, canonical
++from gene_annotation_episode.domain import ContractError
++from gene_annotation_episode.practical_execution_records import canonical as practical_canonical
+ from gene_annotation_episode.practical_execution_state import _immutable
+ from test_hmmer_alignment_input_calculations import ORACLE, EMISSION, SELEX, annotated_selex, checks, sheet_for
+ from test_hmmer_alignment_preparation_data import payload
+@@ -82,7 +83,7 @@
+     _immutable(old, value)
+     receipt = result_worker._write(tmp_path, "new.json", value)
+     raw = (tmp_path / "new.json").read_bytes()
+-    assert raw == old.read_bytes() == (canonical(value) + "\n").encode("utf-8")
++    assert raw == old.read_bytes() == (practical_canonical(value) + "\n").encode("utf-8")
+     assert receipt == {"filename": "new.json", "sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)}
+     assert result_worker._write(tmp_path, "new.json", value) == receipt
+     with pytest.raises(ValueError, match="practical_immutable_record_conflict"):
+@@ -221,11 +222,13 @@
+     assert b"1..2" in output_bytes(plan, bundle, "stdout")
+ 
+ 
+-def grade_actual(plan, bundle):
++def grade_actual(plan, bundle, *, retained_directory=None):
++    """Allow a pinned snapshot location without rewriting the original plan."""
++    directory = Path(plan["attempt_directory"]) if retained_directory is None else retained_directory
+     inputs, outputs, formats, occurrences = {}, {}, {}, []
+     for collection, direction in (("inputs", "input"), ("artifacts", "output")):
+         for index, item in enumerate(bundle[collection]):
+-            content = (Path(plan["attempt_directory"]) / item["relative_path"]).read_bytes()
++            content = (directory / item["relative_path"]).read_bytes()
+             role = item["role"]
+             value = payload(role, content, direction, oid="retained:actual547#/" + collection + "/" + str(index))
+             value["occurrence"]["artifact_ref"] = "artifact_" + hashlib.sha256(content).hexdigest()
+@@ -245,7 +248,13 @@
+     selected["outputs"].append({"role": "resaved_alignment", "format": "stockholm", "relative_path": "outputs/resaved.sto"})
+     plan, bundle = run_actual(tmp_path, selected)
+     assert bundle["returncode"] == 0 and bundle["failures"] == []
+-    grading, occurrences = grade_actual(plan, bundle)
++    _assert_hmmbuild_original_alphabet_checksum_map_and_saved_return(
++        tmp_path, monkeypatch, plan, bundle, fixture)
++
++
++def _assert_hmmbuild_original_alphabet_checksum_map_and_saved_return(
++        tmp_path, monkeypatch, plan, bundle, fixture, *, retained_directory=None):
++    grading, occurrences = grade_actual(plan, bundle, retained_directory=retained_directory)
+     sheet, result = grading["sheet"], grading["calculations"]
+     source = sheet["input_records"][0]
+     transformed = next(item for item in sheet["output_records"] if item["kind"] == "alignment")
+@@ -258,26 +267,113 @@
+     assert result["rows"][0]["coordinates"]["model_to_source_alignment"] == data._model_map(model, source["column_count"])
+     selected_result = selected_values(grading, occurrences, "components.input_sequence_count", "components.model_length")
+     assert [item["value"] for item in selected_result["rows"][0]["quantities"]] == [len(source["rows"]), model["length"]]
++    for quantity in selected_result["rows"][0]["quantities"]:
++        cell = result["rows"][0]["components"][quantity["path"].removeprefix("components.")]
++        assert {key: quantity[key] for key in ("value", "state", "unit")} == {key: cell[key] for key in ("value", "state", "unit")}
+     changed = deepcopy(sheet)
+     changed["model_extraction"]["records"][0]["alphabet"]["kind"] = "DNA"
+     conflict = worker.recalculate_hmmer_preparation(changed, parameters={})
+     assert checks(conflict, "source_checksum")[0]["state"] == "fail"
+     assert checks(conflict, "alphabet")[0]["state"] == "fail"
+     assert "alphabet_incompatible" in {item["code"] for item in conflict["issues"]}
++    receipt = result_worker._write(tmp_path, "hmmbuild-grading.json", grading)
++    saved_bytes = (tmp_path / receipt["filename"]).read_bytes()
++    assert hashlib.sha256(saved_bytes).hexdigest() == receipt["sha256"]
++    saved = json.loads(saved_bytes)
++    assert saved == grading
+     def forbidden(*args, **kwargs):
+         pytest.fail("saved result used original input reader")
+     with monkeypatch.context() as guard:
+-        guard.setattr(data, "read_hmmer_alignment_input", forbidden)
+-        guard.setattr(data, "read_hmmer_alignment_output", forbidden)
++        for name in ("read_hmmer_alignment_input", "read_hmmer_alignment_output", "infer_hmmer_alignment_alphabet",
++                     "decode_native_fasta_alignment", "decode_native_block_alignment", "decode_native_phylip_alignment"):
++            guard.setattr(data, name, forbidden)
++        guard.setattr(worker.model_data, "extract_hmmer_models", forbidden)
+         guard.setattr(Path, "read_bytes", forbidden)
+-        assert worker.recalculate_hmmer_preparation(json.loads(json.dumps(sheet)), parameters={}) == result
++        guard.setattr(Path, "open", forbidden)
++        assert worker.recalculate_hmmer_preparation(saved["sheet"], parameters={}) == result
+         guard.setattr(calc, "calculate_hmmer_alignment_preparation_components", forbidden)
+-        assert selected_values(grading, occurrences, "components.input_sequence_count", "components.model_length") == selected_result
++        assert selected_values(saved, occurrences, "components.input_sequence_count", "components.model_length") == selected_result
+     (tmp_path / "NATIVE_INPUT_CONSUMER_EXAMPLE.json").write_text(json.dumps({
+         "fixture": str(EMISSION / fixture / "emitted.out"), "native_returncode": bundle["returncode"],
+         "source_alphabet": source["input_decoding"], "source_checksum": checks(result, "source_checksum"),
+         "native_model_map": result["rows"][0]["coordinates"]["model_to_source_alignment"],
+         "selected_return": selected_result}, indent=2) + "\n")
++    return grading, selected_result
++
++
++_SAVED_CHECK013_HMMBUILD = {
++    "a2m": {"directory": "test_actual_hmmbuild_original_0", "fixture": "a2m_insertions",
++        "native_format": "A2M", "sequence_count": 5, "checksum": 2776554218,
++        "model_map": [1, 2, 4, 5, 6, 8, 9, 10, 13, 14, 15, 17],
++        "plan_sha256": "82010041dbe118c27d7e43392a56df0daf50e7e2bb5013eda18461fe73e0aad3",
++        "bundle_sha256": "a55ca3517eaba20c889c16e8cc00bf3793ba23d742205ad72cc500d17265980b"},
++    "clustal": {"directory": "test_actual_hmmbuild_original_1", "fixture": "aligned_clustal",
++        "native_format": "Clustal", "sequence_count": 3, "checksum": 3986124183,
++        "model_map": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
++        "plan_sha256": "ee5807af8e105a7ba16ba0abc849fae9eea8eef88b9ab11b821ff20d30e9801c",
++        "bundle_sha256": "75ac3bf7ec1d495983e5bc99582c2143096f089737a35e57e12bfa024f3af43a"},
++}
++
++
++def _regrade_saved_check013_hmmbuild(tmp_path, monkeypatch, fmt):
++    """Regrade the two successful original jobs; keep their native bytes fixed."""
++    case = _SAVED_CHECK013_HMMBUILD[fmt]
++    original = ROOT / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest" / case["directory"]
++    directory = original / "hmmer-preparation-attempt"
++    plan_path, bundle_path = original / "plan.json", directory / "bundle.json"
++    frozen = {path: path.read_bytes() for path in (plan_path, bundle_path)}
++    assert hashlib.sha256(frozen[plan_path]).hexdigest() == case["plan_sha256"]
++    assert hashlib.sha256(frozen[bundle_path]).hexdigest() == case["bundle_sha256"]
++    plan, bundle = json.loads(frozen[plan_path]), json.loads(frozen[bundle_path])
++    original_plan, original_bundle = deepcopy(plan), deepcopy(bundle)
++    assert result_worker.validate_original_bundle(bundle, plan) == bundle
++    assert bundle["returncode"] == 0 and bundle["failures"] == []
++    assert bundle["operation"]["settings"]["--informat"] == case["native_format"]
++    assert len(bundle["inputs"]) == 1 and bundle["working_copies"] == []
++    source_descriptor = bundle["inputs"][0]
++    assert source_descriptor["format"] == fmt
++    for collection in ("inputs", "artifacts"):
++        for item in bundle[collection]:
++            path = directory / item["relative_path"]
++            frozen[path] = path.read_bytes()
++            actual_sha, actual_size = hashlib.sha256(frozen[path]).hexdigest(), len(frozen[path])
++            if collection == "inputs":
++                assert actual_sha == item["expected_sha256"] == item["staged_sha256"] == item["final_sha256"]
++                assert actual_size == item["expected_size_bytes"] == item["staged_size_bytes"] == item["final_size_bytes"]
++            else:
++                assert actual_sha == item["sha256"] and actual_size == item["size_bytes"]
++    fixture_path = EMISSION / case["fixture"] / "emitted.out"
++    frozen[fixture_path] = fixture_path.read_bytes()
++    assert frozen[fixture_path] == frozen[directory / source_descriptor["relative_path"]]
++
++    def forbidden(*args, **kwargs):
++        pytest.fail("saved check013 hmmbuild regrading attempted native execution")
++    monkeypatch.setitem(globals(), "run_actual", forbidden)
++    monkeypatch.setattr(driver, "run_native_hmmer_preparation", forbidden)
++    monkeypatch.setattr(driver.subprocess, "run", forbidden)
++    monkeypatch.setattr(driver.subprocess, "Popen", forbidden)
++    grading, selected_result = _assert_hmmbuild_original_alphabet_checksum_map_and_saved_return(
++        tmp_path, monkeypatch, plan, bundle, case["fixture"], retained_directory=directory)
++    sheet, result = grading["sheet"], grading["calculations"]
++    source = sheet["input_records"][0]
++    transformed = next(item for item in sheet["output_records"] if item["kind"] == "alignment")
++    assert source["input_decoding"]["format"] == fmt
++    assert source["input_decoding"]["source_sha256"] == transformed["source_alphabet"]["source_sha256"] == source_descriptor["expected_sha256"]
++    assert sheet["model_extraction"]["records"][0]["checksum"] == case["checksum"]
++    checksum = checks(result, "source_checksum")[0]
++    assert checksum["details"] == {"calculated": case["checksum"], "native": case["checksum"]}
++    assert result["rows"][0]["coordinates"]["model_to_source_alignment"] == case["model_map"]
++    assert [item["value"] for item in selected_result["rows"][0]["quantities"]] == [case["sequence_count"], 12]
++    assert plan == original_plan and bundle == original_bundle
++    assert {path: path.read_bytes() for path in frozen} == frozen
++
++
++def test_saved_check013_hmmbuild_a2m_regrades_without_native(tmp_path, monkeypatch):
++    _regrade_saved_check013_hmmbuild(tmp_path, monkeypatch, "a2m")
++
++
++def test_saved_check013_hmmbuild_clustal_regrades_without_native(tmp_path, monkeypatch):
++    _regrade_saved_check013_hmmbuild(tmp_path, monkeypatch, "clustal")
+ 
+ 
+ def test_syntax_failure_returns_before_reconstruction_or_native(tmp_path, monkeypatch):

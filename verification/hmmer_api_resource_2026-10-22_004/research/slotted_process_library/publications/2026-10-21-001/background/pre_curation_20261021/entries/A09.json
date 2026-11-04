@@ -1,0 +1,116 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A09",
+  "name": "Conditional necessity, overlap and residual function",
+  "description": "Represent whether a target is needed for a named outcome under specified conditions and available alternatives: absolute loss, quantitative impairment, hidden overlap or no detected phenotype.",
+  "claim_scope": "Necessity attaches to function, assay and background, not a context-free essential-gene label. It can remain unresolved after deletion failure or overexpression rescue.",
+  "distinctions": [
+    "Single-gene dispensability versus required combined function.",
+    "Residual output versus complete tested loss.",
+    "Supplemented growth versus endogenous supply.",
+    "Failed deletion recovery versus demonstrated essentiality.",
+    "No phenotype versus no native contribution."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "necessity": [
+        "required_for_detectable_tested_output",
+        "required_for_full_tested_output",
+        "dispensable_with_available_alternative",
+        "no_detected_defect_in_tested_condition",
+        "unresolved"
+      ],
+      "alternative_relation": [
+        "paralog_overlap",
+        "distinct_route_overlap",
+        "medium_or_host_supply",
+        "suspected_but_unassigned",
+        "none_tested"
+      ],
+      "residual_output": [
+        "detected",
+        "below_test_detection",
+        "not_measured"
+      ],
+      "perturbation_scope": [
+        "single_component",
+        "combined_components",
+        "depletion",
+        "deletion_not_recovered"
+      ]
+    },
+    "required_typed_references": [
+      "target_entity_ref",
+      "function_and_outcome_ref",
+      "background_ref",
+      "available_alternative_refs",
+      "medium_or_host_supply_refs",
+      "assay_and_detection_ref",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "No recovered deletion is not essentiality proof.",
+    "Negative rescue can reflect expression/stability/compatibility.",
+    "Residual growth does not identify a backup enzyme.",
+    "Overlap in one condition does not prove complete equivalence."
+  ],
+  "follow_up_lane_ids": [
+    "F03",
+    "F04",
+    "F05"
+  ],
+  "boundary": "A09 records dependence given alternatives. A10 identifies what the alternative supplies. Neither rescue nor necessity alone assigns exact chemistry.",
+  "evidence": [
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+      "source_locator": "DUF208 Is Needed; Fig. 3; complementation Fig. 4; purification limits.",
+      "observation": "Single queG/duf208 deletions retain Q; double loss accumulates oQ and removes Q, exposing overlapping cellular requirements.",
+      "limit": "Not isolated productive QueH catalysis or established native metal/donor identity."
+    },
+    {
+      "case_group": "context_comf_mmp16_2025",
+      "case_id": "context_comf_mmp16_2025",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068725/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full genomic, growth, complementation, transcriptomic and cysteine-mutant results, discussion, and phylogenetic methods read. Author data/code not rerun; no purified-enzyme activity claimed.",
+      "observation": "Sulfide-containing medium masks an absolute CoM-growth requirement; removal and complementation reveal conditional dependence.",
+      "limit": "Possible L-ASST backup remains unproven; author data/code not rerun."
+    },
+    {
+      "case_group": "organism_02_xoxf",
+      "case_id": "organism_02_xoxf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5075040/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2012 Results/Methods; 2016 MeDH Results/growth/glassware/assay methods and ExaF Results, tables and assay details. Published curves/tables inspected; no numerical raw OD data reanalysis.",
+      "observation": "Residual growth after removing known oxidation routes exposes ExaF and constrains exclusive XoxF/single-paralog necessity.",
+      "limit": "No raw growth-curve reanalysis; metal condition and strain scope remain necessary."
+    },
+    {
+      "case_group": "replacement_bioV",
+      "case_id": "replacement_bioV",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4751477/",
+      "source_locator": "Identification/activity/native inactivation/DTB Results; observation BV1.",
+      "observation": "Positive esterase chemistry and rescue coexist with failed native deletion recovery, which does not prove essentiality or defective uptake.",
+      "limit": "Failed native deletion is an experimental limitation, not an adopted uptake mechanism."
+    },
+    {
+      "case_group": "cellular_yqfG",
+      "case_id": "cellular_yqfG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6144821/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full Results examined, including specificity controls and rescue. Same protein-family investigation group as cellular_ybeY; not independent replication of all E. coli claims.",
+      "observation": "Removing rnr permits yqfG loss while specific 16S maturation defects bound the contribution.",
+      "limit": "Does not transfer all E. coli YbeY phenotypes or resolve every ribosome-turnover mechanism."
+    },
+    {
+      "case_group": "seq_hisn_impase_discrimination",
+      "case_id": "seq_hisn_impase_discrimination",
+      "source_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full 2017 methods/results page inspected, including genetic, sequence and structural sections. 2014 primary abstract inspected. No new sequence calculation or wet-lab work.",
+      "observation": "HisN loss leaves residual growth; cg0911 overexpression rescues, but native cg0911 deletion does not explain that residual function.",
+      "limit": "Backup remains unassigned; overexpression capacity does not establish routine native role."
+    }
+  ]
+}

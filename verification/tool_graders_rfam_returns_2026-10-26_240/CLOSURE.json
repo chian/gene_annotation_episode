@@ -1,0 +1,164 @@
+{
+  "authoritative_goal": {
+    "objective_and_all_sixteen_principles_reread_verbatim_after_study_and_at_closure": true,
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "read_entire_goal": true,
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+  },
+  "contracts_sha256": {
+    "verification/tool_graders_rfam_contract_2026-10-26_232/CONTRACT.md": "ec560fc0a3686b8511f126bd4479f3388837038791b7b6eb0b6ab156b66e6b9a",
+    "verification/tool_graders_rfam_implementation_2026-10-26_234/PUBLICATION_WORKLOAD_003.md": "d68ac4fcb74dd5df0787e2b17421204fad6cee7d0d9cec8111b72b2fd4a01fd1",
+    "verification/tool_graders_rfam_implementation_2026-10-26_234/RETURNS_WORKLOAD_004.md": "6bdcb45a1cc6cea6dbb610eb38acb5e229e7f636ec6c12363d5d5a5c37c89975"
+  },
+  "corrections": [
+    {
+      "reason": "Shared string-enum validation disallows literal + and -. Reused existing nullable alignment_strand format and enforced exact +|-|null semantically; controlled interrupted run preserved.",
+      "run": "tests_001"
+    },
+    {
+      "reason": "Synthetic batch fixture incorrectly retained a different historical multipart HTTP body. Removed that incompatible wire evidence and explicitly marked fixture synthetic; production validation retained.",
+      "run": "tests_002"
+    },
+    {
+      "after": "tests_004",
+      "reason": "Added receiving-parent role guard and monitor-parent regression; six targeted cases passed in tests_005."
+    },
+    {
+      "after": "tests_005",
+      "reason": "Publisher extended shared metadata source scope validation to query_selection_ref roots. Reader already reuses helper; four optional-metadata cases passed against final helper in tests_006."
+    }
+  ],
+  "explicit_limits": [
+    "No full Workflow run or new live execution was performed by this workload.",
+    "The full 55-case run precedes the final monitor-role guard; the new case and five relevant existing cases passed afterward. Final four-case run covers publisher helper integration.",
+    "No W05 annotation-credit aggregation, evidence-axis redesign, literature grader, HPC work, or scientific acceptance gate is implemented here."
+  ],
+  "final_source_sha256": {
+    "gene_annotation_episode/api_rfam.py": "7f1646c8dddf5a9735aa71067d9aaeed8d31feaa25862db5132c6d01d7cf90ab",
+    "gene_annotation_episode/api_service_execution.py": "a5082e4d728125e12733f6b48baa21bf2d31c1edb3440b7f395570eb2c6c86b4",
+    "gene_annotation_episode/api_services.py": "c8b690335b3ec8bfec1d74df37fbb504b3bb037ee5a49ae062f64e22d29bd631",
+    "gene_annotation_episode/communication.py": "144ab5755e53e08f025913a614374047f3c5e3ae5825377528e111c3edbad55c",
+    "gene_annotation_episode/episode_return_records.py": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421",
+    "gene_annotation_episode/rfam_batch_alignment.py": "818687a8c05b6e13c04586c85c34f1c136c59d9bd71c9b4b2af3ce819167f5e9",
+    "gene_annotation_episode/rfam_batch_contracts.py": "25ad13d698b644c9c0c9b342e43c4ad0057a5e6f161e755b3e9c52e6eeef6469",
+    "gene_annotation_episode/rfam_batch_grader.py": "85bb49b8b23122a9dbe7a496c78e77fd5e48c9d1cfdd53b5ca37bd16fe9c02cb",
+    "gene_annotation_episode/rfam_batch_inputs.py": "26060ea13db7be6cd34834e32fa67b12f3392a9931c06f91b8ada2551ed164fd",
+    "gene_annotation_episode/rfam_batch_publication.py": "643e3cc8763c33ec165d7536282f1f207e081cb0403fef4c0cb1be3021b0deb8",
+    "gene_annotation_episode/rfam_batch_returns.py": "0f051584a191e0cb7ff4f877f431c204420dccbd137e034b6e815399a909b77a",
+    "gene_annotation_episode/rfam_batch_table.py": "7d216cdc125f5a77f6c6ea0afa82fdcf53ee311df942d2158f68e09c1b2fc242",
+    "gene_annotation_episode/rfam_batch_table_grader.py": "f4634d578cd6e925c6c33d8e5550e575f35a5d3fd22a2bd995d3d7227cd416da",
+    "gene_annotation_episode/rfam_batch_table_views.py": "9d307f3752fb54171ad2550ea5e0e2d41c19d854aee5fa7645582d7c81235b9a",
+    "gene_annotation_episode/rfam_batch_views.py": "fe805f4d60267f09d47af013bb037c4bc6fca0f161df5577f90b5af75cbefcce",
+    "gene_annotation_episode/state.py": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d",
+    "gene_annotation_episode/tools.py": "b7c2bdd72b9a4f27677fc91f7e4abfbc770da574f837af068306bdb231d74a5d",
+    "tests/test_rfam_batch_returns.py": "2a078a528782dbac567bac69b294e273bb69c840c3e570f1666bb185aac3c2fc"
+  },
+  "owned_files": [
+    "gene_annotation_episode/rfam_batch_returns.py",
+    "tests/test_rfam_batch_returns.py",
+    "verification/tool_graders_rfam_returns_2026-10-26_240/"
+  ],
+  "runs": [
+    {
+      "directory": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_001",
+      "failure_count": 38,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "pytest_seconds": 94.38,
+      "receipt": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_001/verification-receipt.json",
+      "returncode": 2,
+      "source_changed_during_run": "not_recorded_by_original_runner",
+      "test_count": 40
+    },
+    {
+      "directory": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_002",
+      "failure_count": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "pytest_seconds": 49.311,
+      "receipt": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_002/verification-receipt.json",
+      "returncode": 1,
+      "source_changed_during_run": "not_recorded_by_original_runner",
+      "test_count": 8
+    },
+    {
+      "directory": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_003",
+      "failure_count": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "pytest_seconds": 60.518,
+      "receipt": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_003/verification-receipt.json",
+      "returncode": 0,
+      "source_changed_during_run": "not_recorded_by_original_runner",
+      "test_count": 9
+    },
+    {
+      "directory": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_004",
+      "failure_count": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "pytest_seconds": 462.38,
+      "receipt": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_004/verification-receipt.json",
+      "returncode": 0,
+      "source_changed_during_run": "not_recorded_by_original_runner",
+      "test_count": 55
+    },
+    {
+      "directory": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_005",
+      "failure_count": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "pytest_seconds": 27.024,
+      "receipt": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_005/verification-receipt.json",
+      "returncode": 0,
+      "source_changed_during_run": [],
+      "test_count": 6
+    },
+    {
+      "directory": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_006",
+      "failure_count": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "pytest_seconds": 14.947,
+      "receipt": "verification/tool_graders_rfam_returns_2026-10-26_240/tests_006/verification-receipt.json",
+      "returncode": 0,
+      "source_changed_during_run": [],
+      "test_count": 4
+    }
+  ],
+  "status": "owned_implementation_and_controlled_verification_finished",
+  "unique_passing_test_cases_across_runs": 56,
+  "verification_scope": {
+    "actual_generic_api_executor_receipts_and_handoff": true,
+    "actual_rfam_publication_artifacts": true,
+    "actual_store_and_record_identity": true,
+    "actual_workflow_or_model_decisions": false,
+    "configured_yield_controller_or_real_action_observation_credit_proof": "owned by root; not established by these controlled fixtures",
+    "controlled_results_scientific_process_annotation_forms": true,
+    "model_calls": 0,
+    "new_live_api_requests": 0,
+    "original_source_manifest_parse_sheet_calculation_custody": true,
+    "retained_single_native_json": true,
+    "return_time_scientific_recalculation": false,
+    "synthetic_json_and_generated_batch_tblout_variants": true
+  },
+  "version": "rfam_typed_returns_workload_240_closure_v1"
+}

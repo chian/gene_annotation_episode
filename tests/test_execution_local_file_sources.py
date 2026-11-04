@@ -7,6 +7,7 @@ The separate native addition case checks scientific model changes and solves.
 import asyncio
 import base64
 from copy import deepcopy
+from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
@@ -15,11 +16,17 @@ from types import MethodType, SimpleNamespace
 
 import pytest
 
+from method_loop.episode import EpisodeGoal, EpisodeRequest
+from method_loop.identities import EpisodeRef
+
 from gene_annotation_episode.communication import (
     ReportBoundaryError, plain, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.execution_episodes import ExecutionEpisodes, native_result_operation_catalog
+from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episode_contract_information import (
     expand_fact_form, return_contract_information, validate_saved_fact_form,
 )
@@ -29,6 +36,7 @@ from gene_annotation_episode.local_file_capture_results import (
 )
 from gene_annotation_episode.materials import source_for_artifact
 from gene_annotation_episode.native_file_capture import NativeFileCaptureError, capture_native_file
+from gene_annotation_episode.runtime import Record
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords
 
@@ -654,9 +662,11 @@ def test_all_capture_declarations_are_validated_before_first_file_commit(tmp_pat
         assert case.paths[0].read_bytes() == case.originals[0]
 
 
-def _registered_capture_dispatch_case(store, directory, *, saved=None):
+def _registered_capture_dispatch_case(store, directory, *, saved=None, scientific_parent=False,
+                                      schema=None, parent_schema=None):
     """Real registered owner/capture reader; only target observation is controlled."""
-    case = CaptureFixture(store, directory, saved=saved)
+    case = CaptureFixture(store, directory, saved=saved, scientific_parent=scientific_parent,
+        schema=schema, parent_schema=parent_schema)
     targets = case.owner.job_progress_provider
     owner = ExecutionEpisodes(None, store=store, directory=case.owner.directory,
         run_id=case.saved.run_id, resources={'local': {'kind': 'local',
@@ -744,3 +754,179 @@ def test_local_file_source_probe_propagates_unexpected_store_integrity_errors(tm
             case.owner.resolve_received_reference(case.context, source_ref, 'source')
         assert caught.value is error
         assert case.observations == 1
+
+
+def _capture_receiver_context(store, scope, *, run_id, path=(('annotation', 'receiver'),),
+                              parent=None, save=True):
+    """Engineered receiving request using real journal and inheritance owners."""
+    journal = Journal(store, run_id)
+    receipts = EpisodeReceipts(store, run_id)
+    episode_id = EpisodeRef(run_id, path).episode_id
+    manifest = receipts.bind(episode_id, None if parent is None else parent.episode_id)
+    objective = 'Check explicitly delivered execution-file references'
+    goal = (EpisodeGoal.root(objective=objective, result_contract={'role': path[-1][0]})
+        if parent is None else EpisodeGoal.child(EpisodeGoal.from_record(plain(parent.request)['goal']),
+            objective=objective, result_contract={'role': path[-1][0]}))
+    request = EpisodeRequest(goal, Record({'scope': plain(scope), 'initial_report': {},
+        'episode_assignment': {}, 'knowledge_inheritance': manifest}), None).as_record()
+    context = BindingContext(run_id, episode_id, path[-1][0], path, scope, {}, request)
+    if save:
+        journal.save('runtime_episodes', {'episode_id': episode_id, 'path': canonical(path),
+            'request': canonical(request), 'initial_credit': 0, 'state': 'active',
+            'completion': None, 'archive': None})
+    return context, receipts
+
+
+def test_captured_source_and_file_need_actual_same_scope_receiver_delivery(tmp_path, monkeypatch):
+    """Controlled capture/typed boundaries; no native execution is claimed."""
+    with Store(tmp_path / 'state') as store:
+        case = _registered_capture_dispatch_case(store, tmp_path, scientific_parent=True,
+            schema=_custody_form(), parent_schema=_custody_form())
+        outcome = case.execute(0)
+        source_ref = outcome['record_refs'][1]
+        artifact_ref = store.get(source_ref)['artifact_ref']
+        assert artifact_ref in case.saved.receipts.known(case.context.episode_id)
+        assert source_ref in case.saved.receipts.known(case.context.episode_id)
+        for receiver in (case.parent, case.saved.root):
+            assert plain(receiver.scope) == plain(case.context.scope)
+            assert {source_ref, artifact_ref}.isdisjoint(case.saved.receipts.known(receiver.episode_id))
+            # Scientific ownership alone admits both through the generic Store
+            # fallback, so the capture receiver boundary must decide first.
+            assert set(store.reference_subset([source_ref, artifact_ref], plain(receiver.scope))) == {
+                source_ref, artifact_ref}
+            assert case.owner.resolve_received_reference(receiver, source_ref, 'source') is False
+            assert case.owner.resolve_received_reference(receiver, artifact_ref, 'artifact') is False
+        for namespace in (None, 'source'):
+            assert case.owner.resolve_received_reference(case.context, source_ref, namespace) is True
+        child_form = {'files': [source_ref]}
+        assert validate_form(child_form, _custody_form(), lambda ref, namespace:
+            case.owner.resolve_received_reference(case.context, ref, namespace)) == child_form
+        assert _admit_recorded_custody(case, case.parent, case.context, child_form) == [source_ref]
+        assert artifact_ref in case.saved.receipts.known(case.parent.episode_id)
+        assert case.owner.resolve_received_reference(case.parent, source_ref, 'source') is True
+        known = {context.episode_id: set(case.saved.receipts.known(context.episode_id))
+            for context in (case.saved.root, case.parent, case.context)}
+        changes = store.db.total_changes
+        def forbidden(*_args, **_kwargs):
+            pytest.fail('metadata reference admission read bytes, published or reacquired data')
+        with monkeypatch.context() as guarded:
+            guarded.setattr(store, 'get_artifact', forbidden)
+            guarded.setattr(store, 'artifact', forbidden)
+            guarded.setattr(store, 'put', forbidden)
+            guarded.setattr(case.backend, 'read_source', forbidden)
+            guarded.setattr('gene_annotation_episode.local_file_capture_results.read_control', forbidden)
+            guarded.setattr('gene_annotation_episode.local_file_capture_results.capture_native_file', forbidden)
+            for receiver in (case.context, case.parent):
+                for namespace in (None, 'artifact'):
+                    assert case.owner.resolve_received_reference(receiver, artifact_ref, namespace) is True
+            # The unknown Source is rejected before its private custody reader.
+            assert case.owner.resolve_received_reference(case.saved.root, source_ref, 'source') is False
+            assert case.owner.resolve_received_reference(case.saved.root, artifact_ref, 'artifact') is False
+        assert store.db.total_changes == changes
+        assert known == {context.episode_id: set(case.saved.receipts.known(context.episode_id))
+            for context in (case.saved.root, case.parent, case.context)}
+        assert case.observations == 1
+
+
+@pytest.mark.parametrize('delivery', ['initial', 'unsaved_initial', 'inherited', 'late_parent',
+    'other_run_initial'])
+def test_captured_file_metadata_preserves_explicit_initial_and_inherited_grants(tmp_path, monkeypatch, delivery):
+    with Store(tmp_path / 'state') as store:
+        case = _registered_capture_dispatch_case(store, tmp_path)
+        outcome = case.execute(0)
+        source_ref = outcome['record_refs'][1]
+        artifact_ref = store.get(source_ref)['artifact_ref']
+        repeated = case.execute(1)
+        assert repeated['record_refs'][1] != source_ref
+        assert store.get(repeated['record_refs'][1])['artifact_ref'] == artifact_ref
+        run_id = ('independent-file-receiver' if delivery == 'other_run_initial' else case.saved.run_id)
+        receiver, receipts = _capture_receiver_context(store, case.context.scope,
+            run_id=run_id, save=delivery != 'unsaved_initial')
+        if delivery != 'late_parent':
+            receipts.receive(receiver.episode_id, [artifact_ref], kind='initial')
+        if delivery in {'inherited', 'late_parent'}:
+            parent = receiver
+            receiver, _ = _capture_receiver_context(store, case.context.scope, run_id=run_id,
+                path=(*parent.path, ('results', 'child_0')), parent=parent)
+            if delivery == 'late_parent':
+                receipts.receive(parent.episode_id, [artifact_ref], kind='own_action', source_index=0)
+        expected = delivery != 'late_parent'
+        assert (artifact_ref in set(receipts.known(receiver.episode_id))) is expected
+        assert source_ref not in receipts.known(receiver.episode_id)
+        changes = store.db.total_changes
+        def forbidden(*_args, **_kwargs):
+            pytest.fail('metadata receiver accessed file/control bytes or created a grant')
+        with monkeypatch.context() as guarded:
+            guarded.setattr(store, 'get_artifact', forbidden)
+            guarded.setattr(store, 'put', forbidden)
+            guarded.setattr(case.backend, 'read_source', forbidden)
+            assert case.owner.resolve_received_reference(receiver, artifact_ref, 'artifact') is expected
+            assert case.owner.resolve_received_reference(receiver, source_ref, 'source') is False
+        assert store.db.total_changes == changes
+        assert case.observations == 2
+
+
+@pytest.mark.parametrize('delivery', ['initial', 'inherited'])
+def test_captured_source_explicit_and_inherited_receipts_keep_original_custody(tmp_path, delivery):
+    with Store(tmp_path / 'state') as store:
+        case = _registered_capture_dispatch_case(store, tmp_path)
+        outcome = case.execute(0)
+        source_ref = outcome['record_refs'][1]
+        artifact_ref = store.get(source_ref)['artifact_ref']
+        receiver, receipts = _capture_receiver_context(store, case.context.scope,
+            run_id='explicit-source-receiver')
+        receipts.receive(receiver.episode_id, [source_ref], kind='initial')
+        if delivery == 'inherited':
+            receiver, _ = _capture_receiver_context(store, case.context.scope,
+                run_id=receiver.run_id, path=(*receiver.path, ('results', 'child_0')), parent=receiver)
+        assert {source_ref, artifact_ref} <= set(receipts.known(receiver.episode_id))
+        changes = store.db.total_changes
+        assert case.owner.resolve_received_reference(receiver, source_ref, 'source') is True
+        assert case.owner.resolve_received_reference(receiver, artifact_ref, 'artifact') is True
+        assert store.db.total_changes == changes
+        assert case.observations == 1
+
+
+@pytest.mark.parametrize('change', ['namespace', 'assignment', 'request', 'run'])
+def test_captured_file_receiver_rejects_wrong_namespace_and_forged_context(tmp_path, monkeypatch, change):
+    with Store(tmp_path / 'state') as store:
+        case = _registered_capture_dispatch_case(store, tmp_path)
+        outcome = case.execute(0)
+        source_ref = outcome['record_refs'][1]
+        artifact_ref = store.get(source_ref)['artifact_ref']
+        receiver, namespace = case.context, 'artifact'
+        if change == 'namespace':
+            namespace = 'source'
+        elif change == 'assignment':
+            receiver = replace(receiver, assignment={'forged': True})
+        elif change == 'request':
+            request = plain(receiver.request)
+            request['message']['initial_report'] = {'forged': True}
+            receiver = replace(receiver, request=request)
+        else:
+            receiver = replace(receiver, run_id='forged-receiving-run')
+        changes = store.db.total_changes
+        def forbidden(*_args, **_kwargs):
+            pytest.fail('denied receiver reached payload/control bytes')
+        with monkeypatch.context() as guarded:
+            guarded.setattr(store, 'get_artifact', forbidden)
+            guarded.setattr(case.backend, 'read_source', forbidden)
+            assert case.owner.resolve_received_reference(receiver, artifact_ref, namespace) is False
+            assert case.owner.resolve_received_reference(receiver, source_ref,
+                'artifact' if change == 'namespace' else 'source') is False
+        assert store.db.total_changes == changes
+
+
+def test_received_capture_source_still_requires_original_custody_and_unrelated_files_defer(tmp_path):
+    with Store(tmp_path / 'state') as store:
+        case = _registered_capture_dispatch_case(store, tmp_path)
+        outcome = case.execute(0)
+        source = store.get(outcome['record_refs'][1])
+        forged = source_for_artifact(store, source['artifact_ref'], provider='episode.execution_file',
+            request={'version': 'execution_file_capture_v1'}, parent_source_refs=[case.handoff])
+        case.saved.receipts.receive(case.context.episode_id, [forged['id']], kind='initial')
+        assert case.owner.resolve_received_reference(case.context, forged['id'], 'source') is False
+        unrelated = store.artifact(b'independent supplied File', 'application/octet-stream')
+        case.saved.receipts.receive(case.saved.root.episode_id, [unrelated], kind='initial')
+        assert case.backend.reference_access(case.saved.root, unrelated, 'artifact') is None
+        assert unrelated in case.saved.receipts.known(case.saved.root.episode_id)

@@ -218,10 +218,10 @@ def phylogeny_run(request):
                     self.value = ['https://fixture.invalid/' + paths[path]]
                 return super().rpc(command)
 
-            def download(self, url, *, byte_range=None):
+            def download(self, url, *, max_bytes, byte_range=None):
                 assert byte_range is None and url.startswith('https://fixture.invalid/')
                 self.body = native_bytes[url.removeprefix('https://fixture.invalid/')]
-                return super().download(url, byte_range=byte_range)
+                return super().download(url, max_bytes=max_bytes, byte_range=byte_range)
 
         native = Responses()
         constructor = BVBRCAppServiceService.__init__
@@ -308,7 +308,7 @@ def phylogeny_run(request):
                         return selected(PREFIX + 'download_capability', {'objects': [item['object']],
                             'generation': 0, 'predecessor_receipt_ref': None})
                     arguments = {key: deepcopy(item[key]) for key in ('object', 'role', 'declared_format', 'requirement_ids')}
-                    arguments.update(byte_range=None, capability={'kind': 'acquired',
+                    arguments.update(max_bytes=1024 * 1024, byte_range=None, capability={'kind': 'acquired',
                         'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0})
                     return selected(PREFIX + 'download', arguments)
                 if 'scientific_process' in current:

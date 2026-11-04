@@ -1,0 +1,137 @@
+--- verification/tool_graders_hmmer_map_integration_2026-10-28_526/before/gene_annotation_episode/hmmer_alignment_preparation_data.py
++++ gene_annotation_episode/hmmer_alignment_preparation_data.py
+@@ -44,6 +44,7 @@
+     "model_extraction_mismatch", "model_extraction_issue", "association_incomplete",
+     "association_conflict", "model_map_invalid", "first_record_only",
+     "unexpected_output", "resaved_alignment_empty", "mm_symbol_invalid",
++    "map_context_unavailable", "map_context_invalid",
+ })
+ ROW_FIELDS = {
+     "population": frozenset({"record_key", "kind", "occurrence_id", "format", "decoded_count", "complete", "state"}),
+@@ -57,6 +58,83 @@
+ _NUMBER = re.compile(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\Z")
+ _INTEGER = re.compile(r"[0-9]+\Z")
+ _MAPPING = re.compile(r"\s*(\d+)\.\.(\d+)\s+->\s+(?:(\d+)\.\.(\d+)|-\.\.-\s+\(no map\))\s*\Z")
++
++# A retained implementation association, not a guess from a version banner or
++# the installation on the machine reading a saved sheet. No file is opened.
++ALIMASK_PROFILE_EXECUTABLE_SHA256 = "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547"
++ALIMASK_PROFILE = {"name": "infernal_1_1_5_hmmer_3_4_alimask", "source_sha256s": {
++    "hmmer/src/alimask.c": "504e52c49a249facca5887d96f5efeaaf8012820b47bbe75e782aa14af7034ab",
++    "easel/esl_msaweight.c": "0195e7c2a4428f02a84e3c239922090e72a5a72a5cc5de8a3a5551f06b6efe68",
++    "easel/esl_msaweight.h": "caf345d5c9053af80e899b697a648430306f2db6240f8724b017490b94ffb106",
++    "easel/esl_rand64.c": "abd4b05b7bf619f196b1ca99c0de452e0fe38b3ffa0f7e2f5991d88d763e5359",
++    "easel/esl_vectorops.c": "6226cb25818a1319811f7fdec2aa590df0b60f40aa01521a806cf484ea117463",
++}}
++MAP_CONTEXT_FIELDS = frozenset({"version", "source_occurrence_id", "source_sha256", "producer", "profile",
++    "binding", "requested_cli_seed", "resolved_cli_seed", "effective_pb_config"})
++_PB_CONFIG = {"fragthresh": .5, "symfrac": .5, "ignore_rf": True, "allow_samp": True,
++    "sampthresh": 50000, "nsamp": 10000, "maxfrag": 5000, "seed": 42,
++    "rng": "easel_mt19937_64", "sampler": "esl_rand64_Deal_vitter_D_A"}
++
++
++def alimask_map_context_shape(context):
++    """Closed JSON operand shape, separate from its semantic association."""
++    digest = lambda value: type(value) is str and re.fullmatch(r"[0-9a-f]{64}", value) is not None
++    integer = lambda value: type(value) is int and 0 <= value <= 2147483647
++    if (type(context) is not dict or set(context) != MAP_CONTEXT_FIELDS
++            or context["version"] != "hmmer_alignment_map_context_v1"
++            or type(context["source_occurrence_id"]) is not str or not context["source_occurrence_id"]
++            or not digest(context["source_sha256"])
++            or type(context["binding"]) is not str or context["binding"] not in {"retained_executable_profile", "unavailable"}
++            or context["requested_cli_seed"] is not None and not integer(context["requested_cli_seed"])
++            or not integer(context["resolved_cli_seed"])):
++        return False
++    producer = context["producer"]
++    if (type(producer) is not dict or set(producer) != {"program", "engine_version", "executable_sha256"}
++            or producer["program"] != "alimask" or producer["engine_version"] != "3.4"
++            or producer["executable_sha256"] is not None and not digest(producer["executable_sha256"])):
++        return False
++    profile, config = context["profile"], context["effective_pb_config"]
++    if profile is not None and (type(profile) is not dict or set(profile) != {"name", "source_sha256s"}
++            or type(profile["name"]) is not str or not profile["name"]
++            or type(profile["source_sha256s"]) is not dict
++            or set(profile["source_sha256s"]) != set(ALIMASK_PROFILE["source_sha256s"])
++            or any(not digest(value) for value in profile["source_sha256s"].values())):
++        return False
++    if config is not None and (type(config) is not dict or set(config) != set(_PB_CONFIG)
++            or any(type(config[k]) is not bool for k in ("ignore_rf", "allow_samp"))
++            or any(not integer(config[k]) for k in ("sampthresh", "nsamp", "maxfrag", "seed"))
++            or any(not finite(config[k]) or not 0 <= config[k] <= 1 for k in ("fragthresh", "symfrac"))
++            or any(type(config[k]) is not str for k in ("rng", "sampler"))):
++        return False
++    return True
++
++
++def alimask_map_context_valid(context, *, settings, source_occurrence=None, operation=None, alignment=None):
++    """Validate retained identities/settings; never resolve a source or profile."""
++    if not alimask_map_context_shape(context) or type(settings) is not dict:
++        return False
++    if operation is not None and (operation.get("program") != "alimask" or operation.get("engine_version") != "3.4"):
++        return False
++    if source_occurrence is not None and (not _occurrence_valid(source_occurrence)
++            or source_occurrence["direction"] != "input" or source_occurrence["role"] != "alignment"
++            or source_occurrence["ordinal"] != 0
++            or context["source_occurrence_id"] != source_occurrence["occurrence_id"]
++            or context["source_sha256"] != source_occurrence["sha256"]):
++        return False
++    if alignment is not None and (context["source_occurrence_id"] != alignment.get("occurrence_id")
++            or alignment.get("record_key") != context["source_occurrence_id"] + "#alignment/0"
++            or alignment.get("engine_version") != "3.4"):
++        return False
++    resolved = settings.get("--seed", 42)
++    if (type(resolved) is not int or context["resolved_cli_seed"] != resolved
++            or context["requested_cli_seed"] is not None and context["requested_cli_seed"] != resolved
++            or context["requested_cli_seed"] is None and resolved != 42):
++        return False
++    if context["binding"] == "unavailable":
++        return context["profile"] is None and context["effective_pb_config"] is None
++    return (context["producer"]["executable_sha256"] == ALIMASK_PROFILE_EXECUTABLE_SHA256
++        and context["profile"] == ALIMASK_PROFILE
++        and context["effective_pb_config"] == {**_PB_CONFIG, "ignore_rf": not bool(settings.get("--hand"))})
+ 
+ 
+ def issue(code, *, record_key=None, occurrence_id=None, field=None, stage="extraction", **details):
+@@ -195,6 +273,12 @@
+                              "events": deepcopy(weight_events)}
+             if weights and not valid:
+                 local.append(issue("weight_invalid", record_key=row["record_key"], occurrence_id=oid))
++        weight_events = [event for event in events if event["kind"] == "GS" and event["tag"] == "WT"]
++        malformed_weight = any(event["kind"] == "malformed_annotation" and
++            re.match(r"#=GS\s+\S+\s+WT(?:\s|$)", event["raw"]) for event in events)
++        if malformed_weight or weight_events and (len(weight_events) != len(record["rows"])
++                or any(row["weight"]["state"] != "present" for row in record["rows"])):
++            local.append(issue("weight_invalid", record_key=key, occurrence_id=oid))
+         record["issues"] = local
+         sheet["issues"].extend(local)
+     complete = encoding_complete and occurrence["completeness"] == "complete" and all(valid_alignment(r) and not r["issues"] for r in records)
+@@ -381,7 +465,8 @@
+             sheet["issues"].append(issue("association_incomplete", record_key=summary["record_key"], field="summary"))
+ 
+ 
+-def populate_hmmer_alignment_preparation_sheet(*, operation, inputs, outputs, model_extraction=None):
++def populate_hmmer_alignment_preparation_sheet(*, operation, inputs, outputs, model_extraction=None,
++                                               map_reconstruction_context=None):
+     """Read supplied bytes only; failures preserve complete prefix records.
+ 
+     Operation settings use native flag spellings. The selected summary artifact
+@@ -439,6 +524,19 @@
+         sheet["issues"].append(issue("role_missing" if not source_payloads else "role_cardinality_invalid", field="input.alignment", count=len(source_payloads)))
+     for payload in source_payloads:
+         sheet["input_records"].extend(_alignment_records(payload, settings.get("--informat"), operation, sheet))
++    if map_reconstruction_context is not None:
++        first = next((r for r in sheet["input_records"] if len(source_payloads) == 1 and
++            r["record_key"] == source_payloads[0]["occurrence"]["occurrence_id"] + "#alignment/0"), None)
++        occurrence = source_payloads[0]["occurrence"] if len(source_payloads) == 1 else None
++        if first is not None and operation["program"] == "alimask":
++            first["map_reconstruction_context"] = deepcopy(map_reconstruction_context)
++        if not alimask_map_context_valid(map_reconstruction_context, settings=settings,
++                source_occurrence=occurrence, operation=operation, alignment=first):
++            problem = issue("map_context_invalid", record_key=first["record_key"] if first else None,
++                            occurrence_id=occurrence["occurrence_id"] if occurrence else None)
++            sheet["issues"].append(problem)
++            if first is not None:
++                first["issues"].append(problem)
+     output_role = "resaved_alignment" if operation["program"] == "hmmbuild" else "masked_alignment"
+     transformed = payloads["output"].get(output_role, [])
+     if len(transformed) > 1:

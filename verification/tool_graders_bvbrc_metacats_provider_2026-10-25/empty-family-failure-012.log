@@ -1,0 +1,18 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+____ test_empty_unfiltered_native_table_alone_does_not_establish_zero_tests ____
+
+    def test_empty_unfiltered_native_table_alone_does_not_establish_zero_tests():
+        sheet, _, _ = retained_sheet('all_missing')
+        request = native_family_request(sheet)
+        outcome = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})['results'][0]
+>       assert outcome['status'] == 'partial' and outcome['value'] is None
+E       AssertionError: assert ('ok' == 'partial'
+E         
+E         - partial
+E         + ok)
+
+tests/test_bvbrc_metacats_provider.py:355: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_metacats_provider.py::test_empty_unfiltered_native_table_alone_does_not_establish_zero_tests
+1 failed, 1 passed in 1.02s

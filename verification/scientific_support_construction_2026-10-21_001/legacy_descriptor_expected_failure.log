@@ -1,0 +1,12 @@
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+_____ test_descriptor_identity_drift_is_rejected_by_known_factory[old_v1] ______
+tests/test_scientific_process_reconstruction.py:232: in test_descriptor_identity_drift_is_rejected_by_known_factory
+    assert error.value.failure["code"] == "identity_conflict"
+E   AssertionError: assert 'unavailable_binding' == 'identity_conflict'
+E     
+E     - identity_conflict
+E     + unavailable_binding
+=========================== short test summary info ============================
+FAILED tests/test_scientific_process_reconstruction.py::test_descriptor_identity_drift_is_rejected_by_known_factory[old_v1]
+1 failed, 3 passed in 12.40s

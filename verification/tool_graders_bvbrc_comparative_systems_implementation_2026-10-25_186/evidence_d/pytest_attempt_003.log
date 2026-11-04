@@ -1,0 +1,44 @@
+.....................................F........F...                       [100%]
+=================================== FAILURES ===================================
+__________ test_reviewed_saved_example_is_accepted_without_rewriting ___________
+
+    def test_reviewed_saved_example_is_accepted_without_rewriting():
+        value = json.loads((FIXTURES / "supplied_record_sets.json").read_text())["value"]
+>       assert validate_supplied_record_sets(value) == value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_comparative_systems_data_inputs.py:387: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_comparative_systems_data_contracts.py:267: in validate_supplied_record_sets
+    _require(cell["origin"] == ("derived_supplied_records" if cell["state"] == "available" else "unavailable"),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'count_origin_mismatch'
+
+    def _require(condition, code):
+        if not condition:
+>           raise ValueError("comparative_systems_data_" + code)
+E           ValueError: comparative_systems_data_count_origin_mismatch
+
+gene_annotation_episode/bvbrc_comparative_systems_data_contracts.py:29: ValueError
+___________ test_saved_complete_label_cannot_override_page_evidence ____________
+
+    def test_saved_complete_label_cannot_override_page_evidence():
+        value = _extract([_page(DOCS[:2], total=5)])
+        _set(value)["page_coverage"] = "complete"
+        with pytest.raises(ValueError, match="complete_coverage_total_mismatch"):
+            validate_supplied_record_sets(value)
+        pages = [_page(DOCS[:2], total=5), _page(DOCS[2:], offset=2, total=5, source="second")]
+        value = _extract(pages)
+        _set(value)["snapshot_consistency"] = "single_response"
+        with pytest.raises(ValueError, match="single_response_identity_mismatch"):
+            validate_supplied_record_sets(value)
+>       assert record["population"]["completeness"] == "unknown"
+               ^^^^^^
+E       NameError: name 'record' is not defined
+
+tests/test_bvbrc_comparative_systems_data_inputs.py:454: NameError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_data_inputs.py::test_reviewed_saved_example_is_accepted_without_rewriting
+FAILED tests/test_bvbrc_comparative_systems_data_inputs.py::test_saved_complete_label_cannot_override_page_evidence
+2 failed, 48 passed in 5.29s

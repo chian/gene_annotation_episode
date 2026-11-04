@@ -1,0 +1,158 @@
+{
+  "written_utc": "2026-10-26T05:31:46.637853+00:00",
+  "status": "implemented_subset_verified_full_goal_incomplete",
+  "previous_visible_goal_turn": "no progress in implementation: supplied requested revised goal text",
+  "this_goal_turn": "progress: terminal checks, independent actual-record audit and additive coverage/handoff records",
+  "current_record_version": "literature_context_record_v1",
+  "current_joined_terminal_exit": 0,
+  "current_joined_terminal_result": "308 passed in 183.22s",
+  "A105_regression_terminal_exit": 0,
+  "A105_regression_terminal_result": "17 passed in 35.99s",
+  "reports": [
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/FINAL_CURRENT_JOINED_012.xml",
+      "scope": "Final current context reader/calculator/storage/integration, reaction integration and both prompt boundaries",
+      "tests": 308,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 183.204,
+      "groups": {
+        "tests.test_literature_context_inputs": 161,
+        "tests.test_literature_context_calculations": 54,
+        "tests.test_literature_context_storage": 57,
+        "tests.test_literature_context_integration": 10,
+        "tests.test_literature_reaction_integration": 7,
+        "tests.test_literature_experimental_prompt_delivery": 6,
+        "tests.test_literature_reference_parent_prompt": 13
+      },
+      "sha256": "05633ca249e48ba7802ba1d58a5854dc9275c041e3d341836a475af085cf4df9"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/A105_REGRESSION_012.xml",
+      "scope": "Existing A105 assay/quantity/binding integrations after common population-route changes",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 35.974,
+      "groups": {
+        "tests.test_literature_assay_integration": 11,
+        "tests.test_literature_quantity_integration": 3,
+        "tests.test_literature_binding_integration": 3
+      },
+      "sha256": "3ceaa7c0ed5dabc87c1d0bf8e8f909fdc9d4aac3fcd55a76ada5889c32067d08"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/CONTEXT_INTEGRATION_012.xml",
+      "scope": "Initial development run: three test-expectation failures, superseded by final current joined checks",
+      "tests": 8,
+      "failures": 3,
+      "errors": 0,
+      "seconds": 49.864,
+      "groups": {
+        "tests.test_literature_context_integration": 8
+      },
+      "sha256": "1afb3756aa6f851cb9da78952802f3f8a3673f26f2489a9b8b4a84f8f567750a"
+    }
+  ],
+  "current_source_sha256": {
+    "gene_annotation_episode/literature_context_inputs.py": "f3a1a609cbd18cd9c369c33311723ea1c1f907333e21ce10f5c5f9d5c19c392d",
+    "gene_annotation_episode/literature_context_calculations.py": "8a3e0df068ef314b20ce37357359590aaff816ecfcd95cfc13292779f19b7f0f",
+    "gene_annotation_episode/literature_context_storage.py": "f8a4de4be1ab5721563082a2c8b2a2cc3932993e5c3f024ed91b1d5b4d40c59b",
+    "gene_annotation_episode/literature_context_prompt.py": "4ceb94c783f52f08f0188850d308cad508f0323d7b2791b5517d7de7fc1b4589",
+    "gene_annotation_episode/literature_episodes.py": "640ce05c7f690772f079dd967b834c88d31dd9548e337687e38e981be200d321",
+    "gene_annotation_episode/episode_services.py": "7e63dd19c98820d1c8bda6316a12d5dc35298278e91226d7a777cad7b4408fcd",
+    "gene_annotation_episode/literature_experimental_prompt.py": "34ed423a738a97cac4e94bdb82b9d5276351e4083b4c8937a59e83e934b719bf",
+    "tests/test_literature_context_inputs.py": "f276774a001e255a13f9f4d18304466e047c17e48c9ebd2e1099cb4d7f83266f",
+    "tests/test_literature_context_calculations.py": "57df5be1808b7a4429815ea326148d3866a436f1aaa1abd486c96072a6893e6c",
+    "tests/test_literature_context_storage.py": "58f211aefba6140a0106bc47a063fbbdb81e21bf70e794df3c6a8642bed2a4fa",
+    "tests/test_literature_context_integration.py": "59d9b0ce473fea2412dcb2867e4b32ba0a915816ba5a3b91d2e864242a248987",
+    "verification/literature_reference_evidence_2026-10-25_001/run_context_examples.py": "4771dd726b8108284756c395eb3ded5a4694252d5584fbfe5b399e0dd949fb17",
+    "verification/literature_reference_evidence_2026-10-25_001/audit_context_parent_012.py": "ee28a775b7c6aefde26b25aec1059fa54bf65910a2100c85b2b6811383d14bdb"
+  },
+  "record_sha256": {
+    "A108_REFERENCE_CONTEXT_SHEET_001.md": "395198b9e478d4ec614613f38bdc2a6e09caa49c85f4ea23e44880c205958ef7",
+    "CONTEXT_INTERFACES_001.md": "40c0050bbef7b53be35ce1aadd7d979791fd9e9c87ed370df318ff5c857b454f",
+    "CONTEXT_CONSUMER_CLARIFICATIONS_002.md": "5ee62765de71c2b260bd76d022d49899ed18cc09bc820bdc4beea398833160a7",
+    "IMPLEMENTATION_COVERAGE_012.md": "e5f2e7e8af99a27d52e01568a7f879fe47815b40c999553645b33a61c803ec69",
+    "PROGRESS_012.md": "0c506c8675b21076c494e32d60fa7a3a30be9b21e580c04bb79fdb7bf1422c08",
+    "PARENT_CHECK_012.json": "483a8f7da2a79a37597f1efc83b0ae4183e03da9e557526b0328e2eefd6ab982",
+    "primary_huc_compatibility/ACQUISITION_001.json": "eb4a264e214ab09717549101794376c34d365bbbf37fd0215dbb7a5917446410",
+    "primary_huc_compatibility/NATIVE_SHEETS_A_C_001.json": "90c1fe75d9abe2b849942c38bacd8c453a30ba7d15a71f98bc2815ec5cde5065",
+    "primary_huc_compatibility/PARENT_RESET_001.json": "0cbeee0ce27ad5e5aa549fe24c435dc871f8278d549f803245d514d38adf039b",
+    "primary_huc_compatibility/PARENT_SOURCE_CHECK_001.json": "c6cf239558d577baaa938c062986eb45cc57e498ece534b6d537267f307dc3fa",
+    "context_examples_001/EXAMPLES_RECEIPT.json": "c106caf834c2e50bc15f83d6fd61c76067ff0635b6729eeaf2bc788280e7193c",
+    "context_examples_001/REOPEN_RECEIPT.json": "c9744291de81c73f0193b303effd20c034a9513c5a8eeeb74a6f11f36765daf2",
+    "context_examples_001/VERIFICATION_SUMMARY.json": "e5ba7f953eb9daec3c8646487eb409e6281fe91778e7dd3b1b9a3998585eb38e",
+    "LIVE_STATUS_009.json": "6f34267528cf430832593dd239125cbecde1032fed3ff06d61192deaec62c3da",
+    "LIVE_STATUS_009_CORRECTION_001.json": "74aa32658f44de420a24135fe6cadb07cc734f883fd3c70551943030964f214f"
+  },
+  "controlled_examples": {
+    "original_source_availability_cases": 1,
+    "synthetic_cases": 3,
+    "requested_cells_each": 7,
+    "actual_completed_actions_each": 3,
+    "actual_local_observations_each": 3,
+    "selected_operations_each": 1,
+    "admitted_receipts_each": 1,
+    "bookkeeping_credit_each": 0,
+    "fresh_process_reopen": true,
+    "disabled_reader_calculator_identity_aliases": 57,
+    "original_input_bytes_allowed_in_replay": false,
+    "SQL_query_only": true,
+    "actual_model_interpretation": false,
+    "live_host_recovery": false
+  },
+  "source_identity": {
+    "historical_runtime_test_runner_files": 465,
+    "current_files_matching_at_independent_audit": 462,
+    "changed_external_tool_files": {
+      "gene_annotation_episode/infernal_preparation_artifacts.py": {
+        "recorded": "df626f8fa101188278aca843064a005ccc6373cffcd090a22b32dd797c187545",
+        "current": "0165247ca084eccf244b1b73a804165983a31a4078859e3a60536bcad4785c10"
+      },
+      "gene_annotation_episode/infernal_preparation_calculations.py": {
+        "recorded": "8ea978a39565f0201b0231e3fd2169872c6185b8b64e77117c427e9905739ee7",
+        "current": "8ed80121d3b149ff3eab28520e41af35acba1800d2e002c8f4dedcdd689a66d1"
+      },
+      "gene_annotation_episode/infernal_preparation_statistics.py": {
+        "recorded": "e7c6c133e3070ef819f45b5dd62bc8c945f2b7243a35cd1400058c09421da5de",
+        "current": "16f5fe3ac612a42235d759f180b43eaf2c1a9c45fc958eb63f7ef166bec210b0"
+      }
+    },
+    "literature_modules_and_fixture_tests_match_historical_run": true,
+    "whole_current_tree_exactly_matches_historical_run": false,
+    "old_receipts_rewritten": false
+  },
+  "development_failures": {
+    "initial_integration": "Three failures: two nominal-float equality assertions and one question-kind forgery assertion that did not change the input; fixed tests, final ten integrations pass.",
+    "initial_independent_audit": "Stopped before SQL inspection on three external Infernal source hash differences; final checker reports all differences and preserves the original manifests."
+  },
+  "worker_reports_not_additive": {
+    "reader": "161 passed; wider overlapping reader/reaction/assay group reported 367 passed",
+    "calculator": "54 passed; overlapping context/reaction group reported 123 passed",
+    "storage": "57 final storage cases included in current joined run; earlier targeted reports do not add to final counts"
+  },
+  "live_run": {
+    "original_pid": 1169747,
+    "original_execution_session": 86783,
+    "confirmed_live": true,
+    "latest_record": "LIVE_STATUS_009.json",
+    "filename_correction": "LIVE_STATUS_009_CORRECTION_001.json",
+    "delivery_audit": "live_record_reconstruction_001/snapshot_007/receipt.json",
+    "typed_attempts_at_latest_readonly_status": 5,
+    "new_context_modules_in_original_pin": false,
+    "restarted_or_repriced": false
+  },
+  "limits": [
+    "No whole axis or full objective complete.",
+    "Retained structured reader is not an arbitrary native prose/plot/local-exposure parser.",
+    "Original Huc purified assays do not establish measured native organism/sample coverage or capability.",
+    "Logical model bounds and conditional sampling enclosures are distinct; source calibration and dependent uncertainty remain unfinished.",
+    "No configured-model context inference or live host recovery is established by controlled examples.",
+    "Positive original organism/sample contrasts and broader A108 traits remain unfinished.",
+    "Other A105/A106/A111/A110 and experimental partner work remains in IMPLEMENTATION_COVERAGE_012.md.",
+    "The 25 broader reference/schema regressions diagnosed in CHECKS_010 are not claimed repaired.",
+    "A101, target correspondence and W05 aggregation remain separate."
+  ],
+  "no_test_count_summing": true
+}

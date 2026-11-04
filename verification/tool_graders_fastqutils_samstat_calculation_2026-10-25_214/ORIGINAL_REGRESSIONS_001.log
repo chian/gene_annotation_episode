@@ -1,0 +1,23 @@
+...............................................................F........ [ 45%]
+.........................................F.............................. [ 90%]
+................                                                         [100%]
+=================================== FAILURES ===================================
+______________ test_frozen_missing_partial_cardinality_oracles[5] ______________
+tests/test_bvbrc_fastqutils_projection.py:50: in test_frozen_missing_partial_cardinality_oracles
+    assert result["facts"]["answer"] == case["expected"]
+E   AssertionError: assert {'selection':...': False, ...} == {'selection':...': False, ...}
+E     
+E     Omitting 6 identical items, use -vv to show
+E     Differing items:
+E     {'diagnostic_codes': ['selection_cardinality_mismatch', 'missing_artifact']} != {'diagnostic_codes': ['selection_cardinality_mismatch']}
+E     Use -v to get more diff
+__________ test_module_facade_pins_exact_scientific_dependency_bytes ___________
+tests/test_bvbrc_fastqutils_provider.py:216: in test_module_facade_pins_exact_scientific_dependency_bytes
+    assert len(provider._DEPENDENCIES) == 27 and provider.implementation_sha256() == expected.hexdigest()
+E   AssertionError: assert (32 == 27)
+E    +  where 32 = len(('bvbrc_fastqutils_contracts.py', 'bvbrc_fastqutils_identity.py', 'bvbrc_fastqutils_metric_specs.py', 'bvbrc_fastqutils_cutadapt_specs.py', 'bvbrc_fastqutils_cutadapt_reader.py', 'bvbrc_fastqutils_legacy_v2_schemas.json', ...))
+E    +    where ('bvbrc_fastqutils_contracts.py', 'bvbrc_fastqutils_identity.py', 'bvbrc_fastqutils_metric_specs.py', 'bvbrc_fastqutils_cutadapt_specs.py', 'bvbrc_fastqutils_cutadapt_reader.py', 'bvbrc_fastqutils_legacy_v2_schemas.json', ...) = provider._DEPENDENCIES
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_fastqutils_projection.py::test_frozen_missing_partial_cardinality_oracles[5]
+FAILED tests/test_bvbrc_fastqutils_provider.py::test_module_facade_pins_exact_scientific_dependency_bytes
+2 failed, 158 passed in 82.36s (0:01:22)

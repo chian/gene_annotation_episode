@@ -1,0 +1,416 @@
+[
+  {
+    "name": "populated_page",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_pages",
+    "facts": [
+      {
+        "source_ref": "fixture:result",
+        "collection": "genome_feature",
+        "input_source_refs": [],
+        "metadata_source_refs": [],
+        "status": "complete",
+        "mode": "page",
+        "requested_offset": 0,
+        "requested_limit": 2,
+        "returned_row_count": 2,
+        "valid_row_count": 2,
+        "invalid_row_count": 0,
+        "reported_total": 2,
+        "count_exactness": "exact",
+        "response_complete": true,
+        "population_coverage": "complete",
+        "next_offset": null,
+        "population_ref": "fixture:result#population",
+        "unavailable_reason": null
+      }
+    ],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_pages",
+      "facts": [
+        {
+          "source_ref": "fixture:result",
+          "collection": "genome_feature",
+          "input_source_refs": [],
+          "metadata_source_refs": [],
+          "status": "complete",
+          "mode": "page",
+          "requested_offset": 0,
+          "requested_limit": 2,
+          "returned_row_count": 2,
+          "valid_row_count": 2,
+          "invalid_row_count": 0,
+          "reported_total": 2,
+          "count_exactness": "exact",
+          "response_complete": true,
+          "population_coverage": "complete",
+          "next_offset": null,
+          "population_ref": "fixture:result#population",
+          "unavailable_reason": null
+        }
+      ],
+      "cells": [],
+      "unavailable": []
+    }
+  },
+  {
+    "name": "successful_zero_page",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_pages",
+    "facts": [
+      {
+        "source_ref": "fixture:result",
+        "collection": "genome_feature",
+        "input_source_refs": [],
+        "metadata_source_refs": [],
+        "status": "complete",
+        "mode": "page",
+        "requested_offset": 0,
+        "requested_limit": 2,
+        "returned_row_count": 0,
+        "valid_row_count": 0,
+        "invalid_row_count": 0,
+        "reported_total": 0,
+        "count_exactness": "exact",
+        "response_complete": true,
+        "population_coverage": "complete",
+        "next_offset": null,
+        "population_ref": "fixture:result#population",
+        "unavailable_reason": null
+      }
+    ],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_pages",
+      "facts": [
+        {
+          "source_ref": "fixture:result",
+          "collection": "genome_feature",
+          "input_source_refs": [],
+          "metadata_source_refs": [],
+          "status": "complete",
+          "mode": "page",
+          "requested_offset": 0,
+          "requested_limit": 2,
+          "returned_row_count": 0,
+          "valid_row_count": 0,
+          "invalid_row_count": 0,
+          "reported_total": 0,
+          "count_exactness": "exact",
+          "response_complete": true,
+          "population_coverage": "complete",
+          "next_offset": null,
+          "population_ref": "fixture:result#population",
+          "unavailable_reason": null
+        }
+      ],
+      "cells": [],
+      "unavailable": []
+    }
+  },
+  {
+    "name": "partial_page_with_retained_counts",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_pages",
+    "facts": [
+      {
+        "source_ref": "fixture:result",
+        "collection": "genome_feature",
+        "input_source_refs": [],
+        "metadata_source_refs": [],
+        "status": "partial",
+        "mode": "page",
+        "requested_offset": 0,
+        "requested_limit": 2,
+        "returned_row_count": 2,
+        "valid_row_count": 1,
+        "invalid_row_count": 1,
+        "reported_total": 2,
+        "count_exactness": "exact",
+        "response_complete": false,
+        "population_coverage": "unknown",
+        "next_offset": null,
+        "population_ref": "fixture:result#population",
+        "unavailable_reason": "native_value_invalid"
+      }
+    ],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_pages",
+      "facts": [
+        {
+          "source_ref": "fixture:result",
+          "collection": "genome_feature",
+          "input_source_refs": [],
+          "metadata_source_refs": [],
+          "status": "partial",
+          "mode": "page",
+          "requested_offset": 0,
+          "requested_limit": 2,
+          "returned_row_count": 2,
+          "valid_row_count": 1,
+          "invalid_row_count": 1,
+          "reported_total": 2,
+          "count_exactness": "exact",
+          "response_complete": false,
+          "population_coverage": "unknown",
+          "next_offset": null,
+          "population_ref": "fixture:result#population",
+          "unavailable_reason": "native_value_invalid"
+        }
+      ],
+      "cells": [],
+      "unavailable": []
+    }
+  },
+  {
+    "name": "failed_no_sheet_page",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_pages",
+    "facts": [
+      {
+        "source_ref": "fixture:result",
+        "collection": "genome_feature",
+        "input_source_refs": [],
+        "metadata_source_refs": [],
+        "status": "unavailable",
+        "mode": "page",
+        "requested_offset": 7,
+        "requested_limit": 2,
+        "returned_row_count": null,
+        "valid_row_count": null,
+        "invalid_row_count": null,
+        "reported_total": null,
+        "count_exactness": "unknown",
+        "response_complete": false,
+        "population_coverage": "unknown",
+        "next_offset": null,
+        "population_ref": "fixture:result#population",
+        "unavailable_reason": "transport_incomplete"
+      }
+    ],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_pages",
+      "facts": [
+        {
+          "source_ref": "fixture:result",
+          "collection": "genome_feature",
+          "input_source_refs": [],
+          "metadata_source_refs": [],
+          "status": "unavailable",
+          "mode": "page",
+          "requested_offset": 7,
+          "requested_limit": 2,
+          "returned_row_count": null,
+          "valid_row_count": null,
+          "invalid_row_count": null,
+          "reported_total": null,
+          "count_exactness": "unknown",
+          "response_complete": false,
+          "population_coverage": "unknown",
+          "next_offset": null,
+          "population_ref": "fixture:result#population",
+          "unavailable_reason": "transport_incomplete"
+        }
+      ],
+      "cells": [],
+      "unavailable": []
+    }
+  },
+  {
+    "name": "native_missing_term_bucket",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_facets",
+    "facts": [
+      {
+        "source_ref": "fixture:result",
+        "collection": "genome_feature",
+        "input_source_refs": [],
+        "metadata_source_refs": [],
+        "status": "complete",
+        "population_ref": "fixture:result#population",
+        "field": "annotation",
+        "bucket_ref": "fixture:result#bucket/2",
+        "is_missing_bucket": true,
+        "term_ref": "fixture:result#term/2",
+        "count": 0,
+        "denominator": 2,
+        "fraction": 0.0,
+        "fraction_unavailable_reason": null,
+        "requested_offset": 0,
+        "requested_limit": 10,
+        "requested_min_count": 0,
+        "bucket_window_status": "exhausted_window"
+      }
+    ],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_facets",
+      "facts": [
+        {
+          "source_ref": "fixture:result",
+          "collection": "genome_feature",
+          "input_source_refs": [],
+          "metadata_source_refs": [],
+          "status": "complete",
+          "population_ref": "fixture:result#population",
+          "field": "annotation",
+          "bucket_ref": "fixture:result#bucket/2",
+          "is_missing_bucket": true,
+          "term_ref": "fixture:result#term/2",
+          "count": 0,
+          "denominator": 2,
+          "fraction": 0.0,
+          "fraction_unavailable_reason": null,
+          "requested_offset": 0,
+          "requested_limit": 10,
+          "requested_min_count": 0,
+          "bucket_window_status": "exhausted_window"
+        }
+      ],
+      "cells": [],
+      "unavailable": []
+    }
+  },
+  {
+    "name": "failed_no_sheet_facet_query",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_facets",
+    "facts": [
+      {
+        "source_ref": "fixture:result",
+        "collection": "genome_feature",
+        "input_source_refs": [],
+        "metadata_source_refs": [],
+        "status": "unavailable",
+        "population_ref": "fixture:result#population",
+        "field": "annotation",
+        "bucket_ref": null,
+        "is_missing_bucket": null,
+        "term_ref": null,
+        "count": null,
+        "denominator": null,
+        "fraction": null,
+        "fraction_unavailable_reason": "native_format_unverified",
+        "requested_offset": 0,
+        "requested_limit": 10,
+        "requested_min_count": 0,
+        "bucket_window_status": "invalid"
+      }
+    ],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_facets",
+      "facts": [
+        {
+          "source_ref": "fixture:result",
+          "collection": "genome_feature",
+          "input_source_refs": [],
+          "metadata_source_refs": [],
+          "status": "unavailable",
+          "population_ref": "fixture:result#population",
+          "field": "annotation",
+          "bucket_ref": null,
+          "is_missing_bucket": null,
+          "term_ref": null,
+          "count": null,
+          "denominator": null,
+          "fraction": null,
+          "fraction_unavailable_reason": "native_format_unverified",
+          "requested_offset": 0,
+          "requested_limit": 10,
+          "requested_min_count": 0,
+          "bucket_window_status": "invalid"
+        }
+      ],
+      "cells": [],
+      "unavailable": []
+    }
+  },
+  {
+    "name": "successful_empty_facet_array",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_facets",
+    "facts": [],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_facets",
+      "facts": [],
+      "cells": [],
+      "unavailable": []
+    }
+  },
+  {
+    "name": "acquired_invalid_bucket",
+    "evidence_kind": "synthetic_schema_fixture",
+    "fact_source": "execution_bvbrc_facets",
+    "facts": [
+      {
+        "source_ref": "fixture:result",
+        "collection": "genome_feature",
+        "input_source_refs": [],
+        "metadata_source_refs": [],
+        "status": "partial",
+        "population_ref": "fixture:result#population",
+        "field": "annotation",
+        "bucket_ref": "fixture:result#bucket/2",
+        "is_missing_bucket": null,
+        "term_ref": null,
+        "count": null,
+        "denominator": 2,
+        "fraction": null,
+        "fraction_unavailable_reason": "native_value_invalid",
+        "requested_offset": 0,
+        "requested_limit": 10,
+        "requested_min_count": 0,
+        "bucket_window_status": "invalid"
+      }
+    ],
+    "embedded_materialization": {
+      "version": "bvbrc_received_values_v1",
+      "admission_key": "fixture:admission",
+      "form_field": "facts",
+      "fact_source": "execution_bvbrc_facets",
+      "facts": [
+        {
+          "source_ref": "fixture:result",
+          "collection": "genome_feature",
+          "input_source_refs": [],
+          "metadata_source_refs": [],
+          "status": "partial",
+          "population_ref": "fixture:result#population",
+          "field": "annotation",
+          "bucket_ref": "fixture:result#bucket/2",
+          "is_missing_bucket": null,
+          "term_ref": null,
+          "count": null,
+          "denominator": 2,
+          "fraction": null,
+          "fraction_unavailable_reason": "native_value_invalid",
+          "requested_offset": 0,
+          "requested_limit": 10,
+          "requested_min_count": 0,
+          "bucket_window_status": "invalid"
+        }
+      ],
+      "cells": [],
+      "unavailable": []
+    }
+  }
+]

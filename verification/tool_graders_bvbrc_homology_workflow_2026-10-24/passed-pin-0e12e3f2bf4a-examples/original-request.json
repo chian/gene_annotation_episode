@@ -1,0 +1,50 @@
+{
+  "definition_inputs": [],
+  "effect_contract": "selected_api_effects_v1",
+  "input_bindings": [
+    {
+      "binding_id": "query-input",
+      "content": null,
+      "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+      "kind": "inline_parameter",
+      "link_evidence": null,
+      "members": [
+        {
+          "evidence": {
+            "content": {
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+              "byte_count": 681,
+              "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+              "source_ref": "source_d78d274d4d0faac91d82eb4d"
+            },
+            "pointer": "/members/0"
+          },
+          "length": 10,
+          "member_id": "supplied-query-0",
+          "member_pointer": "/members/0",
+          "molecule": "protein",
+          "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+        }
+      ],
+      "parameter_pointer": "/input_fasta_data",
+      "workspace_path": null
+    }
+  ],
+  "parameters": {
+    "blast_max_hits": 3,
+    "blast_program": "blastp",
+    "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+    "db_source": "precomputed_database",
+    "db_type": "faa",
+    "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+    "input_source": "fasta_data",
+    "input_type": "aa",
+    "output_file": "selected",
+    "output_path": "/synthetic/work/output"
+  },
+  "required_application_id": "Homology",
+  "start_parameters": {},
+  "version": "bvbrc_appservice_request_v1",
+  "workspace_targets": []
+}

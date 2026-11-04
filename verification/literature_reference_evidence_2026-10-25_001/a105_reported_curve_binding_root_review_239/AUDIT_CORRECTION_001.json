@@ -1,0 +1,20 @@
+{
+  "observed_unix": 1793168048.1774976,
+  "scope": "root audit authoring error; controlled closed fixture only",
+  "first_attempt": "SQLite mode=ro without immutable created two WAL coordination files while counting a closed checkpointed fixture; audit detected the changed file roster and failed",
+  "original_recorded_files_changed": false,
+  "own_created_sidecars": [
+    {
+      "path": "state.sqlite3-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "state.sqlite3-shm",
+      "bytes": 32768,
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb"
+    }
+  ],
+  "correction": "remove only these newly root-created sidecars, verify original hash set, then use immutable=1 only for these closed checkpointed fixtures",
+  "live_configured_run_mode": "unchanged mode=ro without immutable; WAL must remain visible"
+}

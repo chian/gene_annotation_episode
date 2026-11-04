@@ -1,0 +1,55 @@
+F.F..................................................................... [ 83%]
+..............                                                           [100%]
+=================================== FAILURES ===================================
+_______ test_selected_library_entry_reaches_only_bound_local_commission ________
+source_snapshot/tests/test_atac_differential_execution_integration.py:61: in test_selected_library_entry_reaches_only_bound_local_commission
+    assert OPERATION not in {row['name'] for row in selected.tools.catalog()}
+                             ^^^^^^^^^^^
+E   TypeError: string indices must be integers, not 'str'
+___________ test_atac_target_cannot_use_generic_file_window_results ____________
+dependencies/referencing/_core.py:276: in pointer
+    contents = contents[segment]  # type: ignore[reportUnknownArgumentType]
+               ^^^^^^^^^^^^^^^^^
+E   KeyError: '$defs'
+
+The above exception was the direct cause of the following exception:
+dependencies/jsonschema/validators.py:462: in _validate_reference
+    resolved = self._resolver.lookup(ref)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+dependencies/referencing/_core.py:690: in lookup
+    return retrieved.value.pointer(pointer=fragment, resolver=resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+dependencies/referencing/_core.py:279: in pointer
+    raise error from lookup_error
+E   referencing.exceptions.PointerToNowhere: '/$defs/ResultSelector' does not exist within {'type': 'object', 'properties': {'version': {'const': 'execution_results_assignment_v1'}, 'handoff_ref': {'type': 'string', 'minLength': 1}, 'selector': {'type': 'object', 'allOf': [{'if': {'required': ['version'], 'properties': {'version': {'const': 'atac_differential_result_selector_v1'}}}, 'then': {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': {'ResultSelector': {'type': 'object', 'properties': {'version': {'const': 'atac_differential_result_selector_v1'}, 'mode': {'enum': ['native_result', 'saved_sheet_recalculation']}, 'comparison_key': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'intervals': {'type': 'array', 'items': {'$ref': '#/$defs/Interval'}}, 'parameters': {'$ref': '#/$defs/Parameters'}, 'projection': {'type': 'object', 'properties': {'kind': {'enum': ['summary', 'native_peak_rows', 'native_differential_rows', 'interval_components', 'derived_regions']}, 'row_window': {'anyOf': [{'$ref': '#/$defs/Window'}, {'type': 'null'}]}, 'run_keys': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'uniqueItems': True}, 'categories': {'type': 'array', 'items': {'enum': ['condition1', 'condition2', 'common']}, 'uniqueItems': True}}, 'required': ['kind', 'row_window', 'run_keys', 'categories'], 'additionalProperties': False}, 'saved_sheet_bundle': {'anyOf': [{'$ref': '#/$defs/SavedSheetBundle'}, {'type': 'null'}]}}, 'required': ['version', 'mode', 'comparison_key', 'intervals', 'parameters', 'projection', 'saved_sheet_bundle'], 'additionalProperties': False}, 'SavedSheetBundle': {'type': 'object', 'properties': {'sheet': {'$ref': '#/$defs/NativeFileIdentity'}, 'tables': {'type': 'array', 'items': {'type': 'object', 'properties': {'track_key': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'file': {'$ref': '#/$defs/NativeFileIdentity'}}, 'required': ['track_key', 'file'], 'additionalProperties': False}}}, 'required': ['sheet', 'tables'], 'additionalProperties': False}, 'NativeFileIdentity': {'type': 'object', 'properties': {'artifact_ref': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'size_bytes': {'type': 'integer', 'minimum': 0}, 'format': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}}, 'required': ['artifact_ref', 'sha256', 'size_bytes', 'format'], 'additionalProperties': False}, 'Window': {'type': 'object', 'properties': {'offset': {'type': 'integer', 'minimum': 0}, 'limit': {'type': 'integer', 'minimum': 1}}, 'required': ['offset', 'limit'], 'additionalProperties': False}, 'Parameters': {'type': 'object', 'properties': {'pseudocount': {'type': 'number', 'exclusiveMinimum': 0}, 'cutoff_log10_lr': {'type': 'number', 'minimum': 0}, 'minimum_length_bp': {'type': 'integer', 'minimum': 1}, 'maximum_gap_bp': {'type': 'integer', 'minimum': 0}}, 'required': ['pseudocount', 'cutoff_log10_lr', 'minimum_length_bp', 'maximum_gap_bp'], 'additionalProperties': False}, 'Interval': {'type': 'object', 'properties': {'chromosome': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'start': {'type': 'integer', 'minimum': 0}, 'end': {'type': 'integer', 'minimum': 1, 'maximum': 9223372036854775807}}, 'required': ['chromosome', 'start', 'end'], 'additionalProperties': False}}, '$ref': '#/$defs/ResultSelector'}}]}}, 'required': ['version', 'handoff_ref', 'selector'], 'additionalProperties': False}
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_atac_differential_execution_integration.py:104: in test_atac_target_cannot_use_generic_file_window_results
+    assert Draft202012Validator(schema).is_valid({'version': 'execution_results_assignment_v1',
+dependencies/jsonschema/validators.py:499: in is_valid
+    error = next(self.iter_errors(instance), None)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+dependencies/jsonschema/validators.py:383: in iter_errors
+    for error in errors:
+dependencies/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+dependencies/jsonschema/validators.py:431: in descend
+    for error in errors:
+dependencies/jsonschema/_keywords.py:334: in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+dependencies/jsonschema/validators.py:431: in descend
+    for error in errors:
+dependencies/jsonschema/_keywords.py:386: in if_
+    yield from validator.descend(instance, then, schema_path="then")
+dependencies/jsonschema/validators.py:431: in descend
+    for error in errors:
+dependencies/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+dependencies/jsonschema/validators.py:464: in _validate_reference
+    raise exceptions._WrappedReferencingError(err) from err
+E   jsonschema.exceptions._WrappedReferencingError: PointerToNowhere: '/$defs/ResultSelector' does not exist within {'type': 'object', 'properties': {'version': {'const': 'execution_results_assignment_v1'}, 'handoff_ref': {'type': 'string', 'minLength': 1}, 'selector': {'type': 'object', 'allOf': [{'if': {'required': ['version'], 'properties': {'version': {'const': 'atac_differential_result_selector_v1'}}}, 'then': {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$defs': {'ResultSelector': {'type': 'object', 'properties': {'version': {'const': 'atac_differential_result_selector_v1'}, 'mode': {'enum': ['native_result', 'saved_sheet_recalculation']}, 'comparison_key': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'intervals': {'type': 'array', 'items': {'$ref': '#/$defs/Interval'}}, 'parameters': {'$ref': '#/$defs/Parameters'}, 'projection': {'type': 'object', 'properties': {'kind': {'enum': ['summary', 'native_peak_rows', 'native_differential_rows', 'interval_components', 'derived_regions']}, 'row_window': {'anyOf': [{'$ref': '#/$defs/Window'}, {'type': 'null'}]}, 'run_keys': {'type': 'array', 'items': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'uniqueItems': True}, 'categories': {'type': 'array', 'items': {'enum': ['condition1', 'condition2', 'common']}, 'uniqueItems': True}}, 'required': ['kind', 'row_window', 'run_keys', 'categories'], 'additionalProperties': False}, 'saved_sheet_bundle': {'anyOf': [{'$ref': '#/$defs/SavedSheetBundle'}, {'type': 'null'}]}}, 'required': ['version', 'mode', 'comparison_key', 'intervals', 'parameters', 'projection', 'saved_sheet_bundle'], 'additionalProperties': False}, 'SavedSheetBundle': {'type': 'object', 'properties': {'sheet': {'$ref': '#/$defs/NativeFileIdentity'}, 'tables': {'type': 'array', 'items': {'type': 'object', 'properties': {'track_key': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'file': {'$ref': '#/$defs/NativeFileIdentity'}}, 'required': ['track_key', 'file'], 'additionalProperties': False}}}, 'required': ['sheet', 'tables'], 'additionalProperties': False}, 'NativeFileIdentity': {'type': 'object', 'properties': {'artifact_ref': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'size_bytes': {'type': 'integer', 'minimum': 0}, 'format': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}}, 'required': ['artifact_ref', 'sha256', 'size_bytes', 'format'], 'additionalProperties': False}, 'Window': {'type': 'object', 'properties': {'offset': {'type': 'integer', 'minimum': 0}, 'limit': {'type': 'integer', 'minimum': 1}}, 'required': ['offset', 'limit'], 'additionalProperties': False}, 'Parameters': {'type': 'object', 'properties': {'pseudocount': {'type': 'number', 'exclusiveMinimum': 0}, 'cutoff_log10_lr': {'type': 'number', 'minimum': 0}, 'minimum_length_bp': {'type': 'integer', 'minimum': 1}, 'maximum_gap_bp': {'type': 'integer', 'minimum': 0}}, 'required': ['pseudocount', 'cutoff_log10_lr', 'minimum_length_bp', 'maximum_gap_bp'], 'additionalProperties': False}, 'Interval': {'type': 'object', 'properties': {'chromosome': {'type': 'string', 'minLength': 1, 'maxLength': 4096, 'pattern': '^[^\\x00-\\x1f\\x7f]+$'}, 'start': {'type': 'integer', 'minimum': 0}, 'end': {'type': 'integer', 'minimum': 1, 'maximum': 9223372036854775807}}, 'required': ['chromosome', 'start', 'end'], 'additionalProperties': False}}, '$ref': '#/$defs/ResultSelector'}}]}}, 'required': ['version', 'handoff_ref', 'selector'], 'additionalProperties': False}
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_atac_differential_execution_integration.py::test_selected_library_entry_reaches_only_bound_local_commission
+FAILED source_snapshot/tests/test_atac_differential_execution_integration.py::test_atac_target_cannot_use_generic_file_window_results
+2 failed, 84 passed in 281.77s (0:04:41)

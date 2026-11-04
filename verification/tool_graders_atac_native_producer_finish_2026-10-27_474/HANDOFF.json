@@ -1,0 +1,174 @@
+{
+  "software_binding_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/software_binding.json",
+  "original_assignment_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/native-success-assignment.json",
+  "request": {
+    "bdgdiff": {
+      "cutoff_log10_lr": 3,
+      "maximum_gap_bp": 0,
+      "minimum_length_bp": 50
+    },
+    "callpeak": {
+      "broad": false,
+      "downsample": false,
+      "extension_size_bp": 200,
+      "genome_size_argument": "12000",
+      "keep_duplicates": 1,
+      "nomodel": true,
+      "qvalue_cutoff": 0.05,
+      "shift_bp": -100,
+      "spmr": false,
+      "store_bedgraph": true
+    },
+    "comparison_key": "retained_native_acceptance",
+    "conditions": [
+      {
+        "condition_id": "condition1",
+        "label": null,
+        "sample_ids": [
+          "sample1"
+        ]
+      },
+      {
+        "condition_id": "condition2",
+        "label": null,
+        "sample_ids": [
+          "sample2"
+        ]
+      }
+    ],
+    "inputs": [
+      {
+        "condition_id": "condition1",
+        "file": {
+          "artifact_ref": "artifact_1c2f1848552cdb69d2299d698d15b7932cf7d79e402e8b58eba487902edb8356",
+          "format": "bam",
+          "sha256": "1c2f1848552cdb69d2299d698d15b7932cf7d79e402e8b58eba487902edb8356",
+          "size_bytes": 781
+        },
+        "input_key": "input1",
+        "reference_id": "synthetic_chrToy_12000",
+        "sample_id": "sample1"
+      },
+      {
+        "condition_id": "condition2",
+        "file": {
+          "artifact_ref": "artifact_25bcd2cad982e5e36b9ffd4fa6304c59e2ea22709ec38c6b0b1a8957f224efa2",
+          "format": "bam",
+          "sha256": "25bcd2cad982e5e36b9ffd4fa6304c59e2ea22709ec38c6b0b1a8957f224efa2",
+          "size_bytes": 1278
+        },
+        "input_key": "input2",
+        "reference_id": "synthetic_chrToy_12000",
+        "sample_id": "sample2"
+      }
+    ],
+    "mode": "macs2_2_2_9_1_bam_single_end_no_control",
+    "operation": "analyze_atac_seq_differential_accessibility",
+    "output_prefix": "outputs",
+    "reference": {
+      "aliases": [],
+      "assembly_accession_version": null,
+      "contigs": [
+        {
+          "chromosome": "chrToy",
+          "length_bp": 12000,
+          "sequence_accession_version": null,
+          "sequence_sha256": null,
+          "source_refs": []
+        }
+      ],
+      "reference_id": "synthetic_chrToy_12000",
+      "source_refs": []
+    },
+    "samples": [
+      {
+        "biospecimen_id": null,
+        "input_artifact_refs": [
+          "artifact_1c2f1848552cdb69d2299d698d15b7932cf7d79e402e8b58eba487902edb8356"
+        ],
+        "origin": "synthetic_engineering_fixture",
+        "reference_id": "synthetic_chrToy_12000",
+        "replicate_id": null,
+        "sample_id": "sample1"
+      },
+      {
+        "biospecimen_id": null,
+        "input_artifact_refs": [
+          "artifact_25bcd2cad982e5e36b9ffd4fa6304c59e2ea22709ec38c6b0b1a8957f224efa2"
+        ],
+        "origin": "synthetic_engineering_fixture",
+        "reference_id": "synthetic_chrToy_12000",
+        "replicate_id": null,
+        "sample_id": "sample2"
+      }
+    ],
+    "version": "atac_differential_request_v1"
+  },
+  "input_bindings": [
+    {
+      "file": {
+        "artifact_ref": "artifact_1c2f1848552cdb69d2299d698d15b7932cf7d79e402e8b58eba487902edb8356",
+        "format": "bam",
+        "sha256": "1c2f1848552cdb69d2299d698d15b7932cf7d79e402e8b58eba487902edb8356",
+        "size_bytes": 781
+      },
+      "input_key": "input1",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/source_snapshot/verification/tool_graders_atac_differential_plan_2026-10-27_460/native001/bam_inputs/condition1.bam"
+    },
+    {
+      "file": {
+        "artifact_ref": "artifact_25bcd2cad982e5e36b9ffd4fa6304c59e2ea22709ec38c6b0b1a8957f224efa2",
+        "format": "bam",
+        "sha256": "25bcd2cad982e5e36b9ffd4fa6304c59e2ea22709ec38c6b0b1a8957f224efa2",
+        "size_bytes": 1278
+      },
+      "input_key": "input2",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/source_snapshot/verification/tool_graders_atac_differential_plan_2026-10-27_460/native001/bam_inputs/condition2.bam"
+    }
+  ],
+  "producer_sources_match_current": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_atac_differential_contracts.py",
+      "current_sha256": "77d5104703c4fe54da307fb64411db2e19104f57c6276f08460f45ec6c5ab207",
+      "native_acceptance_snapshot_sha256": "77d5104703c4fe54da307fb64411db2e19104f57c6276f08460f45ec6c5ab207",
+      "equal": true
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_atac_differential_reference.py",
+      "current_sha256": "a9d9e1c9619ee878dd372ab0fd89e240332825479ea8a058aae7126ada15ba21",
+      "native_acceptance_snapshot_sha256": "a9d9e1c9619ee878dd372ab0fd89e240332825479ea8a058aae7126ada15ba21",
+      "equal": true
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_atac_differential_driver.py",
+      "current_sha256": "1146f18f79df449476f3881c8f4cbe4235da86f55a4fba40148a9ea606540c16",
+      "native_acceptance_snapshot_sha256": "1146f18f79df449476f3881c8f4cbe4235da86f55a4fba40148a9ea606540c16",
+      "equal": true
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_atac_differential_local.py",
+      "current_sha256": "20ef7ad73b1bfe3a5de94bc7bc0ea75393def895ac6f081b5a1ec5e05c6294fb",
+      "native_acceptance_snapshot_sha256": "20ef7ad73b1bfe3a5de94bc7bc0ea75393def895ac6f081b5a1ec5e05c6294fb",
+      "equal": true
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_atac_differential_observations.py",
+      "current_sha256": "29d30912a0ca987ac084e9d86debe0eda134c1a7123a39d588165fc31abea1a8",
+      "native_acceptance_snapshot_sha256": "29d30912a0ca987ac084e9d86debe0eda134c1a7123a39d588165fc31abea1a8",
+      "equal": true
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_atac_differential_capture.py",
+      "current_sha256": "d13ccfbf05d2ae7e485c3265cf2f489457523dd2f6eaace4da032c9ee2ca2e18",
+      "native_acceptance_snapshot_sha256": "d13ccfbf05d2ae7e485c3265cf2f489457523dd2f6eaace4da032c9ee2ca2e18",
+      "equal": true
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_atac_differential_software.py",
+      "current_sha256": "ea8978cc1555a959575fc8fde36c831398b191970c367810e7445ffda6f79c3d",
+      "native_acceptance_snapshot_sha256": "ea8978cc1555a959575fc8fde36c831398b191970c367810e7445ffda6f79c3d",
+      "equal": true
+    }
+  ],
+  "native_acceptance_receipt_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_producer_finish_2026-10-27_474/native002/receipt.json"
+}

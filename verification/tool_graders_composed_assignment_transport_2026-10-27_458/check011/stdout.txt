@@ -1,0 +1,22 @@
+............................................................F..          [100%]
+=================================== FAILURES ===================================
+_ test_unsaved_custody_requires_actual_writer_transport_proof[current_profile] _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:563: in test_unsaved_custody_requires_actual_writer_transport_proof
+    returned, index, context, schema = asyncio.run(source.call(
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1038: in call
+    self.workflow.validate_contract_information(saved)
+source_snapshot/gene_annotation_episode/runtime.py:2240: in validate_contract_information
+    raise WorkflowError('original_operation_catalog_mismatch')
+E   gene_annotation_episode.episode_journal.WorkflowError: original_operation_catalog_mismatch
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_unsaved_custody_requires_actual_writer_transport_proof[current_profile]
+1 failed, 62 passed in 187.69s (0:03:07)

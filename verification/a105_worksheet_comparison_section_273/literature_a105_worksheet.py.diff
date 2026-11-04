@@ -1,0 +1,29 @@
+--- before/gene_annotation_episode/literature_a105_worksheet.py
++++ gene_annotation_episode/literature_a105_worksheet.py
+@@ -26,6 +26,9 @@
+         'reported_kinetic_estimates_and_descriptive_contrasts'),
+     SUMMARY: ('requested_kinetic_summary_precision_components', 'literature_kinetic_summary_precision_storage',
+         'summary_precision_cells_schema', 'summary_random_precision'),
++    'literature_measurement_comparison_cells': ('requested_measurement_comparison_components',
++        'literature_measurement_comparison_storage', 'measurement_comparison_cells_schema',
++        'measurement_comparison_validity'),
+     'literature_endpoint_signal_cells': ('requested_endpoint_signal_components', 'literature_endpoint_signal_storage',
+         'endpoint_signal_cells_schema', 'finite_endpoint_readout_contribution'),
+     'literature_product_coupling_cells': ('requested_product_coupling_components', 'literature_product_coupling_storage',
+@@ -43,6 +46,7 @@
+     'does_not_establish_assertion', 'unknown', 'conflicting')
+ _SCOPES = {
+     NATIVE: 'source_kinetic_parameter_contrast', SUMMARY: 'source_kinetic_summary_precision',
++    'literature_measurement_comparison_cells': 'source_measurement_comparison',
+     'literature_endpoint_signal_cells': 'source_endpoint_signal_contribution',
+     'literature_product_coupling_cells': 'source_product_coupling',
+     'literature_calibration_recovery_cells': 'source_calibration_recovery',
+@@ -99,7 +103,7 @@
+     """Return aliases, existing component rosters and host presentation roles.
+ 
+     No experiment, cell or population operation is selected by constructing a
+-    form. Seven supported formats do not represent seven completed assays.
++    form. Eight supported formats do not represent eight completed assays.
+     """
+     if (not isinstance(section_requests, (list, tuple)) or not section_requests
+             or not isinstance(context_field, str) or not CODE.fullmatch(context_field)):

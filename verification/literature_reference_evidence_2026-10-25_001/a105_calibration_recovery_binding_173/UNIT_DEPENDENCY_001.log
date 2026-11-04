@@ -1,0 +1,585 @@
+......................................................................FF [ 81%]
+FFF.............                                                         [100%]
+=================================== FAILURES ===================================
+_ test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[pmole-factor0] _
+
+unit = 'pmole', factor = Fraction(1, 1000)
+
+    @pytest.mark.parametrize('unit,factor', [('pmole', Fraction(1,1000)), ('nmole', Fraction(1)),
+        ('umole', Fraction(1000)), ('µmole', Fraction(1000)), ('μmole', Fraction(1000))])
+    def test_complete_legacy_amount_unit_spelling_preserves_source_and_scale(unit, factor):
+        source = Source(unit=unit)
+        extracted, sheet = run(source, source.args(unit=unit))
+        assert extracted['shared_unit']['raw_unit'] == unit
+        assert extracted['shared_unit']['unit'] == 'nmol'
+>       assert Fraction(extracted['observations']['nominal']['exact_value']['numerator'],
+            extracted['observations']['nominal']['exact_value']['denominator']) == 10*factor
+
+tests/test_literature_calibration_recovery_169.py:435: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'fractions.Fraction'>, numerator = '1', denominator = '100'
+
+    def __new__(cls, numerator=0, denominator=None):
+        """Constructs a Rational.
+    
+        Takes a string like '3/2' or '1.5', another Rational instance, a
+        numerator/denominator pair, or a float.
+    
+        Examples
+        --------
+    
+        >>> Fraction(10, -8)
+        Fraction(-5, 4)
+        >>> Fraction(Fraction(1, 7), 5)
+        Fraction(1, 35)
+        >>> Fraction(Fraction(1, 7), Fraction(2, 3))
+        Fraction(3, 14)
+        >>> Fraction('314')
+        Fraction(314, 1)
+        >>> Fraction('-35/4')
+        Fraction(-35, 4)
+        >>> Fraction('3.1415') # conversion from numeric string
+        Fraction(6283, 2000)
+        >>> Fraction('-47e-2') # string may include a decimal exponent
+        Fraction(-47, 100)
+        >>> Fraction(1.47)  # direct construction from float (exact conversion)
+        Fraction(6620291452234629, 4503599627370496)
+        >>> Fraction(2.25)
+        Fraction(9, 4)
+        >>> Fraction(Decimal('1.47'))
+        Fraction(147, 100)
+    
+        """
+        self = super(Fraction, cls).__new__(cls)
+    
+        if denominator is None:
+            if type(numerator) is int:
+                self._numerator = numerator
+                self._denominator = 1
+                return self
+    
+            elif isinstance(numerator, numbers.Rational):
+                self._numerator = numerator.numerator
+                self._denominator = numerator.denominator
+                return self
+    
+            elif isinstance(numerator, (float, Decimal)):
+                # Exact conversion
+                self._numerator, self._denominator = numerator.as_integer_ratio()
+                return self
+    
+            elif isinstance(numerator, str):
+                # Handle construction from strings.
+                m = _RATIONAL_FORMAT.match(numerator)
+                if m is None:
+                    raise ValueError('Invalid literal for Fraction: %r' %
+                                     numerator)
+                numerator = int(m.group('num') or '0')
+                denom = m.group('denom')
+                if denom:
+                    denominator = int(denom)
+                else:
+                    denominator = 1
+                    decimal = m.group('decimal')
+                    if decimal:
+                        decimal = decimal.replace('_', '')
+                        scale = 10**len(decimal)
+                        numerator = numerator * scale + int(decimal)
+                        denominator *= scale
+                    exp = m.group('exp')
+                    if exp:
+                        exp = int(exp)
+                        if exp >= 0:
+                            numerator *= 10**exp
+                        else:
+                            denominator *= 10**-exp
+                if m.group('sign') == '-':
+                    numerator = -numerator
+    
+            else:
+                raise TypeError("argument should be a string "
+                                "or a Rational instance")
+    
+        elif type(numerator) is int is type(denominator):
+            pass # *very* normal case
+    
+        elif (isinstance(numerator, numbers.Rational) and
+            isinstance(denominator, numbers.Rational)):
+            numerator, denominator = (
+                numerator.numerator * denominator.denominator,
+                denominator.numerator * numerator.denominator
+                )
+        else:
+>           raise TypeError("both arguments should be "
+                            "Rational instances")
+E           TypeError: both arguments should be Rational instances
+
+/usr/lib/python3.12/fractions.py:277: TypeError
+_ test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[nmole-factor1] _
+
+unit = 'nmole', factor = Fraction(1, 1)
+
+    @pytest.mark.parametrize('unit,factor', [('pmole', Fraction(1,1000)), ('nmole', Fraction(1)),
+        ('umole', Fraction(1000)), ('µmole', Fraction(1000)), ('μmole', Fraction(1000))])
+    def test_complete_legacy_amount_unit_spelling_preserves_source_and_scale(unit, factor):
+        source = Source(unit=unit)
+        extracted, sheet = run(source, source.args(unit=unit))
+        assert extracted['shared_unit']['raw_unit'] == unit
+        assert extracted['shared_unit']['unit'] == 'nmol'
+>       assert Fraction(extracted['observations']['nominal']['exact_value']['numerator'],
+            extracted['observations']['nominal']['exact_value']['denominator']) == 10*factor
+
+tests/test_literature_calibration_recovery_169.py:435: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'fractions.Fraction'>, numerator = '10', denominator = '1'
+
+    def __new__(cls, numerator=0, denominator=None):
+        """Constructs a Rational.
+    
+        Takes a string like '3/2' or '1.5', another Rational instance, a
+        numerator/denominator pair, or a float.
+    
+        Examples
+        --------
+    
+        >>> Fraction(10, -8)
+        Fraction(-5, 4)
+        >>> Fraction(Fraction(1, 7), 5)
+        Fraction(1, 35)
+        >>> Fraction(Fraction(1, 7), Fraction(2, 3))
+        Fraction(3, 14)
+        >>> Fraction('314')
+        Fraction(314, 1)
+        >>> Fraction('-35/4')
+        Fraction(-35, 4)
+        >>> Fraction('3.1415') # conversion from numeric string
+        Fraction(6283, 2000)
+        >>> Fraction('-47e-2') # string may include a decimal exponent
+        Fraction(-47, 100)
+        >>> Fraction(1.47)  # direct construction from float (exact conversion)
+        Fraction(6620291452234629, 4503599627370496)
+        >>> Fraction(2.25)
+        Fraction(9, 4)
+        >>> Fraction(Decimal('1.47'))
+        Fraction(147, 100)
+    
+        """
+        self = super(Fraction, cls).__new__(cls)
+    
+        if denominator is None:
+            if type(numerator) is int:
+                self._numerator = numerator
+                self._denominator = 1
+                return self
+    
+            elif isinstance(numerator, numbers.Rational):
+                self._numerator = numerator.numerator
+                self._denominator = numerator.denominator
+                return self
+    
+            elif isinstance(numerator, (float, Decimal)):
+                # Exact conversion
+                self._numerator, self._denominator = numerator.as_integer_ratio()
+                return self
+    
+            elif isinstance(numerator, str):
+                # Handle construction from strings.
+                m = _RATIONAL_FORMAT.match(numerator)
+                if m is None:
+                    raise ValueError('Invalid literal for Fraction: %r' %
+                                     numerator)
+                numerator = int(m.group('num') or '0')
+                denom = m.group('denom')
+                if denom:
+                    denominator = int(denom)
+                else:
+                    denominator = 1
+                    decimal = m.group('decimal')
+                    if decimal:
+                        decimal = decimal.replace('_', '')
+                        scale = 10**len(decimal)
+                        numerator = numerator * scale + int(decimal)
+                        denominator *= scale
+                    exp = m.group('exp')
+                    if exp:
+                        exp = int(exp)
+                        if exp >= 0:
+                            numerator *= 10**exp
+                        else:
+                            denominator *= 10**-exp
+                if m.group('sign') == '-':
+                    numerator = -numerator
+    
+            else:
+                raise TypeError("argument should be a string "
+                                "or a Rational instance")
+    
+        elif type(numerator) is int is type(denominator):
+            pass # *very* normal case
+    
+        elif (isinstance(numerator, numbers.Rational) and
+            isinstance(denominator, numbers.Rational)):
+            numerator, denominator = (
+                numerator.numerator * denominator.denominator,
+                denominator.numerator * numerator.denominator
+                )
+        else:
+>           raise TypeError("both arguments should be "
+                            "Rational instances")
+E           TypeError: both arguments should be Rational instances
+
+/usr/lib/python3.12/fractions.py:277: TypeError
+_ test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[umole-factor2] _
+
+unit = 'umole', factor = Fraction(1000, 1)
+
+    @pytest.mark.parametrize('unit,factor', [('pmole', Fraction(1,1000)), ('nmole', Fraction(1)),
+        ('umole', Fraction(1000)), ('µmole', Fraction(1000)), ('μmole', Fraction(1000))])
+    def test_complete_legacy_amount_unit_spelling_preserves_source_and_scale(unit, factor):
+        source = Source(unit=unit)
+        extracted, sheet = run(source, source.args(unit=unit))
+        assert extracted['shared_unit']['raw_unit'] == unit
+        assert extracted['shared_unit']['unit'] == 'nmol'
+>       assert Fraction(extracted['observations']['nominal']['exact_value']['numerator'],
+            extracted['observations']['nominal']['exact_value']['denominator']) == 10*factor
+
+tests/test_literature_calibration_recovery_169.py:435: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'fractions.Fraction'>, numerator = '10000', denominator = '1'
+
+    def __new__(cls, numerator=0, denominator=None):
+        """Constructs a Rational.
+    
+        Takes a string like '3/2' or '1.5', another Rational instance, a
+        numerator/denominator pair, or a float.
+    
+        Examples
+        --------
+    
+        >>> Fraction(10, -8)
+        Fraction(-5, 4)
+        >>> Fraction(Fraction(1, 7), 5)
+        Fraction(1, 35)
+        >>> Fraction(Fraction(1, 7), Fraction(2, 3))
+        Fraction(3, 14)
+        >>> Fraction('314')
+        Fraction(314, 1)
+        >>> Fraction('-35/4')
+        Fraction(-35, 4)
+        >>> Fraction('3.1415') # conversion from numeric string
+        Fraction(6283, 2000)
+        >>> Fraction('-47e-2') # string may include a decimal exponent
+        Fraction(-47, 100)
+        >>> Fraction(1.47)  # direct construction from float (exact conversion)
+        Fraction(6620291452234629, 4503599627370496)
+        >>> Fraction(2.25)
+        Fraction(9, 4)
+        >>> Fraction(Decimal('1.47'))
+        Fraction(147, 100)
+    
+        """
+        self = super(Fraction, cls).__new__(cls)
+    
+        if denominator is None:
+            if type(numerator) is int:
+                self._numerator = numerator
+                self._denominator = 1
+                return self
+    
+            elif isinstance(numerator, numbers.Rational):
+                self._numerator = numerator.numerator
+                self._denominator = numerator.denominator
+                return self
+    
+            elif isinstance(numerator, (float, Decimal)):
+                # Exact conversion
+                self._numerator, self._denominator = numerator.as_integer_ratio()
+                return self
+    
+            elif isinstance(numerator, str):
+                # Handle construction from strings.
+                m = _RATIONAL_FORMAT.match(numerator)
+                if m is None:
+                    raise ValueError('Invalid literal for Fraction: %r' %
+                                     numerator)
+                numerator = int(m.group('num') or '0')
+                denom = m.group('denom')
+                if denom:
+                    denominator = int(denom)
+                else:
+                    denominator = 1
+                    decimal = m.group('decimal')
+                    if decimal:
+                        decimal = decimal.replace('_', '')
+                        scale = 10**len(decimal)
+                        numerator = numerator * scale + int(decimal)
+                        denominator *= scale
+                    exp = m.group('exp')
+                    if exp:
+                        exp = int(exp)
+                        if exp >= 0:
+                            numerator *= 10**exp
+                        else:
+                            denominator *= 10**-exp
+                if m.group('sign') == '-':
+                    numerator = -numerator
+    
+            else:
+                raise TypeError("argument should be a string "
+                                "or a Rational instance")
+    
+        elif type(numerator) is int is type(denominator):
+            pass # *very* normal case
+    
+        elif (isinstance(numerator, numbers.Rational) and
+            isinstance(denominator, numbers.Rational)):
+            numerator, denominator = (
+                numerator.numerator * denominator.denominator,
+                denominator.numerator * numerator.denominator
+                )
+        else:
+>           raise TypeError("both arguments should be "
+                            "Rational instances")
+E           TypeError: both arguments should be Rational instances
+
+/usr/lib/python3.12/fractions.py:277: TypeError
+_ test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[\xb5mole-factor3] _
+
+unit = 'µmole', factor = Fraction(1000, 1)
+
+    @pytest.mark.parametrize('unit,factor', [('pmole', Fraction(1,1000)), ('nmole', Fraction(1)),
+        ('umole', Fraction(1000)), ('µmole', Fraction(1000)), ('μmole', Fraction(1000))])
+    def test_complete_legacy_amount_unit_spelling_preserves_source_and_scale(unit, factor):
+        source = Source(unit=unit)
+        extracted, sheet = run(source, source.args(unit=unit))
+        assert extracted['shared_unit']['raw_unit'] == unit
+        assert extracted['shared_unit']['unit'] == 'nmol'
+>       assert Fraction(extracted['observations']['nominal']['exact_value']['numerator'],
+            extracted['observations']['nominal']['exact_value']['denominator']) == 10*factor
+
+tests/test_literature_calibration_recovery_169.py:435: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'fractions.Fraction'>, numerator = '10000', denominator = '1'
+
+    def __new__(cls, numerator=0, denominator=None):
+        """Constructs a Rational.
+    
+        Takes a string like '3/2' or '1.5', another Rational instance, a
+        numerator/denominator pair, or a float.
+    
+        Examples
+        --------
+    
+        >>> Fraction(10, -8)
+        Fraction(-5, 4)
+        >>> Fraction(Fraction(1, 7), 5)
+        Fraction(1, 35)
+        >>> Fraction(Fraction(1, 7), Fraction(2, 3))
+        Fraction(3, 14)
+        >>> Fraction('314')
+        Fraction(314, 1)
+        >>> Fraction('-35/4')
+        Fraction(-35, 4)
+        >>> Fraction('3.1415') # conversion from numeric string
+        Fraction(6283, 2000)
+        >>> Fraction('-47e-2') # string may include a decimal exponent
+        Fraction(-47, 100)
+        >>> Fraction(1.47)  # direct construction from float (exact conversion)
+        Fraction(6620291452234629, 4503599627370496)
+        >>> Fraction(2.25)
+        Fraction(9, 4)
+        >>> Fraction(Decimal('1.47'))
+        Fraction(147, 100)
+    
+        """
+        self = super(Fraction, cls).__new__(cls)
+    
+        if denominator is None:
+            if type(numerator) is int:
+                self._numerator = numerator
+                self._denominator = 1
+                return self
+    
+            elif isinstance(numerator, numbers.Rational):
+                self._numerator = numerator.numerator
+                self._denominator = numerator.denominator
+                return self
+    
+            elif isinstance(numerator, (float, Decimal)):
+                # Exact conversion
+                self._numerator, self._denominator = numerator.as_integer_ratio()
+                return self
+    
+            elif isinstance(numerator, str):
+                # Handle construction from strings.
+                m = _RATIONAL_FORMAT.match(numerator)
+                if m is None:
+                    raise ValueError('Invalid literal for Fraction: %r' %
+                                     numerator)
+                numerator = int(m.group('num') or '0')
+                denom = m.group('denom')
+                if denom:
+                    denominator = int(denom)
+                else:
+                    denominator = 1
+                    decimal = m.group('decimal')
+                    if decimal:
+                        decimal = decimal.replace('_', '')
+                        scale = 10**len(decimal)
+                        numerator = numerator * scale + int(decimal)
+                        denominator *= scale
+                    exp = m.group('exp')
+                    if exp:
+                        exp = int(exp)
+                        if exp >= 0:
+                            numerator *= 10**exp
+                        else:
+                            denominator *= 10**-exp
+                if m.group('sign') == '-':
+                    numerator = -numerator
+    
+            else:
+                raise TypeError("argument should be a string "
+                                "or a Rational instance")
+    
+        elif type(numerator) is int is type(denominator):
+            pass # *very* normal case
+    
+        elif (isinstance(numerator, numbers.Rational) and
+            isinstance(denominator, numbers.Rational)):
+            numerator, denominator = (
+                numerator.numerator * denominator.denominator,
+                denominator.numerator * numerator.denominator
+                )
+        else:
+>           raise TypeError("both arguments should be "
+                            "Rational instances")
+E           TypeError: both arguments should be Rational instances
+
+/usr/lib/python3.12/fractions.py:277: TypeError
+_ test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[\u03bcmole-factor4] _
+
+unit = 'μmole', factor = Fraction(1000, 1)
+
+    @pytest.mark.parametrize('unit,factor', [('pmole', Fraction(1,1000)), ('nmole', Fraction(1)),
+        ('umole', Fraction(1000)), ('µmole', Fraction(1000)), ('μmole', Fraction(1000))])
+    def test_complete_legacy_amount_unit_spelling_preserves_source_and_scale(unit, factor):
+        source = Source(unit=unit)
+        extracted, sheet = run(source, source.args(unit=unit))
+        assert extracted['shared_unit']['raw_unit'] == unit
+        assert extracted['shared_unit']['unit'] == 'nmol'
+>       assert Fraction(extracted['observations']['nominal']['exact_value']['numerator'],
+            extracted['observations']['nominal']['exact_value']['denominator']) == 10*factor
+
+tests/test_literature_calibration_recovery_169.py:435: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'fractions.Fraction'>, numerator = '10000', denominator = '1'
+
+    def __new__(cls, numerator=0, denominator=None):
+        """Constructs a Rational.
+    
+        Takes a string like '3/2' or '1.5', another Rational instance, a
+        numerator/denominator pair, or a float.
+    
+        Examples
+        --------
+    
+        >>> Fraction(10, -8)
+        Fraction(-5, 4)
+        >>> Fraction(Fraction(1, 7), 5)
+        Fraction(1, 35)
+        >>> Fraction(Fraction(1, 7), Fraction(2, 3))
+        Fraction(3, 14)
+        >>> Fraction('314')
+        Fraction(314, 1)
+        >>> Fraction('-35/4')
+        Fraction(-35, 4)
+        >>> Fraction('3.1415') # conversion from numeric string
+        Fraction(6283, 2000)
+        >>> Fraction('-47e-2') # string may include a decimal exponent
+        Fraction(-47, 100)
+        >>> Fraction(1.47)  # direct construction from float (exact conversion)
+        Fraction(6620291452234629, 4503599627370496)
+        >>> Fraction(2.25)
+        Fraction(9, 4)
+        >>> Fraction(Decimal('1.47'))
+        Fraction(147, 100)
+    
+        """
+        self = super(Fraction, cls).__new__(cls)
+    
+        if denominator is None:
+            if type(numerator) is int:
+                self._numerator = numerator
+                self._denominator = 1
+                return self
+    
+            elif isinstance(numerator, numbers.Rational):
+                self._numerator = numerator.numerator
+                self._denominator = numerator.denominator
+                return self
+    
+            elif isinstance(numerator, (float, Decimal)):
+                # Exact conversion
+                self._numerator, self._denominator = numerator.as_integer_ratio()
+                return self
+    
+            elif isinstance(numerator, str):
+                # Handle construction from strings.
+                m = _RATIONAL_FORMAT.match(numerator)
+                if m is None:
+                    raise ValueError('Invalid literal for Fraction: %r' %
+                                     numerator)
+                numerator = int(m.group('num') or '0')
+                denom = m.group('denom')
+                if denom:
+                    denominator = int(denom)
+                else:
+                    denominator = 1
+                    decimal = m.group('decimal')
+                    if decimal:
+                        decimal = decimal.replace('_', '')
+                        scale = 10**len(decimal)
+                        numerator = numerator * scale + int(decimal)
+                        denominator *= scale
+                    exp = m.group('exp')
+                    if exp:
+                        exp = int(exp)
+                        if exp >= 0:
+                            numerator *= 10**exp
+                        else:
+                            denominator *= 10**-exp
+                if m.group('sign') == '-':
+                    numerator = -numerator
+    
+            else:
+                raise TypeError("argument should be a string "
+                                "or a Rational instance")
+    
+        elif type(numerator) is int is type(denominator):
+            pass # *very* normal case
+    
+        elif (isinstance(numerator, numbers.Rational) and
+            isinstance(denominator, numbers.Rational)):
+            numerator, denominator = (
+                numerator.numerator * denominator.denominator,
+                denominator.numerator * numerator.denominator
+                )
+        else:
+>           raise TypeError("both arguments should be "
+                            "Rational instances")
+E           TypeError: both arguments should be Rational instances
+
+/usr/lib/python3.12/fractions.py:277: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_literature_calibration_recovery_169.py::test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[pmole-factor0]
+FAILED tests/test_literature_calibration_recovery_169.py::test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[nmole-factor1]
+FAILED tests/test_literature_calibration_recovery_169.py::test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[umole-factor2]
+FAILED tests/test_literature_calibration_recovery_169.py::test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[\xb5mole-factor3]
+FAILED tests/test_literature_calibration_recovery_169.py::test_complete_legacy_amount_unit_spelling_preserves_source_and_scale[\u03bcmole-factor4]
+5 failed, 83 passed in 0.86s

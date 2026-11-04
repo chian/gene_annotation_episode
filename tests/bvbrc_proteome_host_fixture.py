@@ -46,8 +46,8 @@ class ControlledClient(NativeClient):
         super().__init__()
         self.native_complete, self.native_status = True, 200
 
-    def download(self, url, *, byte_range=None):
-        result = super().download(url, byte_range=byte_range)
+    def download(self, url, *, max_bytes, byte_range=None):
+        result = super().download(url, max_bytes=max_bytes, byte_range=byte_range)
         if url.endswith('/native'):
             result = replace(result, transport={**result.transport,
                 'body_complete': self.native_complete, 'status': self.native_status})
@@ -194,7 +194,7 @@ class ProteomeDriver(ProductionDriver):
             'success': 1, 'output_files': [['/controlled/proteome/native', OUTPUT_UUID]]}
         self.client.body = canonical(manifest).encode()
         self.manifest = self.call('download', {'object': obj, 'capability': {'kind': 'acquired',
-            'receipt_ref': cap['source_ref'], 'input_index': 0}, 'byte_range': None,
+            'receipt_ref': cap['source_ref'], 'input_index': 0}, 'max_bytes': 1024 * 1024, 'byte_range': None,
             'requirement_ids': [], 'role': 'task_manifest', 'declared_format': declaration('json')}, context=self.context)
         return self.manifest
 
@@ -204,7 +204,7 @@ class ProteomeDriver(ProductionDriver):
         cap = self.call('download_capability', {'objects': [obj], 'generation': 0,
             'predecessor_receipt_ref': None}, context=self.context)
         self.native_args = {'object': obj, 'capability': {'kind': 'acquired', 'receipt_ref': cap['source_ref'], 'input_index': 0},
-            'byte_range': None, 'requirement_ids': ['native'], 'role': 'proteome_native_projection', 'declared_format': declaration(self.fmt)}
+            'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': ['native'], 'role': 'proteome_native_projection', 'declared_format': declaration(self.fmt)}
         return self.native_args
 
     def acquire_native(self, *, raw=None):

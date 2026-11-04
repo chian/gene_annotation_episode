@@ -1,0 +1,18 @@
+........................................................................ [ 23%]
+........................................................................ [ 46%]
+........................................................................ [ 69%]
+........................................................................ [ 92%]
+..F.....................                                                 [100%]
+=================================== FAILURES ===================================
+_ test_uncertainty_numbers_are_returned_only_with_requested_matching_raw_parameter _
+tests/test_literature_kinetic_integration.py:178: in test_uncertainty_numbers_are_returned_only_with_requested_matching_raw_parameter
+    assert ratio[role]["uncertainty_values"] == {"delivery_status": "not_requested", "magnitude": None,
+E   AssertionError: assert {'delivery_st...l': None, ...} == {'delivery_st...l': None, ...}
+E     
+E     Omitting 5 identical items, use -vv to show
+E     Left contains 1 more item:
+E     {'count_reported_value': None}
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED tests/test_literature_kinetic_integration.py::test_uncertainty_numbers_are_returned_only_with_requested_matching_raw_parameter
+1 failed, 311 passed in 104.24s (0:01:44)

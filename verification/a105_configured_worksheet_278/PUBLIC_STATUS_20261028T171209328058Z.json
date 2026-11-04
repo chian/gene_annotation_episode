@@ -1,0 +1,108 @@
+{
+  "observed_at_utc": "2026-10-28T17:12:09.299993+00:00",
+  "meaning": "Operator lifecycle/count metadata only; no episode action or controller observation is created.",
+  "provider_content_read": false,
+  "operator_status": {
+    "state": "started",
+    "started_at_utc": "2026-10-28T16:57:42.531254+00:00",
+    "process_identity": {
+      "pid": 3726505,
+      "start_ticks": "102022369",
+      "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+    },
+    "run_id": "run_266d996f86fb4fc491a5fac50d62cd33",
+    "entrypoint_manifest": "/home/chia/repos/gene_annotation_episode/verification/a105_configured_worksheet_278/ENTRYPOINT_PIN_002.json"
+  },
+  "confirmed_original_process_live": true,
+  "run": [
+    {
+      "run_id": "run_266d996f86fb4fc491a5fac50d62cd33",
+      "state": "running",
+      "started_at": "2026-10-28T16:48:08.833869+00:00",
+      "updated_at": "2026-10-28T16:57:42.560162+00:00"
+    }
+  ],
+  "episodes": [
+    {
+      "episode_id": "episode_6e71ad5eab1c45a6ff1bf9039d41dd5273447efe7d7181a71b16d3bed4807ba9",
+      "path": "[[\"annotation\",\"root\"]]",
+      "state": "active",
+      "completion": null
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "path": "[[\"annotation\",\"root\"],[\"literature\",\"child_0\"]]",
+      "state": "active",
+      "completion": null
+    }
+  ],
+  "counts": {
+    "runtime_actions": 32,
+    "runtime_observations": 27,
+    "runtime_model_calls": 34,
+    "runtime_report_attempts": 0
+  },
+  "model_call_completion_counts": {
+    "returned": 33,
+    "pending": 1
+  },
+  "selected_action_categories": [
+    {
+      "episode_id": "episode_6e71ad5eab1c45a6ff1bf9039d41dd5273447efe7d7181a71b16d3bed4807ba9",
+      "kind": "episode_child",
+      "tool": null,
+      "status": "pending",
+      "records": 1
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "kind": "tool",
+      "tool": "literature.kinetic.populate",
+      "status": "completed",
+      "records": 1
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "kind": "tool",
+      "tool": "literature.kinetic.populate",
+      "status": "invalid",
+      "records": 1
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "kind": "tool",
+      "tool": "source.locate",
+      "status": "completed",
+      "records": 12
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "kind": "tool",
+      "tool": "source.locate",
+      "status": "invalid",
+      "records": 1
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "kind": "tool",
+      "tool": "source.pdf.info",
+      "status": "unavailable",
+      "records": 1
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "kind": "tool",
+      "tool": "source.read",
+      "status": "completed",
+      "records": 14
+    },
+    {
+      "episode_id": "episode_aa23247b76409e1c14a1966c3e0ea2304859a1fc211c30c84ddcd9d8fbe53d6a",
+      "kind": "tool",
+      "tool": "source.xlsx.sheets",
+      "status": "failed",
+      "records": 1
+    }
+  ],
+  "deliveries": []
+}

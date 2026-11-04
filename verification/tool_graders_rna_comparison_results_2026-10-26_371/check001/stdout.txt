@@ -1,0 +1,187 @@
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+____ test_source_and_possessed_exact_refs_do_not_prove_received_descriptor _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check001/temporary/pytest/test_source_and_possessed_exac0')
+
+    def test_source_and_possessed_exact_refs_do_not_prove_received_descriptor(tmp_path):
+        with Store(tmp_path / "store") as store:
+>           f = E.Fixture(store, tmp_path / "fixture", source_only=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_comparison_operand_authority.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:62: in __init__
+    f = Original(store, self.root_path / str(i), original_id=str(i),
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:28: in __init__
+    super().__init__(*args, **kwargs)
+../../tool_graders_rna_structure_results_2026-10-26_358/fixture_helpers.py:94: in __init__
+    self.scope = {"subject_refs": store.create_problem(raw_sequence="GGGAAACCC", molecule=molecule)["subject_refs"]}
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7e0443798c20>
+input_path = None, raw_sequence = 'GGGAAACCC', molecule = 'rna'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+../../../gene_annotation_episode/materials.py:568: ContractError
+_____________ test_forged_saved_identity_is_rejected[handoff_ref] ______________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check001/temporary/pytest/test_forged_saved_identity_is_0')
+field = 'handoff_ref'
+
+    @pytest.mark.parametrize("field", ["handoff_ref", "source_ref", "sheet_sha256", "record_key"])
+    def test_forged_saved_identity_is_rejected(tmp_path, field):
+        with Store(tmp_path / "store") as store:
+>           f = E.Fixture(store, tmp_path / "fixture")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_comparison_operand_authority.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:62: in __init__
+    f = Original(store, self.root_path / str(i), original_id=str(i),
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:28: in __init__
+    super().__init__(*args, **kwargs)
+../../tool_graders_rna_structure_results_2026-10-26_358/fixture_helpers.py:94: in __init__
+    self.scope = {"subject_refs": store.create_problem(raw_sequence="GGGAAACCC", molecule=molecule)["subject_refs"]}
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7e04247f3770>
+input_path = None, raw_sequence = 'GGGAAACCC', molecule = 'rna'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+../../../gene_annotation_episode/materials.py:568: ContractError
+______________ test_forged_saved_identity_is_rejected[source_ref] ______________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check001/temporary/pytest/test_forged_saved_identity_is_1')
+field = 'source_ref'
+
+    @pytest.mark.parametrize("field", ["handoff_ref", "source_ref", "sheet_sha256", "record_key"])
+    def test_forged_saved_identity_is_rejected(tmp_path, field):
+        with Store(tmp_path / "store") as store:
+>           f = E.Fixture(store, tmp_path / "fixture")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_comparison_operand_authority.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:62: in __init__
+    f = Original(store, self.root_path / str(i), original_id=str(i),
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:28: in __init__
+    super().__init__(*args, **kwargs)
+../../tool_graders_rna_structure_results_2026-10-26_358/fixture_helpers.py:94: in __init__
+    self.scope = {"subject_refs": store.create_problem(raw_sequence="GGGAAACCC", molecule=molecule)["subject_refs"]}
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7e042468e060>
+input_path = None, raw_sequence = 'GGGAAACCC', molecule = 'rna'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+../../../gene_annotation_episode/materials.py:568: ContractError
+_____________ test_forged_saved_identity_is_rejected[sheet_sha256] _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check001/temporary/pytest/test_forged_saved_identity_is_2')
+field = 'sheet_sha256'
+
+    @pytest.mark.parametrize("field", ["handoff_ref", "source_ref", "sheet_sha256", "record_key"])
+    def test_forged_saved_identity_is_rejected(tmp_path, field):
+        with Store(tmp_path / "store") as store:
+>           f = E.Fixture(store, tmp_path / "fixture")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_comparison_operand_authority.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:62: in __init__
+    f = Original(store, self.root_path / str(i), original_id=str(i),
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:28: in __init__
+    super().__init__(*args, **kwargs)
+../../tool_graders_rna_structure_results_2026-10-26_358/fixture_helpers.py:94: in __init__
+    self.scope = {"subject_refs": store.create_problem(raw_sequence="GGGAAACCC", molecule=molecule)["subject_refs"]}
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7e042475f0e0>
+input_path = None, raw_sequence = 'GGGAAACCC', molecule = 'rna'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+../../../gene_annotation_episode/materials.py:568: ContractError
+______________ test_forged_saved_identity_is_rejected[record_key] ______________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check001/temporary/pytest/test_forged_saved_identity_is_3')
+field = 'record_key'
+
+    @pytest.mark.parametrize("field", ["handoff_ref", "source_ref", "sheet_sha256", "record_key"])
+    def test_forged_saved_identity_is_rejected(tmp_path, field):
+        with Store(tmp_path / "store") as store:
+>           f = E.Fixture(store, tmp_path / "fixture")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_comparison_operand_authority.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:62: in __init__
+    f = Original(store, self.root_path / str(i), original_id=str(i),
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:28: in __init__
+    super().__init__(*args, **kwargs)
+../../tool_graders_rna_structure_results_2026-10-26_358/fixture_helpers.py:94: in __init__
+    self.scope = {"subject_refs": store.create_problem(raw_sequence="GGGAAACCC", molecule=molecule)["subject_refs"]}
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7e04245f0fb0>
+input_path = None, raw_sequence = 'GGGAAACCC', molecule = 'rna'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+../../../gene_annotation_episode/materials.py:568: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rna_comparison_operand_authority.py::test_source_and_possessed_exact_refs_do_not_prove_received_descriptor
+FAILED ../../../tests/test_rna_comparison_operand_authority.py::test_forged_saved_identity_is_rejected[handoff_ref]
+FAILED ../../../tests/test_rna_comparison_operand_authority.py::test_forged_saved_identity_is_rejected[source_ref]
+FAILED ../../../tests/test_rna_comparison_operand_authority.py::test_forged_saved_identity_is_rejected[sheet_sha256]
+FAILED ../../../tests/test_rna_comparison_operand_authority.py::test_forged_saved_identity_is_rejected[record_key]
+5 failed in 28.58s

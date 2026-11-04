@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="14" time="76.348" timestamp="2026-10-26T06:11:13.487727-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_sequence_derivation_publication" name="test_native_transformation_retains_actual_sheet_numbers_and_original_mapping[sequence.translate-CATGAAATAAC-dna-arguments0-MK*-quantities0]" time="3.386"><failure message="AssertionError: {'status': 'partial', 'operation_ref': 'operation_3c286787375ba2b13ccb3937', 'record_refs': ['source_bd38151819323253a...46', 'context_e8d90865e0ac3d4b699b76e2', 'feature_b81bc0ff880cf2cc62bd1e4a', 'product_1df863aaae0d2b88958a20ca']}, ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_native_transformation_ret0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a0f68db15b0&gt;
+operation = 'sequence.translate', sequence = 'CATGAAATAAC', molecule = 'dna'
+arguments = {'code': 11, 'frame': 1}, expected = 'MK*'
+quantities = {'input_length_nt': 11, 'selected_length_nt': 11, 'frame_skipped_nt': 1, 'translated_length_nt': 9, ...}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_native_transformation_retains_actual_sheet_numbers_and_original_mapping(
+            tmp_path, monkeypatch, operation, sequence, molecule, arguments, expected, quantities):
+        directory = tmp_path / "state"
+        with Store(directory) as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            original = store.get_input(target)
+            registry = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, **arguments}
+            result = registry.execute(operation, args, operation_key="selected-transformation")
+&gt;           product = product_from_response(store, result)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_derivation_publication.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x7a0f46a41ac0&gt;
+response = {'status': 'partial', 'operation_ref': 'operation_3c286787375ba2b13ccb3937', 'record_refs': ['source_bd38151819323253a...46', 'context_e8d90865e0ac3d4b699b76e2', 'feature_b81bc0ff880cf2cc62bd1e4a', 'product_1df863aaae0d2b88958a20ca']}, ...}
+
+    def product_from_response(store, response):
+&gt;       assert response["status"] == "completed", response
+E       AssertionError: {'status': 'partial', 'operation_ref': 'operation_3c286787375ba2b13ccb3937', 'record_refs': ['source_bd38151819323253a...46', 'context_e8d90865e0ac3d4b699b76e2', 'feature_b81bc0ff880cf2cc62bd1e4a', 'product_1df863aaae0d2b88958a20ca']}, ...}
+E       assert 'partial' == 'completed'
+E         
+E         - completed
+E         + partial
+
+../../../tests/test_sequence_views_integration.py:28: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_publication" name="test_native_transformation_retains_actual_sheet_numbers_and_original_mapping[sequence.translate-GTGAAATAA-dna-arguments1-MK-quantities1]" time="2.482"><failure message="AssertionError: {'status': 'partial', 'operation_ref': 'operation_d4c2e8b4f90798a8fea2698b', 'record_refs': ['source_98559c1ed0d508f82...16', 'context_cebb52df30508c70b01a9ae0', 'feature_995ed754dc7e544d3d814b12', 'product_0d7017e412a468d1fff52033']}, ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_native_transformation_ret1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a0f4680f6e0&gt;
+operation = 'sequence.translate', sequence = 'GTGAAATAA', molecule = 'dna'
+arguments = {'code': 11, 'cds': True}, expected = 'MK'
+quantities = {'translated_length_nt': 9, 'translated_codon_count': 3, 'output_symbol_count': 2, 'amino_acid_symbol_count': 2, ...}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_native_transformation_retains_actual_sheet_numbers_and_original_mapping(
+            tmp_path, monkeypatch, operation, sequence, molecule, arguments, expected, quantities):
+        directory = tmp_path / "state"
+        with Store(directory) as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            original = store.get_input(target)
+            registry = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, **arguments}
+            result = registry.execute(operation, args, operation_key="selected-transformation")
+&gt;           product = product_from_response(store, result)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_derivation_publication.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x7a0f468108f0&gt;
+response = {'status': 'partial', 'operation_ref': 'operation_d4c2e8b4f90798a8fea2698b', 'record_refs': ['source_98559c1ed0d508f82...16', 'context_cebb52df30508c70b01a9ae0', 'feature_995ed754dc7e544d3d814b12', 'product_0d7017e412a468d1fff52033']}, ...}
+
+    def product_from_response(store, response):
+&gt;       assert response["status"] == "completed", response
+E       AssertionError: {'status': 'partial', 'operation_ref': 'operation_d4c2e8b4f90798a8fea2698b', 'record_refs': ['source_98559c1ed0d508f82...16', 'context_cebb52df30508c70b01a9ae0', 'feature_995ed754dc7e544d3d814b12', 'product_0d7017e412a468d1fff52033']}, ...}
+E       assert 'partial' == 'completed'
+E         
+E         - completed
+E         + partial
+
+../../../tests/test_sequence_views_integration.py:28: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_publication" name="test_native_transformation_retains_actual_sheet_numbers_and_original_mapping[sequence.translate-ATGTGATAA-dna-arguments2-MW*-quantities2]" time="2.930"><failure message="AssertionError: {'status': 'partial', 'operation_ref': 'operation_3ddf33c1fa9db0500486f312', 'record_refs': ['source_6670bfcc796cca632...39', 'context_3a90dfd04e59521507b457a6', 'feature_a0885ecaeb14b9b5a8f27ba0', 'product_979b54e0c9b17b31b942794e']}, ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_native_transformation_ret2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a0f469cb650&gt;
+operation = 'sequence.translate', sequence = 'ATGTGATAA', molecule = 'dna'
+arguments = {'code': 2}, expected = 'MW*'
+quantities = {'translated_codon_count': 3, 'internal_stop_count': 0, 'terminal_stop_symbol_count': 1, 'compatible_codon_count': 3}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_native_transformation_retains_actual_sheet_numbers_and_original_mapping(
+            tmp_path, monkeypatch, operation, sequence, molecule, arguments, expected, quantities):
+        directory = tmp_path / "state"
+        with Store(directory) as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            original = store.get_input(target)
+            registry = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, **arguments}
+            result = registry.execute(operation, args, operation_key="selected-transformation")
+&gt;           product = product_from_response(store, result)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_derivation_publication.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x7a0f468118b0&gt;
+response = {'status': 'partial', 'operation_ref': 'operation_3ddf33c1fa9db0500486f312', 'record_refs': ['source_6670bfcc796cca632...39', 'context_3a90dfd04e59521507b457a6', 'feature_a0885ecaeb14b9b5a8f27ba0', 'product_979b54e0c9b17b31b942794e']}, ...}
+
+    def product_from_response(store, response):
+&gt;       assert response["status"] == "completed", response
+E       AssertionError: {'status': 'partial', 'operation_ref': 'operation_3ddf33c1fa9db0500486f312', 'record_refs': ['source_6670bfcc796cca632...39', 'context_3a90dfd04e59521507b457a6', 'feature_a0885ecaeb14b9b5a8f27ba0', 'product_979b54e0c9b17b31b942794e']}, ...}
+E       assert 'partial' == 'completed'
+E         
+E         - completed
+E         + partial
+
+../../../tests/test_sequence_views_integration.py:28: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_publication" name="test_native_transformation_retains_actual_sheet_numbers_and_original_mapping[sequence.view-ACGTACGTAA-dna-arguments3-CGTACGACGT-quantities3]" time="2.645"><failure message="AssertionError: {'status': 'partial', 'operation_ref': 'operation_ecf40298ec105f9c0883ab00', 'record_refs': ['source_46f2ffa554e46557c...a0', 'context_5fc921effe68007cf6acc949', 'feature_6b648a97f2340a2821bf1c62', 'product_d2cc416937650c09fb68cf4a']}, ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_native_transformation_ret3')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a0f469ca300&gt;
+operation = 'sequence.view', sequence = 'ACGTACGTAA', molecule = 'dna'
+arguments = {'molecule': 'dna', 'orientation': 'reverse_complement', 'segments': [{'start': 4, 'end': 8}, {'start': 1, 'end': 5}, {'start': 1, 'end': 3}]}
+expected = 'CGTACGACGT'
+quantities = {'input_symbol_count': 10, 'output_symbol_count': 10, 'requested_segment_count': 3, 'selected_symbol_occurrence_count': 10, ...}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_native_transformation_retains_actual_sheet_numbers_and_original_mapping(
+            tmp_path, monkeypatch, operation, sequence, molecule, arguments, expected, quantities):
+        directory = tmp_path / "state"
+        with Store(directory) as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            original = store.get_input(target)
+            registry = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, **arguments}
+            result = registry.execute(operation, args, operation_key="selected-transformation")
+&gt;           product = product_from_response(store, result)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_derivation_publication.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x7a0f469e4c50&gt;
+response = {'status': 'partial', 'operation_ref': 'operation_ecf40298ec105f9c0883ab00', 'record_refs': ['source_46f2ffa554e46557c...a0', 'context_5fc921effe68007cf6acc949', 'feature_6b648a97f2340a2821bf1c62', 'product_d2cc416937650c09fb68cf4a']}, ...}
+
+    def product_from_response(store, response):
+&gt;       assert response["status"] == "completed", response
+E       AssertionError: {'status': 'partial', 'operation_ref': 'operation_ecf40298ec105f9c0883ab00', 'record_refs': ['source_46f2ffa554e46557c...a0', 'context_5fc921effe68007cf6acc949', 'feature_6b648a97f2340a2821bf1c62', 'product_d2cc416937650c09fb68cf4a']}, ...}
+E       assert 'partial' == 'completed'
+E         
+E         - completed
+E         + partial
+
+../../../tests/test_sequence_views_integration.py:28: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_publication" name="test_native_transformation_retains_actual_sheet_numbers_and_original_mapping[sequence.view-AUGC-rna-arguments4-GCAU-quantities4]" time="3.011"><failure message="AssertionError: {'status': 'partial', 'operation_ref': 'operation_765474a4e3081e356d7d2132', 'record_refs': ['source_f8095eb7a4150a689...27', 'context_67a0e71079d88c8a2d367420', 'feature_119605f0b5a90b891417f295', 'product_0e8d29e621ee4d0d0012ee8e']}, ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_native_transformation_ret4')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a0f469e6d20&gt;
+operation = 'sequence.view', sequence = 'AUGC', molecule = 'rna'
+arguments = {'molecule': 'rna', 'orientation': 'reverse_complement'}
+expected = 'GCAU'
+quantities = {'input_symbol_count': 4, 'output_symbol_count': 4, 'matching_symbol_count': 4, 'mismatching_symbol_count': 0}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_native_transformation_retains_actual_sheet_numbers_and_original_mapping(
+            tmp_path, monkeypatch, operation, sequence, molecule, arguments, expected, quantities):
+        directory = tmp_path / "state"
+        with Store(directory) as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            original = store.get_input(target)
+            registry = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, **arguments}
+            result = registry.execute(operation, args, operation_key="selected-transformation")
+&gt;           product = product_from_response(store, result)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_derivation_publication.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x7a0f46815df0&gt;
+response = {'status': 'partial', 'operation_ref': 'operation_765474a4e3081e356d7d2132', 'record_refs': ['source_f8095eb7a4150a689...27', 'context_67a0e71079d88c8a2d367420', 'feature_119605f0b5a90b891417f295', 'product_0e8d29e621ee4d0d0012ee8e']}, ...}
+
+    def product_from_response(store, response):
+&gt;       assert response["status"] == "completed", response
+E       AssertionError: {'status': 'partial', 'operation_ref': 'operation_765474a4e3081e356d7d2132', 'record_refs': ['source_f8095eb7a4150a689...27', 'context_67a0e71079d88c8a2d367420', 'feature_119605f0b5a90b891417f295', 'product_0e8d29e621ee4d0d0012ee8e']}, ...}
+E       assert 'partial' == 'completed'
+E         
+E         - completed
+E         + partial
+
+../../../tests/test_sequence_views_integration.py:28: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_publication" name="test_native_transformation_retains_actual_sheet_numbers_and_original_mapping[sequence.view-MACDEFGH-protein-arguments5-ACD-quantities5]" time="3.040"><failure message="AssertionError: {'status': 'partial', 'operation_ref': 'operation_ec1879c00679713eb63a899d', 'record_refs': ['source_e37f625ef38257a80...5d', 'context_ad3063af2c94f19b48e25568', 'feature_3a2cdcdafe705750a89829c7', 'product_0f64a04813772bc502d867c0']}, ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_native_transformation_ret5')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7a0f469e55e0&gt;
+operation = 'sequence.view', sequence = 'MACDEFGH', molecule = 'protein'
+arguments = {'molecule': 'protein', 'segments': [{'start': 1, 'end': 4}]}
+expected = 'ACD'
+quantities = {'input_symbol_count': 8, 'output_symbol_count': 3, 'distinct_selected_input_symbol_count': 3, 'selected_input_fraction': 0.375}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_native_transformation_retains_actual_sheet_numbers_and_original_mapping(
+            tmp_path, monkeypatch, operation, sequence, molecule, arguments, expected, quantities):
+        directory = tmp_path / "state"
+        with Store(directory) as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            original = store.get_input(target)
+            registry = ToolRegistry(store, clients=LocalOnly())
+            args = {"subject_ref": target, **arguments}
+            result = registry.execute(operation, args, operation_key="selected-transformation")
+&gt;           product = product_from_response(store, result)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_sequence_derivation_publication.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x7a0f469e52b0&gt;
+response = {'status': 'partial', 'operation_ref': 'operation_ec1879c00679713eb63a899d', 'record_refs': ['source_e37f625ef38257a80...5d', 'context_ad3063af2c94f19b48e25568', 'feature_3a2cdcdafe705750a89829c7', 'product_0f64a04813772bc502d867c0']}, ...}
+
+    def product_from_response(store, response):
+&gt;       assert response["status"] == "completed", response
+E       AssertionError: {'status': 'partial', 'operation_ref': 'operation_ec1879c00679713eb63a899d', 'record_refs': ['source_e37f625ef38257a80...5d', 'context_ad3063af2c94f19b48e25568', 'feature_3a2cdcdafe705750a89829c7', 'product_0f64a04813772bc502d867c0']}, ...}
+E       assert 'partial' == 'completed'
+E         
+E         - completed
+E         + partial
+
+../../../tests/test_sequence_views_integration.py:28: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_publication" name="test_grading_failure_preserves_native_product_and_exact_partial_replay[sequence.translate-translation-arguments0]" time="2.540" /><testcase classname="tests.test_sequence_derivation_publication" name="test_grading_failure_preserves_native_product_and_exact_partial_replay[sequence.view-extraction-arguments1]" time="3.318" /><testcase classname="tests.test_sequence_derivation_workflow" name="test_selected_derivation_delivers_actual_numerical_records_once[sequence.translate-CATGAAATAAC-dna-arguments0-MK*-quantities0]" time="8.634"><failure message="AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...389', 'context_86b6969781ef6ef4a7d488a7', 'feature_97d3c3fa0bdf38fa6f026758', 'product_54f6f8f1bc2dbca7246cc5e4'], ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_selected_derivation_deliv0')
+operation = 'sequence.translate', sequence = 'CATGAAATAAC', molecule = 'dna'
+arguments = {'code': 11, 'frame': 1}, expected = 'MK*'
+quantities = {'input_length_nt': 11, 'selected_length_nt': 11, 'frame_skipped_nt': 1, 'translated_length_nt': 9, ...}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_selected_derivation_delivers_actual_numerical_records_once(
+            tmp_path, operation, sequence, molecule, arguments, expected, quantities):
+        with Store(tmp_path / "state") as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            registry = ToolRegistry(store, clients=LocalOnly())
+            scope = {"subject_refs": [target]}
+            directory = tmp_path / "run"
+            descriptor = prepare_scientific_binding(run_directory=directory,
+                source_directory=PUBLICATION, tool_catalog=registry.catalog(),
+                child_roles=("scientific_process",))
+            library = ScientificProcessLibrary(directory / "scientific-process-library")
+            commission = {"kind": "episode_child", "role": "scientific_process",
+                "goal": "Prepare the supplied sequence for its assigned molecular comparison.",
+                "scope": scope,
+                "purpose": "Return the actual derived sequence and coordinate measurements; assign no function.",
+                "schema_json": json.dumps(RETURN_FORM), "initial_report_json": "{}",
+                "assignment": {"selection": {"version": "scientific_process_selection_v3",
+                    "evidence_axis": library.reference("A101"),
+                    "thought_pattern": library.reference("P01"),
+                    "child_tool_info": [{"name": operation, "resources": "local"}]},
+                    "evidence_refs": [target], "constraints": {"no_external_acquisition": True},
+                    "context": {"molecule": molecule}}}
+            args = {"subject_ref": target, **arguments}
+            choices = ScriptedDecisions([select(commission),
+                select({"kind": "tool", "tool": operation, "arguments": args})])
+            workflow = Workflow(store, registry, choices, directory, "derivation-native-fixture",
+                fixed_completion_estimate, zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_record_receipts=True,
+                initial_known_record_refs=[], decision_protocol="decision_exchange_v1")
+            parent = workflow.build("annotation", "root", "Investigate the supplied sequence", scope)
+            assert workflow.catalog(scope, source=parent.source) == []
+            assert not workflow.permits_common_action(parent.source, "tool")
+            async def run():
+                record = await parent.run_async(workflow.context)
+                await parent.build_result(record)
+                return record
+            record = asyncio.run(run())
+            assert record.units_consumed == 1 and len(choices.calls) == 2
+            child_id = choices.calls[1]["episode_id"]
+            info, = choices.calls[1]["state"]["scientific_process"]["child_tool_info"]
+            assert set(info) == {"name", "description", "resources", "instructions"}
+            assert info["name"] == operation and info["resources"] == "local"
+            family = "translation" if operation == "sequence.translate" else "extraction"
+            guidance = (PUBLICATION.parents[3] / "gene_annotation_episode/knowledge" /
+                        ("sequence-" + family + ".md")).read_text().strip()
+            assert guidance in info["instructions"]
+            returned = json.loads(workflow.journal.row("runtime_forms", child_id)["form"])
+            row = store.db.execute("SELECT * FROM tool_operations WHERE name=?", (operation,)).fetchone()
+            publication = json.loads(row["result"])
+&gt;           assert publication["status"] == "completed", publication
+E           AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...389', 'context_86b6969781ef6ef4a7d488a7', 'feature_97d3c3fa0bdf38fa6f026758', 'product_54f6f8f1bc2dbca7246cc5e4'], ...}
+E           assert 'partial' == 'completed'
+E             
+E             - completed
+E             + partial
+
+../../../tests/test_sequence_derivation_workflow.py:70: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_workflow" name="test_selected_derivation_delivers_actual_numerical_records_once[sequence.translate-GTGAAATAA-dna-arguments1-MK-quantities1]" time="8.116"><failure message="AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...105', 'context_86fa4363d49b7fdbed09e295', 'feature_2d2497fa1813eb27d29d8ee6', 'product_06beed5403679de041adaa10'], ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_selected_derivation_deliv1')
+operation = 'sequence.translate', sequence = 'GTGAAATAA', molecule = 'dna'
+arguments = {'code': 11, 'cds': True}, expected = 'MK'
+quantities = {'translated_length_nt': 9, 'translated_codon_count': 3, 'output_symbol_count': 2, 'amino_acid_symbol_count': 2, ...}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_selected_derivation_delivers_actual_numerical_records_once(
+            tmp_path, operation, sequence, molecule, arguments, expected, quantities):
+        with Store(tmp_path / "state") as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            registry = ToolRegistry(store, clients=LocalOnly())
+            scope = {"subject_refs": [target]}
+            directory = tmp_path / "run"
+            descriptor = prepare_scientific_binding(run_directory=directory,
+                source_directory=PUBLICATION, tool_catalog=registry.catalog(),
+                child_roles=("scientific_process",))
+            library = ScientificProcessLibrary(directory / "scientific-process-library")
+            commission = {"kind": "episode_child", "role": "scientific_process",
+                "goal": "Prepare the supplied sequence for its assigned molecular comparison.",
+                "scope": scope,
+                "purpose": "Return the actual derived sequence and coordinate measurements; assign no function.",
+                "schema_json": json.dumps(RETURN_FORM), "initial_report_json": "{}",
+                "assignment": {"selection": {"version": "scientific_process_selection_v3",
+                    "evidence_axis": library.reference("A101"),
+                    "thought_pattern": library.reference("P01"),
+                    "child_tool_info": [{"name": operation, "resources": "local"}]},
+                    "evidence_refs": [target], "constraints": {"no_external_acquisition": True},
+                    "context": {"molecule": molecule}}}
+            args = {"subject_ref": target, **arguments}
+            choices = ScriptedDecisions([select(commission),
+                select({"kind": "tool", "tool": operation, "arguments": args})])
+            workflow = Workflow(store, registry, choices, directory, "derivation-native-fixture",
+                fixed_completion_estimate, zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_record_receipts=True,
+                initial_known_record_refs=[], decision_protocol="decision_exchange_v1")
+            parent = workflow.build("annotation", "root", "Investigate the supplied sequence", scope)
+            assert workflow.catalog(scope, source=parent.source) == []
+            assert not workflow.permits_common_action(parent.source, "tool")
+            async def run():
+                record = await parent.run_async(workflow.context)
+                await parent.build_result(record)
+                return record
+            record = asyncio.run(run())
+            assert record.units_consumed == 1 and len(choices.calls) == 2
+            child_id = choices.calls[1]["episode_id"]
+            info, = choices.calls[1]["state"]["scientific_process"]["child_tool_info"]
+            assert set(info) == {"name", "description", "resources", "instructions"}
+            assert info["name"] == operation and info["resources"] == "local"
+            family = "translation" if operation == "sequence.translate" else "extraction"
+            guidance = (PUBLICATION.parents[3] / "gene_annotation_episode/knowledge" /
+                        ("sequence-" + family + ".md")).read_text().strip()
+            assert guidance in info["instructions"]
+            returned = json.loads(workflow.journal.row("runtime_forms", child_id)["form"])
+            row = store.db.execute("SELECT * FROM tool_operations WHERE name=?", (operation,)).fetchone()
+            publication = json.loads(row["result"])
+&gt;           assert publication["status"] == "completed", publication
+E           AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...105', 'context_86fa4363d49b7fdbed09e295', 'feature_2d2497fa1813eb27d29d8ee6', 'product_06beed5403679de041adaa10'], ...}
+E           assert 'partial' == 'completed'
+E             
+E             - completed
+E             + partial
+
+../../../tests/test_sequence_derivation_workflow.py:70: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_workflow" name="test_selected_derivation_delivers_actual_numerical_records_once[sequence.translate-ATGTGATAA-dna-arguments2-MW*-quantities2]" time="8.901"><failure message="AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...659', 'context_21e389e8e06df26a65863a9b', 'feature_065dbbb9642fc1a5c31ffe9a', 'product_e454e576a331d70df2b5293b'], ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_selected_derivation_deliv2')
+operation = 'sequence.translate', sequence = 'ATGTGATAA', molecule = 'dna'
+arguments = {'code': 2}, expected = 'MW*'
+quantities = {'translated_codon_count': 3, 'internal_stop_count': 0, 'terminal_stop_symbol_count': 1, 'compatible_codon_count': 3}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_selected_derivation_delivers_actual_numerical_records_once(
+            tmp_path, operation, sequence, molecule, arguments, expected, quantities):
+        with Store(tmp_path / "state") as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            registry = ToolRegistry(store, clients=LocalOnly())
+            scope = {"subject_refs": [target]}
+            directory = tmp_path / "run"
+            descriptor = prepare_scientific_binding(run_directory=directory,
+                source_directory=PUBLICATION, tool_catalog=registry.catalog(),
+                child_roles=("scientific_process",))
+            library = ScientificProcessLibrary(directory / "scientific-process-library")
+            commission = {"kind": "episode_child", "role": "scientific_process",
+                "goal": "Prepare the supplied sequence for its assigned molecular comparison.",
+                "scope": scope,
+                "purpose": "Return the actual derived sequence and coordinate measurements; assign no function.",
+                "schema_json": json.dumps(RETURN_FORM), "initial_report_json": "{}",
+                "assignment": {"selection": {"version": "scientific_process_selection_v3",
+                    "evidence_axis": library.reference("A101"),
+                    "thought_pattern": library.reference("P01"),
+                    "child_tool_info": [{"name": operation, "resources": "local"}]},
+                    "evidence_refs": [target], "constraints": {"no_external_acquisition": True},
+                    "context": {"molecule": molecule}}}
+            args = {"subject_ref": target, **arguments}
+            choices = ScriptedDecisions([select(commission),
+                select({"kind": "tool", "tool": operation, "arguments": args})])
+            workflow = Workflow(store, registry, choices, directory, "derivation-native-fixture",
+                fixed_completion_estimate, zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_record_receipts=True,
+                initial_known_record_refs=[], decision_protocol="decision_exchange_v1")
+            parent = workflow.build("annotation", "root", "Investigate the supplied sequence", scope)
+            assert workflow.catalog(scope, source=parent.source) == []
+            assert not workflow.permits_common_action(parent.source, "tool")
+            async def run():
+                record = await parent.run_async(workflow.context)
+                await parent.build_result(record)
+                return record
+            record = asyncio.run(run())
+            assert record.units_consumed == 1 and len(choices.calls) == 2
+            child_id = choices.calls[1]["episode_id"]
+            info, = choices.calls[1]["state"]["scientific_process"]["child_tool_info"]
+            assert set(info) == {"name", "description", "resources", "instructions"}
+            assert info["name"] == operation and info["resources"] == "local"
+            family = "translation" if operation == "sequence.translate" else "extraction"
+            guidance = (PUBLICATION.parents[3] / "gene_annotation_episode/knowledge" /
+                        ("sequence-" + family + ".md")).read_text().strip()
+            assert guidance in info["instructions"]
+            returned = json.loads(workflow.journal.row("runtime_forms", child_id)["form"])
+            row = store.db.execute("SELECT * FROM tool_operations WHERE name=?", (operation,)).fetchone()
+            publication = json.loads(row["result"])
+&gt;           assert publication["status"] == "completed", publication
+E           AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...659', 'context_21e389e8e06df26a65863a9b', 'feature_065dbbb9642fc1a5c31ffe9a', 'product_e454e576a331d70df2b5293b'], ...}
+E           assert 'partial' == 'completed'
+E             
+E             - completed
+E             + partial
+
+../../../tests/test_sequence_derivation_workflow.py:70: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_workflow" name="test_selected_derivation_delivers_actual_numerical_records_once[sequence.view-ACGTACGTAA-dna-arguments3-CGTACGACGT-quantities3]" time="10.108"><failure message="AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...9fb', 'context_9dd562357d2c1a75e015cfbe', 'feature_ab163ff3f4a783dfc72579df', 'product_1334083e1d9c525588ad9f2f'], ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_selected_derivation_deliv3')
+operation = 'sequence.view', sequence = 'ACGTACGTAA', molecule = 'dna'
+arguments = {'molecule': 'dna', 'orientation': 'reverse_complement', 'segments': [{'start': 4, 'end': 8}, {'start': 1, 'end': 5}, {'start': 1, 'end': 3}]}
+expected = 'CGTACGACGT'
+quantities = {'input_symbol_count': 10, 'output_symbol_count': 10, 'requested_segment_count': 3, 'selected_symbol_occurrence_count': 10, ...}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_selected_derivation_delivers_actual_numerical_records_once(
+            tmp_path, operation, sequence, molecule, arguments, expected, quantities):
+        with Store(tmp_path / "state") as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            registry = ToolRegistry(store, clients=LocalOnly())
+            scope = {"subject_refs": [target]}
+            directory = tmp_path / "run"
+            descriptor = prepare_scientific_binding(run_directory=directory,
+                source_directory=PUBLICATION, tool_catalog=registry.catalog(),
+                child_roles=("scientific_process",))
+            library = ScientificProcessLibrary(directory / "scientific-process-library")
+            commission = {"kind": "episode_child", "role": "scientific_process",
+                "goal": "Prepare the supplied sequence for its assigned molecular comparison.",
+                "scope": scope,
+                "purpose": "Return the actual derived sequence and coordinate measurements; assign no function.",
+                "schema_json": json.dumps(RETURN_FORM), "initial_report_json": "{}",
+                "assignment": {"selection": {"version": "scientific_process_selection_v3",
+                    "evidence_axis": library.reference("A101"),
+                    "thought_pattern": library.reference("P01"),
+                    "child_tool_info": [{"name": operation, "resources": "local"}]},
+                    "evidence_refs": [target], "constraints": {"no_external_acquisition": True},
+                    "context": {"molecule": molecule}}}
+            args = {"subject_ref": target, **arguments}
+            choices = ScriptedDecisions([select(commission),
+                select({"kind": "tool", "tool": operation, "arguments": args})])
+            workflow = Workflow(store, registry, choices, directory, "derivation-native-fixture",
+                fixed_completion_estimate, zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_record_receipts=True,
+                initial_known_record_refs=[], decision_protocol="decision_exchange_v1")
+            parent = workflow.build("annotation", "root", "Investigate the supplied sequence", scope)
+            assert workflow.catalog(scope, source=parent.source) == []
+            assert not workflow.permits_common_action(parent.source, "tool")
+            async def run():
+                record = await parent.run_async(workflow.context)
+                await parent.build_result(record)
+                return record
+            record = asyncio.run(run())
+            assert record.units_consumed == 1 and len(choices.calls) == 2
+            child_id = choices.calls[1]["episode_id"]
+            info, = choices.calls[1]["state"]["scientific_process"]["child_tool_info"]
+            assert set(info) == {"name", "description", "resources", "instructions"}
+            assert info["name"] == operation and info["resources"] == "local"
+            family = "translation" if operation == "sequence.translate" else "extraction"
+            guidance = (PUBLICATION.parents[3] / "gene_annotation_episode/knowledge" /
+                        ("sequence-" + family + ".md")).read_text().strip()
+            assert guidance in info["instructions"]
+            returned = json.loads(workflow.journal.row("runtime_forms", child_id)["form"])
+            row = store.db.execute("SELECT * FROM tool_operations WHERE name=?", (operation,)).fetchone()
+            publication = json.loads(row["result"])
+&gt;           assert publication["status"] == "completed", publication
+E           AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...9fb', 'context_9dd562357d2c1a75e015cfbe', 'feature_ab163ff3f4a783dfc72579df', 'product_1334083e1d9c525588ad9f2f'], ...}
+E           assert 'partial' == 'completed'
+E             
+E             - completed
+E             + partial
+
+../../../tests/test_sequence_derivation_workflow.py:70: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_workflow" name="test_selected_derivation_delivers_actual_numerical_records_once[sequence.view-AUGC-rna-arguments4-GCAU-quantities4]" time="8.049"><failure message="AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...16d', 'context_f64a5e1eeb5dd75cb4985c12', 'feature_301cd3c3479eea806211ce18', 'product_dd1497e67567c65dd90b8124'], ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_selected_derivation_deliv4')
+operation = 'sequence.view', sequence = 'AUGC', molecule = 'rna'
+arguments = {'molecule': 'rna', 'orientation': 'reverse_complement'}
+expected = 'GCAU'
+quantities = {'input_symbol_count': 4, 'output_symbol_count': 4, 'matching_symbol_count': 4, 'mismatching_symbol_count': 0}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_selected_derivation_delivers_actual_numerical_records_once(
+            tmp_path, operation, sequence, molecule, arguments, expected, quantities):
+        with Store(tmp_path / "state") as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            registry = ToolRegistry(store, clients=LocalOnly())
+            scope = {"subject_refs": [target]}
+            directory = tmp_path / "run"
+            descriptor = prepare_scientific_binding(run_directory=directory,
+                source_directory=PUBLICATION, tool_catalog=registry.catalog(),
+                child_roles=("scientific_process",))
+            library = ScientificProcessLibrary(directory / "scientific-process-library")
+            commission = {"kind": "episode_child", "role": "scientific_process",
+                "goal": "Prepare the supplied sequence for its assigned molecular comparison.",
+                "scope": scope,
+                "purpose": "Return the actual derived sequence and coordinate measurements; assign no function.",
+                "schema_json": json.dumps(RETURN_FORM), "initial_report_json": "{}",
+                "assignment": {"selection": {"version": "scientific_process_selection_v3",
+                    "evidence_axis": library.reference("A101"),
+                    "thought_pattern": library.reference("P01"),
+                    "child_tool_info": [{"name": operation, "resources": "local"}]},
+                    "evidence_refs": [target], "constraints": {"no_external_acquisition": True},
+                    "context": {"molecule": molecule}}}
+            args = {"subject_ref": target, **arguments}
+            choices = ScriptedDecisions([select(commission),
+                select({"kind": "tool", "tool": operation, "arguments": args})])
+            workflow = Workflow(store, registry, choices, directory, "derivation-native-fixture",
+                fixed_completion_estimate, zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_record_receipts=True,
+                initial_known_record_refs=[], decision_protocol="decision_exchange_v1")
+            parent = workflow.build("annotation", "root", "Investigate the supplied sequence", scope)
+            assert workflow.catalog(scope, source=parent.source) == []
+            assert not workflow.permits_common_action(parent.source, "tool")
+            async def run():
+                record = await parent.run_async(workflow.context)
+                await parent.build_result(record)
+                return record
+            record = asyncio.run(run())
+            assert record.units_consumed == 1 and len(choices.calls) == 2
+            child_id = choices.calls[1]["episode_id"]
+            info, = choices.calls[1]["state"]["scientific_process"]["child_tool_info"]
+            assert set(info) == {"name", "description", "resources", "instructions"}
+            assert info["name"] == operation and info["resources"] == "local"
+            family = "translation" if operation == "sequence.translate" else "extraction"
+            guidance = (PUBLICATION.parents[3] / "gene_annotation_episode/knowledge" /
+                        ("sequence-" + family + ".md")).read_text().strip()
+            assert guidance in info["instructions"]
+            returned = json.loads(workflow.journal.row("runtime_forms", child_id)["form"])
+            row = store.db.execute("SELECT * FROM tool_operations WHERE name=?", (operation,)).fetchone()
+            publication = json.loads(row["result"])
+&gt;           assert publication["status"] == "completed", publication
+E           AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...16d', 'context_f64a5e1eeb5dd75cb4985c12', 'feature_301cd3c3479eea806211ce18', 'product_dd1497e67567c65dd90b8124'], ...}
+E           assert 'partial' == 'completed'
+E             
+E             - completed
+E             + partial
+
+../../../tests/test_sequence_derivation_workflow.py:70: AssertionError</failure></testcase><testcase classname="tests.test_sequence_derivation_workflow" name="test_selected_derivation_delivers_actual_numerical_records_once[sequence.view-MACDEFGH-protein-arguments5-ACD-quantities5]" time="8.362"><failure message="AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...2f2', 'context_702bf1c88cb922917e0a0d84', 'feature_cc6a0cdec294c75d6fddc481', 'product_a994ba0465f199bbc64cce92'], ...}&#10;assert 'partial' == 'completed'&#10;  &#10;  - completed&#10;  + partial">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_derivation_2026-10-26_279/check001/temporary/test_selected_derivation_deliv5')
+operation = 'sequence.view', sequence = 'MACDEFGH', molecule = 'protein'
+arguments = {'molecule': 'protein', 'segments': [{'start': 1, 'end': 4}]}
+expected = 'ACD'
+quantities = {'input_symbol_count': 8, 'output_symbol_count': 3, 'distinct_selected_input_symbol_count': 3, 'selected_input_fraction': 0.375}
+
+    @pytest.mark.parametrize("operation,sequence,molecule,arguments,expected,quantities", CASES)
+    def test_selected_derivation_delivers_actual_numerical_records_once(
+            tmp_path, operation, sequence, molecule, arguments, expected, quantities):
+        with Store(tmp_path / "state") as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
+            registry = ToolRegistry(store, clients=LocalOnly())
+            scope = {"subject_refs": [target]}
+            directory = tmp_path / "run"
+            descriptor = prepare_scientific_binding(run_directory=directory,
+                source_directory=PUBLICATION, tool_catalog=registry.catalog(),
+                child_roles=("scientific_process",))
+            library = ScientificProcessLibrary(directory / "scientific-process-library")
+            commission = {"kind": "episode_child", "role": "scientific_process",
+                "goal": "Prepare the supplied sequence for its assigned molecular comparison.",
+                "scope": scope,
+                "purpose": "Return the actual derived sequence and coordinate measurements; assign no function.",
+                "schema_json": json.dumps(RETURN_FORM), "initial_report_json": "{}",
+                "assignment": {"selection": {"version": "scientific_process_selection_v3",
+                    "evidence_axis": library.reference("A101"),
+                    "thought_pattern": library.reference("P01"),
+                    "child_tool_info": [{"name": operation, "resources": "local"}]},
+                    "evidence_refs": [target], "constraints": {"no_external_acquisition": True},
+                    "context": {"molecule": molecule}}}
+            args = {"subject_ref": target, **arguments}
+            choices = ScriptedDecisions([select(commission),
+                select({"kind": "tool", "tool": operation, "arguments": args})])
+            workflow = Workflow(store, registry, choices, directory, "derivation-native-fixture",
+                fixed_completion_estimate, zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_record_receipts=True,
+                initial_known_record_refs=[], decision_protocol="decision_exchange_v1")
+            parent = workflow.build("annotation", "root", "Investigate the supplied sequence", scope)
+            assert workflow.catalog(scope, source=parent.source) == []
+            assert not workflow.permits_common_action(parent.source, "tool")
+            async def run():
+                record = await parent.run_async(workflow.context)
+                await parent.build_result(record)
+                return record
+            record = asyncio.run(run())
+            assert record.units_consumed == 1 and len(choices.calls) == 2
+            child_id = choices.calls[1]["episode_id"]
+            info, = choices.calls[1]["state"]["scientific_process"]["child_tool_info"]
+            assert set(info) == {"name", "description", "resources", "instructions"}
+            assert info["name"] == operation and info["resources"] == "local"
+            family = "translation" if operation == "sequence.translate" else "extraction"
+            guidance = (PUBLICATION.parents[3] / "gene_annotation_episode/knowledge" /
+                        ("sequence-" + family + ".md")).read_text().strip()
+            assert guidance in info["instructions"]
+            returned = json.loads(workflow.journal.row("runtime_forms", child_id)["form"])
+            row = store.db.execute("SELECT * FROM tool_operations WHERE name=?", (operation,)).fetchone()
+            publication = json.loads(row["result"])
+&gt;           assert publication["status"] == "completed", publication
+E           AssertionError: {'feedback': {'category': 'partial_execution', 'code': 'representation_error', 'detail': {'field_path': ['measurements...2f2', 'context_702bf1c88cb922917e0a0d84', 'feature_cc6a0cdec294c75d6fddc481', 'product_a994ba0465f199bbc64cce92'], ...}
+E           assert 'partial' == 'completed'
+E             
+E             - completed
+E             + partial
+
+../../../tests/test_sequence_derivation_workflow.py:70: AssertionError</failure></testcase></testsuite></testsuites>

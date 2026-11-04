@@ -1,0 +1,172 @@
+{
+  "baseline_genome_alignment_adapter_sha256": "42bea987a93cee2902278ba5a2adc047d1b334ffb6f99d7fb2f8f980d410962a",
+  "baseline_source_files_verified_unchanged": 1052,
+  "captured_data": "capture_failure_001/data_009.json",
+  "failing_reference_path": "/associations/artifacts/0/artifact/requirement_ids",
+  "failing_reference_values": [
+    "native"
+  ],
+  "intended_referent": {
+    "declared_format": {
+      "format": "mauve_v4",
+      "mode": null,
+      "producer_source_ref": null,
+      "transformation_evidence": [],
+      "version": "4"
+    },
+    "exact_object": null,
+    "producer_rule_evidence": null,
+    "required": true,
+    "requirement_id": "native",
+    "role": "genome_alignment_primary"
+  },
+  "intended_referent_pointer": "/selector/requirements/1",
+  "intended_referent_schema": "bvbrc_appservice_schemas.json#/$defs/OutputRequirement",
+  "probe_count": 16,
+  "probes": [
+    {
+      "name": "captured_C_inputs_are_valid",
+      "outcome": "accepted"
+    },
+    {
+      "name": "captured_C_associations_are_valid",
+      "outcome": "accepted"
+    },
+    {
+      "name": "captured_original_output_selection_is_valid",
+      "outcome": "accepted"
+    },
+    {
+      "code": "bvbrc_genome_alignment_provider_requirement_reference_unknown",
+      "name": "unchanged_D_data_still_has_original_failure",
+      "outcome": "expected_rejection"
+    },
+    {
+      "name": "retained_ArtifactMember_shape_is_valid",
+      "outcome": "accepted"
+    },
+    {
+      "code": "contract_shape_invalid",
+      "name": "duplicate_ArtifactMember_selection_ids_reject",
+      "outcome": "expected_rejection"
+    },
+    {
+      "code": "publication_dependency_conflict",
+      "name": "scientific_requirement_is_not_an_output_selection",
+      "outcome": "expected_rejection"
+    },
+    {
+      "code": "publication_requirement_conflict",
+      "name": "original_selection_wrong_role_rejects",
+      "outcome": "expected_rejection"
+    },
+    {
+      "code": "publication_requirement_conflict",
+      "name": "original_selection_wrong_format_rejects",
+      "outcome": "expected_rejection"
+    },
+    {
+      "code": "publication_requirement_conflict",
+      "name": "original_selection_wrong_exact_object_rejects",
+      "outcome": "expected_rejection"
+    },
+    {
+      "code": "bvbrc_genome_alignment_argument_invalid",
+      "name": "output_selection_is_not_scientific_association_cause",
+      "outcome": "expected_rejection"
+    },
+    {
+      "code": "bvbrc_genome_alignment_argument_invalid",
+      "name": "output_selection_is_not_scientific_input_cause",
+      "outcome": "expected_rejection"
+    },
+    {
+      "code": "bvbrc_genome_alignment_provider_component_identity_conflict",
+      "name": "dropping_nested_scientific_cause_from_global_union_rejects",
+      "outcome": "expected_rejection"
+    },
+    {
+      "name": "older_optional_ArtifactMember_field_absence_validates",
+      "outcome": "accepted"
+    },
+    {
+      "name": "OriginalTask_retained_native_JSON_has_its_own_domain",
+      "outcome": "accepted"
+    },
+    {
+      "code": "bvbrc_genome_alignment_provider_requirement_reference_unknown",
+      "name": "current_whole_data_walk_also_misreads_native_parameter_JSON",
+      "outcome": "expected_rejection"
+    }
+  ],
+  "publication_inputs": "capture_failure_001/temporary/test_public_genome_resolvers_r0/api-service-execution/0615b6646721c9a81873eb0e96280d7fb9d722328ebda481bd2ffcf4a560db96/episodes/c1a68d3886ce19d06dfd9a0d12971237ca21f831ebb5c645eb941d77633034f4/actions/e95fcdedc8aa7ea061843a22adc6768c0911ca51a2b09057d39b2b5a275afc0c/publication_inputs.json",
+  "scientific_artifact_cause": {
+    "kind": "byte_version_evidence",
+    "reason_code": "bvbrc_genome_alignment_artifact_version_unverified",
+    "requirement_id": "ga_association:3e0c84531e03f778e02329016ce35c4758739ec88eab42e5106ff2804ce52fc5",
+    "role": "genome_alignment_primary",
+    "source_refs": [
+      "source_8a44b100e8bb87a513761385"
+    ]
+  },
+  "scientific_requirement_count": 17,
+  "scope": "Existing baseline validators only; no replacement validator or source modification; no complete provider pass claimed.",
+  "standalone_native_example": {
+    "coverage_fraction": {
+      "denominator": 693,
+      "evidence": [],
+      "method_id": "mauve_v4_coverage_fraction_v1",
+      "numerator": 690,
+      "origin": "calculated",
+      "population_id": "official:small.mauve:all_observed_explicit_segments",
+      "requirement_ids": [
+        "mauve_v4_requirement:b2f3d736b6f5eb851edc1930d6ae32ca03737c12453eff5f34bdb337c3bc3129",
+        "mauve_v4_requirement:85e9741e75ee391cf2bb353ca940a3e2794e5cef5cb2703c8f09b9a33753f410",
+        "mauve_v4_requirement:a4386761e1973a74086fb7cec63d7156a79a8bed926a1e67479120091c6635d3",
+        "mauve_v4_requirement:33864c050bd15def1120479688a0a2cd8ad97ab5f6c6e7d3ee4beb2754a04506",
+        "mauve_v4_requirement:a643287097b6e7a4078fa9a53e96a4827636b00104c183069e8a15315dd81467"
+      ],
+      "state": "available",
+      "uncertainty": null,
+      "unit": "fraction",
+      "value": 0.9956709956709957
+    },
+    "denominator_bases": {
+      "denominator": null,
+      "evidence": [],
+      "method_id": "mauve_v4_denominator_bases_v1",
+      "numerator": null,
+      "origin": "native_observation",
+      "population_id": "official:small.mauve:all_observed_explicit_segments",
+      "requirement_ids": [
+        "mauve_v4_requirement:b2f3d736b6f5eb851edc1930d6ae32ca03737c12453eff5f34bdb337c3bc3129",
+        "mauve_v4_requirement:85e9741e75ee391cf2bb353ca940a3e2794e5cef5cb2703c8f09b9a33753f410",
+        "mauve_v4_requirement:a4386761e1973a74086fb7cec63d7156a79a8bed926a1e67479120091c6635d3",
+        "mauve_v4_requirement:33864c050bd15def1120479688a0a2cd8ad97ab5f6c6e7d3ee4beb2754a04506",
+        "mauve_v4_requirement:a643287097b6e7a4078fa9a53e96a4827636b00104c183069e8a15315dd81467"
+      ],
+      "state": "available",
+      "uncertainty": null,
+      "unit": "nucleotides",
+      "value": 693
+    },
+    "denominator_kind": "native_declared_length",
+    "known_union_bases": {
+      "denominator": null,
+      "evidence": [],
+      "method_id": "mauve_v4_known_union_bases_v1",
+      "numerator": null,
+      "origin": "calculated",
+      "population_id": "official:small.mauve:all_observed_explicit_segments",
+      "requirement_ids": [],
+      "state": "available",
+      "uncertainty": null,
+      "unit": "nucleotides",
+      "value": 690
+    },
+    "member": {
+      "index": 0,
+      "namespace": "mauve_v4_member_0based"
+    }
+  }
+}

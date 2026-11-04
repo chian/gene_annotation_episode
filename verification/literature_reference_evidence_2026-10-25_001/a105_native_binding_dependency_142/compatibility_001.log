@@ -1,0 +1,36 @@
+..............F                                                          [100%]
+=================================== FAILURES ===================================
+_ test_untouched_historical_runtime_output_and_actual_typed_receipt_reopen_cold _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_native_binding_dependency_142/pytest_001/test_untouched_historical_runt0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74833ea307d0>
+
+    def test_untouched_historical_runtime_output_and_actual_typed_receipt_reopen_cold(tmp_path, monkeypatch):
+        script = """
+    import hashlib, json, pathlib, sys
+    pin, destination = map(pathlib.Path, sys.argv[1:])
+    sys.path[:0] = [str(pin), str(pin / 'tests')]
+    import pytest
+    from gene_annotation_episode.literature_binding_interaction_storage import _dependencies
+    from test_literature_binding_interaction_integration import test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen
+    assert _dependencies()['sha256']['literature_rate_storage.py'] == '171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4'
+    with pytest.MonkeyPatch.context() as patch:
+        test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen(destination, patch)
+    print(json.dumps({'status':'historical_original_runtime_c4_passed','dependencies':_dependencies()}, sort_keys=True))
+    """
+        result = subprocess.run([sys.executable, "-c", script, str(PIN), str(tmp_path)],
+            cwd=PIN, capture_output=True, text=True, timeout=180)
+        (tmp_path / "historical_stdout.log").write_text(result.stdout)
+        (tmp_path / "historical_stderr.log").write_text(result.stderr)
+>       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<string>", line 7, in <module>
+E         ModuleNotFoundError: No module named 'test_literature_binding_interaction_integration'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-c', "\nimport hashlib, json, pat...ng>", line 7, in <module>\nModuleNotFoundError: No module named \'test_literature_binding_interaction_integration\'\n').returncode
+
+tests/test_a105_native_binding_dependency_142.py:141: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_a105_native_binding_dependency_142.py::test_untouched_historical_runtime_output_and_actual_typed_receipt_reopen_cold
+1 failed, 14 passed in 14.63s

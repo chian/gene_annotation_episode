@@ -1,0 +1,101 @@
+{
+  "status": "root265_pure_defects_repaired_and_scoped_cohort_passed",
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/literature_measurement_comparison_inputs.py",
+      "bytes": 107947,
+      "sha256": "3f05d70580e6b8d15826182e9bc2e21247954ab51ecaebf40a8c4c7568e3882c"
+    },
+    {
+      "path": "gene_annotation_episode/literature_measurement_comparison_calculations.py",
+      "bytes": 30621,
+      "sha256": "faeb140de9d76b4641cb4ac24d9fdb8123172f1e8c32845f9bb28a3c20037838"
+    },
+    {
+      "path": "gene_annotation_episode/literature_measurement_comparison_prompt.py",
+      "bytes": 8908,
+      "sha256": "083245ae7f265dd24bf42586a11c260a5ea404a70bd913d5d66f6a2288737277"
+    },
+    {
+      "path": "tests/test_literature_measurement_comparison_components_258.py",
+      "bytes": 47081,
+      "sha256": "4d2b19ca38ca8b153dc9d5bbc4b2a5236bd006e981404ad721c1ea4c592eca6e"
+    }
+  ],
+  "schema_resources": [
+    {
+      "path": "verification/a105_measurement_comparison_components_258/SELECTION_SCHEMA_004.json",
+      "bytes": 41672,
+      "sha256": "4e4eb4c0a521f5d86bee20201b43ce0fb750545d1eed7a35c7b2d66acf0dd252"
+    },
+    {
+      "path": "verification/a105_measurement_comparison_components_258/EXTRACTION_SCHEMA_004.json",
+      "bytes": 75630,
+      "sha256": "53c8f9491469019078628750987201664c9cf33b2c50e7f2dd0bed426ec8c5ce"
+    },
+    {
+      "path": "verification/a105_measurement_comparison_components_258/CALCULATION_INPUTS_SCHEMA_004.json",
+      "bytes": 71243,
+      "sha256": "b2f745bd4293788aff2c5479057a5ed049a03b762f5af1b6d4af036b2886bc3f"
+    },
+    {
+      "path": "verification/a105_measurement_comparison_components_258/SHEET_SCHEMA_004.json",
+      "bytes": 33775,
+      "sha256": "c86fe6fdec050d09a0e4f383ecec46a8f35ed1994aa16ec2c28b55f297967c53"
+    },
+    {
+      "path": "verification/a105_measurement_comparison_components_258/COVARIANCE_DOCUMENT_SCHEMA_004.json",
+      "bytes": 2141,
+      "sha256": "61d9d3887736f54b47792de00a48345be8d208498bd9a8a9b6af814a128f144c"
+    }
+  ],
+  "extraction_version": "a105_measurement_comparison_extraction_v2",
+  "calculation_inputs_version": "a105_measurement_comparison_calculation_inputs_v2",
+  "callable_signatures_unchanged": true,
+  "selection_sheet_covariance_contract_shapes_unchanged": true,
+  "source_facts_and_synthetic_fixture_status": "preserved_as_declared",
+  "fix1": {
+    "whole_snapshot_content_digest_checked": true,
+    "bound_original_artifact_checked": true,
+    "available_without_raw_snapshot_rejected": true,
+    "malformed_and_nonutf8_unavailable_partials_retained": true
+  },
+  "fix2": {
+    "authenticated_coefficient_reading_and_context_retained": true,
+    "qualified_conversion_does_not_erase_native_partials": true,
+    "no_silent_v1_migration": true
+  },
+  "verification": {
+    "targeted_covariance": "4 passed; REPAIR_COVARIANCE_TARGETED_011.txt",
+    "targeted_coefficients": "18 passed; REPAIR_COEFFICIENT_TARGETED_013.txt",
+    "final_affected_cohort": "62 passed; REPAIR_FINAL_COHORT_014.txt",
+    "exact_reader_input_and_import_receipt": "verification/a105_measurement_comparison_components_258/scoped_receipt_014",
+    "failed_selector_attempt_retained": "REPAIR_COEFFICIENT_TARGETED_012.txt and repair012_coefficient_code; two range selectors excluded their trailing decimal point and were corrected"
+  },
+  "actual_qualified_example": {
+    "EXTRACTION": {
+      "path": "verification/a105_measurement_comparison_components_258/QUALIFIED_COEFFICIENT_EXTRACTION_ACTUAL_015.json",
+      "bytes": 71415,
+      "sha256": "0d8da6ddb5592baba0f5f972a684060acbee7b2fcfabdcb29cb6563fcf4d65a3"
+    },
+    "CALCULATION_INPUTS": {
+      "path": "verification/a105_measurement_comparison_components_258/QUALIFIED_COEFFICIENT_CALCULATION_INPUTS_ACTUAL_015.json",
+      "bytes": 47530,
+      "sha256": "0e013fc891c219988c9ee5edadc053fe01ac6302e2ceeae344b8c62a1b907faa"
+    },
+    "SHEET": {
+      "path": "verification/a105_measurement_comparison_components_258/QUALIFIED_COEFFICIENT_SHEET_ACTUAL_015.json",
+      "bytes": 37555,
+      "sha256": "00e0f1e35958fdfb0f6411f142fe91ab3ea5648ccf84ab8eb2944c5b1e6c5bbe"
+    }
+  },
+  "previous010_pin_and_artifacts_unchanged": true,
+  "shared_implementation_paths_unchanged": 17,
+  "task_sha256": "cd98aa8e5208a0b1c7f2d0b67c3e522589313474a52f613be157f8985577382e",
+  "prompt_module_unchanged": true,
+  "future_repository_cold_path": "Compare original saved typed objects/custody/equality; do not invoke pure reader/compile validators or recalculate there.",
+  "selected_binding_or_shared_edits": false,
+  "actual_model_backed_investigation": false,
+  "primary_positive_matched_covariance_coverage": false,
+  "A105_or_full_goal_complete": false
+}

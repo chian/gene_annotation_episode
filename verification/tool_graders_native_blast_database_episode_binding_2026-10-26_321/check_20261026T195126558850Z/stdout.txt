@@ -1,0 +1,751 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+___ test_actual_received_form_is_required_and_saved_row_cannot_be_rewritten ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_actual_received_form_is_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1c866b530>
+
+    def test_actual_received_form_is_required_and_saved_row_cannot_be_rewritten(tmp_path, monkeypatch):
+>       h = SyntheticHost(tmp_path, monkeypatch)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_returns.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_blast_database_episode_binding.SyntheticHost object at 0x72c1c866b0e0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_actual_received_form_is_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1c866b530>
+program = 'psiblast', nonzero = False, metadata = None, tuples = None
+empty_logs = False, query_kind = 'sequence', query_bytes = None
+sequence = 'ACGT', native_hsp = None, model = None
+
+    def __init__(self, tmp_path, monkeypatch, program='psiblast', *, nonzero=False, metadata=None, tuples=None,
+                 empty_logs=False, query_kind='sequence', query_bytes=None, sequence='ACGT', native_hsp=None, model=None):
+        remote = remote_fixture.__wrapped__(tmp_path, monkeypatch)
+        # Keep the established fake PBS scripts, but bind only the transport
+        # method. Unrelated local_jobs subprocesses retain their real runner.
+        import subprocess
+        monkeypatch.setattr(subprocess, 'run', REAL_RUN)
+        self.calls = []
+        def transport(operations, request):
+            self.calls.append(deepcopy(request))
+            env = dict(os.environ, PATH=str(tmp_path / 'pbs-bin') + os.pathsep + os.environ['PATH'],
+                FAKE_PBS_ROOT=str(remote.database))
+            response = REAL_RUN([sys.executable, '-B', '-c', _REMOTE_WORKER], input=canonical(request).encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            if response.returncode:
+                raise ValueError('controlled_pbs_worker_failed:' + response.stderr.decode())
+            reply = json.loads(response.stdout)
+            assert reply['request_sha256'] == digest(request)
+            return reply['result']['outcome'], reply['result']['context_after']
+        monkeypatch.setattr(PBSPracticalOperations, '_invoke', transport)
+        self.tmp_path, self.workspace = tmp_path, remote.workspace
+        _, plan, manifest = producer_fixture(self.workspace / 'synthetic-inputs', program=program, query=query_kind, checkpoint_output=False)
+        job = deepcopy(plan['requested_job']['native_blast_database'])
+        if query_bytes is not None:
+            job['inputs'][0].update(write(Path(job['inputs'][0]['path']), query_bytes))
+        if query_kind == 'msa':
+            job['query']['msa_master_record_ordinal'] = 0
+        job['grading_parameters']['sequence_database_model'] = model
+        if metadata is None:
+            job['inputs'] = job['inputs'][:1]; job['metadata_inputs'] = []
+        else:
+            job['inputs'][1].update(write(Path(job['inputs'][1]['path']), canonical(metadata).encode()))
+            job['metadata_inputs'] = tuples
+        job['environment']['FAKE_PBS_EXECUTE'] = '1'
+        native_program = program.removesuffix('_vdb')
+        hsp = dict(query_from=1, query_to=4, hit_from=1, hit_to=4, align_len=4, identity=4,
+            qseq='ACGT', hseq='ACGT', gaps=0, bit_score=20, score=40, evalue=0.0)
+        hsp = native_hsp or hsp
+        report = {'BlastOutput2': [{'report': dict(program=native_program, version=native_program.upper() + ' 2.17.0+',
+            search_target={'db': 'target'}, params={}, results={'search': dict(query_id='one', query_title='one', query_len=len(sequence),
+                hits=[dict(len=max(hsp['hit_from'], hsp['hit_to']), description=[dict(id='A', accession='A.1', title='synthetic A')], hsps=[hsp])])})}]}
+        script = ('#!' + sys.executable + '\nimport pathlib, sys\n'
+            + ('' if empty_logs else 'print("synthetic stdout")\nsys.stderr.write("synthetic stderr\\n")\n')
+            +
+            'pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(' + repr(json.dumps(report).encode()) + ')\n'
+            'pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")\n'
+            'raise SystemExit(' + ('7' if nonzero else '0') + ')\n').encode()
+        software = write(Path(job['software']['executable']), script)
+        job['software']['sha256'] = software['sha256']
+        self.job = job
+        config = deepcopy(remote.configuration)
+        config['native_blast_database'] = dict(version='native_blast_database_resource_v1',
+            producer=dict(module_root=manifest['module_root'], manifest=plan['producer_manifest']), environment={},
+            bindings=[dict(program=program, mode='database', software=job['software'],
+                database_manifests=[db['manifest_file'] for db in job['databases']])])
+        self.config = config
+        self.store = Store(tmp_path / 'store')
+        self.scope = {'subject_refs': self.store.create_problem(raw_sequence=sequence, molecule='dna' if program in {'blastn_vdb', 'rpstblastn'} else 'protein')['subject_refs']}
+        self.run_id = 'synthetic-321-' + program
+        self.journal, self.receipts = Journal(self.store, self.run_id), EpisodeReceipts(self.store, self.run_id)
+        self.family = ExecutionEpisodes(None, store=self.store, directory=tmp_path / 'run', run_id=self.run_id,
+            resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+        self.root = self.context((('annotation', 'root'),), {}, None)
+        self.receipts.receive(self.root.episode_id, self.scope['subject_refs'], kind='initial')
+        self.assignment = native_assignment(self.workspace, 'synthetic-hpc', kind='hpc')
+        self.assignment['requested_job'] = requested_job_from_native_blast_database(job)
+        self.assignment['constraints'] = {'account': 'EpiCalib', 'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']}
+        launch = dict(version=LAUNCH_VERSION, requests={'synthetic-hpc': self.assignment}, immutable_input_versions=[], constraints={})
+        handoff_schema = dict(type='object', properties={'handoffs': self.family.fact_sources('launch')['execution_handoff_refs']['report_schema']},
+            required=['handoffs'], additionalProperties=False)
+        self.launch = self.child(self.root, 'launch', launch, handoff_schema, index=0)
+        selected = self.family.prepare_assignment(self.launch, 'launch_hpc', self.assignment, self.scope, 'commission-hpc')
+        self.hpc = self.child(self.launch, 'launch_hpc', selected, handoff_schema, index=0)
+        self.family.initialize(self.hpc)
+        outcome = self.select(self.hpc, 0, 'practical.job.start', {'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']})
+        assert outcome['status'] == 'completed', outcome
+        self.handoff = outcome['record_refs'][0]
+        self.target = self.family.job_progress_provider.targets.read_target(self.handoff, self.scope)
+>       self.deliver(self.hpc, self.launch, self.family.facts(self.hpc))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ExecutionEpisodes.facts() missing 1 required positional argument: 'completion_snapshot'
+
+../../../tests/test_native_blast_database_episode_binding.py:130: TypeError
+_______ test_unchanged_scientific_forwarding_uses_immediate_child_forms ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_unchanged_scientific_forw0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1c866b5f0>
+
+    def test_unchanged_scientific_forwarding_uses_immediate_child_forms(tmp_path, monkeypatch):
+>       h = SyntheticHost(tmp_path, monkeypatch)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_returns.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_blast_database_episode_binding.SyntheticHost object at 0x72c1c866bf50>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_unchanged_scientific_forw0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1c866b5f0>
+program = 'psiblast', nonzero = False, metadata = None, tuples = None
+empty_logs = False, query_kind = 'sequence', query_bytes = None
+sequence = 'ACGT', native_hsp = None, model = None
+
+    def __init__(self, tmp_path, monkeypatch, program='psiblast', *, nonzero=False, metadata=None, tuples=None,
+                 empty_logs=False, query_kind='sequence', query_bytes=None, sequence='ACGT', native_hsp=None, model=None):
+        remote = remote_fixture.__wrapped__(tmp_path, monkeypatch)
+        # Keep the established fake PBS scripts, but bind only the transport
+        # method. Unrelated local_jobs subprocesses retain their real runner.
+        import subprocess
+        monkeypatch.setattr(subprocess, 'run', REAL_RUN)
+        self.calls = []
+        def transport(operations, request):
+            self.calls.append(deepcopy(request))
+            env = dict(os.environ, PATH=str(tmp_path / 'pbs-bin') + os.pathsep + os.environ['PATH'],
+                FAKE_PBS_ROOT=str(remote.database))
+            response = REAL_RUN([sys.executable, '-B', '-c', _REMOTE_WORKER], input=canonical(request).encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            if response.returncode:
+                raise ValueError('controlled_pbs_worker_failed:' + response.stderr.decode())
+            reply = json.loads(response.stdout)
+            assert reply['request_sha256'] == digest(request)
+            return reply['result']['outcome'], reply['result']['context_after']
+        monkeypatch.setattr(PBSPracticalOperations, '_invoke', transport)
+        self.tmp_path, self.workspace = tmp_path, remote.workspace
+        _, plan, manifest = producer_fixture(self.workspace / 'synthetic-inputs', program=program, query=query_kind, checkpoint_output=False)
+        job = deepcopy(plan['requested_job']['native_blast_database'])
+        if query_bytes is not None:
+            job['inputs'][0].update(write(Path(job['inputs'][0]['path']), query_bytes))
+        if query_kind == 'msa':
+            job['query']['msa_master_record_ordinal'] = 0
+        job['grading_parameters']['sequence_database_model'] = model
+        if metadata is None:
+            job['inputs'] = job['inputs'][:1]; job['metadata_inputs'] = []
+        else:
+            job['inputs'][1].update(write(Path(job['inputs'][1]['path']), canonical(metadata).encode()))
+            job['metadata_inputs'] = tuples
+        job['environment']['FAKE_PBS_EXECUTE'] = '1'
+        native_program = program.removesuffix('_vdb')
+        hsp = dict(query_from=1, query_to=4, hit_from=1, hit_to=4, align_len=4, identity=4,
+            qseq='ACGT', hseq='ACGT', gaps=0, bit_score=20, score=40, evalue=0.0)
+        hsp = native_hsp or hsp
+        report = {'BlastOutput2': [{'report': dict(program=native_program, version=native_program.upper() + ' 2.17.0+',
+            search_target={'db': 'target'}, params={}, results={'search': dict(query_id='one', query_title='one', query_len=len(sequence),
+                hits=[dict(len=max(hsp['hit_from'], hsp['hit_to']), description=[dict(id='A', accession='A.1', title='synthetic A')], hsps=[hsp])])})}]}
+        script = ('#!' + sys.executable + '\nimport pathlib, sys\n'
+            + ('' if empty_logs else 'print("synthetic stdout")\nsys.stderr.write("synthetic stderr\\n")\n')
+            +
+            'pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(' + repr(json.dumps(report).encode()) + ')\n'
+            'pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")\n'
+            'raise SystemExit(' + ('7' if nonzero else '0') + ')\n').encode()
+        software = write(Path(job['software']['executable']), script)
+        job['software']['sha256'] = software['sha256']
+        self.job = job
+        config = deepcopy(remote.configuration)
+        config['native_blast_database'] = dict(version='native_blast_database_resource_v1',
+            producer=dict(module_root=manifest['module_root'], manifest=plan['producer_manifest']), environment={},
+            bindings=[dict(program=program, mode='database', software=job['software'],
+                database_manifests=[db['manifest_file'] for db in job['databases']])])
+        self.config = config
+        self.store = Store(tmp_path / 'store')
+        self.scope = {'subject_refs': self.store.create_problem(raw_sequence=sequence, molecule='dna' if program in {'blastn_vdb', 'rpstblastn'} else 'protein')['subject_refs']}
+        self.run_id = 'synthetic-321-' + program
+        self.journal, self.receipts = Journal(self.store, self.run_id), EpisodeReceipts(self.store, self.run_id)
+        self.family = ExecutionEpisodes(None, store=self.store, directory=tmp_path / 'run', run_id=self.run_id,
+            resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+        self.root = self.context((('annotation', 'root'),), {}, None)
+        self.receipts.receive(self.root.episode_id, self.scope['subject_refs'], kind='initial')
+        self.assignment = native_assignment(self.workspace, 'synthetic-hpc', kind='hpc')
+        self.assignment['requested_job'] = requested_job_from_native_blast_database(job)
+        self.assignment['constraints'] = {'account': 'EpiCalib', 'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']}
+        launch = dict(version=LAUNCH_VERSION, requests={'synthetic-hpc': self.assignment}, immutable_input_versions=[], constraints={})
+        handoff_schema = dict(type='object', properties={'handoffs': self.family.fact_sources('launch')['execution_handoff_refs']['report_schema']},
+            required=['handoffs'], additionalProperties=False)
+        self.launch = self.child(self.root, 'launch', launch, handoff_schema, index=0)
+        selected = self.family.prepare_assignment(self.launch, 'launch_hpc', self.assignment, self.scope, 'commission-hpc')
+        self.hpc = self.child(self.launch, 'launch_hpc', selected, handoff_schema, index=0)
+        self.family.initialize(self.hpc)
+        outcome = self.select(self.hpc, 0, 'practical.job.start', {'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']})
+        assert outcome['status'] == 'completed', outcome
+        self.handoff = outcome['record_refs'][0]
+        self.target = self.family.job_progress_provider.targets.read_target(self.handoff, self.scope)
+>       self.deliver(self.hpc, self.launch, self.family.facts(self.hpc))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ExecutionEpisodes.facts() missing 1 required positional argument: 'completion_snapshot'
+
+../../../tests/test_native_blast_database_episode_binding.py:130: TypeError
+_ test_every_native_consumer_qualifies_frozen_measurements_and_missing_reference _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_every_native_consumer_qua0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a6682ea0>
+
+    def test_every_native_consumer_qualifies_frozen_measurements_and_missing_reference(tmp_path, monkeypatch):
+        from gene_annotation_episode.native_blast_database_result_publication import validate_native_blast_database_observation
+        from gene_annotation_episode.evidence_geometry import _observation_extent, _observation_extents
+        from gene_annotation_episode.evidence_axis_contracts import native_metric_facts
+        from gene_annotation_episode.blast_result_views import _original_hsp
+        from gene_annotation_episode.alignment_site_native import source_descriptor, blast_grading
+        from gene_annotation_episode.infernal_result_presentation import infernal_receiver_context
+        from gene_annotation_episode.domain import REASONING_SCHEMA
+        from test_evidence_axis_contracts import axis_entry
+>       h = SyntheticHost(tmp_path, monkeypatch)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_returns.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_blast_database_episode_binding.SyntheticHost object at 0x72c1c86962d0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_every_native_consumer_qua0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a6682ea0>
+program = 'psiblast', nonzero = False, metadata = None, tuples = None
+empty_logs = False, query_kind = 'sequence', query_bytes = None
+sequence = 'ACGT', native_hsp = None, model = None
+
+    def __init__(self, tmp_path, monkeypatch, program='psiblast', *, nonzero=False, metadata=None, tuples=None,
+                 empty_logs=False, query_kind='sequence', query_bytes=None, sequence='ACGT', native_hsp=None, model=None):
+        remote = remote_fixture.__wrapped__(tmp_path, monkeypatch)
+        # Keep the established fake PBS scripts, but bind only the transport
+        # method. Unrelated local_jobs subprocesses retain their real runner.
+        import subprocess
+        monkeypatch.setattr(subprocess, 'run', REAL_RUN)
+        self.calls = []
+        def transport(operations, request):
+            self.calls.append(deepcopy(request))
+            env = dict(os.environ, PATH=str(tmp_path / 'pbs-bin') + os.pathsep + os.environ['PATH'],
+                FAKE_PBS_ROOT=str(remote.database))
+            response = REAL_RUN([sys.executable, '-B', '-c', _REMOTE_WORKER], input=canonical(request).encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            if response.returncode:
+                raise ValueError('controlled_pbs_worker_failed:' + response.stderr.decode())
+            reply = json.loads(response.stdout)
+            assert reply['request_sha256'] == digest(request)
+            return reply['result']['outcome'], reply['result']['context_after']
+        monkeypatch.setattr(PBSPracticalOperations, '_invoke', transport)
+        self.tmp_path, self.workspace = tmp_path, remote.workspace
+        _, plan, manifest = producer_fixture(self.workspace / 'synthetic-inputs', program=program, query=query_kind, checkpoint_output=False)
+        job = deepcopy(plan['requested_job']['native_blast_database'])
+        if query_bytes is not None:
+            job['inputs'][0].update(write(Path(job['inputs'][0]['path']), query_bytes))
+        if query_kind == 'msa':
+            job['query']['msa_master_record_ordinal'] = 0
+        job['grading_parameters']['sequence_database_model'] = model
+        if metadata is None:
+            job['inputs'] = job['inputs'][:1]; job['metadata_inputs'] = []
+        else:
+            job['inputs'][1].update(write(Path(job['inputs'][1]['path']), canonical(metadata).encode()))
+            job['metadata_inputs'] = tuples
+        job['environment']['FAKE_PBS_EXECUTE'] = '1'
+        native_program = program.removesuffix('_vdb')
+        hsp = dict(query_from=1, query_to=4, hit_from=1, hit_to=4, align_len=4, identity=4,
+            qseq='ACGT', hseq='ACGT', gaps=0, bit_score=20, score=40, evalue=0.0)
+        hsp = native_hsp or hsp
+        report = {'BlastOutput2': [{'report': dict(program=native_program, version=native_program.upper() + ' 2.17.0+',
+            search_target={'db': 'target'}, params={}, results={'search': dict(query_id='one', query_title='one', query_len=len(sequence),
+                hits=[dict(len=max(hsp['hit_from'], hsp['hit_to']), description=[dict(id='A', accession='A.1', title='synthetic A')], hsps=[hsp])])})}]}
+        script = ('#!' + sys.executable + '\nimport pathlib, sys\n'
+            + ('' if empty_logs else 'print("synthetic stdout")\nsys.stderr.write("synthetic stderr\\n")\n')
+            +
+            'pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(' + repr(json.dumps(report).encode()) + ')\n'
+            'pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")\n'
+            'raise SystemExit(' + ('7' if nonzero else '0') + ')\n').encode()
+        software = write(Path(job['software']['executable']), script)
+        job['software']['sha256'] = software['sha256']
+        self.job = job
+        config = deepcopy(remote.configuration)
+        config['native_blast_database'] = dict(version='native_blast_database_resource_v1',
+            producer=dict(module_root=manifest['module_root'], manifest=plan['producer_manifest']), environment={},
+            bindings=[dict(program=program, mode='database', software=job['software'],
+                database_manifests=[db['manifest_file'] for db in job['databases']])])
+        self.config = config
+        self.store = Store(tmp_path / 'store')
+        self.scope = {'subject_refs': self.store.create_problem(raw_sequence=sequence, molecule='dna' if program in {'blastn_vdb', 'rpstblastn'} else 'protein')['subject_refs']}
+        self.run_id = 'synthetic-321-' + program
+        self.journal, self.receipts = Journal(self.store, self.run_id), EpisodeReceipts(self.store, self.run_id)
+        self.family = ExecutionEpisodes(None, store=self.store, directory=tmp_path / 'run', run_id=self.run_id,
+            resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+        self.root = self.context((('annotation', 'root'),), {}, None)
+        self.receipts.receive(self.root.episode_id, self.scope['subject_refs'], kind='initial')
+        self.assignment = native_assignment(self.workspace, 'synthetic-hpc', kind='hpc')
+        self.assignment['requested_job'] = requested_job_from_native_blast_database(job)
+        self.assignment['constraints'] = {'account': 'EpiCalib', 'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']}
+        launch = dict(version=LAUNCH_VERSION, requests={'synthetic-hpc': self.assignment}, immutable_input_versions=[], constraints={})
+        handoff_schema = dict(type='object', properties={'handoffs': self.family.fact_sources('launch')['execution_handoff_refs']['report_schema']},
+            required=['handoffs'], additionalProperties=False)
+        self.launch = self.child(self.root, 'launch', launch, handoff_schema, index=0)
+        selected = self.family.prepare_assignment(self.launch, 'launch_hpc', self.assignment, self.scope, 'commission-hpc')
+        self.hpc = self.child(self.launch, 'launch_hpc', selected, handoff_schema, index=0)
+        self.family.initialize(self.hpc)
+        outcome = self.select(self.hpc, 0, 'practical.job.start', {'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']})
+        assert outcome['status'] == 'completed', outcome
+        self.handoff = outcome['record_refs'][0]
+        self.target = self.family.job_progress_provider.targets.read_target(self.handoff, self.scope)
+>       self.deliver(self.hpc, self.launch, self.family.facts(self.hpc))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ExecutionEpisodes.facts() missing 1 required positional argument: 'completion_snapshot'
+
+../../../tests/test_native_blast_database_episode_binding.py:130: TypeError
+_ test_successful_original_collect_immediately_has_exact_zero_future_expectation _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_successful_original_colle0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a685dca0>
+
+    def test_successful_original_collect_immediately_has_exact_zero_future_expectation(tmp_path, monkeypatch):
+        from gene_annotation_episode.numerical import YieldParameters
+        from test_practical_yield import completion_context
+>       h = SyntheticHost(tmp_path, monkeypatch)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_returns.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_blast_database_episode_binding.SyntheticHost object at 0x72c1a6883b00>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_successful_original_colle0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a685dca0>
+program = 'psiblast', nonzero = False, metadata = None, tuples = None
+empty_logs = False, query_kind = 'sequence', query_bytes = None
+sequence = 'ACGT', native_hsp = None, model = None
+
+    def __init__(self, tmp_path, monkeypatch, program='psiblast', *, nonzero=False, metadata=None, tuples=None,
+                 empty_logs=False, query_kind='sequence', query_bytes=None, sequence='ACGT', native_hsp=None, model=None):
+        remote = remote_fixture.__wrapped__(tmp_path, monkeypatch)
+        # Keep the established fake PBS scripts, but bind only the transport
+        # method. Unrelated local_jobs subprocesses retain their real runner.
+        import subprocess
+        monkeypatch.setattr(subprocess, 'run', REAL_RUN)
+        self.calls = []
+        def transport(operations, request):
+            self.calls.append(deepcopy(request))
+            env = dict(os.environ, PATH=str(tmp_path / 'pbs-bin') + os.pathsep + os.environ['PATH'],
+                FAKE_PBS_ROOT=str(remote.database))
+            response = REAL_RUN([sys.executable, '-B', '-c', _REMOTE_WORKER], input=canonical(request).encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            if response.returncode:
+                raise ValueError('controlled_pbs_worker_failed:' + response.stderr.decode())
+            reply = json.loads(response.stdout)
+            assert reply['request_sha256'] == digest(request)
+            return reply['result']['outcome'], reply['result']['context_after']
+        monkeypatch.setattr(PBSPracticalOperations, '_invoke', transport)
+        self.tmp_path, self.workspace = tmp_path, remote.workspace
+        _, plan, manifest = producer_fixture(self.workspace / 'synthetic-inputs', program=program, query=query_kind, checkpoint_output=False)
+        job = deepcopy(plan['requested_job']['native_blast_database'])
+        if query_bytes is not None:
+            job['inputs'][0].update(write(Path(job['inputs'][0]['path']), query_bytes))
+        if query_kind == 'msa':
+            job['query']['msa_master_record_ordinal'] = 0
+        job['grading_parameters']['sequence_database_model'] = model
+        if metadata is None:
+            job['inputs'] = job['inputs'][:1]; job['metadata_inputs'] = []
+        else:
+            job['inputs'][1].update(write(Path(job['inputs'][1]['path']), canonical(metadata).encode()))
+            job['metadata_inputs'] = tuples
+        job['environment']['FAKE_PBS_EXECUTE'] = '1'
+        native_program = program.removesuffix('_vdb')
+        hsp = dict(query_from=1, query_to=4, hit_from=1, hit_to=4, align_len=4, identity=4,
+            qseq='ACGT', hseq='ACGT', gaps=0, bit_score=20, score=40, evalue=0.0)
+        hsp = native_hsp or hsp
+        report = {'BlastOutput2': [{'report': dict(program=native_program, version=native_program.upper() + ' 2.17.0+',
+            search_target={'db': 'target'}, params={}, results={'search': dict(query_id='one', query_title='one', query_len=len(sequence),
+                hits=[dict(len=max(hsp['hit_from'], hsp['hit_to']), description=[dict(id='A', accession='A.1', title='synthetic A')], hsps=[hsp])])})}]}
+        script = ('#!' + sys.executable + '\nimport pathlib, sys\n'
+            + ('' if empty_logs else 'print("synthetic stdout")\nsys.stderr.write("synthetic stderr\\n")\n')
+            +
+            'pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(' + repr(json.dumps(report).encode()) + ')\n'
+            'pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")\n'
+            'raise SystemExit(' + ('7' if nonzero else '0') + ')\n').encode()
+        software = write(Path(job['software']['executable']), script)
+        job['software']['sha256'] = software['sha256']
+        self.job = job
+        config = deepcopy(remote.configuration)
+        config['native_blast_database'] = dict(version='native_blast_database_resource_v1',
+            producer=dict(module_root=manifest['module_root'], manifest=plan['producer_manifest']), environment={},
+            bindings=[dict(program=program, mode='database', software=job['software'],
+                database_manifests=[db['manifest_file'] for db in job['databases']])])
+        self.config = config
+        self.store = Store(tmp_path / 'store')
+        self.scope = {'subject_refs': self.store.create_problem(raw_sequence=sequence, molecule='dna' if program in {'blastn_vdb', 'rpstblastn'} else 'protein')['subject_refs']}
+        self.run_id = 'synthetic-321-' + program
+        self.journal, self.receipts = Journal(self.store, self.run_id), EpisodeReceipts(self.store, self.run_id)
+        self.family = ExecutionEpisodes(None, store=self.store, directory=tmp_path / 'run', run_id=self.run_id,
+            resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+        self.root = self.context((('annotation', 'root'),), {}, None)
+        self.receipts.receive(self.root.episode_id, self.scope['subject_refs'], kind='initial')
+        self.assignment = native_assignment(self.workspace, 'synthetic-hpc', kind='hpc')
+        self.assignment['requested_job'] = requested_job_from_native_blast_database(job)
+        self.assignment['constraints'] = {'account': 'EpiCalib', 'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']}
+        launch = dict(version=LAUNCH_VERSION, requests={'synthetic-hpc': self.assignment}, immutable_input_versions=[], constraints={})
+        handoff_schema = dict(type='object', properties={'handoffs': self.family.fact_sources('launch')['execution_handoff_refs']['report_schema']},
+            required=['handoffs'], additionalProperties=False)
+        self.launch = self.child(self.root, 'launch', launch, handoff_schema, index=0)
+        selected = self.family.prepare_assignment(self.launch, 'launch_hpc', self.assignment, self.scope, 'commission-hpc')
+        self.hpc = self.child(self.launch, 'launch_hpc', selected, handoff_schema, index=0)
+        self.family.initialize(self.hpc)
+        outcome = self.select(self.hpc, 0, 'practical.job.start', {'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']})
+        assert outcome['status'] == 'completed', outcome
+        self.handoff = outcome['record_refs'][0]
+        self.target = self.family.job_progress_provider.targets.read_target(self.handoff, self.scope)
+>       self.deliver(self.hpc, self.launch, self.family.facts(self.hpc))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ExecutionEpisodes.facts() missing 1 required positional argument: 'completion_snapshot'
+
+../../../tests/test_native_blast_database_episode_binding.py:130: TypeError
+_______ test_invalid_model_before_generation_retains_original_exception ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_invalid_model_before_gene0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a66b2ae0>
+
+    def test_invalid_model_before_generation_retains_original_exception(tmp_path, monkeypatch):
+>       h = SyntheticHost(tmp_path, monkeypatch, model={'function_priors': None})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_results.py:223: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_blast_database_episode_binding.SyntheticHost object at 0x72c1a66b39e0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_invalid_model_before_gene0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a66b2ae0>
+program = 'psiblast', nonzero = False, metadata = None, tuples = None
+empty_logs = False, query_kind = 'sequence', query_bytes = None
+sequence = 'ACGT', native_hsp = None, model = {'function_priors': None}
+
+    def __init__(self, tmp_path, monkeypatch, program='psiblast', *, nonzero=False, metadata=None, tuples=None,
+                 empty_logs=False, query_kind='sequence', query_bytes=None, sequence='ACGT', native_hsp=None, model=None):
+        remote = remote_fixture.__wrapped__(tmp_path, monkeypatch)
+        # Keep the established fake PBS scripts, but bind only the transport
+        # method. Unrelated local_jobs subprocesses retain their real runner.
+        import subprocess
+        monkeypatch.setattr(subprocess, 'run', REAL_RUN)
+        self.calls = []
+        def transport(operations, request):
+            self.calls.append(deepcopy(request))
+            env = dict(os.environ, PATH=str(tmp_path / 'pbs-bin') + os.pathsep + os.environ['PATH'],
+                FAKE_PBS_ROOT=str(remote.database))
+            response = REAL_RUN([sys.executable, '-B', '-c', _REMOTE_WORKER], input=canonical(request).encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            if response.returncode:
+                raise ValueError('controlled_pbs_worker_failed:' + response.stderr.decode())
+            reply = json.loads(response.stdout)
+            assert reply['request_sha256'] == digest(request)
+            return reply['result']['outcome'], reply['result']['context_after']
+        monkeypatch.setattr(PBSPracticalOperations, '_invoke', transport)
+        self.tmp_path, self.workspace = tmp_path, remote.workspace
+        _, plan, manifest = producer_fixture(self.workspace / 'synthetic-inputs', program=program, query=query_kind, checkpoint_output=False)
+        job = deepcopy(plan['requested_job']['native_blast_database'])
+        if query_bytes is not None:
+            job['inputs'][0].update(write(Path(job['inputs'][0]['path']), query_bytes))
+        if query_kind == 'msa':
+            job['query']['msa_master_record_ordinal'] = 0
+        job['grading_parameters']['sequence_database_model'] = model
+        if metadata is None:
+            job['inputs'] = job['inputs'][:1]; job['metadata_inputs'] = []
+        else:
+            job['inputs'][1].update(write(Path(job['inputs'][1]['path']), canonical(metadata).encode()))
+            job['metadata_inputs'] = tuples
+        job['environment']['FAKE_PBS_EXECUTE'] = '1'
+        native_program = program.removesuffix('_vdb')
+        hsp = dict(query_from=1, query_to=4, hit_from=1, hit_to=4, align_len=4, identity=4,
+            qseq='ACGT', hseq='ACGT', gaps=0, bit_score=20, score=40, evalue=0.0)
+        hsp = native_hsp or hsp
+        report = {'BlastOutput2': [{'report': dict(program=native_program, version=native_program.upper() + ' 2.17.0+',
+            search_target={'db': 'target'}, params={}, results={'search': dict(query_id='one', query_title='one', query_len=len(sequence),
+                hits=[dict(len=max(hsp['hit_from'], hsp['hit_to']), description=[dict(id='A', accession='A.1', title='synthetic A')], hsps=[hsp])])})}]}
+        script = ('#!' + sys.executable + '\nimport pathlib, sys\n'
+            + ('' if empty_logs else 'print("synthetic stdout")\nsys.stderr.write("synthetic stderr\\n")\n')
+            +
+            'pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(' + repr(json.dumps(report).encode()) + ')\n'
+            'pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")\n'
+            'raise SystemExit(' + ('7' if nonzero else '0') + ')\n').encode()
+        software = write(Path(job['software']['executable']), script)
+        job['software']['sha256'] = software['sha256']
+        self.job = job
+        config = deepcopy(remote.configuration)
+        config['native_blast_database'] = dict(version='native_blast_database_resource_v1',
+            producer=dict(module_root=manifest['module_root'], manifest=plan['producer_manifest']), environment={},
+            bindings=[dict(program=program, mode='database', software=job['software'],
+                database_manifests=[db['manifest_file'] for db in job['databases']])])
+        self.config = config
+        self.store = Store(tmp_path / 'store')
+        self.scope = {'subject_refs': self.store.create_problem(raw_sequence=sequence, molecule='dna' if program in {'blastn_vdb', 'rpstblastn'} else 'protein')['subject_refs']}
+        self.run_id = 'synthetic-321-' + program
+        self.journal, self.receipts = Journal(self.store, self.run_id), EpisodeReceipts(self.store, self.run_id)
+        self.family = ExecutionEpisodes(None, store=self.store, directory=tmp_path / 'run', run_id=self.run_id,
+            resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+        self.root = self.context((('annotation', 'root'),), {}, None)
+        self.receipts.receive(self.root.episode_id, self.scope['subject_refs'], kind='initial')
+        self.assignment = native_assignment(self.workspace, 'synthetic-hpc', kind='hpc')
+        self.assignment['requested_job'] = requested_job_from_native_blast_database(job)
+        self.assignment['constraints'] = {'account': 'EpiCalib', 'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']}
+        launch = dict(version=LAUNCH_VERSION, requests={'synthetic-hpc': self.assignment}, immutable_input_versions=[], constraints={})
+        handoff_schema = dict(type='object', properties={'handoffs': self.family.fact_sources('launch')['execution_handoff_refs']['report_schema']},
+            required=['handoffs'], additionalProperties=False)
+        self.launch = self.child(self.root, 'launch', launch, handoff_schema, index=0)
+        selected = self.family.prepare_assignment(self.launch, 'launch_hpc', self.assignment, self.scope, 'commission-hpc')
+        self.hpc = self.child(self.launch, 'launch_hpc', selected, handoff_schema, index=0)
+        self.family.initialize(self.hpc)
+        outcome = self.select(self.hpc, 0, 'practical.job.start', {'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']})
+        assert outcome['status'] == 'completed', outcome
+        self.handoff = outcome['record_refs'][0]
+        self.target = self.family.job_progress_provider.targets.read_target(self.handoff, self.scope)
+>       self.deliver(self.hpc, self.launch, self.family.facts(self.hpc))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ExecutionEpisodes.facts() missing 1 required positional argument: 'completion_snapshot'
+
+../../../tests/test_native_blast_database_episode_binding.py:130: TypeError
+__ test_abrupt_worker_failure_retains_atomic_siblings_without_valid_manifest ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_abrupt_worker_failure_ret0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a685ea20>
+
+    def test_abrupt_worker_failure_retains_atomic_siblings_without_valid_manifest(tmp_path, monkeypatch):
+        from types import SimpleNamespace
+        from pathlib import Path
+        from gene_annotation_episode import native_blast_database_result_publication as publication
+>       h = SyntheticHost(tmp_path, monkeypatch)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_results.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_blast_database_episode_binding.SyntheticHost object at 0x72c1c8696e40>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_abrupt_worker_failure_ret0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a685ea20>
+program = 'psiblast', nonzero = False, metadata = None, tuples = None
+empty_logs = False, query_kind = 'sequence', query_bytes = None
+sequence = 'ACGT', native_hsp = None, model = None
+
+    def __init__(self, tmp_path, monkeypatch, program='psiblast', *, nonzero=False, metadata=None, tuples=None,
+                 empty_logs=False, query_kind='sequence', query_bytes=None, sequence='ACGT', native_hsp=None, model=None):
+        remote = remote_fixture.__wrapped__(tmp_path, monkeypatch)
+        # Keep the established fake PBS scripts, but bind only the transport
+        # method. Unrelated local_jobs subprocesses retain their real runner.
+        import subprocess
+        monkeypatch.setattr(subprocess, 'run', REAL_RUN)
+        self.calls = []
+        def transport(operations, request):
+            self.calls.append(deepcopy(request))
+            env = dict(os.environ, PATH=str(tmp_path / 'pbs-bin') + os.pathsep + os.environ['PATH'],
+                FAKE_PBS_ROOT=str(remote.database))
+            response = REAL_RUN([sys.executable, '-B', '-c', _REMOTE_WORKER], input=canonical(request).encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            if response.returncode:
+                raise ValueError('controlled_pbs_worker_failed:' + response.stderr.decode())
+            reply = json.loads(response.stdout)
+            assert reply['request_sha256'] == digest(request)
+            return reply['result']['outcome'], reply['result']['context_after']
+        monkeypatch.setattr(PBSPracticalOperations, '_invoke', transport)
+        self.tmp_path, self.workspace = tmp_path, remote.workspace
+        _, plan, manifest = producer_fixture(self.workspace / 'synthetic-inputs', program=program, query=query_kind, checkpoint_output=False)
+        job = deepcopy(plan['requested_job']['native_blast_database'])
+        if query_bytes is not None:
+            job['inputs'][0].update(write(Path(job['inputs'][0]['path']), query_bytes))
+        if query_kind == 'msa':
+            job['query']['msa_master_record_ordinal'] = 0
+        job['grading_parameters']['sequence_database_model'] = model
+        if metadata is None:
+            job['inputs'] = job['inputs'][:1]; job['metadata_inputs'] = []
+        else:
+            job['inputs'][1].update(write(Path(job['inputs'][1]['path']), canonical(metadata).encode()))
+            job['metadata_inputs'] = tuples
+        job['environment']['FAKE_PBS_EXECUTE'] = '1'
+        native_program = program.removesuffix('_vdb')
+        hsp = dict(query_from=1, query_to=4, hit_from=1, hit_to=4, align_len=4, identity=4,
+            qseq='ACGT', hseq='ACGT', gaps=0, bit_score=20, score=40, evalue=0.0)
+        hsp = native_hsp or hsp
+        report = {'BlastOutput2': [{'report': dict(program=native_program, version=native_program.upper() + ' 2.17.0+',
+            search_target={'db': 'target'}, params={}, results={'search': dict(query_id='one', query_title='one', query_len=len(sequence),
+                hits=[dict(len=max(hsp['hit_from'], hsp['hit_to']), description=[dict(id='A', accession='A.1', title='synthetic A')], hsps=[hsp])])})}]}
+        script = ('#!' + sys.executable + '\nimport pathlib, sys\n'
+            + ('' if empty_logs else 'print("synthetic stdout")\nsys.stderr.write("synthetic stderr\\n")\n')
+            +
+            'pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(' + repr(json.dumps(report).encode()) + ')\n'
+            'pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")\n'
+            'raise SystemExit(' + ('7' if nonzero else '0') + ')\n').encode()
+        software = write(Path(job['software']['executable']), script)
+        job['software']['sha256'] = software['sha256']
+        self.job = job
+        config = deepcopy(remote.configuration)
+        config['native_blast_database'] = dict(version='native_blast_database_resource_v1',
+            producer=dict(module_root=manifest['module_root'], manifest=plan['producer_manifest']), environment={},
+            bindings=[dict(program=program, mode='database', software=job['software'],
+                database_manifests=[db['manifest_file'] for db in job['databases']])])
+        self.config = config
+        self.store = Store(tmp_path / 'store')
+        self.scope = {'subject_refs': self.store.create_problem(raw_sequence=sequence, molecule='dna' if program in {'blastn_vdb', 'rpstblastn'} else 'protein')['subject_refs']}
+        self.run_id = 'synthetic-321-' + program
+        self.journal, self.receipts = Journal(self.store, self.run_id), EpisodeReceipts(self.store, self.run_id)
+        self.family = ExecutionEpisodes(None, store=self.store, directory=tmp_path / 'run', run_id=self.run_id,
+            resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+        self.root = self.context((('annotation', 'root'),), {}, None)
+        self.receipts.receive(self.root.episode_id, self.scope['subject_refs'], kind='initial')
+        self.assignment = native_assignment(self.workspace, 'synthetic-hpc', kind='hpc')
+        self.assignment['requested_job'] = requested_job_from_native_blast_database(job)
+        self.assignment['constraints'] = {'account': 'EpiCalib', 'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']}
+        launch = dict(version=LAUNCH_VERSION, requests={'synthetic-hpc': self.assignment}, immutable_input_versions=[], constraints={})
+        handoff_schema = dict(type='object', properties={'handoffs': self.family.fact_sources('launch')['execution_handoff_refs']['report_schema']},
+            required=['handoffs'], additionalProperties=False)
+        self.launch = self.child(self.root, 'launch', launch, handoff_schema, index=0)
+        selected = self.family.prepare_assignment(self.launch, 'launch_hpc', self.assignment, self.scope, 'commission-hpc')
+        self.hpc = self.child(self.launch, 'launch_hpc', selected, handoff_schema, index=0)
+        self.family.initialize(self.hpc)
+        outcome = self.select(self.hpc, 0, 'practical.job.start', {'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']})
+        assert outcome['status'] == 'completed', outcome
+        self.handoff = outcome['record_refs'][0]
+        self.target = self.family.job_progress_provider.targets.read_target(self.handoff, self.scope)
+>       self.deliver(self.hpc, self.launch, self.family.facts(self.hpc))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ExecutionEpisodes.facts() missing 1 required positional argument: 'completion_snapshot'
+
+../../../tests/test_native_blast_database_episode_binding.py:130: TypeError
+_______ test_original_metadata_tuple_order_retains_independent_outcomes ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_original_metadata_tuple_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a685edb0>
+
+    def test_original_metadata_tuple_order_retains_independent_outcomes(tmp_path, monkeypatch):
+        payload = dict(schema='native_blast_database_query_metadata_v1', documents=[], sequence_records=[],
+            effective_msa_masters=[], master_subjects=[], search_bindings=[], target_contexts=[])
+        tuples = [dict(input_key='metadata', consumer='query_identity', schema_id=payload['schema']),
+            dict(input_key='metadata', consumer='profile', schema_id='unregistered.synthetic')]
+>       h = SyntheticHost(tmp_path, monkeypatch, metadata=payload, tuples=tuples)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_results.py:280: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_blast_database_episode_binding.SyntheticHost object at 0x72c1a685ecf0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T195126558850Z/tmp/test_original_metadata_tuple_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72c1a685edb0>
+program = 'psiblast', nonzero = False
+metadata = {'schema': 'native_blast_database_query_metadata_v1', 'documents': [], 'sequence_records': [], 'effective_msa_masters': [], ...}
+tuples = [{'input_key': 'metadata', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1'}, {'input_key': 'metadata', 'consumer': 'profile', 'schema_id': 'unregistered.synthetic'}]
+empty_logs = False, query_kind = 'sequence', query_bytes = None
+sequence = 'ACGT', native_hsp = None, model = None
+
+    def __init__(self, tmp_path, monkeypatch, program='psiblast', *, nonzero=False, metadata=None, tuples=None,
+                 empty_logs=False, query_kind='sequence', query_bytes=None, sequence='ACGT', native_hsp=None, model=None):
+        remote = remote_fixture.__wrapped__(tmp_path, monkeypatch)
+        # Keep the established fake PBS scripts, but bind only the transport
+        # method. Unrelated local_jobs subprocesses retain their real runner.
+        import subprocess
+        monkeypatch.setattr(subprocess, 'run', REAL_RUN)
+        self.calls = []
+        def transport(operations, request):
+            self.calls.append(deepcopy(request))
+            env = dict(os.environ, PATH=str(tmp_path / 'pbs-bin') + os.pathsep + os.environ['PATH'],
+                FAKE_PBS_ROOT=str(remote.database))
+            response = REAL_RUN([sys.executable, '-B', '-c', _REMOTE_WORKER], input=canonical(request).encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+            if response.returncode:
+                raise ValueError('controlled_pbs_worker_failed:' + response.stderr.decode())
+            reply = json.loads(response.stdout)
+            assert reply['request_sha256'] == digest(request)
+            return reply['result']['outcome'], reply['result']['context_after']
+        monkeypatch.setattr(PBSPracticalOperations, '_invoke', transport)
+        self.tmp_path, self.workspace = tmp_path, remote.workspace
+        _, plan, manifest = producer_fixture(self.workspace / 'synthetic-inputs', program=program, query=query_kind, checkpoint_output=False)
+        job = deepcopy(plan['requested_job']['native_blast_database'])
+        if query_bytes is not None:
+            job['inputs'][0].update(write(Path(job['inputs'][0]['path']), query_bytes))
+        if query_kind == 'msa':
+            job['query']['msa_master_record_ordinal'] = 0
+        job['grading_parameters']['sequence_database_model'] = model
+        if metadata is None:
+            job['inputs'] = job['inputs'][:1]; job['metadata_inputs'] = []
+        else:
+            job['inputs'][1].update(write(Path(job['inputs'][1]['path']), canonical(metadata).encode()))
+            job['metadata_inputs'] = tuples
+        job['environment']['FAKE_PBS_EXECUTE'] = '1'
+        native_program = program.removesuffix('_vdb')
+        hsp = dict(query_from=1, query_to=4, hit_from=1, hit_to=4, align_len=4, identity=4,
+            qseq='ACGT', hseq='ACGT', gaps=0, bit_score=20, score=40, evalue=0.0)
+        hsp = native_hsp or hsp
+        report = {'BlastOutput2': [{'report': dict(program=native_program, version=native_program.upper() + ' 2.17.0+',
+            search_target={'db': 'target'}, params={}, results={'search': dict(query_id='one', query_title='one', query_len=len(sequence),
+                hits=[dict(len=max(hsp['hit_from'], hsp['hit_to']), description=[dict(id='A', accession='A.1', title='synthetic A')], hsps=[hsp])])})}]}
+        script = ('#!' + sys.executable + '\nimport pathlib, sys\n'
+            + ('' if empty_logs else 'print("synthetic stdout")\nsys.stderr.write("synthetic stderr\\n")\n')
+            +
+            'pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(' + repr(json.dumps(report).encode()) + ')\n'
+            'pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")\n'
+            'raise SystemExit(' + ('7' if nonzero else '0') + ')\n').encode()
+        software = write(Path(job['software']['executable']), script)
+        job['software']['sha256'] = software['sha256']
+        self.job = job
+        config = deepcopy(remote.configuration)
+        config['native_blast_database'] = dict(version='native_blast_database_resource_v1',
+            producer=dict(module_root=manifest['module_root'], manifest=plan['producer_manifest']), environment={},
+            bindings=[dict(program=program, mode='database', software=job['software'],
+                database_manifests=[db['manifest_file'] for db in job['databases']])])
+        self.config = config
+        self.store = Store(tmp_path / 'store')
+        self.scope = {'subject_refs': self.store.create_problem(raw_sequence=sequence, molecule='dna' if program in {'blastn_vdb', 'rpstblastn'} else 'protein')['subject_refs']}
+        self.run_id = 'synthetic-321-' + program
+        self.journal, self.receipts = Journal(self.store, self.run_id), EpisodeReceipts(self.store, self.run_id)
+        self.family = ExecutionEpisodes(None, store=self.store, directory=tmp_path / 'run', run_id=self.run_id,
+            resources={'synthetic-hpc': config}, initial_information={}, tool_registry=ToolRegistry(self.store),
+            handoff_unit=3, acquired_record_unit=2, log_window_bytes=1024, log_roles=['stdout', 'stderr'])
+        self.root = self.context((('annotation', 'root'),), {}, None)
+        self.receipts.receive(self.root.episode_id, self.scope['subject_refs'], kind='initial')
+        self.assignment = native_assignment(self.workspace, 'synthetic-hpc', kind='hpc')
+        self.assignment['requested_job'] = requested_job_from_native_blast_database(job)
+        self.assignment['constraints'] = {'account': 'EpiCalib', 'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']}
+        launch = dict(version=LAUNCH_VERSION, requests={'synthetic-hpc': self.assignment}, immutable_input_versions=[], constraints={})
+        handoff_schema = dict(type='object', properties={'handoffs': self.family.fact_sources('launch')['execution_handoff_refs']['report_schema']},
+            required=['handoffs'], additionalProperties=False)
+        self.launch = self.child(self.root, 'launch', launch, handoff_schema, index=0)
+        selected = self.family.prepare_assignment(self.launch, 'launch_hpc', self.assignment, self.scope, 'commission-hpc')
+        self.hpc = self.child(self.launch, 'launch_hpc', selected, handoff_schema, index=0)
+        self.family.initialize(self.hpc)
+        outcome = self.select(self.hpc, 0, 'practical.job.start', {'queue': 'selected-queue', 'resources': ['select=1:ncpus=4']})
+        assert outcome['status'] == 'completed', outcome
+        self.handoff = outcome['record_refs'][0]
+        self.target = self.family.job_progress_provider.targets.read_target(self.handoff, self.scope)
+>       self.deliver(self.hpc, self.launch, self.family.facts(self.hpc))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ExecutionEpisodes.facts() missing 1 required positional argument: 'completion_snapshot'
+
+../../../tests/test_native_blast_database_episode_binding.py:130: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_returns.py::test_actual_received_form_is_required_and_saved_row_cannot_be_rewritten
+FAILED ../../../tests/test_native_blast_database_returns.py::test_unchanged_scientific_forwarding_uses_immediate_child_forms
+FAILED ../../../tests/test_native_blast_database_returns.py::test_every_native_consumer_qualifies_frozen_measurements_and_missing_reference
+FAILED ../../../tests/test_native_blast_database_returns.py::test_successful_original_collect_immediately_has_exact_zero_future_expectation
+FAILED ../../../tests/test_native_blast_database_results.py::test_invalid_model_before_generation_retains_original_exception
+FAILED ../../../tests/test_native_blast_database_results.py::test_abrupt_worker_failure_retains_atomic_siblings_without_valid_manifest
+FAILED ../../../tests/test_native_blast_database_results.py::test_original_metadata_tuple_order_retains_independent_outcomes
+7 failed in 49.29s

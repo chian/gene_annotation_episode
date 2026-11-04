@@ -1,0 +1,316 @@
+{
+  "status": "proposal_before_implementation",
+  "fixed_row": "C-L202-GenomeAlignment",
+  "provider": {
+    "adapter_id": "bvbrc_genome_alignment",
+    "adapter_version": "1",
+    "native_application_id": "GenomeAlignment"
+  },
+  "authority": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+  },
+  "boundary_rules": [
+    "Pure readers, extractors and calculators receive bytes/values; no I/O, models, job invocation or resource choice.",
+    "Acquisition and same-run custody belong to existing API launch/results episodes.",
+    "Every result is a new validated record; input arguments are not mutated.",
+    "Raw bytes remain in retained content bindings; parser documents preserve native tokens and source locations.",
+    "JSON is an internal data contract, not model-facing TASK or STEERING.",
+    "This proposal is not authorization to edit shared files or declare a tool complete."
+  ],
+  "reused_types": {
+    "Artifact": {
+      "raw_artifact_ref": "nonempty string",
+      "source_ref": "nonempty string",
+      "sha256": "64 lowercase hexadecimal"
+    },
+    "SourceLocation": "existing phylogeny_calculation_contracts.location / XMFA artifact+byte+line location; preserve exact byte intervals",
+    "Evidence": "existing SourceEvidence content binding plus JSON pointer; no inferred identity from filename",
+    "NativeNumber": "existing bvbrc_alignment_values.native_number; exact raw token/value/state/kind/location",
+    "NumericCell": "existing bvbrc_alignment_values.numeric_cell; semantic relationships validated by provider",
+    "OriginalTask": "existing bvbrc_appservice_schemas.json/$defs/OriginalTask",
+    "ArtifactBundle": "existing bvbrc_appservice_schemas.json/$defs/ArtifactBundle",
+    "XMFAInputs": "mauve_xmfa_source_inputs_v1 in xmfa_source_contracts.py",
+    "XMFADocument": "mauve_xmfa_document_v1 in xmfa_format_contracts.py",
+    "XMFASelection": "population_id,document_id,member_numbers,block_columns,completeness,evidence in xmfa_calculation_contracts.py"
+  },
+  "proposed_types": {
+    "ParseResult": {
+      "status": "ok | partial | invalid",
+      "value": "specific Document | null",
+      "diagnostics": "finite typed diagnostic[]"
+    },
+    "MauveV4Document": {
+      "schema_version": "mauve_v4_document_v1",
+      "document_id": "content+parser-parameter bound identifier",
+      "artifact": "Artifact",
+      "encoding": "ascii | utf-8",
+      "format_version": "NativeNumber (4 required)",
+      "declared_member_count": "NativeNumber",
+      "declared_interval_count": "NativeNumber",
+      "metadata": "raw token+SourceLocation[]",
+      "members": [
+        {
+          "member_index_0based": "NativeNumber",
+          "native_file_token": "string",
+          "declared_source_length": "NativeNumber",
+          "source_location": "SourceLocation"
+        }
+      ],
+      "intervals": [
+        {
+          "interval_index": "observed record index integer>=0",
+          "native_interval_ordinal": "NativeNumber",
+          "source_location": "SourceLocation",
+          "segments": [
+            {
+              "segment_index": "observed index within interval integer>=0",
+              "kind": "ungapped_coordinates | gapped_rows | unrecognized",
+              "native_length": "NativeNumber",
+              "source_location": "SourceLocation",
+              "members": [
+                {
+                  "member_index_0based": "integer>=0",
+                  "native_start": "NativeNumber",
+                  "strand": "+ | - | null",
+                  "sequence": "string | null (null for coordinate-only segment)",
+                  "sequence_parts": "source-located raw lines[]",
+                  "interval_0based_half_open": "[integer>=0,integer>=0] | null",
+                  "state": "present | absent_zero | incompatible | missing",
+                  "source_location": "SourceLocation | null"
+                }
+              ]
+            }
+          ],
+          "completeness": "complete | partial | unknown"
+        }
+      ],
+      "unparsed": "source-located exact lines[]",
+      "completeness": "complete | partial | unknown"
+    },
+    "BackboneDocument": {
+      "schema_version": "mauve_backbone_document_v1",
+      "document_id": "content+parser-parameter bound identifier",
+      "artifact": "Artifact",
+      "dialect": "libmems_signed_coordinate_pairs_v1",
+      "encoding": "ascii | utf-8",
+      "header": "raw header+source location+ordered member index tokens",
+      "rows": [
+        {
+          "row_index": "integer>=0",
+          "raw_line": "string",
+          "source_location": "SourceLocation",
+          "members": [
+            {
+              "member_index_0based": "integer>=0",
+              "native_left": "NativeNumber",
+              "native_right": "NativeNumber",
+              "strand": "+ | - | null",
+              "interval_0based_half_open": "[integer>=0,integer>=0] | null",
+              "state": "present | absent_zero | incompatible"
+            }
+          ]
+        }
+      ],
+      "unparsed": "source-located exact lines[]",
+      "completeness": "complete | partial | unknown"
+    },
+    "BBColsDocument": {
+      "schema_version": "mauve_bbcols_document_v1",
+      "document_id": "content+parser-parameter bound identifier",
+      "artifact": "Artifact",
+      "dialect": "libmems_interval_columns_members_v1",
+      "encoding": "ascii | utf-8",
+      "rows": [
+        {
+          "row_index": "integer>=0",
+          "raw_line": "string",
+          "source_location": "SourceLocation",
+          "native_interval_index_0based": "NativeNumber",
+          "native_left_column_1based": "NativeNumber",
+          "native_column_count": "NativeNumber",
+          "native_member_indices_0based": "NativeNumber[]",
+          "columns_0based_half_open": "[integer>=0,integer>=0] | null",
+          "state": "parsed | incompatible"
+        }
+      ],
+      "unparsed": "source-located exact lines[]",
+      "completeness": "complete | partial | unknown"
+    },
+    "InputExtraction": {
+      "status": "ok | partial | invalid",
+      "inputs": "GenomeAlignmentInputs | null",
+      "requirements": "AcquisitionRequirement[]",
+      "diagnostics": "finite diagnostic[]"
+    },
+    "GenomeAlignmentInputs": {
+      "schema_version": "bvbrc_genome_alignment_inputs_v1",
+      "original_task": "OriginalTask",
+      "genome_occurrences": [
+        {
+          "occurrence_index": "integer>=0",
+          "genome_id": "exact submitted string",
+          "input_binding_id": "string",
+          "evidence": "Evidence[]"
+        }
+      ],
+      "requested_recipe": "progressiveMauve | mauveAligner | null",
+      "observed_invocation": "argv+native version+evidence | null",
+      "invocation_mode": "multiple_files_concatenated | single_file_entries | unknown",
+      "files": "exact native path token, same-run binding evidence, Artifact, full ordered parsed records, transport/completeness and census evidence[]",
+      "member_bindings": "native ordinal namespace -> genome occurrence + file/entry occurrence with evidence[]",
+      "contig_bindings": "file+record -> sequence_id+accession.version+genome occurrence with explicit evidence[]",
+      "feature_maps": "feature occurrence+length+segmented contig coordinates+strand+transformations+evidence[]",
+      "xmfa_source_inputs": "XMFAInputs | null",
+      "genome_census_state": "complete | partial | unknown"
+    },
+    "ArtifactAssociations": {
+      "schema_version": "bvbrc_genome_alignment_associations_v1",
+      "original_task": "OriginalTask",
+      "artifacts": "ArtifactBundle artifact member + exact role + observed format + task/byte-version provenance[]",
+      "native_member_joins": "explicit native namespace -> invocation member mapping with evidence[]",
+      "bbcols_interval_joins": "explicit bbcols internal interval -> XMFA block with evidence[]",
+      "duplicate_representations": "exact identical-content groups, no summation[]",
+      "requirements": "AcquisitionRequirement[]",
+      "diagnostics": "finite diagnostic[]"
+    },
+    "Sheet": {
+      "schema_version": "bvbrc_genome_alignment_sheet_v1",
+      "analysis_id": "deterministic original-task+inputs+artifacts bound id",
+      "original_task": "OriginalTask",
+      "associations": "ArtifactAssociations",
+      "inputs": "GenomeAlignmentInputs | null",
+      "primary_documents": "discriminated XMFADocument | MauveV4Document array, each retaining own identity",
+      "backbone_documents": "BackboneDocument[]",
+      "bbcols_documents": "BBColsDocument[]",
+      "visualization_documents": "lossy native JSON diagnostic-only records[]",
+      "native_measurements": "source-located observed NumericCell[]",
+      "requirements": "AcquisitionRequirement[]",
+      "diagnostics": "finite diagnostic[]"
+    },
+    "Selection": {
+      "schema_version": "bvbrc_genome_alignment_selection_v1",
+      "population_id": "nonempty string",
+      "document_selections": "explicit document IDs + member occurrence IDs + block/segment/sidecar row IDs + column indices[]",
+      "requested_pairs": "explicit unordered member occurrence pairs[]",
+      "case_policy": "preserve | uppercase",
+      "coverage_bases": "represented | multi_member_block | cooccupied_column | v4_explicit_segments | backbone_selected_rows | bbcols_selected_ranges[]",
+      "backbone_minimum_selected_multiplicity": "integer>=1 | null",
+      "coordinate_queries": "explicit observed column or native position queries[]",
+      "feature_queries": "explicit feature occurrence+mapping IDs[]",
+      "requested_fields": "finite provider-defined field names[]",
+      "completeness": "complete | partial | truncated | unknown",
+      "evidence": "Evidence[]"
+    },
+    "Components": {
+      "schema_version": "bvbrc_genome_alignment_components_v1",
+      "analysis_id": "same as Sheet",
+      "selection": "Selection",
+      "xmfa_components": "unaltered typed neutral XMFA alignment/coverage/coordinate outputs[]",
+      "v4_segment_components": "mauve_v4_segment_components_v1[]",
+      "backbone_components": "mauve_backbone_components_v1[]",
+      "bbcols_components": "mauve_bbcols_components_v1[]",
+      "feature_components": "explicit intersection+mapped coverage NumericCell records[]",
+      "aggregates": "optional placement-weighted counts/fractions with preserved operands[]",
+      "requirements": "AcquisitionRequirement[]",
+      "diagnostics": "finite diagnostic[]"
+    }
+  },
+  "functions": [
+    {
+      "owner": "A",
+      "signature": "parse_mauve_v4(data: bytes, *, artifact: Artifact, encoding: str) -> ParseResult[MauveV4Document]"
+    },
+    {
+      "owner": "A",
+      "signature": "calculate_mauve_v4_segments(document: MauveV4Document, *, selection: dict, source_bindings: dict | None, case_policy: str) -> SegmentComponents"
+    },
+    {
+      "owner": "B",
+      "signature": "parse_mauve_backbone(data: bytes, *, artifact: Artifact, dialect: str, encoding: str) -> ParseResult[BackboneDocument]"
+    },
+    {
+      "owner": "B",
+      "signature": "parse_mauve_bbcols(data: bytes, *, artifact: Artifact, dialect: str, encoding: str) -> ParseResult[BBColsDocument]"
+    },
+    {
+      "owner": "B",
+      "signature": "calculate_mauve_backbone_components(document: BackboneDocument, *, selection: dict, source_bindings: dict | None) -> BackboneComponents"
+    },
+    {
+      "owner": "B",
+      "signature": "calculate_mauve_bbcols_components(document: BBColsDocument, *, selection: dict, xmfa_document: XMFADocument | None, joins: dict | None) -> BBColsComponents"
+    },
+    {
+      "owner": "C",
+      "signature": "extract_genome_alignment_inputs(original_task: OriginalTask, *, supplied_values: tuple[dict, ...], supplied_bytes: dict[str, bytes]) -> InputExtraction"
+    },
+    {
+      "owner": "C",
+      "signature": "bind_genome_alignment_artifacts(original_task: OriginalTask, *, artifacts: tuple[dict, ...], producer_evidence: tuple[dict, ...], inputs: GenomeAlignmentInputs | None) -> ArtifactAssociations"
+    },
+    {
+      "owner": "D",
+      "signature": "build_genome_alignment_sheet(*, original_task: OriginalTask, associations: ArtifactAssociations, inputs: GenomeAlignmentInputs | None, documents: tuple[dict, ...]) -> Sheet"
+    },
+    {
+      "owner": "D",
+      "signature": "calculate_genome_alignment_components(sheet: Sheet, *, selection: Selection) -> Components"
+    },
+    {
+      "owner": "E",
+      "signature": "consume_bundle(bundle: ArtifactBundle, *, artifact_bytes: dict[str, bytes], supplied_values: list[dict], requested_form: dict, parameters: dict) -> PureAdapterResult"
+    },
+    {
+      "owner": "E",
+      "signature": "implementation_sha256() -> str; configuration time only, no runtime grading file reads"
+    },
+    {
+      "owner": "F",
+      "signature": "provider-specific own/received facts, admission, validation and namespace facade matching existing EpisodeReturnRecords consumers"
+    },
+    {
+      "owner": "G",
+      "signature": "register and connect finalized C/E/F interfaces through existing AppService/execution consumers; sole owner of shared existing files"
+    }
+  ],
+  "output_formats": [
+    {
+      "recipe": "progressiveMauve",
+      "filename": "alignment.xmfa",
+      "format": "mauve1_xmfa",
+      "version": "Mauve1",
+      "evidence": "source and authentic upstream examples, not BV-BRC task"
+    },
+    {
+      "recipe": "mauveAligner",
+      "filename": "alignment.xmfa",
+      "format": "mauve_v4",
+      "version": "4",
+      "evidence": "source and authentic upstream example; service visualization incompatibility reproduced offline"
+    },
+    {
+      "recipe": "progressiveMauve",
+      "filename": "alignment.xmfa.bbcols",
+      "format": "mauve_bbcols",
+      "version": "pinned producer dialect",
+      "evidence": "source and authentic upstream example"
+    },
+    {
+      "recipe": "progressiveMauve",
+      "filename": "alignment.xmfa.backbone",
+      "format": "mauve_backbone",
+      "version": "pinned producer dialect",
+      "evidence": "source and authentic upstream example"
+    },
+    {
+      "recipe": "either wrapper path",
+      "filename": "alignment.json",
+      "format": "p3_mauve_visualization_json",
+      "version": "pinned producer dialect",
+      "evidence": "source only; lossy, scientific base calculations prohibited"
+    }
+  ],
+  "next_verification": "BOUNDARY_PROPOSAL_001.md section 9; do not launch scientific jobs under this boundary assignment",
+  "not_a_validation_schema": "Shapes and ownership are a reviewable contract proposal. Implement strict schemas and explicit semantic validators in the named modules; do not interpret these strings as executable scoring rules."
+}

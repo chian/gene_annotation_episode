@@ -1,0 +1,385 @@
+{
+  "provenance": {
+    "kind": "supplied_engineering_json",
+    "actual_native_execution": false,
+    "calculator_executed_to_construct_fixture": false,
+    "producer_authenticated": false,
+    "meaning": "Literal small alignment/quantities supplied for contract and selection tests. Capture reference is an explicitly unauthenticated engineering address. No Source, Store or native producer is created.",
+    "numerical_authority": "phylogeny_calculators.literal_site_conservation",
+    "numerical_authority_sha256": "f675d46d431993a4fee45ec875e1684ef32e5ccaa72cacc613e0228082a564fa"
+  },
+  "raw_input_utf8": ">dup title\r\nc-\r\n>dup title\r\na-\r\n>solo third\r\nca\r\n",
+  "raw_output_utf8": ">dup title\nC-\n>dup title\nA-\n>solo third\ncA\n",
+  "alignment": {
+    "alignment_id": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831#alignment",
+    "artifact": {
+      "raw_artifact_ref": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831",
+      "source_ref": "engineering_capture_source_not_authenticated",
+      "sha256": "56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831"
+    },
+    "format": "aligned_fasta",
+    "layout": "fasta",
+    "id_rule": "first_whitespace_token",
+    "encoding": "ascii",
+    "declared_row_count": null,
+    "declared_column_count": null,
+    "observed_row_count": 3,
+    "observed_column_count": 2,
+    "completeness": "complete",
+    "rows": [
+      {
+        "row_index": 0,
+        "raw_header": "dup title",
+        "member_label": "dup",
+        "sequence": "C-",
+        "source_location": {
+          "artifact": {
+            "raw_artifact_ref": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831",
+            "source_ref": "engineering_capture_source_not_authenticated",
+            "sha256": "56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831"
+          },
+          "byte_start_0based": 0,
+          "byte_end_0based_exclusive": 14,
+          "line_start_1based": 1,
+          "line_end_1based_inclusive": 2,
+          "xml_path": null
+        }
+      },
+      {
+        "row_index": 1,
+        "raw_header": "dup title",
+        "member_label": "dup",
+        "sequence": "A-",
+        "source_location": {
+          "artifact": {
+            "raw_artifact_ref": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831",
+            "source_ref": "engineering_capture_source_not_authenticated",
+            "sha256": "56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831"
+          },
+          "byte_start_0based": 14,
+          "byte_end_0based_exclusive": 28,
+          "line_start_1based": 3,
+          "line_end_1based_inclusive": 4,
+          "xml_path": null
+        }
+      },
+      {
+        "row_index": 2,
+        "raw_header": "solo third",
+        "member_label": "solo",
+        "sequence": "cA",
+        "source_location": {
+          "artifact": {
+            "raw_artifact_ref": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831",
+            "source_ref": "engineering_capture_source_not_authenticated",
+            "sha256": "56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831"
+          },
+          "byte_start_0based": 28,
+          "byte_end_0based_exclusive": 43,
+          "line_start_1based": 5,
+          "line_end_1based_inclusive": 6,
+          "xml_path": null
+        }
+      }
+    ]
+  },
+  "population_request": {
+    "kind": "explicit_output_indices",
+    "label": "supplied_three_rows",
+    "row_indices": [
+      2,
+      0,
+      1
+    ],
+    "columns_0based": [
+      1,
+      0
+    ],
+    "completeness": "complete"
+  },
+  "population": {
+    "population_id": "supplied_three_rows",
+    "alignment_id": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831#alignment",
+    "row_indices": [
+      2,
+      0,
+      1
+    ],
+    "columns_0based": [
+      1,
+      0
+    ],
+    "completeness": "complete",
+    "evidence": [
+      {
+        "content": {
+          "source_ref": "engineering_capture_source_not_authenticated",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831",
+          "sha256": "56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831",
+          "byte_count": 43
+        },
+        "pointer": ""
+      }
+    ]
+  },
+  "components": {
+    "version": "literal_site_conservation_v1",
+    "convention": "modal_literal_all_rows_first_source_row_v1",
+    "alignment_id": "artifact_56e23b7fe0c2076115767e620003aa48446c51147d98ad2309f1b3e2b3552831#alignment",
+    "population_id": "supplied_three_rows",
+    "ordered_source_row_indices": [
+      0,
+      1,
+      2
+    ],
+    "member_count": {
+      "value": 3,
+      "state": "available",
+      "unit": "rows",
+      "origin": "derived",
+      "numerator": null,
+      "denominator": null,
+      "population_ref": "supplied_three_rows",
+      "method": "selected_row_count",
+      "evidence": [],
+      "requirement_ids": []
+    },
+    "site_count": {
+      "value": 2,
+      "state": "available",
+      "unit": "columns",
+      "origin": "derived",
+      "numerator": null,
+      "denominator": null,
+      "population_ref": "supplied_three_rows",
+      "method": "selected_column_count",
+      "evidence": [],
+      "requirement_ids": []
+    },
+    "threshold": {
+      "comparison": "strict_greater_than",
+      "value": 0.8,
+      "basis": "unrounded_binary64_ratio"
+    },
+    "display": {
+      "decimal_places": 2,
+      "rounding": "binary64_fixed_2_ties_to_even"
+    },
+    "sites": [
+      {
+        "column_0based": 1,
+        "symbol_counts": [
+          {
+            "symbol": "-",
+            "count": 2
+          },
+          {
+            "symbol": "A",
+            "count": 1
+          }
+        ],
+        "modal_symbol": "-",
+        "modal_first_source_row_index": 0,
+        "modal_count": {
+          "value": 2,
+          "state": "available",
+          "unit": "characters",
+          "origin": "derived",
+          "numerator": null,
+          "denominator": null,
+          "population_ref": "supplied_three_rows",
+          "method": "literal_modal_symbol_count",
+          "evidence": [],
+          "requirement_ids": []
+        },
+        "majority_fraction": {
+          "value": 0.6666666666666666,
+          "state": "available",
+          "unit": "fraction",
+          "origin": "derived",
+          "numerator": 2,
+          "denominator": 3,
+          "population_ref": "supplied_three_rows",
+          "method": "literal_modal_all_rows_fraction",
+          "evidence": [],
+          "requirement_ids": []
+        },
+        "strict_gt_0_8": false,
+        "displayed_2dp_fraction": {
+          "value": 0.67,
+          "state": "available",
+          "unit": "fraction",
+          "origin": "derived",
+          "numerator": 2,
+          "denominator": 3,
+          "population_ref": "supplied_three_rows",
+          "method": "literal_modal_fraction_fixed_2",
+          "evidence": [],
+          "requirement_ids": []
+        }
+      },
+      {
+        "column_0based": 0,
+        "symbol_counts": [
+          {
+            "symbol": "A",
+            "count": 1
+          },
+          {
+            "symbol": "C",
+            "count": 1
+          },
+          {
+            "symbol": "c",
+            "count": 1
+          }
+        ],
+        "modal_symbol": "C",
+        "modal_first_source_row_index": 0,
+        "modal_count": {
+          "value": 1,
+          "state": "available",
+          "unit": "characters",
+          "origin": "derived",
+          "numerator": null,
+          "denominator": null,
+          "population_ref": "supplied_three_rows",
+          "method": "literal_modal_symbol_count",
+          "evidence": [],
+          "requirement_ids": []
+        },
+        "majority_fraction": {
+          "value": 0.3333333333333333,
+          "state": "available",
+          "unit": "fraction",
+          "origin": "derived",
+          "numerator": 1,
+          "denominator": 3,
+          "population_ref": "supplied_three_rows",
+          "method": "literal_modal_all_rows_fraction",
+          "evidence": [],
+          "requirement_ids": []
+        },
+        "strict_gt_0_8": false,
+        "displayed_2dp_fraction": {
+          "value": 0.33,
+          "state": "available",
+          "unit": "fraction",
+          "origin": "derived",
+          "numerator": 1,
+          "denominator": 3,
+          "population_ref": "supplied_three_rows",
+          "method": "literal_modal_fraction_fixed_2",
+          "evidence": [],
+          "requirement_ids": []
+        }
+      }
+    ]
+  },
+  "input_record": {
+    "selection": {
+      "namespace": "artifact",
+      "reference": "artifact_732b52133d3464501c6d6524d78e96628ed59560b91279b51cfa1ab527d304d8",
+      "format": "fasta"
+    },
+    "file": {
+      "artifact_ref": "artifact_732b52133d3464501c6d6524d78e96628ed59560b91279b51cfa1ab527d304d8",
+      "sha256": "732b52133d3464501c6d6524d78e96628ed59560b91279b51cfa1ab527d304d8",
+      "size_bytes": 49,
+      "format": "fasta"
+    },
+    "source_ref": null,
+    "capture": {
+      "state": "complete",
+      "retained_size_bytes": 49,
+      "original_size_bytes": 49
+    },
+    "records_state": "available",
+    "records": [
+      {
+        "record_ordinal": 0,
+        "byte_start": 0,
+        "byte_end": 16,
+        "header": "dup title",
+        "status": "available",
+        "issues": []
+      },
+      {
+        "record_ordinal": 1,
+        "byte_start": 16,
+        "byte_end": 32,
+        "header": "dup title",
+        "status": "available",
+        "issues": []
+      },
+      {
+        "record_ordinal": 2,
+        "byte_start": 32,
+        "byte_end": 49,
+        "header": "solo third",
+        "status": "available",
+        "issues": []
+      }
+    ],
+    "issues": []
+  },
+  "native_execution": {
+    "state": "unknown",
+    "returncode": null,
+    "reported_version": null,
+    "alphabet": {
+      "state": "unknown",
+      "value": null
+    },
+    "output_capture": {
+      "state": "unknown",
+      "retained_size_bytes": 43,
+      "original_size_bytes": null
+    },
+    "parser_status": "ok"
+  },
+  "associations": {
+    "state": "available",
+    "rows": [
+      {
+        "output_row_index": 0,
+        "input_record_ordinals": [
+          0,
+          1
+        ],
+        "state": "ambiguous_label_match"
+      },
+      {
+        "output_row_index": 1,
+        "input_record_ordinals": [
+          0,
+          1
+        ],
+        "state": "ambiguous_label_match"
+      },
+      {
+        "output_row_index": 2,
+        "input_record_ordinals": [
+          2
+        ],
+        "state": "unique_label_match"
+      }
+    ],
+    "unmatched_input_record_ordinals": []
+  },
+  "selection": {
+    "version": "protein_conservation_selection_v1",
+    "native_rows": {
+      "row_indices": null,
+      "offset": 0,
+      "limit": 100
+    },
+    "sites": {
+      "columns_0based": null,
+      "offset": 0,
+      "limit": 100
+    }
+  },
+  "issues": []
+}

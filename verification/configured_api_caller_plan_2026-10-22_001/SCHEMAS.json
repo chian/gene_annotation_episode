@@ -1,0 +1,508 @@
+{
+  "$defs": {
+    "api_registry": {
+      "additionalProperties": false,
+      "properties": {
+        "client_binding_sha256": {
+          "const": "7c3113045c9b8bd9d0613e12a5fd16eddbddb06fcb6b748b75f68d51dc1f2eb9"
+        },
+        "provider": {
+          "const": "hmmer"
+        },
+        "registry_ref": {
+          "const": "execution_registry_2c02600224ac4b1f8e7809935d6d4182"
+        },
+        "resource_id": {
+          "const": "hmmer-public-prechoice"
+        },
+        "version": {
+          "const": "public_search_registry_v1"
+        }
+      },
+      "required": [
+        "client_binding_sha256",
+        "provider",
+        "registry_ref",
+        "resource_id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "api_timing": {
+      "additionalProperties": false,
+      "properties": {
+        "compatibility": {
+          "const": "same_exposed_technical_configuration_unknown_remote_revision"
+        },
+        "duration_measure": {
+          "const": "hmmer_reported_search_elapsed_seconds"
+        },
+        "history_path": {
+          "const": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite"
+        },
+        "ledger_path": {
+          "const": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/api-timing.sqlite"
+        },
+        "monitoring_information_unit": {
+          "const": 1
+        },
+        "observation_unit": {
+          "const": "logical_provider_job_reported_result"
+        },
+        "resource_id": {
+          "const": "hmmer-public-prechoice"
+        },
+        "scope": {
+          "const": "new_orders_in_this_bound_run"
+        },
+        "version": {
+          "const": "hmmer_api_timing_binding_v1"
+        }
+      },
+      "required": [
+        "version",
+        "ledger_path",
+        "history_path",
+        "resource_id",
+        "duration_measure",
+        "observation_unit",
+        "compatibility",
+        "monitoring_information_unit",
+        "scope"
+      ],
+      "type": "object"
+    },
+    "configured_parameters": {
+      "additionalProperties": false,
+      "properties": {
+        "policy": {
+          "additionalProperties": false,
+          "properties": {
+            "controller": {
+              "const": {
+                "cost": 0.001,
+                "cost_by_role": {
+                  "job_launch": 0.1,
+                  "job_monitor": 0.1
+                },
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_size": 8
+              }
+            },
+            "monitoring": {
+              "const": {
+                "include_handoff_checks": true,
+                "information_unit": 1
+              }
+            },
+            "operational": {
+              "additionalProperties": false,
+              "properties": {
+                "acquired_record_unit": {
+                  "const": 1
+                },
+                "handoff_unit": {
+                  "const": 1
+                },
+                "registry_ref": {
+                  "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "acquired_record_unit",
+                "handoff_unit",
+                "registry_ref"
+              ],
+              "type": "object"
+            },
+            "scientific": {
+              "const": {
+                "applicability_weights": {
+                  "contextual": 0.35,
+                  "direct": 1.0,
+                  "incomparable": 0.0,
+                  "scope_limited": 0.2,
+                  "transfer": 0.6
+                },
+                "axis_weights": {
+                  "biological_context": 1.0,
+                  "comparative": 1.0,
+                  "discrimination": 1.0,
+                  "empirical": 1.0,
+                  "mechanistic": 1.0
+                },
+                "epsilon": 0.25,
+                "observation_axes": [
+                  [
+                    "assay_report",
+                    "empirical"
+                  ],
+                  [
+                    "biochemical_assay",
+                    "empirical"
+                  ],
+                  [
+                    "genetic_phenotype",
+                    "empirical"
+                  ],
+                  [
+                    "growth_assay",
+                    "empirical"
+                  ],
+                  [
+                    "read_support",
+                    "empirical"
+                  ],
+                  [
+                    "alignment",
+                    "comparative"
+                  ],
+                  [
+                    "profile_match",
+                    "comparative"
+                  ],
+                  [
+                    "comparison",
+                    "comparative"
+                  ],
+                  [
+                    "gene_prediction",
+                    "comparative"
+                  ],
+                  [
+                    "structure_match",
+                    "mechanistic"
+                  ],
+                  [
+                    "mechanism",
+                    "mechanistic"
+                  ],
+                  [
+                    "reaction_context",
+                    "mechanistic"
+                  ],
+                  [
+                    "context_measurement",
+                    "biological_context"
+                  ],
+                  [
+                    "context",
+                    "biological_context"
+                  ],
+                  [
+                    "taxonomy_assignment",
+                    "biological_context"
+                  ],
+                  [
+                    "sequence_composition",
+                    "biological_context"
+                  ]
+                ],
+                "relation_weights": {
+                  "does_not_discriminate": 0.0,
+                  "mixed": 0.5,
+                  "strengthens": 1.0,
+                  "weakens": 1.0
+                },
+                "scale": 100.0,
+                "target_weights": {},
+                "unresolved_factor": 0.5
+              }
+            },
+            "scientific_child": {
+              "const": "received_findings"
+            },
+            "scientific_progress": {
+              "additionalProperties": false,
+              "properties": {
+                "finding_unit": {
+                  "const": 1
+                },
+                "initial_known_record_refs": {
+                  "items": {
+                    "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "loss_preview_size": {
+                  "const": 24
+                }
+              },
+              "required": [
+                "finding_unit",
+                "initial_known_record_refs",
+                "loss_preview_size"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "controller",
+            "monitoring",
+            "operational",
+            "scientific",
+            "scientific_child",
+            "scientific_progress"
+          ],
+          "type": "object"
+        },
+        "services": {
+          "additionalProperties": false,
+          "properties": {
+            "acquired_record_unit": {
+              "const": 1
+            },
+            "annotation_child_roles": {
+              "const": [
+                "scientific_process",
+                "literature",
+                "launch",
+                "monitor",
+                "results"
+              ]
+            },
+            "api_execution_planning": {
+              "const": {
+                "callable": "execution.estimate",
+                "target": "public.hmmer.search",
+                "version": "hmmer_api_execution_planning_v1"
+              }
+            },
+            "api_timing": {
+              "const": {
+                "compatibility": "same_exposed_technical_configuration_unknown_remote_revision",
+                "duration_measure": "hmmer_reported_search_elapsed_seconds",
+                "history_path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite",
+                "ledger_path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/api-timing.sqlite",
+                "monitoring_information_unit": 1,
+                "observation_unit": "logical_provider_job_reported_result",
+                "resource_id": "hmmer-public-prechoice",
+                "scope": "new_orders_in_this_bound_run",
+                "version": "hmmer_api_timing_binding_v1"
+              }
+            },
+            "execution_planning_roles": {
+              "const": [
+                "annotation",
+                "scientific_process"
+              ]
+            },
+            "handoff_unit": {
+              "const": 1
+            },
+            "literature_outcome_page_size": {
+              "const": 8
+            },
+            "log_roles": {
+              "const": [
+                "native_stderr",
+                "native_text"
+              ]
+            },
+            "log_window_bytes": {
+              "const": 16384
+            },
+            "monitor_outcome_page_size": {
+              "const": 32
+            },
+            "monitoring_information_unit": {
+              "const": 1
+            },
+            "public_search_registry": {
+              "const": {
+                "client_binding_sha256": "7c3113045c9b8bd9d0613e12a5fd16eddbddb06fcb6b748b75f68d51dc1f2eb9",
+                "provider": "hmmer",
+                "registry_ref": "execution_registry_2c02600224ac4b1f8e7809935d6d4182",
+                "resource_id": "hmmer-public-prechoice",
+                "version": "public_search_registry_v1"
+              }
+            },
+            "scientific_child_roles": {
+              "const": [
+                "scientific_process",
+                "literature",
+                "launch",
+                "monitor",
+                "results"
+              ]
+            },
+            "source_directory": {
+              "const": "/tmp/gene-annotation-configured-caller-20261022-006/research/slotted_process_library/publications/2026-10-21-001"
+            },
+            "tool_retrieval": {
+              "const": {
+                "mode": "semantic_fast_v1",
+                "model": {
+                  "model": "gpt-6-luna",
+                  "reasoning_effort": "none"
+                },
+                "version": "scientific_tool_retrieval_v1"
+              }
+            },
+            "version": {
+              "const": "assembled_case_api_prechoice_v1"
+            }
+          },
+          "required": [
+            "acquired_record_unit",
+            "annotation_child_roles",
+            "execution_planning_roles",
+            "handoff_unit",
+            "literature_outcome_page_size",
+            "log_roles",
+            "log_window_bytes",
+            "monitor_outcome_page_size",
+            "monitoring_information_unit",
+            "scientific_child_roles",
+            "source_directory",
+            "tool_retrieval",
+            "version",
+            "public_search_registry",
+            "api_timing",
+            "api_execution_planning"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "policy",
+        "services"
+      ],
+      "type": "object"
+    },
+    "normalized_configuration": {
+      "additionalProperties": false,
+      "properties": {
+        "executable": {
+          "const": {
+            "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/phmmer",
+            "sha256": "e44ed0bf3f3ce441ceed7854391954f057140dab935f2e0ac4608d1a3f72ef61"
+          }
+        },
+        "history": {
+          "const": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite"
+        },
+        "local_jobs": {
+          "const": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          }
+        },
+        "local_tools": {
+          "const": {
+            "minimap2_cache_dir": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/derived-cache/minimap2",
+            "native_receipts_dir": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/native-execution-receipts"
+          }
+        },
+        "max_cpu": {
+          "const": 1
+        },
+        "models": {
+          "const": {
+            "FAST": {
+              "model": "gpt-6-luna",
+              "reasoning_effort": "none"
+            },
+            "REASONING": {
+              "model": "gpt-6-sol",
+              "reasoning_effort": "medium"
+            },
+            "connection": {
+              "command": [
+                "codex",
+                "app-server",
+                "--stdio"
+              ]
+            },
+            "routing": {
+              "child_interpretation": "REASONING",
+              "decide": "REASONING"
+            }
+          }
+        },
+        "public": {
+          "const": {
+            "provider_access_dir": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/public-access",
+            "transport_timeout_seconds": 90
+          }
+        },
+        "reference_database": {
+          "const": {
+            "path": "/home/chia/repos/gene_annotation_episode/cases/gene_001/jobs/homology_001/reviewed.fasta",
+            "sha256": "0e39da39014607bd1687caef1f495721bd4a405c4b83dceb134cd62f0c26332b"
+          }
+        },
+        "reference_records": {
+          "const": 575748
+        },
+        "reference_residues": {
+          "const": 209017843
+        },
+        "resource_id": {
+          "const": "local-development"
+        },
+        "restoration": {
+          "const": {
+            "model_presentation": "bounded_wait_history_v1",
+            "preview_size": 24
+          }
+        },
+        "search_modes": {
+          "const": [
+            "native_defaults",
+            "maximum_sensitivity"
+          ]
+        },
+        "workspace": {
+          "const": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace"
+        }
+      },
+      "required": [
+        "executable",
+        "history",
+        "local_jobs",
+        "local_tools",
+        "max_cpu",
+        "models",
+        "public",
+        "reference_database",
+        "reference_records",
+        "reference_residues",
+        "resource_id",
+        "restoration",
+        "search_modes",
+        "workspace"
+      ],
+      "type": "object"
+    },
+    "planning_marker": {
+      "additionalProperties": false,
+      "properties": {
+        "callable": {
+          "const": "execution.estimate"
+        },
+        "target": {
+          "const": "public.hmmer.search"
+        },
+        "version": {
+          "const": "hmmer_api_execution_planning_v1"
+        }
+      },
+      "required": [
+        "version",
+        "callable",
+        "target"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "configured_api_prechoice_case001_parameters_plan",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Closed particular new caller profile; no scientific/controller numeric change. Only final inherited refs and fresh native registry reference require actual published C/preparation outputs. This schema is planning evidence, not production code."
+}

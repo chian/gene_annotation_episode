@@ -1,0 +1,56 @@
+.......................................................................F [ 82%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+______ test_only_enabled_literature_binding_supplies_experimental_marker _______
+
+    def test_only_enabled_literature_binding_supplies_experimental_marker():
+        class EmptyServices:
+            def own_outcomes(self, *_args, **_kwargs):
+                return {"records": [], "offset": 0, "limit": 8, "next_offset": None}
+    
+            def literature_rate_repository(self):
+                return self
+    
+            def source_projection(self):
+                return self
+    
+            def source_domain_projection(self):
+                return self
+    
+            def received_cells(self, context):
+                return []
+    
+        assignment = {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": []}
+        context = BindingContext("run", "episode", "literature", (("literature", "case"),),
+            {"subject_refs": ["input_fixture"]}, assignment, {})
+        enabled = LiteratureEpisodes(EmptyServices(), rate_population=True)
+        disabled = LiteratureEpisodes(EmptyServices())
+>       assert enabled.decision_context(context, None)["literature_experimental_work"] == {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+
+tests/test_literature_experimental_prompt_delivery.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:725: in decision_context
+    result.update(self._native_rate_meaning_display_context(context))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1099: in _native_rate_meaning_display_context
+    repository = self._native_rate_meaning_repository()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1093: in _native_rate_meaning_repository
+    return source_meaning_projection(self.services.literature_rate_repository())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+repository = <test_literature_experimental_prompt_delivery.test_only_enabled_literature_binding_supplies_experimental_marker.<locals>.EmptyServices object at 0x7e676357a870>
+
+    def source_meaning_projection(repository):
+        """Construct a read-only adapter lazily; discovery installs no tables."""
+>       if repository.provider != PROVIDER or repository.operations_table != "literature_rate_operations":
+           ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EmptyServices' object has no attribute 'provider'
+
+gene_annotation_episode/literature_rate_meaning_delivery.py:101: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_literature_experimental_prompt_delivery.py::test_only_enabled_literature_binding_supplies_experimental_marker
+1 failed, 86 passed in 168.79s (0:02:48)

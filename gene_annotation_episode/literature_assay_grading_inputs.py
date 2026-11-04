@@ -124,7 +124,7 @@ def source_schema(namespace):
     return getattr(import_module('.' + module, __package__), factory)()
 
 
-def assay_grading_population_schema():
+def assay_grading_population_schema(*, legacy=False):
     schema = deepcopy(assay_grading_input_schema())
     props = schema['properties']
     del props['version']
@@ -132,9 +132,18 @@ def assay_grading_population_schema():
     received = obj({'kind': {'const': 'received_component'},
         'namespace': {'enum': list(SOURCE_SCHEMAS)}, 'sheet_ref': deepcopy(REF),
         'component': {'type': 'string', 'minLength': 1}})
+    received['description'] = ('Use a saved numerical reader component, including a single reported '
+        'kinetic parameter from literature.kinetic.populate: namespace literature_kinetic_cells, '
+        'its returned sheet_ref, and component numerator_parameter.')
     literal = obj({'kind': {'const': 'source_number'}, 'number': number_selector_schema(),
         'unit': _witness_schema(), 'origin': {'enum': ['reported', 'proposed', 'synthetic']}})
-    props['quantities'] = obj({role: {'anyOf': [deepcopy(received), deepcopy(literal), {'type': 'null'}]}
+    literal['description'] = ('Scalar shortcut for a number followed immediately by its printed unit '
+        'in the same source representation. A shared table-header unit uses the appropriate typed '
+        'reader instead. For a reported Km, kcat or catalytic efficiency, literature.kinetic.populate '
+        'accepts separate number and unit witnesses and returns a received_component for this grader.')
+    from .experimental_database_measurements import measurement_schema
+    props['quantities'] = obj({role: {'anyOf': [deepcopy(received), deepcopy(literal),
+                               *([measurement_schema()] if role == 'effect' else []), {'type': 'null'}]}
                               for role in ROLES})
     props['quantities']['required'] = list(REQUIRED_ROLES)
     schema['required'] = list(props)
@@ -142,6 +151,8 @@ def assay_grading_population_schema():
     # old committed selections remain readable without inventing an identity.
     props['experiment_ref'] = {**deepcopy(REF), 'x-reference-namespace': 'reference',
         'description': 'Possessed source-anchored assay reference identifying this experiment. Reuse it for another assessment of the same experiment; different experiments use distinct references even when they share a protocol type or paper.'}
+    if not legacy:
+        schema['required'].append('experiment_ref')
     return schema
 
 
@@ -152,11 +163,13 @@ def _unit(raw):
         'pA': ('pA', 1.), 'pS': ('pS', 1.),
         'mg/ml': ('mg/ml', 1.), 'mg/mL': ('mg/ml', 1.),
         'min': ('min', 1.), 's': ('s', 1.), 'h': ('min', 60.),
-        'uM': ('uM', 1.), 'mM': ('uM', 1000.), 'nM': ('uM', .001),
+        'uM': ('uM', 1.), 'mM': ('uM', 1000.), 'nM': ('uM', .001), 'M': ('uM', 1000000.),
+        'pM': ('uM', .000001), 'fM': ('uM', .000000001),
         'uM/min': ('uM/min', 1.), 'mM/min': ('uM/min', 1000.),
-        'per_min': ('per_min', 1.), 'min^-1': ('per_min', 1.),
+        'per_min': ('per_min', 1.), 'min^-1': ('per_min', 1.), 'permin': ('per_min', 1.),
         'per_s': ('per_min', 60.), 's^-1': ('per_min', 60.),
         'U/mg': ('U/mg', 1.), 'umol/min/mg': ('umol/min/mg', 1.),
+        'umol/(min*mg)': ('umol/min/mg', 1.),
         'pmol/min/mg': ('pmol/min/mg', 1.), 'uM_inverse_min_inverse': ('uM_inverse_min_inverse', 1.)}
     for token, (canonical, factor) in tuple(aliases.items()):
         for suffix in ('_squared', '^2'):
@@ -208,7 +221,7 @@ def _read_number(selector, sources):
         'raw_number': token, 'value': value, 'relation': relation}
 
 
-def _literal(selection, sources):
+def _literal(selection, sources, *, unit_reader=_unit):
     unsupported = None
     try:
         number = _read_number(selection['number'], sources)
@@ -228,13 +241,17 @@ def _literal(selection, sources):
     raw = sources.source(witness['source_ref'], witness['representation'])['content']
     # The scalar shortcut supports adjacent printed units only. Shared table
     # headers and nonadjacent unit definitions use the existing typed readers.
-    if witness['start'] < number_end or raw[number_end:witness['start']].strip():
+    try:
+        gap = raw[number_end:witness['start']].decode('utf-8')
+    except UnicodeError as error:
+        raise ContractError('assay_grading_unit_not_adjacent_to_number') from error
+    if witness['start'] < number_end or gap.strip():
         raise ContractError('assay_grading_unit_not_adjacent_to_number')
     prefix, suffix = _unit_contexts(sources, witness, 0, len(witness['quote']))
     if (prefix[-1:] and (prefix[-1:].isalpha() or prefix[-1:] in '_µμ/^')) or _unit_continuation(suffix):
         raise ContractError('assay_grading_partial_source_unit')
     try:
-        unit, factor = _unit(witness['quote'])
+        unit, factor = unit_reader(witness['quote'])
     except ContractError as error:
         if str(error) != 'assay_grading_source_unit_unsupported':
             raise
@@ -284,13 +301,13 @@ def _native_bound(cell):
     return None
 
 
-def _component(selection, read_cells):
+def _component(selection, read_cells, *, schema=None):
     rows = read_cells(selection['namespace'], selection['sheet_ref'], [selection['component']])
     component_field = 'component_key' if selection['namespace'] in (
         'literature_controlled_response_component_cells', 'literature_gel_component_cells') else 'component'
     if len(rows) != 1 or rows[0].get('sheet_ref') != selection['sheet_ref'] or rows[0].get(component_field) != selection['component']:
         raise ContractError('assay_grading_component_not_received')
-    validate_schema(rows, source_schema(selection['namespace']))
+    validate_schema(rows, source_schema(selection['namespace']) if schema is None else schema)
     row = deepcopy(rows[0]); cell = row.get('cell', row)
     raw_status = cell.get('status')
     value = cell.get('value')
@@ -472,7 +489,7 @@ def _support(reference, *, read_record, sources, hypothesis=False):
     return record
 
 
-def read_assay_grading_inputs(arguments, *, read_source, read_cells, read_record):
+def read_assay_grading_inputs(arguments, *, read_source, read_cells, read_record, read_database_request=None):
     """Authenticate operands/support; retain unknowns instead of default scores."""
     args = deepcopy(arguments)
     validate_schema(args, assay_grading_population_schema())
@@ -497,6 +514,10 @@ def read_assay_grading_inputs(arguments, *, read_source, read_cells, read_record
             quantities[role] = _literal(selection, sources)
             if args['source_kind'] == 'synthetic_fixture' and selection['number']['witness']['source_ref'] == args['source_ref']:
                 quantities[role]['origin'] = 'synthetic'
+        elif selection['kind'] == 'database_measurement':
+            from .experimental_database_measurements import read_measurement
+            quantities[role] = read_measurement(selection, sources=sources, read_record=read_record,
+                                               read_database_request=read_database_request, role=role)
         else:
             quantities[role], native[role] = _component(selection, read_cells)
     # Known-variance likelihood must not silently upgrade estimated uncertainty

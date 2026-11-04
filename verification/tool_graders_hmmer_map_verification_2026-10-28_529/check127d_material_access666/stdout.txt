@@ -1,0 +1,1799 @@
+...FFFFF....FFF.FF...FFF.....F..........                                 [100%]
+=================================== FAILURES ===================================
+_ test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.from_source] _
+source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'accession' is a required property
+E   
+E   Failed validating 'required' in schema:
+E       {'additionalProperties': False,
+E        'properties': {'accession': {'anyOf': [{'maxLength': 200,
+E                                                'minLength': 1,
+E                                                'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                                'type': 'string'},
+E                                               {'type': 'null'}]},
+E                       'artifact_ref': {'description': 'An existing '
+E                                                       'persistent record ID. '
+E                                                       'In a reasoning commit '
+E                                                       'only, @name refers to '
+E                                                       'an earlier '
+E                                                       'successfully '
+E                                                       'processed row '
+E                                                       'declared with alias '
+E                                                       'name in this same '
+E                                                       'commit. Ordinary tool '
+E                                                       'calls require '
+E                                                       'existing persistent '
+E                                                       'IDs.',
+E                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                        'type': 'string'},
+E                       'auxiliary_artifact_refs': {'description': 'Optional '
+E                                                                  'host-retained '
+E                                                                  'native '
+E                                                                  'input, '
+E                                                                  'diagnostic '
+E                                                                  'and '
+E                                                                  'metadata '
+E                                                                  'artifacts. '
+E                                                                  'These '
+E                                                                  'preserve '
+E                                                                  'operational '
+E                                                                  'provenance, '
+E                                                                  'never '
+E                                                                  'biological '
+E                                                                  'subjects '
+E                                                                  'or '
+E                                                                  'additional '
+E                                                                  'targets.',
+E                                                   'items': {'description': 'An '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'record '
+E                                                                            'ID. '
+E                                                                            'In '
+E                                                                            'a '
+E                                                                            'reasoning '
+E                                                                            'commit '
+E                                                                            'only, '
+E                                                                            '@name '
+E                                                                            'refers '
+E                                                                            'to '
+E                                                                            'an '
+E                                                                            'earlier '
+E                                                                            'successfully '
+E                                                                            'processed '
+E                                                                            'row '
+E                                                                            'declared '
+E                                                                            'with '
+E                                                                            'alias '
+E                                                                            'name '
+E                                                                            'in '
+E                                                                            'this '
+E                                                                            'same '
+E                                                                            'commit. '
+E                                                                            'Ordinary '
+E                                                                            'tool '
+E                                                                            'calls '
+E                                                                            'require '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'IDs.',
+E                                                             'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                             'type': 'string'},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'operand_refs': {'description': 'Optional '
+E                                                       'host-retained actual '
+E                                                       'sequence operand '
+E                                                       'identities. This '
+E                                                       'source lineage grants '
+E                                                       'no target ownership '
+E                                                       'or biological '
+E                                                       'interpretation.',
+E                                        'items': {'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                        'type': 'array',
+E                                        'uniqueItems': True},
+E                       'parent_source_refs': {'description': 'Optional '
+E                                                             'host-recorded '
+E                                                             'forward source '
+E                                                             'lineage. Each '
+E                                                             'reference names '
+E                                                             'an actual '
+E                                                             'immutable '
+E                                                             'source; this '
+E                                                             'does not assign '
+E                                                             'a biological '
+E                                                             'subject or '
+E                                                             'target.',
+E                                              'items': {'description': 'An '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'record '
+E                                                                       'ID. '
+E                                                                       'In a '
+E                                                                       'reasoning '
+E                                                                       'commit '
+E                                                                       'only, '
+E                                                                       '@name '
+E                                                                       'refers '
+E                                                                       'to an '
+E                                                                       'earlier '
+E                                                                       'successfully '
+E                                                                       'processed '
+E                                                                       'row '
+E                                                                       'declared '
+E                                                                       'with '
+E                                                                       'alias '
+E                                                                       'name '
+E                                                                       'in '
+E                                                                       'this '
+E                                                                       'same '
+E                                                                       'commit. '
+E                                                                       'Ordinary '
+E                                                                       'tool '
+E                                                                       'calls '
+E                                                                       'require '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'IDs.',
+E                                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                        'type': 'string'},
+E                                              'type': 'array',
+E                                              'uniqueItems': True},
+E                       'provider': {'maxLength': 200,
+E                                    'minLength': 1,
+E                                    'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                    'type': 'string'},
+E                       'publication_identifiers': {'description': 'Primary '
+E                                                                  'article '
+E                                                                  'identifiers '
+E                                                                  'retained '
+E                                                                  'from '
+E                                                                  'actual '
+E                                                                  'publication '
+E                                                                  'metadata, '
+E                                                                  'not '
+E                                                                  'bibliography '
+E                                                                  'citations, '
+E                                                                  'source '
+E                                                                  'record IDs '
+E                                                                  'or '
+E                                                                  'scientific '
+E                                                                  'findings. '
+E                                                                  'Multiple '
+E                                                                  'IDs are '
+E                                                                  'source '
+E                                                                  'assertions, '
+E                                                                  'not '
+E                                                                  'automatic '
+E                                                                  'independent '
+E                                                                  'evidence '
+E                                                                  'or an '
+E                                                                  'equivalence '
+E                                                                  'judgment.',
+E                                                   'items': {'anyOf': [{'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmcid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^PMC[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'doi'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^10\\.[0-9]{4,9}/[^\\s]+$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'}]},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'query_selection_ref': {'description': 'Optional exact '
+E                                                              'immutable '
+E                                                              'original-read '
+E                                                              'search '
+E                                                              'selection. A '
+E                                                              'library '
+E                                                              'container '
+E                                                              'named in a '
+E                                                              'search-result '
+E                                                              'custody '
+E                                                              'observation '
+E                                                              'does not mean '
+E                                                              'all its '
+E                                                              'members were '
+E                                                              'searched.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                       'request_ref': {'anyOf': [{'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                                 {'type': 'null'}]},
+E                       'retrieved_at': {'anyOf': [{'format': 'date-time',
+E                                                   'type': 'string'},
+E                                                  {'type': 'null'}]},
+E                       'stderr_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'stdout_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'text_ref': {'anyOf': [{'description': 'An existing '
+E                                                              'persistent '
+E                                                              'record ID. In '
+E                                                              'a reasoning '
+E                                                              'commit only, '
+E                                                              '@name refers '
+E                                                              'to an earlier '
+E                                                              'successfully '
+E                                                              'processed row '
+E                                                              'declared with '
+E                                                              'alias name in '
+E                                                              'this same '
+E                                                              'commit. '
+E                                                              'Ordinary tool '
+E                                                              'calls require '
+E                                                              'existing '
+E                                                              'persistent '
+E                                                              'IDs.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                                              {'type': 'null'}]},
+E                       'uri': {'anyOf': [{'format': 'uri', 'type': 'string'},
+E                                         {'type': 'null'}]},
+E                       'version': {'anyOf': [{'maxLength': 512,
+E                                              'minLength': 1,
+E                                              'pattern': '^[^\\n\\r]+$',
+E                                              'type': 'string'},
+E                                             {'type': 'null'}]}},
+E        'required': ['provider',
+E                     'accession',
+E                     'uri',
+E                     'artifact_ref',
+E                     'text_ref',
+E                     'request_ref',
+E                     'version',
+E                     'retrieved_at'],
+E        'type': 'object'}
+E   
+E   On instance:
+E       {'provider': 'controlled-wrapper',
+E        'artifact_ref': 'artifact_8f8b36f985e12bd469f8691989b47d9d1573937781d9b405d0339aa5a432a3ab',
+E        'text_ref': None,
+E        'request_ref': None,
+E        'version': 'fixture_v1'}
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_blast_utility_material_access_666.py:187: in test_different_source_wrapper_does_not_erase_utility_artifact_ownership
+    wrapper = c.h.store.put('source', {'provider': 'controlled-wrapper', 'artifact_ref': bundle,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error
+_ test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.parse] _
+source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'accession' is a required property
+E   
+E   Failed validating 'required' in schema:
+E       {'additionalProperties': False,
+E        'properties': {'accession': {'anyOf': [{'maxLength': 200,
+E                                                'minLength': 1,
+E                                                'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                                'type': 'string'},
+E                                               {'type': 'null'}]},
+E                       'artifact_ref': {'description': 'An existing '
+E                                                       'persistent record ID. '
+E                                                       'In a reasoning commit '
+E                                                       'only, @name refers to '
+E                                                       'an earlier '
+E                                                       'successfully '
+E                                                       'processed row '
+E                                                       'declared with alias '
+E                                                       'name in this same '
+E                                                       'commit. Ordinary tool '
+E                                                       'calls require '
+E                                                       'existing persistent '
+E                                                       'IDs.',
+E                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                        'type': 'string'},
+E                       'auxiliary_artifact_refs': {'description': 'Optional '
+E                                                                  'host-retained '
+E                                                                  'native '
+E                                                                  'input, '
+E                                                                  'diagnostic '
+E                                                                  'and '
+E                                                                  'metadata '
+E                                                                  'artifacts. '
+E                                                                  'These '
+E                                                                  'preserve '
+E                                                                  'operational '
+E                                                                  'provenance, '
+E                                                                  'never '
+E                                                                  'biological '
+E                                                                  'subjects '
+E                                                                  'or '
+E                                                                  'additional '
+E                                                                  'targets.',
+E                                                   'items': {'description': 'An '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'record '
+E                                                                            'ID. '
+E                                                                            'In '
+E                                                                            'a '
+E                                                                            'reasoning '
+E                                                                            'commit '
+E                                                                            'only, '
+E                                                                            '@name '
+E                                                                            'refers '
+E                                                                            'to '
+E                                                                            'an '
+E                                                                            'earlier '
+E                                                                            'successfully '
+E                                                                            'processed '
+E                                                                            'row '
+E                                                                            'declared '
+E                                                                            'with '
+E                                                                            'alias '
+E                                                                            'name '
+E                                                                            'in '
+E                                                                            'this '
+E                                                                            'same '
+E                                                                            'commit. '
+E                                                                            'Ordinary '
+E                                                                            'tool '
+E                                                                            'calls '
+E                                                                            'require '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'IDs.',
+E                                                             'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                             'type': 'string'},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'operand_refs': {'description': 'Optional '
+E                                                       'host-retained actual '
+E                                                       'sequence operand '
+E                                                       'identities. This '
+E                                                       'source lineage grants '
+E                                                       'no target ownership '
+E                                                       'or biological '
+E                                                       'interpretation.',
+E                                        'items': {'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                        'type': 'array',
+E                                        'uniqueItems': True},
+E                       'parent_source_refs': {'description': 'Optional '
+E                                                             'host-recorded '
+E                                                             'forward source '
+E                                                             'lineage. Each '
+E                                                             'reference names '
+E                                                             'an actual '
+E                                                             'immutable '
+E                                                             'source; this '
+E                                                             'does not assign '
+E                                                             'a biological '
+E                                                             'subject or '
+E                                                             'target.',
+E                                              'items': {'description': 'An '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'record '
+E                                                                       'ID. '
+E                                                                       'In a '
+E                                                                       'reasoning '
+E                                                                       'commit '
+E                                                                       'only, '
+E                                                                       '@name '
+E                                                                       'refers '
+E                                                                       'to an '
+E                                                                       'earlier '
+E                                                                       'successfully '
+E                                                                       'processed '
+E                                                                       'row '
+E                                                                       'declared '
+E                                                                       'with '
+E                                                                       'alias '
+E                                                                       'name '
+E                                                                       'in '
+E                                                                       'this '
+E                                                                       'same '
+E                                                                       'commit. '
+E                                                                       'Ordinary '
+E                                                                       'tool '
+E                                                                       'calls '
+E                                                                       'require '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'IDs.',
+E                                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                        'type': 'string'},
+E                                              'type': 'array',
+E                                              'uniqueItems': True},
+E                       'provider': {'maxLength': 200,
+E                                    'minLength': 1,
+E                                    'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                    'type': 'string'},
+E                       'publication_identifiers': {'description': 'Primary '
+E                                                                  'article '
+E                                                                  'identifiers '
+E                                                                  'retained '
+E                                                                  'from '
+E                                                                  'actual '
+E                                                                  'publication '
+E                                                                  'metadata, '
+E                                                                  'not '
+E                                                                  'bibliography '
+E                                                                  'citations, '
+E                                                                  'source '
+E                                                                  'record IDs '
+E                                                                  'or '
+E                                                                  'scientific '
+E                                                                  'findings. '
+E                                                                  'Multiple '
+E                                                                  'IDs are '
+E                                                                  'source '
+E                                                                  'assertions, '
+E                                                                  'not '
+E                                                                  'automatic '
+E                                                                  'independent '
+E                                                                  'evidence '
+E                                                                  'or an '
+E                                                                  'equivalence '
+E                                                                  'judgment.',
+E                                                   'items': {'anyOf': [{'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmcid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^PMC[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'doi'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^10\\.[0-9]{4,9}/[^\\s]+$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'}]},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'query_selection_ref': {'description': 'Optional exact '
+E                                                              'immutable '
+E                                                              'original-read '
+E                                                              'search '
+E                                                              'selection. A '
+E                                                              'library '
+E                                                              'container '
+E                                                              'named in a '
+E                                                              'search-result '
+E                                                              'custody '
+E                                                              'observation '
+E                                                              'does not mean '
+E                                                              'all its '
+E                                                              'members were '
+E                                                              'searched.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                       'request_ref': {'anyOf': [{'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                                 {'type': 'null'}]},
+E                       'retrieved_at': {'anyOf': [{'format': 'date-time',
+E                                                   'type': 'string'},
+E                                                  {'type': 'null'}]},
+E                       'stderr_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'stdout_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'text_ref': {'anyOf': [{'description': 'An existing '
+E                                                              'persistent '
+E                                                              'record ID. In '
+E                                                              'a reasoning '
+E                                                              'commit only, '
+E                                                              '@name refers '
+E                                                              'to an earlier '
+E                                                              'successfully '
+E                                                              'processed row '
+E                                                              'declared with '
+E                                                              'alias name in '
+E                                                              'this same '
+E                                                              'commit. '
+E                                                              'Ordinary tool '
+E                                                              'calls require '
+E                                                              'existing '
+E                                                              'persistent '
+E                                                              'IDs.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                                              {'type': 'null'}]},
+E                       'uri': {'anyOf': [{'format': 'uri', 'type': 'string'},
+E                                         {'type': 'null'}]},
+E                       'version': {'anyOf': [{'maxLength': 512,
+E                                              'minLength': 1,
+E                                              'pattern': '^[^\\n\\r]+$',
+E                                              'type': 'string'},
+E                                             {'type': 'null'}]}},
+E        'required': ['provider',
+E                     'accession',
+E                     'uri',
+E                     'artifact_ref',
+E                     'text_ref',
+E                     'request_ref',
+E                     'version',
+E                     'retrieved_at'],
+E        'type': 'object'}
+E   
+E   On instance:
+E       {'provider': 'controlled-wrapper',
+E        'artifact_ref': 'artifact_8f8b36f985e12bd469f8691989b47d9d1573937781d9b405d0339aa5a432a3ab',
+E        'text_ref': None,
+E        'request_ref': None,
+E        'version': 'fixture_v1'}
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_blast_utility_material_access_666.py:187: in test_different_source_wrapper_does_not_erase_utility_artifact_ownership
+    wrapper = c.h.store.put('source', {'provider': 'controlled-wrapper', 'artifact_ref': bundle,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error
+_ test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.read] _
+source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'accession' is a required property
+E   
+E   Failed validating 'required' in schema:
+E       {'additionalProperties': False,
+E        'properties': {'accession': {'anyOf': [{'maxLength': 200,
+E                                                'minLength': 1,
+E                                                'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                                'type': 'string'},
+E                                               {'type': 'null'}]},
+E                       'artifact_ref': {'description': 'An existing '
+E                                                       'persistent record ID. '
+E                                                       'In a reasoning commit '
+E                                                       'only, @name refers to '
+E                                                       'an earlier '
+E                                                       'successfully '
+E                                                       'processed row '
+E                                                       'declared with alias '
+E                                                       'name in this same '
+E                                                       'commit. Ordinary tool '
+E                                                       'calls require '
+E                                                       'existing persistent '
+E                                                       'IDs.',
+E                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                        'type': 'string'},
+E                       'auxiliary_artifact_refs': {'description': 'Optional '
+E                                                                  'host-retained '
+E                                                                  'native '
+E                                                                  'input, '
+E                                                                  'diagnostic '
+E                                                                  'and '
+E                                                                  'metadata '
+E                                                                  'artifacts. '
+E                                                                  'These '
+E                                                                  'preserve '
+E                                                                  'operational '
+E                                                                  'provenance, '
+E                                                                  'never '
+E                                                                  'biological '
+E                                                                  'subjects '
+E                                                                  'or '
+E                                                                  'additional '
+E                                                                  'targets.',
+E                                                   'items': {'description': 'An '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'record '
+E                                                                            'ID. '
+E                                                                            'In '
+E                                                                            'a '
+E                                                                            'reasoning '
+E                                                                            'commit '
+E                                                                            'only, '
+E                                                                            '@name '
+E                                                                            'refers '
+E                                                                            'to '
+E                                                                            'an '
+E                                                                            'earlier '
+E                                                                            'successfully '
+E                                                                            'processed '
+E                                                                            'row '
+E                                                                            'declared '
+E                                                                            'with '
+E                                                                            'alias '
+E                                                                            'name '
+E                                                                            'in '
+E                                                                            'this '
+E                                                                            'same '
+E                                                                            'commit. '
+E                                                                            'Ordinary '
+E                                                                            'tool '
+E                                                                            'calls '
+E                                                                            'require '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'IDs.',
+E                                                             'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                             'type': 'string'},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'operand_refs': {'description': 'Optional '
+E                                                       'host-retained actual '
+E                                                       'sequence operand '
+E                                                       'identities. This '
+E                                                       'source lineage grants '
+E                                                       'no target ownership '
+E                                                       'or biological '
+E                                                       'interpretation.',
+E                                        'items': {'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                        'type': 'array',
+E                                        'uniqueItems': True},
+E                       'parent_source_refs': {'description': 'Optional '
+E                                                             'host-recorded '
+E                                                             'forward source '
+E                                                             'lineage. Each '
+E                                                             'reference names '
+E                                                             'an actual '
+E                                                             'immutable '
+E                                                             'source; this '
+E                                                             'does not assign '
+E                                                             'a biological '
+E                                                             'subject or '
+E                                                             'target.',
+E                                              'items': {'description': 'An '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'record '
+E                                                                       'ID. '
+E                                                                       'In a '
+E                                                                       'reasoning '
+E                                                                       'commit '
+E                                                                       'only, '
+E                                                                       '@name '
+E                                                                       'refers '
+E                                                                       'to an '
+E                                                                       'earlier '
+E                                                                       'successfully '
+E                                                                       'processed '
+E                                                                       'row '
+E                                                                       'declared '
+E                                                                       'with '
+E                                                                       'alias '
+E                                                                       'name '
+E                                                                       'in '
+E                                                                       'this '
+E                                                                       'same '
+E                                                                       'commit. '
+E                                                                       'Ordinary '
+E                                                                       'tool '
+E                                                                       'calls '
+E                                                                       'require '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'IDs.',
+E                                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                        'type': 'string'},
+E                                              'type': 'array',
+E                                              'uniqueItems': True},
+E                       'provider': {'maxLength': 200,
+E                                    'minLength': 1,
+E                                    'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                    'type': 'string'},
+E                       'publication_identifiers': {'description': 'Primary '
+E                                                                  'article '
+E                                                                  'identifiers '
+E                                                                  'retained '
+E                                                                  'from '
+E                                                                  'actual '
+E                                                                  'publication '
+E                                                                  'metadata, '
+E                                                                  'not '
+E                                                                  'bibliography '
+E                                                                  'citations, '
+E                                                                  'source '
+E                                                                  'record IDs '
+E                                                                  'or '
+E                                                                  'scientific '
+E                                                                  'findings. '
+E                                                                  'Multiple '
+E                                                                  'IDs are '
+E                                                                  'source '
+E                                                                  'assertions, '
+E                                                                  'not '
+E                                                                  'automatic '
+E                                                                  'independent '
+E                                                                  'evidence '
+E                                                                  'or an '
+E                                                                  'equivalence '
+E                                                                  'judgment.',
+E                                                   'items': {'anyOf': [{'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmcid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^PMC[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'doi'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^10\\.[0-9]{4,9}/[^\\s]+$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'}]},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'query_selection_ref': {'description': 'Optional exact '
+E                                                              'immutable '
+E                                                              'original-read '
+E                                                              'search '
+E                                                              'selection. A '
+E                                                              'library '
+E                                                              'container '
+E                                                              'named in a '
+E                                                              'search-result '
+E                                                              'custody '
+E                                                              'observation '
+E                                                              'does not mean '
+E                                                              'all its '
+E                                                              'members were '
+E                                                              'searched.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                       'request_ref': {'anyOf': [{'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                                 {'type': 'null'}]},
+E                       'retrieved_at': {'anyOf': [{'format': 'date-time',
+E                                                   'type': 'string'},
+E                                                  {'type': 'null'}]},
+E                       'stderr_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'stdout_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'text_ref': {'anyOf': [{'description': 'An existing '
+E                                                              'persistent '
+E                                                              'record ID. In '
+E                                                              'a reasoning '
+E                                                              'commit only, '
+E                                                              '@name refers '
+E                                                              'to an earlier '
+E                                                              'successfully '
+E                                                              'processed row '
+E                                                              'declared with '
+E                                                              'alias name in '
+E                                                              'this same '
+E                                                              'commit. '
+E                                                              'Ordinary tool '
+E                                                              'calls require '
+E                                                              'existing '
+E                                                              'persistent '
+E                                                              'IDs.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                                              {'type': 'null'}]},
+E                       'uri': {'anyOf': [{'format': 'uri', 'type': 'string'},
+E                                         {'type': 'null'}]},
+E                       'version': {'anyOf': [{'maxLength': 512,
+E                                              'minLength': 1,
+E                                              'pattern': '^[^\\n\\r]+$',
+E                                              'type': 'string'},
+E                                             {'type': 'null'}]}},
+E        'required': ['provider',
+E                     'accession',
+E                     'uri',
+E                     'artifact_ref',
+E                     'text_ref',
+E                     'request_ref',
+E                     'version',
+E                     'retrieved_at'],
+E        'type': 'object'}
+E   
+E   On instance:
+E       {'provider': 'controlled-wrapper',
+E        'artifact_ref': 'artifact_8f8b36f985e12bd469f8691989b47d9d1573937781d9b405d0339aa5a432a3ab',
+E        'text_ref': None,
+E        'request_ref': None,
+E        'version': 'fixture_v1'}
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_blast_utility_material_access_666.py:187: in test_different_source_wrapper_does_not_erase_utility_artifact_ownership
+    wrapper = c.h.store.put('source', {'provider': 'controlled-wrapper', 'artifact_ref': bundle,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error
+_ test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.read] _
+source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'accession' is a required property
+E   
+E   Failed validating 'required' in schema:
+E       {'additionalProperties': False,
+E        'properties': {'accession': {'anyOf': [{'maxLength': 200,
+E                                                'minLength': 1,
+E                                                'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                                'type': 'string'},
+E                                               {'type': 'null'}]},
+E                       'artifact_ref': {'description': 'An existing '
+E                                                       'persistent record ID. '
+E                                                       'In a reasoning commit '
+E                                                       'only, @name refers to '
+E                                                       'an earlier '
+E                                                       'successfully '
+E                                                       'processed row '
+E                                                       'declared with alias '
+E                                                       'name in this same '
+E                                                       'commit. Ordinary tool '
+E                                                       'calls require '
+E                                                       'existing persistent '
+E                                                       'IDs.',
+E                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                        'type': 'string'},
+E                       'auxiliary_artifact_refs': {'description': 'Optional '
+E                                                                  'host-retained '
+E                                                                  'native '
+E                                                                  'input, '
+E                                                                  'diagnostic '
+E                                                                  'and '
+E                                                                  'metadata '
+E                                                                  'artifacts. '
+E                                                                  'These '
+E                                                                  'preserve '
+E                                                                  'operational '
+E                                                                  'provenance, '
+E                                                                  'never '
+E                                                                  'biological '
+E                                                                  'subjects '
+E                                                                  'or '
+E                                                                  'additional '
+E                                                                  'targets.',
+E                                                   'items': {'description': 'An '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'record '
+E                                                                            'ID. '
+E                                                                            'In '
+E                                                                            'a '
+E                                                                            'reasoning '
+E                                                                            'commit '
+E                                                                            'only, '
+E                                                                            '@name '
+E                                                                            'refers '
+E                                                                            'to '
+E                                                                            'an '
+E                                                                            'earlier '
+E                                                                            'successfully '
+E                                                                            'processed '
+E                                                                            'row '
+E                                                                            'declared '
+E                                                                            'with '
+E                                                                            'alias '
+E                                                                            'name '
+E                                                                            'in '
+E                                                                            'this '
+E                                                                            'same '
+E                                                                            'commit. '
+E                                                                            'Ordinary '
+E                                                                            'tool '
+E                                                                            'calls '
+E                                                                            'require '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'IDs.',
+E                                                             'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                             'type': 'string'},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'operand_refs': {'description': 'Optional '
+E                                                       'host-retained actual '
+E                                                       'sequence operand '
+E                                                       'identities. This '
+E                                                       'source lineage grants '
+E                                                       'no target ownership '
+E                                                       'or biological '
+E                                                       'interpretation.',
+E                                        'items': {'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                        'type': 'array',
+E                                        'uniqueItems': True},
+E                       'parent_source_refs': {'description': 'Optional '
+E                                                             'host-recorded '
+E                                                             'forward source '
+E                                                             'lineage. Each '
+E                                                             'reference names '
+E                                                             'an actual '
+E                                                             'immutable '
+E                                                             'source; this '
+E                                                             'does not assign '
+E                                                             'a biological '
+E                                                             'subject or '
+E                                                             'target.',
+E                                              'items': {'description': 'An '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'record '
+E                                                                       'ID. '
+E                                                                       'In a '
+E                                                                       'reasoning '
+E                                                                       'commit '
+E                                                                       'only, '
+E                                                                       '@name '
+E                                                                       'refers '
+E                                                                       'to an '
+E                                                                       'earlier '
+E                                                                       'successfully '
+E                                                                       'processed '
+E                                                                       'row '
+E                                                                       'declared '
+E                                                                       'with '
+E                                                                       'alias '
+E                                                                       'name '
+E                                                                       'in '
+E                                                                       'this '
+E                                                                       'same '
+E                                                                       'commit. '
+E                                                                       'Ordinary '
+E                                                                       'tool '
+E                                                                       'calls '
+E                                                                       'require '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'IDs.',
+E                                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                        'type': 'string'},
+E                                              'type': 'array',
+E                                              'uniqueItems': True},
+E                       'provider': {'maxLength': 200,
+E                                    'minLength': 1,
+E                                    'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                    'type': 'string'},
+E                       'publication_identifiers': {'description': 'Primary '
+E                                                                  'article '
+E                                                                  'identifiers '
+E                                                                  'retained '
+E                                                                  'from '
+E                                                                  'actual '
+E                                                                  'publication '
+E                                                                  'metadata, '
+E                                                                  'not '
+E                                                                  'bibliography '
+E                                                                  'citations, '
+E                                                                  'source '
+E                                                                  'record IDs '
+E                                                                  'or '
+E                                                                  'scientific '
+E                                                                  'findings. '
+E                                                                  'Multiple '
+E                                                                  'IDs are '
+E                                                                  'source '
+E                                                                  'assertions, '
+E                                                                  'not '
+E                                                                  'automatic '
+E                                                                  'independent '
+E                                                                  'evidence '
+E                                                                  'or an '
+E                                                                  'equivalence '
+E                                                                  'judgment.',
+E                                                   'items': {'anyOf': [{'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmcid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^PMC[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'doi'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^10\\.[0-9]{4,9}/[^\\s]+$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'}]},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'query_selection_ref': {'description': 'Optional exact '
+E                                                              'immutable '
+E                                                              'original-read '
+E                                                              'search '
+E                                                              'selection. A '
+E                                                              'library '
+E                                                              'container '
+E                                                              'named in a '
+E                                                              'search-result '
+E                                                              'custody '
+E                                                              'observation '
+E                                                              'does not mean '
+E                                                              'all its '
+E                                                              'members were '
+E                                                              'searched.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                       'request_ref': {'anyOf': [{'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                                 {'type': 'null'}]},
+E                       'retrieved_at': {'anyOf': [{'format': 'date-time',
+E                                                   'type': 'string'},
+E                                                  {'type': 'null'}]},
+E                       'stderr_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'stdout_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'text_ref': {'anyOf': [{'description': 'An existing '
+E                                                              'persistent '
+E                                                              'record ID. In '
+E                                                              'a reasoning '
+E                                                              'commit only, '
+E                                                              '@name refers '
+E                                                              'to an earlier '
+E                                                              'successfully '
+E                                                              'processed row '
+E                                                              'declared with '
+E                                                              'alias name in '
+E                                                              'this same '
+E                                                              'commit. '
+E                                                              'Ordinary tool '
+E                                                              'calls require '
+E                                                              'existing '
+E                                                              'persistent '
+E                                                              'IDs.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                                              {'type': 'null'}]},
+E                       'uri': {'anyOf': [{'format': 'uri', 'type': 'string'},
+E                                         {'type': 'null'}]},
+E                       'version': {'anyOf': [{'maxLength': 512,
+E                                              'minLength': 1,
+E                                              'pattern': '^[^\\n\\r]+$',
+E                                              'type': 'string'},
+E                                             {'type': 'null'}]}},
+E        'required': ['provider',
+E                     'accession',
+E                     'uri',
+E                     'artifact_ref',
+E                     'text_ref',
+E                     'request_ref',
+E                     'version',
+E                     'retrieved_at'],
+E        'type': 'object'}
+E   
+E   On instance:
+E       {'provider': 'controlled-wrapper',
+E        'artifact_ref': 'artifact_8f8b36f985e12bd469f8691989b47d9d1573937781d9b405d0339aa5a432a3ab',
+E        'text_ref': None,
+E        'request_ref': None,
+E        'version': 'fixture_v1'}
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_blast_utility_material_access_666.py:187: in test_different_source_wrapper_does_not_erase_utility_artifact_ownership
+    wrapper = c.h.store.put('source', {'provider': 'controlled-wrapper', 'artifact_ref': bundle,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error
+_ test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.locate] _
+source_snapshot/gene_annotation_episode/domain.py:588: in validate_schema
+    _validator(canonical(schema)).validate(value)
+dependencies/jsonschema/validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 'accession' is a required property
+E   
+E   Failed validating 'required' in schema:
+E       {'additionalProperties': False,
+E        'properties': {'accession': {'anyOf': [{'maxLength': 200,
+E                                                'minLength': 1,
+E                                                'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                                'type': 'string'},
+E                                               {'type': 'null'}]},
+E                       'artifact_ref': {'description': 'An existing '
+E                                                       'persistent record ID. '
+E                                                       'In a reasoning commit '
+E                                                       'only, @name refers to '
+E                                                       'an earlier '
+E                                                       'successfully '
+E                                                       'processed row '
+E                                                       'declared with alias '
+E                                                       'name in this same '
+E                                                       'commit. Ordinary tool '
+E                                                       'calls require '
+E                                                       'existing persistent '
+E                                                       'IDs.',
+E                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                        'type': 'string'},
+E                       'auxiliary_artifact_refs': {'description': 'Optional '
+E                                                                  'host-retained '
+E                                                                  'native '
+E                                                                  'input, '
+E                                                                  'diagnostic '
+E                                                                  'and '
+E                                                                  'metadata '
+E                                                                  'artifacts. '
+E                                                                  'These '
+E                                                                  'preserve '
+E                                                                  'operational '
+E                                                                  'provenance, '
+E                                                                  'never '
+E                                                                  'biological '
+E                                                                  'subjects '
+E                                                                  'or '
+E                                                                  'additional '
+E                                                                  'targets.',
+E                                                   'items': {'description': 'An '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'record '
+E                                                                            'ID. '
+E                                                                            'In '
+E                                                                            'a '
+E                                                                            'reasoning '
+E                                                                            'commit '
+E                                                                            'only, '
+E                                                                            '@name '
+E                                                                            'refers '
+E                                                                            'to '
+E                                                                            'an '
+E                                                                            'earlier '
+E                                                                            'successfully '
+E                                                                            'processed '
+E                                                                            'row '
+E                                                                            'declared '
+E                                                                            'with '
+E                                                                            'alias '
+E                                                                            'name '
+E                                                                            'in '
+E                                                                            'this '
+E                                                                            'same '
+E                                                                            'commit. '
+E                                                                            'Ordinary '
+E                                                                            'tool '
+E                                                                            'calls '
+E                                                                            'require '
+E                                                                            'existing '
+E                                                                            'persistent '
+E                                                                            'IDs.',
+E                                                             'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                             'type': 'string'},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'operand_refs': {'description': 'Optional '
+E                                                       'host-retained actual '
+E                                                       'sequence operand '
+E                                                       'identities. This '
+E                                                       'source lineage grants '
+E                                                       'no target ownership '
+E                                                       'or biological '
+E                                                       'interpretation.',
+E                                        'items': {'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                        'type': 'array',
+E                                        'uniqueItems': True},
+E                       'parent_source_refs': {'description': 'Optional '
+E                                                             'host-recorded '
+E                                                             'forward source '
+E                                                             'lineage. Each '
+E                                                             'reference names '
+E                                                             'an actual '
+E                                                             'immutable '
+E                                                             'source; this '
+E                                                             'does not assign '
+E                                                             'a biological '
+E                                                             'subject or '
+E                                                             'target.',
+E                                              'items': {'description': 'An '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'record '
+E                                                                       'ID. '
+E                                                                       'In a '
+E                                                                       'reasoning '
+E                                                                       'commit '
+E                                                                       'only, '
+E                                                                       '@name '
+E                                                                       'refers '
+E                                                                       'to an '
+E                                                                       'earlier '
+E                                                                       'successfully '
+E                                                                       'processed '
+E                                                                       'row '
+E                                                                       'declared '
+E                                                                       'with '
+E                                                                       'alias '
+E                                                                       'name '
+E                                                                       'in '
+E                                                                       'this '
+E                                                                       'same '
+E                                                                       'commit. '
+E                                                                       'Ordinary '
+E                                                                       'tool '
+E                                                                       'calls '
+E                                                                       'require '
+E                                                                       'existing '
+E                                                                       'persistent '
+E                                                                       'IDs.',
+E                                                        'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                        'type': 'string'},
+E                                              'type': 'array',
+E                                              'uniqueItems': True},
+E                       'provider': {'maxLength': 200,
+E                                    'minLength': 1,
+E                                    'pattern': '^[A-Za-z0-9][A-Za-z0-9_.:/+%#?=;&@~-]*$',
+E                                    'type': 'string'},
+E                       'publication_identifiers': {'description': 'Primary '
+E                                                                  'article '
+E                                                                  'identifiers '
+E                                                                  'retained '
+E                                                                  'from '
+E                                                                  'actual '
+E                                                                  'publication '
+E                                                                  'metadata, '
+E                                                                  'not '
+E                                                                  'bibliography '
+E                                                                  'citations, '
+E                                                                  'source '
+E                                                                  'record IDs '
+E                                                                  'or '
+E                                                                  'scientific '
+E                                                                  'findings. '
+E                                                                  'Multiple '
+E                                                                  'IDs are '
+E                                                                  'source '
+E                                                                  'assertions, '
+E                                                                  'not '
+E                                                                  'automatic '
+E                                                                  'independent '
+E                                                                  'evidence '
+E                                                                  'or an '
+E                                                                  'equivalence '
+E                                                                  'judgment.',
+E                                                   'items': {'anyOf': [{'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmcid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^PMC[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'pmid'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^[1-9][0-9]*$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'},
+E                                                                       {'additionalProperties': False,
+E                                                                        'properties': {'namespace': {'const': 'doi'},
+E                                                                                       'value': {'maxLength': 512,
+E                                                                                                 'pattern': '^10\\.[0-9]{4,9}/[^\\s]+$',
+E                                                                                                 'type': 'string'}},
+E                                                                        'required': ['namespace',
+E                                                                                     'value'],
+E                                                                        'type': 'object'}]},
+E                                                   'type': 'array',
+E                                                   'uniqueItems': True},
+E                       'query_selection_ref': {'description': 'Optional exact '
+E                                                              'immutable '
+E                                                              'original-read '
+E                                                              'search '
+E                                                              'selection. A '
+E                                                              'library '
+E                                                              'container '
+E                                                              'named in a '
+E                                                              'search-result '
+E                                                              'custody '
+E                                                              'observation '
+E                                                              'does not mean '
+E                                                              'all its '
+E                                                              'members were '
+E                                                              'searched.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                       'request_ref': {'anyOf': [{'description': 'An existing '
+E                                                                 'persistent '
+E                                                                 'record ID. '
+E                                                                 'In a '
+E                                                                 'reasoning '
+E                                                                 'commit '
+E                                                                 'only, @name '
+E                                                                 'refers to '
+E                                                                 'an earlier '
+E                                                                 'successfully '
+E                                                                 'processed '
+E                                                                 'row '
+E                                                                 'declared '
+E                                                                 'with alias '
+E                                                                 'name in '
+E                                                                 'this same '
+E                                                                 'commit. '
+E                                                                 'Ordinary '
+E                                                                 'tool calls '
+E                                                                 'require '
+E                                                                 'existing '
+E                                                                 'persistent '
+E                                                                 'IDs.',
+E                                                  'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                                  'type': 'string'},
+E                                                 {'type': 'null'}]},
+E                       'retrieved_at': {'anyOf': [{'format': 'date-time',
+E                                                   'type': 'string'},
+E                                                  {'type': 'null'}]},
+E                       'stderr_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'stdout_ref': {'description': 'Optional host-recorded '
+E                                                     'exact native output '
+E                                                     'stream artifact. This '
+E                                                     'is provenance, not a '
+E                                                     'biological observation '
+E                                                     'or model-authored text.',
+E                                      'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                      'type': 'string'},
+E                       'text_ref': {'anyOf': [{'description': 'An existing '
+E                                                              'persistent '
+E                                                              'record ID. In '
+E                                                              'a reasoning '
+E                                                              'commit only, '
+E                                                              '@name refers '
+E                                                              'to an earlier '
+E                                                              'successfully '
+E                                                              'processed row '
+E                                                              'declared with '
+E                                                              'alias name in '
+E                                                              'this same '
+E                                                              'commit. '
+E                                                              'Ordinary tool '
+E                                                              'calls require '
+E                                                              'existing '
+E                                                              'persistent '
+E                                                              'IDs.',
+E                                               'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                                               'type': 'string'},
+E                                              {'type': 'null'}]},
+E                       'uri': {'anyOf': [{'format': 'uri', 'type': 'string'},
+E                                         {'type': 'null'}]},
+E                       'version': {'anyOf': [{'maxLength': 512,
+E                                              'minLength': 1,
+E                                              'pattern': '^[^\\n\\r]+$',
+E                                              'type': 'string'},
+E                                             {'type': 'null'}]}},
+E        'required': ['provider',
+E                     'accession',
+E                     'uri',
+E                     'artifact_ref',
+E                     'text_ref',
+E                     'request_ref',
+E                     'version',
+E                     'retrieved_at'],
+E        'type': 'object'}
+E   
+E   On instance:
+E       {'provider': 'controlled-wrapper',
+E        'artifact_ref': 'artifact_8f8b36f985e12bd469f8691989b47d9d1573937781d9b405d0339aa5a432a3ab',
+E        'text_ref': None,
+E        'request_ref': None,
+E        'version': 'fixture_v1'}
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_blast_utility_material_access_666.py:187: in test_different_source_wrapper_does_not_erase_utility_artifact_ownership
+    wrapper = c.h.store.put('source', {'provider': 'controlled-wrapper', 'artifact_ref': bundle,
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+source_snapshot/gene_annotation_episode/domain.py:591: in validate_schema
+    raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+E   gene_annotation_episode.domain.ContractError: representation_error
+________ test_saved_primary_original_heading_is_readable_and_anchorable ________
+source_snapshot/tests/test_source_representations.py:57: in test_saved_primary_original_heading_is_readable_and_anchorable
+    assert clients.calls == 1 and store.problem() == initial and project_credit(store).credit == 0
+                                                                 ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+____ test_original_table_paging_preserves_bytes_without_complete_hydration _____
+source_snapshot/tests/test_source_representations.py:86: in test_original_table_paging_preserves_bytes_without_complete_hydration
+    assert store.problem() == initial and project_credit(store).credit == 0
+                                          ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+____ test_failed_xml_projection_retains_source_and_replays_partial_outcome _____
+source_snapshot/tests/test_source_representations.py:108: in test_failed_xml_projection_retains_source_and_replays_partial_outcome
+    assert project_credit(reopened).credit == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+_ test_reacquisition_keeps_publication_identity_without_creating_scientific_credit _
+source_snapshot/tests/test_source_representations.py:151: in test_reacquisition_keeps_publication_identity_without_creating_scientific_credit
+    assert store.problem() == initial and project_credit(store).credit == 0
+                                          ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+___ test_invalid_conflicting_or_mismatched_metadata_does_not_discard_article ___
+source_snapshot/tests/test_source_representations.py:178: in test_invalid_conflicting_or_mismatched_metadata_does_not_discard_article
+    assert project_credit(store).credit == 0
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+_ test_repeated_semantic_target_is_listed_once_with_original_manifest_occurrences _
+source_snapshot/tests/test_material_intake.py:47: in test_repeated_semantic_target_is_listed_once_with_original_manifest_occurrences
+    projection = project_credit(store).as_record()
+                 ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+_ test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations0] _
+source_snapshot/tests/test_material_intake.py:67: in test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets
+    assert len(project_credit(store).as_record()["targets"]) == 2
+               ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+_ test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations1] _
+source_snapshot/tests/test_material_intake.py:67: in test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets
+    assert len(project_credit(store).as_record()["targets"]) == 2
+               ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+______ test_mixed_evidence_fastq_order_qualities_links_and_fixed_targets _______
+source_snapshot/tests/test_material_intake.py:139: in test_mixed_evidence_fastq_order_qualities_links_and_fixed_targets
+    before = project_credit(store).as_record()
+             ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_utility_material_access_666.py::test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.from_source]
+FAILED source_snapshot/tests/test_blast_utility_material_access_666.py::test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.parse]
+FAILED source_snapshot/tests/test_blast_utility_material_access_666.py::test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.read]
+FAILED source_snapshot/tests/test_blast_utility_material_access_666.py::test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.read]
+FAILED source_snapshot/tests/test_blast_utility_material_access_666.py::test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.locate]
+FAILED source_snapshot/tests/test_source_representations.py::test_saved_primary_original_heading_is_readable_and_anchorable
+FAILED source_snapshot/tests/test_source_representations.py::test_original_table_paging_preserves_bytes_without_complete_hydration
+FAILED source_snapshot/tests/test_source_representations.py::test_failed_xml_projection_retains_source_and_replays_partial_outcome
+FAILED source_snapshot/tests/test_source_representations.py::test_reacquisition_keeps_publication_identity_without_creating_scientific_credit
+FAILED source_snapshot/tests/test_source_representations.py::test_invalid_conflicting_or_mismatched_metadata_does_not_discard_article
+FAILED source_snapshot/tests/test_material_intake.py::test_repeated_semantic_target_is_listed_once_with_original_manifest_occurrences
+FAILED source_snapshot/tests/test_material_intake.py::test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations0]
+FAILED source_snapshot/tests/test_material_intake.py::test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations1]
+FAILED source_snapshot/tests/test_material_intake.py::test_mixed_evidence_fastq_order_qualities_links_and_fixed_targets
+14 failed, 26 passed in 73.83s (0:01:13)

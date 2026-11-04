@@ -75,6 +75,10 @@ def _parse(directory, request, policy, *, cancel_event=None):
             failure.update(json.loads((directory/'failure.json').read_text()))
         outcome = {'native': result.metadata, 'failure': failure}
     except AcquisitionError as error:
+        if error.phase == 'local_admission' and (error.operational or {}).get('retryable'):
+            # No parser ran. Preserve its prepared handle, and let the owner
+            # retry acquisition without caching a failed or empty analysis.
+            raise
         outcome = {'native': error.operational, 'failure': {'code': error.code, 'phase': error.phase,
                                                          'resource': (error.operational or {}).get('resource')}}
     atomic_json(outcome_path, outcome)

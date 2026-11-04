@@ -1,0 +1,139 @@
+{
+  "identity": "source_executed_synthetic_not_service_artifacts",
+  "live_jobs": 0,
+  "native_programs_executed": [],
+  "fragments": [
+    {
+      "file": "sources/p3_fqutils/lib/fastq_utils.py",
+      "symbol": "run_hostile",
+      "source_sha256": "77f2c38c9b567f07d63ee2e7f13156a4c165cc3be8a603ec8b476b5315ba2ca0",
+      "start_line": 454,
+      "end_line": 483,
+      "fragment_sha256": "baa6a16114e7e4808078889b0e8c58ebce25140c3ae4dc50c756e865cdc4cbae"
+    },
+    {
+      "file": "sources/p3_fqutils/lib/fastq_utils.py",
+      "symbol": "run_alignment/unmapped_with",
+      "source_sha256": "77f2c38c9b567f07d63ee2e7f13156a4c165cc3be8a603ec8b476b5315ba2ca0",
+      "start_line": 295,
+      "end_line": 305,
+      "fragment_sha256": "c3efea70378768ec8403c1d55f3ce0a4632ee6b75079eeddb123abd3f27999fb"
+    },
+    {
+      "file": "sources/hostile_1.1.0/src/hostile/util.py",
+      "symbol": "fastq_path_to_stem",
+      "source_sha256": "21ce667f71c2ae6810de32ae3869bcd15ae802fa377a0d7ea0ffedc977e43460",
+      "start_line": 106,
+      "end_line": 111,
+      "fragment_sha256": "c624b630be3e17f3389fe9a84017983be289f896984cd7d94f977348dfc7bc55"
+    },
+    {
+      "file": "sources/hostile_1.1.0/src/hostile/util.py",
+      "symbol": "parse_count_file",
+      "source_sha256": "21ce667f71c2ae6810de32ae3869bcd15ae802fa377a0d7ea0ffedc977e43460",
+      "start_line": 114,
+      "end_line": 122,
+      "fragment_sha256": "e97a0119812762ad8015c0aab4b1bea886d4b52c3920e4d86c7d31c0cbb05fae"
+    },
+    {
+      "file": "sources/hostile_1.1.0/src/hostile/lib.py",
+      "symbol": "SampleReport",
+      "source_sha256": "12c148095fe0e48010feaed1675fbb1d5122f556de434f25cffecfeb31897e6a",
+      "start_line": 22,
+      "end_line": 38,
+      "fragment_sha256": "d33bf29a0c6741661c78d778931ff83fefd4b420d8da2d66ff27511852edf16b"
+    },
+    {
+      "file": "sources/hostile_1.1.0/src/hostile/lib.py",
+      "symbol": "gather_stats_paired",
+      "source_sha256": "12c148095fe0e48010feaed1675fbb1d5122f556de434f25cffecfeb31897e6a",
+      "start_line": 88,
+      "end_line": 139,
+      "fragment_sha256": "7a8e4b3be116a467db606cd0dbc204363b9aa070d93fb6c01e6774b4cd0efabf"
+    }
+  ],
+  "checks": {
+    "hostile_overwrite": {
+      "calls": [
+        [
+          "hostile",
+          "clean",
+          "--force",
+          "--out-dir",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/synthetic/overwrite",
+          "--fastq1",
+          "libA_R1.fastq",
+          "--fastq2",
+          "libA_R2.fastq"
+        ],
+        [
+          "hostile",
+          "clean",
+          "--force",
+          "--out-dir",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/synthetic/overwrite",
+          "--fastq1",
+          "libB.fastq"
+        ]
+      ],
+      "retained_report": [
+        {
+          "synthetic_stub": true,
+          "fastq1_in_path": "libB.fastq"
+        }
+      ],
+      "earlier_report_lost": true,
+      "read_operands_unchanged": true
+    },
+    "compression_identity": {
+      "filename": "synthetic.unmapped.fq.gz",
+      "magic_hex": "4073796e",
+      "content_format": "fastq",
+      "compression": "none",
+      "suffix_disagrees": true,
+      "sha256": "853a0a6f44d79f484c7718cf6bd0ae8e9fdd4f72d3c48b5ad7380b6fdaa8566b"
+    },
+    "hostile_native_counts": {
+      "rows": [
+        {
+          "version": "1.1.0",
+          "aligner": "bowtie2",
+          "index": "SYNTHETIC_REFERENCE_ID_NOT_ACQUIRED",
+          "options": [],
+          "fastq1_in_name": "nonzero_R1.fastq",
+          "fastq1_in_path": "nonzero_R1.fastq",
+          "fastq1_out_name": "nonzero_R1.clean_1.fastq.gz",
+          "fastq1_out_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/synthetic/hostile_counts/nonzero_R1.clean_1.fastq.gz",
+          "reads_in": 8,
+          "reads_out": 6,
+          "reads_removed": 2,
+          "reads_removed_proportion": 0.25,
+          "fastq2_in_name": "nonzero_R2.fastq",
+          "fastq2_in_path": "nonzero_R2.fastq",
+          "fastq2_out_name": "nonzero_R2.clean_2.fastq.gz",
+          "fastq2_out_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/synthetic/hostile_counts/nonzero_R2.clean_2.fastq.gz"
+        },
+        {
+          "version": "1.1.0",
+          "aligner": "bowtie2",
+          "index": "SYNTHETIC_REFERENCE_ID_NOT_ACQUIRED",
+          "options": [],
+          "fastq1_in_name": "empty_R1.fastq",
+          "fastq1_in_path": "empty_R1.fastq",
+          "fastq1_out_name": "empty_R1.clean_1.fastq.gz",
+          "fastq1_out_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/synthetic/hostile_counts/empty_R1.clean_1.fastq.gz",
+          "reads_in": 0,
+          "reads_out": 0,
+          "reads_removed": 0,
+          "reads_removed_proportion": 0.0,
+          "fastq2_in_name": "empty_R2.fastq",
+          "fastq2_in_path": "empty_R2.fastq",
+          "fastq2_out_name": "empty_R2.clean_2.fastq.gz",
+          "fastq2_out_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/synthetic/hostile_counts/empty_R2.clean_2.fastq.gz"
+        }
+      ],
+      "count_units": "primary_alignment_read_records_not_pairs",
+      "zero_denominator_native_fallback": 0.0
+    }
+  }
+}

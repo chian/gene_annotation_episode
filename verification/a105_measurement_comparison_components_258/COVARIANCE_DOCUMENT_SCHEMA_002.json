@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:a105:measurement-comparison:258:plan002:covariance_document",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_measurement_comparison_covariance_v1"
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "left",
+          "right",
+          "epsilon_signal",
+          "epsilon_nuisance",
+          "nuisance"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "owner_keys": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "dependency_keys": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      }
+    },
+    "covariance": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "basis": {
+      "const": "joint_covariance_of_selected_estimates"
+    },
+    "variance_status": {
+      "enum": [
+        "known",
+        "estimated",
+        "unknown"
+      ]
+    },
+    "origin": {
+      "enum": [
+        "reported",
+        "derived",
+        "synthetic"
+      ]
+    },
+    "systematic_coverage": {
+      "enum": [
+        "included_as_declared",
+        "not_established",
+        "identified_unresolved"
+      ]
+    },
+    "derivation": {
+      "enum": [
+        "reported_estimator_covariance",
+        "exact_linear_transform",
+        "estimated_from_observations",
+        "synthetic_model"
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "roles",
+    "owner_keys",
+    "units",
+    "dependency_keys",
+    "covariance",
+    "basis",
+    "variance_status",
+    "origin",
+    "systematic_coverage",
+    "derivation"
+  ],
+  "additionalProperties": false,
+  "$defs": {}
+}

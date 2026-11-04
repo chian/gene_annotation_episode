@@ -1,0 +1,24 @@
+{
+  "source_sha256": "e307c01fb4e1be833dd93f20b1525a67d42e5fa537321ddf3043a89ec58837b6",
+  "commands": [
+    [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-vv",
+      "tests/test_bvbrc_phylogeny_composed_workflow.py",
+      "-k",
+      "concatenated_sequence_loci"
+    ],
+    [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-vv",
+      "tests/test_bvbrc_phylogeny_composed_workflow.py",
+      "-k",
+      "core_genome_codon_protein"
+    ]
+  ],
+  "test_correction": "cell_count is a count with null ratio numerator/denominator; verify 4 rows \u00d7 4 columns = 16; gap_fraction still retains 2/16."
+}

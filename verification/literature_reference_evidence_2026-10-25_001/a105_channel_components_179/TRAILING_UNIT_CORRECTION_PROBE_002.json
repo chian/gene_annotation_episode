@@ -1,0 +1,64 @@
+{
+  "origin": "synthetic_agent_correction_probe",
+  "rows": [
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 nA</td>",
+      "selected_header_unit": "pA",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "electrical_explicit_unit_mismatch",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA</td>",
+      "selected_header_unit": "pA",
+      "expected_acceptance": true,
+      "accepted": true,
+      "current_pA": 1.8,
+      "spread_inferred": false,
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 mV</td>",
+      "selected_header_unit": "pA",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "electrical_explicit_unit_mismatch",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA/s</td>",
+      "selected_header_unit": "pA",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "partial_electrical_unit",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 approximately 0.2 nA</td>",
+      "selected_header_unit": "pA",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "electrical_spread_syntax_unsupported",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2%</td>",
+      "selected_header_unit": "pA",
+      "expected_acceptance": false,
+      "accepted": false,
+      "error_code": "relative_spread_unit_unsupported",
+      "passed": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2</td>",
+      "selected_header_unit": "pA",
+      "expected_acceptance": true,
+      "accepted": true,
+      "current_pA": 1.8,
+      "spread_inferred": false,
+      "passed": true
+    }
+  ],
+  "all_passed": true
+}

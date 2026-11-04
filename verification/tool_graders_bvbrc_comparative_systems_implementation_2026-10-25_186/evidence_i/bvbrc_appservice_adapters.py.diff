@@ -1,0 +1,14 @@
+--- /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/bvbrc_appservice_adapters.py
++++ gene_annotation_episode/bvbrc_appservice_adapters.py
+@@ -16,9 +16,10 @@
+     from . import bvbrc_genome_alignment_bundle_adapter as genome_alignment
+     from . import bvbrc_proteome_bundle_adapter as proteome
+     from . import bvbrc_proteome_bundle_adapter_v2 as proteome_v2
++    from . import bvbrc_comparative_systems_bundle_adapter as comparative_systems
+ 
+     installed = {(module.ADAPTER_ID, module.ADAPTER_VERSION): module
+-        for module in (homology, gene_tree, codon_tree, msa, metacats, genome_alignment, proteome, proteome_v2)}
++        for module in (homology, gene_tree, codon_tree, msa, metacats, genome_alignment, proteome, proteome_v2, comparative_systems)}
+     bound, seen = {}, set()
+     for row in configured:
+         key = row['adapter_id'], row['adapter_version']

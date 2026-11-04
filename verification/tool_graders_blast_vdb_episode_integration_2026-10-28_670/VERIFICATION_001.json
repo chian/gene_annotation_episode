@@ -1,0 +1,167 @@
+{
+  "authority": {
+    "formatters_removed_by_later_explicit_user_instruction": true,
+    "user_attachment_sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc"
+  },
+  "dependency_changes_after_snapshot": [],
+  "evidence_pins": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670/handle.json",
+      "sha256": "898b7c061162095e78155778cfa2acfc9ecc861f8feae245ff4e271d54ae2ec4",
+      "size_bytes": 3192
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670/last_status.json",
+      "sha256": "dbfd37e6c0b2f73906a2639170fea9abf458fda29cae48748d61ed371bd1ae8d",
+      "size_bytes": 1979
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670/junit.xml",
+      "sha256": "a10d786ec9f166a61aa73543468ed8017ef305ee41371afff8b30bdcd71783d9",
+      "size_bytes": 26120
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670/execution_audit.json",
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+      "size_bytes": 156
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670/source_pins_before.json",
+      "sha256": "bfde929edbbf64532cd3ca2ca99aeebc5ce6c578b20c2c95f991da059ce8763b",
+      "size_bytes": 2363928
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670/loaded_module_pins.json",
+      "sha256": "0df5a64630e86a01e61ac419ab0b877e2def9a7ce2c4020bc0d00cca0e135cf0",
+      "size_bytes": 199824
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670/selected_tests.json",
+      "sha256": "44eb672a40942c7e2f1cf8c552b110de7c996cf5c2f7fa5eff2c1b917e512f26",
+      "size_bytes": 85
+    }
+  ],
+  "execution_audit": {
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true,
+    "outside_modules": [],
+    "pytest_returncode": 0,
+    "unbound_mappings": []
+  },
+  "failed_cases": 0,
+  "implementation_port": {
+    "path": "verification/tool_graders_blast_vdb_episode_integration_2026-10-28_670/IMPLEMENTATION_PORT_001.md",
+    "sha256": "95e53036fb64beb686fbd88e4cc9c813bd71b7e83880f585ab532bdc563a0717",
+    "size_bytes": 7198
+  },
+  "owned_source_pins": [
+    {
+      "path": "gene_annotation_episode/native_blast_utility_tool_info.py",
+      "sha256": "48d2903f0aa3ae3f9f1e373476fcab90fed74653d9cafe9e0669a705ea54a777",
+      "size_bytes": 29031
+    },
+    {
+      "path": "tests/test_blast_vdb_tool_info_670.py",
+      "sha256": "dedf9740e726faa80e4342c301dd0b0c70775d5965dd0b73ea780df88c95c588",
+      "size_bytes": 8476
+    }
+  ],
+  "owned_sources_equal_test_snapshot": true,
+  "passing_cases": 158,
+  "passing_cases_by_module": {
+    "tests.test_blast_preparation_tool_info_651": 110,
+    "tests.test_blast_vdb_tool_info_670": 48
+  },
+  "qualification": "48newVDB cases plus110legacy cases. Controlled inputs only; this check does not invoke a native VDB helper or establish live/full-Workflow completion. No numerical grader or operation-link count increment.",
+  "remaining": [
+    "Generic execution consumers and historical replay are being verified independently by671/672.",
+    "Missing selected input/context capture currently retains raw artifacts but lacks requested failure-only artifact delivery; separate integration repair remains required.",
+    "Actual tiny native VDB execution and full selected Workflow requested returns/replay remain unverified.",
+    "Alias/accession mappings and remote bindings are not advertised by these initial path-only local bindings."
+  ],
+  "selected_tests": [
+    "test_blast_vdb_tool_info_670.py",
+    "test_blast_preparation_tool_info_651.py"
+  ],
+  "skipped_cases": 0,
+  "status": {
+    "files": {
+      "stderr": {
+        "available": true,
+        "bytes": 0
+      },
+      "stdout": {
+        "available": true,
+        "bytes": 261
+      }
+    },
+    "metadata": {
+      "duration_measure": "systemd_service_wall_seconds",
+      "elapsed_seconds": 36.647499845,
+      "enforcement": {
+        "filesystem_sandbox": false,
+        "memory": "systemd_cgroup_v2_memory_max",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset"
+      },
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "native_returncode": 0,
+      "observed_scratch_bytes": 621395968,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "service_exit": {
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "SERVICE_RESULT": "success",
+        "ended": {
+          "at": "2026-10-29T04:31:05.472294+00:00",
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+          "monotonic_ns": 1061827169620164
+        }
+      },
+      "verified_cgroup": {
+        "kill_mode": "control-group",
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "oom_policy": "kill",
+        "runtime_max": "infinity"
+      }
+    },
+    "native_receipt": {
+      "ended": {
+        "at": "2026-10-29T04:31:05.320075+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 1061827017401801
+      },
+      "execution_failure": null,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 621395968,
+      "resource_failure": null,
+      "started": {
+        "at": "2026-10-29T04:30:29.017962+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 1061790715316142
+      }
+    },
+    "quiescent": true,
+    "state": "returned",
+    "terminal": true,
+    "version": "durable_systemd_native_job_v2"
+  },
+  "test_case_directory": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check129_vdb_tool_info670",
+  "verified_behavior": [
+    "Four local VDB operation names expose name, description, resources and substantive actual-operation instructions.",
+    "All20 configured path-based variants have agreeing closed JSON schemas and runtime acceptance checks.",
+    "Each configured variant rejects the other incompatible operation/source/selection/filter variants.",
+    "Malformed variants and unsupported resource bindings reject; core alias/accession jobs remain valid but unbound.",
+    "Tool information is pure and detached from caller mutations.",
+    "110 existing legacy/preparation tool-information cases remain passing."
+  ],
+  "version": "blast_vdb_tool_info_verification_v1"
+}

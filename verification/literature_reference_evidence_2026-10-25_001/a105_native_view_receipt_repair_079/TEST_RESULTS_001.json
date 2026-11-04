@@ -1,0 +1,45 @@
+{
+  "evidence_class": "constructed engineering validation; no model or scientific measurement",
+  "runs": [
+    {
+      "log": "pytest_pre_fix_001.log",
+      "exitstatus": 1,
+      "passed": 1,
+      "failed": 1,
+      "deselected": 20,
+      "purpose": "pre-fix legacy/augmentation contrast"
+    },
+    {
+      "log": "pytest_focused_001.log",
+      "exitstatus": 0,
+      "passed": 22,
+      "seconds": 83.31,
+      "purpose": "initial focused new receipt checks"
+    },
+    {
+      "log": "pytest_foreign_operation_001.log",
+      "exitstatus": 0,
+      "passed": 1,
+      "deselected": 22,
+      "seconds": 5.37,
+      "purpose": "final added copied foreign operation case"
+    },
+    {
+      "log": "pytest_native_pure_regression_001.log",
+      "exitstatus": 0,
+      "passed": 129,
+      "seconds": 305.67,
+      "purpose": "original five-file native/pure regression"
+    },
+    {
+      "log": "pytest_pin_all_001.log",
+      "exitstatus": 0,
+      "passed": 152,
+      "seconds": 363.59,
+      "purpose": "final six-file pin suite;23 new plus129 original"
+    }
+  ],
+  "coverage_overlap": "All earlier runs overlap the final152 and must not be summed as unique tests.",
+  "root_acceptance": "pending independent root review",
+  "full_literature_goal": "incomplete"
+}

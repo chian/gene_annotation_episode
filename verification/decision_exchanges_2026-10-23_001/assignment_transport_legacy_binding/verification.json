@@ -1,0 +1,14 @@
+{
+  "version": "decision_exchange_legacy_binding_verification_v1",
+  "command": ".venv/bin/python -m pytest -q 'tests/test_episode_assignment_transport.py::test_strict_assignment_parse_failure_uses_existing_feedback_without_an_observation[literature]' tests/test_assembled_case_reconstruction.py::test_case_entrypoint_forwards_explicit_and_default_decision_protocols tests/test_case_execution.py::test_case_preparation_launch_and_replay_use_fixed_material_and_explicit_policy tests/test_case_execution.py::test_interrupted_case_restores_policy_snapshot_and_completed_action_history",
+  "result": "4 passed in 34.66s",
+  "source_edits_stable": true,
+  "changed_source_files": [
+    "gene_annotation_episode/case_execution.py",
+    "tests/test_assembled_case_reconstruction.py"
+  ],
+  "behavior": "Explicit caller protocol port forwards default sentinel, None or decision_exchange_v1 unchanged. Only initialize_case intentionally binds original bare-action scripted transport to None.",
+  "first_failure": "first-failure.json",
+  "model_inference": false,
+  "original_run_changes": false
+}

@@ -1,0 +1,565 @@
+{
+  "schema": "hmmer_alignment_preparation_components_v1",
+  "operation": {
+    "program": "alimask",
+    "mode": "mask_alignment",
+    "engine_version": "3.4",
+    "settings": {
+      "--amino": true,
+      "--alirange": "2-4,3-4",
+      "--appendmask": false
+    }
+  },
+  "parameters": {
+    "background": null,
+    "probability_tolerance": 0.0001,
+    "summary_rounding_tolerance": {
+      "eff_nseq": 0.005001,
+      "re_per_position": 0.0006
+    }
+  },
+  "rows": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "kind": "mask",
+      "source_record_key": "input:alignment:0#alignment/0",
+      "output_record_key": "output:masked_alignment:0#alignment/0",
+      "model_record_key": null,
+      "summary_record_key": null,
+      "components": {
+        "input_sequence_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "sequence_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "rows"
+            }
+          ]
+        },
+        "input_column_count": {
+          "value": 6,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_count"
+            }
+          ]
+        },
+        "rf_consensus_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "RF_consensus_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.RF"
+            }
+          ]
+        },
+        "input_alignment_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#population/0",
+              "field": "decoded_count"
+            }
+          ]
+        },
+        "processed_alignment_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "output_validated_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "output:masked_alignment:0#alignment/0",
+              "field": "complete"
+            }
+          ]
+        },
+        "unprocessed_alignment_count": {
+          "value": 0,
+          "state": "present",
+          "unit": "decoded_unprocessed_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#population/0",
+              "field": "decoded_count"
+            },
+            {
+              "record_key": "output:masked_alignment:0#alignment/0",
+              "field": "complete"
+            }
+          ]
+        },
+        "requested_interval_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "request_interval_count",
+          "inputs": [
+            {
+              "field": "native_rows.requested_interval"
+            }
+          ]
+        },
+        "native_mapping_row_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "decoded_mapping_row_count",
+          "inputs": [
+            {
+              "occurrence_id": "output:stdout:0",
+              "field": "native_rows.mapping"
+            }
+          ]
+        },
+        "mapped_model_position_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "model_position_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "rows"
+            },
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.RF"
+            },
+            {
+              "field": "operation.settings"
+            }
+          ]
+        },
+        "requested_union_count": {
+          "value": 3,
+          "state": "present",
+          "unit": "distinct_alignment_column_count",
+          "inputs": [
+            {
+              "field": "intervals",
+              "population": "union_inclusive_alignment_spans"
+            }
+          ]
+        },
+        "input_masked_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.MM",
+              "absent_annotation_means": "empty_mask"
+            }
+          ]
+        },
+        "actual_masked_count": {
+          "value": 3,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "output:masked_alignment:0#alignment/0",
+              "field": "column_annotations.MM"
+            }
+          ]
+        },
+        "newly_masked_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.MM",
+              "absent_annotation_means": "empty_mask"
+            },
+            {
+              "record_key": "output:masked_alignment:0#alignment/0",
+              "field": "column_annotations.MM"
+            }
+          ]
+        },
+        "removed_masked_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.MM",
+              "absent_annotation_means": "empty_mask"
+            },
+            {
+              "record_key": "output:masked_alignment:0#alignment/0",
+              "field": "column_annotations.MM"
+            }
+          ]
+        },
+        "retained_masked_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.MM",
+              "absent_annotation_means": "empty_mask"
+            },
+            {
+              "record_key": "output:masked_alignment:0#alignment/0",
+              "field": "column_annotations.MM"
+            }
+          ]
+        },
+        "masked_fraction": {
+          "value": 0.5,
+          "state": "present",
+          "unit": "masked_columns_per_input_alignment_column",
+          "inputs": [
+            {
+              "record_key": "output:masked_alignment:0#alignment/0",
+              "field": "column_annotations.MM",
+              "role": "numerator"
+            },
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_count",
+              "role": "denominator"
+            }
+          ]
+        }
+      },
+      "coordinates": {
+        "convention": "one_based_inclusive",
+        "model_to_source_alignment": null,
+        "source_output": {
+          "sequence_membership": "pass",
+          "sequence_content": "pass",
+          "sequences": [
+            {
+              "source_record_key": "input:alignment:0#alignment/0/sequence/0",
+              "output_record_key": "output:masked_alignment:0#alignment/0/sequence/0",
+              "source_sequence": "ACDEFG",
+              "output_sequence": "ACDEFG",
+              "content_state": "pass",
+              "correspondence": [
+                {
+                  "residue_position": 1,
+                  "source_alignment_position": 1,
+                  "resaved_alignment_position": 1
+                },
+                {
+                  "residue_position": 2,
+                  "source_alignment_position": 2,
+                  "resaved_alignment_position": 2
+                },
+                {
+                  "residue_position": 3,
+                  "source_alignment_position": 3,
+                  "resaved_alignment_position": 3
+                },
+                {
+                  "residue_position": 4,
+                  "source_alignment_position": 4,
+                  "resaved_alignment_position": 4
+                },
+                {
+                  "residue_position": 5,
+                  "source_alignment_position": 5,
+                  "resaved_alignment_position": 5
+                },
+                {
+                  "residue_position": 6,
+                  "source_alignment_position": 6,
+                  "resaved_alignment_position": 6
+                }
+              ],
+              "symbol_changes": []
+            }
+          ],
+          "source_to_resaved_columns": [
+            {
+              "source_alignment_position": 1,
+              "resaved_alignment_positions": [
+                1
+              ],
+              "state": "unique"
+            },
+            {
+              "source_alignment_position": 2,
+              "resaved_alignment_positions": [
+                2
+              ],
+              "state": "unique"
+            },
+            {
+              "source_alignment_position": 3,
+              "resaved_alignment_positions": [
+                3
+              ],
+              "state": "unique"
+            },
+            {
+              "source_alignment_position": 4,
+              "resaved_alignment_positions": [
+                4
+              ],
+              "state": "unique"
+            },
+            {
+              "source_alignment_position": 5,
+              "resaved_alignment_positions": [
+                5
+              ],
+              "state": "unique"
+            },
+            {
+              "source_alignment_position": 6,
+              "resaved_alignment_positions": [
+                6
+              ],
+              "state": "unique"
+            }
+          ]
+        }
+      },
+      "model_components": null,
+      "source_symbol_counts": null,
+      "intervals": [
+        {
+          "request_record_key": "request#interval/0",
+          "request_ordinal": 0,
+          "requested_start": 2,
+          "requested_end": 4,
+          "requested_coordinate_system": "alignment",
+          "alignment_start": 2,
+          "alignment_end": 4,
+          "state": "present",
+          "inclusive_span": {
+            "value": 3,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "request#interval/0",
+                "field": "start"
+              },
+              {
+                "record_key": "request#interval/0",
+                "field": "end"
+              },
+              {
+                "record_key": "input:alignment:0#alignment/0",
+                "field": "reconstruction.map"
+              }
+            ]
+          },
+          "returned_source_span": {
+            "value": null,
+            "state": "missing",
+            "unit": "alignment_column_count",
+            "inputs": []
+          },
+          "returned_target_span": {
+            "value": null,
+            "state": "missing",
+            "unit": "model_position_count",
+            "inputs": []
+          }
+        },
+        {
+          "request_record_key": "request#interval/1",
+          "request_ordinal": 1,
+          "requested_start": 3,
+          "requested_end": 4,
+          "requested_coordinate_system": "alignment",
+          "alignment_start": 3,
+          "alignment_end": 4,
+          "state": "present",
+          "inclusive_span": {
+            "value": 2,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "request#interval/1",
+                "field": "start"
+              },
+              {
+                "record_key": "request#interval/1",
+                "field": "end"
+              },
+              {
+                "record_key": "input:alignment:0#alignment/0",
+                "field": "reconstruction.map"
+              }
+            ]
+          },
+          "returned_source_span": {
+            "value": null,
+            "state": "missing",
+            "unit": "alignment_column_count",
+            "inputs": []
+          },
+          "returned_target_span": {
+            "value": null,
+            "state": "missing",
+            "unit": "model_position_count",
+            "inputs": []
+          }
+        }
+      ],
+      "input_mm": "m.m...",
+      "output_mm": ".mmm..",
+      "reconstruction": null,
+      "native_mappings": []
+    }
+  ],
+  "checks": [
+    {
+      "code": "parameter_valid",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "input:alignment:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stdout:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stderr:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:masked_alignment:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "source_geometry",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "input_population_processed",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "range_capacity",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {
+        "capacity": 100,
+        "actual": 2
+      }
+    },
+    {
+      "code": "requested_ranges",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "mask_annotation",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {
+        "actual_columns": [
+          2,
+          3,
+          4
+        ],
+        "expected_columns": [
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "code": "alignment_width",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "sequence_membership",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "sequence_content",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "output_geometry",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "output_symbol_changes",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {
+        "changed": false
+      }
+    }
+  ],
+  "issues": []
+}

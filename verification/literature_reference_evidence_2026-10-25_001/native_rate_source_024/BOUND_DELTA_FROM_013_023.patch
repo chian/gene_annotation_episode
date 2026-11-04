@@ -1,0 +1,259 @@
+--- gene_annotation_episode/literature_rate_calculations.py (reconstructed013)
++++ gene_annotation_episode/literature_rate_calculations.py (final021)
+@@ -343,6 +343,15 @@
+         approximations = {side: bool(row and row["approximate"])
+                           for side, row in (("reference", arow), ("test", brow))}
+         for name, cell in cells.items():
++            bounded_row = arow if name == "reference_rate" else brow if name == "test_rate" else None
++            number = bounded_row["source"]["number"] if bounded_row else None
++            relation = number["relation"] if number else "point"
++            censored = relation != "point"
++            # An individual source limit is information even when no point or
++            # canonical quantity is available. No derived contrast bound is
++            # inferred from a censored arm.
++            cell["threshold"] = bounded_row["value"] if censored else None
++            cell["bound"] = relation if censored else "none"
+             # Mean-SE magnitudes/counts are separate source operands from an
+             # approximately printed mean. Their parser retains only points.
+             cell["approximate"] = (approximations["reference"] if name == "reference_rate" else
+--- gene_annotation_episode/literature_rate_storage.py (reconstructed013)
++++ gene_annotation_episode/literature_rate_storage.py (final021)
+@@ -337,6 +337,19 @@
+             raise ContractError("literature_native_rate_saved_mismatch")
+         extraction = validate_native_extraction(payload["sheet"]["extraction"])
+         validate_native_selection(request["arguments"], extraction)
++        rows = {row["arm"]: row for row in extraction["rows"]}
++        for component in self.components:
++            row = rows.get("reference" if component == "reference_rate" else
++                           "test" if component == "test_rate" else None)
++            number = row["source"]["number"] if row else None
++            relation = number["relation"] if number else "point"
++            censored = relation != "point"
++            expected = {"threshold": row["value"] if censored else None,
++                        "bound": relation if censored else "none"}
++            cell = payload["sheet"]["cells"][component]
++            if (not set(expected).issubset(cell)
++                    or canonical({key: cell[key] for key in expected}) != canonical(expected)):
++                raise ContractError("literature_native_rate_saved_bounds_mismatch")
+         context = extraction["native_context"]
+         if context["source_refs"] != payload["direct_input_source_refs"]:
+             raise ContractError("literature_native_rate_saved_mismatch")
+@@ -443,7 +456,8 @@
+                     "unavailable_reason": cell["unavailable_reason"],
+                     "conditional_on": list(cell["conditional_on"])})
+                 if self.provider == PROVIDER and saved.get("version") == NATIVE_RECORD_VERSION:
+-                    result[-1].update(saved["native_bindings"], approximate=cell["approximate"])
++                    result[-1].update(saved["native_bindings"], approximate=cell["approximate"],
++                                     threshold=cell["threshold"], bound=cell["bound"])
+         return result
+ 
+     def source_projection(self):
+@@ -567,6 +581,8 @@
+         properties[field] = {"type": ["string", "null"], "format": "reference",
+                              "x-reference-namespace": "reference"}
+     properties["approximate"] = {"type": "boolean"}
++    properties["threshold"] = {"type": ["number", "null"]}
++    properties["bound"] = {"type": "string", "enum": ["none", "lt", "le", "gt", "ge"]}
+     schema["items"]["required"] = list(properties)
+     schema["x-source"] = "literature_rate_source_cells"
+     return schema
+--- tests/test_literature_rate_native_inputs.py (reconstructed013)
++++ tests/test_literature_rate_native_inputs.py (final021)
+@@ -538,3 +538,30 @@
+     sources = _Sources(lambda *_: {"artifact_ref": "artifact_synthetic", "content": raw})
+     value = _number({"witness": selected, "number_start": 0, "number_end": 1}, sources, "rate")
+     assert value["value"] == 3 and value["approximate"] and value["relation"] == "point"
++
++
++@pytest.mark.parametrize("qualifier,bound", [("< approximately ", "lt"), ("at most ", "le"),
++    ("greater than ", "gt"), ("at least ", "ge")])
++def test_native_individual_cells_keep_canonical_censoring_threshold_without_inventing_contrast_bounds(qualifier, bound):
++    raw, args = synthetic_case(reference=qualifier + "12", test="> 3")
++    for role, prefix in [("reference", qualifier), ("test", "> ")]:
++        args["arms"][role]["rate"]["number"]["number_start"] += len(prefix)
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] is None
++    assert cells["reference_rate"]["threshold"] == pytest.approx(.012)
++    assert cells["reference_rate"]["bound"] == bound
++    assert cells["reference_rate"]["approximate"] == ("approximately" in qualifier)
++    assert cells["test_rate"]["threshold"] == pytest.approx(.003)
++    assert cells["test_rate"]["bound"] == "gt"
++    for name, cell in cells.items():
++        if name not in ("reference_rate", "test_rate"):
++            assert cell["threshold"] is None and cell["bound"] == "none"
++
++
++def test_native_unknown_unit_preserves_the_censoring_relation_without_a_canonical_threshold():
++    raw, args = synthetic_case(reference="< 12", reference_unit="unreported")
++    args["arms"]["reference"]["rate"]["number"]["number_start"] += 2
++    cells = calculate(read_case(raw, args))["cells"]
++    assert cells["reference_rate"]["value"] is None
++    assert cells["reference_rate"]["threshold"] is None and cells["reference_rate"]["bound"] == "lt"
++    assert cells["reference_rate"]["unavailable_reason"] == "unsupported_source_rate_unit"
+--- tests/test_literature_rate_native_storage.py (reconstructed013)
++++ tests/test_literature_rate_native_storage.py (final021)
+@@ -14,13 +14,16 @@
+ from test_literature_rate_native_inputs import synthetic_case, defined_case
+ 
+ 
+-def setup_native_store(path, *, defined=False, approximate=False):
++def setup_native_store(path, *, defined=False, approximate=False, reference=None):
+     store = Store(path)
+     store.create_problem(raw_sequence="ATGGCT", molecule="dna")
+     raw, args = defined_case() if defined else synthetic_case()
+     if approximate:
+         raw, args = synthetic_case(reference="about 12")
+         args["arms"]["reference"]["rate"]["number"]["number_start"] += len("about ")
++    if reference is not None:
++        raw, args = synthetic_case(reference=reference)
++        args["arms"]["reference"]["rate"]["number"]["number_start"] += reference.index("12")
+     artifact = store.artifact(raw, "text/plain")
+     source = store.put("source", {"provider": "synthetic_native_rate_fixture", "accession": None,
+         "uri": None, "artifact_ref": artifact, "text_ref": artifact, "request_ref": None,
+@@ -127,6 +130,54 @@
+         store.close()
+ 
+ 
++@pytest.mark.parametrize("reference,bound", [("< approximately 12", "lt"), ("> 12", "gt")])
++def test_requested_native_bound_survives_typed_subset_receive_and_saved_only_reopen(tmp_path, monkeypatch, reference, bound):
++    store, context, args = setup_native_store(tmp_path, reference=reference)
++    repo = LiteratureRateRepository(store, context.run_id).source_projection()
++    outcome = repo.populate_native(context, args, "bounded")
++    sheet = outcome["result"]["sheet_ref"]
++    permitted = (*context.received_record_refs, *outcome["record_refs"])
++    cells = repo.project_cells([sheet], permitted_record_refs=permitted, components=("reference_rate",))
++    assert len(cells) == 1 and cells[0]["component"] == "reference_rate"
++    assert cells[0]["value"] is None and cells[0]["threshold"] == pytest.approx(.012)
++    assert cells[0]["bound"] == bound and cells[0]["unit"] == "umol/min/mg"
++    assert cells[0]["approximate"] == ("approximately" in reference)
++    assert "test_threshold" not in cells[0]
++    schema = obj({"requested_reference_only": rate_source_cells_schema()})
++    report = form_with_facts({}, schema, {"literature_rate_source_cells": cells})
++    assert validate_form(report, schema, lambda ref, ns: ref in permitted and store.get(ref)["record_type"] == ns) == report
++    repo.validate_returned_values(cells, permitted_record_refs=permitted)
++    for field, value in (("threshold", 12), ("bound", "none")):
++        changed = deepcopy(cells);changed[0][field] = value
++        with pytest.raises(ContractError, match="differs_from_saved"):
++            repo.validate_returned_values(changed, permitted_record_refs=permitted)
++    parent = replace(context, role="annotation", episode_id="parent", path=(("annotation", "root"),), assignment={})
++    repo.receive_cells(parent, cells, "bounded-return")
++    original = repo.read(sheet)
++    source_artifacts = {store.get(ref)["artifact_ref"] for ref in original["input_source_refs"]}
++    store.close()
++    def forbidden(*_args, **_kwargs):
++        raise AssertionError("saved bound restoration must not extract or refit")
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_native_inputs.read_rate_source_inputs", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.populate_rate_contrast", forbidden)
++    with Store(tmp_path) as reopened:
++        reopened.db.close()
++        reopened.db = sqlite3.connect(f"file:{tmp_path / 'state.sqlite3'}?mode=ro", uri=True)
++        reopened.db.row_factory = sqlite3.Row
++        original_get = reopened.get_artifact
++        def saved_only(ref):
++            if ref in source_artifacts:
++                raise AssertionError("scientific source bytes must not be reread")
++            return original_get(ref)
++        monkeypatch.setattr(reopened, "get_artifact", saved_only)
++        restored = LiteratureRateRepository(reopened, context.run_id).source_projection()
++        before = reopened.db.total_changes
++        assert restored.populate_native(context, args, "bounded") == outcome
++        assert restored.project_cells([sheet], permitted_record_refs=permitted, components=("reference_rate",)) == cells
++        assert restored.received_cells(parent) == cells
++        assert reopened.db.total_changes == before
++
++
+ def test_native_replay_rechecks_source_receipt_scope_and_exact_selection(tmp_path):
+     store, context, args = setup_native_store(tmp_path)
+     try:
+--- tests/test_literature_rate_native_integration.py (reconstructed013)
++++ tests/test_literature_rate_native_integration.py (final021)
+@@ -36,14 +36,16 @@
+     return {"selection": {"kind": "reason", "commit": commit}, "report_update": {}}
+ 
+ 
+-@pytest.mark.parametrize("repair_legacy", [False, True])
+-@pytest.mark.parametrize("defined", [False, True])
+-def test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work(tmp_path, repair_legacy, defined):
+-    store, context, args = setup_native_store(tmp_path / "state", defined=defined)
++@pytest.mark.parametrize("repair_legacy,defined,bounded", [(False, False, False), (True, False, False),
++    (False, True, False), (True, True, False), (False, False, True)])
++def test_selected_native_population_crosses_native_return_or_repairs_legacy_admission_without_repeating_work(tmp_path, repair_legacy, defined, bounded):
++    store, context, args = setup_native_store(tmp_path / "state", defined=defined,
++        reference="< approximately 12" if bounded else None)
+     try:
+         native_form = obj({"caller_chosen_native_results": rate_source_cells_schema()})
+         first_form = obj({"legacy_request": rate_cells_schema()}) if repair_legacy else native_form
+-        assignment = {**plain(context.assignment), "requested_rate_components": COMPONENTS}
++        requested = ["reference_rate"] if bounded else COMPONENTS
++        assignment = {**plain(context.assignment), "requested_rate_components": requested}
+         commissions = {"selection": {"kind": "episode_child", "role": "literature",
+             "assignment": assignment, "goal": "Compare the source rates while retaining distinct constructs.",
+             "scope": plain(context.scope), "purpose": "Return requested source-rate cells and limitations.",
+@@ -68,13 +70,18 @@
+         def integrate(inputs):
+             report, = inputs["child_reports"]
+             cells = report["caller_chosen_native_results"]
+-            assert [row["component"] for row in cells] == COMPONENTS
+-            assert cells[0]["value"] == pytest.approx(13.9 if defined else .009)
+-            assert cells[1]["value"] is None
++            assert [row["component"] for row in cells] == requested
++            if bounded:
++                assert cells[0]["value"] is None and cells[0]["threshold"] == pytest.approx(.012)
++                assert cells[0]["bound"] == "lt" and cells[0]["approximate"] is True
++            else:
++                assert cells[0]["value"] == pytest.approx(13.9 if defined else .009)
++                assert cells[1]["value"] is None
++                assert all(row["threshold"] is None and row["bound"] == "none" for row in cells)
+             assert cells[0]["assayed_subject_ref"] is None
+             assert store.get(cells[0]["reference_construct_ref"])["label"] == "WT"
+             assert store.get(cells[0]["test_construct_ref"])["label"] == "variant"
+-            assert cells[0]["approximate"] is False
++            assert cells[0]["approximate"] is bounded
+             received.append(report)
+             return parent_reason(store, args["source_ref"])
+         script = [commissions, population, *([repair] if repair_legacy else []), integrate]
+@@ -108,13 +115,16 @@
+         store.close()
+ 
+ 
+-def test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart(tmp_path):
+-    store, context, args = setup_native_store(tmp_path / "state", approximate=True)
++@pytest.mark.parametrize("bounded", [False, True])
++def test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart(tmp_path, bounded):
++    store, context, args = setup_native_store(tmp_path / "state", approximate=not bounded,
++        reference="< approximately 12" if bounded else None)
+     try:
+         services, binding = service_binding(store, context)
+         outcome = asyncio.run(binding.execute(context, "literature.rate.source.populate", args, "selected"))
+         assert outcome["status"] == "completed"
+-        current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]))
++        current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]),
++            assignment={**plain(context.assignment), "requested_rate_components": ["reference_rate"]})
+         facts = binding.facts(current, {"committed_record_refs": outcome["record_refs"]})
+         assert facts["literature_rate_cells"] == []
+         cells = facts["literature_rate_source_cells"]
+@@ -129,6 +139,7 @@
+             contexts=[r for r in records if r["record_type"] == "context"],
+             terms=[r for r in records if r["record_type"] == "term"])
+         second = deepcopy(first)
++        second["last_local_outcome"] = None
+         second["child_reports"] = [{"native_components": cells}]
+         wire, restarted = LiteratureWire(tmp_path / "wire"), LiteratureWire(tmp_path / "restarted")
+         async def exercise():
+@@ -149,6 +160,16 @@
+         assert all("native_components[0].reference_subject_ref" in turn["input"][0]["text"]
+                    for turn in [wire.turns_sent()[-1], restarted.turns_sent()[0]])
+         assert "native_rate_subject_" not in wire.turns_sent()[-1]["input"][0]["text"]
++        if bounded:
++            assert len(cells) == 1 and cells[0]["threshold"] == pytest.approx(.012)
++            assert cells[0]["bound"] == "lt" and cells[0]["value"] is None
++            for transport in (wire, restarted):
++                for turn in transport.turns_sent():
++                    steering = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)[1]
++                    assert "threshold" in steering and "0.012" in steering and "bound" in steering and "lt" in steering
++            for turn in (wire.turns_sent()[-1], restarted.turns_sent()[0]):
++                text = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)[1]
++                assert "0.003" not in text
+     finally:
+         store.close()
+ 

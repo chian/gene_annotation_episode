@@ -132,6 +132,15 @@ def artifact_path(store, ref):
     from .enrichr_reference_privacy import enrichr_reference_restriction
     if enrichr_reference_restriction(store, None, artifact["id"], "artifact", private_only=True) is False:
         raise ContractError("enrichr_private_artifact_not_readable")
+    from .molecular_reference_privacy import molecular_reference_restriction
+    if molecular_reference_restriction(store, None, artifact["id"], "artifact", private_only=True) is False:
+        raise ContractError("molecular_private_artifact_not_readable")
+    return _verified_artifact_path(store, artifact["id"])
+
+
+def _verified_artifact_path(store, ref):
+    """Verify retained byte identity only; callers own access authority."""
+    artifact = store._require(ref, {"artifact"})
     path = store.path / "artifacts" / artifact["sha256"][:2] / artifact["sha256"]
     digest = hashlib.sha256()
     with path.open("rb") as handle:

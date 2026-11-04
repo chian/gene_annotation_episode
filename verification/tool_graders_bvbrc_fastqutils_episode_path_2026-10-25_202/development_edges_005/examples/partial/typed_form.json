@@ -1,0 +1,498 @@
+{
+  "facts_0": [
+    {
+      "source_ref": "source_55c3828be4a2cbcd23199f4d",
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fread_count",
+      "value": {
+        "selection": {
+          "target": {
+            "kind": "measurement",
+            "selector": {
+              "selection": "semantic",
+              "record_ref": null,
+              "document_id": "reads",
+              "section_key": "fastq_summary",
+              "section_ordinal": 0,
+              "metric": "fastq_read_count",
+              "rows": {
+                "kind": "all",
+                "ordinal": null
+              },
+              "axis": {
+                "kind": "exact",
+                "axis": {
+                  "kind": "none",
+                  "label": null,
+                  "lower": null,
+                  "upper": null
+                }
+              }
+            }
+          },
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "availability_requirement": "available_value"
+        },
+        "matched_count": 1,
+        "state": "missing_value",
+        "satisfied": false,
+        "records": [
+          {
+            "kind": "measurement",
+            "record_ref": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fcells%2F0",
+            "state": "partial",
+            "payload": {
+              "measurement_ref": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fcells%2F0",
+              "document_id": "reads",
+              "quantity": "fastq_read_count",
+              "axis": {
+                "kind": "none",
+                "label_ref": null,
+                "lower": null,
+                "upper": null
+              },
+              "state": "partial",
+              "value": 1,
+              "unit": "reads",
+              "meaning": "observed_count",
+              "precision": "exact_for_retained_population",
+              "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpopulations%2Ffastq_reads%2F0",
+              "association_ref": null,
+              "native_token_ref": null
+            },
+            "source_refs": [
+              "source_b21cfcc5b96ea3d561016424"
+            ],
+            "requirement_refs": [
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven"
+            ],
+            "diagnostic_codes": []
+          }
+        ],
+        "requirement_refs": [
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven"
+        ],
+        "diagnostic_codes": [
+          "missing_requested_value"
+        ]
+      }
+    }
+  ],
+  "facts_1": [
+    {
+      "source_ref": "source_55c3828be4a2cbcd23199f4d",
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Frequirements",
+      "value": {
+        "selection": {
+          "target": {
+            "kind": "requirements"
+          },
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "availability_requirement": "typed_state"
+        },
+        "matched_count": 1,
+        "state": "satisfied",
+        "satisfied": true,
+        "records": [
+          {
+            "kind": "requirements",
+            "record_ref": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Frequirements",
+            "state": "available",
+            "payload": {
+              "requirements": [
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+                  "code": "stage_execution_unknown",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_association:testC198/%2Fmetadata%2Fassert_hostile"
+                  ],
+                  "required_data": "native_execution_evidence",
+                  "state": "unresolved",
+                  "source_refs": [
+                    "source_c48a23530ba754fc5582c23c"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+                  "code": "malformed_native",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+                  "code": "unknown_quality_encoding",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpopulations%2Ffastq_quality_characters%2F0"
+                  ],
+                  "required_data": "quality_encoding",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven",
+                  "code": "producer_version_unproven",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a"
+                  ],
+                  "required_data": "native_version",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fmissing_denominator",
+                  "code": "missing_denominator",
+                  "affected_refs": [],
+                  "required_data": "before_population",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fmissing_requested_value",
+                  "code": "missing_requested_value",
+                  "affected_refs": [],
+                  "required_data": "requested_measurement",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fassociation_unresolved",
+                  "code": "association_unresolved",
+                  "affected_refs": [],
+                  "required_data": "stage_input_association",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fn_fraction%2Fnone%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fn_fraction%2Fnone"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fambiguous_fraction%2Fnone%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fambiguous_fraction%2Fnone"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fmean_read_length%2Fnone%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fmean_read_length%2Fnone"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fmean_phred%2Fnone%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fmean_phred%2Fnone"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fq_ge_threshold_fraction%2F30%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fq_ge_threshold_fraction%2F30"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_error_fraction%2Fnone%2Fpartial_transfer",
+                  "code": "partial_transfer",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_error_fraction%2Fnone"
+                  ],
+                  "required_data": "complete_native_bytes",
+                  "state": "unavailable",
+                  "source_refs": [
+                    "source_b21cfcc5b96ea3d561016424"
+                  ]
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fmissing_denominator",
+                  "code": "missing_denominator",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone"
+                  ],
+                  "required_data": "before_population",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fmissing_requested_value",
+                  "code": "missing_requested_value",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone"
+                  ],
+                  "required_data": "requested_measurement",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fassociation_unresolved",
+                  "code": "association_unresolved",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone"
+                  ],
+                  "required_data": "stage_input_association",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fmissing_denominator",
+                  "code": "missing_denominator",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone"
+                  ],
+                  "required_data": "before_population",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fmissing_requested_value",
+                  "code": "missing_requested_value",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone"
+                  ],
+                  "required_data": "requested_measurement",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fassociation_unresolved",
+                  "code": "association_unresolved",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone"
+                  ],
+                  "required_data": "stage_input_association",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fmissing_denominator",
+                  "code": "missing_denominator",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone"
+                  ],
+                  "required_data": "before_population",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fmissing_requested_value",
+                  "code": "missing_requested_value",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone"
+                  ],
+                  "required_data": "requested_measurement",
+                  "state": "unavailable",
+                  "source_refs": []
+                },
+                {
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fassociation_unresolved",
+                  "code": "association_unresolved",
+                  "affected_refs": [
+                    "bvbrc_fastqutils_component:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone"
+                  ],
+                  "required_data": "stage_input_association",
+                  "state": "unavailable",
+                  "source_refs": []
+                }
+              ]
+            },
+            "source_refs": [
+              "source_c48a23530ba754fc5582c23c",
+              "source_b21cfcc5b96ea3d561016424"
+            ],
+            "requirement_refs": [
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven",
+              "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fmissing_denominator",
+              "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fmissing_requested_value",
+              "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fassociation_unresolved",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fn_fraction%2Fnone%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fambiguous_fraction%2Fnone%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fmean_read_length%2Fnone%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fmean_phred%2Fnone%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fq_ge_threshold_fraction%2F30%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_error_fraction%2Fnone%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fmissing_denominator",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fmissing_requested_value",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fassociation_unresolved",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fmissing_denominator",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fmissing_requested_value",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fassociation_unresolved",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fmissing_denominator",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fmissing_requested_value",
+              "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fassociation_unresolved"
+            ],
+            "diagnostic_codes": []
+          }
+        ],
+        "requirement_refs": [
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven",
+          "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fmissing_denominator",
+          "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fmissing_requested_value",
+          "bvbrc_fastqutils_requirement:testC198/%2Fcalculations%2Fretention_hostile%2Fassociation_unresolved",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fn_fraction%2Fnone%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fambiguous_fraction%2Fnone%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fcomposition_reads%2Fmean_read_length%2Fnone%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fmean_phred%2Fnone%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fq_ge_threshold_fraction%2F30%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fquality_reads%2Fphred_implied_error_fraction%2Fnone%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fmissing_denominator",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fmissing_requested_value",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_count%2Fnone%2Fassociation_unresolved",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fmissing_denominator",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fmissing_requested_value",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fremoved_fraction%2Fnone%2Fassociation_unresolved",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fmissing_denominator",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fmissing_requested_value",
+          "bvbrc_fastqutils_requirement:testC198/%2Fsheets%2Fa6026246644b5bad32bd9b4577629dcef50a82828dbaea8b9ebeea3555fbf03b%2Fparameters%2Fa535f09dc7fa57e5fbcedd8fe4b6d489227f71eb4b4144a2531f8ceb4e2fa21a%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone%2Fassociation_unresolved"
+        ],
+        "diagnostic_codes": []
+      }
+    }
+  ],
+  "facts_2": [
+    {
+      "source_ref": "source_55c3828be4a2cbcd23199f4d",
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fstatus",
+      "value": {
+        "selection": {
+          "target": {
+            "kind": "request_status",
+            "field": "read_count"
+          },
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "availability_requirement": "typed_state"
+        },
+        "matched_count": 1,
+        "state": "satisfied",
+        "satisfied": true,
+        "records": [
+          {
+            "kind": "request_status",
+            "record_ref": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fstatus",
+            "state": "available",
+            "payload": {
+              "field": "read_count",
+              "satisfied": false,
+              "state": "missing_value",
+              "matched_count": 1,
+              "requirement_refs": [
+                "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+                "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+                "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven"
+              ]
+            },
+            "source_refs": [
+              "source_b21cfcc5b96ea3d561016424"
+            ],
+            "requirement_refs": [
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven"
+            ],
+            "diagnostic_codes": []
+          }
+        ],
+        "requirement_refs": [
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fpartial_transfer",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fmalformed_native",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fe834cbc3fd3b6b7dc30cec57341517672d05b7e8968006fef771bab97f18912a%2Fproducer_version_unproven"
+        ],
+        "diagnostic_codes": []
+      }
+    }
+  ]
+}

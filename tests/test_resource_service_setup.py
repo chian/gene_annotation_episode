@@ -185,7 +185,7 @@ def test_caller_merges_services_and_explicitly_enables_receipts(resources, monke
         episode_record_receipts=True, initial_known_record_refs=[])
     application, = applications
     assert workflow.receipts is not None
-    assert workflow.initial_known_record_refs == []
+    assert workflow.initial_known_record_refs == ()
     assert workflow.episode_bindings.as_record() == list(application.episode_binding_descriptors)
     assert set(workflow.role_credit_projectors) == set(ROLES)
     for role in ROLES:

@@ -1,0 +1,50 @@
+.................................................................F...... [ 48%]
+........................................................................ [ 97%]
+.F..                                                                     [100%]
+=================================== FAILURES ===================================
+_____ test_exact_redelivery_deduplicates_without_new_action_or_observation _____
+source_snapshot/tests/test_bvbrc_genome_alignment_returns.py:530: in test_exact_redelivery_deduplicates_without_new_action_or_observation
+    values = run.host.received_facts(parent, schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_genome_alignment_returns.py:353: in received_facts
+    for group in self.received_context(context) if sources else ():
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_genome_alignment_returns.py:340: in received_context
+    child, form, schema = self._attempt(context, attempt['decision_index'])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_genome_alignment_returns.py:258: in _attempt
+    child, form, schema = self.api.appservice.custody._attempt(context, index)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:311: in _attempt
+    else self._selection(context, index))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:141: in _selection
+    self._require(type(sent) is dict and type(sent.get("schema")) is dict,
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:65: in _require
+    raise AppServiceCustodyError(code)
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_parent_selection_schema_required
+____________ test_exact_redelivery_deduplicates_without_observation ____________
+source_snapshot/tests/test_bvbrc_proteome_returns.py:642: in test_exact_redelivery_deduplicates_without_observation
+    assert run.host.received_facts(parent, schema)[MEASUREMENTS] == form['f0']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_proteome_returns.py:448: in received_facts
+    for group in self.received_context(context) if sources else ():
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_proteome_returns.py:434: in received_context
+    child, form, schema = self._attempt(context, attempt['decision_index'])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_proteome_returns.py:350: in _attempt
+    child, form, schema = self.api.appservice.custody._attempt(context, index)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:311: in _attempt
+    else self._selection(context, index))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:141: in _selection
+    self._require(type(sent) is dict and type(sent.get("schema")) is dict,
+source_snapshot/gene_annotation_episode/bvbrc_appservice_custody.py:65: in _require
+    raise AppServiceCustodyError(code)
+E   gene_annotation_episode.bvbrc_appservice_custody.AppServiceCustodyError: bvbrc_appservice_custody_parent_selection_schema_required
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_bvbrc_genome_alignment_returns.py::test_exact_redelivery_deduplicates_without_new_action_or_observation
+FAILED source_snapshot/tests/test_bvbrc_proteome_returns.py::test_exact_redelivery_deduplicates_without_observation
+2 failed, 146 passed in 562.16s (0:09:22)

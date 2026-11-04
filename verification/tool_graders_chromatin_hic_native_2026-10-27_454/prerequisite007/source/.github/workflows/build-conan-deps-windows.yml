@@ -1,0 +1,161 @@
+# Copyright (C) 2024 Roberto Rossini <roberros@uio.no>
+# SPDX-License-Identifier: MIT
+
+name: Build dependencies with Conan (Windows)
+
+on:
+  workflow_call:
+    outputs:
+      cache-key:
+        description: "Cache key"
+        value: ${{ jobs.build-deps.outputs.cache-key }}
+      tar:
+        description: "Archive path"
+        value: ${{ jobs.build-deps.outputs.tar }}
+
+    inputs:
+      build-type:
+        type: string
+        required: true
+        description: "Build type to pass to Conan."
+      conan-version:
+        type: string
+        required: true
+        description: "Conan version to be installed with pip."
+      cppstd:
+        type: string
+        required: true
+        description: "Value to pass to compiler.cppstd."
+      os:
+        type: string
+        required: true
+        description: "OS used to build Conan deps."
+      ref:
+        type: string
+        required: true
+        description: "Reference used to clone the conanfile.py and build script."
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  build-deps:
+    name: Build dependencies with Conan (${{ inputs.os }})
+    runs-on: ${{ inputs.os }}
+
+    env:
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
+      CONAN_HOME: "${{ github.workspace }}\\.conan2"
+
+    outputs:
+      cache-key: ${{ steps.generate-cache-key.outputs.cache-key }}
+      tar: ${{ steps.generate-cache-key.outputs.tar }}
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Add devtools to PATH
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+
+      - name: Detect TMPDIR
+        run: |
+          cat << EOF >> get_tmpdir.py
+          import pathlib
+          import tempfile
+
+          path = pathlib.Path(tempfile.gettempdir())
+          print(path.as_posix())
+          EOF
+
+          echo "TMPDIR=$(python get_tmpdir.py)" | tee -a "$GITHUB_ENV"
+
+      - name: Generate cache key
+        id: generate-cache-key
+        run: |
+          set -u
+          set -e
+
+          hash="${{ hashFiles('conanfile.py', 'utils/devel/build_dependencies.py') }}"
+
+          cl.exe 1> /dev/null 2> version.txt
+          compiler="msvc-$(head -n 1 version.txt | grep -o '[[:digit:].]\+' | head -n 1)"
+
+          suffix="${{ inputs.os }}-$compiler-cxx${{ inputs.cppstd }}-${{ inputs.build-type }}-$hash"
+          suffix="$(echo "$suffix" |
+                    tr -c '[:alnum:]._-' '-' |
+                    sed -E 's/-+/-/g' |
+                    sed 's/-$//' |
+                    tr '[:upper:]' '[:lower:]'
+                  )"
+
+          dest="$TMPDIR/dependencies.conan.${{ inputs.build-type }}.tar.zst"
+
+          echo "cache-key=conan-$suffix" | tee -a "$GITHUB_OUTPUT"
+          echo "tar=$(cygpath -w "$dest")" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Lookup package cache
+        id: lookup-conan-cache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ steps.generate-cache-key.outputs.cache-key }}
+          path: ${{ steps.generate-cache-key.outputs.tar }}
+          lookup-only: true
+
+      - uses: actions/setup-python@v6
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        with:
+          python-version: "3.13"
+
+      - name: Update build deps
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: pip install 'conan==${{ inputs.conan-version }}'
+
+      - name: Configure Conan
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: |
+          conan profile detect --force
+          conan_profile="$(conan profile path default)"
+
+          sed -i 's/compiler\.cppstd=.*/compiler.cppstd=${{ inputs.cppstd }}/' "$conan_profile"
+
+          # Newer versions of b2 lead to exceptions like
+          # ConanException: These libraries were built, but were not used in any boost module
+          cat << EOF | tee -a "$conan_profile"
+          [tool_requires]
+          boost/*: b2/5.2.1
+          EOF
+
+      - name: Clean Conan cache (pre-build)
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: conan remove --confirm '*'
+
+      - name: Build and deploy dependencies
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: |
+          utils/devel/build_dependencies.py \
+            --build-type='${{ inputs.build-type }}' \
+            --cppstd='${{ inputs.cppstd }}' \
+            --ci
+
+      - name: Archive dependencies
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: |
+          src='deps'
+          dest="$(cygpath -u '${{ steps.generate-cache-key.outputs.tar }}')"
+          tar -C "$TMPDIR" -cf - "$src" |
+            zstd -T0 -22 --long --ultra -v -o "$dest"
+
+      - name: Export dependencies
+        uses: actions/cache/save@v4
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        with:
+          key: ${{ steps.generate-cache-key.outputs.cache-key }}
+          path: ${{ steps.generate-cache-key.outputs.tar }}
+        env:
+          ZSTD_CLEVEL: 0

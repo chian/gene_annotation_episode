@@ -1,0 +1,1207 @@
+FF.F.FFFFFF.........FFF................................................. [ 22%]
+........................................................................ [ 44%]
+........................................................................ [ 66%]
+........................................................................ [ 89%]
+........................F...F......                                      [100%]
+=================================== FAILURES ===================================
+___________ test_points_statistics_identities_and_sampling_meanings ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_points_statistics_identit0')
+
+    def test_points_statistics_identities_and_sampling_meanings(tmp_path):
+>       store,context,args,records,repo,outcome,view,rows=populated(tmp_path)
+                                                          ^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_native_observations.py:55: in populated
+    repo=LiteratureContextRepository(store,context.run_id);outcome=repo.populate(context,args,'selected');view=repo.native_observations()
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07deb9a340>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+____ test_missing_values_and_nominal_setting_not_hidden_by_missing_meaning _____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_missing_values_and_nomina0')
+
+    def test_missing_values_and_nominal_setting_not_hidden_by_missing_meaning(tmp_path):
+        def mutate(data):
+            data['meanings']['requirements'][0].update(dict.fromkeys(REQUIREMENT_FIELDS))
+            data['selection']['contexts'][0]['observations'][0]['value_basis']='source_reported_setting'
+            data['selection']['contexts'][1]['observations'][0].update(value=None,reported_sem=None,reported_count=None,count_relation='unknown')
+        store,context,args,records,data=native_fixture(tmp_path,mutate=mutate)
+        with store:
+>           repo=LiteratureContextRepository(store,context.run_id);out=repo.populate(context,args,'selected')
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': None, 'property_ref': None, 'biological_setting_ref': None, 'function_relation_ref': ...n_ref': None, 'membership_evidence_ref': 'reference_15a1e4fa933f96311674252e', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07debe3740>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+______ test_independent_exact_subset_forwarding_and_first_readonly_replay ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_independent_exact_subset_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c07dfd1cad0>
+
+    def test_independent_exact_subset_forwarding_and_first_readonly_replay(tmp_path,monkeypatch):
+>       store,context,args,records,repo,out,view,rows=populated(tmp_path)
+                                                      ^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_native_observations.py:55: in populated
+    repo=LiteratureContextRepository(store,context.run_id);outcome=repo.populate(context,args,'selected');view=repo.native_observations()
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07debe39c0>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_________________ test_positions_fail_structurally[positions0] _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_positions_fail_structural0')
+positions = [True]
+
+    @pytest.mark.parametrize('positions',[[True],[-1],[0,0],['all',0],[{}]])
+    def test_positions_fail_structurally(tmp_path,positions):
+>       store,context,args,records,repo,out,view,rows=populated(tmp_path)
+                                                      ^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_native_observations.py:55: in populated
+    repo=LiteratureContextRepository(store,context.run_id);outcome=repo.populate(context,args,'selected');view=repo.native_observations()
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07deb9ab60>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_________________ test_positions_fail_structurally[positions1] _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_positions_fail_structural1')
+positions = [-1]
+
+    @pytest.mark.parametrize('positions',[[True],[-1],[0,0],['all',0],[{}]])
+    def test_positions_fail_structurally(tmp_path,positions):
+>       store,context,args,records,repo,out,view,rows=populated(tmp_path)
+                                                      ^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_native_observations.py:55: in populated
+    repo=LiteratureContextRepository(store,context.run_id);outcome=repo.populate(context,args,'selected');view=repo.native_observations()
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07debe3380>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_________________ test_positions_fail_structurally[positions2] _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_positions_fail_structural2')
+positions = [0, 0]
+
+    @pytest.mark.parametrize('positions',[[True],[-1],[0,0],['all',0],[{}]])
+    def test_positions_fail_structurally(tmp_path,positions):
+>       store,context,args,records,repo,out,view,rows=populated(tmp_path)
+                                                      ^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_native_observations.py:55: in populated
+    repo=LiteratureContextRepository(store,context.run_id);outcome=repo.populate(context,args,'selected');view=repo.native_observations()
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07deb9ab60>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_________________ test_positions_fail_structurally[positions3] _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_positions_fail_structural3')
+positions = ['all', 0]
+
+    @pytest.mark.parametrize('positions',[[True],[-1],[0,0],['all',0],[{}]])
+    def test_positions_fail_structurally(tmp_path,positions):
+>       store,context,args,records,repo,out,view,rows=populated(tmp_path)
+                                                      ^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_native_observations.py:55: in populated
+    repo=LiteratureContextRepository(store,context.run_id);outcome=repo.populate(context,args,'selected');view=repo.native_observations()
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07deb66ac0>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_________________ test_positions_fail_structurally[positions4] _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_positions_fail_structural4')
+positions = [{}]
+
+    @pytest.mark.parametrize('positions',[[True],[-1],[0,0],['all',0],[{}]])
+    def test_positions_fail_structurally(tmp_path,positions):
+>       store,context,args,records,repo,out,view,rows=populated(tmp_path)
+                                                      ^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_native_observations.py:55: in populated
+    repo=LiteratureContextRepository(store,context.run_id);outcome=repo.populate(context,args,'selected');view=repo.native_observations()
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07decee700>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_______ test_exact_micro_to_milli_conversion_and_source_token_retention ________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_exact_micro_to_milli_conv0')
+
+    def test_exact_micro_to_milli_conversion_and_source_token_retention(tmp_path):
+        store,context,args=native_with_observation(tmp_path,'Measured glucose 10 µM.','10 µM','10','µM')
+        with store:
+>           repo=LiteratureContextRepository(store,context.run_id);out=repo.populate(context,args,'selected')
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_e60ece0994f5bffba7660c20', 'property_ref': 'term_d823ec32ccfe3bb752155065', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_209565ec7582dc0b04c8a0f9', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07deceed40>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+________ test_same_physical_number_survives_recipe_and_excerpt_changes _________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_same_physical_number_surv0')
+
+    def test_same_physical_number_survives_recipe_and_excerpt_changes(tmp_path):
+        store,context,args,records,data=native_fixture(tmp_path)
+        with store:
+>           repo=LiteratureContextRepository(store,context.run_id);one=repo.populate(context,args,'first-recipe')
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_native_observations.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07decef380>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_ test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction[True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_actual_original_form_subs0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c0801946240>
+request_native = True
+
+    @pytest.mark.parametrize('request_native',[True,False])
+    def test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction(tmp_path,monkeypatch,request_native):
+        store,context,args,sources,data=native_fixture(tmp_path/'state')
+        with store:
+            assignment=dict(version='literature_assignment_v1',question_context_refs=[],source_refs=list(context.received_record_refs),
+                requested_context_components=['selected_point'],requested_context_native_positions=[0])
+            fields={'chosen_context':context_semantic_cells_schema()}
+            if request_native:fields['native_context']=native_observations_schema()
+            form=obj(fields);captured={};empty={name:[] for name in store.reasoning_schema()['required']}
+            root=sources['root'];quote=store.get_artifact(root['artifact_ref']).decode()
+            def next_action(inputs,kind):
+                captured[kind]=deepcopy(inputs)
+                text=render_literature_experimental_prompt(inputs,'Constructed native contextual investigation')
+                steering=text.split('\n\nSTEERING\n',1)[1]
+                if kind=='own' or request_native:
+                    assert 'Native context observations' in steering
+                    assert 'source-reported measurement' in steering and 'technical' in steering
+                if kind=='parent':
+                    report,=inputs['child_reports'];assert report['chosen_context'][0]['value']==.5
+                    if request_native:
+                        row,=report['native_context'];assert row['observation_position']==0 and row['lower']==1
+                        assert row['reported_count']==3 and row['replicate_kind']=='technical'
+                        assert 'Culture B' not in steering
+                    else:
+                        assert 'native_context' not in report and 'Native context observations' not in steering
+                for private in ['private-glucose','context_literal_','context_native_measurement_']:
+                    assert private not in steering
+                commit=deepcopy(empty);commit['source_subjects']=[dict(alias=kind,reference_type='assay',source_ref=root['id'],label='context' if kind=='own' else 'experiment',
+                    anchor=dict(source_ref=root['id'],artifact_ref=root['artifact_ref'],start=0,end=len(quote),quote=quote))]
+                return dict(selection=dict(kind='reason',commit=commit),report_update={})
+            provider=ScriptedProvider([
+                dict(selection=dict(kind='episode_child',role='literature',assignment=assignment,goal='Evaluate the constructed glucose context evidence',
+                    scope=plain(context.scope),purpose='Return selected coverage and explicitly requested native observations',schema_json=json.dumps(form),initial_report_json='{}'),report_update={}),
+                dict(selection=dict(kind='tool',tool='literature.context.populate',arguments=args),report_update={}),
+                lambda inputs:next_action(inputs,'own'),lambda inputs:next_action(inputs,'parent')])
+            scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+>           result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+                controller_factory=lambda path,initial:FixtureController(str(path),initial,2),project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,
+                    reference_parent_sources=[root['id']]),),binding_definitions={'credit':scorer.as_record()}))
+
+tests/test_literature_context_native_integration.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4132: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4454: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1511: in execute
+    result = await result
+             ^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3306: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:736: in execute
+    if tool_name == "literature.rate.source.populate" else repo.populate(context, arguments, operation_key))
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07bc41a5c0>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+_ test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction[False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_actual_original_form_subs1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c07dfd2be90>
+request_native = False
+
+    @pytest.mark.parametrize('request_native',[True,False])
+    def test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction(tmp_path,monkeypatch,request_native):
+        store,context,args,sources,data=native_fixture(tmp_path/'state')
+        with store:
+            assignment=dict(version='literature_assignment_v1',question_context_refs=[],source_refs=list(context.received_record_refs),
+                requested_context_components=['selected_point'],requested_context_native_positions=[0])
+            fields={'chosen_context':context_semantic_cells_schema()}
+            if request_native:fields['native_context']=native_observations_schema()
+            form=obj(fields);captured={};empty={name:[] for name in store.reasoning_schema()['required']}
+            root=sources['root'];quote=store.get_artifact(root['artifact_ref']).decode()
+            def next_action(inputs,kind):
+                captured[kind]=deepcopy(inputs)
+                text=render_literature_experimental_prompt(inputs,'Constructed native contextual investigation')
+                steering=text.split('\n\nSTEERING\n',1)[1]
+                if kind=='own' or request_native:
+                    assert 'Native context observations' in steering
+                    assert 'source-reported measurement' in steering and 'technical' in steering
+                if kind=='parent':
+                    report,=inputs['child_reports'];assert report['chosen_context'][0]['value']==.5
+                    if request_native:
+                        row,=report['native_context'];assert row['observation_position']==0 and row['lower']==1
+                        assert row['reported_count']==3 and row['replicate_kind']=='technical'
+                        assert 'Culture B' not in steering
+                    else:
+                        assert 'native_context' not in report and 'Native context observations' not in steering
+                for private in ['private-glucose','context_literal_','context_native_measurement_']:
+                    assert private not in steering
+                commit=deepcopy(empty);commit['source_subjects']=[dict(alias=kind,reference_type='assay',source_ref=root['id'],label='context' if kind=='own' else 'experiment',
+                    anchor=dict(source_ref=root['id'],artifact_ref=root['artifact_ref'],start=0,end=len(quote),quote=quote))]
+                return dict(selection=dict(kind='reason',commit=commit),report_update={})
+            provider=ScriptedProvider([
+                dict(selection=dict(kind='episode_child',role='literature',assignment=assignment,goal='Evaluate the constructed glucose context evidence',
+                    scope=plain(context.scope),purpose='Return selected coverage and explicitly requested native observations',schema_json=json.dumps(form),initial_report_json='{}'),report_update={}),
+                dict(selection=dict(kind='tool',tool='literature.context.populate',arguments=args),report_update={}),
+                lambda inputs:next_action(inputs,'own'),lambda inputs:next_action(inputs,'parent')])
+            scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+>           result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+                controller_factory=lambda path,initial:FixtureController(str(path),initial,2),project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,
+                    reference_parent_sources=[root['id']]),),binding_definitions={'credit':scorer.as_record()}))
+
+tests/test_literature_context_native_integration.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4132: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4454: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1511: in execute
+    result = await result
+             ^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3306: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:736: in execute
+    if tool_name == "literature.rate.source.populate" else repo.populate(context, arguments, operation_key))
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_context_storage.py:252: in populate
+    native_rows = publish_native_observations(extraction, semantic_bindings, publish)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+extraction = {'version': 'a108_context_inputs_v2', 'arguments': {'source_ref': 'source_50cff795eadf39cf5a0427ff', 'data_source_ref'...source_ref': 'source_89c01d31ac6a5a9dd4df647e', 'representation': 'original', 'start': 25, 'end': 35, ...}}, ...}, ...}
+meanings = {'requirements': [{'entity_ref': 'term_f279c535077d6eb4432c7581', 'property_ref': 'term_4563c218495c4b0568afece5', 'bi...n_ref': None, 'membership_evidence_ref': 'reference_a7f39947ad91dce5511db11d', 'joint_scope_evidence_ref': None, ...}]}
+publish = <function LiteratureContextRepository.populate.<locals>.publish at 0x7c07bc41ac00>
+
+    def publish_native_observations(extraction, meanings, publish):
+        """Bind retained point values to actual context/requirement/source identities."""
+        trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
+        if inputs["origin"] not in ("reported","synthetic"):
+            raise ContractError("context_native_origin_mismatch")
+        req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
+        core_contexts={context["key"]:context for context in inputs["contexts"]}
+        data_ref=extraction["arguments"]["data_source_ref"]
+        def reference(witness,role,fallback=None):
+            if witness is None and fallback is None:return None
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
+                "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
+                "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
+                "term_refs":[],"context_refs":[],"anchor":anchor})
+        rows=[];seen={}
+        for selected in trace["contexts"]:
+            core=core_contexts[selected["key"]]
+            witness=selected["setting"] or selected["identity"]
+            anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
+            # Unknown settings are scoped by the actual context identity, not
+            # silently merged into one biological state merely through equal labels.
+            name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
+                  if witness is None else witness["quote"])
+            context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
+                "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
+            sample_ref=reference(selected["sample_unit"],"sampling unit")
+            cluster_ref=reference(selected["cluster"],"sampling cluster")
+            observations={obs["requirement_key"]:obs for obs in core["observations"]}
+            for native in selected["observations"]:
+                obs=observations[native["requirement_key"]]
+                reading=native["value"]
+                witness=native["measurement_identity"]
+                if witness is None and reading is not None:
+                    number=reading["number"];selector=number["selector"];selected=selector["witness"]
+                    # Numeric source identity survives a different surrounding quote
+                    # or recipe. A wider excerpt is not a second observation.
+                    start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
+                    witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
+                measurement_ref=reference(witness,"native observation",native["measurement_key"])
+                interval=obs["interval"]
+                row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
+                    "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
+                    "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
+                    "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
+                    "lower_closed":interval is not None,"upper_closed":interval is not None,
+                    "reported_relation":"unreported" if interval is None else "point",
+                    **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
+>                   "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
+                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+                    "bound_kind":"reported_point_not_operating_domain"}
+E               KeyError: 'setting_kind'
+
+gene_annotation_episode/literature_context_native_storage.py:95: KeyError
+______ test_actual_selected_return_and_saved_only_reconstruction[primary] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_actual_selected_return_an0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c07bc255850>
+case = 'primary'
+
+    @pytest.mark.parametrize('case', ['primary', 'paired', 'marginal', 'capability'])
+    def test_actual_selected_return_and_saved_only_reconstruction(tmp_path, monkeypatch, case):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_journal import Journal
+>       store, context, args = setup_case(tmp_path, case=case)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_integration.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_integration.py:91: in setup_case
+    raw = PRIMARY.read_bytes() if case == 'primary' else (
+          ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a108_nat...er_126/candidate_001/research/experimental_scoring_review_2026-10-23/a108_plausibility_sheet_014/huc_2023_primary.xml')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a108_native_report_reader_126/candidate_001/research/experimental_scoring_review_2026-10-23/a108_plausibility_sheet_014/huc_2023_primary.xml'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_ordinary_child_parent_delivery_has_one_own_observation_per_action[primary] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1831/test_ordinary_child_parent_del0')
+case = 'primary'
+
+    @pytest.mark.parametrize('case', ['primary', 'paired', 'marginal', 'capability'])
+    def test_ordinary_child_parent_delivery_has_one_own_observation_per_action(tmp_path, case):
+>       store, context, args = setup_case(tmp_path/'state', case=case)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_context_integration.py:193: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_context_integration.py:91: in setup_case
+    raw = PRIMARY.read_bytes() if case == 'primary' else (
+          ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a108_nat...er_126/candidate_001/research/experimental_scoring_review_2026-10-23/a108_plausibility_sheet_014/huc_2023_primary.xml')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a108_native_report_reader_126/candidate_001/research/experimental_scoring_review_2026-10-23/a108_plausibility_sheet_014/huc_2023_primary.xml'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_context_native_observations.py::test_points_statistics_identities_and_sampling_meanings
+FAILED tests/test_literature_context_native_observations.py::test_missing_values_and_nominal_setting_not_hidden_by_missing_meaning
+FAILED tests/test_literature_context_native_observations.py::test_independent_exact_subset_forwarding_and_first_readonly_replay
+FAILED tests/test_literature_context_native_observations.py::test_positions_fail_structurally[positions0]
+FAILED tests/test_literature_context_native_observations.py::test_positions_fail_structurally[positions1]
+FAILED tests/test_literature_context_native_observations.py::test_positions_fail_structurally[positions2]
+FAILED tests/test_literature_context_native_observations.py::test_positions_fail_structurally[positions3]
+FAILED tests/test_literature_context_native_observations.py::test_positions_fail_structurally[positions4]
+FAILED tests/test_literature_context_native_observations.py::test_exact_micro_to_milli_conversion_and_source_token_retention
+FAILED tests/test_literature_context_native_observations.py::test_same_physical_number_survives_recipe_and_excerpt_changes
+FAILED tests/test_literature_context_native_integration.py::test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction[True]
+FAILED tests/test_literature_context_native_integration.py::test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction[False]
+FAILED tests/test_literature_context_integration.py::test_actual_selected_return_and_saved_only_reconstruction[primary]
+FAILED tests/test_literature_context_integration.py::test_ordinary_child_parent_delivery_has_one_own_observation_per_action[primary]
+14 failed, 309 passed in 327.48s (0:05:27)

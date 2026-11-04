@@ -1,0 +1,115 @@
+...........F...........................................................F [ 98%]
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_bound_overlap_is_a_launch_contract_and_reopens_without_native_work ____
+
+selected = namespace(plan={'version': 'native_genomic_overlap_run_plan_v1', 'identity': {'run_id': 'synthetic:run:425', 'episode_... operations=<gene_annotation_episode.practical_execution_operations.LocalPracticalOperations object at 0x77ad96311850>)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/temporary/pytest/test_bound_overlap_is_a_launch0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x77ad96360770>
+
+    def test_bound_overlap_is_a_launch_contract_and_reopens_without_native_work(selected, tmp_path, monkeypatch):
+        resource_id = selected.assignment['resource_id']
+        resources = {resource_id: _resource(selected)}
+        def deny(*args, **kwargs):
+            raise AssertionError('resource registration must not execute or observe native work')
+        monkeypatch.setattr('gene_annotation_episode.practical_execution_operations.native.status', deny)
+        monkeypatch.setattr('gene_annotation_episode.practical_execution_operations.native.start_prepared', deny)
+        with Store(tmp_path / 'store') as store:
+            family = _family(store, tmp_path / 'run', resources)
+            launch = {'version': 'execution_launch_assignment_v1', 'requests': {
+                resource_id: deepcopy(selected.assignment)}, 'immutable_input_versions': [], 'constraints': {}}
+            assert Draft202012Validator(family.assignment_schema('launch')).is_valid(launch)
+            assert Draft202012Validator(family.assignment_schema('launch_local')).is_valid(selected.assignment)
+            assert family._validate_request(selected.assignment) == selected.assignment
+            row, = [row for row in family.resource_tool_contracts() if row['name'] == 'analyze_genomic_region_overlap']
+            assert row['description'] and row['instructions'] and row['resources'] == 'local'
+            assert row['invocation_route'] == {'kind': 'commission', 'routes': [{
+                'entry_role': 'launch', 'resource_id': resource_id, 'resource_role': 'launch_local'}]}
+            assert 'analyze_genomic_region_overlap' not in ToolRegistry(store).catalog()
+            restored = ExecutionEpisodes(None, store=store, directory=tmp_path / 'restored',
+                run_id='overlap-registration', tool_registry=ToolRegistry(store), **family.as_record()['configuration'])
+            assert restored.as_record() == family.as_record()
+            assert restored.resource_tool_contracts() == family.resource_tool_contracts()
+            wrong = deepcopy(selected.assignment)
+            wrong['requested_job']['native_genomic_overlap']['software']['bedtools_sha256'] = '0' * 64
+            assert not Draft202012Validator(family.assignment_schema('launch_local')).is_valid(wrong)
+>           with pytest.raises(ValueError, match='binding'):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'binding'
+E             Actual message: 'native_genomic_overlap_operation_mode_software_not_bound'
+
+source_snapshot/tests/test_native_genomic_overlap_shared.py:215: AssertionError
+___ test_distinct_bound_native_modes_preserve_resource_specific_instructions ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/temporary/pytest/test_distinct_bound_native_mod0')
+
+    def test_distinct_bound_native_modes_preserve_resource_specific_instructions(tmp_path):
+        from jsonschema import Draft202012Validator
+>       requests = {name: _native_request('nhmmer_'+name+'_ordinary') for name in ('sequence', 'profile')}
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_execution_tool_contract_declarations.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_execution_tool_contract_declarations.py:126: in _native_request
+    'runs'/label/'plan.json').read_text())['requested_job']
+                              ^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/ch...02/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/plan.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/plan.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_native_launch_map_supplies_resource_identity_without_rewriting_request __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/temporary/pytest/test_native_launch_map_supplie0')
+
+    def test_native_launch_map_supplies_resource_identity_without_rewriting_request(tmp_path):
+>       request = _native_request('hmmscan_search_ordinary')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_execution_tool_contract_declarations.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_execution_tool_contract_declarations.py:126: in _native_request
+    'runs'/label/'plan.json').read_text())['requested_job']
+                              ^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_search_ordinary/plan.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_search_ordinary/plan.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_genomic_overlap_shared.py::test_bound_overlap_is_a_launch_contract_and_reopens_without_native_work
+FAILED source_snapshot/tests/test_execution_tool_contract_declarations.py::test_distinct_bound_native_modes_preserve_resource_specific_instructions
+FAILED source_snapshot/tests/test_execution_tool_contract_declarations.py::test_native_launch_map_supplies_resource_identity_without_rewriting_request
+3 failed, 70 passed in 109.59s (0:01:49)

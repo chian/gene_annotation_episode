@@ -1,0 +1,125 @@
+{
+  "version": "proteome_directional_D_development_handoff_v1",
+  "manifest_file": "OWNED_SOURCE_MANIFEST_001.json",
+  "manifest_sha256": "eb380ec9cee20b9717d1c0db49438cc68400737c87621105a33eacde6d83e57f",
+  "verification_scope": "Development runs while F sources evolved; not final combined frozen evidence. All 86 current D cases covered by passing development runs across the listed modules/selections.",
+  "tests": {
+    "001": "9 failed, 25 passed; initial schema/source-prefix and fixture issues; retained",
+    "002": "1 failed, 33 passed; fixture field typo; retained",
+    "003": "63 passed in 117.76s",
+    "004": "1 failed, 1 passed; deliberately interrupted for test assumption correction; retained",
+    "005": "1 failed, 9 passed in 456.98s; forgery fixture lacked canonical record bytes; retained",
+    "006": "27 passed in 27.83s",
+    "007": "73 passed in 171.44s",
+    "008": "1 failed, 6 deselected in 52.39s; forgery fixture canonical-byte correction followed",
+    "010": "1 failed, 1 passed, 26 deselected in 1.99s; task error path test assumed a path the host does not supply",
+    "011": "6 passed, 5 deselected in 321.06s; exact authenticated guards plus newest/history/replay",
+    "012": "44 passed in 30.89s; final contracts and resolution before native-only test addition",
+    "013": "1 failed, 28 deselected in 1.04s; wrong legacy fixture track key",
+    "014": ".                                                                        [100%]\n1 passed, 28 deselected in 1.03s",
+    "015": "86 tests collected in 0.54s"
+  },
+  "evidence_sha256": {
+    "FILLED_NATIVE_EXAMPLE_001.json": "fbfac2fe1103d525517ea467f45de81f2050c11ffdf8a814a8b6af741447bb49",
+    "build_filled_example_001.py": "9909d76a8c7ffb0dfa8b1ce23c64797a56dac1afa9feb2c49450b5dc19f3f9c3",
+    "build_schema_001.py": "13ec1eaa243f770086e3ea84364a6cfda9ac3d192e3c945e22b7764cb5b48e3b",
+    "collection_015.log": "539559c4ba969fead5cbb6a3b4f292502b54e82dd611fb9e59c6a47be5fd8cee",
+    "development_001.log": "735af973842a65a46ec128677d376de6c39088d96a60d0a699e7774dfe79e8bc",
+    "development_002.log": "51da83144a83c218e53ef3d5ff867e18048256e3d3d67b94f378a0c1c7ea4f8a",
+    "development_003.log": "625346fcfaeafcecda2448f23a00417c7d4c8ce4ed884068c5e1cccdea246cfc",
+    "development_004.log": "e969407e997debd7e126508730ca981ff907d876dbfce9d0e399bd8635bb4609",
+    "development_005.log": "af9a09ffe6dcfd156a56203dce6a81606aab0a7f72b3d37835a6f3b53a1d0f5a",
+    "development_006.log": "60e7d7e7cef0d78b07fbe328eccd422ceb78c726ba6f06deececba34600bab19",
+    "development_007.log": "3c46b457f58e9c09c55aa35d6147ee8a94b5160cc11f942dc919aff073ee1821",
+    "development_008.log": "14cba6e9152b4ad08400fc851bc06e5cb47940b5dce1d31aa8a86f4c89b79700",
+    "development_010.log": "4d6ed94d61fb555a235f2760fdd0185dc438e735d4c948c825f6b7d6799aba88",
+    "development_011.log": "4dd42d9f69dd8689d5339544a4c00d105680110f5610cb01e67c27fc91a435c0",
+    "development_012.log": "8bbd44bf34757fc6bb7489597da4b2d62239d61c66f30eea134730d90fab45f4",
+    "development_013.log": "05fdfde124795068bb543482406555db1475c0952f36d9875696388d27364ff0",
+    "development_014.log": "fc39715b5612ea8f3834e04e2692c96500d04e11d76de8a3ec24b44688b463ae",
+    "filled_native_example_001.log": "e8da39d21d6959cda87c08a4e52633197a6475b0f7a90cc971af1297b0242c31",
+    "package_input_001.json": "8492de6c5fcccffc86a2b08720b7eca2d83e34384b9b8f0f09460119ecc5e2ef",
+    "package_input_provenance_001.json": "209b1bd6daa2fb50c28fea9349894bd5d0542eb27d7db60aae635b105b8b53b5",
+    "retained_2221.txt": "e8bcff01bf827d936c36f00e4bbb73f2b5b1dd99b4d37af4cb9a6b0de44e25f8",
+    "task_conflict_probe_009.log": "c80ebb1edeb500a74dc039472cb24d3715c3fa9a558c0f5f21b2cf9b701882cc"
+  },
+  "native_examples": {
+    "2221": {
+      "sha256": "e8bcff01bf827d936c36f00e4bbb73f2b5b1dd99b4d37af4cb9a6b0de44e25f8",
+      "report_counts": {
+        "queries": 3,
+        "descriptions": 30,
+        "subjects": 3,
+        "hsps": 4,
+        "blocks": 23
+      },
+      "query_1_subject_0": {
+        "intervals": [
+          [
+            0,
+            414
+          ],
+          [
+            485,
+            600
+          ]
+        ],
+        "coverage": "529/600 = 0.881666666666666667",
+        "symbol_identity": "468/529 = 0.884688090737240076",
+        "resolved_identity": "468/468 = 1.000000000000000000",
+        "unresolved_pairs": 61,
+        "hsp_1_expect": "2e-66",
+        "hsp_1_native_gap_count": "missing/null",
+        "hsp_1_trace_query_gap_count": 0
+      },
+      "filled_example_file": "FILLED_NATIVE_EXAMPLE_001.json"
+    },
+    "2011": {
+      "no_hit_query_length": 102,
+      "coverage": "0/102"
+    },
+    "2202": {
+      "query_0_subject_0_paired_union": {
+        "query": 187,
+        "subject": 140
+      },
+      "mapping_state": "observed_conflict",
+      "compatible_identity": "conflict/unavailable"
+    }
+  },
+  "consumer_coverage": {
+    "implemented_ports": [
+      "bind_adapters explicit version2 and unchanged version1",
+      "BVBRCAppServiceService.result_catalog exact v2 selector check",
+      "AppServicePublications._grade selector validation then real facade",
+      "AppServicePublications.publish/read exact partial-sheet result-ref predicate",
+      "AppServicePublications._requested_status/completion exact v2 requested facts and newest publication"
+    ],
+    "controlled_actual_host_tests": [
+      "selected launch_api preparation/submission and original task",
+      "results-owned Workspace manifest and native download receipt binding",
+      "native reader -> observed A sheet -> C validated components -> F finite facts",
+      "immutable saved sheet/components publication and exact authenticated reads",
+      "typed form admission and original historical parent return",
+      "newest partial publication replaces current completion/facts",
+      "recovery and saved replay forbid native/A-full-validator/B/C/network/process; no new runtime observations/actions"
+    ],
+    "F_owned_full_14_family_Workflow_path": "pending F/root evidence; not claimed by D fixtures"
+  },
+  "limits": [
+    "No live GenomeComparison AppService job, credential operation, HPC operation or local database BLAST was run.",
+    "Retained scientific bytes are public fixtures; task, source and Journal custody is controlled synthetic test provenance.",
+    "directional_operand_binding remains unbound; no executed input roster, producer retention policy or native row-to-HSP linkage is inferred.",
+    "No annotation-credit/W05, evidence-axis, prompt, controller, cadence or shared method_loop changes.",
+    "C-L206 remains unfinished overall. Root owns composition, package-data and final frozen verification."
+  ],
+  "goal_reset": {
+    "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "final_verbatim_objective_and_full_design_principles_reread": true,
+    "current_contracts_reread": [
+      "181/PROVIDER_CONTRACT_001.md",
+      "181/REVIEW_CLOSURE_004.md"
+    ]
+  },
+  "live_sessions": []
+}

@@ -94,6 +94,20 @@ class PracticalReceiptInformation:
                         json.loads(episode['path'])[-1][0], json.loads(episode['path']),
                         message['scope'], original, request)
                     original = materialized_assignment(self.store, context)
+                from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+                    materialized_assignment as materialized_macs2_assignment)
+                if isinstance(original, dict) and is_macs2_assignment(original):
+                    context = BindingContext(self.run_id, body['episode_id'],
+                        json.loads(episode['path'])[-1][0], json.loads(episode['path']),
+                        message['scope'], original, request)
+                    original = materialized_macs2_assignment(self.store, context)
+                from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+                    materialized_assignment as materialized_lumpy_assignment)
+                if isinstance(original, dict) and is_lumpy_assignment(original):
+                    context = BindingContext(self.run_id, body['episode_id'],
+                        json.loads(episode['path'])[-1][0], json.loads(episode['path']),
+                        message['scope'], original, request)
+                    original = materialized_lumpy_assignment(self.store, context)
                 if (original is None or canonical(original) != canonical(assignment)
                         or canonical(message.get('scope')) != canonical(body['scope'])):
                     raise ValueError('practical_receipt_original_assignment_conflict')
@@ -208,6 +222,18 @@ class PracticalReceiptInformation:
                         options = {'assignment': snapshot['assignment'], 'control_version': control['version']}
                         match_practical_public_outcome(result, recorded, reference, **options)
                         recorded = practical_outcome_view(recorded, **options)
+                    from .macs2_peak_request_binding import (is_compact_assignment as is_macs2_assignment,
+                        match_practical_public_outcome as match_macs2_outcome,
+                        practical_outcome_view as macs2_outcome_view)
+                    if is_macs2_assignment(assignment):
+                        match_macs2_outcome(result, recorded, reference)
+                        recorded = macs2_outcome_view(recorded)
+                    from .lumpy_request_binding import (is_compact_assignment as is_lumpy_assignment,
+                        match_practical_public_outcome as match_lumpy_outcome,
+                        practical_outcome_view as lumpy_outcome_view)
+                    if is_lumpy_assignment(assignment):
+                        match_lumpy_outcome(result, recorded, reference)
+                        recorded = lumpy_outcome_view(recorded)
                 if (result.get('status') not in {'completed', 'partial'}
                         or canonical(result.get('result')) != canonical(recorded)
                         or reference not in result.get('record_refs', [])):

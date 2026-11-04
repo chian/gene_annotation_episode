@@ -302,7 +302,8 @@ class HomologyJobs:
             context = None if statistics is None else statistics.for_job(self, row)
             handle = prepare_job(command, cwd=directory, policy=LocalJobPolicy(**self.config['job_limits']),
                 handle_path=directory/'native.handle.json', stdout_path=directory/OUTPUTS['native_text'],
-                stderr_path=directory/OUTPUTS['native_stderr'], statistics=context, native_events=native_events)
+                stderr_path=directory/OUTPUTS['native_stderr'], statistics=context, native_events=native_events,
+                cpu_threads=row['cpu'])
         elif statistics is not None:
             recorded = handle.read().get('statistics')
             expected = statistics.for_job(self, row).as_record()

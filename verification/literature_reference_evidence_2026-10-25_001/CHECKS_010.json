@@ -1,0 +1,118 @@
+{
+  "goal_complete": false,
+  "full_A111_complete": false,
+  "actual_model_structure_inference": false,
+  "live_host_restart_proven": false,
+  "final_relevant_joined": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_structure_inputs.py tests/test_literature_structure_calculations.py tests/test_structure_selector_communication.py tests/test_communication.py tests/test_form_reference_validation.py tests/test_literature_structure_integration.py tests/test_literature_perturbation_integration.py tests/test_literature_transport_integration.py tests/test_literature_experimental_prompt.py tests/test_literature_experimental_prompt_delivery.py tests/test_literature_reference_parent_delivery.py --tb=short --junitxml=verification/literature_reference_evidence_2026-10-25_001/FINAL_JOINED_010.xml",
+    "passed": 452,
+    "seconds": 254.65,
+    "junit_seconds": 254.639,
+    "exit_code": 0,
+    "execution_session": 34228,
+    "junit_xml": "FINAL_JOINED_010.xml",
+    "junit_sha256": "bf296e078e5aa5fbc892d838766c1b513e35e907f00e905d46a9a9da93574898"
+  },
+  "final_selected_and_prompt_boundaries": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_structure_integration.py tests/test_literature_experimental_prompt_delivery.py tests/test_literature_reference_parent_delivery.py",
+    "passed": 19,
+    "seconds": 30.97,
+    "exit_code": 0,
+    "execution_session": 17484
+  },
+  "worker_reader": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_structure_inputs.py",
+    "passed": 172,
+    "fixtures": "synthetic"
+  },
+  "worker_calculator": {
+    "command": "python3 -m pytest -q tests/test_literature_structure_calculations.py",
+    "passed": 62,
+    "seconds": 0.15,
+    "fixtures": "synthetic"
+  },
+  "worker_storage": {
+    "command": ".venv/bin/python -m pytest tests/test_literature_structure_storage.py -q",
+    "passed": 37,
+    "seconds": 177.64,
+    "fixtures": "synthetic",
+    "exit_code": 0
+  },
+  "worker_selector_boundary": {
+    "command": ".venv/bin/python -m pytest -q tests/test_structure_selector_communication.py tests/test_communication.py",
+    "passed": 150,
+    "seconds": 0.45,
+    "exit_code": 0
+  },
+  "counts_overlap_not_summed": true,
+  "controlled_primary_examples": "structure_examples_001/EXAMPLES_RECEIPT.json",
+  "separate_process_saved_replay": "structure_examples_001/REOPEN_RECEIPT.json",
+  "independent_parent_example_checks": "structure_examples_001/PARENT_CHECK_010.json",
+  "source_review": "ISCR_STRUCTURE_PARENT_REVIEW_001.md",
+  "mandatory_complete_post_paper_reset": "ISCR_STRUCTURE_PARENT_RESET_001.json",
+  "source_hashes_checks": "ISCR_STRUCTURE_PARENT_SOURCE_CHECK_001.json",
+  "associated_original_validation": "primary_iscr_structure_validation_001/MANIFEST_001.json",
+  "live_process_status": "LIVE_STATUS_007.json",
+  "live_read_only_saved_record_audit": "live_record_reconstruction_001/snapshot_006/receipt.json",
+  "broader_regression": {
+    "worker_command": ".venv/bin/python -m pytest -q tests/test_structure_selector_communication.py tests/test_communication.py tests/test_reference_resolution.py tests/test_form_reference_validation.py tests/test_scientific_process_schema_transport.py",
+    "passed": 164,
+    "failed": 25,
+    "seconds": 158.35,
+    "note": "collected before3final nullable-fact tests; not asserted green",
+    "same_25_failures_reproduced_with_new_formats_disabled": true,
+    "baseline_control": "SELECTOR_DISABLED_REGRESSION_010.json",
+    "baseline_xml": "SELECTOR_DISABLED_REGRESSION_010.xml",
+    "unrelated_sources_not_edited": [
+      "runtime.py",
+      "tool_information.py",
+      "scientific_process_schema_transport.py"
+    ]
+  },
+  "superseded_development_invocations": [
+    {
+      "session": 66416,
+      "passed": 0,
+      "failed": 1,
+      "reason": "valid original CIF quoted token rejected; corrected reader quote provenance"
+    },
+    {
+      "session": 52236,
+      "passed": 4,
+      "failed": 0,
+      "note": "original source and binding replay before richer scientific panel metadata"
+    },
+    {
+      "session": 65234,
+      "passed": 286,
+      "failed": 1,
+      "seconds": 435.62,
+      "reason": "old imported pre-fixed literal source ordering; replaced by fixed field ordering and final37storage checks"
+    },
+    {
+      "session": 63703,
+      "passed": 15,
+      "failed": 4,
+      "seconds": 40.87,
+      "reason": "new returned selector panels exposed unsupported plain/minLength string schemas; corrected with3explicit semantic formats"
+    }
+  ],
+  "source_sha256": {
+    "gene_annotation_episode/communication.py": "af1ff24e9c524bbf91c456e6b6d3edb152532a1eb717d97b2a10f1d77c030806",
+    "gene_annotation_episode/episode_services.py": "a06edf88633178c5cf28d7a8b1d237528d822ba24144012ab9c055cbef07bd1b",
+    "gene_annotation_episode/literature_episodes.py": "e6a59ae0abde8a64cd561c53e66553ee0d3cdf64903415d4e7083424ad5053a0",
+    "gene_annotation_episode/literature_experimental_prompt.py": "b53e995f98216db72f769fd408d9fa207829e0073a1a0c8f000d96b9a82ad841",
+    "gene_annotation_episode/literature_structure_calculations.py": "409ee1f987e1363335188943a40683e36c95c3c10833e28406da1864e2b8b42d",
+    "gene_annotation_episode/literature_structure_inputs.py": "43a775775518053f202ecd741ceb3eb4eb85c5dfdac46db8689606fb4150a050",
+    "gene_annotation_episode/literature_structure_prompt.py": "e9672915a40ab796c4ebb601d7b85b192c06acdc4797bb71626e5f71415cbd17",
+    "gene_annotation_episode/literature_structure_storage.py": "c1096be44c0ae6ad0a62e73436bd8d53de20bfad0cd6b34750da7174637beabe",
+    "tests/test_literature_structure_calculations.py": "f0feda89702a5dbbf204d1dec070133420cd4202fc28221b259f579dd00dfc36",
+    "tests/test_literature_structure_inputs.py": "1a4e025b5e3faa6628380c651cea18016cb6a4d2361299936484d86a59b8256d",
+    "tests/test_literature_structure_integration.py": "c48bb2e2f7d74edab1fef3f14a07738c524cc9d8d31ae5c984f529f12c834f64",
+    "tests/test_literature_structure_storage.py": "d8a883f8a4aec5a5705ccb41a1b5c14cc774037ad65118cdd4e51352f4b24b1f",
+    "tests/test_structure_selector_communication.py": "7088f60e569e037f1eaf3fdfd344e5bdb5bf6401a98ed1b9d4d02f7e97bc75f6",
+    "verification/literature_reference_evidence_2026-10-25_001/A111_REFERENCE_GEOMETRY_SHEET_001.md": "1c1312a0004c935fe0851f1a685b3524e498550100eb65276991aa500b85218c",
+    "verification/literature_reference_evidence_2026-10-25_001/IMPLEMENTATION_COVERAGE_010.md": "b96e6ec849a0d109977ac591da3fff2e1c3026c4b56d76893eb203ccd610d8f9",
+    "verification/literature_reference_evidence_2026-10-25_001/run_structure_examples.py": "26471419c23547a2149b6b7700419c1478dfd6c5f684d8ecb296e08ec4a439b3"
+  }
+}

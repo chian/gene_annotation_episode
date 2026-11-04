@@ -1,0 +1,36 @@
+{
+  "workload": "B001-COMP",
+  "scope": "pure sequence composition sheet, extraction and deterministic calculation",
+  "focused_tests": {
+    "command": ".venv/bin/python -m pytest -q tests/test_sequence_composition_grader.py",
+    "exit_code": 0,
+    "passed": 74,
+    "reported_seconds": 0.28,
+    "output_summary": "74 passed in 0.28s"
+  },
+  "source_inspection": [
+    "gene_annotation_episode/sequence_ops.py::inspect_sequence",
+    "gene_annotation_episode/domain.py::material and collection quality_encoding contracts",
+    "gene_annotation_episode/domain.py::parse_sequences",
+    "gene_annotation_episode/material_parsing.py",
+    "gene_annotation_episode/materials.py::register_material, parse_material, read_member",
+    "gene_annotation_episode/blast_grading_inputs.py::parse_blast_json and input validation",
+    "gene_annotation_episode/blast_pairwise_grader.py",
+    "gene_annotation_episode/blast_database_grader.py::build_database_sheet, calculate_database_probabilities",
+    "gene_annotation_episode/blast_graders.py",
+    "https://biopython.org/docs/latest/api/Bio.SeqIO.QualityIO.html"
+  ],
+  "synthetic_numerical_fixtures": "tested",
+  "native_format_verification": {
+    "all_supported_ascii_quality_characters": "compared with installed Biopython native FASTQ readers",
+    "wrapped_existing_read_fixture": "existing material_parsing.records executed on exact first synthetic WRAPPED_FASTQ record from tests/test_packed_materials.py",
+    "biological_native_dataset": "not exercised"
+  },
+  "saved_sheet_recalculation": "tested after JSON write/reopen with builder forbidden and changed thresholds",
+  "caller_and_saved_sheet_immutability": "tested",
+  "network_or_job_submission": "none",
+  "production_result_binding": "root-owned; not established by these tests",
+  "typed_parent_return": "root-owned; not established by these tests",
+  "credit_and_continuation_path": "unchanged by this workload; not established by these tests",
+  "resource_live_execution": "no remote resource invoked"
+}

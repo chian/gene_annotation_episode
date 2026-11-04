@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 205, in _decode
+    _require(raw == canonical(value).encode("utf-8"), "invalid_schema")
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 168, in _require
+    raise ValueError(code)
+ValueError: invalid_schema
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 61, in <module>
+    inspect_step("receipts.decode_existing_shared_assignment", lambda: receipts._decode(raw))
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 37, in inspect_step
+    result = function()
+             ^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/verification/tool_graders_protein_structure_workflow_2026-10-27_410/diagnose_retained.py", line 61, in <lambda>
+    inspect_step("receipts.decode_existing_shared_assignment", lambda: receipts._decode(raw))
+                                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_workflow_2026-10-27_410/check006/source_snapshot/gene_annotation_episode/protein_structure_result_receipts.py", line 208, in _decode
+    raise ValueError("invalid_schema") from error
+ValueError: invalid_schema

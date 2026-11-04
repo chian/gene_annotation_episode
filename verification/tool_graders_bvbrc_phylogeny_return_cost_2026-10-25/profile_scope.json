@@ -1,0 +1,454 @@
+{
+  "blocked_scientific_callables_and_aliases": [
+    "gene_annotation_episode.bvbrc_codon_tree_bundle_adapter._consume",
+    "gene_annotation_episode.bvbrc_codon_tree_bundle_adapter.consume_bundle",
+    "gene_annotation_episode.bvbrc_codon_tree_grader.calculate_codon_tree",
+    "gene_annotation_episode.bvbrc_codon_tree_inputs.extract_codon_tree_sheet",
+    "gene_annotation_episode.bvbrc_gene_tree_bundle_adapter._consume",
+    "gene_annotation_episode.bvbrc_gene_tree_bundle_adapter.consume_bundle",
+    "gene_annotation_episode.bvbrc_gene_tree_grader.calculate_gene_tree",
+    "gene_annotation_episode.bvbrc_gene_tree_inputs.extract_gene_tree_sheet",
+    "gene_annotation_episode.bvbrc_phylogeny_bundle_projection.consume_bundle",
+    "gene_annotation_episode.bvbrc_phylogeny_bundle_resolution.parse_reader",
+    "gene_annotation_episode.phylogeny_calculators.alignment_components",
+    "gene_annotation_episode.phylogeny_calculators.compare_unrooted_relationships",
+    "gene_annotation_episode.phylogeny_calculators.function_composition",
+    "gene_annotation_episode.phylogeny_calculators.tree_components",
+    "gene_annotation_episode.phylogeny_formats.parse_aligned_fasta",
+    "gene_annotation_episode.phylogeny_formats.parse_newick",
+    "gene_annotation_episode.phylogeny_formats.parse_phyloxml",
+    "gene_annotation_episode.phylogeny_formats.parse_relaxed_phylip"
+  ],
+  "call": "BVBRCPhylogenyReturns.received_facts(root_context, original_science_schema)",
+  "call_count": 1,
+  "configuration": {
+    "selected-api": {
+      "endpoints": {
+        "AppService": "https://app.example.invalid/rpc",
+        "Workspace": "https://workspace.example.invalid/rpc"
+      },
+      "execution_contract": "bvbrc_appservice_execution_v1",
+      "kind": "api",
+      "scientific_adapters": [
+        {
+          "adapter_id": "bvbrc_gene_tree",
+          "adapter_version": "1",
+          "implementation_sha256": "d2cad59d6b38933bdb7e9d2a3412612b87d70c16567c128d68632fff821e4093"
+        }
+      ],
+      "service": "bvbrc_appservice"
+    }
+  },
+  "counts_before": {
+    "artifacts": 41,
+    "current_revisions": 0,
+    "inputs": 1,
+    "library_selection_members": 0,
+    "material_annotations": 0,
+    "material_component_spans": 0,
+    "material_errors": 0,
+    "material_members": 1,
+    "material_name_counts": 0,
+    "material_pack_chunks": 0,
+    "problem": 1,
+    "proposals": 0,
+    "provider_job_failures": 0,
+    "provider_jobs": 0,
+    "reasoning_commits": 0,
+    "record_roots": 0,
+    "records": 27,
+    "runtime_actions": 10,
+    "runtime_episodes": 5,
+    "runtime_estimation_contexts": 0,
+    "runtime_execution_progress_custody": 0,
+    "runtime_execution_progress_dependencies": 0,
+    "runtime_execution_progress_operations": 0,
+    "runtime_execution_progress_snapshots": 0,
+    "runtime_forms": 4,
+    "runtime_model_calls": 4,
+    "runtime_observations": 0,
+    "runtime_receipt_inheritance": 5,
+    "runtime_record_receipts": 72,
+    "runtime_report_attempts": 4,
+    "runtime_runs": 0,
+    "runtime_timed_commissions": 0,
+    "tool_operations": 0
+  },
+  "episode_lifecycle_rows": [
+    {
+      "episode_id": "episode_107ffc7dc7947fc380b70040a8b3f847fe62e09102a166f79ad4d824b367ca2b",
+      "state": "active"
+    },
+    {
+      "episode_id": "episode_761b232e048d4c9dcf2574163de9c8a30ea1e7a9fb81aff41a179139e1ce81a7",
+      "state": "active"
+    },
+    {
+      "episode_id": "episode_7735e1bbbc0337a8b1e51789dbd3c976fcd177fb90bc2480b78160e55f1cf424",
+      "state": "active"
+    },
+    {
+      "episode_id": "episode_d34c9e1626c0cbf153244013f0c40e62f9fae2ed5a170109650f8c3b67923847",
+      "state": "active"
+    },
+    {
+      "episode_id": "episode_f7a0ce6e9ef2f8c5a828a62c16f14c49a5dec7ba434e7142b9827b8f1881c119",
+      "state": "active"
+    }
+  ],
+  "expected_requested_facts": {
+    "bvbrc_phylogeny_branches": [
+      {
+        "branches": [
+          {
+            "bootstrap_matches": null,
+            "bootstrap_replicates": null,
+            "length": 0.0,
+            "length_unit": "native_unknown",
+            "node_index": 2,
+            "split_ref": null,
+            "support_method": "native_unknown",
+            "support_scale": "native_unknown",
+            "support_value": null,
+            "tree_ref": "bvbrc_phylogeny_tree:a/artifact_619812b4d487ec324c12654e2205fd477db3ad8896fbb39bf007afde64b516f8%23tree_document%2Ftree%2F0"
+          },
+          {
+            "bootstrap_matches": null,
+            "bootstrap_replicates": null,
+            "length": -0.1,
+            "length_unit": "native_unknown",
+            "node_index": 5,
+            "split_ref": null,
+            "support_method": "native_unknown",
+            "support_scale": "native_unknown",
+            "support_value": null,
+            "tree_ref": "bvbrc_phylogeny_tree:a/artifact_619812b4d487ec324c12654e2205fd477db3ad8896fbb39bf007afde64b516f8%23tree_document%2Ftree%2F0"
+          }
+        ],
+        "field": "edges",
+        "source_ref": "source_bc402be73b73918172438d6e"
+      }
+    ],
+    "bvbrc_phylogeny_measurements": [
+      {
+        "field": "cells",
+        "source_ref": "source_bc402be73b73918172438d6e",
+        "value": 16
+      },
+      {
+        "field": "gap_fraction",
+        "source_ref": "source_bc402be73b73918172438d6e",
+        "value": 0.125
+      },
+      {
+        "field": "tips",
+        "source_ref": "source_bc402be73b73918172438d6e",
+        "value": 4
+      }
+    ],
+    "bvbrc_phylogeny_requirements": [
+      {
+        "field": "missing",
+        "requirements": [
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "phylogeny_native_support_unavailable",
+            "requirement_id": "phylogeny-bundle/5e5c5c54bb73bc0aa7ed5b2fa682bc07e6972550293a178c319d2ae05047dc21",
+            "role": "branch_support",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "phylogeny_bootstrap_counts_unavailable",
+            "requirement_id": "phylogeny-bundle/7fd8ad43186ace5e715464f90ab2d6f1fb7aa1dc35df3d6c72ca4bbbcfe12edc",
+            "role": "bootstrap_replicates",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "phylogeny_native_support_unavailable",
+            "requirement_id": "phylogeny-bundle/26e245e40ebc9768775a9d7cc956c2d8b5f190e65136ffd137fbcf5300cfce4e",
+            "role": "branch_support",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "phylogeny_bootstrap_counts_unavailable",
+            "requirement_id": "phylogeny-bundle/b5c3b025d4e0cc180bf7e287c4149b8f2a4ddb95880edf70047b633f89890f0a",
+            "role": "bootstrap_replicates",
+            "source_refs": []
+          }
+        ],
+        "source_ref": "source_bc402be73b73918172438d6e"
+      }
+    ]
+  },
+  "original_configuration_source": "tests/test_bvbrc_phylogeny_host_integration.py:configured + tests/test_api_bvbrc_appservice.py:CONFIG",
+  "publications": [
+    {
+      "adapter_implementation_sha256": "d2cad59d6b38933bdb7e9d2a3412612b87d70c16567c128d68632fff821e4093",
+      "path": "api-service-execution/0615b6646721c9a81873eb0e96280d7fb9d722328ebda481bd2ffcf4a560db96/episodes/b3f8aedd750a9473545c96ff1f068a2833e0cdd57d60a12d8718110c437bb6f7/actions/5018102c08b9ef557bce4c460f4e5d642e543e321762940dbf838ea67b41b055/publication_inputs.json",
+      "selector_sha256": "8b23f4abbf832456babb9bd1a3c8aa07b44fd77b818f518623372a61581913b4",
+      "sha256": "83bcfab9933d8a2071872bca2738940286166a7cbb56c315d28cc17ebc56b57c"
+    },
+    {
+      "adapter_implementation_sha256": "d2cad59d6b38933bdb7e9d2a3412612b87d70c16567c128d68632fff821e4093",
+      "path": "api-service-execution/0615b6646721c9a81873eb0e96280d7fb9d722328ebda481bd2ffcf4a560db96/episodes/b3f8aedd750a9473545c96ff1f068a2833e0cdd57d60a12d8718110c437bb6f7/actions/92bdad2a53396bf8f143c8f7f160254bba23a446c5be3f1f7e813860a3d13f81/publication_inputs.json",
+      "selector_sha256": "8b23f4abbf832456babb9bd1a3c8aa07b44fd77b818f518623372a61581913b4",
+      "sha256": "920346319c0a622c2afacf73794ae5d9bdf7ac3b552e3f49f5a3116d69e17508"
+    }
+  ],
+  "requested_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "edges": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "branches": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "bootstrap_matches": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "bootstrap_replicates": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "length": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "length_unit": {
+                    "enum": [
+                      "expected_substitutions_per_model_site",
+                      "joint_mixed_partition_model_site",
+                      "native_unknown"
+                    ],
+                    "type": "string"
+                  },
+                  "node_index": {
+                    "type": "integer"
+                  },
+                  "split_ref": {
+                    "format": "identifier",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "x-reference-namespace": "bvbrc_phylogeny_split"
+                  },
+                  "support_method": {
+                    "enum": [
+                      "rapid_bootstrap",
+                      "rell_bootstrap",
+                      "phyml_abayes",
+                      "phyml_alrt_statistic",
+                      "phyml_chi2",
+                      "phyml_sh_like",
+                      "fasttree_sh_like",
+                      "native_unknown"
+                    ],
+                    "type": "string"
+                  },
+                  "support_scale": {
+                    "enum": [
+                      "percent",
+                      "fraction",
+                      "statistic",
+                      "native_unknown"
+                    ],
+                    "type": "string"
+                  },
+                  "support_value": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "tree_ref": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_phylogeny_tree"
+                  }
+                },
+                "required": [
+                  "tree_ref",
+                  "node_index",
+                  "split_ref",
+                  "length",
+                  "length_unit",
+                  "support_value",
+                  "support_method",
+                  "support_scale",
+                  "bootstrap_matches",
+                  "bootstrap_replicates"
+                ],
+                "type": "object"
+              },
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "field": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "bvbrc_phylogeny_field"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            }
+          },
+          "required": [
+            "source_ref",
+            "field",
+            "branches"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "bvbrc_phylogeny_branches"
+      },
+      "missing": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "bvbrc_phylogeny_field"
+            },
+            "requirements": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "definition",
+                      "input_metadata",
+                      "input_bytes",
+                      "original_task",
+                      "task_manifest",
+                      "output_metadata",
+                      "output_bytes",
+                      "byte_version_evidence",
+                      "scientific_metadata",
+                      "parser_binding"
+                    ],
+                    "type": "string"
+                  },
+                  "reason_code": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_phylogeny_reason"
+                  },
+                  "requirement_id": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_phylogeny_requirement"
+                  },
+                  "role": {
+                    "format": "identifier",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "x-reference-namespace": "bvbrc_phylogeny_role"
+                  },
+                  "source_refs": {
+                    "items": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "source"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "requirement_id",
+                  "kind",
+                  "role",
+                  "source_refs",
+                  "reason_code"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            }
+          },
+          "required": [
+            "source_ref",
+            "field",
+            "requirements"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "bvbrc_phylogeny_requirements"
+      },
+      "numbers": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "bvbrc_phylogeny_field"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            },
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "source_ref",
+            "field",
+            "value"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "bvbrc_phylogeny_measurements"
+      }
+    },
+    "required": [
+      "numbers",
+      "edges",
+      "missing"
+    ],
+    "type": "object"
+  },
+  "results_episode_id": "episode_d34c9e1626c0cbf153244013f0c40e62f9fae2ed5a170109650f8c3b67923847",
+  "root_episode_id": "episode_107ffc7dc7947fc380b70040a8b3f847fe62e09102a166f79ad4d824b367ca2b",
+  "run_id": "appservice-custody-fixture",
+  "science_episode_id": "episode_f7a0ce6e9ef2f8c5a828a62c16f14c49a5dec7ba434e7142b9827b8f1881c119",
+  "scope": {
+    "subject_refs": [
+      "input_adb7b6266eb34f916e03549e"
+    ]
+  }
+}

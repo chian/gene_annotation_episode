@@ -1,0 +1,20 @@
+F
+=================================== FAILURES ===================================
+_____________________________ test_final_evidence ______________________________
+
+    def test_final_evidence():
+        out = Path.cwd()
+        before, after = read(RUN/'source_hashes_before.json'), read(RUN/'source_hashes_after.json')
+>       assert before == after
+E       AssertionError: assert {'gene_annota...10e2758', ...} == {'gene_annota...10e2758', ...}
+E         
+E         Omitting 72 identical items, use -vv to show
+E         Differing items:
+E         {'gene_annotation_episode/blast_vdb_function_calculators.py': 'fa5ae73114f58f82906577a76fc29565d30aae902d970bac7a1cd8d7414a2557'} != {'gene_annotation_episode/blast_vdb_function_calculators.py': '43166053dd44ec1e21e2e8112699ee426b2e0fc89aee638698a724e3bdaea572'}
+E         {'gene_annotation_episode/blast_vdb_function_inputs.py': 'e8d726d99b0cbc9158de715396a3ad79018a744809722d93b7cfe53672f6ecaa'} != {'gene_annotation_episode/blast_vdb_function_inputs.py': '5ed8026865ec3090a59c5eeec02cb747eaa6ca419a277dc6418381ad26d4b5f9'}
+E         Use -v to get more diff
+
+../verify_final_evidence.py:28: AssertionError
+=========================== short test summary info ============================
+FAILED ../verify_final_evidence.py::test_final_evidence - AssertionError: ass...
+1 failed in 0.08s

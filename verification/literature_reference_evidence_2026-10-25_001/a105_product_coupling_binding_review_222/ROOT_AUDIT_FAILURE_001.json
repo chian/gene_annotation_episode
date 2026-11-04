@@ -1,0 +1,9 @@
+{
+  "script": "verify_retained_proofs_001.py",
+  "failure": "Assertion expected only two product storage/test changes but root pin002 and owner-derived pin003 also have different pytest.ini harness configurations.",
+  "production_failure": false,
+  "corrected_script": "verify_retained_proofs_002.py",
+  "root_pin002_config": "[pytest]\npythonpath = . tests\n",
+  "root_pin003_config": "[pytest]\npythonpath = .\ntestpaths = tests\n",
+  "original_script_preserved": true
+}

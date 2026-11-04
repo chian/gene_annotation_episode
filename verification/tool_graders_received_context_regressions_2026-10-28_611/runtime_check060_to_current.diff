@@ -1,0 +1,40 @@
+--- check060/runtime.py
++++ runtime.py
+@@ -1050,7 +1050,7 @@
+                     saved['contract_information'] = self.workflow.freeze_contract_information(self, context, schema)
+                     self.workflow.validate_contract_information(saved)
+                 if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+-                        and not self.workflow.receipt_projection(self)):
++                        and not self.workflow.uses_received_record_context(self)):
+                     self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                         kind='decision_input', source_index=index)
+                 journal.save('runtime_model_calls', {'episode_id': self.episode_id,
+@@ -1077,10 +1077,10 @@
+         if transport is not None:
+             saved['assignment_transport'] = transport
+         if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+-                and not self.workflow.receipt_projection(self)):
+-            # A caller may use a different scalar for this parent while using
+-            # receipt-based credit in its children. Preserve what this actual
+-            # automatic input delivered so those children inherit it correctly.
++                and not self.workflow.uses_received_record_context(self)):
++            # Scientific information is admitted through explicit inputs,
++            # own outcomes and requested returns, independently of the scalar
++            # credit callable. Other role inputs retain their existing delivery.
+             self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                 kind='decision_input', source_index=index)
+         journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+@@ -2579,8 +2579,12 @@
+         if not self.is_scientific_source(source):
+             return {'assignment': source.request.message.as_record().get('episode_assignment', {})}
+         arguments = ({'record_selection': self.receipts.selection(source.episode_id)}
+-                     if self.receipt_projection(source) else {})
++                     if self.uses_received_record_context(source) else {})
+         return self.store.reasoning_view(source.scope, limit=24, **arguments)
++
++    def uses_received_record_context(self, source):
++        """Scientific visibility follows custody, not the chosen credit scalar."""
++        return self.receipts is not None and self.is_scientific_source(source)
+ 
+     def receipt_projection(self, source):
+         if not self.is_scientific_source(source):

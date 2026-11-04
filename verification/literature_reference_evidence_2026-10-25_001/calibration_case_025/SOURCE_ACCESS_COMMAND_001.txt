@@ -1,0 +1,18 @@
+Exact initial command retained from this agent's tool call. This supplements
+the shortened command description in SOURCE_ACCESS_EXCEPTION_001.json:
+
+cat research/experimental_scoring_review_2026-10-23/RESEARCH_SCOPE.md; cat research/experimental_scoring_review_2026-10-23/SOURCE_CORRECTIONS.md; .venv/bin/python - <<'PY'
+from pathlib import Path
+import json
+p=Path('research/experimental_scoring_review_2026-10-23/molecular_measurement/assigned_cases.json')
+v=json.loads(p.read_text());print(type(v).__name__)
+if isinstance(v,dict):
+ print('keys',list(v)); entries=next((x for x in v.values() if isinstance(x,list)),[])
+else:entries=v
+for e in entries:
+ print({k:val for k,val in e.items() if k in ['group_id','case_group','label','case_id','title','name','gene','records','group_key','record_ids']})
+PY
+
+The erroneous key is records. It emitted nested scientific packets rather than
+only selection metadata. No complete inventory read or single-packet exposure
+is claimed. Subsequent full reset reads are documented separately.

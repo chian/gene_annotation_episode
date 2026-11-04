@@ -1,0 +1,47 @@
+..........................F...                                           [100%]
+=================================== FAILURES ===================================
+___ test_scientific_forwarding_and_unrequested_source_do_not_broaden_returns ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check005/temporary/pytest/test_scientific_forwarding_and0')
+
+    def test_scientific_forwarding_and_unrequested_source_do_not_broaden_returns(tmp_path):
+        with Store(tmp_path / "store") as store:
+            f = E.Fixture(store, tmp_path / "fixture")
+            scientific = f.child(role="scientific_process", index=10)
+            child = f.child(parent=scientific, index=0)
+            body = f.execute(child)
+            direct = f.returned(scientific, child)
+            assert f.returned(f.root, scientific) == direct
+            assert f.returns.received_facts(f.root, E.schema(False)) == {}
+            fake = deepcopy(direct)
+            fake["comparison"][0]["qualification"]["baseline_member_id"] = "V"
+            with pytest.raises(ValueError):
+                f.returns.validate_received_report(scientific, fake, E.schema())
+>           other = f.child(index=11, returned=False)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_comparison_results_adapter.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/fixtures/rna_comparison_results_371/helpers.py:126: in child
+    contract = TypedReportContract("Return exactly selected comparison values", schema(returned), lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return exactly selected comparison values', measurements={'schema': {'type': 'object', 'additionalProperties': False, 'properties': {}, 'required': []}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+../../../method_loop/communication.py:36: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rna_comparison_results_adapter.py::test_scientific_forwarding_and_unrequested_source_do_not_broaden_returns
+1 failed, 29 passed in 1186.56s (0:19:46)

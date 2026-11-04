@@ -1,0 +1,51 @@
+.F...................................................................... [ 93%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+___ test_all_explicit_leaves_equal_existing_literal_schema[S734-02-matching] ___
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:562: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:567: in check
+    raise ReportBoundaryError(f"{path}: string literals must be declared codes", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.selected[].sequence_ref: string literals must be declared codes
+
+During handling of the above exception, another exception occurred:
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:241: in requested_restriction_projections
+    schema = validate_closed_schema(original_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:583: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:562: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:558: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:567: in check
+    raise ReportBoundaryError(f"{path}: string literals must be declared codes", code="unrestricted_string")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.selected[].sequence_ref: string literals must be declared codes
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_restriction_mapping_selection_734.py:81: in test_all_explicit_leaves_equal_existing_literal_schema
+    actual = restriction_selected_return_schema(_selection(ALL, policy=policy, reference=reference))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_selection.py:91: in restriction_selected_return_schema
+    requested_restriction_projections({"type": "object", "properties": {"selected": result},
+source_snapshot/gene_annotation_episode/restriction_mapping_returns.py:243: in requested_restriction_projections
+    raise ReportBoundaryError("Invalid requested schema", code="restriction_projection_schema_invalid") from error
+E   gene_annotation_episode.communication.ReportBoundaryError: Invalid requested schema
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_restriction_mapping_selection_734.py::test_all_explicit_leaves_equal_existing_literal_schema[S734-02-matching]
+1 failed, 76 passed in 0.94s

@@ -1,0 +1,5 @@
+#define HTS_CC "/usr/bin/cc"
+#define HTS_CPPFLAGS "-I/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/include"
+#define HTS_CFLAGS "-Wall -O2 -fPIC -I/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/include -fvisibility=hidden"
+#define HTS_LDFLAGS "-L/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu -fvisibility=hidden "
+#define HTS_LIBS "-llzma -lbz2 -lz -lm  "

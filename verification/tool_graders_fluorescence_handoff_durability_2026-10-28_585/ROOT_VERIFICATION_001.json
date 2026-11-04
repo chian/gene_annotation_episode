@@ -1,0 +1,74 @@
+{
+  "record_type": "root_fluorescence_durable_receipt_repair_evidence",
+  "recorded_at": "2026-10-28T15:00:25.005058+00:00",
+  "goal_or_scope_changed": false,
+  "original_failure": {
+    "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check028_fluorescence_workflow_redelivery",
+    "tests": 12,
+    "passed": 8,
+    "failed": 4,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 2678.763,
+    "receipt": {
+      "returncode": 1,
+      "unit": "gene-local-job-0ac45224d8624c29b07bcb0a37dc98db.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true
+    },
+    "audit": {
+      "pytest_returncode": 1,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "source_receipt_sha256": "512175de04f4aed8b4f5121a73f4d77807aed9c0e371fb456c5e8a6d22bb2e4b"
+  },
+  "repair": "ExecutionTargetReader._native authenticates the original saved fluorescence receipt and execution identity without requiring the old producer directory to remain live. Selected observe/read operations retain their live plan and operation identity checks. No credit/controller/schema change.",
+  "focused_verification": {
+    "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check030_fluorescence_handoff_durability",
+    "tests": 136,
+    "passed": 136,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 178.631,
+    "receipt": {
+      "returncode": 0,
+      "unit": "gene-local-job-8acd75257605456ea1a6dbc3fea0a3ab.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true
+    },
+    "audit": {
+      "pytest_returncode": 0,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "source_receipt_sha256": "b80abf92117e017618717b805b2dd074a4422a261672eb8e640af51f7ab1c487"
+  },
+  "current_native_target_method_sha256": "2c5614c2722fac405537d4c9be88749365a521044f3a59c874da19079d8ae9a3",
+  "tested_native_target_method_sha256": "2c5614c2722fac405537d4c9be88749365a521044f3a59c874da19079d8ae9a3",
+  "current_target_method_equals_verified_snapshot": true,
+  "full_workflow_followup": {
+    "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check031_fluorescence_completion_replay",
+    "selected_cases": 4,
+    "status": "running_same_original_handle",
+    "completion_not_claimed": true
+  },
+  "remaining": [
+    "Full four-case follow-up completion and receipt collection",
+    "Actual fluorescence preprocessing and report parsing",
+    "Required TASK/STEERING presentation and complete operation closure"
+  ]
+}

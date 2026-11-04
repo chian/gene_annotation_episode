@@ -1,0 +1,1592 @@
+--- a/gene_annotation_episode/api_service_execution.py
++++ b/gene_annotation_episode/api_service_execution.py
+@@ -90,6 +90,8 @@
+         self.alignment_returns = BVBRCAlignmentReturns(self)
+         from .bvbrc_genome_alignment_returns import BVBRCGenomeAlignmentReturns
+         self.genome_alignment_returns = BVBRCGenomeAlignmentReturns(self)
++        from .bvbrc_proteome_returns import BVBRCProteomeReturns
++        self.proteome_returns = BVBRCProteomeReturns(self)
+ 
+     def __getattr__(self, name):
+         # Preserve existing inspection ports for the unchanged legacy binding.
+@@ -889,6 +891,11 @@
+                 return (self.genome_alignment_returns.resolve_own(context, reference, namespace)
+                     if context.role == 'results' else
+                     self.genome_alignment_returns.resolve_received(context, reference, namespace))
++            from .bvbrc_proteome_returns import IDENTIFIER_NAMESPACES as PROTEOME_NAMESPACES
++            if namespace in PROTEOME_NAMESPACES:
++                return (self.proteome_returns.resolve_own(context, reference, namespace)
++                    if context.role == 'results' else
++                    self.proteome_returns.resolve_received(context, reference, namespace))
+             resolved = self.appservice.resolve(context, reference, namespace)
+             if resolved is not None:
+                 return resolved
+--- a/gene_annotation_episode/bvbrc_appservice_adapters.py
++++ b/gene_annotation_episode/bvbrc_appservice_adapters.py
+@@ -14,9 +14,10 @@
+     from . import bvbrc_msa_bundle_adapter as msa
+     from . import bvbrc_metacats_bundle_adapter as metacats
+     from . import bvbrc_genome_alignment_bundle_adapter as genome_alignment
++    from . import bvbrc_proteome_bundle_adapter as proteome
+ 
+     installed = {(module.ADAPTER_ID, module.ADAPTER_VERSION): module
+-        for module in (homology, gene_tree, codon_tree, msa, metacats, genome_alignment)}
++        for module in (homology, gene_tree, codon_tree, msa, metacats, genome_alignment, proteome)}
+     bound, seen = {}, set()
+     for row in configured:
+         key = row['adapter_id'], row['adapter_version']
+--- a/gene_annotation_episode/bvbrc_appservice_bundle_values.py
++++ b/gene_annotation_episode/bvbrc_appservice_bundle_values.py
+@@ -229,7 +229,8 @@
+                  and facts.get("body_complete") is snapshot.transport["body_complete"]
+                  and event["native_handle"] == {"task_id": task["task_id"]}, "appservice_event_projection_conflict")
+         projection, content = parsed["value"], binding["content"]
+-        artifact = {"role": args["role"], "source_ref": binding["source_ref"],
++        artifact = {"role": args["role"], "requirement_ids": deepcopy(args["requirement_ids"]),
++            "source_ref": binding["source_ref"],
+             "raw_artifact_ref": content["artifact_ref"], "sha256": content["sha256"], "byte_count": content["byte_count"],
+             "workspace_object": obj["object"], "task_association": obj["task_association"],
+             "transfer": {"receipt_ref": acquisition_receipt_ref, **{key: projection[key] for key in
+@@ -266,6 +267,7 @@
+     _require(_same(receipt["object_selection"], args["object"])
+              and _same(receipt["capability_selection"], args["capability"])
+              and _same(receipt["requirement_ids"], args["requirement_ids"])
++             and ("requirement_ids" not in artifact or _same(artifact["requirement_ids"], args["requirement_ids"]))
+              and artifact["role"] == args["role"] and _same(artifact["declared_format"], args["declared_format"]),
+              "publication_requirement_conflict")
+     _require(artifact["task_association"]["task_id"] == task["task_id"], "original_task_mismatch")
+--- a/gene_annotation_episode/bvbrc_appservice_host.py
++++ b/gene_annotation_episode/bvbrc_appservice_host.py
+@@ -220,14 +220,17 @@
+     def facts(self, context):
+         rows = self._own_receipts(context)
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+-        return {'execution_handoff_refs': [r['source_ref'] for r in rows if r['contract'] == 'TaskHandoff'],
++        facts = {'execution_handoff_refs': [r['source_ref'] for r in rows if r['contract'] == 'TaskHandoff'],
+             SUPPORT_SOURCE: [r['source_ref'] for r in rows if r['contract'] != 'TaskHandoff'],
+-            **self.api.homology_returns.facts(context, schema),
+-            **self.api.phylogeny_returns.facts(context, schema),
+-            **self.api.alignment_returns.facts(context, schema),
+-            **self.api.genome_alignment_returns.facts(context, schema),
+             'execution_result_refs': self.publications.own_results(context), 'execution_blast_hsps': [],
+             'execution_completed': self.completion(context) is not None}
++        for returns in (self.api.homology_returns, self.api.phylogeny_returns,
++                self.api.alignment_returns, self.api.genome_alignment_returns, self.api.proteome_returns):
++            supplied = returns.facts(context, schema)
++            if set(facts).intersection(supplied):
++                raise ValueError('appservice_own_fact_source_conflict')
++            facts.update(supplied)
++        return facts
+ 
+     def completion(self, context):
+         if context.role == 'results':
+--- a/gene_annotation_episode/bvbrc_appservice_publication.py
++++ b/gene_annotation_episode/bvbrc_appservice_publication.py
+@@ -261,7 +261,8 @@
+             status = 'invalid'
+         elif (adapter['status'] != 'ok' or bundle['status'] != 'ok'
+                 or missing and (adapter['adapter_id'], adapter['adapter_version']) not in {
+-                    ('bvbrc_msa', '1'), ('bvbrc_metacats', '1'), ('bvbrc_genome_alignment', '1')}):
++                    ('bvbrc_msa', '1'), ('bvbrc_metacats', '1'), ('bvbrc_genome_alignment', '1'),
++                    ('bvbrc_proteome', '1')}):
+             # These new contracts make status authoritative for the exact
+             # requested projection. Other retained scientific dependencies need
+             # not be required by it. Original required output artifacts still
+@@ -438,7 +439,8 @@
+ 
+     def completion(self, context):
+         selected = plain(context.assignment).get('selector', {}).get('adapter')
+-        if selected is not None and (selected['adapter_id'], selected['adapter_version']) == ('bvbrc_genome_alignment', '1'):
++        if selected is not None and (selected['adapter_id'], selected['adapter_version']) in {
++                ('bvbrc_genome_alignment', '1'), ('bvbrc_proteome', '1')}:
+             self.host.custody.authenticate(context, allow_unsaved=True)
+             for _, outcome in reversed(list(self.api._own_outcomes(context))):
+                 result = outcome.get('result') or {}
+--- a/gene_annotation_episode/bvbrc_appservice_schemas.json
++++ b/gene_annotation_episode/bvbrc_appservice_schemas.json
+@@ -3482,6 +3482,14 @@
+         },
+         "declared_format": {
+           "$ref": "#/$defs/DeclaredFormat"
++        },
++        "requirement_ids": {
++          "type": "array",
++          "items": {
++            "type": "string",
++            "minLength": 1
++          },
++          "uniqueItems": true
+         }
+       },
+       "required": [
+--- a/gene_annotation_episode/bvbrc_proteome_bundle_contracts.py
++++ b/gene_annotation_episode/bvbrc_proteome_bundle_contracts.py
+@@ -310,8 +310,11 @@
+             continue
+         if kind == "native_document":
+             binding = value["source"]["content"]
+-            _require(choice["source_ref"] == binding["source_ref"] and choice["raw_artifact_ref"] == binding["artifact_ref"] and
+-                     choice["declared_format"]["format"] == value["format"] and choice["source_contract"] == value["source_contract"], "saved_identity_conflict", path)
++            _require(choice["declared_format"]["format"] == value["format"] and
++                     choice["source_contract"] == value["source_contract"], "saved_identity_conflict", path)
++            if "source_ref" in choice:
++                _require(choice["source_ref"] == binding["source_ref"] and choice["raw_artifact_ref"] == binding["artifact_ref"],
++                         "saved_identity_conflict", path)
+             _require(choice["declared_format"]["version"] is None and choice["declared_format"]["mode"] is None and
+                      value["source_contract"]["deployment_match"] == "unobserved", "saved_identity_conflict", path)
+         elif kind == "original_input_index":
+@@ -378,8 +381,12 @@
+     native = saved["native_sheet_result"]
+     if native is not None and native["value"] is not None:
+         sheet_value = native["value"]
+-        choices = [row for row in parameters["native_documents"] if row["document_id"] == parameters["primary_document_id"]]
+-        _require(len(choices) == 1 and sheet_value["primary_source_ref"] == choices[0]["source_ref"], "saved_identity_conflict", "/native_sheet_result/value/primary_source_ref")
++        choices = [i for i, row in enumerate(parameters["native_documents"]) if row["document_id"] == parameters["primary_document_id"]]
++        resolved = [row for row in saved["input_resolution"] if row["selector_kind"] == "native_document" and
++                    row["selection_index"] in choices and row["content"] is not None and row["result_index"] is not None]
++        _require(len(choices) == len(resolved) == 1 and
++                 sheet_value["primary_source_ref"] == resolved[0]["content"]["source_ref"],
++                 "saved_identity_conflict", "/native_sheet_result/value/primary_source_ref")
+         _require(canonical(sheet_value["native_results"]) == canonical(saved["native_results"]), "saved_sheet_invalid", "/native_sheet_result/value/native_results")
+         for envelope, field in (("input_index_result", "input_index"), ("joins_result", "joins")):
+             expected = saved[envelope]["value"] if saved[envelope] is not None else None
+@@ -398,5 +405,57 @@
+     return saved
+ 
+ 
++def validate_bundle_binding(saved: dict, bundle: dict | None) -> None:
++    """Check saved document membership against an authenticated supplied bundle.
++
++    This checks identities and retained transfer facts only. It neither reads
++    bytes nor reruns native parsing or scientific calculation.
++    """
++    choices = saved["parameters"]["native_documents"]
++    if bundle is None:
++        _require(not any("requirement_id" in choice for choice in choices), "saved_identity_conflict", "/bundle")
++        return
++    actual = _checked(validate_contract, "ArtifactBundle", bundle, "saved_identity_conflict", "/bundle")
++    _require(digest(actual) == saved["bundle_sha256"] and
++             canonical(actual["original_task"]) == canonical(saved["original_task"]), "saved_identity_conflict", "/bundle")
++    for index, row in enumerate(saved["input_resolution"]):
++        if row["selector_kind"] != "native_document":
++            continue
++        choice = choices[row["selection_index"]]
++        if "requirement_id" not in choice:
++            continue
++        path = "/input_resolution/" + str(index)
++        members = [member for member in actual["artifacts"] if choice["requirement_id"] in member.get("requirement_ids", [])]
++        # A missing or ambiguous selected document supplies no parsed result.
++        if len(members) != 1:
++            _require(row["content"] is None and row["result_index"] is None, "saved_identity_conflict", path)
++            continue
++        member = members[0]
++        content = dict(source_ref=member["source_ref"], artifact_field="artifact_ref",
++                       artifact_ref=member["raw_artifact_ref"], sha256=member["sha256"], byte_count=member["byte_count"])
++        # Duplicate actual selections and incompatible parser declarations can
++        # fail before content is resolved; they cannot carry a parsed result.
++        if row["content"] is None:
++            _require(row["result_index"] is None and row["state"] in {"invalid", "incompatible", "unverified"},
++                     "saved_identity_conflict", path)
++            continue
++        _require(row["content"] == content, "saved_identity_conflict", path + "/content")
++        if row["result_index"] is None:
++            continue
++        result = saved["native_results"][row["result_index"]]["value"]
++        _require(member["role"] == choice["role"] and member["declared_format"] == choice["declared_format"],
++                 "saved_identity_conflict", path)
++        if result is not None:
++            transfer, observed = member["transfer"], member["transfer"]["observed_range"]
++            _require(not (observed is not None and observed["start"] != 0 or
++                observed is None and transfer["object_complete"] != "yes" and
++                transfer["requested_range"] is not None and transfer["requested_range"][0] != 0),
++                "saved_identity_conflict", path)
++            source = result["source"]
++            _require(source["content"] == content and
++                     source["body_complete"] == member["transfer"]["body_complete"] and
++                     source["object_complete"] == member["transfer"]["object_complete"], "saved_identity_conflict", path)
++
++
+ __all__ = ["ProteomeBundleError", "BINDING_CODES", "BINDING_INPUT_KINDS", "PURE_REQUIRED_INPUT_KINDS",
+-           "validate_parameters", "validate_provider_sheet", "validate_supplied_data", "parameters_schema", "bundle_schema"]
++           "validate_parameters", "validate_provider_sheet", "validate_bundle_binding", "validate_supplied_data", "parameters_schema", "bundle_schema"]
+--- a/gene_annotation_episode/bvbrc_proteome_bundle_projection.py
++++ b/gene_annotation_episode/bvbrc_proteome_bundle_projection.py
+@@ -467,9 +467,18 @@
+ 
+ def validate_saved_projection(sheet: dict | None, components: dict | None, *,
+     facts: dict, status: str, missing_requirements: tuple[dict, ...], diagnostics: tuple[dict, ...],
+-    requested_form: dict, parameters: dict, original_task: dict, bundle_sha256: str) -> dict:
++    requested_form: dict, parameters: dict, original_task: dict, bundle_sha256: str,
++    bundle: dict | None = None) -> dict:
+     result = project_requested_facts(sheet, components, missing_requirements=missing_requirements,
+         diagnostics=diagnostics, requested_form=requested_form, parameters=parameters)
++    if sheet is not None:
++        _provider_contracts().validate_bundle_binding(sheet, bundle)
++    elif any("requirement_id" in choice for choice in parameters["native_documents"]):
++        if bundle is None:
++            _error("saved_identity_conflict", "/bundle")
++        actual = validate_contract("ArtifactBundle", bundle)
++        if not _equal(actual["original_task"], original_task) or _provider_contracts().digest(actual) != bundle_sha256:
++            _error("saved_identity_conflict", "/bundle")
+     if sheet is not None and (not _equal(sheet["original_task"], original_task) or sheet["bundle_sha256"] != bundle_sha256):
+         _error("saved_identity_conflict", "/sheet")
+     if not _equal(result, dict(status=status, facts=facts, missing_requirements=list(missing_requirements), diagnostics=list(diagnostics))):
+--- a/gene_annotation_episode/bvbrc_proteome_bundle_resolution.py
++++ b/gene_annotation_episode/bvbrc_proteome_bundle_resolution.py
+@@ -259,15 +259,19 @@
+             return None
+         return raw
+ 
+-    def artifact(self, source_ref, artifact_ref, path, row, *, declared=None, role=None):
+-        matches = [a for a in self.bundle["artifacts"] if a["source_ref"] == source_ref and a["raw_artifact_ref"] == artifact_ref]
++    def artifact(self, source_ref, artifact_ref, path, row, *, declared=None, role=None, requirement_id=None):
++        matches = ([a for a in self.bundle["artifacts"] if requirement_id in a.get("requirement_ids", [])]
++                   if requirement_id is not None else
++                   [a for a in self.bundle["artifacts"] if a["source_ref"] == source_ref and a["raw_artifact_ref"] == artifact_ref])
+         if len(matches) != 1:
+-            near = [a for a in self.bundle["artifacts"] if a["source_ref"] == source_ref or a["raw_artifact_ref"] == artifact_ref]
++            near = [] if requirement_id is not None else [a for a in self.bundle["artifacts"] if a["source_ref"] == source_ref or a["raw_artifact_ref"] == artifact_ref]
+             code = "document_ambiguous" if len(matches) > 1 else "artifact_binding_conflict" if near else "document_missing"
+             row["state"] = "invalid" if matches or near else "missing"
+-            self.problem(code, path, refs=[source_ref], severity="error" if matches or near else "qualification", row=row)
++            self.problem(code, path, refs=[a["source_ref"] for a in matches] if requirement_id is not None else [source_ref],
++                         severity="error" if matches or near else "qualification", row=row)
+             return None, None
+         member = matches[0]
++        source_ref = member["source_ref"]
+         row["content"] = _content(member)
+         if role is not None and member["role"] != role:
+             row["state"] = "invalid"
+@@ -293,27 +297,34 @@
+ 
+     def documents(self):
+         selections = self.parameters["native_documents"]
+-        counts = Counter(selection["source_ref"] for selection in selections)
++        resolved_refs = []
++        for selection in selections:
++            matches = [a for a in self.bundle["artifacts"] if selection.get("requirement_id") in a.get("requirement_ids", [])]
++            resolved_refs.append(selection.get("source_ref") if "source_ref" in selection else
++                                 matches[0]["source_ref"] if len(matches) == 1 else None)
++        counts = Counter(ref for ref in resolved_refs if ref is not None)
+         for i, selected in enumerate(selections):
+             path = f"/parameters/native_documents/{i}"
+             row = self.outcome("native_document", i)
+-            if counts[selected["source_ref"]] != 1:
++            source_ref = resolved_refs[i]
++            refs = [] if source_ref is None else [source_ref]
++            if source_ref is not None and counts[source_ref] != 1:
+                 row["state"] = "invalid"
+-                self.problem("document_ambiguous", path, refs=[selected["source_ref"]], severity="error", row=row)
++                self.problem("document_ambiguous", path, refs=refs, severity="error", row=row)
+                 continue
+             declaration, contract = selected["declared_format"], selected["source_contract"]
+             if declaration["format"] not in _FORMATS or declaration["version"] is not None or declaration["mode"] is not None:
+                 row["state"] = "incompatible"
+-                self.problem("artifact_format_incompatible", path + "/declared_format", refs=[selected["source_ref"]], severity="error", row=row)
++                self.problem("artifact_format_incompatible", path + "/declared_format", refs=refs, severity="error", row=row)
+                 continue
+             if contract["deployment_match"] != "unobserved":
+                 row["state"] = "incompatible" if contract["deployment_match"] == "different" else "unverified"
+                 self.problem("source_contract_incompatible" if contract["deployment_match"] == "different" else "deployment_evidence_unverified",
+-                             path + "/source_contract", refs=[selected["source_ref"]],
++                             path + "/source_contract", refs=refs,
+                              severity="error" if contract["deployment_match"] == "different" else "qualification", row=row)
+                 continue
+-            raw, source = self.artifact(selected["source_ref"], selected["raw_artifact_ref"], path, row,
+-                                        declared=declaration, role=selected["role"])
++            raw, source = self.artifact(selected.get("source_ref"), selected.get("raw_artifact_ref"), path, row,
++                declared=declaration, role=selected["role"], requirement_id=selected.get("requirement_id"))
+             if raw is None:
+                 continue
+             result = parse_genome_comparison(raw, source=source, declared_format=declaration["format"], source_contract=contract)
+--- a/gene_annotation_episode/bvbrc_proteome_bundle_schemas.json
++++ b/gene_annotation_episode/bvbrc_proteome_bundle_schemas.json
+@@ -200,39 +200,73 @@
+       "additionalProperties": false
+     },
+     "NativeDocumentSelection": {
+-      "type": "object",
+-      "properties": {
+-        "document_id": {
+-          "type": "string",
+-          "minLength": 1
+-        },
+-        "source_ref": {
+-          "type": "string",
+-          "minLength": 1
+-        },
+-        "raw_artifact_ref": {
+-          "type": "string",
+-          "minLength": 1
+-        },
+-        "role": {
+-          "const": "proteome_native_projection"
+-        },
+-        "declared_format": {
+-          "$ref": "#/$defs/HostDeclaredFormat"
+-        },
+-        "source_contract": {
+-          "$ref": "#/$defs/NativeSourceContract"
+-        }
+-      },
+-      "required": [
+-        "document_id",
+-        "source_ref",
+-        "raw_artifact_ref",
+-        "role",
+-        "declared_format",
+-        "source_contract"
+-      ],
+-      "additionalProperties": false
++      "oneOf": [
++        {
++          "type": "object",
++          "properties": {
++            "document_id": {
++              "type": "string",
++              "minLength": 1
++            },
++            "source_ref": {
++              "type": "string",
++              "minLength": 1
++            },
++            "raw_artifact_ref": {
++              "type": "string",
++              "minLength": 1
++            },
++            "role": {
++              "const": "proteome_native_projection"
++            },
++            "declared_format": {
++              "$ref": "#/$defs/HostDeclaredFormat"
++            },
++            "source_contract": {
++              "$ref": "#/$defs/NativeSourceContract"
++            }
++          },
++          "required": [
++            "document_id",
++            "source_ref",
++            "raw_artifact_ref",
++            "role",
++            "declared_format",
++            "source_contract"
++          ],
++          "additionalProperties": false
++        },
++        {
++          "type": "object",
++          "properties": {
++            "document_id": {
++              "type": "string",
++              "minLength": 1
++            },
++            "role": {
++              "const": "proteome_native_projection"
++            },
++            "declared_format": {
++              "$ref": "#/$defs/HostDeclaredFormat"
++            },
++            "source_contract": {
++              "$ref": "#/$defs/NativeSourceContract"
++            },
++            "requirement_id": {
++              "type": "string",
++              "minLength": 1
++            }
++          },
++          "required": [
++            "document_id",
++            "role",
++            "declared_format",
++            "source_contract",
++            "requirement_id"
++          ],
++          "additionalProperties": false
++        }
++      ]
+     },
+     "SheetNativeCalculationParameters": {
+       "type": "object",
+--- a/gene_annotation_episode/bvbrc_proteome_returns.py
++++ b/gene_annotation_episode/bvbrc_proteome_returns.py
+@@ -20,6 +20,7 @@
+ from .communication import plain, validate_form
+ from .episode_return_records import EpisodeReturnRecords, _same
+ from .execution_contracts import canonical, digest
++from .form_reference_validation import _binding_key, form_validation_value
+ 
+ 
+ _FAMILIES = {
+@@ -202,7 +203,7 @@
+     try:
+         validate_saved_projection(sheet, components, facts=facts, status=saved['status'],
+             missing_requirements=tuple(saved['missing_requirements']), diagnostics=tuple(saved['diagnostics']),
+-            requested_form=form, parameters=parameters, original_task=task, bundle_sha256=binding['sha256'])
++            requested_form=form, parameters=parameters, original_task=task, bundle_sha256=binding['sha256'], bundle=bundle)
+     except (ValueError, KeyError, TypeError, OverflowError, RecursionError) as error:
+         raise ProteomeReturnError('saved_projection_invalid') from error
+     rows = {name: [] for name in FACT_SOURCES}
+@@ -447,13 +448,18 @@
+         if namespace not in (*IDENTIFIER_NAMESPACES, 'source', 'execution_result', None):
+             return None
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+-        return self._resolve(context, self.facts(context, schema), reference, namespace)
++        values = form_validation_value(
++            (self, 'own', _binding_key(context), canonical(schema)),
++            lambda: self.facts(context, schema))
++        return self._resolve(context, values, reference, namespace)
+ 
+     def resolve_received(self, context, reference, namespace) -> bool | None:
+         if namespace not in (*IDENTIFIER_NAMESPACES, 'source', 'execution_result', None):
+             return None
+-        facts = {group['fact_source']: group['facts'] for group in self.received_context(context)}
+-        return self._resolve(context, facts, reference, namespace)
++        values = form_validation_value(
++            (self, 'received', _binding_key(context)),
++            lambda: {group['fact_source']: group['facts'] for group in self.received_context(context)})
++        return self._resolve(context, values, reference, namespace)
+ 
+ 
+ __all__ = ['FACT_SOURCES', 'IDENTIFIER_NAMESPACES', 'proteome_fact_sources',
+--- a/gene_annotation_episode/bvbrc_proteome_tool_info.py
++++ b/gene_annotation_episode/bvbrc_proteome_tool_info.py
+@@ -39,8 +39,12 @@
+     "and calculation_parameters. Select the actual proteome_native_projection role "
+     "and genome_comparison_json_v1 or genome_comparison_tsv_v1 format, with null "
+     "version and mode. These are GenomeComparison's custom formats, not NCBI BLAST "
+-    "JSON. Select each document's actual source and artifact; the primary document "
+-    "is explicit. Supply representation correspondence before treating JSON and TSV "
++    "JSON. Before acquisition, select each document by its parent-declared result "
++    "requirement_id; the unique acquired bundle member must retain that selected "
++    "requirement, role and format. Do not predict future source or artifact identities. "
++    "Already retained documents can instead select their exact source_ref and "
++    "raw_artifact_ref. The primary document is explicit. Missing or multiple matching "
++    "members remain missing or ambiguous. Supply representation correspondence before treating JSON and TSV "
+     "as interchangeable observations.\n\n"
+     "Supply original parameter, FASTA and feature/genome/sequence metadata evidence "
+     "explicitly when requested calculations need it. Keep original input slots, "
+--- a/gene_annotation_episode/execution_episodes.py
++++ b/gene_annotation_episode/execution_episodes.py
+@@ -427,6 +427,17 @@
+                     if ('bvbrc_genome_alignment', '1') in service.scientific_adapters:
+                         from .bvbrc_genome_alignment_tool_info import genome_alignment_tool_contracts
+                         for entry in genome_alignment_tool_contracts(resource_id=resource_id,
++                                assignment_schema=self.api_execution.assignment_schema(resource_id)):
++                            key = entry['name'], kind
++                            if key not in contracts:
++                                contracts[key] = entry
++                            else:
++                                prior = contracts[key]
++                                prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
++                                prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
++                    if ('bvbrc_proteome', '1') in service.scientific_adapters:
++                        from .bvbrc_proteome_tool_info import proteome_tool_contracts
++                        for entry in proteome_tool_contracts(resource_id=resource_id,
+                                 assignment_schema=self.api_execution.assignment_schema(resource_id)):
+                             key = entry['name'], kind
+                             if key not in contracts:
+@@ -884,6 +895,10 @@
+             result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+             result.update(self.api_execution.alignment_returns.received_facts(context, schema))
+             result.update(self.api_execution.genome_alignment_returns.received_facts(context, schema))
++            proteome = self.api_execution.proteome_returns.received_facts(context, schema)
++            if set(result).intersection(proteome):
++                raise ValueError('received_report_fact_conflict')
++            result.update(proteome)
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
+@@ -910,6 +925,11 @@
+                 if context.role == 'results':
+                     return None
+                 return self.api_execution.genome_alignment_returns.resolve_received(context, reference, namespace)
++            from .bvbrc_proteome_returns import IDENTIFIER_NAMESPACES as PROTEOME_NAMESPACES
++            if namespace in PROTEOME_NAMESPACES:
++                if context.role == 'results':
++                    return None
++                return self.api_execution.proteome_returns.resolve_received(context, reference, namespace)
+             resolved = self.api_execution.appservice.resolve(context, reference, namespace)
+             if resolved is not None:
+                 return resolved
+@@ -928,6 +948,7 @@
+             self.api_execution.phylogeny_returns.validate_received_report(context, form, schema)
+             self.api_execution.alignment_returns.validate_received_report(context, form, schema)
+             self.api_execution.genome_alignment_returns.validate_received_report(context, form, schema)
++            self.api_execution.proteome_returns.validate_received_report(context, form, schema)
+         if self._forwards_bvbrc_reports(context.role):
+             self.api_execution.bvbrc_data.validate_received_report(context, form, schema)
+         if self._forwards_minhash_reports(context.role):
+@@ -978,8 +999,9 @@
+         from .bvbrc_phylogeny_returns import phylogeny_fact_sources
+         from .bvbrc_alignment_returns import alignment_fact_sources
+         from .bvbrc_genome_alignment_returns import genome_alignment_fact_sources
++        from .bvbrc_proteome_returns import proteome_fact_sources
+         return {**homology_fact_sources(), **phylogeny_fact_sources(), **alignment_fact_sources(),
+-            **genome_alignment_fact_sources(), 'bvbrc_appservice_support_refs': {'type': 'array', 'meaning':
++            **genome_alignment_fact_sources(), **proteome_fact_sources(), 'bvbrc_appservice_support_refs': {'type': 'array', 'meaning':
+             'Actually received AppService preparation, Workspace, upload or observation receipts; these are not scientific result acquisitions.',
+             'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {
+                 'type': 'string', 'format': 'reference', 'x-reference-namespace': 'bvbrc_appservice_support'},
+@@ -1025,6 +1047,7 @@
+             references.extend(self.api_execution.phylogeny_returns.record_admission(context, form, schema, operation_key))
+             references.extend(self.api_execution.alignment_returns.record_admission(context, form, schema, operation_key))
+             references.extend(self.api_execution.genome_alignment_returns.record_admission(context, form, schema, operation_key))
++            references.extend(self.api_execution.proteome_returns.record_admission(context, form, schema, operation_key))
+         for name, declared in plain(schema).get('properties', {}).items():
+             if declared.get('x-source') in FAMILY_SOURCES.values():
+                 for row in form[name]:
+@@ -1093,6 +1116,11 @@
+                     return (self.api_execution.genome_alignment_returns.resolve_own(context, reference, namespace)
+                         if context.role == 'results' else
+                         self.api_execution.genome_alignment_returns.resolve_received(context, reference, namespace))
++                from .bvbrc_proteome_returns import IDENTIFIER_NAMESPACES as PROTEOME_NAMESPACES
++                if namespace in PROTEOME_NAMESPACES:
++                    return (self.api_execution.proteome_returns.resolve_own(context, reference, namespace)
++                        if context.role == 'results' else
++                        self.api_execution.proteome_returns.resolve_received(context, reference, namespace))
+                 resolved = self.api_execution.appservice.resolve(context, reference, namespace)
+                 if resolved is not None:
+                     return resolved
+--- /dev/null
++++ b/tests/bvbrc_proteome_host_fixture.py
+@@ -0,0 +1,239 @@
++"""Controlled native transport through the real AppService host and provider.
++
++The transport, selected actions, input records and returned task are synthetic.
++No publication envelope or scientific constructor is replaced by this fixture.
++"""
++from copy import deepcopy
++from dataclasses import replace
++import hashlib
++import json
++from types import SimpleNamespace
++
++from gene_annotation_episode import bvbrc_proteome_bundle_adapter as adapter
++from gene_annotation_episode.bvbrc_proteome_returns import FACT_SOURCES
++from gene_annotation_episode.communication import plain, validate_form
++from gene_annotation_episode.execution_contracts import canonical, digest
++from gene_annotation_episode.execution_episodes import ExecutionEpisodes
++from gene_annotation_episode.runtime import TypedReportContract
++from test_api_bvbrc_appservice import CONFIG, metadata
++from test_bvbrc_appservice_custody import SavedRecords, api_assignment, selector as support_selector
++from test_bvbrc_appservice_host import ProductionDriver
++from test_bvbrc_appservice_inputs import NativeClient, receipt_row
++from test_bvbrc_proteome_bundle_resolution import SOURCE, fixture as provider_fixture, declaration
++from test_bvbrc_proteome_bundle_projection import selected_fields, MEAN
++from test_bvbrc_proteome_native import REFERENCE_HEADER, COMPARISON_HEADER
++
++
++OUTPUT_UUID = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
++
++
++def raw_native(fmt):
++    raw = (SOURCE / 'input_000.bin').read_bytes()
++    if fmt == 'genome_comparison_json_v1':
++        return raw
++    document = json.loads(raw)
++    headers = REFERENCE_HEADER.split('\t') + COMPARISON_HEADER.split('\t')[:10]
++    names = ['same label'] + [''] * 11 + ['same label'] + [''] * 9
++    rows = [names, headers]
++    for i, row in enumerate(document['feature_matches']):
++        row['ref_genome_gene'] = i
++        rows.append([str(row.get(key, '')) for key in headers])
++    return ('\n'.join('\t'.join(row) for row in rows) + '\n').encode()
++
++
++class ControlledClient(NativeClient):
++    def __init__(self):
++        super().__init__()
++        self.native_complete, self.native_status = True, 200
++
++    def download(self, url, *, byte_range=None):
++        result = super().download(url, byte_range=byte_range)
++        if url.endswith('/native'):
++            result = replace(result, transport={**result.transport,
++                'body_complete': self.native_complete, 'status': self.native_status})
++        return result
++
++
++class ProteomeDriver(ProductionDriver):
++    def __init__(self, store, directory):
++        self.saved, self.store = SavedRecords(store), store
++        self.config = deepcopy(CONFIG)
++        self.config['scientific_adapters'] = [{'adapter_id': adapter.ADAPTER_ID,
++            'adapter_version': adapter.ADAPTER_VERSION, 'implementation_sha256': adapter.implementation_sha256()}]
++        self.family = ExecutionEpisodes(None, store=store, directory=directory, run_id=self.saved.run_id,
++            resources={'selected-api': self.config}, initial_information={},
++            tool_registry=SimpleNamespace(store=store, clients={}), handoff_unit=2, acquired_record_unit=3,
++            log_window_bytes=1024, log_roles=('stdout', 'stderr'))
++        self.api, self.client = self.family.api_execution, ControlledClient()
++        self.service = self.api.services['selected-api']
++        self.service.client = self.client
++        self.records, self.custody = self.api.appservice.records, self.api.appservice.custody
++        self.last_outcome = None
++
++    def form_schema(self, sources=FACT_SOURCES):
++        descriptors = self.family._appservice_sources()
++        properties = {f'fact{i}': deepcopy(descriptors[source]['report_schema']) for i, source in enumerate(sources)}
++        return {'type': 'object', 'properties': properties, 'required': list(properties), 'additionalProperties': False}
++
++    def content(self, reference, field='artifact_ref'):
++        source = self.store.get(reference)
++        raw = self.store.get_artifact(source[field])
++        return dict(source_ref=reference, artifact_field=field, artifact_ref=source[field],
++                    sha256=hashlib.sha256(raw).hexdigest(), byte_count=len(raw))
++
++    def freeze_refs(self, parent, child, references):
++        schema = plain(child.request)['report_contract']['measurements']['schema']
++        form = {'refs': references}
++        validate_form(form, schema, lambda ref, namespace=None: self.custody.possession(child, ref) is not None)
++        self.freeze_form(parent, child, form, {'committed_record_refs': references})
++        self.saved.receipts.receive(parent.episode_id, references, kind='child_form', source_index=int(child.path[-1][1][6:]))
++
++    def freeze_form(self, parent, child, form, facts):
++        index = int(child.path[-1][1][6:])
++        self.saved.journal.save('runtime_forms', {'episode_id': child.episode_id,
++            'facts': canonical(facts), 'form': canonical(form)})
++        self.saved.journal.save('runtime_report_attempts', {'parent_episode_id': parent.episode_id,
++            'decision_index': index, 'delivery_ref': 'delivery_' + digest([parent.episode_id, index])[:24],
++            'child_episode_id': child.episode_id, 'contract': canonical(plain(child.request)['report_contract']),
++            'form': canonical(form), 'failure': None})
++
++    def start(self, fmt='genome_comparison_json_v1', *, fields=None, supplementary=True):
++        self.fmt, self.schema = fmt, self.form_schema()
++        self.outer_root = self.saved.root
++        self.grandparent = self.saved.child(self.outer_root, 'scientific_process', {}, 0, schema=self.schema)
++        self.parent = self.saved.child(self.grandparent, 'scientific_process', {}, 0, schema=self.schema)
++        self.saved.root = self.parent
++        self.query = {'version': 'bvbrc_appservice_request_v1', 'effect_contract': 'selected_api_effects_v1',
++            'required_application_id': 'GenomeComparison', 'parameters': {
++                'genome_ids': [], 'user_genomes': ['/unused.faa', '/ref.faa', '/subject.faa'],
++                'user_feature_groups': [], 'reference_genome_index': 2,
++                'output_path': '/controlled/proteome', 'output_file': 'selected'},
++            'start_parameters': {}, 'definition_inputs': [], 'input_bindings': [], 'workspace_targets': []}
++        launch_assignment = {'version': 'execution_launch_assignment_v1',
++            'requests': {'selected-api': api_assignment(self.query)}, 'immutable_input_versions': [],
++            'constraints': {'allowed_kinds': ['api']}}
++        self.launch = self.saved.child(self.parent, 'launch', launch_assignment, 10)
++        self.saved.receipts.receive(self.launch.episode_id, self.custody.initial_references(self.launch), kind='initial')
++        self.context = self.saved.child(self.launch, 'launch_api', api_assignment(self.query), 0)
++        self.api._manifest(self.context)
++        preparation = self.call('prepare', {'definition': {'kind': 'packaged', 'required_application_id': 'GenomeComparison'}})
++        self.client.value = {'id': '123', 'application_id': 'GenomeComparison', 'state_code': 'Q'}
++        self.handoff = self.call('submit', {'preparation_receipt_ref': preparation['source_ref'], 'input_evidence_refs': []})
++        source = self.handoff['value']['original_task']['submission_source_ref']
++        self.submission_content = self.content(source, 'request_ref')
++        references = [self.handoff['source_ref'], source]
++        self.freeze_refs(self.launch, self.context, references)
++        self.freeze_refs(self.parent, self.launch, references)
++
++        self.support = self.saved.child(self.parent, 'results', {'version': 'execution_results_assignment_v1',
++            'handoff_ref': self.handoff['source_ref'], 'selector': support_selector()}, 20)
++        self.api.initialize(self.support)
++        self.client.value = {'123': {'id': '123', 'application_id': 'GenomeComparison', 'state_code': 'C'}}
++        self.status = self.call('status', {'handoff_ref': self.handoff['source_ref']}, context=self.support)
++        self.info = self.call('task_info', {'handoff_ref': self.handoff['source_ref'], 'file': 'job_result_id'}, context=self.support)
++        self.freeze_refs(self.parent, self.support, [self.info['source_ref']])
++
++        case = provider_fixture(supplementary=False)
++        parameters = deepcopy(case['parameters'])
++        document = parameters['native_documents'][0]
++        document.pop('source_ref')
++        document.pop('raw_artifact_ref')
++        document.update(requirement_id='native', declared_format=declaration(fmt))
++        parameters['analysis_id'] = 'controlled-proteome-host'
++        self.selected = support_selector()
++        self.selected['supplied_metadata'] = [dict(content=self.content(self.info['source_ref']), pointer='/value')]
++        self.selected.update(endpoint='requested_projection', supplied_contents=[],
++            adapter={'adapter_id': adapter.ADAPTER_ID, 'adapter_version': adapter.ADAPTER_VERSION, 'parameters': parameters},
++            requested_schema=adapter.requested_form_schema(selected_fields() if fields is None else fields))
++        self.selected['requirements'] = [dict(requirement_id='native', role='proteome_native_projection', required=True,
++            declared_format=declaration(fmt), producer_rule_evidence=None, exact_object=None)]
++        if supplementary:
++            templates = json.loads((SOURCE / 'SUPPLIED_VALUES.json').read_text())
++            supplied = dict(version='bvbrc_proteome_supplied_data_v1', original_input_index={
++                'mode': 'construct', 'parameter_source': {'kind': 'submitted', 'source_field': {
++                    'source_ref': source, 'sha256': self.submission_content['sha256'],
++                    'pointer': '/prepared/native_operands/call/rpc_request/params/1', 'row_ordinal': None, 'field_name': None}},
++                'additional_parameter_sources': []}, inventories=[], feature_snapshots=[], genome_snapshots=[],
++                sequence_snapshots=[], execution_links=[], native_links=[], metadata_links=[], representation_links=[])
++            self.selected['supplied_contents'].append(self.submission_content)
++            for number, (group, key) in enumerate((('inventories', 'ref'), ('inventories', 'subject'),
++                ('feature_snapshots', 'feature'), ('genome_snapshots', 'genome'), ('sequence_snapshots', 'sequence')), 2):
++                raw = (SOURCE / f'input_{number:03d}.bin').read_bytes()
++                content = self.saved.source(raw, accession='controlled-supplied-' + key)
++                self.saved.own(self.parent, content['source_ref'], index=number + 9)
++                self.selected['supplied_contents'].append(content)
++                original = templates[group][number - 2 if group == 'inventories' else 0]
++                row = dict(mode='raw', declared_format=original['format'],
++                    source=dict(kind='supplied_snapshot', content=content, completeness_evidence=None))
++                if group == 'inventories': row['inventory_key'] = original['inventory_key']
++                else:
++                    row.update(snapshot_key=original['snapshot_key'], population=original['population'])
++                    if group == 'feature_snapshots': row['coordinate_convention'] = original['coordinate_convention']
++                supplied[group].append(row)
++            content = self.saved.source(canonical(supplied).encode(), accession='controlled-supplied-selection')
++            self.saved.own(self.parent, content['source_ref'], index=21)
++            evidence = dict(content=content, pointer='')
++            parameters['supplied_data_evidence'] = evidence
++            self.selected['supplied_metadata'].append(evidence)
++            self.supplied = supplied
++        self.context = self.saved.child(self.parent, 'results', {'version': 'execution_results_assignment_v1',
++            'handoff_ref': self.handoff['source_ref'], 'selector': self.selected}, 22, schema=self.schema)
++        self.frozen_assignment = deepcopy(plain(self.context.assignment))
++        self.api.initialize(self.context)
++        return self.context
++
++    def acquire_manifest(self, *, native_task='123'):
++        obj = {'kind': 'task_info_object', 'receipt_ref': self.info['source_ref']}
++        self.client.value = [[metadata('/controlled/proteome/manifest', type='job_result', size=None)['native_row']]]
++        observed = self.call('workspace_metadata', {'objects': [obj], 'options': {}}, context=self.context)
++        obj = receipt_row(observed)
++        self.client.value = ['https://controlled.invalid/manifest']
++        cap = self.call('download_capability', {'objects': [obj], 'generation': 0,
++            'predecessor_receipt_ref': None}, context=self.context)
++        manifest = {'id': native_task, 'app': {'id': 'GenomeComparison'}, 'parameters': deepcopy(self.query['parameters']),
++            'success': 1, 'output_files': [['/controlled/proteome/native', OUTPUT_UUID]]}
++        self.client.body = canonical(manifest).encode()
++        self.manifest = self.call('download', {'object': obj, 'capability': {'kind': 'acquired',
++            'receipt_ref': cap['source_ref'], 'input_index': 0}, 'byte_range': None,
++            'requirement_ids': [], 'role': 'task_manifest', 'declared_format': declaration('json')}, context=self.context)
++        return self.manifest
++
++    def native_arguments(self):
++        obj = {'kind': 'manifest_member', 'manifest_receipt_ref': self.manifest['source_ref'], 'output_index': 0}
++        self.client.value = ['https://controlled.invalid/native']
++        cap = self.call('download_capability', {'objects': [obj], 'generation': 0,
++            'predecessor_receipt_ref': None}, context=self.context)
++        self.native_args = {'object': obj, 'capability': {'kind': 'acquired', 'receipt_ref': cap['source_ref'], 'input_index': 0},
++            'byte_range': None, 'requirement_ids': ['native'], 'role': 'proteome_native_projection', 'declared_format': declaration(self.fmt)}
++        return self.native_args
++
++    def acquire_native(self, *, raw=None):
++        args = self.native_arguments()
++        self.client.body = raw_native(self.fmt) if raw is None else raw
++        self.native = self.call('download', args, context=self.context)
++        return self.publication()
++
++    def publication(self):
++        self.body = self.api.read_result(self.last_outcome['result']['source_ref'], self.context.scope)
++        saved = self.body['publication']['adapter_result']
++        self.sheet = self.api.appservice.publications.read_content_source(saved['sheet_content']['source_ref'], self.context.scope)
++        self.components = (None if saved['components_content'] is None else
++            self.api.appservice.publications.read_content_source(saved['components_content']['source_ref'], self.context.scope))
++        return self.body
++
++    def admit_numeric(self, *, to_grandparent=False):
++        child, parent = (self.parent, self.grandparent) if to_grandparent else (self.context, self.parent)
++        facts = self.family.received_report_facts(child) if to_grandparent else self.family.facts(child, {})
++        form = {name: facts[node['x-source']] for name, node in self.schema['properties'].items()}
++        contract = TypedReportContract('Return original requested measurements', self.schema,
++            lambda ref, namespace=None: self.family.resolve(child, ref, namespace),
++            lambda value: self.family.validate_received_report(child, value, self.schema))
++        admitted = contract.admit(form, audit_identifiers=())
++        assert admitted is not None
++        self.freeze_form(parent, child, form, facts)
++        index = int(child.path[-1][1][6:])
++        key = f'{parent.run_id}:{parent.episode_id}:{index}:typed_form'
++        refs = self.family.received_form_references(parent, form, self.schema, key)
++        self.saved.receipts.receive(parent.episode_id, refs, kind='child_form', source_index=index)
++        self.family.validate_received_report(parent, form, self.schema)
++        return form, key, refs
+--- a/tests/test_bvbrc_appservice_contracts.py
++++ b/tests/test_bvbrc_appservice_contracts.py
+@@ -49,8 +49,13 @@
+     assert len(original) == 72
+     assert set(definitions) - set(original) == {"ResolvedObject", "ResolvedUpload", "ResolvedCapability", "ResolvedInputs"}
+     for name in original:
+-        if name not in {"BoundInputs", "WorkspaceObject", "ResultSelector", "ArtifactBundle", "ContentBinding"}:
++        if name not in {"BoundInputs", "WorkspaceObject", "ResultSelector", "ArtifactBundle", "ContentBinding", "ArtifactMember"}:
+             assert definitions[name] == original[name]
++    # Prospective pre-acquisition selection amendment; original bytes stay fixed.
++    member = deepcopy(definitions["ArtifactMember"])
++    assert member["properties"].pop("requirement_ids") == {
++        "type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": True}
++    assert member == original["ArtifactMember"]
+     # Prospective request-content amendment; the immutable original is retained.
+     content = deepcopy(definitions["ContentBinding"])
+     enum = content["properties"]["artifact_field"]["enum"]
+--- /dev/null
++++ b/tests/test_bvbrc_proteome_catalog_integration.py
+@@ -0,0 +1,110 @@
++"""Configured resource owners and real frozen library; no service/model call."""
++from copy import deepcopy
++from types import SimpleNamespace
++
++import pytest
++from jsonschema import Draft202012Validator
++
++from gene_annotation_episode import bvbrc_proteome_bundle_adapter as adapter
++from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters, selected_adapter
++from gene_annotation_episode.bvbrc_proteome_returns import FACT_SOURCES
++from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
++from gene_annotation_episode.episode_services import WorkflowServices
++from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
++from gene_annotation_episode.resource_tool_information import bound_resource_tool_contracts
++from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
++from test_api_bvbrc_appservice import CONFIG
++from test_bvbrc_homology_tool_info import factory
++from test_bvbrc_proteome_tool_info import launch, results
++
++
++def configuration(provider='bvbrc_proteome', pin=None):
++    value = deepcopy(CONFIG)
++    value['scientific_adapters'] = ([] if provider is None else [{
++        'adapter_id': provider, 'adapter_version': '1',
++        'implementation_sha256': adapter.implementation_sha256() if pin is None else pin}])
++    return value
++
++
++def entry(family):
++    return next(row for row in bound_resource_tool_contracts(family)
++                if row['name'] == 'bvbrc.proteome_comparison')
++
++
++def test_actual_registration_uses_exact_pin_and_no_implicit_choice(factory):
++    create, _ = factory
++    family = create({'selected-api': configuration()})
++    service = family.api_execution.services['selected-api']
++    selection = results()['selector']['adapter']
++    assert selected_adapter(service, selection) == (adapter, adapter.implementation_sha256())
++    assert selected_adapter(service, None) is None
++    with pytest.raises(ValueError, match='appservice_adapter_implementation_conflict'):
++        create({'selected-api': configuration(pin='0' * 64)})
++    with pytest.raises(ValueError, match='appservice_adapter_configuration_conflict'):
++        bind_adapters(configuration()['scientific_adapters'] * 2)
++
++
++@pytest.mark.parametrize('provider', [None, 'unknown_provider'])
++def test_unbound_and_unknown_provider_expose_no_scientific_route(factory, provider):
++    create, registry = factory
++    family = create({'selected-api': configuration(provider)})
++    assert not any(row['name'] == 'bvbrc.proteome_comparison' for row in family.resource_tool_contracts())
++    assert ('bvbrc_proteome', '1') not in family.api_execution.services['selected-api'].scientific_adapters
++    assert 'bvbrc.proteome_comparison' not in registry.catalog()
++
++
++def test_actual_assignment_result_contract_and_eight_sources(factory):
++    create, registry = factory
++    family = create({'selected-api': configuration()})
++    row = entry(family)
++    validator = Draft202012Validator(row['input_schema'])
++    for payload in (launch(), results()):
++        assert validator.is_valid(payload), list(validator.iter_errors(payload))
++    assert family.api_execution.validate_assignment(launch()) == launch()
++    assert family.api_execution.services['selected-api'].result_catalog(launch()['request'], results()['selector'])
++    assert set(FACT_SOURCES) <= set(family.fact_sources('results'))
++    assert set(FACT_SOURCES) <= set(family.received_report_sources('scientific_process'))
++    assert set(FACT_SOURCES) <= set(family.received_report_sources('annotation'))
++    assert family.received_report_sources('launch') == {}
++    assert row['name'] not in registry.catalog()
++
++
++def test_multiple_explicit_resources_survive_real_library_and_service_catalog(factory, tmp_path):
++    create, tools = factory
++    family = create({'first-api': configuration(), 'second-api': configuration()})
++    row = entry(family)
++    assert {route['resource_id'] for route in row['invocation_route']['routes']} == {'first-api', 'second-api'}
++    assert len(row['invocation_route']['routes']) == 4
++    for resource in ('first-api', 'second-api'):
++        payload = launch()
++        payload['resource_id'] = resource
++        assert Draft202012Validator(row['input_schema']).is_valid(payload)
++    bindings = EpisodeBindingRegistry([family])
++    workflow = SimpleNamespace(tools=tools, episode_bindings=bindings,
++        scientific_process_binding=SimpleNamespace(child_roles=lambda _: ('launch', 'results')))
++    catalog = WorkflowServices(workflow).tool_information_catalog({})
++    actual = next(item for item in catalog if item['name'] == row['name'])
++    assert actual == row
++    resource_catalogs = {}
++    for item in catalog:
++        resource_catalogs.setdefault(item['resources'], []).append(item)
++    library = ScientificToolLibrary.freeze(tmp_path / 'frozen', catalog=[], tool_info=True,
++        resource_catalogs=resource_catalogs)
++    selection = [{'name': row['name'], 'resources': 'api'}]
++    assert library.parent_tool_info([row]) == [{key: row[key] for key in ('name', 'description', 'resources')}]
++    assert library.resolve_tool_info(selection, [row]) == [{key: row[key] for key in
++        ('name', 'description', 'resources', 'instructions')}]
++    assert library.resolve_invocations(selection, [row]) == [row]
++    assert ScientificToolLibrary(tmp_path / 'frozen').resolve_invocations(selection, [row]) == [row]
++
++
++def test_actual_factory_reconstruction_retains_configured_provider_contract(factory, tmp_path):
++    _, registry = factory
++    first = ExecutionServiceFactory(resources={'selected-api': configuration()}, initial_information={},
++        handoff_unit=2, acquired_record_unit=3, monitoring_information_unit=1)
++    restored = ExecutionServiceFactory.from_record(first.as_record())
++    services = restored(registry.store, run_id='proteome-factory', directory=tmp_path / 'factory',
++        tool_registry=registry)
++    names = [row['name'] for row in services.resource_tool_catalogs['api']]
++    assert names.count('bvbrc.proteome_comparison') == 1
++    assert first.as_record() == restored.as_record()
+--- /dev/null
++++ b/tests/test_bvbrc_proteome_document_selection.py
+@@ -0,0 +1,168 @@
++"""Pre-acquisition selection over real pure constructors; host tests are separate."""
++from copy import deepcopy
++
++import pytest
++
++from gene_annotation_episode import bvbrc_proteome_bundle_contracts as c
++from gene_annotation_episode.bvbrc_appservice_contracts import ContractValidationError, validate_contract
++from gene_annotation_episode.bvbrc_proteome_bundle_projection import validate_saved_projection
++from test_bvbrc_proteome_bundle_resolution import fixture, consume, codes
++from test_bvbrc_appservice_bundle_values import fixture as acquisition_fixture, dependency, bundle
++from test_api_bvbrc_appservice import harness
++
++
++def selected_case():
++    case = fixture(supplementary=False)
++    document = case['parameters']['native_documents'][0]
++    document.pop('source_ref')
++    document.pop('raw_artifact_ref')
++    document['requirement_id'] = 'native'
++    case['bundle']['artifacts'][0]['requirement_ids'] = ['native']
++    return case
++
++
++def saved_check(case, result, **overrides):
++    args = dict(facts=result['facts'], status=result['status'],
++        missing_requirements=tuple(result['missing_requirements']), diagnostics=tuple(result['diagnostics']),
++        requested_form=case['requested_form'], parameters=case['parameters'],
++        original_task=case['bundle']['original_task'], bundle_sha256=c.digest(case['bundle']), bundle=case['bundle'])
++    args.update(overrides)
++    return validate_saved_projection(result['sheet'], result['components'], **args)
++
++
++def test_requirement_selection_resolves_actual_content_and_retains_exact_source_compatibility():
++    logical = selected_case()
++    exact = fixture(supplementary=False)
++    result, historical = consume(logical), consume(exact)
++    assert result['facts'] == historical['facts']
++    assert result['facts']['identity_mean']['cell']['value'] == .4375
++    assert result['facts']['endpoint_mean']['cell']['value'] == .625
++    assert result['sheet']['input_resolution'][0]['content'] == historical['sheet']['input_resolution'][0]['content']
++    assert saved_check(logical, result)['facts'] == result['facts']
++    assert saved_check(exact, historical, bundle=None)['facts'] == historical['facts']
++    with pytest.raises(c.ProteomeBundleError, match='saved_identity_conflict'):
++        saved_check(logical, result, bundle=None)
++
++
++@pytest.mark.parametrize('change', ['both_variants', 'empty', 'unknown_field', 'missing_format'])
++def test_document_union_is_closed_and_disjoint(change):
++    case = selected_case()
++    document = case['parameters']['native_documents'][0]
++    if change == 'both_variants':
++        document.update(source_ref='future', raw_artifact_ref='future')
++    elif change == 'empty': document['requirement_id'] = ''
++    elif change == 'unknown_field': document['fallback'] = 'latest'
++    else: document.pop('declared_format')
++    with pytest.raises(c.ProteomeBundleError, match='parameters_invalid'):
++        c.validate_parameters(case['parameters'])
++
++
++@pytest.mark.parametrize('change,code', [
++    ('unknown', 'document_missing'), ('absent', 'document_missing'),
++    ('role', 'artifact_binding_conflict'), ('format', 'artifact_format_incompatible'),
++    ('multiple', 'document_ambiguous'), ('duplicate_selection', 'document_ambiguous'),
++    ('duplicate_exact', 'document_ambiguous'), ('hash', 'artifact_digest_mismatch'),
++    ('range', 'nonzero_range_unsupported')])
++def test_requirement_selection_never_guesses_an_alternative(change, code):
++    case = selected_case()
++    member = case['bundle']['artifacts'][0]
++    if change == 'unknown': case['parameters']['native_documents'][0]['requirement_id'] = 'unknown'
++    elif change == 'absent': member.pop('requirement_ids')
++    elif change == 'role': member['role'] = 'task_manifest'
++    elif change == 'format': member['declared_format']['format'] = 'json'
++    elif change == 'multiple': case['bundle']['artifacts'].append(deepcopy(member))
++    elif change in {'duplicate_selection', 'duplicate_exact'}:
++        other = deepcopy(case['parameters']['native_documents'][0])
++        other['document_id'] = 'other'
++        if change == 'duplicate_exact':
++            other.pop('requirement_id')
++            other.update(source_ref=member['source_ref'], raw_artifact_ref=member['raw_artifact_ref'])
++        case['parameters']['native_documents'].append(other)
++    elif change == 'hash': member['sha256'] = '0' * 64
++    else: member['transfer'].update(object_complete='no', requested_range=[10, None], observed_range=None)
++    result = consume(case)
++    assert 'proteome_' + code in codes(result)
++    assert result['facts']['identity_mean']['availability'] == 'unavailable'
++    assert saved_check(case, result)['facts'] == result['facts']
++
++
++def test_wrong_task_and_incomplete_bytes_keep_distinct_meanings():
++    case = selected_case()
++    case['bundle']['artifacts'][0]['task_association']['task_id'] = 'wrong'
++    with pytest.raises(c.ProteomeBundleError, match='original_task_conflict'):
++        consume(case)
++    case = selected_case()
++    case['bundle']['artifacts'][0]['transfer'].update(body_complete=False, object_complete='no')
++    result = consume(case)
++    assert result['facts']['identity_mean']['cell']['value'] == .4375
++    assert result['sheet']['native_results'][0]['value']['source']['body_complete'] is False
++    assert result['missing_requirements']
++    saved_check(case, result)
++
++
++@pytest.mark.parametrize('change', ['membership', 'source', 'primary', 'hash', 'task', 'complete', 'role', 'format', 'range'])
++def test_saved_membership_identity_and_transfer_tampering_rejected(change):
++    case = selected_case()
++    result = consume(case)
++    if change == 'membership': case['bundle']['artifacts'][0]['requirement_ids'] = ['other']
++    elif change == 'source': result['sheet']['input_resolution'][0]['content']['source_ref'] = 'other'
++    elif change == 'primary': result['sheet']['native_sheet_result']['value']['primary_source_ref'] = 'other'
++    elif change == 'hash': case['bundle']['artifacts'][0]['sha256'] = '0' * 64
++    elif change == 'task': case['bundle']['original_task']['task_id'] = 'other'
++    elif change == 'role': case['bundle']['artifacts'][0]['role'] = 'wrong'
++    elif change == 'format': case['bundle']['artifacts'][0]['declared_format']['format'] = 'json'
++    elif change == 'range': case['bundle']['artifacts'][0]['transfer'].update(object_complete='no', requested_range=[10, None])
++    else: case['bundle']['artifacts'][0]['transfer'].update(body_complete=False, object_complete='no')
++    # Rehash the altered bundle as an adversarial shape-valid value. The pure
++    # validator must check the relationship, not merely the earlier digest.
++    result['sheet']['bundle_sha256'] = c.digest(case['bundle'])
++    with pytest.raises(c.ProteomeBundleError): saved_check(case, result)
++
++
++def test_actual_member_membership_survives_acquisition_and_bundle(harness):
++    case = acquisition_fixture(harness)
++    acquired = dependency(case)
++    assert acquired['receipt']['artifact']['requirement_ids'] == ['r1']
++    assert bundle(case, [acquired])['artifacts'][0]['requirement_ids'] == ['r1']
++    acquired['receipt']['artifact'].pop('requirement_ids')
++    historical = bundle(case, [acquired])
++    assert 'requirement_ids' not in historical['artifacts'][0]
++
++
++@pytest.mark.parametrize('change', ['member', 'receipt', 'selected'])
++def test_acquisition_receipt_member_and_selected_membership_must_agree(harness, change):
++    case = acquisition_fixture(harness)
++    acquired = dependency(case)
++    if change == 'member': acquired['receipt']['artifact']['requirement_ids'] = []
++    elif change == 'receipt': acquired['receipt']['requirement_ids'] = []
++    else:
++        acquired['receipt']['snapshot']['selected_operands']['native_operands']['arguments']['requirement_ids'] = []
++    with pytest.raises(ContractValidationError): bundle(case, [acquired])
++
++
++@pytest.mark.parametrize('value', [['r1', 'r1'], [''], [2], 'r1'])
++def test_membership_array_has_unique_nonempty_strings(value):
++    member = selected_case()['bundle']['artifacts'][0]
++    member['requirement_ids'] = value
++    with pytest.raises(ContractValidationError): validate_contract('ArtifactMember', member)
++
++
++def test_requirement_variant_requires_actual_bundle_even_for_empty_saved_projection():
++    case = selected_case()
++    args = dict(facts={}, status='invalid', missing_requirements=(), diagnostics=(),
++        requested_form=case['requested_form'], parameters=case['parameters'],
++        original_task=case['bundle']['original_task'], bundle_sha256=c.digest(case['bundle']))
++    with pytest.raises(c.ProteomeBundleError, match='saved_identity_conflict'):
++        validate_saved_projection(None, None, **args)
++    assert validate_saved_projection(None, None, bundle=case['bundle'], **args)['status'] == 'invalid'
++
++
++def test_missing_secondary_requirement_preserves_available_primary_facts():
++    case = selected_case()
++    other = deepcopy(case['parameters']['native_documents'][0])
++    other.update(document_id='missing-secondary', requirement_id='not-acquired')
++    case['parameters']['native_documents'].append(other)
++    result = consume(case)
++    assert result['facts']['identity_mean']['cell']['value'] == .4375
++    assert 'proteome_document_missing' in codes(result)
++    assert saved_check(case, result)['facts'] == result['facts']
+--- /dev/null
++++ b/tests/test_bvbrc_proteome_host_integration.py
+@@ -0,0 +1,317 @@
++"""Real configured host/publication/typed-return integration, controlled transport.
++
++No live service, configured-model presentation or complete Workflow is claimed.
++"""
++from copy import deepcopy
++from dataclasses import replace
++import importlib
++import json
++import os
++from pathlib import Path
++
++import pytest
++
++from gene_annotation_episode import bvbrc_proteome_bundle_adapter as adapter
++from gene_annotation_episode.bvbrc_proteome_returns import FACT_SOURCES
++from gene_annotation_episode.bvbrc_proteome_fact_contracts import encode_reference
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.execution_contracts import digest
++from gene_annotation_episode.practical_execution_state import _read
++from gene_annotation_episode.bvbrc_proteome_calculators import calculate_native_components
++from gene_annotation_episode.state import Store
++from bvbrc_proteome_host_fixture import ProteomeDriver, raw_native, MEAN
++
++
++@pytest.fixture
++def driver(tmp_path, monkeypatch):
++    def forbidden(*args, **kwargs):
++        pytest.fail('controlled proteome test attempted live transport')
++    monkeypatch.setattr('socket.create_connection', forbidden)
++    monkeypatch.setattr('urllib.request.OpenerDirector.open', forbidden)
++    with Store(tmp_path / 'state') as store:
++        yield ProteomeDriver(store, tmp_path)
++
++
++@pytest.mark.parametrize('fmt', ['genome_comparison_json_v1', 'genome_comparison_tsv_v1'])
++def test_actual_host_native_numbers_original_submission_and_two_parent_boundaries(driver, fmt):
++    d = driver
++    fields = __import__('test_bvbrc_proteome_bundle_projection').selected_fields()
++    fields['endpoint'] = {**MEAN, 'summary': 'subject_endpoint_difference_summary'}
++    d.start(fmt, fields=fields)
++    assert d.service.scientific_adapters[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)][0] is adapter
++    selected = d.frozen_assignment['selector']['adapter']['parameters']['native_documents'][0]
++    assert set(selected) == {'document_id', 'requirement_id', 'role', 'declared_format', 'source_contract'}
++    d.acquire_manifest()
++    assert d.api._completion(d.context) is None
++    body = d.acquire_native()
++    assert plain(d.context.assignment) == d.frozen_assignment
++    values = body['publication']['adapter_result']['facts']
++    assert values['mean']['cell']['value'] == .4375
++    assert values['endpoint']['cell']['value'] == .625
++    assert values['zero']['cell']['value'] == 0
++    assert values['denominator']['cell']['value'] is None
++    assert values['ratio']['denominator']['value'] is None
++    assert values['inventory_count']['cell']['value'] == 2
++    assert values['association']['reference_identifier'] == 'r1'
++    assert values['association']['subject_identifier'] == 's1'
++    assert values['association']['reference_join_ref'] is None
++    assert values['association']['subject_join_ref'] is None
++    assert values['selection']['selection'] == 'pass'
++    assert d.sheet['input_index_result']['value']['reference_original_index'] == 2
++    assert d.sheet['input_index_result']['value']['parameter_source']['kind'] == 'submitted'
++    assert len(d.sheet['inventory_results']) == 2
++    assert len(d.sheet['feature_results']) == len(d.sheet['genome_results']) == len(d.sheet['sequence_results']) == 1
++    assert d.sheet['joins_result']['value']['requested_native_links'] == []
++    assert all(row['input_record_count']['value'] is None for row in d.sheet['joins_result']['value']['track_bindings'])
++    assert body['bundle']['artifacts'][0]['requirement_ids'] == ['native']
++    assert d.sheet['input_resolution'][0]['content']['source_ref'] == d.native['value']['artifact']['source_ref']
++    assert d.store.get_artifact(d.native['value']['artifact']['raw_artifact_ref']) == raw_native(fmt)
++    assert body['publication']['adapter_result']['status'] == 'partial'
++    assert d.api._completion(d.context) is None
++    form, _, refs = d.admit_numeric()
++    assert set(refs) == {body['source_ref'], d.native['value']['artifact']['source_ref'],
++        d.sheet['inventory_results'][0]['value']['source']['content']['source_ref']}
++    assert set(d.family.received_report_facts(d.parent)) == set(FACT_SOURCES)
++    forwarded, _, more_refs = d.admit_numeric(to_grandparent=True)
++    assert forwarded == form and more_refs == refs
++    assert d.family.received_report_facts(d.grandparent) == d.family.received_report_facts(d.parent)
++    assert d.family.received_report_facts(d.outer_root) == {}  # No requested form means no expansion.
++    assert d.store.db.execute('SELECT COUNT(*) FROM runtime_observations').fetchone()[0] == 0
++    if fmt == 'genome_comparison_json_v1' and os.environ.get('PROTEOME_EXAMPLE_DIRECTORY'):
++        directory = Path(os.environ['PROTEOME_EXAMPLE_DIRECTORY'])
++        directory.mkdir(parents=True, exist_ok=True)
++        for name, value in [('ASSIGNMENT', d.frozen_assignment), ('PUBLICATION', body), ('SHEET', d.sheet),
++            ('COMPONENTS', d.components), ('TYPED_FORM', form), ('SUPPLIED_DATA', d.supplied),
++            ('NATIVE_ACQUISITION', d.native), ('SUBMISSION', d.handoff),
++            ('COMMANDS', d.client.calls), ('RECEIVED', d.family.received_report_facts(d.grandparent))]:
++            (directory / (name + '.json')).write_text(json.dumps(value, indent=2) + '\n')
++        (directory / 'native.json').write_bytes(raw_native(fmt))
++        (directory / 'submitted_request_wrapper.json').write_bytes(d.store.get_artifact(d.submission_content['artifact_ref']))
++
++
++def test_narrow_actual_native_request_completes_with_explicit_missing_dependencies(driver):
++    d = driver
++    d.start(fields={'mean': MEAN})
++    d.acquire_manifest()
++    body = d.acquire_native()
++    saved = body['publication']['adapter_result']
++    assert saved['status'] == 'ok' and saved['facts']['mean']['cell']['value'] == .4375
++    assert saved['missing_requirements']
++    assert body['publication']['requested_form_status'] == 'satisfied'
++    proof = d.api._completion(d.context)
++    assert proof is not None and d.api.verify_completion(d.context, proof)
++    d.admit_numeric()
++
++
++def forbid_scientific_construction(monkeypatch):
++    def forbidden(*args, **kwargs):
++        raise AssertionError('saved replay repeated scientific construction or acquisition')
++    names = {
++        'bvbrc_proteome_native': ['parse_genome_comparison'],
++        'bvbrc_proteome_inputs': ['index_original_inputs', 'read_protein_fasta', 'read_feature_metadata',
++            'read_genome_metadata', 'read_feature_sequences'],
++        'bvbrc_proteome_joins': ['build_native_joins'], 'bvbrc_proteome_sheet': ['build_native_sheet'],
++        'bvbrc_proteome_calculators': ['calculate_native_components'],
++        'bvbrc_proteome_bundle_resolution': ['consume_bundle', 'parse_genome_comparison', 'index_original_inputs',
++            'read_protein_fasta', 'read_feature_metadata', 'read_genome_metadata', 'read_feature_sequences',
++            'build_native_joins', 'build_native_sheet', 'calculate_native_components'],
++        'bvbrc_proteome_bundle_adapter': ['consume_bundle']}
++    for module_name, functions in names.items():
++        module = importlib.import_module('gene_annotation_episode.' + module_name)
++        for name in functions: monkeypatch.setattr(module, name, forbidden)
++    return forbidden
++
++
++def test_saved_replay_and_explicit_recalculation_preserve_original_observations(driver, monkeypatch):
++    d = driver
++    d.start(fields={'mean': MEAN})
++    d.acquire_manifest()
++    body = deepcopy(d.acquire_native())
++    form, key, refs = d.admit_numeric()
++    original = deepcopy(d.last_outcome)
++    actions = [dict(row) for row in d.store.db.execute('SELECT * FROM runtime_actions ORDER BY episode_id,decision_index')]
++    calls = deepcopy(d.client.calls)
++    sheet, components = deepcopy(d.sheet), deepcopy(d.components)
++    forbidden = forbid_scientific_construction(monkeypatch)
++    monkeypatch.setattr(d.client, 'rpc', forbidden)
++    monkeypatch.setattr(d.client, 'download', forbidden)
++    operation = d.native['value']['origin']['operation_key']
++    assert d.invoke(d.context, 'download', d.native_args, operation) == original
++    assert d.api.read_result(body['source_ref'], d.context.scope) == body
++    assert d.family.received_report_facts(d.parent)[FACT_SOURCES[0]] == form['fact0']
++    assert d.family.received_form_references(d.parent, form, d.schema, key) == refs
++    revised = calculate_native_components(sheet['native_sheet_result']['value'], parameters={
++        **sheet['parameters']['calculation_parameters'], 'minimum_identity_fraction': .9})
++    assert components['value']['tracks'][0]['selection_counts']['pass']['value'] == 1
++    assert revised['value']['tracks'][0]['selection_counts']['pass']['value'] == 0
++    assert revised['value']['sheet_sha256'] == components['value']['sheet_sha256']
++    assert d.sheet == sheet and d.components == components and d.client.calls == calls
++    assert [dict(row) for row in d.store.db.execute('SELECT * FROM runtime_actions ORDER BY episode_id,decision_index')] == actions
++    assert d.store.db.execute('SELECT COUNT(*) FROM runtime_observations').fetchone()[0] == 0
++
++
++@pytest.mark.parametrize('later_kind', ['partial', 'empty'])
++def test_latest_recovered_publication_never_revives_old_success(driver, monkeypatch, later_kind):
++    """Two explicit overlapping selections; no model scheduling claim."""
++    d = driver
++    d.start(fields={'mean': MEAN}, supplementary=False)
++    d.acquire_manifest()
++    args = d.native_arguments()
++    _, first_key = d.selection('download', args, context=d.context)
++    _, later_key = d.selection('download', args, context=d.context)
++    publications = d.api.appservice.publications
++    grade = publications._grade
++    d.client.body = b'{"genome_names":{},"feature_matches":[]}' if later_kind == 'partial' else raw_native(d.fmt)
++    d.client.native_complete = later_kind == 'partial'
++    def interrupted(context, inputs, bundle, origin, stamp, *, current_acquisition):
++        # Interrupt after the real acquisition and publication inputs are saved,
++        # before any scientific construction. Recovery restores the real method.
++        if origin['operation_key'] == later_key:
++            raise KeyboardInterrupt()
++        return grade(context, inputs, bundle, origin, stamp, current_acquisition=current_acquisition)
++    monkeypatch.setattr(publications, '_grade', interrupted)
++    with pytest.raises(KeyboardInterrupt): d.invoke(d.context, 'download', args, later_key)
++    later_directory = d.api._manifest(d.context) / 'actions' / digest(later_key)
++    retained = _read(later_directory / 'call_response.json')
++    frozen_inputs = _read(later_directory / 'publication_inputs.json')
++    assert frozen_inputs['prior_acquisition_receipt_refs'] == [d.manifest['source_ref']]
++    monkeypatch.setattr(publications, '_grade', grade)
++    d.client.body, d.client.native_complete = raw_native(d.fmt), True
++    first = d.invoke(d.context, 'download', args, first_key)
++    assert first['status'] == 'completed'
++    d.native = d.records.read(first['result']['support_receipt_ref'])
++    original = deepcopy(d.publication())
++    form, key, refs = d.admit_numeric()
++    proof = d.api._completion(d.context)
++    assert proof['operation_key'] == first_key
++    calls = deepcopy(d.client.calls)
++    later = d.invoke(d.context, 'download', args, later_key)
++    assert later['status'] == 'partial' and d.client.calls == calls
++    publication = _read(later_directory / 'bundle_publication.json')['value']
++    assert publication['completion_proof'] is None
++    assert bool(publication['result_record_refs']) is (later_kind == 'partial')
++    assert d.api._completion(d.context) is None and not d.api.verify_completion(d.context, proof)
++    latest = d.api.facts(d.context, {})[FACT_SOURCES[0]]
++    assert latest == [] if later_kind == 'empty' else latest[0]['value']['cell']['value'] is None
++    assert _read(later_directory / 'call_response.json') == retained
++    assert _read(later_directory / 'publication_inputs.json') == frozen_inputs
++    forbid_scientific_construction(monkeypatch)
++    assert d.api.read_result(original['source_ref'], d.context.scope) == original
++    assert d.family.received_report_facts(d.parent)[FACT_SOURCES[0]] == form['fact0']
++    assert d.family.received_form_references(d.parent, form, d.schema, key) == refs
++    assert form['fact0'][0]['value']['cell']['value'] == .4375
++
++
++def test_required_incomplete_transfer_cannot_complete_narrow_request(driver):
++    d = driver
++    d.start(fields={'mean': MEAN}, supplementary=False)
++    d.acquire_manifest()
++    args = d.native_arguments()
++    d.client.body, d.client.native_complete = raw_native(d.fmt), False
++    d.native = d.call('download', args, context=d.context)
++    directory = d.api._manifest(d.context) / 'actions' / digest(d.native['value']['origin']['operation_key'])
++    publication = _read(directory / 'bundle_publication.json')['value']
++    saved = publication['adapter_result']
++    assert saved['facts']['mean']['cell']['value'] == .4375
++    assert publication['requested_form_status'] == 'partial'
++    assert any(row['reason_code'] == 'download_incomplete' for row in publication['missing_requirements'])
++    assert d.api._completion(d.context) is None
++
++
++def test_wrong_manifest_task_never_reaches_scientific_download(driver):
++    d = driver
++    d.start(fields={'mean': MEAN}, supplementary=False)
++    d.acquire_manifest(native_task='other-task')
++    args = {'objects': [{'kind': 'manifest_member', 'manifest_receipt_ref': d.manifest['source_ref'], 'output_index': 0}],
++        'generation': 0, 'predecessor_receipt_ref': None}
++    calls = deepcopy(d.client.calls)
++    context, key = d.selection('download_capability', args)
++    result = d.invoke(context, 'download_capability', args, key)
++    assert result['status'] == 'invalid' and result['feedback']['code'] == 'task_manifest_mismatch'
++    assert d.client.calls == calls
++
++
++def test_actual_typed_boundary_rejects_wrong_owner_source_values_expansion_and_sibling(driver):
++    d = driver
++    d.start(fields={'mean': MEAN}, supplementary=False)
++    d.acquire_manifest()
++    d.acquire_native()
++    facts = d.family.facts(d.context, {})
++    form = {name: facts[node['x-source']] for name, node in d.schema['properties'].items()}
++    d.family.validate_received_report(d.context, form, d.schema)
++    for key, value in [('run_id', 'wrong-run'), ('episode_id', 'wrong-owner'), ('scope', {}), ('assignment', {})]:
++        with pytest.raises(ValueError):
++            d.api.proteome_returns.facts(replace(d.context, **{key: value}), d.schema)
++    unreceived = d.saved.source(b'controlled source with no received custody')['source_ref']
++    for change in ('value', 'source', 'unrequested'):
++        altered = deepcopy(form)
++        row = altered['fact0'][0]
++        if change == 'value': row['value']['cell']['value'] = .9
++        elif change == 'source': row['source_ref'] = unreceived
++        else:
++            extra = deepcopy(row)
++            extra['field'] = encode_reference('field', d.sheet['analysis_id'], '/facts/unrequested')
++            altered['fact0'].append(extra)
++        with pytest.raises(ValueError): d.family.validate_received_report(d.context, altered, d.schema)
++    assert not d.api.resolve(d.context, unreceived, 'source')
++    sibling = d.saved.child(d.parent, 'results', d.frozen_assignment, 23, schema=d.schema)
++    assert not d.family.resolve(sibling, form['fact0'][0]['field'], 'bvbrc_proteome_field')
++    with pytest.raises(ValueError): d.family.validate_received_report(sibling, form, d.schema)
++    d.admit_numeric()
++
++
++def test_actual_saved_return_rejects_tampered_retained_bundle_and_sheet_bytes(driver):
++    d = driver
++    d.start(fields={'mean': MEAN}, supplementary=False)
++    d.acquire_manifest()
++    body = d.acquire_native()
++    publication = body['publication']
++    targets = [('membership', publication['bundle_content'], body['bundle']),
++        ('source', publication['adapter_result']['sheet_content'], d.sheet),
++        ('primary', publication['adapter_result']['sheet_content'], d.sheet),
++        ('hash', publication['bundle_content'], body['bundle']),
++        ('task', publication['bundle_content'], body['bundle'])]
++    for kind, content, original in targets:
++        changed = deepcopy(original)
++        if kind == 'membership': changed['artifacts'][0]['requirement_ids'] = ['other']
++        elif kind == 'source': changed['input_resolution'][0]['content']['source_ref'] = 'other'
++        elif kind == 'primary': changed['native_sheet_result']['value']['primary_source_ref'] = 'other'
++        elif kind == 'hash': changed['artifacts'][0]['sha256'] = '0' * 64
++        else: changed['original_task']['task_id'] = 'other-task'
++        sha = content['sha256']
++        path = d.store.path / 'artifacts' / sha[:2] / sha
++        retained = path.read_bytes()
++        try:
++            path.write_text(json.dumps(changed))
++            with pytest.raises(ValueError, match='artifact_digest_mismatch'):
++                d.api.proteome_returns.facts(d.context, d.schema)
++        finally:
++            path.write_bytes(retained)
++    assert d.api.proteome_returns.facts(d.context, d.schema)[FACT_SOURCES[0]][0]['value']['cell']['value'] == .4375
++
++
++def test_later_unrelated_recovered_status_preserves_latest_publication_completion(driver, monkeypatch):
++    d = driver
++    d.start(fields={'mean': MEAN}, supplementary=False)
++    d.acquire_manifest()
++    native_args = d.native_arguments()
++    _, native_key = d.selection('download', native_args)
++    status_args = {'handoff_ref': d.handoff['source_ref']}
++    _, status_key = d.selection('status', status_args)
++    rpc = d.client.rpc
++    d.client.value = {'123': {'id': '123', 'application_id': 'GenomeComparison', 'state_code': 'C'}}
++    def interrupted(request):
++        error = KeyboardInterrupt()
++        error.snapshot = rpc(request)
++        raise error
++    monkeypatch.setattr(d.client, 'rpc', interrupted)
++    with pytest.raises(KeyboardInterrupt): d.invoke(d.context, 'status', status_args, status_key)
++    monkeypatch.setattr(d.client, 'rpc', rpc)
++    d.client.body = raw_native(d.fmt)
++    original = d.invoke(d.context, 'download', native_args, native_key)
++    assert original['status'] == 'completed'
++    proof = d.api._completion(d.context)
++    calls = deepcopy(d.client.calls)
++    status = d.invoke(d.context, 'status', status_args, status_key)
++    assert status['status'] == 'completed' and 'publication_ref' not in status['result']
++    assert d.client.calls == calls and d.api._completion(d.context) == proof
+--- /dev/null
++++ b/tests/test_bvbrc_proteome_return_frames.py
+@@ -0,0 +1,176 @@
++"""Actual public return resolvers under the reviewed synchronous form frame.
++
++The existing return fixture supplies a controlled publication envelope over real
++scientific constructors. This file verifies the frame and custody boundary;
++the separate host tests establish actual AppService publication.
++"""
++from contextvars import copy_context
++from copy import deepcopy
++from dataclasses import replace
++
++import pytest
++
++from gene_annotation_episode.bvbrc_proteome_returns import BVBRCProteomeReturns
++from gene_annotation_episode.communication import plain, validate_form, form_with_facts, ReportBoundaryError
++from gene_annotation_episode.form_reference_validation import form_reference_validation
++from gene_annotation_episode.runtime import TypedReportContract
++from test_bvbrc_proteome_returns import run, MEASUREMENTS, MEAN, fact_form
++
++
++def prepared(run):
++    args = run.example({'mean': MEAN})
++    child = run.child(run.saved.root, 'results', args[0], sources=(MEASUREMENTS,))
++    run.publications.add(child, args)
++    schema = plain(child.request)['report_contract']['measurements']['schema']
++    values = run.host.facts(child, schema)
++    form = form_with_facts({}, schema, values)
++    return child, schema, form
++
++
++def counted(monkeypatch, owner, name):
++    actual, calls = getattr(owner, name), []
++    def observe(*args, **kwargs):
++        calls.append((args, kwargs))
++        return actual(*args, **kwargs)
++    monkeypatch.setattr(owner, name, observe)
++    return calls
++
++
++def test_public_own_resolver_reuses_one_form_only_and_semantics_reauthenticate(run, monkeypatch):
++    child, schema, form = prepared(run)
++    calls = counted(monkeypatch, run.host, 'facts')
++    resolve = lambda ref, ns: run.host.resolve_own(child, ref, ns)
++    assert validate_form(form, schema, resolve) == form
++    assert len(calls) == 1
++    assert validate_form(form, schema, resolve) == form
++    assert len(calls) == 2
++    typed = TypedReportContract('Return requested native mean', schema, resolve,
++        lambda value: run.host.validate_received_report(child, value, schema))
++    assert plain(typed.admit(form, audit_identifiers=(child.episode_id,)).as_record()) == form
++    assert len(calls) == 4  # One traversal snapshot plus independent semantic validation.
++    altered = deepcopy(form)
++    altered['f0'][0]['value']['cell']['value'] = .9
++    with pytest.raises(ValueError, match='returned_facts_conflict'):
++        typed.admit(altered, audit_identifiers=(child.episode_id,))
++    assert len(calls) == 6
++
++
++def test_public_resolvers_distinguish_owner_direction_and_changed_original_context(run, monkeypatch):
++    child, schema, form = prepared(run)
++    ref = form['f0'][0]['field']
++    calls = counted(monkeypatch, run.host, 'facts')
++    received = counted(monkeypatch, run.host, 'received_context')
++    other = BVBRCProteomeReturns(run.api)
++    other_calls = counted(monkeypatch, other, 'facts')
++    with form_reference_validation():
++        assert run.host.resolve_own(child, ref, 'bvbrc_proteome_field')
++        assert run.host.resolve_own(replace(child), ref, 'bvbrc_proteome_field')
++        assert other.resolve_own(child, ref, 'bvbrc_proteome_field')
++        assert run.host.resolve_received(run.saved.root, ref, 'bvbrc_proteome_field') is False
++        # This changed request is not the actual commissioned request. Cached
++        # authority from the original context cannot authorize it.
++        request = plain(child.request)
++        request['report_contract']['measurements']['schema'] = fact_form()
++        assert run.host.resolve_own(replace(child, request=request), ref, 'bvbrc_proteome_field') is False
++        assert run.host.resolve_own(replace(child, received_record_refs=('unreceived',)),
++            ref, 'bvbrc_proteome_field')
++    assert len(calls) == 3 and len(other_calls) == 1 and len(received) == 1
++
++
++def test_nested_frames_errors_and_copied_context_expire_with_public_resolver(run, monkeypatch):
++    child, schema, form = prepared(run)
++    ref = form['f0'][0]['field']
++    calls = counted(monkeypatch, run.host, 'facts')
++    resolve = lambda: run.host.resolve_own(child, ref, 'bvbrc_proteome_field')
++    with form_reference_validation():
++        assert resolve()
++        copied = copy_context()
++        with form_reference_validation():
++            assert resolve()
++        assert resolve() and len(calls) == 2
++        with pytest.raises(RuntimeError):
++            with form_reference_validation():
++                assert resolve()
++                raise RuntimeError('controlled nested failure')
++        assert resolve() and len(calls) == 3
++    assert copied.run(resolve) and copied.run(resolve)
++    assert len(calls) == 5
++    bad = deepcopy(form)
++    bad['f0'][0]['field'] += 'not-original'
++    with pytest.raises(ReportBoundaryError):
++        validate_form(bad, schema, lambda ref, ns: run.host.resolve_own(child, ref, ns))
++    assert validate_form(form, schema, lambda ref, ns: run.host.resolve_own(child, ref, ns)) == form
++    assert len(calls) == 7
++
++
++def test_each_source_reference_keeps_possession_check_inside_shared_frame(run, monkeypatch):
++    child, _, form = prepared(run)
++    source = form['f0'][0]['source_ref']
++    actual = run.api.appservice.custody.possession
++    rejected = False
++    def possession(context, ref, **kwargs):
++        if rejected and ref == source:
++            raise ValueError('controlled_source_custody_revoked')
++        return actual(context, ref, **kwargs)
++    monkeypatch.setattr(run.api.appservice.custody, 'possession', possession)
++    with form_reference_validation():
++        assert run.host.resolve_own(child, source, 'execution_result')
++        rejected = True
++        with pytest.raises(ValueError, match='controlled_source_custody_revoked'):
++            run.host.resolve_own(child, source, 'execution_result')
++
++
++def test_later_validation_rejects_changed_saved_value_and_custody(run, monkeypatch):
++    child, schema, form = prepared(run)
++    resolver = lambda ref, ns: run.host.resolve_own(child, ref, ns)
++    assert validate_form(form, schema, resolver) == form
++    source = form['f0'][0]['source_ref']
++    body = run.publications.bodies[source]
++    body['publication']['adapter_result']['facts']['mean']['cell']['value'] = .9
++    with pytest.raises(ValueError, match='saved_projection_invalid'):
++        validate_form(form, schema, resolver)
++
++
++def test_received_public_resolver_reuses_one_frame_and_revalidates_later_admission(run, monkeypatch):
++    args = run.example({'mean': MEAN})
++    scientific = run.child(run.saved.root, 'scientific_process', args[0], sources=(MEASUREMENTS,))
++    child = run.child(scientific, 'results', args[0], sources=(MEASUREMENTS,))
++    run.publications.add(child, args)
++    form, schema, _, _ = run.admit(scientific, child)
++    calls = counted(monkeypatch, run.host, 'received_context')
++    resolver = lambda ref, ns: run.host.resolve_received(scientific, ref, ns)
++    assert validate_form(form, schema, resolver) == form
++    assert len(calls) == 1
++    assert validate_form(form, schema, resolver) == form
++    assert len(calls) == 2
++    # A successful earlier traversal cannot authorize a later changed report.
++    index = int(child.path[-1][1].removeprefix('child_'))
++    run.store.db.execute('UPDATE runtime_report_attempts SET failure=? WHERE run_id=? '
++        'AND parent_episode_id=? AND decision_index=?',
++        ('{}', scientific.run_id, scientific.episode_id, index))
++    with pytest.raises(ReportBoundaryError):
++        validate_form(form, schema, resolver)
++    assert len(calls) == 3
++
++
++def test_failed_authentication_factory_is_not_reused_and_returned_dict_is_detached(run, monkeypatch):
++    child, _, form = prepared(run)
++    ref, values, calls = form['f0'][0]['field'], [], []
++    actual = run.host.facts
++    def observe(*args, **kwargs):
++        calls.append(1)
++        if len(calls) == 1:
++            raise ValueError('controlled_authentication_failure')
++        result = actual(*args, **kwargs)
++        values.append(result)
++        return result
++    monkeypatch.setattr(run.host, 'facts', observe)
++    with form_reference_validation():
++        with pytest.raises(ValueError, match='controlled_authentication_failure'):
++            run.host.resolve_own(child, ref, 'bvbrc_proteome_field')
++        assert run.host.resolve_own(child, ref, 'bvbrc_proteome_field')
++        values[0][MEASUREMENTS].clear()
++        assert run.host.resolve_own(child, ref, 'bvbrc_proteome_field')
++        assert len(calls) == 2
++    assert run.host.resolve_own(child, ref, 'bvbrc_proteome_field')
++    assert len(calls) == 3

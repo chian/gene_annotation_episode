@@ -1,0 +1,301 @@
+E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_original_fasta_bytes_create_target_and_selected_upload_are_retained _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7451f20a6090>, _basetemp=PosixPath('/tmp/pytest-of-chia/pytest-1365'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def transfer_run(tmp_path_factory):
+        directory = tmp_path_factory.mktemp("bvbrc-appservice-transfer-workflow")
+        with pytest.MonkeyPatch.context() as patch:
+            patch.setattr("socket.create_connection", _forbidden)
+            patch.setattr("socket.socket.connect", _forbidden)
+            patch.setattr("socket.socket.connect_ex", _forbidden)
+            patch.setattr("urllib.request.OpenerDirector.open", _forbidden)
+            with Store(directory / "state") as store:
+                target, = store.create_problem(raw_sequence="ACGTACGTNNTT", molecule="dna")["subject_refs"]
+                scope = {"subject_refs": [target]}
+                material = store.register_material(data=FASTA, name=FILENAME,
+                    format="fasta", molecule="dna", use="evidence")
+                source = store.get(material["source_ref"])
+                content = {"source_ref": source["id"], "artifact_field": "artifact_ref",
+                    "artifact_ref": source["artifact_ref"], "sha256": hashlib.sha256(FASTA).hexdigest(),
+                    "byte_count": len(FASTA)}
+                original = request()
+                original["parameters"].update(input_source="fasta_file", input_fasta_file=REQUESTED_PATH)
+                del original["parameters"]["input_fasta_data"]
+                original["start_parameters"] = {"parent_id": "synthetic-parent-225"}
+                original["input_bindings"] = [{"binding_id": "query", "parameter_pointer": "/input_fasta_file",
+                    "kind": "retained_bytes", "content": content, "workspace_path": REQUESTED_PATH,
+                    "inline_value": None, "link_evidence": None, "members": []}]
+                original["workspace_targets"] = [{"target_id": "query", "path": REQUESTED_PATH,
+                    "type": "contigs", "purpose": "input", "input_binding_id": "query",
+                    "metadata": {"fixture": "synthetic transfer only"}, "allow_overwrite": False,
+                    "allow_create_parents": True}]
+                assignment = {"version": "api_service_assignment_v1", "resource_id": "selected-api",
+                    "service": "bvbrc_appservice", "request": original, "endpoint": "usable_handoff",
+                    "constraints": {"allowed_resource_ids": ["selected-api"], "allowed_kinds": ["api"]}}
+                launch = launch_assignment({"selected-api": assignment}, constraints={
+                    "allowed_resource_ids": ["selected-api"], "allowed_kinds": ["api"]})
+                handoff_form = form("execution_handoff_refs")
+                handoff_form["properties"]["support"] = {"type": "array", "uniqueItems": True,
+                    "items": {"type": "string", "format": "reference", "x-reference-namespace": "bvbrc_appservice_support"},
+                    "x-source": "bvbrc_appservice_support_refs"}
+                handoff_form["required"].append("support")
+                factory = ExecutionServiceFactory({"selected-api": deepcopy(CONFIG)}, {}, 2, 3, .5)
+                configuration = {"factory": factory.as_record(), "scope": scope, "goal": GOAL,
+                    "initial_known_record_refs": [], "assignment": assignment, "launch": launch,
+                    "handoff_form": handoff_form, "material": material, "content": content,
+                    "fixture": "Synthetic FASTA/native replies/scripted decisions; no algorithm, model, or live service"}
+                (directory / "fixture-configuration.json").write_text(json.dumps(configuration, indent=2) + "\n")
+    
+                class Responses(NativeClient):
+                    def rpc(self, command):
+                        if command["method"] == "Workspace.create":
+                            assert command["params"] == [{"objects": [[REQUESTED_PATH, "contigs",
+                                original["workspace_targets"][0]["metadata"], None, None]], "createUploadNodes": 1}]
+                            self.value = [metadata(RETURNED_PATH, shock_url=NODE_URL)["native_row"]]
+                        elif command["method"] == "AppService.start_app2":
+                            assert command["params"] == ["Homology", original["parameters"], original["start_parameters"]]
+                            self.value = {"id": TASK_ID, "application_id": "Homology", "state_code": "Q",
+                                "parameters": deepcopy(original["parameters"]),
+                                "start_parameters": deepcopy(original["start_parameters"])}
+                        else:
+                            raise AssertionError(command)
+                        return super().rpc(command)
+    
+                    def upload(self, url, supplied, *, filename):
+                        assert (url, supplied, filename) == (NODE_URL, FASTA, FILENAME)
+                        return super().upload(url, supplied, filename=filename)
+    
+                    task_info = download = _forbidden
+    
+                native = Responses()
+                constructor = BVBRCAppServiceService.__init__
+    
+                def configured(self, *args, **kwargs):
+                    constructor(self, *args, **kwargs)
+                    self.client = native
+    
+                patch.setattr(BVBRCAppServiceService, "__init__", configured)
+    
+                class Choices:
+                    def __init__(self):
+                        self.counts, self.support_refs, self.before_failure = {}, [], None
+                        self.failure = None
+    
+                    def last(self, episode_id):
+                        row = store.db.execute("SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? "
+                            "AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1", (RUN_ID, episode_id)).fetchone()
+                        return json.loads(row["result"])
+    
+                    async def complete(self, episode_id, role, instructions, current, schema):
+                        self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                        execution = current.get("execution_assignment", {})
+                        version = execution.get("version")
+                        if version == "api_service_assignment_v1":
+                            context = api.appservice.custody.context(episode_id)
+                            if count == 5:
+                                # An authentic upload receipt is deliberately presented
+                                # as a preparation receipt at the actual selected boundary.
+                                self.failure = deepcopy(current["feedback"])
+                                assert self.failure["code"] == "appservice_receipt_contract_conflict"
+                                assert native.calls == self.before_failure["calls"]
+                                assert _rows(store, "runtime_observations") == self.before_failure["observations"]
+                                assert api._completion(context) is None
+                                assert [api.appservice.records.read(ref) for ref in self.support_refs] == self.before_failure["receipts"]
+                                return selected(PREFIX + "submit", {"preparation_receipt_ref": self.support_refs[0],
+                                    "input_evidence_refs": [self.support_refs[2]]})
+                            assert current.get("feedback") is None, current.get("feedback")
+                            if count == 1:
+                                assert api.appservice.custody.content(context, content) == FASTA
+                                assert api.appservice.custody.possession(context, content["source_ref"]) == "parent_assignment"
+                                return selected(PREFIX + "prepare", {"definition": {
+                                    "kind": "packaged", "required_application_id": "Homology"}})
+                            self.support_refs.append(self.last(episode_id)["result"]["support_receipt_ref"])
+                            assert api._completion(context) is None
+                            assert api.facts(context, {})["execution_handoff_refs"] == []
+                            assert api.facts(context, {})["execution_result_refs"] == []
+                            if count == 2:
+                                assert native.calls == []
+                                return selected(PREFIX + "workspace_create", {"objects": [{"target_id": "query",
+                                    "data_binding_id": "query", "creation_time": None}], "options": {"createUploadNodes": 1}})
+                            if count == 3:
+                                return selected(PREFIX + "upload", {"created_object": {
+                                    "receipt_ref": self.support_refs[1], "row_pointer": "/result/0/0"},
+                                    "input_binding_id": "query", "filename": FILENAME})
+                            assert count == 4
+                            self.before_failure = {"calls": deepcopy(native.calls),
+                                "observations": _rows(store, "runtime_observations"),
+                                "receipts": [api.appservice.records.read(ref) for ref in self.support_refs]}
+                            return selected(PREFIX + "submit", {"preparation_receipt_ref": self.support_refs[2],
+                                "input_evidence_refs": [self.support_refs[2]]})
+                        assert current.get("feedback") is None, current.get("feedback")
+                        if version == "execution_launch_assignment_v1":
+                            assert count == 1
+                            return child("launch_api", assignment, scope, handoff_form)
+                        if episode_id != episode.source.episode_id:
+                            assert count == 1
+                            return selected("material.parse", {"material_ref": material["id"], "format": "fasta"})
+                        if count == 1:
+                            with pytest.raises(ValueError, match="input_not_possessed"):
+                                api.appservice.custody.possession(workflow.binding_context(episode.source), content["source_ref"])
+                            return {"selection": {"kind": "child", "goal": "Parse the supplied synthetic FASTA unchanged",
+                                "scope": scope, "purpose": "Return actual retained input-source references",
+                                "schema_json": json.dumps({"type": "object", "properties": {"refs": {
+                                    "type": "array", "items": {"type": "string", "format": "reference"},
+                                    "x-source": "committed_record_refs"}}, "required": ["refs"], "additionalProperties": False}),
+                                "initial_report_json": "{}"}, "report_update": {}}
+                        assert count == 2
+                        assert content["source_ref"] in current["child_reports"][-1]["refs"]
+                        assert api.appservice.custody.possession(workflow.binding_context(episode.source), content["source_ref"]) == "admitted_return"
+                        return child("launch", launch, scope, handoff_form)
+    
+                    async def release(self, episode_id):
+                        pass
+    
+                choices = Choices()
+                workflow = _workflow(store, directory, choices, configuration)
+                api = workflow.episode_bindings.for_role("launch_api").api_execution
+                episode = workflow.build("annotation", "root", GOAL, scope)
+>               archive = asyncio.run(_run(episode, workflow))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_transfer_workflow.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_transfer_workflow.py:69: in _run
+    record = await episode.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:494: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:359: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:494: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:359: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1729: in _finish_async
+    child_result = await child_result
+                   ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1407: in finish
+    facts = self.workflow.facts(self, completion_record=record)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.Workflow object at 0x7451ee9d5970>
+source = <gene_annotation_episode.runtime.DecisionSource object at 0x7451cf25dbb0>
+completion_record = EpisodeRecord(scope_level='launch_api', scope_key='child_0', units_consumed=4, ended_by='yield_stop', unit_records=(Un...'), ('launch_api', 'child_0')), episode_id='episode_4e11d607532b4959a812fdbd0fcb02ee68498a36553696c4d997917a8e002315'))
+
+    def facts(self, source, *, completion_record=None):
+        saved = self.journal.row("runtime_forms", source.episode_id)
+        if saved is not None:
+            facts = json.loads(saved["facts"])
+            facts.pop("interpretations", None)
+            return facts
+        with self.store.read_snapshot():
+            def ordered_refs(field):
+                # Project only references inside SQLite. Old source.read/tool
+                # bodies stay on disk; neither rows nor a Python JSON decoder
+                # materialize completed action payloads to close a small form.
+                rows = self.store.db.execute("SELECT refs.value FROM runtime_actions actions "
+                    "JOIN json_each(actions.result, ?) refs "
+                    "WHERE actions.run_id=? AND actions.episode_id=? AND actions.result IS NOT NULL "
+                    "ORDER BY actions.decision_index, refs.key",
+                    ("$." + field, self.run_id, source.episode_id))
+                return list(dict.fromkeys(row[0] for row in rows))
+            committed = ordered_refs("record_refs")
+            changed = ordered_refs("changed_record_refs")
+            changed_types = {ref: self.store.get(ref)["record_type"] for ref in changed}
+            last = (source.last_outcome or {}).get("record_refs", [])
+            unseen = []
+            for ref in last:
+                if ref not in source.report_basis:
+                    record = self.store.get(ref)
+                    if record.get("record_type") == "observation":
+                        unseen.append(ref)
+            credit_view = self.source_credit_view(source)
+            facts = {"credit": credit_view["credit"], "subject_refs": source.scope["subject_refs"],
+                "committed_record_refs": committed, "changed_record_refs": changed,
+                "changed_annotation_refs": [ref for ref in changed if changed_types[ref] == "annotation"],
+                "changed_assessment_refs": [ref for ref in changed if changed_types[ref] == "assessment"],
+                "changed_interpretation_account_refs": [ref for ref in changed if changed_types[ref] == "interpretation_account"],
+                "last_outcome_refs": last, "interpretation_basis_refs": source.report_basis,
+                "observations_after_report_basis": unseen, "episode_yield": closing_yield(completion_record),
+                'pending_handles': self.pending_handles(source)}
+            if self.native_event_information is not None:
+                facts.update(self.native_event_information.facts(self.binding_context(source)))
+            if self.is_job_source(source):
+                facts.update(self.job_episodes.facts(source, credit_view=credit_view))
+            else:
+                if self.project_annotation_score is not None:
+                    facts['annotation_score'] = self.annotation_context(source.scope)['annotation_score']
+                if self.resource_estimator is not None:
+                    facts['resource_tool_estimates'] = recorded_forecasts(self.store,
+                        run_id=self.run_id, episode_id=source.episode_id)
+            if self.native_timing_information is not None:
+                native = self.native_timing_information.read_details(self.store, source.scope,
+                    details_limit=None, details_offset=0, **self.native_timing_arguments(source))
+                facts['monitoring_information_credit'] = credit_view['monitoring_information_credit']
+                facts['native_execution_measurements'] = native['native_execution_measurements']
+            specialist = self.specialist(source)
+            if specialist is not None:
+                snapshot = {
+                    'completion': (None if completion_record is None else
+                        {'ended_by': completion_record.ended_by, 'end_reason': completion_record.end_reason,
+                         'units_consumed': completion_record.units_consumed}),
+                    'own_action_count': (None if completion_record is None else completion_record.units_consumed),
+                    'last_outcome_refs': last, 'committed_record_refs': committed,
+                    'changed_record_refs': changed, 'report_basis_refs': source.report_basis}
+                context = self.binding_context(source)
+                if specialist is self.scientific_process_binding:
+                    snapshot.update(
+                        initial_credit=self.journal.row('runtime_episodes', source.episode_id)['initial_credit'],
+                        credit=facts['credit'], controller_credit=self.source_controller_credit(source),
+                        episode_yield=facts['episode_yield'],
+                        parent_invocation_ref=self.services.scientific_parent_invocation(context))
+                facts.update(specialist.facts(context, snapshot))
+            received_facts = self.episode_bindings.received_report_facts(self.binding_context(source))
+            if set(received_facts).intersection(facts):
+>               raise ValueError('received_report_fact_conflict')
+E               ValueError: received_report_fact_conflict
+
+gene_annotation_episode/runtime.py:3458: ValueError
+=========================== short test summary info ============================
+ERROR tests/test_bvbrc_appservice_transfer_workflow.py::test_original_fasta_bytes_create_target_and_selected_upload_are_retained
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 error in 35.99s

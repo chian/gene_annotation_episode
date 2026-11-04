@@ -1,0 +1,20 @@
+..FF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_raw_row_occurrences_and_invalid_values_survive_worker_roundtrip[negative_null] _
+source_snapshot/tests/test_atac_differential_result_worker.py:214: in test_raw_row_occurrences_and_invalid_values_survive_worker_roundtrip
+    assert [json.loads(line) for line in Path(table['path']).read_bytes().splitlines()] == original_rows
+E   AssertionError: assert [[0, 1, 0, 16...y', 200, ...]] == [(0, 1, 0, 16...y', 200, ...)]
+E     
+E     At index 0 diff: [0, 1, 0, 16, 'chrToy', 0, 100, -2.0, '-2'] != (0, 1, 0, 16, 'chrToy', 0, 100, -2.0, '-2')
+E     Use -v to get more diff
+_ test_raw_row_occurrences_and_invalid_values_survive_worker_roundtrip[overlap_outside] _
+source_snapshot/tests/test_atac_differential_result_worker.py:214: in test_raw_row_occurrences_and_invalid_values_survive_worker_roundtrip
+    assert [json.loads(line) for line in Path(table['path']).read_bytes().splitlines()] == original_rows
+E   AssertionError: assert [[0, 1, 0, 15...oy', 50, ...]] == [(0, 1, 0, 15...oy', 50, ...)]
+E     
+E     At index 0 diff: [0, 1, 0, 15, 'chrToy', 0, 100, 1.0, '1'] != (0, 1, 0, 15, 'chrToy', 0, 100, 1.0, '1')
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_atac_differential_result_worker.py::test_raw_row_occurrences_and_invalid_values_survive_worker_roundtrip[negative_null]
+FAILED source_snapshot/tests/test_atac_differential_result_worker.py::test_raw_row_occurrences_and_invalid_values_survive_worker_roundtrip[overlap_outside]
+2 failed, 2 passed, 45 deselected in 10.61s

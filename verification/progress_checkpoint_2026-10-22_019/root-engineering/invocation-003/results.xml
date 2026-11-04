@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="40.229" timestamp="2026-10-22T07:58:03.650379-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_direct_hmmer_timing_reconstruction" name="test_real_detached_direct_search_restores_caller_map_timing_and_original_forecast" time="38.630"><failure message="gene_annotation_episode.domain.ContractError: local_commission_frame_identity_conflict">tmp_path = PosixPath('/tmp/direct-hmmer-root008-evidence-20261022-001/invocation-003/pytest-fixtures/test_real_detached_direct_sear0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7071472bdac0&gt;
+
+    def test_real_detached_direct_search_restores_caller_map_timing_and_original_forecast(
+            tmp_path, monkeypatch):
+        with reported_service() as (http, client):
+            monkeypatch.setenv('GENE_EPISODE_HTTP_FIXTURE_BASE', client.base)
+            bootstrap = tmp_path / 'fixture-bootstrap'
+            bootstrap.mkdir()
+            (bootstrap / 'sitecustomize.py').write_text(BOOTSTRAP + NATIVE_BOOTSTRAP)
+            monkeypatch.syspath_prepend(str(bootstrap))
+            from gene_annotation_episode.resource_episodes import HomologyResourceAdapter
+            monkeypatch.setattr(HomologyResourceAdapter, 'capability', native_fixture_capability)
+            original_builder = tool_configuration.build_tools
+            def builder(store, configuration=None):
+                return fixture_tools(original_builder, store, configuration)
+            monkeypatch.setattr(tool_configuration, 'build_tools', builder)
+            monkeypatch.setattr(case_execution, 'build_tools', builder)
+            case, configuration, policy = prepared(tmp_path)
+            configuration['local_jobs'] = {'memory_bytes': 20 * 1024**3,
+                'scratch_bytes': 4 * 1024**3}
+            policy.write_text(POLICY)
+            transport, turns = tmp_path / 'transport.py', tmp_path / 'turns.jsonl'
+            transport.write_text(TRANSPORT)
+            configuration['models']['connection']['command'] = [
+                sys.executable, str(transport), str(turns)]
+            source = synthetic_ap_source(tmp_path / 'synthetic-options')
+            directory = tmp_path / 'run'
+            manifest = prepare_case_run(case, directory, configuration)
+            product = json.loads((case / 'evidence-refs.json').read_text())['product_ref']
+            parameters = direct_parameters(tmp_path, client=client)
+            parameters['services']['source_directory'] = str(source)
+            parameters['policy']['operational']['registry_ref'] = manifest[
+                'registry_configuration']['registry_ref']
+            parameters['policy']['scientific_progress']['initial_known_record_refs'] = [
+                manifest['target_ref'], product]
+            from gene_annotation_episode.run_statistics import RunHistory
+            RunHistory(parameters['services']['api_timing']['history_path']).close()
+            with monkeypatch.context() as patched:
+                patched.setattr(Workflow, 'build', lambda *_a, **_k:
+                    (_ for _ in ()).throw(BeforeRoot()))
+                with pytest.raises(BeforeRoot):
+                    asyncio.run(run_prepared_case(directory, policy_file=policy,
+                        parameters=parameters, provider=Provider([])))
+            saved = json.loads((directory / 'run.json').read_text())
+            run_id = saved['run_id']
+            settings = {k: v for k, v in saved.items() if k != 'run_id'}
+            workspace = case / 'workspace'
+            with Store(workspace) as store, prepared_case_bindings(store, directory) as (_, options):
+                workflow = assemble_workflow(store, builder(store, manifest['configuration']),
+                    Provider([]), directory, run_id, settings,
+                    **{k: v for k, v in options.items() if k != 'binding_definitions'})
+                from types import SimpleNamespace
+                assert_final_owners(SimpleNamespace(workflow=workflow, tools=workflow.tools))
+                scope = {'subject_refs': [manifest['target_ref']]}
+                root = workflow.build('annotation', 'root', settings['goal'], scope)
+                sequence = store.get_artifact(store.get(product)['sequence_ref'])
+                search = {'subject_ref': product, 'algorithm': 'phmmer',
+                    'database': 'fixture', 'parameters': {}, 'page_size': 2}
+                adapter = next(a for a in workflow.episode_bindings.for_role('launch').adapters.values()
+                    if a.capability()['kind'] == 'api')
+                estimate = {'tool': 'public.hmmer.search', 'arguments': deepcopy(search),
+                    'resource_selection': adapter.information.selection(),
+                    'constraints': {'allowed_kinds': ['api']},
+                    'immutable_input_versions': [{'reference': product, 'version': None,
+                        'content_sha256': hashlib.sha256(sequence).hexdigest()}]}
+                library = workflow.scientific_process_binding.library
+                schema = obj({name: deepcopy(workflow.report_sources('scientific_process')[
+                    source_name]['report_schema']) for name, source_name in (
+                        ('timing', 'api_execution_measurements'),
+                        ('forecasts', 'api_reported_execution_forecasts'))})
+                selection = {'kind': 'episode_child', 'role': 'scientific_process',
+                    'goal': 'Acquire a fixture sequence comparison and inspect its timing support',
+                    'scope': scope, 'purpose': 'Return only original timing and forecast facts',
+                    'schema_json': json.dumps(schema), 'initial_report_json': '{}',
+                    'assignment': {'selection': {'version': 'scientific_process_selection_v2',
+                        'annotation_ref': library.reference('A01'),
+                        'thought_ref': library.reference('P01'),
+                        'tools': ['execution.estimate', 'public.hmmer.search']},
+                        'evidence_refs': [product], 'constraints': {'target_only': True},
+                        'context': {'search_arguments': search, 'estimate_input': estimate}}}
+                workflow.configure_execution(independent_execution.make_runtime_binding(
+                    store, directory, kind='fixed_case'))
+                workflow.provider = ScriptedProvider([{'selection': selection, 'report_update': {}}])
+                response, index, context, action_schema = asyncio.run(root.source.call(
+                    {'visible_record_refs': []}, workflow.action_schema(root.source)))
+                assert root.source.apply_response(response, index, context, action_schema) is not None
+                spec, = workflow.commissions.recover_selected(root.source.episode_id)
+                original_request = deepcopy(spec['child']['request'])
+                original_manifest = workflow.receipts.manifest(spec['child']['episode_id'])
+                original_map = deepcopy(workflow.tools.catalog())
+                assert not http.calls and not turns.exists()
+                assert store.db.execute('SELECT count(*) FROM provider_jobs').fetchone()[0] == 0
+            policy.write_text('raise AssertionError("Use the original saved caller")\n')
+            backend = DurableExecutionStore(directory / 'episode-execution')
+            backend.commission(spec)
+            started = backend.start(spec['handle'])
+            async def wait_return():
+                await asyncio.wait_for(backend.wait_events({'version': 'event_condition_v1',
+                    'events': [{'handle': spec['handle'], 'event': 'returned', 'after_cursor': 0}],
+                    'reconsider_at': None}), 60)  # Isolated test deadline only.
+            asyncio.run(wait_return())
+            status = backend.status(spec['handle'])
+            returned = backend.load_return(spec['handle'], status['return_id'])
+            assert started['execution_identity']['pid'] != os.getpid()
+            assert returned['outcome'] == 'closed' and returned['failure'] is None, returned
+            assert returned['completion']['units_consumed'] == 3
+            fact, = returned['form']['timing']
+            forecast, = returned['form']['forecasts']
+            assert fact['elapsed_seconds'] == forecast['expected_total_seconds'] == http.elapsed
+            assert forecast['reported_result_support'] == {'reported_result_count': 1}
+            assert [c[0] for c in http.calls] == ['POST', 'GET', 'GET']
+            calls = [json.loads(line) for line in turns.read_text().splitlines()]
+            assert len(calls) == 3
+            assert calls[2]['api_reported_execution_forecasts'] == [forecast]
+            with Store(workspace) as store, prepared_case_bindings(store, directory) as (_, options):
+                workflow = assemble_workflow(store, builder(store, manifest['configuration']),
+                    Provider([]), directory, run_id, settings,
+                    **{k: v for k, v in options.items() if k != 'binding_definitions'})
+                assert_final_owners(SimpleNamespace(workflow=workflow, tools=workflow.tools))
+                assert workflow.tools.catalog() == original_map
+                assert workflow.receipts.manifest(spec['child']['episode_id']) == original_manifest
+                child = workflow.journal.row('runtime_episodes', spec['child']['episode_id'])
+                assert json.loads(child['request']) == original_request
+                assert store.db.execute('SELECT count(*) FROM runtime_observations '
+                    'WHERE episode_id=?', (spec['child']['episode_id'],)).fetchone()[0] == 3
+                assert store.db.execute('SELECT count(*) FROM runtime_observations '
+                    'WHERE episode_id=?', (spec['parent']['episode_id'],)).fetchone()[0] == 0
+                assert store.count('native_execution') == 0
+                original = workflow.journal.row('runtime_actions', spec['child']['episode_id'], 0)
+                assert json.loads(original['result'])['api_timing_refs'] == [fact['receipt_ref']]
+    
+            # The original scientific parent resumes through the ordinary public
+            # entrypoint. C3/C4 admission and its observation precede the callbacks.
+            integrated = []
+            def parent_estimate(context):
+                assert context['child_reports'] == [returned['form']]
+                assert context['monitoring_information_credit'] == 1
+                assert context['current_credit'] == 0
+                assert 'api_execution_proposal' not in context
+                integrated.append(deepcopy(context['child_reports'][0]))
+                return own('execution.estimate', **estimate)
+            def parent_history(context):
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['reported_result_support'] == {'reported_result_count': 1}
+                assert forecast['expected_total_seconds'] == http.elapsed
+                assert context['monitoring_information_credit'] == 1
+                return own('episode.history', view='records', decision_indices=[0, 1])
+&gt;           asyncio.run(run_prepared_case(directory, resume=True,
+                provider=ScriptedProvider([parent_estimate, parent_history])))
+
+tests/test_direct_hmmer_timing_reconstruction.py:263: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/case_execution.py:427: in run_prepared_case
+    return await run_workflow(store, build_tools(store, settings), provider=provider,
+gene_annotation_episode/runtime.py:3748: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4065: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1101: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.runtime.DecisionSource object at 0x7071472bf050&gt;
+context = {'available_report_facts': {'annotation_score': {'meaning': 'Annotation support for the fixed scope at child closure, ... and denominator.', 'projector': 'gene_annotation_episode.investigation_progress.ScientificFindingProgress', ...}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def call(self, context, schema):
+        index, self.calls = self.calls, self.calls + 1
+        journal = self.workflow.journal
+        row = journal.row("runtime_model_calls", self.episode_id, index)
+        presentation_enabled = (self.workflow.restoration_settings.get('model_presentation')
+                                == MODEL_PRESENTATION_MODE)
+        presentation = None
+        if row:
+            request_text = row["request"]
+            try:
+                saved = json.loads(request_text)
+            except (TypeError, ValueError) as error:
+                raise ContractError('model_presentation_contract_conflict',
+                    detail={'path': ['request']}) from error
+            if row["purpose"] != "decision":
+                raise WorkflowError("saved decision contract differs from reconstruction")
+            factual = (isinstance(saved, dict)
+                       and saved.get('version') == COMMISSION_MODEL_CALL_REQUEST_VERSION)
+            fields = ({'version', 'context', 'schema', 'local_commission_frame'} if factual else
+                      {'version', 'context', 'schema'} if presentation_enabled else {'context', 'schema'})
+            if presentation_enabled:
+                fields.add('model_presentation')
+            expected_version = (COMMISSION_MODEL_CALL_REQUEST_VERSION if factual
+                                else MODEL_CALL_REQUEST_VERSION)
+            if (not isinstance(saved, dict) or set(saved) != fields
+                    or (factual or presentation_enabled) and saved['version'] != expected_version):
+                # Immutable mode applies from the first call, including saved
+                # completed calls. A mixed history cannot change instructions
+                # inside an existing episode/role conversation.
+                raise ContractError('model_presentation_contract_conflict',
+                    detail={'path': ['request', 'version']})
+            if factual and self.workflow.execution_binding is None:
+&gt;               raise ContractError('local_commission_frame_identity_conflict',
+                    detail={'path': ['request', 'version']})
+E               gene_annotation_episode.domain.ContractError: local_commission_frame_identity_conflict
+
+gene_annotation_episode/runtime.py:840: ContractError</failure></testcase></testsuite></testsuites>

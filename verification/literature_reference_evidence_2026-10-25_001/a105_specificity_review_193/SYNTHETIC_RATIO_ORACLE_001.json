@@ -1,0 +1,56 @@
+{
+  "time": 1793148052.2165709,
+  "origin": "new synthetic mathematical example, not measured paper data",
+  "purpose": "Independent arithmetic check of proposed194scientific component before implementation; no source-reader/episode/adequacy claim",
+  "positive_example": {
+    "preferred_per_min": 0.9,
+    "alternative_per_min": 0.15,
+    "covariance_per_min_squared": [
+      [
+        0.0081,
+        0.000675
+      ],
+      [
+        0.000675,
+        0.000225
+      ]
+    ],
+    "ratio": 6,
+    "ratio_variance": 0.36,
+    "ratio_standard_uncertainty": 0.6,
+    "log_ratio": 1.791759469228055,
+    "log_ratio_variance": 0.01,
+    "log_ratio_standard_uncertainty": 0.1,
+    "covariance_status": "explicitly synthetic known joint covariance",
+    "confidence_level": null
+  },
+  "counterexamples": [
+    {
+      "preferred_estimator": 0.0,
+      "alternative_estimator": 0.15,
+      "ratio_estimator": 0.0,
+      "log_ratio": null,
+      "physical_parameter_claim": null,
+      "zero_denominator_undefined": false
+    },
+    {
+      "preferred_estimator": -0.03,
+      "alternative_estimator": 0.15,
+      "ratio_estimator": -0.2,
+      "log_ratio": null,
+      "physical_parameter_claim": null,
+      "zero_denominator_undefined": false
+    },
+    {
+      "preferred_estimator": 0.9,
+      "alternative_estimator": 0.0,
+      "ratio_estimator": null,
+      "log_ratio": null,
+      "physical_parameter_claim": null,
+      "zero_denominator_undefined": true
+    }
+  ],
+  "formula": "R=A/B; L=ln(R); Var(R)=J_R C J_R^T; Var(L)=J_L C J_L^T",
+  "goal_status": "active",
+  "A105_adequate": false
+}

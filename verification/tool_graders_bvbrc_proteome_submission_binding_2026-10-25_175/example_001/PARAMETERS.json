@@ -1,0 +1,47 @@
+{
+  "version": "bvbrc_proteome_bundle_parameters_v1",
+  "analysis_id": "synthetic-proteome-provider",
+  "native_documents": [
+    {
+      "document_id": "native",
+      "source_ref": "synthetic-native",
+      "raw_artifact_ref": "synthetic-native",
+      "role": "proteome_native_projection",
+      "declared_format": {
+        "format": "genome_comparison_json_v1",
+        "version": null,
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      },
+      "source_contract": {
+        "id": "GenomeComparison_inspected_source_v1",
+        "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
+        "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
+        "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
+        "deployment_match": "unobserved",
+        "deployment_evidence": []
+      }
+    }
+  ],
+  "primary_document_id": "native",
+  "supplied_data_evidence": {
+    "content": {
+      "source_ref": "synthetic-supplied-data",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "synthetic-supplied-data",
+      "sha256": "fb39645e1fc50cc62dc41fc5a855ee6d2cea48285900e4a53f67b84aadec0ba4",
+      "byte_count": 4847
+    },
+    "pointer": ""
+  },
+  "calculation_parameters": {
+    "version": "bvbrc_proteome_native_parameters_proposal_v1",
+    "track_keys": [
+      "comp_genome_2"
+    ],
+    "minimum_identity_fraction": 0.6,
+    "minimum_subject_endpoint_difference_fraction": 0.7,
+    "allowed_hit_categories": null
+  }
+}

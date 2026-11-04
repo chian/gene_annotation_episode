@@ -1,0 +1,40 @@
+
+==================================== ERRORS ====================================
+_____ ERROR collecting tests/test_literature_controlled_response_prompt.py _____
+tests/test_literature_controlled_response_prompt.py:9: in <module>
+    from literature_controlled_response_worker_fixture_095 import make_case, run_case
+tests/literature_controlled_response_worker_fixture_095.py:24: in <module>
+    from test_literature_controlled_response_v3_inputs import Fixture
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v3_inputs.py:5: in <module>
+    from test_literature_controlled_response_v2_inputs import Fixture as V2Fixture
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_controlled_response_v2_inputs.py:31: in <module>
+    CASES=json.loads((DESIGN/'CONSTRUCTED_SOURCE_CASES_001.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/joined_literature_validation_124/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_full_source_design_069/CONSTRUCTED_SOURCE_CASES_001.json'
+=========================== short test summary info ============================
+ERROR tests/test_literature_controlled_response_prompt.py - FileNotFoundError...
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 3.33s

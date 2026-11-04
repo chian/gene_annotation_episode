@@ -1,0 +1,49 @@
+{
+  "scope": "Root native-family lexeme correction and received C/D source verification; candidate only, no live or full episode completion claim",
+  "native_manifest_preserved": {
+    "path": "evidence_n/OWNED_FILE_MANIFEST_001.json",
+    "sha256": "446f2b3dfc064bda819f41a658a73a63354b770d9a2663c889175ecd0cf8c285",
+    "paths_checked": 47,
+    "unchanged_paths": 45
+  },
+  "changes": [
+    {
+      "path": "gene_annotation_episode/bvbrc_comparative_systems_native.py",
+      "before": "d2e7bcbf0aa7a53717cff55c1b36af7f56b2d996b311ed04c6610b39c8156304",
+      "after": "d586c217cf6db18a9c255c02a2967c6c86f716462e96405f6b6e978fbb793af6"
+    },
+    {
+      "path": "tests/test_bvbrc_comparative_systems_sheet.py",
+      "before": "7c039d2dfb9701e861806675e78d191f456744ae19bc64c2e393621b8e23dfd0",
+      "after": "6a931bba0da78da1a1ffc4e5a97d760bdabcb778d0df749b57b608741e55d653"
+    }
+  ],
+  "received_deliveries": [
+    {
+      "manifest": "evidence_c_review/C_REVIEW_OWNED_FILE_MANIFEST_001.json",
+      "sha256": "5dc079ce45bb7cbadaef3ca111b6d88a269f046884a04cd3bc7fd4f820cc391d",
+      "verified_paths": 8
+    },
+    {
+      "manifest": "evidence_d/SOURCE_HASHES_001.json",
+      "sha256": "ac134fcf6e7eb13a43db0267934916952c53c206b22d6f28e2b1f08e08db365d",
+      "verified_paths": 13
+    }
+  ],
+  "regression_before": {
+    "exit_code": 1,
+    "failed": 6,
+    "passed": 2,
+    "log_sha256": "28d3a33080b1be83c293b0eb9e89f93216540b4b6ab527d1db5b787b607db0c6"
+  },
+  "verification_after": {
+    "receipt_sha256": "8416d023d0ed8df6735505929a6da7cb55981dfb3ca798ca8231d403a1f8d60b",
+    "passed": 176,
+    "native_parser": 51,
+    "sheet": 43,
+    "calculators": 82,
+    "seconds": 29.6,
+    "source_stable": true
+  },
+  "behavior": "Absent hex column has raw_lexeme null; a present empty token remains empty; an overwide row retains its actual token. Invalid counts stay unavailable. Valid sibling measurements survive. Validators, schemas and numerical formulas unchanged."
+}

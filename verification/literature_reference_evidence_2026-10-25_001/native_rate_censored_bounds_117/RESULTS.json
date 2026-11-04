@@ -1,0 +1,85 @@
+{
+  "workload": "native_rate_censored_bounds_117",
+  "status": "implemented_bounded_workload_complete",
+  "scientific_sources_used": "constructed_fixtures_only",
+  "changed_production_files": 6,
+  "new_tool_operations": 0,
+  "new_assay_graders": 0,
+  "new_scoring_sheets": 0,
+  "existing_component_count": 10,
+  "original_native_contract_field_count": 24,
+  "legacy_contract_field_count": 15,
+  "new_domain_view_field_count": 25,
+  "compatibility": "original schemas and receipts preserved; absent marker replays saved raw-only bounds without source reacquisition, backfill or profile refit; direct calculator default and retained-table v1 unchanged",
+  "new_semantics": "exact rational marginal-operand Cartesian enclosure; strict/inclusive sign handling, zero/undefined denominators, constant images, full finite two-sided domains, partial outward floating projection; no sampling confidence, independence, physical positivity or annotation-credit inference",
+  "selected_path": "same literature.rate.source.populate operation; independent original/domain typed receipt custody; same scientific base rows deduplicated across views; only actually admitted domain fields rendered",
+  "test_proofs": [
+    {
+      "generation": "pin_001",
+      "log": "pin_001_runtime.log",
+      "passed": 4,
+      "failed": 0,
+      "seconds": 63.0,
+      "scope": "actual selected old/new payload and original/domain return, own-next/parent-next, four observations for four scripted actions, first read-only replay"
+    },
+    {
+      "generation": "pin_001",
+      "log": "pin_001_regressions.log",
+      "passed": 232,
+      "failed": 2,
+      "seconds": 262.14,
+      "scope": "initial joined regression; both failures stale display path expectations"
+    },
+    {
+      "generation": "baseline_116_control",
+      "log": "baseline_116_control.log",
+      "passed": 0,
+      "failed": 2,
+      "seconds": 8.7,
+      "scope": "same two failures reproduced without117 calculator/storage/shared changes"
+    },
+    {
+      "generation": "pin_002_test_correction",
+      "log": "pin_002_affected_provider_cases.log",
+      "passed": 2,
+      "failed": 0,
+      "seconds": 9.28,
+      "scope": "root-authorized display assertion correction only"
+    },
+    {
+      "generation": "pin_002_test_correction",
+      "log": "pin_002_joined_rate_path.log",
+      "passed": 65,
+      "failed": 0,
+      "seconds": 105.97,
+      "scope": "joined arithmetic/storage/domain actual-runtime/native-return/semantic rate path"
+    },
+    {
+      "generation": "final_owned_numeric_guard",
+      "log": "final_numeric_guard_focused.log",
+      "passed": 7,
+      "failed": 0,
+      "seconds": 12.72,
+      "scope": "bool/nonfinite guard, old/new read-only operation replay, trace/provenance tampering"
+    }
+  ],
+  "counts_are_overlapping_do_not_add": true,
+  "source_artifacts": [
+    "final_117_patch_with_numeric_guard.diff",
+    "final_117_source_hashes_with_numeric_guard.json",
+    "pin_001_source_hashes.json",
+    "schema_preservation.json",
+    "preservation_checks.json",
+    "constructed_domain_examples.json",
+    "fixed_authority_identity.json"
+  ],
+  "governing_goal_modified": false,
+  "GOAL_md_created_or_modified": false,
+  "amendments_created_or_modified": false,
+  "limits": [
+    "No paper/case/provider/liveDB/new-model investigation performed.",
+    "This engineering workload does not establish A105 coverage/completion or any annotation-credit aggregation.",
+    "Full newly joined root generation after119/116 later refinements remains owned by root; pins and earlier proofs are retained unchanged.",
+    "Domains describe conditional reported-operand enclosures, not physical measurement uncertainty or endpoint co-attainability."
+  ]
+}

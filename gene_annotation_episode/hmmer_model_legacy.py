@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 
 from .hmmer_model_data import ALPHABETS, TRANSITIONS, _issue, _numeric
-from .hmmer_model_source_cells import hmmer2_probability_cell
+from .hmmer_model_source_cells import hmmer2_evd_calibration, hmmer2_probability_cell
 
 
 _INTEGER = re.compile(r"[+-]?[0-9]+\Z")
@@ -174,10 +174,17 @@ class _LegacyReader:
             values = [_numeric(token) for token in header["tokens"]]
             legacy["evd"].append({"tokens": header["tokens"][:], "values": values,
                                   "line": header["line"], "unit": None})
-            if not values:
-                problem("header_width_invalid", "EVD", line=header["line"])
+            if len(values) != 2:
+                problem("header_width_invalid", "EVD", line=header["line"], expected=2, actual=len(values))
             if any(value is None for value in values):
                 problem("header_number_invalid", "EVD", line=header["line"])
+        if len(legacy["evd"]) == 1:
+            observed = legacy["evd"][0]
+            calibrated = hmmer2_evd_calibration(observed["tokens"], observed["values"], line=observed["line"])
+            if calibrated is not None:
+                record["calibration"].append(calibrated)
+            else:
+                problem("calibration_invalid", "EVD", line=observed["line"])
 
         def distribution(tokens, names, expected, field, position, line, reference_kind):
             if len(tokens) != expected:

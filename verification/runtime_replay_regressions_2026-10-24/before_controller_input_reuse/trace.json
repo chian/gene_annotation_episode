@@ -1,0 +1,706 @@
+{
+  "counts": {
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:DecisionSource.apply_response:call": 1,
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:DecisionSource.apply_response:return": 1,
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:DecisionSource.call:call": 2,
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:DecisionSource.call:return": 2,
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:Fixture.complete:call": 2,
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:Fixture.complete:return": 2,
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:Journal.save:call": 8,
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume:Journal.save:return": 8,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:DecisionSource.apply_response:call": 1,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:DecisionSource.apply_response:return": 1,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:DecisionSource.call:call": 2,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:DecisionSource.call:return": 2,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:Fixture.complete:call": 2,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:Fixture.complete:return": 2,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:Fixture.crash_once:call": 8,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:Fixture.crash_once:return": 8,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:Journal.save:call": 8,
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response:Journal.save:return": 8
+  },
+  "events": [
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_episodes",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_episodes",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_episodes",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_episodes",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "calls": 0,
+      "event": "call",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "episode_id": "episode_f60062ac484014b71e719d8150862d1a10b145995f4de10b36b27160e2ea31f7",
+      "event": "call",
+      "feedback": null,
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "episode_id": "episode_f60062ac484014b71e719d8150862d1a10b145995f4de10b36b27160e2ea31f7",
+      "event": "return",
+      "feedback": null,
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "calls": 1,
+      "event": "return",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "feedback": null,
+      "function": "DecisionSource.apply_response",
+      "index": 0,
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "returned_type": null,
+      "schema_action_kinds": [
+        "reason",
+        "wait",
+        "child",
+        "episode_child",
+        "redeliver_report"
+      ],
+      "selection": {
+        "arguments": {
+          "page": 0,
+          "result": "completed"
+        },
+        "kind": "tool",
+        "tool": "fixture.measure"
+      },
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "path": [],
+              "rule": "anyOf"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "function": "DecisionSource.apply_response",
+      "index": 0,
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "returned_type": "NoneType",
+      "schema_action_kinds": [
+        "reason",
+        "wait",
+        "child",
+        "episode_child",
+        "redeliver_report"
+      ],
+      "selection": {
+        "arguments": {
+          "page": 0,
+          "result": "completed"
+        },
+        "kind": "tool",
+        "tool": "fixture.measure"
+      },
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "calls": 1,
+      "event": "call",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "episode_id": "episode_f60062ac484014b71e719d8150862d1a10b145995f4de10b36b27160e2ea31f7",
+      "event": "call",
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "path": [],
+              "rule": "anyOf"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "episode_id": "episode_f60062ac484014b71e719d8150862d1a10b145995f4de10b36b27160e2ea31f7",
+      "event": "return",
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "path": [],
+              "rule": "anyOf"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "calls": 2,
+      "event": "return",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "return",
+      "function": "Fixture.crash_once",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_episodes",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_episodes",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "calls": 0,
+      "event": "call",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "episode_id": "episode_b9fb5b324e3532d50364cc1a9c8b426c4d2de0ef8406bc82610379922173f1bd",
+      "event": "call",
+      "feedback": null,
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "episode_id": "episode_b9fb5b324e3532d50364cc1a9c8b426c4d2de0ef8406bc82610379922173f1bd",
+      "event": "return",
+      "feedback": null,
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "calls": 1,
+      "event": "return",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "feedback": null,
+      "function": "DecisionSource.apply_response",
+      "index": 0,
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "returned_type": null,
+      "schema_action_kinds": [
+        "reason",
+        "wait",
+        "child",
+        "episode_child",
+        "redeliver_report"
+      ],
+      "selection": {
+        "arguments": {
+          "page": 0,
+          "result": "completed"
+        },
+        "kind": "tool",
+        "tool": "fixture.measure"
+      },
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "path": [],
+              "rule": "anyOf"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "function": "DecisionSource.apply_response",
+      "index": 0,
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "returned_type": "NoneType",
+      "schema_action_kinds": [
+        "reason",
+        "wait",
+        "child",
+        "episode_child",
+        "redeliver_report"
+      ],
+      "selection": {
+        "arguments": {
+          "page": 0,
+          "result": "completed"
+        },
+        "kind": "tool",
+        "tool": "fixture.measure"
+      },
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "calls": 1,
+      "event": "call",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_model_calls",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "episode_id": "episode_b9fb5b324e3532d50364cc1a9c8b426c4d2de0ef8406bc82610379922173f1bd",
+      "event": "call",
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "path": [],
+              "rule": "anyOf"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "episode_id": "episode_b9fb5b324e3532d50364cc1a9c8b426c4d2de0ef8406bc82610379922173f1bd",
+      "event": "return",
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "path": [],
+              "rule": "anyOf"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "function": "Fixture.complete",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "calls": 2,
+      "event": "return",
+      "function": "DecisionSource.call",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "call",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    },
+    {
+      "event": "return",
+      "function": "Journal.save",
+      "has_result": false,
+      "table": "runtime_runs",
+      "test": "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume"
+    }
+  ]
+}

@@ -1,0 +1,1895 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 20 items
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmbuild-refine] FAILED [  5%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-legacy_ascii] FAILED [ 10%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-maximum_likelihood_hmm] FAILED [ 15%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-filter_hmm] FAILED [ 20%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-binary] FAILED [ 25%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmemit-sample_unaligned] FAILED [ 30%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmemit-sample_aligned] FAILED [ 35%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-key_file] FAILED [ 40%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-index] FAILED [ 45%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-forecast] FAILED [ 50%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-memory_estimate] FAILED [ 55%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-split_commands] FAILED [ 60%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-partition_scores] FAILED [ 65%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-merge_scores] FAILED [ 70%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_evalue] FAILED [ 75%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_pvalue] FAILED [ 80%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_score] FAILED [ 85%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_ga] FAILED [ 90%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_nc] FAILED [ 95%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_tc] FAILED [100%]
+
+=================================== FAILURES ===================================
+___ test_remaining_native_preparation_modes_through_workflow[cmbuild-refine] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199ea9c06b0>
+program = 'cmbuild', mode = 'refine'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199ea9c0860>, flow=<gene_annotation_episode.runtime....gnment', 'format': 'stockholm', 'relative_path': 'outputs/refined_alignment'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...: 'output', 'role': 'built_models', 'ordinal': 0}, {'direction': 'output', 'role': 'refined_alignment', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_54916133b492b51c0d17b87e55c0ba58ea9de51b4debb2abaa21b0ab99c...8b7cd3018799a13e337a2e98165b4670664f55fe52bbf360908df686fd74c5', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'refine', 'program': 'cmbuild', 'settings': {'--hand':... 'record_key': 'artifact_668b7cd3018799a13e337a2e98165b4670664f55fe52bbf360908df686fd74c5#/artifacts/0#build/2'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmconvert-legacy_ascii] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199ea1c7140>
+program = 'cmconvert', mode = 'legacy_ascii'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199ea0ba5a0>, flow=<gene_annotation_episode.runtime....at': 'infernal_cm_legacy_ascii', 'relative_path': 'outputs/converted_models'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...ection': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'converted_models', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b785...656d36569eb9a9aca845b8e74917ee02a98f2a0c5327a5ca24151726c381f7', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'legacy_ascii', 'program': 'cmconvert', 'settings': {'...: 'artifact_f3656d36569eb9a9aca845b8e74917ee02a98f2a0c5327a5ca24151726c381f7#/artifacts/2#artifact_operation/0'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmconvert-maximum_likelihood_hmm] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9035a90>
+program = 'cmconvert', mode = 'maximum_likelihood_hmm'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e913c8f0>, flow=<gene_annotation_episode.runtime....mms', 'format': 'hmmer_hmm_ascii', 'relative_path': 'outputs/converted_hmms'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...irection': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'converted_hmms', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b785...005bfac4aa9ae38f83cd60ff26bb3db4b63897b9768bb522c3a6e85ea2b9d0', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'maximum_likelihood_hmm', 'program': 'cmconvert', 'set...: 'artifact_0c005bfac4aa9ae38f83cd60ff26bb3db4b63897b9768bb522c3a6e85ea2b9d0#/artifacts/2#artifact_operation/0'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmconvert-filter_hmm] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9071040>
+program = 'cmconvert', mode = 'filter_hmm'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e907f110>, flow=<gene_annotation_episode.runtime....mms', 'format': 'hmmer_hmm_ascii', 'relative_path': 'outputs/converted_hmms'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...irection': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'converted_hmms', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b785...6e676b7aedbf1940f4cc900f053dd1947d87500caf82f13266929538859ab7', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'filter_hmm', 'program': 'cmconvert', 'settings': {'--...: 'artifact_b26e676b7aedbf1940f4cc900f053dd1947d87500caf82f13266929538859ab7#/artifacts/2#artifact_operation/0'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+__ test_remaining_native_preparation_modes_through_workflow[cmconvert-binary] __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199ea1d80b0>
+program = 'cmconvert', mode = 'binary'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e904c260>, flow=<gene_annotation_episode.runtime.... 'format': 'infernal_cm_binary', 'relative_path': 'outputs/converted_models'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...ection': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'converted_models', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b785...d6c3c8ed4b9ad3a8cfffc1a05a9eeb2046265604394b860198e83221f7b6aa', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'binary', 'program': 'cmconvert', 'settings': {'-b': T...: 'artifact_8bd6c3c8ed4b9ad3a8cfffc1a05a9eeb2046265604394b860198e83221f7b6aa#/artifacts/2#artifact_operation/0'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmemit-sample_unaligned] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9f74530>
+program = 'cmemit', mode = 'sample_unaligned'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e921f830>, flow=<gene_annotation_episode.runtime....equences', 'format': 'fasta', 'relative_path': 'outputs/generated_sequences'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...ion': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b785...8b02b40c15d27df349c6973f0651f36c21eed449eb8a3bcd24f3608d2383b0', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'sample_unaligned', 'program': 'cmemit', 'settings': {...: 'artifact_608b02b40c15d27df349c6973f0651f36c21eed449eb8a3bcd24f3608d2383b0#/artifacts/2#generated_sequence/1'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmemit-sample_aligned] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e91c1160>
+program = 'cmemit', mode = 'sample_aligned'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e9138a40>, flow=<gene_annotation_episode.runtime....ment', 'format': 'stockholm', 'relative_path': 'outputs/generated_alignment'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...ion': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'generated_alignment', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b785...d9182f6a217a9d19c8e39bba8c4c0ac79146740b99df2354faa3efae5a35b0', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'sample_aligned', 'program': 'cmemit', 'settings': {'-...: 'artifact_b6d9182f6a217a9d19c8e39bba8c4c0ac79146740b99df2354faa3efae5a35b0#/artifacts/2#generated_sequence/1'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+__ test_remaining_native_preparation_modes_through_workflow[cmfetch-key_file] __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e91e6510>
+program = 'cmfetch', mode = 'key_file'
+
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+            assert_native_custody(case, bundle)
+>           assert_parent_selection(case, choice, body, calculations)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e9bc5760>, flow=<gene_annotation_episode.runtime....s', 'format': 'infernal_cm_ascii', 'relative_path': 'outputs/fetched_models'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...irection': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'fetched_models', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_59b04ac909c3d94345d077708526dc5837b3605a4681682b21809772297...9e34f80970cc3070798217a159921a4b4e8a2514d5ea6c28d9ce146cc3dcb7', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'key_file', 'program': 'cmfetch', 'settings': {'-f': T...: 'artifact_6b9e34f80970cc3070798217a159921a4b4e8a2514d5ea6c28d9ce146cc3dcb7#/artifacts/2#artifact_operation/0'}], ...}
+
+    def assert_parent_selection(case, choice, body, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        assert body['population']['collection'] == 'calculations'
+        assert body['population']['total_records'] == len(calculations['rows'])
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(calculations['rows']) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in calculations['rows']}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            original = saved_rows[row['record_key']]['components']
+            for quantity in row['quantities']:
+                cell = original.get(quantity['path'].removeprefix('components.'))
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+        entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+        assert entry['description'] and entry['instructions'] and entry['resources'] == 'local'
+        assert entry['invocation_route'] == {'kind': 'commission', 'routes': [
+            {'entry_role': 'launch', 'resource_id': 'here', 'resource_role': 'launch_local'}]}
+        Draft202012Validator(entry['input_schema']).validate(case.request)
+        described = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=choice)
+        assert described['service_or_program'] == case.job['program'] and described['operation'] == case.job['mode']
+        assert described['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']
+>       assert [role for _, role, _ in case.provider.calls] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+___ test_remaining_native_preparation_modes_through_workflow[cmfetch-index] ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat8')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9ad02f0>
+program = 'cmfetch', mode = 'index'
+
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+>               'typed_return': case.returned[0], 'failures': body['failures'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e9bc4200>, flow=<gene_annotation_episode.runtime....ole': 'ssi', 'format': 'infernal_ssi', 'relative_path': 'work/models.cm.ssi'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...l': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'ssi', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_23d5da5826907cff7266c2772060088b85f11cd3100f28aa65af9829679...630657ee14f93f8ca3f095aa099a0234be1fc91c9735bf0f9d13c61085795d', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'index', 'program': 'cmfetch', 'settings': {'--index':...: 'artifact_82630657ee14f93f8ca3f095aa099a0234be1fc91c9735bf0f9d13c61085795d#/artifacts/2#artifact_operation/0'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmcalibrate-forecast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat9')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199ea9c0470>
+program = 'cmcalibrate', mode = 'forecast'
+
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+>               'typed_return': case.returned[0], 'failures': body['failures'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e913c1d0>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_ab5cf42fde1a6d10748a5b07144f4b821e4490b525a2615310bdd815e9e...4a2c330c04630b9fdc352ae7b79ac754b16a4ef8fd720caddd47ba7bbb6334', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'forecast', 'program': 'cmcalibrate', 'settings': {'--...': 'artifact_964a2c330c04630b9fdc352ae7b79ac754b16a4ef8fd720caddd47ba7bbb6334#/artifacts/0#resource_estimate/0'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmcalibrate-memory_estimate] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat10')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9f77140>
+program = 'cmcalibrate', mode = 'memory_estimate'
+
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+>               'typed_return': case.returned[0], 'failures': body['failures'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e9071190>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_c5dfdd2e6cb11c838366959d0b993bbf194484e11fc22783b4ef82d9be2...8a93cf8d6ddfb287726012a6060d8581db8fe5eb3a2fb483e6af485a58b8a8', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'memory_estimate', 'program': 'cmcalibrate', 'settings...': 'artifact_ce8a93cf8d6ddfb287726012a6060d8581db8fe5eb3a2fb483e6af485a58b8a8#/artifacts/0#resource_estimate/1'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmcalibrate-split_commands] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat11')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9ad18e0>
+program = 'cmcalibrate', mode = 'split_commands'
+
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+                'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+>               'typed_return': case.returned[0], 'failures': body['failures'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e91e5940>, flow=<gene_annotation_episode.runtime....ommands', 'format': 'infernal_commands', 'relative_path': 'outputs/commands'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'commands', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_7d5e6d3fde0a41ad13a9d522cc7cc4c16d08a1616df28fd15f7a1a5671d...731963e269da19fc00b838de6f0cca4e721568a1a89ef3441e967d353c8394', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'split_commands', 'program': 'cmcalibrate', 'settings'...': 'artifact_0a731963e269da19fc00b838de6f0cca4e721568a1a89ef3441e967d353c8394#/artifacts/2#resource_estimate/0'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmcalibrate-partition_scores] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat12')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9a3d970>
+program = 'cmcalibrate', mode = 'partition_scores'
+
+                else:
+                    assert model['fields'][mode[-2:].upper()]['value'] is None
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+>               'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e9a6c1d0>, flow=<gene_annotation_episode.runtime....t': 'infernal_partition_scores', 'relative_path': 'outputs/partition_scores'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...ection': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'partition_scores', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_b3176cef3008f963006bffe2f7ffc1eda7cf905d11e4d1866196d341f74...5f769950e62bda73a0bc8928045f691504446cea64a966d28f1c0b7baf44dd', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'partition_scores', 'program': 'cmcalibrate', 'setting...cord_key': 'artifact_095f769950e62bda73a0bc8928045f691504446cea64a966d28f1c0b7baf44dd#/artifacts/2#partition/3'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmcalibrate-merge_scores] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat13')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e91f82c0>
+program = 'cmcalibrate', mode = 'merge_scores'
+
+                else:
+                    assert model['fields'][mode[-2:].upper()]['value'] is None
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+>               'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e91854c0>, flow=<gene_annotation_episode.runtime.... 'format': 'infernal_cm_ascii', 'relative_path': 'outputs/calibrated_models'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...ction': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'calibrated_models', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_a05ac2aa0e79294027e9b03f60bd644900c0a4f6d2c2d3d3710742b2e2c...393fef8724e7c42956d4684e29648aab0c2dcb5c6691884967d04c11113654', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [{'artifact_ref': 'artifact_95393fef8724e7c42956d4684e29648aab0c2dcb5c6691884967d04c11113654#/inputs/1', 'c...y': 'artifact_95393fef8724e7c42956d4684e29648aab0c2dcb5c6691884967d04c11113654#/artifacts/2#calibration/1'}, ...], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_evalue] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat14')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199ea9c19a0>
+program = 'cmstat', mode = 'scores_at_evalue'
+
+                else:
+                    assert model['fields'][mode[-2:].upper()]['value'] is None
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+>               'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e91fbbc0>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_847a77782acd39cb49c85c8991b3c70cb0fe8ef56b7daa2664daaae2352...1aa588006b60c9123f77d276b42e29b945cbe2db9687d1cc034508e3cb2cb1', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'scores_at_evalue', 'program': 'cmstat', 'settings': {...ey': 'artifact_c11aa588006b60c9123f77d276b42e29b945cbe2db9687d1cc034508e3cb2cb1#/artifacts/0#model_statistic/3'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_pvalue] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat15')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x719a0c746240>
+program = 'cmstat', mode = 'scores_at_pvalue'
+
+                else:
+                    assert model['fields'][mode[-2:].upper()]['value'] is None
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+>               'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x719a0c5a5070>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_684c0ce2caf64c235319cdbf27e8f8153409ab00ff6c108068f88db0df6...9994a050111f91847722161a6a90bab800aa6950f2b8c11b73ae034d1225e7', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'scores_at_pvalue', 'program': 'cmstat', 'settings': {...ey': 'artifact_659994a050111f91847722161a6a90bab800aa6950f2b8c11b73ae034d1225e7#/artifacts/0#model_statistic/3'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_score] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat16')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9a3da90>
+program = 'cmstat', mode = 'evalues_at_score'
+
+                else:
+                    assert model['fields'][mode[-2:].upper()]['value'] is None
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+>               'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e03ac470>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_1442b082bb9c5f240f2ed2d68878ba0740e62f96ffb9673fcd5fdc00287...7a98f1e429c62e78ed9ba20ac5c954323d610b021fda1507c0a23c5d629441', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'evalues_at_score', 'program': 'cmstat', 'settings': {...ey': 'artifact_e77a98f1e429c62e78ed9ba20ac5c954323d610b021fda1507c0a23c5d629441#/artifacts/0#model_statistic/3'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_ga] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat17')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x719a0c5a4e00>
+program = 'cmstat', mode = 'evalues_at_ga'
+
+                else:
+                    assert model['fields'][mode[-2:].upper()]['value'] is None
+                    assert fields['threshold_bits']['value'] is None and fields['evalue']['value'] is None
+                    assert values['evalue_at_score']['value'] is None
+    
+    
+    @pytest.mark.parametrize('program,mode', MODE_CASES, ids=['-'.join(r) for r in MODE_CASES])
+    def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypatch, program, mode):
+        job = native_job(program, mode)
+        choice = mode_choice(job)
+        case = run_case(tmp_path, program, mode, selectors=[choice])
+        try:
+            body, bundle, sheet, calculations = read_retained(case)
+            (tmp_path / 'NUMERICAL_EXAMPLE.json').write_text(json.dumps({
+                'program': program, 'mode': mode, 'selector': choice,
+                'native_argv': bundle['realized_argv'], 'returncode': bundle['returncode'],
+                'sheet_artifact_ref': body['prepared']['sheet_artifact_ref'],
+>               'calculations_artifact_ref': body['prepared']['calculations_artifact_ref'],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                'sheet_issues': sheet['issues'], 'calculation_issues': calculations['issues'],
+                'typed_return': case.returned[0], 'failures': body['failures'],
+                'scientific_observation_count': case.store.count('observation'),
+            }, indent=2) + '\n')
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x719a0c745b50>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_b1672d913d7d34ed1702221096daac44523be4d92e19303f6be99b38d94...bc77c333cc4a8fec51fdcb6e5b3264b5e41f5f14f510b7196722c89aaa5f28', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'evalues_at_ga', 'program': 'cmstat', 'settings': {'--...ey': 'artifact_c8bc77c333cc4a8fec51fdcb6e5b3264b5e41f5f14f510b7196722c89aaa5f28#/artifacts/0#model_statistic/3'}], ...}
+
+>   ???
+E   AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E     
+E     At index 0 diff: 'REASONING' != 'annotation'
+E     
+E     Full diff:
+E       [
+E     -     'annotation',
+E     -     'launch',
+E     -     'launch_local',
+E     -     'annotation',
+E     -     'results',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E     +     'REASONING',
+E       ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_nc] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat18')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7199e9ad2c90>
+program = 'cmstat', mode = 'evalues_at_nc'
+
+            for algorithm, expected_count in expected_hits.items():
+                calibration = model['calibration'][algorithm]
+                present(calibration['calibration_dbsize_nt'], 20000, unit='nt')
+                present(calibration['random_hit_count'], expected_count)
+            assert 'partition_requests' not in calculations['parameters']
+            assert any(f['code'] == 'native_infernal_preparation_partition_request_binding_unavailable'
+                for f in case.outcomes[0]['result']['failures'])
+            assert any(c['check'] == 'partition_request_binding' and c['outcome'] == 'unknown'
+                for r in rows for c in r['checks'])
+    else:
+        statistics = [r for r in sheet['native_rows'] if r['kind'] == 'model_statistic']
+        assert len(statistics) == 4
+        model, = [r for r in sheet['input_records'] if r['kind'] == 'model']
+        fits = {f['algorithm']: f for f in model['calibration'].values() if f is not None}
+        expected_native = {
+            'scores_at_evalue': [45.32, 36.71, 41.88, 42.23],
+            'scores_at_pvalue': [4.14, 2.60, 2.66, 2.18],
+>           'evalues_at_score': [4406.56, 1593.45, 1859.13, 1697.07],
+        }
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199d958d9d0>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_9ca4daf4cea308ae0695018db3e0400a15809f4cbc3ccd0ee0df35a457d...2ed367824595d9571c618d81686a67e614c48ddd43e8363c354f6d8c96f0fd', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'evalues_at_nc', 'program': 'cmstat', 'settings': {'--...ey': 'artifact_582ed367824595d9571c618d81686a67e614c48ddd43e8363c354f6d8c96f0fd#/artifacts/0#model_statistic/3'}], ...}
+
+            assert len(raw) == row['size_bytes'] == occurrence['size_bytes']
+            assert occurrence['completeness'] == 'complete'
+        return output_occurrences
+    
+    
+    def assert_parent_selection(case, choice, body, sheet, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        collection = choice['projection']['collection']
+        source_rows = calculations['rows'] if collection == 'calculations' else sheet[collection]
+        assert body['population']['collection'] == collection
+        assert body['population']['total_records'] == len(source_rows)
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(source_rows) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in source_rows}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            for quantity in row['quantities']:
+                cell = saved_rows[row['record_key']]
+                for name in quantity['path'].split('.'):
+                    cell = cell.get(name) if cell is not None else None
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+>       entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+_ test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_tc] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/temporary/pytest/test_remaining_native_preparat19')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x719a0c746c90>
+program = 'cmstat', mode = 'evalues_at_tc'
+
+            for algorithm, expected_count in expected_hits.items():
+                calibration = model['calibration'][algorithm]
+                present(calibration['calibration_dbsize_nt'], 20000, unit='nt')
+                present(calibration['random_hit_count'], expected_count)
+            assert 'partition_requests' not in calculations['parameters']
+            assert any(f['code'] == 'native_infernal_preparation_partition_request_binding_unavailable'
+                for f in case.outcomes[0]['result']['failures'])
+            assert any(c['check'] == 'partition_request_binding' and c['outcome'] == 'unknown'
+                for r in rows for c in r['checks'])
+    else:
+        statistics = [r for r in sheet['native_rows'] if r['kind'] == 'model_statistic']
+        assert len(statistics) == 4
+        model, = [r for r in sheet['input_records'] if r['kind'] == 'model']
+        fits = {f['algorithm']: f for f in model['calibration'].values() if f is not None}
+        expected_native = {
+            'scores_at_evalue': [45.32, 36.71, 41.88, 42.23],
+            'scores_at_pvalue': [4.14, 2.60, 2.66, 2.18],
+>           'evalues_at_score': [4406.56, 1593.45, 1859.13, 1697.07],
+        }
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:372: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = namespace(store=<gene_annotation_episode.state.Store object at 0x7199e9d21d00>, flow=<gene_annotation_episode.runtime....e': 'stderr', 'format': 'infernal_stderr', 'relative_path': 'outputs/stderr'}], 'key': None, 'grading_parameters': {}})
+choice = {'version': 'native_infernal_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'...s': [{'direction': 'output', 'role': 'stdout', 'ordinal': 0}, {'direction': 'output', 'role': 'stderr', 'ordinal': 0}]}
+body = {'arguments': {}, 'artifacts': [{'artifact_ref': 'artifact_44175e52b0d5bae28321806efed241743c46bf6122944e797bf726611db...86451a1feea80d45a0f76e31598cdbf74de3206b65cfbcb935972a0770f1f2', 'bundle_validated': True, 'complete': True, ...}, ...}
+calculations = {'issues': [], 'operation': {'engine_version': '1.1.5', 'mode': 'evalues_at_tc', 'program': 'cmstat', 'settings': {'--...ey': 'artifact_9586451a1feea80d45a0f76e31598cdbf74de3206b65cfbcb935972a0770f1f2#/artifacts/0#model_statistic/3'}], ...}
+
+            assert len(raw) == row['size_bytes'] == occurrence['size_bytes']
+            assert occurrence['completeness'] == 'complete'
+        return output_occurrences
+    
+    
+    def assert_parent_selection(case, choice, body, sheet, calculations):
+        parent, received = assert_accounting(case)
+        form = case.returned[0]
+        assert set(form) == {'completed', 'rows', 'artifacts', 'population'}
+        assert form['completed'] is body['complete'] is True, body['failures']
+        assert form['population'] == [body['population']]
+        collection = choice['projection']['collection']
+        source_rows = calculations['rows'] if collection == 'calculations' else sheet[collection]
+        assert body['population']['collection'] == collection
+        assert body['population']['total_records'] == len(source_rows)
+        assert body['population']['returned_records'] == len(form['rows'])
+        assert body['population']['omitted_records'] == max(0, len(source_rows) - choice['projection']['rows']['limit'])
+        assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+        assert body['population']['returned_artifact_count'] == len(case.job['outputs'])
+        saved_rows = {r['record_key']: r for r in source_rows}
+        requested = choice['projection']['quantities']
+        for row in form['rows']:
+            assert row['source_ref'] == body['source_ref']
+            assert [q['path'] for q in row['quantities']] == requested
+            assert set(c['name'] for c in row['checks']) == set(choice['projection']['checks'])
+            for quantity in row['quantities']:
+                cell = saved_rows[row['record_key']]
+                for name in quantity['path'].split('.'):
+                    cell = cell.get(name) if cell is not None else None
+                if cell is not None:
+                    assert {k: quantity[k] for k in ('value', 'state', 'basis', 'unit')} == {
+                        k: cell[k] for k in ('value', 'state', 'basis', 'unit')}
+        facts = case.owner.native_infernal_preparation_returns.received_facts(parent, result_form())
+        assert facts[PREFIX + 'rows'] == form['rows']
+        assert facts[PREFIX + 'artifacts'] == form['artifacts']
+        assert facts[PREFIX + 'population'] == form['population']
+        assert {r['fact_source'] for r in received} == {PREFIX + s for s in ('rows', 'artifacts', 'population')}
+        assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+        assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+        assert tuple(case.record.controller_state.history) == (0, 0)
+        assert case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+        descriptors = case.owner.resource_tool_contracts()
+>       entry, = [r for r in descriptors if r['name'] == 'native.' + case.job['program'] + '.' + case.job['mode']]
+E       AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+E         
+E         At index 0 diff: 'REASONING' != 'annotation'
+E         
+E         Full diff:
+E           [
+E         -     'annotation',
+E         -     'launch',
+E         -     'launch_local',
+E         -     'annotation',
+E         -     'results',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E         +     'REASONING',
+E           ]
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py:212: AssertionError
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_001/tests.xml -
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmbuild-refine] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-legacy_ascii] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-maximum_likelihood_hmm] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-filter_hmm] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-binary] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmemit-sample_unaligned] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmemit-sample_aligned] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-key_file] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-index] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-forecast] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-memory_estimate] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-split_commands] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-partition_scores] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-merge_scores] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_evalue] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_pvalue] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_score] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_ga] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_nc] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_tc] - AssertionError: assert ['REASONING', 'REASONING', 'REASONING', 'REASONING', 'REASONING'] == ['annotation', 'launch', 'launch_local', 'annotation', 'results']
+  
+  At index 0 diff: 'REASONING' != 'annotation'
+  
+  Full diff:
+    [
+  -     'annotation',
+  -     'launch',
+  -     'launch_local',
+  -     'annotation',
+  -     'results',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+  +     'REASONING',
+    ]
+======================== 20 failed in 536.21s (0:08:56) ========================

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="22" time="148.205" timestamp="2026-10-28T23:58:22.527496-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_missing_input_returns_actual_selected_bytes_without_result_or_context[metadata]" time="3.124" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_missing_input_returns_actual_selected_bytes_without_result_or_context[entry_batch]" time="3.077" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_missing_input_returns_actual_selected_bytes_without_result_or_context[dbs_file]" time="2.855" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_missing_input_returns_actual_selected_bytes_without_result_or_context[dependency_list]" time="3.330" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_unqualified_database_list_is_missing_without_suppressing_available_stdout[dependency_list]" time="2.930" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_unqualified_database_list_is_missing_without_suppressing_available_stdout[metadata_with_present_dependency_list]" time="2.889" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_declared_dbs_file_bytes_stay_available_when_other_selected_metadata_is_missing" time="2.871" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_frozen_failure_publication_rejects_tampering[capture_sha256]" time="2.638" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_frozen_failure_publication_rejects_tampering[source_ref]" time="5.681" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_frozen_failure_publication_rejects_tampering[selector]" time="2.696" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_frozen_failure_publication_rejects_tampering[operational_failures]" time="2.705" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_frozen_failure_publication_rejects_tampering[qualification_failure]" time="2.905" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_frozen_failure_publication_rejects_tampering[projection]" time="2.646" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_frozen_failure_publication_rejects_tampering[extra]" time="2.730" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_qualified_or_invalid_capture_cannot_use_missing_input_route" time="2.580" /><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[metadata]" time="9.293"><failure message="TypeError: Object of type mappingproxy is not JSON serializable">source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable</failure></testcase><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[entry_batch]" time="7.552"><failure message="TypeError: Object of type mappingproxy is not JSON serializable">source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable</failure></testcase><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dbs_file]" time="7.494"><failure message="TypeError: Object of type mappingproxy is not JSON serializable">source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable</failure></testcase><testcase classname="tests.test_blast_vdb_capture_failure_674" name="test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition[dependency_list]" time="7.662"><failure message="TypeError: Object of type mappingproxy is not JSON serializable">source_snapshot/tests/test_blast_vdb_capture_failure_674.py:196: in test_selected_failure_returns_and_replays_original_artifacts_without_extra_acquisition
+    "contract": canonical(h.child.request["report_contract"]), "form": canonical(form), "failure": None})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/domain.py:22: in canonical
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/__init__.py:238: in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/json/encoder.py:180: in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+E   TypeError: Object of type mappingproxy is not JSON serializable</failure></testcase><testcase classname="tests.test_blast_vdb_publication_returns_669" name="test_saved_vdb_publisher_authenticates_original_receipt_and_never_rereads_metadata" time="13.683" /><testcase classname="tests.test_blast_vdb_publication_returns_669" name="test_legacy_publication_and_old_body_have_no_v2_enrichment" time="6.053" /><testcase classname="tests.test_blast_vdb_publication_returns_669" name="test_selected_vdb_repair_reuses_original_capture_and_keeps_failure_history_and_credit" time="48.554" /></testsuite></testsuites>

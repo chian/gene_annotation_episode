@@ -1,0 +1,51 @@
+--- /tmp/factual-frame007-root-test-amendment-20261022-001/test_completion_evidence_runtime.py
++++ tests/test_completion_evidence_runtime.py
+@@ -33,7 +33,7 @@
+ 
+ 
+ CURRENT = 'completed_action_inputs_binding_v1'
+-CONTEXT = 'completed_action_estimation_context_v5'
++CONTEXT = 'completed_action_estimation_context_v6'
+ BINDING = {'kind': 'explicit_test_received_progress_units', 'unit': UNIT}
+ 
+ 
+@@ -206,6 +206,8 @@
+ 
+ def packet(context):
+     assert context['version'] == CONTEXT
++    assert context['local_commission_frame_at_selection']['version'] == 'local_commission_frame_v1'
++    assert context['local_commission_frame_after_action']['version'] == 'local_commission_frame_v1'
+     return context['current_completion_evidence']
+ 
+ 
+@@ -428,7 +430,12 @@
+             patched.setattr(CompletionEvidence, 'capture', forbidden)
+             run(legacy)
+         context = legacy.controllers[0].inputs[0]['estimation_context']
+-        assert context['version'] == 'completed_action_estimation_context_v4'
++        # These are fresh durable requests without the optional current-CE
++        # marker. Their factual v6 pair does not create a current CE packet;
++        # genuine saved v1-v5 records retain their separately tested formats.
++        assert context['version'] == 'completed_action_estimation_context_v6'
++        assert context['local_commission_frame_at_selection']['version'] == 'local_commission_frame_v1'
++        assert context['local_commission_frame_after_action']['version'] == 'local_commission_frame_v1'
+         assert 'current_completion_evidence' not in context
+         assert settings == original_settings
+         raw = store.db.execute('SELECT data FROM runtime_estimation_contexts').fetchone()[0]
+--- /tmp/factual-frame007-root-test-amendment-20261022-001/test_model_context_reconstruction.py
++++ tests/test_model_context_reconstruction.py
+@@ -42,7 +42,13 @@
+     child = [r for r in requests if "scientific_process" in r["context"]]
+     assert len(child) == len(sent) == 2
+     for request, actual in zip(child, sent):
+-        assert request["version"] == "runtime_model_call_request_v2"
++        assert request["version"] == "runtime_model_call_request_v3"
++        assert set(request) == {"version", "context", "schema", "model_presentation",
++                                "local_commission_frame"}
++        frame = request["local_commission_frame"]
++        assert frame["version"] == "local_commission_frame_v1"
++        assert frame["run_id"] == run["run_id"]
++        assert frame["pending_captured_at"] == request["context"]["pending_work"]["captured_at"]
+         presentation = request["model_presentation"]
+         assert presentation["version"] == "episode_model_presentation_v1"
+         assert encoded(presentation["context"]) == encoded(actual)

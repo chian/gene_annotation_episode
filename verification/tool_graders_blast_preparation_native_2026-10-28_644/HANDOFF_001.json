@@ -1,0 +1,56 @@
+{
+  "record_type": "blast_preparation_native_handoff_644_v1",
+  "native_invocations": 19,
+  "native_zero_exit_count": 14,
+  "native_nonzero_exit_count": 5,
+  "original_matrix_repeated": false,
+  "production_changed": false,
+  "episode_integration_verified": false,
+  "search_compatibility_verified": false,
+  "original096_integrity": "unverified_original_metadata_exception",
+  "captures": [
+    "retained_native/CAPTURE_001.json",
+    "retained_binary_alias/CAPTURE_002.json",
+    "retained_profile28/CAPTURE_003.json"
+  ],
+  "attempts": [
+    {
+      "name": "check102_blast_preparation_native",
+      "native_calls": 16,
+      "pytest_passed": 1,
+      "collection_returncode": 0,
+      "audit": "clean"
+    },
+    {
+      "name": "check102b_blast_preparation_sources",
+      "native_calls": 0,
+      "pytest_passed": 1,
+      "collection_returncode": 4,
+      "audit": "unbound_dns_library",
+      "unbound_library": "/usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2"
+    },
+    {
+      "name": "check102c_blast_alias_binary",
+      "native_calls": 2,
+      "pytest_passed": 1,
+      "collection_returncode": 0,
+      "audit": "clean"
+    },
+    {
+      "name": "check102d_blast_profile_native",
+      "native_calls": 1,
+      "pytest_passed": 1,
+      "collection_returncode": 0,
+      "audit": "clean"
+    }
+  ],
+  "failed_rps_preserved": true,
+  "successful_rps_source": "authentic_retained315_nested_PssmWithParameters_exact_bytes_plus_type_wrapper",
+  "successful_rps_output_file_count": 12,
+  "binary_alias_native_length": 13,
+  "binary_alias_selected_sequence_length": 12,
+  "binary_alias_stored_identifier": "KEEP_B",
+  "binary_alias_output_sequence_identifier": "lcl|KEEP_B",
+  "explicit_blastdbcmd_verification_helpers_total": 3,
+  "report": "HANDOFF_001.md"
+}

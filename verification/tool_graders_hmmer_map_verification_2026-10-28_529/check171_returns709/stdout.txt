@@ -1,0 +1,18 @@
+
+==================================== ERRORS ====================================
+___________ ERROR collecting tests/test_flux_balance_returns_709.py ____________
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check171_returns709/source_snapshot/tests/test_flux_balance_returns_709.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+runtime/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:23: in <module>
+    from gene_annotation_episode.flux_balance_returns import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE
+source_snapshot/gene_annotation_episode/flux_balance_returns.py:24: in <module>
+    from .flux_balance_return_views import (
+E   ImportError: cannot import name 'FACT_SOURCES' from 'gene_annotation_episode.flux_balance_return_views' (/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check171_returns709/source_snapshot/gene_annotation_episode/flux_balance_return_views.py)
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_flux_balance_returns_709.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 1.27s

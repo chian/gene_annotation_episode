@@ -1,0 +1,871 @@
+..F...........F.....F.FFFFFFFFFFFFFFFFFFFFF....F..............F......F.. [ 34%]
+FF.FFF.............F..F..F....F...F.............F....................... [ 69%]
+...............................................................          [100%]
+=================================== FAILURES ===================================
+_ test_all_five_assignments_roundtrip_without_normalizing_nested_nulls_or_literals _
+source_snapshot/tests/test_episode_assignment_transport.py:216: in test_all_five_assignments_roundtrip_without_normalizing_nested_nulls_or_literals
+    assert Draft202012Validator(case.host).is_valid(decoded), role
+E   AssertionError: scientific_process
+E   assert False
+E    +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_86a8b4754d92eb7ee45d7505']}, ...}, 'report_update': {}})
+E    +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E    +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+E    +        where {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False} = namespace(fixture={'case': PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_composed_assi...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}).host
+_ test_decoded_assignment_original_typed_form_and_saved_commission_remain_exact[scientific_process] _
+source_snapshot/tests/test_episode_assignment_transport.py:272: in test_decoded_assignment_original_typed_form_and_saved_commission_remain_exact
+    assert unit is not None
+E   assert None is not None
+_ test_decoding_preserves_existing_host_and_semantic_rejections[scientific_library_reference] _
+source_snapshot/tests/test_episode_assignment_transport.py:317: in test_decoding_preserves_existing_host_and_semantic_rejections
+    assert Draft202012Validator(case.host).is_valid(decoded)
+E   AssertionError: assert False
+E    +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_d0ee74f8a837408b8261aed1']}, ...}, 'report_update': {}})
+E    +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E    +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+E    +        where {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False} = namespace(fixture={'case': PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_composed_assi...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}).host
+_ test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#/$defs/shared] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:76: in test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#shared] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:76: in test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments0] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:109: in test_composed_transport_preserves_omission_and_explicit_nullable_values
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments1] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:109: in test_composed_transport_preserves_omission_and_explicit_nullable_values
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments2] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:109: in test_composed_transport_preserves_omission_and_explicit_nullable_values
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_restriction_can_require_an_optional_actual_field_without_null_substitution _
+source_snapshot/tests/test_scientific_process_schema_transport.py:125: in test_restriction_can_require_an_optional_actual_field_without_null_substitution
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_conditional_presence_and_max_properties_are_host_constraints[arguments0-True] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_conditional_presence_and_max_properties_are_host_constraints[arguments1-False] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_conditional_presence_and_max_properties_are_host_constraints[arguments2-False] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_conditional_presence_and_max_properties_are_host_constraints[arguments3-True] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_schema_shaped_literals_remain_data_in_composition_and_json_transport[False] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:167: in test_schema_shaped_literals_remain_data_in_composition_and_json_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_schema_shaped_literals_remain_data_in_composition_and_json_transport[True] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:167: in test_schema_shaped_literals_remain_data_in_composition_and_json_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+__ test_boolean_property_schema_is_data_contract_not_an_action_discriminator ___
+source_snapshot/tests/test_scientific_process_schema_transport.py:183: in test_boolean_property_schema_is_data_contract_not_an_action_discriminator
+    case, workflow, _, child = configured_child(tmp_path, store, actual, None)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[[]] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[null] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{"value":2,"value":3}] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{"value":NaN}] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{"value":1e10000}] _
+source_snapshot/tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_recorded_response_reuses_its_original_host_contract_without_provider_dispatch _
+source_snapshot/tests/test_scientific_process_schema_transport.py:216: in test_recorded_response_reuses_its_original_host_contract_without_provider_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect
+_ test_scientific_assignment_json_transport_preserves_arbitrary_finite_context _
+source_snapshot/tests/test_scientific_process_schema_transport.py:263: in test_scientific_assignment_json_transport_preserves_arbitrary_finite_context
+    assert Draft202012Validator(host).is_valid(decoded)
+E   AssertionError: assert False
+E    +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Resolve the scoped fixture alternatives using changing outcomes', 'scope': {'subject_refs': ['input_c301934bc60dd385b83f0619']}, ...}, 'report_update': {}})
+E    +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...chema_json'], 'type': 'object'}]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E    +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...chema_json'], 'type': 'object'}]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+____________ test_unavailable_work_is_feedback_not_zero_observation ____________
+source_snapshot/tests/test_runtime.py:334: in test_unavailable_work_is_feedback_not_zero_observation
+    assert provider.contexts[1]["feedback"] == {"code": "fixture_unavailable"}
+E   AssertionError: assert {'category': ...s': 'invalid'} == {'code': 'fix..._unavailable'}
+E     
+E     Left contains 3 more items:
+E     {'category': 'action_contract',
+E      'detail': {'code': 'schema_validation',
+E                 'issues': [{'path': [], 'rule': 'anyOf'}],
+E                 'more_issues': False},
+E      'status': 'invalid'}...
+E     
+E     ...Full output truncated (3 lines hidden), use '-vv' to show
+_ test_omitted_optional_contexts_does_not_make_empty_request_a_completed_action _
+source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_runtime.py:617: in test_omitted_optional_contexts_does_not_make_empty_request_a_completed_action
+    result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4257: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4579: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+__ test_async_tool_protocol_runs_on_owning_loop_with_sync_fallback_available ___
+source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_runtime.py:773: in test_async_tool_protocol_runs_on_owning_loop_with_sync_fallback_available
+    result = run(store, tools, ScriptedProvider([tool(), reason(1)]), tmp_path / "run")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_runtime.py:215: in run
+    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4257: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4579: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+___ test_form_facts_stream_only_reference_arrays_without_archived_tool_text ____
+source_snapshot/tests/test_runtime.py:887: in test_form_facts_stream_only_reference_arrays_without_archived_tool_text
+    facts = workflow.facts(source)
+            ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3887: in facts
+    received_facts = self.episode_bindings.received_report_facts(self.binding_context(source))
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:2356: in binding_context
+    return BindingContext(self.run_id, source.episode_id, source.path[-1][0],
+                                                          ^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'path'
+______ test_effective_credit_binding_in_context_is_persisted_and_restored ______
+source_snapshot/tests/test_runtime.py:904: in test_effective_credit_binding_in_context_is_persisted_and_restored
+    policy = CreditPolicy(epsilon=.37, scale=42,
+source_snapshot/gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+_ test_resource_only_run_config_uses_canonical_models_and_resume_keeps_custom_models _
+source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_runtime.py:1025: in test_resource_only_run_config_uses_canonical_models_and_resume_keeps_custom_models
+    result = run(store, tools, ScriptedProvider([tool(page=1)]), tmp_path / "run", resume=True,
+source_snapshot/tests/test_runtime.py:215: in run
+    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4257: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4579: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+____ test_actual_store_tools_and_credit_reasoning_commit_existing_evidence _____
+source_snapshot/tests/test_runtime.py:1068: in test_actual_store_tools_and_credit_reasoning_commit_existing_evidence
+    result = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / "actual-run",
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4257: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4579: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_runtime.py:1045: in interpretation
+    observation = context["working_state"]["observations"][0]["id"]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+_ test_missing_inferred_extent_notice_reaches_owner_then_bounded_revision_gains_once _
+source_snapshot/tests/test_runtime.py:1130: in test_missing_inferred_extent_notice_reaches_owner_then_bounded_revision_gains_once
+    result = asyncio.run(run_workflow(store, tools,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4257: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4579: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1062: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_runtime.py:1093: in no_extent
+    observation = context['working_state']['observations'][0]['id']
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+_ test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation _
+source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_runtime_decision_exchanges.py:134: in test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation
+    result = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1032: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1312: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+source_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: coroutine raised StopIteration
+_________ test_own_input_detail_requests_stay_inside_pending_decision __________
+source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_runtime_decision_exchanges.py:190: in test_own_input_detail_requests_stay_inside_pending_decision
+    result = run(store, tools, provider, tmp_path / 'run', counts=(2, 2), decision_protocol=PROTOCOL)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_runtime.py:215: in run
+    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4257: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4579: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1032: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1312: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+source_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: coroutine raised StopIteration
+_ test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context _
+source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_runtime_decision_exchanges.py:246: in test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context
+    asyncio.run(root.run_async(workflow.context))
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1470: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1032: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1312: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+source_snapshot/tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: coroutine raised StopIteration
+______ test_injected_legacy_default_and_markerless_resume_do_not_migrate _______
+source_snapshot/tests/test_runtime_decision_exchanges.py:333: in test_injected_legacy_default_and_markerless_resume_do_not_migrate
+    assert 'episode.history' in {item['name'] for item in json.loads(original)['context']['tools']}
+E   AssertionError: assert 'episode.history' in set()
+_ test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation _
+source_snapshot/tests/test_contract_information_runtime_059.py:103: in test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation
+    assert len([row for row in original['context']['tools'] if row['name'].startswith('literature.')]) == 19
+E   AssertionError: assert 21 == 19
+E    +  where 21 = len([{'argument_transport': 'json_object_contract_information_v1', 'description': 'Populate source-preparation rate cells ...rce_ref', 'model_source_ref', 'model_witnesses'], 'type': 'object'}, 'name': 'literature.binding.model.populate'}, ...])
+_ test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss _
+source_snapshot/tests/test_contract_information_runtime_059.py:355: in test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss
+    assert len(populations) == 19
+E   AssertionError: assert 21 == 19
+E    +  where 21 = len([{'type': 'object', 'properties': {'kind': {'type': 'string', 'const': 'tool'}, 'tool': {'type': 'string', 'const': 'l..., 'additionalProperties': False}}, 'required': ['kind', 'tool', 'arguments'], 'additionalProperties': False, ...}, ...])
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_episode_assignment_transport.py::test_all_five_assignments_roundtrip_without_normalizing_nested_nulls_or_literals
+FAILED source_snapshot/tests/test_episode_assignment_transport.py::test_decoded_assignment_original_typed_form_and_saved_commission_remain_exact[scientific_process]
+FAILED source_snapshot/tests/test_episode_assignment_transport.py::test_decoding_preserves_existing_host_and_semantic_rejections[scientific_library_reference]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#/$defs/shared]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#shared]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments0]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments1]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments2]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_restriction_can_require_an_optional_actual_field_without_null_substitution
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_conditional_presence_and_max_properties_are_host_constraints[arguments0-True]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_conditional_presence_and_max_properties_are_host_constraints[arguments1-False]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_conditional_presence_and_max_properties_are_host_constraints[arguments2-False]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_conditional_presence_and_max_properties_are_host_constraints[arguments3-True]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_schema_shaped_literals_remain_data_in_composition_and_json_transport[False]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_schema_shaped_literals_remain_data_in_composition_and_json_transport[True]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_boolean_property_schema_is_data_contract_not_an_action_discriminator
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[[]]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[null]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{"value":2,"value":3}]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{"value":NaN}]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{"value":1e10000}]
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_recorded_response_reuses_its_original_host_contract_without_provider_dispatch
+FAILED source_snapshot/tests/test_scientific_process_schema_transport.py::test_scientific_assignment_json_transport_preserves_arbitrary_finite_context
+FAILED source_snapshot/tests/test_runtime.py::test_unavailable_work_is_feedback_not_zero_observation
+FAILED source_snapshot/tests/test_runtime.py::test_omitted_optional_contexts_does_not_make_empty_request_a_completed_action
+FAILED source_snapshot/tests/test_runtime.py::test_async_tool_protocol_runs_on_owning_loop_with_sync_fallback_available
+FAILED source_snapshot/tests/test_runtime.py::test_form_facts_stream_only_reference_arrays_without_archived_tool_text
+FAILED source_snapshot/tests/test_runtime.py::test_effective_credit_binding_in_context_is_persisted_and_restored
+FAILED source_snapshot/tests/test_runtime.py::test_resource_only_run_config_uses_canonical_models_and_resume_keeps_custom_models
+FAILED source_snapshot/tests/test_runtime.py::test_actual_store_tools_and_credit_reasoning_commit_existing_evidence
+FAILED source_snapshot/tests/test_runtime.py::test_missing_inferred_extent_notice_reaches_owner_then_bounded_revision_gains_once
+FAILED source_snapshot/tests/test_runtime_decision_exchanges.py::test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation
+FAILED source_snapshot/tests/test_runtime_decision_exchanges.py::test_own_input_detail_requests_stay_inside_pending_decision
+FAILED source_snapshot/tests/test_runtime_decision_exchanges.py::test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context
+FAILED source_snapshot/tests/test_runtime_decision_exchanges.py::test_injected_legacy_default_and_markerless_resume_do_not_migrate
+FAILED source_snapshot/tests/test_contract_information_runtime_059.py::test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation
+FAILED source_snapshot/tests/test_contract_information_runtime_059.py::test_all_nineteen_original_host_contracts_validate_decoded_objects_without_capability_loss
+38 failed, 169 passed in 1477.61s (0:24:37)

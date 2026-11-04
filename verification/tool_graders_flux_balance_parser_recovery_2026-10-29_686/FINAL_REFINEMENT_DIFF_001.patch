@@ -1,0 +1,44 @@
+--- check149_recovery686/gene_annotation_episode/flux_balance_readers.py
++++ check149a_recovery686/gene_annotation_episode/flux_balance_readers.py
+@@ -491,7 +491,6 @@
+                         issue = _issue("schema_invalid", source, f"{pointer}/{axis}/{index}", index=index)
+                         issue[axis[:-1] + "_position"] = row["position"]
+                         issues.append(issue)
+-                        partial = True
+                 value[axis] = kept
+                 source_indices[axis] = indices
+                 partial |= [row["position"] for row in kept] != list(range(count))
+--- check149_recovery686/tests/test_flux_balance_parser_recovery_686.py
++++ check149a_recovery686/tests/test_flux_balance_parser_recovery_686.py
+@@ -189,21 +189,26 @@
+ 
+ 
+ @pytest.mark.parametrize("field", ["variables", "constraints"])
+-def test_problem_population_rejection_keeps_original_row_index(captures, field):
++@pytest.mark.parametrize("malformed_predecessor", [True, False], ids=["filtered_predecessor", "no_predecessor"])
++def test_problem_population_rejection_keeps_original_row_index(captures, field, malformed_predecessor):
+     payload = deepcopy(captures["problems"])
+     count_key = field[:-1] + "_count"
+     expected = payload["effective"][count_key]
+-    prepend_malformed(payload, field)
++    if malformed_predecessor:
++        prepend_malformed(payload, field)
+     rows = payload["effective"][field]
++    original_index = len(rows)
+     outside = relocated(rows[-1], f"/effective/{field}/{len(rows) - 1}", f"/effective/{field}/{len(rows)}")
+     outside.update(position=expected, native_index=expected + 1, optlang_position=expected, id="outside_population")
+     rows.append(outside)
+-    result = read_payload(payload, captures, "problems", name="problem_population_" + field)
+-    located(result, payload, "schema_invalid", f"/effective/{field}/{expected + 1}", expected + 1,
++    result = read_payload(payload, captures, "problems", name=f"problem_population_{field}_{malformed_predecessor}")
++    located(result, payload, "schema_invalid", f"/effective/{field}/{original_index}", original_index,
+             **{field[:-1] + "_position": expected})
+     assert result["effective"][count_key] == expected
+     assert [row["position"] for row in result["effective"][field]] == list(range(expected))
+-    assert result["effective"]["representation"] == "partial"
++    # Keep the established representation policy: filtering an extra row alone
++    # leaves a full expected population; a malformed predecessor marks partial.
++    assert result["effective"]["representation"] == ("partial" if malformed_predecessor else "complete_continuous_linear")
+     assert result["loaded_original"]["representation"] == "complete_continuous_linear"
+ 
+ 

@@ -151,6 +151,22 @@ def test_wired_setup_keeps_scientific_policy_and_passes_original_registry(monkey
         inputs=policy.episode_service_inputs)['inputs'] == 'actual_tool_registry_v1'
 
 
+def test_contract_discovery_profile_survives_policy_capture_and_rejects_unknown_profile(monkeypatch, tmp_path):
+    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
+    supplied = parameters()
+    supplied['services']['scientific_contract_information_profile'] = CONTRACT_INFORMATION_PROFILE
+    policy = create_policy(supplied)
+    supplied['services']['scientific_contract_information_profile'] = 'changed'
+    captured = []
+    monkeypatch.setattr(assembled_case_policy, 'bind_assembled_services',
+        lambda store, **kwargs: captured.append(kwargs))
+    policy.episode_service_factory(object(), run_id='profile-fixture', directory=tmp_path,
+        job_episodes=object(), resource_estimator=object(), tool_catalog={})
+    assert captured[0]['scientific_contract_information_profile'] == CONTRACT_INFORMATION_PROFILE
+    with pytest.raises(ValueError, match='contract_information_profile'):
+        create_policy(supplied)
+
+
 def test_snapshot_loader_preserves_exact_opt_in_definition_and_original_policy_values(tmp_path):
     supplied = parameters()
     policy, recorded = _load_policy(tmp_path, Path(assembled_case_policy.__file__), supplied, resume=False)

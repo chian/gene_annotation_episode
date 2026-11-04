@@ -310,7 +310,7 @@ def project_liftover_return(components, *, source_ref):
 
 
 def liftover_fact_sources():
-    """An UNREGISTERED closed source-owned schema, not a commissioned tool."""
+    """Closed Source-owned facts; schema registration alone proves no execution."""
     text = {"type": "string"}
     integer = {"type": "integer"}
     count = {"type": "integer", "minimum": 0}

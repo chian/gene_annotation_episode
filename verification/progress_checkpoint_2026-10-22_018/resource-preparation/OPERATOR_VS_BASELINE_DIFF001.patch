@@ -1,0 +1,194 @@
+--- /tmp/configured-literature-caller-plan-20261022-001-vujlt8m4/prepare_caller001.py
++++ /tmp/configured-resource-caller-preparation-20261022-001-U7WRRlHE/prepare_caller001.py
+@@ -1,10 +1,11 @@
+-"""PROPOSED preparation only. Run only after root adopts the exact scope/bytes.
++"""Preparation only under the adopted resource caller scope. Root invokes once.
+ 
+ Creates a fresh C custody workspace and ordinary fixed-case prepared caller.
+ Never runs an episode, provider/model, public request or native program. No retry.
+ """
+ from __future__ import annotations
+ import argparse
++from datetime import datetime, timezone
+ import hashlib
+ import json
+ import os
+@@ -16,13 +17,21 @@
+ 
+ PLAN=Path(__file__).resolve().parent
+ CODE=Path('/tmp/gene-annotation-configured-caller-20261022-007')
+-RUN=Path('/home/chia/gene_annotation_episode_runs/configured_literature_localization_001')
+-EVIDENCE=Path('/tmp/configured-literature-localization-preparation-20261022-001')
++RUN=Path('/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001')
++EVIDENCE=Path('/tmp/configured-resource-investigation-preparation-20261022-001')
+ PIN='3805ed95de6e84ac90e31fe89ee076218acbe53d5e111d4332f6d0d108d65842'
+ POLICY=CODE/'gene_annotation_episode/api_planning_case_policy.py'
+ POLICY_SHA='4474422fa09ac5247b1957e7d1bce4a57ac811f39f1cc9356666a7c4d4ea276f'
+ C_SHA='166d459b38295ab4003ebe39babd22184a96482dba5146b3b2479291ebd423ab'
+ SCHEMA_SHA='b000697eb19d68140f14f2e8f7d30c13b60653a6e443c0508c6ec1519b7d6112'
++SCOPE_SHA='9224e495eeb891266ed5c7b212598f4b436c4e1d3cb376db4ffe30a187fd82ad'
++DELTA_SHA='5fa4cb22fc4039283b961d0f3a5f83052e30a03228c44da0bd0436831d241a39'
++FOCUS_SHA='b2f718a545a1829b8521f6cd437ff1c0688ad4068b5f739d033e9d8ce151c7bf'
++INPUT_NAMES={'C_REQUEST001.json','PARAMETER_TEMPLATE001.json','config.toml','focus.txt',
++ 'EXPECTED_HANDOFF001.json','PUBLICATION_INPUTS001.json','SCHEMAS004.json',
++ 'ADOPTED_INPUT_DELTAS001.json','ADOPTED_SCOPE001.md','BASELINE_C_REQUEST001.json',
++ 'BASELINE_PARAMETER_TEMPLATE001.json','BASELINE_CONFIG001.toml',
++ 'OPERATOR_OUTPUT_SCHEMA001.json','prepare_caller001.py'}
+ 
+ def canonical(x):return json.dumps(x,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+ def sha(b):return hashlib.sha256(b).hexdigest()
+@@ -35,6 +44,7 @@
+   return x
+  return json.loads(p.read_bytes(),object_pairs_hook=pairs,
+   parse_constant=lambda x:(_ for _ in ()).throw(ValueError('nonfinite_json')))
++def utc():return datetime.now(timezone.utc).isoformat()
+ def no_links(p):
+  for q in (p,*p.parents):
+   if q.is_symlink():raise ValueError('symlink_path')
+@@ -82,7 +92,10 @@
+    elif not p.is_dir():raise ValueError('unexpected_source_artifact_node')
+  case=Path(next(row['source_path'] for row in expected['source_authorities'] if row['checkpoint_relative_path']=='checkpoint/authority/case/case.json')).parent
+  if (case/'evidence-refs.json').is_file():paths.add(case/'evidence-refs.json')
+- return {'implementation':implementation(root),'files':{str(p):witness(p) for p in sorted(paths)}}
++ def source_witness(p):
++  value=witness(p)
++  return None if value is None else {**value,'mode':oct(p.stat(follow_symlinks=False).st_mode & 0o777)}
++ return {'implementation':implementation(root),'files':{str(p):source_witness(p) for p in sorted(paths)}}
+ def check_source_guard(g,arguments,expected):
+  if g['implementation']['sha256']!=arguments['expected_source_implementation_sha256'] or g['implementation']['file_count']!=122:raise ValueError('source_implementation_mismatch')
+  for d in [expected['source_database'],expected['source_native_database'],*expected['source_authorities']]:
+@@ -97,6 +110,47 @@
+  p=RUN/'workspace'/path;no_links(p)
+  if not p.is_relative_to(RUN/'workspace'):raise ValueError('receipt_path_outside_workspace')
+  return p
++
++def verify_static_inputs(manifest):
++ """Validate the adopted deltas without constructing application objects."""
++ if set(manifest['members'])!=INPUT_NAMES:raise ValueError('input_packet_membership_mismatch')
++ for name,descriptor in manifest['members'].items():
++  if descriptor['path']!=str(PLAN/name):raise ValueError('input_packet_path_mismatch')
++  matches(PLAN/name,descriptor)
++ if (manifest['implementation_root']!=str(CODE) or manifest['implementation_sha256']!=PIN
++   or manifest['runtime_file_count']!=137 or manifest['destination_run_directory']!=str(RUN)):
++  raise ValueError('input_packet_binding_mismatch')
++ for name,expected_hash in [('ADOPTED_SCOPE001.md',SCOPE_SHA),
++   ('ADOPTED_INPUT_DELTAS001.json',DELTA_SHA),('focus.txt',FOCUS_SHA),('SCHEMAS004.json',SCHEMA_SHA),
++   ('BASELINE_C_REQUEST001.json','6772cb5153ee721d5359f5c5d4eb9bd01435c8cf5e78b2d8741683ac76bd580b'),
++   ('BASELINE_PARAMETER_TEMPLATE001.json','3cfeb2dcf0d1eed7bf5fc7fe7ba48130df2ae9d958dce2191bc9dab651f3bf5d'),
++   ('BASELINE_CONFIG001.toml','5de7a0e2f05bbdc9a8fb2c0d234b412441869ff58f96bbf1b101680475395db1')]:
++  if witness(PLAN/name)['sha256']!=expected_hash:raise ValueError('adopted_static_authority_mismatch:'+name)
++ delta=read(PLAN/'ADOPTED_INPUT_DELTAS001.json')
++ source_request=read(PLAN/'BASELINE_C_REQUEST001.json')
++ expected_request={**source_request,'destination_workspace':str(RUN/'workspace')}
++ if canonical(read(PLAN/'C_REQUEST001.json'))!=canonical(expected_request):raise ValueError('C_request_delta_mismatch')
++ if sha(canonical(source_request['initial_known_record_refs']))!=delta['initial_198_list_canonical_sha256']:
++  raise ValueError('original_initial_reference_selection_mismatch')
++ expected_parameters=read(PLAN/'BASELINE_PARAMETER_TEMPLATE001.json')
++ for item in delta['changes']['parameters']:
++  keys=item['path'].split('.');node=expected_parameters
++  for key in keys[:-1]:node=node[key]
++  if node[keys[-1]]!=item['original_value']:raise ValueError('parameter_delta_original_mismatch')
++  node[keys[-1]]=item['proposed_value']
++ parameters=read(PLAN/'PARAMETER_TEMPLATE001.json')
++ if canonical(parameters)!=canonical(expected_parameters):raise ValueError('parameter_delta_mismatch')
++ if (sha(canonical(parameters['policy']))!='dc23b2c87d7d4466f217c2752d1ad1f1bedf86e50fe02ea0a416b60c0d345ac1'
++   or parameters['services']['public_search_registry']['registry_ref']!=manifest['public_search_registry_ref']):
++  raise ValueError('static_policy_or_public_registry_mismatch')
++ expected_config=tomllib.loads((PLAN/'BASELINE_CONFIG001.toml').read_text())
++ for item in delta['changes']['configuration']:
++  keys=item['path'].split('.');node=expected_config
++  for key in keys[:-1]:node=node[key]
++  if node[keys[-1]]!=item['original_value']:raise ValueError('configuration_delta_original_mismatch')
++  node[keys[-1]]=item['proposed_value']
++ if canonical(tomllib.loads((PLAN/'config.toml').read_text()))!=canonical(expected_config):
++  raise ValueError('configuration_delta_mismatch')
+ 
+ def verify_c(result,arguments,expected,schema):
+  validate(schema,result,'result')
+@@ -152,6 +206,8 @@
+  'receipt':witness(rp),'checkpoint':witness(db),'working_database_publication_hash_checked_before_prepare':True}
+ 
+ def new_database_counts(path,tables):
++ if path not in {RUN/'native-jobs/jobs.sqlite',RUN/'workspace/state.sqlite3'}:
++  raise ValueError('count_database_outside_new_prepared_run')
+  wal=witness(Path(str(path)+'-wal'))
+  if wal is not None and wal['bytes']!=0:raise ValueError('new_database_nonempty_wal')
+  db=sqlite3.connect(path.as_uri()+'?mode=ro&immutable=1',uri=True)
+@@ -161,14 +217,23 @@
+  finally:db.close()
+ 
+ def main():
+- parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--prepare',action='store_true',required=True);parser.parse_args()
++ parser=argparse.ArgumentParser(description=__doc__)
++ parser.add_argument('--prepare',action='store_true',required=True)
++ parser.add_argument('--input-manifest-sha256',required=True)
++ args=parser.parse_args()
+  sys.dont_write_bytecode=True
+  os.umask(0o077)
+- no_links(EVIDENCE);EVIDENCE.mkdir(mode=0o700)
+- phase='validate_inputs';before=None;arguments=expected=None;failure=None
++ phase='reserve_evidence';before=None;arguments=expected=None;failure=None;evidence_owned=False
++ started_at=utc()
+  try:
++  no_links(EVIDENCE);EVIDENCE.mkdir(mode=0o700);evidence_owned=True
++  save(EVIDENCE/'OPERATOR_EXECUTION_STARTED001.json',{'argv':sys.argv,'cwd':str(Path.cwd()),
++   'explicit_environment':{key:os.environ.get(key) for key in ['PYTHONDONTWRITEBYTECODE','PYTHONPATH']},
++   'started_at_utc':started_at,'operator':witness(Path(__file__)),'scope_sha256':SCOPE_SHA})
++  phase='validate_inputs'
++  if witness(PLAN/'INPUTS001.json')['sha256']!=args.input_manifest_sha256:raise ValueError('input_manifest_sha256_mismatch')
+   manifest=read(PLAN/'INPUTS001.json')
+-  for n,d in manifest['members'].items():matches(PLAN/n,d)
++  verify_static_inputs(manifest)
+   current=implementation(CODE)
+   if current['sha256']!=PIN or current['file_count']!=137:raise ValueError('execution_implementation_mismatch')
+   if witness(POLICY)['sha256']!=POLICY_SHA or witness(CODE/'gene_annotation_episode/scientific_checkpoint_fork.py')['sha256']!=C_SHA:raise ValueError('producer_source_mismatch')
+@@ -182,6 +247,7 @@
+   if not RUN.parent.is_dir() or os.path.lexists(RUN):raise ValueError('new_run_directory_required')
+   phase='source_before_guard';before=source_guard(arguments,expected);check_source_guard(before,arguments,expected)
+   save(EVIDENCE/'SOURCE_BEFORE001.json',before)
++  phase='create_run'
+   RUN.mkdir(mode=0o700)
+   parent_fd=os.open(RUN.parent,os.O_RDONLY|os.O_DIRECTORY)
+   try:os.fsync(parent_fd)
+@@ -233,7 +299,7 @@
+   if implementation(CODE)!=current:raise ValueError('execution_source_changed')
+   phase='source_after_guard';after=source_guard(arguments,expected);save(EVIDENCE/'SOURCE_AFTER_PREPARE001.json',after)
+   if after!=before:raise ValueError('source_changed_after_prepare')
+-  output={'version':'configured_literature_localization_preparation_result_v1','status':'prepared_not_started',
++  output={'version':'configured_resource_investigation_preparation_result_v1','status':'prepared_not_started',
+    'run_directory':str(RUN),'workspace':str(RUN/'workspace'),'execution_implementation_sha256':PIN,
+    'custody_result':witness(inputs/'C_RESULT001.json'),'receipt':witness(RUN/'workspace/scientific-checkpoint-fork.json'),
+    'case_launch':witness(RUN/'case-launch.json'),'parameters':witness(inputs/'parameters.json'),
+@@ -246,17 +312,28 @@
+    'no_policy_binding_or_execution_binding_created_until_ordinary_future_run','no_child_or_parent_scientific_behavior_demonstrated']}
+   validate(read(PLAN/'OPERATOR_OUTPUT_SCHEMA001.json'),output,'result')
+   save(inputs/'PREPARATION_RESULT001.json',output);save(EVIDENCE/'RESULTS001.json',output)
++  save(EVIDENCE/'OPERATOR_EXECUTION_FINISHED001.json',{'started_at_utc':started_at,
++   'finished_at_utc':utc(),'status':'prepared_not_started','exit_code':0,'last_phase':phase})
+   print(json.dumps(output,sort_keys=True),flush=True)
+  except BaseException as e:
+-  failure={'version':'configured_literature_localization_preparation_failure_v1','phase':phase,
++  failure={'version':'configured_resource_investigation_preparation_failure_v1','phase':phase,
+    'exception_type':type(e).__name__,'message':str(e),'source_unchanged':None,'source_guard_error_type':None,
+    'run_directory':str(RUN),'preserve_partial':True,'automatic_retry':False,'model_http_native_calls':0}
+-  if before is not None and arguments is not None and expected is not None:
++  if evidence_owned and before is not None and arguments is not None and expected is not None:
+    try:
+     after=source_guard(arguments,expected);save(EVIDENCE/'SOURCE_AFTER_FAILURE001.json',after);failure['source_unchanged']=after==before
+    except BaseException as guard_error:failure['source_guard_error_type']=type(guard_error).__name__
+-  validate(read(PLAN/'OPERATOR_OUTPUT_SCHEMA001.json'),failure,'failure')
+-  save(EVIDENCE/'FAILURE001.json',failure)
++  if evidence_owned:
++   # A storage failure can also prevent writing diagnostic files. Preserve the
++   # actual failure on external stderr even in that case; never overwrite or
++   # clean up existing evidence/partial target files.
++   try:
++    validate(read(PLAN/'OPERATOR_OUTPUT_SCHEMA001.json'),failure,'failure')
++    save(EVIDENCE/'FAILURE001.json',failure)
++    save(EVIDENCE/'OPERATOR_EXECUTION_FINISHED001.json',{'started_at_utc':started_at,
++     'finished_at_utc':utc(),'status':'failed_preserve_partial','exit_code':1,'last_phase':phase})
++   except BaseException as diagnostic_error:
++    print(json.dumps({'diagnostic_preservation_error_type':type(diagnostic_error).__name__}),file=sys.stderr,flush=True)
+   print(json.dumps(failure,sort_keys=True),file=sys.stderr,flush=True)
+   raise
+ 

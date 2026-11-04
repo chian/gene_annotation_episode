@@ -1,0 +1,191 @@
+{
+  "version": "hmmer_input_fasta_implementation_handoff_v1",
+  "packet": 538,
+  "scope": "isolated AFA/A2M input decoder and frozen byte/diagnostic primitives",
+  "contracts": [
+    "verification/tool_graders_hmmer_input_implementation_2026-10-28_536/ROOT_INTERFACE_001.md",
+    "verification/tool_graders_hmmer_input_implementation_2026-10-28_536/ROOT_INTERFACE_002.md",
+    "verification/tool_graders_hmmer_remaining_map_inputs_2026-10-28_534/SHARED_INTERFACE.md",
+    "verification/tool_graders_hmmer_remaining_map_inputs_2026-10-28_534/SOURCE_MAP.md",
+    "verification/tool_graders_hmmer_remaining_map_inputs_2026-10-28_534/VERIFICATION_CASES.md"
+  ],
+  "owned_implementation_and_test_files": [
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_input_types.py",
+      "size_bytes": 3615,
+      "sha256": "40459e9f8a60affcf2770431dd019990c16d3ef9a39459ca31e9c63aead95d9d"
+    },
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_input_fasta.py",
+      "size_bytes": 23207,
+      "sha256": "0ef0644998dff643ba22c6e279c9df3da29ea22890307378be05f6c4bdbdf989"
+    },
+    {
+      "path": "tests/test_hmmer_alignment_input_fasta.py",
+      "size_bytes": 24674,
+      "sha256": "280cff4036ebd552d038ec00509def309f2f75a2c54ac6e47dda72e8ec683790"
+    }
+  ],
+  "owned_diff": {
+    "path": "verification/tool_graders_hmmer_input_fasta_2026-10-28_538/OWNED.diff",
+    "size_bytes": 52966,
+    "sha256": "fb09242bc7087042b712b5b8d41c8ccd5b473d4aa2dfdffc85ca65d87962c970"
+  },
+  "test_selector": "tests/test_hmmer_alignment_input_fasta.py",
+  "test_function_selectors": [
+    "tests/test_hmmer_alignment_input_fasta.py::test_native_byte_lines_lf_crlf_and_control_bytes",
+    "tests/test_hmmer_alignment_input_fasta.py::test_byte_line_argument_misuse",
+    "tests/test_hmmer_alignment_input_fasta.py::test_diagnostic_closed_shape_and_exact_detail_types",
+    "tests/test_hmmer_alignment_input_fasta.py::test_diagnostic_rejects_contract_misuse",
+    "tests/test_hmmer_alignment_input_fasta.py::test_decoder_argument_misuse",
+    "tests/test_hmmer_alignment_input_fasta.py::test_empty_file_is_eof_without_an_alignment_occurrence",
+    "tests/test_hmmer_alignment_input_fasta.py::test_afa_multiline_whitespace_description_and_duplicate_identity",
+    "tests/test_hmmer_alignment_input_fasta.py::test_header_bytes_are_reversible_and_nul_is_a_token_delimiter",
+    "tests/test_hmmer_alignment_input_fasta.py::test_header_tokens_do_not_split_at_bare_cr_vt_or_ff",
+    "tests/test_hmmer_alignment_input_fasta.py::test_invalid_header_preserves_consumed_and_trailing_bytes",
+    "tests/test_hmmer_alignment_input_fasta.py::test_afa_nul_sequence_byte_has_native_unknown_alias",
+    "tests/test_hmmer_alignment_input_fasta.py::test_afa_keeps_ordinary_alphabet_aliases_lexical",
+    "tests/test_hmmer_alignment_input_fasta.py::test_afa_internal_invalid_byte_is_not_whitespace_or_a_newline",
+    "tests/test_hmmer_alignment_input_fasta.py::test_nonascii_ctype_paths_preserve_unestablished_source_semantics",
+    "tests/test_hmmer_alignment_input_fasta.py::test_afa_empty_row_consumes_next_header_without_inventing_its_row",
+    "tests/test_hmmer_alignment_input_fasta.py::test_afa_unequal_suffix_is_one_failed_alignment_without_padding",
+    "tests/test_hmmer_alignment_input_fasta.py::test_afa_second_set_of_headers_is_more_rows_in_one_msa",
+    "tests/test_hmmer_alignment_input_fasta.py::test_retained_native_a2m_aligned_emission_bytes_unchanged",
+    "tests/test_hmmer_alignment_input_fasta.py::test_retained_native_a2m_insertions_have_exact_expansion_and_source_mapping",
+    "tests/test_hmmer_alignment_input_fasta.py::test_authored_a2m_leading_trailing_insert_slots_and_dotful_equivalence",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_multiline_inserts_whitespace_and_uppercase_o_are_preserved_as_source",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_consensus_failures_never_invent_expanded_rows",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_structural_digital_discrepancies_remain_unestablished",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_zero_consensus_unsafe_insert_slot_is_not_a_native_status_claim",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_forbidden_bytes_are_rejected_without_generated_gaps",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_native_structural_error_precedes_digital_error",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_native_digital_error_precedes_structural_length_assertion",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_empty_row_can_receive_defined_insertion_slot_gaps",
+    "tests/test_hmmer_alignment_input_fasta.py::test_a2m_zero_column_native_ok_is_not_usable_alignment_geometry"
+  ],
+  "test_functions_authored": 29,
+  "checks_actually_performed": [
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_input_types.py",
+      "check": "stdlib_ast_parse",
+      "result": "passed"
+    },
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_input_fasta.py",
+      "check": "stdlib_ast_parse",
+      "result": "passed"
+    },
+    {
+      "path": "tests/test_hmmer_alignment_input_fasta.py",
+      "check": "stdlib_ast_parse",
+      "result": "passed"
+    }
+  ],
+  "source_functions_read": [
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_afa.c",
+      "size_bytes": 30568,
+      "sha256": "0fa3d02ccff23cc9b989c22b5408f81dabf38c0538be7958906391deb8988596",
+      "function_start_lines": {
+        "esl_msafile_afa_SetInmap": 40,
+        "esl_msafile_afa_Read": 182
+      }
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_a2m.c",
+      "size_bytes": 45980,
+      "sha256": "0042c1176e1a2395ffdc30a8faae850c8bceba6d866fe3cae55e2f24f5dc5023",
+      "function_start_lines": {
+        "esl_msafile_a2m_SetInmap": 61,
+        "esl_msafile_a2m_Read": 215,
+        "a2m_padding_digital": 508
+      }
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_alphabet.c",
+      "size_bytes": 87682,
+      "sha256": "9e42b877ebf904015bd7fdddeb274bbd611feadb7ce1d9b7ba334b0ece2c8d0b",
+      "function_start_lines": {
+        "create_rna": 176,
+        "create_dna": 222,
+        "create_amino": 267,
+        "esl_abc_dsqcat": 923,
+        "esl_abc_dsqcat_noalloc": 961
+      }
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_mem.c",
+      "size_bytes": 56332,
+      "sha256": "9b7553a49b39872b97a365d8f4842d2afed3add46cdd1aa32caf60b8cecc6b04",
+      "function_start_lines": {
+        "esl_memnewline": 484,
+        "esl_memtok": 526,
+        "esl_memspn": 551
+      }
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa.c",
+      "size_bytes": 140417,
+      "sha256": "6154a39ce13f20aee668528c287f27725dc4c390a689f8beba65ef305fa8ae0f",
+      "function_start_lines": {
+        "esl_msa_SetSeqName": 1147,
+        "esl_msa_SetSeqDescription": 1230
+      }
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_buffer.c",
+      "size_bytes": 117484,
+      "sha256": "91d88c7fd24177829256819b46dfe27bb198d2c629e501d70bdaaa3063e99ad7",
+      "function_start_lines": {
+        "esl_buffer_GetLine": 988,
+        "buffer_countline": 1755
+      }
+    }
+  ],
+  "original_native_artifacts_inspected": [
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m/emitted.out",
+      "size_bytes": 99,
+      "sha256": "7e85ea14332e2dff9ff62f274e81c07fa59699c96f48236a46a8d41dd2b24197",
+      "original_emission_receipt": {
+        "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_a2m/receipt.json",
+        "size_bytes": 3342,
+        "sha256": "f6457ff70269f51edef2e55074f61bbe56f07107b5e7f00386c5da47a7406f3b"
+      },
+      "original_emission_returncode": 0,
+      "evidence_kind": "retained native emission bytes; input conformance not executed by packet538"
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/emitted.out",
+      "size_bytes": 170,
+      "sha256": "4a47f0cd7fad3b309d62e69985932c31b12358e0befa0e78d0d4cb92b7ed22e3",
+      "original_emission_receipt": {
+        "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/receipt.json",
+        "size_bytes": 3373,
+        "sha256": "35acdcc3b6505abbf902814c79a789c877c646f0ca975018e71b959a3325e198"
+      },
+      "original_emission_returncode": 0,
+      "evidence_kind": "retained native emission bytes; input conformance not executed by packet538"
+    }
+  ],
+  "packet534_cases_addressed_in_authored_tests": [
+    "N02",
+    "N03",
+    "N04",
+    "N13",
+    "N14"
+  ],
+  "not_performed": [
+    "application imports",
+    "pytest",
+    "compiler",
+    "native reader calls",
+    "emission regeneration",
+    "jobs",
+    "saved-sheet integration",
+    "episode returns",
+    "live-resource verification"
+  ],
+  "integration_owner": "root",
+  "completion_claim": "authored parser/primitives/tests and source handoff only"
+}

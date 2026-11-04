@@ -1,0 +1,150 @@
+{
+  "version": "barcode_root_integration_494_v1",
+  "recorded_at": "2026-10-28T00:17:03.789234+00:00",
+  "scope": "local_resource_and_received_input_boundaries_plus_numerical_review_not_full_scientific_Workflow",
+  "checks": [
+    {
+      "attempt": "check001",
+      "passed": 13,
+      "unit": "gene-local-job-3f5537be17c046e9bf8e93e7f3dc81bd.service",
+      "terminal": true,
+      "quiescent": true,
+      "returncode": 0,
+      "receipt": {
+        "path": "verification/tool_graders_barcode_integration_2026-10-27_494/check001/receipt.json",
+        "sha256": "4b75e89bcb00ed141b277edb4a26778070de88d1012508ac5a3a6a8b015555ac",
+        "size_bytes": 1613
+      },
+      "audit": {
+        "path": "verification/tool_graders_barcode_integration_2026-10-27_494/check001/execution_audit.json",
+        "sha256": "a52ce6f40423200de95e49fa77f4278b7a911f2a32fbe4f2ac8dd2d6953ecf26",
+        "size_bytes": 108
+      },
+      "junit": {
+        "path": "verification/tool_graders_barcode_integration_2026-10-27_494/check001/junit.xml",
+        "sha256": "eca7015fcbfb546849bb10fe8c36f991e367d84d37b6cea5d9f7d30ccf32b647",
+        "size_bytes": 2064
+      },
+      "unchanged": [
+        "source_unchanged",
+        "dependency_unchanged",
+        "stdlib_unchanged",
+        "binary_unchanged"
+      ],
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      }
+    },
+    {
+      "attempt": "math001",
+      "passed": 61,
+      "unit": "gene-local-job-df07104b8c764cae8abeabf1bf56a7ed.service",
+      "terminal": true,
+      "quiescent": true,
+      "returncode": 0,
+      "receipt": {
+        "path": "verification/tool_graders_barcode_integration_2026-10-27_494/math001/receipt.json",
+        "sha256": "be5ae3eece27fd7d22ff640a0dccf3f18e1dd9246f35a6a6290c96cb2a3ffc18",
+        "size_bytes": 1610
+      },
+      "audit": {
+        "path": "verification/tool_graders_barcode_integration_2026-10-27_494/math001/execution_audit.json",
+        "sha256": "a52ce6f40423200de95e49fa77f4278b7a911f2a32fbe4f2ac8dd2d6953ecf26",
+        "size_bytes": 108
+      },
+      "junit": {
+        "path": "verification/tool_graders_barcode_integration_2026-10-27_494/math001/junit.xml",
+        "sha256": "7994a67d857c693b20f04ad7e42ecb6fe1943e1b0b66287b5b571ba92eb5920d",
+        "size_bytes": 9189
+      },
+      "unchanged": [
+        "source_unchanged",
+        "dependency_unchanged",
+        "stdlib_unchanged",
+        "binary_unchanged"
+      ],
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": "gene_annotation_episode/barcode_operands.py",
+      "sha256": "a9fe96dcc133da1708d545b059fa9a2bb59eab49eda3cdd1b00e9762050f987c",
+      "size_bytes": 4752,
+      "matches_check001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/practical_execution_operations.py",
+      "sha256": "3a2b82258e90aea557affc7cc651a0028bc91b5069201a559025a839428fffa1",
+      "size_bytes": 89975,
+      "matches_check001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/practical_execution_records.py",
+      "sha256": "aa5881e34f17b15100fea4946a0c156ab1998d7e3f6f2bce8749674f5b03fc79",
+      "size_bytes": 31202,
+      "matches_check001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/execution_input_versions.py",
+      "sha256": "02d430e1e72576121558dc10b7dfdf31b7eac33cf38bf7d250b419e0fa33db6b",
+      "size_bytes": 5921,
+      "matches_check001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/barcode_contracts.py",
+      "sha256": "8a52f2f77d59fe5892dd7f3cb22907eb762a1223bcf30d217359a41b5c4e430c",
+      "size_bytes": 36884,
+      "matches_math001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/barcode_formats.py",
+      "sha256": "023e4dda7bd38bbf710cc615243092ef005b7d3165e6fb8ba3226caec6290b18",
+      "size_bytes": 25042,
+      "matches_math001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/barcode_metadata.py",
+      "sha256": "93428f90224ee100916f3b80402b36ceee41c4503a1784695b76919b8c8b9c36",
+      "size_bytes": 3609,
+      "matches_math001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/barcode_calculators.py",
+      "sha256": "82ebce76c99310e81188decb224e6f962aa39affeb4821a221350c9b5af58074",
+      "size_bytes": 15040,
+      "matches_math001_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/barcode_result_views.py",
+      "sha256": "5ddc3c25ebe48ac0ead2000d3f36e5b0966d14100713507a42f6f53cc32ea074",
+      "size_bytes": 5095,
+      "matches_math001_snapshot": true
+    }
+  ],
+  "numerical_example": {
+    "path": "verification/tool_graders_barcode_integration_2026-10-27_494/check001/selected-resource-example.json",
+    "sha256": "4394597a1e46c6e47b028a2086197485d8efe381a4f97ebe9a8a3010b2dad399",
+    "size_bytes": 25335
+  },
+  "remaining": [
+    "493 result custody/final host-return checks",
+    "495 shared registration and targeted regressions",
+    "complete scientific parent to launch to local to results to typed return Workflow",
+    "saved-only recalculation and exact redelivery/private-origin credit at that full boundary",
+    "full current integration review and selected model-facing information where unsettled"
+  ],
+  "tally_change": 0,
+  "numerical_grader_tally": 114,
+  "fixed_scope": 308
+}

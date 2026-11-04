@@ -1,0 +1,392 @@
+{
+  "schema": "primer_placement_sheet_v1",
+  "inputs": {
+    "native_record": {
+      "schema": "biomni_primer_placement_native_v1",
+      "outcome": "completed",
+      "result": {
+        "explanation": "Output fields:\n- sequences: List of alignment results, where each contains:\n  * sequence: The short sequence that was aligned\n  * alignments: List of all alignment positions found, where each contains:\n    - position: 0-based start position in the target sequence\n    - strand: '+' for forward strand, '-' for reverse complement\n    - mismatches: List of mismatches, each containing:\n      * position: Position in the short sequence where mismatch occurs\n      * expected: Base expected from short sequence\n      * found: Base found in target sequence",
+        "sequences": [
+          {
+            "sequence": "AAAA",
+            "alignments": [
+              {
+                "position": 0,
+                "strand": "+",
+                "mismatches": []
+              },
+              {
+                "position": 1,
+                "strand": "+",
+                "mismatches": [
+                  [
+                    3,
+                    "A",
+                    "C"
+                  ]
+                ]
+              },
+              {
+                "position": 7,
+                "strand": "+",
+                "mismatches": [
+                  [
+                    0,
+                    "A",
+                    "C"
+                  ]
+                ]
+              },
+              {
+                "position": 8,
+                "strand": "+",
+                "mismatches": []
+              }
+            ]
+          }
+        ]
+      },
+      "failure": null,
+      "source_identity": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check234_molecular_driver/source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/molecular_biology.py",
+        "callable": "align_sequences",
+        "sha256": "22db874a1776118c633103253ae0366f1e2d09df47b6bf41b031f423ff25d82e"
+      }
+    },
+    "target_sequence": "AAAACCCCAAAA",
+    "primers": "AAAA",
+    "target_ref": null,
+    "primer_refs": null,
+    "target_mapping": null,
+    "primer_mappings": null
+  },
+  "rejected_values": [],
+  "native_outcome": "completed",
+  "groups": [
+    {
+      "group_ordinal": 0,
+      "primer_occurrence_ordinal": 0,
+      "native_group_ordinal": 0,
+      "native_group": {
+        "sequence": "AAAA",
+        "alignments": [
+          {
+            "position": 0,
+            "strand": "+",
+            "mismatches": []
+          },
+          {
+            "position": 1,
+            "strand": "+",
+            "mismatches": [
+              [
+                3,
+                "A",
+                "C"
+              ]
+            ]
+          },
+          {
+            "position": 7,
+            "strand": "+",
+            "mismatches": [
+              [
+                0,
+                "A",
+                "C"
+              ]
+            ]
+          },
+          {
+            "position": 8,
+            "strand": "+",
+            "mismatches": []
+          }
+        ]
+      },
+      "primer_length_symbols": 4,
+      "native_primer_length_symbols": 4,
+      "candidate_windows_per_orientation": 9,
+      "candidate_oriented_windows": 18,
+      "reported_hit_count": 4,
+      "native_sequence_matches_occurrence": true,
+      "hits": [
+        {
+          "native_hit_ordinal": 0,
+          "native_hit": {
+            "position": 0,
+            "strand": "+",
+            "mismatches": []
+          },
+          "strand": "+",
+          "target_interval": [
+            0,
+            4
+          ],
+          "oriented_source_primer": "AAAA",
+          "target_window": "AAAA",
+          "interpretation": "canonical_dna_window",
+          "source_acceptance": "compatible",
+          "native_mismatch_entry_count": 0,
+          "compared_symbol_count": 4,
+          "identical_symbol_count": 4,
+          "mismatch_count": 0,
+          "mismatch_fraction": {
+            "numerator": 0,
+            "denominator": 4,
+            "value": 0.0
+          },
+          "mismatch_list_matches_full_operands": true,
+          "target_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "primer_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "mismatches": [],
+          "issues": [
+            {
+              "code": "primer_target_original_mapping_unavailable",
+              "path": ""
+            },
+            {
+              "code": "primer_primer_original_mapping_unavailable",
+              "path": ""
+            }
+          ]
+        },
+        {
+          "native_hit_ordinal": 1,
+          "native_hit": {
+            "position": 1,
+            "strand": "+",
+            "mismatches": [
+              [
+                3,
+                "A",
+                "C"
+              ]
+            ]
+          },
+          "strand": "+",
+          "target_interval": [
+            1,
+            5
+          ],
+          "oriented_source_primer": "AAAA",
+          "target_window": "AAAC",
+          "interpretation": "canonical_dna_window",
+          "source_acceptance": "compatible",
+          "native_mismatch_entry_count": 1,
+          "compared_symbol_count": 4,
+          "identical_symbol_count": 3,
+          "mismatch_count": 1,
+          "mismatch_fraction": {
+            "numerator": 1,
+            "denominator": 4,
+            "value": 0.25
+          },
+          "mismatch_list_matches_full_operands": true,
+          "target_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "primer_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "mismatches": [
+            {
+              "native_mismatch_ordinal": 0,
+              "native_triple": [
+                3,
+                "A",
+                "C"
+              ],
+              "oriented_primer_position": 3,
+              "original_primer_position": 3,
+              "target_position": 4,
+              "symbols_match_full_operands": true,
+              "target_source_intervals": null,
+              "primer_source_intervals": null
+            }
+          ],
+          "issues": [
+            {
+              "code": "primer_target_original_mapping_unavailable",
+              "path": ""
+            },
+            {
+              "code": "primer_primer_original_mapping_unavailable",
+              "path": ""
+            }
+          ]
+        },
+        {
+          "native_hit_ordinal": 2,
+          "native_hit": {
+            "position": 7,
+            "strand": "+",
+            "mismatches": [
+              [
+                0,
+                "A",
+                "C"
+              ]
+            ]
+          },
+          "strand": "+",
+          "target_interval": [
+            7,
+            11
+          ],
+          "oriented_source_primer": "AAAA",
+          "target_window": "CAAA",
+          "interpretation": "canonical_dna_window",
+          "source_acceptance": "compatible",
+          "native_mismatch_entry_count": 1,
+          "compared_symbol_count": 4,
+          "identical_symbol_count": 3,
+          "mismatch_count": 1,
+          "mismatch_fraction": {
+            "numerator": 1,
+            "denominator": 4,
+            "value": 0.25
+          },
+          "mismatch_list_matches_full_operands": true,
+          "target_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "primer_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "mismatches": [
+            {
+              "native_mismatch_ordinal": 0,
+              "native_triple": [
+                0,
+                "A",
+                "C"
+              ],
+              "oriented_primer_position": 0,
+              "original_primer_position": 0,
+              "target_position": 7,
+              "symbols_match_full_operands": true,
+              "target_source_intervals": null,
+              "primer_source_intervals": null
+            }
+          ],
+          "issues": [
+            {
+              "code": "primer_target_original_mapping_unavailable",
+              "path": ""
+            },
+            {
+              "code": "primer_primer_original_mapping_unavailable",
+              "path": ""
+            }
+          ]
+        },
+        {
+          "native_hit_ordinal": 3,
+          "native_hit": {
+            "position": 8,
+            "strand": "+",
+            "mismatches": []
+          },
+          "strand": "+",
+          "target_interval": [
+            8,
+            12
+          ],
+          "oriented_source_primer": "AAAA",
+          "target_window": "AAAA",
+          "interpretation": "canonical_dna_window",
+          "source_acceptance": "compatible",
+          "native_mismatch_entry_count": 0,
+          "compared_symbol_count": 4,
+          "identical_symbol_count": 4,
+          "mismatch_count": 0,
+          "mismatch_fraction": {
+            "numerator": 0,
+            "denominator": 4,
+            "value": 0.0
+          },
+          "mismatch_list_matches_full_operands": true,
+          "target_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "primer_mapping": {
+            "state": "unavailable",
+            "intervals": null
+          },
+          "mismatches": [],
+          "issues": [
+            {
+              "code": "primer_target_original_mapping_unavailable",
+              "path": ""
+            },
+            {
+              "code": "primer_primer_original_mapping_unavailable",
+              "path": ""
+            }
+          ]
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "measurements": {
+    "target_length_symbols": 12,
+    "requested_primer_occurrence_count": 1,
+    "native_group_count": 1
+  },
+  "issues": [
+    {
+      "code": "primer_occurrence_binding_population_unavailable",
+      "path": "/primer_refs"
+    },
+    {
+      "code": "primer_occurrence_binding_population_unavailable",
+      "path": "/primer_mappings"
+    },
+    {
+      "code": "primer_target_original_mapping_unavailable",
+      "path": "/groups/0/hits/0"
+    },
+    {
+      "code": "primer_primer_original_mapping_unavailable",
+      "path": "/groups/0/hits/0"
+    },
+    {
+      "code": "primer_target_original_mapping_unavailable",
+      "path": "/groups/0/hits/1"
+    },
+    {
+      "code": "primer_primer_original_mapping_unavailable",
+      "path": "/groups/0/hits/1"
+    },
+    {
+      "code": "primer_target_original_mapping_unavailable",
+      "path": "/groups/0/hits/2"
+    },
+    {
+      "code": "primer_primer_original_mapping_unavailable",
+      "path": "/groups/0/hits/2"
+    },
+    {
+      "code": "primer_target_original_mapping_unavailable",
+      "path": "/groups/0/hits/3"
+    },
+    {
+      "code": "primer_primer_original_mapping_unavailable",
+      "path": "/groups/0/hits/3"
+    }
+  ],
+  "status": "partial"
+}

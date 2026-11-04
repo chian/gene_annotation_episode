@@ -1,0 +1,311 @@
+{
+  "record_type": "root_database_utility_component_verification",
+  "recorded_at": "2026-10-28T22:17:37.552240+00:00",
+  "checks": {
+    "check084_database_utility_native": {
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/receipt.json",
+        "sha256": "c5c05fab39a6abb64219ba781393afad03aaa9f7e83c9c03c389fba4b5fcb53e",
+        "size_bytes": 1641
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/execution_audit.json",
+        "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+        "size_bytes": 156
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/case_reports.jsonl",
+        "sha256": "64a3f088d1bf4a937bbb47c9e11408b6f64e1a0997459f17ab67eea2d13caa58",
+        "size_bytes": 818
+      },
+      "execution": {
+        "returncode": 1,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "tests": [
+        {
+          "file": "tests/test_native_blast_database_utility_capture_624.py",
+          "outcome": "failed",
+          "count": 1
+        }
+      ]
+    },
+    "check085_database_utility_diagnostic": {
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check085_database_utility_diagnostic/receipt.json",
+        "sha256": "465a4ae36db46fd5276537a89abdf5d6b6d1d6604c9507324b7f485176bf29d9",
+        "size_bytes": 1643
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check085_database_utility_diagnostic/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check085_database_utility_diagnostic/case_reports.jsonl",
+        "sha256": "4ac4bd2bed3336ea2b0a9ae9daf720217bc69fad9a0042b1f3185985f0a89621",
+        "size_bytes": 194
+      },
+      "execution": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "tests": [
+        {
+          "file": "tests/test_native_blast_database_utility_probe_624.py",
+          "outcome": "passed",
+          "count": 1
+        }
+      ]
+    },
+    "check086_utility_components": {
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/receipt.json",
+        "sha256": "804e8236295b6f81af46cdf2fc702940a32c80374cfa50843d8afdb2ed5cad4a",
+        "size_bytes": 1634
+      },
+      "audit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/execution_audit.json",
+        "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+        "size_bytes": 156
+      },
+      "case_reports": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/case_reports.jsonl",
+        "sha256": "c49b3c26643977ba3791d604fdea008c22799e8fb02ae57689f8112af5e6b55a",
+        "size_bytes": 77421
+      },
+      "execution": {
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "tests": [
+        {
+          "file": "tests/test_blast_database_extraction_626.py",
+          "outcome": "passed",
+          "count": 29
+        },
+        {
+          "file": "tests/test_blast_database_inspection_626.py",
+          "outcome": "passed",
+          "count": 31
+        },
+        {
+          "file": "tests/test_blast_database_preparation_627.py",
+          "outcome": "passed",
+          "count": 36
+        },
+        {
+          "file": "tests/test_blast_utility_contracts_625.py",
+          "outcome": "passed",
+          "count": 109
+        },
+        {
+          "file": "tests/test_native_blast_standard_database_contracts.py",
+          "outcome": "passed",
+          "count": 137
+        },
+        {
+          "file": "tests/test_native_blast_utility_contracts_624.py",
+          "outcome": "passed",
+          "count": 19
+        }
+      ]
+    }
+  },
+  "source": [
+    {
+      "source": {
+        "path": "gene_annotation_episode/blast_utility_contracts.py",
+        "sha256": "9bcf8c9887dd13d2102f21eba08ded54569acabb425b5c96cc2dd1a9d1d11220",
+        "size_bytes": 33638
+      },
+      "executed_source": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/source_snapshot/gene_annotation_episode/blast_utility_contracts.py",
+        "sha256": "9bcf8c9887dd13d2102f21eba08ded54569acabb425b5c96cc2dd1a9d1d11220",
+        "size_bytes": 33638
+      },
+      "matches_executed_snapshot": true
+    },
+    {
+      "source": {
+        "path": "gene_annotation_episode/blast_database_extraction.py",
+        "sha256": "4738ba23f600a0aabfe29421d788d7be62d8db1bd195a4d4432c55170dfa6a61",
+        "size_bytes": 14650
+      },
+      "executed_source": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/source_snapshot/gene_annotation_episode/blast_database_extraction.py",
+        "sha256": "4738ba23f600a0aabfe29421d788d7be62d8db1bd195a4d4432c55170dfa6a61",
+        "size_bytes": 14650
+      },
+      "matches_executed_snapshot": true
+    },
+    {
+      "source": {
+        "path": "gene_annotation_episode/blast_database_inspection.py",
+        "sha256": "fd63263bd6eb2d6155917fd57671bd23de1deaf71e194ae63a58676f26192c71",
+        "size_bytes": 20676
+      },
+      "executed_source": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/source_snapshot/gene_annotation_episode/blast_database_inspection.py",
+        "sha256": "fd63263bd6eb2d6155917fd57671bd23de1deaf71e194ae63a58676f26192c71",
+        "size_bytes": 20676
+      },
+      "matches_executed_snapshot": true
+    },
+    {
+      "source": {
+        "path": "gene_annotation_episode/blast_database_preparation.py",
+        "sha256": "e8d02e893bed865c47e315071ce93f208d4ff59c63fefe6ecb2bcab0a6653c4f",
+        "size_bytes": 17519
+      },
+      "executed_source": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/source_snapshot/gene_annotation_episode/blast_database_preparation.py",
+        "sha256": "e8d02e893bed865c47e315071ce93f208d4ff59c63fefe6ecb2bcab0a6653c4f",
+        "size_bytes": 17519
+      },
+      "matches_executed_snapshot": true
+    },
+    {
+      "source": {
+        "path": "gene_annotation_episode/native_blast_standard_database_contracts.py",
+        "sha256": "7db4d438fc0f4697688fc91b68b46b99094389a496380d887d07446af6392455",
+        "size_bytes": 63588
+      },
+      "executed_source": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/source_snapshot/gene_annotation_episode/native_blast_standard_database_contracts.py",
+        "sha256": "7db4d438fc0f4697688fc91b68b46b99094389a496380d887d07446af6392455",
+        "size_bytes": 63588
+      },
+      "matches_executed_snapshot": true
+    },
+    {
+      "source": {
+        "path": "gene_annotation_episode/native_blast_utility_contracts.py",
+        "sha256": "f027e4359019673feb281517048a4a8fac442e407d6040b67f8221dde8e5924a",
+        "size_bytes": 13097
+      },
+      "executed_source": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py",
+        "sha256": "f027e4359019673feb281517048a4a8fac442e407d6040b67f8221dde8e5924a",
+        "size_bytes": 13097
+      },
+      "matches_executed_snapshot": true
+    },
+    {
+      "source": {
+        "path": "gene_annotation_episode/native_blast_utility_tool_info.py",
+        "sha256": "dc0657a7249ca53176101cdab3b6f6177a31dcea9a9d082028c9b2934f8c0288",
+        "size_bytes": 7077
+      },
+      "executed_source": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/source_snapshot/gene_annotation_episode/native_blast_utility_tool_info.py",
+        "sha256": "dc0657a7249ca53176101cdab3b6f6177a31dcea9a9d082028c9b2934f8c0288",
+        "size_bytes": 7077
+      },
+      "matches_executed_snapshot": true
+    }
+  ],
+  "original_native_capture": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/CAPTURE_001.json",
+    "sha256": "c77f3a317acdf74ba1de46b2a5ac35fc60135fa6e9fb9614f646206226d3ec59",
+    "size_bytes": 69696
+  },
+  "diagnostic_capture": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check085_database_utility_diagnostic/temporary/database_utility_probe/PROBE_001.json",
+    "sha256": "355b273bb78049c0d8b4c637ed2d74ca26d259ccaa7c8060eb44de979c07a501",
+    "size_bytes": 41487
+  },
+  "native_commands_original": 20,
+  "native_commands_followup": 4,
+  "native_builds": 3,
+  "native_failed_duplicate_builds": 1,
+  "native_qualifications": [
+    "084 capture test failed because both integrity commands were expected to succeed; actual metadata exceptions retained.",
+    "085 capture test passed while retaining both actual integrity commands returncode1.",
+    "Detailed native checks show missing Taxid9606 and three passing OID checks; no full integrity pass.",
+    "Successful full/sample integrity parser cases are synthetic, explicitly labelled.",
+    "No successful original build/search was repeated;085 uses original databases and diagnoses a failed check.",
+    "No database BLAST, API, HPC, authentication or taxonomy download occurred."
+  ],
+  "numerical_examples": [
+    {
+      "population": "three tiny nucleotide sequences",
+      "sequence_count": 3,
+      "residue_count": 31,
+      "unit": "nt"
+    },
+    {
+      "population": "two tiny protein sequences",
+      "sequence_count": 2,
+      "residue_count": 35,
+      "unit": "aa"
+    },
+    {
+      "population": "seqB range2-7",
+      "native_full_length": 12,
+      "returned_symbols": 6,
+      "plus_sequence": "TGCAAT",
+      "minus_sequence": "ATTGCA"
+    },
+    {
+      "population": "seqA range8-99",
+      "native_full_length": 12,
+      "returned_symbols": 5
+    }
+  ],
+  "implementation": {
+    "shared_records": "closed supporting utility types; no independent scientific score",
+    "readers": "native extraction/info/metadata/integrity with partial records and original identities",
+    "preparation": "original output families plus existing standard prepared-manifest projection",
+    "compiler": "one explicit selected command; exact three original makeblastdb commands reproduced",
+    "tool_information": "pure descriptors for configured software; not yet exposed through shared runtime"
+  },
+  "remaining": [
+    "Native producer/reservation/capture now assigned fresh628 against005.",
+    "Shared practical/resource binding, saved result publication and requested episode returns are unfinished.",
+    "Actual full integrity success requires appropriate genuine taxonomy/reference data; none fabricated.",
+    "Masking result/parent template renderers await required user feedback.",
+    "Other R7 utilities and all R1-R7 obligations remain open."
+  ],
+  "accounting": {
+    "new_completed_inventory_rows": 0,
+    "new_connected_operation_names": 0,
+    "new_numerical_graders": 0
+  }
+}

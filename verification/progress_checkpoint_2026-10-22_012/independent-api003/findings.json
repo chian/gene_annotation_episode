@@ -1,0 +1,209 @@
+{
+  "seal": {
+    "report_sha256": "d24dcb76e39571e8f265501c404b9f1d42672bc814466351cb4d19522b781bae",
+    "manifest_sha256": "32dc15a3533d99d36cae42125549b17da6832066c0ec11af51a3afbeadaf59f1",
+    "members": 1444,
+    "member_bytes": 32121307,
+    "total_files_with_outer_manifest": 1445,
+    "outer_manifest_bytes": 335486,
+    "file_modes": {
+      "0444": 1442,
+      "0555": 2
+    },
+    "outer_manifest_mode": "0444",
+    "directory_count": 122,
+    "directory_modes": {
+      "0775": 122
+    },
+    "writable_directories": 122,
+    "directory_modes_declared_by_manifest": false,
+    "extra_missing_files": 0,
+    "symlinks_special_members": 0,
+    "extra_empty_directories": 0,
+    "exact_report_copy": true
+  },
+  "source_identity": {
+    "runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+    "pin_algorithm": "sha256(concat(sorted relative UTF8 path,NUL,raw SHA256(file)))",
+    "runtime_files": 131,
+    "test_python_files": 205,
+    "all_membership_bytes_match": true,
+    "runtime_added": [
+      "gene_annotation_episode/api_reported_statistics.py",
+      "gene_annotation_episode/api_timing_information.py",
+      "gene_annotation_episode/api_timing_records.py"
+    ],
+    "runtime_changed": [
+      "gene_annotation_episode/assembled_service_setup.py",
+      "gene_annotation_episode/case_execution.py",
+      "gene_annotation_episode/episode_composition.py",
+      "gene_annotation_episode/episode_services.py",
+      "gene_annotation_episode/hmmer_resource_adapter.py",
+      "gene_annotation_episode/public_search_operations.py",
+      "gene_annotation_episode/resource_episodes.py",
+      "gene_annotation_episode/resource_estimation.py",
+      "gene_annotation_episode/resource_service_setup.py",
+      "gene_annotation_episode/run_statistics.py",
+      "gene_annotation_episode/runtime.py",
+      "gene_annotation_episode/tools.py"
+    ],
+    "runtime_unchanged": 116,
+    "runtime_removed": 0,
+    "tests_added": [
+      "tests/test_api_reported_statistics.py",
+      "tests/test_api_timing_connected.py",
+      "tests/test_api_timing_custody.py",
+      "tests/test_api_timing_reconstruction.py",
+      "tests/test_api_timing_runtime.py",
+      "tests/test_case_resource_estimator.py"
+    ],
+    "tests_changed": [
+      "tests/test_run_statistics.py"
+    ],
+    "tests_unchanged": 198,
+    "tests_removed": 0
+  },
+  "parent002": {
+    "exact_files_including_manifest": 694,
+    "all_byte_identical_to_original": true,
+    "manifest_sha256": "fa15fca23194b03b0fb2cef06c8082dda05226213339caa8fba7510892dd71ea"
+  },
+  "root_final_regression": {
+    "distinct_xml_nodes": 213,
+    "disjoint_test_files": 11,
+    "node_overlap": 0,
+    "file_overlap": 0,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "groups": [
+      {
+        "group": "legacy-operations",
+        "cases": 135,
+        "files": [
+          "tests/test_hmmer_api_operations.py",
+          "tests/test_hmmer_api_publication.py",
+          "tests/test_hmmer_api_result_states.py",
+          "tests/test_public_search.py"
+        ],
+        "duration_seconds": 505.04,
+        "recorded_exit_code": 0,
+        "log_sha256": "a4e50578f024c247cbed9dbaa19f2803f7eabb6151f91d60d4ac9df955d56445",
+        "xml_sha256": "22cc7ef7fb5c3868e63518b532ec1887101a40d214e62a60ee6bb9711a27140a"
+      },
+      {
+        "group": "connected-consumers",
+        "cases": 78,
+        "files": [
+          "tests/test_api_timing_connected.py",
+          "tests/test_hmmer_api_adapter.py",
+          "tests/test_hmmer_api_caller_configuration.py",
+          "tests/test_hmmer_api_connected.py",
+          "tests/test_hmmer_api_information.py",
+          "tests/test_hmmer_api_progress.py",
+          "tests/test_hmmer_api_reconstruction.py"
+        ],
+        "duration_seconds": 436.62,
+        "recorded_exit_code": 0,
+        "log_sha256": "6b1dac7957caf89ba8d1e33b4f387e787157e4b525b3e25b69be38c299c7ea90",
+        "xml_sha256": "f0f58e7fedf6d240935b068dbbebc84ee1d658da9f6e8d3e8dfb1e7cc9274e4c"
+      }
+    ],
+    "runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+    "reexecuted_by_verifier": false,
+    "producer_invocations_counted_in213": false
+  },
+  "retained_inputs": {
+    "copied_input_record_hashes_bytes_modes_verified": 1434,
+    "unchanged_parent_static_assets": 319,
+    "non_python_static": 317,
+    "archival_python_scripts": 2,
+    "ordered_checklist_references": 41,
+    "checklist_sha256": "76eb448324a797c01174b28b13b7c7becfaac07fd1c7ee1c5586c3e573d82d86"
+  },
+  "report_boundaries": {
+    "retained_invocations": [
+      {
+        "label": "A custody",
+        "log": "evidence/a-custody/custody_final_003.log",
+        "passed": 28,
+        "seconds": 144.16,
+        "counted_in213": false
+      },
+      {
+        "label": "A identity",
+        "log": "evidence/a-custody/custody_identity_channels.log",
+        "passed": 2,
+        "seconds": 15.91,
+        "counted_in213": false
+      },
+      {
+        "label": "A operations",
+        "log": "evidence/a-custody/baseline_operations.log",
+        "passed": 36,
+        "seconds": 64.78,
+        "counted_in213": false
+      },
+      {
+        "label": "B statistics",
+        "log": "evidence/b-statistics/pytest-final.stdout.log",
+        "passed": 77,
+        "seconds": 49.46,
+        "counted_in213": false
+      },
+      {
+        "label": "B caller",
+        "log": "evidence/b-case-estimator/pytest-001.log",
+        "passed": 14,
+        "seconds": 135.88,
+        "counted_in213": false
+      },
+      {
+        "label": "C final",
+        "log": "evidence/c-integration/final-owned-after-scope025.log",
+        "passed": 7,
+        "seconds": 74.3,
+        "counted_in213": false
+      },
+      {
+        "label": "root earlier joined",
+        "log": "evidence/root-connected/after-source-version-correction.log",
+        "passed": 1,
+        "seconds": 13.26,
+        "counted_in213": false
+      },
+      {
+        "label": "C native overrun",
+        "log": "evidence/c-integration/first-regression.log",
+        "passed": 56,
+        "seconds": 259.63,
+        "counted_in213": false
+      }
+    ],
+    "only_root135_plus78_counted_in213": true,
+    "no341_at_one_pin_result_inferred": true,
+    "C_overrun": {
+      "earlier_checks": 56,
+      "seconds": 259.63,
+      "recorded_native_nodes": 7,
+      "recorded_tiny_local_alignments": 8,
+      "recorded_path": "sequence_worker through protected systemd native lifecycle",
+      "recorded_limits": "20GiB RAM/4GiB scratch/no wall-time limit",
+      "separate_from_C_final7_and_root_final213": true
+    },
+    "B_reconstructed_stdout_disclosed": true,
+    "historical_candidate_unsealed_statuses_preserved": true,
+    "source_semantics_and_historical_execution_not_reproven_by_file_checker": true
+  },
+  "limits": [
+    "The original checker added an undeclared stronger directory-readonly assertion and stopped at writable directory mode0775; original checker and /tmp/api003-independent-seal-q9sab8_r/FAILURE.json are preserved. Root clarified declared readonly means member file modes. All122 directory modes remain unchanged and are a custody limitation, not a declared-mode mismatch.",
+    "Read-only Python stdlib filesystem/hash/JSON/XML/regular-expression inspection; no application imports, Store/Workflow/history/ledger construction, tests, services, native execution, network/model calls, scientific database access, active-process inspection or production/scientific/sealed-artifact mutation.",
+    "This verifies present sealed evidence integrity, source identities, recorded regression nodes/counts and reported boundaries. It does not reproduce execution or establish new implementation/scientific behavior.",
+    "Historical native execution count/path/limits and absence of external/model/live-workspace activity are retained producer provenance, not independently re-executed observations.",
+    "All1434 copied records match their saved source/candidate identities; current original mutable /tmp input sources are not newly consulted. All694 original immutable API002 files and319 static assets are directly byte-compared.",
+    "Separate API003 scope026 actual-service work, live scientific state and whole fixed-goal completion are outside this check.",
+    "One initial administrative Python writer text failed with IndentationError before execution/file creation; the corrected checker is new and writes only this /tmp output."
+  ],
+  "status": "PASS",
+  "checked_at_utc": "2026-10-22T07:46:29.912199+00:00"
+}

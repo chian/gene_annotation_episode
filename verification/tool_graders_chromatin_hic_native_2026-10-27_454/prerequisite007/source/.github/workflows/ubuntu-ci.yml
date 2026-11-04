@@ -1,0 +1,695 @@
+# Copyright (C) 2022 Roberto Rossini <roberros@uio.no>
+# SPDX-License-Identifier: MIT
+
+name: Ubuntu CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/ubuntu-ci.yml"
+      - "cmake/**"
+      - "examples/**"
+      - "src/**"
+      - "test/integration/**"
+      - "test/units/**"
+      - "utils/devel/build_dependencies.py"
+      - "CMakeLists.txt"
+      - "conanfile.py"
+
+  pull_request:
+    paths:
+      - ".github/workflows/ubuntu-ci.yml"
+      - "cmake/**"
+      - "examples/**"
+      - "src/**"
+      - "test/integration/**"
+      - "test/units/**"
+      - "utils/devel/build_dependencies.py"
+      - "CMakeLists.txt"
+      - "conanfile.py"
+
+  workflow_dispatch:
+    inputs:
+      ci-type:
+        description: "CI type"
+        required: true
+        default: "short"
+        type: choice
+        options:
+          - short
+          - full
+
+# https://stackoverflow.com/a/72408109
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  matrix-factory:
+    name: Generate job matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-result.outputs.result }}
+      ci-type: ${{ steps.ci-type.outputs.type }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.after }}
+
+      - name: Detect CI type
+        id: ci-type
+        run: |
+          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
+            echo "type=${{ inputs.ci-type }}" | tee -a "$GITHUB_OUTPUT"
+          elif git log --format=%B -n 1 ${{ github.event.after }} | grep -qF '[ci full]'; then
+            echo "type=full" | tee -a "$GITHUB_OUTPUT"
+          else
+            echo "type=short" | tee -a "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate matrix
+        uses: actions/github-script@v8
+        id: set-result
+        with:
+          script: |
+            // Documentation
+            // https://docs.github.com/en/actions/learn-github-actions/contexts#fromjson
+            // https://github.com/actions/runner/issues/982#issuecomment-809360765
+
+            var ci_short = "${{ steps.ci-type.outputs.type }}" === "short"
+
+            var includes = []
+
+            // Debug builds (short CI)
+            includes.push({ compiler: 'gcc-8',     os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-15',    os: 'ubuntu-25.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'ON'  })
+            includes.push({ compiler: 'clang-8',   os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-21',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'ON'  })
+
+            // Release builds (short CI)
+            includes.push({ compiler: 'gcc-15',    os: 'ubuntu-25.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'ON'  })
+            includes.push({ compiler: 'clang-21',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'ON'  })
+
+            if (ci_short) {
+              return { include: includes }
+            }
+
+            // Debug builds (long CI)
+            includes.push({ compiler: 'gcc-9',     os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-10',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-11',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-12',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-13',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-14',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-9',   os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-10',  os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-11',  os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-12',  os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-13',  os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-14',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-15',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-16',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-17',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-18',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-19',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-20',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+
+            // Release builds (long CI)
+            includes.push({ compiler: 'gcc-8',     os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-9',     os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-10',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-11',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-12',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-13',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'gcc-14',    os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-8',   os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-9',   os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-10',  os: 'ubuntu-20.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-11',  os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-12',  os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-13',  os: 'ubuntu-22.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-14',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-15',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-16',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-17',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-18',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-19',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler: 'clang-20',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+
+            // Make sure project builds with CMake 3.25
+            includes.push({ compiler: 'clang-21',  os: 'ubuntu-24.04',  generator: 'Ninja', cmake: '3.25.2', build_type: 'Release', developer_mode: 'OFF' })
+            // Make sure project builds with make
+            includes.push({ compiler: 'clang-21',  os: 'ubuntu-24.04',  generator: 'Unix Makefiles', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+
+            return { include: includes }
+
+  cache-test-dataset:
+    name: Cache test dataset
+    uses: paulsengroup/hictk/.github/workflows/cache-test-dataset.yml@ec6c8c43e445043aa05d189aa2799c949166cf27
+
+  build-deps-dbg:
+    name: Build dependencies (Debug)
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-linux.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: Debug
+      conan-version: "2.21.*"
+      cppstd: 17
+      image: "ghcr.io/paulsengroup/ci-docker-images/ubuntu-20.04-cxx-clang-21"
+      ref: main
+
+  build-deps-rel:
+    name: Build dependencies (Release)
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-linux.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: Release
+      conan-version: "2.21.*"
+      cppstd: 17
+      image: "ghcr.io/paulsengroup/ci-docker-images/ubuntu-20.04-cxx-clang-21"
+      ref: main
+
+  build-project:
+    name: Build project
+    needs:
+      - matrix-factory
+      - build-deps-dbg
+      - build-deps-rel
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix-factory.outputs.matrix) }}
+
+    container:
+      image: ghcr.io/paulsengroup/ci-docker-images/${{ matrix.os }}-cxx-${{ matrix.compiler }}:latest
+      options: "--user=root"
+
+    env:
+      CCACHE_DIR: "/opt/ccache-cache"
+      CCACHE_COMPILERCHECK: "content"
+      CCACHE_COMPRESSLEVEL: "1"
+      CCACHE_MAXSIZE: "10G"
+      TMPDIR: "/tmp/"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Fix permissions
+        run: chown -R "$(id -u):$(id -g)" "$PWD"
+
+      - name: Check build deps are up-to-date
+        id: build-deps-outdated
+        run: |
+          pattern='[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+$'
+          flag=false
+
+          if [[ $(cmake --version | grep -o "$pattern") != ${{ matrix.cmake }} ]]; then
+            flag=true
+          fi
+
+          echo "outdated=$flag" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Update build deps
+        if: ${{ steps.build-deps-outdated.outputs.outdated }}
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends python3-pip
+
+          python3 -m pip install "cmake==${{ matrix.cmake }}"
+
+      - name: Generate cache keys
+        id: cache-key
+        run: |
+          set -u
+
+          os='${{ matrix.os }}'
+          compiler='${{ matrix.compiler }}'
+          generator='${{ matrix.generator }}'
+          build_type='${{ matrix.build_type }}'
+          if [ '${{ matrix.developer_mode }}' = ON ]; then
+            suffix=-devel
+          else
+            suffix=''
+          fi
+
+          if [[ '${{ matrix.build_type }}' == Debug ]]; then
+            deps_cache_key='${{ needs.build-deps-dbg.outputs.cache-key }}'
+            deps_cache_path='${{ needs.build-deps-dbg.outputs.tar }}'
+          elif [[ '${{ matrix.build_type }}' == Release ]]; then
+            deps_cache_key='${{ needs.build-deps-rel.outputs.cache-key }}'
+            deps_cache_path='${{ needs.build-deps-rel.outputs.tar }}'
+          else
+            1>&2 echo 'Unknown build type "${{ matrix.build_type }}"'
+            exit 1
+          fi
+
+          deps_hash="$(echo "$deps_cache_key" | sha256sum | cut -f 1 -d ' ')"
+
+          # This can be used by to always update a cache entry (useful e.g. for ccache)
+          current_date="$(date '+%Y-%m-%d-%H:%M:%S')"
+
+          ccache_key_prefix="ccache-$os-$compiler-$deps_hash-$build_type-$generator$suffix"
+          ccache_key_prefix="$(echo "$ccache_key_prefix" |
+                               tr -c '[:alnum:]._-' '-' |
+                               sed 's/-\+/-/g' |
+                               sed 's/-$//' |
+                               tr '[:upper:]' '[:lower:]'
+                             )"
+
+          {
+            echo "deps-key=${deps_cache_key}"
+            echo "deps-path=${deps_cache_path}"
+            echo "ccache-key=${ccache_key_prefix}-$GITHUB_REF-${current_date}"
+            echo "ccache-restore-key-1=$ccache_key_prefix-$GITHUB_REF"
+            echo "ccache-restore-key-2=$ccache_key_prefix"
+          } | tee -a "$GITHUB_OUTPUT"
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ steps.cache-key.outputs.deps-key }}
+          path: ${{ steps.cache-key.outputs.deps-path }}
+          fail-on-cache-miss: true
+
+      - name: Unpack dependencies
+        run: tar -C "$TMPDIR" -xf '${{ steps.cache-key.outputs.deps-path }}'
+
+      - name: Restore Ccache folder
+        id: cache-ccache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ steps.cache-key.outputs.ccache-restore-key-1 }}
+          restore-keys: ${{ steps.cache-key.outputs.ccache-restore-key-2 }}
+          path: ${{ env.CCACHE_DIR }}
+
+      - name: Reset Ccache stats
+        run: ccache --zero-stats
+
+      - name: Configure project
+        run: |
+          if [[ '${{ matrix.compiler }}' == 'clang' ]]; then
+            LINKER=LLD
+          else
+            LINKER=SYSTEM
+          fi
+
+          cmake -DCMAKE_BUILD_TYPE='${{ matrix.build_type }}'          \
+                -DCMAKE_C_STANDARD=17                                  \
+                -DCMAKE_CXX_STANDARD=17                                \
+                -DCMAKE_LINKER_TYPE="$LINKER"                          \
+                -DCMAKE_PREFIX_PATH="$TMPDIR/deps/cmake/"              \
+                -DENABLE_DEVELOPER_MODE='${{ matrix.developer_mode }}' \
+                -DOPT_ENABLE_CLANG_TIDY=OFF                            \
+                -DOPT_ENABLE_CPPCHECK=OFF                              \
+                -DHICTK_ENABLE_TESTING=ON                              \
+                -DHICTK_BUILD_EXAMPLES=ON                              \
+                -DHICTK_DOWNLOAD_TEST_DATASET=OFF                      \
+                -DHICTK_ENABLE_GIT_VERSION_TRACKING=OFF                \
+                -DCMAKE_INSTALL_PREFIX=dest                            \
+                -G '${{ matrix.generator }}'                           \
+                -S .                                                   \
+                -B build
+
+      - name: Build project
+        id: cmake-build
+        run: |
+          if [[ '${{ needs.matrix-factory.outputs.ci-type }}' != 'short' ]]; then
+            export CCACHE_DISABLE=1
+          fi
+
+          echo "start=$(date +%s)" >> "$GITHUB_OUTPUT"
+          cmake --build build -j "$(nproc)"
+
+      - name: Package binaries
+        run: |
+          cmake --install build
+
+          tar -cf - -C dest/ bin | zstd -T0 -13 -o binaries.tar.zst
+
+      - name: Package unit tests
+        run: |
+          rm -r build/src
+          tar --exclude='*.o' -cf - build/ | zstd -T0 -13 -o unit-tests.tar.zst
+
+      - name: Upload unit tests
+        uses: actions/upload-artifact@v5
+        with:
+          name: "unit-tests-${{ matrix.os }}-\
+            ${{ matrix.compiler }}-\
+            ${{ matrix.generator }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+          path: unit-tests.tar.zst
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v5
+        with:
+          name: "binaries-${{ matrix.os }}-\
+            ${{ matrix.compiler }}-\
+            ${{ matrix.generator }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+          path: binaries.tar.zst
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Print Ccache statistics (pre-cleanup)
+        run: |
+          ccache --show-stats \
+                 --show-compression \
+                 --verbose
+
+      - name: Cleanup Ccache folder
+        if: needs.matrix-factory.outputs.ci-type == 'short'
+        run: |
+          timestamp="$(date +%s)"
+          time_delta="$(( timestamp - ${{ steps.cmake-build.outputs.start }} + 60 ))"
+          ccache --evict-older-than="${time_delta}s"
+          ccache --recompress=19 --recompress-threads="$(nproc)"
+          ccache --cleanup --max-size 1G
+
+      - name: Print Ccache statistics (post-cleanup)
+        if: needs.matrix-factory.outputs.ci-type == 'short'
+        run: |
+          ccache --show-stats \
+                 --show-compression \
+                 --verbose
+
+      - name: Save Ccache folder
+        uses: actions/cache/save@v4
+        with:
+          key: ${{ steps.cache-key.outputs.ccache-key }}
+          path: ${{ env.CCACHE_DIR }}
+        env:
+          ZSTD_CLEVEL: 1
+
+      - name: Generate list of stale cache entries
+        id: stale-cache
+        if: steps.cache-ccache.outputs.cache-matched-key != ''
+        run: |
+          fname='stale-cache-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.generator }}-${{ matrix.build_type }}-${{ matrix.developer_mode }}.txt'
+          echo '${{ steps.cache-ccache.outputs.cache-matched-key }}' > "$fname"
+
+          echo "name=$fname" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Upload stale cache entries
+        if: steps.cache-ccache.outputs.cache-matched-key != ''
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ steps.stale-cache.outputs.name }}
+          path: "${{ steps.stale-cache.outputs.name }}"
+          if-no-files-found: error
+          retention-days: 1
+
+  purge-stale-ccache-entries:
+    name: Purge stale CCache entries
+    needs: [build-project]
+    uses: paulsengroup/hictk/.github/workflows/purge-stale-ccache-entries.yml@18f6815c7416feef4b4bd9ceffe69baae7fefabb
+    permissions:
+      contents: read
+      actions: write
+
+  run-unit-tests:
+    name: Run unit tests
+    needs: [matrix-factory, cache-test-dataset, build-project]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix-factory.outputs.matrix) }}
+
+    container:
+      image: ghcr.io/paulsengroup/ci-docker-images/${{ matrix.os }}-cxx-${{ matrix.compiler }}:latest
+      options: "--user=root"
+
+    env:
+      HICTK_CI: "1"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Restore test dataset
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.cache-test-dataset.outputs.cache-key }}
+          path: test/data/hictk_test_data.tar.zst
+          fail-on-cache-miss: true
+
+      - name: Download unit tests artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: "unit-tests-${{ matrix.os }}-\
+            ${{ matrix.compiler }}-\
+            ${{ matrix.generator }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+
+      - name: Extract binaries and test dataset
+        run: |
+          zstd -dcf unit-tests.tar.zst | tar -xf -
+          tar -xf test/data/hictk_test_data.tar.zst
+
+      - name: Add test user
+        run: useradd devel
+
+      - name: Fix permissions
+        run: chown -R devel:devel build/
+
+      - name: Setup dependencies
+        run: |
+          apt-get update
+          apt-get install -q -y --no-install-recommends \
+            python3-pip \
+            sudo
+
+          python3 -m pip install 'cmake==${{ matrix.cmake }}'
+
+      - name: Run unit tests
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          ctest --test-dir build/           \
+                --schedule-random           \
+                --output-on-failure         \
+                --no-tests=error            \
+                --timeout 300               \
+                -j "$(nproc)"
+
+  run-integration-tests:
+    name: Run integration tests
+    needs: [matrix-factory, cache-test-dataset, build-project]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix-factory.outputs.matrix) }}
+
+    container:
+      image: ubuntu:24.04
+      options: "--user=root"
+
+    env:
+      HICTK_CI: "1"
+      DEBIAN_FRONTEND: "noninteractive"
+      TZ: "Etc/UTC"
+
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -q -y --no-install-recommends \
+            curl \
+            git \
+            python3.12 \
+            python3.12-venv \
+            python3-pip \
+            sudo \
+            tar \
+            zip \
+            zstd
+
+          if [ '${{ matrix.developer_mode }}' = ON ]; then
+            apt-get install -q -y --no-install-recommends \
+              libasan8 \
+              libubsan1
+          fi
+
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Restore test dataset
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.cache-test-dataset.outputs.cache-key }}
+          path: test/data/hictk_test_data.tar.zst
+          fail-on-cache-miss: true
+
+      - name: Download binaries artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: "binaries-${{ matrix.os }}-\
+            ${{ matrix.compiler }}-\
+            ${{ matrix.generator }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+
+      - name: Extract binaries and test dataset
+        run: |
+          tar -xf binaries.tar.zst
+          tar -xf test/data/hictk_test_data.tar.zst
+
+      - name: Install test suite
+        run: |
+          python3.12 -m venv venv --upgrade
+          venv/bin/pip install test/integration
+
+      - name: Add test user
+        run: useradd devel
+
+      - name: Test hictk balance
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.balance.json \
+            --suites=balance
+
+      - name: Test hictk convert
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.convert.json \
+            --suites=convert
+
+      - name: Test hictk dump
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.dump.json \
+            --suites=dump
+
+      - name: Test hictk fix-mcool
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.fix-mcool.json \
+            --suites=fix-mcool
+
+      - name: Test hictk load
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.load.json \
+            --suites=load
+
+      - name: Test hictk merge
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.merge.json \
+            --suites=merge
+
+      - name: Test hictk metadata
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.metadata.json \
+            --suites=metadata
+
+      - name: Test hictk rename-chromosomes
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.rename-chromosomes.json \
+            --suites=rename-chromosomes
+
+      - name: Test hictk validate
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.validate.json \
+            --suites=validate
+
+      - name: Test hictk zoomify
+        run: |
+          sudo -u devel -E env "PATH=$PATH" \
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$(nproc)" \
+            --result-file integration-test-report.zoomify.json \
+            --suites=zoomify
+
+      - name: Upload integration test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: "integration-test-reports-\
+            ${{ matrix.os }}-\
+            ${{ matrix.compiler }}-\
+            ${{ matrix.generator }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+          path: integration-test-report*.json
+          retention-days: 7
+
+  ubuntu-ci-status-check:
+    name: Status Check (Ubuntu CI)
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    needs:
+      - build-project
+      - run-unit-tests
+      - run-integration-tests
+
+    steps:
+      - name: Collect job results
+        if: |
+          needs.build-project.result != 'success'      ||
+          needs.run-unit-tests.result != 'success'     ||
+          needs.run-integration-tests.result != 'success'
+        run: exit 1

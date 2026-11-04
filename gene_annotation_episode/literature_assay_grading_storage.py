@@ -92,6 +92,19 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
     received_table = 'literature_assay_grading_received'
     binding_fields = ()
 
+    legacy_version = LEGACY_VERSION
+    requested = REQUESTED
+    population_schema = staticmethod(grading_population_schema)
+    read_inputs = staticmethod(read_assay_grading_inputs)
+    input_schema = staticmethod(assay_grading_input_schema)
+    grade = staticmethod(grade_assay)
+    sheet_schema = staticmethod(assay_grading_sheet_schema)
+    rows = staticmethod(_rows)
+    cells_schema = staticmethod(assay_grading_cells_schema)
+
+    def before_publish(self, context, arguments):
+        """Optional axis-specific identity/revision checks inside the transaction."""
+
     def __init__(self, store, run_id, *, read_cells=None):
         if not isinstance(run_id, str) or not run_id:
             raise ValueError('explicit_literature_run_required')
@@ -117,9 +130,11 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError('operation_key_required')
         args = plain(arguments)
-        validate_schema(args, grading_population_schema())
-        requested = list(context.assignment.get(REQUESTED, ()))
-        if len(set(requested)) != len(requested) or any(name not in COMPONENTS for name in requested):
+        if 'experiment_ref' not in args:
+            raise ContractError('assay_grading_experiment_reference_required')
+        validate_schema(args, self.population_schema())
+        requested = list(context.assignment.get(self.requested, ()))
+        if len(set(requested)) != len(requested) or any(name not in self.components for name in requested):
             raise ContractError('assay_grading_component_selection_invalid')
         request = {'run_id': self.run_id, 'episode_id': context.episode_id,
             'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope),
@@ -167,13 +182,21 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
             input_component_rows.append({'namespace': namespace, 'sheet_ref': sheet_ref,
                 'components': list(components), 'rows': deepcopy(rows)})
             return rows
+        def read_database_request(reference):
+            source = retain(self._native_source(context, reference), possessed=True)
+            request_ref = source.get('request_ref')
+            if request_ref is None:
+                raise ContractError('database_measurement_request_unavailable')
+            receipt = self._artifact_json(request_ref)
+            artifact_bindings[(reference, 'request')] = request_ref
+            return receipt
 
         retain(self._native_source(context, args['source_ref']), possessed=True)
-        extraction = read_assay_grading_inputs(args, read_source=read_source,
-            read_cells=read_cells, read_record=read_record)
-        validate_schema(extraction, assay_grading_input_schema())
-        sheet = grade_assay(extraction)
-        validate_schema(sheet, assay_grading_sheet_schema())
+        extraction = self.read_inputs(args, read_source=read_source,
+            read_cells=read_cells, read_record=read_record, read_database_request=read_database_request)
+        validate_schema(extraction, self.input_schema())
+        sheet = self.grade(extraction)
+        validate_schema(sheet, self.sheet_schema())
         # Retain public provenance from every quantity without expanding a
         # delivered numerical subset into private reader operands.
         sources = [args['source_ref']]
@@ -192,7 +215,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
             for ancestor in source.get('parent_source_refs', ()):
                 if ancestor not in sources:
                     sources.append(ancestor)
-        payload = {'version': VERSION, 'selection': args, 'extraction': extraction,
+        payload = {'version': self.record_version, 'selection': args, 'extraction': extraction,
             'sheet': sheet, 'direct_record_refs': direct, 'input_source_refs': sources,
             'record_bindings': record_bindings,
             'input_component_rows': input_component_rows,
@@ -200,16 +223,17 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
                 for (ref, rep), artifact in artifact_bindings.items()]}
         with self.store.transaction():
             self._install()
+            self.before_publish(context, args)
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(signature, 'application/json')
-            record = {'provider': PROVIDER, 'accession': None, 'uri': None,
+            record = {'provider': self.provider, 'accession': None, 'uri': None,
                 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref,
-                'version': VERSION, 'retrieved_at': None, 'parent_source_refs': sources}
+                'version': self.record_version, 'retrieved_at': None, 'parent_source_refs': sources}
             sheet_ref = identity('source', {'origin': 'tool', 'record': record})
             exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (sheet_ref,)).fetchone()
             self.store.put('source', record, origin='tool', scope=plain(context.scope))
-            rows = _rows(payload, sheet_ref, requested)
-            validate_schema(rows, assay_grading_cells_schema())
+            rows = self.rows(payload, sheet_ref, requested)
+            validate_schema(rows, self.cells_schema())
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {
                 'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}),
                 'record_refs': [sheet_ref], 'changed_record_refs': [] if exists else [sheet_ref],
@@ -233,7 +257,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
     def read(self, sheet_ref):
         source = self.store.get(sheet_ref)
         if (source.get('record_type') != 'source' or source.get('origin') != 'tool'
-                or source.get('provider') != PROVIDER or source.get('version') not in (VERSION, LEGACY_VERSION)):
+                or source.get('provider') != self.provider or source.get('version') not in (self.record_version, self.legacy_version)):
             raise ContractError('assay_grading_sheet_required')
         record = {key: value for key, value in source.items() if key not in ('id', 'record_type', 'origin')}
         if identity('source', {'origin': 'tool', 'record': record}) != sheet_ref:
@@ -261,11 +285,11 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
                 or outcome.get('operation_ref') != identity('operation', {
                     'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
             raise ContractError('assay_grading_saved_selection_mismatch')
-        validate_schema(saved['selection'], grading_population_schema())
-        if source['version'] == VERSION and 'experiment_ref' not in saved['selection']:
+        validate_schema(saved['selection'], self.population_schema(legacy=source['version'] != self.record_version))
+        if source['version'] == self.record_version and 'experiment_ref' not in saved['selection']:
             raise ContractError('assay_grading_saved_experiment_missing')
-        validate_schema(saved['extraction'], assay_grading_input_schema())
-        validate_schema(saved['sheet'], assay_grading_sheet_schema())
+        validate_schema(saved['extraction'], self.input_schema())
+        validate_schema(saved['sheet'], self.sheet_schema())
         for reference, digest in saved['record_bindings'].items():
             if (not self.store.reference_subset([reference], plain(scope))
                     or identity('assay_grading_input_record', self.store.get(reference)) != digest):
@@ -274,25 +298,25 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
             raise ContractError('assay_grading_saved_input_mismatch')
         for binding in saved['artifact_bindings']:
             native = self.store.get(binding['source_ref'])
-            field = 'artifact_ref' if binding['representation'] == 'original' else 'text_ref'
+            field = {'original': 'artifact_ref', 'text': 'text_ref', 'request': 'request_ref'}[binding['representation']]
             if native.get(field) != binding['artifact_ref']:
                 raise ContractError('assay_grading_saved_input_mismatch')
-        rows = _rows(saved, sheet_ref, request['requested_components'])
-        validate_schema(rows, assay_grading_cells_schema())
+        rows = self.rows(saved, sheet_ref, request['requested_components'])
+        validate_schema(rows, self.cells_schema())
         if canonical(rows) != canonical(outcome['result']['cells']):
             raise ContractError('assay_grading_saved_cells_mismatch')
         return saved
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
-        selected = COMPONENTS if components is None else components
+        selected = self.components if components is None else components
         if (not isinstance(selected, (list, tuple)) or len(set(selected)) != len(selected)
-                or any(component not in COMPONENTS for component in selected)):
+                or any(component not in self.components for component in selected)):
             raise ContractError('assay_grading_component_selection_invalid')
         rows = []
         for reference in dict.fromkeys(sheet_refs):
             if reference not in permitted_record_refs:
                 raise ContractError('literature_sheet_not_received')
-            rows.extend(_rows(self.read(reference), reference, selected))
+            rows.extend(self.rows(self.read(reference), reference, selected))
         return rows
 
     def received_cells(self, context):
@@ -319,7 +343,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
                 row = self.store.get(reference)
             except (LookupError, ContractError):
                 continue
-            if row.get('record_type') == 'source' and row.get('provider') == PROVIDER and row.get('version') in (VERSION, LEGACY_VERSION):
+            if row.get('record_type') == 'source' and row.get('provider') == self.provider and row.get('version') in (self.record_version, self.legacy_version):
                 self.read(reference)
                 refs.append(reference)
         return list(dict.fromkeys(refs))
@@ -333,7 +357,7 @@ class LiteratureAssayGradingRepository(LiteratureRateRepository):
         Shared measurement keys remain on each cell; distinct experiment refs
         do not assert statistical independence.
         """
-        selected = COMPONENTS if components is None else components
+        selected = self.components if components is None else components
         rows = self.fact_cells(context, self.available_sheet_refs(context), components=selected)
         experiments, assessments = {}, {}
         for row in rows:

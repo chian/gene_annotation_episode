@@ -1,0 +1,68 @@
+{
+  "actual_numeric_population_or_admission_claimed": false,
+  "actual_selected_bound_fields": [
+    {
+      "all_declared_cell_fields_present": true,
+      "cell_field_count": 15,
+      "decision_index": 0,
+      "declared_top_level_binding_preserved": true,
+      "exact_full_declared_schema": false,
+      "field": "literature_rate_cells",
+      "initial_has_exact_interpretation_fields_only": true,
+      "namespace": "literature_rate_cells",
+      "original_selected_action_sha256": "b0b66fe6285e3aacf378472ed9248076b707fa706d83be08a09d6be6a03106f8",
+      "parent_episode_id": "episode_80c74788f0b367d06930159b6c0fd4ad92ec459cb2ad2edc962d361903b74cd2",
+      "requested_components": {
+        "requested_rate_components": [
+          "reference_rate",
+          "test_rate",
+          "rate_difference",
+          "retained_fraction",
+          "fractional_decrease"
+        ]
+      },
+      "schema_equivalent_ignoring_unordered_required_enum_and_type": false,
+      "semantic_constraint_differences": [
+        {
+          "expected": "reference",
+          "path": "items.properties.assayed_subject_ref.x-reference-namespace",
+          "status": "omitted_constraint"
+        },
+        {
+          "expected": "term",
+          "path": "items.properties.endpoint_ref.x-reference-namespace",
+          "status": "omitted_constraint"
+        },
+        {
+          "expected": "reference",
+          "path": "items.properties.experiment_ref.x-reference-namespace",
+          "status": "omitted_constraint"
+        },
+        {
+          "expected": "term",
+          "path": "items.properties.normalization_ref.x-reference-namespace",
+          "status": "omitted_constraint"
+        },
+        {
+          "expected": "context",
+          "path": "items.properties.reference_condition_ref.x-reference-namespace",
+          "status": "omitted_constraint"
+        },
+        {
+          "expected": "context",
+          "path": "items.properties.test_condition_ref.x-reference-namespace",
+          "status": "omitted_constraint"
+        }
+      ]
+    }
+  ],
+  "correction": "Earlier commentary called the declared projection full/exact before detailed comparison. That was too strong. FIRST_COMMISSION inspected partner-only; absence of partner fields does not indicate failure because the selected family is rate. The launch pending label was conservative/stale relative to its own4 selected actions.",
+  "current_partner_auditor_covers_this_rate_family": false,
+  "existing_validation": "Namespace-specific saved-cell validation remains selected by the correct x-source. It has not yet been exercised by an actual returned form in this run.",
+  "interpretation": "Actual model selected a rate-family fact request with all15 fields and x-source, but omitted6 x-reference-namespace constraints. This proves selected binding only; no exact-schema compliance, numerical population, scientific correctness, closure or parent delivery. The model need not select partner-specific cells or a prescribed itinerary.",
+  "original_runs_pins_or_contracts_changed": false,
+  "pin_manifest_sha256": "a446edfd1e3e614aafe67022c2f6927fcf21135caac29d1dfe42c04f67787579",
+  "private_model_content_or_provider_logs_read": false,
+  "status": "actual_model_selected_fact_binding_with_partial_schema_preservation",
+  "written_utc": "2026-10-26T08:45:29.898845+00:00"
+}

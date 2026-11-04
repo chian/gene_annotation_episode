@@ -1,0 +1,37 @@
+{
+  "actual_model_public_HTTP_native_programs_allowed": false,
+  "baseline": {
+    "bytes": 127761,
+    "path": "/tmp/gene-annotation-configured-caller-20261022-006/GENERATION_BASELINE_006.json",
+    "sha256": "5ba160e1bcbdb14c08b5a929015143b7bd1d316eedc5dd2d239b5f45c6ab644e"
+  },
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_api_planning_case_policy.py",
+    "--basetemp",
+    "/tmp/api-planning-case-p-006-evidence-jsywz9yg/basetemp-002",
+    "--junitxml",
+    "/tmp/api-planning-case-p-006-evidence-jsywz9yg/component-002.xml"
+  ],
+  "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+  "declared_old_files_verified": 348,
+  "original_scientific_state_used": false,
+  "owned_inputs": {
+    "gene_annotation_episode/api_planning_case_policy.py": {
+      "bytes": 5777,
+      "path": "/tmp/gene-annotation-configured-caller-20261022-006/gene_annotation_episode/api_planning_case_policy.py",
+      "sha256": "4474422fa09ac5247b1957e7d1bce4a57ac811f39f1cc9356666a7c4d4ea276f"
+    },
+    "tests/test_api_planning_case_policy.py": {
+      "bytes": 25174,
+      "path": "/tmp/gene-annotation-configured-caller-20261022-006/tests/test_api_planning_case_policy.py",
+      "sha256": "7f6a2b561bc6c6c870db1f5ea05d9875828cb351db3487220fd994049abafb70"
+    }
+  },
+  "reason_for_second_invocation": "Tests only: positive initial-ref ownership proof now uses the actual locally registered fixture protein rather than a shape-only unregistered reference. Production module unchanged; first57passing invocation retained.",
+  "shared_source_limit": "B is concurrently writing NEW scientific_checkpoint_fork.py; this invocation is only P isolated component/setup/single-policy-source checks. No full implementation pin/worker/reconstruction proof claimed.",
+  "static_assets_verified": 319
+}

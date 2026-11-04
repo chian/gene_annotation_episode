@@ -1,0 +1,63 @@
+{
+  "method": "stdlib AST/source/hash only",
+  "delegates": {
+    "calculate_rfam_batch_components": {
+      "path": "gene_annotation_episode/rfam_batch_grader.py",
+      "calls": [
+        "validate_rfam_parameters",
+        "select_rfam_common_sheet",
+        "infernal_search_grader.calculate_infernal_search_scores"
+      ],
+      "binary_arithmetic_operators": 0
+    },
+    "calculate_rfam_batch_report_components": {
+      "path": "gene_annotation_episode/rfam_batch_report_grader.py",
+      "calls": [
+        "validate_rfam_parameters",
+        "select_rfam_common_sheet",
+        "infernal_search_grader.calculate_infernal_search_scores"
+      ],
+      "binary_arithmetic_operators": 0
+    },
+    "calculate_rfam_batch_table_components": {
+      "path": "gene_annotation_episode/rfam_batch_table_grader.py",
+      "calls": [
+        "select_rfam_common_sheet",
+        "infernal_search_grader.calculate_infernal_search_scores",
+        "finite_json_copy",
+        "ContractError"
+      ],
+      "binary_arithmetic_operators": 0
+    }
+  },
+  "retained_fixtures": [
+    {
+      "path": "verification/tool_graders_rfam_contract_2026-10-26_232/examples/official-single-result.json",
+      "sha256": "1396240ef8eb2073f3e307915814ca418a6f6bae29088e27c76ee375882362ab"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/input.seq",
+      "sha256": "4dc1529db76f089ec36caf8f3d176028d3bb5c828a1d04bfd130e72f92f515f4"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/response.body",
+      "sha256": "46b3e1c6554f1f20d7869e447298beb782ad2cf6735196bd11a39be80e5fad25"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/response.body",
+      "sha256": "61e8f39517f480efd4388a91f6096500c13e120d658eec75bcdf343db4105c63"
+    },
+    {
+      "path": "verification/tool_graders_rfam_numerical_2026-10-26_235/examples_001/examples/live_single.sheet.json",
+      "sha256": "e5de6b4e504e32b2437f327326d71da9ece5cc3d47031b91ce2fda05e46ed765"
+    },
+    {
+      "path": "verification/tool_graders_rfam_report_2026-10-26_242/examples_011/native.sheet.json",
+      "sha256": "d100a8b1122fe1563ddae06561886bb734c722310d2093b413b45ce84c04a314"
+    },
+    {
+      "path": "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001/parse.json",
+      "sha256": "f02bce72e69b0682483d1b99f111a6a8ccfb5727978d7056f77e1457f544bf70"
+    }
+  ]
+}

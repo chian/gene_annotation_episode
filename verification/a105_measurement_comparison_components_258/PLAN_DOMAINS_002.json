@@ -1,0 +1,209 @@
+{
+  "roles": [
+    "left",
+    "right",
+    "epsilon_signal",
+    "epsilon_nuisance",
+    "nuisance"
+  ],
+  "relationships": {
+    "construct": [
+      "same_construct_supported",
+      "intended_variant",
+      "different",
+      "unknown",
+      "conflicting"
+    ],
+    "preparation": [
+      "same_preparation_supported",
+      "different_preparations_supported",
+      "unknown",
+      "conflicting"
+    ],
+    "preparation_target": [
+      "same_preparation_quantity",
+      "same_population_estimand_supported",
+      "incompatible",
+      "unknown",
+      "conflicting"
+    ],
+    "protocol": [
+      "matched_except_intended_change",
+      "additional_differences",
+      "unknown",
+      "conflicting"
+    ],
+    "endpoint": [
+      "same_quantity",
+      "fixed_reaction_conversion",
+      "complementary",
+      "incompatible",
+      "unknown",
+      "conflicting"
+    ],
+    "denominator": [
+      "same_basis_supported",
+      "different",
+      "unknown",
+      "conflicting"
+    ],
+    "functional_bearing": [
+      "same_quantitative_assertion",
+      "existence_only",
+      "partner_dependence_only",
+      "complementary",
+      "unknown",
+      "conflicting"
+    ],
+    "attribution": [
+      "isolated_supported",
+      "mixed_contributors_identified",
+      "unresolved",
+      "unknown",
+      "conflicting"
+    ],
+    "sampling": [
+      "repeated_representation",
+      "shared_physical_estimate",
+      "paired_observations_supported",
+      "independent_preparations_supported",
+      "independence_not_established",
+      "unknown",
+      "conflicting"
+    ],
+    "systematic_coverage": [
+      "included_in_selected_covariance",
+      "identified_unresolved",
+      "not_established",
+      "unknown",
+      "conflicting"
+    ],
+    "left_validity": [
+      "endpoint_quantification_supported",
+      "identified_unresolved_interference",
+      "corrected_endpoint_supported",
+      "unknown",
+      "conflicting"
+    ],
+    "right_validity": [
+      "endpoint_quantification_supported",
+      "identified_unresolved_interference",
+      "corrected_endpoint_supported",
+      "unknown",
+      "conflicting"
+    ],
+    "left_readout_isolation": [
+      "isolated_signal_supported",
+      "mixed_optical_contributions",
+      "unknown",
+      "conflicting"
+    ],
+    "right_readout_isolation": [
+      "isolated_signal_supported",
+      "mixed_optical_contributions",
+      "unknown",
+      "conflicting"
+    ]
+  },
+  "reasons": {
+    "source": [
+      "quantity_not_selected",
+      "source_number_unreported",
+      "source_unit_unreported",
+      "native_nondetection_not_point",
+      "native_negligible_not_point",
+      "source_semantics_unknown",
+      "source_semantics_conflicting",
+      "reported_uncertainty_not_joint_covariance",
+      "nuisance_quantity_unmeasured",
+      "covariance_not_supplied",
+      "joint_covariance_incomplete",
+      "covariance_status_unknown"
+    ],
+    "relationship": [
+      "construct_not_common",
+      "preparation_target_unknown",
+      "preparation_target_conflicting",
+      "protocols_not_matched",
+      "endpoint_conversion_unknown",
+      "endpoint_conversion_conflicting",
+      "endpoint_incompatible",
+      "denominator_not_common",
+      "functional_resolution_not_quantitative",
+      "attribution_unresolved",
+      "validity_unresolved",
+      "duplicate_representation_not_replication",
+      "shared_estimate_not_replication",
+      "common_model_not_selected",
+      "common_model_unknown",
+      "common_model_conflicting",
+      "optical_model_unknown",
+      "optical_model_conflicting",
+      "estimate_scale_model_unknown",
+      "estimate_scale_model_conflicting",
+      "coefficient_applicability_unknown",
+      "coefficient_applicability_conflicting",
+      "nuisance_linkage_unknown",
+      "nuisance_linkage_conflicting",
+      "scenario_not_selected",
+      "scenario_stipulations_unresolved",
+      "variance_meaning_mismatch",
+      "common_systematic_error_not_assessed"
+    ],
+    "implementation": [
+      "unsupported_unit",
+      "bounded_arithmetic_unimplemented",
+      "range_arithmetic_unimplemented",
+      "unresolved_native_qualification",
+      "opposite_direction_conversion_unimplemented",
+      "uncertain_conversion_unimplemented",
+      "numerical_model_range"
+    ],
+    "domain": [
+      "zero_denominator",
+      "positive_values_required_for_log",
+      "nonzero_spectral_signal_required",
+      "positive_discrepancy_variance_required",
+      "nonunique_gls_weights",
+      "inconsistent_deterministic_constraint",
+      "covariance_invalid_shape",
+      "covariance_not_symmetric",
+      "covariance_not_positive_semidefinite",
+      "covariance_owner_unit_dependency_mismatch",
+      "covariance_overlap_conflict",
+      "physical_owner_value_conflict",
+      "covariance_json_invalid",
+      "covariance_basis_status_invalid",
+      "covariance_nonfinite_numeric",
+      "covariance_estimate_owner_unavailable"
+    ]
+  },
+  "interpretations": [
+    "native_report",
+    "supported_reexpression",
+    "descriptive_protocol_comparison",
+    "common_estimand_comparison",
+    "known_covariance_standardization",
+    "estimated_covariance_plugin_standardization",
+    "known_covariance_common_estimate",
+    "estimated_covariance_plugin_common_estimate",
+    "spectral_sensitivity",
+    "supported_estimate_scale_correction",
+    "first_order_known_input_covariance",
+    "first_order_estimated_input_covariance",
+    "stipulated_report_scale_scenario",
+    "unavailable",
+    "protocol_difference_uncertainty_known_covariance",
+    "protocol_difference_uncertainty_estimated_covariance"
+  ],
+  "limits": [
+    "standalone_components_not_selected_integration",
+    "same_estimate_ratio_log_difference_are_dependent",
+    "agreement_does_not_detect_shared_bias",
+    "source_positive_matched_covariance_case_still_open",
+    "general_A105_adequacy_unfinished",
+    "no_target_transfer_or_W05",
+    "corrected_quantity_not_automatically_substituted_into_common_pair",
+    "unknown_systematics_not_set_to_zero"
+  ]
+}

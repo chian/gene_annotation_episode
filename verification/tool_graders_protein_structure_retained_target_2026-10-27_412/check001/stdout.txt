@@ -1,0 +1,69 @@
+........F.F....
+=================================== FAILURES ===================================
+___________________ test_saved_target_checks_requested_scope ___________________
+
+actual = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7d0dc338fe00>
+
+    def test_saved_target_checks_requested_scope(actual):
+        f = actual
+>       unrelated = f.store.create_problem(raw_sequence="ACDEFG", molecule="protein")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_retained_target.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7d0da20858e0>
+input_path = None, raw_sequence = 'ACDEFG', molecule = 'protein'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+source_snapshot/gene_annotation_episode/materials.py:568: ContractError
+_ test_saved_target_requires_current_bound_resource[workspace-path_outside_assigned_workspace] _
+
+actual = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7d0dc338fe00>
+change = 'workspace', code = 'path_outside_assigned_workspace'
+
+    @pytest.mark.parametrize("change,code", [
+        ("missing_resource", "practical_execution_resource_identity_conflict"),
+        ("workspace", "path_outside_assigned_workspace"),
+        ("operation", "native_protein_structure_operation_mode_software_not_bound"),
+        ("mode", "native_protein_structure_operation_mode_software_not_bound"),
+        ("software", "native_protein_structure_operation_mode_software_not_bound"),
+    ])
+    def test_saved_target_requires_current_bound_resource(actual, change, code):
+        f = actual
+        resource = deepcopy(f.config)
+        resource_id = f.assignment["resource_id"]
+        if change == "missing_resource":
+            resource_id = "another-configured-resource"
+        elif change == "workspace":
+            resource["workspace"] = str(f.directory / "different-workspace")
+        elif change == "operation":
+            resource["native_protein_structure"][0].update(operation="inspect", scientific_mode=None)
+        elif change == "mode":
+            resource["native_protein_structure"][0]["scientific_mode"] = "evaluate_declared_transform_ca"
+        else:
+            resource["native_protein_structure"][0]["software"]["python_sha256"] = "a" * 64
+        changed = binding(f, {resource_id: resource})
+>       with pytest.raises(ValueError, match=code):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'path_outside_assigned_workspace'
+E         Actual message: 'practical_write_outside_workspace'
+
+source_snapshot/tests/test_protein_structure_retained_target.py:268: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_retained_target.py::test_saved_target_checks_requested_scope
+FAILED source_snapshot/tests/test_protein_structure_retained_target.py::test_saved_target_requires_current_bound_resource[workspace-path_outside_assigned_workspace]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/usr/lib/python3.12/copy.py:220: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+2 failed, 13 passed in 1127.87s (0:18:47)

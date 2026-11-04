@@ -1,0 +1,79 @@
+[  3%] Performing configure step for 'htslib'
+[  9%] Built target boot
+[ 15%] Built target gentable
+[ 25%] Built target tld-dev
+[ 37%] Built target module_plot
+[ 43%] Built target converttablegen
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking for ranlib... ranlib
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for C compiler warning flags... -Wall
+checking whether C compiler accepts -mssse3 -mpopcnt -msse4.1... yes
+checking whether C compiler accepts -mavx2... yes
+checking whether C compiler accepts -mavx512f... yes
+checking whether C compiler supports ARM Neon... no
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking shared library type for unknown-Linux... plain .so
+checking whether the compiler accepts -fvisibility=hidden... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for sys/param.h... yes
+checking for getpagesize... yes
+checking for working mmap... yes
+checking for gmtime_r... yes
+checking for fsync... yes
+checking for drand48... yes
+checking for srand48_deterministic... no
+checking for gcc options needed to detect all undeclared functions... none needed
+checking whether fdatasync is declared... yes
+checking for fdatasync... yes
+checking for library containing log... -lm
+checking for zlib.h... yes
+checking for inflate in -lz... yes
+checking for library containing recv... none required
+checking whether htscodecs files are present... yes
+configure: WARNING: GCS support not enabled: requires libcurl support
+checking for library containing regcomp... none required
+checking whether PTHREAD_MUTEX_RECURSIVE is declared... yes
+configure: creating ./config.status
+config.status: creating config.mk
+config.status: creating htslib.pc.tmp
+config.status: creating config.h
+config.status: linking htscodecs_bundled.mk to htscodecs.mk
+[ 46%] Performing build step for 'htslib'
+make[4]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+[ 50%] No install step for 'htslib'
+[ 53%] Completed 'htslib'
+[ 65%] Built target htslib
+[ 68%] Generating convert_tables.h
+[ 71%] Building C object src/CMakeFiles/samstat.dir/samstat.c.o
+[ 75%] Building C object src/CMakeFiles/samstat.dir/htsinterface/htsglue.c.o
+[ 78%] Building C object src/CMakeFiles/samstat.dir/sambamparse/sam_bam_parse.c.o
+[ 81%] Building C object src/CMakeFiles/samstat.dir/param/param.c.o
+[ 84%] Building C object src/CMakeFiles/samstat.dir/collect/collect.c.o
+[ 87%] Building C object src/CMakeFiles/samstat.dir/report/stat_report.c.o
+[ 90%] Building C object src/CMakeFiles/samstat.dir/report/lst.c.o
+[ 93%] Building C object src/CMakeFiles/samstat.dir/tools/tools.c.o
+[ 96%] Building C object src/CMakeFiles/samstat.dir/thread/thread_data.c.o
+[100%] Linking C executable samstat
+[100%] Built target samstat

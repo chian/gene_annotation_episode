@@ -1,0 +1,124 @@
+.....................F.................................................. [ 48%]
+........................................................................ [ 96%]
+......                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compose _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1993/test_selected_original_fluc_sh0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70111d9d5cd0>
+
+    def test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compose(tmp_path,monkeypatch):
+        proof=Path(os.environ['ION_DISCRIMINATION_PROOF_DIR']) if os.environ.get('ION_DISCRIMINATION_PROOF_DIR') else tmp_path/'proof'
+        proof.mkdir(parents=True,exist_ok=False)
+        store,ctx,args=setup(proof/'state',original='efflux_summary_thresholds',requested=['preferred_activity','alternative_activity','nominal_threshold_ratio'])
+        request=plain(ctx.assignment);forms=[];prompts=[];controllers=[]
+        alias=obj({'numbers':{'$ref':'episode-fact:'+NAMESPACE}})
+        child={'selection':{'kind':'episode_child','role':'literature','assignment':request,
+            'goal':'Examine original Fluc fluoride/chloride thresholds, actual source subject, construct ownership, derivation, experimental controls and applicability. Preserve reported estimates separately from nominal arithmetic and physical parameter bounds.',
+            'scope':plain(ctx.scope),'purpose':'Return exactly the requested original-source native thresholds and nominal threshold comparison, preserving actual ion and construct scope, missing chloride derivation and approximate fluoride inference.',
+            'schema_json':json.dumps(alias),'initial_report_json':'{}'},'report_update':{}}
+        def select(inputs):
+            text=render_literature_experimental_prompt(inputs,'Examine source ion specificity and preserve experimental limitations.')
+            assert ION_DISCRIMINATION_TASK in text.split('\n\nSTEERING\n')[0];prompts.append(text)
+            return {'selection':{'kind':'tool','tool':'literature.ion_discrimination.populate','arguments':json.dumps(args)},'report_update':{}}
+        def integrate(inputs):
+            form,=inputs['child_reports'];forms.append(deepcopy(form));rows=form['numbers']
+            assert [r['threshold'] for r in rows]==[30000,30,1000]
+            assert rows[0]['approximation']=='source_qualified' and rows[1]['derivation']=='unknown'
+            assert all(r['physical_domain'] is None for r in rows)
+            assert all(r['relationships']['subject_construct']['value']=='paper_summary_unresolved' for r in rows)
+            assert any(r['source_meanings']['preferred_ion'] is not None for r in rows)
+            assert any(r['source_meanings']['alternative_ion'] is not None for r in rows)
+            text=render_literature_experimental_prompt(inputs,'Evaluate the returned Fluc experimental evidence.')
+            assert ION_DISCRIMINATION_TASK in text.split('\n\nSTEERING\n')[0]
+            assert 'paper_summary_unresolved' in text.split('\n\nSTEERING\n')[1]
+            prompts.append(text)
+            commit={name:[] for name in store.reasoning_schema()['required']}
+            original=store.get(args['source_ref']);text=store.get_artifact(original['artifact_ref']).decode()
+            w=witness(text,'Fluc',source=args['source_ref'])
+            commit['source_subjects']=[{'alias':'original_fluc_source_subject','reference_type':'assay','source_ref':args['source_ref'],
+                'label':'Fluc','anchor':{**{name:w[name] for name in ('source_ref','start','end','quote')},'artifact_ref':original['artifact_ref']}}]
+            return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
+        def controller(path,initial):
+            value=FixtureController(str(path),initial,2 if len(path)==1 else 1);controllers.append(value);return value
+        from gene_annotation_episode.providers import _SessionConnection
+        class ControlledProvider:
+            def __init__(self):
+                self.connection=_SessionConnection.__new__(_SessionConnection)
+                self.connection.scientific_prompt_states={};self.index=0;self.presentations=[]
+            async def complete(self,episode_id,role,instructions,context,output_schema):
+                rendered=self.connection._presentation(episode_id,role,instructions,context)[0]
+                self.presentations.append(rendered)
+                state=self.connection.scientific_prompt_states[(episode_id,role)]
+                step=self.index;self.index+=1
+                if step in (0,2):
+                    operation='episode.return_contract' if step==0 else 'episode.operation_contract'
+                    operands={'role':'literature','source':NAMESPACE} if step==0 else {'operation':'literature.ion_discrimination.populate'}
+                    return {'response':{'response_type':'request_context','lookup':{
+                        'view':'composition_information','operation':operation,'arguments':operands}}}
+                if step==1:
+                    assert 'episode-fact:'+NAMESPACE in rendered and 'formula_code' not in rendered
+                    action=child
+                elif step==3:action=select(state)
+                elif step==4:action=integrate(state)
+                else:raise AssertionError('unexpected extra model exchange')
+                return {'response':{'response_type':'select_action',**action}}
+            async def release(self,episode_id):pass
+        provider=ControlledProvider();scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+>       summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=proof/'run',controller_factory=controller,
+            project_credit=scorer,initial_known_record_refs=list(ctx.received_record_refs),
+            episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,ion_discrimination_population=True,
+                reference_parent_sources=[args['source_ref']],contract_information_profile=CONTRACT_INFORMATION_PROFILE),),
+            binding_definitions={'credit':scorer.as_record()},decision_protocol='decision_exchange_v1'))
+
+tests/test_literature_ion_discrimination_binding_199.py:455: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4270: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4592: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1045: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1325: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_literature_ion_discrimination_binding_199.py:450: in complete
+    elif step==4:action=integrate(state)
+                        ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'action_yields': {'before': 1, 'completion_count_basis': 'saved_own_controller_observations', 'expectation_model': {'..., 'annotation_credit': None, 'approximation': 'source_qualified', 'component': 'nominal_threshold_ratio', ...}]}], ...}
+
+    def integrate(inputs):
+        form,=inputs['child_reports'];forms.append(deepcopy(form));rows=form['numbers']
+        assert [r['threshold'] for r in rows]==[30000,30,1000]
+        assert rows[0]['approximation']=='source_qualified' and rows[1]['derivation']=='unknown'
+        assert all(r['physical_domain'] is None for r in rows)
+>       assert all(r['relationships']['subject_construct']['value']=='paper_summary_unresolved' for r in rows)
+E       assert False
+E        +  where False = all(<generator object test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compose.<locals>.integrate.<locals>.<genexpr> at 0x70111ab26b50>)
+
+tests/test_literature_ion_discrimination_binding_199.py:416: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ion_discrimination_binding_199.py::test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compose
+1 failed, 149 passed in 140.30s (0:02:20)

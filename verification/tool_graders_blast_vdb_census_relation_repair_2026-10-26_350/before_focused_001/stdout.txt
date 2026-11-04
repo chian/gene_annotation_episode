@@ -1,0 +1,183 @@
+FFFFFFFF.....FFFFFFFFFFFFFFF.                                            [100%]
+=================================== FAILURES ===================================
+_ test_unresolved_optional_census_edge_uses_selected_policy[target_duplicates_only-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:137: in test_unresolved_optional_census_edge_uses_selected_policy
+    assert link["status"] == "available" and link["reason_code"] is None
+E   AssertionError: assert ('unavailable' == 'available'
+E     
+E     - available
+E     + unavailable
+E     ? ++)
+_ test_unresolved_optional_census_edge_uses_selected_policy[target_duplicates_only-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:137: in test_unresolved_optional_census_edge_uses_selected_policy
+    assert link["status"] == "available" and link["reason_code"] is None
+E   AssertionError: assert ('unavailable' == 'available'
+E     
+E     - available
+E     + unavailable
+E     ? ++)
+_ test_unresolved_optional_census_edge_uses_selected_policy[known_source_blocks-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:137: in test_unresolved_optional_census_edge_uses_selected_policy
+    assert link["status"] == "available" and link["reason_code"] is None
+E   AssertionError: assert ('unavailable' == 'available'
+E     
+E     - available
+E     + unavailable
+E     ? ++)
+_ test_unresolved_optional_census_edge_uses_selected_policy[known_source_blocks-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:137: in test_unresolved_optional_census_edge_uses_selected_policy
+    assert link["status"] == "available" and link["reason_code"] is None
+E   AssertionError: assert ('unavailable' == 'available'
+E     
+E     - available
+E     + unavailable
+E     ? ++)
+_ test_available_sample_contradiction_disables_all_corrected_functions[target_duplicates_only-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:186: in test_available_sample_contradiction_disables_all_corrected_functions
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'available' == 'incompatible'
+E     
+E     - incompatible
+E     + available
+_ test_available_sample_contradiction_disables_all_corrected_functions[target_duplicates_only-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:186: in test_available_sample_contradiction_disables_all_corrected_functions
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'available' == 'incompatible'
+E     
+E     - incompatible
+E     + available
+_ test_available_sample_contradiction_disables_all_corrected_functions[known_source_blocks-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:186: in test_available_sample_contradiction_disables_all_corrected_functions
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'available' == 'incompatible'
+E     
+E     - incompatible
+E     + available
+_ test_available_sample_contradiction_disables_all_corrected_functions[known_source_blocks-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:186: in test_available_sample_contradiction_disables_all_corrected_functions
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'available' == 'incompatible'
+E     
+E     - incompatible
+E     + available
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-target_duplicates_only-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-target_duplicates_only-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-known_source_blocks-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-known_source_blocks-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-target_duplicates_only-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-target_duplicates_only-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-known_source_blocks-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-known_source_blocks-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-target_duplicates_only-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-target_duplicates_only-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-known_source_blocks-qualify_separate] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-known_source_blocks-withhold_weights] _
+../../../tests/test_blast_vdb_function_census_relations.py:255: in test_census_dependency_conflict_cannot_be_treated_as_optional_unknown
+    assert link["status"] == "incompatible"
+E   AssertionError: assert 'unavailable' == 'incompatible'
+E     
+E     - incompatible
+E     + unavailable
+_ test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation[old_available_sheet] _
+../../../tests/test_blast_vdb_function_census_relations.py:288: in test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation
+    with pytest.raises(ValueError, match="^blast_vdb_function_record_fields_invalid$"):
+E   Failed: DID NOT RAISE ValueError
+_ test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation[tampered_original_sheet] _
+../../../tests/test_blast_vdb_function_census_relations.py:288: in test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation
+    with pytest.raises(ValueError, match="^blast_vdb_function_record_fields_invalid$"):
+E   Failed: DID NOT RAISE ValueError
+_ test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation[tampered_repaired_link] _
+../../../tests/test_blast_vdb_function_census_relations.py:288: in test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation
+    with pytest.raises(ValueError, match="^blast_vdb_function_record_fields_invalid$"):
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_unresolved_optional_census_edge_uses_selected_policy[target_duplicates_only-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_unresolved_optional_census_edge_uses_selected_policy[target_duplicates_only-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_unresolved_optional_census_edge_uses_selected_policy[known_source_blocks-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_unresolved_optional_census_edge_uses_selected_policy[known_source_blocks-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_available_sample_contradiction_disables_all_corrected_functions[target_duplicates_only-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_available_sample_contradiction_disables_all_corrected_functions[target_duplicates_only-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_available_sample_contradiction_disables_all_corrected_functions[known_source_blocks-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_available_sample_contradiction_disables_all_corrected_functions[known_source_blocks-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-target_duplicates_only-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-target_duplicates_only-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-known_source_blocks-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[repeated_endpoint-known_source_blocks-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-target_duplicates_only-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-target_duplicates_only-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-known_source_blocks-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[single_endpoint-known_source_blocks-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-target_duplicates_only-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-target_duplicates_only-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-known_source_blocks-qualify_separate]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_census_dependency_conflict_cannot_be_treated_as_optional_unknown[conflict_and_unresolved-known_source_blocks-withhold_weights]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation[old_available_sheet]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation[tampered_original_sheet]
+FAILED ../../../tests/test_blast_vdb_function_census_relations.py::test_saved_validator_rejects_available_link_over_sample_conflict_without_repopulation[tampered_repaired_link]
+23 failed, 6 passed in 0.87s

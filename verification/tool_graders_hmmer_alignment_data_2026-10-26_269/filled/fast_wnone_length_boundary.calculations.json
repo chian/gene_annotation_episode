@@ -1,0 +1,384 @@
+{
+  "schema": "hmmer_alignment_preparation_components_v1",
+  "operation": {
+    "program": "alimask",
+    "mode": "model_to_alignment",
+    "engine_version": "3.4",
+    "settings": {
+      "--dna": true,
+      "--fast": true,
+      "--wnone": true,
+      "--symfrac": 0.6,
+      "--fragthresh": 0.5,
+      "--model2ali": "6-6"
+    }
+  },
+  "parameters": {
+    "background": null,
+    "probability_tolerance": 0.0001,
+    "summary_rounding_tolerance": {
+      "eff_nseq": 0.005001,
+      "re_per_position": 0.0006
+    }
+  },
+  "rows": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "kind": "mapping",
+      "source_record_key": "input:alignment:0#alignment/0",
+      "output_record_key": null,
+      "model_record_key": null,
+      "summary_record_key": null,
+      "components": {
+        "input_sequence_count": {
+          "value": 3,
+          "state": "present",
+          "unit": "sequence_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "rows"
+            }
+          ]
+        },
+        "input_column_count": {
+          "value": 8,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_count"
+            }
+          ]
+        },
+        "rf_consensus_count": {
+          "value": 6,
+          "state": "present",
+          "unit": "RF_consensus_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.RF"
+            }
+          ]
+        },
+        "input_alignment_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#population/0",
+              "field": "decoded_count"
+            }
+          ]
+        },
+        "processed_alignment_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "output_validated_alignment_record_count",
+          "inputs": []
+        },
+        "unprocessed_alignment_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "decoded_unprocessed_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#population/0",
+              "field": "decoded_count"
+            }
+          ]
+        },
+        "requested_interval_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "request_interval_count",
+          "inputs": [
+            {
+              "field": "native_rows.requested_interval"
+            }
+          ]
+        },
+        "native_mapping_row_count": {
+          "value": 0,
+          "state": "incomplete",
+          "unit": "decoded_mapping_row_count",
+          "inputs": [
+            {
+              "occurrence_id": "output:stdout:0",
+              "field": "native_rows.mapping"
+            }
+          ]
+        },
+        "mapped_model_position_count": {
+          "value": 5,
+          "state": "present",
+          "unit": "model_position_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "rows"
+            },
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.RF"
+            },
+            {
+              "field": "operation.settings"
+            }
+          ]
+        },
+        "requested_union_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "alignment_column_count",
+          "inputs": []
+        }
+      },
+      "coordinates": null,
+      "model_components": null,
+      "source_symbol_counts": null,
+      "intervals": [
+        {
+          "request_record_key": "request#interval/0",
+          "request_ordinal": 0,
+          "requested_start": 6,
+          "requested_end": 6,
+          "requested_coordinate_system": "model",
+          "alignment_start": null,
+          "alignment_end": null,
+          "state": "incompatible",
+          "inclusive_span": {
+            "value": null,
+            "state": "incompatible",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "request#interval/0",
+                "field": "start"
+              },
+              {
+                "record_key": "request#interval/0",
+                "field": "end"
+              },
+              {
+                "record_key": "input:alignment:0#alignment/0",
+                "field": "reconstruction.map"
+              }
+            ]
+          }
+        }
+      ],
+      "input_mm": null,
+      "output_mm": null,
+      "reconstruction": {
+        "state": "present",
+        "map": [
+          1,
+          2,
+          3,
+          5,
+          6
+        ],
+        "basis": "fast_wnone",
+        "weights": [
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/0",
+            "weight": 1.0
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/1",
+            "weight": 1.0
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/2",
+            "weight": 1.0
+          }
+        ],
+        "marked_sequences": [
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/0",
+            "sequence": "AC--GT~~"
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/1",
+            "sequence": "ACT-GT~~"
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/2",
+            "sequence": "~~ANGT~~"
+          }
+        ],
+        "column_occupancy": [
+          {
+            "alignment_position": 1,
+            "weighted_residue_count": 2.0,
+            "weighted_residue_gap_count": 2.0,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 2,
+            "weighted_residue_count": 2.0,
+            "weighted_residue_gap_count": 2.0,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 3,
+            "weighted_residue_count": 2.0,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 0.6666666865348816,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 4,
+            "weighted_residue_count": 1.0,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 0.3333333432674408,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": false
+          },
+          {
+            "alignment_position": 5,
+            "weighted_residue_count": 3.0,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 6,
+            "weighted_residue_count": 3.0,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 7,
+            "weighted_residue_count": 0.0,
+            "weighted_residue_gap_count": 0.0,
+            "weighted_occupancy": null,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": false
+          },
+          {
+            "alignment_position": 8,
+            "weighted_residue_count": 0.0,
+            "weighted_residue_gap_count": 0.0,
+            "weighted_occupancy": null,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": false
+          }
+        ],
+        "pb_consensus_columns": null,
+        "issues": []
+      },
+      "native_mappings": []
+    }
+  ],
+  "checks": [
+    {
+      "code": "parameter_valid",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "input:alignment:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stdout:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stderr:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "source_geometry",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "input_population_processed",
+      "state": "unknown",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "range_capacity",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {
+        "capacity": 100,
+        "actual": 1
+      }
+    },
+    {
+      "code": "requested_ranges",
+      "state": "fail",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "native_mapping",
+      "state": "fail",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    }
+  ],
+  "issues": [
+    {
+      "code": "range_out_of_bounds",
+      "stage": "calculation",
+      "record_key": "request#interval/0",
+      "field": null,
+      "details": {
+        "bound": 5
+      }
+    },
+    {
+      "code": "mapping_mismatch",
+      "stage": "calculation",
+      "record_key": "input:alignment:0#alignment/0",
+      "field": null,
+      "details": {}
+    }
+  ]
+}

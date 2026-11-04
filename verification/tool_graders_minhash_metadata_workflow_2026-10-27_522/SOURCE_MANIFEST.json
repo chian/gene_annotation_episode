@@ -1,0 +1,174 @@
+{
+  "workload": 522,
+  "status": "authored_and_static_ast_checked_not_executed",
+  "test_collection_executed": false,
+  "application_or_scientific_imports_executed": false,
+  "native_network_or_jobs_executed": false,
+  "owned_test_files": [
+    {
+      "path": "tests/bvbrc_minhash_metadata_episode_fixture.py",
+      "sha256": "60eec0660ff7cbbd240acfa6ec85186fdf58d70cad1a8ca0ae74134ab65f6027",
+      "bytes": 15514,
+      "ast_parse": "passed"
+    },
+    {
+      "path": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py",
+      "sha256": "3d988594f5891b83db93406384d05b979f29943aff0f486241efe6a56ad1a83d",
+      "bytes": 38893,
+      "ast_parse": "passed"
+    }
+  ],
+  "preserved_existing_test_dependencies": [
+    {
+      "path": "tests/bvbrc_minhash_episode_fixture.py",
+      "sha256": "2bedb4b18e1529392216d1c425374a01ab81c7035ea77b2183254fb8b458c8a5",
+      "matches_pre_authoring_snapshot": true
+    },
+    {
+      "path": "tests/test_bvbrc_minhash_episode_path.py",
+      "sha256": "d11336ebae5b3e363a5c0cac3db470235a985573595f492565f6f41cf0202e14",
+      "matches_pre_authoring_snapshot": true
+    },
+    {
+      "path": "tests/test_bvbrc_minhash_return_boundaries.py",
+      "sha256": "dc98eabb0dd9bd5dae34c208595c3dbe86b9a5ee90419e7cd12820fd711966f1",
+      "matches_pre_authoring_snapshot": true
+    }
+  ],
+  "pytest_file_selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py",
+  "static_test_function_count": 15,
+  "expected_cases_from_ast": 20,
+  "selectors": [
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_selected_pair_inputs_reach_common_sheet_and_onward_typed_return",
+      "line": 182,
+      "expected_cases_from_ast": 2,
+      "parameters": [
+        {
+          "names": "mode",
+          "values_source": [
+            "'genome'",
+            "'fasta'"
+          ],
+          "keyword_source": {}
+        }
+      ]
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_explicit_missing_inputs_preserve_fraction_and_native_parse_status",
+      "line": 213,
+      "expected_cases_from_ast": 2,
+      "parameters": [
+        {
+          "names": "metadata, distance",
+          "values_source": [
+            "(pair(query_length=None, reference_length=None, alphabet_size=None), 0.22314355131420976)",
+            "(pair(kmer_length=None, query_length=None, reference_length=None, alphabet_size=None), None)"
+          ],
+          "keyword_source": {}
+        }
+      ]
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_both_key_joins_preserve_duplicates_reordering_and_unmatched_diagnostics",
+      "line": 230,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_empty_and_zero_denominator_complete_with_explicit_unavailable_cells",
+      "line": 267,
+      "expected_cases_from_ast": 2,
+      "parameters": [
+        {
+          "names": "rows, metadata, code",
+          "values_source": [
+            "([], [], 'empty_result_completeness_unknown')",
+            "([['83333.1', '0', '1', '0/0']], [pair()], 'zero_union_calculations_unavailable')"
+          ],
+          "keyword_source": {}
+        }
+      ]
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_only_requested_result_families_cross_both_receiving_boundaries",
+      "line": 282,
+      "expected_cases_from_ast": 3,
+      "parameters": [
+        {
+          "names": "family",
+          "values_source": [
+            "'bvbrc_minhash_counts'",
+            "'bvbrc_minhash_calculations'",
+            "'source_only'"
+          ],
+          "keyword_source": {}
+        }
+      ]
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_selected_saved_sheet_recalculation_and_closed_replay_preserve_original_work",
+      "line": 312,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_changed_native_metadata_selector_keeps_one_original_acquisition",
+      "line": 399,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_received_unrelated_source_cannot_replace_saved_minhash_result",
+      "line": 418,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_selected_redelivery_reuses_closed_facts_without_an_observation",
+      "line": 449,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_invalid_selected_pointer_preserves_source_and_native_handoff_without_acquisition",
+      "line": 475,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_partial_native_neighbors_retain_numbers_and_two_dimensional_diagnostics",
+      "line": 498,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_metadata_input_authority_requires_original_immediate_child_and_receiver",
+      "line": 545,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_forged_returned_calculation_and_diagnostic_are_rejected_without_history_change",
+      "line": 571,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_same_selected_action_key_cannot_replay_a_different_selector",
+      "line": 590,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    },
+    {
+      "selector": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py::test_unselected_source_and_changed_metadata_bytes_cannot_supply_inputs",
+      "line": 612,
+      "expected_cases_from_ast": 1,
+      "parameters": []
+    }
+  ],
+  "known_unverified_issue": {
+    "path": "gene_annotation_episode/runtime.py:1592",
+    "finding": "The selected commission ValueError handler copies str(error) but discards ContractError.detail containing source and field references. Root has accepted ownership of review; tests retain required detail assertions."
+  }
+}

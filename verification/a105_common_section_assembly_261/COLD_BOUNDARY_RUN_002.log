@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/a105_common_section_assembly_261/resume_cold_boundary_002.py", line 57, in <module>
+    validate_form(original,schema,reference_resolver(cold.references(scope)))
+                                                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_integration_review_256/joined_pin_008/gene_annotation_episode/state.py", line 1737, in references
+    result[kind] = [row["id"] for row in self.list(kind, scope, limit=2**31-1)]
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_integration_review_256/joined_pin_008/gene_annotation_episode/state.py", line 407, in list
+    rows = self.db.execute(f"""SELECT data FROM records r WHERE record_type=? AND (json_type(r.data,'$.context_account_scope') IS NOT NULL OR NOT EXISTS
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such function: library_scope_record

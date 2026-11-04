@@ -1,0 +1,10 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging /home/chia/repos/gene_annotation_episode/.venv/bin/python ../codon-native-numeric-correction-125/export_correction_evidence.py",
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging",
+  "exit_code": 1,
+  "exporter_sha256_at_failure": "3521090e7781c74405b3e4226b239ea20973dbf3350cfaceefa7df3798ce02d5",
+  "failure": "AssertionError in fixtures.assert_locations: location['artifact'] == artifact(data)",
+  "cause": "The reusable test helper assumes raw/codon-native, while the exported counterexample explicitly supplies raw/codon-numeric-boundary-counterexample. The reader correctly preserves the supplied identity.",
+  "resolution": "The exporter now validates each source byte span, line number and exact supplied ArtifactRef directly. No reader or test changes were required; no output artifact had been written before this assertion.",
+  "scientific_execution": "not_run"
+}

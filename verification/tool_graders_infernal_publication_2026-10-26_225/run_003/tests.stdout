@@ -1,0 +1,366 @@
+FFFF..FF....FF.F...FFF..                                                 [100%]
+=================================== FAILURES ===================================
+______ test_native_five_families_and_bounded_receipt[cmsearch-search_hit] ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_native_five_families_and_0')
+case = 'cmsearch', family = 'search_hit'
+
+    @pytest.mark.parametrize("case,family", [("cmsearch", "search_hit"), ("cmscan", "search_hit"),
+        ("cmsearch", "search_sequence"), ("cmalign", "alignment_sequence"),
+        ("cmalign", "alignment_column"), ("cmalign", "alignment_pair")])
+    def test_native_five_families_and_bounded_receipt(tmp_path, case, family):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store, case)
+            bundle, ref, artifacts = fixture_bundle(store, case, bindings=[binding])
+            selected = selector(family)
+            prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+            assert prepared["numerical_complete"], prepared
+            result = publish(store, bundle, prepared, selected)
+            assert len(result["rows"]) == 1
+            row = result["rows"][0]
+            native = rows(store, prepared)[0]
+            assert row["record_key"] == native["record_key"]  # No invented accession conversion.
+            assert row["measurements"] == native["measurements"]
+            if family in {"alignment_column", "alignment_pair"}:
+                assert row["status"] == "unbound" and row["subject_ref"] is None
+                assert not store.list("observation")
+                assert values(row)["row_count"] == 10
+                if family == "alignment_column":
+                    assert values(row)["occupancy"] == 1
+                else:
+                    assert values(row)["canonical_pair_fraction"] == 1
+            else:
+>               assert row["status"] == "published", result
+E               AssertionError: {'record_refs': ['source_577618f42d856a24fa68c2f5'], 'rows': [{'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a...esentation_error', 'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a201effac6e45fa839c5eac8ea1cfe1748fb",0,3]'}]}
+E               assert 'invalid' == 'published'
+E                 
+E                 - published
+E                 + invalid
+
+../../../tests/test_native_infernal_publication.py:142: AssertionError
+_______ test_native_five_families_and_bounded_receipt[cmscan-search_hit] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_native_five_families_and_1')
+case = 'cmscan', family = 'search_hit'
+
+    @pytest.mark.parametrize("case,family", [("cmsearch", "search_hit"), ("cmscan", "search_hit"),
+        ("cmsearch", "search_sequence"), ("cmalign", "alignment_sequence"),
+        ("cmalign", "alignment_column"), ("cmalign", "alignment_pair")])
+    def test_native_five_families_and_bounded_receipt(tmp_path, case, family):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store, case)
+            bundle, ref, artifacts = fixture_bundle(store, case, bindings=[binding])
+            selected = selector(family)
+            prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+            assert prepared["numerical_complete"], prepared
+            result = publish(store, bundle, prepared, selected)
+            assert len(result["rows"]) == 1
+            row = result["rows"][0]
+            native = rows(store, prepared)[0]
+            assert row["record_key"] == native["record_key"]  # No invented accession conversion.
+            assert row["measurements"] == native["measurements"]
+            if family in {"alignment_column", "alignment_pair"}:
+                assert row["status"] == "unbound" and row["subject_ref"] is None
+                assert not store.list("observation")
+                assert values(row)["row_count"] == 10
+                if family == "alignment_column":
+                    assert values(row)["occupancy"] == 1
+                else:
+                    assert values(row)["canonical_pair_fraction"] == 1
+            else:
+>               assert row["status"] == "published", result
+E               AssertionError: {'record_refs': ['source_6bc0e98be3c88aa440728f08'], 'rows': [{'record_key': '["artifact_63757570e8104a6241ceab294fb84...esentation_error', 'record_key': '["artifact_63757570e8104a6241ceab294fb84c7ef2addf50e77d8f7fc59ed114b3d19bd7",0,3]'}]}
+E               assert 'invalid' == 'published'
+E                 
+E                 - published
+E                 + invalid
+
+../../../tests/test_native_infernal_publication.py:142: AssertionError
+___ test_native_five_families_and_bounded_receipt[cmsearch-search_sequence] ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_native_five_families_and_2')
+case = 'cmsearch', family = 'search_sequence'
+
+    @pytest.mark.parametrize("case,family", [("cmsearch", "search_hit"), ("cmscan", "search_hit"),
+        ("cmsearch", "search_sequence"), ("cmalign", "alignment_sequence"),
+        ("cmalign", "alignment_column"), ("cmalign", "alignment_pair")])
+    def test_native_five_families_and_bounded_receipt(tmp_path, case, family):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store, case)
+            bundle, ref, artifacts = fixture_bundle(store, case, bindings=[binding])
+            selected = selector(family)
+            prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+            assert prepared["numerical_complete"], prepared
+            result = publish(store, bundle, prepared, selected)
+            assert len(result["rows"]) == 1
+            row = result["rows"][0]
+            native = rows(store, prepared)[0]
+            assert row["record_key"] == native["record_key"]  # No invented accession conversion.
+            assert row["measurements"] == native["measurements"]
+            if family in {"alignment_column", "alignment_pair"}:
+                assert row["status"] == "unbound" and row["subject_ref"] is None
+                assert not store.list("observation")
+                assert values(row)["row_count"] == 10
+                if family == "alignment_column":
+                    assert values(row)["occupancy"] == 1
+                else:
+                    assert values(row)["canonical_pair_fraction"] == 1
+            else:
+>               assert row["status"] == "published", result
+E               AssertionError: {'record_refs': ['source_577618f42d856a24fa68c2f5'], 'rows': [{'record_key': '[{"kind":"supplied_sequence_metadata","m...': 'representation_error', 'record_key': '[{"kind":"supplied_sequence_metadata","metadata_index":0},"+","reported"]'}]}
+E               assert 'invalid' == 'published'
+E                 
+E                 - published
+E                 + invalid
+
+../../../tests/test_native_infernal_publication.py:142: AssertionError
+__ test_native_five_families_and_bounded_receipt[cmalign-alignment_sequence] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_native_five_families_and_3')
+case = 'cmalign', family = 'alignment_sequence'
+
+    @pytest.mark.parametrize("case,family", [("cmsearch", "search_hit"), ("cmscan", "search_hit"),
+        ("cmsearch", "search_sequence"), ("cmalign", "alignment_sequence"),
+        ("cmalign", "alignment_column"), ("cmalign", "alignment_pair")])
+    def test_native_five_families_and_bounded_receipt(tmp_path, case, family):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store, case)
+            bundle, ref, artifacts = fixture_bundle(store, case, bindings=[binding])
+            selected = selector(family)
+            prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+            assert prepared["numerical_complete"], prepared
+            result = publish(store, bundle, prepared, selected)
+            assert len(result["rows"]) == 1
+            row = result["rows"][0]
+            native = rows(store, prepared)[0]
+            assert row["record_key"] == native["record_key"]  # No invented accession conversion.
+            assert row["measurements"] == native["measurements"]
+            if family in {"alignment_column", "alignment_pair"}:
+                assert row["status"] == "unbound" and row["subject_ref"] is None
+                assert not store.list("observation")
+                assert values(row)["row_count"] == 10
+                if family == "alignment_column":
+                    assert values(row)["occupancy"] == 1
+                else:
+                    assert values(row)["canonical_pair_fraction"] == 1
+            else:
+>               assert row["status"] == "published", result
+E               AssertionError: {'record_refs': ['source_96c1d61fcfe8ae9b16151f18'], 'rows': [{'record_key': 'artifact:artifact_d05076dcff0860a7b23c87...rd_key': 'artifact:artifact_d05076dcff0860a7b23c87e80a3352c3fba15f93417a4e56234df0fe9a338a0d/alignment:0/sequence:0'}]}
+E               assert 'invalid' == 'published'
+E                 
+E                 - published
+E                 + invalid
+
+../../../tests/test_native_infernal_publication.py:142: AssertionError
+_____ test_projections_preserve_full_sheet_source_and_observation_identity _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_projections_preserve_full0')
+
+    def test_projections_preserve_full_sheet_source_and_observation_identity(tmp_path):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store)
+            bundle, ref, artifacts = fixture_bundle(store, bindings=[binding])
+            first = selector(metrics=["bitscore"])
+            one = prepare(store, tmp_path / "first", bundle, ref, artifacts, first)
+            initial = publish(store, bundle, one, first)
+            second = selector(keys=[initial["rows"][0]["record_key"]], metrics=["evalue", "sequence_span_fraction"])
+            two = prepare(store, tmp_path / "second", bundle, ref, artifacts, second)
+            repeated = publish(store, bundle, two, second)
+            for field in ("sheet_artifact_ref", "scores_artifact_ref", "source_grading_artifact_ref"):
+                assert one[field] == two[field]
+            for field in ("source_ref", "observation_ref", "reference_refs"):
+                assert initial["rows"][0][field] == repeated["rows"][0][field]
+>           assert len(store.list("observation")) == 1
+E           AssertionError: assert 0 == 1
+E            +  where 0 = len([])
+E            +    where [] = list('observation')
+E            +      where list = <gene_annotation_episode.state.Store object at 0x7c5b60716ff0>.list
+
+../../../tests/test_native_infernal_publication.py:183: AssertionError
+______ test_host_no_full_dataset_or_sheet_hydration_and_completed_replay _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_host_no_full_dataset_or_s0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c5b81688a10>
+
+    def test_host_no_full_dataset_or_sheet_hydration_and_completed_replay(tmp_path, monkeypatch):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store)
+            bundle, ref, artifacts = fixture_bundle(store, bindings=[binding])
+            selected = selector()
+            original = store.get_artifact
+            forbidden = {r["artifact_ref"] for r in artifacts}
+            forbidden.add(store.get(binding["subject_ref"])["sequence_ref"])
+            def bounded(reference):
+                assert reference not in forbidden, "host hydrated full native data, sequence, sheet or scores"
+                return original(reference)
+            monkeypatch.setattr(store, "get_artifact", bounded)
+            prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+            forbidden.update(prepared[k] for k in ("sheet_artifact_ref", "scores_artifact_ref"))
+>           assert publish(store, bundle, prepared, selected)["rows"][0]["status"] == "published"
+E           AssertionError: assert 'invalid' == 'published'
+E             
+E             - published
+E             + invalid
+
+../../../tests/test_native_infernal_publication.py:205: AssertionError
+_________ test_absent_binding_and_wrong_binding_preserve_valid_sibling _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_absent_binding_and_wrong_0')
+
+    
+    
+    def test_absent_binding_and_wrong_binding_preserve_valid_sibling(tmp_path):
+        with Store(tmp_path / "store") as store:
+            good = bound_subject(store, "cmalign")
+            original = _fasta((FIXTURES / "cmalign/inputs/sequences.fa").read_text())
+            bad = {**good, "record_ordinal": 1, "native_name": original[1]["name"]}
+            bundle, ref, artifacts = fixture_bundle(store, "cmalign", bindings=[good, bad])
+            selected = selector("alignment_sequence", limit=3)
+>           prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+E           AssertionError: assert ['invalid', '...d', 'unbound'] == ['published',...d', 'unbound']
+E             
+E             At index 0 diff: 'invalid' != 'published'
+E             Use -v to get more diff
+
+../../../tests/test_native_infernal_publication.py:254: AssertionError
+__________________ test_duplicate_names_never_guess_a_subject __________________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_duplicate_names_never_gue0')
+
+    
+    
+    def test_duplicate_names_never_guess_a_subject(tmp_path):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store, ordinal=1)
+            fasta = (FIXTURES / "cmsearch/inputs/sequences.fa").read_text()
+            first = _fasta(fasta)[0]
+            duplicate = fasta + ">" + first["name"] + "\n" + first["sequence"] + "\n"
+            bundle, ref, artifacts = fixture_bundle(store, bindings=[binding], edits={"sequences": duplicate})
+            selected = selector(limit=2)
+>           prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError: {'record_refs': ['source_1f32f903b6c14d0493b561e6'], 'rows': [{'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a...esentation_error', 'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a201effac6e45fa839c5eac8ea1cfe1748fb",0,4]'}]}
+E           assert ['unbound', 'invalid'] == ['unbound', 'published']
+E             
+E             At index 1 diff: 'invalid' != 'published'
+E             Use -v to get more diff
+
+../../../tests/test_native_infernal_publication.py:269: AssertionError
+___ test_missing_record_and_partial_output_are_specific_and_keep_valid_work ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_missing_record_and_partia0')
+
+    
+    
+    def test_missing_record_and_partial_output_are_specific_and_keep_valid_work(tmp_path):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store)
+            table = (FIXTURES / "cmsearch/hits.tblout").read_text()
+            bundle, ref, artifacts = fixture_bundle(store, bindings=[binding], edits={"tblout": table + "bad native row\n"})
+            selected = selector()
+>           prepared = prepare(store, tmp_path / "partial", bundle, ref, artifacts, selected)
+E           AssertionError: assert 'invalid' == 'published'
+E             
+E             - published
+E             + invalid
+
+../../../tests/test_native_infernal_publication.py:292: AssertionError
+______ test_every_interval_is_checked_and_physical_gaps_are_not_enclosed _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_every_interval_is_checked0')
+
+    
+    
+    def test_every_interval_is_checked_and_physical_gaps_are_not_enclosed(tmp_path):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store)
+            bundle, ref, artifacts = fixture_bundle(store, bindings=[binding])
+            selected = selector()
+            prepared = prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)
+            synthetic = rows(store, prepared)
+            synthetic[0]["subject_intervals"] = [[0, 10], [20, 30]]
+            projected = replaced_rows(store, prepared, synthetic)
+            scope = store.validate_scope({"subject_refs": [binding["subject_ref"]], "segments": [
+                {"target_ref": binding["subject_ref"], "start": a, "end": b, "unit": "nt"}
+>               for a, b in ((0, 10), (20, 30))]})
+E           AssertionError: {'record_refs': ['source_577618f42d856a24fa68c2f5'], 'rows': [{'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a...esentation_error', 'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a201effac6e45fa839c5eac8ea1cfe1748fb",0,3]'}]}
+E           assert 'invalid' == 'published'
+E             
+E             - published
+E             + invalid
+
+../../../tests/test_native_infernal_publication.py:386: AssertionError
+_____ test_explicit_model_reference_must_match_native_identity_and_family ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_explicit_model_reference_0')
+
+    
+    
+    def test_explicit_model_reference_must_match_native_identity_and_family(tmp_path):
+        with Store(tmp_path / "store") as store:
+            binding = bound_subject(store)
+            origin = store._caller_source({"fixture": "explicit model reference"}, "caller")
+            def model(name, kind):
+                return store.put("reference", {"reference_type": kind, "source_ref": origin["id"],
+                    "accession": name, "label": name, "sequence_ref": None, "molecule": None,
+                    "length": None, "term_refs": [], "context_refs": []}, origin="caller")["id"]
+            for index, (name, kind, status) in enumerate((("tRNA5", "family", "published"),
+                    ("wrong", "family", "invalid"), ("tRNA5", "sequence", "invalid"))):
+                model_binding = {"operand_role": "models", "record_ordinal": 0, "native_name": "tRNA5",
+                    "native_accession": None, "subject_ref": None, "reference_ref": model(name, kind)}
+                bundle, ref, artifacts = fixture_bundle(store, bindings=[binding, model_binding])
+                selected = selector()
+>               prepared = prepare(store, tmp_path / str(index), bundle, ref, artifacts, selected)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: {'record_refs': ['source_0b7270d5d5d6732d4868f519'], 'rows': [{'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a...esentation_error', 'record_key': '["artifact_546b0aeeea1aebc58e3510be0818a201effac6e45fa839c5eac8ea1cfe1748fb",0,3]'}]}
+E               assert 'invalid' == 'published'
+E                 
+E                 - published
+E                 + invalid
+
+../../../tests/test_native_infernal_publication.py:415: AssertionError
+____ test_real_matchonly_omitted_positions_keep_disjoint_original_intervals ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/test_real_matchonly_omitted_po0')
+
+    
+    
+    def test_unbound_population_still_validates_supplied_model_reference(tmp_path):
+        with Store(tmp_path / "store") as store:
+            bound_subject(store, "cmalign")
+            origin = store._caller_source({"fixture": "model reference for a population"}, "caller")
+            for index, name in enumerate(("tRNA5", "wrong")):
+                reference = store.put("reference", {"reference_type": "family", "source_ref": origin["id"],
+                    "accession": name, "label": name, "sequence_ref": None, "molecule": None,
+                    "length": None, "term_refs": [], "context_refs": []}, origin="caller")["id"]
+                binding = {"operand_role": "models", "record_ordinal": 0, "native_name": "tRNA5",
+                    "native_accession": None, "subject_ref": None, "reference_ref": reference}
+                bundle, ref, artifacts = fixture_bundle(store, "cmalign", bindings=[binding])
+                selected = selector("alignment_column")
+                prepared = prepare(store, tmp_path / str(index), bundle, ref, artifacts, selected)
+                result = publish(store, bundle, prepared, selected)
+                row = result["rows"][0]
+                assert row["status"] == ("unbound" if name == "tRNA5" else "invalid")
+>               assert row["subject_ref"] is None and row["observation_ref"] is None
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: {'record_refs': ['source_81926371221538ae2b7232bd'], 'rows': [{'record_key': 'artifact:artifact_c0c70826ef738dcc11c5e7...rd_key': 'artifact:artifact_c0c70826ef738dcc11c5e711e451304c40437c9c24c807705af71ab695c3aaf2/alignment:0/sequence:0'}]}
+E               assert 'invalid' == 'published'
+E                 
+E                 - published
+E                 + invalid
+
+../../../tests/test_native_infernal_publication.py:438: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_publication.py::test_native_five_families_and_bounded_receipt[cmsearch-search_hit]
+FAILED ../../../tests/test_native_infernal_publication.py::test_native_five_families_and_bounded_receipt[cmscan-search_hit]
+FAILED ../../../tests/test_native_infernal_publication.py::test_native_five_families_and_bounded_receipt[cmsearch-search_sequence]
+FAILED ../../../tests/test_native_infernal_publication.py::test_native_five_families_and_bounded_receipt[cmalign-alignment_sequence]
+FAILED ../../../tests/test_native_infernal_publication.py::test_projections_preserve_full_sheet_source_and_observation_identity
+FAILED ../../../tests/test_native_infernal_publication.py::test_host_no_full_dataset_or_sheet_hydration_and_completed_replay
+FAILED ../../../tests/test_native_infernal_publication.py::test_absent_binding_and_wrong_binding_preserve_valid_sibling
+FAILED ../../../tests/test_native_infernal_publication.py::test_duplicate_names_never_guess_a_subject
+FAILED ../../../tests/test_native_infernal_publication.py::test_missing_record_and_partial_output_are_specific_and_keep_valid_work
+FAILED ../../../tests/test_native_infernal_publication.py::test_every_interval_is_checked_and_physical_gaps_are_not_enclosed
+FAILED ../../../tests/test_native_infernal_publication.py::test_explicit_model_reference_must_match_native_identity_and_family
+FAILED ../../../tests/test_native_infernal_publication.py::test_real_matchonly_omitted_positions_keep_disjoint_original_intervals
+12 failed, 12 passed in 106.16s (0:01:46)

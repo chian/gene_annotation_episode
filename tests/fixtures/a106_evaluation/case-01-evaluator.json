@@ -1,0 +1,27 @@
+{
+  "case_id": "anonymous-case-01",
+  "provenance": {
+    "url": "https://rest.uniprot.org/uniprotkb/P0ACY3.fasta",
+    "header": ">sp|P0ACY3|YEAG_ECOLI Serine/threonine kinase YeaG OS=Escherichia coli (strain K12) OX=83333 GN=yeaG PE=1 SV=1",
+    "length": 644,
+    "sequence_sha256": "657fea063a3df97645b931ce6b24f5c523c846bb2c4bdd2dfa74c1a6e28975cd"
+  },
+  "input_policy": "Only the raw amino-acid sequence and general A106 instructions enter the episode.",
+  "evaluation_kind": "microbial_intervention_with_documented_measurement_limitations",
+  "discovery_leads": [
+    {
+      "url": "https://www.nature.com/articles/srep17524",
+      "pmcid": "PMC4664914",
+      "doi": "10.1038/srep17524"
+    }
+  ],
+  "expected_findings": [
+    "Resolve the sequence as E. coli YeaG while retaining strain correspondence.",
+    "Discover deletion and plasmid complementation in sustained nitrogen starvation.",
+    "Retain the original experiment identity across paper, figures and supplementary data.",
+    "Do not equate a logarithmic display with a reported log-scale mean or standard deviation.",
+    "Require supported fixed predictions, exact variance and model before a numerical evidence ratio.",
+    "Return an explicitly unresolved final score if essential inputs cannot be supported."
+  ],
+  "limits": "This case does not pre-establish a positive numerical score or complete the separate TnSeq/RNASeq live-analysis requirements."
+}

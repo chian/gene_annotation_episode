@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="2.717" timestamp="2026-10-27T01:43:03.246287-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature]" time="1.683"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_covariance_meaning_custody_128/baseline_pre128_004/verification/literature_reference_evidence_2026-10-25_001/parent_population_information_023/population_catalog_before.json'">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1828/test_all_child_population_entr0')
+role = 'literature'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+&gt;           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                  ^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_parent_population_information.py:43: in baseline
+    raw = (EVIDENCE / "population_catalog_before.json").read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_cov...ication/literature_reference_evidence_2026-10-25_001/parent_population_information_023/population_catalog_before.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_covariance_meaning_custody_128/baseline_pre128_004/verification/literature_reference_evidence_2026-10-25_001/parent_population_information_023/population_catalog_before.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError</failure></testcase></testsuite></testsuites>

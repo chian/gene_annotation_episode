@@ -1,0 +1,770 @@
+{
+  "document_kind": "scientific_parent_uniprot_presentation_examples",
+  "status": "proposal_only_no_application_execution_or_admission",
+  "fixture": {
+    "path": "tests/fixtures/uniprot_native/P0AAW1.json",
+    "sha256": "dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e",
+    "bytes": 8650,
+    "provenance": "Historical 2026-10-23 entity retained by repository; no new API request. See fixture README and transport metadata."
+  },
+  "expected_value_method": "Read-only stdlib JSON/string checks against the retained fixture. Controlled mutations specify hypothetical inputs; expected presentation follows source-inspected C/P/H contracts. Internal window extents/counts remain retained and are not a mandate to print them. No application module or parser/projector was run.",
+  "cases": [
+    {
+      "case": "sequence",
+      "kind": "retained_authentic_values",
+      "question": "What reference sequence window is available for comparison with the supplied target, and is there a material length qualification?",
+      "selection": {
+        "version": "uniprot_return_selection_v1",
+        "pages": [
+          {
+            "publication": {
+              "mode": "assigned_page"
+            },
+            "page_fields": [],
+            "records": [
+              {
+                "record": {
+                  "mode": "primary_accession",
+                  "accession": "P0AAW1"
+                },
+                "fields": [
+                  {
+                    "kind": "token",
+                    "field": "primary_accession",
+                    "array_ordinal": null
+                  },
+                  {
+                    "kind": "text",
+                    "field": "protein_name",
+                    "pointer": "/proteinDescription/recommendedName/fullName/value",
+                    "offset": 0,
+                    "limit": 40
+                  },
+                  {
+                    "kind": "sequence_window",
+                    "start": 9,
+                    "end": 19
+                  }
+                ],
+                "grant_sequence_artifact": false
+              }
+            ],
+            "grant_source": false
+          }
+        ]
+      },
+      "expected_display_values": {
+        "primary_accession": "P0AAW1",
+        "protein_name": "Uncharacterized protein YbhP",
+        "sequence_window": "FKVLTINIHK",
+        "start": 9,
+        "end": 19,
+        "unit": "aa",
+        "coordinates": "zero_based_half_open",
+        "reference_sequence_length_aa": 253
+      },
+      "retained_internal_values": {
+        "protein_name_window": {
+          "offset": 0,
+          "limit": 40,
+          "start": 0,
+          "end": 28,
+          "native_length": 28,
+          "omitted_prefix": 0,
+          "omitted_suffix": 0,
+          "unit": "unicode_code_points"
+        },
+        "sequence_lengths": {
+          "observed_length": 253,
+          "reported_length": 253,
+          "length_relation": "agree"
+        }
+      }
+    },
+    {
+      "case": "go",
+      "kind": "retained_authentic_values",
+      "question": "Which GO cross-references does the selected reference carry, with native term, attribution and owned evidence?",
+      "selection": {
+        "version": "uniprot_return_selection_v1",
+        "pages": [
+          {
+            "publication": {
+              "mode": "assigned_page"
+            },
+            "page_fields": [],
+            "records": [
+              {
+                "record": {
+                  "mode": "primary_accession",
+                  "accession": "P0AAW1"
+                },
+                "fields": [
+                  {
+                    "kind": "token",
+                    "field": "primary_accession",
+                    "array_ordinal": null
+                  },
+                  {
+                    "kind": "cross_reference",
+                    "selection": {
+                      "mode": "database",
+                      "database": "GO"
+                    },
+                    "include_evidence": true,
+                    "properties": [
+                      {
+                        "key": "GoTerm",
+                        "window": {
+                          "offset": 0,
+                          "limit": 80
+                        }
+                      },
+                      {
+                        "key": "GoEvidenceType",
+                        "window": {
+                          "offset": 0,
+                          "limit": 80
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "grant_sequence_artifact": false
+              }
+            ],
+            "grant_source": false
+          }
+        ]
+      },
+      "expected_display_values": {
+        "primary_accession": "P0AAW1",
+        "members": [
+          {
+            "database": "GO",
+            "identifier": "GO:0005886",
+            "owned_evidence": [
+              {
+                "evidenceCode": "ECO:0007005",
+                "source": "PubMed",
+                "id": "32127419"
+              }
+            ],
+            "owned_evidence_state": "present",
+            "properties": [
+              {
+                "key": "GoTerm",
+                "text": "C:plasma membrane"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "HDA:EcoCyc"
+              }
+            ]
+          },
+          {
+            "database": "GO",
+            "identifier": "GO:0003824",
+            "owned_evidence": null,
+            "owned_evidence_state": "absent",
+            "properties": [
+              {
+                "key": "GoTerm",
+                "text": "F:catalytic activity"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "IEA:InterPro"
+              }
+            ]
+          }
+        ],
+        "partial_reason": "Requested ECO/source evidence container absent on GO:0003824; GO membership and both requested property windows remain available."
+      },
+      "retained_internal_values": {
+        "native_member_count": 42,
+        "matching_member_count": 2,
+        "indeterminate_member_count": 0,
+        "unavailable_member_count": 0,
+        "excluded_member_count": 40,
+        "requested_go_field_status": "partial",
+        "members": [
+          {
+            "native_ordinal_audit_only": 31,
+            "property_windows": [
+              {
+                "key": "GoTerm",
+                "text": "C:plasma membrane",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 17,
+                "native_length": 17,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "HDA:EcoCyc",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 10,
+                "native_length": 10,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              }
+            ]
+          },
+          {
+            "native_ordinal_audit_only": 32,
+            "property_windows": [
+              {
+                "key": "GoTerm",
+                "text": "F:catalytic activity",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 20,
+                "native_length": 20,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "IEA:InterPro",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 12,
+                "native_length": 12,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "feature_positions",
+      "kind": "retained_authentic_values",
+      "question": "Which entry-sequence features have positions overlapping the requested reference interval [9,20) aa?",
+      "selection": {
+        "version": "uniprot_return_selection_v1",
+        "pages": [
+          {
+            "publication": {
+              "mode": "assigned_page"
+            },
+            "page_fields": [],
+            "records": [
+              {
+                "record": {
+                  "mode": "primary_accession",
+                  "accession": "P0AAW1"
+                },
+                "fields": [
+                  {
+                    "kind": "token",
+                    "field": "primary_accession",
+                    "array_ordinal": null
+                  },
+                  {
+                    "kind": "feature_location",
+                    "selection": {
+                      "mode": "entry_interval_overlap",
+                      "start": 9,
+                      "end": 20,
+                      "coordinates": "zero_based_half_open",
+                      "unit": "aa"
+                    },
+                    "include_evidence": false,
+                    "type_window": {
+                      "offset": 0,
+                      "limit": 40
+                    },
+                    "description_window": {
+                      "offset": 0,
+                      "limit": 40
+                    }
+                  }
+                ],
+                "grant_sequence_artifact": false
+              }
+            ],
+            "grant_source": false
+          }
+        ]
+      },
+      "expected_display_values": {
+        "primary_accession": "P0AAW1",
+        "type": "Chain",
+        "description": "Uncharacterized protein YbhP",
+        "exact_interval": [
+          0,
+          253
+        ],
+        "derived_coordinates": "zero_based_half_open",
+        "unit": "aa",
+        "requested_entry_interval": [
+          9,
+          20
+        ]
+      },
+      "retained_internal_values": {
+        "native_member_count": 1,
+        "matching_member_count": 1,
+        "indeterminate_member_count": 0,
+        "unavailable_member_count": 0,
+        "excluded_member_count": 0,
+        "type_window": {
+          "offset": 0,
+          "limit": 40,
+          "start": 0,
+          "end": 5,
+          "native_length": 5,
+          "omitted_prefix": 0,
+          "omitted_suffix": 0
+        },
+        "description_window": {
+          "offset": 0,
+          "limit": 40,
+          "start": 0,
+          "end": 28,
+          "native_length": 28,
+          "omitted_prefix": 0,
+          "omitted_suffix": 0
+        },
+        "native_start": 1,
+        "native_end": 253,
+        "start_modifier": "EXACT",
+        "end_modifier": "EXACT",
+        "native_coordinates": "one_based_inclusive",
+        "sequence_binding": "entry_sequence",
+        "native_sequence_identifier_state": "absent",
+        "evidence_requested": false
+      }
+    },
+    {
+      "case": "feature_fuzzy_control",
+      "kind": "controlled_illustrative_mutation_not_a_new_native_result",
+      "question": "Which entry-sequence features have positions overlapping the requested reference interval [9,20) aa?",
+      "selection": {
+        "version": "uniprot_return_selection_v1",
+        "pages": [
+          {
+            "publication": {
+              "mode": "assigned_page"
+            },
+            "page_fields": [],
+            "records": [
+              {
+                "record": {
+                  "mode": "primary_accession",
+                  "accession": "P0AAW1"
+                },
+                "fields": [
+                  {
+                    "kind": "token",
+                    "field": "primary_accession",
+                    "array_ordinal": null
+                  },
+                  {
+                    "kind": "feature_location",
+                    "selection": {
+                      "mode": "entry_interval_overlap",
+                      "start": 9,
+                      "end": 20,
+                      "coordinates": "zero_based_half_open",
+                      "unit": "aa"
+                    },
+                    "include_evidence": false,
+                    "type_window": {
+                      "offset": 0,
+                      "limit": 40
+                    },
+                    "description_window": {
+                      "offset": 0,
+                      "limit": 40
+                    }
+                  }
+                ],
+                "grant_sequence_artifact": false
+              }
+            ],
+            "grant_source": false
+          }
+        ]
+      },
+      "mutations": [
+        {
+          "operation": "replace",
+          "pointer": "/features/0/location/start/modifier",
+          "before": "EXACT",
+          "after": "BEFORE"
+        }
+      ],
+      "expected_display_values": {
+        "primary_accession": "P0AAW1",
+        "native_start": 1,
+        "native_end": 253,
+        "start_modifier": "BEFORE",
+        "end_modifier": "EXACT",
+        "exact_interval": null,
+        "qualification": "Nonexact native start; overlap indeterminate. No exact interval is supplied.",
+        "type": "Chain",
+        "description": "Uncharacterized protein YbhP",
+        "requested_entry_interval": [
+          9,
+          20
+        ],
+        "requested_coordinates": "zero_based_half_open",
+        "native_coordinates": "one_based_inclusive",
+        "unit": "aa"
+      },
+      "retained_internal_values": {
+        "native_member_count": 1,
+        "matching_member_count": 0,
+        "indeterminate_member_count": 1,
+        "unavailable_member_count": 0,
+        "excluded_member_count": 0,
+        "field_status": "partial",
+        "sequence_binding": "entry_sequence"
+      }
+    },
+    {
+      "case": "go_database_null_control",
+      "kind": "controlled_illustrative_mutation_not_a_new_native_result",
+      "question": "Which GO cross-references does the selected reference carry, with native term, attribution and owned evidence?",
+      "selection": {
+        "version": "uniprot_return_selection_v1",
+        "pages": [
+          {
+            "publication": {
+              "mode": "assigned_page"
+            },
+            "page_fields": [],
+            "records": [
+              {
+                "record": {
+                  "mode": "primary_accession",
+                  "accession": "P0AAW1"
+                },
+                "fields": [
+                  {
+                    "kind": "token",
+                    "field": "primary_accession",
+                    "array_ordinal": null
+                  },
+                  {
+                    "kind": "cross_reference",
+                    "selection": {
+                      "mode": "database",
+                      "database": "GO"
+                    },
+                    "include_evidence": true,
+                    "properties": [
+                      {
+                        "key": "GoTerm",
+                        "window": {
+                          "offset": 0,
+                          "limit": 80
+                        }
+                      },
+                      {
+                        "key": "GoEvidenceType",
+                        "window": {
+                          "offset": 0,
+                          "limit": 80
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "grant_sequence_artifact": false
+              }
+            ],
+            "grant_source": false
+          }
+        ]
+      },
+      "mutations": [
+        {
+          "operation": "replace",
+          "pointer": "/uniProtKBCrossReferences/31/database",
+          "before": "GO",
+          "after": null
+        }
+      ],
+      "expected_display_values": {
+        "indeterminate_native_identifier": "GO:0005886",
+        "native_database_state": "null",
+        "matched_identifier": "GO:0003824",
+        "qualification": "The identifier string does not repair a null native database field; original requested property/evidence values stay attached to the indeterminate member.",
+        "primary_accession": "P0AAW1",
+        "members": [
+          {
+            "database": null,
+            "identifier": "GO:0005886",
+            "owned_evidence": [
+              {
+                "evidenceCode": "ECO:0007005",
+                "source": "PubMed",
+                "id": "32127419"
+              }
+            ],
+            "owned_evidence_state": "present",
+            "properties": [
+              {
+                "key": "GoTerm",
+                "text": "C:plasma membrane"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "HDA:EcoCyc"
+              }
+            ],
+            "membership": "indeterminate"
+          },
+          {
+            "database": "GO",
+            "identifier": "GO:0003824",
+            "owned_evidence": null,
+            "owned_evidence_state": "absent",
+            "properties": [
+              {
+                "key": "GoTerm",
+                "text": "F:catalytic activity"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "IEA:InterPro"
+              }
+            ],
+            "membership": "matched"
+          }
+        ]
+      },
+      "retained_internal_values": {
+        "native_member_count": 42,
+        "matching_member_count": 1,
+        "indeterminate_member_count": 1,
+        "unavailable_member_count": 0,
+        "excluded_member_count": 40,
+        "field_status": "partial",
+        "members": [
+          {
+            "native_ordinal_audit_only": 31,
+            "property_windows": [
+              {
+                "key": "GoTerm",
+                "text": "C:plasma membrane",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 17,
+                "native_length": 17,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "HDA:EcoCyc",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 10,
+                "native_length": 10,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              }
+            ]
+          },
+          {
+            "native_ordinal_audit_only": 32,
+            "property_windows": [
+              {
+                "key": "GoTerm",
+                "text": "F:catalytic activity",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 20,
+                "native_length": 20,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              },
+              {
+                "key": "GoEvidenceType",
+                "text": "IEA:InterPro",
+                "offset": 0,
+                "limit": 80,
+                "start": 0,
+                "end": 12,
+                "native_length": 12,
+                "omitted_prefix": 0,
+                "omitted_suffix": 0,
+                "unit": "unicode_code_points"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "sequence_missing_control",
+      "kind": "controlled_illustrative_mutation_not_a_new_native_result",
+      "question": "What reference sequence window is available for comparison with the supplied target, and is there a material length qualification?",
+      "selection": {
+        "version": "uniprot_return_selection_v1",
+        "pages": [
+          {
+            "publication": {
+              "mode": "assigned_page"
+            },
+            "page_fields": [],
+            "records": [
+              {
+                "record": {
+                  "mode": "primary_accession",
+                  "accession": "P0AAW1"
+                },
+                "fields": [
+                  {
+                    "kind": "token",
+                    "field": "primary_accession",
+                    "array_ordinal": null
+                  },
+                  {
+                    "kind": "text",
+                    "field": "protein_name",
+                    "pointer": "/proteinDescription/recommendedName/fullName/value",
+                    "offset": 0,
+                    "limit": 40
+                  },
+                  {
+                    "kind": "sequence_window",
+                    "start": 9,
+                    "end": 19
+                  }
+                ],
+                "grant_sequence_artifact": false
+              }
+            ],
+            "grant_source": false
+          }
+        ]
+      },
+      "mutations": [
+        {
+          "operation": "remove",
+          "pointer": "/sequence/value"
+        }
+      ],
+      "expected_display_values": {
+        "primary_accession": "P0AAW1",
+        "protein_name": "Uncharacterized protein YbhP",
+        "qualification": "Valid requested identity/name remain available; no sequence letters or window-derived length tuple are returned.",
+        "sequence_window": "unavailable",
+        "requested_entry_interval": [
+          9,
+          19
+        ],
+        "coordinates": "zero_based_half_open",
+        "unit": "aa"
+      },
+      "retained_internal_values": {
+        "sequence_field_status": "unavailable",
+        "sequence_field_failure": "sequence_unavailable",
+        "returned_window": null
+      }
+    },
+    {
+      "case": "sequence_length_conflict_control",
+      "kind": "controlled_illustrative_mutation_not_a_new_native_result",
+      "question": "What reference sequence window is available for comparison with the supplied target, and is there a material length qualification?",
+      "selection": {
+        "version": "uniprot_return_selection_v1",
+        "pages": [
+          {
+            "publication": {
+              "mode": "assigned_page"
+            },
+            "page_fields": [],
+            "records": [
+              {
+                "record": {
+                  "mode": "primary_accession",
+                  "accession": "P0AAW1"
+                },
+                "fields": [
+                  {
+                    "kind": "token",
+                    "field": "primary_accession",
+                    "array_ordinal": null
+                  },
+                  {
+                    "kind": "text",
+                    "field": "protein_name",
+                    "pointer": "/proteinDescription/recommendedName/fullName/value",
+                    "offset": 0,
+                    "limit": 40
+                  },
+                  {
+                    "kind": "sequence_window",
+                    "start": 9,
+                    "end": 19
+                  }
+                ],
+                "grant_sequence_artifact": false
+              }
+            ],
+            "grant_source": false
+          }
+        ]
+      },
+      "expected_display_values": {
+        "primary_accession": "P0AAW1",
+        "protein_name": "Uncharacterized protein YbhP",
+        "sequence_window": "FKVLTINIHK",
+        "start": 9,
+        "end": 19,
+        "unit": "aa",
+        "coordinates": "zero_based_half_open",
+        "observed_length": 253,
+        "reported_length": 254,
+        "length_relation": "conflict"
+      },
+      "retained_internal_values": {
+        "protein_name_window": {
+          "offset": 0,
+          "limit": 40,
+          "start": 0,
+          "end": 28,
+          "native_length": 28,
+          "omitted_prefix": 0,
+          "omitted_suffix": 0,
+          "unit": "unicode_code_points"
+        }
+      },
+      "mutations": [
+        {
+          "operation": "replace",
+          "pointer": "/sequence/length",
+          "before": 253,
+          "after": 254
+        }
+      ]
+    }
+  ],
+  "supersedes": "EXAMPLE_SELECTIONS_001.json, preserved",
+  "revision_reason": "Scientific-parent display excludes unrelated release and internal completeness bookkeeping. Whole selected text remains exact; qualifiers are shown when they affect the scientific choice."
+}

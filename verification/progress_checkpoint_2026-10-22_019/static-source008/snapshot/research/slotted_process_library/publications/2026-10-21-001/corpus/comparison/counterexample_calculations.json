@@ -1,0 +1,147 @@
+{
+  "as_of_utc": "2026-10-21T21:23:58.947991+00:00",
+  "status": "Actual descriptive re-extraction and arithmetic from published tables; known outcomes disclosed. No new alignments, docking, kinetic fits, or experiments.",
+  "hisn": {
+    "source": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+    "table_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4/tables/3",
+    "inputs": [
+      {
+        "protein": "Dietzia sp. strain Chol2 HisN Dz",
+        "identity_percent": 29,
+        "similarity_percent": 47,
+        "blast_bits_published": 105,
+        "motif5_record": "yes RFGGDCYAY",
+        "complementation_reported": true
+      },
+      {
+        "protein": "Zymomonas mobilis HisN Zm",
+        "identity_percent": 32,
+        "similarity_percent": 48,
+        "blast_bits_published": 101,
+        "motif5_record": "yes LLGGDCYNY",
+        "complementation_reported": true
+      },
+      {
+        "protein": "Actinoplanes utahensis HisN Au",
+        "identity_percent": 55,
+        "similarity_percent": 68,
+        "blast_bits_published": 261,
+        "motif5_record": "yes RAYGDFYGY",
+        "complementation_reported": true
+      },
+      {
+        "protein": "Actinoplanes utahensis HisN2 Au",
+        "identity_percent": 36,
+        "similarity_percent": 51,
+        "blast_bits_published": 119,
+        "motif5_record": "no ------QPS",
+        "complementation_reported": false
+      }
+    ],
+    "computed_rank_inversions": [
+      {
+        "noncomplementing": "Actinoplanes utahensis HisN2 Au",
+        "complementing": "Dietzia sp. strain Chol2 HisN Dz",
+        "noncomplementing_bits": 119,
+        "complementing_bits": 105
+      },
+      {
+        "noncomplementing": "Actinoplanes utahensis HisN2 Au",
+        "complementing": "Zymomonas mobilis HisN Zm",
+        "noncomplementing_bits": 119,
+        "complementing_bits": 101
+      }
+    ],
+    "interpretation": "Higher overall similarity cannot be used here as a monotonic ordering of complementation support. Motif pattern and measured capacity warrant a different comparator choice.",
+    "limits": [
+      "Four deliberately selected candidates are not a representative classifier benchmark.",
+      "Complementation negatives leave expression, folding and host-context alternatives; they are not purified-enzyme nulls.",
+      "The subsequent HMM uses these validated proteins as seeds; these same proteins cannot be a held-out validation of that HMM.",
+      "No BLAST, pairwise alignment, HMM build or assay was rerun."
+    ]
+  },
+  "tm0936_relatives": {
+    "source": "https://doi.org/10.1021/ja4066078",
+    "primary_pdf": "https://www.chem.tamu.edu/rgroup/raushel/publications/P282-JACS-Deaminase-2013.pdf",
+    "source_table": "Table 1, PDF page 4, visually checked against local rendered page",
+    "units": "kcat/Km in M^-1 s^-1; 30 degrees C, pH 7.5",
+    "inputs": [
+      {
+        "protein": "Bc1793",
+        "SAH": {
+          "relation": "<",
+          "value": 10
+        },
+        "adenosine": {
+          "relation": "=",
+          "value": 370000
+        },
+        "MTA": {
+          "relation": "=",
+          "value": 34
+        },
+        "aligned_Arg136": "present as Arg150"
+      },
+      {
+        "protein": "Tvn0515",
+        "SAH": {
+          "relation": "=",
+          "value": 260000
+        },
+        "adenosine": {
+          "relation": "<",
+          "value": 10
+        },
+        "MTA": {
+          "relation": "<",
+          "value": 10
+        },
+        "aligned_Arg136": "Trp140",
+        "aligned_Arg148": "Pro154"
+      }
+    ],
+    "computed_comparisons": [
+      {
+        "comparison": "Bc1793 adenosine / SAH efficiency",
+        "relation": ">",
+        "lower_bound": 37000.0
+      },
+      {
+        "comparison": "Tvn0515 SAH / adenosine efficiency",
+        "relation": ">",
+        "lower_bound": 26000.0
+      },
+      {
+        "comparison": "Tvn0515 SAH / Bc1793 SAH efficiency",
+        "relation": ">",
+        "lower_bound": 26000.0
+      }
+    ],
+    "censoring_rule": "The published <10 values remain upper limits, never zero or measured values of 10. Ratio bounds assume a positive denominator; a truly zero denominator implies unbounded preference rather than a finite estimate.",
+    "interpretation": "Arg136-position presence is not sufficient for measurable SAH efficiency in Bc1793; the two template arginines are not necessary for SAH turnover in Tvn0515. These refute those residue-presence rules, not every possible geometric or mechanistic requirement.",
+    "limits": [
+      "All kinetic values and assay outcomes belong to the authors.",
+      "Alternative contact and loop explanations are homology-model proposals, not newly measured geometry.",
+      "In-vitro substrate preference is distinct from native flux or physiological necessity.",
+      "A conserved catalytic core can coexist with different or unidentified substrate profiles."
+    ]
+  },
+  "thought_pattern_candidate": {
+    "name": "Seek cases that separate a proposed predictor from the supported function",
+    "decision_branches": [
+      "If the feature is present but supported function is absent in a controlled comparison, reopen sufficiency and context.",
+      "If supported function remains when the proposed feature is absent, reopen necessity and alternative implementations.",
+      "If both covary, retain the relationship as a candidate; do not manufacture evidence of necessity or sufficiency."
+    ],
+    "lane_links": [
+      "F01",
+      "F05"
+    ],
+    "tool_choices": [
+      "Published table extraction joined to feature/condition records",
+      "Alignment/motif mapping when alignment inputs and validated references are available",
+      "Genomic profile comparison with explicit missingness and detection limits"
+    ],
+    "compatibility_limit": "Complementation negatives, censored kinetic observations, and unassigned genomic-profile cells have different force. The pattern cannot erase those distinctions."
+  }
+}

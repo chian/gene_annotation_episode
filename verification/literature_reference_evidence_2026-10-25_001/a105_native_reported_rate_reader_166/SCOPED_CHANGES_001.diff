@@ -1,0 +1,1444 @@
+--- baseline/literature_rate_observation_inputs.py
++++ gene_annotation_episode/literature_rate_observation_inputs.py
+@@ -0,0 +1,175 @@
++"""Finite original-XLSX source-cell reading, with no experimental-unit inference."""
++from __future__ import annotations
++
++from copy import deepcopy
++from fractions import Fraction
++import hashlib
++import io
++import re
++import sqlite3
++import xml.etree.ElementTree as ET
++import zipfile
++
++from .domain import REF, identity, obj, validate_schema
++from .literature_experimental_contracts import ExperimentalContractError
++from .spreadsheet_tools import Workbook, _tag
++
++VERSION = 'a105_reported_rate_observations_v1'
++SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
++TEXT = {'type': 'string', 'minLength': 1}
++CELL = {'type': 'string', 'pattern': '^[A-Z]+[1-9][0-9]*$'}
++STATUSES = ('observed', 'missing', 'not_detected', 'censored', 'unsupported_cell')
++ENTRY_REASONS = ('source_measurement_unavailable', 'nondetection_without_point',
++    'censored_measurement', 'formula_measurement_unsupported', 'numeric_cell_type_required',
++    'source_cell_error', 'invalid_numeric_lexeme')
++
++
++def label_schema():
++    return obj({'cell': deepcopy(CELL), 'expected_text': deepcopy(TEXT)})
++
++
++def rate_observation_population_schema():
++    observation = obj({'label': label_schema(), 'value_cell': deepcopy(CELL)})
++    group = obj({'label': label_schema(), 'observations': {'type': 'array',
++        'minItems': 1, 'items': observation}})
++    return obj({'source_ref': deepcopy(REF), 'source_kind': {'enum': list(SOURCE_KINDS)},
++        'worksheet': deepcopy(TEXT), **{name: label_schema() for name in ('panel','subject','native_unit')},
++        'groups': {'type': 'array', 'minItems': 1, 'items': group},
++        'reference_group': deepcopy(TEXT), 'test_group': deepcopy(TEXT)})
++
++
++def _fail(code, field):
++    raise ExperimentalContractError(code,field)
++
++
++def _row_column(address):
++    match=re.fullmatch(r'([A-Z]+)([1-9][0-9]*)',address)
++    return int(match[2]),match[1]
++
++
++def validate_selected_layout(args):
++    """The supported layout is contiguous labelled rows under group headers.
++
++    This validates representation relationships, not experimental independence.
++    Different source cells never collapse merely because their text matches.
++    """
++    subject_row,subject_column=_row_column(args['subject']['cell'])
++    headers={}
++    for group in args['groups']:
++        label=group['label'];address=label['cell']
++        previous=headers.setdefault(label['expected_text'],address)
++        if previous!=address:_fail('ambiguous_group_label_scope','groups')
++        row,column=_row_column(address)
++        if row<=subject_row:_fail('group_header_must_follow_subject_header','groups')
++        selected_rows=set()
++        for observation in group['observations']:
++            lr,lc=_row_column(observation['label']['cell']);vr,vc=_row_column(observation['value_cell'])
++            if lr!=vr:_fail('observation_label_value_row_mismatch','value_cell')
++            if vc!=subject_column:_fail('observation_subject_column_mismatch','value_cell')
++            if lc!=column or lr<=row:_fail('observation_group_row_mismatch','groups')
++            selected_rows.add(lr)
++        if selected_rows!=set(range(row+1,max(selected_rows)+1)):
++            _fail('contiguous_group_observation_rows_required','groups')
++        next_headers=[_row_column(g['label']['cell'])[0] for g in args['groups']
++            if _row_column(g['label']['cell'])[1]==column and _row_column(g['label']['cell'])[0]>row]
++        if next_headers and max(selected_rows)>=min(next_headers):
++            _fail('observation_crosses_selected_group_header','groups')
++
++
++def entry_meaning(args, artifact_ref, group, observation):
++    """Identity of the witnessed reported representation; no physical unit ID."""
++    return {'source_ref':args['source_ref'],'artifact_ref':artifact_ref,'worksheet':args['worksheet'],
++        'panel':args['panel']['expected_text'],'subject':args['subject']['expected_text'],
++        'native_unit':args['native_unit']['expected_text'],'group':group['label']['expected_text'],
++        'observation_label':observation['label']['expected_text'],
++        'panel_cell':args['panel']['cell'],'subject_cell':args['subject']['cell'],
++        'native_unit_cell':args['native_unit']['cell'],'group_cell':group['label']['cell'],
++        'label_cell':observation['label']['cell'],'value_cell':observation['value_cell']}
++
++
++def read_rate_observations(content, arguments, *, artifact_ref):
++    """Read only chosen entries; all measurements originate in workbook bytes.
++
++    Model arguments identify meanings/locations, never measured values. Numeric
++    nonformula cells supply points. Blank/ND/limits remain in the source roster;
++    cached formula values and text numerals are not accepted numeric points.
++    Observation identities identify source-labelled reports, not physical units.
++    """
++    args=deepcopy(arguments)
++    validate_schema(args,rate_observation_population_schema())
++    validate_selected_layout(args)
++    if args['reference_group']==args['test_group']:
++        _fail('distinct_groups_required','test_group')
++    digest=hashlib.sha256(content).hexdigest()
++    if artifact_ref != 'artifact_'+digest:
++        _fail('source_artifact_hash_mismatch','artifact_ref')
++    try:
++        workbook=Workbook(io.BytesIO(content))
++        try:
++            layout=workbook.layout()
++            selected=[sheet for sheet in layout['sheets'] if sheet['name']==args['worksheet']]
++            if len(selected)!=1 or not selected[0]['available']:
++                _fail('xlsx_available_unique_worksheet_required','worksheet')
++            sheet=selected[0]; member=sheet['worksheet_part']
++            with workbook.open(member) as stream: member_bytes=stream.read()
++            member_digest=hashlib.sha256(member_bytes).hexdigest()
++            wanted={args[name]['cell'] for name in ('panel','subject','native_unit')}
++            for group in args['groups']:
++                wanted.add(group['label']['cell'])
++                for entry in group['observations']:wanted.update((entry['label']['cell'],entry['value_cell']))
++            cells={}
++            with sqlite3.connect(':memory:') as connection:
++                failure=workbook.index_strings(connection,layout['shared_strings_part']) or layout.get('shared_strings_failure')
++                if failure:_fail(failure['code'],'shared_strings')
++                for element in ET.fromstring(member_bytes).iter():
++                    if _tag(element)=='c' and element.get('r') in wanted:
++                        address=element.get('r')
++                        if address in cells:_fail('xlsx_ambiguous_cell','cell.'+address)
++                        cells[address]=workbook.cell(element,connection)
++        finally:workbook.close()
++    except (zipfile.BadZipFile,ET.ParseError,KeyError,ValueError) as error:
++        if isinstance(error,ExperimentalContractError):raise
++        raise ExperimentalContractError('xlsx_source_unreadable','source_ref') from error
++    custody={'source_ref': args['source_ref'], 'artifact_ref':artifact_ref,
++        'workbook_sha256':digest,'worksheet':args['worksheet'],'member':member,'member_sha256':member_digest}
++    def witness(address):
++        cell=cells.get(address,{'address':address,'cell_type':'absent','value':None,'raw_value':None,
++            'style_index':None,'formula':None,'value_is_formula_cache':False,'error':None})
++        return {**custody,'cell':address,**{key:deepcopy(cell[key]) for key in
++            ('cell_type','value','raw_value','style_index','formula','value_is_formula_cache','error')}}
++    def labelled(selector):
++        result=witness(selector['cell'])
++        if result['formula'] is not None or result['error'] is not None or result['value']!=selector['expected_text']:
++            _fail('source_label_witness_mismatch','cell.'+selector['cell'])
++        return result
++    meanings={name:labelled(args[name]) for name in ('panel','subject','native_unit')}
++    origin='synthetic' if args['source_kind']=='synthetic_fixture' else 'reported'
++    entries=[]
++    for group in args['groups']:
++        group_witness=labelled(group['label'])
++        for selected in group['observations']:
++            label=labelled(selected['label']); value=witness(selected['value_cell'])
++            status,reason,exact,bound='unsupported_cell','numeric_cell_type_required',None,'none'
++            if value['formula'] is not None:reason='formula_measurement_unsupported'
++            elif value['error'] is not None:reason='source_cell_error'
++            elif value['value'] is None or value['value'].strip()=='':
++                status,reason='missing','source_measurement_unavailable'
++            elif value['cell_type']=='n':
++                token=value['raw_value']
++                if isinstance(token,str) and re.fullmatch(r'[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?',token):
++                    exact=Fraction(token);status,reason='observed',None
++                else:reason='invalid_numeric_lexeme'
++            elif value['value'].strip().casefold() in ('nd','not detected'):
++                status,reason='not_detected','nondetection_without_point'
++            else:
++                match=re.fullmatch(r'\s*(<=|>=|<|>|≤|≥)\s*([+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?)\s*',value['value'])
++                if match:
++                    status,reason='censored','censored_measurement';bound=match[1]
++            meaning=entry_meaning(args,artifact_ref,group,selected)
++            entries.append({'record_identity':identity('source_reported_entry',meaning),
++                'meaning':meaning,'group':group_witness['value'],'label':label['value'],
++                'status':status,'unavailable_reason':reason,'bound':bound,
++                'exact_value':None if exact is None else {'numerator':str(exact.numerator),'denominator':str(exact.denominator)},
++                'origin':origin,'group_source':group_witness,'label_source':label,'value_source':value})
++    return {'version':VERSION,'source_kind':args['source_kind'],'custody':custody,
++        'meanings':meanings,'entries':entries,'grouping':'unknown','physical_conversion':'unknown'}
+--- baseline/literature_rate_observation_calculations.py
++++ gene_annotation_episode/literature_rate_observation_calculations.py
+@@ -0,0 +1,125 @@
++"""Reporting-level numerical cells, without preparation or sampling inference."""
++from __future__ import annotations
++from copy import deepcopy
++from decimal import Decimal, localcontext
++from fractions import Fraction
++import math
++
++VERSION='a105_reported_rate_contrast_v1'
++GROUP_COMPONENTS=('rate','sample_sd','cv','observed_point_mean','observed_point_sd')
++COMPONENTS=('reference_rate','test_rate','rate_difference','retained_fraction','fractional_decrease',
++    'reference_sample_sd','test_sample_sd','reference_cv','test_cv',
++    'reference_observed_point_mean','test_observed_point_mean','reference_observed_point_sd','test_observed_point_sd')
++REASONS=('numerical_model_range','insufficient_entry_count','no_point_observations','nonpositive_mean',
++    'conflicting_reported_entry','source_entry_association_unresolved','incomplete_selected_roster','missing_reference_group','missing_test_group','zero_reference_rate')
++FORMULAS={'rate':'sum(all_selected_distinct_entries)/selected_entry_count',
++    'sample_sd':'sqrt(sum((entry-full_set_mean)^2)/(selected_entry_count-1))',
++    'cv':'descriptive_sample_sd/full_set_mean',
++    'observed_point_mean':'sum(available_distinct_point_entries)/point_entry_count',
++    'observed_point_sd':'sqrt(sum((point-observed_point_mean)^2)/(point_entry_count-1))',
++    'rate_difference':'reference_rate-test_rate','retained_fraction':'test_rate/reference_rate',
++    'fractional_decrease':'1-test_rate/reference_rate'}
++QUALIFICATIONS=('reported_convention_only','preparation_grouping_unknown','pairing_unknown',
++    'physical_unit_conversion_unknown','method_binding_unknown','blank_binding_unknown',
++    'calibration_binding_unknown','product_attribution_unknown','experimental_comparability_not_established')
++
++
++def _q(exact):
++    return Fraction(int(exact['numerator']),int(exact['denominator']))
++
++
++def _cell(value,unit,formula,*,reason=None):
++    exact=None
++    if isinstance(value,Fraction):exact={'numerator':str(value.numerator),'denominator':str(value.denominator)}
++    if value is not None:
++        try:
++            number=float(value)
++            if not math.isfinite(number) or number==0 and value!=0:raise ValueError()
++        except (ArithmeticError,ValueError):number,reason=None,'numerical_model_range'
++    else:number=None
++    return {'value':number,'unit':unit,'formula':formula,'origin':'derived',
++        'status':'populated' if number is not None else 'unavailable',
++        'unavailable_reason':reason,'source_exact_value':exact if number is not None else None}
++
++
++def _statistics(values):
++    if not values:return None,None,'no_point_observations','no_point_observations'
++    mean=sum(values,Fraction())/len(values)
++    if len(values)<2:return mean,None,None,'insufficient_entry_count'
++    variance=sum(((v-mean)**2 for v in values),Fraction())/(len(values)-1)
++    with localcontext() as ctx:
++        ctx.prec=60
++        sd=(Decimal(variance.numerator)/Decimal(variance.denominator)).sqrt()
++    return mean,sd,None,None
++
++
++def populate_rate_observation_contrast(extraction,*,reference_group,test_group):
++    """Flat distinct reported-entry descriptors; no IID, SE or corrected rate.
++
++    Incomplete rosters retain available-point descriptions but never silently
++    substitute those points for the entire selected group. Identity conflicts
++    exclude all conflicting representations from available-point summaries.
++    """
++    data=deepcopy(extraction)
++    unit=data['meanings']['native_unit']['value']
++    by_identity={}
++    for entry in data['entries']:by_identity.setdefault(entry['record_identity'],[]).append(entry)
++    conflicts=set()
++    for key,entries in by_identity.items():
++        signatures={(e['group'],e['status'],e['bound'],None if e['exact_value'] is None else _q(e['exact_value']),
++            e['origin'],e['value_source']['value'] if e['status']!='observed' else None) for e in entries}
++        if len(signatures)>1:conflicts.add(key)
++    grouped={}
++    for entry in data['entries']:grouped.setdefault(entry['group'],[]).append(entry)
++    groups=[]
++    for name,entries in grouped.items():
++        unique={}
++        for entry in entries:unique.setdefault(entry['record_identity'],entry)
++        labels={}
++        for key,e in unique.items():labels.setdefault(e['label'],set()).add(key)
++        unresolved={key for keys in labels.values() if len(keys)>1 for key in keys}
++        points=[_q(e['exact_value']) for key,e in unique.items() if key not in conflicts and key not in unresolved and e['status']=='observed']
++        mean,sd,mr,sr=_statistics(points)
++        complete=all(key not in conflicts and key not in unresolved and e['status']=='observed' for key,e in unique.items())
++        reason=None if complete else 'conflicting_reported_entry' if any(key in conflicts for key in unique) else 'source_entry_association_unresolved' if unresolved else 'incomplete_selected_roster'
++        cells={'observed_point_mean':_cell(mean,unit,FORMULAS['observed_point_mean'],reason=mr),
++            'observed_point_sd':_cell(sd,unit,FORMULAS['observed_point_sd'],reason=sr),
++            'rate':_cell(mean if complete else None,unit,FORMULAS['rate'],reason=reason or mr),
++            'sample_sd':_cell(sd if complete else None,unit,FORMULAS['sample_sd'],reason=reason or sr)}
++        cv_reason=reason or mr or sr or ('nonpositive_mean' if mean is not None and mean<=0 else None)
++        with localcontext() as ctx:
++            ctx.prec=60
++            cv=sd/(Decimal(mean.numerator)/Decimal(mean.denominator)) if cv_reason is None else None
++        cells['cv']=_cell(cv,'fraction',FORMULAS['cv'],reason=cv_reason)
++        groups.append({'label':name,'entry_count':None if unresolved else len(unique),
++            'selected_row_count':len(unique),'known_entry_count':len(set(unique)-unresolved),
++            'association_unresolved':bool(unresolved),'representation_count':len(entries),
++            'point_entry_count':len(points),'complete':complete,
++            'observation_labels':[{'record_identity':key,'label':e['label'],'status':e['status'],
++                'conflicting':key in conflicts,'association_unresolved':key in unresolved,'unavailable_reason':e['unavailable_reason'],
++                'label_source':deepcopy(e['label_source']),'group_source':deepcopy(e['group_source'])} for key,e in unique.items()],
++            'limitations':list(dict.fromkeys([*([reason] if reason else []),
++                *(e['unavailable_reason'] for e in entries if e['unavailable_reason'] is not None)])),
++            'cells':cells})
++    selected={role:next((g for g in groups if g['label']==label),None)
++        for role,label in (('reference',reference_group),('test',test_group))}
++    a,b=selected.values()
++    reason=('missing_reference_group' if a is None else 'missing_test_group' if b is None else
++        a['cells']['rate']['unavailable_reason'] or b['cells']['rate']['unavailable_reason'])
++    av=_q(a['cells']['rate']['source_exact_value']) if a and a['cells']['rate']['source_exact_value'] else None
++    bv=_q(b['cells']['rate']['source_exact_value']) if b and b['cells']['rate']['source_exact_value'] else None
++    cells={}
++    for role,g in selected.items():
++        for name in GROUP_COMPONENTS:
++            cells[role+'_'+name]=deepcopy(g['cells'][name]) if g else _cell(None,
++                'fraction' if name=='cv' else unit,FORMULAS[name],reason='missing_'+role+'_group')
++    cells['rate_difference']=_cell(av-bv if reason is None else None,unit,FORMULAS['rate_difference'],reason=reason)
++    ratio_reason=reason or ('zero_reference_rate' if av==0 else None)
++    ratio=bv/av if ratio_reason is None else None
++    cells['retained_fraction']=_cell(ratio,'fraction',FORMULAS['retained_fraction'],reason=ratio_reason)
++    cells['fractional_decrease']=_cell(1-ratio if ratio is not None else None,'fraction',FORMULAS['fractional_decrease'],reason=ratio_reason)
++    return {'version':VERSION,'axis':'A105','scope':'source_reported_entry_endpoint',
++        'extraction':data,'groups':groups,'reference_group':reference_group,'test_group':test_group,
++        'cells':cells,'qualifications':list(QUALIFICATIONS),'preparation_count':None,
++        'between_preparation_sd':None,'mean_se':None,'difference_se':None,'corrected_activity':None,
++        'annotation_credit':None,'assay_error_rate':None}
+--- baseline/literature_rate_observation_storage.py
++++ gene_annotation_episode/literature_rate_observation_storage.py
+@@ -0,0 +1,294 @@
++"""Selected source-cell operation, saved numerical sheet and exact subset custody."""
++from __future__ import annotations
++from copy import deepcopy
++import hashlib
++import json
++
++from .communication import plain
++from .domain import ContractError, canonical, identity, obj, validate_schema
++from .literature_rate_storage import LiteratureRateRepository
++from .literature_rate_observation_inputs import (VERSION as INPUT_VERSION, SOURCE_KINDS, TEXT, STATUSES,
++    ENTRY_REASONS, label_schema, rate_observation_population_schema, read_rate_observations,
++    entry_meaning, validate_selected_layout)
++from .literature_rate_observation_calculations import (VERSION as SHEET_VERSION, COMPONENTS,
++    REASONS, FORMULAS, QUALIFICATIONS, populate_rate_observation_contrast)
++
++PROVIDER='literature.a105.reported_rate_observations'
++VERSION='literature_reported_rate_observation_record_v1'
++NAMESPACE='literature_rate_observation_cells'
++REQUESTED='requested_rate_observation_components'
++VIEW='reported_rate_observation_components'
++ALL_REASONS=(*REASONS,*ENTRY_REASONS)
++
++
++def _array(schema,unique=False):
++    return {'type':'array','items':deepcopy(schema),**({'uniqueItems':True} if unique else {})}
++
++
++def _nullable(schema):
++    return {'anyOf':[deepcopy(schema),{'type':'null'}]}
++
++
++def _exact():
++    return _nullable(obj({'numerator':{'type':'string','pattern':'^-?[0-9]+$'},
++        'denominator':{'type':'string','pattern':'^[1-9][0-9]*$'}}))
++
++
++def _custody():
++    return obj({name:deepcopy(TEXT) for name in ('source_ref','artifact_ref','workbook_sha256','worksheet','member','member_sha256')})
++
++
++def _witness():
++    formula=obj({'text':{'type':['string','null']},'attributes':{'type':'object','additionalProperties':{'type':'string'}}})
++    return obj({**_custody()['properties'],'cell':deepcopy(TEXT),'cell_type':deepcopy(TEXT),
++        **{name:{'type':['string','null']} for name in ('value','raw_value','style_index','error')},
++        'formula':_nullable(formula),'value_is_formula_cache':{'type':'boolean'}})
++
++
++def _cell():
++    return obj({'value':{'type':['number','null']},'unit':deepcopy(TEXT),
++        'formula':{'enum':list(dict.fromkeys(FORMULAS.values()))},'origin':{'const':'derived'},
++        'status':{'enum':['populated','unavailable']},'unavailable_reason':{'enum':[*ALL_REASONS,None]},
++        'source_exact_value':_exact()})
++
++
++def _entry():
++    meaning=obj({name:deepcopy(TEXT) for name in ('source_ref','artifact_ref','worksheet','panel','subject','native_unit','group','observation_label',
++        'panel_cell','subject_cell','native_unit_cell','group_cell','label_cell','value_cell')})
++    return obj({'record_identity':deepcopy(TEXT),'meaning':meaning,'group':deepcopy(TEXT),'label':deepcopy(TEXT),
++        'status':{'enum':list(STATUSES)},'unavailable_reason':{'enum':[*ENTRY_REASONS,None]},
++        'bound':{'enum':['none','<','>','<=','>=','≤','≥']},'exact_value':_exact(),
++        'origin':{'enum':['reported','synthetic']},
++        **{name:_witness() for name in ('group_source','label_source','value_source')}})
++
++
++def _group(numeric=False):
++    observation=obj({'record_identity':deepcopy(TEXT),'label':deepcopy(TEXT),'status':{'enum':list(STATUSES)},
++        'conflicting':{'type':'boolean'},'association_unresolved':{'type':'boolean'},'unavailable_reason':{'enum':[*ENTRY_REASONS,None]},
++        'label_source':_witness(),'group_source':_witness()})
++    fields={'label':deepcopy(TEXT),**{name:{'type':'integer','minimum':0} for name in
++        ('selected_row_count','known_entry_count','representation_count','point_entry_count')},
++        'entry_count':{'type':['integer','null'],'minimum':0},'association_unresolved':{'type':'boolean'},'complete':{'type':'boolean'},
++        'observation_labels':_array(observation),'limitations':_array({'enum':list(ALL_REASONS)},True)}
++    if numeric:
++        fields['cells']=obj({name:_cell() for name in ('rate','sample_sd','cv','observed_point_mean','observed_point_sd')})
++    return obj(fields)
++
++
++def _sheet_schema():
++    extraction=obj({'version':{'const':INPUT_VERSION},'source_kind':{'enum':list(SOURCE_KINDS)},
++        'custody':_custody(),'meanings':obj({name:_witness() for name in ('panel','subject','native_unit')}),
++        'entries':_array(_entry()),'grouping':{'const':'unknown'},'physical_conversion':{'const':'unknown'}})
++    return obj({'version':{'const':SHEET_VERSION},'axis':{'const':'A105'},
++        'scope':{'const':'source_reported_entry_endpoint'},'extraction':extraction,'groups':_array(_group(True)),
++        'reference_group':deepcopy(TEXT),'test_group':deepcopy(TEXT),'cells':obj({name:_cell() for name in COMPONENTS}),
++        'qualifications':{'const':list(QUALIFICATIONS)},**{name:{'type':'null'} for name in
++            ('preparation_count','between_preparation_sd','mean_se','difference_se','corrected_activity','annotation_credit','assay_error_rate')}})
++
++
++def _project_saved(saved,reference,components):
++    sheet=saved['sheet'];data=sheet['extraction']
++    groups={}
++    for role in ('reference','test'):
++        name=sheet[role+'_group']
++        group=next((g for g in sheet['groups'] if g['label']==name),None)
++        groups[role]={'requested_label':name,'status':'observed' if group else 'not_observed',
++            'observed':None if group is None else {k:deepcopy(v) for k,v in group.items() if k!='cells'}}
++    origins=list(dict.fromkeys(e['origin'] for e in data['entries'] if e['group'] in
++        (sheet['reference_group'],sheet['test_group'])))
++    return [{'sheet_ref':reference,'evidence_source_ref':saved['input_source_ref'],
++        'evaluation_scope':'source_reported_rate_observations','component':name,**deepcopy(sheet['cells'][name]),
++        'subject':data['meanings']['subject']['value'],'panel':data['meanings']['panel']['value'],
++        'source_native_unit':data['meanings']['native_unit']['value'],'source_kind':data['source_kind'],
++        'groups':deepcopy(groups),'grouping':'unknown','physical_conversion':'unknown',
++        'qualifications':deepcopy(sheet['qualifications']),'input_origins':origins} for name in components]
++
++
++def rate_observation_cells_schema():
++    ref={'type':'string','format':'reference','x-reference-namespace':'source'}
++    group=obj({'requested_label':deepcopy(TEXT),'status':{'enum':['observed','not_observed']},
++        'observed':_nullable(_group())})
++    row=obj({'sheet_ref':deepcopy(ref),'evidence_source_ref':deepcopy(ref),
++        'evaluation_scope':{'const':'source_reported_rate_observations'},'component':{'enum':list(COMPONENTS)},
++        **_cell()['properties'],**{name:deepcopy(TEXT) for name in ('subject','panel','source_native_unit')},
++        'source_kind':{'enum':list(SOURCE_KINDS)},'groups':obj({role:deepcopy(group) for role in ('reference','test')}),
++        'grouping':{'const':'unknown'},'physical_conversion':{'const':'unknown'},
++        'qualifications':{'const':list(QUALIFICATIONS)},'input_origins':_array({'enum':['reported','synthetic']},True)})
++    return {**_array(row),'x-source':NAMESPACE}
++
++
++class LiteratureRateObservationRepository(LiteratureRateRepository):
++    """Reuse existing authenticated admission; original XLSX never reread at return."""
++    provider,components,record_version=PROVIDER,COMPONENTS,VERSION
++    operations_table='literature_rate_observation_operations'
++    received_table='literature_rate_observation_received'
++    binding_fields=()
++
++    def __init__(self,store,run_id):
++        if not isinstance(run_id,str) or not run_id:raise ValueError('explicit_literature_run_required')
++        self.store,self.run_id=store,run_id
++
++    def _installed(self,table):
++        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",(table,)).fetchone() is not None
++
++    def _install(self):
++        super().__init__(self.store,self.run_id)
++
++    @staticmethod
++    def _components(components):
++        if (not isinstance(components,(list,tuple)) or any(type(n) is not str or n not in COMPONENTS for n in components)
++                or len(set(components))!=len(components)):
++            raise ContractError('literature_rate_observation_component_selection_invalid')
++        return list(components)
++
++    def _ancestors(self,scope,reference):
++        result=[reference]
++        for current in result:
++            for parent in self._native_provenance(scope,current).get('parent_source_refs',()):
++                if parent not in result:result.append(parent)
++        return result
++
++    def populate(self,context,arguments,operation_key):
++        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
++        if not isinstance(operation_key,str) or not operation_key:raise ContractError('operation_key_required')
++        args=plain(arguments);validate_schema(args,rate_observation_population_schema())
++        source=self._native_source(context,args['source_ref'])
++        requested=self._components(plain(context.assignment.get(REQUESTED,[])))
++        request={'run_id':self.run_id,'episode_id':context.episode_id,'operation_key':operation_key,
++            'arguments':args,'scope':plain(context.scope),'components':requested}
++        signature=canonical(request)
++        old=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
++            (self.run_id,context.episode_id,operation_key)).fetchone() if self._installed(self.operations_table) else None
++        if old is not None:
++            if old['signature']!=signature:raise ContractError('operation_key_reused_for_different_work')
++            outcome=json.loads(old['outcome']);self.read(outcome['result']['sheet_ref'])
++            return outcome
++        artifact=source['artifact_ref']
++        extraction=read_rate_observations(self.store.get_artifact(artifact),args,artifact_ref=artifact)
++        sheet=populate_rate_observation_contrast(extraction,reference_group=args['reference_group'],test_group=args['test_group'])
++        validate_schema(sheet,_sheet_schema())
++        ancestors=self._ancestors(context.scope,args['source_ref'])
++        payload={'version':VERSION,'input_source_ref':args['source_ref'],'input_artifact_ref':artifact,
++            'input_source_refs':ancestors,'selection':args,'sheet':sheet}
++        with self.store.transaction():
++            self._install()
++            sheet_artifact=self.store.artifact(canonical(payload),'application/json')
++            request_ref=self.store.artifact(canonical(request),'application/json')
++            value={'provider':PROVIDER,'accession':None,'uri':None,'artifact_ref':sheet_artifact,'text_ref':sheet_artifact,
++                'request_ref':request_ref,'version':VERSION,'retrieved_at':None,'parent_source_refs':ancestors}
++            reference=identity('source',{'origin':'tool','record':value})
++            existed=self.store.db.execute('SELECT 1 FROM records WHERE id=?',(reference,)).fetchone()
++            self.store.put('source',value,origin='tool',scope=plain(context.scope))
++            outcome={'status':'completed','operation_ref':identity('operation',{'run_id':self.run_id,'episode_id':context.episode_id,'key':operation_key}),
++                'record_refs':[reference],'changed_record_refs':[] if existed else [reference],
++                'result':{'sheet_ref':reference,'view':VIEW,'cells':_project_saved(payload,reference,requested)},'feedback':None}
++            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
++                (self.run_id,context.episode_id,operation_key,signature,canonical(outcome)))
++        return outcome
++
++    def _json_artifact(self,reference):
++        content=self.store.get_artifact(reference)
++        if 'artifact_'+hashlib.sha256(content).hexdigest()!=reference:
++            raise ContractError('rate_observation_saved_artifact_hash_mismatch')
++        try:return json.loads(content)
++        except (TypeError,ValueError) as error:raise ContractError('rate_observation_saved_json_invalid') from error
++
++    def read(self,sheet_ref):
++        """Authenticate original closed saved rows, without scientific IO or math."""
++        source=self.store.get(sheet_ref)
++        value={k:v for k,v in source.items() if k not in ('id','record_type','origin')}
++        if (source.get('record_type')!='source' or source.get('origin')!='tool' or source.get('provider')!=PROVIDER
++                or source.get('version')!=VERSION or identity('source',{'origin':'tool','record':value})!=sheet_ref):
++            raise ContractError('literature_rate_observation_sheet_required')
++        request=self._json_artifact(source['request_ref'])
++        if set(request)!={'run_id','episode_id','operation_key','arguments','scope','components'} or request['run_id']!=self.run_id:
++            raise ContractError('rate_observation_saved_request_mismatch')
++        validate_schema(request['arguments'],rate_observation_population_schema());self._components(request['components'])
++        operation=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
++            (self.run_id,request['episode_id'],request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
++        if operation is None or operation['signature']!=canonical(request):raise ContractError('literature_sheet_not_selected_output')
++        saved=self._json_artifact(source['artifact_ref'])
++        if (set(saved)!={'version','input_source_ref','input_artifact_ref','input_source_refs','selection','sheet'}
++                or saved['version']!=VERSION or saved['selection']!=request['arguments']
++                or saved['input_source_ref']!=request['arguments']['source_ref'] or saved['input_source_refs']!=source['parent_source_refs']):
++            raise ContractError('rate_observation_saved_selection_mismatch')
++        validate_schema(saved['sheet'],_sheet_schema());self._validate_saved_bindings(saved,request)
++        outcome=json.loads(operation['outcome'])
++        expected={'sheet_ref':sheet_ref,'view':VIEW,'cells':_project_saved(saved,sheet_ref,request['components'])}
++        if (outcome.get('status')!='completed' or canonical(outcome.get('result'))!=canonical(expected)
++                or outcome.get('record_refs')!=[sheet_ref] or outcome.get('feedback') is not None
++                or outcome.get('operation_ref')!=identity('operation',{'run_id':self.run_id,'episode_id':request['episode_id'],'key':request['operation_key']})):
++            raise ContractError('rate_observation_saved_outcome_mismatch')
++        return saved
++
++    def _validate_saved_bindings(self,saved,request):
++        args= saved['selection'];sheet=saved['sheet'];data=sheet['extraction'];custody=data['custody']
++        original=self._native_provenance(request['scope'],saved['input_source_ref'])
++        if (original['artifact_ref']!=saved['input_artifact_ref'] or self._ancestors(request['scope'],saved['input_source_ref'])!=saved['input_source_refs']
++                or custody['source_ref']!=saved['input_source_ref'] or custody['artifact_ref']!=saved['input_artifact_ref']
++                or 'artifact_'+custody['workbook_sha256']!=saved['input_artifact_ref'] or custody['worksheet']!=args['worksheet']
++                or data['source_kind']!=args['source_kind'] or sheet['reference_group']!=args['reference_group'] or sheet['test_group']!=args['test_group']):
++            raise ContractError('rate_observation_saved_source_binding_mismatch')
++        def check(witness,selector):
++            if (any(witness[k]!=v for k,v in custody.items()) or witness['cell']!=selector['cell']
++                    or witness['value']!=selector['expected_text'] or witness['formula'] is not None):
++                raise ContractError('rate_observation_saved_label_binding_mismatch')
++        for name in ('panel','subject','native_unit'):check(data['meanings'][name],args[name])
++        validate_selected_layout(args)
++        roster=[(g,e) for g in args['groups'] for e in g['observations']]
++        if len(roster)!=len(data['entries']):raise ContractError('rate_observation_saved_roster_mismatch')
++        for entry,(g,e) in zip(data['entries'],roster):
++            check(entry['group_source'],g['label']);check(entry['label_source'],e['label'])
++            meaning=entry_meaning(args,saved['input_artifact_ref'],g,e)
++            expected_origin='synthetic' if args['source_kind']=='synthetic_fixture' else 'reported'
++            if (entry['meaning']!=meaning or entry['group']!=meaning['group'] or entry['label']!=meaning['observation_label']
++                    or entry['record_identity']!=identity('source_reported_entry',meaning) or entry['origin']!=expected_origin
++                    or entry['value_source']['cell']!=e['value_cell']
++                    or any(entry['value_source'][k]!=v for k,v in custody.items())
++                    or (entry['exact_value'] is not None)!=(entry['status']=='observed')):
++                raise ContractError('rate_observation_saved_entry_binding_mismatch')
++        labels=list(dict.fromkeys(e['group'] for e in data['entries']))
++        if [g['label'] for g in sheet['groups']]!=labels:raise ContractError('rate_observation_saved_group_binding_mismatch')
++        for group in sheet['groups']:
++            entries=[e for e in data['entries'] if e['group']==group['label']]
++            unique={}
++            for entry in entries:unique.setdefault(entry['record_identity'],entry)
++            by_label={}
++            for key,e in unique.items():by_label.setdefault(e['label'],set()).add(key)
++            unresolved={key for keys in by_label.values() if len(keys)>1 for key in keys}
++            if (group['entry_count']!=(None if unresolved else len(unique)) or group['selected_row_count']!=len(unique)
++                    or group['known_entry_count']!=len(set(unique)-unresolved) or group['association_unresolved']!=bool(unresolved)
++                    or group['representation_count']!=len(entries)
++                    or [e['record_identity'] for e in group['observation_labels']]!=list(unique)
++                    or any(e['association_unresolved']!=(e['record_identity'] in unresolved) for e in group['observation_labels'])
++                    or group['point_entry_count']!=sum(e['status']=='observed' and not e['conflicting'] and not e['association_unresolved'] for e in group['observation_labels'])):
++                raise ContractError('rate_observation_saved_group_binding_mismatch')
++        for cell in sheet['cells'].values():
++            if ((cell['value'] is None)!=(cell['status']=='unavailable')
++                    or (cell['unavailable_reason'] is None)!=(cell['status']=='populated')):
++                raise ContractError('rate_observation_saved_cell_binding_mismatch')
++
++    def project_cells(self,sheet_refs,*,permitted_record_refs,components=None):
++        selected=self._components(COMPONENTS if components is None else components)
++        result=[]
++        for reference in dict.fromkeys(sheet_refs):
++            if reference not in permitted_record_refs:raise ContractError('literature_sheet_not_received')
++            result.extend(_project_saved(self.read(reference),reference,selected))
++        return result
++
++    def fact_cells(self,context,sheet_refs,*,components):
++        refs=list(dict.fromkeys(sheet_refs))
++        if self.store.reference_subset(refs,plain(context.scope))!=refs:raise ContractError('literature_source_outside_scope')
++        return super().fact_cells(context,refs,components=components)
++
++    def received_cells(self,context):
++        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
++        return super().received_cells(context) if self._installed(self.received_table) else []
++
++    def receive_cells(self,context,cells,operation_key):
++        with self.store.transaction():
++            self._install();return super().receive_cells(context,cells,operation_key)
++
++    @staticmethod
++    def cell_record_refs(cells):
++        return list(dict.fromkeys(ref for row in cells for ref in (row['sheet_ref'],row['evidence_source_ref'])))
+--- baseline/literature_rate_observation_prompt.py
++++ gene_annotation_episode/literature_rate_observation_prompt.py
+@@ -0,0 +1,70 @@
++"""Recurring investigation instructions; pure requested-cell scientific display."""
++from collections.abc import Mapping
++
++RATE_OBSERVATION_TASK = """Evaluate the source molecule’s reported activity entries and the explicitly selected functional comparison. Inspect the original workbook’s panel, subject, native unit, group labels and individual observation labels; select those source cells deliberately. The source cells supply the measured numbers. A requested group without matching source entries remains unobserved. This targeted reader supports selected publisher XLSX numeric cells; a formula’s cached result is not an accepted measured number.
++
++Keep the source’s reported entries separate from physical experiments and independent preparations. This reader supports a contiguous block of row-labelled observations immediately below each selected group header; the number of rows is selected from the source and is not fixed. Each observation label and value share a row, the value column matches the selected subject header, and the observation-label column matches its group header. Keep missing, censored and nondetected cells in that selected block. Selecting the exact same source cells twice does not add an entry. Different labels with equal values remain distinct reported entries. Different cells with the same observation label within one group leave their association unresolved: preserve those representations, withhold full-group summaries and retain only descriptive summaries of points whose entry identities are known. Cell locations and Parallel labels establish neither physical independence nor pairing. Preserve shared original reference cells across comparisons. CV requires a positive reported mean; retain signed native means and differences when that prerequisite fails.
++
++When preparation grouping is unknown, retain useful source-entry mean, descriptive sample SD and CV without inventing preparation IDs, independent n, standard errors or a sampling model. SD uses the selected distinct entry count minus one and describes those reported entries only. Missing, censored and nondetected entries stay in the selected roster; available-point summaries do not replace an incomplete full-set mean.
++
++Preserve the source-native unit convention. A same-source reported-activity difference or ratio can remain useful while physical conversion is unknown. Do not define U from an unrelated assay. Keep experimental comparability outside the selected change separate from isolation of the measured effect. A common source, subject label or unit does not establish equal active enzyme, a matched blank, calibration, product identity or molecular attribution. Source-entry variability and an explicitly selected substrate contrast inform precision and functional distinction; they are not reliability, function probabilities or annotation credit. Return exactly the requested saved components and their actual source meanings, count basis and qualifications. Keep reported source values, calculated summaries and synthetic fixtures distinctly labelled."""
++
++RATE_OBSERVATION_OPERATION_DESCRIPTION = "Read explicitly selected original XLSX activity-entry cells from an actually received scoped source, with witnessed panel, subject, source-native unit, group and observation labels. The finite layout requires contiguous labelled rows immediately below group headers, same-row labels/values and the selected subject column. Source numeric nonformula cells supply all measured points; formula caches remain unsupported. Select source_kind explicitly; synthetic fixtures retain synthetic input origin. Populate descriptive reported-entry mean/SD/CV and a specified same-source reported-convention difference/ratio. Preserve unknown grouping, physical conversion, method/blank/calibration/product attribution; do not infer preparation n, pairing, SE, corrected rate, assay reliability or annotation credit. Same-cell selections deduplicate; reused labels at different rows leave association and distinct-entry count unknown. Missing/censored/nondetected selected entries remain in the roster, with explicit partials. CV requires a positive mean."
++
++
++def is_row(row):
++    return isinstance(row,Mapping) and row.get('evaluation_scope')=='source_reported_rate_observations' and 'component' in row
++
++
++def rows_from_values(value):
++    if is_row(value):yield value
++    elif isinstance(value,Mapping):
++        for child in value.values():yield from rows_from_values(child)
++    elif isinstance(value,(list,tuple)):
++        for child in value:yield from rows_from_values(child)
++
++
++def rows_from_reports(reports):
++    for report in reports:
++        if isinstance(report,Mapping):
++            for value in report.values():
++                if isinstance(value,(list,tuple)):yield from (r for r in value if is_row(r))
++
++
++def render_received(parts,rows,*,section,table):
++    comparisons={};entries={}
++    for row in rows:
++        comparisons.setdefault(row['sheet_ref'],[]).append(row)
++        for group in row['groups'].values():
++            for entry in (group['observed']['observation_labels'] if group['observed'] else ()):
++                entries.setdefault(entry['record_identity'],len(entries)+1)
++    for number,comparison in enumerate(comparisons.values(),1):
++        first=comparison[0]
++        section(parts,'Reported activity comparison '+str(number),table(
++            ('Subject','Source panel / reported endpoint','Native source convention','Input origin'),
++            [(first['subject'],first['panel'],first['source_native_unit'],', '.join(first['input_origins']))]))
++        section(parts,'Requested reported-entry numerical components',table(
++            ('Component','Value','Unit','Status','Unavailable reason'),
++            [(row['component'],row['value'],row['unit'],row['status'],row['unavailable_reason']) for row in comparison]))
++        section(parts,'Requested groups and actual count basis',table(
++            ('Role','Requested group','Observed status','Distinct source entries','Selected rows','Known entries','Available points','Representations','Complete','Association unresolved'),
++            [(role,g['requested_label'],g['status'],g['observed']['entry_count'] if g['observed'] else None,
++              g['observed']['selected_row_count'] if g['observed'] else None,
++              g['observed']['known_entry_count'] if g['observed'] else None,
++              g['observed']['point_entry_count'] if g['observed'] else None,
++              g['observed']['representation_count'] if g['observed'] else None,
++              g['observed']['complete'] if g['observed'] else None,
++              g['observed']['association_unresolved'] if g['observed'] else None) for role,g in first['groups'].items()]))
++        section(parts,'Source-labelled entry identity and reuse',table(
++            ('Role','Group','Source observation label','Local report-entry identity','Status','Conflict','Association unresolved','Limitation'),
++            [(role,g['requested_label'],entry['label'],'source entry '+str(entries[entry['record_identity']]),
++              entry['status'],entry['conflicting'],entry['association_unresolved'],entry['unavailable_reason'])
++             for role,g in first['groups'].items() for entry in (g['observed']['observation_labels'] if g['observed'] else ())]))
++        section(parts,'Scientific qualifications',table(('Meaning','Status'),
++            [('Arithmetic','same-source reported convention only'),('Preparation grouping / independent n','unknown'),
++             ('SD / CV basis','descriptive across distinct reported entries; denominator entry_count-1 for SD'),
++             ('SE / pairing / between-preparation SD','unavailable; grouping and sampling design unknown'),
++             ('Physical unit conversion / assay method / blank / calibration / product attribution','unknown'),
++             ('Experimental comparability / effect isolation','not established by common source, subject or units')]))
++        section(parts,'Requested calculation meanings',table(('Component','Calculation'),
++            [(row['component'],row['formula']) for row in comparison]))
+--- baseline/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -73,6 +73,11 @@
+     result.append({"name": "literature.rate.populate",
+         "description": "Populate source-preparation rate cells from a selected already acquired CSV/TSV summary. Preserve actual subjects, conditions, units, uncertainty and missingness. This finite table route does not read arbitrary prose/figures or calculate target transfer/annotation credit. Select a statistical model only when supported; otherwise use none and unknown dependence.",
+         "input_schema": rate_population_schema()})
++    from .literature_rate_observation_inputs import rate_observation_population_schema
++    from .literature_rate_observation_prompt import RATE_OBSERVATION_OPERATION_DESCRIPTION
++    result.append({"name": "literature.rate.observations.populate",
++        "description": RATE_OBSERVATION_OPERATION_DESCRIPTION,
++        "input_schema": rate_observation_population_schema()})
+     from .literature_rate_replicate_storage import rate_replicate_population_schema
+     from .literature_rate_replicate_prompt import RATE_REPLICATE_OPERATION_DESCRIPTION
+     result.append({"name": "literature.rate.replicates.populate",
+@@ -316,6 +321,8 @@
+                          "literature_rate_native_inputs.py",
+                          "literature_native_rate_operand_information.py",
+                          "literature_rate_calculations.py", "literature_rate_storage.py",
++                         "literature_rate_observation_inputs.py", "literature_rate_observation_calculations.py",
++                         "literature_rate_observation_storage.py", "literature_rate_observation_prompt.py", "spreadsheet_tools.py",
+                          "literature_rate_replicate_inputs.py", "literature_rate_replicate_calculations.py",
+                          "literature_rate_replicate_storage.py", "literature_rate_replicate_prompt.py",
+                          "episode_services.py",
+@@ -456,6 +463,9 @@
+         schema = deepcopy(schema)
+         if self.rate_population:
+             from .literature_rate_storage import COMPONENTS
++            from .literature_rate_observation_storage import COMPONENTS as OBSERVATION_COMPONENTS
++            schema["properties"]["requested_rate_observation_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(OBSERVATION_COMPONENTS)}}
+             from .literature_rate_replicate_storage import COMPONENTS as REPLICATE_COMPONENTS
+             schema["properties"]["requested_rate_replicate_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(REPLICATE_COMPONENTS)}}
+@@ -805,7 +815,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -835,10 +845,11 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
++                        "literature.rate.observations.populate": self.services.literature_rate_observation_repository,
+                         "literature.rate.replicates.populate": self.services.literature_rate_replicate_repository,
+                         "literature.rate.source.populate": self.services.literature_rate_repository,
+                         "literature.quantity.populate": self.services.literature_quantity_repository,
+@@ -1136,6 +1147,7 @@
+         return {"literature_rate_source_meaning_display": {"cells": list(unique.values()), "records": records}}
+ 
+     def _rate_fact_sources(self):
++        from .literature_rate_observation_storage import rate_observation_cells_schema
+         from .literature_rate_replicate_storage import rate_replicate_cells_schema
+         from .literature_rate_meaning_delivery import rate_source_meaning_cells_schema
+         from .literature_rate_domains import rate_source_domain_cells_schema
+@@ -1160,7 +1172,10 @@
+         from .literature_kinetic_model_storage import kinetic_model_cells_schema
+         from .literature_binding_interaction_model_storage import binding_interaction_model_cells_schema
+         from .literature_binding_interaction_storage import binding_interaction_cells_schema
+-        result = {"literature_rate_replicate_cells": {"type": "array", "meaning":
++        result = {"literature_rate_observation_cells": {"type": "array", "meaning":
++            "Exactly requested source-native reported-entry descriptive means, SD/CV and selected functional contrasts. Preserve witnessed panel/subject/group/observation labels, unknown preparation grouping, actual entry/representation/point counts, shared and conflicting source-labelled identities, missing/censored roster and actual input origins. Native arithmetic uses only the selected same-source reporting convention; it establishes neither experimental comparability nor effect isolation. Physical unit conversion, method/blank/calibration/product attribution, preparation n, SE, corrected activity and annotation credit remain unknown.",
++            "report_schema": rate_observation_cells_schema()},
++            "literature_rate_replicate_cells": {"type": "array", "meaning":
+             "Exactly requested raw-rate measurement components with actual source subject/experiment, selected versus observed groups, per-group sampling bases, actual measurement and unit counts, missing/censored/conflicting identities and selected dependence. Unit means receive equal weight after within-unit averaging. Descriptive SD and conditional SE are separate; grouping proves no biological independence. These dependent numerical views supply no assay specificity, error rate, function probability, target transfer or annotation credit.",
+             "report_schema": rate_replicate_cells_schema()},
+             "literature_rate_cells": {"type": "array", "meaning":
+@@ -1278,6 +1293,7 @@
+         return result
+ 
+     def _population_routes(self):
++        from .literature_rate_observation_storage import PROVIDER as OBSERVATION_PROVIDER
+         from .literature_rate_replicate_storage import PROVIDER as REPLICATE_PROVIDER
+         from .literature_rate_storage import COMPONENTS, PROVIDER
+         from .literature_quantity_storage import COMPONENTS as QUANTITIES, PROVIDER as QUANTITY_PROVIDER
+@@ -1302,7 +1318,9 @@
+         from .literature_kinetic_model_storage import COMPONENTS as KINETIC_MODEL_COMPONENTS, PROVIDER as KINETIC_MODEL_PROVIDER
+         from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+         from .literature_binding_interaction_model_storage import COMPONENTS as INTERACTION_MODEL_COMPONENTS, PROVIDER as INTERACTION_MODEL_PROVIDER
+-        result = (("literature_rate_replicate_cells", "requested_rate_replicate_components", REPLICATE_PROVIDER,
++        result = (("literature_rate_observation_cells", "requested_rate_observation_components", OBSERVATION_PROVIDER,
++                 (), self.services.literature_rate_observation_repository),
++                ("literature_rate_replicate_cells", "requested_rate_replicate_components", REPLICATE_PROVIDER,
+                  (), self.services.literature_rate_replicate_repository),
+                 ("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
+@@ -1505,6 +1523,10 @@
+             if cells:
+                 repository().receive_cells(context, cells, operation_key)
+         references = []
++        from .literature_rate_observation_storage import NAMESPACE as OBSERVATION_NAMESPACE
++        observation_cells = [row for name, node in schema.get("properties", {}).items()
++            if node.get("x-source") == OBSERVATION_NAMESPACE for row in form[name]]
++        references.extend(self.services.literature_rate_observation_repository().cell_record_refs(observation_cells))
+         from .literature_rate_replicate_storage import NAMESPACE as REPLICATE_NAMESPACE
+         replicate_cells = [row for name, node in schema.get("properties", {}).items()
+             if node.get("x-source") == REPLICATE_NAMESPACE for row in form[name]]
+@@ -1590,10 +1612,10 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells"} else None)
++                        [] if namespace in {"literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+-                    if namespace == "literature_rate_replicate_cells" and rows:
++                    if namespace in {"literature_rate_observation_cells", "literature_rate_replicate_cells"} and rows:
+                         # Preserve the exact available requested subset. A
+                         # receiver cannot expand possession merely by knowing
+                         # the complete saved sheet's reference.
+--- baseline/episode_services.py
++++ gene_annotation_episode/episode_services.py
+@@ -102,6 +102,14 @@
+             self._literature_rate_repository = LiteratureRateRepository(
+                 self.workflow.store, self.workflow.run_id)
+         return self._literature_rate_repository
++
++    def literature_rate_observation_repository(self):
++        """Access selected original XLSX entries and saved requested subsets."""
++        from .literature_rate_observation_storage import LiteratureRateObservationRepository
++        if not hasattr(self, '_literature_rate_observation_repository'):
++            self._literature_rate_observation_repository = LiteratureRateObservationRepository(
++                self.workflow.store, self.workflow.run_id)
++        return self._literature_rate_observation_repository
+ 
+     def literature_rate_replicate_repository(self):
+         """Access explicitly selected raw-rate tables and saved typed subsets."""
+--- baseline/literature_experimental_prompt.py
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -26,6 +26,7 @@
+ from . import literature_kinetic_model_render as _kinetic_model
+ from . import literature_binding_interaction_model_render as _interaction_model
+ from .literature_binding_interaction_model_prompt import BINDING_INTERACTION_MODEL_TASK
++from . import literature_rate_observation_prompt as _rate_observations
+ from . import literature_rate_replicate_prompt as _rate_replicates
+ 
+ from collections.abc import Mapping
+@@ -315,6 +316,8 @@
+         parts.extend(["", EXPERIMENTAL_TASK])
+     if SAVED_NUMERICAL_RETURN_TASK not in normalized:
+         parts.extend(["", SAVED_NUMERICAL_RETURN_TASK])
++    if _rate_observations.RATE_OBSERVATION_TASK not in normalized:
++        parts.extend(["", _rate_observations.RATE_OBSERVATION_TASK])
+     if _rate_replicates.RATE_REPLICATE_TASK not in normalized:
+         parts.extend(["", _rate_replicates.RATE_REPLICATE_TASK])
+     if ASSAY_TASK not in normalized:
+@@ -366,7 +369,7 @@
+     _section(parts, "Assigned scope", _values(state.get("scope", {})))
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+-        "source_ref", "representation", "artifact_ref", "page", "selection", "requested_rate_replicate_components",
++        "source_ref", "representation", "artifact_ref", "page", "selection", "requested_rate_observation_components", "requested_rate_replicate_components",
+         "requested_product_partition_components", "requested_completion_time_components", "requested_active_site_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+@@ -493,6 +496,10 @@
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if isinstance(content, Mapping) and content.get("view") == "reported_rate_observation_components":
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _rate_observations.render_received(parts, content["cells"], section=_section, table=_table)
++        return
+     if isinstance(content, Mapping) and content.get("view") == "raw_rate_replicate_components":
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _rate_replicates.render_received(parts, content["cells"], section=_section, table=_table)
+@@ -522,7 +529,7 @@
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if (list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
++    if (list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+             or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+@@ -533,7 +540,8 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and (any(_rate_replicates.rows_from_values(content["records"]))
++            and (any(_rate_observations.rows_from_values(content["records"]))
++                or any(_rate_replicates.rows_from_values(content["records"]))
+                 or any(_rate_meanings.rows_from_values(content["records"]))
+                 or any(_completion_time.rows_from_values(content["records"]))
+                 or any(_active_site.rows_from_values(content["records"]))
+@@ -1008,6 +1016,7 @@
+     from .literature_context_native_render import is_row as native_context_row, render_rows as render_native_context
+     covariance_rows = []
+     reaction_native = {}
++    rate_observations = {}
+     rate_replicates = {}
+     from .literature_reaction_native_render import is_row as native_reaction_row, render_rows as native_reaction_rows
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+@@ -1018,7 +1027,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_rate_replicates.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_rate_observations.is_row(row) for row in value):
++                for row in value:
++                    rate_observations.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_rate_replicates.is_row(row) for row in value):
+                 for row in value:
+                     rate_replicates.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(_product_partition.is_row(row) for row in value):
+@@ -1115,6 +1127,7 @@
+             ordinary.append(remainder)
+     if ordinary:
+         _section(parts, "Admitted requested child returns", values(ordinary))
++    _rate_observations.render_received(parts, [row for rows in rate_observations.values() for row in rows], section=_section, table=_table)
+     for rows in rate_replicates.values():
+         _rate_replicates.render_received(parts, rows, section=_section, table=_table)
+     _covariance_meanings(parts, covariance_rows, records)
+@@ -1308,6 +1321,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_observation_sheets = {row["sheet_ref"] for row in _rate_observations.rows_from_reports(state.get("child_reports", ()))}
+         received_replicate_sheets = {row["sheet_ref"] for row in _rate_replicates.rows_from_reports(state.get("child_reports", ()))}
+         received_partition_sheets = {row["sheet_ref"] for row in _product_partition.rows_from_reports(state.get("child_reports", ()))}
+         received_completion_time_sheets = {row["sheet_ref"] for row in _completion_time.rows_from_reports(state.get("child_reports", ()))}
+@@ -1323,7 +1337,7 @@
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_meanings.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1337,7 +1351,8 @@
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+-        if (list(_rate_replicates.rows_from_reports([state["current_report_update"]])) or
++        if (list(_rate_observations.rows_from_reports([state["current_report_update"]])) or
++                list(_rate_replicates.rows_from_reports([state["current_report_update"]])) or
+                 list(_completion_time.rows_from_reports([state["current_report_update"]])) or
+                 list(_active_site.rows_from_reports([state["current_report_update"]])) or
+                 list(_product_partition.rows_from_reports([state["current_report_update"]]))):
+--- baseline/communication.py
++++ gene_annotation_episode/communication.py
+@@ -157,6 +157,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_rate_observation_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_rate_observation_storage import rate_observation_cells_schema
++            expected = rate_observation_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: reported observation fact schema must match its registered source", code="invalid_schema")
+             return
+         if source == "literature_rate_replicate_cells":
+             if depth != 1:
+--- /dev/null
++++ tests/test_literature_rate_observations_166.py
+@@ -0,0 +1,498 @@
++"""Original case164 XLSX plus labelled synthetic workbook engineering cases."""
++from copy import deepcopy
++from dataclasses import replace
++from functools import partial
++import asyncio
++import io
++import json
++from pathlib import Path
++import sqlite3
++from types import SimpleNamespace
++import zipfile
++
++import pytest
++from method_loop.durable import DurableExecutionError
++
++from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain, validate_closed_schema
++from gene_annotation_episode.domain import ContractError, canonical, obj
++from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
++from gene_annotation_episode.episode_composition import compose_episode_bindings
++from gene_annotation_episode.episode_journal import Journal
++from gene_annotation_episode.episode_services import WorkflowServices
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_experimental_prompt import render_literature_experimental_prompt
++from gene_annotation_episode.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
++from gene_annotation_episode.literature_rate_observation_inputs import read_rate_observations
++from gene_annotation_episode.literature_rate_observation_calculations import populate_rate_observation_contrast
++from gene_annotation_episode.literature_rate_observation_prompt import RATE_OBSERVATION_TASK
++from gene_annotation_episode.literature_rate_observation_storage import (
++    COMPONENTS, NAMESPACE, REQUESTED, LiteratureRateObservationRepository, rate_observation_cells_schema)
++from gene_annotation_episode.runtime import run_workflow
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.tools import ToolRegistry
++from test_runtime import FixtureController, ScriptedProvider
++
++CASE = Path(__file__).resolve().parents[1] / 'research/experimental_scoring_review_2026-10-23/a105_raw_rate_primary_case_164'
++REQUEST = ['reference_rate', 'test_rate', 'reference_sample_sd', 'test_sample_sd',
++           'reference_cv', 'test_cv', 'rate_difference', 'retained_fraction', 'fractional_decrease']
++FORM = obj({'activity': rate_observation_cells_schema()})
++
++
++def label(cell, expected_text):
++    return {'cell': cell, 'expected_text': expected_text}
++
++
++def source_arguments(reference):
++    return {'source_ref': reference, 'source_kind': 'primary_source', 'worksheet': 'Sheet1',
++        'panel': label('A1', 'Fig 2B. Raw data of catalytic activity of PKs from different species on different substrates'),
++        'subject': label('J3', 'Actinobacteria bifidobacterium'), 'native_unit': label('C2', 'U/mg'),
++        'groups': [{'label': label('C'+str(start-1), name),
++                    'observations': [{'label': label('C'+str(row), 'Parallel '+str(index)), 'value_cell': 'J'+str(row)}
++                        for index, row in enumerate(range(start,start+3),1)]}
++                   for name,start in [('DHA',8),('L-EUS',12),('D-EUS',16)]],
++        'reference_group': 'D-EUS', 'test_group': 'L-EUS'}
++
++
++def setup(path, *, content=None, requested=REQUEST):
++    store = Store(path)
++    manifest = store.path/'empty-manifest.json'
++    manifest.write_text(json.dumps({'schema_version': 1, 'entries': []}))
++    store.create_problem(manifest_path=manifest)
++    artifact = store.artifact((CASE/'originals/S1Data.xlsx').read_bytes() if content is None else content,
++        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
++    source = store.put('source', {'provider': 'retained_original_case164' if content is None else 'synthetic_xlsx_fixture',
++        'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': None,
++        'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')
++    args = source_arguments(source['id'])
++    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [],
++        'source_refs': [source['id']], REQUESTED: list(requested)}
++    context = BindingContext('original-xlsx-166', 'source-child', 'literature',
++        (('literature','source-child'),), store.validate_scope(), assignment, {}, (source['id'],))
++    return store,context,args
++
++
++def binding_for(store,context, *, reference_parent=False):
++    host = SimpleNamespace(store=store,run_id=context.run_id,tools=ToolRegistry(store))
++    services = WorkflowServices(host)
++    binding = LiteratureEpisodes(services, rate_population=True,
++        reference_parent_sources=list(context.received_record_refs[:1]) if reference_parent else None)
++    host.episode_bindings = EpisodeBindingRegistry((binding,))
++    return services,binding
++
++
++def populated(store,context,args,key='selected'):
++    repo=LiteratureRateObservationRepository(store,context.run_id)
++    out=repo.populate(context,args,key)
++    return repo,out,replace(context,received_record_refs=(*context.received_record_refs,*out['record_refs']))
++
++
++def synthetic_workbook(cells):
++    """Explicit synthetic OOXML fixture; never a scientific measurement."""
++    from xml.sax.saxutils import escape
++    buffer=io.BytesIO()
++    with zipfile.ZipFile(buffer,'w') as z:
++        z.writestr('_rels/.rels','<Relationships><Relationship Id="root" Type="x/officeDocument" Target="xl/workbook.xml"/></Relationships>')
++        z.writestr('xl/workbook.xml','<workbook xmlns:r="urn:r"><sheets><sheet name="Sheet1" sheetId="1" r:id="s1"/></sheets></workbook>')
++        z.writestr('xl/_rels/workbook.xml.rels','<Relationships><Relationship Id="s1" Type="x/worksheet" Target="worksheets/sheet1.xml"/></Relationships>')
++        entries=[]
++        for address,value in cells.items():
++            if isinstance(value,tuple):
++                entries.append(f'<c r="{address}"><f>{escape(value[0])}</f><v>{value[1]}</v></c>')
++            elif type(value) in (int,float):
++                entries.append(f'<c r="{address}"><v>{value}</v></c>')
++            elif value is not None:
++                entries.append(f'<c r="{address}" t="inlineStr"><is><t>{escape(value)}</t></is></c>')
++        z.writestr('xl/worksheets/sheet1.xml','<worksheet><sheetData><row r="1">'+''.join(entries)+'</row></sheetData></worksheet>')
++    return buffer.getvalue()
++
++
++def synthetic_case(path,values,*,repeated_label=False):
++    cells={'A1':'reported activity panel','J3':'synthetic molecule','C2':'symbolic units',
++           'C7':'other','C11':'test','C15':'reference'}
++    for start in (8,12,16):
++        for index,row in enumerate(range(start,start+3),1):
++            cells['C'+str(row)]='reading '+str(index)
++            cells['J'+str(row)]=values.get(row, float(row))
++    if repeated_label:cells['C17']=cells['C16']
++    store,context,args=setup(path,content=synthetic_workbook(cells),requested=COMPONENTS)
++    args['panel']=label('A1',cells['A1']);args['subject']=label('J3',cells['J3']);args['native_unit']=label('C2',cells['C2'])
++    args['source_kind']='synthetic_fixture'
++    args['reference_group']='reference';args['test_group']='test'
++    for group,name,start in zip(args['groups'],('other','test','reference'),(8,12,16)):
++        group['label']['expected_text']=name
++        for index,observation in enumerate(group['observations'],1):observation['label']['expected_text']='reading '+str(index)
++    if repeated_label:args['groups'][2]['observations'][1]['label']['expected_text']='reading 1'
++    return store,context,args
++
++
++def test_original_workbook_native_arithmetic_exact_lexemes_and_shared_reference(tmp_path):
++    store,context,args=setup(tmp_path)
++    try:
++        repo,out,current=populated(store,context,args)
++        cells={r['component']:r for r in out['result']['cells']}
++        assert [cells[n]['value'] for n in REQUEST] == pytest.approx([
++            .50447333333333342,.18895333333333334,.034036247345048686,.012470787197820887,
++            .06746887317145673,.06599929716942924,.3155200000000001,.37455564218789226,.6254443578121077])
++        assert cells['reference_rate']['unit']=='U/mg'
++        assert all(row['grouping']=='unknown' and row['physical_conversion']=='unknown' for row in cells.values())
++        saved=repo.read(out['result']['sheet_ref'])
++        entries=saved['sheet']['extraction']['entries']
++        j16=next(e for e in entries if e['value_source']['cell']=='J16')
++        assert j16['value_source']['raw_value']=='0.53756666666666675'
++        assert j16['value_source']['formula'] is None
++        assert j16['value_source']['workbook_sha256']=='e6d31a25930fe62cf10dd13c1b3e8193202687e78ed935cb3dfd21fd51ff4a7a'
++        assert j16['value_source']['member_sha256']=='50a15623fb2543e42d1d09c7990f0e18f1428e6f6253ac1832cbfe56dc63224e'
++        assert repo.populate(context,args,'selected')==out
++        other={**args,'test_group':'DHA'}
++        _,out2,_=populated(store,context,other,'second-comparison')
++        first_ids=cells['rate_difference']['groups']['reference']['observed']['observation_labels']
++        assert first_ids==out2['result']['cells'][0]['groups']['reference']['observed']['observation_labels']
++        assert out2['result']['cells'][1]['value']==pytest.approx(.15676666666666665)
++        # The raw DHA mean remains distinct from the separate S1Table H7 central value.
++        assert out2['result']['cells'][1]['value'] != .1569
++        import xml.etree.ElementTree as ET
++        import hashlib
++        summary_bytes=(CASE/'originals/S1Table.xlsx').read_bytes()
++        assert hashlib.sha256(summary_bytes).hexdigest()=='331a7dd5f2f28fb5d538714e9617430e28bc427b8a899183c64f0502105c476b'
++        with zipfile.ZipFile(io.BytesIO(summary_bytes)) as z:
++            ns={'m':'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
++            strings=[''.join(si.itertext()) for si in ET.fromstring(z.read('xl/sharedStrings.xml'))]
++            h7=next(c for c in ET.fromstring(z.read('xl/worksheets/sheet1.xml')).findall('.//m:c',ns) if c.get('r')=='H7')
++            assert h7.get('t')=='s' and h7.find('m:f',ns) is None
++            assert strings[int(h7.find('m:v',ns).text)]=='0.1569±0.0054'
++        # This separate summary representation supplies no new independent n,
++        # and its untyped ± does not declare a sampling SD or SE.
++        assert store.targets()==[]
++    finally:store.close()
++
++
++@pytest.mark.parametrize('value,status,reason',[(None,'missing','source_measurement_unavailable'),
++    ('ND','not_detected','nondetection_without_point'),('<5','censored','censored_measurement'),
++    (('1+1','2'),'unsupported_cell','formula_measurement_unsupported'),
++    ('14','unsupported_cell','numeric_cell_type_required')])
++def test_incomplete_selected_roster_retains_points_and_synthetic_origins(tmp_path,value,status,reason):
++    store,context,args=synthetic_case(tmp_path,{16:10.,17:value,18:30.})
++    try:
++        repo,out,_=populated(store,context,args)
++        cells={r['component']:r for r in out['result']['cells']}
++        assert cells['reference_rate']['value'] is None
++        assert cells['reference_rate']['unavailable_reason']=='incomplete_selected_roster'
++        assert cells['reference_observed_point_mean']['value']==20
++        assert cells['reference_observed_point_sd']['value']==pytest.approx(2**.5*10)
++        assert cells['test_rate']['value']==13
++        group=cells['reference_rate']['groups']['reference']['observed']
++        assert (group['entry_count'],group['point_entry_count'],group['representation_count'])==(3,2,3)
++        assert group['observation_labels'][1]['status']==status
++        assert group['observation_labels'][1]['unavailable_reason']==reason
++        assert all(c['input_origins']==['synthetic'] and c['origin']=='derived' for c in cells.values())
++        entries=repo.read(out['result']['sheet_ref'])['sheet']['extraction']['entries']
++        assert all(e['origin']=='synthetic' for e in entries)
++        if status=='unsupported_cell' and isinstance(value,tuple):
++            entry=next(e for e in entries if e['value_source']['cell']=='J17')
++            assert entry['value_source']['value_is_formula_cache'] is True
++            assert entry['value_source']['formula']['text']=='1+1'
++            assert entry['exact_value'] is None
++    finally:store.close()
++
++
++def test_duplicate_representations_and_conflicting_source_labels_do_not_invent_experiments(tmp_path):
++    store,context,args=synthetic_case(tmp_path,{16:10.,17:10.,18:30.})
++    try:
++        args['groups'][2]['observations'].append(deepcopy(args['groups'][2]['observations'][0]))
++        repo,out,_=populated(store,context,args)
++        first=out['result']['cells'][0]
++        assert first['value']==pytest.approx(50/3)
++        observed=first['groups']['reference']['observed']
++        assert (observed['entry_count'],observed['representation_count'])==(3,4)
++        # Equal numbers with distinct source labels remain distinct entries.
++        assert observed['observation_labels'][0]['record_identity']!=observed['observation_labels'][1]['record_identity']
++        changed=deepcopy(args)
++        changed['groups'][2]['observations'][-1]['value_cell']='J18'
++        from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++        with pytest.raises(ExperimentalContractError,match='label_value_row_mismatch'):
++            populated(store,context,changed,'misbound')
++        # Equal labels on different source rows remain distinct representations.
++        # Explicitly constructing a conflicting detached record is a synthetic
++        # calculator robustness check, not an accepted source-reader input.
++        data=repo.read(out['result']['sheet_ref'])['sheet']['extraction']
++        extra=deepcopy(data['entries'][-1]);extra['exact_value']={'numerator':'999','denominator':'1'}
++        data['entries'].append(extra)
++        sheet=populate_rate_observation_contrast(data,reference_group='reference',test_group='test')
++        assert sheet['cells']['reference_rate']['unavailable_reason']=='conflicting_reported_entry'
++        assert sheet['cells']['reference_observed_point_mean']['value']==20
++    finally:store.close()
++
++
++def test_requested_absent_group_is_not_a_source_label_omission_or_zero(tmp_path):
++    store,context,args=setup(tmp_path,requested=COMPONENTS)
++    try:
++        args['test_group']='requested but absent'
++        _,out,_=populated(store,context,args)
++        cells={r['component']:r for r in out['result']['cells']}
++        assert cells['reference_rate']['value']==pytest.approx(.5044733333333334)
++        assert cells['test_rate']['value'] is None and cells['rate_difference']['unavailable_reason']=='missing_test_group'
++        assert cells['test_rate']['groups']['test']['status']=='not_observed'
++        assert cells['test_rate']['groups']['test']['observed'] is None
++        assert cells['test_rate']['groups']['test']['requested_label']=='requested but absent'
++    finally:store.close()
++
++
++def test_selected_binding_exact_facts_repairable_label_mismatch_and_custody(tmp_path):
++    store,context,args=setup(tmp_path,requested=['rate_difference','retained_fraction'])
++    try:
++        services,binding=binding_for(store,context)
++        bad=deepcopy(args);bad['subject']['expected_text']='unrelated molecule'
++        failed=asyncio.run(binding.execute(context,'literature.rate.observations.populate',bad,'wrong-label'))
++        assert failed['status']=='invalid' and 'source_label_witness_mismatch' in failed['feedback']['code']
++        bad=deepcopy(args);bad['mean']=99
++        failed=asyncio.run(binding.execute(context,'literature.rate.observations.populate',bad,'invented-value'))
++        assert failed['status']=='invalid'
++        missing=asyncio.run(binding.execute(replace(context,received_record_refs=()),'literature.rate.observations.populate',args,'not-received'))
++        assert missing['feedback']['code']=='literature_source_not_received'
++        out=asyncio.run(binding.execute(context,'literature.rate.observations.populate',args,'selected'))
++        assert out['status']=='completed',out
++        current=replace(context,received_record_refs=(*context.received_record_refs,*out['record_refs']))
++        form=form_with_facts({},FORM,binding.facts(current,{'committed_record_refs':out['record_refs']}))
++        binding.validate_report(current,form,FORM)
++        assert [r['component'] for r in form['activity']]==['rate_difference','retained_fraction']
++        wrong=deepcopy(form);wrong['activity'][0]['value']=9
++        with pytest.raises(ReportBoundaryError,match='differs_from_saved'):binding.validate_report(current,wrong,FORM)
++        omitted=deepcopy(form);omitted['activity'].pop()
++        with pytest.raises(ReportBoundaryError,match='requested_subset_mismatch'):binding.validate_report(current,omitted,FORM)
++        wrong_schema=deepcopy(FORM);wrong_schema['properties']['activity']['items']['properties']['subject']={'type':'string'}
++        with pytest.raises(ReportBoundaryError,match='registered source'):validate_closed_schema(wrong_schema)
++        no_request=replace(current,assignment={k:v for k,v in current.assignment.items() if k!=REQUESTED})
++        assert binding.facts(no_request,{'committed_record_refs':out['record_refs']})[NAMESPACE]==[]
++        with pytest.raises(ReportBoundaryError,match='unrequested'):binding.validate_report(no_request,form,FORM)
++        # Source-sheet ancestry is checked before reading a different received source.
++        other_artifact=store.artifact(b'unrelated fixture')
++        other=store.put('source',{'provider':'unrelated_fixture','accession':None,'uri':None,'artifact_ref':other_artifact,
++            'text_ref':None,'request_ref':None,'version':None,'retrieved_at':None},origin='caller')
++        page=replace(context,role='literature_page',path=(('literature_page','page'),),assignment={'version':'page_assignment_v1',
++            'source_ref':args['source_ref'],'representation':'original','artifact_ref':store.get(args['source_ref'])['artifact_ref'],
++            'question_context_refs':[],'prior_delivery_refs':[],REQUESTED:['rate_difference']},
++            received_record_refs=(*context.received_record_refs,other['id']))
++        failed=asyncio.run(binding.execute(page,'literature.rate.observations.populate',{**args,'source_ref':other['id']},'outside-page'))
++        assert failed['feedback']['code']=='literature_reading_outside_assigned_source'
++    finally:store.close()
++
++
++def test_admitted_subset_shared_reference_and_parent_scientific_display(tmp_path):
++    store,context,args=setup(tmp_path,requested=['rate_difference'])
++    try:
++        repo,first,child=populated(store,context,args)
++        _,second,_=populated(store,context,{**args,'test_group':'DHA'},'second')
++        parent=replace(child,episode_id='parent',role='annotation',path=(('annotation','parent'),),assignment={},
++            received_record_refs=(*child.received_record_refs,*second['record_refs']))
++        repo.receive_cells(parent,first['result']['cells'],'trusted-first')
++        repo.receive_cells(parent,second['result']['cells'],'trusted-second')
++        rows=repo.received_cells(parent)
++        assert repo.fact_cells(parent,[first['result']['sheet_ref'],second['result']['sheet_ref']],components=COMPONENTS)==rows
++        private=repo.project_cells(first['record_refs'],permitted_record_refs=parent.received_record_refs,components=['reference_rate'])
++        with pytest.raises(ContractError,match='cell_not_received'):repo.validate_fact_values(parent,private)
++        state={'literature_experimental_work':{'version':'literature_experimental_task_v1','aspect':'reference_evidence_parent'},
++            'reference_evidence_parent':{'version':'reference_evidence_parent_v1','source_refs':[args['source_ref']]},
++            'goal':{'objective':'Compare reported BbPK activities without claiming preparations or calibrated product rate.'},
++            'working_state':{},'child_reports':[{'activity':rows}]}
++        prompt=render_literature_experimental_prompt(state,'Keep the source-evidence question.')
++        task,steering=prompt.split('\n\nSTEERING\n')
++        assert REFERENCE_PARENT_TASK in task and RATE_OBSERVATION_TASK not in task
++        assert 'D-EUS' in steering and 'L-EUS' in steering and 'DHA' in steering and 'U/mg' in steering
++        assert steering.count('source entry 1')==2  # shared D-EUS entry retained across two comparisons
++        assert 'preparation' in steering.lower() and 'unknown' in steering
++        assert '| reference_rate |' not in steering and '| test_rate |' not in steering
++        assert 'sha256' not in steering and 'source_reported_entry_' not in steering and 'artifact_' not in steering
++    finally:store.close()
++
++
++def test_recurring_task_survives_delta_lookup_and_cold_transport(tmp_path):
++    from gene_annotation_episode.decision_context import state_frame
++    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE, CONTRACT_ARGUMENT_TRANSPORT
++    from gene_annotation_episode.episode_contract_information import operation_contract_information
++    from gene_annotation_episode.literature_episodes import _population_catalog
++    from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
++    state=snapshot();state['literature_assignment'][REQUESTED]=REQUEST
++    state['contract_information_profile']=CONTRACT_INFORMATION_PROFILE
++    operation=next(row for row in _population_catalog() if row['name']=='literature.rate.observations.populate')
++    state['tools']=[{**operation,'argument_transport':CONTRACT_ARGUMENT_TRANSPORT}]
++    info=operation_contract_information(catalog=[operation],operation=operation['name'])
++    lookup={'version':'decision_context_v1','kind':'decision_lookup_result','decision_index':1,
++        'exchange_index':1,'result':info,'pending_contract_information':[info]}
++    later=deepcopy(state);later['feedback']={'code':'source_label_witness_mismatch'}
++    cold_state=state_frame(later);cold_state.update(restored_pending_decision_index=1,
++        restored_public_exchanges=[{'lookup_result':info}])
++    wire=LiteratureWire(tmp_path/'wire');cold=LiteratureWire(tmp_path/'cold')
++    async def exercise():
++        await complete(wire,state_frame(state));await complete(wire,state_frame(later,state))
++        await complete(wire,lookup);await complete(cold,cold_state)
++    asyncio.run(exercise())
++    for turn in (*wire.turns_sent(),*cold.turns_sent()):
++        task,steering=turn['input'][0]['text'].split('\n\nSTEERING\n',1)
++        assert task.count(RATE_OBSERVATION_TASK)==1 and RATE_OBSERVATION_TASK not in steering
++        assert info['result']['schema_sha256'] not in task+steering
++    assert info['result']['text'] in wire.turns_sent()[-1]['input'][0]['text']
++    assert info['result']['text'] in cold.turns_sent()[0]['input'][0]['text']
++
++
++def test_original_source_shared_episode_admission_and_cold_readonly_factory(tmp_path,monkeypatch):
++    import os
++    path=Path(os.environ.get('RATE_OBSERVATION_PROOF_DIR',str(tmp_path)))
++    path.mkdir(parents=True,exist_ok=True)
++    store,context,args=setup(path/'state',requested=['rate_difference','retained_fraction','reference_sample_sd'])
++    # Original article supplies a genuine source-subject anchor for the parent's
++    # selected nonempty reasoning action. It is not a new assay or target.
++    article_bytes=(CASE/'originals/article.html').read_bytes()
++    article_artifact=store.artifact(article_bytes,'text/html')
++    article=store.put('source',{'provider':'retained_original_case164_article','accession':None,'uri':None,
++        'artifact_ref':article_artifact,'text_ref':article_artifact,'request_ref':None,'version':None,'retrieved_at':None},origin='caller')
++    known=[*context.received_record_refs,article['id']]
++    received=[];controllers=[];tasks=[];parent_prompts=[]
++    child={'selection':{'kind':'episode_child','role':'literature','assignment':plain(context.assignment),
++        'goal':'Evaluate the original BbPK D-EUS versus L-EUS reported activity entries.',
++        'scope':plain(context.scope),'purpose':'Return requested native reported-entry contrasts and descriptive SD.',
++        'schema_json':json.dumps(FORM),'initial_report_json':'{}'},'report_update':{}}
++    def work(inputs):
++        prompt=render_literature_experimental_prompt(inputs,'Evaluate reported substrate distinctions in the actual source workbook.')
++        tasks.append(prompt.split('\n\nSTEERING\n')[0])
++        return {'selection':{'kind':'tool','tool':'literature.rate.observations.populate','arguments':args},'report_update':{}}
++    def integrate(inputs):
++        form,=inputs['child_reports'];received.append(form)
++        prompt=render_literature_experimental_prompt(inputs,'Evaluate the assigned reference evidence.');parent_prompts.append(prompt)
++        task,steering=prompt.split('\n\nSTEERING\n')
++        assert REFERENCE_PARENT_TASK in task and RATE_OBSERVATION_TASK not in task
++        assert 'D-EUS' in steering and 'L-EUS' in steering and 'U/mg' in steering
++        assert '| reference_rate |' not in steering and '| test_rate |' not in steering
++        commit={field:[] for field in store.reasoning_schema()['required']}
++        quote='Actinobacteria Bifidobacterium';start=article_bytes.index(quote.encode())
++        commit['source_subjects']=[{'alias':'source_subject_BbPK','reference_type':'assay',
++            'source_ref':article['id'],'label':quote,'anchor':{'source_ref':article['id'],
++                'artifact_ref':article_artifact,'start':start,'end':start+len(quote.encode()),'quote':quote}}]
++        return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
++    def controller(path,initial):
++        value=FixtureController(str(path),initial,2 if len(path)==1 else 1);controllers.append(value);return value
++    try:
++        scorer=ScientificFindingProgress(FindingProgressPolicy(1));provider=ScriptedProvider([child,work,integrate])
++        summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=path/'run',
++            controller_factory=controller,project_credit=scorer,initial_known_record_refs=known,
++            episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,reference_parent_sources=known),),
++            binding_definitions={'credit':scorer.as_record()}))
++        assert len(received)==1 and summary['credit']==0 and store.targets()==[]
++        assert all(RATE_OBSERVATION_TASK in task for task in tasks)
++        assert [c.scores for c in controllers]==[[0,0],[0]]
++        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==3
++        assert store.db.execute('SELECT count(*) FROM literature_rate_observation_operations').fetchone()[0]==1
++        assert not store.list('assessment') and not store.list('observation')
++        assert any(r['label']=='Actinobacteria Bifidobacterium' and r.get('anchor') for r in store.list('reference'))
++        receipt,=store.db.execute('SELECT cells FROM literature_rate_observation_received').fetchall()
++        assert json.loads(receipt[0])==received[0]['activity']
++        saved_sheet=LiteratureRateObservationRepository(store,store.db.execute(
++            'SELECT run_id FROM literature_rate_observation_operations').fetchone()[0]).read(received[0]['activity'][0]['sheet_ref'])
++        run_id=store.db.execute('SELECT run_id FROM literature_rate_observation_operations').fetchone()[0]
++        parent_id=store.db.execute('SELECT episode_id FROM literature_rate_observation_received').fetchone()[0]
++        parent=replace(context,run_id=run_id,episode_id=parent_id,role='annotation',path=(('annotation',parent_id),),
++            assignment={},received_record_refs=tuple([*known,received[0]['activity'][0]['sheet_ref']]))
++        services,_=binding_for(store,parent)
++        binding=LiteratureEpisodes(services,rate_population=True,reference_parent_sources=known)
++        descriptor=binding.as_record();journal=Journal(store,run_id)
++        blocked={store.get(ref)['artifact_ref'] for ref in known}
++        original_get=store.get_artifact
++        def guarded(reference):
++            assert reference not in blocked,'original scientific artifacts blocked BEFORE factory'
++            return original_get(reference)
++        def forbidden(*a,**k):raise AssertionError('source reader / calculator / acquisition disabled BEFORE factory')
++        monkeypatch.setattr(store,'get_artifact',guarded)
++        for module,names in {
++            'literature_rate_observation_inputs':['read_rate_observations','Workbook'],
++            'literature_rate_observation_storage':['read_rate_observations','populate_rate_observation_contrast'],
++            'literature_rate_observation_calculations':['populate_rate_observation_contrast','_statistics'],
++            'spreadsheet_tools':['Workbook'],
++        }.items():
++            for name in names:monkeypatch.setattr('gene_annotation_episode.'+module+'.'+name,forbidden)
++        monkeypatch.setattr(services,'execute_tool',forbidden)
++        dbpath=store.path/'state.sqlite'
++        # Use the actual existing SQLite file name, with URI read-only open.
++        dbpath=Path(store.db.execute('PRAGMA database_list').fetchone()[2])
++        checkpoint=tuple(store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)').fetchone())
++        assert checkpoint[0]==0 and checkpoint[1]==checkpoint[2]
++        store.db.close()
++        assert not Path(str(dbpath)+'-wal').exists() or Path(str(dbpath)+'-wal').stat().st_size==0
++        store.db=sqlite3.connect('file:'+str(dbpath)+'?mode=ro&immutable=1',uri=True)
++        store.db.row_factory=sqlite3.Row;store.db.execute('PRAGMA query_only=ON')
++        before={str(p.relative_to(store.path)):p.read_bytes() for p in store.path.rglob('*') if p.is_file()}
++        restored,=compose_episode_bindings(services,store=store,journal=journal,execution_backend=None,
++            descriptors=[descriptor],job_episodes=None,resource_estimator=None,role_credit_bindings={}).bindings
++        assert restored.as_record()==descriptor
++        assert restored.received_report_facts(parent)[NAMESPACE]==received[0]['activity']
++        fresh_services=WorkflowServices(services.workflow)
++        assert fresh_services.literature_rate_observation_repository().fact_cells(parent,
++            [received[0]['activity'][0]['sheet_ref']],components=COMPONENTS)==received[0]['activity']
++        assert store.db.total_changes==0
++        assert {str(p.relative_to(store.path)):p.read_bytes() for p in store.path.rglob('*') if p.is_file()}==before
++        obsolete=deepcopy(descriptor);obsolete['implementation_sha256']='0'*64
++        with pytest.raises(DurableExecutionError,match='identity_conflict'):
++            compose_episode_bindings(services,store=store,journal=journal,execution_backend=None,
++                descriptors=[obsolete],job_episodes=None,resource_estimator=None,role_credit_bindings={})
++        (path/'SAVED_SHEET_001.json').write_text(json.dumps(saved_sheet,indent=2)+'\n')
++        (path/'ADMITTED_ROWS_001.json').write_text(json.dumps(received[0],indent=2)+'\n')
++        (path/'BINDING_DESCRIPTOR_001.json').write_text(json.dumps(descriptor,indent=2)+'\n')
++        (path/'PARENT_PROMPT_001.txt').write_text(parent_prompts[0])
++        (path/'CHILD_TASK_001.txt').write_text(tasks[0])
++        (path/'PROOF_RESULT_001.json').write_text(json.dumps({'source':'retained original case164 S1Data.xlsx and article.html',
++            'provider':'controlled ScriptedProvider; no actual model inference','targets':0,'source_operations':1,
++            'runtime_observations':3,'controller_scores':[c.scores for c in controllers],
++            'nonempty_parent_reasoning':'actual source-subject anchor in original article bytes',
++            'original_typed_admission':True,'source_artifacts_disabled_before_factory':True,
++            'xlsx_reader_and_calculators_disabled_before_factory':True,'sqlite_uri_mode':'ro','query_only':True,
++            'writer_checkpoint_before_readonly_open':checkpoint,'wal_absent_or_empty_before_readonly_open':True,
++            'immutable':True,'restoration_total_changes':store.db.total_changes,'byte_preservation':True,
++            'reconstructed_exact_original_rows':True,'annotation_credit':None,'a105_adequacy_claim':False},indent=2)+'\n')
++    finally:store.close()
++
++
++@pytest.mark.parametrize('mean_values',[(0.,0.,0.),(-2.,-1.,0.)])
++def test_cv_requires_positive_mean_without_discarding_signed_native_values(tmp_path,mean_values):
++    store,context,args=synthetic_case(tmp_path,dict(zip((16,17,18),mean_values)))
++    try:
++        _,out,_=populated(store,context,args)
++        cells={r['component']:r for r in out['result']['cells']}
++        assert cells['reference_rate']['value']==sum(mean_values)/3
++        assert cells['reference_sample_sd']['value'] is not None
++        assert cells['rate_difference']['value']==sum(mean_values)/3-13
++        assert cells['reference_cv']['value'] is None
++        assert cells['reference_cv']['unavailable_reason']=='nonpositive_mean'
++    finally:store.close()
++
++
++@pytest.mark.parametrize('change,reason',[
++    ('wrong_column','observation_subject_column_mismatch'),
++    ('wrong_group','observation_group_row_mismatch'),
++    ('repeated_group_text','ambiguous_group_label_scope'),
++    ('row_gap','contiguous_group_observation_rows_required')])
++def test_finite_row_layout_rejects_misbound_or_ambiguous_selectors(tmp_path,change,reason):
++    from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++    store,context,args=synthetic_case(tmp_path,{})
++    try:
++        if change=='wrong_column':args['groups'][2]['observations'][0]['value_cell']='K16'
++        elif change=='wrong_group':args['groups'][2]['observations'][0]['label']['cell']='B16'
++        elif change=='repeated_group_text':args['groups'][0]['label']['expected_text']='reference'
++        elif change=='row_gap':args['groups'][2]['observations'].pop(1)
++        with pytest.raises(ExperimentalContractError,match=reason):populated(store,context,args)
++    finally:store.close()
++
++
++def test_reused_observation_label_on_different_rows_preserves_unknown_association(tmp_path):
++    store,context,args=synthetic_case(tmp_path,{16:10.,17:10.,18:30.},repeated_label=True)
++    try:
++        repo,out,_=populated(store,context,args)
++        cells={r['component']:r for r in out['result']['cells']}
++        assert cells['reference_rate']['value'] is None
++        assert cells['reference_rate']['unavailable_reason']=='source_entry_association_unresolved'
++        assert cells['reference_observed_point_mean']['value']==30
++        group=cells['reference_rate']['groups']['reference']['observed']
++        assert group['entry_count'] is None and group['selected_row_count']==3
++        assert group['known_entry_count']==group['point_entry_count']==1
++        assert group['association_unresolved']
++        assert [e['association_unresolved'] for e in group['observation_labels']]==[True,True,False]
++        assert len(repo.read(out['result']['sheet_ref'])['sheet']['extraction']['entries'])==9
++    finally:store.close()

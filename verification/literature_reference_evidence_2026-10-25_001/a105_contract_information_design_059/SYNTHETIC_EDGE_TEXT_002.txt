@@ -1,0 +1,76 @@
+Synthetic scalar/type/escaping edge case
+
+Root: Definition1
+
+Definition names are local grammar labels. A reference reuses the entire named structure. Literal scalar cells use quoted string spelling and explicit null/boolean/number spelling; escaped newlines and Unicode escapes preserve source text exactly. All constraints are supplied.
+
+Definition1 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "description" | literal | "literal Definition1, a\u007cb, quotes \" and newline\n; escaped \\n; <br> and μ" |
+| "const" | reference | Definition2 |
+| "enum" | reference | Definition4 |
+| "items" | reference | Definition5 |
+| "properties" | reference | Definition6 |
+| "required" | reference | Definition7 |
+| "arbitrary_extension" | reference | Definition8 |
+
+Definition2 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "looks_like_schema" | reference | Definition3 |
+
+Definition3 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "type" | literal | "string" |
+
+Definition4 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | null |
+| 1 | literal | false |
+| 2 | literal | 0 |
+| 3 | literal | "null" |
+| 4 | literal | "false" |
+| 5 | literal | "0" |
+
+Definition5 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| (none) | empty | object |
+
+Definition6 — object
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| "same" | reference | Definition5 |
+| "same_again" | reference | Definition5 |
+
+Definition7 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| (none) | empty | array |
+
+Definition8 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "Definition1" |
+| 1 | reference | Definition9 |
+| 2 | reference | Definition9 |
+
+Definition9 — array
+
+| Field or position | Entry kind | Declared value or structure |
+| --- | --- | --- |
+| 0 | literal | "two" |
+| 1 | literal | 2 |
+| 2 | literal | 2.0 |
+| 3 | literal | true |

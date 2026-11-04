@@ -1,0 +1,26 @@
+F
+=================================== FAILURES ===================================
+___ test_actual_native_multiple_tables_duplicate_bytes_and_exact_projection ____
+
+case = <test_chromatin_interaction_result_receipts.Harness object at 0x79acc4937800>
+
+    def test_actual_native_multiple_tables_duplicate_bytes_and_exact_projection(case):
+        first, second = [r['result'] for r in case.outcomes]
+        bundle, = first['facts'][SAVED_SOURCE]
+        assert len(first['qualified_files']['tables']) == 10
+        assert len(bundle['tables']) == 6
+        assert len({canonical(f) for f in bundle['tables']}) == 3
+        assert first['facts'][SAVED_SOURCE] == second['facts'][SAVED_SOURCE]
+        projection, = first['facts'][PROJECTION_SOURCE]
+        assert projection['population_keys'] == ['p1', 'p0']
+>       assert [r['fields']['fold_enrichment']['value'] for r in projection['rows']] == [1.5, 1.0, 1.5, 1.0]
+E       assert [1.5, None, 1.5, None] == [1.5, 1.0, 1.5, 1.0]
+E         
+E         At index 1 diff: None != 1.0
+E         Use -v to get more diff
+
+source_snapshot/tests/test_chromatin_interaction_result_receipts.py:285: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_interaction_result_receipts.py::test_actual_native_multiple_tables_duplicate_bytes_and_exact_projection
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 105.45s (0:01:45)

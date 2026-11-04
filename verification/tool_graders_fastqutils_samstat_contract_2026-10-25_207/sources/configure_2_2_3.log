@@ -1,0 +1,49 @@
+-- The C compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Warning (dev) at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/share/cmake-3.31/Modules/ExternalProject/shared_internal_commands.cmake:1276 (message):
+  The DOWNLOAD_EXTRACT_TIMESTAMP option was not given and policy CMP0135 is
+  not set.  The policy's OLD behavior will be used.  When using a URL
+  download, the timestamps of extracted files should preferably be that of
+  the time of extraction, otherwise code that depends on the extracted
+  contents might not be rebuilt if the URL changes.  The OLD behavior
+  preserves the timestamps from the archive instead, but this is usually not
+  what you want.  Update your project to the NEW behavior or specify the
+  DOWNLOAD_EXTRACT_TIMESTAMP option with a value of true to avoid this
+  robustness issue.
+Call Stack (most recent call first):
+  /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_tools/cmake/data/share/cmake-3.31/Modules/ExternalProject.cmake:3041 (_ep_add_download_command)
+  thirdparty/htslib.cmake:12 (ExternalProject_Add)
+  CMakeLists.txt:53 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found HDF5: /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.so (found version "1.10.10") found components: C HL
+-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.3")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Threads are enabled.
+CMake Deprecation Warning at src/tld/tests/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- pthreads is enabled.
+-- Configuring done (0.2s)
+-- Generating done (0.0s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    HDF5_C_HL_LIBRARY
+    HDF5_C_LIBRARY_hdf5
+    HDF5_C_LIBRARY_hdf5_hl
+
+
+-- Build files have been written to: /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_2_3

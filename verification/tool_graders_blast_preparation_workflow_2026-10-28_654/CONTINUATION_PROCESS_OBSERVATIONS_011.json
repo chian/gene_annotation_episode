@@ -1,0 +1,229 @@
+{
+  "handle": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/handle.json",
+  "scope": "read-only process metadata; no process signal, injection, command execution, stopping policy or database read",
+  "initial_inspection_failure": "The first metadata-reader attempt expected io.stat, which is absent; no complete pair was collected by that attempt. Absence is now recorded explicitly. The native handle was not changed or restarted.",
+  "interval_seconds": 25.000625058,
+  "observations": [
+    {
+      "at": "2026-10-29T02:44:52.299581+00:00",
+      "monotonic_ns": 1055453996909132,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gene-local-job-bec6fd4743674032a54715a98dd6e24a.service",
+      "processes": [
+        {
+          "pid": 4040310,
+          "ppid": 1716,
+          "state": "R",
+          "start_ticks": 105479660,
+          "user_cpu_seconds": 285.66,
+          "system_cpu_seconds": 248.12,
+          "wchan": "0",
+          "command": [
+            "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/_local_job_worker.py",
+            "run",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/.local-job-1e1f2e5e298d4ffba45443b0c538900c.request",
+            "cff23858bee13246862f3c0923c2242f7694f1343550be39842913fa69a6131f"
+          ],
+          "io": {
+            "rchar": 1018703,
+            "wchar": 226,
+            "syscr": 173,
+            "syscw": 4,
+            "read_bytes": 0,
+            "write_bytes": 4096,
+            "cancelled_write_bytes": 0
+          }
+        },
+        {
+          "pid": 4040318,
+          "ppid": 4040310,
+          "state": "R",
+          "start_ticks": 105479696,
+          "user_cpu_seconds": 559.64,
+          "system_cpu_seconds": 58.85,
+          "wchan": "0",
+          "command": [
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/runtime/bin/python",
+            "-B",
+            "-S",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/bounded_entry.py",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654",
+            "check"
+          ],
+          "io": {
+            "rchar": 3291468043,
+            "wchar": 74261050,
+            "syscr": 484678,
+            "syscw": 4641,
+            "read_bytes": 131072,
+            "write_bytes": 74694656,
+            "cancelled_write_bytes": 36864
+          }
+        }
+      ],
+      "cgroup_metadata": {
+        "cpu.stat": {
+          "value": "usage_usec 1154490534\nuser_usec 846905476\nsystem_usec 307585058\nnice_usec 0\ncore_sched.force_idle_usec 0\n",
+          "unavailable": null
+        },
+        "io.stat": {
+          "value": null,
+          "unavailable": {
+            "type": "FileNotFoundError",
+            "errno": 2,
+            "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gene-local-job-bec6fd4743674032a54715a98dd6e24a.service/io.stat"
+          }
+        },
+        "memory.current": {
+          "value": "393510912\n",
+          "unavailable": null
+        },
+        "cgroup.events": {
+          "value": "populated 1\nfrozen 0\n",
+          "unavailable": null
+        }
+      }
+    },
+    {
+      "at": "2026-10-29T02:45:17.300207+00:00",
+      "monotonic_ns": 1055478997534190,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gene-local-job-bec6fd4743674032a54715a98dd6e24a.service",
+      "processes": [
+        {
+          "pid": 4040310,
+          "ppid": 1716,
+          "state": "R",
+          "start_ticks": 105479660,
+          "user_cpu_seconds": 296.57,
+          "system_cpu_seconds": 257.64,
+          "wchan": "0",
+          "command": [
+            "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/_local_job_worker.py",
+            "run",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/.local-job-1e1f2e5e298d4ffba45443b0c538900c.request",
+            "cff23858bee13246862f3c0923c2242f7694f1343550be39842913fa69a6131f"
+          ],
+          "io": {
+            "rchar": 1018703,
+            "wchar": 226,
+            "syscr": 173,
+            "syscw": 4,
+            "read_bytes": 0,
+            "write_bytes": 4096,
+            "cancelled_write_bytes": 0
+          }
+        },
+        {
+          "pid": 4040318,
+          "ppid": 4040310,
+          "state": "R",
+          "start_ticks": 105479696,
+          "user_cpu_seconds": 583.93,
+          "system_cpu_seconds": 59.36,
+          "wchan": "0",
+          "command": [
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/runtime/bin/python",
+            "-B",
+            "-S",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/bounded_entry.py",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654",
+            "check"
+          ],
+          "io": {
+            "rchar": 3299887598,
+            "wchar": 74296760,
+            "syscr": 486179,
+            "syscw": 4652,
+            "read_bytes": 131072,
+            "write_bytes": 74747904,
+            "cancelled_write_bytes": 36864
+          }
+        }
+      ],
+      "cgroup_metadata": {
+        "cpu.stat": {
+          "value": "usage_usec 1199711677\nuser_usec 882100211\nsystem_usec 317611466\nnice_usec 0\ncore_sched.force_idle_usec 0\n",
+          "unavailable": null
+        },
+        "io.stat": {
+          "value": null,
+          "unavailable": {
+            "type": "FileNotFoundError",
+            "errno": 2,
+            "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gene-local-job-bec6fd4743674032a54715a98dd6e24a.service/io.stat"
+          }
+        },
+        "memory.current": {
+          "value": "393584640\n",
+          "unavailable": null
+        },
+        "cgroup.events": {
+          "value": "populated 1\nfrozen 0\n",
+          "unavailable": null
+        }
+      }
+    }
+  ],
+  "same_process_deltas": [
+    {
+      "pid": 4040310,
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/gene_annotation_episode/_local_job_worker.py",
+        "run",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/.local-job-1e1f2e5e298d4ffba45443b0c538900c.request",
+        "cff23858bee13246862f3c0923c2242f7694f1343550be39842913fa69a6131f"
+      ],
+      "states": [
+        "R",
+        "R"
+      ],
+      "wchan": [
+        "0",
+        "0"
+      ],
+      "user_cpu_seconds": 10.909999999999968,
+      "system_cpu_seconds": 9.519999999999982,
+      "io": {
+        "rchar": 0,
+        "wchar": 0,
+        "syscr": 0,
+        "syscw": 0,
+        "read_bytes": 0,
+        "write_bytes": 0,
+        "cancelled_write_bytes": 0
+      }
+    },
+    {
+      "pid": 4040318,
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/runtime/bin/python",
+        "-B",
+        "-S",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/bounded_entry.py",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654",
+        "check"
+      ],
+      "states": [
+        "R",
+        "R"
+      ],
+      "wchan": [
+        "0",
+        "0"
+      ],
+      "user_cpu_seconds": 24.289999999999964,
+      "system_cpu_seconds": 0.509999999999998,
+      "io": {
+        "rchar": 8419555,
+        "wchar": 35710,
+        "syscr": 1501,
+        "syscw": 11,
+        "read_bytes": 0,
+        "write_bytes": 53248,
+        "cancelled_write_bytes": 0
+      }
+    }
+  ]
+}

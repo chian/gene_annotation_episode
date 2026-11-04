@@ -1,0 +1,250 @@
+E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_selected_homology_reaches_parent_with_complete_sheet_and_exact_zero _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_ho...rification/tool_graders_bvbrc_homology_workflow_2026-10-24/pytest-state'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def homology_run(tmp_path_factory):
+        from gene_annotation_episode.bvbrc_homology_returns import homology_fact_sources
+    
+        directory = tmp_path_factory.mktemp('homology-shared-workflow')
+        with pytest.MonkeyPatch.context() as patch, Store(directory / 'state') as store:
+            target, = store.create_problem(raw_sequence='ACDEFGHIKL', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            supplied = _supplied_fixture(store, target)
+            manifest_path = '/synthetic/work/output/selected.job_result'
+            raw_path = '/synthetic/work/output/selected.raw.json'
+            manifest_bytes = canonical({'id': '123', 'app': {'id': 'Homology'}, 'success': 1,
+                'parameters': supplied.request['parameters'], 'output_files': [[raw_path, SHOCK_UUID]]}).encode()
+    
+            class Responses(NativeClient):
+                def rpc(self, command):
+                    method = command['method']
+                    if method == 'AppService.start_app2':
+                        assert command['params'][0] == 'Homology'
+                        assert command['params'][1] == supplied.request['parameters']
+                        self.value = {'id': '123', 'application_id': 'Homology', 'state_code': 'Q'}
+                    elif method == 'Workspace.get':
+                        reference, = command['params'][0]['objects']
+                        assert command['params'][0]['metadata_only'] == 1
+                        if reference == OBJECT_UUID:
+                            row = metadata(manifest_path, type='job_result', size=len(manifest_bytes))
+                        else:
+                            assert reference == raw_path
+                            row = metadata(raw_path, uuid=SHOCK_UUID, type='json', size=len(supplied.raw))
+                        row['native_row'][8] = {'task_data': {'task_id': '123', 'app_id': 'Homology'}}
+                        self.value = [[row['native_row'], None]]
+                    elif method == 'Workspace.get_download_url':
+                        reference, = command['params'][0]['objects']
+                        assert reference in (manifest_path, raw_path)
+                        self.value = ['https://fixture.invalid/' + ('manifest' if reference == manifest_path else 'raw')]
+                    else:
+                        raise AssertionError(command)
+                    return super().rpc(command)
+    
+                def download(self, url, *, byte_range=None):
+                    assert byte_range is None
+                    assert url in ('https://fixture.invalid/manifest', 'https://fixture.invalid/raw')
+                    self.body = manifest_bytes if url.endswith('/manifest') else supplied.raw
+                    return super().download(url, byte_range=byte_range)
+    
+            native = Responses()
+            constructor = BVBRCAppServiceService.__init__
+    
+            def configured(self, *args, **kwargs):
+                constructor(self, *args, **kwargs)
+                self.client = native
+    
+            def forbidden(*args, **kwargs):
+                raise AssertionError('Homology workflow fixture attempted live network transport')
+    
+            patch.setattr(BVBRCAppServiceService, '__init__', configured)
+            patch.setattr('socket.create_connection', forbidden)
+            patch.setattr('socket.socket.connect', forbidden)
+            patch.setattr('urllib.request.OpenerDirector.open', forbidden)
+    
+            def controllers(path, initial):
+                def root_estimate(history, parameters, contexts):
+                    count = 3 if path[-1][0] == 'annotation' else 2
+                    return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+                        parameters, {'fixture': 'root_and_input_preparation_continuation_only'})
+                return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                    estimate_with_context=root_estimate if path[-1][0] in {'annotation', 'improvement'} else None)
+    
+            assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
+                'service': 'bvbrc_appservice', 'request': supplied.request,
+                'endpoint': 'usable_handoff', 'constraints': {}}
+            launch = launch_assignment({'selected-api': assignment})
+            handoff_form = form('execution_handoff_refs')
+            result_form = form('execution_result_refs')
+            sources = homology_fact_sources()
+            result_form['properties'].update(measurements=sources['bvbrc_homology_measurements']['report_schema'],
+                requirements=sources['bvbrc_homology_requirements']['report_schema'])
+            result_form['required'].extend(['measurements', 'requirements'])
+            config = deepcopy(CONFIG)
+            config['scientific_adapters'] = [{'adapter_id': 'bvbrc_homology', 'adapter_version': '1',
+                'implementation_sha256': adapter.implementation_sha256()}]
+            factory = ExecutionServiceFactory({'selected-api': config}, {}, 2, 3, .5)
+    
+            class Choices:
+                def __init__(self):
+                    self.counts = {}
+                    self.partial_ref = None
+                    self.partial_snapshot = None
+                    self.result_objects = {}
+    
+                def last(self, episode_id):
+                    row = store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                        'AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1',
+                        (workflow.run_id, episode_id)).fetchone()
+                    return json.loads(row['result'])['result']
+    
+                async def complete(self, episode_id, role, instructions, current, schema):
+                    assert current.get('feedback') is None, current.get('feedback')
+                    self.counts[episode_id] = count = self.counts.get(episode_id, 0) + 1
+                    execution = current.get('execution_assignment', {})
+                    version = execution.get('version')
+                    if version == 'execution_launch_assignment_v1':
+                        assert count == 1
+                        return child('launch_api', assignment, scope, handoff_form)
+                    if version == 'api_service_assignment_v1':
+                        if count == 1:
+                            return selected(PREFIX + 'prepare', {'definition': {
+                                'kind': 'packaged', 'required_application_id': 'Homology'}})
+                        assert count == 2
+                        return selected(PREFIX + 'submit', {'preparation_receipt_ref':
+                            self.last(episode_id)['support_receipt_ref'], 'input_evidence_refs': []})
+                    if version == 'execution_results_assignment_v1':
+                        if count == 1:
+                            return selected(PREFIX + 'task_info', {'handoff_ref': execution['handoff_ref'], 'file': 'job_result_id'})
+                        previous = self.last(episode_id)
+                        if count == 2:
+                            return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'task_info_object',
+                                'receipt_ref': previous['support_receipt_ref']}], 'options': {}})
+                        if count in (3, 6):
+                            obj = {'kind': 'receipt_row', 'receipt_ref': previous['support_receipt_ref'], 'row_pointer': '/result/0/0'}
+                            self.result_objects[count] = obj
+                            return selected(PREFIX + 'download_capability', {'objects': [obj],
+                                'generation': 0, 'predecessor_receipt_ref': None})
+                        if count in (4, 7):
+                            manifest = count == 4
+                            return selected(PREFIX + 'download', {'object': self.result_objects[count - 1],
+                                'capability': {'kind': 'acquired', 'receipt_ref': previous['support_receipt_ref'], 'input_index': 0},
+                                'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
+                                'role': 'job_result_manifest' if manifest else 'blast_json15_raw',
+                                'declared_format': supplied.manifest_format if manifest else supplied.raw_format})
+                        assert count == 5
+                        self.partial_ref = previous['source_ref']
+                        self.partial_snapshot = api.read_result(self.partial_ref, scope)
+                        assert self.partial_snapshot['publication']['completion_proof'] is None
+                        return selected(PREFIX + 'workspace_metadata', {'objects': [{'kind': 'manifest_member',
+                            'manifest_receipt_ref': previous['support_receipt_ref'], 'output_index': 0}], 'options': {}})
+                    if episode_id != episode.source.episode_id:
+                        assert count <= 2
+                        material = supplied.input_material if count == 1 else supplied.scientific_material
+                        return selected('material.parse', {'material_ref': material['id'], 'format': 'text'})
+                    if count == 1:
+                        return {'selection': {'kind': 'child',
+                            'goal': 'Inspect the supplied synthetic query input and mapping metadata for the requested service job',
+                            'scope': scope, 'purpose': 'Return retained source references after inspecting the supplied material',
+                            'schema_json': json.dumps({'type': 'object', 'properties': {'refs': {
+                                'type': 'array', 'items': {'type': 'string', 'format': 'reference'},
+                                'x-source': 'committed_record_refs'}}, 'required': ['refs'], 'additionalProperties': False}),
+                            'initial_report_json': '{}'}, 'report_update': {}}
+                    if count == 2:
+                        received = current['child_reports'][-1]
+                        assert supplied.input_source['source_ref'] in received['refs']
+                        assert supplied.scientific_evidence['content']['source_ref'] in received['refs']
+                        return child('launch', launch, scope, handoff_form)
+                    assert count == 3
+                    received = current['child_reports'][-1]
+                    assert received['completed']
+                    assert received['yield']['expected_next_gain'] == NumericBand.exact(0).as_record()
+                    handoff, = received['references']
+                    return child('results', {'version': 'execution_results_assignment_v1',
+                        'handoff_ref': handoff, 'selector': supplied.selector}, scope, result_form)
+    
+                async def release(self, episode_id):
+                    pass
+    
+            choices = Choices()
+            workflow = Workflow(store, ToolRegistry(store, clients=Client()), choices, directory / 'run',
+                'homology-selected-workflow', controller_factory=controllers, project_credit=lambda *_: 0,
+                episode_service_factory=factory, episode_service_binding=factory.as_record(),
+                episode_service_inputs='actual_tool_registry_v1', annotation_child_roles=('improvement', 'launch', 'results'),
+                episode_record_receipts=True, initial_known_record_refs=[])
+            api = workflow.episode_bindings.for_role('results').api_execution
+            episode = workflow.build('annotation', 'root', 'Acquire the requested synthetic Homology measurements', scope)
+    
+            async def run():
+                record = await episode.run_async(workflow.context)
+                await episode.build_result(record)
+                return record
+    
+>           record = asyncio.run(run())
+                     ^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_homology_workflow.py:299: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_bvbrc_homology_workflow.py:295: in run
+    record = await episode.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:494: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:359: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1215: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:912: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_bvbrc_homology_workflow.homology_run.<locals>.Choices object at 0x775ad2fac620>
+episode_id = 'episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5'
+role = 'REASONING'
+instructions = 'Acquire the original selected execution results through the original handoff. Choose bounded status or requested file... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+current = {'available_report_facts': {'bvbrc_appservice_support_refs': {'meaning': 'Actually received AppService preparation, Wo...troller_binding': {'factory': 'test_bvbrc_homology_workflow.homology_run.<locals>.controllers', 'kind': 'custom'}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'condition'...: False, 'properties': {}, 'required': []}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, current, schema):
+>       assert current.get('feedback') is None, current.get('feedback')
+E       AssertionError: {'category': 'provider', 'code': 'contract_shape_invalid'}
+E       assert {'category': 'provider', 'code': 'contract_shape_invalid'} is None
+E        +  where {'category': 'provider', 'code': 'contract_shape_invalid'} = <built-in method get of dict object at 0x775ad2fcb080>('feedback')
+E        +    where <built-in method get of dict object at 0x775ad2fcb080> = {'available_report_facts': {'bvbrc_appservice_support_refs': {'meaning': 'Actually received AppService preparation, Wo...troller_binding': {'factory': 'test_bvbrc_homology_workflow.homology_run.<locals>.controllers', 'kind': 'custom'}, ...}.get
+
+tests/test_bvbrc_homology_workflow.py:218: AssertionError
+=========================== short test summary info ============================
+ERROR tests/test_bvbrc_homology_workflow.py::test_selected_homology_reaches_parent_with_complete_sheet_and_exact_zero
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 error in 65.74s (0:01:05)

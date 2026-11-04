@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="13" skipped="0" tests="47" time="115.820" timestamp="2026-10-26T07:33:01.017983-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_alignment_site_action_records" name="test_reference_position_set_filters_before_hydration_and_limit" time="11.055" /><testcase classname="tests.test_alignment_site_action_records" name="test_reference_selection_and_own_episode_isolation[all_own_completed_results]" time="1.923" /><testcase classname="tests.test_alignment_site_action_records" name="test_reference_selection_and_own_episode_isolation[matching_alignment]" time="2.560" /><testcase classname="tests.test_alignment_site_action_records" name="test_reference_selection_and_own_episode_isolation[matching_alignment_window]" time="2.951" /><testcase classname="tests.test_alignment_site_action_records" name="test_context_is_original_saved_assignment[run]" time="0.518" /><testcase classname="tests.test_alignment_site_action_records" name="test_context_is_original_saved_assignment[episode]" time="0.502" /><testcase classname="tests.test_alignment_site_action_records" name="test_context_is_original_saved_assignment[scope]" time="0.527" /><testcase classname="tests.test_alignment_site_action_records" name="test_context_is_original_saved_assignment[request]" time="0.586" /><testcase classname="tests.test_alignment_site_action_records" name="test_context_is_original_saved_assignment[unsaved]" time="0.860" /><testcase classname="tests.test_alignment_site_action_records" name="test_page_parameters_are_explicit_integer_bounds[True-None]" time="0.618" /><testcase classname="tests.test_alignment_site_action_records" name="test_page_parameters_are_explicit_integer_bounds[0-None]" time="0.669" /><testcase classname="tests.test_alignment_site_action_records" name="test_page_parameters_are_explicit_integer_bounds[-1-None]" time="0.594" /><testcase classname="tests.test_alignment_site_action_records" name="test_page_parameters_are_explicit_integer_bounds[1-True]" time="0.503" /><testcase classname="tests.test_alignment_site_action_records" name="test_page_parameters_are_explicit_integer_bounds[1--1]" time="0.610" /><testcase classname="tests.test_alignment_site_action_records" name="test_caller_cannot_broaden_original_selection_or_request_another_source" time="0.853" /><testcase classname="tests.test_alignment_site_action_records" name="test_completed_action_requires_exact_saved_operation[missing]" time="1.345" /><testcase classname="tests.test_alignment_site_action_records" name="test_completed_action_requires_exact_saved_operation[id]" time="1.253" /><testcase classname="tests.test_alignment_site_action_records" name="test_completed_action_requires_exact_saved_operation[name]" time="1.093" /><testcase classname="tests.test_alignment_site_action_records" name="test_completed_action_requires_exact_saved_operation[arguments]" time="1.228" /><testcase classname="tests.test_alignment_site_action_records" name="test_completed_action_requires_exact_saved_operation[scope]" time="1.071" /><testcase classname="tests.test_alignment_site_action_records" name="test_runtime_only_pending_metadata_allowed_but_tool_result_type_change_rejected" time="1.127" /><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[initial-None-True]" time="3.846"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3f2357fb0&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d098bd40&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+kind = 'initial', index = None, allowed = True
+
+    @pytest.mark.parametrize('kind,index,allowed', [('initial', None, True), ('decision_input', 3, True),
+        ('decision_input', 4, False), ('own_action', 2, True), ('own_action', 3, False),
+        ('child_form', 2, True), ('child_form', 4, False), ('report_redelivery', 2, True)])
+    def test_blast_original_receipt_must_precede_selected_read(blast_case, kind, index, allowed):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        blast_read(case, context)
+        case.receipts.receive(context.episode_id, [case.alignment], kind=kind, source_index=index)
+        if allowed:
+&gt;           record, = page(case, context, BLAST)['records']
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_alignment_site_action_records.py:308: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_alignment_site_action_records.py:91: in page
+    return case.service.own_action_results(context, source=source,
+../../../gene_annotation_episode/alignment_site_action_records.py:77: in own_action_results
+    records = [self._record(context, row, source) for row in rows[:limit]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_action_records.py:101: in _record
+    alignment, original, reference, native = _original_hsp(self.store,
+../../../gene_annotation_episode/blast_result_views.py:40: in _original_hsp
+    scope = store.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x72a3f2357fb0&gt;
+scope = mappingproxy({'subject_refs': ('input_12bd695ab2db56e9ad4ddefa',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+../../../gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[decision_input-3-True]" time="4.859"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3f2357d40&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3f2357c80&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+kind = 'decision_input', index = 3, allowed = True
+
+    @pytest.mark.parametrize('kind,index,allowed', [('initial', None, True), ('decision_input', 3, True),
+        ('decision_input', 4, False), ('own_action', 2, True), ('own_action', 3, False),
+        ('child_form', 2, True), ('child_form', 4, False), ('report_redelivery', 2, True)])
+    def test_blast_original_receipt_must_precede_selected_read(blast_case, kind, index, allowed):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        blast_read(case, context)
+        case.receipts.receive(context.episode_id, [case.alignment], kind=kind, source_index=index)
+        if allowed:
+&gt;           record, = page(case, context, BLAST)['records']
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_alignment_site_action_records.py:308: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_alignment_site_action_records.py:91: in page
+    return case.service.own_action_results(context, source=source,
+../../../gene_annotation_episode/alignment_site_action_records.py:77: in own_action_results
+    records = [self._record(context, row, source) for row in rows[:limit]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_action_records.py:101: in _record
+    alignment, original, reference, native = _original_hsp(self.store,
+../../../gene_annotation_episode/blast_result_views.py:40: in _original_hsp
+    scope = store.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x72a3f2357d40&gt;
+scope = mappingproxy({'subject_refs': ('input_12bd695ab2db56e9ad4ddefa',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+../../../gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[decision_input-4-False]" time="5.722" /><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[own_action-2-True]" time="4.478"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3f2356ea0&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3f23b4170&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+kind = 'own_action', index = 2, allowed = True
+
+    @pytest.mark.parametrize('kind,index,allowed', [('initial', None, True), ('decision_input', 3, True),
+        ('decision_input', 4, False), ('own_action', 2, True), ('own_action', 3, False),
+        ('child_form', 2, True), ('child_form', 4, False), ('report_redelivery', 2, True)])
+    def test_blast_original_receipt_must_precede_selected_read(blast_case, kind, index, allowed):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        blast_read(case, context)
+        case.receipts.receive(context.episode_id, [case.alignment], kind=kind, source_index=index)
+        if allowed:
+&gt;           record, = page(case, context, BLAST)['records']
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_alignment_site_action_records.py:308: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_alignment_site_action_records.py:91: in page
+    return case.service.own_action_results(context, source=source,
+../../../gene_annotation_episode/alignment_site_action_records.py:77: in own_action_results
+    records = [self._record(context, row, source) for row in rows[:limit]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_action_records.py:101: in _record
+    alignment, original, reference, native = _original_hsp(self.store,
+../../../gene_annotation_episode/blast_result_views.py:40: in _original_hsp
+    scope = store.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x72a3f2356ea0&gt;
+scope = mappingproxy({'subject_refs': ('input_12bd695ab2db56e9ad4ddefa',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+../../../gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[own_action-3-False]" time="4.752" /><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[child_form-2-True]" time="3.616"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3d0843d40&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d08356a0&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+kind = 'child_form', index = 2, allowed = True
+
+    @pytest.mark.parametrize('kind,index,allowed', [('initial', None, True), ('decision_input', 3, True),
+        ('decision_input', 4, False), ('own_action', 2, True), ('own_action', 3, False),
+        ('child_form', 2, True), ('child_form', 4, False), ('report_redelivery', 2, True)])
+    def test_blast_original_receipt_must_precede_selected_read(blast_case, kind, index, allowed):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        blast_read(case, context)
+        case.receipts.receive(context.episode_id, [case.alignment], kind=kind, source_index=index)
+        if allowed:
+&gt;           record, = page(case, context, BLAST)['records']
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_alignment_site_action_records.py:308: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_alignment_site_action_records.py:91: in page
+    return case.service.own_action_results(context, source=source,
+../../../gene_annotation_episode/alignment_site_action_records.py:77: in own_action_results
+    records = [self._record(context, row, source) for row in rows[:limit]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_action_records.py:101: in _record
+    alignment, original, reference, native = _original_hsp(self.store,
+../../../gene_annotation_episode/blast_result_views.py:40: in _original_hsp
+    scope = store.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x72a3d0843d40&gt;
+scope = mappingproxy({'subject_refs': ('input_12bd695ab2db56e9ad4ddefa',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+../../../gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[child_form-4-False]" time="3.787" /><testcase classname="tests.test_alignment_site_action_records" name="test_blast_original_receipt_must_precede_selected_read[report_redelivery-2-True]" time="3.609"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3f23d7f50&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d0843dd0&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+kind = 'report_redelivery', index = 2, allowed = True
+
+    @pytest.mark.parametrize('kind,index,allowed', [('initial', None, True), ('decision_input', 3, True),
+        ('decision_input', 4, False), ('own_action', 2, True), ('own_action', 3, False),
+        ('child_form', 2, True), ('child_form', 4, False), ('report_redelivery', 2, True)])
+    def test_blast_original_receipt_must_precede_selected_read(blast_case, kind, index, allowed):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        blast_read(case, context)
+        case.receipts.receive(context.episode_id, [case.alignment], kind=kind, source_index=index)
+        if allowed:
+&gt;           record, = page(case, context, BLAST)['records']
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_alignment_site_action_records.py:308: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_alignment_site_action_records.py:91: in page
+    return case.service.own_action_results(context, source=source,
+../../../gene_annotation_episode/alignment_site_action_records.py:77: in own_action_results
+    records = [self._record(context, row, source) for row in rows[:limit]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_action_records.py:101: in _record
+    alignment, original, reference, native = _original_hsp(self.store,
+../../../gene_annotation_episode/blast_result_views.py:40: in _original_hsp
+    scope = store.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x72a3f23d7f50&gt;
+scope = mappingproxy({'subject_refs': ('input_12bd695ab2db56e9ad4ddefa',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+../../../gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_frozen_parent_receipt_prefix[True]" time="4.418"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3f23d4740&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d0842480&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+inherited_before = True
+
+    @pytest.mark.parametrize('inherited_before', [True, False])
+    def test_blast_frozen_parent_receipt_prefix(blast_case, inherited_before):
+        case = blast_case
+        schema = requested(BLAST)
+        parent = saved_context(case, schema, name='parent')
+        if inherited_before:
+            case.receipts.receive(parent.episode_id, [case.alignment], kind='child_form', source_index=1)
+        child = saved_context(case, schema, name='descendant', parent=parent.episode_id)
+        if not inherited_before:
+            case.receipts.receive(parent.episode_id, [case.alignment], kind='child_form', source_index=2)
+        blast_read(case, child)
+        if inherited_before:
+&gt;           assert len(page(case, child, BLAST)['records']) == 1
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_alignment_site_action_records.py:328: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_alignment_site_action_records.py:91: in page
+    return case.service.own_action_results(context, source=source,
+../../../gene_annotation_episode/alignment_site_action_records.py:77: in own_action_results
+    records = [self._record(context, row, source) for row in rows[:limit]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_action_records.py:101: in _record
+    alignment, original, reference, native = _original_hsp(self.store,
+../../../gene_annotation_episode/blast_result_views.py:40: in _original_hsp
+    scope = store.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x72a3f23d4740&gt;
+scope = mappingproxy({'subject_refs': ('input_12bd695ab2db56e9ad4ddefa',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+../../../gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_frozen_parent_receipt_prefix[False]" time="5.582" /><testcase classname="tests.test_alignment_site_action_records" name="test_context_received_handles_do_not_replace_missing_receipt_history" time="3.730" /><testcase classname="tests.test_alignment_site_action_records" name="test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates[locator]" time="3.897"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'&#10;  Actual message: 'invalid_scope'">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3f23d7ef0&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d084e690&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+tamper = 'locator'
+
+    @pytest.mark.parametrize('tamper', ['locator', 'window', 'native_input', 'operand', 'mapping', 'alignment_unit'])
+    def test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates(blast_case, tamper):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
+        blast_read(case, context)
+        def corrupt(grading):
+            sheet = grading['sheet']
+            if tamper == 'locator':
+                sheet['source']['native_locator']['hsp_ordinal'] += 1
+            elif tamper == 'window':
+                sheet['requested_window']['column_offset'] += 1
+            elif tamper == 'native_input':
+                sheet['native_input']['hit_from'] += 1
+            elif tamper == 'operand':
+                original = case.store.get(sheet['operands']['reference']['subject_ref'])
+                payload = {k:v for k,v in original.items() if k not in {'id', 'origin', 'record_type'}}
+                payload['accession'] = 'DIFFERENT_SAME_LENGTH.1'
+                replacement = case.store.put('reference', payload, origin=original['origin'])
+                assert replacement['length'] == original['length']
+                sheet['operands']['reference']['subject_ref'] = replacement['id']
+            elif tamper == 'mapping':
+                sheet['original_mapping_inputs']['query'] = None
+            else:
+                sheet['operands']['query']['alignment_unit'] = 'aa'
+        change_grading(case, context, 3, BLAST, corrupt)
+&gt;       with pytest.raises(ValueError, match='(sheet_.*conflict|native_hsp_sheet_conflict)'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'
+E         Actual message: 'invalid_scope'
+
+../../../tests/test_alignment_site_action_records.py:372: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates[window]" time="3.446"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'&#10;  Actual message: 'invalid_scope'">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3f23d7c20&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d0844a10&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+tamper = 'window'
+
+    @pytest.mark.parametrize('tamper', ['locator', 'window', 'native_input', 'operand', 'mapping', 'alignment_unit'])
+    def test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates(blast_case, tamper):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
+        blast_read(case, context)
+        def corrupt(grading):
+            sheet = grading['sheet']
+            if tamper == 'locator':
+                sheet['source']['native_locator']['hsp_ordinal'] += 1
+            elif tamper == 'window':
+                sheet['requested_window']['column_offset'] += 1
+            elif tamper == 'native_input':
+                sheet['native_input']['hit_from'] += 1
+            elif tamper == 'operand':
+                original = case.store.get(sheet['operands']['reference']['subject_ref'])
+                payload = {k:v for k,v in original.items() if k not in {'id', 'origin', 'record_type'}}
+                payload['accession'] = 'DIFFERENT_SAME_LENGTH.1'
+                replacement = case.store.put('reference', payload, origin=original['origin'])
+                assert replacement['length'] == original['length']
+                sheet['operands']['reference']['subject_ref'] = replacement['id']
+            elif tamper == 'mapping':
+                sheet['original_mapping_inputs']['query'] = None
+            else:
+                sheet['operands']['query']['alignment_unit'] = 'aa'
+        change_grading(case, context, 3, BLAST, corrupt)
+&gt;       with pytest.raises(ValueError, match='(sheet_.*conflict|native_hsp_sheet_conflict)'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'
+E         Actual message: 'invalid_scope'
+
+../../../tests/test_alignment_site_action_records.py:372: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates[native_input]" time="3.354"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'&#10;  Actual message: 'invalid_scope'">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3d0847bc0&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d08414f0&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+tamper = 'native_input'
+
+    @pytest.mark.parametrize('tamper', ['locator', 'window', 'native_input', 'operand', 'mapping', 'alignment_unit'])
+    def test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates(blast_case, tamper):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
+        blast_read(case, context)
+        def corrupt(grading):
+            sheet = grading['sheet']
+            if tamper == 'locator':
+                sheet['source']['native_locator']['hsp_ordinal'] += 1
+            elif tamper == 'window':
+                sheet['requested_window']['column_offset'] += 1
+            elif tamper == 'native_input':
+                sheet['native_input']['hit_from'] += 1
+            elif tamper == 'operand':
+                original = case.store.get(sheet['operands']['reference']['subject_ref'])
+                payload = {k:v for k,v in original.items() if k not in {'id', 'origin', 'record_type'}}
+                payload['accession'] = 'DIFFERENT_SAME_LENGTH.1'
+                replacement = case.store.put('reference', payload, origin=original['origin'])
+                assert replacement['length'] == original['length']
+                sheet['operands']['reference']['subject_ref'] = replacement['id']
+            elif tamper == 'mapping':
+                sheet['original_mapping_inputs']['query'] = None
+            else:
+                sheet['operands']['query']['alignment_unit'] = 'aa'
+        change_grading(case, context, 3, BLAST, corrupt)
+&gt;       with pytest.raises(ValueError, match='(sheet_.*conflict|native_hsp_sheet_conflict)'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'
+E         Actual message: 'invalid_scope'
+
+../../../tests/test_alignment_site_action_records.py:372: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates[operand]" time="3.480"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'&#10;  Actual message: 'invalid_scope'">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3d082bbc0&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d0774740&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+tamper = 'operand'
+
+    @pytest.mark.parametrize('tamper', ['locator', 'window', 'native_input', 'operand', 'mapping', 'alignment_unit'])
+    def test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates(blast_case, tamper):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
+        blast_read(case, context)
+        def corrupt(grading):
+            sheet = grading['sheet']
+            if tamper == 'locator':
+                sheet['source']['native_locator']['hsp_ordinal'] += 1
+            elif tamper == 'window':
+                sheet['requested_window']['column_offset'] += 1
+            elif tamper == 'native_input':
+                sheet['native_input']['hit_from'] += 1
+            elif tamper == 'operand':
+                original = case.store.get(sheet['operands']['reference']['subject_ref'])
+                payload = {k:v for k,v in original.items() if k not in {'id', 'origin', 'record_type'}}
+                payload['accession'] = 'DIFFERENT_SAME_LENGTH.1'
+                replacement = case.store.put('reference', payload, origin=original['origin'])
+                assert replacement['length'] == original['length']
+                sheet['operands']['reference']['subject_ref'] = replacement['id']
+            elif tamper == 'mapping':
+                sheet['original_mapping_inputs']['query'] = None
+            else:
+                sheet['operands']['query']['alignment_unit'] = 'aa'
+        change_grading(case, context, 3, BLAST, corrupt)
+&gt;       with pytest.raises(ValueError, match='(sheet_.*conflict|native_hsp_sheet_conflict)'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'
+E         Actual message: 'invalid_scope'
+
+../../../tests/test_alignment_site_action_records.py:372: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates[mapping]" time="3.820"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'&#10;  Actual message: 'invalid_scope'">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3d077fe30&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d0773a10&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+tamper = 'mapping'
+
+    @pytest.mark.parametrize('tamper', ['locator', 'window', 'native_input', 'operand', 'mapping', 'alignment_unit'])
+    def test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates(blast_case, tamper):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
+        blast_read(case, context)
+        def corrupt(grading):
+            sheet = grading['sheet']
+            if tamper == 'locator':
+                sheet['source']['native_locator']['hsp_ordinal'] += 1
+            elif tamper == 'window':
+                sheet['requested_window']['column_offset'] += 1
+            elif tamper == 'native_input':
+                sheet['native_input']['hit_from'] += 1
+            elif tamper == 'operand':
+                original = case.store.get(sheet['operands']['reference']['subject_ref'])
+                payload = {k:v for k,v in original.items() if k not in {'id', 'origin', 'record_type'}}
+                payload['accession'] = 'DIFFERENT_SAME_LENGTH.1'
+                replacement = case.store.put('reference', payload, origin=original['origin'])
+                assert replacement['length'] == original['length']
+                sheet['operands']['reference']['subject_ref'] = replacement['id']
+            elif tamper == 'mapping':
+                sheet['original_mapping_inputs']['query'] = None
+            else:
+                sheet['operands']['query']['alignment_unit'] = 'aa'
+        change_grading(case, context, 3, BLAST, corrupt)
+&gt;       with pytest.raises(ValueError, match='(sheet_.*conflict|native_hsp_sheet_conflict)'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'
+E         Actual message: 'invalid_scope'
+
+../../../tests/test_alignment_site_action_records.py:372: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates[alignment_unit]" time="4.631"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'&#10;  Actual message: 'invalid_scope'">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3d07706b0&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3f2270350&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+tamper = 'alignment_unit'
+
+    @pytest.mark.parametrize('tamper', ['locator', 'window', 'native_input', 'operand', 'mapping', 'alignment_unit'])
+    def test_blast_sheet_is_bound_to_original_native_hsp_and_coordinates(blast_case, tamper):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
+        blast_read(case, context)
+        def corrupt(grading):
+            sheet = grading['sheet']
+            if tamper == 'locator':
+                sheet['source']['native_locator']['hsp_ordinal'] += 1
+            elif tamper == 'window':
+                sheet['requested_window']['column_offset'] += 1
+            elif tamper == 'native_input':
+                sheet['native_input']['hit_from'] += 1
+            elif tamper == 'operand':
+                original = case.store.get(sheet['operands']['reference']['subject_ref'])
+                payload = {k:v for k,v in original.items() if k not in {'id', 'origin', 'record_type'}}
+                payload['accession'] = 'DIFFERENT_SAME_LENGTH.1'
+                replacement = case.store.put('reference', payload, origin=original['origin'])
+                assert replacement['length'] == original['length']
+                sheet['operands']['reference']['subject_ref'] = replacement['id']
+            elif tamper == 'mapping':
+                sheet['original_mapping_inputs']['query'] = None
+            else:
+                sheet['operands']['query']['alignment_unit'] = 'aa'
+        change_grading(case, context, 3, BLAST, corrupt)
+&gt;       with pytest.raises(ValueError, match='(sheet_.*conflict|native_hsp_sheet_conflict)'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: '(sheet_.*conflict|native_hsp_sheet_conflict)'
+E         Actual message: 'invalid_scope'
+
+../../../tests/test_alignment_site_action_records.py:372: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_blast_empty_window_missing_strings_and_legacy_grading_stay_distinct" time="4.622"><failure message="gene_annotation_episode.domain.ContractError: invalid_scope">blast_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x72a3d0852fc0&gt;, tools=&lt;gene_annotation_episode.tools.T...s object at 0x72a3d0852bd0&gt;, alignment='observation_651af152e0fa56deed3c24f7', target='input_12bd695ab2db56e9ad4ddefa')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x72a3d0850830&gt;
+
+    def test_blast_empty_window_missing_strings_and_legacy_grading_stay_distinct(blast_case, monkeypatch):
+        case = blast_case
+        context = saved_context(case, requested(BLAST))
+        case.receipts.receive(context.episode_id, [case.alignment], kind='initial')
+        blast_read(case, context, index=1, offset=8)
+        blast_read(case, context, index=2)
+        # Simulate the original older read shape without the new grading pointer.
+        change_outcome(case, context, 2, lambda outcome: outcome['result'].pop('site_grading_artifact_ref'))
+        def forbidden(*args, **kwargs):
+            pytest.fail('Closing a saved result reran scientific grading')
+        import gene_annotation_episode.alignment_site_native as native
+        monkeypatch.setattr(native, 'blast_grading', forbidden)
+&gt;       groups = project(case, context, BLAST)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_alignment_site_action_records.py:388: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_alignment_site_action_records.py:99: in project
+    return [project_site_action_return(record, fields) for record in page(case, context, source)['records']]
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_alignment_site_action_records.py:91: in page
+    return case.service.own_action_results(context, source=source,
+../../../gene_annotation_episode/alignment_site_action_records.py:77: in own_action_results
+    records = [self._record(context, row, source) for row in rows[:limit]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_action_records.py:101: in _record
+    alignment, original, reference, native = _original_hsp(self.store,
+../../../gene_annotation_episode/blast_result_views.py:40: in _original_hsp
+    scope = store.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = &lt;gene_annotation_episode.state.Store object at 0x72a3d0852fc0&gt;
+scope = mappingproxy({'subject_refs': ('input_12bd695ab2db56e9ad4ddefa',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} &lt;= set(scope) &lt;= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+&gt;           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+../../../gene_annotation_episode/library_targets.py:302: ContractError</failure></testcase><testcase classname="tests.test_alignment_site_action_records" name="test_actual_retained_grader_failure_is_partial_and_not_legacy" time="1.024" /><testcase classname="tests.test_alignment_site_action_records" name="test_frozen_facts_distinguish_absent_closure_absent_source_and_actual_empty" time="0.912" /><testcase classname="tests.test_alignment_site_action_records" name="test_frozen_source_must_be_actual_array[None]" time="0.586" /><testcase classname="tests.test_alignment_site_action_records" name="test_frozen_source_must_be_actual_array[value1]" time="0.860" /><testcase classname="tests.test_alignment_site_action_records" name="test_frozen_source_must_be_actual_array[0]" time="0.552" /><testcase classname="tests.test_alignment_site_action_records" name="test_frozen_source_must_be_actual_array[False]" time="0.327" /><testcase classname="tests.test_alignment_site_action_records" name="test_frozen_source_must_be_actual_array[[]]" time="0.594" /><testcase classname="tests.test_alignment_site_action_records" name="test_frozen_values_remain_exact_after_later_actions_and_source_disappearance" time="1.936" /></testsuite></testsuites>

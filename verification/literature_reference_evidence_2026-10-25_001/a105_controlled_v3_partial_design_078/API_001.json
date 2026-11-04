@@ -1,0 +1,31 @@
+{
+  "status": "design_only_no_production_release",
+  "source_module": "gene_annotation_episode/literature_controlled_response_v3_inputs.py",
+  "source_api": [
+    "controlled_response_v3_arguments_schema() -> dict",
+    "validate_controlled_response_v3_selection(arguments) -> dict",
+    "read_controlled_response_v3_inputs(arguments, *, read_source) -> SourceExtractionV3",
+    "validate_controlled_response_v3_extraction(arguments, extraction) -> SourceExtractionV3"
+  ],
+  "local_module": "gene_annotation_episode/literature_controlled_response_local_calculations.py",
+  "local_api": [
+    "controlled_response_local_arguments_schema() -> dict",
+    "validate_controlled_response_local_inputs(inputs) -> LocalInputs",
+    "populate_controlled_response_local(inputs) -> LocalSheet",
+    "validate_controlled_response_local_sheet(inputs, sheet) -> LocalSheet"
+  ],
+  "population_api": [
+    "populate_controlled_response_v3(extraction) -> ConditionalPopulationV3",
+    "validate_controlled_response_v3_population(extraction, population) -> ConditionalPopulationV3"
+  ],
+  "native_api": [
+    "populate_source_v3(operation_key, episode_id, selection) -> immutable record/outcome",
+    "project_component_facts(record_ref, requested_component_keys) -> NativeFactV3[]",
+    "validate_component_fact_values(owner_episode_id, rows) -> None",
+    "receive_component_facts(receiver_episode_id, child_episode_id, rows, original_form_proof) -> None",
+    "received_component_facts(receiver_episode_id, requested_component_keys) -> NativeFactV3[]"
+  ],
+  "source_calls_sheet": false,
+  "local_calls_whole_owner_or_legacy_sheet": false,
+  "production_coding_authorized": false
+}

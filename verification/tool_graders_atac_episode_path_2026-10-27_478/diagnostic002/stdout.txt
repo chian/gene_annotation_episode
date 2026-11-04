@@ -1,0 +1,13 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_original_actual_worker_controls_match_shared_binding ___________
+source_snapshot/tests/test_atac_differential_worker_binding_diagnostic.py:35: in test_original_actual_worker_controls_match_shared_binding
+    owner.atac_results.receipts.validate_worker(receipt, verify_control_bytes=True)
+source_snapshot/gene_annotation_episode/atac_differential_result_receipts.py:759: in validate_worker
+    require(all(environment.get(k) == v for k, v in expected.items())
+source_snapshot/gene_annotation_episode/atac_differential_result_receipts.py:167: in require
+    raise ValueError(code)
+E   ValueError: atac_differential_result_authority_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_atac_differential_worker_binding_diagnostic.py::test_original_actual_worker_controls_match_shared_binding
+1 failed in 4.75s

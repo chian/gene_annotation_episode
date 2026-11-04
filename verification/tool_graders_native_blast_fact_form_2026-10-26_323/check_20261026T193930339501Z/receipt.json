@@ -1,0 +1,83 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_fact_forms.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_communication.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_structure_selector_communication.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_form_reference_validation.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_reference_resolution.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_proteome_fact_contracts.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_proteome_directional_fact_contracts.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_result_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_failure_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_episode_yield_reports.py",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193930339501Z/tmp"
+  ],
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 147.392004044,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 1,
+    "observed_scratch_bytes": 9080832,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "SERVICE_RESULT": "exit-code",
+      "ended": {
+        "at": "2026-10-26T19:41:58.028070+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 857279725396501
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 1,
+  "source_sha256": {
+    "gene_annotation_episode/communication.py": "655bc1025b3b609bdae55cb46ec7ac4ba6d72ec7d790ff30bf430e6683a241cb",
+    "gene_annotation_episode/form_reference_validation.py": "d5185145c1a910ca54566980d0f4286be5a902ce67dc2445bd5b0ae7f57c688a",
+    "gene_annotation_episode/native_blast_database_result_views.py": "0d3ad104b8d26249ff79806a586fa332a6fedd3b892bb991bbb56c232e3aa80d",
+    "tests/test_bvbrc_proteome_directional_fact_contracts.py": "f4b5605e955e7b0d097e8c9ba56d84a298576458d4e2d88ea78a9db7240b40d0",
+    "tests/test_bvbrc_proteome_fact_contracts.py": "b326cf47b9cd818fc99bf1cc5ea1dcc07ab59cc94c7e7f8fee06402da6eb4b8d",
+    "tests/test_communication.py": "a9db1a8d727691f5b0d7ee4cd4281a66266788be3d19237fab3cef570776a35e",
+    "tests/test_episode_yield_reports.py": "901dc34ca114b45cf7c6bbf7db0fb8dd41266df08fd728932ead2c211250e429",
+    "tests/test_form_reference_validation.py": "fdaab49ecaac56d87cd8f9456b2917dea447b13962aab16e7d6bbc6f0264868c",
+    "tests/test_native_blast_database_result_views.py": "300c992e953db8a02075d799f062a0e2dcfb1ab8c17b59f91c600eb5ec16f52a",
+    "tests/test_native_blast_fact_forms.py": "a442194fed4efa4181207eabc4751117de3be54ccd139bf9d3fffce21f3d26cf",
+    "tests/test_native_infernal_preparation_failure_views.py": "0c846563e9f0e68874d6d45bf0e7ad001a8af43a5a6bd5f9b8076d6f589efa8c",
+    "tests/test_reference_resolution.py": "c9ec1c040d54f5780ed1188d72c3155551fff161c2ea540bb2730ff8c275d71e",
+    "tests/test_structure_selector_communication.py": "7088f60e569e037f1eaf3fdfd344e5bdb5bf6401a98ed1b9d4d02f7e97bc75f6"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193930339501Z/stderr.txt",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193930339501Z/stdout.txt"
+}

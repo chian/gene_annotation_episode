@@ -1,0 +1,40 @@
+.........................................F
+=================================== FAILURES ===================================
+____ test_changed_live_context_role_and_conflicting_reference_fields_reject ____
+
+saved = <test_native_infernal_returns.SavedReturns object at 0x7b4f3fb11520>
+
+    def test_changed_live_context_role_and_conflicting_reference_fields_reject(saved):
+        schema = schema_for(GENERIC_REFS, GENERIC_REFS)
+        child = saved.child(saved.root, schema)
+        saved.publication(child)
+        form = saved.returned(saved.root, child)
+>       forged = replace(child, role='scientific_process')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_returns.py:446: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:11: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = BindingContext(run_id='native-infernal-return-fixture', episode_id='episode_7784ec88fbef2930e8f70c81b48d3ef1ed63fced68...'information': mappingproxy({'requested_0': 'requested_0', 'requested_1': 'requested_1'})})}), received_record_refs=())
+
+    def __post_init__(self):
+        for name in ('run_id', 'episode_id', 'role'):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
+                raise ValueError(f'nonempty_{name}_required')
+        path = tuple(tuple(part) for part in self.path)
+        if (not path or any(len(part) != 2 or any(not isinstance(item, str) or not item
+                for item in part) for part in path) or path[-1][0] != self.role):
+>           raise ValueError('binding_context_path_must_match_role')
+E           ValueError: binding_context_path_must_match_role
+
+../../../gene_annotation_episode/episode_bindings.py:71: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_returns.py::test_changed_live_context_role_and_conflicting_reference_fields_reject
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 41 passed in 82.95s (0:01:22)

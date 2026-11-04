@@ -1,0 +1,365 @@
+{
+  "msa_entropy|eligible_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_eligible_count_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|internal_gap_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_internal_gap_count_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|terminal_gap_excluded_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_terminal_gap_excluded_count_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|literal_entropy_bits": {
+    "value": null,
+    "state": "not_measured",
+    "unit": "bits",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "msa_entropy|native_score_recalculated": {
+    "value": null,
+    "state": "not_measured",
+    "unit": "hundredths_of_bit",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_binary64_fixed2_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|score_residual": {
+    "value": null,
+    "state": "not_measured",
+    "unit": "hundredths_of_bit",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_observed_minus_selected_population_score_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|member_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "rows",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/selected_row_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_count": {
+    "value": 2,
+    "state": "available",
+    "unit": "columns",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/selected_column_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|cell_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/selected_cell_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|gap_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/gap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|gap_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/gap_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|canonical_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/canonical_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|canonical_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/canonical_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|ambiguity_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/ambiguity_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|ambiguity_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/ambiguity_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|stop_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/stop_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|stop_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/stop_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|other_nongap_cells": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/other_nongap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|other_nongap_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/other_nongap_cell_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|site_gap_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/gap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/canonical_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_ambiguity_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/ambiguity_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_stop_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/stop_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_other_nongap_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/other_nongap_symbol_count",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "alignment|site_gap_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/site_gap_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/site_canonical_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_majority_fraction": {
+    "value": null,
+    "state": "missing",
+    "unit": "fraction",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/canonical_majority_fraction",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": 0,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "alignment|site_canonical_entropy_bits": {
+    "value": null,
+    "state": "missing",
+    "unit": "bits",
+    "origin": "derived",
+    "method_ref": "bvbrc_alignment_method:analysis/canonical_entropy_bits",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": 0,
+    "requirement_refs": []
+  },
+  "requirements": [
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven"
+    }
+  ],
+  "qualifications": [
+    {
+      "code": "alignment_deployed_version_unproven",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven"
+      ]
+    },
+    {
+      "code": "alignment_unregistered_qualification",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": null,
+      "requirement_refs": []
+    }
+  ],
+  "collection:msa_entropy": [
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:analysis/aligned%23alignment",
+      "population_ref": "bvbrc_alignment_population:analysis/all",
+      "column_0based": 0,
+      "eligible_count": 0,
+      "internal_gap_count": 0,
+      "terminal_gap_excluded_count": 0,
+      "literal_entropy_bits": null,
+      "native_score_recalculated": null,
+      "score_residual": null,
+      "strict_majority_consensus": null,
+      "requirement_refs": []
+    },
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:analysis/aligned%23alignment",
+      "population_ref": "bvbrc_alignment_population:analysis/all",
+      "column_0based": 1,
+      "eligible_count": 0,
+      "internal_gap_count": 0,
+      "terminal_gap_excluded_count": 0,
+      "literal_entropy_bits": null,
+      "native_score_recalculated": null,
+      "score_residual": null,
+      "strict_majority_consensus": null,
+      "requirement_refs": []
+    }
+  ]
+}

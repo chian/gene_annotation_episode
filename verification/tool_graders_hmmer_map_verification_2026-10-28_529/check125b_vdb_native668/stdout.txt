@@ -1,0 +1,17 @@
+................................F..........                              [100%]
+=================================== FAILURES ===================================
+_______ test_preflight_failures_do_not_invoke_wrapper_or_retry[scratch] ________
+source_snapshot/tests/test_blast_vdb_native_context_668.py:480: in test_preflight_failures_do_not_invoke_wrapper_or_retry
+    bundle = driver.run_native_blast_utility(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:307: in run_native_blast_utility
+    _stage_inputs(root, job, plan["policy"], bundle)
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:160: in _stage_inputs
+    _scratch(root, policy, os.fstat(reader.fileno()).st_size)
+source_snapshot/tests/test_blast_vdb_native_context_668.py:476: in exceed
+    raise driver._ScratchLimit()
+          ^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: _ScratchLimit.__init__() missing 2 required positional arguments: 'observed' and 'limit'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_vdb_native_context_668.py::test_preflight_failures_do_not_invoke_wrapper_or_retry[scratch]
+1 failed, 42 passed in 77.62s (0:01:17)

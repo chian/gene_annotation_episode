@@ -1,0 +1,1866 @@
+{
+  "calculation": {
+    "annotation_credit": null,
+    "axis": "A105",
+    "cells": {
+      "denominator_parameter": {
+        "approximate": false,
+        "conditional_on": [],
+        "formula": "source_denominator_parameter",
+        "origin": "reported",
+        "relation": "eq",
+        "status": "populated",
+        "threshold": null,
+        "unavailable_reason": null,
+        "unit": "uM^-1min^-1",
+        "value": 0.0027
+      },
+      "log_contrast_standard_uncertainty": {
+        "approximate": false,
+        "conditional_on": [
+          "supplied_subject_and_parameter_relationships",
+          "reported_protocol_comparison",
+          "supplied_log_covariance"
+        ],
+        "formula": "sqrt(Cnn+Cdd-2*Cnd)",
+        "origin": "derived",
+        "relation": "none",
+        "status": "unavailable",
+        "threshold": null,
+        "unavailable_reason": "kinetic_log_model_unreported",
+        "unit": "dimensionless",
+        "value": null
+      },
+      "log_contrast_variance": {
+        "approximate": false,
+        "conditional_on": [
+          "supplied_subject_and_parameter_relationships",
+          "reported_protocol_comparison",
+          "supplied_log_covariance"
+        ],
+        "formula": "Cnn+Cdd-2*Cnd",
+        "origin": "derived",
+        "relation": "none",
+        "status": "unavailable",
+        "threshold": null,
+        "unavailable_reason": "kinetic_log_model_unreported",
+        "unit": "dimensionless_squared",
+        "value": null
+      },
+      "log_parameter_contrast": {
+        "approximate": false,
+        "conditional_on": [
+          "supplied_subject_and_parameter_relationships",
+          "reported_protocol_comparison"
+        ],
+        "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+        "origin": "derived",
+        "relation": "none",
+        "status": "populated",
+        "threshold": null,
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 9.652173124255222
+      },
+      "numerator_parameter": {
+        "approximate": false,
+        "conditional_on": [],
+        "formula": "source_numerator_parameter",
+        "origin": "reported",
+        "relation": "eq",
+        "status": "populated",
+        "threshold": null,
+        "unavailable_reason": null,
+        "unit": "uM^-1min^-1",
+        "value": 42.0
+      },
+      "parameter_difference": {
+        "approximate": false,
+        "conditional_on": [
+          "supplied_subject_and_parameter_relationships",
+          "reported_protocol_comparison"
+        ],
+        "formula": "numerator_parameter-denominator_parameter",
+        "origin": "derived",
+        "relation": "none",
+        "status": "populated",
+        "threshold": null,
+        "unavailable_reason": null,
+        "unit": "uM^-1min^-1",
+        "value": 41.9973
+      },
+      "parameter_ratio": {
+        "approximate": false,
+        "conditional_on": [
+          "supplied_subject_and_parameter_relationships",
+          "reported_protocol_comparison"
+        ],
+        "formula": "numerator_parameter/denominator_parameter",
+        "origin": "derived",
+        "relation": "none",
+        "status": "populated",
+        "threshold": null,
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 15555.555555555555
+      },
+      "source_profile_log_ratio": {
+        "approximate": false,
+        "conditional_on": [
+          "supplied_subject_and_parameter_relationships",
+          "reported_protocol_comparison",
+          "supplied_log_covariance",
+          "known_normal_log_parameters"
+        ],
+        "formula": "e*abs(e)/(2*V)",
+        "origin": "derived",
+        "relation": "none",
+        "status": "unavailable",
+        "threshold": null,
+        "unavailable_reason": "kinetic_log_model_unreported",
+        "unit": "dimensionless",
+        "value": null
+      },
+      "source_signed_index": {
+        "approximate": false,
+        "conditional_on": [
+          "supplied_subject_and_parameter_relationships",
+          "reported_protocol_comparison",
+          "supplied_log_covariance",
+          "known_normal_log_parameters"
+        ],
+        "formula": "tanh(source_profile_log_ratio/2)",
+        "origin": "proposed",
+        "relation": "none",
+        "status": "unavailable",
+        "threshold": null,
+        "unavailable_reason": "kinetic_log_model_unreported",
+        "unit": "dimensionless",
+        "value": null
+      }
+    },
+    "contrast_meaning": "numerator_parameter_exceeds_denominator",
+    "evaluation_scope": "source_kinetic_parameter_contrast",
+    "independent_preparation_count": null,
+    "inputs": {
+      "comparison_scope": "reported_protocols",
+      "denominator": {
+        "approximate": false,
+        "context": {
+          "conditions": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+          "endpoint": "amount of inorganic phosphate",
+          "experiment": "Michaelis−Menten Parameters for Rv2131c",
+          "experimental_system": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+          "normalization": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+          "preparation": null,
+          "substrate": "IMP"
+        },
+        "measurement_id": "kinetic_source_token_842920e890446e7ef97988d8",
+        "origin": "reported",
+        "parameter_kind": "catalytic_efficiency",
+        "physical_measurement_id": "kinetic_physical_observation_2be3da702074bf6f377a4fd6",
+        "relation": "eq",
+        "source": {
+          "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+          "end": 1461,
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 1455
+        },
+        "status": "point",
+        "subject": {
+          "construct": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+          "genotype": "Mtb H37Rv",
+          "molecule": "Rv2131c",
+          "organism": "Mycobacterium tuberculosis"
+        },
+        "unavailable_reason": null,
+        "uncertainty": {
+          "confidence_level": null,
+          "count": null,
+          "estimate_basis": "unknown",
+          "interval": null,
+          "magnitude": 0.0015,
+          "repetition_basis": "unspecified",
+          "statistic": "unspecified"
+        },
+        "unit": "uM^-1min^-1",
+        "value": 0.0027
+      },
+      "nonintended_conditions_relationship": "different",
+      "numerator": {
+        "approximate": false,
+        "context": {
+          "conditions": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+          "endpoint": "calculated AMP concentration",
+          "experiment": "Michaelis−Menten Parameters for Rv2131c",
+          "experimental_system": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+          "normalization": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+          "preparation": null,
+          "substrate": "PAP"
+        },
+        "measurement_id": "kinetic_source_token_e847e0887ef79896405d2c16",
+        "origin": "reported",
+        "parameter_kind": "catalytic_efficiency",
+        "physical_measurement_id": "kinetic_physical_observation_3ac47841397fab669fa60e34",
+        "relation": "eq",
+        "source": {
+          "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+          "end": 1138,
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 1136
+        },
+        "status": "point",
+        "subject": {
+          "construct": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+          "genotype": "Mtb H37Rv",
+          "molecule": "Rv2131c",
+          "organism": "Mycobacterium tuberculosis"
+        },
+        "unavailable_reason": null,
+        "uncertainty": {
+          "confidence_level": null,
+          "count": null,
+          "estimate_basis": "unknown",
+          "interval": null,
+          "magnitude": 8.0,
+          "repetition_basis": "unspecified",
+          "statistic": "unspecified"
+        },
+        "unit": "uM^-1min^-1",
+        "value": 42.0
+      },
+      "parameter_definition_relationship": "same",
+      "subject_relationship": "same_molecule_and_construct",
+      "substrate_arrangement": "separate_assays",
+      "version": "a105_kinetic_contrast_inputs_v1"
+    },
+    "interpretation_limits": [
+      "parameter_magnitude_is_not_complete_functional_specificity",
+      "higher_Km_is_not_automatically_stronger_affinity_or_activity",
+      "reported_protocol_comparison_is_not_automatically_common_condition_preference",
+      "unknown_preparation_identity_is_not_independent_replication",
+      "reported_spread_and_counts_are_not_log_covariance",
+      "shared_physical_estimates_remain_dependent_across_comparisons",
+      "ratio_log_profile_and_index_are_not_independent_evidence",
+      "no_target_correspondence_or_annotation_credit"
+    ],
+    "measurement_keys": {
+      "denominator": "kinetic_estimate_23cc3c5865f4d291f6661cf1eaf7b338913d037e592680624558bf67740b33d3",
+      "numerator": "kinetic_estimate_0a3f0fd2f1557a464a26a3b3f5f2275d85b46385c860b70fa7271f25538a0988"
+    },
+    "model": null,
+    "physical_measurement_ids": {
+      "denominator": "kinetic_physical_observation_2be3da702074bf6f377a4fd6",
+      "numerator": "kinetic_physical_observation_3ac47841397fab669fa60e34"
+    },
+    "variance_status": "not_supplied",
+    "version": "a105_kinetic_contrast_sheet_v1"
+  },
+  "cells": {
+    "denominator_parameter": {
+      "approximate": false,
+      "conditional_on": [],
+      "formula": "source_denominator_parameter",
+      "origin": "reported",
+      "relation": "eq",
+      "status": "populated",
+      "threshold": null,
+      "unavailable_reason": null,
+      "unit": "uM^-1min^-1",
+      "value": 0.0027
+    },
+    "log_parameter_contrast": {
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison"
+      ],
+      "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+      "origin": "derived",
+      "relation": "none",
+      "status": "populated",
+      "threshold": null,
+      "unavailable_reason": null,
+      "unit": "dimensionless",
+      "value": 9.652173124255222
+    },
+    "numerator_parameter": {
+      "approximate": false,
+      "conditional_on": [],
+      "formula": "source_numerator_parameter",
+      "origin": "reported",
+      "relation": "eq",
+      "status": "populated",
+      "threshold": null,
+      "unavailable_reason": null,
+      "unit": "uM^-1min^-1",
+      "value": 42.0
+    },
+    "parameter_difference": {
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison"
+      ],
+      "formula": "numerator_parameter-denominator_parameter",
+      "origin": "derived",
+      "relation": "none",
+      "status": "populated",
+      "threshold": null,
+      "unavailable_reason": null,
+      "unit": "uM^-1min^-1",
+      "value": 41.9973
+    },
+    "parameter_ratio": {
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison"
+      ],
+      "formula": "numerator_parameter/denominator_parameter",
+      "origin": "derived",
+      "relation": "none",
+      "status": "populated",
+      "threshold": null,
+      "unavailable_reason": null,
+      "unit": "dimensionless",
+      "value": 15555.555555555555
+    }
+  },
+  "comparison_bindings": {
+    "comparison_scope": {
+      "value": "reported_protocols",
+      "witness_refs": [
+        "reference_5cf3fa0c01de3d06fd823c7a"
+      ]
+    },
+    "nonintended_conditions_relationship": {
+      "value": "different",
+      "witness_refs": [
+        "reference_95e4509a8e9398a23e41342f"
+      ]
+    },
+    "parameter_definition_relationship": {
+      "value": "same",
+      "witness_refs": [
+        "reference_8a177df3c2906520d3d3dc1a",
+        "reference_325f41c3b1b3ac84b63bc340"
+      ]
+    },
+    "subject_relationship": {
+      "value": "same_molecule_and_construct",
+      "witness_refs": [
+        "reference_5cdf158c062046969bcab8c6",
+        "reference_ef38e6a60033e8ac6ef04a87",
+        "reference_15d59415cef839351a29f948"
+      ]
+    },
+    "substrate_arrangement": {
+      "value": "separate_assays",
+      "witness_refs": [
+        "reference_9b7e13b8e7f22705c61e8b39",
+        "reference_92b6b6e7524ba4bfbb164e88"
+      ]
+    }
+  },
+  "direct_input_source_refs": [
+    "source_c94683844a3390af8f03f04b",
+    "source_1af731c083e3207c5eb0f3a6"
+  ],
+  "extraction": {
+    "calculation_inputs": {
+      "comparison_scope": "reported_protocols",
+      "denominator": {
+        "approximate": false,
+        "context": {
+          "conditions": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+          "endpoint": "amount of inorganic phosphate",
+          "experiment": "Michaelis−Menten Parameters for Rv2131c",
+          "experimental_system": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+          "normalization": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+          "preparation": null,
+          "substrate": "IMP"
+        },
+        "measurement_id": "kinetic_source_token_842920e890446e7ef97988d8",
+        "origin": "reported",
+        "parameter_kind": "catalytic_efficiency",
+        "physical_measurement_id": "kinetic_physical_observation_2be3da702074bf6f377a4fd6",
+        "relation": "eq",
+        "source": {
+          "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+          "end": 1461,
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 1455
+        },
+        "status": "point",
+        "subject": {
+          "construct": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+          "genotype": "Mtb H37Rv",
+          "molecule": "Rv2131c",
+          "organism": "Mycobacterium tuberculosis"
+        },
+        "unavailable_reason": null,
+        "uncertainty": {
+          "confidence_level": null,
+          "count": null,
+          "estimate_basis": "unknown",
+          "interval": null,
+          "magnitude": 0.0015,
+          "repetition_basis": "unspecified",
+          "statistic": "unspecified"
+        },
+        "unit": "uM^-1min^-1",
+        "value": 0.0027
+      },
+      "nonintended_conditions_relationship": "different",
+      "numerator": {
+        "approximate": false,
+        "context": {
+          "conditions": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+          "endpoint": "calculated AMP concentration",
+          "experiment": "Michaelis−Menten Parameters for Rv2131c",
+          "experimental_system": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+          "normalization": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+          "preparation": null,
+          "substrate": "PAP"
+        },
+        "measurement_id": "kinetic_source_token_e847e0887ef79896405d2c16",
+        "origin": "reported",
+        "parameter_kind": "catalytic_efficiency",
+        "physical_measurement_id": "kinetic_physical_observation_3ac47841397fab669fa60e34",
+        "relation": "eq",
+        "source": {
+          "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+          "end": 1138,
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 1136
+        },
+        "status": "point",
+        "subject": {
+          "construct": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+          "genotype": "Mtb H37Rv",
+          "molecule": "Rv2131c",
+          "organism": "Mycobacterium tuberculosis"
+        },
+        "unavailable_reason": null,
+        "uncertainty": {
+          "confidence_level": null,
+          "count": null,
+          "estimate_basis": "unknown",
+          "interval": null,
+          "magnitude": 8.0,
+          "repetition_basis": "unspecified",
+          "statistic": "unspecified"
+        },
+        "unit": "uM^-1min^-1",
+        "value": 42.0
+      },
+      "parameter_definition_relationship": "same",
+      "subject_relationship": "same_molecule_and_construct",
+      "substrate_arrangement": "separate_assays",
+      "version": "a105_kinetic_contrast_inputs_v1"
+    },
+    "comparison": {
+      "comparison_scope": {
+        "value": "reported_protocols",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 47691,
+            "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 47280
+          }
+        ]
+      },
+      "nonintended_conditions_relationship": {
+        "value": "different",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 47691,
+            "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 47280
+          }
+        ]
+      },
+      "parameter_definition_relationship": {
+        "value": "same",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+            "end": 777,
+            "quote": "<italic>k</italic><sub>cat</sub>/<italic>K</italic><sub>m</sub>",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 714
+          },
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 47691,
+            "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 47280
+          }
+        ]
+      },
+      "subject_relationship": {
+        "value": "same_molecule_and_construct",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 12687,
+            "quote": "The Rv2131c gene was PCR-amplified from Mtb H37Rv genomic DNA with the primers 5′-TTACGTAGGACATATGGTGGTGAGCCCTGCCGCACC-3′ (NdeI) and 5′-TAGTATAAGCGGATCCTCAGCGCCACGCGTCGGCGA-3′ (BamHI). The resulting 0.8 kilobase fragment was digested with NdeI and BamHI and ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag. DNA sequencing was used to confirm the successful construction of the pET28b_2131c plasmid.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12237
+          },
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 18735,
+            "quote": "The kinetic parameters for PAP were determined using a previously described electrospray ionization mass spectrometry (ESI-MS) assay with some modifications, as described below.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 18558
+          },
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 26187,
+            "quote": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 24705
+          }
+        ]
+      },
+      "substrate_arrangement": {
+        "value": "separate_assays",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 24385,
+            "quote": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 23369
+          },
+          {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 26187,
+            "quote": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 24705
+          }
+        ]
+      }
+    },
+    "implementation_dependencies": {
+      "custody_module": "gene_annotation_episode.literature_assay_inputs",
+      "custody_sha256": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+      "scalar_module": "gene_annotation_episode.literature_rate_native_inputs",
+      "scalar_scope_module": "gene_annotation_episode.literature_partner_source_fields",
+      "scalar_scope_sha256": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+      "scalar_sha256": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500"
+    },
+    "input_unavailable_reasons": {
+      "denominator": [],
+      "numerator": []
+    },
+    "operands": {
+      "denominator": {
+        "approximate": false,
+        "calculation_operand": {
+          "approximate": false,
+          "context": {
+            "conditions": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+            "endpoint": "amount of inorganic phosphate",
+            "experiment": "Michaelis−Menten Parameters for Rv2131c",
+            "experimental_system": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+            "normalization": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+            "preparation": null,
+            "substrate": "IMP"
+          },
+          "measurement_id": "kinetic_source_token_842920e890446e7ef97988d8",
+          "origin": "reported",
+          "parameter_kind": "catalytic_efficiency",
+          "physical_measurement_id": "kinetic_physical_observation_2be3da702074bf6f377a4fd6",
+          "relation": "eq",
+          "source": {
+            "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+            "end": 1461,
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1455
+          },
+          "status": "point",
+          "subject": {
+            "construct": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+            "genotype": "Mtb H37Rv",
+            "molecule": "Rv2131c",
+            "organism": "Mycobacterium tuberculosis"
+          },
+          "unavailable_reason": null,
+          "uncertainty": {
+            "confidence_level": null,
+            "count": null,
+            "estimate_basis": "unknown",
+            "interval": null,
+            "magnitude": 0.0015,
+            "repetition_basis": "unspecified",
+            "statistic": "unspecified"
+          },
+          "unit": "uM^-1min^-1",
+          "value": 0.0027
+        },
+        "canonical_value": 0.0027,
+        "context": {
+          "conditions": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 26187,
+            "quote": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 24705
+          },
+          "endpoint": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 25971,
+            "quote": "amount of inorganic phosphate",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 25942
+          },
+          "experiment": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 43536,
+            "quote": "Michaelis−Menten Parameters for Rv2131c",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 43495
+          },
+          "experimental_system": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 13899,
+            "quote": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 13840
+          },
+          "normalization": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 16616,
+            "quote": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 16488
+          },
+          "preparation": null,
+          "substrate": {
+            "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+            "end": 1228,
+            "quote": "IMP",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1225
+          }
+        },
+        "measurement_identity": {
+          "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+          "end": 1475,
+          "quote": "0.0027 ± 0.0015",
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 1455
+        },
+        "number": {
+          "approximate": false,
+          "raw_number": "0.0027",
+          "relation": "point",
+          "selector": {
+            "number_end": 6,
+            "number_start": 0,
+            "witness": {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 1475,
+              "quote": "0.0027 ± 0.0015",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 1455
+            }
+          },
+          "value": 0.0027
+        },
+        "parameter_kind": {
+          "value": "catalytic_efficiency",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 777,
+              "quote": "<italic>k</italic><sub>cat</sub>/<italic>K</italic><sub>m</sub>",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 714
+            }
+          ]
+        },
+        "qualification": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 1475,
+              "quote": "0.0027 ± 0.0015",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 1455
+            }
+          ]
+        },
+        "source_origin": "reported",
+        "subject": {
+          "construct": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 12594,
+            "quote": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12503
+          },
+          "genotype": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 12286,
+            "quote": "Mtb H37Rv",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12277
+          },
+          "molecule": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 12248,
+            "quote": "Rv2131c",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12241
+          },
+          "organism": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 1185,
+            "quote": "Mycobacterium tuberculosis",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 1159
+          }
+        },
+        "unavailable_reasons": [],
+        "uncertainty": {
+          "canonical": {
+            "confidence_level": null,
+            "count": null,
+            "estimate_basis": "unknown",
+            "interval": null,
+            "magnitude": 0.0015,
+            "repetition_basis": "unspecified",
+            "statistic": "unspecified"
+          },
+          "confidence_level": null,
+          "count": null,
+          "effective_unit": {
+            "canonical_unit": "uM^-1min^-1",
+            "multiplier": 1.0,
+            "raw_unit": "µM<sup>−1</sup> min<sup>−1</sup>",
+            "unavailable_reason": null,
+            "witness": {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 816,
+              "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 779
+            }
+          },
+          "interval": null,
+          "magnitude": {
+            "approximate": false,
+            "raw_number": "0.0015",
+            "relation": "point",
+            "selector": {
+              "number_end": 15,
+              "number_start": 9,
+              "witness": {
+                "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+                "end": 1475,
+                "quote": "0.0027 ± 0.0015",
+                "representation": "original",
+                "source_ref": "source_1af731c083e3207c5eb0f3a6",
+                "start": 1455
+              }
+            },
+            "value": 0.0015
+          },
+          "meanings": {
+            "estimate_basis": {
+              "value": "unknown",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+                  "end": 47691,
+                  "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+                  "representation": "original",
+                  "source_ref": "source_c94683844a3390af8f03f04b",
+                  "start": 47280
+                }
+              ]
+            },
+            "repetition_basis": {
+              "value": "unspecified",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+                  "end": 47691,
+                  "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+                  "representation": "original",
+                  "source_ref": "source_c94683844a3390af8f03f04b",
+                  "start": 47280
+                }
+              ]
+            },
+            "statistic": {
+              "value": "unspecified",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+                  "end": 1475,
+                  "quote": "0.0027 ± 0.0015",
+                  "representation": "original",
+                  "source_ref": "source_1af731c083e3207c5eb0f3a6",
+                  "start": 1455
+                },
+                {
+                  "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+                  "end": 47691,
+                  "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+                  "representation": "original",
+                  "source_ref": "source_c94683844a3390af8f03f04b",
+                  "start": 47280
+                }
+              ]
+            },
+            "unit_relationship": {
+              "value": "same_as_parameter",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+                  "end": 816,
+                  "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+                  "representation": "original",
+                  "source_ref": "source_1af731c083e3207c5eb0f3a6",
+                  "start": 779
+                }
+              ]
+            }
+          },
+          "unavailable_reason": null,
+          "unit": null
+        },
+        "unit": {
+          "canonical_unit": "uM^-1min^-1",
+          "multiplier": 1.0,
+          "raw_unit": "µM<sup>−1</sup> min<sup>−1</sup>",
+          "unavailable_reason": null,
+          "witness": {
+            "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+            "end": 816,
+            "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 779
+          }
+        }
+      },
+      "numerator": {
+        "approximate": false,
+        "calculation_operand": {
+          "approximate": false,
+          "context": {
+            "conditions": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+            "endpoint": "calculated AMP concentration",
+            "experiment": "Michaelis−Menten Parameters for Rv2131c",
+            "experimental_system": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+            "normalization": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+            "preparation": null,
+            "substrate": "PAP"
+          },
+          "measurement_id": "kinetic_source_token_e847e0887ef79896405d2c16",
+          "origin": "reported",
+          "parameter_kind": "catalytic_efficiency",
+          "physical_measurement_id": "kinetic_physical_observation_3ac47841397fab669fa60e34",
+          "relation": "eq",
+          "source": {
+            "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+            "end": 1138,
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1136
+          },
+          "status": "point",
+          "subject": {
+            "construct": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+            "genotype": "Mtb H37Rv",
+            "molecule": "Rv2131c",
+            "organism": "Mycobacterium tuberculosis"
+          },
+          "unavailable_reason": null,
+          "uncertainty": {
+            "confidence_level": null,
+            "count": null,
+            "estimate_basis": "unknown",
+            "interval": null,
+            "magnitude": 8.0,
+            "repetition_basis": "unspecified",
+            "statistic": "unspecified"
+          },
+          "unit": "uM^-1min^-1",
+          "value": 42.0
+        },
+        "canonical_value": 42.0,
+        "context": {
+          "conditions": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 24385,
+            "quote": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 23369
+          },
+          "endpoint": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 24207,
+            "quote": "calculated AMP concentration",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 24179
+          },
+          "experiment": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 43536,
+            "quote": "Michaelis−Menten Parameters for Rv2131c",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 43495
+          },
+          "experimental_system": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 13899,
+            "quote": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 13840
+          },
+          "normalization": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 16616,
+            "quote": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 16488
+          },
+          "preparation": null,
+          "substrate": {
+            "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+            "end": 913,
+            "quote": "PAP",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 910
+          }
+        },
+        "measurement_identity": {
+          "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+          "end": 1147,
+          "quote": "42 ± 8",
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 1136
+        },
+        "number": {
+          "approximate": false,
+          "raw_number": "42",
+          "relation": "point",
+          "selector": {
+            "number_end": 2,
+            "number_start": 0,
+            "witness": {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 1147,
+              "quote": "42 ± 8",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 1136
+            }
+          },
+          "value": 42.0
+        },
+        "parameter_kind": {
+          "value": "catalytic_efficiency",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 777,
+              "quote": "<italic>k</italic><sub>cat</sub>/<italic>K</italic><sub>m</sub>",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 714
+            }
+          ]
+        },
+        "qualification": {
+          "value": "reported_point",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 1147,
+              "quote": "42 ± 8",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 1136
+            }
+          ]
+        },
+        "source_origin": "reported",
+        "subject": {
+          "construct": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 12594,
+            "quote": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12503
+          },
+          "genotype": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 12286,
+            "quote": "Mtb H37Rv",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12277
+          },
+          "molecule": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 12248,
+            "quote": "Rv2131c",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12241
+          },
+          "organism": {
+            "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+            "end": 1185,
+            "quote": "Mycobacterium tuberculosis",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 1159
+          }
+        },
+        "unavailable_reasons": [],
+        "uncertainty": {
+          "canonical": {
+            "confidence_level": null,
+            "count": null,
+            "estimate_basis": "unknown",
+            "interval": null,
+            "magnitude": 8.0,
+            "repetition_basis": "unspecified",
+            "statistic": "unspecified"
+          },
+          "confidence_level": null,
+          "count": null,
+          "effective_unit": {
+            "canonical_unit": "uM^-1min^-1",
+            "multiplier": 1.0,
+            "raw_unit": "µM<sup>−1</sup> min<sup>−1</sup>",
+            "unavailable_reason": null,
+            "witness": {
+              "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+              "end": 816,
+              "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 779
+            }
+          },
+          "interval": null,
+          "magnitude": {
+            "approximate": false,
+            "raw_number": "8",
+            "relation": "point",
+            "selector": {
+              "number_end": 6,
+              "number_start": 5,
+              "witness": {
+                "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+                "end": 1147,
+                "quote": "42 ± 8",
+                "representation": "original",
+                "source_ref": "source_1af731c083e3207c5eb0f3a6",
+                "start": 1136
+              }
+            },
+            "value": 8.0
+          },
+          "meanings": {
+            "estimate_basis": {
+              "value": "unknown",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+                  "end": 47691,
+                  "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+                  "representation": "original",
+                  "source_ref": "source_c94683844a3390af8f03f04b",
+                  "start": 47280
+                }
+              ]
+            },
+            "repetition_basis": {
+              "value": "unspecified",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+                  "end": 47691,
+                  "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+                  "representation": "original",
+                  "source_ref": "source_c94683844a3390af8f03f04b",
+                  "start": 47280
+                }
+              ]
+            },
+            "statistic": {
+              "value": "unspecified",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+                  "end": 1147,
+                  "quote": "42 ± 8",
+                  "representation": "original",
+                  "source_ref": "source_1af731c083e3207c5eb0f3a6",
+                  "start": 1136
+                },
+                {
+                  "artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+                  "end": 47691,
+                  "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+                  "representation": "original",
+                  "source_ref": "source_c94683844a3390af8f03f04b",
+                  "start": 47280
+                }
+              ]
+            },
+            "unit_relationship": {
+              "value": "same_as_parameter",
+              "witnesses": [
+                {
+                  "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+                  "end": 816,
+                  "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+                  "representation": "original",
+                  "source_ref": "source_1af731c083e3207c5eb0f3a6",
+                  "start": 779
+                }
+              ]
+            }
+          },
+          "unavailable_reason": null,
+          "unit": null
+        },
+        "unit": {
+          "canonical_unit": "uM^-1min^-1",
+          "multiplier": 1.0,
+          "raw_unit": "µM<sup>−1</sup> min<sup>−1</sup>",
+          "unavailable_reason": null,
+          "witness": {
+            "artifact_ref": "artifact_5530074b03823a0c8ff1a86026fbdd7bcd5d269977cc37419adf1c0a8dfb0546",
+            "end": 816,
+            "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 779
+          }
+        }
+      }
+    },
+    "source_kind": "primary_source",
+    "source_ref": "source_c94683844a3390af8f03f04b",
+    "source_refs": [
+      "source_c94683844a3390af8f03f04b",
+      "source_1af731c083e3207c5eb0f3a6"
+    ],
+    "version": "a105_kinetic_source_extraction_v1"
+  },
+  "implementation_dependencies": {
+    "sha256": {
+      "literature_assay_inputs.py": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+      "literature_experimental_contracts.py": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc",
+      "literature_kinetic_calculations.py": "1ca423165e40b99140bb1a1b431081e240d1ae788f7b5d933823817a6c397f50",
+      "literature_kinetic_inputs.py": "1176033e44bb7e2ff065aecd6f1d335fbcab531069e99490cd293dd8a8edb844",
+      "literature_kinetic_storage.py": "599606c6e40f00e587934b0a7fcd1c550b46253974dd5b123cfdde228245759e",
+      "literature_kinetic_validation.py": "2f21acdab795ba3917d3ce8202d0621c5c222e64cc75f7823a1f31a92d6e71c2",
+      "literature_partner_source_fields.py": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+      "literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500"
+    },
+    "validation_version": "a105_kinetic_saved_validation_v1"
+  },
+  "input_artifact_ref": "artifact_53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e",
+  "input_source_ref": "source_c94683844a3390af8f03f04b",
+  "input_source_refs": [
+    "source_c94683844a3390af8f03f04b",
+    "source_1af731c083e3207c5eb0f3a6"
+  ],
+  "requested_components": [
+    "numerator_parameter",
+    "denominator_parameter",
+    "parameter_difference",
+    "parameter_ratio",
+    "log_parameter_contrast"
+  ],
+  "role_bindings": {
+    "denominator": {
+      "approximate": false,
+      "canonical_unit": "uM_inverse_min_inverse",
+      "context": {
+        "conditions": "reference_c1ebd05cd08bbd4807f835a8",
+        "endpoint": "reference_37e81fcc0ed104677d48c438",
+        "experiment": "reference_bf483bc7d2f2fd8b43e9c903",
+        "experimental_system": "reference_b2005a09f0c854ba5dd38c8b",
+        "normalization": "reference_528560686886fc6ecd01b9ed",
+        "preparation": null,
+        "substrate": "reference_b41b3943e56de6a986cc621e"
+      },
+      "converted_origin": "reported",
+      "input_status": "point",
+      "input_unavailable_reasons": [],
+      "measurement_ref": "reference_26adc567965538f505354972",
+      "measurement_source_ref": "source_1af731c083e3207c5eb0f3a6",
+      "numeric_tokens": [
+        {
+          "ref": "reference_26adc567965538f505354972",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6"
+        },
+        {
+          "ref": "reference_4f71e948d3e89b8bf38bc088",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6"
+        }
+      ],
+      "observed_relation": "point",
+      "parameter_kind": "catalytic_efficiency",
+      "parameter_kind_witness_refs": [
+        "reference_ef8f5d69a3fc7242d4399836"
+      ],
+      "physical_observation_ref": "reference_45ed62ce66f2a4b519da527e",
+      "qualification": "reported_point",
+      "qualification_witness_refs": [
+        "reference_2faa2169e078606889113775"
+      ],
+      "source_origin": "reported",
+      "source_unit_ref": "reference_3529c797480b1cad9e9d8527",
+      "subject": {
+        "construct": "reference_0dd1a908ef83b73cbf56bb84",
+        "genotype": "reference_7cf2a28897b1a58768581c10",
+        "molecule": "reference_07e17a8cc3faf12b19a0ce35",
+        "organism": "reference_7d63a21ddce0be67b1b6055f"
+      },
+      "uncertainty": {
+        "canonical_unit": "uM_inverse_min_inverse",
+        "confidence_level_ref": null,
+        "count_ref": null,
+        "estimate_basis": "unknown",
+        "interval_ref": null,
+        "magnitude_ref": "reference_4f71e948d3e89b8bf38bc088",
+        "repetition_basis": "unspecified",
+        "statistic": "unspecified",
+        "unavailable_reason": null,
+        "unit_ref": "reference_556174fbeaee39366c6921ed"
+      },
+      "uncertainty_canonical": {
+        "confidence_level": null,
+        "count": null,
+        "estimate_basis": "unknown",
+        "interval": null,
+        "magnitude": 0.0015,
+        "repetition_basis": "unspecified",
+        "statistic": "unspecified"
+      }
+    },
+    "numerator": {
+      "approximate": false,
+      "canonical_unit": "uM_inverse_min_inverse",
+      "context": {
+        "conditions": "reference_fadcf9f2c3a5b91578c7c298",
+        "endpoint": "reference_5470a89a0c4a718cec798ac0",
+        "experiment": "reference_bf483bc7d2f2fd8b43e9c903",
+        "experimental_system": "reference_b2005a09f0c854ba5dd38c8b",
+        "normalization": "reference_528560686886fc6ecd01b9ed",
+        "preparation": null,
+        "substrate": "reference_5f4b9a9c17fb0ade80594e52"
+      },
+      "converted_origin": "reported",
+      "input_status": "point",
+      "input_unavailable_reasons": [],
+      "measurement_ref": "reference_2e6b9d5c28a11f9389edbbda",
+      "measurement_source_ref": "source_1af731c083e3207c5eb0f3a6",
+      "numeric_tokens": [
+        {
+          "ref": "reference_2e6b9d5c28a11f9389edbbda",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6"
+        },
+        {
+          "ref": "reference_31240a2b5badd53b1d039d48",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6"
+        }
+      ],
+      "observed_relation": "point",
+      "parameter_kind": "catalytic_efficiency",
+      "parameter_kind_witness_refs": [
+        "reference_ef8f5d69a3fc7242d4399836"
+      ],
+      "physical_observation_ref": "reference_cad32a3151b6871585d33815",
+      "qualification": "reported_point",
+      "qualification_witness_refs": [
+        "reference_9925bc9942ad77ce5739302f"
+      ],
+      "source_origin": "reported",
+      "source_unit_ref": "reference_3529c797480b1cad9e9d8527",
+      "subject": {
+        "construct": "reference_0dd1a908ef83b73cbf56bb84",
+        "genotype": "reference_7cf2a28897b1a58768581c10",
+        "molecule": "reference_07e17a8cc3faf12b19a0ce35",
+        "organism": "reference_7d63a21ddce0be67b1b6055f"
+      },
+      "uncertainty": {
+        "canonical_unit": "uM_inverse_min_inverse",
+        "confidence_level_ref": null,
+        "count_ref": null,
+        "estimate_basis": "unknown",
+        "interval_ref": null,
+        "magnitude_ref": "reference_31240a2b5badd53b1d039d48",
+        "repetition_basis": "unspecified",
+        "statistic": "unspecified",
+        "unavailable_reason": null,
+        "unit_ref": "reference_556174fbeaee39366c6921ed"
+      },
+      "uncertainty_canonical": {
+        "confidence_level": null,
+        "count": null,
+        "estimate_basis": "unknown",
+        "interval": null,
+        "magnitude": 8.0,
+        "repetition_basis": "unspecified",
+        "statistic": "unspecified"
+      }
+    }
+  },
+  "selection": {
+    "comparison": {
+      "comparison_scope": {
+        "value": "reported_protocols",
+        "witnesses": [
+          {
+            "end": 47691,
+            "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 47280
+          }
+        ]
+      },
+      "nonintended_conditions_relationship": {
+        "value": "different",
+        "witnesses": [
+          {
+            "end": 47691,
+            "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 47280
+          }
+        ]
+      },
+      "parameter_definition_relationship": {
+        "value": "same",
+        "witnesses": [
+          {
+            "end": 777,
+            "quote": "<italic>k</italic><sub>cat</sub>/<italic>K</italic><sub>m</sub>",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 714
+          },
+          {
+            "end": 47691,
+            "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 47280
+          }
+        ]
+      },
+      "subject_relationship": {
+        "value": "same_molecule_and_construct",
+        "witnesses": [
+          {
+            "end": 12687,
+            "quote": "The Rv2131c gene was PCR-amplified from Mtb H37Rv genomic DNA with the primers 5′-TTACGTAGGACATATGGTGGTGAGCCCTGCCGCACC-3′ (NdeI) and 5′-TAGTATAAGCGGATCCTCAGCGCCACGCGTCGGCGA-3′ (BamHI). The resulting 0.8 kilobase fragment was digested with NdeI and BamHI and ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag. DNA sequencing was used to confirm the successful construction of the pET28b_2131c plasmid.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 12237
+          },
+          {
+            "end": 18735,
+            "quote": "The kinetic parameters for PAP were determined using a previously described electrospray ionization mass spectrometry (ESI-MS) assay with some modifications, as described below.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 18558
+          },
+          {
+            "end": 26187,
+            "quote": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 24705
+          }
+        ]
+      },
+      "substrate_arrangement": {
+        "value": "separate_assays",
+        "witnesses": [
+          {
+            "end": 24385,
+            "quote": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 23369
+          },
+          {
+            "end": 26187,
+            "quote": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+            "representation": "original",
+            "source_ref": "source_c94683844a3390af8f03f04b",
+            "start": 24705
+          }
+        ]
+      }
+    },
+    "denominator": {
+      "context": {
+        "conditions": {
+          "end": 26187,
+          "quote": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 24705
+        },
+        "endpoint": {
+          "end": 25971,
+          "quote": "amount of inorganic phosphate",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 25942
+        },
+        "experiment": {
+          "end": 43536,
+          "quote": "Michaelis−Menten Parameters for Rv2131c",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 43495
+        },
+        "experimental_system": {
+          "end": 13899,
+          "quote": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 13840
+        },
+        "normalization": {
+          "end": 16616,
+          "quote": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 16488
+        },
+        "preparation": null,
+        "substrate": {
+          "end": 1228,
+          "quote": "IMP",
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 1225
+        }
+      },
+      "measurement": {
+        "number": {
+          "number_end": 6,
+          "number_start": 0,
+          "witness": {
+            "end": 1475,
+            "quote": "0.0027 ± 0.0015",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1455
+          }
+        },
+        "unit": {
+          "end": 816,
+          "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 779
+        }
+      },
+      "measurement_identity": {
+        "end": 1475,
+        "quote": "0.0027 ± 0.0015",
+        "representation": "original",
+        "source_ref": "source_1af731c083e3207c5eb0f3a6",
+        "start": 1455
+      },
+      "parameter_kind": {
+        "value": "catalytic_efficiency",
+        "witnesses": [
+          {
+            "end": 777,
+            "quote": "<italic>k</italic><sub>cat</sub>/<italic>K</italic><sub>m</sub>",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 714
+          }
+        ]
+      },
+      "qualification": {
+        "value": "reported_point",
+        "witnesses": [
+          {
+            "end": 1475,
+            "quote": "0.0027 ± 0.0015",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1455
+          }
+        ]
+      },
+      "subject": {
+        "construct": {
+          "end": 12594,
+          "quote": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 12503
+        },
+        "genotype": {
+          "end": 12286,
+          "quote": "Mtb H37Rv",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 12277
+        },
+        "molecule": {
+          "end": 12248,
+          "quote": "Rv2131c",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 12241
+        },
+        "organism": {
+          "end": 1185,
+          "quote": "Mycobacterium tuberculosis",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 1159
+        }
+      },
+      "uncertainty": {
+        "confidence_level": null,
+        "count": null,
+        "estimate_basis": {
+          "value": "unknown",
+          "witnesses": [
+            {
+              "end": 47691,
+              "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+              "representation": "original",
+              "source_ref": "source_c94683844a3390af8f03f04b",
+              "start": 47280
+            }
+          ]
+        },
+        "interval": null,
+        "magnitude": {
+          "number_end": 15,
+          "number_start": 9,
+          "witness": {
+            "end": 1475,
+            "quote": "0.0027 ± 0.0015",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1455
+          }
+        },
+        "repetition_basis": {
+          "value": "unspecified",
+          "witnesses": [
+            {
+              "end": 47691,
+              "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+              "representation": "original",
+              "source_ref": "source_c94683844a3390af8f03f04b",
+              "start": 47280
+            }
+          ]
+        },
+        "statistic": {
+          "value": "unspecified",
+          "witnesses": [
+            {
+              "end": 1475,
+              "quote": "0.0027 ± 0.0015",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 1455
+            },
+            {
+              "end": 47691,
+              "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+              "representation": "original",
+              "source_ref": "source_c94683844a3390af8f03f04b",
+              "start": 47280
+            }
+          ]
+        },
+        "unit": null,
+        "unit_relationship": {
+          "value": "same_as_parameter",
+          "witnesses": [
+            {
+              "end": 816,
+              "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 779
+            }
+          ]
+        }
+      }
+    },
+    "numerator": {
+      "context": {
+        "conditions": {
+          "end": 24385,
+          "quote": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 23369
+        },
+        "endpoint": {
+          "end": 24207,
+          "quote": "calculated AMP concentration",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 24179
+        },
+        "experiment": {
+          "end": 43536,
+          "quote": "Michaelis−Menten Parameters for Rv2131c",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 43495
+        },
+        "experimental_system": {
+          "end": 13899,
+          "quote": "pET28b_2131c was transformed into E. coli strain BL21(DE3).",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 13840
+        },
+        "normalization": {
+          "end": 16616,
+          "quote": "Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 16488
+        },
+        "preparation": null,
+        "substrate": {
+          "end": 913,
+          "quote": "PAP",
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 910
+        }
+      },
+      "measurement": {
+        "number": {
+          "number_end": 2,
+          "number_start": 0,
+          "witness": {
+            "end": 1147,
+            "quote": "42 ± 8",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1136
+          }
+        },
+        "unit": {
+          "end": 816,
+          "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+          "representation": "original",
+          "source_ref": "source_1af731c083e3207c5eb0f3a6",
+          "start": 779
+        }
+      },
+      "measurement_identity": {
+        "end": 1147,
+        "quote": "42 ± 8",
+        "representation": "original",
+        "source_ref": "source_1af731c083e3207c5eb0f3a6",
+        "start": 1136
+      },
+      "parameter_kind": {
+        "value": "catalytic_efficiency",
+        "witnesses": [
+          {
+            "end": 777,
+            "quote": "<italic>k</italic><sub>cat</sub>/<italic>K</italic><sub>m</sub>",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 714
+          }
+        ]
+      },
+      "qualification": {
+        "value": "reported_point",
+        "witnesses": [
+          {
+            "end": 1147,
+            "quote": "42 ± 8",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1136
+          }
+        ]
+      },
+      "subject": {
+        "construct": {
+          "end": 12594,
+          "quote": "ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 12503
+        },
+        "genotype": {
+          "end": 12286,
+          "quote": "Mtb H37Rv",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 12277
+        },
+        "molecule": {
+          "end": 12248,
+          "quote": "Rv2131c",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 12241
+        },
+        "organism": {
+          "end": 1185,
+          "quote": "Mycobacterium tuberculosis",
+          "representation": "original",
+          "source_ref": "source_c94683844a3390af8f03f04b",
+          "start": 1159
+        }
+      },
+      "uncertainty": {
+        "confidence_level": null,
+        "count": null,
+        "estimate_basis": {
+          "value": "unknown",
+          "witnesses": [
+            {
+              "end": 47691,
+              "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+              "representation": "original",
+              "source_ref": "source_c94683844a3390af8f03f04b",
+              "start": 47280
+            }
+          ]
+        },
+        "interval": null,
+        "magnitude": {
+          "number_end": 6,
+          "number_start": 5,
+          "witness": {
+            "end": 1147,
+            "quote": "42 ± 8",
+            "representation": "original",
+            "source_ref": "source_1af731c083e3207c5eb0f3a6",
+            "start": 1136
+          }
+        },
+        "repetition_basis": {
+          "value": "unspecified",
+          "witnesses": [
+            {
+              "end": 47691,
+              "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+              "representation": "original",
+              "source_ref": "source_c94683844a3390af8f03f04b",
+              "start": 47280
+            }
+          ]
+        },
+        "statistic": {
+          "value": "unspecified",
+          "witnesses": [
+            {
+              "end": 1147,
+              "quote": "42 ± 8",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 1136
+            },
+            {
+              "end": 47691,
+              "quote": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+              "representation": "original",
+              "source_ref": "source_c94683844a3390af8f03f04b",
+              "start": 47280
+            }
+          ]
+        },
+        "unit": null,
+        "unit_relationship": {
+          "value": "same_as_parameter",
+          "witnesses": [
+            {
+              "end": 816,
+              "quote": "µM<sup>−1</sup> min<sup>−1</sup>",
+              "representation": "original",
+              "source_ref": "source_1af731c083e3207c5eb0f3a6",
+              "start": 779
+            }
+          ]
+        }
+      }
+    },
+    "source_kind": "primary_source",
+    "source_ref": "source_c94683844a3390af8f03f04b",
+    "version": "a105_kinetic_source_selection_v1"
+  },
+  "version": "literature_kinetic_population_record_v1"
+}

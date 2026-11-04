@@ -17,6 +17,22 @@ REQUIREMENT_FIELDS = ("definition", "entity", "property", "biological_setting", 
 ROUTE_FIELDS = ("definition", "biological_setting", "function_relation", "membership_evidence", "joint_scope_evidence")
 
 
+def witness_display_label(quote):
+    """Bound display text; retain the complete exact witness in its anchor.
+
+    Use the same preview convention as the existing native kinetic sheets.
+    Paragraph evidence and multiline table spans remain valid source witnesses.
+    """
+    if len(quote) <= 512 and "\n" not in quote and "\r" not in quote:
+        return quote
+    prefix = "[source witness preview] "
+    preview = " ".join(quote.split())
+    available = 512 - len(prefix)
+    if len(preview) > available:
+        preview = preview[:available - 1] + "…"
+    return prefix + preview
+
+
 def read_meanings(value, inputs, sources):
     """Bind exact witnesses to the actual roster, including explicit unknowns."""
     _keys(value, ("requirements", "routes"), "meanings")
@@ -58,7 +74,7 @@ def direct_references(arguments, extraction, initial):
 
 def publish_meanings(extraction, publish):
     """Publish actual anchored meanings and distinct non-evidentiary handles."""
-    data_ref = extraction["arguments"]["data_source_ref"]
+    data_ref = extraction["arguments"]["data_source_ref"] or extraction["arguments"]["source_ref"]
     result = {}
     for plural, fields in (("requirements", REQUIREMENT_FIELDS), ("routes", ROUTE_FIELDS)):
         if extraction["meanings"][plural] is None:
@@ -80,17 +96,17 @@ def publish_meanings(extraction, publish):
                 common = {"source_ref": witness["source_ref"], "anchor": anchor}
                 accession = identity("context_literal", {**scoped, "field": field, **anchor})
                 if field == "biological_setting":
-                    record = {**common, "context_type": "environment", "name": witness["quote"],
+                    record = {**common, "context_type": "environment", "name": witness_display_label(witness["quote"]),
                               "attributes": [], "related_refs": []}
                     row[ref_field] = publish("context", record)
                 elif field.endswith("_evidence"):
                     record = {**common, "reference_type": "literature_result", "accession": accession,
-                        "label": witness["quote"], "sequence_ref": None, "molecule": None,
+                        "label": witness_display_label(witness["quote"]), "sequence_ref": None, "molecule": None,
                         "length": None, "term_refs": [], "context_refs": []}
                     row[ref_field] = publish("reference", record)
                 else:
                     row[ref_field] = publish("term", {**common, "namespace": "literature_context_" + field,
-                        "accession": accession, "label": witness["quote"], "term_type": "other"})
+                        "accession": accession, "label": witness_display_label(witness["quote"]), "term_type": "other"})
             witness = entry["definition"]
             anchor = None if witness is None else {k: witness[k] for k in (
                 "source_ref", "artifact_ref", "start", "end", "quote")}
@@ -98,7 +114,7 @@ def publish_meanings(extraction, publish):
             row[noun + "_ref"] = publish("reference", {
                 "reference_type": "literature_result", "source_ref": data_ref if witness is None else witness["source_ref"],
                 "accession": identity("context_literal", {**scoped, "field": "definition"}),
-                "label": "Unreported " + noun + " definition" if witness is None else witness["quote"],
+                "label": "Unreported " + noun + " definition" if witness is None else witness_display_label(witness["quote"]),
                 "sequence_ref": None, "molecule": None, "length": None,
                 "term_refs": [row[f + "_ref"] for f in ("entity", "property", "function_relation")
                               if row.get(f + "_ref") is not None],

@@ -1,0 +1,81 @@
+"""Copy exact216 implementation and retained214 inputs into this owned scope."""
+import ast
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import shutil
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+UP = ROOT / 'verification/tool_graders_fastqutils_combined_2026-10-25_216'
+REFERENCE = ROOT / 'verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/final_208_001/source/tests'
+FROZEN = HERE / 'candidate'
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def save(name, value):
+    with (HERE / name).open('x') as stream:
+        json.dump(value, stream, indent=2, sort_keys=True, allow_nan=False)
+        stream.write('\n')
+
+def main():
+    manifest = json.loads((UP / 'combined_source_before_003.json').read_text())
+    assert len(manifest) == 1176
+    incoming, copies = {}, []
+    FROZEN.mkdir(exist_ok=False)
+    def copy(source, destination, expected=None):
+        actual = sha(source)
+        assert expected is None or actual == expected, str(source)
+        incoming[str(source)] = actual
+        assert not destination.exists(), str(destination)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
+        assert sha(destination) == actual
+        copies.append(dict(source=str(source), destination=str(destination), sha256=actual))
+    for name, expected in manifest.items():
+        copy(UP / 'candidate_003' / name, FROZEN / name, expected)
+    # Reference helper remains outside the immutable candidate. Its imports use
+    # the candidate's existing mechanical helpers; any differing byte is rejected.
+    source = REFERENCE / 'test_bvbrc_fastqutils_episode_flow.py'
+    copy(source, HERE / 'helpers/test_bvbrc_fastqutils_episode_flow.py')
+    todo, seen = [source], set()
+    while todo:
+        source = todo.pop()
+        if source.name in seen:
+            continue
+        seen.add(source.name)
+        incoming[str(source)] = sha(source)
+        for node in ast.walk(ast.parse(source.read_text())):
+            names = ([node.module] if isinstance(node, ast.ImportFrom) and node.module else
+                     [x.name for x in node.names] if isinstance(node, ast.Import) else [])
+            for name in names:
+                helper = REFERENCE / (name + '.py')
+                if helper.is_file():
+                    destination = FROZEN / 'tests' / helper.name
+                    assert destination.is_file() and sha(helper) == sha(destination), str(helper)
+                    todo.append(helper)
+    native = FROZEN / 'tests/fixtures/bvbrc_fastqutils_samstat_mapping'
+    for version in ('current', 'legacy'):
+        copy(native / version / 'mixed.sam.samstat.html', HERE / 'native_inputs' / version / 'mixed.sam.samstat.html')
+    copy(native / 'PROVENANCE.json', HERE / 'native_inputs/PROVENANCE.json')
+    for name in ('AGENTS.md', 'GOAL.md', 'docs/EPISODE_STRUCTURE.md', 'docs/TIME_AWARE_ESTIMATION.md',
+                 'docs/PRACTICAL_EXECUTION.md', 'docs/PRACTICAL_EXECUTION_CONTRACT_2026-10-22_001.md',
+                 'docs/TASK_AND_STEERING.md'):
+        incoming[str(ROOT / name)] = sha(ROOT / name)
+    goal = Path('/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt')
+    incoming[str(goal)] = sha(goal)
+    incoming[str(UP / 'combined_source_before_003.json')] = sha(UP / 'combined_source_before_003.json')
+    save('incoming_before.json', incoming)
+    save('frozen_before.json', {str(p): sha(p) for base in (FROZEN, HERE / 'helpers', HERE / 'native_inputs')
+                              for p in sorted(base.rglob('*')) if p.is_file()})
+    save('copy_manifest.json', copies)
+    save('freeze_receipt.json', dict(completed_at=datetime.now(timezone.utc).isoformat(),
+        original_candidate_paths=len(manifest), helper_closure=sorted(seen),
+        source_bytes=sum(p.stat().st_size for p in HERE.rglob('*') if p.is_file()),
+        application_changes=False, production_changes=False, running202_touched=False))
+    print('Verified and copied 1176 immutable216 paths; helper/native inputs frozen under218.')
+
+if __name__ == '__main__':
+    main()

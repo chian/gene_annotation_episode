@@ -149,8 +149,8 @@ def test_failed_or_incomplete_response_retains_actual_bytes_without_completion(d
     context, args = setup(d)
     d.client.body = b'partial or error body'
     original = d.client.download
-    def response(url, *, byte_range=None):
-        snapshot = original(url, byte_range=byte_range)
+    def response(url, *, max_bytes, byte_range=None):
+        snapshot = original(url, max_bytes=max_bytes, byte_range=byte_range)
         return replace(snapshot, transport={**snapshot.transport, 'status': status, 'body_complete': complete})
     monkeypatch.setattr(d.client, 'download', response)
     acquired = d.call('download', args, context=context)

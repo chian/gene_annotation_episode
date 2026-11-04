@@ -1,0 +1,337 @@
+{
+  "scope": "Complete source-byte verification operands/results only; not full MSA sheet/episode/live execution.",
+  "cases": [
+    {
+      "case": "combined_native",
+      "provenance": "retained_native_bytes_with_explicit_fixture_invocation",
+      "status": "ok",
+      "verified_files": 1,
+      "verified_maps": 0,
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "requirements": [],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/combined_native.inputs.json",
+          "sha256": "8b7f2a456c0f60f9cbb24e8d1f73c4c8f88675fd09b3df9dfe2202765cd93a59"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/combined_native.answer.json",
+          "sha256": "00ae4597fd4e79d91224e3640e8203c22beb9c07ce42c907e689e3818a5d6339"
+        }
+      ]
+    },
+    {
+      "case": "separate_native",
+      "provenance": "retained_native_bytes_with_explicit_fixture_invocation",
+      "status": "ok",
+      "verified_files": 3,
+      "verified_maps": 0,
+      "source_lengths": [
+        50,
+        49,
+        41
+      ],
+      "requirements": [],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/separate_native.inputs.json",
+          "sha256": "f07ced3b8a9c94db9d9914153a427af9cbe41a325f80f2594fc12ea7b141a59a"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/separate_native.answer.json",
+          "sha256": "9c307bb3020aa39c6987b69ad562b612bf0fc76b3e793da7cfab870971292d9b"
+        }
+      ]
+    },
+    {
+      "case": "one_missing_source",
+      "provenance": "synthetic_missing_source_on_retained_native_example",
+      "status": "partial",
+      "verified_files": 2,
+      "verified_maps": 0,
+      "source_lengths": [
+        50,
+        null,
+        41
+      ],
+      "requirements": [
+        "xmfa_source_bytes_required"
+      ],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/one_missing_source.inputs.json",
+          "sha256": "f4e03447f8f0e02dd75c1e69628980960ed29438a084763510f170303190ab82"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/one_missing_source.answer.json",
+          "sha256": "1bc341d8455c89b8c71d5c7a1561d43d64a6347c02d210d4da7c6922967497ae"
+        }
+      ]
+    },
+    {
+      "case": "contradictory_json_sequence",
+      "provenance": "synthetic_counterexample_on_retained_native_bytes",
+      "status": "invalid",
+      "verified_files": 0,
+      "verified_maps": 0,
+      "source_lengths": null,
+      "requirements": [
+        "xmfa_source_record_bytes_conflict"
+      ],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/contradictory_json_sequence.inputs.json",
+          "sha256": "6979e20c620724ad19ac7d0c4c3589ba211205a5b595c048476517543de90d19"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/contradictory_json_sequence.answer.json",
+          "sha256": "ddbf5289002bb6547240d351f09fff00e145f098e64038892fbbb0e96e0a3ada"
+        }
+      ]
+    },
+    {
+      "case": "distinct_original_occurrences",
+      "provenance": "synthetic_explicit_original_maps_on_retained_native_bytes",
+      "status": "ok",
+      "verified_files": 1,
+      "verified_maps": 2,
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "requirements": [],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/distinct_original_occurrences.inputs.json",
+          "sha256": "18824d6c7d4138e9dc223bded141ea32a9980ff17d847653923d4e2428fdf178"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/distinct_original_occurrences.answer.json",
+          "sha256": "32928a16dd1e07a3ce01e44e224e2bf0501cf48e3fc43a8e02f0a479ac753a97"
+        }
+      ]
+    },
+    {
+      "case": "unknown_original_occurrence",
+      "provenance": "synthetic_counterexample_on_retained_native_bytes",
+      "status": "partial",
+      "verified_files": 1,
+      "verified_maps": 1,
+      "source_lengths": [
+        50,
+        41,
+        49
+      ],
+      "requirements": [
+        "xmfa_original_map_conflict"
+      ],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/unknown_original_occurrence.inputs.json",
+          "sha256": "ea5a9604b581660500fe547f39d55ae258cbdecca94dcc38188ddf2f841ed883"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/unknown_original_occurrence.answer.json",
+          "sha256": "e2ada0776f4fd240d96706c5d991c0b776372bfa119552fe9946f0fcc24ecef0"
+        }
+      ]
+    },
+    {
+      "case": "missing_reader",
+      "provenance": "synthetic_missing_declaration_on_retained_native_bytes",
+      "status": "partial",
+      "verified_files": 0,
+      "verified_maps": 0,
+      "source_lengths": null,
+      "requirements": [
+        "xmfa_source_reader_required"
+      ],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/missing_reader.inputs.json",
+          "sha256": "68ceb8ff52ede2aa48263ac4b4f5e40f1b1ad1335e0cd094c4af65ef67e7fa03"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/missing_reader.answer.json",
+          "sha256": "e1aa991dfc0f744f1ac700c3c8587d472952b275af502e7c3715a734c31a0c7e"
+        }
+      ]
+    },
+    {
+      "case": "partial_record_population",
+      "provenance": "synthetic_partial_declaration_on_retained_native_bytes",
+      "status": "partial",
+      "verified_files": 1,
+      "verified_maps": 0,
+      "source_lengths": [
+        null,
+        null,
+        null
+      ],
+      "requirements": [
+        "xmfa_input_population_partial"
+      ],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/partial_record_population.inputs.json",
+          "sha256": "27ee2ae76713c8b43fba8008ef12acf33cf5d4acd946217d0c2b7ec96f899bc8"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/partial_record_population.answer.json",
+          "sha256": "88839f80ce4ba3a40682340f66dd83b3ee4ee80095bc1b87c8bb9cae4bda6655"
+        }
+      ]
+    },
+    {
+      "case": "raw_dna",
+      "provenance": "synthetic_raw_bytes",
+      "status": "ok",
+      "verified_files": 1,
+      "verified_maps": 0,
+      "source_lengths": null,
+      "requirements": [],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/raw_dna.inputs.json",
+          "sha256": "a925356c1aac295260cc48a9243f4a7bfcde18864ebd76d4bc2f5b3e061a88c7"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/raw_dna.answer.json",
+          "sha256": "7c3862263d7dbd78cc92731577d41ad5493d9fef00a1706620cce5af85c155f0"
+        }
+      ]
+    },
+    {
+      "case": "raw_empty",
+      "provenance": "synthetic_empty_raw_bytes",
+      "status": "ok",
+      "verified_files": 1,
+      "verified_maps": 0,
+      "source_lengths": null,
+      "requirements": [],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/raw_empty.inputs.json",
+          "sha256": "4662ddd479bb18ab46b0902318d672315cded67069ad0dfea99c40fcc6c275aa"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/raw_empty.answer.json",
+          "sha256": "d909927fde2185b518105990081a5d48dee001995ff2a24a7b01b1b19d128d7f"
+        }
+      ]
+    },
+    {
+      "case": "raw_invalid_space",
+      "provenance": "synthetic_invalid_raw_bytes",
+      "status": "invalid",
+      "verified_files": 0,
+      "verified_maps": 0,
+      "source_lengths": null,
+      "requirements": [
+        "xmfa_source_record_bytes_conflict"
+      ],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/raw_invalid_space.inputs.json",
+          "sha256": "01531fbc09c2c8a57f5af75ec74ebf6a32be79894987cd9967f52ab30ab84e84"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/raw_invalid_space.answer.json",
+          "sha256": "b11744d53dc8b5b905d72bde0aca4f1276e43ab3d1f2ae9d2104b13babab64c1"
+        }
+      ]
+    },
+    {
+      "case": "utf8_layout",
+      "provenance": "synthetic_utf8_layout_bytes",
+      "status": "ok",
+      "verified_files": 1,
+      "verified_maps": 0,
+      "source_lengths": null,
+      "requirements": [],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/utf8_layout.inputs.json",
+          "sha256": "56b461c15dede2fb3996d0b198f935f23a72dc64cb2c087fa06e91d5bb3d15fb"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/utf8_layout.answer.json",
+          "sha256": "29fde8e8909f9f6b1cfb5dcdd10c7bcbf1756817a548014ded22f1c25206f22e"
+        }
+      ]
+    },
+    {
+      "case": "unbound_genbank",
+      "provenance": "synthetic_unbound_format_declaration",
+      "status": "partial",
+      "verified_files": 0,
+      "verified_maps": 0,
+      "source_lengths": null,
+      "requirements": [
+        "xmfa_source_extractor_unbound"
+      ],
+      "supplied_byte_replay_without_acquisition": true,
+      "saved_validation_and_binding_without_parsing_or_acquisition": true,
+      "artifacts": [
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/unbound_genbank.inputs.json",
+          "sha256": "6de50641f8c73b7f3567b4c20bfdb394002318f5bba9d3b83302e075af054126"
+        },
+        {
+          "path": "verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004/unbound_genbank.answer.json",
+          "sha256": "1dca331798e71597dbd6dd3e6515c264e048716fcb367463d3abd4a4d9af2dae"
+        }
+      ]
+    }
+  ],
+  "case_count": 13,
+  "source_before": {
+    "gene_annotation_episode/bvbrc_msa_xmfa_inputs.py": "58ec7cdb7d08336eb227523ea853641a68c76bac00b3cc4c834f4bc19a7136b5",
+    "gene_annotation_episode/bvbrc_alignment_provider_contracts.py": "4e283ec25fecbc9d7e68a87708d0eb6343522dc60fbb55cebdbdc61e772c20dd",
+    "gene_annotation_episode/bvbrc_alignment_associations.py": "8573c6bfe2a5031acf822022715bf42b4b3d242b37a042e932cbbe472a78ac36",
+    "gene_annotation_episode/xmfa_sources.py": "1db09368e3c939ec9dc2416df7aa98dcde7ae2afbf2addbc1919194735fc0242",
+    "gene_annotation_episode/xmfa_source_contracts.py": "90fdeebd16fec15eca882911981372cf033ae7de879773f811e24c186cf18398",
+    "gene_annotation_episode/xmfa_format_contracts.py": "e03d6b5f3230e5272e334adb5a7858a7720182c7ecb2fe602b250dac842ef01f",
+    "gene_annotation_episode/phylogeny_formats.py": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69"
+  },
+  "source_after": {
+    "gene_annotation_episode/bvbrc_msa_xmfa_inputs.py": "58ec7cdb7d08336eb227523ea853641a68c76bac00b3cc4c834f4bc19a7136b5",
+    "gene_annotation_episode/bvbrc_alignment_provider_contracts.py": "4e283ec25fecbc9d7e68a87708d0eb6343522dc60fbb55cebdbdc61e772c20dd",
+    "gene_annotation_episode/bvbrc_alignment_associations.py": "8573c6bfe2a5031acf822022715bf42b4b3d242b37a042e932cbbe472a78ac36",
+    "gene_annotation_episode/xmfa_sources.py": "1db09368e3c939ec9dc2416df7aa98dcde7ae2afbf2addbc1919194735fc0242",
+    "gene_annotation_episode/xmfa_source_contracts.py": "90fdeebd16fec15eca882911981372cf033ae7de879773f811e24c186cf18398",
+    "gene_annotation_episode/xmfa_format_contracts.py": "e03d6b5f3230e5272e334adb5a7858a7720182c7ecb2fe602b250dac842ef01f",
+    "gene_annotation_episode/phylogeny_formats.py": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69"
+  },
+  "source_unchanged": true,
+  "retained_native_inputs_unchanged": true
+}

@@ -1,0 +1,237 @@
+
+FILE: gene_annotation_episode/practical_execution_records.py FUNCTION: validate_assignment
+232: def validate_assignment(value):
+233:     value = _object(value, code='invalid_practical_assignment')
+234:     required = {'version', 'assignment_id', 'resource_kind', 'workspace',
+235:         'endpoint', 'requested_job', 'progress_requirements', 'completion_keys',
+236:         'initial_context', 'inventory_snapshot', 'constraints'}
+237:     if not required <= set(value) or set(value) - required - {'launch_instructions', 'resource_id'}:
+238:         raise ValueError('invalid_practical_assignment')
+239:     if 'resource_id' in value and not _text(value['resource_id']):
+240:         raise ValueError('invalid_practical_resource_id')
+241:     if 'launch_instructions' in value:
+242:         value['launch_instructions'] = validate_selection(value['launch_instructions'])
+243:     if (value['version'] != ASSIGNMENT_VERSION or not _text(value['assignment_id'])
+244:             or value['resource_kind'] not in {'local', 'hpc'}
+245:             or value['endpoint'] not in {'usable_handoff', 'completed_job_outputs'}):
+246:         raise ValueError('invalid_practical_assignment')
+247:     _path(value['workspace'])
+248:     job = _object(value['requested_job'], code='invalid_practical_job')
+249:     if 'native_barcode' in job:
+250:         from .native_barcode_contracts import validate_barcode_requested_job
+251:         job = validate_barcode_requested_job(job)
+252:         if value['resource_kind'] != 'local':
+253:             raise ValueError('native_barcode_local_resource_required')
+254:         if not value.get('resource_id'):
+255:             raise ValueError('native_barcode_resource_identity_required')
+256:     elif 'native_expression_nmf' in job:
+257:         from .native_expression_nmf_contracts import validate_expression_nmf_requested_job
+258:         job = validate_expression_nmf_requested_job(job)
+259:         if value['resource_kind'] != 'local':
+260:             raise ValueError('native_expression_nmf_local_resource_required')
+261:         if not value.get('resource_id'):
+262:             raise ValueError('native_expression_nmf_resource_identity_required')
+263:     elif 'native_atac_differential' in job:
+264:         from .native_atac_differential_contracts import validate_atac_requested_job
+265:         job = validate_atac_requested_job(job)
+266:         if value['resource_kind'] != 'local':
+267:             raise ValueError('native_atac_differential_local_resource_required')
+268:         if not value.get('resource_id'):
+269:             raise ValueError('native_atac_differential_resource_identity_required')
+270:     elif 'native_chromatin_interactions' in job:
+271:         from .native_chromatin_interaction_contracts import validate_chromatin_requested_job
+272:         job = validate_chromatin_requested_job(job)
+273:         if value['resource_kind'] != 'local':
+274:             raise ValueError('native_chromatin_interactions_local_resource_required')
+275:         if not value.get('resource_id'):
+276:             raise ValueError('native_chromatin_interactions_resource_identity_required')
+277:     elif 'native_genomic_overlap' in job:
+278:         from .native_genomic_overlap_contracts import validate_genomic_overlap_requested_job
+279:         job = validate_genomic_overlap_requested_job(job)
+280:         if value['resource_kind'] != 'local':
+281:             raise ValueError('native_genomic_overlap_local_resource_required')
+282:         if not value.get('resource_id'):
+283:             raise ValueError('native_genomic_overlap_resource_identity_required')
+284:     elif 'native_protein_structure' in job:
+285:         from .native_protein_structure_contracts import validate_protein_structure_requested_job
+286:         job = validate_protein_structure_requested_job(job)
+287:         if value['resource_kind'] != 'local':
+288:             raise ValueError('native_protein_structure_local_resource_required')
+289:         if not value.get('resource_id'):
+290:             raise ValueError('native_protein_structure_resource_identity_required')
+291:     elif 'native_rna_structure' in job:
+292:         from .native_rna_structure_contracts import validate_rna_structure_requested_job
+293:         job = validate_rna_structure_requested_job(job)
+294:         if value['resource_kind'] != 'local':
+295:             raise ValueError('native_rna_structure_local_resource_required')
+296:         if not value.get('resource_id'):
+297:             raise ValueError('native_rna_structure_resource_identity_required')
+298:     elif 'native_blast_standard_database' in job:
+299:         from .native_blast_standard_database_contracts import validate_standard_blast_database_requested_job
+300:         job = validate_standard_blast_database_requested_job(job)
+301:         if value['resource_kind'] != 'hpc':
+302:             raise ValueError('native_blast_standard_database_hpc_resource_required')
+303:         if not value.get('resource_id'):
+304:             raise ValueError('native_blast_standard_database_resource_identity_required')
+305:     elif 'native_blast_database' in job:
+306:         from .native_blast_database_contracts import validate_native_blast_database_requested_job
+307:         job = validate_native_blast_database_requested_job(job)
+308:         if value['resource_kind'] != 'hpc':
+309:             raise ValueError('native_blast_database_hpc_resource_required')
+310:         if not value.get('resource_id'):
+311:             raise ValueError('native_blast_database_resource_identity_required')
+312:     elif 'native_blast' in job:
+313:         from .native_blast_contracts import validate_native_blast_requested_job
+314:         job = validate_native_blast_requested_job(job)
+315:         if value['resource_kind'] != 'local':
+316:             raise ValueError('native_blast_resource_binding_unfinished:' + value['resource_kind'])
+317:         if not value.get('resource_id'):
+318:             raise ValueError('native_blast_resource_identity_required')
+319:     elif 'native_hmmer' in job:
+320:         from .native_hmmer_contracts import validate_native_hmmer_requested_job
+321:         job = validate_native_hmmer_requested_job(job)
+322:     elif 'native_hmmer_preparation' in job:
+323:         from .native_hmmer_preparation_contracts import validate_native_hmmer_preparation_requested_job
+324:         job = validate_native_hmmer_preparation_requested_job(job)
+325:         if value['resource_kind'] != 'local':
+326:             raise ValueError('native_hmmer_preparation_resource_binding_unfinished:' + value['resource_kind'])
+327:         if not value.get('resource_id'):
+328:             raise ValueError('native_hmmer_preparation_resource_identity_required')
+329:     elif 'native_infernal' in job:
+330:         from .native_infernal_contracts import validate_native_infernal_requested_job
+331:         job = validate_native_infernal_requested_job(job)
+332:     elif 'native_infernal_preparation' in job:
+333:         from .native_infernal_preparation_contracts import validate_native_infernal_preparation_requested_job
+334:         job = validate_native_infernal_preparation_requested_job(job)
+335:         if value['resource_kind'] != 'local':
+336:             raise ValueError('native_infernal_preparation_resource_binding_unfinished:' + value['resource_kind'])
+337:     elif set(job) != {'argv', 'environment'}:
+338:         raise ValueError('invalid_practical_job')
+339:     _strings(job['argv'], nonempty=True)
+340:     _environment(job['environment'])
+341:     value['initial_context'] = validate_context(value['initial_context'], workspace=value['workspace'])
+342:     if value['initial_context']['revision'] != 0:
+343:         raise ValueError('practical_initial_context_requires_revision_zero')
+344:     _object(value['inventory_snapshot'], code='invalid_practical_inventory_snapshot')
+345:     _object(value['constraints'], code='invalid_practical_constraints')
+346:     if not isinstance(value['progress_requirements'], list):
+347:         raise ValueError('invalid_practical_requirements')
+348:     keys = set()
+349:     requirements = []
+350:     for raw in value['progress_requirements']:
+351:         requirement = _object(raw, {'key', 'credit', 'predicate'}, code='invalid_practical_requirement')
+352:         credit = requirement['credit']
+353:         try:
+354:             valid_credit = type(credit) in (int, float) and math.isfinite(credit) and credit >= 0
+355:         except OverflowError:
+356:             valid_credit = False
+357:         if (not _text(requirement['key']) or requirement['key'] in keys
+358:                 or not valid_credit):
+359:             raise ValueError('invalid_practical_requirement')
+360:         requirement['predicate'] = validate_predicate(requirement['predicate'])
+361:         keys.add(requirement['key'])
+362:         requirements.append(requirement)
+363:     value['progress_requirements'] = requirements
+364:     completion = _strings(value['completion_keys'], nonempty=True, unique=True)
+365:     if not set(completion) <= keys:
+366:         raise ValueError('unknown_practical_completion_key')
+367:     endpoint_kind = ('requested_job_handoff' if value['endpoint'] == 'usable_handoff'
+368:         else 'requested_job_outputs')
+369:     if not any(item['key'] in completion and item['predicate']['kind'] == endpoint_kind
+370:             for item in requirements):
+371:         raise ValueError('practical_completion_requires_requested_job_endpoint')
+372:     # Overflow in the total is invalid even when every individual credit is finite.
+373:     try:
+374:         total = math.fsum(item['credit'] for item in requirements)
+375:     except OverflowError as error:
+376:         raise ValueError('nonfinite_practical_credit_total') from error
+377:     if not math.isfinite(total):
+378:         raise ValueError('nonfinite_practical_credit_total')
+379:     return value
+
+FILE: gene_annotation_episode/execution_input_versions.py FUNCTION: validate_execution_input_versions
+15: def validate_execution_input_versions(owner, versions, scope, *, context, atac_assignments=(),
+16:                                       nmf_assignments=(), barcode_assignments=()):
+17:     # Only exact selected BAMs already admitted through original receipt
+18:     # inheritance may use bare artifact custody. Generic artifacts retain
+19:     # their ordinary Store scope requirement.
+20:     selected_files = {}
+21:     failure_prefixes = {}
+22:     for assignment in atac_assignments:
+23:         admitted = owner._atac_inputs(context, assignment)
+24:         job = assignment.get('requested_job', {}).get('native_atac_differential')
+25:         if job is None:
+26:             continue
+27:         owner.store.validate_scope(plain(scope), parent_scope=plain(context.scope))
+28:         for occurrence in job['request']['inputs']:
+29:             file = occurrence['file']
+30:             if file['artifact_ref'] not in admitted:
+31:                 raise ValueError('atac_input_not_received')
+32:             selected_files[file['artifact_ref']] = file
+33:             failure_prefixes[file['artifact_ref']] = 'atac'
+34:     for assignment in nmf_assignments:
+35:         job = assignment.get('requested_job', {}).get('native_expression_nmf')
+36:         if job is None:
+37:             continue
+38:         admitted = owner._expression_nmf_inputs(context, assignment)
+39:         owner.store.validate_scope(plain(scope), parent_scope=plain(context.scope))
+40:         file = job['input']
+41:         if file['artifact_ref'] not in admitted:
+42:             raise ValueError('expression_nmf_input_not_received')
+43:         selected_files[file['artifact_ref']] = file
+44:         failure_prefixes[file['artifact_ref']] = 'expression_nmf'
+45:     for assignment in barcode_assignments:
+46:         job = assignment.get('requested_job', {}).get('native_barcode')
+47:         if job is None:
+48:             continue
+49:         admitted = owner._barcode_inputs(context, assignment)
+50:         owner.store.validate_scope(plain(scope), parent_scope=plain(context.scope))
+51:         for binding in job['inputs'].values():
+52:             if binding is None:
+53:                 continue
+54:             file = binding['file']
+55:             if file['artifact_ref'] not in admitted:
+56:                 raise ValueError('barcode_input_not_received')
+57:             selected_files[file['artifact_ref']] = file
+58:             failure_prefixes[file['artifact_ref']] = 'barcode'
+59:     for supplied in versions:
+60:         if (getattr(owner, 'native_barcode_results', None) is not None
+61:                 and owner._barcode_reference_access(context, supplied['reference'], None) is False):
+62:             raise ValueError('barcode_input_protected_reference_denied')
+63:         if (getattr(owner, 'native_expression_nmf_results', None) is not None
+64:                 and owner._expression_nmf_reference_access(context, supplied['reference'], None) is False):
+65:             raise ValueError('expression_nmf_input_protected_reference_denied')
+66:         if owner._atac_reference_access(context, supplied['reference'], None) is False:
+67:             raise ValueError('atac_input_protected_reference_denied')
+68:         if owner._chromatin_reference_access(context, supplied['reference'], None) is False:
+69:             raise ValueError('chromatin_input_protected_reference_denied')
+70:         if owner._protein_reference_access(context, supplied['reference'], None) is False:
+71:             from .protein_structure_authority import ProteinStructureOperandError
+72:             from .protein_structure_contracts import issue
+73:             raise ProteinStructureOperandError(issue('original_commission_mismatch',
+74:                 stage='authority', field='receipt'))
+75:         record = owner.store.get(supplied['reference'])
+76:         if not owner.store.reference_subset([supplied['reference']], plain(scope)):
+77:             selected = selected_files.get(supplied['reference'])
+78:             if selected is None or record['record_type'] != 'artifact':
+79:                 raise ValueError('execution_input_outside_assigned_scope')
+80:             from .native_file_capture import _metadata
+81:             metadata = _metadata(owner.store, supplied['reference'])
+82:             if metadata['sha256'] != selected['sha256'] or metadata['size'] != selected['size_bytes']:
+83:                 raise ValueError(failure_prefixes[supplied['reference']] + '_input_artifact_metadata_mismatch')
+84:         if supplied['version'] is not None and str(record.get('revision')) != supplied['version']:
+85:             raise ValueError('execution_input_version_conflict')
+86:         if supplied['content_sha256'] is not None:
+87:             selected = selected_files.get(supplied['reference'])
+88:             if selected is not None and record['record_type'] == 'artifact':
+89:                 from .native_file_capture import _metadata
+90:                 metadata = _metadata(owner.store, supplied['reference'])
+91:                 if metadata['sha256'] != selected['sha256'] or metadata['size'] != selected['size_bytes']:
+92:                     raise ValueError(failure_prefixes[supplied['reference']] + '_input_artifact_metadata_mismatch')
+93:                 if metadata['sha256'] != supplied['content_sha256']:
+94:                     raise ValueError('execution_input_version_conflict')
+95:             else:
+96:                 artifact = (record['id'] if record['record_type'] == 'artifact' else
+97:                     record.get('sequence_ref', record.get('artifact_ref')))
+98:                 if artifact is None or hashlib.sha256(owner.store.get_artifact(artifact)).hexdigest() != supplied['content_sha256']:
+99:                     raise ValueError('execution_input_version_conflict')

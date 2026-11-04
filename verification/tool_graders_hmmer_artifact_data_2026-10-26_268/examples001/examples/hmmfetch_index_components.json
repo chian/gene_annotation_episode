@@ -1,0 +1,692 @@
+{
+  "schema": "hmmer_artifact_components_v1",
+  "operation": {
+    "program": "hmmfetch",
+    "mode": "index",
+    "engine_version": "3.4",
+    "settings": {
+      "native_argv": [
+        "--index",
+        "models.hmm"
+      ]
+    }
+  },
+  "parameters": {
+    "probability_tolerance": 0.0001
+  },
+  "rows": [
+    {
+      "kind": "population",
+      "row_key": "input_population",
+      "direction": "input",
+      "record_keys": [
+        "input/models/0#model/0"
+      ],
+      "decoded_model_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "complete_model_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "complete_decoded_model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "primary_name_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "primary_name_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "accession_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "accession_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "distinct_primary_name_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "distinct_name_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "distinct_accession_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "distinct_accession_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "model_artifact_bytes": {
+        "value": 6670,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "measured_size_bytes",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "population",
+      "row_key": "output_population",
+      "direction": "output",
+      "record_keys": [],
+      "decoded_model_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "decoded_model_count",
+        "inputs": []
+      },
+      "complete_model_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "complete_decoded_model_count",
+        "inputs": []
+      },
+      "primary_name_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "primary_name_occurrence_count",
+        "inputs": []
+      },
+      "accession_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "accession_occurrence_count",
+        "inputs": []
+      },
+      "distinct_primary_name_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "distinct_name_count",
+        "inputs": []
+      },
+      "distinct_accession_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "distinct_accession_count",
+        "inputs": []
+      },
+      "model_artifact_bytes": {
+        "value": null,
+        "state": "missing",
+        "unit": "byte",
+        "inputs": []
+      }
+    },
+    {
+      "kind": "artifact",
+      "row_key": "input/models/0",
+      "occurrence_id": "input/models/0",
+      "size_bytes": {
+        "value": 6670,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "format": "hmmer3_ascii",
+      "revision": "3/f",
+      "byte_order": null,
+      "offset_width": null,
+      "decoded_record_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "not_applicable",
+      "authenticated_custody_state": "not_applicable",
+      "internal_content_state": "not_applicable"
+    },
+    {
+      "kind": "artifact",
+      "row_key": "output/stdout/0",
+      "occurrence_id": "output/stdout/0",
+      "size_bytes": {
+        "value": 104,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stdout/0"
+          }
+        ]
+      },
+      "format": null,
+      "revision": null,
+      "byte_order": null,
+      "offset_width": null,
+      "decoded_record_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stdout/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "not_applicable",
+      "authenticated_custody_state": "not_applicable",
+      "internal_content_state": "not_applicable"
+    },
+    {
+      "kind": "artifact",
+      "row_key": "output/stderr/0",
+      "occurrence_id": "output/stderr/0",
+      "size_bytes": {
+        "value": 0,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stderr/0"
+          }
+        ]
+      },
+      "format": null,
+      "revision": null,
+      "byte_order": null,
+      "offset_width": null,
+      "decoded_record_count": {
+        "value": null,
+        "state": "missing",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/stderr/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "not_applicable",
+      "authenticated_custody_state": "not_applicable",
+      "internal_content_state": "not_applicable"
+    },
+    {
+      "kind": "artifact",
+      "row_key": "output/ssi/0",
+      "occurrence_id": "output/ssi/0",
+      "size_bytes": {
+        "value": 165,
+        "state": "present",
+        "unit": "byte",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/ssi/0"
+          }
+        ]
+      },
+      "format": "ssi",
+      "revision": "3.0",
+      "byte_order": "big",
+      "offset_width": 8,
+      "decoded_record_count": {
+        "value": null,
+        "state": "incompatible",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "artifact_metadata",
+            "occurrence_id": "output/ssi/0"
+          }
+        ]
+      },
+      "supplied_binding_state": "pass",
+      "authenticated_custody_state": "unknown",
+      "internal_content_state": "unknown"
+    },
+    {
+      "kind": "index_summary",
+      "row_key": "index_summary",
+      "native_row_key": "output/stdout/0#line/2",
+      "native_model_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "model_count",
+        "inputs": [
+          {
+            "field": "model_count",
+            "row_key": "output/stdout/0#line/2"
+          }
+        ]
+      },
+      "decoded_input_model_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "model_count_difference": {
+        "value": 0,
+        "state": "present",
+        "unit": "model_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          },
+          {
+            "field": "model_count",
+            "row_key": "output/stdout/0#line/2"
+          }
+        ]
+      },
+      "native_primary_name_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "primary_name_count",
+        "inputs": [
+          {
+            "field": "primary_name_count",
+            "row_key": "output/stdout/0#line/2"
+          }
+        ]
+      },
+      "decoded_input_primary_name_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "primary_name_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "primary_name_count_difference": {
+        "value": 0,
+        "state": "present",
+        "unit": "primary_name_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          },
+          {
+            "field": "primary_name_count",
+            "row_key": "output/stdout/0#line/2"
+          }
+        ]
+      },
+      "native_accession_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "accession_count",
+        "inputs": [
+          {
+            "field": "accession_count",
+            "row_key": "output/stdout/0#line/2"
+          }
+        ]
+      },
+      "decoded_input_accession_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "accession_occurrence_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          }
+        ]
+      },
+      "accession_count_difference": {
+        "value": 0,
+        "state": "present",
+        "unit": "accession_count",
+        "inputs": [
+          {
+            "field": "population",
+            "occurrence_id": "input/models/0"
+          },
+          {
+            "field": "accession_count",
+            "row_key": "output/stdout/0#line/2"
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "code": "parameters_valid",
+      "state": "pass",
+      "row_key": null,
+      "field": null,
+      "inputs": [
+        {
+          "parameter": "probability_tolerance"
+        },
+        {
+          "parameter": "expected_revision"
+        }
+      ]
+    },
+    {
+      "code": "model_population_complete",
+      "state": "pass",
+      "row_key": "input_population",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "source_primary_names_unique",
+      "state": "pass",
+      "row_key": "input_population",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "source_accessions_unique",
+      "state": "pass",
+      "row_key": "input_population",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "model_population_complete",
+      "state": "unknown",
+      "row_key": "output_population",
+      "field": null,
+      "inputs": []
+    },
+    {
+      "code": "required_member_present",
+      "state": "pass",
+      "row_key": null,
+      "field": "ssi",
+      "inputs": [
+        {
+          "field": "artifact_occurrences",
+          "direction": "output",
+          "role": "ssi"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "input/models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "input/models/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "input/models/0"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "output/stdout/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stdout/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "output/stdout/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stdout/0"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "output/stderr/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stderr/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "output/stderr/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/stderr/0"
+        }
+      ]
+    },
+    {
+      "code": "supplied_bytes_match_occurrence",
+      "state": "pass",
+      "row_key": "output/ssi/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/ssi/0"
+        }
+      ]
+    },
+    {
+      "code": "capture_complete",
+      "state": "pass",
+      "row_key": "output/ssi/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/ssi/0"
+        }
+      ]
+    },
+    {
+      "code": "supplied_artifact_binding",
+      "state": "pass",
+      "row_key": "output/ssi/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/ssi/0"
+        },
+        {
+          "field": "artifact_bindings",
+          "occurrence_id": "output/ssi/0"
+        }
+      ]
+    },
+    {
+      "code": "authenticated_artifact_custody",
+      "state": "unknown",
+      "row_key": "output/ssi/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/ssi/0"
+        }
+      ]
+    },
+    {
+      "code": "binary_framing",
+      "state": "pass",
+      "row_key": "output/ssi/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/ssi/0"
+        }
+      ]
+    },
+    {
+      "code": "binary_internal_content",
+      "state": "unknown",
+      "row_key": "output/ssi/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/ssi/0"
+        }
+      ]
+    },
+    {
+      "code": "member_nonempty",
+      "state": "pass",
+      "row_key": "output/ssi/0",
+      "field": null,
+      "inputs": [
+        {
+          "field": "artifact_metadata",
+          "occurrence_id": "output/ssi/0"
+        }
+      ]
+    },
+    {
+      "code": "native_model_count",
+      "state": "pass",
+      "row_key": "index_summary",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        },
+        {
+          "field": "model_count",
+          "row_key": "output/stdout/0#line/2"
+        }
+      ]
+    },
+    {
+      "code": "native_primary_name_count",
+      "state": "pass",
+      "row_key": "index_summary",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        },
+        {
+          "field": "primary_name_count",
+          "row_key": "output/stdout/0#line/2"
+        }
+      ]
+    },
+    {
+      "code": "native_accession_count",
+      "state": "pass",
+      "row_key": "index_summary",
+      "field": null,
+      "inputs": [
+        {
+          "field": "population",
+          "occurrence_id": "input/models/0"
+        },
+        {
+          "field": "accession_count",
+          "row_key": "output/stdout/0#line/2"
+        }
+      ]
+    },
+    {
+      "code": "native_diagnostics",
+      "state": "not_applicable",
+      "row_key": null,
+      "field": null,
+      "inputs": []
+    }
+  ],
+  "issues": []
+}

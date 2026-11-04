@@ -1057,7 +1057,11 @@ _STRICT_VALIDATOR = validators.extend(Draft202012Validator,
 _VALIDATORS = {name: _STRICT_VALIDATOR({"$defs": _DEFINITIONS, "$ref": "#/$defs/" + name}) for name in PUBLIC_TYPE_NAMES}
 
 
-def protein_structure_schema_definitions() -> dict:
+def protein_structure_schema_definitions(*, action_custody=False) -> dict:
+    if type(action_custody) is not bool:
+        raise ValueError("invalid_schema")
+    if action_custody:
+        return protein_structure_action_schema_definitions()
     return deepcopy(_DEFINITIONS)
 
 
@@ -1524,9 +1528,13 @@ def _check_inventory(v):
 def _validate(name, value):
     try:
         _json_only(value)
-        if not _VALIDATORS[name].is_valid(value):
+        action_custody = _contains_action_custody(value)
+        validator = _action_validator(name) if action_custody else _VALIDATORS[name]
+        if not validator.is_valid(value):
             raise ValueError("invalid_schema")
         _relations(value)
+        if action_custody:
+            _action_relations(value)
     except (KeyError, TypeError, IndexError, RecursionError, OverflowError) as error:
         raise ValueError("invalid_schema") from error
     return deepcopy(value)
@@ -1599,3 +1607,127 @@ def validate_structure_inventory(value: StructureInventory) -> StructureInventor
 
 __all__ = [*PUBLIC_TYPE_NAMES, "protein_structure_schema_definitions", "protein_structure_schema_ref",
            *[name for name in globals() if name.startswith("validate_")]]
+
+
+# These authority types are deliberately defined AFTER the legacy cohort was
+# constructed. Default exported definitions and their historical digests stay
+# unchanged; only an explicitly selected action cohort includes these types.
+class ProteinStructureActionCustody(TypedDict):
+    version: Literal["protein_structure_action_custody_v1"]
+    source_ref: SourceRef
+
+
+class StructureSequenceDescriptorV2(TypedDict):
+    version: Literal["structure_sequence_descriptor_v2"]
+    custody: ProteinStructureActionCustody
+    reference_ref: ReferenceRef
+    sequence_file: FileIdentity
+    residue_map_file: FileIdentity
+    structure_file: FileIdentity
+    selection: StructureSelection
+    sequence_length: Positive
+    allowed_uses: list[Literal["sequence_align", "structure_correspondence"]]
+
+
+class SavedSheetDescriptorV2(TypedDict):
+    version: Literal["protein_structure_saved_sheet_v2"]
+    custody: ProteinStructureActionCustody
+    sheet_file: FileIdentity
+    original_components_file: FileIdentity
+    operation: Literal["compare_protein_structures"]
+    original_mode: ScientificMode
+    allowed_uses: list[Literal["recalculate", "select_projection", "use_transform"]]
+
+
+def protein_structure_action_schema_definitions() -> dict:
+    """Extend only authority positions in a detached opt-in schema cohort."""
+    definitions = deepcopy(_DEFINITIONS)
+    definitions["ResultCustodyV1"] = deepcopy(definitions["ResultCustody"])
+    definitions["ProteinStructureActionCustody"] = {
+        "type": "object", "properties": {
+            "version": {"enum": ["protein_structure_action_custody_v1"]},
+            "source_ref": {**_type_schema(SourceRef), "format": "reference", "x-reference-namespace": "source"}},
+        "required": ["version", "source_ref"], "additionalProperties": False}
+    for name, version in (("StructureSequenceDescriptor", "structure_sequence_descriptor_v2"),
+                          ("SavedSheetDescriptor", "protein_structure_saved_sheet_v2")):
+        legacy = deepcopy(_DEFINITIONS[name])
+        legacy["properties"]["custody"] = {"$ref": "#/$defs/ResultCustodyV1"}
+        definitions[name + "V1"] = legacy
+        action = deepcopy(legacy)
+        action["properties"]["version"] = {"enum": [version]}
+        action["properties"]["custody"] = {"$ref": "#/$defs/ProteinStructureActionCustody"}
+        if name == "StructureSequenceDescriptor":
+            action["properties"]["reference_ref"].update(format="reference", **{"x-reference-namespace": "reference"})
+        definitions[name + "V2"] = action
+        definitions[name] = {"anyOf": [{"$ref": "#/$defs/" + name + "V1"},
+                                      {"$ref": "#/$defs/" + name + "V2"}]}
+    for suffix, descriptor, custody in (("V1", "SavedSheetDescriptorV1", "ResultCustodyV1"),
+                                       ("V2", "SavedSheetDescriptorV2", "ProteinStructureActionCustody")):
+        received = deepcopy(_DEFINITIONS["ReceivedTransform"])
+        received["properties"]["saved_sheet"] = {"$ref": "#/$defs/" + descriptor}
+        received["properties"]["calculation_custody"] = {"$ref": "#/$defs/" + custody}
+        definitions["ReceivedTransform" + suffix] = received
+    definitions["ReceivedTransform"] = {"anyOf": [{"$ref": "#/$defs/ReceivedTransformV1"},
+                                                 {"$ref": "#/$defs/ReceivedTransformV2"}]}
+    return definitions
+
+
+def _contains_action_custody(value):
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, dict):
+            if isinstance(item.get("version"), str) and item["version"] in {"protein_structure_action_custody_v1",
+                    "structure_sequence_descriptor_v2", "protein_structure_saved_sheet_v2"}:
+                return True
+            pending.extend(item.values())
+        elif isinstance(item, list):
+            pending.extend(item)
+    return False
+
+
+def _action_validator(name):
+    definitions = protein_structure_action_schema_definitions()
+    if name not in definitions:
+        raise ValueError("invalid_schema")
+    return _STRICT_VALIDATOR({"$defs": definitions, "$ref": "#/$defs/" + name})
+
+
+def _action_relations(value):
+    if isinstance(value, list):
+        for item in value:
+            _action_relations(item)
+    elif isinstance(value, dict):
+        for item in value.values():
+            _action_relations(item)
+        version = value.get("version")
+        if version == "structure_sequence_descriptor_v2":
+            _unique(value["allowed_uses"], nonempty=True)
+            if (not same(value["selection"]["file_identity"], value["structure_file"])
+                    or value["sequence_file"]["byte_length"] != value["sequence_length"]):
+                raise ValueError("sequence_artifact_mismatch")
+            if (value["sequence_file"]["format"] != "ascii_protein_sequence_v1"
+                    or value["residue_map_file"]["format"] != "protein_structure_sequence_v1"):
+                raise ValueError("unsupported_format")
+        elif version == "protein_structure_saved_sheet_v2":
+            _unique(value["allowed_uses"], nonempty=True)
+            if (value["sheet_file"]["format"] != "protein_structure_comparison_sheet_v1"
+                    or value["original_components_file"]["format"] != "protein_structure_components_v1"):
+                raise ValueError("unsupported_format")
+
+
+def validate_protein_structure_action_custody(value):
+    return _validate("ProteinStructureActionCustody", value)
+
+
+def validate_structure_sequence_descriptor_v2(value):
+    return _validate("StructureSequenceDescriptorV2", value)
+
+
+def validate_saved_sheet_descriptor_v2(value):
+    return _validate("SavedSheetDescriptorV2", value)
+
+
+__all__ += ["ProteinStructureActionCustody", "StructureSequenceDescriptorV2", "SavedSheetDescriptorV2",
+    "protein_structure_action_schema_definitions", "validate_protein_structure_action_custody",
+    "validate_structure_sequence_descriptor_v2", "validate_saved_sheet_descriptor_v2"]

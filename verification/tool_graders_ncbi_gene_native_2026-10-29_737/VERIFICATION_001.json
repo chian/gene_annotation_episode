@@ -1,0 +1,234 @@
+{
+  "version": "ncbi_gene_native_verification_737_v1",
+  "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737",
+  "handle": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/handle.json",
+  "cases": 56,
+  "passed": 56,
+  "failed": 0,
+  "skipped": 0,
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/handle.json",
+    "unit": "gene-local-job-c02b728a80b84ba1a59c67727c30b196.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "selected_stdlib_source_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T20:46:04.225963+00:00",
+          "monotonic_ns": 1120325923292809,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 12.235212266,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 777400320
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "source_matches_frozen": [
+    {
+      "current": {
+        "path": "gene_annotation_episode/ncbi_gene_native.py",
+        "sha256": "3ca863ef6d7d3b37dba700e30125b5ee3063ea08efa5abe6d1b82d11d260d18b",
+        "size_bytes": 12917
+      },
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/source_snapshot/gene_annotation_episode/ncbi_gene_native.py",
+        "sha256": "3ca863ef6d7d3b37dba700e30125b5ee3063ea08efa5abe6d1b82d11d260d18b",
+        "size_bytes": 12917
+      },
+      "same": true
+    },
+    {
+      "current": {
+        "path": "tests/test_ncbi_gene_native_737.py",
+        "sha256": "3db7aa6fad23a01480b029f1d935198cf3f3dab25f33c2ada751a94fd3edccde",
+        "size_bytes": 17130
+      },
+      "frozen": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/source_snapshot/tests/test_ncbi_gene_native_737.py",
+        "sha256": "3db7aa6fad23a01480b029f1d935198cf3f3dab25f33c2ada751a94fd3edccde",
+        "size_bytes": 17130
+      },
+      "same": true
+    }
+  ],
+  "closure_checks": [
+    {
+      "kind": "source",
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/source_pins_before.json",
+        "sha256": "bdb9eca8f7ff0b14b1bca3ea2e86a7cbd203d06d0760c09ea6934ecce848a9b8",
+        "size_bytes": 2341942
+      },
+      "after": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/source_pins_after.json",
+        "sha256": "bdb9eca8f7ff0b14b1bca3ea2e86a7cbd203d06d0760c09ea6934ecce848a9b8",
+        "size_bytes": 2341942
+      },
+      "unchanged": true
+    },
+    {
+      "kind": "dependencies",
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/dependency_pins_before.json",
+        "sha256": "08296b5ddc3e46a3a8bb6865a19725cd5fae87741ba1f95c605cb787a73b9237",
+        "size_bytes": 3217927
+      },
+      "after": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/dependency_pins_after.json",
+        "sha256": "08296b5ddc3e46a3a8bb6865a19725cd5fae87741ba1f95c605cb787a73b9237",
+        "size_bytes": 3217927
+      },
+      "unchanged": true
+    },
+    {
+      "kind": "stdlib",
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/stdlib_pins_before.json",
+        "sha256": "d649e182ed0445886495205b5dd4ed6424a724635238e7f6b2da495fa05b04af",
+        "size_bytes": 191368
+      },
+      "after": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/stdlib_pins_after.json",
+        "sha256": "d649e182ed0445886495205b5dd4ed6424a724635238e7f6b2da495fa05b04af",
+        "size_bytes": 191368
+      },
+      "unchanged": true
+    },
+    {
+      "kind": "binary",
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/binary_pins_before.json",
+        "sha256": "0fedd8493b025c69d8c3909c50ed18235adbac77b5af306ce4189bdb4062d218",
+        "size_bytes": 544
+      },
+      "after": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/binary_pins_after.json",
+        "sha256": "0fedd8493b025c69d8c3909c50ed18235adbac77b5af306ce4189bdb4062d218",
+        "size_bytes": 544
+      },
+      "unchanged": true
+    },
+    {
+      "kind": "selected_stdlib_source",
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/selected_stdlib_source_pins.json",
+        "sha256": "243f646a1089a7c540eac2824eb38695a89ebdca0d18c6b5e824e778c5131114",
+        "size_bytes": 194272
+      },
+      "after": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/selected_stdlib_source_pins_after.json",
+        "sha256": "243f646a1089a7c540eac2824eb38695a89ebdca0d18c6b5e824e778c5131114",
+        "size_bytes": 194272
+      },
+      "unchanged": true
+    },
+    {
+      "kind": "native_libraries",
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/native_library_pins_before.json",
+        "sha256": "d12c4130927ee2515b8519c6e54ac39e86e2611781fe4556ff39b6befd7766e2",
+        "size_bytes": 97532
+      },
+      "after": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/native_library_pins_after.json",
+        "sha256": "d12c4130927ee2515b8519c6e54ac39e86e2611781fe4556ff39b6befd7766e2",
+        "size_bytes": 97532
+      },
+      "unchanged": true
+    },
+    {
+      "kind": "original_retained_fixtures",
+      "before": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/original_retained_fixture_pins_before.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "size_bytes": 3
+      },
+      "after": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/original_retained_fixture_pins_after.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "size_bytes": 3
+      },
+      "unchanged": true
+    }
+  ],
+  "native_facts": {
+    "source_sha256": "06caac1d71d16e5cad9278bb81ff41cd7abc067681638cbaca3e050e025d82ca",
+    "source_bytes": 2074977,
+    "source_capture_audit_clean": false,
+    "source_capture_qualification": "original201 unbound NSS mapping; no retrospective authorization",
+    "record_count": 1,
+    "locus_count": 3,
+    "locus_commentary_counts": [
+      11,
+      3,
+      11
+    ],
+    "new_network_requests": 0,
+    "episode_binding_verified": false
+  },
+  "native_artifacts": [
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/native-gene737/parsed.json",
+      "sha256": "166f954dd3eb33e3c8bc28a6f8006aa851421cffae4b45d55dc3430401ee8e87",
+      "size_bytes": 18905261
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check202_gene737/native-gene737/facts.json",
+      "sha256": "6efee91a0402169d77e08f7c3632401d56636c8f99e7dbb2541a433499990752",
+      "size_bytes": 422
+    }
+  ],
+  "new_network_requests": 0,
+  "scientific_analyses_executed": 0,
+  "new_numerical_authorities": 0,
+  "whole_tool_increment": 0,
+  "result_path_binding_verified": false,
+  "episode_return_verified": false,
+  "source_capture201_audit_clean": false,
+  "remaining": [
+    "Actual ToolInfo and selected API resource-child binding",
+    "Episode-owned Gene/locus/CDS choices and child-owned result custody",
+    "Requested typed returns and full episode/saved replay",
+    "Required TASK/STEERING feedback; all R1-R7 remain open"
+  ]
+}

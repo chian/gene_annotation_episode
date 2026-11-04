@@ -1,0 +1,1344 @@
+--- a/gene_annotation_episode/literature_rate_calculations.py
++++ b/gene_annotation_episode/literature_rate_calculations.py
+@@ -211,7 +211,7 @@
+ 
+ def populate_rate_contrast(extraction, *, reference_arm, test_arm,
+                            reference_condition, test_condition,
+-                           dependence="unknown", observation_model="none"):
++                           dependence="unknown", observation_model="none", native_bound_version=None):
+     """Populate source-rate cells; unknown assumptions remain visible unknowns.
+ 
+     ``independent_normal_groups`` is an explicit conditional observation model,
+@@ -221,6 +221,10 @@
+     """
+     extracted = validate_rate_extraction(extraction)
+     native = extracted["version"] == "a105_rate_extraction_v2"
++    if native_bound_version is not None:
++        from .literature_rate_domains import VERSION as DOMAIN_VERSION
++        if not native or native_bound_version != DOMAIN_VERSION:
++            _error("unsupported_native_bound_version", "native_bound_version")
+     for name, value in (("reference_arm", reference_arm), ("test_arm", test_arm),
+                         ("reference_condition", reference_condition),
+                         ("test_condition", test_condition)):
+@@ -277,7 +281,7 @@
+             elif bvalue == 0 and brow["value"] != 0:
+                 bvalue, breason = None, "numerical_model_range"
+     pair_rows = [*arows, *brows]
+-    pair_reason = areason or breason or native_pair_reason
++    pair_reason = (native_pair_reason or areason or breason) if native_bound_version is not None else areason or breason or native_pair_reason
+     def native_origin(row, multiplier):
+         if row is None:
+             return "derived"
+@@ -358,7 +362,7 @@
+                 approximations["test"] if name == "test_rate" else
+                 False if name in ("reference_mean_se", "test_mean_se", "difference_se") else
+                 any(approximations.values()))
+-    return {
++    result = {
+         "version": VERSION, "axis": "A105", "scope": "source_preparation_endpoint",
+         "subject": extracted["subject"], "experiment": extracted["experiment"],
+         "comparison": {"reference_arm": reference_arm, "test_arm": test_arm,
+@@ -373,6 +377,12 @@
+         "extraction": extracted, "cells": cells, "profile_diagnostics": profile,
+         "annotation_credit": None, "molecule_specific_product_rate": None,
+     }
++    if native_bound_version is not None:
++        from .literature_rate_domains import native_domain_trace, apply_native_domains
++        trace = native_domain_trace(extracted, cells)
++        apply_native_domains(cells, trace)
++        result["native_bound_arithmetic"] = trace
++    return result
+ 
+ 
+ __all__ = ["VERSION", "populate_rate_contrast"]
+--- a/gene_annotation_episode/literature_rate_storage.py
++++ b/gene_annotation_episode/literature_rate_storage.py
+@@ -321,11 +321,13 @@
+             return {"artifact_ref": artifact, "content": self.store.get_artifact(artifact)}
+ 
+         extraction = read_rate_source_inputs(args, read_source=read_source)
++        from .literature_rate_domains import VERSION as DOMAIN_VERSION
+         rows = {row["arm"]: row for row in extraction["rows"]}
+         sheet = populate_rate_contrast(extraction, reference_arm="reference", test_arm="test",
+             reference_condition=rows.get("reference", {}).get("condition"),
+             test_condition=rows.get("test", {}).get("condition"),
+-            dependence=args["dependence"]["value"], observation_model=args["observation_model"]["value"])
++            dependence=args["dependence"]["value"], observation_model=args["observation_model"]["value"],
++            native_bound_version=DOMAIN_VERSION)
+         direct = extraction["native_context"]["source_refs"]
+         parents, seen = list(direct), set(direct)
+         cursor = 0
+@@ -438,6 +440,24 @@
+             raise ContractError("literature_native_rate_saved_mismatch")
+         extraction = validate_native_extraction(payload["sheet"]["extraction"])
+         validate_native_selection(request["arguments"], extraction)
++        trace = payload["sheet"].get("native_bound_arithmetic")
++        if "native_bound_arithmetic" in payload["sheet"]:
++            from .literature_rate_domains import VERSION as DOMAIN_VERSION, native_domain_trace, apply_native_domains
++            if not isinstance(trace, dict) or trace.get("version") != DOMAIN_VERSION:
++                raise ContractError("literature_native_rate_bound_version_unsupported")
++            import math
++            for cell in payload["sheet"]["cells"].values():
++                for field in ("value", "threshold"):
++                    value = cell.get(field)
++                    try:
++                        valid = value is None or type(value) in (int, float) and math.isfinite(value)
++                    except (OverflowError, ValueError):
++                        valid = False
++                    if not valid:
++                        raise ContractError("literature_native_rate_saved_numeric_type_mismatch")
++            expected_trace = native_domain_trace(extraction, payload["sheet"]["cells"])
++            if canonical(trace) != canonical(expected_trace):
++                raise ContractError("literature_native_rate_saved_domain_mismatch")
+         rows = {row["arm"]: row for row in extraction["rows"]}
+         for component in self.components:
+             row = rows.get("reference" if component == "reference_rate" else
+@@ -448,6 +468,32 @@
+             expected = {"threshold": row["value"] if censored else None,
+                         "bound": relation if censored else "none"}
+             cell = payload["sheet"]["cells"][component]
++            if trace is not None and component in ("rate_difference", "retained_fraction", "fractional_decrease"):
++                original = {name: deepcopy(value) for name, value in payload["sheet"]["cells"].items()}
++                for value in original.values():
++                    value.update(threshold=None, bound="none")
++                apply_native_domains(original, trace)
++                expected = {key: original[component][key] for key in ("threshold", "bound")}
++                domain = trace["components"][component]["reported_domain"]
++                if cell["input_rows"] != trace["components"][component]["input_rows"]:
++                    raise ContractError("literature_native_rate_saved_domain_mismatch")
++                image = trace["components"][component]["image"]
++                exact_point = image is not None and image["lower"] is not None and image["lower"] == image["upper"]
++                if domain["failure"] is not None:
++                    if (cell["value"] is not None or cell["status"] != "unavailable"
++                            or cell["unavailable_reason"] != domain["failure"]):
++                        raise ContractError("literature_native_rate_saved_domain_mismatch")
++                elif not exact_point:
++                    if cell["value"] is not None or cell["status"] != "unavailable":
++                        raise ContractError("literature_native_rate_saved_domain_mismatch")
++                    if cell["unavailable_reason"] != "censored_measurement":
++                        raise ContractError("literature_native_rate_saved_domain_mismatch")
++                else:
++                    from fractions import Fraction
++                    exact = image["lower"]
++                    identified = float(Fraction(int(exact["numerator"]), int(exact["denominator"])))
++                    if cell["value"] != identified or cell["status"] != "populated" or cell["unavailable_reason"] is not None:
++                        raise ContractError("literature_native_rate_saved_domain_mismatch")
+             if (not set(expected).issubset(cell)
+                     or canonical({key: cell[key] for key in expected}) != canonical(expected)):
+                 raise ContractError("literature_native_rate_saved_bounds_mismatch")
+@@ -569,6 +615,14 @@
+             self._source_projection = LiteratureRateSourceProjection(self.store, self.run_id)
+         return self._source_projection
+ 
++    def source_domain_projection(self):
++        """Versioned domain return over the same original numerical operations."""
++        if self.provider != PROVIDER or self.operations_table != "literature_rate_operations":
++            raise ContractError("native_rate_return_view_requires_rate_repository")
++        if not hasattr(self, "_source_domain_projection"):
++            self._source_domain_projection = LiteratureRateSourceDomainProjection(self.store, self.run_id)
++        return self._source_domain_projection
++
+     def validate_empty_return_family(self, context):
+         """At typed admission, distinguish unavailable work from the wrong view.
+ 
+@@ -759,6 +813,58 @@
+         raise ContractError("native_rate_return_view_cannot_publish_legacy_table")
+ 
+ 
++class LiteratureRateSourceDomainProjection(LiteratureRateSourceProjection):
++    """Independent typed custody for constraints, without a second sheet."""
++    received_table = "literature_rate_source_domain_received"
++
++    def __init__(self, store, run_id):
++        if not isinstance(run_id, str) or not run_id:
++            raise ValueError("explicit_literature_run_required")
++        self.store, self.run_id = store, run_id
++
++    def _installed(self):
++        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
++            (self.received_table,)).fetchone() is not None
++
++    def received_cells(self, context):
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        return super().received_cells(context) if self._installed() else []
++
++    def receive_cells(self, context, cells, operation_key):
++        with self.store.transaction():
++            self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
++                run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
++                cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
++            return super().receive_cells(context, cells, operation_key)
++
++    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
++        from .literature_rate_domains import _project, _point
++        from fractions import Fraction
++        rows = super().project_cells(sheet_refs, permitted_record_refs=permitted_record_refs, components=components)
++        saved = {}
++        for row in rows:
++            reference = row["sheet_ref"]
++            if reference not in saved:
++                saved[reference] = self.read(reference)
++            trace = saved[reference]["sheet"].get("native_bound_arithmetic")
++            if trace is not None:
++                domain = trace["components"][row["component"]]["reported_domain"]
++            else:
++                # Historical cells supply only their actually saved point or
++                # raw threshold. Never infer a previously unsaved contrast.
++                q = row["value"] if row["value"] is not None else row["threshold"]
++                interval = None if q is None else _point(Fraction(q))
++                if q is not None and row["bound"] != "none":
++                    q = Fraction(q)
++                    interval = {"lt": (-float("inf"), False, q, False), "le": (-float("inf"), False, q, True),
++                        "gt": (q, False, float("inf"), False), "ge": (q, True, float("inf"), False)}[row["bound"]]
++                domain = _project(interval, basis="legacy_stored_cell", conditioning="stored_source_cell",
++                    failure=row["unavailable_reason"] if interval is None else None)
++            row["reported_domain"] = deepcopy(domain)
++        return rows
++
++
+ def rate_source_cells_schema():
+     """Closed native return contract, distinct from the unchanged v1 projection."""
+     schema = rate_cells_schema()
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -126,7 +126,7 @@
+         "input_schema": partner_source_population_schema_with_information()})
+     from .literature_native_rate_operand_information import rate_source_population_schema_with_information
+     result.append({"name": "literature.rate.source.populate",
+-        "description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request its closed literature_rate_source_cells return projection, which preserves each arm's subject, construct, preparation and approximation; literature_rate_cells is the separate legacy table projection. Select source-backed endpoint/basis relationships and statistical assumptions; different constructs may be the intended comparison. Source-defined U/mg requires its endpoint-specific definition. Missing meanings, unsupported units and censored values retain partial inputs. Exact witnesses verify custody, not causal isolation, target correspondence or annotation credit.",
++        "description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request literature_rate_source_domain_cells for full reported-operand domains, including finite two-sided enclosures; the original literature_rate_source_cells projection preserves each arm's subject, construct, preparation, approximation and one-sided limits; literature_rate_cells is the separate legacy table projection. Select source-backed endpoint/basis relationships and statistical assumptions; different constructs may be the intended comparison. Source-defined U/mg requires its endpoint-specific definition. Missing meanings, unsupported units and censored values retain partial inputs. Exact witnesses verify custody, not causal isolation, target correspondence or annotation credit.",
+         "input_schema": rate_source_population_schema_with_information()})
+     from .literature_amount_inputs import amount_arguments_schema
+     result.append({"name": "literature.amount.populate",
+@@ -252,7 +252,7 @@
+                          "literature_rate_native_inputs.py",
+                          "literature_native_rate_operand_information.py",
+                          "literature_rate_calculations.py", "literature_rate_storage.py",
+-                         "literature_rate_source_render.py",
++                         "literature_rate_source_render.py", "literature_rate_domains.py",
+                          "literature_received_fact_render.py",
+                          "literature_experimental_prompt.py", "literature_prose_reader.py",
+                          "literature_html_quantity_reader.py",
+@@ -562,6 +562,7 @@
+             result.update(self._gel_display_context(context))
+         if self.rate_population:
+             result.update(self._native_rate_display_context(context))
++            result.update(self._native_rate_domain_display_context(context))
+             result.update(self._received_fact_display_context(context))
+         return result
+ 
+@@ -594,6 +595,7 @@
+             result.update(self._gel_display_context(context))
+         if self.rate_population:
+             result.update(self._native_rate_display_context(context))
++            result.update(self._native_rate_domain_display_context(context))
+             result.update(self._received_fact_display_context(context))
+         return result
+ 
+@@ -878,7 +880,41 @@
+                 records[reference] = record
+         return {"literature_rate_source_display": {"cells": list(unique.values()), "records": records}}
+ 
++    def _native_rate_domain_display_context(self, context):
++        """Exact owned/admitted rate rows and possessed meaning-record metadata."""
++        from .literature_rate_storage import PROVIDER, NATIVE_RECORD_VERSION, COMPONENTS
++        from .literature_rate_source_render import MEANING_FIELDS
++        repository = self.services.literature_rate_repository().source_domain_projection()
++        rows = list(repository.received_cells(context))
++        for reference in context.received_record_refs:
++            record = self.services.read_record(reference)
++            if (record.get("record_type") == "source" and record.get("provider") == PROVIDER
++                    and record.get("version") == NATIVE_RECORD_VERSION):
++                # fact_cells authenticates original ownership or the exact
++                # receiver subset. A known sheet never expands parent custody.
++                rows.extend(repository.fact_cells(context, [reference], components=COMPONENTS))
++        unique = {}
++        for row in rows:
++            key = (row["sheet_ref"], row["component"])
++            if key in unique and unique[key] != row:
++                raise ContractError("literature_rate_source_domain_display_possession_conflict")
++            unique[key] = row
++        records = {}
++        for row in unique.values():
++            for field, namespace in MEANING_FIELDS.items():
++                reference = row[field]
++                if reference is None:
++                    continue
++                if reference not in context.received_record_refs:
++                    raise ContractError("literature_rate_source_domain_display_record_not_received")
++                record = self._require(reference, context.scope, namespace)
++                if record.get("id") != reference or record.get("record_type") != namespace:
++                    raise ContractError("literature_rate_source_domain_display_record_mismatch")
++                records[reference] = record
++        return {"literature_rate_source_domain_display": {"cells": list(unique.values()), "records": records}}
++
+     def _rate_fact_sources(self):
++        from .literature_rate_domains import rate_source_domain_cells_schema
+         from .literature_rate_storage import rate_cells_schema, rate_source_cells_schema
+         from .literature_quantity_storage import quantity_cells_schema
+         from .literature_assay_storage import assay_cells_schema
+@@ -902,6 +938,9 @@
+             "literature_rate_source_cells": {"type": "array", "meaning":
+                 "The same saved numerical rate components from native source spans, with each arm's actual subject/construct/preparation bindings and approximation retained. Source-supported conditional statistical assumptions do not establish causal isolation, target transfer or annotation credit. This closed native return view is distinct from the legacy table view, not a second scoring sheet.",
+                 "report_schema": rate_source_cells_schema()},
++            "literature_rate_source_domain_cells": {"type": "array", "meaning":
++                "The same saved native rate components with conditional logical enclosures of reported operands. Finite bounds, inclusivity, undefined denominators and outward numerical projection are explicit; range failure can qualify a still-useful partial enclosure. Status concerns the point estimate. Domains are not sampling confidence intervals, independence, endpoint co-attainability, target transfer or annotation credit. This is another closed return view of the same numerical sheet, not another assay.",
++                "report_schema": rate_source_domain_cells_schema()},
+             "literature_quantity_cells": {"type": "array", "meaning":
+                 "Saved single reported source quantities, with quantity and analyte identity. Untyped spread remains untyped. Source conditions, attribution and correction scores remain unknown where unsupported.",
+                 "report_schema": quantity_cells_schema()},
+@@ -992,6 +1031,8 @@
+                  COMPONENTS, self.services.literature_rate_repository),
+                 ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository().source_projection),
++                ("literature_rate_source_domain_cells", "requested_rate_components", PROVIDER,
++                 COMPONENTS, self.services.literature_rate_repository().source_domain_projection),
+                 ("literature_quantity_cells", "requested_quantity_components", QUANTITY_PROVIDER,
+                  QUANTITIES, self.services.literature_quantity_repository),
+                 ("literature_assay_cells", "requested_assay_components", ASSAY_PROVIDER,
+@@ -1040,7 +1081,7 @@
+                     continue
+                 row = self.services.read_record(reference)
+                 if row.get("record_type") == "source" and row.get("provider") == provider:
+-                    if namespace in {"literature_rate_cells", "literature_rate_source_cells"}:
++                    if namespace in {"literature_rate_cells", "literature_rate_source_cells", "literature_rate_source_domain_cells"}:
+                         if row.get("version") not in {"literature_rate_population_record_v1", "literature_rate_population_record_v2"}:
+                             raise ContractError("literature_rate_projection_version_mismatch")
+                         if row.get("version") != adapter.record_version:
+@@ -1144,7 +1185,7 @@
+                             code="literature_rate_receiver_mismatch", field=name)
+                     permitted.update(selection["known_record_refs"])
+                 try:
+-                    if (namespace in {"literature_rate_cells", "literature_rate_source_cells"}
++                    if (namespace in {"literature_rate_cells", "literature_rate_source_cells", "literature_rate_source_domain_cells"}
+                             and not rows and context.assignment.get("requested_rate_components") not in ([], ())):
+                         repository().validate_empty_return_family(context)
+                     # This hook validates the REPORTING episode (also when C4
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -14,6 +14,7 @@
+ from .literature_controlled_response_prompt import CONTROLLED_RESPONSE_TASK
+ from .literature_gel_prompt import GEL_TASK
+ from . import literature_rate_source_render as _native_rate
++from . import literature_rate_domains as _rate_domains
+ from .literature_received_fact_render import ReceivedFactDisplay
+ 
+ from collections.abc import Mapping
+@@ -78,7 +79,7 @@
+     "report_contract_declaration", "contract_information_profile",
+     "requested_controlled_response_component_keys", "literature_controlled_response_return_bindings",
+     "requested_gel_component_keys", "literature_gel_return_bindings", "literature_gel_return_records",
+-    "literature_rate_source_display",
++    "literature_rate_source_display", "literature_rate_source_domain_display",
+ })
+ 
+ 
+@@ -215,6 +216,9 @@
+     native_rows = list(_native_rate.rows_from_reports(state.get("child_reports", ())))
+     own = (state.get("last_local_outcome") or {}).get("result", {})
+     native_rows.extend(_native_rate.own_rows(own, state.get("literature_rate_source_display", {}).get("cells", ())))
++    domain_rows = list(_rate_domains.rows_from_reports(state.get("child_reports", ())))
++    domain_rows.extend(_rate_domains.own_rows(own, state.get("literature_rate_source_domain_display", {}).get("cells", ())))
++    native_rows.extend(_rate_domains.base_rows(domain_rows))
+     hidden_native_rate = _native_rate.hidden_records(native_rows)
+     selected = {}
+     for reference in pending:
+@@ -362,11 +366,18 @@
+ 
+ def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+         controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None,
+-        native_rate_display=None, values=_values):
++        native_rate_display=None, native_rate_domain_display=None, values=_values):
+     if not isinstance(value, Mapping):
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    native_rate_domain_display = native_rate_domain_display or {}
++    domain_rows = _rate_domains.own_rows(content, native_rate_domain_display.get("cells", ()))
++    if domain_rows:
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _rate_domains.render_received(parts, domain_rows, native_rate_domain_display.get("records", {}),
++            section=_section, table=_table)
++        return
+     native_rate_display = native_rate_display or {}
+     native_rows = _native_rate.own_rows(content, native_rate_display.get("cells", ()))
+     if native_rows:
+@@ -724,13 +735,14 @@
+         ((r.get("component"), definitions.get(r.get("formula_code"), "unknown")) for r in rows)))
+ 
+ 
+-def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None, native_rate_records=None, values=_values):
++def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None, native_rate_records=None, native_rate_domain_records=None, values=_values):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     ratio_source = {}
+     controlled = {}
+     gel = {}
+     native_rate = {}
++    rate_domains = {}
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+     from .literature_gel_render import is_row as gel_row, render_received as gel_received
+     for report in reports:
+@@ -739,7 +751,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_native_rate.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_rate_domains.is_row(row) for row in value):
++                for row in value:
++                    rate_domains.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_native_rate.is_row(row) for row in value):
+                 for row in value:
+                     native_rate.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(controlled_row(row) for row in value):
+@@ -799,12 +814,24 @@
+             ordinary.append(remainder)
+     if ordinary:
+         _section(parts, "Admitted requested child returns", values(ordinary))
+-    if len(native_rate) > 1:
++    native_sheets = list(dict.fromkeys((*native_rate, *rate_domains)))
++    if len(native_sheets) > 1:
+         _section(parts, "Returned comparison labels",
+             "Comparison numbers identify returned records, not independent experiments.")
+-    for comparison_number, rows in enumerate(native_rate.values(), 1):
+-        _native_rate.render_received(parts, rows, native_rate_records or records or {},
++    for comparison_number, sheet_ref in enumerate(native_sheets, 1):
++        domain_rows = rate_domains.get(sheet_ref, [])
++        combined = {}
++        for row in [*native_rate.get(sheet_ref, []), *_rate_domains.base_rows(domain_rows)]:
++            key = (row["sheet_ref"], row["component"])
++            if key in combined and combined[key] != row:
++                from .domain import ContractError
++                raise ContractError("literature_rate_cross_view_display_mismatch")
++            combined[key] = row
++        meanings = {**(records or {}), **(native_rate_records or {}), **(native_rate_domain_records or {})}
++        _native_rate.render_received(parts, list(combined.values()), meanings,
+             section=_section, table=_table, comparison_number=comparison_number)
++        if domain_rows:
++            _rate_domains.render_domains(parts, domain_rows, section=_section, table=_table)
+     for sheet_ref, rows in grouped.items():
+         first = rows[0]
+         metadata = {key: value for key, value in first.items() if key not in (
+@@ -932,6 +959,9 @@
+     native_rate_display = state.get("literature_rate_source_display", {})
+     native_rate_records = {**controlled_records, **native_rate_display.get("records", {})}
+     native_rate_display = {**native_rate_display, "records": native_rate_records}
++    native_rate_domain_display = state.get("literature_rate_source_domain_display", {})
++    native_rate_domain_records = {**controlled_records, **native_rate_domain_display.get("records", {})}
++    native_rate_domain_display = {**native_rate_domain_display, "records": native_rate_domain_records}
+     if selected:
+         _section(parts, "Relevant received experimental facts", display.render_records(table=_table))
+         _section(parts, "Selected received source excerpts", display.render_passages(table=_table))
+@@ -944,6 +974,7 @@
+         from .literature_gel_render import rows_from_reports as gel_rows
+         received_gel_sheets = {row['sheet_ref'] for row in gel_rows(state.get('child_reports', ()))}
+         received_native_rate_sheets = {row['sheet_ref'] for row in _native_rate.rows_from_reports(state.get('child_reports', ()))}
++        received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+                 and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+@@ -953,7 +984,7 @@
+             _source_result(parts, outcome, "Last selected action outcome", controlled_records=controlled_records,
+                 controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+                 gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
+-                native_rate_display=native_rate_display, values=semantic_values)
++                native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display, values=semantic_values)
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+@@ -962,7 +993,7 @@
+         _received_returns(parts, state["child_reports"], records=controlled_records,
+             ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
+             controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records,
+-            native_rate_records=native_rate_records, values=semantic_values)
++            native_rate_records=native_rate_records, native_rate_domain_records=native_rate_domain_records, values=semantic_values)
+     pending = state.get("pending_work", {})
+     if pending.get("items"):
+         _section(parts, "Pending assigned work", _values([_pick(row, (
+@@ -972,7 +1003,7 @@
+         _source_result(parts, result, "Requested information; continue this decision", controlled_records=controlled_records,
+             controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+                 gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
+-                native_rate_display=native_rate_display, values=semantic_values)
++                native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display, values=semantic_values)
+     return "\n".join(parts)
+ 
+ 
+--- a/gene_annotation_episode/literature_reference_parent_prompt.py
++++ b/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -132,7 +132,7 @@
+         "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs",
+         "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
+         "literature_gel_return_bindings", "literature_gel_return_records", "literature_rate_source_display",
+-        "literature_received_fact_display")
++        "literature_received_fact_display", "literature_rate_source_domain_display")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions, descriptor), lookup_results) + '\n\n' + _steering(
+--- a/tests/test_literature_rate_native_integration.py
++++ b/tests/test_literature_rate_native_integration.py
+@@ -157,8 +157,13 @@
+                 assert "native_rate_" not in task + steering
+                 for name in ("reference_subject_ref", "test_construct_ref", "reference_preparation_ref"):
+                     assert name in task
+-        assert all("native_components[0].reference_subject_ref" in turn["input"][0]["text"]
+-                   for turn in [wire.turns_sent()[-1], restarted.turns_sent()[0]])
++        for turn in [wire.turns_sent()[-1], restarted.turns_sent()[0]]:
++            steering = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)[1]
++            assert "Native source-rate comparison" in steering
++            assert "Reference and test meanings" in steering
++            assert "Arm | Subject | Construct | Preparation | Condition" in steering
++            assert "Reference | enzyme Alpha | WT | prepR" in steering
++            assert "Test | enzyme Beta | variant | prepT" in steering
+         assert "native_rate_subject_" not in wire.turns_sent()[-1]["input"][0]["text"]
+         if bounded:
+             assert len(cells) == 1 and cells[0]["threshold"] == pytest.approx(.012)
+@@ -166,9 +171,12 @@
+             for transport in (wire, restarted):
+                 for turn in transport.turns_sent():
+                     steering = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)[1]
+-                    assert "threshold" in steering and "0.012" in steering and "bound" in steering and "lt" in steering
++                    assert "0.012" in steering
++                    assert (("threshold" in steering and "bound" in steering and "lt" in steering)
++                            or ("Bound | Threshold" in steering and "< | 0.012" in steering))
+             for turn in (wire.turns_sent()[-1], restarted.turns_sent()[0]):
+                 text = turn["input"][0]["text"].split("\n\nSTEERING\n", 1)[1]
++                assert "Bound | Threshold" in text and "< | 0.012" in text
+                 assert "0.003" not in text
+     finally:
+         store.close()
+--- /dev/null
++++ b/gene_annotation_episode/literature_rate_domains.py
+@@ -0,0 +1,287 @@
++"""Exact reported-operand enclosures, without sampling or independence claims.
++
++Marginal source limits define a Cartesian enclosure, not co-attainability or a
++confidence interval. Finite JSON numbers are outward projections of retained
++rationals. This module neither reads scientific sources nor fits a model.
++"""
++from copy import deepcopy
++from fractions import Fraction
++import math
++
++VERSION = "reported_rate_domain_v1"
++NAMESPACE = "literature_rate_source_domain_cells"
++DERIVED = ("rate_difference", "retained_fraction", "fractional_decrease")
++INF = math.inf
++
++
++def _point(value):
++    return (value, True, value, True)
++
++
++def _contains_zero(a):
++    return (a[0] < 0 or a[0] == 0 and a[1]) and (a[2] > 0 or a[2] == 0 and a[3])
++
++
++def _subtract(a, b):
++    lower = -INF if a[0] == -INF or b[2] == INF else a[0] - b[2]
++    upper = INF if a[2] == INF or b[0] == -INF else a[2] - b[0]
++    return (lower, a[1] and b[3], upper, a[3] and b[1])
++
++
++def _multiply(a, b):
++    if a == _point(Fraction(0)) or b == _point(Fraction(0)):
++        return _point(Fraction(0))
++    candidates = []
++    for x, xc in ((a[0], a[1]), (a[2], a[3])):
++        for y, yc in ((b[0], b[1]), (b[2], b[3])):
++            # Zero times an infinite endpoint is a limit, not NaN or a
++            # measurement. Actual zero attainment is handled separately.
++            value = (Fraction(0) if x == 0 or y == 0 else
++                (INF if (x > 0) == (y > 0) else -INF) if x in (-INF, INF) or y in (-INF, INF) else x * y)
++            closed = value not in (-INF, INF) and xc and yc
++            candidates.append((value, closed))
++    lower, upper = min(x for x, _ in candidates), max(x for x, _ in candidates)
++    zero_attained = _contains_zero(a) or _contains_zero(b)
++    return (lower, any(c for x, c in candidates if x == lower) or lower == 0 and zero_attained,
++            upper, any(c for x, c in candidates if x == upper) or upper == 0 and zero_attained)
++
++
++def _divide(b, a):
++    if _contains_zero(a):
++        return None
++    inverse = (Fraction(0) if a[2] == INF else -INF if a[2] == 0 else 1 / a[2],
++               a[3] if a[2] not in (-INF, INF, 0) else False,
++               Fraction(0) if a[0] == -INF else INF if a[0] == 0 else 1 / a[0],
++               a[1] if a[0] not in (-INF, INF, 0) else False)
++    return _multiply(b, inverse)
++
++
++def _encode(interval):
++    if interval is None:
++        return None
++    def number(value):
++        return None if value in (-INF, INF) else {"numerator": str(value.numerator), "denominator": str(value.denominator)}
++    return {"lower": number(interval[0]), "lower_inclusive": bool(interval[1]),
++            "upper": number(interval[2]), "upper_inclusive": bool(interval[3])}
++
++
++def _project(interval, *, basis, conditioning, failure=None):
++    result = {"kind": "undefined" if failure == "zero_reference_rate" else "unavailable",
++        "lower": None, "upper": None, "lower_inclusive": False, "upper_inclusive": False,
++        "projection": "none", "basis": basis, "conditioning": conditioning,
++        "failure": failure}
++    if interval is None:
++        return result
++    values, closed, outward, range_loss = [], [], False, False
++    for index in (0, 2):
++        exact = interval[index]
++        if exact in (-INF, INF):
++            values.append(None)
++            closed.append(False)
++            continue
++        try:
++            value = float(exact)
++            if not math.isfinite(value):
++                raise OverflowError
++            inclusive = bool(interval[index + 1])
++            if value == 0 and exact != 0:
++                # Retain sign information and an outward subnormal endpoint;
++                # this zero is an open logical limit, never a point estimate.
++                value = (0.0 if exact > 0 else -math.ulp(0.0)) if index == 0 else (math.ulp(0.0) if exact > 0 else 0.0)
++                inclusive, range_loss = False, True
++            rounded = Fraction(value)
++            if index == 0 and rounded > exact:
++                value = math.nextafter(value, -INF)
++            if index == 2 and rounded < exact:
++                value = math.nextafter(value, INF)
++            if not math.isfinite(value):
++                raise OverflowError
++            outward |= Fraction(value) != exact
++            values.append(value)
++            closed.append(inclusive)
++        except (OverflowError, ValueError):
++            # Relax only the endpoint that cannot be represented. Its other
++            # endpoint can still carry useful numerical information.
++            positive = exact > 0
++            value = (math.nextafter(INF, 0) if positive else None) if index == 0 else (None if positive else math.nextafter(-INF, 0))
++            values.append(value)
++            closed.append(False)
++            outward, range_loss = True, True
++    lower, upper = values
++    kind = ("unbounded" if lower is None and upper is None else
++            "upper_bounded" if lower is None else "lower_bounded" if upper is None else
++            "point" if lower == upper else "finite_interval")
++    result.update(kind=kind, lower=lower, upper=upper,
++        lower_inclusive=closed[0], upper_inclusive=closed[1],
++        projection="outward" if outward else "exact",
++        failure="numerical_model_range" if range_loss else None)
++    return result
++
++
++def _operand(row):
++    from .literature_rate_native_inputs import _scale
++    if row is None:
++        return None, "source_measurement_unavailable"
++    source = row["source"]
++    unit, number = source["unit"], source["number"]
++    reason = ("source_rate_unit_unreported" if number and unit is None else
++        unit["unavailable_reason"] if unit and unit["unavailable_reason"] else
++        "conflicting_measurement" if row["status"] == "conflicting" else
++        "source_measurement_unavailable" if number is None else None)
++    if reason:
++        return None, reason
++    q = Fraction(number["raw_number"].replace("−", "-")) * _scale(unit)
++    return {"point": _point(q), "lt": (-INF, False, q, False),
++        "le": (-INF, False, q, True), "gt": (q, False, INF, False),
++        "ge": (q, True, INF, False)}[number["relation"]], None
++
++
++def native_domain_trace(extraction, cells):
++    """Basic algebra on already validated retained operands; no profile refit."""
++    from .literature_experimental_contracts import RATE_UNITS
++    from .literature_rate_native_inputs import native_pair_reason
++    rows = {row["arm"]: row for row in extraction["rows"]}
++    a, ar = _operand(rows.get("reference"))
++    b, br = _operand(rows.get("test"))
++    pair_reason = native_pair_reason(extraction)
++    if all(rows.get(role) and rows[role]["unit"] for role in ("reference", "test")):
++        if RATE_UNITS[rows["reference"]["unit"]][0] != RATE_UNITS[rows["test"]["unit"]][0]:
++            pair_reason = "incompatible_rate_dimensions"
++    # A censor qualifier must never mask a separate comparability failure.
++    pair_reason = pair_reason or ar or br
++    images = {"reference_rate": (a, ar), "test_rate": (b, br)}
++    ratio = _divide(b, a) if pair_reason is None else None
++    ratio_reason = pair_reason or ("zero_reference_rate" if ratio is None else None)
++    images.update(rate_difference=(_subtract(a, b) if pair_reason is None else None, pair_reason),
++        retained_fraction=(ratio, ratio_reason),
++        fractional_decrease=(_subtract(_point(Fraction(1)), ratio) if ratio is not None else None, ratio_reason))
++    components = {}
++    def identity(row):
++        source = row["source"]
++        return (deepcopy(source["location"]) if source["location"] is not None else
++            {"source_ref": source["source_ref"], "artifact_ref": source["artifact_ref"],
++             "start": None, "end": None, "arm": row["arm"]})
++    for name, cell in cells.items():
++        interval, failure = images.get(name, (
++            _point(Fraction(cell["value"])) if cell["value"] is not None else None,
++            cell["unavailable_reason"]))
++        basis = ("reported_operand_algebra" if name in DERIVED else
++            "reported_point" if name in ("reference_rate", "test_rate") and interval and interval[0] == interval[2] else
++            "reported_censoring" if name in ("reference_rate", "test_rate") else "stored_numerical_point")
++        conditioning = "reported_endpoint_normalization_unit_relations" if name in DERIVED else "stored_source_cell"
++        roles = ("reference",) if name in ("reference_rate", "reference_mean_se") else ("test",) if name in ("test_rate", "test_mean_se") else ("reference", "test")
++        components[name] = {"input_rows": [identity(rows[role]) for role in roles if role in rows], "image": _encode(interval),
++            "reported_domain": _project(interval, basis=basis, conditioning=conditioning, failure=failure)}
++    return {"version": VERSION, "components": components}
++
++
++def apply_native_domains(cells, trace):
++    """Populate supported existing scalar/bound slots; full image stays in trace."""
++    for name in DERIVED:
++        cell = cells[name]
++        domain = trace["components"][name]["reported_domain"]
++        kind = domain["kind"]
++        if domain["failure"]:
++            cell.update(value=None, status="unavailable", unavailable_reason=domain["failure"])
++        if kind in ("lower_bounded", "upper_bounded"):
++            side = "lower" if kind == "lower_bounded" else "upper"
++            cell.update(threshold=domain[side], bound=("g" if side == "lower" else "l") +
++                ("e" if domain[side + "_inclusive"] else "t"))
++        elif domain["failure"] is None:
++            image = trace["components"][name]["image"]
++            if image is not None and image["lower"] is not None and image["lower"] == image["upper"]:
++                exact = image["lower"]
++                value = float(Fraction(int(exact["numerator"]), int(exact["denominator"])))
++                cell.update(value=value, status="populated", unavailable_reason=None)
++
++
++def rate_source_domain_cells_schema():
++    """A separate closed view; existing native rows remain unchanged."""
++    from .domain import obj
++    from .literature_rate_storage import rate_source_cells_schema, UNAVAILABLE_REASONS
++    from .literature_rate_native_inputs import NATIVE_REASONS
++    schema = rate_source_cells_schema()
++    schema["x-source"] = NAMESPACE
++    properties = schema["items"]["properties"]
++    properties["reported_domain"] = obj({
++        "kind": {"type": "string", "enum": ["point", "lower_bounded", "upper_bounded", "finite_interval", "unbounded", "undefined", "unavailable", "numerical_range"]},
++        "lower": {"type": ["number", "null"]}, "upper": {"type": ["number", "null"]},
++        "lower_inclusive": {"type": "boolean"}, "upper_inclusive": {"type": "boolean"},
++        "projection": {"type": "string", "enum": ["exact", "outward", "none"]},
++        "basis": {"type": "string", "enum": ["reported_point", "reported_censoring", "reported_operand_algebra", "stored_numerical_point", "legacy_stored_cell"]},
++        "conditioning": {"type": "string", "enum": ["reported_endpoint_normalization_unit_relations", "stored_source_cell"]},
++        "failure": {"type": ["string", "null"], "enum": [*UNAVAILABLE_REASONS, *NATIVE_REASONS, None]}})
++    schema["items"]["required"] = list(properties)
++    return schema
++
++
++# These pure view helpers deliberately preserve the original native masking and
++# scientific label renderer. Domain rows never fall through a generic record
++# expansion merely because their closed contract has an additional field.
++def is_row(value):
++    from collections.abc import Mapping
++    from jsonschema import Draft202012Validator
++    # Use a module-level cache assigned lazily to avoid the storage import cycle.
++    global _domain_row_validator
++    if "_domain_row_validator" not in globals():
++        _domain_row_validator = Draft202012Validator(rate_source_domain_cells_schema()["items"])
++    from .communication import plain
++    return isinstance(value, Mapping) and _domain_row_validator.is_valid(plain(value))
++
++
++def base_rows(rows):
++    """Validate exact new rows before presenting their original native fields."""
++    from .domain import ContractError
++    from .communication import plain
++    result = []
++    for row in rows:
++        if not is_row(row):
++            raise ContractError("literature_rate_domain_display_contract_mismatch")
++        result.append({key: plain(value) for key, value in row.items() if key != "reported_domain"})
++    return result
++
++
++def rows_from_reports(reports):
++    from collections.abc import Mapping
++    for report in reports:
++        if isinstance(report, Mapping):
++            for rows in report.values():
++                if isinstance(rows, (list, tuple)) and rows and all(is_row(row) for row in rows):
++                    yield from rows
++
++
++def hidden_records(rows):
++    from .literature_rate_source_render import hidden_records as native_hidden_records
++    return native_hidden_records(base_rows(rows))
++
++
++def own_rows(content, display_rows):
++    from .literature_rate_source_render import own_rows as native_own_rows
++    display_rows = list(display_rows)
++    matched = {(row["sheet_ref"], row["component"]) for row in native_own_rows(content, base_rows(display_rows))}
++    return [row for row in display_rows if (row["sheet_ref"], row["component"]) in matched]
++
++
++def render_received(parts, rows, records, *, section, table, comparison_number=None):
++    from .literature_rate_source_render import render_received as native_render_received
++    rows = list(rows)
++    if not rows:
++        return
++    native_render_received(parts, base_rows(rows), records, section=section, table=table,
++        comparison_number=comparison_number)
++    render_domains(parts, rows, section=section, table=table)
++
++
++def render_domains(parts, rows, *, section, table):
++    """Only actually returned domain fields, after their common base is shown."""
++    from .literature_rate_source_render import _COMPONENTS
++    rows = list(rows)
++    base_rows(rows)
++    section(parts, "Reported-operand numerical domains",
++        "Conditional logical enclosures of the reported operands with the recorded endpoint, normalization and units. "
++        "Outward projection marks numerical rounding; approximation remains separate. These are not sampling confidence intervals "
++        "or evidence of independence or endpoint co-attainability. Status above concerns the point estimate.")
++    section(parts, "Requested reported domains", table(
++        ("Component", "Domain kind", "Lower", "Lower inclusive", "Upper", "Upper inclusive", "Numerical projection", "Basis", "Conditioning", "Failure"),
++        ((_COMPONENTS[row["component"]], *(row["reported_domain"][field] for field in
++          ("kind", "lower", "lower_inclusive", "upper", "upper_inclusive", "projection", "basis", "conditioning", "failure"))) for row in rows)))
+--- /dev/null
++++ b/tests/test_literature_native_rate_censored_bounds.py
+@@ -0,0 +1,390 @@
++"""Constructed reported-limit arithmetic; no papers, provider or inference."""
++from copy import deepcopy
++from dataclasses import replace
++from fractions import Fraction
++import math
++import re
++import sqlite3
++
++import pytest
++
++from gene_annotation_episode.communication import form_with_facts, validate_form, plain
++from gene_annotation_episode.domain import ContractError, obj
++from gene_annotation_episode.literature_rate_calculations import populate_rate_contrast
++from gene_annotation_episode.literature_rate_domains import VERSION, NAMESPACE, rate_source_domain_cells_schema
++from gene_annotation_episode.literature_rate_storage import LiteratureRateRepository, rate_source_cells_schema
++from gene_annotation_episode.state import Store
++from test_literature_rate_native_inputs import synthetic_case, read_case, calculate
++from test_literature_rate_native_storage import setup_native_store
++
++
++def operands(reference="12", test="< .3", **kwargs):
++    raw, args = synthetic_case(reference=reference, test=test,
++        reference_unit=kwargs.pop("reference_unit", "umol/min/mg"),
++        test_unit=kwargs.pop("test_unit", "umol/min/mg"), **kwargs)
++    for role, token in (("reference", reference), ("test", test)):
++        numeric = re.search(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[-+]?\d+)?", token)
++        selected = args["arms"][role]["rate"]["number"]
++        selected["number_start"] += numeric.start()
++    return raw, args
++
++
++def sheet(reference="12", test="< .3", *, mutate=None, **kwargs):
++    raw, args = operands(reference, test, **kwargs)
++    if mutate:
++        mutate(args)
++    extraction = read_case(raw, args)
++    rows = {r["arm"]: r for r in extraction["rows"]}
++    return populate_rate_contrast(extraction, reference_arm="reference", test_arm="test",
++        reference_condition=rows["reference"]["condition"], test_condition=rows["test"]["condition"],
++        dependence=args["dependence"]["value"], observation_model=args["observation_model"]["value"],
++        native_bound_version=VERSION)
++
++
++def domain(result, name):
++    return result["native_bound_arithmetic"]["components"][name]["reported_domain"]
++
++
++@pytest.mark.parametrize("comparator,bound,inclusive", [("<", "lt", False), ("<=", "le", True), (">", "gt", False), (">=", "ge", True)])
++def test_positive_point_reference_preserves_all_four_comparators(comparator, bound, inclusive):
++    result = sheet(test=comparator + " .3")
++    cells = result["cells"]
++    for name, value in (("rate_difference", 11.7), ("retained_fraction", .025), ("fractional_decrease", .975)):
++        assert cells[name]["value"] is None
++        assert cells[name]["threshold"] == pytest.approx(value)
++        expected = bound if name == "retained_fraction" else {"lt":"gt", "le":"ge", "gt":"lt", "ge":"le"}[bound]
++        assert cells[name]["bound"] == expected
++        d = domain(result, name)
++        assert d["lower_inclusive"] if expected == "ge" else d["upper_inclusive"] if expected == "le" else not d["lower_inclusive"] and not d["upper_inclusive"]
++    assert cells["reference_rate"]["value"] == 12
++    assert cells["test_rate"]["threshold"] == .3
++    for name in ("reference_mean_se", "test_mean_se", "difference_se", "signed_profile_log_ratio", "source_signed_index"):
++        assert cells[name]["value"] is None
++    assert result["profile_diagnostics"] is None
++    assert result["model"]["dependence"] == "unknown"
++
++
++def test_negative_reference_reverses_ratio_but_not_difference():
++    result = sheet("-12", "<= .3")
++    assert result["cells"]["retained_fraction"]["bound"] == "ge"
++    assert result["cells"]["retained_fraction"]["threshold"] == pytest.approx(-.025)
++    assert result["cells"]["fractional_decrease"]["bound"] == "le"
++    assert result["cells"]["fractional_decrease"]["threshold"] == pytest.approx(1.025)
++    assert result["cells"]["rate_difference"]["bound"] == "ge"
++
++
++@pytest.mark.parametrize("reference,test,expected", [
++    ("> 2", "3", (0, False, 1.5, False)),
++    (">= 2", "3", (0, False, 1.5, True)),
++    ("< -2", "3", (-1.5, False, 0, False)),
++    ("<= -2", "3", (-1.5, True, 0, False)),
++    ("> 0", ">= 0", (0, True, None, False)),
++    ("< 0", "> 3", (None, False, 0, False)),
++    ("> 2", "< 3", (None, False, 1.5, False)),
++    (">= 2", "<= 3", (None, False, 1.5, True)),
++])
++def test_censored_denominators_keep_finite_or_one_sided_images(reference, test, expected):
++    result = sheet(reference, test)
++    d = domain(result, "retained_fraction")
++    assert (d["lower"], d["lower_inclusive"], d["upper"], d["upper_inclusive"]) == expected
++    assert result["cells"]["retained_fraction"]["value"] is None
++    assert d["conditioning"] == "reported_endpoint_normalization_unit_relations"
++
++
++@pytest.mark.parametrize("reference", ["0", ">= 0", "<= 0", "> -2", "< 2"])
++def test_zero_or_potentially_zero_denominator_is_explicitly_undefined(reference):
++    result = sheet(reference, "0")
++    for name in ("retained_fraction", "fractional_decrease"):
++        assert domain(result, name)["kind"] == "undefined"
++        assert result["cells"][name]["value"] is None
++        assert result["cells"][name]["unavailable_reason"] == "zero_reference_rate"
++
++
++@pytest.mark.parametrize("reference", ["> 0", "< 0", ">= 2", "<= -2"])
++def test_exact_constant_images_are_identified_without_imputing_a_censored_rate(reference):
++    result = sheet(reference, "0")
++    assert result["cells"]["reference_rate"]["value"] is None
++    assert result["cells"]["retained_fraction"]["value"] == 0
++    assert result["cells"]["fractional_decrease"]["value"] == 1
++    assert domain(result, "retained_fraction")["kind"] == "point"
++
++
++@pytest.mark.parametrize("field,value", [("endpoint", "unknown"), ("endpoint", "different"), ("normalization", "unknown"), ("normalization", "different")])
++def test_censor_does_not_mask_pair_guard(field, value):
++    def mutate(args):
++        args["comparison"][field + "_relation"]["value"] = value
++        if value == "unknown":
++            args["comparison"][field + "_relation"]["witnesses"] = []
++    result = sheet(mutate=mutate)
++    reason = "source_" + field + "_relationship_" + value
++    for name in ("rate_difference", "retained_fraction", "fractional_decrease", "difference_se", "signed_profile_log_ratio"):
++        assert result["cells"][name]["unavailable_reason"] == reason
++        assert result["cells"][name]["threshold"] is None
++    assert result["cells"]["reference_rate"]["value"] == 12
++    assert result["cells"]["test_rate"]["threshold"] == .3
++
++
++def test_incompatible_units_and_reused_observations_preserve_raw_cells():
++    result = sheet(test_unit="umol/min")
++    assert domain(result, "rate_difference")["failure"] == "incompatible_rate_dimensions"
++    def reused(args):
++        args["arms"]["test"]["measurement_identity"] = args["arms"]["reference"]["subject"]
++        args["arms"]["reference"]["measurement_identity"] = args["arms"]["reference"]["subject"]
++    assert domain(sheet(mutate=reused), "rate_difference")["failure"] == "reused_source_observation"
++    result = sheet(test_unit="unreported")
++    assert result["cells"]["test_rate"]["bound"] == "lt"
++    assert domain(result, "rate_difference")["kind"] == "unavailable"
++
++
++def test_rounding_is_outward_and_overflow_underflow_do_not_become_zero():
++    result = sheet("3", "< 1")
++    upper = domain(result, "retained_fraction")["upper"]
++    assert Fraction(upper) >= Fraction(1, 3)
++    assert domain(result, "retained_fraction")["projection"] == "outward"
++    tiny = sheet("1e300", "< 1e-300")
++    d = domain(tiny, "retained_fraction")
++    assert d["upper"] == math.ulp(0.0) and d["kind"] == "upper_bounded"
++    assert tiny["cells"]["retained_fraction"]["value"] is None
++    assert tiny["cells"]["retained_fraction"]["threshold"] == math.ulp(0.0)
++    huge = sheet("> 1e-300", "1e300")
++    d = domain(huge, "retained_fraction")
++    assert d["lower"] == 0 and not d["lower_inclusive"]
++    assert d["upper"] is None and d["kind"] == "lower_bounded"
++    assert d["failure"] == "numerical_model_range" and d["projection"] == "outward"
++    assert huge["cells"]["retained_fraction"]["value"] is None
++    assert huge["cells"]["retained_fraction"]["bound"] == "gt"
++    assert huge["native_bound_arithmetic"]["components"]["retained_fraction"]["image"]["upper"] is not None
++
++
++def test_legacy_direct_calculator_and_closed_native_contract_are_unchanged():
++    raw, args = operands()
++    original = calculate(read_case(raw, args))
++    assert "native_bound_arithmetic" not in original
++    assert original["cells"]["retained_fraction"]["threshold"] is None
++    assert len(rate_source_cells_schema()["items"]["properties"]) == 24
++
++
++@pytest.mark.parametrize("test,side,sign", [("> 1e300", "lower", 1), ("< -1e300", "upper", -1)])
++def test_overflow_preserves_a_representable_strict_outer_constraint(test, side, sign):
++    result = sheet("1e-300", test)
++    d = domain(result, "retained_fraction")
++    assert d[side] == sign * math.nextafter(math.inf, 0)
++    assert not d[side + "_inclusive"]
++    assert d["projection"] == "outward" and d["failure"] == "numerical_model_range"
++    assert result["cells"]["retained_fraction"]["value"] is None
++
++
++def test_underflow_point_remains_unknown_while_its_constraints_and_complement_survive():
++    result = sheet("1e300", "1e-300")
++    assert result["cells"]["retained_fraction"]["value"] is None
++    d = domain(result, "retained_fraction")
++    assert d["lower"] == 0 and not d["lower_inclusive"]
++    assert d["upper"] == math.ulp(0.0) and not d["upper_inclusive"]
++    assert result["cells"]["fractional_decrease"]["value"] == 1
++    assert domain(result, "fractional_decrease")["projection"] == "outward"
++
++
++def test_explicit_domain_display_reuses_validated_native_mask_and_retains_finite_limits(tmp_path):
++    from gene_annotation_episode import literature_rate_domains as display
++    from gene_annotation_episode.literature_experimental_prompt import _section, _table
++    store, owner, args = setup_native_store(tmp_path, reference="> 12")
++    try:
++        repo = LiteratureRateRepository(store, owner.run_id)
++        outcome = repo.populate_native(owner, args, "selected")
++        permitted = (*owner.received_record_refs, *outcome["record_refs"])
++        rows = repo.source_domain_projection().project_cells([outcome["result"]["sheet_ref"]],
++            permitted_record_refs=permitted, components=["retained_fraction"])
++        assert display.is_row(rows[0])
++        assert display.own_rows(outcome["result"], rows) == rows
++        assert rows[0]["sheet_ref"] in display.hidden_records(rows)
++        assert rows[0]["test_preparation_ref"] in display.hidden_records(rows)
++        assert "reported_domain" not in display.base_rows(rows)[0]
++        records = {ref: store.get(ref) for ref in permitted}
++        parts = []
++        display.render_received(parts, rows, records, section=_section, table=_table)
++        text = "\n".join(parts)
++        assert "finite_interval" in text and "0.25" in text
++        assert "enzyme Alpha" in text and "enzyme Beta" in text
++        assert "not sampling confidence intervals" in text
++        changed = deepcopy(rows);changed[0]["private_extra"] = 3
++        assert not display.is_row(changed[0])
++        with pytest.raises(ContractError, match="display_contract_mismatch"):
++            display.base_rows(changed)
++    finally:
++        store.close()
++
++
++def test_absent_domain_receipt_table_stays_absent_on_first_readonly_access(tmp_path):
++    store, owner, args = setup_native_store(tmp_path)
++    repo = LiteratureRateRepository(store, owner.run_id)
++    repo.populate_native(owner, args, "selected")
++    assert not repo.source_domain_projection()._installed()
++    store.close()
++    reopened = Store.__new__(Store)
++    reopened.path = tmp_path.resolve();reopened._savepoint = 0
++    reopened.db = sqlite3.connect((tmp_path / "state.sqlite3").as_uri() + "?mode=ro", uri=True, isolation_level=None)
++    reopened.db.row_factory = sqlite3.Row
++    reopened.db.execute("PRAGMA query_only=ON")
++    try:
++        view = LiteratureRateRepository(reopened, owner.run_id).source_domain_projection()
++        assert view.received_cells(owner) == []
++        assert not view._installed() and reopened.db.total_changes == 0
++    finally:
++        reopened.close()
++
++
++def test_cross_view_typed_subsets_render_one_comparison_without_upgrading_custody(tmp_path):
++    from gene_annotation_episode.literature_experimental_prompt import _steering
++    from gene_annotation_episode.literature_rate_source_render import MEANING_FIELDS
++    store, owner, args = setup_native_store(tmp_path, reference="> 12")
++    try:
++        repo = LiteratureRateRepository(store, owner.run_id)
++        outcome = repo.populate_native(owner, args, "selected")
++        reference = outcome["result"]["sheet_ref"]
++        permitted = (*owner.received_record_refs, *outcome["record_refs"])
++        old_view, new_view = repo.source_projection(), repo.source_domain_projection()
++        old_rows = old_view.project_cells([reference], permitted_record_refs=permitted,
++            components=["retained_fraction", "rate_difference"])
++        new_rows = new_view.project_cells([reference], permitted_record_refs=permitted, components=["retained_fraction"])
++        schema = obj({"old_components": rate_source_cells_schema(), "new_domains": rate_source_domain_cells_schema()})
++        form = form_with_facts({}, schema, {"literature_rate_source_cells": old_rows, NAMESPACE: new_rows})
++        validate_form(form, schema, lambda ref, ns: ref in permitted and store.get(ref)["record_type"] == ns)
++        receiver = replace(owner, episode_id="receiver", received_record_refs=permitted)
++        old_view.receive_cells(receiver, old_rows, "old-subset")
++        new_view.receive_cells(receiver, new_rows, "new-subset")
++        assert new_view.fact_cells(receiver, [reference], components=["rate_difference"]) == []
++        records = {row[field]: store.get(row[field]) for row in old_rows for field in MEANING_FIELDS if row[field] is not None}
++        text = _steering({"child_reports": [form], "working_state": {},
++            "literature_rate_source_display": {"cells": old_rows, "records": records},
++            "literature_rate_source_domain_display": {"cells": new_rows, "records": records}}, ())
++        assert text.count("Native source-rate comparison 1") == 1
++        assert "Native source-rate comparison 2" not in text
++        assert text.count("Reported-operand numerical domains") == 1
++        assert text.count("Test / reference rate") == 2  # One shared base row and one requested domain row.
++        assert "Reference − test rate" in text
++        assert "Reference rate |" not in text and "Test rate |" not in text
++        other = repo.populate_native(replace(owner, episode_id="private-owner"), args, "private-output")
++        private_ref = other["result"]["sheet_ref"]
++        receiver = replace(receiver, received_record_refs=(*permitted, private_ref))
++        assert new_view.fact_cells(receiver, [private_ref], components=["reference_rate"]) == []
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("legacy", [False, True])
++def test_native_actual_operation_replay_domains_and_readonly_subset_custody(tmp_path, monkeypatch, legacy):
++    store, owner, args = setup_native_store(tmp_path, reference="> 12")
++    repo = LiteratureRateRepository(store, owner.run_id)
++    if legacy:
++        original = populate_rate_contrast
++        def old_calculator(*args, **kwargs):
++            kwargs.pop("native_bound_version", None)
++            return original(*args, **kwargs)
++        monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.populate_rate_contrast", old_calculator)
++    outcome = repo.populate_native(owner, args, "selected")
++    reference = outcome["result"]["sheet_ref"]
++    original_saved = repo.read(reference)
++    assert ("native_bound_arithmetic" in original_saved["sheet"]) is not legacy
++    permitted = (*owner.received_record_refs, *outcome["record_refs"])
++    view = repo.source_domain_projection()
++    rows = view.project_cells([reference], permitted_record_refs=permitted, components=["retained_fraction"])
++    d = rows[0]["reported_domain"]
++    assert d["kind"] == ("unavailable" if legacy else "finite_interval")
++    assert rows[0]["value"] is None
++    form_schema = obj({"caller_chosen": rate_source_domain_cells_schema()})
++    form = form_with_facts({}, form_schema, {NAMESPACE: rows})
++    assert validate_form(form, form_schema, lambda ref, ns: ref in permitted and store.get(ref)["record_type"] == ns) == form
++    receiver = replace(owner, role="annotation", episode_id="receiver", path=(("annotation", "receiver"),),
++        assignment={}, received_record_refs=permitted)
++    assert not view._installed()
++    view.receive_cells(receiver, rows, "constructed-admission")
++    assert repo.source_projection().received_cells(receiver) == []
++    assert view.fact_cells(receiver, [reference], components=["reference_rate"]) == []
++    changed = deepcopy(rows);changed[0]["reported_domain"]["upper"] = 99
++    with pytest.raises(ContractError, match="differs_from_saved"):
++        view.validate_returned_values(changed, permitted_record_refs=permitted)
++    artifacts = {store.get(args["source_ref"])[name] for name in ("artifact_ref", "text_ref")}
++    store.close()
++    def forbidden(*args, **kwargs):
++        raise AssertionError("saved read acquired, recalculated, fit or mutated")
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.populate_rate_contrast", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_native_inputs.read_rate_source_inputs", forbidden)
++    reopened = Store.__new__(Store)
++    reopened.path = tmp_path.resolve();reopened._savepoint = 0
++    reopened.db = sqlite3.connect((tmp_path / "state.sqlite3").as_uri() + "?mode=ro", uri=True, isolation_level=None)
++    reopened.db.row_factory = sqlite3.Row
++    reopened.db.execute("PRAGMA query_only=ON")
++    reopened.db.create_function("library_scope_record", 2, reopened._scope_filter_record)
++    get_artifact = reopened.get_artifact
++    def saved_only(ref):
++        if ref in artifacts:
++            forbidden()
++        return get_artifact(ref)
++    monkeypatch.setattr(reopened, "get_artifact", saved_only)
++    for name in ("put", "artifact", "transaction", "register_material", "parse_material"):
++        monkeypatch.setattr(reopened, name, forbidden)
++    try:
++        restored = LiteratureRateRepository(reopened, owner.run_id)
++        assert restored.populate_native(owner, args, "selected") == outcome
++        assert restored.read(reference) == original_saved
++        domain_view = restored.source_domain_projection()
++        assert domain_view.received_cells(receiver) == rows
++        assert domain_view.fact_cells(receiver, [reference], components=["reference_rate"]) == []
++        assert reopened.db.total_changes == 0
++    finally:
++        reopened.close()
++
++
++def test_new_saved_trace_rejects_versions_constraints_and_source_association_tampering(tmp_path):
++    store, owner, args = setup_native_store(tmp_path, reference="> 12")
++    try:
++        repo = LiteratureRateRepository(store, owner.run_id)
++        outcome = repo.populate_native(owner, args, "selected")
++        saved = repo.read(outcome["result"]["sheet_ref"])
++        request = {"arguments": args}
++        for alteration in ("version", "constraint", "source"):
++            changed = deepcopy(saved)
++            trace = changed["sheet"]["native_bound_arithmetic"]
++            if alteration == "version":
++                trace["version"] = "unknown_version"
++            elif alteration == "constraint":
++                trace["components"]["retained_fraction"]["reported_domain"]["upper"] = 99
++            else:
++                trace["components"]["retained_fraction"]["input_rows"][0]["source_ref"] = "source_forged"
++            with pytest.raises(ContractError, match="bound_version_unsupported|saved_domain_mismatch"):
++                repo._validate_native_saved(changed, request, outcome)
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("field,value", [("value", True), ("value", math.inf), ("threshold", True), ("threshold", -math.inf)])
++def test_new_saved_identified_one_cannot_be_forged_as_boolean_or_nonfinite(tmp_path, field, value):
++    store, owner, _ = setup_native_store(tmp_path)
++    try:
++        raw, args = operands("12", "12")
++        artifact = store.artifact(raw, "text/plain")
++        source = store.put("source", {"provider": "constructed_equal_rate_fixture", "accession": None,
++            "uri": None, "artifact_ref": artifact, "text_ref": artifact, "request_ref": None,
++            "version": None, "retrieved_at": None}, origin="caller")
++        def bind(value):
++            if isinstance(value, dict):
++                return {key: source["id"] if key == "source_ref" else bind(child) for key, child in value.items()}
++            if isinstance(value, list):
++                return [bind(child) for child in value]
++            return value
++        args = bind(args)
++        owner = replace(owner, received_record_refs=(source["id"],),
++            assignment={**plain(owner.assignment), "source_refs": [source["id"]]})
++        repo = LiteratureRateRepository(store, owner.run_id)
++        outcome = repo.populate_native(owner, args, "equal-source-rates")
++        saved = repo.read(outcome["result"]["sheet_ref"])
++        assert saved["sheet"]["cells"]["retained_fraction"]["value"] == 1
++        changed = deepcopy(saved)
++        changed["sheet"]["cells"]["retained_fraction"][field] = value
++        altered_outcome = deepcopy(outcome)
++        altered_outcome["result"]["cells"] = deepcopy(changed["sheet"]["cells"])
++        with pytest.raises(ContractError, match="saved_numeric_type_mismatch"):
++            repo._validate_native_saved(changed, {"arguments": args}, altered_outcome)
++        assert repo.read(outcome["result"]["sheet_ref"]) == saved
++    finally:
++        store.close()
+--- /dev/null
++++ b/tests/test_literature_native_rate_domain_integration.py
+@@ -0,0 +1,148 @@
++"""Actual selected source-rate work, closed domain returns and first RO replay.
++
++Only constructed source bytes and scripted engineering providers/controllers.
++"""
++import asyncio
++from copy import deepcopy
++from dataclasses import replace
++from functools import partial
++import json
++import sqlite3
++from types import SimpleNamespace
++
++import pytest
++
++from gene_annotation_episode.communication import plain
++from gene_annotation_episode.domain import ContractError, obj
++from gene_annotation_episode.episode_bindings import BindingContext
++from gene_annotation_episode.episode_receipts import EpisodeReceipts
++from gene_annotation_episode.episode_services import WorkflowServices
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_experimental_prompt import render_literature_experimental_prompt
++from gene_annotation_episode.literature_rate_calculations import populate_rate_contrast
++from gene_annotation_episode.literature_rate_domains import NAMESPACE, rate_source_domain_cells_schema
++from gene_annotation_episode.literature_rate_storage import LiteratureRateRepository, rate_source_cells_schema
++from gene_annotation_episode.runtime import run_workflow
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.tools import ToolRegistry
++from test_literature_rate_native_storage import setup_native_store
++from test_literature_rate_source_semantic_integration import source_reason
++from test_runtime import FixtureController, ScriptedProvider
++
++
++@pytest.mark.parametrize("legacy_payload", [False, True])
++@pytest.mark.parametrize("domain_return", [False, True])
++def test_selected_native_action_own_next_decision_typed_subset_and_readonly_replay(tmp_path, monkeypatch, legacy_payload, domain_return):
++    path = tmp_path / "state"
++    store, template, args = setup_native_store(path, reference="> 12")
++    if legacy_payload:
++        def legacy_calculator(*args, **kwargs):
++            kwargs.pop("native_bound_version", None)
++            return populate_rate_contrast(*args, **kwargs)
++        monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.populate_rate_contrast", legacy_calculator)
++    namespace = NAMESPACE if domain_return else "literature_rate_source_cells"
++    schema = rate_source_domain_cells_schema() if domain_return else rate_source_cells_schema()
++    form = obj({"caller_chosen_subset": schema})
++    assignment = {**plain(template.assignment), "requested_rate_components": ["retained_fraction"]}
++    captured = {}
++    def child_next(inputs):
++        display = inputs["literature_rate_source_domain_display"]
++        captured["child_display"] = deepcopy(display)
++        requested = next(row for row in display["cells"] if row["component"] == "retained_fraction")
++        assert requested["reported_domain"]["kind"] == ("unavailable" if legacy_payload else "finite_interval")
++        task, steering = render_literature_experimental_prompt(inputs, "Constructed child work").split("\n\nSTEERING\n", 1)
++        assert "Reported-operand numerical domains" in steering
++        assert "enzyme Alpha" in steering and "enzyme Beta" in steering
++        assert "not sampling confidence intervals" in steering
++        return source_reason(store, args["source_ref"])
++    def parent_next(inputs):
++        captured["parent"] = deepcopy(inputs)
++        rows = inputs["child_reports"][0]["caller_chosen_subset"]
++        assert len(rows) == 1 and rows[0]["component"] == "retained_fraction"
++        own_domain = inputs["literature_rate_source_domain_display"]["cells"]
++        assert own_domain == (rows if domain_return else [])
++        task, steering = render_literature_experimental_prompt(inputs, "Constructed receiving work").split("\n\nSTEERING\n", 1)
++        assert "enzyme Alpha" in steering and "enzyme Beta" in steering
++        assert "0.012" not in steering and "0.003" not in steering
++        assert "Reference rate |" not in steering and "Test rate |" not in steering
++        if domain_return:
++            assert "Reported-operand numerical domains" in steering
++            if not legacy_payload:
++                assert "finite_interval" in steering and "0.25" in steering
++        else:
++            assert "Reported-operand numerical domains" not in steering
++        return source_reason(store, args["source_ref"])
++    provider = ScriptedProvider([
++        {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
++            "goal": "Compare constructed source rates.", "scope": plain(template.scope),
++            "purpose": "Return only the requested numerical component.", "schema_json": json.dumps(form),
++            "initial_report_json": "{}"}, "report_update": {}},
++        {"selection": {"kind": "tool", "tool": "literature.rate.source.populate", "arguments": args}, "report_update": {}},
++        child_next, parent_next])
++    scorer = ScientificFindingProgress(FindingProgressPolicy(1))
++    result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
++        run_dir=tmp_path / "run", controller_factory=lambda path, initial: FixtureController(str(path), initial, 2),
++        project_credit=scorer, initial_known_record_refs=[args["source_ref"]],
++        episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
++            reference_parent_sources=[args["source_ref"]]),), binding_definitions={"credit": scorer.as_record()}))
++    assert result["credit"] == 0
++    assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 4
++    operation, = store.db.execute("SELECT * FROM literature_rate_operations").fetchall()
++    actions = store.db.execute("SELECT result FROM runtime_actions WHERE json_extract(action,'$.tool')='literature.rate.source.populate'").fetchall()
++    assert len(actions) == 1 and json.loads(actions[0]["result"])["status"] == "completed"
++    attempt, = store.db.execute("SELECT * FROM runtime_report_attempts").fetchall()
++    assert attempt["failure"] is None
++    rows = json.loads(attempt["form"])["caller_chosen_subset"]
++    parent_row, = store.db.execute("SELECT * FROM runtime_episodes WHERE json_array_length(path)=1").fetchall()
++    child_row, = store.db.execute("SELECT * FROM runtime_episodes WHERE json_array_length(path)=2").fetchall()
++    def context(row):
++        request = json.loads(row["request"])
++        role = json.loads(row["path"])[-1][0]
++        return BindingContext(operation["run_id"], row["episode_id"], role,
++            tuple(tuple(p) for p in json.loads(row["path"])), plain(template.scope),
++            request["message"].get("episode_assignment", {}), request,
++            tuple(EpisodeReceipts(store, operation["run_id"]).known(row["episode_id"])))
++    owner, receiver = context(child_row), context(parent_row)
++    outcome = json.loads(operation["outcome"])
++    sheet_ref = outcome["result"]["sheet_ref"]
++    saved = LiteratureRateRepository(store, operation["run_id"]).read(sheet_ref)
++    artifacts = {store.get(args["source_ref"])[field] for field in ("artifact_ref", "text_ref")}
++    expected_parent_domain = captured["parent"]["literature_rate_source_domain_display"]
++    store.close()
++    def forbidden(*args, **kwargs):
++        raise AssertionError("RO replay reacquired scientific bytes, recalculated, modeled or mutated")
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_storage.populate_rate_contrast", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_rate_native_inputs.read_rate_source_inputs", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.providers.ModelConnection", forbidden)
++    reopened = Store.__new__(Store)
++    reopened.path = path.resolve();reopened._savepoint = 0
++    reopened.db = sqlite3.connect((path / "state.sqlite3").as_uri() + "?mode=ro", uri=True, isolation_level=None)
++    reopened.db.row_factory = sqlite3.Row
++    reopened.db.execute("PRAGMA query_only=ON")
++    reopened.db.create_function("library_scope_record", 2, reopened._scope_filter_record)
++    get_artifact = reopened.get_artifact
++    def saved_only(ref):
++        if ref in artifacts:
++            forbidden()
++        return get_artifact(ref)
++    monkeypatch.setattr(reopened, "get_artifact", saved_only)
++    for method in ("put", "artifact", "transaction", "register_material", "parse_material"):
++        monkeypatch.setattr(reopened, method, forbidden)
++    try:
++        services = WorkflowServices(SimpleNamespace(store=reopened, run_id=operation["run_id"]))
++        binding = LiteratureEpisodes(services, rate_population=True, reference_parent_sources=[args["source_ref"]])
++        repo = services.literature_rate_repository()
++        assert repo.populate_native(owner, args, operation["operation_key"]) == outcome
++        assert repo.read(sheet_ref) == saved
++        view = repo.source_domain_projection() if domain_return else repo.source_projection()
++        assert view.received_cells(receiver) == rows
++        assert view.fact_cells(receiver, [sheet_ref], components=["reference_rate"]) == []
++        assert binding._native_rate_domain_display_context(receiver)["literature_rate_source_domain_display"] == expected_parent_domain
++        for column, value in (("form", json.dumps({"caller_chosen_subset": []})),):
++            # Query-only mode itself forbids forging the actual runtime receipt.
++            with pytest.raises(sqlite3.OperationalError):
++                reopened.db.execute("UPDATE runtime_report_attempts SET " + column + "=?", (value,))
++        assert reopened.db.total_changes == 0
++    finally:
++        reopened.close()

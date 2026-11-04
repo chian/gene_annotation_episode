@@ -1,0 +1,22 @@
+........................................................................ [ 36%]
+........................................................................ [ 72%]
+.....................................................F                   [100%]
+=================================== FAILURES ===================================
+_________ test_original_facs_csv_function_numbers_reach_report_parser __________
+source_snapshot/tests/test_fluorescence_native_report_execution.py:40: in test_original_facs_csv_function_numbers_reach_report_parser
+    log = namespace['perform_facs_cell_sorting'](supplied['path'], 'signal',
+source_snapshot/reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cell_biology.py:399: in perform_facs_cell_sorting
+    import pandas as pd
+dependencies/pandas/__init__.py:19: in <module>
+    raise ImportError(
+E   ImportError: Unable to import required dependencies:
+E   pytz: No module named 'pytz.exceptions'
+=============================== warnings summary ===============================
+tests/test_fluorescence_preparation.py::test_native_nonfinite_preparation_stays_invalid_with_raw_retained
+  /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check043_fluorescence_preparation_reports/dependencies/flowio/flowdata.py:728: RuntimeWarning: overflow encountered in power
+    tmp_events[:, chan_idx] = (10 ** (chan_decades * tmp_events[:, chan_idx] / chan_range)) * chan_log0
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_fluorescence_native_report_execution.py::test_original_facs_csv_function_numbers_reach_report_parser
+1 failed, 197 passed, 1 warning in 1.62s

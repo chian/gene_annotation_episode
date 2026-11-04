@@ -1,0 +1,456 @@
+{
+  "attempts": [
+    {
+      "attempt": "check071_masking_result_core",
+      "current_owned_source_matches_snapshot": {
+        "gene_annotation_episode/native_blast_masking_result_publication.py": true,
+        "gene_annotation_episode/native_blast_masking_result_worker.py": false,
+        "gene_annotation_episode/sequence_masking_result_views.py": false,
+        "tests/test_native_blast_masking_empty_selection_616.py": false,
+        "tests/test_native_blast_masking_result_faults_616.py": false,
+        "tests/test_native_blast_masking_results_616.py": false
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/handle.json",
+          "sha256": "7aed5fbd988101715ea2f430cba0965a3fec7bae938f892dfc0c5151126bcab1",
+          "size_bytes": 3228
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/receipt.json",
+          "sha256": "bd981c009915f5c2be61d6436f7289afe508f4eb2ef70a2da7062735a48e9e11",
+          "size_bytes": 1638
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/stdout.txt",
+          "sha256": "b5e9375729ce900a3b2b30fabeb0c008d7b32046c6099cdb9573950936ebf1de",
+          "size_bytes": 2266
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/execution_audit.json",
+          "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/selected_tests.json",
+          "sha256": "aa67dde7e5efbcf5a81cabfab6a92d0e0560409fa49c614edc2afe43f48075e8",
+          "size_bytes": 49
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/junit.xml",
+          "sha256": "e13722bf07fd3564eed785e3ca0766c426771ca88581bdfa426549a713c13086",
+          "size_bytes": 5418
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/case_reports.jsonl",
+          "sha256": "2d4e1d18461f01b7cdf3abaaec7ba2cc4c72bf6f09e961d2692807b7405358d7",
+          "size_bytes": 6122
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/source_pins_before.json",
+          "sha256": "e9d73b2668afc0103641860becb684886f7c10fec592fcbfd29593d1dfe7fdb6",
+          "size_bytes": 2386601
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/source_pins_after.json",
+          "sha256": "e9d73b2668afc0103641860becb684886f7c10fec592fcbfd29593d1dfe7fdb6",
+          "size_bytes": 2386601
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/user_supplied_authority_pin.json",
+          "sha256": "62f03d4efb3e8f6a3bcff86f4c4921af143ecf24a76cd4ddebf0c295c62e23e7",
+          "size_bytes": 204
+        }
+      ],
+      "receipt": {
+        "binary_unchanged": true,
+        "dependency_unchanged": true,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check071_masking_result_core/handle.json",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 78.025427379,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 1,
+          "observed_scratch_bytes": 616783872,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "SERVICE_RESULT": "exit-code",
+            "ended": {
+              "at": "2026-10-28T21:17:02.466304+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 1035784163629754
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "quiescent": true,
+        "returncode": 1,
+        "source_unchanged": true,
+        "stdlib_unchanged": true,
+        "terminal": true,
+        "unit": "gene-local-job-ac64e1a081b8477fa1caa90fc3e4b9ee.service"
+      },
+      "test_suites": [
+        {
+          "errors": "0",
+          "failures": "1",
+          "hostname": "chia-Z590-UD",
+          "name": "pytest",
+          "skipped": "0",
+          "tests": "20",
+          "time": "75.352",
+          "timestamp": "2026-10-28T16:15:46.585143-05:00"
+        }
+      ]
+    },
+    {
+      "attempt": "check074_masking_result_faults",
+      "current_owned_source_matches_snapshot": {
+        "gene_annotation_episode/native_blast_masking_result_publication.py": true,
+        "gene_annotation_episode/native_blast_masking_result_worker.py": true,
+        "gene_annotation_episode/sequence_masking_result_views.py": false,
+        "tests/test_native_blast_masking_empty_selection_616.py": false,
+        "tests/test_native_blast_masking_result_faults_616.py": true,
+        "tests/test_native_blast_masking_results_616.py": true
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/handle.json",
+          "sha256": "f66ca0cc306d0e3acebf47083d4656c09db0df2da20ab9144744a251b5006b34",
+          "size_bytes": 3252
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/receipt.json",
+          "sha256": "b6e5faf7431c5f3ab65da5b557426e6b01de495a55e06393cbe92a59ae9f18c6",
+          "size_bytes": 1639
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/stdout.txt",
+          "sha256": "f62a470ed9fd0b6c99acc5fafb7748e758f3fc3b42a3af7c98bcde9590538b03",
+          "size_bytes": 110
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/selected_tests.json",
+          "sha256": "19374aff74a3784eda297989373a844c3f5b2a60e06b9af7dc8d9e019971ab07",
+          "size_bytes": 55
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/junit.xml",
+          "sha256": "79655ac87db0aa0c45a895c8458da84ae3316bd1b2d868075b47a3bd3f0367e4",
+          "size_bytes": 1549
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/case_reports.jsonl",
+          "sha256": "6af8e49de7fe527436397c6d2a7f26b0f8265b1454d305b58e7b123e384d7a80",
+          "size_bytes": 1706
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/source_pins_before.json",
+          "sha256": "5b6309dd1d6ed3a936f2b15cfec1ad0b67cf46bf917a9dc15ebb4043ebb90f2c",
+          "size_bytes": 2399673
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/source_pins_after.json",
+          "sha256": "5b6309dd1d6ed3a936f2b15cfec1ad0b67cf46bf917a9dc15ebb4043ebb90f2c",
+          "size_bytes": 2399673
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/user_supplied_authority_pin.json",
+          "sha256": "62f03d4efb3e8f6a3bcff86f4c4921af143ecf24a76cd4ddebf0c295c62e23e7",
+          "size_bytes": 204
+        }
+      ],
+      "receipt": {
+        "binary_unchanged": true,
+        "dependency_unchanged": true,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check074_masking_result_faults/handle.json",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 111.878024743,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 607887360,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-28T21:21:58.181430+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 1036079878755870
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "quiescent": true,
+        "returncode": 0,
+        "source_unchanged": true,
+        "stdlib_unchanged": true,
+        "terminal": true,
+        "unit": "gene-local-job-e946691a343949418afc7219f4d41371.service"
+      },
+      "test_suites": [
+        {
+          "errors": "0",
+          "failures": "0",
+          "hostname": "chia-Z590-UD",
+          "name": "pytest",
+          "skipped": "0",
+          "tests": "8",
+          "time": "108.801",
+          "timestamp": "2026-10-28T16:20:08.634210-05:00"
+        }
+      ]
+    },
+    {
+      "attempt": "check076_masking_empty_selection",
+      "current_owned_source_matches_snapshot": {
+        "gene_annotation_episode/native_blast_masking_result_publication.py": true,
+        "gene_annotation_episode/native_blast_masking_result_worker.py": true,
+        "gene_annotation_episode/sequence_masking_result_views.py": true,
+        "tests/test_native_blast_masking_empty_selection_616.py": true,
+        "tests/test_native_blast_masking_result_faults_616.py": true,
+        "tests/test_native_blast_masking_results_616.py": true
+      },
+      "evidence": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/handle.json",
+          "sha256": "5d7f0b49c4124790950a7fe2f62ae6fa396dc6dcc042f6427ddddb6b22e2bc58",
+          "size_bytes": 3276
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/receipt.json",
+          "sha256": "f28a59d7ece41013c0aea9ce2db95005ec94d69b6b81625a30f21ec8188cc662",
+          "size_bytes": 1639
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/stdout.txt",
+          "sha256": "ede6406d3238cee8afd3d31757a2bd92b43bfd35c52950a3da5fd6f03cfeb1f0",
+          "size_bytes": 98
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/selected_tests.json",
+          "sha256": "a777f9be234418123ecdc097c48f5f0cca0f323e44d55927f3571e913e50ae81",
+          "size_bytes": 57
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/junit.xml",
+          "sha256": "e1ad48531e3ee61f27e71e15c67193852e8009327de0670055d680cd8a3d3d26",
+          "size_bytes": 607
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/case_reports.jsonl",
+          "sha256": "30d903d8bb38ff8d86d1d6f86d34414cf9dd8eb7608dd76e97db4faf9d449136",
+          "size_bytes": 468
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/source_pins_before.json",
+          "sha256": "a8c8f86813caeb1d32de006c677409a89b5fbadf643d9eb9f54488207a5b33fe",
+          "size_bytes": 2373237
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/source_pins_after.json",
+          "sha256": "a8c8f86813caeb1d32de006c677409a89b5fbadf643d9eb9f54488207a5b33fe",
+          "size_bytes": 2373237
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/user_supplied_authority_pin.json",
+          "sha256": "62f03d4efb3e8f6a3bcff86f4c4921af143ecf24a76cd4ddebf0c295c62e23e7",
+          "size_bytes": 204
+        }
+      ],
+      "receipt": {
+        "binary_unchanged": true,
+        "dependency_unchanged": true,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_empty_selection/handle.json",
+        "metadata": {
+          "duration_measure": "systemd_service_wall_seconds",
+          "elapsed_seconds": 5.602667026,
+          "enforcement": {
+            "filesystem_sandbox": false,
+            "memory": "systemd_cgroup_v2_memory_max",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset"
+          },
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "native_returncode": 0,
+          "observed_scratch_bytes": 599949312,
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "service_exit": {
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "SERVICE_RESULT": "success",
+            "ended": {
+              "at": "2026-10-28T21:26:50.725194+00:00",
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "monotonic_ns": 1036372422519945
+            }
+          },
+          "verified_cgroup": {
+            "kill_mode": "control-group",
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "oom_policy": "kill",
+            "runtime_max": "infinity"
+          }
+        },
+        "quiescent": true,
+        "returncode": 0,
+        "source_unchanged": true,
+        "stdlib_unchanged": true,
+        "terminal": true,
+        "unit": "gene-local-job-c21a133ada09401ca1333c49bd070b05.service"
+      },
+      "test_suites": [
+        {
+          "errors": "0",
+          "failures": "0",
+          "hostname": "chia-Z590-UD",
+          "name": "pytest",
+          "skipped": "0",
+          "tests": "2",
+          "time": "1.340",
+          "timestamp": "2026-10-28T16:26:48.779932-05:00"
+        }
+      ]
+    }
+  ],
+  "authority_pin": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "complete_episode_integration_claimed": false,
+  "new_scientific_native_runs": 0,
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/sequence_masking_result_views.py",
+      "sha256": "968fb0d5461a6da647bd441317f90cb201f31850c519abe70d9fc68eea59dd43",
+      "size_bytes": 27382
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_result_worker.py",
+      "sha256": "9ae8f7bdf78dc9425e4d037ef5d907e3da5a0983e171f1c01347f1207f78df04",
+      "size_bytes": 15262
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_result_publication.py",
+      "sha256": "0f482b069594b6ec4910e7fb8ea6857c5f2ceb8bc82dcb9a7cb37d760965d92e",
+      "size_bytes": 24649
+    },
+    {
+      "path": "tests/test_native_blast_masking_results_616.py",
+      "sha256": "0ab4641eb8f4b5e480d119db09532602f8eec82c336d897516e41a14189b3ca9",
+      "size_bytes": 24723
+    },
+    {
+      "path": "tests/test_native_blast_masking_result_faults_616.py",
+      "sha256": "c03dd89c65e449f287159c9333787dddffc8a0235625041280a40890b43e8d4d",
+      "size_bytes": 7950
+    },
+    {
+      "path": "tests/test_native_blast_masking_empty_selection_616.py",
+      "sha256": "ca3cead77dd7ecaec87017c61ae8098869b02d8c7663216057ad72a1dd6f3bd0",
+      "size_bytes": 1534
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_results_2026-10-28_616/EMPTY_SELECTION_004.md",
+      "sha256": "3b4b7d371090ca5b214b3e2d8ba294df0052eaa09706a93e95f4003f4f0c1634",
+      "size_bytes": 680
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_results_2026-10-28_616/FULFILLMENT_003.md",
+      "sha256": "8e8d89e9f7aa2b172b35e22695f6cbe4d9ffabc2fd87580b22d9019ca39c866b",
+      "size_bytes": 2256
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_results_2026-10-28_616/HANDOFF_005.md",
+      "sha256": "980931361b73489dcf842bc21d12b44136ac8d1202aada0186584688d632bd30",
+      "size_bytes": 9210
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_results_2026-10-28_616/INTERFACES_001.md",
+      "sha256": "4f0bc2f0a23211c758200c1d23d356085250fca671323e864b19f3acd7d35dce",
+      "size_bytes": 11379
+    },
+    {
+      "path": "verification/tool_graders_blast_masking_results_2026-10-28_616/RETURN_GRANTS_002.md",
+      "sha256": "240777152c25d3af56a18c05e11b8403f22edd1cf4ac9aa9ce931d88a521047f",
+      "size_bytes": 2813
+    }
+  ],
+  "version": "masking_results_616_handoff_manifest_v1"
+}

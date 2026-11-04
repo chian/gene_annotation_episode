@@ -1,0 +1,11 @@
+docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_2026-10-24_001.md:870:3. `ExecutionEpisodes.initial_decision_context(context)` returns
+docs/API_ITERATION_BOUNDARY_CONTRACT_2026-10-24_001.md:59:| Shared initial information is broader than this receiver's decision | `ExecutionEpisodes.initial_decision_context` supplies all resource capabilities and initial inventories. The API projection must select only original assigned resource facts; it must not print other-resource inventories or import a parent's statistics. |
+docs/RESULTS_ITERATION_BOUNDARY_CONTRACT_2026-10-24_001.md:69:| Initial capability context is wider than this decision | `initial_decision_context` supplies all resource inventories. The results projection must restrict to the original assigned resource and requested acquisition. |
+gene_annotation_episode/practical_resource_episodes.py:170:    def initial_decision_context(self, context):
+gene_annotation_episode/runtime.py:821:            supplied_initial = self.workflow.episode_bindings.initial_decision_context(
+gene_annotation_episode/execution_episodes.py:361:    def initial_decision_context(self, context):
+gene_annotation_episode/execution_episodes.py:603:                return _outcome(self.initial_decision_context(context))
+tests/test_execution_episodes_family.py:101:    assert h.family.initial_decision_context(None)['execution_resource_capabilities'][0] == {
+tests/test_practical_reconstruction.py:33:    information = binding.initial_decision_context(None)['practical_resource_capabilities']
+gene_annotation_episode/episode_bindings.py:198:    def initial_decision_context(self, context):
+gene_annotation_episode/episode_bindings.py:202:            callback = getattr(binding, 'initial_decision_context', None)

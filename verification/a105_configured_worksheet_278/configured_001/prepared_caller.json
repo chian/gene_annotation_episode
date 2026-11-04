@@ -1,0 +1,4925 @@
+{
+  "version": "configured_original_common_worksheet_caller278_v1",
+  "run_id": "run_266d996f86fb4fc491a5fac50d62cd33",
+  "source_ref": "source_b3c0254e0138183de587b197",
+  "artifact_ref": "artifact_74103000b27fe82a97b1dc652cab09defdbe8100834917fac29e8503316fd08b",
+  "text_ref": "artifact_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+  "source_identities": [
+    {
+      "path": "research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf",
+      "pin_path": "pin_006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf",
+      "sha256": "74103000b27fe82a97b1dc652cab09defdbe8100834917fac29e8503316fd08b",
+      "bytes": 2176809,
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf",
+      "retained_path": "/home/chia/repos/gene_annotation_episode/verification/a105_configured_worksheet_278/source_originals_001/elife-06181-v2.pdf"
+    },
+    {
+      "path": "research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.txt",
+      "pin_path": "pin_006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.txt",
+      "sha256": "0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+      "bytes": 197163,
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.txt",
+      "retained_path": "/home/chia/repos/gene_annotation_episode/verification/a105_configured_worksheet_278/source_originals_001/elife-06181-v2.txt"
+    }
+  ],
+  "scope": {
+    "subject_refs": []
+  },
+  "scientific_question": "Determine what the retained original experimental paper establishes about the catalytic activity of its D101A/E322Y alkaline-phosphatase construct in the reported pNPP assay. Investigate the source contents and select the relevant original row, units, Methods and applicable footnotes yourself. Return the source-reported catalytic-efficiency parameter and the uncertainty/replication components for that same report, with actual subject, construct, preparation, substrate, conditions, endpoint and normalization. Establish what each number evaluates. Keep reported SD, relative SD, physical independent-preparation count, statistical estimator count and estimated mean standard error distinct. Unknown statistical hierarchy or assumptions must remain unknown; no hypothetical scenario is requested. Preserve the relation between repeated numerical views of the same report. Interpret the result's bearing on molecular activity and the limits of effect isolation, including background contributors and what the measured endpoint establishes. Distinguish comparability outside an intended change from attribution of the observed effect. Use only the one supplied primary-source record and its retained representations; no new paper search or reacquisition is in scope. No annotation-target sequence is supplied. Possible functional assertions may emerge from the evidence. Choose your own actual literature child assignments, return forms, reads, interpretation and operation choices. Integrate only the typed information actually returned to you. Retain useful partial results and specific unavailable reasons. This is reference experimental evidence; target correspondence, W05 aggregation and final annotation credit are outside scope.",
+  "return_purpose": "Return the requested common worksheet with native parameter, source random-precision components and constrained relationships; interpret the molecular-activity assertion and its limitations from admitted child evidence.",
+  "template": {
+    "submitted_form": {
+      "type": "object",
+      "properties": {
+        "native_parameter": {
+          "$ref": "episode-fact:literature_kinetic_cells"
+        },
+        "precision": {
+          "$ref": "episode-fact:literature_kinetic_summary_precision_cells"
+        },
+        "assessment_context": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "const": "a105_source_evidence_worksheet_v1"
+            },
+            "assertion_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "reference",
+                "x-reference-namespace": "hypothesis"
+              },
+              "uniqueItems": true
+            },
+            "quantity_links": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "left": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "enum": [
+                          "native_parameter",
+                          "precision"
+                        ]
+                      },
+                      "sheet_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "source"
+                      },
+                      "component": {
+                        "type": "string",
+                        "enum": [
+                          "numerator_parameter",
+                          "source_reported_parameter",
+                          "source_reported_sd",
+                          "source_relative_reported_sd",
+                          "source_independent_preparation_count",
+                          "source_statistical_estimator_count",
+                          "source_mean_standard_error"
+                        ]
+                      },
+                      "quantity": {
+                        "type": "string",
+                        "enum": [
+                          "cell_value",
+                          "reported_spread",
+                          "reported_count"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "field",
+                      "sheet_ref",
+                      "component",
+                      "quantity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "right": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "enum": [
+                          "native_parameter",
+                          "precision"
+                        ]
+                      },
+                      "sheet_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "source"
+                      },
+                      "component": {
+                        "type": "string",
+                        "enum": [
+                          "numerator_parameter",
+                          "source_reported_parameter",
+                          "source_reported_sd",
+                          "source_relative_reported_sd",
+                          "source_independent_preparation_count",
+                          "source_statistical_estimator_count",
+                          "source_mean_standard_error"
+                        ]
+                      },
+                      "quantity": {
+                        "type": "string",
+                        "enum": [
+                          "cell_value",
+                          "reported_spread",
+                          "reported_count"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "field",
+                      "sheet_ref",
+                      "component",
+                      "quantity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "relation": {
+                    "type": "string",
+                    "enum": [
+                      "same_reported_parameter",
+                      "same_reported_spread",
+                      "same_count_report",
+                      "conditional_precision_of_report",
+                      "unresolved",
+                      "conflicting"
+                    ]
+                  },
+                  "support_record_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "reference"
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "left",
+                  "right",
+                  "relation",
+                  "support_record_refs"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "assertion_links": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "selector": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "enum": [
+                          "native_parameter",
+                          "precision"
+                        ]
+                      },
+                      "sheet_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "source"
+                      },
+                      "component": {
+                        "type": "string",
+                        "enum": [
+                          "numerator_parameter",
+                          "source_reported_parameter",
+                          "source_reported_sd",
+                          "source_relative_reported_sd",
+                          "source_independent_preparation_count",
+                          "source_statistical_estimator_count",
+                          "source_mean_standard_error"
+                        ]
+                      },
+                      "quantity": {
+                        "type": "string",
+                        "enum": [
+                          "cell_value",
+                          "reported_spread",
+                          "reported_count"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "field",
+                      "sheet_ref",
+                      "component",
+                      "quantity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "assertion_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "reference",
+                    "x-reference-namespace": "hypothesis"
+                  },
+                  "relation": {
+                    "type": "string",
+                    "enum": [
+                      "measures_asserted_endpoint",
+                      "addresses_named_weakness",
+                      "does_not_establish_assertion",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "support_record_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "reference"
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "selector",
+                  "assertion_ref",
+                  "relation",
+                  "support_record_refs"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "version",
+            "assertion_refs",
+            "quantity_links",
+            "assertion_links"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "native_parameter",
+        "precision",
+        "assessment_context"
+      ],
+      "additionalProperties": false
+    },
+    "assignment_rosters": {
+      "requested_kinetic_components": [
+        "numerator_parameter"
+      ],
+      "requested_kinetic_summary_precision_components": [
+        "source_reported_parameter",
+        "source_reported_sd",
+        "source_relative_reported_sd",
+        "source_independent_preparation_count",
+        "source_statistical_estimator_count",
+        "source_mean_standard_error"
+      ]
+    },
+    "section_roles": [
+      {
+        "field": "native_parameter",
+        "source": "literature_kinetic_cells",
+        "components": [
+          "numerator_parameter"
+        ],
+        "numerical_role": "reported_kinetic_estimates_and_descriptive_contrasts"
+      },
+      {
+        "field": "precision",
+        "source": "literature_kinetic_summary_precision_cells",
+        "components": [
+          "source_reported_parameter",
+          "source_reported_sd",
+          "source_relative_reported_sd",
+          "source_independent_preparation_count",
+          "source_statistical_estimator_count",
+          "source_mean_standard_error"
+        ],
+        "numerical_role": "summary_random_precision"
+      }
+    ]
+  },
+  "expanded_form": {
+    "type": "object",
+    "properties": {
+      "native_parameter": {
+        "type": "array",
+        "x-source": "literature_kinetic_cells",
+        "items": {
+          "type": "object",
+          "properties": {
+            "sheet_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "evidence_source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "component": {
+              "type": "string",
+              "enum": [
+                "numerator_parameter",
+                "denominator_parameter",
+                "parameter_difference",
+                "parameter_ratio",
+                "log_parameter_contrast"
+              ]
+            },
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "threshold": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "uM",
+                "per_min",
+                "uM_inverse_min_inverse",
+                "dimensionless",
+                null
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "unavailable"
+              ]
+            },
+            "relation": {
+              "type": "string",
+              "enum": [
+                "eq",
+                "lt",
+                "le",
+                "gt",
+                "ge",
+                "none"
+              ]
+            },
+            "approximate": {
+              "type": "boolean"
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "calculated",
+                "synthetic",
+                "derived"
+              ]
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "source_measurement_unreported",
+                "source_kinetic_unit_unreported",
+                "unsupported_source_kinetic_unit",
+                "source_operand_qualification_unknown",
+                "source_operand_qualification_conflicting",
+                "source_numeric_range",
+                "numerator_measurement_missing",
+                "denominator_measurement_missing",
+                "source_measurement_missing",
+                "censored_measurement",
+                "conflicting_measurement",
+                "parameter_kind_mismatch",
+                "subject_relationship_different",
+                "subject_relationship_unknown",
+                "subject_relationship_conflicting",
+                "parameter_definition_relationship_different",
+                "parameter_definition_relationship_unknown",
+                "parameter_definition_relationship_conflicting",
+                "mixed_substrates_unsupported",
+                "substrate_arrangement_unknown",
+                "substrate_arrangement_conflicting",
+                "comparison_scope_unknown",
+                "comparison_scope_conflicting",
+                "common_conditions_not_matched",
+                "reused_source_observation",
+                "conflicting_source_observation",
+                "zero_denominator_parameter",
+                "positive_parameters_required_for_log",
+                "kinetic_log_model_unreported",
+                "covariance_status_unknown",
+                "known_log_covariance_required",
+                "kinetic_observation_model_unspecified",
+                "approximate_parameter_model_unsupported",
+                "positive_log_contrast_variance_required",
+                "numerical_model_range",
+                null
+              ]
+            },
+            "formula_code": {
+              "type": "string",
+              "enum": [
+                "kinetic_numerator_parameter",
+                "kinetic_denominator_parameter",
+                "kinetic_parameter_difference",
+                "kinetic_parameter_ratio",
+                "kinetic_log_parameter_contrast"
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "supplied_subject_and_parameter_relationships",
+                  "reported_protocol_comparison",
+                  "declared_common_conditions",
+                  "supplied_log_covariance",
+                  "known_normal_log_parameters"
+                ]
+              }
+            },
+            "evaluation_scope": {
+              "type": "string",
+              "enum": [
+                "source_kinetic_parameter_contrast"
+              ]
+            },
+            "contrast_meaning": {
+              "type": "string",
+              "enum": [
+                "numerator_parameter_exceeds_denominator"
+              ]
+            },
+            "model_input_status": {
+              "type": "string",
+              "enum": [
+                "not_supplied_by_native_operation"
+              ]
+            },
+            "model_reader_capability": {
+              "type": "string",
+              "enum": [
+                "unimplemented"
+              ]
+            },
+            "comparison": {
+              "type": "object",
+              "properties": {
+                "subject_relationship": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "enum": [
+                        "same_molecule_and_construct",
+                        "different",
+                        "unknown",
+                        "conflicting"
+                      ]
+                    },
+                    "witness_refs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "reference"
+                      }
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "witness_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                "parameter_definition_relationship": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "enum": [
+                        "same",
+                        "different",
+                        "unknown",
+                        "conflicting"
+                      ]
+                    },
+                    "witness_refs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "reference"
+                      }
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "witness_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                "substrate_arrangement": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "enum": [
+                        "separate_assays",
+                        "mixed_substrates",
+                        "unknown",
+                        "conflicting"
+                      ]
+                    },
+                    "witness_refs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "reference"
+                      }
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "witness_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                "comparison_scope": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "enum": [
+                        "reported_protocols",
+                        "common_conditions",
+                        "unknown",
+                        "conflicting"
+                      ]
+                    },
+                    "witness_refs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "reference"
+                      }
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "witness_refs"
+                  ],
+                  "additionalProperties": false
+                },
+                "nonintended_conditions_relationship": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "enum": [
+                        "matched",
+                        "different",
+                        "unknown",
+                        "conflicting"
+                      ]
+                    },
+                    "witness_refs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "reference"
+                      }
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "witness_refs"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "subject_relationship",
+                "parameter_definition_relationship",
+                "substrate_arrangement",
+                "comparison_scope",
+                "nonintended_conditions_relationship"
+              ],
+              "additionalProperties": false
+            },
+            "numerator": {
+              "type": "object",
+              "properties": {
+                "parameter_kind": {
+                  "type": "string",
+                  "enum": [
+                    "Km",
+                    "kcat",
+                    "catalytic_efficiency",
+                    "unknown",
+                    "conflicting"
+                  ]
+                },
+                "parameter_kind_witness_refs": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "measurement_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                },
+                "measurement_source_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "source"
+                },
+                "physical_observation_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                },
+                "source_unit_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                },
+                "canonical_unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "uM",
+                    "per_min",
+                    "uM_inverse_min_inverse",
+                    null
+                  ]
+                },
+                "qualification": {
+                  "type": "string",
+                  "enum": [
+                    "reported_point",
+                    "source_qualified_approximate",
+                    "unknown",
+                    "conflicting"
+                  ]
+                },
+                "qualification_witness_refs": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "approximate": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "input_status": {
+                  "type": "string",
+                  "enum": [
+                    "point",
+                    "censored",
+                    "missing",
+                    "conflicting",
+                    "unresolved"
+                  ]
+                },
+                "observed_relation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "point",
+                    "lt",
+                    "le",
+                    "gt",
+                    "ge",
+                    null
+                  ]
+                },
+                "source_origin": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "reported",
+                    "synthetic",
+                    null
+                  ]
+                },
+                "converted_origin": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "reported",
+                    "calculated",
+                    "synthetic",
+                    null
+                  ]
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "organism": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "genotype": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "molecule": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "construct": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  },
+                  "required": [
+                    "organism",
+                    "genotype",
+                    "molecule",
+                    "construct"
+                  ],
+                  "additionalProperties": false
+                },
+                "context": {
+                  "type": "object",
+                  "properties": {
+                    "substrate": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "preparation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "experiment": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "experimental_system": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "conditions": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "endpoint": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "normalization": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  },
+                  "required": [
+                    "substrate",
+                    "preparation",
+                    "experiment",
+                    "experimental_system",
+                    "conditions",
+                    "endpoint",
+                    "normalization"
+                  ],
+                  "additionalProperties": false
+                },
+                "numeric_tokens": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "reference"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "source"
+                      }
+                    },
+                    "required": [
+                      "ref",
+                      "source_ref"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "uncertainty": {
+                  "type": "object",
+                  "properties": {
+                    "statistic": {
+                      "type": "string",
+                      "enum": [
+                        "sd",
+                        "sem",
+                        "ci",
+                        "unspecified",
+                        "unreported"
+                      ]
+                    },
+                    "count_reading_status": {
+                      "type": "string",
+                      "enum": [
+                        "not_selected",
+                        "exact",
+                        "qualified",
+                        "range_or_alternatives",
+                        "unsupported",
+                        "not_positive"
+                      ]
+                    },
+                    "count_unavailable_reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "exact_count_qualified",
+                        "count_range_or_alternatives",
+                        "unsupported_count_literal",
+                        "positive_count_required",
+                        null
+                      ]
+                    },
+                    "count_notation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "decimal_digits",
+                        "english_cardinal",
+                        "unsupported",
+                        null
+                      ]
+                    },
+                    "count_relation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "point",
+                        "lt",
+                        "le",
+                        "gt",
+                        "ge",
+                        "unresolved",
+                        null
+                      ]
+                    },
+                    "count_approximate": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "unit_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "canonical_unit": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "uM",
+                        "per_min",
+                        "uM_inverse_min_inverse",
+                        null
+                      ]
+                    },
+                    "repetition_basis": {
+                      "type": "string",
+                      "enum": [
+                        "biological_preparations",
+                        "technical_measurements",
+                        "unspecified"
+                      ]
+                    },
+                    "estimate_basis": {
+                      "type": "string",
+                      "enum": [
+                        "fit_to_averaged_curve",
+                        "between_fitted_parameters",
+                        "unknown"
+                      ]
+                    },
+                    "magnitude_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "interval_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "confidence_level_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "count_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "unavailable_reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "source_uncertainty_unit_unavailable",
+                        "source_numeric_range",
+                        null
+                      ]
+                    }
+                  },
+                  "required": [
+                    "statistic",
+                    "count_reading_status",
+                    "count_unavailable_reason",
+                    "count_notation",
+                    "count_relation",
+                    "count_approximate",
+                    "unit_ref",
+                    "canonical_unit",
+                    "repetition_basis",
+                    "estimate_basis",
+                    "magnitude_ref",
+                    "interval_ref",
+                    "confidence_level_ref",
+                    "count_ref",
+                    "unavailable_reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "uncertainty_values": {
+                  "type": "object",
+                  "properties": {
+                    "delivery_status": {
+                      "type": "string",
+                      "enum": [
+                        "requested",
+                        "not_requested"
+                      ]
+                    },
+                    "magnitude": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "interval": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "number"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "confidence_level": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "count": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "count_reported_value": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "delivery_status",
+                    "magnitude",
+                    "interval",
+                    "confidence_level",
+                    "count",
+                    "count_reported_value"
+                  ],
+                  "additionalProperties": false
+                },
+                "input_unavailable_reasons": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "source_measurement_unreported",
+                      "source_parameter_kind_unknown",
+                      "source_parameter_kind_conflicting",
+                      "source_kinetic_unit_unreported",
+                      "unsupported_source_kinetic_unit",
+                      "source_numeric_range",
+                      "source_operand_qualification_unknown",
+                      "source_operand_qualification_conflicting"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "parameter_kind",
+                "parameter_kind_witness_refs",
+                "measurement_ref",
+                "measurement_source_ref",
+                "physical_observation_ref",
+                "source_unit_ref",
+                "canonical_unit",
+                "qualification",
+                "qualification_witness_refs",
+                "approximate",
+                "input_status",
+                "observed_relation",
+                "source_origin",
+                "converted_origin",
+                "subject",
+                "context",
+                "numeric_tokens",
+                "uncertainty",
+                "uncertainty_values",
+                "input_unavailable_reasons"
+              ],
+              "additionalProperties": false
+            },
+            "denominator": {
+              "type": "object",
+              "properties": {
+                "parameter_kind": {
+                  "type": "string",
+                  "enum": [
+                    "Km",
+                    "kcat",
+                    "catalytic_efficiency",
+                    "unknown",
+                    "conflicting"
+                  ]
+                },
+                "parameter_kind_witness_refs": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "measurement_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                },
+                "measurement_source_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "source"
+                },
+                "physical_observation_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                },
+                "source_unit_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "reference"
+                },
+                "canonical_unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "uM",
+                    "per_min",
+                    "uM_inverse_min_inverse",
+                    null
+                  ]
+                },
+                "qualification": {
+                  "type": "string",
+                  "enum": [
+                    "reported_point",
+                    "source_qualified_approximate",
+                    "unknown",
+                    "conflicting"
+                  ]
+                },
+                "qualification_witness_refs": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "reference"
+                  }
+                },
+                "approximate": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "input_status": {
+                  "type": "string",
+                  "enum": [
+                    "point",
+                    "censored",
+                    "missing",
+                    "conflicting",
+                    "unresolved"
+                  ]
+                },
+                "observed_relation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "point",
+                    "lt",
+                    "le",
+                    "gt",
+                    "ge",
+                    null
+                  ]
+                },
+                "source_origin": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "reported",
+                    "synthetic",
+                    null
+                  ]
+                },
+                "converted_origin": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "reported",
+                    "calculated",
+                    "synthetic",
+                    null
+                  ]
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "organism": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "genotype": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "molecule": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "construct": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  },
+                  "required": [
+                    "organism",
+                    "genotype",
+                    "molecule",
+                    "construct"
+                  ],
+                  "additionalProperties": false
+                },
+                "context": {
+                  "type": "object",
+                  "properties": {
+                    "substrate": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "preparation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "experiment": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "experimental_system": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "conditions": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "endpoint": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "normalization": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    }
+                  },
+                  "required": [
+                    "substrate",
+                    "preparation",
+                    "experiment",
+                    "experimental_system",
+                    "conditions",
+                    "endpoint",
+                    "normalization"
+                  ],
+                  "additionalProperties": false
+                },
+                "numeric_tokens": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "reference"
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "source"
+                      }
+                    },
+                    "required": [
+                      "ref",
+                      "source_ref"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "uncertainty": {
+                  "type": "object",
+                  "properties": {
+                    "statistic": {
+                      "type": "string",
+                      "enum": [
+                        "sd",
+                        "sem",
+                        "ci",
+                        "unspecified",
+                        "unreported"
+                      ]
+                    },
+                    "count_reading_status": {
+                      "type": "string",
+                      "enum": [
+                        "not_selected",
+                        "exact",
+                        "qualified",
+                        "range_or_alternatives",
+                        "unsupported",
+                        "not_positive"
+                      ]
+                    },
+                    "count_unavailable_reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "exact_count_qualified",
+                        "count_range_or_alternatives",
+                        "unsupported_count_literal",
+                        "positive_count_required",
+                        null
+                      ]
+                    },
+                    "count_notation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "decimal_digits",
+                        "english_cardinal",
+                        "unsupported",
+                        null
+                      ]
+                    },
+                    "count_relation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "point",
+                        "lt",
+                        "le",
+                        "gt",
+                        "ge",
+                        "unresolved",
+                        null
+                      ]
+                    },
+                    "count_approximate": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "unit_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "canonical_unit": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "uM",
+                        "per_min",
+                        "uM_inverse_min_inverse",
+                        null
+                      ]
+                    },
+                    "repetition_basis": {
+                      "type": "string",
+                      "enum": [
+                        "biological_preparations",
+                        "technical_measurements",
+                        "unspecified"
+                      ]
+                    },
+                    "estimate_basis": {
+                      "type": "string",
+                      "enum": [
+                        "fit_to_averaged_curve",
+                        "between_fitted_parameters",
+                        "unknown"
+                      ]
+                    },
+                    "magnitude_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "interval_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "confidence_level_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "count_ref": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "reference",
+                      "x-reference-namespace": "reference"
+                    },
+                    "unavailable_reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "source_uncertainty_unit_unavailable",
+                        "source_numeric_range",
+                        null
+                      ]
+                    }
+                  },
+                  "required": [
+                    "statistic",
+                    "count_reading_status",
+                    "count_unavailable_reason",
+                    "count_notation",
+                    "count_relation",
+                    "count_approximate",
+                    "unit_ref",
+                    "canonical_unit",
+                    "repetition_basis",
+                    "estimate_basis",
+                    "magnitude_ref",
+                    "interval_ref",
+                    "confidence_level_ref",
+                    "count_ref",
+                    "unavailable_reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "uncertainty_values": {
+                  "type": "object",
+                  "properties": {
+                    "delivery_status": {
+                      "type": "string",
+                      "enum": [
+                        "requested",
+                        "not_requested"
+                      ]
+                    },
+                    "magnitude": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "interval": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "number"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "confidence_level": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "count": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "count_reported_value": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "delivery_status",
+                    "magnitude",
+                    "interval",
+                    "confidence_level",
+                    "count",
+                    "count_reported_value"
+                  ],
+                  "additionalProperties": false
+                },
+                "input_unavailable_reasons": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "source_measurement_unreported",
+                      "source_parameter_kind_unknown",
+                      "source_parameter_kind_conflicting",
+                      "source_kinetic_unit_unreported",
+                      "unsupported_source_kinetic_unit",
+                      "source_numeric_range",
+                      "source_operand_qualification_unknown",
+                      "source_operand_qualification_conflicting"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "parameter_kind",
+                "parameter_kind_witness_refs",
+                "measurement_ref",
+                "measurement_source_ref",
+                "physical_observation_ref",
+                "source_unit_ref",
+                "canonical_unit",
+                "qualification",
+                "qualification_witness_refs",
+                "approximate",
+                "input_status",
+                "observed_relation",
+                "source_origin",
+                "converted_origin",
+                "subject",
+                "context",
+                "numeric_tokens",
+                "uncertainty",
+                "uncertainty_values",
+                "input_unavailable_reasons"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "sheet_ref",
+            "evidence_source_ref",
+            "component",
+            "value",
+            "threshold",
+            "unit",
+            "status",
+            "relation",
+            "approximate",
+            "origin",
+            "unavailable_reason",
+            "formula_code",
+            "conditional_on",
+            "evaluation_scope",
+            "contrast_meaning",
+            "model_input_status",
+            "model_reader_capability",
+            "comparison",
+            "numerator",
+            "denominator"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "precision": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "array",
+        "x-source": "literature_kinetic_summary_precision_cells",
+        "x-unique-by": [
+          "sheet_ref",
+          "component"
+        ],
+        "items": {
+          "type": "object",
+          "properties": {
+            "row_version": {
+              "const": "kinetic_summary_precision_return_v1"
+            },
+            "sheet_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "evidence_source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "evaluation_scope": {
+              "const": "source_kinetic_summary_precision"
+            },
+            "component": {
+              "enum": [
+                "source_reported_parameter",
+                "source_reported_sd",
+                "source_source_summary_count",
+                "source_independent_preparation_count",
+                "source_statistical_estimator_count",
+                "source_relative_reported_sd",
+                "source_mean_variance",
+                "source_mean_standard_error",
+                "source_relative_mean_standard_error",
+                "source_mean_interval_df",
+                "source_mean_interval_confidence_level",
+                "source_mean_interval_t_multiplier",
+                "source_mean_interval_halfwidth",
+                "source_mean_interval_lower",
+                "source_mean_interval_upper",
+                "scenario_reported_parameter",
+                "scenario_reported_sd",
+                "scenario_source_summary_count",
+                "scenario_independent_preparation_count",
+                "scenario_statistical_estimator_count",
+                "scenario_relative_reported_sd",
+                "scenario_mean_variance",
+                "scenario_mean_standard_error",
+                "scenario_relative_mean_standard_error",
+                "scenario_mean_interval_df",
+                "scenario_mean_interval_confidence_level",
+                "scenario_mean_interval_t_multiplier",
+                "scenario_mean_interval_halfwidth",
+                "scenario_mean_interval_lower",
+                "scenario_mean_interval_upper"
+              ]
+            },
+            "population": {
+              "enum": [
+                "source_cells",
+                "scenario_cells"
+              ]
+            },
+            "cell_name": {
+              "enum": [
+                "reported_parameter",
+                "reported_sd",
+                "source_summary_count",
+                "independent_preparation_count",
+                "statistical_estimator_count",
+                "relative_reported_sd",
+                "mean_variance",
+                "mean_standard_error",
+                "relative_mean_standard_error",
+                "mean_interval_df",
+                "mean_interval_confidence_level",
+                "mean_interval_t_multiplier",
+                "mean_interval_halfwidth",
+                "mean_interval_lower",
+                "mean_interval_upper"
+              ]
+            },
+            "cell": {},
+            "source_kind": {
+              "enum": [
+                "primary_source",
+                "synthetic_fixture"
+              ]
+            },
+            "parameter_kind": {
+              "enum": [
+                "Km",
+                "kcat",
+                "catalytic_efficiency",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "source_context": {
+              "type": "object",
+              "properties": {
+                "organism": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "genotype": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "molecule": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "construct": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "substrate": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "preparation": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "experiment": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "experimental_system": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "conditions": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "endpoint": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                },
+                "normalization": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "selected",
+                        "not_selected",
+                        "source_unavailable"
+                      ]
+                    },
+                    "fragments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "source"
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "format": "reference",
+                                "x-reference-namespace": "artifact"
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "artifact_ref",
+                              "representation",
+                              "start",
+                              "end"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "location"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "fragments"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "organism",
+                "genotype",
+                "molecule",
+                "construct",
+                "substrate",
+                "preparation",
+                "experiment",
+                "experimental_system",
+                "conditions",
+                "endpoint",
+                "normalization"
+              ],
+              "additionalProperties": false
+            },
+            "sampling_basis": {
+              "type": "object",
+              "properties": {
+                "source_count_meaning": {
+                  "enum": [
+                    "physical_preparation_count",
+                    "statistical_estimator_count",
+                    "both_same_count",
+                    "technical_measurement_count",
+                    "unknown",
+                    "conflicting"
+                  ]
+                },
+                "repetition_basis": {
+                  "enum": [
+                    "biological_preparations",
+                    "technical_measurements",
+                    "unspecified"
+                  ]
+                },
+                "estimate_basis": {
+                  "enum": [
+                    "fit_to_averaged_curve",
+                    "between_fitted_parameters",
+                    "unknown"
+                  ]
+                }
+              },
+              "required": [
+                "source_count_meaning",
+                "repetition_basis",
+                "estimate_basis"
+              ],
+              "additionalProperties": false
+            },
+            "model_conditions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "condition": {
+                    "enum": [
+                      "row_footnote_applicability",
+                      "statistical_count_matches_sd",
+                      "one_estimate_per_preparation",
+                      "equal_weight_arithmetic_mean",
+                      "sample_sd_n_minus_one",
+                      "iid_common_mean_finite_variance",
+                      "normal_sampling_units",
+                      "reported_sd_summarizes_counted_preparation_estimates"
+                    ]
+                  },
+                  "state": {
+                    "enum": [
+                      "source_supported",
+                      "source_contradicted",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  }
+                },
+                "required": [
+                  "condition",
+                  "state"
+                ],
+                "additionalProperties": false
+              },
+              "uniqueItems": true
+            },
+            "contribution": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "one_summary_precision_contribution"
+                },
+                "physical_measurement_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "independence_inferred": {
+                  "const": false
+                },
+                "variance_meaning": {
+                  "const": "estimated_random_mean_precision_not_known_population_variance"
+                },
+                "shared_systematic_uncertainty": {
+                  "const": "not_established_by_summary_precision"
+                }
+              },
+              "required": [
+                "kind",
+                "physical_measurement_id",
+                "independence_inferred",
+                "variance_meaning",
+                "shared_systematic_uncertainty"
+              ],
+              "additionalProperties": false
+            },
+            "dependency_locations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "artifact"
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_ref",
+                  "representation",
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": false
+              },
+              "uniqueItems": true
+            },
+            "withheld_locations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "artifact"
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_ref",
+                  "representation",
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": false
+              },
+              "uniqueItems": true
+            },
+            "bounds_kind": {
+              "const": "no_additional_bounds_in_this_return"
+            },
+            "limits": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "source_summaries_do_not_reconstruct_raw_measurements",
+                  "physical_count_does_not_define_statistical_count",
+                  "source_conditions_and_stipulations_distinct",
+                  "random_precision_does_not_include_unknown_systematics",
+                  "shared_calibration_does_not_shrink_with_preparation_count",
+                  "dependent_precision_representations_not_independent_assays",
+                  "measurement_repeatability_does_not_establish_physiological_specificity",
+                  "no_cross_construct_contrast",
+                  "no_assay_error_probability",
+                  "no_target_transfer_or_annotation_credit"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "row_version",
+            "sheet_ref",
+            "evidence_source_ref",
+            "evaluation_scope",
+            "component",
+            "population",
+            "cell_name",
+            "cell",
+            "source_kind",
+            "parameter_kind",
+            "source_context",
+            "sampling_basis",
+            "model_conditions",
+            "contribution",
+            "dependency_locations",
+            "withheld_locations",
+            "bounds_kind",
+            "limits"
+          ],
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "properties": {
+                "component": {
+                  "const": "source_reported_parameter"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "reported_parameter"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_reported_parameter"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_number"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_reported_sd"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "reported_sd"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_reported_sd"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_source_summary_count"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "source_summary_count"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_source_summary_count"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_independent_preparation_count"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "independent_preparation_count"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_independent_preparation_count"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_statistical_estimator_count"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "statistical_estimator_count"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_statistical_estimator_count"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_relative_reported_sd"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "relative_reported_sd"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_relative_reported_sd"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_variance"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_variance"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_variance"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_squared"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_standard_error"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_standard_error"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_standard_error"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_relative_mean_standard_error"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "relative_mean_standard_error"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_relative_mean_standard_error"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_interval_df"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_df"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_df"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_interval_confidence_level"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_confidence_level"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_confidence_level"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_confidence_95"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_interval_t_multiplier"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_t_multiplier"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_t_multiplier"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_interval_halfwidth"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_halfwidth"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_halfwidth"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_interval_lower"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_lower"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_lower"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_number"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "source_mean_interval_upper"
+                },
+                "population": {
+                  "const": "source_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_upper"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/SourceCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_upper"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_number"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_reported_parameter"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "reported_parameter"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_reported_parameter"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_number"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_reported_sd"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "reported_sd"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_reported_sd"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_source_summary_count"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "source_summary_count"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_source_summary_count"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_independent_preparation_count"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "independent_preparation_count"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_independent_preparation_count"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_statistical_estimator_count"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "statistical_estimator_count"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_statistical_estimator_count"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_relative_reported_sd"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "relative_reported_sd"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_relative_reported_sd"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_variance"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_variance"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_variance"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_squared"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_standard_error"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_standard_error"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_standard_error"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_relative_mean_standard_error"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "relative_mean_standard_error"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_relative_mean_standard_error"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_nonnegative"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_interval_df"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_df"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_df"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_count"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive_integer"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_interval_confidence_level"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_confidence_level"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_confidence_level"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_confidence_95"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_interval_t_multiplier"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_t_multiplier"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_t_multiplier"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_dimensionless"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_interval_halfwidth"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_halfwidth"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_halfwidth"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_positive"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_interval_lower"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_lower"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_lower"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_number"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "scenario_mean_interval_upper"
+                },
+                "population": {
+                  "const": "scenario_cells"
+                },
+                "cell_name": {
+                  "const": "mean_interval_upper"
+                },
+                "cell": {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Cell"
+                    },
+                    {
+                      "$ref": "#/$defs/CellStates"
+                    },
+                    {
+                      "$ref": "#/$defs/ScenarioCellQualifications"
+                    }
+                  ],
+                  "properties": {
+                    "formula_code": {
+                      "const": "summary_precision_mean_interval_upper"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/Unit_canonical"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/Value_number"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "$defs": {
+          "Cell": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "unit": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "uM",
+                      "per_min",
+                      "uM^-1min^-1",
+                      "uM_squared",
+                      "per_min_squared",
+                      "uM_inverse_squared_min_inverse_squared",
+                      "dimensionless",
+                      "count"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "enum": [
+                  "populated",
+                  "unavailable"
+                ]
+              },
+              "qualification": {
+                "enum": [
+                  "source_reported",
+                  "derived_source_supported_conditions",
+                  "conditional_on_stipulated_assumptions",
+                  "unavailable"
+                ]
+              },
+              "formula_code": {
+                "enum": [
+                  "summary_precision_reported_parameter",
+                  "summary_precision_reported_sd",
+                  "summary_precision_source_summary_count",
+                  "summary_precision_independent_preparation_count",
+                  "summary_precision_statistical_estimator_count",
+                  "summary_precision_relative_reported_sd",
+                  "summary_precision_mean_variance",
+                  "summary_precision_mean_standard_error",
+                  "summary_precision_relative_mean_standard_error",
+                  "summary_precision_mean_interval_df",
+                  "summary_precision_mean_interval_confidence_level",
+                  "summary_precision_mean_interval_t_multiplier",
+                  "summary_precision_mean_interval_halfwidth",
+                  "summary_precision_mean_interval_lower",
+                  "summary_precision_mean_interval_upper"
+                ]
+              },
+              "origin": {
+                "enum": [
+                  "reported",
+                  "derived",
+                  "proposed",
+                  "synthetic"
+                ]
+              },
+              "approximate": {
+                "type": "boolean"
+              },
+              "source_exact_value": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "numerator": {
+                        "type": "string",
+                        "pattern": "^(0|-?[1-9][0-9]*)$"
+                      },
+                      "denominator": {
+                        "type": "string",
+                        "pattern": "^[1-9][0-9]*$"
+                      }
+                    },
+                    "required": [
+                      "numerator",
+                      "denominator"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "conditional_on": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "one_estimate_per_preparation",
+                    "reported_sd_summarizes_counted_preparation_estimates",
+                    "equal_weight_arithmetic_mean",
+                    "sample_sd_n_minus_one",
+                    "iid_common_mean_finite_variance",
+                    "normal_sampling_units"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "stipulated_assumptions": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "one_estimate_per_preparation",
+                    "reported_sd_summarizes_counted_preparation_estimates",
+                    "equal_weight_arithmetic_mean",
+                    "sample_sd_n_minus_one",
+                    "iid_common_mean_finite_variance",
+                    "normal_sampling_units"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "unavailable_reason": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "source_measurement_unreported",
+                      "source_kinetic_unit_unreported",
+                      "unsupported_source_kinetic_unit",
+                      "source_operand_qualification_unknown",
+                      "source_operand_qualification_conflicting",
+                      "source_numeric_range",
+                      "source_uncertainty_unit_unavailable",
+                      "censored_parameter",
+                      "conflicting_parameter",
+                      "reported_sd_unreported",
+                      "reported_statistic_not_sd",
+                      "source_summary_count_unreported",
+                      "source_count_not_exact",
+                      "row_footnote_applicability_unknown",
+                      "row_footnote_applicability_conflicting",
+                      "row_footnote_applicability_contradicted",
+                      "physical_preparation_count_unknown",
+                      "statistical_estimator_count_unknown",
+                      "statistical_count_conflicting",
+                      "statistical_count_sd_relationship_unknown",
+                      "insufficient_estimator_count",
+                      "sample_sd_convention_unknown",
+                      "iid_model_unknown",
+                      "mean_identity_unknown",
+                      "normality_unknown",
+                      "source_condition_contradicted",
+                      "source_condition_conflicting",
+                      "zero_parameter_for_relative_precision",
+                      "interval_not_requested",
+                      "positive_sd_required_for_student_t",
+                      "scenario_assumption_conflicts_with_source",
+                      "numerical_model_range",
+                      "sd_preparation_estimator_ownership_unknown",
+                      "source_parameter_kind_unknown",
+                      "source_parameter_kind_conflicting"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit",
+              "status",
+              "qualification",
+              "formula_code",
+              "origin",
+              "approximate",
+              "source_exact_value",
+              "conditional_on",
+              "stipulated_assumptions",
+              "unavailable_reason"
+            ],
+            "additionalProperties": false
+          },
+          "CellStates": {
+            "oneOf": [
+              {
+                "properties": {
+                  "status": {
+                    "const": "populated"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "unit": {
+                    "not": {
+                      "type": "null"
+                    }
+                  },
+                  "qualification": {
+                    "enum": [
+                      "source_reported",
+                      "derived_source_supported_conditions",
+                      "conditional_on_stipulated_assumptions"
+                    ]
+                  },
+                  "unavailable_reason": {
+                    "type": "null"
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "qualification": {
+                          "const": "conditional_on_stipulated_assumptions"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "stipulated_assumptions": {
+                          "minItems": 1
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "stipulated_assumptions": {
+                          "maxItems": 0
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "properties": {
+                  "status": {
+                    "const": "unavailable"
+                  },
+                  "value": {
+                    "type": "null"
+                  },
+                  "qualification": {
+                    "const": "unavailable"
+                  },
+                  "source_exact_value": {
+                    "type": "null"
+                  },
+                  "unavailable_reason": {
+                    "not": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "SourceCellQualifications": {
+            "properties": {
+              "qualification": {
+                "enum": [
+                  "source_reported",
+                  "derived_source_supported_conditions",
+                  "unavailable"
+                ]
+              },
+              "stipulated_assumptions": {
+                "maxItems": 0
+              }
+            }
+          },
+          "ScenarioCellQualifications": {
+            "properties": {
+              "qualification": {
+                "enum": [
+                  "source_reported",
+                  "derived_source_supported_conditions",
+                  "conditional_on_stipulated_assumptions",
+                  "unavailable"
+                ]
+              }
+            }
+          },
+          "Unit_canonical": {
+            "enum": [
+              "uM",
+              "per_min",
+              "uM^-1min^-1",
+              null
+            ]
+          },
+          "Unit_squared": {
+            "enum": [
+              "uM_squared",
+              "per_min_squared",
+              "uM_inverse_squared_min_inverse_squared",
+              null
+            ]
+          },
+          "Unit_count": {
+            "const": "count"
+          },
+          "Unit_dimensionless": {
+            "const": "dimensionless"
+          },
+          "Value_number": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "Value_nonnegative": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "Value_positive": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "Value_positive_integer": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "Value_confidence_95": {
+            "anyOf": [
+              {
+                "const": 0.95
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "assessment_context": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "a105_source_evidence_worksheet_v1"
+          },
+          "assertion_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "hypothesis"
+            },
+            "uniqueItems": true
+          },
+          "quantity_links": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "properties": {
+                "left": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "native_parameter",
+                        "precision"
+                      ]
+                    },
+                    "sheet_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    },
+                    "component": {
+                      "type": "string",
+                      "enum": [
+                        "numerator_parameter",
+                        "source_reported_parameter",
+                        "source_reported_sd",
+                        "source_relative_reported_sd",
+                        "source_independent_preparation_count",
+                        "source_statistical_estimator_count",
+                        "source_mean_standard_error"
+                      ]
+                    },
+                    "quantity": {
+                      "type": "string",
+                      "enum": [
+                        "cell_value",
+                        "reported_spread",
+                        "reported_count"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "sheet_ref",
+                    "component",
+                    "quantity"
+                  ],
+                  "additionalProperties": false
+                },
+                "right": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "native_parameter",
+                        "precision"
+                      ]
+                    },
+                    "sheet_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    },
+                    "component": {
+                      "type": "string",
+                      "enum": [
+                        "numerator_parameter",
+                        "source_reported_parameter",
+                        "source_reported_sd",
+                        "source_relative_reported_sd",
+                        "source_independent_preparation_count",
+                        "source_statistical_estimator_count",
+                        "source_mean_standard_error"
+                      ]
+                    },
+                    "quantity": {
+                      "type": "string",
+                      "enum": [
+                        "cell_value",
+                        "reported_spread",
+                        "reported_count"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "sheet_ref",
+                    "component",
+                    "quantity"
+                  ],
+                  "additionalProperties": false
+                },
+                "relation": {
+                  "type": "string",
+                  "enum": [
+                    "same_reported_parameter",
+                    "same_reported_spread",
+                    "same_count_report",
+                    "conditional_precision_of_report",
+                    "unresolved",
+                    "conflicting"
+                  ]
+                },
+                "support_record_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "reference"
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "left",
+                "right",
+                "relation",
+                "support_record_refs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "assertion_links": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "properties": {
+                "selector": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "native_parameter",
+                        "precision"
+                      ]
+                    },
+                    "sheet_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    },
+                    "component": {
+                      "type": "string",
+                      "enum": [
+                        "numerator_parameter",
+                        "source_reported_parameter",
+                        "source_reported_sd",
+                        "source_relative_reported_sd",
+                        "source_independent_preparation_count",
+                        "source_statistical_estimator_count",
+                        "source_mean_standard_error"
+                      ]
+                    },
+                    "quantity": {
+                      "type": "string",
+                      "enum": [
+                        "cell_value",
+                        "reported_spread",
+                        "reported_count"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "sheet_ref",
+                    "component",
+                    "quantity"
+                  ],
+                  "additionalProperties": false
+                },
+                "assertion_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "reference",
+                  "x-reference-namespace": "hypothesis"
+                },
+                "relation": {
+                  "type": "string",
+                  "enum": [
+                    "measures_asserted_endpoint",
+                    "addresses_named_weakness",
+                    "does_not_establish_assertion",
+                    "unknown",
+                    "conflicting"
+                  ]
+                },
+                "support_record_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "reference"
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "selector",
+                "assertion_ref",
+                "relation",
+                "support_record_refs"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "version",
+          "assertion_refs",
+          "quantity_links",
+          "assertion_links"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "native_parameter",
+      "precision",
+      "assessment_context"
+    ],
+    "additionalProperties": false
+  },
+  "contract_declaration": {
+    "version": "episode_report_contract_declaration_v1",
+    "child_role": "annotation",
+    "submitted_schema_json": "{\"type\": \"object\", \"properties\": {\"native_parameter\": {\"$ref\": \"episode-fact:literature_kinetic_cells\"}, \"precision\": {\"$ref\": \"episode-fact:literature_kinetic_summary_precision_cells\"}, \"assessment_context\": {\"type\": \"object\", \"properties\": {\"version\": {\"type\": \"string\", \"const\": \"a105_source_evidence_worksheet_v1\"}, \"assertion_refs\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"hypothesis\"}, \"uniqueItems\": true}, \"quantity_links\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"object\", \"properties\": {\"left\": {\"type\": \"object\", \"properties\": {\"field\": {\"type\": \"string\", \"enum\": [\"native_parameter\", \"precision\"]}, \"sheet_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"source\"}, \"component\": {\"type\": \"string\", \"enum\": [\"numerator_parameter\", \"source_reported_parameter\", \"source_reported_sd\", \"source_relative_reported_sd\", \"source_independent_preparation_count\", \"source_statistical_estimator_count\", \"source_mean_standard_error\"]}, \"quantity\": {\"type\": \"string\", \"enum\": [\"cell_value\", \"reported_spread\", \"reported_count\"]}}, \"required\": [\"field\", \"sheet_ref\", \"component\", \"quantity\"], \"additionalProperties\": false}, \"right\": {\"type\": \"object\", \"properties\": {\"field\": {\"type\": \"string\", \"enum\": [\"native_parameter\", \"precision\"]}, \"sheet_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"source\"}, \"component\": {\"type\": \"string\", \"enum\": [\"numerator_parameter\", \"source_reported_parameter\", \"source_reported_sd\", \"source_relative_reported_sd\", \"source_independent_preparation_count\", \"source_statistical_estimator_count\", \"source_mean_standard_error\"]}, \"quantity\": {\"type\": \"string\", \"enum\": [\"cell_value\", \"reported_spread\", \"reported_count\"]}}, \"required\": [\"field\", \"sheet_ref\", \"component\", \"quantity\"], \"additionalProperties\": false}, \"relation\": {\"type\": \"string\", \"enum\": [\"same_reported_parameter\", \"same_reported_spread\", \"same_count_report\", \"conditional_precision_of_report\", \"unresolved\", \"conflicting\"]}, \"support_record_refs\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\"}, \"uniqueItems\": true}}, \"required\": [\"left\", \"right\", \"relation\", \"support_record_refs\"], \"additionalProperties\": false}}, \"assertion_links\": {\"type\": \"array\", \"uniqueItems\": true, \"items\": {\"type\": \"object\", \"properties\": {\"selector\": {\"type\": \"object\", \"properties\": {\"field\": {\"type\": \"string\", \"enum\": [\"native_parameter\", \"precision\"]}, \"sheet_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"source\"}, \"component\": {\"type\": \"string\", \"enum\": [\"numerator_parameter\", \"source_reported_parameter\", \"source_reported_sd\", \"source_relative_reported_sd\", \"source_independent_preparation_count\", \"source_statistical_estimator_count\", \"source_mean_standard_error\"]}, \"quantity\": {\"type\": \"string\", \"enum\": [\"cell_value\", \"reported_spread\", \"reported_count\"]}}, \"required\": [\"field\", \"sheet_ref\", \"component\", \"quantity\"], \"additionalProperties\": false}, \"assertion_ref\": {\"type\": [\"string\", \"null\"], \"format\": \"reference\", \"x-reference-namespace\": \"hypothesis\"}, \"relation\": {\"type\": \"string\", \"enum\": [\"measures_asserted_endpoint\", \"addresses_named_weakness\", \"does_not_establish_assertion\", \"unknown\", \"conflicting\"]}, \"support_record_refs\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\"}, \"uniqueItems\": true}}, \"required\": [\"selector\", \"assertion_ref\", \"relation\", \"support_record_refs\"], \"additionalProperties\": false}}}, \"required\": [\"version\", \"assertion_refs\", \"quantity_links\", \"assertion_links\"], \"additionalProperties\": false}}, \"required\": [\"native_parameter\", \"precision\", \"assessment_context\"], \"additionalProperties\": false}",
+    "expanded_schema_sha256": "bd971eaf4517ce3c13067f61253dfa71ede4cda15459b88ee95afdcd2449d332",
+    "fact_references": [
+      {
+        "field": "native_parameter",
+        "source": "literature_kinetic_cells",
+        "schema_sha256": "bb0b08dfd6d4dd49480be00140b34584904f1400b7143aa48722162db2baa8ad",
+        "source_had_x_source": true
+      },
+      {
+        "field": "precision",
+        "source": "literature_kinetic_summary_precision_cells",
+        "schema_sha256": "3cc03f7cae64d4bdfaa95897cc42f5f6e47b4e8100d813000000edfc899ef136",
+        "source_had_x_source": true
+      }
+    ]
+  },
+  "assignment": {
+    "version": "literature_assignment_v1",
+    "source_refs": [
+      "source_b3c0254e0138183de587b197"
+    ],
+    "question_context_refs": [],
+    "requested_kinetic_components": [
+      "numerator_parameter"
+    ],
+    "requested_kinetic_summary_precision_components": [
+      "source_reported_parameter",
+      "source_reported_sd",
+      "source_relative_reported_sd",
+      "source_independent_preparation_count",
+      "source_statistical_estimator_count",
+      "source_mean_standard_error"
+    ]
+  },
+  "initial_report": {
+    "assessment_context": {
+      "version": "a105_source_evidence_worksheet_v1",
+      "assertion_refs": [],
+      "quantity_links": [],
+      "assertion_links": []
+    }
+  },
+  "episode_binding_descriptor": {
+    "version": "literature_episode_binding_v1",
+    "binding_id": "literature",
+    "implementation_sha256": "3046583c23dea9ba1e6ca7118cff39f4c80383aa8ba32c16ab61963e7148f4ca",
+    "configuration": {
+      "outcome_page_size": 8,
+      "rate_population": true,
+      "reference_parent_sources": [
+        "source_b3c0254e0138183de587b197"
+      ],
+      "contract_information_profile": "operation_contract_information_v1"
+    }
+  },
+  "configuration": {
+    "models": {
+      "connection": {
+        "command": [
+          "codex",
+          "app-server",
+          "--stdio"
+        ]
+      },
+      "FAST": {
+        "model": "gpt-6-luna",
+        "reasoning_effort": "none"
+      },
+      "REASONING": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium"
+      },
+      "routing": {
+        "decide": "REASONING",
+        "child_interpretation": "REASONING"
+      }
+    },
+    "controller": {
+      "cost": 0.001,
+      "window_size": 8,
+      "subsample_size": 4,
+      "uncertainty_alpha": 0.05
+    },
+    "scientific_progress": {
+      "finding_unit": 1,
+      "loss_preview_size": 24,
+      "initial_known_record_refs": []
+    },
+    "restoration": {
+      "preview_size": 24
+    },
+    "local_tools": {
+      "cmsearch_cpu": 1,
+      "minimap2_cpu": 1
+    },
+    "local_jobs": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296
+    }
+  },
+  "tool_configuration": {
+    "local_tools": {
+      "cmsearch_cpu": 1,
+      "minimap2_cpu": 1
+    },
+    "local_jobs": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296
+    },
+    "public": {
+      "ncbi_email": "chia@anl.gov"
+    }
+  },
+  "settings": {
+    "schema_version": 1,
+    "directory": "/home/chia/repos/gene_annotation_episode/verification/a105_configured_worksheet_278/configured_001/run",
+    "problem": {
+      "caller_context_ref": null,
+      "caller_context_source_ref": null,
+      "id": "problem_c3468d33891421c260d908dd",
+      "initial_collection_refs": [],
+      "initial_parse_refs": [],
+      "intake_feedback": [],
+      "intake_status": "completed",
+      "manifest_ref": "artifact_406e9052d7c5782d0e70febbe2a12d5a9e72046854bdac2684c4c7909900ddc3",
+      "manifest_source_ref": "source_3d068bf1879f4119309acf36",
+      "material_refs": [],
+      "subject_refs": [],
+      "target_binding": "unresolved",
+      "target_binding_versions": {}
+    },
+    "models": {
+      "connection": {
+        "command": [
+          "codex",
+          "app-server",
+          "--stdio"
+        ]
+      },
+      "FAST": {
+        "model": "gpt-6-luna",
+        "reasoning_effort": "none"
+      },
+      "REASONING": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium"
+      },
+      "routing": {
+        "decide": "REASONING",
+        "child_interpretation": "REASONING"
+      }
+    },
+    "controller": {
+      "cost": 0.001,
+      "window_size": 8,
+      "subsample_size": 4,
+      "uncertainty_alpha": 0.05
+    },
+    "goal": "Determine what the retained original experimental paper establishes about the catalytic activity of its D101A/E322Y alkaline-phosphatase construct in the reported pNPP assay. Investigate the source contents and select the relevant original row, units, Methods and applicable footnotes yourself. Return the source-reported catalytic-efficiency parameter and the uncertainty/replication components for that same report, with actual subject, construct, preparation, substrate, conditions, endpoint and normalization. Establish what each number evaluates. Keep reported SD, relative SD, physical independent-preparation count, statistical estimator count and estimated mean standard error distinct. Unknown statistical hierarchy or assumptions must remain unknown; no hypothetical scenario is requested. Preserve the relation between repeated numerical views of the same report. Interpret the result's bearing on molecular activity and the limits of effect isolation, including background contributors and what the measured endpoint establishes. Distinguish comparability outside an intended change from attribution of the observed effect. Use only the one supplied primary-source record and its retained representations; no new paper search or reacquisition is in scope. No annotation-target sequence is supplied. Possible functional assertions may emerge from the evidence. Choose your own actual literature child assignments, return forms, reads, interpretation and operation choices. Integrate only the typed information actually returned to you. Retain useful partial results and specific unavailable reasons. This is reference experimental evidence; target correspondence, W05 aggregation and final annotation credit are outside scope.",
+    "credit_policy": null,
+    "bindings": {
+      "controller": "gene_annotation_episode.numerical.YieldController",
+      "credit": "gene_annotation_episode.investigation_progress.ScientificFindingProgress",
+      "scientific_child_credit": "gene_annotation_episode.investigation_progress.ScientificFindingProgress"
+    },
+    "binding_versions": {
+      "controller": {
+        "estimator_version": "completed_signed_score_preferential_yield_v1",
+        "template_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35"
+      },
+      "credit": {
+        "requirement": "same_caller_injected_executable"
+      },
+      "scientific_child_credit": {
+        "requirement": "same_caller_injected_executable"
+      }
+    },
+    "binding_definitions": {
+      "credit": {
+        "kind": "received_scientific_finding_progress",
+        "policy": {
+          "version": "known_retained_scientific_findings_v1",
+          "finding_unit": 1,
+          "identity_version": "typed_source_claim_question_qualification_v2",
+          "finding_validity_version": "owned_current_finding_replacement_closure_v1",
+          "eligible_information": "distinct_current_retained_typed_target_findings",
+          "receipt": "caller_supplies_actual_known_assessment_references",
+          "negative_information": "retained_without_applicability_or_opinion_weight",
+          "annotation_support": "separately_bound_not_this_score",
+          "activity_credit": false
+        },
+        "receipt_version": "frozen_parent_receipt_prefix_v1",
+        "loss_preview_size": 24,
+        "baseline": "frozen_inherited_parent_information",
+        "parent_projection": "received_meanings_not_sum_of_child_scores",
+        "default_entrypoint": "standard_received_scientific_progress_v2"
+      },
+      "scientific_child_credit": {
+        "kind": "received_scientific_finding_progress",
+        "policy": {
+          "version": "known_retained_scientific_findings_v1",
+          "finding_unit": 1,
+          "identity_version": "typed_source_claim_question_qualification_v2",
+          "finding_validity_version": "owned_current_finding_replacement_closure_v1",
+          "eligible_information": "distinct_current_retained_typed_target_findings",
+          "receipt": "caller_supplies_actual_known_assessment_references",
+          "negative_information": "retained_without_applicability_or_opinion_weight",
+          "annotation_support": "separately_bound_not_this_score",
+          "activity_credit": false
+        },
+        "receipt_version": "frozen_parent_receipt_prefix_v1",
+        "loss_preview_size": 24,
+        "baseline": "frozen_inherited_parent_information",
+        "parent_projection": "received_meanings_not_sum_of_child_scores"
+      }
+    },
+    "restoration": {
+      "preview_size": 24
+    },
+    "decision_protocol": "decision_exchange_v1",
+    "annotation_child_roles": [
+      "literature"
+    ],
+    "root_action_boundary": "root_episode_commissioning_v1",
+    "episode_record_receipts": {
+      "version": "explicit_store_record_receipts_v1",
+      "enabled": true
+    },
+    "episode_progress_receipts": {
+      "version": "received_progress_order_v1"
+    },
+    "wait_inputs": {
+      "version": "wait_inputs_binding_v2"
+    },
+    "completed_action_inputs": {
+      "version": "completed_action_inputs_binding_v1"
+    },
+    "scientific_knowledge": {
+      "version": "frozen_parent_receipt_prefix_v1",
+      "initial_known_record_refs": [
+        "source_b3c0254e0138183de587b197"
+      ]
+    },
+    "episode_bindings": [
+      {
+        "version": "literature_episode_binding_v1",
+        "binding_id": "literature",
+        "implementation_sha256": "3046583c23dea9ba1e6ca7118cff39f4c80383aa8ba32c16ab61963e7148f4ca",
+        "configuration": {
+          "outcome_page_size": 8,
+          "rate_population": true,
+          "reference_parent_sources": [
+            "source_b3c0254e0138183de587b197"
+          ],
+          "contract_information_profile": "operation_contract_information_v1"
+        }
+      }
+    ],
+    "initial_tool_resources": {
+      "local_jobs": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "cmsearch": {
+        "executable": null,
+        "cpu": 1,
+        "job_limits": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "executable_sha256": null,
+        "adapter_version": "infernal_cmsearch_fmt3_v1"
+      },
+      "pdf_tools": {
+        "pdfinfo": {
+          "executable": null,
+          "executable_sha256": null
+        },
+        "pdftotext": {
+          "executable": null,
+          "executable_sha256": null
+        },
+        "pdftoppm": {
+          "executable": null,
+          "executable_sha256": null
+        }
+      },
+      "minimap2": {
+        "executable": null,
+        "cpu": 1,
+        "job_limits": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "cache_dir": "/home/chia/repos/gene_annotation_episode/verification/a105_configured_worksheet_278/configured_001/state/cache/minimap2",
+        "executable_sha256": null,
+        "adapter_version": "minimap2_paf_source_placements_v1"
+      }
+    }
+  },
+  "execution_mode": "ordinary shared Workflow and method_loop; blocking children, no independent-process binding; actual configured provider; caller-fixed parent return; model-selected children and operations"
+}

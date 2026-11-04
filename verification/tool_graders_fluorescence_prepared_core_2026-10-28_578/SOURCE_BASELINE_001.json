@@ -1,0 +1,33 @@
+{
+  "kind": "source_only_baseline",
+  "application_imports": false,
+  "tests_run": false,
+  "files": [
+    {
+      "path": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "sha256": "045d6189c6ffdb9d610cdd00a56ed723b1c3c3d6dd656cf5c33284b03260c22f",
+      "public_signatures_ast": {
+        "canonical": "arguments(posonlyargs=[], args=[arg(arg='value')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+        "digest": "arguments(posonlyargs=[], args=[arg(arg='value')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+        "finite": "arguments(posonlyargs=[], args=[arg(arg='value')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+        "issue": "arguments(posonlyargs=[], args=[arg(arg='code', annotation=Name(id='str', ctx=Load())), arg(arg='stage', annotation=Name(id='str', ctx=Load()))], kwonlyargs=[arg(arg='source_key'), arg(arg='sample_key'), arg(arg='domain_key'), arg(arg='channel_key'), arg(arg='event_ordinal'), arg(arg='gate_key'), arg(arg='control_key')], kw_defaults=[Constant(value=None), Constant(value=None), Constant(value=None), Constant(value=None), Constant(value=None), Constant(value=None), Constant(value=None)], defaults=[])",
+        "validate_event_parse_result": "arguments(posonlyargs=[], args=[arg(arg='value', annotation=Name(id='dict', ctx=Load()))], kwonlyargs=[], kw_defaults=[], defaults=[])",
+        "validate_csv_request": "arguments(posonlyargs=[], args=[], kwonlyargs=[arg(arg='source', annotation=Name(id='dict', ctx=Load())), arg(arg='format_spec', annotation=Name(id='dict', ctx=Load())), arg(arg='sample', annotation=Name(id='dict', ctx=Load())), arg(arg='channels', annotation=Subscript(value=Name(id='list', ctx=Load()), slice=Name(id='dict', ctx=Load()), ctx=Load())), arg(arg='domain', annotation=Name(id='dict', ctx=Load()))], kw_defaults=[None, None, None, None, None], defaults=[])",
+        "validate_snapshot_request": "arguments(posonlyargs=[], args=[], kwonlyargs=[arg(arg='source', annotation=Name(id='dict', ctx=Load())), arg(arg='sample', annotation=Name(id='dict', ctx=Load())), arg(arg='channels', annotation=Subscript(value=Name(id='list', ctx=Load()), slice=Name(id='dict', ctx=Load()), ctx=Load())), arg(arg='domain', annotation=Name(id='dict', ctx=Load()))], kw_defaults=[None, None, None, None], defaults=[])",
+        "validate_event_input_request": "arguments(posonlyargs=[], args=[], kwonlyargs=[arg(arg='source', annotation=Name(id='dict', ctx=Load())), arg(arg='sample', annotation=Name(id='dict', ctx=Load())), arg(arg='channels', annotation=Subscript(value=Name(id='list', ctx=Load()), slice=Name(id='dict', ctx=Load()), ctx=Load())), arg(arg='domain', annotation=Name(id='dict', ctx=Load()))], kw_defaults=[None, None, None, None], defaults=[])",
+        "control_comparison_files": "arguments(posonlyargs=[], args=[arg(arg='sheet', annotation=Name(id='dict', ctx=Load()))], kwonlyargs=[arg(arg='control_key', annotation=Name(id='str', ctx=Load()))], kw_defaults=[None], defaults=[])",
+        "validate_calculation_parameters": "arguments(posonlyargs=[], args=[arg(arg='value', annotation=Name(id='dict', ctx=Load()))], kwonlyargs=[arg(arg='sheet', annotation=Name(id='dict', ctx=Load()))], kw_defaults=[None], defaults=[])",
+        "validate_components": "arguments(posonlyargs=[], args=[arg(arg='value', annotation=Name(id='dict', ctx=Load()))], kwonlyargs=[arg(arg='sheet', annotation=Name(id='dict', ctx=Load()))], kw_defaults=[None], defaults=[])",
+        "validate_selection": "arguments(posonlyargs=[], args=[arg(arg='value', annotation=Name(id='dict', ctx=Load()))], kwonlyargs=[arg(arg='components', annotation=Name(id='dict', ctx=Load()))], kw_defaults=[None], defaults=[])"
+      }
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_calculations.py",
+      "sha256": "02694dfef067242eda00abdab17107002c9d94aa014a3acf2dc287849f594f0b",
+      "public_signatures_ast": {
+        "evaluate_gate_membership": "arguments(posonlyargs=[], args=[arg(arg='sheet', annotation=Name(id='dict', ctx=Load()))], kwonlyargs=[], kw_defaults=[], defaults=[])",
+        "calculate_fluorescence_sheet": "arguments(posonlyargs=[], args=[arg(arg='sheet', annotation=Name(id='dict', ctx=Load()))], kwonlyargs=[arg(arg='parameters', annotation=Name(id='dict', ctx=Load()))], kw_defaults=[None], defaults=[])"
+      }
+    }
+  ]
+}

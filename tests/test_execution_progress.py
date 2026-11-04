@@ -4,8 +4,14 @@ The remote worker and qstat subprocess are real; PBS is a local fixture. These
 tests run no live scheduler, network/model service, or scientific investigation.
 """
 import base64
+from collections import Counter
 from copy import deepcopy
 import json
+import gc
+import hashlib
+import os
+from pathlib import Path
+import stat
 from types import SimpleNamespace
 
 import pytest
@@ -390,3 +396,294 @@ def test_real_local_closed_launch_is_observed_without_reopening_history(tmp_path
             (spec.work/'release').touch()
             if handle is not None:
                 native.wait_job(handle)
+
+
+def _two_stored_handoffs(e):
+    """Existing controlled PBS transport and real selected receipt publications."""
+    _, first, _ = start(e)
+    collected, _ = execute(e.remote, e.value, 'practical.job.collect', key='run-1:episode-1:1')
+    second, _ = e.publish(collected, 1, tool_name='practical.job.collect')
+    assert first != second
+    return first, second
+
+
+def test_operation_local_handoff_reader_counts_equal_values_and_detached_aliases(environment, monkeypatch):
+    e = environment
+    refs = _two_stored_handoffs(e)
+    reader = e.native.targets
+    expected = {}
+    for ref in refs:
+        target = reader.read_target(ref, e.scope)
+        expected[ref] = (target, reader.usable_handoff(target), reader.returnable_handoff(target))
+    assert expected[refs[0]][0]['execution_id'] == expected[refs[1]][0]['execution_id']
+    before = tuple(e.store.db.iterdump()), files(e.state.directory)
+    calls, original = [], reader.receipts.read
+    def counted(ref, scope):
+        calls.append((ref, canonical(plain(scope))))
+        return original(ref, scope)
+    monkeypatch.setattr(reader.receipts, 'read', counted)
+    with e.store.read_snapshot():
+        read = reader._handoff_reader()
+        for ref in refs:
+            assert read(ref, e.scope) == expected[ref]
+            changed = read(ref, deepcopy(e.scope))
+            changed[0]['assignment']['requested_job']['argv'][0] = 'changed detached view'
+            assert read(ref, e.scope) == expected[ref]
+        assert Counter(calls) == Counter((ref, canonical(e.scope)) for ref in refs)
+        broad = e.store.validate_scope()
+        assert broad != e.scope
+        assert read(refs[0], broad) == expected[refs[0]]
+        assert calls[-1] == (refs[0], canonical(broad))
+    with e.store.read_snapshot():
+        fresh = reader._handoff_reader()
+        assert fresh(refs[0], e.scope) == expected[refs[0]]
+    assert Counter(calls)[(refs[0], canonical(e.scope))] == 2
+    assert (tuple(e.store.db.iterdump()), files(e.state.directory)) == before
+    assert not [row for row in e.remote.calls if row[1]['mode'] == 'observe_execution']
+
+
+@pytest.mark.parametrize('fault', ['scope', 'body', 'resource', 'target', 'cycle'])
+def test_operation_local_handoff_reader_keeps_denials_and_retries_failed_reads(environment, monkeypatch, fault):
+    e = environment
+    _, ref, _ = start(e)
+    reader = e.native.targets
+    scope, selected = deepcopy(e.scope), ref
+    target = reader.read_target(ref, e.scope)
+    if fault == 'scope':
+        scope = {'subject_refs': [e.store.targets()[1]['id']]}
+    elif fault == 'body':
+        source = e.store.get(ref)
+        body = json.loads(e.store.get_artifact(source['artifact_ref']))
+        body['receipt']['arguments'] = {'different': 'selected action'}
+        artifact = e.store.artifact(canonical(body), 'application/json')
+        selected = e.store.put('source', reader.receipts._source_payload(body,
+            artifact, source['request_ref']), origin='tool')['id']
+    elif fault == 'resource':
+        configuration = deepcopy(reader.resources)
+        configuration['fixture-hpc']['workspace'] = str(e.tmp_path / 'unselected-workspace')
+        monkeypatch.setattr(reader, 'resources', configuration)
+    calls, original = [], reader.receipts.read
+    def counted(reference, receiving):
+        calls.append((reference, canonical(plain(receiving))))
+        return original(reference, receiving)
+    monkeypatch.setattr(reader.receipts, 'read', counted)
+    before = tuple(e.store.db.iterdump()), files(e.state.directory)
+    with e.store.read_snapshot():
+        read = reader._handoff_reader()
+        if fault in {'scope', 'body', 'resource'}:
+            for _ in range(2):
+                with pytest.raises(ContractError, match='execution_target_unavailable_or_outside_scope'):
+                    read(selected, scope)
+            assert calls == [(selected, canonical(scope))] * 2
+        elif fault == 'target':
+            assert read(ref, scope)[0] == target
+            changed = {**target, 'execution_id': 'different.aurora'}
+            with pytest.raises(ContractError, match='execution_target_identity_conflict'):
+                reader.returnable_handoff(changed)
+            assert read(ref, scope)[0] == target
+        else:
+            receipt_reads = {}
+            reader._native(ref, scope, _receipt_reads=receipt_reads)
+            count = len(calls)
+            with pytest.raises(ValueError, match='receipt_ancestry_cycle'):
+                reader._native(ref, scope, _seen=(ref,), _receipt_reads=receipt_reads)
+            assert len(calls) == count
+    assert (tuple(e.store.db.iterdump()), files(e.state.directory)) == before
+    assert not [row for row in e.remote.calls if row[1]['mode'] == 'observe_execution']
+
+
+def test_one_fact_pass_publishes_before_snapshot_and_authenticates_each_stored_source_once(environment, monkeypatch):
+    """Engineering facts routing around actual immutable selected PBS receipts."""
+    from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+    e = environment
+    refs = _two_stored_handoffs(e)
+    reader = e.native.targets
+    expected = sorted(ref for ref in refs if reader.returnable_handoff(reader.read_target(ref, e.scope)))
+    owner = ExecutionEpisodes.__new__(ExecutionEpisodes)
+    owner.store, owner.run_id, owner.api_execution = e.store, e.context.run_id, None
+    owner.job_progress_provider = e.native
+    inactive = SimpleNamespace(applies=lambda *_: False)
+    for name in ('native_blast_masking_results', 'native_blast_utility_results',
+            'native_fluorescence_results', 'native_protein_structure_results', 'native_hmmer_results'):
+        setattr(owner, name, inactive)
+    for name in ('native_flux_balance_results', 'native_expression_nmf_results', 'atac_results',
+            'native_chromatin_interaction_results', 'native_genomic_overlap_results',
+            'rna_structure_comparison_results', 'native_rna_structure_results',
+            'native_blast_standard_database_results', 'native_blast_database_results',
+            'native_hmmer_preparation_results', 'native_infernal_preparation_results',
+            'native_blast_results', 'native_infernal_results'):
+        setattr(owner, name, None)
+    owner.local_file_sources = inactive
+    owner._has_appservice = lambda: False
+    owner._practical_context = lambda context: context
+    owner._selection = lambda context, supplied=None: dict(run_id=context.run_id,
+        episode_id=context.episode_id, known_record_refs=[*refs, refs[0]], initial_known_record_refs=[])
+    published = []
+    def published_facts(context, completion):
+        assert not e.store.db.in_transaction
+        published.append(context.episode_id)
+        return dict(practical_completed=False, practical_receipt_refs=list(refs))
+    owner._delegate = lambda context: SimpleNamespace(facts=published_facts)
+    calls, original = [], reader.receipts.read
+    def counted(reference, scope):
+        assert e.store.db.in_transaction
+        calls.append((reference, canonical(plain(scope))))
+        return original(reference, scope)
+    monkeypatch.setattr(reader.receipts, 'read', counted)
+    before = tuple(e.store.db.iterdump()), files(e.state.directory)
+    actual = owner._live_facts(e.context, {})
+    assert actual['execution_handoff_refs'] == expected
+    assert actual['execution_completed'] is False
+    assert actual['practical_receipt_refs'] == list(refs)
+    assert actual['execution_result_refs'] == actual['execution_file_source_refs'] == []
+    assert published == [e.context.episode_id]
+    assert Counter(calls) == Counter((ref, canonical(e.scope)) for ref in refs)
+    assert (tuple(e.store.db.iterdump()), files(e.state.directory)) == before
+
+
+def test_retained_original_lumpy_handoffs_use_one_operation_local_metadata_read(tmp_path, monkeypatch):
+    """Opt-in original native receipts; no workflow continuation or scientific work."""
+    selected = os.environ.get('HMMER_NATIVE_ORACLE_LUMPY_RESOURCE_PREFIX')
+    expected_sha = os.environ.get('HMMER_NATIVE_ORACLE_LUMPY_RESOURCE_PREFIX_SHA256')
+    if not selected or not expected_sha:
+        pytest.skip('requires the explicitly pinned original LUMPY resource prefix')
+    prefix = Path(selected).resolve(strict=True)
+    raw = prefix.read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == expected_sha
+    proof = json.loads(raw)
+    assert proof['version'] == 'lumpy_resource_workflow_proof_v1'
+    assert proof['native_seal']['outcome'] == 'succeeded' and proof['native_seal']['returncode'] == 0
+    original = Path(proof['directory']).resolve(strict=True)
+    store_path = Path(proof['store_directory']).resolve(strict=True)
+    assert store_path.parent == original and prefix.parent == original
+
+    def inventory(directory):
+        result = {}
+        for path in sorted(directory.rglob('*')):
+            # WAL/SHM may exist transiently while actual SQLite owners are open.
+            if path.name.endswith(('-wal', '-shm')):
+                continue
+            mode = path.lstat().st_mode
+            if stat.S_ISREG(mode):
+                body = path.read_bytes()
+                result[str(path.relative_to(directory))] = dict(mode=stat.S_IMODE(mode),
+                    size_bytes=len(body), sha256=hashlib.sha256(body).hexdigest())
+            elif stat.S_ISLNK(mode):
+                result[str(path.relative_to(directory))] = dict(mode=stat.S_IMODE(mode),
+                    symlink=os.readlink(path))
+        return result
+
+    before_files = inventory(original)
+    before_family = {path.name: dict(size_bytes=path.stat().st_size,
+        sha256=hashlib.sha256(path.read_bytes()).hexdigest(), mode=stat.S_IMODE(path.stat().st_mode))
+        for path in sorted(store_path.glob('state.sqlite3*')) if path.is_file()}
+    from gene_annotation_episode import native_lifecycle
+    from gene_annotation_episode import native_lumpy_execution as lumpy
+    from gene_annotation_episode import vcf_result_measurements as variants
+    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.runtime import Workflow
+    from gene_annotation_episode.tools import ToolRegistry
+    from test_lumpy_resource_workflow import _assemble
+
+    forbidden_calls = []
+    def forbidden(*args, **kwargs):
+        forbidden_calls.append('forbidden work')
+        raise AssertionError('retained handoff metadata read attempted work or publication')
+    class NoDecisions:
+        async def complete(self, *args, **kwargs):
+            return forbidden(*args, **kwargs)
+        async def release(self, *args, **kwargs):
+            return forbidden(*args, **kwargs)
+    for name in ('prepare_job', 'start_prepared', 'start_job', 'resume_start', 'status',
+            'collect', 'cancel', 'release', 'run_blocking', 'wait_job'):
+        monkeypatch.setattr(native_lifecycle, name, forbidden)
+    monkeypatch.setattr(native_lifecycle.NativeJobHandle, 'read', forbidden)
+    for name in ('prepare_local_lumpy', 'run_lumpy', 'freeze_lumpy_software_binding', '_verify_native_runtime'):
+        monkeypatch.setattr(lumpy, name, forbidden)
+    for name in ('parse_vcf_sheet', 'calculate_vcf_components', 'project_vcf_return'):
+        monkeypatch.setattr(variants, name, forbidden)
+    monkeypatch.setattr(ToolRegistry, 'execute', forbidden)
+    monkeypatch.setattr(Workflow, 'build', forbidden)
+    for name in ('put', 'artifact', 'register_material', 'create_problem'):
+        monkeypatch.setattr(Store, name, forbidden)
+    monkeypatch.setattr('socket.create_connection', forbidden)
+
+    store = workflow = tools = owner = None
+    outcome = dict(version='lumpy_retained_handoff_metadata_v1', prefix=str(prefix),
+        prefix_sha256=expected_sha, passed=False, native_work_executed=False)
+    try:
+        store = Store(store_path)
+        before_rows = tuple(store.db.iterdump())
+        workflow, tools = _assemble(store, proof, NoDecisions())
+        owner = workflow.episode_bindings.for_role('results')
+        reader = owner.job_progress_provider.targets
+        authority = EpisodeReturnRecords(store, proof['run_id'], failure_prefix='lumpy_retained_metadata_')
+        context = authority.context(proof['native_plan']['identity']['episode_id'])
+        assert context.role == 'launch_local'
+        authority.authenticate(context)
+        row = store.db.execute('SELECT form FROM runtime_forms WHERE run_id=? AND episode_id=?',
+            (proof['run_id'], context.episode_id)).fetchone()
+        assert row is not None
+        form = json.loads(row['form'])
+        assert form['completed'] is True
+        refs = form['references']
+        assert len(refs) == len(set(refs)) == 2
+        expected, operations = {}, set()
+        for reference in refs:
+            body = reader.receipts.read(reference, context.scope)
+            operations.add(body['receipt']['tool_name'])
+            target = reader.read_target(reference, context.scope)
+            assert target['origin_episode_id'] == context.episode_id
+            assert target['execution_id'] == proof['native_plan']['identity']['execution_id']
+            expected[reference] = (target, reader.usable_handoff(target), reader.returnable_handoff(target))
+        assert operations == {'practical.job.start', 'practical.job.collect'}
+        calls, original_read = [], reader.receipts.read
+        def counted(reference, scope):
+            calls.append((reference, canonical(plain(scope))))
+            return original_read(reference, scope)
+        monkeypatch.setattr(reader.receipts, 'read', counted)
+        with store.read_snapshot():
+            read = reader._handoff_reader()
+            for reference in refs:
+                assert read(reference, context.scope) == expected[reference]
+                changed = read(reference, context.scope)
+                changed[0]['assignment']['requested_job']['argv'][0] = 'detached mutation'
+                assert read(reference, deepcopy(plain(context.scope))) == expected[reference]
+            assert Counter(calls) == Counter((ref, canonical(plain(context.scope))) for ref in refs)
+        first_operation = list(calls)
+        with store.read_snapshot():
+            fresh = reader._handoff_reader()
+            for reference in refs:
+                assert fresh(reference, context.scope) == expected[reference]
+        assert Counter(calls) == Counter({key: 2 for key in first_operation})
+        assert tuple(store.db.iterdump()) == before_rows
+        assert forbidden_calls == []
+        outcome.update(passed=True, source_refs=refs, episode_id=context.episode_id,
+            receiving_scope=plain(context.scope), stored_operations=sorted(operations),
+            first_operation_receipt_reads=[dict(source_ref=ref, scope=json.loads(scope)) for ref, scope in first_operation],
+            fresh_operation_reauthenticated=True, exact_original_rows=True,
+            logical_rows_sha256=hashlib.sha256('\n'.join(before_rows).encode()).hexdigest())
+    except BaseException as error:
+        outcome['failure'] = dict(type=type(error).__name__, message=str(error))
+        raise
+    finally:
+        if store is not None:
+            store.close()
+        owner = workflow = tools = store = None
+        gc.collect()
+        after_files = inventory(original)
+        after_family = {path.name: dict(size_bytes=path.stat().st_size,
+            sha256=hashlib.sha256(path.read_bytes()).hexdigest(), mode=stat.S_IMODE(path.stat().st_mode))
+            for path in sorted(store_path.glob('state.sqlite3*')) if path.is_file()}
+        files_equal = after_files == before_files
+        family_equal = {key: value for key, value in after_family.items() if not key.endswith(('-wal', '-shm'))} == {
+            key: value for key, value in before_family.items() if not key.endswith(('-wal', '-shm'))}
+        prefix_equal = prefix.read_bytes() == raw
+        outcome.update(passed=outcome['passed'] and files_equal and family_equal and prefix_equal,
+            original_files_unchanged=files_equal, original_prefix_unchanged=prefix_equal,
+            original_sqlite_family_before=before_family,
+            original_sqlite_family_after=after_family,
+            original_file_inventory_sha256=hashlib.sha256(canonical(before_files).encode()).hexdigest(),
+            forbidden_work_attempts=forbidden_calls)
+        (tmp_path / 'LUMPY_RETAINED_HANDOFF_METADATA.json').write_text(json.dumps(outcome, indent=2) + '\n')
+        assert files_equal and family_equal and prefix_equal

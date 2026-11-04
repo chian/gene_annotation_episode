@@ -1,0 +1,304 @@
+
+FILE: gene_annotation_episode/communication.py FUNCTION: _compile_closed_schema
+118: def _compile_closed_schema(schema):
+119:     """Closed-form grammar plus exact registered facts; errors are never cached."""
+120:     try:
+121:         Draft202012Validator.check_schema(schema)
+122:     except SchemaError as exc:
+123:         raise ReportBoundaryError(exc.message, code="invalid_schema") from exc
+124: 
+125:     native_blast_sources = None
+126:     standard_blast_sources = None
+127:     rna_structure_sources = None
+128:     protein_structure_sources = None
+129:     genomic_overlap_sources = None
+130:     chromatin_sources = None
+131:     atac_sources = None
+132:     expression_nmf_sources = None
+133:     barcode_sources = None
+134: 
+135:     def check(node, path, depth=0):
+136:         nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+137:         nonlocal chromatin_sources, atac_sources, expression_nmf_sources, barcode_sources
+138:         source = node.get("x-source") if isinstance(node, dict) else None
+139:         if isinstance(source, str) and source.startswith("barcode_"):
+140:             if depth != 1:
+141:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+142:             if barcode_sources is None:
+143:                 from .barcode_return_views import barcode_fact_sources
+144:                 barcode_sources = barcode_fact_sources()
+145:             expected = barcode_sources.get(source, {}).get("report_schema")
+146:             if (expected is None or not _schema_cacheable(node)
+147:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+148:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+149:                 raise ReportBoundaryError(f"{path}: Barcode fact schema must match its registered source", code="invalid_schema")
+150:             return
+151:         if isinstance(source, str) and source.startswith("expression_nmf_"):
+152:             if depth != 1:
+153:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+154:             if expression_nmf_sources is None:
+155:                 from .expression_nmf_return_views import expression_nmf_fact_sources
+156:                 expression_nmf_sources = expression_nmf_fact_sources()
+157:             expected = expression_nmf_sources.get(source, {}).get("report_schema")
+158:             if (expected is None or not _schema_cacheable(node)
+159:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+160:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+161:                 raise ReportBoundaryError(f"{path}: NMF fact schema must match its registered source", code="invalid_schema")
+162:             return
+163:         if isinstance(source, str) and source.startswith("atac_differential_"):
+164:             if depth != 1:
+165:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+166:             if atac_sources is None:
+167:                 from .atac_differential_return_views import atac_fact_sources
+168:                 atac_sources = atac_fact_sources()
+169:             expected = atac_sources.get(source, {}).get("report_schema")
+170:             if (expected is None or not _schema_cacheable(node)
+171:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+172:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+173:                 raise ReportBoundaryError(f"{path}: ATAC fact schema must match its registered source", code="invalid_schema")
+174:             return
+175:         if isinstance(source, str) and source.startswith("chromatin_interaction_"):
+176:             if depth != 1:
+177:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+178:             if chromatin_sources is None:
+179:                 from .chromatin_interaction_return_views import FACT_SOURCES, chromatin_fact_schema_alternatives
+180:                 chromatin_sources = {key: chromatin_fact_schema_alternatives(key) for key in FACT_SOURCES}
+181:             expected = chromatin_sources.get(source, ())
+182:             if (not expected or not _schema_cacheable(node)
+183:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+184:                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+185:                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
+186:             return
+187:         if source == "literature_channel_cells":
+188:             if depth != 1:
+189:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+190:             from .literature_channel_storage import channel_cells_schema
+191:             expected = channel_cells_schema()
+192:             if (not _schema_cacheable(node)
+193:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+194:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+195:                 raise ReportBoundaryError(f"{path}: channel fact schema must match its registered source", code="invalid_schema")
+196:             return
+197:         if source == "literature_compiled_assay_cells":
+198:             if depth != 1:
+199:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+200:             from .literature_compiled_assay_storage import compiled_assay_cells_schema
+201:             expected = compiled_assay_cells_schema()
+202:             if (not _schema_cacheable(node)
+203:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+204:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+205:                 raise ReportBoundaryError(f"{path}: compiled assay schema must match its registered source", code="invalid_schema")
+206:             return
+207:         if source == "literature_calibration_recovery_cells":
+208:             if depth != 1:
+209:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+210:             from .literature_calibration_recovery_storage import calibration_recovery_cells_schema
+211:             expected = calibration_recovery_cells_schema()
+212:             if (not _schema_cacheable(node)
+213:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+214:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+215:                 raise ReportBoundaryError(f"{path}: recovery fact schema must match its registered source", code="invalid_schema")
+216:             return
+217:         if source == "literature_rate_observation_cells":
+218:             if depth != 1:
+219:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+220:             from .literature_rate_observation_storage import rate_observation_cells_schema
+221:             expected = rate_observation_cells_schema()
+222:             if (not _schema_cacheable(node)
+223:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+224:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+225:                 raise ReportBoundaryError(f"{path}: reported observation fact schema must match its registered source", code="invalid_schema")
+226:             return
+227:         if source == "literature_rate_replicate_cells":
+228:             if depth != 1:
+229:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+230:             from .literature_rate_replicate_storage import rate_replicate_cells_schema
+231:             expected = rate_replicate_cells_schema()
+232:             if (not _schema_cacheable(node)
+233:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+234:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+235:                 raise ReportBoundaryError(f"{path}: raw replicate fact schema must match its registered source", code="invalid_schema")
+236:             return
+237:         if source == "literature_completion_time_cells":
+238:             if depth != 1:
+239:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+240:             from .literature_completion_time_storage import completion_time_cells_schema
+241:             expected = completion_time_cells_schema()
+242:             if (not _schema_cacheable(node)
+243:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+244:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+245:                 raise ReportBoundaryError(f"{path}: completion time fact schema must match its registered source", code="invalid_schema")
+246:             return
+247:         if source == "literature_active_site_cells":
+248:             if depth != 1:
+249:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+250:             from .literature_active_site_storage import active_site_cells_schema
+251:             expected = active_site_cells_schema()
+252:             if (not _schema_cacheable(node)
+253:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+254:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+255:                 raise ReportBoundaryError(f"{path}: active site fact schema must match its registered source", code="invalid_schema")
+256:             return
+257:         if source == "literature_rate_source_meaning_cells":
+258:             if depth != 1:
+259:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+260:             from .literature_rate_meaning_delivery import rate_source_meaning_cells_schema
+261:             expected = rate_source_meaning_cells_schema()
+262:             # Exact recorded witnesses are permitted only in this complete
+263:             # registered fact view. Generic model-authored strings retain the
+264:             # original closed-form grammar and saved-value custody checks.
+265:             if (not _schema_cacheable(node)
+266:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+267:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+268:                 raise ReportBoundaryError(f"{path}: rate meaning fact schema must match its registered source", code="invalid_schema")
+269:             return
+270:         if isinstance(source, str) and source.startswith("genomic_overlap_"):
+271:             if depth != 1:
+272:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+273:             if genomic_overlap_sources is None:
+274:                 from .genomic_overlap_return_views import genomic_overlap_fact_sources
+275:                 genomic_overlap_sources = genomic_overlap_fact_sources()
+276:             expected = genomic_overlap_sources.get(source, {}).get("report_schema")
+277:             if (expected is None or not _schema_cacheable(node)
+278:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+279:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+280:                 raise ReportBoundaryError(f"{path}: overlap fact schema must match its registered source", code="invalid_schema")
+281:             return
+282:         if source == "literature_perturbation_summary_cells":
+283:             if depth != 1:
+284:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+285:             from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+286:             # Only these complete registered fact contracts permit their
+287:             # optional premise metadata. Generic object/keyword rules remain
+288:             # unchanged. Actual saved-value checks prevent dropping a basis
+289:             # supplied by the source-bound measurement recipe.
+290:             expected = (perturbation_summary_cells_schema(),
+291:                 perturbation_summary_cells_schema(include_covariance_interpretations=False),
+292:                 perturbation_summary_cells_schema(include_interpretation_basis=False))
+293:             if (not _schema_cacheable(node)
+294:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+295:                     not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}):
+296:                 raise ReportBoundaryError(f"{path}: perturbation summary fact schema must match its registered source", code="invalid_schema")
+297:             return
+298:         if source == "literature_controlled_response_component_cells":
+299:             if depth != 1:
+300:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+301:             from .literature_controlled_response_storage import controlled_response_cells_schema
+302:             expected = controlled_response_cells_schema()
+303:             if (not _schema_cacheable(node)
+304:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+305:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+306:                 raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+307:             return
+308:         if source == "literature_gel_component_cells":
+309:             if depth != 1:
+310:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+311:             from .literature_gel_storage import gel_cells_schema
+312:             expected = gel_cells_schema()
+313:             if (not _schema_cacheable(node)
+314:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+315:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+316:                 raise ReportBoundaryError(f"{path}: gel fact schema must match its registered source", code="invalid_schema")
+317:             return
+318:         if isinstance(source, str) and source.startswith("execution_protein_structure_"):
+319:             if depth != 1:
+320:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+321:             if protein_structure_sources is None:
+322:                 from .protein_structure_result_views import protein_structure_fact_sources
+323:                 protein_structure_sources = protein_structure_fact_sources()
+324:             original = protein_structure_sources.get(source, {}).get("report_schema")
+325:             expected = None if original is None else {**original, "x-source": source}
+326:             if (expected is None or not _schema_cacheable(node)
+327:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+328:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+329:                 raise ReportBoundaryError(f"{path}: protein fact schema must match its registered source", code="invalid_schema")
+330:             return
+331:         if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+332:             if depth != 1:
+333:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+334:             if rna_structure_sources is None:
+335:                 from .rna_structure_result_views import rna_structure_fact_sources
+336:                 from .rna_structure_comparison_views import rna_comparison_fact_sources
+337:                 rna_structure_sources = rna_structure_fact_sources()
+338:                 rna_structure_sources.update(rna_comparison_fact_sources())
+339:             expected = rna_structure_sources.get(source, {}).get("report_schema")
+340:             # Recorded RNA fields have exact units, nullable associations and
+341:             # native labels. They do not grant a free-form model schema.
+342:             if (expected is None or not _schema_cacheable(node)
+343:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+344:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+345:                 raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+346:             return
+347:         if isinstance(source, str) and source.startswith("execution_blast_standard_database_"):
+348:             if depth != 1:
+349:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+350:             if standard_blast_sources is None:
+351:                 from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+352:                 standard_blast_sources = standard_blast_database_fact_sources()
+353:             expected = standard_blast_sources.get(source, {}).get("report_schema")
+354:             # These recorded contracts contain native strings, tagged identities,
+355:             # tuples and numerical relationships outside the generic grammar.
+356:             # Match the complete detached JSON tree, including scalar types;
+357:             # Python equality alone would treat True, 1 and 1.0 as equal.
+358:             if (expected is None or not _schema_cacheable(node)
+359:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+360:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+361:                 raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+362:             return
+363:         if isinstance(source, str) and source.startswith("execution_blast_database_"):
+364:             if depth != 1:
+365:                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+366:             if native_blast_sources is None:
+367:                 from .native_blast_database_result_views import native_blast_database_fact_sources
+368:                 native_blast_sources = native_blast_database_fact_sources()
+369:             expected = native_blast_sources.get(source, {}).get("report_schema")
+370:             # These recorded contracts contain native strings, tagged identities,
+371:             # tuples and numerical relationships outside the generic grammar.
+372:             # Match the complete detached JSON tree, including scalar types;
+373:             # Python equality alone would treat True, 1 and 1.0 as equal.
+374:             if (expected is None or not _schema_cacheable(node)
+375:                     or json.dumps(node, sort_keys=True, allow_nan=False)
+376:                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+377:                 raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
+378:             return
+379:         if not isinstance(node, dict) or set(node) - KEYWORDS:
+380:             raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+381:         declared = node.get("type")
+382:         kinds = set(declared) if isinstance(declared, list) else {declared}
+383:         if not kinds or len(kinds - {"null"}) > 1 or not kinds <= {"object", "array", "number", "integer", "boolean", "null", "string"}:
+384:             raise ReportBoundaryError(f"{path}: explicit single type required", code="invalid_schema")
+385:         if "object" in kinds:
+386:             props = node.get("properties")
+387:             if not isinstance(props, dict) or node.get("additionalProperties") is not False or set(node.get("required", [])) != set(props):
+388:                 raise ReportBoundaryError(f"{path}: fields must be explicit, required and closed", code="open_object")
+389:             for name, child in props.items():
+390:                 if not CODE.fullmatch(name):
+391:                     raise ReportBoundaryError(f"{path}: invalid field name", code="invalid_schema")
+392:                 check(child, path + "." + name, depth + 1)
+393:         elif "array" in kinds:
+394:             if "items" not in node:
+395:                 raise ReportBoundaryError(f"{path}: arrays need item types", code="open_array")
+396:             check(node["items"], path + "[]", depth + 1)
+397:         elif "string" in kinds:
+398:             literals = node.get("enum", [node["const"]] if "const" in node else None)
+399:             if literals is not None:
+400:                 if not literals or any(v is not None and (not isinstance(v, str) or not CODE.fullmatch(v)) for v in literals):
+401:                     raise ReportBoundaryError(f"{path}: string literals must be declared codes", code="unrestricted_string")
+402:             elif node.get("format") not in FORMATS:
+403:                 raise ReportBoundaryError(f"{path}: strings need a declared semantic type", code="unrestricted_string")
+404:         elif "format" in node:
+405:             raise ReportBoundaryError(f"{path}: format only applies to strings", code="invalid_schema")
+406:         for literal in node.get("enum", [node["const"]] if "const" in node else []):
+407:             if isinstance(literal, (dict, list)):
+408:                 raise ReportBoundaryError(f"{path}: composite constants cannot bypass fields", code="invalid_schema")
+409:         if "x-reference-namespace" in node and node.get("format") not in REFERENCE_FORMATS:
+410:             raise ReportBoundaryError(f"{path}: reference namespace needs reference type", code="invalid_schema")
+411:         if "x-source" in node and (not isinstance(node["x-source"], str) or not CODE.fullmatch(node["x-source"])):
+412:             raise ReportBoundaryError(f"{path}: fact source must be a registered key", code="invalid_schema")
+413:         if "x-source" in node and (path.count(".") != 1 or "[]" in path):
+414:             raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+415:     if not isinstance(schema, dict) or schema.get("type") != "object":
+416:         raise ReportBoundaryError("Report must be a closed object", code="invalid_schema")
+417:     check(schema, "report")
+418:     _finite(schema)
+419:     return schema

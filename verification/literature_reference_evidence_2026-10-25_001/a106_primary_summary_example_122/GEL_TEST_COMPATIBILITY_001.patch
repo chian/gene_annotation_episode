@@ -1,0 +1,14 @@
+--- before/tests/test_literature_gel_prompt.py
++++ after/tests/test_literature_gel_prompt.py
+@@ -17,7 +17,10 @@
+         'verification/literature_reference_evidence_2026-10-25_001/gel_episode_integration_107/BASELINE_DEFAULT_CONTRACTS_001.json').read_text())
+     assert EXPERIMENTAL_TASK==baseline['EXPERIMENTAL_TASK']
+     assert SAVED_NUMERICAL_RETURN_TASK==baseline['SAVED_NUMERICAL_RETURN_TASK']
+-    assert REFERENCE_PARENT_TASK==baseline['REFERENCE_PARENT_TASK']
++    correction=json.loads((Path(__file__).resolve().parents[1]/
++        'verification/literature_reference_evidence_2026-10-25_001/a106_summary_uncertainty_119/PARENT_TASK_CORRECTION_001.json').read_text())
++    assert baseline['REFERENCE_PARENT_TASK'].count(correction['before'])==1
++    assert REFERENCE_PARENT_TASK==baseline['REFERENCE_PARENT_TASK'].replace(correction['before'],correction['after'],1)
+ 
+ 
+ @pytest.mark.parametrize('raw',[False,True])

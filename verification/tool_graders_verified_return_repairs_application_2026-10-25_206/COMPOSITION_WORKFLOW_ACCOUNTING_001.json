@@ -1,0 +1,3456 @@
+{
+  "cumulative_source": "runtime_observations.observation.credit.credit",
+  "database": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_candidate/verification/tool_graders_bvbrc_genome_alignment_episode_flow_2026-10-25/runs/mauve-v4-9kigwy1s/state/state.sqlite3",
+  "database_read_only_unchanged": true,
+  "database_sha256": "39d505d0b9c6a9c43f260700bee2a39e69ab68505b4d0c607202fcd75260e1b9",
+  "episodes": {
+    "annotation": {
+      "action_count": 8,
+      "actual_marginal_gains": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "archive": {
+        "file": "66a27248914c8d7c170c20c1dd013270a5475072e1c82dfffa10c5893c108e9b.json",
+        "index_sha256": "fb6b2033890477b1f9f7c8ad4303014c6102fc796deca5cefb8d51fd1ba73242",
+        "sha256": "1cfc2d1e2afef3e05e6a8ebd991a14bd79a293270fa6b61e3d4c1ce3ec3161ff"
+      },
+      "completion": {
+        "actions": 8,
+        "ended_by": "yield_stop"
+      },
+      "cumulative_credits": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "decision_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+      "final_expected_next_gain": {
+        "alpha": 0.05,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 2,
+        "upper": 0.07619158557694622,
+        "value": 0.012339432876807502
+      },
+      "final_stop": true,
+      "initial_cumulative_credit": 0.0,
+      "model_call_count": 8,
+      "observation_count": 8,
+      "observations": [
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "label": "child_0",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "fitting_scope": "full_history",
+                "history_used": 1,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 1
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child_0"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_922a250fc28c76cfb655ba20f346fcadfaa3e5f83bca56230ce09792d9514b13",
+            "unit_index": 0
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "label": "wait:1",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 2,
+                "fitting_scope": "full_history",
+                "history_used": 2,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 2
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "wait:1"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_259461cab1871b3f915f5a4d69cd2583324302fd56a07f99d0e930adbb5f810c",
+            "unit_index": 1
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 2
+          },
+          "decision_index": 2,
+          "label": "wait:2",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 3,
+                "fitting_scope": "full_history",
+                "history_used": 3,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 3
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "wait:2"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_e99be52cc9affe4d06bea7df6a20e4e901ae4c20c9185f081cb63149a1209116",
+            "unit_index": 2
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 3
+          },
+          "decision_index": 3,
+          "label": "wait:3",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 4,
+                "fitting_scope": "full_history",
+                "history_used": 4,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 4
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "wait:3"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_16b097ae8e4b635830095357923e44eaef84cedcdd7f6fc1b041d41d95550a79",
+            "unit_index": 3
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 4
+          },
+          "decision_index": 4,
+          "label": "wait:4",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 5,
+                "fitting_scope": "full_history",
+                "history_used": 5,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 5
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "wait:4"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_379500fedfd6441db0461c52890d56ed7055fa0941734617359d8b0e5c0c2152",
+            "unit_index": 4
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 5
+          },
+          "decision_index": 5,
+          "label": "wait:5",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 6,
+                "fitting_scope": "full_history",
+                "history_used": 6,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 6
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "wait:5"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_e2db91424a149726a915391dda6b9fb64843f00bb7fca26e2cfe0f368dc113bb",
+            "unit_index": 5
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 6
+          },
+          "decision_index": 6,
+          "label": "wait:6",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 7,
+                "fitting_scope": "full_history",
+                "history_used": 7,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 7
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "wait:6"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_dcaa8d16985da90035c42a6a46343fb30d03b6815af12dabf04b0e276ed181af",
+            "unit_index": 6
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 7
+          },
+          "decision_index": 7,
+          "label": "wait:7",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 0.07619158557694622,
+                "value": 0.012339432876807502
+              },
+              "stop": true
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 8,
+                "fit_objective": 0.4025180920677681,
+                "fitting_scope": "full_history",
+                "history_used": 8,
+                "initialization": "cold_template_prior",
+                "next_gain_variance": 0.0010613409110305473,
+                "rank_decay": 0.05454795983214367,
+                "yield_intercept": -4.45857154102318
+              },
+              "expected_next_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 0.07619158557694622,
+                "value": 0.012339432876807502
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 8
+            },
+            "is_root": true,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": true,
+            "unit_label": "wait:7"
+          },
+          "unit_ref": {
+            "episode_id": "episode_09ba3e7299d35a83b6051f2383af6c7f931d4c11b0f6e8e8f9fe6c54441dee5f",
+            "unit_id": "unit_4f20d49cdd44ab622c4cd0361b4b75c95551218cc991e6f9fad7a5e7cfb80061",
+            "unit_index": 7
+          }
+        }
+      ],
+      "state": "yielded"
+    },
+    "launch": {
+      "action_count": 1,
+      "actual_marginal_gains": [
+        2.0
+      ],
+      "archive": {
+        "file": "dc785f6aa4c537879f230ba60b25dc283192e0678a8d68831494d62615eebb2f.json",
+        "index_sha256": "5aaa3f2e3756cc3b50958704bad6e0ed6d419b32f09e90b1bf59e22141ef04ae",
+        "sha256": "6508c0671e4ad95ffc418a5c976dcbd8b853f6e09032ac1a5643093b397981a6"
+      },
+      "completion": {
+        "actions": 1,
+        "ended_by": "yield_stop"
+      },
+      "cumulative_credits": [
+        2
+      ],
+      "decision_indices": [
+        0
+      ],
+      "episode_id": "episode_e18e71fbb6ed23c8dfc3f1df0b0d7cf8fb59efe63b0d3e26ffebcb1e3a37e680",
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "final_stop": true,
+      "initial_cumulative_credit": 0.0,
+      "model_call_count": 1,
+      "observation_count": 1,
+      "observations": [
+        {
+          "credit": {
+            "credit": 2,
+            "estimation_action_index": 0,
+            "practical_completion": {
+              "assignment_sha256": "5f171b05a764911fd5022fc5cab36a3194225061bf8ca546600cd1867abcd200",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_e18e71fbb6ed23c8dfc3f1df0b0d7cf8fb59efe63b0d3e26ffebcb1e3a37e680",
+              "operation_key": "genome-alignment-composed-v4-1:episode_e18e71fbb6ed23c8dfc3f1df0b0d7cf8fb59efe63b0d3e26ffebcb1e3a37e680:0",
+              "receipt_sha256": "6a996f189ba90cac73cb293fbc643f3a21e70e7072bd0d16d08da047b1ebb43d",
+              "run_id": "genome-alignment-composed-v4-1",
+              "validation_keys": [
+                "received_usable_handoff"
+              ],
+              "version": "practical_completion_v1"
+            }
+          },
+          "decision_index": 0,
+          "label": "child_0",
+          "step": {
+            "credit": 2.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "completion_action_index": 0,
+                "completion_proof": {
+                  "assignment_sha256": "5f171b05a764911fd5022fc5cab36a3194225061bf8ca546600cd1867abcd200",
+                  "endpoint": "usable_handoff",
+                  "episode_id": "episode_e18e71fbb6ed23c8dfc3f1df0b0d7cf8fb59efe63b0d3e26ffebcb1e3a37e680",
+                  "operation_key": "genome-alignment-composed-v4-1:episode_e18e71fbb6ed23c8dfc3f1df0b0d7cf8fb59efe63b0d3e26ffebcb1e3a37e680:0",
+                  "receipt_sha256": "6a996f189ba90cac73cb293fbc643f3a21e70e7072bd0d16d08da047b1ebb43d",
+                  "run_id": "genome-alignment-composed-v4-1",
+                  "validation_keys": [
+                    "received_usable_handoff"
+                  ],
+                  "version": "practical_completion_v1"
+                },
+                "completion_unit_ref": {
+                  "episode_id": "episode_e18e71fbb6ed23c8dfc3f1df0b0d7cf8fb59efe63b0d3e26ffebcb1e3a37e680",
+                  "unit_id": "unit_597ac019331387676840ed30b4a62152e78aa4d0b4b9ef98851c531705183254",
+                  "unit_index": 0
+                },
+                "fitting_scope": "verified_assignment_endpoint",
+                "history_used": 1
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                "completion_proof": "practical_completion_v1",
+                "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+                "continuation": "existing_available_upper_bound_lte_configured_cost",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "raw_history": "unchanged_one_observation_per_completed_own_action",
+                "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                "version": "verified_practical_endpoint_yield_v1"
+              },
+              "turns": 1
+            },
+            "is_root": false,
+            "marginal_credit": 2.0,
+            "requests_transition": false,
+            "stop": true,
+            "unit_label": "child_0"
+          },
+          "unit_ref": {
+            "episode_id": "episode_e18e71fbb6ed23c8dfc3f1df0b0d7cf8fb59efe63b0d3e26ffebcb1e3a37e680",
+            "unit_id": "unit_597ac019331387676840ed30b4a62152e78aa4d0b4b9ef98851c531705183254",
+            "unit_index": 0
+          }
+        }
+      ],
+      "state": "yielded"
+    },
+    "launch_api": {
+      "action_count": 2,
+      "actual_marginal_gains": [
+        0.0,
+        2.0
+      ],
+      "archive": {
+        "file": "1876162e4a651369008c039a0efd7d7e9b35c70fdd17979bfb6f82ebd371a817.json",
+        "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "sha256": "9086bbb2ee8ce6f63b61c0a37aaa53b4373d0028d420f91fb79a95be9aa4a268"
+      },
+      "completion": {
+        "actions": 2,
+        "ended_by": "yield_stop"
+      },
+      "cumulative_credits": [
+        0,
+        2
+      ],
+      "decision_indices": [
+        0,
+        1
+      ],
+      "episode_id": "episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94",
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "final_stop": true,
+      "initial_cumulative_credit": 0.0,
+      "model_call_count": 2,
+      "observation_count": 2,
+      "observations": [
+        {
+          "credit": {
+            "credit": 0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "label": "tool:0",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "fitting_scope": "full_history",
+                "history_used": 1,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 1
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:0"
+          },
+          "unit_ref": {
+            "episode_id": "episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94",
+            "unit_id": "unit_969e4b8ff2e31c4821eb48adef27216a18b243c77f601dbf6317eec1cc0512f1",
+            "unit_index": 0
+          }
+        },
+        {
+          "credit": {
+            "credit": 2,
+            "estimation_action_index": 1,
+            "practical_completion": {
+              "assignment_sha256": "c6aabb919ae4bf5c24dd0bbfb88d64a373fcb662d68a77ba6ee91d0f6add2f59",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94",
+              "operation_key": "genome-alignment-composed-v4-1:episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94:1",
+              "receipt_sha256": "bba39b20f265bf23de87c7eaf239f060939efbe60069ce32129c627bf261c80d",
+              "run_id": "genome-alignment-composed-v4-1",
+              "validation_keys": [
+                "usable_handoff"
+              ],
+              "version": "practical_completion_v1"
+            }
+          },
+          "decision_index": 1,
+          "label": "tool:1",
+          "step": {
+            "credit": 2.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 2,
+                "completion_action_index": 1,
+                "completion_proof": {
+                  "assignment_sha256": "c6aabb919ae4bf5c24dd0bbfb88d64a373fcb662d68a77ba6ee91d0f6add2f59",
+                  "endpoint": "usable_handoff",
+                  "episode_id": "episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94",
+                  "operation_key": "genome-alignment-composed-v4-1:episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94:1",
+                  "receipt_sha256": "bba39b20f265bf23de87c7eaf239f060939efbe60069ce32129c627bf261c80d",
+                  "run_id": "genome-alignment-composed-v4-1",
+                  "validation_keys": [
+                    "usable_handoff"
+                  ],
+                  "version": "practical_completion_v1"
+                },
+                "completion_unit_ref": {
+                  "episode_id": "episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94",
+                  "unit_id": "unit_d2d78cb7882cf24f2d077d457b0b5ab4b5320b90d134db5b8faa984aa2471c4c",
+                  "unit_index": 1
+                },
+                "fitting_scope": "verified_assignment_endpoint",
+                "history_used": 2
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                "completion_proof": "practical_completion_v1",
+                "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+                "continuation": "existing_available_upper_bound_lte_configured_cost",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "raw_history": "unchanged_one_observation_per_completed_own_action",
+                "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                "version": "verified_practical_endpoint_yield_v1"
+              },
+              "turns": 2
+            },
+            "is_root": false,
+            "marginal_credit": 2.0,
+            "requests_transition": false,
+            "stop": true,
+            "unit_label": "tool:1"
+          },
+          "unit_ref": {
+            "episode_id": "episode_7d401ec0e10354cc012c3a63e0b8f2c027ccbba24a6b32e3801be9df3a2bdc94",
+            "unit_id": "unit_d2d78cb7882cf24f2d077d457b0b5ab4b5320b90d134db5b8faa984aa2471c4c",
+            "unit_index": 1
+          }
+        }
+      ],
+      "state": "yielded"
+    },
+    "results": {
+      "action_count": 7,
+      "actual_marginal_gains": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0,
+        0.0,
+        3.0
+      ],
+      "archive": {
+        "file": "23c5408c1cb5658b110b291722523e6460d0727ecd09cdfd6694c2e4c27add5e.json",
+        "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "sha256": "452de94d49db43efecd18f8d8df37320572a124fd2e93d47678be59781e728f2"
+      },
+      "completion": {
+        "actions": 7,
+        "ended_by": "yield_stop"
+      },
+      "cumulative_credits": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        6
+      ],
+      "decision_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "final_stop": true,
+      "initial_cumulative_credit": 0.0,
+      "model_call_count": 7,
+      "observation_count": 7,
+      "observations": [
+        {
+          "credit": {
+            "credit": 0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "label": "tool:0",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "fitting_scope": "full_history",
+                "history_used": 1,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 1
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:0"
+          },
+          "unit_ref": {
+            "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+            "unit_id": "unit_137e5cdd0b54e5933d4d4ab07696ee946d2f111a72be8c433ba47a7aa34360cd",
+            "unit_index": 0
+          }
+        },
+        {
+          "credit": {
+            "credit": 0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "label": "tool:1",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 2,
+                "fitting_scope": "full_history",
+                "history_used": 2,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 2
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:1"
+          },
+          "unit_ref": {
+            "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+            "unit_id": "unit_770c9e5c7e291a206ac21966717c3d1169e834c80d5e72d5d5f5354660106c76",
+            "unit_index": 1
+          }
+        },
+        {
+          "credit": {
+            "credit": 0,
+            "estimation_action_index": 2
+          },
+          "decision_index": 2,
+          "label": "tool:2",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 3,
+                "fitting_scope": "full_history",
+                "history_used": 3,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 3
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:2"
+          },
+          "unit_ref": {
+            "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+            "unit_id": "unit_f849a0b9ca86d47d5d4e63edf2b5815508763d97d029fa4a5c3fcfdad4060f8f",
+            "unit_index": 2
+          }
+        },
+        {
+          "credit": {
+            "credit": 0,
+            "estimation_action_index": 3
+          },
+          "decision_index": 3,
+          "label": "tool:3",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 4,
+                "fitting_scope": "full_history",
+                "history_used": 4,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 4
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:3"
+          },
+          "unit_ref": {
+            "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+            "unit_id": "unit_3ee7eb0d30cdf279fc540d47f50f74a147d9a430721179ce052c02e50b47c9bd",
+            "unit_index": 3
+          }
+        },
+        {
+          "credit": {
+            "credit": 3,
+            "estimation_action_index": 4
+          },
+          "decision_index": 4,
+          "label": "tool:4",
+          "step": {
+            "credit": 3.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 5,
+                "fitting_scope": "full_history",
+                "history_used": 5,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 5
+            },
+            "is_root": false,
+            "marginal_credit": 3.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:4"
+          },
+          "unit_ref": {
+            "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+            "unit_id": "unit_17423c618773cbae54c263d360f92504a8cf8a9fa726d0269412ccfe5d838b0c",
+            "unit_index": 4
+          }
+        },
+        {
+          "credit": {
+            "credit": 3,
+            "estimation_action_index": 5
+          },
+          "decision_index": 5,
+          "label": "tool:5",
+          "step": {
+            "credit": 3.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 6,
+                "fitting_scope": "full_history",
+                "history_used": 6,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 6
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:5"
+          },
+          "unit_ref": {
+            "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+            "unit_id": "unit_0bcb953bbc136c26ad7e97ef6e451b27ab6ad63f23f6a9a7aa37620dca42062f",
+            "unit_index": 5
+          }
+        },
+        {
+          "credit": {
+            "credit": 6,
+            "estimation_action_index": 6,
+            "practical_completion": {
+              "assignment_sha256": "52ce1ab80fe3d88bca3e6d137040bb6e58f6a8741f99f4dfef2a57004fdf8d7f",
+              "endpoint": "completed_job_outputs",
+              "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+              "operation_key": "genome-alignment-composed-v4-1:episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da:6",
+              "receipt_sha256": "bf818bb080258a7099b50c7abcf8b3981561a6a306fdd69fcfa49e8ef8d1a746",
+              "run_id": "genome-alignment-composed-v4-1",
+              "validation_keys": [
+                "requested_service_result"
+              ],
+              "version": "practical_completion_v1"
+            }
+          },
+          "decision_index": 6,
+          "label": "tool:6",
+          "step": {
+            "credit": 6.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "stop": true
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 7,
+                "completion_action_index": 6,
+                "completion_proof": {
+                  "assignment_sha256": "52ce1ab80fe3d88bca3e6d137040bb6e58f6a8741f99f4dfef2a57004fdf8d7f",
+                  "endpoint": "completed_job_outputs",
+                  "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+                  "operation_key": "genome-alignment-composed-v4-1:episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da:6",
+                  "receipt_sha256": "bf818bb080258a7099b50c7abcf8b3981561a6a306fdd69fcfa49e8ef8d1a746",
+                  "run_id": "genome-alignment-composed-v4-1",
+                  "validation_keys": [
+                    "requested_service_result"
+                  ],
+                  "version": "practical_completion_v1"
+                },
+                "completion_unit_ref": {
+                  "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+                  "unit_id": "unit_d8262fbac1be98459e714172135ad35297dff7af7c4d6830010213a4d6730a67",
+                  "unit_index": 6
+                },
+                "fitting_scope": "verified_assignment_endpoint",
+                "history_used": 7
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 0.0,
+                "value": 0.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                "completion_proof": "practical_completion_v1",
+                "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+                "continuation": "existing_available_upper_bound_lte_configured_cost",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "raw_history": "unchanged_one_observation_per_completed_own_action",
+                "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                "version": "verified_practical_endpoint_yield_v1"
+              },
+              "turns": 7
+            },
+            "is_root": false,
+            "marginal_credit": 3.0,
+            "requests_transition": false,
+            "stop": true,
+            "unit_label": "tool:6"
+          },
+          "unit_ref": {
+            "episode_id": "episode_46f74f003af85f1801ceda183eafe99f2cc24643fa82123ab47a8a4a9ab8b6da",
+            "unit_id": "unit_d8262fbac1be98459e714172135ad35297dff7af7c4d6830010213a4d6730a67",
+            "unit_index": 6
+          }
+        }
+      ],
+      "state": "yielded"
+    },
+    "scientific_process": {
+      "action_count": 8,
+      "actual_marginal_gains": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "archive": {
+        "file": "0423413bd8419f9921ed2c20edf3a1526e0c7e69697474df1a5d81c07962c8e9.json",
+        "index_sha256": "937a8f4945f48d3e8425b93b8f01d913919bf1819d8cfbc5f8c3670939950ba7",
+        "sha256": "c2ea2b8274239231f3515edd75c58ce7a8b2c2cadd43ee523e3e25d02ec85094"
+      },
+      "completion": {
+        "actions": 8,
+        "ended_by": "yield_stop"
+      },
+      "cumulative_credits": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "decision_indices": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+      "final_expected_next_gain": {
+        "alpha": 0.05,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 2,
+        "upper": 0.07619158557694622,
+        "value": 0.012339432876807502
+      },
+      "final_stop": true,
+      "initial_cumulative_credit": 0.0,
+      "model_call_count": 9,
+      "observation_count": 8,
+      "observations": [
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 0
+          },
+          "decision_index": 0,
+          "label": "tool:0",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 1,
+                "fitting_scope": "full_history",
+                "history_used": 1,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 1
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:0"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_fd33a367ed27a924efd7a384f3144520e923b593f36d134f5f51b4c82023f88c",
+            "unit_index": 0
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 1
+          },
+          "decision_index": 1,
+          "label": "child_1",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 2,
+                "fitting_scope": "full_history",
+                "history_used": 2,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 2
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child_1"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_dfa1e434ff7e1602bc731199f005c10ec494ed94908ab44a012fc5ffbc02dc5f",
+            "unit_index": 1
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 2
+          },
+          "decision_index": 2,
+          "label": "child_2",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 3,
+                "fitting_scope": "full_history",
+                "history_used": 3,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 3
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child_2"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_b8b473e0414599fece53a5fcb76a742709c09f6f1042b5e48d9c0a86610c4ec0",
+            "unit_index": 2
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 4
+          },
+          "decision_index": 4,
+          "label": "tool:4",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 4,
+                "fitting_scope": "full_history",
+                "history_used": 4,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 4
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:4"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_6d0d226ab7bce7497023c89a82daab39cd3ff64452057523f60a7bc1bf569b72",
+            "unit_index": 3
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 5
+          },
+          "decision_index": 5,
+          "label": "tool:5",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 5,
+                "fitting_scope": "full_history",
+                "history_used": 5,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 5
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:5"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_66d32aee022160fac672aa41b2b678d9a5c3af505242173c6f90965f02e1b037",
+            "unit_index": 4
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 6
+          },
+          "decision_index": 6,
+          "label": "tool:6",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 6,
+                "fitting_scope": "full_history",
+                "history_used": 6,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 6
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:6"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_36895533cf75610eb729d51f2c525c20e56ad99e73ee2feb871b6e03fc5de9c3",
+            "unit_index": 5
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 7
+          },
+          "decision_index": 7,
+          "label": "tool:7",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 7,
+                "fitting_scope": "full_history",
+                "history_used": 7,
+                "initialization": "cold_template_prior"
+              },
+              "expected_next_gain": {
+                "alpha": -1.0,
+                "lower": -1.0,
+                "status_code": -1,
+                "uncertainty_code": -1,
+                "upper": -1.0,
+                "value": -1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 7
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "tool:7"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_c269e8a02d1371827695ac60217460e9f2e31dd830c4df999537773a6d7d9be4",
+            "unit_index": 6
+          }
+        },
+        {
+          "credit": {
+            "credit": 0.0,
+            "estimation_action_index": 8
+          },
+          "decision_index": 8,
+          "label": "tool:8",
+          "step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.1,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 0.07619158557694622,
+                "value": 0.012339432876807502
+              },
+              "stop": true
+            },
+            "estimate": {
+              "diagnostics": {
+                "completed_acquisition_turns": 8,
+                "fit_objective": 0.4025180920677681,
+                "fitting_scope": "full_history",
+                "history_used": 8,
+                "initialization": "cold_template_prior",
+                "next_gain_variance": 0.0010613409110305473,
+                "rank_decay": 0.05454795983214367,
+                "yield_intercept": -4.45857154102318
+              },
+              "expected_next_gain": {
+                "alpha": 0.05,
+                "lower": 0.0,
+                "status_code": 0,
+                "uncertainty_code": 2,
+                "upper": 0.07619158557694622,
+                "value": 0.012339432876807502
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 4,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 8
+              },
+              "provenance": {
+                "adaptations": [
+                  "Real marginal credit responses pass into the fit without integer coercion",
+                  "Completed Episode acquisitions condition on observation; no failure/usability model",
+                  "A fresh original fitter cold-fits the entire score history each turn",
+                  "Original numeric bands and delta/Laplace curvature approximation are retained",
+                  "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+                  "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval"
+                ],
+                "calibrated_confidence_interval": false,
+                "credit_input": "projected_marginal_credit",
+                "estimator": "completed_signed_score_preferential_yield_v1",
+                "limitations": [
+                  "The fractional kernel is not a continuous-response probability density",
+                  "Uncertainty assumes the working model and is not coverage calibrated",
+                  "Credit units affect effective information and must remain fixed within an Episode",
+                  "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+                  "No failed-attempt probability is estimated from completed-only acquisitions",
+                  "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
+                  "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
+                  "Gain/loss interval subtraction is not coverage calibrated; Bonferroni allocation cannot calibrate the underlying Laplace approximation"
+                ],
+                "per_episode_units": {
+                  "direct_tool": "One completed selected acquisition supplies one local observation",
+                  "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+                  "read_or_comparison": "A completed acquisition can have zero marginal credit",
+                  "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
+                  "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
+                  "shared_refresh": "Shared credit refreshes do not add action observations"
+                },
+                "source_license": "MIT; gene_annotation_episode/vendor/LICENSE.nano-graphrag",
+                "source_path": "question_pipeline/utilities/rarefaction.py",
+                "source_repository": "nano-graphrag",
+                "source_revision": "60a167f9eeda0c9ea2ca294724174948947baf3f",
+                "source_sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35",
+                "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
+                "template_estimator": "preferential_incidence_estimator_v2",
+                "turn_unit": "completed_episode_acquisition",
+                "uncertainty": "approximate_model_dependent_curvature_laplace_band",
+                "vendored_source": "gene_annotation_episode/vendor/nano_rarefaction.py"
+              },
+              "turns": 8
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": true,
+            "unit_label": "tool:8"
+          },
+          "unit_ref": {
+            "episode_id": "episode_195e7547f6bff5b480f4c511ef5321b0798fbd05b01ed946c293d858030e00d4",
+            "unit_id": "unit_b168eace42f3dc8f777d82ca3f5b87aadef6212250928fda4cb7585c404fdfef",
+            "unit_index": 7
+          }
+        }
+      ],
+      "state": "yielded"
+    }
+  },
+  "forms": {
+    "launch": {
+      "completed": true,
+      "references": [
+        "source_f0d93682dd3a2015a5a175ec"
+      ],
+      "yield": {
+        "completed_actions": 1,
+        "continuation_cost": 0.1,
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop_requested": true
+      }
+    },
+    "launch_api": {
+      "completed": true,
+      "references": [
+        "source_f0d93682dd3a2015a5a175ec"
+      ],
+      "yield": {
+        "completed_actions": 2,
+        "continuation_cost": 0.1,
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop_requested": true
+      }
+    },
+    "results": {
+      "completed": true,
+      "missing": [
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/missing",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": [
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_invocation_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_d8256cfb3bfd10ff515ccdc505e814a239e00ff7b2ebfd18880f5d2ee1100efd",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_invocation",
+              "source_refs": []
+            },
+            {
+              "kind": "output_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_native_execution_unverified",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_c9e571294de12221f40aa961e3b154f955e208374c428aca50899fb90cd45b8d",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": []
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_genome_census_unknown",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_0c4f033c0337c3ecc6079881a92fa691c47953410d518cd5828d414b9de52dd4",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_feature_map_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_447124c9a27d96a5f58c5c40fb2d28b13e9c5e151c68e582596cc78548a9cb79",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_feature_mapping",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_staged_file_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_31443213b9d918de87c49c2f4c7b0f63282ca2474f6d25551495c03752c34c5c",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "byte_version_evidence",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_artifact_version_unverified",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A73b40be1cb445b6f73fe946abda7d05f23c8ecd78609dd9be5bbc6e78cb783cf",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": [
+                "source_bda6e179deb8e0fd916ee7a6"
+              ]
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3Adab49a417fbc899e5f14f7bf6546c922433f660ceb67e60621d522061cdd0d8d",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": [
+                "source_bda6e179deb8e0fd916ee7a6"
+              ]
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A45e9c68e43edf3a91fbd108671bdcad8c457a4ee16e48e6035f67f9cedb24838",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": [
+                "source_bda6e179deb8e0fd916ee7a6"
+              ]
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A8855ba5da2d3b233380312fd17d825ca5d3a5ea39833366b8c9a55d9f72953f3",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A06a55e4edbab6e1ce7a534fe27bd313e44768ac5b8a7e0364e8f23fcdc4dbef6",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad9b37ffcc5eb4ac60dc3d228c5aa4f1515f2a180690c386af09c3488fef470e0",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A6b0288ef9f15a86f1ad123a32d4bf64da675bcabb4af8253fc9130be2547e3bb",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Aa92a71dc8786d04e0ecf3ee7ccb4be4c379681f66e9ffa553717af6f0ce169e6",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            }
+          ]
+        }
+      ],
+      "numbers": [
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/coverage",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": {
+            "document_ref": "bvbrc_genome_alignment_document:retained-v4-workflow/mauve_v4%3A3962bbdd7eb5397069e2f1816308056d7db7e3191e1138634229a92dbd9af5e0",
+            "request_ref": "bvbrc_genome_alignment_request:retained-v4-workflow/anchors",
+            "requirement_refs": [
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A8855ba5da2d3b233380312fd17d825ca5d3a5ea39833366b8c9a55d9f72953f3",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A06a55e4edbab6e1ce7a534fe27bd313e44768ac5b8a7e0364e8f23fcdc4dbef6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad9b37ffcc5eb4ac60dc3d228c5aa4f1515f2a180690c386af09c3488fef470e0",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A6b0288ef9f15a86f1ad123a32d4bf64da675bcabb4af8253fc9130be2547e3bb",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Aa92a71dc8786d04e0ecf3ee7ccb4be4c379681f66e9ffa553717af6f0ce169e6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A73b40be1cb445b6f73fe946abda7d05f23c8ecd78609dd9be5bbc6e78cb783cf"
+            ],
+            "state": "resolved",
+            "value": {
+              "denominator": 693,
+              "method_ref": "bvbrc_genome_alignment_method:retained-v4-workflow/mauve_v4_coverage_fraction_v1",
+              "numerator": 690,
+              "origin": "calculated",
+              "population_ref": "bvbrc_genome_alignment_population:retained-v4-workflow/retained-v4-all-observed-explicit-segments",
+              "requirement_refs": [
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09"
+              ],
+              "state": "available",
+              "uncertainty": null,
+              "unit": "fraction",
+              "value": 0.9956709956709957
+            }
+          }
+        },
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/zero_gaps",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": {
+            "document_ref": "bvbrc_genome_alignment_document:retained-v4-workflow/mauve_v4%3A3962bbdd7eb5397069e2f1816308056d7db7e3191e1138634229a92dbd9af5e0",
+            "request_ref": "bvbrc_genome_alignment_request:retained-v4-workflow/anchors",
+            "requirement_refs": [
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A8855ba5da2d3b233380312fd17d825ca5d3a5ea39833366b8c9a55d9f72953f3",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A06a55e4edbab6e1ce7a534fe27bd313e44768ac5b8a7e0364e8f23fcdc4dbef6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad9b37ffcc5eb4ac60dc3d228c5aa4f1515f2a180690c386af09c3488fef470e0",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A6b0288ef9f15a86f1ad123a32d4bf64da675bcabb4af8253fc9130be2547e3bb",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Aa92a71dc8786d04e0ecf3ee7ccb4be4c379681f66e9ffa553717af6f0ce169e6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A73b40be1cb445b6f73fe946abda7d05f23c8ecd78609dd9be5bbc6e78cb783cf"
+            ],
+            "state": "resolved",
+            "value": {
+              "denominator": null,
+              "method_ref": "bvbrc_genome_alignment_method:retained-v4-workflow/mauve_v4_selected_gap_count_v1",
+              "numerator": null,
+              "origin": "calculated",
+              "population_ref": "bvbrc_genome_alignment_population:retained-v4-workflow/retained-v4-all-observed-explicit-segments",
+              "requirement_refs": [
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4"
+              ],
+              "state": "available",
+              "uncertainty": null,
+              "unit": "characters",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "qualifications": [
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/qualifications",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": [
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/output_version_unproven",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/0",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/output_version_unproven",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/1",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_invocation_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/2",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_native_execution_unverified",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/3",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_genome_census_unknown",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/4",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_feature_map_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/5",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_staged_file_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/6",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_artifact_version_unverified",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/7",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/8",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/9",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/10",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/11",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/12",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/13",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/14",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/15",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/16",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/17",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/18",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/19",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/20",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/21",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/22",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/23",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/24",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/25",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/26",
+              "severity": "qualification"
+            }
+          ]
+        }
+      ],
+      "references": [
+        "source_cc9c416b3762e955e8602c2c",
+        "source_afa1b3b624205cdb2761bbd4"
+      ],
+      "yield": {
+        "completed_actions": 7,
+        "continuation_cost": 0.1,
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop_requested": true
+      }
+    },
+    "scientific_process": {
+      "missing": [
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/missing",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": [
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_invocation_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_d8256cfb3bfd10ff515ccdc505e814a239e00ff7b2ebfd18880f5d2ee1100efd",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_invocation",
+              "source_refs": []
+            },
+            {
+              "kind": "output_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_native_execution_unverified",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_c9e571294de12221f40aa961e3b154f955e208374c428aca50899fb90cd45b8d",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": []
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_genome_census_unknown",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_0c4f033c0337c3ecc6079881a92fa691c47953410d518cd5828d414b9de52dd4",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_feature_map_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_447124c9a27d96a5f58c5c40fb2d28b13e9c5e151c68e582596cc78548a9cb79",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_feature_mapping",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_staged_file_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_requirement_31443213b9d918de87c49c2f4c7b0f63282ca2474f6d25551495c03752c34c5c",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "byte_version_evidence",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_artifact_version_unverified",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A73b40be1cb445b6f73fe946abda7d05f23c8ecd78609dd9be5bbc6e78cb783cf",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": [
+                "source_bda6e179deb8e0fd916ee7a6"
+              ]
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3Adab49a417fbc899e5f14f7bf6546c922433f660ceb67e60621d522061cdd0d8d",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": [
+                "source_bda6e179deb8e0fd916ee7a6"
+              ]
+            },
+            {
+              "kind": "input_metadata",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A45e9c68e43edf3a91fbd108671bdcad8c457a4ee16e48e6035f67f9cedb24838",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_primary",
+              "source_refs": [
+                "source_bda6e179deb8e0fd916ee7a6"
+              ]
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A8855ba5da2d3b233380312fd17d825ca5d3a5ea39833366b8c9a55d9f72953f3",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A06a55e4edbab6e1ce7a534fe27bd313e44768ac5b8a7e0364e8f23fcdc4dbef6",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad9b37ffcc5eb4ac60dc3d228c5aa4f1515f2a180690c386af09c3488fef470e0",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A6b0288ef9f15a86f1ad123a32d4bf64da675bcabb4af8253fc9130be2547e3bb",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            },
+            {
+              "kind": "input_bytes",
+              "reason_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "requirement_ref": "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Aa92a71dc8786d04e0ecf3ee7ccb4be4c379681f66e9ffa553717af6f0ce169e6",
+              "role_ref": "bvbrc_genome_alignment_role:retained-v4-workflow/genome_alignment_staged_input",
+              "source_refs": []
+            }
+          ]
+        }
+      ],
+      "numbers": [
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/coverage",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": {
+            "document_ref": "bvbrc_genome_alignment_document:retained-v4-workflow/mauve_v4%3A3962bbdd7eb5397069e2f1816308056d7db7e3191e1138634229a92dbd9af5e0",
+            "request_ref": "bvbrc_genome_alignment_request:retained-v4-workflow/anchors",
+            "requirement_refs": [
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A8855ba5da2d3b233380312fd17d825ca5d3a5ea39833366b8c9a55d9f72953f3",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A06a55e4edbab6e1ce7a534fe27bd313e44768ac5b8a7e0364e8f23fcdc4dbef6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad9b37ffcc5eb4ac60dc3d228c5aa4f1515f2a180690c386af09c3488fef470e0",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A6b0288ef9f15a86f1ad123a32d4bf64da675bcabb4af8253fc9130be2547e3bb",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Aa92a71dc8786d04e0ecf3ee7ccb4be4c379681f66e9ffa553717af6f0ce169e6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A73b40be1cb445b6f73fe946abda7d05f23c8ecd78609dd9be5bbc6e78cb783cf"
+            ],
+            "state": "resolved",
+            "value": {
+              "denominator": 693,
+              "method_ref": "bvbrc_genome_alignment_method:retained-v4-workflow/mauve_v4_coverage_fraction_v1",
+              "numerator": 690,
+              "origin": "calculated",
+              "population_ref": "bvbrc_genome_alignment_population:retained-v4-workflow/retained-v4-all-observed-explicit-segments",
+              "requirement_refs": [
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09"
+              ],
+              "state": "available",
+              "uncertainty": null,
+              "unit": "fraction",
+              "value": 0.9956709956709957
+            }
+          }
+        },
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/zero_gaps",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": {
+            "document_ref": "bvbrc_genome_alignment_document:retained-v4-workflow/mauve_v4%3A3962bbdd7eb5397069e2f1816308056d7db7e3191e1138634229a92dbd9af5e0",
+            "request_ref": "bvbrc_genome_alignment_request:retained-v4-workflow/anchors",
+            "requirement_refs": [
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A8855ba5da2d3b233380312fd17d825ca5d3a5ea39833366b8c9a55d9f72953f3",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A9d3b976582b0e9078c8e5a2293308ad0d050f77040186a0574ff3d50a71ecd40",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A06a55e4edbab6e1ce7a534fe27bd313e44768ac5b8a7e0364e8f23fcdc4dbef6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ab5654c3f9bbe02b7449696206b74dfd23baa24b44f002ce08070444fdb011806",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad9b37ffcc5eb4ac60dc3d228c5aa4f1515f2a180690c386af09c3488fef470e0",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Abda02d15e5e4cfe9ebb73bb5d411e8f912dd8684317da5ea0e7c4af446402fe2",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A6b0288ef9f15a86f1ad123a32d4bf64da675bcabb4af8253fc9130be2547e3bb",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Ad209cd5e859c535d5cc96957fa12d9f43296d07b74028cdf5ccf28db2f63bf09",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3Aa92a71dc8786d04e0ecf3ee7ccb4be4c379681f66e9ffa553717af6f0ce169e6",
+              "bvbrc_genome_alignment_requirement:retained-v4-workflow/ga_association%3A73b40be1cb445b6f73fe946abda7d05f23c8ecd78609dd9be5bbc6e78cb783cf"
+            ],
+            "state": "resolved",
+            "value": {
+              "denominator": null,
+              "method_ref": "bvbrc_genome_alignment_method:retained-v4-workflow/mauve_v4_selected_gap_count_v1",
+              "numerator": null,
+              "origin": "calculated",
+              "population_ref": "bvbrc_genome_alignment_population:retained-v4-workflow/retained-v4-all-observed-explicit-segments",
+              "requirement_refs": [
+                "bvbrc_genome_alignment_requirement:retained-v4-workflow/mauve_v4_requirement%3A751f7277630d7985fb4ce25d741e9f6fda0543085273f8c5f025cac0daeafcd4"
+              ],
+              "state": "available",
+              "uncertainty": null,
+              "unit": "characters",
+              "value": 0
+            }
+          }
+        }
+      ],
+      "qualifications": [
+        {
+          "field": "bvbrc_genome_alignment_field:retained-v4-workflow/qualifications",
+          "source_ref": "source_afa1b3b624205cdb2761bbd4",
+          "value": [
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/output_version_unproven",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/0",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/output_version_unproven",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/1",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_invocation_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/2",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_native_execution_unverified",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/3",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_genome_census_unknown",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/4",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_feature_map_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/5",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_staged_file_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/6",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_artifact_version_unverified",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/7",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/8",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/bvbrc_genome_alignment_member_join_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/9",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/10",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/11",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/12",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/13",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/14",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/15",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/16",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/17",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/18",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/19",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/20",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/21",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/22",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/23",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/24",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_source_symbols_missing",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/25",
+              "severity": "qualification"
+            },
+            {
+              "code_ref": "bvbrc_genome_alignment_reason:retained-v4-workflow/mauve_v4_pair_not_coobserved",
+              "phase": "association",
+              "qualification_ref": "bvbrc_genome_alignment_qualification:retained-v4-workflow/26",
+              "severity": "qualification"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gain_source": "runtime_observations.observation.step.marginal_credit",
+  "parent_admissions": [
+    {
+      "child": "results",
+      "decision_indices": [
+        2,
+        3
+      ],
+      "original_form_equal": true,
+      "original_schema_equal": true,
+      "parent": "scientific_process",
+      "successful_attempt_count": 2
+    },
+    {
+      "child": "scientific_process",
+      "decision_indices": [
+        0
+      ],
+      "original_form_equal": true,
+      "original_schema_equal": true,
+      "parent": "annotation",
+      "successful_attempt_count": 1
+    }
+  ],
+  "table_counts": {
+    "runtime_actions": 26,
+    "runtime_model_calls": 27,
+    "runtime_observations": 26,
+    "runtime_record_receipts": 228,
+    "runtime_report_attempts": 5
+  }
+}

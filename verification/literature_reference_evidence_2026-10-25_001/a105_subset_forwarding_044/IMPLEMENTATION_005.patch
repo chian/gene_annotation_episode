@@ -1,0 +1,285 @@
+--- baseline/gene_annotation_episode/literature_rate_storage.py
++++ gene_annotation_episode/literature_rate_storage.py
+@@ -6,6 +6,8 @@
+ from __future__ import annotations
+ 
+ import json
++import hashlib
++from copy import deepcopy
+ 
+ from .communication import plain
+ from .domain import ContractError, canonical, identity
+@@ -50,6 +52,105 @@
+         store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
+             run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
+             cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
++    @property
++    def _delivery_table(self):
++        return self.received_table.removesuffix("_received") + "_delivery_bindings"
++
++    def _delivery_binding(self, context, operation_key):
++        installed = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
++            (self._delivery_table,)).fetchone()
++        return self.store.db.execute(f"SELECT cells_digest FROM {self._delivery_table} WHERE "
++            "run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id, context.episode_id, operation_key)).fetchone() if installed else None
++
++    def _install_delivery_bindings(self):
++        # New receipt state is created only inside the actual incoming receive
++        # transaction. Old authentic runtime state can remain fully read-only.
++        # Optical004 already uses this exact per-view table/digest naming.
++        self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self._delivery_table}(
++            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
++            cells_digest TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
++
++    def _delivery_digest(self, cells):
++        kind = self.received_table.removeprefix("literature_").removesuffix("_received")
++        return identity(kind + "_admitted_cells", cells)
++
++    def _runtime_delivery_cells(self, context, operation_key):
++        """Authenticate runtime admission; other keys are a trusted manual API.
++
++        A saved digest is not proof that runtime admitted the subset. Its actual
++        successful form and original child contract supply that proof. Reading
++        an old authentic runtime receipt needs no backfilled binding or history.
++        """
++        if not isinstance(operation_key, str) or not operation_key:
++            raise ContractError("operation_key_required")
++        prefix = self.run_id + ":" + context.episode_id + ":"
++        if not operation_key.startswith(prefix) and not operation_key.endswith(":typed_form"):
++            return None
++        suffix = operation_key[len(prefix):].split(":") if operation_key.startswith(prefix) else []
++        if (len(suffix) != 2 or not suffix[0].isascii() or not suffix[0].isdigit()
++                or suffix[1] != "typed_form"):
++            raise ContractError("literature_delivery_binding_mismatch")
++        try:
++            index = int(suffix[0])
++        except ValueError as error:
++            raise ContractError("literature_delivery_binding_mismatch") from error
++        if index > 2**63 - 1 or str(index) != suffix[0]:
++            raise ContractError("literature_delivery_binding_mismatch")
++        installed = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_report_attempts'").fetchone()
++        attempt = self.store.db.execute("SELECT form,contract,failure,child_episode_id,delivery_ref FROM runtime_report_attempts "
++            "WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
++            (self.run_id, context.episode_id, index)).fetchone() if installed else None
++        if attempt is None or attempt["form"] is None or attempt["failure"] is not None:
++            raise ContractError("literature_delivery_binding_mismatch")
++        try:
++            form, contract = json.loads(attempt["form"]), json.loads(attempt["contract"])
++            if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_episodes'").fetchone() is None:
++                raise ContractError("literature_delivery_binding_mismatch")
++            child = self.store.db.execute("SELECT request FROM runtime_episodes WHERE run_id=? AND episode_id=?",
++                (self.run_id, attempt["child_episode_id"])).fetchone()
++            if child is None:
++                raise ContractError("literature_delivery_binding_mismatch")
++            original_contract = json.loads(child["request"])["report_contract"]
++            if canonical(original_contract) != canonical(contract):
++                # A selected report repair can legitimately revise the form.
++                # Authenticate that actual decision and its original delivery,
++                # rather than pretending it was the child's initial contract.
++                installed_action = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_actions'").fetchone()
++                action = self.store.db.execute("SELECT action FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?",
++                    (self.run_id, context.episode_id, index)).fetchone() if installed_action else None
++                installed_decision = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_model_calls'").fetchone()
++                # Report repair runs before ActionLeaf/action publication. Read
++                # only its public selected choice, never provider history,
++                # request text, complete responses or private reasoning.
++                decision = self.store.db.execute("SELECT CASE WHEN json_valid(response) THEN response -> '$.selection' END AS selected "
++                    "FROM runtime_model_calls WHERE run_id=? AND episode_id=? AND call_index=? AND purpose='decision'",
++                    (self.run_id, context.episode_id, index)).fetchone() if installed_decision else None
++                selected = json.loads(action["action"]) if action else None
++                chosen = json.loads(decision["selected"]) if decision and decision["selected"] is not None else None
++                if selected is not None and chosen is not None and canonical(selected) != canonical(chosen):
++                    raise ContractError("literature_delivery_binding_mismatch")
++                selected = selected if selected is not None else chosen
++                if not isinstance(selected, dict):
++                    raise ContractError("literature_delivery_binding_mismatch")
++                prior = self.store.db.execute("SELECT child_episode_id,contract FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? "
++                    "AND delivery_ref=? AND decision_index<? ORDER BY decision_index LIMIT 1",
++                    (self.run_id, context.episode_id, selected.get("delivery_ref"), index)).fetchone()
++                if (selected.get("kind") != "redeliver_report" or prior is None
++                        or attempt["delivery_ref"] != selected.get("delivery_ref")
++                        or prior["child_episode_id"] != attempt["child_episode_id"]
++                        or canonical(json.loads(prior["contract"])) != canonical(original_contract)
++                        or selected.get("purpose") != contract["decision"]
++                        or canonical(json.loads(selected["schema_json"])) != canonical(contract["measurements"]["schema"])):
++                    raise ContractError("literature_delivery_binding_mismatch")
++            namespace = self.received_table.removesuffix("_received") + "_cells"
++            fields = [name for name, node in contract["measurements"]["schema"]["properties"].items()
++                if node.get("x-source") == namespace]
++            if not fields:
++                raise ContractError("literature_delivery_binding_mismatch")
++            return [row for name in fields for row in form[name]]
++        except (KeyError, TypeError, ValueError) as error:
++            raise ContractError("literature_delivery_binding_mismatch") from error
+ 
+     def populate(self, context, arguments, operation_key):
+         """Parse the exact selected retained table and save this action atomically.
+@@ -509,34 +610,120 @@
+             if canonical(row) != canonical(expected[0]):
+                 raise ContractError("literature_rate_return_differs_from_saved_cells")
+ 
++    def _sheet_owner(self, reference):
++        """Check the original selected owner, without reading scientific bytes."""
++        self.read(reference)
++        source = self.store.get(reference)
++        record = {key: value for key, value in source.items() if key not in ("id", "record_type", "origin")}
++        if identity("source", {"origin": "tool", "record": record}) != reference:
++            raise ContractError("literature_sheet_owner_mismatch")
++        request_bytes = self.store.get_artifact(source["request_ref"])
++        if "artifact_" + hashlib.sha256(request_bytes).hexdigest() != source["request_ref"]:
++            raise ContractError("literature_sheet_owner_mismatch")
++        request = json.loads(request_bytes)
++        if (request.get("run_id") != self.run_id or type(request.get("episode_id")) is not str
++                or not request["episode_id"] or type(request.get("operation_key")) is not str
++                or not request["operation_key"]):
++            raise ContractError("literature_sheet_owner_mismatch")
++        operation = self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE "
++            "run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
++        outcome = json.loads(operation["outcome"]) if operation else {}
++        if (outcome.get("status") != "completed" or outcome.get("result", {}).get("sheet_ref") != reference
++                or reference not in outcome.get("record_refs", ())
++                or outcome.get("operation_ref") != identity("operation", {"run_id": self.run_id,
++                    "episode_id": request["episode_id"], "key": request["operation_key"]})):
++            raise ContractError("literature_sheet_owner_mismatch")
++        return request["episode_id"]
++
++    def fact_cells(self, context, sheet_refs, *, components):
++        """Project owned cells or copy this receiver's exact admitted subset."""
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        # Use each view's existing complete component-selection validation.
++        self.project_cells([], permitted_record_refs=(), components=components)
++        received = None
++        result = []
++        for reference in dict.fromkeys(sheet_refs):
++            if reference not in context.received_record_refs:
++                raise ContractError("literature_sheet_not_received")
++            # Empty projection still validates exact v1/v2 view and saved sheet.
++            self.project_cells([reference], permitted_record_refs=context.received_record_refs, components=[])
++            if self._sheet_owner(reference) == context.episode_id:
++                result.extend(self.project_cells([reference], permitted_record_refs=context.received_record_refs,
++                    components=components))
++            else:
++                if received is None:
++                    received = {(row["sheet_ref"], row["component"]): row for row in self.received_cells(context)}
++                result.extend(deepcopy(received[(reference, name)]) for name in components
++                    if (reference, name) in received)
++        return result
++
++    def validate_fact_values(self, context, cells):
++        """A valid saved row must also be possessed by the reporting episode."""
++        self.validate_returned_values(cells, permitted_record_refs=context.received_record_refs)
++        if not cells:
++            return
++        expected = {(row["sheet_ref"], row["component"]): row for row in self.fact_cells(context,
++            list(dict.fromkeys(row["sheet_ref"] for row in cells)),
++            components=list(dict.fromkeys(row["component"] for row in cells)))}
++        if any(canonical(row) != canonical(expected.get((row["sheet_ref"], row["component"]))) for row in cells):
++            raise ContractError("literature_cell_not_received")
++
+     def receive_cells(self, context, cells, operation_key):
+         """Record exactly the already admitted subset, adding no observation."""
+         if context.run_id != self.run_id:
+             raise ContractError("literature_run_mismatch")
+-        self.validate_returned_values(cells,
+-            permitted_record_refs=[row["sheet_ref"] for row in cells])
+-        data = canonical(cells)
+-        old = self.store.db.execute(f"SELECT cells FROM {self.received_table} WHERE "
+-            "run_id=? AND episode_id=? AND operation_key=?",
+-            (self.run_id, context.episode_id, operation_key)).fetchone()
+-        if old is not None and old["cells"] != data:
+-            raise ContractError("literature_rate_delivery_identity_conflict")
+-        self.store.db.execute(f"INSERT OR IGNORE INTO {self.received_table} VALUES(?,?,?,?)",
+-            (self.run_id, context.episode_id, operation_key, data))
++        with self.store.transaction():
++            original = self._runtime_delivery_cells(context, operation_key)
++            if original is not None and canonical(original) != canonical(cells):
++                raise ContractError("literature_delivery_binding_mismatch")
++            self.validate_returned_values(cells,
++                permitted_record_refs=[row["sheet_ref"] for row in cells])
++            data = canonical(cells)
++            old = self.store.db.execute(f"SELECT cells FROM {self.received_table} WHERE "
++                "run_id=? AND episode_id=? AND operation_key=?",
++                (self.run_id, context.episode_id, operation_key)).fetchone()
++            if old is not None and old["cells"] != data:
++                raise ContractError("literature_rate_delivery_identity_conflict")
++            digest = self._delivery_digest(cells)
++            bound = self._delivery_binding(context, operation_key)
++            if bound is not None and bound[0] != digest:
++                raise ContractError("literature_delivery_binding_mismatch")
++            if old is not None and bound is None and original is None:
++                raise ContractError("literature_delivery_binding_unavailable")
++            if old is not None and bound is None:
++                # The original runtime form is sufficient proof. Preserve old
++                # state rather than backfilling a newly invented admission.
++                return
++            self._install_delivery_bindings()
++            self.store.db.execute(f"INSERT OR IGNORE INTO {self.received_table} VALUES(?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, data))
++            self.store.db.execute(f"INSERT OR IGNORE INTO {self._delivery_table} VALUES(?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, digest))
+ 
+     def received_cells(self, context):
+         """Forward copied admitted cells, not the complete private child sheet."""
+         if context.run_id != self.run_id:
+             raise ContractError("literature_run_mismatch")
+         result, seen = [], set()
+-        rows = self.store.db.execute(f"SELECT cells FROM {self.received_table} WHERE "
++        rows = self.store.db.execute(f"SELECT operation_key,cells FROM {self.received_table} WHERE "
+             "run_id=? AND episode_id=? ORDER BY rowid", (self.run_id, context.episode_id))
+         for saved in rows:
+-            for row in json.loads(saved["cells"]):
++            cells = json.loads(saved["cells"])
++            original = self._runtime_delivery_cells(context, saved["operation_key"])
++            bound = self._delivery_binding(context, saved["operation_key"])
++            if bound is None and original is None:
++                raise ContractError("literature_delivery_binding_unavailable")
++            if (bound is not None and bound[0] != self._delivery_digest(cells)
++                    or original is not None and canonical(original) != canonical(cells)):
++                raise ContractError("literature_delivery_binding_mismatch")
++            self.validate_returned_values(cells, permitted_record_refs=[row["sheet_ref"] for row in cells])
++            for row in cells:
+                 key = (row["sheet_ref"], row["component"])
+                 if key not in seen:
+                     seen.add(key)
+-                    result.append(row)
++                    result.append(deepcopy(row))
+         return result
+ 
+ 
+--- baseline/gene_annotation_episode/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -9,6 +9,7 @@
+ 
+ from collections.abc import Mapping
+ from copy import deepcopy
++from dataclasses import replace
+ import hashlib
+ import inspect
+ import json
+@@ -690,9 +691,7 @@
+                             continue
+                     selected.append(reference)
+             components = tuple(context.assignment.get(requested_field, defaults))
+-            result[namespace] = (adapter.fact_cells(context, selected, components=components)
+-                if namespace == "literature_optical_cells" else adapter.project_cells(selected,
+-                    permitted_record_refs=context.received_record_refs, components=components))
++            result[namespace] = adapter.fact_cells(context, selected, components=components)
+         return result
+ 
+     def received_report_sources(self, role):
+@@ -741,7 +740,11 @@
+                     if (namespace in {"literature_rate_cells", "literature_rate_source_cells"}
+                             and not rows and context.assignment.get("requested_rate_components") not in ([], ())):
+                         repository().validate_empty_return_family(context)
+-                    repository().validate_returned_values(rows, permitted_record_refs=permitted)
++                    # This hook validates the REPORTING episode (also when C4
++                    # reconstructs a child's original contract), before its
++                    # form is admitted to the distinct receiving parent.
++                    repository().validate_fact_values(replace(context,
++                        received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")

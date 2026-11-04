@@ -1,0 +1,38 @@
+{
+  "shared_routes": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_transport_inputs.py tests/test_literature_transport_calculations.py tests/test_literature_transport_storage.py tests/test_literature_transport_integration.py tests/test_literature_transport_quantity_integration.py tests/test_literature_quantity_integration.py tests/test_literature_experimental_prompt_delivery.py tests/test_literature_reference_parent_delivery.py tests/test_literature_binding_model_integration.py tests/test_literature_ratio_integration.py tests/test_literature_assay_integration.py tests/test_literature_rate_episode_integration.py",
+    "passed": 253,
+    "seconds": 281.38,
+    "execution_session": 13651,
+    "exit_code": 0
+  },
+  "final_prompt_and_descriptor_consumer": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_transport_integration.py tests/test_literature_experimental_prompt_delivery.py tests/test_literature_reference_parent_delivery.py",
+    "passed": 17,
+    "seconds": 24.14,
+    "execution_session": 40130,
+    "exit_code": 0
+  },
+  "controlled_examples": "transport_response_examples_001/EXAMPLES_RECEIPT.json",
+  "fresh_process_replay": "transport_response_examples_001/REOPEN_RECEIPT.json",
+  "counts_are_not_summed": true,
+  "goal_complete": false,
+  "actual_model_transport_inference": false,
+  "source_sha256": {
+    "gene_annotation_episode/literature_transport_inputs.py": "2e5c31ab6171fd431a3cf6277799663d5f83654213341e0f81a43937d10893e6",
+    "gene_annotation_episode/literature_transport_storage.py": "3158ef8337cf90f8f8d23d2fa28bb9a62f41a1ccf6adbe3adcea1f2b31fb02c8",
+    "gene_annotation_episode/literature_transport_prompt.py": "7c4d98513f8307bca72b416792aeb21e5f68f3b6ed982bd6f30a075fd0a4e8dc",
+    "gene_annotation_episode/literature_experimental_prompt.py": "11c7d273f1d95e1ea1de21838acad28cb4836ab1cce1753852b4e399e22aee97",
+    "gene_annotation_episode/literature_episodes.py": "6ec51a7213c770a89da4f0673bf07e97c6930ad0de5a3104a211299c8d9fca15",
+    "gene_annotation_episode/episode_services.py": "2ab8373c30f8e27aea6a9cde8218c0ca358e2e71c9833487e902b92a59d76b9e",
+    "tests/test_literature_transport_inputs.py": "f371a18991fdce2af2fb8c7a1afd46873d4b3e796c0f3d8e56ec89bb5129e270",
+    "tests/test_literature_transport_storage.py": "7d040dccce265fed3c33e6dfb858c3cddc7a908e9c5d35dced3b0569b3844a79",
+    "tests/test_literature_transport_integration.py": "28bc38935fc65c5b3cc59d9a898032acbb3e01569b020918ba81c9f77edc8bd5",
+    "verification/literature_reference_evidence_2026-10-25_001/run_transport_response_examples.py": "1a49aaf76c1781f5cf50a88cf1b83068f98b15b59d9efa541975767340cd011f"
+  },
+  "development_notes": [
+    "No root selected-transport failure in assembled checks.",
+    "Schema/fact descriptions clarified response direction without changing saved row fields or arithmetic.",
+    "Added final ordinary binding descriptor reconstruction/replay consumer after broad invocation began; covered by final17 group."
+  ]
+}

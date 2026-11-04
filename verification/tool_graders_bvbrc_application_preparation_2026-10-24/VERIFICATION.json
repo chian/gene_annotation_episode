@@ -1,0 +1,69 @@
+{
+  "schema": "bvbrc_application_preparation_verification_v1",
+  "evidence_kind": "local retained-source and synthetic validation tests",
+  "authoritative_goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "required_identities": [
+    "GenomeAssembly2",
+    "GenomeAnnotation",
+    "ComprehensiveGenomeAnalysis",
+    "Homology",
+    "Variation",
+    "TnSeq",
+    "CodonTree",
+    "GeneTree",
+    "CoreGenomeMLST",
+    "WholeGenomeSNPAnalysis",
+    "TaxonomicClassification",
+    "MetagenomeBinning",
+    "MetagenomicReadMapping",
+    "RNASeq",
+    "ViralAssembly",
+    "GenomeAlignment",
+    "SARS2Assembly",
+    "MSA",
+    "MetaCATS",
+    "GenomeComparison",
+    "ComparativeSystems",
+    "FastqUtils",
+    "InfluenzaHASubtypeConversion",
+    "SubspeciesClassification"
+  ],
+  "source_definitions": 24,
+  "synthetic_preparations_ok": 24,
+  "source_only_corrections": {
+    "CoreGenomeMLST": [
+      544,
+      839
+    ],
+    "WholeGenomeSNPAnalysis": [
+      565,
+      983,
+      1208
+    ]
+  },
+  "test_command": ".venv/bin/python -m pytest -q tests/test_bvbrc_application_definitions.py",
+  "test_result": "55 passed in 0.20s",
+  "verified": [
+    "all 24 source hashes and identity mappings",
+    "exact known byte-offset corrections",
+    "duplicate parameter declarations and duplicate JSON object members retained",
+    "pure typed preparation and no inserted defaults",
+    "exact C1 start_app2 request operands",
+    "unsupported known Subspecies modes, MSA choices and WGSNP field spellings",
+    "unknown JSON fields retained with explicit unvalidated qualifications",
+    "optional retained definition identity, byte/hash, and provenance consistency"
+  ],
+  "not_verified": [
+    "current deployed definitions",
+    "credentials and authorization",
+    "Workspace object contents and ACLs",
+    "reference/database releases and availability",
+    "native scientific job execution",
+    "native output parsing and scientific calculations for these applications",
+    "full APIServiceExecution and receiver/episode path",
+    "installed package data (root packaging handoff)"
+  ],
+  "network_calls": 0,
+  "submitted_jobs": 0,
+  "shared_files_modified": []
+}

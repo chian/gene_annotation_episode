@@ -1,0 +1,1332 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="36" skipped="0" tests="54" time="147.693" timestamp="2026-10-26T05:10:57.029243-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_actual_retained_projection_crosses_exact_form_without_new_work[consensus-selected0]" time="5.148" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_actual_retained_projection_crosses_exact_form_without_new_work[press-selected1]" time="4.394" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_actual_retained_projection_crosses_exact_form_without_new_work[binary-selected2]" time="3.112" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_reference_only_forms_do_not_grant_rows_names_digests_or_population[execution_result_refs]" time="2.792"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707357090ef0&gt;
+source = 'execution_result_refs'
+
+    @pytest.mark.parametrize('source', [GENERIC, REFERENCE_SOURCE])
+    def test_reference_only_forms_do_not_grant_rows_names_digests_or_population(saved, source):
+        schema = schema_for(source)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child, selected=selector(artifacts=[
+            {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]))
+
+../../../tests/test_native_hmmer_preparation_returns.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_reference_only_forms_do_not_grant_rows_names_digests_or_population[execution_hmmer_preparation_result_refs]" time="3.152"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d55070&gt;
+source = 'execution_hmmer_preparation_result_refs'
+
+    @pytest.mark.parametrize('source', [GENERIC, REFERENCE_SOURCE])
+    def test_reference_only_forms_do_not_grant_rows_names_digests_or_population(saved, source):
+        schema = schema_for(source)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child, selected=selector(artifacts=[
+            {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]))
+
+../../../tests/test_native_hmmer_preparation_returns.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_each_scientific_boundary_forwards_only_requested_facts[execution_hmmer_preparation_rows]" time="2.997"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d57cb0&gt;
+forward = 'execution_hmmer_preparation_rows'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+        science = saved.child(saved.root, outer, role='scientific_process')
+        inner = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        leaf = saved.child(science, inner)
+&gt;       projection, _, _ = saved.publication(leaf, selected=selector(artifacts=[
+            {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]))
+
+../../../tests/test_native_hmmer_preparation_returns.py:331: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_each_scientific_boundary_forwards_only_requested_facts[execution_hmmer_preparation_artifacts]" time="2.807"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707357092a50&gt;
+forward = 'execution_hmmer_preparation_artifacts'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+        science = saved.child(saved.root, outer, role='scientific_process')
+        inner = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        leaf = saved.child(science, inner)
+&gt;       projection, _, _ = saved.publication(leaf, selected=selector(artifacts=[
+            {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]))
+
+../../../tests/test_native_hmmer_preparation_returns.py:331: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_each_scientific_boundary_forwards_only_requested_facts[execution_hmmer_preparation_population]" time="3.884"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707357079a00&gt;
+forward = 'execution_hmmer_preparation_population'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+        science = saved.child(saved.root, outer, role='scientific_process')
+        inner = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        leaf = saved.child(science, inner)
+&gt;       projection, _, _ = saved.publication(leaf, selected=selector(artifacts=[
+            {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]))
+
+../../../tests/test_native_hmmer_preparation_returns.py:331: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_each_scientific_boundary_forwards_only_requested_facts[execution_hmmer_preparation_result_refs]" time="2.905"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707357079d60&gt;
+forward = 'execution_hmmer_preparation_result_refs'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+        science = saved.child(saved.root, outer, role='scientific_process')
+        inner = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        leaf = saved.child(science, inner)
+&gt;       projection, _, _ = saved.publication(leaf, selected=selector(artifacts=[
+            {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]))
+
+../../../tests/test_native_hmmer_preparation_returns.py:331: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_each_scientific_boundary_forwards_only_requested_facts[execution_completed]" time="2.831"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356ef9580&gt;
+forward = 'execution_completed'
+
+    @pytest.mark.parametrize('forward', [ROWS, ARTIFACTS, POPULATION, REFERENCE_SOURCE, COMPLETE])
+    def test_each_scientific_boundary_forwards_only_requested_facts(saved, forward):
+        outer = schema_for(forward)
+        science = saved.child(saved.root, outer, role='scientific_process')
+        inner = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        leaf = saved.child(science, inner)
+&gt;       projection, _, _ = saved.publication(leaf, selected=selector(artifacts=[
+            {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]))
+
+../../../tests/test_native_hmmer_preparation_returns.py:331: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_missing_record_key_is_a_returned_diagnostic_without_row_or_name_access" time="3.348"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356d255e0&gt;
+
+    def test_missing_record_key_is_a_returned_diagnostic_without_row_or_name_access(saved):
+        schema = schema_for(POPULATION)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child, selected=selector(keys=['first', 'missing-native-key']))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:351: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:91: in retained_projection
+    first = project_preparation_result(grading, selector=selection, source_ref=source, occurrences=occurrences)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_population_and_artifact_associations_survive_forwarding_and_redelivery[False]" time="4.592" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_population_and_artifact_associations_survive_forwarding_and_redelivery[True]" time="4.968" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_frozen_scientific_return_remains_original_subset_after_later_delivery" time="3.059"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073570795b0&gt;
+
+    def test_frozen_scientific_return_remains_original_subset_after_later_delivery(saved):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        science = saved.child(saved.root, schema, role='scientific_process')
+        first = saved.child(science, schema)
+&gt;       saved.publication(first)
+
+../../../tests/test_native_hmmer_preparation_returns.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_duplicate_frozen_population_rows_cannot_invent_a_second_original_fact" time="3.486"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073570af650&gt;
+
+    def test_duplicate_frozen_population_rows_cannot_invent_a_second_original_fact(saved):
+        schema = schema_for(POPULATION)
+        science = saved.child(saved.root, schema, role='scientific_process')
+        leaf = saved.child(science, schema)
+&gt;       saved.publication(leaf)
+
+../../../tests/test_native_hmmer_preparation_returns.py:414: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_sibling_or_inherited_source_possession_does_not_supply_requested_facts" time="3.214"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x70735646fe00&gt;
+
+    def test_sibling_or_inherited_source_possession_does_not_supply_requested_facts(saved):
+        schema = schema_for(*FACT_SOURCES, REFERENCE_SOURCE)
+        science = saved.child(saved.root, schema, role='scientific_process')
+        sibling = saved.child(saved.root, schema, index=1)
+&gt;       saved.publication(sibling)
+
+../../../tests/test_native_hmmer_preparation_returns.py:427: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_other_provider_generic_refs_and_unrelated_forms_remain_unhandled" time="3.046" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[quantity]" time="4.887" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[state]" time="3.633" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[name]" time="3.305" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[accession]" time="3.572" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[source]" time="3.524" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[artifact]" time="3.612" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[check_outcome]" time="2.511" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[check_occurrence]" time="2.580" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[population]" time="1.881" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[missing_key]" time="2.841" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[artifact_source]" time="2.338" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_forged_facts_reject_even_when_saved_forms_and_attempts_agree[digest]" time="2.272" /><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[False-scope]" time="1.713"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356ea52b0&gt;
+change = 'scope', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[False-assignment]" time="1.939"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d3ef60&gt;
+change = 'assignment', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[False-role]" time="1.911"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356f05d30&gt;
+change = 'role', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[False-purpose]" time="1.747"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356f040e0&gt;
+change = 'purpose', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[False-schema]" time="1.898"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073569d5970&gt;
+change = 'schema', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[False-deleted]" time="1.879"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073569d5be0&gt;
+change = 'deleted', redelivery = False
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[True-scope]" time="1.733"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356fbe390&gt;
+change = 'scope', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[True-assignment]" time="1.616"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d57050&gt;
+change = 'assignment', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[True-role]" time="1.700"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d3f4d0&gt;
+change = 'role', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[True-purpose]" time="1.683"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073570ae8a0&gt;
+change = 'purpose', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[True-schema]" time="1.713"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073570ad400&gt;
+change = 'schema', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_original_commission_is_required_for_original_and_redelivered_facts[True-deleted]" time="1.929"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073569d5970&gt;
+change = 'deleted', redelivery = True
+
+    @pytest.mark.parametrize('change', ['scope', 'assignment', 'role', 'purpose', 'schema', 'deleted'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_required_for_original_and_redelivered_facts(saved, change, redelivery):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[frozen_form]" time="1.790"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x7073569d4f50&gt;
+change = 'frozen_form'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[frozen_facts]" time="1.750"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d1a300&gt;
+change = 'frozen_facts'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[context_request]" time="1.545"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d18350&gt;
+change = 'context_request'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[closed_facts_missing]" time="2.079"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d19700&gt;
+change = 'closed_facts_missing'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[child_owner]" time="1.763"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d22c30&gt;
+change = 'child_owner'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[redelivery_identity]" time="1.567"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707378d207a0&gt;
+change = 'redelivery_identity'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[source_record]" time="2.036"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356f2c650&gt;
+change = 'source_record'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_saved_context_closure_and_underlying_port_mutations_reject[completed_action]" time="2.553"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356ea4110&gt;
+change = 'completed_action'
+
+    @pytest.mark.parametrize('change', ['frozen_form', 'frozen_facts', 'context_request', 'closed_facts_missing',
+        'child_owner', 'redelivery_identity', 'source_record', 'completed_action'])
+    def test_saved_context_closure_and_underlying_port_mutations_reject(saved, change):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:524: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias" time="1.862"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356ea6510&gt;
+
+    def test_redelivery_cannot_recover_unrequested_rows_but_preserves_reference_alias(saved):
+        schema = schema_for(GENERIC)
+        child = saved.child(saved.root, schema)
+&gt;       projection, _, _ = saved.publication(child)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:567: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_parent_child_scope_containment_and_opposite_direction_are_enforced" time="2.065"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356d02c30&gt;
+
+    def test_parent_child_scope_containment_and_opposite_direction_are_enforced(saved):
+        scope = {**saved.scope, 'segments': [{'target_ref': saved.scope['subject_refs'][0], 'start': 0, 'end': 6, 'unit': 'nt'}]}
+        schema = schema_for(ROWS)
+        science = saved.child(saved.root, schema, role='scientific_process', scope=scope)
+        valid = saved.child(science, schema, scope=scope)
+&gt;       projection, _, _ = saved.publication(valid)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_returns.py:589: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_form_schema_and_duplicate_source_fields_are_authenticated" time="2.190"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356d176e0&gt;
+
+    def test_form_schema_and_duplicate_source_fields_are_authenticated(saved):
+        schema = schema_for(ROWS, ROWS)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:604: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_reference_type_cannot_be_relabelled_by_a_supplied_port" time="2.089"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707356ea6330&gt;
+
+    def test_reference_type_cannot_be_relabelled_by_a_supplied_port(saved):
+        schema = schema_for(ROWS)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:620: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_returns" name="test_authentication_cache_lasts_only_one_synchronous_form_check" time="1.932"><failure message="gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation">saved = &lt;test_native_hmmer_preparation_returns.SavedReturns object at 0x707357092ae0&gt;
+
+    def test_authentication_cache_lasts_only_one_synchronous_form_check(saved):
+        schema = schema_for(ROWS)
+        child = saved.child(saved.root, schema)
+&gt;       saved.publication(child)
+
+../../../tests/test_native_hmmer_preparation_returns.py:632: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_returns.py:191: in publication
+    projection, grading, occurrences = retained_projection(self.store, case, source, selected)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_native_hmmer_preparation_returns.py:93: in retained_projection
+    result = project_preparation_result(grading, selector=selected, source_ref=source, occurrences=occurrences)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1489: in project_preparation_result
+    selector = validate_preparation_result_selector(selector, program=saved.program, mode=saved.mode)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:52: in wrapped
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:614: in validate_preparation_result_selector
+    _error("collection_not_in_operation")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'collection_not_in_operation'
+
+    def _error(code):
+&gt;       raise ContractError("native_hmmer_preparation_projection_" + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_collection_not_in_operation
+
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:43: ContractError</failure></testcase></testsuite></testsuites>

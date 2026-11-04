@@ -1,0 +1,90 @@
+{
+  "patch_id": "durable_independent_episode_ports_v4",
+  "upstream_revision": "7576c096c39bc6af4225d2df6e10be81b189fc60",
+  "upstream_hashes_remain_in": "SOURCE.json",
+  "license": "Original MIT license retained unchanged in LICENSE.",
+  "purpose": "Preserve the ordinary Episode loop and controlled return boundary while adding pending dispatch, collection of already closed children, restored ownership contexts and a durable process execution binding. Application commissioning, completion replay and numerical waiting behavior require separate consumer integration.",
+  "changes": [
+    {
+      "path": "episode.py",
+      "upstream_sha256": "1b5d37613b9e76530d5b6d207e4a7f0424a5cf60484bb3a7a8cef63fb8fd336d",
+      "local_sha256": "e379a669f58561894370c1e68f2e7ec0df2fdbd9ae3484b6e1c51e0b4ab066d8",
+      "details": [
+        "EpisodeUpdate retains typed delivery failures and optional admitted report; views expose only admitted reports.",
+        "ChildEpisodeUnit catches explicitly typed ReportDeliveryError after independent credit projection, retaining child trace/result.",
+        "The shared Episode loop processes ReportRedelivery without controller advancement and updates the existing child edge with delivery history/revised contract.",
+        "Frame reconstruction is unchanged: opaque recorded payloads remain exactly compared; application journal tests reconstruct saved communication events.",
+        "Redelivery retains original child/result audit exclusions and final model-input checks; ordinary source adapters preserve administrative events. Single-unit experimental stepping cannot repair a prior trace it does not retain.",
+        "ChildEpisodeUnit.start_async commissions a child in an isolated Context stack with immutable parent/child goal ownership. Blocking and independent async returns use one projection/admission helper; no controller formula or completion observation is added at dispatch.",
+        "DeferredUnit returns PendingAction without advancing the controller or invoking the completed-unit hook.",
+        "ClosedChildUnit collects existing closed work through the original typed return boundary without rerunning a child source.",
+        "Context.from_commission restores the original parent goal/path boundary without a live parent stack."
+      ]
+    },
+    {
+      "path": "__init__.py",
+      "upstream_sha256": "15329d32cc2ae6160c2d292d6dd7f9f727b2a3a382e05eef51b45b7ccc3599a9",
+      "local_sha256": "26c578540bba572ab67fec9981754525067e9717b70fb040ed193ab9c1e6166d",
+      "details": [
+        "Export ReportDeliveryError and ReportRedelivery public composition types.",
+        "Export IndependentChild for explicit execution/collection composition.",
+        "Export PendingAction, DeferredUnit and ClosedChildUnit as public shared-loop ports."
+      ]
+    },
+    {
+      "path": "archive.py",
+      "upstream_sha256": "776caa19fc335d71f9731a2f4e6b948cf0bca236bf0255fa8b7995284ebd54b6",
+      "local_sha256": "e28c18b01dd0f7e0d11f9c413442f71a412264066de349b19f73394f718cc5a6",
+      "details": [
+        "Address each stored JSON value by its canonical content and byte-offset index hashes rather than a fresh UUID.",
+        "Repeated child closure, parent archival and resumed reconstruction reuse the same file addresses.",
+        "Serialization remains bounded in memory; existing atomic publication and ArchivedRecord integrity checks remain; no score, observation, communication form or continuation rule changes."
+      ]
+    },
+    {
+      "path": "independent.py",
+      "upstream_sha256": null,
+      "local_sha256": "0b2cd709cfba7cba98e4ecf4f6b288de465e1961c20ae73cdb787af42138ecd4",
+      "details": [
+        "New in-process execution primitive: existing Episode.run_async and local controllers; parent-owned exactly-once collection; cancellation shielding; optional completed trace/result archival. Does not claim durable process execution or application commissioning integration.",
+        "Closing an owner releases its pending result-projection closures without cancelling children; successful receipt likewise releases no-longer-needed closures. Focused weak-reference tests cover both closed child and closed parent sources."
+      ]
+    },
+    {
+      "path": "durable.py",
+      "upstream_sha256": null,
+      "local_sha256": "5f99292dbda5d770b0b440359880bdeb2e86cddefedca2872e87408b885454c7",
+      "details": [
+        "Persist immutable versioned commissions, single claimed process identities, typed returns, acknowledgments and exposed progress events.",
+        "Spawn detached workers and recover existing identities without automatic work retry; public status does not load child archives.",
+        "Race-free selected-event waiting uses durable cursors and Linux notifications, without a polling cadence or scientific scheduler."
+      ]
+    },
+    {
+      "path": "durable_worker.py",
+      "upstream_sha256": null,
+      "local_sha256": "fb3cfc5df0f4ecda40d56b99ddd18375bfeeb8ee80b7cbd124ce697252b602d4",
+      "details": [
+        "Reconstruct exactly one selected child through the caller factory and run its ordinary Episode/controller.",
+        "Archive closure and preserve structured failed/interrupted outcomes and committed partial references; no report composer.",
+        "Retain interrupted outcome when the caller binding surfaces interrupted_execution with preserved partial records."
+      ]
+    }
+  ],
+  "verification": [
+    "tests/test_runtime.py::test_failed_child_delivery_parent_repairs_without_new_science_or_yield",
+    "tests/test_runtime.py::test_report_repair_resume_preserves_child_science_and_observations",
+    "tests/test_runtime.py::test_numerical_yield_with_pending_delivery_is_explicit",
+    "tests/test_runtime.py::test_shared_kernel_sync_delivery_repair_preserves_declarative_child_trace",
+    "tests/test_runtime.py::test_resume_reuses_closed_child_archives_without_duplicate_files",
+    "tests/test_independent_episode.py (seven focused synthetic-runtime checks)",
+    "tests/test_deferred_episode.py",
+    "tests/test_durable_episode.py",
+    "tests/test_episode_admission.py",
+    "tests/test_episode_completion.py"
+  ],
+  "previous_patch_ids": [
+    "controlled_report_delivery_and_archive_recovery_v2",
+    "independent_child_execution_foundation_v3"
+  ]
+}

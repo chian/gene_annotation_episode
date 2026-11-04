@@ -1,0 +1,31 @@
+{
+  "source_database": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/temporary/pytest/test_constructor_iteration_pre0/state/state.sqlite3",
+  "inspection": "Root-requested SELECT-only stdlib sqlite3 mode=ro/query_only inspection; 3 rows per table and feedback clipped to 3000 characters; no app imports/replay.",
+  "episodes": [
+    {
+      "episode_id": "episode_09679049dd796ce4a8747e4189a72da97ff779ea8cc4cbff7f7c81a8c54fcf8f",
+      "path": "[[\"annotation\",\"root\"]]",
+      "state": "active",
+      "completion": null
+    }
+  ],
+  "calls": [
+    {
+      "call_index": 0,
+      "kind": "episode_child",
+      "selection_version": "scientific_process_selection_v2",
+      "feedback": null,
+      "requested_form_type": "null"
+    },
+    {
+      "call_index": 1,
+      "kind": null,
+      "selection_version": null,
+      "feedback": "{\"category\":\"action_contract\",\"detail\":{\"code\":\"schema_validation\",\"issues\":[{\"expected\":\"scientific_process_selection_v3\",\"path\":[\"assignment\",\"selection\",\"version\"],\"rule\":\"const\"},{\"expected\":[\"version\",\"evidence_axis\",\"thought_pattern\",\"child_tool_info\"],\"path\":[\"assignment\",\"selection\"],\"rule\":\"required\"},{\"expected\":[\"version\",\"evidence_axis\",\"thought_pattern\",\"child_tool_info\"],\"path\":[\"assignment\",\"selection\"],\"rule\":\"required\"},{\"expected\":[\"version\",\"evidence_axis\",\"thought_pattern\",\"child_tool_info\"],\"path\":[\"assignment\",\"selection\"],\"rule\":\"required\"},{\"expected\":false,\"path\":[\"assignment\",\"selection\"],\"rule\":\"additionalProperties\"}],\"more_issues\":false},\"status\":\"invalid\"}",
+      "requested_form_type": "null"
+    }
+  ],
+  "finding": "The existing runtime fixture also selects legacy v2 against the current v3 child schema. Its next callback is invoked at the root with requested_form null because the commission was rejected before creating a child.",
+  "production_changed": false,
+  "existing_test_changed": false
+}

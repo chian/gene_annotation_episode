@@ -1,0 +1,28 @@
+......................F
+=================================== FAILURES ===================================
+_ test_original_commission_is_checked_on_delivery_and_redelivery[False-scope] __
+
+saved = <test_native_infernal_returns.SavedReturns object at 0x74a3f62ed280>
+alteration = 'scope', redelivery = False
+
+    @pytest.mark.parametrize('alteration', ['scope', 'assignment', 'role', 'purpose', 'schema'])
+    @pytest.mark.parametrize('redelivery', [False, True])
+    def test_original_commission_is_checked_on_delivery_and_redelivery(saved, alteration, redelivery):
+        schema = schema_for(GENERIC_REFS)
+        child = saved.child(saved.root, schema)
+        saved.publication(child)
+        form = saved.returned(saved.root, child)
+        index = 0
+        if redelivery:
+            schema = schema_for(REFERENCE_SOURCE)
+            form = saved.redeliver(saved.root, child, schema)
+            index = 1
+>       action = json.loads(saved.journal.row('runtime_actions', saved.root.episode_id, decision_index=0)['action'])
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: Journal.row() got an unexpected keyword argument 'decision_index'
+
+../../../tests/test_native_infernal_returns.py:344: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_returns.py::test_original_commission_is_checked_on_delivery_and_redelivery[False-scope]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 22 passed in 38.76s

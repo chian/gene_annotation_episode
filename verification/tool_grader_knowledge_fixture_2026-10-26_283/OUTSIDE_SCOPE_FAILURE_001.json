@@ -1,0 +1,169 @@
+{
+  "episode_paths": [
+    [
+      [
+        "annotation",
+        "root"
+      ]
+    ]
+  ],
+  "action_count": 0,
+  "calls": [
+    {
+      "episode_id": "episode_c47ace84c02151b646e9d98e0bec70c118516cba98f2647ea95aa7beb011bfba",
+      "call_index": 0,
+      "feedback": null,
+      "response": {
+        "report_update": {},
+        "selection": {
+          "assignment": {
+            "constraints": {},
+            "context": {},
+            "evidence_refs": [
+              "input_e972ff09692bbc2d15e3d3e8"
+            ],
+            "selection": {
+              "annotation_ref": {
+                "entry_sha256": "8f31cfb6f7b53ad5732e0e5014ecb7c688b3399d2a4526c82464837b6e2c2571",
+                "library_id": "5dd5073c68e7c1de9ab700662761136c9433e59be4c964a162f38f0566b9cc11",
+                "option_id": "A01",
+                "slot": "annotation_distinction",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "thought_ref": {
+                "entry_sha256": "a2a850600e73ee43469ed9bd7e8c744a6ac6e159ae9751ea4b19ae670c2db299",
+                "library_id": "5dd5073c68e7c1de9ab700662761136c9433e59be4c964a162f38f0566b9cc11",
+                "option_id": "P01",
+                "slot": "thought_pattern",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "tools": [
+                "sequence.translate"
+              ],
+              "version": "scientific_process_selection_v2"
+            }
+          },
+          "goal": "Derive the assigned synthetic coding sequence and inspect its molecular mapping",
+          "initial_report_json": "{\"products\":[],\"observations\":[]}",
+          "kind": "episode_child",
+          "purpose": "Return only the derived protein and mapping observation",
+          "role": "scientific_process",
+          "schema_json": "{\"type\": \"object\", \"additionalProperties\": false, \"required\": [\"products\", \"observations\"], \"properties\": {\"products\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"product\"}}, \"observations\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"observation\"}}}}",
+          "scope": {
+            "subject_refs": [
+              "input_e972ff09692bbc2d15e3d3e8"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "episode_id": "episode_c47ace84c02151b646e9d98e0bec70c118516cba98f2647ea95aa7beb011bfba",
+      "call_index": 1,
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "expected": "scientific_process_selection_v3",
+              "path": [
+                "assignment",
+                "selection",
+                "version"
+              ],
+              "rule": "const"
+            },
+            {
+              "expected": [
+                "version",
+                "evidence_axis",
+                "thought_pattern",
+                "child_tool_info"
+              ],
+              "path": [
+                "assignment",
+                "selection"
+              ],
+              "rule": "required"
+            },
+            {
+              "expected": [
+                "version",
+                "evidence_axis",
+                "thought_pattern",
+                "child_tool_info"
+              ],
+              "path": [
+                "assignment",
+                "selection"
+              ],
+              "rule": "required"
+            },
+            {
+              "expected": [
+                "version",
+                "evidence_axis",
+                "thought_pattern",
+                "child_tool_info"
+              ],
+              "path": [
+                "assignment",
+                "selection"
+              ],
+              "rule": "required"
+            },
+            {
+              "expected": false,
+              "path": [
+                "assignment",
+                "selection"
+              ],
+              "rule": "additionalProperties"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "response": {
+        "report_update": {
+          "observations": [],
+          "products": []
+        },
+        "selection": {
+          "arguments": {
+            "cds": true,
+            "code": 11,
+            "end": 9,
+            "frame": 0,
+            "start": 0,
+            "strand": "+",
+            "subject_ref": "input_e972ff09692bbc2d15e3d3e8"
+          },
+          "kind": "tool",
+          "tool": "sequence.translate"
+        }
+      }
+    },
+    {
+      "episode_id": "episode_c47ace84c02151b646e9d98e0bec70c118516cba98f2647ea95aa7beb011bfba",
+      "call_index": 2,
+      "feedback": {
+        "category": "action_contract",
+        "detail": {
+          "code": "schema_validation",
+          "issues": [
+            {
+              "path": [],
+              "rule": "anyOf"
+            }
+          ],
+          "more_issues": false
+        },
+        "status": "invalid"
+      },
+      "response": null
+    }
+  ]
+}

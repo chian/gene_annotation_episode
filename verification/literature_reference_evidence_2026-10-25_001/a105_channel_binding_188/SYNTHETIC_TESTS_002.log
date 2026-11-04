@@ -1,0 +1,22 @@
+
+==================================== ERRORS ====================================
+________ ERROR collecting tests/test_literature_channel_binding_188.py _________
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/tests/test_literature_channel_binding_188.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_channel_binding_188.py:22: in <module>
+    from gene_annotation_episode.state import Store
+gene_annotation_episode/state.py:20: in <module>
+    from . import materials
+gene_annotation_episode/materials.py:20: in <module>
+    from .material_parsing import FORMATS, VERSION, recognize, records
+gene_annotation_episode/material_parsing.py:6: in <module>
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'
+=========================== short test summary info ============================
+ERROR tests/test_literature_channel_binding_188.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 2.44s

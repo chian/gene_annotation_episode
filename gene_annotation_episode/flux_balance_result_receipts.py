@@ -35,7 +35,9 @@ from .progress_records import validate_resource_observation
 VERSION = 'native_flux_balance_acquired_result_v1'
 PUBLIC_VERSION = 'flux_balance_public_result_v1'
 _READING = ContextVar('flux_balance_reading', default=())
-FACT_SOURCES = tuple(fba_fact_sources())
+# This versioned Results receipt retains its original three-field contract.
+# Ordinary action declarations may add sources without changing old receipts.
+FACT_SOURCES = ('flux_balance_measurements', 'flux_balance_saved_sheets', 'flux_balance_failures')
 PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE = FACT_SOURCES
 
 def require(condition, code='fba_result_authority_conflict'):

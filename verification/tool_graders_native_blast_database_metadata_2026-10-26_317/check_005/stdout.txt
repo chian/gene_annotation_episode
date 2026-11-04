@@ -1,0 +1,41 @@
+...................................F....                                 [100%]
+=================================== FAILURES ===================================
+_____ test_target_contexts_follow_exact_search_and_never_a_global_fallback _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_metadata_2026-10-26_317/check_005/pytest-of-chia/pytest-0/test_target_contexts_follow_ex0')
+
+    def test_target_contexts_follow_exact_search_and_never_a_global_fallback(tmp_path):
+        first = document(search=native_search(query_len=12, hits=native_search()["hits"][:1]))
+        first["BlastOutput2"][0]["report"]["search_target"]["db"] = "target"
+        report = dict(BlastOutput2=[first["BlastOutput2"][0], deepcopy(first["BlastOutput2"][0])])
+        job, bundle, catalog, _ = fixture(tmp_path, report=report)
+        payload = sequence_payload(tmp_path, catalog)
+        for key in ("reference_metadata", "description_bindings", "sequence_identity_bindings", "sequence_proofs"):
+            payload["searches"][0][key] = payload["searches"][0][key][:1]
+        second = deepcopy(payload["searches"][0])
+        second_address = dict(address(), report_index=1, search_pointer="/BlastOutput2/1/report/results/search")
+        second["search_key"] = second_address
+        for key in ("description_bindings", "sequence_identity_bindings"):
+            second[key][0]["search_key"] = deepcopy(second_address)
+            second[key][0]["binding"]["report_index"] = 1
+        payload["searches"].append(second)
+        seq = metadata(tmp_path, catalog, "sequence_database", payload, "sequence_metadata")
+        query_payload = empty_payload("query_identity")
+        query_payload["documents"] = payload["documents"]
+        query_payload["target_contexts"] = [dict(search_key=key, taxid=taxid, lineage=[dict(taxid=taxid, rank="genus", name=None)],
+            independent_of_search=True, source=dict(source_ref="facts", pointer="")) for key, taxid in ((address(), 1), (second_address, 2))]
+        query = metadata(tmp_path, catalog, "query_identity", query_payload, "query_metadata")
+        sheets = populate(prepared(job, bundle, catalog, [seq, query]), catalog)
+        iteration = sheets["iteration"]
+        assert iteration["target_context"] is None
+        assert [r["target_context"]["taxid"] for r in iteration["target_contexts"]] == [1, 2]
+        assert all(r["target_context"]["query_operand"] == iteration["query_bindings"][i]["query_binding"]["operand"] for i, r in enumerate(iteration["target_contexts"]))
+        calculated = calculate_blast_iteration_components(iteration)
+>       assert [r["sequence_components"]["components"]["database_sheet"]["taxonomy"]["ranks"]["genus"]["target_matching_fraction"] for r in calculated["searches"]] == [1, 0]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: list indices must be integers or slices, not str
+
+../../../tests/test_native_blast_database_metadata.py:638: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_metadata.py::test_target_contexts_follow_exact_search_and_never_a_global_fallback
+1 failed, 39 passed in 0.82s

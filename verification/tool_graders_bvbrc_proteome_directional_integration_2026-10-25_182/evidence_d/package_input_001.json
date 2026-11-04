@@ -1,0 +1,115 @@
+{
+  "bundle": {
+    "version": "bvbrc_appservice_artifact_bundle_v1",
+    "original_task": {
+      "resource_id": "synthetic-api",
+      "task_id": "synthetic-task",
+      "required_application_id": "GenomeComparison",
+      "native_application_id": "GenomeComparison",
+      "submitted_parameters": {
+        "genome_ids": [],
+        "user_genomes": [
+          "/unused.faa",
+          "/ref.faa",
+          "/subject.faa"
+        ],
+        "user_feature_groups": [],
+        "reference_genome_index": 2
+      },
+      "submitted_start_parameters": {},
+      "scheduler_returned_parameters": null,
+      "effective_parameters": null,
+      "submission_receipt_ref": "synthetic-receipt",
+      "submission_operation_key": "synthetic-operation",
+      "submission_source_ref": "synthetic-original-parameters"
+    },
+    "artifacts": [
+      {
+        "role": "proteome_directional_report",
+        "source_ref": "directional",
+        "raw_artifact_ref": "directional",
+        "sha256": "e8bcff01bf827d936c36f00e4bbb73f2b5b1dd99b4d37af4cb9a6b0de44e25f8",
+        "byte_count": 12858,
+        "workspace_object": {
+          "path": "/synthetic/directional",
+          "uuid": "uuid-directional",
+          "type": "json",
+          "metadata_receipt_ref": "metadata-directional"
+        },
+        "task_association": {
+          "kind": "task_result_manifest",
+          "evidence_ref": "synthetic-manifest",
+          "pointer": "/output_files/0",
+          "task_id": "synthetic-task",
+          "output_path": "/synthetic/directional",
+          "output_uuid": "uuid-directional",
+          "byte_version_status": "unknown",
+          "version_evidence": []
+        },
+        "transfer": {
+          "receipt_ref": "receipt-directional",
+          "body_complete": true,
+          "requested_range": null,
+          "observed_range": null,
+          "total_size": 12858,
+          "object_complete": "yes"
+        },
+        "declared_format": {
+          "format": "ncbi_blastall_blastp_pairwise_text_v1",
+          "version": "2.2.21",
+          "mode": "protein_database_search_pairwise_display",
+          "producer_source_ref": null,
+          "transformation_evidence": []
+        },
+        "requirement_ids": [
+          "directional"
+        ]
+      }
+    ],
+    "input_bindings": [],
+    "query_bindings": [],
+    "supplied_scientific_metadata": [],
+    "supplied_contents": [],
+    "acquisition_receipt_refs": [
+      "receipt-directional"
+    ],
+    "requested_selector_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "status": "ok",
+    "missing_requirements": [],
+    "diagnostics": []
+  },
+  "supplied_values": [],
+  "parameters": {
+    "version": "bvbrc_proteome_bundle_parameters_v2",
+    "analysis_id": "package_example",
+    "native_documents": [],
+    "primary_document_id": null,
+    "supplied_data_evidence": null,
+    "calculation_parameters": null,
+    "directional_documents": [
+      {
+        "document_id": "retained_2221",
+        "report_key": "retained_2221",
+        "role": "proteome_directional_report",
+        "declared_format": {
+          "format": "ncbi_blastall_blastp_pairwise_text_v1",
+          "version": "2.2.21",
+          "mode": "protein_database_search_pairwise_display",
+          "producer_source_ref": null,
+          "transformation_evidence": []
+        },
+        "requirement_id": "directional"
+      }
+    ],
+    "directional_calculation_parameters": {
+      "version": "bvbrc_proteome_directional_parameters_v1",
+      "formula_version": "displayed_blastp_correspondence_v1",
+      "amino_acid_alphabet": "standard20",
+      "ratio_decimal_places": 18,
+      "rounding": "half_even"
+    }
+  },
+  "artifact_files": {
+    "directional": "retained_2221.txt"
+  }
+}

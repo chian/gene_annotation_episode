@@ -1,0 +1,140 @@
+{
+  "hit": {
+    "hit_id": "[\"cmscan_native_fmt2\",0,3]",
+    "locator": {
+      "artifact_id": "cmscan_native_fmt2",
+      "artifact_index": 0,
+      "line": 3
+    },
+    "sequence": {
+      "name": "native_forward",
+      "accession": null,
+      "native_role": "query",
+      "input_record_occurrence": null,
+      "metadata_join": {
+        "status": "matched",
+        "metadata_index": 0,
+        "candidate_indices": [
+          0
+        ],
+        "rejected_identity_indices": [],
+        "unresolved_occurrence_indices": []
+      },
+      "identity": {
+        "kind": "supplied_sequence_metadata",
+        "metadata_index": 0
+      }
+    },
+    "model": {
+      "name": "tRNA5",
+      "accession": null,
+      "native_role": "target",
+      "input_record_occurrence": null,
+      "metadata_join": {
+        "status": "matched",
+        "metadata_index": 0,
+        "candidate_indices": [
+          0
+        ],
+        "rejected_identity_indices": [],
+        "unresolved_occurrence_indices": []
+      }
+    },
+    "algorithm": "cm",
+    "strand": "+",
+    "inclusion": "?",
+    "selected_for_aggregate": true,
+    "components": {
+      "bitscore": 71.4,
+      "evalue": 6.7e-23,
+      "bias_bits": 0.0,
+      "gc_fraction": 0.5,
+      "model_span_length": 72,
+      "model_span_fraction": 1.0,
+      "sequence_span_length": 72,
+      "sequence_span_fraction": 1.0
+    },
+    "population_complete": true,
+    "denominators": {
+      "consensus_length": 72,
+      "sequence_length": 72
+    },
+    "model_interval": [
+      0,
+      72
+    ],
+    "sequence_interval": [
+      0,
+      72
+    ],
+    "unavailable_components": [],
+    "status": "available",
+    "issues": []
+  },
+  "aggregate": {
+    "aggregate_id": "[{\"kind\":\"supplied_sequence_metadata\",\"metadata_index\":2},\"+\",\"reported\"]",
+    "sequence_identity": {
+      "kind": "supplied_sequence_metadata",
+      "metadata_index": 2
+    },
+    "sequence_names": [
+      "native_repeat"
+    ],
+    "strand": "+",
+    "hit_scope": "reported",
+    "hit_count": 4,
+    "hit_ids": [
+      "[\"cmscan_native_fmt2\",0,7]",
+      "[\"cmscan_native_fmt2\",0,8]",
+      "[\"cmscan_native_fmt2\",0,9]",
+      "[\"cmscan_native_fmt2\",0,10]"
+    ],
+    "unselected_hit_count": 0,
+    "unknown_selection_count": 0,
+    "invalid_geometry_count": 0,
+    "union_intervals": [
+      [
+        0,
+        72
+      ],
+      [
+        122,
+        194
+      ]
+    ],
+    "union_numerator": 144,
+    "union_denominator": 194,
+    "union_span_fraction": 0.7422680412371134,
+    "complete_for_selected_population": true,
+    "identical_interval_memberships": [
+      [
+        "[\"cmscan_native_fmt2\",0,7]",
+        "[\"cmscan_native_fmt2\",0,9]"
+      ],
+      [
+        "[\"cmscan_native_fmt2\",0,8]",
+        "[\"cmscan_native_fmt2\",0,10]"
+      ]
+    ],
+    "duplicate_representation_memberships": [],
+    "overlap_memberships": [
+      {
+        "hit_ids": [
+          "[\"cmscan_native_fmt2\",0,7]",
+          "[\"cmscan_native_fmt2\",0,9]"
+        ],
+        "overlap_length": 72
+      },
+      {
+        "hit_ids": [
+          "[\"cmscan_native_fmt2\",0,8]",
+          "[\"cmscan_native_fmt2\",0,10]"
+        ],
+        "overlap_length": 72
+      }
+    ],
+    "status": "available",
+    "issues": [],
+    "meaning": "union of reported coordinate spans on one resolved physical sequence and strand; not paired coverage or independent evidence"
+  }
+}

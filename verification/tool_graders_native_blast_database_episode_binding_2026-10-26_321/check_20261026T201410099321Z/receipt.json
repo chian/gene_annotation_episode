@@ -1,0 +1,75 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_results.py::test_complete_biological_identity_is_required_without_losing_native_rows",
+    "/home/chia/repos/gene_annotation_episode/tests/test_practical_pbs_operations.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_execution_progress.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_execution_episodes_family.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_execution_binding_runtime.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_execution_tool_contract_declarations.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_practical_receipt_information.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_practical_execution_state.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_practical_yield.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_state.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_evidence_axis_contracts.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_numeric_bounds.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_blast_result_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_infernal_result_presentation.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_alignment_site_action_records.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_alignment_site_publication.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_alignment_site_returns.py",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp"
+  ],
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 782.397830519,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 1,
+    "observed_scratch_bytes": 116482048,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "SERVICE_RESULT": "exit-code",
+      "ended": {
+        "at": "2026-10-26T20:27:12.794910+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 859994492236560
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 1,
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/stderr.txt",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/stdout.txt"
+}

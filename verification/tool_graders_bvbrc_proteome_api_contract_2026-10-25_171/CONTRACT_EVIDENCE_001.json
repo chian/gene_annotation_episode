@@ -1,0 +1,1410 @@
+{
+  "version": "proteome_api_planning_evidence_v1",
+  "purpose": "read-only current-code and actual saved-synthetic-output verification; no provider implemented",
+  "authority_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "objective_and_all_16_principles_reread_after_study": true,
+  "fixtures_origin": "constructed_synthetic_inputs_real_A_B1_B2_B3_B4_no_live_service_or_episode",
+  "validated_existing_contracts": [
+    "NativeProjection",
+    "InputIndex",
+    "ProteinInventory",
+    "FeatureSnapshot",
+    "GenomeSnapshot",
+    "FeatureSequenceSnapshot",
+    "NativeJoinsResult",
+    "NativeSheetResult",
+    "NativeComponentsResult",
+    "NativeComponentsResult"
+  ],
+  "saved_recalculation_equal": true,
+  "changed_parameter_recalculation_equal": true,
+  "saved_sheet_unchanged": true,
+  "sources_unchanged_during_evidence_check": true,
+  "actual_output_projection": {
+    "source_scope": "complete_document",
+    "track_key": "comp_genome_2",
+    "identity_mean": {
+      "state": "value",
+      "value": 0.4375,
+      "reason_codes": [],
+      "source_fields": [
+        {
+          "source_ref": "synthetic-native",
+          "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+          "pointer": "/feature_matches/0/comp_genome_2_percent_identity",
+          "row_ordinal": 0,
+          "field_name": "comp_genome_2_percent_identity"
+        },
+        {
+          "source_ref": "synthetic-native",
+          "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+          "pointer": "/feature_matches/1/comp_genome_2_percent_identity",
+          "row_ordinal": 1,
+          "field_name": "comp_genome_2_percent_identity"
+        }
+      ]
+    },
+    "identity_membership": [
+      "comp_genome_2/row/0",
+      "comp_genome_2/row/1"
+    ],
+    "subject_endpoint_mean": {
+      "state": "value",
+      "value": 0.625,
+      "reason_codes": [],
+      "source_fields": [
+        {
+          "source_ref": "synthetic-native",
+          "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+          "pointer": "/feature_matches/0/comp_genome_2_seq_coverage",
+          "row_ordinal": 0,
+          "field_name": "comp_genome_2_seq_coverage"
+        },
+        {
+          "source_ref": "synthetic-native",
+          "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+          "pointer": "/feature_matches/1/comp_genome_2_seq_coverage",
+          "row_ordinal": 1,
+          "field_name": "comp_genome_2_seq_coverage"
+        }
+      ]
+    },
+    "selection_counts": {
+      "pass": {
+        "state": "value",
+        "value": 1,
+        "reason_codes": [],
+        "source_fields": []
+      },
+      "fail": {
+        "state": "value",
+        "value": 1,
+        "reason_codes": [],
+        "source_fields": []
+      },
+      "unknown": {
+        "state": "value",
+        "value": 0,
+        "reason_codes": [],
+        "source_fields": []
+      }
+    },
+    "changed_parameter_selection_counts": {
+      "pass": {
+        "state": "value",
+        "value": 0,
+        "reason_codes": [],
+        "source_fields": []
+      },
+      "fail": {
+        "state": "value",
+        "value": 2,
+        "reason_codes": [],
+        "source_fields": []
+      },
+      "unknown": {
+        "state": "value",
+        "value": 0,
+        "reason_codes": [],
+        "source_fields": []
+      }
+    },
+    "executed_reference_denominator": {
+      "state": "missing_input",
+      "value": null,
+      "reason_codes": [
+        "exact_executed_input_missing"
+      ],
+      "source_fields": [
+        {
+          "source_ref": "synthetic-original-parameters",
+          "sha256": "7b7bce0eef3acca79d170831ba70b084ee83eaf7cc84ebc345367264558f759f",
+          "pointer": "/parameters/user_genomes/1",
+          "row_ordinal": 1,
+          "field_name": "user_genomes"
+        }
+      ]
+    },
+    "sheet_sha256": "faa32801f3df2061213c22b998de63540f967de5e2428fa0fe2a494093e02eb0",
+    "recalculated_sheet_sha256": "faa32801f3df2061213c22b998de63540f967de5e2428fa0fe2a494093e02eb0"
+  },
+  "actual_public_signatures": {
+    "bvbrc_proteome_native.py": {
+      "parse_genome_comparison": {
+        "line": 429,
+        "arguments": "content: bytes, *, source: dict, declared_format: str, source_contract: dict"
+      }
+    },
+    "bvbrc_proteome_inputs.py": {
+      "read_protein_fasta": {
+        "line": 111,
+        "arguments": "content: bytes, *, source: dict, declared_format: str, inventory_key: str"
+      },
+      "read_feature_metadata": {
+        "line": 464,
+        "arguments": "content: bytes, *, source: dict, declared_format: str, snapshot_key: str, population: dict, coordinate_convention: dict"
+      },
+      "read_genome_metadata": {
+        "line": 471,
+        "arguments": "content: bytes, *, source: dict, declared_format: str, snapshot_key: str, population: dict"
+      },
+      "read_feature_sequences": {
+        "line": 478,
+        "arguments": "content: bytes, *, source: dict, declared_format: str, snapshot_key: str, population: dict"
+      },
+      "index_original_inputs": {
+        "line": 503,
+        "arguments": "original_task: dict, *, parameter_source: dict, source_contract: dict, additional_parameter_sources: list[dict] | None=None"
+      }
+    },
+    "bvbrc_proteome_joins.py": {
+      "build_native_joins": {
+        "line": 391,
+        "arguments": "native: dict, *, input_index: dict | None, inventories: list[dict], feature_snapshots: list[dict], genome_snapshots: list[dict], sequence_snapshots: list[dict], execution_links: list[dict], native_links: list[dict], metadata_links: list[dict]"
+      }
+    },
+    "bvbrc_proteome_sheet.py": {
+      "build_native_sheet": {
+        "line": 249,
+        "arguments": "native_results: list[dict], *, primary_source_ref: str, input_index: dict | None, inventories: list[dict], feature_snapshots: list[dict], genome_snapshots: list[dict], sequence_snapshots: list[dict], joins: dict | None, representation_links: list[dict], directional_attachment: dict | None=None"
+      }
+    },
+    "bvbrc_proteome_calculators.py": {
+      "calculate_native_components": {
+        "line": 303,
+        "arguments": "sheet: dict, *, parameters: dict"
+      }
+    },
+    "bvbrc_appservice_saved_results.py": {
+      "read_latest_adapter_result": {
+        "line": 14,
+        "arguments": "publications, context, *, adapter_ids"
+      }
+    }
+  },
+  "actual_contract_definitions": {
+    "bvbrc_proteome_data_schemas.json": {
+      "ParameterSource": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "submitted",
+              "effective"
+            ]
+          },
+          "source_field": {
+            "$ref": "#/$defs/SourceField"
+          }
+        },
+        "required": [
+          "kind",
+          "source_field"
+        ],
+        "additionalProperties": false
+      },
+      "PopulationDescriptor": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "enum": [
+              "execution_time_snapshot",
+              "supplied_snapshot",
+              "later_database_snapshot",
+              "unknown"
+            ]
+          },
+          "query_source": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/SourceField"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "selected_fields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "offset": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requested_limit": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reported_total_count": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/NativeNumber"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "population_complete": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "completeness_evidence": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/SourceField"
+            }
+          }
+        },
+        "required": [
+          "origin",
+          "query_source",
+          "selected_fields",
+          "offset",
+          "requested_limit",
+          "reported_total_count",
+          "population_complete",
+          "completeness_evidence"
+        ],
+        "additionalProperties": false
+      },
+      "CoordinateConvention": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "enum": [
+              "one_based_closed",
+              "zero_based_half_open",
+              "unknown"
+            ]
+          },
+          "source_fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/SourceField"
+            }
+          }
+        },
+        "required": [
+          "value",
+          "source_fields"
+        ],
+        "additionalProperties": false
+      },
+      "ProteinInventoryResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "partial",
+              "invalid"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ProteinInventory"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PRequirement"
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PDiagnostic"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "requirements",
+          "diagnostics"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "invalid"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/ProteinInventory"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "FeatureSnapshotResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "partial",
+              "invalid"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FeatureSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PRequirement"
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PDiagnostic"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "requirements",
+          "diagnostics"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "invalid"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/FeatureSnapshot"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "GenomeSnapshotResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "partial",
+              "invalid"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/GenomeSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PRequirement"
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PDiagnostic"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "requirements",
+          "diagnostics"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "invalid"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/GenomeSnapshot"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "FeatureSequenceSnapshotResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "partial",
+              "invalid"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FeatureSequenceSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PRequirement"
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PDiagnostic"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "requirements",
+          "diagnostics"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "invalid"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/FeatureSequenceSnapshot"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "InputIndexResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "partial",
+              "invalid"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/InputIndex"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PRequirement"
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PDiagnostic"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "requirements",
+          "diagnostics"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "invalid"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/InputIndex"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bvbrc_proteome_sheet_schemas.json": {
+      "NativeCalculationParameters": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "bvbrc_proteome_native_parameters_proposal_v1"
+          },
+          "track_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minimum_identity_fraction": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minimum_subject_endpoint_difference_fraction": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "allowed_hit_categories": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "bi (<->)",
+                    "uni (->)"
+                  ]
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "track_keys",
+          "minimum_identity_fraction",
+          "minimum_subject_endpoint_difference_fraction",
+          "allowed_hit_categories"
+        ],
+        "additionalProperties": false
+      },
+      "AssociationComponents": {
+        "type": "object",
+        "properties": {
+          "association_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "track_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "first_hsp_alignment_identity_percent": {
+            "$ref": "#/$defs/PercentageCell"
+          },
+          "subject_endpoint_difference_percent": {
+            "$ref": "#/$defs/PercentageCell"
+          },
+          "selection": {
+            "enum": [
+              "pass",
+              "fail",
+              "unknown"
+            ]
+          },
+          "failed_conditions": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "identity",
+                "subject_endpoint_difference",
+                "category"
+              ]
+            }
+          },
+          "unknown_conditions": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "identity",
+                "subject_endpoint_difference",
+                "category"
+              ]
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PDiagnostic"
+            }
+          }
+        },
+        "required": [
+          "association_key",
+          "track_key",
+          "first_hsp_alignment_identity_percent",
+          "subject_endpoint_difference_percent",
+          "selection",
+          "failed_conditions",
+          "unknown_conditions",
+          "diagnostics"
+        ],
+        "additionalProperties": false
+      },
+      "NativeTrackComponents": {
+        "type": "object",
+        "properties": {
+          "track_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "materialization": {
+            "enum": [
+              "table_field_block",
+              "published_association",
+              "unknown",
+              "not_in_projection"
+            ]
+          },
+          "source_scope": {
+            "enum": [
+              "complete_document",
+              "complete_prefix_only",
+              "partial_or_unknown_artifact"
+            ]
+          },
+          "source_association_record_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "published_association_record_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "native_bi_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "native_uni_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "native_other_category_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "native_missing_category_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "observed_bound_reference_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "observed_bound_subject_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "unresolved_reference_association_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "unresolved_subject_association_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "reference_input_record_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "comparison_input_record_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "no_published_reference_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "multiple_reference_subject_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "excess_bound_pair_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "observed_selected_reference_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "demonstrated_subject_sequence_group_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "unresolved_subject_sequence_count": {
+            "$ref": "#/$defs/CountCell"
+          },
+          "first_hsp_identity_summary": {
+            "$ref": "#/$defs/NativeFractionSummary"
+          },
+          "subject_endpoint_difference_summary": {
+            "$ref": "#/$defs/NativeFractionSummary"
+          },
+          "observed_reference_fraction": {
+            "$ref": "#/$defs/Ratio"
+          },
+          "complete_published_reference_fraction": {
+            "$ref": "#/$defs/Ratio"
+          },
+          "selection_counts": {
+            "$ref": "#/$defs/SelectionCounts"
+          },
+          "observed_selected_reference_fraction": {
+            "$ref": "#/$defs/Ratio"
+          },
+          "complete_selected_reference_fraction": {
+            "$ref": "#/$defs/Ratio"
+          },
+          "qualifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PReason"
+            }
+          }
+        },
+        "required": [
+          "track_key",
+          "materialization",
+          "source_scope",
+          "source_association_record_count",
+          "published_association_record_count",
+          "native_bi_count",
+          "native_uni_count",
+          "native_other_category_count",
+          "native_missing_category_count",
+          "observed_bound_reference_count",
+          "observed_bound_subject_count",
+          "unresolved_reference_association_count",
+          "unresolved_subject_association_count",
+          "reference_input_record_count",
+          "comparison_input_record_count",
+          "no_published_reference_count",
+          "multiple_reference_subject_count",
+          "excess_bound_pair_count",
+          "observed_selected_reference_count",
+          "demonstrated_subject_sequence_group_count",
+          "unresolved_subject_sequence_count",
+          "first_hsp_identity_summary",
+          "subject_endpoint_difference_summary",
+          "observed_reference_fraction",
+          "complete_published_reference_fraction",
+          "selection_counts",
+          "observed_selected_reference_fraction",
+          "complete_selected_reference_fraction",
+          "qualifications"
+        ],
+        "additionalProperties": false
+      },
+      "PRequirement": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/PReason"
+          },
+          "scope": {
+            "$ref": "#/$defs/Scope"
+          },
+          "required_input": {
+            "enum": [
+              "complete_bytes",
+              "original_parameters",
+              "exact_executed_fasta",
+              "execution_input_witness",
+              "complete_membership",
+              "occurrence_mapping",
+              "feature_metadata",
+              "genome_metadata",
+              "feature_sequence",
+              "coordinate_convention",
+              "representation_correspondence",
+              "directional_report",
+              "producer_execution_facts",
+              "valid_parameters",
+              "valid_saved_sheet"
+            ]
+          },
+          "source_fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/SourceField"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "scope",
+          "required_input",
+          "source_fields"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "bvbrc_appservice_schemas.json": {
+      "ObjectSelection": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "original_input"
+              },
+              "input_binding_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "input_binding_id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "original_target"
+              },
+              "target_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "target_id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "receipt_row"
+              },
+              "receipt_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "row_pointer": {
+                "type": "string",
+                "pattern": "^(|/.*)$"
+              }
+            },
+            "required": [
+              "kind",
+              "receipt_ref",
+              "row_pointer"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "task_info_object"
+              },
+              "receipt_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "receipt_ref"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "manifest_member"
+              },
+              "manifest_receipt_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "output_index": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "kind",
+              "manifest_receipt_ref",
+              "output_index"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Arguments_upload": {
+        "type": "object",
+        "properties": {
+          "created_object": {
+            "type": "object",
+            "properties": {
+              "receipt_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "row_pointer": {
+                "type": "string",
+                "pattern": "^(|/.*)$"
+              }
+            },
+            "required": [
+              "receipt_ref",
+              "row_pointer"
+            ],
+            "additionalProperties": false
+          },
+          "input_binding_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "filename": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "created_object",
+          "input_binding_id",
+          "filename"
+        ],
+        "additionalProperties": false
+      },
+      "Arguments_workspace_create": {
+        "type": "object",
+        "properties": {
+          "objects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/CreateObjectSelection"
+            },
+            "minItems": 1
+          },
+          "options": {
+            "$ref": "#/$defs/CreationOptions"
+          }
+        },
+        "required": [
+          "objects",
+          "options"
+        ],
+        "additionalProperties": false
+      },
+      "AcquisitionRequirement": {
+        "type": "object",
+        "properties": {
+          "requirement_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "definition",
+              "input_metadata",
+              "input_bytes",
+              "original_task",
+              "task_manifest",
+              "output_metadata",
+              "output_bytes",
+              "byte_version_evidence",
+              "scientific_metadata",
+              "parser_binding"
+            ]
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "reason_code": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "requirement_id",
+          "kind",
+          "role",
+          "source_refs",
+          "reason_code"
+        ],
+        "additionalProperties": false
+      },
+      "Diagnostic": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phase": {
+            "enum": [
+              "custody",
+              "prepare",
+              "transport",
+              "native_decode",
+              "association",
+              "publication",
+              "recovery",
+              "return"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^(|/.*)$"
+          },
+          "severity": {
+            "enum": [
+              "error",
+              "qualification"
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "code",
+          "phase",
+          "path",
+          "severity",
+          "evidence_refs"
+        ],
+        "additionalProperties": false
+      },
+      "ContentBinding": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_field": {
+            "enum": [
+              "artifact_ref",
+              "text_ref",
+              "stdout_ref",
+              "stderr_ref"
+            ]
+          },
+          "artifact_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "byte_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "source_ref",
+          "artifact_field",
+          "artifact_ref",
+          "sha256",
+          "byte_count"
+        ],
+        "additionalProperties": false
+      },
+      "SourceEvidence": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "#/$defs/ContentBinding"
+          },
+          "pointer": {
+            "type": "string",
+            "pattern": "^(|/.*)$"
+          }
+        },
+        "required": [
+          "content",
+          "pointer"
+        ],
+        "additionalProperties": false
+      },
+      "ResultSelector": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "bvbrc_appservice_result_selector_v1"
+          },
+          "endpoint": {
+            "enum": [
+              "requested_artifacts",
+              "requested_projection"
+            ]
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/OutputRequirement"
+            },
+            "minItems": 1
+          },
+          "adapter": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AdapterSelection"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requested_schema": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/$defs/Json"
+            }
+          },
+          "supplied_metadata": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/SourceEvidence"
+            },
+            "minItems": 0
+          },
+          "supplied_contents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/ContentBinding"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "supplied_capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/SuppliedCapabilityBinding"
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "version",
+          "endpoint",
+          "requirements",
+          "adapter",
+          "requested_schema",
+          "supplied_metadata",
+          "supplied_capabilities"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "inspected_source_and_fixture_hashes": {
+    "gene_annotation_episode/bvbrc_proteome_native.py": "186341c3a3eadb7ee89f4f8d2017eada14502648091b9c1dde747dc936a80e55",
+    "gene_annotation_episode/bvbrc_proteome_native_contracts.py": "6c83f3d1c05aa2b24f8c7542edaf3030a5b3209ecd2052699048af43c18eac53",
+    "gene_annotation_episode/bvbrc_proteome_native_schemas.json": "c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d",
+    "gene_annotation_episode/bvbrc_proteome_inputs.py": "66fc298dda9e250f86a0ffa9dc27636f9ae1ee33c4c640fd4a25c1ff28cc1df4",
+    "gene_annotation_episode/bvbrc_proteome_data_contracts.py": "12a8aaa5cdc0006e3fab6d8e083139a8ab04a91bf1aa65b202a0ca1d5ac46381",
+    "gene_annotation_episode/bvbrc_proteome_data_schemas.json": "01f8987b1d35754056d6e0337d12868d77e4f9df336d0c72edcb7d9ec998d951",
+    "gene_annotation_episode/bvbrc_proteome_joins.py": "99cfb3e13c0e63bea8cfdda5b11be6e2f5bd353ff137b2f9a461917812e78971",
+    "gene_annotation_episode/bvbrc_proteome_sheet.py": "f9e2047ffdaa1c77eefcc132e63a09e36cab76df835c53be46c9e43bfc86fbe7",
+    "gene_annotation_episode/bvbrc_proteome_sheet_contracts.py": "9e20d25115871c862a5cb94fe4bf4b3b5f80219906a13b20896578e937ff2942",
+    "gene_annotation_episode/bvbrc_proteome_sheet_schemas.json": "739ee63e0e6eea56398c8482a1143dec8b7f7f073041de3edfa4a06af654d9ae",
+    "gene_annotation_episode/bvbrc_proteome_calculators.py": "8ad22533fccf74b5dcf37970b8ce8848a76744c1e8f328e998ef1394d85dc9cc",
+    "gene_annotation_episode/bvbrc_appservice_adapters.py": "9958e26840f50cafff7ee15441653318540d419565a192212dc98675875fc24d",
+    "gene_annotation_episode/bvbrc_appservice_publication.py": "148feba156664b980e04a2d20863b891accf3f1f1e8535c91bf7d902bd61a584",
+    "gene_annotation_episode/bvbrc_appservice_host.py": "c3e2c8a4155f71520d273930849d521b2b23364c13fb091d4ef4b5b892c281e5",
+    "gene_annotation_episode/bvbrc_appservice_custody.py": "27b5907ed762be2aca499ca9af94005a9d2950af8468fa32fac3316c134db134",
+    "gene_annotation_episode/bvbrc_appservice_records.py": "8066e1d41511150254702b69bd00ad100446a6c0606ddefa20769701b393f354",
+    "gene_annotation_episode/bvbrc_appservice_inputs.py": "d7d489e7b3aac2a33c68f1a308a51677cd52c1a63d21eb4a1375a691398cac3b",
+    "gene_annotation_episode/bvbrc_appservice_bundle_values.py": "b16085b93ea22b66253d51b7c63499da69580baa9243ae91450f4bedbe9dbb86",
+    "gene_annotation_episode/bvbrc_appservice_readers.py": "6c4d48b11cae3f0a5a445bc91db09d0126b92c6067a0d2ac9285fdbf7ffd4a8e",
+    "gene_annotation_episode/bvbrc_appservice_contracts.py": "428067218bafeff0faf92c3e2f81ec74578c1c99c0c60bf234b7ebf8fde5168e",
+    "gene_annotation_episode/bvbrc_appservice_schemas.json": "d21f7a4450e23e346ee0a3ed52d3466a7d5f212fe25aecab5fcf738f60d99924",
+    "gene_annotation_episode/bvbrc_appservice_saved_results.py": "4a184825481b6acf9a0e7fdad26d23843b0ad8dd2d21a4aca18e7d976d40b405",
+    "gene_annotation_episode/bvbrc_appservice_monitor.py": "20c4dfeb5f3ffac8756de242704728171154d8053f0c6aa8d34197367e3e3f00",
+    "gene_annotation_episode/bvbrc_appservice_receipt_values.py": "1c105aef69fdd78f55826171731667fa029329ac989c18fba6ad9a7c2ccd2cda",
+    "gene_annotation_episode/bvbrc_appservice_tool_info.py": "c9d6b498026a0a6db9c92a46d803db1e7c5570cf82b2eea9639ebb9738feb0f0",
+    "gene_annotation_episode/api_bvbrc_appservice.py": "c5d54cd90de69084d11186eabedf06ba0d473edb9867492a33ab868ad8daf2ed",
+    "gene_annotation_episode/api_service_execution.py": "5a31f40fe2ad9d92795d81c4b2b783a0fc5766d550a5c0ac1239a2a8a219daa8",
+    "gene_annotation_episode/execution_episodes.py": "960b05612d3e6c6c2a2207329ceae49a82fdc9b4ce6ab022b2c0d13986310aed",
+    "gene_annotation_episode/episode_bindings.py": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d",
+    "gene_annotation_episode/runtime.py": "f15783d6068cfda5adbb3a52e91efdf7dd94b85dd7e59e335303218ae3d8cc04",
+    "gene_annotation_episode/episode_services.py": "f8c5b96967f55be32127f98d08f964faa76372a479a545511c50728725340d01",
+    "gene_annotation_episode/resource_tool_information.py": "67d3174b9f96850e3358e64b27b318127c14a9c4eeaae4850f1ce8a1d3dc79cc",
+    "gene_annotation_episode/execution_service_setup.py": "539b821bdbc2698d607dac421a5ea94895bec5a05a6935a06580658888ac82a0",
+    "gene_annotation_episode/tool_information.py": "98032980e046ae166c1f1814059a4b2aee6abb33bd4534851090cff0e5e64fdb",
+    "gene_annotation_episode/scientific_tool_library.py": "9379edc57f8f050b8758b9df9f3b9b9dd052c8ee98b4aa2333b10105e1dcdad2",
+    "gene_annotation_episode/scientific_process_episodes.py": "66699bf280c2d6ab99cd18c1e312d41b6b3d9350e3040a02e6660d27b97cb029",
+    "gene_annotation_episode/scientific_process_prompt.py": "3e9e609d56a864ef7df825ea40ca41552506c99596ad45e7d5d992f8b3a01954",
+    "gene_annotation_episode/providers.py": "e2c13579c3e393743ab859469c7e5a0f64a6f09d030abace8e65698e248d904d",
+    "gene_annotation_episode/decision_context.py": "44337bc2ab42774eb33f535f39a0301d037a59de326e00741caadc0bddd0de7c",
+    "gene_annotation_episode/bvbrc_genome_alignment_bundle_adapter.py": "fb7a00ecd788f17a69014c3deb8cbb053900d8b3cee1cab95ea5dbc9065bb558",
+    "gene_annotation_episode/bvbrc_genome_alignment_bundle_resolution.py": "842abe69e542b6863ed6b6c6b52f081f7fafd036bff688a4192fad1cda1fea33",
+    "gene_annotation_episode/bvbrc_genome_alignment_returns.py": "969e84546d5e32168c8193afb0356d276f71996ab02e7603db60b1296af7475c",
+    "gene_annotation_episode/bvbrc_genome_alignment_tool_info.py": "55643297379cd8e8ce7f5ddc7a19d5d698aa1990e54be6ee77f464016bbefd49",
+    "gene_annotation_episode/bvbrc_application_definitions.py": "51b36c8b9df024d2085229b6cc406dd447ef1cc1b298a720f4fbeea3c8933f4b",
+    "gene_annotation_episode/bvbrc_application_specs/original/GenomeComparison.json": "98b639266d78107b21a1e8ba21be0c4038a498a5ede2fd1deac96b89426d9bdd",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_004.bin": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/SYNTHETIC_ORIGINAL_TASK.json": "21f11bf20b2cc04bc4ad3225343ff8636313094728aca6f38b2721950985c4ab",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_007.bin": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/SHEET.json": "2c554a4e44d3253bef9ce2e73b14cf68de1b53f2c18754d15e2b7164143f4e6c",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_001.bin": "7b7bce0eef3acca79d170831ba70b084ee83eaf7cc84ebc345367264558f759f",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/RECALCULATED_COMPONENTS.json": "2804cd58e05f01526e166e6a7c7d1e59699d9c0a4b01fa233db72a22733a9cb5",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/COMPONENTS.json": "75b3958956734c9ad9b6c2aa62ef30a766073808015d670ecab75960312e7328",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_002.bin": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/JOINS.json": "ddca6d311553441ad69924fce0e28be1afc3bb27ca60487fa57690a9f1f67337",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_006.bin": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/RECEIPT.json": "ce31a7298e3e894dc2081eadf92fd893fe4b486c1ef55b1b1359febbc308f9af",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_000.bin": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_003.bin": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/input_005.bin": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+    "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001/SUPPLIED_VALUES.json": "5c756b3d622c64f7d12e4621d9fc86186e86ad80f88ff3f5202c2e51e3bde648"
+  },
+  "claims": {
+    "live_GenomeComparison_run": false,
+    "retained_native_GenomeComparison_output": false,
+    "provider_dispatch_executed": false,
+    "episode_path_executed": false,
+    "configured_provider_prompt_verified": false,
+    "new_production_files_written": false,
+    "original_verification_process_touched": false
+  }
+}

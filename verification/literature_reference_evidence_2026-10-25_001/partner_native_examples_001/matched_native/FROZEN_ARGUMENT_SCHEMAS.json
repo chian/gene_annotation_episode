@@ -1,0 +1,3159 @@
+{
+  "retained": {
+    "type": "object",
+    "properties": {
+      "source_ref": {
+        "type": "string",
+        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+      },
+      "data_source_ref": {
+        "type": "string",
+        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+      },
+      "source_kind": {
+        "enum": [
+          "primary_source",
+          "retained_extraction",
+          "graph_extraction",
+          "synthetic_fixture"
+        ]
+      },
+      "literals": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "partner": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "experiment": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endpoint": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "normalization": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reference_condition": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "omitted_condition": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "addback_condition": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "function": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "subject",
+          "partner",
+          "experiment",
+          "endpoint",
+          "normalization",
+          "reference_condition",
+          "omitted_condition",
+          "addback_condition",
+          "function"
+        ],
+        "additionalProperties": false
+      },
+      "interpretation_witnesses": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+            },
+            "representation": {
+              "enum": [
+                "original",
+                "text"
+              ]
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "quote": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "source_ref",
+            "representation",
+            "start",
+            "end",
+            "quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "source_ref",
+      "data_source_ref",
+      "source_kind",
+      "literals",
+      "interpretation_witnesses"
+    ],
+    "additionalProperties": false
+  },
+  "native": {
+    "type": "object",
+    "properties": {
+      "source_ref": {
+        "type": "string",
+        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+      },
+      "data_source_ref": {
+        "type": "string",
+        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+      },
+      "source_kind": {
+        "enum": [
+          "primary_source",
+          "retained_extraction",
+          "graph_extraction",
+          "synthetic_fixture"
+        ]
+      },
+      "literals": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "partner": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "experiment": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endpoint": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "normalization": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reference_condition": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "omitted_condition": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "addback_condition": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "function": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "subject",
+          "partner",
+          "experiment",
+          "endpoint",
+          "normalization",
+          "reference_condition",
+          "omitted_condition",
+          "addback_condition",
+          "function"
+        ],
+        "additionalProperties": false
+      },
+      "interpretation_witnesses": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+            },
+            "representation": {
+              "enum": [
+                "original",
+                "text"
+              ]
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "quote": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "source_ref",
+            "representation",
+            "start",
+            "end",
+            "quote"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "input_mode": {
+        "const": "native_source_spans"
+      },
+      "arms": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "subject": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partner": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "endpoint": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "normalization": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partner_state": {
+                    "enum": [
+                      "present",
+                      "absent",
+                      "unreported"
+                    ]
+                  },
+                  "conditions": {
+                    "type": "object",
+                    "properties": {
+                      "coverage": {
+                        "enum": [
+                          "complete",
+                          "partial",
+                          "unreported"
+                        ]
+                      },
+                      "factors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "factor": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+                              "minLength": 1,
+                              "maxLength": 128
+                            },
+                            "level": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "kind": {
+                                      "const": "literal"
+                                    },
+                                    "witness": {
+                                      "type": "object",
+                                      "properties": {
+                                        "source_ref": {
+                                          "type": "string",
+                                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                        },
+                                        "representation": {
+                                          "enum": [
+                                            "original",
+                                            "text"
+                                          ]
+                                        },
+                                        "start": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        },
+                                        "end": {
+                                          "type": "integer",
+                                          "minimum": 1
+                                        },
+                                        "quote": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "source_ref",
+                                        "representation",
+                                        "start",
+                                        "end",
+                                        "quote"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "witness"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "kind": {
+                                      "const": "number"
+                                    },
+                                    "selector": {
+                                      "type": "object",
+                                      "properties": {
+                                        "witness": {
+                                          "type": "object",
+                                          "properties": {
+                                            "source_ref": {
+                                              "type": "string",
+                                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                            },
+                                            "representation": {
+                                              "enum": [
+                                                "original",
+                                                "text"
+                                              ]
+                                            },
+                                            "start": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            },
+                                            "end": {
+                                              "type": "integer",
+                                              "minimum": 1
+                                            },
+                                            "quote": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          "required": [
+                                            "source_ref",
+                                            "representation",
+                                            "start",
+                                            "end",
+                                            "quote"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        "number_start": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        },
+                                        "number_end": {
+                                          "type": "integer",
+                                          "minimum": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "witness",
+                                        "number_start",
+                                        "number_end"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "unit_witness": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "source_ref": {
+                                              "type": "string",
+                                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                            },
+                                            "representation": {
+                                              "enum": [
+                                                "original",
+                                                "text"
+                                              ]
+                                            },
+                                            "start": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            },
+                                            "end": {
+                                              "type": "integer",
+                                              "minimum": 1
+                                            },
+                                            "quote": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          "required": [
+                                            "source_ref",
+                                            "representation",
+                                            "start",
+                                            "end",
+                                            "quote"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "selector",
+                                    "unit_witness"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "factor",
+                            "level"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "coverage",
+                      "factors"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "measurement_identity": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "origin": {
+                    "enum": [
+                      "reported",
+                      "graph_derived",
+                      "synthetic"
+                    ]
+                  },
+                  "rate": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "object",
+                            "properties": {
+                              "witness": {
+                                "type": "object",
+                                "properties": {
+                                  "source_ref": {
+                                    "type": "string",
+                                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                  },
+                                  "representation": {
+                                    "enum": [
+                                      "original",
+                                      "text"
+                                    ]
+                                  },
+                                  "start": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "end": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                  },
+                                  "quote": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": [
+                                  "source_ref",
+                                  "representation",
+                                  "start",
+                                  "end",
+                                  "quote"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "number_start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "number_end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "witness",
+                              "number_start",
+                              "number_end"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "unit": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "representation",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "spread": {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "SD",
+                                  "SEM",
+                                  "CI",
+                                  "unspecified",
+                                  "unreported"
+                                ]
+                              },
+                              "magnitude": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "witness": {
+                                        "type": "object",
+                                        "properties": {
+                                          "source_ref": {
+                                            "type": "string",
+                                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                          },
+                                          "representation": {
+                                            "enum": [
+                                              "original",
+                                              "text"
+                                            ]
+                                          },
+                                          "start": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          },
+                                          "end": {
+                                            "type": "integer",
+                                            "minimum": 1
+                                          },
+                                          "quote": {
+                                            "type": "string",
+                                            "minLength": 1
+                                          }
+                                        },
+                                        "required": [
+                                          "source_ref",
+                                          "representation",
+                                          "start",
+                                          "end",
+                                          "quote"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "number_start": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "number_end": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "witness",
+                                      "number_start",
+                                      "number_end"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "unit": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "source_ref": {
+                                        "type": "string",
+                                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                      },
+                                      "representation": {
+                                        "enum": [
+                                          "original",
+                                          "text"
+                                        ]
+                                      },
+                                      "start": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "end": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      },
+                                      "quote": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "source_ref",
+                                      "representation",
+                                      "start",
+                                      "end",
+                                      "quote"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "witnesses": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "source_ref": {
+                                      "type": "string",
+                                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                    },
+                                    "representation": {
+                                      "enum": [
+                                        "original",
+                                        "text"
+                                      ]
+                                    },
+                                    "start": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    },
+                                    "end": {
+                                      "type": "integer",
+                                      "minimum": 1
+                                    },
+                                    "quote": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "source_ref",
+                                    "representation",
+                                    "start",
+                                    "end",
+                                    "quote"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "magnitude",
+                              "unit",
+                              "witnesses"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "spread"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "subject",
+                  "partner",
+                  "endpoint",
+                  "normalization",
+                  "partner_state",
+                  "conditions",
+                  "measurement_identity",
+                  "origin",
+                  "rate"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "omitted": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "subject": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partner": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "endpoint": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "normalization": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partner_state": {
+                    "enum": [
+                      "present",
+                      "absent",
+                      "unreported"
+                    ]
+                  },
+                  "conditions": {
+                    "type": "object",
+                    "properties": {
+                      "coverage": {
+                        "enum": [
+                          "complete",
+                          "partial",
+                          "unreported"
+                        ]
+                      },
+                      "factors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "factor": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+                              "minLength": 1,
+                              "maxLength": 128
+                            },
+                            "level": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "kind": {
+                                      "const": "literal"
+                                    },
+                                    "witness": {
+                                      "type": "object",
+                                      "properties": {
+                                        "source_ref": {
+                                          "type": "string",
+                                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                        },
+                                        "representation": {
+                                          "enum": [
+                                            "original",
+                                            "text"
+                                          ]
+                                        },
+                                        "start": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        },
+                                        "end": {
+                                          "type": "integer",
+                                          "minimum": 1
+                                        },
+                                        "quote": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "source_ref",
+                                        "representation",
+                                        "start",
+                                        "end",
+                                        "quote"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "witness"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "kind": {
+                                      "const": "number"
+                                    },
+                                    "selector": {
+                                      "type": "object",
+                                      "properties": {
+                                        "witness": {
+                                          "type": "object",
+                                          "properties": {
+                                            "source_ref": {
+                                              "type": "string",
+                                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                            },
+                                            "representation": {
+                                              "enum": [
+                                                "original",
+                                                "text"
+                                              ]
+                                            },
+                                            "start": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            },
+                                            "end": {
+                                              "type": "integer",
+                                              "minimum": 1
+                                            },
+                                            "quote": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          "required": [
+                                            "source_ref",
+                                            "representation",
+                                            "start",
+                                            "end",
+                                            "quote"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        "number_start": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        },
+                                        "number_end": {
+                                          "type": "integer",
+                                          "minimum": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "witness",
+                                        "number_start",
+                                        "number_end"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "unit_witness": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "source_ref": {
+                                              "type": "string",
+                                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                            },
+                                            "representation": {
+                                              "enum": [
+                                                "original",
+                                                "text"
+                                              ]
+                                            },
+                                            "start": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            },
+                                            "end": {
+                                              "type": "integer",
+                                              "minimum": 1
+                                            },
+                                            "quote": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          "required": [
+                                            "source_ref",
+                                            "representation",
+                                            "start",
+                                            "end",
+                                            "quote"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "selector",
+                                    "unit_witness"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "factor",
+                            "level"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "coverage",
+                      "factors"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "measurement_identity": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "origin": {
+                    "enum": [
+                      "reported",
+                      "graph_derived",
+                      "synthetic"
+                    ]
+                  },
+                  "rate": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "object",
+                            "properties": {
+                              "witness": {
+                                "type": "object",
+                                "properties": {
+                                  "source_ref": {
+                                    "type": "string",
+                                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                  },
+                                  "representation": {
+                                    "enum": [
+                                      "original",
+                                      "text"
+                                    ]
+                                  },
+                                  "start": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "end": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                  },
+                                  "quote": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": [
+                                  "source_ref",
+                                  "representation",
+                                  "start",
+                                  "end",
+                                  "quote"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "number_start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "number_end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "witness",
+                              "number_start",
+                              "number_end"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "unit": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "representation",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "spread": {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "SD",
+                                  "SEM",
+                                  "CI",
+                                  "unspecified",
+                                  "unreported"
+                                ]
+                              },
+                              "magnitude": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "witness": {
+                                        "type": "object",
+                                        "properties": {
+                                          "source_ref": {
+                                            "type": "string",
+                                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                          },
+                                          "representation": {
+                                            "enum": [
+                                              "original",
+                                              "text"
+                                            ]
+                                          },
+                                          "start": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          },
+                                          "end": {
+                                            "type": "integer",
+                                            "minimum": 1
+                                          },
+                                          "quote": {
+                                            "type": "string",
+                                            "minLength": 1
+                                          }
+                                        },
+                                        "required": [
+                                          "source_ref",
+                                          "representation",
+                                          "start",
+                                          "end",
+                                          "quote"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "number_start": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "number_end": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "witness",
+                                      "number_start",
+                                      "number_end"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "unit": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "source_ref": {
+                                        "type": "string",
+                                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                      },
+                                      "representation": {
+                                        "enum": [
+                                          "original",
+                                          "text"
+                                        ]
+                                      },
+                                      "start": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "end": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      },
+                                      "quote": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "source_ref",
+                                      "representation",
+                                      "start",
+                                      "end",
+                                      "quote"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "witnesses": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "source_ref": {
+                                      "type": "string",
+                                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                    },
+                                    "representation": {
+                                      "enum": [
+                                        "original",
+                                        "text"
+                                      ]
+                                    },
+                                    "start": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    },
+                                    "end": {
+                                      "type": "integer",
+                                      "minimum": 1
+                                    },
+                                    "quote": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "source_ref",
+                                    "representation",
+                                    "start",
+                                    "end",
+                                    "quote"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "magnitude",
+                              "unit",
+                              "witnesses"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "spread"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "subject",
+                  "partner",
+                  "endpoint",
+                  "normalization",
+                  "partner_state",
+                  "conditions",
+                  "measurement_identity",
+                  "origin",
+                  "rate"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "addback": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "subject": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partner": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "endpoint": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "normalization": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "partner_state": {
+                    "enum": [
+                      "present",
+                      "absent",
+                      "unreported"
+                    ]
+                  },
+                  "conditions": {
+                    "type": "object",
+                    "properties": {
+                      "coverage": {
+                        "enum": [
+                          "complete",
+                          "partial",
+                          "unreported"
+                        ]
+                      },
+                      "factors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "factor": {
+                              "type": "string",
+                              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+                              "minLength": 1,
+                              "maxLength": 128
+                            },
+                            "level": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "kind": {
+                                      "const": "literal"
+                                    },
+                                    "witness": {
+                                      "type": "object",
+                                      "properties": {
+                                        "source_ref": {
+                                          "type": "string",
+                                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                        },
+                                        "representation": {
+                                          "enum": [
+                                            "original",
+                                            "text"
+                                          ]
+                                        },
+                                        "start": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        },
+                                        "end": {
+                                          "type": "integer",
+                                          "minimum": 1
+                                        },
+                                        "quote": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "source_ref",
+                                        "representation",
+                                        "start",
+                                        "end",
+                                        "quote"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "witness"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "kind": {
+                                      "const": "number"
+                                    },
+                                    "selector": {
+                                      "type": "object",
+                                      "properties": {
+                                        "witness": {
+                                          "type": "object",
+                                          "properties": {
+                                            "source_ref": {
+                                              "type": "string",
+                                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                            },
+                                            "representation": {
+                                              "enum": [
+                                                "original",
+                                                "text"
+                                              ]
+                                            },
+                                            "start": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            },
+                                            "end": {
+                                              "type": "integer",
+                                              "minimum": 1
+                                            },
+                                            "quote": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          "required": [
+                                            "source_ref",
+                                            "representation",
+                                            "start",
+                                            "end",
+                                            "quote"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        "number_start": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        },
+                                        "number_end": {
+                                          "type": "integer",
+                                          "minimum": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "witness",
+                                        "number_start",
+                                        "number_end"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "unit_witness": {
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "source_ref": {
+                                              "type": "string",
+                                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                            },
+                                            "representation": {
+                                              "enum": [
+                                                "original",
+                                                "text"
+                                              ]
+                                            },
+                                            "start": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            },
+                                            "end": {
+                                              "type": "integer",
+                                              "minimum": 1
+                                            },
+                                            "quote": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          "required": [
+                                            "source_ref",
+                                            "representation",
+                                            "start",
+                                            "end",
+                                            "quote"
+                                          ],
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "selector",
+                                    "unit_witness"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "factor",
+                            "level"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "coverage",
+                      "factors"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "measurement_identity": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "origin": {
+                    "enum": [
+                      "reported",
+                      "graph_derived",
+                      "synthetic"
+                    ]
+                  },
+                  "rate": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "object",
+                            "properties": {
+                              "witness": {
+                                "type": "object",
+                                "properties": {
+                                  "source_ref": {
+                                    "type": "string",
+                                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                    "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                  },
+                                  "representation": {
+                                    "enum": [
+                                      "original",
+                                      "text"
+                                    ]
+                                  },
+                                  "start": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "end": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                  },
+                                  "quote": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": [
+                                  "source_ref",
+                                  "representation",
+                                  "start",
+                                  "end",
+                                  "quote"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "number_start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "number_end": {
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            },
+                            "required": [
+                              "witness",
+                              "number_start",
+                              "number_end"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "unit": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "representation",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "spread": {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "SD",
+                                  "SEM",
+                                  "CI",
+                                  "unspecified",
+                                  "unreported"
+                                ]
+                              },
+                              "magnitude": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "witness": {
+                                        "type": "object",
+                                        "properties": {
+                                          "source_ref": {
+                                            "type": "string",
+                                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                          },
+                                          "representation": {
+                                            "enum": [
+                                              "original",
+                                              "text"
+                                            ]
+                                          },
+                                          "start": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          },
+                                          "end": {
+                                            "type": "integer",
+                                            "minimum": 1
+                                          },
+                                          "quote": {
+                                            "type": "string",
+                                            "minLength": 1
+                                          }
+                                        },
+                                        "required": [
+                                          "source_ref",
+                                          "representation",
+                                          "start",
+                                          "end",
+                                          "quote"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "number_start": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "number_end": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "witness",
+                                      "number_start",
+                                      "number_end"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "unit": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "source_ref": {
+                                        "type": "string",
+                                        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                      },
+                                      "representation": {
+                                        "enum": [
+                                          "original",
+                                          "text"
+                                        ]
+                                      },
+                                      "start": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "end": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      },
+                                      "quote": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "source_ref",
+                                      "representation",
+                                      "start",
+                                      "end",
+                                      "quote"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "witnesses": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "source_ref": {
+                                      "type": "string",
+                                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                                    },
+                                    "representation": {
+                                      "enum": [
+                                        "original",
+                                        "text"
+                                      ]
+                                    },
+                                    "start": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    },
+                                    "end": {
+                                      "type": "integer",
+                                      "minimum": 1
+                                    },
+                                    "quote": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "source_ref",
+                                    "representation",
+                                    "start",
+                                    "end",
+                                    "quote"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "magnitude",
+                              "unit",
+                              "witnesses"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "spread"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "subject",
+                  "partner",
+                  "endpoint",
+                  "normalization",
+                  "partner_state",
+                  "conditions",
+                  "measurement_identity",
+                  "origin",
+                  "rate"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "reference",
+          "omitted",
+          "addback"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "source_ref",
+      "data_source_ref",
+      "source_kind",
+      "literals",
+      "interpretation_witnesses",
+      "input_mode",
+      "arms"
+    ],
+    "additionalProperties": false
+  }
+}

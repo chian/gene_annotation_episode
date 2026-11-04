@@ -1,0 +1,88 @@
+{
+  "case": "cutadapt_filtered",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+    "-j",
+    "1",
+    "-a",
+    "AGATCGGAAGAGC",
+    "-q",
+    "20",
+    "-m",
+    "6",
+    "--json",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered/native.json",
+    "-o",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered/output.fastq",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered/synthetic.fastq"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered",
+  "started_at": "2026-10-25T22:25:08.251537+00:00",
+  "input_sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+  "synthetic_input": true,
+  "native_executable_run": true,
+  "BV_BRC_service_run": false,
+  "no_wall_time_limit": true,
+  "exit_code": 0,
+  "ended_at": "2026-10-25T22:25:08.323326+00:00",
+  "elapsed_seconds": 0.07178060594014823,
+  "files": {
+    "native.json": {
+      "sha256": "39244eb0322797a8411a9a5d2457b2d20a05b5a65c75e966c1949e73a7c400e3",
+      "byte_count": 2521
+    },
+    "synthetic.fastq": {
+      "sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+      "byte_count": 186
+    },
+    "stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_count": 0
+    },
+    "output.fastq": {
+      "sha256": "992f92a6ad75672dd34ff1f487de27d5e3d7aaf533e0ed3a87fe1f02d998f461",
+      "byte_count": 99
+    },
+    "stdout.log": {
+      "sha256": "9ded2d30afa01a2abd75d730cf67c37841ebbfbf557633e48c72208655d42937",
+      "byte_count": 1461
+    }
+  },
+  "native_summary": {
+    "cutadapt_version": "4.9",
+    "schema_version": [
+      0,
+      3
+    ],
+    "read_counts": {
+      "input": 4,
+      "filtered": {
+        "too_short": 1,
+        "too_long": null,
+        "too_many_n": null,
+        "too_many_expected_errors": null,
+        "casava_filtered": null,
+        "discard_trimmed": null,
+        "discard_untrimmed": null
+      },
+      "output": 3,
+      "reverse_complemented": null,
+      "read1_with_adapter": 2,
+      "read2_with_adapter": null
+    },
+    "basepair_counts": {
+      "input": 58,
+      "input_read1": 58,
+      "input_read2": null,
+      "quality_trimmed": 4,
+      "quality_trimmed_read1": 4,
+      "quality_trimmed_read2": null,
+      "poly_a_trimmed": null,
+      "poly_a_trimmed_read1": null,
+      "poly_a_trimmed_read2": null,
+      "output": 24,
+      "output_read1": 24,
+      "output_read2": null
+    }
+  }
+}

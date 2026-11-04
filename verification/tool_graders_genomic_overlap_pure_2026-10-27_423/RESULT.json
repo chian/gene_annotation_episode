@@ -1,0 +1,64 @@
+{
+  "scope": "G1 pure records/readers/sheet/calculations for B-L123-analyze_genomic_region_overlap",
+  "final_attempt": "check003",
+  "pytest_passed": 96,
+  "pytest_seconds": 16.16,
+  "executed_source_pins": [
+    {
+      "path": "gene_annotation_episode/genomic_overlap_calculations.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_calculations.py",
+      "sha256": "1c7c4f4bd08323eb1903ac94774ca7d7d6d6829cc4ab6a4744fd96a4d0de9e84",
+      "byte_length": 12349
+    },
+    {
+      "path": "gene_annotation_episode/genomic_overlap_contracts.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_contracts.py",
+      "sha256": "1bde770d3360feb38d2d3c77a5ab8c44f2c810cd86dbbf9cf15d0b658d4a906e",
+      "byte_length": 106459
+    },
+    {
+      "path": "gene_annotation_episode/genomic_overlap_inputs.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/genomic_overlap_inputs.py",
+      "sha256": "f84562475133ac699a1f82d42d4693a9f50a3ce16ea4f457a5e56ce643b6ee23",
+      "byte_length": 43373
+    },
+    {
+      "path": "tests/test_genomic_overlap_calculations.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_genomic_overlap_calculations.py",
+      "sha256": "bf2cf1b5ad813161476f8d4856f1b71224656be870fae682a3128f248c01cc5b",
+      "byte_length": 14707
+    },
+    {
+      "path": "tests/test_genomic_overlap_inputs.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_genomic_overlap_inputs.py",
+      "sha256": "ba05b3e50845d4f2c1047128332e541cb8d479f05e3081c32a182efda60a9fa3",
+      "byte_length": 22473
+    }
+  ],
+  "executed_source_pins_unchanged": true,
+  "checkout_source_drift": [],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "verified_cgroup": {
+    "memory_max": 21474836480,
+    "memory_swap_max": 0,
+    "runtime_max": "infinity",
+    "kill_mode": "control-group",
+    "oom_policy": "kill"
+  },
+  "enforcement": {
+    "memory": "systemd_cgroup_v2_memory_max",
+    "swap": "systemd_memory_swap_max_zero",
+    "wall_time": "unset",
+    "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+    "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+    "process_tree": "systemd_control_group",
+    "filesystem_sandbox": false
+  },
+  "own_native_invocation_performed": false,
+  "full_workflow_integration_verified": false,
+  "native_evidence_qualification": "Untouched packet421 A1/B1 rows used for incompatible-token test; seven token-remapped fixtures explicitly marked derived. No newly canonical-token native result claimed."
+}

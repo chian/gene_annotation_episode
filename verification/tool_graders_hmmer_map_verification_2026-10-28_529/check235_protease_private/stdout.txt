@@ -1,0 +1,63 @@
+...............................EFFFE                                     [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_genuine_fresh_cli_preserves_full_fit_and_original_native_files _
+source_snapshot/tests/test_molecular_sequence_protease_private.py:253: in genuine_complete_cli_case
+    return _actual_cli_case(tmp_path_factory.mktemp("protease-native-parent") / "complete",
+source_snapshot/tests/test_molecular_sequence_protease_private.py:243: in _actual_cli_case
+    assert capture["verification_failures"] == [], capture["verification_failures"]
+E   AssertionError: [{'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular...isode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/matplotlib'}]
+E   assert [{'stage': 'l.../matplotlib'}] == []
+E     
+E     Left contains 3 more items, first extra item: {'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/numpy'}
+E     Use -v to get more diff
+___ ERROR at setup of test_genuine_saved_cli_uses_no_native_source_or_scipy ____
+source_snapshot/tests/test_molecular_sequence_protease_private.py:253: in genuine_complete_cli_case
+    return _actual_cli_case(tmp_path_factory.mktemp("protease-native-parent") / "complete",
+source_snapshot/tests/test_molecular_sequence_protease_private.py:243: in _actual_cli_case
+    assert capture["verification_failures"] == [], capture["verification_failures"]
+E   AssertionError: [{'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular...isode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/matplotlib'}]
+E   assert [{'stage': 'l.../matplotlib'}] == []
+E     
+E     Left contains 3 more items, first extra item: {'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/numpy'}
+E     Use -v to get more diff
+=================================== FAILURES ===================================
+______ test_genuine_fresh_cli_partial_and_failure_controls[missing_curve] ______
+source_snapshot/tests/test_molecular_sequence_protease_private.py:278: in test_genuine_fresh_cli_partial_and_failure_controls
+    case = _actual_cli_case(tmp_path / case_name, genuine_cli_deployment, case=case_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_protease_private.py:243: in _actual_cli_case
+    assert capture["verification_failures"] == [], capture["verification_failures"]
+E   AssertionError: [{'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular...isode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/matplotlib'}]
+E   assert [{'stage': 'l.../matplotlib'}] == []
+E     
+E     Left contains 3 more items, first extra item: {'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/numpy'}
+E     Use -v to get more diff
+____ test_genuine_fresh_cli_partial_and_failure_controls[pre_fit_exception] ____
+source_snapshot/tests/test_molecular_sequence_protease_private.py:278: in test_genuine_fresh_cli_partial_and_failure_controls
+    case = _actual_cli_case(tmp_path / case_name, genuine_cli_deployment, case=case_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_protease_private.py:243: in _actual_cli_case
+    assert capture["verification_failures"] == [], capture["verification_failures"]
+E   AssertionError: [{'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular...isode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/matplotlib'}]
+E   assert [{'stage': 'l.../matplotlib'}] == []
+E     
+E     Left contains 3 more items, first extra item: {'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/numpy'}
+E     Use -v to get more diff
+__ test_genuine_fresh_cli_partial_and_failure_controls[post_fit_write_error] ___
+source_snapshot/tests/test_molecular_sequence_protease_private.py:278: in test_genuine_fresh_cli_partial_and_failure_controls
+    case = _actual_cli_case(tmp_path / case_name, genuine_cli_deployment, case=case_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_molecular_sequence_protease_private.py:243: in _actual_cli_case
+    assert capture["verification_failures"] == [], capture["verification_failures"]
+E   AssertionError: [{'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular...isode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/matplotlib'}]
+E   assert [{'stage': 'l.../matplotlib'}] == []
+E     
+E     Left contains 3 more items, first extra item: {'stage': 'library:numpy', 'exception_type': '_BoundaryError', 'exception_module': 'gene_annotation_episode.molecular_sequence_native', 'message': 'molecular_sequence_required_library_unavailable: /libraries/numpy'}
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_molecular_sequence_protease_private.py::test_genuine_fresh_cli_partial_and_failure_controls[missing_curve]
+FAILED source_snapshot/tests/test_molecular_sequence_protease_private.py::test_genuine_fresh_cli_partial_and_failure_controls[pre_fit_exception]
+FAILED source_snapshot/tests/test_molecular_sequence_protease_private.py::test_genuine_fresh_cli_partial_and_failure_controls[post_fit_write_error]
+ERROR source_snapshot/tests/test_molecular_sequence_protease_private.py::test_genuine_fresh_cli_preserves_full_fit_and_original_native_files
+ERROR source_snapshot/tests/test_molecular_sequence_protease_private.py::test_genuine_saved_cli_uses_no_native_source_or_scipy
+3 failed, 31 passed, 2 errors in 5.52s

@@ -7,6 +7,7 @@ The provider owns selection and reconstruction of this receiving context.
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from urllib.parse import urlsplit
 
 from .rna_structure_comparison_prompt import render_rna_comparison_requested_return
 from .scientific_process_prompt import (
@@ -93,6 +94,32 @@ def _guidance(parts, process):
             _section(parts, "Supplied annotation support mapping", _values(selected))
 
 
+def _source_operands(working):
+    """Copy only callable Source metadata from its declared inventory slot."""
+    rows = []
+    sources = working.get("sources", ())
+    if not isinstance(sources, (list, tuple)):
+        return rows
+    for source in sources:
+        if (not isinstance(source, Mapping) or source.get("record_type") != "source"
+                or not isinstance(source.get("id"), str) or not source["id"]
+                or not isinstance(source.get("provider"), str)):
+            continue
+        uri = source.get("uri")
+        web_uri = None
+        if isinstance(uri, str) and not any(character.isspace() or ord(character) < 32 for character in uri):
+            try:
+                parsed = urlsplit(uri)
+                parsed.port  # Validate a supplied port without normalizing the URI.
+                if (parsed.scheme.lower() in {"http", "https"} and parsed.hostname
+                        and parsed.username is None and parsed.password is None):
+                    web_uri = uri
+            except ValueError:
+                pass
+        rows.append((source["id"], source["provider"], source.get("accession"), source.get("version"), web_uri))
+    return rows
+
+
 def _task(state, instructions):
     parts = ["TASK", "", text_instructions(instructions)]
     _goal(parts, state)
@@ -117,6 +144,10 @@ def _task(state, instructions):
     material.update(_pick(working, ("target_binding", "read_library_access", "supplied_context_source_refs")))
     if material:
         _section(parts, "Supplied material and scoped access", _values(material))
+    sources = _source_operands(working)
+    if sources:
+        _section(parts, "Callable supplied Sources", _table(
+            ("Source operand", "Provider", "Accession", "Recorded version", "HTTP(S) resource URI"), sources))
     _guidance(parts, process)
 
     selected_manuals = state.get("selected_launch_instructions") or {}
@@ -128,12 +159,19 @@ def _task(state, instructions):
         _section(parts, "Callable operations", _table(("Operation", "Meaning"),
             ((tool["name"], tool.get("description", "")) for tool in tools)))
         for tool in tools:
+            if tool.get("instructions") is not None:
+                title = "Operation guidance for " + tool["name"]
+                if "resources" in tool:
+                    title += " (resources: " + _scalar(tool["resources"]) + ")"
+                _section(parts, title, _text(tool["instructions"]))
             if "input_schema" in tool:
                 _section(parts, "Operands for " + tool["name"], _schema(tool["input_schema"], "arguments"))
     if "permitted_children" in process:
         _section(parts, "Permitted child roles", _values(process["permitted_children"]))
     if state.get("child_options") is not None:
         _section(parts, "Child construction and requested facts", _text(state["child_options"]))
+    if state.get("job_episode_options") is not None:
+        _section(parts, "Configured job child roles and requested facts", _text(state["job_episode_options"]))
     parts.extend(["", render_rna_comparison_requested_return(state)])
     if process.get("selection"):
         # Pinned option identities are actionable operands of the unchanged

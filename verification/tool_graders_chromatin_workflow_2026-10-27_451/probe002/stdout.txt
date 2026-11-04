@@ -1,0 +1,70 @@
+{
+  "complete_error_count": 54,
+  "launch_local_branches": [
+    {
+      "index": 12,
+      "errors": [
+        {
+          "validator": "additionalProperties",
+          "instance_path": [
+            "assignment",
+            "requested_job"
+          ],
+          "schema_path": [
+            "properties",
+            "assignment",
+            "anyOf",
+            0,
+            "properties",
+            "requested_job",
+            "anyOf",
+            0,
+            "additionalProperties"
+          ],
+          "message": "Additional properties are not allowed ('native_chromatin_interactions' was unexpected)"
+        },
+        {
+          "validator": "required",
+          "instance_path": [
+            "assignment",
+            "requested_job",
+            "native_chromatin_interactions",
+            "software"
+          ],
+          "schema_path": [
+            "properties",
+            "assignment",
+            "anyOf",
+            0,
+            "properties",
+            "requested_job",
+            "anyOf",
+            1,
+            "allOf",
+            0,
+            "properties",
+            "native_chromatin_interactions",
+            "properties",
+            "software",
+            "required"
+          ],
+          "message": "'native_runtime' is a required property"
+        },
+        {
+          "validator": "required",
+          "instance_path": [
+            "assignment"
+          ],
+          "schema_path": [
+            "properties",
+            "assignment",
+            "anyOf",
+            0,
+            "required"
+          ],
+          "message": "'launch_instructions' is a required property"
+        }
+      ]
+    }
+  ]
+}

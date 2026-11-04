@@ -1,0 +1,65 @@
+{
+  "origin": "independent root synthetic parser probe",
+  "rows": [
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 nA</td>",
+      "accepted": false,
+      "reason": "electrical_explicit_unit_mismatch:current",
+      "expected_acceptance": false,
+      "matched_expectation": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA</td>",
+      "accepted": true,
+      "current_pA": 1.8,
+      "expected_acceptance": true,
+      "matched_expectation": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 mV</td>",
+      "accepted": false,
+      "reason": "electrical_explicit_unit_mismatch:current",
+      "expected_acceptance": false,
+      "matched_expectation": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA/s</td>",
+      "accepted": false,
+      "reason": "partial_electrical_unit:current",
+      "expected_acceptance": false,
+      "matched_expectation": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 (pA)/s</td>",
+      "accepted": false,
+      "reason": "partial_electrical_unit:current",
+      "expected_acceptance": false,
+      "matched_expectation": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA)/s</td>",
+      "accepted": false,
+      "reason": "partial_electrical_unit:current",
+      "expected_acceptance": false,
+      "matched_expectation": true
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA)\u207b\u00b9</td>",
+      "accepted": true,
+      "current_pA": 1.8,
+      "expected_acceptance": false,
+      "matched_expectation": false
+    },
+    {
+      "source_cell": "<td>1.8 \u00b1 0.2 pA)\u22121</td>",
+      "accepted": true,
+      "current_pA": 1.8,
+      "expected_acceptance": false,
+      "matched_expectation": false
+    }
+  ],
+  "imports": {
+    "test_literature_channel_components_179": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_channel_review_183/pin_001/tests/test_literature_channel_components_179.py",
+    "gene_annotation_episode.literature_channel_inputs": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_channel_review_183/pin_001/gene_annotation_episode/literature_channel_inputs.py"
+  }
+}

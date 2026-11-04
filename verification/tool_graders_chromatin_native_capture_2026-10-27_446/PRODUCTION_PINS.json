@@ -1,0 +1,32 @@
+{
+  "authority": "Original user attachment; these pins are implementation evidence only",
+  "original_goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/native_chromatin_interaction_capture.py",
+      "sha256": "82e1da008bbc5a88cc78bbd1cf31e09773e3512fbec802cae82ac79fa664d842",
+      "size_bytes": 17067
+    },
+    {
+      "path": "tests/test_native_chromatin_interaction_capture.py",
+      "sha256": "d6e6983136a31bcf79c8e12493096160b9afef4835f8c49897a7b2ee88451bd0",
+      "size_bytes": 27733
+    },
+    {
+      "path": "verification/tool_graders_chromatin_native_capture_2026-10-27_446/run_bounded.py",
+      "sha256": "cd4f4c21251711c93e64924cf9cbd58380ca8e2159e48d46e74dbe5db996b606",
+      "size_bytes": 6933
+    }
+  ],
+  "verification": [
+    {"attempt": "check001", "passed": 30, "deselected": 0, "seconds": 73.89, "terminal": true, "quiescent": true, "returncode": 0},
+    {"attempt": "check002", "passed": 3, "deselected": 27, "seconds": 13.44, "terminal": true, "quiescent": true, "returncode": 0}
+  ],
+  "overlap_note": "check002 reruns the same three native cases with stronger low-level path/HDF5 guards; 30 distinct cases, not 33",
+  "latest_worker_consumer_sha256": "a05b85814556929b555771a573183b1eb2ee3c1623c4034fe0899c84cc713dae",
+  "copied_python_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+  "policy": {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": null},
+  "verified_swap_bytes": 0,
+  "tool_completion_claimed": false,
+  "tally_changed": false
+}

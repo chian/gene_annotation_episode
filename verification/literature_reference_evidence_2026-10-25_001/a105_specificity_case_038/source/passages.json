@@ -1,0 +1,986 @@
+[
+  {
+    "passage": 0,
+    "section_type": "TITLE",
+    "type": "front",
+    "text": "Rv2131c from Mycobacterium tuberculosis Is a CysQ 3′-Phosphoadenosine-5′-phosphatase",
+    "bioc_offset": "0",
+    "table_xml": null
+  },
+  {
+    "passage": 1,
+    "section_type": "ABSTRACT",
+    "type": "abstract",
+    "text": "Mycobacterium tuberculosis (Mtb) produces a number of sulfur-containing metabolites that contribute to its pathogenesis and ability to survive in the host. These metabolites are products of the sulfate assimilation pathway. CysQ, a 3′-phosphoadenosine-5′-phosphatase, is considered an important regulator of this pathway in plants, yeast, and other bacteria. By controlling the pools of 3′-phosphoadenosine 5′-phosphate (PAP) and 3′-phosphoadenosine 5′-phosphosulfate (PAPS), CysQ has the potential to modulate flux in the biosynthesis of essential sulfur-containing metabolites. Bioinformatic analysis of the Mtb genome suggests the presence of a CysQ homologue encoded by the gene Rv2131c. However, a recent biochemical study assigned the protein’s function as a class IV fructose-1,6-bisphosphatase. In the present study, we expressed Rv2131c heterologously and found that the protein dephosphorylates PAP in a magnesium-dependent manner, with optimal activity observed between pH 8.5 and pH 9.5 using 0.5 mM MgCl2. A sensitive electrospray ionization mass spectrometry-based assay was used to extract the kinetic parameters for PAP, revealing a Km (8.1 ± 3.1 μM) and kcat (5.4 ± 1.1 s−1) comparable to those reported for other CysQ enzymes. The second-order rate constant for PAP was determined to be over 3 orders of magnitude greater than those determined for myo-inositol 1-phosphate (IMP) and fructose 1,6-bisphosphate (FBP), previously considered to be the primary substrates of this enzyme. Moreover, the ability of the Rv2131c-encoded enzyme to dephosphorylate PAP and PAPS in vivo was confirmed by functional complementation of an Escherichia coli ΔcysQ mutant. Taken together, these studies indicate that Rv2131c encodes a CysQ enzyme that may play a role in mycobacterial sulfur metabolism.",
+    "bioc_offset": "89",
+    "table_xml": null
+  },
+  {
+    "passage": 2,
+    "section_type": "INTRO",
+    "type": "footnote",
+    "text": "Abbreviations: Mtb, Mycobacterium tuberculosis; PAP, 3′-phosphoadenosine 5′-phosphate; PAPS, 3′-phosphoadenosine 5′-phosphosulfate; IMP, myo-inositol 1-phosphate; FBP, fructose 1,6-bisphosphate; APS, adenosine 5′-phosphosulfate; CIP, calf intestinal alkaline phosphatase; IMAC, immobilized metal ion affinity chromatography.",
+    "bioc_offset": "1914",
+    "table_xml": null
+  },
+  {
+    "passage": 3,
+    "section_type": "INTRO",
+    "type": "paragraph",
+    "text": "Tuberculosis poses a critical threat to global health. It is estimated that one-third of the world’s population is infected with Mycobacterium tuberculosis (Mtb),1 the disease-causing bacterium. The emergence of drug-resistant strains has rapidly diminished the efficacy of current antibiotics, urging the development of more effective treatments and the identification of new therapeutic targets. ",
+    "bioc_offset": "2249",
+    "table_xml": null
+  },
+  {
+    "passage": 4,
+    "section_type": "INTRO",
+    "type": "paragraph",
+    "text": "Many sulfur-containing metabolites have been implicated in Mtb pathogenesis, suggesting the sulfate assimilation pathway may serve as a reservoir of molecules intimately linked to the virulence and survival of the bacterium. Notable examples include sulfolipid-1, a glycolipid constituent of the Mtb cell wall that has been correlated with virulence, and mycothiol, an abundant low molecular mass thiol whose antioxidant activity may facilitate bacterial survival in the host (−). In addition, disruption of the reductive branch of the sulfate assimilation pathway has been shown to attenuate Mtb virulence and persistence during the chronic phase of infection in mice. Genes involved in the sulfate assimilation pathway are frequently upregulated under conditions that mimic the latent stage of the Mtb life cycle; some of these genes lack a human counterpart, making them attractive drug targets. Since dormant mycobacteria are impervious to antibiotics which rely on active cell division, the machinery used by these bacteria in the metabolism of sulfur may represent new targets for therapeutic intervention.",
+    "bioc_offset": "2650",
+    "table_xml": null
+  },
+  {
+    "passage": 5,
+    "section_type": "INTRO",
+    "type": "paragraph",
+    "text": "The sulfate assimilation pathway of Mtb is analogous to the prototypical pathway of Escherichia coli (Figure 1) (−). It begins with the uptake of inorganic sulfate, which is subsequently activated by condensation with ATP in a reaction catalyzed by ATP sulfurylase. This enzyme, encoded by the genes cysD and cysN, is a heterodimeric G-protein that couples GTP hydrolysis with the sulfurylation of ATP to generate adenosine 5′-phosphosulfate (APS). APS is then phosphorylated at the 3′-position by APS kinase (CysC) to give 3′-phosphoadenosine 5′-phosphosulfate (PAPS). In E. coli, this intermediate is reduced to sulfite and 3′-phosphoadenosine 5′-phosphate (PAP) by PAPS reductase (CysH), which uses thioredoxin as an electron donor. Sulfite is then reduced to sulfide, which is incorporated into several reduced sulfur-containing metabolites, such as cysteine, methionine, and mycothiol, by other enzymes in the Cys regulon. In Mtb, however, this reduction cascade emanates from APS, which is reduced to sulfite by APS reductase (also termed CysH). This leaves PAPS to serve as the sulfuryl group donor for a set of eukaryotic-like sulfotransferases, which generate sulfated metabolites believed to mediate host−pathogen interactions and signaling pathways in the bacterium (−).",
+    "bioc_offset": "3765",
+    "table_xml": null
+  },
+  {
+    "passage": 6,
+    "section_type": "FIG",
+    "type": "fig_caption",
+    "text": "Sulfate assimilation pathways of E. coli and Mtb. Arrows with dotted lines designate enzymatic reactions specific to E. coli. Bolded arrows designate those specific to Mtb.",
+    "bioc_offset": "5065",
+    "table_xml": null
+  },
+  {
+    "passage": 7,
+    "section_type": "INTRO",
+    "type": "paragraph",
+    "text": "One regulator of sulfate assimilation in E. coli is the phosphatase CysQ. Mutations in the cysQ gene result in cysteine and sulfite auxotrophy under aerobic conditions, which supports a key role for this enzyme in sulfur metabolism. CysQ is believed to regulate the intracellular level of PAPS, which may be cytotoxic at high concentrations. In addition, CysQ is thought to modulate PAP levels in the cell, an activity that might further regulate the biosynthesis of reduced sulfur-containing metabolites since PAP is a competitive inhibitor of PAPS reductase. Interestingly, PAP accumulation negatively regulates the activity of other important bacterial enzymes. Examples include oligoribonuclease, an exonuclease which degrades small ribonucleotides, and phosphopantetheinyltransferase, an enzyme which transfers the 4-phosphopantetheine group of coenzyme A to acyl carrier protein during fatty acid biosynthesis and the production of secondary metabolites. Thus, CysQ may not only regulate the cell’s ability to metabolize sulfur but could also play a role in other essential bacterial processes. Yet, no homologue of the E. coli CysQ has been characterized in Mtb.",
+    "bioc_offset": "5238",
+    "table_xml": null
+  },
+  {
+    "passage": 8,
+    "section_type": "INTRO",
+    "type": "paragraph",
+    "text": "Given the many parallels between sulfur metabolism in E. coli and Mtb, we reasoned that a CysQ-like phosphatase could be functional in mycobacteria. Upon searching the Mtb genome, we discovered a gene, Rv2131c, whose encoded protein shares 31% amino acid sequence identity with the E. coli CysQ. However, a recent report by Gu and co-workers indicated the encoded enzyme may serve as a bifunctional inositol monophosphatase and fructose-1,6-bisphosphatase, a finding that supports a role for Rv2131c in myo-inositol biosynthesis and challenges its assignment to the mycobacterial sulfate assimilation pathway.",
+    "bioc_offset": "6410",
+    "table_xml": null
+  },
+  {
+    "passage": 9,
+    "section_type": "INTRO",
+    "type": "paragraph",
+    "text": "Here, we clarify the physiological role of Rv2131c by providing conclusive evidence that the gene product can function as a CysQ phosphatase. Genetic complementation of an E. coli ΔcysQ mutant with the Mtb gene unequivocally establishes its ability to dephosphorylate PAP and PAPS in vivo. In addition, following the heterologous expression of Rv2131c in E. coli, the enzyme was purified and characterized to obtain kinetic parameters for PAP, myo-inositol 1-phosphate (IMP), and fructose 1,6-bisphosphate (FBP). The data confirm that PAP is the preferred in vitro substrate of Rv2131c, redefining the substrate specificity of this enzyme and validating its assignment as a CysQ phosphatase. Taken together, these findings suggest that Rv2131c may serve as an important regulator of sulfur metabolism in Mtb. With the potential to manipulate sulfation levels in the cell and regulate the biosynthesis of essential reduced sulfur-containing metabolites, CysQ may be an attractive target for antibiotic therapy.",
+    "bioc_offset": "7020",
+    "table_xml": null
+  },
+  {
+    "passage": 10,
+    "section_type": "METHODS",
+    "type": "title_1",
+    "text": "Experimental Procedures",
+    "bioc_offset": "8034",
+    "table_xml": null
+  },
+  {
+    "passage": 11,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Materials",
+    "bioc_offset": "8058",
+    "table_xml": null
+  },
+  {
+    "passage": 12,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "Pfu DNA polymerase was from Stratagene (La Jolla, CA). Oligonucleotides were from Elim Biopharmaceuticals, Inc. (Hayward, CA). Restriction enzymes and calf intestinal alkaline phosphatase (CIP) were from New England Biolabs (Ipswich, MA). Qiagen kits were used for plasmid DNA purification and the extraction of DNA from agarose gels. T4 DNA ligase and BL21(DE3) chemically competent cells were purchased from Invitrogen (Carlsbad, CA). Vectors were obtained from Novagen (pET28b; Madison, WI) and the American Type Culture Collection (pBAD18; Manassas, VA). DNA sequencing was performed by Elim Biopharmaceuticals, Inc. All chemicals were purchased from Sigma-Aldrich (St. Louis, MO) and were used without further purification, including 3′-phosphoadenosine 5′-phosphate (PAP), guanosine 5′-monophosphate (GMP), adenosine 5′-monophosphate (AMP), d-myo-inositol 1-monophosphate (IMP), and d-fructose 1,6-bisphosphate (FBP). Assay mixtures were prepared in water that was doubly distilled and deionized using a Milli-Q system (Millipore; Billerica, MA). All other materials used in this work were obtained from sources cited within the text.",
+    "bioc_offset": "8068",
+    "table_xml": null
+  },
+  {
+    "passage": 13,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Preparation of Expression Vector",
+    "bioc_offset": "9217",
+    "table_xml": null
+  },
+  {
+    "passage": 14,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "The Rv2131c gene was PCR-amplified from Mtb H37Rv genomic DNA with the primers 5′-TTACGTAGGACATATGGTGGTGAGCCCTGCCGCACC-3′ (NdeI) and 5′-TAGTATAAGCGGATCCTCAGCGCCACGCGTCGGCGA-3′ (BamHI). The resulting 0.8 kilobase fragment was digested with NdeI and BamHI and ligated into a similarly digested and CIP-treated pET28b vector with an N-terminal His6 tag. DNA sequencing was used to confirm the successful construction of the pET28b_2131c plasmid.",
+    "bioc_offset": "9250",
+    "table_xml": null
+  },
+  {
+    "passage": 15,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Preparation of E. coli Complementation Vector",
+    "bioc_offset": "9701",
+    "table_xml": null
+  },
+  {
+    "passage": 16,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "The Rv2131c gene was PCR-amplified from Mtb H37Rv genomic DNA with the primers 5′-CACAGTTACGTCTAGAAGGAGGTACTGAATGGTGAGCCCTGCCGCAC-3′ (XbaI) and 5′-ACATGACTCTAAGCTTTCAGCGCCACGCGTCGGCGA-3′ (HindIII). A ribosome binding site was added by PCR and is shown in boldface type. The PCR product was digested with XbaI and HindIII and ligated into a similarly digested and CIP-treated pBAD18 vector with an ampicillin resistance marker and an arabinose-inducible promoter. DNA sequencing was used to confirm the successful construction of the pBAD18_2131c plasmid.",
+    "bioc_offset": "9747",
+    "table_xml": null
+  },
+  {
+    "passage": 17,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Expression of Rv2131c in E. coli",
+    "bioc_offset": "10310",
+    "table_xml": null
+  },
+  {
+    "passage": 18,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "pET28b_2131c was transformed into E. coli strain BL21(DE3). Transformants were used to inoculate 1 L cultures of LB medium containing 50 mg/L kanamycin, which were incubated at 37 °C for approximately 2.5 h with shaking until an OD600 of 0.6−0.8 was reached. Protein expression was induced by the addition of isopropyl β-d-thiogalactoside (IPTG) to a final concentration of 100 µM. The cultures were grown for an additional 20 h at 18 °C before the cells were harvested by centrifugation (6000 rpm, 4 °C, 15 min). The collected cells (∼5 g/L) were suspended in 20 mL of PAP-agarose buffer (50 mM Tris buffer, pH 7.5, 10 mM CaCl2, and 50 mM KCl) supplemented with 5 µg/mL lysozyme, 5 µg/mL DNase, and 1 complete, EDTA-free protease inhibitor cocktail tablet (Roche) at 4 °C. Cells were lysed by ultrasonication (Misonix Sonicator 3000) or using a high-pressure homogenizer (Avestin EmulsiFlex-C5). The cell lysate was cleared by centrifugation (18500 rpm, 4 °C, 20 min), and the protein was purified from the supernatant as previously described. Briefly, ∼1.5 mL of PAP-agarose resin (Sigma) was swelled in PAP-agarose buffer and added to the supernatant, which was rocked gently with the beads for 2 h at 4 °C. The supernatant was applied to a chromatography column and collected by gravity flow. The resin was washed with 20 mL of PAP-agarose buffer containing 500 mM NaCl, followed by 20 mL of PAP-agarose buffer. To elute the protein, 3 mL of elution buffer (PAP-agarose buffer containing 300 µM PAP) was allowed to equilibrate with the column for 20 min before 0.5 mL fractions were collected. SDS−PAGE was used to identify column fractions containing the desired protein, which were concentrated and further purified by size exclusion chromatography. The protein was loaded onto a HiPrep 16/60 Sephacryl S-300 high resolution−gel filtration column (GE Healthcare Biosciences Corp.) equilibrated with gel filtration buffer (50 mM Tris buffer, pH 7.5, 10% glycerol, 1 mM dithiothreitol). Fractions (2 mL each) were analyzed by SDS−PAGE, and those containing pure protein were concentrated by centrifugation and stored at −80 °C.",
+    "bioc_offset": "10343",
+    "table_xml": null
+  },
+  {
+    "passage": 19,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "To confirm the protein’s identity, the purified sample was desalted on a microbore reversed-phase column (Bruker Agilent) and characterized using a Bruker Hewlett-Packard ESI-ion trap mass spectrometer. Tryptic digestion and mass fingerprinting using an Applied Biosystems 4800 MALDI-TOF were used to provide further confirmation of the protein’s identity. Protein concentration was determined by UV absorption at 280 nm using a calculated extinction coefficient of 46350 M−1 cm−1.",
+    "bioc_offset": "12501",
+    "table_xml": null
+  },
+  {
+    "passage": 20,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Activity Assays",
+    "bioc_offset": "12991",
+    "table_xml": null
+  },
+  {
+    "passage": 21,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "The Baykov malachite green method was used to establish phosphatase activity with PAP as the substrate and to determine the optimal conditions for catalysis. A standard reaction mixture contained 50 mM Tris buffer, pH 8.5, 100 µM PAP, 0.5 mM MgCl2, and 5 nM enzyme in a 200 µL volume. The reaction was preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 5 min thereafter by adding one-fourth volume of acidic malachite green dye solution. After 10 min, the absorbance of the reaction at 630 nm was determined using a Molecular Devices SpectraMax 190 UV−visible plate reader. A standard curve generated using monobasic potassium phosphate was used to correlate the absorbance of the reaction mixture with the concentration of inorganic phosphate in solution. Since enzyme activity was determined to be linear under these reaction conditions, the initial rate of the reaction was calculated by dividing the concentration of liberated phosphate by the reaction time. Control reactions without enzyme were treated identically and used to account for background hydrolysis of the substrate. For the determination of the optimum pH range, metal cofactor, and MgCl2 concentration, the corresponding factors were varied. To evaluate the effect of various alkali metal cations on enzyme activity, increasing amounts of each cation were added to the standard reaction mixture.",
+    "bioc_offset": "13007",
+    "table_xml": null
+  },
+  {
+    "passage": 22,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Enzyme Kinetics",
+    "bioc_offset": "14407",
+    "table_xml": null
+  },
+  {
+    "passage": 23,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "The kinetic parameters for PAP were determined using a previously described electrospray ionization mass spectrometry (ESI-MS) assay with some modifications, as described below.",
+    "bioc_offset": "14423",
+    "table_xml": null
+  },
+  {
+    "passage": 24,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Mass Spectrometry",
+    "bioc_offset": "14601",
+    "table_xml": null
+  },
+  {
+    "passage": 25,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "Mass spectra were acquired using a quadrupole time-of-flight (Q-Tof) mass spectrometer equipped with a Z-spray electrospray ionization (ESI) source (Q-Tof Premier; Waters, Beverly, MA). Sample solutions were infused from a 250 μL gastight syringe (Hamilton, Reno, NV) into the ESI probe at a flow rate of 5 μL/min using a syringe pump. The electrospray was emitted from a stainless steel capillary with an inner diameter of 127 μm. The ion source parameters were as follows: ESI capillary voltage 2.4 kV, nebulizing gas (nitrogen) flow rate 800 L/h, sample cone voltage 35 V, extraction cone and ion guide voltages 5 V, source block temperature 80 °C, and nebulizing gas temperature 200 °C. No cone gas was used. The pressures in the different stages of the instrument were as follows: first pumping stage 1.5 mbar, ion transfer stage 5 × 10−4 mbar, quadrupole analyzer 2 × 10−5 mbar, argon-filled cell 8 × 10−3 mbar, and Tof analyzer 9 × 10−7 mbar. The Tof analyzer was operated in “V” mode. Under these conditions, a mass resolving power of 10000 was routinely achieved. For each sample, mass spectra were recorded in the negative ion mode for a period of 4 min. The electrospray emitter was rinsed with deionized water after each measurement to avoid cross-contamination between samples. External mass calibration was performed immediately prior to measurements using solutions of sodium formate. Mass spectra were processed using MassLynx software (version 4.1; Waters).",
+    "bioc_offset": "14619",
+    "table_xml": null
+  },
+  {
+    "passage": 26,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Single-Point Normalization Factor",
+    "bioc_offset": "16115",
+    "table_xml": null
+  },
+  {
+    "passage": 27,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "Guanosine 5′-monophosphate (GMP) was selected as the internal standard due to its structural similarities to the product of PAP dephosphorylation, AMP. A solution containing 5 µM AMP in 50 mM Tris buffer, pH 8.5, and 0.5 mM MgCl2 was prepared. A 25 µL aliquot of the solution was mixed with 100 µL of water containing 6.25 µM GMP. The intensities of the product ion (IP) and internal standard ion (IIS) measured by ESI-MS were used to obtain the corresponding single-point normalization factor R. R relates the intensity ratio, IP/IIS, to the concentration ratio of the respective analytes as described in eq 1. ",
+    "bioc_offset": "16149",
+    "table_xml": null
+  },
+  {
+    "passage": 28,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "Equation 1 can be rearranged to calculate the product concentration when R, IP/IIS, and the concentration of the internal standard are known (eq 2). If the initial rate of a reaction is desired, the product concentration can be divided by the reaction time (TR) provided that enzyme activity is linear during that time (eq 3). ",
+    "bioc_offset": "16778",
+    "table_xml": null
+  },
+  {
+    "passage": 29,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Reaction Progress Curve",
+    "bioc_offset": "17106",
+    "table_xml": null
+  },
+  {
+    "passage": 30,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "To establish the linear range of PAP phosphatase activity, a reaction progress curve was generated. A 421 µL reaction mixture containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and 25 µM PAP was preincubated for 5 min at 30 °C. Prior to the addition of enzyme, a 25 µL aliquot was removed and quenched with 5 µL of 10% HCl to obtain a 0 min time point. To initiate the reaction, 4 µL of a 500 nM enzyme stock was added to the mixture for a final enzyme concentration of 5 nM. The reaction proceeded at 30 °C for 30 min, during which 25 µL aliquots were removed and quenched as described above. A 25 µL aliquot from each quenched sample was then mixed with 100 µL of internal standard solution (6.25 µM GMP in water) and analyzed by ESI-MS. The concentration of AMP in each sample was calculated as described above and used to determine the extent of substrate conversion as a function of time.",
+    "bioc_offset": "17130",
+    "table_xml": null
+  },
+  {
+    "passage": 31,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Determination of Michaelis−Menten Parameters for PAP",
+    "bioc_offset": "18061",
+    "table_xml": null
+  },
+  {
+    "passage": 32,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "Attempts to characterize the kinetic parameters for PAP using the malachite green assay suggested that the Km was below 20 µM (data not shown). Because this is near the detection limit of the assay, a more sensitive method was required for the kinetic analysis of this substrate. Eight reaction mixtures (198 µL each) containing 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, and a variable concentration of PAP (0.625−50 µM) were prepared. Following a 5 min incubation at 30 °C, the reactions were initiated by adding 2 µL of a 500 nM enzyme stock for a final enzyme concentration of 5 nM. After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl. Samples for ESI-MS analysis were prepared by combining 25 µL of each quenched reaction with 100 µL of internal standard solution. Using the calculated AMP concentration for each sample, the corresponding initial rates were determined and plotted against PAP concentration using KaleidaGraph (version 4.03) to obtain Michaelis−Menten parameters.",
+    "bioc_offset": "18116",
+    "table_xml": null
+  },
+  {
+    "passage": 33,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Determination of Michaelis−Menten Parameters for IMP and FBP",
+    "bioc_offset": "19148",
+    "table_xml": null
+  },
+  {
+    "passage": 34,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "The kinetic parameters for IMP and FBP were determined using the malachite green assay. Reaction mixtures were prepared using the optimal conditions for catalysis reported previously for these substrates. Mixtures containing 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme, and a variable concentration of IMP (1−5.5 mM) or FBP (90−900 µM) were prepared in a 100 µL volume. The substrate concentrations used in these studies were based on the previously reported Km values for IMP (220 µM) and FBP (450 µM). However, initial experiments revealed that the Km for IMP was much greater than expected, necessitating the use of a higher concentration range. Because substrate inhibition was observed for both IMP and FBP, the highest substrate concentrations used in the kinetic analysis of these substrates were 5.5 mM and 900 µM, respectively. The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution. Enzyme activity was determined to be in the linear regime under these reaction conditions. Control reactions without enzyme were used to account for the background hydrolysis of each substrate. The amount of inorganic phosphate in each sample was quantified as described above and used to determine the initial rates corresponding to each substrate concentration. KaleidaGraph was used to determine the kinetic parameters for these substrates.",
+    "bioc_offset": "19211",
+    "table_xml": null
+  },
+  {
+    "passage": 35,
+    "section_type": "METHODS",
+    "type": "title_2",
+    "text": "Genetic Complementation in E. coli",
+    "bioc_offset": "20704",
+    "table_xml": null
+  },
+  {
+    "passage": 36,
+    "section_type": "METHODS",
+    "type": "paragraph",
+    "text": "An E. coli mutant with a Tn5Kan-I-SceI transposon in the cysQ gene was obtained from the E. coli Genome Project at the University of Wisconsin—Madison. Cells cultured overnight in 2 mL of LB medium with 50 mg/L kanamycin were used to inoculate 1 L of LB/kanamycin medium and grown for approximately 3 h at 37 °C with shaking to an OD600 of ∼0.6. The cells were then cooled to 4 °C and made electrocompetent by washing them four times, twice in ice-cold water and twice in ice-cold 10% glycerol, and resuspending them in 0.5 mL of 10% glycerol. Electroporation with a Bio-Rad gene pulser was used to transform plasmid DNA into the cells following the manufacturer’s protocol. Transformants were grown on LB agar containing 50 mg/L kanamycin and 100 mg/L ampicillin. Individual colonies were streaked onto M9 minimal medium [10 g/L M9 minimal salts (Sigma), 15 g/L Bacto Agar, 0.2% glycerol, 1 mM MgSO4, and 0.1 mM CaCl2] containing arabinose (0.2%) and 50 mg/L kanamycin. Certain plates also contained 100 mg/L ampicillin and/or 0.5 mM Na2SO3. The antibiotics, MgSO4, CaCl2, arabinose, and Na2SO3 were sterile-filtered individually and added following autoclave sterilization of the remaining media. Plates were incubated at 37 °C for 24 h.",
+    "bioc_offset": "20739",
+    "table_xml": null
+  },
+  {
+    "passage": 37,
+    "section_type": "RESULTS",
+    "type": "title_1",
+    "text": "Results and Discussion",
+    "bioc_offset": "21988",
+    "table_xml": null
+  },
+  {
+    "passage": 38,
+    "section_type": "RESULTS",
+    "type": "title_2",
+    "text": "Identification of CysQ Homologue Rv2131c in the M. tuberculosis Genome",
+    "bioc_offset": "22011",
+    "table_xml": null
+  },
+  {
+    "passage": 39,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "BLAST analysis was used to identify a CysQ homologue in M. tuberculosis with 31% amino acid sequence identity to E. coli CysQ (UniProtKB entry P22255). The corresponding gene, Rv2131c, was annotated as a “possible monophosphatase cysQ” in the published genome. The encoded protein bears the conserved metal-binding motif of the phosphomonoesterase protein family (Figure 2), which includes the Saccharomyces cerevisiae Hal2p (UnitProtKB P32179), a well-characterized 3′-phosphoadenosine-5′-phosphatase.",
+    "bioc_offset": "22082",
+    "table_xml": null
+  },
+  {
+    "passage": 40,
+    "section_type": "FIG",
+    "type": "fig_caption",
+    "text": "Multiple sequence alignment of enzymes from the phosphomonoesterase protein family. Sequences were aligned using ClustalW, and shading of conserved residues was performed using Jalview. The underlined residues constitute the conserved metal-binding motif of the phosphomonoesterase protein family. Abbreviations are as follows: Mtb_Rv2131c, Rv2131c from Mtb (UniProtKB entry P65163); Ecoli_CysQ, CysQ from E. coli (UniProtKB entry P22255); Scer_Hal2, 3′(2′),5′-bisphosphate nucleotidase from S. cerevisiae (UniProtKB entry P32179); Osat_RHL, 3′(2′),5′-diphosphonucleoside 3′(2′)-phosphohydrolase from O. sativa (UniProtKB entry P0C5A3); Ecoli_SuhB, inositol-1-monophosphatase from E. coli (UniProtKB entry P0ADG4); Ecoli_FBPase, fructose-1,6-bisphosphatase from E. coli (UniProtKB entry P0A993).",
+    "bioc_offset": "22593",
+    "table_xml": null
+  },
+  {
+    "passage": 41,
+    "section_type": "RESULTS",
+    "type": "title_2",
+    "text": "Heterologous Expression of Rv2131c in E. coli",
+    "bioc_offset": "23405",
+    "table_xml": null
+  },
+  {
+    "passage": 42,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "Rv2131c was expressed in E. coli BL21(DE3) with an N-terminal His6 tag. Initial attempts to purify the protein using the Ni2+ IMAC procedure described by Gu et al. were unsuccessful. Significant impurities were retained following elution of the protein from the column. To improve the purification process, a substrate-affinity purification step was introduced. PAP-agarose resin preequilibrated with calcium, an inhibitor of homologous phosphatases, was used to enrich the Rv2131c gene product by preventing hydrolysis of the immobilized substrate. The protein was eluted using an excess of PAP and further purified by size exclusion chromatography. The protein was stable in gel filtration buffer lacking NaCl, an inhibitor of certain CysQ homologues. For this reason, NaCl was omitted from subsequent activity assays. SDS−PAGE analysis revealed an apparent molecular mass of 30 kDa for the purified protein. Electrospray ionization mass spectrometry was used to confirm the identity of the protein, whose measured mass (30578 ± 1 Da) was in agreement with the predicted molecular mass of the protein lacking the N-terminal methionine (30578.5 Da). In addition, tryptic digestion and mass fingerprinting of the purified protein sample generated approximately 83% sequence coverage, providing further confirmation of the protein’s identity.",
+    "bioc_offset": "23451",
+    "table_xml": null
+  },
+  {
+    "passage": 43,
+    "section_type": "RESULTS",
+    "type": "title_2",
+    "text": "Defining Optimal Conditions for PAP Phosphatase Activity",
+    "bioc_offset": "24798",
+    "table_xml": null
+  },
+  {
+    "passage": 44,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "Once the purified Rv2131c gene product was found to dephosphorylate PAP, its activity with the substrate was measured as a function of pH, various metal ions, and Mg2+ concentration (Figure 3). The pH-dependent activity profile was determined by calculating the specific activity of the enzyme in the presence of 100 µM PAP and 0.5 mM MgCl2 at pH 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, and 10.0. The optimum pH was found to be between 8.5 and 9.5 (Figure 3A), similar to that of other CysQ homologues.",
+    "bioc_offset": "24855",
+    "table_xml": null
+  },
+  {
+    "passage": 45,
+    "section_type": "FIG",
+    "type": "fig_caption",
+    "text": "pH, metal, and Mg2+ dependence of Rv2131c PAP phosphatase activity. Rv2131c activity as a function of pH (A), various divalent metal ions (B), or MgCl2 concentration (C). Conditions: 100 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme, 30 °C. For (A) through (C), the corresponding conditions were varied. Activities are expressed as a percentage of the maximum observed activity. These data represent the average of three independent experiments. Error bars indicate the corresponding standard deviation.",
+    "bioc_offset": "25357",
+    "table_xml": null
+  },
+  {
+    "passage": 46,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "To determine its divalent metal ion dependence, the enzyme was assayed with 100 µM PAP in the presence of 50 mM Tris buffer (pH 8.5) and 0.5 mM MgCl2, MnCl2, CoCl2, CaCl2, FeCl2, ZnCl2, NiCl2, or CuCl2. As anticipated, the enzyme was most active with Mg2+, the preferred cofactor of the phosphomonoesterase protein family. Mn2+ afforded roughly 50% of the activity observed with Mg2+, while 40% activity was retained in the presence of Co2+. Less than 7% activity was observed with the remaining metal ions (Figure 3B). This trend may be explained by variations in the pKa of metal-coordinated water, which likely participates in phosphoryl group transfer. The pKaʼs of Mg2+-, Mn2+-, and Co2+-coordinated water are between 10.2 and 11.4, whereas those of water coordinated to the remaining divalent metal ions deviate markedly from these values. The microenvironment defined by the enzyme’s active site appears to favor hydrolysis by water with a pKa that falls within this narrow range.",
+    "bioc_offset": "25880",
+    "table_xml": null
+  },
+  {
+    "passage": 47,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "Once Mg2+ was identified as the optimal metal cofactor for PAP phosphatase activity, different concentrations of the metal ion (from 0 to 15 mM) were assayed in the presence of 100 µM PAP and 50 mM Tris buffer (pH 8.5). Maximal activity was observed with 0.5 mM MgCl2, comparable to the E. coli CysQ and related enzymes. Only a small amount of the metal ion was needed to activate the enzyme, which maintained significant activity at higher Mg2+ concentrations, though a gradual decline in activity was observed above 1 mM MgCl2 (Figure 3C).",
+    "bioc_offset": "26872",
+    "table_xml": null
+  },
+  {
+    "passage": 48,
+    "section_type": "RESULTS",
+    "type": "title_2",
+    "text": "Sensitivity of Rv2131c to Alkali Metal Cations",
+    "bioc_offset": "27418",
+    "table_xml": null
+  },
+  {
+    "passage": 49,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "Proteins belonging to the phosphomonoesterase protein family are universally inhibited by lithium, often at submillimolar concentrations. In addition, the PAP phosphatase activity of CysQ homologues is commonly affected by two other alkali metal cations: Na+ and K+. Some enzymes are inhibited by both of these cations, whereas others are inhibited by sodium but activated by potassium. It is likely that the variable cation sensitivity of CysQ homologues results from structural differences in their alkali metal-binding sites.",
+    "bioc_offset": "27465",
+    "table_xml": null
+  },
+  {
+    "passage": 50,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "To evaluate the sensitivity of the Rv2131c-encoded enzyme to these cations, PAP phosphatase activity was measured using 100 µM PAP in the presence of 50 mM Tris buffer (pH 8.5), 0.5 mM MgCl2, and various concentrations of LiCl (0−10 mM), NaCl (0−500 mM), or KCl (0−500 mM). Lithium was the most potent inhibitor of Rv2131c, with a half-maximal inhibition concentration (IC50) of approximately 0.5 mM (Figure 4). Sodium and potassium also inhibited PAP hydrolysis but had higher IC50 values (150 and 250 mM, respectively).",
+    "bioc_offset": "27994",
+    "table_xml": null
+  },
+  {
+    "passage": 51,
+    "section_type": "FIG",
+    "type": "fig_caption",
+    "text": "Inhibition of Rv2131c PAP phosphatase activity by Li+, Na+, and K+. Rv2131c activity as a function of LiCl (●), NaCl (◼), or KCl (▲) concentration. Conditions: 100 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme, variable amounts of LiCl, NaCl, or KCl, 30 °C. Activities are expressed as a percentage of the activity observed in the absence of monovalent cations. These data represent the average of three independent experiments. Error bars indicate the corresponding standard deviation.",
+    "bioc_offset": "28523",
+    "table_xml": null
+  },
+  {
+    "passage": 52,
+    "section_type": "RESULTS",
+    "type": "title_2",
+    "text": "ESI-MS Assay",
+    "bioc_offset": "29033",
+    "table_xml": null
+  },
+  {
+    "passage": 53,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "Previous efforts to assay CysQ-type activity have frequently relied on colorimetric inorganic phosphate detection or HPLC-based methods. However, the limited sensitivity of these techniques has frustrated attempts to accurately measure kinetic parameters for substrates with low micromolar Km values. Methods involving radiolabeled materials have been successfully employed to obtain the kinetic parameters for such substrates but are often cumbersome. This is especially true when radioactive substrates must be synthesized due to a lack of commercial availability, as is the case with PAP. For these reasons, and because initial attempts to characterize PAP using the malachite green assay indicated the Km was below 20 µM, we used a mass spectrometry-based assay for the steady-state kinetic analysis of this substrate. This approach has been successfully applied to bacterial sulfotransferases, generating kinetic parameters that are in excellent agreement with those obtained using a radiolabel transfer assay.",
+    "bioc_offset": "29046",
+    "table_xml": null
+  },
+  {
+    "passage": 54,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "To quantify product formation by mass spectrometry, an internal standard must be used whose mass spectral intensity can be compared to that of the product ion. For this comparison to be valid, the structure and ionization efficiency of the internal standard must approximate those of the product. With this in mind, we selected GMP as our internal standard because of its structural similarities to the PAP reaction product, AMP. A mixture containing known concentrations of AMP and GMP was prepared and analyzed by ESI-MS to obtain the intensities of the product and internal standard ions. These values were then used to calculate a single-point normalization factor R using eq 1. An average R value of 1.5 ± 0.1 was obtained using a series of samples prepared and analyzed at different times over a 3 week period. This value was used to calculate the amount of AMP generated in subsequent assays using eq 2.",
+    "bioc_offset": "30066",
+    "table_xml": null
+  },
+  {
+    "passage": 55,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "Initially, a reaction progress curve was generated to define the linear range of enzyme activity (Figure 5). Product formation was monitored as a function of time by taking aliquots of a reaction mixture containing 25 µM PAP and 5 nM enzyme over a 30 min period. Each aliquot was quenched with a 10% HCl solution and then mixed with the internal standard prior to analysis by ESI-MS. Acid was used to stop the reaction because the internal standard was not soluble in methanol, the organic solvent traditionally used as a quenching agent in this assay. The linear portion of the progress curve was defined between 0 and 6 min with an R2 value of 0.993 (Figure 5, inset). A reaction time of 4 min was used in subsequent kinetic assays, corresponding to approximately 37% conversion of substrate to product.",
+    "bioc_offset": "30978",
+    "table_xml": null
+  },
+  {
+    "passage": 56,
+    "section_type": "FIG",
+    "type": "fig_caption",
+    "text": "Reaction progress curve for determining the linear range of Rv2131c PAP phosphatase activity. Conditions: 25 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme, 30 °C. The inset shows the linear portion of the curve from 0 to 6 min.",
+    "bioc_offset": "31788",
+    "table_xml": null
+  },
+  {
+    "passage": 57,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "It is noteworthy that unlike previous applications of this method samples were prepared under entirely aqueous conditions and without altering the biochemical matrix of the reaction. Tris buffer was used at a concentration of 50 mM in each reaction, demonstrating the ability of this assay to quantify the products of enzymatic processes in complex biochemical mixtures. The sensitivity of these measurements was somewhat limited by the ion suppression effect of Tris buffer, however, which made it difficult to obtain accurate reaction progress curves at low substrate concentrations. For this reason, we were unable to confirm whether enzyme activity was still linear after 4 min under these reaction conditions. Thus, the initial rates calculated at low PAP concentrations may be slightly underestimated and the Km for this substrate may be even lower than reported.",
+    "bioc_offset": "32035",
+    "table_xml": null
+  },
+  {
+    "passage": 58,
+    "section_type": "RESULTS",
+    "type": "title_2",
+    "text": "Steady-State Kinetic Assays",
+    "bioc_offset": "32905",
+    "table_xml": null
+  },
+  {
+    "passage": 59,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "The kinetics of PAP phosphatase activity were measured by reacting various amounts of substrate with Rv2131c and quantifying product formation by the ESI-MS assay (Figure S1 of the Supporting Information). Reaction velocity was plotted as a function of substrate concentration (Figure 6), and Michaelis−Menten parameters were derived using KaleidaGraph.",
+    "bioc_offset": "32933",
+    "table_xml": null
+  },
+  {
+    "passage": 60,
+    "section_type": "FIG",
+    "type": "fig_caption",
+    "text": "Steady-state kinetics of Rv2131c with PAP as the substrate. A plot of V0 vs [PAP]. Conditions: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme, 30 °C.",
+    "bioc_offset": "33289",
+    "table_xml": null
+  },
+  {
+    "passage": 61,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "As anticipated, the Km for PAP is in the low micromolar range and compares favorably with those of the E. coli CysQ (1.1 µM) and S. cerevisiae Hal2p (0.72 µM) (Table 1). These values are consistent with the reportedly low levels of PAP in the cell (less than 10 µM). The catalytic efficiency of the Rv2131c-encoded enzyme for PAP is also comparable to those of its homologous enzymes. The similar biochemical profiles of these enzymes support the assignment of the Rv2131c gene product as a PAP-specific phosphatase.",
+    "bioc_offset": "33466",
+    "table_xml": null
+  },
+  {
+    "passage": 62,
+    "section_type": "TABLE",
+    "type": "table_title_caption",
+    "text": "Michaelis−Menten Parameters for Rv2131c",
+    "bioc_offset": "33995",
+    "table_xml": null
+  },
+  {
+    "passage": 63,
+    "section_type": "TABLE",
+    "type": "table",
+    "text": "substrate\tKm (µM)a\tkcat (s−1)a\tkcat/Km (µM−1 min−1)\t \tPAP\t8.1 ± 3.1\t5.4 ± 1.1\t42 ± 8\t \tIMP\t7110 ± 1070\t0.31 ± 0.13\t0.0027 ± 0.0015\t \tFBP\t566 ± 107\t0.24 ± 0.05\t0.025 ± 0.001\t \t",
+    "bioc_offset": "34037",
+    "table_xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<table frame=\"hsides\" rules=\"groups\" border=\"1\"><colgroup><col align=\"left\"/><col align=\"char\" char=\".\"/><col align=\"char\" char=\".\"/><col align=\"char\" char=\".\"/></colgroup><thead valign=\"middle\"><tr valign=\"bottom\"><th style=\"border:none;\" align=\"center\" valign=\"bottom\">substrate</th><th style=\"border:none;\" align=\"center\" valign=\"bottom\" char=\".\"><italic>K</italic><sub>m</sub> (µM)<xref rid=\"tbl1-fn1\" ref-type=\"table-fn\">a</xref></th><th style=\"border:none;\" align=\"center\" valign=\"bottom\" char=\".\"><italic>k</italic><sub>cat</sub> (s<sup>−1</sup>)<xref rid=\"tbl1-fn1\" ref-type=\"table-fn\">a</xref></th><th style=\"border:none;\" align=\"center\" valign=\"bottom\" char=\".\"><italic>k</italic><sub>cat</sub>/<italic>K</italic><sub>m</sub> (µM<sup>−1</sup> min<sup>−1</sup>)</th></tr></thead><tbody><tr valign=\"top\"><td style=\"border:none;\" align=\"left\" valign=\"top\">PAP</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">8.1 ± 3.1</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">5.4 ± 1.1</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">42 ± 8</td></tr><tr valign=\"top\"><td style=\"border:none;\" align=\"left\" valign=\"top\">IMP</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">7110 ± 1070</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">0.31 ± 0.13</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">0.0027 ± 0.0015</td></tr><tr valign=\"top\"><td style=\"border:none;\" align=\"left\" valign=\"top\">FBP</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">566 ± 107</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">0.24 ± 0.05</td><td style=\"border:none;\" align=\"char\" valign=\"top\" char=\".\">0.025 ± 0.001</td></tr></tbody></table>\n"
+  },
+  {
+    "passage": 64,
+    "section_type": "TABLE",
+    "type": "table_footnote",
+    "text": "KaleidaGraph (version 4.03) was used to extract Km and kcat from initial velocity data. Conditions for PAP: 0.625−50 µM PAP, 50 mM Tris buffer, pH 8.5, 0.5 mM MgCl2, 5 nM enzyme. Conditions for IMP and FBP: IMP (1−5.5 mM) or FBP (90−900 µM), 50 mM Tris buffer, pH 9.0, 10 mM MgCl2, 110 nM enzyme. All reactions were performed at 30 °C. These data represent the average of three independent experiments.",
+    "bioc_offset": "34266",
+    "table_xml": null
+  },
+  {
+    "passage": 65,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "In concurrence with the previous biochemical study of Rv2131c, the encoded enzyme was found to dephosphorylate IMP and FBP. However, the catalytic efficiencies for these substrates are over 3 orders of magnitude lower than the corresponding second-order rate constant for PAP, indicating that PAP is the preferred substrate for Rv2131c. These findings suggest the enzyme exhibits only nominal activity with IMP and FBP in vivo. While isolated activity with certain inositol phosphates has been described for a number of CysQ homologues, PAP is widely defined as the superior substrate (−). The slight promiscuity of these enzymes can possibly be attributed to the structural similarities between these substrates and the conservation of a common metal-binding motif and core fold among members of the phosphomonoesterase protein family, which includes various inositol phosphatases, fructose-1,6-bisphosphatase, and the E. coli CysQ.",
+    "bioc_offset": "34678",
+    "table_xml": null
+  },
+  {
+    "passage": 66,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "PAP phosphatases have also been shown to exhibit activity with PAPS, another intermediate of the sulfate assimilation pathway. Unfortunately, the phosphosulfate bond of this substrate is prone to rapid hydrolysis, which results in conversion to PAP. Consequently, the kinetic analysis of this substrate is complicated by the presence of a competing substrate. In addition, commercial PAPS (Sigma, EMD Biosciences) is supplied as a lithium salt. Since lithium is a potent inhibitor of this enzyme class, ion-exchange chromatography must be used to purify the substrate prior to its use in biochemical assays. This purification process results in significant decomposition of the compound to PAP and sulfate, precluding its accurate kinetic characterization. For these reasons, attempts to obtain kinetic parameters for PAPS that would enable a comparison with the other substrates in this study were unsuccessful. However, a qualitative assessment of [35S]PAPS hydrolysis by Rv2131c using thin-layer chromatography and Phosphorimager analysis suggests that PAPS is a substrate for the enzyme (data not shown).",
+    "bioc_offset": "35614",
+    "table_xml": null
+  },
+  {
+    "passage": 67,
+    "section_type": "RESULTS",
+    "type": "title_2",
+    "text": "Genetic Complementation of an E. coli ΔcysQ Mutant",
+    "bioc_offset": "36723",
+    "table_xml": null
+  },
+  {
+    "passage": 68,
+    "section_type": "RESULTS",
+    "type": "paragraph",
+    "text": "Given the similarities in sequence and substrate selectivity between the Rv2131c-encoded enzyme and the E. coli CysQ, we chose to validate the function of Rv2131c through genetic complementation studies in E. coli. A mutant strain of E. coli lacking CysQ was transformed with Rv2131c in a pBAD18 plasmid under the control of an arabinose-inducible promoter. Disruption of the cysQ gene in E. coli results in a growth requirement for sulfite or cysteine (Figure 7A). Thus, following growth on LB agar with ampicillin and kanamycin, isolated colonies of the transformed cells were plated onto M9 minimal medium containing sulfate as the sole sulfur source. Arabinose was also included in the medium to enable overexpression of the Mtb gene. Complementation of the mutant strain clearly demonstrated the ability of the Rv2131c gene product to restore prototrophy in vivo (Figure 7B). Growth of the mutant strain was restored to levels observed in the presence of sulfite after just 24 h of growth. Importantly, the vector control maintained cysteine and sulfite auxotrophy (Figure 7C). These results support our hypothesis that Rv2131c encodes a functional CysQ in vivo.",
+    "bioc_offset": "36778",
+    "table_xml": null
+  },
+  {
+    "passage": 69,
+    "section_type": "FIG",
+    "type": "fig_caption",
+    "text": "Complementation of ΔcysQ sulfite auxotrophy in E. coli. An E. coli strain with the native cysQ disrupted by a transposon insertion (A) was transformed with the Rv2131c gene in a pBAD18 vector (B) or with the vector alone (C). Individual colonies were plated onto M9 minimal medium containing 0.2% arabinose and incubated at 37 °C for 24 h. Plates on the left contained 0.5 mM sulfite.",
+    "bioc_offset": "37946",
+    "table_xml": null
+  },
+  {
+    "passage": 70,
+    "section_type": "CONCL",
+    "type": "title_1",
+    "text": "Summary",
+    "bioc_offset": "38335",
+    "table_xml": null
+  },
+  {
+    "passage": 71,
+    "section_type": "CONCL",
+    "type": "paragraph",
+    "text": "In recent years, a framework for mycobacterial sulfur metabolism has emerged reflecting analogous pathways in E. coli. Many key genes of the Cys regulon, including the cysDNC genes and cysH, have been identified and characterized. Here, we augment the current picture of sulfur metabolism in Mtb to include CysQ, a PAP phosphatase encoded by the Rv2131c gene.",
+    "bioc_offset": "38343",
+    "table_xml": null
+  },
+  {
+    "passage": 72,
+    "section_type": "CONCL",
+    "type": "paragraph",
+    "text": "Following its identification by homology to the E. coli CysQ, Rv2131c was recombinantly expressed and purified from E. coli. Biochemical studies of the Rv2131c enzyme revealed its ability to dephosphorylate PAP in a magnesium-dependent manner that was sensitive to inhibition by lithium, sodium, and potassium ions. The enzyme exhibited optimal activity with 0.5 mM MgCl2 at pH 8.5−9.5. A sensitive ESI-MS assay was used to extract the kinetic parameters for PAP, which were comparable to those of the E. coli CysQ. PAP was the substrate utilized most efficiently by the enzyme, which exhibited relatively little activity with IMP and FBP. Genetic complementation studies in E. coli confirmed its ability to dephosphorylate PAP and PAPS in vivo, reaffirming its place in the sulfate assimilation pathway of Mtb.",
+    "bioc_offset": "38703",
+    "table_xml": null
+  },
+  {
+    "passage": 73,
+    "section_type": "CONCL",
+    "type": "paragraph",
+    "text": "While the Rv2131c enzyme was originally classified as a bifunctional inositol monophosphatase and fructose-1,6-bisphosphatase, our findings suggest its primary physiological role relates to mycobacterial sulfur metabolism and not to the biosynthesis of myo-inositol. By controlling the pools of PAP and PAPS in the cell, Rv2131c is poised to serve as a key regulator of the sulfate assimilation pathway. This enzyme, which we rename CysQ in accordance with its genomic annotation, has the potential to manipulate sulfation levels in the cell and control the biosynthesis of essential reduced sulfur-containing metabolites. Future studies will investigate the effects of cysQ deletion on sulfation levels in Mtb and evaluate its importance for bacterial growth and pathogenesis.",
+    "bioc_offset": "39517",
+    "table_xml": null
+  },
+  {
+    "passage": 74,
+    "section_type": "SUPPL",
+    "type": "title",
+    "text": "Supporting Information Available",
+    "bioc_offset": "40295",
+    "table_xml": null
+  },
+  {
+    "passage": 75,
+    "section_type": "SUPPL",
+    "type": "paragraph",
+    "text": "Sample mass spectra from kinetic studies with PAP. This material is available free of charge via the Internet at .",
+    "bioc_offset": "40328",
+    "table_xml": null
+  },
+  {
+    "passage": 76,
+    "section_type": "SUPPL",
+    "type": "title_1",
+    "text": "Supplementary Material",
+    "bioc_offset": "40443",
+    "table_xml": null
+  },
+  {
+    "passage": 77,
+    "section_type": "REF",
+    "type": "title",
+    "text": "References",
+    "bioc_offset": "40466",
+    "table_xml": null
+  },
+  {
+    "passage": 78,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Global Alliance for TB Drug Development",
+    "bioc_offset": "40477",
+    "table_xml": null
+  },
+  {
+    "passage": 79,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "From magic bullets back to the magic mountain: the rise of extensively drug-resistant tuberculosis",
+    "bioc_offset": "40517",
+    "table_xml": null
+  },
+  {
+    "passage": 80,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "The growing burden of tuberculosis: global trends and interactions with the HIV epidemic",
+    "bioc_offset": "40616",
+    "table_xml": null
+  },
+  {
+    "passage": 81,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Drug targets in mycobacterial sulfur metabolism",
+    "bioc_offset": "40705",
+    "table_xml": null
+  },
+  {
+    "passage": 82,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Sulfate metabolism in mycobacteria",
+    "bioc_offset": "40753",
+    "table_xml": null
+  },
+  {
+    "passage": 83,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Infectivity, Pathogenicity and Sulpholipid Fraction of Some Indian and British Strains of Tubercle Bacilli",
+    "bioc_offset": "40788",
+    "table_xml": null
+  },
+  {
+    "passage": 84,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Mycothiol biochemistry",
+    "bioc_offset": "40895",
+    "table_xml": null
+  },
+  {
+    "passage": 85,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Association of mycothiol with protection of Mycobacterium tuberculosis from toxic oxidants and antibiotics",
+    "bioc_offset": "40918",
+    "table_xml": null
+  },
+  {
+    "passage": 86,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Mycothiol is essential for growth of Mycobacterium tuberculosis Erdman",
+    "bioc_offset": "41025",
+    "table_xml": null
+  },
+  {
+    "passage": 87,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "5′-Adenosinephosphosulphate reductase (CysH) protects Mycobacterium tuberculosis against free radicals during chronic infection phase in mice",
+    "bioc_offset": "41096",
+    "table_xml": null
+  },
+  {
+    "passage": 88,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "The Mycobacterium tuberculosis cysD and cysNC genes form a stress-induced operon that encodes a tri-functional sulfate-activating complex",
+    "bioc_offset": "41240",
+    "table_xml": null
+  },
+  {
+    "passage": 89,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Stationary phase gene expression of Mycobacterium tuberculosis following a progressive nutrient depletion: a model for persistent organisms?",
+    "bioc_offset": "41378",
+    "table_xml": null
+  },
+  {
+    "passage": 90,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "The molecular basis for positive regulation of cys promoters in Salmonella typhimurium and Escherichia coli",
+    "bioc_offset": "41519",
+    "table_xml": null
+  },
+  {
+    "passage": 91,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Biosynthesis of Cysteine",
+    "bioc_offset": "41627",
+    "table_xml": null
+  },
+  {
+    "passage": 92,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "5′-Adenosinephosphosulfate lies at a metabolic branch point in mycobacteria",
+    "bioc_offset": "41652",
+    "table_xml": null
+  },
+  {
+    "passage": 93,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "A conserved mechanism for sulfonucleotide reduction",
+    "bioc_offset": "41730",
+    "table_xml": null
+  },
+  {
+    "passage": 94,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Sulfotransferases and sulfatases in mycobacteria",
+    "bioc_offset": "41782",
+    "table_xml": null
+  },
+  {
+    "passage": 95,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Identification, function and structure of the mycobacterial sulfotransferase that initiates sulfolipid-1 biosynthesis",
+    "bioc_offset": "41831",
+    "table_xml": null
+  },
+  {
+    "passage": 96,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "A sulfated metabolite produced by stf3 negatively regulates the virulence of Mycobacterium tuberculosis",
+    "bioc_offset": "41949",
+    "table_xml": null
+  },
+  {
+    "passage": 97,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "cysQ, a gene needed for cysteine synthesis in Escherichia coli K-12 only during aerobic growth",
+    "bioc_offset": "42053",
+    "table_xml": null
+  },
+  {
+    "passage": 98,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Cloning and characterization of a mammalian lithium-sensitive bisphosphate 3′-nucleotidase inhibited by inositol 1,4-bisphosphate",
+    "bioc_offset": "42148",
+    "table_xml": null
+  },
+  {
+    "passage": 99,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "A rice HAL2-like gene encodes a Ca(2+)-sensitive 3′(2′),5′-diphosphonucleoside 3′(2′)-phosphohydrolase and complements yeast met22 and Escherichia coli cysQ mutations",
+    "bioc_offset": "42280",
+    "table_xml": null
+  },
+  {
+    "passage": 100,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "A salt-sensitive 3′(2′),5′-bisphosphate nucleotidase involved in sulfate activation",
+    "bioc_offset": "42457",
+    "table_xml": null
+  },
+  {
+    "passage": 101,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Oligoribonuclease is a common downstream target of lithium-induced pAp accumulation in Escherichia coli and human cells",
+    "bioc_offset": "42547",
+    "table_xml": null
+  },
+  {
+    "passage": 102,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Post-translational modification of polyketide and nonribosomal peptide synthases",
+    "bioc_offset": "42667",
+    "table_xml": null
+  },
+  {
+    "passage": 103,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Deciphering the biology of Mycobacterium tuberculosis from the complete genome sequence",
+    "bioc_offset": "42748",
+    "table_xml": null
+  },
+  {
+    "passage": 104,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Rv2131c gene product: an unconventional enzyme that is both inositol monophosphatase and fructose-1,6-bisphosphatase",
+    "bioc_offset": "42836",
+    "table_xml": null
+  },
+  {
+    "passage": 105,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Tight regulation, modulation, and high-level expression by vectors containing the arabinose PBAD promoter",
+    "bioc_offset": "42953",
+    "table_xml": null
+  },
+  {
+    "passage": 106,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "A malachite green procedure for orthophosphate determination and its use in alkaline phosphatase-based enzyme immunoassay",
+    "bioc_offset": "43059",
+    "table_xml": null
+  },
+  {
+    "passage": 107,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Kinetic analysis of NodST sulfotransferase using an electrospray ionization mass spectrometry assay",
+    "bioc_offset": "43181",
+    "table_xml": null
+  },
+  {
+    "passage": 108,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Kinetic measurements and mechanism determination of Stf0 sulfotransferase using mass spectrometry",
+    "bioc_offset": "43281",
+    "table_xml": null
+  },
+  {
+    "passage": 109,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Fourier transform ion cyclotron resonance mass spectrometry: a primer",
+    "bioc_offset": "43379",
+    "table_xml": null
+  },
+  {
+    "passage": 110,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Definition of a metal-dependent/Li(+)-inhibited phosphomonoesterase protein family based upon a conserved three-dimensional core structure",
+    "bioc_offset": "43449",
+    "table_xml": null
+  },
+  {
+    "passage": 111,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "X-ray structure of yeast Hal2p, a major target of lithium and sodium toxicity, and identification of framework interactions determining cation sensitivity",
+    "bioc_offset": "43588",
+    "table_xml": null
+  },
+  {
+    "passage": 112,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "The yeast HAL2 nucleotidase is an in vivo target of salt toxicity",
+    "bioc_offset": "43743",
+    "table_xml": null
+  },
+  {
+    "passage": 113,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "The Arabidopsis HAL2-like gene family includes a novel sodium-sensitive phosphatase",
+    "bioc_offset": "43809",
+    "table_xml": null
+  },
+  {
+    "passage": 114,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Molecular cloning and biochemical characterization of a 3′(2′),5′-bisphosphate nucleotidase from Debaryomyces hansenii",
+    "bioc_offset": "43893",
+    "table_xml": null
+  },
+  {
+    "passage": 115,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Structural enzymology of Li(+)-sensitive/Mg(2+)-dependent phosphatases",
+    "bioc_offset": "44018",
+    "table_xml": null
+  },
+  {
+    "passage": 116,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Artificial Hydrolytic Metalloenzymes",
+    "bioc_offset": "44089",
+    "table_xml": null
+  },
+  {
+    "passage": 117,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "NADP(H) Phosphatase Activities of Archaeal Inositol Monophosphatase and Eubacterial 3′-Phosphoadenosine 5′-Phosphate Phosphatase",
+    "bioc_offset": "44126",
+    "table_xml": null
+  },
+  {
+    "passage": 118,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "A novel mammalian lithium-sensitive enzyme with a dual enzymatic activity, 3′-phosphoadenosine 5′-phosphate phosphatase and inositol-polyphosphate 1-phosphatase",
+    "bioc_offset": "44259",
+    "table_xml": null
+  },
+  {
+    "passage": 119,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "The SAL1 gene of Arabidopsis, encoding an enzyme with 3′(2′),5′-bisphosphate nucleotidase and inositol polyphosphate 1-phosphatase activities, increases salt tolerance in yeast",
+    "bioc_offset": "44424",
+    "table_xml": null
+  },
+  {
+    "passage": 120,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Enzymatic synthesis of adenosine-5′-phosphosulfate",
+    "bioc_offset": "44607",
+    "table_xml": null
+  },
+  {
+    "passage": 121,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "The trifunctional sulfate-activating complex (SAC) of Mycobacterium tuberculosis",
+    "bioc_offset": "44660",
+    "table_xml": null
+  },
+  {
+    "passage": 122,
+    "section_type": "REF",
+    "type": "ref",
+    "text": "Sulfite reduction in mycobacteria",
+    "bioc_offset": "44741",
+    "table_xml": null
+  }
+]

@@ -1,0 +1,43 @@
+F.................................................                       [100%]
+=================================== FAILURES ===================================
+_______ test_R1_R2_kernel_temperature_census_and_single_scientific_call ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78b2e44670e0>
+
+    def test_R1_R2_kernel_temperature_census_and_single_scientific_call(monkeypatch):
+        inputs = numerical()
+        sheets = run(inputs)
+        calls = []
+        original = c._sequence.calculate_blast_sequence_database_components
+        def counted(sheet, *, model):
+            calls.append((deepcopy(sheet), deepcopy(model)))
+            return original(sheet, model=model)
+        monkeypatch.setattr(c._sequence, "calculate_blast_sequence_database_components", counted)
+        for temperature, probabilities in ((1, (.8, .2)), (2, (2 / 3, 1 / 3))):
+            model = dict(temperature_bits=temperature, function_priors={"F": .5, "G": .5})
+            with monkeypatch.context() as blocked:
+                assert_pure(blocked)
+>               results = c.calculate_standard_blast_database_sheets(sheets, sequence_model=model)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_standard_database_calculators.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_standard_database_calculators.py:268: in calculate_standard_blast_database_sheets
+    return _calculate(sheet_set, sequence_model=sequence_model)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_calculators.py:219: in _calculate
+    result = _sequence.calculate_blast_sequence_database_components(row["sheet"], model=model)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ({'schema': 'blast_sequence_database_result_sheet_v1', 'search': {'search_key': {'artifact_key': 'report', 'member_ord... 'database_identity': {'namespace': 'synthetic', 'value': 'target', 'version': '1', 'release': 'r1', ...}, ...}, ...},)
+kw = {'model': {'temperature_bits': 1, 'function_priors': {'F': 0.5, 'G': 0.5}}}
+
+    def fail(*a, **kw):
+>       pytest.fail("pure metadata boundary attempted I/O or scoring")
+E       Failed: pure metadata boundary attempted I/O or scoring
+
+../../../tests/test_native_blast_standard_database_metadata.py:281: Failed
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_calculators.py::test_R1_R2_kernel_temperature_census_and_single_scientific_call
+1 failed, 49 passed in 8.04s

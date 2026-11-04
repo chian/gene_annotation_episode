@@ -1,0 +1,94 @@
+{
+  "status": "Research reconstruction, not constructed episodes or adopted slots. Known outcomes disclosed.",
+  "traces": [
+    {
+      "case_id": "causal_envC_activation",
+      "routes": [
+        {
+          "question": "Which part of a structural analogy survives missing catalytic elements?",
+          "steps": [
+            {
+              "available": "Published LytM-fold similarity suggests metallopeptidase chemistry.",
+              "actual_probe": "Inspect primary structure result and current4BH5/2B13 molecule/contact records, then author-to-entity residue mappings.",
+              "result": "4BH5 has no listed Zn;2B13 has Zn contacts H210/D214/H293. The corresponding paper-assigned EnvC residues W320/V324/Y401 are observed in4BH5.",
+              "changed_question": "Retain fold support; ask whether the retained cleft serves a different biological role. Absence of a required catalytic center is not absence of function.",
+              "limit": "Correspondence comes from authors; no new structural superposition.4BH5 also contains potassium, so a claim of no metals would be false."
+            }
+          ]
+        },
+        {
+          "question": "Does the phenotype fail because protein is absent/mislocalized, or because activation is impaired?",
+          "steps": [
+            {
+              "available": "Domain substitutions can disrupt many properties at once.",
+              "actual_probe": "Parse original Table1 and select variants with preserved stability and septal localization but defective full-length function.",
+              "result_refs": [
+                "E2",
+                "E4",
+                "envc_table_probe.json"
+              ],
+              "changed_question": "These retained properties weaken abundance/location explanations. Ask whether isolated variants also fail in paired AmiB activation."
+            },
+            {
+              "actual_probe": "Read complete purified-pair assay Results and Methods.",
+              "result_ref": "E2",
+              "changed_question": "Impaired activation persists outside the localization setting. Keep the activator assignment; inspect whether the molecular binding mechanism itself was tested.",
+              "boundary": "Direct complex detection failed in this paper; modeled regulatory-helix contacts are not measured binding."
+            }
+          ]
+        }
+      ],
+      "supporting_files": [
+        "envc_table_probe.json",
+        "raw/envc_query_manifest.json",
+        "raw/envc_residue_mapping_summary.json"
+      ]
+    },
+    {
+      "case_id": "causal_tsaE_turnover",
+      "routes": [
+        {
+          "question": "At which part of a repeated reaction does a component contribute?",
+          "steps": [
+            {
+              "available": "The complete system produces modified tRNA; TsaE hydrolyzes ATP.",
+              "actual_probe": "Read component-omission time courses and product-release assay, including assay concentrations.",
+              "result_ref": "T1",
+              "changed_question": "Initial transfer and product release remain possible without TsaE; ask what fails when another cycle is needed."
+            },
+            {
+              "actual_probe": "Read ATPase-defective and switch-uncoupling variants with assembly controls.",
+              "result_refs": [
+                "T1",
+                "T2"
+              ],
+              "changed_question": "Hydrolysis is required for repeated operation in this system but hydrolysis alone is insufficient. A post-reaction reset is supported; detailed conformational mechanism remains partly modeled."
+            }
+          ]
+        },
+        {
+          "question": "Do apparently conflicting papers measure the same requirement?",
+          "steps": [
+            {
+              "available": "2015E.coli paper calls ATPase dispensable;2018/2019Thermotoga papers require it for multiple turnover.",
+              "actual_probe": "Read original2015 supplementary assay rather than infer conditions from its abstract; compare with2018 Methods/Discussion.",
+              "actual_extracted_conditions": {
+                "E_coli2015": "25ug purified overexpressed cellular tRNA in80uL;2.5uM each protein;90min endpoint.",
+                "Thermotoga2018": "In-vitro-transcribed tRNA; time-course incorporation and product-release measurements, explicitly distinguishing product per enzyme complex."
+              },
+              "changed_question": "Species, substrate preparation and measurement differ. Ask whether absolute turnover is comparable before choosing a universal mechanistic explanation.",
+              "boundary": "The2018 authors leave species differences versus low-turnover assay explanations open. These readings do not resolve that question; no new kinetic data."
+            }
+          ]
+        }
+      ],
+      "supporting_files": [
+        "raw/PMC4330362.xml",
+        "raw/tsa2015_supplement.txt",
+        "raw/PMC5814804.xml",
+        "raw/PMC6614819.xml"
+      ]
+    }
+  ],
+  "research_only": "No repository changes, scientific runtime execution, target-state writes, experiments or scoring changes."
+}

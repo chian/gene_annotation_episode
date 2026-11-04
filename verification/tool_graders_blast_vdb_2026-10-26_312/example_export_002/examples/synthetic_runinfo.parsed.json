@@ -1,0 +1,528 @@
+{
+  "schema": "blast_vdb_metadata_parse_v1",
+  "format": "runinfo_csv",
+  "source_ref": "synthetic:runinfo",
+  "input_identity": {
+    "sha256": "db15d01660fecdf12e106a07d3cacf4ff17206c0171a5d10918149949f028c36",
+    "size_bytes": 198
+  },
+  "native_text": "Run,Sample,BioSample,Experiment,BioProject,TaxID,spots,bases,SampleName,ReadHash,Extra\nSRR1,SRS1,SAMN1,SRX1,PRJ1,2,10,80,\"name, one\",opaque,kept\nSRR2,SRS2,SAMN1,SRX2,PRJ1,3,4,32,name2,opaque2,kept2\n",
+  "parse_context": null,
+  "records": [
+    {
+      "record_key": {
+        "source_ref": "synthetic:runinfo",
+        "record_ordinal": 0
+      },
+      "source_entity": {
+        "kind": "dataset",
+        "identifiers": [
+          {
+            "namespace": "NCBI.SRA.Run",
+            "value": "SRR1",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.SRA.Sample",
+            "value": "SRS1",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.BioSample",
+            "value": "SAMN1",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.SRA.Experiment",
+            "value": "SRX1",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.BioProject",
+            "value": "PRJ1",
+            "version": null
+          }
+        ],
+        "parent_record_key": null,
+        "dataset_identifier": {
+          "namespace": "NCBI.SRA.Run",
+          "value": "SRR1",
+          "version": null
+        },
+        "member_identifier": null,
+        "sample_identifier": null,
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "runinfo_csv",
+      "source_version": null,
+      "native_record": {
+        "input_text": "Run,Sample,BioSample,Experiment,BioProject,TaxID,spots,bases,SampleName,ReadHash,Extra\nSRR1,SRS1,SAMN1,SRX1,PRJ1,2,10,80,\"name, one\",opaque,kept\nSRR2,SRS2,SAMN1,SRX2,PRJ1,3,4,32,name2,opaque2,kept2\n",
+        "row_ordinal": 0,
+        "line_span": [
+          2,
+          2
+        ],
+        "headers": [
+          "Run",
+          "Sample",
+          "BioSample",
+          "Experiment",
+          "BioProject",
+          "TaxID",
+          "spots",
+          "bases",
+          "SampleName",
+          "ReadHash",
+          "Extra"
+        ],
+        "values": [
+          "SRR1",
+          "SRS1",
+          "SAMN1",
+          "SRX1",
+          "PRJ1",
+          "2",
+          "10",
+          "80",
+          "name, one",
+          "opaque",
+          "kept"
+        ],
+        "fields": {
+          "Run": "SRR1",
+          "Sample": "SRS1",
+          "BioSample": "SAMN1",
+          "Experiment": "SRX1",
+          "BioProject": "PRJ1",
+          "TaxID": "2",
+          "spots": "10",
+          "bases": "80",
+          "SampleName": "name, one",
+          "ReadHash": "opaque",
+          "Extra": "kept"
+        },
+        "counts": {
+          "spots": 10,
+          "bases": 80
+        }
+      },
+      "source": {
+        "source_ref": "synthetic:runinfo",
+        "pointer": "/records/0"
+      },
+      "identifiers": [
+        {
+          "namespace": "NCBI.SRA.Run",
+          "value": "SRR1",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.SRA.Sample",
+          "value": "SRS1",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.BioSample",
+          "value": "SAMN1",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.SRA.Experiment",
+          "value": "SRX1",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.BioProject",
+          "value": "PRJ1",
+          "version": null
+        }
+      ],
+      "sequence": null,
+      "functions": [],
+      "taxid": 2,
+      "taxid_scope": "sample_context",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "native_parser",
+      "issues": []
+    },
+    {
+      "record_key": {
+        "source_ref": "synthetic:runinfo",
+        "record_ordinal": 1
+      },
+      "source_entity": {
+        "kind": "sample",
+        "identifiers": [
+          {
+            "namespace": "NCBI.SRA.Sample",
+            "value": "SRS1",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.BioSample",
+            "value": "SAMN1",
+            "version": null
+          }
+        ],
+        "parent_record_key": {
+          "source_ref": "synthetic:runinfo",
+          "record_ordinal": 0
+        },
+        "dataset_identifier": {
+          "namespace": "NCBI.SRA.Run",
+          "value": "SRR1",
+          "version": null
+        },
+        "member_identifier": null,
+        "sample_identifier": {
+          "namespace": "NCBI.SRA.Sample",
+          "value": "SRS1",
+          "version": null
+        },
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "runinfo_csv",
+      "source_version": null,
+      "native_record": {
+        "input_text": "Run,Sample,BioSample,Experiment,BioProject,TaxID,spots,bases,SampleName,ReadHash,Extra\nSRR1,SRS1,SAMN1,SRX1,PRJ1,2,10,80,\"name, one\",opaque,kept\nSRR2,SRS2,SAMN1,SRX2,PRJ1,3,4,32,name2,opaque2,kept2\n",
+        "row_ordinal": 0,
+        "line_span": [
+          2,
+          2
+        ],
+        "headers": [
+          "Run",
+          "Sample",
+          "BioSample",
+          "Experiment",
+          "BioProject",
+          "TaxID",
+          "spots",
+          "bases",
+          "SampleName",
+          "ReadHash",
+          "Extra"
+        ],
+        "values": [
+          "SRR1",
+          "SRS1",
+          "SAMN1",
+          "SRX1",
+          "PRJ1",
+          "2",
+          "10",
+          "80",
+          "name, one",
+          "opaque",
+          "kept"
+        ],
+        "fields": {
+          "Run": "SRR1",
+          "Sample": "SRS1",
+          "BioSample": "SAMN1",
+          "Experiment": "SRX1",
+          "BioProject": "PRJ1",
+          "TaxID": "2",
+          "spots": "10",
+          "bases": "80",
+          "SampleName": "name, one",
+          "ReadHash": "opaque",
+          "Extra": "kept"
+        },
+        "counts": {
+          "spots": 10,
+          "bases": 80
+        }
+      },
+      "source": {
+        "source_ref": "synthetic:runinfo",
+        "pointer": "/records/1"
+      },
+      "identifiers": [
+        {
+          "namespace": "NCBI.SRA.Sample",
+          "value": "SRS1",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.BioSample",
+          "value": "SAMN1",
+          "version": null
+        }
+      ],
+      "sequence": null,
+      "functions": [],
+      "taxid": 2,
+      "taxid_scope": "sample_context",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "native_parser",
+      "issues": []
+    },
+    {
+      "record_key": {
+        "source_ref": "synthetic:runinfo",
+        "record_ordinal": 2
+      },
+      "source_entity": {
+        "kind": "dataset",
+        "identifiers": [
+          {
+            "namespace": "NCBI.SRA.Run",
+            "value": "SRR2",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.SRA.Sample",
+            "value": "SRS2",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.BioSample",
+            "value": "SAMN1",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.SRA.Experiment",
+            "value": "SRX2",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.BioProject",
+            "value": "PRJ1",
+            "version": null
+          }
+        ],
+        "parent_record_key": null,
+        "dataset_identifier": {
+          "namespace": "NCBI.SRA.Run",
+          "value": "SRR2",
+          "version": null
+        },
+        "member_identifier": null,
+        "sample_identifier": null,
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "runinfo_csv",
+      "source_version": null,
+      "native_record": {
+        "input_text": "Run,Sample,BioSample,Experiment,BioProject,TaxID,spots,bases,SampleName,ReadHash,Extra\nSRR1,SRS1,SAMN1,SRX1,PRJ1,2,10,80,\"name, one\",opaque,kept\nSRR2,SRS2,SAMN1,SRX2,PRJ1,3,4,32,name2,opaque2,kept2\n",
+        "row_ordinal": 1,
+        "line_span": [
+          3,
+          3
+        ],
+        "headers": [
+          "Run",
+          "Sample",
+          "BioSample",
+          "Experiment",
+          "BioProject",
+          "TaxID",
+          "spots",
+          "bases",
+          "SampleName",
+          "ReadHash",
+          "Extra"
+        ],
+        "values": [
+          "SRR2",
+          "SRS2",
+          "SAMN1",
+          "SRX2",
+          "PRJ1",
+          "3",
+          "4",
+          "32",
+          "name2",
+          "opaque2",
+          "kept2"
+        ],
+        "fields": {
+          "Run": "SRR2",
+          "Sample": "SRS2",
+          "BioSample": "SAMN1",
+          "Experiment": "SRX2",
+          "BioProject": "PRJ1",
+          "TaxID": "3",
+          "spots": "4",
+          "bases": "32",
+          "SampleName": "name2",
+          "ReadHash": "opaque2",
+          "Extra": "kept2"
+        },
+        "counts": {
+          "spots": 4,
+          "bases": 32
+        }
+      },
+      "source": {
+        "source_ref": "synthetic:runinfo",
+        "pointer": "/records/2"
+      },
+      "identifiers": [
+        {
+          "namespace": "NCBI.SRA.Run",
+          "value": "SRR2",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.SRA.Sample",
+          "value": "SRS2",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.BioSample",
+          "value": "SAMN1",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.SRA.Experiment",
+          "value": "SRX2",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.BioProject",
+          "value": "PRJ1",
+          "version": null
+        }
+      ],
+      "sequence": null,
+      "functions": [],
+      "taxid": 3,
+      "taxid_scope": "sample_context",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "native_parser",
+      "issues": []
+    },
+    {
+      "record_key": {
+        "source_ref": "synthetic:runinfo",
+        "record_ordinal": 3
+      },
+      "source_entity": {
+        "kind": "sample",
+        "identifiers": [
+          {
+            "namespace": "NCBI.SRA.Sample",
+            "value": "SRS2",
+            "version": null
+          },
+          {
+            "namespace": "NCBI.BioSample",
+            "value": "SAMN1",
+            "version": null
+          }
+        ],
+        "parent_record_key": {
+          "source_ref": "synthetic:runinfo",
+          "record_ordinal": 2
+        },
+        "dataset_identifier": {
+          "namespace": "NCBI.SRA.Run",
+          "value": "SRR2",
+          "version": null
+        },
+        "member_identifier": null,
+        "sample_identifier": {
+          "namespace": "NCBI.SRA.Sample",
+          "value": "SRS2",
+          "version": null
+        },
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "runinfo_csv",
+      "source_version": null,
+      "native_record": {
+        "input_text": "Run,Sample,BioSample,Experiment,BioProject,TaxID,spots,bases,SampleName,ReadHash,Extra\nSRR1,SRS1,SAMN1,SRX1,PRJ1,2,10,80,\"name, one\",opaque,kept\nSRR2,SRS2,SAMN1,SRX2,PRJ1,3,4,32,name2,opaque2,kept2\n",
+        "row_ordinal": 1,
+        "line_span": [
+          3,
+          3
+        ],
+        "headers": [
+          "Run",
+          "Sample",
+          "BioSample",
+          "Experiment",
+          "BioProject",
+          "TaxID",
+          "spots",
+          "bases",
+          "SampleName",
+          "ReadHash",
+          "Extra"
+        ],
+        "values": [
+          "SRR2",
+          "SRS2",
+          "SAMN1",
+          "SRX2",
+          "PRJ1",
+          "3",
+          "4",
+          "32",
+          "name2",
+          "opaque2",
+          "kept2"
+        ],
+        "fields": {
+          "Run": "SRR2",
+          "Sample": "SRS2",
+          "BioSample": "SAMN1",
+          "Experiment": "SRX2",
+          "BioProject": "PRJ1",
+          "TaxID": "3",
+          "spots": "4",
+          "bases": "32",
+          "SampleName": "name2",
+          "ReadHash": "opaque2",
+          "Extra": "kept2"
+        },
+        "counts": {
+          "spots": 4,
+          "bases": 32
+        }
+      },
+      "source": {
+        "source_ref": "synthetic:runinfo",
+        "pointer": "/records/3"
+      },
+      "identifiers": [
+        {
+          "namespace": "NCBI.SRA.Sample",
+          "value": "SRS2",
+          "version": null
+        },
+        {
+          "namespace": "NCBI.BioSample",
+          "value": "SAMN1",
+          "version": null
+        }
+      ],
+      "sequence": null,
+      "functions": [],
+      "taxid": 3,
+      "taxid_scope": "sample_context",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "native_parser",
+      "issues": []
+    }
+  ],
+  "issues": []
+}

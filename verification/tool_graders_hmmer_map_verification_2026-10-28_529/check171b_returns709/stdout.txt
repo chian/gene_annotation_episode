@@ -1,0 +1,1770 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                              [100%]
+=================================== FAILURES ===================================
+_______________ test_requested_projection_grants_no_saved_sheet ________________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:153: in test_requested_projection_grants_no_saved_sheet
+    child = f.child(f.root, form_schema(PROJECTION_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+________ test_sheet_possession_requires_original_immediate_child_return ________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:163: in test_sheet_possession_requires_original_immediate_child_return
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+________ test_frozen_forwarding_prefix_excludes_later_identical_origin _________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:181: in test_frozen_forwarding_prefix_excludes_later_identical_origin
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+____________ test_saved_child_inherits_only_original_receipt_prefix ____________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:200: in test_saved_child_inherits_only_original_receipt_prefix
+    first = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_____________ test_historical_return_survives_scientific_file_loss _____________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:212: in test_historical_return_survives_scientific_file_loss
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+___________ test_full_and_compact_original_contract_validation[None] ___________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:247: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_______ test_full_and_compact_original_contract_validation[declaration] ________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:247: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+__________ test_full_and_compact_original_contract_validation[frame] ___________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:247: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+______ test_full_and_compact_original_contract_validation[empty_request] _______
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:247: in test_full_and_compact_original_contract_validation
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+______ test_compact_redelivery_reads_frozen_facts_without_an_observation _______
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:273: in test_compact_redelivery_reads_frozen_facts_without_an_observation
+    child = f.child(f.root, form_schema(PROJECTION_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_ test_exact_normalized_measurements_and_failures_reach_requested_parent_fields _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:294: in test_exact_normalized_measurements_and_failures_reach_requested_parent_fields
+    child = f.child(f.root, schema)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_____ test_projection_origins_deduplicate_and_keep_original_results_owners _____
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:311: in test_projection_origins_deduplicate_and_keep_original_results_owners
+    science = f.child(f.root, form_schema(PROJECTION_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+__ test_changed_original_commission_is_not_a_return_authority[selected_goal] ___
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_changed_original_commission_is_not_a_return_authority[selected_initial] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_changed_original_commission_is_not_a_return_authority[selected_assignment] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+__ test_changed_original_commission_is_not_a_return_authority[selected_scope] __
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_changed_original_commission_is_not_a_return_authority[tool_commission] __
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_______ test_changed_original_commission_is_not_a_return_authority[goal] _______
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_____ test_changed_original_commission_is_not_a_return_authority[initial] ______
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+____ test_changed_original_commission_is_not_a_return_authority[assignment] ____
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+___ test_changed_original_commission_is_not_a_return_authority[inheritance] ____
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:331: in test_changed_original_commission_is_not_a_return_authority
+    child = f.child(f.root, form_schema(SAVED_SOURCE))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_only_actual_successful_immediate_closed_result_return_contributes[nonimmediate] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:359: in test_only_actual_successful_immediate_closed_result_return_contributes
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_only_actual_successful_immediate_closed_result_return_contributes[failed_report] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:359: in test_only_actual_successful_immediate_closed_result_return_contributes
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_only_actual_successful_immediate_closed_result_return_contributes[missing_form] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:359: in test_only_actual_successful_immediate_closed_result_return_contributes
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_only_actual_successful_immediate_closed_result_return_contributes[forged_host_action] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:359: in test_only_actual_successful_immediate_closed_result_return_contributes
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_open_result_checks_artifact_but_closed_historical_delivery_uses_only_frozen_records _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:381: in test_open_result_checks_artifact_but_closed_historical_delivery_uses_only_frozen_records
+    child = f.child(f.root, schema); f.own(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_frozen_measurements_cannot_be_forged_from_schema_valid_values[different_value] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:396: in test_frozen_measurements_cannot_be_forged_from_schema_valid_values
+    child = f.child(f.root, schema); f.own(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_ test_frozen_measurements_cannot_be_forged_from_schema_valid_values[extra_row] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:396: in test_frozen_measurements_cannot_be_forged_from_schema_valid_values
+    child = f.child(f.root, schema); f.own(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_ test_frozen_measurements_cannot_be_forged_from_schema_valid_values[wrong_number_type] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:396: in test_frozen_measurements_cannot_be_forged_from_schema_valid_values
+    child = f.child(f.root, schema); f.own(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_ test_duplicate_requested_source_fields_must_agree_and_unrelated_fields_grant_nothing _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:408: in test_duplicate_requested_source_fields_must_agree_and_unrelated_fields_grant_nothing
+    child = f.child(f.root, schema); f.own(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[missing_prefix] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:423: in test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix
+    science = f.child(f.root, schema, role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[deleted_witness] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:423: in test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix
+    science = f.child(f.root, schema, role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[changed_contract] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:423: in test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix
+    science = f.child(f.root, schema, role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+___________ test_readers_make_no_persistent_changes_or_observations ____________
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:440: in test_readers_make_no_persistent_changes_or_observations
+    child = f.child(f.root, schema); f.own(child); f.returned(f.root, child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_ test_saved_selector_and_received_reference_permission_are_independent_requirements _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:452: in test_saved_selector_and_received_reference_permission_are_independent_requirements
+    child = f.child(f.root, schema); f.own(child); f.returned(f.root, child)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_original688_projection_numbers_are_forwarded_verbatim_without_new_science[SBML] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:467: in test_original688_projection_numbers_are_forwarded_verbatim_without_new_science
+    child = f.child(f.root, form_schema(PROJECTION_SOURCE)); f.own(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_ test_original688_projection_numbers_are_forwarded_verbatim_without_new_science[JSON] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:467: in test_original688_projection_numbers_are_forwarded_verbatim_without_new_science
+    child = f.child(f.root, form_schema(PROJECTION_SOURCE)); f.own(child)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[]: unsupported schema keyword
+_ test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[None] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:481: in test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[filled_selection] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:481: in test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[assignment_digest] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:481: in test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[invocation_digest] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:481: in test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[invocation_identity] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:481: in test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+_ test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[selected_assignment] _
+source_snapshot/gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+source_snapshot/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+source_snapshot/tests/test_flux_balance_returns_709.py:481: in test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation
+    science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_returns_709.py:103: in child
+    contract = TypedReportContract('Return the selected FBA data', schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:168: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:569: in _compile_closed_schema
+    check(schema, "report")
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:548: in check
+    check(node["items"], path + "[]", depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:544: in check
+    check(child, path + "." + name, depth + 1)
+source_snapshot/gene_annotation_episode/communication.py:532: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.field_0[].artifact_ref: unsupported schema keyword
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_requested_projection_grants_no_saved_sheet
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_sheet_possession_requires_original_immediate_child_return
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_frozen_forwarding_prefix_excludes_later_identical_origin
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_saved_child_inherits_only_original_receipt_prefix
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_historical_return_survives_scientific_file_loss
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_full_and_compact_original_contract_validation[None]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_full_and_compact_original_contract_validation[declaration]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_full_and_compact_original_contract_validation[frame]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_full_and_compact_original_contract_validation[empty_request]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_compact_redelivery_reads_frozen_facts_without_an_observation
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_exact_normalized_measurements_and_failures_reach_requested_parent_fields
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_projection_origins_deduplicate_and_keep_original_results_owners
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[selected_goal]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[selected_initial]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[selected_assignment]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[selected_scope]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[tool_commission]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[goal]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[initial]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[assignment]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_changed_original_commission_is_not_a_return_authority[inheritance]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_only_actual_successful_immediate_closed_result_return_contributes[nonimmediate]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_only_actual_successful_immediate_closed_result_return_contributes[failed_report]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_only_actual_successful_immediate_closed_result_return_contributes[missing_form]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_only_actual_successful_immediate_closed_result_return_contributes[forged_host_action]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_open_result_checks_artifact_but_closed_historical_delivery_uses_only_frozen_records
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_frozen_measurements_cannot_be_forged_from_schema_valid_values[different_value]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_frozen_measurements_cannot_be_forged_from_schema_valid_values[extra_row]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_frozen_measurements_cannot_be_forged_from_schema_valid_values[wrong_number_type]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_duplicate_requested_source_fields_must_agree_and_unrelated_fields_grant_nothing
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[missing_prefix]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[deleted_witness]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_frozen_forwarding_cannot_rebuild_a_missing_original_prefix[changed_contract]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_readers_make_no_persistent_changes_or_observations
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_saved_selector_and_received_reference_permission_are_independent_requirements
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_original688_projection_numbers_are_forwarded_verbatim_without_new_science[SBML]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_original688_projection_numbers_are_forwarded_verbatim_without_new_science[JSON]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[None]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[filled_selection]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[assignment_digest]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[invocation_digest]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[invocation_identity]
+FAILED source_snapshot/tests/test_flux_balance_returns_709.py::test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation[selected_assignment]
+43 failed in 552.39s (0:09:12)

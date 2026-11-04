@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="14" time="45.840" timestamp="2026-10-26T08:07:06.248539-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_phmmer_site_publication" name="test_retained_phmmer_engine_version_geometry_and_frozen_parent_form" time="36.758"><failure message="gene_annotation_episode.communication.ReportBoundaryError: finite_json_required">phmmer_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7603319fa720&gt;, tools=&lt;gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x76030fcbcc20&gt;
+
+    def test_retained_phmmer_engine_version_geometry_and_frozen_parent_form(phmmer_case, monkeypatch):
+        case = phmmer_case
+        original, source, native_grade = _original(case)
+        original_before = deepcopy((original, source, native_grade))
+        native = json.loads(case.store.get_artifact(source['artifact_ref']))
+        engine = native_grade['sheet']['operation']['engine_version']
+        assert isinstance(engine, str) and engine and engine != source['version']
+        positions = [2, 0, 252, 2]
+        schema = requested(policy='matching_alignment_position_set', alignment=original['id'],
+                           positions=[0, 2, 252])
+        validate_closed_schema(schema)
+        context = saved_context(case, schema)
+        result = perform(case, context, 1, 'sequence.sites',
+            {'alignment_ref': original['id'], 'positions': positions})
+&gt;       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+&gt;       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError</failure></testcase><testcase classname="tests.test_phmmer_site_publication" name="test_retained_phmmer_nonidentical_selected_window_and_full_gapped_numbers" time="0.524"><failure message="gene_annotation_episode.communication.ReportBoundaryError: finite_json_required">phmmer_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x76030fc7f800&gt;, tools=&lt;gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+
+    def test_retained_phmmer_nonidentical_selected_window_and_full_gapped_numbers(phmmer_case):
+        case = phmmer_case
+        original, source, native_grade = _original(case, GAPPED)
+        schema = requested(policy='matching_alignment_window', alignment=original['id'],
+                           window={'start': 197, 'end': 203})
+        context = saved_context(case, schema)
+        perform(case, context, 1, 'sequence.sites',
+            {'alignment_ref': original['id'], 'window': {'start': 197, 'end': 203}})
+&gt;       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+&gt;       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError</failure></testcase><testcase classname="tests.test_phmmer_site_publication" name="test_missing_original_engine_metadata_stays_null_through_host[grade]" time="0.958"><failure message="gene_annotation_episode.communication.ReportBoundaryError: finite_json_required">phmmer_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x76030ff99b50&gt;, tools=&lt;gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+absence = 'grade'
+
+    @pytest.mark.parametrize('absence', ['grade', 'engine_version_key', 'engine_version_null'])
+    def test_missing_original_engine_metadata_stays_null_through_host(phmmer_case, absence):
+        case = phmmer_case
+        _, original_source, native_grade = _original(case)
+        synthetic = deepcopy(native_grade)
+        if absence == 'engine_version_key':
+            del synthetic['sheet']['operation']['engine_version']
+        elif absence == 'engine_version_null':
+            synthetic['sheet']['operation']['engine_version'] = None
+        observation, source = _synthetic_original_grades(case, [] if absence == 'grade' else [synthetic])
+        assert source_descriptor(case.store, source, observation)['native_version'] is None
+        context = saved_context(case, requested(policy='matching_alignment', alignment=observation['id']))
+        perform(case, context, 1, 'sequence.sites', {'alignment_ref': observation['id'], 'positions': [0]})
+&gt;       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+&gt;       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError</failure></testcase><testcase classname="tests.test_phmmer_site_publication" name="test_missing_original_engine_metadata_stays_null_through_host[engine_version_key]" time="0.702"><failure message="gene_annotation_episode.communication.ReportBoundaryError: finite_json_required">phmmer_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x76030fbc5cd0&gt;, tools=&lt;gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+absence = 'engine_version_key'
+
+    @pytest.mark.parametrize('absence', ['grade', 'engine_version_key', 'engine_version_null'])
+    def test_missing_original_engine_metadata_stays_null_through_host(phmmer_case, absence):
+        case = phmmer_case
+        _, original_source, native_grade = _original(case)
+        synthetic = deepcopy(native_grade)
+        if absence == 'engine_version_key':
+            del synthetic['sheet']['operation']['engine_version']
+        elif absence == 'engine_version_null':
+            synthetic['sheet']['operation']['engine_version'] = None
+        observation, source = _synthetic_original_grades(case, [] if absence == 'grade' else [synthetic])
+        assert source_descriptor(case.store, source, observation)['native_version'] is None
+        context = saved_context(case, requested(policy='matching_alignment', alignment=observation['id']))
+        perform(case, context, 1, 'sequence.sites', {'alignment_ref': observation['id'], 'positions': [0]})
+&gt;       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+&gt;       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError</failure></testcase><testcase classname="tests.test_phmmer_site_publication" name="test_missing_original_engine_metadata_stays_null_through_host[engine_version_null]" time="0.658"><failure message="gene_annotation_episode.communication.ReportBoundaryError: finite_json_required">phmmer_case = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x76030fbe1fd0&gt;, tools=&lt;gene_annotation_episode.tools.T...RE', 1): 'observation_4d585622c9a3c0aa33e4508b', ('sp|A0MTA1|APEX1_DANRE', 2): 'observation_17951ebc691767025e0d11d2'})
+absence = 'engine_version_null'
+
+    @pytest.mark.parametrize('absence', ['grade', 'engine_version_key', 'engine_version_null'])
+    def test_missing_original_engine_metadata_stays_null_through_host(phmmer_case, absence):
+        case = phmmer_case
+        _, original_source, native_grade = _original(case)
+        synthetic = deepcopy(native_grade)
+        if absence == 'engine_version_key':
+            del synthetic['sheet']['operation']['engine_version']
+        elif absence == 'engine_version_null':
+            synthetic['sheet']['operation']['engine_version'] = None
+        observation, source = _synthetic_original_grades(case, [] if absence == 'grade' else [synthetic])
+        assert source_descriptor(case.store, source, observation)['native_version'] is None
+        context = saved_context(case, requested(policy='matching_alignment', alignment=observation['id']))
+        perform(case, context, 1, 'sequence.sites', {'alignment_ref': observation['id'], 'positions': [0]})
+&gt;       records, projected = _projection(case, context)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_phmmer_site_publication.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_phmmer_site_publication.py:119: in _projection
+    selection = requested_site_projections(schema)[REFERENCE]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/alignment_site_returns.py:443: in requested_site_projections
+    _finite_json(original_schema)
+../../../gene_annotation_episode/alignment_site_returns.py:98: in _finite_json
+    _require(kind in (list, dict), "finite_json_required")
+../../../gene_annotation_episode/alignment_site_returns.py:85: in _require
+    _error(code, field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'finite_json_required', field = None
+
+    def _error(code, field=None):
+&gt;       raise ReportBoundaryError(code, code="alignment_site_" + code, field=field)
+E       gene_annotation_episode.communication.ReportBoundaryError: finite_json_required
+
+../../../gene_annotation_episode/alignment_site_returns.py:80: ReportBoundaryError</failure></testcase><testcase classname="tests.test_phmmer_site_publication" name="test_wrong_or_ambiguous_original_engine_metadata_cannot_publish[wrong_program-site_native_program_conflict]" time="0.568" /><testcase classname="tests.test_phmmer_site_publication" name="test_wrong_or_ambiguous_original_engine_metadata_cannot_publish[ambiguous-site_native_version_ambiguous]" time="0.436" /><testcase classname="tests.test_phmmer_site_publication" name="test_wrong_or_ambiguous_original_engine_metadata_cannot_publish[empty-site_native_version_invalid]" time="0.420" /><testcase classname="tests.test_phmmer_site_publication" name="test_wrong_or_ambiguous_original_engine_metadata_cannot_publish[number-site_native_version_invalid]" time="0.395" /><testcase classname="tests.test_phmmer_site_publication" name="test_wrong_or_ambiguous_original_engine_metadata_cannot_publish[boolean-site_native_version_invalid]" time="0.478" /><testcase classname="tests.test_phmmer_site_publication" name="test_modified_saved_site_engine_version_rejected_by_original_host[parser_version]" time="1.014" /><testcase classname="tests.test_phmmer_site_publication" name="test_modified_saved_site_engine_version_rejected_by_original_host[other_engine_version]" time="0.895" /><testcase classname="tests.test_phmmer_site_publication" name="test_modified_saved_site_engine_version_rejected_by_original_host[None]" time="0.911" /><testcase classname="tests.test_phmmer_site_publication" name="test_saved_phmmer_site_calculation_has_no_acquisition_execution_or_mutation" time="0.468" /></testsuite></testsuites>

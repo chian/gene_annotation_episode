@@ -1,0 +1,36 @@
+F
+=================================== FAILURES ===================================
+___ test_selected_homology_reaches_parent_with_complete_sheet_and_exact_zero ___
+
+homology_run = namespace(store=<gene_annotation_episode.state.Store object at 0x7658d05703b0>, workflow=<gene_annotation_episode.runt...'adapter_version': '1', 'implementation_sha256': '0e12e3f2bf4a0f29d38a7108a22214ec58160f1e7d638d34d12350f3c90e85e1'}]})
+
+    def test_selected_homology_reaches_parent_with_complete_sheet_and_exact_zero(homology_run):
+        run = homology_run
+        preparation = run.archive['units'][0]['child']
+        launch = run.archive['units'][1]['child']
+        api_record = launch['units'][0]['child']
+        results = run.results_record
+        assert run.record.units_consumed == 3
+        assert preparation['units_consumed'] == 2
+        assert launch['units_consumed'] == 1
+        assert api_record['units_consumed'] == 2
+        assert results['units_consumed'] == 7
+        for closed in (launch, api_record, results):
+            assert closed['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+            assert closed['units'][-1]['controller_step']['marginal_credit'] > 0
+            assert run.choices.counts[closed['episode_id']] == closed['units_consumed']
+        assert run.returned['completed'] is True
+        assert {row['field']: row['value'] for row in run.returned['measurements']} == {
+            'hits': 3, 'query_coverage': .6, 'reference_coverage': .75}
+        assert run.returned['requirements'] == [{'source_ref': run.final_ref, 'field': 'missing', 'requirements': []}]
+        assert all(row['source_ref'] == run.final_ref for row in run.returned['measurements'])
+        admitted = run.store.db.execute('SELECT form,failure FROM runtime_report_attempts WHERE run_id=? '
+            'AND child_episode_id=?', (run.workflow.run_id, results['episode_id'])).fetchone()
+>       assert admitted['failure'] is None and json.loads(admitted['form']) == run.returned
+E       assert ('{"delivery_ref":"delivery_b08b0d6e61d92597abf3cfa4","field":"report.measurements[0].field","kind":"report_delivery_failure","reason":"unknown_reference"}' is None)
+
+tests/test_bvbrc_homology_workflow.py:335: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_homology_workflow.py::test_selected_homology_reaches_parent_with_complete_sheet_and_exact_zero
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 409.05s (0:06:49)

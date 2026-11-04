@@ -1,0 +1,522 @@
+--- before/gene_annotation_episode/acquisition.py
++++ after/gene_annotation_episode/acquisition.py
+@@ -38,8 +38,6 @@
+                     raise ValueError("provider_alignment_coordinates_outside_sequence")
+                 normalized.update(query_interval=query_interval, reference_interval=reference_interval,
+                     query_length=query_length, reference_length=reference_length,
+-                    query_coverage=(query_interval[1]-query_interval[0])/query_length if query_length else None,
+-                    reference_coverage=(reference_interval[1]-reference_interval[0])/reference_length if reference_length else None,
+                     coordinate_system="zero_based_half_open")
+                 if isinstance(alignment.get("identity"), list) and alignment["identity"]:
+                     normalized["identity_fraction"] = alignment["identity"][0]
+--- before/gene_annotation_episode/tools.py
++++ after/gene_annotation_episode/tools.py
+@@ -6,9 +6,7 @@
+         if is_profile:
+             values += measurements(profile_ref=ref(reference["id"]))
+         for key, value in {"bitscore": domain.get("bitscore", hit["bitscore"]),
+-                           "evalue": domain.get("independent_evalue", hit["evalue"]),
+-                           "query_coverage": domain.get("query_coverage"),
+-                           "target_coverage": domain.get("reference_coverage")}.items():
++                           "evalue": domain.get("independent_evalue", hit["evalue"])}.items():
+             if value is not None:
+                 values += measurements(**{key: number(value)})
+         if "query_interval" in domain:
+@@ -24,6 +22,12 @@
+             hit_array_index=hit["native_array_index"],
+             domain_array_index=domain.get("native_array_index"), artifact_ref=source["artifact_ref"])
+         values += self._grading_values(domain_scores, HMMER_DOMAIN_METRICS)
++        # Preserve endpoint-span meanings, using this exact shared score row.
++        # Paired coverage excludes insertion/deletion positions and is distinct.
++        values += self._grading_values({
++            "query_coverage": domain_scores.get("sequence_span_coverage" if is_profile else "model_span_coverage"),
++            "target_coverage": domain_scores.get("model_span_coverage" if is_profile else "sequence_span_coverage"),
++        }, ("query_coverage", "target_coverage"))
+         return self._observation("profile_match" if is_profile else "comparison",
+             [subject_ref], source, values, references=[reference["id"]],
+             dependencies=[subject_ref, reference["id"], query_model["id"]], operand_intervals=operand_intervals)
+--- before/tests/test_hmmer_grading_publication.py
++++ after/tests/test_hmmer_grading_publication.py
+@@ -114,6 +114,24 @@
+ def domain_refs(outcome, hit=0):
+     return {x['domain_array_index']: x['observation_ref']
+             for x in outcome['result']['records'][hit]['domain_publications']}
++
++
++def assert_span_aliases_equal_shared(store, outcome, algorithm):
++    """Check the original page/domain join, including unavailable cells."""
++    grading = grading_for(store, outcome)
++    source = store.get(outcome['result']['source_ref'])
++    axes = (('sequence', 'model') if algorithm == 'hmmscan' else ('model', 'sequence'))
++    for hit in outcome['result']['records']:
++        for domain in hit['domain_publications']:
++            score = api_domain_scores(grading, hit_array_index=hit['native_array_index'],
++                domain_array_index=domain['domain_array_index'], artifact_ref=source['artifact_ref'])
++            values = numeric(store, domain['observation_ref'])
++            for alias, axis in zip(('query_coverage', 'target_coverage'), axes):
++                component = axis + '_span_coverage'
++                if score.get(component) is None:
++                    assert alias not in values
++                else:
++                    assert values[alias] == values[component] == score[component]
+ 
+ 
+ def test_retained_phmmer_full_page_custody_and_checkable_distinct_components(tmp_path):
+@@ -161,12 +179,14 @@
+         assert len(store.list('observation')) == 4
+         assert store.db.execute('SELECT count(*) FROM tool_operations').fetchone()[0] == 1
+         assert not store.current_annotations()
++        assert_span_aliases_equal_shared(store, outcome, 'phmmer')
+ 
+ 
+ def test_original_domain_indices_survive_invalid_internal_row_and_duplicate_provider_indices(tmp_path):
+     body = json.loads(PAGE1.read_bytes())
+     body['result']['hits'][0]['domains'].insert(1, 'invalid internal domain')
+     body['result']['hits'][1]['index'] = body['result']['hits'][0]['index']
++    body['result']['hits'].insert(0, 'invalid internal hit')
+     with Store(tmp_path) as store:
+         _, _, _, result_owner = receiver(store, body=body)
+         outcome = result_owner.act('api.hmmer.result')
+@@ -175,9 +195,10 @@
+         assert numeric(store, domain_refs(outcome)[2])['consensus_identity_fraction'] == pytest.approx(25/88)
+         assert numeric(store, domain_refs(outcome, 1)[0])['consensus_identity_fraction'] == pytest.approx(38/114)
+         assert [r['native_index'] for r in outcome['result']['records']] == [0, 0]
+-        assert [r['native_array_index'] for r in outcome['result']['records']] == [0, 1]
++        assert [r['native_array_index'] for r in outcome['result']['records']] == [1, 2]
+         assert any(e.get('domain_array_index') == 1 for e in outcome['result']['projection_errors'])
+         assert len(grading_for(store, outcome)['scores']['domains']) == 4
++        assert_span_aliases_equal_shared(store, outcome, 'phmmer')
+ 
+ 
+ def test_invalid_query_length_preserves_later_sibling_and_exact_raw_page(tmp_path):
+@@ -193,6 +214,7 @@
+                    and e['domain_array_index'] == 0 for e in outcome['result']['projection_errors'])
+         source = store.get(outcome['result']['source_ref'])
+         assert store.get_artifact(source['artifact_ref']) == client.snapshot(body).content
++        assert_span_aliases_equal_shared(store, outcome, 'phmmer')
+ 
+ 
+ def test_conflicting_reference_lengths_are_not_arbitrarily_selected(tmp_path):
+@@ -206,6 +228,7 @@
+         assert set(domain_refs(outcome)) == {0, 1, 2}
+         assert any(e['code'] == 'provider_reference_length_inconsistent_between_domains'
+                    for e in outcome['result']['projection_errors'])
++        assert_span_aliases_equal_shared(store, outcome, 'phmmer')
+ 
+ 
+ @pytest.mark.parametrize('algorithm', ['phmmer', 'hmmscan'])
+@@ -222,6 +245,9 @@
+         assert reference['reference_type'] == ('protein' if algorithm == 'phmmer' else 'family')
+         assert reference['length'] == (12 if algorithm == 'phmmer' else None)
+         assert values['query_coverage'] == (4/10 if algorithm == 'phmmer' else 4/12)
++        assert values['target_coverage'] == (4/12 if algorithm == 'phmmer' else 4/10)
++        assert values['query_coverage'] != (3/10 if algorithm == 'phmmer' else 3/12)
++        assert values['target_coverage'] != (3/12 if algorithm == 'phmmer' else 3/10)
+         assert (values['query_start'], values['query_end']) == ((0, 4) if algorithm == 'phmmer' else (1, 5))
+         for name, value in {'model_length': 10, 'sequence_length': 12, 'paired_positions': 3,
+             'insert_positions': 1, 'delete_positions': 1, 'alignment_columns': 5,
+@@ -231,6 +257,7 @@
+             'posterior_upper_mean': (.05+1+.95+1)/4}.items():
+             assert values[name] == pytest.approx(value)
+         assert 'identity_fraction' not in values and 'sequence_identity_fraction' not in values
++        assert_span_aliases_equal_shared(store, outcome, algorithm)
+ 
+ 
+ @pytest.mark.parametrize('missing', [True, False])
+@@ -293,20 +320,87 @@
+         assert len(domain_refs(outcome, 1)) == 1
+         assert any(e['code'] == 'hmmer_grading_domain_artifact_mismatch' and e['domain_array_index'] == 1
+                    for e in outcome['result']['projection_errors'])
+-
+-
+-def test_missing_reference_length_preserves_native_domain_and_available_components(tmp_path):
+-    body = synthetic_payload()
+-    body['result']['hits'][0]['domains'][0]['alignment_display']['l'] = None
+-    with Store(tmp_path) as store:
+-        _, _, _, result_owner = receiver(store, body=body, sequence='MACDEFGHIK')
++        assert_span_aliases_equal_shared(store, outcome, 'phmmer')
++
++
++@pytest.mark.parametrize('algorithm', ['phmmer', 'hmmscan'])
++def test_missing_reference_length_preserves_native_domain_and_available_components(tmp_path, algorithm):
++    body = synthetic_payload(algorithm)
++    missing_axis = 'model' if algorithm == 'hmmscan' else 'sequence'
++    body['result']['hits'][0]['domains'][0]['alignment_display'][
++        'm' if algorithm == 'hmmscan' else 'l'] = None
++    with Store(tmp_path) as store:
++        _, _, _, result_owner = receiver(store, body=body, algorithm=algorithm,
++            sequence='MACDEFGHIK' if algorithm == 'phmmer' else 'MACDEFGHIKLM')
+         outcome = result_owner.act('api.hmmer.result')
+         assert set(domain_refs(outcome)) == {0}
+         values = numeric(store, domain_refs(outcome)[0])
+         assert values['native_domain_score_bits'] == values['bitscore'] == -2.5
+         assert values['paired_positions'] == 3 and values['sequence_span_residues'] == 4
+-        assert not {'sequence_length', 'sequence_span_coverage', 'paired_sequence_coverage',
++        assert not {missing_axis + '_length', missing_axis + '_span_coverage', 'paired_' + missing_axis + '_coverage',
+                     'target_coverage'} & values.keys()
++        assert_span_aliases_equal_shared(store, outcome, algorithm)
++
++
++@pytest.mark.parametrize('algorithm', ['phmmer', 'hmmscan'])
++@pytest.mark.parametrize('joined_query', [False, True])
++def test_missing_native_query_length_uses_only_shared_explicit_join(tmp_path, algorithm, joined_query):
++    body = synthetic_payload(algorithm)
++    display = body['result']['hits'][0]['domains'][0]['alignment_display']
++    display['l' if algorithm == 'hmmscan' else 'm'] = None
++    with Store(tmp_path) as store:
++        _, _, _, result_owner = receiver(store, body=body, algorithm=algorithm,
++            sequence='MACDEFGHIK' if algorithm == 'phmmer' else 'MACDEFGHIKLM')
++        if joined_query:
++            display['sqname' if algorithm == 'hmmscan' else 'hmmname'] = store.targets()[0]['id']
++        outcome = result_owner.act('api.hmmer.result')
++        values = numeric(store, domain_refs(outcome)[0])
++        score, = grading_for(store, outcome)['scores']['domains']
++        axis = 'sequence' if algorithm == 'hmmscan' else 'model'
++        if joined_query:
++            assert score[axis + '_length'] == (12 if algorithm == 'hmmscan' else 10)
++            assert values['query_coverage'] == (4/12 if algorithm == 'hmmscan' else 4/10)
++        else:
++            assert score[axis + '_length'] is None
++            assert 'query_coverage' not in values
++        assert values['bitscore'] == -2.5
++        assert_span_aliases_equal_shared(store, outcome, algorithm)
++
++
++@pytest.mark.parametrize('algorithm', ['phmmer', 'hmmscan'])
++@pytest.mark.parametrize('shared_value', [0.125, None, 0.0])
++def test_aliases_copy_shared_cells_and_ignore_parser_alias_sentinels(tmp_path, monkeypatch, algorithm, shared_value):
++    """Injected score sentinels establish projection, not scientific measurements."""
++    import gene_annotation_episode.tools as tool_module
++    original_parse = tool_module.parse_hmmer
++    def poisoned_parser(*args, **kwargs):
++        parsed = original_parse(*args, **kwargs)
++        for hit in parsed['hits']:
++            for domain in hit['domains']:
++                domain.update(query_coverage=.987, reference_coverage=.876)
++        return parsed
++    monkeypatch.setattr(tool_module, 'parse_hmmer', poisoned_parser)
++    with Store(tmp_path) as store:
++        tools, _, _, result_owner = receiver(store, body=synthetic_payload(algorithm), algorithm=algorithm,
++            sequence='MACDEFGHIK' if algorithm == 'phmmer' else 'MACDEFGHIKLM')
++        original_grading = tools._hmmer_grading
++        def injected_shared_cells(snapshot):
++            grading = original_grading(snapshot)
++            score, = grading['scores']['domains']
++            for name, value in (('model_span_coverage', shared_value), ('sequence_span_coverage', .625)):
++                score[name] = score['derived'][name] = score['components'][name]['value'] = value
++            return grading
++        monkeypatch.setattr(tools, '_hmmer_grading', injected_shared_cells)
++        outcome = result_owner.act('api.hmmer.result')
++        assert outcome['status'] == 'completed'
++        assert_span_aliases_equal_shared(store, outcome, algorithm)
++        values = numeric(store, domain_refs(outcome)[0])
++        alias = 'target_coverage' if algorithm == 'hmmscan' else 'query_coverage'
++        if shared_value is None:
++            assert alias not in values
++        else:
++            assert values[alias] == shared_value
++        assert values['query_coverage' if algorithm == 'hmmscan' else 'target_coverage'] == .625
+ 
+ 
+ def test_second_page_provider_index_is_not_array_index_or_population_completion(tmp_path):
+@@ -321,6 +415,7 @@
+         assert grading['sheet']['inputs']['acquisition']['hit_population_complete'] is False
+         assert grading['sheet']['inputs']['acquisition']['page_start'] == 2
+         assert result_owner.api.facts(result_owner.context, {})['execution_completed'] is True
++        assert_span_aliases_equal_shared(store, outcome, 'phmmer')
+ 
+ 
+ def test_empty_synthetic_hmmscan_is_completed_page_with_no_observed_matches(tmp_path):
+@@ -362,6 +457,7 @@
+         assert len(store.list('observation')) == 4
+         assert numeric(store, domain_refs(outcome)[1])['bitscore'] == 16.722900390625
+         assert 'consensus_identity_fraction' not in numeric(store, domain_refs(outcome)[1])
++        assert_span_aliases_equal_shared(store, outcome, 'phmmer')
+ 
+ 
+ def test_saved_sheet_recalculation_after_store_reopen_needs_no_network_or_analysis(tmp_path, monkeypatch):
+@@ -375,6 +471,7 @@
+     monkeypatch.setattr(subprocess, 'Popen', prohibited)
+     with Store(tmp_path) as reopened:
+         saved, = source_tool_gradings(reopened, source_ref)
++        assert_span_aliases_equal_shared(reopened, outcome, 'phmmer')
+         sheet = json.loads(json.dumps(saved['sheet']))
+         before = deepcopy(sheet)
+         monkeypatch.setattr('builtins.open', prohibited)
+--- before/tests/test_hmmer_grading_api_returns.py
++++ after/tests/test_hmmer_grading_api_returns.py
+@@ -27,7 +27,8 @@
+ from test_execution_wiring import child, form
+ from test_practical_runtime import selected
+ from test_hmmer_grading_publication import (PAGE1, QUERY, RetainedClient, receiver, domain_refs,
+-    numeric, synthetic_payload, prohibit_live_network_and_native_execution)
++    numeric, synthetic_payload, prohibit_live_network_and_native_execution,
++    assert_span_aliases_equal_shared)
+ 
+ 
+ def fixture_controller(path, initial):
+@@ -99,6 +100,12 @@
+                     assert len(observed) == expected_domains
+                     assert set(observed) <= set(context['visible_record_refs'])
+                     assert any(numeric(store, r).get('paired_positions') == expected_pairs for r in observed)
++                    for reference in observed:
++                        values = numeric(store, reference)
++                        assert values['query_coverage'] == values[
++                            'sequence_span_coverage' if algorithm == 'hmmscan' else 'model_span_coverage']
++                        assert values['target_coverage'] == values[
++                            'model_span_coverage' if algorithm == 'hmmscan' else 'sequence_span_coverage']
+                 return child('results', {'version': 'execution_results_assignment_v1',
+                     'handoff_ref': self.handoff, 'selector': {'page': 1}}, scope, result_form)
+ 
+@@ -162,6 +169,8 @@
+             (('results', 'replay'),), json.loads(manifest['scope']), json.loads(manifest['assignment']), {})
+         replay = asyncio.run(api.execute(original_context, 'api.hmmer.result', {}, action['operation_key']))
+         assert replay == json.loads(action['result'])
++        assert_span_aliases_equal_shared(store, replay, algorithm)
++        assert set(r['id'] for r in observations) <= set(replay['record_refs'])
+         assert [tuple(row) for row in store.db.execute('SELECT episode_id,unit_index,observation FROM runtime_observations ORDER BY episode_id,unit_index')] == before
+         assert len(client.calls) == 4
+ 
+--- before/tests/test_public_search.py
++++ after/tests/test_public_search.py
+@@ -2,6 +2,8 @@
+     phmmer = parse_hmmer(json.dumps(result()).encode(), algorithm="phmmer")["hits"][0]["domains"][0]
+     hmmscan = parse_hmmer(json.dumps(result("hmmscan")).encode(), algorithm="hmmscan")["hits"][0]["domains"][0]
+     assert phmmer["query_interval"] == [1, 7] and phmmer["reference_interval"] == [3, 9]
+-    assert phmmer["query_coverage"] == .75 and phmmer["reference_coverage"] == .5
+-    assert hmmscan["query_interval"] == [3, 9] and hmmscan["query_coverage"] == .5
+-    assert hmmscan["reference_interval"] == [1, 7] and hmmscan["reference_coverage"] == .75
++    assert (phmmer["query_length"], phmmer["reference_length"]) == (8, 12)
++    assert hmmscan["query_interval"] == [3, 9] and hmmscan["reference_interval"] == [1, 7]
++    assert (hmmscan["query_length"], hmmscan["reference_length"]) == (12, 8)
++    for domain in (phmmer, hmmscan):
++        assert not {"query_coverage", "reference_coverage"} & domain.keys()
+--- before/gene_annotation_episode/homology_results.py
++++ after/gene_annotation_episode/homology_results.py
+@@ -25,7 +25,7 @@
+ from .phmmer_format import VERSION
+ from .phmmer_grading_worker import VERSION as GRADING_VERSION
+ from .hmmer_graders import HMMER_DOMAIN_METRICS
+-from .tool_grading_artifacts import retain_tool_grading
++from .tool_grading_artifacts import retain_tool_grading, source_tool_gradings
+ 
+ 
+ @dataclass(frozen=True)
+@@ -467,19 +467,36 @@
+                         old = self.store.db.execute('SELECT observation_ref FROM homology_measurements WHERE measurement_key=?', (key,)).fetchone()
+                         if old:
+                             observation_ref = old[0]
++                            source = self.store.get(self.store.get(observation_ref)['source_ref'])
++                            retained = json.loads(self.store.get_artifact(source['artifact_ref']))
++                            if retained.get('numerical_projection_version') == 'hmmer_shared_paired_aliases_v1':
++                                for saved_grading in source_tool_gradings(self.store, source['id']):
++                                    failure = saved_grading.get('failure')
++                                    if failure and failure.get('code') == 'phmmer_shared_grading_unavailable':
++                                        errors.append({'ordinal': ordinal, 'code': 'phmmer_grading_unavailable',
++                                                       'grading_failure': failure})
+                         else:
+-                            source = self._source('native.phmmer.alignment', {**semantic, 'measurement_key': key},
++                            if grading is None:
++                                grading = {'sheet': None, 'scores': None, 'failure': {
++                                    'code': 'phmmer_shared_grading_unavailable', 'category': 'grading_input'}}
++                                errors.append({'ordinal': ordinal, 'code': 'phmmer_grading_unavailable',
++                                               'grading_failure': grading['failure']})
++                            source = self._source('native.phmmer.alignment', {**semantic, 'measurement_key': key,
++                                'numerical_projection_version': 'hmmer_shared_paired_aliases_v1'},
+                                 parents=[snapshot_ref], operands=[inputs.query_ref, reference['id']],
+                                 tool_grading=grading, parser_version=snapshot['parser_version'])
+-                            values = {'evalue': row['independent_domain_evalue'], 'bitscore': row['domain_bitscore'],
+-                                'query_coverage': row['paired_residues']/row['query_length'],
+-                                'target_coverage': row['paired_residues']/row['reference_length']}
+-                            if row['paired_residues']:
+-                                values['identity_fraction'] = row['identical_paired_residues']/row['paired_residues']
++                            values = {'evalue': row['independent_domain_evalue'], 'bitscore': row['domain_bitscore']}
+                             if grading and not grading.get('failure'):
+                                 graded = grading['scores']['domains'][0]
+                                 values.update({name: graded[name] for name in HMMER_DOMAIN_METRICS
+                                     if graded.get(name) is not None})
++                                # These native aliases describe actual paired residues;
++                                # the API publisher's endpoint-span aliases are distinct.
++                                values.update({alias: graded[component] for alias, component in (
++                                    ('query_coverage', 'paired_model_coverage'),
++                                    ('target_coverage', 'paired_sequence_coverage'),
++                                    ('identity_fraction', 'sequence_identity_fraction'))
++                                    if graded.get(component) is not None})
+                             measurements = [{'name': k, 'value': {'type': 'number', 'value': v, 'unit_ref': None}} for k,v in values.items()]
+                             measurements.append({'name': 'reference_ref', 'value': {'type': 'reference', 'ref': reference['id']}})
+                             operands = [{'role': role, 'subject_ref': ref, 'start': start, 'end': end, 'unit': 'aa', 'model_unit': 'aa'}
+--- before/tests/test_phmmer_grading_binding.py
++++ after/tests/test_phmmer_grading_binding.py
+@@ -51,6 +51,18 @@
+     grades = source_tool_gradings(store, source['id'])
+     assert len(grades) == 1
+     return grades[0]
++
++
++def assert_paired_aliases_equal_shared(store, observation):
++    grading = saved_grade(store, observation)
++    score = grading['scores']['domains'][0] if grading.get('scores') else {}
++    measured = values(store, observation)
++    for alias, component in (('query_coverage', 'paired_model_coverage'),
++            ('target_coverage', 'paired_sequence_coverage'), ('identity_fraction', 'sequence_identity_fraction')):
++        if score.get(component) is None:
++            assert alias not in measured
++        else:
++            assert measured[alias] == measured[component] == score[component]
+ 
+ 
+ @pytest.fixture(scope='module')
+@@ -130,6 +142,7 @@
+             assert native['quantities']['actual_sequence_correspondence'] is True
+             assert values(store, observation)['paired_model_coverage'] == values(store, observation)['query_coverage']
+             assert values(store, observation)['paired_sequence_coverage'] == values(store, observation)['target_coverage']
++            assert_paired_aliases_equal_shared(store, observation)
+             assert row['native_domain_bias_bits'] is not None and row['native_accuracy'] is not None
+             assert row['sequence_envelope_residues'] >= row['sequence_span_residues']
+             assert row['posterior_lower_mean'] <= row['posterior_upper_mean']
+@@ -172,6 +185,10 @@
+         assert domain['sequence_span_residues'] == 256 and domain['paired_positions'] == 253
+         assert domain['insert_positions'] == 3 and domain['sequence_span_coverage'] == 1
+         assert domain['paired_sequence_coverage'] == 253/256
++        assert values(store, combined[1])['target_coverage'] == 253/256
++        assert values(store, combined[1])['target_coverage'] != domain['sequence_span_coverage']
++        for reference in combined:
++            assert_paired_aliases_equal_shared(store, reference)
+         before = store.count('observation')
+         replay = run_extract(adapter, inputs, scope, snapshot_ref=snapshot, limit=10)
+         assert replay['changed_record_refs'] == [] and store.count('observation') == before
+@@ -442,10 +459,12 @@
+         assert 'synthetic_publication_grading_failure' in json.dumps(result['feedback'])
+         for reference in result['result']['comparison_refs']:
+             measured = values(store, reference)
+-            assert measured['query_coverage'] == 1 and 'model_span_coverage' not in measured
++            assert not {'query_coverage', 'target_coverage', 'identity_fraction', 'model_span_coverage'} & measured.keys()
++            assert 'bitscore' in measured and 'evalue' in measured
+             grading = saved_grade(store, reference)
+             assert grading['scores'] is None and grading['sheet'] is None
+             assert grading['failure']['code'] == 'synthetic_publication_grading_failure'
++            assert_paired_aliases_equal_shared(store, reference)
+         assert store.count('observation') == 2
+ 
+ 
+@@ -469,15 +488,90 @@
+         store.db.execute('INSERT INTO homology_result_snapshots VALUES(?,?,?,?,?)',
+             (source['id'], 'explicit-historical-fixture', inputs.query_ref, str(directory), canonical(historical)))
+         old = run_extract(adapter, inputs, scope, snapshot_ref=source['id'], limit=10)
+-        assert old['status'] == 'completed'
++        assert old['status'] == 'partial'
++        assert all(error['grading_failure']['code'] == 'phmmer_shared_grading_unavailable'
++            for error in old['feedback']['publication_errors'])
+         old_rows = {reference: store.get(reference) for reference in old['result']['comparison_refs']}
+         for reference in old_rows:
+             original = store.get(store.get(reference)['source_ref'])
+             assert original['version'] == historical['parser_version']
+-            assert source_tool_gradings(store, original['id']) == []
+-            assert 'model_span_coverage' not in values(store, reference)
++            grade = saved_grade(store, reference)
++            assert grade['failure']['code'] == 'phmmer_shared_grading_unavailable'
++            semantic = json.loads(store.get_artifact(original['artifact_ref']))
++            assert semantic['paired_residues'] > 0
++            assert semantic['numerical_projection_version'] == 'hmmer_shared_paired_aliases_v1'
++            assert not {'query_coverage', 'target_coverage', 'identity_fraction', 'model_span_coverage'} & values(store, reference).keys()
+         new = run_extract(adapter, inputs, scope, snapshot_ref=captured['result']['snapshot_ref'], limit=10)
+         assert set(new['result']['comparison_refs']).isdisjoint(old_rows)
+         assert {reference: store.get(reference) for reference in old_rows} == old_rows
+         replay = run_extract(adapter, inputs, scope, snapshot_ref=source['id'], limit=10)
+         assert replay['result'] == old['result'] and replay['changed_record_refs'] == []
++        assert replay['status'] == old['status']
++        assert replay['feedback'] == old['feedback']
++
++
++def test_shared_alias_cells_are_projected_without_raw_count_or_consensus_fallback(tmp_path, tiny, monkeypatch):
++    """Injected shared cells are projection sentinels, not native measurements."""
++    store, adapter, inputs, scope = workspace(tmp_path, tiny)
++    original = adapter._grading
++    def injected(*args, **kwargs):
++        grading = original(*args, **kwargs)
++        score, = grading['scores']['domains']
++        for name, value in (('paired_model_coverage', .125), ('paired_sequence_coverage', .625),
++                ('sequence_identity_fraction', None)):
++            score[name] = score['components'][name]['value'] = score['derived'][name] = value
++        assert score['consensus_identity_fraction'] == 1
++        return grading
++    monkeypatch.setattr(adapter, '_grading', injected)
++    with store:
++        result = run_extract(adapter, inputs, scope, limit=10)
++        assert result['status'] == 'completed'
++        for reference in result['result']['comparison_refs']:
++            assert_paired_aliases_equal_shared(store, reference)
++            measured = values(store, reference)
++            assert measured['query_coverage'] == .125 and measured['target_coverage'] == .625
++            assert 'identity_fraction' not in measured
++            assert measured['consensus_identity_fraction'] == 1
++
++
++def test_preexisting_ungraded_observation_cache_and_witness_remain_unchanged(tmp_path, tiny, monkeypatch):
++    """A synthetic historical Store record must keep its originally saved values."""
++    store, adapter, inputs, scope = workspace(tmp_path, tiny)
++    monkeypatch.setattr(adapter, '_grading', lambda *args, **kwargs: None)
++    with store:
++        captured = run_extract(adapter, inputs, scope, limit=10)
++        historical_refs = []
++        for reference in captured['result']['comparison_refs']:
++            observed = store.get(reference)
++            source = store.get(observed['source_ref'])
++            semantic = json.loads(store.get_artifact(source['artifact_ref']))
++            semantic.pop('numerical_projection_version')
++            old_source = adapter._source('native.phmmer.alignment', semantic,
++                parents=source['parent_source_refs'], operands=source['operand_refs'],
++                parser_version=source['version'])
++            historical = {k: v for k, v in observed.items() if k not in {'id', 'origin', 'record_type'}}
++            historical['source_ref'] = old_source['id']
++            historical['measurements'] += [{'name': name, 'value': {
++                'type': 'number', 'value': value, 'unit_ref': None}}
++                for name, value in (('query_coverage', .123), ('target_coverage', .456), ('identity_fraction', .789))]
++            old = store.put('observation', historical, origin='tool', scope=scope)
++            store.db.execute('UPDATE homology_measurements SET observation_ref=? WHERE measurement_key=?',
++                (old['id'], semantic['measurement_key']))
++            store.db.execute('UPDATE homology_result_witnesses SET record_ref=? WHERE record_ref=?',
++                (old['id'], reference))
++            historical_refs.append(old['id'])
++        records = [tuple(row) for row in store.db.execute('SELECT * FROM records ORDER BY id')]
++        cache = [tuple(row) for row in store.db.execute('SELECT * FROM homology_measurements ORDER BY measurement_key')]
++        witnesses = [tuple(row) for row in store.db.execute('SELECT * FROM homology_result_witnesses ORDER BY snapshot_ref,ordinal')]
++        replay = run_extract(adapter, inputs, scope, snapshot_ref=captured['result']['snapshot_ref'], limit=10)
++        assert replay['status'] == 'completed' and replay['feedback'] is None
++        assert replay['result']['comparison_refs'] == historical_refs
++        assert replay['changed_record_refs'] == []
++        assert [tuple(row) for row in store.db.execute('SELECT * FROM records ORDER BY id')] == records
++        assert [tuple(row) for row in store.db.execute('SELECT * FROM homology_measurements ORDER BY measurement_key')] == cache
++        assert [tuple(row) for row in store.db.execute('SELECT * FROM homology_result_witnesses ORDER BY snapshot_ref,ordinal')] == witnesses
++        for reference in historical_refs:
++            measured = values(store, reference)
++            assert measured['query_coverage'] == .123 and measured['target_coverage'] == .456
++            assert measured['identity_fraction'] == .789
++            assert source_tool_gradings(store, store.get(reference)['source_ref']) == []
+--- before/tests/test_phmmer_grading_returns.py
++++ after/tests/test_phmmer_grading_returns.py
+@@ -10,7 +10,7 @@
+ from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
+ from test_homology_episode_runtime import ParentTools, Provider, action, commission, run
+ from test_homology_jobs import wait_terminal
+-from test_phmmer_grading_binding import values
++from test_phmmer_grading_binding import values, assert_paired_aliases_equal_shared
+ from test_resource_episode_branches import resources as resource_fixture
+ from test_resource_episode_branches import test_nested_launch_real_local_job_checked_handoff_and_separate_results as run_nested
+ 
+@@ -37,6 +37,7 @@
+             "AND json_extract(action,'$.role')='results'")]
+         assert len(parent_returns) == 1
+         assert parent_returns[0]['result']['acquired'] == [observation['id']]
++        assert_paired_aliases_equal_shared(r.store, parent_returns[0]['result']['acquired'][0])
+         assert 'hmmer_search_sheet_v1' not in json.dumps(parent_returns)
+         job, = [row[0] for row in r.jobs.db.execute('SELECT job_ref FROM orders')]
+         native = NativePhmmerInput.from_job(r.jobs, r.jobs.handoff(job))
+@@ -83,6 +84,7 @@
+         returned, = [form['comparisons'] for form in forms if 'comparisons' in form]
+         assert len(returned) == 1
+         numbers = values(r.store, returned[0])
++        assert_paired_aliases_equal_shared(r.store, returned[0])
+         assert numbers['paired_positions'] == 253 and numbers['sequence_identity_fraction'] == 1
+         assert numbers['posterior_lower_mean'] <= numbers['posterior_upper_mean']
+         parent_action = r.store.db.execute("SELECT result FROM runtime_actions "

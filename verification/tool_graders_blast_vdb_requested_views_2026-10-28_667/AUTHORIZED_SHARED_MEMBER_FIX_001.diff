@@ -1,0 +1,41 @@
+--- before/gene_annotation_episode/blast_vdb_utility_contracts.py
++++ after/gene_annotation_episode/blast_vdb_utility_contracts.py
+@@ -421,8 +421,11 @@
+             _require(count is not None and not row["failures"], "complete_record_count")
+         member = row["vdb_member"]
+         candidates = [m for m in members if m["native_identifier"] == row["native_identifier"]]
+-        if member is not None:
+-            _require(len(candidates) == 1 and candidates[0] == member, "vdb_member_record_binding")
++        _require(member == (candidates[0] if len(candidates) == 1 else None), "vdb_member_record_binding")
++        if len(candidates) > 1:
++            _require(any(f["code"] == "supplied_binding_conflict" and f["stage"] == "association"
++                and f["record_key"] == row["record_key"] and f["occurrence_id"] == out["occurrence_id"]
++                and f["line_number"] == row["line_number"] for f in row["failures"]), "vdb_member_conflict_unqualified")
+         _diagnostics(row, occurrences=known, subjects=subjects, record_keys=keys, outcome=value["original_outcome"])
+     _require(set(value["missing_selector_ordinals"]) == ordinals - matched, "missing_selector_population")
+     unexpected = {r["record_key"] for r in rows if entries and not r["matched_selector_ordinals"]}
+--- before/tests/test_blast_vdb_utility_contracts_662.py
++++ after/tests/test_blast_vdb_utility_contracts_662.py
+@@ -350,6 +350,9 @@
+     value["vdb_context"]["member_bindings"] = [link]
+     value["records"][0]["vdb_member"] = deepcopy(link)
+     assert validate_blast_utility_result(value)["records"][0]["vdb_member"]["read_identity"]["read_index"] == 0
++    bad = deepcopy(value); bad["records"][0]["vdb_member"] = None
++    with pytest.raises(ContractError, match="member_record_binding"):
++        validate_blast_utility_result(bad)
+     for mutate in (
+         lambda m: m.update(dataset_key="unselected"),
+         lambda m: m.update(native_identifier="different"),
+@@ -375,6 +378,12 @@
+     value["vdb_context"]["member_bindings"].append(conflicting)
+     with pytest.raises(ContractError, match="member_record_binding"): validate_blast_utility_result(value)
+     value["records"][0]["vdb_member"] = None
++    with pytest.raises(ContractError, match="member_conflict_unqualified"):
++        validate_blast_utility_result(value)
++    row = value["records"][0]
++    row["failures"].append(failure("supplied_binding_conflict", row=row["record_key"], line=1, stage="association"))
++    row["completeness"] = "partial"
++    value["population_completeness"] = "partial_selection"
+     assert validate_blast_utility_result(value)["records"][0]["vdb_member"] is None
+ 
+ 

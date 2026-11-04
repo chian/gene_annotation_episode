@@ -1,0 +1,156 @@
+{
+  "case": "Fd + Hyd \u2212 crotonyl-CoA",
+  "physical_source_ref": "source_1a9a4b39c8027622fd89cf8e",
+  "source_kind": "primary_source",
+  "cells": [
+    {
+      "component": "reference_rate",
+      "value": 5.0,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": null,
+      "reported_domain": {
+        "basis": "reported_point",
+        "conditioning": "stored_source_cell",
+        "failure": null,
+        "kind": "point",
+        "lower": 5.0,
+        "lower_inclusive": true,
+        "projection": "exact",
+        "upper": 5.0,
+        "upper_inclusive": true
+      }
+    },
+    {
+      "component": "test_rate",
+      "value": null,
+      "unit": "umol/min/mg",
+      "threshold": 0.01,
+      "bound": "lt",
+      "unavailable_reason": "censored_measurement",
+      "reported_domain": {
+        "basis": "reported_censoring",
+        "conditioning": "stored_source_cell",
+        "failure": null,
+        "kind": "upper_bounded",
+        "lower": null,
+        "lower_inclusive": false,
+        "projection": "outward",
+        "upper": 0.01,
+        "upper_inclusive": false
+      }
+    },
+    {
+      "component": "rate_difference",
+      "value": null,
+      "unit": "umol/min/mg",
+      "threshold": 4.989999999999999,
+      "bound": "gt",
+      "unavailable_reason": "censored_measurement",
+      "reported_domain": {
+        "basis": "reported_operand_algebra",
+        "conditioning": "reported_endpoint_normalization_unit_relations",
+        "failure": null,
+        "kind": "lower_bounded",
+        "lower": 4.989999999999999,
+        "lower_inclusive": false,
+        "projection": "outward",
+        "upper": null,
+        "upper_inclusive": false
+      }
+    },
+    {
+      "component": "retained_fraction",
+      "value": null,
+      "unit": "fraction",
+      "threshold": 0.002,
+      "bound": "lt",
+      "unavailable_reason": "censored_measurement",
+      "reported_domain": {
+        "basis": "reported_operand_algebra",
+        "conditioning": "reported_endpoint_normalization_unit_relations",
+        "failure": null,
+        "kind": "upper_bounded",
+        "lower": null,
+        "lower_inclusive": false,
+        "projection": "outward",
+        "upper": 0.002,
+        "upper_inclusive": false
+      }
+    },
+    {
+      "component": "fractional_decrease",
+      "value": null,
+      "unit": "fraction",
+      "threshold": 0.998,
+      "bound": "gt",
+      "unavailable_reason": "censored_measurement",
+      "reported_domain": {
+        "basis": "reported_operand_algebra",
+        "conditioning": "reported_endpoint_normalization_unit_relations",
+        "failure": null,
+        "kind": "lower_bounded",
+        "lower": 0.998,
+        "lower_inclusive": false,
+        "projection": "outward",
+        "upper": null,
+        "upper_inclusive": false
+      }
+    },
+    {
+      "component": "reference_mean_se",
+      "value": null,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": "mean_uncertainty_unreported",
+      "reported_domain": {
+        "basis": "stored_numerical_point",
+        "conditioning": "stored_source_cell",
+        "failure": "mean_uncertainty_unreported",
+        "kind": "unavailable",
+        "lower": null,
+        "lower_inclusive": false,
+        "projection": "none",
+        "upper": null,
+        "upper_inclusive": false
+      }
+    },
+    {
+      "component": "test_mean_se",
+      "value": null,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": "censored_measurement",
+      "reported_domain": {
+        "basis": "stored_numerical_point",
+        "conditioning": "stored_source_cell",
+        "failure": "censored_measurement",
+        "kind": "unavailable",
+        "lower": null,
+        "lower_inclusive": false,
+        "projection": "none",
+        "upper": null,
+        "upper_inclusive": false
+      }
+    }
+  ],
+  "uncertainty": {
+    "reference": {
+      "count": null,
+      "kind": "unreported",
+      "magnitude": null,
+      "sampling_basis": "unspecified",
+      "unavailable_reason": null
+    },
+    "test": {
+      "count": null,
+      "kind": "unreported",
+      "magnitude": null,
+      "sampling_basis": "unspecified",
+      "unavailable_reason": null
+    }
+  }
+}

@@ -1,0 +1,438 @@
+{
+  "kind": "synthetic_adversarial_observation",
+  "requested_completion": [
+    "completion_time_ratio"
+  ],
+  "requested_product": [
+    "selected_fraction_sum"
+  ],
+  "completion_rows": [
+    {
+      "sheet_ref": "source_b18e9c494146709eae1343ee",
+      "evidence_source_ref": "source_c6f8eae47ffc7ed710da938b",
+      "component": "completion_time_ratio",
+      "value": null,
+      "unit": "dimensionless",
+      "status": "bounded",
+      "unavailable_reason": null,
+      "approximate": true,
+      "origin": "derived",
+      "conditional_on": [
+        "strictly_positive_physical_completion_time",
+        "source_endpoint_and_pair_interpretations",
+        "reported_operand_cartesian_enclosure",
+        "preparation_protocol_comparison_only"
+      ],
+      "reported_domain": {
+        "basis": "reported_operand_algebra",
+        "conditioning": "strictly_positive_physical_completion_time",
+        "failure": null,
+        "kind": "lower_bounded",
+        "lower": 453.5031614826947,
+        "lower_inclusive": false,
+        "projection": "outward",
+        "upper": null,
+        "upper_inclusive": false
+      },
+      "exact_domain": {
+        "lower": {
+          "denominator": "2078297",
+          "numerator": "942514260"
+        },
+        "lower_inclusive": false,
+        "upper": null,
+        "upper_inclusive": false
+      },
+      "evaluation_scope": "source_preparation_completion_time",
+      "experiment": {
+        "status": "withheld_time_operand",
+        "witness": null
+      },
+      "intended_change": {
+        "status": "selected",
+        "witness": {
+          "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+          "end": 171,
+          "quote": "Purification",
+          "representation": "original",
+          "source_ref": "source_c6f8eae47ffc7ed710da938b",
+          "start": 159
+        }
+      },
+      "other_changes": [
+        {
+          "status": "selected",
+          "witness": {
+            "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+            "end": 201,
+            "quote": "heating also changed",
+            "representation": "original",
+            "source_ref": "source_c6f8eae47ffc7ed710da938b",
+            "start": 181
+          }
+        }
+      ],
+      "comparison": {
+        "endpoint_relation": {
+          "value": "same",
+          "support": [
+            {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 157,
+                "quote": "equilibrium",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 146
+              }
+            }
+          ]
+        },
+        "preparation_relation": {
+          "value": "different",
+          "support": [
+            {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 157,
+                "quote": "equilibrium",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 146
+              }
+            }
+          ]
+        },
+        "pair_relationship": {
+          "value": "supported",
+          "support": [
+            {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 157,
+                "quote": "equilibrium",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 146
+              }
+            }
+          ]
+        },
+        "other_changes_status": {
+          "value": "partial",
+          "support": [
+            {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 157,
+                "quote": "equilibrium",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 146
+              }
+            }
+          ]
+        }
+      },
+      "operands": [
+        {
+          "role": "numerator",
+          "meanings": {
+            "subject": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 86,
+                "quote": "reference protein",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 69
+              }
+            },
+            "construct": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 357,
+                "quote": "Native construct",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 341
+              }
+            },
+            "preparation": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 95,
+                "quote": "Cleanup",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 88
+              }
+            },
+            "condition": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 380,
+                "quote": "Fixed assay condition",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 359
+              }
+            },
+            "endpoint": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 271,
+                "quote": "Single mixture has component A 71.234567% and component B 28.765433%",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 203
+              }
+            },
+            "measurement_identity": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 39,
+                "quote": "Single mixture",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 25
+              }
+            }
+          },
+          "qualification": {
+            "value": "source_qualified_approximate",
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                  "end": 427,
+                  "quote": "Source describes these reports as approximate",
+                  "representation": "original",
+                  "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                  "start": 382
+                }
+              }
+            ]
+          },
+          "reading": null
+        },
+        {
+          "role": "denominator",
+          "meanings": {
+            "subject": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 86,
+                "quote": "reference protein",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 69
+              }
+            },
+            "construct": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 357,
+                "quote": "Native construct",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 341
+              }
+            },
+            "preparation": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 52,
+                "quote": "baseline",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 44
+              }
+            },
+            "condition": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 380,
+                "quote": "Fixed assay condition",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 359
+              }
+            },
+            "endpoint": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 157,
+                "quote": "equilibrium",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 146
+              }
+            },
+            "measurement_identity": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                "end": 60,
+                "quote": "baseline mixture",
+                "representation": "original",
+                "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                "start": 44
+              }
+            }
+          },
+          "qualification": {
+            "value": "source_qualified_approximate",
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_312bf0ee30e12fab2f567710e2e42bea46087a93cfa8e7accc7fdd1ba42341e0",
+                  "end": 427,
+                  "quote": "Source describes these reports as approximate",
+                  "representation": "original",
+                  "source_ref": "source_c6f8eae47ffc7ed710da938b",
+                  "start": 382
+                }
+              }
+            ]
+          },
+          "reading": null
+        }
+      ]
+    }
+  ],
+  "product_rows": [
+    {
+      "sheet_ref": "source_c6c9169e1a24d65747ff5dde",
+      "evidence_source_ref": "source_c6f8eae47ffc7ed710da938b",
+      "component": "selected_fraction_sum",
+      "value": 1.0,
+      "unit": "fraction",
+      "status": "populated",
+      "unavailable_reason": null,
+      "origin": "derived",
+      "approximate": true,
+      "threshold": null,
+      "bound": "none",
+      "outside_reported_fraction_range": false,
+      "conditional_on": [
+        "source_reported_fraction_scale",
+        "same_selected_preparation_and_endpoint",
+        "shared_selected_denominator",
+        "dependent_transforms_not_independent_evidence"
+      ],
+      "experiment_ref": "reference_18dbb14cc9368cead8f9769a",
+      "experiment_status": "selected",
+      "quantities": [
+        {
+          "role": "a",
+          "subject_ref": "reference_afda8c5f4381f5de5ed5e792",
+          "organism_ref": null,
+          "construct_ref": "reference_4a53551bb79061165b34a747",
+          "preparation_ref": "reference_1a1e7a794f1207dfe07aaba4",
+          "compound_ref": "reference_c1afc8dc2e000b59d2e96647",
+          "endpoint_ref": "reference_469055a629dd8e7226ecc62e",
+          "condition_ref": "reference_5b70d6e3389ed1d25d9592d1",
+          "stage_ref": "reference_dd28f6f3b3d570022a05f9d7",
+          "time_ref": null,
+          "denominator_ref": null,
+          "measurement_basis_ref": "reference_3a977380589a908b386cb85f",
+          "measurement_identity_ref": "reference_5fcae13bbadee6cf23b101ab",
+          "meaning_status": {
+            "subject": "selected",
+            "organism": "not_selected",
+            "construct": "selected",
+            "preparation": "selected",
+            "compound": "selected",
+            "endpoint": "selected",
+            "condition": "selected",
+            "stage": "selected",
+            "time": "not_selected",
+            "denominator": "withheld_unrequested_numbers",
+            "measurement_basis": "selected",
+            "measurement_identity": "selected"
+          },
+          "basis": "amount_fraction",
+          "stage": "equilibrium",
+          "qualification": "source_qualified_approximate"
+        },
+        {
+          "role": "b",
+          "subject_ref": "reference_afda8c5f4381f5de5ed5e792",
+          "organism_ref": null,
+          "construct_ref": "reference_4a53551bb79061165b34a747",
+          "preparation_ref": "reference_1a1e7a794f1207dfe07aaba4",
+          "compound_ref": "reference_c755778f56d0e60c4dd3c454",
+          "endpoint_ref": "reference_469055a629dd8e7226ecc62e",
+          "condition_ref": "reference_5b70d6e3389ed1d25d9592d1",
+          "stage_ref": "reference_dd28f6f3b3d570022a05f9d7",
+          "time_ref": null,
+          "denominator_ref": null,
+          "measurement_basis_ref": "reference_3a977380589a908b386cb85f",
+          "measurement_identity_ref": "reference_fb53890d324cf92c59f44b52",
+          "meaning_status": {
+            "subject": "selected",
+            "organism": "not_selected",
+            "construct": "selected",
+            "preparation": "selected",
+            "compound": "selected",
+            "endpoint": "selected",
+            "condition": "selected",
+            "stage": "selected",
+            "time": "not_selected",
+            "denominator": "withheld_unrequested_numbers",
+            "measurement_basis": "selected",
+            "measurement_identity": "selected"
+          },
+          "basis": "amount_fraction",
+          "stage": "equilibrium",
+          "qualification": "source_qualified_approximate"
+        }
+      ],
+      "evidence": [
+        {
+          "role": "repetition_basis",
+          "witness_ref": "reference_fbbf28c04b324e8fdc28f07d",
+          "availability": "recorded"
+        },
+        {
+          "role": "composition",
+          "witness_ref": null,
+          "availability": "withheld_unrequested_numbers"
+        }
+      ],
+      "relationships": {
+        "same_preparation": "supported",
+        "same_endpoint": "supported",
+        "shared_denominator": "supported"
+      },
+      "evaluation_scope": "reported_selected_product_partition",
+      "uncertainty_calculation": "not_implemented"
+    }
+  ],
+  "native_product_operands_present_in_completion_return": true,
+  "native_product_operands_present_in_completion_render": true,
+  "scope_question": "Should cross-family unrequested native operands be withheld when contained in another requested family's scientifically meaningful source witness?",
+  "source_hashes": {
+    "gene_annotation_episode/literature_completion_time_storage.py": "69dd0b02673d017beaf016ace0824e3bd4b3efed606802a2c118c78191800cc3",
+    "gene_annotation_episode/literature_completion_time_render.py": "388238c64dc375f2dfbc8640ec8d6fcd1ac4495be5ada10afdda57a8c6da9e74",
+    "gene_annotation_episode/literature_product_partition_storage.py": "9894244dcf626ba357f9ab0dd30e9192918fe765ba13e876a53442ebe0f6b46c"
+  }
+}

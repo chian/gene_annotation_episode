@@ -1,0 +1,11 @@
+--- before203/tests/test_literature_channel_binding_188.py
++++ after203/tests/test_literature_channel_binding_188.py
+@@ -442,7 +442,7 @@
+         assert 'J*covariance*J_transpose; J=[' not in task_text
+         assert 'calibrated_measured_endpoint_per_selected_amount_compiled_v1' not in task_text
+         if profile is None:
+-            assert 'episode-fact:' not in task_text
++            assert 'episode-fact:' + source in task_text
+     assert state==before and original['properties']['numbers']==schema()
+     validate_closed_schema(original)
+ 

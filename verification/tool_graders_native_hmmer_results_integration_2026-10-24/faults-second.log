@@ -1,0 +1,13 @@
+F
+=================================== FAILURES ===================================
+_____ test_wrong_biological_binding_is_invalid_and_does_not_close_endpoint _____
+tests/test_native_hmmer_results_integration.py:485: in test_wrong_biological_binding_is_invalid_and_does_not_close_endpoint
+    assert wrong['status'] == 'invalid' and wrong['observation_ref'] is None
+E   AssertionError: assert ('unbound' == 'invalid'
+E     
+E     - invalid
+E     + unbound)
+=========================== short test summary info ============================
+FAILED tests/test_native_hmmer_results_integration.py::test_wrong_biological_binding_is_invalid_and_does_not_close_endpoint
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 18 deselected in 19.48s

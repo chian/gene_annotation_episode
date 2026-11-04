@@ -1,0 +1,44 @@
+..........................................FF......                       [100%]
+=================================== FAILURES ===================================
+______ test_feature_mismatch_retains_failed_assignment_and_other_features ______
+
+    def test_feature_mismatch_retains_failed_assignment_and_other_features():
+        case = wire_case(fixture("translated_features.json"))
+        original = case["payload"]["searches"][0]["supplied_assignments"][0]
+        original["target"]["feature_identifier"]["value"] = "different-feature"
+>       out = populate(case); sheet = out["sheets"][0]["sheet"]
+                                      ^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_native_blast_vdb_function_metadata.py:429: IndexError
+_____ test_tabular_sparse_native_hsp_indices_and_source_lines_survive_wire _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_metadata_2026-10-26_345/run_006/temporary/test_tabular_sparse_native_hsp0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e975437a0f0>
+
+    def test_tabular_sparse_native_hsp_indices_and_source_lines_survive_wire(tmp_path, monkeypatch):
+        from test_blast_vdb_calculators import table_values
+        from test_blast_vdb_function_inputs import explicit
+        values = table_values()
+        assignment = explicit(values, 0)
+        sheet = inputs.populate_blast_vdb_function_sheet(vdb.populate_blast_vdb_sheet(**values),
+            supplied_assignments=[assignment], dependency_records=[], census_records=[])
+        case = wire_case(sheet)
+        case["job"]["outputs"][next(i for i, o in enumerate(case["job"]["outputs"]) if o["role"] == "primary_report")]["format"] = "tabular7"
+        case["catalog"]["primary_reports"][0]["format"] = "tabular7"
+        case["artifacts"]["entries"][0]["format"] = "tabular7"
+        with monkeypatch.context() as pure:
+            forbid_io(pure)
+            out = populate(case)
+        assert not out["issues"] and out["sheets"][0]["sheet"] == sheet
+        assigned = [o for o in sheet["observations"] if o["assignment_key"] is not None]
+        assert [o["row_key"]["hsp_ordinal"] for o in assigned] == [1]
+>       assert assigned[0]["source_locator"]["line_number"] == 7
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'line_number'
+
+../../../tests/test_native_blast_vdb_function_metadata.py:453: KeyError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_feature_mismatch_retains_failed_assignment_and_other_features
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_tabular_sparse_native_hsp_indices_and_source_lines_survive_wire
+2 failed, 48 passed in 2.12s

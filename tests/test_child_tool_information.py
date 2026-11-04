@@ -17,7 +17,7 @@ from gene_annotation_episode.providers import ModelRole
 from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.scientific_tool_retrieval import ScientificToolRetriever, tool_info_output_schema
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_information import resource_kind, selectors, tool_info_selection
+from gene_annotation_episode.tool_information import make_tool_info, resource_kind, selectors, tool_info_selection
 from gene_annotation_episode.tools import ToolRegistry
 
 
@@ -76,7 +76,7 @@ def test_same_name_resource_variants_resolve_exact_instructions_and_contracts(ac
     selected = [{'name': 'practical.job.start', 'resources': kind} for kind in ('local', 'hpc')]
     rows = library.resolve_tool_info(selected)
     assert rows[0]['instructions'] != rows[1]['instructions']
-    assert 'EpiCalib' in rows[1]['instructions'] and 'actual assigned HPC' in rows[1]['instructions']
+    assert 'configuration.account' in rows[1]['instructions'] and 'actual assigned HPC' in rows[1]['instructions']
     contracts = library.resolve_invocations(selected)
     assert contracts[0]['input_schema'] == next(row['input_schema'] for row in operation_catalog('local') if row['name'] == 'practical.job.start')
     assert contracts[1]['input_schema'] == next(row['input_schema'] for row in operation_catalog('hpc') if row['name'] == 'practical.job.start')
@@ -89,6 +89,23 @@ def test_same_name_resource_variants_resolve_exact_instructions_and_contracts(ac
         tool_info_selection([selected[0], selected[0]])
     with pytest.raises(ValueError, match='unknown'):
         library.resolve_tool_info([{'name': 'sequence.align', 'resources': 'hpc'}])
+
+
+def test_generated_hpc_information_uses_actual_assignment_and_configuration():
+    contract = next(row for row in operation_catalog('hpc') if row['name'] == 'practical.job.start')
+    original = deepcopy(contract)
+    information = make_tool_info(contract, 'hpc')
+    assert set(information) == {'name', 'description', 'resources', 'instructions'}
+    assert information['name'] == contract['name'] and information['resources'] == 'hpc'
+    assert information['description'] == contract['description']
+    instructions = information['instructions']
+    for literal in ('actual assigned HPC execution binding', 'actual assignment workspace',
+            'configuration.account', 'assignment constraints', 'actual input_schema'):
+        assert literal in instructions
+    for literal in ('/lus/flare/projects/BioReason-Aurora-Test', 'EpiCalib', '/home/chian',
+            'WORKSPACE_DIRECTORY.md'):
+        assert literal not in instructions
+    assert contract == original
 
 
 def test_parent_information_excludes_instructions_child_gets_actual_contract_and_executes(actual):

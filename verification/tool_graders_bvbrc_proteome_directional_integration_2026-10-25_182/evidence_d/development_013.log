@@ -1,0 +1,22 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_native_only_v2_keeps_directional_wrappers_null_and_calls_no_directional_producer _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7bb743114350>
+
+    def test_native_only_v2_keeps_directional_wrappers_null_and_calls_no_directional_producer(monkeypatch):
+        case = fixture(mixed=True, supplementary=True)
+        case['parameters'].update(directional_documents=[], directional_calculation_parameters=None)
+        case['requested_form'] = requested_form_schema_v2({'mean': {'kind': 'measurement', 'target': 'summary',
+            'track_key': 'comp_genome_1', 'summary': 'first_hsp_identity_summary', 'metric': 'mean'}})
+        def forbidden(*args, **kwargs): raise AssertionError('unselected directional producer ran')
+        for name in ('parse_genome_comparison_directional_report', 'build_directional_sheet', 'calculate_directional_components'):
+            monkeypatch.setattr(provider, name, forbidden)
+        result = adapter.consume_bundle(**case)
+>       assert result['facts']['mean']['cell']['value'] == .4375
+E       assert None == 0.4375
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:184: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_native_only_v2_keeps_directional_wrappers_null_and_calls_no_directional_producer
+1 failed, 28 deselected in 1.04s

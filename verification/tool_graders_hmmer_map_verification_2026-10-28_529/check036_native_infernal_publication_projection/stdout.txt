@@ -1,0 +1,27 @@
+..............................................FF........................ [ 96%]
+...                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_cmsearch_publication_has_one_common_calculation_and_saved_recalculation _
+source_snapshot/tests/test_cmsearch_shared_publication.py:60: in test_cmsearch_publication_has_one_common_calculation_and_saved_recalculation
+    args, native = prepared_case(store)
+                   ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_cmsearch_shared_publication.py:29: in prepared_case
+    header = rna_evidence.model_header(model_bytes)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rna_evidence.py:32: in model_header
+    raise ContractError("single_infernal_covariance_model_required")
+E   gene_annotation_episode.domain.ContractError: single_infernal_covariance_model_required
+___ test_malformed_trailing_row_preserves_shared_sheet_and_valid_observation ___
+source_snapshot/tests/test_cmsearch_shared_publication.py:94: in test_malformed_trailing_row_preserves_shared_sheet_and_valid_observation
+    args, native = prepared_case(store)
+                   ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_cmsearch_shared_publication.py:29: in prepared_case
+    header = rna_evidence.model_header(model_bytes)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/rna_evidence.py:32: in model_header
+    raise ContractError("single_infernal_covariance_model_required")
+E   gene_annotation_episode.domain.ContractError: single_infernal_covariance_model_required
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_cmsearch_shared_publication.py::test_cmsearch_publication_has_one_common_calculation_and_saved_recalculation
+FAILED source_snapshot/tests/test_cmsearch_shared_publication.py::test_malformed_trailing_row_preserves_shared_sheet_and_valid_observation
+2 failed, 73 passed in 155.09s (0:02:35)

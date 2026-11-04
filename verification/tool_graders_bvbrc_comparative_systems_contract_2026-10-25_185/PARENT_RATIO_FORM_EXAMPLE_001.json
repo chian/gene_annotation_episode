@@ -1,0 +1,687 @@
+{
+  "type": "object",
+  "properties": {
+    "comparative_ratios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "format": "identifier",
+            "x-reference-namespace": "execution_result"
+          },
+          "field": {
+            "type": "string",
+            "enum": [
+              "retained_ec_percent"
+            ]
+          },
+          "value": {
+            "type": "object",
+            "properties": {
+              "field_id": {
+                "type": "string",
+                "enum": [
+                  "retained_ec_percent"
+                ]
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "numerator": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "missing",
+                            "not_measured",
+                            "failed",
+                            "truncated",
+                            "incompatible",
+                            "invalid"
+                          ]
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "occurrence",
+                            "genome",
+                            "feature",
+                            "feature_token",
+                            "ec_token",
+                            "role_token",
+                            "family",
+                            "subsystem_name",
+                            "record",
+                            "genome_ec_pair",
+                            "genome_role_pair",
+                            "ec_genome_opportunity",
+                            "role_genome_opportunity",
+                            "amino_acid",
+                            "fraction",
+                            "percent",
+                            "feature_per_ec_genome",
+                            "feature_per_role_genome",
+                            "occurrence_per_positive_genome",
+                            "dimensionless"
+                          ]
+                        },
+                        "origin": {
+                          "type": "string",
+                          "enum": [
+                            "program_reported_derived",
+                            "derived_retained_records",
+                            "derived_supplied_records",
+                            "derived_calculation",
+                            "unavailable"
+                          ]
+                        },
+                        "population_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "identifier",
+                          "x-reference-namespace": "bvbrc_comparative_systems_population"
+                        },
+                        "method_id": {
+                          "type": "string",
+                          "enum": [
+                            "native_field",
+                            "native_hex_exact_width",
+                            "distinct_valid_members",
+                            "record_occurrences",
+                            "distinct_valid_feature_pairs",
+                            "distinct_valid_genome_ec_pairs",
+                            "distinct_valid_genome_role_pairs",
+                            "opportunity_product",
+                            "ratio",
+                            "coefficient_of_variation",
+                            "set_intersection",
+                            "set_union",
+                            "set_jaccard",
+                            "explicit_category_exact_set",
+                            "reported_formula_check",
+                            "unavailable"
+                          ]
+                        },
+                        "input_refs": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "enum": [
+                                  "native",
+                                  "sheet",
+                                  "supplied",
+                                  "component"
+                                ]
+                              },
+                              "owner_id": {
+                                "type": "string",
+                                "format": "identifier",
+                                "x-reference-namespace": "bvbrc_comparative_systems_owner"
+                              },
+                              "pointer": {
+                                "type": "string",
+                                "format": "identifier",
+                                "x-reference-namespace": "bvbrc_comparative_systems_pointer"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "owner_id",
+                              "pointer"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "uncertainty": {
+                          "type": "null"
+                        },
+                        "qualification_codes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "outer_json_invalid",
+                              "duplicate_json_key",
+                              "format_incompatible",
+                              "tsv_header_mismatch",
+                              "tsv_row_width_mismatch",
+                              "numeric_token_invalid",
+                              "nonfinite_number",
+                              "artifact_truncated",
+                              "original_task_mismatch",
+                              "producer_version_unverified",
+                              "native_first_object_discard",
+                              "native_query_completeness_unknown",
+                              "group_membership_unknown",
+                              "native_identifier_placeholder",
+                              "identity_conflict",
+                              "duplicate_identical_representation",
+                              "duplicate_record_conflict",
+                              "inner_join_missing",
+                              "inner_join_many_to_many",
+                              "variant_matrix_extra_column",
+                              "genome_name_collision",
+                              "conflicting_native_categories",
+                              "hex_count_width_ambiguous",
+                              "native_formula_mismatch",
+                              "reference_release_unknown",
+                              "reference_membership_missing",
+                              "population_incomplete",
+                              "population_incompatible",
+                              "empty_denominator",
+                              "unrequested_dependency_missing",
+                              "page_gap",
+                              "page_overlap",
+                              "snapshot_consistency_unknown",
+                              "data_input_binding_mismatch",
+                              "data_input_unavailable",
+                              "unsupported_server_filter",
+                              "annotation_filter_applied",
+                              "later_snapshot_not_original",
+                              "missing_required_field",
+                              "incomplete_reference_membership",
+                              "native_category_imputed",
+                              "absent_record_not_measured",
+                              "dependent_representation",
+                              "invalid_component_request",
+                              "ambiguous_document_selection",
+                              "missing_document_selection",
+                              "byte_identity_mismatch",
+                              "no_native_rows",
+                              "not_selected",
+                              "source_version_mismatch"
+                            ]
+                          },
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "value",
+                        "unit",
+                        "origin",
+                        "population_id",
+                        "method_id",
+                        "input_refs",
+                        "uncertainty",
+                        "qualification_codes"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "denominator": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "missing",
+                            "not_measured",
+                            "failed",
+                            "truncated",
+                            "incompatible",
+                            "invalid"
+                          ]
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "occurrence",
+                            "genome",
+                            "feature",
+                            "feature_token",
+                            "ec_token",
+                            "role_token",
+                            "family",
+                            "subsystem_name",
+                            "record",
+                            "genome_ec_pair",
+                            "genome_role_pair",
+                            "ec_genome_opportunity",
+                            "role_genome_opportunity",
+                            "amino_acid",
+                            "fraction",
+                            "percent",
+                            "feature_per_ec_genome",
+                            "feature_per_role_genome",
+                            "occurrence_per_positive_genome",
+                            "dimensionless"
+                          ]
+                        },
+                        "origin": {
+                          "type": "string",
+                          "enum": [
+                            "program_reported_derived",
+                            "derived_retained_records",
+                            "derived_supplied_records",
+                            "derived_calculation",
+                            "unavailable"
+                          ]
+                        },
+                        "population_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "identifier",
+                          "x-reference-namespace": "bvbrc_comparative_systems_population"
+                        },
+                        "method_id": {
+                          "type": "string",
+                          "enum": [
+                            "native_field",
+                            "native_hex_exact_width",
+                            "distinct_valid_members",
+                            "record_occurrences",
+                            "distinct_valid_feature_pairs",
+                            "distinct_valid_genome_ec_pairs",
+                            "distinct_valid_genome_role_pairs",
+                            "opportunity_product",
+                            "ratio",
+                            "coefficient_of_variation",
+                            "set_intersection",
+                            "set_union",
+                            "set_jaccard",
+                            "explicit_category_exact_set",
+                            "reported_formula_check",
+                            "unavailable"
+                          ]
+                        },
+                        "input_refs": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "enum": [
+                                  "native",
+                                  "sheet",
+                                  "supplied",
+                                  "component"
+                                ]
+                              },
+                              "owner_id": {
+                                "type": "string",
+                                "format": "identifier",
+                                "x-reference-namespace": "bvbrc_comparative_systems_owner"
+                              },
+                              "pointer": {
+                                "type": "string",
+                                "format": "identifier",
+                                "x-reference-namespace": "bvbrc_comparative_systems_pointer"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "owner_id",
+                              "pointer"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "uncertainty": {
+                          "type": "null"
+                        },
+                        "qualification_codes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "outer_json_invalid",
+                              "duplicate_json_key",
+                              "format_incompatible",
+                              "tsv_header_mismatch",
+                              "tsv_row_width_mismatch",
+                              "numeric_token_invalid",
+                              "nonfinite_number",
+                              "artifact_truncated",
+                              "original_task_mismatch",
+                              "producer_version_unverified",
+                              "native_first_object_discard",
+                              "native_query_completeness_unknown",
+                              "group_membership_unknown",
+                              "native_identifier_placeholder",
+                              "identity_conflict",
+                              "duplicate_identical_representation",
+                              "duplicate_record_conflict",
+                              "inner_join_missing",
+                              "inner_join_many_to_many",
+                              "variant_matrix_extra_column",
+                              "genome_name_collision",
+                              "conflicting_native_categories",
+                              "hex_count_width_ambiguous",
+                              "native_formula_mismatch",
+                              "reference_release_unknown",
+                              "reference_membership_missing",
+                              "population_incomplete",
+                              "population_incompatible",
+                              "empty_denominator",
+                              "unrequested_dependency_missing",
+                              "page_gap",
+                              "page_overlap",
+                              "snapshot_consistency_unknown",
+                              "data_input_binding_mismatch",
+                              "data_input_unavailable",
+                              "unsupported_server_filter",
+                              "annotation_filter_applied",
+                              "later_snapshot_not_original",
+                              "missing_required_field",
+                              "incomplete_reference_membership",
+                              "native_category_imputed",
+                              "absent_record_not_measured",
+                              "dependent_representation",
+                              "invalid_component_request",
+                              "ambiguous_document_selection",
+                              "missing_document_selection",
+                              "byte_identity_mismatch",
+                              "no_native_rows",
+                              "not_selected",
+                              "source_version_mismatch"
+                            ]
+                          },
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "value",
+                        "unit",
+                        "origin",
+                        "population_id",
+                        "method_id",
+                        "input_refs",
+                        "uncertainty",
+                        "qualification_codes"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "scale": {
+                      "enum": [
+                        1,
+                        100
+                      ],
+                      "type": "integer"
+                    },
+                    "output": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "missing",
+                            "not_measured",
+                            "failed",
+                            "truncated",
+                            "incompatible",
+                            "invalid"
+                          ]
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "occurrence",
+                            "genome",
+                            "feature",
+                            "feature_token",
+                            "ec_token",
+                            "role_token",
+                            "family",
+                            "subsystem_name",
+                            "record",
+                            "genome_ec_pair",
+                            "genome_role_pair",
+                            "ec_genome_opportunity",
+                            "role_genome_opportunity",
+                            "amino_acid",
+                            "fraction",
+                            "percent",
+                            "feature_per_ec_genome",
+                            "feature_per_role_genome",
+                            "occurrence_per_positive_genome",
+                            "dimensionless"
+                          ]
+                        },
+                        "origin": {
+                          "type": "string",
+                          "enum": [
+                            "program_reported_derived",
+                            "derived_retained_records",
+                            "derived_supplied_records",
+                            "derived_calculation",
+                            "unavailable"
+                          ]
+                        },
+                        "population_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "identifier",
+                          "x-reference-namespace": "bvbrc_comparative_systems_population"
+                        },
+                        "method_id": {
+                          "type": "string",
+                          "enum": [
+                            "native_field",
+                            "native_hex_exact_width",
+                            "distinct_valid_members",
+                            "record_occurrences",
+                            "distinct_valid_feature_pairs",
+                            "distinct_valid_genome_ec_pairs",
+                            "distinct_valid_genome_role_pairs",
+                            "opportunity_product",
+                            "ratio",
+                            "coefficient_of_variation",
+                            "set_intersection",
+                            "set_union",
+                            "set_jaccard",
+                            "explicit_category_exact_set",
+                            "reported_formula_check",
+                            "unavailable"
+                          ]
+                        },
+                        "input_refs": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "enum": [
+                                  "native",
+                                  "sheet",
+                                  "supplied",
+                                  "component"
+                                ]
+                              },
+                              "owner_id": {
+                                "type": "string",
+                                "format": "identifier",
+                                "x-reference-namespace": "bvbrc_comparative_systems_owner"
+                              },
+                              "pointer": {
+                                "type": "string",
+                                "format": "identifier",
+                                "x-reference-namespace": "bvbrc_comparative_systems_pointer"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "owner_id",
+                              "pointer"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "uncertainty": {
+                          "type": "null"
+                        },
+                        "qualification_codes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "outer_json_invalid",
+                              "duplicate_json_key",
+                              "format_incompatible",
+                              "tsv_header_mismatch",
+                              "tsv_row_width_mismatch",
+                              "numeric_token_invalid",
+                              "nonfinite_number",
+                              "artifact_truncated",
+                              "original_task_mismatch",
+                              "producer_version_unverified",
+                              "native_first_object_discard",
+                              "native_query_completeness_unknown",
+                              "group_membership_unknown",
+                              "native_identifier_placeholder",
+                              "identity_conflict",
+                              "duplicate_identical_representation",
+                              "duplicate_record_conflict",
+                              "inner_join_missing",
+                              "inner_join_many_to_many",
+                              "variant_matrix_extra_column",
+                              "genome_name_collision",
+                              "conflicting_native_categories",
+                              "hex_count_width_ambiguous",
+                              "native_formula_mismatch",
+                              "reference_release_unknown",
+                              "reference_membership_missing",
+                              "population_incomplete",
+                              "population_incompatible",
+                              "empty_denominator",
+                              "unrequested_dependency_missing",
+                              "page_gap",
+                              "page_overlap",
+                              "snapshot_consistency_unknown",
+                              "data_input_binding_mismatch",
+                              "data_input_unavailable",
+                              "unsupported_server_filter",
+                              "annotation_filter_applied",
+                              "later_snapshot_not_original",
+                              "missing_required_field",
+                              "incomplete_reference_membership",
+                              "native_category_imputed",
+                              "absent_record_not_measured",
+                              "dependent_representation",
+                              "invalid_component_request",
+                              "ambiguous_document_selection",
+                              "missing_document_selection",
+                              "byte_identity_mismatch",
+                              "no_native_rows",
+                              "not_selected",
+                              "source_version_mismatch"
+                            ]
+                          },
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "value",
+                        "unit",
+                        "origin",
+                        "population_id",
+                        "method_id",
+                        "input_refs",
+                        "uncertainty",
+                        "qualification_codes"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "genome_population_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "identifier",
+                      "x-reference-namespace": "bvbrc_comparative_systems_population"
+                    },
+                    "component_population_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "identifier",
+                      "x-reference-namespace": "bvbrc_comparative_systems_population"
+                    }
+                  },
+                  "required": [
+                    "numerator",
+                    "denominator",
+                    "scale",
+                    "output",
+                    "genome_population_id",
+                    "component_population_id"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1,
+                "maxItems": 1
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "satisfied",
+                  "partial",
+                  "invalid",
+                  "unavailable"
+                ]
+              }
+            },
+            "required": [
+              "field_id",
+              "values",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "source_ref",
+          "field",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 1,
+      "x-source": "bvbrc_comparative_systems_ratios"
+    }
+  },
+  "required": [
+    "comparative_ratios"
+  ],
+  "additionalProperties": false
+}

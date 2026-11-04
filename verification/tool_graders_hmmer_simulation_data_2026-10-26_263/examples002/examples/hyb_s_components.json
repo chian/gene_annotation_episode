@@ -1,0 +1,1436 @@
+{
+  "schema": "hmmer_simulation_components_v1",
+  "operation": {
+    "program": "hmmsim",
+    "mode": "hybrid",
+    "engine_version": "3.4",
+    "settings": {
+      "-N": 1000,
+      "-L": 30,
+      "--seed": 42,
+      "style": "s",
+      "fast": false,
+      "--hyb": true,
+      "-a": false,
+      "--xfile": "scores.bin",
+      "--ffile": "filter.txt",
+      "--pthresh": 0.1
+    }
+  },
+  "parameters": {
+    "fixed_lambda": 0.693147,
+    "fit_tolerance": 1e-10,
+    "solver_iteration_limit": 200,
+    "rounding_tolerance": 5.1e-05,
+    "tail_masses": [
+      1.0
+    ],
+    "filter_criterion": null
+  },
+  "rows": [
+    {
+      "kind": "native_summary",
+      "record_key": "calculation/0",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "tailp": {
+          "value": 1.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.tailp"
+            }
+          ]
+        },
+        "mu": {
+          "value": 5.1418,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.mu"
+            }
+          ]
+        },
+        "lambda": {
+          "value": 0.808,
+          "state": "present",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.lambda"
+            }
+          ]
+        },
+        "E10": {
+          "value": 9.783,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10"
+            }
+          ]
+        },
+        "mufix": {
+          "value": 5.2185,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.mufix"
+            }
+          ]
+        },
+        "E10fix": {
+          "value": 19.7987,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10fix"
+            }
+          ]
+        },
+        "mufix2": {
+          "value": 5.1391,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.mufix2"
+            }
+          ]
+        },
+        "E10fix2": {
+          "value": 9.5264,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10fix2"
+            }
+          ]
+        },
+        "pmu": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            }
+          ]
+        },
+        "plambda": {
+          "value": 0.8123,
+          "state": "present",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            }
+          ]
+        },
+        "E10p": {
+          "value": 0.1473,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10p"
+            }
+          ]
+        }
+      },
+      "details": {
+        "origin": "native_printed",
+        "pmu_status": "undetermined",
+        "uncertainty": "native_fit_uncertainty_not_reported"
+      }
+    },
+    {
+      "kind": "score_statistics",
+      "record_key": "calculation/1",
+      "source_record_keys": [
+        "output:scores:0#scores/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "observed_count": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        },
+        "declared_population": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "mean": {
+          "value": 5.860345257171345,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        },
+        "min": {
+          "value": 2.9866988700257764,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        },
+        "max": {
+          "value": 15.291573236114905,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        },
+        "sample_variance": {
+          "value": 2.530488191171968,
+          "state": "present",
+          "unit": "bit_squared",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        },
+        "x10": {
+          "value": 10.862541176697581,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        }
+      },
+      "details": {
+        "sample_variance_denominator": 999,
+        "population": "generated_model_scores",
+        "independence": "not_established",
+        "representation": "native_binary64"
+      }
+    },
+    {
+      "kind": "fit",
+      "record_key": "calculation/2",
+      "source_record_keys": [
+        "output:scores:0#scores/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "mu": {
+          "value": 5.141821480443523,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            }
+          ]
+        },
+        "lambda": {
+          "value": 0.807977354069667,
+          "state": "present",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            }
+          ]
+        },
+        "survival_at_x10": {
+          "value": 0.009782859555615203,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            }
+          ]
+        },
+        "E10": {
+          "value": 9.782859555615202,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_mass": {
+          "value": 1.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": null,
+              "field": "parameters.tail_masses.0"
+            }
+          ]
+        },
+        "tail_count": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_threshold": {
+          "value": 2.9866988700257764,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        }
+      },
+      "details": {
+        "variant": "independent",
+        "family": "gumbel",
+        "tail_ordinal": 0,
+        "expectation_population_mass": 1.0,
+        "iterations": 3,
+        "lawless_residual": 1.855648967818979e-11,
+        "calibration_precision": null,
+        "fit_uncertainty": "not_estimated"
+      }
+    },
+    {
+      "kind": "native_rounding_residuals",
+      "record_key": "calculation/3",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "mu": {
+          "value": 2.1480443523458348e-05,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.mu"
+            }
+          ]
+        },
+        "lambda": {
+          "value": -2.264593033307616e-05,
+          "state": "present",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.lambda"
+            }
+          ]
+        },
+        "E10": {
+          "value": -0.00014044438479743349,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fit_tolerance"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.solver_iteration_limit"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10"
+            }
+          ]
+        }
+      },
+      "details": {
+        "fit_record_key": "calculation/2",
+        "comparable": false
+      }
+    },
+    {
+      "kind": "fit",
+      "record_key": "calculation/4",
+      "source_record_keys": [
+        "output:scores:0#scores/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "mu": {
+          "value": 5.2184881322931,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            }
+          ]
+        },
+        "lambda": {
+          "value": 0.693147,
+          "state": "present",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            }
+          ]
+        },
+        "survival_at_x10": {
+          "value": 0.0197986719005187,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            }
+          ]
+        },
+        "E10": {
+          "value": 19.798671900518702,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_mass": {
+          "value": 1.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": null,
+              "field": "parameters.tail_masses.0"
+            }
+          ]
+        },
+        "tail_count": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_threshold": {
+          "value": 2.9866988700257764,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        }
+      },
+      "details": {
+        "variant": "fixed_lambda",
+        "family": "gumbel",
+        "tail_ordinal": 0,
+        "expectation_population_mass": 1.0,
+        "iterations": null,
+        "lawless_residual": null,
+        "calibration_precision": null,
+        "fit_uncertainty": "not_estimated"
+      }
+    },
+    {
+      "kind": "native_rounding_residuals",
+      "record_key": "calculation/5",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "mufix": {
+          "value": -1.1867706899870711e-05,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.mufix"
+            }
+          ]
+        },
+        "E10fix": {
+          "value": -2.8099481298227147e-05,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            },
+            {
+              "record_key": null,
+              "field": "parameters.fixed_lambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10fix"
+            }
+          ]
+        }
+      },
+      "details": {
+        "fit_record_key": "calculation/4",
+        "comparable": true
+      }
+    },
+    {
+      "kind": "fit",
+      "record_key": "calculation/6",
+      "source_record_keys": [
+        "output:scores:0#scores/0",
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "mu": {
+          "value": 5.139048048610013,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            }
+          ]
+        },
+        "lambda": {
+          "value": 0.8123,
+          "state": "present",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            }
+          ]
+        },
+        "survival_at_x10": {
+          "value": 0.009523676565803095,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            }
+          ]
+        },
+        "E10": {
+          "value": 9.523676565803095,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_mass": {
+          "value": 1.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": null,
+              "field": "parameters.tail_masses.0"
+            }
+          ]
+        },
+        "tail_count": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_threshold": {
+          "value": 2.9866988700257764,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        }
+      },
+      "details": {
+        "variant": "native_lambda",
+        "family": "gumbel",
+        "tail_ordinal": 0,
+        "expectation_population_mass": 1.0,
+        "iterations": null,
+        "lawless_residual": null,
+        "calibration_precision": "printed_rounded",
+        "fit_uncertainty": "not_estimated"
+      }
+    },
+    {
+      "kind": "native_rounding_residuals",
+      "record_key": "calculation/7",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "mufix2": {
+          "value": -5.195138998725923e-05,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.mufix2"
+            }
+          ]
+        },
+        "E10fix2": {
+          "value": -0.002723434196905572,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10fix2"
+            }
+          ]
+        }
+      },
+      "details": {
+        "fit_record_key": "calculation/6",
+        "comparable": false
+      }
+    },
+    {
+      "kind": "fit",
+      "record_key": "calculation/8",
+      "source_record_keys": [
+        "output:scores:0#scores/0",
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "mu": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            }
+          ]
+        },
+        "lambda": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            }
+          ]
+        },
+        "survival_at_x10": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            }
+          ]
+        },
+        "E10": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_mass": {
+          "value": 1.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": null,
+              "field": "parameters.tail_masses.0"
+            }
+          ]
+        },
+        "tail_count": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        },
+        "tail_threshold": {
+          "value": 2.9866988700257764,
+          "state": "present",
+          "unit": "bit",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            }
+          ]
+        }
+      },
+      "details": {
+        "variant": "native_calibration",
+        "family": "gumbel",
+        "tail_ordinal": 0,
+        "expectation_population_mass": 1.0,
+        "iterations": null,
+        "lawless_residual": null,
+        "calibration_precision": "printed_rounded",
+        "fit_uncertainty": "not_estimated"
+      }
+    },
+    {
+      "kind": "native_rounding_residuals",
+      "record_key": "calculation/9",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "E10p": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.E10p"
+            }
+          ]
+        }
+      },
+      "details": {
+        "fit_record_key": "calculation/8",
+        "comparable": false
+      }
+    },
+    {
+      "kind": "native_experimental_filter_replay",
+      "record_key": "calculation/10",
+      "source_record_keys": [
+        "output:scores:0#scores/0",
+        "output:stdout:0#summary/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "count": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": null,
+              "field": "operation.settings.--pthresh"
+            }
+          ]
+        },
+        "fraction": {
+          "value": 1.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            },
+            {
+              "record_key": null,
+              "field": "operation.settings.--pthresh"
+            }
+          ]
+        }
+      },
+      "details": {
+        "criterion": {
+          "threshold": 0.1,
+          "meaning": "survival_probability",
+          "comparison": "<=",
+          "fit_variant": "native_calibration"
+        },
+        "family": "exponential",
+        "pmu_status": "undetermined",
+        "calibration_precision": "printed_rounded",
+        "interpretation": "experimental_native_diagnostic_only"
+      }
+    },
+    {
+      "kind": "filter_recalculation",
+      "record_key": "calculation/11",
+      "source_record_keys": [
+        "output:scores:0#scores/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "count": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "operation.settings.--pthresh"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            }
+          ]
+        },
+        "fraction": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.values"
+            },
+            {
+              "record_key": null,
+              "field": "operation.settings.--pthresh"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.pmu"
+            },
+            {
+              "record_key": "output:stdout:0#summary/0",
+              "field": "payload.values.plambda"
+            },
+            {
+              "record_key": "output:scores:0#scores/0",
+              "field": "payload.declared_population"
+            }
+          ]
+        }
+      },
+      "details": {
+        "origin": "native",
+        "criterion": {
+          "threshold": 0.1,
+          "meaning": "survival_probability",
+          "comparison": "<=",
+          "fit_variant": "native_calibration"
+        },
+        "fit_record_key": "calculation/8",
+        "calibration_precision": "printed_rounded"
+      }
+    },
+    {
+      "kind": "native_filter",
+      "record_key": "calculation/12",
+      "source_record_keys": [
+        "output:filter:0#filter/0"
+      ],
+      "model_keys": [
+        "input:models:0#model/0"
+      ],
+      "components": {
+        "count": {
+          "value": 1000,
+          "state": "present",
+          "unit": "sequence",
+          "inputs": [
+            {
+              "record_key": "output:filter:0#filter/0",
+              "field": "payload.count"
+            }
+          ]
+        },
+        "fraction": {
+          "value": 1.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:filter:0#filter/0",
+              "field": "payload.count"
+            },
+            {
+              "record_key": "output:filter:0#filter/0",
+              "field": "payload.denominator"
+            }
+          ]
+        },
+        "rounding_residual": {
+          "value": 0.0,
+          "state": "present",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "record_key": "output:filter:0#filter/0",
+              "field": "payload.count"
+            },
+            {
+              "record_key": "output:filter:0#filter/0",
+              "field": "payload.denominator"
+            },
+            {
+              "record_key": "output:filter:0#filter/0",
+              "field": "payload.fraction"
+            }
+          ]
+        }
+      },
+      "details": {
+        "criterion_status": "native_experimental_undetermined_calibration"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "native_rounding.mu",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "state": "unknown",
+      "details": {
+        "residual": 2.1480443523458348e-05,
+        "tolerance": 5.1e-05,
+        "qualification": "selected_solver_tolerance_differs_from_native_1e-5"
+      }
+    },
+    {
+      "name": "native_rounding.lambda",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "state": "unknown",
+      "details": {
+        "residual": -2.264593033307616e-05,
+        "tolerance": 5.1e-05,
+        "qualification": "selected_solver_tolerance_differs_from_native_1e-5"
+      }
+    },
+    {
+      "name": "native_rounding.E10",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "state": "unknown",
+      "details": {
+        "residual": -0.00014044438479743349,
+        "tolerance": 5.1e-05,
+        "qualification": "selected_solver_tolerance_differs_from_native_1e-5"
+      }
+    },
+    {
+      "name": "native_rounding.mufix",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "state": "pass",
+      "details": {
+        "residual": -1.1867706899870711e-05,
+        "tolerance": 5.1e-05,
+        "qualification": null
+      }
+    },
+    {
+      "name": "native_rounding.E10fix",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "state": "pass",
+      "details": {
+        "residual": -2.8099481298227147e-05,
+        "tolerance": 5.1e-05,
+        "qualification": null
+      }
+    },
+    {
+      "name": "native_rounding.mufix2",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "state": "unknown",
+      "details": {
+        "residual": -5.195138998725923e-05,
+        "tolerance": 5.1e-05,
+        "qualification": "calibration_inputs_are_printed_rounded_values"
+      }
+    },
+    {
+      "name": "native_rounding.E10fix2",
+      "source_record_keys": [
+        "output:stdout:0#summary/0"
+      ],
+      "state": "unknown",
+      "details": {
+        "residual": -0.002723434196905572,
+        "tolerance": 5.1e-05,
+        "qualification": "calibration_inputs_are_printed_rounded_values"
+      }
+    },
+    {
+      "name": "hybrid_native_experimental_filter_count",
+      "source_record_keys": [
+        "output:scores:0#scores/0",
+        "output:filter:0#filter/0"
+      ],
+      "state": "pass",
+      "details": {
+        "calculated": 1000,
+        "native": 1000,
+        "calculation_record_key": "calculation/10",
+        "qualification": "undetermined_zero_location_and_printed_slope"
+      }
+    },
+    {
+      "name": "native_filter_count",
+      "source_record_keys": [
+        "output:scores:0#scores/0",
+        "output:filter:0#filter/0"
+      ],
+      "state": "unknown",
+      "details": {
+        "calculated": null,
+        "native": 1000,
+        "qualification": "printed_calibration_parameters_only",
+        "calculation_record_key": "calculation/11"
+      }
+    },
+    {
+      "name": "native_filter_fraction",
+      "source_record_keys": [
+        "output:filter:0#filter/0"
+      ],
+      "state": "pass",
+      "details": {
+        "residual": 0.0
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "calibration_undetermined",
+      "stage": "calculation",
+      "record_key": "output:scores:0#scores/0",
+      "field": "pmu",
+      "details": {}
+    }
+  ]
+}

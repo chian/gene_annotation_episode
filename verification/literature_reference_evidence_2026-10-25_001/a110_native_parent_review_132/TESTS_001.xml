@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="17" time="65.945" timestamp="2026-10-27T02:21:49.437317-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_selected_existing_operation_saved_views_and_first_read_only_reconstruction[False]" time="4.640" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_selected_existing_operation_saved_views_and_first_read_only_reconstruction[True]" time="4.089" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_ordinary_original_child_return_exact_receipt_and_normal_observation_accounting[explicit-False]" time="8.255" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_ordinary_original_child_return_exact_receipt_and_normal_observation_accounting[explicit-True]" time="8.008" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_ordinary_original_child_return_exact_receipt_and_normal_observation_accounting[omitted-False]" time="7.908" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_ordinary_original_child_return_exact_receipt_and_normal_observation_accounting[omitted-True]" time="6.188" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_ordinary_original_child_return_exact_receipt_and_normal_observation_accounting[empty-False]" time="6.759" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_ordinary_original_child_return_exact_receipt_and_normal_observation_accounting[empty-True]" time="5.631" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_unreceived_new_selector_source_rejected_before_bytes" time="2.232" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_native_position_subset_does_not_expand_from_globally_known_sheet" time="2.394" /><testcase classname="tests.test_literature_reaction_native_integration_129" name="test_mixed_old_prepared_and_native_sheets_preserve_aggregate_and_skip_missing_native_view" time="3.999" /><testcase classname="tests.test_literature_reaction_native_identity_129" name="test_point_identity_ignores_recipe_excerpt_and_row_position" time="0.001" /><testcase classname="tests.test_literature_reaction_native_identity_129" name="test_author_pair_identity_is_the_exact_expression_not_surrounding_quote" time="0.001" /><testcase classname="tests.test_literature_reaction_native_identity_129" name="test_resource_identity_survives_reordering_and_unit_interpretation_changes" time="0.003" /><testcase classname="tests.test_literature_reaction_native_identity_129" name="test_unextracted_ratio_does_not_claim_the_paper_omitted_it" time="0.001" /><testcase classname="tests.test_joined_native_context_reaction_render_129" name="test_joined_own_outcomes_and_typed_native_returns_keep_family_meanings" time="2.017" /><testcase classname="tests.test_literature_reaction_native_primary_129" name="test_primary_author_product_pair_ratio_selected_and_returned_with_unknown_sampling" time="1.354"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a110_native_parent_review_132/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_csid/41467_2018_7563_MOESM1_ESM.pdf'">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1849/test_primary_author_product_pa0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7455fa00ae70&gt;
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x7455fa615e40&gt;
+
+    def test_primary_author_product_pair_ratio_selected_and_returned_with_unknown_sampling(tmp_path, monkeypatch, record_property):
+&gt;       store, seed, args = setup_case(tmp_path / 'state', primary=True)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_reaction_native_primary_129.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_reaction_integration.py:57: in setup_case
+    supplement = source(store, (BASE/'primary_csid/41467_2018_7563_MOESM1_ESM.pdf').read_bytes(),
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a110_nat...iew_132/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_csid/41467_2018_7563_MOESM1_ESM.pdf')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a110_native_parent_review_132/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_csid/41467_2018_7563_MOESM1_ESM.pdf'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError</failure></testcase></testsuite></testsuites>

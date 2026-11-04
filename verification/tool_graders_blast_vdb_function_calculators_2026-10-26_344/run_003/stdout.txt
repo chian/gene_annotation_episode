@@ -1,0 +1,37 @@
+..............................................F....................      [100%]
+=================================== FAILURES ===================================
+_______ test_pssm_master_axis_is_retained_in_its_own_search_distribution _______
+
+    def test_pssm_master_axis_is_retained_in_its_own_search_distribution():
+        values = translated_case()
+        source = values["search"]["native"]["search"]
+        pssm = inputs(collect(program="tblastn_vdb", query="PMAKPP", query_kind="pssm", hits=source["hits"])["searches"][0],
+            symbols=["CCCATGGCTAAACCCCCC", "TTTAGCCATAAA", "CAGACCCATCCC"], kind="reference")
+        for i in range(3):
+            feature(pssm, interval=[3, 12] if i == 0 else [0, 9], identifier=f"feature{i}", strand=1 if i == 0 else -1,
+                translation="MAK" if i < 2 else "MGL", genetic_code=1, codon_start=1, function=function("A" if i < 2 else "B"), hit=i)
+        result = calculate(populate(pssm), temperature=2)
+>       stratum, _ = assert_weights(result, {"A": 2/3, "B": 1/3}, scope="feature")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_vdb_function_calculators.py:492: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'schema': 'blast_vdb_function_components_v2', 'search_key': {'artifact_key': 'report', 'member_ordinal': None, 'repor...ature_bits': 2, 'grouping_model': 'target_duplicates_only', 'unknown_source_dependency': 'qualify_separate', ...}, ...}
+expected = {'A': 0.6666666666666666, 'B': 0.3333333333333333}
+field = 'conditional_function_weight', kwargs = {'scope': 'feature'}
+
+    def assert_weights(result, expected, field="conditional_function_weight", **kwargs):
+        stratum, by_function = rows(result, **kwargs)
+>       assert set(by_function) == set(expected)
+E       AssertionError: assert set() == {'A', 'B'}
+E         
+E         Extra items in the right set:
+E         'B'
+E         'A'
+E         Use -v to get more diff
+
+../../../tests/test_blast_vdb_function_calculators.py:101: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_vdb_function_calculators.py::test_pssm_master_axis_is_retained_in_its_own_search_distribution
+1 failed, 66 passed in 1.74s

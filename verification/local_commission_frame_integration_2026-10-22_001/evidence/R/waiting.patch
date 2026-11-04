@@ -1,0 +1,65 @@
+--- baseline007/gene_annotation_episode/waiting.py
++++ final007/gene_annotation_episode/waiting.py
+@@ -36,6 +36,7 @@
+ CONTEXT_VERSION = "completed_action_estimation_context_v3"
+ CONTEXT_IDENTITY_VERSION = "completed_action_estimation_context_v4"
+ CONTEXT_COMPLETION_VERSION = "completed_action_estimation_context_v5"
++CONTEXT_COMMISSION_VERSION = "completed_action_estimation_context_v6"
+ EVENTS = frozenset({"returned", "state_changed", "progress_committed"})
+ WAKE_REASONS = EVENTS | {"reconsideration"}
+ EVENT_METHODS = frozenset({"exact_class_duration_summary_only", "unavailable"})
+@@ -578,7 +579,9 @@
+ def completed_action_context(existing_context, *, pending_at_selection,
+         pending_after_action, wait_estimate_at_selection=None, wait_outcome=None,
+         progress_records=(), duration_expectations=(), own_completed_action_history=(),
+-        local_return_history_at_selection=None, current_completion_evidence=None):
++        local_return_history_at_selection=None, current_completion_evidence=None,
++        local_commission_frame_at_selection=None, local_commission_frame_after_action=None,
++        run_id=None, episode_id=None, controller_credit=None):
+     """Freeze original pending/wait inputs at one actual completion boundary.
+ 
+     Pass this record to the existing controller as ``estimation_context``. The
+@@ -617,4 +620,43 @@
+         except (TypeError, ValueError) as error:
+             raise WaitError("invalid_wait_record") from error
+         result.update(version=CONTEXT_COMPLETION_VERSION, current_completion_evidence=packet)
++    if (local_commission_frame_at_selection is not None
++            or local_commission_frame_after_action is not None):
++        result.update(version=CONTEXT_COMMISSION_VERSION,
++            local_commission_frame_at_selection=local_commission_frame_at_selection,
++            local_commission_frame_after_action=local_commission_frame_after_action)
++        result = validate_completed_action_commission_context(result,
++            run_id=run_id, episode_id=episode_id,
++            selected_frame=local_commission_frame_at_selection,
++            pending_at_selection=pending_at_selection, pending_after_action=pending_after_action,
++            controller_credit=controller_credit)
+     return result
++
++
++def validate_completed_action_commission_context(value, *, run_id, episode_id,
++        selected_frame, pending_at_selection, pending_after_action, controller_credit):
++    """Validate saved factual v6 fields using only their original operands."""
++    from .local_commission_frame import validate_local_commission_frame
++
++    if (not _text(run_id) or not _text(episode_id) or not isinstance(value, dict)
++            or value.get('version') != CONTEXT_COMMISSION_VERSION
++            or value.get('local_commission_frame_at_selection') is None
++            or value.get('local_commission_frame_after_action') is None
++            or selected_frame is None):
++        raise WaitError('invalid_wait_record')
++    before = validate_local_commission_frame(value['local_commission_frame_at_selection'],
++        run_id=run_id, episode_id=episode_id, pending=pending_at_selection,
++        controller_credit=controller_credit)
++    after = validate_local_commission_frame(value['local_commission_frame_after_action'],
++        run_id=run_id, episode_id=episode_id, pending=pending_after_action,
++        controller_credit=controller_credit)
++    if (_json(before) != _json(selected_frame)
++            or 'pending_work_at_selection' not in value
++            or 'pending_work_after_action' not in value
++            or _json(value['pending_work_at_selection']) != _json(pending_at_selection)
++            or _json(value['pending_work_after_action']) != _json(pending_after_action)):
++        raise ValueError('local_commission_frame_identity_conflict')
++    result = _copy(value)
++    result.update(local_commission_frame_at_selection=before,
++        local_commission_frame_after_action=after)
++    return result

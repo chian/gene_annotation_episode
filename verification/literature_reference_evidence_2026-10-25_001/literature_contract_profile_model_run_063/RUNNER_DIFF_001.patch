@@ -1,0 +1,37 @@
+--- original030/runner/run_literature_source_job_019.py
++++ new063/runner/run_literature_source_job_062.py
+@@ -222,6 +222,7 @@
+         tools = build_tools(store, configuration)
+         host = SimpleNamespace(store=store, tools=tools, run_id="offline-source-job-preparation")
+         binding = LiteratureEpisodes(WorkflowServices(host), rate_population=True,
++            contract_information_profile="operation_contract_information_v1",
+             reference_parent_sources=source_info["source_refs"])
+         scope = store.validate_scope()
+         assignment = {"version": "literature_assignment_v1", "question_context_refs": [],
+@@ -240,6 +241,7 @@
+                     ("artifact_ref", "text_ref", "version", "parent_source_refs")}}
+                    for row in source_info["source_records"].values()]
+         rendered = render_literature_experimental_prompt({
++            "contract_information_profile": "operation_contract_information_v1",
+             "literature_experimental_work": {"version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"},
+             "goal": {"objective": job}, "scope": scope, "literature_assignment": assignment,
+             "literature_source_custody": source_custody,
+@@ -251,6 +253,7 @@
+             (("annotation", "root"),), scope, {}, {}, tuple(source_info["source_refs"]))
+         parent_initial = binding.initial_decision_context(parent_context)
+         parent_rendered = render_literature_experimental_prompt({**parent_initial,
++            "contract_information_profile": "operation_contract_information_v1",
+             "goal": {"objective": job}, "scope": scope,
+             "available_report_facts": binding.received_report_sources("annotation")}, "")
+         require(parent_rendered.startswith("TASK\n") and "\nSTEERING\n" in parent_rendered,
+@@ -334,8 +337,9 @@
+             run_dir=directory / "run", resume=resume, goal=job,
+             initial_known_record_refs=source_info["source_refs"],
+             episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
++                contract_information_profile="operation_contract_information_v1",
+                 reference_parent_sources=source_info["source_refs"]),),
+-            annotation_child_roles=("literature",))
++            annotation_child_roles=("literature",), decision_protocol="decision_exchange_v1")
+         if (directory / "RESULT.json").exists():
+             require(resume and json.loads((directory / "RESULT.json").read_bytes()) == result, "resume_result_changed")
+         else:

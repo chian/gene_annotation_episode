@@ -1,0 +1,23 @@
+[
+  {
+    "phase": "source_examination",
+    "operation": "rg protein_structure_return*.py plus named existing source files",
+    "failure": "rg: gene_annotation_episode/protein_structure_return*.py: No such file or directory (os error 2)",
+    "correction": "Read the actual native_protein_structure_returns.py path.",
+    "effect": "Read-only search; no source or input mutation."
+  },
+  {
+    "phase": "post_profile_input_summary",
+    "operation": "sqlite3.connect(file:check001/diagnostic-state/state.sqlite?mode=ro)",
+    "failure": "sqlite3.OperationalError: unable to open database file",
+    "correction": "Read Store.__init__; use the actual state.sqlite3 filename.",
+    "effect": "Read-only connection failed; no database created."
+  },
+  {
+    "phase": "post_profile_input_summary",
+    "operation": "SELECT episode_id,action,outcome FROM runtime_actions ...",
+    "failure": "sqlite3.OperationalError: no such column: outcome",
+    "correction": "Inspect actual row keys, then read the retained result column.",
+    "effect": "Read-only query failed; diagnostic result unchanged."
+  }
+]

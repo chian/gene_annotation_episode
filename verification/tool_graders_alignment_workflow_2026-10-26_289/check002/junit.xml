@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="11" time="165.617" timestamp="2026-10-26T07:43:37.803598-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_alignment_site_workflow" name="test_scientific_child_owns_alignment_and_selected_sites_through_parent_return[dna-global-ordinary]" time="18.401" /><testcase classname="tests.test_alignment_site_workflow" name="test_scientific_child_owns_alignment_and_selected_sites_through_parent_return[rna-global-ordinary]" time="13.690" /><testcase classname="tests.test_alignment_site_workflow" name="test_scientific_child_owns_alignment_and_selected_sites_through_parent_return[protein-local-mixed]" time="18.891" /><testcase classname="tests.test_alignment_site_workflow" name="test_scientific_child_owns_alignment_and_selected_sites_through_parent_return[dna-local-no_alignment]" time="17.203" /><testcase classname="tests.test_alignment_site_workflow" name="test_scientific_child_owns_alignment_and_selected_sites_through_parent_return[dna-global-grader_failure]" time="10.316" /><testcase classname="tests.test_alignment_site_workflow" name="test_blast_hsp_is_acquired_received_then_selected_and_returned[ordinary-2]" time="20.568" /><testcase classname="tests.test_alignment_site_workflow" name="test_blast_hsp_is_acquired_received_then_selected_and_returned[empty-8]" time="4.191"><failure message="method_loop.durable.DurableExecutionError: identity_conflict">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_workflow_2026-10-26_289/check002/temporary/test_blast_hsp_is_acquired_rec1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x712cb23b6cf0&gt;
+shape = 'empty', offset = 8
+
+    @pytest.mark.parametrize('shape,offset', [('ordinary', 2), ('empty', 8), ('missing', 0)])
+    def test_blast_hsp_is_acquired_received_then_selected_and_returned(tmp_path, monkeypatch, shape, offset):
+        class Responses(Client):
+            fetched = None
+            def blast(self, action, **arguments):
+                response = super().blast(action, **arguments)
+                if action == 'fetch' and shape != 'missing':
+                    body = json.loads(response.content)
+                    hsp = body['BlastOutput2'][0]['report']['results']['search']['hits'][0]['hsps'][0]
+                    hsp.update(qseq='MACDEFGH', hseq='MACAEFGH', midline='||| ||||', identity=7)
+                    response = replace(response, content=json.dumps(body).encode())
+                if action == 'fetch':
+                    self.fetched = response.content
+                return response
+    
+        client = Responses()
+        resources = {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}
+        factory = ExecutionServiceFactory(resources, {}, 3, 2, .5)
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+            scope = store.validate_scope({'subject_refs': [target]})
+            tools = ToolRegistry(store, clients=client)
+            directory = tmp_path / 'run'
+            descriptor, library = _descriptor(directory, tools)
+            request = assignment('blast', 'ncbi_blast', {'subject_ref': target, 'program': 'blastp', 'database': 'swissprot'})
+            launch = launch_assignment({'blast': request})
+            handoff_form = form('execution_handoff_refs')
+            result_form = obj({'complete': {'type': 'boolean', 'x-source': 'execution_completed'},
+                'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}})
+    
+            class Choices:
+                parent_calls = 0
+                calls = []
+                hsp = None
+                child_id = None
+                requested_schema = None
+                async def complete(self, episode_id, role, instructions, current, output_schema):
+                    assert not current.get('feedback'), current.get('feedback')
+                    self.calls.append((episode_id, deepcopy(current)))
+                    execution = current.get('execution_assignment', {})
+                    if execution.get('version') == 'execution_launch_assignment_v1':
+                        return child('launch_api', request, scope, handoff_form)
+                    if execution.get('version') == 'api_service_assignment_v1':
+                        return selected('api.blast.submit')
+                    if execution.get('version') == 'execution_results_assignment_v1':
+                        return selected('api.blast.fetch')
+                    if 'scientific_process' in current:
+                        self.child_id = episode_id
+                        assert self.hsp in set(workflow.receipts.known(episode_id))
+                        return selected('result.blast.hsp', {'observation_ref': self.hsp,
+                            'column_offset': offset, 'column_limit': 4})
+                    self.parent_calls += 1
+                    if self.parent_calls == 1:
+                        assert store.count('observation') == 0
+                        return child('launch', launch, scope, handoff_form)
+                    if self.parent_calls == 2:
+                        handoff, = current['child_reports'][-1]['references']
+                        return child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': {}}, scope, result_form)
+                    assert self.parent_calls == 3
+                    match, = current['child_reports'][-1]['matches']
+                    self.hsp = match['hsp_ref']
+                    assert self.hsp in set(workflow.receipts.known(episode_id))
+                    self.requested_schema = _site_form(BLAST, alignment_ref=self.hsp,
+                        window={'column_offset': offset, 'column_limit': 4})
+                    return _commission(library, scope, ['result.blast.hsp'], [target, self.hsp], self.requested_schema)
+                async def release(self, episode_id):
+                    pass
+    
+            decisions = Choices()
+            def services(store, **kwargs):
+                execution = factory(store, **kwargs)
+                return EpisodeApplicationServices((descriptor, *execution.episode_binding_descriptors),
+                    execution.role_credit_bindings, execution.job_progress_provider,
+                    resource_tool_catalogs=execution.resource_tool_catalogs)
+&gt;           workflow = Workflow(store, tools, decisions, directory, 'alignment-site-api-' + shape,
+                _controller({'annotation': 3, 'scientific_process': 1}), zero_fixture_credit,
+                episode_service_factory=services,
+                episode_service_binding={'execution': factory.as_record(), 'scientific': descriptor},
+                episode_service_inputs='actual_tool_registry_v1',
+                annotation_child_roles=('launch', 'results', 'scientific_process'),
+                episode_record_receipts=True, initial_known_record_refs=[])
+
+../../../tests/test_alignment_site_workflow.py:386: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/runtime.py:1573: in __init__
+    composition = compose_episode_bindings(self.services, store=store, journal=self.journal,
+../../../gene_annotation_episode/episode_composition.py:145: in compose_episode_bindings
+    binding = reopen_scientific_binding(services, descriptor=descriptor, directory=directory)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/episode_composition.py:80: in reopen_scientific_binding
+    _same_record(binding.as_record(), descriptor, reference)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+actual = {'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process', 'implementation_sha256': '54d77bcd5a...g_sha256': '9a8c15f31cb6cf766d31d19da90a936f244c61c132fcc9bcb443395cfee243d0'}, 'child_roles': ['scientific_process']}}
+saved = {'binding_id': 'scientific_process', 'configuration': {'child_roles': ['scientific_process'], 'library': {'library_id'...a256': '17c394c9c6127491c8770036be0abdc177639c403691b32105bf23aa46925a65', 'version': 'scientific_process_episodes_v8'}
+reference = 'scientific_process'
+
+    def _same_record(actual, saved, reference):
+        if canonical(actual) != canonical(saved):
+&gt;           raise _failure('identity_conflict', reference)
+E           method_loop.durable.DurableExecutionError: identity_conflict
+
+../../../gene_annotation_episode/episode_composition.py:49: DurableExecutionError</failure></testcase><testcase classname="tests.test_alignment_site_workflow" name="test_blast_hsp_is_acquired_received_then_selected_and_returned[missing-0]" time="21.607" /><testcase classname="tests.test_alignment_site_workflow" name="test_native_minimap_child_returns_selected_quality_coordinates_and_insertion_ancestry" time="22.654" /><testcase classname="tests.test_alignment_site_workflow" name="test_no_site_request_does_not_read_sites_and_requested_unexecuted_source_is_empty[False]" time="8.227" /><testcase classname="tests.test_alignment_site_workflow" name="test_no_site_request_does_not_read_sites_and_requested_unexecuted_source_is_empty[True]" time="9.162" /></testsuite></testsuites>

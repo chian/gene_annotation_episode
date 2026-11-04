@@ -1,0 +1,583 @@
+{
+  "status": "native_evidence_checks_passed",
+  "scope": "Fixed native files only; no candidate parser/calculator/import/service path tested",
+  "check_count": 44,
+  "checks": [
+    {
+      "check": "legacy SAM/BAM mapping payload identical",
+      "observed": [
+        [
+          "MAPQ gt 30",
+          "MAPQ lt 30",
+          "MAPQ lt 10",
+          "Unmapped",
+          "Total"
+        ],
+        [
+          5,
+          2,
+          2,
+          1,
+          10
+        ],
+        [
+          0.5,
+          0.2,
+          0.2,
+          0.1,
+          1.0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "expected": [
+        [
+          "MAPQ gt 30",
+          "MAPQ lt 30",
+          "MAPQ lt 10",
+          "Unmapped",
+          "Total"
+        ],
+        [
+          5,
+          2,
+          2,
+          1,
+          10
+        ],
+        [
+          0.5,
+          0.2,
+          0.2,
+          0.1,
+          1.0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy R1 counts",
+      "observed": [
+        5,
+        2,
+        2,
+        1,
+        10
+      ],
+      "expected": [
+        5,
+        2,
+        2,
+        1,
+        10
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy R2 counts",
+      "observed": [
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "expected": [
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "modern table rows",
+      "observed": [
+        [
+          4,
+          40.0,
+          4,
+          0
+        ],
+        [
+          3,
+          30.0,
+          2,
+          1
+        ],
+        [
+          2,
+          20.0,
+          2,
+          0
+        ],
+        [
+          1,
+          10.0,
+          1,
+          0
+        ]
+      ],
+      "expected": [
+        [
+          4,
+          40.0,
+          4,
+          0
+        ],
+        [
+          3,
+          30.0,
+          2,
+          1
+        ],
+        [
+          2,
+          20.0,
+          2,
+          0
+        ],
+        [
+          1,
+          10.0,
+          1,
+          0
+        ]
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "modern SAM/BAM mapping payload identical",
+      "observed": [
+        [
+          4,
+          40.0,
+          4,
+          0
+        ],
+        [
+          3,
+          30.0,
+          2,
+          1
+        ],
+        [
+          2,
+          20.0,
+          2,
+          0
+        ],
+        [
+          1,
+          10.0,
+          1,
+          0
+        ]
+      ],
+      "expected": [
+        [
+          4,
+          40.0,
+          4,
+          0
+        ],
+        [
+          3,
+          30.0,
+          2,
+          1
+        ],
+        [
+          2,
+          20.0,
+          2,
+          0
+        ],
+        [
+          1,
+          10.0,
+          1,
+          0
+        ]
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "modern Reads",
+      "observed": "10",
+      "expected": "10",
+      "result": "pass"
+    },
+    {
+      "check": "modern Bases",
+      "observed": "50 bp",
+      "expected": "50 bp",
+      "result": "pass"
+    },
+    {
+      "check": "modern Mean Q rounded",
+      "observed": "16.2",
+      "expected": "16.2",
+      "result": "pass"
+    },
+    {
+      "check": "legacy length density x",
+      "observed": [
+        "4.000000",
+        "8.000000"
+      ],
+      "expected": [
+        "4.000000",
+        "8.000000"
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy length density y",
+      "observed": [
+        0.090324,
+        0.169574
+      ],
+      "expected": [
+        0.090324,
+        0.169574
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy base count A",
+      "observed": [
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy base count C",
+      "observed": [
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "expected": [
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy base count G",
+      "observed": [
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "expected": [
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy base count T",
+      "observed": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "expected": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy base count N",
+      "observed": [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "expected": [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy native quality index defect",
+      "observed": [
+        37.0,
+        41.0,
+        41.0,
+        41.0,
+        41.0
+      ],
+      "expected": [
+        37,
+        41,
+        41,
+        41,
+        41
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy Q0 Q40 mean",
+      "observed": [
+        20.0
+      ],
+      "expected": [
+        20.0
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy Q0 Q40 SEM",
+      "observed": [
+        14.142136
+      ],
+      "expected": [
+        14.142136
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "modern Q0 Q40 mean",
+      "observed": "3.0",
+      "expected": "3.0",
+      "result": "pass"
+    },
+    {
+      "check": "modern known gap-compressed identity",
+      "observed": "80.0%",
+      "expected": "80.0%",
+      "result": "pass"
+    },
+    {
+      "check": "modern clipping",
+      "observed": "15.4%",
+      "expected": "15.4%",
+      "result": "pass"
+    },
+    {
+      "check": "legacy partial prefix count",
+      "observed": 10000,
+      "expected": 10000,
+      "result": "pass"
+    },
+    {
+      "check": "modern partial prefix count",
+      "observed": "10",
+      "expected": "10",
+      "result": "pass"
+    },
+    {
+      "check": "legacy native report-wide total",
+      "observed": true,
+      "expected": true,
+      "result": "pass"
+    },
+    {
+      "check": "legacy empty fractions are nonfinite native tokens",
+      "observed": 5,
+      "expected": 5,
+      "result": "pass"
+    },
+    {
+      "check": "legacy malformed-input report retained first record",
+      "observed": 1,
+      "expected": 1,
+      "result": "pass"
+    },
+    {
+      "check": "legacy malformed-input warning retained",
+      "observed": true,
+      "expected": true,
+      "result": "pass"
+    },
+    {
+      "check": "modern malformed-input has no HTML",
+      "observed": false,
+      "expected": false,
+      "result": "pass"
+    },
+    {
+      "check": "missing-sequence Bases is not numeric zero",
+      "observed": "n/a",
+      "expected": "n/a",
+      "result": "pass"
+    },
+    {
+      "check": "legacy empty FASTQ has no HTML",
+      "observed": false,
+      "expected": false,
+      "result": "pass"
+    },
+    {
+      "check": "modern SVG HTML has no script data arrays",
+      "observed": false,
+      "expected": false,
+      "result": "pass"
+    },
+    {
+      "check": "caller error wording does not match exit code semantics",
+      "observed": true,
+      "expected": true,
+      "result": "pass"
+    },
+    {
+      "check": "legacy clustered x first label",
+      "observed": "0",
+      "expected": "0",
+      "result": "pass"
+    },
+    {
+      "check": "legacy clustered first range",
+      "observed": "250-255",
+      "expected": "250-255",
+      "result": "pass"
+    },
+    {
+      "check": "legacy clustered mean value",
+      "observed": 1,
+      "expected": 1,
+      "result": "pass"
+    },
+    {
+      "check": "legacy paired1002 R1 exact bins",
+      "observed": [
+        501,
+        0,
+        0,
+        0,
+        501
+      ],
+      "expected": [
+        501,
+        0,
+        0,
+        0,
+        501
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy paired1002 R2 exact bins",
+      "observed": [
+        0,
+        501,
+        0,
+        0,
+        501
+      ],
+      "expected": [
+        0,
+        501,
+        0,
+        0,
+        501
+      ],
+      "result": "pass"
+    },
+    {
+      "check": "legacy paired1002 rounded pair flags",
+      "observed": true,
+      "expected": true,
+      "result": "pass"
+    },
+    {
+      "check": "legacy paired1002 exact total suffix",
+      "observed": true,
+      "expected": true,
+      "result": "pass"
+    },
+    {
+      "check": "modern10001 rounded main count",
+      "observed": "10.0 k",
+      "expected": "10.0 k",
+      "result": "pass"
+    },
+    {
+      "check": "modern10001 exact count sublabel",
+      "observed": true,
+      "expected": true,
+      "result": "pass"
+    },
+    {
+      "check": "modern large rounded N50",
+      "observed": "11.0 kb",
+      "expected": "11.0 kb",
+      "result": "pass"
+    },
+    {
+      "check": "modern large rounded median",
+      "observed": true,
+      "expected": true,
+      "result": "pass"
+    },
+    {
+      "check": "modern missing-quality mean card absent",
+      "observed": false,
+      "expected": false,
+      "result": "pass"
+    }
+  ]
+}

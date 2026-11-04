@@ -1,0 +1,266 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "before_decision_index": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "calculation_context": {
+      "const": "runtime_model_calls.request.context"
+    },
+    "decision_indices": {
+      "items": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "discover_older_decisions": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "arguments": {
+              "additionalProperties": false,
+              "properties": {
+                "limit": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "offset": {
+                  "const": 0
+                },
+                "view": {
+                  "const": "index"
+                }
+              },
+              "required": [
+                "view",
+                "offset",
+                "limit"
+              ],
+              "type": "object"
+            },
+            "tool": {
+              "const": "episode.history"
+            }
+          },
+          "required": [
+            "tool",
+            "arguments"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "episode_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "exact_included_records": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "arguments": {
+              "additionalProperties": false,
+              "properties": {
+                "decision_indices": {
+                  "items": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "view": {
+                  "const": "records"
+                }
+              },
+              "required": [
+                "view",
+                "decision_indices"
+              ],
+              "type": "object"
+            },
+            "tool": {
+              "const": "episode.history"
+            }
+          },
+          "required": [
+            "tool",
+            "arguments"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "first_unit_index": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "history_is_complete": {
+      "type": "boolean"
+    },
+    "history_lookup": {
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "unavailable_reason": {
+          "enum": [
+            null,
+            "episode_history_not_in_saved_catalog",
+            "saved_tool_catalog_unavailable"
+          ]
+        }
+      },
+      "required": [
+        "availability",
+        "unavailable_reason"
+      ],
+      "type": "object"
+    },
+    "history_result_row_path": {
+      "const": "result.records[*].controller_observation"
+    },
+    "history_result_step_path": {
+      "const": "result.records[*].controller_observation.step"
+    },
+    "identity_fields": {
+      "const": [
+        "episode_id",
+        "unit_index",
+        "unit_ref",
+        "decision_index"
+      ]
+    },
+    "included_history_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "included_rows": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "included_rows_without_decision_identity": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "included_rows_without_unit_ref": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "last_unit_index": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "omitted_rows": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "order": {
+      "const": "original_unit_index_ascending"
+    },
+    "page_size_source": {
+      "const": "restoration.preview_size"
+    },
+    "preview_size": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "range": {
+      "additionalProperties": false,
+      "properties": {
+        "end_exclusive": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unit": {
+          "const": "completed_own_action_history_position"
+        }
+      },
+      "required": [
+        "start",
+        "end_exclusive",
+        "unit"
+      ],
+      "type": "object"
+    },
+    "raw_history_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "total_rows": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "version": {
+      "const": "bounded_wait_history_page_v1"
+    }
+  },
+  "required": [
+    "version",
+    "run_id",
+    "episode_id",
+    "before_decision_index",
+    "page_size_source",
+    "preview_size",
+    "order",
+    "total_rows",
+    "included_rows",
+    "omitted_rows",
+    "range",
+    "first_unit_index",
+    "last_unit_index",
+    "decision_indices",
+    "identity_fields",
+    "included_rows_without_decision_identity",
+    "included_rows_without_unit_ref",
+    "raw_history_sha256",
+    "included_history_sha256",
+    "history_is_complete",
+    "history_lookup",
+    "exact_included_records",
+    "discover_older_decisions",
+    "history_result_row_path",
+    "history_result_step_path",
+    "calculation_context"
+  ],
+  "type": "object"
+}

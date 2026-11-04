@@ -1,0 +1,87 @@
+...............F...F...                                                  [100%]
+=================================== FAILURES ===================================
+_ test_partial_native_work_and_explicit_zero_keep_distinct_receipts[malformed_sibling] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run005/pytest/test_partial_native_work_and_e1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70ec94febb00>
+mode = 'malformed_sibling'
+
+    @pytest.mark.parametrize('mode', ['failed_native', 'malformed_sibling', 'zero_hits'])
+    def test_partial_native_work_and_explicit_zero_keep_distinct_receipts(tmp_path, monkeypatch, mode):
+        transform = (lambda report: report['results']['search']['hits'][0]['hsps'].append(None)) if mode == 'malformed_sibling' else None
+        if mode == 'zero_hits':
+            native = dict(program='blastn', version='BLASTN 2.17.0+', search_target={'db':'target'}, params={},
+                results={'search':dict(query_id='q', query_title='q', query_len=8, hits=[])})
+            h = SyntheticHost(tmp_path, monkeypatch, 'blastn_vdb', sequence='ACGTACGT', query_bytes=b'>q\nACGTACGT\n',
+                native_report=canonical({'BlastOutput2':[{'report':native}]}).encode())
+            selected = selection(census=None)
+        else:
+            h, selected = connected_fixture(tmp_path, monkeypatch, nonzero=mode == 'failed_native', report_transform=transform)
+        try:
+            child, body = capture(h, selected)
+            assert body['capture']['status'] == 'complete'
+            calc = _json(h.store, body['preparation']['calculations_artifact_ref'])['vdb_function'][0]['components']
+            if mode == 'zero_hits':
+                assert body['complete'] and calc['status'] == 'no_reported_hits'
+                assert all(not rows for rows in body['publication']['rows_by_family'].values())
+            else:
+>               assert not body['complete'] and calc['status'] == 'partial'
+E               assert (not True)
+
+../../../tests/test_native_blast_vdb_function_integration.py:300: AssertionError
+_ test_exact_descriptor_rejects_generation_receipt_scope_and_cycle_substitutions _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_function_integration_2026-10-26_347/run005/pytest/test_exact_descriptor_rejects_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70ec70c59460>
+
+    def test_exact_descriptor_rejects_generation_receipt_scope_and_cycle_substitutions(tmp_path, monkeypatch):
+        h, selected = connected_fixture(tmp_path, monkeypatch)
+        try:
+            original, body = capture(h, selected)
+            h.returned(original)
+            descriptor = h.family.native_blast_database_results.facts(original)[SAVED_INPUT_SOURCE][0]
+            before = deepcopy(h.calls)
+            forbid_acquisition(h, monkeypatch)
+            mutations = [('generation', lambda d: d.update(original_calculation_id='0'*64)),
+                ('interpretation',lambda d:d.update(input_interpretation_id='0'*64)),
+                ('receipt_hash',lambda d:d['original_result_receipt'].update(receipt_sha256='0'*64)),
+                ('other_run',lambda d:d['original_result_receipt'].update(run_id='different-run')),
+                ('other_episode',lambda d:d['original_result_receipt'].update(episode_id=h.hpc.episode_id)),
+                ('missing_operation',lambda d:d['original_result_receipt'].update(operation_key=body['operation_key'][:-1]+'99'))]
+            failures = []
+            for index,(name, mutate) in enumerate(mutations, 2):
+                wrong = deepcopy(descriptor); mutate(wrong)
+                child, failed = capture(h, selection(saved=wrong, temperature=2), index=index)
+                assert failure_triple(failed) == AUTHORITY, name
+                assert h.family.completion_for_action(child, failed['operation_key']) is None
+                failures.append(dict(case=name,receipt=failed))
+            owner = h.family.native_blast_database_results
+            address = descriptor['original_result_receipt']
+            repeated = tuple(address[k] for k in ('run_id','episode_id','operation_key'))
+            with pytest.raises(ValueError, match='unauthorized'):
+                owner._read_saved_function_input(descriptor, h.scope, _seen=(repeated,))
+>           foreign = h.store.create_problem(raw_sequence='TTTTTTTT', molecule='dna')['subject_refs']
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_vdb_function_returns.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x70ec919f64e0>
+input_path = None, raw_sequence = 'TTTTTTTT', molecule = 'dna'
+role = 'unspecified', manifest_path = None, caller_context = None
+format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+../../../gene_annotation_episode/materials.py:568: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_integration.py::test_partial_native_work_and_explicit_zero_keep_distinct_receipts[malformed_sibling]
+FAILED ../../../tests/test_native_blast_vdb_function_returns.py::test_exact_descriptor_rejects_generation_receipt_scope_and_cycle_substitutions
+2 failed, 21 passed in 383.46s (0:06:23)

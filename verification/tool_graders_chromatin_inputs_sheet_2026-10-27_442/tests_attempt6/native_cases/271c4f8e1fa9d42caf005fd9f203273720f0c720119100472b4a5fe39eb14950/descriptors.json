@@ -1,0 +1,159 @@
+[
+  {
+    "table_key": "p4e4693b284c3f26ec98cc529f68d3f29d03f344cc82d460149c857e92a7d600e:bins",
+    "population_key": "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "role": "bins",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "tsv",
+    "shape": [
+      4,
+      4
+    ],
+    "dtype_descriptor": {
+      "kind": "scalar",
+      "dtype": "utf8_tsv_int64"
+    },
+    "row_count": 4,
+    "native_source_locator": {
+      "kind": "hdf5_path",
+      "value": "/bins"
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "sha256": "b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "size_bytes": 79,
+      "format": "chromatin_contact_tables_v1:bins"
+    }
+  },
+  {
+    "table_key": "p4e4693b284c3f26ec98cc529f68d3f29d03f344cc82d460149c857e92a7d600e:contacts",
+    "population_key": "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "role": "contacts",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      0
+    ],
+    "dtype_descriptor": {
+      "kind": "structured",
+      "fields": [
+        {
+          "name": "bin1_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "bin2_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "value",
+          "dtype": "<f4"
+        },
+        {
+          "name": "source_block",
+          "dtype": "<i8"
+        },
+        {
+          "name": "source_row",
+          "dtype": "<i8"
+        }
+      ]
+    },
+    "row_count": 0,
+    "native_source_locator": {
+      "kind": "hdf5_path",
+      "value": "/pixels"
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_3768b2d6f6ed1c7aa2bf759078f7212e8b451b4dd9e1996f5e8413ed6cd9f936",
+      "sha256": "3768b2d6f6ed1c7aa2bf759078f7212e8b451b4dd9e1996f5e8413ed6cd9f936",
+      "size_bytes": 192,
+      "format": "chromatin_contact_tables_v1:contacts"
+    }
+  },
+  {
+    "table_key": "p4e4693b284c3f26ec98cc529f68d3f29d03f344cc82d460149c857e92a7d600e:weights",
+    "population_key": "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "role": "weights",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      4
+    ],
+    "dtype_descriptor": {
+      "kind": "scalar",
+      "dtype": "<f8"
+    },
+    "row_count": 4,
+    "native_source_locator": {
+      "kind": "hdf5_path",
+      "value": "/bins/weight"
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_9ea5025cdac62ede1358dbf313b35feaeb67a687d001aca9005d886a2934c32b",
+      "sha256": "9ea5025cdac62ede1358dbf313b35feaeb67a687d001aca9005d886a2934c32b",
+      "size_bytes": 160,
+      "format": "chromatin_contact_tables_v1:weights"
+    }
+  },
+  {
+    "table_key": "p4e4693b284c3f26ec98cc529f68d3f29d03f344cc82d460149c857e92a7d600e:cell_states",
+    "population_key": "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "role": "cell_states",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      0
+    ],
+    "dtype_descriptor": {
+      "kind": "structured",
+      "fields": [
+        {
+          "name": "bin1_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "bin2_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "state",
+          "dtype": "|u1"
+        }
+      ]
+    },
+    "row_count": 0,
+    "native_source_locator": {
+      "kind": "hdf5_path",
+      "value": "/pixels"
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "sha256": "c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "size_bytes": 192,
+      "format": "chromatin_contact_tables_v1:cell_states"
+    }
+  },
+  {
+    "table_key": "p4e4693b284c3f26ec98cc529f68d3f29d03f344cc82d460149c857e92a7d600e:dense_values",
+    "population_key": "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "role": "dense_values",
+    "availability": "not_native_representation",
+    "absence_reason": null,
+    "encoding": null,
+    "shape": null,
+    "dtype_descriptor": null,
+    "row_count": null,
+    "native_source_locator": null,
+    "extent": "unavailable",
+    "file": null
+  }
+]

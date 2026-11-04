@@ -27,7 +27,7 @@ from gene_annotation_episode.homology_jobs import HomologyJobs
 from gene_annotation_episode.investigation_progress import ScientificFindingProgress
 from gene_annotation_episode.providers import ModelConnection
 from gene_annotation_episode.runtime import Workflow, assemble_workflow
-from gene_annotation_episode.scientific_credit import AnnotationSupportScore
+from gene_annotation_episode.scientific_process_reports import SELECTION_REPORT_VERSION
 from gene_annotation_episode.state import Store
 from test_assembled_case_policy import parameters as assembled_parameters
 from test_assembled_service_setup import PUBLICATION, RETRIEVAL, ROOT_ROLES
@@ -81,14 +81,20 @@ for line in sys.stdin:
         result = {'thread': {'id':'assembled-fixture-thread'}, 'model':params['model'],
             'reasoningEffort':params['config']['model_reasoning_effort']}
     elif method == 'turn/start':
-        context = json.loads(params['input'][0]['text'])
-        selected = context['scientific_process']['selection']['tools']
+        # The published scientific prompt is prose. This controlled transport
+        # consumes its recorded semantic input and verifies the exact wire text;
+        # prompt-presentation assertions live in test_scientific_process_prompt_delivery.
+        requests = (log.parent/'run/providers').glob('*/session-*/call-*/request.json')
+        request = json.loads(max(requests, key=lambda path: path.stat().st_mtime_ns).read_text())
+        assert request['input'] == params['input']
+        context = request['context']
+        selected = [row['name'] for row in context['scientific_process']['selection']['child_tool_info']]
         assert selected == ['sequence.inspect','translation.codes']
         names = {entry['name'] for entry in context['tools']}
         assert set(selected) <= names and 'source.archive.extract' not in names
         assert context['scientific_process']['permitted_children'] == [
             'scientific_process','literature','launch','monitor','results']
-        assert context['current_credit'] == 0 and context['annotation_score'] == 0
+        assert context['current_credit'] == 0 and 'annotation_score' not in context
         previous = context['last_local_outcome']
         if previous is None:
             action = {'kind':'tool','tool':'sequence.inspect',
@@ -240,7 +246,6 @@ def form_schema(workflow):
         'records':{'type':'array','items':{'type':'string','format':'reference'},
             'x-source':'committed_record_refs'},
         'local_credit':{'type':'number','x-source':'credit'},
-        'support':{'type':'number','x-source':'annotation_score'},
         'process_results':workflow.report_sources('scientific_process')[
             'scientific_process_results']['report_schema']})
 
@@ -256,9 +261,9 @@ def commission_fixture(tmp_path, monkeypatch, *, wired=False):
         scope = {'subject_refs':[fixture['manifest']['target_ref']]}
         root = workflow.build('annotation', 'root', settings['goal'], scope)
         library = workflow.scientific_process_binding.library
-        selection = {'version':'scientific_process_selection_v2',
-            'annotation_ref':library.reference('A01'), 'thought_ref':library.reference('P01'),
-            'tools':SELECTED_TOOLS}
+        selection = {'version':'scientific_process_selection_v3',
+            'evidence_axis':library.reference('A01'), 'thought_pattern':library.reference('P01'),
+            'child_tool_info':[{'name': name, 'resources': 'local'} for name in SELECTED_TOOLS]}
         schema = form_schema(workflow)
         action = {'kind':'episode_child', 'role':'scientific_process',
             'goal':'Investigate the invented construction contract through actual local measurements.',
@@ -276,6 +281,7 @@ def commission_fixture(tmp_path, monkeypatch, *, wired=False):
                 context, workflow.action_schema(root.source))
             return root.source.apply_response(response, index, actual_context, action_contract)
         deferred = asyncio.run(select())
+        assert root.source.feedback is None, root.source.feedback
         spec, = workflow.commissions.recover_selected(root.source.episode_id)
         # C1 is entered only for an already published original commission.
         # Publication records identity; it starts no worker or model transport.
@@ -331,7 +337,7 @@ def assert_assembled(workflow, fixture):
     assert set(workflow.role_credit_projectors) == {*OPERATIONAL_ROLES,'monitor'}
     assert type(workflow.project_credit) is ScientificFindingProgress
     assert workflow.project_credit is workflow.project_child_credit
-    assert type(workflow.project_annotation_score) is AnnotationSupportScore
+    assert workflow.project_annotation_score is None
     assert workflow.project_credit.policy.finding_unit == fixture['parameters']['policy'][
         'scientific_progress']['finding_unit']
     assert workflow.scientific_process_binding.tool_retrieval == RETRIEVAL
@@ -544,10 +550,12 @@ def test_real_detached_assembled_worker_original_form_single_parent_receipt_and_
         form = result['form']
         assert set(form) == set(fixture['schema']['properties'])
         assert form['finding_state'] == 'measured'
-        assert form['local_credit'] == form['support'] == 0
+        assert form['local_credit'] == 0 and 'support' not in form
         assert {store.get(ref)['record_type'] for ref in form['records']} == {'source','observation'}
         process, = form['process_results']
-        assert process['selection'] == fixture['selection']
+        expected_selection = {**fixture['selection'], 'version': SELECTION_REPORT_VERSION,
+            'source_version': fixture['selection']['version']}
+        assert process['selection'] == expected_selection
         assert process['completed_actions'] == 2 and process['origin_kind'] == 'ordinary_child'
         assert observations(store,root.source.episode_id) == []
         before = list(store.db.execute('SELECT * FROM runtime_record_receipts WHERE episode_id=?',
@@ -560,12 +568,16 @@ def test_real_detached_assembled_worker_original_form_single_parent_receipt_and_
             "SELECT * FROM runtime_record_receipts WHERE episode_id=? AND receipt_kind='child_form'",
             (root.source.episode_id,))]
         assert {row['record_ref'] for row in received} >= set(form['records'])
-        # The child commission completes once. A second explicit fixture action
-        # permits a next-decision check that receives only the original form.
+        # The current assembled root owns reasoning and child commissions.
+        # Record an explicit unresolved claim as its second zero-progress action
+        # while checking that it receives only the original child form.
         def after_return(context):
             assert context['child_reports'] == [form]
-            return {'selection':{'kind':'tool','tool':'episode.history',
-                'arguments':{'view':'index'}},'report_update':{}}
+            commit = {key: [] for key in store.reasoning_schema()['required']}
+            commit['hypotheses'] = [{'alias': 'fixture_unresolved_family',
+                'subject_refs': [fixture['manifest']['target_ref']], 'predicate': 'functional_family',
+                'value': {'type': 'enum', 'value': 'unresolved'}, 'context_refs': []}]
+            return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
         workflow.provider.script = iter([after_return])
         closed = asyncio.run(root.run_async(workflow.context))
         asyncio.run(root.build_result(closed))

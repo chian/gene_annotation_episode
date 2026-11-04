@@ -1,0 +1,16 @@
+FF..                                                                     [100%]
+=================================== FAILURES ===================================
+__ test_selected_native_fit_and_independent_numbers_reach_requested_receiver ___
+source_snapshot/tests/test_expression_nmf_episode_path.py:188: in test_selected_native_fit_and_independent_numbers_reach_requested_receiver
+    'calculated_frobenius_residual': calculation['frobenius_residual'], 'manifest_outcome': manifest['outcome'],
+                                                                                            ^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'outcome'
+___ test_saved_sheet_alone_preserves_authority_and_has_zero_new_acquisition ____
+source_snapshot/tests/test_expression_nmf_episode_path.py:201: in test_saved_sheet_alone_preserves_authority_and_has_zero_new_acquisition
+    assert all(not Path(row['path']).exists() for row in saved['removed'])
+E   assert False
+E    +  where False = all(<generator object test_saved_sheet_alone_preserves_authority_and_has_zero_new_acquisition.<locals>.<genexpr> at 0x7e7cfc8aa180>)
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_expression_nmf_episode_path.py::test_selected_native_fit_and_independent_numbers_reach_requested_receiver
+FAILED source_snapshot/tests/test_expression_nmf_episode_path.py::test_saved_sheet_alone_preserves_authority_and_has_zero_new_acquisition
+2 failed, 2 passed in 7511.58s (2:05:11)

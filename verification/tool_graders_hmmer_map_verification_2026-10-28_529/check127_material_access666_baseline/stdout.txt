@@ -1,0 +1,21 @@
+E                                                                        [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.from_source] _
+source_snapshot/tests/test_blast_utility_material_access_666.py:51: in consumer
+    filled = scientific.prepare_invocation(parent, 'scientific_process', selected,
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:268: in prepare_invocation
+    assignment = self.prepare_assignment(parent, role, inputs, scope, operation_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:234: in prepare_assignment
+    assignment = self._assignment(selection, scope, materialize=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:195: in _assignment
+    selected['child_tool_info'] = self.tool_library.resolve_tool_info(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:257: in resolve_tool_info
+    self._require_tool_info()
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:236: in _require_tool_info
+    raise ValueError('scientific_tool_info_not_in_legacy_snapshot')
+E   ValueError: scientific_tool_info_not_in_legacy_snapshot
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_blast_utility_material_access_666.py::test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.from_source]
+1 error in 3.74s

@@ -1,0 +1,297 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: received_report_sources
+1847:     def received_report_sources(self, role):
+1848:         result = {}
+1849:         if self.native_barcode_returns is not None and role in {'annotation', 'scientific_process'}:
+1850:             from .barcode_return_views import barcode_fact_sources
+1851:             result.update(barcode_fact_sources())
+1852:         if self.native_expression_nmf_returns is not None and role in {'annotation', 'scientific_process'}:
+1853:             from .expression_nmf_return_views import expression_nmf_fact_sources
+1854:             result.update(expression_nmf_fact_sources())
+1855:         if self.atac_returns is not None and role in {'annotation', 'scientific_process'}:
+1856:             from .atac_differential_return_views import atac_fact_sources
+1857:             result.update(atac_fact_sources())
+1858:         if self.native_chromatin_interaction_returns is not None and role in {'annotation', 'scientific_process'}:
+1859:             from .chromatin_interaction_return_views import chromatin_fact_sources
+1860:             result.update(chromatin_fact_sources())
+1861:         if self.native_genomic_overlap_returns is not None and role in {'annotation', 'scientific_process'}:
+1862:             from .genomic_overlap_return_views import genomic_overlap_fact_sources
+1863:             result.update(genomic_overlap_fact_sources())
+1864:         if role in {'annotation', 'scientific_process'}:
+1865:             from .protein_structure_result_views import protein_structure_fact_sources
+1866:             result.update(protein_structure_fact_sources())
+1867:         if self.rna_structure_comparison_returns is not None and role in {'annotation', 'scientific_process'}:
+1868:             from .rna_structure_comparison_views import rna_comparison_fact_sources
+1869:             result.update(rna_comparison_fact_sources())
+1870:         if self.native_rna_structure_returns is not None and role in {'annotation', 'scientific_process'}:
+1871:             from .rna_structure_result_views import rna_structure_fact_sources
+1872:             result.update(rna_structure_fact_sources())
+1873:         if self.native_blast_standard_database_returns is not None and role in {'annotation', 'scientific_process'}:
+1874:             from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
+1875:             result.update(standard_blast_database_fact_sources())
+1876:         if self.native_blast_database_returns is not None and role in {'annotation', 'scientific_process'}:
+1877:             from .native_blast_database_result_views import native_blast_database_fact_sources
+1878:             result.update(native_blast_database_fact_sources())
+1879:         if self.native_hmmer_preparation_returns is not None and role in {'annotation', 'scientific_process'}:
+1880:             from .hmmer_preparation_result_views import preparation_fact_sources
+1881:             result.update(preparation_fact_sources())
+1882:         if self.native_infernal_preparation_returns is not None and role in {'annotation', 'scientific_process'}:
+1883:             from .infernal_preparation_result_views import preparation_fact_sources
+1884:             result.update(preparation_fact_sources())
+1885:         if self._has_rfam() and role in {'annotation', 'scientific_process'}:
+1886:             from .rfam_batch_returns import rfam_fact_sources
+1887:             result.update(rfam_fact_sources())
+1888:         if self.native_blast_returns is not None and role in {'annotation', 'scientific_process'}:
+1889:             from .blast_pairwise_result_views import native_blast_fact_sources
+1890:             result.update(native_blast_fact_sources())
+1891:             result['execution_blast_pairwise_result_refs'] = self._blast_reference_source()
+1892:         if self.native_infernal_returns is not None and role in {'annotation', 'scientific_process'}:
+1893:             from .infernal_native_result_views import native_infernal_fact_sources
+1894:             result.update(native_infernal_fact_sources())
+1895:             result['execution_infernal_result_refs'] = self._infernal_reference_source()
+1896:         if self._forwards_bvbrc_reports(role):
+1897:             from .bvbrc_data_views import bvbrc_data_fact_sources
+1898:             result.update(bvbrc_data_fact_sources())
+1899:         if self._forwards_minhash_reports(role):
+1900:             from .bvbrc_minhash_views import minhash_fact_sources
+1901:             result.update(minhash_fact_sources())
+1902:         if self._has_appservice() and role in {'annotation', 'scientific_process'}:
+1903:             result.update(self._appservice_sources())
+1904:         return result
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: received_report_facts
+1906:     def received_report_facts(self, context):
+1907:         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+1908:         result = {}
+1909:         if (self.native_barcode_returns is not None
+1910:                 and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
+1911:             result.update(self.native_barcode_returns.facts_for_closure(context, schema))
+1912:         if (self.native_expression_nmf_returns is not None
+1913:                 and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
+1914:             result.update(self.native_expression_nmf_returns.facts_for_closure(context, schema))
+1915:         if (self.atac_returns is not None and context.role in {'annotation', 'scientific_process'}
+1916:                 and schema.get('properties') is not None):
+1917:             result.update(self.atac_returns.facts_for_closure(context, schema))
+1918:         if (self.native_chromatin_interaction_returns is not None
+1919:                 and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
+1920:             result.update(self.native_chromatin_interaction_returns.facts_for_closure(context, schema))
+1921:         if (self.native_genomic_overlap_returns is not None
+1922:                 and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
+1923:             # Runtime freezes this private provenance alongside public facts.
+1924:             # Only registered x-sources are projected into the parent form.
+1925:             result.update(self.native_genomic_overlap_returns.facts_for_closure(context, schema))
+1926:         if context.role in {'annotation', 'scientific_process'}:
+1927:             result.update(self.native_protein_structure_returns.received_facts(context, schema))
+1928:         if self.rna_structure_comparison_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1929:             result.update(self.rna_structure_comparison_returns.received_facts(context, schema))
+1930:         if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1931:             result.update(self.native_rna_structure_returns.received_facts(context, schema))
+1932:         if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1933:             result.update(self.native_blast_standard_database_returns.received_facts(context, schema))
+1934:         if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1935:             result.update(self.native_blast_database_returns.received_facts(context, schema))
+1936:         if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1937:             result.update(self.native_hmmer_preparation_returns.received_facts(context, schema))
+1938:         if self.native_infernal_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1939:             result.update(self.native_infernal_preparation_returns.received_facts(context, schema))
+1940:         if self._has_rfam() and context.role in {'annotation', 'scientific_process'}:
+1941:             result.update(self.api_execution.rfam_returns.received_facts(context, schema))
+1942:         if self.native_blast_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1943:             result.update(self.native_blast_returns.received_facts(context, schema))
+1944:         if self.native_infernal_returns is not None and context.role in {'annotation', 'scientific_process'}:
+1945:             result.update(self.native_infernal_returns.received_facts(context, schema))
+1946:         if self._forwards_bvbrc_reports(context.role):
+1947:             result.update(self.api_execution.bvbrc_data.received_facts(context, schema))
+1948:         if self._forwards_minhash_reports(context.role):
+1949:             result.update(self.api_execution.minhash.received_facts(context, schema))
+1950:         if self._has_appservice() and context.role in {'annotation', 'scientific_process'}:
+1951:             # Execution roles already supply their own/received support facts
+1952:             # through facts(); only the scientific roles need this forwarding.
+1953:             if any(node.get('x-source') == 'bvbrc_appservice_support_refs'
+1954:                     for node in schema.get('properties', {}).values()):
+1955:                 result['bvbrc_appservice_support_refs'] = self.api_execution.appservice.received_support_refs(context)
+1956:             result.update(self.api_execution.homology_returns.received_facts(context, schema))
+1957:             result.update(self.api_execution.phylogeny_returns.received_facts(context, schema))
+1958:             result.update(self.api_execution.alignment_returns.received_facts(context, schema))
+1959:             result.update(self.api_execution.genome_alignment_returns.received_facts(context, schema))
+1960:             proteome = self.api_execution.proteome_returns.received_facts(context, schema)
+1961:             if set(result).intersection(proteome):
+1962:                 raise ValueError('received_report_fact_conflict')
+1963:             result.update(proteome)
+1964:             comparative = self.api_execution.comparative_systems_returns.received_facts(context, schema)
+1965:             if set(result).intersection(comparative):
+1966:                 raise ValueError('received_report_fact_conflict')
+1967:             result.update(comparative)
+1968:             fastqutils = self.api_execution.fastqutils_returns.received_facts(context, schema)
+1969:             if set(result).intersection(fastqutils):
+1970:                 raise ValueError('received_report_fact_conflict')
+1971:             result.update(fastqutils)
+1972:         return result
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: resolve_received_reference
+1974:     def resolve_received_reference(self, context, reference, namespace):
+1975:         barcode = self._barcode_reference_access(context, reference, namespace)
+1976:         if barcode is not None:
+1977:             return barcode
+1978:         nmf = self._expression_nmf_reference_access(context, reference, namespace)
+1979:         if nmf is not None:
+1980:             return nmf
+1981:         atac = self._atac_reference_access(context, reference, namespace)
+1982:         if atac is not None:
+1983:             return atac
+1984:         chromatin = self._chromatin_reference_access(context, reference, namespace)
+1985:         if chromatin is not None:
+1986:             return chromatin
+1987:         overlap = self._genomic_overlap_reference_access(context, reference, namespace)
+1988:         if overlap is not None:
+1989:             return overlap
+1990:         access = self._protein_reference_access(context, reference, namespace)
+1991:         if access is not None:
+1992:             return access
+1993:         if self.rna_structure_comparison_results is not None:
+1994:             from .rna_structure_comparison_results import IDENTIFIER_NAMESPACES as COMPARISON_NAMESPACES
+1995:             if namespace in COMPARISON_NAMESPACES:
+1996:                 return (self.rna_structure_comparison_results.resolve(context, reference, namespace)
+1997:                     if context.role == 'results' else
+1998:                     self.rna_structure_comparison_returns.resolve_received(context, reference, namespace))
+1999:             access = self.rna_structure_comparison_results.retained_reference_access(context, reference, namespace)
+2000:             if access is not None:
+2001:                 return access
+2002:         if self.native_rna_structure_results is not None:
+2003:             # This callback precedes Workflow's generic Store fallback, even
+2004:             # for ordinary scientific receivers and old expanded receipts.
+2005:             access = self.native_rna_structure_results.retained_reference_access(context, reference, namespace)
+2006:             if access is not None:
+2007:                 return access
+2008:             if context.role in {'annotation', 'scientific_process'}:
+2009:                 resolved = self.native_rna_structure_returns.resolve_received(context, reference, namespace)
+2010:                 if resolved is not None:
+2011:                     return resolved
+2012:         if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+2013:             resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
+2014:             if resolved is not None:
+2015:                 return resolved
+2016:         if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+2017:             resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
+2018:             if resolved is not None:
+2019:                 return resolved
+2020:         if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+2021:             resolved = self.native_hmmer_preparation_returns.resolve_received(context, reference, namespace)
+2022:             if resolved is not None:
+2023:                 return resolved
+2024:         if self.native_infernal_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+2025:             resolved = self.native_infernal_preparation_returns.resolve_received(context, reference, namespace)
+2026:             if resolved is not None:
+2027:                 return resolved
+2028:         if self._has_rfam() and context.role in {'annotation', 'scientific_process'}:
+2029:             resolved = self.api_execution.rfam_returns.resolve_received(context, reference, namespace)
+2030:             if resolved is not None:
+2031:                 return resolved
+2032:         if self.native_blast_returns is not None and context.role in {'annotation', 'scientific_process'}:
+2033:             resolved = self.native_blast_returns.resolve_received(context, reference, namespace)
+2034:             if resolved is not None:
+2035:                 return resolved
+2036:         if self.native_infernal_returns is not None and context.role in {'annotation', 'scientific_process'}:
+2037:             resolved = self.native_infernal_returns.resolve_received(context, reference, namespace)
+2038:             if resolved is not None:
+2039:                 return resolved
+2040:         if self._has_appservice():
+2041:             from .bvbrc_homology_returns import IDENTIFIER_NAMESPACES
+2042:             if namespace in IDENTIFIER_NAMESPACES:
+2043:                 # Results owns its publication. The normal role resolver below
+2044:                 # validates those facts; there is no child return to consult.
+2045:                 if context.role == 'results':
+2046:                     return None
+2047:                 return self.api_execution.homology_returns.resolve_received(context, reference, namespace)
+2048:             from .bvbrc_phylogeny_returns import IDENTIFIER_NAMESPACES as PHYLOGENY_NAMESPACES
+2049:             if namespace in PHYLOGENY_NAMESPACES:
+2050:                 if context.role == 'results':
+2051:                     return None
+2052:                 return self.api_execution.phylogeny_returns.resolve_received(context, reference, namespace)
+2053:             from .bvbrc_alignment_returns import IDENTIFIER_NAMESPACES as ALIGNMENT_NAMESPACES
+2054:             if namespace in ALIGNMENT_NAMESPACES:
+2055:                 if context.role == 'results':
+2056:                     return None
+2057:                 return self.api_execution.alignment_returns.resolve_received(context, reference, namespace)
+2058:             from .bvbrc_genome_alignment_returns import IDENTIFIER_NAMESPACES as GENOME_ALIGNMENT_NAMESPACES
+2059:             if namespace in GENOME_ALIGNMENT_NAMESPACES:
+2060:                 if context.role == 'results':
+2061:                     return None
+2062:                 return self.api_execution.genome_alignment_returns.resolve_received(context, reference, namespace)
+2063:             from .bvbrc_proteome_returns import IDENTIFIER_NAMESPACES as PROTEOME_NAMESPACES
+2064:             if namespace in PROTEOME_NAMESPACES:
+2065:                 if context.role == 'results':
+2066:                     return None
+2067:                 return self.api_execution.proteome_returns.resolve_received(context, reference, namespace)
+2068:             from .bvbrc_comparative_systems_returns import IDENTIFIER_NAMESPACES as COMPARATIVE_NAMESPACES
+2069:             if namespace in COMPARATIVE_NAMESPACES:
+2070:                 if context.role == 'results':
+2071:                     return None
+2072:                 return self.api_execution.comparative_systems_returns.resolve_received(context, reference, namespace)
+2073:             from .bvbrc_fastqutils_returns import IDENTIFIER_NAMESPACES as FASTQUTILS_NAMESPACES
+2074:             if namespace in FASTQUTILS_NAMESPACES:
+2075:                 if context.role == 'results':
+2076:                     return None
+2077:                 return self.api_execution.fastqutils_returns.resolve_received(context, reference, namespace)
+2078:             resolved = self.api_execution.appservice.resolve(context, reference, namespace)
+2079:             if resolved is not None:
+2080:                 return resolved
+2081:         if self._forwards_bvbrc_reports(context.role):
+2082:             resolved = self.api_execution.bvbrc_data.resolve_received(context, reference, namespace)
+2083:             if resolved is not None:
+2084:                 return resolved
+2085:         if self._forwards_minhash_reports(context.role):
+2086:             resolved = self.api_execution.minhash.resolve_received(context, reference, namespace)
+2087:             if resolved is not None:
+2088:                 return resolved
+2089:         for results in (self.native_hmmer_preparation_results, self.native_infernal_preparation_results):
+2090:             if results is not None:
+2091:                 resolved = results.retained_reference_access(context, reference, namespace)
+2092:                 if resolved is not None:
+2093:                     return resolved
+2094:         return None
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: validate_received_report
+2096:     def validate_received_report(self, context, form, schema):
+2097:         if self.native_barcode_returns is not None:
+2098:             self.native_barcode_returns.validate_received_report(context, form, schema)
+2099:         if self.native_expression_nmf_returns is not None:
+2100:             self.native_expression_nmf_returns.validate_received_report(context, form, schema)
+2101:         if self.atac_returns is not None:
+2102:             self.atac_returns.validate_received_report(context, form, schema)
+2103:         if self.native_chromatin_interaction_returns is not None:
+2104:             self.native_chromatin_interaction_returns.validate_received_report(context, form, schema)
+2105:         if self.native_genomic_overlap_returns is not None:
+2106:             self.native_genomic_overlap_returns.validate_received_report(context, form, schema)
+2107:         self.native_protein_structure_returns.validate_received_report(context, form, schema)
+2108:         if self.rna_structure_comparison_returns is not None:
+2109:             self.rna_structure_comparison_returns.validate_received_report(context, form, schema)
+2110:         if self.native_rna_structure_returns is not None:
+2111:             self.native_rna_structure_returns.validate_received_report(context, form, schema)
+2112:         if self.native_blast_standard_database_returns is not None:
+2113:             self.native_blast_standard_database_returns.validate_received_report(context, form, schema)
+2114:         if self.native_blast_database_returns is not None:
+2115:             self.native_blast_database_returns.validate_received_report(context, form, schema)
+2116:         if self.native_hmmer_preparation_returns is not None:
+2117:             self.native_hmmer_preparation_returns.validate_received_report(context, form, schema)
+2118:         if self.native_infernal_preparation_returns is not None:
+2119:             self.native_infernal_preparation_returns.validate_received_report(context, form, schema)
+2120:         if self._has_rfam():
+2121:             self.api_execution.rfam_returns.validate_received_report(context, form, schema)
+2122:         if self.native_blast_returns is not None:
+2123:             self.native_blast_returns.validate_received_report(context, form, schema)
+2124:         if self.native_infernal_returns is not None:
+2125:             self.native_infernal_returns.validate_received_report(context, form, schema)
+2126:         if self._has_appservice():
+2127:             self.api_execution.appservice.validate_received_report(context, form, schema)
+2128:             self.api_execution.homology_returns.validate_received_report(context, form, schema)
+2129:             self.api_execution.phylogeny_returns.validate_received_report(context, form, schema)
+2130:             self.api_execution.alignment_returns.validate_received_report(context, form, schema)
+2131:             self.api_execution.genome_alignment_returns.validate_received_report(context, form, schema)
+2132:             self.api_execution.proteome_returns.validate_received_report(context, form, schema)
+2133:             self.api_execution.comparative_systems_returns.validate_received_report(context, form, schema)
+2134:             self.api_execution.fastqutils_returns.validate_received_report(context, form, schema)
+2135:         if self._forwards_bvbrc_reports(context.role):
+2136:             self.api_execution.bvbrc_data.validate_received_report(context, form, schema)
+2137:         if self._forwards_minhash_reports(context.role):
+2138:             self.api_execution.minhash.validate_received_report(context, form, schema)

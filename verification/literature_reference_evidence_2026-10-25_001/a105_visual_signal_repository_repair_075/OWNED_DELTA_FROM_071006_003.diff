@@ -1,0 +1,164 @@
+--- a/gene_annotation_episode/literature_ratio_source_storage.py
++++ b/gene_annotation_episode/literature_ratio_source_storage.py
+@@ -184,8 +184,11 @@
+     def _dependencies(self, context, selection):
+         # Authorize the complete declared metadata closure before any byte access.
+         nodes = list(_walk(selection))
+-        direct = _unique(node['source_ref'] for node in nodes if 'source_ref' in node)
+-        views = _unique(node['view_ref'] for node in nodes if 'view_ref' in node)
++        # Custody rosters describe dependency sets, not scientific array order.
++        # Canonical JSON sorts object keys, so traversal insertion order cannot
++        # define durable source/view order (075; pure074 uses the same rule).
++        direct = sorted({node['source_ref'] for node in nodes if 'source_ref' in node})
++        views = sorted({node['view_ref'] for node in nodes if 'view_ref' in node})
+         for view_ref in views:
+             if view_ref not in context.received_record_refs:
+                 raise ContractError('relative_signal_view_not_received')
+@@ -193,6 +196,7 @@
+                 raise ContractError('literature_source_outside_scope')
+             view, _ = self._view_records(view_ref)
+             direct.extend(ref for ref in (view['input_source_ref'], view['source_ref']) if ref not in direct)
++        direct.sort()
+         for reference in direct:
+             self._source(context, reference)
+         closure = list(direct)
+--- a/tests/test_literature_ratio_source_storage.py
++++ b/tests/test_literature_ratio_source_storage.py
+@@ -604,3 +604,115 @@
+         assert repo.populate(context, selection, 'implementation-bound') == outcome
+     finally:
+         store.close()
++
++
++def multi_source_view_case(path):
++    """Engineering-only multiple sources/views; original arrays intentionally unsorted."""
++    store, context, selection, first = native_case(path)
++    root = selection['source_ref']
++    witnesses = sorted([source(store, b'Synthetic subject witness', parents=[root]),
++        source(store, b'Synthetic genotype witness', parents=[root])])
++    received = list(context.received_record_refs) + witnesses
++    for key, reference in [('subject', witnesses[1]), ('genotype', witnesses[0])]:
++        raw = store.get_artifact(store.get(reference)['artifact_ref'])
++        quote = raw.decode()
++        selection['comparison'][key] = {'status': 'known', 'value': quote,
++            'witnesses': [{'kind': 'text', 'source_ref': reference, 'representation': 'original',
++                'start': 0, 'end': len(raw), 'quote': quote}]}
++    image = Image.new('RGB', (240, 100), 'white')
++    draw = ImageDraw.Draw(image); draw.text((10, 40), '0.64', fill='black'); draw.text((110, 40), '1.00', fill='black')
++    draw.rectangle((5, 5, 7, 7), fill='blue')
++    buffer = BytesIO(); image.save(buffer, format='PNG')
++    second_source = source(store, buffer.getvalue(), parents=[root])
++    args = {'source_ref': second_source}
++    second = ToolRegistry(store).execute('image.view', args, scope=plain(context.scope),
++        operation_key='fixture-run:fixture-child:6')
++    assert second['status'] == 'completed', second
++    second_view = second['result']['view']
++    Journal(store, context.run_id).save('runtime_actions', {'episode_id': context.episode_id,
++        'decision_index': 6, 'action': canonical({'kind': 'tool', 'tool': 'image.view', 'arguments': args}),
++        'result': canonical(second), 'credit': None, 'timing': None})
++    received.extend((second_source, second_view['id'], second_view['source_ref']))
++    original_row = selection['representations'][0]
++    extra = deepcopy(original_row); extra['representation_id'] = 'z-second-view'
++    def rebind(value):
++        if isinstance(value, dict):
++            return {key: second_view['id'] if key == 'view_ref' else rebind(child) for key, child in value.items()}
++        if isinstance(value, list): return [rebind(child) for child in value]
++        return value
++    extra = rebind(extra)
++    xml = b'<article><body><sec id="s1"><p>SyntheticProtein was expressed at 64% (V) of WT levels.</p></sec></body></article>'
++    article = source(store, xml, parents=[root], name='synthetic_engineering_jats')
++    received.append(article)
++    prose = deepcopy(original_row)
++    prose.update(representation_id='m-jats', kind='jats_percent', selection={
++        'source_ref': article, 'section_id': 's1', 'paragraph_index': 0,
++        'expected_subject': 'SyntheticProtein', 'variant': 'V', 'reference_literal': 'WT levels'})
++    alias = deepcopy(original_row); alias['representation_id'] = 'a-shared-custody-alias'
++    # Array order is scientific selection order, not a dependency-sort request.
++    selection['representations'] = [extra, prose, original_row, alias]
++    context = replace(context, received_record_refs=tuple(dict.fromkeys(received)))
++    return store, context, selection, (first, second)
++
++
++def reverse_object_keys(value):
++    if isinstance(value, dict):
++        return {key: reverse_object_keys(child) for key, child in reversed(list(value.items()))}
++    if isinstance(value, list): return [reverse_object_keys(child) for child in value]
++    return value
++
++
++def test_multisource_multiview_canonical_store_read_replay_preserves_scientific_arrays(tmp_path, monkeypatch):
++    store, context, selection, views = multi_source_view_case(tmp_path)
++    try:
++        repo = repository(store, context)
++        original_order = [row['representation_id'] for row in selection['representations']]
++        outcome = repo.populate(context, selection, 'multi-source-view')
++        saved = repo.read(outcome['result']['sheet_ref'])
++        assert saved['sheet']['cells']['reported_ratio']['value'] == .64
++        assert [row['representation_id'] for row in saved['extraction']['representations']] == original_order
++        assert [row['representation_id'] for row in saved['selection']['representations']] == original_order
++        dependencies = [(row['source_ref'], row['representation']) for row in saved['extraction']['sources']]
++        assert len(dependencies) == 3 and dependencies == sorted(set(dependencies))
++        view_refs = [row['view_ref'] for row in saved['extraction']['views']]
++        assert len(view_refs) == 2 and view_refs == sorted(set(view_refs))
++        assert set(saved['input_view_refs']) == {view['result']['view_ref'] for view in views}
++        assert set(saved['direct_input_source_refs']) <= set(saved['input_source_refs'])
++        expected_sources = {selection['source_ref'], *(source_ref for source_ref, _ in dependencies),
++            *(view['result']['view']['source_ref'] for view in views),
++            *(view['result']['view']['input_source_ref'] for view in views)}
++        assert set(saved['direct_input_source_refs']) == expected_sources
++        assert saved['sheet']['independent_preparation_count'] is None
++        reordered = repo.populate(context, reverse_object_keys(selection), 'object-reordered-new-work')
++        reordered_saved = repo.read(reordered['result']['sheet_ref'])
++        assert reordered_saved['extraction'] == saved['extraction']
++        assert reordered_saved['sheet'] == saved['sheet']
++        reordered_array = deepcopy(selection)
++        reordered_array['representations'].reverse()
++        changed_array = repo.populate(context, reordered_array, 'array-reordered-new-work')
++        changed_saved = repo.read(changed_array['result']['sheet_ref'])
++        assert [row['representation_id'] for row in changed_saved['extraction']['representations']] == original_order[::-1]
++        assert changed_saved['extraction']['sources'] == saved['extraction']['sources']
++        assert changed_saved['extraction']['views'] == saved['extraction']['views']
++        # Canonical publication changes object order; it must not change arrays,
++        # source/view custody, meanings, native readings or the original outcome.
++        roundtrip = json.loads(canonical(saved))
++        assert roundtrip == saved
++        allowed = {store.get(outcome['result']['sheet_ref'])['artifact_ref'],
++            store.get(outcome['result']['sheet_ref'])['request_ref'], saved['calculation_artifact_ref'],
++            *(store.get(view['result']['view']['source_ref'])['request_ref'] for view in views)}
++        get = store.get_artifact
++        def saved_artifacts_only(reference):
++            assert reference in allowed
++            return get(reference)
++        monkeypatch.setattr(store, 'get_artifact', saved_artifacts_only)
++        import gene_annotation_episode.literature_ratio_source_inputs as inputs
++        import gene_annotation_episode.literature_ratio_source_calculations as calculations
++        monkeypatch.setattr(inputs, 'read_relative_signal_source_inputs', lambda *_a, **_k: pytest.fail('reader replay'))
++        monkeypatch.setattr(calculations, 'populate_relative_signal_v2', lambda *_a, **_k: pytest.fail('calculator replay'))
++        before = store.db.total_changes
++        assert repo.populate(context, reverse_object_keys(selection), 'multi-source-view') == outcome
++        assert repo.read(outcome['result']['sheet_ref']) == saved
++        assert store.db.total_changes == before
++    finally:
++        store.close()
+--- a/tests/test_literature_ratio_source_readonly.py
++++ b/tests/test_literature_ratio_source_readonly.py
+@@ -6,12 +6,16 @@
+ import subprocess
+ import sys
+ 
+-from test_literature_ratio_source_storage import native_case, owned, repository
++import pytest
++
++from test_literature_ratio_source_storage import native_case, multi_source_view_case, owned, repository
+ 
+ 
+-def test_first_projection_in_fresh_readonly_process_never_reads_source_or_mutates(tmp_path):
++@pytest.mark.parametrize('multiple_dependencies', [False, True])
++def test_first_projection_in_fresh_readonly_process_never_reads_source_or_mutates(tmp_path, multiple_dependencies):
+     directory = tmp_path / 'store'
+-    store, context, selection, _ = native_case(directory, known=True)
++    store, context, selection, _ = (multi_source_view_case(directory) if multiple_dependencies
++        else native_case(directory, known=True))
+     repo = repository(store, context); outcome = repo.populate(context, selection, 'selected')
+     reference = outcome['result']['sheet_ref']; saved = repo.read(reference)
+     owner = owned(context, outcome)

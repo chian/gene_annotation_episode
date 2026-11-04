@@ -1,0 +1,48 @@
+..FFF......F....................                                         [100%]
+=================================== FAILURES ===================================
+_ test_missing_essential_capture_is_processed_without_a_result[extract_sequences-omit0] _
+source_snapshot/tests/test_native_blast_utility_publication_631.py:242: in test_missing_essential_capture_is_processed_without_a_result
+    output = publish(store, prepared, chosen, tmp_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:151: in publish
+    return publication.publish_selected_utility_result(store, source_ref=prepared["source_ref"], prepared=prepared,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:330: in publish_selected_utility_result
+    _error("selected_projection_worker_failed")
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:49: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_selected_projection_worker_failed
+_ test_missing_essential_capture_is_processed_without_a_result[integrity-omit1] _
+source_snapshot/tests/test_native_blast_utility_publication_631.py:242: in test_missing_essential_capture_is_processed_without_a_result
+    output = publish(store, prepared, chosen, tmp_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:151: in publish
+    return publication.publish_selected_utility_result(store, source_ref=prepared["source_ref"], prepared=prepared,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:330: in publish_selected_utility_result
+    _error("selected_projection_worker_failed")
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:49: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_selected_projection_worker_failed
+_ test_missing_essential_capture_is_processed_without_a_result[create_sequence_database-omit2] _
+source_snapshot/tests/test_native_blast_utility_publication_631.py:242: in test_missing_essential_capture_is_processed_without_a_result
+    output = publish(store, prepared, chosen, tmp_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:151: in publish
+    return publication.publish_selected_utility_result(store, source_ref=prepared["source_ref"], prepared=prepared,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:330: in publish_selected_utility_result
+    _error("selected_projection_worker_failed")
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:49: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_selected_projection_worker_failed
+_ test_retained_native_stream_through_controlled_capture[metadata_dna_v5-metadata-expected3] _
+source_snapshot/tests/test_native_blast_utility_publication_631.py:301: in test_retained_native_stream_through_controlled_capture
+    assert [row["value"] for row in output["database_fields"]] == expected
+E   assert [31, 3] == [3, 31]
+E     
+E     At index 0 diff: 31 != 3
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_blast_utility_publication_631.py::test_missing_essential_capture_is_processed_without_a_result[extract_sequences-omit0]
+FAILED source_snapshot/tests/test_native_blast_utility_publication_631.py::test_missing_essential_capture_is_processed_without_a_result[integrity-omit1]
+FAILED source_snapshot/tests/test_native_blast_utility_publication_631.py::test_missing_essential_capture_is_processed_without_a_result[create_sequence_database-omit2]
+FAILED source_snapshot/tests/test_native_blast_utility_publication_631.py::test_retained_native_stream_through_controlled_capture[metadata_dna_v5-metadata-expected3]
+4 failed, 28 passed in 143.82s (0:02:23)

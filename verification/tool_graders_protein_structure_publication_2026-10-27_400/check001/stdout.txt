@@ -1,0 +1,96 @@
+..................................F..................................... [ 92%]
+......                                                                   [100%]
+=================================== FAILURES ===================================
+_____________ test_reference_requires_exact_ascii_sequence_bytes[] _____________
+
+value = {'accession': 'native_protein_structure_944496af95b9bb0d99f288227063a3b3e8a707541669c430dba0aac883f9df24', 'artifact_r...t_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', ...], 'provider': 'episode.execution_result', ...}
+schema = {'type': 'object', 'properties': {'provider': {'type': 'string', 'minLength': 1, 'maxLength': 200, 'pattern': '^[A-Za-...ired': ['provider', 'accession', 'uri', 'artifact_ref', 'text_ref', 'request_ref', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+source_snapshot/gene_annotation_episode/domain.py:584: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'accession': {'anyOf': [{'maxLength': 200, ...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'accession': 'native_protein_structure_944496af95b9bb0d99f288227063a3b3e8a707541669c430dba0aac883f9df24', 'artifact_...e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', ...], 'provider': 'episode.execution_result', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: ['artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b', 'artifact_f5ecb04ca5826c82e623e68f6d0fef744a053aa82c87ae6aeda510196cab71a4', 'artifact_32de78bf33a3ab99b59c7ef07db715576671a6788c074c99d6649027a2bfc49c', 'artifact_df46d452df3a7fa822058a04d85642ddbab7e2f657867284d567ff95362e5fdc', 'artifact_3634be08460d7f7a63b71db2d9374779498612db0d8074d5b2e7fb12820c22d8', 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5', 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'] has non-unique elements
+E           
+E           Failed validating 'uniqueItems' in schema['properties']['auxiliary_artifact_refs']:
+E               {'description': 'Optional host-retained native input, diagnostic and '
+E                               'metadata artifacts. These preserve operational '
+E                               'provenance, never biological subjects or additional '
+E                               'targets.',
+E                'items': {'description': 'An existing persistent record ID. In a '
+E                                         'reasoning commit only, @name refers to an '
+E                                         'earlier successfully processed row declared '
+E                                         'with alias name in this same commit. '
+E                                         'Ordinary tool calls require existing '
+E                                         'persistent IDs.',
+E                          'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$',
+E                          'type': 'string'},
+E                'type': 'array',
+E                'uniqueItems': True}
+E           
+E           On instance['auxiliary_artifact_refs']:
+E               ['artifact_0d2f22dea65954b61826b177d40709607d7cdaa65e76226fb52ac0d0ea643f1b',
+E                'artifact_f5ecb04ca5826c82e623e68f6d0fef744a053aa82c87ae6aeda510196cab71a4',
+E                'artifact_32de78bf33a3ab99b59c7ef07db715576671a6788c074c99d6649027a2bfc49c',
+E                'artifact_df46d452df3a7fa822058a04d85642ddbab7e2f657867284d567ff95362e5fdc',
+E                'artifact_3634be08460d7f7a63b71db2d9374779498612db0d8074d5b2e7fb12820c22d8',
+E                'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+E                'artifact_964357f50de3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652',
+E                'artifact_54135a3899bc02b3e9cc8fa56db962bc4e879b05babd555f5ae85e143d53f6c5',
+E                'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855']
+
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_publication_2026-10-27_400/check001/temporary/pytest/test_reference_requires_exact_6')
+raw = b''
+
+    @pytest.mark.parametrize("raw", [b"AGST\n", b">header\nAGST", b"agst", b"GGST", b"AGSTX", b"AG\xc3\x9fT", b""])
+    def test_reference_requires_exact_ascii_sequence_bytes(tmp_path, raw):
+        with Store(tmp_path / "store") as store:
+            row = case(store)
+            supplied = extracted(store, row)
+            source_ref = publish_source(store, row)
+            supplied["sequence_file"] = retain(store, raw, "ascii_protein_sequence_v1")
+            # Explicitly listed malformed artifacts still cannot substitute bytes.
+>           source_ref = source_with(store, source_ref, auxiliary_artifact_refs=[*store.get(source_ref)["auxiliary_artifact_refs"], supplied["sequence_file"]["artifact_ref"]])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_record_publication.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_record_publication.py:95: in source_with
+    return store.put("source", {**payload(store.get(source_ref)), **updates}, origin="tool")["id"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:1530: in put
+    self._validate_record(kind, record, origin)
+source_snapshot/gene_annotation_episode/state.py:701: in _validate_record
+    validate_schema(data, RECORD_SCHEMAS[kind])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'accession': 'native_protein_structure_944496af95b9bb0d99f288227063a3b3e8a707541669c430dba0aac883f9df24', 'artifact_r...t_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', ...], 'provider': 'episode.execution_result', ...}
+schema = {'type': 'object', 'properties': {'provider': {'type': 'string', 'minLength': 1, 'maxLength': 200, 'pattern': '^[A-Za-...ired': ['provider', 'accession', 'uri', 'artifact_ref', 'text_ref', 'request_ref', ...], 'additionalProperties': False}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+source_snapshot/gene_annotation_episode/domain.py:587: ContractError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_record_publication.py::test_reference_requires_exact_ascii_sequence_bytes[]
+1 failed, 77 passed in 287.46s (0:04:47)

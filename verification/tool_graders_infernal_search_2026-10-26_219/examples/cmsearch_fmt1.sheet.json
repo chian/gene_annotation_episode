@@ -1,0 +1,1953 @@
+{
+  "schema": "infernal_search_sheet_v1",
+  "operation": {
+    "program": "cmsearch",
+    "native_version": "1.1.5",
+    "settings": {
+      "recorded_native_option_argv": [
+        "--cpu",
+        "1",
+        "--fmt",
+        "1",
+        "--tblout",
+        "hits.tbl",
+        "--notextw",
+        "--verbose",
+        "-E",
+        "10",
+        "--incE",
+        "1e-30"
+      ]
+    }
+  },
+  "artifacts": [
+    {
+      "artifact_id": "cmsearch_fmt1",
+      "format": "infernal_tblout",
+      "table_format": 1,
+      "complete": true,
+      "content": "#target name         accession query name           accession mdl mdl from   mdl to seq from   seq to strand trunc pass   gc  bias  score   E-value inc description of target\n#------------------- --------- -------------------- --------- --- -------- -------- -------- -------- ------ ----- ---- ---- ----- ------ --------- --- ---------------------\nnative_forward       -         tRNA5                -          cm        1       72        1       72      +    no    1 0.50   0.0   71.4   1.9e-22 ?   -\nnative_reverse       -         tRNA5                -          cm        1       72       72        1      -    no    1 0.50   0.0   71.4   1.9e-22 ?   -\nnative_repeat        -         tRNA5                -          cm        1       72        1       72      +    no    1 0.50   0.0   71.4   1.9e-22 ?   -\nnative_repeat        -         tRNA5                -          cm        1       72      123      194      +    no    1 0.50   0.0   71.4   1.9e-22 ?   -\nnative_second        -         tRNA5                -          cm        1       72        1       73      +    no    1 0.67   0.0   68.7   1.3e-21 ?   -\nnative_second        -         tRNA5-hand           -          cm        1       74        1       73      +    no    1 0.67   0.0   70.5   6.2e-22 ?   -\nnative_forward       -         tRNA5-hand           -          cm        1       74        1       72      +    no    1 0.50   0.0   69.2   1.6e-21 ?   -\nnative_reverse       -         tRNA5-hand           -          cm        1       74       72        1      -    no    1 0.50   0.0   69.2   1.6e-21 ?   -\nnative_repeat        -         tRNA5-hand           -          cm        1       74        1       72      +    no    1 0.50   0.0   69.2   1.6e-21 ?   -\nnative_repeat        -         tRNA5-hand           -          cm        1       74      123      194      +    no    1 0.50   0.0   69.2   1.6e-21 ?   -\n#\n# Program:         cmsearch\n# Version:         1.1.5 (Sep 2023)\n# Pipeline mode:   SEARCH\n# Query file:      two_models.cm\n# Target file:     tiny.fa\n# Option settings: /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch --tblout hits.tbl --fmt 1 --notextw --verbose -E 10 --incE 1e-30 --cpu 1 two_models.cm tiny.fa \n# Current dir:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmsearch_fmt1\n# Date:            Sun Oct 25 20:01:48 2026\n# [ok]\n",
+      "artifact_index": 0,
+      "headers": [
+        {
+          "line": 1,
+          "text": "#target name         accession query name           accession mdl mdl from   mdl to seq from   seq to strand trunc pass   gc  bias  score   E-value inc description of target"
+        },
+        {
+          "line": 2,
+          "text": "#------------------- --------- -------------------- --------- --- -------- -------- -------- -------- ------ ----- ---- ---- ----- ------ --------- --- ---------------------"
+        },
+        {
+          "line": 13,
+          "text": "#"
+        },
+        {
+          "line": 14,
+          "text": "# Program:         cmsearch"
+        },
+        {
+          "line": 15,
+          "text": "# Version:         1.1.5 (Sep 2023)"
+        },
+        {
+          "line": 16,
+          "text": "# Pipeline mode:   SEARCH"
+        },
+        {
+          "line": 17,
+          "text": "# Query file:      two_models.cm"
+        },
+        {
+          "line": 18,
+          "text": "# Target file:     tiny.fa"
+        },
+        {
+          "line": 19,
+          "text": "# Option settings: /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch --tblout hits.tbl --fmt 1 --notextw --verbose -E 10 --incE 1e-30 --cpu 1 two_models.cm tiny.fa "
+        },
+        {
+          "line": 20,
+          "text": "# Current dir:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmsearch_fmt1"
+        },
+        {
+          "line": 21,
+          "text": "# Date:            Sun Oct 25 20:01:48 2026"
+        },
+        {
+          "line": 22,
+          "text": "# [ok]"
+        }
+      ],
+      "footer": {
+        "fields": {
+          "Program": [
+            {
+              "line": 14,
+              "value": "cmsearch"
+            }
+          ],
+          "Version": [
+            {
+              "line": 15,
+              "value": "1.1.5 (Sep 2023)"
+            }
+          ],
+          "Pipeline mode": [
+            {
+              "line": 16,
+              "value": "SEARCH"
+            }
+          ],
+          "Query file": [
+            {
+              "line": 17,
+              "value": "two_models.cm"
+            }
+          ],
+          "Target file": [
+            {
+              "line": 18,
+              "value": "tiny.fa"
+            }
+          ],
+          "Option settings": [
+            {
+              "line": 19,
+              "value": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch --tblout hits.tbl --fmt 1 --notextw --verbose -E 10 --incE 1e-30 --cpu 1 two_models.cm tiny.fa"
+            }
+          ],
+          "Current dir": [
+            {
+              "line": 20,
+              "value": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmsearch_fmt1"
+            }
+          ],
+          "Date": [
+            {
+              "line": 21,
+              "value": "Sun Oct 25 20:01:48 2026"
+            }
+          ]
+        },
+        "complete_marker_lines": [
+          22
+        ]
+      },
+      "rows": [
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 3
+          },
+          "text": "native_forward       -         tRNA5                -          cm        1       72        1       72      +    no    1 0.50   0.0   71.4   1.9e-22 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_forward",
+            "-",
+            "tRNA5",
+            "-",
+            "cm",
+            "1",
+            "72",
+            "1",
+            "72",
+            "+",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "71.4",
+            "1.9e-22",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,3]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 4
+          },
+          "text": "native_reverse       -         tRNA5                -          cm        1       72       72        1      -    no    1 0.50   0.0   71.4   1.9e-22 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_reverse",
+            "-",
+            "tRNA5",
+            "-",
+            "cm",
+            "1",
+            "72",
+            "72",
+            "1",
+            "-",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "71.4",
+            "1.9e-22",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,4]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 5
+          },
+          "text": "native_repeat        -         tRNA5                -          cm        1       72        1       72      +    no    1 0.50   0.0   71.4   1.9e-22 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_repeat",
+            "-",
+            "tRNA5",
+            "-",
+            "cm",
+            "1",
+            "72",
+            "1",
+            "72",
+            "+",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "71.4",
+            "1.9e-22",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,5]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 6
+          },
+          "text": "native_repeat        -         tRNA5                -          cm        1       72      123      194      +    no    1 0.50   0.0   71.4   1.9e-22 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_repeat",
+            "-",
+            "tRNA5",
+            "-",
+            "cm",
+            "1",
+            "72",
+            "123",
+            "194",
+            "+",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "71.4",
+            "1.9e-22",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,6]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 7
+          },
+          "text": "native_second        -         tRNA5                -          cm        1       72        1       73      +    no    1 0.67   0.0   68.7   1.3e-21 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_second",
+            "-",
+            "tRNA5",
+            "-",
+            "cm",
+            "1",
+            "72",
+            "1",
+            "73",
+            "+",
+            "no",
+            "1",
+            "0.67",
+            "0.0",
+            "68.7",
+            "1.3e-21",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,7]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 8
+          },
+          "text": "native_second        -         tRNA5-hand           -          cm        1       74        1       73      +    no    1 0.67   0.0   70.5   6.2e-22 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_second",
+            "-",
+            "tRNA5-hand",
+            "-",
+            "cm",
+            "1",
+            "74",
+            "1",
+            "73",
+            "+",
+            "no",
+            "1",
+            "0.67",
+            "0.0",
+            "70.5",
+            "6.2e-22",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,8]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 9
+          },
+          "text": "native_forward       -         tRNA5-hand           -          cm        1       74        1       72      +    no    1 0.50   0.0   69.2   1.6e-21 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_forward",
+            "-",
+            "tRNA5-hand",
+            "-",
+            "cm",
+            "1",
+            "74",
+            "1",
+            "72",
+            "+",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "69.2",
+            "1.6e-21",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,9]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 10
+          },
+          "text": "native_reverse       -         tRNA5-hand           -          cm        1       74       72        1      -    no    1 0.50   0.0   69.2   1.6e-21 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_reverse",
+            "-",
+            "tRNA5-hand",
+            "-",
+            "cm",
+            "1",
+            "74",
+            "72",
+            "1",
+            "-",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "69.2",
+            "1.6e-21",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,10]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 11
+          },
+          "text": "native_repeat        -         tRNA5-hand           -          cm        1       74        1       72      +    no    1 0.50   0.0   69.2   1.6e-21 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_repeat",
+            "-",
+            "tRNA5-hand",
+            "-",
+            "cm",
+            "1",
+            "74",
+            "1",
+            "72",
+            "+",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "69.2",
+            "1.6e-21",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,11]",
+          "status": "available"
+        },
+        {
+          "locator": {
+            "artifact_id": "cmsearch_fmt1",
+            "artifact_index": 0,
+            "line": 12
+          },
+          "text": "native_repeat        -         tRNA5-hand           -          cm        1       74      123      194      +    no    1 0.50   0.0   69.2   1.6e-21 ?   -",
+          "issues": [],
+          "tokens": [
+            "native_repeat",
+            "-",
+            "tRNA5-hand",
+            "-",
+            "cm",
+            "1",
+            "74",
+            "123",
+            "194",
+            "+",
+            "no",
+            "1",
+            "0.50",
+            "0.0",
+            "69.2",
+            "1.6e-21",
+            "?",
+            "-"
+          ],
+          "hit_id": "[\"cmsearch_fmt1\",0,12]",
+          "status": "available"
+        }
+      ],
+      "issues": [],
+      "sha256_utf8": "014a87d21ddf4762003677c981fc507818aa585bf656443a8f95b6a019bfc657",
+      "native_program": "cmsearch",
+      "effective_program": "cmsearch",
+      "native_version": "1.1.5",
+      "effective_version": "1.1.5",
+      "observed_table_format": 1,
+      "effective_table_format": 1,
+      "table_format_basis": "native_header",
+      "native_complete": true,
+      "effective_complete": true,
+      "native_option_tokens": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch",
+        "--tblout",
+        "hits.tbl",
+        "--fmt",
+        "1",
+        "--notextw",
+        "--verbose",
+        "-E",
+        "10",
+        "--incE",
+        "1e-30",
+        "--cpu",
+        "1",
+        "two_models.cm",
+        "tiny.fa"
+      ],
+      "omitted_overlaps": false,
+      "retained_population_complete": true,
+      "status": "available"
+    }
+  ],
+  "hits": [
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,3]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 3
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_forward",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 72,
+      "sequence_from": 1,
+      "sequence_to": 72,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 71.4,
+      "evalue": 1.9e-22,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_forward",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "72",
+        "sequence_from": "1",
+        "sequence_to": "72",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "71.4",
+        "evalue": "1.9e-22",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 0
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 0
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_forward",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 0
+        }
+      },
+      "model": {
+        "name": "tRNA5",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 72,
+      "sequence_length": 72,
+      "model_interval": [
+        0,
+        72
+      ],
+      "sequence_interval": [
+        0,
+        72
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,4]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 4
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_reverse",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 72,
+      "sequence_from": 72,
+      "sequence_to": 1,
+      "strand": "-",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 71.4,
+      "evalue": 1.9e-22,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_reverse",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "72",
+        "sequence_from": "72",
+        "sequence_to": "1",
+        "strand": "-",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "71.4",
+        "evalue": "1.9e-22",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 1
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 0
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_reverse",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 1,
+          "candidate_indices": [
+            1
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 1
+        }
+      },
+      "model": {
+        "name": "tRNA5",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 72,
+      "sequence_length": 72,
+      "model_interval": [
+        0,
+        72
+      ],
+      "sequence_interval": [
+        0,
+        72
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,5]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 5
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_repeat",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 72,
+      "sequence_from": 1,
+      "sequence_to": 72,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 71.4,
+      "evalue": 1.9e-22,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_repeat",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "72",
+        "sequence_from": "1",
+        "sequence_to": "72",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "71.4",
+        "evalue": "1.9e-22",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 194,
+          "value": 194,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 2
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 0
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_repeat",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 2,
+          "candidate_indices": [
+            2
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 2
+        }
+      },
+      "model": {
+        "name": "tRNA5",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 72,
+      "sequence_length": 194,
+      "model_interval": [
+        0,
+        72
+      ],
+      "sequence_interval": [
+        0,
+        72
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,6]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 6
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_repeat",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 72,
+      "sequence_from": 123,
+      "sequence_to": 194,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 71.4,
+      "evalue": 1.9e-22,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_repeat",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "72",
+        "sequence_from": "123",
+        "sequence_to": "194",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "71.4",
+        "evalue": "1.9e-22",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 194,
+          "value": 194,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 2
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 0
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_repeat",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 2,
+          "candidate_indices": [
+            2
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 2
+        }
+      },
+      "model": {
+        "name": "tRNA5",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 72,
+      "sequence_length": 194,
+      "model_interval": [
+        0,
+        72
+      ],
+      "sequence_interval": [
+        122,
+        194
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,7]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 7
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_second",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 72,
+      "sequence_from": 1,
+      "sequence_to": 73,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.67,
+      "bias_bits": 0.0,
+      "bitscore": 68.7,
+      "evalue": 1.3e-21,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_second",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "72",
+        "sequence_from": "1",
+        "sequence_to": "73",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.67",
+        "bias_bits": "0.0",
+        "bitscore": "68.7",
+        "evalue": "1.3e-21",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 73,
+          "value": 73,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 3
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 0
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_second",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 3,
+          "candidate_indices": [
+            3
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 3
+        }
+      },
+      "model": {
+        "name": "tRNA5",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 72,
+      "sequence_length": 73,
+      "model_interval": [
+        0,
+        72
+      ],
+      "sequence_interval": [
+        0,
+        73
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,8]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 8
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_second",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5-hand",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 74,
+      "sequence_from": 1,
+      "sequence_to": 73,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.67,
+      "bias_bits": 0.0,
+      "bitscore": 70.5,
+      "evalue": 6.2e-22,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_second",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5-hand",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "74",
+        "sequence_from": "1",
+        "sequence_to": "73",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.67",
+        "bias_bits": "0.0",
+        "bitscore": "70.5",
+        "evalue": "6.2e-22",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 73,
+          "value": 73,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 3
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 74,
+          "value": 74,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 1
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_second",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 3,
+          "candidate_indices": [
+            3
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 3
+        }
+      },
+      "model": {
+        "name": "tRNA5-hand",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 1,
+          "candidate_indices": [
+            1
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 74,
+      "sequence_length": 73,
+      "model_interval": [
+        0,
+        74
+      ],
+      "sequence_interval": [
+        0,
+        73
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,9]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 9
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_forward",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5-hand",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 74,
+      "sequence_from": 1,
+      "sequence_to": 72,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 69.2,
+      "evalue": 1.6e-21,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_forward",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5-hand",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "74",
+        "sequence_from": "1",
+        "sequence_to": "72",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "69.2",
+        "evalue": "1.6e-21",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 0
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 74,
+          "value": 74,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 1
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_forward",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 0
+        }
+      },
+      "model": {
+        "name": "tRNA5-hand",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 1,
+          "candidate_indices": [
+            1
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 74,
+      "sequence_length": 72,
+      "model_interval": [
+        0,
+        74
+      ],
+      "sequence_interval": [
+        0,
+        72
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,10]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 10
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_reverse",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5-hand",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 74,
+      "sequence_from": 72,
+      "sequence_to": 1,
+      "strand": "-",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 69.2,
+      "evalue": 1.6e-21,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_reverse",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5-hand",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "74",
+        "sequence_from": "72",
+        "sequence_to": "1",
+        "strand": "-",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "69.2",
+        "evalue": "1.6e-21",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 72,
+          "value": 72,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 1
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 74,
+          "value": 74,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 1
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_reverse",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 1,
+          "candidate_indices": [
+            1
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 1
+        }
+      },
+      "model": {
+        "name": "tRNA5-hand",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 1,
+          "candidate_indices": [
+            1
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 74,
+      "sequence_length": 72,
+      "model_interval": [
+        0,
+        74
+      ],
+      "sequence_interval": [
+        0,
+        72
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,11]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 11
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_repeat",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5-hand",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 74,
+      "sequence_from": 1,
+      "sequence_to": 72,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 69.2,
+      "evalue": 1.6e-21,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_repeat",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5-hand",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "74",
+        "sequence_from": "1",
+        "sequence_to": "72",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "69.2",
+        "evalue": "1.6e-21",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 194,
+          "value": 194,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 2
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 74,
+          "value": 74,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 1
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_repeat",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 2,
+          "candidate_indices": [
+            2
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 2
+        }
+      },
+      "model": {
+        "name": "tRNA5-hand",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 1,
+          "candidate_indices": [
+            1
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 74,
+      "sequence_length": 194,
+      "model_interval": [
+        0,
+        74
+      ],
+      "sequence_interval": [
+        0,
+        72
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    },
+    {
+      "hit_id": "[\"cmsearch_fmt1\",0,12]",
+      "locator": {
+        "artifact_id": "cmsearch_fmt1",
+        "artifact_index": 0,
+        "line": 12
+      },
+      "table_format": 1,
+      "program": "cmsearch",
+      "native_target_name": "native_repeat",
+      "native_target_accession": null,
+      "native_query_name": "tRNA5-hand",
+      "native_query_accession": null,
+      "algorithm": "cm",
+      "model_from": 1,
+      "model_to": 74,
+      "sequence_from": 123,
+      "sequence_to": 194,
+      "strand": "+",
+      "truncation": "no",
+      "pass": 1,
+      "gc_fraction": 0.5,
+      "bias_bits": 0.0,
+      "bitscore": 69.2,
+      "evalue": 1.6e-21,
+      "inclusion": "?",
+      "native_model_length": null,
+      "native_sequence_length": null,
+      "idx": null,
+      "clan": null,
+      "olp": null,
+      "anyidx": null,
+      "anyfrct1": null,
+      "anyfrct2": null,
+      "winidx": null,
+      "winfrct1": null,
+      "winfrct2": null,
+      "description": "-",
+      "native_tokens": {
+        "native_target_name": "native_repeat",
+        "native_target_accession": "-",
+        "native_query_name": "tRNA5-hand",
+        "native_query_accession": "-",
+        "algorithm": "cm",
+        "model_from": "1",
+        "model_to": "74",
+        "sequence_from": "123",
+        "sequence_to": "194",
+        "strand": "+",
+        "truncation": "no",
+        "pass": "1",
+        "gc_fraction": "0.50",
+        "bias_bits": "0.0",
+        "bitscore": "69.2",
+        "evalue": "1.6e-21",
+        "inclusion": "?",
+        "description": "-"
+      },
+      "issues": [],
+      "query_list_locator": null,
+      "query_list_boundary_observed": false,
+      "lengths": {
+        "sequence": {
+          "native": null,
+          "supplied": 194,
+          "value": 194,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 2
+          }
+        },
+        "model": {
+          "native": null,
+          "supplied": 74,
+          "value": 74,
+          "status": "validated",
+          "provenance": {
+            "native": null,
+            "metadata_index": 1
+          }
+        }
+      },
+      "sequence": {
+        "name": "native_repeat",
+        "accession": null,
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 2,
+          "candidate_indices": [
+            2
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        },
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 2
+        }
+      },
+      "model": {
+        "name": "tRNA5-hand",
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 1,
+          "candidate_indices": [
+            1
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "consensus_length": 74,
+      "sequence_length": 194,
+      "model_interval": [
+        0,
+        74
+      ],
+      "sequence_interval": [
+        122,
+        194
+      ],
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open"
+      },
+      "population_complete": true,
+      "status": "available"
+    }
+  ],
+  "sequence_metadata": [
+    {
+      "name": "native_forward",
+      "sequence": "GGAGCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGCCCCA",
+      "length": 72
+    },
+    {
+      "name": "native_reverse",
+      "sequence": "UGGGGCUAAAGGGAAUCGAACCCAUAACCUUUUGGAUGUCAGCCAAACGCUCUGCCAUUGAGCUAUAGCUCC",
+      "length": 72
+    },
+    {
+      "name": "native_repeat",
+      "sequence": "GGAGCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGGAGCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGCCCCA",
+      "length": 194
+    },
+    {
+      "name": "native_second",
+      "sequence": "GGGCCCGUAGCUCAGUUGGGAGAGCGCUGCCCUUGCAAGGCAGAGGCCCCGGGUUCAAAUCCCGGUGGGUCCA",
+      "length": 73
+    },
+    {
+      "name": "no_match",
+      "sequence": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "length": 160
+    }
+  ],
+  "model_metadata": [
+    {
+      "name": "tRNA5",
+      "consensus_length": 72
+    },
+    {
+      "name": "tRNA5-hand",
+      "consensus_length": 74
+    }
+  ],
+  "metadata_validation": {
+    "sequence": [
+      {
+        "metadata_index": 0,
+        "supplied": {
+          "name": "native_forward",
+          "sequence": "GGAGCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGCCCCA",
+          "length": 72
+        },
+        "length": 72,
+        "status": "available",
+        "issues": []
+      },
+      {
+        "metadata_index": 1,
+        "supplied": {
+          "name": "native_reverse",
+          "sequence": "UGGGGCUAAAGGGAAUCGAACCCAUAACCUUUUGGAUGUCAGCCAAACGCUCUGCCAUUGAGCUAUAGCUCC",
+          "length": 72
+        },
+        "length": 72,
+        "status": "available",
+        "issues": []
+      },
+      {
+        "metadata_index": 2,
+        "supplied": {
+          "name": "native_repeat",
+          "sequence": "GGAGCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGGAGCUAUAGCUCAAUGGCAGAGCGUUUGGCUGACAUCCAAAAGGUUAUGGGUUCGAUUCCCUUUAGCCCCA",
+          "length": 194
+        },
+        "length": 194,
+        "status": "available",
+        "issues": []
+      },
+      {
+        "metadata_index": 3,
+        "supplied": {
+          "name": "native_second",
+          "sequence": "GGGCCCGUAGCUCAGUUGGGAGAGCGCUGCCCUUGCAAGGCAGAGGCCCCGGGUUCAAAUCCCGGUGGGUCCA",
+          "length": 73
+        },
+        "length": 73,
+        "status": "available",
+        "issues": []
+      },
+      {
+        "metadata_index": 4,
+        "supplied": {
+          "name": "no_match",
+          "sequence": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "length": 160
+        },
+        "length": 160,
+        "status": "available",
+        "issues": []
+      }
+    ],
+    "model": [
+      {
+        "metadata_index": 0,
+        "supplied": {
+          "name": "tRNA5",
+          "consensus_length": 72
+        },
+        "length": 72,
+        "status": "available",
+        "issues": []
+      },
+      {
+        "metadata_index": 1,
+        "supplied": {
+          "name": "tRNA5-hand",
+          "consensus_length": 74
+        },
+        "length": 74,
+        "status": "available",
+        "issues": []
+      }
+    ]
+  },
+  "issues": [],
+  "status": "available",
+  "statistical_limitations": [
+    "Native scores are model scores, not annotation probabilities.",
+    "E-values are per query and depend on native search space; returned hits do not define database size.",
+    "Table spans do not establish paired residue coverage, identity or aligned correspondence.",
+    "Printed score/bias precision is one decimal, GC two decimals and E-value two significant digits in 1.1.5.",
+    "Format-2 overlap fractions are rounded to three decimal places in 1.1.5.",
+    "Distinct artifacts, models and hits are not asserted to be independent evidence.",
+    "Infernal 1.1.5 inclusion code uses reporting-threshold mode; mixed E-value/bit-score modes may ignore the requested inclusion mode. Native inc is retained unchanged."
+  ],
+  "no_hit_meaning": "no_reported_match_under_recorded_settings; not biological absence"
+}

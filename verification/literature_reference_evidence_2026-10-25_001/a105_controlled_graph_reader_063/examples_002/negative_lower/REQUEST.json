@@ -1,0 +1,102 @@
+{
+  "version": "controlled_response_rate_figure_selection_v1",
+  "images": [
+    {
+      "image_id": "panel",
+      "source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "original_source_ref": "source_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "mapping": null
+    }
+  ],
+  "measurement": {
+    "kind": "linear_bar",
+    "image_id": "panel",
+    "terminal_edge": "lower",
+    "bar_selection": {
+      "roi": {
+        "left": 10,
+        "top": 5,
+        "right": 20,
+        "bottom": 105
+      },
+      "rgb_min": [
+        0,
+        0,
+        0
+      ],
+      "rgb_max": [
+        30,
+        30,
+        30
+      ],
+      "minimum_row_fraction": 0.5,
+      "minimum_run_rows": 2,
+      "edge_tolerance_pixels": 0.5
+    },
+    "axis": {
+      "first": {
+        "pixel": 20,
+        "tick": {
+          "status": "exact",
+          "candidates": [
+            {
+              "kind": "text",
+              "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+              "representation": "text",
+              "start": 4,
+              "end": 5,
+              "quote": "4"
+            }
+          ],
+          "fragments": []
+        }
+      },
+      "second": {
+        "pixel": 60,
+        "tick": {
+          "status": "exact",
+          "candidates": [
+            {
+              "kind": "text",
+              "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+              "representation": "text",
+              "start": 14,
+              "end": 15,
+              "quote": "0"
+            }
+          ],
+          "fragments": []
+        }
+      },
+      "unit": {
+        "status": "exact",
+        "candidates": [
+          {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 24,
+            "end": 33,
+            "quote": "µmol/min"
+          }
+        ],
+        "fragments": []
+      },
+      "scale": {
+        "status": "known",
+        "kind": "linear",
+        "basis": "source_text_literal",
+        "witnesses": [
+          {
+            "kind": "text",
+            "source_ref": "source_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "representation": "text",
+            "start": 42,
+            "end": 53,
+            "quote": "linear axis"
+          }
+        ]
+      }
+    }
+  }
+}

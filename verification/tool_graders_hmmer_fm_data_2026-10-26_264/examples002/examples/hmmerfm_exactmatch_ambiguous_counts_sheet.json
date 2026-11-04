@@ -1,0 +1,950 @@
+{
+  "schema": "hmmer_fm_sheet_v1",
+  "operation": {
+    "program": "hmmerfm-exactmatch",
+    "mode": "count_only",
+    "engine_version": "3.4",
+    "settings": {
+      "--fwd_only": true,
+      "--count_only": true,
+      "--out": "hits.txt"
+    }
+  },
+  "artifact_occurrences": [
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt",
+      "direction": "input",
+      "role": "queries",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt",
+      "sha256": "a25563e8e3e7b799089f9d9e29541608727c49d7002e01adc0561caf01bbd7a4",
+      "size_bytes": 18,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa",
+      "direction": "input",
+      "role": "source_sequences",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa",
+      "sha256": "590b818ca84729edca60d344b69485f9a9a354338745f7f6e1afe45935173cc2",
+      "size_bytes": 36,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm",
+      "direction": "input",
+      "role": "fm_database",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm",
+      "sha256": "a0440cc74dc3ad9dc955daf786f8882e26dd58b88f9125fe00fc3750effb8443",
+      "size_bytes": 325,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/hits.txt",
+      "direction": "output",
+      "role": "hits",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/hits.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log",
+      "direction": "output",
+      "role": "stdout",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log",
+      "sha256": "28ac3a39622e57c6bb8d033a3fbba620313063d43dd5bfcc244cf138496d7462",
+      "size_bytes": 1020,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log",
+      "direction": "output",
+      "role": "stderr",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log",
+      "sha256": "d418c0c0dcbd3a03ffa72c1413c66f4813f3c657c97f1e0c8b2a28a4bcc3fd1d",
+      "size_bytes": 109,
+      "completeness": "complete"
+    }
+  ],
+  "producer_contract": {
+    "format": "hmmer_fm_3_4",
+    "engine_version": "3.4",
+    "byte_order": "little",
+    "uint8_bytes": 1,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "int32_bytes": 4
+  },
+  "source_binding": null,
+  "database": {
+    "schema": "hmmer_fm_extraction_v1",
+    "occurrence": {
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm",
+      "direction": "input",
+      "role": "fm_database",
+      "ordinal": 0,
+      "artifact_ref": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm",
+      "sha256": "a0440cc74dc3ad9dc955daf786f8882e26dd58b88f9125fe00fc3750effb8443",
+      "size_bytes": 325,
+      "completeness": "complete"
+    },
+    "producer_contract": {
+      "format": "hmmer_fm_3_4",
+      "engine_version": "3.4",
+      "byte_order": "little",
+      "uint8_bytes": 1,
+      "uint16_bytes": 2,
+      "uint32_bytes": 4,
+      "uint64_bytes": 8,
+      "int32_bytes": 4
+    },
+    "metadata": {
+      "fwd_only": 0,
+      "alph_type": 0,
+      "alph_size": 4,
+      "charBits": 2,
+      "freq_SA": 8,
+      "freq_cnt_sb": 65536,
+      "freq_cnt_b": 256,
+      "block_count": 1,
+      "seq_count": 2,
+      "ambiguity_range_count": 2,
+      "total_char_count": 18,
+      "alphabet_symbols": "ACGT",
+      "storage_encoding": "dna_2bit",
+      "dna_reader_compatibility": "compatible",
+      "actual_bytes": 325,
+      "header_locator": {
+        "byte_start": 0,
+        "byte_end": 34,
+        "line_start": null,
+        "line_end": null,
+        "record_ordinal": null
+      }
+    },
+    "segments": [
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#segment/0",
+        "locator": {
+          "byte_start": 34,
+          "byte_end": 78,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 0
+        },
+        "target_id": 0,
+        "target_start": 1,
+        "fm_start": 0,
+        "length": 10,
+        "name_length": 6,
+        "acc_length": 0,
+        "source_length": 6,
+        "desc_length": 0,
+        "name": "ambig0",
+        "acc": "",
+        "source": "ambig0",
+        "desc": ""
+      },
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#segment/1",
+        "locator": {
+          "byte_start": 78,
+          "byte_end": 122,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 1
+        },
+        "target_id": 1,
+        "target_start": 1,
+        "fm_start": 10,
+        "length": 8,
+        "name_length": 6,
+        "acc_length": 0,
+        "source_length": 6,
+        "desc_length": 0,
+        "name": "ambig1",
+        "acc": "",
+        "source": "ambig1",
+        "desc": ""
+      }
+    ],
+    "ambiguity_ranges": [
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#ambiguity/0",
+        "locator": {
+          "byte_start": 122,
+          "byte_end": 130,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 0
+        },
+        "lower": 4,
+        "upper": 5
+      },
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#ambiguity/1",
+        "locator": {
+          "byte_start": 130,
+          "byte_end": 138,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 1
+        },
+        "lower": 10,
+        "upper": 13
+      }
+    ],
+    "blocks": [
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#block/0/forward",
+        "locator": {
+          "byte_start": 138,
+          "byte_end": 240,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 0
+        },
+        "block_ordinal": 0,
+        "section": "forward",
+        "header": {
+          "N": 19,
+          "term_loc": 17,
+          "seq_offset": 0,
+          "ambig_offset": 0,
+          "overlap": 0,
+          "seq_cnt": 2,
+          "ambig_cnt": 2
+        },
+        "arrays": {
+          "T": {
+            "values": [
+              27,
+              161,
+              179,
+              177,
+              176
+            ],
+            "expected_count": 5,
+            "element_bytes": 1,
+            "row_width": 1,
+            "complete": true,
+            "locator": {
+              "byte_start": 170,
+              "byte_end": 175,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "BWT": {
+            "values": [
+              23,
+              106,
+              252,
+              234,
+              0
+            ],
+            "expected_count": 5,
+            "element_bytes": 1,
+            "row_width": 1,
+            "complete": true,
+            "locator": {
+              "byte_start": 175,
+              "byte_end": 180,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "SA": {
+            "values": [
+              0,
+              15,
+              8
+            ],
+            "expected_count": 3,
+            "element_bytes": 4,
+            "row_width": 1,
+            "complete": true,
+            "locator": {
+              "byte_start": 180,
+              "byte_end": 192,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "counters_b": {
+            "values": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                5,
+                3,
+                6,
+                5
+              ]
+            ],
+            "expected_count": 2,
+            "element_bytes": 2,
+            "row_width": 4,
+            "complete": true,
+            "locator": {
+              "byte_start": 192,
+              "byte_end": 208,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "counters_sb": {
+            "values": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                5,
+                3,
+                6,
+                5
+              ]
+            ],
+            "expected_count": 2,
+            "element_bytes": 4,
+            "row_width": 4,
+            "complete": true,
+            "locator": {
+              "byte_start": 208,
+              "byte_end": 240,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          }
+        },
+        "decoded": {
+          "text": "ACGTGGACGTATGTACGTA",
+          "bwt": "ACCTCGGGTTTATGGGAAA",
+          "text_sentinel_index": 18,
+          "bwt_sentinel_index": 17,
+          "symbol_kind": "generated_index"
+        },
+        "complete": true
+      },
+      {
+        "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#block/0/reverse",
+        "locator": {
+          "byte_start": 240,
+          "byte_end": 325,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": 1
+        },
+        "block_ordinal": 0,
+        "section": "reverse",
+        "header": {
+          "N": 19,
+          "term_loc": 3,
+          "seq_offset": 0,
+          "ambig_offset": 0,
+          "overlap": 0,
+          "seq_cnt": 2,
+          "ambig_cnt": 2
+        },
+        "arrays": {
+          "BWT": {
+            "values": [
+              248,
+              192,
+              183,
+              90,
+              160
+            ],
+            "expected_count": 5,
+            "element_bytes": 1,
+            "row_width": 1,
+            "complete": true,
+            "locator": {
+              "byte_start": 272,
+              "byte_end": 277,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "counters_b": {
+            "values": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                5,
+                3,
+                6,
+                5
+              ]
+            ],
+            "expected_count": 2,
+            "element_bytes": 2,
+            "row_width": 4,
+            "complete": true,
+            "locator": {
+              "byte_start": 277,
+              "byte_end": 293,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          },
+          "counters_sb": {
+            "values": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                5,
+                3,
+                6,
+                5
+              ]
+            ],
+            "expected_count": 2,
+            "element_bytes": 4,
+            "row_width": 4,
+            "complete": true,
+            "locator": {
+              "byte_start": 293,
+              "byte_end": 325,
+              "line_start": null,
+              "line_end": null,
+              "record_ordinal": null
+            }
+          }
+        },
+        "decoded": {
+          "text": null,
+          "bwt": "TTGATAAAGTCTCCGGGGA",
+          "text_sentinel_index": null,
+          "bwt_sentinel_index": 3,
+          "symbol_kind": "generated_index"
+        },
+        "complete": true
+      }
+    ],
+    "population": {
+      "state": "decoded",
+      "complete": true,
+      "decoded_segment_count": 2,
+      "decoded_ambiguity_range_count": 2,
+      "decoded_block_section_count": 2,
+      "body_complete": true
+    },
+    "issues": []
+  },
+  "input_records": [
+    {
+      "kind": "fasta",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa#fasta/0",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa",
+      "locator": {
+        "byte_start": 0,
+        "byte_end": 19,
+        "line_start": 1,
+        "line_end": 2,
+        "record_ordinal": 0
+      },
+      "source_ordinal": 0,
+      "payload": {
+        "header": "ambig0",
+        "raw_header": ">ambig0\n",
+        "name": "ambig0",
+        "description": "",
+        "sequence": "ACGTNNACGT",
+        "sequence_lines": [
+          "ACGTNNACGT\n"
+        ],
+        "complete": true,
+        "valid": true
+      }
+    },
+    {
+      "kind": "fasta",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa#fasta/1",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa",
+      "locator": {
+        "byte_start": 19,
+        "byte_end": 36,
+        "line_start": 3,
+        "line_end": 4,
+        "record_ordinal": 1
+      },
+      "source_ordinal": 1,
+      "payload": {
+        "header": "ambig1",
+        "raw_header": ">ambig1\n",
+        "name": "ambig1",
+        "description": "",
+        "sequence": "NNRYACGT",
+        "sequence_lines": [
+          "NNRYACGT\n"
+        ],
+        "complete": true,
+        "valid": true
+      }
+    },
+    {
+      "kind": "query",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt#query/0",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt",
+      "locator": {
+        "byte_start": 0,
+        "byte_end": 5,
+        "line_start": 1,
+        "line_end": 1,
+        "record_ordinal": 0
+      },
+      "source_ordinal": null,
+      "payload": {
+        "text": "ACGT",
+        "raw_line": "ACGT\n",
+        "line_ending": "LF",
+        "valid": true,
+        "complete": true
+      }
+    },
+    {
+      "kind": "query",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt#query/1",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt",
+      "locator": {
+        "byte_start": 5,
+        "byte_end": 8,
+        "line_start": 2,
+        "line_end": 2,
+        "record_ordinal": 1
+      },
+      "source_ordinal": null,
+      "payload": {
+        "text": "GG",
+        "raw_line": "GG\n",
+        "line_ending": "LF",
+        "valid": true,
+        "complete": true
+      }
+    },
+    {
+      "kind": "query",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt#query/2",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt",
+      "locator": {
+        "byte_start": 8,
+        "byte_end": 13,
+        "line_start": 3,
+        "line_end": 3,
+        "record_ordinal": 2
+      },
+      "source_ordinal": null,
+      "payload": {
+        "text": "ATGT",
+        "raw_line": "ATGT\n",
+        "line_ending": "LF",
+        "valid": true,
+        "complete": true
+      }
+    },
+    {
+      "kind": "query",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt#query/3",
+      "occurrence_id": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt",
+      "locator": {
+        "byte_start": 13,
+        "byte_end": 18,
+        "line_start": 4,
+        "line_end": 4,
+        "record_ordinal": 3
+      },
+      "source_ordinal": null,
+      "payload": {
+        "text": "GGAC",
+        "raw_line": "GGAC\n",
+        "line_ending": "LF",
+        "valid": true,
+        "complete": true
+      }
+    }
+  ],
+  "native_rows": [
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/0",
+      "locator": {
+        "byte_start": 0,
+        "byte_end": 108,
+        "line_start": 1,
+        "line_end": 1,
+        "record_ordinal": 0
+      },
+      "payload": {
+        "text": "# hmmerfm-exactmatch :: Find all instances of each <qfile> sequence in the database represented by <fmfile>",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/1",
+      "locator": {
+        "byte_start": 108,
+        "byte_end": 162,
+        "line_start": 2,
+        "line_end": 2,
+        "record_ordinal": 1
+      },
+      "payload": {
+        "text": "# Copyright (C) 2023 Howard Hughes Medical Institute.",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/2",
+      "locator": {
+        "byte_start": 162,
+        "byte_end": 218,
+        "line_start": 3,
+        "line_end": 3,
+        "record_ordinal": 2
+      },
+      "payload": {
+        "text": "# Freely distributed under the BSD open source license.",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/3",
+      "locator": {
+        "byte_start": 218,
+        "byte_end": 292,
+        "line_start": 4,
+        "line_end": 4,
+        "record_ordinal": 3
+      },
+      "payload": {
+        "text": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/4",
+      "locator": {
+        "byte_start": 292,
+        "byte_end": 483,
+        "line_start": 5,
+        "line_end": 5,
+        "record_ordinal": 4
+      },
+      "payload": {
+        "text": "# input binary-formatted HMMER database:   /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/5",
+      "locator": {
+        "byte_start": 483,
+        "byte_end": 665,
+        "line_start": 6,
+        "line_end": 6,
+        "record_ordinal": 5
+      },
+      "payload": {
+        "text": "# input file of query sequences:           /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries_ambiguous.txt",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/6",
+      "locator": {
+        "byte_start": 665,
+        "byte_end": 717,
+        "line_start": 7,
+        "line_end": 7,
+        "record_ordinal": 6
+      },
+      "payload": {
+        "text": "# output file containing list of hits:     hits.txt",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/7",
+      "locator": {
+        "byte_start": 717,
+        "byte_end": 757,
+        "line_start": 8,
+        "line_end": 8,
+        "record_ordinal": 7
+      },
+      "payload": {
+        "text": "# output only counts, not hit locations",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/8",
+      "locator": {
+        "byte_start": 757,
+        "byte_end": 806,
+        "line_start": 9,
+        "line_end": 9,
+        "record_ordinal": 8
+      },
+      "payload": {
+        "text": "# don't compute matches to the reversed sequence",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "index_parameters",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#index_parameters/0",
+      "locator": {
+        "byte_start": 806,
+        "byte_end": 853,
+        "line_start": 10,
+        "line_end": 10,
+        "record_ordinal": 0
+      },
+      "payload": {
+        "parameter": "alphabet",
+        "token": "dna",
+        "value": "dna",
+        "state": "present"
+      }
+    },
+    {
+      "kind": "index_parameters",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#index_parameters/1",
+      "locator": {
+        "byte_start": 853,
+        "byte_end": 900,
+        "line_start": 11,
+        "line_end": 11,
+        "record_ordinal": 1
+      },
+      "payload": {
+        "parameter": "bin_length",
+        "token": "256",
+        "value": 256,
+        "state": "present"
+      }
+    },
+    {
+      "kind": "index_parameters",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#index_parameters/2",
+      "locator": {
+        "byte_start": 900,
+        "byte_end": 945,
+        "line_start": 12,
+        "line_end": 12,
+        "record_ordinal": 2
+      },
+      "payload": {
+        "parameter": "suffix array sample rate",
+        "token": "8",
+        "value": 8,
+        "state": "present"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/9",
+      "locator": {
+        "byte_start": 945,
+        "byte_end": 1019,
+        "line_start": 13,
+        "line_end": 13,
+        "record_ordinal": 9
+      },
+      "payload": {
+        "text": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stdout.log#diagnostic/10",
+      "locator": {
+        "byte_start": 1019,
+        "byte_end": 1020,
+        "line_start": 14,
+        "line_end": 14,
+        "record_ordinal": 10
+      },
+      "payload": {
+        "text": "",
+        "category": "native_text",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "exactmatch_counts",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log#exactmatch_counts/0",
+      "locator": {
+        "byte_start": 0,
+        "byte_end": 21,
+        "line_start": 1,
+        "line_end": 1,
+        "record_ordinal": 0
+      },
+      "payload": {
+        "Q": 4,
+        "H": 6,
+        "R": null,
+        "Q_token": "4",
+        "H_token": "6",
+        "R_token": null,
+        "population": "raw_fm_intervals"
+      }
+    },
+    {
+      "kind": "exactmatch_counts",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log#exactmatch_counts/1",
+      "locator": {
+        "byte_start": 21,
+        "byte_end": 37,
+        "line_start": 2,
+        "line_end": 2,
+        "record_ordinal": 1
+      },
+      "payload": {
+        "Q": null,
+        "H": null,
+        "R": 0,
+        "Q_token": null,
+        "H_token": null,
+        "R_token": "0",
+        "population": "raw_fm_intervals"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log#diagnostic/0",
+      "locator": {
+        "byte_start": 37,
+        "byte_end": 61,
+        "line_start": 3,
+        "line_end": 3,
+        "record_ordinal": 0
+      },
+      "payload": {
+        "text": "run time:  0.00 seconds",
+        "category": "runtime",
+        "numerical_state": "not_interpreted"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log#diagnostic/1",
+      "locator": {
+        "byte_start": 61,
+        "byte_end": 85,
+        "line_start": 4,
+        "line_end": 4,
+        "record_ordinal": 1
+      },
+      "payload": {
+        "text": "occ calls:           20",
+        "category": "unsafe_post_free_statistic",
+        "numerical_state": "incompatible"
+      }
+    },
+    {
+      "kind": "diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log#diagnostic/2",
+      "locator": {
+        "byte_start": 85,
+        "byte_end": 109,
+        "line_start": 5,
+        "line_end": 5,
+        "record_ordinal": 2
+      },
+      "payload": {
+        "text": "occ/sec:              0",
+        "category": "unsafe_post_free_statistic",
+        "numerical_state": "incompatible"
+      }
+    }
+  ],
+  "associations": {
+    "source_binding_state": "unknown",
+    "segments": [
+      {
+        "segment_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#segment/0",
+        "target_id": 0,
+        "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa#fasta/0",
+        "basis": "supplied_source_order",
+        "custody_state": "unknown"
+      },
+      {
+        "segment_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_ambiguous/index.fm#segment/1",
+        "target_id": 1,
+        "source_record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/ambiguous.fa#fasta/1",
+        "basis": "supplied_source_order",
+        "custody_state": "unknown"
+      }
+    ],
+    "query_groups": [],
+    "hit_targets": []
+  },
+  "issues": [
+    {
+      "code": "unreliable_diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log#diagnostic/1",
+      "field": null,
+      "stage": "extract",
+      "detail": null
+    },
+    {
+      "code": "unreliable_diagnostic",
+      "record_key": "retained:verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmerfm_exactmatch_ambiguous_counts/stderr.log#diagnostic/2",
+      "field": null,
+      "stage": "extract",
+      "detail": null
+    }
+  ]
+}

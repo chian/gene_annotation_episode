@@ -1,0 +1,156 @@
+{
+  "case": "Fd + Hyd + methyl viologen",
+  "physical_source_ref": "source_1a9a4b39c8027622fd89cf8e",
+  "source_kind": "primary_source",
+  "cells": [
+    {
+      "component": "reference_rate",
+      "value": 7.0,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": null,
+      "reported_domain": {
+        "basis": "reported_point",
+        "conditioning": "stored_source_cell",
+        "failure": null,
+        "kind": "point",
+        "lower": 7.0,
+        "lower_inclusive": true,
+        "projection": "exact",
+        "upper": 7.0,
+        "upper_inclusive": true
+      }
+    },
+    {
+      "component": "test_rate",
+      "value": 5.0,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": null,
+      "reported_domain": {
+        "basis": "reported_point",
+        "conditioning": "stored_source_cell",
+        "failure": null,
+        "kind": "point",
+        "lower": 5.0,
+        "lower_inclusive": true,
+        "projection": "exact",
+        "upper": 5.0,
+        "upper_inclusive": true
+      }
+    },
+    {
+      "component": "rate_difference",
+      "value": 2.0,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": null,
+      "reported_domain": {
+        "basis": "reported_operand_algebra",
+        "conditioning": "reported_endpoint_normalization_unit_relations",
+        "failure": null,
+        "kind": "point",
+        "lower": 2.0,
+        "lower_inclusive": true,
+        "projection": "exact",
+        "upper": 2.0,
+        "upper_inclusive": true
+      }
+    },
+    {
+      "component": "retained_fraction",
+      "value": 0.7142857142857143,
+      "unit": "fraction",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": null,
+      "reported_domain": {
+        "basis": "reported_operand_algebra",
+        "conditioning": "reported_endpoint_normalization_unit_relations",
+        "failure": null,
+        "kind": "finite_interval",
+        "lower": 0.7142857142857142,
+        "lower_inclusive": true,
+        "projection": "outward",
+        "upper": 0.7142857142857143,
+        "upper_inclusive": true
+      }
+    },
+    {
+      "component": "fractional_decrease",
+      "value": 0.2857142857142857,
+      "unit": "fraction",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": null,
+      "reported_domain": {
+        "basis": "reported_operand_algebra",
+        "conditioning": "reported_endpoint_normalization_unit_relations",
+        "failure": null,
+        "kind": "finite_interval",
+        "lower": 0.2857142857142857,
+        "lower_inclusive": true,
+        "projection": "outward",
+        "upper": 0.28571428571428575,
+        "upper_inclusive": true
+      }
+    },
+    {
+      "component": "reference_mean_se",
+      "value": null,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": "mean_uncertainty_unreported",
+      "reported_domain": {
+        "basis": "stored_numerical_point",
+        "conditioning": "stored_source_cell",
+        "failure": "mean_uncertainty_unreported",
+        "kind": "unavailable",
+        "lower": null,
+        "lower_inclusive": false,
+        "projection": "none",
+        "upper": null,
+        "upper_inclusive": false
+      }
+    },
+    {
+      "component": "test_mean_se",
+      "value": null,
+      "unit": "umol/min/mg",
+      "threshold": null,
+      "bound": "none",
+      "unavailable_reason": "mean_uncertainty_unreported",
+      "reported_domain": {
+        "basis": "stored_numerical_point",
+        "conditioning": "stored_source_cell",
+        "failure": "mean_uncertainty_unreported",
+        "kind": "unavailable",
+        "lower": null,
+        "lower_inclusive": false,
+        "projection": "none",
+        "upper": null,
+        "upper_inclusive": false
+      }
+    }
+  ],
+  "uncertainty": {
+    "reference": {
+      "count": null,
+      "kind": "unreported",
+      "magnitude": null,
+      "sampling_basis": "unspecified",
+      "unavailable_reason": null
+    },
+    "test": {
+      "count": null,
+      "kind": "unreported",
+      "magnitude": null,
+      "sampling_basis": "unspecified",
+      "unavailable_reason": null
+    }
+  }
+}

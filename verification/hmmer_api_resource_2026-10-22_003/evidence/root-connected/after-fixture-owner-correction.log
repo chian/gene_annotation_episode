@@ -1,0 +1,177 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_prechoice_forecasts_result_return_parent_use_and_original_history ____
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7532977645f0>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-861/test_prechoice_forecasts_resul0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x753297784050>
+
+    def test_prechoice_forecasts_result_return_parent_use_and_original_history(resources, tmp_path, monkeypatch):
+        r = resources
+        history_path = tmp_path / 'shared-statistics.sqlite3'
+        history = RunHistory(history_path)
+        history.close()
+        r.estimator = ResourceToolEstimator.with_reported_results()
+        def explicit_factory(store, **operands):
+            return bind_assembled_services_with_public_search_timing(store, api_timing=timing, **operands)
+    
+        monkeypatch.setattr(connected, 'bind_assembled_services_with_public_search', explicit_factory)
+        with reported_service() as (http, client):
+            timing = ApiTimingBinding(ledger_path=tmp_path / 'api-timing.sqlite3',
+                history_path=history_path, resource_id=connected.registry(client)['resource_id'],
+                monitoring_information_unit=connected.MONITOR)
+            initial_forecasts = []
+    
+            def select_api(context):
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['status'] == 'no_matching_history'
+                assert forecast['reported_result_support'] == {'reported_result_count': 0}
+                assert not http.calls
+                assert r.store.db.execute('SELECT count(*) FROM provider_jobs').fetchone()[0] == 0
+                initial_forecasts.append(deepcopy(forecast))
+                return connected.api_child(r, h.workflow)
+    
+            def select_submit(context):
+                forecast, = context['api_reported_execution_forecasts']
+                assert forecast['status'] == 'no_matching_history'
+                assert not http.calls
+                assert r.store.db.execute('SELECT count(*) FROM provider_jobs').fetchone()[0] == 1
+                return own('api_search.submit', retry_of=None)
+    
+            h = connected.host(r, tmp_path / 'runtime', client,
+                script=[select_api, select_submit, own('api_search.check_handoff'),
+                    own('resource.capabilities')], counts={'annotation': 2})
+            launch, boundary = resource_episode(h, r, 'launch', r.launch)
+            record = asyncio.run(launch.run_async(boundary))
+            asyncio.run(launch.build_result(record))
+            handoff = json.loads(r.journal.row('runtime_forms', launch.source.episode_id)['form'])['handoff']
+            assert record.units_consumed == 2
+            assert [call[0] for call in http.calls] == ['POST', 'GET']
+    
+            timing_schema = h.workflow.report_sources('results')['api_execution_measurements']['report_schema']
+            return_schema = obj({'timing': deepcopy(timing_schema)})
+            assignment = {'version': RESULTS_VERSION, 'handoff': handoff,
+                'requested_data_selector': {'version': 'public_search_result_selector_v1',
+                    'provider': 'hmmer', 'first_page': 1, 'last_page': 2, 'page_size': 2}}
+    
+            def select_results(_context):
+                return {'selection': {'kind': 'episode_child', 'role': 'results',
+                    'goal': 'Obtain only the original assigned fixture result pages', 'scope': r.scope,
+                    'purpose': 'Return only the source-qualified reported duration',
+                    'schema_json': json.dumps(return_schema), 'initial_report_json': '{}',
+                    'assignment': assignment}, 'report_update': {}}
+    
+            parent_use = []
+    
+            def use_return(context):
+                child_form, = context['child_reports']
+                fact, = child_form['timing']
+                assert fact['elapsed_seconds'] == http.elapsed
+                assert fact['observation_unit'] == 'logical_provider_job_reported_result'
+                assert fact['duration_measure'] == 'hmmer_reported_search_elapsed_seconds'
+                assert fact['job_ref'] == handoff['execution_handle']
+                assert context['current_credit'] == 0
+                assert context['monitoring_information_credit'] == connected.MONITOR
+                parent_use.append(deepcopy(fact))
+                return own('episode.history', view='records', decision_indices=[0])
+    
+            provider = ScriptedProvider([select_results, own('api_search.acquire', page=1),
+                own('api_search.acquire', page=2), use_return])
+            h.workflow.provider = provider
+            parent = h.owner
+>           parent_record = asyncio.run(parent.run_async(h.workflow.context))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_timing_connected.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:443: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:313: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:443: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1088: in execute
+    result = await result
+             ^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:2713: in execute
+    result = await result if inspect.isawaitable(result) else result
+             ^^^^^^^^^^^^
+gene_annotation_episode/resource_episodes.py:277: in execute
+    return await adapter.execute(context, tool_name, arguments, operation_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/hmmer_resource_adapter.py:206: in execute
+    published = json_value(self.ports.result_publisher.publish(receipt['receipt_ref'],
+gene_annotation_episode/public_search_publication.py:41: in publish
+    imported = self.tools.publish_hmmer_snapshot(snapshot, scope=scope)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tools.py:2018: in publish_hmmer_snapshot
+    source = self._source(snapshot.service, None, snapshot=snapshot)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.tools.ToolRegistry object at 0x753297767bf0>
+provider = 'fixture_hmmer', body = None
+snapshot = SourceSnapshot(service='fixture_hmmer', url='http://127.0.0.1:37311/result/f2e3e0dd-fb31-4c56-bd23-438f000d59ec', requ...p://127.0.0.1:37311/result/f2e3e0dd-fb31-4c56-bd23-438f000d59ec?page=1&page_size=2&with_domains=true'}, 'status': 200})
+text = None, accession = None, software_version = None
+parent_source_refs = None, stdout_ref = None, stderr_ref = None
+auxiliary_artifact_refs = None, operand_refs = None, query_selection_ref = None
+publication_identifiers = None
+
+    def _source(self, provider: str, body: Any, *, snapshot: SourceSnapshot | None = None,
+                text: str | None = None, accession: str | None = None, software_version: str | None = None,
+                parent_source_refs: list[str] | None = None,
+                stdout_ref: str | None = None, stderr_ref: str | None = None,
+                auxiliary_artifact_refs: list[str] | None = None,
+                operand_refs: list[str] | None = None, query_selection_ref: str | None = None,
+                publication_identifiers: list[dict] | None = None) -> dict:
+        artifact = self.store.artifact(snapshot.content if snapshot else canonical(body),
+                                       snapshot.media_type if snapshot else "application/json")
+        request = None
+        if snapshot:
+            request = self.store.artifact(canonical({"request": snapshot.request, "transport": snapshot.transport}), "application/json")
+            if software_version is None:
+                details = snapshot.transport.get("job_details") or {}
+>               software_version = details.get("database", {}).get("version") or snapshot.transport.get("response", {}).get("headers", {}).get("x-uniprot-release")
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'str' object has no attribute 'get'
+
+gene_annotation_episode/tools.py:379: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_connected.py::test_prechoice_forecasts_result_return_parent_use_and_original_history
+1 failed in 29.32s

@@ -1,0 +1,1173 @@
+{
+  "parse_result": {
+    "status": "partial",
+    "value": {
+      "schema_version": "bvbrc_msa_sheet_v1",
+      "tool": "C-L204-MSA",
+      "analysis": {
+        "analysis_id": "analysis",
+        "mode": "segment_concatenation",
+        "alignment_id": "aligned#alignment",
+        "frequency_table_id": null,
+        "consensus_alignment_id": null,
+        "tree_id": null,
+        "full_xmfa_slot_id": null,
+        "xmfa_document_id": null,
+        "segment_ids": [
+          "a",
+          "b",
+          "missing"
+        ],
+        "reference": null,
+        "output_role_evidence": []
+      },
+      "inputs": [
+        {
+          "binding_id": "original",
+          "parameter_pointer": "/input/original",
+          "kind": "retained_bytes",
+          "content": {
+            "source_ref": "source:original",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "original",
+            "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38",
+            "byte_count": 23
+          },
+          "workspace_path": "/workspace/original",
+          "inline_value": null,
+          "link_evidence": null,
+          "members": []
+        }
+      ],
+      "run": {
+        "original_task_id": "task",
+        "settings": [],
+        "commands": [],
+        "versions": [],
+        "conflicts": [],
+        "completeness": "unknown"
+      },
+      "documents": [
+        {
+          "kind": "alignment",
+          "value": {
+            "alignment_id": "original#alignment",
+            "artifact": {
+              "raw_artifact_ref": "original",
+              "source_ref": "source:original",
+              "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38"
+            },
+            "format": "aligned_fasta",
+            "layout": "fasta",
+            "id_rule": "first_whitespace_token",
+            "encoding": "utf-8",
+            "declared_row_count": null,
+            "declared_column_count": null,
+            "observed_row_count": 2,
+            "observed_column_count": null,
+            "completeness": "partial",
+            "rows": [
+              {
+                "row_index": 0,
+                "raw_header": "dna",
+                "member_label": "dna",
+                "sequence": "CCCCAT",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "original",
+                    "source_ref": "source:original",
+                    "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 12,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              {
+                "row_index": 1,
+                "raw_header": "other",
+                "member_label": "other",
+                "sequence": "AAA",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "original",
+                    "source_ref": "source:original",
+                    "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38"
+                  },
+                  "byte_start_0based": 12,
+                  "byte_end_0based_exclusive": 23,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "alignment",
+          "value": {
+            "alignment_id": "aligned#alignment",
+            "artifact": {
+              "raw_artifact_ref": "aligned",
+              "source_ref": "source:aligned",
+              "sha256": "42f4fe83bd180f1d5adb2c1324bdc35159aeafdd26aa7a6c578fac62d9122e4e"
+            },
+            "format": "aligned_fasta",
+            "layout": "fasta",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii",
+            "declared_row_count": null,
+            "declared_column_count": null,
+            "observed_row_count": 1,
+            "observed_column_count": 4,
+            "completeness": "complete",
+            "rows": [
+              {
+                "row_index": 0,
+                "raw_header": "merged",
+                "member_label": "merged",
+                "sequence": "MGK-",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "aligned",
+                    "source_ref": "source:aligned",
+                    "sha256": "42f4fe83bd180f1d5adb2c1324bdc35159aeafdd26aa7a6c578fac62d9122e4e"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 13,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "read_outcomes": [],
+      "associations": {
+        "original_members": [
+          {
+            "key": {
+              "input_binding_id": "original",
+              "member_id": "dna",
+              "occurrence_index": 0
+            },
+            "host_member_id": null,
+            "original_input_pointer": "/input/original",
+            "source_document_id": "original#alignment",
+            "source_row_index": 0,
+            "raw_header": "dna",
+            "member_label": "dna",
+            "sequence_sha256": "b9a12fa6afcacd3fcd64eac92661582b7cabfccdb2718ba6d5142f9d6237c0bc",
+            "original_length": 6,
+            "molecule": "dna",
+            "feature_ids": [],
+            "genome_ids": [],
+            "source_record_ids": [],
+            "evidence": []
+          },
+          {
+            "key": {
+              "input_binding_id": "original",
+              "member_id": "other",
+              "occurrence_index": 0
+            },
+            "host_member_id": null,
+            "original_input_pointer": "/input/original",
+            "source_document_id": "original#alignment",
+            "source_row_index": 1,
+            "raw_header": "other",
+            "member_label": "other",
+            "sequence_sha256": "cb1ad2119d8fafb69566510ee712661f9f14b83385006ef92aec47f523a38358",
+            "original_length": 3,
+            "molecule": "dna",
+            "feature_ids": [],
+            "genome_ids": [],
+            "source_record_ids": [],
+            "evidence": []
+          }
+        ],
+        "inline_inputs": [],
+        "row_members": [
+          {
+            "association_id": "explicit",
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "member_keys": [
+              {
+                "input_binding_id": "original",
+                "member_id": "dna",
+                "occurrence_index": 0
+              },
+              {
+                "input_binding_id": "original",
+                "member_id": "other",
+                "occurrence_index": 0
+              }
+            ],
+            "transformation_ids": [
+              "concat",
+              "translate",
+              "translate-other",
+              "gap-fill"
+            ],
+            "state": "resolved",
+            "basis": "transformation_record",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          }
+        ],
+        "transformations": [
+          {
+            "input_members": [
+              {
+                "input_binding_id": "original",
+                "member_id": "dna",
+                "occurrence_index": 0
+              },
+              {
+                "input_binding_id": "original",
+                "member_id": "other",
+                "occurrence_index": 0
+              }
+            ],
+            "input_rows": [],
+            "output_rows": [
+              {
+                "alignment_id": "aligned#alignment",
+                "row_index": 0
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ],
+            "transformation_id": "concat",
+            "kind": "concatenate",
+            "segment_order": [
+              "a",
+              "b"
+            ],
+            "output_intervals": [
+              {
+                "segment_id": "a",
+                "interval_0based_half_open": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "segment_id": "b",
+                "interval_0based_half_open": [
+                  2,
+                  3
+                ]
+              }
+            ]
+          },
+          {
+            "input_members": [
+              {
+                "input_binding_id": "original",
+                "member_id": "dna",
+                "occurrence_index": 0
+              }
+            ],
+            "input_rows": [],
+            "output_rows": [
+              {
+                "alignment_id": "aligned#alignment",
+                "row_index": 0
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ],
+            "transformation_id": "translate",
+            "kind": "translate",
+            "translation_table": 11,
+            "frame": 0,
+            "strand": "-",
+            "input_intervals": [
+              [
+                0,
+                6
+              ]
+            ]
+          },
+          {
+            "input_members": [
+              {
+                "input_binding_id": "original",
+                "member_id": "other",
+                "occurrence_index": 0
+              }
+            ],
+            "input_rows": [],
+            "output_rows": [
+              {
+                "alignment_id": "aligned#alignment",
+                "row_index": 0
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ],
+            "transformation_id": "translate-other",
+            "kind": "translate",
+            "translation_table": 11,
+            "frame": 0,
+            "strand": "+",
+            "input_intervals": [
+              [
+                0,
+                3
+              ]
+            ]
+          },
+          {
+            "transformation_id": "gap-fill",
+            "kind": "missing_segment_gap_fill",
+            "input_members": [],
+            "input_rows": [],
+            "output_rows": [
+              {
+                "alignment_id": "aligned#alignment",
+                "row_index": 0
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "artifact_ref": "declaration",
+                  "artifact_field": "artifact_ref",
+                  "source_ref": "source:declaration",
+                  "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                  "byte_count": 23
+                },
+                "pointer": ""
+              }
+            ],
+            "segment_id": "missing",
+            "output_interval_0based_half_open": [
+              3,
+              4
+            ]
+          }
+        ],
+        "correspondences": [
+          {
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "column_0based": 0,
+            "staged_ungapped_position_0based": 0,
+            "original_member": {
+              "input_binding_id": "original",
+              "member_id": "dna"
+            },
+            "original_interval_0based_half_open": [
+              3,
+              6
+            ],
+            "strand": "-",
+            "translation_table": 11,
+            "transformation_id": "translate",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          },
+          {
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "column_0based": 1,
+            "staged_ungapped_position_0based": 1,
+            "original_member": {
+              "input_binding_id": "original",
+              "member_id": "dna"
+            },
+            "original_interval_0based_half_open": [
+              0,
+              3
+            ],
+            "strand": "-",
+            "translation_table": 11,
+            "transformation_id": "translate",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          },
+          {
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "column_0based": 2,
+            "staged_ungapped_position_0based": 2,
+            "original_member": {
+              "input_binding_id": "original",
+              "member_id": "other"
+            },
+            "original_interval_0based_half_open": [
+              0,
+              3
+            ],
+            "strand": "+",
+            "translation_table": 11,
+            "transformation_id": "translate-other",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          }
+        ],
+        "feature_genomes": [],
+        "source_records": [],
+        "functions": [],
+        "function_equivalences": [],
+        "taxonomy": [],
+        "member_entities": [],
+        "dependence_groups": [],
+        "requirements": [],
+        "diagnostics": [
+          {
+            "code": "bvbrc_alignment_provider_original_document_incomplete",
+            "phase": "association",
+            "path": "/original_members",
+            "severity": "qualification",
+            "evidence_refs": []
+          }
+        ]
+      },
+      "populations": {
+        "alignments": [
+          {
+            "population_id": "all",
+            "alignment_id": "aligned#alignment",
+            "row_indices": [
+              0
+            ],
+            "columns_0based": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ],
+        "composition": [],
+        "taxonomy": [],
+        "leaves": []
+      },
+      "segments": [
+        {
+          "segment_id": "a",
+          "native_segment_token": "a",
+          "genome_id": null,
+          "genome_sequence_record_id": null,
+          "contig_id": null,
+          "original_interval_0based_half_open": [
+            0,
+            6
+          ],
+          "strand": "-",
+          "input_member": {
+            "input_binding_id": "original",
+            "member_id": "dna",
+            "occurrence_index": 0
+          },
+          "alignment_id": "aligned#alignment",
+          "concatenated_interval_0based_half_open": [
+            0,
+            2
+          ],
+          "order_index": 0,
+          "state": "resolved",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-segment-map",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-segment-map",
+                "sha256": "b12a0e8dcf7c94072372179a5cd1bd91fcdcae7b2dbe9adfaf177d5adeefc3c9",
+                "byte_count": 21
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "segment_id": "b",
+          "native_segment_token": "b",
+          "genome_id": null,
+          "genome_sequence_record_id": null,
+          "contig_id": null,
+          "original_interval_0based_half_open": [
+            0,
+            3
+          ],
+          "strand": "+",
+          "input_member": {
+            "input_binding_id": "original",
+            "member_id": "other",
+            "occurrence_index": 0
+          },
+          "alignment_id": "aligned#alignment",
+          "concatenated_interval_0based_half_open": [
+            2,
+            3
+          ],
+          "order_index": 1,
+          "state": "resolved",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-segment-map",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-segment-map",
+                "sha256": "b12a0e8dcf7c94072372179a5cd1bd91fcdcae7b2dbe9adfaf177d5adeefc3c9",
+                "byte_count": 21
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "segment_id": "missing",
+          "native_segment_token": "missing",
+          "genome_id": null,
+          "genome_sequence_record_id": null,
+          "contig_id": null,
+          "original_interval_0based_half_open": null,
+          "strand": "unknown",
+          "input_member": null,
+          "alignment_id": null,
+          "concatenated_interval_0based_half_open": [
+            3,
+            4
+          ],
+          "order_index": 2,
+          "state": "missing",
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "tree_bindings": [],
+      "consensus_associations": [],
+      "native_observations": [],
+      "native_tree_measurements": [],
+      "support_observations": [],
+      "xmfa_bindings": [],
+      "requirements": [
+        {
+          "requirement_id": "msa/analysis/segments/msa_segment_membership_unresolved",
+          "kind": "scientific_metadata",
+          "role": "segments",
+          "source_refs": [],
+          "reason_code": "msa_segment_membership_unresolved"
+        },
+        {
+          "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+          "kind": "scientific_metadata",
+          "role": "run",
+          "source_refs": [],
+          "reason_code": "alignment_deployed_version_unproven"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "bvbrc_alignment_provider_original_document_incomplete",
+          "phase": "association",
+          "path": "/original_members",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "msa_segment_membership_unresolved",
+          "phase": "association",
+          "path": "/segments",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "alignment_deployed_version_unproven",
+          "phase": "association",
+          "path": "/run",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "bvbrc_alignment_provider_original_document_incomplete",
+        "phase": "association",
+        "path": "/original_members",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "msa_segment_membership_unresolved",
+        "phase": "association",
+        "path": "/segments",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "alignment_deployed_version_unproven",
+        "phase": "association",
+        "path": "/run",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "components": {
+    "schema_version": "bvbrc_msa_components_v1",
+    "analysis_id": "analysis",
+    "parameters": {
+      "version": "bvbrc_msa_components_v1",
+      "requests": [
+        {
+          "kind": "msa_entropy",
+          "request_id": "msa_entropy",
+          "population_id": "all",
+          "alphabet": "protein",
+          "case_policy": "uppercase",
+          "terminal_gap": "-",
+          "observed_table_id": null,
+          "native_rounding": "binary64_fixed_2_ties_to_even"
+        },
+        {
+          "kind": "original_coverage",
+          "request_id": "original_coverage",
+          "population_id": "all"
+        }
+      ]
+    },
+    "results": [
+      {
+        "request_id": "msa_entropy",
+        "kind": "msa_entropy",
+        "status": "partial",
+        "value": {
+          "status": "partial",
+          "analysis_id": "analysis",
+          "population_id": "all",
+          "alignment_id": "aligned#alignment",
+          "method_parameters": {
+            "alphabet": "protein",
+            "case_policy": "uppercase",
+            "terminal_gap": "-",
+            "native_rounding": "binary64_fixed_2_ties_to_even"
+          },
+          "sites": [
+            {
+              "column_0based": 0,
+              "included_row_indices": [
+                0
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "M",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": "M",
+              "native_observation_ids": [],
+              "eligible_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 1,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 1,
+              "included_row_indices": [
+                0
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "G",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": "G",
+              "native_observation_ids": [],
+              "eligible_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 1,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 2,
+              "included_row_indices": [
+                0
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "K",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": "K",
+              "native_observation_ids": [],
+              "eligible_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 1,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": 0.0,
+                "state": "available",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 3,
+              "included_row_indices": [],
+              "excluded_terminal_row_indices": [
+                0
+              ],
+              "symbol_counts": [],
+              "strict_majority_consensus": null,
+              "native_observation_ids": [],
+              "eligible_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "internal_gap_count": {
+                "value": 0,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "terminal_gap_excluded_count": {
+                "value": 1,
+                "state": "available",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "literal_entropy_bits": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": 0,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            }
+          ],
+          "requirements": [],
+          "diagnostics": [
+            {
+              "code": "bvbrc_msa_empty_site_population",
+              "phase": "association",
+              "path": "/sites/3",
+              "severity": "qualification",
+              "evidence_refs": [
+                "aligned"
+              ]
+            }
+          ]
+        },
+        "requirements": [],
+        "diagnostics": [
+          {
+            "code": "bvbrc_msa_empty_site_population",
+            "phase": "association",
+            "path": "/sites/3",
+            "severity": "qualification",
+            "evidence_refs": [
+              "aligned"
+            ]
+          }
+        ]
+      },
+      {
+        "request_id": "original_coverage",
+        "kind": "original_coverage",
+        "status": "partial",
+        "value": null,
+        "requirements": [
+          {
+            "requirement_id": "msa/analysis/original_coverage/original_member_occurrence_ambiguous",
+            "kind": "scientific_metadata",
+            "role": "original_coverage",
+            "source_refs": [],
+            "reason_code": "original_member_occurrence_ambiguous"
+          }
+        ],
+        "diagnostics": []
+      }
+    ],
+    "requirements": [
+      {
+        "requirement_id": "msa/analysis/original_coverage/original_member_occurrence_ambiguous",
+        "kind": "scientific_metadata",
+        "role": "original_coverage",
+        "source_refs": [],
+        "reason_code": "original_member_occurrence_ambiguous"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "bvbrc_msa_empty_site_population",
+        "phase": "association",
+        "path": "/sites/3",
+        "severity": "qualification",
+        "evidence_refs": [
+          "aligned"
+        ]
+      }
+    ]
+  },
+  "changed_components": null
+}

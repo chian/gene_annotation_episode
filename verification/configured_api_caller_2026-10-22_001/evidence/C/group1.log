@@ -1,0 +1,230 @@
+...........FFFFF.............F.                                          [100%]
+=================================== FAILURES ===================================
+____ test_unsupported_execution_inventory_and_schema_fail_closed[provider] _____
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv0')
+fault = 'provider'
+
+    @pytest.mark.parametrize('fault', ['provider', 'api', 'native', 'virtual', 'hidden'])
+    def test_unsupported_execution_inventory_and_schema_fail_closed(tmp_path, fault):
+        source = checkpoint_source_fixture(tmp_path)
+        if fault == 'provider':
+            mutate_database(source, "INSERT INTO provider_job_failures VALUES('synthetic', '{}')")
+        elif fault == 'api':
+            mutate_database(source, 'CREATE TABLE api_unadopted(value)')
+        elif fault == 'native':
+            path = source['arguments']['source_run_directory']/'native-jobs/jobs.sqlite'
+            with sqlite3.connect(path) as db:
+                # An executable inventory cannot be represented as inherited facts.
+                db.execute('INSERT INTO handoffs SELECT '+','.join('NULL' for _ in db.execute('PRAGMA table_info(handoffs)')))
+        elif fault == 'virtual':
+            mutate_database(source, 'CREATE VIRTUAL TABLE unsupported USING fts5(text)')
+        else:
+            mutate_database(source, 'CREATE TABLE unsupported(x, y GENERATED ALWAYS AS (x))')
+        code = 'source_schema_unsupported' if fault in {'virtual', 'hidden'} else 'source_execution_inventory_out_of_scope'
+>       value = failure(source, tmp_path/'new', code)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:353: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_exe..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_7485f5310db2c5f26a872289', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv0/new')
+code = 'source_execution_inventory_out_of_scope'
+
+    def failure(source, destination, code):
+        with pytest.raises(custody.ScientificCheckpointForkError) as error:
+            fork(source, destination)
+        value = error.value.as_record()
+        validate('failure', value)
+>       assert value['code'] == code
+E       AssertionError: assert 'source_nonem..._out_of_scope' == 'source_execu..._out_of_scope'
+E         
+E         - source_execution_inventory_out_of_scope
+E         + source_nonempty_wal_out_of_scope
+
+tests/test_scientific_checkpoint_fork.py:221: AssertionError
+_______ test_unsupported_execution_inventory_and_schema_fail_closed[api] _______
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv1')
+fault = 'api'
+
+    @pytest.mark.parametrize('fault', ['provider', 'api', 'native', 'virtual', 'hidden'])
+    def test_unsupported_execution_inventory_and_schema_fail_closed(tmp_path, fault):
+        source = checkpoint_source_fixture(tmp_path)
+        if fault == 'provider':
+            mutate_database(source, "INSERT INTO provider_job_failures VALUES('synthetic', '{}')")
+        elif fault == 'api':
+            mutate_database(source, 'CREATE TABLE api_unadopted(value)')
+        elif fault == 'native':
+            path = source['arguments']['source_run_directory']/'native-jobs/jobs.sqlite'
+            with sqlite3.connect(path) as db:
+                # An executable inventory cannot be represented as inherited facts.
+                db.execute('INSERT INTO handoffs SELECT '+','.join('NULL' for _ in db.execute('PRAGMA table_info(handoffs)')))
+        elif fault == 'virtual':
+            mutate_database(source, 'CREATE VIRTUAL TABLE unsupported USING fts5(text)')
+        else:
+            mutate_database(source, 'CREATE TABLE unsupported(x, y GENERATED ALWAYS AS (x))')
+        code = 'source_schema_unsupported' if fault in {'virtual', 'hidden'} else 'source_execution_inventory_out_of_scope'
+>       value = failure(source, tmp_path/'new', code)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:353: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_exe..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_c5be6348597f8c2e39c0e574', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv1/new')
+code = 'source_execution_inventory_out_of_scope'
+
+    def failure(source, destination, code):
+        with pytest.raises(custody.ScientificCheckpointForkError) as error:
+            fork(source, destination)
+        value = error.value.as_record()
+        validate('failure', value)
+>       assert value['code'] == code
+E       AssertionError: assert 'source_nonem..._out_of_scope' == 'source_execu..._out_of_scope'
+E         
+E         - source_execution_inventory_out_of_scope
+E         + source_nonempty_wal_out_of_scope
+
+tests/test_scientific_checkpoint_fork.py:221: AssertionError
+_____ test_unsupported_execution_inventory_and_schema_fail_closed[native] ______
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv2')
+fault = 'native'
+
+    @pytest.mark.parametrize('fault', ['provider', 'api', 'native', 'virtual', 'hidden'])
+    def test_unsupported_execution_inventory_and_schema_fail_closed(tmp_path, fault):
+        source = checkpoint_source_fixture(tmp_path)
+        if fault == 'provider':
+            mutate_database(source, "INSERT INTO provider_job_failures VALUES('synthetic', '{}')")
+        elif fault == 'api':
+            mutate_database(source, 'CREATE TABLE api_unadopted(value)')
+        elif fault == 'native':
+            path = source['arguments']['source_run_directory']/'native-jobs/jobs.sqlite'
+            with sqlite3.connect(path) as db:
+                # An executable inventory cannot be represented as inherited facts.
+>               db.execute('INSERT INTO handoffs SELECT '+','.join('NULL' for _ in db.execute('PRAGMA table_info(handoffs)')))
+E               sqlite3.IntegrityError: NOT NULL constraint failed: handoffs.job_ref
+
+tests/test_scientific_checkpoint_fork.py:347: IntegrityError
+_____ test_unsupported_execution_inventory_and_schema_fail_closed[virtual] _____
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv3')
+fault = 'virtual'
+
+    @pytest.mark.parametrize('fault', ['provider', 'api', 'native', 'virtual', 'hidden'])
+    def test_unsupported_execution_inventory_and_schema_fail_closed(tmp_path, fault):
+        source = checkpoint_source_fixture(tmp_path)
+        if fault == 'provider':
+            mutate_database(source, "INSERT INTO provider_job_failures VALUES('synthetic', '{}')")
+        elif fault == 'api':
+            mutate_database(source, 'CREATE TABLE api_unadopted(value)')
+        elif fault == 'native':
+            path = source['arguments']['source_run_directory']/'native-jobs/jobs.sqlite'
+            with sqlite3.connect(path) as db:
+                # An executable inventory cannot be represented as inherited facts.
+                db.execute('INSERT INTO handoffs SELECT '+','.join('NULL' for _ in db.execute('PRAGMA table_info(handoffs)')))
+        elif fault == 'virtual':
+            mutate_database(source, 'CREATE VIRTUAL TABLE unsupported USING fts5(text)')
+        else:
+            mutate_database(source, 'CREATE TABLE unsupported(x, y GENERATED ALWAYS AS (x))')
+        code = 'source_schema_unsupported' if fault in {'virtual', 'hidden'} else 'source_execution_inventory_out_of_scope'
+>       value = failure(source, tmp_path/'new', code)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:353: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_exe..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_43cbe2fb0bf31a37de8dab79', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv3/new')
+code = 'source_schema_unsupported'
+
+    def failure(source, destination, code):
+        with pytest.raises(custody.ScientificCheckpointForkError) as error:
+            fork(source, destination)
+        value = error.value.as_record()
+        validate('failure', value)
+>       assert value['code'] == code
+E       AssertionError: assert 'source_nonem..._out_of_scope' == 'source_schema_unsupported'
+E         
+E         - source_schema_unsupported
+E         + source_nonempty_wal_out_of_scope
+
+tests/test_scientific_checkpoint_fork.py:221: AssertionError
+_____ test_unsupported_execution_inventory_and_schema_fail_closed[hidden] ______
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv4')
+fault = 'hidden'
+
+    @pytest.mark.parametrize('fault', ['provider', 'api', 'native', 'virtual', 'hidden'])
+    def test_unsupported_execution_inventory_and_schema_fail_closed(tmp_path, fault):
+        source = checkpoint_source_fixture(tmp_path)
+        if fault == 'provider':
+            mutate_database(source, "INSERT INTO provider_job_failures VALUES('synthetic', '{}')")
+        elif fault == 'api':
+            mutate_database(source, 'CREATE TABLE api_unadopted(value)')
+        elif fault == 'native':
+            path = source['arguments']['source_run_directory']/'native-jobs/jobs.sqlite'
+            with sqlite3.connect(path) as db:
+                # An executable inventory cannot be represented as inherited facts.
+                db.execute('INSERT INTO handoffs SELECT '+','.join('NULL' for _ in db.execute('PRAGMA table_info(handoffs)')))
+        elif fault == 'virtual':
+            mutate_database(source, 'CREATE VIRTUAL TABLE unsupported USING fts5(text)')
+        else:
+            mutate_database(source, 'CREATE TABLE unsupported(x, y GENERATED ALWAYS AS (x))')
+        code = 'source_schema_unsupported' if fault in {'virtual', 'hidden'} else 'source_execution_inventory_out_of_scope'
+>       value = failure(source, tmp_path/'new', code)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:353: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_exe..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_35c320f14f2eba4abf4b9a3e', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_unsupported_execution_inv4/new')
+code = 'source_schema_unsupported'
+
+    def failure(source, destination, code):
+        with pytest.raises(custody.ScientificCheckpointForkError) as error:
+            fork(source, destination)
+        value = error.value.as_record()
+        validate('failure', value)
+>       assert value['code'] == code
+E       AssertionError: assert 'source_nonem..._out_of_scope' == 'source_schema_unsupported'
+E         
+E         - source_schema_unsupported
+E         + source_nonempty_wal_out_of_scope
+
+tests/test_scientific_checkpoint_fork.py:221: AssertionError
+_______ test_packed_component_corruption_is_not_materialized_or_repaired _______
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_packed_component_corrupti0')
+
+    def test_packed_component_corruption_is_not_materialized_or_repaired(tmp_path):
+        source = checkpoint_source_fixture(tmp_path)
+        # Material metadata is copied opaquely, then its actual span reader checks
+        # the component digest without materializing an independent sequence.
+>       mutate_database(source, 'UPDATE material_component_spans SET length=length+1')
+
+tests/test_scientific_checkpoint_fork.py:426: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-group1-20261022-001/test_packed_componen..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_c4866b33536b0cdb9bd7728c', ...}
+sql = 'UPDATE material_component_spans SET length=length+1', args = ()
+
+    def mutate_database(source, sql, args=()):
+        # Explicit synthetic fault injection, completed before custody captures it.
+        path = source['arguments']['source_workspace']/'state.sqlite3'
+        with sqlite3.connect(path) as db:
+>           db.execute(sql, args)
+E           sqlite3.OperationalError: no such column: length
+
+tests/test_scientific_checkpoint_fork.py:281: OperationalError
+=========================== short test summary info ============================
+FAILED tests/test_scientific_checkpoint_fork.py::test_unsupported_execution_inventory_and_schema_fail_closed[provider]
+FAILED tests/test_scientific_checkpoint_fork.py::test_unsupported_execution_inventory_and_schema_fail_closed[api]
+FAILED tests/test_scientific_checkpoint_fork.py::test_unsupported_execution_inventory_and_schema_fail_closed[native]
+FAILED tests/test_scientific_checkpoint_fork.py::test_unsupported_execution_inventory_and_schema_fail_closed[virtual]
+FAILED tests/test_scientific_checkpoint_fork.py::test_unsupported_execution_inventory_and_schema_fail_closed[hidden]
+FAILED tests/test_scientific_checkpoint_fork.py::test_packed_component_corruption_is_not_materialized_or_repaired
+6 failed, 25 passed in 117.20s (0:01:57)

@@ -1,0 +1,391 @@
+{
+  "availability": {
+    "insertion_correspondence": true,
+    "local_correspondence": true,
+    "native_cs_equality": false,
+    "quality": "unavailable"
+  },
+  "inherited_native_measurements": {
+    "block_length": 4,
+    "mapping_quality": 0,
+    "mapping_quality_available": true,
+    "matching_bases": 4,
+    "native_alignment_type": null,
+    "native_tag_quantities": {
+      "AS": null,
+      "NM": null,
+      "cm": null,
+      "de": null,
+      "dv": null,
+      "ms": null,
+      "nn": null,
+      "rl": null,
+      "s1": null,
+      "s2": null,
+      "zd": null
+    },
+    "usable_mapping_quality": 0
+  },
+  "insertions": [],
+  "issues": [
+    {
+      "code": "site_native_cs_unavailable"
+    },
+    {
+      "code": "site_original_mapping_unavailable",
+      "role": "reference"
+    },
+    {
+      "code": "site_original_mapping_unavailable",
+      "role": "query"
+    }
+  ],
+  "measured_counts": {
+    "aligned_reference_positions": 4,
+    "duplicate_requested_position_count": 0,
+    "identical_positions": 4,
+    "inserted_query_positions": 0,
+    "outside_alignment_positions": 0,
+    "paired_positions": 4,
+    "query_gap_positions": 0,
+    "reference_skip_positions": 3,
+    "requested_position_count": 7,
+    "selected_insertion_events": 0,
+    "selected_query_paired_units": 4,
+    "selected_reference_paired_units": 4,
+    "substituted_positions": 0,
+    "unavailable_positions": 0,
+    "unique_requested_position_count": 7
+  },
+  "mode": "minimap2_placement",
+  "native_input": {
+    "native_row": {
+      "base_alignment_available": true,
+      "block_length": 4,
+      "cigar": "2M3N2M",
+      "cs": null,
+      "issues": [],
+      "mapping_quality": 0,
+      "mapping_quality_available": true,
+      "matching_bases": 4,
+      "native_alignment_type": null,
+      "native_line": "q\t4\t0\t4\t+\tr\t7\t0\t7\t4\t4\t0\tcg:Z:2M3N2M",
+      "query_interval": [
+        0,
+        4
+      ],
+      "query_length": 4,
+      "query_name": "q",
+      "reference_interval": [
+        0,
+        7
+      ],
+      "reference_length": 7,
+      "reference_name": "r",
+      "strand": "+",
+      "tags": [
+        {
+          "name": "cg",
+          "type": "Z",
+          "value": "2M3N2M"
+        }
+      ]
+    },
+    "quality": null,
+    "quality_encoding": "unspecified",
+    "query_metadata": {
+      "length": 4,
+      "name": "q",
+      "sequence": "ACGT",
+      "subject_ref": "read_subject:member1"
+    },
+    "reference_metadata": {
+      "length": 7,
+      "name": "r",
+      "sequence": "ACNNNGT",
+      "subject_ref": "reference:reference"
+    }
+  },
+  "native_parameters": {
+    "native_parameters": null,
+    "native_version": "synthetic",
+    "preset": "map-ont"
+  },
+  "operands": {
+    "query": {
+      "alignment_unit": "nt",
+      "length": 4,
+      "molecule": "dna",
+      "subject_ref": "read_subject:member1",
+      "unit": "nt"
+    },
+    "reference": {
+      "alignment_unit": "nt",
+      "length": 7,
+      "molecule": "dna",
+      "subject_ref": "reference:reference",
+      "unit": "nt"
+    }
+  },
+  "original_mapping_inputs": null,
+  "requested_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "schema": "reference_site_comparison_sheet_v1",
+  "selection": {
+    "kind": "reference_positions",
+    "positions": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "sites": [
+    {
+      "alignment_column": 0,
+      "native_operation": "M",
+      "quality_encoding": "unspecified",
+      "quality_scale": null,
+      "query_interval": [
+        0,
+        1
+      ],
+      "query_mapping_reason": "site_original_mapping_unavailable",
+      "query_mapping_status": "unavailable",
+      "query_original_intervals": null,
+      "query_original_symbol": "A",
+      "query_position": 0,
+      "query_quality_character": null,
+      "query_quality_score": null,
+      "query_strand": "+",
+      "query_symbol": "A",
+      "reference_interval": [
+        0,
+        1
+      ],
+      "reference_mapping_reason": "site_original_mapping_unavailable",
+      "reference_mapping_status": "unavailable",
+      "reference_original_intervals": null,
+      "reference_position": 0,
+      "reference_symbol": "A",
+      "relationship": "identical",
+      "request_ordinal": 0,
+      "unavailable_reason": null
+    },
+    {
+      "alignment_column": 1,
+      "native_operation": "M",
+      "quality_encoding": "unspecified",
+      "quality_scale": null,
+      "query_interval": [
+        1,
+        2
+      ],
+      "query_mapping_reason": "site_original_mapping_unavailable",
+      "query_mapping_status": "unavailable",
+      "query_original_intervals": null,
+      "query_original_symbol": "C",
+      "query_position": 1,
+      "query_quality_character": null,
+      "query_quality_score": null,
+      "query_strand": "+",
+      "query_symbol": "C",
+      "reference_interval": [
+        1,
+        2
+      ],
+      "reference_mapping_reason": "site_original_mapping_unavailable",
+      "reference_mapping_status": "unavailable",
+      "reference_original_intervals": null,
+      "reference_position": 1,
+      "reference_symbol": "C",
+      "relationship": "identical",
+      "request_ordinal": 1,
+      "unavailable_reason": null
+    },
+    {
+      "alignment_column": null,
+      "native_operation": "N",
+      "quality_encoding": "unspecified",
+      "quality_scale": null,
+      "query_interval": null,
+      "query_mapping_reason": null,
+      "query_mapping_status": "not_applicable",
+      "query_original_intervals": [],
+      "query_original_symbol": null,
+      "query_position": null,
+      "query_quality_character": null,
+      "query_quality_score": null,
+      "query_strand": "+",
+      "query_symbol": null,
+      "reference_interval": [
+        2,
+        3
+      ],
+      "reference_mapping_reason": "site_original_mapping_unavailable",
+      "reference_mapping_status": "unavailable",
+      "reference_original_intervals": null,
+      "reference_position": 2,
+      "reference_symbol": "N",
+      "relationship": "reference_skip",
+      "request_ordinal": 2,
+      "unavailable_reason": null
+    },
+    {
+      "alignment_column": null,
+      "native_operation": "N",
+      "quality_encoding": "unspecified",
+      "quality_scale": null,
+      "query_interval": null,
+      "query_mapping_reason": null,
+      "query_mapping_status": "not_applicable",
+      "query_original_intervals": [],
+      "query_original_symbol": null,
+      "query_position": null,
+      "query_quality_character": null,
+      "query_quality_score": null,
+      "query_strand": "+",
+      "query_symbol": null,
+      "reference_interval": [
+        3,
+        4
+      ],
+      "reference_mapping_reason": "site_original_mapping_unavailable",
+      "reference_mapping_status": "unavailable",
+      "reference_original_intervals": null,
+      "reference_position": 3,
+      "reference_symbol": "N",
+      "relationship": "reference_skip",
+      "request_ordinal": 3,
+      "unavailable_reason": null
+    },
+    {
+      "alignment_column": null,
+      "native_operation": "N",
+      "quality_encoding": "unspecified",
+      "quality_scale": null,
+      "query_interval": null,
+      "query_mapping_reason": null,
+      "query_mapping_status": "not_applicable",
+      "query_original_intervals": [],
+      "query_original_symbol": null,
+      "query_position": null,
+      "query_quality_character": null,
+      "query_quality_score": null,
+      "query_strand": "+",
+      "query_symbol": null,
+      "reference_interval": [
+        4,
+        5
+      ],
+      "reference_mapping_reason": "site_original_mapping_unavailable",
+      "reference_mapping_status": "unavailable",
+      "reference_original_intervals": null,
+      "reference_position": 4,
+      "reference_symbol": "N",
+      "relationship": "reference_skip",
+      "request_ordinal": 4,
+      "unavailable_reason": null
+    },
+    {
+      "alignment_column": 2,
+      "native_operation": "M",
+      "quality_encoding": "unspecified",
+      "quality_scale": null,
+      "query_interval": [
+        2,
+        3
+      ],
+      "query_mapping_reason": "site_original_mapping_unavailable",
+      "query_mapping_status": "unavailable",
+      "query_original_intervals": null,
+      "query_original_symbol": "G",
+      "query_position": 2,
+      "query_quality_character": null,
+      "query_quality_score": null,
+      "query_strand": "+",
+      "query_symbol": "G",
+      "reference_interval": [
+        5,
+        6
+      ],
+      "reference_mapping_reason": "site_original_mapping_unavailable",
+      "reference_mapping_status": "unavailable",
+      "reference_original_intervals": null,
+      "reference_position": 5,
+      "reference_symbol": "G",
+      "relationship": "identical",
+      "request_ordinal": 5,
+      "unavailable_reason": null
+    },
+    {
+      "alignment_column": 3,
+      "native_operation": "M",
+      "quality_encoding": "unspecified",
+      "quality_scale": null,
+      "query_interval": [
+        3,
+        4
+      ],
+      "query_mapping_reason": "site_original_mapping_unavailable",
+      "query_mapping_status": "unavailable",
+      "query_original_intervals": null,
+      "query_original_symbol": "T",
+      "query_position": 3,
+      "query_quality_character": null,
+      "query_quality_score": null,
+      "query_strand": "+",
+      "query_symbol": "T",
+      "reference_interval": [
+        6,
+        7
+      ],
+      "reference_mapping_reason": "site_original_mapping_unavailable",
+      "reference_mapping_status": "unavailable",
+      "reference_original_intervals": null,
+      "reference_position": 6,
+      "reference_symbol": "T",
+      "relationship": "identical",
+      "request_ordinal": 6,
+      "unavailable_reason": null
+    }
+  ],
+  "source": {
+    "alignment_ref": "observation:alignment",
+    "format": "minimap2_paf_row",
+    "native_artifact_ref": "artifact:native",
+    "native_locator": {
+      "line_number": 1,
+      "row_end": 100,
+      "row_start": 0
+    },
+    "native_version": "synthetic",
+    "provider": "minimap2.mapping",
+    "source_ref": "source:native"
+  },
+  "status": "partial",
+  "symbol_interpretation": {
+    "identity": "literal_normalized_original_symbol_equality_without_ambiguity_resolution",
+    "native_cs_symbols": "normalized_ACGTN_not_original_IUPAC_identity",
+    "reader_normalization": "uppercase_original_IUPAC_symbols_query_complemented_on_reverse_strand"
+  },
+  "unique_requested_positions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
+}

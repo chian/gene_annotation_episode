@@ -1,0 +1,1883 @@
+{
+  "artifacts": [
+    {
+      "artifact": {
+        "byte_count": 2355,
+        "declared_format": {
+          "fields": null,
+          "format": "blast_json15",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+        "role": "blast_json15_raw",
+        "sha256": "8985738aff592204b8d0c57c1ab8984067cef5e2e03ad92468d385b400a97b63",
+        "source_ref": "SYNTHETIC-source-blast_json15_raw",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/blast_json15_raw",
+          "output_uuid": "SYNTHETIC-uuid-blast_json15_raw",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 2355
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/blast_json15_raw",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-blast_json15_raw"
+        }
+      },
+      "diagnostics": [],
+      "native_document": {
+        "BlastOutput2": [
+          {
+            "report": {
+              "params": {
+                "expect": 1e-05
+              },
+              "program": "blastp",
+              "reference": "SYNTHETIC; no algorithm was executed",
+              "results": {
+                "search": {
+                  "hits": [
+                    {
+                      "description": [
+                        {
+                          "accession": "0",
+                          "id": "gnl|BL_ORD_ID|0",
+                          "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+                        }
+                      ],
+                      "hsps": [
+                        {
+                          "align_len": 4,
+                          "bit_score": 20,
+                          "evalue": 1e-05,
+                          "gaps": 0,
+                          "hit_from": 2,
+                          "hit_to": 5,
+                          "hseq": "ACDE",
+                          "identity": 4,
+                          "midline": "ACDE",
+                          "num": 1,
+                          "positive": 4,
+                          "qseq": "ACDE",
+                          "query_from": 1,
+                          "query_to": 4,
+                          "score": 40
+                        },
+                        {
+                          "align_len": 4,
+                          "bit_score": 18,
+                          "evalue": 1e-05,
+                          "gaps": 0,
+                          "hit_from": 4,
+                          "hit_to": 7,
+                          "hseq": "DEFG",
+                          "identity": 4,
+                          "midline": "DEFG",
+                          "num": 2,
+                          "positive": 4,
+                          "qseq": "DEFG",
+                          "query_from": 3,
+                          "query_to": 6,
+                          "score": 36
+                        },
+                        {
+                          "align_len": 4,
+                          "bit_score": 20,
+                          "evalue": 1e-05,
+                          "gaps": 0,
+                          "hit_from": 2,
+                          "hit_to": 5,
+                          "hseq": "ACDE",
+                          "identity": 4,
+                          "midline": "ACDE",
+                          "num": 3,
+                          "positive": 4,
+                          "qseq": "ACDE",
+                          "query_from": 1,
+                          "query_to": 4,
+                          "score": 40
+                        }
+                      ],
+                      "len": 8,
+                      "num": 1
+                    },
+                    {
+                      "description": [
+                        {
+                          "accession": "1",
+                          "id": "gnl|BL_ORD_ID|1",
+                          "title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]"
+                        }
+                      ],
+                      "hsps": [
+                        {
+                          "align_len": 4,
+                          "bit_score": 18,
+                          "evalue": 1e-05,
+                          "gaps": 0,
+                          "hit_from": 1,
+                          "hit_to": 4,
+                          "hseq": "ACDQ",
+                          "identity": 3,
+                          "midline": "ACD ",
+                          "num": 1,
+                          "positive": 3,
+                          "qseq": "ACDE",
+                          "query_from": 1,
+                          "query_to": 4,
+                          "score": 36
+                        }
+                      ],
+                      "len": 8,
+                      "num": 2
+                    },
+                    {
+                      "description": [
+                        {
+                          "accession": "2",
+                          "id": "gnl|BL_ORD_ID|2",
+                          "title": "synthetic_reference_without_assignment"
+                        }
+                      ],
+                      "hsps": [
+                        {
+                          "align_len": 4,
+                          "bit_score": 16,
+                          "evalue": 1e-05,
+                          "gaps": 0,
+                          "hit_from": 1,
+                          "hit_to": 4,
+                          "hseq": "ACDQ",
+                          "identity": 3,
+                          "midline": "ACD ",
+                          "num": 1,
+                          "positive": 3,
+                          "qseq": "ACDE",
+                          "query_from": 1,
+                          "query_to": 4,
+                          "score": 32
+                        }
+                      ],
+                      "len": 8,
+                      "num": 3
+                    }
+                  ],
+                  "query_id": "Query_1",
+                  "query_len": 10,
+                  "query_title": "synthetic_query_hit"
+                }
+              },
+              "search_target": {
+                "db": "SYNTHETIC_DATABASE_PATH"
+              },
+              "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+            }
+          },
+          {
+            "report": {
+              "params": {
+                "expect": 1e-05
+              },
+              "program": "blastp",
+              "reference": "SYNTHETIC; no algorithm was executed",
+              "results": {
+                "search": {
+                  "hits": [],
+                  "query_id": "Query_2",
+                  "query_len": 4,
+                  "query_title": "synthetic_query_zero"
+                }
+              },
+              "search_target": {
+                "db": "SYNTHETIC_DATABASE_PATH"
+              },
+              "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+            }
+          }
+        ]
+      },
+      "native_lines": null,
+      "observed_byte_count": 2355,
+      "observed_sha256": "8985738aff592204b8d0c57c1ab8984067cef5e2e03ad92468d385b400a97b63",
+      "qualifications": [
+        "native_format_version_unknown"
+      ],
+      "representation_links": [
+        {
+          "kind": "raw_processed_report",
+          "report_index": 0,
+          "status": "validated"
+        },
+        {
+          "kind": "raw_processed_report",
+          "report_index": 1,
+          "status": "validated"
+        }
+      ],
+      "status": "complete"
+    },
+    {
+      "artifact": {
+        "byte_count": 6145,
+        "declared_format": {
+          "fields": null,
+          "format": "homology_processed_json",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-homology_processed_json",
+        "role": "homology_processed_json",
+        "sha256": "13cf7b3ce044a609728046aa400389ce5f3a3cd6fbf3546a12003c62cc80850b",
+        "source_ref": "SYNTHETIC-source-homology_processed_json",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/homology_processed_json",
+          "output_uuid": "SYNTHETIC-uuid-homology_processed_json",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 6145
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/homology_processed_json",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-homology_processed_json"
+        }
+      },
+      "diagnostics": [],
+      "native_document": [
+        {
+          "report": {
+            "params": {
+              "expect": 1e-05
+            },
+            "program": "blastp",
+            "reference": "SYNTHETIC; no algorithm was executed",
+            "results": {
+              "search": {
+                "hits": [
+                  {
+                    "description": [
+                      {
+                        "accession": "0",
+                        "id": "fig|999999.1.peg.1",
+                        "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+                      }
+                    ],
+                    "hsps": [
+                      {
+                        "align_len": 4,
+                        "bit_score": 20,
+                        "evalue": 1e-05,
+                        "gaps": 0,
+                        "hit_from": 2,
+                        "hit_to": 5,
+                        "hseq": "ACDE",
+                        "identity": 4,
+                        "midline": "ACDE",
+                        "num": 1,
+                        "positive": 4,
+                        "qseq": "ACDE",
+                        "query_from": 1,
+                        "query_to": 4,
+                        "score": 40
+                      },
+                      {
+                        "align_len": 4,
+                        "bit_score": 18,
+                        "evalue": 1e-05,
+                        "gaps": 0,
+                        "hit_from": 4,
+                        "hit_to": 7,
+                        "hseq": "DEFG",
+                        "identity": 4,
+                        "midline": "DEFG",
+                        "num": 2,
+                        "positive": 4,
+                        "qseq": "DEFG",
+                        "query_from": 3,
+                        "query_to": 6,
+                        "score": 36
+                      },
+                      {
+                        "align_len": 4,
+                        "bit_score": 20,
+                        "evalue": 1e-05,
+                        "gaps": 0,
+                        "hit_from": 2,
+                        "hit_to": 5,
+                        "hseq": "ACDE",
+                        "identity": 4,
+                        "midline": "ACDE",
+                        "num": 3,
+                        "positive": 4,
+                        "qseq": "ACDE",
+                        "query_from": 1,
+                        "query_to": 4,
+                        "score": 40
+                      }
+                    ],
+                    "len": 8,
+                    "num": 1
+                  },
+                  {
+                    "description": [
+                      {
+                        "accession": "1",
+                        "id": "fig|999999.2.peg.1",
+                        "title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]"
+                      }
+                    ],
+                    "hsps": [
+                      {
+                        "align_len": 4,
+                        "bit_score": 18,
+                        "evalue": 1e-05,
+                        "gaps": 0,
+                        "hit_from": 1,
+                        "hit_to": 4,
+                        "hseq": "ACDQ",
+                        "identity": 3,
+                        "midline": "ACD ",
+                        "num": 1,
+                        "positive": 3,
+                        "qseq": "ACDE",
+                        "query_from": 1,
+                        "query_to": 4,
+                        "score": 36
+                      }
+                    ],
+                    "len": 8,
+                    "num": 2
+                  },
+                  {
+                    "description": [
+                      {
+                        "accession": "2",
+                        "id": "synthetic_reference_without_assignment",
+                        "title": "synthetic_reference_without_assignment"
+                      }
+                    ],
+                    "hsps": [
+                      {
+                        "align_len": 4,
+                        "bit_score": 16,
+                        "evalue": 1e-05,
+                        "gaps": 0,
+                        "hit_from": 1,
+                        "hit_to": 4,
+                        "hseq": "ACDQ",
+                        "identity": 3,
+                        "midline": "ACD ",
+                        "num": 1,
+                        "positive": 3,
+                        "qseq": "ACDE",
+                        "query_from": 1,
+                        "query_to": 4,
+                        "score": 32
+                      }
+                    ],
+                    "len": 8,
+                    "num": 3
+                  }
+                ],
+                "query_id": "synthetic_query_hit",
+                "query_len": 10,
+                "query_title": "synthetic_query_hit"
+              }
+            },
+            "search_target": {
+              "db": "SYNTHETIC_DATABASE_PATH"
+            },
+            "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+          }
+        },
+        {
+          "report": {
+            "params": {
+              "expect": 1e-05
+            },
+            "program": "blastp",
+            "reference": "SYNTHETIC; no algorithm was executed",
+            "results": {
+              "search": {
+                "hits": [],
+                "query_id": "synthetic_query_zero",
+                "query_len": 4,
+                "query_title": "synthetic_query_zero"
+              }
+            },
+            "search_target": {
+              "db": "SYNTHETIC_DATABASE_PATH"
+            },
+            "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+          }
+        }
+      ],
+      "native_lines": null,
+      "observed_byte_count": 6145,
+      "observed_sha256": "13cf7b3ce044a609728046aa400389ce5f3a3cd6fbf3546a12003c62cc80850b",
+      "qualifications": [
+        "native_format_version_unknown"
+      ],
+      "representation_links": [
+        {
+          "kind": "raw_processed_report",
+          "report_index": 0,
+          "status": "validated"
+        },
+        {
+          "kind": "raw_processed_report",
+          "report_index": 1,
+          "status": "validated"
+        }
+      ],
+      "status": "complete"
+    },
+    {
+      "artifact": {
+        "byte_count": 328,
+        "declared_format": {
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen"
+          ],
+          "format": "blast_tabular",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-blast_tabular",
+        "role": "blast_tabular",
+        "sha256": "277764984f9ca6ea2482b804c2f83f111d8eaa3eda78adb48758c1b01501efce",
+        "source_ref": "SYNTHETIC-source-blast_tabular",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/blast_tabular",
+          "output_uuid": "SYNTHETIC-uuid-blast_tabular",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 328
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/blast_tabular",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-blast_tabular"
+        }
+      },
+      "diagnostics": [],
+      "native_document": null,
+      "native_lines": [
+        "synthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t1\t4\t2\t5\t1e-05\t20\t10\t8",
+        "synthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t3\t6\t4\t7\t1e-05\t18\t10\t8",
+        "synthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t1\t4\t2\t5\t1e-05\t20\t10\t8",
+        "synthetic_query_hit\tBL_ORD_ID|1\t75.0\t4\t1\t0\t1\t4\t1\t4\t1e-05\t18\t10\t8",
+        "synthetic_query_hit\tBL_ORD_ID|2\t75.0\t4\t1\t0\t1\t4\t1\t4\t1e-05\t16\t10\t8"
+      ],
+      "observed_byte_count": 328,
+      "observed_sha256": "277764984f9ca6ea2482b804c2f83f111d8eaa3eda78adb48758c1b01501efce",
+      "qualifications": [
+        "native_format_version_unknown"
+      ],
+      "representation_links": [
+        {
+          "kind": "tabular_hsp_association_set",
+          "line": 1,
+          "matches": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/0",
+              "report_index": 0
+            },
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 2,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/2",
+              "report_index": 0
+            }
+          ],
+          "status": "ambiguous"
+        },
+        {
+          "kind": "tabular_hsp_association_set",
+          "line": 2,
+          "matches": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 1,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/1",
+              "report_index": 0
+            }
+          ],
+          "status": "validated"
+        },
+        {
+          "kind": "tabular_hsp_association_set",
+          "line": 3,
+          "matches": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/0",
+              "report_index": 0
+            },
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 2,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/2",
+              "report_index": 0
+            }
+          ],
+          "status": "ambiguous"
+        },
+        {
+          "kind": "tabular_hsp_association_set",
+          "line": 4,
+          "matches": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 1,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/1/hsps/0",
+              "report_index": 0
+            }
+          ],
+          "status": "validated"
+        },
+        {
+          "kind": "tabular_hsp_association_set",
+          "line": 5,
+          "matches": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 2,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/2/hsps/0",
+              "report_index": 0
+            }
+          ],
+          "status": "validated"
+        }
+      ],
+      "status": "complete"
+    },
+    {
+      "artifact": {
+        "byte_count": 95,
+        "declared_format": {
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen"
+          ],
+          "format": "blast_tabular_header",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-blast_tabular_header",
+        "role": "blast_tabular_header",
+        "sha256": "7231e9f26a8ce378a79d948200b3d476d1d6baff02800a0a5be5800be581d2f1",
+        "source_ref": "SYNTHETIC-source-blast_tabular_header",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/blast_tabular_header",
+          "output_uuid": "SYNTHETIC-uuid-blast_tabular_header",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 95
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/blast_tabular_header",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-blast_tabular_header"
+        }
+      },
+      "diagnostics": [],
+      "native_document": null,
+      "native_lines": [
+        "qseqid\tsseqid\tpident\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore\tqlen\tslen"
+      ],
+      "observed_byte_count": 95,
+      "observed_sha256": "7231e9f26a8ce378a79d948200b3d476d1d6baff02800a0a5be5800be581d2f1",
+      "qualifications": [
+        "native_format_version_unknown"
+      ],
+      "representation_links": [],
+      "status": "complete"
+    },
+    {
+      "artifact": {
+        "byte_count": 442,
+        "declared_format": {
+          "fields": null,
+          "format": "homology_metadata_json",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-homology_metadata_json",
+        "role": "homology_metadata_json",
+        "sha256": "2879b674166777061a86ff59ef332c14780943b424b83c4d48c9a85e524c33cd",
+        "source_ref": "SYNTHETIC-source-homology_metadata_json",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/homology_metadata_json",
+          "output_uuid": "SYNTHETIC-uuid-homology_metadata_json",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 442
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/homology_metadata_json",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-homology_metadata_json"
+        }
+      },
+      "diagnostics": [],
+      "native_document": null,
+      "native_lines": null,
+      "qualifications": [
+        "reader_bytes_not_supplied"
+      ],
+      "representation_links": [],
+      "status": "unavailable"
+    }
+  ],
+  "binding": {
+    "artifacts": [
+      {
+        "byte_count": 2355,
+        "declared_format": {
+          "fields": null,
+          "format": "blast_json15",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+        "role": "blast_json15_raw",
+        "sha256": "8985738aff592204b8d0c57c1ab8984067cef5e2e03ad92468d385b400a97b63",
+        "source_ref": "SYNTHETIC-source-blast_json15_raw",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/blast_json15_raw",
+          "output_uuid": "SYNTHETIC-uuid-blast_json15_raw",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 2355
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/blast_json15_raw",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-blast_json15_raw"
+        }
+      },
+      {
+        "byte_count": 6145,
+        "declared_format": {
+          "fields": null,
+          "format": "homology_processed_json",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-homology_processed_json",
+        "role": "homology_processed_json",
+        "sha256": "13cf7b3ce044a609728046aa400389ce5f3a3cd6fbf3546a12003c62cc80850b",
+        "source_ref": "SYNTHETIC-source-homology_processed_json",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/homology_processed_json",
+          "output_uuid": "SYNTHETIC-uuid-homology_processed_json",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 6145
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/homology_processed_json",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-homology_processed_json"
+        }
+      },
+      {
+        "byte_count": 442,
+        "declared_format": {
+          "fields": null,
+          "format": "homology_metadata_json",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-homology_metadata_json",
+        "role": "homology_metadata_json",
+        "sha256": "2879b674166777061a86ff59ef332c14780943b424b83c4d48c9a85e524c33cd",
+        "source_ref": "SYNTHETIC-source-homology_metadata_json",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/homology_metadata_json",
+          "output_uuid": "SYNTHETIC-uuid-homology_metadata_json",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 442
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/homology_metadata_json",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-homology_metadata_json"
+        }
+      },
+      {
+        "byte_count": 328,
+        "declared_format": {
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen"
+          ],
+          "format": "blast_tabular",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-blast_tabular",
+        "role": "blast_tabular",
+        "sha256": "277764984f9ca6ea2482b804c2f83f111d8eaa3eda78adb48758c1b01501efce",
+        "source_ref": "SYNTHETIC-source-blast_tabular",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/blast_tabular",
+          "output_uuid": "SYNTHETIC-uuid-blast_tabular",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 328
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/blast_tabular",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-blast_tabular"
+        }
+      },
+      {
+        "byte_count": 95,
+        "declared_format": {
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen"
+          ],
+          "format": "blast_tabular_header",
+          "mode": "database_identification",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_version": "source-sha256-qualified",
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-blast_tabular_header",
+        "role": "blast_tabular_header",
+        "sha256": "7231e9f26a8ce378a79d948200b3d476d1d6baff02800a0a5be5800be581d2f1",
+        "source_ref": "SYNTHETIC-source-blast_tabular_header",
+        "task_association": {
+          "manifest_record_pointer": "/output_files/0",
+          "manifest_source_ref": "SYNTHETIC-manifest",
+          "output_path": "/SYNTHETIC/blast_tabular_header",
+          "output_uuid": "SYNTHETIC-uuid-blast_tabular_header",
+          "task_id": "SYNTHETIC-task"
+        },
+        "transfer": {
+          "body_complete": true,
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 95
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/blast_tabular_header",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-blast_tabular_header"
+        }
+      }
+    ],
+    "database_binding": {
+      "actual_database_members": null,
+      "actual_taxon_filter": null,
+      "effective_native_database": "SYNTHETIC_DATABASE_PATH",
+      "effective_parameters_source": null,
+      "input_or_database_sequence_inventory_ref": null,
+      "reference_release": null,
+      "reference_release_source": null,
+      "requested_selection": {
+        "db_source": "fasta_file",
+        "db_type": "faa"
+      }
+    },
+    "original_task": {
+      "effective_parameters": null,
+      "effective_parameters_source": null,
+      "native_application_id": "Homology",
+      "required_application_id": "Homology",
+      "resource_id": "SYNTHETIC-api",
+      "submission_receipt_ref": "SYNTHETIC-submit",
+      "submitted_parameters": {
+        "blast_max_hits": 3,
+        "blast_program": "blastp"
+      },
+      "task_id": "SYNTHETIC-task"
+    },
+    "primary_representation": "raw",
+    "query_bindings": [
+      {
+        "id_mapping_evidence": [
+          {
+            "pointer": "/queries/0",
+            "relation": "exact_submitted_member_to_native_query",
+            "source_ref": "SYNTHETIC-stage-map"
+          }
+        ],
+        "input_source_ref": "SYNTHETIC-input",
+        "member_ref": "SYNTHETIC-member-0",
+        "molecule": "aa",
+        "native_query": {
+          "query_id": "Query_1",
+          "query_len": 10,
+          "query_title": "synthetic_query_hit",
+          "report_index": 0
+        },
+        "sequence_transform": {
+          "coordinate_map_ref": null,
+          "kind": "identity",
+          "pointer": "/members/0",
+          "source_ref": "SYNTHETIC-input"
+        },
+        "staged_id": "synthetic_query_hit",
+        "staged_length": 10,
+        "staged_sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b",
+        "subject_ref": "SYNTHETIC-subject-0",
+        "supplied_id": "synthetic_query_hit",
+        "supplied_length": 10,
+        "supplied_sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+      },
+      {
+        "id_mapping_evidence": [
+          {
+            "pointer": "/queries/1",
+            "relation": "exact_submitted_member_to_native_query",
+            "source_ref": "SYNTHETIC-stage-map"
+          }
+        ],
+        "input_source_ref": "SYNTHETIC-input",
+        "member_ref": "SYNTHETIC-member-1",
+        "molecule": "aa",
+        "native_query": {
+          "query_id": "Query_2",
+          "query_len": 4,
+          "query_title": "synthetic_query_zero",
+          "report_index": 1
+        },
+        "sequence_transform": {
+          "coordinate_map_ref": null,
+          "kind": "identity",
+          "pointer": "/members/1",
+          "source_ref": "SYNTHETIC-input"
+        },
+        "staged_id": "synthetic_query_zero",
+        "staged_length": 4,
+        "staged_sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+        "subject_ref": "SYNTHETIC-subject-1",
+        "supplied_id": "synthetic_query_zero",
+        "supplied_length": 4,
+        "supplied_sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e"
+      }
+    ],
+    "schema": "bvbrc_homology_artifact_bundle_v1",
+    "scientific_mode": "database_identification",
+    "subject_binding": null
+  },
+  "diagnostics": [],
+  "queries": [
+    {
+      "description_links": [
+        {
+          "description_index": 0,
+          "diagnostics": [],
+          "hit_index": 0,
+          "metadata_key": "fig|999999.1.peg.1",
+          "metadata_pointer": "/fig|999999.1.peg.1",
+          "processed_description_pointer": "/0/report/results/search/hits/0/description/0",
+          "processed_id": "fig|999999.1.peg.1",
+          "raw_accession": "0",
+          "raw_description_pointer": "/BlastOutput2/0/report/results/search/hits/0/description/0",
+          "raw_id": "gnl|BL_ORD_ID|0",
+          "raw_title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]",
+          "report_index": 0,
+          "status": "validated",
+          "transformation_source_ref": "SYNTHETIC-retained-source-transform"
+        },
+        {
+          "description_index": 0,
+          "diagnostics": [],
+          "hit_index": 1,
+          "metadata_key": "fig|999999.2.peg.1",
+          "metadata_pointer": "/fig|999999.2.peg.1",
+          "processed_description_pointer": "/0/report/results/search/hits/1/description/0",
+          "processed_id": "fig|999999.2.peg.1",
+          "raw_accession": "1",
+          "raw_description_pointer": "/BlastOutput2/0/report/results/search/hits/1/description/0",
+          "raw_id": "gnl|BL_ORD_ID|1",
+          "raw_title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]",
+          "report_index": 0,
+          "status": "validated",
+          "transformation_source_ref": "SYNTHETIC-retained-source-transform"
+        },
+        {
+          "description_index": 0,
+          "diagnostics": [],
+          "hit_index": 2,
+          "metadata_key": "synthetic_reference_without_assignment",
+          "metadata_pointer": "/synthetic_reference_without_assignment",
+          "processed_description_pointer": "/0/report/results/search/hits/2/description/0",
+          "processed_id": "synthetic_reference_without_assignment",
+          "raw_accession": "2",
+          "raw_description_pointer": "/BlastOutput2/0/report/results/search/hits/2/description/0",
+          "raw_id": "gnl|BL_ORD_ID|2",
+          "raw_title": "synthetic_reference_without_assignment",
+          "report_index": 0,
+          "status": "validated",
+          "transformation_source_ref": "SYNTHETIC-retained-source-transform"
+        }
+      ],
+      "diagnostics": [],
+      "native_tabular_measurements": [
+        {
+          "association_status": "ambiguous",
+          "fields": {
+            "bitscore": "20",
+            "evalue": "1e-05",
+            "gapopen": "0",
+            "length": "4",
+            "mismatch": "0",
+            "pident": "100.0",
+            "qend": "4",
+            "qlen": "10",
+            "qseqid": "synthetic_query_hit",
+            "qstart": "1",
+            "send": "5",
+            "slen": "8",
+            "sseqid": "BL_ORD_ID|0",
+            "sstart": "2"
+          },
+          "gapopen": 0,
+          "hsp_locators": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/0",
+              "report_index": 0
+            },
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 2,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/2",
+              "report_index": 0
+            }
+          ],
+          "line": 1,
+          "mismatch": 0,
+          "native_line": "synthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t1\t4\t2\t5\t1e-05\t20\t10\t8",
+          "pident": 100.0,
+          "source_locator": {
+            "artifact_ref": "SYNTHETIC-artifact-blast_tabular",
+            "line": 1,
+            "pointer": "",
+            "report_index": 0
+          },
+          "status": "complete"
+        },
+        {
+          "association_status": "validated",
+          "fields": {
+            "bitscore": "18",
+            "evalue": "1e-05",
+            "gapopen": "0",
+            "length": "4",
+            "mismatch": "0",
+            "pident": "100.0",
+            "qend": "6",
+            "qlen": "10",
+            "qseqid": "synthetic_query_hit",
+            "qstart": "3",
+            "send": "7",
+            "slen": "8",
+            "sseqid": "BL_ORD_ID|0",
+            "sstart": "4"
+          },
+          "gapopen": 0,
+          "hsp_locators": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 1,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/1",
+              "report_index": 0
+            }
+          ],
+          "line": 2,
+          "mismatch": 0,
+          "native_line": "synthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t3\t6\t4\t7\t1e-05\t18\t10\t8",
+          "pident": 100.0,
+          "source_locator": {
+            "artifact_ref": "SYNTHETIC-artifact-blast_tabular",
+            "line": 2,
+            "pointer": "",
+            "report_index": 0
+          },
+          "status": "complete"
+        },
+        {
+          "association_status": "ambiguous",
+          "fields": {
+            "bitscore": "20",
+            "evalue": "1e-05",
+            "gapopen": "0",
+            "length": "4",
+            "mismatch": "0",
+            "pident": "100.0",
+            "qend": "4",
+            "qlen": "10",
+            "qseqid": "synthetic_query_hit",
+            "qstart": "1",
+            "send": "5",
+            "slen": "8",
+            "sseqid": "BL_ORD_ID|0",
+            "sstart": "2"
+          },
+          "gapopen": 0,
+          "hsp_locators": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/0",
+              "report_index": 0
+            },
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "hsp_index": 2,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/2",
+              "report_index": 0
+            }
+          ],
+          "line": 3,
+          "mismatch": 0,
+          "native_line": "synthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t1\t4\t2\t5\t1e-05\t20\t10\t8",
+          "pident": 100.0,
+          "source_locator": {
+            "artifact_ref": "SYNTHETIC-artifact-blast_tabular",
+            "line": 3,
+            "pointer": "",
+            "report_index": 0
+          },
+          "status": "complete"
+        },
+        {
+          "association_status": "validated",
+          "fields": {
+            "bitscore": "18",
+            "evalue": "1e-05",
+            "gapopen": "0",
+            "length": "4",
+            "mismatch": "1",
+            "pident": "75.0",
+            "qend": "4",
+            "qlen": "10",
+            "qseqid": "synthetic_query_hit",
+            "qstart": "1",
+            "send": "4",
+            "slen": "8",
+            "sseqid": "BL_ORD_ID|1",
+            "sstart": "1"
+          },
+          "gapopen": 0,
+          "hsp_locators": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 1,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/1/hsps/0",
+              "report_index": 0
+            }
+          ],
+          "line": 4,
+          "mismatch": 1,
+          "native_line": "synthetic_query_hit\tBL_ORD_ID|1\t75.0\t4\t1\t0\t1\t4\t1\t4\t1e-05\t18\t10\t8",
+          "pident": 75.0,
+          "source_locator": {
+            "artifact_ref": "SYNTHETIC-artifact-blast_tabular",
+            "line": 4,
+            "pointer": "",
+            "report_index": 0
+          },
+          "status": "complete"
+        },
+        {
+          "association_status": "validated",
+          "fields": {
+            "bitscore": "16",
+            "evalue": "1e-05",
+            "gapopen": "0",
+            "length": "4",
+            "mismatch": "1",
+            "pident": "75.0",
+            "qend": "4",
+            "qlen": "10",
+            "qseqid": "synthetic_query_hit",
+            "qstart": "1",
+            "send": "4",
+            "slen": "8",
+            "sseqid": "BL_ORD_ID|2",
+            "sstart": "1"
+          },
+          "gapopen": 0,
+          "hsp_locators": [
+            {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 2,
+              "hsp_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/2/hsps/0",
+              "report_index": 0
+            }
+          ],
+          "line": 5,
+          "mismatch": 1,
+          "native_line": "synthetic_query_hit\tBL_ORD_ID|2\t75.0\t4\t1\t0\t1\t4\t1\t4\t1e-05\t16\t10\t8",
+          "pident": 75.0,
+          "source_locator": {
+            "artifact_ref": "SYNTHETIC-artifact-blast_tabular",
+            "line": 5,
+            "pointer": "",
+            "report_index": 0
+          },
+          "status": "complete"
+        }
+      ],
+      "normalized_result": {
+        "execution": {
+          "application_id": "Homology",
+          "database_backed": true,
+          "original_task": {
+            "effective_parameters": null,
+            "effective_parameters_source": null,
+            "native_application_id": "Homology",
+            "required_application_id": "Homology",
+            "resource_id": "SYNTHETIC-api",
+            "submission_receipt_ref": "SYNTHETIC-submit",
+            "submitted_parameters": {
+              "blast_max_hits": 3,
+              "blast_program": "blastp"
+            },
+            "task_id": "SYNTHETIC-task"
+          },
+          "provider": "bvbrc",
+          "scientific_mode": "database_identification"
+        },
+        "format": "json2",
+        "hits": [
+          {
+            "descriptions": [
+              {
+                "accession": "0",
+                "id": "gnl|BL_ORD_ID|0",
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "description_index": 0,
+                  "hit_index": 0,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/0/description/0",
+                  "report_index": 0
+                },
+                "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+              }
+            ],
+            "hit_index": 0,
+            "hsps": [
+              {
+                "align_len": 4,
+                "bit_score": 20,
+                "evalue": 1e-05,
+                "gaps": 0,
+                "hit_from": 2,
+                "hit_to": 5,
+                "hseq": "ACDE",
+                "identity": 4,
+                "midline": "ACDE",
+                "num": 1,
+                "positive": 4,
+                "qseq": "ACDE",
+                "query_from": 1,
+                "query_to": 4,
+                "score": 40,
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "hit_index": 0,
+                  "hsp_index": 0,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/0",
+                  "report_index": 0
+                }
+              },
+              {
+                "align_len": 4,
+                "bit_score": 18,
+                "evalue": 1e-05,
+                "gaps": 0,
+                "hit_from": 4,
+                "hit_to": 7,
+                "hseq": "DEFG",
+                "identity": 4,
+                "midline": "DEFG",
+                "num": 2,
+                "positive": 4,
+                "qseq": "DEFG",
+                "query_from": 3,
+                "query_to": 6,
+                "score": 36,
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "hit_index": 0,
+                  "hsp_index": 1,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/1",
+                  "report_index": 0
+                }
+              },
+              {
+                "align_len": 4,
+                "bit_score": 20,
+                "evalue": 1e-05,
+                "gaps": 0,
+                "hit_from": 2,
+                "hit_to": 5,
+                "hseq": "ACDE",
+                "identity": 4,
+                "midline": "ACDE",
+                "num": 3,
+                "positive": 4,
+                "qseq": "ACDE",
+                "query_from": 1,
+                "query_to": 4,
+                "score": 40,
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "hit_index": 0,
+                  "hsp_index": 2,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/0/hsps/2",
+                  "report_index": 0
+                }
+              }
+            ],
+            "length": 8,
+            "source_locator": {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 0,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/0",
+              "report_index": 0
+            },
+            "unpaired_metadata": {}
+          },
+          {
+            "descriptions": [
+              {
+                "accession": "1",
+                "id": "gnl|BL_ORD_ID|1",
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "description_index": 0,
+                  "hit_index": 1,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/1/description/0",
+                  "report_index": 0
+                },
+                "title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]"
+              }
+            ],
+            "hit_index": 1,
+            "hsps": [
+              {
+                "align_len": 4,
+                "bit_score": 18,
+                "evalue": 1e-05,
+                "gaps": 0,
+                "hit_from": 1,
+                "hit_to": 4,
+                "hseq": "ACDQ",
+                "identity": 3,
+                "midline": "ACD ",
+                "num": 1,
+                "positive": 3,
+                "qseq": "ACDE",
+                "query_from": 1,
+                "query_to": 4,
+                "score": 36,
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "hit_index": 1,
+                  "hsp_index": 0,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/1/hsps/0",
+                  "report_index": 0
+                }
+              }
+            ],
+            "length": 8,
+            "source_locator": {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 1,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/1",
+              "report_index": 0
+            },
+            "unpaired_metadata": {}
+          },
+          {
+            "descriptions": [
+              {
+                "accession": "2",
+                "id": "gnl|BL_ORD_ID|2",
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "description_index": 0,
+                  "hit_index": 2,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/2/description/0",
+                  "report_index": 0
+                },
+                "title": "synthetic_reference_without_assignment"
+              }
+            ],
+            "hit_index": 2,
+            "hsps": [
+              {
+                "align_len": 4,
+                "bit_score": 16,
+                "evalue": 1e-05,
+                "gaps": 0,
+                "hit_from": 1,
+                "hit_to": 4,
+                "hseq": "ACDQ",
+                "identity": 3,
+                "midline": "ACD ",
+                "num": 1,
+                "positive": 3,
+                "qseq": "ACDE",
+                "query_from": 1,
+                "query_to": 4,
+                "score": 32,
+                "source_locator": {
+                  "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+                  "hit_index": 2,
+                  "hsp_index": 0,
+                  "pointer": "/BlastOutput2/0/report/results/search/hits/2/hsps/0",
+                  "report_index": 0
+                }
+              }
+            ],
+            "length": 8,
+            "source_locator": {
+              "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+              "hit_index": 2,
+              "pointer": "/BlastOutput2/0/report/results/search/hits/2",
+              "report_index": 0
+            },
+            "unpaired_metadata": {}
+          }
+        ],
+        "issues": [],
+        "mode": "database",
+        "native": {
+          "archive_member": null,
+          "document": {
+            "BlastOutput2": [
+              {
+                "report": {
+                  "params": {
+                    "expect": 1e-05
+                  },
+                  "program": "blastp",
+                  "reference": "SYNTHETIC; no algorithm was executed",
+                  "results": {
+                    "search": {
+                      "hits": [
+                        {
+                          "description": [
+                            {
+                              "accession": "0",
+                              "id": "gnl|BL_ORD_ID|0",
+                              "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+                            }
+                          ],
+                          "hsps": [
+                            {
+                              "align_len": 4,
+                              "bit_score": 20,
+                              "evalue": 1e-05,
+                              "gaps": 0,
+                              "hit_from": 2,
+                              "hit_to": 5,
+                              "hseq": "ACDE",
+                              "identity": 4,
+                              "midline": "ACDE",
+                              "num": 1,
+                              "positive": 4,
+                              "qseq": "ACDE",
+                              "query_from": 1,
+                              "query_to": 4,
+                              "score": 40
+                            },
+                            {
+                              "align_len": 4,
+                              "bit_score": 18,
+                              "evalue": 1e-05,
+                              "gaps": 0,
+                              "hit_from": 4,
+                              "hit_to": 7,
+                              "hseq": "DEFG",
+                              "identity": 4,
+                              "midline": "DEFG",
+                              "num": 2,
+                              "positive": 4,
+                              "qseq": "DEFG",
+                              "query_from": 3,
+                              "query_to": 6,
+                              "score": 36
+                            },
+                            {
+                              "align_len": 4,
+                              "bit_score": 20,
+                              "evalue": 1e-05,
+                              "gaps": 0,
+                              "hit_from": 2,
+                              "hit_to": 5,
+                              "hseq": "ACDE",
+                              "identity": 4,
+                              "midline": "ACDE",
+                              "num": 3,
+                              "positive": 4,
+                              "qseq": "ACDE",
+                              "query_from": 1,
+                              "query_to": 4,
+                              "score": 40
+                            }
+                          ],
+                          "len": 8,
+                          "num": 1
+                        },
+                        {
+                          "description": [
+                            {
+                              "accession": "1",
+                              "id": "gnl|BL_ORD_ID|1",
+                              "title": "fig|999999.2.peg.1|SYN_B|ALT_B   SYNTHETIC_FUNCTION_BETA   [SYNTHETIC_ORGANISM_B | 999999.2]"
+                            }
+                          ],
+                          "hsps": [
+                            {
+                              "align_len": 4,
+                              "bit_score": 18,
+                              "evalue": 1e-05,
+                              "gaps": 0,
+                              "hit_from": 1,
+                              "hit_to": 4,
+                              "hseq": "ACDQ",
+                              "identity": 3,
+                              "midline": "ACD ",
+                              "num": 1,
+                              "positive": 3,
+                              "qseq": "ACDE",
+                              "query_from": 1,
+                              "query_to": 4,
+                              "score": 36
+                            }
+                          ],
+                          "len": 8,
+                          "num": 2
+                        },
+                        {
+                          "description": [
+                            {
+                              "accession": "2",
+                              "id": "gnl|BL_ORD_ID|2",
+                              "title": "synthetic_reference_without_assignment"
+                            }
+                          ],
+                          "hsps": [
+                            {
+                              "align_len": 4,
+                              "bit_score": 16,
+                              "evalue": 1e-05,
+                              "gaps": 0,
+                              "hit_from": 1,
+                              "hit_to": 4,
+                              "hseq": "ACDQ",
+                              "identity": 3,
+                              "midline": "ACD ",
+                              "num": 1,
+                              "positive": 3,
+                              "qseq": "ACDE",
+                              "query_from": 1,
+                              "query_to": 4,
+                              "score": 32
+                            }
+                          ],
+                          "len": 8,
+                          "num": 3
+                        }
+                      ],
+                      "query_id": "Query_1",
+                      "query_len": 10,
+                      "query_title": "synthetic_query_hit"
+                    }
+                  },
+                  "search_target": {
+                    "db": "SYNTHETIC_DATABASE_PATH"
+                  },
+                  "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+                }
+              }
+            ]
+          },
+          "original_artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+          "original_pointer": "/BlastOutput2/0",
+          "original_sha256": "8985738aff592204b8d0c57c1ab8984067cef5e2e03ad92468d385b400a97b63",
+          "projection_sha256": "5d9846ce31cd4a2888d8d9620fb19c85a495e04c9a0c6d4e181b54ca3d46de04",
+          "representation": "derived_single_query_projection",
+          "sha256": "5d9846ce31cd4a2888d8d9620fb19c85a495e04c9a0c6d4e181b54ca3d46de04"
+        },
+        "query": {
+          "id": "Query_1",
+          "length": 10,
+          "native_identity_valid": true,
+          "title": "synthetic_query_hit"
+        },
+        "resource": "api",
+        "schema": "blast_normalized_result_v1",
+        "search": {
+          "database": "SYNTHETIC_DATABASE_PATH",
+          "hit_array_present": true,
+          "parameters": {
+            "expect": 1e-05
+          },
+          "program": "blastp",
+          "reported_hit_count": 3,
+          "request": {
+            "database": "SYNTHETIC_DATABASE_PATH",
+            "database_scope": "searched_database",
+            "max_target_seqs": 3
+          },
+          "statistics": {},
+          "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+        },
+        "source_locator": {
+          "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+          "pointer": "/BlastOutput2/0",
+          "report_index": 0
+        }
+      },
+      "query_binding": {
+        "id_mapping_evidence": [
+          {
+            "pointer": "/queries/0",
+            "relation": "exact_submitted_member_to_native_query",
+            "source_ref": "SYNTHETIC-stage-map"
+          }
+        ],
+        "input_source_ref": "SYNTHETIC-input",
+        "member_ref": "SYNTHETIC-member-0",
+        "molecule": "aa",
+        "native_query": {
+          "query_id": "Query_1",
+          "query_len": 10,
+          "query_title": "synthetic_query_hit",
+          "report_index": 0
+        },
+        "sequence_transform": {
+          "coordinate_map_ref": null,
+          "kind": "identity",
+          "pointer": "/members/0",
+          "source_ref": "SYNTHETIC-input"
+        },
+        "staged_id": "synthetic_query_hit",
+        "staged_length": 10,
+        "staged_sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b",
+        "subject_ref": "SYNTHETIC-subject-0",
+        "supplied_id": "synthetic_query_hit",
+        "supplied_length": 10,
+        "supplied_sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+      },
+      "query_binding_status": "validated",
+      "report_index": 0,
+      "source_locator": {
+        "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+        "pointer": "/BlastOutput2/0",
+        "report_index": 0
+      },
+      "status": "complete"
+    },
+    {
+      "description_links": [],
+      "diagnostics": [],
+      "native_tabular_measurements": [],
+      "normalized_result": {
+        "execution": {
+          "application_id": "Homology",
+          "database_backed": true,
+          "original_task": {
+            "effective_parameters": null,
+            "effective_parameters_source": null,
+            "native_application_id": "Homology",
+            "required_application_id": "Homology",
+            "resource_id": "SYNTHETIC-api",
+            "submission_receipt_ref": "SYNTHETIC-submit",
+            "submitted_parameters": {
+              "blast_max_hits": 3,
+              "blast_program": "blastp"
+            },
+            "task_id": "SYNTHETIC-task"
+          },
+          "provider": "bvbrc",
+          "scientific_mode": "database_identification"
+        },
+        "format": "json2",
+        "hits": [],
+        "issues": [],
+        "mode": "database",
+        "native": {
+          "archive_member": null,
+          "document": {
+            "BlastOutput2": [
+              {
+                "report": {
+                  "params": {
+                    "expect": 1e-05
+                  },
+                  "program": "blastp",
+                  "reference": "SYNTHETIC; no algorithm was executed",
+                  "results": {
+                    "search": {
+                      "hits": [],
+                      "query_id": "Query_2",
+                      "query_len": 4,
+                      "query_title": "synthetic_query_zero"
+                    }
+                  },
+                  "search_target": {
+                    "db": "SYNTHETIC_DATABASE_PATH"
+                  },
+                  "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+                }
+              }
+            ]
+          },
+          "original_artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+          "original_pointer": "/BlastOutput2/1",
+          "original_sha256": "8985738aff592204b8d0c57c1ab8984067cef5e2e03ad92468d385b400a97b63",
+          "projection_sha256": "baad2729973cc9122045ec102fbf081364bbb29372296da8b47465f67bae0171",
+          "representation": "derived_single_query_projection",
+          "sha256": "baad2729973cc9122045ec102fbf081364bbb29372296da8b47465f67bae0171"
+        },
+        "query": {
+          "id": "Query_2",
+          "length": 4,
+          "native_identity_valid": true,
+          "title": "synthetic_query_zero"
+        },
+        "resource": "api",
+        "schema": "blast_normalized_result_v1",
+        "search": {
+          "database": "SYNTHETIC_DATABASE_PATH",
+          "hit_array_present": true,
+          "parameters": {
+            "expect": 1e-05
+          },
+          "program": "blastp",
+          "reported_hit_count": 0,
+          "request": {
+            "database": "SYNTHETIC_DATABASE_PATH",
+            "database_scope": "searched_database",
+            "max_target_seqs": 3
+          },
+          "statistics": {},
+          "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE"
+        },
+        "source_locator": {
+          "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+          "pointer": "/BlastOutput2/1",
+          "report_index": 1
+        }
+      },
+      "query_binding": {
+        "id_mapping_evidence": [
+          {
+            "pointer": "/queries/1",
+            "relation": "exact_submitted_member_to_native_query",
+            "source_ref": "SYNTHETIC-stage-map"
+          }
+        ],
+        "input_source_ref": "SYNTHETIC-input",
+        "member_ref": "SYNTHETIC-member-1",
+        "molecule": "aa",
+        "native_query": {
+          "query_id": "Query_2",
+          "query_len": 4,
+          "query_title": "synthetic_query_zero",
+          "report_index": 1
+        },
+        "sequence_transform": {
+          "coordinate_map_ref": null,
+          "kind": "identity",
+          "pointer": "/members/1",
+          "source_ref": "SYNTHETIC-input"
+        },
+        "staged_id": "synthetic_query_zero",
+        "staged_length": 4,
+        "staged_sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+        "subject_ref": "SYNTHETIC-subject-1",
+        "supplied_id": "synthetic_query_zero",
+        "supplied_length": 4,
+        "supplied_sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e"
+      },
+      "query_binding_status": "validated",
+      "report_index": 1,
+      "source_locator": {
+        "artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+        "pointer": "/BlastOutput2/1",
+        "report_index": 1
+      },
+      "status": "complete"
+    }
+  ],
+  "schema": "bvbrc_homology_parse_v1",
+  "status": "complete"
+}

@@ -1,0 +1,52 @@
+..............FF........                                                 [100%]
+=================================== FAILURES ===================================
+_ test_broad_table_with_unknown_recovery_spans_is_a_projection_partial_not_a_number_leak[experiment] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2007/test_broad_table_with_unknown_0')
+field = 'experiment'
+
+    @pytest.mark.parametrize('field',['experiment','mean_definition'])
+    def test_broad_table_with_unknown_recovery_spans_is_a_projection_partial_not_a_number_leak(tmp_path,field):
+        store,ctx,args=setup(tmp_path,requested=['reported_zprime','control_band_ratio'])
+        with store:
+            raw=store.get_artifact(store.get(args['source_ref'])['artifact_ref'])
+            start,end=raw.index(b'<table>'),raw.index(b'</table>')+len(b'</table>')
+            args['context'][field]={'source_ref':args['source_ref'],'representation':'original',
+                'start':start,'end':end,'quote':raw[start:end].decode()}
+            repo,out,_=populated(store,ctx,args)
+            rows=out['result']['cells'];assert len(rows)==2
+            quote=rows[0]['source_meanings'][field]
+>           assert quote['status']=='numerical_scope_unresolved'
+E           AssertionError: assert 'unrequested_numbers_withheld' == 'numerical_scope_unresolved'
+E             
+E             - numerical_scope_unresolved
+E             + unrequested_numbers_withheld
+
+tests/test_literature_measurement_validation_binding_209.py:232: AssertionError
+_ test_broad_table_with_unknown_recovery_spans_is_a_projection_partial_not_a_number_leak[mean_definition] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2007/test_broad_table_with_unknown_1')
+field = 'mean_definition'
+
+    @pytest.mark.parametrize('field',['experiment','mean_definition'])
+    def test_broad_table_with_unknown_recovery_spans_is_a_projection_partial_not_a_number_leak(tmp_path,field):
+        store,ctx,args=setup(tmp_path,requested=['reported_zprime','control_band_ratio'])
+        with store:
+            raw=store.get_artifact(store.get(args['source_ref'])['artifact_ref'])
+            start,end=raw.index(b'<table>'),raw.index(b'</table>')+len(b'</table>')
+            args['context'][field]={'source_ref':args['source_ref'],'representation':'original',
+                'start':start,'end':end,'quote':raw[start:end].decode()}
+            repo,out,_=populated(store,ctx,args)
+            rows=out['result']['cells'];assert len(rows)==2
+            quote=rows[0]['source_meanings'][field]
+>           assert quote['status']=='numerical_scope_unresolved'
+E           AssertionError: assert 'unrequested_numbers_withheld' == 'numerical_scope_unresolved'
+E             
+E             - numerical_scope_unresolved
+E             + unrequested_numbers_withheld
+
+tests/test_literature_measurement_validation_binding_209.py:232: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_validation_binding_209.py::test_broad_table_with_unknown_recovery_spans_is_a_projection_partial_not_a_number_leak[experiment]
+FAILED tests/test_literature_measurement_validation_binding_209.py::test_broad_table_with_unknown_recovery_spans_is_a_projection_partial_not_a_number_leak[mean_definition]
+2 failed, 22 passed, 2 deselected in 41.21s

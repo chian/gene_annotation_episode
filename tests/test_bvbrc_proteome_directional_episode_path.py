@@ -84,9 +84,9 @@ def test_actual_selected_tool_shared_workflow_native_publication_and_typed_paren
             else: raise AssertionError(command)
             return super().rpc(command)
 
-        def download(self, url, *, byte_range=None):
+        def download(self, url, *, max_bytes, byte_range=None):
             self.body = canonical(manifest).encode() if url.endswith('/manifest') else native('2221')
-            return super().download(url, byte_range=byte_range)
+            return super().download(url, max_bytes=max_bytes, byte_range=byte_range)
 
     client = Responses()
     constructor = BVBRCAppServiceService.__init__
@@ -158,7 +158,7 @@ def test_actual_selected_tool_shared_workflow_native_publication_and_typed_paren
                         return selected(PREFIX + 'download_capability', {'objects': [self.manifest_object], 'generation': 0, 'predecessor_receipt_ref': None})
                     if count == 5: return selected(PREFIX + 'download', {'object': self.manifest_object,
                         'capability': {'kind': 'acquired', 'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0},
-                        'byte_range': None, 'requirement_ids': [], 'role': 'task_manifest', 'declared_format': {
+                        'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': [], 'role': 'task_manifest', 'declared_format': {
                             'format': 'json', 'version': None, 'mode': None, 'producer_source_ref': None, 'transformation_evidence': []}})
                     if count == 6:
                         self.manifest_ref = self.last(episode_id)['support_receipt_ref']
@@ -167,7 +167,7 @@ def test_actual_selected_tool_shared_workflow_native_publication_and_typed_paren
                     assert count == 7
                     return selected(PREFIX + 'download', {'object': {'kind': 'manifest_member', 'manifest_receipt_ref': self.manifest_ref, 'output_index': 0},
                         'capability': {'kind': 'acquired', 'receipt_ref': self.last(episode_id)['support_receipt_ref'], 'input_index': 0},
-                        'byte_range': None, 'requirement_ids': ['directional'], 'role': 'proteome_directional_report',
+                        'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': ['directional'], 'role': 'proteome_directional_report',
                         'declared_format': case['parameters']['directional_documents'][0]['declared_format']})
                 if 'scientific_process' in current:
                     if count == 1: return child('launch', launching, scope, handoff_schema)

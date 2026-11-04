@@ -473,7 +473,7 @@ def download_operation(h, url, *, byte_range=None):
     entry = {"input_index": 0, "object_selection": obj["selection"], "object": obj["object"],
         "task_association": obj["task_association"], "url": url,
         "issued_observed_at": "2026-10-24T12:00:00+00:00", "expires_at": None, "expiry_evidence": None}
-    args = {"capability": capability, "object": obj["selection"], "byte_range": byte_range,
+    args = {"capability": capability, "object": obj["selection"], "byte_range": byte_range, "max_bytes": 1048576,
         "requirement_ids": ["r1"], "role": "native_output", "declared_format": deepcopy(FORMAT)}
     bindings = bound(request, "download", args, original_task=original_task(request), object=obj,
         capability={"selection": capability, "entry": entry})

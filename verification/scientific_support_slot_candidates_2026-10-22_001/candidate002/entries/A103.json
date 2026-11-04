@@ -1,0 +1,206 @@
+{
+  "entry_version": "scientific_support_entry_v1",
+  "id": "A103",
+  "slot": "annotation_distinction",
+  "name": "Functional association from conserved gene organization",
+  "description": "Support process association from recurrent locus, operon or fusion organization with exact genome identity, arrangement and exceptions.",
+  "support": {
+    "proposition": "Actual, specifically organized recurrence of the target homolog/domain with a separately characterized process supports bounded functional association, rather than an exact reaction or substrate assignment.",
+    "operands": [
+      {
+        "operand_id": "observed_gene_organization",
+        "observation_kinds": [
+          "context",
+          "context_measurement",
+          "comparison"
+        ],
+        "hypothesis_predicates": [
+          "participates_in",
+          "functional_family",
+          "partner_dependence"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "different_source_subject",
+          "conditions_limit_transfer",
+          "alternatives_not_discriminated",
+          "confounding_unresolved"
+        ],
+        "instruction": "Preserve genome accession/release and strain, feature identity, order/orientation, overlap or intergenic interval, fusion boundaries and the exact examined inventory. Separate source feature labels from an assessed organization observation. Preserve broken/nonuniversal linkage and paralog/assembly ambiguity. Assess strengthens only for the bounded process association; does_not_discriminate exact catalyzes or substrate claims from proximity alone. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates."
+      },
+      {
+        "operand_id": "associated_process_characterization",
+        "observation_kinds": [
+          "assay_report",
+          "biochemical_assay",
+          "genetic_phenotype"
+        ],
+        "hypothesis_predicates": [
+          "participates_in",
+          "functional_family",
+          "catalyzes",
+          "requires",
+          "partner_dependence"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "different_source_subject",
+          "conditions_limit_transfer",
+          "measurement_does_not_establish_claim"
+        ],
+        "instruction": "Identify the independent source fact that characterizes the neighboring/fused process and preserve what it actually measured. HemK-prfA overlap nominates an RF relationship; methylation assays establish substrate/site. YjeF fusion supports coupling while epimerase chemistry and ADP dependence require separate assays. Use exact experimental strain rather than borrowing a comparison-table strain. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates."
+      }
+    ],
+    "qualifications": [
+      "HemK-prfA organization recurs but is nonuniversal. OarX ATCC 13032 table context and ATCC 14067 experimental work remain distinct; blank FmnO cells are unknown assignments. A fused architecture is not proof of a particular partner reaction or donor.",
+      "Retain actual source_ref, source_subject_refs, condition_refs and assumption_refs. The published examples below are instruction provenance about their named subjects; they are not observations of ybhP/b0790 and were not repeated to prepare this draft.",
+      "At construction and in decision context, resolve these observation kinds through annotation_support_routes for the actual caller-bound annotation policy; an entry does not supply universal component labels, select a projector, mask another kind, change a weight, or create a target finding. An unavailable route declaration remains unavailable.",
+      "Use actual retained assessments in a compatible annotation account. Selecting this entry earns nothing. The current caller-owned applicability × relation × extent arithmetic, same-component maximum, coherent-account integration and derived discrimination remain unchanged for this review basis. A finding qualification is not an automatic numeric discount; no independence, confidence or new score dimension is implied."
+    ],
+    "boundary": "A proximity/fusion observation is not a direct assay, proof of operon transcription, universal linkage or independent replication across closely related genomes. No fixed neighborhood radius or required recurrence count is adopted. The episode retains actual observation meaning when kind dispatch differs under the caller policy."
+  },
+  "evidence": [
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:2#/actual_observations",
+      "observation": "The target genome has dispersed chorismate genes. In Aeropyrum pernix and Pyrococcus abyssi, an unknown GHMP-kinase-like gene lies immediately downstream of shikimate dehydrogenase. Its homologs occur in pathway-bearing archaea but not the pathway-lacking P. horikoshii comparison. A separate GHMP paralog, RMJ01903, tracks threonine-biosynthesis genes in other archaeal genomes.",
+      "limit": "Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping. | Group source-use limits: Related genome occurrences are not asserted independent tests. The historical WIT/gi identity is preserved without an invented modern locus mapping; none of the analyses was rerun."
+    },
+    {
+      "case_group": "context_bioy_optional_module_2007",
+      "case_id": "context_bioy_optional_module_2007",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1815280/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:11#/actual_observations",
+      "observation": "Many bioY loci associate with biotin biosynthesis/regulons, but only approximately one-third link to bioMN; some genomes lack obvious BioMN homologs. In heterologous E. coli, BioY alone transported biotin. Longer accumulation assays initially suggested BioMN dispensability; initial-rate substrate titrations showed the full system has greater affinity. BioM Walker-A mutation impaired efficient uptake.",
+      "limit": "Comparative results, all transport/complex results, discussion, and assay/bioinformatics methods read from full paper. No membrane assay or phylogenetic reconstruction performed. | Group source-use limits: Heterologous uptake does not establish a native role across all BioY paralogs, so it is not assigned allele-linked native A109. Late accumulation and initial-rate readouts are related tests."
+    },
+    {
+      "case_group": "context_cfbb_f430_ringf_2017",
+      "case_id": "context_cfbb_f430_ringf_2017",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5337119/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:12#/actual_observations",
+      "observation": "Chemically required chelation, amidation, and reduction motivated searching for a matching gene grouping. Several methanogen clusters combine a type-II chelatase, MurF-like ligase, nitrogenase-like pair, and amidation enzyme. The M. barkeri MurF-like CfbB converted two candidate reduced intermediates; reduced enzyme concentration made the faster seco-F430 reaction discriminate the preferred substrate.",
+      "limit": "Complete main cluster/enzyme results and relevant ligase methods read. Not all structural/spectroscopic supplementary detail inspected. Cfb letter assignments kept specific to this paper, avoiding conflation with the 2016 study. | Group source-use limits: Use the 2017 paper-specific CfbB letter assignment. Not all spectroscopy/structural supplements were inspected; upstream natural electron supply remains unknown."
+    },
+    {
+      "case_group": "context_comf_mmp16_2025",
+      "case_id": "context_comf_mmp16_2025",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068725/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:9#/actual_observations",
+      "observation": "Across MCR-containing archaeal genomes, MMP16 tracks sulfoacetaldehyde-biosynthesis genes and often clusters with them. Knockout growth in standard sulfide-containing medium showed a defect rather than absolute auxotrophy. Removing supplied sulfide uncovered CoM-dependent growth; complementation restored it. Methionine inhibition experiments implicated a possible L-ASST backup without proving its mechanism.",
+      "limit": "Full genomic, growth, complementation, transcriptomic and cysteine-mutant results, discussion, and phylogenetic methods read. Author data/code not rerun; no purified-enzyme activity claimed. | Group source-use limits: No purified ComF activity or exact L-ASST backup mechanism is claimed. Comparative results and shared strains/media are connected evidence."
+    },
+    {
+      "case_group": "context_mj0044_ip_kinase_2006",
+      "case_id": "context_mj0044_ip_kinase_2006",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1447442/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:7#/actual_observations",
+      "observation": "MJ0044 homologs cluster with mevalonate-pathway genes in several archaea; M. jannaschii itself lacks that clustering. Repeated assays with mevalonate and mevalonate-5-phosphate were negative. The retained context motivated an alternative reaction order: decarboxylation before the second phosphorylation, producing isopentenyl phosphate as the proposed substrate.",
+      "limit": "Complete primary methods/results and pathway caveats read. No assay or genomic analysis rerun; historical whole-pathway claims not promoted to a current confirmed pathway. | Group source-use limits: The proposed upstream decarboxylation and its gene remain unidentified; historical full-pathway reconstruction is not confirmed by the measured kinase reaction."
+    },
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "case_id": "context_oarx_thiamin_2024",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:1#/actual_observations/paper_reported",
+      "observation": "OarX coexists with canonical FabG and belongs to a separate clade. Neighborhoods connect it to thiamin enzymes/transporters and TPP riboswitches; FmnO occurs only in a subset. Canonical thiamin biosynthesis is already accounted for. Physiological-dose growth tests failed to support salvage of PCA, MTA, oxo-HET, oxo-thiamin, or thiamin acetic acid.",
+      "limit": "Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct. | Group source-use limits: The original workbook-derived 87/22/65 counts and ENA inspection are preserved in coverage but not extra biological replications. ATCC13032 table and ATCC14067 experiments remain different."
+    },
+    {
+      "case_group": "context_poxa_yjek_efp_2010_2011",
+      "case_id": "context_poxa_yjek_efp_2010_2011",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2821294/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:8#/actual_observations[characters 0:272]",
+      "observation": "The 2010 analysis found repeated efp/yjeA/yjeK clustering and cooccurrence of the enzyme pair with EF-P Lys34. YjeK-like genes associate with efp rather than the ablB catabolic partner of canonical LAM. Both aminomutase-first and attachment-first mechanisms were proposed.",
+      "limit": "2010 hypothesis/results/methods passages and complete 2011 main article read. Detailed 2011 supplementary methods not inspected. No new genome count, alignment, or assays. | Group source-use limits: The 2010 source is explicitly a hypothesis; the 2011 source is later discriminating evidence, not information available to the earlier investigation. Detailed 2011 supplementary methods were not inspected. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL."
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "case_id": "context_rbkr_regulator_kinase_2017",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5397151/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:10#/actual_observations",
+      "observation": "RibK and the wHTH-RibK fusion occupy complementary genomes. Conserved upstream motifs recur at riboflavin biosynthesis/uptake loci; Thermoplasma auxotrophs instead point toward an uptake target. Recombinant proteins bound predicted DNA sites, kinase assays produced FMN, and FMN disrupted DNA binding. Candidate operator positions suggested activation.",
+      "limit": "Complete genomic reconstruction, dual-function results, evolutionary caveats, and relevant bioinformatics/DNA-binding/kinase methods read. Structure section not exhaustively inspected; no motif scan or assay repeated. | Group source-use limits: Native activation/sign was inferred from operator positions, not established with native genetics/transcriptomics; it is not A107 observed native regulation. Kinase and binding outputs are connected study measurements."
+    },
+    {
+      "case_group": "context_ribk_mj0056_2008",
+      "case_id": "context_ribk_mj0056_2008",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2293203/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:6#/actual_observations",
+      "observation": "MJ0056 has a riboflavin-kinase-like fold with bound CDP despite undetectable sequence similarity to known kinases. Its homologs are adjacent to ribB in multiple archaea. It also occurs in riboflavin auxotrophs, consistent with phosphorylation of salvaged vitamin rather than de novo riboflavin synthesis alone.",
+      "limit": "Complete short primary paper and methods read. No ribB-neighborhood retrieval or enzymatic measurement repeated. | Group source-use limits: Auxotroph occurrence is compatible with salvage but does not measure native salvage flux. Fold, adjacency and assays remain connected evidence, not automatically independent."
+    },
+    {
+      "case_group": "hemk_prmc",
+      "case_id": "context_hemk_prmc_2002",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC125846/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:5#/actual_observations",
+      "observation": "After identifying YfcB as the L3 glutamine methyltransferase, the authors found RF methylation remained in the YfcB mutant. HemK was the sole significant E. coli YfcB homolog. hemK immediately follows prfA/RF1 with overlapping stop/start codons; this relationship recurs in diverse bacteria but is not universal.",
+      "limit": "Full primary main text retrieved; identification, gene-organization, methylation results and methods read. No independent prfA-neighborhood query, mutation, or assay."
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "case_id": "pxpABC_oxoproline_disposal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5625064/",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:11#/actual_observations/1",
+      "observation": "Neighboring genes, complementary occurrence and physiological observations motivated a three-component enzyme hypothesis.",
+      "limit": "Primary indexed introduction, discussion and relevant comparative-genomics/assay methods inspected. No experiments or source genome analysis repeated."
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/0/observation",
+      "observation": "Authors found inverse QueG/DUF208 distribution, Q-pathway neighborhoods and QueA fusions.",
+      "limit": "Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun."
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "case_id": "seq_hutW_vibrio",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:13#/actual_observations/0",
+      "observation": "HutW shared 39% sequence identity with ChuW; related heme-utilization operons motivated comparison.",
+      "limit": "Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed."
+    },
+    {
+      "case_group": "yjef_nnr",
+      "case_id": "context_yjef_nnr_fusion_2011",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3308837/",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:3#/actual_observations",
+      "observation": "Yeast dehydratase YKL151C corresponds to YjeF’s C-terminal domain. YjeF’s N-terminal domain has separate yeast/mammalian homologs; fusion suggests related reactions. Known dehydratase stereoselectivity suggested an epimerase partner. Recombinant YjeF repairs both epimers. An ATP-regeneration system unexpectedly abolished bacterial activity, prompting ADP testing.",
+      "limit": "Complete main experimental procedures and relevant results read from full PMC HTML; supplementary procedures not independently inspected. No new sequence/fusion search or assays. | Group source-use limits: The context/root records duplicate the 2011 paper and are not independent enzyme characterizations. Supplementary methods were not independently inspected. The 3RS8 ADP-ribose query is separate record work and does not confirm the paper ligand prose."
+    }
+  ]
+}

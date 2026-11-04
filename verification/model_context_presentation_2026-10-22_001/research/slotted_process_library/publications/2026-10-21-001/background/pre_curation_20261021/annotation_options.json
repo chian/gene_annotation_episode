@@ -1,0 +1,3059 @@
+{
+  "slot": "annotation_distinction",
+  "status": "source_grounded_research_catalog_not_adopted_credit_schema",
+  "corpus_scope": {
+    "distinct_case_groups": 142,
+    "included_case_records": 149,
+    "reviewed": "Question, observations and annotation consequence across all 142 groups; recorded source scopes retained. Original Cas2, YeaG, archaeal processing and IscR traces inspected for the detailed boundaries below."
+  },
+  "credit_form_relationship": "The first slot selects an annotation property or distinction to approach. Credit remains assigned through the declared structured JSON form, not another freehand judgment. These research options expose possible field semantics; compatibility with current runtime fields has not been established. No numerical scoring axis, weight or saved credit changes.",
+  "common_scope": "All claims retain target entity, actual observations, preparation, organism/strain, conditions, uncertainty and transfer scope. Those are typed claim/provenance information, not additional library slots or independent credit axes. Unknown parts can remain explicit while valid narrower annotations are preserved.",
+  "option_selection": "The property selected for a bounded child need not request every property or remain the only property approached throughout an investigation. No option selects the child’s scientific action or prescribes an episode itinerary.",
+  "options": [
+    {
+      "id": "A01",
+      "name": "Direct molecular operation",
+      "description": "Represent what the target itself does: chemical transformation, binding, translocation or physical energy effect; distinguish a downstream consequence.",
+      "claim_scope": "A specified protein/complex acting on material in a stated preparation and condition; the operation may remain unresolved while a narrower binding claim is retained.",
+      "distinctions": [
+        "Fold/motif resemblance versus demonstrated operation.",
+        "Binding versus productive chemical conversion.",
+        "Target-executed step versus spontaneous or partner-executed consequence.",
+        "Model-substrate activity versus solved native function."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "operation_kind": [
+            "covalent_transformation",
+            "noncovalent_binding",
+            "translocation",
+            "physical_energy_dissipation",
+            "unresolved"
+          ],
+          "operation_owner": [
+            "target",
+            "other_component",
+            "unresolved"
+          ],
+          "transformation_examples": [
+            "nitrile_reduction",
+            "phosphorylation",
+            "decarboxylation",
+            "model_ester_hydrolysis"
+          ],
+          "binding_without_demonstrated_conversion": [
+            true,
+            false,
+            "not_assessed"
+          ]
+        },
+        "required_typed_references": [
+          "target_entity_ref",
+          "material_ref",
+          "condition_ref",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "A positive assay does not establish primary native role.",
+        "An incomplete preparation or inappropriate condition does not establish universal inactivity.",
+        "A downstream product does not identify each enzyme-executed step."
+      ],
+      "follow_up_lane_ids": [
+        "F01",
+        "F02",
+        "F03"
+      ],
+      "boundary": "A02 specifies material/features selected; A03 specifies how action works; A06 specifies system responsibility. These are independently representable.",
+      "evidence": [
+        {
+          "case_group": "quef",
+          "case_id": "seq_queF_not_folE",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary Results and Discussion plus alignment and assay descriptions inspected through indexed full-text sections. No sequence alignment or experiments rerun here.",
+          "observation": "Controlled negative cyclohydrolase assays and authentic preQ1 product assign nitrile reduction while retaining the pathway association.",
+          "limit": "Author assays; no universal transfer to every FolE-like protein."
+        },
+        {
+          "case_group": "seq_ptmvd_m3k_picrophilus",
+          "case_id": "seq_ptmvd_m3k_picrophilus",
+          "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment.",
+          "observation": "Product analysis assigns phosphorylation; observed alkene follows spontaneous decomposition, not direct enzyme decarboxylation.",
+          "limit": "Sequence sections and product-analysis conclusion inspected; no new experiment."
+        },
+        {
+          "case_group": "MJ0577_Zarembinski_1998",
+          "case_id": "MJ0577_Zarembinski_1998",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC28018/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full primary text and live 1MJH contact record checked; published answer known.",
+          "observation": "ATP binding, absent appreciable purified-alone hydrolysis and extract-enabled hydrolysis require different annotation claims.",
+          "limit": "Activating extract component and cellular role remain unidentified."
+        },
+        {
+          "case_group": "spec_frsa_disputed_pdc_native_unknown",
+          "case_id": "spec_frsa_disputed_pdc_native_unknown",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450606/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified.",
+          "observation": "Measured model-ester hydrolysis is narrower than a solved native function, particularly with weak kinetic parameters and explicit author qualification.",
+          "limit": "2019 relevant body inspected; original 2011 PDC claim was not independently reverified."
+        },
+        {
+          "case_group": "organism_20_isia",
+          "case_id": "organism_20_isia",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8545134/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete relevant mutant/spectroscopy/growth Results and growth conditions. No new fluorescence-lifetime analysis.",
+          "observation": "C260V removes excitation quenching, supporting physical energy dissipation rather than assigning a new enzymatic reaction.",
+          "limit": "Author spectroscopy; no new lifetime analysis or universal phenotype claim."
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "name": "Molecular target, recognition range and exact feature",
+      "description": "Represent which substrate, ligand, ion, macromolecule, sequence site or chemical feature is recognized or acted upon, with bounded exclusions and productive versus nonproductive recognition.",
+      "claim_scope": "The operation recipient at warranted resolution: molecule, carrier/polymer context, residue/nucleotide and atom, stereoisomer/anomer or tested panel.",
+      "distinctions": [
+        "Same operation, different substrate/ligand range.",
+        "Binding versus productive modification.",
+        "Free metabolite versus carrier/polymer-bound target.",
+        "Protein-level activity versus exact residue, nucleotide, atom or stereochemical assignment.",
+        "Affinity for one target versus discrimination against alternatives."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "target_context": [
+            "free_small_molecule",
+            "protein_site",
+            "RNA_site",
+            "DNA_site",
+            "carrier_bound_metabolite",
+            "ion",
+            "unresolved"
+          ],
+          "target_relation": [
+            "bound",
+            "productively_transformed",
+            "no_detected_activity_under_test",
+            "unresolved"
+          ],
+          "target_resolution": [
+            "molecule",
+            "polymer_or_carrier",
+            "residue_or_nucleotide",
+            "specific_atom_or_stereoisomer",
+            "unresolved"
+          ],
+          "range_statement": [
+            "tested_target_only",
+            "bounded_tested_panel",
+            "multiple_tested_targets",
+            "untested_family_prediction"
+          ]
+        },
+        "required_typed_references": [
+          "target_entity_ref",
+          "substrate_or_site_ref",
+          "numbering_or_sequence_ref",
+          "tested_alternative_refs",
+          "condition_ref",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "No-detection in a panel is not universal exclusivity.",
+        "Km, competition IC50 and Kd are different measurements.",
+        "Protein substrate assignment does not establish every altered phosphosite.",
+        "Homolog contacts, ligand complexes and best hits alone do not establish native specificity."
+      ],
+      "follow_up_lane_ids": [
+        "F01",
+        "F03"
+      ],
+      "boundary": "This is what is selected. A01 is the operation, A05 the regulatory effect, and A08 native physiological significance. Exact modification sites are explicit here, not buried under a generic activity label.",
+      "evidence": [
+        {
+          "case_group": "seq_triA_atzA_near_identity",
+          "case_id": "seq_triA_atzA_near_identity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC95154/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary introduction, sequence results, substrate table and competition methods/results inspected through indexed full text. Historical organism name preserved explicitly.",
+          "observation": "Only nine of 475 residues differ, yet the tested melamine/ammeline and halo-triazine profiles differ.",
+          "limit": "Tested panel is bounded, not universal exclusivity."
+        },
+        {
+          "case_group": "seq_yggH_trmB_ecoli",
+          "case_id": "seq_yggH_trmB_ecoli",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC154064/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary introduction, cloning methods and positional-assay results inspected through indexed sections; no new analysis performed.",
+          "observation": "Coarse AdoMet-related prediction becomes a tRNA guanosine-46 N7 assignment through modification and G46A substrate contrasts.",
+          "limit": "Positional-assay sections inspected; no new assay."
+        },
+        {
+          "case_group": "seq_yadB_gluQRS_ecoli",
+          "case_id": "seq_yadB_gluQRS_ecoli",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+          "observation": "Both tRNA-Asp preparations bind but only Q34-containing tRNA is glutamylated, separating carrier, chemical feature and productive recognition.",
+          "limit": "Matched-substrate NAR sections read; associated PNAS source was abstract-level."
+        },
+        {
+          "case_group": "seq_queFL_archaeosine",
+          "case_id": "seq_queFL_archaeosine",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments.",
+          "observation": "Free and tRNA-bound preQ0 form adducts, but productive archaeosine synthesis uses the tRNA-bound substrate.",
+          "limit": "Author experiments; no new chemistry or whole-family transfer."
+        },
+        {
+          "case_group": "hemk_prmc",
+          "case_id": "context_hemk_prmc_2002",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC125846/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full primary main text retrieved; identification, gene-organization, methylation results and methods read. No independent prfA-neighborhood query, mutation, or assay.",
+          "observation": "Related methyltransferases distinguish release-factor GGQ glutamine from L3 glutamine; chemistry does not supply protein/site specificity.",
+          "limit": "Identification/methylation sections read; no new assay."
+        },
+        {
+          "case_group": "sulfoglycolysis_selectivity",
+          "case_id": "spec_yihs_sulfosugar_selectivity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2008 primary abstract inspected; 2021 relevant complete YihS results, comparisons and figure legends inspected. Supporting spectra/kinetic fits not independently reprocessed.",
+          "observation": "Sulfosugar preference, synthetic-reference/NMR product assignment and beta-SQ preference refine target and stereochemical resolution.",
+          "limit": "2021 relevant body inspected; 2008 ordinary-sugar work was abstract-level; spectra/fits not reprocessed."
+        },
+        {
+          "case_group": "reg_iscR_state_target_specificity",
+          "case_id": "reg_iscR_state_target_specificity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3676455/",
+          "source_locator": "Tables 2–3; Figures 4–5; Online Methods and Discussion.",
+          "observation": "E43A approximately preserves hya affinity but expands type-1 recognition, distinguishing one-target affinity from specificity.",
+          "limit": "Clusterless structures do not directly show the proposed holo conformational trajectory."
+        },
+        {
+          "case_group": "yeag",
+          "case_id": "cellular_yeaG",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+          "source_locator": "Trace route_2_phosphorylation_to_direct_contribution; main Tables 2–3; selected supplementary AceA site rows and assay Methods.",
+          "observation": "The YeaG/AceA purified-protein assay supports phosphorylation with malate; site-resolved records do not establish the exact in-vitro modified sites.",
+          "limit": "Actual research extracted selected XLSX rows/response contrasts; no raw spectra, native flux or exact assay site mapping."
+        }
+      ]
+    },
+    {
+      "id": "A03",
+      "name": "Mode and mechanism of molecular action",
+      "description": "Represent how an assigned operation is physically or chemically achieved, at the level actually distinguished by evidence.",
+      "claim_scope": "A mechanism proposition attached to an operation/condition: transport mode, reaction direction, intermediate or structural route.",
+      "distinctions": [
+        "Passive channel versus carrier/active transport.",
+        "Reduction-capable fold versus direction realized with cellular partners.",
+        "Structural model versus independently constrained route.",
+        "Shared broad chemistry versus changed product/intermediate or mechanism."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "mechanism_resolution": [
+            "operation_only",
+            "physical_mode",
+            "intermediate_or_route",
+            "detailed_mechanism_unresolved"
+          ],
+          "physical_mode_examples": [
+            "passive_channel",
+            "proton_coupled_transport",
+            "partner_driven_oxidation",
+            "coupled_redox"
+          ],
+          "mechanism_relation": [
+            "directly_discriminated_in_tested_system",
+            "consistent_model",
+            "conflicting_models",
+            "unresolved"
+          ],
+          "reaction_direction": [
+            "forward_in_stated_system",
+            "reverse_in_stated_system",
+            "both_tested",
+            "unresolved"
+          ]
+        },
+        "required_typed_references": [
+          "operation_ref",
+          "mechanism_or_model_ref",
+          "system_and_condition_ref",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "Static contacts or topology do not establish a complete dynamic cycle.",
+        "Artificial acceptors do not establish native direction.",
+        "A homolog mechanism is not automatically the target mechanism."
+      ],
+      "follow_up_lane_ids": [
+        "F01",
+        "F02",
+        "F04"
+      ],
+      "boundary": "A04 states requirements/consumption; A07 states where materials can meet. Either can constrain a mechanism without proving it.",
+      "evidence": [
+        {
+          "case_group": "fluc_fluoride_channel",
+          "case_id": "fluc_fluoride_channel",
+          "source_url": "https://elifesciences.org/articles/01084",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary full results/methods and correction inspected by root.",
+          "observation": "Reconstituted flux and currents distinguish a fluoride-selective channel from a generic resistance or active-carrier inference.",
+          "limit": "Author experiments; separate sequence-label correction does not withdraw channel behavior."
+        },
+        {
+          "case_group": "organism_19_pyruvate_transport",
+          "case_id": "organism_19_pyruvate_transport",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5738728/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant main Results/transport Methods across three papers, including alternative-transporter and resuscitation controls. Grouped as one investigation, not three cases.",
+          "observation": "BtsT radiolabeled uptake and proteoliposomes establish proton-coupled pyruvate uptake beyond starvation association.",
+          "limit": "Resuscitation sensing-network phenotypes are not BtsT-only deletion results and alternative routes exist."
+        },
+        {
+          "case_group": "spatial_trxa_relocation_role",
+          "case_id": "spatial_trxa_relocation_role",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94335/",
+          "source_locator": "Fig. 1–2; Table 2; Mechanism of oxidation Results and earlier-strain correction.",
+          "observation": "Exported TrxA supports DsbB-dependent OmpA oxidation and a trapped mixed disulfide, unlike its usual cytoplasmic reductant role.",
+          "limit": "Engineered context does not reannotate native TrxA as naturally exported."
+        },
+        {
+          "case_group": "spatial_dsbd_topology_revision",
+          "case_id": "spatial_dsbd_topology_revision",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC193585/",
+          "source_locator": "Results, Figs. 2–5; mature-protein numbering.",
+          "observation": "An intramolecular Cys163–Cys285 disulfide plus cytoplasmic accessibility rejects an earlier static opposite-face model.",
+          "limit": "Periplasmic encounter and complete dynamic transfer cycle remain unresolved."
+        },
+        {
+          "case_group": "seq_hutW_vibrio",
+          "case_id": "seq_hutW_vibrio",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed.",
+          "observation": "HutW shares broad heme degradation with ChuW but differs in tested NADPH support and product reduction state.",
+          "limit": "No new heme experiment; shared broad chemistry does not supply identical detailed mechanism."
+        }
+      ]
+    },
+    {
+      "id": "A04",
+      "name": "Productive requirements and coupled reaction account",
+      "description": "Represent cofactors, substrates, electron/nucleotide donors and compatible partners required for productive operation, distinguishing coupled consumption from merely correlated stimulation.",
+      "claim_scope": "A productive reaction or repeated operation in a stated system, keeping incomplete preparation, single event, sustained turnover and coupled readout distinct.",
+      "distinctions": [
+        "Incomplete preparation versus cofactor-restored activity.",
+        "Regulatory stimulation versus consumed coupled substrate.",
+        "Upstream capacity versus downstream partner-admitted specificity.",
+        "Single event or ATP hydrolysis versus sustained productive operation.",
+        "Artificial donor substitution versus identified native supply."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "requirement_role": [
+            "consumed_substrate",
+            "electron_donor_or_acceptor",
+            "catalytic_cofactor",
+            "compatible_protein_partner",
+            "regeneration_or_reset_input",
+            "unresolved"
+          ],
+          "dependency": [
+            "required_under_test",
+            "rate_or_affinity_modifier",
+            "dispensable_under_test",
+            "unresolved"
+          ],
+          "coupled_output": [
+            "single_event",
+            "sustained_turnover",
+            "multiple_coupled_products",
+            "unresolved"
+          ],
+          "reaction_account": [
+            "measured_stoichiometry_with_bounds",
+            "conditional_accounting_model",
+            "incomplete"
+          ]
+        },
+        "required_typed_references": [
+          "reaction_ref",
+          "required_entity_refs",
+          "condition_and_preparation_ref",
+          "measurement_or_stoichiometry_refs",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "Required assay reagent does not identify native partner.",
+        "Coupled precursor preference is not isolated upstream specificity.",
+        "Feasibility/balance does not establish native flux or proton translocation.",
+        "Ideal extrapolated stoichiometry is not a measured uncertain ratio."
+      ],
+      "follow_up_lane_ids": [
+        "F02",
+        "F03",
+        "F05"
+      ],
+      "boundary": "A03 addresses mechanism. A04 records requirements/accounting. A05 is an input-to-regulatory-effect relation, not inferred merely from a substrate requirement.",
+      "evidence": [
+        {
+          "case_group": "chem_queg",
+          "case_id": "chem_queg",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4753064/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant purification, reconstitution, activity/complementation methods, cofactor results and EPR interpretation inspected; raw spectra not reprocessed.",
+          "observation": "Iron/sulfide restoration alone is insufficient; cobalamin restoration enables productive oQ-to-Q conversion.",
+          "limit": "Artificial donors do not identify native electron delivery; raw spectra not reprocessed."
+        },
+        {
+          "case_group": "chem_nfnab",
+          "case_id": "chem_nfnab",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed.",
+          "observation": "NAD+-stimulated ferredoxin reduction resolves as coupled transhydrogenation with reverse dependence and stoichiometry.",
+          "limit": "Native NADPH-supply interpretation is not new flux measurement; analytical bounds remain."
+        },
+        {
+          "case_group": "chem_bcd_etf",
+          "case_id": "chem_bcd_etf",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved.",
+          "observation": "Consumed crotonyl-CoA enables the defined ferredoxin-reduction system, replacing an apparent acetyl-CoA activation explanation.",
+          "limit": "Measured ratios are 2.2 NADH and 1.4 crotonyl-CoA per H2; ideal 2:1:1 is extrapolated."
+        },
+        {
+          "case_group": "chem_f420_precursor_partner",
+          "case_id": "chem_f420_precursor_partner",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting.",
+          "observation": "Changing only downstream CofD/FbiA changes apparent upstream precursor preference, so isolated promiscuity and pathway entry differ.",
+          "limit": "Cognate organism-specific pairs do not establish universal CofC PEP specificity or new native flux."
+        },
+        {
+          "case_group": "yjef_nnr",
+          "case_id": "context_yjef_nnr_fusion_2011",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3308837/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete main experimental procedures and relevant results read from full PMC HTML; supplementary procedures not independently inspected. No new sequence/fusion search or assays.",
+          "observation": "ATP regeneration abolishes bacterial repair activity, motivating ADP testing and ADP-dependent dehydratase assignment.",
+          "limit": "ATP dependence cannot transfer from eukaryotic homologs; supplementary procedures not independently read."
+        },
+        {
+          "case_group": "spatial_ftsw_bpbp_job",
+          "case_id": "spatial_ftsw_bpbp_job",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6430707/",
+          "source_locator": "Figs. 1–2; main polymerization and membrane-interface Results/Methods.",
+          "observation": "Cognate bPBP enables FtsW polymerization even with bPBP transpeptidase inactivated; membrane-interface changes alter compatibility.",
+          "limit": "2019 does not formally exclude additional flippase capacity; no independent assay reproduction."
+        }
+      ]
+    },
+    {
+      "id": "A05",
+      "name": "Regulatory input, target and effect",
+      "description": "Represent which input changes regulator state/abundance, through what route, and which target experiences activation, repression or another effect.",
+      "claim_scope": "A directed relation with input, state, target, sign and condition. Enzyme/protein regulation and transcription are included; occupancy can be recorded without productive control.",
+      "distinctions": [
+        "Environmental response versus direct sensing, cofactor chemistry, feedback or abundance.",
+        "Target binding versus productive regulation.",
+        "Shared DNA-site class versus target-dependent activation/repression.",
+        "Cofactor occupancy/redox versus total protein.",
+        "Reversible activity change versus altered transcription/degradation."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "input_route": [
+            "direct_ligand_binding",
+            "cofactor_state_change",
+            "indirect_metabolic_or_assembly_feedback",
+            "regulator_abundance_change",
+            "unresolved"
+          ],
+          "regulated_state": [
+            "apo_or_cofactor_ligated",
+            "oxidation_state",
+            "allosteric_state",
+            "abundance",
+            "unresolved"
+          ],
+          "target_relation": [
+            "binding_only",
+            "activation",
+            "repression",
+            "reversible_activity_inhibition",
+            "unresolved"
+          ],
+          "regulatory_level": [
+            "transcription",
+            "protein_activity",
+            "protein_turnover",
+            "unresolved"
+          ]
+        },
+        "required_typed_references": [
+          "input_or_condition_ref",
+          "regulator_ref",
+          "state_measurement_ref",
+          "target_or_promoter_ref",
+          "output_measurement_ref",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "Motif/footprint does not specify regulatory sign.",
+        "Ligand-responsive phenotype does not establish direct sensing.",
+        "Total protein change does not establish per-molecule activity.",
+        "Assay recovery is not a measured intracellular state trajectory."
+      ],
+      "follow_up_lane_ids": [
+        "F01",
+        "F03",
+        "F05"
+      ],
+      "boundary": "A02 carries DNA/ligand recognition specificity. A05 carries productive input-to-target effect. A06 may establish regulatory participation without resolving the full relation.",
+      "evidence": [
+        {
+          "case_group": "reg_iscR_state_target_specificity",
+          "case_id": "reg_iscR_state_target_specificity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4108476/",
+          "source_locator": "Figures 1–4 and 7; Table 2; cluster occupancy/demand Results.",
+          "observation": "Footprinted site C lacks the measured regulatory effect of A/B, while cluster state, abundance and demand comparisons resolve different regulatory inputs.",
+          "limit": "Target conditions remain explicit; no intracellular state-pool reconstruction."
+        },
+        {
+          "case_group": "reg_iscR_state_target_specificity",
+          "case_id": "reg_iscR_state_target_specificity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/",
+          "source_locator": "Figures 1–6; relevant redox, iron-release, reporter and DNA-binding Results/Methods.",
+          "observation": "PMS under anaerobic versus aerobic conditions separates cofactor-state action from cluster destruction, with distinct target-class reporter effects.",
+          "limit": "Direct cofactor action is not selective PMS-pocket recognition; chamber auto-reduction is the authors’ interpretation."
+        },
+        {
+          "case_group": "context_rbkr_regulator_kinase_2017",
+          "case_id": "context_rbkr_regulator_kinase_2017",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5397151/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete genomic reconstruction, dual-function results, evolutionary caveats, and relevant bioinformatics/DNA-binding/kinase methods read. Structure section not exhaustively inspected; no motif scan or assay repeated.",
+          "observation": "RibK fusion makes FMN and binds DNA; FMN disrupts binding, but operator position only suggests transcriptional activation.",
+          "limit": "Activation was not directly measured; no new motif scan or assay."
+        },
+        {
+          "case_group": "organism_16_malr",
+          "case_id": "organism_16_malr",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3911195/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant Results including deletion, reporter rescue and sugar-independent DNA binding; growth/deletion/purification Methods inspected.",
+          "observation": "Deletion, reporter rescue and promoter binding establish activation while maltose did not change tested EMSA binding.",
+          "limit": "Maltose-use regulation does not establish direct maltose sensing."
+        },
+        {
+          "case_group": "pxpT_pxpR_access_and_sensing",
+          "case_id": "pxpT_pxpR_access_and_sensing",
+          "source_url": "https://journals.asm.org/doi/10.1128/aem.02181-25",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Indexed complete relevant regulatory Results, transport Discussion, figure descriptions and culture/purification Methods inspected. Direct publisher fetch 403; raw binding data not obtained. Current published 2026 article used, not 2025 preprint.",
+          "observation": "Reporter/motif comparisons support repression and ITC supports direct 5-OP binding with related-ligand negatives.",
+          "limit": "Indexed relevant Results inspected; direct publisher fetch 403; raw binding data not obtained."
+        },
+        {
+          "case_group": "organism_15_nifi",
+          "case_id": "organism_15_nifi",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94954/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Main complete switch-off/reversibility/physiology Results and culture/assay Methods; no direct protein-interaction work claimed from this paper.",
+          "observation": "NifI loss removes reversible ammonium switch-off without detected nif transcription or NifH modification/degradation explanation.",
+          "limit": "Posttranscriptional control is supported; direct molecular inhibition is not shown."
+        }
+      ]
+    },
+    {
+      "id": "A06",
+      "name": "Contribution within a biological system",
+      "description": "Represent a target’s specific responsibility in a multi-component process: execution, activation, cofactor supply, assembly, positioning, reset or another bounded contribution.",
+      "claim_scope": "A causal contribution to a named cellular/biochemical system, distinct from whole-system output and association alone.",
+      "distinctions": [
+        "Required component versus performer of headline chemistry.",
+        "Enzyme-like fold versus activation of another catalyst.",
+        "Pairwise binding versus simultaneous scaffolding/productive assembly.",
+        "ATPase versus reset enabling repeated product formation.",
+        "A real phenotype versus an unresolved physical connector."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "system_contribution": [
+            "direct_product_chemistry",
+            "activation_of_other_catalyst",
+            "cofactor_supply",
+            "assembly_or_target_positioning",
+            "reset_for_repeated_operation",
+            "substrate_access",
+            "RNA_processing_accessory",
+            "unresolved"
+          ],
+          "contribution_resolution": [
+            "association_only",
+            "defined_component_requirement",
+            "specific_contribution_discriminated",
+            "unresolved"
+          ],
+          "catalytic_capacity_explains_system_role": [
+            "yes_under_test",
+            "not_required_for_tested_role",
+            "not_established"
+          ]
+        },
+        "required_typed_references": [
+          "target_entity_ref",
+          "system_or_process_ref",
+          "partner_refs",
+          "specific_output_ref",
+          "perturbation_and_control_refs",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "Association/co-migration does not establish direct chemistry or stable membership.",
+        "A family-site expectation does not prove the target mutant catalytically null.",
+        "One endpoint does not establish every stage of system operation.",
+        "Participation can be supported while the connector is unresolved."
+      ],
+      "follow_up_lane_ids": [
+        "F02",
+        "F03",
+        "F04",
+        "F05"
+      ],
+      "boundary": "A01 describes direct operation; A06 its system responsibility. A08 gives physiological consequences and A09 necessity given alternatives.",
+      "evidence": [
+        {
+          "case_group": "causal_envC_activation",
+          "case_id": "causal_envC_activation",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3923381/",
+          "source_locator": "2013 relevant Results/Methods; Table 1; active-site and stable/localized variant comparisons.",
+          "observation": "Absent active-LytM zinc coordination and stable septal activation-defective variants support amidase activation instead of copied peptidase chemistry.",
+          "limit": "Direct complex detection failed and helix-contact mechanism remains proposed."
+        },
+        {
+          "case_group": "causal_cas2_spacer_acquisition",
+          "case_id": "causal_cas2_spacer_acquisition",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+          "source_locator": "Protospacer integration Results; Fig. 1 and Extended Data Figs. 2–3.",
+          "observation": "Cas2 E9Q supports integration while an assembly-interface deletion does not; Cas1 active-site variants fail.",
+          "limit": "No directly demonstrated E. coli Cas2 nuclease-null assay; low Cas1-only Mn2+ activity bounds absolute necessity."
+        },
+        {
+          "case_group": "causal_cas2_spacer_acquisition",
+          "case_id": "causal_cas2_spacer_acquisition",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4662619/",
+          "source_locator": "Protospacer-capture Results/Methods; trace descriptive 5DS4/5DS5 coordinate analysis.",
+          "observation": "Donor-DNA structures and acquisition variants assign a positive DNA-positioning/assembly contribution rather than an absence-only passive label.",
+          "limit": "Static geometry is not necessity/binding affinity; not every clamp variant has an independent affinity assay."
+        },
+        {
+          "case_group": "chem_ubix",
+          "case_id": "chem_ubix",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4988493/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant primary body and methods, including substrate tests, filtrate reconstitution and structure work, inspected.",
+          "observation": "Protein-free reaction filtrate activates apo-Fdc1, assigning cofactor-supply chemistry to UbiX rather than downstream decarboxylation.",
+          "limit": "Native DMAP source and universal precursor specificity remain unestablished."
+        },
+        {
+          "case_group": "causal_tsaE_turnover",
+          "case_id": "causal_tsaE_turnover",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5814804/",
+          "source_locator": "2018 single/multiple-turnover Results/Methods and Discussion; trace T1.",
+          "observation": "TmTsaBD makes/releases one product without TsaE, but ATPase-defective TsaE fails sustained turnover, locating a reset contribution.",
+          "limit": "Species/assay discrepancy with E. coli endpoint evidence remains open."
+        },
+        {
+          "case_group": "cellular_y_complex",
+          "case_id": "cellular_y_complex",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Three full primary papers inspected. Downloaded 76-file GEO processed-track archive and exact reference feature table; interrogated selected tracks in known cggR/gapA, glnR/glnA, rpoB and rnpB windows. No raw-read realignment or formal replication statistics.",
+          "observation": "Selected transcript-processing defects support a bounded RNase Y accessory contribution rather than all RNase Y activity or resolved direct phosphorelay action.",
+          "limit": "Conflicting historical studies remain; selected deposited-track windows were inspected without raw-read realignment."
+        },
+        {
+          "case_group": "cellular_yejM",
+          "case_id": "cellular_yejM",
+          "source_url": "https://journals.asm.org/doi/10.1128/mbio.00939-20",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Publisher full Results examined, including 10/12 suppressors and turnover controls.",
+          "observation": "LpxC turnover, suppressors and LapB association support LPS-synthesis regulation; lipid effects alone did not establish cardiolipin transport.",
+          "limit": "Does not settle every molecular contact or every YejM function."
+        }
+      ]
+    },
+    {
+      "id": "A07",
+      "name": "Spatial access, export and topology",
+      "description": "Represent which compartment, membrane face or local site target/material can access and which export, topology or targeting feature enables the encounter.",
+      "claim_scope": "A target/material/partner location relation; export, orientation, local concentration, assembly and bulk fractionation remain separate.",
+      "distinctions": [
+        "Cellular presence versus access to required face.",
+        "Membrane association versus transmembrane topology.",
+        "Export versus targeting versus activity.",
+        "Prediction versus controlled accessibility evidence.",
+        "Processed substrate versus native assembly compatibility."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "spatial_relation": [
+            "same_compartment_access",
+            "opposite_face_or_sequestered",
+            "exported",
+            "locally_targeted",
+            "membrane_associated_only",
+            "unresolved"
+          ],
+          "location_resolution": [
+            "bulk_fraction",
+            "compartment",
+            "membrane_face",
+            "specific_cellular_site",
+            "unresolved"
+          ],
+          "access_feature": [
+            "export_signal",
+            "membrane_topology",
+            "targeting_domain",
+            "transport_step",
+            "unresolved"
+          ],
+          "assembly_after_access": [
+            "observed_under_test",
+            "not_observed_under_test",
+            "not_assessed"
+          ]
+        },
+        "required_typed_references": [
+          "target_or_material_ref",
+          "compartment_or_face_ref",
+          "feature_and_numbering_ref",
+          "integrity_or_orientation_control_refs",
+          "condition_ref",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "Fractionation does not prove integral topology.",
+        "Inaccessible labeling may reflect burial.",
+        "Heterologous membrane topology is not automatically native.",
+        "Processing is not assembly; absent expression is not an assembly-specific negative."
+      ],
+      "follow_up_lane_ids": [
+        "F03",
+        "F04"
+      ],
+      "boundary": "This is spatial opportunity. A01/A03 specify operation/mode, A06 system role, and A09 whether localization is required at the tested expression level.",
+      "evidence": [
+        {
+          "case_group": "spatial_murj_lipidII_access",
+          "case_id": "spatial_murj_lipidII_access",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4163187/",
+          "source_locator": "Main Results and Figs. 1–3; outer- versus inner-membrane access controls.",
+          "observation": "MurJ inhibition restricts periplasmic ColM access; only inner-membrane disruption restores cleavage of accumulated labeled material.",
+          "limit": "In-vivo access evidence; no purified transport/raw replication."
+        },
+        {
+          "case_group": "spatial_amic_amia_export_septal_access",
+          "case_id": "spatial_amic_amia_export_septal_access",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4428285/",
+          "source_locator": "Figs. 2–6, 8–9; export/targeting fragment Results.",
+          "observation": "Tat export, N-terminal septal targeting and catalytic-region rescue are separable; an induced nonseptal exported construct rescues chaining.",
+          "limit": "Induced rescue does not establish native targeting dispensability; degraded AmiB-GFP is not reliable localization."
+        },
+        {
+          "case_group": "organism_10_hpnn",
+          "case_id": "organism_10_hpnn",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3215060/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant phylogeny/localization, cell-cycle and temperature Results plus lipid methods; no new localization assay or claim that all RND homologs have this substrate.",
+          "observation": "HpnN loss retains whole-cell hopanoids but removes outer-membrane allocation, separating bulk abundance from spatial opportunity.",
+          "limit": "No purified-protein transport mechanism was demonstrated."
+        },
+        {
+          "case_group": "archaeal_pibd_flak_recognition_access",
+          "case_id": "archaeal_pibd_flak_recognition_access",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1367262/",
+          "source_locator": "Trace O2006; complete relevant topology Results/Methods/Discussion and captions.",
+          "observation": "Controlled cysteine accessibility favors cytoplasmic access near PibD catalytic residues over a conflicting five-segment prediction.",
+          "limit": "Heterologous bacterial membranes, partial blocking and burial/leakage limit native archaeal orientation claims."
+        },
+        {
+          "case_group": "archaeal_hvo_pilin_processing_assembly",
+          "case_id": "archaeal_hvo_pilin_processing_assembly",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/",
+          "source_locator": "Trace O2013; Figures 2–3 and 8–9; main Results.",
+          "observation": "PilA1 hydrophobic-domain hybrid remains expressed/processed but lacks pili and adhesion, separating cleavage from assembly compatibility.",
+          "limit": "PilA3 hybrid lacks expression, so is not assembly-specific negative; other filament components remain possible."
+        }
+      ]
+    },
+    {
+      "id": "A08",
+      "name": "Native physiological contribution and its conditions",
+      "description": "Represent which cellular/organismal consequence an activity contributes to in biological context, preserving environmental, nutrient, temporal and population conditions.",
+      "claim_scope": "A gene/activity in a stated strain, environment, phase and outcome, with coexisting roles retained; measured capacity need not be dominant native function.",
+      "distinctions": [
+        "Capacity/induction versus native contribution.",
+        "Immediate regrowth versus long-term survival or competition.",
+        "Bulk mean versus population-state distributions.",
+        "Nutrient use versus detoxification, fitness or protection.",
+        "Additional conditional role versus erasing prior valid roles."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "physiological_contribution_examples": [
+            "nutrient_acquisition",
+            "metabolite_damage_prevention",
+            "stress_adaptation",
+            "sustained_starvation_survival",
+            "competitive_fitness",
+            "photoprotection",
+            "unresolved"
+          ],
+          "role_relation": [
+            "native_contribution_under_stated_conditions",
+            "capacity_only",
+            "additional_conditional_role",
+            "native_role_unresolved"
+          ],
+          "outcome_type": [
+            "growth_rate_or_yield",
+            "survival",
+            "competitive_abundance",
+            "population_state_distribution",
+            "molecular_homeostasis"
+          ],
+          "effect": [
+            "increases",
+            "decreases",
+            "no_detected_effect_in_test",
+            "heterogeneous_or_tradeoff",
+            "unresolved"
+          ]
+        },
+        "required_typed_references": [
+          "target_entity_ref",
+          "strain_and_background_ref",
+          "environment_and_nutrient_refs",
+          "time_or_phase_ref",
+          "population_and_outcome_refs",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "One model/time window is not universal role.",
+        "Reporter is not flux; population association is not lineage-tracked fate.",
+        "No early growth defect does not exclude later survival contribution.",
+        "Side activity/heterologous rescue does not establish primary native flux."
+      ],
+      "follow_up_lane_ids": [
+        "F01",
+        "F03",
+        "F05"
+      ],
+      "boundary": "A08 gives biological consequence. A06 assigns system responsibility, A09 dependence given alternatives. Shared context fields are scope, not another library slot.",
+      "evidence": [
+        {
+          "case_group": "yeag",
+          "case_id": "cellular_yeaG",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+          "source_locator": "Trace route_1; recovery/heterogeneity/survival Results; culture/flow Methods; Fig. 6D limitation.",
+          "observation": "YeaG loss improves immediate recovery lag but worsens prolonged-starvation survival and changes reporter heterogeneity.",
+          "limit": "No raw FCS/CFU or lineage tracking; follow-up text and Fig. 6D caption disagree on exact timing."
+        },
+        {
+          "case_group": "organism_01_ttr",
+          "case_id": "organism_01_ttr",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2946174/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 1999 Results and experimental descriptions; 2010 main Results/Methods Summary and figure captions; live AJ224978.1 metadata verified LT2 ttr locus, 12,121 bp. No raw LC-MS or animal reanalysis.",
+          "observation": "Inflammation-dependent intestinal benefit differs from an earlier systemic infection nonphenotype despite the same respiratory capacity.",
+          "limit": "Author host/competition experiments; no raw animal or LC-MS reanalysis and no universal virulence claim."
+        },
+        {
+          "case_group": "organism_13_icl",
+          "case_id": "organism_13_icl",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3977286/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant complete Results and culture/extraction Methods; no isotope-flux recomputation. The 2005 infection paper was retrieved but remains an abstract-level auxiliary source here.",
+          "observation": "B12 rerouting restores survival without full growth, separating poison avoidance, assimilation and biomass outcomes.",
+          "limit": "No isotope-flux recomputation or new in-host flux assignment."
+        },
+        {
+          "case_group": "spec_yigl_conditional_b6",
+          "case_id": "spec_yigl_conditional_b6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11409668/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2024 relevant complete results/discussion and assay/genotype methods inspected; 2013 relevant regulation, competition and growth results inspected. Supplements not independently analyzed. Fresh public-record probe documented in raw/live_probe_summary.json.",
+          "observation": "PNP hydrolysis/protection adds an excess-PNP role without erasing sugar-stress biology or assigning chief basal PNP catabolism.",
+          "limit": "Deletion retains substantial activity and near-normal basal growth; supplements not independently analyzed."
+        },
+        {
+          "case_group": "spec_suhb_catalysis_vs_rrna",
+          "case_id": "spec_suhb_catalysis_vs_rrna",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4807359/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2000 primary abstract only; 2016 suppressor, recruitment, reporter/endogenous comparison, genetic-interaction results and relevant methods/discussion inspected; 2019 relevant binding/reconstitution results/methods and stated limitations inspected. Raw data and earlier 1994 activity paper not independently analyzed.",
+          "observation": "Suppressor, recruitment and reporter/endogenous comparisons support Nus/rRNA participation while retaining genuine IMPase capacity.",
+          "limit": "Detailed recruitment/looping remains a model; 2000 complementation contrast is abstract-only."
+        },
+        {
+          "case_group": "context_oarx_thiamin_2024",
+          "case_id": "context_oarx_thiamin_2024",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct.",
+          "observation": "Thiamin associations support a bounded reductase role while tested salvage candidates fail, leaving exact substrate/reaction unresolved.",
+          "limit": "Actual research parsed table/genome records; no annotation run or new enzyme assay; context is not exact chemistry."
+        }
+      ]
+    },
+    {
+      "id": "A09",
+      "name": "Conditional necessity, overlap and residual function",
+      "description": "Represent whether a target is needed for a named outcome under specified conditions and available alternatives: absolute loss, quantitative impairment, hidden overlap or no detected phenotype.",
+      "claim_scope": "Necessity attaches to function, assay and background, not a context-free essential-gene label. It can remain unresolved after deletion failure or overexpression rescue.",
+      "distinctions": [
+        "Single-gene dispensability versus required combined function.",
+        "Residual output versus complete tested loss.",
+        "Supplemented growth versus endogenous supply.",
+        "Failed deletion recovery versus demonstrated essentiality.",
+        "No phenotype versus no native contribution."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "necessity": [
+            "required_for_detectable_tested_output",
+            "required_for_full_tested_output",
+            "dispensable_with_available_alternative",
+            "no_detected_defect_in_tested_condition",
+            "unresolved"
+          ],
+          "alternative_relation": [
+            "paralog_overlap",
+            "distinct_route_overlap",
+            "medium_or_host_supply",
+            "suspected_but_unassigned",
+            "none_tested"
+          ],
+          "residual_output": [
+            "detected",
+            "below_test_detection",
+            "not_measured"
+          ],
+          "perturbation_scope": [
+            "single_component",
+            "combined_components",
+            "depletion",
+            "deletion_not_recovered"
+          ]
+        },
+        "required_typed_references": [
+          "target_entity_ref",
+          "function_and_outcome_ref",
+          "background_ref",
+          "available_alternative_refs",
+          "medium_or_host_supply_refs",
+          "assay_and_detection_ref",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "No recovered deletion is not essentiality proof.",
+        "Negative rescue can reflect expression/stability/compatibility.",
+        "Residual growth does not identify a backup enzyme.",
+        "Overlap in one condition does not prove complete equivalence."
+      ],
+      "follow_up_lane_ids": [
+        "F03",
+        "F04",
+        "F05"
+      ],
+      "boundary": "A09 records dependence given alternatives. A10 identifies what the alternative supplies. Neither rescue nor necessity alone assigns exact chemistry.",
+      "evidence": [
+        {
+          "case_group": "replacement_queH",
+          "case_id": "replacement_queH",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+          "source_locator": "DUF208 Is Needed; Fig. 3; complementation Fig. 4; purification limits.",
+          "observation": "Single queG/duf208 deletions retain Q; double loss accumulates oQ and removes Q, exposing overlapping cellular requirements.",
+          "limit": "Not isolated productive QueH catalysis or established native metal/donor identity."
+        },
+        {
+          "case_group": "context_comf_mmp16_2025",
+          "case_id": "context_comf_mmp16_2025",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068725/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full genomic, growth, complementation, transcriptomic and cysteine-mutant results, discussion, and phylogenetic methods read. Author data/code not rerun; no purified-enzyme activity claimed.",
+          "observation": "Sulfide-containing medium masks an absolute CoM-growth requirement; removal and complementation reveal conditional dependence.",
+          "limit": "Possible L-ASST backup remains unproven; author data/code not rerun."
+        },
+        {
+          "case_group": "organism_02_xoxf",
+          "case_id": "organism_02_xoxf",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5075040/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2012 Results/Methods; 2016 MeDH Results/growth/glassware/assay methods and ExaF Results, tables and assay details. Published curves/tables inspected; no numerical raw OD data reanalysis.",
+          "observation": "Residual growth after removing known oxidation routes exposes ExaF and constrains exclusive XoxF/single-paralog necessity.",
+          "limit": "No raw growth-curve reanalysis; metal condition and strain scope remain necessary."
+        },
+        {
+          "case_group": "replacement_bioV",
+          "case_id": "replacement_bioV",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4751477/",
+          "source_locator": "Identification/activity/native inactivation/DTB Results; observation BV1.",
+          "observation": "Positive esterase chemistry and rescue coexist with failed native deletion recovery, which does not prove essentiality or defective uptake.",
+          "limit": "Failed native deletion is an experimental limitation, not an adopted uptake mechanism."
+        },
+        {
+          "case_group": "cellular_yqfG",
+          "case_id": "cellular_yqfG",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6144821/",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full Results examined, including specificity controls and rescue. Same protein-family investigation group as cellular_ybeY; not independent replication of all E. coli claims.",
+          "observation": "Removing rnr permits yqfG loss while specific 16S maturation defects bound the contribution.",
+          "limit": "Does not transfer all E. coli YbeY phenotypes or resolve every ribosome-turnover mechanism."
+        },
+        {
+          "case_group": "seq_hisn_impase_discrimination",
+          "case_id": "seq_hisn_impase_discrimination",
+          "source_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+          "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full 2017 methods/results page inspected, including genetic, sequence and structural sections. 2014 primary abstract inspected. No new sequence calculation or wet-lab work.",
+          "observation": "HisN loss leaves residual growth; cg0911 overexpression rescues, but native cg0911 deletion does not explain that residual function.",
+          "limit": "Backup remains unassigned; overexpression capacity does not establish routine native role."
+        }
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "Functional replacement and route equivalence",
+      "description": "Represent whether an alternative replaces the same reaction, one reference activity, a different route to the same product or demand for the missing function.",
+      "claim_scope": "A reference-function/route relationship with restored outcome, unfilled activities and changed resource demands explicit.",
+      "distinctions": [
+        "Same product versus same reaction.",
+        "One activity versus whole multifunctional reference.",
+        "Catalytic repair versus salvage/demand-reducing suppression.",
+        "One-condition rescue versus complete native interchangeability.",
+        "Equivalent product versus changed recycling/donor demands."
+      ],
+      "example_structured_values": {
+        "status": "illustrative_only_not_an_adopted_schema",
+        "fields": {
+          "replacement_relation": [
+            "same_reaction",
+            "subset_of_reference_activities",
+            "different_route_same_output",
+            "demand_reducing_bypass",
+            "partial_context_specific_substitution",
+            "unresolved"
+          ],
+          "restored_outcome": [
+            "specified_molecular_product",
+            "growth_under_test",
+            "native_process_under_test",
+            "subset_only"
+          ],
+          "unfilled_demand": [
+            "known_remaining_activity",
+            "new_recycling_requirement",
+            "remaining_external_supply",
+            "none_demonstrated",
+            "unresolved"
+          ],
+          "equivalence_scope": [
+            "tested_condition_only",
+            "multiple_tested_conditions",
+            "unresolved"
+          ]
+        },
+        "required_typed_references": [
+          "reference_function_or_route_ref",
+          "alternative_entity_or_route_ref",
+          "restored_outcome_ref",
+          "remaining_requirement_refs",
+          "condition_and_background_ref",
+          "observation_refs"
+        ],
+        "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+      },
+      "not_established": [
+        "Rescue does not establish the same reaction/all reference activities.",
+        "No annotated known-family enzyme does not establish absent function.",
+        "Bookkeeping equivalence depends on stated boundaries/donor assumptions.",
+        "Heterologous substitution does not establish primary native role."
+      ],
+      "follow_up_lane_ids": [
+        "F02",
+        "F05"
+      ],
+      "boundary": "A09 asks whether an alternative makes a target dispensable; A10 asks what contribution it provides; A04 gives the resulting requirements. This is a relation to annotate, not a prescribed comparison procedure.",
+      "evidence": [
+        {
+          "case_group": "replacement_bioZ",
+          "case_id": "replacement_bioZ",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+          "source_locator": "Figs. 3–9; native deletion/C115S, reconstitution/MS and CaiB Results.",
+          "observation": "BioZ bypasses BioC plus BioH using a glutaryl-CoA/malonyl-ACP entry route, restoring precursor output without BioH chemistry.",
+          "limit": "No independent raw spectral/isotope analysis."
+        },
+        {
+          "case_group": "replacement_cobY",
+          "case_id": "replacement_cobY",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101920/",
+          "source_locator": "Purified H6MTH1152/complementation Results; Figures 6–7.",
+          "observation": "CobY supplies guanylyltransferase but not detected kinase; de novo rescue does not replace the CobU salvage kinase demand.",
+          "limit": "Negative assay is condition-bounded."
+        },
+        {
+          "case_group": "replacement_thyX",
+          "case_id": "replacement_thyX",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+          "source_locator": "Table 2; Figures 3–4; main Results/Methods.",
+          "observation": "ThyA alone incompletely replaces ThyX; adding FolA exposes the folate-recycling demand despite shared dTMP output.",
+          "limit": "No specific native backup reductase identified; authors’ simulations not rerun."
+        },
+        {
+          "case_group": "replacement_folA_bypass",
+          "case_id": "replacement_folA_bypass",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6828540/",
+          "source_locator": "Evolution of D27G; Figures 4–6; ThyA/DeoB re-expression contrasts.",
+          "observation": "Some evolved lineages partly restore catalysis; others lose thyA/deoB and retain supplementation, separating repair and salvage compensation.",
+          "limit": "No evolution/sequencing/omics reanalysis; suppressors do not remove every external requirement."
+        },
+        {
+          "case_group": "replacement_hemJ",
+          "case_id": "replacement_hemJ",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6093240/",
+          "source_locator": "HemJ not fully replaceable and in-vitro assay subsections.",
+          "observation": "HemG supports HemJ substitution in glucose growth but not photoautotrophy, bounding native interchangeability.",
+          "limit": "Isolated productive HemJ catalysis and proposed coupling remain unresolved."
+        }
+      ]
+    }
+  ],
+  "mapping_role_semantics": {
+    "direct_support": "At least one explicit evidence row in this catalog uses this case to establish a useful annotation distinction. Other mapped options are relevant context unless separately supported by an evidence row. This is not validation of a scoring axis or every biological alternative.",
+    "context_only": "Whole-corpus review identified a relevant annotation distinction, but the case is not used as direct source evidence for an option boundary in this catalog. The note records the existing case consequence rather than a new validation.",
+    "limited_inspection": "Abstract/summary-level only. Associated distinctions are provisional context, and the case is not counted as establishing an option boundary.",
+    "option_roles": "Per-option status is authoritative when a case supports one option boundary and supplies only context for another. The case-level role describes its strongest use."
+  },
+  "case_mapping": [
+    {
+      "case_group": "AF2372_Stieglitz_2002",
+      "option_ids": [
+        "A01",
+        "A04"
+      ],
+      "role": "limited_inspection",
+      "note": "Dual activity confirmed with material differences; homologous enzymes need not share every kinetic/regulatory property.",
+      "option_roles": {
+        "A01": "limited_inspection",
+        "A04": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "Arad3529_Fan_2013",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Pterin-metabolite deaminase; proposed degradation-pathway role remains contextual inference.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "BC0371_Song_2007",
+      "option_ids": [
+        "A02"
+      ],
+      "role": "limited_inspection",
+      "note": "Incorrect Ala-D/L-Glu epimerase annotation corrected to N-succinyl Arg/Lys racemase.",
+      "option_roles": {
+        "A02": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "BC1793_Hitchcock_2013",
+      "option_ids": [
+        "A02"
+      ],
+      "role": "context_only",
+      "note": "Simple residue/family transfer fails; measured substrate profile is narrower than inherited broad SAH/MTA expectations.",
+      "option_roles": {
+        "A02": "context_only"
+      }
+    },
+    {
+      "case_group": "Cc0300_Xiang_2009",
+      "option_ids": [
+        "A02"
+      ],
+      "role": "context_only",
+      "note": "Hydrophobic-residue-directed carboxypeptidase profile replaces over-specific inherited annotation.",
+      "option_roles": {
+        "A02": "context_only"
+      }
+    },
+    {
+      "case_group": "Cc2672_Cc3125_Xiang_2009",
+      "option_ids": [
+        "A02"
+      ],
+      "role": "context_only",
+      "note": "Incorrect prolidase assignments corrected to experimentally bounded Arg/Lys-directed peptide hydrolase profiles.",
+      "option_roles": {
+        "A02": "context_only"
+      }
+    },
+    {
+      "case_group": "DUF1537_Zhang_2016",
+      "option_ids": [
+        "A01",
+        "A02"
+      ],
+      "role": "context_only",
+      "note": "Kinase assignment supported through integrated evidence; structures confirm reaction geometry rather than originating all substrate hypotheses.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only"
+      }
+    },
+    {
+      "case_group": "EF1143_Vorontsov_2011_2014",
+      "option_ids": [
+        "A02",
+        "A04",
+        "A05"
+      ],
+      "role": "context_only",
+      "note": "Regulated dNTP triphosphohydrolase supported; structural similarity does not establish identical allosteric behavior or DNA-binding role.",
+      "option_roles": {
+        "A02": "context_only",
+        "A04": "context_only",
+        "A05": "context_only"
+      }
+    },
+    {
+      "case_group": "EUBREC0560_PG1327_Fleischman_2014",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Biochemically supported substrate profiles; cellular roles unresolved.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "EUBREC2651_Fleischman_2014",
+      "option_ids": [
+        "A01",
+        "A02"
+      ],
+      "role": "context_only",
+      "note": "Authors' PSAT assignment remains tentative.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only"
+      }
+    },
+    {
+      "case_group": "HpbD_Zhao_2013",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Hydroxyproline-betaine 2-epimerase, with physiological interpretation supported in the experimentally tractable organism.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "Lmo2620_Bh0225_Xiang_2012",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Phosphorylated-sugar lactonase activities supported; physiological pathway and untested larger substrates unresolved.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "MJ0109_Johnson_2001",
+      "option_ids": [
+        "A01",
+        "A03"
+      ],
+      "role": "limited_inspection",
+      "note": "Structural confirmation/explanation of previously measured dual activity, not proof that sequence-best-hit function is exclusive.",
+      "option_roles": {
+        "A01": "limited_inspection",
+        "A03": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "MJ0226_Hwang_1999",
+      "option_ids": [
+        "A02"
+      ],
+      "role": "limited_inspection",
+      "note": "Noncanonical nucleotide-triphosphate pyrophosphatase activity supported.",
+      "option_roles": {
+        "A02": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "MJ0577_Zarembinski_1998",
+      "option_ids": [
+        "A01",
+        "A04",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "ATP binding supported; paper interprets factor-dependent ATPase activity and proposes a molecular-switch role. Cellular function unresolved.",
+      "option_roles": {
+        "A01": "direct_support",
+        "A04": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "MS53_0025_MAG6390_Korczynska_2014",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Specific phosphorylated-furanose lactonase activities supported; small-sugar catabolism proposed.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Biochemically supported SAH/MTA/adenosine deaminase activities; broad fold correspondence alone insufficient for the substrate name. Dominant physiological substrate and obligatory pathway remain unresolved by these checks.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "TT1927b_Handa_2005",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Polyisoprenoid binding supported; exclusive physiological ligand and cellular task not established by fold resemblance.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "TenA_Toms_2005",
+      "option_ids": [
+        "A01",
+        "A08"
+      ],
+      "role": "limited_inspection",
+      "note": "Enzymatic thiaminase-II activity established rather than explaining the regulatory phenotype alone.",
+      "option_roles": {
+        "A01": "limited_inspection",
+        "A08": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "TenI_Toms_2005",
+      "option_ids": [
+        "A02"
+      ],
+      "role": "limited_inspection",
+      "note": "Structure supported rejecting an over-specific synthase transfer; no enzymatic function established by this paper.",
+      "option_roles": {
+        "A02": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "YwlE_Fuhrmann_2013",
+      "option_ids": [
+        "A02"
+      ],
+      "role": "limited_inspection",
+      "note": "Specific phosphoarginine phosphatase rather than functional transfer from tyrosine-phosphatase fold/name.",
+      "option_roles": {
+        "A02": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "archaeal_hvo_pilin_processing_assembly",
+      "option_ids": [
+        "A06",
+        "A07",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Pilin processing, assembly-compatible hydrophobic features and overlapping adhesion contributions are separable; absent expression is not assembly-specific failure.",
+      "option_roles": {
+        "A06": "context_only",
+        "A07": "direct_support",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "archaeal_pibd_flak_recognition_access",
+      "option_ids": [
+        "A02",
+        "A07",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "Tested leader recognition, membrane accessibility and restoration of native archaella/motility are distinct properties; apparent processing is not complete replacement.",
+      "option_roles": {
+        "A02": "context_only",
+        "A07": "direct_support",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "causal_actS_stress_activation",
+      "option_ids": [
+        "A06",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Amidase activator with conditional envelope effects. Neither growth rescue nor stress association establishes direct hydrolase activity or universal protection.",
+      "option_roles": {
+        "A06": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "option_ids": [
+        "A06",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Cas2 assembly/DNA positioning supports integration while direct E. coli nuclease-null status and absolute necessity for every strand-transfer event remain unestablished.",
+      "option_roles": {
+        "A06": "direct_support",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "causal_envC_activation",
+      "option_ids": [
+        "A06"
+      ],
+      "role": "direct_support",
+      "note": "Supports amidase activation rather than copying metallopeptidase catalysis. Exact binding mechanism remains unestablished by this 2013 study.",
+      "option_roles": {
+        "A06": "direct_support"
+      }
+    },
+    {
+      "case_group": "causal_nlpI_scaffolding",
+      "option_ids": [
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "In-vitro scaffolding capacity is supported; the proposed physiological organization and coordination of synthesis remain incompletely demonstrated.",
+      "option_roles": {
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "causal_tsaE_turnover",
+      "option_ids": [
+        "A04",
+        "A06"
+      ],
+      "role": "direct_support",
+      "note": "Supports an ATP-hydrolysis-dependent reset contribution in the tested Thermotoga system. Do not equate ATPase capacity with successful coupling or silently generalize across species.",
+      "option_roles": {
+        "A04": "context_only",
+        "A06": "direct_support"
+      }
+    },
+    {
+      "case_group": "cellular_cdv",
+      "option_ids": [
+        "A06",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Supports archaeal cell-division machinery participation, without transferring an endosomal function from eukaryotic homology.",
+      "option_roles": {
+        "A06": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_cetZ",
+      "option_ids": [
+        "A08",
+        "A09"
+      ],
+      "role": "context_only",
+      "note": "Supports rod-shape differentiation required for efficient swimming rather than a default division annotation from sequence similarity.",
+      "option_roles": {
+        "A08": "context_only",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_dolP",
+      "option_ids": [
+        "A06",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Supports a stress-dependent contribution to BamA/outer-membrane homeostasis. Does not establish that DolP directly catalyzes OMP folding or fully explain its division connection.",
+      "option_roles": {
+        "A06": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_letB",
+      "option_ids": [
+        "A03",
+        "A07",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Supports lipid-associated envelope maintenance and a tunnel-transport model. Physiology, lipid contact and shape are convergent; this paper does not directly measure net lipid transport through the tunnel.",
+      "option_roles": {
+        "A03": "context_only",
+        "A07": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_minJ",
+      "option_ids": [
+        "A06",
+        "A07"
+      ],
+      "role": "context_only",
+      "note": "Supports a division-site-selection intermediary; motility/recombination phenotypes are subordinate under tested conditions. Historical swarming-operon assignment was misleading.",
+      "option_roles": {
+        "A06": "context_only",
+        "A07": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_popZ",
+      "option_ids": [
+        "A06",
+        "A07"
+      ],
+      "role": "context_only",
+      "note": "Supports chromosome-origin anchoring and polar organization; time-resolved capture and controls discriminate tethering from simple colocalization.",
+      "option_roles": {
+        "A06": "context_only",
+        "A07": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_ugtP",
+      "option_ids": [
+        "A05",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Supports a nutrient-responsive division-regulatory role in addition to known glucosyltransferase function; avoid inferring such a second role from enzyme family alone.",
+      "option_roles": {
+        "A05": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_y_complex",
+      "option_ids": [
+        "A06",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Supports an RNase Y accessory role in selected transcript maturation. Do not equate it with all RNase Y activity or declare the historical direct-phosphorelay disagreement resolved.",
+      "option_roles": {
+        "A06": "direct_support",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yabA",
+      "option_ids": [
+        "A05",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Supports negative control of replication initiation coupled to replication machinery. This study does not settle every molecular model for YabA action on DnaA.",
+      "option_roles": {
+        "A05": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_ybeY",
+      "option_ids": [
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Supports rRNA maturation and defective-ribosome quality-control participation; a pleiotropic stress phenotype alone would not specify that role.",
+      "option_roles": {
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yejM",
+      "option_ids": [
+        "A05",
+        "A06"
+      ],
+      "role": "direct_support",
+      "note": "Supports regulation of LPS synthesis via LpxC turnover. Cardiolipin binding/abundance effects alone did not establish a transporter role.",
+      "option_roles": {
+        "A05": "context_only",
+        "A06": "direct_support"
+      }
+    },
+    {
+      "case_group": "cellular_yfgM",
+      "option_ids": [
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Supports an ancillary Sec-associated role overlapping the periplasmic folding network; direct chaperone activity or a universal substrate handoff mechanism is not established.",
+      "option_roles": {
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yhcB",
+      "option_ids": [
+        "A06",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Supports participation in coordinated envelope growth and division. Co-migration did not establish oxidase membership; exact direct molecular connector remains unresolved.",
+      "option_roles": {
+        "A06": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yhdP",
+      "option_ids": [
+        "A06",
+        "A07",
+        "A09"
+      ],
+      "role": "context_only",
+      "note": "Supports redundant participation in envelope lipid homeostasis and GPL trafficking. The authors transport interpretation exceeds what antibiotic sensitivity alone shows.",
+      "option_roles": {
+        "A06": "context_only",
+        "A07": "context_only",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yihI",
+      "option_ids": [
+        "A04",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Supports modulation of a ribosome-assembly GTPase; growth rescue does not establish biochemical repair of the measured catalytic defect.",
+      "option_roles": {
+        "A04": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yjgA",
+      "option_ids": [
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Supports participation in late large-subunit maturation, with specific structural defects. Association alone would support less.",
+      "option_roles": {
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yneA",
+      "option_ids": [
+        "A05",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Supports an SOS division-inhibitor role. The 2003 FtsZ-localization effect did not establish direct binding to FtsZ.",
+      "option_roles": {
+        "A05": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "cellular_yqfG",
+      "option_ids": [
+        "A06",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Supports 16S 3-prime maturation and a genetic relationship to ribosome turnover; homologous cellular effects are narrower than those reported for E. coli YbeY.",
+      "option_roles": {
+        "A06": "context_only",
+        "A09": "direct_support"
+      }
+    },
+    {
+      "case_group": "chem_bcd_etf",
+      "option_ids": [
+        "A04",
+        "A06"
+      ],
+      "role": "direct_support",
+      "note": "Coupled crotonyl-CoA and ferredoxin reduction by NADH, rather than an acetyl-CoA-activated standalone oxidoreductase. Do not equate artificial-acceptor dehydrogenase activity with physiological direction.",
+      "option_roles": {
+        "A04": "direct_support",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_bioc",
+      "option_ids": [
+        "A02",
+        "A04"
+      ],
+      "role": "context_only",
+      "note": "SAM-dependent malonyl-ACP carboxyl O-methyltransferase, masking the terminal carboxyl for pathway entry. Malonyl-CoA activity at high concentration is inadequate evidence for the physiological substrate.",
+      "option_roles": {
+        "A02": "context_only",
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_dsr_terminal",
+      "option_ids": [
+        "A01",
+        "A04"
+      ],
+      "role": "context_only",
+      "note": "Menadiol:DsrC-trisulfide oxidoreductase with sulfide product. Physiological quinol coupling is supported by analog/architecture, while proton translocation, DsrJOP role and thermodynamic potential remain unresolved.",
+      "option_roles": {
+        "A01": "context_only",
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "option_ids": [
+        "A02",
+        "A04"
+      ],
+      "role": "direct_support",
+      "note": "Annotate organism-specific coupled chemistry. Do not label every CofC homolog PEP-specific or require a hypothetical archaeal reductase from the 2019 generalization. Upstream promiscuity differs from pathway entry.",
+      "option_roles": {
+        "A02": "context_only",
+        "A04": "direct_support"
+      }
+    },
+    {
+      "case_group": "chem_hemq",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A04"
+      ],
+      "role": "context_only",
+      "note": "Coproheme oxidative decarboxylase rather than chlorite dismutase or a coproporphyrinogen oxidase. Protein-bound heme can be substrate/product; an apparent heme cofactor is insufficient to assign chlorite chemistry.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_hydabc",
+      "option_ids": [
+        "A04"
+      ],
+      "role": "context_only",
+      "note": "Hydrogen production coupled to simultaneous NADH and reduced-ferredoxin oxidation, rather than either sole donor. Protein family and artificial-viologen activity alone miss the essential coupled donor requirement.",
+      "option_roles": {
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "option_ids": [
+        "A04"
+      ],
+      "role": "context_only",
+      "note": "H2-dependent coupled ferredoxin/heterodisulfide reductase; the flavin mechanism and ATP-yield model have additional assumptions. Native ferredoxin potential was unknown; assays used clostridial ferredoxin.",
+      "option_roles": {
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_nfnab",
+      "option_ids": [
+        "A04",
+        "A05"
+      ],
+      "role": "direct_support",
+      "note": "NADH-dependent reduced ferredoxin:NADP+ oxidoreductase with coupled reaction established. NADPH supply during fermentation is a physiological interpretation; artificial-acceptor or O2 activity does not establish its native role.",
+      "option_roles": {
+        "A04": "direct_support",
+        "A05": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_queg",
+      "option_ids": [
+        "A04"
+      ],
+      "role": "direct_support",
+      "note": "Cobalamin/Fe-S-dependent epoxyqueuosine reductase. Inactive apo-protein does not falsify this function; dithionite/viologen assay donors do not identify the native electron-delivery system.",
+      "option_roles": {
+        "A04": "direct_support"
+      }
+    },
+    {
+      "case_group": "chem_ubiuv_oxygen_donor",
+      "option_ids": [
+        "A01",
+        "A04"
+      ],
+      "role": "context_only",
+      "note": "Prephenate supplies oxygen in the UbiUV-associated pathway. Direct purified-protein hydroxylation, the electron acceptor and detailed oxidation mechanism remain unestablished in this paper.",
+      "option_roles": {
+        "A01": "context_only",
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "chem_ubix",
+      "option_ids": [
+        "A01",
+        "A06"
+      ],
+      "role": "direct_support",
+      "note": "UbiX is a flavin prenyltransferase supplying the decarboxylase cofactor. The reconstitution assay assigns accessory chemistry; it does not establish the physiological DMAP source or universal precursor specificity.",
+      "option_roles": {
+        "A01": "context_only",
+        "A06": "direct_support"
+      }
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "option_ids": [
+        "A01",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "A nonorthologous archaeal shikimate kinase candidate can be distinguished from the homoserine kinase paralog despite misleading sequence similarity.",
+      "option_roles": {
+        "A01": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "context_bioy_optional_module_2007",
+      "option_ids": [
+        "A02",
+        "A04",
+        "A09"
+      ],
+      "role": "context_only",
+      "note": "BioY supplies biotin transport specificity/core activity, while BioMN changes transport behavior; subunit necessity cannot be inferred solely from one local operon or one assay condition.",
+      "option_roles": {
+        "A02": "context_only",
+        "A04": "context_only",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "context_cfbb_f430_ringf_2017",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "CfbB is the ATP-dependent F430 ring-F ligase, rather than a peptidoglycan MurF assignment inferred from family resemblance.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "context_comf_mmp16_2025",
+      "option_ids": [
+        "A08",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Primary physiological coenzyme-M synthase in M. acetivorans; incomplete essentiality under one medium condition does not erase the functional association.",
+      "option_roles": {
+        "A08": "context_only",
+        "A09": "direct_support"
+      }
+    },
+    {
+      "case_group": "context_mj0044_ip_kinase_2006",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Isopentenyl-phosphate kinase, not phosphomevalonate kinase. A proposed full alternative pathway in the historical paper is a separate hypothesis.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Thiamin-associated short-chain dehydrogenase/reductase, candidate salvage enzyme. An exact reaction, substrate, or EC assignment is unsupported.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "direct_support"
+      }
+    },
+    {
+      "case_group": "context_poxa_yjek_efp_2010_2011",
+      "option_ids": [
+        "A02",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "EF-P beta-lysylation machinery: YjeK produces free (R)-beta-lysine before PoxA attaches it to EF-P.",
+      "option_roles": {
+        "A02": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "option_ids": [
+        "A01",
+        "A05"
+      ],
+      "role": "direct_support",
+      "note": "Bifunctional CTP-dependent riboflavin kinase and ligand-responsive DNA-binding regulator; activation of target transcription remains an inference.",
+      "option_roles": {
+        "A01": "context_only",
+        "A05": "direct_support"
+      }
+    },
+    {
+      "case_group": "context_ribk_mj0056_2008",
+      "option_ids": [
+        "A01",
+        "A04",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Archaeal CTP-preferring riboflavin kinase RibK, usable in both biosynthetic and salvage contexts.",
+      "option_roles": {
+        "A01": "context_only",
+        "A04": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "csiD_glutarate_hydroxylase",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Glutarate hydroxylation has molecular and condition-dependent physiological support.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "fluc_fluoride_channel",
+      "option_ids": [
+        "A02",
+        "A03"
+      ],
+      "role": "direct_support",
+      "note": "Fluoride-selective channel activity is supported for tested homologues; resistance alone did not establish transport mechanism.",
+      "option_roles": {
+        "A02": "context_only",
+        "A03": "direct_support"
+      }
+    },
+    {
+      "case_group": "hemk_prmc",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A06"
+      ],
+      "role": "direct_support",
+      "note": "Related methyltransfer chemistry is retained while release-factor GGQ specificity is distinguished from L3/DNA targets and the historical heme assignment.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "direct_support",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "lhgO_electron_acceptor_correction",
+      "option_ids": [
+        "A03",
+        "A04",
+        "A07"
+      ],
+      "role": "context_only",
+      "note": "Quinone-linked membrane-associated dehydrogenase is supported; intrinsic transmembrane topology is not established by fractionation alone.",
+      "option_roles": {
+        "A03": "context_only",
+        "A04": "context_only",
+        "A07": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_01_ttr",
+      "option_ids": [
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Refine a respiratory-function annotation with a conditional intestinal-lumen role; do not infer universal systemic virulence. Detailed evidence routes are in detailed_traces.md.",
+      "option_roles": {
+        "A08": "direct_support"
+      }
+    },
+    {
+      "case_group": "organism_02_xoxf",
+      "option_ids": [
+        "A02",
+        "A04",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "XoxF supports lanthanide-dependent methanol metabolism; regulation, paralog redundancy and alternative oxidation constrain essentiality claims. Detailed routes are in detailed_traces.md.",
+      "option_roles": {
+        "A02": "context_only",
+        "A04": "context_only",
+        "A09": "direct_support"
+      }
+    },
+    {
+      "case_group": "organism_03_tau_ssu",
+      "option_ids": [
+        "A02",
+        "A07",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Sulfur scavenging during sulfate/cysteine scarcity; distinguish transporter specificity, desulfonating activity and whole-cell nutrient range.",
+      "option_roles": {
+        "A02": "context_only",
+        "A07": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_04_gcsr",
+      "option_ids": [
+        "A05",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Glycine-responsive activation of the glycine-to-pyruvate operon; broad quorum/pyocyanin attribution needs correction. This is a regulator, not a glycine-cleaving enzyme.",
+      "option_roles": {
+        "A05": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_05_tcu",
+      "option_ids": [
+        "A06",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "The locus enables use of tricarballylate as carbon/energy; citrate transport alone is insufficient. Sequence-based proposals for TcuA/B chemistry are not purified catalytic demonstrations in this paper.",
+      "option_roles": {
+        "A06": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_07_xyg",
+      "option_ids": [
+        "A06",
+        "A08",
+        "A09"
+      ],
+      "role": "context_only",
+      "note": "BoGH5A initiates xyloglucan access; the locus supports conditional dietary nutrient use. Induced neighbors and homologous hydrolases are not all equally essential.",
+      "option_roles": {
+        "A06": "context_only",
+        "A08": "context_only",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_08_porphyran",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Porphyran utilization and two porphyranases are supported. An active enzyme alone does not establish whole-organism substrate use; observed horizontal-transfer architecture does not identify the historical donor/event.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_09_huc",
+      "option_ids": [
+        "A02",
+        "A04",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Resource-dependent aerobic energy scavenging, with different temporal roles for two hydrogenases; catalytic affinity is supported by purified-protein measurements rather than expression alone.",
+      "option_roles": {
+        "A02": "context_only",
+        "A04": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_10_hpnn",
+      "option_ids": [
+        "A07",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Hopanoid localization supports temperature-dependent envelope physiology; additional roles remain possible. The paper does not purify HpnN to show a transport mechanism.",
+      "option_roles": {
+        "A07": "direct_support",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_11_fucp",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Strain-specific fucose transport/use; conditional colonization benefit. Neither the transporter phenotype nor locus induction assigns catalytic reactions to all neighboring genes.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_12_nitrate",
+      "option_ids": [
+        "A08",
+        "A09"
+      ],
+      "role": "context_only",
+      "note": "Host-derived nitrate supports conditional gut growth; nitrate respiration need not be a pathogen-only role. Triple-mutant evidence does not isolate each paralog's contribution.",
+      "option_roles": {
+        "A08": "context_only",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_13_icl",
+      "option_ids": [
+        "A06",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Refine ICL physiological essentiality to include methylisocitrate-lyase-dependent avoidance of metabolic poisoning. Survival rescue is distinct from biomass rescue; in-vitro results do not by themselves establish in-host carbon flux.",
+      "option_roles": {
+        "A06": "context_only",
+        "A08": "direct_support"
+      }
+    },
+    {
+      "case_group": "organism_14_rut",
+      "option_ids": [
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Pyrimidine nitrogen salvage with transport and detoxification constraints. Individual mechanistic proposals for unresolved proteins remain hypotheses; missing growth does not uniformly mean loss of a ring-cleaving catalyst.",
+      "option_roles": {
+        "A06": "context_only",
+        "A07": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_15_nifi",
+      "option_ids": [
+        "A05",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Posttranscriptional regulation of nitrogenase activity, supporting adaptation to changing nitrogen supply; NifI proteins are not nitrogenase catalysts and direct molecular inhibition is not shown here.",
+      "option_roles": {
+        "A05": "direct_support",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_16_malr",
+      "option_ids": [
+        "A05",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Positive regulation of maltose/maltodextrin utilization, with direct promoter binding; do not annotate a transporter or claim directly demonstrated maltose sensing.",
+      "option_roles": {
+        "A05": "direct_support",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_17_ybts",
+      "option_ids": [
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Yersiniabactin production contributes to copper protection under tested conditions. This does not reassign YbtS as a copper enzyme or show that this specific mechanism determines all infection fitness.",
+      "option_roles": {
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_18_dsdapm",
+      "option_ids": [
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "D-serine catabolism contributes to conditional infection fitness; a short ex-vivo urine assay does not reproduce that role. Direct catalytic annotation rests on separate chemistry, not infection counts.",
+      "option_roles": {
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_19_pyruvate_transport",
+      "option_ids": [
+        "A02",
+        "A03",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Pyruvate acquisition during nutrient limitation/resuscitation, with redundant uptake routes. A sensing-network phenotype is not automatically a BtsT-only knockout result; YhjX specificity remained unresolved in the cited studies.",
+      "option_roles": {
+        "A02": "context_only",
+        "A03": "direct_support",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_20_isia",
+      "option_ids": [
+        "A01",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Cys-dependent energy dissipation contributes to conditional photoprotection, with a growth tradeoff. This is a physical photosynthetic role, not evidence for a new enzymatic reaction.",
+      "option_roles": {
+        "A01": "direct_support",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_21_vcra",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "VC reductive dehalogenase associated with organohalide respiration; environmental gene detection establishes capacity evidence, not measured field flux. Protein was only partially purified and gene assignment lacked a knockout test.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_22_eutc",
+      "option_ids": [
+        "A04",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Ethanolamine utilization supports conditional intestinal expansion through respiratory access to a nutrient, rather than universal virulence or simply increased nutrient abundance.",
+      "option_roles": {
+        "A04": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_23_pdu",
+      "option_ids": [
+        "A04",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Microbiota-derived propanediol is a conditional carbon resource; do not copy an electron-acceptor requirement from another nutrient pathway. PtsN regulatory evidence is not direct propanediol catalysis.",
+      "option_roles": {
+        "A04": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "organism_24_sdha",
+      "option_ids": [
+        "A04",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Inflammation enables oxidative use of microbiota-derived succinate; gut physiology cannot be read directly from an anaerobic textbook pathway. Transporter breadth alone did not identify the relevant nutrient.",
+      "option_roles": {
+        "A04": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "pa0142",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Assigns an experimentally demonstrated 8-oxoguanine deaminase activity; sequence relatives elsewhere remain predictions.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "option_ids": [
+        "A04",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Supports a multicomponent oxoproline-disposal system rather than importing a familiar pathway or inferring useful in-vivo reaction direction from in-vitro activity alone.",
+      "option_roles": {
+        "A04": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "pxpT_pxpR_access_and_sensing",
+      "option_ids": [
+        "A05",
+        "A07"
+      ],
+      "role": "direct_support",
+      "note": "Supports PxpT-dependent access and PxpR repression with direct 5-OP binding. Do not equate pathway induction with demonstrated direct sensing, or growth rescue with measured transport.",
+      "option_roles": {
+        "A05": "direct_support",
+        "A07": "context_only"
+      }
+    },
+    {
+      "case_group": "quef",
+      "option_ids": [
+        "A01",
+        "A04",
+        "A06"
+      ],
+      "role": "direct_support",
+      "note": "Pathway association survives rejected cyclohydrolase chemistry; controlled NADPH-dependent preQ0 reduction supplies the corrected operation.",
+      "option_roles": {
+        "A01": "direct_support",
+        "A04": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "option_ids": [
+        "A02",
+        "A05"
+      ],
+      "role": "direct_support",
+      "note": "Supports a cofactor-state-dependent sequence-specific regulator with target-dependent activation/repression. Direct cofactor redox action is distinguishable from indirect assembly-demand feedback; neither implies a demonstrated selective PMS-binding pocket. DNA occupancy alone does not specify productive control or its sign.",
+      "option_roles": {
+        "A02": "direct_support",
+        "A05": "direct_support"
+      }
+    },
+    {
+      "case_group": "replacement_bioG",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A10"
+      ],
+      "role": "context_only",
+      "note": "BioG supports the demethylating step; expression dose and promiscuity affect rescue. Native necessity in each donor organism was not established here.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_bioJ",
+      "option_ids": [
+        "A01",
+        "A08",
+        "A10"
+      ],
+      "role": "context_only",
+      "note": "BioJ has biochemical and native physiological support for biotin-precursor production. Its contribution depends on nutrient availability; host phenotypes do not require a second catalytic annotation.",
+      "option_roles": {
+        "A01": "context_only",
+        "A08": "context_only",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_bioK",
+      "option_ids": [
+        "A09",
+        "A10"
+      ],
+      "role": "context_only",
+      "note": "Functional BioH substitution is supported in the heterologous system; direct isolated chemistry and native physiological requirement remain unverified by this paper.",
+      "option_roles": {
+        "A09": "context_only",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_bioV",
+      "option_ids": [
+        "A01",
+        "A09",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "BioV supplies the esterase step. Failed native deletion suggests a limitation to test, but alone does not prove essentiality or deficient biotin uptake.",
+      "option_roles": {
+        "A01": "context_only",
+        "A09": "direct_support",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "option_ids": [
+        "A01",
+        "A04",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "BioZ supplies pimeloyl-ACP by a different entry route rather than catalyzing BioH’s demethylation. FabH similarity alone would misassign pathway responsibility.",
+      "option_roles": {
+        "A01": "context_only",
+        "A04": "context_only",
+        "A10": "direct_support"
+      }
+    },
+    {
+      "case_group": "replacement_cobY",
+      "option_ids": [
+        "A01",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "CobY replaces the guanylyltransferase contribution. The kinase demand belongs to the tested salvage route; assigning bifunctional CobU equivalence would overstate the result.",
+      "option_roles": {
+        "A01": "context_only",
+        "A10": "direct_support"
+      }
+    },
+    {
+      "case_group": "replacement_folA_bypass",
+      "option_ids": [
+        "A09",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "Adaptation can be enzymatic partial restoration or suppressor-driven salvage compensation. The latter did not eliminate all external supplement requirement.",
+      "option_roles": {
+        "A09": "context_only",
+        "A10": "direct_support"
+      }
+    },
+    {
+      "case_group": "replacement_folE2",
+      "option_ids": [
+        "A04",
+        "A09",
+        "A10"
+      ],
+      "role": "context_only",
+      "note": "FolE2 supports zinc-limitation-associated replacement of FolE. Metal flexibility in vitro does not establish native metal occupancy.",
+      "option_roles": {
+        "A04": "context_only",
+        "A09": "context_only",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_folM",
+      "option_ids": [
+        "A02",
+        "A08",
+        "A10"
+      ],
+      "role": "context_only",
+      "note": "Dihydromonapterin reductase has physiological support. FolM also has DHFR capacity in a perturbed/overexpressed context; rescue alone cannot assign routine folate-recycling responsibility.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_hemJ",
+      "option_ids": [
+        "A04",
+        "A08",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "HemJ participates in cellular PPO function, with replacement limited by biological context. Isolated catalysis and proposed enzyme coupling were not fully established.",
+      "option_roles": {
+        "A04": "context_only",
+        "A08": "context_only",
+        "A10": "direct_support"
+      }
+    },
+    {
+      "case_group": "replacement_lysU",
+      "option_ids": [
+        "A08",
+        "A09"
+      ],
+      "role": "context_only",
+      "note": "Paralog overlap and condition/strain dependence remain live; this evidence does not support a universal LysU-specific heat requirement or a dedicated alarmone annotation.",
+      "option_roles": {
+        "A08": "context_only",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_purT",
+      "option_ids": [
+        "A04",
+        "A09",
+        "A10"
+      ],
+      "role": "limited_inspection",
+      "note": "PurT provides an alternative GAR-formylation route; effectiveness depends on substrate supply. It is not evidence that folate dependence of the entire purine pathway disappears.",
+      "option_roles": {
+        "A04": "limited_inspection",
+        "A09": "limited_inspection",
+        "A10": "limited_inspection"
+      }
+    },
+    {
+      "case_group": "replacement_queH",
+      "option_ids": [
+        "A01",
+        "A09",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "QueH supplies oQ-to-Q conversion in vivo and can overlap with QueG. Native metal identity, electron donor and isolated productive catalysis remain bounded uncertainties.",
+      "option_roles": {
+        "A01": "context_only",
+        "A09": "direct_support",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "replacement_thyX",
+      "option_ids": [
+        "A04",
+        "A10"
+      ],
+      "role": "direct_support",
+      "note": "Same desired dTMP output does not make the alternatives metabolically interchangeable: ThyA replacement imposes folate-recycling demand. No particular native backup reductase was identified.",
+      "option_roles": {
+        "A04": "context_only",
+        "A10": "direct_support"
+      }
+    },
+    {
+      "case_group": "rida",
+      "option_ids": [
+        "A01",
+        "A06",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Supports enamine/imine deaminase, renamed RidA, while residual mutant activities constrain simplistic catalytic-residue assignments.",
+      "option_roles": {
+        "A01": "context_only",
+        "A06": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_codA_isoguanine_failed_candidate",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Adds an isoguanine-deaminating activity to CodA and records failure of the original sequence candidate path without assigning that archaeal protein a function.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_hisZ_lactococcus",
+      "option_ids": [
+        "A04",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Reassigns a synthetase-like homolog as a functional component of histidine-biosynthetic ATP phosphoribosyltransferase; homology describes ancestry, not tRNA-charging function.",
+      "option_roles": {
+        "A04": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_hisn_impase_discrimination",
+      "option_ids": [
+        "A02",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Supports HolPase annotation for tested ZMO_RS06805; prevents transferring that activity to every IMPase-like or nearest overall homolog. Cg0911 side activity does not establish its native role.",
+      "option_roles": {
+        "A02": "context_only",
+        "A09": "direct_support"
+      }
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "option_ids": [
+        "A02",
+        "A03",
+        "A04"
+      ],
+      "role": "direct_support",
+      "note": "Confirms a shared broad heme-degradation function while qualifying transfer of the reference enzyme's mechanism and product state.",
+      "option_roles": {
+        "A02": "context_only",
+        "A03": "direct_support",
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "option_ids": [
+        "A01",
+        "A03"
+      ],
+      "role": "direct_support",
+      "note": "Corrects an archaeal MVD annotation to M3K, separating observed alkene production from the enzyme's actual chemical step.",
+      "option_roles": {
+        "A01": "direct_support",
+        "A03": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_pucM_transthyretin_like",
+      "option_ids": [
+        "A01",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Assigns PucM as hydroxyisourate hydrolase; broad transfer to all relatives requires care.",
+      "option_roles": {
+        "A01": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "option_ids": [
+        "A01",
+        "A02"
+      ],
+      "role": "direct_support",
+      "note": "QueF homology did not justify nitrile-reductase annotation: this homolog is an archaeosine-forming amidinotransferase acting on tRNA.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "direct_support"
+      }
+    },
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "option_ids": [
+        "A01",
+        "A02"
+      ],
+      "role": "direct_support",
+      "note": "Very high overall identity supplied discovery support but could not justify transferring atrazine dechlorination to TriA.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "direct_support"
+      }
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "option_ids": [
+        "A01",
+        "A02"
+      ],
+      "role": "direct_support",
+      "note": "Refines synthetase-like annotation to a tRNA-modification enzyme, glutamylating queuosine at the anticodon rather than making a translation substrate.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "direct_support"
+      }
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A04"
+      ],
+      "role": "context_only",
+      "note": "Identified YgbP as MEP cytidylyltransferase, combining chemical-class homology with pathway-specific validation.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "context_only",
+        "A04": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_yggH_trmB_ecoli",
+      "option_ids": [
+        "A01",
+        "A02"
+      ],
+      "role": "direct_support",
+      "note": "Correct coarse methyltransferase prediction became a tRNA guanosine-46 N7 methyltransferase assignment; exact site was not supplied by sequence similarity.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "direct_support"
+      }
+    },
+    {
+      "case_group": "seq_yjeH_exporter_ecoli",
+      "option_ids": [
+        "A02",
+        "A03"
+      ],
+      "role": "context_only",
+      "note": "Specific methionine and branched-chain amino-acid exporter annotation rests on transport measurements plus sequence-family support.",
+      "option_roles": {
+        "A02": "context_only",
+        "A03": "context_only"
+      }
+    },
+    {
+      "case_group": "seq_yrdC_tsaC_ecoli",
+      "option_ids": [
+        "A04",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "Supports YrdC/Sua5 participation in t6A biosynthesis and distinguishes YrdC from a similar paralog. This paper alone does not supply the complete later pathway mechanism.",
+      "option_roles": {
+        "A04": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "spatial_amic_amia_export_septal_access",
+      "option_ids": [
+        "A07",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Supports Tat-dependent export and separable AmiC septal targeting. Targeting, export and catalysis are distinct properties; overexpression rescue does not establish that septal concentration is essential.",
+      "option_roles": {
+        "A07": "direct_support",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "spatial_ccda_dsbd_acceptor_range",
+      "option_ids": [
+        "A02",
+        "A04",
+        "A10"
+      ],
+      "role": "context_only",
+      "note": "Supports a transmembrane reducing pathway shared with DsbD while restricting demonstrated acceptor scope. Exported partners and appended domains cannot be assumed functionally interchangeable.",
+      "option_roles": {
+        "A02": "context_only",
+        "A04": "context_only",
+        "A10": "context_only"
+      }
+    },
+    {
+      "case_group": "spatial_dsbd_topology_revision",
+      "option_ids": [
+        "A03",
+        "A07"
+      ],
+      "role": "direct_support",
+      "note": "Refines the transmembrane electron-transfer mechanism and rejects the earlier static opposite-face cysteine model. Cytoplasmic accessibility permits a cavity interpretation; the periplasmic γ-domain encounter remained unresolved.",
+      "option_roles": {
+        "A03": "direct_support",
+        "A07": "context_only"
+      }
+    },
+    {
+      "case_group": "spatial_ftsw_bpbp_job",
+      "option_ids": [
+        "A01",
+        "A04",
+        "A07"
+      ],
+      "role": "direct_support",
+      "note": "Assigns partner-dependent peptidoglycan polymerase activity to FtsW. The 2011 access observations remain recorded; 2019 authors explicitly did not formally exclude additional flippase activity.",
+      "option_roles": {
+        "A01": "context_only",
+        "A04": "direct_support",
+        "A07": "context_only"
+      }
+    },
+    {
+      "case_group": "spatial_murj_lipidII_access",
+      "option_ids": [
+        "A03",
+        "A07"
+      ],
+      "role": "direct_support",
+      "note": "Supports MurJ-dependent lipid II translocation in vivo. The access control distinguishes substrate sequestration from failed ColM import or activity.",
+      "option_roles": {
+        "A03": "context_only",
+        "A07": "direct_support"
+      }
+    },
+    {
+      "case_group": "spatial_trxa_relocation_role",
+      "option_ids": [
+        "A03",
+        "A04",
+        "A07"
+      ],
+      "role": "direct_support",
+      "note": "Demonstrates conditional oxidant activity after engineered relocation, dependent on partner access and abundance. It does not annotate native TrxA as a naturally exported oxidant.",
+      "option_roles": {
+        "A03": "direct_support",
+        "A04": "context_only",
+        "A07": "context_only"
+      }
+    },
+    {
+      "case_group": "spec_aquifex_hfp_coupling_contamination",
+      "option_ids": [
+        "A01",
+        "A04",
+        "A06"
+      ],
+      "role": "context_only",
+      "note": "HFP is an ARAPDP-phosphatase candidate compatible with the reconstituted pathway, not a demonstrated bifunctional ribose-phosphate isomerase. Native essentiality and exclusivity are not established by this paper.",
+      "option_roles": {
+        "A01": "context_only",
+        "A04": "context_only",
+        "A06": "context_only"
+      }
+    },
+    {
+      "case_group": "spec_cysq_pap_not_imp",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "PAP-preferring CysQ phosphatase rather than primary IMPase/FBPase. Native sulfur-regulatory contribution is supported by biochemical/heterologous evidence but was not directly quantified as Mtb PAP flux here.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "option_ids": [
+        "A01",
+        "A02",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Do not retain cofactor-independent PDC as established. Record measured model-ester hydrolysis while leaving the physiological substrate/function unresolved; a positive artificial-substrate assay is not a native-function solution.",
+      "option_roles": {
+        "A01": "direct_support",
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "option_ids": [
+        "A01",
+        "A06",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Real IMPase capacity coexists with a Nus/rRNA physiological contribution; older catalytic-complementation contrasts are abstract-only, with later RNA-role sections inspected.",
+      "option_roles": {
+        "A01": "context_only",
+        "A06": "context_only",
+        "A08": "direct_support"
+      }
+    },
+    {
+      "case_group": "spec_yigl_conditional_b6",
+      "option_ids": [
+        "A02",
+        "A08",
+        "A09"
+      ],
+      "role": "direct_support",
+      "note": "Add direct PNP/PLP phosphatase activity and conditional excess-PNP protection. Retain the established sugar-stress role; normal-state PNP catabolism is not reassigned chiefly to YigL.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "direct_support",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "spec_yihu_native_sulfonate",
+      "option_ids": [
+        "A02",
+        "A08"
+      ],
+      "role": "context_only",
+      "note": "Physiological sulfolactaldehyde reductase in sulfoglycolysis, producing DHPS. Earlier SSA reduction is real assay chemistry; a secondary stress contribution is not categorically excluded.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only"
+      }
+    },
+    {
+      "case_group": "spec_yjjg_conditional_salvage_cleanup",
+      "option_ids": [
+        "A02",
+        "A08",
+        "A09"
+      ],
+      "role": "context_only",
+      "note": "Retain nucleotide hydrolysis, conditional thymine salvage and experimentally tested xenonucleotide protection. Neither phenotype alone establishes the dominant substrate in unchallenged cells.",
+      "option_roles": {
+        "A02": "context_only",
+        "A08": "context_only",
+        "A09": "context_only"
+      }
+    },
+    {
+      "case_group": "sulfoglycolysis_selectivity",
+      "option_ids": [
+        "A01",
+        "A02"
+      ],
+      "role": "direct_support",
+      "note": "Parallel pathway organization does not establish interchangeable substrates. Individual sulfonate-recognition sites and substrate tests constrain transfer.",
+      "option_roles": {
+        "A01": "context_only",
+        "A02": "direct_support"
+      }
+    },
+    {
+      "case_group": "yeag",
+      "option_ids": [
+        "A02",
+        "A06",
+        "A08"
+      ],
+      "role": "direct_support",
+      "note": "Immediate recovery versus prolonged survival, population heterogeneity and protein versus exact phosphosite assignment are distinct across the linked 2015/2021 records.",
+      "option_roles": {
+        "A02": "direct_support",
+        "A06": "context_only",
+        "A08": "direct_support"
+      }
+    },
+    {
+      "case_group": "yjef_nnr",
+      "option_ids": [
+        "A01",
+        "A04"
+      ],
+      "role": "direct_support",
+      "note": "Bifunctional NAD(P)HX epimerase and ADP-dependent NAD(P)HX dehydratase; the cofactor cannot simply be transferred from the ATP-dependent eukaryotic homolog.",
+      "option_roles": {
+        "A01": "context_only",
+        "A04": "direct_support"
+      }
+    }
+  ],
+  "unresolved_conceptual_boundaries": [
+    "The ten options are research content, not ten adopted hypervolume axes. Existing form/consumer inspection is required before proposing schema integration.",
+    "A02 target specificity and A05 regulatory relation share DNA/ligand references; regulatory sign/output stay in A05 and cannot be inferred from recognition.",
+    "A03 mechanism, A04 productive requirements and A07 access constrain each other, but dependence/access alone does not establish the full mechanism.",
+    "A06 system responsibility and A08 physiological consequence differ in explanatory level; a bounded child should request the level needed rather than every property.",
+    "A09 necessity and A10 equivalence are function/background/alternative relations, not new gene-essentiality or comparative-credit scores.",
+    "Dominant native activity, multifunctionality and taxonomic transfer are represented within operation/target/physiology claims and common scope, not redundant extra options."
+  ]
+}

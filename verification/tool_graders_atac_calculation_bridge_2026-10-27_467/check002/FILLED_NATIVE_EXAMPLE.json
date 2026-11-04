@@ -1,0 +1,1969 @@
+{
+  "provenance": "retained MACS2 2.2.9.1 output from synthetic engineering tracks",
+  "native_sheet": {
+    "version": "atac_differential_native_sheet_v1",
+    "tool_row": "B-L125-analyze_atac_seq_differential_accessibility",
+    "reference": {
+      "reference_id": "fixture-toy",
+      "assembly_accession_version": null,
+      "source_refs": [
+        "supplied-sq"
+      ],
+      "contigs": [
+        {
+          "chromosome": "chrToy",
+          "length_bp": 500,
+          "sequence_accession_version": null,
+          "sequence_sha256": null,
+          "source_refs": [
+            "supplied-sq"
+          ]
+        }
+      ],
+      "aliases": []
+    },
+    "samples": [
+      {
+        "sample_id": "fixture-s1",
+        "input_artifact_refs": [
+          "supplied-1"
+        ],
+        "reference_id": "fixture-toy",
+        "biospecimen_id": null,
+        "replicate_id": null,
+        "origin": "synthetic_engineering_fixture"
+      },
+      {
+        "sample_id": "fixture-s2",
+        "input_artifact_refs": [
+          "supplied-2"
+        ],
+        "reference_id": "fixture-toy",
+        "biospecimen_id": null,
+        "replicate_id": null,
+        "origin": "synthetic_engineering_fixture"
+      }
+    ],
+    "conditions": [
+      {
+        "condition_id": "fixture-c1",
+        "label": "condition 1",
+        "sample_ids": [
+          "fixture-s1"
+        ]
+      },
+      {
+        "condition_id": "fixture-c2",
+        "label": "condition 2",
+        "sample_ids": [
+          "fixture-s2"
+        ]
+      }
+    ],
+    "callpeak_bindings": [],
+    "comparison": {
+      "comparison_key": "fixture-comparison",
+      "condition1_id": "fixture-c1",
+      "condition2_id": "fixture-c2",
+      "reference_id": "fixture-toy",
+      "track_keys": {
+        "signal1": "signal1",
+        "background1": "background1",
+        "signal2": "signal2",
+        "background2": "background2"
+      },
+      "selected_argv": [],
+      "selected_parameters": {
+        "depth1_lexeme": "1",
+        "depth2_lexeme": "2",
+        "depth_unit": "million_tags",
+        "cutoff_log10_lr": 3,
+        "minimum_length_bp": 50,
+        "maximum_gap_bp": 0,
+        "native_pseudocount": 0.01
+      },
+      "artifact_roles": {
+        "condition1": "condition1.bed",
+        "condition2": "condition2.bed",
+        "common": "common.bed"
+      },
+      "producer_ref": "fixture-native-bdgdiff"
+    },
+    "tracks": [
+      {
+        "version": "atac_bedgraph_parsed_v1",
+        "artifact": {
+          "artifact_ref": "t1.bdg",
+          "format": "bedgraph4",
+          "expected_sha256": "fc34572321b9e8a7f6f0318e18aec98dfe42e81f71ba68957ba39818af3a86d8",
+          "expected_size_bytes": 85,
+          "supplied_extent": "complete",
+          "producer_run_ref": null,
+          "producer_outcome": "not_run",
+          "writer_closed": null,
+          "producer_name": null,
+          "producer_version": null,
+          "producer_source_ref": null,
+          "origin": "synthetic_engineering_fixture"
+        },
+        "binding_key": "signal1",
+        "state": {
+          "availability": "present",
+          "byte_extent": "complete",
+          "identity": "verified",
+          "format": "compatible",
+          "output_extent": "complete"
+        },
+        "parsed_sha256": "fc34572321b9e8a7f6f0318e18aec98dfe42e81f71ba68957ba39818af3a86d8",
+        "parsed_byte_count": 85,
+        "physical_line_count": 5,
+        "data_row_count": 5,
+        "readable_data_row_count": 5,
+        "malformed_data_row_count": 0,
+        "binding": {
+          "track_key": "signal1",
+          "condition_id": "fixture-c1",
+          "sample_ids": [
+            "fixture-s1"
+          ],
+          "role": "signal",
+          "callpeak_run_key": null,
+          "reference_id": "fixture-toy",
+          "value_unit": "supplied_signal",
+          "normalization": "raw_pileup",
+          "background_origin": "unknown",
+          "source_artifact_ref": "t1.bdg"
+        },
+        "coordinate_convention": "zero_based_half_open",
+        "numeric_storage": "native_decimal_lexeme_plus_binary64_parse",
+        "native_writer_precision": "supplied_lexical",
+        "row_order": "native_file_order",
+        "chromosome_extents": [
+          {
+            "chromosome": "chrToy",
+            "first_reported_start": 0,
+            "last_reported_end": 500,
+            "readable_row_count": 5,
+            "has_unreported_leading_span": false,
+            "has_unreported_internal_span": false,
+            "has_unreported_tail": false,
+            "reference_length_bp": 500
+          }
+        ],
+        "geometry_inspection": "complete",
+        "unlocated_invalid_row_count": 0,
+        "headers": [],
+        "rows": [
+          [
+            0,
+            1,
+            0,
+            15,
+            "chrToy",
+            0,
+            100,
+            0.0,
+            "0"
+          ],
+          [
+            1,
+            2,
+            15,
+            33,
+            "chrToy",
+            100,
+            200,
+            20.0,
+            "20"
+          ],
+          [
+            2,
+            3,
+            33,
+            51,
+            "chrToy",
+            200,
+            300,
+            10.0,
+            "10"
+          ],
+          [
+            3,
+            4,
+            51,
+            68,
+            "chrToy",
+            300,
+            400,
+            2.0,
+            "2"
+          ],
+          [
+            4,
+            5,
+            68,
+            85,
+            "chrToy",
+            400,
+            500,
+            0.0,
+            "0"
+          ]
+        ],
+        "invalid_records": [],
+        "issues": [],
+        "ordered_row_index": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "overlap_groups": []
+      },
+      {
+        "version": "atac_bedgraph_parsed_v1",
+        "artifact": {
+          "artifact_ref": "c1.bdg",
+          "format": "bedgraph4",
+          "expected_sha256": "728c12c489cd3fc5b3b8a3bd8a8bd01909c9358c04e4c6a23b1480d35df35919",
+          "expected_size_bytes": 83,
+          "supplied_extent": "complete",
+          "producer_run_ref": null,
+          "producer_outcome": "not_run",
+          "writer_closed": null,
+          "producer_name": null,
+          "producer_version": null,
+          "producer_source_ref": null,
+          "origin": "synthetic_engineering_fixture"
+        },
+        "binding_key": "background1",
+        "state": {
+          "availability": "present",
+          "byte_extent": "complete",
+          "identity": "verified",
+          "format": "compatible",
+          "output_extent": "complete"
+        },
+        "parsed_sha256": "728c12c489cd3fc5b3b8a3bd8a8bd01909c9358c04e4c6a23b1480d35df35919",
+        "parsed_byte_count": 83,
+        "physical_line_count": 5,
+        "data_row_count": 5,
+        "readable_data_row_count": 5,
+        "malformed_data_row_count": 0,
+        "binding": {
+          "track_key": "background1",
+          "condition_id": "fixture-c1",
+          "sample_ids": [
+            "fixture-s1"
+          ],
+          "role": "model_background",
+          "callpeak_run_key": null,
+          "reference_id": "fixture-toy",
+          "value_unit": "supplied_model_background",
+          "normalization": "raw_pileup",
+          "background_origin": "explicit_supplied_track",
+          "source_artifact_ref": "c1.bdg"
+        },
+        "coordinate_convention": "zero_based_half_open",
+        "numeric_storage": "native_decimal_lexeme_plus_binary64_parse",
+        "native_writer_precision": "supplied_lexical",
+        "row_order": "native_file_order",
+        "chromosome_extents": [
+          {
+            "chromosome": "chrToy",
+            "first_reported_start": 0,
+            "last_reported_end": 500,
+            "readable_row_count": 5,
+            "has_unreported_leading_span": false,
+            "has_unreported_internal_span": false,
+            "has_unreported_tail": false,
+            "reference_length_bp": 500
+          }
+        ],
+        "geometry_inspection": "complete",
+        "unlocated_invalid_row_count": 0,
+        "headers": [],
+        "rows": [
+          [
+            0,
+            1,
+            0,
+            15,
+            "chrToy",
+            0,
+            100,
+            1.0,
+            "1"
+          ],
+          [
+            1,
+            2,
+            15,
+            32,
+            "chrToy",
+            100,
+            200,
+            1.0,
+            "1"
+          ],
+          [
+            2,
+            3,
+            32,
+            49,
+            "chrToy",
+            200,
+            300,
+            1.0,
+            "1"
+          ],
+          [
+            3,
+            4,
+            49,
+            66,
+            "chrToy",
+            300,
+            400,
+            1.0,
+            "1"
+          ],
+          [
+            4,
+            5,
+            66,
+            83,
+            "chrToy",
+            400,
+            500,
+            1.0,
+            "1"
+          ]
+        ],
+        "invalid_records": [],
+        "issues": [],
+        "ordered_row_index": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "overlap_groups": []
+      },
+      {
+        "version": "atac_bedgraph_parsed_v1",
+        "artifact": {
+          "artifact_ref": "t2.bdg",
+          "format": "bedgraph4",
+          "expected_sha256": "041f19c6a6f672bf6376c87e9d8a8286b5406419bec0fcd221fb1debd8f00318",
+          "expected_size_bytes": 85,
+          "supplied_extent": "complete",
+          "producer_run_ref": null,
+          "producer_outcome": "not_run",
+          "writer_closed": null,
+          "producer_name": null,
+          "producer_version": null,
+          "producer_source_ref": null,
+          "origin": "synthetic_engineering_fixture"
+        },
+        "binding_key": "signal2",
+        "state": {
+          "availability": "present",
+          "byte_extent": "complete",
+          "identity": "verified",
+          "format": "compatible",
+          "output_extent": "complete"
+        },
+        "parsed_sha256": "041f19c6a6f672bf6376c87e9d8a8286b5406419bec0fcd221fb1debd8f00318",
+        "parsed_byte_count": 85,
+        "physical_line_count": 5,
+        "data_row_count": 5,
+        "readable_data_row_count": 5,
+        "malformed_data_row_count": 0,
+        "binding": {
+          "track_key": "signal2",
+          "condition_id": "fixture-c2",
+          "sample_ids": [
+            "fixture-s2"
+          ],
+          "role": "signal",
+          "callpeak_run_key": null,
+          "reference_id": "fixture-toy",
+          "value_unit": "supplied_signal",
+          "normalization": "raw_pileup",
+          "background_origin": "unknown",
+          "source_artifact_ref": "t2.bdg"
+        },
+        "coordinate_convention": "zero_based_half_open",
+        "numeric_storage": "native_decimal_lexeme_plus_binary64_parse",
+        "native_writer_precision": "supplied_lexical",
+        "row_order": "native_file_order",
+        "chromosome_extents": [
+          {
+            "chromosome": "chrToy",
+            "first_reported_start": 0,
+            "last_reported_end": 500,
+            "readable_row_count": 5,
+            "has_unreported_leading_span": false,
+            "has_unreported_internal_span": false,
+            "has_unreported_tail": false,
+            "reference_length_bp": 500
+          }
+        ],
+        "geometry_inspection": "complete",
+        "unlocated_invalid_row_count": 0,
+        "headers": [],
+        "rows": [
+          [
+            0,
+            1,
+            0,
+            15,
+            "chrToy",
+            0,
+            100,
+            0.0,
+            "0"
+          ],
+          [
+            1,
+            2,
+            15,
+            32,
+            "chrToy",
+            100,
+            200,
+            2.0,
+            "2"
+          ],
+          [
+            2,
+            3,
+            32,
+            50,
+            "chrToy",
+            200,
+            300,
+            20.0,
+            "20"
+          ],
+          [
+            3,
+            4,
+            50,
+            68,
+            "chrToy",
+            300,
+            400,
+            40.0,
+            "40"
+          ],
+          [
+            4,
+            5,
+            68,
+            85,
+            "chrToy",
+            400,
+            500,
+            0.0,
+            "0"
+          ]
+        ],
+        "invalid_records": [],
+        "issues": [],
+        "ordered_row_index": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "overlap_groups": []
+      },
+      {
+        "version": "atac_bedgraph_parsed_v1",
+        "artifact": {
+          "artifact_ref": "c2.bdg",
+          "format": "bedgraph4",
+          "expected_sha256": "37d16eea764052d112654086671b4881cc7cdc9a7be97cace47bba4eab1b510b",
+          "expected_size_bytes": 83,
+          "supplied_extent": "complete",
+          "producer_run_ref": null,
+          "producer_outcome": "not_run",
+          "writer_closed": null,
+          "producer_name": null,
+          "producer_version": null,
+          "producer_source_ref": null,
+          "origin": "synthetic_engineering_fixture"
+        },
+        "binding_key": "background2",
+        "state": {
+          "availability": "present",
+          "byte_extent": "complete",
+          "identity": "verified",
+          "format": "compatible",
+          "output_extent": "complete"
+        },
+        "parsed_sha256": "37d16eea764052d112654086671b4881cc7cdc9a7be97cace47bba4eab1b510b",
+        "parsed_byte_count": 83,
+        "physical_line_count": 5,
+        "data_row_count": 5,
+        "readable_data_row_count": 5,
+        "malformed_data_row_count": 0,
+        "binding": {
+          "track_key": "background2",
+          "condition_id": "fixture-c2",
+          "sample_ids": [
+            "fixture-s2"
+          ],
+          "role": "model_background",
+          "callpeak_run_key": null,
+          "reference_id": "fixture-toy",
+          "value_unit": "supplied_model_background",
+          "normalization": "raw_pileup",
+          "background_origin": "explicit_supplied_track",
+          "source_artifact_ref": "c2.bdg"
+        },
+        "coordinate_convention": "zero_based_half_open",
+        "numeric_storage": "native_decimal_lexeme_plus_binary64_parse",
+        "native_writer_precision": "supplied_lexical",
+        "row_order": "native_file_order",
+        "chromosome_extents": [
+          {
+            "chromosome": "chrToy",
+            "first_reported_start": 0,
+            "last_reported_end": 500,
+            "readable_row_count": 5,
+            "has_unreported_leading_span": false,
+            "has_unreported_internal_span": false,
+            "has_unreported_tail": false,
+            "reference_length_bp": 500
+          }
+        ],
+        "geometry_inspection": "complete",
+        "unlocated_invalid_row_count": 0,
+        "headers": [],
+        "rows": [
+          [
+            0,
+            1,
+            0,
+            15,
+            "chrToy",
+            0,
+            100,
+            2.0,
+            "2"
+          ],
+          [
+            1,
+            2,
+            15,
+            32,
+            "chrToy",
+            100,
+            200,
+            2.0,
+            "2"
+          ],
+          [
+            2,
+            3,
+            32,
+            49,
+            "chrToy",
+            200,
+            300,
+            2.0,
+            "2"
+          ],
+          [
+            3,
+            4,
+            49,
+            66,
+            "chrToy",
+            300,
+            400,
+            2.0,
+            "2"
+          ],
+          [
+            4,
+            5,
+            66,
+            83,
+            "chrToy",
+            400,
+            500,
+            2.0,
+            "2"
+          ]
+        ],
+        "invalid_records": [],
+        "issues": [],
+        "ordered_row_index": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "overlap_groups": []
+      }
+    ],
+    "peaks_xls": [],
+    "narrowpeaks": [],
+    "summits": [],
+    "peak_links": [],
+    "native_differential": [
+      {
+        "version": "macs2_bdgdiff_parsed_v1",
+        "artifact": {
+          "artifact_ref": "condition1.bed",
+          "format": "macs2_bdgdiff_bed5",
+          "expected_sha256": "b275c315a7fc59e60fbede9728b62e76f8f8d7cd5d5212bfd82b177566695bc7",
+          "expected_size_bytes": 127,
+          "supplied_extent": "complete",
+          "producer_run_ref": "fixture-native-bdgdiff",
+          "producer_outcome": "succeeded",
+          "writer_closed": true,
+          "producer_name": "MACS2",
+          "producer_version": "2.2.9.1",
+          "producer_source_ref": "MACS2-2.2.9.1",
+          "origin": "synthetic_engineering_fixture"
+        },
+        "binding_key": "fixture-comparison",
+        "state": {
+          "availability": "present",
+          "byte_extent": "complete",
+          "identity": "verified",
+          "format": "compatible",
+          "output_extent": "complete"
+        },
+        "parsed_sha256": "b275c315a7fc59e60fbede9728b62e76f8f8d7cd5d5212bfd82b177566695bc7",
+        "parsed_byte_count": 127,
+        "physical_line_count": 2,
+        "data_row_count": 1,
+        "readable_data_row_count": 1,
+        "malformed_data_row_count": 0,
+        "headers": [
+          {
+            "locator": {
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 90
+            },
+            "kind": "track",
+            "text": "track name=\"condition 1 (peaks)\" description=\"unique regions in condition 1\" visibility=1"
+          }
+        ],
+        "rows": [
+          {
+            "row_ordinal": 0,
+            "locator": {
+              "line_number": 2,
+              "byte_start": 90,
+              "byte_end": 127
+            },
+            "original_fields": [
+              "chrToy",
+              "0",
+              "100",
+              "condition1.bed1",
+              "17.7408"
+            ],
+            "chromosome": "chrToy",
+            "reported_start0": 0,
+            "reported_end0": 100,
+            "name": "condition1.bed1",
+            "reported_score": 17.7408
+          }
+        ],
+        "invalid_records": [],
+        "issues": [
+          {
+            "code": "native_bdgdiff_coordinate_displacement",
+            "artifact_ref": "condition1.bed",
+            "binding_key": "fixture-comparison",
+            "row_ordinals": [],
+            "locations": [],
+            "field": null,
+            "requirement": "compatible_native_mode"
+          }
+        ],
+        "comparison_key": "fixture-comparison",
+        "category": "condition1",
+        "coordinate_convention": "zero_based_half_open_as_reported",
+        "coordinate_qualification": "macs2_2_2_9_1_native_endpos_displacement_demonstrated",
+        "score_precision": "native_float32_then_6_significant_decimal_digits"
+      },
+      {
+        "version": "macs2_bdgdiff_parsed_v1",
+        "artifact": {
+          "artifact_ref": "condition2.bed",
+          "format": "macs2_bdgdiff_bed5",
+          "expected_sha256": "1c5f95c1539811d288faaf1f71967169e69f64a60a539ed7723b7984041b3ec1",
+          "expected_size_bytes": 129,
+          "supplied_extent": "complete",
+          "producer_run_ref": "fixture-native-bdgdiff",
+          "producer_outcome": "succeeded",
+          "writer_closed": true,
+          "producer_name": "MACS2",
+          "producer_version": "2.2.9.1",
+          "producer_source_ref": "MACS2-2.2.9.1",
+          "origin": "synthetic_engineering_fixture"
+        },
+        "binding_key": "fixture-comparison",
+        "state": {
+          "availability": "present",
+          "byte_extent": "complete",
+          "identity": "verified",
+          "format": "compatible",
+          "output_extent": "complete"
+        },
+        "parsed_sha256": "1c5f95c1539811d288faaf1f71967169e69f64a60a539ed7723b7984041b3ec1",
+        "parsed_byte_count": 129,
+        "physical_line_count": 2,
+        "data_row_count": 1,
+        "readable_data_row_count": 1,
+        "malformed_data_row_count": 0,
+        "headers": [
+          {
+            "locator": {
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 90
+            },
+            "kind": "track",
+            "text": "track name=\"condition 2 (peaks)\" description=\"unique regions in condition 2\" visibility=1"
+          }
+        ],
+        "rows": [
+          {
+            "row_ordinal": 0,
+            "locator": {
+              "line_number": 2,
+              "byte_start": 90,
+              "byte_end": 129
+            },
+            "original_fields": [
+              "chrToy",
+              "200",
+              "300",
+              "condition2.bed1",
+              "12.1487"
+            ],
+            "chromosome": "chrToy",
+            "reported_start0": 200,
+            "reported_end0": 300,
+            "name": "condition2.bed1",
+            "reported_score": 12.1487
+          }
+        ],
+        "invalid_records": [],
+        "issues": [
+          {
+            "code": "native_bdgdiff_coordinate_displacement",
+            "artifact_ref": "condition2.bed",
+            "binding_key": "fixture-comparison",
+            "row_ordinals": [],
+            "locations": [],
+            "field": null,
+            "requirement": "compatible_native_mode"
+          }
+        ],
+        "comparison_key": "fixture-comparison",
+        "category": "condition2",
+        "coordinate_convention": "zero_based_half_open_as_reported",
+        "coordinate_qualification": "macs2_2_2_9_1_native_endpos_displacement_demonstrated",
+        "score_precision": "native_float32_then_6_significant_decimal_digits"
+      },
+      {
+        "version": "macs2_bdgdiff_parsed_v1",
+        "artifact": {
+          "artifact_ref": "common.bed",
+          "format": "macs2_bdgdiff_bed5",
+          "expected_sha256": "d1bcb346ff8aeb2ca71bfc90c8c264f974f999b13cc20952d55f4fd88c770ea5",
+          "expected_size_bytes": 128,
+          "supplied_extent": "complete",
+          "producer_run_ref": "fixture-native-bdgdiff",
+          "producer_outcome": "succeeded",
+          "writer_closed": true,
+          "producer_name": "MACS2",
+          "producer_version": "2.2.9.1",
+          "producer_source_ref": "MACS2-2.2.9.1",
+          "origin": "synthetic_engineering_fixture"
+        },
+        "binding_key": "fixture-comparison",
+        "state": {
+          "availability": "present",
+          "byte_extent": "complete",
+          "identity": "verified",
+          "format": "compatible",
+          "output_extent": "complete"
+        },
+        "parsed_sha256": "d1bcb346ff8aeb2ca71bfc90c8c264f974f999b13cc20952d55f4fd88c770ea5",
+        "parsed_byte_count": 128,
+        "physical_line_count": 2,
+        "data_row_count": 1,
+        "readable_data_row_count": 1,
+        "malformed_data_row_count": 0,
+        "headers": [
+          {
+            "locator": {
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 89
+            },
+            "kind": "track",
+            "text": "track name=\"common (peaks)\" description=\"common regions in both conditions\" visibility=1"
+          }
+        ],
+        "rows": [
+          {
+            "row_ordinal": 0,
+            "locator": {
+              "line_number": 2,
+              "byte_start": 89,
+              "byte_end": 128
+            },
+            "original_fields": [
+              "chrToy",
+              "100",
+              "200",
+              "common.bed1",
+              "5.42506e-07"
+            ],
+            "chromosome": "chrToy",
+            "reported_start0": 100,
+            "reported_end0": 200,
+            "name": "common.bed1",
+            "reported_score": 5.42506e-07
+          }
+        ],
+        "invalid_records": [],
+        "issues": [
+          {
+            "code": "native_bdgdiff_coordinate_displacement",
+            "artifact_ref": "common.bed",
+            "binding_key": "fixture-comparison",
+            "row_ordinals": [],
+            "locations": [],
+            "field": null,
+            "requirement": "compatible_native_mode"
+          }
+        ],
+        "comparison_key": "fixture-comparison",
+        "category": "common",
+        "coordinate_convention": "zero_based_half_open_as_reported",
+        "coordinate_qualification": "macs2_2_2_9_1_native_endpos_displacement_demonstrated",
+        "score_precision": "native_float32_then_6_significant_decimal_digits"
+      }
+    ],
+    "depth_selection": {
+      "kind": "explicit_declared_depths",
+      "conditions": [
+        {
+          "condition_id": "fixture-c1",
+          "sample_ids": [
+            "fixture-s1"
+          ],
+          "value": 1,
+          "value_lexeme": "1",
+          "unit": "million_tags",
+          "population": "synthetic_declared_treatment_depth",
+          "source_ref": "supplied-depths",
+          "origin": "synthetic_engineering_fixture",
+          "state": "declared"
+        },
+        {
+          "condition_id": "fixture-c2",
+          "sample_ids": [
+            "fixture-s2"
+          ],
+          "value": 2,
+          "value_lexeme": "2",
+          "unit": "million_tags",
+          "population": "synthetic_declared_treatment_depth",
+          "source_ref": "supplied-depths",
+          "origin": "synthetic_engineering_fixture",
+          "state": "declared"
+        }
+      ],
+      "compatible_population": true,
+      "issues": []
+    },
+    "reference_relation": "same_supplied_reference",
+    "normalization_compatibility": "raw_compatible",
+    "coverage_completeness": "complete_declared_domain",
+    "data_status": "complete_reported_data",
+    "issues": [
+      {
+        "code": "native_bdgdiff_coordinate_displacement",
+        "artifact_ref": "condition1.bed",
+        "binding_key": "fixture-comparison",
+        "row_ordinals": [],
+        "locations": [],
+        "field": null,
+        "requirement": "compatible_native_mode"
+      },
+      {
+        "code": "native_bdgdiff_coordinate_displacement",
+        "artifact_ref": "condition2.bed",
+        "binding_key": "fixture-comparison",
+        "row_ordinals": [],
+        "locations": [],
+        "field": null,
+        "requirement": "compatible_native_mode"
+      },
+      {
+        "code": "native_bdgdiff_coordinate_displacement",
+        "artifact_ref": "common.bed",
+        "binding_key": "fixture-comparison",
+        "row_ordinals": [],
+        "locations": [],
+        "field": null,
+        "requirement": "compatible_native_mode"
+      }
+    ]
+  },
+  "intervals": [
+    {
+      "interval_ordinal": 0,
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 0,
+      "end": 100,
+      "values": {
+        "signal1": 0.0,
+        "background1": 1.0,
+        "signal2": 0.0,
+        "background2": 2.0
+      },
+      "states": {
+        "signal1": "observed",
+        "background1": "observed",
+        "signal2": "observed",
+        "background2": "observed"
+      },
+      "source_rows": {
+        "signal1": [
+          0
+        ],
+        "background1": [
+          0
+        ],
+        "signal2": [
+          0
+        ],
+        "background2": [
+          0
+        ]
+      },
+      "source_extents": {
+        "signal1": "complete",
+        "background1": "complete",
+        "signal2": "complete",
+        "background2": "complete"
+      },
+      "unlocated_invalid_rows": {
+        "signal1": 0,
+        "background1": 0,
+        "signal2": 0,
+        "background2": 0
+      },
+      "scores": {
+        "method": "macs2_2_2_9_1_likelihoods_correct_track_intervals",
+        "parameters": {
+          "pseudocount": 0.01,
+          "depth_unit": "million_tags",
+          "input_precision": "ieee754_binary32",
+          "arithmetic_precision": "ieee754_binary64",
+          "score_precision": "ieee754_binary32"
+        },
+        "inputs": {
+          "signal1": 0.0,
+          "background1": 1.0,
+          "signal2": 0.0,
+          "background2": 2.0,
+          "depth1": 1,
+          "depth2": 2
+        },
+        "native_input_values": {
+          "signal1": {
+            "value": 0.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "signal2": {
+            "value": 0.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background2": {
+            "value": 2.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          }
+        },
+        "depth_factors": {
+          "condition1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          },
+          "condition2": {
+            "value": 0.5,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          }
+        },
+        "adjusted_values": {
+          "signal1": {
+            "value": 0.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background1": {
+            "value": 1.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "signal2": {
+            "value": 0.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background2": {
+            "value": 1.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          }
+        },
+        "likelihoods": {
+          "condition1_vs_background": {
+            "unrounded": {
+              "value": -0.41425126816542535,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": -0.41425126791000366,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "background1"
+            ]
+          },
+          "condition2_vs_background": {
+            "unrounded": {
+              "value": -0.42277850161614927,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": -0.42277848720550537,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal2",
+              "background2"
+            ]
+          },
+          "condition1_vs_condition2": {
+            "unrounded": {
+              "value": 0.0008388275471235531,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 0.0008388275746256113,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "signal2"
+            ]
+          }
+        },
+        "input_issues": [],
+        "uncertainty": {
+          "kind": "not_estimated",
+          "value": null
+        }
+      }
+    },
+    {
+      "interval_ordinal": 1,
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 100,
+      "end": 200,
+      "values": {
+        "signal1": 20.0,
+        "background1": 1.0,
+        "signal2": 2.0,
+        "background2": 2.0
+      },
+      "states": {
+        "signal1": "observed",
+        "background1": "observed",
+        "signal2": "observed",
+        "background2": "observed"
+      },
+      "source_rows": {
+        "signal1": [
+          1
+        ],
+        "background1": [
+          1
+        ],
+        "signal2": [
+          1
+        ],
+        "background2": [
+          1
+        ]
+      },
+      "source_extents": {
+        "signal1": "complete",
+        "background1": "complete",
+        "signal2": "complete",
+        "background2": "complete"
+      },
+      "unlocated_invalid_rows": {
+        "signal1": 0,
+        "background1": 0,
+        "signal2": 0,
+        "background2": 0
+      },
+      "scores": {
+        "method": "macs2_2_2_9_1_likelihoods_correct_track_intervals",
+        "parameters": {
+          "pseudocount": 0.01,
+          "depth_unit": "million_tags",
+          "input_precision": "ieee754_binary32",
+          "arithmetic_precision": "ieee754_binary64",
+          "score_precision": "ieee754_binary32"
+        },
+        "inputs": {
+          "signal1": 20.0,
+          "background1": 1.0,
+          "signal2": 2.0,
+          "background2": 2.0,
+          "depth1": 1,
+          "depth2": 2
+        },
+        "native_input_values": {
+          "signal1": {
+            "value": 20.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "signal2": {
+            "value": 2.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background2": {
+            "value": 2.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          }
+        },
+        "depth_factors": {
+          "condition1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          },
+          "condition2": {
+            "value": 0.5,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          }
+        },
+        "adjusted_values": {
+          "signal1": {
+            "value": 20.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background1": {
+            "value": 1.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "signal2": {
+            "value": 1.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background2": {
+            "value": 1.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          }
+        },
+        "likelihoods": {
+          "condition1_vs_background": {
+            "unrounded": {
+              "value": 17.699888398058125,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 17.699888229370117,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "background1"
+            ]
+          },
+          "condition2_vs_background": {
+            "unrounded": {
+              "value": 0.0,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 0.0,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal2",
+              "background2"
+            ]
+          },
+          "condition1_vs_condition2": {
+            "unrounded": {
+              "value": 17.740844719291573,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 17.7408447265625,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "signal2"
+            ]
+          }
+        },
+        "input_issues": [],
+        "uncertainty": {
+          "kind": "not_estimated",
+          "value": null
+        }
+      }
+    },
+    {
+      "interval_ordinal": 2,
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 200,
+      "end": 300,
+      "values": {
+        "signal1": 10.0,
+        "background1": 1.0,
+        "signal2": 20.0,
+        "background2": 2.0
+      },
+      "states": {
+        "signal1": "observed",
+        "background1": "observed",
+        "signal2": "observed",
+        "background2": "observed"
+      },
+      "source_rows": {
+        "signal1": [
+          2
+        ],
+        "background1": [
+          2
+        ],
+        "signal2": [
+          2
+        ],
+        "background2": [
+          2
+        ]
+      },
+      "source_extents": {
+        "signal1": "complete",
+        "background1": "complete",
+        "signal2": "complete",
+        "background2": "complete"
+      },
+      "unlocated_invalid_rows": {
+        "signal1": 0,
+        "background1": 0,
+        "signal2": 0,
+        "background2": 0
+      },
+      "scores": {
+        "method": "macs2_2_2_9_1_likelihoods_correct_track_intervals",
+        "parameters": {
+          "pseudocount": 0.01,
+          "depth_unit": "million_tags",
+          "input_precision": "ieee754_binary32",
+          "arithmetic_precision": "ieee754_binary64",
+          "score_precision": "ieee754_binary32"
+        },
+        "inputs": {
+          "signal1": 10.0,
+          "background1": 1.0,
+          "signal2": 20.0,
+          "background2": 2.0,
+          "depth1": 1,
+          "depth2": 2
+        },
+        "native_input_values": {
+          "signal1": {
+            "value": 10.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "signal2": {
+            "value": 20.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background2": {
+            "value": 2.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          }
+        },
+        "depth_factors": {
+          "condition1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          },
+          "condition2": {
+            "value": 0.5,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          }
+        },
+        "adjusted_values": {
+          "signal1": {
+            "value": 10.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background1": {
+            "value": 1.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "signal2": {
+            "value": 10.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background2": {
+            "value": 1.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          }
+        },
+        "likelihoods": {
+          "condition1_vs_background": {
+            "unrounded": {
+              "value": 6.062437826874461,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 6.062438011169434,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "background1"
+            ]
+          },
+          "condition2_vs_background": {
+            "unrounded": {
+              "value": 6.076850230184037,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 6.076850414276123,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal2",
+              "background2"
+            ]
+          },
+          "condition1_vs_condition2": {
+            "unrounded": {
+              "value": 5.425064388639364e-07,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 5.425064273367752e-07,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "signal2"
+            ]
+          }
+        },
+        "input_issues": [],
+        "uncertainty": {
+          "kind": "not_estimated",
+          "value": null
+        }
+      }
+    },
+    {
+      "interval_ordinal": 3,
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 300,
+      "end": 400,
+      "values": {
+        "signal1": 2.0,
+        "background1": 1.0,
+        "signal2": 40.0,
+        "background2": 2.0
+      },
+      "states": {
+        "signal1": "observed",
+        "background1": "observed",
+        "signal2": "observed",
+        "background2": "observed"
+      },
+      "source_rows": {
+        "signal1": [
+          3
+        ],
+        "background1": [
+          3
+        ],
+        "signal2": [
+          3
+        ],
+        "background2": [
+          3
+        ]
+      },
+      "source_extents": {
+        "signal1": "complete",
+        "background1": "complete",
+        "signal2": "complete",
+        "background2": "complete"
+      },
+      "unlocated_invalid_rows": {
+        "signal1": 0,
+        "background1": 0,
+        "signal2": 0,
+        "background2": 0
+      },
+      "scores": {
+        "method": "macs2_2_2_9_1_likelihoods_correct_track_intervals",
+        "parameters": {
+          "pseudocount": 0.01,
+          "depth_unit": "million_tags",
+          "input_precision": "ieee754_binary32",
+          "arithmetic_precision": "ieee754_binary64",
+          "score_precision": "ieee754_binary32"
+        },
+        "inputs": {
+          "signal1": 2.0,
+          "background1": 1.0,
+          "signal2": 40.0,
+          "background2": 2.0,
+          "depth1": 1,
+          "depth2": 2
+        },
+        "native_input_values": {
+          "signal1": {
+            "value": 2.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "signal2": {
+            "value": 40.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background2": {
+            "value": 2.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          }
+        },
+        "depth_factors": {
+          "condition1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          },
+          "condition2": {
+            "value": 0.5,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          }
+        },
+        "adjusted_values": {
+          "signal1": {
+            "value": 2.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background1": {
+            "value": 1.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "signal2": {
+            "value": 20.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background2": {
+            "value": 1.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          }
+        },
+        "likelihoods": {
+          "condition1_vs_background": {
+            "unrounded": {
+              "value": 0.16644363220881903,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 0.1664436310529709,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "background1"
+            ]
+          },
+          "condition2_vs_background": {
+            "unrounded": {
+              "value": 17.73434958547817,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 17.734350204467773,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal2",
+              "background2"
+            ]
+          },
+          "condition1_vs_condition2": {
+            "unrounded": {
+              "value": -12.148710476532996,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": -12.148710250854492,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "signal2"
+            ]
+          }
+        },
+        "input_issues": [],
+        "uncertainty": {
+          "kind": "not_estimated",
+          "value": null
+        }
+      }
+    },
+    {
+      "interval_ordinal": 4,
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 400,
+      "end": 500,
+      "values": {
+        "signal1": 0.0,
+        "background1": 1.0,
+        "signal2": 0.0,
+        "background2": 2.0
+      },
+      "states": {
+        "signal1": "observed",
+        "background1": "observed",
+        "signal2": "observed",
+        "background2": "observed"
+      },
+      "source_rows": {
+        "signal1": [
+          4
+        ],
+        "background1": [
+          4
+        ],
+        "signal2": [
+          4
+        ],
+        "background2": [
+          4
+        ]
+      },
+      "source_extents": {
+        "signal1": "complete",
+        "background1": "complete",
+        "signal2": "complete",
+        "background2": "complete"
+      },
+      "unlocated_invalid_rows": {
+        "signal1": 0,
+        "background1": 0,
+        "signal2": 0,
+        "background2": 0
+      },
+      "scores": {
+        "method": "macs2_2_2_9_1_likelihoods_correct_track_intervals",
+        "parameters": {
+          "pseudocount": 0.01,
+          "depth_unit": "million_tags",
+          "input_precision": "ieee754_binary32",
+          "arithmetic_precision": "ieee754_binary64",
+          "score_precision": "ieee754_binary32"
+        },
+        "inputs": {
+          "signal1": 0.0,
+          "background1": 1.0,
+          "signal2": 0.0,
+          "background2": 2.0,
+          "depth1": 1,
+          "depth2": 2
+        },
+        "native_input_values": {
+          "signal1": {
+            "value": 0.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "signal2": {
+            "value": 0.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          },
+          "background2": {
+            "value": 2.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "pileup"
+          }
+        },
+        "depth_factors": {
+          "condition1": {
+            "value": 1.0,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          },
+          "condition2": {
+            "value": 0.5,
+            "state": "derived",
+            "reason": null,
+            "unit": "1"
+          }
+        },
+        "adjusted_values": {
+          "signal1": {
+            "value": 0.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background1": {
+            "value": 1.01,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "signal2": {
+            "value": 0.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          },
+          "background2": {
+            "value": 1.005,
+            "state": "derived",
+            "reason": null,
+            "unit": "depth_scaled_pileup"
+          }
+        },
+        "likelihoods": {
+          "condition1_vs_background": {
+            "unrounded": {
+              "value": -0.41425126816542535,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": -0.41425126791000366,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "background1"
+            ]
+          },
+          "condition2_vs_background": {
+            "unrounded": {
+              "value": -0.42277850161614927,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": -0.42277848720550537,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal2",
+              "background2"
+            ]
+          },
+          "condition1_vs_condition2": {
+            "unrounded": {
+              "value": 0.0008388275471235531,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "native_float32": {
+              "value": 0.0008388275746256113,
+              "state": "derived",
+              "reason": null,
+              "unit": "signed_log10_likelihood_ratio"
+            },
+            "operands": [
+              "signal1",
+              "signal2"
+            ]
+          }
+        },
+        "input_issues": [],
+        "uncertainty": {
+          "kind": "not_estimated",
+          "value": null
+        }
+      }
+    }
+  ],
+  "regions": [
+    {
+      "category": "condition1",
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 100,
+      "end": 200,
+      "qualifying_bp": 100,
+      "qualifying_interval_ordinals": [
+        1
+      ],
+      "score_numerator": 1774.08447265625,
+      "score_unit": "signed_log10_likelihood_ratio",
+      "left_boundary": "observed_gap",
+      "source_extent": "complete",
+      "span_bp": 100,
+      "bridged_gap_bp": 0,
+      "score_denominator_bp": 100,
+      "mean_score": 17.7408447265625,
+      "right_boundary": "observed_gap",
+      "native_float32_mean_score": 17.7408447265625,
+      "numerical_reason": null
+    },
+    {
+      "category": "common",
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 200,
+      "end": 300,
+      "qualifying_bp": 100,
+      "qualifying_interval_ordinals": [
+        2
+      ],
+      "score_numerator": 5.425064273367752e-05,
+      "score_unit": "signed_log10_likelihood_ratio",
+      "left_boundary": "observed_gap",
+      "source_extent": "complete",
+      "span_bp": 100,
+      "bridged_gap_bp": 0,
+      "score_denominator_bp": 100,
+      "mean_score": 5.425064273367752e-07,
+      "right_boundary": "observed_gap",
+      "native_float32_mean_score": 5.425064273367752e-07,
+      "numerical_reason": null
+    },
+    {
+      "category": "condition2",
+      "population_ordinal": 0,
+      "chromosome": "chrToy",
+      "start": 300,
+      "end": 400,
+      "qualifying_bp": 100,
+      "qualifying_interval_ordinals": [
+        3
+      ],
+      "score_numerator": 1214.8710250854492,
+      "score_unit": "signed_log10_likelihood_ratio",
+      "left_boundary": "observed_gap",
+      "source_extent": "complete",
+      "span_bp": 100,
+      "bridged_gap_bp": 0,
+      "score_denominator_bp": 100,
+      "mean_score": 12.148710250854492,
+      "right_boundary": "observed_gap",
+      "native_float32_mean_score": 12.148710250854492,
+      "numerical_reason": null
+    }
+  ],
+  "depth_operands": [
+    1,
+    2
+  ],
+  "depth_unit": "million_tags",
+  "eligibility": {
+    "population": "usable",
+    "tracks": {
+      "signal1": "usable",
+      "background1": "usable",
+      "signal2": "usable",
+      "background2": "usable"
+    },
+    "depths": "usable"
+  }
+}

@@ -1,0 +1,71 @@
+............F.                                                           [100%]
+=================================== FAILURES ===================================
+_______ test_full_raw_wait_completed_action_and_history_inputs_are_exact _______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-905/test_full_raw_wait_completed_a0')
+
+    def test_full_raw_wait_completed_action_and_history_inputs_are_exact(tmp_path):
+        from gene_annotation_episode.numerical import YieldController, YieldEstimate, NumericBand
+        from test_runtime_history import history
+    
+        store, tools = setup(tmp_path)
+        calls = []
+    
+        def estimate(history, settings, contexts):
+            calls.append((tuple(history), deepcopy(contexts)))
+            return YieldEstimate(len(history), NumericBand.exact(1), settings,
+                {'fixture': 'explicit_context_callback_no_production_fit'},
+                estimator_binding={'fixture': 'original_signed_context_callback'})
+    
+        def factory(path, initial):
+            return YieldController(str(path), initial, 0, estimate_with_context=estimate)
+    
+        values = [1, 0, -.25, .5, 0, -.125] * 5
+        condition = {'version': 'event_condition_v1', 'events': [],
+            'reconsider_at': '2000-01-01T00:00:00+00:00'}
+        scripts = [reason(value) for value in values]
+        scripts.insert(4, {'selection': 'invalid_fixture_choice', 'report_update': {}})
+        scripts.extend([history([0]), history(view='records', offset=28, limit=2),
+            {'selection': {'kind': 'tool', 'tool': 'episode.estimate_wait',
+                'arguments': {'condition': condition}}, 'report_update': {}},
+            {'selection': {'kind': 'wait', 'condition': condition}, 'report_update': {}},
+            KeyboardInterrupt()])
+        provider = CapturingProvider(scripts)
+        workflow = runtime.Workflow(store, tools, provider, tmp_path/'run', 'numeric-presentation',
+            factory, fixture_credit, restoration_settings={'preview_size': 24, 'model_presentation': MODE})
+        owner = workflow.build('annotation', 'root', 'Original numerical operand fixture',
+            {'subject_refs': ['subject_A']})
+        with pytest.raises(KeyboardInterrupt):
+            asyncio.run(owner.run_async(workflow.context))
+        records = list(store.db.execute('SELECT * FROM runtime_observations ORDER BY unit_index'))
+        assert len(records) == len(values) + 4
+        observations = [json.loads(row['observation']) for row in records]
+        assert [entry['step']['marginal_credit'] for entry in observations] == values + [0] * 4
+        assert calls[-1][0] == tuple(values + [0] * 4)
+        assert [entry['decision_index'] for entry in observations[:6]] == [0, 1, 2, 3, 5, 6]
+        for observation in observations:
+            decision = observation['decision_index']
+            request = json.loads(workflow.journal.row('runtime_model_calls', owner.source.episode_id, decision)['request'])
+            raw = request['context']['waiting_support']['own_completed_action_history']
+            displayed = request['model_presentation']['context']['waiting_support']['own_completed_action_history']
+            assert canonical(displayed) == canonical(raw[-24:])
+            context_row = store.db.execute('SELECT data FROM runtime_estimation_contexts WHERE decision_index=?',
+                (decision,)).fetchone()
+            actual = json.loads(context_row[0])
+            assert canonical(actual['own_completed_action_history']) == canonical(raw)
+            assert canonical(calls[observation['unit_ref']['unit_index'] + 1][1][-1]) == canonical(actual)
+        assert len(calls[-1][1][-1]['own_completed_action_history']) == 33 > 24
+        pending = workflow.journal.row('runtime_model_calls', owner.source.episode_id, len(scripts)-1)
+        assert pending['response'] is None
+        pending_context = json.loads(pending['request'])
+        assert len(pending_context['context']['waiting_support']['own_completed_action_history']) == 34
+        page = pending_context['model_presentation']['context']['waiting_support']['own_completed_action_history_page']
+        assert page['included_rows'] == 24 and page['omitted_rows'] == 10
+>       waits = list(store.db.execute('SELECT request FROM runtime_waits'))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: no such table: runtime_waits
+
+tests/test_model_context_runtime.py:285: OperationalError
+=========================== short test summary info ============================
+FAILED tests/test_model_context_runtime.py::test_full_raw_wait_completed_action_and_history_inputs_are_exact
+1 failed, 13 passed in 58.04s

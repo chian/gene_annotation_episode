@@ -1,0 +1,16 @@
+{
+  "calculator214_delivered": false,
+  "changed_paths": [
+    "gene_annotation_episode/bvbrc_fastqutils_tool_info.py"
+  ],
+  "copied_paths": 1162,
+  "instruction_additions": [
+    "SAMstat2.2.3 legacy HTML and2.5.0 HTML have different native statistics and alignment-flag exclusions. Preserve the actual producer version, reported alignment record populations, mate strata, counts, quality summaries and uncertainty. Legacy embedded arrays retain their coordinate labels, density or clustered-mean meanings and native defects; current SVG plots do not expose their original numerical arrays. Do not reconstruct those arrays from graph geometry. A rounded display remains rounded. A closed HTML report does not establish that all original input records were processed. The recognized FastqUtils SAMstat failure report carries a failed measurement and explicit execution-evidence requirement; it is not a zero-result analysis. Unsupported SAMstat versions, other Cutadapt versions and other SRA formats remain retained artifacts with explicit parser requirements until their formats are implemented.",
+    "SAMstat report-bin calculations are separate from original-read mapping. Select samstat_report_mapping_v1 with the report-wide population, one reported mate stratum, or the two explicitly disjoint mate strata from one artifact. They calculate the mapped-record fraction and native MAPQ-at-least-30-bin fraction among those reported alignment records. Keep all four bin counts, numerator, denominator and population qualifications. Do not combine a report-wide total with its mates or sum different reports. MAPQ255 shares the high native bin but does not establish known mapping confidence. Unknown original-input coverage remains unknown; an explicit prefix remains partial. A zero denominator is undefined, missing bins stay missing, and conflicting counts remain incompatible. "
+  ],
+  "production_changed": false,
+  "source": "candidate_002",
+  "source_manifest_sha256": "160707bbe8cf330ba743f75ab33812fbafa7f06a3be0b9fc4bd6f38f4111fbae",
+  "status": "prepared_for214_delivery_not_yet_composed_or_verified",
+  "target": "candidate_003"
+}

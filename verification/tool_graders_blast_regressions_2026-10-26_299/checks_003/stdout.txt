@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 34 items
+
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastn] PASSED [  2%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastp] PASSED [  5%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[blastx] PASSED [  8%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastn] PASSED [ 11%]
+../../../tests/test_blast_binding.py::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastx] PASSED [ 14%]
+../../../tests/test_blast_binding.py::test_zip_exact_bytes_partial_hsps_export_and_owned_collect PASSED [ 17%]
+../../../tests/test_blast_binding.py::test_wrong_query_preserves_native_failure_then_recovers_same_job_after_reopen PASSED [ 20%]
+../../../tests/test_blast_binding.py::test_explicit_empty_hits_and_absent_hits_stay_distinct[False] PASSED [ 23%]
+../../../tests/test_blast_binding.py::test_explicit_empty_hits_and_absent_hits_stay_distinct[True] PASSED [ 26%]
+../../../tests/test_blast_binding.py::test_missing_contact_is_durable_known_not_sent_and_old_rid_paths_removed PASSED [ 29%]
+../../../tests/test_blast_binding.py::test_installed_client_observer_preserves_each_http_entity_and_actual_timing[False] PASSED [ 32%]
+../../../tests/test_blast_binding.py::test_installed_client_observer_preserves_each_http_entity_and_actual_timing[True] PASSED [ 35%]
+../../../tests/test_blast_binding.py::test_accepted_cancelled_search_resumes_one_handle_and_root_cannot_collect PASSED [ 38%]
+../../../tests/test_blast_binding.py::test_uncertain_submit_never_repeats_and_native_field_requires_trusted_origin PASSED [ 41%]
+../../../tests/test_blast_binding.py::test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form PASSED [ 44%]
+../../../tests/test_blast_binding.py::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[False] PASSED [ 47%]
+../../../tests/test_blast_binding.py::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[True] PASSED [ 50%]
+../../../tests/test_blast_binding.py::test_optional_invalid_taxonomy_does_not_discard_valid_hsp PASSED [ 52%]
+../../../tests/test_blast_binding.py::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[PK\x03\x04broken native archive] PASSED [ 55%]
+../../../tests/test_blast_binding.py::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[{"BlastOutput2":[{"report":{"program":"blastn","results":{"iterations":[]}}}]}] PASSED [ 58%]
+../../../tests/test_blast_binding.py::test_legacy_search_protocol_wait_has_one_receipt_and_root_cannot_search PASSED [ 61%]
+../../../tests/test_blast_binding.py::test_zero_native_frames_remain_integer_source_metadata PASSED [ 64%]
+../../../tests/test_blast_binding.py::test_inferred_transfer_keeps_source_geometry_separate_from_retired_credit PASSED [ 67%]
+../../../tests/test_blast_binding.py::test_coherent_six_nt_two_aa_reverse_translated_geometry[blastx] PASSED [ 70%]
+../../../tests/test_blast_binding.py::test_coherent_six_nt_two_aa_reverse_translated_geometry[tblastn] PASSED [ 73%]
+../../../tests/test_blast_binding.py::test_coherent_six_nt_two_aa_reverse_translated_geometry[tblastx] PASSED [ 76%]
+../../../tests/test_blast_result_views.py::test_bounded_native_alignment_preserves_scores_gaps_reverse_coordinates_and_custody PASSED [ 79%]
+../../../tests/test_blast_result_views.py::test_unreceived_hsp_and_cached_tool_reply_cannot_bypass_host_permission PASSED [ 82%]
+../../../tests/test_blast_result_views.py::test_scope_and_native_record_integrity_are_required_even_with_received_reference PASSED [ 85%]
+../../../tests/test_blast_result_views.py::test_missing_alignment_stays_unknown_while_actual_scores_remain_available PASSED [ 88%]
+../../../tests/test_blast_result_views.py::test_recorded_hsp_facts_fill_closed_parent_form_and_service_port_preserves_host_inputs PASSED [ 91%]
+../../../tests/test_blast_typed_return_integration.py::test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[ready] PASSED [ 94%]
+../../../tests/test_blast_typed_return_integration.py::test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[selected_status_waits] PASSED [ 97%]
+../../../tests/test_blast_typed_return_integration.py::test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_prose[interrupted_submission] PASSED [100%]
+
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_regressions_2026-10-26_299/checks_003/junit.xml -
+======================== 34 passed in 140.80s (0:02:20) ========================

@@ -1,0 +1,131 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_binding.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 24.06135038,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 1531904,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-26T05:44:08.646131+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 807010343456561
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "source_hashes_after": {
+    "gene_annotation_episode/execution_contracts.py": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+    "gene_annotation_episode/execution_episodes.py": "8aab5b1454dd3fb2a25147ad2de4988d45b4a447e61aa091b2ac96a4e0c80df9",
+    "gene_annotation_episode/execution_progress.py": "a82c634f018f42243d2621abd333237fc85d0530081cb49117f8728b0e923203",
+    "gene_annotation_episode/infernal_preparation_artifacts.py": "0165247ca084eccf244b1b73a804165983a31a4078859e3a60536bcad4785c10",
+    "gene_annotation_episode/infernal_preparation_calculations.py": "df3f3fbd37733298a96bca6d8f6a5b9dbe7519850f7cc84a7094c11b3d81187d",
+    "gene_annotation_episode/infernal_preparation_emission.py": "6ecd3b270a43470892936aa111b9860af770f0781c9a8e47a28d815fec92fa32",
+    "gene_annotation_episode/infernal_preparation_emission_calculations.py": "86627c73cc061c79feaab3f5a36f8dff3e1ebec26c922f1b9d270ceda4e78716",
+    "gene_annotation_episode/infernal_preparation_models.py": "adc0f2aa2b1d4f0416cddd6ecd53139f78df100005d3ba3f6a0e1ba8a665101b",
+    "gene_annotation_episode/infernal_preparation_schema.py": "97a1422127316118423325ff8cdd7d3c0a0b2751f1facae9b3a49262c7171eba",
+    "gene_annotation_episode/infernal_preparation_statistics.py": "12d5a40657b4bb38e357dd7c44d15e80b319f24db8d18617898548885c4a1f1b",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/native_infernal_contracts.py": "8c9179da9cf1f0d040a4f657ea64f759d9852ad05190d6f643b7de15ea8b6215",
+    "gene_annotation_episode/native_infernal_driver.py": "a899575cc976d37fbdcf434654acc51adcb05f14d48054c70e462d96c9725d67",
+    "gene_annotation_episode/native_infernal_preparation_acquisition.py": "fff7dd2022b3e08d4f123d9a50db9ed92a16bb11c8716816321ad507727b627c",
+    "gene_annotation_episode/native_infernal_preparation_contracts.py": "e8851074d59d1b354348ac6143dd0e1e72f036356afe6d2eb2f9823fd23d9496",
+    "gene_annotation_episode/native_infernal_preparation_driver.py": "af01418dd47e6cc1c28710271a295ade86ce1b2d98a36bfd7fe5dff265fb81fd",
+    "gene_annotation_episode/native_infernal_preparation_job_schema.py": "024997f94e5407ab2b39eae6951c43b29f6503d1bf9c94a5c1a9a6beb80d0317",
+    "gene_annotation_episode/native_infernal_preparation_local.py": "03ed971b8db1c8b3494bf36357469d2cf577792de2046a70cdc619a118009281",
+    "gene_annotation_episode/native_infernal_preparation_tool_info.py": "85a98ba1c9665041fc23c5f30f90686a3ec4220e92a35ee3a9dda8e626dba4d8",
+    "gene_annotation_episode/native_infernal_preparation_worker.py": "cc917e9c8a50db386786f5ec8e325b3fa274dfd3f1566e12d1a4a65b922cefb1",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "gene_annotation_episode/practical_execution_credit.py": "9ab4837b978cd2eb9601ce9716af363e25f12e12fe4fdb74a38cba7cfd2ca3fd",
+    "gene_annotation_episode/practical_execution_operations.py": "c46a1724bcc1dd578df5a24ff1e55fb50d32cbf42b81821f7d00e749f692d8c3",
+    "gene_annotation_episode/practical_execution_records.py": "180465f78b15ded3ec797441a3c06602a3d7bfca16f7c988123e64e7713cb845",
+    "gene_annotation_episode/practical_execution_state.py": "4aa0b3a85efc0e64e7a2a41c2aac6456772469e254fa9fc1a6614c5400f791fb",
+    "gene_annotation_episode/practical_receipt_information.py": "ef876415fda17968e2c4471f87b35e2f6e6e8ef48f33f3f1304d936f1aeb300a",
+    "gene_annotation_episode/practical_resource_episodes.py": "484b563a17377c62166878a15c24aa78d84a032e1b7a9e58120366356927da89",
+    "tests/test_native_infernal_preparation_binding.py": "541c8ff9fa04c03767af60035ecba55b1b00676867c6e4b9ca51c97f84fa8705",
+    "tests/test_native_infernal_preparation_driver.py": "5940d0db1e0a5eb5ab3dee79fb2b084bc2466b03dbce685018897d97b5eb2baa",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/run_binding_tests.py": "db6302e178081187641ca8a7600c3d2e952e8a4ede7a223aab139948bad7e5d9"
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/execution_contracts.py": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+    "gene_annotation_episode/execution_episodes.py": "8aab5b1454dd3fb2a25147ad2de4988d45b4a447e61aa091b2ac96a4e0c80df9",
+    "gene_annotation_episode/execution_progress.py": "a82c634f018f42243d2621abd333237fc85d0530081cb49117f8728b0e923203",
+    "gene_annotation_episode/infernal_preparation_artifacts.py": "0165247ca084eccf244b1b73a804165983a31a4078859e3a60536bcad4785c10",
+    "gene_annotation_episode/infernal_preparation_calculations.py": "92f4cd92c6334094ac2426cdaaa01d15e0d9a706f1b4d23ae6f37077a45dae65",
+    "gene_annotation_episode/infernal_preparation_emission.py": "6ecd3b270a43470892936aa111b9860af770f0781c9a8e47a28d815fec92fa32",
+    "gene_annotation_episode/infernal_preparation_emission_calculations.py": "86627c73cc061c79feaab3f5a36f8dff3e1ebec26c922f1b9d270ceda4e78716",
+    "gene_annotation_episode/infernal_preparation_models.py": "adc0f2aa2b1d4f0416cddd6ecd53139f78df100005d3ba3f6a0e1ba8a665101b",
+    "gene_annotation_episode/infernal_preparation_schema.py": "97a1422127316118423325ff8cdd7d3c0a0b2751f1facae9b3a49262c7171eba",
+    "gene_annotation_episode/infernal_preparation_statistics.py": "12d5a40657b4bb38e357dd7c44d15e80b319f24db8d18617898548885c4a1f1b",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/native_infernal_contracts.py": "8c9179da9cf1f0d040a4f657ea64f759d9852ad05190d6f643b7de15ea8b6215",
+    "gene_annotation_episode/native_infernal_driver.py": "a899575cc976d37fbdcf434654acc51adcb05f14d48054c70e462d96c9725d67",
+    "gene_annotation_episode/native_infernal_preparation_acquisition.py": "fff7dd2022b3e08d4f123d9a50db9ed92a16bb11c8716816321ad507727b627c",
+    "gene_annotation_episode/native_infernal_preparation_contracts.py": "e8851074d59d1b354348ac6143dd0e1e72f036356afe6d2eb2f9823fd23d9496",
+    "gene_annotation_episode/native_infernal_preparation_driver.py": "af01418dd47e6cc1c28710271a295ade86ce1b2d98a36bfd7fe5dff265fb81fd",
+    "gene_annotation_episode/native_infernal_preparation_job_schema.py": "024997f94e5407ab2b39eae6951c43b29f6503d1bf9c94a5c1a9a6beb80d0317",
+    "gene_annotation_episode/native_infernal_preparation_local.py": "03ed971b8db1c8b3494bf36357469d2cf577792de2046a70cdc619a118009281",
+    "gene_annotation_episode/native_infernal_preparation_tool_info.py": "85a98ba1c9665041fc23c5f30f90686a3ec4220e92a35ee3a9dda8e626dba4d8",
+    "gene_annotation_episode/native_infernal_preparation_worker.py": "cc917e9c8a50db386786f5ec8e325b3fa274dfd3f1566e12d1a4a65b922cefb1",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "gene_annotation_episode/practical_execution_credit.py": "9ab4837b978cd2eb9601ce9716af363e25f12e12fe4fdb74a38cba7cfd2ca3fd",
+    "gene_annotation_episode/practical_execution_operations.py": "c46a1724bcc1dd578df5a24ff1e55fb50d32cbf42b81821f7d00e749f692d8c3",
+    "gene_annotation_episode/practical_execution_records.py": "180465f78b15ded3ec797441a3c06602a3d7bfca16f7c988123e64e7713cb845",
+    "gene_annotation_episode/practical_execution_state.py": "4aa0b3a85efc0e64e7a2a41c2aac6456772469e254fa9fc1a6614c5400f791fb",
+    "gene_annotation_episode/practical_receipt_information.py": "ef876415fda17968e2c4471f87b35e2f6e6e8ef48f33f3f1304d936f1aeb300a",
+    "gene_annotation_episode/practical_resource_episodes.py": "484b563a17377c62166878a15c24aa78d84a032e1b7a9e58120366356927da89",
+    "tests/test_native_infernal_preparation_binding.py": "541c8ff9fa04c03767af60035ecba55b1b00676867c6e4b9ca51c97f84fa8705",
+    "tests/test_native_infernal_preparation_driver.py": "5940d0db1e0a5eb5ab3dee79fb2b084bc2466b03dbce685018897d97b5eb2baa",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/run_binding_tests.py": "db6302e178081187641ca8a7600c3d2e952e8a4ede7a223aab139948bad7e5d9"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/binding_001/stdout.log"
+}

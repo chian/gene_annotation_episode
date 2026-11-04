@@ -1,0 +1,804 @@
+{
+  "schema": "hmmer_search_scores_v1",
+  "operation": {
+    "program": "hmmscan",
+    "format": "hmmer_api_json",
+    "engine_version": null,
+    "alphabet": "amino",
+    "mode": "profile_database_scan"
+  },
+  "parameters": {},
+  "hits": [
+    {
+      "record_key": "[\"synthetic_hmmscan_positive.payload.json\",\"api_hit\",\"/result/hits/0\"]",
+      "locator": {
+        "artifact_ref": "synthetic_hmmscan_positive.payload.json",
+        "artifact_role": "api_json",
+        "hit_array_index": 0,
+        "json_pointer": "/result/hits/0"
+      },
+      "query_record_key": "[\"synthetic_hmmscan_positive.payload.json\",\"api_query\",\"/result\"]",
+      "query_name": "q",
+      "query_occurrence": 0,
+      "target_name": "model",
+      "target_accession": null,
+      "iteration": 1,
+      "is_reported": true,
+      "is_included": false,
+      "identifiers": {
+        "name": "model",
+        "acc": null,
+        "index": null,
+        "seqidx": null,
+        "metadata": null
+      },
+      "issues": [],
+      "native": {
+        "sequence_evalue": 0.0,
+        "sequence_score_bits": 8.0,
+        "sequence_bias_bits": 0.2,
+        "expected_domains": null,
+        "regions": null,
+        "clustered_regions": null,
+        "overlapping_envelopes": null,
+        "envelopes": null,
+        "domains": 2,
+        "reported_domains": 1,
+        "included_domains": 0
+      },
+      "components": {},
+      "unavailable": {},
+      "derived": {},
+      "native_sequence_evalue": 0.0,
+      "native_sequence_score_bits": 8.0,
+      "native_sequence_bias_bits": 0.2,
+      "native_expected_domains": null,
+      "native_regions": null,
+      "native_clustered_regions": null,
+      "native_overlapping_envelopes": null,
+      "native_envelopes": null,
+      "native_domains": 2,
+      "native_reported_domains": 1,
+      "native_included_domains": 0,
+      "domain_record_keys": [
+        "[\"synthetic_hmmscan_positive.payload.json\",\"api_domain\",\"/result/hits/0/domains/0\"]"
+      ],
+      "retained_domain_count": 1,
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "interval_unions": {
+        "model": {
+          "intervals": [
+            [
+              0,
+              4
+            ]
+          ],
+          "positions": 4,
+          "population": "available domains for this exact hit occurrence and iteration"
+        },
+        "sequence": {
+          "intervals": [
+            [
+              1,
+              5
+            ]
+          ],
+          "positions": 4,
+          "population": "available domains for this exact hit occurrence and iteration"
+        },
+        "envelope": {
+          "intervals": [
+            [
+              0,
+              7
+            ]
+          ],
+          "positions": 7,
+          "population": "available domains for this exact hit occurrence and iteration"
+        }
+      },
+      "availability": "native_measurements_available"
+    }
+  ],
+  "domains": [
+    {
+      "record_key": "[\"synthetic_hmmscan_positive.payload.json\",\"api_domain\",\"/result/hits/0/domains/0\"]",
+      "locator": {
+        "artifact_ref": "synthetic_hmmscan_positive.payload.json",
+        "artifact_role": "api_json",
+        "hit_array_index": 0,
+        "domain_array_index": 0,
+        "json_pointer": "/result/hits/0/domains/0"
+      },
+      "query_record_key": "[\"synthetic_hmmscan_positive.payload.json\",\"api_query\",\"/result\"]",
+      "hit_record_key": "[\"synthetic_hmmscan_positive.payload.json\",\"api_hit\",\"/result/hits/0\"]",
+      "query_name": "q",
+      "query_occurrence": 0,
+      "target_name": "model",
+      "target_accession": null,
+      "iteration": 1,
+      "is_reported": true,
+      "is_included": false,
+      "issues": [],
+      "native": {
+        "domain_score_bits": -2.5,
+        "domain_bias_nats": 0.6931471805599453,
+        "envelope_score_nats": null,
+        "domain_correction_nats": null,
+        "optimal_accuracy_sum": null,
+        "conditional_evalue": 0.0,
+        "independent_evalue": 3.0,
+        "env_from": 1,
+        "env_to": 7,
+        "hmm_from": 1,
+        "hmm_to": 4,
+        "ali_from": 2,
+        "ali_to": 5,
+        "model_length": 10,
+        "sequence_length": 12,
+        "display_columns": 5,
+        "sequence_evalue": 0.0,
+        "sequence_score_bits": 8.0,
+        "sequence_bias_bits": 0.2
+      },
+      "components": {
+        "model_length": {
+          "value": 10,
+          "numerator": null,
+          "denominator": null,
+          "definition": "model_length"
+        },
+        "sequence_length": {
+          "value": 12,
+          "numerator": null,
+          "denominator": null,
+          "definition": "sequence_length"
+        },
+        "model_span_positions": {
+          "value": 4,
+          "numerator": null,
+          "denominator": null,
+          "definition": "model_span_positions"
+        },
+        "sequence_span_residues": {
+          "value": 4,
+          "numerator": null,
+          "denominator": null,
+          "definition": "sequence_span_residues"
+        },
+        "sequence_envelope_residues": {
+          "value": 7,
+          "numerator": null,
+          "denominator": null,
+          "definition": "sequence_envelope_residues"
+        },
+        "model_span_coverage": {
+          "value": 0.4,
+          "numerator": 4,
+          "denominator": 10,
+          "definition": "model_span_coverage"
+        },
+        "sequence_span_coverage": {
+          "value": 0.3333333333333333,
+          "numerator": 4,
+          "denominator": 12,
+          "definition": "sequence_span_coverage"
+        },
+        "sequence_envelope_coverage": {
+          "value": 0.5833333333333334,
+          "numerator": 7,
+          "denominator": 12,
+          "definition": "sequence_envelope_coverage"
+        },
+        "paired_positions": {
+          "value": 3,
+          "numerator": null,
+          "denominator": null,
+          "definition": "paired_positions"
+        },
+        "insert_positions": {
+          "value": 1,
+          "numerator": null,
+          "denominator": null,
+          "definition": "insert_positions"
+        },
+        "delete_positions": {
+          "value": 1,
+          "numerator": null,
+          "denominator": null,
+          "definition": "delete_positions"
+        },
+        "alignment_columns": {
+          "value": 5,
+          "numerator": null,
+          "denominator": null,
+          "definition": "alignment_columns"
+        },
+        "paired_model_coverage": {
+          "value": 0.3,
+          "numerator": 3,
+          "denominator": 10,
+          "definition": "paired_model_coverage"
+        },
+        "paired_sequence_coverage": {
+          "value": 0.25,
+          "numerator": 3,
+          "denominator": 12,
+          "definition": "paired_sequence_coverage"
+        },
+        "sequence_identity_fraction": {
+          "value": null,
+          "numerator": null,
+          "denominator": 3,
+          "definition": "sequence_identity_fraction"
+        },
+        "consensus_identity_fraction": {
+          "value": 1.0,
+          "numerator": 3,
+          "denominator": 3,
+          "definition": "consensus_identity_fraction"
+        },
+        "alignment_identity_fraction": {
+          "value": 0.6,
+          "numerator": 3,
+          "denominator": 5,
+          "definition": "alignment_identity_fraction"
+        },
+        "api_identity_fraction": {
+          "value": 0.75,
+          "numerator": 3,
+          "denominator": 4,
+          "definition": "api_identity_fraction"
+        },
+        "native_domain_score_bits": {
+          "value": -2.5,
+          "numerator": null,
+          "denominator": null,
+          "definition": "native_domain_score_bits"
+        },
+        "native_domain_bias_bits": {
+          "value": 1.0,
+          "numerator": 0.6931471805599453,
+          "denominator": 0.6931471805599453,
+          "definition": "native_domain_bias_bits",
+          "units": "bits"
+        },
+        "native_conditional_evalue": {
+          "value": 0.0,
+          "numerator": null,
+          "denominator": null,
+          "definition": "native_conditional_evalue"
+        },
+        "native_independent_evalue": {
+          "value": 3.0,
+          "numerator": null,
+          "denominator": null,
+          "definition": "native_independent_evalue"
+        },
+        "native_accuracy": {
+          "value": null,
+          "numerator": null,
+          "denominator": null,
+          "definition": "native_accuracy"
+        },
+        "posterior_lower_mean": {
+          "value": 0.6875,
+          "numerator": 2.75,
+          "denominator": 4,
+          "definition": "posterior_lower_mean"
+        },
+        "posterior_upper_mean": {
+          "value": 0.75,
+          "numerator": 3.0,
+          "denominator": 4,
+          "definition": "posterior_upper_mean"
+        }
+      },
+      "unavailable": {
+        "sequence_identity_fraction": "actual_sequence_operands_and_correspondence_unavailable",
+        "native_accuracy": "native_measurement_unavailable"
+      },
+      "derived": {
+        "model_length": 10,
+        "sequence_length": 12,
+        "model_span_positions": 4,
+        "sequence_span_residues": 4,
+        "sequence_envelope_residues": 7,
+        "model_span_coverage": 0.4,
+        "sequence_span_coverage": 0.3333333333333333,
+        "sequence_envelope_coverage": 0.5833333333333334,
+        "paired_positions": 3,
+        "insert_positions": 1,
+        "delete_positions": 1,
+        "alignment_columns": 5,
+        "paired_model_coverage": 0.3,
+        "paired_sequence_coverage": 0.25,
+        "sequence_identity_fraction": null,
+        "consensus_identity_fraction": 1.0,
+        "alignment_identity_fraction": 0.6,
+        "api_identity_fraction": 0.75,
+        "posterior_lower_mean": 0.6875,
+        "posterior_upper_mean": 0.75,
+        "domain_bias_bits_from_nats": 1.0
+      },
+      "intervals": {
+        "model": [
+          0,
+          4
+        ],
+        "sequence": [
+          1,
+          5
+        ],
+        "envelope": [
+          0,
+          7
+        ]
+      },
+      "coordinate_convention": {
+        "native": "one_based_inclusive",
+        "intervals": "zero_based_half_open",
+        "model_axis": "target",
+        "sequence_axis": "query"
+      },
+      "model_length": 10,
+      "sequence_length": 12,
+      "model_span_positions": 4,
+      "sequence_span_residues": 4,
+      "sequence_envelope_residues": 7,
+      "model_span_coverage": 0.4,
+      "sequence_span_coverage": 0.3333333333333333,
+      "sequence_envelope_coverage": 0.5833333333333334,
+      "paired_positions": 3,
+      "insert_positions": 1,
+      "delete_positions": 1,
+      "alignment_columns": 5,
+      "paired_model_coverage": 0.3,
+      "paired_sequence_coverage": 0.25,
+      "sequence_identity_fraction": null,
+      "consensus_identity_fraction": 1.0,
+      "alignment_identity_fraction": 0.6,
+      "api_identity_fraction": 0.75,
+      "native_domain_score_bits": -2.5,
+      "native_domain_bias_bits": 1.0,
+      "native_conditional_evalue": 0.0,
+      "native_independent_evalue": 3.0,
+      "native_accuracy": null,
+      "posterior_lower_mean": 0.6875,
+      "posterior_upper_mean": 0.75,
+      "consensus_identical_positions": 3,
+      "api_identity_reported_count": 3,
+      "api_identity_recalculated_fraction": 0.75,
+      "posterior_population": {
+        "observed_residues": 4,
+        "missing_residues": 0,
+        "gap_columns": 1,
+        "character_counts": {
+          "0": 1,
+          "*": 2,
+          "9": 1
+        },
+        "upper_endpoint_closed": false,
+        "invalid_column_indices": []
+      },
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "availability": "partial"
+    }
+  ],
+  "queries": [
+    {
+      "record_key": "[\"synthetic_hmmscan_positive.payload.json\",\"api_query\",\"/result\"]",
+      "locator": {
+        "artifact_ref": "synthetic_hmmscan_positive.payload.json",
+        "artifact_role": "api_json",
+        "json_pointer": "/result",
+        "query_occurrence": 0
+      },
+      "issues": [],
+      "native": {},
+      "components": {},
+      "unavailable": {},
+      "derived": {},
+      "name": "q",
+      "occurrence": 0,
+      "length": 12,
+      "acquired_hit_row_count": 1,
+      "acquired_reported_hit_row_count": 1,
+      "acquired_included_hit_row_count": 0,
+      "included_status_unavailable_rows": 0,
+      "reporting_status_unavailable_rows": 0,
+      "acquisition": {},
+      "completion": {
+        "provider_status": "SUCCESS",
+        "page_count": 1,
+        "output_complete": null,
+        "hit_population_complete": null
+      },
+      "count_population": "retained rows across explicitly identified rounds; dependent rounds are not independent evidence",
+      "native_search_statistics": {
+        "nreported": 1
+      }
+    }
+  ],
+  "iterations": [],
+  "definitions": {
+    "model_length": {
+      "inputs": [
+        "native.model_length",
+        "joins.model.length"
+      ],
+      "formula": "native full length, or exact-identity supplied operand length",
+      "units": "positions",
+      "population": "entire model",
+      "origin": "native_or_supplied",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "sequence_length": {
+      "inputs": [
+        "native.sequence_length",
+        "joins.sequence.length"
+      ],
+      "formula": "native full length, or exact-identity supplied operand length",
+      "units": "residues",
+      "population": "entire sequence",
+      "origin": "native_or_supplied",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "model_span_positions": {
+      "inputs": [
+        "intervals.model"
+      ],
+      "formula": "end - start (native inclusive to - from + 1)",
+      "units": "model positions",
+      "population": "one domain model interval",
+      "origin": "derived",
+      "coordinate_convention": "zero_based_half_open",
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "sequence_span_residues": {
+      "inputs": [
+        "intervals.sequence"
+      ],
+      "formula": "end - start (native inclusive to - from + 1)",
+      "units": "residues",
+      "population": "one domain sequence interval",
+      "origin": "derived",
+      "coordinate_convention": "zero_based_half_open",
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "sequence_envelope_residues": {
+      "inputs": [
+        "intervals.envelope"
+      ],
+      "formula": "end - start (native inclusive to - from + 1)",
+      "units": "residues",
+      "population": "one domain envelope interval",
+      "origin": "derived",
+      "coordinate_convention": "zero_based_half_open",
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "model_span_coverage": {
+      "inputs": [
+        "model_span_positions",
+        "model_length"
+      ],
+      "formula": "numerator / denominator",
+      "units": "fraction",
+      "population": "model_length",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "sequence_span_coverage": {
+      "inputs": [
+        "sequence_span_residues",
+        "sequence_length"
+      ],
+      "formula": "numerator / denominator",
+      "units": "fraction",
+      "population": "sequence_length",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "sequence_envelope_coverage": {
+      "inputs": [
+        "sequence_envelope_residues",
+        "sequence_length"
+      ],
+      "formula": "numerator / denominator",
+      "units": "fraction",
+      "population": "sequence_length",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "paired_model_coverage": {
+      "inputs": [
+        "paired_positions",
+        "model_length"
+      ],
+      "formula": "numerator / denominator",
+      "units": "fraction",
+      "population": "model_length",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "paired_sequence_coverage": {
+      "inputs": [
+        "paired_positions",
+        "sequence_length"
+      ],
+      "formula": "numerator / denominator",
+      "units": "fraction",
+      "population": "sequence_length",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "paired_positions": {
+      "inputs": [
+        "quantities.paired_positions"
+      ],
+      "formula": "count(model != '.' and sequence != '-')",
+      "units": "columns",
+      "population": "one validated native alignment display",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "insert_positions": {
+      "inputs": [
+        "quantities.insert_positions"
+      ],
+      "formula": "count(model == '.' and sequence != '-')",
+      "units": "columns",
+      "population": "one validated native alignment display",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "delete_positions": {
+      "inputs": [
+        "quantities.delete_positions"
+      ],
+      "formula": "count(model != '.' and sequence == '-')",
+      "units": "columns",
+      "population": "one validated native alignment display",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "alignment_columns": {
+      "inputs": [
+        "quantities.alignment_columns"
+      ],
+      "formula": "length of validated aligned model/sequence display",
+      "units": "columns",
+      "population": "one validated native alignment display",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "consensus_identity_fraction": {
+      "inputs": [
+        "quantities.consensus_identical_positions",
+        "quantities.paired_positions"
+      ],
+      "formula": "equal uppercase displayed model and sequence residues / paired positions",
+      "units": "fraction",
+      "population": "paired display columns; model consensus is not an actual reference sequence",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "sequence_identity_fraction": {
+      "inputs": [
+        "quantities.actual_sequence_correspondence",
+        "quantities.consensus_identical_positions",
+        "quantities.paired_positions"
+      ],
+      "formula": "identical / paired only after exact supplied protein sequence operands agree with native intervals, for phmmer or jackhmmer round 1",
+      "units": "fraction",
+      "population": "paired actual sequence residues",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "alignment_identity_fraction": {
+      "inputs": [
+        "quantities.consensus_identical_positions",
+        "quantities.alignment_columns"
+      ],
+      "formula": "identical displayed residues / all alignment columns",
+      "units": "fraction",
+      "population": "paired, insertion and deletion columns",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "api_identity_fraction": {
+      "inputs": [
+        "alignment.identity[0]",
+        "quantities.api_identity_numerator",
+        "quantities.api_identity_denominator"
+      ],
+      "formula": "retain provider fraction; independently check alphabetic mline count / min(ungapped model, ungapped sequence)",
+      "units": "fraction",
+      "population": "minimum ungapped display length",
+      "origin": "native_provider",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "native_domain_score_bits": {
+      "inputs": [
+        "native.domain_score_bits"
+      ],
+      "formula": "retain native measurement",
+      "units": "bits",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "origin": "native",
+      "coordinate_convention": null,
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "native_domain_bias_bits": {
+      "inputs": [
+        "native.domain_bias_bits",
+        "native.domain_bias_nats"
+      ],
+      "formula": "native bits unchanged; provider domain_bias_nats / ln(2) when supplied",
+      "units": "bits",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "origin": "native",
+      "coordinate_convention": null,
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "native_conditional_evalue": {
+      "inputs": [
+        "native.conditional_evalue"
+      ],
+      "formula": "retain native measurement",
+      "units": "expected chance hit count",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "origin": "native",
+      "coordinate_convention": null,
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "native_independent_evalue": {
+      "inputs": [
+        "native.independent_evalue"
+      ],
+      "formula": "retain native measurement",
+      "units": "expected chance hit count",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "origin": "native",
+      "coordinate_convention": null,
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "native_accuracy": {
+      "inputs": [
+        "native.accuracy"
+      ],
+      "formula": "retain native measurement",
+      "units": "native mean posterior accuracy",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "origin": "native",
+      "coordinate_convention": null,
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "posterior_lower_mean": {
+      "inputs": [
+        "alignment.ppline",
+        "alignment.aseq"
+      ],
+      "formula": "sum(character interval lower bounds) / count(sequence residues with available posterior characters)",
+      "units": "posterior bound",
+      "population": "sequence residues with valid PP characters; gap/missing columns excluded with explicit counts",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": "0:[0,.05), 1:[.05,.15), ..., 9:[.85,.95), *:[.95,1]; upper endpoint open except *",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "posterior_upper_mean": {
+      "inputs": [
+        "alignment.ppline",
+        "alignment.aseq"
+      ],
+      "formula": "sum(character interval upper bounds) / count(sequence residues with available posterior characters)",
+      "units": "posterior bound",
+      "population": "sequence residues with valid PP characters; gap/missing columns excluded with explicit counts",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": "0:[0,.05), 1:[.05,.15), ..., 9:[.85,.95), *:[.95,1]; upper endpoint open except *",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "cutoff_margins": {
+      "inputs": [
+        "inputs.model_cutoffs",
+        "native.sequence_score_bits",
+        "native.domain_score_bits"
+      ],
+      "formula": "score bits - explicitly supplied matching model cutoff bits, separately for GA/TC/NC and sequence/domain scope",
+      "units": "bits",
+      "population": "one exact model and score scope; no category confidence",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "hit_interval_unions": {
+      "inputs": [
+        "same-hit domains.intervals"
+      ],
+      "formula": "merge overlapping/adjacent intervals and sum end-start",
+      "units": "positions or residues",
+      "population": "same query occurrence, target occurrence and round; no sums across models or dependent rounds",
+      "origin": "derived",
+      "coordinate_convention": "zero_based_half_open",
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "native_hit_measurements": {
+      "inputs": [
+        "hits.native"
+      ],
+      "formula": "retain full sequence score/bias/E-value and native domain counts",
+      "units": "bits, expected chance hit count, or native count as named",
+      "population": "one native target at one search/round",
+      "origin": "native",
+      "coordinate_convention": null,
+      "uncertainty": "native precision; reported domains differ from internal domains",
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    },
+    "query_and_iteration_counts": {
+      "inputs": [
+        "rows.query_record_key",
+        "rows.iteration",
+        "rows.is_reported",
+        "rows.is_included"
+      ],
+      "formula": "count retained rows with matching explicit keys and flags; native round measurements retained separately",
+      "units": "rows",
+      "population": "acquired rows only; neither database population nor independent evidence",
+      "origin": "derived",
+      "coordinate_convention": null,
+      "uncertainty": null,
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained"
+    }
+  },
+  "issues": []
+}

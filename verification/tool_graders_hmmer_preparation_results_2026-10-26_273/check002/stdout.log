@@ -1,0 +1,234 @@
+..............F...........FFFF.                                          [100%]
+=================================== FAILURES ===================================
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-single_key] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_results_2026-10-26_273/check002/temporary/test_all26_modes_retain_grade_14')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ce5f52a0b00>
+program = 'hmmfetch', mode = 'single_key'
+
+    @pytest.mark.parametrize("program,mode", CASES)
+    def test_all26_modes_retain_grade_and_publish_only_requested_artifact(tmp_path, monkeypatch, program, mode):
+        with Store(tmp_path / "store") as store:
+            bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+            selected = next((r for r in bundle["artifacts"] if r["role"] not in {"stdout", "stderr"}), bundle["artifacts"][0])
+            choice = selector(artifacts=[{"direction": "output", "role": selected["role"], "ordinal": 0}])
+            full_get = store.get_artifact
+            numerical = {prepared[k] for k in ("grading_artifact_ref", "sheet_artifact_ref", "calculations_artifact_ref")}
+            def no_full_sheet(reference):
+                assert reference not in numerical, "host hydrated full numerical data"
+                return full_get(reference)
+            monkeypatch.setattr(store, "get_artifact", no_full_sheet)
+>           result = publication.publish_selected_preparation_result(store, source_ref=source,
+                prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
+
+../../../tests/test_native_hmmer_preparation_result_publication.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x7ce5f52a0b30>
+source_ref = 'source_1d7c5898ca1ddb4f999c6016'
+prepared = {'version': 'native_hmmer_preparation_prepared_v1', 'bundle_artifact_ref': 'artifact_775945918763962814c6f3d979b15a2fc...869d07ae0bb', 'grading_artifact_ref': 'artifact_159a7020381f6153dd3211f7302ab8ccf25783bf26ad2f5ea4bac26a9dba963f', ...}
+selector = {'version': 'native_hmmer_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'artifacts': [{'direction': 'output', 'role': 'fetched_models', 'ordinal': 0}], 'projection': None}
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_results_2026-10-26_273/check002/temporary/test_all26_modes_retain_grade_14/projection/native-hmmer-preparation-projection')
+policy = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296, wall_seconds=None)
+
+    def publish_selected_preparation_result(store, *, source_ref, prepared, selector, directory, policy):
+        """Return pure V1 selections, retaining a separate immutable projection."""
+        if not isinstance(policy, LocalJobPolicy):
+            _error("local_job_policy_required")
+        prepared = _prepared_shape(prepared)
+        bundle = _decode(store.get_artifact(prepared["bundle_artifact_ref"]))
+        prepared = validate_prepared_grading(store, prepared, bundle=bundle)
+        stable = _stable(store, prepared)
+        source = store._require(source_ref, {"source"})
+        expected = original_source_payload(bundle=bundle, capture=stable["capture"], prepared=prepared)
+        if source.get("origin") != "tool" or any(source.get(k) != v for k, v in expected.items()):
+            _error("publication_source_custody_conflict")
+        selector = validate_preparation_result_selector(selector, program=bundle["program"], mode=bundle["mode"])
+        intent = {"source_ref": source_ref, "prepared_sha256": native_infernal_digest(prepared),
+            "selector": selector, "policy": policy.to_dict()}
+        directory, saved = _begin(directory, "native-hmmer-preparation-projection", intent, "publication.json",
+                                 failure_receipt="projection-failure.json")
+        if saved is not None:
+            if set(saved) == {"_failure"}:
+                record = saved["_failure"]
+                if (type(record) is not dict or set(record) != {"version", "intent", "code", "failures",
+                        "projection_artifact_ref", "worker_receipt_artifact_ref", "artifacts"}
+                        or record["version"] != PREFIX + "projection_failure_v1" or record["intent"] != intent
+                        or record["code"] not in {PREFIX + "projection_worker_failed", PREFIX + "saved_numerical_grading_unavailable"}):
+                    _error("projection_failure_receipt_invalid")
+                validate_failures(record["failures"])
+                for ref in [record["worker_receipt_artifact_ref"], *[r["artifact_ref"] for r in record["artifacts"]],
+                            *([record["projection_artifact_ref"]] if record["projection_artifact_ref"] else [])]:
+                    _artifact_path(store, ref)
+                raise ContractError(record["code"])
+            if (type(saved) is not dict or set(saved) != _PUBLICATION_FIELDS
+                    or type(saved["projection_artifact_ref"]) is not str or not saved["projection_artifact_ref"]):
+                _error("publication_receipt_invalid")
+            receipt = _read_record(directory, "projection-receipt.json")
+            if (receipt["publication_sha256"] != native_infernal_digest(saved) or receipt["intent"] != intent
+                    or receipt.get("completed") is not True or saved["failures"] != prepared["failures"]):
+                _error("publication_receipt_identity_conflict")
+            selected = _selected(store, saved["projection_artifact_ref"], source_ref=source_ref,
+                selector=selector, occurrences=prepared["occurrences"])
+            if any(saved[k] != selected[k] for k in selected) or saved["record_refs"] != _record_refs(source_ref, selected):
+                _error("publication_selected_data_conflict")
+            validate_failures(saved["failures"])
+            for ref in [receipt["worker_receipt_artifact_ref"], *[r["artifact_ref"] for r in receipt["artifacts"]]]:
+                _artifact_path(store, ref)
+            return saved
+        plan = {"version": PLAN_VERSION, "task": "project", "directory": str(directory),
+            "grading": _worker_file(store, prepared["grading_artifact_ref"]) if prepared["grading_artifact_ref"] else None,
+            "grading_context": stable["grading_context"], "occurrences": prepared["occurrences"], "source_ref": source_ref,
+            "selector": selector, "failures": deepcopy(prepared["failures"])}
+        outputs, failures, completed, diagnostics = _execute_worker(store, directory, plan, policy)
+        reference = outputs.get("projection")
+        if not completed or reference is None:
+            code = PREFIX + ("saved_numerical_grading_unavailable" if any(
+                row["code"] == PREFIX + "saved_numerical_grading_unavailable" for row in failures)
+                else "projection_worker_failed")
+            _immutable(directory / "projection-failure.json", {"version": PREFIX + "projection_failure_v1",
+                "intent": intent, "code": code, "failures": failures,
+                "projection_artifact_ref": reference, **diagnostics})
+>           raise ContractError(code)
+E           gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_worker_failed
+
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:409: ContractError
+_ test_requested_native_numerical_value_crosses_saved_publication[hmmemit-consensus_simple-length-12] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_results_2026-10-26_273/check002/temporary/test_requested_native_numerica0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ce5f529e480>
+program = 'hmmemit', mode = 'consensus_simple', path = 'length', expected = 12
+
+    @pytest.mark.parametrize("program,mode,path,expected", [
+        ("hmmemit", "consensus_simple", "length", 12),
+        ("makehmmerdb", "build", "components.source_symbol_total", 28),
+        ("makehmmerdb", "build", "components.actual_database_bytes", 314),
+    ])
+    def test_requested_native_numerical_value_crosses_saved_publication(tmp_path, monkeypatch, program, mode, path, expected):
+        with Store(tmp_path / "store") as store:
+            _, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+            choice = selector(quantities=[path])
+>           result = publication.publish_selected_preparation_result(store, source_ref=source,
+                prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
+
+../../../tests/test_native_hmmer_preparation_result_publication.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:410: in publish_selected_preparation_result
+    selected = _selected(store, reference, source_ref=source_ref, selector=selector, occurrences=prepared["occurrences"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:325: in _selected
+    _error("selected_artifact_association_conflict")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'selected_artifact_association_conflict'
+
+    def _error(code):
+>       raise ContractError(PREFIX + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_selected_artifact_association_conflict
+
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:44: ContractError
+_ test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.source_symbol_total-28] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_results_2026-10-26_273/check002/temporary/test_requested_native_numerica1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ce5f5222630>
+program = 'makehmmerdb', mode = 'build', path = 'components.source_symbol_total'
+expected = 28
+
+    @pytest.mark.parametrize("program,mode,path,expected", [
+        ("hmmemit", "consensus_simple", "length", 12),
+        ("makehmmerdb", "build", "components.source_symbol_total", 28),
+        ("makehmmerdb", "build", "components.actual_database_bytes", 314),
+    ])
+    def test_requested_native_numerical_value_crosses_saved_publication(tmp_path, monkeypatch, program, mode, path, expected):
+        with Store(tmp_path / "store") as store:
+            _, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+            choice = selector(quantities=[path])
+>           result = publication.publish_selected_preparation_result(store, source_ref=source,
+                prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
+
+../../../tests/test_native_hmmer_preparation_result_publication.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:410: in publish_selected_preparation_result
+    selected = _selected(store, reference, source_ref=source_ref, selector=selector, occurrences=prepared["occurrences"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:325: in _selected
+    _error("selected_artifact_association_conflict")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'selected_artifact_association_conflict'
+
+    def _error(code):
+>       raise ContractError(PREFIX + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_selected_artifact_association_conflict
+
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:44: ContractError
+_ test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.actual_database_bytes-314] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_results_2026-10-26_273/check002/temporary/test_requested_native_numerica2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ce616b44440>
+program = 'makehmmerdb', mode = 'build'
+path = 'components.actual_database_bytes', expected = 314
+
+    @pytest.mark.parametrize("program,mode,path,expected", [
+        ("hmmemit", "consensus_simple", "length", 12),
+        ("makehmmerdb", "build", "components.source_symbol_total", 28),
+        ("makehmmerdb", "build", "components.actual_database_bytes", 314),
+    ])
+    def test_requested_native_numerical_value_crosses_saved_publication(tmp_path, monkeypatch, program, mode, path, expected):
+        with Store(tmp_path / "store") as store:
+            _, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+            choice = selector(quantities=[path])
+>           result = publication.publish_selected_preparation_result(store, source_ref=source,
+                prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
+
+../../../tests/test_native_hmmer_preparation_result_publication.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:410: in publish_selected_preparation_result
+    selected = _selected(store, reference, source_ref=source_ref, selector=selector, occurrences=prepared["occurrences"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:325: in _selected
+    _error("selected_artifact_association_conflict")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'selected_artifact_association_conflict'
+
+    def _error(code):
+>       raise ContractError(PREFIX + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_selected_artifact_association_conflict
+
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:44: ContractError
+_______ test_projection_rejects_changed_selection_and_prepared_identity ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_results_2026-10-26_273/check002/temporary/test_projection_rejects_change0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ce616b17f50>
+
+    def test_projection_rejects_changed_selection_and_prepared_identity(tmp_path, monkeypatch):
+        with Store(tmp_path / "store") as store:
+            bundle, _, _, prepared, source = prepare(store, tmp_path, monkeypatch)
+            choice = selector(quantities=["length"])
+>           result = publication.publish_selected_preparation_result(store, source_ref=source,
+                prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
+
+../../../tests/test_native_hmmer_preparation_result_publication.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:410: in publish_selected_preparation_result
+    selected = _selected(store, reference, source_ref=source_ref, selector=selector, occurrences=prepared["occurrences"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:325: in _selected
+    _error("selected_artifact_association_conflict")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'selected_artifact_association_conflict'
+
+    def _error(code):
+>       raise ContractError(PREFIX + code)
+E       gene_annotation_episode.domain.ContractError: native_hmmer_preparation_selected_artifact_association_conflict
+
+../../../gene_annotation_episode/native_hmmer_preparation_result_publication.py:44: ContractError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-single_key]
+FAILED ../../../tests/test_native_hmmer_preparation_result_publication.py::test_requested_native_numerical_value_crosses_saved_publication[hmmemit-consensus_simple-length-12]
+FAILED ../../../tests/test_native_hmmer_preparation_result_publication.py::test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.source_symbol_total-28]
+FAILED ../../../tests/test_native_hmmer_preparation_result_publication.py::test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.actual_database_bytes-314]
+FAILED ../../../tests/test_native_hmmer_preparation_result_publication.py::test_projection_rejects_changed_selection_and_prepared_identity
+5 failed, 26 passed in 164.35s (0:02:44)

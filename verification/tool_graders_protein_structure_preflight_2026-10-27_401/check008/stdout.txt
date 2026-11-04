@@ -1,0 +1,27 @@
+F
+=================================== FAILURES ===================================
+_ test_service_exposes_actual_policy_without_projection_or_state_access[False] _
+
+fixed_case = False
+
+    @pytest.mark.parametrize('fixed_case', [False, True])
+    def test_service_exposes_actual_policy_without_projection_or_state_access(fixed_case):
+>       policy = replace(CreditPolicy(), observation_axes=(('alignment', 'mechanistic'),))
+                         ^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_scientific_support_context.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+source_snapshot/gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_scientific_support_context.py::test_service_exposes_actual_policy_without_projection_or_state_access[False]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.32s

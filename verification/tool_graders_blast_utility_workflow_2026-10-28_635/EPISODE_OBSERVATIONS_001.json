@@ -1,0 +1,1594 @@
+{
+  "description": "Frozen episode histories and original parent delivery from check096. Root/scientific decisions and their horizon estimator are scripted fixtures; practical terminal estimator and actual operational gains use production paths.",
+  "case_path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/CASE.json",
+  "case_sha256": "3ff2348497da78484fef45b409dd5f66fbe1629943b3fbfc89a1be8aa63a920b",
+  "episode_count": 17,
+  "own_observation_count": 26,
+  "episodes": [
+    {
+      "episode_id": "episode_35f9aeea5bd5b2e88548283c10795c5e65a5c3a6293f3ae81e06159b8df731a1",
+      "role": "annotation",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 0.0,
+      "recorded_scores": [
+        0.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "value": 0.0,
+        "lower": 0.0,
+        "upper": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "alpha": 0.0
+      },
+      "estimate_provenance": {
+        "kind": "caller_injected",
+        "function": "test_native_blast_utility_workflow_634.run_case.<locals>.controller.<locals>.estimate",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "template_relationship": "not_inferred"
+      },
+      "ordinary_controller_decision": {
+        "stop": true,
+        "projected_gain": {
+          "value": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "alpha": 0.0
+        },
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound"
+      }
+    },
+    {
+      "episode_id": "episode_238e8de21c42e8c311523697a70432366129dfa7e4cb55b3d9417c79d6226ad1",
+      "role": "scientific_process",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 0.0,
+      "recorded_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "own_observation_count": 10,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "function": "test_native_blast_utility_workflow_634.run_case.<locals>.controller.<locals>.estimate",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "kind": "caller_injected",
+        "template_relationship": "not_inferred"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_b3a9f1d942b553aaafd0a833951317ebc8efadb59bac96003db2ca3efb4d6ce6",
+      "role": "launch",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_0"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 3.0,
+      "recorded_scores": [
+        3.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_7fafd4782806a7c40c026e44da238f050cd90bfcfccc8f078cd0978e4f43800b",
+      "role": "launch_local",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_0"
+        ],
+        [
+          "launch_local",
+          "child_0"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 7.0,
+      "recorded_scores": [
+        7.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_fcdcde21047b418f232ba20b1b38be15e75199e1d8668eeb012d167ad33329f8",
+      "role": "results",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "results",
+          "child_1"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 2.0,
+      "recorded_scores": [
+        2.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_7b38a24091a7186e308bf60b0a4de537e5780f33fe7d0f0ab1b4fffad57b45fe",
+      "role": "launch",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_2"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 3.0,
+      "recorded_scores": [
+        3.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_be400532dee58202065f42518275122b73a455c890eb4705beb60f919c9e2894",
+      "role": "launch_local",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_2"
+        ],
+        [
+          "launch_local",
+          "child_0"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 7.0,
+      "recorded_scores": [
+        7.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_94808b2ffa017d2b6d959eccd4ecad3cd314299d434e6a2365ab7cc20a948d5c",
+      "role": "results",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "results",
+          "child_3"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 2.0,
+      "recorded_scores": [
+        2.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_cc4850a42729cde63302cab455116f1b85b6137e7da3a20387ece1587f21f78f",
+      "role": "launch",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_4"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 3.0,
+      "recorded_scores": [
+        3.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_7ade7d4676d30d395f598642094803aa344b7d80f1bc9d18b86ffd3732b411ed",
+      "role": "launch_local",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_4"
+        ],
+        [
+          "launch_local",
+          "child_0"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 7.0,
+      "recorded_scores": [
+        7.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_9a6a6f8967994b401a50bc1f42f99010baa0a61b4b8d03434f98c04ee9adf0dd",
+      "role": "results",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "results",
+          "child_5"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 2.0,
+      "recorded_scores": [
+        2.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_54240c370ceb5e7e5d29ef8173b6c36a9a07800ce7887acbbc490bea2f00d6e1",
+      "role": "launch",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_6"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 3.0,
+      "recorded_scores": [
+        3.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_c89e8ffc40810a5519456d73807b87b469d46cf78c2c54b08b91505931224a61",
+      "role": "launch_local",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_6"
+        ],
+        [
+          "launch_local",
+          "child_0"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 7.0,
+      "recorded_scores": [
+        7.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_ea3acd4ff9504841e55bcadd31c9a322ab4c4ccb3724724f2e9c9aad0af2909c",
+      "role": "results",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "results",
+          "child_7"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 2.0,
+      "recorded_scores": [
+        2.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_5eb6eee99d3eb95526d1a2140534914a890c44f1cb433dfb96785bc236ac1d74",
+      "role": "launch",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_8"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 3.0,
+      "recorded_scores": [
+        3.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_7696a6aa6d44be6087e6f6115927908a7ef358e5c90ac582f7cc36839e2190d5",
+      "role": "launch_local",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "launch",
+          "child_8"
+        ],
+        [
+          "launch_local",
+          "child_0"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 7.0,
+      "recorded_scores": [
+        7.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    },
+    {
+      "episode_id": "episode_07c9cd1f01563ade5bc236762a000845ad0553f9dedcdf49104431091701c198",
+      "role": "results",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ],
+        [
+          "results",
+          "child_9"
+        ]
+      ],
+      "initial_credit": 0.0,
+      "current_credit": 2.0,
+      "recorded_scores": [
+        2.0
+      ],
+      "own_observation_count": 1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "estimate_provenance": {
+        "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+        "completion_proof": "practical_completion_v1",
+        "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+        "continuation": "existing_available_upper_bound_lte_configured_cost",
+        "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+        "raw_history": "unchanged_one_observation_per_completed_own_action",
+        "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+        "version": "verified_practical_endpoint_yield_v1"
+      },
+      "ordinary_controller_decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      }
+    }
+  ],
+  "forwarded_field_counts": {
+    "checks": 27,
+    "database_fields": 6,
+    "failures": 4,
+    "integrity": 1,
+    "missing": 0,
+    "sequences": 2,
+    "status": 5
+  },
+  "forwarded_original_form": {
+    "checks": [
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_cab03fe0fcd1e8ad55b74b9912709a7ea6a42ece102cf8a5815590273f7db37c",
+          "native_blast_utility_occurrence_cb2df9aa5a0e63687164822a1355f902f2002bb690146c2cfa0e838a92b7f79d"
+        ],
+        "method": "native_execution_outcome",
+        "name": "native_execution",
+        "reason": null,
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_c015a5e524fd283babbea6ec9054b4c64d5c415a0aadb70c406eb28c9d3dac6f",
+          "native_blast_utility_occurrence_e68fc0e0d4b5aca2450482e1e92b983d70188f30ab313b48dd2a07d10a1d3263",
+          "native_blast_utility_occurrence_5358f807ef22852a02b53bbd62316f6eac36a97b09bacc50e4d7a2887c996697",
+          "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e",
+          "native_blast_utility_occurrence_501ad29e341a9d38587b2241cd3f019c9480339c997aeafe61c4d8ce59489386",
+          "native_blast_utility_occurrence_7190b43f7dff8b7c46f12911631e8df1fa156f5acf5aea2bb1781c896f49b988",
+          "native_blast_utility_occurrence_faad78d824a6bbe067e9ee83b0232405de33ac1433612223de10f1ca43d73d14",
+          "native_blast_utility_occurrence_bebae24fd7b47b93b852d5f4aed6bc6f34dcd320b263dd40abf4f9a2502ef6d7",
+          "native_blast_utility_occurrence_841bcd48f0bb3af4ba67cffeb42186d1fdade18d3ff4ad9de4ac28533fefefeb",
+          "native_blast_utility_occurrence_4cda2aeeaa4f00836c96262489e90acf527db57ee6b0d5dc493bf0426d340077"
+        ],
+        "method": "family_inventory",
+        "name": "database_inventory",
+        "reason": null,
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e"
+        ],
+        "method": "explicit_reference_join",
+        "name": "database_metadata",
+        "reason": null,
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e"
+        ],
+        "method": "identity_digest",
+        "name": "custody",
+        "reason": null,
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e"
+        ],
+        "method": "native_format_parser",
+        "name": "syntax",
+        "reason": null,
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "identity_digest",
+        "name": "custody",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "native_execution_outcome",
+        "name": "native_execution",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "selected_record_match",
+        "name": "identity",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/0"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "native_format_parser",
+        "name": "sequence_symbols",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/0"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "sequence_length_agreement",
+        "name": "sequence_length",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/0"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "selected_record_match",
+        "name": "identity",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/1"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "native_format_parser",
+        "name": "sequence_symbols",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/1"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "sequence_length_agreement",
+        "name": "sequence_length",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/1"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "native_format_parser",
+        "name": "syntax",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1"
+        ],
+        "method": "selected_record_match",
+        "name": "selection",
+        "reason": null,
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d"
+        ],
+        "method": "identity_digest",
+        "name": "custody",
+        "reason": null,
+        "source_ref": "source_1a464e5cf23b577e90cf822b",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d"
+        ],
+        "method": "native_execution_outcome",
+        "name": "native_execution",
+        "reason": null,
+        "source_ref": "source_1a464e5cf23b577e90cf822b",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d"
+        ],
+        "method": "native_format_parser",
+        "name": "syntax",
+        "reason": null,
+        "source_ref": "source_1a464e5cf23b577e90cf822b",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d"
+        ],
+        "method": "native_format_parser",
+        "name": "database_metadata",
+        "reason": null,
+        "source_ref": "source_1a464e5cf23b577e90cf822b",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7"
+        ],
+        "method": "identity_digest",
+        "name": "custody",
+        "reason": null,
+        "source_ref": "source_f7097371f1f0fb18c24b33cd",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7"
+        ],
+        "method": "native_execution_outcome",
+        "name": "native_execution",
+        "reason": null,
+        "source_ref": "source_f7097371f1f0fb18c24b33cd",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7"
+        ],
+        "method": "native_format_parser",
+        "name": "syntax",
+        "reason": null,
+        "source_ref": "source_f7097371f1f0fb18c24b33cd",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7"
+        ],
+        "method": "native_format_parser",
+        "name": "database_metadata",
+        "reason": null,
+        "source_ref": "source_f7097371f1f0fb18c24b33cd",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1"
+        ],
+        "method": "identity_digest",
+        "name": "custody",
+        "reason": null,
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_3dc1a331b4840f76aaacb3af1601dc1f1afd147a1c744e69f17b3fcb378508fb"
+        ],
+        "method": "identity_digest",
+        "name": "custody",
+        "reason": null,
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "status": "pass",
+        "subject_refs": [
+          "native_blast_utility_occurrence_3dc1a331b4840f76aaacb3af1601dc1f1afd147a1c744e69f17b3fcb378508fb"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1",
+          "native_blast_utility_occurrence_3dc1a331b4840f76aaacb3af1601dc1f1afd147a1c744e69f17b3fcb378508fb"
+        ],
+        "method": "native_execution_outcome",
+        "name": "native_execution",
+        "reason": "native_nonzero_exit",
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "status": "fail",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      },
+      {
+        "evidence_occurrence_ids": [
+          "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1",
+          "native_blast_utility_occurrence_3dc1a331b4840f76aaacb3af1601dc1f1afd147a1c744e69f17b3fcb378508fb"
+        ],
+        "method": "native_full_check",
+        "name": "native_integrity",
+        "reason": "semantic_validation_unavailable",
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "status": "unknown",
+        "subject_refs": [
+          "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d"
+        ]
+      }
+    ],
+    "database_fields": [
+      {
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "field_name": "database_residue_count",
+        "json_pointer": "/number-of-letters",
+        "line_number": null,
+        "missing_reason": null,
+        "native_lexeme": "33",
+        "occurrence_id": "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e",
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "unit": "nt",
+        "value": 33,
+        "value_basis": "native_reported"
+      },
+      {
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "field_name": "database_sequence_count",
+        "json_pointer": "/number-of-sequences",
+        "line_number": null,
+        "missing_reason": null,
+        "native_lexeme": "3",
+        "occurrence_id": "native_blast_utility_occurrence_86b8e485998d4ba0c6aebb76e19d35d31c46937eb981fc66a1d92a3731c7cc6e",
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "unit": "sequences",
+        "value": 3,
+        "value_basis": "native_reported"
+      },
+      {
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "field_name": "database_sequence_count",
+        "json_pointer": null,
+        "line_number": 2,
+        "missing_reason": null,
+        "native_lexeme": "3",
+        "occurrence_id": "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d",
+        "source_ref": "source_1a464e5cf23b577e90cf822b",
+        "unit": "sequences",
+        "value": 3,
+        "value_basis": "native_reported"
+      },
+      {
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "field_name": "database_residue_count",
+        "json_pointer": null,
+        "line_number": 2,
+        "missing_reason": null,
+        "native_lexeme": "33",
+        "occurrence_id": "native_blast_utility_occurrence_63eb7d97b63e36450a9400622646339b20ce4ad0c94ad5e20bdae87145a1098d",
+        "source_ref": "source_1a464e5cf23b577e90cf822b",
+        "unit": "nt",
+        "value": 33,
+        "value_basis": "native_reported_exact"
+      },
+      {
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "field_name": "database_residue_count",
+        "json_pointer": "/number-of-letters",
+        "line_number": null,
+        "missing_reason": null,
+        "native_lexeme": "33",
+        "occurrence_id": "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7",
+        "source_ref": "source_f7097371f1f0fb18c24b33cd",
+        "unit": "nt",
+        "value": 33,
+        "value_basis": "native_reported"
+      },
+      {
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "field_name": "database_sequence_count",
+        "json_pointer": "/number-of-sequences",
+        "line_number": null,
+        "missing_reason": null,
+        "native_lexeme": "3",
+        "occurrence_id": "native_blast_utility_occurrence_948e37977857dcbc88aa56d339c85a0f19b662d55a5cdc4ad2356aaeddfc0fb7",
+        "source_ref": "source_f7097371f1f0fb18c24b33cd",
+        "unit": "sequences",
+        "value": 3,
+        "value_basis": "native_reported"
+      }
+    ],
+    "failures": [
+      {
+        "code": "native_nonzero_exit",
+        "line_number": null,
+        "native_returncode": 1,
+        "occurrence_id": null,
+        "record_key": null,
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "stage": "native"
+      },
+      {
+        "code": "native_nonzero_exit",
+        "line_number": null,
+        "native_returncode": 1,
+        "occurrence_id": "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1",
+        "record_key": null,
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "stage": "native"
+      },
+      {
+        "code": "output_inventory_incomplete",
+        "line_number": null,
+        "native_returncode": null,
+        "occurrence_id": "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1",
+        "record_key": null,
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "stage": "capture"
+      },
+      {
+        "code": "semantic_validation_unavailable",
+        "line_number": null,
+        "native_returncode": null,
+        "occurrence_id": "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1",
+        "record_key": null,
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "stage": "validation"
+      }
+    ],
+    "integrity": [
+      {
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "fields": {
+          "diagnostics": [
+            {
+              "category": "execution_failure",
+              "line_number": 8,
+              "native_oid": null,
+              "occurrence_id": "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1"
+            },
+            {
+              "category": "unknown",
+              "line_number": 9,
+              "native_oid": null,
+              "occurrence_id": "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1"
+            },
+            {
+              "category": "check_pass",
+              "line_number": 11,
+              "native_oid": null,
+              "occurrence_id": "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1"
+            },
+            {
+              "category": "unknown",
+              "line_number": 13,
+              "native_oid": null,
+              "occurrence_id": "native_blast_utility_occurrence_43dc105b15a6a856ec4d533034f68d098fd5f935870a99ea2d615aba4f19b8c1"
+            }
+          ],
+          "observed_checked_count": null,
+          "observed_population_count": null,
+          "observed_sampled_oids": null
+        },
+        "scope": "unknown",
+        "source_ref": "source_2c721c6a5dc25892eb06180e"
+      }
+    ],
+    "missing": [],
+    "sequences": [
+      {
+        "association": "exact",
+        "completeness": "complete",
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "effective_range": {
+          "end_exclusive": 7,
+          "start_0based": 1,
+          "strand": "minus"
+        },
+        "line_number": 1,
+        "molecule": "dna",
+        "native_accession": "KEEP_B",
+        "native_identifier": "lcl|KEEP_B",
+        "native_length_basis": "full_sequence",
+        "native_oid": 1,
+        "native_reported_length": 12,
+        "native_row_ordinal": 0,
+        "occurrence_id": "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1",
+        "record_key": "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/0",
+        "requested_range": {
+          "end_1based": 7,
+          "start_1based": 2
+        },
+        "returned_symbol_count": 6,
+        "selector_ordinals": [
+          1
+        ],
+        "sequences": {
+          "normalized_sequence": "ATTGCA"
+        },
+        "source_ref": "source_660151b518e1cff2649b0f52"
+      },
+      {
+        "association": "exact",
+        "completeness": "complete",
+        "database_key": "native_blast_utility_a188fe0914e69bac4bd570d7db545a1312997c6cc37548507de496c9c823307d",
+        "effective_range": {
+          "end_exclusive": 7,
+          "start_0based": 1,
+          "strand": "minus"
+        },
+        "line_number": 2,
+        "molecule": "dna",
+        "native_accession": "KEEP_B",
+        "native_identifier": "lcl|KEEP_B",
+        "native_length_basis": "full_sequence",
+        "native_oid": 1,
+        "native_reported_length": 12,
+        "native_row_ordinal": 1,
+        "occurrence_id": "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1",
+        "record_key": "native_blast_utility_occurrence_4b68a4f48d501ac8f81202cc84d9941a47473f73e7fa205c6759280d445a8fc1#/records/1",
+        "requested_range": {
+          "end_1based": 7,
+          "start_1based": 2
+        },
+        "returned_symbol_count": 6,
+        "selector_ordinals": [
+          1
+        ],
+        "sequences": {
+          "normalized_sequence": "ATTGCA"
+        },
+        "source_ref": "source_660151b518e1cff2649b0f52"
+      }
+    ],
+    "status": [
+      {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": null,
+        "source_ref": "source_923910affcaa1cac83dba41a",
+        "state": "complete",
+        "writer_closed": true
+      },
+      {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": "complete_selection",
+        "source_ref": "source_660151b518e1cff2649b0f52",
+        "state": "complete",
+        "writer_closed": true
+      },
+      {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": "complete",
+        "source_ref": "source_1a464e5cf23b577e90cf822b",
+        "state": "complete",
+        "writer_closed": true
+      },
+      {
+        "inventory_complete": true,
+        "native_state": "succeeded",
+        "result_completeness": "complete",
+        "source_ref": "source_f7097371f1f0fb18c24b33cd",
+        "state": "complete",
+        "writer_closed": true
+      },
+      {
+        "inventory_complete": true,
+        "native_state": "failed",
+        "result_completeness": null,
+        "source_ref": "source_2c721c6a5dc25892eb06180e",
+        "state": "complete",
+        "writer_closed": true
+      }
+    ]
+  }
+}

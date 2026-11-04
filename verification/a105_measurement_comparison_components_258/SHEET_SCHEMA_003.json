@@ -1,0 +1,1333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:a105:measurement-comparison:258:plan003:sheet",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_measurement_comparison_sheet_v1"
+    },
+    "axis": {
+      "const": "A105"
+    },
+    "section": {
+      "const": "measurement_comparison_validity"
+    },
+    "assertion_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contribution_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/cell"
+      }
+    },
+    "relationship_meanings": {
+      "type": "object",
+      "properties": {
+        "construct": {
+          "enum": [
+            "same_construct_supported",
+            "intended_variant",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "preparation": {
+          "enum": [
+            "same_preparation_supported",
+            "different_preparations_supported",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "preparation_target": {
+          "enum": [
+            "same_preparation_quantity",
+            "same_population_estimand_supported",
+            "incompatible",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "protocol": {
+          "enum": [
+            "matched_except_intended_change",
+            "additional_differences",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "endpoint": {
+          "enum": [
+            "same_quantity",
+            "fixed_reaction_conversion",
+            "complementary",
+            "incompatible",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "denominator": {
+          "enum": [
+            "same_basis_supported",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "functional_bearing": {
+          "enum": [
+            "same_quantitative_assertion",
+            "existence_only",
+            "partner_dependence_only",
+            "complementary",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "attribution": {
+          "enum": [
+            "isolated_supported",
+            "mixed_contributors_identified",
+            "unresolved",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "sampling": {
+          "enum": [
+            "repeated_representation",
+            "shared_physical_estimate",
+            "paired_observations_supported",
+            "independent_preparations_supported",
+            "independence_not_established",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "systematic_coverage": {
+          "enum": [
+            "included_in_selected_covariance",
+            "identified_unresolved",
+            "not_established",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "left_validity": {
+          "enum": [
+            "endpoint_quantification_supported",
+            "identified_unresolved_interference",
+            "corrected_endpoint_supported",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "right_validity": {
+          "enum": [
+            "endpoint_quantification_supported",
+            "identified_unresolved_interference",
+            "corrected_endpoint_supported",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "left_readout_isolation": {
+          "enum": [
+            "isolated_signal_supported",
+            "mixed_optical_contributions",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "right_readout_isolation": {
+          "enum": [
+            "isolated_signal_supported",
+            "mixed_optical_contributions",
+            "unknown",
+            "conflicting"
+          ]
+        }
+      },
+      "required": [
+        "construct",
+        "preparation",
+        "preparation_target",
+        "protocol",
+        "endpoint",
+        "denominator",
+        "functional_bearing",
+        "attribution",
+        "sampling",
+        "systematic_coverage",
+        "left_validity",
+        "right_validity",
+        "left_readout_isolation",
+        "right_readout_isolation"
+      ],
+      "additionalProperties": false
+    },
+    "estimate_bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "enum": [
+              "left",
+              "right",
+              "epsilon_signal",
+              "epsilon_nuisance",
+              "nuisance"
+            ]
+          },
+          "owner_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "physical_owner_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dependency_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "estimator_scale": {
+            "enum": [
+              "direct_rate",
+              "fitted_asymptote",
+              "reported_mean",
+              "terminal_amount",
+              "parameter_estimate",
+              "unknown",
+              "conflicting"
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "owner_key",
+          "physical_owner_key",
+          "dependency_keys",
+          "unit",
+          "estimator_scale"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "dependence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "roles": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "left",
+                "right",
+                "epsilon_signal",
+                "epsilon_nuisance",
+                "nuisance"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "relation": {
+            "enum": [
+              "shared_primitive",
+              "repeated_representation",
+              "shared_physical_estimate",
+              "sampling_unknown",
+              "paired_observations_supported",
+              "independent_preparations_supported",
+              "complementary_endpoint"
+            ]
+          }
+        },
+        "required": [
+          "roles",
+          "relation"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "common_unbiased_quantity_model",
+          "fixed_reaction_conversion",
+          "linear_mixture_on_selected_estimate_scale",
+          "common_rate_equality_stipulated",
+          "linear_estimate_scale_mapping_stipulated",
+          "first_order_covariance_propagation",
+          "estimated_weights_treated_as_plugin",
+          "no_reference_distribution_assumed"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "annotation_credit": {
+      "type": "null"
+    },
+    "remaining_limits": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "standalone_components_not_selected_integration",
+          "same_estimate_ratio_log_difference_are_dependent",
+          "agreement_does_not_detect_shared_bias",
+          "source_positive_matched_covariance_case_still_open",
+          "general_A105_adequacy_unfinished",
+          "no_target_transfer_or_W05",
+          "corrected_quantity_not_automatically_substituted_into_common_pair",
+          "unknown_systematics_not_set_to_zero"
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "version",
+    "axis",
+    "section",
+    "assertion_key",
+    "contribution_key",
+    "cells",
+    "relationship_meanings",
+    "estimate_bindings",
+    "dependence",
+    "assumptions",
+    "annotation_credit",
+    "remaining_limits"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "cell": {
+      "type": "object",
+      "properties": {
+        "component": {
+          "enum": [
+            "native_left",
+            "native_right",
+            "converted_left",
+            "converted_right",
+            "protocol_difference",
+            "protocol_ratio",
+            "protocol_log_ratio",
+            "common_difference",
+            "common_ratio",
+            "common_log_ratio",
+            "difference_variance",
+            "difference_standard_uncertainty",
+            "standardized_difference",
+            "squared_standardized_difference",
+            "weight_left",
+            "weight_right",
+            "combined_estimate",
+            "combined_variance",
+            "combined_standard_uncertainty",
+            "spectral_multiplier",
+            "spectral_multiplier_variance",
+            "observed_interference",
+            "corrected_estimate",
+            "corrected_estimate_variance",
+            "required_interference_scenario",
+            "required_nuisance_equivalent_scenario"
+          ]
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "exact_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/exact"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "conditional_value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "conditional_exact_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/exact"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "populated",
+            "conditional_scenario",
+            "unavailable"
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "point",
+            "lt",
+            "le",
+            "gt",
+            "ge",
+            "range",
+            "unresolved"
+          ]
+        },
+        "approximate": {
+          "type": "boolean"
+        },
+        "interpretation": {
+          "enum": [
+            "native_report",
+            "supported_reexpression",
+            "descriptive_protocol_comparison",
+            "common_estimand_comparison",
+            "known_covariance_standardization",
+            "estimated_covariance_plugin_standardization",
+            "known_covariance_common_estimate",
+            "estimated_covariance_plugin_common_estimate",
+            "spectral_sensitivity",
+            "supported_estimate_scale_correction",
+            "first_order_known_input_covariance",
+            "first_order_estimated_input_covariance",
+            "stipulated_report_scale_scenario",
+            "unavailable",
+            "protocol_difference_uncertainty_known_covariance",
+            "protocol_difference_uncertainty_estimated_covariance"
+          ]
+        },
+        "formula": {
+          "enum": [
+            "native_estimate",
+            "c_left*x_left",
+            "c_right*x_right",
+            "L-R",
+            "L/R",
+            "ln(L)-ln(R)",
+            "c_left^2*Cll+c_right^2*Crr-2*c_left*c_right*Clr",
+            "sqrt(V_D)",
+            "D/sqrt(V_D)",
+            "D^2/V_D",
+            "(V_R-C_LR)/(V_L+V_R-2*C_LR)",
+            "(V_L-C_LR)/(V_L+V_R-2*C_LR)",
+            "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+            "if(V_D>0,(V_L*V_R-C_LR^2)/V_D,if(V_D==0&&D==0,V_L,unavailable))",
+            "sqrt(V_combined)",
+            "epsilon_nuisance/epsilon_signal",
+            "J_alpha*C_epsilon*J_alpha_transpose",
+            "s*alpha*f",
+            "y-s*alpha*f",
+            "J_h*C_y_epsilon_f*J_h_transpose",
+            "y-H",
+            "(y-H)/(s*alpha)"
+          ]
+        },
+        "meaning_code": {
+          "enum": [
+            "native_left",
+            "native_right",
+            "converted_left",
+            "converted_right",
+            "protocol_difference",
+            "protocol_ratio",
+            "protocol_log_ratio",
+            "common_difference",
+            "common_ratio",
+            "common_log_ratio",
+            "difference_variance",
+            "difference_standard_uncertainty",
+            "standardized_difference",
+            "squared_standardized_difference",
+            "weight_left",
+            "weight_right",
+            "combined_estimate",
+            "combined_variance",
+            "combined_standard_uncertainty",
+            "spectral_multiplier",
+            "spectral_multiplier_variance",
+            "observed_interference",
+            "corrected_estimate",
+            "corrected_estimate_variance",
+            "required_interference_scenario",
+            "required_nuisance_equivalent_scenario"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "reported",
+            "derived",
+            "synthetic",
+            "proposed"
+          ]
+        },
+        "input_origins": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "reported",
+              "derived",
+              "synthetic",
+              "proposed"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "operand_roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "left",
+              "right",
+              "epsilon_signal",
+              "epsilon_nuisance",
+              "nuisance"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "operand_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "model_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "contribution_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uncertainty": {
+          "type": "object",
+          "properties": {
+            "covariance_source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$"
+              },
+              "uniqueItems": true
+            },
+            "variance_status": {
+              "enum": [
+                "not_selected",
+                "known",
+                "estimated",
+                "unknown"
+              ]
+            },
+            "scope": {
+              "enum": [
+                "not_applicable",
+                "selected_estimator_covariance",
+                "first_order_operand_propagation"
+              ]
+            },
+            "sampling_distribution": {
+              "const": "not_assumed"
+            }
+          },
+          "required": [
+            "covariance_source_refs",
+            "variance_status",
+            "scope",
+            "sampling_distribution"
+          ],
+          "additionalProperties": false
+        },
+        "reasons": {
+          "$ref": "#/$defs/reasons"
+        }
+      },
+      "required": [
+        "component",
+        "value",
+        "exact_value",
+        "conditional_value",
+        "conditional_exact_value",
+        "status",
+        "unit",
+        "relation",
+        "approximate",
+        "interpretation",
+        "formula",
+        "meaning_code",
+        "origin",
+        "input_origins",
+        "operand_roles",
+        "operand_keys",
+        "model_keys",
+        "contribution_key",
+        "uncertainty",
+        "reasons"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "native_left"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "native_estimate"
+              },
+              "meaning_code": {
+                "const": "native_left"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "native_right"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "native_estimate"
+              },
+              "meaning_code": {
+                "const": "native_right"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "converted_left"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "c_left*x_left"
+              },
+              "meaning_code": {
+                "const": "converted_left"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "converted_right"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "c_right*x_right"
+              },
+              "meaning_code": {
+                "const": "converted_right"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "protocol_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L-R"
+              },
+              "meaning_code": {
+                "const": "protocol_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "protocol_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L/R"
+              },
+              "meaning_code": {
+                "const": "protocol_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "protocol_log_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "ln(L)-ln(R)"
+              },
+              "meaning_code": {
+                "const": "protocol_log_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "common_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L-R"
+              },
+              "meaning_code": {
+                "const": "common_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "common_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "L/R"
+              },
+              "meaning_code": {
+                "const": "common_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "common_log_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "ln(L)-ln(R)"
+              },
+              "meaning_code": {
+                "const": "common_log_ratio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "difference_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "c_left^2*Cll+c_right^2*Crr-2*c_left*c_right*Clr"
+              },
+              "meaning_code": {
+                "const": "difference_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "difference_standard_uncertainty"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "sqrt(V_D)"
+              },
+              "meaning_code": {
+                "const": "difference_standard_uncertainty"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "standardized_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "D/sqrt(V_D)"
+              },
+              "meaning_code": {
+                "const": "standardized_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "squared_standardized_difference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "D^2/V_D"
+              },
+              "meaning_code": {
+                "const": "squared_standardized_difference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "weight_left"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "(V_R-C_LR)/(V_L+V_R-2*C_LR)"
+              },
+              "meaning_code": {
+                "const": "weight_left"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "weight_right"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "(V_L-C_LR)/(V_L+V_R-2*C_LR)"
+              },
+              "meaning_code": {
+                "const": "weight_right"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "combined_estimate"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))"
+              },
+              "meaning_code": {
+                "const": "combined_estimate"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "combined_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "if(V_D>0,(V_L*V_R-C_LR^2)/V_D,if(V_D==0&&D==0,V_L,unavailable))"
+              },
+              "meaning_code": {
+                "const": "combined_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "combined_standard_uncertainty"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "sqrt(V_combined)"
+              },
+              "meaning_code": {
+                "const": "combined_standard_uncertainty"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "spectral_multiplier"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "epsilon_nuisance/epsilon_signal"
+              },
+              "meaning_code": {
+                "const": "spectral_multiplier"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "spectral_multiplier_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "J_alpha*C_epsilon*J_alpha_transpose"
+              },
+              "meaning_code": {
+                "const": "spectral_multiplier_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "observed_interference"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "s*alpha*f"
+              },
+              "meaning_code": {
+                "const": "observed_interference"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "corrected_estimate"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "y-s*alpha*f"
+              },
+              "meaning_code": {
+                "const": "corrected_estimate"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "corrected_estimate_variance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "J_h*C_y_epsilon_f*J_h_transpose"
+              },
+              "meaning_code": {
+                "const": "corrected_estimate_variance"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "required_interference_scenario"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "y-H"
+              },
+              "meaning_code": {
+                "const": "required_interference_scenario"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "required_nuisance_equivalent_scenario"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "formula": {
+                "const": "(y-H)/(s*alpha)"
+              },
+              "meaning_code": {
+                "const": "required_nuisance_equivalent_scenario"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "populated"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "conditional_value": {
+                "type": "null"
+              },
+              "conditional_exact_value": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "conditional_scenario"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "exact_value": {
+                "type": "null"
+              },
+              "conditional_value": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unavailable"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "exact_value": {
+                "type": "null"
+              },
+              "conditional_value": {
+                "type": "null"
+              },
+              "conditional_exact_value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "domain_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "zero_denominator",
+          "positive_values_required_for_log",
+          "nonzero_spectral_signal_required",
+          "positive_discrepancy_variance_required",
+          "nonunique_gls_weights",
+          "inconsistent_deterministic_constraint",
+          "covariance_invalid_shape",
+          "covariance_not_symmetric",
+          "covariance_not_positive_semidefinite",
+          "covariance_owner_unit_dependency_mismatch",
+          "covariance_overlap_conflict",
+          "physical_owner_value_conflict",
+          "covariance_json_invalid",
+          "covariance_basis_status_invalid",
+          "covariance_nonfinite_numeric",
+          "covariance_estimate_owner_unavailable",
+          "zero_plugin_difference_variance",
+          "combined_estimate_not_identified_by_plugin_covariance"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "exact": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "type": "string",
+          "pattern": "^-?[0-9]+$"
+        },
+        "denominator": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "additionalProperties": false
+    },
+    "implementation_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "unsupported_unit",
+          "bounded_arithmetic_unimplemented",
+          "range_arithmetic_unimplemented",
+          "unresolved_native_qualification",
+          "opposite_direction_conversion_unimplemented",
+          "uncertain_conversion_unimplemented",
+          "numerical_model_range"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "reasons": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source_reasons"
+        },
+        "relationship": {
+          "$ref": "#/$defs/relationship_reasons"
+        },
+        "implementation": {
+          "$ref": "#/$defs/implementation_reasons"
+        },
+        "domain": {
+          "$ref": "#/$defs/domain_reasons"
+        }
+      },
+      "required": [
+        "source",
+        "relationship",
+        "implementation",
+        "domain"
+      ],
+      "additionalProperties": false
+    },
+    "relationship_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "construct_not_common",
+          "preparation_target_unknown",
+          "preparation_target_conflicting",
+          "protocols_not_matched",
+          "endpoint_conversion_unknown",
+          "endpoint_conversion_conflicting",
+          "endpoint_incompatible",
+          "denominator_not_common",
+          "functional_resolution_not_quantitative",
+          "attribution_unresolved",
+          "validity_unresolved",
+          "duplicate_representation_not_replication",
+          "shared_estimate_not_replication",
+          "common_model_not_selected",
+          "common_model_unknown",
+          "common_model_conflicting",
+          "optical_model_unknown",
+          "optical_model_conflicting",
+          "estimate_scale_model_unknown",
+          "estimate_scale_model_conflicting",
+          "coefficient_applicability_unknown",
+          "coefficient_applicability_conflicting",
+          "nuisance_linkage_unknown",
+          "nuisance_linkage_conflicting",
+          "scenario_not_selected",
+          "scenario_stipulations_unresolved",
+          "variance_meaning_mismatch",
+          "common_systematic_error_not_assessed"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "source_reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "quantity_not_selected",
+          "source_number_unreported",
+          "source_unit_unreported",
+          "native_nondetection_not_point",
+          "native_negligible_not_point",
+          "source_semantics_unknown",
+          "source_semantics_conflicting",
+          "reported_uncertainty_not_joint_covariance",
+          "nuisance_quantity_unmeasured",
+          "covariance_not_supplied",
+          "joint_covariance_incomplete",
+          "covariance_status_unknown"
+        ]
+      },
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "/home/chia/repos/gene_annotation_episode/tests/test_hmmer_model_data.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_hmmer_model_calculations.py"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/check002",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "source_sha256": {
+    "gene_annotation_episode/hmmer_model_data.py": "10957b8b31595f7084882b6223ef8d002fcb33e58443aeedfa61ec61c2d71c73",
+    "gene_annotation_episode/hmmer_model_calculations.py": "d30de7592245e85ef900fb3e7e6cf3fcfc6e1c9d87f1850498155b2043cbaf8c",
+    "tests/test_hmmer_model_data.py": "cb8fb4752caf55dcfa8c97db272567cdd8da9ce66602389d0cedf5cea9998077",
+    "tests/test_hmmer_model_calculations.py": "c4ac7577b98c6a89b2ed41a9aeb94602f8753f194448a723a20039c161070d12"
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T07:57:42.930793+00:00",
+        "monotonic_ns": 815024628119327,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 1.212554465,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 20480
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/check002/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_data_2026-10-26_262/check002/stderr.log"
+}

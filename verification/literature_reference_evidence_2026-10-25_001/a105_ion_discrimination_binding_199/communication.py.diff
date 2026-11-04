@@ -1,0 +1,37 @@
+--- 198/communication.py
++++ 199/communication.py
+@@ -170,6 +170,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_ion_discrimination_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_ion_discrimination_storage import ion_discrimination_cells_schema
++            expected = ion_discrimination_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: ion fact schema must match its registered source", code="invalid_schema")
+             return
+         if source == "literature_channel_cells":
+             if depth != 1:
+@@ -421,7 +431,7 @@
+     # uses a placeholder. Original contracts and returned rows remain exact.
+     parent_schema = schema
+     native = {name: node for name, node in schema["properties"].items()
+-        if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
++        if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+         or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))}
+     if native:
+         parent_schema = {**schema, "properties": dict(schema["properties"])}
+@@ -495,7 +505,7 @@
+     def visit(value, node, path, resource=None):
+         if value is None or not isinstance(node, dict):
+             return
+-        if (node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
++        if (node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+                 or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))):
+             resource = node
+         if resource is not None and "$ref" in node:

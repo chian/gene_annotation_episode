@@ -1,0 +1,102 @@
+{
+  "written_utc": "2026-10-26T09:59:00.158247+00:00",
+  "scope": "Selected public action contracts and safe worker launch metadata only; no private model requests/responses.",
+  "actions": [
+    {
+      "run_id": "run_5b6d267e04d24cefbf5221450ae6d05a",
+      "episode_id": "episode_f734e441dca65d91d2ceb8d5abbb05b7c56a2456a66c69e6e04a887039e7212e",
+      "decision_index": 2,
+      "kind": "episode_child",
+      "tool": null,
+      "role": "literature",
+      "requested_fields": {
+        "interpretation_basis_refs": {
+          "x-source": "interpretation_basis_refs",
+          "type": "array",
+          "cell_field_count": 0,
+          "cell_field_names": []
+        },
+        "source_observation_refs": {
+          "x-source": null,
+          "type": "array",
+          "cell_field_count": 0,
+          "cell_field_names": []
+        },
+        "unresolved_question_codes": {
+          "x-source": null,
+          "type": "array",
+          "cell_field_count": 0,
+          "cell_field_names": []
+        }
+      },
+      "requested_components": {},
+      "status": "pending"
+    },
+    {
+      "run_id": "run_5b6d267e04d24cefbf5221450ae6d05a",
+      "episode_id": "episode_f734e441dca65d91d2ceb8d5abbb05b7c56a2456a66c69e6e04a887039e7212e",
+      "decision_index": 3,
+      "kind": "wait",
+      "tool": null
+    },
+    {
+      "run_id": "run_5b6d267e04d24cefbf5221450ae6d05a",
+      "episode_id": "episode_edb450f6543ea60596da8175400f06ad0fa8a5e98fd13e320eef3e745ba6bc05",
+      "decision_index": 0,
+      "kind": "tool",
+      "tool": "source.read",
+      "status": "completed"
+    },
+    {
+      "run_id": "run_5b6d267e04d24cefbf5221450ae6d05a",
+      "episode_id": "episode_edb450f6543ea60596da8175400f06ad0fa8a5e98fd13e320eef3e745ba6bc05",
+      "decision_index": 1,
+      "kind": "tool",
+      "tool": "source.read",
+      "status": "completed"
+    },
+    {
+      "run_id": "run_5b6d267e04d24cefbf5221450ae6d05a",
+      "episode_id": "episode_edb450f6543ea60596da8175400f06ad0fa8a5e98fd13e320eef3e745ba6bc05",
+      "decision_index": 2,
+      "kind": "tool",
+      "tool": "source.read",
+      "status": "completed"
+    },
+    {
+      "run_id": "run_5b6d267e04d24cefbf5221450ae6d05a",
+      "episode_id": "episode_edb450f6543ea60596da8175400f06ad0fa8a5e98fd13e320eef3e745ba6bc05",
+      "decision_index": 3,
+      "kind": "tool",
+      "tool": "source.locate",
+      "status": "completed"
+    },
+    {
+      "run_id": "run_5b6d267e04d24cefbf5221450ae6d05a",
+      "episode_id": "episode_edb450f6543ea60596da8175400f06ad0fa8a5e98fd13e320eef3e745ba6bc05",
+      "decision_index": 4,
+      "kind": "tool",
+      "tool": "source.read",
+      "status": "completed"
+    }
+  ],
+  "workers": [
+    {
+      "pid": 1477385,
+      "safe_argv_prefix": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-P",
+        "-m",
+        "method_loop.durable_worker",
+        "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_023/live_001/run/episode-execution"
+      ],
+      "safe_path_flag": true
+    }
+  ],
+  "numerical_admission_or_scientific_accuracy_proved": false,
+  "current_counts": {
+    "runtime_actions": 7,
+    "runtime_observations": 5,
+    "runtime_report_attempts": 0
+  }
+}

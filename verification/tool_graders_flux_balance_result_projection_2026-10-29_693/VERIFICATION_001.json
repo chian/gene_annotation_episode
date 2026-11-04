@@ -1,0 +1,270 @@
+{
+  "version": "fba_pure_projection_verification_693_v1",
+  "goal_unchanged": true,
+  "scoped_status": "pure projection/fact declarations verified; episode integration unfinished",
+  "attempts": [
+    {
+      "attempt": "check156_projection693",
+      "counts": {
+        "passed": 68,
+        "failed": 0,
+        "skipped": 0
+      },
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/handle.json",
+        "unit": "gene-local-job-d103e9c311c64eceb3f8544c70b5736d.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T13:37:38.303698+00:00",
+              "monotonic_ns": 1094620001024319,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 8.424212789,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 755564544
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "current_owned_files_match_snapshot": {
+        "gene_annotation_episode/flux_balance_result_contracts.py": true,
+        "gene_annotation_episode/flux_balance_result_views.py": true,
+        "gene_annotation_episode/flux_balance_return_views.py": true
+      },
+      "evidence_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/receipt.json",
+          "sha256": "f1b217403f3a75f0a39c1c3f45da59f4ed6b0423bcd9fbcb3f312c672f8cd4e3",
+          "size_bytes": 1629,
+          "lines": 49
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156,
+          "lines": 7
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/case_reports.jsonl",
+          "sha256": "c14f28849de5cfcdf89c821d8d6822a74945df558d6e5eb271e1779676a1deda",
+          "size_bytes": 13879,
+          "lines": 68
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/selected_tests.json",
+          "sha256": "9f388ecb65ab6e5a70bd667b30e4b64318b72dbdea46a150abecdf3ba7cdccb7",
+          "size_bytes": 51,
+          "lines": 3
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/selected_request.json",
+          "sha256": "d73637658c50dfe65b4c1d415e1b694e301bda09f15ef07e57f0ba4f835d1397",
+          "size_bytes": 3409,
+          "lines": 49
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/source_pins_before.json",
+          "sha256": "3adec72bdbee6f5e87c1e269db760dcc11527b2a5dfd0ed5aa36b9e4040f8bf2",
+          "size_bytes": 2358297,
+          "lines": 30407
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/dependency_pins_before.json",
+          "sha256": "9a89418c88728e6ee3b0d19d81dabd893a88f36e7ae22910732f5258bb22a44c",
+          "size_bytes": 3282451,
+          "lines": 53772
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/stdlib_pins_before.json",
+          "sha256": "2e22218d342fbb7fca6cdef7e5e8b79c26804c6153ccff91ec27562327bbcc0e",
+          "size_bytes": 195232,
+          "lines": 3222
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156_projection693/binary_pins_before.json",
+          "sha256": "f649ddc18f246fe224c4f3c08cf92cb14ed5fc5d62f8e925bc0e7063ad305fa6",
+          "size_bytes": 556,
+          "lines": 12
+        }
+      ]
+    },
+    {
+      "attempt": "check156b_projection693_chain",
+      "counts": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/handle.json",
+        "unit": "gene-local-job-8c27d81cf717414d82e042cd27eaa8ec.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T13:39:16.531245+00:00",
+              "monotonic_ns": 1094718228571579,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 10.81395408,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 788533248
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "current_owned_files_match_snapshot": {
+        "gene_annotation_episode/flux_balance_result_contracts.py": true,
+        "gene_annotation_episode/flux_balance_result_views.py": true,
+        "gene_annotation_episode/flux_balance_return_views.py": true,
+        "tests/test_flux_balance_result_projection_693.py": true
+      },
+      "evidence_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/receipt.json",
+          "sha256": "88248cccec786cb3b61e4e293f58a211969524e7ef115aea68ea1039618aaee7",
+          "size_bytes": 1636,
+          "lines": 49
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156,
+          "lines": 7
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/case_reports.jsonl",
+          "sha256": "9985d360c99d2ac75aeacd65fbc53dc1bbd9bbbc12739f03167bb314f123208e",
+          "size_bytes": 658,
+          "lines": 3
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/selected_tests.json",
+          "sha256": "8648a35c35071ab9ca331b90e06296b715a9615f7ac0ba45c31c1b1fe68ff403",
+          "size_bytes": 236,
+          "lines": 4
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/selected_request.json",
+          "sha256": "38df68843a0f250a76584c16dea086fb8e40a083c3a9fab6e7efd12b0b852a08",
+          "size_bytes": 3253,
+          "lines": 48
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/source_pins_before.json",
+          "sha256": "f0b988a830acba33871b7c9dcfe430f94186b46acd2a4efc4e84fb6a99508dec",
+          "size_bytes": 2415955,
+          "lines": 30542
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/dependency_pins_before.json",
+          "sha256": "fc34b74443c4c0525da5d35a25bf16ba1e3fe31f5c10616fea87c142d8c9afbe",
+          "size_bytes": 3357729,
+          "lines": 53772
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/stdlib_pins_before.json",
+          "sha256": "967aaffadce5dcc131edd72e6378b0ba2342a5ea7f65663a47d19ab2c874dcc7",
+          "size_bytes": 199740,
+          "lines": 3222
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check156b_projection693_chain/binary_pins_before.json",
+          "sha256": "77ceaa5aa159cf8719b7ccd134127060458dde5cd19313250bc055fea8205db0",
+          "size_bytes": 570,
+          "lines": 12
+        }
+      ]
+    }
+  ],
+  "unique_passed_cases": 71,
+  "new_native_solves": 0,
+  "new_acquisitions": 0,
+  "scientific_calculator_production_edits": 0,
+  "prompt_or_host_edits": 0,
+  "remaining": [
+    "real result-worker and retained-publication binding",
+    "host-authenticated saved-sheet admission and scientific-parent forwarding",
+    "closed episode replay",
+    "reviewed TASK/STEERING template",
+    "live configured episode verification"
+  ]
+}

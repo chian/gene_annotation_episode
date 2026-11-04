@@ -1,0 +1,30 @@
+{
+  "run": "pinned_checks_001",
+  "terminal_exit": 1,
+  "junit": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "4",
+      "skipped": "0",
+      "tests": "143",
+      "time": "84.497",
+      "timestamp": "2026-10-26T06:33:10.375716-05:00",
+      "hostname": "chia-Z590-UD"
+    }
+  ],
+  "failed_tests": [
+    "test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart[False]",
+    "test_actual_provider_text_preserves_native_bindings_and_approximation_across_delta_and_restart[True]",
+    "test_provider_repeats_actual_capabilities_in_task_across_delta_lookup_and_reconstruction[oxygen_measurements]",
+    "test_provider_repeats_actual_capabilities_in_task_across_delta_lookup_and_reconstruction[custom_reference_components]"
+  ],
+  "cause": "Coordinator wrapper replaced _SessionConnection.__init__, blocking LiteratureWire scripted fixtures before their real provider presentation path could run. Production and captured pin were not changed.",
+  "correction": "Keep pure session construction/complete path; forbid actual ModelConnection creation and external _SessionConnection startup/RPC/send/read. LiteratureWire overrides RPC with scripted responses.",
+  "initial_wrapper_hash_not_captured": true,
+  "rerun": "pinned_checks_002",
+  "xml_sha256": "eac130c8eac137735ec71a9c8916949b60155e3399f09c2a9182b4156e1aac9c",
+  "current_wrapper_sha256": "4bf267c950c0cc6fc3526cf2e9a30bbc4775e6c89b864b2903438f438b92e134",
+  "failed_run_preserved": true,
+  "configured_model_execution_not_proved": true
+}

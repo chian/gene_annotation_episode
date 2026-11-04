@@ -1,0 +1,15 @@
+{
+  "purpose": "stdlib-only copy of existing frozen check005 dependencies, which already include pip",
+  "base": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check005/dependencies",
+  "destination": "verification/tool_graders_fluorescence_runtime_dependencies_2026-10-28_591/seed_dependencies",
+  "pip_metadata": [
+    "Name: pip",
+    "Version: 24.0"
+  ],
+  "new_installation_on_host": false,
+  "initial_staging_error": "Unnecessary assertion that pip was absent failed after base copy. Existing pip retained unchanged.",
+  "packages_to_install_in_bounded_job": [
+    "FlowIO==1.4.0",
+    "FlowUtils==1.2.2"
+  ]
+}

@@ -1,0 +1,581 @@
+{
+  "sheet": {
+    "schema": "blast_pairwise_result_sheet_v1",
+    "search": {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "program_context": {
+        "execution_program": "blastn",
+        "reported_program": null,
+        "scientific_mode": "pairwise",
+        "query_kind": "sequence",
+        "reference_kind": "sequence",
+        "native_version": null,
+        "geometry_program": "blastn"
+      },
+      "stage": null,
+      "iteration": null,
+      "normalized": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "tabular",
+        "query": {
+          "id": null,
+          "title": null,
+          "length": null
+        },
+        "search": {
+          "program": "blastn",
+          "version": null,
+          "database": null,
+          "parameters": {},
+          "statistics": {},
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+              "-task",
+              "blastn",
+              "-dust",
+              "no",
+              "-strand",
+              "plus",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/subject_sequence.fa",
+              "-outfmt",
+              "6 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+              "-out",
+              "report.tsv"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "blastn",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+                "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/query_sequence.fa",
+                  "sha256": "2b487608210420fcdfe1024ee2206f781aeabf2e4a21fe85777a22827f62783e",
+                  "size_bytes": 83,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/subject_sequence.fa",
+                  "sha256": "25b7d32ccdae717a73aab47133ae8c5268bd277b8af46cc748bd10eeb6567264",
+                  "size_bytes": 85,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_blastn_no_hits",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_blastn_no_hits",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-task",
+                "blastn",
+                "-dust",
+                "no",
+                "-strand",
+                "plus",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "tabular6",
+                  "relative_path": "report.tsv",
+                  "fields": [
+                    "qseqid",
+                    "sseqid",
+                    "qlen",
+                    "slen",
+                    "qstart",
+                    "qend",
+                    "sstart",
+                    "send",
+                    "qframe",
+                    "sframe",
+                    "length",
+                    "nident",
+                    "gaps",
+                    "mismatch",
+                    "score",
+                    "bitscore",
+                    "evalue",
+                    "qseq",
+                    "sseq",
+                    "btop"
+                  ],
+                  "delimiter": "\t"
+                }
+              ],
+              "metadata": {
+                "engineering_example": "blastn_no_hits_tabular6",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": false,
+          "reported_hit_count": null
+        },
+        "hits": [],
+        "native": {
+          "text": "",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [],
+          "declared_alignment_row_count": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "issues": [
+          {
+            "code": "blast_query_binding_unavailable",
+            "pointer": "/sections/0",
+            "field": null,
+            "details": {
+              "conflicts": [],
+              "matching_operands": 0
+            }
+          },
+          {
+            "code": "blast_tabular_empty_without_zero_hit_report",
+            "pointer": "/sections/0",
+            "field": null,
+            "details": {}
+          }
+        ]
+      },
+      "row_map": [],
+      "operand_binding": null,
+      "reporting": {
+        "native_hit_array_present": false,
+        "native_hit_count": null,
+        "requested_hit_limit": null,
+        "requested_hsp_limit": null,
+        "native_returncode": 0,
+        "producer_complete": true
+      },
+      "native": {
+        "report": {
+          "text": ""
+        },
+        "search": {
+          "text": "",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [],
+          "declared_alignment_row_count": null
+        },
+        "line_numbers": []
+      },
+      "issues": [
+        {
+          "code": "blast_query_binding_unavailable",
+          "pointer": "/sections/0",
+          "field": null,
+          "details": {
+            "conflicts": [],
+            "matching_operands": 0
+          }
+        },
+        {
+          "code": "blast_tabular_empty_without_zero_hit_report",
+          "pointer": "/sections/0",
+          "field": null,
+          "details": {}
+        }
+      ]
+    },
+    "operand_bindings": {
+      "query": {
+        "subject_ref": "query_subject",
+        "length": 60,
+        "molecule": "dna",
+        "artifact_key": "query_sequence",
+        "native_id": "query_blastn_no_hits",
+        "selected_interval": null
+      },
+      "reference": {
+        "subject_ref": "paired_reference",
+        "length": 60,
+        "molecule": "dna",
+        "artifact_key": "subject_sequence",
+        "native_id": "subject_blastn_no_hits",
+        "selected_interval": null
+      }
+    }
+  },
+  "calculation": {
+    "schema": "blast_pairwise_result_components_v1",
+    "components": {
+      "schema": "blast_pairwise_sheet_v1",
+      "status": "alignment_report_unavailable",
+      "input": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "tabular",
+        "query": {
+          "id": null,
+          "title": null,
+          "length": 60
+        },
+        "search": {
+          "program": "blastn",
+          "version": null,
+          "database": null,
+          "parameters": {},
+          "statistics": {},
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+              "-task",
+              "blastn",
+              "-dust",
+              "no",
+              "-strand",
+              "plus",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/subject_sequence.fa",
+              "-outfmt",
+              "6 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+              "-out",
+              "report.tsv"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "blastn",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+                "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/query_sequence.fa",
+                  "sha256": "2b487608210420fcdfe1024ee2206f781aeabf2e4a21fe85777a22827f62783e",
+                  "size_bytes": 83,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_tabular6/subject_sequence.fa",
+                  "sha256": "25b7d32ccdae717a73aab47133ae8c5268bd277b8af46cc748bd10eeb6567264",
+                  "size_bytes": 85,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_blastn_no_hits",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_blastn_no_hits",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-task",
+                "blastn",
+                "-dust",
+                "no",
+                "-strand",
+                "plus",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "tabular6",
+                  "relative_path": "report.tsv",
+                  "fields": [
+                    "qseqid",
+                    "sseqid",
+                    "qlen",
+                    "slen",
+                    "qstart",
+                    "qend",
+                    "sstart",
+                    "send",
+                    "qframe",
+                    "sframe",
+                    "length",
+                    "nident",
+                    "gaps",
+                    "mismatch",
+                    "score",
+                    "bitscore",
+                    "evalue",
+                    "qseq",
+                    "sseq",
+                    "btop"
+                  ],
+                  "delimiter": "\t"
+                }
+              ],
+              "metadata": {
+                "engineering_example": "blastn_no_hits_tabular6",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": false,
+          "reported_hit_count": null
+        },
+        "hits": [],
+        "native": {
+          "text": "",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [],
+          "declared_alignment_row_count": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "issues": [
+          {
+            "code": "blast_query_binding_unavailable",
+            "pointer": "/sections/0",
+            "field": null,
+            "details": {
+              "conflicts": [],
+              "matching_operands": 0
+            }
+          },
+          {
+            "code": "blast_tabular_empty_without_zero_hit_report",
+            "pointer": "/sections/0",
+            "field": null,
+            "details": {}
+          }
+        ]
+      },
+      "query": {
+        "id": null,
+        "title": null,
+        "length": 60
+      },
+      "reference": null,
+      "hsps": [],
+      "union": {
+        "pairs": [],
+        "counts": {
+          "distinct_residue_pairs": 0,
+          "paired_query_positions": 0,
+          "paired_reference_positions": 0,
+          "identical_residue_pairs": null,
+          "hsps_with_geometry": 0,
+          "hsps_without_geometry": 0
+        },
+        "denominators": {
+          "query_length": 60,
+          "reference_length": null,
+          "distinct_residue_pairs": 0
+        },
+        "fractions": {
+          "query_paired_coverage": null,
+          "reference_paired_coverage": null,
+          "paired_identity": null
+        },
+        "complete_for_reported_hsps": false,
+        "identical_mapping_hsp_groups": [],
+        "conflicts": [],
+        "meaning": "union_of_observed_correspondences_not_a_selected_global_alignment"
+      },
+      "issues": [
+        {
+          "code": "blast_query_binding_unavailable",
+          "pointer": "/sections/0",
+          "field": null,
+          "details": {
+            "conflicts": [],
+            "matching_operands": 0
+          }
+        },
+        {
+          "code": "blast_tabular_empty_without_zero_hit_report",
+          "pointer": "/sections/0",
+          "field": null,
+          "details": {}
+        }
+      ],
+      "calculations": {
+        "paired_identity": "identical_paired_columns / paired_columns",
+        "alignment_identity": "identical_paired_columns / all_alignment_columns",
+        "query_paired_coverage": "union_of_paired_query_positions / supplied_query_length",
+        "reference_paired_coverage": "union_of_paired_reference_positions / actual_full_reference_length",
+        "native_scores": "preserved_per_HSP_without_summing_alternative_or_overlapping_HSPs"
+      },
+      "coordinate_context": {
+        "query": {
+          "reported_length": null,
+          "full_length": 60,
+          "selected_interval": null,
+          "coordinate_unit": "nt"
+        },
+        "reference": {
+          "reported_length": null,
+          "full_length": 60,
+          "selected_interval": null,
+          "coordinate_unit": "nt"
+        }
+      },
+      "selected_operand_coverage": {
+        "query": {
+          "numerator": null,
+          "denominator": 60,
+          "value": null,
+          "unit": "fraction"
+        },
+        "reference": {
+          "numerator": null,
+          "denominator": 60,
+          "value": null,
+          "unit": "fraction"
+        }
+      }
+    }
+  }
+}

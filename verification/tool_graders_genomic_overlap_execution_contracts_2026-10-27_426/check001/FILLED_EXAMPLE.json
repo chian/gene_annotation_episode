@@ -1,0 +1,1479 @@
+{
+  "evidence_label": "hand_worked_synthetic_supplied_data",
+  "native_execution_claim": false,
+  "sheet": {
+    "version": "genomic_region_overlap_sheet_v1",
+    "request": {
+      "version": "genomic_overlap_request_v1",
+      "operation": "analyze_genomic_region_overlap",
+      "mode": "unstranded_outer_span",
+      "region_sets": [
+        {
+          "set_key": "A",
+          "display_label": "supplied A intervals",
+          "source": {
+            "kind": "bed_artifact",
+            "source_ref": "synthetic:source:A",
+            "file": {
+              "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "size_bytes": 46,
+              "format": "bed_outer_span_v1"
+            }
+          },
+          "reference": null,
+          "format": "bed_outer_span_v1"
+        },
+        {
+          "set_key": "B",
+          "display_label": "supplied B intervals",
+          "source": {
+            "kind": "bed_artifact",
+            "source_ref": "synthetic:source:B",
+            "file": {
+              "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "size_bytes": 35,
+              "format": "bed_outer_span_v1"
+            }
+          },
+          "reference": null,
+          "format": "bed_outer_span_v1"
+        },
+        {
+          "set_key": "C",
+          "display_label": "supplied C intervals",
+          "source": {
+            "kind": "bed_artifact",
+            "source_ref": "synthetic:source:C",
+            "file": {
+              "artifact_ref": "artifact_b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+              "sha256": "b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+              "size_bytes": 24,
+              "format": "bed_outer_span_v1"
+            }
+          },
+          "reference": null,
+          "format": "bed_outer_span_v1"
+        }
+      ],
+      "comparisons": [
+        {
+          "comparison_key": "comparison_0",
+          "ordinal": 0,
+          "a_set_key": "A",
+          "b_set_key": "B"
+        },
+        {
+          "comparison_key": "comparison_1",
+          "ordinal": 1,
+          "a_set_key": "A",
+          "b_set_key": "C"
+        },
+        {
+          "comparison_key": "comparison_2",
+          "ordinal": 2,
+          "a_set_key": "B",
+          "b_set_key": "C"
+        }
+      ],
+      "output_prefix": "overlap_analysis"
+    },
+    "sets": [
+      {
+        "version": "genomic_overlap_parsed_set_v1",
+        "set_key": "A",
+        "source_file": {
+          "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+          "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+          "size_bytes": 46,
+          "format": "bed_outer_span_v1"
+        },
+        "parsed_byte_count": 46,
+        "result_extent": "complete",
+        "input_data_row_count": 2,
+        "regions": [
+          {
+            "occurrence_key": "r0",
+            "data_ordinal": 0,
+            "native_token": "s0_r0",
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 22
+            },
+            "original_fields": [
+              "chr1",
+              "0",
+              "10",
+              "gene_window"
+            ],
+            "chromosome": "chr1",
+            "start": 0,
+            "end": 10,
+            "name": "gene_window",
+            "raw_strand": null
+          },
+          {
+            "occurrence_key": "r1",
+            "data_ordinal": 1,
+            "native_token": "s0_r1",
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 2,
+              "byte_start": 22,
+              "byte_end": 46
+            },
+            "original_fields": [
+              "chr1",
+              "5",
+              "15",
+              "second_window"
+            ],
+            "chromosome": "chr1",
+            "start": 5,
+            "end": 15,
+            "name": "second_window",
+            "raw_strand": null
+          }
+        ],
+        "ignored_records": [],
+        "invalid_records": [],
+        "canonical_order": [
+          "r0",
+          "r1"
+        ],
+        "coordinate_groups": [
+          {
+            "group_key": "A:coordinate:0",
+            "chromosome": "chr1",
+            "start": 0,
+            "end": 10,
+            "occurrence_keys": [
+              "r0"
+            ]
+          },
+          {
+            "group_key": "A:coordinate:1",
+            "chromosome": "chr1",
+            "start": 5,
+            "end": 15,
+            "occurrence_keys": [
+              "r1"
+            ]
+          }
+        ],
+        "full_record_groups": [
+          {
+            "group_key": "A:full_record:0",
+            "original_fields": [
+              "chr1",
+              "0",
+              "10",
+              "gene_window"
+            ],
+            "occurrence_keys": [
+              "r0"
+            ]
+          },
+          {
+            "group_key": "A:full_record:1",
+            "original_fields": [
+              "chr1",
+              "5",
+              "15",
+              "second_window"
+            ],
+            "occurrence_keys": [
+              "r1"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      {
+        "version": "genomic_overlap_parsed_set_v1",
+        "set_key": "B",
+        "source_file": {
+          "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+          "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+          "size_bytes": 35,
+          "format": "bed_outer_span_v1"
+        },
+        "parsed_byte_count": 35,
+        "result_extent": "complete",
+        "input_data_row_count": 1,
+        "regions": [
+          {
+            "occurrence_key": "r0",
+            "data_ordinal": 0,
+            "native_token": "s1_r0",
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 35
+            },
+            "original_fields": [
+              "chr1",
+              "7",
+              "12",
+              "regulatory_interval",
+              "42",
+              "+"
+            ],
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12,
+            "name": "regulatory_interval",
+            "raw_strand": "+"
+          }
+        ],
+        "ignored_records": [],
+        "invalid_records": [],
+        "canonical_order": [
+          "r0"
+        ],
+        "coordinate_groups": [
+          {
+            "group_key": "B:coordinate:0",
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12,
+            "occurrence_keys": [
+              "r0"
+            ]
+          }
+        ],
+        "full_record_groups": [
+          {
+            "group_key": "B:full_record:0",
+            "original_fields": [
+              "chr1",
+              "7",
+              "12",
+              "regulatory_interval",
+              "42",
+              "+"
+            ],
+            "occurrence_keys": [
+              "r0"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      {
+        "version": "genomic_overlap_parsed_set_v1",
+        "set_key": "C",
+        "source_file": {
+          "artifact_ref": "artifact_b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+          "sha256": "b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+          "size_bytes": 24,
+          "format": "bed_outer_span_v1"
+        },
+        "parsed_byte_count": 24,
+        "result_extent": "complete",
+        "input_data_row_count": 1,
+        "regions": [
+          {
+            "occurrence_key": "r0",
+            "data_ordinal": 0,
+            "native_token": "s2_r0",
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 24
+            },
+            "original_fields": [
+              "chr1",
+              "10",
+              "20",
+              "third_window"
+            ],
+            "chromosome": "chr1",
+            "start": 10,
+            "end": 20,
+            "name": "third_window",
+            "raw_strand": null
+          }
+        ],
+        "ignored_records": [],
+        "invalid_records": [],
+        "canonical_order": [
+          "r0"
+        ],
+        "coordinate_groups": [
+          {
+            "group_key": "C:coordinate:0",
+            "chromosome": "chr1",
+            "start": 10,
+            "end": 20,
+            "occurrence_keys": [
+              "r0"
+            ]
+          }
+        ],
+        "full_record_groups": [
+          {
+            "group_key": "C:full_record:0",
+            "original_fields": [
+              "chr1",
+              "10",
+              "20",
+              "third_window"
+            ],
+            "occurrence_keys": [
+              "r0"
+            ]
+          }
+        ],
+        "issues": []
+      }
+    ],
+    "comparisons": [
+      {
+        "version": "genomic_overlap_parsed_pairs_v1",
+        "format": "bedtools_intersect_wo_bed4_v1",
+        "comparison_key": "comparison_0",
+        "receipt": {
+          "version": "genomic_overlap_native_pair_receipt_v1",
+          "comparison_key": "comparison_0",
+          "identity": null,
+          "derivation": "supplied_native_output",
+          "outcome": "unknown",
+          "software": null,
+          "realized_argv": [],
+          "environment": {},
+          "returncode": null,
+          "started_at": null,
+          "finished_at": null,
+          "writer_closed": null,
+          "capture_extent": "complete",
+          "native_result_extent": "complete",
+          "completeness_basis": "supplied_full_output_declaration",
+          "completeness_source_refs": [
+            "fixture:425"
+          ],
+          "issues": [],
+          "stdout": {
+            "artifact_ref": "fixture:comparison_0",
+            "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+            "size_bytes": 68,
+            "format": "bedtools_intersect_wo_bed4_v1"
+          },
+          "stderr": null,
+          "a": {
+            "set_key": "A",
+            "original_file": {
+              "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "size_bytes": 46,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": null
+          },
+          "b": {
+            "set_key": "B",
+            "original_file": {
+              "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "size_bytes": 35,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": null
+          }
+        },
+        "result_extent": "complete",
+        "parsed_byte_count": 68,
+        "valid_pairs": [
+          {
+            "pair_key": "p0:a0:b0",
+            "comparison_key": "comparison_0",
+            "native_row_ordinal": 0,
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 34
+            },
+            "a": {
+              "set_key": "A",
+              "occurrence_key": "r0",
+              "native_token": "s0_r0",
+              "chromosome": "chr1",
+              "start": 0,
+              "end": 10
+            },
+            "b": {
+              "set_key": "B",
+              "occurrence_key": "r0",
+              "native_token": "s1_r0",
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 12
+            },
+            "native_overlap_bp": 3
+          },
+          {
+            "pair_key": "p0:a1:b0",
+            "comparison_key": "comparison_0",
+            "native_row_ordinal": 1,
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 2,
+              "byte_start": 34,
+              "byte_end": 68
+            },
+            "a": {
+              "set_key": "A",
+              "occurrence_key": "r1",
+              "native_token": "s0_r1",
+              "chromosome": "chr1",
+              "start": 5,
+              "end": 15
+            },
+            "b": {
+              "set_key": "B",
+              "occurrence_key": "r0",
+              "native_token": "s1_r0",
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 12
+            },
+            "native_overlap_bp": 5
+          }
+        ],
+        "rejected_rows": [],
+        "issues": []
+      },
+      {
+        "version": "genomic_overlap_parsed_pairs_v1",
+        "format": "bedtools_intersect_wo_bed4_v1",
+        "comparison_key": "comparison_1",
+        "receipt": {
+          "version": "genomic_overlap_native_pair_receipt_v1",
+          "comparison_key": "comparison_1",
+          "identity": null,
+          "derivation": "supplied_native_output",
+          "outcome": "unknown",
+          "software": null,
+          "realized_argv": [],
+          "environment": {},
+          "returncode": null,
+          "started_at": null,
+          "finished_at": null,
+          "writer_closed": null,
+          "capture_extent": "complete",
+          "native_result_extent": "complete",
+          "completeness_basis": "supplied_full_output_declaration",
+          "completeness_source_refs": [
+            "fixture:425"
+          ],
+          "issues": [],
+          "stdout": {
+            "artifact_ref": "fixture:comparison_1",
+            "sha256": "ebba13be9117ae7abcfbad56f86997b4269a997b1a93b361883ad4567c5e2910",
+            "size_bytes": 35,
+            "format": "bedtools_intersect_wo_bed4_v1"
+          },
+          "stderr": null,
+          "a": {
+            "set_key": "A",
+            "original_file": {
+              "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "size_bytes": 46,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": null
+          },
+          "b": {
+            "set_key": "C",
+            "original_file": {
+              "artifact_ref": "artifact_b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+              "sha256": "b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+              "size_bytes": 24,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": null
+          }
+        },
+        "result_extent": "complete",
+        "parsed_byte_count": 35,
+        "valid_pairs": [
+          {
+            "pair_key": "p1:a1:b0",
+            "comparison_key": "comparison_1",
+            "native_row_ordinal": 0,
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 35
+            },
+            "a": {
+              "set_key": "A",
+              "occurrence_key": "r1",
+              "native_token": "s0_r1",
+              "chromosome": "chr1",
+              "start": 5,
+              "end": 15
+            },
+            "b": {
+              "set_key": "C",
+              "occurrence_key": "r0",
+              "native_token": "s2_r0",
+              "chromosome": "chr1",
+              "start": 10,
+              "end": 20
+            },
+            "native_overlap_bp": 5
+          }
+        ],
+        "rejected_rows": [],
+        "issues": []
+      },
+      {
+        "version": "genomic_overlap_parsed_pairs_v1",
+        "format": "bedtools_intersect_wo_bed4_v1",
+        "comparison_key": "comparison_2",
+        "receipt": {
+          "version": "genomic_overlap_native_pair_receipt_v1",
+          "comparison_key": "comparison_2",
+          "identity": null,
+          "derivation": "supplied_native_output",
+          "outcome": "unknown",
+          "software": null,
+          "realized_argv": [],
+          "environment": {},
+          "returncode": null,
+          "started_at": null,
+          "finished_at": null,
+          "writer_closed": null,
+          "capture_extent": "complete",
+          "native_result_extent": "complete",
+          "completeness_basis": "supplied_full_output_declaration",
+          "completeness_source_refs": [
+            "fixture:425"
+          ],
+          "issues": [],
+          "stdout": {
+            "artifact_ref": "fixture:comparison_2",
+            "sha256": "6de6501628262f30e98687f9ebc95ebb50c89d785b27d23c5a3d8ab45300779a",
+            "size_bytes": 35,
+            "format": "bedtools_intersect_wo_bed4_v1"
+          },
+          "stderr": null,
+          "a": {
+            "set_key": "B",
+            "original_file": {
+              "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "size_bytes": 35,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": null
+          },
+          "b": {
+            "set_key": "C",
+            "original_file": {
+              "artifact_ref": "artifact_b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+              "sha256": "b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+              "size_bytes": 24,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": null
+          }
+        },
+        "result_extent": "complete",
+        "parsed_byte_count": 35,
+        "valid_pairs": [
+          {
+            "pair_key": "p2:a0:b0",
+            "comparison_key": "comparison_2",
+            "native_row_ordinal": 0,
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 35
+            },
+            "a": {
+              "set_key": "B",
+              "occurrence_key": "r0",
+              "native_token": "s1_r0",
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 12
+            },
+            "b": {
+              "set_key": "C",
+              "occurrence_key": "r0",
+              "native_token": "s2_r0",
+              "chromosome": "chr1",
+              "start": 10,
+              "end": 20
+            },
+            "native_overlap_bp": 2
+          }
+        ],
+        "rejected_rows": [],
+        "issues": []
+      }
+    ],
+    "reference_relations": [
+      {
+        "comparison_key": "comparison_0",
+        "a_set_key": "A",
+        "b_set_key": "B",
+        "relation": "unknown",
+        "basis": "insufficient_supplied_identity",
+        "a_reference": null,
+        "b_reference": null,
+        "issues": []
+      },
+      {
+        "comparison_key": "comparison_1",
+        "a_set_key": "A",
+        "b_set_key": "C",
+        "relation": "unknown",
+        "basis": "insufficient_supplied_identity",
+        "a_reference": null,
+        "b_reference": null,
+        "issues": []
+      },
+      {
+        "comparison_key": "comparison_2",
+        "a_set_key": "B",
+        "b_set_key": "C",
+        "relation": "unknown",
+        "basis": "insufficient_supplied_identity",
+        "a_reference": null,
+        "b_reference": null,
+        "issues": []
+      }
+    ],
+    "issues": []
+  },
+  "components": {
+    "version": "genomic_region_overlap_components_v1",
+    "source_sheet_sha256": "a1f064c8218611c95acde880edc7cbe2a27f023329e6a868fe95d103834d564c",
+    "parameters": {
+      "version": "genomic_overlap_calculation_parameters_v1",
+      "minimum_overlap_bp": 4,
+      "minimum_a_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "minimum_b_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      }
+    },
+    "sets": [
+      {
+        "set_key": "A",
+        "result_extent": "complete",
+        "input_data_row_count": 2,
+        "valid_region_count": 2,
+        "region_count": 2,
+        "summed_region_bp": 20,
+        "union_bp": 15,
+        "coordinate_locus_count": 2,
+        "duplicate_coordinate_excess": 0,
+        "issues": [],
+        "union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 0,
+            "end": 15
+          }
+        ],
+        "region_geometry": [
+          {
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10
+          },
+          {
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10
+          }
+        ]
+      },
+      {
+        "set_key": "B",
+        "result_extent": "complete",
+        "input_data_row_count": 1,
+        "valid_region_count": 1,
+        "region_count": 1,
+        "summed_region_bp": 5,
+        "union_bp": 5,
+        "coordinate_locus_count": 1,
+        "duplicate_coordinate_excess": 0,
+        "issues": [],
+        "union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12
+          }
+        ],
+        "region_geometry": [
+          {
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5
+          }
+        ]
+      },
+      {
+        "set_key": "C",
+        "result_extent": "complete",
+        "input_data_row_count": 1,
+        "valid_region_count": 1,
+        "region_count": 1,
+        "summed_region_bp": 10,
+        "union_bp": 10,
+        "coordinate_locus_count": 1,
+        "duplicate_coordinate_excess": 0,
+        "issues": [],
+        "union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 10,
+            "end": 20
+          }
+        ],
+        "region_geometry": [
+          {
+            "set_key": "C",
+            "occurrence_key": "r0",
+            "span_bp": 10
+          }
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "comparison_key": "comparison_0",
+        "a_set_key": "A",
+        "b_set_key": "B",
+        "result_extent": "complete",
+        "reference_relation": "unknown",
+        "observed": {
+          "observed_pair_count": 2,
+          "observed_pairwise_bp_sum": 8,
+          "observed_intersection_union_bp": 5,
+          "interpretation": "exact_complete_result"
+        },
+        "unfiltered": {
+          "a_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 2,
+          "b_regions_with_overlap": 1,
+          "a_region_overlap_fraction": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "native_pair_count": 2,
+          "pairwise_overlap_bp_sum": 8,
+          "intersection_union_bp": 5,
+          "combined_union_bp": 15,
+          "jaccard_bp": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          }
+        },
+        "selected": {
+          "a_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 1,
+          "b_regions_with_overlap": 1,
+          "a_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "selected_pair_count": 1,
+          "selected_pairwise_bp_sum": 5,
+          "selected_intersection_union_bp": 5,
+          "selected_shared_union_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          }
+        },
+        "issues": [],
+        "intersection_union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12
+          }
+        ],
+        "selected_intersection_union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12
+          }
+        ],
+        "edges": [
+          {
+            "pair_key": "p0:a0:b0",
+            "a_set_key": "A",
+            "a_occurrence_key": "r0",
+            "b_set_key": "B",
+            "b_occurrence_key": "r0",
+            "intersection": {
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 10
+            },
+            "overlap_bp": 3,
+            "a_overlap_fraction": {
+              "numerator": 3,
+              "denominator": 10,
+              "value": 0.3,
+              "missing_reason": null
+            },
+            "b_overlap_fraction": {
+              "numerator": 3,
+              "denominator": 5,
+              "value": 0.6,
+              "missing_reason": null
+            },
+            "selected": false
+          },
+          {
+            "pair_key": "p0:a1:b0",
+            "a_set_key": "A",
+            "a_occurrence_key": "r1",
+            "b_set_key": "B",
+            "b_occurrence_key": "r0",
+            "intersection": {
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 12
+            },
+            "overlap_bp": 5,
+            "a_overlap_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "b_overlap_fraction": {
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1.0,
+              "missing_reason": null
+            },
+            "selected": true
+          }
+        ],
+        "occurrences": [
+          {
+            "comparison_key": "comparison_0",
+            "population": "unfiltered",
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 3,
+            "coverage_fraction": {
+              "numerator": 3,
+              "denominator": 10,
+              "value": 0.3,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a0:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "unfiltered",
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "unfiltered",
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5,
+            "partner_count": 2,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1.0,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a0:b0",
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "selected",
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 0,
+            "covered_bp": 0,
+            "coverage_fraction": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0.0,
+              "missing_reason": null
+            },
+            "pair_keys": [],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "selected",
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "selected",
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1.0,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          }
+        ]
+      },
+      {
+        "comparison_key": "comparison_1",
+        "a_set_key": "A",
+        "b_set_key": "C",
+        "result_extent": "complete",
+        "reference_relation": "unknown",
+        "observed": {
+          "observed_pair_count": 1,
+          "observed_pairwise_bp_sum": 5,
+          "observed_intersection_union_bp": 5,
+          "interpretation": "exact_complete_result"
+        },
+        "unfiltered": {
+          "a_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 10,
+            "value": 0.5,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 1,
+          "b_regions_with_overlap": 1,
+          "a_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "native_pair_count": 1,
+          "pairwise_overlap_bp_sum": 5,
+          "intersection_union_bp": 5,
+          "combined_union_bp": 20,
+          "jaccard_bp": {
+            "numerator": 5,
+            "denominator": 20,
+            "value": 0.25,
+            "missing_reason": null
+          }
+        },
+        "selected": {
+          "a_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 10,
+            "value": 0.5,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 1,
+          "b_regions_with_overlap": 1,
+          "a_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "selected_pair_count": 1,
+          "selected_pairwise_bp_sum": 5,
+          "selected_intersection_union_bp": 5,
+          "selected_shared_union_fraction": {
+            "numerator": 5,
+            "denominator": 20,
+            "value": 0.25,
+            "missing_reason": null
+          }
+        },
+        "issues": [],
+        "intersection_union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 10,
+            "end": 15
+          }
+        ],
+        "selected_intersection_union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 10,
+            "end": 15
+          }
+        ],
+        "edges": [
+          {
+            "pair_key": "p1:a1:b0",
+            "a_set_key": "A",
+            "a_occurrence_key": "r1",
+            "b_set_key": "C",
+            "b_occurrence_key": "r0",
+            "intersection": {
+              "chromosome": "chr1",
+              "start": 10,
+              "end": 15
+            },
+            "overlap_bp": 5,
+            "a_overlap_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "b_overlap_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "selected": true
+          }
+        ],
+        "occurrences": [
+          {
+            "comparison_key": "comparison_1",
+            "population": "unfiltered",
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 0,
+            "covered_bp": 0,
+            "coverage_fraction": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0.0,
+              "missing_reason": null
+            },
+            "pair_keys": [],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_1",
+            "population": "unfiltered",
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p1:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_1",
+            "population": "unfiltered",
+            "set_key": "C",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p1:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_1",
+            "population": "selected",
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 0,
+            "covered_bp": 0,
+            "coverage_fraction": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0.0,
+              "missing_reason": null
+            },
+            "pair_keys": [],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_1",
+            "population": "selected",
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p1:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_1",
+            "population": "selected",
+            "set_key": "C",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p1:a1:b0"
+            ],
+            "result_extent": "complete"
+          }
+        ]
+      },
+      {
+        "comparison_key": "comparison_2",
+        "a_set_key": "B",
+        "b_set_key": "C",
+        "result_extent": "complete",
+        "reference_relation": "unknown",
+        "observed": {
+          "observed_pair_count": 1,
+          "observed_pairwise_bp_sum": 2,
+          "observed_intersection_union_bp": 2,
+          "interpretation": "exact_complete_result"
+        },
+        "unfiltered": {
+          "a_union_coverage_fraction": {
+            "numerator": 2,
+            "denominator": 5,
+            "value": 0.4,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 2,
+            "denominator": 10,
+            "value": 0.2,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 1,
+          "b_regions_with_overlap": 1,
+          "a_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "missing_reason": null
+          },
+          "native_pair_count": 1,
+          "pairwise_overlap_bp_sum": 2,
+          "intersection_union_bp": 2,
+          "combined_union_bp": 13,
+          "jaccard_bp": {
+            "numerator": 2,
+            "denominator": 13,
+            "value": 0.15384615384615385,
+            "missing_reason": null
+          }
+        },
+        "selected": {
+          "a_union_coverage_fraction": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 0,
+            "denominator": 10,
+            "value": 0.0,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 0,
+          "b_regions_with_overlap": 0,
+          "a_region_overlap_fraction": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "missing_reason": null
+          },
+          "selected_pair_count": 0,
+          "selected_pairwise_bp_sum": 0,
+          "selected_intersection_union_bp": 0,
+          "selected_shared_union_fraction": {
+            "numerator": 0,
+            "denominator": 13,
+            "value": 0.0,
+            "missing_reason": null
+          }
+        },
+        "issues": [],
+        "intersection_union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 10,
+            "end": 12
+          }
+        ],
+        "selected_intersection_union_segments": [],
+        "edges": [
+          {
+            "pair_key": "p2:a0:b0",
+            "a_set_key": "B",
+            "a_occurrence_key": "r0",
+            "b_set_key": "C",
+            "b_occurrence_key": "r0",
+            "intersection": {
+              "chromosome": "chr1",
+              "start": 10,
+              "end": 12
+            },
+            "overlap_bp": 2,
+            "a_overlap_fraction": {
+              "numerator": 2,
+              "denominator": 5,
+              "value": 0.4,
+              "missing_reason": null
+            },
+            "b_overlap_fraction": {
+              "numerator": 2,
+              "denominator": 10,
+              "value": 0.2,
+              "missing_reason": null
+            },
+            "selected": false
+          }
+        ],
+        "occurrences": [
+          {
+            "comparison_key": "comparison_2",
+            "population": "unfiltered",
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5,
+            "partner_count": 1,
+            "covered_bp": 2,
+            "coverage_fraction": {
+              "numerator": 2,
+              "denominator": 5,
+              "value": 0.4,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p2:a0:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_2",
+            "population": "unfiltered",
+            "set_key": "C",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 2,
+            "coverage_fraction": {
+              "numerator": 2,
+              "denominator": 10,
+              "value": 0.2,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p2:a0:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_2",
+            "population": "selected",
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5,
+            "partner_count": 0,
+            "covered_bp": 0,
+            "coverage_fraction": {
+              "numerator": 0,
+              "denominator": 5,
+              "value": 0.0,
+              "missing_reason": null
+            },
+            "pair_keys": [],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_2",
+            "population": "selected",
+            "set_key": "C",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 0,
+            "covered_bp": 0,
+            "coverage_fraction": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0.0,
+              "missing_reason": null
+            },
+            "pair_keys": [],
+            "result_extent": "complete"
+          }
+        ]
+      }
+    ],
+    "issues": []
+  }
+}

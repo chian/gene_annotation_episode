@@ -1,0 +1,22 @@
+........................................................................ [ 36%]
+........................................................................ [ 73%]
+........................................F.....F.....                     [100%]
+=================================== FAILURES ===================================
+_ test_real_v2_resource_custody_and_shared_cells_reach_both_parents[facs-prepared] _
+source_snapshot/tests/test_fluorescence_prepared_workflow.py:215: in test_real_v2_resource_custody_and_shared_cells_reach_both_parents
+    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}
+E   AssertionError: assert {'artifact_32...1660b8b', ...} <= {'artifact_32...5eba111', ...}
+E     
+E     Extra items in the left set:
+E     'artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b'
+_ test_real_v2_resource_custody_and_shared_cells_reach_both_parents[cytokine-prepared] _
+source_snapshot/tests/test_fluorescence_prepared_workflow.py:215: in test_real_v2_resource_custody_and_shared_cells_reach_both_parents
+    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}
+E   AssertionError: assert {'artifact_32...1660b8b', ...} <= {'artifact_32...5eba111', ...}
+E     
+E     Extra items in the left set:
+E     'artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_fluorescence_prepared_workflow.py::test_real_v2_resource_custody_and_shared_cells_reach_both_parents[facs-prepared]
+FAILED source_snapshot/tests/test_fluorescence_prepared_workflow.py::test_real_v2_resource_custody_and_shared_cells_reach_both_parents[cytokine-prepared]
+2 failed, 194 passed in 10237.15s (2:50:37)

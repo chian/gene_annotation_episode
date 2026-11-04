@@ -1,0 +1,32 @@
+........................................................................ [ 92%]
+....F.                                                                   [100%]
+=================================== FAILURES ===================================
+______ test_large_scan_retains_all_members_but_selected_output_is_bounded ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_views_2026-10-26_368/check001/temporary/pytest/test_large_scan_retains_all_me0')
+
+    def test_large_scan_retains_all_members_but_selected_output_is_bounded(tmp_path):
+        # 256 unique synthetic variants; these are supplied model-energy fixtures.
+        sequences = ["AAAA" + "".join("ACGU"[(n // (4 ** i)) % 4] for i in range(5)) for n in range(257)]
+        sheets = [f.feature("WT" if i == 0 else f"V{i:03d}", seq, "." * 9, energy=-10.0 if i == 0 else -9.0 + (i % 4))
+            for i, seq in enumerate(sequences)]
+        energy = f.energy_request()
+        members = [f.member(s) for s in sheets]
+        selected = f.selector(members, [f.comparison(s["record_key"], energy=energy) for s in sheets[1:]], scan=f.scan_request(energy))
+        sheet = populate_rna_comparison_sheet(selected, operands={s["record_key"]: f.supplied(s) for s in sheets})
+        data = calculate(sheet)
+        choice = request_for("scan_energy", metrics=["baseline_rank_start", "baseline_rank_end", "lowest_energy_tie_count", "baseline_energy_above_minimum"])
+        result, = project(data, choice)
+        assert len(data[1]["scan"]["members"]) == 257
+        assert result["qualification"]["population"]["rank_population_count"] == 257
+        assert result["payload"]["rank_class"] == "unique_lowest"
+>       assert len(json.dumps(result)) < 12000
+E       assert 287930 < 12000
+E        +  where 287930 = len('{"schema": "rna_comparison_projection_v1", "projection_id": "scan_energy", "family": "scan_energy", "result_receipt_k...eneration_rule_used", "member_id": null, "comparison_id": null, "selection_id": null, "field": null, "index": null}]}}')
+E        +    where '{"schema": "rna_comparison_projection_v1", "projection_id": "scan_energy", "family": "scan_energy", "result_receipt_k...eneration_rule_used", "member_id": null, "comparison_id": null, "selection_id": null, "field": null, "index": null}]}}' = <function dumps at 0x79a79e670720>({'schema': 'rna_comparison_projection_v1', 'projection_id': 'scan_energy', 'family': 'scan_energy', 'result_receipt_key': 'rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111', ...})
+E        +      where <function dumps at 0x79a79e670720> = json.dumps
+
+../../../tests/test_rna_structure_comparison_views.py:547: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rna_structure_comparison_views.py::test_large_scan_retains_all_members_but_selected_output_is_bounded
+1 failed, 77 passed in 68.75s (0:01:08)

@@ -20,6 +20,7 @@ def build_tools(store, configuration=None):
         local.get('native_receipts_dir', store.path/'native-execution-receipts'))
         if 'history' in configuration or 'resource_id' in configuration else None)
     tools = ToolRegistry(store, clients=clients, job_limits=configuration.get('local_jobs'),
+        local_resources=configuration.get('local_resources'),
         knowledge_library_directory=configuration.get('knowledge_library_directory'),
         native_statistics=statistics,
         provider_poll_interval_seconds=public.get('poll_interval_seconds', 5),

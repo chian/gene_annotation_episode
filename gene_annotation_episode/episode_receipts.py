@@ -38,6 +38,14 @@ def _validate_report_prefix(value):
 class EpisodeReceipts:
     def __init__(self, store, run_id):
         self.store, self.db, self.run_id = store, store.db, run_id
+        tables = {row[0] for row in self.db.execute("SELECT name FROM sqlite_master WHERE type='table' "
+            "AND name IN ('runtime_receipt_inheritance','runtime_record_receipts')")}
+        if (tables == {'runtime_receipt_inheritance', 'runtime_record_receipts'}
+                and 'received_report_prefix' in {row[1] for row in self.db.execute(
+                    'PRAGMA table_info(runtime_receipt_inheritance)')}):
+            # Existing storage is also used by immutable retained readers.
+            # Do not acquire a write transaction merely to read real receipts.
+            return
         schema = '''
             CREATE TABLE IF NOT EXISTS runtime_receipt_inheritance(
                 run_id TEXT NOT NULL, episode_id TEXT NOT NULL,
@@ -167,6 +175,65 @@ class EpisodeReceipts:
         query, parameters = self.selection(episode_id, record_type=record_type, baseline=baseline)
         return (row[0] for row in self.db.execute(query+' ORDER BY receipts.record_ref', parameters))
 
+    def forward_references(self, record):
+        """Project the existing receipt dependencies from record metadata only.
+
+        This creates no receipt and reads no dependency or artifact body.
+        Collection members still require their existing paged admission path.
+        """
+        if record.get('record_type') == 'collection_member':
+            return []
+        if (record.get('record_type') == 'source' and record.get('origin') == 'tool'
+                and record.get('provider') == 'episode.bvbrc_appservice_bundle_data'
+                and record.get('version') == 'bvbrc_appservice_bundle_data_v1'
+                and type(record.get('accession')) is str
+                and re.fullmatch(r'application_artifact_bundle_[0-9a-f]{64}', record['accession'])):
+            return []
+        if record.get('record_type') == 'source' and record.get('provider') in {
+                'ensembl', 'alphafold', 'emdb', 'rcsb_pdb', 'string', 'kegg', 'reactome', 'quickgo', 'pubchem', 'hpa', 'ucsc', 'eva', 'gnomad',
+                'public.ncbi.entrez', 'public.ncbi.geo', 'public.ncbi.sra.file',
+                'public.jaspar', 'public.encode', 'public.screen', 'bvbrc_minhash'}:
+            return []
+        if (record.get('record_type') == 'source' and record.get('origin') == 'tool'
+                and (record.get('provider'), record.get('version')) in {
+                    ('find_n_glycosylation_motifs', 'ordinary_n_glycosylation_result_v1'),
+                    ('predict_o_glycosylation_hotspots', 'ordinary_o_glycosylation_result_v1'),
+                    ('find_enriched_motifs_with_homer', 'ordinary_homer_motif_result_v1'),
+                    ('find_enriched_motifs_with_homer', 'ordinary_homer_motif_native_capture_v1'),
+                    ('identify_transcription_factor_binding_sites', 'ordinary_tf_binding_result_v1'),
+                    ('identify_transcription_factor_binding_sites', 'ordinary_tf_binding_native_capture_v1'),
+                    ('analyze_protein_conservation', 'ordinary_protein_conservation_result_v1'),
+                    ('analyze_protein_conservation', 'ordinary_protein_conservation_native_capture_v1'),
+                    ('analyze_protein_phylogeny', 'ordinary_protein_phylogeny_result_v1'),
+                    ('analyze_protein_phylogeny', 'ordinary_protein_phylogeny_native_capture_v1'),
+                    ('detect_and_annotate_somatic_mutations', 'ordinary_somatic_variant_result_v1'),
+                    ('detect_and_annotate_somatic_mutations', 'ordinary_somatic_variant_native_capture_v1'),
+                    ('generate_gene_embeddings_with_ESM_models', 'esm_gene_embedding_result_v1'),
+                    ('analyze_protease_kinetics', 'ordinary_protease_kinetics_result_v1'),
+                    ('analyze_arsenic_speciation_hplc_icpms', 'ordinary_arsenic_speciation_result_v1'),
+                    ('predict_protein_disorder_regions', 'ordinary_protein_disorder_result_v1'),
+                    ('align_sequences', 'ordinary_primer_placement_result_v1')}):
+            return []
+        restriction_custody = (record.get('provider'), record.get('version')) in {
+            ('episode.restriction_input', 'restriction_input_source_v1'),
+            ('episode.restriction_result', 'restriction_published_result_v1')}
+        if (restriction_custody or record.get('provider') in {
+                    'analyze_itc_binding_thermodynamics', 'liftover_coordinates',
+                    'analyze_circular_dichroism_spectra', 'perform_flux_balance_analysis',
+                    'annotate_open_reading_frames', 'analyze_cas9_mutation_outcomes', 'result.macs2.peaks',
+                    'result.variants.vcf', 'enrichr'}
+                or record.get('provider') == 'episode.execution_result'
+                and record.get('version') in {'native_infernal_preparation_bundle_v1',
+                                             'native_hmmer_preparation_bundle_v1',
+                                             'native_blast_masking_bundle_v1',
+                                             'native_blast_utility_bundle_v1',
+                                             'native_blast_database_bundle_v1',
+                                             'native_protein_structure_bundle_v1',
+                                             'protein_structure_saved_action_v1',
+                                             'native_rna_structure_bundle_v1'}):
+            return []
+        return list(self.store._refs(record))
+
     def receive(self, episode_id, references, *, kind, source_index=None):
         """Record actual reference delivery and its declared semantic dependencies.
 
@@ -192,21 +259,4 @@ class EpisodeReceipts:
                 self.db.execute('INSERT OR IGNORE INTO runtime_record_receipts '
                     '(run_id,episode_id,record_ref,receipt_kind,source_index) VALUES(?,?,?,?,?)',
                     (self.run_id, episode_id, reference, kind, source_index))
-                restriction_custody = (record.get('provider'), record.get('version')) in {
-                    ('episode.restriction_input', 'restriction_input_source_v1'),
-                    ('episode.restriction_result', 'restriction_published_result_v1')}
-                if (restriction_custody or record.get('provider') in {
-                            'analyze_itc_binding_thermodynamics', 'enrichr'}
-                        or record.get('provider') == 'episode.execution_result'
-                        and record.get('version') in {'native_infernal_preparation_bundle_v1',
-                                                     'native_hmmer_preparation_bundle_v1',
-                                                     'native_blast_masking_bundle_v1',
-                                                     'native_blast_utility_bundle_v1',
-                                                     'native_blast_database_bundle_v1',
-                                                     'native_protein_structure_bundle_v1',
-                                                     'native_rna_structure_bundle_v1'}):
-                    # Custody retains the full bundle and auxiliary data. This
-                    # source alone delivers none of those unrequested artifacts.
-                    # Explicit selected artifact references remain in pending.
-                    continue
-                pending.extend(ref for ref in self.store._refs(record) if ref not in seen)
+                pending.extend(ref for ref in self.forward_references(record) if ref not in seen)

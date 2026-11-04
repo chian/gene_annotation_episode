@@ -1,0 +1,197 @@
+--- baseline/blast_database_grader.py
++++ current/blast_database_grader.py
+@@ -356,9 +356,9 @@
+     return associations
+ 
+ 
+-def _sequence_links(bindings, normalized, report, hits, issues):
++def _sequence_links(bindings, normalized, report, hits, issues, *, geometry_program=None):
+     accepted, seen = defaultdict(list), set()
+-    program = normalized.get("search", {}).get("program")
++    program = geometry_program or normalized.get("search", {}).get("program")
+     units = PROGRAM_UNITS.get(program) if isinstance(program, str) else None
+     for index, binding in enumerate(bindings):
+         code = None
+@@ -673,23 +673,86 @@
+             "meaning": "reported measurements, separated by method; not category-derived reliability grades"}
+ 
+ 
+-def _database_profile(profile, search, groups, issues):
+-    if profile is None:
++def _calculation_context(value):
++    """Validate the explicit context port; never manufacture request fields."""
++    if value is None:
++        return None
++    try:
++        value = _json_copy(value)
++    except (TypeError, ValueError) as error:
++        raise ValueError("blast_database_calculation_context_finite_json_required") from error
++    if not isinstance(value, dict) or set(value) != {"reporting", "database_identity"}:
++        raise ValueError("blast_database_calculation_context_fields_invalid")
++    reporting = value["reporting"]
++    if (not isinstance(reporting, dict) or set(reporting) != {
++            "native_hit_array_present", "native_hit_count", "requested_hit_limit",
++            "requested_hsp_limit", "native_returncode", "producer_complete"}
++            or type(reporting["native_hit_array_present"]) is not bool
++            or any(reporting[key] is not None and not _index(reporting[key]) for key in
++                   ("native_hit_count", "requested_hit_limit", "requested_hsp_limit"))
++            or reporting["native_returncode"] is not None and type(reporting["native_returncode"]) is not int
++            or reporting["producer_complete"] is not None and type(reporting["producer_complete"]) is not bool):
++        raise ValueError("blast_database_calculation_reporting_invalid")
++    identity = value["database_identity"]
++    if identity is not None:
++        if (not isinstance(identity, dict) or set(identity) != {"namespace", "value", "version",
++                "release", "scope", "preparation_type", "source"}
++                or any(_text(identity[key]) is None for key in ("namespace", "value"))
++                or any(identity[key] is not None and _text(identity[key]) is None
++                       for key in ("version", "release", "scope"))
++                or identity["preparation_type"] not in ("sequence_database", "rps", "delta", "unknown")
++                or not isinstance(identity["source"], dict)
++                or set(identity["source"]) != {"source_ref", "pointer"}
++                or _text(identity["source"]["source_ref"]) is None
++                or not _pointer(identity["source"]["pointer"])):
++            raise ValueError("blast_database_calculation_identity_invalid")
++    return value
++
++
++def _database_profile(profile, search, groups, issues, *, calculation_context=None):
++    if profile is None and calculation_context is None:
+         return {"available_for_adjustment": False, "reasons": ["database_profile_not_supplied"],
+                 "function_representation": []}
+     reasons = []
+-    if not isinstance(profile, dict):
++    if profile is not None and not isinstance(profile, dict):
+         raise ValueError("database_profile_object_required")
+     database = search.get("database")
+     request = search.get("request") or {}
++    release = request.get("database_release") or search.get("database_release")
++    expected_scope = request.get("database_scope", "searched_database")
++    if calculation_context is not None:
++        identity = calculation_context["database_identity"]
++        database = identity["value"] if identity is not None else None
++        release = identity["release"] if identity is not None else None
++        expected_scope = identity["scope"] if identity is not None else None
++        if identity is None:
++            reasons.append("database_context_identity_unavailable")
++        else:
++            if identity["preparation_type"] != "sequence_database":
++                reasons.append("database_context_sequence_population_unqualified")
++            for field, original_keys in (("value", ("database", "db")),
++                    ("release", ("database_release",)), ("scope", ("database_scope",)),
++                    ("namespace", ("database_namespace",)), ("version", ("database_version",))):
++                for original in (search, request):
++                    if any(original.get(key) is not None and original[key] != identity[field]
++                           for key in original_keys):
++                        reasons.append("database_context_" + field + "_conflict")
++        if release is None:
++            reasons.append("database_context_release_unavailable")
++        if expected_scope is None:
++            reasons.append("database_context_scope_unavailable")
++    if profile is None:
++        for reason in sorted(set(reasons)):
++            issues.append({"code": reason})
++        return {"available_for_adjustment": False,
++                "reasons": sorted(set(["database_profile_not_supplied", *reasons])),
++                "function_representation": []}
+     if not database or profile.get("database") != database:
+         reasons.append("database_profile_identity_mismatch")
+-    release = request.get("database_release") or search.get("database_release")
+     if (release is not None or profile.get("release") is not None) and profile.get("release") != release:
+         reasons.append("database_profile_release_unmatched")
+     if profile.get("count_unit") not in {"unique_sequences", "sequence_groups"}:
+         reasons.append("database_profile_requires_sequence_count_unit")
+-    expected_scope = request.get("database_scope", "searched_database")
+     if profile.get("scope") != expected_scope:
+         reasons.append("database_profile_scope_mismatch")
+     if not _text(profile.get("source")):
+@@ -733,7 +796,9 @@
+                          target_context: dict | None = None,
+                          database_profile: dict | None = None,
+                          description_bindings: list[dict] | None = None,
+-                         sequence_identity_bindings: list[dict] | None = None) -> dict:
++                         sequence_identity_bindings: list[dict] | None = None,
++                         geometry_program: str | None = None,
++                         calculation_context: dict | None = None) -> dict:
+     """Populate a tool-facing numerical sheet without choosing an annotation.
+ 
+     Supplied metadata stays attached to its exact accession/taxon. Conflicting
+@@ -745,6 +810,11 @@
+     supplied full-sequence identities for cross-hit grouping. These functions
+     check the supplied relationships; the caller owns artifact/episode custody
+     and validating each full-sequence record's relation to the actual operand.
++
++    Optional geometry keeps execution identity intact and must agree exactly
++    with its established coordinate program. Optional calculation_context
++    carries reporting/database facts separately; neither null option changes
++    legacy output or supplies missing extended-program semantics.
+     """
+     from .blast_pairwise_grader import alignment_components
+ 
+@@ -756,6 +826,15 @@
+         raise ValueError("blast_explicit_binding_pair_required")
+     explicit = description_bindings is not None
+     normalized = _json_copy(result)
++    if geometry_program is not None:
++        program = normalized.get("search", {}).get("program")
++        if not isinstance(geometry_program, str) or geometry_program not in PROGRAM_UNITS:
++            raise ValueError("blast_database_geometry_program_invalid")
++        expected = program if isinstance(program, str) and program in PROGRAM_UNITS else (
++            "blastp" if program in ("psiblast", "deltablast") else None)
++        if geometry_program != expected:
++            raise ValueError("blast_database_geometry_program_conflict")
++    context = _calculation_context(calculation_context)
+     metadata = _json_copy(reference_metadata if reference_metadata is not None else [])
+     target_input = _json_copy(target_context if target_context is not None else {})
+     profile = _json_copy(database_profile)
+@@ -766,7 +845,8 @@
+         report, indexed_hits, descriptions, description_bindings, sequence_identity_bindings = _explicit_inputs(
+             normalized, description_bindings, sequence_identity_bindings, issues)
+         description_links = _description_links(description_bindings, metadata, report, indexed_hits, descriptions, issues)
+-        sequence_links = _sequence_links(sequence_identity_bindings, normalized, report, indexed_hits, issues)
++        sequence_links = _sequence_links(sequence_identity_bindings, normalized, report, indexed_hits, issues,
++                                         geometry_program=geometry_program)
+     target = {"taxid": _taxid(target_input.get("taxid")),
+         "lineage": _lineage(target_input, issues, {"context": "target"}),
+         "source": target_input.get("source"),
+@@ -785,7 +865,8 @@
+         components = []
+         for hsp_index, hsp in enumerate(native_hit.get("hsps", [])):
+             try:
+-                component = alignment_components(hsp, program=normalized["search"]["program"],
++                component = alignment_components(hsp,
++                    program=geometry_program if geometry_program is not None else normalized["search"]["program"],
+                     query_length=normalized["query"].get("length"),
+                     reference_length=native_hit.get("length"),
+                     coordinate_convention="blast_json2" if normalized.get("format") == "json2" else "directional")
+@@ -851,6 +932,9 @@
+     reported_count = normalized["search"].get("reported_hit_count")
+     if type(reported_count) is not int or reported_count < 0:
+         reported_count = None
++    if context is not None:
++        limit = context["reporting"]["requested_hit_limit"]
++        reported_count = context["reporting"]["native_hit_count"]
+     studies = defaultdict(set)
+     for group in groups:
+         for study in group["study_groups"]:
+@@ -868,7 +952,8 @@
+                 not any(basis["kind"] == "sequence_group" for basis in group["identity_basis"])
+                 for group in groups),
+             "meaning": "groups collapse demonstrated sequence identity; distinct groups are not claimed independent experiments"},
+-        "database_representation": _database_profile(profile, normalized["search"], groups, issues),
++        "database_representation": _database_profile(profile, normalized["search"], groups, issues,
++                                                       calculation_context=context),
+         "coverage": {"native_hit_count": len(hits), "sequence_group_count": len(groups),
+             "groups_with_explicit_function": sum(bool(group["functions"]) for group in groups),
+             "groups_without_explicit_function": sum(not group["functions"] for group in groups),
+@@ -881,6 +966,11 @@
+             "whole_database_result_complete": None,
+             "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness"},
+         "issues": issues}
++    if context is not None:
++        output["calculation_context"] = context
++        output["search_limits"].update(
++            requested_hsp_limit=context["reporting"]["requested_hsp_limit"],
++            hit_array_present=context["reporting"]["native_hit_array_present"])
+     if explicit:
+         output.update(association_mode="explicit_bindings_v1",
+                       description_bindings=description_bindings,

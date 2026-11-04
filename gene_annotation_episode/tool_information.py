@@ -116,9 +116,9 @@ RESOURCE_INSTRUCTIONS = {
     'hpc': ('Use only the actual assigned HPC execution binding and supplied access/resource configuration. '
         'The implemented HPC operations are the practical PBS/SSH operations, not a remote substitute for '
         'an arbitrary local tool. Preparation and execution can require multiple selected episode actions. '
-        'On Aurora keep software, environments, inputs, caches, temporary files, logs and runs under '
-        '/lus/flare/projects/BioReason-Aurora-Test; charge new Aurora jobs to EpiCalib. '
-        'Only /home/chian/WORKSPACE_DIRECTORY.md is allowed for this workflow in Aurora home. '
+        'Keep software, environments, inputs, caches, temporary files, logs and runs within the '
+        'actual assignment workspace. Use configuration.account for PBS charging and select queue '
+        'and resources consistent with the assignment constraints and supplied resource configuration. '
         'Preserve the original attempt, explicit queue/resources and native handoff. '
         'Configured or documented access is not proof of present authentication or availability.'),
 }

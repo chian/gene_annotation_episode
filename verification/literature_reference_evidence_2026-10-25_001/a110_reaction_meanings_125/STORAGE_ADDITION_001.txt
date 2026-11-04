@@ -1,0 +1,101 @@
+
+
+def reaction_semantic_cells_schema():
+    """Closed named scientific view of the same15 existing numerical cells."""
+    schema = deepcopy(reaction_cells_schema())
+    schema["x-source"] = MEANINGS_NAMESPACE
+    properties = schema["items"]["properties"]
+    def ref(kind, nullable=True):
+        return {"type": ["string", "null"] if nullable else "string", "format": "reference",
+                "x-reference-namespace": kind}
+    def meaning(kind, fields, bases):
+        return {kind + "_ref": ref("reference", False), "definition_reported": {"type": "boolean"},
+            **{field + "_ref": ref(namespace) for field, namespace in fields.items() if field != "definition"},
+            **{basis: {"type": "string", "enum": list(BASES)} for basis in bases}}
+    model = obj({**meaning("model", MODEL_FIELDS, ("prediction_basis",)),
+        "role": {"type": "string", "enum": ["claim", "alternative"]},
+        "prediction": {"type": ["number", "null"]},
+        "unit": {"type": "string", "enum": ["mol_per_mol", "signal_per_signal"]}})
+    resource = obj({**meaning("resource", RESOURCE_FIELDS, ("supply_basis", "coefficient_basis")),
+        "coefficient": {"type": "number", "exclusiveMinimum": 0},
+        "coefficient_role": {"type": "string", "enum": ["resource_unit_per_demand_unit"]},
+        "coefficient_demand_ref": ref("reference", False)})
+    demand = obj({**meaning("demand", DEMAND_FIELDS, ("demand_basis",)),
+        "value": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "unit": {"type": "string", "enum": ["umol", "uM", "umol_per_min", "uM_per_min"]}})
+    fields = {"model_definitions": {"type": "array", "items": model},
+        "comparison_member_refs": {"type": "array", "uniqueItems": True, "items": ref("reference", False)},
+        "comparison_reduction": {"type": "string", "enum": ["minimum_over_declared_alternatives"]},
+        "resource_definitions": {"type": "array", "items": resource},
+        "demand_definition": {**demand, "type": ["object", "null"]},
+        "nominal_limiting_resource_refs": {"type": "array", "uniqueItems": True, "items": ref("reference", False)}}
+    properties.update(fields)
+    schema["items"]["required"].extend(fields)
+    return schema
+
+
+class LiteratureReactionSemanticProjection(LiteratureReactionRepository):
+    """Independent receipt of the named view, with no new operation or sheet."""
+    record_version = MEANINGS_RECORD_VERSION
+    received_table = "literature_reaction_semantic_received"
+
+    def __init__(self, store, run_id):
+        if not isinstance(run_id, str) or not run_id:
+            raise ValueError("explicit_literature_run_required")
+        self.store, self.run_id = store, run_id
+
+    def populate(self, context, arguments, operation_key):
+        raise ContractError("reaction_semantic_return_view_cannot_publish")
+
+    def cells_schema(self):
+        return reaction_semantic_cells_schema()
+
+    def _row_metadata(self, saved):
+        return semantic_metadata(_metadata(saved["extraction"], saved["sheet"]),
+            saved["semantic_bindings"], saved["extraction"]["calculation_inputs"], saved["sheet"])
+
+    def read(self, sheet_ref):
+        saved = super().read(sheet_ref)
+        source = self.store.get(sheet_ref)
+        request = json.loads(self.store.get_artifact(source["request_ref"]))
+        operation = self.store.db.execute(f"SELECT outcome FROM {self.operations_table} "
+            "WHERE run_id=? AND episode_id=? AND operation_key=?",
+            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
+        outcome = json.loads(operation["outcome"])
+        import hashlib
+        payload = self.store.get_artifact(source["artifact_ref"])
+        if ("artifact_" + hashlib.sha256(payload).hexdigest() != source["artifact_ref"]
+                or saved["extraction"].get("version") != MEANINGS_INPUT_VERSION
+                or saved["sheet"]["cells"] != outcome["result"]["cells"]
+                or any(outcome["result"].get(key) != value for key, value in self._row_metadata(saved).items())):
+            raise ContractError("literature_reaction_semantic_saved_mismatch")
+        def validate_published(kind, record):
+            expected = identity(kind, {"origin": "tool", "record": record})
+            actual = self.store.get(expected)
+            if actual != {"id": expected, "record_type": kind, "origin": "tool", **record}:
+                raise ContractError("literature_reaction_semantic_binding_mismatch")
+            return expected
+        expected_bindings = publish_meanings(saved["extraction"], validate_published)
+        if expected_bindings != saved["semantic_bindings"]:
+            raise ContractError("literature_reaction_semantic_binding_mismatch")
+        return saved
+
+    def _installed(self):
+        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+            (self.received_table,)).fetchone() is not None
+
+    def received_cells(self, context):
+        if context.run_id != self.run_id:
+            raise ContractError("literature_run_mismatch")
+        return super().received_cells(context) if self._installed() else []
+
+    def receive_cells(self, context, cells, operation_key):
+        with self.store.transaction():
+            self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
+                run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
+                cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
+            return super().receive_cells(context, cells, operation_key)
+
+
+__all__ = ["LiteratureReactionRepository", "LiteratureReactionSemanticProjection", "COMPONENTS", "PROVIDER",
+    "reaction_population_schema", "reaction_cells_schema", "reaction_semantic_cells_schema"]

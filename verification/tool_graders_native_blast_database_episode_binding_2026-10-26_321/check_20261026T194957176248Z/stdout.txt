@@ -1,0 +1,27 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+______ test_saved_complete_master_map_publishes_without_redecoding[pssm] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T194957176248Z/tmp/test_saved_complete_master_map1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e1c73e0b440>
+kind = 'pssm'
+
+    @pytest.mark.parametrize('kind', ['msa', 'pssm'])
+    def test_saved_complete_master_map_publishes_without_redecoding(tmp_path, monkeypatch, kind):
+        from gene_annotation_episode.native_blast_database_result_publication import validate_native_blast_database_observation
+        query = (b'CLUSTAL W\n\none A-CGT\ntwo ATCGT\n' if kind == 'msa' else b'''Pssm ::= { isProtein TRUE, numRows 2, numColumns 4,
+          rowLabels { "A", "C" }, query seq { id { local str "one" }, descr { title "one" },
+          inst { repr raw, mol aa, length 4, seq-data iupacaa "ACGT" } },
+          finalData { scores { 1,2,3,4,5,6,7,8 }, lambda 1.0, kappa 1.0, h 1.0 } }''')
+        h = SyntheticHost(tmp_path, monkeypatch, query_kind=kind, query_bytes=query)
+        try:
+            child = h.results(query_selection(h, kind=kind))
+            body = h.select(child, 0, 'execution.results.collect')['result']
+>           row, = body['publication']['rows_by_family']['hsp']
+            ^^^^
+E           ValueError: not enough values to unpack (expected 1, got 0)
+
+../../../tests/test_native_blast_database_results.py:207: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_results.py::test_saved_complete_master_map_publishes_without_redecoding[pssm]
+1 failed, 2 passed in 57.32s

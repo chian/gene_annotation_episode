@@ -1,0 +1,133 @@
+--- tests/test_runtime.py before
++++ tests/test_runtime.py after
+@@ -395,6 +395,10 @@
+ 
+ def test_resume_recovers_published_operation_before_runtime_response(tmp_path, monkeypatch):
+     store, tools = setup(tmp_path)
++    schema = obj({"outcome_refs": {"type": "array", "items": {
++        "type": "string", "format": "reference", "x-reference-namespace": "observation"},
++        "x-source": "last_outcome_refs"}})
++    provider = ScriptedProvider([commission(schema, {}), tool()])
+     original = Journal.save
+     crashed = False
+     def crash_once(self, table, values):
+@@ -405,11 +409,44 @@
+         return original(self, table, values)
+     monkeypatch.setattr(Journal, "save", crash_once)
+     with pytest.raises(RuntimeError, match="synthetic crash"):
+-        run(store, tools, ScriptedProvider([tool()]), tmp_path / "run", counts=(1, 1))
+-    result = run(store, tools, ScriptedProvider([]), tmp_path / "run", counts=(1, 1), resume=True)
+-    assert result["completed_actions"] == 1
++        run(store, tools, provider, tmp_path / "run", counts=(1, 1))
++    assert crashed and tools.executions == tools.commits == 1
++    assert provider.contexts[0]["tools"] == []
++    assert "fixture.measure" in {entry["name"] for entry in provider.contexts[1]["tools"]}
++    identities = [dict(row) for row in store.db.execute(
++        "SELECT episode_id,path,request,initial_credit FROM runtime_episodes ORDER BY episode_id")]
++    root_id = next(row["episode_id"] for row in identities if len(json.loads(row["path"])) == 1)
++    child_id = next(row["episode_id"] for row in identities if len(json.loads(row["path"])) == 2)
++    child_action = dict(store.db.execute("SELECT * FROM runtime_actions WHERE episode_id=?",
++        (child_id,)).fetchone())
++    assert json.loads(child_action["action"]) == tool()["selection"]
++    assert child_action["result"] is child_action["credit"] is None
++    operation = dict(store.db.execute("SELECT * FROM synthetic_operations").fetchone())
++    assert operation["id"] == f"{child_action['run_id']}:{child_id}:{child_action['decision_index']}"
++    assert store.db.execute("SELECT COUNT(*) FROM synthetic_operations").fetchone()[0] == 1
++    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 0
++    calls = [dict(row) for row in store.db.execute(
++        "SELECT * FROM runtime_model_calls ORDER BY episode_id,call_index")]
++    resumed = ScriptedProvider([])
++    result = run(store, tools, resumed, tmp_path / "run", counts=(1, 1), resume=True)
++    assert result["completed_actions"] == 1 and result["episode_count"] == 2
++    assert result["credit"] == 0 and resumed.contexts == []
+     assert tools.executions == 2 and tools.commits == 1
+-    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 1
++    assert [dict(row) for row in store.db.execute("SELECT * FROM synthetic_operations")] == [operation]
++    assert [dict(row) for row in store.db.execute(
++        "SELECT episode_id,path,request,initial_credit FROM runtime_episodes ORDER BY episode_id")] == identities
++    assert [dict(row) for row in store.db.execute(
++        "SELECT * FROM runtime_model_calls ORDER BY episode_id,call_index")] == calls
++    # The recovered tool is one child observation; its typed return is one
++    # separate parent observation. Recovery itself supplies no observation.
++    observations = [dict(row) for row in store.db.execute("SELECT * FROM runtime_observations")]
++    assert len(observations) == 2
++    assert {episode_id: sum(row["episode_id"] == episode_id for row in observations)
++        for episode_id in (root_id, child_id)} == {root_id: 1, child_id: 1}
++    assert all(json.loads(row["observation"])["step"]["delta"] == 0 for row in observations)
++    returned = json.loads(store.db.execute("SELECT form FROM runtime_report_attempts "
++        "WHERE parent_episode_id=? AND child_episode_id=?", (root_id, child_id)).fetchone()[0])
++    assert returned == {"outcome_refs": json.loads(operation["result"])["record_refs"]}
+ 
+ 
+ def test_child_scoped_reference_error_does_not_discard_work(tmp_path):
+@@ -910,23 +947,63 @@
+     binding = {"cmsearch": {"executable": "/fixture/cmsearch", "cpu": 2,
+         "executable_sha256": "fixture-hash", "adapter_version": "fixture-adapter"}}
+     tools.resource_binding = lambda: deepcopy(binding)
+-    provider = ScriptedProvider([tool(), KeyboardInterrupt()])
++    schema = obj({"outcome_refs": {"type": "array", "items": {
++        "type": "string", "format": "reference", "x-reference-namespace": "observation"},
++        "x-source": "last_outcome_refs"}})
++    provider = ScriptedProvider([commission(schema, {}), tool(), KeyboardInterrupt()])
+     with pytest.raises(KeyboardInterrupt):
+-        run(store, tools, provider, tmp_path / "run")
++        run(store, tools, provider, tmp_path / "run", counts=(2, 1))
+     settings = json.loads(store.db.execute("SELECT settings FROM runtime_runs").fetchone()[0])
+     original_binding = deepcopy(binding)
+     assert settings["initial_tool_resources"] == original_binding
+     manifest = json.loads((tmp_path / "run/run.json").read_text())
+     assert manifest["initial_tool_resources"] == original_binding
+-    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 1
++    assert provider.contexts[0]["tools"] == provider.contexts[2]["tools"] == []
++    assert "fixture.measure" in {entry["name"] for entry in provider.contexts[1]["tools"]}
++    episodes = [dict(row) for row in store.db.execute("SELECT * FROM runtime_episodes")]
++    root_id = next(row["episode_id"] for row in episodes if len(json.loads(row["path"])) == 1)
++    original_child = next(row for row in episodes if len(json.loads(row["path"])) == 2)
++    assert original_child["state"] == "yielded" and original_child["archive"] is not None
++    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations WHERE episode_id=?",
++        (root_id,)).fetchone()[0] == 1
++    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations WHERE episode_id=?",
++        (original_child["episode_id"],)).fetchone()[0] == 1
++    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 2
++    history = {table: [dict(row) for row in store.db.execute(f"SELECT * FROM {table}")]
++        for table in ("runtime_actions", "runtime_observations", "runtime_forms",
++            "runtime_report_attempts", "runtime_estimation_contexts", "synthetic_operations")}
++    completed_calls = [dict(row) for row in store.db.execute(
++        "SELECT * FROM runtime_model_calls WHERE response IS NOT NULL")]
++    archive = tmp_path / "run/archive"
++    archive_bytes = {path.name: path.read_bytes() for path in archive.iterdir()}
+     binding["cmsearch"]["cpu"] = 3
+     binding["cmsearch"]["executable_sha256"] = "changed-resource-fixture"
+-    result = run(store, tools, ScriptedProvider([tool(page=1)]), tmp_path / "run", resume=True)
+-    assert result["completed_actions"] == 2 and tools.executions == 2
+-    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 2
++    resumed = ScriptedProvider([commission(schema, {}), tool(page=1)])
++    result = run(store, tools, resumed, tmp_path / "run", counts=(2, 1), resume=True)
++    assert result["completed_actions"] == 2 and tools.executions == tools.commits == 2
++    assert result["credit"] == 0 and result["episode_count"] == 3
++    assert resumed.contexts[0]["tools"] == []
++    assert "fixture.measure" in {entry["name"] for entry in resumed.contexts[1]["tools"]}
++    assert resumed.contexts[0]["child_reports"] == provider.contexts[2]["child_reports"]
++    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 4
+     assert json.loads(store.db.execute("SELECT settings FROM runtime_runs").fetchone()[0])["initial_tool_resources"] == original_binding
++    assert json.loads((tmp_path / "run/run.json").read_text())["initial_tool_resources"] == original_binding
++    assert dict(store.db.execute("SELECT * FROM runtime_episodes WHERE episode_id=?",
++        (original_child["episode_id"],)).fetchone()) == original_child
++    for table, rows in history.items():
++        after = [dict(row) for row in store.db.execute(f"SELECT * FROM {table}")]
++        assert all(row in after for row in rows), table
++    after_calls = [dict(row) for row in store.db.execute("SELECT * FROM runtime_model_calls")]
++    assert all(row in after_calls for row in completed_calls)
++    assert all((archive / name).read_bytes() == data for name, data in archive_bytes.items())
++    # Each child owns its one tool action. The root owns its two returned
++    # commissions, retaining the original zero gains across reconstruction.
+     assert [json.loads(row[0])["step"]["delta"] for row in store.db.execute(
+-        "SELECT observation FROM runtime_observations ORDER BY unit_index")] == [0, 0]
++        "SELECT observation FROM runtime_observations WHERE episode_id=? ORDER BY unit_index",
++        (root_id,))] == [0, 0]
++    child_counts = store.db.execute("SELECT COUNT(*) FROM runtime_observations "
++        "WHERE episode_id!=? GROUP BY episode_id", (root_id,)).fetchall()
++    assert [row[0] for row in child_counts] == [1, 1]
+ 
+ 
+ def test_resource_only_run_config_uses_canonical_models_and_resume_keeps_custom_models(tmp_path):

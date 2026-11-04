@@ -1,0 +1,127 @@
+--- original/gene_annotation_episode/native_hmmer_preparation_driver.py
++++ gene_annotation_episode/native_hmmer_preparation_driver.py
+@@ -85,13 +85,15 @@
+     "query_requires_final_lf", "query_empty", "query_exceeds_254_symbols", "query_requires_literal_canonical_dna",
+     "producer_byte_order_mismatch", "producer_integer_width_mismatch", "invalid_fm_framing", "dna_only_reader", "fm_reader_header_incompatible",
+     "invalid_fm_arrays", "invalid_fm_segments", "invalid_fm_ambiguities", "source_sha256_order_mismatch",
+-    "wrong_model_signature", "no_model_bytes"})
++    "wrong_model_signature", "no_model_bytes", "malformed_alignment", "alphabet_undetermined",
++    "alphabet_source_semantics_unestablished", "decoder_source_semantics_unestablished"})
+ PREFLIGHT_FAILURE_CONTEXT = {
+     "invalid_alimask_input": {"role": "alignment", "programs": frozenset({"alimask"}),
+-        "reasons": frozenset({"malformed_stockholm", "multiple_alignments", "invalid_weights", "range_outside_alignment", "empty_model_map"})},
++        "reasons": frozenset({"malformed_stockholm", "malformed_alignment", "multiple_alignments", "invalid_weights", "range_outside_alignment", "empty_model_map"})},
+     "unsupported_alimask_model_map": {"role": "alignment", "programs": frozenset({"alimask"}),
+         "reasons": frozenset({"alignment_format_not_established", "rf_required", "weighted_map_not_established",
+-            "pb_subsampling_not_established", "map_configuration_unavailable", "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights"})},
++            "pb_subsampling_not_established", "map_configuration_unavailable", "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights",
++            "alphabet_undetermined", "alphabet_source_semantics_unestablished", "decoder_source_semantics_unestablished"})},
+     "unsafe_alimask_range": {"role": "alignment", "programs": frozenset({"alimask"}), "reasons": None},
+     "invalid_exactmatch_queries": {"role": "queries", "programs": frozenset({"hmmerfm-exactmatch"}),
+         "reasons": frozenset({"query_requires_final_lf", "query_empty", "query_exceeds_254_symbols", "query_requires_literal_canonical_dna"})},
+@@ -263,9 +265,14 @@
+ 
+ 
+ def _alimask_preflight_shared(root, job, bundle):
+-    """Validate the first native MSA through the same reader and map calculator."""
++    """Prevent unsafe ali2model scans using the first MSA's shared operands."""
++    if job["mode"] != "alignment_to_model":
++        # The other modes never perform the unsafe alignment-to-model scan.
++        # Their ordinary native range/format/alphabet refusals remain native.
++        return
+     from .hmmer_alignment_preparation_data import (
+-        populate_hmmer_alignment_preparation_sheet, valid_alignment)
++        read_hmmer_alignment_input, selected_alphabet, valid_alignment)
++    from .hmmer_alignment_input_validation import input_decoding_local_valid
+     from .hmmer_alignment_preparation_calculations import (
+         reconstruct_alimask_model_map, resolve_alimask_map_context)
+ 
+@@ -274,34 +281,46 @@
+     if len(entries) != 1:
+         _error("alimask_input_slot_conflict")
+     input_index, retained = entries[0]
+-    if retained["format"] not in {"stockholm", "pfam"}:
+-        _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment",
+-                 reason="alignment_format_not_established")
+-        return
+     path = _confined_file(root, retained["relative_path"])
+     occurrence = {"occurrence_id": "preflight:" + bundle["identity"]["attempt_id"] + "#/inputs/" + str(input_index),
+         "direction": "input", "role": "alignment", "ordinal": 0,
+         "artifact_ref": retained["artifact_ref"] or str(path), "sha256": retained["staged_sha256"],
+         "size_bytes": retained["staged_size_bytes"], "completeness": "complete"}
+     operation = bundle["operation"]
+-    parsed = populate_hmmer_alignment_preparation_sheet(operation=operation,
+-        inputs={"alignment": [{"occurrence": occurrence, "content": path.read_bytes()}]}, outputs={})
++    settings = operation["settings"]
++    parsed = read_hmmer_alignment_input(path.read_bytes(), declared_format=retained["format"],
++        occurrence=occurrence, explicit_alphabet=selected_alphabet(settings),
++        engine_version=operation["engine_version"])
+     if any(item["code"] in {"occurrence_size_mismatch", "occurrence_digest_mismatch"} for item in parsed["issues"]):
+         _failure(bundle, "inputs", "input_identity_mismatch", "alignment", ordinal=0)
+         return
+     first_key = occurrence["occurrence_id"] + "#alignment/0"
+-    candidates = [row for row in parsed["input_records"] if row["record_key"] == first_key
++    candidates = [row for row in parsed["records"] if row["record_key"] == first_key
+                   and row["occurrence_id"] == occurrence["occurrence_id"]]
+     first = candidates[0] if len(candidates) == 1 else None
++    decoding = parsed["input_decoding"]
++    if not input_decoding_local_valid(decoding, alignment=first, settings=settings):
++        _error("alimask_input_decoding_contract")
++    if decoding["effective_alphabet"] is None:
++        reason = ("alphabet_undetermined" if decoding["file_end_state"] == "alphabet_undetermined"
++                  else "alphabet_source_semantics_unestablished")
++        _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason=reason)
++        return
++    malformed = "malformed_stockholm" if retained["format"] in {"stockholm", "pfam"} else "malformed_alignment"
+     # Later MSAs or invalid suffix bytes remain retained, unprocessed evidence.
+     if first is not None and not first["complete"] and any(
+             row["record_key"] == occurrence["occurrence_id"] + "#alignment/1"
+             and row["occurrence_id"] == occurrence["occurrence_id"]
+-            and row["original_events"][0]["kind"] == "header" for row in parsed["input_records"]):
++            and row["original_events"][0]["kind"] == "header" for row in parsed["records"]):
+         _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="multiple_alignments")
+         return
+     if not valid_alignment(first):
+-        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++        native = first.get("native_input") if first is not None else None
++        unavailable = (first is None and decoding["file_end_state"] == "source_semantics_unestablished"
++            or native is not None and any(problem["code"] == "native_source_semantics_unestablished"
++                and problem["details"]["actual"] != "annotation_byte_interpretation" for problem in native["diagnostics"]))
++        _failure(bundle, "preflight", "unsupported_alimask_model_map" if unavailable else "invalid_alimask_input",
++                 "alignment", reason="decoder_source_semantics_unestablished" if unavailable else malformed)
+         return
+     first_codes = {item["code"] for item in first["issues"]}
+     weight_events = [event for event in first["original_events"] if event["kind"] == "GS" and event["tag"] == "WT"]
+@@ -312,14 +331,11 @@
+     syntax_codes = {"alignment_invalid", "alignment_incomplete", "alignment_empty", "row_geometry_invalid",
+         "row_symbols_invalid", "annotation_geometry_invalid", "annotation_join_ambiguous", "duplicate_sequence_name"}
+     if first_codes & syntax_codes:
+-        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
+-        return
+-    settings = operation["settings"]
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason=malformed)
++        return
+     ranges = parse_ranges(settings[RANGE_FLAGS[job["mode"]]])
+-    if job["mode"] in {"mask_alignment", "alignment_to_model"} and any(end > first["column_count"] for _, end in ranges):
++    if any(end > first["column_count"] for _, end in ranges):
+         _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="range_outside_alignment")
+-        return
+-    if job["mode"] != "alignment_to_model":
+         return
+     context = resolve_alimask_map_context(operation=operation, software=bundle["software"],
+         source_occurrence=occurrence, requested_options=job["options"])
+@@ -328,10 +344,12 @@
+         reasons = {"rf_missing": "rf_required", "alphabet_missing": "explicit_alphabet_required",
+             "alphabet_incompatible": "unsupported_alignment_symbols", "weight_invalid": "invalid_weights",
+             "weighting_unsupported": "weighted_map_not_established", "pb_sampling_unsupported": "pb_subsampling_not_established",
+-            "map_context_unavailable": "map_configuration_unavailable", "map_context_invalid": "map_configuration_unavailable"}
++            "map_context_unavailable": "map_configuration_unavailable", "map_context_invalid": "map_configuration_unavailable",
++            "alphabet_undetermined": "alphabet_undetermined",
++            "alphabet_source_semantics_unestablished": "alphabet_source_semantics_unestablished"}
+         code = reconstructed["issues"][0]["code"] if reconstructed["issues"] else None
+         if code in {"alignment_invalid", "settings_invalid"}:
+-            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason=malformed)
+         elif code in reasons:
+             _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason=reasons[code])
+         else:

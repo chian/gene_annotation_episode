@@ -1,0 +1,41 @@
+.F.F.................................................................... [ 93%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+______ test_actual_translated_pairwise_measurements_reach_both_receivers _______
+
+pairwise_run = namespace(store=<gene_annotation_episode.state.Store object at 0x70486fc64680>, workflow=<gene_annotation_episode.runt...'adapter_version': '1', 'implementation_sha256': '6431e9b48d6015056915c610f125653a9bbb886e0195bd1a24a1fc531896a809'}]})
+
+    
+    def test_actual_translated_pairwise_measurements_reach_both_receivers(pairwise_run):
+>       run = pairwise_run
+E       AssertionError: assert {'aligned_pai...verage': None} == {'query_cover...'identity': 1}
+E         
+E         Differing items:
+E         {'reference_coverage': None} != {'reference_coverage': 0.6}
+E         {'identity': None} != {'identity': 1}
+E         {'query_coverage': None} != {'query_coverage': 0.6}
+E         {'aligned_pairs': None} != {'aligned_pairs': 3}
+E         Use -v to get more diff
+
+tests/test_bvbrc_homology_pairwise_workflow.py:454: AssertionError
+_______ test_partial_missing_values_and_saved_sheet_recalculation_replay _______
+
+pairwise_run = namespace(store=<gene_annotation_episode.state.Store object at 0x70486fc64680>, workflow=<gene_annotation_episode.runt...'adapter_version': '1', 'implementation_sha256': '6431e9b48d6015056915c610f125653a9bbb886e0195bd1a24a1fc531896a809'}]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70484be95eb0>
+
+    
+    def test_partial_missing_values_and_saved_sheet_recalculation_replay(pairwise_run, monkeypatch):
+        run = pairwise_run
+        early = run.api.read_result(run.choices.partial_ref, run.scope)
+        assert early == run.choices.partial_snapshot
+        assert early['status'] == 'partial' and early['publication']['completion_proof'] is None
+        assert all(early['publication']['adapter_result']['facts'][field] is None for field in MEASUREMENTS)
+>       assert early['publication']['adapter_result']['missing_requirements']
+E       assert False
+E        +  where False = all(<generator object test_partial_missing_values_and_saved_sheet_recalculation_replay.<locals>.<genexpr> at 0x70484bcff5e0>)
+
+tests/test_bvbrc_homology_pairwise_workflow.py:549: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_homology_pairwise_workflow.py::test_actual_translated_pairwise_measurements_reach_both_receivers
+FAILED tests/test_bvbrc_homology_pairwise_workflow.py::test_partial_missing_values_and_saved_sheet_recalculation_replay
+2 failed, 75 passed in 1737.71s (0:28:57)

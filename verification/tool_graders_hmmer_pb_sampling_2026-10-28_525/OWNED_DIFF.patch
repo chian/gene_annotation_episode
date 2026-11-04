@@ -1,0 +1,434 @@
+--- /dev/null
++++ gene_annotation_episode/hmmer_alignment_pb_sampling.py
+@@ -0,0 +1,201 @@
++"""Pure row-ordinal sampling for retained Easel PB reconstruction.
++
++This ports MT19937-64 and the Vitter D/A implementation in
++``resources/software/infernal-1.1.5/easel/esl_rand64.c``. The native generator
++derives from Makoto Matsumoto and Takuji Nishimura's MT19937-64; Easel's Deal
++implementation derives from Kevin Lawler's Vitter implementation.
++
++The caller supplies the effective PB seed. This module neither infers that
++seed from CLI options nor decides whether an alignment should be sampled. It
++returns calculated zero-based source-row ordinals, not observed native output.
++PB counts, weights, fragment handling and occurrence joins belong to the common
++alignment reconstruction. Floating calculations retain the source operation
++order; native equivalence still depends on the platform's double/libm behavior.
++"""
++from __future__ import annotations
++
++import math
++
++
++_UINT64_MAX = (1 << 64) - 1
++_INT64_MAX = (1 << 63) - 1
++
++__all__ = ["sample_easel_pb_rows"]
++
++
++class _EaselMT19937_64:
++    """The retained generator's uint64 stream and two needed double forms."""
++
++    def __init__(self, seed: int) -> None:
++        self._mt = [0] * 312
++        self._mt[0] = seed
++        for z in range(1, 312):
++            previous = self._mt[z - 1]
++            self._mt[z] = (
++                6364136223846793005 * (previous ^ (previous >> 62)) + z
++            ) & _UINT64_MAX
++        self._fill_table()
++
++    def _fill_table(self) -> None:
++        mt = self._mt
++        mag01 = (0, 0xB5026F5AA96619E9)
++        for z in range(156):
++            x = (mt[z] & 0xFFFFFFFF80000000) | (mt[z + 1] & 0x7FFFFFFF)
++            mt[z] = mt[z + 156] ^ (x >> 1) ^ mag01[x & 1]
++        for z in range(156, 311):
++            x = (mt[z] & 0xFFFFFFFF80000000) | (mt[z + 1] & 0x7FFFFFFF)
++            mt[z] = mt[z - 156] ^ (x >> 1) ^ mag01[x & 1]
++        x = (mt[311] & 0xFFFFFFFF80000000) | (mt[0] & 0x7FFFFFFF)
++        mt[311] = mt[155] ^ (x >> 1) ^ mag01[x & 1]
++        self._mti = 0
++
++    def uint64(self) -> int:
++        if self._mti >= 312:
++            self._fill_table()
++        x = self._mt[self._mti]
++        self._mti += 1
++        x ^= (x >> 29) & 0x5555555555555555
++        x ^= (x << 17) & 0x71D67FFFEDA60000
++        x ^= (x << 37) & 0xFFF7EEE000000000
++        x ^= x >> 43
++        return x
++
++    def double(self) -> float:
++        return float(self.uint64() >> 11) * (1.0 / 9007199254740992.0)
++
++    def double_open(self) -> float:
++        return (float(self.uint64() >> 12) + 0.5) * (1.0 / 4503599627370496.0)
++
++
++def _log(value: float) -> float:
++    # C log(0) produces -infinity; Python's math.log(0) raises ValueError.
++    # The initial [0,1) draw can be zero. Subsequent draws are in (0,1).
++    return -math.inf if value == 0.0 else math.log(value)
++
++
++def _round_nonnegative(value: float) -> float:
++    """C round() on the nonnegative domain used by vitter_a()."""
++    fraction, integer = math.modf(value)
++    return integer + 1.0 if fraction >= 0.5 else integer
++
++
++def _vitter_a(
++    rng: _EaselMT19937_64, m: int, n: int, j: int, deal: list[int]
++) -> None:
++    top = float(n - m)
++    nreal = float(n)
++    while m >= 2:
++        u = rng.double_open()
++        skip = 0
++        quotient = top / nreal
++        while quotient > u:
++            skip += 1
++            top -= 1.0
++            nreal -= 1.0
++            quotient = (quotient * top) / nreal
++        j += skip + 1
++        deal.append(j)
++        nreal -= 1.0
++        m -= 1
++    skip = math.floor(_round_nonnegative(nreal) * rng.double())
++    j += skip + 1
++    deal.append(j)
++
++
++def _validate_settings(population_size: int, sample_size: int, seed: int) -> None:
++    if (
++        type(population_size) is not int
++        or type(sample_size) is not int
++        or type(seed) is not int
++        or not 1 <= sample_size <= population_size <= _INT64_MAX
++        or sample_size > _INT64_MAX // 13
++        or not 1 <= seed <= _UINT64_MAX
++    ):
++        raise ValueError("settings_invalid")
++
++
++def sample_easel_pb_rows(
++    population_size: int, *, sample_size: int, seed: int
++) -> list[int]:
++    """Return Easel's sorted sample without replacement from ``range(N)``.
++
++    All three arguments must be built-in integers, excluding booleans. Native
++    ``n`` and ``m`` are signed int64; this port requires ``1 <= m <= n`` and
++    ``m <= INT64_MAX // 13`` because native setup calculates ``13*m``. The seed
++    must be in ``1..UINT64_MAX``. These are native definition bounds, not a
++    resource policy. Invalid settings raise ``ValueError('settings_invalid')``.
++
++    Native ``m=0`` still writes one element and does not implement an empty
++    sample. Native seed zero chooses time-dependent state, which cannot be
++    reconstructed from this port's inputs. Both are rejected explicitly.
++    """
++    _validate_settings(population_size, sample_size, seed)
++    rng = _EaselMT19937_64(seed)
++    m = sample_size
++    n = population_size
++    j = -1
++    qu1 = n - m + 1
++    threshold = 13 * m
++    mreal = float(m)
++    nreal = float(n)
++    minv = 1.0 / float(m)
++    # This draw occurs even if the very first branch is Method A or m == 1.
++    vprime = math.exp(minv * _log(rng.double()))
++    qu1real = nreal - mreal + 1.0
++    deal: list[int] = []
++
++    # The native unused setup 1.0/(m-1) may be infinity for m == 1. Its first
++    # used value is computed here, where m > 1; do not raise on that setup.
++    while m > 1 and n > threshold:
++        mmin1inv = 1.0 / (-1.0 + mreal)
++        while True:
++            while True:
++                x = nreal * (-vprime + 1.0)
++                skip = math.floor(x)
++                if skip < qu1:
++                    break
++                vprime = math.exp(minv * _log(rng.double_open()))
++            u = rng.double_open()
++            neg_skip_real = float(-skip)
++            y1 = math.exp(mmin1inv * _log(u * nreal / qu1real))
++            vprime = y1 * (-x / nreal + 1.0) * (
++                qu1real / (neg_skip_real + qu1real)
++            )
++            if vprime <= 1.0:
++                break
++
++            y2 = 1.0
++            top = nreal - 1.0
++            if n - 1 > skip:
++                bottom = nreal - mreal
++                limit = n - skip
++            else:
++                bottom = nreal + neg_skip_real - 1.0
++                limit = qu1
++            for _ in range(n - 1, limit - 1, -1):
++                y2 = (y2 * top) / bottom
++                top -= 1.0
++                bottom -= 1.0
++            if nreal / (nreal - x) >= y1 * math.exp(mmin1inv * _log(y2)):
++                vprime = math.exp(mmin1inv * _log(rng.double_open()))
++                break
++            vprime = math.exp(minv * _log(rng.double_open()))
++
++        j += skip + 1
++        deal.append(j)
++        n = n - skip - 1
++        nreal = nreal + neg_skip_real - 1.0
++        m -= 1
++        mreal -= 1.0
++        minv = mmin1inv
++        qu1 -= skip
++        qu1real += neg_skip_real
++        threshold -= 13
++
++    if m > 1:
++        _vitter_a(rng, m, n, j, deal)
++    else:
++        skip = math.floor(n * vprime)
++        j += skip + 1
++        deal.append(j)
++    return deal
+--- /dev/null
++++ tests/test_hmmer_alignment_pb_sampling.py
+@@ -0,0 +1,227 @@
++"""Source-derived sampler fixtures; these are not captured native outputs.
++
++Scripted double streams below are hand traces of retained esl_rand64.c. Actual
++MT19937-64/Deal conformance belongs to the separately recorded native diagnostic
++run; no native program is launched by these tests.
++"""
++from __future__ import annotations
++
++import pytest
++
++from gene_annotation_episode import hmmer_alignment_pb_sampling as sampling
++
++
++class _ScriptedDraws:
++    def __init__(self, draws):
++        self.draws = list(draws)
++        self.calls = []
++
++    def _draw(self, kind):
++        expected_kind, value = self.draws.pop(0)
++        assert kind == expected_kind
++        self.calls.append(kind)
++        return value
++
++    def double(self):
++        return self._draw("half_open")
++
++    def double_open(self):
++        return self._draw("open")
++
++
++def _scripted(monkeypatch, population_size, sample_size, draws):
++    rng = _ScriptedDraws(draws)
++    seeds = []
++
++    def create(seed):
++        seeds.append(seed)
++        return rng
++
++    monkeypatch.setattr(sampling, "_EaselMT19937_64", create)
++    result = sampling.sample_easel_pb_rows(
++        population_size, sample_size=sample_size, seed=42
++    )
++    assert seeds == [42]
++    assert rng.draws == []
++    return result, rng.calls
++
++
++def test_method_a_consumes_initial_vprime_draw(monkeypatch):
++    # m=3,n=10: Method A skips 1 then 2; final n'=5 draw .4 skips 2.
++    rows, calls = _scripted(monkeypatch, 10, 3, [
++        ("half_open", .25), ("open", .5), ("open", .5), ("half_open", .4)
++    ])
++    assert rows == [1, 4, 7]
++    assert calls == ["half_open", "open", "open", "half_open"]
++
++
++def test_method_d_keeps_vprime_for_final_single_draw(monkeypatch):
++    # m=2,n=100: initial Vprime=.5 gives S=50; updated Vprime*49=12.5.
++    rows, calls = _scripted(monkeypatch, 100, 2, [
++        ("half_open", .25), ("open", .25)
++    ])
++    assert rows == [50, 63]
++    assert calls == ["half_open", "open"]
++
++
++def test_method_d_switches_to_a_with_remaining_population(monkeypatch):
++    # Initial cube root(.016) gives S=74. Remaining m=2,n=25 uses A:
++    # .5 skips 7, then n'=17 and .25 skips 4.
++    rows, calls = _scripted(monkeypatch, 100, 3, [
++        ("half_open", .016), ("open", .5), ("open", .5), ("half_open", .25)
++    ])
++    assert rows == [74, 82, 87]
++    assert calls == ["half_open", "open", "open", "half_open"]
++
++
++def test_method_d_zero_initial_draw_resamples_unusable_skip(monkeypatch):
++    rows, calls = _scripted(monkeypatch, 100, 2, [
++        ("half_open", 0.0), ("open", .25), ("open", .25)
++    ])
++    assert rows == [50, 63]
++    assert calls == ["half_open", "open", "open"]
++
++
++def test_method_d_rejected_proposal_consumes_two_more_open_draws(monkeypatch):
++    # First S=50,U=.99 fails both acceptance tests, then .25/.25 succeeds.
++    rows, calls = _scripted(monkeypatch, 100, 2, [
++        ("half_open", .25), ("open", .99), ("open", .25), ("open", .25)
++    ])
++    assert rows == [50, 63]
++    assert calls == ["half_open", "open", "open", "open"]
++
++
++def test_method_d_second_acceptance_resets_vprime(monkeypatch):
++    # Cube root(.13) gives S=49. U=.96 fails the fast test but passes
++    # the y2 test; the next .25 resets Vprime=.5 before the next D step.
++    rows, calls = _scripted(monkeypatch, 100, 3, [
++        ("half_open", .13), ("open", .96), ("open", .25), ("open", .25)
++    ])
++    assert rows == [49, 75, 82]
++    assert calls == ["half_open", "open", "open", "open"]
++
++
++@pytest.mark.parametrize("population_size,expected", [
++    (1, 0), (10, 7), ((1 << 53) + 1, 6755399441055744),
++    ((1 << 63) - 1, 6917529027641081856),
++])
++def test_single_sample_uses_initial_draw_and_native_double_population(
++    monkeypatch, population_size, expected
++):
++    rows, calls = _scripted(
++        monkeypatch, population_size, 1, [("half_open", .75)]
++    )
++    assert rows == [expected]
++    assert calls == ["half_open"]
++
++
++@pytest.mark.parametrize("seed", [1, 42, (1 << 64) - 1])
++@pytest.mark.parametrize("size", [1, 2, 3, 17, 312, 313])
++def test_full_sample_preserves_every_ordinal(size, seed):
++    assert sampling.sample_easel_pb_rows(size, sample_size=size, seed=seed) == list(range(size))
++
++
++def test_full_sample_does_not_skip_native_draws(monkeypatch):
++    rows, calls = _scripted(monkeypatch, 3, 3, [
++        ("half_open", .25), ("open", .75), ("open", .5), ("half_open", .25)
++    ])
++    assert rows == [0, 1, 2]
++    assert calls == ["half_open", "open", "open", "half_open"]
++
++
++@pytest.mark.parametrize("population_size,initial_method", [
++    (50001, "A"), (130000, "A"), (130001, "D"),
++])
++def test_pb_scale_samples_repeat_and_keep_order(
++    monkeypatch, population_size, initial_method
++):
++    calls = []
++    original = sampling._vitter_a
++
++    def capture(rng, m, n, j, deal):
++        calls.append((m, n, j, len(deal)))
++        return original(rng, m, n, j, deal)
++
++    monkeypatch.setattr(sampling, "_vitter_a", capture)
++    rows = sampling.sample_easel_pb_rows(population_size, sample_size=10000, seed=42)
++    assert len(rows) == 10000
++    assert all(type(value) is int for value in rows)
++    assert 0 <= rows[0] < rows[-1] < population_size
++    assert all(left < right for left, right in zip(rows, rows[1:]))
++    assert calls
++    if initial_method == "A":
++        assert calls[0] == (10000, population_size, -1, 0)
++    else:
++        assert 1 < calls[0][0] < 10000
++        assert calls[0][1] < population_size
++        assert calls[0][2] >= 0
++        assert calls[0][3] > 0
++    assert rows == sampling.sample_easel_pb_rows(
++        population_size, sample_size=10000, seed=42
++    )
++    assert rows != sampling.sample_easel_pb_rows(
++        population_size, sample_size=10000, seed=43
++    )
++
++
++def test_mt_seed_recurrence_retains_uint64_wraparound(monkeypatch):
++    monkeypatch.setattr(sampling._EaselMT19937_64, "_fill_table", lambda self: None)
++    assert sampling._EaselMT19937_64(1)._mt[:2] == [1, 6364136223846793006]
++    assert sampling._EaselMT19937_64((1 << 64) - 1)._mt[:2] == [
++        (1 << 64) - 1, 11436943252031931213
++    ]
++
++
++@pytest.mark.parametrize("word,half_open,open_value", [
++    (0, 0.0, 2.0 ** -53),
++    ((1 << 64) - 1, float.fromhex("0x1.fffffffffffffp-1"), float.fromhex("0x1.fffffffffffffp-1")),
++    ((1 << 63), .5, .5 + 2.0 ** -53),
++])
++def test_double_forms_have_native_endpoints(monkeypatch, word, half_open, open_value):
++    rng = sampling._EaselMT19937_64(42)
++    monkeypatch.setattr(rng, "uint64", lambda: word)
++    assert rng.double() == half_open
++    assert rng.double_open() == open_value
++
++
++@pytest.mark.parametrize("value,expected", [
++    (0.0, 0.0), (.499, 0.0), (.5, 1.0), (1.5, 2.0),
++    (2.5, 3.0), (float((1 << 52) - 1), float((1 << 52) - 1)),
++])
++def test_c_round_is_away_from_zero_without_add_half_loss(value, expected):
++    assert sampling._round_nonnegative(value) == expected
++
++
++@pytest.mark.parametrize("field", ["population_size", "sample_size", "seed"])
++@pytest.mark.parametrize("bad", [True, False, 1.0, "1", None, [], {}])
++def test_noninteger_settings_are_rejected(field, bad):
++    values = {"population_size": 100, "sample_size": 10, "seed": 42}
++    values[field] = bad
++    with pytest.raises(ValueError, match="^settings_invalid$"):
++        sampling.sample_easel_pb_rows(**values)
++
++
++@pytest.mark.parametrize("population_size,sample_size,seed", [
++    (0, 0, 42), (10, 0, 42), (0, 1, 42), (-1, 1, 42),
++    (10, -1, 42), (10, 11, 42), (10, 1, 0), (10, 1, -1),
++    (1 << 63, 1, 42), (10, 1 << 63, 42), (10, 1, 1 << 64),
++    ((1 << 63) - 1, ((1 << 63) - 1) // 13 + 1, 42),
++])
++def test_native_domain_violations_are_rejected(population_size, sample_size, seed):
++    with pytest.raises(ValueError, match="^settings_invalid$"):
++        sampling.sample_easel_pb_rows(population_size, sample_size=sample_size, seed=seed)
++
++
++def test_largest_defined_integer_setup_is_validated_without_allocating_sample():
++    sampling._validate_settings(
++        (1 << 63) - 1, ((1 << 63) - 1) // 13, (1 << 64) - 1
++    )
++
++
++def test_invalid_settings_are_rejected_before_rng_creation(monkeypatch):
++    def forbidden(seed):
++        raise AssertionError("RNG was created for invalid settings")
++
++    monkeypatch.setattr(sampling, "_EaselMT19937_64", forbidden)
++    with pytest.raises(ValueError, match="^settings_invalid$"):
++        sampling.sample_easel_pb_rows(10, sample_size=0, seed=42)

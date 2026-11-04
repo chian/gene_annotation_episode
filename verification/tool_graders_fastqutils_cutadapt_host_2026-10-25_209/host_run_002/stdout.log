@@ -1,0 +1,161 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 1 item
+
+../test_native_cutadapt_host.py::test_retained_trimgalore_cutadapt_bytes_actual_host_two_returns_and_saved_replay FAILED
+
+=================================== FAILURES ===================================
+_ test_retained_trimgalore_cutadapt_bytes_actual_host_two_returns_and_saved_replay _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_cutadapt_host_2026-10-25_209/host_run_002/tmp/test_retained_trimgalore_cutad0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7edd962d7b30>
+
+    def test_retained_trimgalore_cutadapt_bytes_actual_host_two_returns_and_saved_replay(tmp_path, monkeypatch):
+        def no_network(*args, **kwargs):
+            raise AssertionError('Controlled host verification attempted live transport')
+    
+        for name in ('socket.create_connection', 'socket.socket.connect', 'urllib.request.OpenerDirector.open'):
+            monkeypatch.setattr(name, no_network)
+        # Reuse precisely the original 204 parameters/form. Its handcrafted bundle
+        # is used only as a fixture declaration source and is never sent to the host.
+        monkeypatch.setattr(native_fixture, 'NATIVE', NATIVE)
+        data, fields = native_fixture.fixture()
+        assert tuple(fields) == EXPECTED_NAMES
+        params = deepcopy(data[3])
+        assert params['metadata_bindings'] == []
+        assert [row['selection'] for row in params['documents']] == [
+            {'kind': 'output_requirement', 'requirement_id': 'selected_trim'},
+            {'kind': 'output_requirement', 'requirement_id': 'selected_final'}]
+        selected_form = validate_requested_form(native_fixture.f.schema(fields))
+        fixture_map = {'parameters': params, 'requested_form': selected_form,
+                       'declarations': {'declarations': []},
+                       'submitted_parameters': deepcopy(data[0]['original_task']['submitted_parameters'])}
+        submitted = fixture_map['submitted_parameters']
+        assert submitted['recipe'] == ['TRIM']
+        assert submitted['paired_end_libs'] == submitted['srr_libs'] == []
+        assert submitted['single_end_libs'] == [{'read': '/synthetic/input.fastq'}]
+        output_objects = {name: ('/fixture/output/' + FILES[name], str(uuid.uuid5(
+            uuid.NAMESPACE_URL, 'controlled-cutadapt-host209:' + name))) for name in NAMES}
+        native_bytes = {name: (NATIVE / FILES[name]).read_bytes() for name in NAMES}
+        monkeypatch.setattr(host_fixture, 'fixture', lambda name: deepcopy(fixture_map[name]))
+        monkeypatch.setattr(host_fixture, 'raw', lambda name: native_bytes[name])
+        monkeypatch.setattr(host_fixture, 'NAMES', NAMES)
+        monkeypatch.setattr(host_fixture, 'OUTPUTS', output_objects)
+        save('fixture_declarations', dict(fixtures=fixture_map, requested_fields=fields,
+            workspace_outputs=output_objects,
+            native_inputs={name: dict(file=FILES[name], sha256=hashlib.sha256(raw).hexdigest(), byte_count=len(raw))
+                           for name, raw in native_bytes.items()},
+            original_provider_bundle_injected=False,
+            qualification='Actual retained local native output on synthetic reads; controlled task and Workspace transport.'))
+    
+        with Store(tmp_path / 'state') as store:
+            d = host_fixture.FastqDriver(store, tmp_path)
+            assert list(d.saved.receipts.known(d.saved.root.episode_id)) == []
+            initial_receipts = store.db.execute('SELECT COUNT(*) FROM runtime_record_receipts').fetchone()[0]
+            assert initial_receipts == 0
+            assert adapter.implementation_sha256() == PIN
+            d.start(documents=('trim', 'final'))
+            assert d.selected['adapter']['parameters'] == params
+            assert validate_requested_form(d.selected['requested_schema']) == selected_form
+            assert d.handoff['value']['original_task']['submitted_parameters'] == submitted
+            assert d.service.scientific_adapters[(adapter.ADAPTER_ID, adapter.ADAPTER_VERSION)][0] is adapter
+            parse = d.saved.journal.row('runtime_actions', d.parent.episode_id, 1)
+            parsed = json.loads(parse['result'])
+            assert json.loads(parse['action'])['tool'] == 'material.parse'
+            assert parsed['status'] == 'completed' and d.declarations['source_ref'] in parsed['record_refs']
+            attempt = parsed['result']['parse_attempt']
+            assert (attempt['status'], attempt['code'], attempt['source_ref']) == (
+                'completed', 'retained_without_sequence_projection', d.declarations['source_ref'])
+            assert store.get(d.declarations['source_ref'])['origin'] == 'caller'
+            assert store.get_artifact(d.declarations['artifact_ref']) == canonical({'declarations': []}).encode()
+            assert d.custody.possession(d.parent, d.declarations['source_ref']) == 'own_completed_action'
+            with pytest.raises(AppServiceCustodyError, match='input_not_possessed'):
+                d.custody.possession(d.parent, d.declarations['source_ref'], before=1)
+            save('original_selection_and_custody', dict(initial_known_record_refs=[], initial_receipt_count=initial_receipts,
+                material=d.material, declarations=d.declarations, parse_action=dict(parse), parsed=parsed,
+                assignment=d.frozen_assignment, submission=d.handoff,
+                custody='own_completed_action', custody_before_parse='input_not_possessed'))
+            d.acquire_manifest()
+            assert d.api._completion(d.context) is None
+            first = d.acquire_native('trim')
+            assert d.api._completion(d.context) is None
+            assert first['publication']['completion_proof'] is None
+            assert first['publication']['requested_form_status'] == 'partial'
+            assert [row['role'] for row in first['bundle']['artifacts']] == ['trim']
+            assert first['publication']['adapter_result']['facts']['cutadapt_output_bases']['records'][0]['payload']['value'] == 28
+            save('first_artifact_publication', first)
+            body = d.acquire_native('final')
+            assert body['publication']['requested_form_status'] == 'satisfied'
+            proof = d.api._completion(d.context)
+            assert proof is not None and d.api.verify_completion(d.context, proof)
+            assert plain(d.context.assignment) == d.frozen_assignment
+            assert body['publication_inputs']['selector'] == d.selected
+            assert body['publication_inputs']['adapter_implementation_sha256'] == PIN
+            assert body['bundle']['original_task'] == d.handoff['value']['original_task']
+            assert [row['role'] for row in body['bundle']['artifacts']] == list(NAMES)
+            for member in body['bundle']['artifacts']:
+                name = member['role']
+                assert member['requirement_ids'] == ['selected_' + name]
+                assert member['task_association']['task_id'] == '123'
+                assert member['workspace_object']['path'] == member['task_association']['output_path'] == output_objects[name][0]
+                assert member['workspace_object']['uuid'] == member['task_association']['output_uuid'] == output_objects[name][1]
+                assert store.get_artifact(member['raw_artifact_ref']) == native_bytes[name]
+                assert member['sha256'] == hashlib.sha256(native_bytes[name]).hexdigest()
+                assert member['byte_count'] == len(native_bytes[name])
+                assert d.custody.possession(d.context, member['source_ref']) == 'own_completed_action'
+                assert member['source_ref'] != 'source_' + name
+                document = next(row for row in d.sheet['documents'] if row['document_id'] == name)
+                assert document['artifact']['content_binding']['source_ref'] == member['source_ref']
+                assert document['artifact']['content_binding']['artifact_ref'] == member['raw_artifact_ref']
+            assert all(row['observed_state'] == 'unknown' for row in d.sheet['stages'])
+            assert [row['requested_token'] for row in d.sheet['stages']] == ['TRIM']
+            assert all(row['artifact']['identity'] == 'unknown' for row in d.sheet['documents'])
+            assert all(edge['scope'] == 'artifact_local' and edge['task_stage_ref'] is None
+                       for edge in d.sheet['native_lineage'])
+            populations = {row['id']: row for row in d.sheet['populations']}
+            for edge in d.sheet['native_lineage']:
+                assert populations[edge['before_population_ref']]['document_ids'] == ['trim']
+                assert populations[edge['after_population_ref']]['document_ids'] == ['trim']
+            trim = next(row for row in d.sheet['documents'] if row['document_id'] == 'trim')
+            assert [row['value'] for row in trim['labels'] if row['kind'] == 'producer_version'] == ['0.6.10', '4.9']
+            save('final_publication', body)
+            save('sheet', d.sheet)
+            save('components', d.components)
+    
+            actions_before = action_rows(store)
+            typed, key, refs = d.admit_numeric()
+            forwarded, forwarded_key, forwarded_refs = d.admit_numeric(to_grandparent=True)
+            assert typed == forwarded and refs == forwarded_refs
+>           values = assert_values(forwarded)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../test_native_cutadapt_host.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+typed = {'facts_0': [{'field': 'bvbrc_fastqutils_field:testC198/%2Ffacts%2Fcutadapt_input_reads', 'source_ref': 'source_69d9c0...inal%2Fsha256%2F992f92a6ad75672dd34ff1f487de27d5e3d7aaf533e0ed3a87fe1f02d998f461%2Fproducer_version_unproven'], ...}}]}
+
+    def assert_values(typed):
+        values = host_fixture.native_values(typed)
+        assert set(values) == set(EXPECTED_NAMES)
+        assert [values[name]['records'][0]['payload']['value']
+                for name in EXPECTED_NAMES[:6]] == EXPECTED_MEASUREMENTS
+        component = values['cutadapt_base_retention']['records'][0]['payload']
+        assert component['value'] == 28 / 58
+        assert (component['numerator'], component['denominator']) == (28, 58)
+        assert component['lineage_basis']['basis'] == 'native_report'
+        assert values['requirements']['selection']['target']['kind'] == 'requirements'
+        requirements = values['requirements']['records'][0]['payload']['requirements']
+>       assert {'stage_execution_unknown', 'producer_version_unproven', 'unknown_quality_encoding'} <= {
+            row['code'] for row in requirements}
+E       AssertionError: assert {'producer_ve...ity_encoding'} <= {'producer_ve...ity_encoding'}
+E         
+E         Extra items in the left set:
+E         'stage_execution_unknown'
+
+../test_native_cutadapt_host.py:64: AssertionError
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_cutadapt_host_2026-10-25_209/host_run_002/results.xml -
+=========================== short test summary info ============================
+FAILED ../test_native_cutadapt_host.py::test_retained_trimgalore_cutadapt_bytes_actual_host_two_returns_and_saved_replay
+======================== 1 failed in 335.81s (0:05:35) =========================

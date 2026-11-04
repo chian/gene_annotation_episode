@@ -1,0 +1,6 @@
+First packaging invocation exited1 after RESULTS.json and owned-source copies were written:
+Traceback (most recent call last):
+  File "<stdin>", line 23, in <module>
+AssertionError
+
+Investigation: pytest raw fixture trees retain current-path symlinks. Preserve and inventory them as symlinks rather than asserting every raw fixture path is a regular file; no tests/production source affected.

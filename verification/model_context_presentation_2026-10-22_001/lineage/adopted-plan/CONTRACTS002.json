@@ -1,0 +1,296 @@
+{
+  "definition": {
+    "additionalProperties": false,
+    "properties": {
+      "history_path": {
+        "const": "waiting_support.own_completed_action_history"
+      },
+      "lookup_source": {
+        "const": "original_context.tools"
+      },
+      "lookup_tool": {
+        "const": "episode.history"
+      },
+      "page_size_source": {
+        "const": "restoration.preview_size"
+      },
+      "preview_size": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "selection": {
+        "const": "latest_completed_rows_in_original_order"
+      },
+      "serialization": {
+        "const": "canonical_key_order_then_python_json_default_ascii_v1"
+      },
+      "version": {
+        "const": "bounded_wait_history_v1"
+      }
+    },
+    "required": [
+      "version",
+      "history_path",
+      "page_size_source",
+      "preview_size",
+      "selection",
+      "serialization",
+      "lookup_tool",
+      "lookup_source"
+    ],
+    "type": "object"
+  },
+  "new_request_envelope": {
+    "additionalProperties": false,
+    "properties": {
+      "context": {
+        "type": "object"
+      },
+      "model_presentation": {
+        "additionalProperties": false,
+        "properties": {
+          "before_decision_index": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "context": {
+            "type": "object"
+          },
+          "definition": {
+            "additionalProperties": false,
+            "properties": {
+              "history_path": {
+                "const": "waiting_support.own_completed_action_history"
+              },
+              "lookup_source": {
+                "const": "original_context.tools"
+              },
+              "lookup_tool": {
+                "const": "episode.history"
+              },
+              "page_size_source": {
+                "const": "restoration.preview_size"
+              },
+              "preview_size": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "selection": {
+                "const": "latest_completed_rows_in_original_order"
+              },
+              "serialization": {
+                "const": "canonical_key_order_then_python_json_default_ascii_v1"
+              },
+              "version": {
+                "const": "bounded_wait_history_v1"
+              }
+            },
+            "required": [
+              "version",
+              "history_path",
+              "page_size_source",
+              "preview_size",
+              "selection",
+              "serialization",
+              "lookup_tool",
+              "lookup_source"
+            ],
+            "type": "object"
+          },
+          "episode_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "model_input_char_count": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "model_input_text_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "model_input_utf8_byte_count": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "original_context_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "presented_context_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "run_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "version": {
+            "const": "episode_model_presentation_v1"
+          }
+        },
+        "required": [
+          "version",
+          "definition",
+          "run_id",
+          "episode_id",
+          "before_decision_index",
+          "original_context_sha256",
+          "presented_context_sha256",
+          "model_input_text_sha256",
+          "model_input_char_count",
+          "model_input_utf8_byte_count",
+          "context"
+        ],
+        "type": "object"
+      },
+      "schema": {
+        "type": "object"
+      },
+      "version": {
+        "const": "runtime_model_call_request_v2"
+      }
+    },
+    "required": [
+      "version",
+      "context",
+      "schema",
+      "model_presentation"
+    ],
+    "type": "object"
+  },
+  "presentation": {
+    "additionalProperties": false,
+    "properties": {
+      "before_decision_index": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "context": {
+        "type": "object"
+      },
+      "definition": {
+        "additionalProperties": false,
+        "properties": {
+          "history_path": {
+            "const": "waiting_support.own_completed_action_history"
+          },
+          "lookup_source": {
+            "const": "original_context.tools"
+          },
+          "lookup_tool": {
+            "const": "episode.history"
+          },
+          "page_size_source": {
+            "const": "restoration.preview_size"
+          },
+          "preview_size": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "selection": {
+            "const": "latest_completed_rows_in_original_order"
+          },
+          "serialization": {
+            "const": "canonical_key_order_then_python_json_default_ascii_v1"
+          },
+          "version": {
+            "const": "bounded_wait_history_v1"
+          }
+        },
+        "required": [
+          "version",
+          "history_path",
+          "page_size_source",
+          "preview_size",
+          "selection",
+          "serialization",
+          "lookup_tool",
+          "lookup_source"
+        ],
+        "type": "object"
+      },
+      "episode_id": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "model_input_char_count": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "model_input_text_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "model_input_utf8_byte_count": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "original_context_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "presented_context_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "run_id": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "version": {
+        "const": "episode_model_presentation_v1"
+      }
+    },
+    "required": [
+      "version",
+      "definition",
+      "run_id",
+      "episode_id",
+      "before_decision_index",
+      "original_context_sha256",
+      "presented_context_sha256",
+      "model_input_text_sha256",
+      "model_input_char_count",
+      "model_input_utf8_byte_count",
+      "context"
+    ],
+    "type": "object"
+  },
+  "restoration": {
+    "anyOf": [
+      {
+        "additionalProperties": false,
+        "properties": {
+          "preview_size": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "preview_size"
+        ],
+        "type": "object"
+      },
+      {
+        "additionalProperties": false,
+        "properties": {
+          "model_presentation": {
+            "const": "bounded_wait_history_v1"
+          },
+          "preview_size": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "preview_size",
+          "model_presentation"
+        ],
+        "type": "object"
+      }
+    ]
+  },
+  "semantic_validation": "See PROPOSAL002.md: recompute exact declared raw->latest-N projection; canonical type/sign/identity/count/hash comparisons required in addition to these shapes.",
+  "status": "proposed_unimplemented"
+}

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="13" time="166.816" timestamp="2026-10-26T01:49:36.829076-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_saved_success_receipt_cannot_remove_projection_evidence[projection_ref]" time="14.291"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'publication_receipt'&#10;  Actual message: 'native_infernal_preparation_capture_record_bytes_changed'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_007/temporary/pytest/test_saved_success_receipt_can0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x74bad3e50800&gt;
+fault = 'projection_ref'
+
+    @pytest.mark.parametrize("fault", ["projection_ref", "completed", "failures"])
+    def test_saved_success_receipt_cannot_remove_projection_evidence(tmp_path, monkeypatch, fault):
+        with Store(tmp_path / "store") as store:
+            _, _, bundle, capture, _, prepared = grade(store, tmp_path)
+            choice = selector()
+            ref, result = selected(store, tmp_path, bundle, capture, prepared, choice)
+            directory = tmp_path / "selection/native-infernal-preparation-projection"
+            receipt = json.loads((directory / "projection-receipt.json").read_bytes())
+            if fault == "projection_ref":
+                result["projection_artifact_ref"] = None
+            elif fault == "completed":
+                receipt["completed"] = False
+            else:
+                result["failures"] = [{"stage": "metadata", "code": "synthetic_forged_failure", "record_key": None}]
+            # This deliberately mutates both small local receipts. Rehashing an
+            # assertion cannot replace the required retained projection artifact.
+            receipt["publication_sha256"] = digest(result)
+            (directory / "publication.json").write_text(canonical(result))
+            (directory / "projection-receipt.json").write_text(canonical(receipt))
+            monkeypatch.setattr(publication, "run_local_job", forbidden)
+&gt;           with pytest.raises(ValueError, match="publication_receipt"):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'publication_receipt'
+E             Actual message: 'native_infernal_preparation_capture_record_bytes_changed'
+
+../../../tests/test_native_infernal_preparation_result_publication.py:355: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_saved_success_receipt_cannot_remove_projection_evidence[completed]" time="12.798"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'publication_receipt'&#10;  Actual message: 'native_infernal_preparation_capture_record_bytes_changed'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_007/temporary/pytest/test_saved_success_receipt_can1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x74bab34c04a0&gt;
+fault = 'completed'
+
+    @pytest.mark.parametrize("fault", ["projection_ref", "completed", "failures"])
+    def test_saved_success_receipt_cannot_remove_projection_evidence(tmp_path, monkeypatch, fault):
+        with Store(tmp_path / "store") as store:
+            _, _, bundle, capture, _, prepared = grade(store, tmp_path)
+            choice = selector()
+            ref, result = selected(store, tmp_path, bundle, capture, prepared, choice)
+            directory = tmp_path / "selection/native-infernal-preparation-projection"
+            receipt = json.loads((directory / "projection-receipt.json").read_bytes())
+            if fault == "projection_ref":
+                result["projection_artifact_ref"] = None
+            elif fault == "completed":
+                receipt["completed"] = False
+            else:
+                result["failures"] = [{"stage": "metadata", "code": "synthetic_forged_failure", "record_key": None}]
+            # This deliberately mutates both small local receipts. Rehashing an
+            # assertion cannot replace the required retained projection artifact.
+            receipt["publication_sha256"] = digest(result)
+            (directory / "publication.json").write_text(canonical(result))
+            (directory / "projection-receipt.json").write_text(canonical(receipt))
+            monkeypatch.setattr(publication, "run_local_job", forbidden)
+&gt;           with pytest.raises(ValueError, match="publication_receipt"):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'publication_receipt'
+E             Actual message: 'native_infernal_preparation_capture_record_bytes_changed'
+
+../../../tests/test_native_infernal_preparation_result_publication.py:355: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_saved_success_receipt_cannot_remove_projection_evidence[failures]" time="13.009"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'publication_receipt'&#10;  Actual message: 'native_infernal_preparation_capture_record_bytes_changed'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_007/temporary/pytest/test_saved_success_receipt_can2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x74bab344c6e0&gt;
+fault = 'failures'
+
+    @pytest.mark.parametrize("fault", ["projection_ref", "completed", "failures"])
+    def test_saved_success_receipt_cannot_remove_projection_evidence(tmp_path, monkeypatch, fault):
+        with Store(tmp_path / "store") as store:
+            _, _, bundle, capture, _, prepared = grade(store, tmp_path)
+            choice = selector()
+            ref, result = selected(store, tmp_path, bundle, capture, prepared, choice)
+            directory = tmp_path / "selection/native-infernal-preparation-projection"
+            receipt = json.loads((directory / "projection-receipt.json").read_bytes())
+            if fault == "projection_ref":
+                result["projection_artifact_ref"] = None
+            elif fault == "completed":
+                receipt["completed"] = False
+            else:
+                result["failures"] = [{"stage": "metadata", "code": "synthetic_forged_failure", "record_key": None}]
+            # This deliberately mutates both small local receipts. Rehashing an
+            # assertion cannot replace the required retained projection artifact.
+            receipt["publication_sha256"] = digest(result)
+            (directory / "publication.json").write_text(canonical(result))
+            (directory / "projection-receipt.json").write_text(canonical(receipt))
+            monkeypatch.setattr(publication, "run_local_job", forbidden)
+&gt;           with pytest.raises(ValueError, match="publication_receipt"):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'publication_receipt'
+E             Actual message: 'native_infernal_preparation_capture_record_bytes_changed'
+
+../../../tests/test_native_infernal_preparation_result_publication.py:355: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_grade_and_publication_replay_with_originals_and_all_work_forbidden" time="12.608" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_failed_grading_can_return_captured_artifacts_in_bounded_projection" time="11.592" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_projection_worker_failure_is_durable_without_invented_population" time="11.124" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_exact_missing_keys_and_stable_grading_across_directories" time="17.687" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[source]" time="14.886" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[prepared_ref]" time="12.040" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[occurrence]" time="12.409" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[sheet_bytes]" time="12.295" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[projection_bytes]" time="11.547" /><testcase classname="tests.test_native_infernal_preparation_result_publication" name="test_source_byte_and_return_mismatches_reject[publication]" time="10.061" /></testsuite></testsuites>

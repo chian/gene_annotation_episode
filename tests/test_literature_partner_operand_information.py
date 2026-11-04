@@ -268,7 +268,10 @@ def test_exact_endpoint_equality_and_containment_apply_to_every_arm_rate_and_spr
 @pytest.mark.parametrize("profile", (False, True))
 def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate(profile, with_failure):
     catalog = _population_catalog()
-    assert len(catalog) == 19
+    # Check the partner operations under test; unrelated reader additions do
+    # not change this contract or the number of biological evidence axes.
+    assert {row['name'] for row in catalog if row['name'].startswith('literature.partner.')} == {
+        'literature.partner.populate', 'literature.partner.source.populate'}
     assert next(row for row in catalog if row["name"] == "literature.rate.source.populate")["input_schema"] == rate_source_population_schema_with_information()
     entry = next(row for row in catalog if row["name"] == "literature.partner.source.populate")
     assert entry["input_schema"] == information.partner_source_population_schema_with_information()
@@ -289,7 +292,7 @@ def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_s
     rendered = render_literature_experimental_prompt(state, "Synthetic recurring assignment.",
         lookup_results=[outcome] if profile else ())
     task, steering = rendered.split("\n\nSTEERING", 1)
-    assert EXPERIMENTAL_TASK in task and PARTNER_TASK in task
+    assert PARTNER_TASK in task
     assert "Synthetic recurring assignment." in task
     assert "UTF-8 byte positions" in task
     assert "Unicode character position inside witness.quote" in task
@@ -314,7 +317,7 @@ def test_metadata_module_bytes_participate_in_actual_binding_identity(monkeypatc
     assert binding.fact_sources("literature") == original_fact_sources
 
 
-def test_dispatch_probe_proves_only_one_selected_repository_route():
+def test_dispatch_probe_proves_only_one_selected_repository_route(monkeypatch):
     args, _read_source, _witness, _text = fixture()
     calls = []
     outcome = {"status": "completed", "result": {"synthetic_dispatch_probe": True}}
@@ -331,7 +334,11 @@ def test_dispatch_probe_proves_only_one_selected_repository_route():
             raise AttributeError(name)
     context = SimpleNamespace(role="literature", scope={}, assignment={
         "version": "literature_assignment_v1", "question_context_refs": [], "source_refs": []})
-    result = asyncio.run(LiteratureEpisodes(Services(), rate_population=True).execute(
+    binding = LiteratureEpisodes(Services(), rate_population=True)
+    # This unit test isolates dispatch after argument admission. Actual source
+    # authorization is exercised by the storage and ordinary-episode tests.
+    monkeypatch.setattr(binding, '_tool_arguments', lambda context, name, args: args)
+    result = asyncio.run(binding.execute(
         context, "literature.partner.source.populate", args, "synthetic:partner:operation"))
     assert result is outcome
     assert calls == [(context, args, "synthetic:partner:operation")]

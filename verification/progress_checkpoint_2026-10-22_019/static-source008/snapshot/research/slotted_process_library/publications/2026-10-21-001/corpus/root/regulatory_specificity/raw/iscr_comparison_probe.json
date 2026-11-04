@@ -1,0 +1,223 @@
+{
+  "probe_id": "iscr_published_specificity_and_state_comparisons",
+  "operation": "Align the authors’ 30-mer variants position by position; preserve censored IC50 values and calculate within-source ratios of reported central estimates. No new motif model, genome scan, curve fit, measured binding, or inferred ligand affinity.",
+  "source_inputs": {
+    "Nesbit_2009": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2709974/",
+      "location": "Table 1 and DNA competition Methods",
+      "protein": "IscR-C92A/C98A/C104A",
+      "conditions": "55 nM protein, 5 nM Texas Red hya DNA, unlabeled competitor 8–1000 nM, 40 mM Tris-Cl pH 7.9, 150 mM KCl",
+      "scope": "IC50 is an assay-dependent DNA competition measurement, not a regulator–signal dissociation constant."
+    },
+    "Rajagopalan_2013": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3676455/",
+      "location": "Table 2; variant DNA-binding Methods",
+      "hya_Kd_nM": {
+        "WT": 17,
+        "E43A": 22,
+        "S40A": 170,
+        "Q44A": 57
+      },
+      "scope": "Apparent affinities under the source assay. Anaerobically isolated preparations had partial cluster occupancy; no pure-state intrinsic affinity is inferred."
+    },
+    "Banerjee_2025": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/",
+      "location": "Figure 4c and fluorescence-polarization Methods",
+      "type1_Kd_nM": {
+        "untreated": 22,
+        "PMS_treated_lower_bound": 1000,
+        "air_oxidized_returned_to_Coy": 26
+      },
+      "scope": "PMS-treated Kd is censored above 1000 nM; the source describes the impairment as approximately at least 50-fold. Central bound arithmetic alone gives >1000/22. Cofactor reduction on return to the chamber is authors’ mechanistic interpretation, not measured here."
+    },
+    "Giel_2013": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4108476/",
+      "location": "Cluster-occupancy Results and Figure S1 description",
+      "half_maximal_repression_total_IscR_nM": {
+        "aerobic": 955,
+        "anaerobic": 107
+      },
+      "scope": "Total regulator amount needed for a functional reporter response; not a direct cluster occupancy measurement."
+    }
+  },
+  "DNA_competition_rows": [
+    {
+      "name": "hya WT",
+      "sequence": "ATAAATCCACACAGTTTGTATTGTTTTGTG",
+      "IC50_nM": 29,
+      "relation": "=",
+      "length": 30,
+      "changes_from_WT": [],
+      "IC50_over_WT_IC50": 1.0,
+      "ratio_relation": "="
+    },
+    {
+      "name": "-50 C to G",
+      "sequence": "ATAAATCGACACAGTTTGTATTGTTTTGTG",
+      "IC50_nM": 1000,
+      "relation": ">",
+      "length": 30,
+      "changes_from_WT": [
+        {
+          "one_based_oligo_index": 8,
+          "WT_base": "C",
+          "variant_base": "G"
+        }
+      ],
+      "IC50_over_WT_IC50": 34.48275862068966,
+      "ratio_relation": ">"
+    },
+    {
+      "name": "-38 A to T",
+      "sequence": "ATAAATCCACACAGTTTGTTTTGTTTTGTG",
+      "IC50_nM": 1000,
+      "relation": ">",
+      "length": 30,
+      "changes_from_WT": [
+        {
+          "one_based_oligo_index": 20,
+          "WT_base": "A",
+          "variant_base": "T"
+        }
+      ],
+      "IC50_over_WT_IC50": 34.48275862068966,
+      "ratio_relation": ">"
+    },
+    {
+      "name": "-36 T to G",
+      "sequence": "ATAAATCCACACAGTTTGTATGGTTTTGTG",
+      "IC50_nM": 16,
+      "relation": "=",
+      "length": 30,
+      "changes_from_WT": [
+        {
+          "one_based_oligo_index": 22,
+          "WT_base": "T",
+          "variant_base": "G"
+        }
+      ],
+      "IC50_over_WT_IC50": 0.5517241379310345,
+      "ratio_relation": "="
+    },
+    {
+      "name": "Palindrome1",
+      "sequence": "ATAAATACATACAGTTTGTATGTATTTGTG",
+      "IC50_nM": 202,
+      "relation": "=",
+      "length": 30,
+      "changes_from_WT": [
+        {
+          "one_based_oligo_index": 7,
+          "WT_base": "C",
+          "variant_base": "A"
+        },
+        {
+          "one_based_oligo_index": 10,
+          "WT_base": "C",
+          "variant_base": "T"
+        },
+        {
+          "one_based_oligo_index": 22,
+          "WT_base": "T",
+          "variant_base": "G"
+        },
+        {
+          "one_based_oligo_index": 23,
+          "WT_base": "G",
+          "variant_base": "T"
+        },
+        {
+          "one_based_oligo_index": 24,
+          "WT_base": "T",
+          "variant_base": "A"
+        }
+      ],
+      "IC50_over_WT_IC50": 6.9655172413793105,
+      "ratio_relation": "="
+    },
+    {
+      "name": "Palindrome2",
+      "sequence": "ATAAATCCATCCAGTTTGGATGGATTTGTG",
+      "IC50_nM": 1000,
+      "relation": ">",
+      "length": 30,
+      "changes_from_WT": [
+        {
+          "one_based_oligo_index": 10,
+          "WT_base": "C",
+          "variant_base": "T"
+        },
+        {
+          "one_based_oligo_index": 11,
+          "WT_base": "A",
+          "variant_base": "C"
+        },
+        {
+          "one_based_oligo_index": 19,
+          "WT_base": "T",
+          "variant_base": "G"
+        },
+        {
+          "one_based_oligo_index": 22,
+          "WT_base": "T",
+          "variant_base": "G"
+        },
+        {
+          "one_based_oligo_index": 24,
+          "WT_base": "T",
+          "variant_base": "A"
+        }
+      ],
+      "IC50_over_WT_IC50": 34.48275862068966,
+      "ratio_relation": ">"
+    },
+    {
+      "name": "Palindrome1-2",
+      "sequence": "ATAAATCCATACAGTTTGTATGGATTTGTG",
+      "IC50_nM": 10,
+      "relation": "approximately",
+      "length": 30,
+      "changes_from_WT": [
+        {
+          "one_based_oligo_index": 10,
+          "WT_base": "C",
+          "variant_base": "T"
+        },
+        {
+          "one_based_oligo_index": 22,
+          "WT_base": "T",
+          "variant_base": "G"
+        },
+        {
+          "one_based_oligo_index": 24,
+          "WT_base": "T",
+          "variant_base": "A"
+        }
+      ],
+      "IC50_over_WT_IC50": 0.3448275862068966,
+      "ratio_relation": "approximately"
+    }
+  ],
+  "derived_within_source_ratios": {
+    "2013_hya_E43A_Kd_over_WT": 1.2941176470588236,
+    "2013_hya_S40A_Kd_over_WT": 10.0,
+    "2013_hya_Q44A_Kd_over_WT": 3.3529411764705883,
+    "2025_PMS_type1_Kd_over_untreated_lower_bound": 45.45454545454545,
+    "2025_PMS_ratio_relation": ">",
+    "2025_returned_to_chamber_Kd_over_untreated": 1.1818181818181819,
+    "2013_aerobic_over_anaerobic_total_IscR_at_half_max_repression": 8.925233644859814
+  },
+  "decision_relevance": [
+    "A single base substitution can cause a large, censored loss of DNA competition despite almost unchanged sequence identity; this supports testing recognition features rather than transferring a regulon from overall similarity.",
+    "Removal of E43 barely changes hya affinity but changes discrimination in the authors’ additional experiments. Preserving affinity at one reference site does not establish preserved target range.",
+    "The 2025 comparison tests the state during the measurement, not just an oxidation treatment applied earlier. Binding recovery after chamber return cannot be treated as proof of oxidation-independent binding.",
+    "Different signals are represented: DNA-recognition competition, protein–DNA affinity, and functional repression threshold. Their numerical ratios cannot be combined into one scale or transferred as a direct ligand-recognition measurement."
+  ],
+  "source_text_hashes": {
+    "PMC12594620.txt": "842d55b685e712ea930b2bcc67417e8b694d38cf8c147f0c02a0dee368832924",
+    "PMC2709974.txt": "2a2d756744d819ddef2913f0cf8d42767e7e9ede28ac1f1dced0e5f62fd4a04f",
+    "PMC3447993.txt": "7c8e8bc6d3403bb4b598a3516c1eeddc2dfe30e39b467aa618ff9c2d040e0e5f",
+    "PMC3676455.txt": "889a1f1afdd25d6e976d33300e523a95ccc83e0b90b75600e1b3bf6f35e99079",
+    "PMC4108476.txt": "a4f71ea54bdd4cafa3ec9bab5323b956e6f8cd0490ac2132756db78c97bb1b49"
+  }
+}

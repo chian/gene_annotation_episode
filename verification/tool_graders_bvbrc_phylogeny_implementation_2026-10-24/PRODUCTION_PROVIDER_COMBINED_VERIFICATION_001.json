@@ -1,0 +1,122 @@
+{
+  "scope": "Fourteen installed shared/native/provider modules across the two phylogeny tools",
+  "command": ".venv/bin/python -m pytest tests/test_phylogeny_formats.py tests/test_phylogeny_calculators.py tests/test_phylogeny_raxml_inputs.py tests/test_bvbrc_codon_tree_native.py tests/test_bvbrc_codon_tree_calculators.py tests/test_bvbrc_codon_tree_matrix_population.py tests/test_bvbrc_phylogeny_common.py tests/test_bvbrc_gene_tree_provider.py tests/test_bvbrc_codon_tree_provider.py -q --junitxml=verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/production-provider-combined-tests-001.xml",
+  "pytest_passed": 612,
+  "pytest_subtests_passed": 9,
+  "junit_counts": {
+    "tests": 621,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "deselected": 0,
+  "exclusions": [],
+  "receipt": {
+    "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/production-provider-combined-tests-001.xml",
+    "sha256": "a94cb495478f045cfaf0b93119da13588975bce43882ecdd31224964a61a2c69"
+  },
+  "production_modules": [
+    {
+      "path": "gene_annotation_episode/phylogeny_formats.py",
+      "sha256": "4fb42f3986aad989b913d7bb35452174512487041ee97cdb1f943e4c779b1c69"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_format_contracts.py",
+      "sha256": "28ae230bc643d795c1fb4f3671ed952102d76b7a16af8e0a95bafa8109c5920a"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_calculators.py",
+      "sha256": "68b27a168d0b64f931389bda26b94203b757ec891c11632659b944894cb0e07c"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_calculation_contracts.py",
+      "sha256": "fc47d43dac81d005d609160e70e83f8e068b6a4e13e64c9927c389a6294e67d4"
+    },
+    {
+      "path": "gene_annotation_episode/phylogeny_raxml_inputs.py",
+      "sha256": "fbdfc9c2525ad3b31e4bdc8922f30d60ba4ef67b02ec700a0aa411af1dda213f"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_codon_tree_native.py",
+      "sha256": "3f83d5c0268b8efa43c593a873cebe212f6acaf0f4626f064c14272f70d86340"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_codon_tree_calculators.py",
+      "sha256": "e8eeab6a379af3cf80b0c92089df13a8c06630abf8baabe04593d94aaab87d54"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_common_inputs.py",
+      "sha256": "c014f4b510a4f349d55ec3d5255d266417e058a8ab5f8d9cf26fa1b133d32f9d"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_common_contracts.py",
+      "sha256": "d081167ec5571a728b6ec8a827033c1fd24c58e9d8bd458b9bb28963ee121a04"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_phylogeny_common_grader.py",
+      "sha256": "ce4095410739cf2e8b1fdc2b97903717be44f6b00c93b4fe7e21abd342a5fb05"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_gene_tree_inputs.py",
+      "sha256": "f99179802bf2be328e8867f5f1808f139678038883de03269fafe7c792f0cf11"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_gene_tree_grader.py",
+      "sha256": "f3f382822d3f589295bdde68bb3d2a2e9d07efa59a4468bf82850fdac17d7ac9"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_codon_tree_inputs.py",
+      "sha256": "00f915ded5a9d8c259d338c59c7829761a397a781e72b5be72de7f631cab6aa5"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_codon_tree_grader.py",
+      "sha256": "5393d24a52e255fb1d1027082218dadc9165e1f4a0a7f279bc14cb2db82f83be"
+    }
+  ],
+  "test_files": [
+    {
+      "path": "tests/test_phylogeny_formats.py",
+      "sha256": "f6fe0cfa4c497f484173ea87b0d4e0599ce5baf6e3966cdf5bdb019b2402c309"
+    },
+    {
+      "path": "tests/test_phylogeny_calculators.py",
+      "sha256": "9c0fb5dff5444ec5da19d3464278aad1fa2780afbdbc38c24224599ab78d9010"
+    },
+    {
+      "path": "tests/test_phylogeny_raxml_inputs.py",
+      "sha256": "c4fabb0aa4c97cf048c241e67bd36880dfabf9b7fc3b5db98fbbdbff674fa210"
+    },
+    {
+      "path": "tests/test_bvbrc_codon_tree_native.py",
+      "sha256": "028da5b61cfad0b18536bfaccb9cda8db146719e43a3eef54b4aafaba7b5eec5"
+    },
+    {
+      "path": "tests/test_bvbrc_codon_tree_calculators.py",
+      "sha256": "c1680e089d62cebbea184b91df38e3f2269702b5f48d4d103969a84e1c40f8d2"
+    },
+    {
+      "path": "tests/test_bvbrc_codon_tree_matrix_population.py",
+      "sha256": "10357ec40a09faad909d46596a6e3a17e11a4971c5c8b8407706fa6a896b41a5"
+    },
+    {
+      "path": "tests/test_bvbrc_phylogeny_common.py",
+      "sha256": "55c12a8ddaf18a893c92825103776be137b32fe386e3338b1917724576dce894"
+    },
+    {
+      "path": "tests/test_bvbrc_gene_tree_provider.py",
+      "sha256": "d47fe0b24c15f79df119b0b5a0546bde4ffc87f86b679ed031bc67b24a0bda25"
+    },
+    {
+      "path": "tests/test_bvbrc_codon_tree_provider.py",
+      "sha256": "e69480f055b05caa6383246c72b641da8d47a2ae5804c9d07e7b2f795cea8545"
+    }
+  ],
+  "codon_saved_examples": 20,
+  "all_saved_components_equal": true,
+  "forbidden_access_attempts": 0,
+  "qualifications": [
+    "Retained official native outputs plus explicitly synthetic adversarial examples.",
+    "This verifies pure production parsing/extraction/calculation, not the complete selected-tool episode path.",
+    "No new live scientific BV-BRC or HPC run; bundle, library and parent-return integration remain unfinished."
+  ]
+}

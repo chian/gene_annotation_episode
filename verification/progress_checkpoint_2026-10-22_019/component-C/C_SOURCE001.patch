@@ -1,0 +1,292 @@
+--- original/assembled_service_setup.py
++++ 008/assembled_service_setup.py
+@@ -100,6 +100,7 @@
+     public_search_ports=None,
+     api_timing=None,
+     api_execution_planning=None,
++    api_direct_timing=None,
+ ) -> EpisodeApplicationServices:
+     """Bind exact caller operands without observing or selecting work.
+ 
+@@ -118,7 +119,7 @@
+         job_episodes=job_episodes, resource_estimator=resource_estimator,
+         handoff_unit=handoff_unit, acquired_record_unit=acquired_record_unit,
+         public_search_ports=public_search_ports, api_timing=api_timing,
+-        api_execution_planning=api_execution_planning)
++        api_execution_planning=api_execution_planning, api_direct_timing=api_direct_timing)
+     information = ProgressInformationCredit(_SavedProgressReader(store, run_id),
+         information_unit=monitoring_information_unit)
+     native_progress = HomologyProgressProvider(store, job_episodes.jobs,
+@@ -226,6 +227,49 @@
+         api_execution_planning=planner, **operands)
+ 
+ 
++def bind_assembled_services_with_public_search_timing_planning_direct(store: Store, *, tool_registry,
++        public_search_registry, api_timing, ordinary_hmmer_timing,
++        native_timing_information=None, **operands):
++    """Bind ordinary acquisition to the same explicit timing owners before freeze."""
++    from method_loop.durable import DurableExecutionError
++    from .api_execution_planning import ApiExecutionPlanner
++    from .api_timing_information import ApiReportedTimingFactReader
++    from .api_timing_records import ApiTimingBinding, ApiTimingLedger
++    from .api_reported_statistics import ApiReportedStatistics
++    from .communication import plain
++    from .direct_hmmer_timing import DIRECT_MODE, DirectHmmerTiming
++    from .native_timing_information import NativeTimingInformation
++    from .scientific_tool_library import _catalog
++    if plain(ordinary_hmmer_timing) != DIRECT_MODE:
++        raise ValueError('unsupported_ordinary_hmmer_timing_binding')
++    if _catalog(plain(operands['tool_catalog'])) != _catalog(tool_registry.catalog()):
++        raise DurableExecutionError('identity_conflict', affected_refs=['ordinary_hmmer_timing.tool_catalog'])
++    timing = api_timing if type(api_timing) is ApiTimingBinding else ApiTimingBinding.from_record(api_timing)
++    if operands['monitoring_information_unit'] != timing.monitoring_information_unit:
++        raise ValueError('api_timing_information_unit_mismatch')
++    if native_timing_information is not None and (type(native_timing_information) is not NativeTimingInformation
++            or native_timing_information.information_unit != timing.monitoring_information_unit):
++        raise ValueError('api_timing_information_unit_mismatch')
++    estimator = operands['resource_estimator']
++    if (type(estimator) is not ResourceToolEstimator
++            or estimator.as_record() != ResourceToolEstimator.with_reported_results().as_record()):
++        raise ValueError('reported_result_estimator_not_enabled')
++    statistics = ApiReportedStatistics(timing, registry=public_search_registry)
++    ledger = ApiTimingLedger(store=store, run_id=operands['run_id'], registry=public_search_registry,
++        binding=timing, statistics=statistics)
++    ports = bind_public_search_ports(store, tool_registry, registry=public_search_registry, timing=ledger)
++    planner = ApiExecutionPlanner(store, run_id=operands['run_id'], ports=ports, timing=ledger,
++        resource_estimator=estimator)
++    tool_registry.bind_api_execution_planner(planner)
++    reader = ApiReportedTimingFactReader(ledger, ports=ports)
++    direct = DirectHmmerTiming(planner, reader=reader)
++    tool_registry.bind_api_direct_hmmer_timing(direct)
++    operands = {**operands, 'tool_catalog': tool_registry.catalog()}
++    return _bind_assembled_services(store, public_search_ports=ports, api_timing=ledger,
++        api_execution_planning=planner, api_direct_timing=direct, **operands)
++
++
+ __all__ = ['bind_assembled_services', 'bind_assembled_services_with_public_search',
+            'bind_assembled_services_with_public_search_timing',
+-           'bind_assembled_services_with_public_search_timing_planning']
++           'bind_assembled_services_with_public_search_timing_planning',
++           'bind_assembled_services_with_public_search_timing_planning_direct']
+--- original/resource_service_setup.py
++++ 008/resource_service_setup.py
+@@ -35,6 +35,7 @@
+                            public_search_ports=None,
+                            api_timing=None,
+                            api_execution_planning=None,
++                           api_direct_timing=None,
+                            ) -> EpisodeApplicationServices:
+     """Prepare resource descriptors and projections without observing work.
+ 
+@@ -58,6 +59,7 @@
+         from .api_resource_credit import ApiSearchOperationalCredit, ResourceCreditDispatch
+         api_adapter = HmmerServiceResourceAdapter(None, store, journal, ports=public_search_ports,
+             api_execution_planning=api_execution_planning,
++            api_direct_timing=api_direct_timing,
+             **({} if api_timing is None else {'timing': api_timing, 'resource_estimator': resource_estimator}))
+         api_projector = ApiSearchOperationalCredit(api_adapter.information,
+             handoff_unit=handoff_unit, acquired_record_unit=acquired_record_unit)
+@@ -67,6 +69,8 @@
+         adapters = (*adapters, api_adapter)
+     elif api_execution_planning is not None:
+         raise ValueError('api_execution_planning_requires_public_search_ports')
++    elif api_direct_timing is not None:
++        raise ValueError('api_direct_timing_requires_public_search_ports')
+     binding = ResourceEpisodes(None, resource_adapters=adapters)
+     return EpisodeApplicationServices((binding.as_record(),), {
+         role: {'definition': projector.as_record(), 'project': projector}
+--- original/hmmer_resource_adapter.py
++++ 008/hmmer_resource_adapter.py
+@@ -43,7 +43,8 @@
+ 
+ class HmmerServiceResourceAdapter:
+     def __init__(self, services, store, journal, *, ports: PublicSearchPorts,
+-                 timing=None, resource_estimator=None, api_execution_planning=None):
++                 timing=None, resource_estimator=None, api_execution_planning=None,
++                 api_direct_timing=None):
+         if (not isinstance(ports, PublicSearchPorts) or journal.store is not store
+                 or getattr(ports.result_publisher, 'store', None) is not store):
+             raise TypeError('explicit_hmmer_resource_ports_required')
+@@ -54,6 +55,7 @@
+         self.record_selection = None
+         self.timing, self.resource_estimator = timing, resource_estimator
+         self.api_execution_planning = api_execution_planning
++        self.api_direct_timing = api_direct_timing
+         self.timing_reader = None
+         if timing is not None:
+             from .api_timing_information import ApiReportedTimingFactReader
+@@ -62,7 +64,8 @@
+                     or type(resource_estimator) is not ResourceToolEstimator
+                     or resource_estimator.as_record() != ResourceToolEstimator.with_reported_results().as_record()):
+                 raise ValueError('api_timing_adapter_binding_mismatch')
+-            self.timing_reader = ApiReportedTimingFactReader(timing, ports=ports)
++            if api_direct_timing is None:
++                self.timing_reader = ApiReportedTimingFactReader(timing, ports=ports)
+         if api_execution_planning is not None:
+             from .api_execution_planning import ApiExecutionPlanner
+             if (type(api_execution_planning) is not ApiExecutionPlanner
+@@ -73,6 +76,19 @@
+                     or api_execution_planning.resource_estimator is not resource_estimator):
+                 raise ValueError('api_execution_planning_adapter_binding_mismatch')
+             api_execution_planning.validate_registry(ports.result_publisher.tools)
++        if api_direct_timing is not None:
++            from .api_timing_information import ApiReportedTimingFactReader
++            from .direct_hmmer_timing import DirectHmmerTiming
++            if (type(api_direct_timing) is not DirectHmmerTiming
++                    or api_execution_planning is None or timing is None
++                    or api_direct_timing.planner is not api_execution_planning
++                    or type(api_direct_timing.reader) is not ApiReportedTimingFactReader
++                    or api_direct_timing.reader.ledger is not timing
++                    or api_direct_timing.reader.ports is not ports
++                    or api_direct_timing.reader.store is not store):
++                raise ValueError('api_direct_timing_adapter_binding_mismatch')
++            api_direct_timing.validate_registry(ports.result_publisher.tools)
++            self.timing_reader = api_direct_timing.reader
+ 
+     def bind_record_selection(self, callback):
+         self.record_selection = callback
+@@ -87,6 +103,9 @@
+         if self.api_execution_planning is not None:
+             value.update(version='hmmer_service_resource_adapter_v3',
+                 api_execution_planning=self.api_execution_planning.as_record())
++        if self.api_direct_timing is not None:
++            value.update(version='hmmer_service_resource_adapter_v4',
++                ordinary_hmmer_timing=self.api_direct_timing.as_record())
+         return value
+ 
+     def capability(self):
+--- original/episode_services.py
++++ 008/episode_services.py
+@@ -122,6 +122,9 @@
+ 
+     def bind_api_execution_planner(self, planner):
+         return self.workflow.tools.bind_api_execution_planner(planner)
++
++    def bind_api_direct_hmmer_timing(self, binding):
++        return self.workflow.tools.bind_api_direct_hmmer_timing(binding)
+ 
+     async def observe_progress(self, target_handle, requested_fields, scope, *,
+                          permitted_committed_record_types=(), operation_key=None):
+--- original/episode_composition.py
++++ 008/episode_composition.py
+@@ -161,27 +161,37 @@
+                         adapter = HomologyResourceAdapter(job_episodes, store, journal,
+                                                            resource_estimator)
+                     elif adapter_descriptor.get('version') in {'hmmer_service_resource_adapter_v1',
+-                            'hmmer_service_resource_adapter_v2', 'hmmer_service_resource_adapter_v3'}:
++                            'hmmer_service_resource_adapter_v2', 'hmmer_service_resource_adapter_v3',
++                            'hmmer_service_resource_adapter_v4'}:
+                         from .hmmer_resource_adapter import HmmerServiceResourceAdapter
+                         resolver = getattr(services, 'public_search_ports', None)
+                         if not callable(resolver):
+                             raise _failure('unavailable_binding', adapter_ref)
+                         timing = None
+                         if adapter_descriptor['version'] in {'hmmer_service_resource_adapter_v2',
+-                                'hmmer_service_resource_adapter_v3'}:
++                                'hmmer_service_resource_adapter_v3', 'hmmer_service_resource_adapter_v4'}:
+                             ports = resolver(adapter_descriptor['registry'], timing=adapter_descriptor['timing'])
+                             timing = ports.operations.timing
+                             _same_record(resource_estimator.as_record(), adapter_descriptor['resource_estimator'], adapter_ref)
+                         else:
+                             ports = resolver(adapter_descriptor['registry'])
+                         planner = None
+-                        if adapter_descriptor['version'] == 'hmmer_service_resource_adapter_v3':
++                        if adapter_descriptor['version'] in {'hmmer_service_resource_adapter_v3',
++                                'hmmer_service_resource_adapter_v4'}:
+                             from .api_execution_planning import ApiExecutionPlanner
+                             planner = ApiExecutionPlanner(store, run_id=journal.run_id,
+                                 ports=ports, timing=timing, resource_estimator=resource_estimator)
+                             _same_record(planner.as_record(), adapter_descriptor['api_execution_planning'], adapter_ref)
++                        direct = None
++                        if adapter_descriptor['version'] == 'hmmer_service_resource_adapter_v4':
++                            from .api_timing_information import ApiReportedTimingFactReader
++                            from .direct_hmmer_timing import DirectHmmerTiming
++                            reader = ApiReportedTimingFactReader(timing, ports=ports)
++                            direct = DirectHmmerTiming(planner, reader=reader)
++                            _same_record(direct.as_record(), adapter_descriptor['ordinary_hmmer_timing'], adapter_ref)
+                         adapter = HmmerServiceResourceAdapter(services, store, journal, ports=ports,
+                             api_execution_planning=planner,
++                            api_direct_timing=direct,
+                             **({} if timing is None else {'timing': timing, 'resource_estimator': resource_estimator}))
+                         # Compare the complete saved adapter before changing the
+                         # registry handle. Equal attachment deliberately replaces
+@@ -192,6 +202,12 @@
+                             if not callable(attach):
+                                 raise _failure('unavailable_binding', adapter_ref)
+                             if attach(planner) is not planner:
++                                raise _failure('identity_conflict', adapter_ref)
++                        if direct is not None:
++                            attach = getattr(services, 'bind_api_direct_hmmer_timing', None)
++                            if not callable(attach):
++                                raise _failure('unavailable_binding', adapter_ref)
++                            if attach(direct) is not direct:
+                                 raise _failure('identity_conflict', adapter_ref)
+                     else:
+                         raise _failure('unavailable_binding', reference)
+--- original/api_planning_case_policy.py
++++ 008/api_planning_case_policy.py
+@@ -14,13 +14,15 @@
+ from gene_annotation_episode import assembled_case_policy
+ from gene_annotation_episode.api_timing_records import ApiTimingBinding
+ from gene_annotation_episode.assembled_service_setup import (
+-    bind_assembled_services_with_public_search_timing_planning)
++    bind_assembled_services_with_public_search_timing_planning,
++    bind_assembled_services_with_public_search_timing_planning_direct)
+ from gene_annotation_episode.case_execution import PolicyBindings
+ from gene_annotation_episode.domain import canonical
+ from gene_annotation_episode.resource_estimation import ResourceToolEstimator
+ 
+ 
+ VERSION = 'assembled_case_api_prechoice_v1'
++DIRECT_VERSION = 'assembled_case_api_prechoice_direct_timing_v1'
+ _SERVICE_FIELDS = assembled_case_policy._SERVICE_FIELDS | {
+     'public_search_registry', 'api_timing', 'api_execution_planning'}
+ _PLANNING = {'version': 'hmmer_api_execution_planning_v1',
+@@ -68,9 +70,15 @@
+         raise ValueError('explicit_api_prechoice_policy_sections_required')
+     saved = _json_copy(parameters)
+     services = saved['services']
+-    if (type(services) is not dict or set(services) != _SERVICE_FIELDS
+-            or services['version'] != VERSION):
++    direct = type(services) is dict and services.get('version') == DIRECT_VERSION
++    fields = _SERVICE_FIELDS | {'ordinary_hmmer_timing'} if direct else _SERVICE_FIELDS
++    if (type(services) is not dict or set(services) != fields
++            or services['version'] != VERSION and services['version'] != DIRECT_VERSION):
+         raise ValueError('explicit_api_prechoice_services_configuration_required')
++    if direct:
++        from gene_annotation_episode.direct_hmmer_timing import DIRECT_MODE
++        if services['ordinary_hmmer_timing'] != DIRECT_MODE:
++            raise ValueError('unsupported_ordinary_hmmer_timing_binding')
+     if services['api_execution_planning'] != _PLANNING:
+         raise ValueError('unsupported_api_execution_planning_binding')
+     for name in _UNITS:
+@@ -83,7 +91,7 @@
+             raise ValueError('explicit_positive_api_prechoice_service_units_required')
+     timing = ApiTimingBinding.from_record(services['api_timing'])
+     base_services = {name: value for name, value in services.items()
+-                     if name not in {'api_timing', 'api_execution_planning'}}
++                     if name not in {'api_timing', 'api_execution_planning', 'ordinary_hmmer_timing'}}
+     base_services['version'] = assembled_case_policy.API_VERSION
+     base = assembled_case_policy.create_policy(
+         {'policy': saved['policy'], 'services': base_services})
+@@ -98,7 +106,10 @@
+ 
+     def setup(store, *, run_id, directory, job_episodes, resource_estimator,
+               tool_catalog, tool_registry):
+-        return bind_assembled_services_with_public_search_timing_planning(store,
++        factory = (bind_assembled_services_with_public_search_timing_planning_direct if direct
++            else bind_assembled_services_with_public_search_timing_planning)
++        extra = {'ordinary_hmmer_timing': json.loads(canonical(services['ordinary_hmmer_timing']))} if direct else {}
++        return factory(store,
+             run_id=run_id, directory=directory, job_episodes=job_episodes,
+             resource_estimator=resource_estimator, tool_catalog=tool_catalog,
+             tool_registry=tool_registry,
+@@ -113,7 +124,7 @@
+             literature_outcome_page_size=services['literature_outcome_page_size'],
+             monitor_outcome_page_size=services['monitor_outcome_page_size'],
+             log_window_bytes=services['log_window_bytes'],
+-            log_roles=tuple(services['log_roles']))
++            log_roles=tuple(services['log_roles']), **extra)
+ 
+     return replace(base, resource_estimator=estimator,
+         episode_service_factory=setup,

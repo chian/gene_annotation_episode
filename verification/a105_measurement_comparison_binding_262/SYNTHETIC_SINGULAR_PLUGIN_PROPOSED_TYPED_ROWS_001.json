@@ -1,0 +1,2027 @@
+{
+  "status": "plan_only_no_selected_operation_or_admission",
+  "sheet_ref_meaning": "schema-valid invented placeholder, no source record created",
+  "rows": [
+    {
+      "row_version": "measurement_comparison_return_v1",
+      "sheet_ref": "source_4f0eded0d74a1fcc6957aa22dc6e690e3d931c3cddd6bd131f4f9e1192704400",
+      "evidence_source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+      "evaluation_scope": "source_measurement_comparison",
+      "component": "combined_estimate",
+      "cell": {
+        "component": "combined_estimate",
+        "value": 20.0,
+        "exact_value": {
+          "numerator": "20",
+          "denominator": "1"
+        },
+        "conditional_value": null,
+        "conditional_exact_value": null,
+        "status": "populated",
+        "unit": "umol/min/mg",
+        "relation": "point",
+        "approximate": false,
+        "interpretation": "estimated_covariance_plugin_common_estimate",
+        "formula": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+        "meaning_code": "combined_estimate",
+        "origin": "derived",
+        "input_origins": [
+          "synthetic"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "operand_keys": [
+          "literature_measurement_fcf42f5a92536f1ef494f540",
+          "literature_measurement_bfe8a63f3d299102af93bd8f"
+        ],
+        "model_keys": [
+          "measurement_comparison_conversion_5b307ba47cca9c6e166154db",
+          "measurement_comparison_common_model_548aa7ecd15d43373de04198"
+        ],
+        "contribution_key": "measurement_comparison_contribution_c3d4092afdc87194056a6600",
+        "uncertainty": {
+          "covariance_source_refs": [
+            "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468"
+          ],
+          "variance_status": "estimated",
+          "scope": "selected_estimator_covariance",
+          "sampling_distribution": "not_assumed"
+        },
+        "reasons": {
+          "source": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        }
+      },
+      "source_kind": "synthetic_fixture",
+      "assertion_question": "quantitative_activity",
+      "role_meanings": [
+        {
+          "role": "left",
+          "estimator_scale": "reported_mean",
+          "quantity_kind": "specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "synthetic",
+          "relation": "point",
+          "approximate": false,
+          "qualification": "reported_point",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "left",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 168,
+                    "end": 172
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "rate",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 178,
+                    "end": 182
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 173,
+                    "end": 177
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "estimator_scale": "reported_mean",
+          "quantity_kind": "specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "synthetic",
+          "relation": "point",
+          "approximate": false,
+          "qualification": "reported_point",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "right",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 205,
+                    "end": 210
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "rate",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 222,
+                    "end": 226
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 211,
+                    "end": 221
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "same_quantity"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "construct",
+          "value": "same_construct_supported"
+        },
+        {
+          "name": "preparation_target",
+          "value": "same_population_estimand_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "matched_except_intended_change"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "same_quantitative_assertion"
+        },
+        {
+          "name": "left_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "not_established"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "isolated_signal_supported"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        }
+      ],
+      "model_conditions": [
+        {
+          "name": "common_model.applicability",
+          "state": "supported"
+        }
+      ],
+      "conversion_conditions": [
+        {
+          "role": "left",
+          "kind": "identity",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        },
+        {
+          "role": "right",
+          "kind": "identity",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [
+        {
+          "source_ref": "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "artifact_ref": "artifact_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "basis": "joint_covariance_of_selected_estimates",
+          "variance_status": "estimated",
+          "origin": "synthetic",
+          "systematic_coverage": "included_as_declared",
+          "derivation": "synthetic_model",
+          "status": "available"
+        }
+      ],
+      "model_settings": {
+        "common_variance_interpretation": "estimated_joint_estimator_covariance",
+        "common_combination": "generalized_least_squares",
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "optical_nuisance_sign": null,
+        "scenario_anchor_role": null
+      },
+      "dependencies": [
+        {
+          "role": "left",
+          "owner_key": "literature_measurement_fcf42f5a92536f1ef494f540",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_fcf42f5a92536f1ef494f540"
+          ],
+          "estimator_scale": "reported_mean",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "end": 185,
+              "representation": "original",
+              "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "start": 183
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "owner_key": "literature_measurement_bfe8a63f3d299102af93bd8f",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_bfe8a63f3d299102af93bd8f"
+          ],
+          "estimator_scale": "reported_mean",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "end": 229,
+              "representation": "original",
+              "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "start": 227
+            }
+          ]
+        }
+      ],
+      "dependence": [
+        {
+          "roles": [
+            "left",
+            "right"
+          ],
+          "relation": "sampling_unknown"
+        }
+      ],
+      "assumptions": [
+        "common_unbiased_quantity_model",
+        "estimated_weights_treated_as_plugin",
+        "no_reference_distribution_assumed"
+      ],
+      "withheld_locations": [
+        {
+          "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "representation": "original",
+          "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "start": 183,
+          "end": 185
+        },
+        {
+          "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "representation": "original",
+          "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "start": 227,
+          "end": 229
+        },
+        {
+          "source_ref": "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "artifact_ref": "artifact_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "representation": "original",
+          "start": 0,
+          "end": 561
+        }
+      ]
+    },
+    {
+      "row_version": "measurement_comparison_return_v1",
+      "sheet_ref": "source_4f0eded0d74a1fcc6957aa22dc6e690e3d931c3cddd6bd131f4f9e1192704400",
+      "evidence_source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+      "evaluation_scope": "source_measurement_comparison",
+      "component": "combined_variance",
+      "cell": {
+        "component": "combined_variance",
+        "value": 4.0,
+        "exact_value": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "conditional_value": null,
+        "conditional_exact_value": null,
+        "status": "populated",
+        "unit": "(umol/min/mg)^2",
+        "relation": "point",
+        "approximate": false,
+        "interpretation": "estimated_covariance_plugin_common_estimate",
+        "formula": "if(V_D>0,(V_L*V_R-C_LR^2)/V_D,if(V_D==0&&D==0,V_L,unavailable))",
+        "meaning_code": "combined_variance",
+        "origin": "derived",
+        "input_origins": [
+          "synthetic"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "operand_keys": [
+          "literature_measurement_fcf42f5a92536f1ef494f540",
+          "literature_measurement_bfe8a63f3d299102af93bd8f"
+        ],
+        "model_keys": [
+          "measurement_comparison_conversion_5b307ba47cca9c6e166154db",
+          "measurement_comparison_common_model_548aa7ecd15d43373de04198"
+        ],
+        "contribution_key": "measurement_comparison_contribution_c3d4092afdc87194056a6600",
+        "uncertainty": {
+          "covariance_source_refs": [
+            "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468"
+          ],
+          "variance_status": "estimated",
+          "scope": "selected_estimator_covariance",
+          "sampling_distribution": "not_assumed"
+        },
+        "reasons": {
+          "source": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": []
+        }
+      },
+      "source_kind": "synthetic_fixture",
+      "assertion_question": "quantitative_activity",
+      "role_meanings": [
+        {
+          "role": "left",
+          "estimator_scale": "reported_mean",
+          "quantity_kind": "specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "synthetic",
+          "relation": "point",
+          "approximate": false,
+          "qualification": "reported_point",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "left",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 168,
+                    "end": 172
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "rate",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 178,
+                    "end": 182
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 173,
+                    "end": 177
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "estimator_scale": "reported_mean",
+          "quantity_kind": "specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "synthetic",
+          "relation": "point",
+          "approximate": false,
+          "qualification": "reported_point",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "right",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 205,
+                    "end": 210
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "rate",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 222,
+                    "end": 226
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 211,
+                    "end": 221
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "same_quantity"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "construct",
+          "value": "same_construct_supported"
+        },
+        {
+          "name": "preparation_target",
+          "value": "same_population_estimand_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "matched_except_intended_change"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "same_quantitative_assertion"
+        },
+        {
+          "name": "left_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "not_established"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "isolated_signal_supported"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        }
+      ],
+      "model_conditions": [
+        {
+          "name": "common_model.applicability",
+          "state": "supported"
+        }
+      ],
+      "conversion_conditions": [
+        {
+          "role": "left",
+          "kind": "identity",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        },
+        {
+          "role": "right",
+          "kind": "identity",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [
+        {
+          "source_ref": "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "artifact_ref": "artifact_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "basis": "joint_covariance_of_selected_estimates",
+          "variance_status": "estimated",
+          "origin": "synthetic",
+          "systematic_coverage": "included_as_declared",
+          "derivation": "synthetic_model",
+          "status": "available"
+        }
+      ],
+      "model_settings": {
+        "common_variance_interpretation": "estimated_joint_estimator_covariance",
+        "common_combination": "generalized_least_squares",
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "optical_nuisance_sign": null,
+        "scenario_anchor_role": null
+      },
+      "dependencies": [
+        {
+          "role": "left",
+          "owner_key": "literature_measurement_fcf42f5a92536f1ef494f540",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_fcf42f5a92536f1ef494f540"
+          ],
+          "estimator_scale": "reported_mean",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "end": 185,
+              "representation": "original",
+              "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "start": 183
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "owner_key": "literature_measurement_bfe8a63f3d299102af93bd8f",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_bfe8a63f3d299102af93bd8f"
+          ],
+          "estimator_scale": "reported_mean",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "end": 229,
+              "representation": "original",
+              "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "start": 227
+            }
+          ]
+        }
+      ],
+      "dependence": [
+        {
+          "roles": [
+            "left",
+            "right"
+          ],
+          "relation": "sampling_unknown"
+        }
+      ],
+      "assumptions": [
+        "common_unbiased_quantity_model",
+        "estimated_weights_treated_as_plugin",
+        "no_reference_distribution_assumed"
+      ],
+      "withheld_locations": [
+        {
+          "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "representation": "original",
+          "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "start": 183,
+          "end": 185
+        },
+        {
+          "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "representation": "original",
+          "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "start": 227,
+          "end": 229
+        },
+        {
+          "source_ref": "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "artifact_ref": "artifact_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "representation": "original",
+          "start": 0,
+          "end": 561
+        }
+      ]
+    },
+    {
+      "row_version": "measurement_comparison_return_v1",
+      "sheet_ref": "source_4f0eded0d74a1fcc6957aa22dc6e690e3d931c3cddd6bd131f4f9e1192704400",
+      "evidence_source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+      "evaluation_scope": "source_measurement_comparison",
+      "component": "weight_left",
+      "cell": {
+        "component": "weight_left",
+        "value": null,
+        "exact_value": null,
+        "conditional_value": null,
+        "conditional_exact_value": null,
+        "status": "unavailable",
+        "unit": "dimensionless",
+        "relation": "point",
+        "approximate": false,
+        "interpretation": "unavailable",
+        "formula": "(V_R-C_LR)/(V_L+V_R-2*C_LR)",
+        "meaning_code": "weight_left",
+        "origin": "derived",
+        "input_origins": [
+          "synthetic"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "operand_keys": [
+          "literature_measurement_fcf42f5a92536f1ef494f540",
+          "literature_measurement_bfe8a63f3d299102af93bd8f"
+        ],
+        "model_keys": [
+          "measurement_comparison_conversion_5b307ba47cca9c6e166154db",
+          "measurement_comparison_common_model_548aa7ecd15d43373de04198"
+        ],
+        "contribution_key": "measurement_comparison_contribution_c3d4092afdc87194056a6600",
+        "uncertainty": {
+          "covariance_source_refs": [
+            "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468"
+          ],
+          "variance_status": "estimated",
+          "scope": "selected_estimator_covariance",
+          "sampling_distribution": "not_assumed"
+        },
+        "reasons": {
+          "source": [],
+          "relationship": [],
+          "implementation": [],
+          "domain": [
+            "nonunique_gls_weights"
+          ]
+        }
+      },
+      "source_kind": "synthetic_fixture",
+      "assertion_question": "quantitative_activity",
+      "role_meanings": [
+        {
+          "role": "left",
+          "estimator_scale": "reported_mean",
+          "quantity_kind": "specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "synthetic",
+          "relation": "point",
+          "approximate": false,
+          "qualification": "reported_point",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "left",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 168,
+                    "end": 172
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "rate",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 178,
+                    "end": 182
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "NADH",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 173,
+                    "end": 177
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "estimator_scale": "reported_mean",
+          "quantity_kind": "specific_activity",
+          "semantics": "reported_point_estimate",
+          "normalization": "protein_mass",
+          "origin": "synthetic",
+          "relation": "point",
+          "approximate": false,
+          "qualification": "reported_point",
+          "reported_uncertainty_statistic": "unreported",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "contexts": [
+            {
+              "field": "row_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "right",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 205,
+                    "end": 210
+                  }
+                }
+              ]
+            },
+            {
+              "field": "quantity_label",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "rate",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 222,
+                    "end": 226
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.organism",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.genotype",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.molecule",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.construct",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "subject.expression_host",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "subject.arrangement",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.assay",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.preparation",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.partners",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.substrates",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.conditions",
+              "status": "not_selected",
+              "fragments": []
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "ferredoxin",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 211,
+                    "end": 221
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.denominator",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.time_window",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.fit_basis",
+              "status": "selected",
+              "fragments": [
+                {
+                  "text": "<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>",
+                  "location": {
+                    "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "representation": "original",
+                    "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+                    "start": 0,
+                    "end": 165
+                  }
+                }
+              ]
+            },
+            {
+              "field": "assay.sampling_unit",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.intended_change",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.additional_differences",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.calibration",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.blank",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.active_fraction",
+              "status": "source_unavailable",
+              "fragments": []
+            },
+            {
+              "field": "assay.purity",
+              "status": "source_unavailable",
+              "fragments": []
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "same_quantity"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "construct",
+          "value": "same_construct_supported"
+        },
+        {
+          "name": "preparation_target",
+          "value": "same_population_estimand_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "matched_except_intended_change"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "same_quantitative_assertion"
+        },
+        {
+          "name": "left_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "not_established"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "isolated_signal_supported"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        }
+      ],
+      "model_conditions": [
+        {
+          "name": "common_model.applicability",
+          "state": "supported"
+        }
+      ],
+      "conversion_conditions": [
+        {
+          "role": "left",
+          "kind": "identity",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        },
+        {
+          "role": "right",
+          "kind": "identity",
+          "direction": "same_direction_supported",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [
+        {
+          "source_ref": "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "artifact_ref": "artifact_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "basis": "joint_covariance_of_selected_estimates",
+          "variance_status": "estimated",
+          "origin": "synthetic",
+          "systematic_coverage": "included_as_declared",
+          "derivation": "synthetic_model",
+          "status": "available"
+        }
+      ],
+      "model_settings": {
+        "common_variance_interpretation": "estimated_joint_estimator_covariance",
+        "common_combination": "generalized_least_squares",
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "optical_nuisance_sign": null,
+        "scenario_anchor_role": null
+      },
+      "dependencies": [
+        {
+          "role": "left",
+          "owner_key": "literature_measurement_fcf42f5a92536f1ef494f540",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_fcf42f5a92536f1ef494f540"
+          ],
+          "estimator_scale": "reported_mean",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "end": 185,
+              "representation": "original",
+              "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "start": 183
+            }
+          ]
+        },
+        {
+          "role": "right",
+          "owner_key": "literature_measurement_bfe8a63f3d299102af93bd8f",
+          "physical_owner_key": null,
+          "dependency_keys": [
+            "literature_measurement_bfe8a63f3d299102af93bd8f"
+          ],
+          "estimator_scale": "reported_mean",
+          "unit": "umol/min/mg",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "end": 229,
+              "representation": "original",
+              "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+              "start": 227
+            }
+          ]
+        }
+      ],
+      "dependence": [
+        {
+          "roles": [
+            "left",
+            "right"
+          ],
+          "relation": "sampling_unknown"
+        }
+      ],
+      "assumptions": [
+        "common_unbiased_quantity_model",
+        "estimated_weights_treated_as_plugin",
+        "no_reference_distribution_assumed"
+      ],
+      "withheld_locations": [
+        {
+          "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "representation": "original",
+          "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "start": 183,
+          "end": 185
+        },
+        {
+          "source_ref": "source_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "representation": "original",
+          "artifact_ref": "artifact_6a1fb2b3a6dbdceb28b9f8785b71938d4ffec2a72eefbebd4eb1f48776a1db87",
+          "start": 227,
+          "end": 229
+        },
+        {
+          "source_ref": "source_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "artifact_ref": "artifact_f351e5abe1520ebf984b1d47eb4aced0ceb499787028c68e9f388585d128d468",
+          "representation": "original",
+          "start": 0,
+          "end": 561
+        }
+      ]
+    }
+  ]
+}

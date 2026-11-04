@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="17.791" timestamp="2026-10-27T21:00:33.072270-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_numerical_declarations_203" name="test_new_legacy_alias_uses_actual_c1_c4_original_contract_and_readonly_saved_delivery" time="17.446"><failure message="sqlite3.DatabaseError: not authorized">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-2002/test_new_legacy_alias_uses_act0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7b1718233a10&gt;
+
+    def test_new_legacy_alias_uses_actual_c1_c4_original_contract_and_readonly_saved_delivery(tmp_path, monkeypatch):
+        # Reuse the complete original C1/C4 fixture assertions, changing only its
+        # caller to legacy None. It publishes a real selected commission, executes
+        # the synthetic child's native work, rolls back failed receipt admission,
+        # admits the exact typed return, then cold-reopens SQLite mode=ro before
+        # binding construction with acquisition/calculation/receive blocked.
+        import test_contract_information_custody_059 as custody
+        captured = {}
+        def original_world(*args, **kwargs):
+            result = world(*args, **kwargs)
+            captured['descriptors'] = result[4].episode_bindings.as_record()
+            return result
+        monkeypatch.setattr(custody, 'world', original_world)
+        custody.test_original_c1_c4_compact_form_native_custody_rollback_and_readonly_first_reconstruction(tmp_path, monkeypatch)
+        # Strengthen the existing logical SQL equality proof with a connection
+        # that is read-only from its first open, before the real binding composer.
+        from gene_annotation_episode.state import Store
+        from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.episode_services import WorkflowServices
+        state_path = tmp_path / 'state'
+        def hashes():
+            return {str(path.relative_to(state_path)): hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in state_path.rglob('*') if path.is_file()}
+        before = hashes()
+        cold = Store.__new__(Store)
+        cold.path, cold._savepoint = state_path, 0
+        cold.db = sqlite3.connect((state_path / 'state.sqlite3').resolve().as_uri() + '?mode=ro&amp;immutable=1',
+            uri=True, isolation_level=None)
+        cold.db.row_factory = sqlite3.Row
+        cold.db.execute('PRAGMA query_only=ON')
+        writes = []
+        mutation_codes = {getattr(sqlite3, name) for name in ('SQLITE_INSERT', 'SQLITE_UPDATE', 'SQLITE_DELETE',
+            'SQLITE_CREATE_TABLE', 'SQLITE_CREATE_INDEX', 'SQLITE_CREATE_TRIGGER', 'SQLITE_CREATE_VIEW',
+            'SQLITE_ALTER_TABLE', 'SQLITE_DROP_TABLE', 'SQLITE_DROP_INDEX', 'SQLITE_DROP_TRIGGER', 'SQLITE_DROP_VIEW')}
+        def authorize(action, arg1, arg2, database, trigger):
+            if action in mutation_codes:
+                writes.append((action, arg1, arg2))
+                return sqlite3.SQLITE_DENY
+            return sqlite3.SQLITE_OK
+        cold.db.set_authorizer(authorize)
+        try:
+            spec = json.loads(cold.db.execute('SELECT spec FROM runtime_commission_intents').fetchone()[0])
+            admission = json.loads(cold.db.execute('SELECT admission FROM runtime_return_admissions').fetchone()[0])
+            parent_row = cold.db.execute('SELECT request FROM runtime_episodes WHERE episode_id=?',
+                (spec['parent']['episode_id'],)).fetchone()
+            parent_request = json.loads(parent_row['request'])
+            original_form = admission['report']
+            source_ref = original_form['numbers'][0]['evidence_source_ref']
+            original_source_artifact = cold.get(source_ref)['artifact_ref']
+            get_artifact = cold.get_artifact
+            def saved_artifact(reference):
+                if reference == original_source_artifact:
+                    raise AssertionError('Cold reconstruction must not reacquire original synthetic source bytes')
+                return get_artifact(reference)
+            monkeypatch.setattr(cold, 'get_artifact', saved_artifact)
+            refs = tuple(dict.fromkeys([source_ref, *admission['received_record_refs'],
+                *parent_request['message']['scope']['subject_refs']]))
+            context = BindingContext(spec['run_id'], spec['parent']['episode_id'], 'annotation',
+                spec['parent']['path'], parent_request['message']['scope'], {}, parent_request, refs)
+            host = SimpleNamespace(store=cold, run_id=spec['run_id'], tools=None)
+            services = WorkflowServices(host)
+            composition = compose_episode_bindings(services, store=cold,
+                journal=SimpleNamespace(store=cold, run_id=spec['run_id']),
+                execution_backend=None, descriptors=captured['descriptors'], job_episodes=None,
+                resource_estimator=None, role_credit_bindings={})
+            bindings = EpisodeBindingRegistry(composition.bindings)
+            host.episode_bindings = bindings
+            binding = bindings.for_role('literature')
+            assert bindings.as_record() == captured['descriptors']
+&gt;           assert binding.received_report_facts(context)['literature_kinetic_cells'] == original_form['numbers']
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_numerical_declarations_203.py:374: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:1639: in received_report_facts
+    cells = repository().received_cells(context)
+            ^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:102: in literature_rate_repository
+    self._literature_rate_repository = LiteratureRateRepository(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_rate_storage.LiteratureRateRepository object at 0x7b16d26fbb00&gt;
+store = &lt;gene_annotation_episode.state.Store object at 0x7b16d19a1730&gt;
+run_id = 'kinetic-run'
+
+    def __init__(self, store, run_id):
+        if not isinstance(run_id, str) or not run_id:
+            raise ValueError("explicit_literature_run_required")
+        self.store, self.run_id = store, run_id
+&gt;       store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.operations_table}(
+            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
+            signature TEXT NOT NULL, outcome TEXT NOT NULL,
+            PRIMARY KEY(run_id,episode_id,operation_key))""")
+E       sqlite3.DatabaseError: not authorized
+
+gene_annotation_episode/literature_rate_storage.py:48: DatabaseError</failure></testcase></testsuite></testsuites>

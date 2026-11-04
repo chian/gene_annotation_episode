@@ -1,0 +1,38 @@
+{
+  "application_imports": 0,
+  "application_sql_writes": 0,
+  "database_connections": 1,
+  "no_polling_or_retry": true,
+  "statements": [
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6",
+        8
+      ],
+      "sql": "SELECT call_index,purpose,request,sha256_text(request) AS request_text_sha256 FROM runtime_model_calls WHERE run_id=? AND episode_id=? AND call_index=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6",
+        8
+      ],
+      "sql": "SELECT decision_index,json_extract(action,'$.kind') AS kind,json_extract(action,'$.tool') AS tool,json_extract(action,'$.arguments') AS selected_arguments,sha256_text(action) AS action_text_sha256,json_extract(result,'$.status') AS status,json_extract(result,'$.operation_ref') AS operation_ref,json_extract(result,'$.result.job_ref') AS nested_job_ref,json_extract(result,'$.job_ref') AS top_job_ref FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?"
+    },
+    {
+      "parameters": [
+        "provider_job_920f37be1a6acba2844c4797"
+      ],
+      "sql": "SELECT id,operation_key,request,sha256_text(request) AS request_text_sha256,state,remote_id,error_code FROM provider_jobs WHERE id=?"
+    },
+    {
+      "parameters": [
+        "run_b1f5d2ae45664656a967e01700632ead",
+        "episode_6b74cd5bd09b8360ee8350db160ed10c7c3d3ca817ba43b0772c74e6ae8b25a6",
+        3
+      ],
+      "sql": "SELECT decision_index,json_extract(action,'$.tool') AS tool,json_extract(action,'$.arguments') AS selected_arguments,sha256_text(action) AS action_text_sha256,result,sha256_text(result) AS result_text_sha256 FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?"
+    }
+  ]
+}

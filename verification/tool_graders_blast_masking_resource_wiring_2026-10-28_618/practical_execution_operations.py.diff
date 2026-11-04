@@ -1,0 +1,290 @@
+--- before/practical_execution_operations.py
++++ gene_annotation_episode/practical_execution_operations.py
+@@ -90,11 +90,14 @@
+                                         'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
+                                         'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                                         'native_chromatin_interactions', 'native_atac_differential',
+-                                        'native_expression_nmf', 'native_fluorescence'}
++                                        'native_expression_nmf', 'native_fluorescence', 'native_blast_masking'}
+                 or configuration['kind'] != 'local'):
+             raise ValueError('explicit_local_practical_configuration_required')
+         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
+         self.policy = LocalJobPolicy(**configuration['policy'])
++        if 'native_blast_masking' in configuration:
++            from .native_blast_masking_tool_info import validate_native_blast_masking_bindings
++            validate_native_blast_masking_bindings(configuration['native_blast_masking'])
+         if 'native_fluorescence' in configuration:
+             from .native_fluorescence_contracts import validate_fluorescence_bindings
+             validate_fluorescence_bindings(configuration['native_fluorescence'])
+@@ -137,6 +140,24 @@
+         return {'facts': {'paths': path_facts(assignment)}}
+ 
+     def validate_assignment(self, assignment):
++        if 'native_blast_masking' in assignment['requested_job']:
++            from .native_blast_masking_contracts import validate_native_blast_masking_requested_job
++            job = validate_native_blast_masking_requested_job(assignment['requested_job'])['native_blast_masking']
++            operation = job['operation']
++            if not any(row['program'] == operation['program'] and row['mode'] == operation['mode']
++                    and row['software'] == job['software']
++                    and operation['output_format'] in row['output_formats']
++                    and operation['masking_style'] in row['masking_styles']
++                    for row in self.configuration.get('native_blast_masking', [])):
++                raise ValueError('native_blast_masking_program_mode_software_format_style_not_bound')
++            if assignment.get('resource_kind') != 'local':
++                raise ValueError('native_blast_masking_local_resource_required')
++            if not assignment.get('resource_id'):
++                raise ValueError('native_blast_masking_resource_identity_required')
++            confined(assignment['workspace'], self.configuration['workspace'])
++            if (self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3
++                    or self.policy.wall_seconds is not None):
++                raise ValueError('native_blast_masking_local_policy_conflict')
+         if 'native_fluorescence' in assignment['requested_job']:
+             from .native_fluorescence_contracts import POLICY, validate_fluorescence_requested_job
+             job = validate_fluorescence_requested_job(assignment['requested_job'])['native_fluorescence']
+@@ -331,10 +352,13 @@
+                 native_hmmer_preparation=False, native_blast=False, native_rna_structure=False,
+                 native_protein_structure=False, native_genomic_overlap=False, native_chromatin_interactions=False,
+                 native_atac_differential=False, native_expression_nmf=False,
+-                native_fluorescence=False):
++                native_fluorescence=False, native_blast_masking=False):
+         root = self._action_directory(state, operation_key)
+         handle = native.NativeJobHandle(root/'native.json')
+-        if native_fluorescence:
++        if native_blast_masking:
++            from .native_blast_masking_local import prepare_local_blast_masking
++            handle = prepare_local_blast_masking(state, operation_key, root=root, policy=self.policy)
++        elif native_fluorescence:
+             from .native_fluorescence_local import prepare_local_fluorescence
+             handle = prepare_local_fluorescence(state, operation_key, root=root, policy=self.policy)
+         elif native_expression_nmf:
+@@ -412,6 +436,52 @@
+             raise ValueError('rna_original_attempt_mismatch')
+         return plan
+ 
++    def _masking_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
++                      original_operation_key=None, attempt_id=None, resource_id=None,
++                      requested_job_sha256=None):
++        """Authenticate the selected original masking reservation without dispatch."""
++        from .native_blast_masking_local import local_blast_masking_plan
++        self.validate_assignment(assignment)
++        plan = local_blast_masking_plan(assignment, execution_id)
++        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
++            'operation_key': original_operation_key, 'attempt_id': attempt_id,
++            'resource_id': resource_id, 'requested_job_sha256': requested_job_sha256}
++        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
++                plan['identity'][key] != value for key, value in expected.items())):
++            raise ValueError('native_blast_masking_original_attempt_mismatch')
++        return plan
++
++    @staticmethod
++    def _masking_observed_files(plan, view, *, log_window_bytes=8192, log_roles=('stdout', 'stderr')):
++        """Expose measured selected files; availability is not result validation."""
++        from .native_infernal_driver import _confined_file
++        outputs, logs = [], []
++        rows = [*plan['requested_job']['native_blast_masking']['outputs'],
++            {'role': 'native_blast_masking_bundle', 'relative_path': 'bundle.json'}]
++        for selected in rows:
++            path = _confined_file(Path(plan['attempt_directory']), selected['relative_path'])
++            text_log = selected['role'] in log_roles
++            detail = _output_details(path, text_log=text_log, limit=log_window_bytes)
++            outputs.append({'role': selected['role'], 'available': detail['available'],
++                'bytes': detail.get('bytes'), 'writer_closed': detail['available'] and view['terminal']})
++            if text_log and detail['available']:
++                logs.append({'role': selected['role'], 'path': str(path),
++                    'offset': detail['tail_byte_offset'], 'observed_size': detail['bytes'],
++                    'bytes_base64': detail['bytes_base64']})
++        return outputs, logs, outputs[-1]['available']
++
++    @staticmethod
++    def _masking_sealed_bundle(plan):
++        from .native_blast_masking_contracts import validate_original_bundle
++        from .native_blast_masking_driver import validate_native_blast_masking_bundle_files
++        from .native_infernal_driver import _confined_file, _read_json
++        root = Path(plan['attempt_directory'])
++        manifest = _confined_file(root, 'bundle.json')
++        if not manifest.is_file():
++            return None
++        bundle = validate_original_bundle(_read_json(manifest, sealed=True), plan)
++        return validate_native_blast_masking_bundle_files(bundle, root)
++
+     def _protein_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
+                       original_operation_key=None, attempt_id=None, resource_id=None):
+         """Authenticate the original protein reservation without executing it."""
+@@ -502,6 +572,10 @@
+         atac_plan = None
+         expression_nmf_plan = None
+         fluorescence_plan = None
++        masking_plan = None
++        if 'native_blast_masking' in request:
++            masking_plan = self._masking_plan(state.assignment, str(handle.path),
++                run_id=state.run_id, origin_episode_id=state.episode_id)
+         if 'native_fluorescence' in request:
+             fluorescence_plan = self._fluorescence_plan(state.assignment, str(handle.path),
+                 run_id=state.run_id, origin_episode_id=state.episode_id)
+@@ -587,6 +661,10 @@
+         if fluorescence_plan is not None:
+             attempt = Path(fluorescence_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in fluorescence_plan['outputs']]
++        if masking_plan is not None:
++            attempt = Path(masking_plan['attempt_directory'])
++            outputs = [str(attempt / row['relative_path']) for row in request['native_blast_masking']['outputs']]
++            outputs.append(str(attempt / 'bundle.json'))
+         return {'requested_job_sha256': digest(request), 'argv': request['argv'],
+             'environment': request['environment'], 'resource_kind': 'local',
+             'execution_id': str(handle.path), 'status': status, 'returncode': rc,
+@@ -602,6 +680,26 @@
+             raise ValueError('positive_log_window_required')
+         if any(role not in {'stdout', 'stderr'} for role in log_roles):
+             raise ValueError('unsupported_native_log_role')
++        if 'native_blast_masking' in assignment['requested_job']:
++            plan = self._masking_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
++                    'original_operation_key', 'resource_id', 'requested_job_sha256')})
++            view = native.status(native.NativeJobHandle(Path(execution_id)))
++            metadata, measurements = view['metadata'], []
++            rc = metadata.get('native_returncode')
++            state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
++                'running' if view['state'] == 'running' else
++                'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
++            failure = None if state != 'failed' else (
++                'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
++            if view['terminal'] and metadata.get('elapsed_seconds') is not None:
++                measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
++            outputs, logs, available = self._masking_observed_files(plan, view,
++                log_window_bytes=log_window_bytes, log_roles=log_roles)
++            return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': state,
++                'returncode': rc, 'failure_code': failure, 'result_available': available,
++                'measurements': measurements, 'outputs': outputs, 'logs': logs,
++                'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+         if 'native_fluorescence' in assignment['requested_job']:
+             from .native_fluorescence_observations import fluorescence_observed_files
+             plan = self._fluorescence_plan(assignment, execution_id, attempt_id=attempt_id,
+@@ -852,6 +950,29 @@
+     def read_output(self, assignment, execution_id, *, path, offset, limit,
+                     attempt_id=None, **identity):
+         """Read the selected bounded output bytes; never start or collect work."""
++        if 'native_blast_masking' in assignment['requested_job']:
++            from .native_infernal_driver import _confined_file, _regular_reader
++            plan = self._masking_plan(assignment, execution_id, attempt_id=attempt_id,
++                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id',
++                    'original_operation_key', 'resource_id', 'requested_job_sha256')})
++            root = Path(plan['attempt_directory'])
++            paths = {str(root / row['relative_path'])
++                for row in plan['requested_job']['native_blast_masking']['outputs']}
++            paths.add(str(root / 'bundle.json'))
++            if str(path) not in paths:
++                raise ValueError('native_blast_masking_original_output_path_required')
++            path = _confined_file(root, str(Path(path).relative_to(root)))
++            self._masking_sealed_bundle(plan)
++            if (type(offset) is not int or offset < 0 or type(limit) is not int
++                    or not 1 <= limit <= 1024*1024):
++                raise ValueError('bounded_native_output_window_required')
++            with _regular_reader(path) as stream:
++                size = os.fstat(stream.fileno()).st_size
++                stream.seek(offset)
++                raw = stream.read(min(limit, max(0, size-offset)))
++            return {'path': str(path), 'offset': offset, 'returned_bytes': len(raw),
++                'size_bytes': size, 'bytes_base64': base64.b64encode(raw).decode('ascii'),
++                'text_utf8': raw.decode('utf-8', errors='replace')}
+         if 'native_fluorescence' in assignment['requested_job']:
+             from .native_fluorescence_observations import read_fluorescence_output
+             plan = self._fluorescence_plan(assignment, execution_id, attempt_id=attempt_id,
+@@ -1015,6 +1136,7 @@
+                         native_infernal_preparation='native_infernal_preparation' in command,
+                         native_hmmer_preparation='native_hmmer_preparation' in command,
+                         native_blast='native_blast' in command,
++                        native_blast_masking='native_blast_masking' in command,
+                         native_rna_structure='native_rna_structure' in command,
+                         native_protein_structure='native_protein_structure' in command,
+                         native_genomic_overlap='native_genomic_overlap' in command,
+@@ -1024,7 +1146,12 @@
+                         native_fluorescence='native_fluorescence' in command)
+                 if 'retry_failed_execution_id' in arguments:
+                     strict_owner = None
+-                    if 'native_fluorescence' in command:
++                    masking_retry_plan = None
++                    if 'native_blast_masking' in command:
++                        masking_retry_plan = self._masking_plan(state.assignment, str(handle.path),
++                            run_id=state.run_id, origin_episode_id=state.episode_id)
++                        strict_owner = masking_retry_plan['identity']
++                    elif 'native_fluorescence' in command:
+                         strict_owner = self._fluorescence_plan(state.assignment, str(handle.path),
+                             run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+                     elif 'native_expression_nmf' in command:
+@@ -1050,13 +1177,16 @@
+                             or ('native_blast' in command or 'native_rna_structure' in command)
+                                 and old['metadata'].get('native_returncode') is None
+                             or {'native_protein_structure', 'native_genomic_overlap', 'native_chromatin_interactions',
+-                                'native_atac_differential', 'native_expression_nmf', 'native_fluorescence'} & set(command) and (
++                                'native_atac_differential', 'native_expression_nmf', 'native_fluorescence',
++                                'native_blast_masking'} & set(command) and (
+                                 old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
+-                                or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')):
++                                or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')
++                            or masking_retry_plan is not None and self._masking_sealed_bundle(masking_retry_plan) is None):
+                         return {'facts': {'requested_job': self._job_fact(state, handle, old),
+                             'paths': path_facts(state.assignment)}, 'native_outcome': {
+                             'failure': {'code': 'practical_retry_requires_original_failed_execution'},
+                             'observation': old,
++                            **({} if masking_retry_plan is None else {'native_blast_masking_plan': masking_retry_plan}),
+                             **({} if strict_owner is None else {
+                                 'attempt_id': strict_owner['attempt_id'],
+                                 'attempt_operation_key': strict_owner['operation_key']})}}, None
+@@ -1065,6 +1195,7 @@
+                         native_infernal_preparation='native_infernal_preparation' in command,
+                         native_hmmer_preparation='native_hmmer_preparation' in command,
+                         native_blast='native_blast' in command,
++                        native_blast_masking='native_blast_masking' in command,
+                         native_rna_structure='native_rna_structure' in command,
+                         native_protein_structure='native_protein_structure' in command,
+                         native_genomic_overlap='native_genomic_overlap' in command,
+@@ -1075,6 +1206,9 @@
+             else:
+                 handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env)
+             if requested:
++                if 'native_blast_masking' in command:
++                    self._masking_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                        origin_episode_id=state.episode_id)
+                 if 'native_fluorescence' in command:
+                     self._fluorescence_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                         origin_episode_id=state.episode_id)
+@@ -1154,6 +1288,9 @@
+                     'stdout': log_tail(body['stdout']), 'stderr': log_tail(body['stderr'])}
+         elif tool_name in {'practical.job.status', 'practical.job.collect'}:
+             handle = self._job_handle(state)
++            if 'native_blast_masking' in state.assignment['requested_job']:
++                self._masking_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                    origin_episode_id=state.episode_id)
+             if 'native_fluorescence' in state.assignment['requested_job']:
+                 self._fluorescence_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+@@ -1175,7 +1312,12 @@
+             view = native.status(handle)
+             outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+             body = handle.read()
+-            if 'native_fluorescence' in state.assignment['requested_job']:
++            if 'native_blast_masking' in state.assignment['requested_job']:
++                plan = self._masking_plan(state.assignment, str(handle.path), run_id=state.run_id,
++                    origin_episode_id=state.episode_id)
++                outputs, logs, _ = self._masking_observed_files(plan, view)
++                outcome['native_outcome'] = {**view, 'observed_logs': logs, 'observed_outputs': outputs}
++            elif 'native_fluorescence' in state.assignment['requested_job']:
+                 from .native_fluorescence_observations import fluorescence_observed_files
+                 plan = self._fluorescence_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+@@ -1297,6 +1439,15 @@
+                 outcome['native_outcome'] = {**view, 'observed_logs': logs}
+         else:
+             raise ValueError('practical_operation_not_bound')
++        if ('native_blast_masking' in state.assignment['requested_job']
++                and 'requested_job' in outcome['facts']):
++            plan = self._masking_plan(state.assignment,
++                outcome['facts']['requested_job']['execution_id'],
++                run_id=state.run_id, origin_episode_id=state.episode_id)
++            outcome['native_outcome'] = {**outcome['native_outcome'],
++                'attempt_id': plan['identity']['attempt_id'],
++                'attempt_operation_key': plan['identity']['operation_key'],
++                'native_blast_masking_plan': plan}
+         outcome['facts']['paths'] = path_facts(state.assignment)
+         return outcome, updated
+ 

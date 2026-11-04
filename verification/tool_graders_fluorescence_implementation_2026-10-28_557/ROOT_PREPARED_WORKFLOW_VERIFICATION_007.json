@@ -1,0 +1,131 @@
+{
+  "record_type": "prepared_fluorescence_workflow_and_saved_delivery_evidence",
+  "recorded_at": "2026-10-28T20:22:59.134315+00:00",
+  "checks": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow",
+      "outcomes": {
+        "failed": 2,
+        "passed": 194
+      },
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check049_fluorescence_prepared_workflow/handle.json",
+        "unit": "gene-local-job-2a601c08c4b64c829b45ba3699ab60d4.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "nonpassing": [
+        {
+          "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_real_v2_resource_custody_and_shared_cells_reach_both_parents[facs-prepared]",
+          "phase": "call",
+          "outcome": "failed",
+          "duration_seconds": 0.37753463303670287,
+          "failure": "source_snapshot/tests/test_fluorescence_prepared_workflow.py:215: in test_real_v2_resource_custody_and_shared_cells_reach_both_parents\n    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}\nE   AssertionError: assert {'artifact_32...1660b8b', ...} <= {'artifact_32...5eba111', ...}\nE     \nE     Extra items in the left set:\nE     'artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b'"
+        },
+        {
+          "nodeid": "tests/test_fluorescence_prepared_workflow.py::test_real_v2_resource_custody_and_shared_cells_reach_both_parents[cytokine-prepared]",
+          "phase": "call",
+          "outcome": "failed",
+          "duration_seconds": 0.41390721406787634,
+          "failure": "source_snapshot/tests/test_fluorescence_prepared_workflow.py:215: in test_real_v2_resource_custody_and_shared_cells_reach_both_parents\n    assert baseline <= set(case.target_record_refs) | {file['artifact_ref'] for file in case.supplied}\nE   AssertionError: assert {'artifact_32...1660b8b', ...} <= {'artifact_32...5eba111', ...}\nE     \nE     Extra items in the left set:\nE     'artifact_b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b'"
+        }
+      ]
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check063_fluorescence_saved_postconditions",
+      "outcomes": {
+        "passed": 3,
+        "skipped": 2
+      },
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check063_fluorescence_saved_postconditions/handle.json",
+        "unit": "gene-local-job-e21a9a9d0e57496dad13654f14c6ed4a.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "nonpassing": [
+        {
+          "nodeid": "tests/test_fluorescence_saved_prepared_case.py::test_saved_prepared_complete_sheet_calculator_comparison[facs-prepared]",
+          "phase": "call",
+          "outcome": "skipped",
+          "duration_seconds": 1.1985844429582357
+        },
+        {
+          "nodeid": "tests/test_fluorescence_saved_prepared_case.py::test_saved_prepared_complete_sheet_calculator_comparison[cytokine-prepared]",
+          "phase": "call",
+          "outcome": "skipped",
+          "duration_seconds": 1.1781777209835127
+        }
+      ]
+    }
+  ],
+  "saved_return_cases": [
+    {
+      "evidence": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check063_fluorescence_saved_postconditions/temporary/SAVED_PREPARED_608_analyze_cytokine_production_in_cd4_tcells_returns.json",
+      "values": [
+        2,
+        2,
+        1.0,
+        100.0,
+        130.0,
+        65.0,
+        50.0,
+        1.5,
+        100.0,
+        0.0
+      ],
+      "both_parent_deliveries": true,
+      "declared_associations": true
+    },
+    {
+      "evidence": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check063_fluorescence_saved_postconditions/temporary/SAVED_PREPARED_608_perform_facs_cell_sorting_returns.json",
+      "values": [
+        2,
+        2,
+        1.0,
+        100.0,
+        130.0,
+        65.0,
+        50.0,
+        1.5,
+        100.0,
+        0.0
+      ],
+      "both_parent_deliveries": true,
+      "declared_associations": true
+    }
+  ],
+  "initial_custody_correction_verified": true,
+  "original_native_analysis_reruns": 0,
+  "new_saved_check_actions": 0,
+  "new_saved_check_observations": 0,
+  "numerical_example": {
+    "supplied_data": "synthetic two-event FCS",
+    "retained_events": 2,
+    "selected_events": 2,
+    "selected_percent": 100,
+    "raw_A_mean_instrument_units": 130,
+    "scaled_A_mean_instrument_units": 65,
+    "compensated_A_mean_instrument_units": 50,
+    "scaled_time_mean_seconds": 1.5,
+    "supplied_report_percent": 100,
+    "native_minus_calculated_percent": 0
+  },
+  "qualification": "Original049 has194passed2failed. Saved063 has3passed2skipped. Original failures remain recorded; they were not rewritten as passes. The saved checks prove original requested deliveries and baseline correction without reexecuting the producer or Workflow.",
+  "unfinished": [
+    "The original complete sheet and component bytes were deliberately withdrawn by the saved/replay fixture;063 cannot recheck complete-sheet recalculation or exact original component membership. Its two skips are explicit unverified evidence, not passes. Prior047 prepared producer/result checks separately verify common-calculator publication equality, but do not recreate those withdrawn049bytes.",
+    "Receiver TASK/STEERING presentation still awaits required user feedback and implementation.",
+    "No whole operation or inventory completion increment."
+  ],
+  "related_prior_component_evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_PREPARED_INTEGRATION_VERIFICATION_006.json"
+}

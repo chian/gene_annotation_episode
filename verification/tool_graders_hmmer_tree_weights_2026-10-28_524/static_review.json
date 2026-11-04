@@ -1,0 +1,141 @@
+{
+  "observed_at": "2026-10-28T05:18:37.127342+00:00",
+  "kind": "host_stdlib_AST_only",
+  "application_imports_executed": false,
+  "test_imports_executed": false,
+  "tests_executed": false,
+  "native_or_compiler_executed": false,
+  "files": [
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_tree_weights.py",
+      "sha256": "aefd5f55d07cba25e6b4a69dd4c8c2e28aeb4031ea06872ec077a006b497ac4d",
+      "bytes": 11157,
+      "ast_parse": "passed",
+      "imports_declared_but_not_executed": [
+        "__future__",
+        "math"
+      ],
+      "functions": [
+        {
+          "name": "_validated_residues",
+          "line": 21,
+          "end_line": 37
+        },
+        {
+          "name": "_native_pair_identity",
+          "line": 40,
+          "end_line": 59
+        },
+        {
+          "name": "_check_raw_weights",
+          "line": 62,
+          "end_line": 64
+        },
+        {
+          "name": "_upgma_tree",
+          "line": 67,
+          "end_line": 130
+        },
+        {
+          "name": "gsc_raw_weights",
+          "line": 133,
+          "end_line": 192
+        },
+        {
+          "name": "blosum_raw_weights",
+          "line": 195,
+          "end_line": 240
+        }
+      ]
+    },
+    {
+      "path": "tests/test_hmmer_alignment_tree_weights.py",
+      "sha256": "397e3a8a5f0009444884c66a3c8e7029eb78d5d83954c0d872abfea9c91204ff",
+      "bytes": 9502,
+      "ast_parse": "passed",
+      "imports_declared_but_not_executed": [
+        "__future__",
+        "math",
+        "unittest",
+        "gene_annotation_episode.hmmer_alignment_tree_weights"
+      ],
+      "functions": [
+        {
+          "name": "test_singleton_early_return_has_explicit_derived_diagnostics",
+          "line": 23,
+          "end_line": 34
+        },
+        {
+          "name": "test_pair_identity_denominator_is_minimum_residue_count",
+          "line": 36,
+          "end_line": 49
+        },
+        {
+          "name": "test_gsc_equal_distances_preserve_native_scan_and_swap_topology",
+          "line": 51,
+          "end_line": 61
+        },
+        {
+          "name": "test_gsc_identical_residues_remain_raw_zero_for_common_normalizer",
+          "line": 63,
+          "end_line": 71
+        },
+        {
+          "name": "test_zero_length_subtree_splits_positive_inherited_weight_by_clade_size",
+          "line": 73,
+          "end_line": 83
+        },
+        {
+          "name": "test_upgma_uses_clade_sizes_in_merged_distances",
+          "line": 85,
+          "end_line": 96
+        },
+        {
+          "name": "test_all_gap_missing_and_nonresidue_pairs_have_native_zero_identity",
+          "line": 98,
+          "end_line": 112
+        },
+        {
+          "name": "test_degenerate_codes_count_only_exact_matches",
+          "line": 114,
+          "end_line": 121
+        },
+        {
+          "name": "test_blosum_transitive_links_cross_a_nonlinked_endpoint_pair",
+          "line": 123,
+          "end_line": 133
+        },
+        {
+          "name": "test_blosum_cluster_ids_follow_native_deletion_swaps",
+          "line": 135,
+          "end_line": 142
+        },
+        {
+          "name": "test_input_order_is_preserved_and_input_rows_are_not_changed",
+          "line": 144,
+          "end_line": 150
+        },
+        {
+          "name": "test_malformed_alignment_fails_with_closed_code",
+          "line": 152,
+          "end_line": 158
+        },
+        {
+          "name": "test_invalid_residue_settings_fail_without_guessing_alphabet",
+          "line": 160,
+          "end_line": 166
+        },
+        {
+          "name": "test_invalid_cutoffs_fail_even_for_singleton_early_return",
+          "line": 168,
+          "end_line": 172
+        },
+        {
+          "name": "test_integer_endpoint_cutoff_is_recorded_as_float",
+          "line": 174,
+          "end_line": 177
+        }
+      ]
+    }
+  ]
+}

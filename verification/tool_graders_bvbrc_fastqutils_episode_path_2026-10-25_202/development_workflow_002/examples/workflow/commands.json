@@ -1,0 +1,150 @@
+[
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "AppService.start_app2",
+      "params": [
+        "FastqUtils",
+        {
+          "output_file": "fixture",
+          "output_path": "/fixture/output",
+          "paired_end_libs": [
+            {
+              "platform": "illumina",
+              "read1": "/fixture/input_R1.fastq",
+              "read2": "/fixture/input_R2.fastq"
+            }
+          ],
+          "recipe": [
+            "TRIM",
+            "PAIRED_FILTER",
+            "FASTQC",
+            "ALIGN",
+            "SCRUB_HUMAN",
+            "SCRUB_HUMAN"
+          ],
+          "reference_genome_id": "synthetic_reference195",
+          "single_end_libs": [],
+          "srr_libs": []
+        },
+        {}
+      ],
+      "id": "bvbrc_rpc_3c3038bcd6313ed821f9d4fef1d31f79008607f43d826e9ad0375ff9cec07b83"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "AppService.query_tasks",
+      "params": [
+        [
+          "123"
+        ]
+      ],
+      "id": "bvbrc_rpc_7f1f702331814217c2d371111db9e45e28ad297f9cae64e88764f21be90864a5"
+    }
+  ],
+  [
+    "task_info",
+    "123",
+    "job_result_id"
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get",
+      "params": [
+        {
+          "objects": [
+            "11111111-1111-1111-1111-111111111111"
+          ],
+          "metadata_only": 1
+        }
+      ],
+      "id": "bvbrc_rpc_0b8a954f35a93c0098521bf85c8e42a82c83ad66a9f96389136ea0cb1e36ec7b"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/manifest"
+          ]
+        }
+      ],
+      "id": "bvbrc_rpc_02377d783f3b41e9aee94496c910d209251d07c296c128ee2f955c092f36c0bb"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/manifest",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/reads"
+          ]
+        }
+      ],
+      "id": "bvbrc_rpc_156b063ceef89b7470d1edf62de4370fe69f7513fd3c7f0259e6409c4427b153"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/reads",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/hostile"
+          ]
+        }
+      ],
+      "id": "bvbrc_rpc_1acc39037d0d28610505a32ac42df15c704e231efa051c5aba20d00e1990cbfd"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/hostile",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "version": "1.1",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/fixture/output/qc"
+          ]
+        }
+      ],
+      "id": "bvbrc_rpc_240f50437875271dc5e8a577d647b40be83284741a0fe56238a37b48d73cec01"
+    }
+  ],
+  [
+    "download",
+    "https://controlled.invalid/qc",
+    null
+  ]
+]

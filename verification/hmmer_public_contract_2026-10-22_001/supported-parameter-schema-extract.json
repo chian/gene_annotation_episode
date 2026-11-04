@@ -1,0 +1,184 @@
+{
+  "source": "ebi-openapi.body",
+  "source_sha256": "66eb96071df82d6c5d64a137014baa04e3974c50bc3e0e8c0c0a56eddfb7e8b3",
+  "json_pointer": "#/components/schemas/SearchRequestSchema/properties",
+  "meaning": "Exact schema fragments for the 14 caller-supported optional parameters; not live endpoint execution.",
+  "properties": {
+    "E": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 1.0,
+      "title": "E"
+    },
+    "domE": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 1.0,
+      "title": "domE"
+    },
+    "incE": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 0.01,
+      "title": "incE"
+    },
+    "incdomE": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 0.03,
+      "title": "incdomE"
+    },
+    "T": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 7.0,
+      "title": "T"
+    },
+    "domT": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 5.0,
+      "title": "domT"
+    },
+    "incT": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 25.0,
+      "title": "incT"
+    },
+    "incdomT": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 22.0,
+      "title": "incdomT"
+    },
+    "threshold": {
+      "anyOf": [
+        {
+          "maxLength": 16,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "evalue",
+      "title": "Threshold"
+    },
+    "popen": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 0.02,
+      "title": "Popen"
+    },
+    "pextend": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 0.4,
+      "title": "Pextend"
+    },
+    "mx": {
+      "anyOf": [
+        {
+          "maxLength": 16,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "BLOSUM62",
+      "title": "Mx"
+    },
+    "include_taxonomy": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Include Taxonomy"
+    },
+    "exclude_taxonomy": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": [],
+      "title": "Exclude Taxonomy"
+    }
+  }
+}

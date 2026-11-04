@@ -1,0 +1,1583 @@
+{
+  "assignment": {
+    "handoff_ref": "source_77d495d410c7c98dc140e2b8",
+    "selector": {
+      "acquisition": "retained_inputs_only",
+      "parameters": {
+        "arithmetic": "retained_binary64_values_v1",
+        "native_uncertainty_policy": "retain_no_fabricated_transfer",
+        "pair_difference": "alignment_column_pair_sets",
+        "schema": "rna_comparison_parameters_v1",
+        "site_denominator": "decidable_selected_shared_sites",
+        "tie_rule": "exact_selected_numeric_value"
+      },
+      "projections": [
+        {
+          "comparison_ids": [
+            "compare-V"
+          ],
+          "family": "comparison_counts",
+          "include_pairing_change_state": true,
+          "metrics": [
+            "preserved_pair_count",
+            "pair_symmetric_difference_count"
+          ],
+          "projection_id": "counts",
+          "selection_ids": []
+        }
+      ],
+      "question": {
+        "baseline_member_id": "WT",
+        "comparisons": [
+          {
+            "calculate_pair_changes": true,
+            "comparison_id": "compare-V",
+            "correspondence": {
+              "kind": "substitution_only",
+              "substitutions": [
+                {
+                  "baseline_symbol": "C",
+                  "index": 6,
+                  "variant_symbol": "U"
+                }
+              ]
+            },
+            "energy": null,
+            "site_selections": [],
+            "variant_member_id": "V"
+          }
+        ],
+        "kind": "pairwise",
+        "membership": [
+          {
+            "kind": "saved_sheet",
+            "member_id": "WT",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_ff42c05b7d994bc6c5355c9b85a83c781470d4ae7fcfe78b6e7099629c039a66",
+              "handoff_ref": "source_2196ea55c4256b54b8170b16",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "WT",
+              "result_receipt_key": "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "sheet_sha256": "94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+              "source_ref": "source_9f1ab4d75816546add8721ec"
+            }
+          },
+          {
+            "kind": "saved_sheet",
+            "member_id": "V",
+            "saved_input": {
+              "bundle_artifact_ref": "artifact_52f9d52c8cb56828acb6ffda701b11ea8c4f15e94052779639fc89298874b579",
+              "handoff_ref": "source_77d495d410c7c98dc140e2b8",
+              "mode": "supplied_features",
+              "operation": "analyze_rna_secondary_structure_features",
+              "record_key": "V",
+              "result_receipt_key": "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f",
+              "schema": "rna_structure_saved_sheet_input_v1",
+              "sheet_artifact_ref": "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "sheet_sha256": "1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+              "source_ref": "source_7a3a484dbd6036ff39003d01"
+            }
+          }
+        ],
+        "scan": null
+      },
+      "version": "native_rna_structure_comparison_selector_v1"
+    },
+    "version": "execution_results_assignment_v1"
+  },
+  "operands": {
+    "data": {
+      "V": {
+        "original_bundle_software": {
+          "python_executable": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+          "python_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+          "python_version": null,
+          "rna_extension_sha256": null,
+          "rna_module_sha256": null,
+          "viennarna_distribution_version": null,
+          "worker_module": "gene_annotation_episode.native_rna_structure_worker",
+          "worker_source_sha256": "d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7"
+        },
+        "original_sheet": {
+          "analysis_sequence": {
+            "alphabet": "RNA_IUPAC",
+            "ambiguous_indices": [],
+            "analysis_sequence": "GGGAAAUCC",
+            "case_operation": "exact",
+            "length_nt": 9,
+            "original_sequence": "GGGAAAUCC",
+            "original_to_analysis_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "symbol_counts": {
+              "A": 3,
+              "B": 0,
+              "C": 2,
+              "D": 0,
+              "G": 3,
+              "H": 0,
+              "K": 0,
+              "M": 0,
+              "N": 0,
+              "R": 0,
+              "S": 0,
+              "U": 1,
+              "V": 0,
+              "W": 0,
+              "Y": 0
+            }
+          },
+          "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+          "issues": [],
+          "legacy_quantities": null,
+          "mode": "supplied_features",
+          "model": null,
+          "native_evaluation": {
+            "engine": null,
+            "engine_version": null,
+            "model_key": null,
+            "numeric_text": null,
+            "reason": "not_requested",
+            "state": "not_requested",
+            "structure_key": null,
+            "unit": "kcal/mol",
+            "value": null
+          },
+          "native_input": {
+            "byte_count": 4538,
+            "format": "rna_native_record_json_v1",
+            "sha256": "b05c3334969e12fa7b45a2f91a09a6cb27693e5200216eacd6a07c1a2ea2a36f"
+          },
+          "native_mfe": {
+            "engine": null,
+            "engine_version": null,
+            "model_key": null,
+            "numeric_text": null,
+            "reason": "not_requested",
+            "state": "not_requested",
+            "structure_key": null,
+            "unit": "kcal/mol",
+            "value": null
+          },
+          "native_uncertainty": {
+            "energy_interval": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "energy_standard_error": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "ensemble_diversity": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "ensemble_free_energy_kcal_mol": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "mfe_frequency": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "pair_probabilities": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            }
+          },
+          "operation": "analyze_rna_secondary_structure_features",
+          "original_input": {
+            "dot_bracket": "(((...)))",
+            "energy_mode": "none",
+            "normalization": "exact",
+            "record_key": "V",
+            "schema": "rna_feature_input_v1",
+            "sequence": "GGGAAAUCC",
+            "sequence_id": null,
+            "structure_id": null,
+            "structure_origin": "supplied_unknown",
+            "structure_source_ref": null,
+            "subject_binding": null
+          },
+          "record_key": "V",
+          "schema": "rna_supplied_structure_feature_sheet_v1",
+          "sequence_pairs": [
+            {
+              "ordered_pair": "GC",
+              "pair_key": "pair:0:8",
+              "symbol_i": "G",
+              "symbol_j": "C",
+              "unambiguous": true
+            },
+            {
+              "ordered_pair": "GC",
+              "pair_key": "pair:1:7",
+              "symbol_i": "G",
+              "symbol_j": "C",
+              "unambiguous": true
+            },
+            {
+              "ordered_pair": "GU",
+              "pair_key": "pair:2:6",
+              "symbol_i": "G",
+              "symbol_j": "U",
+              "unambiguous": true
+            }
+          ],
+          "status": "complete",
+          "structure": {
+            "dot_bracket": "(((...)))",
+            "energy_conversion": null,
+            "energy_dot_bracket": null,
+            "origin": "supplied_unknown",
+            "source_ref": null,
+            "structure_id": null,
+            "structure_key": "V:structure"
+          },
+          "subject_binding": null,
+          "topology": {
+            "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+            "dot_bracket": "(((...)))",
+            "issues": [],
+            "length_nt": 9,
+            "pairs": [
+              {
+                "child_pair_keys": [
+                  "pair:1:7"
+                ],
+                "closing_token": ")",
+                "i": 0,
+                "j": 8,
+                "opening_token": "(",
+                "pair_key": "pair:0:8",
+                "parent_pair_key": null,
+                "stem_key": "stem:0:8"
+              },
+              {
+                "child_pair_keys": [
+                  "pair:2:6"
+                ],
+                "closing_token": ")",
+                "i": 1,
+                "j": 7,
+                "opening_token": "(",
+                "pair_key": "pair:1:7",
+                "parent_pair_key": "pair:0:8",
+                "stem_key": "stem:0:8"
+              },
+              {
+                "child_pair_keys": [],
+                "closing_token": ")",
+                "i": 2,
+                "j": 6,
+                "opening_token": "(",
+                "pair_key": "pair:2:6",
+                "parent_pair_key": "pair:1:7",
+                "stem_key": "stem:0:8"
+              }
+            ],
+            "positions": [
+              {
+                "bracket": "(",
+                "index": 0,
+                "input_index": 0,
+                "pair_key": "pair:0:8",
+                "partner_index": 8,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": "(",
+                "index": 1,
+                "input_index": 1,
+                "pair_key": "pair:1:7",
+                "partner_index": 7,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": "(",
+                "index": 2,
+                "input_index": 2,
+                "pair_key": "pair:2:6",
+                "partner_index": 6,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": ".",
+                "index": 3,
+                "input_index": 3,
+                "pair_key": null,
+                "partner_index": null,
+                "stem_key": null,
+                "unpaired_region_key": "region:2:6"
+              },
+              {
+                "bracket": ".",
+                "index": 4,
+                "input_index": 4,
+                "pair_key": null,
+                "partner_index": null,
+                "stem_key": null,
+                "unpaired_region_key": "region:2:6"
+              },
+              {
+                "bracket": ".",
+                "index": 5,
+                "input_index": 5,
+                "pair_key": null,
+                "partner_index": null,
+                "stem_key": null,
+                "unpaired_region_key": "region:2:6"
+              },
+              {
+                "bracket": ")",
+                "index": 6,
+                "input_index": 6,
+                "pair_key": "pair:2:6",
+                "partner_index": 2,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": ")",
+                "index": 7,
+                "input_index": 7,
+                "pair_key": "pair:1:7",
+                "partner_index": 1,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": ")",
+                "index": 8,
+                "input_index": 8,
+                "pair_key": "pair:0:8",
+                "partner_index": 0,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              }
+            ],
+            "regions": [
+              {
+                "closing_pair_key": "pair:2:6",
+                "five_prime_unpaired_indices": null,
+                "immediate_branch_pair_keys": [],
+                "kind": "hairpin",
+                "region_key": "region:2:6",
+                "three_prime_unpaired_indices": null,
+                "unpaired_indices": [
+                  3,
+                  4,
+                  5
+                ],
+                "unpaired_intervals": [
+                  [
+                    3,
+                    6
+                  ]
+                ]
+              },
+              {
+                "closing_pair_key": null,
+                "five_prime_unpaired_indices": null,
+                "immediate_branch_pair_keys": [
+                  "pair:0:8"
+                ],
+                "kind": "exterior",
+                "region_key": "region:exterior",
+                "three_prime_unpaired_indices": null,
+                "unpaired_indices": [],
+                "unpaired_intervals": []
+              }
+            ],
+            "schema": "rna_topology_v1",
+            "status": "valid",
+            "stems": [
+              {
+                "inner_pair": [
+                  2,
+                  6
+                ],
+                "outer_pair": [
+                  0,
+                  8
+                ],
+                "pair_keys": [
+                  "pair:0:8",
+                  "pair:1:7",
+                  "pair:2:6"
+                ],
+                "stem_key": "stem:0:8"
+              }
+            ]
+          }
+        },
+        "received_failure": null
+      },
+      "WT": {
+        "original_bundle_software": {
+          "python_executable": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+          "python_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+          "python_version": null,
+          "rna_extension_sha256": null,
+          "rna_module_sha256": null,
+          "viennarna_distribution_version": null,
+          "worker_module": "gene_annotation_episode.native_rna_structure_worker",
+          "worker_source_sha256": "d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7"
+        },
+        "original_sheet": {
+          "analysis_sequence": {
+            "alphabet": "RNA_IUPAC",
+            "ambiguous_indices": [],
+            "analysis_sequence": "GGGAAACCC",
+            "case_operation": "exact",
+            "length_nt": 9,
+            "original_sequence": "GGGAAACCC",
+            "original_to_analysis_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "symbol_counts": {
+              "A": 3,
+              "B": 0,
+              "C": 3,
+              "D": 0,
+              "G": 3,
+              "H": 0,
+              "K": 0,
+              "M": 0,
+              "N": 0,
+              "R": 0,
+              "S": 0,
+              "U": 0,
+              "V": 0,
+              "W": 0,
+              "Y": 0
+            }
+          },
+          "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+          "issues": [],
+          "legacy_quantities": null,
+          "mode": "supplied_features",
+          "model": null,
+          "native_evaluation": {
+            "engine": null,
+            "engine_version": null,
+            "model_key": null,
+            "numeric_text": null,
+            "reason": "not_requested",
+            "state": "not_requested",
+            "structure_key": null,
+            "unit": "kcal/mol",
+            "value": null
+          },
+          "native_input": {
+            "byte_count": 4541,
+            "format": "rna_native_record_json_v1",
+            "sha256": "1d9fa0d3b3e7b718329fbf68b6f3da89e90729b5f2f1c4b8e842d0c865d2f596"
+          },
+          "native_mfe": {
+            "engine": null,
+            "engine_version": null,
+            "model_key": null,
+            "numeric_text": null,
+            "reason": "not_requested",
+            "state": "not_requested",
+            "structure_key": null,
+            "unit": "kcal/mol",
+            "value": null
+          },
+          "native_uncertainty": {
+            "energy_interval": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "energy_standard_error": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "ensemble_diversity": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "ensemble_free_energy_kcal_mol": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "mfe_frequency": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            },
+            "pair_probabilities": {
+              "reason": "selected_algorithm_does_not_produce_uncertainty",
+              "state": "not_produced",
+              "value": null
+            }
+          },
+          "operation": "analyze_rna_secondary_structure_features",
+          "original_input": {
+            "dot_bracket": "(((...)))",
+            "energy_mode": "none",
+            "normalization": "exact",
+            "record_key": "WT",
+            "schema": "rna_feature_input_v1",
+            "sequence": "GGGAAACCC",
+            "sequence_id": null,
+            "structure_id": null,
+            "structure_origin": "supplied_unknown",
+            "structure_source_ref": null,
+            "subject_binding": null
+          },
+          "record_key": "WT",
+          "schema": "rna_supplied_structure_feature_sheet_v1",
+          "sequence_pairs": [
+            {
+              "ordered_pair": "GC",
+              "pair_key": "pair:0:8",
+              "symbol_i": "G",
+              "symbol_j": "C",
+              "unambiguous": true
+            },
+            {
+              "ordered_pair": "GC",
+              "pair_key": "pair:1:7",
+              "symbol_i": "G",
+              "symbol_j": "C",
+              "unambiguous": true
+            },
+            {
+              "ordered_pair": "GC",
+              "pair_key": "pair:2:6",
+              "symbol_i": "G",
+              "symbol_j": "C",
+              "unambiguous": true
+            }
+          ],
+          "status": "complete",
+          "structure": {
+            "dot_bracket": "(((...)))",
+            "energy_conversion": null,
+            "energy_dot_bracket": null,
+            "origin": "supplied_unknown",
+            "source_ref": null,
+            "structure_id": null,
+            "structure_key": "WT:structure"
+          },
+          "subject_binding": null,
+          "topology": {
+            "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+            "dot_bracket": "(((...)))",
+            "issues": [],
+            "length_nt": 9,
+            "pairs": [
+              {
+                "child_pair_keys": [
+                  "pair:1:7"
+                ],
+                "closing_token": ")",
+                "i": 0,
+                "j": 8,
+                "opening_token": "(",
+                "pair_key": "pair:0:8",
+                "parent_pair_key": null,
+                "stem_key": "stem:0:8"
+              },
+              {
+                "child_pair_keys": [
+                  "pair:2:6"
+                ],
+                "closing_token": ")",
+                "i": 1,
+                "j": 7,
+                "opening_token": "(",
+                "pair_key": "pair:1:7",
+                "parent_pair_key": "pair:0:8",
+                "stem_key": "stem:0:8"
+              },
+              {
+                "child_pair_keys": [],
+                "closing_token": ")",
+                "i": 2,
+                "j": 6,
+                "opening_token": "(",
+                "pair_key": "pair:2:6",
+                "parent_pair_key": "pair:1:7",
+                "stem_key": "stem:0:8"
+              }
+            ],
+            "positions": [
+              {
+                "bracket": "(",
+                "index": 0,
+                "input_index": 0,
+                "pair_key": "pair:0:8",
+                "partner_index": 8,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": "(",
+                "index": 1,
+                "input_index": 1,
+                "pair_key": "pair:1:7",
+                "partner_index": 7,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": "(",
+                "index": 2,
+                "input_index": 2,
+                "pair_key": "pair:2:6",
+                "partner_index": 6,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": ".",
+                "index": 3,
+                "input_index": 3,
+                "pair_key": null,
+                "partner_index": null,
+                "stem_key": null,
+                "unpaired_region_key": "region:2:6"
+              },
+              {
+                "bracket": ".",
+                "index": 4,
+                "input_index": 4,
+                "pair_key": null,
+                "partner_index": null,
+                "stem_key": null,
+                "unpaired_region_key": "region:2:6"
+              },
+              {
+                "bracket": ".",
+                "index": 5,
+                "input_index": 5,
+                "pair_key": null,
+                "partner_index": null,
+                "stem_key": null,
+                "unpaired_region_key": "region:2:6"
+              },
+              {
+                "bracket": ")",
+                "index": 6,
+                "input_index": 6,
+                "pair_key": "pair:2:6",
+                "partner_index": 2,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": ")",
+                "index": 7,
+                "input_index": 7,
+                "pair_key": "pair:1:7",
+                "partner_index": 1,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              },
+              {
+                "bracket": ")",
+                "index": 8,
+                "input_index": 8,
+                "pair_key": "pair:0:8",
+                "partner_index": 0,
+                "stem_key": "stem:0:8",
+                "unpaired_region_key": null
+              }
+            ],
+            "regions": [
+              {
+                "closing_pair_key": "pair:2:6",
+                "five_prime_unpaired_indices": null,
+                "immediate_branch_pair_keys": [],
+                "kind": "hairpin",
+                "region_key": "region:2:6",
+                "three_prime_unpaired_indices": null,
+                "unpaired_indices": [
+                  3,
+                  4,
+                  5
+                ],
+                "unpaired_intervals": [
+                  [
+                    3,
+                    6
+                  ]
+                ]
+              },
+              {
+                "closing_pair_key": null,
+                "five_prime_unpaired_indices": null,
+                "immediate_branch_pair_keys": [
+                  "pair:0:8"
+                ],
+                "kind": "exterior",
+                "region_key": "region:exterior",
+                "three_prime_unpaired_indices": null,
+                "unpaired_indices": [],
+                "unpaired_intervals": []
+              }
+            ],
+            "schema": "rna_topology_v1",
+            "status": "valid",
+            "stems": [
+              {
+                "inner_pair": [
+                  2,
+                  6
+                ],
+                "outer_pair": [
+                  0,
+                  8
+                ],
+                "pair_keys": [
+                  "pair:0:8",
+                  "pair:1:7",
+                  "pair:2:6"
+                ],
+                "stem_key": "stem:0:8"
+              }
+            ]
+          }
+        },
+        "received_failure": null
+      }
+    },
+    "original_receipts": {
+      "V": {
+        "arguments": {},
+        "assignment": {
+          "handoff_ref": "source_77d495d410c7c98dc140e2b8",
+          "selector": {
+            "acquisition": "complete_bound_bundle",
+            "projection": {
+              "family": "summary",
+              "metrics": [
+                "pair_count",
+                "paired_fraction",
+                "long_stem_fraction",
+                "accepted_pair_fraction"
+              ],
+              "rows": {
+                "limit": 50,
+                "offset": 0
+              }
+            },
+            "version": "native_rna_structure_result_selector_v1"
+          },
+          "version": "execution_results_assignment_v1"
+        },
+        "capture": {
+          "absent_artifacts": [],
+          "artifacts": [
+            {
+              "artifact_ref": "artifact_efa5e304d139cd7763937422408829cad8227911ca5043110a920d8d5524deec",
+              "format": "rna_input_json_v1",
+              "kind": "input",
+              "relative_path": "input.json",
+              "role": "input",
+              "sha256": "efa5e304d139cd7763937422408829cad8227911ca5043110a920d8d5524deec",
+              "size_bytes": 273
+            },
+            {
+              "artifact_ref": "artifact_b05c3334969e12fa7b45a2f91a09a6cb27693e5200216eacd6a07c1a2ea2a36f",
+              "format": "rna_native_record_json_v1",
+              "kind": "output",
+              "relative_path": "native-result.json",
+              "role": "native_result",
+              "sha256": "b05c3334969e12fa7b45a2f91a09a6cb27693e5200216eacd6a07c1a2ea2a36f",
+              "size_bytes": 4538
+            },
+            {
+              "artifact_ref": "artifact_81cede0927bf19f2d3678b4c9ad2f16fbe71a2da23d33bffec143249e0ca3209",
+              "format": "text",
+              "kind": "output",
+              "relative_path": "stdout.txt",
+              "role": "stdout",
+              "sha256": "81cede0927bf19f2d3678b4c9ad2f16fbe71a2da23d33bffec143249e0ca3209",
+              "size_bytes": 47
+            },
+            {
+              "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "format": "text",
+              "kind": "output",
+              "relative_path": "stderr.txt",
+              "role": "stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size_bytes": 0
+            }
+          ],
+          "bundle_artifact_ref": "artifact_52f9d52c8cb56828acb6ffda701b11ea8c4f15e94052779639fc89298874b579",
+          "bundle_validated": true,
+          "capture_complete": true,
+          "failures": [],
+          "invalid_artifacts": [],
+          "version": "native_rna_structure_capture_v1"
+        },
+        "capture_complete": true,
+        "delivery_complete": true,
+        "episode_id": "episode_abff772d17938a7b00d9c64f206cbb82c74201226ac90557bf6f9041db1e6e0c",
+        "failure_selection": null,
+        "failures": [],
+        "native_success": true,
+        "observation": {
+          "failure_code": null,
+          "logs": [],
+          "measurements": [],
+          "native": {
+            "fixture": "synthetic_supplied_observation"
+          },
+          "observed_at": "2026-10-26T00:00:03+00:00",
+          "outputs": [],
+          "provenance_refs": [],
+          "result_available": true,
+          "returncode": 0,
+          "state": "completed"
+        },
+        "operation_key": "rna358-synthetic-run:episode_abff772d17938a7b00d9c64f206cbb82c74201226ac90557bf6f9041db1e6e0c:0",
+        "prepared": {
+          "bundle_artifact_ref": "artifact_52f9d52c8cb56828acb6ffda701b11ea8c4f15e94052779639fc89298874b579",
+          "components_artifact_ref": "artifact_4905e83ff2d60e708603665f1c96286451b7c585b15b103247dc0181e5677f33",
+          "components_schema": "rna_structure_components_v1",
+          "diagnostics_artifact_ref": "artifact_f7d966d7c144af73976387fb6a7d98bffb9c753fc5cc9980effdc1486e210c2c",
+          "failures": [],
+          "grading_artifact_ref": "artifact_9e6037316d286fc3f8255304f2d10316145211c58d7d087b27a7270307d01cbf",
+          "native_success": true,
+          "requested_cells_accounted_for": true,
+          "selected_rows_artifact_ref": "artifact_337187e71d8c59b43c7247a4d2203770fa70523fbef4ea1aa5cef5bfeaa895d3",
+          "selector": {
+            "acquisition": "complete_bound_bundle",
+            "projection": {
+              "family": "summary",
+              "metrics": [
+                "pair_count",
+                "paired_fraction",
+                "long_stem_fraction",
+                "accepted_pair_fraction"
+              ],
+              "rows": {
+                "limit": 50,
+                "offset": 0
+              }
+            },
+            "version": "native_rna_structure_result_selector_v1"
+          },
+          "sheet_artifact_ref": "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+          "sheet_schema": "rna_supplied_structure_feature_sheet_v1",
+          "source_grading_artifact_ref": "artifact_37ff67ebd5c54b6b769cde6d6e8707ab5e08f56cb9940d6e55c48cc3264c9ff0",
+          "version": "native_rna_structure_prepared_grading_v1",
+          "worker_receipt_artifact_ref": "artifact_df3db6726f8f9c2190a0c719b15e4523943a5c5d7fa7a9c215a4f70892fb551e"
+        },
+        "record_refs": [
+          "source_7a3a484dbd6036ff39003d01"
+        ],
+        "rows": [
+          {
+            "calculation_key": "rna_calculation:4905e83ff2d60e708603665f1c96286451b7c585b15b103247dc0181e5677f33",
+            "calculation_parameters": {
+              "energy": {
+                "normalization": "per_nt"
+              },
+              "pair_composition": {
+                "accepted_ordered_pair_types": [
+                  "AU",
+                  "UA",
+                  "GC",
+                  "CG",
+                  "GU",
+                  "UG"
+                ],
+                "denominator": "unambiguous_pairs"
+              },
+              "schema": "rna_calculation_parameters_v1",
+              "topology": {
+                "include_exterior_in_loop_size_statistics": false,
+                "long_stem_min_pairs": 3
+              }
+            },
+            "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+            "family": "summary",
+            "measurements": [
+              {
+                "denominator": null,
+                "name": "pair_count",
+                "numerator": null,
+                "origin": "derived_topology",
+                "unit": "pairs",
+                "value": 3
+              },
+              {
+                "denominator": 9,
+                "name": "paired_fraction",
+                "numerator": 6,
+                "origin": "derived_topology",
+                "unit": "dimensionless",
+                "value": 0.6666666666666666
+              },
+              {
+                "denominator": 1,
+                "name": "long_stem_fraction",
+                "numerator": 1,
+                "origin": "derived_topology",
+                "unit": "dimensionless",
+                "value": 1.0
+              },
+              {
+                "denominator": 3,
+                "name": "accepted_pair_fraction",
+                "numerator": 3,
+                "origin": "derived_sequence_composition",
+                "unit": "dimensionless",
+                "value": 1.0
+              }
+            ],
+            "mode": "supplied_features",
+            "operation": "analyze_rna_secondary_structure_features",
+            "qualification_codes": [],
+            "record_key": "V",
+            "row_key": "V:summary",
+            "sequence_id": null,
+            "source_ref": "source_7a3a484dbd6036ff39003d01",
+            "status": "unbound",
+            "structure_id": null,
+            "structure_key": "V:structure",
+            "structure_origin": "supplied_unknown",
+            "subject_ref": null,
+            "unavailable": []
+          }
+        ],
+        "run_id": "rna358-synthetic-run",
+        "scope": {
+          "subject_refs": [
+            "input_701115a7cb963c5641545008"
+          ]
+        },
+        "source_ref": "source_7a3a484dbd6036ff39003d01",
+        "target": {
+          "assignment": {
+            "assignment_id": "explicitly-synthetic-rna-attempt",
+            "completion_keys": [
+              "handoff"
+            ],
+            "constraints": {
+              "allocation": {
+                "memory_bytes": 21474836480,
+                "scratch_bytes": 4294967296,
+                "wall_seconds": null
+              }
+            },
+            "endpoint": "usable_handoff",
+            "initial_context": {
+              "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/1/workspace",
+              "environment": {},
+              "revision": 0
+            },
+            "inventory_snapshot": {},
+            "progress_requirements": [
+              {
+                "credit": 1,
+                "key": "handoff",
+                "predicate": {
+                  "kind": "requested_job_handoff"
+                }
+              }
+            ],
+            "requested_job": {
+              "argv": [
+                "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+                "-B",
+                "-m",
+                "gene_annotation_episode.native_rna_structure_worker",
+                "--operation",
+                "analyze_rna_secondary_structure_features",
+                "--input-json",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/1/supplied-input.json",
+                "--model-json",
+                "null",
+                "--output-json",
+                "native-result.json",
+                "--record-key",
+                "V",
+                "--software-json",
+                "{\"python_executable\":\"/home/chia/repos/gene_annotation_episode/.venv/bin/python\",\"python_sha256\":\"e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f\",\"python_version\":null,\"rna_extension_sha256\":null,\"rna_module_sha256\":null,\"viennarna_distribution_version\":null,\"worker_module\":\"gene_annotation_episode.native_rna_structure_worker\",\"worker_source_sha256\":\"d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7\"}"
+              ],
+              "environment": {
+                "PYTHONPATH": "/home/chia/repos/gene_annotation_episode"
+              },
+              "native_rna_structure": {
+                "environment": {
+                  "PYTHONPATH": "/home/chia/repos/gene_annotation_episode"
+                },
+                "grading_parameters": {
+                  "energy": {
+                    "normalization": "per_nt"
+                  },
+                  "pair_composition": {
+                    "accepted_ordered_pair_types": [
+                      "AU",
+                      "UA",
+                      "GC",
+                      "CG",
+                      "GU",
+                      "UG"
+                    ],
+                    "denominator": "unambiguous_pairs"
+                  },
+                  "schema": "rna_calculation_parameters_v1",
+                  "topology": {
+                    "include_exterior_in_loop_size_statistics": false,
+                    "long_stem_min_pairs": 3
+                  }
+                },
+                "mode": "supplied_features",
+                "model": null,
+                "operands": [
+                  {
+                    "artifact_ref": "artifact_efa5e304d139cd7763937422408829cad8227911ca5043110a920d8d5524deec",
+                    "format": "rna_input_json_v1",
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/1/supplied-input.json",
+                    "role": "input",
+                    "sha256": "efa5e304d139cd7763937422408829cad8227911ca5043110a920d8d5524deec",
+                    "size_bytes": 273
+                  }
+                ],
+                "operation": "analyze_rna_secondary_structure_features",
+                "outputs": [
+                  {
+                    "format": "rna_native_record_json_v1",
+                    "relative_path": "native-result.json",
+                    "role": "native_result"
+                  },
+                  {
+                    "format": "text",
+                    "relative_path": "stdout.txt",
+                    "role": "stdout"
+                  },
+                  {
+                    "format": "text",
+                    "relative_path": "stderr.txt",
+                    "role": "stderr"
+                  }
+                ],
+                "program": "rna_structure_python",
+                "record_key": "V",
+                "software": {
+                  "python_executable": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+                  "python_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+                  "python_version": null,
+                  "rna_extension_sha256": null,
+                  "rna_module_sha256": null,
+                  "viennarna_distribution_version": null,
+                  "worker_module": "gene_annotation_episode.native_rna_structure_worker",
+                  "worker_source_sha256": "d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7"
+                },
+                "version": "native_rna_structure_job_v1"
+              }
+            },
+            "resource_id": "local-rna",
+            "resource_kind": "local",
+            "version": "practical_assignment_v1",
+            "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/1/workspace"
+          },
+          "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/1/workspace/.episode-operations/309e4ed45293d6e6b30e30dc79460817771df64099f9c05b6f895d1864273cb4/968da0e641aeec316f3137feae4a5b9509102bf4a51b491082c1c7bef4968522/native.json",
+          "handle": "source_77d495d410c7c98dc140e2b8",
+          "origin_episode_id": "episode_fbf8993fcd31cb12b9495863a199fee5065f7a2dea225dcf973cfc4648a7d918",
+          "request_sha256": "76825f4473bba105a4c98d3d9f6d85fd69e66e103ed3bee9afb165d8089cceb0",
+          "resource_id": "local-rna",
+          "resource_kind": "local",
+          "run_id": "rna358-synthetic-run",
+          "scope": {
+            "subject_refs": [
+              "input_701115a7cb963c5641545008"
+            ]
+          },
+          "version": "execution_target_v1"
+        },
+        "tool_name": "execution.results.collect",
+        "version": "native_rna_structure_acquired_result_v1"
+      },
+      "WT": {
+        "arguments": {},
+        "assignment": {
+          "handoff_ref": "source_2196ea55c4256b54b8170b16",
+          "selector": {
+            "acquisition": "complete_bound_bundle",
+            "projection": {
+              "family": "summary",
+              "metrics": [
+                "pair_count",
+                "paired_fraction",
+                "long_stem_fraction",
+                "accepted_pair_fraction"
+              ],
+              "rows": {
+                "limit": 50,
+                "offset": 0
+              }
+            },
+            "version": "native_rna_structure_result_selector_v1"
+          },
+          "version": "execution_results_assignment_v1"
+        },
+        "capture": {
+          "absent_artifacts": [],
+          "artifacts": [
+            {
+              "artifact_ref": "artifact_8c4fa87faf34fa14bd2ab387a839b5ef5aa5bdcaf7632b40e31e6d17f8bdf818",
+              "format": "rna_input_json_v1",
+              "kind": "input",
+              "relative_path": "input.json",
+              "role": "input",
+              "sha256": "8c4fa87faf34fa14bd2ab387a839b5ef5aa5bdcaf7632b40e31e6d17f8bdf818",
+              "size_bytes": 274
+            },
+            {
+              "artifact_ref": "artifact_1d9fa0d3b3e7b718329fbf68b6f3da89e90729b5f2f1c4b8e842d0c865d2f596",
+              "format": "rna_native_record_json_v1",
+              "kind": "output",
+              "relative_path": "native-result.json",
+              "role": "native_result",
+              "sha256": "1d9fa0d3b3e7b718329fbf68b6f3da89e90729b5f2f1c4b8e842d0c865d2f596",
+              "size_bytes": 4541
+            },
+            {
+              "artifact_ref": "artifact_81cede0927bf19f2d3678b4c9ad2f16fbe71a2da23d33bffec143249e0ca3209",
+              "format": "text",
+              "kind": "output",
+              "relative_path": "stdout.txt",
+              "role": "stdout",
+              "sha256": "81cede0927bf19f2d3678b4c9ad2f16fbe71a2da23d33bffec143249e0ca3209",
+              "size_bytes": 47
+            },
+            {
+              "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "format": "text",
+              "kind": "output",
+              "relative_path": "stderr.txt",
+              "role": "stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size_bytes": 0
+            }
+          ],
+          "bundle_artifact_ref": "artifact_ff42c05b7d994bc6c5355c9b85a83c781470d4ae7fcfe78b6e7099629c039a66",
+          "bundle_validated": true,
+          "capture_complete": true,
+          "failures": [],
+          "invalid_artifacts": [],
+          "version": "native_rna_structure_capture_v1"
+        },
+        "capture_complete": true,
+        "delivery_complete": true,
+        "episode_id": "episode_16fd9eff7c88381b16a4b0dea7e134c57911e697970b23c0df041cf2512e9e4a",
+        "failure_selection": null,
+        "failures": [],
+        "native_success": true,
+        "observation": {
+          "failure_code": null,
+          "logs": [],
+          "measurements": [],
+          "native": {
+            "fixture": "synthetic_supplied_observation"
+          },
+          "observed_at": "2026-10-26T00:00:03+00:00",
+          "outputs": [],
+          "provenance_refs": [],
+          "result_available": true,
+          "returncode": 0,
+          "state": "completed"
+        },
+        "operation_key": "rna358-synthetic-run:episode_16fd9eff7c88381b16a4b0dea7e134c57911e697970b23c0df041cf2512e9e4a:0",
+        "prepared": {
+          "bundle_artifact_ref": "artifact_ff42c05b7d994bc6c5355c9b85a83c781470d4ae7fcfe78b6e7099629c039a66",
+          "components_artifact_ref": "artifact_5882f2bc7db6529abd214693df1600b63e3929a88cda2cbd09aad604c997eb97",
+          "components_schema": "rna_structure_components_v1",
+          "diagnostics_artifact_ref": "artifact_3ac8ca9d365b0ab0c5dac4a7ab4edb487d7d7ed3e70a7e97a6a90685ae4b083b",
+          "failures": [],
+          "grading_artifact_ref": "artifact_a905abee869cf9662492d7de202945f188a8e625f40dc5c526abec7ce3148cc1",
+          "native_success": true,
+          "requested_cells_accounted_for": true,
+          "selected_rows_artifact_ref": "artifact_4021f208250df891e10355d48f5c7bec9b87e2a5ebeaaba5f4900b6fd4566163",
+          "selector": {
+            "acquisition": "complete_bound_bundle",
+            "projection": {
+              "family": "summary",
+              "metrics": [
+                "pair_count",
+                "paired_fraction",
+                "long_stem_fraction",
+                "accepted_pair_fraction"
+              ],
+              "rows": {
+                "limit": 50,
+                "offset": 0
+              }
+            },
+            "version": "native_rna_structure_result_selector_v1"
+          },
+          "sheet_artifact_ref": "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+          "sheet_schema": "rna_supplied_structure_feature_sheet_v1",
+          "source_grading_artifact_ref": "artifact_3b8343cce390e2fb2353163e7f9d43b2be12602ecb5e03047a9aacdae2ada642",
+          "version": "native_rna_structure_prepared_grading_v1",
+          "worker_receipt_artifact_ref": "artifact_d8b3c7199abe4b4bdad1021011830ea9c1a9c88fff6cc0d20af64bc1423dd3fd"
+        },
+        "record_refs": [
+          "source_9f1ab4d75816546add8721ec"
+        ],
+        "rows": [
+          {
+            "calculation_key": "rna_calculation:5882f2bc7db6529abd214693df1600b63e3929a88cda2cbd09aad604c997eb97",
+            "calculation_parameters": {
+              "energy": {
+                "normalization": "per_nt"
+              },
+              "pair_composition": {
+                "accepted_ordered_pair_types": [
+                  "AU",
+                  "UA",
+                  "GC",
+                  "CG",
+                  "GU",
+                  "UG"
+                ],
+                "denominator": "unambiguous_pairs"
+              },
+              "schema": "rna_calculation_parameters_v1",
+              "topology": {
+                "include_exterior_in_loop_size_statistics": false,
+                "long_stem_min_pairs": 3
+              }
+            },
+            "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+            "family": "summary",
+            "measurements": [
+              {
+                "denominator": null,
+                "name": "pair_count",
+                "numerator": null,
+                "origin": "derived_topology",
+                "unit": "pairs",
+                "value": 3
+              },
+              {
+                "denominator": 9,
+                "name": "paired_fraction",
+                "numerator": 6,
+                "origin": "derived_topology",
+                "unit": "dimensionless",
+                "value": 0.6666666666666666
+              },
+              {
+                "denominator": 1,
+                "name": "long_stem_fraction",
+                "numerator": 1,
+                "origin": "derived_topology",
+                "unit": "dimensionless",
+                "value": 1.0
+              },
+              {
+                "denominator": 3,
+                "name": "accepted_pair_fraction",
+                "numerator": 3,
+                "origin": "derived_sequence_composition",
+                "unit": "dimensionless",
+                "value": 1.0
+              }
+            ],
+            "mode": "supplied_features",
+            "operation": "analyze_rna_secondary_structure_features",
+            "qualification_codes": [],
+            "record_key": "WT",
+            "row_key": "WT:summary",
+            "sequence_id": null,
+            "source_ref": "source_9f1ab4d75816546add8721ec",
+            "status": "unbound",
+            "structure_id": null,
+            "structure_key": "WT:structure",
+            "structure_origin": "supplied_unknown",
+            "subject_ref": null,
+            "unavailable": []
+          }
+        ],
+        "run_id": "rna358-synthetic-run",
+        "scope": {
+          "subject_refs": [
+            "input_701115a7cb963c5641545008"
+          ]
+        },
+        "source_ref": "source_9f1ab4d75816546add8721ec",
+        "target": {
+          "assignment": {
+            "assignment_id": "explicitly-synthetic-rna-attempt",
+            "completion_keys": [
+              "handoff"
+            ],
+            "constraints": {
+              "allocation": {
+                "memory_bytes": 21474836480,
+                "scratch_bytes": 4294967296,
+                "wall_seconds": null
+              }
+            },
+            "endpoint": "usable_handoff",
+            "initial_context": {
+              "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/0/workspace",
+              "environment": {},
+              "revision": 0
+            },
+            "inventory_snapshot": {},
+            "progress_requirements": [
+              {
+                "credit": 1,
+                "key": "handoff",
+                "predicate": {
+                  "kind": "requested_job_handoff"
+                }
+              }
+            ],
+            "requested_job": {
+              "argv": [
+                "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+                "-B",
+                "-m",
+                "gene_annotation_episode.native_rna_structure_worker",
+                "--operation",
+                "analyze_rna_secondary_structure_features",
+                "--input-json",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/0/supplied-input.json",
+                "--model-json",
+                "null",
+                "--output-json",
+                "native-result.json",
+                "--record-key",
+                "WT",
+                "--software-json",
+                "{\"python_executable\":\"/home/chia/repos/gene_annotation_episode/.venv/bin/python\",\"python_sha256\":\"e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f\",\"python_version\":null,\"rna_extension_sha256\":null,\"rna_module_sha256\":null,\"viennarna_distribution_version\":null,\"worker_module\":\"gene_annotation_episode.native_rna_structure_worker\",\"worker_source_sha256\":\"d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7\"}"
+              ],
+              "environment": {
+                "PYTHONPATH": "/home/chia/repos/gene_annotation_episode"
+              },
+              "native_rna_structure": {
+                "environment": {
+                  "PYTHONPATH": "/home/chia/repos/gene_annotation_episode"
+                },
+                "grading_parameters": {
+                  "energy": {
+                    "normalization": "per_nt"
+                  },
+                  "pair_composition": {
+                    "accepted_ordered_pair_types": [
+                      "AU",
+                      "UA",
+                      "GC",
+                      "CG",
+                      "GU",
+                      "UG"
+                    ],
+                    "denominator": "unambiguous_pairs"
+                  },
+                  "schema": "rna_calculation_parameters_v1",
+                  "topology": {
+                    "include_exterior_in_loop_size_statistics": false,
+                    "long_stem_min_pairs": 3
+                  }
+                },
+                "mode": "supplied_features",
+                "model": null,
+                "operands": [
+                  {
+                    "artifact_ref": "artifact_8c4fa87faf34fa14bd2ab387a839b5ef5aa5bdcaf7632b40e31e6d17f8bdf818",
+                    "format": "rna_input_json_v1",
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/0/supplied-input.json",
+                    "role": "input",
+                    "sha256": "8c4fa87faf34fa14bd2ab387a839b5ef5aa5bdcaf7632b40e31e6d17f8bdf818",
+                    "size_bytes": 274
+                  }
+                ],
+                "operation": "analyze_rna_secondary_structure_features",
+                "outputs": [
+                  {
+                    "format": "rna_native_record_json_v1",
+                    "relative_path": "native-result.json",
+                    "role": "native_result"
+                  },
+                  {
+                    "format": "text",
+                    "relative_path": "stdout.txt",
+                    "role": "stdout"
+                  },
+                  {
+                    "format": "text",
+                    "relative_path": "stderr.txt",
+                    "role": "stderr"
+                  }
+                ],
+                "program": "rna_structure_python",
+                "record_key": "WT",
+                "software": {
+                  "python_executable": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+                  "python_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+                  "python_version": null,
+                  "rna_extension_sha256": null,
+                  "rna_module_sha256": null,
+                  "viennarna_distribution_version": null,
+                  "worker_module": "gene_annotation_episode.native_rna_structure_worker",
+                  "worker_source_sha256": "d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7"
+                },
+                "version": "native_rna_structure_job_v1"
+              }
+            },
+            "resource_id": "local-rna",
+            "resource_kind": "local",
+            "version": "practical_assignment_v1",
+            "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/0/workspace"
+          },
+          "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comparison_results_2026-10-26_371/check004/temporary/pytest/test_independently_received_or0/fixture/0/workspace/.episode-operations/057d8d515acdecfe0bb160bff707b3ef6cdd8d40e18e57271aa724fd4e9f6900/cc63d3d6ef49a4f4c7b09ccb6530b7cdfe9bbdbf99175469611d9b9788bd2030/native.json",
+          "handle": "source_2196ea55c4256b54b8170b16",
+          "origin_episode_id": "episode_5e99570c854b618350bc86ecf83481235fdb0867df10de5f9292f0b30a38e9a9",
+          "request_sha256": "4802c89b60c73973fcb128db1cdb5dc2cd34dc03bcf0d8b61baedf197a47777c",
+          "resource_id": "local-rna",
+          "resource_kind": "local",
+          "run_id": "rna358-synthetic-run",
+          "scope": {
+            "subject_refs": [
+              "input_701115a7cb963c5641545008"
+            ]
+          },
+          "version": "execution_target_v1"
+        },
+        "tool_name": "execution.results.collect",
+        "version": "native_rna_structure_acquired_result_v1"
+      }
+    },
+    "selected_references": [
+      "source_2196ea55c4256b54b8170b16",
+      "source_9f1ab4d75816546add8721ec",
+      "artifact_ff42c05b7d994bc6c5355c9b85a83c781470d4ae7fcfe78b6e7099629c039a66",
+      "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+      "source_77d495d410c7c98dc140e2b8",
+      "source_7a3a484dbd6036ff39003d01",
+      "artifact_52f9d52c8cb56828acb6ffda701b11ea8c4f15e94052779639fc89298874b579",
+      "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0"
+    ],
+    "version": "rna_structure_comparison_resolved_operands_v1"
+  },
+  "selector": {
+    "acquisition": "retained_inputs_only",
+    "parameters": {
+      "arithmetic": "retained_binary64_values_v1",
+      "native_uncertainty_policy": "retain_no_fabricated_transfer",
+      "pair_difference": "alignment_column_pair_sets",
+      "schema": "rna_comparison_parameters_v1",
+      "site_denominator": "decidable_selected_shared_sites",
+      "tie_rule": "exact_selected_numeric_value"
+    },
+    "projections": [
+      {
+        "comparison_ids": [
+          "compare-V"
+        ],
+        "family": "comparison_counts",
+        "include_pairing_change_state": true,
+        "metrics": [
+          "preserved_pair_count",
+          "pair_symmetric_difference_count"
+        ],
+        "projection_id": "counts",
+        "selection_ids": []
+      }
+    ],
+    "question": {
+      "baseline_member_id": "WT",
+      "comparisons": [
+        {
+          "calculate_pair_changes": true,
+          "comparison_id": "compare-V",
+          "correspondence": {
+            "kind": "substitution_only",
+            "substitutions": [
+              {
+                "baseline_symbol": "C",
+                "index": 6,
+                "variant_symbol": "U"
+              }
+            ]
+          },
+          "energy": null,
+          "site_selections": [],
+          "variant_member_id": "V"
+        }
+      ],
+      "kind": "pairwise",
+      "membership": [
+        {
+          "kind": "saved_sheet",
+          "member_id": "WT",
+          "saved_input": {
+            "bundle_artifact_ref": "artifact_ff42c05b7d994bc6c5355c9b85a83c781470d4ae7fcfe78b6e7099629c039a66",
+            "handoff_ref": "source_2196ea55c4256b54b8170b16",
+            "mode": "supplied_features",
+            "operation": "analyze_rna_secondary_structure_features",
+            "record_key": "WT",
+            "result_receipt_key": "rna_result_receipt:4c52cf4d0e4fb5d79943a2b1350991b9e48af7b64aaeb9a54617948a380dcbb4",
+            "schema": "rna_structure_saved_sheet_input_v1",
+            "sheet_artifact_ref": "artifact_94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+            "sheet_sha256": "94ce616f5ed66149c7971cff954725295c31ed30e841a234b556b8563fbee2a8",
+            "source_ref": "source_9f1ab4d75816546add8721ec"
+          }
+        },
+        {
+          "kind": "saved_sheet",
+          "member_id": "V",
+          "saved_input": {
+            "bundle_artifact_ref": "artifact_52f9d52c8cb56828acb6ffda701b11ea8c4f15e94052779639fc89298874b579",
+            "handoff_ref": "source_77d495d410c7c98dc140e2b8",
+            "mode": "supplied_features",
+            "operation": "analyze_rna_secondary_structure_features",
+            "record_key": "V",
+            "result_receipt_key": "rna_result_receipt:703310a8813ed71f35c00d8a17b4f180c58db495f6b0fd9653acdeac5ad9fa2f",
+            "schema": "rna_structure_saved_sheet_input_v1",
+            "sheet_artifact_ref": "artifact_1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+            "sheet_sha256": "1bab9c948f8b65472e499e6d885aa81bc6ca04a32f5c9b34cdae5d7eeffc2ce0",
+            "source_ref": "source_7a3a484dbd6036ff39003d01"
+          }
+        }
+      ],
+      "scan": null
+    },
+    "version": "native_rna_structure_comparison_selector_v1"
+  }
+}

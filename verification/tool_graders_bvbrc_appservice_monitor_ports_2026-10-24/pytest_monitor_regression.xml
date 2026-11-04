@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="80" time="390.986" timestamp="2026-10-24T20:16:16.304388-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_recursive_monitoring" name="test_exact_exposed_observations_survive_reopen_and_projection_views_share_identity" time="6.527" /><testcase classname="tests.test_recursive_monitoring" name="test_exposure_notifications_require_commit_and_recover_after_publication_before_ack" time="6.528" /><testcase classname="tests.test_recursive_monitoring" name="test_selected_direct_relationships_reject_grandchild_fanout_and_foreign_scope" time="6.846" /><testcase classname="tests.test_recursive_monitoring" name="test_form_delivery_is_explicit_typed_idempotent_and_transactional" time="5.529" /><testcase classname="tests.test_recursive_monitoring" name="test_job_exposure_has_committed_identity_without_an_unbound_c2_notification" time="5.289" /><testcase classname="tests.test_recursive_monitoring" name="test_recursive_monitors_return_their_original_forms_while_actual_targets_remain_active" time="11.302" /><testcase classname="tests.test_recursive_monitoring" name="test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress" time="26.983"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_recursive_monitoring.test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress.&lt;locals&gt;.ApplicationProvider object at 0x7fc67435aab0&gt;
+episode_id = 'episode_de9e479e7a37265e9ff07a1d0648252fc5177f36f1769ba5f8948bfd64231301'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...11441f0583'], 'state': 'executing'}], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+output_schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1323/test_run_workflow_consumes_sel0')
+
+    def test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress(tmp_path):
+        with Store(tmp_path / "state") as store:
+            store.create_problem(raw_sequence="MKWAA", molecule="protein")
+            scope = store.validate_scope({"subject_refs": store.problem()["subject_refs"]})
+            directory = tmp_path / "run"
+            executions = DurableExecutionStore(directory / "episode-execution")
+            gate = tmp_path / "target.gate"
+            os.mkfifo(gate)
+            job = LiveJob(tmp_path, store, scope)
+            targets, retained, controllers, selections, delivered = {}, {}, {}, [], []
+            binding = MonitorEpisodes(None, outcome_page_size=1)
+            definitions = binding.fact_sources("monitor")
+            schema = obj({
+                "progress": definitions["monitoring_progress_refs"]["report_schema"],
+                "state": definitions["monitoring_execution_state"]["report_schema"],
+                "available": definitions["monitoring_result_available"]["report_schema"],
+                "assessment": {"type": "string", "enum": ["work_observed", "unresolved"]}})
+    
+            def provider_for(run_id):
+                if run_id not in retained:
+                    retained[run_id] = ProgressProvider(store, executions, run_id=run_id, job_provider=job)
+                return retained[run_id]
+    
+            def project(context, selection):
+                # Explicit fixture units supplied through the supported caller port.
+                # Projection consumes actual C7 receipt/outcome selection, without
+                # deriving a second scientific score or counting read timestamps.
+                selections.append((context, deepcopy(selection)))
+                progress = provider_for(context.run_id)
+                known = {progress.observation_identity(ref, scope) for ref in selection["known_progress_refs"]}
+                baseline = {progress.observation_identity(ref, scope) for ref in selection["initial_progress_refs"]}
+                return {"credit": len(known - baseline)}
+    
+            def controller(path, initial):
+                value = FixtureController(str(path), initial, 3 if len(path) == 4 else 2)
+                controllers[path] = value
+                return value
+    
+            def child(handle):
+                return {"selection": {"kind": "episode_child", "role": "monitor",
+                    "assignment": assignment(handle), "goal": "Investigate the selected exposed progress",
+                    "scope": scope, "purpose": "Return original observations and constrained progress interpretation",
+                    "schema_json": json.dumps(schema), "initial_report_json": '{"assessment":"unresolved"}'},
+                    "report_update": {}}
+    
+            def observe(context):
+                if context["child_reports"]:
+                    form, = context["child_reports"]
+                    assert form["assessment"] == "work_observed"
+                    assert form["available"] is (form["state"] == "executing"
+                        and context["monitor_assignment"]["target_handle"] == targets["middle"]["handle"])
+                    delivered.append(form)
+                return {"selection": {"kind": "tool", "tool": "progress.observe",
+                    "arguments": {"requested_fields": list(FIELDS)}}, "report_update": {"assessment": "work_observed"}}
+    
+            def select_dependency(context, handle):
+                assert handle in {row["handle"] for row in context["monitor_direct_dependencies"]}
+                return child(handle)
+    
+            def read_job_log(context):
+                snapshot = context["last_local_outcome"]["result"]
+                assert snapshot["measurements"][0]["value"] == 1
+                return {"selection": {"kind": "tool", "tool": "progress.log", "arguments": {
+                    "progress_ref": snapshot["progress_ref"], "log_index": 0}}, "report_update": {"assessment": "work_observed"}}
+    
+            def repeat_job_observation(context):
+                assert context["last_local_outcome"]["result"]["text"] == "batch 1 complete\n"
+                job.timestamp = datetime.now(timezone.utc).isoformat()
+                return observe(context)
+    
+            def science_uses_form(context):
+                form, = context["child_reports"]
+                assert set(form) == {"progress", "state", "available", "assessment"}
+                assert form["state"] == "executing" and form["available"] is False
+                assert len(form["progress"]) == 3
+                assert executions.status(targets["target"]["handle"])["liveness"] == "live"
+                assert job.process.poll() is None
+                delivered.append(form)
+                return {"selection": {"kind": "tool", "tool": "episode.history",
+                    "arguments": {"view": "records", "decision_indices": [0]}}, "report_update": {}}
+    
+            class ApplicationProvider(ScriptedProvider):
+                async def complete(self, *args, **kwargs):
+                    if not targets:
+                        run_id = json.loads((directory / "run.json").read_text())["run_id"]
+                        targets["target"] = durable_target(tmp_path, store, executions,
+                            run_id=run_id, arguments={"gate": str(gate)})
+                        for key in ("middle", "unselected"):
+                            targets[key] = durable_target(tmp_path, store, executions, key=key,
+                                parent=targets["target"], run_id=run_id)
+                        executions.start(targets["target"]["handle"])
+                        await asyncio.wait_for(executions.wait_events(event_condition(
+                            targets["target"]["handle"], "progress_committed")), 10)
+                        progress = provider_for(run_id)
+                        progress.expose(targets["target"]["handle"], operation_key="selected-direct-commissions",
+                            dependencies=[{"handle": targets[key]["handle"], "kind": "episode",
+                                "relation_ref": content_digest(targets[key]), "observed_at": job.timestamp,
+                                "state": "pending"} for key in ("middle", "unselected")])
+                        progress.expose(targets["middle"]["handle"], operation_key="selected-job-submission",
+                            dependencies=[{"handle": job.handle, "kind": "job", "relation_ref": job.source["id"],
+                                "observed_at": job.timestamp, "state": "executing"}])
+                        assert progress.flush_notifications() == {"published": 2, "pending": 0}
+                    return await super().complete(*args, **kwargs)
+    
+            scripted = ApplicationProvider([
+                lambda context: child(targets["target"]["handle"]),
+                lambda context: select_dependency(context, targets["middle"]["handle"]),
+                lambda context: select_dependency(context, job.handle),
+                observe, read_job_log, repeat_job_observation, observe, observe, science_uses_form])
+            try:
+&gt;               summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=scripted,
+                    run_dir=directory, controller_factory=controller, project_credit=lambda store, scope: 0,
+                    episode_binding_descriptors=[binding.as_record()],
+                    role_credit_bindings={"monitor": {"definition": {"kind": "fixture_unique_observation",
+                        "units": "fixture_information"}, "project": project}}, job_progress_provider=job))
+
+tests/test_recursive_monitoring.py:646: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3817: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4139: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1215: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:912: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_recursive_monitoring.test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress.&lt;locals&gt;.ApplicationProvider object at 0x7fc67435aab0&gt;
+args = ('episode_de9e479e7a37265e9ff07a1d0648252fc5177f36f1769ba5f8948bfd64231301', 'REASONING', 'You own an iterative scient...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+kwargs = {}
+
+    async def complete(self, *args, **kwargs):
+        if not targets:
+            run_id = json.loads((directory / "run.json").read_text())["run_id"]
+            targets["target"] = durable_target(tmp_path, store, executions,
+                run_id=run_id, arguments={"gate": str(gate)})
+            for key in ("middle", "unselected"):
+                targets[key] = durable_target(tmp_path, store, executions, key=key,
+                    parent=targets["target"], run_id=run_id)
+            executions.start(targets["target"]["handle"])
+            await asyncio.wait_for(executions.wait_events(event_condition(
+                targets["target"]["handle"], "progress_committed")), 10)
+            progress = provider_for(run_id)
+            progress.expose(targets["target"]["handle"], operation_key="selected-direct-commissions",
+                dependencies=[{"handle": targets[key]["handle"], "kind": "episode",
+                    "relation_ref": content_digest(targets[key]), "observed_at": job.timestamp,
+                    "state": "pending"} for key in ("middle", "unselected")])
+            progress.expose(targets["middle"]["handle"], operation_key="selected-job-submission",
+                dependencies=[{"handle": job.handle, "kind": "job", "relation_ref": job.source["id"],
+                    "observed_at": job.timestamp, "state": "executing"}])
+            assert progress.flush_notifications() == {"published": 2, "pending": 0}
+&gt;       return await super().complete(*args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+tests/test_recursive_monitoring.py:638: RuntimeError</failure></testcase><testcase classname="tests.test_recursive_monitoring" name="test_monitor_rejects_undelivered_refs_unrestricted_forms_and_modified_recorded_facts" time="4.917" /><testcase classname="tests.test_execution_progress" name="test_old_pbs_target_survives_retry_and_corrupt_current_pointer" time="12.469" /><testcase classname="tests.test_execution_progress" name="test_raw_log_bytes_custody_and_selected_output_read_do_not_touch_launch" time="10.010" /><testcase classname="tests.test_execution_progress" name="test_scope_original_request_and_supplied_target_identity_are_qualified" time="8.809" /><testcase classname="tests.test_execution_progress" name="test_one_real_dependency_is_exposed_after_committed_native_handoff" time="7.670" /><testcase classname="tests.test_execution_progress" name="test_receipt_aliases_share_first_durable_physical_dependency_and_retry_is_distinct" time="9.463" /><testcase classname="tests.test_execution_progress" name="test_resource_capture_survives_later_c8_publication_failure" time="6.071" /><testcase classname="tests.test_execution_progress" name="test_resource_credit_excludes_bytes_read_times_and_open_elapsed" time="8.504" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;0]" time="0.001" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;1]" time="0.003" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;2]" time="0.003" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;3]" time="0.002" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;4]" time="0.001" /><testcase classname="tests.test_execution_progress" name="test_real_api_port_delegation_commits_get_intent_before_progress_projection[SUCCESS-returned]" time="8.865" /><testcase classname="tests.test_execution_progress" name="test_real_api_port_delegation_commits_get_intent_before_progress_projection[STARTED-executing]" time="8.472" /><testcase classname="tests.test_execution_progress" name="test_real_local_closed_launch_is_observed_without_reopening_history" time="12.110" /><testcase classname="tests.test_homology_progress" name="test_definition_and_scope_are_bound_to_registered_query" time="4.190" /><testcase classname="tests.test_homology_progress" name="test_caller_must_supply_valid_log_representation_bounds[0-roles0]" time="2.934" /><testcase classname="tests.test_homology_progress" name="test_caller_must_supply_valid_log_representation_bounds[True-roles1]" time="2.691" /><testcase classname="tests.test_homology_progress" name="test_caller_must_supply_valid_log_representation_bounds[1-roles2]" time="3.216" /><testcase classname="tests.test_homology_progress" name="test_caller_must_supply_valid_log_representation_bounds[1-roles3]" time="2.775" /><testcase classname="tests.test_homology_progress" name="test_caller_must_supply_valid_log_representation_bounds[1-roles4]" time="2.441" /><testcase classname="tests.test_homology_progress" name="test_caller_must_supply_valid_log_representation_bounds[1-roles5]" time="3.626" /><testcase classname="tests.test_homology_progress" name="test_observation_only_reads_status_and_publishes_resolvable_provenance" time="5.496" /><testcase classname="tests.test_homology_progress" name="test_log_tail_is_exact_retained_bytes_with_original_offsets" time="4.351" /><testcase classname="tests.test_homology_progress" name="test_partial_log_read_keeps_only_actual_bytes_and_growth_is_not_atomic" time="3.527" /><testcase classname="tests.test_homology_progress" name="test_same_bytes_at_different_offsets_retain_distinct_custody" time="3.551" /><testcase classname="tests.test_homology_progress" name="test_selected_replay_precedes_status_and_log_reads_and_conflicts_on_selection" time="4.027" /><testcase classname="tests.test_homology_progress" name="test_unknown_native_states_and_measurements_remain_unknown[submission_unconfirmed]" time="3.501" /><testcase classname="tests.test_homology_progress" name="test_unknown_native_states_and_measurements_remain_unknown[execution_unknown]" time="3.696" /><testcase classname="tests.test_homology_progress" name="test_failures_and_live_partial_outputs_are_preserved_without_scientific_completion" time="3.571" /><testcase classname="tests.test_homology_progress" name="test_invalid_native_status_and_disappearing_logs_roll_back_capture" time="4.401" /><testcase classname="tests.test_homology_progress" name="test_dependency_is_exact_selected_order_relationship_without_live_poll[False]" time="3.861" /><testcase classname="tests.test_homology_progress" name="test_dependency_is_exact_selected_order_relationship_without_live_poll[True]" time="3.758" /><testcase classname="tests.test_homology_progress" name="test_dependency_rejects_mismatched_registered_assignment[cpu-2]" time="3.091" /><testcase classname="tests.test_homology_progress" name="test_dependency_rejects_mismatched_registered_assignment[cpu-True]" time="3.310" /><testcase classname="tests.test_homology_progress" name="test_dependency_rejects_mismatched_registered_assignment[query_ref-foreign]" time="4.227" /><testcase classname="tests.test_homology_progress" name="test_dependency_rejects_mismatched_registered_assignment[search_mode-maximum_sensitivity]" time="4.997" /><testcase classname="tests.test_homology_progress" name="test_dependency_rejects_mismatched_registered_assignment[registry_ref-foreign]" time="4.648" /><testcase classname="tests.test_homology_progress" name="test_dependency_rejects_mismatched_registered_assignment[handoff-value5]" time="4.487" /><testcase classname="tests.test_homology_progress" name="test_dependency_absence_is_durable_and_foreign_scope_is_rejected" time="3.594" /><testcase classname="tests.test_homology_progress" name="test_concurrent_writers_reuse_first_snapshot_and_selected_operation" time="3.769" /><testcase classname="tests.test_homology_progress" name="test_actual_tiny_local_native_run_and_retained_log_bytes" time="5.774" /><testcase classname="tests.test_progress_receipt_order" name="test_interleaved_receipts_drive_j_prefixes_and_monitor_consumers" time="5.230" /><testcase classname="tests.test_progress_receipt_order" name="test_first_listed_order_is_preserved_and_later_keys_do_not_move_refs" time="5.960" /><testcase classname="tests.test_progress_receipt_order" name="test_unfinished_or_failed_outcomes_are_rejected_without_publication[pending]" time="4.685" /><testcase classname="tests.test_progress_receipt_order" name="test_unfinished_or_failed_outcomes_are_rejected_without_publication[failed]" time="5.864" /><testcase classname="tests.test_progress_receipt_order" name="test_unfinished_or_failed_outcomes_are_rejected_without_publication[invalid]" time="4.380" /><testcase classname="tests.test_progress_receipt_order" name="test_unfinished_or_failed_outcomes_are_rejected_without_publication[None]" time="4.821" /><testcase classname="tests.test_progress_receipt_order" name="test_only_explicit_progress_reference_arrays_are_accepted[None]" time="4.431" /><testcase classname="tests.test_progress_receipt_order" name="test_only_explicit_progress_reference_arrays_are_accepted[progress_string]" time="4.654" /><testcase classname="tests.test_progress_receipt_order" name="test_only_explicit_progress_reference_arrays_are_accepted[references2]" time="4.963" /><testcase classname="tests.test_progress_receipt_order" name="test_only_explicit_progress_reference_arrays_are_accepted[references3]" time="4.956" /><testcase classname="tests.test_progress_receipt_order" name="test_only_explicit_progress_reference_arrays_are_accepted[references4]" time="4.562" /><testcase classname="tests.test_progress_receipt_order" name="test_only_explicit_progress_reference_arrays_are_accepted[references5]" time="4.541" /><testcase classname="tests.test_progress_receipt_order" name="test_outcome_without_explicit_refs_does_not_search_nested_results" time="4.580" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_and_scope_must_be_finite_json[nan]" time="5.180" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_and_scope_must_be_finite_json[inf]" time="4.940" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_and_scope_must_be_finite_json[-inf]" time="4.687" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_and_scope_must_be_finite_json[value3]" time="5.440" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_and_scope_must_be_finite_json[value4]" time="5.154" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_is_immutable_under_delivery_key[change0]" time="3.215" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_is_immutable_under_delivery_key[change1]" time="2.605" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_is_immutable_under_delivery_key[change2]" time="2.182" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_is_immutable_under_delivery_key[change3]" time="2.522" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_is_immutable_under_delivery_key[change4]" time="2.890" /><testcase classname="tests.test_progress_receipt_order" name="test_complete_outcome_is_immutable_under_delivery_key[change5]" time="2.582" /><testcase classname="tests.test_progress_receipt_order" name="test_scope_and_channel_are_part_of_delivery_identity" time="2.938" /><testcase classname="tests.test_progress_receipt_order" name="test_publication_failure_rolls_back_delivery_and_every_new_receipt[own]" time="2.714" /><testcase classname="tests.test_progress_receipt_order" name="test_publication_failure_rolls_back_delivery_and_every_new_receipt[form]" time="2.081" /><testcase classname="tests.test_progress_receipt_order" name="test_outer_transaction_rolls_back_both_channels_without_moving_existing_receipts" time="2.499" /><testcase classname="tests.test_progress_receipt_order" name="test_run_scope_and_receiver_isolation_use_saved_c8_records" time="2.597" /><testcase classname="tests.test_progress_receipt_order" name="test_existing_form_digest_and_mixed_receipts_replay_after_reopen" time="2.407" /></testsuite></testsuites>

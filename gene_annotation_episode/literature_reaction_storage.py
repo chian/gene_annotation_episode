@@ -239,6 +239,9 @@ class LiteratureReactionRepository(LiteratureRateRepository):
                 return row["id"]
             bindings = {}
             for field, (literal, kind) in BINDINGS.items():
+                if field == "experiment_ref" and assessment is not None:
+                    bindings[field] = assessment["experiment_ref"]
+                    continue
                 entry = extraction["literals"][literal]
                 if entry is None:
                     bindings[field] = None

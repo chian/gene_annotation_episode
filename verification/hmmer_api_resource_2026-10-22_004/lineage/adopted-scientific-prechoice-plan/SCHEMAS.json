@@ -1,0 +1,1178 @@
+{
+  "$comment": "UNADOPTED DESIGN DOCUMENT ONLY. No application schema change. All objects are closed. Cross-field and exact owner/hash/projection rules are in PROPOSAL.md. Finite JSON numbers are required before canonicalization. Existing API forecast and input-version schemas are copied unchanged from inspected003 source. Bind resource_selection to the actual caller selection in the real input branch.",
+  "$defs": {
+    "api_capture": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            null,
+            "unsupported_statistics_configuration",
+            "history_schema_unavailable",
+            "history_unavailable",
+            "invalid_statistics"
+          ]
+        },
+        "execution_classes": {
+          "items": {
+            "$ref": "#/$defs/api_execution_class"
+          },
+          "maxItems": 1,
+          "type": "array"
+        },
+        "snapshots": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/$defs/api_snapshot_data"
+              },
+              "ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_expectation"
+              }
+            },
+            "required": [
+              "ref",
+              "data"
+            ],
+            "type": "object"
+          },
+          "maxItems": 1,
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "invalid_statistics"
+          ]
+        },
+        "version": {
+          "const": "episode_execution_expectation_binding_v3"
+        }
+      },
+      "required": [
+        "version",
+        "execution_classes",
+        "status",
+        "code",
+        "snapshots"
+      ],
+      "type": "object"
+    },
+    "api_constraints": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_kinds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "allowed_resource_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "cpu": {
+          "type": "null"
+        },
+        "kind": {
+          "const": "api"
+        },
+        "memory_bytes": {
+          "type": "null"
+        },
+        "resource_id": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "resource_binding"
+        },
+        "scratch_bytes": {
+          "type": "null"
+        },
+        "wall_seconds": {
+          "type": "null"
+        }
+      },
+      "required": [],
+      "type": "object"
+    },
+    "api_estimate_input_template": {
+      "additionalProperties": false,
+      "properties": {
+        "arguments": {
+          "$ref": "#/$defs/hmmer_arguments"
+        },
+        "constraints": {
+          "$ref": "#/$defs/api_constraints"
+        },
+        "immutable_input_versions": {
+          "items": {
+            "$ref": "#/$defs/input_version"
+          },
+          "type": "array"
+        },
+        "resource_selection": {
+          "$ref": "#/$defs/api_selection",
+          "x-required-bound-const": "Replace this schema with const(actual bound API selection) when constructing the real catalog branch."
+        },
+        "tool": {
+          "const": "public.hmmer.search"
+        }
+      },
+      "required": [
+        "tool",
+        "arguments",
+        "resource_selection",
+        "constraints",
+        "immutable_input_versions"
+      ],
+      "type": "object"
+    },
+    "api_estimate_output": {
+      "additionalProperties": false,
+      "properties": {
+        "api_execution_options": {
+          "items": {
+            "$ref": "#/$defs/existing_api_option"
+          },
+          "type": "array"
+        },
+        "api_reported_execution_expectations": {
+          "items": {
+            "$ref": "#/$defs/api_capture"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        "api_reported_execution_forecasts": {
+          "items": {
+            "$ref": "#/$defs/existing_api_report_estimate"
+          },
+          "type": "array"
+        },
+        "api_timing_planning_disposition": {
+          "$ref": "#/$defs/forecast_disposition"
+        },
+        "arguments": {
+          "$ref": "#/$defs/hmmer_arguments"
+        },
+        "constraints": {
+          "$ref": "#/$defs/api_constraints"
+        },
+        "immutable_input_versions": {
+          "items": {
+            "$ref": "#/$defs/input_version"
+          },
+          "type": "array"
+        },
+        "normalized_arguments": {
+          "$ref": "#/$defs/hmmer_normalized_arguments"
+        },
+        "request": {
+          "$ref": "#/$defs/hmmer_request"
+        },
+        "request_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "resource_selection": {
+          "$ref": "#/$defs/api_selection"
+        },
+        "scope_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "tool": {
+          "const": "public.hmmer.search"
+        },
+        "version": {
+          "const": "api_execution_proposal_estimate_v1"
+        }
+      },
+      "required": [
+        "version",
+        "tool",
+        "arguments",
+        "normalized_arguments",
+        "scope_sha256",
+        "resource_selection",
+        "constraints",
+        "immutable_input_versions",
+        "request",
+        "request_sha256",
+        "api_reported_execution_expectations",
+        "api_reported_execution_forecasts",
+        "api_execution_options",
+        "api_timing_planning_disposition"
+      ],
+      "type": "object"
+    },
+    "api_execution_class": {
+      "additionalProperties": false,
+      "properties": {
+        "backend": {
+          "const": "https"
+        },
+        "cpu_threads": {
+          "type": "null"
+        },
+        "duration_measure": {
+          "const": "hmmer_reported_search_elapsed_seconds"
+        },
+        "implementation_sha256": {
+          "type": "null"
+        },
+        "memory_bytes": {
+          "type": "null"
+        },
+        "parameters_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "phase": {
+          "const": "remote_protein_homology_search"
+        },
+        "query_residues": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "reference_records": {
+          "type": "null"
+        },
+        "reference_residues": {
+          "type": "null"
+        },
+        "reference_state": {
+          "const": "unknown"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "scratch_bytes": {
+          "type": "null"
+        },
+        "wall_seconds": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "phase",
+        "backend",
+        "resource_id",
+        "implementation_sha256",
+        "parameters_sha256",
+        "memory_bytes",
+        "scratch_bytes",
+        "cpu_threads",
+        "query_residues",
+        "reference_residues",
+        "reference_records",
+        "reference_state",
+        "duration_measure",
+        "wall_seconds"
+      ],
+      "type": "object"
+    },
+    "api_selection": {
+      "additionalProperties": false,
+      "properties": {
+        "allocation": {
+          "additionalProperties": false,
+          "properties": {
+            "cpu": {
+              "type": "null"
+            },
+            "memory_bytes": {
+              "type": "null"
+            },
+            "scratch_bytes": {
+              "type": "null"
+            },
+            "wall_seconds": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "cpu",
+            "memory_bytes",
+            "scratch_bytes",
+            "wall_seconds"
+          ],
+          "type": "object"
+        },
+        "capability_binding_ref": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "execution_registry"
+        },
+        "kind": {
+          "const": "api"
+        },
+        "resource_id": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "resource_binding"
+        }
+      },
+      "required": [
+        "resource_id",
+        "kind",
+        "allocation",
+        "capability_binding_ref"
+      ],
+      "type": "object"
+    },
+    "api_snapshot_data": {
+      "additionalProperties": false,
+      "properties": {
+        "class_ref": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "execution_class"
+        },
+        "current_condition": {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "enum": [
+                null,
+                "operator_report",
+                "outage",
+                "maintenance",
+                "recovered"
+              ]
+            },
+            "ref": {
+              "format": "reference",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "execution_condition"
+            },
+            "reported_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "resource_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "unspecified",
+                "normal",
+                "degraded",
+                "unavailable"
+              ]
+            }
+          },
+          "required": [
+            "ref",
+            "resource_id",
+            "state",
+            "reason",
+            "reported_at"
+          ],
+          "type": "object"
+        },
+        "execution_class": {
+          "$ref": "#/$defs/api_execution_class"
+        },
+        "expectation_method": {
+          "const": "empirical_reported_result_duration_mean_by_condition_v1"
+        },
+        "history_through_sequence": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "observation_unit": {
+          "const": "logical_provider_job_reported_result"
+        },
+        "statistics": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "condition_state": {
+                "enum": [
+                  "unspecified",
+                  "normal",
+                  "degraded",
+                  "unavailable"
+                ]
+              },
+              "max_seconds": {
+                "minimum": 0,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "mean_seconds": {
+                "minimum": 0,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "min_seconds": {
+                "minimum": 0,
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "reported_result_count": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "condition_state",
+              "reported_result_count",
+              "mean_seconds",
+              "min_seconds",
+              "max_seconds"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "version": {
+          "const": "reported_result_statistics_v1"
+        }
+      },
+      "required": [
+        "version",
+        "class_ref",
+        "execution_class",
+        "history_through_sequence",
+        "current_condition",
+        "observation_unit",
+        "statistics",
+        "expectation_method"
+      ],
+      "type": "object"
+    },
+    "existing_api_option": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "phmmer",
+            "hmmscan"
+          ]
+        },
+        "database": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "execution_class_ref": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "execution_class"
+        },
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "type": "number"
+            },
+            "T": {
+              "type": "number"
+            },
+            "domE": {
+              "type": "number"
+            },
+            "domT": {
+              "type": "number"
+            },
+            "exclude_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "incE": {
+              "type": "number"
+            },
+            "incT": {
+              "type": "number"
+            },
+            "incdomE": {
+              "type": "number"
+            },
+            "incdomT": {
+              "type": "number"
+            },
+            "include_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "mx": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "pextend": {
+              "type": "number"
+            },
+            "popen": {
+              "type": "number"
+            },
+            "threshold": {
+              "enum": [
+                "evalue",
+                "bitscore"
+              ]
+            }
+          },
+          "required": [],
+          "type": "object"
+        },
+        "proposal_ref": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "execution_proposal"
+        },
+        "provider": {
+          "const": "hmmer"
+        },
+        "subject_ref": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": null
+        },
+        "version": {
+          "const": "api_execution_option_v1"
+        }
+      },
+      "required": [
+        "version",
+        "provider",
+        "subject_ref",
+        "algorithm",
+        "database",
+        "parameters",
+        "execution_class_ref",
+        "proposal_ref"
+      ],
+      "type": "object"
+    },
+    "existing_api_report_estimate": {
+      "additionalProperties": false,
+      "properties": {
+        "compatibility": {
+          "enum": [
+            "same_exposed_technical_configuration_unknown_remote_revision"
+          ],
+          "type": "string"
+        },
+        "cpu_threads": {
+          "type": "null"
+        },
+        "current_condition_state": {
+          "enum": [
+            null,
+            "degraded",
+            "normal",
+            "unavailable",
+            "unspecified"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "elapsed_seconds": {
+          "type": "null"
+        },
+        "estimate_ref": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "job_execution_estimate"
+        },
+        "execution_class_ref": {
+          "format": "reference",
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-reference-namespace": "execution_class"
+        },
+        "expectation_ref": {
+          "format": "reference",
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-reference-namespace": "execution_expectation"
+        },
+        "expected_total_seconds": {
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "forecast_duration_measure": {
+          "enum": [
+            null,
+            "hmmer_reported_search_elapsed_seconds"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "job_ref": {
+          "type": "null"
+        },
+        "memory_limit_bytes": {
+          "type": "null"
+        },
+        "method": {
+          "enum": [
+            "exact_exposed_configuration_current_condition_reported_duration_mean_v1"
+          ],
+          "type": "string"
+        },
+        "observation_unit": {
+          "enum": [
+            "logical_provider_job_reported_result"
+          ],
+          "type": "string"
+        },
+        "observed_max_seconds": {
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "observed_min_seconds": {
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "outcome_support": {
+          "type": "null"
+        },
+        "phase": {
+          "enum": [
+            null,
+            "remote_protein_homology_search"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "proposal_ref": {
+          "format": "reference",
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-reference-namespace": "execution_proposal"
+        },
+        "reported_result_support": {
+          "additionalProperties": false,
+          "properties": {
+            "reported_result_count": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "reported_result_count"
+          ],
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "sample_ref": {
+          "type": "null"
+        },
+        "scratch_limit_bytes": {
+          "type": "null"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "no_matching_history",
+            "history_unavailable",
+            "invalid_statistics"
+          ],
+          "type": "string"
+        },
+        "successful_duration_samples": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "timing_relation": {
+          "enum": [
+            "unknown"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "estimate_ref",
+        "job_ref",
+        "proposal_ref",
+        "execution_class_ref",
+        "expectation_ref",
+        "current_condition_state",
+        "sample_ref",
+        "status",
+        "method",
+        "phase",
+        "cpu_threads",
+        "memory_limit_bytes",
+        "scratch_limit_bytes",
+        "successful_duration_samples",
+        "outcome_support",
+        "expected_total_seconds",
+        "observed_min_seconds",
+        "observed_max_seconds",
+        "forecast_duration_measure",
+        "elapsed_seconds",
+        "timing_relation",
+        "observation_unit",
+        "reported_result_support",
+        "compatibility"
+      ],
+      "type": "object"
+    },
+    "forecast_disposition": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            null,
+            "history_schema_unavailable",
+            "history_unavailable",
+            "not_opted_in_order",
+            "reported_duration_conflict",
+            "reported_duration_identity_conflict",
+            "reported_duration_invalid",
+            "reported_duration_missing",
+            "start_binding_unavailable",
+            "start_condition_unknown",
+            "statistics_identity_conflict",
+            "submission_binding_ambiguous",
+            "submission_binding_conflict",
+            "submission_binding_unavailable",
+            "timing_binding_unavailable",
+            "timing_custody_unavailable",
+            "timing_source_publication_unavailable",
+            "unsupported_statistics_configuration"
+          ]
+        },
+        "intent_ref": {
+          "type": "null"
+        },
+        "measurement_ref": {
+          "type": "null"
+        },
+        "order_binding_ref": {
+          "type": "null"
+        },
+        "source_ref": {
+          "type": "null"
+        },
+        "state": {
+          "enum": [
+            "available",
+            "unavailable",
+            "not_applicable",
+            "conflict"
+          ]
+        },
+        "submission_binding_ref": {
+          "type": "null"
+        },
+        "version": {
+          "const": "api_timing_disposition_v1"
+        }
+      },
+      "required": [
+        "version",
+        "state",
+        "code",
+        "order_binding_ref",
+        "intent_ref",
+        "submission_binding_ref",
+        "measurement_ref",
+        "source_ref"
+      ],
+      "type": "object"
+    },
+    "hmmer_arguments": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "phmmer",
+            "hmmscan"
+          ]
+        },
+        "database": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "page_size": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "type": "number"
+            },
+            "T": {
+              "type": "number"
+            },
+            "domE": {
+              "type": "number"
+            },
+            "domT": {
+              "type": "number"
+            },
+            "exclude_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "incE": {
+              "type": "number"
+            },
+            "incT": {
+              "type": "number"
+            },
+            "incdomE": {
+              "type": "number"
+            },
+            "incdomT": {
+              "type": "number"
+            },
+            "include_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "mx": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "pextend": {
+              "type": "number"
+            },
+            "popen": {
+              "type": "number"
+            },
+            "threshold": {
+              "enum": [
+                "evalue",
+                "bitscore"
+              ]
+            }
+          },
+          "required": [],
+          "type": "object"
+        },
+        "subject_ref": {
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject_ref",
+        "algorithm",
+        "database"
+      ],
+      "type": "object"
+    },
+    "hmmer_normalized_arguments": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "phmmer",
+            "hmmscan"
+          ]
+        },
+        "database": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "page_size": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "type": "number"
+            },
+            "T": {
+              "type": "number"
+            },
+            "domE": {
+              "type": "number"
+            },
+            "domT": {
+              "type": "number"
+            },
+            "exclude_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "incE": {
+              "type": "number"
+            },
+            "incT": {
+              "type": "number"
+            },
+            "incdomE": {
+              "type": "number"
+            },
+            "incdomT": {
+              "type": "number"
+            },
+            "include_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "mx": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "pextend": {
+              "type": "number"
+            },
+            "popen": {
+              "type": "number"
+            },
+            "threshold": {
+              "enum": [
+                "evalue",
+                "bitscore"
+              ]
+            }
+          },
+          "required": [],
+          "type": "object"
+        },
+        "subject_ref": {
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject_ref",
+        "algorithm",
+        "database",
+        "parameters",
+        "page_size"
+      ],
+      "type": "object"
+    },
+    "hmmer_request": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "phmmer",
+            "hmmscan"
+          ]
+        },
+        "database": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "identity_version": {
+          "const": "hmmer_single_fasta_sequence_v2"
+        },
+        "page_size": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "parameters": {
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "type": "number"
+            },
+            "T": {
+              "type": "number"
+            },
+            "domE": {
+              "type": "number"
+            },
+            "domT": {
+              "type": "number"
+            },
+            "exclude_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "incE": {
+              "type": "number"
+            },
+            "incT": {
+              "type": "number"
+            },
+            "incdomE": {
+              "type": "number"
+            },
+            "incdomT": {
+              "type": "number"
+            },
+            "include_taxonomy": {
+              "items": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "mx": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "pextend": {
+              "type": "number"
+            },
+            "popen": {
+              "type": "number"
+            },
+            "threshold": {
+              "enum": [
+                "evalue",
+                "bitscore"
+              ]
+            }
+          },
+          "required": [],
+          "type": "object"
+        },
+        "query_length": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "query_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "query_sha256_representation": {
+          "const": "submitted_fasta_utf8_bytes"
+        },
+        "sequence_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "sequence_sha256_representation": {
+          "const": "single_fasta_sequence_uppercase_whitespace_removed_ascii"
+        },
+        "subject_ref": {
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject_ref",
+        "algorithm",
+        "database",
+        "parameters",
+        "page_size",
+        "query_sha256",
+        "identity_version",
+        "query_sha256_representation",
+        "sequence_sha256_representation",
+        "sequence_sha256",
+        "query_length"
+      ],
+      "type": "object"
+    },
+    "input_version": {
+      "additionalProperties": false,
+      "properties": {
+        "content_sha256": {
+          "format": "identifier",
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-reference-namespace": "resource_input_digest"
+        },
+        "reference": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": null
+        },
+        "version": {
+          "format": "identifier",
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-reference-namespace": "resource_input_version"
+        }
+      },
+      "required": [
+        "reference",
+        "version",
+        "content_sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:unadopted:hmmer-api-scientific-prechoice-plan:20261022:001",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/api_estimate_input_template"
+    },
+    {
+      "$ref": "#/$defs/api_estimate_output"
+    }
+  ]
+}

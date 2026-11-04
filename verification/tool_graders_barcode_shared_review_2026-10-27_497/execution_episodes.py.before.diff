@@ -1,0 +1,444 @@
+--- verification/tool_graders_barcode_shared_registration_2026-10-27_495/before/gene_annotation_episode/execution_episodes.py
++++ gene_annotation_episode/execution_episodes.py
+@@ -114,6 +114,11 @@
+         self._practical = {}
+         for resource_id, configuration in self.resources.items():
+             kind = KINDS[configuration['kind']]
++            if 'native_barcode' in configuration:
++                from .native_barcode_contracts import validate_barcode_bindings
++                if kind != 'local':
++                    raise ValueError('native_barcode_resource_execution_binding_unfinished:' + kind)
++                validate_barcode_bindings(configuration['native_barcode'])
+             if 'native_expression_nmf' in configuration:
+                 from .native_expression_nmf_contracts import validate_expression_nmf_bindings
+                 if kind != 'local':
+@@ -193,7 +198,13 @@
+         from .native_protein_structure_returns import NativeProteinStructureReturns
+         self.native_protein_structure_results = NativeProteinStructureResults(self)
+         self.native_protein_structure_returns = NativeProteinStructureReturns(self)
++        self.native_barcode_results = self.native_barcode_returns = None
+         self.native_expression_nmf_results = self.native_expression_nmf_returns = None
++        if any(configuration.get('native_barcode') for configuration in self.resources.values()):
++            from .native_barcode_results import NativeBarcodeResults
++            from .barcode_returns import BarcodeReturns
++            self.native_barcode_results = NativeBarcodeResults(self)
++            self.native_barcode_returns = BarcodeReturns(self)
+         if any(configuration.get('native_expression_nmf') for configuration in self.resources.values()):
+             from .native_expression_nmf_results import NativeExpressionNMFResults
+             from .expression_nmf_returns import ExpressionNMFReturns
+@@ -291,6 +302,11 @@
+         if kind != 'api':
+             schema['properties']['resource_kind'] = {'type': 'string', 'const': kind}
+             alternatives = []
++            barcode = self.resources[resource_id].get('native_barcode', [])
++            if barcode:
++                from .native_barcode_tool_information import barcode_tool_contracts
++                alternatives.extend(row['input_schema'] for row in barcode_tool_contracts(
++                    barcode, resource_kind=kind, resource_id=resource_id))
+             nmf = self.resources[resource_id].get('native_expression_nmf', [])
+             if nmf:
+                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
+@@ -369,6 +385,12 @@
+         self.credit_kind(role)
+         if role == 'results':
+             schema = deepcopy(RESULTS_SCHEMA)
++            if self.native_barcode_results is not None:
++                from .barcode_result_contracts import BARCODE_RESULT_SELECTOR_SCHEMA
++                schema['properties']['selector'].setdefault('allOf', []).append({
++                    'if': {'required': ['version'], 'properties': {'version': {
++                        'const': 'barcode_result_selector_v1'}}},
++                    'then': deepcopy(BARCODE_RESULT_SELECTOR_SCHEMA)})
+             if self.native_expression_nmf_results is not None:
+                 from .expression_nmf_result_contracts import EXPRESSION_NMF_RESULT_SELECTOR_SCHEMA
+                 schema['properties']['selector'].setdefault('allOf', []).append({
+@@ -519,6 +541,34 @@
+                 return True
+         return self.native_genomic_overlap_returns.resolve_received(context, reference, namespace)
+ 
++    def _barcode_reference_access(self, context, reference, namespace):
++        host = self.native_barcode_results
++        if host is None or not host.owns_reference(reference):
++            return None
++        if namespace not in {None, 'artifact'}:
++            return False
++        if host.applies(context):
++            if host.resolve_own(context, reference, namespace):
++                return True
++            selector = plain(context.assignment)['selector']
++            supplied = selector.get('saved_sheet_file')
++            if (selector.get('mode') == 'saved_sheet_recalculation' and isinstance(supplied, dict)
++                    and supplied.get('artifact_ref') == reference):
++                self.native_barcode_returns.authenticate_received_saved_sheet(context, supplied)
++                return True
++        return self.native_barcode_returns.resolve_received(context, reference, namespace)
++
++    @staticmethod
++    def _barcode_selector(assignment):
++        return assignment.get('selector', {}).get('version') == 'barcode_result_selector_v1'
++
++    def _retained_barcode_target(self, context, assignment, scope):
++        if not self._barcode_selector(assignment):
++            return None
++        if self.native_barcode_results is None:
++            raise ValueError('native_barcode_results_binding_unavailable')
++        return self.native_barcode_results.retained_target(context, assignment, scope)
++
+     def _expression_nmf_reference_access(self, context, reference, namespace):
+         host = self.native_expression_nmf_results
+         if host is None or not host.owns_reference(reference):
+@@ -623,10 +673,18 @@
+             raise ValueError('native_genomic_overlap_results_binding_unavailable')
+         return self.native_genomic_overlap_results.retained_target(context, assignment, scope)
+ 
+-    def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=()):
++    def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=(), barcode_assignments=()):
+         from .execution_input_versions import validate_execution_input_versions
+         return validate_execution_input_versions(self, versions, scope, context=context,
+-            atac_assignments=atac_assignments, nmf_assignments=nmf_assignments)
++            atac_assignments=atac_assignments, nmf_assignments=nmf_assignments,
++            barcode_assignments=barcode_assignments)
++
++    def _barcode_inputs(self, context, assignment):
++        if 'native_barcode' not in assignment.get('requested_job', {}):
++            return []
++        from .barcode_operands import validate_barcode_job_inputs
++        return validate_barcode_job_inputs(self.store, context, assignment,
++            reference_access=self.resolve_received_reference)
+ 
+     def _expression_nmf_inputs(self, context, assignment):
+         if 'native_expression_nmf' not in assignment.get('requested_job', {}):
+@@ -671,6 +729,7 @@
+             selected = self._launch(selected, scope=scope)
+             from .protein_structure_operands import validate_protein_structure_job_inputs
+             for request in selected['requests'].values():
++                self._barcode_inputs(parent, request)
+                 self._expression_nmf_inputs(parent, request)
+                 self._atac_inputs(parent, request)
+                 self._chromatin_inputs(parent, request)
+@@ -678,7 +737,8 @@
+                 validate_protein_structure_job_inputs(self.store, parent, request,
+                     returns=self.native_protein_structure_returns)
+             self._versions(selected['immutable_input_versions'], scope, context=parent,
+-                atac_assignments=selected['requests'].values(), nmf_assignments=selected['requests'].values())
++                atac_assignments=selected['requests'].values(), nmf_assignments=selected['requests'].values(),
++                barcode_assignments=selected['requests'].values())
+             from .native_blast_database_result_publication import validate_native_job_inputs
+             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             for request in selected['requests'].values():
+@@ -688,12 +748,14 @@
+                 validate_rna_structure_job_inputs(self.store, parent, request)
+             return selected
+         if role == 'results':
++            barcode_target = self._retained_barcode_target(parent, selected, scope)
+             nmf_target = self._retained_expression_nmf_target(parent, selected, scope)
+             atac_target = self._retained_atac_target(parent, selected, scope)
+             chromatin_target = self._retained_chromatin_target(parent, selected, scope)
+             overlap_target = self._retained_genomic_overlap_target(parent, selected, scope)
+             retained = self._retained_protein_result(parent, selected, scope)
+-            target = (nmf_target if nmf_target is not None else
++            target = (barcode_target if barcode_target is not None else
++                nmf_target if nmf_target is not None else
+                 atac_target if atac_target is not None else
+                 chromatin_target if chromatin_target is not None else
+                 overlap_target if overlap_target is not None else
+@@ -732,6 +794,7 @@
+             raise ValueError('resource_child_role_owned_by_launch')
+         original = self._launch(plain(parent.assignment))
+         self._match_request(original, selected)
++        self._barcode_inputs(parent, selected)
+         self._expression_nmf_inputs(parent, selected)
+         self._atac_inputs(parent, selected)
+         self._chromatin_inputs(parent, selected)
+@@ -740,7 +803,8 @@
+         validate_protein_structure_job_inputs(self.store, parent, selected,
+             returns=self.native_protein_structure_returns)
+         self._versions(original['immutable_input_versions'], scope, context=parent,
+-            atac_assignments=[selected], nmf_assignments=[selected])
++            atac_assignments=[selected], nmf_assignments=[selected],
++            barcode_assignments=[selected])
+         from .native_blast_database_result_publication import validate_native_job_inputs
+         from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+         validate_native_job_inputs(self.store, parent, selected)
+@@ -761,6 +825,7 @@
+             value = self._launch(plain(context.assignment), scope=context.scope)
+             from .protein_structure_operands import validate_protein_structure_job_inputs
+             for request in value['requests'].values():
++                self._barcode_inputs(context, request)
+                 self._expression_nmf_inputs(context, request)
+                 self._atac_inputs(context, request)
+                 self._chromatin_inputs(context, request)
+@@ -768,11 +833,13 @@
+                 validate_protein_structure_job_inputs(self.store, context, request,
+                     returns=self.native_protein_structure_returns)
+             self._versions(value['immutable_input_versions'], context.scope, context=context,
+-                atac_assignments=value['requests'].values(), nmf_assignments=value['requests'].values())
++                atac_assignments=value['requests'].values(), nmf_assignments=value['requests'].values(),
++                barcode_assignments=value['requests'].values())
+         else:
+             target = self._target(context)
+             self._selector(plain(context.assignment), target)
+-            if (self._expression_nmf_selector(plain(context.assignment))
++            if (self._barcode_selector(plain(context.assignment))
++                    or self._expression_nmf_selector(plain(context.assignment))
+                     or self._atac_selector(plain(context.assignment))
+                     or self._chromatin_selector(plain(context.assignment))
+                     or self._genomic_overlap_selector(plain(context.assignment))
+@@ -791,6 +858,7 @@
+         if row is not None:
+             original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
+             self._match_request(original, plain(context.assignment))
++            self._barcode_inputs(context, plain(context.assignment))
+             self._expression_nmf_inputs(context, plain(context.assignment))
+             self._atac_inputs(context, plain(context.assignment))
+             self._chromatin_inputs(context, plain(context.assignment))
+@@ -799,7 +867,8 @@
+             validate_protein_structure_job_inputs(self.store, context, plain(context.assignment),
+                 returns=self.native_protein_structure_returns)
+             self._versions(original['immutable_input_versions'], context.scope, context=context,
+-                atac_assignments=[plain(context.assignment)], nmf_assignments=[plain(context.assignment)])
++                atac_assignments=[plain(context.assignment)], nmf_assignments=[plain(context.assignment)],
++                barcode_assignments=[plain(context.assignment)])
+             from .native_blast_database_result_publication import validate_native_job_inputs
+             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             validate_native_job_inputs(self.store, context, plain(context.assignment))
+@@ -985,6 +1054,10 @@
+                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+             native_entries = []
++            if configuration.get('native_barcode'):
++                from .native_barcode_tool_information import barcode_tool_contracts
++                native_entries.extend(barcode_tool_contracts(configuration['native_barcode'],
++                    resource_kind=kind, resource_id=resource_id))
+             if configuration.get('native_expression_nmf'):
+                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
+                 native_entries.extend(expression_nmf_tool_contracts(configuration['native_expression_nmf'],
+@@ -1126,7 +1199,12 @@
+         if context.role == 'results':
+             assignment = plain(context.assignment)
+             retained = self._retained_protein_result(context, assignment, context.scope)
+-            if self._expression_nmf_selector(assignment):
++            if self._barcode_selector(assignment):
++                from .barcode_execution_information import describe_barcode_result
++                value['execution_target'] = self._target(context)
++                value['execution_target_description'] = describe_barcode_result(
++                    value['execution_target'], selector=assignment['selector'])
++            elif self._expression_nmf_selector(assignment):
+                 from .expression_nmf_execution_information import describe_expression_nmf_result
+                 value['execution_target'] = self._target(context)
+                 value['execution_target_description'] = describe_expression_nmf_result(
+@@ -1171,6 +1249,9 @@
+ 
+     def _target(self, context):
+         assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
++        barcode = self._retained_barcode_target(context, assignment, context.scope)
++        if barcode is not None:
++            return barcode
+         nmf = self._retained_expression_nmf_target(context, assignment, context.scope)
+         if nmf is not None:
+             return nmf
+@@ -1248,6 +1329,15 @@
+         return assignment.get('selector', {}).get('version') == 'native_rna_structure_comparison_selector_v1'
+ 
+     def _selector(self, assignment, target):
++        native_barcode = 'native_barcode' in target.get('assignment', {}).get('requested_job', {})
++        if self._barcode_selector(assignment) or native_barcode:
++            if self.native_barcode_results is None:
++                raise ValueError('native_barcode_results_binding_unavailable')
++            if not native_barcode or target.get('resource_kind') != 'local':
++                raise ValueError('barcode_result_target_conflict')
++            from .barcode_result_contracts import validate_barcode_result_selector
++            return validate_barcode_result_selector(assignment['selector'],
++                job=target['assignment']['requested_job']['native_barcode'])
+         native_nmf = 'native_expression_nmf' in target.get('assignment', {}).get('requested_job', {})
+         if self._expression_nmf_selector(assignment) or native_nmf:
+             if self.native_expression_nmf_results is None:
+@@ -1369,6 +1459,10 @@
+         return value
+ 
+     def catalog(self, context):
++        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++            from .native_barcode_results import operation_catalog as barcode_result_catalog
++            self._selector(plain(context.assignment), self._target(context))
++            return barcode_result_catalog()
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             from .native_expression_nmf_results import operation_catalog as nmf_result_catalog
+             self._selector(plain(context.assignment), self._target(context))
+@@ -1452,6 +1546,10 @@
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
++            if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++                self._selector(plain(context.assignment), target)
++                return await self.native_barcode_results.execute(
++                    context, target, tool_name, arguments, operation_key)
+             if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+                 self._selector(plain(context.assignment), target)
+                 return await self.native_expression_nmf_results.execute(
+@@ -1748,6 +1846,9 @@
+ 
+     def received_report_sources(self, role):
+         result = {}
++        if self.native_barcode_returns is not None and role in {'annotation', 'scientific_process'}:
++            from .barcode_return_views import barcode_fact_sources
++            result.update(barcode_fact_sources())
+         if self.native_expression_nmf_returns is not None and role in {'annotation', 'scientific_process'}:
+             from .expression_nmf_return_views import expression_nmf_fact_sources
+             result.update(expression_nmf_fact_sources())
+@@ -1805,6 +1906,9 @@
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
++        if (self.native_barcode_returns is not None
++                and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
++            result.update(self.native_barcode_returns.facts_for_closure(context, schema))
+         if (self.native_expression_nmf_returns is not None
+                 and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
+             result.update(self.native_expression_nmf_returns.facts_for_closure(context, schema))
+@@ -1868,6 +1972,9 @@
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
++        barcode = self._barcode_reference_access(context, reference, namespace)
++        if barcode is not None:
++            return barcode
+         nmf = self._expression_nmf_reference_access(context, reference, namespace)
+         if nmf is not None:
+             return nmf
+@@ -1987,6 +2094,8 @@
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
++        if self.native_barcode_returns is not None:
++            self.native_barcode_returns.validate_received_report(context, form, schema)
+         if self.native_expression_nmf_returns is not None:
+             self.native_expression_nmf_returns.validate_received_report(context, form, schema)
+         if self.atac_returns is not None:
+@@ -2031,6 +2140,9 @@
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
++        if self.native_barcode_results is not None and role == 'results':
++            from .barcode_return_views import barcode_fact_sources
++            values.update(barcode_fact_sources())
+         if self.native_expression_nmf_results is not None and role == 'results':
+             from .expression_nmf_return_views import expression_nmf_fact_sources
+             values.update(expression_nmf_fact_sources())
+@@ -2096,6 +2208,9 @@
+             'Whether this assignment has actual verified endpoint information. Generic native results mean requested current-filesystem acquisition plus independently observed successful exact execution, without a producing-attempt or atomic-version claim. RNA results mean complete requested original-bundle or retained-sheet delivery, including specific unavailable values; this does not assert native success. Yielding alone is false.'}
+         from .native_hmmer_acquisition import ORIGIN as hmmer_origin
+         origins = [NATIVE_RESULT_ORIGIN, hmmer_origin]
++        if self.native_barcode_results is not None:
++            from .native_barcode_results import ORIGIN as barcode_origin
++            origins.append(barcode_origin)
+         if self.native_expression_nmf_results is not None:
+             from .native_expression_nmf_results import ORIGIN as nmf_origin
+             origins.append(nmf_origin)
+@@ -2160,6 +2275,11 @@
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
++        if self.native_barcode_results is not None:
++            from .barcode_return_views import FACT_SOURCES
++            native_empty.update({source: [] for source in FACT_SOURCES})
++            if self.native_barcode_results.applies(context):
++                return {**native_empty, **self.native_barcode_results.facts(context)}
+         if self.native_expression_nmf_results is not None:
+             from .expression_nmf_return_views import FACT_SOURCES
+             native_empty.update({source: [] for source in FACT_SOURCES})
+@@ -2259,6 +2379,9 @@
+     def received_form_references(self, context, form, schema, operation_key):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         references = []
++        if self.native_barcode_returns is not None:
++            references.extend(self.native_barcode_returns.record_admission(
++                context, form, schema, operation_key))
+         if self.native_expression_nmf_returns is not None:
+             references.extend(self.native_expression_nmf_returns.record_admission(
+                 context, form, schema, operation_key))
+@@ -2356,6 +2479,7 @@
+                 [assignment] if context.role == 'launch_local' else [])
+             references = []
+             for request in requests:
++                references.extend(self._barcode_inputs(context, request))
+                 references.extend(self._expression_nmf_inputs(context, request))
+                 references.extend(self._atac_inputs(context, request))
+                 references.extend(self._chromatin_inputs(context, request))
+@@ -2367,6 +2491,12 @@
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
++        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++            selector = self._selector(assignment, target)
++            if selector['mode'] == 'saved_sheet_recalculation':
++                self.native_barcode_returns.authenticate_received_saved_sheet(context, selector['saved_sheet_file'])
++                selected.append(selector['saved_sheet_file']['artifact_ref'])
++            return list(dict.fromkeys(selected))
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             selector = self._selector(assignment, target)
+             if selector['mode'] == 'saved_sheet_recalculation':
+@@ -2426,6 +2556,9 @@
+ 
+     def resolve(self, context, reference, namespace):
+         try:
++            barcode = self._barcode_reference_access(context, reference, namespace)
++            if barcode is not None:
++                return barcode
+             nmf = self._expression_nmf_reference_access(context, reference, namespace)
+             if nmf is not None:
+                 return nmf
+@@ -2643,6 +2776,8 @@
+             return False
+ 
+     def validate_report(self, context, form, original_schema):
++        if self.native_barcode_returns is not None:
++            self.native_barcode_returns.validate_received_report(context, form, original_schema)
+         if self.native_expression_nmf_returns is not None:
+             self.native_expression_nmf_returns.validate_received_report(context, form, original_schema)
+         if self.atac_returns is not None:
+@@ -2660,6 +2795,8 @@
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
++        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++            return self.native_barcode_results.credit_view(context, receiver_selection)
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             return self.native_expression_nmf_results.credit_view(context, receiver_selection)
+         if self.atac_results is not None and self.atac_results.applies(context):
+@@ -2720,6 +2857,8 @@
+         return self.project_credit(context, receiver_selection)
+ 
+     def _native_results_complete(self, context, bodies):
++        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++            return False  # The original requested barcode delivery receipt owns completion.
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             return False  # The original requested NMF delivery receipt owns completion.
+         if self.atac_results is not None and self.atac_results.applies(context):
+@@ -2765,6 +2904,9 @@
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
++        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++            proof = self.native_barcode_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             proof = self.native_expression_nmf_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -2847,6 +2989,9 @@
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
++        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++            proof = self.native_barcode_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             proof = self.native_expression_nmf_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -2900,6 +3045,8 @@
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
++        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
++            return proof == self.native_barcode_results.completion(context)
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             return proof == self.native_expression_nmf_results.completion(context)
+         if self.atac_results is not None and self.atac_results.applies(context):

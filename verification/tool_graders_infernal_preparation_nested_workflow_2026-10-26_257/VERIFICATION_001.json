@@ -1,0 +1,1173 @@
+{
+  "created_at": "2026-10-26T07:13:32.234133+00:00",
+  "test_result": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "48",
+    "time": "377.090",
+    "timestamp": "2026-10-26T02:04:49.210531-05:00",
+    "hostname": "chia-Z590-UD"
+  },
+  "case_count": 13,
+  "runtime_action_count": 78,
+  "runtime_own_observation_count": 78,
+  "biological_observation_count": 0,
+  "annotation_count": 0,
+  "resource_receipt": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T07:11:07.011397+00:00",
+        "monotonic_ns": 812228708722636,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 378.119764643,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 93237248
+  },
+  "key_source_hashes": {
+    "gene_annotation_episode/episode_receipts.py": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331",
+    "gene_annotation_episode/execution_episodes.py": "0b1dc8069cf53979ba86b0ec31af0baf4eca5b438dc82bbde28f4ba4ac762088",
+    "gene_annotation_episode/native_infernal_preparation_results.py": "c7a59bb086ce30ba66168bab714bb9c91113c0da7ca8e0b3234300136e5de8d0",
+    "gene_annotation_episode/native_infernal_preparation_returns.py": "546c67e79419cc7ff75addac6cc52627d4d17e472931b38b4afeaaa2f814b8cf",
+    "tests/test_native_infernal_preparation_nested_workflow.py": "9d15be849c7eab022b771a6c40ab01d6f9b9bb27a8a14df9405efcc87ba52226"
+  },
+  "key_sources_unchanged": true,
+  "all_source_changes_during_run": {
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_source_fields.py": {
+      "before": null,
+      "after": "3cb2899439d51fc2c448bc7fec627193d9b5ed8dcaf1526c9d43d29dcbaae2ae"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_native_inputs.py": {
+      "before": "911e64c10c8aec2400fa13ba7c27b494c34b6760dc16bad547fc508bac2f27ff",
+      "after": "637a30af225122f09e83a7b45c42667b8f4fe558ac133670485e9ba3425fdf8f"
+    },
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_partner_storage.py": {
+      "before": "0ae77ad955ec0b1c088585ac66c5f31c3e83bd1a7d217992b50ba7be59c3701a",
+      "after": "600f7a9c84f2281ad8492e27f87fb55068b48c01bee5fb5eb0523708f780c92c"
+    }
+  },
+  "changed_sources_in_pytest_import_manifest": [],
+  "cases": [
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/cmbuild-build0",
+      "program": "cmbuild",
+      "mode": "build",
+      "partial_test_horizon": false,
+      "native_request_sha256": "2b003190a2ac24ab13a96785a269c2d933e7e8c3e2d39d6cc00d2cb2bec63986",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+        "sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89"
+      },
+      "result_source": "source_39896ab6fbec5a708cd3390e",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "rows",
+        "population"
+      ],
+      "present_quantities": [
+        {
+          "record_key": "artifact_308a31b1cdad7d7cb7e31b93c367fa8d8da6363e34d66859c1a06b5d096d4b03#/artifacts/0#build/0",
+          "basis": "derived",
+          "path": "components.paired_consensus_fraction",
+          "state": "present",
+          "unit": "fraction",
+          "value": 0.6666666666666666
+        }
+      ],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 3,
+          "returned_records": 2,
+          "source_ref": "source_39896ab6fbec5a708cd3390e",
+          "total_records": 2
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr",
+        "infernal_cm_ascii"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/cmcalibrate-calibrate0",
+      "program": "cmcalibrate",
+      "mode": "calibrate",
+      "partial_test_horizon": false,
+      "native_request_sha256": "dc483af95656678f94a72394f521beda6807831cd4fa1f891e4c4fedbb67cbde",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+        "sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be"
+      },
+      "result_source": "source_c9c7c785c92c95d202ec7970",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "rows",
+        "population"
+      ],
+      "present_quantities": [
+        {
+          "record_key": "artifact_250fd00200918cb337cc24ac92d281bc712ac025a631dd8c38e7e524aaf2c2e5#/artifacts/2#calibration/0",
+          "basis": "model_header",
+          "path": "components.actual_calibration_nt",
+          "state": "present",
+          "unit": "nt",
+          "value": 10000
+        },
+        {
+          "record_key": "artifact_250fd00200918cb337cc24ac92d281bc712ac025a631dd8c38e7e524aaf2c2e5#/artifacts/2#calibration/1",
+          "basis": "model_header",
+          "path": "components.actual_calibration_nt",
+          "state": "present",
+          "unit": "nt",
+          "value": 10000
+        },
+        {
+          "record_key": "artifact_250fd00200918cb337cc24ac92d281bc712ac025a631dd8c38e7e524aaf2c2e5#/artifacts/2#calibration/2",
+          "basis": "model_header",
+          "path": "components.actual_calibration_nt",
+          "state": "present",
+          "unit": "nt",
+          "value": 10000
+        },
+        {
+          "record_key": "artifact_250fd00200918cb337cc24ac92d281bc712ac025a631dd8c38e7e524aaf2c2e5#/artifacts/2#calibration/3",
+          "basis": "model_header",
+          "path": "components.actual_calibration_nt",
+          "state": "present",
+          "unit": "nt",
+          "value": 10000
+        }
+      ],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 3,
+          "returned_records": 9,
+          "source_ref": "source_c9c7c785c92c95d202ec7970",
+          "total_records": 9
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr",
+        "infernal_cm_ascii"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/cmconvert-ascii0",
+      "program": "cmconvert",
+      "mode": "ascii",
+      "partial_test_horizon": false,
+      "native_request_sha256": "e4167628628d34ae4f730fa1c649a482f4e5816361787b2d326befd1063c48bd",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmconvert",
+        "sha256": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5"
+      },
+      "result_source": "source_2726b289a05f3c6d1cecbc9b",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "rows",
+        "population"
+      ],
+      "present_quantities": [
+        {
+          "record_key": "artifact_dd22ee06dfac924a4f484324fa1235e7c212f0451d2779dcc762909efdc7b55a#/artifacts/0#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.input_model_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_dd22ee06dfac924a4f484324fa1235e7c212f0451d2779dcc762909efdc7b55a#/artifacts/0#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 3
+        },
+        {
+          "record_key": "artifact_dd22ee06dfac924a4f484324fa1235e7c212f0451d2779dcc762909efdc7b55a#/artifacts/1#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_dd22ee06dfac924a4f484324fa1235e7c212f0451d2779dcc762909efdc7b55a#/artifacts/2#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        }
+      ],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 3,
+          "returned_records": 3,
+          "source_ref": "source_2726b289a05f3c6d1cecbc9b",
+          "total_records": 3
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr",
+        "infernal_cm_ascii"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/cmemit-consensus0",
+      "program": "cmemit",
+      "mode": "consensus",
+      "partial_test_horizon": false,
+      "native_request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+      },
+      "result_source": "source_cc0620d355c8a46414acd044",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "rows",
+        "population"
+      ],
+      "present_quantities": [
+        {
+          "record_key": "artifact_533aa4d66bd02b11a9d4d5d5e372366ab9d1d3b4c81eb40875cb33c863a3655a#/artifacts/2#generated_sequence/0",
+          "basis": "derived",
+          "path": "components.residue_count",
+          "state": "present",
+          "unit": "nt",
+          "value": 12
+        },
+        {
+          "record_key": "artifact_533aa4d66bd02b11a9d4d5d5e372366ab9d1d3b4c81eb40875cb33c863a3655a#/artifacts/2#generated_sequence/0",
+          "basis": "derived",
+          "path": "components.gc_count",
+          "state": "present",
+          "unit": "nt",
+          "value": 8
+        },
+        {
+          "record_key": "artifact_533aa4d66bd02b11a9d4d5d5e372366ab9d1d3b4c81eb40875cb33c863a3655a#/artifacts/2#generated_sequence/0",
+          "basis": "derived",
+          "path": "components.gc_fraction_canonical",
+          "state": "present",
+          "unit": "fraction",
+          "value": 0.6666666666666666
+        }
+      ],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 3,
+          "returned_records": 2,
+          "source_ref": "source_cc0620d355c8a46414acd044",
+          "total_records": 2
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr",
+        "fasta"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/cmfetch-single_key0",
+      "program": "cmfetch",
+      "mode": "single_key",
+      "partial_test_horizon": false,
+      "native_request_sha256": "79a1608bf324176fe4a8a783b1c212bed71227d6a0154fe55a99b81982110236",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmfetch",
+        "sha256": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8"
+      },
+      "result_source": "source_393914d58e7bdf5a6457ddf7",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "rows",
+        "population"
+      ],
+      "present_quantities": [
+        {
+          "record_key": "artifact_03a41da35f35e2310f1e65692c01061b3e71a500f68dc7355bae383ff515e32d#/artifacts/0#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.input_model_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_03a41da35f35e2310f1e65692c01061b3e71a500f68dc7355bae383ff515e32d#/artifacts/0#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 3
+        },
+        {
+          "record_key": "artifact_03a41da35f35e2310f1e65692c01061b3e71a500f68dc7355bae383ff515e32d#/artifacts/0#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.missing_key_count",
+          "state": "present",
+          "unit": "count",
+          "value": 0
+        },
+        {
+          "record_key": "artifact_03a41da35f35e2310f1e65692c01061b3e71a500f68dc7355bae383ff515e32d#/artifacts/1#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_03a41da35f35e2310f1e65692c01061b3e71a500f68dc7355bae383ff515e32d#/artifacts/2#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        }
+      ],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 3,
+          "returned_records": 3,
+          "source_ref": "source_393914d58e7bdf5a6457ddf7",
+          "total_records": 3
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr",
+        "infernal_cm_ascii"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/cmpress-press0",
+      "program": "cmpress",
+      "mode": "press",
+      "partial_test_horizon": false,
+      "native_request_sha256": "4403d7135f26d98b656120e83a42ecf65452617b5236df6e8b58b2896aa553fd",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmpress",
+        "sha256": "34fa41dc406b2cfcd3451520b704efb29bacec81d8a506c5929780a6ae01ecb4"
+      },
+      "result_source": "source_f90bbde10f4e71a2a1eb4eba",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "rows",
+        "population"
+      ],
+      "present_quantities": [
+        {
+          "record_key": "artifact_7eac053f61d21a0e3bff0c17bc80afaff9067d1761e7b56834173dc0685abd00#/artifacts/0#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.input_model_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_7eac053f61d21a0e3bff0c17bc80afaff9067d1761e7b56834173dc0685abd00#/artifacts/0#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 6
+        },
+        {
+          "record_key": "artifact_7eac053f61d21a0e3bff0c17bc80afaff9067d1761e7b56834173dc0685abd00#/artifacts/1#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_7eac053f61d21a0e3bff0c17bc80afaff9067d1761e7b56834173dc0685abd00#/artifacts/2#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_7eac053f61d21a0e3bff0c17bc80afaff9067d1761e7b56834173dc0685abd00#/artifacts/3#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_7eac053f61d21a0e3bff0c17bc80afaff9067d1761e7b56834173dc0685abd00#/artifacts/4#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        },
+        {
+          "record_key": "artifact_7eac053f61d21a0e3bff0c17bc80afaff9067d1761e7b56834173dc0685abd00#/artifacts/5#artifact_operation/0",
+          "basis": "derived",
+          "path": "components.output_artifact_count",
+          "state": "present",
+          "unit": "count",
+          "value": 1
+        }
+      ],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 6,
+          "returned_artifact_count": 6,
+          "returned_records": 6,
+          "source_ref": "source_f90bbde10f4e71a2a1eb4eba",
+          "total_records": 6
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr",
+        "infernal_cm_binary",
+        "infernal_ssi",
+        "infernal_i1f",
+        "infernal_i1p"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/cmstat-summary0",
+      "program": "cmstat",
+      "mode": "summary",
+      "partial_test_horizon": false,
+      "native_request_sha256": "a72e40ab01e3001f92a1d290bb311d744c67eed7a5faeb9eb00735dbad1eb735",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+        "sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae"
+      },
+      "result_source": "source_2fe57f1f513b94db3c60720f",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "rows",
+        "population"
+      ],
+      "present_quantities": [
+        {
+          "record_key": "artifact_c15dcdecaf2b48b70a362e290cf879d704104d4735918a39bd734935c6024e39#/artifacts/0#model_statistic/0",
+          "basis": "derived",
+          "path": "components.paired_consensus_fraction",
+          "state": "present",
+          "unit": "fraction",
+          "value": 0.6666666666666666
+        }
+      ],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 2,
+          "returned_artifact_count": 2,
+          "returned_records": 1,
+          "source_ref": "source_2fe57f1f513b94db3c60720f",
+          "total_records": 1
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/test_missing_key_diagnostic_su0",
+      "program": "cmemit",
+      "mode": "consensus",
+      "partial_test_horizon": true,
+      "native_request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+      },
+      "result_source": "source_cd946896fa20bb337213deeb",
+      "complete": false,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "population"
+      ],
+      "requested_forwarded_fields": [
+        "population"
+      ],
+      "present_quantities": [],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [
+            "requested_but_absent_preparation_row"
+          ],
+          "omitted_records": 2,
+          "requested_artifact_count": 0,
+          "returned_artifact_count": 0,
+          "returned_records": 0,
+          "source_ref": "source_cd946896fa20bb337213deeb",
+          "total_records": 2
+        }
+      ],
+      "failure_facts": [],
+      "native_formats": [],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/test_requested_capture_failure0",
+      "program": "cmemit",
+      "mode": "consensus",
+      "partial_test_horizon": true,
+      "native_request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+      },
+      "result_source": "source_db0a26860f3d2f792ceecba9",
+      "complete": false,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "failures"
+      ],
+      "requested_forwarded_fields": [
+        "failures"
+      ],
+      "present_quantities": [],
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [
+            {
+              "direction": "output",
+              "ordinal": 0,
+              "role": "generated_sequences"
+            }
+          ],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 2,
+          "returned_records": 0,
+          "source_ref": "source_db0a26860f3d2f792ceecba9",
+          "total_records": 0
+        }
+      ],
+      "failure_facts": [
+        {
+          "affected": {
+            "direction": "output",
+            "ordinal": 0,
+            "role": "generated_sequences"
+          },
+          "code": "native_infernal_preparation_sealed_artifact_digest_mismatch",
+          "handoff_ref": "source_b76cdd7635dbb0978fec6768",
+          "record_key": null,
+          "source_ref": "source_db0a26860f3d2f792ceecba9",
+          "stage": "capture"
+        },
+        {
+          "affected": null,
+          "code": "preparation_generated_output_missing",
+          "handoff_ref": "source_b76cdd7635dbb0978fec6768",
+          "record_key": null,
+          "source_ref": "source_db0a26860f3d2f792ceecba9",
+          "stage": "association"
+        }
+      ],
+      "native_formats": [
+        "infernal_stdout",
+        "infernal_stderr"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/test_requested_capture_failure1",
+      "program": "cmemit",
+      "mode": "consensus",
+      "partial_test_horizon": true,
+      "native_request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+      },
+      "result_source": null,
+      "complete": false,
+      "requested_results_fields": [
+        "completed",
+        "rows",
+        "artifacts",
+        "population",
+        "failures"
+      ],
+      "requested_forwarded_fields": [
+        "failures"
+      ],
+      "present_quantities": [],
+      "population": [],
+      "failure_facts": [
+        {
+          "affected": null,
+          "code": "native_infernal_preparation_sealed_bundle_unavailable",
+          "handoff_ref": "source_72935eea8cd76c1a7bafd014",
+          "record_key": null,
+          "source_ref": null,
+          "stage": "capture"
+        }
+      ],
+      "native_formats": [],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          0.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/test_requested_only_subsets_at0",
+      "program": "cmemit",
+      "mode": "consensus",
+      "partial_test_horizon": false,
+      "native_request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+      },
+      "result_source": "source_3266644890e17f4697e8b1e1",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "rows"
+      ],
+      "requested_forwarded_fields": [
+        "rows"
+      ],
+      "present_quantities": [],
+      "population": [],
+      "failure_facts": [],
+      "native_formats": [],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/test_requested_only_subsets_at1",
+      "program": "cmemit",
+      "mode": "consensus",
+      "partial_test_horizon": false,
+      "native_request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+      },
+      "result_source": "source_a7ed0d884ebcc4643241b4fd",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "artifacts"
+      ],
+      "requested_forwarded_fields": [
+        "artifacts"
+      ],
+      "present_quantities": [],
+      "population": [],
+      "failure_facts": [],
+      "native_formats": [
+        "fasta"
+      ],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    },
+    {
+      "directory": "verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/stable_009/temporary/pytest/test_requested_only_subsets_at2",
+      "program": "cmemit",
+      "mode": "consensus",
+      "partial_test_horizon": false,
+      "native_request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "executable": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+      },
+      "result_source": "source_178a9cacc15e34fafd76ca33",
+      "complete": true,
+      "requested_results_fields": [
+        "completed",
+        "references"
+      ],
+      "requested_forwarded_fields": [
+        "references"
+      ],
+      "present_quantities": [],
+      "population": [],
+      "failure_facts": [],
+      "native_formats": [],
+      "credit_histories": {
+        "annotation": [
+          0.0
+        ],
+        "scientific_process": [
+          0.0,
+          0.0
+        ],
+        "launch": [
+          3.0
+        ],
+        "launch_local": [
+          7.0
+        ],
+        "results": [
+          2.0
+        ]
+      },
+      "biological_observation_records": 0,
+      "annotation_records": 0,
+      "runtime_actions": 6,
+      "runtime_own_observations": 6
+    }
+  ],
+  "unrequested_stdout_rejection": [
+    {
+      "case": "test_requested_only_subsets_at0",
+      "recipient": "scientific_process",
+      "stdout_stderr_reference": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_known_references": false,
+      "workflow_resolver": false,
+      "owner_without_services_resolver": false
+    },
+    {
+      "case": "test_requested_only_subsets_at0",
+      "recipient": "annotation",
+      "stdout_stderr_reference": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_known_references": false,
+      "workflow_resolver": false,
+      "owner_without_services_resolver": false
+    },
+    {
+      "case": "test_requested_only_subsets_at1",
+      "recipient": "scientific_process",
+      "stdout_stderr_reference": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_known_references": false,
+      "workflow_resolver": false,
+      "owner_without_services_resolver": false
+    },
+    {
+      "case": "test_requested_only_subsets_at1",
+      "recipient": "annotation",
+      "stdout_stderr_reference": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_known_references": false,
+      "workflow_resolver": false,
+      "owner_without_services_resolver": false
+    },
+    {
+      "case": "test_requested_only_subsets_at2",
+      "recipient": "scientific_process",
+      "stdout_stderr_reference": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_known_references": false,
+      "workflow_resolver": false,
+      "owner_without_services_resolver": false
+    },
+    {
+      "case": "test_requested_only_subsets_at2",
+      "recipient": "annotation",
+      "stdout_stderr_reference": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_known_references": false,
+      "workflow_resolver": false,
+      "owner_without_services_resolver": false
+    }
+  ],
+  "scope": "Actual selected native local preparation, saved deterministic data and both actual typed parent boundaries; explicitly scripted engineering decisions, not configured-model science. This workload does not close the all308 objective.",
+  "limitations": [
+    "Only seven named local modes covered here; other modes and production repairs owned by other workloads.",
+    "No network, API or HPC deployment exercised.",
+    "No monitoring-choice or configured-model scientific investigation verified.",
+    "Generated model data are not biological observations; no W05, literature grader or annotation-confidence work.",
+    "Whole-checkout source snapshot changed during run; exact named preparation checkpoint and own test stayed unchanged."
+  ]
+}

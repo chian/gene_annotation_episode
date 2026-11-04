@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "scope": "independent parent preservation audit",
+  "baseline_files_checked": 65,
+  "changed_existing_files": [
+    "gene_annotation_episode/literature_episodes.py",
+    "gene_annotation_episode/literature_rate_storage.py"
+  ],
+  "unchanged_baseline_files": 63,
+  "existing_function_changes": {
+    "literature_episodes.py": [
+      "LiteratureEpisodes._rate_facts",
+      "LiteratureEpisodes.validate_received_report"
+    ],
+    "literature_rate_storage.py": [
+      "LiteratureRateRepository.receive_cells",
+      "LiteratureRateRepository.received_cells"
+    ]
+  },
+  "new_functions": {
+    "literature_episodes.py": [],
+    "literature_rate_storage.py": [
+      "LiteratureRateRepository._delivery_binding",
+      "LiteratureRateRepository._delivery_digest",
+      "LiteratureRateRepository._delivery_table",
+      "LiteratureRateRepository._install_delivery_bindings",
+      "LiteratureRateRepository._runtime_delivery_cells",
+      "LiteratureRateRepository._sheet_owner",
+      "LiteratureRateRepository.fact_cells",
+      "LiteratureRateRepository.validate_fact_values"
+    ]
+  },
+  "population_catalog_and_all_schema_functions_AST_unchanged": true,
+  "frozen_optical_and_kinetic_sources_unchanged": true,
+  "current_existing_source_sha256": {
+    "gene_annotation_episode/literature_episodes.py": "831e49fcd159d3cbddab96b9aaa51ed0f02f82122cae61e623ccbd9342cc51ca",
+    "gene_annotation_episode/literature_rate_storage.py": "171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4"
+  },
+  "tests_rerun": false,
+  "primary_source_or_model_history_read": false,
+  "test_completion_claim": "separate owner terminal receipt; this audit verifies scope, not runtime behavior"
+}

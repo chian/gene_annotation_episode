@@ -1,0 +1,386 @@
+.............FFFFFFFFFFFFF                                               [100%]
+=================================== FAILURES ===================================
+_ test_saved_vdb_publisher_authenticates_original_receipt_and_never_rereads_metadata _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:282: in test_saved_vdb_publisher_authenticates_original_receipt_and_never_rereads_metadata
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_hash] _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:327: in test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_namespace] _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:327: in test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_pointer] _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:327: in test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_list] _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:327: in test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_document] _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:327: in test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[plan_context] _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:327: in test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[output_hash] _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:327: in test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_vdb_saved_result_from_other_context_rejects_even_with_consistent_replacement_hashes _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:352: in test_vdb_saved_result_from_other_context_rejects_even_with_consistent_replacement_hashes
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_saved_projection_proof_cannot_be_replaced_by_self_consistent_other_request_digest _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:375: in test_saved_projection_proof_cannot_be_replaced_by_self_consistent_other_request_digest
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_native_failed_saved_vdb_rows_remain_deliverable_with_explicit_bytes_only _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:398: in test_native_failed_saved_vdb_rows_remain_deliverable_with_explicit_bytes_only
+    prepared = prepare(store, capture, tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_utility_publication_631.py:146: in prepare
+    return publication.prepare_native_blast_utility_result(store, capture=capture,
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:327: in prepare_native_blast_utility_result
+    prepared = validate_prepared_utility_result(store, prepared)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py:193: in validate_prepared_utility_result
+    capture = _validate_saved(store, stable["capture"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_selected_vdb_repair_reuses_original_capture_and_keeps_failure_history_and_credit _
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:476: in test_selected_vdb_repair_reuses_original_capture_and_keeps_failure_history_and_credit
+    first = selected_collect(h, 0)
+            ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:454: in selected_collect
+    outcome = asyncio.run(h.family.native_blast_utility_results.execute(h.child, h.target,
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_results.py:358: in execute
+    capture = capture_local_utility_bundle(self.store, target=target, directory=directory / 'capture')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:438: in retained
+    return acquisition._validate_saved(store, json.loads(saved.read_text()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+__ test_selected_vdb_partial_parsed_result_is_never_reparsed_on_later_collect __
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:520: in test_selected_vdb_partial_parsed_result_is_never_reparsed_on_later_collect
+    first = selected_collect(h, 0)["result"]
+            ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:454: in selected_collect
+    outcome = asyncio.run(h.family.native_blast_utility_results.execute(h.child, h.target,
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_results.py:358: in execute
+    capture = capture_local_utility_bundle(self.store, target=target, directory=directory / 'capture')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_vdb_publication_returns_669.py:438: in retained
+    return acquisition._validate_saved(store, json.loads(saved.read_text()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:248: in _validate_saved
+    capture = validate_native_blast_utility_capture(capture)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_acquisition.py:207: in validate_native_blast_utility_capture
+    validate_native_blast_utility_bundle(capture["original_bundle"], capture["plan"])
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_saved_vdb_publisher_authenticates_original_receipt_and_never_rereads_metadata
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_hash]
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_namespace]
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_pointer]
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_list]
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[proof_document]
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[plan_context]
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering[output_hash]
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_vdb_saved_result_from_other_context_rejects_even_with_consistent_replacement_hashes
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_saved_projection_proof_cannot_be_replaced_by_self_consistent_other_request_digest
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_native_failed_saved_vdb_rows_remain_deliverable_with_explicit_bytes_only
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_selected_vdb_repair_reuses_original_capture_and_keeps_failure_history_and_credit
+FAILED source_snapshot/tests/test_blast_vdb_publication_returns_669.py::test_selected_vdb_partial_parsed_result_is_never_reparsed_on_later_collect
+13 failed, 13 passed in 94.92s (0:01:34)

@@ -1,0 +1,44 @@
+{
+  "inputs_and_results_match": {
+    "input_directory": true,
+    "input_form_sha256": true,
+    "input_schema_sha256": true,
+    "result_sha256": true,
+    "values_result_sha256": true,
+    "input_records_before_sha256": true,
+    "input_file_hashes_before": true
+  },
+  "timings": {
+    "cold_priming_seconds_unprofiled": {
+      "before": 24.762135247001424,
+      "after": 21.752705350983888
+    },
+    "warm_seconds_unprofiled": {
+      "before": 9.425069286022335,
+      "after": 6.220734372967854
+    },
+    "seconds": {
+      "before": 24.193623989005573,
+      "after": 15.29339304100722
+    },
+    "values_seconds_unprofiled": {
+      "before": 0.48308511602226645,
+      "after": 0.5070544990012422
+    },
+    "values_warm_seconds_unprofiled": {
+      "before": 0.47996903397142887,
+      "after": 0.06018407002557069
+    },
+    "has_reference_twenty_seconds_unprofiled": {
+      "before": 0.5762199120363221,
+      "after": 5.8687059208750725e-05
+    }
+  },
+  "notes": [
+    "All times retain counter and audit-hook overhead; only seconds is cProfile-instrumented.",
+    "Concurrent host/test work existed. These bounded observations are not a complete Workflow timing estimate.",
+    "The no-write effects shim preserves _job/_all/_intent/_state validation but tests neither locking nor concurrent-writer isolation.",
+    "Raw schema_calls lists include 30 post-profile _values entries because they share a mutable list; the cProfile function statistics and phase-captured schema_counts establish 135 publication schema validations in each run. Raw receipts remain unchanged.",
+    "Input hashes are first-read versus completion observations; they cannot exclude a transient mutation followed by restoration."
+  ]
+}

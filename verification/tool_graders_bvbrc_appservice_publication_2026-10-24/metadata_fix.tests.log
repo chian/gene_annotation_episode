@@ -1,0 +1,22 @@
+........................................................................ [ 57%]
+.........................F
+=================================== FAILURES ===================================
+_______ test_resolved_input_addendum_has_eleven_closed_distinct_branches _______
+
+    def test_resolved_input_addendum_has_eleven_closed_distinct_branches():
+        schema = contract_schema("ResolvedInputs")["$defs"]["ResolvedInputs"]
+        assert len(schema["oneOf"]) == 11
+        for branch in schema["oneOf"]:
+            assert branch["additionalProperties"] is False
+>           assert set(branch["required"]) == set(branch["properties"])
+E           AssertionError: assert {'objects', 'operation'} == {'objects', '...riginal_task'}
+E             
+E             Extra items in the right set:
+E             'original_task'
+E             Use -v to get more diff
+
+tests/test_bvbrc_appservice_contracts.py:270: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_contracts.py::test_resolved_input_addendum_has_eleven_closed_distinct_branches
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 97 passed in 74.72s (0:01:14)

@@ -1,0 +1,632 @@
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+.....................................FFFFFFFFFFFFFF..................... [ 48%]
+.............F..............................................F........... [ 64%]
+........................F...............F............................... [ 80%]
+........................................................................ [ 96%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[value-1.0-measurements] _
+
+kind = 'measurements', field = 'value', value = 1.0
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de1d4230>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[value-1.0-booleans] _
+
+kind = 'booleans', field = 'value', value = 1.0
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de1d5e20>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[unit-bits-measurements] _
+
+kind = 'measurements', field = 'unit', value = 'bits'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de1d5640>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[unit-bits-booleans] _
+
+kind = 'booleans', field = 'unit', value = 'bits'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de1d48c0>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[status-unavailable-measurements] _
+
+kind = 'measurements', field = 'status', value = 'unavailable'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de138710>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[status-unavailable-booleans] _
+
+kind = 'booleans', field = 'status', value = 'unavailable'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de1382c0>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[reason-missing_input-measurements] _
+
+kind = 'measurements', field = 'reason', value = 'missing_input'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de138920>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[reason-missing_input-booleans] _
+
+kind = 'booleans', field = 'reason', value = 'missing_input'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de138e60>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[component_pointer-/other-measurements] _
+
+kind = 'measurements', field = 'component_pointer', value = '/other'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de1d4350>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_cell_conflicts_are_specific_and_preserve_originals[component_pointer-/other-booleans] _
+
+kind = 'booleans', field = 'component_pointer', value = '/other'
+
+    @pytest.mark.parametrize('kind', ['measurements', 'booleans'])
+    @pytest.mark.parametrize('field,value', [('value', 1.0), ('unit', 'bits'), ('status', 'unavailable'),
+        ('reason', 'missing_input'), ('component_pointer', '/other')])
+    def test_received_cell_conflicts_are_specific_and_preserve_originals(kind, field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[])
+        row[kind] = [dict(name='cell', value=1, unit='count', status='available', reason=None,
+            component_pointer='/original')]
+        saved, changed = deepcopy(row), deepcopy(row)
+        changed[kind][0][field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_cell_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de1d48f0>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_row_context_conflicts_never_choose_a_projection[context-value0] _
+
+field = 'context', value = {'different': True}
+
+    @pytest.mark.parametrize('field,value', [('context', {'different': True}), ('source_ref', 'other'),
+        ('publication_status', 'source_only'), ('calculation_id', 'different-calculation')])
+    def test_received_row_context_conflicts_never_choose_a_projection(field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[], publication_status='observation')
+        changed = deepcopy(row); changed[field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_row_context_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de13ae40>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {'different': True}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_row_context_conflicts_never_choose_a_projection[source_ref-other] _
+
+field = 'source_ref', value = 'other'
+
+    @pytest.mark.parametrize('field,value', [('context', {'different': True}), ('source_ref', 'other'),
+        ('publication_status', 'source_only'), ('calculation_id', 'different-calculation')])
+    def test_received_row_context_conflicts_never_choose_a_projection(field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[], publication_status='observation')
+        changed = deepcopy(row); changed[field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_row_context_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de138590>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'other', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_row_context_conflicts_never_choose_a_projection[publication_status-source_only] _
+
+field = 'publication_status', value = 'source_only'
+
+    @pytest.mark.parametrize('field,value', [('context', {'different': True}), ('source_ref', 'other'),
+        ('publication_status', 'source_only'), ('calculation_id', 'different-calculation')])
+    def test_received_row_context_conflicts_never_choose_a_projection(field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[], publication_status='observation')
+        changed = deepcopy(row); changed[field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_row_context_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de13a6c0>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+_ test_received_row_context_conflicts_never_choose_a_projection[calculation_id-different-calculation] _
+
+field = 'calculation_id', value = 'different-calculation'
+
+    @pytest.mark.parametrize('field,value', [('context', {'different': True}), ('source_ref', 'other'),
+        ('publication_status', 'source_only'), ('calculation_id', 'different-calculation')])
+    def test_received_row_context_conflicts_never_choose_a_projection(field, value):
+        from gene_annotation_episode.native_blast_database_returns import NativeBLASTDatabaseReturns
+        returns = NativeBLASTDatabaseReturns.__new__(NativeBLASTDatabaseReturns)
+        returns.failure_prefix = 'native_blast_database_return_'
+        row = dict(calculation_id='calculation', record_key='row', context={}, source_ref='source',
+            measurements=[], booleans=[], publication_status='observation')
+        changed = deepcopy(row); changed[field] = value
+        with pytest.raises(ValueError, match='native_blast_database_return_received_row_context_conflict'):
+>           returns._merge_received_row(row, changed)
+
+../../../tests/test_native_blast_database_returns.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/native_blast_database_returns.py:149: in _merge_received_row
+    forward = self._row_context_subset(accumulated, row)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.native_blast_database_returns.NativeBLASTDatabaseReturns object at 0x7ed3de13af60>
+row = {'calculation_id': 'calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+received = {'calculation_id': 'different-calculation', 'record_key': 'row', 'context': {}, 'source_ref': 'source', ...}
+
+    def _row_context_subset(self, row, received):
+        left, right = self._row_context(row), self._row_context(received)
+>       if row['family'] != 'hsp' or received['family'] != 'hsp':
+           ^^^^^^^^^^^^^
+E       KeyError: 'family'
+
+../../../gene_annotation_episode/native_blast_database_returns.py:131: KeyError
+___________ test_native_fact_schemas_are_exact_previous_descriptors ____________
+
+    def test_native_fact_schemas_are_exact_previous_descriptors():
+>       assert views.native_blast_database_fact_sources() == json.loads((PACKET / "FACT_SCHEMAS_BEFORE_001.json").read_bytes())
+E       AssertionError: assert {'execution_b...', ...}}, ...} == {'execution_b...'array'}, ...}
+E         
+E         Omitting 30 identical items, use -vv to show
+E         Left contains 6 more items:
+E         {'execution_blast_database_sequence_record_quality_rows': {'meaning': 'Selected '
+E                                                                               'frozen '
+E                                                                               'sequence_record_quality '
+E                                                                               'numerical '...
+E         
+E         ...Full output truncated (1664 lines hidden), use '-vv' to show
+
+../../../tests/test_native_blast_database_convergence_worker.py:228: AssertionError
+__________ test_actual_legacy_population_is_byte_equal_to_original_m ___________
+
+case = ({'original_job': {'version': 'native_blast_database_job_v1', 'program': 'psiblast', 'mode': 'database', 'software': {...f9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e', 'record_ordinal': 0, ...}], 'selected_master_record_ordinal': None, ...})
+
+    def test_actual_legacy_population_is_byte_equal_to_original_m(case):
+        args, prepared = case
+        path = PACKET / "baseline/native_blast_database_metadata.py"
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == "3ab6b866e2a0b5c4bb7605ffbf8cad693cee56fe59b0f438b13a4b2b5566c1c7"
+        spec = importlib.util.spec_from_file_location("gene_annotation_episode._original_m328", path)
+        original = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(original)
+        expected = original.populate_native_blast_database_sheets(args["collection"], prepared_inputs=prepared, artifact_catalog=args["artifact_catalog"])
+        assert encode(populate(args, prepared)) == encode(expected)
+        assert "native_convergence" not in expected
+        assert metadata._SCHEMAS == original._SCHEMAS
+        registry = original.metadata_schema_registry()
+        for row in registry:
+            for field in ("validator_module", "populator_module"):
+                if row[field] == original.__name__: row[field] = metadata.__name__
+>       assert metadata.metadata_schema_registry() == registry
+E       AssertionError: assert [{'consumer':...a', ...}, ...] == [{'consumer':...tadata', ...}]
+E         
+E         Left contains 2 more items, first extra item: {'consumer': 'sequence_database', 'schema_id': 'native_blast_database_sequence_metadata_v2', 'validator_module': 'gene_annotation_episode.native_blast_database_metadata', 'validator_function': '_validate_sequence_metadata', ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_convergence_binding.py:388: AssertionError
+________ test_six_explicit_hpc_contracts_are_pure_actual_request_shapes ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ed3de162000>
+
+    def test_six_explicit_hpc_contracts_are_pure_actual_request_shapes(monkeypatch):
+        selected = bindings()
+        original = deepcopy(selected)
+        with monkeypatch.context() as pure:
+            forbid_io(pure)
+            rows = native_blast_database_tool_contracts(selected, resource_kind="hpc", resource_id="selected-hpc")
+        assert len(rows) == 6
+        for row, binding in zip(rows, selected):
+            assert set(row) == {"name", "description", "resources", "instructions", "input_schema", "invocation_route"}
+            assert row["resources"] == "hpc" and row["name"] == "native." + binding["program"]
+            assert row["invocation_route"] == {"kind": "commission", "routes": [{"entry_role": "launch", "resource_id": "selected-hpc", "resource_role": "launch_hpc"}]}
+            request = c.requested_job_from_native_blast_database(job_for(binding["program"]))
+            Draft202012Validator(row["input_schema"]).validate(request)
+            request["native_blast_database"]["software"]["sha256"] = "f" * 64
+            assert not Draft202012Validator(row["input_schema"]).is_valid(request)
+            assert "practical.job.start" in row["instructions"]
+>           assert row["instructions"].endswith("and sheets remain retained separately from small typed returns.")
+E           AssertionError: assert False
+E            +  where False = <built-in method endswith of str object at 0x3de4ab00>('and sheets remain retained separately from small typed returns.')
+E            +    where <built-in method endswith of str object at 0x3de4ab00> = 'Supply the selected native_blast_database_job_v1 with actual query bytes, exact file identities, explicit software, p...numerical cells and saved-input descriptors. Local database searches remain outside this result calculation operation.'.endswith
+
+../../../tests/test_native_blast_database_tool_info.py:34: AssertionError
+________ test_additive_catalogs_preserve_all_old_exact_registered_forms ________
+
+    def test_additive_catalogs_preserve_all_old_exact_registered_forms():
+        for current, name, catalog, row_schema, sources in [
+            (sv, 'native_blast_standard_database_result_views', 'standard_blast_database_metric_definitions', 'standard_blast_database_row_schema', 'standard_blast_database_fact_sources'),
+            (nv, 'native_blast_database_result_views', 'native_blast_database_metric_definitions', 'native_blast_database_row_schema', 'native_blast_database_fact_sources')]:
+            before = load_before(name)
+            old = getattr(before, catalog)()
+            new = getattr(current, catalog)()
+>           assert set(new) - set(old) == {'sequence_record_quality'}
+E           AssertionError: assert {'sequence_re...tion_summary'} == {'sequence_record_quality'}
+E             
+E             Extra items in the left set:
+E             'vdb_function'
+E             'vdb_function_census'
+E             'vdb_function_contribution'
+E             'vdb_function_summary'
+E             Use -v to get more diff
+
+../../../tests/test_blast_fasta_record_identity_integration.py:384: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[value-1.0-measurements]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[value-1.0-booleans]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[unit-bits-measurements]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[unit-bits-booleans]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[status-unavailable-measurements]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[status-unavailable-booleans]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[reason-missing_input-measurements]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[reason-missing_input-booleans]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[component_pointer-/other-measurements]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_cell_conflicts_are_specific_and_preserve_originals[component_pointer-/other-booleans]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_row_context_conflicts_never_choose_a_projection[context-value0]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_row_context_conflicts_never_choose_a_projection[source_ref-other]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_row_context_conflicts_never_choose_a_projection[publication_status-source_only]
+FAILED ../../../tests/test_native_blast_database_returns.py::test_received_row_context_conflicts_never_choose_a_projection[calculation_id-different-calculation]
+FAILED ../../../tests/test_native_blast_database_convergence_worker.py::test_native_fact_schemas_are_exact_previous_descriptors
+FAILED ../../../tests/test_native_blast_database_convergence_binding.py::test_actual_legacy_population_is_byte_equal_to_original_m
+FAILED ../../../tests/test_native_blast_database_tool_info.py::test_six_explicit_hpc_contracts_are_pure_actual_request_shapes
+FAILED ../../../tests/test_blast_fasta_record_identity_integration.py::test_additive_catalogs_preserve_all_old_exact_registered_forms
+18 failed, 429 passed, 5 deselected in 1998.78s (0:33:18)

@@ -1,0 +1,29 @@
+--- before/gene_annotation_episode/literature_perturbation_summary.py
++++ after/gene_annotation_episode/literature_perturbation_summary.py
+@@ -200,6 +200,17 @@
+         _fail("positive_integer_repeat_count_required", field + ".count.n")
+     _choice(count["unit_kind"], UNIT_KINDS, field + ".count.unit_kind")
+     _choice(count["independence"], ("independent", "not_independent", "unknown"), field + ".count.independence")
++    if unit == "unreported":
++        # A missing amount does not require an invented physical unit. Any
++        # actual amount, image/raw measurement or numerical uncertainty still
++        # requires one, including statistics supplied without a point value.
++        # Counts/coverage and nonnumerical meanings remain dimensionless metadata.
++        for name in ("value", "raw_units", "graph", "digitization"):
++            if entry[name] is not None:
++                _fail("observed_amount_unit_required", field + "." + name)
++        for name in ("value", "lower", "upper"):
++            if spread[name] is not None:
++                _fail("observed_amount_unit_required", field + ".uncertainty." + name)
+     if not isinstance(entry["meaning_witnesses"], list):
+         _fail("witness_list_required", field + ".meaning_witnesses")
+     entry["meaning_witnesses"] = [sources.witness(w, field + f".meaning_witnesses[{i}]")
+@@ -313,7 +324,7 @@
+         _fail("unsupported_perturbation_summary_version", "data_source.version")
+     from .literature_perturbation_inputs import ENDPOINT_UNITS, EXPOSURE_UNITS
+     _choice(data["endpoint_unit"], ENDPOINT_UNITS, "data_source.endpoint_unit")
+-    _choice(data["exposure_unit"], EXPOSURE_UNITS, "data_source.exposure_unit")
++    _choice(data["exposure_unit"], (*EXPOSURE_UNITS, "unreported"), "data_source.exposure_unit")
+     _choice(data["origin"], ("reported", "graph_derived", "synthetic"), "data_source.origin")
+     _keys(data["measurements"], ROLES, "data_source.measurements")
+     observations, summaries, raw, graphs, owners = {}, {}, {}, {}, {}

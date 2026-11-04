@@ -1,0 +1,78 @@
+{
+  "status": "Research comparison notes only; no proposed/fixed taxonomy or scoring change.",
+  "known_outcomes": "Published outcomes were known. Source observations and reconstructed decisions retain their original provenance in referenced files.",
+  "comparisons": [
+    {
+      "comparison_id": "conserved_core_variable_property",
+      "case_refs": [
+        "sequence/hemk_live_routes.json",
+        "structure/tm0936_traces.jsonl",
+        "root/cases.jsonl#sulfoglycolysis_selectivity"
+      ],
+      "observed_recurrence": "Broader resemblance supports a retained capacity while a narrower property requires its own comparison.",
+      "observed_variation": "HemK: amino-group methylation versus protein/DNA substrate; TM0936: metal chemistry versus SAH/AMP specificity; YihS: related sugar chemistry versus sulfonate selectivity.",
+      "next_question_difference": "A wider core comparison can repair weak motif evidence; a substrate-negative comparator can challenge an overextended specificity claim. These are different next choices.",
+      "boundary_question": "Does searching for a suitable analogue separate cleanly from deciding which property can transfer? Not yet established as independent slots."
+    },
+    {
+      "comparison_id": "counterexamples_change_rule_scope",
+      "case_refs": [
+        "structure/tm0936_traces.jsonl",
+        "context/oarx_actual_routes.json",
+        "cellular/detailed_traces.json#cellular_y_complex"
+      ],
+      "observed_recurrence": "A positive association motivates an initially broad rule; a specifically chosen exception changes its scope.",
+      "observed_variation": "SAH activity despite absent arginines; OarX retained without a recorded FmnO partner; mature rnpB retained in Y-complex mutants.",
+      "next_question_difference": "Resolve alternative geometry, distinguish optional partner from absent annotation, or delimit dependent RNA substrates. The same exception-seeking move demands different biological interpretation.",
+      "boundary_question": "Exception selection looks reusable across tools; the response must distinguish an invalid rule from a narrower conditional rule."
+    },
+    {
+      "comparison_id": "failed_specific_hypothesis_retains_association",
+      "case_refs": [
+        "context/contrasting_investigations.json#context_quef_nitrile_reductase_2005",
+        "context/verified_cases.jsonl#context_mj0044_ip_kinase_2006",
+        "root/cases.jsonl#lhgO_electron_acceptor_correction"
+      ],
+      "observed_recurrence": "A failed reaction or reagent test rejects one mechanistic interpretation without automatically discarding a supported pathway connection.",
+      "observed_variation": "QueF cyclohydrolase negatives; MJ0044 phosphorylation-order alternatives; LhgO oxygen versus quinone.",
+      "next_question_difference": "Search a different pathway step, change reaction order, or replace an assumed electron acceptor.",
+      "boundary_question": "Revising one component of a hypothesis must preserve which other components remain supported; this is not simply a repeat-search task."
+    },
+    {
+      "comparison_id": "rescue_relationship",
+      "case_refs": [
+        "cellular/verified_cases.jsonl#cellular_yabA",
+        "cellular/verified_cases.jsonl#cellular_yihI",
+        "cellular/detailed_traces.json#cellular_yhcB"
+      ],
+      "observed_recurrence": "Improved phenotype does not uniquely identify the repaired relationship.",
+      "observed_variation": "Complementary YabA interaction defects together restore localization/control; YihI improves derT57I growth without restoring its measured GTPase activity; YhcB suppressors modify other envelope pathways.",
+      "next_question_difference": "Test joint interaction requirements, separate catalytic restoration from compensation, or inspect broader balance.",
+      "boundary_question": "How should a process represent the proposed causal relationship so it requests a discriminating control rather than calling all rescue equivalent?"
+    },
+    {
+      "comparison_id": "observation_attribution",
+      "case_refs": [
+        "sequence/published_deep_traces.jsonl#seq_codA_isoguanine_failed_candidate",
+        "root/nnr_record_crosscheck.json",
+        "context/oarx_actual_routes.json"
+      ],
+      "observed_recurrence": "Before transferring an observation, check which entity the record or measurement actually concerns.",
+      "observed_variation": "Host CodA versus expressed archaeal candidate; deposited 3RS8 ligand list versus paper description; OarX comparison table and experimental genome from different strains.",
+      "next_question_difference": "Follow activity across purification, inspect the cited entry itself, or preserve explicit strain mapping.",
+      "boundary_question": "This recurrence could be a shared provenance obligation rather than a selectable scientific thought-pattern slot; retain that distinction."
+    },
+    {
+      "comparison_id": "missing_requirement_completion",
+      "case_refs": [
+        "context/contrasting_investigations.json#context_archaeal_shikimate_kinase_2001",
+        "root/cases.jsonl#nnr_yjef_cofactor_and_repair",
+        "root/cases.jsonl#pxpABC_oxoproline_disposal"
+      ],
+      "observed_recurrence": "A proposed role has a necessary unsatisfied requirement, constraining which missing function or component to investigate.",
+      "observed_variation": "Retained pathway before/after a missing kinase; repair of only one NAD(P)HX stereoisomer; disposal opposed by uncoupled reaction equilibrium.",
+      "next_question_difference": "Seek a nonorthologous replacement, a stereochemical partner, or an energy-coupled multi-component system.",
+      "boundary_question": "Necessary requirements can constrain similarity search or motivate an unrelated candidate; they are not a mandatory pathway-reconstruction stage."
+    }
+  ]
+}

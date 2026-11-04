@@ -1,0 +1,65 @@
+{
+  "scope": "boundary documents and retained-byte integrity; no new production tests or scientific jobs",
+  "checks": [
+    {
+      "check": "json_parse",
+      "path": "ACQUISITION_RECEIPTS_001.json",
+      "status": "pass"
+    },
+    {
+      "check": "json_parse",
+      "path": "ACQUISITION_RECEIPTS_002.json",
+      "status": "pass"
+    },
+    {
+      "check": "json_parse",
+      "path": "ACQUISITION_RECEIPTS_003.json",
+      "status": "pass"
+    },
+    {
+      "check": "json_parse",
+      "path": "ACQUISITION_RECEIPTS_004.json",
+      "status": "pass"
+    },
+    {
+      "check": "json_parse",
+      "path": "ACQUISITION_RECEIPTS_005.json",
+      "status": "pass"
+    },
+    {
+      "check": "json_parse",
+      "path": "CONTRACT_BOUNDARIES_001.json",
+      "status": "pass"
+    },
+    {
+      "check": "json_parse",
+      "path": "OFFLINE_BOUNDARY_PROBE_001.json",
+      "status": "pass"
+    },
+    {
+      "check": "json_parse",
+      "path": "SOURCE_AND_CONSUMER_HASHES_001.json",
+      "status": "pass"
+    },
+    {
+      "check": "all_successfully_acquired_source_bytes_match_receipts",
+      "status": "pass"
+    },
+    {
+      "check": "offline_probe_python_ast",
+      "status": "pass"
+    },
+    {
+      "check": "recorded_offline_probe_expected_outcomes",
+      "status": "pass"
+    },
+    {
+      "check": "immutable_goal_sha256",
+      "status": "pass"
+    },
+    {
+      "check": "all_three_fixture_source_sequences_match_retained_official_bytes_and_hashes",
+      "status": "pass"
+    }
+  ]
+}

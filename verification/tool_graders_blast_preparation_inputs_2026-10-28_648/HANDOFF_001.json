@@ -1,0 +1,89 @@
+{
+  "workload": 648,
+  "status": "pure parser implementation verified; integrated return path belongs to root",
+  "ports": [
+    "parse_blast_preparation_list(contents: bytes, *, grammar: str, occurrence: dict) -> dict",
+    "parse_blast_alias_document(contents: bytes, *, occurrence: dict) -> dict",
+    "parse_blast_seqid_list_info(contents: bytes, *, occurrence: dict) -> dict",
+    "parse_blast_aliastool_diagnostics(contents: bytes, *, occurrence: dict) -> dict",
+    "parse_makembindex_diagnostics(contents: bytes, *, occurrence: dict) -> dict",
+    "parse_makeprofiledb_aux(contents: bytes, *, occurrence: dict) -> dict",
+    "parse_makeprofiledb_diagnostics(contents: bytes, *, occurrence: dict) -> dict"
+  ],
+  "owned_sources": [
+    {
+      "path": "gene_annotation_episode/blast_preparation_inputs.py",
+      "sha256": "c45fd1e5ad9afca5d391a1be17e81f0fe8d292b204752fe77f9fe179cf724c2e",
+      "size_bytes": 20869
+    },
+    {
+      "path": "tests/test_blast_preparation_inputs_648.py",
+      "sha256": "1ccf733531f01aa355b4c3e25cc02b0adee9dc63561ea84efd948a897804b1d8",
+      "size_bytes": 19453
+    }
+  ],
+  "native_fixture_packet": {
+    "path": "verification/tool_graders_blast_preparation_inputs_2026-10-28_648/native_text_fixtures.json",
+    "sha256": "59759f9d2cef859e3f2807f88f76d9441143da97aa1623bd95347198bd99822b",
+    "size_bytes": 28605
+  },
+  "verification": {
+    "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check106_inputs648",
+    "tests_passed": 50,
+    "tests_failed": 0,
+    "receipt": {
+      "path": "verification/tool_graders_blast_preparation_inputs_2026-10-28_648/runner_evidence/receipt.json",
+      "sha256": "b4d01b8138e0e28f8bd4cf8f7038005e7127cb7730a03669ae12a02bd8af4107",
+      "size_bytes": 1625
+    },
+    "stdout": {
+      "path": "verification/tool_graders_blast_preparation_inputs_2026-10-28_648/runner_evidence/stdout.txt",
+      "sha256": "9f4f001366722a949cc6a677081dd1118062017e3a7aef915ee4f181a445bd30",
+      "size_bytes": 99
+    },
+    "native_reruns": 0,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "swap_bytes": 0,
+      "wall_seconds": null
+    }
+  },
+  "observed_examples": {
+    "gi_converted_occurrences": 3,
+    "unbound_stored_identifiers": 2,
+    "bound_stored_identifiers": 1,
+    "bound_native_database_length_symbols": 33,
+    "aggregate_alias_native_nseq": 6,
+    "aggregate_alias_native_length_symbols": 66,
+    "binary_subset_native_nseq": 1,
+    "binary_subset_native_length_symbols": 13,
+    "new_index_effective_ws_hint": 10,
+    "profile_aux": {
+      "matrix": "BLOSUM62",
+      "gap_open": 11,
+      "gap_extend": 1,
+      "scale": 1.0,
+      "native_profile_ordinal": 0,
+      "sequence_length": 320,
+      "karlin_k": 0.0375672
+    }
+  },
+  "semantics": [
+    "Uses shared ArtifactOccurrence, custody/failure/check helpers and validate_blast_preparation_document.",
+    "Native byte identity mismatches raise the existing ContractError; malformed text returns located failures and valid partial rows.",
+    "Quoted alias token order and duplicate tokens are retained. List grammar does not invent comment or shell quotation semantics.",
+    "UTF-8 list offsets are original zero-based half-open byte spans.",
+    "Alias LENGTH remains native_reported; parser has no molecule binding and uses symbols.",
+    "Native effective parameters retain source occurrence_id scope until population explicitly resolves the volume.",
+    "Malformed interior profile length/K pairs retain later valid original native ordinals with qualified gaps; common647 approved this partial-row relationship.",
+    "Auxiliary placeholder header lines 4 through 7 produce no biological metadata.",
+    "Native failed diagnostics do not invent returncodes, success or profile inclusion."
+  ],
+  "remaining": [
+    "Root producer/population/publication/parent-return and saved-workflow integration.",
+    "Authentic nonempty show_filters grammar.",
+    "Authentic successful DELTA/COBALT, binary scoremat and multi-volume/exclusion coverage remain existing native verification gaps.",
+    "No new native execution, DB-content inspection, configured HPC deployment or downstream search compatibility was established by workload648."
+  ]
+}

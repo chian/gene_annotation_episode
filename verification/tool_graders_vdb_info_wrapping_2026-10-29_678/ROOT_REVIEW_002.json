@@ -1,0 +1,218 @@
+{
+  "record_type": "root_component_review",
+  "recorded_at": "2026-10-29T07:09:32.646385+00:00",
+  "goal_sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+  "contract": {
+    "path": "verification/tool_graders_vdb_info_wrapping_2026-10-29_678/DECODING_CONTRACT_PROPOSAL_002.md",
+    "sha256": "14ab8df1d230f109f9f23743df158e60d6f17c0d143c6b75155b8a803a6b6fb7",
+    "size_bytes": 21223
+  },
+  "handoff": {
+    "path": "verification/tool_graders_vdb_info_wrapping_2026-10-29_678/HANDOFF_001.md",
+    "sha256": "de7a627bf22662395095ca40c1d285c9065605d0455baaa365d717090a39a881",
+    "size_bytes": 6554
+  },
+  "verification": {
+    "path": "verification/tool_graders_vdb_info_wrapping_2026-10-29_678/VERIFICATION_001.json",
+    "sha256": "30a977266ed16a52466aa7e6adf3500ed38000f2876818feedbff5c5aa152f5a",
+    "size_bytes": 8213
+  },
+  "accepted_scope": "Approved _vdb_info decoder repair and pure saved projection; not full operation completion.",
+  "reviewed_complete_sources": [
+    "gene_annotation_episode/blast_vdb_utility_inputs.py::_vdb_info",
+    "gene_annotation_episode/blast_vdb_utility_inputs.py::parse_blast_vdb_inspection",
+    "tests/test_vdb_info_wrapping_678.py",
+    "gene_annotation_episode/native_blast_utility_results.py",
+    "tests/test_blast_utility_collection_repair_659.py",
+    "tests/test_blast_vdb_workflow_673.py"
+  ],
+  "scope_verified_from_ast": [
+    {
+      "path": "gene_annotation_episode/blast_vdb_utility_inputs.py",
+      "changed_top_level_nodes": [
+        "_vdb_info"
+      ],
+      "bytes_unchanged": false
+    },
+    {
+      "path": "tests/test_blast_vdb_utility_inputs_663.py",
+      "changed_top_level_nodes": [
+        "test_source_derived_info_wrapping_populations_average_and_absent_csra_label",
+        "test_wrapped_native_input_tokens_preserve_punctuation_and_words",
+        "test_parsers_and_saved_normalizer_perform_no_io"
+      ],
+      "bytes_unchanged": false
+    },
+    {
+      "path": "gene_annotation_episode/blast_vdb_utility_contracts.py",
+      "changed_top_level_nodes": [],
+      "bytes_unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/blast_utility_contracts.py",
+      "changed_top_level_nodes": [],
+      "bytes_unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/blast_utility_result_views.py",
+      "changed_top_level_nodes": [],
+      "bytes_unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_worker.py",
+      "changed_top_level_nodes": [],
+      "bytes_unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_publication.py",
+      "changed_top_level_nodes": [],
+      "bytes_unchanged": true
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_returns.py",
+      "changed_top_level_nodes": [],
+      "bytes_unchanged": true
+    }
+  ],
+  "current_source_pins_verified": [
+    {
+      "path": "gene_annotation_episode/blast_vdb_utility_inputs.py",
+      "sha256": "b78adf5df4b991883c98d07e8216405eb2d2ff69f6f0046b20b0257d23913d6e",
+      "size_bytes": 29276
+    },
+    {
+      "path": "tests/test_blast_vdb_utility_inputs_663.py",
+      "sha256": "c6e31fa73655b1679d65c1026c1c248e708b37abe9278ff9a6abd0b4c37a4665",
+      "size_bytes": 27475
+    },
+    {
+      "path": "gene_annotation_episode/blast_vdb_utility_contracts.py",
+      "sha256": "3ef50f426a23f26790ff06e0cb0ad7edcc0473b6bbec8c2f27dcb7aa9e96d238",
+      "size_bytes": 31306
+    },
+    {
+      "path": "gene_annotation_episode/blast_utility_contracts.py",
+      "sha256": "28cf67559ecfe776ed5bf00dd093349c87a13583d9159e9be61e8baaba207a0c",
+      "size_bytes": 41121
+    },
+    {
+      "path": "gene_annotation_episode/blast_utility_result_views.py",
+      "sha256": "54c1d4fb07098f82bc6f7f46599391fd764a74741bde053d98ad14ae2625c28b",
+      "size_bytes": 92525
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_worker.py",
+      "sha256": "47b239686dd8c3489435c3e22647fb395f34d5059c63eacdf2b6023cc676b9f8",
+      "size_bytes": 41029
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_publication.py",
+      "sha256": "352ebc44d02f7f9f128267cbc90ab58e80c5e10d026f154fd1df24e441089454",
+      "size_bytes": 26953
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_returns.py",
+      "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+      "size_bytes": 17257
+    },
+    {
+      "path": "tests/test_vdb_info_wrapping_678.py",
+      "sha256": "4dd76b4ad8fd7925b4e47c7d7aafac8d4ed7cb762748fc530809510c1b232e90",
+      "size_bytes": 13709
+    }
+  ],
+  "evidence_pins_verified": 13,
+  "passed_cases": 47,
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check144_info678/handle.json",
+    "unit": "gene-local-job-f60ce3e51b7a4f459ba0a39eafbd344b.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T06:44:01.618295+00:00",
+          "monotonic_ns": 1069803315620886,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 3.627103684,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 607076352
+    }
+  },
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "verified_values": {
+    "vdb_selected_inputs": {
+      "value": null,
+      "missing_reason": "ambiguous_population"
+    },
+    "vdb_resolved_paths": {
+      "value": null,
+      "missing_reason": "ambiguous_population"
+    },
+    "vdb_sequence_count": 20,
+    "vdb_total_unclipped_bases": 5000,
+    "vdb_longest_sequence_bases": 250,
+    "vdb_average_sequence_bases": 250,
+    "optional_fields_absent": [
+      "vdb_csra_inputs",
+      "vdb_reference_sequence_count",
+      "vdb_reference_total_bases"
+    ],
+    "inspection_completeness": "partial",
+    "projection_result_completeness": "partial",
+    "projection_delivery_state": "complete"
+  },
+  "historical_results_reinterpreted": false,
+  "native_executions_in_component_test": 0,
+  "integration_next_step": {
+    "owner": "/root/vdb_info_corrected_workflow_682",
+    "test": "tests/test_vdb_info_corrected_workflow_682.py::test_corrected_info_full_workflow",
+    "reason": "Ordinary collect reuses existing parsed results and closed assignments cannot reopen. One separate native info verification after the demonstrated parser change exercises corrected full returns without altering the old run.",
+    "new_operation_count_claimed": false
+  },
+  "remaining": [
+    "Review new authentic corrected child and root returns",
+    "Review saved-only replay of the new corrected result"
+  ],
+  "goal_and_complete_operating_principles_reread": true,
+  "approved_contract_reread": true
+}

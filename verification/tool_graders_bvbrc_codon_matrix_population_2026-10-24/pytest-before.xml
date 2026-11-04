@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="0" tests="21" time="0.391" timestamp="2026-10-24T23:40:21.507238-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_complete_main_subset_retains_external_memberships_and_exact_denominator" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">def test_complete_main_subset_retains_external_memberships_and_exact_denominator():
+        sheet = scoped_sheet()
+        before = deepcopy(sheet)
+&gt;       got = calculate(sheet)
+              ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_complete_empty_main_retains_unrelated_native_memberships" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">def test_complete_empty_main_retains_unrelated_native_memberships():
+        sheet = scoped_sheet(empty=True)
+        before = deepcopy(sheet)
+&gt;       got = calculate(sheet)
+              ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_external_requested_population_is_unknown_without_its_matrix_rows" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">def test_external_requested_population_is_unknown_without_its_matrix_rows():
+&gt;       got = calculate(scoped_sheet(), genome="optional")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_empty_unknown_main_does_not_become_measured_zero[unknown]" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">state = 'unknown'
+
+    @pytest.mark.parametrize("state", ["unknown", "partial", "truncated"])
+    def test_empty_unknown_main_does_not_become_measured_zero(state):
+        sheet = scoped_sheet(empty=True)
+        sheet["populations"]["genomes"][0]["completeness"] = state
+&gt;       got = calculate(sheet)
+              ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_empty_unknown_main_does_not_become_measured_zero[partial]" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">state = 'partial'
+
+    @pytest.mark.parametrize("state", ["unknown", "partial", "truncated"])
+    def test_empty_unknown_main_does_not_become_measured_zero(state):
+        sheet = scoped_sheet(empty=True)
+        sheet["populations"]["genomes"][0]["completeness"] = state
+&gt;       got = calculate(sheet)
+              ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_empty_unknown_main_does_not_become_measured_zero[truncated]" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">state = 'truncated'
+
+    @pytest.mark.parametrize("state", ["unknown", "partial", "truncated"])
+    def test_empty_unknown_main_does_not_become_measured_zero(state):
+        sheet = scoped_sheet(empty=True)
+        sheet["populations"]["genomes"][0]["completeness"] = state
+&gt;       got = calculate(sheet)
+              ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_explicit_feature_genome_conflict_rejected_for_every_matrix_state[complete]" time="0.001" /><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_explicit_feature_genome_conflict_rejected_for_every_matrix_state[partial]" time="0.000"><failure message="Failed: DID NOT RAISE ValueError">state = 'partial'
+
+    @pytest.mark.parametrize("state", ["complete", "partial", "truncated", "unknown"])
+    def test_explicit_feature_genome_conflict_rejected_for_every_matrix_state(state):
+        sheet = scoped_sheet()
+        sheet["families"][0]["matrix_completeness"] = state
+        sheet["families"][0]["memberships"] = [membership(features=("a",), genomes=("G2",))]
+&gt;       with pytest.raises(ValueError, match="^phylogeny_codon_representation_genome_membership_conflict$"):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_codon_tree_matrix_population.py:142: Failed</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_explicit_feature_genome_conflict_rejected_for_every_matrix_state[truncated]" time="0.000"><failure message="Failed: DID NOT RAISE ValueError">state = 'truncated'
+
+    @pytest.mark.parametrize("state", ["complete", "partial", "truncated", "unknown"])
+    def test_explicit_feature_genome_conflict_rejected_for_every_matrix_state(state):
+        sheet = scoped_sheet()
+        sheet["families"][0]["matrix_completeness"] = state
+        sheet["families"][0]["memberships"] = [membership(features=("a",), genomes=("G2",))]
+&gt;       with pytest.raises(ValueError, match="^phylogeny_codon_representation_genome_membership_conflict$"):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_codon_tree_matrix_population.py:142: Failed</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_explicit_feature_genome_conflict_rejected_for_every_matrix_state[unknown]" time="0.000"><failure message="Failed: DID NOT RAISE ValueError">state = 'unknown'
+
+    @pytest.mark.parametrize("state", ["complete", "partial", "truncated", "unknown"])
+    def test_explicit_feature_genome_conflict_rejected_for_every_matrix_state(state):
+        sheet = scoped_sheet()
+        sheet["families"][0]["matrix_completeness"] = state
+        sheet["families"][0]["memberships"] = [membership(features=("a",), genomes=("G2",))]
+&gt;       with pytest.raises(ValueError, match="^phylogeny_codon_representation_genome_membership_conflict$"):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_codon_tree_matrix_population.py:142: Failed</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_explicit_unselected_matrix_mapping_conflict_is_still_rejected" time="0.000" /><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_structural_and_membership_conflicts_remain_invalid[&lt;lambda&gt;-codon_feature_genome_membership_conflict]" time="0.000" /><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_structural_and_membership_conflicts_remain_invalid[&lt;lambda&gt;-codon_duplicate_matrix_genome]" time="0.000" /><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_structural_and_membership_conflicts_remain_invalid[&lt;lambda&gt;-duplicate_identifier]" time="0.000" /><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_structural_and_membership_conflicts_remain_invalid[&lt;lambda&gt;-codon_duplicate_representation_record]" time="0.001"><failure message="AssertionError: &#10;- phylogeny_codon_representation_feature_outside_matrix&#10;+ phylogeny_codon_duplicate_representation_record">mutation = &lt;function &lt;lambda&gt; at 0x73ea2f4df6a0&gt;
+code = 'codon_duplicate_representation_record'
+
+    @pytest.mark.parametrize("mutation,code", [
+        (lambda f: f["matrix"].append({"genome_id": "Goptional", "feature_ids": ["a"]}), "codon_feature_genome_membership_conflict"),
+        (lambda f: f["matrix"].append({"genome_id": "G1", "feature_ids": []}), "codon_duplicate_matrix_genome"),
+        (lambda f: f["matrix"][0]["feature_ids"].append("a"), "duplicate_identifier"),
+        (lambda f: f["memberships"].append(deepcopy(f["memberships"][0])), "codon_duplicate_representation_record"),
+        (lambda f: f["memberships"][0]["deleted_feature_ids"].append("a"), "codon_included_deleted_feature_conflict"),
+    ])
+    def test_structural_and_membership_conflicts_remain_invalid(mutation, code):
+        sheet = scoped_sheet()
+        mutation(sheet["families"][0])
+&gt;       with pytest.raises(ValueError, match="^phylogeny_" + code + "$"):
+E       AssertionError: 
+E       - phylogeny_codon_representation_feature_outside_matrix
+E       + phylogeny_codon_duplicate_representation_record
+
+tests/test_bvbrc_codon_tree_matrix_population.py:164: AssertionError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_structural_and_membership_conflicts_remain_invalid[&lt;lambda&gt;-codon_included_deleted_feature_conflict]" time="0.000" /><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_independent_lists_are_not_zipped_and_absent_mappings_are_not_inferred" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">def test_independent_lists_are_not_zipped_and_absent_mappings_are_not_inferred():
+        sheet = scoped_sheet()
+        sheet["families"][0]["matrix"][1]["feature_ids"] = ["c"]
+        sheet["families"][0]["memberships"] = [membership(
+            features=("c", "a", "b", "unmapped"), genomes=("G1", "Goptional", "G2"))]
+        before = deepcopy(sheet)
+&gt;       assert values(calculate(sheet)) == {"present_genomes": 2, "missing_genomes": 0, "extra_copies": 1,
+                      ^^^^^^^^^^^^^^^^
+                                           "presence_fraction": 1, "native_initial_family_rank": 1}
+
+tests/test_bvbrc_codon_tree_matrix_population.py:174: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_unknown_membership_genomes_do_not_invalidate_explicit_matrix" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">def test_unknown_membership_genomes_do_not_invalidate_explicit_matrix():
+        sheet = scoped_sheet()
+        sheet["families"][0]["memberships"] = [membership(features=("a", "unmapped"), genomes=())]
+&gt;       assert values(calculate(sheet))["presence_fraction"] == .5
+                      ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_missing_selected_matrix_row_is_not_zero_or_repaired_from_membership" time="0.000"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">def test_missing_selected_matrix_row_is_not_zero_or_repaired_from_membership():
+        sheet = scoped_sheet()
+        sheet["families"][0]["matrix"].pop()
+&gt;       got = calculate(sheet)
+              ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_retained_native_membership_with_explicit_single_genome_scope" time="0.015"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">def test_retained_native_membership_with_explicit_single_genome_scope():
+        sheet = retained_subset_sheet()
+        before = deepcopy(sheet)
+&gt;       got = calculate(sheet)
+              ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase><testcase classname="tests.test_bvbrc_codon_tree_matrix_population" name="test_saved_json_recalculation_uses_production_calculator_without_external_access" time="0.009"><failure message="ValueError: phylogeny_codon_representation_feature_outside_matrix">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x73ea2f6b88c0&gt;
+
+    def test_saved_json_recalculation_uses_production_calculator_without_external_access(monkeypatch):
+        assert Path(calc.__file__).resolve() == ROOT / "gene_annotation_episode/bvbrc_codon_tree_calculators.py"
+        originals = [scoped_sheet(), scoped_sheet(empty=True), retained_subset_sheet()]
+        saved = json.loads(json.dumps(originals))
+&gt;       expected = [calculate(sheet) for sheet in originals]
+                    ^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_codon_tree_matrix_population.py:248: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_codon_tree_matrix_population.py:85: in calculate
+    return calc.codon_family_population_components(sheet, family_population_id="returned", genome_population_id=genome)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:243: in codon_family_population_components
+    matrix = _family_matrix(family) if family else None
+             ^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:198: in _family_matrix
+    _require(all(f in feature_genomes for f in row["feature_ids"] + row["deleted_feature_ids"] +
+gene_annotation_episode/bvbrc_codon_tree_calculators.py:50: in _require
+    c.require(ok, "codon_" + code)
+gene_annotation_episode/phylogeny_calculation_contracts.py:59: in require
+    fail(code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'codon_representation_feature_outside_matrix'
+
+    def fail(code):
+&gt;       raise ValueError("phylogeny_" + code)
+E       ValueError: phylogeny_codon_representation_feature_outside_matrix
+
+gene_annotation_episode/phylogeny_calculation_contracts.py:54: ValueError</failure></testcase></testsuite></testsuites>

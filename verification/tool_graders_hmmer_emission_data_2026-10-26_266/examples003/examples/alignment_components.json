@@ -1,0 +1,3486 @@
+{
+  "schema": "hmmer_emission_components_v1",
+  "operation": {
+    "program": "hmmemit",
+    "mode": "sample_core_aligned",
+    "engine_version": "3.4",
+    "settings": {
+      "-a": true,
+      "-N": 3,
+      "--seed": 42
+    }
+  },
+  "parameters": {
+    "consensus_thresholds": null,
+    "probability_rounding_tolerance": 1e-05
+  },
+  "rows": [
+    {
+      "kind": "generated_record",
+      "record_key": "output:generated_alignment#alignment_row/0",
+      "basis": "generated",
+      "model_record_key": "input:models#model/0",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "sequence": "ACDEFGHIKLMN",
+      "length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "symbol_counts": {
+        "A": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "A"
+            }
+          ]
+        },
+        "C": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "C"
+            }
+          ]
+        },
+        "D": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "D"
+            }
+          ]
+        },
+        "E": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "E"
+            }
+          ]
+        },
+        "F": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "F"
+            }
+          ]
+        },
+        "G": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "G"
+            }
+          ]
+        },
+        "H": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "H"
+            }
+          ]
+        },
+        "I": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "I"
+            }
+          ]
+        },
+        "K": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "K"
+            }
+          ]
+        },
+        "L": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "L"
+            }
+          ]
+        },
+        "M": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "M"
+            }
+          ]
+        },
+        "N": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/0",
+              "field": "sequence",
+              "symbol": "N"
+            }
+          ]
+        }
+      },
+      "canonical_residue_count": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "noncanonical_unambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_fraction": {
+        "value": 0.0,
+        "state": "present",
+        "unit": "fraction_of_ungapped_residues",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "gap_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "gap_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "stop_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "stop_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "missing_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "missing_data_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "invalid_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "model_alignment": {
+        "state": "present",
+        "alignment_record_key": "output:generated_alignment#alignment/0"
+      }
+    },
+    {
+      "kind": "generated_record",
+      "record_key": "output:generated_alignment#alignment_row/1",
+      "basis": "generated",
+      "model_record_key": "input:models#model/0",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "sequence": "ACDEFGHIKLMN",
+      "length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "symbol_counts": {
+        "A": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "A"
+            }
+          ]
+        },
+        "C": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "C"
+            }
+          ]
+        },
+        "D": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "D"
+            }
+          ]
+        },
+        "E": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "E"
+            }
+          ]
+        },
+        "F": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "F"
+            }
+          ]
+        },
+        "G": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "G"
+            }
+          ]
+        },
+        "H": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "H"
+            }
+          ]
+        },
+        "I": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "I"
+            }
+          ]
+        },
+        "K": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "K"
+            }
+          ]
+        },
+        "L": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "L"
+            }
+          ]
+        },
+        "M": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "M"
+            }
+          ]
+        },
+        "N": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/1",
+              "field": "sequence",
+              "symbol": "N"
+            }
+          ]
+        }
+      },
+      "canonical_residue_count": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "noncanonical_unambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_fraction": {
+        "value": 0.0,
+        "state": "present",
+        "unit": "fraction_of_ungapped_residues",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "gap_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "gap_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "stop_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "stop_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "missing_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "missing_data_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "invalid_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "model_alignment": {
+        "state": "present",
+        "alignment_record_key": "output:generated_alignment#alignment/0"
+      }
+    },
+    {
+      "kind": "generated_record",
+      "record_key": "output:generated_alignment#alignment_row/2",
+      "basis": "generated",
+      "model_record_key": "input:models#model/0",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "sequence": "ACDEFGHIKLMN",
+      "length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "symbol_counts": {
+        "A": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "A"
+            }
+          ]
+        },
+        "C": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "C"
+            }
+          ]
+        },
+        "D": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "D"
+            }
+          ]
+        },
+        "E": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "E"
+            }
+          ]
+        },
+        "F": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "F"
+            }
+          ]
+        },
+        "G": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "G"
+            }
+          ]
+        },
+        "H": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "H"
+            }
+          ]
+        },
+        "I": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "I"
+            }
+          ]
+        },
+        "K": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "K"
+            }
+          ]
+        },
+        "L": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "L"
+            }
+          ]
+        },
+        "M": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "M"
+            }
+          ]
+        },
+        "N": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_alignment#alignment_row/2",
+              "field": "sequence",
+              "symbol": "N"
+            }
+          ]
+        }
+      },
+      "canonical_residue_count": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "noncanonical_unambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_fraction": {
+        "value": 0.0,
+        "state": "present",
+        "unit": "fraction_of_ungapped_residues",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "gap_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "gap_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "stop_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "stop_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "missing_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "missing_data_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "invalid_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "model_alignment": {
+        "state": "present",
+        "alignment_record_key": "output:generated_alignment#alignment/0"
+      }
+    },
+    {
+      "kind": "model",
+      "model_record_key": "input:models#model/0",
+      "basis": "generated",
+      "record_keys": [
+        "output:generated_alignment#alignment_row/0",
+        "output:generated_alignment#alignment_row/1",
+        "output:generated_alignment#alignment_row/2"
+      ],
+      "input_model_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "model_match_state_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "length"
+          }
+        ]
+      },
+      "selected_N": {
+        "value": 3,
+        "state": "present",
+        "unit": "requested_sample_count",
+        "inputs": [
+          {
+            "field": "operation.settings.-N"
+          }
+        ]
+      },
+      "configured_expected_length": {
+        "value": null,
+        "state": "missing",
+        "unit": "configured_expected_residue_count",
+        "inputs": [
+          {
+            "field": "operation.settings.-L"
+          }
+        ]
+      },
+      "captured_sample_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "captured_generated_record_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "associations.model_population.record_keys",
+            "record_keys": [
+              "output:generated_alignment#alignment_row/0",
+              "output:generated_alignment#alignment_row/1",
+              "output:generated_alignment#alignment_row/2"
+            ]
+          }
+        ]
+      },
+      "expected_output_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "expected_generated_record_count",
+        "inputs": [
+          {
+            "field": "operation.mode"
+          },
+          {
+            "field": "operation.settings.-N"
+          }
+        ]
+      },
+      "count_difference": {
+        "value": 0,
+        "state": "present",
+        "unit": "captured_minus_expected_record_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "associations.model_population.record_keys",
+            "record_keys": [
+              "output:generated_alignment#alignment_row/0",
+              "output:generated_alignment#alignment_row/1",
+              "output:generated_alignment#alignment_row/2"
+            ]
+          },
+          {
+            "field": "expected_output_count"
+          }
+        ]
+      },
+      "total_length": {
+        "value": 36,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "minimum_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "maximum_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "mean_length": {
+        "value": 12.0,
+        "state": "present",
+        "unit": "residues_per_captured_record",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment_row/0",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/1",
+            "field": "length"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment_row/2",
+            "field": "length"
+          },
+          {
+            "denominator": 3,
+            "population": "captured_generated_records"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "alignment",
+      "record_key": "output:generated_alignment#alignment/0",
+      "basis": "generated",
+      "model_record_key": "input:models#model/0",
+      "alignment_width": {
+        "value": 12,
+        "state": "present",
+        "unit": "alignment_column_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment/0",
+            "field": "native.column_count"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment/0",
+            "field": "native.column_annotations.RF"
+          }
+        ]
+      },
+      "rf_match_column_count": {
+        "value": 12,
+        "state": "present",
+        "unit": "rf_match_column_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment/0",
+            "field": "native.column_count"
+          },
+          {
+            "record_key": "output:generated_alignment#alignment/0",
+            "field": "native.column_annotations.RF"
+          }
+        ]
+      },
+      "captured_row_count": {
+        "value": 3,
+        "state": "present",
+        "unit": "captured_generated_record_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_alignment#alignment/0",
+            "field": "native.row_record_keys"
+          }
+        ]
+      },
+      "match_columns": [
+        {
+          "alignment_column": {
+            "value": 1,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 1,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 1,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 1
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 1
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 1
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 1
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 1
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 1
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 2,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 2,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 2,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 2
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 2
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 2
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 2
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 2
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 2
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 3,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 3,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 3,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 3
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 3
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 3
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 3
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 3
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 3
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 4,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 4,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 4,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 4
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 4
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 4
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 4
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 4
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 4
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 5,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 5,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 5,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 5
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 5
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 5
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 5
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 5
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 5
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 6,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 6,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 6,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 6
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 6
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 6
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 6
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 6
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 6
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 7,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 7,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 7,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 7
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 7
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 7
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 7
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 7
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 7
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 8,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 8,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 8,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 8
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 8
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 8
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 8
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 8
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 8
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 9,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 9,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 9,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 9
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 9
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 9
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 9
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 9
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 9
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 10,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 10,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 10,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 10
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 10
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 10
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 10
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 10
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 10
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 11,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 11,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 11,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 11
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 11
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 11
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 11
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 11
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 11
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        },
+        {
+          "alignment_column": {
+            "value": 12,
+            "state": "present",
+            "unit": "one_based_alignment_column",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "rf_match_ordinal": {
+            "value": 12,
+            "state": "present",
+            "unit": "one_based_rf_match_ordinal",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              }
+            ]
+          },
+          "model_position": {
+            "value": 12,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_count"
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.column_annotations.RF"
+              },
+              {
+                "record_key": "input:models#model/0",
+                "field": "length"
+              }
+            ]
+          },
+          "occupancy": {
+            "value": 3,
+            "state": "present",
+            "unit": "generated_residue_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 12
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 12
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 12
+              }
+            ]
+          },
+          "sample_denominator": {
+            "value": 3,
+            "state": "present",
+            "unit": "captured_generated_record_count",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          },
+          "occupancy_fraction": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "fraction_of_captured_rows",
+            "inputs": [
+              {
+                "record_key": "output:generated_alignment#alignment_row/0",
+                "field": "sequence",
+                "alignment_column": 12
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/1",
+                "field": "sequence",
+                "alignment_column": 12
+              },
+              {
+                "record_key": "output:generated_alignment#alignment_row/2",
+                "field": "sequence",
+                "alignment_column": 12
+              },
+              {
+                "record_key": "output:generated_alignment#alignment/0",
+                "field": "native.row_record_keys"
+              }
+            ]
+          }
+        }
+      ],
+      "row_coordinates": [
+        {
+          "record_key": "output:generated_alignment#alignment_row/0",
+          "columns": [
+            {
+              "symbol": "A",
+              "alignment_column": {
+                "value": 1,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 1,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "alignment_column": {
+                "value": 2,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 2,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "alignment_column": {
+                "value": 3,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 3,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "alignment_column": {
+                "value": 4,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 4,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "alignment_column": {
+                "value": 5,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 5,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "alignment_column": {
+                "value": 6,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 6,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "alignment_column": {
+                "value": 7,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 7,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "alignment_column": {
+                "value": 8,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 8,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "alignment_column": {
+                "value": 9,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 9,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "alignment_column": {
+                "value": 10,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 10,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "alignment_column": {
+                "value": 11,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 11,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "alignment_column": {
+                "value": 12,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 12,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/0",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "record_key": "output:generated_alignment#alignment_row/1",
+          "columns": [
+            {
+              "symbol": "A",
+              "alignment_column": {
+                "value": 1,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 1,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "alignment_column": {
+                "value": 2,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 2,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "alignment_column": {
+                "value": 3,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 3,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "alignment_column": {
+                "value": 4,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 4,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "alignment_column": {
+                "value": 5,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 5,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "alignment_column": {
+                "value": 6,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 6,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "alignment_column": {
+                "value": 7,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 7,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "alignment_column": {
+                "value": 8,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 8,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "alignment_column": {
+                "value": 9,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 9,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "alignment_column": {
+                "value": 10,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 10,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "alignment_column": {
+                "value": 11,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 11,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "alignment_column": {
+                "value": 12,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 12,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/1",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "record_key": "output:generated_alignment#alignment_row/2",
+          "columns": [
+            {
+              "symbol": "A",
+              "alignment_column": {
+                "value": 1,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 1,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "alignment_column": {
+                "value": 2,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 2,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "alignment_column": {
+                "value": 3,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 3,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "alignment_column": {
+                "value": 4,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 4,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "alignment_column": {
+                "value": 5,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 5,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "alignment_column": {
+                "value": 6,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 6,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "alignment_column": {
+                "value": 7,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 7,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "alignment_column": {
+                "value": 8,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 8,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "alignment_column": {
+                "value": 9,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 9,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "alignment_column": {
+                "value": 10,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 10,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "alignment_column": {
+                "value": 11,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 11,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "alignment_column": {
+                "value": 12,
+                "state": "present",
+                "unit": "one_based_alignment_column",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              },
+              "residue_position": {
+                "value": 12,
+                "state": "present",
+                "unit": "one_based_ungapped_residue",
+                "inputs": [
+                  {
+                    "record_key": "output:generated_alignment#alignment_row/2",
+                    "field": "sequence"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "code": "sample_population_count",
+      "state": "pass",
+      "record_key": "input:models#model/0",
+      "inputs": [
+        {
+          "record_key": "input:models#model/0",
+          "field": "associations.model_population.record_keys",
+          "record_keys": [
+            "output:generated_alignment#alignment_row/0",
+            "output:generated_alignment#alignment_row/1",
+            "output:generated_alignment#alignment_row/2"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "alignment_geometry",
+      "state": "pass",
+      "record_key": "output:generated_alignment#alignment/0",
+      "inputs": [
+        {
+          "record_key": "output:generated_alignment#alignment/0",
+          "field": "native.column_count"
+        },
+        {
+          "record_key": "output:generated_alignment#alignment/0",
+          "field": "native.column_annotations.RF"
+        }
+      ]
+    },
+    {
+      "code": "rf_matches_model_length",
+      "state": "pass",
+      "record_key": "output:generated_alignment#alignment/0",
+      "inputs": [
+        {
+          "record_key": "output:generated_alignment#alignment/0",
+          "field": "native.column_count"
+        },
+        {
+          "record_key": "output:generated_alignment#alignment/0",
+          "field": "native.column_annotations.RF"
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,2233 @@
+{
+  "episode_id": "literature-episode",
+  "role": "REASONING",
+  "model": "gpt-6-sol",
+  "effort": "medium",
+  "instructions": "Evaluate the reference experiment iteratively within its assigned source scope.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After its decision_lookup_result arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\ndecision_bootstrap supplies an authoritative scoped model state. decision_update\nreplaces the listed top-level fields and removes exactly removed_fields; omitted\nfields keep their previous values. base_revision identifies the previous state\nand revision identifies the resulting state. Newer state replaces older values,\nincluding yield expectations; older estimates remain historical. A bootstrap\nafter conversation loss or compaction replaces earlier presentation state.\ndecision_lookup_result supplies only the requested own historical information.\nRestored public exchanges preserve the requests and results of an unfinished\ndecision; do not repeat their already answered lookups merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.",
+  "context": {
+    "version": "decision_context_v1",
+    "kind": "decision_bootstrap",
+    "base_revision": null,
+    "revision": "53910ee8d4e432885da1b71221200109e6f922b0fb8e76a283656e406ca0ac88",
+    "fields": {
+      "action_yields": {
+        "before": 5,
+        "rows": [
+          {
+            "attempted_uncompleted": 1,
+            "category": "tool/source.read",
+            "completed_actions": 2,
+            "expected_yield": {
+              "band": null,
+              "status": "unavailable",
+              "unavailable_reason": "parameters_unbound"
+            },
+            "total_yield": -0.25
+          }
+        ],
+        "version": "own_decision_yield_table_v1"
+      },
+      "available_report_facts": {
+        "literature_rate_cells": {
+          "meaning": "Source endpoint statistics, not an annotation probability or transfer score."
+        },
+        "unused_fact": {
+          "meaning": "UNREQUESTED_FACT_DEFINITION"
+        }
+      },
+      "child_options": "literature_strategy can compare search approaches for this assigned experimental question.",
+      "child_reports": [
+        {
+          "caller_chosen": [
+            {
+              "approximate": false,
+              "comparison": {
+                "comparison_scope": {
+                  "value": "reported_protocols",
+                  "witness_refs": [
+                    "reference_8a4f72bd331f5c5e8f0b9ee2"
+                  ]
+                },
+                "nonintended_conditions_relationship": {
+                  "value": "unknown",
+                  "witness_refs": []
+                },
+                "parameter_definition_relationship": {
+                  "value": "same",
+                  "witness_refs": [
+                    "reference_f0975495dce1345e77d1f29b"
+                  ]
+                },
+                "subject_relationship": {
+                  "value": "same_molecule_and_construct",
+                  "witness_refs": [
+                    "reference_104f27128b69d71c6d3e4cdd"
+                  ]
+                },
+                "substrate_arrangement": {
+                  "value": "separate_assays",
+                  "witness_refs": [
+                    "reference_f5ba3c88fd21e4271f8612dd"
+                  ]
+                }
+              },
+              "component": "parameter_ratio",
+              "conditional_on": [
+                "supplied_subject_and_parameter_relationships",
+                "reported_protocol_comparison"
+              ],
+              "contrast_meaning": "numerator_parameter_exceeds_denominator",
+              "denominator": {
+                "approximate": false,
+                "canonical_unit": "per_min",
+                "context": {
+                  "conditions": null,
+                  "endpoint": null,
+                  "experiment": null,
+                  "experimental_system": null,
+                  "normalization": null,
+                  "preparation": null,
+                  "substrate": "reference_4ed8dfb3d173f405a9bfd6dc"
+                },
+                "converted_origin": "synthetic",
+                "input_status": "point",
+                "input_unavailable_reasons": [],
+                "measurement_ref": "reference_7cc654b80c32c89b6c68ba53",
+                "measurement_source_ref": "source_3ff751b21bf0d0d437162512",
+                "numeric_tokens": [
+                  {
+                    "ref": "reference_7cc654b80c32c89b6c68ba53",
+                    "source_ref": "source_3ff751b21bf0d0d437162512"
+                  }
+                ],
+                "observed_relation": "point",
+                "parameter_kind": "kcat",
+                "parameter_kind_witness_refs": [
+                  "reference_c5c95adb766d2c76335b772c"
+                ],
+                "physical_observation_ref": null,
+                "qualification": "reported_point",
+                "qualification_witness_refs": [
+                  "reference_f74753c248575d9a8c691511"
+                ],
+                "source_origin": "synthetic",
+                "source_unit_ref": "reference_f417772a51b89e74af9febc8",
+                "subject": {
+                  "construct": "reference_f85197683231727f8fd84e6a",
+                  "genotype": null,
+                  "molecule": "reference_b0212bc56d8d8b9c5ee66ceb",
+                  "organism": null
+                },
+                "uncertainty": {
+                  "canonical_unit": null,
+                  "confidence_level_ref": null,
+                  "count_approximate": null,
+                  "count_notation": null,
+                  "count_reading_status": "not_selected",
+                  "count_ref": null,
+                  "count_relation": null,
+                  "count_unavailable_reason": null,
+                  "estimate_basis": "unknown",
+                  "interval_ref": null,
+                  "magnitude_ref": null,
+                  "repetition_basis": "unspecified",
+                  "statistic": "unreported",
+                  "unavailable_reason": null,
+                  "unit_ref": null
+                },
+                "uncertainty_values": {
+                  "confidence_level": null,
+                  "count": null,
+                  "count_reported_value": null,
+                  "delivery_status": "not_requested",
+                  "interval": null,
+                  "magnitude": null
+                }
+              },
+              "evaluation_scope": "source_kinetic_parameter_contrast",
+              "evidence_source_ref": "source_3ff751b21bf0d0d437162512",
+              "formula_code": "kinetic_parameter_ratio",
+              "model_input_status": "not_supplied_by_native_operation",
+              "model_reader_capability": "unimplemented",
+              "numerator": {
+                "approximate": false,
+                "canonical_unit": "per_min",
+                "context": {
+                  "conditions": "reference_a4c99d876309c831903fd091",
+                  "endpoint": null,
+                  "experiment": null,
+                  "experimental_system": null,
+                  "normalization": null,
+                  "preparation": null,
+                  "substrate": "reference_2abc42038bc8272bede81fda"
+                },
+                "converted_origin": "synthetic",
+                "input_status": "point",
+                "input_unavailable_reasons": [],
+                "measurement_ref": "reference_f8dd8f9d257860221c7146b6",
+                "measurement_source_ref": "source_3ff751b21bf0d0d437162512",
+                "numeric_tokens": [
+                  {
+                    "ref": "reference_f8dd8f9d257860221c7146b6",
+                    "source_ref": "source_3ff751b21bf0d0d437162512"
+                  },
+                  {
+                    "ref": "reference_5cb86c585f27b334927332da",
+                    "source_ref": "source_3ff751b21bf0d0d437162512"
+                  },
+                  {
+                    "ref": "reference_84bbd504a83fe195022006a9",
+                    "source_ref": "source_3ff751b21bf0d0d437162512"
+                  }
+                ],
+                "observed_relation": "point",
+                "parameter_kind": "kcat",
+                "parameter_kind_witness_refs": [
+                  "reference_c5c95adb766d2c76335b772c"
+                ],
+                "physical_observation_ref": null,
+                "qualification": "reported_point",
+                "qualification_witness_refs": [
+                  "reference_f74753c248575d9a8c691511"
+                ],
+                "source_origin": "synthetic",
+                "source_unit_ref": "reference_df6eda6fddf09c9ca64d25fd",
+                "subject": {
+                  "construct": "reference_f85197683231727f8fd84e6a",
+                  "genotype": null,
+                  "molecule": "reference_b0212bc56d8d8b9c5ee66ceb",
+                  "organism": null
+                },
+                "uncertainty": {
+                  "canonical_unit": "per_min",
+                  "confidence_level_ref": null,
+                  "count_approximate": false,
+                  "count_notation": "decimal_digits",
+                  "count_reading_status": "exact",
+                  "count_ref": "reference_84bbd504a83fe195022006a9",
+                  "count_relation": "point",
+                  "count_unavailable_reason": null,
+                  "estimate_basis": "unknown",
+                  "interval_ref": null,
+                  "magnitude_ref": "reference_5cb86c585f27b334927332da",
+                  "repetition_basis": "technical_measurements",
+                  "statistic": "sd",
+                  "unavailable_reason": null,
+                  "unit_ref": "reference_eaa3cc74c87119ad9227e054"
+                },
+                "uncertainty_values": {
+                  "confidence_level": null,
+                  "count": null,
+                  "count_reported_value": null,
+                  "delivery_status": "not_requested",
+                  "interval": null,
+                  "magnitude": null
+                }
+              },
+              "origin": "derived",
+              "relation": "none",
+              "sheet_ref": "source_02ccabb3c26f0e391c43f021",
+              "status": "populated",
+              "threshold": null,
+              "unavailable_reason": null,
+              "unit": "dimensionless",
+              "value": 11.001871489559463
+            }
+          ]
+        }
+      ],
+      "controller": {
+        "decision": {
+          "continuation_cost": 0.001
+        },
+        "epoch": "PRIVATE_EPOCH",
+        "estimate": {
+          "diagnostics": {
+            "fit": "PRIVATE_FIT"
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": -0.1,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.9,
+            "value": 0.5
+          },
+          "turns": 2
+        },
+        "scores": [
+          999
+        ]
+      },
+      "current_credit": 0,
+      "current_report_basis_refs": [
+        "reference_0841ffbb366fa06e87fb29f8"
+      ],
+      "current_report_update": {},
+      "feedback": null,
+      "goal": {
+        "goal_id": "PRIVATE_GOAL",
+        "objective": "Evaluate the admitted source kinetic contrast",
+        "parent_goal_id": "PRIVATE_PARENT_GOAL",
+        "task_context": {
+          "constraint": "Use the retained original source and preserve its actual assayed subject."
+        }
+      },
+      "last_local_outcome": null,
+      "literature_experimental_work": {
+        "aspect": "reference_evidence_parent",
+        "version": "literature_experimental_task_v1"
+      },
+      "literature_source_custody": [
+        {
+          "artifact_ref": "artifact_selected",
+          "source_ref": "source_selected",
+          "version": "retained source representation"
+        }
+      ],
+      "own_literature_outcomes": {
+        "records": []
+      },
+      "pending_work": {
+        "items": []
+      },
+      "reference_evidence_parent": {
+        "child_population_operations": [],
+        "source_custody": [],
+        "source_refs": [
+          "source_3ff751b21bf0d0d437162512"
+        ],
+        "version": "reference_evidence_parent_v1"
+      },
+      "requested_form": {
+        "additionalProperties": false,
+        "properties": {
+          "numbers": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "approximate": {
+                  "type": "boolean"
+                },
+                "comparison": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "comparison_scope": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "enum": [
+                            "reported_protocols",
+                            "common_conditions",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "witness_refs": {
+                          "items": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "reference"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "witness_refs"
+                      ],
+                      "type": "object"
+                    },
+                    "nonintended_conditions_relationship": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "enum": [
+                            "matched",
+                            "different",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "witness_refs": {
+                          "items": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "reference"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "witness_refs"
+                      ],
+                      "type": "object"
+                    },
+                    "parameter_definition_relationship": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "enum": [
+                            "same",
+                            "different",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "witness_refs": {
+                          "items": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "reference"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "witness_refs"
+                      ],
+                      "type": "object"
+                    },
+                    "subject_relationship": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "enum": [
+                            "same_molecule_and_construct",
+                            "different",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "witness_refs": {
+                          "items": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "reference"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "witness_refs"
+                      ],
+                      "type": "object"
+                    },
+                    "substrate_arrangement": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "enum": [
+                            "separate_assays",
+                            "mixed_substrates",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "witness_refs": {
+                          "items": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "reference"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "witness_refs"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "subject_relationship",
+                    "parameter_definition_relationship",
+                    "substrate_arrangement",
+                    "comparison_scope",
+                    "nonintended_conditions_relationship"
+                  ],
+                  "type": "object"
+                },
+                "component": {
+                  "enum": [
+                    "numerator_parameter",
+                    "denominator_parameter",
+                    "parameter_difference",
+                    "parameter_ratio",
+                    "log_parameter_contrast"
+                  ],
+                  "type": "string"
+                },
+                "conditional_on": {
+                  "items": {
+                    "enum": [
+                      "supplied_subject_and_parameter_relationships",
+                      "reported_protocol_comparison",
+                      "declared_common_conditions",
+                      "supplied_log_covariance",
+                      "known_normal_log_parameters"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "contrast_meaning": {
+                  "enum": [
+                    "numerator_parameter_exceeds_denominator"
+                  ],
+                  "type": "string"
+                },
+                "denominator": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "approximate": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "canonical_unit": {
+                      "enum": [
+                        "uM",
+                        "per_min",
+                        "uM_inverse_min_inverse",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "context": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "conditions": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "endpoint": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "experiment": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "experimental_system": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "normalization": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "preparation": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "substrate": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        }
+                      },
+                      "required": [
+                        "substrate",
+                        "preparation",
+                        "experiment",
+                        "experimental_system",
+                        "conditions",
+                        "endpoint",
+                        "normalization"
+                      ],
+                      "type": "object"
+                    },
+                    "converted_origin": {
+                      "enum": [
+                        "reported",
+                        "calculated",
+                        "synthetic",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "input_status": {
+                      "enum": [
+                        "point",
+                        "censored",
+                        "missing",
+                        "conflicting",
+                        "unresolved"
+                      ],
+                      "type": "string"
+                    },
+                    "input_unavailable_reasons": {
+                      "items": {
+                        "enum": [
+                          "source_measurement_unreported",
+                          "source_parameter_kind_unknown",
+                          "source_parameter_kind_conflicting",
+                          "source_kinetic_unit_unreported",
+                          "unsupported_source_kinetic_unit",
+                          "source_numeric_range",
+                          "source_operand_qualification_unknown",
+                          "source_operand_qualification_conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "measurement_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "measurement_source_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "source"
+                    },
+                    "numeric_tokens": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "ref": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "reference"
+                          },
+                          "source_ref": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "source"
+                          }
+                        },
+                        "required": [
+                          "ref",
+                          "source_ref"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "observed_relation": {
+                      "enum": [
+                        "point",
+                        "lt",
+                        "le",
+                        "gt",
+                        "ge",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "parameter_kind": {
+                      "enum": [
+                        "Km",
+                        "kcat",
+                        "catalytic_efficiency",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "parameter_kind_witness_refs": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "reference"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "physical_observation_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "qualification": {
+                      "enum": [
+                        "reported_point",
+                        "source_qualified_approximate",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "qualification_witness_refs": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "reference"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "source_origin": {
+                      "enum": [
+                        "reported",
+                        "synthetic",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "source_unit_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "construct": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "genotype": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "molecule": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "organism": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        }
+                      },
+                      "required": [
+                        "organism",
+                        "genotype",
+                        "molecule",
+                        "construct"
+                      ],
+                      "type": "object"
+                    },
+                    "uncertainty": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "canonical_unit": {
+                          "enum": [
+                            "uM",
+                            "per_min",
+                            "uM_inverse_min_inverse",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "confidence_level_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "count_approximate": {
+                          "type": [
+                            "boolean",
+                            "null"
+                          ]
+                        },
+                        "count_notation": {
+                          "enum": [
+                            "decimal_digits",
+                            "english_cardinal",
+                            "unsupported",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "count_reading_status": {
+                          "enum": [
+                            "not_selected",
+                            "exact",
+                            "qualified",
+                            "range_or_alternatives",
+                            "unsupported",
+                            "not_positive"
+                          ],
+                          "type": "string"
+                        },
+                        "count_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "count_relation": {
+                          "enum": [
+                            "point",
+                            "lt",
+                            "le",
+                            "gt",
+                            "ge",
+                            "unresolved",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "count_unavailable_reason": {
+                          "enum": [
+                            "exact_count_qualified",
+                            "count_range_or_alternatives",
+                            "unsupported_count_literal",
+                            "positive_count_required",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "estimate_basis": {
+                          "enum": [
+                            "fit_to_averaged_curve",
+                            "between_fitted_parameters",
+                            "unknown"
+                          ],
+                          "type": "string"
+                        },
+                        "interval_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "magnitude_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "repetition_basis": {
+                          "enum": [
+                            "biological_preparations",
+                            "technical_measurements",
+                            "unspecified"
+                          ],
+                          "type": "string"
+                        },
+                        "statistic": {
+                          "enum": [
+                            "sd",
+                            "sem",
+                            "ci",
+                            "unspecified",
+                            "unreported"
+                          ],
+                          "type": "string"
+                        },
+                        "unavailable_reason": {
+                          "enum": [
+                            "source_uncertainty_unit_unavailable",
+                            "source_numeric_range",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "unit_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        }
+                      },
+                      "required": [
+                        "statistic",
+                        "count_reading_status",
+                        "count_unavailable_reason",
+                        "count_notation",
+                        "count_relation",
+                        "count_approximate",
+                        "unit_ref",
+                        "canonical_unit",
+                        "repetition_basis",
+                        "estimate_basis",
+                        "magnitude_ref",
+                        "interval_ref",
+                        "confidence_level_ref",
+                        "count_ref",
+                        "unavailable_reason"
+                      ],
+                      "type": "object"
+                    },
+                    "uncertainty_values": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "confidence_level": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "count": {
+                          "minimum": 1,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "count_reported_value": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "delivery_status": {
+                          "enum": [
+                            "requested",
+                            "not_requested"
+                          ],
+                          "type": "string"
+                        },
+                        "interval": {
+                          "items": {
+                            "type": "number"
+                          },
+                          "maxItems": 2,
+                          "minItems": 2,
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "magnitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "delivery_status",
+                        "magnitude",
+                        "interval",
+                        "confidence_level",
+                        "count",
+                        "count_reported_value"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "parameter_kind",
+                    "parameter_kind_witness_refs",
+                    "measurement_ref",
+                    "measurement_source_ref",
+                    "physical_observation_ref",
+                    "source_unit_ref",
+                    "canonical_unit",
+                    "qualification",
+                    "qualification_witness_refs",
+                    "approximate",
+                    "input_status",
+                    "observed_relation",
+                    "source_origin",
+                    "converted_origin",
+                    "subject",
+                    "context",
+                    "numeric_tokens",
+                    "uncertainty",
+                    "uncertainty_values",
+                    "input_unavailable_reasons"
+                  ],
+                  "type": "object"
+                },
+                "evaluation_scope": {
+                  "enum": [
+                    "source_kinetic_parameter_contrast"
+                  ],
+                  "type": "string"
+                },
+                "evidence_source_ref": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "source"
+                },
+                "formula_code": {
+                  "enum": [
+                    "kinetic_numerator_parameter",
+                    "kinetic_denominator_parameter",
+                    "kinetic_parameter_difference",
+                    "kinetic_parameter_ratio",
+                    "kinetic_log_parameter_contrast"
+                  ],
+                  "type": "string"
+                },
+                "model_input_status": {
+                  "enum": [
+                    "not_supplied_by_native_operation"
+                  ],
+                  "type": "string"
+                },
+                "model_reader_capability": {
+                  "enum": [
+                    "unimplemented"
+                  ],
+                  "type": "string"
+                },
+                "numerator": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "approximate": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "canonical_unit": {
+                      "enum": [
+                        "uM",
+                        "per_min",
+                        "uM_inverse_min_inverse",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "context": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "conditions": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "endpoint": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "experiment": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "experimental_system": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "normalization": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "preparation": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "substrate": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        }
+                      },
+                      "required": [
+                        "substrate",
+                        "preparation",
+                        "experiment",
+                        "experimental_system",
+                        "conditions",
+                        "endpoint",
+                        "normalization"
+                      ],
+                      "type": "object"
+                    },
+                    "converted_origin": {
+                      "enum": [
+                        "reported",
+                        "calculated",
+                        "synthetic",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "input_status": {
+                      "enum": [
+                        "point",
+                        "censored",
+                        "missing",
+                        "conflicting",
+                        "unresolved"
+                      ],
+                      "type": "string"
+                    },
+                    "input_unavailable_reasons": {
+                      "items": {
+                        "enum": [
+                          "source_measurement_unreported",
+                          "source_parameter_kind_unknown",
+                          "source_parameter_kind_conflicting",
+                          "source_kinetic_unit_unreported",
+                          "unsupported_source_kinetic_unit",
+                          "source_numeric_range",
+                          "source_operand_qualification_unknown",
+                          "source_operand_qualification_conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "measurement_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "measurement_source_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "source"
+                    },
+                    "numeric_tokens": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "ref": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "reference"
+                          },
+                          "source_ref": {
+                            "format": "reference",
+                            "type": "string",
+                            "x-reference-namespace": "source"
+                          }
+                        },
+                        "required": [
+                          "ref",
+                          "source_ref"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "observed_relation": {
+                      "enum": [
+                        "point",
+                        "lt",
+                        "le",
+                        "gt",
+                        "ge",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "parameter_kind": {
+                      "enum": [
+                        "Km",
+                        "kcat",
+                        "catalytic_efficiency",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "parameter_kind_witness_refs": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "reference"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "physical_observation_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "qualification": {
+                      "enum": [
+                        "reported_point",
+                        "source_qualified_approximate",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "qualification_witness_refs": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "reference"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "source_origin": {
+                      "enum": [
+                        "reported",
+                        "synthetic",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "source_unit_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "subject": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "construct": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "genotype": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "molecule": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "organism": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        }
+                      },
+                      "required": [
+                        "organism",
+                        "genotype",
+                        "molecule",
+                        "construct"
+                      ],
+                      "type": "object"
+                    },
+                    "uncertainty": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "canonical_unit": {
+                          "enum": [
+                            "uM",
+                            "per_min",
+                            "uM_inverse_min_inverse",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "confidence_level_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "count_approximate": {
+                          "type": [
+                            "boolean",
+                            "null"
+                          ]
+                        },
+                        "count_notation": {
+                          "enum": [
+                            "decimal_digits",
+                            "english_cardinal",
+                            "unsupported",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "count_reading_status": {
+                          "enum": [
+                            "not_selected",
+                            "exact",
+                            "qualified",
+                            "range_or_alternatives",
+                            "unsupported",
+                            "not_positive"
+                          ],
+                          "type": "string"
+                        },
+                        "count_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "count_relation": {
+                          "enum": [
+                            "point",
+                            "lt",
+                            "le",
+                            "gt",
+                            "ge",
+                            "unresolved",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "count_unavailable_reason": {
+                          "enum": [
+                            "exact_count_qualified",
+                            "count_range_or_alternatives",
+                            "unsupported_count_literal",
+                            "positive_count_required",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "estimate_basis": {
+                          "enum": [
+                            "fit_to_averaged_curve",
+                            "between_fitted_parameters",
+                            "unknown"
+                          ],
+                          "type": "string"
+                        },
+                        "interval_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "magnitude_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        },
+                        "repetition_basis": {
+                          "enum": [
+                            "biological_preparations",
+                            "technical_measurements",
+                            "unspecified"
+                          ],
+                          "type": "string"
+                        },
+                        "statistic": {
+                          "enum": [
+                            "sd",
+                            "sem",
+                            "ci",
+                            "unspecified",
+                            "unreported"
+                          ],
+                          "type": "string"
+                        },
+                        "unavailable_reason": {
+                          "enum": [
+                            "source_uncertainty_unit_unavailable",
+                            "source_numeric_range",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "unit_ref": {
+                          "format": "reference",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "x-reference-namespace": "reference"
+                        }
+                      },
+                      "required": [
+                        "statistic",
+                        "count_reading_status",
+                        "count_unavailable_reason",
+                        "count_notation",
+                        "count_relation",
+                        "count_approximate",
+                        "unit_ref",
+                        "canonical_unit",
+                        "repetition_basis",
+                        "estimate_basis",
+                        "magnitude_ref",
+                        "interval_ref",
+                        "confidence_level_ref",
+                        "count_ref",
+                        "unavailable_reason"
+                      ],
+                      "type": "object"
+                    },
+                    "uncertainty_values": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "confidence_level": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "count": {
+                          "minimum": 1,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "count_reported_value": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "delivery_status": {
+                          "enum": [
+                            "requested",
+                            "not_requested"
+                          ],
+                          "type": "string"
+                        },
+                        "interval": {
+                          "items": {
+                            "type": "number"
+                          },
+                          "maxItems": 2,
+                          "minItems": 2,
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "magnitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "delivery_status",
+                        "magnitude",
+                        "interval",
+                        "confidence_level",
+                        "count",
+                        "count_reported_value"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "parameter_kind",
+                    "parameter_kind_witness_refs",
+                    "measurement_ref",
+                    "measurement_source_ref",
+                    "physical_observation_ref",
+                    "source_unit_ref",
+                    "canonical_unit",
+                    "qualification",
+                    "qualification_witness_refs",
+                    "approximate",
+                    "input_status",
+                    "observed_relation",
+                    "source_origin",
+                    "converted_origin",
+                    "subject",
+                    "context",
+                    "numeric_tokens",
+                    "uncertainty",
+                    "uncertainty_values",
+                    "input_unavailable_reasons"
+                  ],
+                  "type": "object"
+                },
+                "origin": {
+                  "enum": [
+                    "reported",
+                    "calculated",
+                    "synthetic",
+                    "derived"
+                  ],
+                  "type": "string"
+                },
+                "relation": {
+                  "enum": [
+                    "eq",
+                    "lt",
+                    "le",
+                    "gt",
+                    "ge",
+                    "none"
+                  ],
+                  "type": "string"
+                },
+                "sheet_ref": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "source"
+                },
+                "status": {
+                  "enum": [
+                    "populated",
+                    "unavailable"
+                  ],
+                  "type": "string"
+                },
+                "threshold": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unavailable_reason": {
+                  "enum": [
+                    "source_measurement_unreported",
+                    "source_kinetic_unit_unreported",
+                    "unsupported_source_kinetic_unit",
+                    "source_operand_qualification_unknown",
+                    "source_operand_qualification_conflicting",
+                    "source_numeric_range",
+                    "numerator_measurement_missing",
+                    "denominator_measurement_missing",
+                    "source_measurement_missing",
+                    "censored_measurement",
+                    "conflicting_measurement",
+                    "parameter_kind_mismatch",
+                    "subject_relationship_different",
+                    "subject_relationship_unknown",
+                    "subject_relationship_conflicting",
+                    "parameter_definition_relationship_different",
+                    "parameter_definition_relationship_unknown",
+                    "parameter_definition_relationship_conflicting",
+                    "mixed_substrates_unsupported",
+                    "substrate_arrangement_unknown",
+                    "substrate_arrangement_conflicting",
+                    "comparison_scope_unknown",
+                    "comparison_scope_conflicting",
+                    "common_conditions_not_matched",
+                    "reused_source_observation",
+                    "conflicting_source_observation",
+                    "zero_denominator_parameter",
+                    "positive_parameters_required_for_log",
+                    "kinetic_log_model_unreported",
+                    "covariance_status_unknown",
+                    "known_log_covariance_required",
+                    "kinetic_observation_model_unspecified",
+                    "approximate_parameter_model_unsupported",
+                    "positive_log_contrast_variance_required",
+                    "numerical_model_range",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "enum": [
+                    "uM",
+                    "per_min",
+                    "uM_inverse_min_inverse",
+                    "dimensionless",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "sheet_ref",
+                "evidence_source_ref",
+                "component",
+                "value",
+                "threshold",
+                "unit",
+                "status",
+                "relation",
+                "approximate",
+                "origin",
+                "unavailable_reason",
+                "formula_code",
+                "conditional_on",
+                "evaluation_scope",
+                "contrast_meaning",
+                "model_input_status",
+                "model_reader_capability",
+                "comparison",
+                "numerator",
+                "denominator"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "x-source": "literature_kinetic_cells"
+          }
+        },
+        "required": [
+          "numbers"
+        ],
+        "type": "object"
+      },
+      "requested_report_purpose": "Return the requested source-rate cells and necessary qualifications.",
+      "restored_episode_history": {
+        "entries": [
+          "PRIVATE_RESTORE_HISTORY"
+        ]
+      },
+      "scope": {
+        "subject_refs": [
+          "input_scoped_material"
+        ]
+      },
+      "tools": [
+        {
+          "description": "Read the selected retained source byte window.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "offset": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "representation": {
+                "enum": [
+                  "original",
+                  "text"
+                ],
+                "type": "string"
+              },
+              "source_ref": {
+                "format": "reference",
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_ref",
+              "representation",
+              "offset",
+              "limit"
+            ],
+            "type": "object"
+          },
+          "name": "source.read"
+        }
+      ],
+      "waiting_support": {
+        "local_return_history": {
+          "samples": [
+            "PRIVATE_CHILD_HISTORY"
+          ]
+        },
+        "own_completed_action_history": [
+          "PRIVATE_OWN_HISTORY"
+        ]
+      },
+      "working_state": {
+        "references": [
+          {
+            "accession": "kinetic_subject_relationship_bc7ca47653d79b2065642ea4",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 214,
+              "quote": "Same subject and definition; separate assays; reported protocols.",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 149
+            },
+            "context_refs": [],
+            "id": "reference_104f27128b69d71c6d3e4cdd",
+            "label": "Same subject and definition; separate assays; reported protocols.",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_substrate_5af35b9b5805e0d3da94f8d1",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 42,
+              "quote": "substrateN",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 32
+            },
+            "context_refs": [],
+            "id": "reference_2abc42038bc8272bede81fda",
+            "label": "substrateN",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_substrate_c86156c07c49d6e138da631a",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 53,
+              "quote": "substrateD",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 43
+            },
+            "context_refs": [],
+            "id": "reference_4ed8dfb3d173f405a9bfd6dc",
+            "label": "substrateD",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_uncertainty_magnitude_ac5d5b9c52ed84962da22927",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 241,
+              "quote": "0.86421357",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 231
+            },
+            "context_refs": [],
+            "id": "reference_5cb86c585f27b334927332da",
+            "label": "0.86421357",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_measurement_3503bce88a80115e716e60f4",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 137,
+              "quote": "1.2342468",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 128
+            },
+            "context_refs": [],
+            "id": "reference_7cc654b80c32c89b6c68ba53",
+            "label": "1.2342468",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_uncertainty_count_5adf1d6c8f26d9b728574963",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 252,
+              "quote": "73",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 250
+            },
+            "context_refs": [],
+            "id": "reference_84bbd504a83fe195022006a9",
+            "label": "73",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_comparison_scope_bc7ca47653d79b2065642ea4",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 214,
+              "quote": "Same subject and definition; separate assays; reported protocols.",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 149
+            },
+            "context_refs": [],
+            "id": "reference_8a4f72bd331f5c5e8f0b9ee2",
+            "label": "Same subject and definition; separate assays; reported protocols.",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_conditions_217586d5fe9994cc7658301e",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 109,
+              "quote": "numerator 13.57902468 s^-1",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 83
+            },
+            "context_refs": [],
+            "id": "reference_a4c99d876309c831903fd091",
+            "label": "numerator 13.57902468 s^-1",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_molecule_de7b4361a3f5b2f29bd90692",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 20,
+              "quote": "ProteinFixture",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 6
+            },
+            "context_refs": [],
+            "id": "reference_b0212bc56d8d8b9c5ee66ceb",
+            "label": "ProteinFixture",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_parameter_kind_82d92ec9cdb506e0426dd6ae",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 75,
+              "quote": "kcat",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 71
+            },
+            "context_refs": [],
+            "id": "reference_c5c95adb766d2c76335b772c",
+            "label": "kcat",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_unit_ccc8cdefdde9ca1792282fe9",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 109,
+              "quote": "s^-1",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 105
+            },
+            "context_refs": [],
+            "id": "reference_df6eda6fddf09c9ca64d25fd",
+            "label": "s^-1",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_uncertainty_unit_ccc8cdefdde9ca1792282fe9",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 109,
+              "quote": "s^-1",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 105
+            },
+            "context_refs": [],
+            "id": "reference_eaa3cc74c87119ad9227e054",
+            "label": "s^-1",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_parameter_definition_relationship_bc7ca47653d79b2065642ea4",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 214,
+              "quote": "Same subject and definition; separate assays; reported protocols.",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 149
+            },
+            "context_refs": [],
+            "id": "reference_f0975495dce1345e77d1f29b",
+            "label": "Same subject and definition; separate assays; reported protocols.",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_unit_1aa3d9131c78f6ae98dab2de",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 142,
+              "quote": "s^-1",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 138
+            },
+            "context_refs": [],
+            "id": "reference_f417772a51b89e74af9febc8",
+            "label": "s^-1",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_substrate_arrangement_bc7ca47653d79b2065642ea4",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 214,
+              "quote": "Same subject and definition; separate assays; reported protocols.",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 149
+            },
+            "context_refs": [],
+            "id": "reference_f5ba3c88fd21e4271f8612dd",
+            "label": "Same subject and definition; separate assays; reported protocols.",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_qualification_bc7ca47653d79b2065642ea4",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 214,
+              "quote": "Same subject and definition; separate assays; reported protocols.",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 149
+            },
+            "context_refs": [],
+            "id": "reference_f74753c248575d9a8c691511",
+            "label": "Same subject and definition; separate assays; reported protocols.",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_construct_32272b34881a9ab9d29bcad6",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 31,
+              "quote": "constructX",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 21
+            },
+            "context_refs": [],
+            "id": "reference_f85197683231727f8fd84e6a",
+            "label": "constructX",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "kinetic_measurement_5ad1dc940d67580172f31935",
+            "anchor": {
+              "artifact_ref": "artifact_522e6418fec09fa3273f7f337596cbf3885a56b06f6c9cf586d32767dbad8a2f",
+              "end": 104,
+              "quote": "13.57902468",
+              "source_ref": "source_3ff751b21bf0d0d437162512",
+              "start": 93
+            },
+            "context_refs": [],
+            "id": "reference_f8dd8f9d257860221c7146b6",
+            "label": "13.57902468",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_3ff751b21bf0d0d437162512",
+            "term_refs": []
+          },
+          {
+            "accession": "unrelated",
+            "anchor": {
+              "artifact_ref": "artifact_91067a424e14d50cb54df975b1555fe1db88204712c8bba25be2bfb0313430f1",
+              "end": 27,
+              "quote": "unrelated source definition",
+              "source_ref": "source_07aae4f142b02ad726dd8cd1",
+              "start": 0
+            },
+            "context_refs": [],
+            "id": "reference_0841ffbb366fa06e87fb29f8",
+            "label": "unrelated source definition",
+            "length": null,
+            "molecule": null,
+            "origin": "tool",
+            "record_type": "reference",
+            "reference_type": "literature_result",
+            "sequence_ref": null,
+            "source_ref": "source_07aae4f142b02ad726dd8cd1",
+            "term_refs": []
+          }
+        ]
+      }
+    },
+    "removed_fields": []
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "fixture": {
+        "const": true
+      }
+    },
+    "required": [
+      "fixture"
+    ],
+    "additionalProperties": false
+  },
+  "started_at": "2026-10-28T01:55:05.914115+00:00",
+  "input": [
+    {
+      "type": "text",
+      "text": "TASK\n\nEvaluate what the assigned experimental sources establish about the reference molecule and its possible function. Keep the actual caller question, supplied material, scientific scope and constraints below as your job. A function can emerge from the evidence; an initial annotation or public searchable name is not required. Decide which uncertainty is useful to resolve next, choose among the permitted source operations and literature investigations, and revise your interpretation using actual outcomes.\n\nEstablish which organism, genotype, molecule, construct, preparation and experimental system each result concerns. Distinguish the source organism from an expression host, a tagged construct from a native molecule, and a reference preparation from the supplied annotation target. Preserve the actual measured entity, endpoint, units, normalization, comparison numerator and denominator, conditions, intended experimental change and controls. A shared name, source paper or equal number does not establish a common experiment or molecular identity.\n\nJudge the bearing of the measured endpoint on the specific functional assertion. Molecular conversion, transport and binding experiments answer different questions from growth, survival or other perturbation/restoration phenotypes. A recovery-growth result is not an enzyme activity measurement. A band-signal ratio is not calibrated molar or active protein amount. A no-inhibitor reference is not a no-enzyme blank. Oxygen consumption does not itself identify product formation or a quantitative productive coupling ratio. Keep the source's observation separate from the authors' inference and from your interpretation.\n\nKeep experimental comparability outside the deliberately tested difference separate from isolation of the measured effect. Ask which amounts or conditions could explain a comparison, whether molecules replace one another or coexist, and which contributors remain in a mixed readout. Similar conditions do not prove attribution. A complementary experiment can address a named weakness without becoming independent replication. Preserve contradictions and source-representation conflicts; measurements on different endpoints or conditions are not automatically inconsistent repeats.\n\nWhen a narrower literature investigation is useful, define its actual question, source scope, constraints and requested typed information. Ask for the numerical components and experimental relationships needed for your next decision, including relevant uncertainty, controls, unavailable reasons and source identity. Use the declared return projections to construct a closed form; retain actual reference meanings and select only the needed components. Children own their iterative source search, reading and interpretation choices. Their permitted relationships are alternatives, not a required itinerary, reading quota or automatic sequence.\n\nIntegrate only information actually received through your own outcomes or requested admitted child forms. A globally stored source or a reference needed for validation is not delivered scientific knowledge. Read scoped evidence when needed. Preserve units, bounds, uncertainty definitions, experimental meaning and dependence when comparing results. Missing values remain unknown; nondetection is not exact zero. Do not interchange SD, SEM, confidence intervals or untyped error bars. Convert them only when the required statistical information and assumptions support the calculation. Do not count technical repetitions as independent experiments or repeated representations as new evidence. Models identify source meanings and supported operands; deterministic operations perform parsing, validation, unit conversion and arithmetic.\n\nA numerical source-effect component evaluates its declared experiment and endpoint. It is not a probability of function, target annotation support or investigation-progress credit. Source findings may qualify or weaken a proposed function while still being useful information. Sequence/structural correspondence and later combination into annotation credit remain separate work. Do not invent target-transfer weights, reliability categories, missing controls, covariance or scientific progress. Do not manufacture target assessments merely to give source processing credit or hasten stopping.\n\nRetain valid partial results and actionable source limitations. Your task remains this parent investigation after a child return; the admitted return is evidence for your next decision, not another task prompt. Use ordinary reasoning to integrate findings and update only your declared typed report when one is requested. Do not add a second model call to restate recorded facts or compose a report. Source navigation, bookkeeping and report construction add no scientific contribution by themselves. The configured controller owns continuation; there is no source-completion gate or fixed action count.\n\nWhen requesting saved numerical experimental components from a child, copy the declared projection schema into your chosen top-level return field, including its exact `x-source` selector. Choose the needed components through the child assignment. Keep bound fact fields out of `initial_report_json`; the runtime fills them from saved results. Use separate constrained fields for interpretations and unresolved questions. Do not ask the child to rewrite saved numerical cells as model-authored report values.\n\nEvaluate the reference experiment iteratively within its assigned source scope.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After the requested information arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\nEach request supplies the complete task and current decision-relevant information. Current values replace earlier values, including yield expectations; prior estimates remain historical. A requested own-history lookup continues this same pending decision. Previously answered lookups remain answered after reconstruction; do not repeat them merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.\n\nAssigned source-evidence question\n\n| Field | Supplied value |\n| --- | --- |\n| objective | Evaluate the admitted source kinetic contrast |\n| task_context.constraint | Use the retained original source and preserve its actual assayed subject. |\n\nAssigned scientific scope\n\n| Field | Supplied value |\n| --- | --- |\n| subject_refs[0] | input_scoped_material |\n\nCaller-selected source assignment\n\n| Field | Supplied value |\n| --- | --- |\n| source_refs[0] | source_3ff751b21bf0d0d437162512 |\n\nAvailable own operations\n\n| Operation | Meaning |\n| --- | --- |\n| source.read | Read the selected retained source byte window. |\n\nOperands for source.read\n\n| Field | Presence | Type or constraint | Meaning or value |\n| --- | --- | --- | --- |\n| arguments | required | object |  |\n| arguments | constraint | additionalProperties | false |\n| arguments.limit | required | integer |  |\n| arguments.limit | constraint | minimum | 1 |\n| arguments.offset | required | integer |  |\n| arguments.offset | constraint | minimum | 0 |\n| arguments.representation | required | string |  |\n| arguments.representation | constraint | enum[0] | original |\n| arguments.representation | constraint | enum[1] | text |\n| arguments.source_ref | required | string; reference |  |\n\nPermitted child investigations and their construction\n\nliterature_strategy can compare search approaches for this assigned experimental question.\n\nInformation requested from this parent\n\nReturn the requested source-rate cells and necessary qualifications.\n\nThis parent's requested typed return\n\n| Field | Presence | Type or constraint | Meaning or value |\n| --- | --- | --- | --- |\n| return | required | object |  |\n| return | constraint | additionalProperties | false |\n| return.numbers | required | array | recorded fact from literature_kinetic_cells |\n| return.numbers[] | each item | object |  |\n| return.numbers[] | constraint | additionalProperties | false |\n| return.numbers[].approximate | required | boolean |  |\n| return.numbers[].comparison | required | object |  |\n| return.numbers[].comparison | constraint | additionalProperties | false |\n| return.numbers[].comparison.comparison_scope | required | object |  |\n| return.numbers[].comparison.comparison_scope | constraint | additionalProperties | false |\n| return.numbers[].comparison.comparison_scope.value | required | string |  |\n| return.numbers[].comparison.comparison_scope.value | constraint | enum[0] | reported_protocols |\n| return.numbers[].comparison.comparison_scope.value | constraint | enum[1] | common_conditions |\n| return.numbers[].comparison.comparison_scope.value | constraint | enum[2] | unknown |\n| return.numbers[].comparison.comparison_scope.value | constraint | enum[3] | conflicting |\n| return.numbers[].comparison.comparison_scope.witness_refs | required | array |  |\n| return.numbers[].comparison.comparison_scope.witness_refs | constraint | uniqueItems | true |\n| return.numbers[].comparison.comparison_scope.witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].comparison.nonintended_conditions_relationship | required | object |  |\n| return.numbers[].comparison.nonintended_conditions_relationship | constraint | additionalProperties | false |\n| return.numbers[].comparison.nonintended_conditions_relationship.value | required | string |  |\n| return.numbers[].comparison.nonintended_conditions_relationship.value | constraint | enum[0] | matched |\n| return.numbers[].comparison.nonintended_conditions_relationship.value | constraint | enum[1] | different |\n| return.numbers[].comparison.nonintended_conditions_relationship.value | constraint | enum[2] | unknown |\n| return.numbers[].comparison.nonintended_conditions_relationship.value | constraint | enum[3] | conflicting |\n| return.numbers[].comparison.nonintended_conditions_relationship.witness_refs | required | array |  |\n| return.numbers[].comparison.nonintended_conditions_relationship.witness_refs | constraint | uniqueItems | true |\n| return.numbers[].comparison.nonintended_conditions_relationship.witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].comparison.parameter_definition_relationship | required | object |  |\n| return.numbers[].comparison.parameter_definition_relationship | constraint | additionalProperties | false |\n| return.numbers[].comparison.parameter_definition_relationship.value | required | string |  |\n| return.numbers[].comparison.parameter_definition_relationship.value | constraint | enum[0] | same |\n| return.numbers[].comparison.parameter_definition_relationship.value | constraint | enum[1] | different |\n| return.numbers[].comparison.parameter_definition_relationship.value | constraint | enum[2] | unknown |\n| return.numbers[].comparison.parameter_definition_relationship.value | constraint | enum[3] | conflicting |\n| return.numbers[].comparison.parameter_definition_relationship.witness_refs | required | array |  |\n| return.numbers[].comparison.parameter_definition_relationship.witness_refs | constraint | uniqueItems | true |\n| return.numbers[].comparison.parameter_definition_relationship.witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].comparison.subject_relationship | required | object |  |\n| return.numbers[].comparison.subject_relationship | constraint | additionalProperties | false |\n| return.numbers[].comparison.subject_relationship.value | required | string |  |\n| return.numbers[].comparison.subject_relationship.value | constraint | enum[0] | same_molecule_and_construct |\n| return.numbers[].comparison.subject_relationship.value | constraint | enum[1] | different |\n| return.numbers[].comparison.subject_relationship.value | constraint | enum[2] | unknown |\n| return.numbers[].comparison.subject_relationship.value | constraint | enum[3] | conflicting |\n| return.numbers[].comparison.subject_relationship.witness_refs | required | array |  |\n| return.numbers[].comparison.subject_relationship.witness_refs | constraint | uniqueItems | true |\n| return.numbers[].comparison.subject_relationship.witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].comparison.substrate_arrangement | required | object |  |\n| return.numbers[].comparison.substrate_arrangement | constraint | additionalProperties | false |\n| return.numbers[].comparison.substrate_arrangement.value | required | string |  |\n| return.numbers[].comparison.substrate_arrangement.value | constraint | enum[0] | separate_assays |\n| return.numbers[].comparison.substrate_arrangement.value | constraint | enum[1] | mixed_substrates |\n| return.numbers[].comparison.substrate_arrangement.value | constraint | enum[2] | unknown |\n| return.numbers[].comparison.substrate_arrangement.value | constraint | enum[3] | conflicting |\n| return.numbers[].comparison.substrate_arrangement.witness_refs | required | array |  |\n| return.numbers[].comparison.substrate_arrangement.witness_refs | constraint | uniqueItems | true |\n| return.numbers[].comparison.substrate_arrangement.witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].component | required | string |  |\n| return.numbers[].component | constraint | enum[0] | numerator_parameter |\n| return.numbers[].component | constraint | enum[1] | denominator_parameter |\n| return.numbers[].component | constraint | enum[2] | parameter_difference |\n| return.numbers[].component | constraint | enum[3] | parameter_ratio |\n| return.numbers[].component | constraint | enum[4] | log_parameter_contrast |\n| return.numbers[].conditional_on | required | array |  |\n| return.numbers[].conditional_on | constraint | uniqueItems | true |\n| return.numbers[].conditional_on[] | each item | string |  |\n| return.numbers[].conditional_on[] | constraint | enum[0] | supplied_subject_and_parameter_relationships |\n| return.numbers[].conditional_on[] | constraint | enum[1] | reported_protocol_comparison |\n| return.numbers[].conditional_on[] | constraint | enum[2] | declared_common_conditions |\n| return.numbers[].conditional_on[] | constraint | enum[3] | supplied_log_covariance |\n| return.numbers[].conditional_on[] | constraint | enum[4] | known_normal_log_parameters |\n| return.numbers[].contrast_meaning | required | string |  |\n| return.numbers[].contrast_meaning | constraint | enum[0] | numerator_parameter_exceeds_denominator |\n| return.numbers[].denominator | required | object |  |\n| return.numbers[].denominator | constraint | additionalProperties | false |\n| return.numbers[].denominator.approximate | required | boolean or null |  |\n| return.numbers[].denominator.canonical_unit | required | string or null |  |\n| return.numbers[].denominator.canonical_unit | constraint | enum[0] | uM |\n| return.numbers[].denominator.canonical_unit | constraint | enum[1] | per_min |\n| return.numbers[].denominator.canonical_unit | constraint | enum[2] | uM_inverse_min_inverse |\n| return.numbers[].denominator.canonical_unit | constraint | enum[3] | null |\n| return.numbers[].denominator.context | required | object |  |\n| return.numbers[].denominator.context | constraint | additionalProperties | false |\n| return.numbers[].denominator.context.conditions | required | string or null; reference to reference |  |\n| return.numbers[].denominator.context.endpoint | required | string or null; reference to reference |  |\n| return.numbers[].denominator.context.experiment | required | string or null; reference to reference |  |\n| return.numbers[].denominator.context.experimental_system | required | string or null; reference to reference |  |\n| return.numbers[].denominator.context.normalization | required | string or null; reference to reference |  |\n| return.numbers[].denominator.context.preparation | required | string or null; reference to reference |  |\n| return.numbers[].denominator.context.substrate | required | string or null; reference to reference |  |\n| return.numbers[].denominator.converted_origin | required | string or null |  |\n| return.numbers[].denominator.converted_origin | constraint | enum[0] | reported |\n| return.numbers[].denominator.converted_origin | constraint | enum[1] | calculated |\n| return.numbers[].denominator.converted_origin | constraint | enum[2] | synthetic |\n| return.numbers[].denominator.converted_origin | constraint | enum[3] | null |\n| return.numbers[].denominator.input_status | required | string |  |\n| return.numbers[].denominator.input_status | constraint | enum[0] | point |\n| return.numbers[].denominator.input_status | constraint | enum[1] | censored |\n| return.numbers[].denominator.input_status | constraint | enum[2] | missing |\n| return.numbers[].denominator.input_status | constraint | enum[3] | conflicting |\n| return.numbers[].denominator.input_status | constraint | enum[4] | unresolved |\n| return.numbers[].denominator.input_unavailable_reasons | required | array |  |\n| return.numbers[].denominator.input_unavailable_reasons | constraint | uniqueItems | true |\n| return.numbers[].denominator.input_unavailable_reasons[] | each item | string |  |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[0] | source_measurement_unreported |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[1] | source_parameter_kind_unknown |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[2] | source_parameter_kind_conflicting |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[3] | source_kinetic_unit_unreported |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[4] | unsupported_source_kinetic_unit |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[5] | source_numeric_range |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[6] | source_operand_qualification_unknown |\n| return.numbers[].denominator.input_unavailable_reasons[] | constraint | enum[7] | source_operand_qualification_conflicting |\n| return.numbers[].denominator.measurement_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.measurement_source_ref | required | string or null; reference to source |  |\n| return.numbers[].denominator.numeric_tokens | required | array |  |\n| return.numbers[].denominator.numeric_tokens[] | each item | object |  |\n| return.numbers[].denominator.numeric_tokens[] | constraint | additionalProperties | false |\n| return.numbers[].denominator.numeric_tokens[].ref | required | string; reference to reference |  |\n| return.numbers[].denominator.numeric_tokens[].source_ref | required | string; reference to source |  |\n| return.numbers[].denominator.observed_relation | required | string or null |  |\n| return.numbers[].denominator.observed_relation | constraint | enum[0] | point |\n| return.numbers[].denominator.observed_relation | constraint | enum[1] | lt |\n| return.numbers[].denominator.observed_relation | constraint | enum[2] | le |\n| return.numbers[].denominator.observed_relation | constraint | enum[3] | gt |\n| return.numbers[].denominator.observed_relation | constraint | enum[4] | ge |\n| return.numbers[].denominator.observed_relation | constraint | enum[5] | null |\n| return.numbers[].denominator.parameter_kind | required | string |  |\n| return.numbers[].denominator.parameter_kind | constraint | enum[0] | Km |\n| return.numbers[].denominator.parameter_kind | constraint | enum[1] | kcat |\n| return.numbers[].denominator.parameter_kind | constraint | enum[2] | catalytic_efficiency |\n| return.numbers[].denominator.parameter_kind | constraint | enum[3] | unknown |\n| return.numbers[].denominator.parameter_kind | constraint | enum[4] | conflicting |\n| return.numbers[].denominator.parameter_kind_witness_refs | required | array |  |\n| return.numbers[].denominator.parameter_kind_witness_refs | constraint | uniqueItems | true |\n| return.numbers[].denominator.parameter_kind_witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].denominator.physical_observation_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.qualification | required | string |  |\n| return.numbers[].denominator.qualification | constraint | enum[0] | reported_point |\n| return.numbers[].denominator.qualification | constraint | enum[1] | source_qualified_approximate |\n| return.numbers[].denominator.qualification | constraint | enum[2] | unknown |\n| return.numbers[].denominator.qualification | constraint | enum[3] | conflicting |\n| return.numbers[].denominator.qualification_witness_refs | required | array |  |\n| return.numbers[].denominator.qualification_witness_refs | constraint | uniqueItems | true |\n| return.numbers[].denominator.qualification_witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].denominator.source_origin | required | string or null |  |\n| return.numbers[].denominator.source_origin | constraint | enum[0] | reported |\n| return.numbers[].denominator.source_origin | constraint | enum[1] | synthetic |\n| return.numbers[].denominator.source_origin | constraint | enum[2] | null |\n| return.numbers[].denominator.source_unit_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.subject | required | object |  |\n| return.numbers[].denominator.subject | constraint | additionalProperties | false |\n| return.numbers[].denominator.subject.construct | required | string or null; reference to reference |  |\n| return.numbers[].denominator.subject.genotype | required | string or null; reference to reference |  |\n| return.numbers[].denominator.subject.molecule | required | string or null; reference to reference |  |\n| return.numbers[].denominator.subject.organism | required | string or null; reference to reference |  |\n| return.numbers[].denominator.uncertainty | required | object |  |\n| return.numbers[].denominator.uncertainty | constraint | additionalProperties | false |\n| return.numbers[].denominator.uncertainty.canonical_unit | required | string or null |  |\n| return.numbers[].denominator.uncertainty.canonical_unit | constraint | enum[0] | uM |\n| return.numbers[].denominator.uncertainty.canonical_unit | constraint | enum[1] | per_min |\n| return.numbers[].denominator.uncertainty.canonical_unit | constraint | enum[2] | uM_inverse_min_inverse |\n| return.numbers[].denominator.uncertainty.canonical_unit | constraint | enum[3] | null |\n| return.numbers[].denominator.uncertainty.confidence_level_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.uncertainty.count_approximate | required | boolean or null |  |\n| return.numbers[].denominator.uncertainty.count_notation | required | string or null |  |\n| return.numbers[].denominator.uncertainty.count_notation | constraint | enum[0] | decimal_digits |\n| return.numbers[].denominator.uncertainty.count_notation | constraint | enum[1] | english_cardinal |\n| return.numbers[].denominator.uncertainty.count_notation | constraint | enum[2] | unsupported |\n| return.numbers[].denominator.uncertainty.count_notation | constraint | enum[3] | null |\n| return.numbers[].denominator.uncertainty.count_reading_status | required | string |  |\n| return.numbers[].denominator.uncertainty.count_reading_status | constraint | enum[0] | not_selected |\n| return.numbers[].denominator.uncertainty.count_reading_status | constraint | enum[1] | exact |\n| return.numbers[].denominator.uncertainty.count_reading_status | constraint | enum[2] | qualified |\n| return.numbers[].denominator.uncertainty.count_reading_status | constraint | enum[3] | range_or_alternatives |\n| return.numbers[].denominator.uncertainty.count_reading_status | constraint | enum[4] | unsupported |\n| return.numbers[].denominator.uncertainty.count_reading_status | constraint | enum[5] | not_positive |\n| return.numbers[].denominator.uncertainty.count_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.uncertainty.count_relation | required | string or null |  |\n| return.numbers[].denominator.uncertainty.count_relation | constraint | enum[0] | point |\n| return.numbers[].denominator.uncertainty.count_relation | constraint | enum[1] | lt |\n| return.numbers[].denominator.uncertainty.count_relation | constraint | enum[2] | le |\n| return.numbers[].denominator.uncertainty.count_relation | constraint | enum[3] | gt |\n| return.numbers[].denominator.uncertainty.count_relation | constraint | enum[4] | ge |\n| return.numbers[].denominator.uncertainty.count_relation | constraint | enum[5] | unresolved |\n| return.numbers[].denominator.uncertainty.count_relation | constraint | enum[6] | null |\n| return.numbers[].denominator.uncertainty.count_unavailable_reason | required | string or null |  |\n| return.numbers[].denominator.uncertainty.count_unavailable_reason | constraint | enum[0] | exact_count_qualified |\n| return.numbers[].denominator.uncertainty.count_unavailable_reason | constraint | enum[1] | count_range_or_alternatives |\n| return.numbers[].denominator.uncertainty.count_unavailable_reason | constraint | enum[2] | unsupported_count_literal |\n| return.numbers[].denominator.uncertainty.count_unavailable_reason | constraint | enum[3] | positive_count_required |\n| return.numbers[].denominator.uncertainty.count_unavailable_reason | constraint | enum[4] | null |\n| return.numbers[].denominator.uncertainty.estimate_basis | required | string |  |\n| return.numbers[].denominator.uncertainty.estimate_basis | constraint | enum[0] | fit_to_averaged_curve |\n| return.numbers[].denominator.uncertainty.estimate_basis | constraint | enum[1] | between_fitted_parameters |\n| return.numbers[].denominator.uncertainty.estimate_basis | constraint | enum[2] | unknown |\n| return.numbers[].denominator.uncertainty.interval_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.uncertainty.magnitude_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.uncertainty.repetition_basis | required | string |  |\n| return.numbers[].denominator.uncertainty.repetition_basis | constraint | enum[0] | biological_preparations |\n| return.numbers[].denominator.uncertainty.repetition_basis | constraint | enum[1] | technical_measurements |\n| return.numbers[].denominator.uncertainty.repetition_basis | constraint | enum[2] | unspecified |\n| return.numbers[].denominator.uncertainty.statistic | required | string |  |\n| return.numbers[].denominator.uncertainty.statistic | constraint | enum[0] | sd |\n| return.numbers[].denominator.uncertainty.statistic | constraint | enum[1] | sem |\n| return.numbers[].denominator.uncertainty.statistic | constraint | enum[2] | ci |\n| return.numbers[].denominator.uncertainty.statistic | constraint | enum[3] | unspecified |\n| return.numbers[].denominator.uncertainty.statistic | constraint | enum[4] | unreported |\n| return.numbers[].denominator.uncertainty.unavailable_reason | required | string or null |  |\n| return.numbers[].denominator.uncertainty.unavailable_reason | constraint | enum[0] | source_uncertainty_unit_unavailable |\n| return.numbers[].denominator.uncertainty.unavailable_reason | constraint | enum[1] | source_numeric_range |\n| return.numbers[].denominator.uncertainty.unavailable_reason | constraint | enum[2] | null |\n| return.numbers[].denominator.uncertainty.unit_ref | required | string or null; reference to reference |  |\n| return.numbers[].denominator.uncertainty_values | required | object |  |\n| return.numbers[].denominator.uncertainty_values | constraint | additionalProperties | false |\n| return.numbers[].denominator.uncertainty_values.confidence_level | required | number or null |  |\n| return.numbers[].denominator.uncertainty_values.count | required | integer or null |  |\n| return.numbers[].denominator.uncertainty_values.count | constraint | minimum | 1 |\n| return.numbers[].denominator.uncertainty_values.count_reported_value | required | integer or null |  |\n| return.numbers[].denominator.uncertainty_values.delivery_status | required | string |  |\n| return.numbers[].denominator.uncertainty_values.delivery_status | constraint | enum[0] | requested |\n| return.numbers[].denominator.uncertainty_values.delivery_status | constraint | enum[1] | not_requested |\n| return.numbers[].denominator.uncertainty_values.interval | required | array or null |  |\n| return.numbers[].denominator.uncertainty_values.interval | constraint | maxItems | 2 |\n| return.numbers[].denominator.uncertainty_values.interval | constraint | minItems | 2 |\n| return.numbers[].denominator.uncertainty_values.interval[] | each item | number |  |\n| return.numbers[].denominator.uncertainty_values.magnitude | required | number or null |  |\n| return.numbers[].evaluation_scope | required | string |  |\n| return.numbers[].evaluation_scope | constraint | enum[0] | source_kinetic_parameter_contrast |\n| return.numbers[].evidence_source_ref | required | string; reference to source |  |\n| return.numbers[].formula_code | required | string |  |\n| return.numbers[].formula_code | constraint | enum[0] | kinetic_numerator_parameter |\n| return.numbers[].formula_code | constraint | enum[1] | kinetic_denominator_parameter |\n| return.numbers[].formula_code | constraint | enum[2] | kinetic_parameter_difference |\n| return.numbers[].formula_code | constraint | enum[3] | kinetic_parameter_ratio |\n| return.numbers[].formula_code | constraint | enum[4] | kinetic_log_parameter_contrast |\n| return.numbers[].model_input_status | required | string |  |\n| return.numbers[].model_input_status | constraint | enum[0] | not_supplied_by_native_operation |\n| return.numbers[].model_reader_capability | required | string |  |\n| return.numbers[].model_reader_capability | constraint | enum[0] | unimplemented |\n| return.numbers[].numerator | required | object |  |\n| return.numbers[].numerator | constraint | additionalProperties | false |\n| return.numbers[].numerator.approximate | required | boolean or null |  |\n| return.numbers[].numerator.canonical_unit | required | string or null |  |\n| return.numbers[].numerator.canonical_unit | constraint | enum[0] | uM |\n| return.numbers[].numerator.canonical_unit | constraint | enum[1] | per_min |\n| return.numbers[].numerator.canonical_unit | constraint | enum[2] | uM_inverse_min_inverse |\n| return.numbers[].numerator.canonical_unit | constraint | enum[3] | null |\n| return.numbers[].numerator.context | required | object |  |\n| return.numbers[].numerator.context | constraint | additionalProperties | false |\n| return.numbers[].numerator.context.conditions | required | string or null; reference to reference |  |\n| return.numbers[].numerator.context.endpoint | required | string or null; reference to reference |  |\n| return.numbers[].numerator.context.experiment | required | string or null; reference to reference |  |\n| return.numbers[].numerator.context.experimental_system | required | string or null; reference to reference |  |\n| return.numbers[].numerator.context.normalization | required | string or null; reference to reference |  |\n| return.numbers[].numerator.context.preparation | required | string or null; reference to reference |  |\n| return.numbers[].numerator.context.substrate | required | string or null; reference to reference |  |\n| return.numbers[].numerator.converted_origin | required | string or null |  |\n| return.numbers[].numerator.converted_origin | constraint | enum[0] | reported |\n| return.numbers[].numerator.converted_origin | constraint | enum[1] | calculated |\n| return.numbers[].numerator.converted_origin | constraint | enum[2] | synthetic |\n| return.numbers[].numerator.converted_origin | constraint | enum[3] | null |\n| return.numbers[].numerator.input_status | required | string |  |\n| return.numbers[].numerator.input_status | constraint | enum[0] | point |\n| return.numbers[].numerator.input_status | constraint | enum[1] | censored |\n| return.numbers[].numerator.input_status | constraint | enum[2] | missing |\n| return.numbers[].numerator.input_status | constraint | enum[3] | conflicting |\n| return.numbers[].numerator.input_status | constraint | enum[4] | unresolved |\n| return.numbers[].numerator.input_unavailable_reasons | required | array |  |\n| return.numbers[].numerator.input_unavailable_reasons | constraint | uniqueItems | true |\n| return.numbers[].numerator.input_unavailable_reasons[] | each item | string |  |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[0] | source_measurement_unreported |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[1] | source_parameter_kind_unknown |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[2] | source_parameter_kind_conflicting |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[3] | source_kinetic_unit_unreported |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[4] | unsupported_source_kinetic_unit |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[5] | source_numeric_range |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[6] | source_operand_qualification_unknown |\n| return.numbers[].numerator.input_unavailable_reasons[] | constraint | enum[7] | source_operand_qualification_conflicting |\n| return.numbers[].numerator.measurement_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.measurement_source_ref | required | string or null; reference to source |  |\n| return.numbers[].numerator.numeric_tokens | required | array |  |\n| return.numbers[].numerator.numeric_tokens[] | each item | object |  |\n| return.numbers[].numerator.numeric_tokens[] | constraint | additionalProperties | false |\n| return.numbers[].numerator.numeric_tokens[].ref | required | string; reference to reference |  |\n| return.numbers[].numerator.numeric_tokens[].source_ref | required | string; reference to source |  |\n| return.numbers[].numerator.observed_relation | required | string or null |  |\n| return.numbers[].numerator.observed_relation | constraint | enum[0] | point |\n| return.numbers[].numerator.observed_relation | constraint | enum[1] | lt |\n| return.numbers[].numerator.observed_relation | constraint | enum[2] | le |\n| return.numbers[].numerator.observed_relation | constraint | enum[3] | gt |\n| return.numbers[].numerator.observed_relation | constraint | enum[4] | ge |\n| return.numbers[].numerator.observed_relation | constraint | enum[5] | null |\n| return.numbers[].numerator.parameter_kind | required | string |  |\n| return.numbers[].numerator.parameter_kind | constraint | enum[0] | Km |\n| return.numbers[].numerator.parameter_kind | constraint | enum[1] | kcat |\n| return.numbers[].numerator.parameter_kind | constraint | enum[2] | catalytic_efficiency |\n| return.numbers[].numerator.parameter_kind | constraint | enum[3] | unknown |\n| return.numbers[].numerator.parameter_kind | constraint | enum[4] | conflicting |\n| return.numbers[].numerator.parameter_kind_witness_refs | required | array |  |\n| return.numbers[].numerator.parameter_kind_witness_refs | constraint | uniqueItems | true |\n| return.numbers[].numerator.parameter_kind_witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].numerator.physical_observation_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.qualification | required | string |  |\n| return.numbers[].numerator.qualification | constraint | enum[0] | reported_point |\n| return.numbers[].numerator.qualification | constraint | enum[1] | source_qualified_approximate |\n| return.numbers[].numerator.qualification | constraint | enum[2] | unknown |\n| return.numbers[].numerator.qualification | constraint | enum[3] | conflicting |\n| return.numbers[].numerator.qualification_witness_refs | required | array |  |\n| return.numbers[].numerator.qualification_witness_refs | constraint | uniqueItems | true |\n| return.numbers[].numerator.qualification_witness_refs[] | each item | string; reference to reference |  |\n| return.numbers[].numerator.source_origin | required | string or null |  |\n| return.numbers[].numerator.source_origin | constraint | enum[0] | reported |\n| return.numbers[].numerator.source_origin | constraint | enum[1] | synthetic |\n| return.numbers[].numerator.source_origin | constraint | enum[2] | null |\n| return.numbers[].numerator.source_unit_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.subject | required | object |  |\n| return.numbers[].numerator.subject | constraint | additionalProperties | false |\n| return.numbers[].numerator.subject.construct | required | string or null; reference to reference |  |\n| return.numbers[].numerator.subject.genotype | required | string or null; reference to reference |  |\n| return.numbers[].numerator.subject.molecule | required | string or null; reference to reference |  |\n| return.numbers[].numerator.subject.organism | required | string or null; reference to reference |  |\n| return.numbers[].numerator.uncertainty | required | object |  |\n| return.numbers[].numerator.uncertainty | constraint | additionalProperties | false |\n| return.numbers[].numerator.uncertainty.canonical_unit | required | string or null |  |\n| return.numbers[].numerator.uncertainty.canonical_unit | constraint | enum[0] | uM |\n| return.numbers[].numerator.uncertainty.canonical_unit | constraint | enum[1] | per_min |\n| return.numbers[].numerator.uncertainty.canonical_unit | constraint | enum[2] | uM_inverse_min_inverse |\n| return.numbers[].numerator.uncertainty.canonical_unit | constraint | enum[3] | null |\n| return.numbers[].numerator.uncertainty.confidence_level_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.uncertainty.count_approximate | required | boolean or null |  |\n| return.numbers[].numerator.uncertainty.count_notation | required | string or null |  |\n| return.numbers[].numerator.uncertainty.count_notation | constraint | enum[0] | decimal_digits |\n| return.numbers[].numerator.uncertainty.count_notation | constraint | enum[1] | english_cardinal |\n| return.numbers[].numerator.uncertainty.count_notation | constraint | enum[2] | unsupported |\n| return.numbers[].numerator.uncertainty.count_notation | constraint | enum[3] | null |\n| return.numbers[].numerator.uncertainty.count_reading_status | required | string |  |\n| return.numbers[].numerator.uncertainty.count_reading_status | constraint | enum[0] | not_selected |\n| return.numbers[].numerator.uncertainty.count_reading_status | constraint | enum[1] | exact |\n| return.numbers[].numerator.uncertainty.count_reading_status | constraint | enum[2] | qualified |\n| return.numbers[].numerator.uncertainty.count_reading_status | constraint | enum[3] | range_or_alternatives |\n| return.numbers[].numerator.uncertainty.count_reading_status | constraint | enum[4] | unsupported |\n| return.numbers[].numerator.uncertainty.count_reading_status | constraint | enum[5] | not_positive |\n| return.numbers[].numerator.uncertainty.count_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.uncertainty.count_relation | required | string or null |  |\n| return.numbers[].numerator.uncertainty.count_relation | constraint | enum[0] | point |\n| return.numbers[].numerator.uncertainty.count_relation | constraint | enum[1] | lt |\n| return.numbers[].numerator.uncertainty.count_relation | constraint | enum[2] | le |\n| return.numbers[].numerator.uncertainty.count_relation | constraint | enum[3] | gt |\n| return.numbers[].numerator.uncertainty.count_relation | constraint | enum[4] | ge |\n| return.numbers[].numerator.uncertainty.count_relation | constraint | enum[5] | unresolved |\n| return.numbers[].numerator.uncertainty.count_relation | constraint | enum[6] | null |\n| return.numbers[].numerator.uncertainty.count_unavailable_reason | required | string or null |  |\n| return.numbers[].numerator.uncertainty.count_unavailable_reason | constraint | enum[0] | exact_count_qualified |\n| return.numbers[].numerator.uncertainty.count_unavailable_reason | constraint | enum[1] | count_range_or_alternatives |\n| return.numbers[].numerator.uncertainty.count_unavailable_reason | constraint | enum[2] | unsupported_count_literal |\n| return.numbers[].numerator.uncertainty.count_unavailable_reason | constraint | enum[3] | positive_count_required |\n| return.numbers[].numerator.uncertainty.count_unavailable_reason | constraint | enum[4] | null |\n| return.numbers[].numerator.uncertainty.estimate_basis | required | string |  |\n| return.numbers[].numerator.uncertainty.estimate_basis | constraint | enum[0] | fit_to_averaged_curve |\n| return.numbers[].numerator.uncertainty.estimate_basis | constraint | enum[1] | between_fitted_parameters |\n| return.numbers[].numerator.uncertainty.estimate_basis | constraint | enum[2] | unknown |\n| return.numbers[].numerator.uncertainty.interval_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.uncertainty.magnitude_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.uncertainty.repetition_basis | required | string |  |\n| return.numbers[].numerator.uncertainty.repetition_basis | constraint | enum[0] | biological_preparations |\n| return.numbers[].numerator.uncertainty.repetition_basis | constraint | enum[1] | technical_measurements |\n| return.numbers[].numerator.uncertainty.repetition_basis | constraint | enum[2] | unspecified |\n| return.numbers[].numerator.uncertainty.statistic | required | string |  |\n| return.numbers[].numerator.uncertainty.statistic | constraint | enum[0] | sd |\n| return.numbers[].numerator.uncertainty.statistic | constraint | enum[1] | sem |\n| return.numbers[].numerator.uncertainty.statistic | constraint | enum[2] | ci |\n| return.numbers[].numerator.uncertainty.statistic | constraint | enum[3] | unspecified |\n| return.numbers[].numerator.uncertainty.statistic | constraint | enum[4] | unreported |\n| return.numbers[].numerator.uncertainty.unavailable_reason | required | string or null |  |\n| return.numbers[].numerator.uncertainty.unavailable_reason | constraint | enum[0] | source_uncertainty_unit_unavailable |\n| return.numbers[].numerator.uncertainty.unavailable_reason | constraint | enum[1] | source_numeric_range |\n| return.numbers[].numerator.uncertainty.unavailable_reason | constraint | enum[2] | null |\n| return.numbers[].numerator.uncertainty.unit_ref | required | string or null; reference to reference |  |\n| return.numbers[].numerator.uncertainty_values | required | object |  |\n| return.numbers[].numerator.uncertainty_values | constraint | additionalProperties | false |\n| return.numbers[].numerator.uncertainty_values.confidence_level | required | number or null |  |\n| return.numbers[].numerator.uncertainty_values.count | required | integer or null |  |\n| return.numbers[].numerator.uncertainty_values.count | constraint | minimum | 1 |\n| return.numbers[].numerator.uncertainty_values.count_reported_value | required | integer or null |  |\n| return.numbers[].numerator.uncertainty_values.delivery_status | required | string |  |\n| return.numbers[].numerator.uncertainty_values.delivery_status | constraint | enum[0] | requested |\n| return.numbers[].numerator.uncertainty_values.delivery_status | constraint | enum[1] | not_requested |\n| return.numbers[].numerator.uncertainty_values.interval | required | array or null |  |\n| return.numbers[].numerator.uncertainty_values.interval | constraint | maxItems | 2 |\n| return.numbers[].numerator.uncertainty_values.interval | constraint | minItems | 2 |\n| return.numbers[].numerator.uncertainty_values.interval[] | each item | number |  |\n| return.numbers[].numerator.uncertainty_values.magnitude | required | number or null |  |\n| return.numbers[].origin | required | string |  |\n| return.numbers[].origin | constraint | enum[0] | reported |\n| return.numbers[].origin | constraint | enum[1] | calculated |\n| return.numbers[].origin | constraint | enum[2] | synthetic |\n| return.numbers[].origin | constraint | enum[3] | derived |\n| return.numbers[].relation | required | string |  |\n| return.numbers[].relation | constraint | enum[0] | eq |\n| return.numbers[].relation | constraint | enum[1] | lt |\n| return.numbers[].relation | constraint | enum[2] | le |\n| return.numbers[].relation | constraint | enum[3] | gt |\n| return.numbers[].relation | constraint | enum[4] | ge |\n| return.numbers[].relation | constraint | enum[5] | none |\n| return.numbers[].sheet_ref | required | string; reference to source |  |\n| return.numbers[].status | required | string |  |\n| return.numbers[].status | constraint | enum[0] | populated |\n| return.numbers[].status | constraint | enum[1] | unavailable |\n| return.numbers[].threshold | required | number or null |  |\n| return.numbers[].unavailable_reason | required | string or null |  |\n| return.numbers[].unavailable_reason | constraint | enum[0] | source_measurement_unreported |\n| return.numbers[].unavailable_reason | constraint | enum[1] | source_kinetic_unit_unreported |\n| return.numbers[].unavailable_reason | constraint | enum[2] | unsupported_source_kinetic_unit |\n| return.numbers[].unavailable_reason | constraint | enum[3] | source_operand_qualification_unknown |\n| return.numbers[].unavailable_reason | constraint | enum[4] | source_operand_qualification_conflicting |\n| return.numbers[].unavailable_reason | constraint | enum[5] | source_numeric_range |\n| return.numbers[].unavailable_reason | constraint | enum[6] | numerator_measurement_missing |\n| return.numbers[].unavailable_reason | constraint | enum[7] | denominator_measurement_missing |\n| return.numbers[].unavailable_reason | constraint | enum[8] | source_measurement_missing |\n| return.numbers[].unavailable_reason | constraint | enum[9] | censored_measurement |\n| return.numbers[].unavailable_reason | constraint | enum[10] | conflicting_measurement |\n| return.numbers[].unavailable_reason | constraint | enum[11] | parameter_kind_mismatch |\n| return.numbers[].unavailable_reason | constraint | enum[12] | subject_relationship_different |\n| return.numbers[].unavailable_reason | constraint | enum[13] | subject_relationship_unknown |\n| return.numbers[].unavailable_reason | constraint | enum[14] | subject_relationship_conflicting |\n| return.numbers[].unavailable_reason | constraint | enum[15] | parameter_definition_relationship_different |\n| return.numbers[].unavailable_reason | constraint | enum[16] | parameter_definition_relationship_unknown |\n| return.numbers[].unavailable_reason | constraint | enum[17] | parameter_definition_relationship_conflicting |\n| return.numbers[].unavailable_reason | constraint | enum[18] | mixed_substrates_unsupported |\n| return.numbers[].unavailable_reason | constraint | enum[19] | substrate_arrangement_unknown |\n| return.numbers[].unavailable_reason | constraint | enum[20] | substrate_arrangement_conflicting |\n| return.numbers[].unavailable_reason | constraint | enum[21] | comparison_scope_unknown |\n| return.numbers[].unavailable_reason | constraint | enum[22] | comparison_scope_conflicting |\n| return.numbers[].unavailable_reason | constraint | enum[23] | common_conditions_not_matched |\n| return.numbers[].unavailable_reason | constraint | enum[24] | reused_source_observation |\n| return.numbers[].unavailable_reason | constraint | enum[25] | conflicting_source_observation |\n| return.numbers[].unavailable_reason | constraint | enum[26] | zero_denominator_parameter |\n| return.numbers[].unavailable_reason | constraint | enum[27] | positive_parameters_required_for_log |\n| return.numbers[].unavailable_reason | constraint | enum[28] | kinetic_log_model_unreported |\n| return.numbers[].unavailable_reason | constraint | enum[29] | covariance_status_unknown |\n| return.numbers[].unavailable_reason | constraint | enum[30] | known_log_covariance_required |\n| return.numbers[].unavailable_reason | constraint | enum[31] | kinetic_observation_model_unspecified |\n| return.numbers[].unavailable_reason | constraint | enum[32] | approximate_parameter_model_unsupported |\n| return.numbers[].unavailable_reason | constraint | enum[33] | positive_log_contrast_variance_required |\n| return.numbers[].unavailable_reason | constraint | enum[34] | numerical_model_range |\n| return.numbers[].unavailable_reason | constraint | enum[35] | null |\n| return.numbers[].unit | required | string or null |  |\n| return.numbers[].unit | constraint | enum[0] | uM |\n| return.numbers[].unit | constraint | enum[1] | per_min |\n| return.numbers[].unit | constraint | enum[2] | uM_inverse_min_inverse |\n| return.numbers[].unit | constraint | enum[3] | dimensionless |\n| return.numbers[].unit | constraint | enum[4] | null |\n| return.numbers[].value | required | number or null |  |\n\nAvailable source-evidence return meanings\n\n| Source | Meaning |\n| --- | --- |\n| literature_rate_cells | Source endpoint statistics, not an annotation probability or transfer score. |\n\nSTEERING\n\nOwn action yields\n\n| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |\n| --- | --- | --- | --- | --- | --- |\n| tool/source.read | 2 | -0.25 | unavailable | parameters_unbound | 1 |\n\nCurrent continuation expectation\n\n| Completed actions | Expected next gain | Uncertainty | Continuation cost |\n| --- | --- | --- | --- |\n| 2 | 0.5 | lower=-0.1; upper=0.9; approximate Laplace model band; alpha=0.05 | 0.001 |\n\nRelevant received experimental facts\n\n| Record | Scientific type | Received scientific meaning and relationships | Selected excerpt |\n| --- | --- | --- | --- |\n| Entity 1 | reference | accession=unrelated; context_refs=none supplied; label=unrelated source definition; length=unknown; molecule=unknown; origin=tool; reference_type=literature_result; term_refs=none supplied; source identity=Source handle 1; sequence association=unknown | Passage 1 |\n| Entity 2 | reference | context_refs=none supplied; label=substrateD; length=unknown; molecule=unknown; origin=tool; reference_type=literature_result; term_refs=none supplied; source identity=Source handle 2; sequence association=unknown | Passage 2 |\n| Entity 3 | reference | context_refs=none supplied; label=constructX; length=unknown; molecule=unknown; origin=tool; reference_type=literature_result; term_refs=none supplied; source identity=Source handle 2; sequence association=unknown | Passage 3 |\n| Entity 4 | reference | context_refs=none supplied; label=ProteinFixture; length=unknown; molecule=unknown; origin=tool; reference_type=literature_result; term_refs=none supplied; source identity=Source handle 2; sequence association=unknown | Passage 4 |\n| Entity 5 | reference | context_refs=none supplied; label=substrateN; length=unknown; molecule=unknown; origin=tool; reference_type=literature_result; term_refs=none supplied; source identity=Source handle 2; sequence association=unknown | Passage 5 |\n\nSelected received source excerpts\n\n| Excerpt | Already received source text |\n| --- | --- |\n| Passage 1 | unrelated source definition |\n| Passage 2 | substrateD |\n| Passage 3 | constructX |\n| Passage 4 | ProteinFixture |\n| Passage 5 | substrateN |\n\nLocal scientific links\n\nRecord and excerpt labels identify this display; they do not establish independent experiments.\n\nAdmitted requested kinetic parameter components\n\n| Component | Value | Unit | Status | Reported relation | Threshold | Approximate | Unavailable reason | Origin |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| parameter_ratio | 11.001871489559463 | dimensionless | populated | none | unknown | false | unknown | derived |\n\nKinetic comparison meaning\n\n| Field | Supplied value |\n| --- | --- |\n| evaluation_scope | source_kinetic_parameter_contrast |\n| contrast_meaning | numerator_parameter_exceeds_denominator |\n| model_input_status | not_supplied_by_native_operation |\n| model_reader_capability | unimplemented |\n\nSelected kinetic experimental relationships\n\n| Meaning | Selected interpretation |\n| --- | --- |\n| comparison_scope | reported_protocols |\n| nonintended_conditions_relationship | unknown |\n| parameter_definition_relationship | same |\n| subject_relationship | same_molecule_and_construct |\n| substrate_arrangement | separate_assays |\n\nNumerator kinetic parameter meaning\n\n| Field | Supplied value |\n| --- | --- |\n| parameter_kind | kcat |\n| canonical_unit | per_min |\n| qualification | reported_point |\n| approximate | false |\n| input_status | point |\n| observed_relation | point |\n| source_origin | synthetic |\n| converted_origin | synthetic |\n| input_unavailable_reasons | none supplied |\n\nNumerator source subject and experimental context\n\n| Meaning | Source definition |\n| --- | --- |\n| construct | constructX |\n| genotype | unknown |\n| molecule | ProteinFixture |\n| organism | unknown |\n| conditions | source-bound witness retained for scoped access |\n| endpoint | unknown |\n| experiment | unknown |\n| experimental_system | unknown |\n| normalization | unknown |\n| preparation | unknown |\n| substrate | substrateN |\n\nNumerator source observation identity\n\n| Meaning | Source definition |\n| --- | --- |\n| physical observation | unknown |\n\nNumerator reported uncertainty meaning\n\n| Field | Supplied value |\n| --- | --- |\n| statistic | sd |\n| canonical_unit | per_min |\n| repetition_basis | technical_measurements |\n| estimate_basis | unknown |\n| unavailable_reason | unknown |\n| count_reading_status | exact |\n| count_unavailable_reason | unknown |\n| count_notation | decimal_digits |\n| count_relation | point |\n| count_approximate | false |\n\nDenominator kinetic parameter meaning\n\n| Field | Supplied value |\n| --- | --- |\n| parameter_kind | kcat |\n| canonical_unit | per_min |\n| qualification | reported_point |\n| approximate | false |\n| input_status | point |\n| observed_relation | point |\n| source_origin | synthetic |\n| converted_origin | synthetic |\n| input_unavailable_reasons | none supplied |\n\nDenominator source subject and experimental context\n\n| Meaning | Source definition |\n| --- | --- |\n| construct | constructX |\n| genotype | unknown |\n| molecule | ProteinFixture |\n| organism | unknown |\n| conditions | unknown |\n| endpoint | unknown |\n| experiment | unknown |\n| experimental_system | unknown |\n| normalization | unknown |\n| preparation | unknown |\n| substrate | substrateD |\n\nDenominator source observation identity\n\n| Meaning | Source definition |\n| --- | --- |\n| physical observation | unknown |\n\nDenominator reported uncertainty meaning\n\n| Field | Supplied value |\n| --- | --- |\n| statistic | unreported |\n| canonical_unit | unknown |\n| repetition_basis | unspecified |\n| estimate_basis | unknown |\n| unavailable_reason | unknown |\n| count_reading_status | not_selected |\n| count_unavailable_reason | unknown |\n| count_notation | unknown |\n| count_relation | unknown |\n| count_approximate | unknown |\n\nRequested kinetic calculation definitions\n\n| Component | Meaning |\n| --- | --- |\n| parameter_ratio | numerator parameter divided by denominator parameter |"
+    }
+  ],
+  "model_instructions": "Evaluate the reference experiment iteratively within its assigned source scope.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After the requested information arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\nEach request supplies the complete task and current decision-relevant information. Current values replace earlier values, including yield expectations; prior estimates remain historical. A requested own-history lookup continues this same pending decision. Previously answered lookups remain answered after reconstruction; do not repeat them merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts."
+}

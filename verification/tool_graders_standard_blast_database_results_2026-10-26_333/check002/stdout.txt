@@ -1,0 +1,74 @@
+..............................FF...........................              [100%]
+=================================== FAILURES ===================================
+_________________ test_R5_taxa_A_A_B_and_independent_target_A __________________
+
+    def test_R5_taxa_A_A_B_and_independent_target_A():
+        inputs = fixture(doc=report(hits=[hit(), hit(1), hit(2)]))
+        payload = numerical_metadata(inputs, sequences=("ACDEFGHIKL", "ACDEPQRSTV", "ACDEFGHIKM"), indices=(0, 1, 2), census=False)
+        for i, row in enumerate(payload["searches"][0]["reference_metadata"]):
+            row["lineage"] = [dict(rank="genus", taxid=10 if i < 2 else 20, name=None)]
+        add_metadata(inputs, payload, "sequence_database")
+        target = query_payload(); source = received(inputs, "independent-target", encoded(dict(taxid=10)))
+        target["documents"] = [source]
+        target["target_contexts"] = [dict(search_key=address(), taxid=10, lineage=[dict(rank="genus", taxid=10, name=None)],
+            independent_of_search=True, source=dict(source_ref=source["document_key"], pointer=""))]
+        add_metadata(inputs, target, "query_identity", "target-meta")
+        _, _, rows = calculate(inputs)
+        row = next(r for r in family(rows, "sequence_taxonomy") if r["identity"]["function"] is None and r["identity"]["rank"] == "genus")
+        assert cell(row, "same_taxon_pair_count")["value"] == 1
+>       assert cell(row, "comparable_pair_count")["value"] == 3
+E       assert 1 == 3
+
+../../../tests/test_native_blast_standard_database_calculators.py:288: AssertionError
+___________ test_R6_assembly_percentages_original_source_and_method ____________
+
+    def test_R6_assembly_percentages_original_source_and_method():
+        from gene_annotation_episode.blast_reference_metadata import read_ncbi_assembly_metadata
+        inputs = fixture(); payload = numerical_metadata(inputs, census=False)
+        native = dict(accession="GCA_SYNTHETIC.1", checkmInfo=dict(completeness=95, contamination=125, checkmVersion="synthetic-version"),
+            assemblyStats=dict(numberOfContigs="3", contigN50="12000", totalSequenceLength="31000"))
+        source = received(inputs, "assembly", encoded(native)); link = received(inputs, "assembly-link", encoded(dict(reference="S0.1", assembly="GCA_SYNTHETIC.1")))
+        payload["documents"] += [source, link]
+        extracted = read_ncbi_assembly_metadata(native, reference_accession="S0.1", assembly_accession="GCA_SYNTHETIC.1",
+            linkage_source=link["document_key"], source=source["document_key"])
+        allowed = ("accession", "completeness_fraction", "contamination_fraction", "contig_count", "contig_n50", "total_sequence_length",
+            "quality_method", "quality_version", "measurement_methods", "source", "linkage_source")
+        payload["searches"][0]["reference_metadata"][0]["assembly"] = {k: extracted["assembly"][k] for k in allowed}
+        add_metadata(inputs, payload, "sequence_database")
+>       sheets, results, rows = calculate(inputs)
+                                ^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_standard_database_calculators.py:309: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_blast_standard_database_calculators.py:28: in calculate
+    sheets = run(inputs)
+             ^^^^^^^^^^^
+../../../tests/test_native_blast_standard_database_metadata.py:234: in run
+    return m.validate_standard_blast_database_sheet_set(sheets)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:69: in checked
+    return function(value)
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:1530: in validate_standard_blast_database_sheet_set
+    prepared = validate_standard_blast_database_prepared_inputs(value["prepared_inputs"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:69: in checked
+    return function(value)
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:1480: in validate_standard_blast_database_prepared_inputs
+    _validate_saved_metadata(value, files)
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:1241: in _validate_saved_metadata
+    _fail("metadata_original_slot_conflict")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'metadata_original_slot_conflict'
+
+    def _fail(code):
+>       raise ValueError(_PREFIX + code)
+E       ValueError: native_blast_standard_database_metadata_original_slot_conflict
+
+../../../gene_annotation_episode/native_blast_standard_database_metadata.py:62: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_calculators.py::test_R5_taxa_A_A_B_and_independent_target_A
+FAILED ../../../tests/test_native_blast_standard_database_calculators.py::test_R6_assembly_percentages_original_source_and_method
+2 failed, 57 passed in 8.26s

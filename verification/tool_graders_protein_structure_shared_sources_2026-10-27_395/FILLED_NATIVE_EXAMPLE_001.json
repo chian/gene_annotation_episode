@@ -1,0 +1,121 @@
+{
+  "fixture": "Synthetic two-chain PDB, chains A and B; B is translated +3 angstrom along x",
+  "native_result": {
+    "path": "verification/tool_graders_protein_structure_shared_sources_2026-10-27_395/check002/temporary/pytest/test_same_original_bytes_are_s0/.episode-operations/b33fcbb911a4dcb7d31ee53ea512e5d23fcb7e0583a96cdab1815759af06cd10/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/protein-structure-attempt/result.json",
+    "sha256": "20f7a98be6c980c372915c3630a462d8a2629ba5ccab1be6e86bf426e84acca0",
+    "byte_length": 133962
+  },
+  "fixed_selection": {
+    "bfactor_semantics": "unspecified",
+    "ca_selection": {
+      "choices": [],
+      "policy": "unambiguous_only"
+    },
+    "chain_key": {
+      "chain_id": "A",
+      "namespace": "pdb",
+      "ter_segment_ordinal_0based": 0
+    },
+    "data_block": null,
+    "file_identity": {
+      "artifact_ref": "artifact_ef8cbe93436e06d2903a288dccfffcb32232276484d33bfc491981b30dbdc15c",
+      "byte_length": 690,
+      "format": "pdb_3x_text",
+      "sha256": "ef8cbe93436e06d2903a288dccfffcb32232276484d33bfc491981b30dbdc15c"
+    },
+    "model_key": {
+      "native_serial_token": {
+        "lexeme": null,
+        "lexical_state": "absent",
+        "span": null,
+        "syntax": "absent",
+        "text": null
+      },
+      "ordinal_0based": 0,
+      "serial_state": "implicit"
+    },
+    "residue_variant_choices": [],
+    "semantics_evidence": null,
+    "sequence_basis": "observed_polymer",
+    "structure_role": "fixed",
+    "symbol_policy": {
+      "explicit_component_overrides": [],
+      "unknown": "reject"
+    },
+    "zero_occupancy_policy": "exclude"
+  },
+  "moving_selection": {
+    "bfactor_semantics": "unspecified",
+    "ca_selection": {
+      "choices": [],
+      "policy": "unambiguous_only"
+    },
+    "chain_key": {
+      "chain_id": "B",
+      "namespace": "pdb",
+      "ter_segment_ordinal_0based": 0
+    },
+    "data_block": null,
+    "file_identity": {
+      "artifact_ref": "artifact_ef8cbe93436e06d2903a288dccfffcb32232276484d33bfc491981b30dbdc15c",
+      "byte_length": 690,
+      "format": "pdb_3x_text",
+      "sha256": "ef8cbe93436e06d2903a288dccfffcb32232276484d33bfc491981b30dbdc15c"
+    },
+    "model_key": {
+      "native_serial_token": {
+        "lexeme": null,
+        "lexical_state": "absent",
+        "span": null,
+        "syntax": "absent",
+        "text": null
+      },
+      "ordinal_0based": 0,
+      "serial_state": "implicit"
+    },
+    "residue_variant_choices": [],
+    "semantics_evidence": null,
+    "sequence_basis": "observed_polymer",
+    "structure_role": "moving",
+    "symbol_policy": {
+      "explicit_component_overrides": [],
+      "unknown": "reject"
+    },
+    "zero_occupancy_policy": "exclude"
+  },
+  "evaluation_used_count": {
+    "origin": "derived",
+    "reason": null,
+    "state": "present",
+    "unit": "pair",
+    "value": 4
+  },
+  "evaluation_rmsd": {
+    "origin": "derived",
+    "reason": null,
+    "state": "present",
+    "unit": "angstrom",
+    "value": 1.2065475977771465e-16
+  },
+  "translation": {
+    "origin": "fitted",
+    "reason": null,
+    "state": "present",
+    "unit": "angstrom",
+    "value": [
+      -2.999999999999999,
+      -6.661338147750939e-16,
+      -2.220446049250313e-16
+    ]
+  },
+  "expected": {
+    "evaluation_used_count": 4,
+    "evaluation_rmsd_angstrom": 0,
+    "translation_angstrom": [
+      -3,
+      0,
+      0
+    ]
+  },
+  "claim_limit": "Actual local native driver invocation on a synthetic file; no episode receipt delivery tested here."
+}

@@ -1,0 +1,230 @@
+...........F
+=================================== FAILURES ===================================
+_ test_unknown_prospective_forecast_crosses_form_and_does_not_block_native_work _
+
+self = <test_runtime.ScriptedProvider object at 0x785120020560>
+episode_id = 'episode_f1933ed6bcf752ffe97ba0a621eb06928783937ea9b8913a50029c29476ab434'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...e_d0de00533bff857e7eb39a79', ...}]}], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+output_schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+source_snapshot/tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_preflight_2026-10-27_401/check010/temporary/pytest/test_unknown_prospective_forec0')
+
+    def test_unknown_prospective_forecast_crosses_form_and_does_not_block_native_work(tmp_path):
+        store, tools, target, history = setup(tmp_path)
+        history.unlink()  # Deliberately unavailable shared history; no native job exists yet.
+        try:
+            form = obj({'forecasts': {'type': 'array', 'items': deepcopy(ESTIMATE_SCHEMA),
+                                     'x-source': 'resource_tool_estimates'}})
+            args = {'query_ref': target, 'reference_ref': target, 'molecule': 'protein', 'mode': 'global'}
+            def child_after_estimate(context):
+                estimate, = context['resource_tool_estimates']
+                assert estimate['status'] == 'history_unavailable'
+                assert estimate['expected_total_seconds'] is None and estimate['successful_duration_samples'] == 0
+                assert estimate['outcome_support'] is None
+                assert not history.exists() and store.count('native_execution') == 0
+                return tool('state.query', {'refs': [target]})
+            def parent_after_form(context):
+                forecast, = context['child_reports'][0]['forecasts']
+                assert forecast['status'] == 'history_unavailable' and forecast['expected_total_seconds'] is None
+                assert forecast['execution_class_ref'] is not None and forecast['proposal_ref'] is not None
+                assert context['monitoring_information_credit'] == 0
+                return tool('sequence.align', args)
+            provider = ScriptedProvider([commission(target, form),
+                tool('execution.estimate', {'tool': 'sequence.align', 'arguments': args}),
+                child_after_estimate, parent_after_form])
+>           result = run(store, tools, provider, tmp_path/'run', counts=(2, 2), estimates=True)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_native_timing_information_runtime.py:330: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_timing_information_runtime.py:53: in run
+    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path, resume=resume,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4132: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:4454: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.DecisionSource object at 0x7851169a7950>
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...e_d0de00533bff857e7eb39a79', ...}]}], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def call(self, context, schema):
+        index, self.calls = self.calls, self.calls + 1
+        journal = self.workflow.journal
+        row = journal.row("runtime_model_calls", self.episode_id, index)
+        profile = self.workflow.contract_information_profile(self)
+        if row:
+            saved = json.loads(row["request"])
+            if row["purpose"] != "decision":
+                raise WorkflowError("saved decision contract differs from reconstruction")
+            # Historical and interrupted decisions retain the actual contract
+            # supplied at dispatch. Additions to today's tool catalog belong to
+            # new decisions, not retrospective reconstruction of earlier ones.
+            schema = saved["schema"]
+            context = saved["context"]
+            if (profile is None) != ('contract_information' not in saved):
+                raise WorkflowError('original_contract_information_profile_changed')
+            if profile is not None:
+                self.workflow.validate_contract_information(saved)
+            if (self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL
+                    and saved.get('decision_protocol') != DECISION_EXCHANGE_PROTOCOL):
+                raise WorkflowError('pending_decision_requires_original_protocol')
+            if row["response"] is not None:
+                if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+                    if profile is not None:
+                        self.validate_contract_exchange_history(saved, index)
+                    context = self.interpretation_context(context,
+                        self.workflow.decision_exchanges.rows(self.episode_id, index))
+                return json.loads(row["response"]), index, context, schema
+        else:
+            # Selected manuals are exact immutable assignment operands. Supply
+            # their bodies only to new calls; saved calls above keep the context
+            # originally dispatched, including an interrupted request.
+            context = {**context,
+                'launch_instruction_library': self.workflow.launch_instructions.context()}
+            selected_instructions = self.workflow.launch_instructions.materialize(
+                self.request.message.as_record().get('episode_assignment', {}).get('launch_instructions'))
+            if selected_instructions is not None:
+                context['selected_launch_instructions'] = selected_instructions
+            if self.workflow.available_child_roles(self):
+                context['child_options'] = child_option_information(self.workflow, self)['text']
+            supplied_initial = self.workflow.episode_bindings.initial_decision_context(
+                self.workflow.binding_context(self))
+            if set(supplied_initial).intersection(context):
+                raise ValueError('initial_binding_context_field_conflict')
+            context = {**context, **supplied_initial}
+            if 'pending_work' not in context:
+                # Direct caller dispatches need the same authoritative
+                # outstanding-work input as next(). Saved decisions above
+                # retain the exact original context instead.
+                context = {**context, 'pending_work': self.workflow.pending_work(self)}
+            binding = self.workflow.execution_expectations
+            if binding is not None and binding.applies(self.path[-1][0]):
+                planning_scopes = ()
+                if (self.path[-1][0] in binding.planning_roles
+                        and self.workflow.job_episodes is not None):
+                    jobs = self.workflow.job_episodes
+                    if 'search_modes' in jobs.jobs.config:
+                        options = jobs.prospective_execution_options(self.workflow.store, self.scope)
+                        planning_scopes = list({value['execution_class'].ref: value['execution_class']
+                                                for value in options}.values())
+                        context = {**context, 'job_execution_options': [
+                            {key: value[key] for key in ('query_ref', 'cpu', 'search_mode')}
+                            | {'execution_class_ref': value['execution_class'].ref}
+                            for value in options]}
+                    else:
+                        planning_scopes = jobs.prospective_execution_classes(self.workflow.store, self.scope)
+                context = {**context, "execution_expectations": binding.capture(self.path[-1][0],
+                    assignment=self.request.message.as_record().get("job_assignment"),
+                    planning_scopes=planning_scopes)}
+            if self.workflow.resource_estimator is not None:
+                if self.workflow.is_job_source(self):
+                    estimates = self.workflow.resource_estimator.estimate(
+                        context.get("execution_expectations"),
+                        job_ref=self.workflow.job_episodes.assignment(self)["job_ref"],
+                        sample=self.workflow.job_episodes.latest_sample(self, include_inherited=True))
+                elif "execution_expectations" in context:
+                    # Supply expected execution costs before the owning episode
+                    # chooses work. These classes describe proposed execution.
+                    estimates = self.workflow.resource_estimator.estimate_context(
+                        context["execution_expectations"])
+                else:
+                    estimates = None
+                if estimates is not None:
+                    context = {**context, "resource_tool_estimates": estimates}
+            native_expectations = self.workflow.native_estimation_context(self, context)
+            if native_expectations is not None:
+                context = {**context, 'native_execution_expectations': native_expectations}
+                if self.workflow.resource_estimator is not None:
+                    native_estimates = self.workflow.resource_estimator.estimate_context(native_expectations)
+                    context['resource_tool_estimates'] = [*context.get('resource_tool_estimates', []), *native_estimates]
+            if self.workflow.native_event_information is not None:
+                context['native_event_targets'] = self.workflow.native_event_information.read(
+                    self.workflow.binding_context(self))
+            if self.workflow.permits_common_action(self, 'wait'):
+                context['waiting_support'] = self.workflow.waiting_support(self, context)
+            if profile is not None:
+                context = {**context, 'contract_information_profile': profile}
+            saved = {"context": context, "schema": schema}
+        if self.workflow.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
+            if row is None:
+                saved = {**saved, 'decision_protocol': DECISION_EXCHANGE_PROTOCOL}
+                if profile is not None:
+                    saved['contract_information'] = self.workflow.freeze_contract_information(self, context, schema)
+                    self.workflow.validate_contract_information(saved)
+                if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                        and not self.workflow.receipt_projection(self)):
+                    self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                        kind='decision_input', source_index=index)
+                journal.save('runtime_model_calls', {'episode_id': self.episode_id,
+                    'call_index': index, 'purpose': 'decision', 'request': _json(saved), 'response': None})
+            return await self.exchange_decision(context, schema, index, saved)
+        has_session = getattr(self.workflow.provider, "has_session", lambda *_: False)
+        if (not has_session(self.episode_id, "REASONING")
+                and "restored_episode_history" not in context):
+            # Restore the authoritative scientific/runtime state through the
+            # existing replay path, not by rehydrating all archived contexts.
+            # The fresh native conversation receives only a bounded metadata
+            # index; exact older selections/outcomes are an ordinary own read.
+            context = {**context, "restored_episode_history":
+                self.workflow.history_preview(self, before=index)}
+        context = instructional_model_context(context)
+        # Save the exact supplied context, including its bounded operational
+        # index, before dispatch. Completed historical calls are returned above
+        # unchanged. Metadata contains no old contexts, so it cannot nest them.
+        saved = {"context": context, "schema": schema}
+        if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
+                and not self.workflow.receipt_projection(self)):
+            # A caller may use a different scalar for this parent while using
+            # receipt-based credit in its children. Preserve what this actual
+            # automatic input delivered so those children inherit it correctly.
+            self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'],
+                kind='decision_input', source_index=index)
+        journal.save("runtime_model_calls", {"episode_id": self.episode_id,
+            "call_index": index, "purpose": "decision", "request": _json(saved), "response": None})
+        with journal.measure("runtime_model_calls", self.episode_id, index):
+            instructions = self.instructions(context)
+>           response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+                                                              context, _action_generation_schema(schema))
+E           RuntimeError: coroutine raised StopIteration
+
+source_snapshot/gene_annotation_episode/runtime.py:946: RuntimeError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_timing_information_runtime.py::test_unknown_prospective_forecast_crosses_form_and_does_not_block_native_work
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 11 passed in 88.62s (0:01:28)

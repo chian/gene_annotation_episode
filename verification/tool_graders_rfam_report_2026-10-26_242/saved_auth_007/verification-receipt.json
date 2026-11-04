@@ -1,0 +1,86 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_rfam_batch_report.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_rfam_batch_alignment.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 2.441358285,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 1,
+    "observed_scratch_bytes": 40960,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "SERVICE_RESULT": "exit-code",
+      "ended": {
+        "at": "2026-10-26T04:27:55.273113+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 802436970438425
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 1,
+  "source_sha256_after": {
+    "gene_annotation_episode/rfam_batch_alignment.py": "f5d28350d10e13b83973e28c0989e44fd29b4b16709d32765ae5a04692701788",
+    "gene_annotation_episode/rfam_batch_report.py": "ed5f9b6e3eba8c7fe4b4aaa12ce0aed6519c246f69c63667f6c2cc38a845d15d",
+    "gene_annotation_episode/rfam_batch_report_contracts.py": "359aa11ce77d6f094dfe9b75553f61719d00d93da460e467e03cbd418ba6f64c",
+    "gene_annotation_episode/rfam_batch_report_grader.py": "e69e58cee81b93eca6101b39dd8333bfa50fb434d2af9ff54b03a6facfa2bef1",
+    "gene_annotation_episode/rfam_batch_report_views.py": "789d4b1e52014c2e931c8d7ab3bf7d62baef2f2cf43521e9be139d7db69016dd",
+    "tests/test_rfam_batch_alignment.py": "a4f3e13209185c7a75dd231fc224667a005736ce73eff9bfdf77ac72cf35af0b",
+    "tests/test_rfam_batch_report.py": "8f9192a75b796c4792ecf318a1c1a6ac4706a7f062ba2eebc3c9aa76beeceeff"
+  },
+  "source_sha256_before": {
+    "gene_annotation_episode/rfam_batch_alignment.py": "f5d28350d10e13b83973e28c0989e44fd29b4b16709d32765ae5a04692701788",
+    "gene_annotation_episode/rfam_batch_report.py": "ed5f9b6e3eba8c7fe4b4aaa12ce0aed6519c246f69c63667f6c2cc38a845d15d",
+    "gene_annotation_episode/rfam_batch_report_contracts.py": "359aa11ce77d6f094dfe9b75553f61719d00d93da460e467e03cbd418ba6f64c",
+    "gene_annotation_episode/rfam_batch_report_grader.py": "e69e58cee81b93eca6101b39dd8333bfa50fb434d2af9ff54b03a6facfa2bef1",
+    "gene_annotation_episode/rfam_batch_report_views.py": "789d4b1e52014c2e931c8d7ab3bf7d62baef2f2cf43521e9be139d7db69016dd",
+    "tests/test_rfam_batch_alignment.py": "a4f3e13209185c7a75dd231fc224667a005736ce73eff9bfdf77ac72cf35af0b",
+    "tests/test_rfam_batch_report.py": "8f9192a75b796c4792ecf318a1c1a6ac4706a7f062ba2eebc3c9aa76beeceeff"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rfam_report_2026-10-26_242/saved_auth_007/stdout.log"
+}

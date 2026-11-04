@@ -1,0 +1,177 @@
+--- checkpoint003/gene_annotation_episode/literature_optical_storage.py
++++ checkpoint004/gene_annotation_episode/literature_optical_storage.py
+@@ -147,6 +147,7 @@
+         local = aliases.get(role)
+         operands["wavelength_context" if role == "wavelength" else role] = {
+             "measurement_ref": reference(number["selector"]["witness"], "measurement", number=number) if number else None,
++            "measurement_source_ref": number["selector"]["witness"]["source_ref"] if number else None,
+             "physical_observation_ref": reference(meanings.get("measurement_identity"), "physical"),
+             "semantic_owner_ref": metadata(row["owner_key"], "Optical " + role + " semantic owner", extraction["source_ref"]) if row and row["owner_key"] else None,
+             "local_reuse_ref": metadata(local, "Local optical operand reuse alias", extraction["source_ref"]) if local else None,
+@@ -382,8 +383,8 @@
+             _fail("saved_mismatch")
+         _validate_inputs(saved["selection"], saved["extraction"])
+         _validate_calculation(saved)
+-        if outcome["result"] != {"sheet_ref": sheet_ref, "cells": saved["cells"], "source_kind": saved["extraction"]["source_kind"],
+-                "evaluation_scope": EVALUATION_SCOPE, "endpoint_kind": "NADH_depletion"}:
++        if not _saved_equal(outcome["result"], {"sheet_ref": sheet_ref, "cells": saved["cells"], "source_kind": saved["extraction"]["source_kind"],
++                "evaluation_scope": EVALUATION_SCOPE, "endpoint_kind": "NADH_depletion"}):
+             _fail("outcome_mismatch")
+         root = self.store.get(saved["input_source_ref"])
+         if root.get("artifact_ref") != saved["input_artifact_ref"]:
+@@ -406,7 +407,7 @@
+             records.append(ref)
+             return ref
+         bindings = _bindings(saved["extraction"], expected)
+-        if bindings != (saved["context_bindings"], saved["operand_bindings"], saved["interpretation_bindings"], saved["covariance_binding_ref"]):
++        if not _saved_equal(bindings, (saved["context_bindings"], saved["operand_bindings"], saved["interpretation_bindings"], saved["covariance_binding_ref"])):
+             _fail("binding_mismatch")
+         if outcome.get("record_refs") != list(dict.fromkeys([sheet_ref, *records])):
+             _fail("operation_records_mismatch")
+@@ -501,6 +502,7 @@
+     context = {name: obj({"ref": ref("context" if name == "condition" else "reference"),
+         "unavailable_reason": enum(["source_context_unreported"], True)}) for name in LITERAL_FIELDS}
+     operand = obj({**{name: ref("context" if name == "condition_ref" else "reference") for name in _OPERAND_REFS},
++        "measurement_source_ref": ref("source"),
+         "qualification": enum(QUALIFICATIONS), "approximate": {"type": ["boolean", "null"]},
+         "observed_relation": enum(["point", "lt", "le", "gt", "ge"], True),
+         "observation_status": enum(["observed", "censored", "unavailable", "unreported"]),
+--- checkpoint003/gene_annotation_episode/literature_experimental_prompt.py
++++ checkpoint004/gene_annotation_episode/literature_experimental_prompt.py
+@@ -429,6 +429,21 @@
+         and anchor["start"] < token["end"] and token["start"] < anchor["end"] for token in tokens)
+ 
+ 
++def _optical_unknown_token_sources(rows, records):
++    """Off-page anchors permit withholding only their declared optical source."""
++    result = set()
++    for row in rows:
++        for quantity in row.get("operands", {}).values():
++            if not isinstance(quantity, Mapping):
++                continue
++            ref = quantity.get("measurement_ref")
++            source = quantity.get("measurement_source_ref")
++            if (ref is not None and isinstance(source, str)
++                    and (ref not in records or not isinstance(records[ref].get("anchor"), Mapping))):
++                result.add(source)
++    return result
++
++
+ def _optical_hidden_records(reports, records):
+     """Typed refs preserve custody; automatic expansion does not expose operands.
+ 
+@@ -443,9 +458,9 @@
+         for quantity in row.get("operands", {}).values() if isinstance(quantity, Mapping)}
+     tokens = [records[ref]["anchor"] for ref in measurements if ref in records
+         and isinstance(records[ref].get("anchor"), Mapping)]
+-    incomplete = any(ref is not None and (ref not in records or not isinstance(records[ref].get("anchor"), Mapping)) for ref in measurements)
++    unknown_sources = _optical_unknown_token_sources(rows, records)
+     return refs | {ref for ref, record in records.items() if _contains_optical_token(record, tokens)
+-        or incomplete and isinstance(record.get("anchor"), Mapping)}
++        or isinstance(record.get("anchor"), Mapping) and record["anchor"].get("source_ref") in unknown_sources}
+ 
+ 
+ def _optical_received(parts, rows, records):
+@@ -454,12 +469,13 @@
+     measurements = {q.get("measurement_ref") for q in first.get("operands", {}).values() if isinstance(q, Mapping)}
+     tokens = [records[ref]["anchor"] for ref in measurements if ref in records
+         and isinstance(records[ref].get("anchor"), Mapping)]
+-    incomplete = any(ref is not None and (ref not in records or not isinstance(records[ref].get("anchor"), Mapping)) for ref in measurements)
++    unknown_sources = _optical_unknown_token_sources(rows, records)
+     def label(reference):
+         if reference is None:
+             return "unknown"
+         record = records.get(reference)
+-        if record is None or _contains_optical_token(record, tokens) or incomplete and isinstance(record.get("anchor"), Mapping):
++        if (record is None or _contains_optical_token(record, tokens)
++                or isinstance(record.get("anchor"), Mapping) and record["anchor"].get("source_ref") in unknown_sources):
+             return "source-bound witness retained for scoped access"
+         return record.get("label", record.get("name", "source-bound witness retained for scoped access"))
+     units = {"uM2/min2": "(uM/min)^2", "mM_inverse_cm_inverse": "mM^-1 cm^-1"}
+--- checkpoint003/tests/test_literature_optical_storage.py
++++ checkpoint004/tests/test_literature_optical_storage.py
+@@ -82,6 +82,8 @@
+         assert cells[0]["source_origin"] == "synthetic"
+         assert all("value" not in operand for operand in cells[0]["operands"].values())
+         assert cells[0]["operands"]["epsilon"]["canonical_unit"] == "mM_inverse_cm_inverse"
++        assert cells[0]["operands"]["epsilon"]["measurement_source_ref"] == args["source_ref"]
++        assert optical_cells_schema()["items"]["properties"]["operands"]["properties"]["epsilon"]["properties"]["measurement_source_ref"]["x-reference-namespace"] == "source"
+         assert store.get(cells[0]["context"]["construct"]["ref"])["label"] == "reference-RC"
+         validate_form({"numbers": cells}, obj({"numbers": optical_cells_schema()}),
+             lambda ref, ns: store.reference_subset([ref], plain(context.scope)) and store.get(ref)["record_type"] == ns)
+@@ -409,3 +411,34 @@
+         assert store.db.execute("SELECT count(*) FROM literature_optical_operations").fetchone()[0] == 0
+     finally:
+         store.close()
++
++
++def test_saved_qualified_operand_boolean_is_not_integer_one(tmp_path):
++    def qualified(args):
++        args["calibration"]["epsilon"]["qualification"]["value"] = "source_qualified_approximate"
++    store, context, args = setup(tmp_path, change=qualified)
++    try:
++        repo = LiteratureOpticalRepository(store, context.run_id)
++        out = repo.populate(context, args, "qualified")
++        assert repo.read(out["result"]["sheet_ref"])["operand_bindings"]["epsilon"]["approximate"] is True
++        fake = rewrite_selected_payload(store, out, lambda p: p["operand_bindings"]["epsilon"].update(approximate=1))
++        with pytest.raises(ContractError, match="binding_mismatch"):
++            repo.read(fake)
++    finally:
++        store.close()
++
++
++def test_original_outcome_zero_cell_cannot_be_relabelled_false(tmp_path):
++    store, context, args = setup(tmp_path, covariance=False)
++    try:
++        repo = LiteratureOpticalRepository(store, context.run_id)
++        args["signals"]["blank"] = deepcopy(args["signals"]["sample"])
++        out = repo.populate(context, args, "zero-rate")
++        assert repo.read(out["result"]["sheet_ref"])["cells"]["net_rate"]["value"] == 0.0
++        altered = deepcopy(out)
++        altered["result"]["cells"]["net_rate"]["value"] = False
++        store.db.execute("UPDATE literature_optical_operations SET outcome=?", (canonical(altered),))
++        with pytest.raises(ContractError, match="outcome_mismatch"):
++            repo.read(out["result"]["sheet_ref"])
++    finally:
++        store.close()
+--- checkpoint003/tests/test_literature_optical_integration.py
++++ checkpoint004/tests/test_literature_optical_integration.py
+@@ -7,7 +7,7 @@
+ 
+ import pytest
+ 
+-from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain
++from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain, validate_form
+ from gene_annotation_episode.decision_context import state_frame
+ from gene_annotation_episode.domain import ContractError, canonical, identity, obj
+ from gene_annotation_episode.episode_composition import compose_episode_bindings
+@@ -192,6 +192,21 @@
+             state["working_state"]["references"] = [r for r in state["working_state"]["references"] if r["id"] != missing]
+         state["working_state"]["references"].append(broad)
+         state["current_report_basis_refs"].append(broad["id"])
++        # Independent admitted scientific information from a different source
++        # must survive when an optical measurement falls off the record page.
++        unrelated_text = "Unrelated source: cobalt-free buffer condition retained."
++        artifact = store.artifact(unrelated_text)
++        unrelated_source = store.put("source", {"provider": "synthetic_unrelated_source", "accession": None, "uri": None,
++            "artifact_ref": artifact, "text_ref": artifact, "request_ref": None, "version": None, "retrieved_at": None}, origin="caller")["id"]
++        unrelated = store.put("reference", {"reference_type": "literature_result", "source_ref": unrelated_source,
++            "accession": "independent_condition", "label": "cobalt-free buffer", "sequence_ref": None, "molecule": None,
++            "length": None, "term_refs": [], "context_refs": [], "anchor": {"source_ref": unrelated_source, "artifact_ref": artifact,
++                "start": 0, "end": len(unrelated_text.encode()), "quote": unrelated_text}}, origin="tool")
++        independent_form = {"independent_condition_ref": unrelated["id"]}
++        validate_form(independent_form, obj({"independent_condition_ref": {"type": "string", "format": "reference", "x-reference-namespace": "reference"}}),
++            lambda ref, ns: bool(store.reference_subset([ref], plain(context.scope))) and store.get(ref)["record_type"] == ns)
++        state["child_reports"].append(independent_form)
++        state["working_state"]["references"].append(unrelated)
+         if parent:
+             services, binding = service_binding(store, context)
+             binding = LiteratureEpisodes(services, rate_population=True, reference_parent_sources=[args["source_ref"]])
+@@ -209,6 +224,7 @@
+             text = turn["input"][0]["text"]
+             task, steering = text.split("\n\nSTEERING\n")
+             assert "Admitted requested optical endpoint inputs" in steering
++            assert "cobalt-free buffer" in steering
+             assert str(rows[0]["value"]) in steering
+             for token in (*RAW_SENTINELS, "5.67812345", "1.133377709"):
+                 assert token not in task + steering

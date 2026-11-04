@@ -1,0 +1,276 @@
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -126,7 +126,7 @@
+         "input_schema": partner_source_population_schema_with_information()})
+     from .literature_native_rate_operand_information import rate_source_population_schema_with_information
+     result.append({"name": "literature.rate.source.populate",
+-        "description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request its closed literature_rate_source_cells return projection, which preserves each arm's subject, construct, preparation and approximation; literature_rate_cells is the separate legacy table projection. Select source-backed endpoint/basis relationships and statistical assumptions; different constructs may be the intended comparison. Source-defined U/mg requires its endpoint-specific definition. Missing meanings, unsupported units and censored values retain partial inputs. Exact witnesses verify custody, not causal isolation, target correspondence or annotation credit.",
++        "description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request literature_rate_source_domain_cells for full reported-operand domains, including finite two-sided enclosures; the original literature_rate_source_cells projection preserves each arm's subject, construct, preparation, approximation and one-sided limits; literature_rate_cells is the separate legacy table projection. Select source-backed endpoint/basis relationships and statistical assumptions; different constructs may be the intended comparison. Source-defined U/mg requires its endpoint-specific definition. Missing meanings, unsupported units and censored values retain partial inputs. Exact witnesses verify custody, not causal isolation, target correspondence or annotation credit.",
+         "input_schema": rate_source_population_schema_with_information()})
+     from .literature_amount_inputs import amount_arguments_schema
+     result.append({"name": "literature.amount.populate",
+@@ -252,7 +252,7 @@
+                          "literature_rate_native_inputs.py",
+                          "literature_native_rate_operand_information.py",
+                          "literature_rate_calculations.py", "literature_rate_storage.py",
+-                         "literature_rate_source_render.py",
++                         "literature_rate_source_render.py", "literature_rate_domains.py",
+                          "literature_received_fact_render.py",
+                          "literature_experimental_prompt.py", "literature_prose_reader.py",
+                          "literature_html_quantity_reader.py",
+@@ -562,6 +562,7 @@
+             result.update(self._gel_display_context(context))
+         if self.rate_population:
+             result.update(self._native_rate_display_context(context))
++            result.update(self._native_rate_domain_display_context(context))
+             result.update(self._received_fact_display_context(context))
+         return result
+ 
+@@ -594,6 +595,7 @@
+             result.update(self._gel_display_context(context))
+         if self.rate_population:
+             result.update(self._native_rate_display_context(context))
++            result.update(self._native_rate_domain_display_context(context))
+             result.update(self._received_fact_display_context(context))
+         return result
+ 
+@@ -878,7 +880,41 @@
+                 records[reference] = record
+         return {"literature_rate_source_display": {"cells": list(unique.values()), "records": records}}
+ 
++    def _native_rate_domain_display_context(self, context):
++        """Exact owned/admitted rate rows and possessed meaning-record metadata."""
++        from .literature_rate_storage import PROVIDER, NATIVE_RECORD_VERSION, COMPONENTS
++        from .literature_rate_source_render import MEANING_FIELDS
++        repository = self.services.literature_rate_repository().source_domain_projection()
++        rows = list(repository.received_cells(context))
++        for reference in context.received_record_refs:
++            record = self.services.read_record(reference)
++            if (record.get("record_type") == "source" and record.get("provider") == PROVIDER
++                    and record.get("version") == NATIVE_RECORD_VERSION):
++                # fact_cells authenticates original ownership or the exact
++                # receiver subset. A known sheet never expands parent custody.
++                rows.extend(repository.fact_cells(context, [reference], components=COMPONENTS))
++        unique = {}
++        for row in rows:
++            key = (row["sheet_ref"], row["component"])
++            if key in unique and unique[key] != row:
++                raise ContractError("literature_rate_source_domain_display_possession_conflict")
++            unique[key] = row
++        records = {}
++        for row in unique.values():
++            for field, namespace in MEANING_FIELDS.items():
++                reference = row[field]
++                if reference is None:
++                    continue
++                if reference not in context.received_record_refs:
++                    raise ContractError("literature_rate_source_domain_display_record_not_received")
++                record = self._require(reference, context.scope, namespace)
++                if record.get("id") != reference or record.get("record_type") != namespace:
++                    raise ContractError("literature_rate_source_domain_display_record_mismatch")
++                records[reference] = record
++        return {"literature_rate_source_domain_display": {"cells": list(unique.values()), "records": records}}
++
+     def _rate_fact_sources(self):
++        from .literature_rate_domains import rate_source_domain_cells_schema
+         from .literature_rate_storage import rate_cells_schema, rate_source_cells_schema
+         from .literature_quantity_storage import quantity_cells_schema
+         from .literature_assay_storage import assay_cells_schema
+@@ -902,6 +938,9 @@
+             "literature_rate_source_cells": {"type": "array", "meaning":
+                 "The same saved numerical rate components from native source spans, with each arm's actual subject/construct/preparation bindings and approximation retained. Source-supported conditional statistical assumptions do not establish causal isolation, target transfer or annotation credit. This closed native return view is distinct from the legacy table view, not a second scoring sheet.",
+                 "report_schema": rate_source_cells_schema()},
++            "literature_rate_source_domain_cells": {"type": "array", "meaning":
++                "The same saved native rate components with conditional logical enclosures of reported operands. Finite bounds, inclusivity, undefined denominators and outward numerical projection are explicit; range failure can qualify a still-useful partial enclosure. Status concerns the point estimate. Domains are not sampling confidence intervals, independence, endpoint co-attainability, target transfer or annotation credit. This is another closed return view of the same numerical sheet, not another assay.",
++                "report_schema": rate_source_domain_cells_schema()},
+             "literature_quantity_cells": {"type": "array", "meaning":
+                 "Saved single reported source quantities, with quantity and analyte identity. Untyped spread remains untyped. Source conditions, attribution and correction scores remain unknown where unsupported.",
+                 "report_schema": quantity_cells_schema()},
+@@ -992,6 +1031,8 @@
+                  COMPONENTS, self.services.literature_rate_repository),
+                 ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository().source_projection),
++                ("literature_rate_source_domain_cells", "requested_rate_components", PROVIDER,
++                 COMPONENTS, self.services.literature_rate_repository().source_domain_projection),
+                 ("literature_quantity_cells", "requested_quantity_components", QUANTITY_PROVIDER,
+                  QUANTITIES, self.services.literature_quantity_repository),
+                 ("literature_assay_cells", "requested_assay_components", ASSAY_PROVIDER,
+@@ -1040,7 +1081,7 @@
+                     continue
+                 row = self.services.read_record(reference)
+                 if row.get("record_type") == "source" and row.get("provider") == provider:
+-                    if namespace in {"literature_rate_cells", "literature_rate_source_cells"}:
++                    if namespace in {"literature_rate_cells", "literature_rate_source_cells", "literature_rate_source_domain_cells"}:
+                         if row.get("version") not in {"literature_rate_population_record_v1", "literature_rate_population_record_v2"}:
+                             raise ContractError("literature_rate_projection_version_mismatch")
+                         if row.get("version") != adapter.record_version:
+@@ -1144,7 +1185,7 @@
+                             code="literature_rate_receiver_mismatch", field=name)
+                     permitted.update(selection["known_record_refs"])
+                 try:
+-                    if (namespace in {"literature_rate_cells", "literature_rate_source_cells"}
++                    if (namespace in {"literature_rate_cells", "literature_rate_source_cells", "literature_rate_source_domain_cells"}
+                             and not rows and context.assignment.get("requested_rate_components") not in ([], ())):
+                         repository().validate_empty_return_family(context)
+                     # This hook validates the REPORTING episode (also when C4
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -14,6 +14,7 @@
+ from .literature_controlled_response_prompt import CONTROLLED_RESPONSE_TASK
+ from .literature_gel_prompt import GEL_TASK
+ from . import literature_rate_source_render as _native_rate
++from . import literature_rate_domains as _rate_domains
+ from .literature_received_fact_render import ReceivedFactDisplay
+ 
+ from collections.abc import Mapping
+@@ -78,7 +79,7 @@
+     "report_contract_declaration", "contract_information_profile",
+     "requested_controlled_response_component_keys", "literature_controlled_response_return_bindings",
+     "requested_gel_component_keys", "literature_gel_return_bindings", "literature_gel_return_records",
+-    "literature_rate_source_display",
++    "literature_rate_source_display", "literature_rate_source_domain_display",
+ })
+ 
+ 
+@@ -215,6 +216,9 @@
+     native_rows = list(_native_rate.rows_from_reports(state.get("child_reports", ())))
+     own = (state.get("last_local_outcome") or {}).get("result", {})
+     native_rows.extend(_native_rate.own_rows(own, state.get("literature_rate_source_display", {}).get("cells", ())))
++    domain_rows = list(_rate_domains.rows_from_reports(state.get("child_reports", ())))
++    domain_rows.extend(_rate_domains.own_rows(own, state.get("literature_rate_source_domain_display", {}).get("cells", ())))
++    native_rows.extend(_rate_domains.base_rows(domain_rows))
+     hidden_native_rate = _native_rate.hidden_records(native_rows)
+     selected = {}
+     for reference in pending:
+@@ -362,11 +366,18 @@
+ 
+ def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+         controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None,
+-        native_rate_display=None, values=_values):
++        native_rate_display=None, native_rate_domain_display=None, values=_values):
+     if not isinstance(value, Mapping):
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    native_rate_domain_display = native_rate_domain_display or {}
++    domain_rows = _rate_domains.own_rows(content, native_rate_domain_display.get("cells", ()))
++    if domain_rows:
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _rate_domains.render_received(parts, domain_rows, native_rate_domain_display.get("records", {}),
++            section=_section, table=_table)
++        return
+     native_rate_display = native_rate_display or {}
+     native_rows = _native_rate.own_rows(content, native_rate_display.get("cells", ()))
+     if native_rows:
+@@ -724,13 +735,14 @@
+         ((r.get("component"), definitions.get(r.get("formula_code"), "unknown")) for r in rows)))
+ 
+ 
+-def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None, native_rate_records=None, values=_values):
++def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None, native_rate_records=None, native_rate_domain_records=None, values=_values):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     ratio_source = {}
+     controlled = {}
+     gel = {}
+     native_rate = {}
++    rate_domains = {}
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+     from .literature_gel_render import is_row as gel_row, render_received as gel_received
+     for report in reports:
+@@ -739,7 +751,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_native_rate.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_rate_domains.is_row(row) for row in value):
++                for row in value:
++                    rate_domains.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_native_rate.is_row(row) for row in value):
+                 for row in value:
+                     native_rate.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(controlled_row(row) for row in value):
+@@ -799,12 +814,24 @@
+             ordinary.append(remainder)
+     if ordinary:
+         _section(parts, "Admitted requested child returns", values(ordinary))
+-    if len(native_rate) > 1:
++    native_sheets = list(dict.fromkeys((*native_rate, *rate_domains)))
++    if len(native_sheets) > 1:
+         _section(parts, "Returned comparison labels",
+             "Comparison numbers identify returned records, not independent experiments.")
+-    for comparison_number, rows in enumerate(native_rate.values(), 1):
+-        _native_rate.render_received(parts, rows, native_rate_records or records or {},
++    for comparison_number, sheet_ref in enumerate(native_sheets, 1):
++        domain_rows = rate_domains.get(sheet_ref, [])
++        combined = {}
++        for row in [*native_rate.get(sheet_ref, []), *_rate_domains.base_rows(domain_rows)]:
++            key = (row["sheet_ref"], row["component"])
++            if key in combined and combined[key] != row:
++                from .domain import ContractError
++                raise ContractError("literature_rate_cross_view_display_mismatch")
++            combined[key] = row
++        meanings = {**(records or {}), **(native_rate_records or {}), **(native_rate_domain_records or {})}
++        _native_rate.render_received(parts, list(combined.values()), meanings,
+             section=_section, table=_table, comparison_number=comparison_number)
++        if domain_rows:
++            _rate_domains.render_domains(parts, domain_rows, section=_section, table=_table)
+     for sheet_ref, rows in grouped.items():
+         first = rows[0]
+         metadata = {key: value for key, value in first.items() if key not in (
+@@ -932,6 +959,9 @@
+     native_rate_display = state.get("literature_rate_source_display", {})
+     native_rate_records = {**controlled_records, **native_rate_display.get("records", {})}
+     native_rate_display = {**native_rate_display, "records": native_rate_records}
++    native_rate_domain_display = state.get("literature_rate_source_domain_display", {})
++    native_rate_domain_records = {**controlled_records, **native_rate_domain_display.get("records", {})}
++    native_rate_domain_display = {**native_rate_domain_display, "records": native_rate_domain_records}
+     if selected:
+         _section(parts, "Relevant received experimental facts", display.render_records(table=_table))
+         _section(parts, "Selected received source excerpts", display.render_passages(table=_table))
+@@ -944,6 +974,7 @@
+         from .literature_gel_render import rows_from_reports as gel_rows
+         received_gel_sheets = {row['sheet_ref'] for row in gel_rows(state.get('child_reports', ()))}
+         received_native_rate_sheets = {row['sheet_ref'] for row in _native_rate.rows_from_reports(state.get('child_reports', ()))}
++        received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+                 and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+@@ -953,7 +984,7 @@
+             _source_result(parts, outcome, "Last selected action outcome", controlled_records=controlled_records,
+                 controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+                 gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
+-                native_rate_display=native_rate_display, values=semantic_values)
++                native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display, values=semantic_values)
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+@@ -962,7 +993,7 @@
+         _received_returns(parts, state["child_reports"], records=controlled_records,
+             ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
+             controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records,
+-            native_rate_records=native_rate_records, values=semantic_values)
++            native_rate_records=native_rate_records, native_rate_domain_records=native_rate_domain_records, values=semantic_values)
+     pending = state.get("pending_work", {})
+     if pending.get("items"):
+         _section(parts, "Pending assigned work", _values([_pick(row, (
+@@ -972,7 +1003,7 @@
+         _source_result(parts, result, "Requested information; continue this decision", controlled_records=controlled_records,
+             controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+                 gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records,
+-                native_rate_display=native_rate_display, values=semantic_values)
++                native_rate_display=native_rate_display, native_rate_domain_display=native_rate_domain_display, values=semantic_values)
+     return "\n".join(parts)
+ 
+ 
+--- a/gene_annotation_episode/literature_reference_parent_prompt.py
++++ b/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -132,7 +132,7 @@
+         "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs",
+         "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
+         "literature_gel_return_bindings", "literature_gel_return_records", "literature_rate_source_display",
+-        "literature_received_fact_display")
++        "literature_received_fact_display", "literature_rate_source_domain_display")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions, descriptor), lookup_results) + '\n\n' + _steering(

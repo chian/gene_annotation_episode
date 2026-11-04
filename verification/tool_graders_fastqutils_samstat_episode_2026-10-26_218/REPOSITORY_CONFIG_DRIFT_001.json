@@ -1,0 +1,80 @@
+{
+  "old_source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_candidate/pyproject.toml",
+  "old_sha256": "dc6fa91dc60cb2351e16e2b51d5cd967f6334a667826e0221e5d6e08f3542cdb",
+  "current_source": "/home/chia/repos/gene_annotation_episode/pyproject.toml",
+  "current_sha256": "6606c0ecd5f5f9166d0444f2e0a822e81b4a344e6a90510ecad1536ed8ce8f4a",
+  "changed_toml_fields": [
+    [
+      "tool.setuptools.package-data.gene_annotation_episode",
+      [
+        "defaults.toml",
+        "vendor/*.txt",
+        "vendor/*.json",
+        "vendor/LICENSE*",
+        "knowledge/*.json",
+        "knowledge/*.md",
+        "launch_instruction_library/*.json",
+        "launch_instruction_library/*.md",
+        "bvbrc_application_specs/MANIFEST.json",
+        "bvbrc_application_specs/original/*.json",
+        "bvbrc_application_specs/derived/*.json",
+        "bvbrc_application_specs/README.md",
+        "bvbrc_appservice_schemas.json",
+        "bvbrc_proteome_native_schemas.json",
+        "bvbrc_proteome_data_schemas.json",
+        "bvbrc_proteome_sheet_schemas.json",
+        "bvbrc_proteome_bundle_schemas.json",
+        "bvbrc_proteome_directional_schemas.json",
+        "bvbrc_proteome_directional_numerical_schemas.json",
+        "bvbrc_proteome_bundle_v2_schemas.json",
+        "bvbrc_comparative_systems_handoff_schemas.json"
+      ],
+      [
+        "defaults.toml",
+        "vendor/*.txt",
+        "vendor/*.json",
+        "vendor/LICENSE*",
+        "knowledge/*.json",
+        "knowledge/*.md",
+        "launch_instruction_library/*.json",
+        "launch_instruction_library/*.md",
+        "bvbrc_application_specs/MANIFEST.json",
+        "bvbrc_application_specs/original/*.json",
+        "bvbrc_application_specs/derived/*.json",
+        "bvbrc_application_specs/README.md",
+        "bvbrc_appservice_schemas.json",
+        "bvbrc_proteome_native_schemas.json",
+        "bvbrc_proteome_data_schemas.json",
+        "bvbrc_proteome_sheet_schemas.json",
+        "bvbrc_proteome_bundle_schemas.json",
+        "bvbrc_proteome_directional_schemas.json",
+        "bvbrc_proteome_directional_numerical_schemas.json",
+        "bvbrc_proteome_bundle_v2_schemas.json",
+        "bvbrc_comparative_systems_handoff_schemas.json",
+        "bvbrc_fastqutils_schemas.json",
+        "bvbrc_fastqutils_legacy_v2_schemas.json",
+        "bvbrc_fastqutils_legacy_cutadapt_schemas.json"
+      ]
+    ]
+  ],
+  "pytest_options_unchanged": true,
+  "pytest_options_before": {
+    "ini_options": {
+      "testpaths": [
+        "tests"
+      ]
+    }
+  },
+  "pytest_options_after": {
+    "ini_options": {
+      "testpaths": [
+        "tests"
+      ]
+    }
+  },
+  "host_pytest_result": "2 passed in 997.76s",
+  "host_runner_exit": 1,
+  "qualification": "Audit detects repository packaging configuration drift. Test targets are outside the candidate child directory, so default pytest upward configuration discovery found repository pyproject.toml; import sys.path isolation does not select pytest configuration. Changed package-data entries are inactive during these non-build, non-install tests. Explicit test filenames bypass testpaths; candidate imports and all tracked candidate files are unchanged.",
+  "repeat_acquisition_required": false,
+  "root_apply_at": "2026-10-26T00:48:03Z"
+}

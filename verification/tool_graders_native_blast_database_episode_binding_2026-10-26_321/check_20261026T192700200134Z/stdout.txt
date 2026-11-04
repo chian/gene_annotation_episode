@@ -1,0 +1,79 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+___ test_actual_preparation_and_frozen_replay_without_remote_or_calculation ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192700200134Z/tmp/test_actual_preparation_and_fr0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d64ed325b50>
+
+    def test_actual_preparation_and_frozen_replay_without_remote_or_calculation(tmp_path, monkeypatch):
+        h = SyntheticHost(tmp_path, monkeypatch)
+        try:
+            child = h.results(typed=False)
+            outcome = h.select(child, 0, 'execution.results.collect')
+>           assert outcome['status'] == 'completed', outcome
+E           AssertionError: {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_native_blast_database_results.py:18: AssertionError
+_________ test_nonzero_native_retains_readable_rows_without_completion _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192700200134Z/tmp/test_nonzero_native_retains_re0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d650f20af30>
+
+    def test_nonzero_native_retains_readable_rows_without_completion(tmp_path, monkeypatch):
+        h = SyntheticHost(tmp_path, monkeypatch, nonzero=True)
+        try:
+            child = h.results(typed=False)
+            body = h.select(child, 0, 'execution.results.collect')['result']
+>           assert body['capture']['status'] == 'complete'
+                   ^^^^^^^^^^^^^^^
+E           TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_native_blast_database_results.py:46: TypeError
+_________ test_missing_explicit_row_is_specific_incomplete_projection __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192700200134Z/tmp/test_missing_explicit_row_is_s0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d650eec02c0>
+
+    def test_missing_explicit_row_is_specific_incomplete_projection(tmp_path, monkeypatch):
+        h = SyntheticHost(tmp_path, monkeypatch)
+        try:
+            selection = selector('hsp')
+            selection['projections'][0]['rows'] = {'record_keys': ['explicit-missing-row']}
+            child = h.results(selection, typed=False)
+            body = h.select(child, 0, 'execution.results.collect')['result']
+>           assert not body['complete']
+                       ^^^^^^^^^^^^^^^^
+E           TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_native_blast_database_results.py:62: TypeError
+____________ test_selected_metadata_requires_actual_parent_receipt _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T192700200134Z/tmp/test_selected_metadata_require0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d650f059f10>
+
+    def test_selected_metadata_requires_actual_parent_receipt(tmp_path, monkeypatch):
+        h = SyntheticHost(tmp_path, monkeypatch)
+        try:
+            ref = h.store.artifact(b'{}', 'application/json'); artifact = h.store.get(ref)
+            selection = selector('hsp', metadata_inputs=[dict(input_key='additional', consumer='profile', schema_id='unknown.future',
+                artifact_ref=ref, sha256=artifact['sha256'], size_bytes=artifact['size'])])
+            with pytest.raises(ValueError, match='selected_input_not_received'):
+                h.results(selection, typed=False)
+            h.receipts.receive(h.root.episode_id, [ref], kind='initial')
+            child = h.results(selection, typed=False)
+            body = h.select(child, 0, 'execution.results.collect')['result']
+>           assert body['publication']['rows_by_family']['hsp']
+                   ^^^^^^^^^^^^^^^^^^^
+E           TypeError: 'NoneType' object is not subscriptable
+
+../../../tests/test_native_blast_database_results.py:80: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_results.py::test_actual_preparation_and_frozen_replay_without_remote_or_calculation
+FAILED ../../../tests/test_native_blast_database_results.py::test_nonzero_native_retains_readable_rows_without_completion
+FAILED ../../../tests/test_native_blast_database_results.py::test_missing_explicit_row_is_specific_incomplete_projection
+FAILED ../../../tests/test_native_blast_database_results.py::test_selected_metadata_requires_actual_parent_receipt
+4 failed in 32.36s

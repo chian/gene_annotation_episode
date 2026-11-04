@@ -1,0 +1,116 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 48 items / 45 deselected / 3 selected
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py::test_requested_only_subsets_at_each_boundary[fields0] FAILED [ 33%]
+RETAINED FAILURE tests/test_native_infernal_preparation_nested_workflow.py::test_requested_only_subsets_at_each_boundary[fields0]
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/probe_007/temporary/pytest/test_requested_only_subsets_at0')
+fields = ('rows',)
+
+    @pytest.mark.parametrize('fields', [('rows',), ('artifacts',), ('references',)])
+    def test_requested_only_subsets_at_each_boundary(tmp_path, fields):
+        selector = choice_for(native_job('cmemit', 'consensus'))
+        selector['projection']['rows'] = {'offset': 0, 'limit': 1}
+        selector['projection']['quantities'] = ['components.gc_fraction_canonical']
+        selector['projection']['checks'] = []
+        selector['artifacts'] = [{'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]
+        case = nested_case(tmp_path, selector=selector, results_fields=fields, parent_fields=fields)
+        try:
+            assert set(case.returned) == {'completed', *fields} and set(case.forwarded) == set(fields)
+            assert case.forwarded == {field: case.returned[field] for field in fields}
+            for context in (case.science_context, case.root_context):
+                facts = case.owner.native_infernal_preparation_returns.received_facts(context,
+                    forwarded_form(('rows', 'artifacts', 'population', 'references')))
+                for name in ('rows', 'artifacts', 'population'):
+                    assert facts[PREFIX + name] == (case.forwarded[name] if name in fields else [])
+            if fields == ('rows',):
+                assert [q['path'] for q in case.forwarded['rows'][0]['quantities']] == ['components.gc_fraction_canonical']
+            # A source reference never grants auxiliary sheet/calculation files.
+            prepared = case.outcome['result']['prepared']
+            source = case.store.get(case.outcome['result']['source_ref'])
+            probes = []
+            for context in (case.science_context, case.root_context):
+                resolve = case.flow.resolver(case.scope, context=context)
+                for reference in source['auxiliary_artifact_refs']:
+                    probes.append({'recipient': context.role, 'reference': reference,
+                        'source_ref': source['id'], 'relationship': 'auxiliary_artifact_refs',
+                        'known_references': sorted(case.flow.receipts.known(context.episode_id)),
+                        'workflow_resolver': resolve(reference, 'artifact'),
+                        'owner_without_services_resolver': case.owner.resolve(context, reference, 'artifact'),
+                        'received_preparation_resolver': case.owner.native_infernal_preparation_returns.resolve_received(
+                            context, reference, 'artifact')})
+            (tmp_path / 'resolver-probe.json').write_text(json.dumps(probes, indent=2) + '\n')
+            for context in (case.science_context, case.root_context):
+                known = set(case.flow.receipts.known(context.episode_id))
+                resolve = case.flow.resolver(case.scope, context=context)
+                for key in ('sheet_artifact_ref', 'calculations_artifact_ref'):
+                    assert prepared[key] not in known
+                    assert not case.owner.native_infernal_preparation_returns.resolve_received(context, prepared[key], 'artifact')
+                    assert not resolve(prepared[key], 'artifact'), (context.role, key, prepared[key], sorted(known))
+                    assert not case.owner.resolve(context, prepared[key], 'artifact')
+                unrequested = next(row for row in case.outcome['result']['capture']['artifacts'] if row['role'] == 'models')
+>               assert unrequested['artifact_ref'] not in known
+E               AssertionError: assert 'artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc' not in {'artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e', 'artifact_728096fb6a41c529e0058e03c73916d67bf2248a34397598050617d71c5d9e47', 'artifact_7d4c72fac7369e48e9276aa0535a1988282f65b6c24453d11ea917a1dc2752b2', 'input_7e643ef05db64829a21ebff7', 'artifact_5d548e736103a701d8dee2d6b2976bb6a2f3d700710562c13bb1384673489279', 'source_a749b5c4fed1f375cdcb2464', 'artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc', 'artifact_9ffa312c4bc5fce7029c6d9fc4db40b7a042cde44e7d28c83b3cecdac700e9ca', 'collection_0ebc3b960c42eea916215a94', 'material_5f0371dd1ffab5f174fb969f', 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'artifact_f8262b6fdc5bf17603799e749077307fd884e9fbe23c12e9239f0a0534349a12', 'source_bbb76c70f7c09bc6138a30b5', 'artifact_858cdba2630a8bd95df95a6a548b9c6a08707311ac3276f56ea1bf4644a26365', 'parse_attempt_8eec51cc97eade240e010f29', 'source_64e1fd197c85aec2d5964636'}
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py:481: AssertionError
+
+
+=================================== FAILURES ===================================
+____________ test_requested_only_subsets_at_each_boundary[fields0] _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/probe_007/temporary/pytest/test_requested_only_subsets_at0')
+fields = ('rows',)
+
+    @pytest.mark.parametrize('fields', [('rows',), ('artifacts',), ('references',)])
+    def test_requested_only_subsets_at_each_boundary(tmp_path, fields):
+        selector = choice_for(native_job('cmemit', 'consensus'))
+        selector['projection']['rows'] = {'offset': 0, 'limit': 1}
+        selector['projection']['quantities'] = ['components.gc_fraction_canonical']
+        selector['projection']['checks'] = []
+        selector['artifacts'] = [{'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]
+        case = nested_case(tmp_path, selector=selector, results_fields=fields, parent_fields=fields)
+        try:
+            assert set(case.returned) == {'completed', *fields} and set(case.forwarded) == set(fields)
+            assert case.forwarded == {field: case.returned[field] for field in fields}
+            for context in (case.science_context, case.root_context):
+                facts = case.owner.native_infernal_preparation_returns.received_facts(context,
+                    forwarded_form(('rows', 'artifacts', 'population', 'references')))
+                for name in ('rows', 'artifacts', 'population'):
+                    assert facts[PREFIX + name] == (case.forwarded[name] if name in fields else [])
+            if fields == ('rows',):
+                assert [q['path'] for q in case.forwarded['rows'][0]['quantities']] == ['components.gc_fraction_canonical']
+            # A source reference never grants auxiliary sheet/calculation files.
+            prepared = case.outcome['result']['prepared']
+            source = case.store.get(case.outcome['result']['source_ref'])
+            probes = []
+            for context in (case.science_context, case.root_context):
+                resolve = case.flow.resolver(case.scope, context=context)
+                for reference in source['auxiliary_artifact_refs']:
+                    probes.append({'recipient': context.role, 'reference': reference,
+                        'source_ref': source['id'], 'relationship': 'auxiliary_artifact_refs',
+                        'known_references': sorted(case.flow.receipts.known(context.episode_id)),
+                        'workflow_resolver': resolve(reference, 'artifact'),
+                        'owner_without_services_resolver': case.owner.resolve(context, reference, 'artifact'),
+                        'received_preparation_resolver': case.owner.native_infernal_preparation_returns.resolve_received(
+                            context, reference, 'artifact')})
+            (tmp_path / 'resolver-probe.json').write_text(json.dumps(probes, indent=2) + '\n')
+            for context in (case.science_context, case.root_context):
+                known = set(case.flow.receipts.known(context.episode_id))
+                resolve = case.flow.resolver(case.scope, context=context)
+                for key in ('sheet_artifact_ref', 'calculations_artifact_ref'):
+                    assert prepared[key] not in known
+                    assert not case.owner.native_infernal_preparation_returns.resolve_received(context, prepared[key], 'artifact')
+                    assert not resolve(prepared[key], 'artifact'), (context.role, key, prepared[key], sorted(known))
+                    assert not case.owner.resolve(context, prepared[key], 'artifact')
+                unrequested = next(row for row in case.outcome['result']['capture']['artifacts'] if row['role'] == 'models')
+>               assert unrequested['artifact_ref'] not in known
+E               AssertionError: assert 'artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc' not in {'artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e', 'artifact_728096fb6a41c529e0058e03c73916d67bf2248a34397598050617d71c5d9e47', 'artifact_7d4c72fac7369e48e9276aa0535a1988282f65b6c24453d11ea917a1dc2752b2', 'input_7e643ef05db64829a21ebff7', 'artifact_5d548e736103a701d8dee2d6b2976bb6a2f3d700710562c13bb1384673489279', 'source_a749b5c4fed1f375cdcb2464', 'artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc', 'artifact_9ffa312c4bc5fce7029c6d9fc4db40b7a042cde44e7d28c83b3cecdac700e9ca', 'collection_0ebc3b960c42eea916215a94', 'material_5f0371dd1ffab5f174fb969f', 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'artifact_f8262b6fdc5bf17603799e749077307fd884e9fbe23c12e9239f0a0534349a12', 'source_bbb76c70f7c09bc6138a30b5', 'artifact_858cdba2630a8bd95df95a6a548b9c6a08707311ac3276f56ea1bf4644a26365', 'parse_attempt_8eec51cc97eade240e010f29', 'source_64e1fd197c85aec2d5964636'}
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py:481: AssertionError
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/probe_007/tests.xml -
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_nested_workflow.py::test_requested_only_subsets_at_each_boundary[fields0] - AssertionError: assert 'artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc' not in {'artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e', 'artifact_728096fb6a41c529e0058e03c73916d67bf2248a34397598050617d71c5d9e47', 'artifact_7d4c72fac7369e48e9276aa0535a1988282f65b6c24453d11ea917a1dc2752b2', 'input_7e643ef05db64829a21ebff7', 'artifact_5d548e736103a701d8dee2d6b2976bb6a2f3d700710562c13bb1384673489279', 'source_a749b5c4fed1f375cdcb2464', 'artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc', 'artifact_9ffa312c4bc5fce7029c6d9fc4db40b7a042cde44e7d28c83b3cecdac700e9ca', 'collection_0ebc3b960c42eea916215a94', 'material_5f0371dd1ffab5f174fb969f', 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'artifact_f8262b6fdc5bf17603799e749077307fd884e9fbe23c12e9239f0a0534349a12', 'source_bbb76c70f7c09bc6138a30b5', 'artifact_858cdba2630a8bd95df95a6a548b9c6a08707311ac3276f56ea1bf4644a26365', 'parse_attempt_8eec51cc97eade240e010f29', 'source_64e1fd197c85aec2d5964636'}
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+====================== 1 failed, 45 deselected in 25.02s =======================

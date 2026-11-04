@@ -1,0 +1,24 @@
+{
+  "evidence_kind": "actual_terminal_test_receipts",
+  "runs": [
+    {
+      "command": ".venv/bin/pytest -q tests/test_bvbrc_proteome_returns.py -x",
+      "exit_code": 1,
+      "passed": 50,
+      "failed": 1,
+      "seconds": 60.23,
+      "failed_test": "test_real_recorded_custody_forwarding_and_zero_synthetic_observations",
+      "failure": "sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action",
+      "cause_and_correction": "The controlled test publication fixture omitted action from a Journal upsert. The fixture now supplies its original selected download action; no production source changed for this correction."
+    },
+    {
+      "command": ".venv/bin/pytest -q tests/test_bvbrc_proteome_returns.py tests/test_bvbrc_proteome_returns_original.py -x",
+      "exit_code": 0,
+      "passed": 107,
+      "failed": 0,
+      "seconds": 472.15,
+      "source_guard": false,
+      "qualification": "This process imported the earlier binder before the final empty-publication guard and its five focused tests were added. RUN_003 is the captured final-source verification."
+    }
+  ]
+}

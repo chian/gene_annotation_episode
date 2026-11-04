@@ -1,0 +1,15 @@
+--- before/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_v3_partial_design_078/build_declarations_007.py
++++ after/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_v3_partial_design_078/build_declarations_007.py
+@@ -62,6 +62,12 @@
+ ED['Assignment']=cp(D['Assignment'])
+ ED['ScopeRelationExtraction']=obj({'selection':cp(D['ScopeRelation']),'witnesses':arr(ref('WitnessRecord')),
+     'effective_value':cp(D['ScopeRelation']['properties']['value'])})
++# Optional only for saved legacy extractions. Live reads retain each local
++# interpretation's actual witnesses independently of any whole-model request.
++E['properties']['local_pair_extractions']=arr(obj({'pair_key':T,
++    'admissibility':obj({'selection':cp(D['LocalPairNomination']['properties']['admissibility']),
++        'witnesses':arr(ref('WitnessRecord')),'effective_value':enum('compatible','unknown','conflicting')}),
++    'scope':ref('ScopeRelationExtraction'),'variance_status':ref('InterpretationExtraction')}))
+ ED['CompanionExtraction']=obj({'reading_key':T,'primary_role':enum(*ROLES),'reading':ref('ArmExtraction')})
+ ED['ReconciliationDecision']=obj({'role':enum(*ROLES),'selection':cp(D['ReconciliationNomination']),
+     'witnesses':arr(ref('WitnessRecord')),'reading_selectors':arr(ref('ReadingSelector'),minItems=1),

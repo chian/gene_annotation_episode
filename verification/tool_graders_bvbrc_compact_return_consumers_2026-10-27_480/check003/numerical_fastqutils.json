@@ -1,0 +1,77 @@
+{
+  "evidence": "existing constructed numerical fixture; compact contract custody only",
+  "family": "fastqutils",
+  "rows": [
+    {
+      "source_ref": "source_0496fd7bd95f8fa06c9b37fd",
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fread_count",
+      "value": {
+        "selection": {
+          "target": {
+            "kind": "measurement",
+            "selector": {
+              "selection": "semantic",
+              "record_ref": null,
+              "document_id": "reads",
+              "section_key": "fastq_summary",
+              "section_ordinal": 0,
+              "metric": "fastq_read_count",
+              "rows": {
+                "kind": "all",
+                "ordinal": null
+              },
+              "axis": {
+                "kind": "exact",
+                "axis": {
+                  "kind": "none",
+                  "label": null,
+                  "lower": null,
+                  "upper": null
+                }
+              }
+            }
+          },
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "availability_requirement": "available_value"
+        },
+        "matched_count": 1,
+        "state": "satisfied",
+        "satisfied": true,
+        "records": [
+          {
+            "kind": "measurement",
+            "record_ref": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+            "state": "available",
+            "payload": {
+              "measurement_ref": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+              "document_id": "reads",
+              "quantity": "fastq_read_count",
+              "axis": {
+                "kind": "none",
+                "label_ref": null,
+                "lower": null,
+                "upper": null
+              },
+              "state": "available",
+              "value": 2,
+              "unit": "reads",
+              "meaning": "observed_count",
+              "precision": "exact_for_retained_population",
+              "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+              "association_ref": null,
+              "native_token_ref": null
+            },
+            "source_refs": [
+              "source_reads"
+            ],
+            "requirement_refs": [],
+            "diagnostic_codes": []
+          }
+        ],
+        "requirement_refs": [],
+        "diagnostic_codes": []
+      }
+    }
+  ]
+}

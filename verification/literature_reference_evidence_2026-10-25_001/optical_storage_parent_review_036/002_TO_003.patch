@@ -1,0 +1,454 @@
+--- checkpoint002/gene_annotation_episode/literature_optical_storage.py
++++ checkpoint003/gene_annotation_episode/literature_optical_storage.py
+@@ -169,23 +169,47 @@
+     return context, operands, interpretations, cov_ref
+ 
+ 
++def _saved_equal(left, right):
++    """Exact JSON identity; malformed nonfinite data is a structured mismatch."""
++    try:
++        return canonical(left) == canonical(right)
++    except (ValueError, TypeError, OverflowError):
++        return False
++
++
++def _finite_cell(value):
++    import math
++    try:
++        return type(value) in (int, float) and math.isfinite(value)
++    except (OverflowError, TypeError, ValueError):
++        return False
++
++
++def _admitted_digest(cells):
++    try:
++        return identity("optical_admitted_cells", cells)
++    except (ValueError, TypeError, OverflowError):
++        _fail("delivery_binding_mismatch")
++
++
+ def _validate_calculation(saved):
+     result, inputs = saved["calculation"], saved["extraction"]["calculation_inputs"]
+     _keys(result, ("version", "endpoint", *CELL_MAP.values(), "primitive_observation_refs", "input_snapshot"))
+     if (result["version"] != "a105_nadh_optical_rate_cells_v1" or result["endpoint"] != "NADH_depletion"
+-            or result["input_snapshot"] != inputs or result["primitive_observation_refs"] != inputs["primitive_observation_refs"]):
++            or not _saved_equal(result["input_snapshot"], inputs)
++            or not _saved_equal(result["primitive_observation_refs"], inputs["primitive_observation_refs"])):
+         _fail("saved_calculation_mismatch")
+     _keys(saved["cells"], COMPONENTS)
+-    import math
+     expected_conditions = [name + "=" + inputs[name] for name in INTERPRETATIONS if name != "signal_kind"]
+     for component in COMPONENTS:
+         cell = result[CELL_MAP[component]]
+         _keys(cell, ("value", "unit", "status", "formula", "origin", "unavailable_reason", "conditional_on"))
+         value, reason = cell["value"], cell["unavailable_reason"]
+-        if (canonical(saved["cells"][component]) != canonical(cell)
++        if value is not None and not _finite_cell(value):
++            _fail("saved_cell_mismatch")
++        if (not _saved_equal(saved["cells"][component], cell)
+                 or cell["unit"] != ("uM/min" if component == "net_rate" else "(uM/min)^2")
+                 or cell["formula"] != FORMULAS[component] or cell["origin"] != "derived"
+-                or (value is not None and (type(value) not in (int, float) or not math.isfinite(value)))
+                 or cell["status"] != ("unavailable" if value is None else "populated")
+                 or (reason not in REASONS if value is None else reason is not None)):
+             _fail("saved_cell_mismatch")
+@@ -235,10 +259,10 @@
+     def receive_cells(self, context, cells, operation_key):
+         with self.store.transaction():
+             original = self._original_delivery_cells(context, operation_key)
+-            if original is not None and canonical(cells) != canonical(original):
++            if original is not None and not _saved_equal(cells, original):
+                 _fail("delivery_binding_mismatch")
+             super().receive_cells(context, cells, operation_key)
+-            digest = identity("optical_admitted_cells", cells)
++            digest = _admitted_digest(cells)
+             old = self.store.db.execute("SELECT cells_digest FROM literature_optical_delivery_bindings WHERE run_id=? AND episode_id=? AND operation_key=?",
+                 (self.run_id, context.episode_id, operation_key)).fetchone()
+             if old is not None and old[0] != digest:
+@@ -327,7 +351,7 @@
+     def read(self, sheet_ref):
+         """Authenticate original saved associations; never read scientific bytes."""
+         source = self.store.get(sheet_ref)
+-        if (source.get("record_type") != "source" or source.get("provider") != PROVIDER
++        if (source.get("id") != sheet_ref or source.get("record_type") != "source" or source.get("provider") != PROVIDER
+                 or source.get("version") != VERSION or source.get("origin") != "tool" or not source.get("request_ref")):
+             _fail("sheet_required")
+         request = json.loads(self.store.get_artifact(source["request_ref"]))
+@@ -376,7 +400,8 @@
+         def expected(kind, value):
+             ref = identity(kind, {"origin": "tool", "record": value})
+             actual = self.store.get(ref)
+-            if actual.get("record_type") != kind or actual.get("origin") != "tool" or any(actual.get(k) != v for k, v in value.items()):
++            if (actual.get("id") != ref or actual.get("record_type") != kind or actual.get("origin") != "tool"
++                    or not _saved_equal({key: actual.get(key) for key in value}, value)):
+                 _fail("binding_mismatch")
+             records.append(ref)
+             return ref
+@@ -418,6 +443,22 @@
+                     "operands": deepcopy(saved["operand_bindings"])})
+         return result
+ 
++    def validate_cells(self, cells, *, sheet_refs, permitted_record_refs, components=None):
++        expected = self.project_cells(sheet_refs, permitted_record_refs=permitted_record_refs, components=components)
++        if not _saved_equal(cells, expected):
++            raise ContractError("literature_rate_return_differs_from_saved_cells")
++
++    def validate_returned_values(self, cells, *, permitted_record_refs):
++        seen = set()
++        for row in cells:
++            key = (row["sheet_ref"], row["component"])
++            if key in seen:
++                raise ContractError("duplicate_literature_rate_return_cell")
++            seen.add(key)
++            expected = self.project_cells([row["sheet_ref"]], permitted_record_refs=permitted_record_refs, components=[row["component"]])
++            if not _saved_equal(row, expected[0]):
++                raise ContractError("literature_rate_return_differs_from_saved_cells")
++
+     def fact_cells(self, context, sheet_refs, *, components):
+         """Own sheets can project; child sheets forward only actually admitted cells."""
+         selected = _selected({"requested_optical_components": list(components)})
+@@ -442,8 +483,8 @@
+             bound = self.store.db.execute("SELECT cells_digest FROM literature_optical_delivery_bindings WHERE run_id=? AND episode_id=? AND operation_key=?",
+                 (self.run_id, context.episode_id, receipt["operation_key"])).fetchone()
+             original = self._original_delivery_cells(context, receipt["operation_key"])
+-            if (bound is None or bound[0] != identity("optical_admitted_cells", cells)
+-                    or original is not None and canonical(original) != canonical(cells)):
++            if (bound is None or bound[0] != _admitted_digest(cells)
++                    or original is not None and not _saved_equal(original, cells)):
+                 _fail("delivery_binding_mismatch")
+         rows = super().received_cells(context)
+         self.validate_returned_values(rows, permitted_record_refs=[row["sheet_ref"] for row in rows])
+--- checkpoint002/gene_annotation_episode/literature_experimental_prompt.py
++++ checkpoint003/gene_annotation_episode/literature_experimental_prompt.py
+@@ -426,7 +426,7 @@
+     return isinstance(anchor, Mapping) and any(
+         all(anchor.get(key) == token.get(key) for key in ("source_ref", "artifact_ref"))
+         and type(anchor.get("start")) is int and type(anchor.get("end")) is int
+-        and anchor["start"] <= token["start"] < token["end"] <= anchor["end"] for token in tokens)
++        and anchor["start"] < token["end"] and token["start"] < anchor["end"] for token in tokens)
+ 
+ 
+ def _optical_hidden_records(reports, records):
+@@ -443,7 +443,9 @@
+         for quantity in row.get("operands", {}).values() if isinstance(quantity, Mapping)}
+     tokens = [records[ref]["anchor"] for ref in measurements if ref in records
+         and isinstance(records[ref].get("anchor"), Mapping)]
+-    return refs | {ref for ref, record in records.items() if _contains_optical_token(record, tokens)}
++    incomplete = any(ref is not None and (ref not in records or not isinstance(records[ref].get("anchor"), Mapping)) for ref in measurements)
++    return refs | {ref for ref, record in records.items() if _contains_optical_token(record, tokens)
++        or incomplete and isinstance(record.get("anchor"), Mapping)}
+ 
+ 
+ def _optical_received(parts, rows, records):
+@@ -452,11 +454,12 @@
+     measurements = {q.get("measurement_ref") for q in first.get("operands", {}).values() if isinstance(q, Mapping)}
+     tokens = [records[ref]["anchor"] for ref in measurements if ref in records
+         and isinstance(records[ref].get("anchor"), Mapping)]
++    incomplete = any(ref is not None and (ref not in records or not isinstance(records[ref].get("anchor"), Mapping)) for ref in measurements)
+     def label(reference):
+         if reference is None:
+             return "unknown"
+         record = records.get(reference)
+-        if record is None or _contains_optical_token(record, tokens):
++        if record is None or _contains_optical_token(record, tokens) or incomplete and isinstance(record.get("anchor"), Mapping):
+             return "source-bound witness retained for scoped access"
+         return record.get("label", record.get("name", "source-bound witness retained for scoped access"))
+     units = {"uM2/min2": "(uM/min)^2", "mM_inverse_cm_inverse": "mM^-1 cm^-1"}
+--- checkpoint002/tests/test_literature_optical_storage.py
++++ checkpoint003/tests/test_literature_optical_storage.py
+@@ -17,13 +17,13 @@
+ SUFFIX = " Molecule reference-R; construct reference-RC; preparation reference-RP; condition buffer-B; measured NADH."
+ 
+ 
+-def setup(path, *, covariance=True, status="known", text=TEXT + SUFFIX, change=None):
++def setup(path, *, covariance=True, status="known", text=TEXT + SUFFIX, change=None, operands=None):
+     store = Store(path)
+     store.create_problem(raw_sequence="ATGGCT", molecule="dna")
+     artifact = store.artifact(text, "text/plain")
+     source = store.put("source", {"provider": "synthetic_optical_fixture", "accession": None, "uri": None,
+         "artifact_ref": artifact, "text_ref": artifact, "request_ref": None, "version": None, "retrieved_at": None}, origin="caller")["id"]
+-    args = fixture(text)[0]
++    args = fixture(text, **(operands or {}))[0]
+     for field, quote in (("molecule", "reference-R"), ("construct", "reference-RC"), ("preparation", "reference-RP"),
+                          ("condition", "buffer-B"), ("measured_entity", "NADH")):
+         args[field] = witness(text, quote)
+@@ -185,7 +185,7 @@
+             repo.populate(replace(context, assignment={**plain(context.assignment), "requested_optical_components": ["net_rate"]}), args, "selected")
+ 
+ 
+-def test_receipts_scope_page_ancestry_and_exact_representation_authorized(tmp_path):
++def test_receipts_and_actual_assigned_page_source_ancestry_authorized(tmp_path):
+     store, context, args = setup(tmp_path)
+     try:
+         repo = LiteratureOpticalRepository(store, context.run_id)
+@@ -299,7 +299,7 @@
+         store.close()
+ 
+ 
+-def test_same_token_reuse_survives_storage_and_conflicting_physical_reuse_fails(tmp_path):
++def test_same_token_reuse_preserves_physical_measurement_and_distinct_owner_bindings(tmp_path):
+     store, context, args = setup(tmp_path, covariance=False)
+     try:
+         repo = LiteratureOpticalRepository(store, context.run_id)
+@@ -307,9 +307,105 @@
+         outcome = repo.populate(context, args, "same-token")
+         row, = projected(repo, outcome, ["net_rate"])
+         assert row["value"] == 0
++        forged = deepcopy(row)
++        forged["value"] = False
++        with pytest.raises(ContractError, match="differs_from_saved_cells"):
++            repo.validate_returned_values([forged], permitted_record_refs=outcome["record_refs"])
+         assert row["operands"]["sample_slope"]["local_reuse_ref"] == row["operands"]["blank_slope"]["local_reuse_ref"]
+         assert row["operands"]["sample_slope"]["semantic_owner_ref"] != row["operands"]["blank_slope"]["semantic_owner_ref"]
+         saved = repo.read(row["sheet_ref"])
+         assert saved["extraction"]["signals"]["sample"]["measurement_key"] == saved["extraction"]["signals"]["blank"]["measurement_key"]
+     finally:
+         store.close()
++
++
++def rewrite_selected_payload(store, outcome, mutate):
++    """Synthetic corruption reaches the detached validator past provider labels."""
++    original = store.get(outcome["result"]["sheet_ref"])
++    payload = json.loads(store.get_artifact(original["artifact_ref"]))
++    mutate(payload)
++    fields = {key: original[key] for key in ("provider", "accession", "uri", "request_ref", "version", "retrieved_at", "parent_source_refs")}
++    artifact = store.artifact(json.dumps(payload), "application/json")
++    fields.update(artifact_ref=artifact, text_ref=artifact)
++    ref = store.put("source", fields, origin="tool")["id"]
++    changed = deepcopy(outcome)
++    changed["result"]["sheet_ref"] = ref
++    changed["record_refs"] = [ref if old == original["id"] else old for old in changed["record_refs"]]
++    store.db.execute("UPDATE literature_optical_operations SET outcome=?", (canonical(changed),))
++    return ref
++
++
++def test_zero_operand_snapshot_cannot_be_spoofed_with_boolean_false(tmp_path):
++    text = (TEXT + SUFFIX).replace("-0.012 AU/min", "0.0 AU/min")
++    store, context, args = setup(tmp_path, text=text, operands={"sample": ("0.0 AU/min", "0.0", "AU/min")})
++    try:
++        repo = LiteratureOpticalRepository(store, context.run_id)
++        out = repo.populate(context, args, "zero-sample")
++        fake = rewrite_selected_payload(store, out, lambda p: p["calculation"]["input_snapshot"].update(sample_slope=False))
++        with pytest.raises(ContractError, match="saved_calculation_mismatch"):
++            repo.read(fake)
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("invalid", [10**400, float("nan"), float("inf"), True])
++def test_adversarial_saved_cell_is_deliberate_structured_failure(tmp_path, invalid):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureOpticalRepository(store, context.run_id)
++        out = repo.populate(context, args, "selected")
++        def corrupt(payload):
++            payload["calculation"]["net_depletion_rate"]["value"] = invalid
++            payload["cells"]["net_rate"]["value"] = invalid
++        fake = rewrite_selected_payload(store, out, corrupt)
++        with pytest.raises(ContractError, match="saved_cell_mismatch"):
++            repo.read(fake)
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("mutation", ["bool_offset", "wrong_id"])
++def test_saved_binding_authenticates_exact_types_and_derived_record_identity(tmp_path, mutation):
++    # This condition genuinely starts at byte0, so False would compare equal to
++    # its valid zero offset under ordinary Python nested equality.
++    def change(args):
++        original = args["relation"]["witnesses"][0]
++        args["condition"] = {**original, "start": 0, "end": len("Synthetic"), "quote": "Synthetic"}
++    store, context, args = setup(tmp_path, change=change)
++    try:
++        repo = LiteratureOpticalRepository(store, context.run_id)
++        out = repo.populate(context, args, "selected")
++        saved = repo.read(out["result"]["sheet_ref"])
++        ref = saved["context_bindings"]["condition"]
++        record = store.get(ref)
++        if mutation == "bool_offset":
++            assert record["anchor"]["start"] == 0
++            record["anchor"]["start"] = False
++        else:
++            record["id"] = "context_" + "a" * 64
++        store.db.execute("UPDATE records SET data=? WHERE id=?", (json.dumps(record), ref))
++        with pytest.raises(ContractError, match="binding_mismatch"):
++            repo.read(out["result"]["sheet_ref"])
++    finally:
++        store.close()
++
++
++def test_repository_honors_explicit_bound_scope_guard_before_source_access(tmp_path, monkeypatch):
++    """Injected scope port guard; Store paper sources themselves are reusable.
++
++    This covers the adapter's actual rejection branch, not a claim that source
++    records currently have target roots in Store. Receipt/assigned-page tests
++    above exercise the ordinary unmodified Store source authorization path.
++    """
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureOpticalRepository(store, context.run_id)
++        original = store.reference_subset
++        def bound_guard(refs, scope=None):
++            return [] if args["source_ref"] in refs else original(refs, scope)
++        monkeypatch.setattr(store, "reference_subset", bound_guard)
++        with pytest.raises(ContractError, match="source_outside_scope"):
++            repo.populate(context, args, "scope-denied")
++        assert store.db.execute("SELECT count(*) FROM literature_optical_operations").fetchone()[0] == 0
++    finally:
++        store.close()
+--- checkpoint002/tests/test_literature_optical_integration.py
++++ checkpoint003/tests/test_literature_optical_integration.py
+@@ -9,7 +9,7 @@
+ 
+ from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain
+ from gene_annotation_episode.decision_context import state_frame
+-from gene_annotation_episode.domain import obj
++from gene_annotation_episode.domain import ContractError, canonical, identity, obj
+ from gene_annotation_episode.episode_composition import compose_episode_bindings
+ from gene_annotation_episode.episode_journal import Journal
+ from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+@@ -18,9 +18,23 @@
+ from gene_annotation_episode.runtime import run_workflow
+ from gene_annotation_episode.tools import ToolRegistry
+ from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
+-from test_literature_optical_storage import setup, projected
++from test_literature_optical_storage import setup, projected, TEXT, SUFFIX
+ from test_literature_rate_episode_integration import service_binding
+ from test_runtime import FixtureController, ScriptedProvider
++
++
++RAW_SENTINELS = ("-0.01357902468", "-0.0012342468", "5678.12345", "11.33377709", "337.6197531")
++
++
++def sentinel_setup(path, *, broad=False):
++    text = TEXT + SUFFIX
++    for old, value in zip(("-0.012", "-0.002", "5000", "10 mm", "340 nm"), RAW_SENTINELS):
++        text = text.replace(old, value + (" mm" if old == "10 mm" else " nm" if old == "340 nm" else ""))
++    numbers = dict(zip(("sample", "blank", "epsilon", "path", "wavelength"),
++        [(value + " " + unit, value, unit) for value, unit in zip(RAW_SENTINELS,
++            ("AU/min", "AU/min", "M^-1 cm^-1", "mm", "nm"))]))
++    change = (lambda a: a["signals"]["sample"].update(condition=deepcopy(a["relation"]["witnesses"][0]))) if broad else None
++    return setup(path, text=text, operands=numbers, change=change)
+ 
+ 
+ def work(args):
+@@ -119,6 +133,23 @@
+             changed = deepcopy(received[0]); changed["caller_selected_numbers"][0]["value"] = -99
+             with pytest.raises(ReportBoundaryError, match="differs_from_saved"):
+                 rebuilt.validate_report(current, changed, schema)
++        if components == ["net_rate"]:
++            # A forged received row containing a valid but unadmitted variance
++            # still cannot forward, even if its receipt digest is also forged.
++            original_receipt = store.db.execute("SELECT operation_key,cells FROM literature_optical_received WHERE episode_id=? AND operation_key LIKE '%:typed_form'", (parent.episode_id,)).fetchone()
++            forged = services.literature_optical_repository().project_cells([outcome["result"]["sheet_ref"]],
++                permitted_record_refs=outcome["record_refs"], components=["variance_net_rate"])
++            store.db.execute("UPDATE literature_optical_received SET cells=? WHERE episode_id=? AND operation_key=?",
++                (canonical(forged), parent.episode_id, original_receipt["operation_key"]))
++            store.db.execute("UPDATE literature_optical_delivery_bindings SET cells_digest=? WHERE episode_id=? AND operation_key=?",
++                (identity("optical_admitted_cells", forged), parent.episode_id, original_receipt["operation_key"]))
++            with pytest.raises(ContractError, match="delivery_binding_mismatch"):
++                rebuilt.received_report_facts(parent)
++            original_cells = json.loads(original_receipt["cells"])
++            store.db.execute("UPDATE literature_optical_received SET cells=? WHERE episode_id=? AND operation_key=?",
++                (original_receipt["cells"], parent.episode_id, original_receipt["operation_key"]))
++            store.db.execute("UPDATE literature_optical_delivery_bindings SET cells_digest=? WHERE episode_id=? AND operation_key=?",
++                (identity("optical_admitted_cells", original_cells), parent.episode_id, original_receipt["operation_key"]))
+         # No fact filling/forwarding/internal source arithmetic adds a turn.
+         assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 3
+         assert not store.list("observation") and not store.list("assessment")
+@@ -128,9 +159,9 @@
+ 
+ @pytest.mark.parametrize("components", [["net_rate"], ["variance_net_rate"]])
+ @pytest.mark.parametrize("parent", [False, True])
+-def test_actual_receiving_provider_text_excludes_unrequested_operand_numbers(tmp_path, components, parent):
+-    store, context, args = setup(tmp_path / "state", change=lambda a: a["signals"]["sample"].update(
+-        condition=deepcopy(a["relation"]["witnesses"][0])))
++@pytest.mark.parametrize("record_page", ["complete", "missing_operand", "partial_overlap"])
++def test_actual_receiving_provider_text_excludes_unrequested_operand_numbers(tmp_path, components, parent, record_page):
++    store, context, args = sentinel_setup(tmp_path / "state", broad=True)
+     try:
+         # Distinct exact source tokens and output values make name-only checks
+         # insufficient. Whole-source interpretation witnesses deliberately span
+@@ -149,6 +180,16 @@
+         broad = deepcopy(store.list("reference")[0])
+         broad.update(id="reference_broad_received", label=saved["selection"]["relation"]["witnesses"][0]["quote"],
+             anchor={key: saved["extraction"]["relation"]["witnesses"][0][key] for key in ("source_ref", "artifact_ref", "start", "end", "quote")})
++        if record_page != "complete":
++            number = saved["extraction"]["signals"]["sample"]["number"]
++            w = number["selector"]["witness"]
++            quote = w["quote"] if record_page == "missing_operand" else RAW_SENTINELS[0][:-1]
++            start = w["start"] + (0 if record_page == "missing_operand" else number["selector"]["number_start"])
++            broad.update(label=quote, anchor={"source_ref": w["source_ref"], "artifact_ref": w["artifact_ref"],
++                "start": start, "end": start + len(quote.encode()), "quote": quote})
++        if record_page == "missing_operand":
++            missing = rows[0]["operands"]["sample_slope"]["measurement_ref"]
++            state["working_state"]["references"] = [r for r in state["working_state"]["references"] if r["id"] != missing]
+         state["working_state"]["references"].append(broad)
+         state["current_report_basis_refs"].append(broad["id"])
+         if parent:
+@@ -169,19 +210,24 @@
+             task, steering = text.split("\n\nSTEERING\n")
+             assert "Admitted requested optical endpoint inputs" in steering
+             assert str(rows[0]["value"]) in steering
+-            for token in ("-0.012", "-0.002", "5000", "10 mm"):
++            for token in (*RAW_SENTINELS, "5.67812345", "1.133377709"):
+                 assert token not in task + steering
+-            unrequested = "0.0024" if components == ["net_rate"] else "| net_rate | 2.0 |"
+-            assert unrequested not in task + steering
+-            for value in ("reference-R", "reference-RC", "reference-RP", "buffer-B", "NADH_depletion", "matched_no_reaction_background", "reported_point", "known"):
++            other_component = "variance_net_rate" if components == ["net_rate"] else "net_rate"
++            assert str(saved["cells"][other_component]["value"]) not in task + steering
++            for value in ("NADH_depletion", "matched_no_reaction_background", "reported_point", "known"):
+                 assert value in steering
++            if record_page != "missing_operand":
++                for value in ("reference-R", "reference-RC", "reference-RP", "buffer-B"):
++                    assert value in steering
++            if record_page == "partial_overlap":
++                assert RAW_SENTINELS[0][:-1] not in task + steering
+             assert "source-bound witness retained for scoped access" in steering
+             assert "optical_owner_" not in text and "literature_optical_owner_" not in text
+             if components == ["variance_net_rate"]:
+                 assert "(uM/min)^2" in steering
+-        assert store.get(rows[0]["operands"]["epsilon"]["measurement_ref"])["label"] == "5000"
++        assert store.get(rows[0]["operands"]["epsilon"]["measurement_ref"])["label"] == RAW_SENTINELS[2]
+         # Raw records still support an explicit permitted later source read.
+-        assert b"5000" in store.get_artifact(store.get(args["source_ref"])["artifact_ref"])
++        assert RAW_SENTINELS[2].encode() in store.get_artifact(store.get(args["source_ref"])["artifact_ref"])
+     finally:
+         store.close()
+ 
+@@ -219,7 +265,7 @@
+ 
+ @pytest.mark.parametrize("leaf_components", [["net_rate"], ["variance_net_rate"]])
+ def test_actual_grandchild_literature_parent_annotation_parent_exact_subset(tmp_path, leaf_components):
+-    store, context, args = setup(tmp_path / "state")
++    store, context, args = sentinel_setup(tmp_path / "state", broad=True)
+     try:
+         schema = obj({"selected_optical": optical_cells_schema()})
+         outer = {**plain(context.assignment), "requested_optical_components": ["net_rate", "variance_net_rate"]}
+@@ -252,13 +298,12 @@
+             wire = LiteratureWire(tmp_path / ("receiver-" + str(index)))
+             asyncio.run(complete(wire, state_frame(state)))
+             text = wire.turns_sent()[0]["input"][0]["text"]
+-            for token in ("-0.012", "-0.002", "5000", "10 mm"):
++            for token in (*RAW_SENTINELS, "5.67812345", "1.133377709"):
+                 assert token not in text
+             assert "reference-RC" in text and "NADH_depletion" in text
+-            if leaf_components == ["net_rate"]:
+-                assert "0.0024" not in text
+-            else:
+-                assert "| net_rate | 2.0 |" not in text
++            operation = json.loads(store.db.execute("SELECT outcome FROM literature_optical_operations").fetchone()[0])
++            other_component = "variance_net_rate" if leaf_components == ["net_rate"] else "net_rate"
++            assert str(operation["result"]["cells"][other_component]["value"]) not in text
+         forms = [json.loads(row[0]) for row in store.db.execute("SELECT form FROM runtime_forms")]
+         assert len(forms) == 2
+         assert all([row["component"] for row in form["selected_optical"]] == leaf_components for form in forms)
+@@ -378,7 +423,6 @@
+             return [rows[0]["sheet_ref"]]
+         receiver = ReceiverBindingV1(store, journal, 7, contract, lambda form: binding.validate_report(child, form, schema),
+             receive, lambda: 0, lambda index, credit: Value({"credit": credit, "estimation_action_index": index}))
+-        receive_cells = repo.receive_cells
+         # C7's service instance has its own repository over the same Store.
+         service_repo = binding.services.literature_optical_repository()
+         original_receive = service_repo.receive_cells

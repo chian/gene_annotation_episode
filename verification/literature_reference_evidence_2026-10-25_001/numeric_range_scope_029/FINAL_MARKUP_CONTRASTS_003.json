@@ -1,0 +1,114 @@
+[
+  {
+    "case": "css",
+    "text": "The concentration was between an unusually <span style=\"color:red;\">low</span> concentration of 3.2 and 4.6 \u03bcM.",
+    "native": false,
+    "token": "3.2",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "css",
+    "text": "The concentration was between an unusually <span style=\"color:red;\">low</span> concentration of 3.2 and 4.6 \u03bcM.",
+    "native": false,
+    "token": "4.6",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "css",
+    "text": "The concentration was between an unusually <span style=\"color:red;\">low</span> concentration of 3.2 and 4.6 \u03bcM.",
+    "native": true,
+    "token": "3.2",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "css",
+    "text": "The concentration was between an unusually <span style=\"color:red;\">low</span> concentration of 3.2 and 4.6 \u03bcM.",
+    "native": true,
+    "token": "4.6",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "encoded_interval",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;between 2.1 and 2.9&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": false,
+    "token": "3.2",
+    "result": "lower_bound_source_number_unsupported:number"
+  },
+  {
+    "case": "encoded_interval",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;between 2.1 and 2.9&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": false,
+    "token": "4.6",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "encoded_interval",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;between 2.1 and 2.9&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": true,
+    "token": "3.2",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "encoded_interval",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;between 2.1 and 2.9&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": true,
+    "token": "4.6",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "encoded_attributes",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;span style=\"between 2.1 and 2.9;\"&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": false,
+    "token": "3.2",
+    "result": "lower_bound_source_number_unsupported:number"
+  },
+  {
+    "case": "encoded_attributes",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;span style=\"between 2.1 and 2.9;\"&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": false,
+    "token": "4.6",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "encoded_attributes",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;span style=\"between 2.1 and 2.9;\"&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": true,
+    "token": "3.2",
+    "result": "interval_source_number_unsupported:number_selector"
+  },
+  {
+    "case": "encoded_attributes",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and &lt;span style=\"between 2.1 and 2.9;\"&gt; 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": true,
+    "token": "4.6",
+    "result": "interval_source_number_unsupported:number"
+  },
+  {
+    "case": "bare_markup",
+    "text": "The mix was divided between <i>two</i> vessels of 180 \u03bcl each and 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": false,
+    "token": "3.2",
+    "result": "point"
+  },
+  {
+    "case": "bare_markup",
+    "text": "The mix was divided between <i>two</i> vessels of 180 \u03bcl each and 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": false,
+    "token": "4.6",
+    "result": "point"
+  },
+  {
+    "case": "bare_markup",
+    "text": "The mix was divided between <i>two</i> vessels of 180 \u03bcl each and 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": true,
+    "token": "3.2",
+    "result": "point"
+  },
+  {
+    "case": "bare_markup",
+    "text": "The mix was divided between <i>two</i> vessels of 180 \u03bcl each and 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "native": true,
+    "token": "4.6",
+    "result": "point"
+  }
+]

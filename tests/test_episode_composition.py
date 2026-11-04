@@ -15,7 +15,9 @@ from method_loop.durable import DurableExecutionError, DurableExecutionStore, ca
 
 from gene_annotation_episode.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_composition import EpisodeComposition, compose_episode_bindings
+from gene_annotation_episode.episode_composition import (
+    EpisodeComposition, compose_episode_bindings, scientific_binding_compatible,
+)
 from gene_annotation_episode.episode_journal import Journal
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes, ProgressProvider
 from gene_annotation_episode.episode_services import WorkflowServices
@@ -284,3 +286,77 @@ def test_duplicate_descriptors_do_not_create_another_binding(resources, monkeypa
     with pytest.raises(DurableExecutionError) as error:
         compose(resources, [saved, deepcopy(saved)])
     assert_failure(error, 'identity_conflict', 'episode_bindings')
+
+
+def _restriction_replay_descriptors():
+    # Actual570 descriptor metadata, used only as pure compatibility inputs.
+    # These dictionaries establish no library, producer, execution or custody.
+    recorded = {
+        'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process',
+        'implementation_sha256': 'cf9e98737150f9dff6a5a3371e2b3424850e4ac1ae957d916caca0271b5b5a24',
+        'configuration': {
+            'library': {'version': 'scientific_process_library_snapshot_v2',
+                'library_id': '14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a',
+                'manifest_sha256': '24e89e053b2c04814885c948c796cb2993fd62dc77867bd462c7badf68c4f9d0'},
+            'tool_library': {'version': 'scientific_tool_library_v2',
+                'catalog_sha256': '763a54379b621cc30f7903eb2e1fc38603fd1472987dbdd5f121e5dfdd07700d'},
+            'child_roles': ['scientific_process']},
+    }
+    actual = deepcopy(recorded)
+    actual['implementation_sha256'] = '3f4a6e314d2f6376e210de699545cc9fc2e14ada0ef8550954af21aa68cf33e3'
+    return actual, recorded
+
+
+def test_closed_restriction_repair_accepts_only_the_reviewed_current_to_recorded_pair():
+    actual, recorded = _restriction_replay_descriptors()
+    before = deepcopy((actual, recorded))
+    assert scientific_binding_compatible(actual, recorded) is True
+    assert scientific_binding_compatible(actual, actual) is True
+    assert scientific_binding_compatible(recorded, recorded) is True
+    assert {key: value for key, value in actual.items() if key != 'implementation_sha256'} == {
+        key: value for key, value in recorded.items() if key != 'implementation_sha256'}
+    assert (actual, recorded) == before
+
+
+@pytest.mark.parametrize('changed', ['reverse', 'unknown_actual', 'unknown_recorded'])
+def test_closed_restriction_repair_rejects_reverse_and_unknown_implementations(changed):
+    actual, recorded = _restriction_replay_descriptors()
+    if changed == 'reverse':
+        actual, recorded = recorded, actual
+    elif changed == 'unknown_actual':
+        actual['implementation_sha256'] = '0' * 64
+    else:
+        recorded['implementation_sha256'] = 'f' * 64
+    before = deepcopy((actual, recorded))
+    assert scientific_binding_compatible(actual, recorded) is False
+    assert (actual, recorded) == before
+
+
+@pytest.mark.parametrize('changed', ['library', 'manifest', 'tool_catalog', 'child_roles',
+    'binding_role', 'current_version', 'recorded_version', 'both_legacy_versions',
+    'extra_configuration', 'extra_descriptor'])
+def test_closed_restriction_repair_preserves_all_other_descriptor_operands(changed):
+    actual, recorded = _restriction_replay_descriptors()
+    if changed == 'library':
+        actual['configuration']['library']['library_id'] = '0' * 64
+    elif changed == 'manifest':
+        actual['configuration']['library']['manifest_sha256'] = '0' * 64
+    elif changed == 'tool_catalog':
+        actual['configuration']['tool_library']['catalog_sha256'] = '0' * 64
+    elif changed == 'child_roles':
+        actual['configuration']['child_roles'].append('results')
+    elif changed == 'binding_role':
+        actual['binding_id'] = 'different_scientific_role'
+    elif changed == 'current_version':
+        actual['version'] = 'scientific_process_episodes_v7'
+    elif changed == 'recorded_version':
+        recorded['version'] = 'scientific_process_episodes_v7'
+    elif changed == 'both_legacy_versions':
+        actual['version'] = recorded['version'] = 'scientific_process_episodes_v7'
+    elif changed == 'extra_configuration':
+        actual['configuration']['unrecorded_option'] = True
+    else:
+        actual['unrecorded_field'] = True
+    before = deepcopy((actual, recorded))
+    assert scientific_binding_compatible(actual, recorded) is False
+    assert (actual, recorded) == before

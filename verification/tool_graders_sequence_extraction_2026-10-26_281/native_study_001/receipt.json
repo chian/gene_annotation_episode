@@ -1,0 +1,56 @@
+{
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T10:52:59.631907+00:00",
+        "monotonic_ns": 825541329236827,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.695141046,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 32768
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_extraction_2026-10-26_281/native_study_001/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_sequence_extraction_2026-10-26_281/native_study_001/stderr.log",
+  "source_hashes_before": {
+    "gene_annotation_episode/sequence_views.py": "5ad12f8ef43d33044dd5cd9662cb9b242af241e0f300fac0353c3130842b9634",
+    "gene_annotation_episode/sequence_mapping.py": "241195f974b6a8dab6a06434daa47d04bd277c6a584c77a534f30a274fb3c1c3",
+    "verification/tool_graders_sequence_extraction_2026-10-26_281/native_study.py": "b2221e9b849cc68c5ce183e9bb33fb480fae06a7fd681c1f1f719355c5d67ef7",
+    "verification/tool_graders_sequence_extraction_2026-10-26_281/run_verification.py": "bbd506776c5289caf7e91ef9a7ff9533119da563b77253061f1913fddd7c0f07"
+  },
+  "source_hashes_after": {
+    "gene_annotation_episode/sequence_views.py": "5ad12f8ef43d33044dd5cd9662cb9b242af241e0f300fac0353c3130842b9634",
+    "gene_annotation_episode/sequence_mapping.py": "241195f974b6a8dab6a06434daa47d04bd277c6a584c77a534f30a274fb3c1c3",
+    "verification/tool_graders_sequence_extraction_2026-10-26_281/native_study.py": "b2221e9b849cc68c5ce183e9bb33fb480fae06a7fd681c1f1f719355c5d67ef7",
+    "verification/tool_graders_sequence_extraction_2026-10-26_281/run_verification.py": "bbd506776c5289caf7e91ef9a7ff9533119da563b77253061f1913fddd7c0f07"
+  },
+  "sources_unchanged": true
+}

@@ -1,0 +1,3086 @@
+{
+  "type": "object",
+  "properties": {
+    "read_count": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "measurement",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "reads",
+            "section_key": "fastq_summary",
+            "section_ordinal": 0,
+            "metric": "fastq_read_count",
+            "rows": {
+              "kind": "all"
+            },
+            "axis": {
+              "kind": "exact",
+              "axis": {
+                "kind": "none",
+                "label": null,
+                "lower": null,
+                "upper": null
+              }
+            }
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    "gc": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "composition_reads",
+            "metric": "gc_acgt_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    "errors": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "quality_reads",
+            "metric": "phred_implied_expected_errors",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    "retained": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "component",
+          "selector": {
+            "selection": "semantic",
+            "calculation_id": "retention_hostile",
+            "metric": "native_report_retention_fraction",
+            "threshold": null
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    "qc": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "category",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "qc",
+            "section_key": "fastqc_basic_statistics",
+            "section_ordinal": 0
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    "population": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "population",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "reads",
+            "population_key": "fastq_reads",
+            "population_ordinal": 0
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "available_value"
+      }
+    },
+    "association": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "association",
+          "selector": {
+            "selection": "semantic",
+            "document_id": "hostile",
+            "input_pointer": "/paired_end_libs/0",
+            "recipe_ordinal": 4,
+            "mate": "combined",
+            "branch": "clean"
+          }
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      }
+    },
+    "requirements": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "requirements"
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      }
+    },
+    "status": {
+      "$ref": "#/$defs/ProjectedField",
+      "x-bvbrc-fastqutils": {
+        "target": {
+          "kind": "request_status",
+          "field": "read_count"
+        },
+        "cardinality": "one_target",
+        "expected_cardinality": 1,
+        "availability_requirement": "typed_state"
+      }
+    }
+  },
+  "required": [
+    "read_count",
+    "gc",
+    "errors",
+    "retained",
+    "qc",
+    "population",
+    "association",
+    "requirements",
+    "status"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "ProjectedField": {
+      "type": "object",
+      "properties": {
+        "selection": {
+          "$ref": "#/$defs/FactSelection"
+        },
+        "matched_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "satisfied",
+            "missing_value",
+            "ambiguous",
+            "cardinality_mismatch",
+            "invalid"
+          ]
+        },
+        "satisfied": {
+          "type": "boolean"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactRecord"
+          }
+        },
+        "requirement_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "diagnostic_codes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "missing_artifact",
+              "partial_transfer",
+              "malformed_native",
+              "nonfinite_native",
+              "unsupported_format",
+              "unsupported_version",
+              "producer_version_unproven",
+              "compression_suffix_mismatch",
+              "truncated_compressed_stream",
+              "missing_bgzf_eof",
+              "unknown_quality_encoding",
+              "invalid_quality_score",
+              "invalid_sequence_symbol",
+              "ambiguous_pair_key",
+              "missing_mate",
+              "association_unresolved",
+              "stage_execution_unknown",
+              "stage_reused_report",
+              "artifact_collision",
+              "input_path_reused",
+              "unknown_reference",
+              "reference_incomplete",
+              "missing_denominator",
+              "zero_denominator",
+              "incompatible_population",
+              "count_inconsistent",
+              "not_retained_by_service",
+              "report_overwritten",
+              "unsupported_report_section",
+              "native_fallback_value",
+              "rounded_native_value",
+              "truncated_native_display",
+              "native_estimator",
+              "synthetic_identity",
+              "missing_requested_value",
+              "selection_ambiguous",
+              "selection_cardinality_mismatch",
+              "metadata_binding_missing",
+              "metadata_value_conflict",
+              "encoding_declaration_conflict",
+              "explicit_encoding_assumption",
+              "lineage_asserted_only",
+              "native_report_local_lineage",
+              "trim_pair_counter_mixed",
+              "source_row_absent",
+              "document_identity_conflict",
+              "native_header_conflict",
+              "record_boundary_invalid",
+              "supplied_version_assumption",
+              "saved_relationship_conflict",
+              "explicit_lineage_assumption"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "selection",
+        "matched_count",
+        "state",
+        "satisfied",
+        "records",
+        "requirement_refs",
+        "diagnostic_codes"
+      ],
+      "additionalProperties": false
+    },
+    "FactSelection": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/FactTarget"
+        },
+        "cardinality": {
+          "type": "string",
+          "enum": [
+            "one_target",
+            "exact_rows"
+          ]
+        },
+        "expected_cardinality": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "availability_requirement": {
+          "type": "string",
+          "enum": [
+            "typed_state",
+            "available_value"
+          ]
+        }
+      },
+      "required": [
+        "target",
+        "cardinality",
+        "expected_cardinality",
+        "availability_requirement"
+      ],
+      "additionalProperties": false
+    },
+    "FactTarget": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "measurement"
+            },
+            "selector": {
+              "$ref": "#/$defs/MeasurementSelector"
+            }
+          },
+          "required": [
+            "kind",
+            "selector"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "component"
+            },
+            "selector": {
+              "$ref": "#/$defs/ComponentSelector"
+            }
+          },
+          "required": [
+            "kind",
+            "selector"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "category"
+            },
+            "selector": {
+              "$ref": "#/$defs/CategorySelector"
+            }
+          },
+          "required": [
+            "kind",
+            "selector"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "population"
+            },
+            "selector": {
+              "$ref": "#/$defs/PopulationSelector"
+            }
+          },
+          "required": [
+            "kind",
+            "selector"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "association"
+            },
+            "selector": {
+              "$ref": "#/$defs/AssociationSelector"
+            }
+          },
+          "required": [
+            "kind",
+            "selector"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "requirements"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "request_status"
+            },
+            "field": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            }
+          },
+          "required": [
+            "kind",
+            "field"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "MeasurementSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "record"
+            },
+            "record_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "selection",
+            "record_ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "semantic"
+            },
+            "document_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            },
+            "section_key": {
+              "type": "string",
+              "enum": [
+                "fastq_records",
+                "fastq_summary",
+                "bam_header",
+                "bam_records",
+                "bam_summary",
+                "fastqc_basic_statistics",
+                "fastqc_per_base_quality",
+                "fastqc_per_tile_quality",
+                "fastqc_per_sequence_quality",
+                "fastqc_per_base_content",
+                "fastqc_per_sequence_gc",
+                "fastqc_per_base_n",
+                "fastqc_length_distribution",
+                "fastqc_duplication",
+                "fastqc_overrepresented",
+                "fastqc_adapter_content",
+                "fastqc_kmer_content",
+                "trim_summary",
+                "trim_pair_validation",
+                "trim_configuration",
+                "trim_adapter_detection",
+                "cutadapt_embedded",
+                "fastq_pair_summary",
+                "hostile_report",
+                "unsupported"
+              ]
+            },
+            "section_ordinal": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "metric": {
+              "type": "string",
+              "enum": [
+                "fastq_read_count",
+                "fastq_base_count",
+                "fastq_symbol_count",
+                "fastq_min_length",
+                "fastq_max_length",
+                "fastq_length_histogram_count",
+                "quality_character_count",
+                "phred_histogram_count",
+                "verified_pair_count",
+                "fastqc_total_sequences",
+                "fastqc_flagged_sequences",
+                "fastqc_total_bases_display",
+                "fastqc_min_length",
+                "fastqc_max_length",
+                "fastqc_gc_percent",
+                "fastqc_base_quality_mean",
+                "fastqc_base_quality_median",
+                "fastqc_base_quality_lower_quartile",
+                "fastqc_base_quality_upper_quartile",
+                "fastqc_base_quality_p10",
+                "fastqc_base_quality_p90",
+                "fastqc_tile_quality_deviation",
+                "fastqc_sequence_quality_count",
+                "fastqc_base_content_percent",
+                "fastqc_n_percent",
+                "fastqc_sequence_gc_smoothed_count",
+                "fastqc_length_bin_count",
+                "fastqc_total_deduplicated_percent",
+                "fastqc_duplication_bin_percent",
+                "fastqc_overrepresented_count",
+                "fastqc_overrepresented_percent",
+                "fastqc_adapter_percent",
+                "fastqc_kmer_scaled_count",
+                "fastqc_kmer_pvalue",
+                "fastqc_kmer_obs_exp_max",
+                "trim_processed_count",
+                "trim_removed_short_count",
+                "trim_removed_short_percent",
+                "trim_removed_n_count",
+                "trim_removed_n_percent",
+                "trim_removed_long_count",
+                "trim_removed_long_percent",
+                "trim_validation_pair_count",
+                "trim_removed_pair_count",
+                "trim_removed_pair_percent",
+                "trim_native_option",
+                "trim_adapter_detection_count",
+                "fastq_pair_left_paired",
+                "fastq_pair_right_paired",
+                "fastq_pair_left_single",
+                "fastq_pair_right_single",
+                "hostile_reads_in",
+                "hostile_reads_out",
+                "hostile_reads_removed",
+                "hostile_removed_proportion",
+                "bam_record_count",
+                "bam_primary_record_count",
+                "bam_secondary_record_count",
+                "bam_supplementary_record_count",
+                "bam_mapped_primary_count",
+                "bam_mapq_histogram_count",
+                "bam_mapq_unavailable_count"
+              ]
+            },
+            "rows": {
+              "$ref": "#/$defs/RowSelector"
+            },
+            "axis": {
+              "$ref": "#/$defs/AxisSelector"
+            }
+          },
+          "required": [
+            "selection",
+            "document_id",
+            "section_key",
+            "section_ordinal",
+            "metric",
+            "rows",
+            "axis"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "RowSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "all"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "ordinal"
+            },
+            "ordinal": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "kind",
+            "ordinal"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AxisSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "all"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "exact"
+            },
+            "axis": {
+              "$ref": "#/$defs/Axis"
+            }
+          },
+          "required": [
+            "kind",
+            "axis"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Axis": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "none",
+            "base_closed_1",
+            "length_closed",
+            "quality_score",
+            "quality_ascii",
+            "symbol",
+            "adapter",
+            "sequence",
+            "duplication_bin",
+            "tile_base_closed_1",
+            "native_label",
+            "mapq"
+          ]
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "label",
+        "lower",
+        "upper"
+      ],
+      "additionalProperties": false
+    },
+    "ComponentSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "record"
+            },
+            "record_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "selection",
+            "record_ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "semantic"
+            },
+            "calculation_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            },
+            "metric": {
+              "type": "string",
+              "enum": [
+                "gc_acgt_fraction",
+                "n_fraction",
+                "ambiguous_fraction",
+                "mean_read_length",
+                "mean_phred",
+                "q_ge_threshold_fraction",
+                "phred_implied_expected_errors",
+                "phred_implied_error_fraction",
+                "read_retention_fraction",
+                "base_retention_fraction",
+                "pair_retention_fraction",
+                "removed_count",
+                "removed_fraction",
+                "native_report_retention_fraction",
+                "distinct_mapped_read_fraction",
+                "primary_record_fraction",
+                "report_count_difference"
+              ]
+            },
+            "threshold": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 93
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "selection",
+            "calculation_id",
+            "metric",
+            "threshold"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CategorySelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "record"
+            },
+            "record_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "selection",
+            "record_ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "semantic"
+            },
+            "document_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            },
+            "section_key": {
+              "type": "string",
+              "enum": [
+                "fastq_records",
+                "fastq_summary",
+                "bam_header",
+                "bam_records",
+                "bam_summary",
+                "fastqc_basic_statistics",
+                "fastqc_per_base_quality",
+                "fastqc_per_tile_quality",
+                "fastqc_per_sequence_quality",
+                "fastqc_per_base_content",
+                "fastqc_per_sequence_gc",
+                "fastqc_per_base_n",
+                "fastqc_length_distribution",
+                "fastqc_duplication",
+                "fastqc_overrepresented",
+                "fastqc_adapter_content",
+                "fastqc_kmer_content",
+                "trim_summary",
+                "trim_pair_validation",
+                "trim_configuration",
+                "trim_adapter_detection",
+                "cutadapt_embedded",
+                "fastq_pair_summary",
+                "hostile_report",
+                "unsupported"
+              ]
+            },
+            "section_ordinal": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "selection",
+            "document_id",
+            "section_key",
+            "section_ordinal"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "PopulationSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "record"
+            },
+            "record_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "selection",
+            "record_ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "semantic"
+            },
+            "document_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            },
+            "population_key": {
+              "type": "string",
+              "enum": [
+                "fastq_reads",
+                "fastq_bases",
+                "fastq_quality_characters",
+                "verified_read_pairs",
+                "bam_records",
+                "bam_primary_records",
+                "bam_quality_bases",
+                "fastqc_module",
+                "trim_processed",
+                "trim_removed_short",
+                "trim_removed_n",
+                "trim_removed_long",
+                "trim_pairs_in",
+                "trim_pairs_removed",
+                "fastq_pair_left_paired",
+                "fastq_pair_right_paired",
+                "fastq_pair_left_single",
+                "fastq_pair_right_single",
+                "hostile_in",
+                "hostile_out",
+                "hostile_removed"
+              ]
+            },
+            "population_ordinal": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "selection",
+            "document_id",
+            "population_key",
+            "population_ordinal"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AssociationSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "record"
+            },
+            "record_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "selection",
+            "record_ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "semantic"
+            },
+            "document_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            },
+            "input_pointer": {
+              "type": "string",
+              "pattern": "^/(paired_end_libs|single_end_libs|srr_libs)/(0|[1-9][0-9]*)$"
+            },
+            "recipe_ordinal": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "mate": {
+              "type": "string",
+              "enum": [
+                "R1",
+                "R2",
+                "unpaired",
+                "combined",
+                "unknown"
+              ]
+            },
+            "branch": {
+              "type": "string",
+              "enum": [
+                "input",
+                "current",
+                "trimmed",
+                "paired",
+                "singleton",
+                "clean",
+                "aligned",
+                "unconcordant",
+                "unmapped",
+                "report_only",
+                "unknown"
+              ]
+            }
+          },
+          "required": [
+            "selection",
+            "document_id",
+            "input_pointer",
+            "recipe_ordinal",
+            "mate",
+            "branch"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "FactRecord": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "measurement"
+            },
+            "record_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "available",
+                "partial",
+                "missing",
+                "not_measured",
+                "failed",
+                "malformed",
+                "truncated",
+                "incompatible",
+                "undefined",
+                "ambiguous"
+              ]
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/MeasurementPayload"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "diagnostic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_artifact",
+                  "partial_transfer",
+                  "malformed_native",
+                  "nonfinite_native",
+                  "unsupported_format",
+                  "unsupported_version",
+                  "producer_version_unproven",
+                  "compression_suffix_mismatch",
+                  "truncated_compressed_stream",
+                  "missing_bgzf_eof",
+                  "unknown_quality_encoding",
+                  "invalid_quality_score",
+                  "invalid_sequence_symbol",
+                  "ambiguous_pair_key",
+                  "missing_mate",
+                  "association_unresolved",
+                  "stage_execution_unknown",
+                  "stage_reused_report",
+                  "artifact_collision",
+                  "input_path_reused",
+                  "unknown_reference",
+                  "reference_incomplete",
+                  "missing_denominator",
+                  "zero_denominator",
+                  "incompatible_population",
+                  "count_inconsistent",
+                  "not_retained_by_service",
+                  "report_overwritten",
+                  "unsupported_report_section",
+                  "native_fallback_value",
+                  "rounded_native_value",
+                  "truncated_native_display",
+                  "native_estimator",
+                  "synthetic_identity",
+                  "missing_requested_value",
+                  "selection_ambiguous",
+                  "selection_cardinality_mismatch",
+                  "metadata_binding_missing",
+                  "metadata_value_conflict",
+                  "encoding_declaration_conflict",
+                  "explicit_encoding_assumption",
+                  "lineage_asserted_only",
+                  "native_report_local_lineage",
+                  "trim_pair_counter_mixed",
+                  "source_row_absent",
+                  "document_identity_conflict",
+                  "native_header_conflict",
+                  "record_boundary_invalid",
+                  "supplied_version_assumption",
+                  "saved_relationship_conflict",
+                  "explicit_lineage_assumption"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "record_ref",
+            "state",
+            "payload",
+            "source_refs",
+            "requirement_refs",
+            "diagnostic_codes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "component"
+            },
+            "record_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "available",
+                "partial",
+                "missing",
+                "not_measured",
+                "failed",
+                "malformed",
+                "truncated",
+                "incompatible",
+                "undefined",
+                "ambiguous"
+              ]
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ComponentPayload"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "diagnostic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_artifact",
+                  "partial_transfer",
+                  "malformed_native",
+                  "nonfinite_native",
+                  "unsupported_format",
+                  "unsupported_version",
+                  "producer_version_unproven",
+                  "compression_suffix_mismatch",
+                  "truncated_compressed_stream",
+                  "missing_bgzf_eof",
+                  "unknown_quality_encoding",
+                  "invalid_quality_score",
+                  "invalid_sequence_symbol",
+                  "ambiguous_pair_key",
+                  "missing_mate",
+                  "association_unresolved",
+                  "stage_execution_unknown",
+                  "stage_reused_report",
+                  "artifact_collision",
+                  "input_path_reused",
+                  "unknown_reference",
+                  "reference_incomplete",
+                  "missing_denominator",
+                  "zero_denominator",
+                  "incompatible_population",
+                  "count_inconsistent",
+                  "not_retained_by_service",
+                  "report_overwritten",
+                  "unsupported_report_section",
+                  "native_fallback_value",
+                  "rounded_native_value",
+                  "truncated_native_display",
+                  "native_estimator",
+                  "synthetic_identity",
+                  "missing_requested_value",
+                  "selection_ambiguous",
+                  "selection_cardinality_mismatch",
+                  "metadata_binding_missing",
+                  "metadata_value_conflict",
+                  "encoding_declaration_conflict",
+                  "explicit_encoding_assumption",
+                  "lineage_asserted_only",
+                  "native_report_local_lineage",
+                  "trim_pair_counter_mixed",
+                  "source_row_absent",
+                  "document_identity_conflict",
+                  "native_header_conflict",
+                  "record_boundary_invalid",
+                  "supplied_version_assumption",
+                  "saved_relationship_conflict",
+                  "explicit_lineage_assumption"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "record_ref",
+            "state",
+            "payload",
+            "source_refs",
+            "requirement_refs",
+            "diagnostic_codes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "category"
+            },
+            "record_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "available",
+                "partial",
+                "missing",
+                "not_measured",
+                "failed",
+                "malformed",
+                "truncated",
+                "incompatible",
+                "undefined",
+                "ambiguous"
+              ]
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CategoryPayload"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "diagnostic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_artifact",
+                  "partial_transfer",
+                  "malformed_native",
+                  "nonfinite_native",
+                  "unsupported_format",
+                  "unsupported_version",
+                  "producer_version_unproven",
+                  "compression_suffix_mismatch",
+                  "truncated_compressed_stream",
+                  "missing_bgzf_eof",
+                  "unknown_quality_encoding",
+                  "invalid_quality_score",
+                  "invalid_sequence_symbol",
+                  "ambiguous_pair_key",
+                  "missing_mate",
+                  "association_unresolved",
+                  "stage_execution_unknown",
+                  "stage_reused_report",
+                  "artifact_collision",
+                  "input_path_reused",
+                  "unknown_reference",
+                  "reference_incomplete",
+                  "missing_denominator",
+                  "zero_denominator",
+                  "incompatible_population",
+                  "count_inconsistent",
+                  "not_retained_by_service",
+                  "report_overwritten",
+                  "unsupported_report_section",
+                  "native_fallback_value",
+                  "rounded_native_value",
+                  "truncated_native_display",
+                  "native_estimator",
+                  "synthetic_identity",
+                  "missing_requested_value",
+                  "selection_ambiguous",
+                  "selection_cardinality_mismatch",
+                  "metadata_binding_missing",
+                  "metadata_value_conflict",
+                  "encoding_declaration_conflict",
+                  "explicit_encoding_assumption",
+                  "lineage_asserted_only",
+                  "native_report_local_lineage",
+                  "trim_pair_counter_mixed",
+                  "source_row_absent",
+                  "document_identity_conflict",
+                  "native_header_conflict",
+                  "record_boundary_invalid",
+                  "supplied_version_assumption",
+                  "saved_relationship_conflict",
+                  "explicit_lineage_assumption"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "record_ref",
+            "state",
+            "payload",
+            "source_refs",
+            "requirement_refs",
+            "diagnostic_codes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "population"
+            },
+            "record_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "available",
+                "partial",
+                "missing",
+                "not_measured",
+                "failed",
+                "malformed",
+                "truncated",
+                "incompatible",
+                "undefined",
+                "ambiguous"
+              ]
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PopulationPayload"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "diagnostic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_artifact",
+                  "partial_transfer",
+                  "malformed_native",
+                  "nonfinite_native",
+                  "unsupported_format",
+                  "unsupported_version",
+                  "producer_version_unproven",
+                  "compression_suffix_mismatch",
+                  "truncated_compressed_stream",
+                  "missing_bgzf_eof",
+                  "unknown_quality_encoding",
+                  "invalid_quality_score",
+                  "invalid_sequence_symbol",
+                  "ambiguous_pair_key",
+                  "missing_mate",
+                  "association_unresolved",
+                  "stage_execution_unknown",
+                  "stage_reused_report",
+                  "artifact_collision",
+                  "input_path_reused",
+                  "unknown_reference",
+                  "reference_incomplete",
+                  "missing_denominator",
+                  "zero_denominator",
+                  "incompatible_population",
+                  "count_inconsistent",
+                  "not_retained_by_service",
+                  "report_overwritten",
+                  "unsupported_report_section",
+                  "native_fallback_value",
+                  "rounded_native_value",
+                  "truncated_native_display",
+                  "native_estimator",
+                  "synthetic_identity",
+                  "missing_requested_value",
+                  "selection_ambiguous",
+                  "selection_cardinality_mismatch",
+                  "metadata_binding_missing",
+                  "metadata_value_conflict",
+                  "encoding_declaration_conflict",
+                  "explicit_encoding_assumption",
+                  "lineage_asserted_only",
+                  "native_report_local_lineage",
+                  "trim_pair_counter_mixed",
+                  "source_row_absent",
+                  "document_identity_conflict",
+                  "native_header_conflict",
+                  "record_boundary_invalid",
+                  "supplied_version_assumption",
+                  "saved_relationship_conflict",
+                  "explicit_lineage_assumption"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "record_ref",
+            "state",
+            "payload",
+            "source_refs",
+            "requirement_refs",
+            "diagnostic_codes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "association"
+            },
+            "record_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "available",
+                "partial",
+                "missing",
+                "not_measured",
+                "failed",
+                "malformed",
+                "truncated",
+                "incompatible",
+                "undefined",
+                "ambiguous"
+              ]
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AssociationPayload"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "diagnostic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_artifact",
+                  "partial_transfer",
+                  "malformed_native",
+                  "nonfinite_native",
+                  "unsupported_format",
+                  "unsupported_version",
+                  "producer_version_unproven",
+                  "compression_suffix_mismatch",
+                  "truncated_compressed_stream",
+                  "missing_bgzf_eof",
+                  "unknown_quality_encoding",
+                  "invalid_quality_score",
+                  "invalid_sequence_symbol",
+                  "ambiguous_pair_key",
+                  "missing_mate",
+                  "association_unresolved",
+                  "stage_execution_unknown",
+                  "stage_reused_report",
+                  "artifact_collision",
+                  "input_path_reused",
+                  "unknown_reference",
+                  "reference_incomplete",
+                  "missing_denominator",
+                  "zero_denominator",
+                  "incompatible_population",
+                  "count_inconsistent",
+                  "not_retained_by_service",
+                  "report_overwritten",
+                  "unsupported_report_section",
+                  "native_fallback_value",
+                  "rounded_native_value",
+                  "truncated_native_display",
+                  "native_estimator",
+                  "synthetic_identity",
+                  "missing_requested_value",
+                  "selection_ambiguous",
+                  "selection_cardinality_mismatch",
+                  "metadata_binding_missing",
+                  "metadata_value_conflict",
+                  "encoding_declaration_conflict",
+                  "explicit_encoding_assumption",
+                  "lineage_asserted_only",
+                  "native_report_local_lineage",
+                  "trim_pair_counter_mixed",
+                  "source_row_absent",
+                  "document_identity_conflict",
+                  "native_header_conflict",
+                  "record_boundary_invalid",
+                  "supplied_version_assumption",
+                  "saved_relationship_conflict",
+                  "explicit_lineage_assumption"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "record_ref",
+            "state",
+            "payload",
+            "source_refs",
+            "requirement_refs",
+            "diagnostic_codes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "requirements"
+            },
+            "record_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "available",
+                "partial",
+                "missing",
+                "not_measured",
+                "failed",
+                "malformed",
+                "truncated",
+                "incompatible",
+                "undefined",
+                "ambiguous"
+              ]
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/RequirementsPayload"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "diagnostic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_artifact",
+                  "partial_transfer",
+                  "malformed_native",
+                  "nonfinite_native",
+                  "unsupported_format",
+                  "unsupported_version",
+                  "producer_version_unproven",
+                  "compression_suffix_mismatch",
+                  "truncated_compressed_stream",
+                  "missing_bgzf_eof",
+                  "unknown_quality_encoding",
+                  "invalid_quality_score",
+                  "invalid_sequence_symbol",
+                  "ambiguous_pair_key",
+                  "missing_mate",
+                  "association_unresolved",
+                  "stage_execution_unknown",
+                  "stage_reused_report",
+                  "artifact_collision",
+                  "input_path_reused",
+                  "unknown_reference",
+                  "reference_incomplete",
+                  "missing_denominator",
+                  "zero_denominator",
+                  "incompatible_population",
+                  "count_inconsistent",
+                  "not_retained_by_service",
+                  "report_overwritten",
+                  "unsupported_report_section",
+                  "native_fallback_value",
+                  "rounded_native_value",
+                  "truncated_native_display",
+                  "native_estimator",
+                  "synthetic_identity",
+                  "missing_requested_value",
+                  "selection_ambiguous",
+                  "selection_cardinality_mismatch",
+                  "metadata_binding_missing",
+                  "metadata_value_conflict",
+                  "encoding_declaration_conflict",
+                  "explicit_encoding_assumption",
+                  "lineage_asserted_only",
+                  "native_report_local_lineage",
+                  "trim_pair_counter_mixed",
+                  "source_row_absent",
+                  "document_identity_conflict",
+                  "native_header_conflict",
+                  "record_boundary_invalid",
+                  "supplied_version_assumption",
+                  "saved_relationship_conflict",
+                  "explicit_lineage_assumption"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "record_ref",
+            "state",
+            "payload",
+            "source_refs",
+            "requirement_refs",
+            "diagnostic_codes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "request_status"
+            },
+            "record_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "available",
+                "partial",
+                "missing",
+                "not_measured",
+                "failed",
+                "malformed",
+                "truncated",
+                "incompatible",
+                "undefined",
+                "ambiguous"
+              ]
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/RequestStatusPayload"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "requirement_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "diagnostic_codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_artifact",
+                  "partial_transfer",
+                  "malformed_native",
+                  "nonfinite_native",
+                  "unsupported_format",
+                  "unsupported_version",
+                  "producer_version_unproven",
+                  "compression_suffix_mismatch",
+                  "truncated_compressed_stream",
+                  "missing_bgzf_eof",
+                  "unknown_quality_encoding",
+                  "invalid_quality_score",
+                  "invalid_sequence_symbol",
+                  "ambiguous_pair_key",
+                  "missing_mate",
+                  "association_unresolved",
+                  "stage_execution_unknown",
+                  "stage_reused_report",
+                  "artifact_collision",
+                  "input_path_reused",
+                  "unknown_reference",
+                  "reference_incomplete",
+                  "missing_denominator",
+                  "zero_denominator",
+                  "incompatible_population",
+                  "count_inconsistent",
+                  "not_retained_by_service",
+                  "report_overwritten",
+                  "unsupported_report_section",
+                  "native_fallback_value",
+                  "rounded_native_value",
+                  "truncated_native_display",
+                  "native_estimator",
+                  "synthetic_identity",
+                  "missing_requested_value",
+                  "selection_ambiguous",
+                  "selection_cardinality_mismatch",
+                  "metadata_binding_missing",
+                  "metadata_value_conflict",
+                  "encoding_declaration_conflict",
+                  "explicit_encoding_assumption",
+                  "lineage_asserted_only",
+                  "native_report_local_lineage",
+                  "trim_pair_counter_mixed",
+                  "source_row_absent",
+                  "document_identity_conflict",
+                  "native_header_conflict",
+                  "record_boundary_invalid",
+                  "supplied_version_assumption",
+                  "saved_relationship_conflict",
+                  "explicit_lineage_assumption"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "record_ref",
+            "state",
+            "payload",
+            "source_refs",
+            "requirement_refs",
+            "diagnostic_codes"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "MeasurementPayload": {
+      "type": "object",
+      "properties": {
+        "measurement_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "document_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+        },
+        "quantity": {
+          "type": "string",
+          "enum": [
+            "fastq_read_count",
+            "fastq_base_count",
+            "fastq_symbol_count",
+            "fastq_min_length",
+            "fastq_max_length",
+            "fastq_length_histogram_count",
+            "quality_character_count",
+            "phred_histogram_count",
+            "verified_pair_count",
+            "fastqc_total_sequences",
+            "fastqc_flagged_sequences",
+            "fastqc_total_bases_display",
+            "fastqc_min_length",
+            "fastqc_max_length",
+            "fastqc_gc_percent",
+            "fastqc_base_quality_mean",
+            "fastqc_base_quality_median",
+            "fastqc_base_quality_lower_quartile",
+            "fastqc_base_quality_upper_quartile",
+            "fastqc_base_quality_p10",
+            "fastqc_base_quality_p90",
+            "fastqc_tile_quality_deviation",
+            "fastqc_sequence_quality_count",
+            "fastqc_base_content_percent",
+            "fastqc_n_percent",
+            "fastqc_sequence_gc_smoothed_count",
+            "fastqc_length_bin_count",
+            "fastqc_total_deduplicated_percent",
+            "fastqc_duplication_bin_percent",
+            "fastqc_overrepresented_count",
+            "fastqc_overrepresented_percent",
+            "fastqc_adapter_percent",
+            "fastqc_kmer_scaled_count",
+            "fastqc_kmer_pvalue",
+            "fastqc_kmer_obs_exp_max",
+            "trim_processed_count",
+            "trim_removed_short_count",
+            "trim_removed_short_percent",
+            "trim_removed_n_count",
+            "trim_removed_n_percent",
+            "trim_removed_long_count",
+            "trim_removed_long_percent",
+            "trim_validation_pair_count",
+            "trim_removed_pair_count",
+            "trim_removed_pair_percent",
+            "trim_native_option",
+            "trim_adapter_detection_count",
+            "fastq_pair_left_paired",
+            "fastq_pair_right_paired",
+            "fastq_pair_left_single",
+            "fastq_pair_right_single",
+            "hostile_reads_in",
+            "hostile_reads_out",
+            "hostile_reads_removed",
+            "hostile_removed_proportion",
+            "bam_record_count",
+            "bam_primary_record_count",
+            "bam_secondary_record_count",
+            "bam_supplementary_record_count",
+            "bam_mapped_primary_count",
+            "bam_mapq_histogram_count",
+            "bam_mapq_unavailable_count"
+          ]
+        },
+        "axis": {
+          "$ref": "#/$defs/ProjectedAxis"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "available",
+            "partial",
+            "missing",
+            "not_measured",
+            "failed",
+            "malformed",
+            "truncated",
+            "incompatible",
+            "undefined"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "reads",
+            "bases",
+            "pairs",
+            "alignment_records",
+            "phred",
+            "phred_deviation",
+            "percent",
+            "fraction",
+            "ratio",
+            "expected_errors",
+            "scaled_native_count",
+            "native_count",
+            "dimensionless",
+            "ascii",
+            "bp",
+            "kbp",
+            "Mbp",
+            "Gbp"
+          ]
+        },
+        "meaning": {
+          "type": "string",
+          "enum": [
+            "observed_count",
+            "observed_native",
+            "native_normalized",
+            "native_estimate",
+            "native_configuration"
+          ]
+        },
+        "precision": {
+          "type": "string",
+          "enum": [
+            "exact_for_retained_population",
+            "not_reported",
+            "native_rounded",
+            "native_truncated_display",
+            "native_estimator"
+          ]
+        },
+        "population_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "association_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_token_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "measurement_ref",
+        "document_id",
+        "quantity",
+        "axis",
+        "state",
+        "value",
+        "unit",
+        "meaning",
+        "precision",
+        "population_ref",
+        "association_ref",
+        "native_token_ref"
+      ],
+      "additionalProperties": false
+    },
+    "ProjectedAxis": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "none",
+            "base_closed_1",
+            "length_closed",
+            "quality_score",
+            "quality_ascii",
+            "symbol",
+            "adapter",
+            "sequence",
+            "duplication_bin",
+            "tile_base_closed_1",
+            "native_label",
+            "mapq"
+          ]
+        },
+        "label_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "label_ref",
+        "lower",
+        "upper"
+      ],
+      "additionalProperties": false
+    },
+    "ComponentPayload": {
+      "type": "object",
+      "properties": {
+        "component_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "calculation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+        },
+        "quantity": {
+          "type": "string",
+          "enum": [
+            "gc_acgt_fraction",
+            "n_fraction",
+            "ambiguous_fraction",
+            "mean_read_length",
+            "mean_phred",
+            "q_ge_threshold_fraction",
+            "phred_implied_expected_errors",
+            "phred_implied_error_fraction",
+            "read_retention_fraction",
+            "base_retention_fraction",
+            "pair_retention_fraction",
+            "removed_count",
+            "removed_fraction",
+            "native_report_retention_fraction",
+            "distinct_mapped_read_fraction",
+            "primary_record_fraction",
+            "report_count_difference"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "available",
+            "partial",
+            "missing",
+            "not_measured",
+            "failed",
+            "malformed",
+            "truncated",
+            "incompatible",
+            "undefined"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "reads",
+            "bases",
+            "pairs",
+            "alignment_records",
+            "phred",
+            "phred_deviation",
+            "percent",
+            "fraction",
+            "ratio",
+            "expected_errors",
+            "scaled_native_count",
+            "native_count",
+            "dimensionless",
+            "ascii",
+            "bp",
+            "kbp",
+            "Mbp",
+            "Gbp"
+          ]
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "composition_v1",
+            "quality_phred_v1",
+            "retention_v1",
+            "mapping_v1",
+            "report_consistency_v1"
+          ]
+        },
+        "population_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          }
+        },
+        "operand_measurement_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          }
+        },
+        "numerator": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "meaning": {
+          "type": "string",
+          "enum": [
+            "derived_descriptive",
+            "phred_model_prediction",
+            "native_report_derived"
+          ]
+        },
+        "uncertainty": {
+          "type": "string",
+          "enum": [
+            "not_estimated",
+            "phred_model_only",
+            "native_reporting_precision"
+          ]
+        },
+        "parameter_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "encoding_basis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EncodingBasis"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lineage_basis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LineageBasis"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "component_ref",
+        "calculation_id",
+        "quantity",
+        "state",
+        "value",
+        "unit",
+        "method",
+        "population_refs",
+        "operand_measurement_refs",
+        "numerator",
+        "denominator",
+        "threshold",
+        "meaning",
+        "uncertainty",
+        "parameter_sha256",
+        "encoding_basis",
+        "lineage_basis"
+      ],
+      "additionalProperties": false
+    },
+    "EncodingBasis": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "explicit_source_bound_declaration",
+            "native_bam_phred",
+            "native_sam_phred"
+          ]
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "phred33",
+            "phred64",
+            "bam_phred"
+          ]
+        },
+        "metadata_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Host_SourceEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "declaration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EncodingDeclaration"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_locator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Locator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "basis",
+        "encoding",
+        "metadata_id",
+        "evidence",
+        "declaration",
+        "native_locator"
+      ],
+      "additionalProperties": false
+    },
+    "Host_SourceEvidence": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/Host_ContentBinding"
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        }
+      },
+      "required": [
+        "content",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "Host_ContentBinding": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_field": {
+          "enum": [
+            "artifact_ref",
+            "text_ref",
+            "stdout_ref",
+            "stderr_ref",
+            "request_ref"
+          ]
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "source_ref",
+        "artifact_field",
+        "artifact_ref",
+        "sha256",
+        "byte_count"
+      ],
+      "additionalProperties": false
+    },
+    "EncodingDeclaration": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "fastqutils_encoding_declaration_v1"
+        },
+        "document_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "phred33",
+            "phred64"
+          ]
+        },
+        "basis": {
+          "const": "explicit_assumption"
+        }
+      },
+      "required": [
+        "version",
+        "document_id",
+        "encoding",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "Locator": {
+      "type": "object",
+      "properties": {
+        "member": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "block": {
+          "type": "string",
+          "minLength": 1
+        },
+        "block_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "row_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "byte_start": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "byte_end": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "member",
+        "block",
+        "block_ordinal",
+        "row_ordinal",
+        "field",
+        "byte_start",
+        "byte_end"
+      ],
+      "additionalProperties": false
+    },
+    "LineageBasis": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "type": "string",
+          "enum": [
+            "native_report",
+            "observed_record_correspondence",
+            "explicit_source_bound_declaration",
+            "unknown"
+          ]
+        },
+        "metadata_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Host_SourceEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "declaration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LineageDeclaration"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_lineage_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "basis",
+        "metadata_id",
+        "evidence",
+        "declaration",
+        "native_lineage_ref"
+      ],
+      "additionalProperties": false
+    },
+    "LineageDeclaration": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "fastqutils_lineage_declaration_v1"
+        },
+        "before": {
+          "$ref": "#/$defs/PopulationSelector"
+        },
+        "after": {
+          "$ref": "#/$defs/PopulationSelector"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "successor_population",
+            "subset_population",
+            "same_population"
+          ]
+        },
+        "basis": {
+          "const": "explicit_assumption"
+        }
+      },
+      "required": [
+        "version",
+        "before",
+        "after",
+        "relation",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "CategoryPayload": {
+      "type": "object",
+      "properties": {
+        "category_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_label_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "warn",
+            "fail",
+            "unrecognized"
+          ]
+        },
+        "association_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "category_ref",
+        "native_label_ref",
+        "value",
+        "association_ref"
+      ],
+      "additionalProperties": false
+    },
+    "PopulationPayload": {
+      "type": "object",
+      "properties": {
+        "population_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "fastq_reads",
+            "fastq_bases",
+            "verified_read_pairs",
+            "native_pair_validation",
+            "alignment_records",
+            "primary_alignment_reads",
+            "native_qc_population",
+            "native_report_population"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "unknown"
+          ]
+        },
+        "representation": {
+          "type": "string",
+          "enum": [
+            "emitted_bytes",
+            "input_bytes",
+            "native_report",
+            "native_estimator"
+          ]
+        },
+        "association_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "member_artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          }
+        },
+        "parent_population_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          }
+        },
+        "quality_encoding": {
+          "type": "string",
+          "enum": [
+            "phred33",
+            "phred64",
+            "bam_phred",
+            "unknown"
+          ]
+        },
+        "encoding_basis": {
+          "$ref": "#/$defs/EncodingBasis"
+        }
+      },
+      "required": [
+        "population_ref",
+        "kind",
+        "scope",
+        "representation",
+        "association_ref",
+        "member_artifact_refs",
+        "parent_population_refs",
+        "quality_encoding",
+        "encoding_basis"
+      ],
+      "additionalProperties": false
+    },
+    "AssociationPayload": {
+      "type": "object",
+      "properties": {
+        "association_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "library_ref": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+        },
+        "stage_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mate": {
+          "type": "string",
+          "enum": [
+            "R1",
+            "R2",
+            "unpaired",
+            "combined",
+            "unknown"
+          ]
+        },
+        "branch": {
+          "type": "string",
+          "enum": [
+            "input",
+            "current",
+            "trimmed",
+            "paired",
+            "singleton",
+            "clean",
+            "aligned",
+            "unconcordant",
+            "unmapped",
+            "report_only",
+            "unknown"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "established",
+            "unresolved",
+            "conflicting"
+          ]
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "original_input_binding",
+            "explicit_assertion",
+            "observed_record_correspondence"
+          ]
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          }
+        }
+      },
+      "required": [
+        "association_ref",
+        "library_ref",
+        "stage_ref",
+        "mate",
+        "branch",
+        "state",
+        "basis",
+        "artifact_refs"
+      ],
+      "additionalProperties": false
+    },
+    "RequirementsPayload": {
+      "type": "object",
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          }
+        }
+      },
+      "required": [
+        "requirements"
+      ],
+      "additionalProperties": false
+    },
+    "Requirement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+        },
+        "code": {
+          "type": "string",
+          "enum": [
+            "missing_artifact",
+            "partial_transfer",
+            "malformed_native",
+            "nonfinite_native",
+            "unsupported_format",
+            "unsupported_version",
+            "producer_version_unproven",
+            "compression_suffix_mismatch",
+            "truncated_compressed_stream",
+            "missing_bgzf_eof",
+            "unknown_quality_encoding",
+            "invalid_quality_score",
+            "invalid_sequence_symbol",
+            "ambiguous_pair_key",
+            "missing_mate",
+            "association_unresolved",
+            "stage_execution_unknown",
+            "stage_reused_report",
+            "artifact_collision",
+            "input_path_reused",
+            "unknown_reference",
+            "reference_incomplete",
+            "missing_denominator",
+            "zero_denominator",
+            "incompatible_population",
+            "count_inconsistent",
+            "not_retained_by_service",
+            "report_overwritten",
+            "unsupported_report_section",
+            "native_fallback_value",
+            "rounded_native_value",
+            "truncated_native_display",
+            "native_estimator",
+            "synthetic_identity",
+            "missing_requested_value",
+            "selection_ambiguous",
+            "selection_cardinality_mismatch",
+            "metadata_binding_missing",
+            "metadata_value_conflict",
+            "encoding_declaration_conflict",
+            "explicit_encoding_assumption",
+            "lineage_asserted_only",
+            "native_report_local_lineage",
+            "trim_pair_counter_mixed",
+            "source_row_absent",
+            "document_identity_conflict",
+            "native_header_conflict",
+            "record_boundary_invalid",
+            "supplied_version_assumption",
+            "saved_relationship_conflict",
+            "explicit_lineage_assumption"
+          ]
+        },
+        "affected_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          }
+        },
+        "required_data": {
+          "type": "string",
+          "enum": [
+            "complete_native_bytes",
+            "full_fastqc_data",
+            "earlier_hostile_report",
+            "before_population",
+            "after_population",
+            "mate_identity",
+            "pair_correspondence",
+            "quality_encoding",
+            "stage_input_association",
+            "reference_identity",
+            "reference_completeness",
+            "native_version",
+            "native_execution_evidence",
+            "supported_parser",
+            "requested_measurement",
+            "selected_document",
+            "source_bound_metadata",
+            "exact_source_cardinality"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "missing",
+            "unavailable",
+            "unresolved",
+            "incompatible"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "code",
+        "affected_refs",
+        "required_data",
+        "state",
+        "source_refs"
+      ],
+      "additionalProperties": false
+    },
+    "RequestStatusPayload": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
+        },
+        "satisfied": {
+          "type": "boolean"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "satisfied",
+            "missing_value",
+            "ambiguous",
+            "cardinality_mismatch",
+            "invalid"
+          ]
+        },
+        "matched_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "requirement_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "field",
+        "satisfied",
+        "state",
+        "matched_count",
+        "requirement_refs"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

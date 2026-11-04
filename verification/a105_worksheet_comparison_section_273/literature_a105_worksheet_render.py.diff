@@ -1,0 +1,19 @@
+--- before/gene_annotation_episode/literature_a105_worksheet_render.py
++++ gene_annotation_episode/literature_a105_worksheet_render.py
+@@ -9,6 +9,7 @@
+ from . import literature_compiled_assay_render as compiled
+ from . import literature_endpoint_signal_render as endpoint
+ from . import literature_kinetic_summary_precision_render as summary
++from . import literature_measurement_comparison_render as comparison
+ from . import literature_product_coupling_render as coupling
+ from .literature_a105_worksheet import VERSION
+ 
+@@ -114,6 +115,8 @@
+             _native(parts, rows, safe_records, hidden, section=section, table=table)
+         elif scope == 'source_kinetic_summary_precision':
+             summary.render_received(parts, rows, section=section, table=table)
++        elif scope == 'source_measurement_comparison':
++            comparison.render_received(parts, rows, section=section, table=table)
+         elif scope == 'source_endpoint_signal_contribution':
+             endpoint.render_received(parts, rows, section=section, table=table)
+         elif scope == 'source_product_coupling':

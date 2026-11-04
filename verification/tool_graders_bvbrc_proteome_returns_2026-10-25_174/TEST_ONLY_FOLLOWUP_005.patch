@@ -1,0 +1,28 @@
+--- tests/test_bvbrc_proteome_returns_original.py@RUN_003
++++ tests/test_bvbrc_proteome_returns_original.py@RUN_005
+@@ -80,6 +80,7 @@
+ 
+ @pytest.mark.parametrize('source,field,value', [
+     (ASSOCIATIONS, 'native_category', 'not_native'),
++    (ASSOCIATIONS, 'native_category', 'uni (->)'),
+     (ASSOCIATIONS, 'subject_identifier', 'made_up_subject'),
+     (ASSOCIATIONS, 'track_key', 'comp_genome_333'),
+     (ASSOCIATIONS, 'association_key', 'comp_genome_2/row/333'),
+@@ -91,9 +92,14 @@
+     schema = fact_form(source)
+     if field != 'cell':
+         node = schema['properties']['f0']['items']['properties']['value']['properties'][field]
+-        # A caller constrains the carrier's literal to a forged token. The
+-        # original semantic schema and exact saved fact still govern admission.
+-        node['enum'] = [value]
++        # Narrow the nullable native category carrier to a string; communication
++        # code enums cannot contain the saved native literals' punctuation.
++        # Other callers constrain the carrier to the forged token itself.
++        # Original semantic domains and exact saved values govern both cases.
++        if field == 'native_category':
++            node['type'] = 'string'
++        else:
++            node['enum'] = [value]
+     child = run.child(run.saved.root, 'results', args[0], schema=schema)
+     run.publications.add(child, args)
+     values = run.host.facts(child, schema)

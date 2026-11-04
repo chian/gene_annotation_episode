@@ -1,0 +1,321 @@
+{
+  "provenance": "actual388check005 local ViennaRNA2.7.0 execution with synthetic supplied RNA input; real selected Workflow and typed returns; controlled choices, no live LLM",
+  "examples": [
+    {
+      "receipt_path": "verification/tool_graders_rna_original_prompt_delivery_2026-10-27_388/check005_native/temporary/pytest/test_real_selected_tool_to_nat0/run/execution-results/2bfc70dfa750018e9d2f471aa2db1e08f7b8dad452b724e1fc860e21f2e73fa7/native-rna-structure-actions/fba4fec58dca3cd6c156b2f13bf4d4c53a5d2801b80255a0ae88cfd6fe1af8cf/receipt.json",
+      "receipt_sha256": "1a0064fceed3e12e65679187ae5560928ad3ad0a95d95c15e9f3c28589815c93",
+      "mode": "mfe_prediction",
+      "requested_model": {
+        "circ": false,
+        "dangles": 2,
+        "gquad": false,
+        "hard_constraints": null,
+        "logML": false,
+        "max_bp_span": -1,
+        "min_loop_size": 3,
+        "noGU": false,
+        "noGUclosure": false,
+        "noLP": false,
+        "parameters": {
+          "kind": "turner2004",
+          "operand_role": null
+        },
+        "schema": "vienna_rna_model_spec_v1",
+        "soft_constraints": null,
+        "special_hp": true,
+        "temperature_c": 37.0
+      },
+      "native_success": true,
+      "capture_complete": true,
+      "delivery_complete": true,
+      "rows": [
+        {
+          "calculation_key": "rna_calculation:bfb4d0c784506c2f43193a21ba4a94767142c9253817a9cd62d2e84edc74a868",
+          "calculation_parameters": {
+            "energy": {
+              "normalization": "per_nt"
+            },
+            "pair_composition": {
+              "accepted_ordered_pair_types": [
+                "AU",
+                "UA",
+                "GC",
+                "CG",
+                "GU",
+                "UG"
+              ],
+              "denominator": "unambiguous_pairs"
+            },
+            "schema": "rna_calculation_parameters_v1",
+            "topology": {
+              "include_exterior_in_loop_size_statistics": false,
+              "long_stem_min_pairs": 3
+            }
+          },
+          "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+          "family": "summary",
+          "measurements": [
+            {
+              "denominator": null,
+              "name": "pair_count",
+              "numerator": null,
+              "origin": "derived_topology",
+              "unit": "pairs",
+              "value": 3
+            },
+            {
+              "denominator": 9,
+              "name": "paired_fraction",
+              "numerator": 6,
+              "origin": "derived_topology",
+              "unit": "dimensionless",
+              "value": 0.6666666666666666
+            },
+            {
+              "denominator": null,
+              "name": "stack_count",
+              "numerator": null,
+              "origin": "derived_topology",
+              "unit": "stacks",
+              "value": 2
+            },
+            {
+              "denominator": 1,
+              "name": "loop_mean_unpaired_nt",
+              "numerator": 3,
+              "origin": "derived_topology",
+              "unit": "nt",
+              "value": 3.0
+            },
+            {
+              "denominator": null,
+              "name": "mfe_kcal_mol",
+              "numerator": null,
+              "origin": "native_prediction",
+              "unit": "kcal/mol",
+              "value": -1.2000000476837158
+            }
+          ],
+          "mode": "mfe_prediction",
+          "operation": "predict_rna_secondary_structure",
+          "qualification_codes": [],
+          "record_key": "original-record",
+          "row_key": "original-record:summary",
+          "sequence_id": "Example RNA",
+          "source_ref": "source_6a2237dcd57cc2c0edb894fd",
+          "status": "bound",
+          "structure_id": null,
+          "structure_key": "original-record:structure",
+          "structure_origin": "native_prediction",
+          "subject_ref": "input_beb3584aefc052dc76bd120b",
+          "unavailable": []
+        }
+      ]
+    },
+    {
+      "receipt_path": "verification/tool_graders_rna_original_prompt_delivery_2026-10-27_388/check005_native/temporary/pytest/test_real_selected_tool_to_nat1/run/execution-results/2bfc70dfa750018e9d2f471aa2db1e08f7b8dad452b724e1fc860e21f2e73fa7/native-rna-structure-actions/fba4fec58dca3cd6c156b2f13bf4d4c53a5d2801b80255a0ae88cfd6fe1af8cf/receipt.json",
+      "receipt_sha256": "fb1de42eec90575d7f7568813d62125bc5e757094f76319179df4c6d82f6e552",
+      "mode": "supplied_features",
+      "requested_model": {
+        "circ": false,
+        "dangles": 2,
+        "gquad": false,
+        "hard_constraints": null,
+        "logML": false,
+        "max_bp_span": -1,
+        "min_loop_size": 3,
+        "noGU": false,
+        "noGUclosure": false,
+        "noLP": false,
+        "parameters": {
+          "kind": "turner2004",
+          "operand_role": null
+        },
+        "schema": "vienna_rna_model_spec_v1",
+        "soft_constraints": null,
+        "special_hp": true,
+        "temperature_c": 37.0
+      },
+      "native_success": true,
+      "capture_complete": true,
+      "delivery_complete": true,
+      "rows": [
+        {
+          "calculation_key": "rna_calculation:42bbfff161d2bd07f3366b9e640eb7b39bd1fb2932d66ee820bbb71cb75a203f",
+          "calculation_parameters": {
+            "energy": {
+              "normalization": "per_nt"
+            },
+            "pair_composition": {
+              "accepted_ordered_pair_types": [
+                "AU",
+                "UA",
+                "GC",
+                "CG",
+                "GU",
+                "UG"
+              ],
+              "denominator": "unambiguous_pairs"
+            },
+            "schema": "rna_calculation_parameters_v1",
+            "topology": {
+              "include_exterior_in_loop_size_statistics": false,
+              "long_stem_min_pairs": 3
+            }
+          },
+          "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+          "family": "summary",
+          "measurements": [
+            {
+              "denominator": null,
+              "name": "pair_count",
+              "numerator": null,
+              "origin": "derived_topology",
+              "unit": "pairs",
+              "value": 3
+            },
+            {
+              "denominator": 9,
+              "name": "paired_fraction",
+              "numerator": 6,
+              "origin": "derived_topology",
+              "unit": "dimensionless",
+              "value": 0.6666666666666666
+            },
+            {
+              "denominator": null,
+              "name": "stack_count",
+              "numerator": null,
+              "origin": "derived_topology",
+              "unit": "stacks",
+              "value": 2
+            },
+            {
+              "denominator": 1,
+              "name": "loop_mean_unpaired_nt",
+              "numerator": 3,
+              "origin": "derived_topology",
+              "unit": "nt",
+              "value": 3.0
+            },
+            {
+              "denominator": null,
+              "name": "evaluated_energy_kcal_mol",
+              "numerator": null,
+              "origin": "native_evaluation",
+              "unit": "kcal/mol",
+              "value": -1.2000000476837158
+            }
+          ],
+          "mode": "supplied_features",
+          "operation": "analyze_rna_secondary_structure_features",
+          "qualification_codes": [],
+          "record_key": "original-record",
+          "row_key": "original-record:summary",
+          "sequence_id": "Example RNA",
+          "source_ref": "source_25e355c3c93109167d11cff6",
+          "status": "bound",
+          "structure_id": "Supplied hairpin",
+          "structure_key": "original-record:structure",
+          "structure_origin": "supplied_unknown",
+          "subject_ref": "input_caae0ed141b0ace17842f8d2",
+          "unavailable": []
+        }
+      ]
+    },
+    {
+      "receipt_path": "verification/tool_graders_rna_original_prompt_delivery_2026-10-27_388/check005_native/temporary/pytest/test_real_selected_tool_to_nat2/run/execution-results/2bfc70dfa750018e9d2f471aa2db1e08f7b8dad452b724e1fc860e21f2e73fa7/native-rna-structure-actions/fba4fec58dca3cd6c156b2f13bf4d4c53a5d2801b80255a0ae88cfd6fe1af8cf/receipt.json",
+      "receipt_sha256": "4d18b76b647c36b892ae00f2422463316d1f8cc380373f373204d28b78392960",
+      "mode": "supplied_features",
+      "requested_model": null,
+      "native_success": true,
+      "capture_complete": true,
+      "delivery_complete": true,
+      "rows": [
+        {
+          "calculation_key": "rna_calculation:a711ffdb68a41614ec01872063ede79cbfd0b51a81bb9f3e2882641840555a64",
+          "calculation_parameters": {
+            "energy": {
+              "normalization": "per_nt"
+            },
+            "pair_composition": {
+              "accepted_ordered_pair_types": [
+                "AU",
+                "UA",
+                "GC",
+                "CG",
+                "GU",
+                "UG"
+              ],
+              "denominator": "unambiguous_pairs"
+            },
+            "schema": "rna_calculation_parameters_v1",
+            "topology": {
+              "include_exterior_in_loop_size_statistics": false,
+              "long_stem_min_pairs": 3
+            }
+          },
+          "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+          "family": "summary",
+          "measurements": [
+            {
+              "denominator": null,
+              "name": "pair_count",
+              "numerator": null,
+              "origin": "derived_topology",
+              "unit": "pairs",
+              "value": 3
+            },
+            {
+              "denominator": 9,
+              "name": "paired_fraction",
+              "numerator": 6,
+              "origin": "derived_topology",
+              "unit": "dimensionless",
+              "value": 0.6666666666666666
+            },
+            {
+              "denominator": null,
+              "name": "stack_count",
+              "numerator": null,
+              "origin": "derived_topology",
+              "unit": "stacks",
+              "value": 2
+            },
+            {
+              "denominator": 1,
+              "name": "loop_mean_unpaired_nt",
+              "numerator": 3,
+              "origin": "derived_topology",
+              "unit": "nt",
+              "value": 3.0
+            }
+          ],
+          "mode": "supplied_features",
+          "operation": "analyze_rna_secondary_structure_features",
+          "qualification_codes": [],
+          "record_key": "original-record",
+          "row_key": "original-record:summary",
+          "sequence_id": "Example RNA",
+          "source_ref": "source_2e9d8996457994456fa66901",
+          "status": "partial",
+          "structure_id": "Supplied hairpin",
+          "structure_key": "original-record:structure",
+          "structure_origin": "supplied_unknown",
+          "subject_ref": "input_9c9246a535dbc99fe846b129",
+          "unavailable": [
+            {
+              "denominator": null,
+              "name": "evaluated_energy_kcal_mol",
+              "numerator": null,
+              "origin": "native_evaluation",
+              "reason": "not_requested",
+              "state": "not_requested",
+              "unit": "kcal/mol"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

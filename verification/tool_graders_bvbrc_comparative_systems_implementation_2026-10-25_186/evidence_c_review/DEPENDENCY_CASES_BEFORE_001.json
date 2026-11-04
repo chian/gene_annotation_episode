@@ -1,0 +1,622 @@
+{
+  "stage": "before",
+  "real_service_job": false,
+  "cases": [
+    {
+      "name": "joined_feature_metadata",
+      "basis": "actual_N_on_unchanged_producer_source_executed_synthetic_feature_join",
+      "formula": "subsystem_role_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "incompatible",
+        "value": null,
+        "qualification_codes": [
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "native_first_object_discard",
+          "inner_join_many_to_many",
+          "conflicting_native_categories",
+          "duplicate_record_conflict",
+          "duplicate_identical_representation"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "0bfab9a947bbc5882f047b9100c793544f0323c5ee1583d485c1db29314a81ae",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "source_executed_synthetic",
+          "sha256": "2243f27680b18c01724da4ff1e722f970caf916d4b3780676d2e1f3963b8a408",
+          "byte_count": 1924
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "source_executed_synthetic",
+          "sha256": "2eb9b9c6af077c963914c900e9017e1cd76550666aed1a683a5f7f2a78cfbe96",
+          "byte_count": 2639
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unidentified_width_pathway_ec_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "pathway_ec_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "e891d29e5d5f98e184695399c63fdfe125d3beb4144152bdb62b50ccba19e262",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "synthetic_fixture",
+          "sha256": "200445d9e6f90a42f49519abb0c9f4953957df43d6ad7fba622cd87751e2605a",
+          "byte_count": 1968
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "source_executed_synthetic",
+          "sha256": "69fde17bed6042dd1183677343e7cc4fa3d36b69064adc433985af7a46ef36bc",
+          "byte_count": 2314
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unrelated_number_pathway_ec_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "pathway_ec_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "91f7436e99618132f6ba0ca2047ab72739f1cfd2b83174b7c73db216a176ebbb",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "synthetic_fixture",
+          "sha256": "1c67df84e578970097f2bda88a51e79a1ded84a10cd770116b00d30af2c3c086",
+          "byte_count": 2028
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "source_executed_synthetic",
+          "sha256": "69fde17bed6042dd1183677343e7cc4fa3d36b69064adc433985af7a46ef36bc",
+          "byte_count": 2314
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unidentified_width_pathway_gene_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "pathway_gene_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "e891d29e5d5f98e184695399c63fdfe125d3beb4144152bdb62b50ccba19e262",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "synthetic_fixture",
+          "sha256": "200445d9e6f90a42f49519abb0c9f4953957df43d6ad7fba622cd87751e2605a",
+          "byte_count": 1968
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "source_executed_synthetic",
+          "sha256": "69fde17bed6042dd1183677343e7cc4fa3d36b69064adc433985af7a46ef36bc",
+          "byte_count": 2314
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unrelated_number_pathway_gene_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "pathway_gene_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "91f7436e99618132f6ba0ca2047ab72739f1cfd2b83174b7c73db216a176ebbb",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "synthetic_fixture",
+          "sha256": "1c67df84e578970097f2bda88a51e79a1ded84a10cd770116b00d30af2c3c086",
+          "byte_count": 2028
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "source_executed_synthetic",
+          "sha256": "69fde17bed6042dd1183677343e7cc4fa3d36b69064adc433985af7a46ef36bc",
+          "byte_count": 2314
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unidentified_width_subsystem_role_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "subsystem_role_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete",
+          "conflicting_native_categories",
+          "duplicate_identical_representation"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "52d3b42b87eeb6dfc3a504626254718f196bb1ed440666a1702830efdd79245d",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "source_executed_synthetic",
+          "sha256": "2243f27680b18c01724da4ff1e722f970caf916d4b3780676d2e1f3963b8a408",
+          "byte_count": 1924
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "synthetic_fixture",
+          "sha256": "a6ee5ed2ef9454b319573f9e13914bcadd18f1d084ce2a44509bbcde1825c55b",
+          "byte_count": 2356
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unrelated_number_subsystem_role_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "subsystem_role_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete",
+          "conflicting_native_categories",
+          "duplicate_identical_representation"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "b43d72d81b82ce41ff68f495ffe08cf5d8f75485367876e62ce24f667659756a",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "source_executed_synthetic",
+          "sha256": "2243f27680b18c01724da4ff1e722f970caf916d4b3780676d2e1f3963b8a408",
+          "byte_count": 1924
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "synthetic_fixture",
+          "sha256": "049b110eec862e4893e99f8d93db7da56fc621f9742c007f62a90bb2c0226c05",
+          "byte_count": 2449
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unidentified_width_subsystem_gene_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "subsystem_gene_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "52d3b42b87eeb6dfc3a504626254718f196bb1ed440666a1702830efdd79245d",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "source_executed_synthetic",
+          "sha256": "2243f27680b18c01724da4ff1e722f970caf916d4b3780676d2e1f3963b8a408",
+          "byte_count": 1924
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "synthetic_fixture",
+          "sha256": "a6ee5ed2ef9454b319573f9e13914bcadd18f1d084ce2a44509bbcde1825c55b",
+          "byte_count": 2356
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unrelated_number_subsystem_gene_conservation",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "subsystem_gene_conservation",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "b43d72d81b82ce41ff68f495ffe08cf5d8f75485367876e62ce24f667659756a",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "source_executed_synthetic",
+          "sha256": "2243f27680b18c01724da4ff1e722f970caf916d4b3780676d2e1f3963b8a408",
+          "byte_count": 1924
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "synthetic_fixture",
+          "sha256": "049b110eec862e4893e99f8d93db7da56fc621f9742c007f62a90bb2c0226c05",
+          "byte_count": 2449
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unidentified_width_subsystem_prop_active",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "subsystem_prop_active",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "52d3b42b87eeb6dfc3a504626254718f196bb1ed440666a1702830efdd79245d",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "source_executed_synthetic",
+          "sha256": "2243f27680b18c01724da4ff1e722f970caf916d4b3780676d2e1f3963b8a408",
+          "byte_count": 1924
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "synthetic_fixture",
+          "sha256": "a6ee5ed2ef9454b319573f9e13914bcadd18f1d084ce2a44509bbcde1825c55b",
+          "byte_count": 2356
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    },
+    {
+      "name": "unrelated_number_subsystem_prop_active",
+      "basis": "actual_N_on_explicit_synthetic_malformed_artifact",
+      "formula": "subsystem_prop_active",
+      "expected": {
+        "state": "available",
+        "value": 0
+      },
+      "actual": {
+        "state": "missing",
+        "value": null,
+        "qualification_codes": [
+          "producer_version_unverified",
+          "reference_release_unknown",
+          "native_query_completeness_unknown",
+          "population_incomplete"
+        ]
+      },
+      "matches_expected": false,
+      "canonical_sheet_sha256": "b43d72d81b82ce41ff68f495ffe08cf5d8f75485367876e62ce24f667659756a",
+      "source_documents": [
+        {
+          "document_id": "pathways",
+          "basis": "source_executed_synthetic",
+          "sha256": "2243f27680b18c01724da4ff1e722f970caf916d4b3780676d2e1f3963b8a408",
+          "byte_count": 1924
+        },
+        {
+          "document_id": "subsystems",
+          "basis": "synthetic_fixture",
+          "sha256": "049b110eec862e4893e99f8d93db7da56fc621f9742c007f62a90bb2c0226c05",
+          "byte_count": 2449
+        },
+        {
+          "document_id": "pathway_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "2b1918e628e62271e1341c08c90a66af4c0ced357d312812f8c52af52797baa3",
+          "byte_count": 651
+        },
+        {
+          "document_id": "subsystem_raw",
+          "basis": "source_executed_synthetic",
+          "sha256": "802161f58b13054abaf5b5339174b9690d9e51b40e5403364fd26c4d49f4f036",
+          "byte_count": 923
+        },
+        {
+          "document_id": "variants",
+          "basis": "source_executed_synthetic",
+          "sha256": "80c93daa7f5f66cb99eb0f4f3d5ed9cad5c0851cb3292eee39780c4a24cce54a",
+          "byte_count": 175
+        }
+      ]
+    }
+  ],
+  "runtime_sources": [
+    {
+      "path": "candidate/gene_annotation_episode/bvbrc_comparative_systems_calculation_contracts.py",
+      "sha256": "a47afffc86e539c3aa4bea8d848f4d71c68e10de7fbb8e0152c7a0a0783b0fad"
+    },
+    {
+      "path": "candidate/gene_annotation_episode/bvbrc_comparative_systems_calculators.py",
+      "sha256": "d5ed31296fc2979b3675368fe339b5f81f3da1e10994d62504de9114b5599ecc"
+    },
+    {
+      "path": "candidate/gene_annotation_episode/bvbrc_comparative_systems_handoff_contracts.py",
+      "sha256": "e8a1293364b753f5f85ffc36cbe88a96bd72ec562359ea9797c19504a779f381"
+    },
+    {
+      "path": "candidate/gene_annotation_episode/bvbrc_comparative_systems_native.py",
+      "sha256": "d2e7bcbf0aa7a53717cff55c1b36af7f56b2d996b311ed04c6610b39c8156304"
+    },
+    {
+      "path": "candidate/gene_annotation_episode/bvbrc_comparative_systems_sheet.py",
+      "sha256": "a0c4e11b73e533755b805ba913a693c7772fce6cd2e8fb589d25a6d029e10147"
+    },
+    {
+      "path": "candidate/gene_annotation_episode/bvbrc_comparative_systems_sheet_contracts.py",
+      "sha256": "30487f1e90ce2bae19e4557f8ca4fbe7bd80a5a01c4a6fb2761279237993b073"
+    }
+  ]
+}

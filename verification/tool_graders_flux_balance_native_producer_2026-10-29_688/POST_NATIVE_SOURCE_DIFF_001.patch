@@ -1,0 +1,478 @@
+--- check151c/gene_annotation_episode/native_flux_balance_cobra_glpk.py
++++ final688/gene_annotation_episode/native_flux_balance_cobra_glpk.py
+@@ -166,7 +166,7 @@
+                     if "lower_bound" not in value or "upper_bound" not in value:
+                         missing_bounds.add(sid)
+                         features.append({"kind": "default_bound", "source": location("original_model", f"/reactions/{i}"), "disposition": "transformed"})
+-                    has_objective |= value.get("objective_coefficient", 0) != 0
++                    has_objective |= "objective_coefficient" in value
+         recognized = {"id", "name", "notes", "annotation", "compartments", "metabolites", "reactions", "genes", "version"}
+         for key in original_json.keys() - recognized:
+             features.append({"kind": "ignored_json_field", "source": location("original_model", "/" + _escape(key)), "disposition": "unsupported"})
+@@ -263,6 +263,18 @@
+             "missing_bounds": missing_bounds, "missing_objective": not has_objective, "unsupported": unsupported}
+ 
+ 
++def _source_information_guarded(audit, original_json, diagnostics, model=None):
++    try:
++        return _source_information(audit, original_json, model)
++    except Exception as error:
++        diagnostics["exceptions"].append(exception(error, "load", "source_information"))
++        audit["issues"].append(issue("source_semantics_unsupported", "load", "/source_audit"))
++        # The decoded original source remains valid evidence even when its
++        # scientific interpretation cannot be represented by this loader.
++        return {"joins": [], "features": [], "reactions": {}, "missing_bounds": set(),
++                "missing_objective": True, "unsupported": True}
++
++
+ def _load_model(path, *, profile, raw, scratch_directory, diagnostics):
+     import cobra
+     import libsbml
+@@ -271,7 +283,7 @@
+     load_config = {"solver_interface": config.solver.__name__, "lower_bound": observation(config.lower_bound),
+                    "upper_bound": observation(config.upper_bound), "tolerance": observation(config.tolerance)}
+     audit, original_json = _source_audit(raw, profile)
+-    preliminary = _source_information(audit, original_json)
++    preliminary = _source_information_guarded(audit, original_json, diagnostics)
+     loader_diagnostics = []
+     if profile == "sbml":
+         doc = libsbml.readSBMLFromFile(str(path))
+@@ -290,7 +302,7 @@
+     profile = context["source_audit"]["input_profile"]
+     model = cobra.io.read_sbml_model(str(path), number=float, f_replace=cobra.io.sbml.F_REPLACE) if profile == "sbml" else cobra.io.load_json_model(str(path))
+     require(model.solver.interface.__name__ == "optlang.glpk_interface", "solver_unavailable")
+-    context["source_information"] = _source_information(context["source_audit"], context["source_json"], model)
++    context["source_information"] = _source_information_guarded(context["source_audit"], context["source_json"], context["diagnostics"], model)
+     model._fba_capture_context = context
+     return model
+ 
+@@ -410,7 +422,7 @@
+                 "loader_diagnostics": deepcopy(ctx.get("loader_diagnostics", [])), "capture_failures": failures}}
+ 
+ 
+-def _controls(control):
++def _controls(control, failures, operation):
+     values = {}
+     for key in dir(type(control)):
+         if key.startswith("_") or key in {"this", "thisown"}:
+@@ -418,9 +430,19 @@
+         descriptor = getattr(type(control), key)
+         if not isinstance(descriptor, property):
+             continue
+-        value = getattr(control, key)
+-        values[key] = value if value is None or type(value) in (str, int, bool) else float(value) if isinstance(value, float) and math.isfinite(value) else {
+-            "state": "unavailable", "type": type(value).__module__ + "." + type(value).__name__}
++        native_type = None
++        try:
++            value = getattr(control, key)
++            native_type = type(value).__module__ + "." + type(value).__name__
++            if value is None or type(value) in (str, int, bool):
++                values[key] = value
++            elif isinstance(value, float) and math.isfinite(value):
++                values[key] = float(value)
++            else:
++                raise TypeError("native_control_not_primitive:" + native_type)
++        except Exception as error:
++            values[key] = {"state": "unavailable", "type": native_type}
++            failures.append(exception(error, "capture", operation + "/" + key))
+     return values
+ 
+ 
+@@ -595,7 +617,7 @@
+         "variables": variables, "constraints": constraints, "objective": objective, "reaction_variables": joins,
+         "representation": representation, "native_optlang_json": native_json, **text, "issues": problems,
+         "native_capture_evidence": {"version": "cobra_glpk_problem_evidence_v1", "native_variables": raw_vars, "native_rows": raw_rows,
+-            "reaction_flux_expressions": expressions, "configuration": {"integer_controls": _controls(solver.configuration._iocp)},
++            "reaction_flux_expressions": expressions, "configuration": {"integer_controls": _controls(solver.configuration._iocp, failures, "integer_controls")},
+             "capture_failures": failures}}
+ 
+ 
+@@ -632,6 +654,10 @@
+     """008's native source predicate; this is point custody, not feasibility."""
+     if type(return_code) is not int or type(primal_status) is not int:
+         return False
++    if status is not None and (type(status) is not int or status not in {1, 2, 3, 4, 5, 6}):
++        return False
++    if dual_status is not None and (type(dual_status) is not int or dual_status not in {1, 2, 3, 4}):
++        return False
+     valid = (return_code == 0 and primal_status in {2, 3, 4}) or (return_code in {6, 7, 8, 9} and primal_status in {2, 3})
+     if not valid:
+         return False
+@@ -659,7 +685,7 @@
+         def observe(problem, controls):
+             position = len(events)
+             failures = []
+-            parameters = _safe_get(lambda: _controls(controls), failures, name + "/parameters")
++            parameters = _safe_get(lambda: _controls(controls, failures, name + "/parameters"), failures, name + "/parameters")
+             before = _safe_get(lambda: digest(_native_structure(model)), failures, "native_problem_identity_before")
+             event = {"typed": {"position": position, "routine": name, "return_code": None, "raw_status_code": None,
+                 "primal_status_code": None, "dual_status_code": None,
+@@ -706,7 +732,9 @@
+         if len(previous[axis]) != len(final[axis]):
+             return False
+         for before, after in zip(previous[axis], final[axis]):
+-            if (before["native_index"], before["id"]) != (after["native_index"], after["id"]):
++            if before["native_index"] != after["native_index"]:
++                return False
++            if _name(before["id"]) is not None and _name(after["id"]) is not None and before["id"] != after["id"]:
+                 return False
+             for field in fields:
+                 if before[field]["state"] == "present" and after[field]["state"] == "present" and before[field] != after[field]:
+@@ -886,13 +914,23 @@
+             problems.append(issue("variable_nonfinite" if result["state"] == "nonfinite" else "variable_missing", "capture", pointer))
+         return result
+     for i, row in enumerate(raw["variables"]):
++        if _name(row["id"]) is None:
++            problems.append(issue("variable_identity_conflict", "capture",
++                f"/native_capture_evidence/raw_getters/variables/{i}/id", variable_position=row["native_index"] - 1))
++            continue
++        pointer = f"/variable_values/{len(variables)}"
+         variables.append({"variable_position": row["native_index"] - 1, "variable_id": row["id"],
+-            "primal": candidate(row["primal"], f"/variable_values/{i}/primal/value"),
+-            "reduced_cost": candidate(row["reduced_cost"], f"/variable_values/{i}/reduced_cost/value")})
++            "primal": candidate(row["primal"], pointer + "/primal/value"),
++            "reduced_cost": candidate(row["reduced_cost"], pointer + "/reduced_cost/value")})
+     for i, row in enumerate(raw["constraints"]):
++        if _name(row["id"]) is None:
++            problems.append(issue("constraint_identity_conflict", "capture",
++                f"/native_capture_evidence/raw_getters/constraints/{i}/id", constraint_position=row["native_index"] - 1))
++            continue
++        pointer = f"/constraint_values/{len(constraints)}"
+         constraints.append({"constraint_position": row["native_index"] - 1, "constraint_id": row["id"],
+-            "activity": candidate(row["activity"], f"/constraint_values/{i}/activity/value"),
+-            "shadow_price": candidate(row["shadow_price"], f"/constraint_values/{i}/shadow_price/value")})
++            "activity": candidate(row["activity"], pointer + "/activity/value"),
++            "shadow_price": candidate(row["shadow_price"], pointer + "/shadow_price/value")})
+     for i, rxn in enumerate(model.reactions):
+         values = {}
+         for field in ("fluxes", "reduced_costs"):
+@@ -904,7 +942,7 @@
+             "flux": candidate(values["fluxes"], f"/reaction_values/{i}/flux/value"),
+             "reduced_cost": candidate(values["reduced_costs"], f"/reaction_values/{i}/reduced_cost/value")})
+     config = _safe_get(lambda: capture_cobra_glpk_configuration(model, role="solution", pointer="/configuration_after_solve"), failures, "configuration_after_solve")
+-    controls = _safe_get(lambda: _controls(model.solver.configuration._iocp), failures, "integer_controls_after_solve")
++    controls = _safe_get(lambda: _controls(model.solver.configuration._iocp, failures, "integer_controls_after_solve"), failures, "integer_controls_after_solve")
+     return {"version": "cobra_glpk_solution_capture_v1", "model_optimize_call_count": optimize_call_count,
+         "native_passes": [deepcopy(event["typed"]) for event in native_passes],
+         "solution_object_state": "returned" if solution is not None else "not_returned" if optimize_call_count else "not_executed",
+--- check151c/gene_annotation_episode/native_flux_balance_driver.py
++++ final688/gene_annotation_episode/native_flux_balance_driver.py
+@@ -252,6 +252,8 @@
+             except Exception as error:
+                 diagnostics["exceptions"].append(capture.exception(error, "capture", "software_after"))
+                 problems.append(capture.issue("binding_unavailable", "capture", "/software"))
++                if application["request_realization"] == "exact":
++                    application["request_realization"] = "unknown"
+                 outcome = "partial" if calls else "failed"
+             log.write(canonical({"diagnostics": diagnostics, "solve_call_count": calls, "execution_outcome": outcome}) + "\n")
+     if not write("native_log", log.getvalue().encode("utf-8"), raw=True):
+--- check151c/tests/test_native_flux_balance_producer_688.py
++++ final688/tests/test_native_flux_balance_producer_688.py
+@@ -168,6 +168,29 @@
+     assert not native._established_return(0, 2, 4, 2)
+     assert not native._established_return(0, 2, 5, 3)
+     assert not native._established_return(True, 2)
++    assert not native._established_return(0, 3, 3, 99)
++    assert not native._established_return(0, 2, 5, True)
++
++
++def test_synthetic_control_capture_preserves_values_and_actual_exceptions():
++    class Control:
++        @property
++        def valid(self):
++            return 1e-7
++        @property
++        def callback(self):
++            return object()
++        @property
++        def failed(self):
++            raise OSError("controlled getter unavailable")
++    failures = []
++    controls = native._controls(Control(), failures, "synthetic_parameters")
++    assert controls["valid"] == 1e-7
++    assert controls["callback"] == {"state": "unavailable", "type": "builtins.object"}
++    assert controls["failed"] == {"state": "unavailable", "type": None}
++    assert [(r["operation"], r["exception_class"]) for r in failures] == [
++        ("synthetic_parameters/callback", "TypeError"), ("synthetic_parameters/failed", "OSError")]
++    assert all(row["traceback"].startswith("Traceback") for row in failures)
+ 
+ 
+ def _live_model(tmp_path):
+@@ -251,6 +274,36 @@
+     assert application["objective_application"] == "rejected"
+ 
+ 
++def test_explicit_json_zero_objective_is_supplied_without_solve(tmp_path, monkeypatch):
++    import cobra
++    def forbidden(*args, **kwargs):
++        raise AssertionError("source/objective inspection must not optimize")
++    monkeypatch.setattr(cobra.Model, "optimize", forbidden)
++    document = _json_model()
++    for reaction in document["reactions"]:
++        reaction["objective_coefficient"] = 0
++    raw = canonical(document).encode()
++    path = tmp_path / "explicit-zero.json"
++    path.write_bytes(raw)
++    diagnostics = {"warnings": [], "logging": [], "exceptions": []}
++    context = native._load_model(path, profile="cobra_json", raw=raw, scratch_directory=tmp_path, diagnostics=diagnostics)
++    model = native._load_audited_model(path, context)
++    assert not context["source_information"]["missing_objective"]
++    job = {"constraints": None, "objective": {"kind": "model_default", "reaction_id": None},
++        "solver_options": {"feasibility_tolerance": None, "optimality_tolerance": None, "integrality_tolerance": None}}
++    application = native._request_application(job)
++    assert native._apply_request(model, job, application, diagnostics)
++    model.solver.update()
++    snapshot = native.capture_cobra_glpk_problem(model, phase="effective")
++    assert snapshot["objective"]["terms"] == [] and snapshot["objective"]["terms_complete"]
++    assert snapshot["objective"]["native_constant"]["value"] == snapshot["objective"]["interface_offset"]["value"] == 0
++    assert model.solver.status is None
++    for reaction in document["reactions"]:
++        del reaction["objective_coefficient"]
++    audit, supplied = native._source_audit(canonical(document).encode(), "cobra_json")
++    assert native._source_information(audit, supplied)["missing_objective"]
++
++
+ def test_storage_immutable_confined_and_changed_identity(tmp_path):
+     source, output = tmp_path / "source", tmp_path / "retained"
+     source.write_bytes(b"complete native bytes")
+@@ -270,6 +323,8 @@
+     packet = ATTEMPT / "source_snapshot/verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe"
+     summary = read_json(packet / "probe_summary.json")
+     assert summary["model_optimize_calls"] == 1
++    assert summary["fluxes"] == {"IN": 7.0, "AB": 6.0, "OUT": 6.0}
++    assert summary["aux_primal"] == 6 and summary["objective"] == -2.75
+     assert read_json(packet / "native_passes.json")[0]["return_code"] == 0
+ 
+ 
+@@ -292,6 +347,16 @@
+     assert [r["primal"]["state"] for r in point["variable_values"]][:3] == ["nonfinite", "missing", "present"]
+     assert point["native_cobra_objective"]["state"] == "missing"
+     assert point["solution_object_state"] == "not_returned"
++    final["variables"][0]["id"] = None
++    final["constraints"][0]["id"] = None
++    point = native.capture_cobra_glpk_solution(model, None, optimize_call_count=1, native_passes=[event], diagnostics=diagnostics)
++    assert point["point_state"] == "basic_solution"
++    assert len(point["variable_values"]) == 5 and len(point["constraint_values"]) == 1
++    assert point["variable_values"][0]["variable_position"] == 1
++    assert point["variable_values"][1]["primal"]["state"] == "present"
++    assert point["variable_values"][1]["primal"]["source"]["pointer"] == "/variable_values/1/primal/value"
++    assert {r["code"] for r in point["issues"]} >= {"variable_identity_conflict", "constraint_identity_conflict"}
++    final = deepcopy(raw)
+     later = deepcopy(event)
+     later["typed"].update(position=1, return_code=10, raw_status_code=1, primal_status_code=1, dual_status_code=1)
+     later["evidence"]["raw_getters"].update(glpk_status_code=1, glpk_primal_status_code=1, glpk_dual_status_code=1)
+@@ -331,6 +396,214 @@
+         if case == "unsupported_option":
+             assert manifest["request_application"]["solver_option_applications"][1]["application"] == "rejected"
+         assert not (Path(plan["attempt_directory"]) / ".native-flux-balance-solve-entered.json").exists()
++
++
++def test_source_units_collisions_and_actual_partial_setter_without_solve(tmp_path, monkeypatch):
++    model, context, diagnostics = _live_model(tmp_path)
++    units = b'<listOfUnitDefinitions><unitDefinition id="supplied_flux"><listOfUnits><unit kind="mole" exponent="1" scale="-3" multiplier="1"/></listOfUnits></unitDefinition></listOfUnitDefinitions>'
++    raw = SBML.replace(b'<listOfCompartments>', units + b'<listOfCompartments>').replace(b'value="0" constant="true"', b'value="0" units="supplied_flux" constant="true"').replace(b'value="10" constant="true"', b'value="10" units="supplied_flux" constant="true"')
++    audit, _ = native._source_audit(raw, "sbml")
++    source = native._source_information(audit, None)
++    assert source["reactions"]["IN"]["flux_unit"]["native_text"] == "supplied_flux"
++    assert source["reactions"]["AB"]["flux_unit"]["basis"] == "unknown"
++    collision = SBML.replace(b'id="R_OUT"', b'id="AB"')
++    audit, _ = native._source_audit(collision, "sbml")
++    source = native._source_information(audit, None)
++    assert source["unsupported"] and any(row["kind"] == "id_collision" for row in source["features"])
++    job = {"constraints": [{"reaction_id": identifier, "lower": _selected_bound(lo), "upper": _selected_bound(hi)}
++        for identifier, lo, hi in (("IN", -5, -2), ("AB", 0, 3), ("OUT", 0, 4))],
++        "objective": {"kind": "model_default", "reaction_id": None},
++        "solver_options": {"feasibility_tolerance": None, "optimality_tolerance": None, "integrality_tolerance": None}}
++    import cobra
++    original = cobra.Reaction.bounds
++    def setter(reaction, value):
++        if reaction.id == "AB":
++            raise OSError("controlled setter failure after prior application")
++        original.fset(reaction, value)
++    monkeypatch.setattr(cobra.Reaction, "bounds", property(original.fget, setter))
++    application = native._request_application(job)
++    assert not native._apply_request(model, job, application, diagnostics)
++    assert [r["application"] for r in application["constraint_changes"]] == ["applied", "rejected", "not_attempted"]
++    model.solver.update()
++    snapshot = native.capture_cobra_glpk_problem(model, phase="effective")
++    variables = {row["id"]: row for row in snapshot["variables"]}
++    assert variables[model.reactions.IN.forward_variable.name]["lower"]["value"] == 0
++    reverse = variables[model.reactions.IN.reverse_variable.name]
++    assert (reverse["lower"]["value"], reverse["upper"]["value"]) == (2, 5)
++    assert model.reactions.OUT.upper_bound == 1000 and model.solver.status is None
++
++
++def test_decoded_xml_audit_survives_source_interpretation_exception(tmp_path, monkeypatch):
++    import cobra
++    from gene_annotation_episode.native_flux_balance_driver import run_flux_balance_native
++    def forbidden(*args, **kwargs):
++        raise AssertionError("invalid semantic source must never optimize")
++    monkeypatch.setattr(cobra.Model, "optimize", forbidden)
++    raw = SBML.replace(b'id="M_A" ', b'').replace(b'boundaryCondition="false"', b'boundaryCondition="true"', 1)
++    plan = _plan(tmp_path / "invalid_boundary_id", "sbml", raw)
++    _environment(monkeypatch, plan)
++    manifest = run_flux_balance_native(plan)
++    assert manifest["solve_call_count"] == 0 and manifest["execution_outcome"] == "failed"
++    output = Path(plan["attempt_directory"]) / "outputs"
++    payload = read_json(output / "model-capture.json")
++    assert payload["source_audit"]["xml_elements"]
++    assert any(r["code"] == "source_semantics_unsupported" for r in payload["source_audit"]["issues"])
++    assert (output / "original-model.xml").read_bytes() == raw
++    assert b'"operation":"source_information"' in (output / "native-log.txt").read_bytes()
++    assert payload["loaded_original"] is None and manifest["request_realization"] != "exact"
++
++
++def test_saved_emission_recalculation_cli_replay_and_tamper_no_solve(tmp_path, monkeypatch):
++    retained = os.environ.get("HMMER_NATIVE_ORACLE_FBA_RETAINED")
++    if retained is None:
++        pytest.skip("requires explicitly supplied original producer emissions")
++    from gene_annotation_episode.native_flux_balance_driver import main, run_flux_balance_native
++    from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
++    import cobra
++    def forbidden(*args, **kwargs):
++        raise AssertionError("saved/replay verification must not optimize")
++    monkeypatch.setattr(cobra.Model, "optimize", forbidden)
++    examples = []
++    for profile in ("sbml", "cobra_json"):
++        folder = Path(retained) / profile
++        plan = read_json(folder / "selected-plan.json")
++        sheet, calculated = _parsed_calculated(plan)
++        before = digest(sheet)
++        parameters = deepcopy(calculated["parameters"])
++        parameters["objective_absolute_tolerance"] = 0
++        recalculated = calculate_flux_balance_sheet(sheet, parameters=parameters)
++        assert digest(sheet) == before
++        assert recalculated["objective"]["full_calculated"]["value"] == 10
++        assert main([str(folder / "selected-plan.json")]) == 0
++        manifest = run_flux_balance_native(plan)
++        solution = read_json(Path(plan["attempt_directory"]) / "outputs/solution-capture.json")
++        assert len(solution["native_passes"]) == 1
++        examples.append({"profile": profile, "public_optimize_calls": manifest["solve_call_count"],
++            "native_passes": len(solution["native_passes"]), "point_state": solution["point_state"],
++            "fluxes": {r["reaction_id"]: r["flux"]["value"] for r in solution["reaction_values"]},
++            "variable_count": sheet["problems"]["effective"]["variable_count"],
++            "constraint_count": sheet["problems"]["effective"]["constraint_count"],
++            "calculated_objective": calculated["objective"]["full_calculated"]["value"],
++            "candidate_feasibility": calculated["candidate_feasibility"], "request_realization": sheet["native"]["request_realization"],
++            "evaluated_variable_bound_sides": calculated["evaluated_variable_bound_count"],
++            "violated_variable_bound_sides": calculated["violated_variable_bound_count"],
++            "constraint_activities": {r["constraint_id"]: r["activity"]["value"] for r in calculated["constraint_checks"]},
++            "artifact_bytes": {r["role"]: r["identity"]["size_bytes"] for r in manifest["files"]},
++            "original_sheet_sha256": calculated["sheet_sha256"], "saved_recalculation_sheet_sha256": recalculated["sheet_sha256"]})
++        assert manifest["request_application"]["constraint_changes"] == [] if profile == "sbml" else len(manifest["request_application"]["constraint_changes"]) == 2
++        altered = deepcopy(plan)
++        altered["identity"]["requested_job_sha256"] = "0" * 64
++        with pytest.raises(ValueError, match="original_attempt_mismatch"):
++            run_flux_balance_native(altered)
++    immutable_json(ATTEMPT / "verified-numerical-examples.json", examples)
++    print(canonical({"authentic_original_cases": examples, "new_native_calls_in_this_test": 0}))
++
++
++def test_controlled_exception_after_observed_return_and_csv_write_failure(tmp_path, monkeypatch):
++    """Synthetic execution faults: zero native solves, not native measurements."""
++    retained = os.environ.get("HMMER_NATIVE_ORACLE_FBA_RETAINED")
++    if retained is None:
++        pytest.skip("controlled transport fixture requires original retained bytes")
++    import cobra
++    import optlang.glpk_interface as interface
++    from gene_annotation_episode import native_flux_balance_driver as driver
++    original_plan = read_json(Path(retained) / "sbml/selected-plan.json")
++    retained_payload = read_json(Path(original_plan["attempt_directory"]) / "outputs/solution-capture.json")
++    native_calls = []
++    # The wrapper observes a controlled Python routine return, not GLPK work.
++    def controlled_native(problem, parameters):
++        native_calls.append("controlled_return_only")
++        return 0
++    monkeypatch.setattr(interface, "glp_simplex", controlled_native)
++    def controlled_optimize(model):
++        interface.glp_simplex(model.solver.problem, model.solver.configuration._smcp)
++        raise RuntimeError("controlled exception after the observed routine returned")
++    monkeypatch.setattr(cobra.Model, "optimize", controlled_optimize)
++    software = _software()
++    plan = _plan(tmp_path / "controlled_exception", "sbml", SBML, software=software)
++    _environment(monkeypatch, plan)
++    manifest = driver.run_flux_balance_native(plan)
++    assert manifest["solve_call_count"] == 1 and manifest["execution_outcome"] == "partial"
++    output = Path(plan["attempt_directory"]) / "outputs"
++    payload = read_json(output / "solution-capture.json")
++    assert payload["solution_object_state"] == "not_returned"
++    assert payload["point_state"] == "not_established"  # Actual unsolved getters are not promoted.
++    assert len(payload["native_passes"]) == 1 and payload["native_passes"][0]["return_code"] == 0
++    assert all(r["primal"]["state"] == "missing" for r in payload["variable_values"])
++    assert (output / "problem-capture.json").is_file()
++    # A transport stub supplies already retained bytes to exercise only the
++    # post-capture writer branch. No Cobra Solution is constructed or restored.
++    sentinel = object()
++    monkeypatch.setattr(cobra.Model, "optimize", lambda model: sentinel)
++    monkeypatch.setattr(native, "capture_cobra_glpk_solution", lambda *args, **kwargs: deepcopy(retained_payload))
++    def failed_csv(*args, **kwargs):
++        raise OSError("controlled CSV writer failure after native payload retention")
++    monkeypatch.setattr(driver, "_csv", failed_csv)
++    plan = _plan(tmp_path / "controlled_csv", "sbml", SBML, software=software)
++    _environment(monkeypatch, plan)
++    manifest = driver.run_flux_balance_native(plan)
++    output = Path(plan["attempt_directory"]) / "outputs"
++    assert manifest["execution_outcome"] == "partial" and manifest["solve_call_count"] == 1
++    assert read_json(output / "solution-capture.json") == retained_payload
++    assert next(r for r in manifest["files"] if r["role"] == "flux_csv")["state"] == "absent"
++    assert len(native_calls) == 1
++    immutable_json(ATTEMPT / "controlled-fault-evidence.json", {"evidence_class": "synthetic transport and exception plumbing",
++        "actual_glpk_calls": 0, "controlled_routine_returns": len(native_calls), "cobra_solution_objects_constructed": 0,
++        "authoritative_native_emissions_unchanged": str(Path(retained))})
++
++
++def test_final_software_identity_failure_downgrades_exact_without_native_work(tmp_path, monkeypatch):
++    """Controlled Python invocation only; the native optimizer is never called."""
++    import cobra
++    from gene_annotation_episode import native_flux_balance_driver as driver
++    original_verify = driver._verify_software
++    def verify(software, *, native_loaded=False):
++        if native_loaded:
++            raise ValueError("fba_software_file_changed")
++        return original_verify(software)
++    monkeypatch.setattr(driver, "_verify_software", verify)
++    controlled_calls = []
++    def return_no_solution(model):
++        controlled_calls.append("python_stub_only")
++        return None
++    monkeypatch.setattr(cobra.Model, "optimize", return_no_solution)
++    plan = _plan(tmp_path / "final_software_identity", "sbml", SBML)
++    _environment(monkeypatch, plan)
++    manifest = driver.run_flux_balance_native(plan)
++    assert len(controlled_calls) == 1
++    assert manifest["execution_outcome"] == "partial"
++    assert manifest["request_realization"] == manifest["request_application"]["request_realization"] == "unknown"
++    assert any(row["code"] == "binding_unavailable" for row in manifest["issues"])
++    payload = read_json(Path(plan["attempt_directory"]) / "outputs/solution-capture.json")
++    assert payload["native_passes"] == [] and payload["point_state"] == "not_established"
++
++
++def test_invalid_selected_requests_and_envelopes_reject_before_invocation(tmp_path, monkeypatch):
++    from gene_annotation_episode.native_flux_balance_driver import run_flux_balance_native
++    import cobra
++    def forbidden(*args, **kwargs):
++        raise AssertionError("invalid envelope must never invoke native work")
++    monkeypatch.setattr(cobra.Model, "optimize", forbidden)
++    plan = _plan(tmp_path / "invalid_selections", "sbml", SBML)
++    change = {"reaction_id": "IN", "lower": _selected_bound(0), "upper": _selected_bound(10)}
++    for changes in ([change, deepcopy(change)],
++                    [change | {"lower": _selected_bound(11)}],
++                    [change | {"lower": change["lower"] | {"value": float("nan")}}],
++                    [change | {"lower": change["lower"] | {"kind": "unknown_kind"}}]):
++        altered = deepcopy(plan)
++        altered["requested_job"]["native_flux_balance"]["constraints"] = changes
++        with pytest.raises(ValueError):
++            run_flux_balance_native(altered)
++    for field, value in (("role", "unsupported_role"), ("relative_path", "../escape"), ("format", "unsupported_format")):
++        altered = deepcopy(plan)
++        altered["outputs"][0][field] = value
++        with pytest.raises(ValueError):
++            run_flux_balance_native(altered)
++    altered = deepcopy(plan)
++    altered["requested_job"]["native_flux_balance"]["source_function_sha256"] = "0" * 64
++    with pytest.raises(ValueError, match="source_function_mismatch"):
++        run_flux_balance_native(altered)
++    assert not Path(plan["attempt_directory"]).exists()
+ 
+ 
+ def test_selected_producer_native_sbml_and_json_once(tmp_path, monkeypatch):

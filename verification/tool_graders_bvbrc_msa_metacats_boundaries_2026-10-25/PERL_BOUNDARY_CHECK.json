@@ -1,0 +1,7 @@
+{
+  "purpose": "Correct unsupported claim of unbounded all-gap scanning; isolated language-semantics check, not complete producer validation",
+  "command": "perl -e 'my @seq=split(//,\"---\"); my $j=0; my $forward_steps=0; $forward_steps++, $j++ while ($seq[$j] eq \"-\"); print \"forward_index=$j steps=$forward_steps\\n\"; $j=$#seq; my $backward_steps=0; $backward_steps++, $j-- while ($seq[$j] eq \"-\"); print \"backward_index=$j steps=$backward_steps\\n\";'",
+  "exit_code": 0,
+  "stdout": "forward_index=3 steps=3\nbackward_index=-4 steps=6\n",
+  "scope": "Exact guard expression on an all-gap three-element Perl array. Native complete helper empty-population behavior was not executed by this check."
+}

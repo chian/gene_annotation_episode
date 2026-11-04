@@ -1,0 +1,1083 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "gel_lane_selection_v1"
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "byte_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_kind": {
+          "enum": [
+            "primary_source",
+            "retained_extraction",
+            "synthetic_fixture"
+          ]
+        }
+      },
+      "required": [
+        "source_ref",
+        "artifact_ref",
+        "byte_sha256",
+        "width",
+        "height",
+        "source_kind"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "experiment": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "organism": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "genotype": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "subject": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "construct": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "system": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "endpoint": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "intended_variable": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "experiment",
+        "organism",
+        "genotype",
+        "subject",
+        "construct",
+        "system",
+        "endpoint",
+        "intended_variable"
+      ],
+      "additionalProperties": false
+    },
+    "lanes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "lane_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subject": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "known",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "state",
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "construct": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "known",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "state",
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "endpoint": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "known",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "state",
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "condition": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "known",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "state",
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          },
+          "control_role": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "known",
+                  "unknown",
+                  "conflicting"
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "protein_free",
+                      "protein_present",
+                      "competitor",
+                      "reference",
+                      "other"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "witnesses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "state",
+              "value",
+              "witnesses"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "lane_id",
+          "observation_id",
+          "subject",
+          "construct",
+          "endpoint",
+          "condition",
+          "control_role"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "roi_assignments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "assignment_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lanes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lane_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "background": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "whole_lane": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "bands": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "band_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "role": {
+                        "enum": [
+                          "shifted",
+                          "free",
+                          "other"
+                        ]
+                      },
+                      "region": {
+                        "anyOf": [
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            },
+                            "minItems": 4,
+                            "maxItems": 4
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "band_id",
+                      "role",
+                      "region"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "lane_id",
+                "background",
+                "whole_lane",
+                "bands"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "assignment_id",
+          "lanes"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "version",
+    "image",
+    "context",
+    "lanes",
+    "roi_assignments"
+  ],
+  "additionalProperties": false
+}

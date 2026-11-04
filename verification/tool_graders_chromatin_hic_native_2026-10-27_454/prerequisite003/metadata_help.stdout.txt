@@ -1,0 +1,19 @@
+Print file metadata to stdout. 
+
+
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite003/hictk metadata [OPTIONS] uri
+
+
+POSITIONALS:
+  uri TEXT:(.[ms]cool) OR (.hic) REQUIRED
+                              Path to a .hic or .[ms]cool file (Cooler URI syntax supported). 
+
+OPTIONS:
+  -h,     --help              Print this help message and exit 
+  -f,     --output-format TEXT:{json,toml,yaml} [json]  
+                              Format used to return file metadata. 
+                              Should be one of: json, toml, or yaml. 
+          --include-file-path, --exclude-file-path{false} 
+                              Output the given input path using attribute "uri". 
+          --recursive         Print metadata for each resolution or cell contained in a 
+                              multi-resolution or single-cell file. 

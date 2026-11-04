@@ -65,7 +65,8 @@ def _check_flux_balance_version(owner, supplied, witness, index):
 
 def validate_execution_input_versions(owner, versions, scope, *, context, atac_assignments=(),
                                       nmf_assignments=(), fluorescence_assignments=(),
-                                      flux_balance_assignments=()):
+                                      flux_balance_assignments=(), macs2_peak_assignments=(),
+                                      lumpy_assignments=()):
     # Only exact selected BAMs already admitted through original receipt
     # inheritance may use bare artifact custody. Generic artifacts retain
     # their ordinary Store scope requirement.
@@ -83,6 +84,30 @@ def validate_execution_input_versions(owner, versions, scope, *, context, atac_a
                 raise ValueError('atac_input_not_received')
             selected_files[file['artifact_ref']] = file
             failure_prefixes[file['artifact_ref']] = 'atac'
+    for assignment in macs2_peak_assignments:
+        job = assignment.get('requested_job', {}).get('native_macs2_peak')
+        if job is None:
+            continue
+        admitted = owner._macs2_peak_inputs(context, assignment)
+        owner.store.validate_scope(plain(scope), parent_scope=plain(context.scope))
+        for occurrence in job['request']['inputs']:
+            file = occurrence['file']
+            if file['artifact_ref'] not in admitted:
+                raise ValueError('macs2_peak_input_not_received')
+            selected_files[file['artifact_ref']] = file
+            failure_prefixes[file['artifact_ref']] = 'macs2_peak'
+    for assignment in lumpy_assignments:
+        job = assignment.get('requested_job', {}).get('native_lumpy')
+        if job is None:
+            continue
+        admitted = owner._lumpy_inputs(context, assignment)
+        owner.store.validate_scope(plain(scope), parent_scope=plain(context.scope))
+        for binding in job['input_bindings']:
+            file = binding['file']
+            if file['artifact_ref'] not in admitted:
+                raise ValueError('lumpy_input_not_received')
+            selected_files[file['artifact_ref']] = file
+            failure_prefixes[file['artifact_ref']] = 'lumpy'
     for assignment in nmf_assignments:
         job = assignment.get('requested_job', {}).get('native_expression_nmf')
         if job is None:

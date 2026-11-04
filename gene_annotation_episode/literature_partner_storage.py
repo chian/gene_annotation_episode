@@ -22,6 +22,8 @@ from .literature_partner_native_inputs import (
     partner_source_population_schema as _native_population_schema,
 )
 from .literature_rate_storage import LiteratureRateRepository
+from .literature_partner_types import EXPERIMENT_TYPES
+from . import literature_experiment_assessments as assessments
 
 
 PROVIDER = "literature.experimental.partner"
@@ -70,7 +72,7 @@ def partner_source_population_schema():
 
 def _arguments_schema(args):
     return (partner_source_population_schema() if isinstance(args, dict) and "input_mode" in args
-            else partner_population_schema())
+            else partner_population_schema(include_assessment=True))
 
 
 def _native_version(args):
@@ -362,6 +364,7 @@ def _native_operand_projection(extraction):
 
 
 class LiteraturePartnerRepository(LiteratureRateRepository):
+    experiment_types = EXPERIMENT_TYPES
     provider = PROVIDER
     components = COMPONENTS
     record_version = "literature_partner_record_v1"
@@ -419,6 +422,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
             self._source(context, reference)
         for reference in saved["input_source_refs"]:
             self._provenance(context.scope, reference)
+        if "experiment_assessment" in saved:
+            assessments.authorize_assessment(self, context, saved["experiment_assessment"])
         return outcome
 
     def populate(self, context, arguments, operation_key):
@@ -428,6 +433,9 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
             raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, _arguments_schema(args))
+        assessment = args.get("experiment_assessment")
+        if assessment is not None:
+            assessments.authorize_assessment(self, context, assessment)
         signature = canonical({"arguments": args, "scope": plain(context.scope)})
         parameters = (self.run_id, context.episode_id, operation_key)
         query = (f"SELECT signature,outcome FROM {self.operations_table} "
@@ -439,6 +447,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
             old = self.store.db.execute(query, parameters).fetchone()
             if old is not None:
                 return self._replay(context, old, signature)
+            if assessment is not None:
+                assessments.check_revision(self, assessment)
 
             def read_source(reference, representation):
                 source = self._source(context, reference)
@@ -456,7 +466,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
                 raise ContractError("literature_partner_direct_source_mismatch")
             for reference in direct:
                 self._source(context, reference)
-            parents = self._parents(context.scope, direct)
+            extra_parents = self._assessment_sources(assessment)
+            parents = self._parents(context.scope, list(dict.fromkeys([*direct, *extra_parents])))
             source = self.store.get(args["source_ref"])
             payload = {"version": self.record_version, "input_source_ref": source["id"],
                 "input_artifact_ref": source["artifact_ref"], "input_source_refs": parents,
@@ -481,6 +492,9 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
                     publish(kind, record)
                 payload["native_operand_bindings"] = native_projection
             for field, (literal, kind) in BINDINGS.items():
+                if field == "experiment_ref" and assessment is not None:
+                    bindings[field] = assessment["experiment_ref"]
+                    continue
                 if field in native_common:
                     bindings[field] = native_common[field]
                     continue
@@ -489,6 +503,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
                     publish("reference", _condition_role(literal, entry))
                 bindings[field] = publish(kind, _binding_record(literal, kind, entry)) if entry else None
             payload["experimental_bindings"] = bindings
+            if assessment is not None:
+                payload["experiment_assessment"] = deepcopy(assessment)
             factor_bindings = {name: publish("term", _factor_record(args["data_source_ref"], name))
                 for name in _factor_names(extraction)}
             payload["factor_bindings"] = factor_bindings
@@ -509,9 +525,23 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
                 "result": {"sheet_ref": sheet_ref, "cells": deepcopy(extraction["cells"]),
                     "assay_interpretation": deepcopy(interpretation), **_metadata(extraction, factor_bindings)},
                 "feedback": None}
+            if assessment is not None:
+                outcome["result"]["experiment_assessment"] = deepcopy(assessment)
             self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
                 (*parameters, signature, canonical(outcome)))
         return outcome
+
+    def _assessment_sources(self, assessment):
+        if assessment is None:
+            return []
+        return [self.store.get(assessment["experiment_ref"])["source_ref"],
+                *([assessment["revises_sheet_ref"]] if assessment["revises_sheet_ref"] is not None else [])]
+
+    def current_assessments(self):
+        return assessments.current_assessments(self)
+
+    def assessment_history(self, sheet_ref):
+        return assessments.assessment_history(self, sheet_ref)
 
     def read(self, sheet_ref):
         """Validate saved authority and copy cells, without source-byte reads."""
@@ -538,6 +568,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         request = json.loads(self.store.get_artifact(source["request_ref"]))
         require(set(request) == {"run_id", "episode_id", "operation_key", "arguments", "scope"})
         args, extraction = request["arguments"], saved["extraction"]
+        assessment = args.get("experiment_assessment")
+        assessments.validate_saved_assessment(self, saved, request)
         validate_schema(args, _arguments_schema(args))
         operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
             "WHERE run_id=? AND episode_id=? AND operation_key=?",
@@ -547,7 +579,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         marked = "native_operand_bindings" in saved
         require(set(saved) == {"version", "input_source_ref", "input_artifact_ref", "input_source_refs",
             "direct_input_source_refs", "data_source_ref", "extraction", "experimental_bindings", "factor_bindings", "sheet"}
-            | ({"native_operand_bindings"} if marked else set()))
+            | ({"native_operand_bindings"} if marked else set())
+            | ({"experiment_assessment"} if assessment is not None else set()))
         require(source["version"] == self.record_version and source["text_ref"] == source["artifact_ref"])
         native = args.get("input_mode") == "native_source_spans"
         require(extraction["version"] == (_native_version(args) if native
@@ -570,7 +603,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         require(saved["direct_input_source_refs"] == direct)
         require(isinstance(extraction["sources"], list) and len(extraction["sources"]) == len(direct)
             and set(extraction["sources"]) == set(direct))
-        require(saved["input_source_refs"] == self._parents(request["scope"], direct))
+        require(saved["input_source_refs"] == self._parents(request["scope"],
+            list(dict.fromkeys([*direct, *self._assessment_sources(assessment)]))))
         require(saved["input_artifact_ref"] == self.store.get(args["source_ref"])["artifact_ref"]
             and saved["data_source_ref"] == args["data_source_ref"])
 
@@ -597,6 +631,9 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         require(set(saved["experimental_bindings"]) == set(BINDINGS))
         for field, (literal, kind) in BINDINGS.items():
             entry, reference = extraction["literals"][literal], saved["experimental_bindings"][field]
+            if field == "experiment_ref" and assessment is not None:
+                require(reference == assessment["experiment_ref"])
+                continue
             if field in native_common:
                 require(reference == native_common[field])
                 continue
@@ -635,7 +672,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
             *(native_records if native_records is not None else _condition_refs(extraction)),
             *(factors[name] for name in sorted(factors))])))
         require(outcome["result"] == {"sheet_ref": sheet_ref, "cells": extraction["cells"],
-            "assay_interpretation": interpretation, **_metadata(extraction, factors)})
+            "assay_interpretation": interpretation, **_metadata(extraction, factors),
+            **({"experiment_assessment": assessment} if assessment is not None else {})})
 
     def _validate_native_saved(self, args, evidence, inputs, *, version=None):
         """Check frozen native-selector relationships without parsing again.

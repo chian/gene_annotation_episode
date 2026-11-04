@@ -1,0 +1,60 @@
+...................................FF..                                  [100%]
+=================================== FAILURES ===================================
+_ test_saved_binding_rejects_contradictory_native_metadata[multiple_file_entry] _
+
+change = 'multiple_file_entry'
+
+    @pytest.mark.parametrize('change', ['multiple_file_entry', 'format_conflict'])
+    def test_saved_binding_rejects_contradictory_native_metadata(change):
+        data=(BASE/'separate.xmfa').read_bytes()
+        extra=(b'#Sequence1Entry\t1\n' if change=='multiple_file_entry'
+               else b'#Sequence1Format\tFastA\n')
+        data=data.replace(b'#FormatVersion Mauve1\n',b'#FormatVersion Mauve1\n'+extra)
+        # Native files use a tab; preserve that delimiter when adding the fixture.
+        if extra not in data:
+            data=data.replace(b'#FormatVersion\tMauve1\n',b'#FormatVersion\tMauve1\n'+extra)
+        assert extra in data
+        document=native_document('metadata-original.xmfa',data)
+        result=bind(document,supplied('multiple_files_concatenated'))
+        assert result['members'][0]['state']=='resolved'
+        replacement=(b'#Sequence1Entry\t9\n' if change=='multiple_file_entry'
+                     else b'#Sequence1Format\tGenBank\n')
+        changed=native_document('metadata-changed.xmfa',data.replace(extra,replacement,1))
+        # Source sequences and coordinate checks are unchanged, but the native
+        # association declaration now contradicts the saved resolved binding.
+        result['document_id']=changed['document_id']
+>       with pytest.raises(ValueError,match='xmfa_source_(entry|format)_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_xmfa_sources.py:306: Failed
+__ test_saved_binding_rejects_contradictory_native_metadata[format_conflict] ___
+
+change = 'format_conflict'
+
+    @pytest.mark.parametrize('change', ['multiple_file_entry', 'format_conflict'])
+    def test_saved_binding_rejects_contradictory_native_metadata(change):
+        data=(BASE/'separate.xmfa').read_bytes()
+        extra=(b'#Sequence1Entry\t1\n' if change=='multiple_file_entry'
+               else b'#Sequence1Format\tFastA\n')
+        data=data.replace(b'#FormatVersion Mauve1\n',b'#FormatVersion Mauve1\n'+extra)
+        # Native files use a tab; preserve that delimiter when adding the fixture.
+        if extra not in data:
+            data=data.replace(b'#FormatVersion\tMauve1\n',b'#FormatVersion\tMauve1\n'+extra)
+        assert extra in data
+        document=native_document('metadata-original.xmfa',data)
+        result=bind(document,supplied('multiple_files_concatenated'))
+        assert result['members'][0]['state']=='resolved'
+        replacement=(b'#Sequence1Entry\t9\n' if change=='multiple_file_entry'
+                     else b'#Sequence1Format\tGenBank\n')
+        changed=native_document('metadata-changed.xmfa',data.replace(extra,replacement,1))
+        # Source sequences and coordinate checks are unchanged, but the native
+        # association declaration now contradicts the saved resolved binding.
+        result['document_id']=changed['document_id']
+>       with pytest.raises(ValueError,match='xmfa_source_(entry|format)_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_xmfa_sources.py:306: Failed
+=========================== short test summary info ============================
+FAILED tests/test_xmfa_sources.py::test_saved_binding_rejects_contradictory_native_metadata[multiple_file_entry]
+FAILED tests/test_xmfa_sources.py::test_saved_binding_rejects_contradictory_native_metadata[format_conflict]
+2 failed, 37 passed in 0.45s

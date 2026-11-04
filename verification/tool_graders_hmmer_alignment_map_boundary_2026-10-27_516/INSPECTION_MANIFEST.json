@@ -1,0 +1,487 @@
+{
+  "schema": "hmmer_alignment_map_boundary_readonly_evidence_v1",
+  "date": "2026-10-27",
+  "status": "proposal_for_root_review_only",
+  "authoritative_attachment": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+  "production_or_test_files_changed": false,
+  "executions": {
+    "application_or_scientific_imports": false,
+    "tests": false,
+    "native_programs": false,
+    "network_or_remote_jobs": false
+  },
+  "method": "Local source/retained-output text inspection, stdlib JSON/AST/hash inspection, evidence documentation writes only.",
+  "profile_note": "Inspected finite relevant source set, not a transitive compilation manifest. Current source hashes and authentic retained executable hashes do not alone prove original build provenance or new-branch conformance.",
+  "profile_source_sha256s": {
+    "resources/software/infernal-1.1.5/hmmer/src/alimask.c": "504e52c49a249facca5887d96f5efeaaf8012820b47bbe75e782aa14af7034ab",
+    "resources/software/infernal-1.1.5/easel/esl_msaweight.c": "0195e7c2a4428f02a84e3c239922090e72a5a72a5cc5de8a3a5551f06b6efe68",
+    "resources/software/infernal-1.1.5/easel/esl_msaweight.h": "caf345d5c9053af80e899b697a648430306f2db6240f8724b017490b94ffb106",
+    "resources/software/infernal-1.1.5/easel/esl_rand64.c": "abd4b05b7bf619f196b1ca99c0de452e0fe38b3ffa0f7e2f5991d88d763e5359",
+    "resources/software/infernal-1.1.5/easel/esl_rand64.h": "5b16b1d8bfe71047252fb0c6ad837b1f31e88e16f3f54c820c0c8a39e298ea00",
+    "resources/software/infernal-1.1.5/easel/esl_distance.c": "cd6bd49339e502da9f172cf4404788d97beebe9eb11312bf85ba3a73bed18f3a",
+    "resources/software/infernal-1.1.5/easel/esl_msacluster.c": "c3a3076d464fac4e2c4f0fecbe389754d4c505a10ae893a9bf4a7b78b17d694c",
+    "resources/software/infernal-1.1.5/easel/esl_cluster.c": "97f116ba83af6fcc77ba5e5dd2c220ff185021e660fbd2d4623ed84b00b1e836",
+    "resources/software/infernal-1.1.5/easel/esl_tree.c": "9da088a37c18db13f6ebf5519e4ad62db323233faebaebfff88c704222151125",
+    "resources/software/infernal-1.1.5/easel/esl_vectorops.c": "6226cb25818a1319811f7fdec2aa590df0b60f40aa01521a806cf484ea117463",
+    "resources/software/infernal-1.1.5/easel/esl_msa.c": "6154a39ce13f20aee668528c287f27725dc4c390a689f8beba65ef305fa8ae0f",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_stockholm.c": "a5b8a8f6ce0a2e0f683ba908a1dd352ae0e3704eb3959b7b83c0c1561ef7c574"
+  },
+  "doc_syntax_checks": [
+    {
+      "block_index": 3,
+      "kind": "design_adapter_ast_parse_only",
+      "result": "parsed",
+      "executed": false
+    }
+  ],
+  "files": [
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_preparation_data.py",
+      "sha256": "17177f61891d65eef10086716c4166f9b7338607cbf862c743ac25d1a7ef7975",
+      "size_bytes": 31707,
+      "inspection_scope": "Complete module; occurrence preservation, first-record association, native mappings, population and sheet construction.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_preparation_calculations.py",
+      "sha256": "69619b4f1e15438da71e8ddbb0768baa20aad06a9ddb80d0dfbd43cded847f28",
+      "size_bytes": 49110,
+      "inspection_scope": "Complete module; reconstruction, mask/build calculations, validation and component projection.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/hmmalign_inputs.py",
+      "sha256": "c435e6987088d4fd02e48c762a48d4611c4f25f12f4b59c5b08b8208f7660b78",
+      "size_bytes": 42875,
+      "inspection_scope": "Complete relevant reader path lines 1-270: events, interleaved records, row/annotation joins and framing.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/hmmer_model_data.py",
+      "sha256": "5a546591d13c2651850516fefd0a6e1dc5f1a16c4b33322e3430ec99089984db",
+      "size_bytes": 23456,
+      "inspection_scope": "Complete _occurrence_valid function only; exact eight-field identity validation.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/native_hmmer_preparation_contracts.py",
+      "sha256": "a11cd4387a1f8475f8cc1ab78fa9853da6c62fdded135151b22dc1a190f30d66",
+      "size_bytes": 30328,
+      "inspection_scope": "Complete relevant constants, native_options, selected job validation, resolved settings and compilation paths; unrelated FM metadata details inspected only for shared exact field shape.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/native_hmmer_preparation_driver.py",
+      "sha256": "9e49b8236d6fecb68fdcb4322aadc0d71b6758d77da0b27b50bc0683dfef736b",
+      "size_bytes": 48745,
+      "inspection_scope": "Complete relevant failure/identity/staging functions and _stockholm_for_map, _alimask_map, _preflight; producer bundle construction inspected. Not an independent full-driver audit.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/native_hmmer_preparation_worker.py",
+      "sha256": "983b1edd8fdf1bbd081eab85b141d3f35e0162fed7fcbc2e9c8f54189d4ca110",
+      "size_bytes": 17058,
+      "inspection_scope": "Complete operation/parameters/metadata/payload/model/recalculate/grade functions relevant to alignment sheets.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/native_hmmer_preparation_result_worker.py",
+      "sha256": "38d2ea0c26d97aa9dc143851cff31dfc4cbfe828f13775a8206cc061e75d67d5",
+      "size_bytes": 20203,
+      "inspection_scope": "Complete qualified_occurrences, effective_metadata, grading_context, eligible, _grade and _project functions.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/hmmer_preparation_result_views.py",
+      "sha256": "28e37c221e833dbdf1fea8405f16c0c6dae9ce18928bcaa022321980c9bf7770",
+      "size_bytes": 109905,
+      "inspection_scope": "Complete relevant _Saved initialization, row_occurrence, _quantity and project_preparation_result paths; B1 definitions, units/meanings/calculation fields and relevant context validation branches.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/native_hmmer_preparation_result_publication.py",
+      "sha256": "a355beaaf1c31a4d8cc7d1aab22a557870e3205127d066fbafe4192b1b15ceff",
+      "size_bytes": 27695,
+      "inspection_scope": "Complete prepare_native_hmmer_preparation_grading and publish_selected_preparation_result functions.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/native_hmmer_preparation_results.py",
+      "sha256": "9ef47f521432d90b1cf81f03f46e692aabec45fe0bc6ff210503d94f3d1c2349",
+      "size_bytes": 29334,
+      "inspection_scope": "Complete execute/read/own/facts/credit_view/completion functions relevant to the child-owned publication path.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "gene_annotation_episode/native_hmmer_preparation_returns.py",
+      "sha256": "2dfdb6c8a7c147236fd75ba2d9972ceb0531c9c3bacb077d567b0edbcb90b0f0",
+      "size_bytes": 18654,
+      "inspection_scope": "Complete module; original requested forms, frozen facts and received-only projection.",
+      "category": "current_implementation"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/hmmer/src/alimask.c",
+      "sha256": "504e52c49a249facca5887d96f5efeaaf8012820b47bbe75e782aa14af7034ab",
+      "size_bytes": 25455,
+      "inspection_scope": "Complete file; options, model map and main native operation.",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msaweight.c",
+      "sha256": "0195e7c2a4428f02a84e3c239922090e72a5a72a5cc5de8a3a5551f06b6efe68",
+      "size_bytes": 75553,
+      "inspection_scope": "Complete PB_adv, consensus_by_rf/sample/all, collect_counts, cfg creation, GSC and BLOSUM functions (183-574, 712-898 relevant blocks).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msaweight.h",
+      "sha256": "caf345d5c9053af80e899b697a648430306f2db6240f8724b017490b94ffb106",
+      "size_bytes": 3609,
+      "inspection_scope": "Complete file; effective PB configuration defaults and data types.",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_rand64.c",
+      "sha256": "abd4b05b7bf619f196b1ca99c0de452e0fe38b3ffa0f7e2f5991d88d763e5359",
+      "size_bytes": 28417,
+      "inspection_scope": "Complete relevant Create/Init/GetSeed, generator, double/open-double, Vitter A/Deal, seed and fill-table functions (93-486 relevant blocks).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_rand64.h",
+      "sha256": "5b16b1d8bfe71047252fb0c6ad837b1f31e88e16f3f54c820c0c8a39e298ea00",
+      "size_bytes": 1167,
+      "inspection_scope": "Complete file; MT19937-64 state and public primitive signatures.",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_distance.c",
+      "sha256": "cd6bd49339e502da9f172cf4404788d97beebe9eb11312bf85ba3a73bed18f3a",
+      "size_bytes": 72036,
+      "inspection_scope": "Complete XPairId (278-310), XPairIdMx (638-664), XDiffMx (689-712).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msacluster.c",
+      "sha256": "c3a3076d464fac4e2c4f0fecbe389754d4c505a10ae893a9bf4a7b78b17d694c",
+      "size_bytes": 15435,
+      "inspection_scope": "Complete relevant prefix and single-linkage callback path (1-234).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_cluster.c",
+      "sha256": "97f116ba83af6fcc77ba5e5dd2c220ff185021e660fbd2d4623ed84b00b1e836",
+      "size_bytes": 12525,
+      "inspection_scope": "Complete generic stack single-linkage function (135-185).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_tree.c",
+      "sha256": "9da088a37c18db13f6ebf5519e4ad62db323233faebaebfff88c704222151125",
+      "size_bytes": 73795,
+      "inspection_scope": "Complete SetCladesizes (293-313), cluster_engine (1575-1732), UPGMA wrapper (1744-1747).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_vectorops.c",
+      "sha256": "6226cb25818a1319811f7fdec2aa590df0b60f40aa01521a806cf484ea117463",
+      "size_bytes": 55624,
+      "inspection_scope": "Complete DScale (62-66), DSum (198-209), DNorm (1142-1151).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa.c",
+      "sha256": "6154a39ce13f20aee668528c287f27725dc4c390a689f8beba65ef305fa8ae0f",
+      "size_bytes": 140417,
+      "inspection_scope": "Complete MarkFragments_old (2205-2238).",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msafile_stockholm.c",
+      "sha256": "a5b8a8f6ce0a2e0f683ba908a1dd352ae0e3704eb3959b7b83c0c1561ef7c574",
+      "size_bytes": 115085,
+      "inspection_scope": "Complete stockholm_write (1069-1295); rounded WT and RF output semantics.",
+      "category": "retained_native_source_profile"
+    },
+    {
+      "path": "resources/software/infernal-1.1.5/hmmer/src/alimask",
+      "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547",
+      "size_bytes": 472176,
+      "inspection_scope": "Bytes hashed only; executable was not invoked. Hash compared to retained 269 native receipt fields.",
+      "category": "retained_executable_identity"
+    },
+    {
+      "path": "tests/test_hmmer_alignment_preparation_data.py",
+      "sha256": "8bcd5af97fbaeaf7ae2554c3d2e4c35403f32ec0daba8235d47cff779761e825",
+      "size_bytes": 13519,
+      "inspection_scope": "Complete existing test module, read only.",
+      "category": "existing_test_source_not_executed"
+    },
+    {
+      "path": "tests/test_hmmer_alignment_preparation_calculations.py",
+      "sha256": "cf528acced87ecc6e0e142b74b5b561f72afa30925310ba50b42cebe4a7042e0",
+      "size_bytes": 18134,
+      "inspection_scope": "Complete existing test module, read only.",
+      "category": "existing_test_source_not_executed"
+    },
+    {
+      "path": "tests/test_native_hmmer_preparation_driver.py",
+      "sha256": "dd96bcf9ee31368f16574503e8da638f2c1bdd71f5ad82a3ee703f6582615f6a",
+      "size_bytes": 28210,
+      "inspection_scope": "Complete relevant tests in lines 1-120 and 165-226, read only.",
+      "category": "existing_test_source_not_executed"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/input.sto",
+      "sha256": "9cda066ae0bf193b11250fcd11a1c959602a2ec93d5905a835a664192270f8a6",
+      "size_bytes": 43,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/stdout.log",
+      "sha256": "8328b83c658b3815d6eff24f72b9b825a4de7186a1af23e36097854269bfe44b",
+      "size_bytes": 838,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/intent.json",
+      "sha256": "204f7b4de09099fb9a3b634356bbef26ee157fe548fd2f94069871cebfd2544f",
+      "size_bytes": 648,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/receipt.json",
+      "sha256": "b95ca57a3848aee656c36d0401ed5fc7f80497cac7b766a26cc1ddbeca95c74a",
+      "size_bytes": 2218,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/input.sto",
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095",
+      "size_bytes": 111,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/stdout.log",
+      "sha256": "115249bfb24ddb52806b2986a58b3b188eee2597b62370704a5a548ddd819a34",
+      "size_bytes": 963,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/intent.json",
+      "sha256": "8db040bb31ea4cbaa3a5e59b92403317650baef4644fe6688334b505ec41bd7d",
+      "size_bytes": 719,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/receipt.json",
+      "sha256": "d829f568ddba82be9327ec62528f77c85082621c80e72743aa0d72d67b5bfe41",
+      "size_bytes": 2263,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/input.sto",
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095",
+      "size_bytes": 111,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/stdout.log",
+      "sha256": "cc817a54e813af48565e9c5701176c21e097ff16f7a4335e6d4f75eb238de686",
+      "size_bytes": 923,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/intent.json",
+      "sha256": "7bbd6cf4a497281f2d9ae255404d7e5fa934124114afd7b840372b6a2cb065cb",
+      "size_bytes": 721,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/receipt.json",
+      "sha256": "49e9a1b39a5e355ef4a433c3f382f56e7918fb523b5c5df0fe9123d1bc568e53",
+      "size_bytes": 2267,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/input.sto",
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095",
+      "size_bytes": 111,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/stdout.log",
+      "sha256": "a0bd15e96cbf2938c0d3dd926e5bcaea75d8c59d2d2c09fb65bb4f97c222c351",
+      "size_bytes": 920,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/intent.json",
+      "sha256": "b1d784a8acf4b8e490385885bc7738a54185cfe515a313805d0c97316a7c32fc",
+      "size_bytes": 715,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/receipt.json",
+      "sha256": "b4900301097546bcedca759f8cdfe1db853d11a959433e3c945a0524995d4b98",
+      "size_bytes": 2254,
+      "inspection_scope": "Retained authentic original-producer input, native output or lifecycle record; no rerun.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map0/hmmer-preparation-attempt/bundle.json",
+      "sha256": "12aa05cc56c3396ae0453c33c59f6b64725a2490465d932b564a5d70db7ae815",
+      "size_bytes": 6501,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map0/hmmer-preparation-attempt/inputs/alignment/0",
+      "sha256": "fba315f0d3200be64ac2f2a78b8bfe7d583b55978849a367e5e9b5e68c8b80a5",
+      "size_bytes": 125,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map0/hmmer-preparation-attempt/outputs/stdout",
+      "sha256": "1afd876012274cfcdefed0e268414635acba1ba0d4a1c8052c98575762ff89a8",
+      "size_bytes": 1079,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map1/hmmer-preparation-attempt/bundle.json",
+      "sha256": "1849bdcbcb8e81cac999bf141525c77ec25fe259fbc7cc1fdaea3a5280cdb858",
+      "size_bytes": 6505,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map1/hmmer-preparation-attempt/inputs/alignment/0",
+      "sha256": "fba315f0d3200be64ac2f2a78b8bfe7d583b55978849a367e5e9b5e68c8b80a5",
+      "size_bytes": 125,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map1/hmmer-preparation-attempt/outputs/stdout",
+      "sha256": "3838b5ef585e3e796438258d644c8718658b38acfdf8c247c72e4c25088a8ef5",
+      "size_bytes": 1038,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map2/hmmer-preparation-attempt/bundle.json",
+      "sha256": "418996cc2c3d028002407a6ce25beda05fc27e1e5655657a9e20b711e84bb56b",
+      "size_bytes": 6476,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map2/hmmer-preparation-attempt/inputs/alignment/0",
+      "sha256": "fba315f0d3200be64ac2f2a78b8bfe7d583b55978849a367e5e9b5e68c8b80a5",
+      "size_bytes": 125,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_gappy_fragment_map2/hmmer-preparation-attempt/outputs/stdout",
+      "sha256": "27241aa965acd1af06b10e3cab4acd61a258b2f252b322bf047d8e1e5a9a6bd4",
+      "size_bytes": 993,
+      "inspection_scope": "Retained actual gappy native case; original options, source rows and stdout endpoints inspected.",
+      "category": "retained_native_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/REPORT.md",
+      "sha256": "533dd916f8eb2d269f91e0ee2a7598d6256a301f2aa792c8244462d4062d9539",
+      "size_bytes": 7935,
+      "inspection_scope": "Complete report, evidence only.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/REPORT_ADDENDUM_001.md",
+      "sha256": "55b7b71c1fc6e47724d4a467e4eafc3382d25c2ba8606c7762e6707a7c3930e0",
+      "size_bytes": 2552,
+      "inspection_scope": "Complete report addendum, evidence only.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/INTERFACE_AND_NUMERICAL_MEANINGS.md",
+      "sha256": "65ca0ef6ac6c3eadbbdeb08a2d8c3ea121ceeb5177baf37c4dc2927e9666c708",
+      "size_bytes": 11163,
+      "inspection_scope": "Complete historical interface evidence.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check005/receipt.json",
+      "sha256": "f0ac287093d0e8ceb1cf40d684a15829cc1a394f3613f72faa5f797b8fd87158",
+      "size_bytes": 2812,
+      "inspection_scope": "Retained test receipt read; tests not executed here.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/REPORT.md",
+      "sha256": "0e3f4409b066b975b258970a44d1ff94672d68d0fd812a0aa9580581c4219cc6",
+      "size_bytes": 12159,
+      "inspection_scope": "Complete historical producer report, evidence only.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005_native_cases.json",
+      "sha256": "1ac655502d673ce9d61c8eada0d7d95c17a812222568a07b8d3dde1dd5cc5bae",
+      "size_bytes": 88721,
+      "inspection_scope": "JSON parsed; 13 alimask case records and their referenced options/bundle identities inspected.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_preparation_shared_binding_2026-10-26_278/README.md",
+      "sha256": "d4af0d3372563c1ff13a341f70d44e9419b00fbd04100ca29b14ff015512b3ae",
+      "size_bytes": 2357,
+      "inspection_scope": "Complete historical binding report, evidence only.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_model_format_boundary_2026-10-27_508/IMPLEMENTATION_CONTRACT.md",
+      "sha256": "8ca2b16eb6d732c3b848c45385410cbc917311cecd78f969d596f06df9a53e8a",
+      "size_bytes": 38155,
+      "inspection_scope": "Relevant section 10 gap and format boundary evidence; not user goal authority.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json",
+      "sha256": "dc5547c0ddb3817010a803263862f2c54e4959b341f91a24f5d4c5d0313b61a2",
+      "size_bytes": 248115,
+      "inspection_scope": "Only relevant native/alimask and native/hmmbuild rows examined as status evidence; not goal authority.",
+      "category": "historical_evidence"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "a937f09031bbb32c0e4308daccc3c0498bc812611453849e48bdf0a15c4a34e7",
+      "size_bytes": 13154,
+      "inspection_scope": "Complete actual applicable instructions read.",
+      "category": "instructions"
+    }
+  ],
+  "unfinished_verification": [
+    "GSC and BLOSUM native conformance",
+    "sampled PB native conformance and platform-sensitive draw arithmetic",
+    "sensitive Kahan normalization case",
+    "shared-parser preflight and full requested-return integration after implementation"
+  ],
+  "unaltered_completion_status": "No R2, inventory-row, resource or episode completion claimed."
+}

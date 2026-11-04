@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.295" timestamp="2026-10-29T14:27:00.728300-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_restriction_mapping_declarations_733" name="test_actual_compact_selection_expands_into_existing_explicit_723_contract" time="0.000"><failure message="gene_annotation_episode.episode_contract_information.ContractInformationError: unsupported_form_reference:submitted_schema_json">source_snapshot/tests/test_restriction_mapping_declarations_733.py:45: in test_actual_compact_selection_expands_into_existing_explicit_723_contract
+    result=expanded(schema)
+           ^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_restriction_mapping_declarations_733.py:37: in expanded
+    return expand_fact_form(json.dumps(schema),child_role='scientific_process',
+source_snapshot/gene_annotation_episode/episode_contract_information.py:193: in expand_fact_form
+    references = _references(submitted)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_contract_information.py:174: in _references
+    raise ContractInformationError('unsupported_form_reference', 'submitted_schema_json')
+E   gene_annotation_episode.episode_contract_information.ContractInformationError: unsupported_form_reference:submitted_schema_json</failure></testcase></testsuite></testsuites>

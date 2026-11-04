@@ -1,0 +1,20 @@
+{
+  "version": "decision_exchange_regression_reproduction_v1",
+  "command": ".venv/bin/python -m pytest -q 'tests/test_episode_assignment_transport.py::test_strict_assignment_parse_failure_uses_existing_feedback_without_an_observation[literature]' -x",
+  "original_result": "1 failed in 16.17s",
+  "exception": {
+    "outer_type": "RuntimeError",
+    "outer_message": "coroutine raised StopIteration",
+    "cause_type": "StopIteration",
+    "cause_site": "tests/test_homology_episode_runtime.py:85 next(self.script)"
+  },
+  "path": [
+    "test_episode_assignment_transport.select",
+    "DecisionSource.call",
+    "DecisionSource.exchange_decision",
+    "Provider.complete"
+  ],
+  "recorded_protocol": "decision_exchange_v1",
+  "cause": "initialize_case published an actual ModelConnection default protocol before later using the original bare-action scripted assignment transport; the first bare action was invalid as an exchange envelope, and the next exchange exhausted the one-response fixture.",
+  "repair": "Expose and forward the explicit case caller decision_protocol option; bind only this legacy scripted transport helper to None. No automatic fallback or saved-run migration."
+}

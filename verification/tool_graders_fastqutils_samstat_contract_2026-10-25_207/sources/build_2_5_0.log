@@ -1,0 +1,201 @@
+[  6%] Building C object src/util/CMakeFiles/tldlite.dir/tldlite.c.o
+[  6%] Creating directories for 'htslib'
+[ 10%] Performing download step (verify and extract) for 'htslib'
+-- verifying file...
+     file='/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/thirdparty/htslib-1.24.tar.bz2'
+-- verifying file... done
+-- extracting...
+     src='/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/thirdparty/htslib-1.24.tar.bz2'
+     dst='/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/build_2_5_0/htslib/src/htslib'
+-- extracting... [tar xfz]
+[ 13%] Linking C static library libtldlite.a
+[ 13%] Built target tldlite
+[ 17%] Building C object src/plot/CMakeFiles/svg_plot.dir/svg_plot.c.o
+-- extracting... [analysis]
+-- extracting... [rename]
+-- extracting... [clean up]
+-- extracting... done
+[ 20%] No update step for 'htslib'
+[ 24%] No patch step for 'htslib'
+[ 27%] Performing configure step for 'htslib'
+checking for gcc... /usr/bin/cc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether /usr/bin/cc accepts -g... yes
+checking for /usr/bin/cc option to enable C23 features... unsupported
+checking for /usr/bin/cc option to enable C11 features... none needed
+checking for ranlib... ranlib
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for C compiler warning flags... -Wall
+checking for /usr/bin/cc options to detect undeclared functions... none needed
+checking for /usr/bin/cc options to ignore future-version functions... [ 31%] Linking C static library libsvg_plot.a
+none needed
+checking for stdio.h... [ 31%] Built target svg_plot
+[ 34%] Building C object src/plot/CMakeFiles/module_plot.dir/report_plots.c.o
+yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for sys/param.h... yes
+checking whether _XOPEN_SOURCE is declared... no
+checking whether __get_cpuid_max is declared... yes
+checking whether __cpuid_count is declared... yes
+checking for x86intrin.h... In file included from /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_plots.c:4:
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h: In function ‘fmt_len.constprop’:
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h:55:37: warning: ‘ bp’ directive output may be truncated writing 3 bytes into a region of size between 1 and 48 [-Wformat-truncation=]
+   55 |                 snprintf(buf, n, "%s bp", t);
+      |                                     ^~~
+In file included from /usr/include/stdio.h:980,
+                 from /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/util/tldlite.h:32,
+                 from /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_plots.h:33,
+                 from /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_plots.c:1:
+In function ‘snprintf’,
+    inlined from ‘fmt_len’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h:55:17,
+    inlined from ‘fmt_len.constprop’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h:49:20:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:54:10: note: ‘__builtin___snprintf_chk’ output between 4 and 51 bytes into a destination of size 48
+   54 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   55 |                                    __glibc_objsize (__s), __fmt,
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   56 |                                    __va_arg_pack ());
+      |                                    ~~~~~~~~~~~~~~~~~
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h: In function ‘fmt_len.constprop’:
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h:74:41: warning: ‘ kb’ directive output may be truncated writing 3 bytes into a region of size between 0 and 48 [-Wformat-truncation=]
+   74 |                 snprintf(buf, n, "%s%s%s kb", tilde, t, dot ? dot : "");
+      |                                         ^~~
+In function ‘snprintf’,
+    inlined from ‘fmt_len.constprop’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h:74:17:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:54:10: note: ‘__builtin___snprintf_chk’ output between 4 and 52 bytes into a destination of size 48
+   54 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   55 |                                    __glibc_objsize (__s), __fmt,
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   56 |                                    __va_arg_pack ());
+      |                                    ~~~~~~~~~~~~~~~~~
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h: In function ‘fmt_len.constprop’:
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h:58:39: warning: ‘ bp’ directive output may be truncated writing 3 bytes into a region of size between 0 and 48 [-Wformat-truncation=]
+   58 |                 snprintf(buf, n, "%s%s bp", tilde, t);
+      |                                       ^~~
+In function ‘snprintf’,
+    inlined from ‘fmt_len.constprop’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/plot/report_fmt.h:58:17:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:54:10: note: ‘__builtin___snprintf_chk’ output between 4 and 52 bytes into a destination of size 48
+   54 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   55 |                                    __glibc_objsize (__s), __fmt,
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   56 |                                    __va_arg_pack ());
+      |                                    ~~~~~~~~~~~~~~~~~
+yes
+checking C compiler flags needed for sse4.1... [ 37%] Linking C static library libmodule_plot.a
+[ 37%] Built target module_plot
+[ 41%] Building C object src/plot/CMakeFiles/svg_plot_test.dir/svg_plot_test.c.o
+-msse4.1 -mssse3 -mpopcnt
+checking C compiler flags needed for avx2... [ 44%] Linking C executable svg_plot_test
+[ 44%] Built target svg_plot_test
+-mavx2 -mpopcnt
+checking C compiler flags needed for avx512f... -mavx512f -mpopcnt
+checking for working __builtin_clz... yes
+checking for working __builtin_prefetch... yes
+checking for working __builtin_cpu_supports("ssse3")... yes
+checking for working __attribute__((target("ssse3")))... yes
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for /usr/bin/cc option to support large files... none needed
+checking shared library type for unknown-Linux... plain .so
+checking whether the linker supports versioned symbols... yes
+checking whether the compiler accepts -fvisibility=hidden... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for getpagesize... yes
+checking for working mmap... yes
+checking for gmtime_r... yes
+checking for fsync... yes
+checking for drand48... yes
+checking for srand48_deterministic... no
+checking for getauxval... yes
+checking for elf_aux_info... no
+checking for posix_memalign... yes
+checking whether fdatasync is declared... yes
+checking for fdatasync... yes
+checking for __attribute__((constructor))... yes
+checking for clock_gettime with CLOCK_PROCESS_CPUTIME_ID... yes
+checking for library containing log... -lm
+checking for zlib.h... yes
+checking for inflate in -lz... yes
+checking for library containing recv... none required
+checking for bzlib.h... yes
+checking for BZ2_bzBuffToBuffCompress in -lbz2... yes
+checking for lzma.h... yes
+checking for lzma_easy_buffer_encode in -llzma... yes
+checking whether htscodecs files are present... yes
+configure: WARNING: GCS support not enabled: requires libcurl support
+configure: WARNING: ref-cache not enabled: requires libcurl
+checking for library containing regcomp... none required
+configure: creating ./config.status
+config.status: creating config.mk
+config.status: creating htslib.pc.tmp
+config.status: creating config.h
+config.status: linking htscodecs_bundled.mk to htscodecs.mk
+[ 48%] Performing build step for 'htslib'
+gmake[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+echo '#define HTS_VERSION_TEXT "1.24"' > version.h
+[ 51%] No install step for 'htslib'
+[ 55%] Completed 'htslib'
+[ 55%] Built target htslib
+[ 58%] Building C object src/CMakeFiles/samstat.dir/samstat.c.o
+[ 62%] Building C object src/CMakeFiles/samstat.dir/htsinterface/htsglue.c.o
+[ 65%] Building C object src/CMakeFiles/samstat.dir/htsinterface/precheck.c.o
+[ 68%] Building C object src/CMakeFiles/samstat.dir/sambamparse/sam_bam_parse.c.o
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/sambamparse/sam_bam_parse.c: In function ‘parse_alignment’:
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/sambamparse/sam_bam_parse.c:78:31: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   78 |                         x_sum += bam_cigar_oplen(a->cigar[i]);
+      |                               ^
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/sambamparse/sam_bam_parse.c:80:17: note: here
+   80 |                 case 'M':
+      |                 ^~~~
+[ 72%] Building C object src/CMakeFiles/samstat.dir/param/param.c.o
+[ 75%] Building C object src/CMakeFiles/samstat.dir/collect/collect.c.o
+In file included from /usr/include/string.h:548,
+                 from /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/param/param.c:6:
+In function ‘memset’,
+    inlined from ‘check_outputs’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/param/param.c:421:9,
+    inlined from ‘sanity_check_param’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/param/param.c:294:9:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:59:10: warning: ‘__builtin___memset_chk’ specified bound between 18446744056529682432 and 18446744073709551608 exceeds maximum object size 9223372036854775807 [-Wstringop-overflow=]
+   59 |   return __builtin___memset_chk (__dest, __ch, __len,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   60 |                                  __glibc_objsize0 (__dest));
+      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+[ 79%] Building C object src/CMakeFiles/samstat.dir/report/report_help.c.o
+[ 82%] Building C object src/CMakeFiles/samstat.dir/report/stat_report.c.o
+[ 86%] Building C object src/CMakeFiles/samstat.dir/report/json_report.c.o
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/report/stat_report.c: In function ‘stat_report’:
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/report/stat_report.c:523:53: warning: ‘__builtin___snprintf_chk’ output may be truncated before the last format character [-Wformat-truncation=]
+  523 |                         snprintf(v, sizeof(v), "%s%%", tmp);
+      |                                                     ^
+In file included from /usr/include/stdio.h:980,
+                 from /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/util/tldlite.h:32,
+                 from /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/report/stat_report.c:1:
+In function ‘snprintf’,
+    inlined from ‘page_strip’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/report/stat_report.c:523:25,
+    inlined from ‘stat_report’ at /home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/samstat/src/report/stat_report.c:237:17:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:54:10: note: ‘__builtin___snprintf_chk’ output between 2 and 65 bytes into a destination of size 64
+   54 |   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   55 |                                    __glibc_objsize (__s), __fmt,
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   56 |                                    __va_arg_pack ());
+      |                                    ~~~~~~~~~~~~~~~~~
+[ 89%] Building C object src/CMakeFiles/samstat.dir/report/mqc_report.c.o
+[ 93%] Building C object src/CMakeFiles/samstat.dir/report/outfile.c.o
+[ 96%] Building C object src/CMakeFiles/samstat.dir/thread/thread_data.c.o
+[100%] Linking C executable samstat
+[100%] Built target samstat

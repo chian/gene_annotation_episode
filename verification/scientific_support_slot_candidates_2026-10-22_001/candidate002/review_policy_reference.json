@@ -1,0 +1,104 @@
+{
+  "status": "unchanged_review_basis_not_runtime_binding_or_approval",
+  "source_path": "docs/SCIENTIFIC_SUPPORT_CASE_CROSSWALK_2026-10-21_002.json",
+  "source_pointer": "/arithmetic_review/policy",
+  "policy": {
+    "axis_weights": {
+      "empirical": 1.0,
+      "comparative": 1.0,
+      "mechanistic": 1.0,
+      "biological_context": 1.0,
+      "discrimination": 1.0
+    },
+    "epsilon": 0.25,
+    "scale": 100.0,
+    "applicability_weights": {
+      "direct": 1.0,
+      "transfer": 0.6,
+      "contextual": 0.35,
+      "scope_limited": 0.2,
+      "incomparable": 0.0
+    },
+    "relation_weights": {
+      "strengthens": 1.0,
+      "weakens": 1.0,
+      "mixed": 0.5,
+      "does_not_discriminate": 0.0
+    },
+    "unresolved_factor": 0.5,
+    "target_weights": {},
+    "observation_axes": [
+      [
+        "assay_report",
+        "empirical"
+      ],
+      [
+        "biochemical_assay",
+        "empirical"
+      ],
+      [
+        "genetic_phenotype",
+        "empirical"
+      ],
+      [
+        "growth_assay",
+        "empirical"
+      ],
+      [
+        "read_support",
+        "empirical"
+      ],
+      [
+        "alignment",
+        "comparative"
+      ],
+      [
+        "profile_match",
+        "comparative"
+      ],
+      [
+        "comparison",
+        "comparative"
+      ],
+      [
+        "gene_prediction",
+        "comparative"
+      ],
+      [
+        "structure_match",
+        "mechanistic"
+      ],
+      [
+        "mechanism",
+        "mechanistic"
+      ],
+      [
+        "reaction_context",
+        "mechanistic"
+      ],
+      [
+        "context_measurement",
+        "biological_context"
+      ],
+      [
+        "context",
+        "biological_context"
+      ],
+      [
+        "taxonomy_assignment",
+        "biological_context"
+      ],
+      [
+        "sequence_composition",
+        "biological_context"
+      ]
+    ]
+  },
+  "applicability": "This reference describes the review arithmetic only. At real construction, annotation_support_routes must declare the actual caller-bound matching policy; these bodies contain no hardcoded axis names. No score is calculated or policy selected here.",
+  "unresolved_choices": [
+    "current component merging versus explicitly specified separate contributions",
+    "derived discrimination in the product versus nonnumerical interpretation metadata",
+    "same-component maximum versus an explicitly specified provenance-aware accumulation",
+    "reward for derived comparative interpretation versus additional independent evidence"
+  ]
+}

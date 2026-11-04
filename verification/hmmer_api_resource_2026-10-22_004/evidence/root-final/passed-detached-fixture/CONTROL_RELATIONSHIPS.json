@@ -1,0 +1,136 @@
+{
+  "archives": {
+    "episode_archive": {
+      "file": "24fd7bca05b4587becad43961a0dc4a078e11ef5848d17f50bc08ab241ce57b1.json",
+      "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256": "18a5602dde20fb607a96341bd9dca76924de9fdd39b19ab2bd8b8836c8f0ae50"
+    },
+    "facts_archive": {
+      "file": "fc9c5a5c69d0d5611d1e93e9433429e6ae991407dca61d4c766c0911b309fa21.json",
+      "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256": "8e02c45f93df73a646aa235d08313d73ab27414530a59293c0db4e25e60c5b64"
+    },
+    "result_archive": {
+      "file": "cdf5ae9ba1e37fdb79475f04c5dcb6f098238b23f49e43faf9d608dbc200f7db.json",
+      "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256": "e3837806d753b937203203a89a6c06a381a8b6bce3d87c5368d98599cff6dbb7"
+    }
+  },
+  "child_episode_id": "episode_5d4c7118cfc78ffcc8fa4cfc384118b6351f4afea400a7b384d41fbb03d7b50a",
+  "child_observations": 2,
+  "derived_exports": [
+    {
+      "bytes": 88,
+      "derived_path": "derived-control-records/worker-execution-identity.from-sqlite.json",
+      "original_database_or_content_address_not_relabelled": true,
+      "representation": "exact_original_stored_text_column_utf8_no_added_newline",
+      "sha256": "37ceed0bceb839a4d64b78f9b6ff21ab48941b9a3b13cf80bd2ea02816f58d66",
+      "source_column": "execution_identity",
+      "source_copied_database": "run/episode-execution/executions.sqlite",
+      "source_row_key": {
+        "handle": "execution_1f6b2a5ba738704c8940275506d6689aeb93b0b43370df1565545415e9796de7"
+      },
+      "source_table": "commissions"
+    },
+    {
+      "bytes": 2381,
+      "derived_path": "derived-control-records/worker-return-envelope.from-sqlite.json",
+      "original_database_or_content_address_not_relabelled": true,
+      "representation": "exact_original_stored_text_column_utf8_no_added_newline",
+      "sha256": "16f771d244359a40b2bc647c7b0dbdb7b26f4f433118a7d083f89effab0d204f",
+      "source_column": "envelope",
+      "source_copied_database": "run/episode-execution/executions.sqlite",
+      "source_row_key": {
+        "handle": "execution_1f6b2a5ba738704c8940275506d6689aeb93b0b43370df1565545415e9796de7",
+        "return_id": "2e935d152008c1acc96495d9447ca5b5eee39fb228e21e938bcd213c62ad5e2e"
+      },
+      "source_table": "returns"
+    },
+    {
+      "bytes": 12888,
+      "derived_path": "derived-control-records/original-commission-spec.from-sqlite.json",
+      "original_database_or_content_address_not_relabelled": true,
+      "representation": "exact_original_stored_text_column_utf8_no_added_newline",
+      "sha256": "e270f71febeb4caa95ab66b5834c693ebab31299ac42e730033adc44dd3a0c7e",
+      "source_column": "spec",
+      "source_copied_database": "run/episode-execution/executions.sqlite",
+      "source_row_key": {
+        "handle": "execution_1f6b2a5ba738704c8940275506d6689aeb93b0b43370df1565545415e9796de7"
+      },
+      "source_table": "commissions"
+    },
+    {
+      "bytes": 9695,
+      "derived_path": "derived-control-records/original-child-request.from-sqlite.json",
+      "original_database_or_content_address_not_relabelled": true,
+      "representation": "exact_original_stored_text_column_utf8_no_added_newline",
+      "sha256": "e20c7168f860cacf8f7464012915891c5a2c6a487792e37c804eb4e2faba48b2",
+      "source_column": "request",
+      "source_copied_database": "case/workspace/state.sqlite3",
+      "source_row_key": {
+        "episode_id": "episode_5d4c7118cfc78ffcc8fa4cfc384118b6351f4afea400a7b384d41fbb03d7b50a"
+      },
+      "source_table": "runtime_episodes"
+    },
+    {
+      "bytes": 1142,
+      "derived_path": "derived-control-records/child-returned-form.from-sqlite.json",
+      "original_database_or_content_address_not_relabelled": true,
+      "representation": "exact_original_stored_text_column_utf8_no_added_newline",
+      "sha256": "83068ffbcf1326873c30fa259b23007eae24782df47be5bf1438e40bea2c4c06",
+      "source_column": "form",
+      "source_copied_database": "case/workspace/state.sqlite3",
+      "source_row_key": {
+        "episode_id": "episode_5d4c7118cfc78ffcc8fa4cfc384118b6351f4afea400a7b384d41fbb03d7b50a"
+      },
+      "source_table": "runtime_forms"
+    },
+    {
+      "bytes": 8526,
+      "derived_path": "derived-control-records/original-estimate-action-result.from-sqlite.json",
+      "original_database_or_content_address_not_relabelled": true,
+      "representation": "exact_original_stored_text_column_utf8_no_added_newline",
+      "sha256": "78d9b0217480b4a18cfdaf04fa5beee6af910f61f6ba43e382efc07434c81511",
+      "source_column": "result",
+      "source_copied_database": "case/workspace/state.sqlite3",
+      "source_row_key": {
+        "episode_id": "episode_5d4c7118cfc78ffcc8fa4cfc384118b6351f4afea400a7b384d41fbb03d7b50a",
+        "selected_tool": "execution.estimate"
+      },
+      "source_table": "runtime_actions"
+    },
+    {
+      "bytes": 8102,
+      "derived_path": "derived-control-records/original-receipt-baseline.rows-from-sqlite.json",
+      "original_database_or_content_address_not_relabelled": true,
+      "representation": "explicit_new_rows_export_preserving_original_column_values",
+      "sha256": "647496a4f4b75e87a16167c841f7e3c16c1785f7659a1966743f9fd58b1345b1",
+      "source_copied_database": "case/workspace/state.sqlite3",
+      "source_tables": [
+        "runtime_receipt_inheritance",
+        "runtime_record_receipts"
+      ]
+    }
+  ],
+  "handle": "execution_1f6b2a5ba738704c8940275506d6689aeb93b0b43370df1565545415e9796de7",
+  "native_execution_record_count": 0,
+  "no_relocated_resumability_claim": true,
+  "original_child_request_equals_original_commission": true,
+  "parent_admission_limit": "This detached fixture preserves closed child return and original parent pending commission; parent has zero observations. Separate connected tests cover parent typed admission. No parent admission is inferred here.",
+  "parent_episode_id": "episode_f73cf51cc224a3f5714c596c819cf9615918ca5982f26e8c3a6b1a024008b96b",
+  "parent_observations": 0,
+  "provider_job_count": 0,
+  "raw_original_paths_and_references_remain_unchanged": true,
+  "recorded_backend_lifecycle": "returned",
+  "recorded_execution_identity": {
+    "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+    "pid": 704563,
+    "start_ticks": "46988179"
+  },
+  "return_id": "2e935d152008c1acc96495d9447ca5b5eee39fb228e21e938bcd213c62ad5e2e",
+  "return_outcome": "closed",
+  "returned_forecast_equals_original_selected_estimate": true,
+  "returned_form_equals_original_child_form": true,
+  "source": "Copied root-scripted detached scientific fixture only; no actual/private scientific provider input.",
+  "version": "passed_fixture_control_relationships_v1"
+}

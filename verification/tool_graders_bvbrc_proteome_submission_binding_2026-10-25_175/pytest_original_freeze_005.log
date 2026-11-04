@@ -1,0 +1,25 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_all_frozen_schemas_are_self_contained_and_exactly_reachable _______
+
+    def test_all_frozen_schemas_are_self_contained_and_exactly_reachable():
+        package = Path(__file__).parents[1] / "gene_annotation_episode/bvbrc_appservice_schemas.json"
+        frozen = Path(__file__).parents[1] / "verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/CONTRACT_SCHEMA.json"
+        definitions = json.loads(package.read_text())["$defs"]
+        original = json.loads(frozen.read_text())["$defs"]
+        assert len(original) == 72
+        assert set(definitions) - set(original) == {"ResolvedObject", "ResolvedUpload", "ResolvedCapability", "ResolvedInputs"}
+        for name in original:
+            if name not in {"BoundInputs", "WorkspaceObject", "ResultSelector", "ArtifactBundle"}:
+>               assert definitions[name] == original[name]
+E               AssertionError: assert {'type': 'obj...rties': False} == {'type': 'obj...rties': False}
+E                 
+E                 Omitting 3 identical items, use -vv to show
+E                 Differing items:
+E                 {'properties': {'source_ref': {'type': 'string', 'minLength': 1}, 'artifact_field': {'enum': ['artifact_ref', 'text_re...}, 'artifact_ref': {'type': 'string', 'minLength': 1}, 'sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, ...}} != {'properties': {'source_ref': {'type': 'string', 'minLength': 1}, 'artifact_field': {'enum': ['artifact_ref', 'text_re...}, 'artifact_ref': {'type': 'string', 'minLength': 1}, 'sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, ...}}
+E                 Use -v to get more diff
+
+tests/test_bvbrc_appservice_contracts.py:53: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_contracts.py::test_all_frozen_schemas_are_self_contained_and_exactly_reachable
+1 failed in 0.13s

@@ -1,0 +1,46 @@
+.......F
+=================================== FAILURES ===================================
+_____________ test_owner_version_and_original_pin_remain_required ______________
+
+driver = <test_bvbrc_proteome_directional_returns.DirectionalDriver object at 0x7c01994378c0>
+
+    def test_owner_version_and_original_pin_remain_required(driver):
+        d = driver
+        d.start(fields={'decimal': selected_fields()['decimal']})
+        d.acquire_manifest(); d.acquire_native()
+        for field, value in [('run_id', 'foreign'), ('episode_id', 'foreign'), ('scope', {}), ('assignment', {})]:
+            with pytest.raises(ValueError): d.api.proteome_returns.facts(replace(d.context, **{field: value}), d.schema)
+        configuration = d.api.configuration['selected-api']['scientific_adapters']
+        original = deepcopy(configuration)
+        try:
+            configuration[0]['adapter_version'] = '1'
+>           with pytest.raises(ProteomeReturnError, match='pin_conflict'): d.api.proteome_returns.facts(d.context, d.schema)
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_directional_returns.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_returns.py:323: in facts
+    latest = read_latest_adapter_result(self.api.appservice.publications, context, adapter_ids=(_ADAPTER_ID,))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_saved_results.py:36: in read_latest_adapter_result
+    body = publications.read(reference, context.scope, episode_id=context.episode_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_appservice_publication.py:399: in read
+    self._validate_inputs(context, intent['prepared'], value['snapshot'], inputs, origin['operation_key'])
+gene_annotation_episode/bvbrc_appservice_publication.py:185: in _validate_inputs
+    _require(any(row == {'adapter_id': selected['adapter_id'],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+code = 'appservice_publication_adapter_configuration_conflict'
+
+    def _require(condition, code):
+        if not condition:
+>           raise ValueError(code)
+E           ValueError: appservice_publication_adapter_configuration_conflict
+
+gene_annotation_episode/bvbrc_appservice_publication.py:39: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_directional_returns.py::test_owner_version_and_original_pin_remain_required
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 7 passed in 1939.66s (0:32:19)

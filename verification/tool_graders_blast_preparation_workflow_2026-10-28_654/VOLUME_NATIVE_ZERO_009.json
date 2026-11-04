@@ -1,0 +1,22 @@
+{
+  "evidence": "check117b_volume_diagnostics/RETAINED_VOLUME_RECALCULATION_006.json",
+  "observed": {
+    "native_returncode": 0,
+    "stdout_bytes": 0,
+    "alias_NSEQ": 0,
+    "alias_LENGTH": 0,
+    "stderr": "success log ending with 0 sequences; no captured warning or exception"
+  },
+  "official_source": {
+    "commit": "864d3b0d51f61ff2d39c694869d41786f62e9ba8",
+    "aliastool": "verification/tool_graders_blast_utility_boundaries_2026-10-28_620/official_source/blastdb_aliastool.cpp:465-469",
+    "writer": "verification/tool_graders_blast_preparation_native_2026-10-28_644/official_source/writedb.cpp:443-485",
+    "helper": "verification/tool_graders_blast_preparation_native_2026-10-28_644/official_source/writedb.cpp:295-314",
+    "writer_sha256": "4497aa5c3d1ac9ea41bce8f149f1721010cd8e4089b3365acd5faf3b0a1940c0",
+    "url": "https://raw.githubusercontent.com/ncbi/ncbi-cxx-toolkit-public/864d3b0d51f61ff2d39c694869d41786f62e9ba8/src/objtools/blast/seqdb_writer/writedb.cpp",
+    "native_binary_equivalence": "not established"
+  },
+  "source_behavior": "num_volumes overload initializes both counters to zero, ignores totals helper boolean, writes counters and success log. The helper resets zeros and catches all totals-reading exceptions without a diagnostic.",
+  "qualification": "These are preserved native-reported literals, not independently established empty-population measurements. A swallowed totals-reading failure is possible under the retained implementation, but not proved by this capture. Do not infer 6/66, replace zeros with missing, or reject availability solely due to zero. Downstream native compatibility and total-count validation remain unverified.",
+  "native_reexecution": false
+}

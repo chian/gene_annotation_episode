@@ -1,0 +1,47 @@
+{
+  "source": "/usr/share/man/man1/bwrap.1.gz",
+  "source_sha256": "c8e082335ec4161443db6eabffdc7b6f40e9c04fc6d5672205ae8d9a95ab2812",
+  "excerpts": [
+    {
+      "term": "--unshare-net",
+      "start_line": 97,
+      "text": ".RE\n.PP\n\\fB\\-\\-unshare\\-net\\fR\n.RS 4\nCreate a new network namespace\n.RE\n.PP\n\\fB\\-\\-unshare\\-uts\\fR\n.RS 4\nCreate a new uts namespace\n.RE\n.PP\n\\fB\\-\\-unshare\\-cgroup\\fR\n.RS 4\nCreate a new cgroup namespace"
+    },
+    {
+      "term": "--ro-bind",
+      "start_line": 314,
+      "text": ".RE\n.PP\n\\fB\\-\\-ro\\-bind \\fR\\fBSRC\\fR\\fB \\fR\\fBDEST\\fR\n.RS 4\nBind mount the host path\nSRC\nreadonly on\nDEST\n.RE\n.PP\n\\fB\\-\\-ro\\-bind\\-try \\fR\\fBSRC\\fR\\fB \\fR\\fBDEST\\fR\n.RS 4\nEqual to\n\\fB\\-\\-ro\\-bind\\fR\nbut ignores non\\-existent"
+    },
+    {
+      "term": "--die-with-parent",
+      "start_line": 501,
+      "text": ".RE\n.PP\n\\fB\\-\\-die\\-with\\-parent\\fR\n.RS 4\nEnsures child process (COMMAND) dies when bwrap\\*(Aqs parent dies\\&. Kills (SIGKILL) all bwrap sandbox processes in sequence from parent to child including COMMAND process when bwrap or bwrap\\*(Aqs parent dies\\&. See prctl, PR_SET_PDEATHSIG\\&.\n.RE\n.PP\n\\fB\\-\\-as\\-pid\\-1\\fR\n.RS 4\nDo not create a process with PID=1 in the sandbox to reap child processes\\&.\n.RE\n.PP\n\\fB\\-\\-cap\\-add \\fR\\fBCAP\\fR\n.RS 4\nAdd the specified capability"
+    },
+    {
+      "term": "--new-session",
+      "start_line": 494,
+      "text": ".RE\n.PP\n\\fB\\-\\-new\\-session\\fR\n.RS 4\nCreate a new terminal session for the sandbox (calls setsid())\\&. This disconnects the sandbox from the controlling terminal which means the sandbox can\\*(Aqt for instance inject input into the terminal\\&.\n.sp\nNote: In a general sandbox, if you don\\*(Aqt use \\-\\-new\\-session, it is recommended to use seccomp to disallow the TIOCSTI ioctl, otherwise the application can feed keyboard input to the terminal which can e\\&.g\\&. lead to out\\-of\\-sandbox command execution (see CVE\\-2017\\-5226)\\&.\n.RE\n.PP\n\\fB\\-\\-die\\-with\\-parent\\fR\n.RS 4\nEnsures child process (COMMAND) dies when bwrap\\*(Aqs parent dies\\&. Kills (SIGKILL) all bwrap sandbox processes in sequence from parent to child including COMMAND process when bwrap or bwrap\\*(Aqs parent dies\\&. See prctl, PR_SET_PDEATHSIG\\&.\n.RE\n.PP\n\\fB\\-\\-as\\-pid\\-1\\fR"
+    },
+    {
+      "term": "--proc",
+      "start_line": 337,
+      "text": ".RE\n.PP\n\\fB\\-\\-proc \\fR\\fBDEST\\fR\n.RS 4\nMount procfs on\nDEST\n.RE\n.PP\n\\fB\\-\\-dev \\fR\\fBDEST\\fR\n.RS 4\nMount new devtmpfs on\nDEST\n.RE\n.PP\n\\fB\\-\\-tmpfs \\fR\\fBDEST\\fR"
+    },
+    {
+      "term": "--dev",
+      "start_line": 298,
+      "text": ".RE\n.PP\n\\fB\\-\\-dev\\-bind \\fR\\fBSRC\\fR\\fB \\fR\\fBDEST\\fR\n.RS 4\nBind mount the host path\nSRC\non\nDEST, allowing device access\n.RE\n.PP\n\\fB\\-\\-dev\\-bind\\-try \\fR\\fBSRC\\fR\\fB \\fR\\fBDEST\\fR\n.RS 4\nEqual to\n\\fB\\-\\-dev\\-bind\\fR\nbut ignores non\\-existent"
+    },
+    {
+      "term": "--setenv",
+      "start_line": 198,
+      "text": ".RE\n.PP\n\\fB\\-\\-setenv \\fR\\fBVAR\\fR\\fB \\fR\\fBVALUE\\fR\n.RS 4\nSet an environment variable\n.RE\n.PP\n\\fB\\-\\-unsetenv \\fR\\fBVAR\\fR\n.RS 4\nUnset an environment variable\n.RE\n.PP\n\\fB\\-\\-clearenv\\fR\n.RS 4\nUnset all environment variables, except for"
+    },
+    {
+      "term": "--chdir",
+      "start_line": 192,
+      "text": "Options about environment setup:\n.PP\n\\fB\\-\\-chdir \\fR\\fBDIR\\fR\n.RS 4\nChange directory to\nDIR\n.RE\n.PP\n\\fB\\-\\-setenv \\fR\\fBVAR\\fR\\fB \\fR\\fBVALUE\\fR\n.RS 4\nSet an environment variable\n.RE\n.PP\n\\fB\\-\\-unsetenv \\fR\\fBVAR\\fR\n.RS 4"
+    }
+  ],
+  "invoked": false
+}

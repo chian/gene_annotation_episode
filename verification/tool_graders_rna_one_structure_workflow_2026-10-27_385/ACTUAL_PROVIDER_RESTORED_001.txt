@@ -1,0 +1,148 @@
+TASK
+
+Return the requested sequence or structure information for the parent’s single selected RNA input supplied-RNA. Include only the explicitly selected fields below.
+
+Use only the independently selected retained RNA inputs named in this assignment. Keep the parent's baseline, membership, correspondence, site selections, model comparison and requested outputs fixed. The routing handoff does not choose the scientific baseline. This calculation uses retained data; it acquires no new native observation and generates no variants.
+
+Declared scan population (input states, not calculation outcomes)
+
+| Declared input category | Entries |
+| --- | --- |
+| All declared entries, including baseline and aliases | 1 |
+| Retained saved inputs | 1 |
+| Received failures | 0 |
+| Not supplied | 0 |
+| Not tested | 0 |
+| Aliases, with no additional rank weight | 0 |
+
+Explicit baseline input
+
+supplied-RNA: saved sheet.
+
+Fixed scan comparisons
+
+0 baseline-to-canonical-variant comparisons; declared order. Count each canonical sequence variant once. Retain failures and absent entries in population qualifications. Aliases retain their declared relationships without additional population weight.
+
+Selected scan energy
+
+No energy comparison requested.
+
+Declared correspondence coverage
+
+None supplied.
+
+Exact requested comparison outputs
+
+| Parent selection | Output family | Selection scope | Requested values |
+| --- | --- | --- | --- |
+| requested-structure | structures | members supplied-RNA | original sequence (complete, preserving original case); dot-bracket structure (complete original string) |
+
+Return every explicitly selected structure field completely, preserving original case, structure origin and validity. Invalid original text stays invalid; it does not establish validated pairing.
+
+Return the selected fields with their required availability, coverage and model qualifications. Do not add unselected structures, positions, energies or member rows.
+
+Choose the next available operation using the recorded outcomes. execution.results.status checks the selected retained inputs and existing comparison records. execution.results.collect calculates the fixed comparison and prepares exactly the requested return. Both operations take an empty argument object. The calculation uses the bound local limits of 20 GiB memory and 4 GiB scratch, with no wall-time budget. Choose between the available operations as the evidence warrants; no operation order is prescribed.
+
+Preserve native measurements, model assumptions, units, coordinates, valid partial results and specific failure qualifications. Measured zero, unavailable, not tested, failed and incompatible are distinct. The scientific parent interprets the returned comparison; model energy or pairing change alone does not establish experimental stability, biological importance or function.
+
+A completed status action does not complete the requested comparison delivery. The configured controller owns continuation. Validated completion of the original requested delivery sets future expected credit to exact zero through the existing practical endpoint, preserving the final actual gain and prior observations. Select the next action and constrained interpretations through the supplied typed response contract; recorded facts are populated automatically. Tool-specific and resource instructions are available through knowledge.search, knowledge.entry and knowledge.read. The tool_knowledge context identifies the run-frozen library. Retrieve sections when useful; these instructions do not select work, supply scientific evidence or add execution capabilities. Use the actual tool schemas and caller-owned configuration for execution. Knowledge reads use line coordinates, not scientific source-byte anchors. No manual read is mandatory. Launch software/resource instructions have their own run-frozen library: launch.instructions.search, launch.instructions.entry, launch.instructions.read and launch.instructions.select. The launch_instruction_library context gives its identity. Select any relevant sections from one or several entries; pass the returned selection as launch_instructions in the child assignment. selected_launch_instructions contains exact sections already selected for this assignment. Instructions describe ways to work; they do not select resources, enable tools, override caller constraints, establish current availability or supply scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.
+
+Parent's assigned question
+
+| Field | Supplied value |
+| --- | --- |
+| objective | Return the requested original sequence and dot-bracket for the single supplied RNA structure. |
+| task_context.root_objective | Investigate the exact supplied RNA sequence and structure. |
+| task_context.root_result_contract.role | annotation |
+
+Fixed scope
+
+| Field | Supplied value |
+| --- | --- |
+| subject_refs[0] | input_703b2ee87547d44b9967d06e |
+
+Information requested by the parent
+
+Return only the two selected strings with their retained origin and validity.
+
+Parent return form
+
+| Field | Presence | Type or constraint | Meaning or value |
+| --- | --- | --- | --- |
+| return | required | object |  |
+| return | constraint | additionalProperties | false |
+| return.completed | required | boolean | recorded fact from execution_completed |
+| return.requested_structure | required | array | Automatically supplied requested RNA comparison facts and their required qualifications.; recorded fact from execution_rna_structure_comparison_projections |
+
+Meaning of requested recorded facts
+
+| Source | Meaning |
+| --- | --- |
+| execution_completed | Whether this assignment has actual verified endpoint information. Generic native results mean requested current-filesystem acquisition plus independently observed successful exact execution, without a producing-attempt or atomic-version claim. RNA results mean complete requested original-bundle or retained-sheet delivery, including specific unavailable values; this does not assert native success. Yielding alone is false. |
+| execution_rna_structure_comparison_projections | Exactly selected retained RNA comparison facts and required population qualifications; no implied native acquisition or annotation confidence. |
+
+Return interpretation timing
+
+Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.
+
+STEERING
+
+Own completed actions
+
+None supplied.
+
+Current continuation expectation
+
+| Completed actions | Expected next gain | Uncertainty | Continuation cost |
+| --- | --- | --- | --- |
+| 1 | unavailable | insufficient completed actions | 0.0 |
+
+Current separate measures
+
+| Field | Supplied value |
+| --- | --- |
+| current_credit | 0 |
+
+Last own action outcome
+
+| Field | Supplied value |
+| --- | --- |
+| value | empty object |
+
+Requested information; continue the same decision
+
+| Selected operation | Action outcome | Requested comparison delivery complete |
+| --- | --- | --- |
+| execution.results.collect | completed | true |
+
+| Affected selection | Stage | Qualification |
+| --- | --- | --- |
+| scope not supplied | calculate | selected population only |
+| member supplied-RNA | input | unknown source origin |
+
+Requested RNA structures — requested-structure
+
+Sequence coordinates: zero based.
+
+| Member | Selected field | Complete supplied value | Origin | State |
+| --- | --- | --- | --- | --- |
+| supplied-RNA | Original sequence | GGGAAACCC | supplied; origin unknown | present |
+| supplied-RNA | Dot-bracket | (((...))) | supplied; origin unknown | present |
+
+Structure qualifications — supplied-RNA
+
+| Affected selection | Stage | Qualification |
+| --- | --- | --- |
+| member supplied-RNA | input | unknown source origin |
+
+Scoped qualifications
+
+| Affected selection | Stage | Qualification |
+| --- | --- | --- |
+| member supplied-RNA | input | unknown source origin |
+
+Last own RNA comparison outcome
+
+| Selected operation | Action outcome | Requested comparison delivery complete |
+| --- | --- | --- |
+| execution.results.status | completed | false |

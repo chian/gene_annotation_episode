@@ -1,0 +1,48 @@
+..............................................F.......                   [100%]
+=================================== FAILURES ===================================
+__________ test_v1_defaults_and_original_record_do_not_promote_to_v2 ___________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_design_221/frozen_test_tmp_001/test_v1_defaults_and_original_0')
+
+    def test_v1_defaults_and_original_record_do_not_promote_to_v2(tmp_path):
+        store,ctx,args,_=setup(tmp_path)
+        with store:
+            repo,outcome,saved=populate(store,ctx,args)
+            before=canonical(saved);cells=deepcopy(outcome['result']['cells'])
+            ctx,args=v2(ctx,args);ctx,args,_=block(store,ctx,args)
+            selected(store,ctx,args)
+            assert canonical(repo.read(outcome['result']['sheet_ref']))==before
+            assert repo.project_cells(outcome['record_refs'],permitted_record_refs=outcome['record_refs'])==cells
+            assert all(r['partial_uncertainty_status']=='unimplemented' and 'uncertainty' not in r for r in cells)
+            with pytest.raises(ContractError,match='sheet_required'):
+                repo.v2_projection().read(outcome['result']['sheet_ref'])
+            baseline=Path(__file__).resolve().parents[1]/'verification/literature_reference_evidence_2026-10-25_001/a105_component_uncertainty_repair_215/V1_SCHEMA_BASELINE_001.json'
+>           expected=json.loads(baseline.read_text())
+                                ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_compiled_assay_uncertainty_215.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_com...cation/literature_reference_evidence_2026-10-25_001/a105_component_uncertainty_repair_215/V1_SCHEMA_BASELINE_001.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_common_assessment_design_221/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_component_uncertainty_repair_215/V1_SCHEMA_BASELINE_001.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_compiled_assay_uncertainty_215.py::test_v1_defaults_and_original_record_do_not_promote_to_v2
+1 failed, 53 passed in 250.43s (0:04:10)

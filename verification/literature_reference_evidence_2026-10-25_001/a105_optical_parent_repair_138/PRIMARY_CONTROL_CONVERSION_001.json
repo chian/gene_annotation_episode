@@ -1,0 +1,84 @@
+{
+  "kind": "reported primary table values and derived arithmetic; not a new assay or configured-model run",
+  "source_path": "research/experimental_scoring_review_2026-10-23/a105_optical_case_031/primary_access_0.bin",
+  "source_sha256": "318ac6fe96b509815001892dcaa996688c703175c7dedf88b663d99fe9c90bcf",
+  "source_location": "Table2; assay row blocks and footnotes; nominal units endpoint-specific U/mg",
+  "selection": {
+    "nadh_reference_25C": {
+      "table_row": 5,
+      "label": "Fd + Hyd",
+      "source_token": "7 (14)a"
+    },
+    "nadh_methyl_viologen_25C": {
+      "table_row": 9,
+      "label": "Fd + Hyd + methyl viologen",
+      "source_token": "5"
+    },
+    "h2_reference_37C": {
+      "table_row": 19,
+      "label": "Fd + Hyd",
+      "source_token": "5"
+    },
+    "h2_methyl_viologen_37C": {
+      "table_row": 23,
+      "label": "Fd + Hyd + methyl viologen",
+      "source_token": "0.02"
+    },
+    "h2_without_crotonyl_37C": {
+      "table_row": 20,
+      "label": "Fd + Hyd \u2212 crotonyl-CoA",
+      "source_token": "<0.01"
+    }
+  },
+  "nadh_retained_rate_fraction": {
+    "exact": "5/7",
+    "value": 0.7142857142857143
+  },
+  "h2_retained_rate_fraction": {
+    "exact": "1/250",
+    "value": 0.004
+  },
+  "cross_protocol_retention_difference": {
+    "exact": "1243/1750",
+    "value": 0.7102857142857143
+  },
+  "h2_crotonyl_omission_loss_fraction_domain": {
+    "lower": {
+      "exact": "499/500",
+      "value": 0.998
+    },
+    "lower_inclusive": false,
+    "upper": {
+      "exact": "1",
+      "value": 1.0
+    },
+    "upper_inclusive": true,
+    "conditional_on": "nonnegative true omission rate below reported threshold; reference point report5 used as denominator; no sampling-confidence claim"
+  },
+  "h2_crotonyl_dependent_rate_domain": {
+    "lower": {
+      "exact": "499/100",
+      "value": 4.99
+    },
+    "lower_inclusive": false,
+    "upper": {
+      "exact": "5",
+      "value": 5.0
+    },
+    "upper_inclusive": true,
+    "unit": "umol_H2_per_min_per_mg_complex"
+  },
+  "cross_protocol_coupling_efficiency": null,
+  "statistical_uncertainty": null,
+  "independent_preparation_count": null,
+  "overall_reliability_score": null,
+  "interpretation_limits": [
+    "The complex, ferredoxin and hydrogenase coexist; H2 is a coupled downstream endpoint.",
+    "Crotonyl omission is the intended mechanistic contrast, not a no-enzyme matched blank.",
+    "NADH and H2 assays differ in temperature, reagent concentrations, enzyme loading and reporter conditions.",
+    "Within-endpoint fractions describe the specified protocols; their difference is not a calibrated coupling fraction or reliability probability.",
+    "The source reports lag phases and rates not always proportional to enzyme amount; mass normalization alone does not establish common-condition catalytic comparability.",
+    "No below-limit value was substituted as zero or as the threshold point.",
+    "Loss fraction and rate difference share the same observations and cannot be counted as independent evidence."
+  ]
+}

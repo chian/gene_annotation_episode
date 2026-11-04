@@ -1,0 +1,145 @@
+FF....                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_actual_runtime_pending_replay_completed_authority_and_byte_loss[inspect-structure_inventory-execution_protein_structure_projections] _
+
+store = <gene_annotation_episode.state.Store object at 0x775acd1030e0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check003/temporary/pytest/test_actual_runtime_pending_re0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x775acd102e10>
+kind = 'inspect', family = 'structure_inventory'
+source = 'execution_protein_structure_projections'
+
+    @pytest.mark.parametrize("kind,family,source", [("inspect", "structure_inventory", PROJECTION_SOURCE),
+        ("extract_sequence", "extracted_sequence", SEQUENCE_SOURCE), ("compare", "comparison_summary", SAVED_SOURCE)])
+    def test_actual_runtime_pending_replay_completed_authority_and_byte_loss(store, tmp_path, monkeypatch, kind, family, source):
+        """Real native launch and host, with real runtime rows; no outer Workflow."""
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind=kind)
+        selected = selector(projection(family), return_saved=kind == "compare",
+                            uses=["sequence_align"] if kind == "extract_sequence" else [])
+        asyncio.run(f.live())
+        child = f.child(selector=selected, schema=RUNTIME.schema_for(source, FAILURE_SOURCE))
+        result = asyncio.run(f.collect(child, commit=False))
+        receipt, host = result["result"], f.host
+        custody = receipt["publication"]["custody"]
+        assert receipt["publication"]["delivery_complete"]
+        assert not any(host.own_fact_groups(child, verify_artifacts=False).values())
+        assert host.completion(child) is None
+        assert host.credit_view(child, None)["credit"] == 0
+        with pytest.raises(ProteinStructureOperandError):
+            host.read_result_authority(custody, scope=f.scope)
+        key = receipt["body"]["intent"]["operation_key"]
+        with monkeypatch.context() as guard:
+            guard.setattr(hm, "capture_local_protein_structure_bundle", forbidden)
+            guard.setattr(host, "_prepare_worker", forbidden)
+            guard.setattr(hm, "publish_protein_structure_source", forbidden)
+            guard.setattr(hm, "publish_protein_structure_projection", forbidden)
+            assert asyncio.run(host.execute(child, f.target, "execution.results.collect", {}, key)) == result
+        f.commit(child, result)
+        f.episode_receipts.receive(child.episode_id, result["record_refs"], kind="own_action", source_index=0)
+        view = host.read_result_authority(custody, scope=f.scope)
+        facts, completion, credit = host.facts(child, verify_artifacts=False), host.completion(child), host.credit_view(child, None)
+        assert facts["execution_completed"] and facts["execution_result_origin"] == hm.ORIGIN
+        assert credit["credit"] == 3 and credit["new_acquired_record_count"] == 1
+        assert completion["validation_keys"] == ["original_protein_result_commission", "complete_sealed_bundle_acquisition",
+                                                 "requested_protein_projection_or_explicit_unavailability"]
+        assert len(completion) == 8
+        assert host.own_fact_groups(child, verify_artifacts=True) == receipt["publication"]["facts"]
+        form = f.returned(child)
+        if kind == "extract_sequence":
+            descriptor = view["facts"][SEQUENCE_SOURCE][0]
+            assert descriptor["allowed_uses"] == ["sequence_align"]
+            assert f.returns.authenticate_received_sequence(f.root, descriptor, required_use="sequence_align") == view
+            with pytest.raises(ProteinStructureOperandError, match="sequence_not_received"):
+                f.returns.authenticate_received_sequence(f.root, descriptor, required_use="structure_correspondence")
+            references = f.returns.record_admission(f.root, form, child.request["report_contract"]["measurements"]["schema"],
+                f"{f.run_id}:{f.root.episode_id}:1:typed_form")
+            expected = [descriptor["reference_ref"], *(descriptor[name]["artifact_ref"] for name in
+                ("sequence_file", "residue_map_file", "structure_file")), *(descriptor["custody"][name] for name in
+                ("handoff_ref", "source_ref", "bundle_artifact_ref"))]
+            assert references == expected and len(references) == 7
+            assert all(f.returns.resolve_received(f.root, ref, None) is True for ref in references)
+            assert f.returns.resolve_received(f.root, view["native_file"]["artifact_ref"], "artifact") is False
+        if kind == "compare":
+            descriptor = view["facts"][SAVED_SOURCE][0]
+            assert f.returns.authenticate_received_saved_sheet(f.root, descriptor, required_use="recalculate") == view
+        if kind == "inspect":
+            status = f.child(index=2, selector=selected, schema=RUNTIME.schema_for(PROJECTION_SOURCE))
+            status_result = asyncio.run(f.collect(status, name="execution.results.status"))["result"]
+            assert status_result["body"]["capture"] is None and status_result["body"]["worker"] is None
+            assert not any(host.own_fact_groups(status, verify_artifacts=False).values())
+            assert host.completion(status) is None and host.credit_view(status, None)["credit"] == 0
+            later = f.child(index=3, selector=selector(projection(family, identifier="later")),
+                            schema=RUNTIME.schema_for(PROJECTION_SOURCE))
+            second = asyncio.run(f.collect(later))["result"]
+            assert second["publication"]["source_record"] == receipt["publication"]["source_record"]
+            assert second["publication"]["custody"] != custody
+            assert host.read_result_authority(second["publication"]["custody"], scope=f.scope)["selector"]["projections"][0]["projection_id"] == "later"
+            assert host.read_result_authority(custody, scope=f.scope) == view
+>           assert host.credit_view(later, None)["credit"] == 0
+E           assert 3 == 0
+
+source_snapshot/tests/test_native_protein_structure_results.py:397: AssertionError
+_ test_actual_runtime_pending_replay_completed_authority_and_byte_loss[extract_sequence-extracted_sequence-execution_protein_structure_sequences] _
+
+store = <gene_annotation_episode.state.Store object at 0x775aab2c3a70>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check003/temporary/pytest/test_actual_runtime_pending_re1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x775aab254d40>
+kind = 'extract_sequence', family = 'extracted_sequence'
+source = 'execution_protein_structure_sequences'
+
+    @pytest.mark.parametrize("kind,family,source", [("inspect", "structure_inventory", PROJECTION_SOURCE),
+        ("extract_sequence", "extracted_sequence", SEQUENCE_SOURCE), ("compare", "comparison_summary", SAVED_SOURCE)])
+    def test_actual_runtime_pending_replay_completed_authority_and_byte_loss(store, tmp_path, monkeypatch, kind, family, source):
+        """Real native launch and host, with real runtime rows; no outer Workflow."""
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind=kind)
+        selected = selector(projection(family), return_saved=kind == "compare",
+                            uses=["sequence_align"] if kind == "extract_sequence" else [])
+        asyncio.run(f.live())
+        child = f.child(selector=selected, schema=RUNTIME.schema_for(source, FAILURE_SOURCE))
+        result = asyncio.run(f.collect(child, commit=False))
+        receipt, host = result["result"], f.host
+        custody = receipt["publication"]["custody"]
+        assert receipt["publication"]["delivery_complete"]
+        assert not any(host.own_fact_groups(child, verify_artifacts=False).values())
+        assert host.completion(child) is None
+        assert host.credit_view(child, None)["credit"] == 0
+        with pytest.raises(ProteinStructureOperandError):
+            host.read_result_authority(custody, scope=f.scope)
+        key = receipt["body"]["intent"]["operation_key"]
+        with monkeypatch.context() as guard:
+            guard.setattr(hm, "capture_local_protein_structure_bundle", forbidden)
+            guard.setattr(host, "_prepare_worker", forbidden)
+            guard.setattr(hm, "publish_protein_structure_source", forbidden)
+            guard.setattr(hm, "publish_protein_structure_projection", forbidden)
+            assert asyncio.run(host.execute(child, f.target, "execution.results.collect", {}, key)) == result
+        f.commit(child, result)
+        f.episode_receipts.receive(child.episode_id, result["record_refs"], kind="own_action", source_index=0)
+        view = host.read_result_authority(custody, scope=f.scope)
+        facts, completion, credit = host.facts(child, verify_artifacts=False), host.completion(child), host.credit_view(child, None)
+        assert facts["execution_completed"] and facts["execution_result_origin"] == hm.ORIGIN
+        assert credit["credit"] == 3 and credit["new_acquired_record_count"] == 1
+        assert completion["validation_keys"] == ["original_protein_result_commission", "complete_sealed_bundle_acquisition",
+                                                 "requested_protein_projection_or_explicit_unavailability"]
+        assert len(completion) == 8
+        assert host.own_fact_groups(child, verify_artifacts=True) == receipt["publication"]["facts"]
+        form = f.returned(child)
+        if kind == "extract_sequence":
+            descriptor = view["facts"][SEQUENCE_SOURCE][0]
+            assert descriptor["allowed_uses"] == ["sequence_align"]
+            assert f.returns.authenticate_received_sequence(f.root, descriptor, required_use="sequence_align") == view
+            with pytest.raises(ProteinStructureOperandError, match="sequence_not_received"):
+                f.returns.authenticate_received_sequence(f.root, descriptor, required_use="structure_correspondence")
+            references = f.returns.record_admission(f.root, form, child.request["report_contract"]["measurements"]["schema"],
+                f"{f.run_id}:{f.root.episode_id}:1:typed_form")
+            expected = [descriptor["reference_ref"], *(descriptor[name]["artifact_ref"] for name in
+                ("sequence_file", "residue_map_file", "structure_file")), *(descriptor["custody"][name] for name in
+                ("handoff_ref", "source_ref", "bundle_artifact_ref"))]
+            assert references == expected and len(references) == 7
+>           assert all(f.returns.resolve_received(f.root, ref, None) is True for ref in references)
+E           assert False
+E            +  where False = all(<generator object test_actual_runtime_pending_replay_completed_authority_and_byte_loss.<locals>.<genexpr> at 0x775aaa9eb970>)
+
+source_snapshot/tests/test_native_protein_structure_results.py:379: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_runtime_pending_replay_completed_authority_and_byte_loss[inspect-structure_inventory-execution_protein_structure_projections]
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_runtime_pending_replay_completed_authority_and_byte_loss[extract_sequence-extracted_sequence-execution_protein_structure_sequences]
+2 failed, 4 passed in 471.14s (0:07:51)

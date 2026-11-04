@@ -1,0 +1,215 @@
+{
+  "version": "a105_amount_components_v1",
+  "axis": "A105",
+  "evaluation_scope": "source_amount_comparison",
+  "inputs": {
+    "quantities": {
+      "numerator": {
+        "value": 5.0,
+        "unit": "mg/ml",
+        "status": "observed",
+        "bound": "none",
+        "approximate": true,
+        "measurement_key": "literature_amount_measurement_0beba15735e573c5b5f31e0e",
+        "physical_observation_key": "literature_amount_observation_e62bd3ce674038f33d6423cf",
+        "origin": "reported",
+        "unavailable_reason": null,
+        "qualification": "source_qualified_approximate",
+        "amount_role": "target_mass_estimate",
+        "amount_kind": "estimated",
+        "basis_status": "supported"
+      },
+      "denominator": {
+        "value": 7.0,
+        "unit": "mg/ml",
+        "status": "observed",
+        "bound": "none",
+        "approximate": false,
+        "measurement_key": "literature_amount_measurement_5d541be1e000881d12955695",
+        "physical_observation_key": "literature_amount_observation_5c79a66c57d0e0f52907b454",
+        "origin": "reported",
+        "unavailable_reason": null,
+        "qualification": "reported_point",
+        "amount_role": "total_protein_mass_estimate",
+        "amount_kind": "measured",
+        "basis_status": "supported"
+      }
+    },
+    "comparison_kind": "stock_target_mass_estimate_over_total_mass_estimate",
+    "pair_relationship": "supported",
+    "stock_relationship": "same",
+    "covariance": null,
+    "covariance_origin": null,
+    "variance_status": "unknown"
+  },
+  "cells": {
+    "numerator_amount": {
+      "value": 5.0,
+      "unit": "mg/ml",
+      "status": "populated",
+      "formula": "source_numerator_amount",
+      "origin": "reported",
+      "unavailable_reason": null,
+      "approximate": true,
+      "conditional_on": [],
+      "threshold": null,
+      "bound": "none",
+      "qualification": "source_qualified_approximate"
+    },
+    "denominator_amount": {
+      "value": 7.0,
+      "unit": "mg/ml",
+      "status": "populated",
+      "formula": "source_denominator_amount",
+      "origin": "reported",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "bound": "none",
+      "qualification": "reported_point"
+    },
+    "amount_difference": {
+      "value": -2.0,
+      "unit": "mg/ml",
+      "status": "populated",
+      "formula": "numerator-denominator",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations"
+      ]
+    },
+    "amount_ratio": {
+      "value": 0.7142857142857143,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "numerator/denominator",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations"
+      ]
+    },
+    "reciprocal_amount_ratio": {
+      "value": 1.4,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "denominator/numerator",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations"
+      ]
+    },
+    "conditional_mass_denominator_factor": {
+      "value": 1.4,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "reciprocal_amount_ratio_same_stock_mass_basis_alias",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations",
+        "same_stock_rate_with_total_mass_denominator_required_before_application"
+      ]
+    },
+    "amount_difference_variance": {
+      "value": null,
+      "unit": "(mg/ml)^2",
+      "status": "unavailable",
+      "formula": "J_amount_difference*covariance*J_transpose",
+      "origin": "derived",
+      "unavailable_reason": "amount_covariance_unreported",
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations",
+        "linear_covariance_propagation"
+      ]
+    },
+    "amount_difference_standard_uncertainty": {
+      "value": null,
+      "unit": "mg/ml",
+      "status": "unavailable",
+      "formula": "sqrt(amount_difference_variance)",
+      "origin": "derived",
+      "unavailable_reason": "amount_covariance_unreported",
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations",
+        "linear_covariance_propagation"
+      ]
+    },
+    "amount_ratio_variance": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "J_amount_ratio*covariance*J_transpose",
+      "origin": "derived",
+      "unavailable_reason": "amount_covariance_unreported",
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations",
+        "first_order_covariance_propagation"
+      ]
+    },
+    "amount_ratio_standard_uncertainty": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "sqrt(amount_ratio_variance)",
+      "origin": "derived",
+      "unavailable_reason": "amount_covariance_unreported",
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations",
+        "first_order_covariance_propagation"
+      ]
+    },
+    "reciprocal_amount_ratio_variance": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "J_reciprocal_amount_ratio*covariance*J_transpose",
+      "origin": "derived",
+      "unavailable_reason": "amount_covariance_unreported",
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations",
+        "first_order_covariance_propagation"
+      ]
+    },
+    "reciprocal_amount_ratio_standard_uncertainty": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "sqrt(reciprocal_amount_ratio_variance)",
+      "origin": "derived",
+      "unavailable_reason": "amount_covariance_unreported",
+      "approximate": true,
+      "conditional_on": [
+        "source_role_and_pair_interpretations",
+        "first_order_covariance_propagation"
+      ]
+    }
+  },
+  "comparison_kind": "stock_target_mass_estimate_over_total_mass_estimate",
+  "variance_status": "unknown",
+  "covariance_origin": null,
+  "mass_factor_alias_of": "reciprocal_amount_ratio",
+  "mass_factor_applied_to_rate": false,
+  "independent_preparation_count": null,
+  "annotation_credit": null,
+  "interpretation_limits": [
+    "target_and_total_protein_are_different_measurands",
+    "mass_fraction_estimate_is_not_automatically_validated_purity_or_active_fraction",
+    "nominal_amount_ratio_is_not_amount_response_correction",
+    "difference_of_target_and_total_estimates_is_not_contaminant_concentration",
+    "source_amounts_do_not_establish_effect_isolation",
+    "arithmetic_aliases_are_not_independent_evidence"
+  ]
+}

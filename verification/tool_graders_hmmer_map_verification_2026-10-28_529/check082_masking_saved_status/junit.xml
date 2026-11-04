@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.962" timestamp="2026-10-28T16:37:26.342616-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_blast_masking_saved_status_623" name="test_saved_status_uses_original_observation_without_acquisition_or_new_credit" time="10.496"><failure message="AssertionError: saved status attempted fresh native observation or result work">source_snapshot/tests/test_native_blast_masking_saved_status_623.py:28: in test_saved_status_uses_original_observation_without_acquisition_or_new_credit
+    outcome = case.execute(child=child, tool='execution.results.status')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_host_returns.py:161: in execute
+    outcome = asyncio.run(self.results.execute(child, self.target, tool, {}, key))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_results.py:318: in execute
+    prior = (self._prior(target, context.scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_results.py:295: in _prior
+    body = self._receipt(_read(path), scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_results.py:109: in _receipt
+    return self._validate_body(_read(self._saved_directory(row['episode_id'],
+source_snapshot/gene_annotation_episode/native_blast_masking_results.py:227: in _validate_body
+    _require(capture_local_bundle(self.store, target=target, directory=directory / 'capture')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_saved_status_623.py:22: in forbidden
+    raise AssertionError('saved status attempted fresh native observation or result work')
+E   AssertionError: saved status attempted fresh native observation or result work</failure></testcase></testsuite></testsuites>

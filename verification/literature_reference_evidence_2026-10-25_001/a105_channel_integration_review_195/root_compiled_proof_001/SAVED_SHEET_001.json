@@ -1,0 +1,4579 @@
+{
+  "component_selections": [
+    {
+      "component": "net_rate",
+      "namespace": "literature_optical_cells",
+      "sheet_ref": "source_89a2fadc687a799d75689aae"
+    },
+    {
+      "component": "contaminant_rate",
+      "namespace": "literature_assay_cells",
+      "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+    },
+    {
+      "component": "recovery",
+      "namespace": "literature_calibration_recovery_cells",
+      "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+    },
+    {
+      "component": "active_site_concentration",
+      "namespace": "literature_active_site_cells",
+      "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+    },
+    {
+      "component": "condition_test_rate",
+      "namespace": "literature_assay_cells",
+      "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+    },
+    {
+      "component": "condition_reference_rate",
+      "namespace": "literature_assay_cells",
+      "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+    }
+  ],
+  "direct_input_source_refs": [
+    "source_b913e04b11a87d24d70fdab1"
+  ],
+  "extraction": {
+    "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+    "assay": {
+      "arrangement": {
+        "kind": "source_interpretation",
+        "value": "single_preparation",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 210,
+            "quote": "single preparation",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 192
+          }
+        ]
+      },
+      "asserted_input": null,
+      "asserted_output": null,
+      "condition": {
+        "value": "condition buffer",
+        "witness": {
+          "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+          "end": 80,
+          "quote": "condition buffer",
+          "representation": "original",
+          "source_ref": "source_b913e04b11a87d24d70fdab1",
+          "start": 64
+        }
+      },
+      "construct": {
+        "value": "construct C",
+        "witness": {
+          "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+          "end": 47,
+          "quote": "construct C",
+          "representation": "original",
+          "source_ref": "source_b913e04b11a87d24d70fdab1",
+          "start": 36
+        }
+      },
+      "endpoint": {
+        "kind": "source_interpretation",
+        "value": "oxygen_consumption",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 100,
+            "quote": "Oxygen consumption",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 82
+          }
+        ]
+      },
+      "experimental_system": null,
+      "expression_host": null,
+      "genotype": null,
+      "intended_variable": null,
+      "measured_entity": {
+        "value": "NADH",
+        "witness": {
+          "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+          "end": 109,
+          "quote": "NADH",
+          "representation": "original",
+          "source_ref": "source_b913e04b11a87d24d70fdab1",
+          "start": 105
+        }
+      },
+      "molecule": {
+        "value": "enzyme P",
+        "witness": {
+          "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+          "end": 18,
+          "quote": "enzyme P",
+          "representation": "original",
+          "source_ref": "source_b913e04b11a87d24d70fdab1",
+          "start": 10
+        }
+      },
+      "organism": {
+        "value": "organism O",
+        "witness": {
+          "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+          "end": 34,
+          "quote": "organism O",
+          "representation": "original",
+          "source_ref": "source_b913e04b11a87d24d70fdab1",
+          "start": 24
+        }
+      },
+      "preparation": {
+        "value": "preparation A",
+        "witness": {
+          "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+          "end": 62,
+          "quote": "preparation A",
+          "representation": "original",
+          "source_ref": "source_b913e04b11a87d24d70fdab1",
+          "start": 49
+        }
+      }
+    },
+    "correction_stages": {
+      "background": {
+        "kind": "source_interpretation",
+        "value": "already_applied",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "contaminant": {
+        "kind": "source_interpretation",
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "molecule_amount": {
+        "kind": "source_interpretation",
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "nuisance_condition": {
+        "kind": "source_interpretation",
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "recovery": {
+        "kind": "source_interpretation",
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      }
+    },
+    "covariance_source": null,
+    "distinct_residual_observation": null,
+    "model_witnesses": [],
+    "observation_model": "none",
+    "operands": {
+      "E": {
+        "canonical_physical_keys": [
+          "physical_source_span_1261a26e6fcff2fd5c415829"
+        ],
+        "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+        "native_normalized": false,
+        "physical_identity_status": "partly_canonical",
+        "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+        "recorded_dependency_keys": [],
+        "row": {
+          "approximate": false,
+          "component": "active_site_concentration",
+          "conditional_on": [
+            "nonnegative_amounts_positive_molecular_weight",
+            "reported_operand_cartesian_enclosure"
+          ],
+          "evaluation_scope": "active_site_titration_amount",
+          "evidence_source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+          "exact_domain": {
+            "lower": {
+              "denominator": "1",
+              "numerator": "2000"
+            },
+            "lower_inclusive": true,
+            "upper": {
+              "denominator": "1",
+              "numerator": "2000"
+            },
+            "upper_inclusive": true
+          },
+          "experiment": {
+            "status": "selected",
+            "witness": {
+              "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+              "end": 96,
+              "quote": "assay titration",
+              "representation": "original",
+              "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+              "start": 81
+            }
+          },
+          "fraction_uncertainty": {
+            "input_state": "joint_source_error_covariance_not_selected",
+            "reason": "full_joint_covariance_propagation_not_implemented",
+            "source_spreads_are_not_full_joint_uncertainty": true,
+            "status": "unavailable",
+            "value": null
+          },
+          "intended_change": {
+            "status": "selected",
+            "witness": {
+              "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+              "end": 58,
+              "quote": "construct tagged",
+              "representation": "original",
+              "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+              "start": 42
+            }
+          },
+          "interpretations": {
+            "active_estimate_meaning": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 246,
+                    "quote": "Same preparation and assay",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 220
+                  }
+                }
+              ],
+              "value": "titrated_active_sites"
+            },
+            "amount_linkage": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 246,
+                    "quote": "Same preparation and assay",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 220
+                  }
+                }
+              ],
+              "value": "same_preparation_and_assay"
+            },
+            "molecular_basis": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 246,
+                    "quote": "Same preparation and assay",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 220
+                  }
+                }
+              ],
+              "value": "per_monomer"
+            },
+            "normalization_stage": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 356,
+                    "quote": "Rate uses total monomer concentration",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 319
+                  }
+                }
+              ],
+              "value": "total_monomer"
+            },
+            "site_stoichiometry": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 246,
+                    "quote": "Same preparation and assay",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 220
+                  }
+                }
+              ],
+              "value": "one_site_per_monomer"
+            },
+            "titrant_concentration_basis": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 246,
+                    "quote": "Same preparation and assay",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 220
+                  }
+                }
+              ],
+              "value": "nominal_reported"
+            },
+            "titrant_to_site_stoichiometry": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 246,
+                    "quote": "Same preparation and assay",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 220
+                  }
+                }
+              ],
+              "value": "reported_one_to_one"
+            }
+          },
+          "operands": [
+            {
+              "meanings": {
+                "assay": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 96,
+                    "quote": "assay titration",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 81
+                  }
+                },
+                "condition": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 104,
+                    "quote": "55 C",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 100
+                  }
+                },
+                "construct": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 58,
+                    "quote": "construct tagged",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 42
+                  }
+                },
+                "endpoint": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 175,
+                    "quote": "active sites",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 163
+                  }
+                },
+                "measurement_identity": {
+                  "status": "not_selected",
+                  "witness": null
+                },
+                "organism": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 40,
+                    "quote": "organism X",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 30
+                  }
+                },
+                "preparation": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 79,
+                    "quote": "preparation stock A",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 60
+                  }
+                },
+                "subject": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 24,
+                    "quote": "subject enzyme",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 10
+                  }
+                }
+              },
+              "measurement_key": "active_site_measurement_a94df6a037eda9707e9cd980",
+              "physical_observation_key": null,
+              "qualification": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 246,
+                      "quote": "Same preparation and assay",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 220
+                    }
+                  }
+                ],
+                "value": "reported_point"
+              },
+              "reading": {
+                "bound": "point",
+                "number": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 180,
+                  "quote": "2000",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 176
+                },
+                "raw_unit": "nM"
+              },
+              "reported_uncertainty": {
+                "kind": {
+                  "support": [
+                    {
+                      "status": "selected",
+                      "witness": {
+                        "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                        "end": 371,
+                        "quote": "Regression SD",
+                        "representation": "original",
+                        "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                        "start": 358
+                      }
+                    }
+                  ],
+                  "value": "regression_sd"
+                },
+                "reading": {
+                  "bound": "point",
+                  "number": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 185,
+                    "quote": "3",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 184
+                  },
+                  "raw_unit": "nM"
+                },
+                "sampling_basis": {
+                  "support": [
+                    {
+                      "status": "selected",
+                      "witness": {
+                        "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                        "end": 412,
+                        "quote": "repeated aliquots from same preparation",
+                        "representation": "original",
+                        "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                        "start": 373
+                      }
+                    }
+                  ],
+                  "value": "same_preparation_aliquots"
+                },
+                "statement": {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 412,
+                    "quote": "Regression SD; repeated aliquots from same preparation",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 358
+                  }
+                }
+              },
+              "role": "active_site_concentration"
+            }
+          ],
+          "origin": "synthetic",
+          "other_changes": [
+            {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                "end": 439,
+                "quote": "Purification also changed",
+                "representation": "original",
+                "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                "start": 414
+              }
+            }
+          ],
+          "rate_application_status": "not_applied_requires_same_rate_context",
+          "reported_domain": {
+            "basis": "reported_operand",
+            "conditioning": "nonnegative_amounts_positive_molecular_weight",
+            "failure": null,
+            "kind": "point",
+            "lower": 2000.0,
+            "lower_inclusive": true,
+            "projection": "exact",
+            "upper": 2000.0,
+            "upper_inclusive": true
+          },
+          "sheet_ref": "source_b4d2ae17ec3f3eea831d3657",
+          "status": "point",
+          "unavailable_reason": null,
+          "unit": "nM",
+          "value": 2000.0
+        },
+        "selection": {
+          "component": "active_site_concentration",
+          "namespace": "literature_active_site_cells",
+          "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+        },
+        "unavailable_reason": null,
+        "unit": "uM",
+        "value": 2.0
+      },
+      "g": {
+        "canonical_physical_keys": [
+          "physical_source_span_f125cf0624b5da575f25fa75"
+        ],
+        "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+        "native_normalized": false,
+        "physical_identity_status": "partly_canonical",
+        "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+        "recorded_dependency_keys": [],
+        "row": {
+          "arrangement_kind": "single_preparation",
+          "arrangement_ref": "term_07a7c13861cd07e905068339",
+          "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+          "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+          "asserted_input_ref": null,
+          "asserted_output_ref": null,
+          "component": "contaminant_rate",
+          "condition_ref": "context_0f709482b93ccf87c20a0e22",
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+          "covariance_origin": null,
+          "covariance_source_ref": null,
+          "endpoint_kind": "oxygen_consumption",
+          "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+          "evaluated_scope": "interpreted_source_endpoint",
+          "evidence_source_ref": "source_846e61ce050f040974024b77",
+          "experimental_system_ref": null,
+          "expression_host_ref": null,
+          "genotype_ref": null,
+          "input_measurement_refs": [
+            "reference_a7498e5dc63a3f87ed604449"
+          ],
+          "intended_variable_ref": null,
+          "interpretation_kind": "episode_source_interpretation",
+          "measured_entity_ref": null,
+          "operand_source_kind": "synthetic_fixture",
+          "organism_ref": "reference_ace98bece4a4e50ba5722023",
+          "origin": "synthetic",
+          "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+          "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 0.2
+        },
+        "selection": {
+          "component": "contaminant_rate",
+          "namespace": "literature_assay_cells",
+          "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+        },
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 0.2
+      },
+      "k": {
+        "canonical_physical_keys": [],
+        "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+        "native_normalized": false,
+        "physical_identity_status": "cross_component_identity_unknown",
+        "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+        "recorded_dependency_keys": [
+          "literature_measurement_d2e2856cf6b8ae72497b07dc",
+          "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+        ],
+        "row": {
+          "applicability": "same_matrix_same_endpoint_supported",
+          "component": "recovery",
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "control_kind": "reporter_standard",
+          "evaluation_scope": "source_calibration_recovery",
+          "evidence_source_ref": "source_c781f994d2a884bfceb79371",
+          "exact_value": {
+            "denominator": "50",
+            "numerator": "49"
+          },
+          "formula": "measured/nominal",
+          "input_measurement_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "input_origins": [
+            "synthetic"
+          ],
+          "interpretation_scope_unavailable_reason": null,
+          "origin": "derived",
+          "qualifications": [
+            "source_quotes_do_not_prove_scientific_roles",
+            "shared_units_do_not_establish_comparison_linkage",
+            "no_target_measurement_supplied",
+            "replicate_independence_not_established",
+            "denominator_uncertainty_and_covariance_not_supplied",
+            "recovery_bias_and_inverse_share_original_operands",
+            "no_overall_reliability_grade",
+            "no_annotation_credit"
+          ],
+          "section": "calibration_validity",
+          "sheet_ref": "source_3ed93b5d685758b4f59ba453",
+          "source_kind": "synthetic_fixture",
+          "source_meanings": {
+            "analyte": null,
+            "blank_treatment": "no-reaction blank",
+            "endpoint": "optical reporter",
+            "expected_quantity_basis": "Nominal stock amount",
+            "experiment": "Illustrative standard",
+            "matrix": "buffer"
+          },
+          "spread_kind": "SD",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 0.98
+        },
+        "selection": {
+          "component": "recovery",
+          "namespace": "literature_calibration_recovery_cells",
+          "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+        },
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.98
+      },
+      "q": {
+        "canonical_physical_keys": [
+          "physical_source_span_16d7b40eacb9cc41ca9c230a",
+          "physical_source_span_3dd605ab177e961ab29e64f2",
+          "physical_source_span_43e241613fe56ff33b63f858",
+          "physical_source_span_99142b69916b22ace78264cf"
+        ],
+        "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+        "native_normalized": false,
+        "physical_identity_status": "partly_canonical",
+        "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+        "recorded_dependency_keys": [],
+        "row": {
+          "component": "net_rate",
+          "conditional_on": [
+            "source_optical_relationship_assignments"
+          ],
+          "context": {
+            "condition": {
+              "ref": null,
+              "unavailable_reason": "source_context_unreported"
+            },
+            "construct": {
+              "ref": null,
+              "unavailable_reason": "source_context_unreported"
+            },
+            "measured_entity": {
+              "ref": null,
+              "unavailable_reason": "source_context_unreported"
+            },
+            "molecule": {
+              "ref": null,
+              "unavailable_reason": "source_context_unreported"
+            },
+            "preparation": {
+              "ref": null,
+              "unavailable_reason": "source_context_unreported"
+            }
+          },
+          "covariance": {
+            "binding_ref": null,
+            "origin": null,
+            "source_ref": null,
+            "status": "unknown",
+            "unavailable_reason": "covariance_unreported"
+          },
+          "endpoint_assignment": "conditional_on_selected_extinction_relation",
+          "endpoint_kind": "NADH_depletion",
+          "evaluation_scope": "source_nadh_depletion_endpoint",
+          "evidence_source_ref": "source_8469b9696d94c72384deb030",
+          "formula_code": "nadh_extinction_net_rate",
+          "interpretations": {
+            "blank_role": {
+              "value": "matched_no_reaction_background",
+              "witness_refs": [
+                "reference_53cd06cf26137ad4044c81dc"
+              ]
+            },
+            "matched_window": {
+              "value": "same",
+              "witness_refs": [
+                "reference_3f8e677fce4eccacd8cbd9c4"
+              ]
+            },
+            "rate_window": {
+              "value": "source_supported_rate_interval",
+              "witness_refs": [
+                "reference_4d6f9515e885481e8b7acc0b"
+              ]
+            },
+            "relation": {
+              "value": "applicable_extinction_relation",
+              "witness_refs": [
+                "reference_8d4772c6d39383fe89f5efd7"
+              ]
+            },
+            "same_endpoint": {
+              "value": "same",
+              "witness_refs": [
+                "reference_54fd6b6a5a7c22e78bff9dcc"
+              ]
+            },
+            "signal_kind": {
+              "value": "absorbance_slope",
+              "witness_refs": [
+                "reference_be845fea847bcf52d7d9d692"
+              ]
+            }
+          },
+          "operands": {
+            "blank_slope": {
+              "approximate": false,
+              "canonical_unit": "absorbance/min",
+              "condition_ref": null,
+              "converted_origin": "synthetic",
+              "input_status": "available",
+              "input_unavailable_reasons": [],
+              "interval_ref": null,
+              "local_reuse_ref": "reference_1ad479971ed722a88067cc61",
+              "measured_entity_ref": null,
+              "measurement_ref": "reference_dcf1ebcc9f4d2865037f5dec",
+              "measurement_source_ref": "source_8469b9696d94c72384deb030",
+              "observation_status": "observed",
+              "observed_relation": "point",
+              "physical_observation_ref": null,
+              "qualification": "reported_point",
+              "semantic_owner_ref": "reference_7ffd6dd3bc7cbea2bcb55df5",
+              "source_origin": "synthetic"
+            },
+            "epsilon": {
+              "approximate": false,
+              "canonical_unit": "mM_inverse_cm_inverse",
+              "condition_ref": null,
+              "converted_origin": "derived",
+              "input_status": "available",
+              "input_unavailable_reasons": [],
+              "interval_ref": null,
+              "local_reuse_ref": "reference_5cf93e030586dc6da27c0ccf",
+              "measured_entity_ref": null,
+              "measurement_ref": "reference_36e8dcd3cc5cc59c71da6462",
+              "measurement_source_ref": "source_8469b9696d94c72384deb030",
+              "observation_status": "observed",
+              "observed_relation": "point",
+              "physical_observation_ref": null,
+              "qualification": "reported_point",
+              "semantic_owner_ref": "reference_03993d1d28c8f0236e2e5213",
+              "source_origin": "synthetic"
+            },
+            "path_length": {
+              "approximate": false,
+              "canonical_unit": "cm",
+              "condition_ref": null,
+              "converted_origin": "derived",
+              "input_status": "available",
+              "input_unavailable_reasons": [],
+              "interval_ref": null,
+              "local_reuse_ref": "reference_6b2c86bfce5850ad8ab89c83",
+              "measured_entity_ref": null,
+              "measurement_ref": "reference_3d61722e3fb8c35f75d25dd0",
+              "measurement_source_ref": "source_8469b9696d94c72384deb030",
+              "observation_status": "observed",
+              "observed_relation": "point",
+              "physical_observation_ref": null,
+              "qualification": "reported_point",
+              "semantic_owner_ref": "reference_cd0e66797e5aa7edc139e5fd",
+              "source_origin": "synthetic"
+            },
+            "sample_slope": {
+              "approximate": false,
+              "canonical_unit": "absorbance/min",
+              "condition_ref": null,
+              "converted_origin": "synthetic",
+              "input_status": "available",
+              "input_unavailable_reasons": [],
+              "interval_ref": null,
+              "local_reuse_ref": "reference_ea375de0440f335dab0f4a6d",
+              "measured_entity_ref": null,
+              "measurement_ref": "reference_b6dc8ac79a082486bf26f410",
+              "measurement_source_ref": "source_8469b9696d94c72384deb030",
+              "observation_status": "observed",
+              "observed_relation": "point",
+              "physical_observation_ref": null,
+              "qualification": "reported_point",
+              "semantic_owner_ref": "reference_b5c327d6cc3be3ee9353b1c2",
+              "source_origin": "synthetic"
+            },
+            "wavelength_context": {
+              "approximate": false,
+              "canonical_unit": "nm",
+              "condition_ref": null,
+              "converted_origin": "synthetic",
+              "input_status": "context_only",
+              "input_unavailable_reasons": [],
+              "interval_ref": null,
+              "local_reuse_ref": null,
+              "measured_entity_ref": null,
+              "measurement_ref": "reference_86fe374b23ce6ab483c28feb",
+              "measurement_source_ref": "source_8469b9696d94c72384deb030",
+              "observation_status": "observed",
+              "observed_relation": "point",
+              "physical_observation_ref": null,
+              "qualification": "reported_point",
+              "semantic_owner_ref": "reference_293f0b9c82439796b5e6146b",
+              "source_origin": "synthetic"
+            }
+          },
+          "origin": "derived",
+          "sheet_ref": "source_89a2fadc687a799d75689aae",
+          "source_kind": "synthetic_fixture",
+          "source_origin": "synthetic",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 1.7999999999999998
+        },
+        "selection": {
+          "component": "net_rate",
+          "namespace": "literature_optical_cells",
+          "sheet_ref": "source_89a2fadc687a799d75689aae"
+        },
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 1.7999999999999998
+      },
+      "u": {
+        "canonical_physical_keys": [
+          "physical_source_span_1207db3cdf48a1a023bb2677"
+        ],
+        "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+        "native_normalized": false,
+        "physical_identity_status": "partly_canonical",
+        "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+        "recorded_dependency_keys": [],
+        "row": {
+          "arrangement_kind": "single_preparation",
+          "arrangement_ref": "term_07a7c13861cd07e905068339",
+          "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+          "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+          "asserted_input_ref": null,
+          "asserted_output_ref": null,
+          "component": "condition_test_rate",
+          "condition_ref": "context_0f709482b93ccf87c20a0e22",
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+          "covariance_origin": null,
+          "covariance_source_ref": null,
+          "endpoint_kind": "oxygen_consumption",
+          "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+          "evaluated_scope": "interpreted_source_endpoint",
+          "evidence_source_ref": "source_846e61ce050f040974024b77",
+          "experimental_system_ref": null,
+          "expression_host_ref": null,
+          "genotype_ref": null,
+          "input_measurement_refs": [
+            "reference_fef60b6ad3f48ed6b23c3a10"
+          ],
+          "intended_variable_ref": null,
+          "interpretation_kind": "episode_source_interpretation",
+          "measured_entity_ref": null,
+          "operand_source_kind": "synthetic_fixture",
+          "organism_ref": "reference_ace98bece4a4e50ba5722023",
+          "origin": "synthetic",
+          "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+          "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 0.9
+        },
+        "selection": {
+          "component": "condition_test_rate",
+          "namespace": "literature_assay_cells",
+          "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+        },
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 0.9
+      },
+      "v": {
+        "canonical_physical_keys": [
+          "physical_source_span_b40365e8ffd580e5ee3ebe50"
+        ],
+        "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+        "native_normalized": false,
+        "physical_identity_status": "partly_canonical",
+        "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+        "recorded_dependency_keys": [],
+        "row": {
+          "arrangement_kind": "single_preparation",
+          "arrangement_ref": "term_07a7c13861cd07e905068339",
+          "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+          "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+          "asserted_input_ref": null,
+          "asserted_output_ref": null,
+          "component": "condition_reference_rate",
+          "condition_ref": "context_0f709482b93ccf87c20a0e22",
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+          "covariance_origin": null,
+          "covariance_source_ref": null,
+          "endpoint_kind": "oxygen_consumption",
+          "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+          "evaluated_scope": "interpreted_source_endpoint",
+          "evidence_source_ref": "source_846e61ce050f040974024b77",
+          "experimental_system_ref": null,
+          "expression_host_ref": null,
+          "genotype_ref": null,
+          "input_measurement_refs": [
+            "reference_9cf29f42e468a5c7d3d5bb44"
+          ],
+          "intended_variable_ref": null,
+          "interpretation_kind": "episode_source_interpretation",
+          "measured_entity_ref": null,
+          "operand_source_kind": "synthetic_fixture",
+          "organism_ref": "reference_ace98bece4a4e50ba5722023",
+          "origin": "synthetic",
+          "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+          "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 1.0
+        },
+        "selection": {
+          "component": "condition_reference_rate",
+          "namespace": "literature_assay_cells",
+          "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+        },
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 1.0
+      }
+    },
+    "relationships": {
+      "E": {
+        "kind": "source_interpretation",
+        "value": "same_assay_active_molecules",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "g": {
+        "kind": "source_interpretation",
+        "value": "additional_contaminant_contribution",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "k": {
+        "kind": "source_interpretation",
+        "value": "applicable_reporter_standard",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "q": {
+        "kind": "source_interpretation",
+        "value": "net_background_corrected_assay_endpoint",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "u": {
+        "kind": "source_interpretation",
+        "value": "test_nuisance_control_excludes_intended_change",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "v": {
+        "kind": "source_interpretation",
+        "value": "reference_nuisance_control_excludes_intended_change",
+        "witnesses": [
+          {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      }
+    },
+    "residual_relationship": {
+      "kind": "source_interpretation",
+      "value": "unknown",
+      "witnesses": []
+    },
+    "source_kind": "synthetic_fixture",
+    "source_ref": "source_b913e04b11a87d24d70fdab1",
+    "source_refs": [
+      "source_b913e04b11a87d24d70fdab1"
+    ],
+    "variance_status": "unknown",
+    "version": "a105_compiled_assay_inputs_v1"
+  },
+  "input_artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+  "input_snapshots": [
+    {
+      "row": {
+        "component": "net_rate",
+        "conditional_on": [
+          "source_optical_relationship_assignments"
+        ],
+        "context": {
+          "condition": {
+            "ref": null,
+            "unavailable_reason": "source_context_unreported"
+          },
+          "construct": {
+            "ref": null,
+            "unavailable_reason": "source_context_unreported"
+          },
+          "measured_entity": {
+            "ref": null,
+            "unavailable_reason": "source_context_unreported"
+          },
+          "molecule": {
+            "ref": null,
+            "unavailable_reason": "source_context_unreported"
+          },
+          "preparation": {
+            "ref": null,
+            "unavailable_reason": "source_context_unreported"
+          }
+        },
+        "covariance": {
+          "binding_ref": null,
+          "origin": null,
+          "source_ref": null,
+          "status": "unknown",
+          "unavailable_reason": "covariance_unreported"
+        },
+        "endpoint_assignment": "conditional_on_selected_extinction_relation",
+        "endpoint_kind": "NADH_depletion",
+        "evaluation_scope": "source_nadh_depletion_endpoint",
+        "evidence_source_ref": "source_8469b9696d94c72384deb030",
+        "formula_code": "nadh_extinction_net_rate",
+        "interpretations": {
+          "blank_role": {
+            "value": "matched_no_reaction_background",
+            "witness_refs": [
+              "reference_53cd06cf26137ad4044c81dc"
+            ]
+          },
+          "matched_window": {
+            "value": "same",
+            "witness_refs": [
+              "reference_3f8e677fce4eccacd8cbd9c4"
+            ]
+          },
+          "rate_window": {
+            "value": "source_supported_rate_interval",
+            "witness_refs": [
+              "reference_4d6f9515e885481e8b7acc0b"
+            ]
+          },
+          "relation": {
+            "value": "applicable_extinction_relation",
+            "witness_refs": [
+              "reference_8d4772c6d39383fe89f5efd7"
+            ]
+          },
+          "same_endpoint": {
+            "value": "same",
+            "witness_refs": [
+              "reference_54fd6b6a5a7c22e78bff9dcc"
+            ]
+          },
+          "signal_kind": {
+            "value": "absorbance_slope",
+            "witness_refs": [
+              "reference_be845fea847bcf52d7d9d692"
+            ]
+          }
+        },
+        "operands": {
+          "blank_slope": {
+            "approximate": false,
+            "canonical_unit": "absorbance/min",
+            "condition_ref": null,
+            "converted_origin": "synthetic",
+            "input_status": "available",
+            "input_unavailable_reasons": [],
+            "interval_ref": null,
+            "local_reuse_ref": "reference_1ad479971ed722a88067cc61",
+            "measured_entity_ref": null,
+            "measurement_ref": "reference_dcf1ebcc9f4d2865037f5dec",
+            "measurement_source_ref": "source_8469b9696d94c72384deb030",
+            "observation_status": "observed",
+            "observed_relation": "point",
+            "physical_observation_ref": null,
+            "qualification": "reported_point",
+            "semantic_owner_ref": "reference_7ffd6dd3bc7cbea2bcb55df5",
+            "source_origin": "synthetic"
+          },
+          "epsilon": {
+            "approximate": false,
+            "canonical_unit": "mM_inverse_cm_inverse",
+            "condition_ref": null,
+            "converted_origin": "derived",
+            "input_status": "available",
+            "input_unavailable_reasons": [],
+            "interval_ref": null,
+            "local_reuse_ref": "reference_5cf93e030586dc6da27c0ccf",
+            "measured_entity_ref": null,
+            "measurement_ref": "reference_36e8dcd3cc5cc59c71da6462",
+            "measurement_source_ref": "source_8469b9696d94c72384deb030",
+            "observation_status": "observed",
+            "observed_relation": "point",
+            "physical_observation_ref": null,
+            "qualification": "reported_point",
+            "semantic_owner_ref": "reference_03993d1d28c8f0236e2e5213",
+            "source_origin": "synthetic"
+          },
+          "path_length": {
+            "approximate": false,
+            "canonical_unit": "cm",
+            "condition_ref": null,
+            "converted_origin": "derived",
+            "input_status": "available",
+            "input_unavailable_reasons": [],
+            "interval_ref": null,
+            "local_reuse_ref": "reference_6b2c86bfce5850ad8ab89c83",
+            "measured_entity_ref": null,
+            "measurement_ref": "reference_3d61722e3fb8c35f75d25dd0",
+            "measurement_source_ref": "source_8469b9696d94c72384deb030",
+            "observation_status": "observed",
+            "observed_relation": "point",
+            "physical_observation_ref": null,
+            "qualification": "reported_point",
+            "semantic_owner_ref": "reference_cd0e66797e5aa7edc139e5fd",
+            "source_origin": "synthetic"
+          },
+          "sample_slope": {
+            "approximate": false,
+            "canonical_unit": "absorbance/min",
+            "condition_ref": null,
+            "converted_origin": "synthetic",
+            "input_status": "available",
+            "input_unavailable_reasons": [],
+            "interval_ref": null,
+            "local_reuse_ref": "reference_ea375de0440f335dab0f4a6d",
+            "measured_entity_ref": null,
+            "measurement_ref": "reference_b6dc8ac79a082486bf26f410",
+            "measurement_source_ref": "source_8469b9696d94c72384deb030",
+            "observation_status": "observed",
+            "observed_relation": "point",
+            "physical_observation_ref": null,
+            "qualification": "reported_point",
+            "semantic_owner_ref": "reference_b5c327d6cc3be3ee9353b1c2",
+            "source_origin": "synthetic"
+          },
+          "wavelength_context": {
+            "approximate": false,
+            "canonical_unit": "nm",
+            "condition_ref": null,
+            "converted_origin": "synthetic",
+            "input_status": "context_only",
+            "input_unavailable_reasons": [],
+            "interval_ref": null,
+            "local_reuse_ref": null,
+            "measured_entity_ref": null,
+            "measurement_ref": "reference_86fe374b23ce6ab483c28feb",
+            "measurement_source_ref": "source_8469b9696d94c72384deb030",
+            "observation_status": "observed",
+            "observed_relation": "point",
+            "physical_observation_ref": null,
+            "qualification": "reported_point",
+            "semantic_owner_ref": "reference_293f0b9c82439796b5e6146b",
+            "source_origin": "synthetic"
+          }
+        },
+        "origin": "derived",
+        "sheet_ref": "source_89a2fadc687a799d75689aae",
+        "source_kind": "synthetic_fixture",
+        "source_origin": "synthetic",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 1.7999999999999998
+      },
+      "selection": {
+        "component": "net_rate",
+        "namespace": "literature_optical_cells",
+        "sheet_ref": "source_89a2fadc687a799d75689aae"
+      }
+    },
+    {
+      "row": {
+        "arrangement_kind": "single_preparation",
+        "arrangement_ref": "term_07a7c13861cd07e905068339",
+        "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+        "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+        "asserted_input_ref": null,
+        "asserted_output_ref": null,
+        "component": "contaminant_rate",
+        "condition_ref": "context_0f709482b93ccf87c20a0e22",
+        "conditional_on": [
+          "source_role_assignments"
+        ],
+        "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "endpoint_kind": "oxygen_consumption",
+        "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+        "evaluated_scope": "interpreted_source_endpoint",
+        "evidence_source_ref": "source_846e61ce050f040974024b77",
+        "experimental_system_ref": null,
+        "expression_host_ref": null,
+        "genotype_ref": null,
+        "input_measurement_refs": [
+          "reference_a7498e5dc63a3f87ed604449"
+        ],
+        "intended_variable_ref": null,
+        "interpretation_kind": "episode_source_interpretation",
+        "measured_entity_ref": null,
+        "operand_source_kind": "synthetic_fixture",
+        "organism_ref": "reference_ace98bece4a4e50ba5722023",
+        "origin": "synthetic",
+        "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 0.2
+      },
+      "selection": {
+        "component": "contaminant_rate",
+        "namespace": "literature_assay_cells",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+      }
+    },
+    {
+      "row": {
+        "applicability": "same_matrix_same_endpoint_supported",
+        "component": "recovery",
+        "conditional_on": [
+          "source_role_assignments"
+        ],
+        "control_kind": "reporter_standard",
+        "evaluation_scope": "source_calibration_recovery",
+        "evidence_source_ref": "source_c781f994d2a884bfceb79371",
+        "exact_value": {
+          "denominator": "50",
+          "numerator": "49"
+        },
+        "formula": "measured/nominal",
+        "input_measurement_keys": [
+          "literature_measurement_d2e2856cf6b8ae72497b07dc",
+          "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+        ],
+        "input_origins": [
+          "synthetic"
+        ],
+        "interpretation_scope_unavailable_reason": null,
+        "origin": "derived",
+        "qualifications": [
+          "source_quotes_do_not_prove_scientific_roles",
+          "shared_units_do_not_establish_comparison_linkage",
+          "no_target_measurement_supplied",
+          "replicate_independence_not_established",
+          "denominator_uncertainty_and_covariance_not_supplied",
+          "recovery_bias_and_inverse_share_original_operands",
+          "no_overall_reliability_grade",
+          "no_annotation_credit"
+        ],
+        "section": "calibration_validity",
+        "sheet_ref": "source_3ed93b5d685758b4f59ba453",
+        "source_kind": "synthetic_fixture",
+        "source_meanings": {
+          "analyte": null,
+          "blank_treatment": "no-reaction blank",
+          "endpoint": "optical reporter",
+          "expected_quantity_basis": "Nominal stock amount",
+          "experiment": "Illustrative standard",
+          "matrix": "buffer"
+        },
+        "spread_kind": "SD",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "fraction",
+        "value": 0.98
+      },
+      "selection": {
+        "component": "recovery",
+        "namespace": "literature_calibration_recovery_cells",
+        "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+      }
+    },
+    {
+      "row": {
+        "approximate": false,
+        "component": "active_site_concentration",
+        "conditional_on": [
+          "nonnegative_amounts_positive_molecular_weight",
+          "reported_operand_cartesian_enclosure"
+        ],
+        "evaluation_scope": "active_site_titration_amount",
+        "evidence_source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+        "exact_domain": {
+          "lower": {
+            "denominator": "1",
+            "numerator": "2000"
+          },
+          "lower_inclusive": true,
+          "upper": {
+            "denominator": "1",
+            "numerator": "2000"
+          },
+          "upper_inclusive": true
+        },
+        "experiment": {
+          "status": "selected",
+          "witness": {
+            "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+            "end": 96,
+            "quote": "assay titration",
+            "representation": "original",
+            "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+            "start": 81
+          }
+        },
+        "fraction_uncertainty": {
+          "input_state": "joint_source_error_covariance_not_selected",
+          "reason": "full_joint_covariance_propagation_not_implemented",
+          "source_spreads_are_not_full_joint_uncertainty": true,
+          "status": "unavailable",
+          "value": null
+        },
+        "intended_change": {
+          "status": "selected",
+          "witness": {
+            "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+            "end": 58,
+            "quote": "construct tagged",
+            "representation": "original",
+            "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+            "start": 42
+          }
+        },
+        "interpretations": {
+          "active_estimate_meaning": {
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 246,
+                  "quote": "Same preparation and assay",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 220
+                }
+              }
+            ],
+            "value": "titrated_active_sites"
+          },
+          "amount_linkage": {
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 246,
+                  "quote": "Same preparation and assay",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 220
+                }
+              }
+            ],
+            "value": "same_preparation_and_assay"
+          },
+          "molecular_basis": {
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 246,
+                  "quote": "Same preparation and assay",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 220
+                }
+              }
+            ],
+            "value": "per_monomer"
+          },
+          "normalization_stage": {
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 356,
+                  "quote": "Rate uses total monomer concentration",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 319
+                }
+              }
+            ],
+            "value": "total_monomer"
+          },
+          "site_stoichiometry": {
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 246,
+                  "quote": "Same preparation and assay",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 220
+                }
+              }
+            ],
+            "value": "one_site_per_monomer"
+          },
+          "titrant_concentration_basis": {
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 246,
+                  "quote": "Same preparation and assay",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 220
+                }
+              }
+            ],
+            "value": "nominal_reported"
+          },
+          "titrant_to_site_stoichiometry": {
+            "support": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 246,
+                  "quote": "Same preparation and assay",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 220
+                }
+              }
+            ],
+            "value": "reported_one_to_one"
+          }
+        },
+        "operands": [
+          {
+            "meanings": {
+              "assay": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 96,
+                  "quote": "assay titration",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 81
+                }
+              },
+              "condition": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 104,
+                  "quote": "55 C",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 100
+                }
+              },
+              "construct": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 58,
+                  "quote": "construct tagged",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 42
+                }
+              },
+              "endpoint": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 175,
+                  "quote": "active sites",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 163
+                }
+              },
+              "measurement_identity": {
+                "status": "not_selected",
+                "witness": null
+              },
+              "organism": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 40,
+                  "quote": "organism X",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 30
+                }
+              },
+              "preparation": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 79,
+                  "quote": "preparation stock A",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 60
+                }
+              },
+              "subject": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 24,
+                  "quote": "subject enzyme",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 10
+                }
+              }
+            },
+            "measurement_key": "active_site_measurement_a94df6a037eda9707e9cd980",
+            "physical_observation_key": null,
+            "qualification": {
+              "support": [
+                {
+                  "status": "selected",
+                  "witness": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 246,
+                    "quote": "Same preparation and assay",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 220
+                  }
+                }
+              ],
+              "value": "reported_point"
+            },
+            "reading": {
+              "bound": "point",
+              "number": {
+                "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                "end": 180,
+                "quote": "2000",
+                "representation": "original",
+                "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                "start": 176
+              },
+              "raw_unit": "nM"
+            },
+            "reported_uncertainty": {
+              "kind": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 371,
+                      "quote": "Regression SD",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 358
+                    }
+                  }
+                ],
+                "value": "regression_sd"
+              },
+              "reading": {
+                "bound": "point",
+                "number": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 185,
+                  "quote": "3",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 184
+                },
+                "raw_unit": "nM"
+              },
+              "sampling_basis": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 412,
+                      "quote": "repeated aliquots from same preparation",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 373
+                    }
+                  }
+                ],
+                "value": "same_preparation_aliquots"
+              },
+              "statement": {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 412,
+                  "quote": "Regression SD; repeated aliquots from same preparation",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 358
+                }
+              }
+            },
+            "role": "active_site_concentration"
+          }
+        ],
+        "origin": "synthetic",
+        "other_changes": [
+          {
+            "status": "selected",
+            "witness": {
+              "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+              "end": 439,
+              "quote": "Purification also changed",
+              "representation": "original",
+              "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+              "start": 414
+            }
+          }
+        ],
+        "rate_application_status": "not_applied_requires_same_rate_context",
+        "reported_domain": {
+          "basis": "reported_operand",
+          "conditioning": "nonnegative_amounts_positive_molecular_weight",
+          "failure": null,
+          "kind": "point",
+          "lower": 2000.0,
+          "lower_inclusive": true,
+          "projection": "exact",
+          "upper": 2000.0,
+          "upper_inclusive": true
+        },
+        "sheet_ref": "source_b4d2ae17ec3f3eea831d3657",
+        "status": "point",
+        "unavailable_reason": null,
+        "unit": "nM",
+        "value": 2000.0
+      },
+      "selection": {
+        "component": "active_site_concentration",
+        "namespace": "literature_active_site_cells",
+        "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+      }
+    },
+    {
+      "row": {
+        "arrangement_kind": "single_preparation",
+        "arrangement_ref": "term_07a7c13861cd07e905068339",
+        "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+        "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+        "asserted_input_ref": null,
+        "asserted_output_ref": null,
+        "component": "condition_test_rate",
+        "condition_ref": "context_0f709482b93ccf87c20a0e22",
+        "conditional_on": [
+          "source_role_assignments"
+        ],
+        "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "endpoint_kind": "oxygen_consumption",
+        "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+        "evaluated_scope": "interpreted_source_endpoint",
+        "evidence_source_ref": "source_846e61ce050f040974024b77",
+        "experimental_system_ref": null,
+        "expression_host_ref": null,
+        "genotype_ref": null,
+        "input_measurement_refs": [
+          "reference_fef60b6ad3f48ed6b23c3a10"
+        ],
+        "intended_variable_ref": null,
+        "interpretation_kind": "episode_source_interpretation",
+        "measured_entity_ref": null,
+        "operand_source_kind": "synthetic_fixture",
+        "organism_ref": "reference_ace98bece4a4e50ba5722023",
+        "origin": "synthetic",
+        "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 0.9
+      },
+      "selection": {
+        "component": "condition_test_rate",
+        "namespace": "literature_assay_cells",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+      }
+    },
+    {
+      "row": {
+        "arrangement_kind": "single_preparation",
+        "arrangement_ref": "term_07a7c13861cd07e905068339",
+        "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+        "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+        "asserted_input_ref": null,
+        "asserted_output_ref": null,
+        "component": "condition_reference_rate",
+        "condition_ref": "context_0f709482b93ccf87c20a0e22",
+        "conditional_on": [
+          "source_role_assignments"
+        ],
+        "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "endpoint_kind": "oxygen_consumption",
+        "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+        "evaluated_scope": "interpreted_source_endpoint",
+        "evidence_source_ref": "source_846e61ce050f040974024b77",
+        "experimental_system_ref": null,
+        "expression_host_ref": null,
+        "genotype_ref": null,
+        "input_measurement_refs": [
+          "reference_9cf29f42e468a5c7d3d5bb44"
+        ],
+        "intended_variable_ref": null,
+        "interpretation_kind": "episode_source_interpretation",
+        "measured_entity_ref": null,
+        "operand_source_kind": "synthetic_fixture",
+        "organism_ref": "reference_ace98bece4a4e50ba5722023",
+        "origin": "synthetic",
+        "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 1.0
+      },
+      "selection": {
+        "component": "condition_reference_rate",
+        "namespace": "literature_assay_cells",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+      }
+    }
+  ],
+  "input_source_ref": "source_b913e04b11a87d24d70fdab1",
+  "input_source_refs": [
+    "source_b913e04b11a87d24d70fdab1",
+    "source_89a2fadc687a799d75689aae",
+    "source_d7ffd40c4a73fdc64e3d3c8c",
+    "source_3ed93b5d685758b4f59ba453",
+    "source_b4d2ae17ec3f3eea831d3657",
+    "source_8469b9696d94c72384deb030",
+    "source_846e61ce050f040974024b77",
+    "source_c781f994d2a884bfceb79371",
+    "source_981ebbdb9fdd48fe6f7cf729"
+  ],
+  "selection": {
+    "assay": {
+      "arrangement": {
+        "value": "single_preparation",
+        "witnesses": [
+          {
+            "end": 210,
+            "quote": "single preparation",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 192
+          }
+        ]
+      },
+      "asserted_input": null,
+      "asserted_output": null,
+      "condition": {
+        "end": 80,
+        "quote": "condition buffer",
+        "representation": "original",
+        "source_ref": "source_b913e04b11a87d24d70fdab1",
+        "start": 64
+      },
+      "construct": {
+        "end": 47,
+        "quote": "construct C",
+        "representation": "original",
+        "source_ref": "source_b913e04b11a87d24d70fdab1",
+        "start": 36
+      },
+      "endpoint": {
+        "value": "oxygen_consumption",
+        "witnesses": [
+          {
+            "end": 100,
+            "quote": "Oxygen consumption",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 82
+          }
+        ]
+      },
+      "experimental_system": null,
+      "expression_host": null,
+      "genotype": null,
+      "intended_variable": null,
+      "measured_entity": {
+        "end": 109,
+        "quote": "NADH",
+        "representation": "original",
+        "source_ref": "source_b913e04b11a87d24d70fdab1",
+        "start": 105
+      },
+      "molecule": {
+        "end": 18,
+        "quote": "enzyme P",
+        "representation": "original",
+        "source_ref": "source_b913e04b11a87d24d70fdab1",
+        "start": 10
+      },
+      "organism": {
+        "end": 34,
+        "quote": "organism O",
+        "representation": "original",
+        "source_ref": "source_b913e04b11a87d24d70fdab1",
+        "start": 24
+      },
+      "preparation": {
+        "end": 62,
+        "quote": "preparation A",
+        "representation": "original",
+        "source_ref": "source_b913e04b11a87d24d70fdab1",
+        "start": 49
+      }
+    },
+    "correction_stages": {
+      "background": {
+        "value": "already_applied",
+        "witnesses": [
+          {
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "contaminant": {
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "molecule_amount": {
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "nuisance_condition": {
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      },
+      "recovery": {
+        "value": "not_applied",
+        "witnesses": [
+          {
+            "end": 517,
+            "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 332
+          }
+        ]
+      }
+    },
+    "covariance_source_ref": null,
+    "distinct_residual_variance": null,
+    "model_witnesses": [],
+    "observation_model": "none",
+    "operands": {
+      "E": {
+        "component": "active_site_concentration",
+        "namespace": "literature_active_site_cells",
+        "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+      },
+      "g": {
+        "component": "contaminant_rate",
+        "namespace": "literature_assay_cells",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+      },
+      "k": {
+        "component": "recovery",
+        "namespace": "literature_calibration_recovery_cells",
+        "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+      },
+      "q": {
+        "component": "net_rate",
+        "namespace": "literature_optical_cells",
+        "sheet_ref": "source_89a2fadc687a799d75689aae"
+      },
+      "u": {
+        "component": "condition_test_rate",
+        "namespace": "literature_assay_cells",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+      },
+      "v": {
+        "component": "condition_reference_rate",
+        "namespace": "literature_assay_cells",
+        "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+      }
+    },
+    "relationships": {
+      "E": {
+        "value": "same_assay_active_molecules",
+        "witnesses": [
+          {
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "g": {
+        "value": "additional_contaminant_contribution",
+        "witnesses": [
+          {
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "k": {
+        "value": "applicable_reporter_standard",
+        "witnesses": [
+          {
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "q": {
+        "value": "net_background_corrected_assay_endpoint",
+        "witnesses": [
+          {
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "u": {
+        "value": "test_nuisance_control_excludes_intended_change",
+        "witnesses": [
+          {
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      },
+      "v": {
+        "value": "reference_nuisance_control_excludes_intended_change",
+        "witnesses": [
+          {
+            "end": 330,
+            "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 243
+          }
+        ]
+      }
+    },
+    "residual_relationship": {
+      "value": "unknown",
+      "witnesses": []
+    },
+    "source_kind": "synthetic_fixture",
+    "source_ref": "source_b913e04b11a87d24d70fdab1",
+    "variance_status": "unknown"
+  },
+  "sheet": {
+    "algebraic_stage_identities": {},
+    "annotation_credit": null,
+    "axis": "A105",
+    "cells": {
+      "attributed_rate": {
+        "conditional_on": [],
+        "formula": "q-g",
+        "meaning": "Endpoint rate after the additional supported contaminant subtraction only.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "attribution",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 1.5999999999999999
+      },
+      "calibrated_measured_endpoint_per_selected_amount": {
+        "conditional_on": [],
+        "formula": "q/(k*E)",
+        "meaning": "Reporter-calibrated measured endpoint per selected molecular amount; not contaminant-isolated or nuisance-corrected.",
+        "origin": "derived",
+        "qualifications": [
+          "not_contaminant_isolated",
+          "not_nuisance_corrected"
+        ],
+        "section": "calibration_and_amount_normalization",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "per_min",
+        "value": 0.9183673469387754
+      },
+      "condition_reference_rate": {
+        "conditional_on": [],
+        "formula": "selected_source_v",
+        "meaning": "Selected source quantity; scientific eligibility for combination is separate.",
+        "origin": "synthetic",
+        "qualifications": [],
+        "section": "comparability",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 1.0
+      },
+      "condition_response": {
+        "conditional_on": [],
+        "formula": "u/v",
+        "meaning": "Applicable nuisance-condition test/reference response, excluding the intended change.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "comparability",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.9
+      },
+      "condition_test_rate": {
+        "conditional_on": [],
+        "formula": "selected_source_u",
+        "meaning": "Selected source quantity; scientific eligibility for combination is separate.",
+        "origin": "synthetic",
+        "qualifications": [],
+        "section": "comparability",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 0.9
+      },
+      "contaminant_rate": {
+        "conditional_on": [],
+        "formula": "selected_source_g",
+        "meaning": "Selected source quantity; scientific eligibility for combination is separate.",
+        "origin": "synthetic",
+        "qualifications": [],
+        "section": "measurement",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 0.2
+      },
+      "corrected_activity": {
+        "conditional_on": [],
+        "formula": "(q-g)*v/(k*E*u)",
+        "meaning": "Compiled source-endpoint activity under the selected calibration, amount, attribution and nuisance-control meanings.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "compiled_source_endpoint_effect",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "per_min",
+        "value": 0.9070294784580498
+      },
+      "effect_precision": {
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ],
+        "formula": "1/effect_variance",
+        "meaning": "Reciprocal conditional effect variance; dependent on the same source measurements.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "uncertainty",
+        "status": "unavailable",
+        "unavailable_reason": "primitive_covariance_not_supplied",
+        "unit": "min_squared",
+        "value": null
+      },
+      "effect_standard_uncertainty": {
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ],
+        "formula": "sqrt(effect_variance)",
+        "meaning": "Square root of conditional effect variance, not an inferred confidence interval.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "uncertainty",
+        "status": "unavailable",
+        "unavailable_reason": "primitive_covariance_not_supplied",
+        "unit": "per_min",
+        "value": null
+      },
+      "effect_variance": {
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ],
+        "formula": "J*covariance*J_transpose+distinct_residual_variance",
+        "meaning": "Conditional first-order propagated effect variance plus the selected distinct residual variance.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "uncertainty",
+        "status": "unavailable",
+        "unavailable_reason": "primitive_covariance_not_supplied",
+        "unit": "per_min_squared",
+        "value": null
+      },
+      "measured_endpoint_per_selected_amount": {
+        "conditional_on": [],
+        "formula": "q/E",
+        "meaning": "Measured endpoint rate per selected molecular amount; not contaminant-isolated or nuisance-corrected.",
+        "origin": "derived",
+        "qualifications": [
+          "not_contaminant_isolated",
+          "not_nuisance_corrected"
+        ],
+        "section": "amount_normalization",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "per_min",
+        "value": 0.8999999999999999
+      },
+      "net_rate": {
+        "conditional_on": [],
+        "formula": "selected_source_q",
+        "meaning": "Selected source quantity; scientific eligibility for combination is separate.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "measurement",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM/min",
+        "value": 1.7999999999999998
+      },
+      "protein_amount": {
+        "conditional_on": [],
+        "formula": "selected_source_E",
+        "meaning": "Selected source quantity; scientific eligibility for combination is separate.",
+        "origin": "synthetic",
+        "qualifications": [],
+        "section": "amount_normalization",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "uM",
+        "value": 2.0
+      },
+      "recovery": {
+        "conditional_on": [],
+        "formula": "selected_source_k",
+        "meaning": "Selected source quantity; scientific eligibility for combination is separate.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "validity",
+        "status": "populated",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.98
+      },
+      "source_presence_index": {
+        "conditional_on": [
+          "first_order_covariance_propagation",
+          "known_variance",
+          "known_normal_nonnegative_presence"
+        ],
+        "formula": "tanh(source_profile_log_ratio/2)",
+        "meaning": "Existing proposed bounded transform of that conditional profile; not annotation credit.",
+        "origin": "proposed",
+        "qualifications": [],
+        "section": "uncertainty",
+        "status": "unavailable",
+        "unavailable_reason": "primitive_covariance_not_supplied",
+        "unit": "dimensionless",
+        "value": null
+      },
+      "source_profile_log_ratio": {
+        "conditional_on": [
+          "first_order_covariance_propagation",
+          "known_variance",
+          "known_normal_nonnegative_presence"
+        ],
+        "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+        "meaning": "Existing conditional known-normal nonnegative-presence profile; not a probability of function.",
+        "origin": "derived",
+        "qualifications": [],
+        "section": "uncertainty",
+        "status": "unavailable",
+        "unavailable_reason": "primitive_covariance_not_supplied",
+        "unit": "dimensionless",
+        "value": null
+      }
+    },
+    "dependencies": {
+      "attributed_rate": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "calibrated_measured_endpoint_per_selected_amount": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        }
+      ],
+      "condition_reference_rate": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "condition_response": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "condition_test_rate": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "contaminant_rate": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "corrected_activity": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "effect_precision": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "effect_standard_uncertainty": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "effect_variance": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "measured_endpoint_per_selected_amount": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        }
+      ],
+      "net_rate": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        }
+      ],
+      "protein_amount": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        }
+      ],
+      "recovery": [
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        }
+      ],
+      "source_presence_index": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ],
+      "source_profile_log_ratio": [
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "role": "q",
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "role": "g",
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "identity_stage": null,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "role": "k",
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "role": "E",
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "role": "u",
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        },
+        {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "identity_stage": null,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "role": "v",
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          }
+        }
+      ]
+    },
+    "effective_operand_reasons": {
+      "E": null,
+      "g": null,
+      "k": null,
+      "q": null,
+      "u": null,
+      "v": null
+    },
+    "effective_values": {
+      "E": 2.0,
+      "g": 0.2,
+      "k": 0.98,
+      "q": 1.7999999999999998,
+      "u": 0.9,
+      "v": 1.0
+    },
+    "observation_model": "none",
+    "operand_eligibility_reasons": {
+      "E": null,
+      "g": null,
+      "k": null,
+      "q": null,
+      "u": null,
+      "v": null
+    },
+    "original_extraction": {
+      "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+      "assay": {
+        "arrangement": {
+          "kind": "source_interpretation",
+          "value": "single_preparation",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 210,
+              "quote": "single preparation",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 192
+            }
+          ]
+        },
+        "asserted_input": null,
+        "asserted_output": null,
+        "condition": {
+          "value": "condition buffer",
+          "witness": {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 80,
+            "quote": "condition buffer",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 64
+          }
+        },
+        "construct": {
+          "value": "construct C",
+          "witness": {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 47,
+            "quote": "construct C",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 36
+          }
+        },
+        "endpoint": {
+          "kind": "source_interpretation",
+          "value": "oxygen_consumption",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 100,
+              "quote": "Oxygen consumption",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 82
+            }
+          ]
+        },
+        "experimental_system": null,
+        "expression_host": null,
+        "genotype": null,
+        "intended_variable": null,
+        "measured_entity": {
+          "value": "NADH",
+          "witness": {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 109,
+            "quote": "NADH",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 105
+          }
+        },
+        "molecule": {
+          "value": "enzyme P",
+          "witness": {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 18,
+            "quote": "enzyme P",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 10
+          }
+        },
+        "organism": {
+          "value": "organism O",
+          "witness": {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 34,
+            "quote": "organism O",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 24
+          }
+        },
+        "preparation": {
+          "value": "preparation A",
+          "witness": {
+            "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+            "end": 62,
+            "quote": "preparation A",
+            "representation": "original",
+            "source_ref": "source_b913e04b11a87d24d70fdab1",
+            "start": 49
+          }
+        }
+      },
+      "correction_stages": {
+        "background": {
+          "kind": "source_interpretation",
+          "value": "already_applied",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 517,
+              "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 332
+            }
+          ]
+        },
+        "contaminant": {
+          "kind": "source_interpretation",
+          "value": "not_applied",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 517,
+              "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 332
+            }
+          ]
+        },
+        "molecule_amount": {
+          "kind": "source_interpretation",
+          "value": "not_applied",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 517,
+              "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 332
+            }
+          ]
+        },
+        "nuisance_condition": {
+          "kind": "source_interpretation",
+          "value": "not_applied",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 517,
+              "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 332
+            }
+          ]
+        },
+        "recovery": {
+          "kind": "source_interpretation",
+          "value": "not_applied",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 517,
+              "quote": "Net background subtraction already applied; contaminant correction not applied; reporter recovery not applied; molecule amount normalization not applied; nuisance correction not applied",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 332
+            }
+          ]
+        }
+      },
+      "covariance_source": null,
+      "distinct_residual_observation": null,
+      "model_witnesses": [],
+      "observation_model": "none",
+      "operands": {
+        "E": {
+          "canonical_physical_keys": [
+            "physical_source_span_1261a26e6fcff2fd5c415829"
+          ],
+          "component_key": "selected_source_component_68c7de34f66d5ef81b9be690",
+          "native_normalized": false,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_ab66335db669e63f71742954",
+          "recorded_dependency_keys": [],
+          "row": {
+            "approximate": false,
+            "component": "active_site_concentration",
+            "conditional_on": [
+              "nonnegative_amounts_positive_molecular_weight",
+              "reported_operand_cartesian_enclosure"
+            ],
+            "evaluation_scope": "active_site_titration_amount",
+            "evidence_source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+            "exact_domain": {
+              "lower": {
+                "denominator": "1",
+                "numerator": "2000"
+              },
+              "lower_inclusive": true,
+              "upper": {
+                "denominator": "1",
+                "numerator": "2000"
+              },
+              "upper_inclusive": true
+            },
+            "experiment": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                "end": 96,
+                "quote": "assay titration",
+                "representation": "original",
+                "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                "start": 81
+              }
+            },
+            "fraction_uncertainty": {
+              "input_state": "joint_source_error_covariance_not_selected",
+              "reason": "full_joint_covariance_propagation_not_implemented",
+              "source_spreads_are_not_full_joint_uncertainty": true,
+              "status": "unavailable",
+              "value": null
+            },
+            "intended_change": {
+              "status": "selected",
+              "witness": {
+                "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                "end": 58,
+                "quote": "construct tagged",
+                "representation": "original",
+                "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                "start": 42
+              }
+            },
+            "interpretations": {
+              "active_estimate_meaning": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 246,
+                      "quote": "Same preparation and assay",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 220
+                    }
+                  }
+                ],
+                "value": "titrated_active_sites"
+              },
+              "amount_linkage": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 246,
+                      "quote": "Same preparation and assay",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 220
+                    }
+                  }
+                ],
+                "value": "same_preparation_and_assay"
+              },
+              "molecular_basis": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 246,
+                      "quote": "Same preparation and assay",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 220
+                    }
+                  }
+                ],
+                "value": "per_monomer"
+              },
+              "normalization_stage": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 356,
+                      "quote": "Rate uses total monomer concentration",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 319
+                    }
+                  }
+                ],
+                "value": "total_monomer"
+              },
+              "site_stoichiometry": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 246,
+                      "quote": "Same preparation and assay",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 220
+                    }
+                  }
+                ],
+                "value": "one_site_per_monomer"
+              },
+              "titrant_concentration_basis": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 246,
+                      "quote": "Same preparation and assay",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 220
+                    }
+                  }
+                ],
+                "value": "nominal_reported"
+              },
+              "titrant_to_site_stoichiometry": {
+                "support": [
+                  {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 246,
+                      "quote": "Same preparation and assay",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 220
+                    }
+                  }
+                ],
+                "value": "reported_one_to_one"
+              }
+            },
+            "operands": [
+              {
+                "meanings": {
+                  "assay": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 96,
+                      "quote": "assay titration",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 81
+                    }
+                  },
+                  "condition": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 104,
+                      "quote": "55 C",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 100
+                    }
+                  },
+                  "construct": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 58,
+                      "quote": "construct tagged",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 42
+                    }
+                  },
+                  "endpoint": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 175,
+                      "quote": "active sites",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 163
+                    }
+                  },
+                  "measurement_identity": {
+                    "status": "not_selected",
+                    "witness": null
+                  },
+                  "organism": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 40,
+                      "quote": "organism X",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 30
+                    }
+                  },
+                  "preparation": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 79,
+                      "quote": "preparation stock A",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 60
+                    }
+                  },
+                  "subject": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 24,
+                      "quote": "subject enzyme",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 10
+                    }
+                  }
+                },
+                "measurement_key": "active_site_measurement_a94df6a037eda9707e9cd980",
+                "physical_observation_key": null,
+                "qualification": {
+                  "support": [
+                    {
+                      "status": "selected",
+                      "witness": {
+                        "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                        "end": 246,
+                        "quote": "Same preparation and assay",
+                        "representation": "original",
+                        "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                        "start": 220
+                      }
+                    }
+                  ],
+                  "value": "reported_point"
+                },
+                "reading": {
+                  "bound": "point",
+                  "number": {
+                    "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                    "end": 180,
+                    "quote": "2000",
+                    "representation": "original",
+                    "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                    "start": 176
+                  },
+                  "raw_unit": "nM"
+                },
+                "reported_uncertainty": {
+                  "kind": {
+                    "support": [
+                      {
+                        "status": "selected",
+                        "witness": {
+                          "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                          "end": 371,
+                          "quote": "Regression SD",
+                          "representation": "original",
+                          "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                          "start": 358
+                        }
+                      }
+                    ],
+                    "value": "regression_sd"
+                  },
+                  "reading": {
+                    "bound": "point",
+                    "number": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 185,
+                      "quote": "3",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 184
+                    },
+                    "raw_unit": "nM"
+                  },
+                  "sampling_basis": {
+                    "support": [
+                      {
+                        "status": "selected",
+                        "witness": {
+                          "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                          "end": 412,
+                          "quote": "repeated aliquots from same preparation",
+                          "representation": "original",
+                          "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                          "start": 373
+                        }
+                      }
+                    ],
+                    "value": "same_preparation_aliquots"
+                  },
+                  "statement": {
+                    "status": "selected",
+                    "witness": {
+                      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                      "end": 412,
+                      "quote": "Regression SD; repeated aliquots from same preparation",
+                      "representation": "original",
+                      "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                      "start": 358
+                    }
+                  }
+                },
+                "role": "active_site_concentration"
+              }
+            ],
+            "origin": "synthetic",
+            "other_changes": [
+              {
+                "status": "selected",
+                "witness": {
+                  "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+                  "end": 439,
+                  "quote": "Purification also changed",
+                  "representation": "original",
+                  "source_ref": "source_981ebbdb9fdd48fe6f7cf729",
+                  "start": 414
+                }
+              }
+            ],
+            "rate_application_status": "not_applied_requires_same_rate_context",
+            "reported_domain": {
+              "basis": "reported_operand",
+              "conditioning": "nonnegative_amounts_positive_molecular_weight",
+              "failure": null,
+              "kind": "point",
+              "lower": 2000.0,
+              "lower_inclusive": true,
+              "projection": "exact",
+              "upper": 2000.0,
+              "upper_inclusive": true
+            },
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657",
+            "status": "point",
+            "unavailable_reason": null,
+            "unit": "nM",
+            "value": 2000.0
+          },
+          "selection": {
+            "component": "active_site_concentration",
+            "namespace": "literature_active_site_cells",
+            "sheet_ref": "source_b4d2ae17ec3f3eea831d3657"
+          },
+          "unavailable_reason": null,
+          "unit": "uM",
+          "value": 2.0
+        },
+        "g": {
+          "canonical_physical_keys": [
+            "physical_source_span_f125cf0624b5da575f25fa75"
+          ],
+          "component_key": "selected_source_component_4a3b289560d7f1e70e714bc3",
+          "native_normalized": false,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_fca134a596c1e7090365cf13",
+          "recorded_dependency_keys": [],
+          "row": {
+            "arrangement_kind": "single_preparation",
+            "arrangement_ref": "term_07a7c13861cd07e905068339",
+            "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+            "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+            "asserted_input_ref": null,
+            "asserted_output_ref": null,
+            "component": "contaminant_rate",
+            "condition_ref": "context_0f709482b93ccf87c20a0e22",
+            "conditional_on": [
+              "source_role_assignments"
+            ],
+            "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+            "covariance_origin": null,
+            "covariance_source_ref": null,
+            "endpoint_kind": "oxygen_consumption",
+            "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+            "evaluated_scope": "interpreted_source_endpoint",
+            "evidence_source_ref": "source_846e61ce050f040974024b77",
+            "experimental_system_ref": null,
+            "expression_host_ref": null,
+            "genotype_ref": null,
+            "input_measurement_refs": [
+              "reference_a7498e5dc63a3f87ed604449"
+            ],
+            "intended_variable_ref": null,
+            "interpretation_kind": "episode_source_interpretation",
+            "measured_entity_ref": null,
+            "operand_source_kind": "synthetic_fixture",
+            "organism_ref": "reference_ace98bece4a4e50ba5722023",
+            "origin": "synthetic",
+            "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM/min",
+            "value": 0.2
+          },
+          "selection": {
+            "component": "contaminant_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          },
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 0.2
+        },
+        "k": {
+          "canonical_physical_keys": [],
+          "component_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "native_normalized": false,
+          "physical_identity_status": "cross_component_identity_unknown",
+          "quantity_key": "selected_source_component_523e6e6e0ed44a57ba5494dc",
+          "recorded_dependency_keys": [
+            "literature_measurement_d2e2856cf6b8ae72497b07dc",
+            "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+          ],
+          "row": {
+            "applicability": "same_matrix_same_endpoint_supported",
+            "component": "recovery",
+            "conditional_on": [
+              "source_role_assignments"
+            ],
+            "control_kind": "reporter_standard",
+            "evaluation_scope": "source_calibration_recovery",
+            "evidence_source_ref": "source_c781f994d2a884bfceb79371",
+            "exact_value": {
+              "denominator": "50",
+              "numerator": "49"
+            },
+            "formula": "measured/nominal",
+            "input_measurement_keys": [
+              "literature_measurement_d2e2856cf6b8ae72497b07dc",
+              "literature_measurement_5c117b06e2dbb9727b6cfbb3"
+            ],
+            "input_origins": [
+              "synthetic"
+            ],
+            "interpretation_scope_unavailable_reason": null,
+            "origin": "derived",
+            "qualifications": [
+              "source_quotes_do_not_prove_scientific_roles",
+              "shared_units_do_not_establish_comparison_linkage",
+              "no_target_measurement_supplied",
+              "replicate_independence_not_established",
+              "denominator_uncertainty_and_covariance_not_supplied",
+              "recovery_bias_and_inverse_share_original_operands",
+              "no_overall_reliability_grade",
+              "no_annotation_credit"
+            ],
+            "section": "calibration_validity",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453",
+            "source_kind": "synthetic_fixture",
+            "source_meanings": {
+              "analyte": null,
+              "blank_treatment": "no-reaction blank",
+              "endpoint": "optical reporter",
+              "expected_quantity_basis": "Nominal stock amount",
+              "experiment": "Illustrative standard",
+              "matrix": "buffer"
+            },
+            "spread_kind": "SD",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 0.98
+          },
+          "selection": {
+            "component": "recovery",
+            "namespace": "literature_calibration_recovery_cells",
+            "sheet_ref": "source_3ed93b5d685758b4f59ba453"
+          },
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.98
+        },
+        "q": {
+          "canonical_physical_keys": [
+            "physical_source_span_16d7b40eacb9cc41ca9c230a",
+            "physical_source_span_3dd605ab177e961ab29e64f2",
+            "physical_source_span_43e241613fe56ff33b63f858",
+            "physical_source_span_99142b69916b22ace78264cf"
+          ],
+          "component_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "native_normalized": false,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "selected_source_component_843df91ab1a0e3403aedc26d",
+          "recorded_dependency_keys": [],
+          "row": {
+            "component": "net_rate",
+            "conditional_on": [
+              "source_optical_relationship_assignments"
+            ],
+            "context": {
+              "condition": {
+                "ref": null,
+                "unavailable_reason": "source_context_unreported"
+              },
+              "construct": {
+                "ref": null,
+                "unavailable_reason": "source_context_unreported"
+              },
+              "measured_entity": {
+                "ref": null,
+                "unavailable_reason": "source_context_unreported"
+              },
+              "molecule": {
+                "ref": null,
+                "unavailable_reason": "source_context_unreported"
+              },
+              "preparation": {
+                "ref": null,
+                "unavailable_reason": "source_context_unreported"
+              }
+            },
+            "covariance": {
+              "binding_ref": null,
+              "origin": null,
+              "source_ref": null,
+              "status": "unknown",
+              "unavailable_reason": "covariance_unreported"
+            },
+            "endpoint_assignment": "conditional_on_selected_extinction_relation",
+            "endpoint_kind": "NADH_depletion",
+            "evaluation_scope": "source_nadh_depletion_endpoint",
+            "evidence_source_ref": "source_8469b9696d94c72384deb030",
+            "formula_code": "nadh_extinction_net_rate",
+            "interpretations": {
+              "blank_role": {
+                "value": "matched_no_reaction_background",
+                "witness_refs": [
+                  "reference_53cd06cf26137ad4044c81dc"
+                ]
+              },
+              "matched_window": {
+                "value": "same",
+                "witness_refs": [
+                  "reference_3f8e677fce4eccacd8cbd9c4"
+                ]
+              },
+              "rate_window": {
+                "value": "source_supported_rate_interval",
+                "witness_refs": [
+                  "reference_4d6f9515e885481e8b7acc0b"
+                ]
+              },
+              "relation": {
+                "value": "applicable_extinction_relation",
+                "witness_refs": [
+                  "reference_8d4772c6d39383fe89f5efd7"
+                ]
+              },
+              "same_endpoint": {
+                "value": "same",
+                "witness_refs": [
+                  "reference_54fd6b6a5a7c22e78bff9dcc"
+                ]
+              },
+              "signal_kind": {
+                "value": "absorbance_slope",
+                "witness_refs": [
+                  "reference_be845fea847bcf52d7d9d692"
+                ]
+              }
+            },
+            "operands": {
+              "blank_slope": {
+                "approximate": false,
+                "canonical_unit": "absorbance/min",
+                "condition_ref": null,
+                "converted_origin": "synthetic",
+                "input_status": "available",
+                "input_unavailable_reasons": [],
+                "interval_ref": null,
+                "local_reuse_ref": "reference_1ad479971ed722a88067cc61",
+                "measured_entity_ref": null,
+                "measurement_ref": "reference_dcf1ebcc9f4d2865037f5dec",
+                "measurement_source_ref": "source_8469b9696d94c72384deb030",
+                "observation_status": "observed",
+                "observed_relation": "point",
+                "physical_observation_ref": null,
+                "qualification": "reported_point",
+                "semantic_owner_ref": "reference_7ffd6dd3bc7cbea2bcb55df5",
+                "source_origin": "synthetic"
+              },
+              "epsilon": {
+                "approximate": false,
+                "canonical_unit": "mM_inverse_cm_inverse",
+                "condition_ref": null,
+                "converted_origin": "derived",
+                "input_status": "available",
+                "input_unavailable_reasons": [],
+                "interval_ref": null,
+                "local_reuse_ref": "reference_5cf93e030586dc6da27c0ccf",
+                "measured_entity_ref": null,
+                "measurement_ref": "reference_36e8dcd3cc5cc59c71da6462",
+                "measurement_source_ref": "source_8469b9696d94c72384deb030",
+                "observation_status": "observed",
+                "observed_relation": "point",
+                "physical_observation_ref": null,
+                "qualification": "reported_point",
+                "semantic_owner_ref": "reference_03993d1d28c8f0236e2e5213",
+                "source_origin": "synthetic"
+              },
+              "path_length": {
+                "approximate": false,
+                "canonical_unit": "cm",
+                "condition_ref": null,
+                "converted_origin": "derived",
+                "input_status": "available",
+                "input_unavailable_reasons": [],
+                "interval_ref": null,
+                "local_reuse_ref": "reference_6b2c86bfce5850ad8ab89c83",
+                "measured_entity_ref": null,
+                "measurement_ref": "reference_3d61722e3fb8c35f75d25dd0",
+                "measurement_source_ref": "source_8469b9696d94c72384deb030",
+                "observation_status": "observed",
+                "observed_relation": "point",
+                "physical_observation_ref": null,
+                "qualification": "reported_point",
+                "semantic_owner_ref": "reference_cd0e66797e5aa7edc139e5fd",
+                "source_origin": "synthetic"
+              },
+              "sample_slope": {
+                "approximate": false,
+                "canonical_unit": "absorbance/min",
+                "condition_ref": null,
+                "converted_origin": "synthetic",
+                "input_status": "available",
+                "input_unavailable_reasons": [],
+                "interval_ref": null,
+                "local_reuse_ref": "reference_ea375de0440f335dab0f4a6d",
+                "measured_entity_ref": null,
+                "measurement_ref": "reference_b6dc8ac79a082486bf26f410",
+                "measurement_source_ref": "source_8469b9696d94c72384deb030",
+                "observation_status": "observed",
+                "observed_relation": "point",
+                "physical_observation_ref": null,
+                "qualification": "reported_point",
+                "semantic_owner_ref": "reference_b5c327d6cc3be3ee9353b1c2",
+                "source_origin": "synthetic"
+              },
+              "wavelength_context": {
+                "approximate": false,
+                "canonical_unit": "nm",
+                "condition_ref": null,
+                "converted_origin": "synthetic",
+                "input_status": "context_only",
+                "input_unavailable_reasons": [],
+                "interval_ref": null,
+                "local_reuse_ref": null,
+                "measured_entity_ref": null,
+                "measurement_ref": "reference_86fe374b23ce6ab483c28feb",
+                "measurement_source_ref": "source_8469b9696d94c72384deb030",
+                "observation_status": "observed",
+                "observed_relation": "point",
+                "physical_observation_ref": null,
+                "qualification": "reported_point",
+                "semantic_owner_ref": "reference_293f0b9c82439796b5e6146b",
+                "source_origin": "synthetic"
+              }
+            },
+            "origin": "derived",
+            "sheet_ref": "source_89a2fadc687a799d75689aae",
+            "source_kind": "synthetic_fixture",
+            "source_origin": "synthetic",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM/min",
+            "value": 1.7999999999999998
+          },
+          "selection": {
+            "component": "net_rate",
+            "namespace": "literature_optical_cells",
+            "sheet_ref": "source_89a2fadc687a799d75689aae"
+          },
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 1.7999999999999998
+        },
+        "u": {
+          "canonical_physical_keys": [
+            "physical_source_span_1207db3cdf48a1a023bb2677"
+          ],
+          "component_key": "selected_source_component_a8aca6ac52e0d479ee38300a",
+          "native_normalized": false,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_b2d1ae2af88afd2c2fd68963",
+          "recorded_dependency_keys": [],
+          "row": {
+            "arrangement_kind": "single_preparation",
+            "arrangement_ref": "term_07a7c13861cd07e905068339",
+            "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+            "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+            "asserted_input_ref": null,
+            "asserted_output_ref": null,
+            "component": "condition_test_rate",
+            "condition_ref": "context_0f709482b93ccf87c20a0e22",
+            "conditional_on": [
+              "source_role_assignments"
+            ],
+            "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+            "covariance_origin": null,
+            "covariance_source_ref": null,
+            "endpoint_kind": "oxygen_consumption",
+            "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+            "evaluated_scope": "interpreted_source_endpoint",
+            "evidence_source_ref": "source_846e61ce050f040974024b77",
+            "experimental_system_ref": null,
+            "expression_host_ref": null,
+            "genotype_ref": null,
+            "input_measurement_refs": [
+              "reference_fef60b6ad3f48ed6b23c3a10"
+            ],
+            "intended_variable_ref": null,
+            "interpretation_kind": "episode_source_interpretation",
+            "measured_entity_ref": null,
+            "operand_source_kind": "synthetic_fixture",
+            "organism_ref": "reference_ace98bece4a4e50ba5722023",
+            "origin": "synthetic",
+            "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM/min",
+            "value": 0.9
+          },
+          "selection": {
+            "component": "condition_test_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          },
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 0.9
+        },
+        "v": {
+          "canonical_physical_keys": [
+            "physical_source_span_b40365e8ffd580e5ee3ebe50"
+          ],
+          "component_key": "selected_source_component_4b68ba0acf7984c6cb1f231b",
+          "native_normalized": false,
+          "physical_identity_status": "partly_canonical",
+          "quantity_key": "compilation_quantity_6d6e67c60472a7b005592fd3",
+          "recorded_dependency_keys": [],
+          "row": {
+            "arrangement_kind": "single_preparation",
+            "arrangement_ref": "term_07a7c13861cd07e905068339",
+            "assay_ref": "reference_ab61d79036e2b06b93cb8cfb",
+            "assayed_subject_ref": "reference_e78d62a99addc58d363f87c8",
+            "asserted_input_ref": null,
+            "asserted_output_ref": null,
+            "component": "condition_reference_rate",
+            "condition_ref": "context_0f709482b93ccf87c20a0e22",
+            "conditional_on": [
+              "source_role_assignments"
+            ],
+            "construct_ref": "reference_e51a85ce0cec9b3ab4bc1f62",
+            "covariance_origin": null,
+            "covariance_source_ref": null,
+            "endpoint_kind": "oxygen_consumption",
+            "endpoint_ref": "term_1e416512c46515f031a2f9b8",
+            "evaluated_scope": "interpreted_source_endpoint",
+            "evidence_source_ref": "source_846e61ce050f040974024b77",
+            "experimental_system_ref": null,
+            "expression_host_ref": null,
+            "genotype_ref": null,
+            "input_measurement_refs": [
+              "reference_9cf29f42e468a5c7d3d5bb44"
+            ],
+            "intended_variable_ref": null,
+            "interpretation_kind": "episode_source_interpretation",
+            "measured_entity_ref": null,
+            "operand_source_kind": "synthetic_fixture",
+            "organism_ref": "reference_ace98bece4a4e50ba5722023",
+            "origin": "synthetic",
+            "preparation_ref": "reference_5aa1872da150a3fb62b5c8b7",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM/min",
+            "value": 1.0
+          },
+          "selection": {
+            "component": "condition_reference_rate",
+            "namespace": "literature_assay_cells",
+            "sheet_ref": "source_d7ffd40c4a73fdc64e3d3c8c"
+          },
+          "unavailable_reason": null,
+          "unit": "uM/min",
+          "value": 1.0
+        }
+      },
+      "relationships": {
+        "E": {
+          "kind": "source_interpretation",
+          "value": "same_assay_active_molecules",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 330,
+              "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 243
+            }
+          ]
+        },
+        "g": {
+          "kind": "source_interpretation",
+          "value": "additional_contaminant_contribution",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 330,
+              "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 243
+            }
+          ]
+        },
+        "k": {
+          "kind": "source_interpretation",
+          "value": "applicable_reporter_standard",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 330,
+              "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 243
+            }
+          ]
+        },
+        "q": {
+          "kind": "source_interpretation",
+          "value": "net_background_corrected_assay_endpoint",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 330,
+              "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 243
+            }
+          ]
+        },
+        "u": {
+          "kind": "source_interpretation",
+          "value": "test_nuisance_control_excludes_intended_change",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 330,
+              "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 243
+            }
+          ]
+        },
+        "v": {
+          "kind": "source_interpretation",
+          "value": "reference_nuisance_control_excludes_intended_change",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+              "end": 330,
+              "quote": "The same molecule, construct, preparation and assay are linked to all selected controls",
+              "representation": "original",
+              "source_ref": "source_b913e04b11a87d24d70fdab1",
+              "start": 243
+            }
+          ]
+        }
+      },
+      "residual_relationship": {
+        "kind": "source_interpretation",
+        "value": "unknown",
+        "witnesses": []
+      },
+      "source_kind": "synthetic_fixture",
+      "source_ref": "source_b913e04b11a87d24d70fdab1",
+      "source_refs": [
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "variance_status": "unknown",
+      "version": "a105_compiled_assay_inputs_v1"
+    },
+    "remaining_implementation_limits": [
+      "no_cross_assay_grand_score",
+      "bounded_operand_combination_unimplemented",
+      "partial_normalization_uncertainty_unimplemented",
+      "covariance_for_bypassed_correction_stages_unimplemented",
+      "no_target_correspondence_or_annotation_credit"
+    ],
+    "scope": "compiled_source_endpoint",
+    "universal_reliability_grade": null,
+    "variance_status": "unknown",
+    "version": "a105_compiled_assay_sheet_v1"
+  },
+  "source_metadata": {
+    "source_3ed93b5d685758b4f59ba453": {
+      "accession": null,
+      "artifact_ref": "artifact_46dad0fa21f88db1716493d85039d01b2ee52766e01f38990782115eaf424d9f",
+      "id": "source_3ed93b5d685758b4f59ba453",
+      "origin": "tool",
+      "parent_source_refs": [
+        "source_c781f994d2a884bfceb79371",
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "provider": "literature.a105.calibration_recovery",
+      "record_type": "source",
+      "request_ref": "artifact_e07da1484e9c71feb5f8f855f49e8f57e701c0d147fdf3bc347dd1e89e7b6e53",
+      "retrieved_at": null,
+      "text_ref": "artifact_46dad0fa21f88db1716493d85039d01b2ee52766e01f38990782115eaf424d9f",
+      "uri": null,
+      "version": "literature_calibration_recovery_record_v1"
+    },
+    "source_8469b9696d94c72384deb030": {
+      "accession": null,
+      "artifact_ref": "artifact_8e2200002d7b7e7afc2f09298cf842ce34394c0981382dea9fa1733793c34daa",
+      "id": "source_8469b9696d94c72384deb030",
+      "origin": "caller",
+      "parent_source_refs": [
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "provider": "compiled_synthetic_optical",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": null,
+      "text_ref": "artifact_8e2200002d7b7e7afc2f09298cf842ce34394c0981382dea9fa1733793c34daa",
+      "uri": null,
+      "version": null
+    },
+    "source_846e61ce050f040974024b77": {
+      "accession": null,
+      "artifact_ref": "artifact_34322d64ef3511818300ef2cfe2e495755c1c728ed2f44b2e3e14f1e24139511",
+      "id": "source_846e61ce050f040974024b77",
+      "origin": "caller",
+      "parent_source_refs": [
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "provider": "compiled_synthetic_controls",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": null,
+      "text_ref": "artifact_34322d64ef3511818300ef2cfe2e495755c1c728ed2f44b2e3e14f1e24139511",
+      "uri": null,
+      "version": null
+    },
+    "source_89a2fadc687a799d75689aae": {
+      "accession": null,
+      "artifact_ref": "artifact_2a9ff42dc6e2e0a8f025067eb72845260add11ea8eba87fcf0e2710498a3b91e",
+      "id": "source_89a2fadc687a799d75689aae",
+      "origin": "tool",
+      "parent_source_refs": [
+        "source_8469b9696d94c72384deb030",
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "provider": "literature.a105.optical_population",
+      "record_type": "source",
+      "request_ref": "artifact_f67df72f64aa191c940d918e1118672c1ef387805f2d2898f93b263885797b26",
+      "retrieved_at": null,
+      "text_ref": "artifact_2a9ff42dc6e2e0a8f025067eb72845260add11ea8eba87fcf0e2710498a3b91e",
+      "uri": null,
+      "version": "literature_optical_population_record_v1"
+    },
+    "source_981ebbdb9fdd48fe6f7cf729": {
+      "accession": null,
+      "artifact_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+      "id": "source_981ebbdb9fdd48fe6f7cf729",
+      "origin": "caller",
+      "parent_source_refs": [
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "provider": "compiled_synthetic_active",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": null,
+      "text_ref": "artifact_35500b64629a84004773e91af621d98d5c72209ea455eceea61f6a54df57e253",
+      "uri": null,
+      "version": null
+    },
+    "source_b4d2ae17ec3f3eea831d3657": {
+      "accession": null,
+      "artifact_ref": "artifact_8a43ee9eb97a7a9b9444b64dc9abc56efa691628d36bbef1a57153b180fc23f5",
+      "id": "source_b4d2ae17ec3f3eea831d3657",
+      "origin": "tool",
+      "parent_source_refs": [
+        "source_981ebbdb9fdd48fe6f7cf729",
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "provider": "literature.a105.active_site_population",
+      "record_type": "source",
+      "request_ref": "artifact_a191b80e27c4881bffa84e8b1c36188135ef97c4dda7829d5bf2d0f9f851a520",
+      "retrieved_at": null,
+      "text_ref": "artifact_8a43ee9eb97a7a9b9444b64dc9abc56efa691628d36bbef1a57153b180fc23f5",
+      "uri": null,
+      "version": "literature_active_site_record_v1"
+    },
+    "source_b913e04b11a87d24d70fdab1": {
+      "accession": null,
+      "artifact_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+      "id": "source_b913e04b11a87d24d70fdab1",
+      "origin": "caller",
+      "provider": "compiled_synthetic_context",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": null,
+      "text_ref": "artifact_cd97f2bfc74442150686a89eb76c9e556d26e1e57eaef97e76bc1dca1010b2a1",
+      "uri": null,
+      "version": null
+    },
+    "source_c781f994d2a884bfceb79371": {
+      "accession": null,
+      "artifact_ref": "artifact_bb3825dea446238c82408a790c8fd840156fb60e0986701dc905f093da610696",
+      "id": "source_c781f994d2a884bfceb79371",
+      "origin": "caller",
+      "parent_source_refs": [
+        "source_b913e04b11a87d24d70fdab1"
+      ],
+      "provider": "compiled_synthetic_recovery",
+      "record_type": "source",
+      "request_ref": null,
+      "retrieved_at": null,
+      "text_ref": "artifact_bb3825dea446238c82408a790c8fd840156fb60e0986701dc905f093da610696",
+      "uri": null,
+      "version": null
+    },
+    "source_d7ffd40c4a73fdc64e3d3c8c": {
+      "accession": null,
+      "artifact_ref": "artifact_146ffb182cb3a9379a002c3ce63544b5c0ca4952b3fafc232bd61ebba7fc2b7f",
+      "id": "source_d7ffd40c4a73fdc64e3d3c8c",
+      "origin": "tool",
+      "parent_source_refs": [
+        "source_846e61ce050f040974024b77"
+      ],
+      "provider": "literature.a105.assay_population",
+      "record_type": "source",
+      "request_ref": "artifact_7b68ce2610d2678d3353768b981089bc4ca4a36358b13dbfa6baa5bd8f162f03",
+      "retrieved_at": null,
+      "text_ref": "artifact_146ffb182cb3a9379a002c3ce63544b5c0ca4952b3fafc232bd61ebba7fc2b7f",
+      "uri": null,
+      "version": "literature_assay_population_record_v2"
+    }
+  },
+  "version": "literature_compiled_assay_record_v1"
+}

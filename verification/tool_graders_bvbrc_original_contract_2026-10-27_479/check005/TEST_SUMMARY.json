@@ -1,0 +1,97 @@
+{
+  "attempt": "check005",
+  "counts": [
+    {
+      "file": "tests.test_bvbrc_appservice_custody",
+      "outcome": "passed",
+      "count": 83
+    },
+    {
+      "file": "tests.test_bvbrc_appservice_compact_custody",
+      "outcome": "passed",
+      "count": 26
+    },
+    {
+      "file": "tests.test_bvbrc_appservice_compact_custody",
+      "outcome": "failed",
+      "count": 4
+    },
+    {
+      "file": "tests.test_bvbrc_appservice_host",
+      "outcome": "passed",
+      "count": 8
+    },
+    {
+      "file": "tests.test_bvbrc_appservice_inputs",
+      "outcome": "passed",
+      "count": 27
+    },
+    {
+      "file": "tests.test_bvbrc_appservice_native_monitor",
+      "outcome": "passed",
+      "count": 64
+    },
+    {
+      "file": "tests.test_bvbrc_appservice_monitor_workflow",
+      "outcome": "passed",
+      "count": 1
+    }
+  ],
+  "failures": [
+    {
+      "name": "test_compact_durable_commission_and_inheritance_keep_original_identity[None]",
+      "classname": "tests.test_bvbrc_appservice_compact_custody",
+      "text": "source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity\n    spec = coordinator.select(parent={\"episode_id\": saved.parent.episode_id,\nsource_snapshot/gene_annotation_episode/episode_commissions.py:116: in select\n    _conflict(handle)\nsource_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict\n    raise CommissionError(\"identity_conflict\", affected_refs=references)\nE   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict"
+    },
+    {
+      "name": "test_compact_durable_commission_and_inheritance_keep_original_identity[declaration]",
+      "classname": "tests.test_bvbrc_appservice_compact_custody",
+      "text": "source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity\n    spec = coordinator.select(parent={\"episode_id\": saved.parent.episode_id,\nsource_snapshot/gene_annotation_episode/episode_commissions.py:116: in select\n    _conflict(handle)\nsource_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict\n    raise CommissionError(\"identity_conflict\", affected_refs=references)\nE   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict"
+    },
+    {
+      "name": "test_compact_durable_commission_and_inheritance_keep_original_identity[selection]",
+      "classname": "tests.test_bvbrc_appservice_compact_custody",
+      "text": "source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity\n    spec = coordinator.select(parent={\"episode_id\": saved.parent.episode_id,\nsource_snapshot/gene_annotation_episode/episode_commissions.py:116: in select\n    _conflict(handle)\nsource_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict\n    raise CommissionError(\"identity_conflict\", affected_refs=references)\nE   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict"
+    },
+    {
+      "name": "test_compact_durable_commission_and_inheritance_keep_original_identity[inheritance]",
+      "classname": "tests.test_bvbrc_appservice_compact_custody",
+      "text": "source_snapshot/tests/test_bvbrc_appservice_compact_custody.py:286: in test_compact_durable_commission_and_inheritance_keep_original_identity\n    spec = coordinator.select(parent={\"episode_id\": saved.parent.episode_id,\nsource_snapshot/gene_annotation_episode/episode_commissions.py:116: in select\n    _conflict(handle)\nsource_snapshot/gene_annotation_episode/episode_commissions.py:46: in _conflict\n    raise CommissionError(\"identity_conflict\", affected_refs=references)\nE   gene_annotation_episode.episode_commissions.CommissionError: identity_conflict"
+    }
+  ],
+  "current_input_drift": {
+    "source": {
+      "compared_file_count": 2317,
+      "changed_paths": [
+        "gene_annotation_episode/atac_differential_result_receipts.py",
+        "gene_annotation_episode/communication.py",
+        "gene_annotation_episode/episode_services.py",
+        "gene_annotation_episode/literature_episodes.py",
+        "gene_annotation_episode/literature_experimental_prompt.py",
+        "gene_annotation_episode/literature_partner_source_fields.py",
+        "gene_annotation_episode/literature_rate_observation_calculations.py",
+        "gene_annotation_episode/literature_rate_observation_inputs.py",
+        "gene_annotation_episode/native_atac_differential_preparation.py",
+        "tests/test_atac_differential_completed_worker_authority.py",
+        "tests/test_atac_differential_execution_integration.py",
+        "tests/test_bvbrc_appservice_compact_custody.py",
+        "tests/test_bvbrc_compact_family_returns.py",
+        "tests/test_bvbrc_homology_returns.py",
+        "tests/test_bvbrc_phylogeny_returns.py",
+        "tests/test_literature_rate_observations_166.py"
+      ]
+    },
+    "dependency": {
+      "compared_file_count": 5313,
+      "changed_paths": []
+    },
+    "standard_library": {
+      "compared_file_count": 643,
+      "changed_paths": []
+    },
+    "binary": {
+      "compared_file_count": 1,
+      "changed_paths": []
+    }
+  }
+}

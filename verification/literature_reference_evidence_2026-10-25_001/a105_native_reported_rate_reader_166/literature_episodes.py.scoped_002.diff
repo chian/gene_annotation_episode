@@ -1,0 +1,130 @@
+--- verification/literature_reference_evidence_2026-10-25_001/a105_native_reported_rate_reader_166/baseline/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -73,6 +73,11 @@
+     result.append({"name": "literature.rate.populate",
+         "description": "Populate source-preparation rate cells from a selected already acquired CSV/TSV summary. Preserve actual subjects, conditions, units, uncertainty and missingness. This finite table route does not read arbitrary prose/figures or calculate target transfer/annotation credit. Select a statistical model only when supported; otherwise use none and unknown dependence.",
+         "input_schema": rate_population_schema()})
++    from .literature_rate_observation_inputs import rate_observation_population_schema
++    from .literature_rate_observation_prompt import RATE_OBSERVATION_OPERATION_DESCRIPTION
++    result.append({"name": "literature.rate.observations.populate",
++        "description": RATE_OBSERVATION_OPERATION_DESCRIPTION,
++        "input_schema": rate_observation_population_schema()})
+     from .literature_rate_replicate_storage import rate_replicate_population_schema
+     from .literature_rate_replicate_prompt import RATE_REPLICATE_OPERATION_DESCRIPTION
+     result.append({"name": "literature.rate.replicates.populate",
+@@ -316,6 +321,8 @@
+                          "literature_rate_native_inputs.py",
+                          "literature_native_rate_operand_information.py",
+                          "literature_rate_calculations.py", "literature_rate_storage.py",
++                         "literature_rate_observation_inputs.py", "literature_rate_observation_calculations.py",
++                         "literature_rate_observation_storage.py", "literature_rate_observation_prompt.py", "spreadsheet_tools.py",
+                          "literature_rate_replicate_inputs.py", "literature_rate_replicate_calculations.py",
+                          "literature_rate_replicate_storage.py", "literature_rate_replicate_prompt.py",
+                          "episode_services.py",
+@@ -456,6 +463,9 @@
+         schema = deepcopy(schema)
+         if self.rate_population:
+             from .literature_rate_storage import COMPONENTS
++            from .literature_rate_observation_storage import COMPONENTS as OBSERVATION_COMPONENTS
++            schema["properties"]["requested_rate_observation_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(OBSERVATION_COMPONENTS)}}
+             from .literature_rate_replicate_storage import COMPONENTS as REPLICATE_COMPONENTS
+             schema["properties"]["requested_rate_replicate_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(REPLICATE_COMPONENTS)}}
+@@ -805,7 +815,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -835,10 +845,11 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
++                        "literature.rate.observations.populate": self.services.literature_rate_observation_repository,
+                         "literature.rate.replicates.populate": self.services.literature_rate_replicate_repository,
+                         "literature.rate.source.populate": self.services.literature_rate_repository,
+                         "literature.quantity.populate": self.services.literature_quantity_repository,
+@@ -1136,6 +1147,7 @@
+         return {"literature_rate_source_meaning_display": {"cells": list(unique.values()), "records": records}}
+ 
+     def _rate_fact_sources(self):
++        from .literature_rate_observation_storage import rate_observation_cells_schema
+         from .literature_rate_replicate_storage import rate_replicate_cells_schema
+         from .literature_rate_meaning_delivery import rate_source_meaning_cells_schema
+         from .literature_rate_domains import rate_source_domain_cells_schema
+@@ -1160,7 +1172,10 @@
+         from .literature_kinetic_model_storage import kinetic_model_cells_schema
+         from .literature_binding_interaction_model_storage import binding_interaction_model_cells_schema
+         from .literature_binding_interaction_storage import binding_interaction_cells_schema
+-        result = {"literature_rate_replicate_cells": {"type": "array", "meaning":
++        result = {"literature_rate_observation_cells": {"type": "array", "meaning":
++            "Exactly requested source-native reported-entry descriptive means, SD/CV and selected functional contrasts. Preserve witnessed panel/subject/group/observation labels, unknown preparation grouping, actual entry/representation/point counts, shared and conflicting source-labelled identities, missing/censored roster and actual input origins. Native arithmetic uses only the selected same-source reporting convention; it establishes neither experimental comparability nor effect isolation. Physical unit conversion, method/blank/calibration/product attribution, preparation n, SE, corrected activity and annotation credit remain unknown.",
++            "report_schema": rate_observation_cells_schema()},
++            "literature_rate_replicate_cells": {"type": "array", "meaning":
+             "Exactly requested raw-rate measurement components with actual source subject/experiment, selected versus observed groups, per-group sampling bases, actual measurement and unit counts, missing/censored/conflicting identities and selected dependence. Unit means receive equal weight after within-unit averaging. Descriptive SD and conditional SE are separate; grouping proves no biological independence. These dependent numerical views supply no assay specificity, error rate, function probability, target transfer or annotation credit.",
+             "report_schema": rate_replicate_cells_schema()},
+             "literature_rate_cells": {"type": "array", "meaning":
+@@ -1278,6 +1293,7 @@
+         return result
+ 
+     def _population_routes(self):
++        from .literature_rate_observation_storage import PROVIDER as OBSERVATION_PROVIDER
+         from .literature_rate_replicate_storage import PROVIDER as REPLICATE_PROVIDER
+         from .literature_rate_storage import COMPONENTS, PROVIDER
+         from .literature_quantity_storage import COMPONENTS as QUANTITIES, PROVIDER as QUANTITY_PROVIDER
+@@ -1302,7 +1318,9 @@
+         from .literature_kinetic_model_storage import COMPONENTS as KINETIC_MODEL_COMPONENTS, PROVIDER as KINETIC_MODEL_PROVIDER
+         from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+         from .literature_binding_interaction_model_storage import COMPONENTS as INTERACTION_MODEL_COMPONENTS, PROVIDER as INTERACTION_MODEL_PROVIDER
+-        result = (("literature_rate_replicate_cells", "requested_rate_replicate_components", REPLICATE_PROVIDER,
++        result = (("literature_rate_observation_cells", "requested_rate_observation_components", OBSERVATION_PROVIDER,
++                 (), self.services.literature_rate_observation_repository),
++                ("literature_rate_replicate_cells", "requested_rate_replicate_components", REPLICATE_PROVIDER,
+                  (), self.services.literature_rate_replicate_repository),
+                 ("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
+@@ -1505,6 +1523,10 @@
+             if cells:
+                 repository().receive_cells(context, cells, operation_key)
+         references = []
++        from .literature_rate_observation_storage import NAMESPACE as OBSERVATION_NAMESPACE
++        observation_cells = [row for name, node in schema.get("properties", {}).items()
++            if node.get("x-source") == OBSERVATION_NAMESPACE for row in form[name]]
++        references.extend(self.services.literature_rate_observation_repository().cell_record_refs(observation_cells))
+         from .literature_rate_replicate_storage import NAMESPACE as REPLICATE_NAMESPACE
+         replicate_cells = [row for name, node in schema.get("properties", {}).items()
+             if node.get("x-source") == REPLICATE_NAMESPACE for row in form[name]]
+@@ -1590,7 +1612,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells"} else None)
++                        [] if namespace in {"literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                     if namespace == "literature_rate_replicate_cells" and rows:
+@@ -1604,6 +1626,15 @@
+                             components=requested or [])
+                         if canonical(rows) != canonical(expected):
+                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
++                    if namespace == "literature_rate_observation_cells":
++                        from .domain import canonical
++                        owned = repository().available_sheet_refs(replace(context,
++                            received_record_refs=tuple(permitted)))
++                        selected = list(dict.fromkeys([*(row["sheet_ref"] for row in rows), *owned]))
++                        expected = repository().fact_cells(replace(context,
++                            received_record_refs=tuple(permitted)), selected, components=requested or [])
++                        if canonical(rows) != canonical(expected):
++                            raise ContractError("literature_rate_observation_requested_subset_mismatch")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+         native_adapter = self.services.literature_context_repository().native_observations()

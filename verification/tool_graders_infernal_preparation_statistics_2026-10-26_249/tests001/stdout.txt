@@ -1,0 +1,26 @@
+.............................F.....................                      [100%]
+=================================== FAILURES ===================================
+_______ test_native_calibration_fit_residual_preserves_header_precision ________
+
+    def test_native_calibration_fit_residual_preserves_header_precision():
+        sheet = calibration_sheet(**{'-L':.01})
+        result = by_key(calculate_infernal_statistics(sheet,parameters={}))
+        source = next(r for r in sheet['native_rows'] if r['kind']=='calibration' and r['identity']==dict(algorithm='cm_local_cyk',source='model_header',name='fixture246'))
+        row = result[source['record_key']]
+        expected = -2.53576-math.log(10)/.44855
+        assert row['components']['mu_extrap_calculated']['value'] == pytest.approx(expected,abs=1e-12)
+        assert row['components']['mu_extrap_residual']['value'] == pytest.approx(expected+7.66916,abs=1e-12)
+        assert row['components']['actual_calibration_nt']['value'] == 10000
+        assert row['components']['total_calibration_chunk_count']['value'] == 1
+        assert outcome(row,'calibration_fit_consistent') == 'pass'
+        assert outcome(row,'calibration_length_consistent') == 'pass'
+        # A source-header rounding interval, not invented tolerance, explains why
+        # the point residual can exceed half the printed mu_extrap last place.
+>       assert abs(row['components']['mu_extrap_residual']['value']) > .000005
+E       assert 3.292845735636263e-06 > 5e-06
+E        +  where 3.292845735636263e-06 = abs(3.292845735636263e-06)
+
+../../../tests/test_infernal_preparation_calculations.py:60: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_infernal_preparation_calculations.py::test_native_calibration_fit_residual_preserves_header_precision
+1 failed, 50 passed in 5.48s

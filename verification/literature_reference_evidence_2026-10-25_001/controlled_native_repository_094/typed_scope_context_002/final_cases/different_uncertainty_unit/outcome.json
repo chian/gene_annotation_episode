@@ -1,0 +1,5315 @@
+{
+  "status": "completed",
+  "operation_ref": "operation_fd52dcb309ae8ad48a8bd2fa",
+  "record_refs": [
+    "source_411963e90926f0789df482e6",
+    "reference_087e17d5fe83729f5c5e5587",
+    "reference_7d12c638789f98dd7cb5b606",
+    "reference_7021a4b62807bc86cffc69ec",
+    "reference_d7c5c4228673d7a9822ebe88",
+    "reference_ae784a3d894b2dc1a95d8e4a",
+    "reference_0de920ff9f6ded42f692deb7",
+    "reference_b96919eb09259ae15ea5b863",
+    "reference_52e9b86a59cce804678eac92",
+    "reference_3551bb86e1ee1cd9320f271a",
+    "reference_2be932a3777b94fed927f0e0"
+  ],
+  "changed_record_refs": [
+    "reference_087e17d5fe83729f5c5e5587",
+    "reference_7d12c638789f98dd7cb5b606",
+    "reference_7021a4b62807bc86cffc69ec",
+    "reference_d7c5c4228673d7a9822ebe88",
+    "reference_ae784a3d894b2dc1a95d8e4a",
+    "reference_0de920ff9f6ded42f692deb7",
+    "reference_b96919eb09259ae15ea5b863",
+    "reference_52e9b86a59cce804678eac92",
+    "reference_3551bb86e1ee1cd9320f271a",
+    "reference_2be932a3777b94fed927f0e0",
+    "source_411963e90926f0789df482e6"
+  ],
+  "result": {
+    "sheet_ref": "source_411963e90926f0789df482e6",
+    "projection_status": "ready",
+    "component_keys": [
+      "raw:protein_condition1:primary",
+      "raw:empty_condition1:primary",
+      "raw:protein_condition0:primary",
+      "raw:empty_condition0:primary",
+      "local:condition0-real:difference",
+      "local:condition0-real:variance",
+      "local:condition0-real:standard_uncertainty",
+      "final:protein_condition1_response",
+      "final:empty_condition1_response",
+      "final:protein_condition0_response",
+      "final:empty_condition0_response",
+      "final:condition1_controlled_response",
+      "final:condition0_controlled_response",
+      "final:controlled_response_difference",
+      "final:contrast_variance",
+      "final:contrast_standard_uncertainty",
+      "final:contrast_precision",
+      "final:source_profile_log_ratio",
+      "final:source_signed_index"
+    ],
+    "cells": [
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "raw:protein_condition1:primary",
+        "kind": "native_raw",
+        "component": "protein_condition1_response",
+        "reading": {
+          "role": "protein_condition1",
+          "reading_key": null
+        },
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.01,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": {
+          "value": 10.0,
+          "threshold": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "nmol/min",
+          "status": "point",
+          "origin": "synthetic",
+          "digitization_interval": null,
+          "source_observation_id": "controlled_source_token_98cd44b91bc1d5d2662cf8b2"
+        },
+        "reported_uncertainty": {
+          "statistic": "ci",
+          "magnitude": null,
+          "interval": [
+            0.121135791,
+            0.136246802
+          ],
+          "confidence_level": null,
+          "count": null,
+          "repetition_basis": "unknown",
+          "estimate_basis": "unknown"
+        },
+        "reported_uncertainty_unit": "uM/min",
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "raw:empty_condition1:primary",
+        "kind": "native_raw",
+        "component": "empty_condition1_response",
+        "reading": {
+          "role": "empty_condition1",
+          "reading_key": null
+        },
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.004,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": {
+          "value": 4.0,
+          "threshold": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "nmol/min",
+          "status": "point",
+          "origin": "synthetic",
+          "digitization_interval": null,
+          "source_observation_id": "controlled_source_token_3dcd1cc67141875c07c54d27"
+        },
+        "reported_uncertainty": {
+          "statistic": "unreported",
+          "magnitude": null,
+          "interval": null,
+          "confidence_level": null,
+          "count": null,
+          "repetition_basis": "unknown",
+          "estimate_basis": "unknown"
+        },
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "empty_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "raw:protein_condition0:primary",
+        "kind": "native_raw",
+        "component": "protein_condition0_response",
+        "reading": {
+          "role": "protein_condition0",
+          "reading_key": null
+        },
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.008,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": {
+          "value": 8.0,
+          "threshold": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "nmol/min",
+          "status": "point",
+          "origin": "synthetic",
+          "digitization_interval": null,
+          "source_observation_id": "controlled_source_token_d6932995225af002a8db7de3"
+        },
+        "reported_uncertainty": {
+          "statistic": "unreported",
+          "magnitude": null,
+          "interval": null,
+          "confidence_level": null,
+          "count": null,
+          "repetition_basis": "unknown",
+          "estimate_basis": "unknown"
+        },
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea"
+          ],
+          "condition_ids": [
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "raw:empty_condition0:primary",
+        "kind": "native_raw",
+        "component": "empty_condition0_response",
+        "reading": {
+          "role": "empty_condition0",
+          "reading_key": null
+        },
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.00405,
+          "lower": 0.00395,
+          "upper": 0.00415,
+          "relation": "interval",
+          "approximate": true,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "approximate_source_reading",
+            "conditional_digitization",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "conditional_digitization",
+          "bound_state": {
+            "lower": "available",
+            "upper": "available"
+          }
+        },
+        "native_reading": {
+          "value": 4.05,
+          "threshold": null,
+          "relation": "interval",
+          "approximate": true,
+          "unit": "nmol/min",
+          "status": "point",
+          "origin": "synthetic",
+          "digitization_interval": {
+            "lower": 3.95,
+            "upper": 4.15
+          },
+          "source_observation_id": "controlled_response_graph_a2a49040311603ed96491b40950275003af8726346e3a560c89a840946f912a0"
+        },
+        "reported_uncertainty": {
+          "statistic": "unreported",
+          "magnitude": null,
+          "interval": null,
+          "confidence_level": null,
+          "count": null,
+          "repetition_basis": "unknown",
+          "estimate_basis": "unknown"
+        },
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "empty_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "local:condition0-real:difference",
+        "kind": "local_difference",
+        "component": "local_difference",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": "condition0-real",
+        "cell": {
+          "value": 0.00395,
+          "lower": 0.00385,
+          "upper": 0.00405,
+          "relation": "interval",
+          "approximate": true,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "condition_control_difference",
+          "conditional_on": [
+            "approximate_source_reading",
+            "conditional_digitization",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "conditional_digitization",
+          "bound_state": {
+            "lower": "available",
+            "upper": "available"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_23be55338d5bdb6071218e72",
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            },
+            {
+              "reading": {
+                "role": "empty_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "local:condition0-real:variance",
+        "kind": "local_variance",
+        "component": "local_variance",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": "condition0-real",
+        "cell": {
+          "value": 4.5e-07,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": true,
+          "unit": "(umol/min)^2",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "local_joint_covariance",
+          "conditional_on": [
+            "approximate_source_reading",
+            "conditional_digitization",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_23be55338d5bdb6071218e72",
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "known",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [],
+          "uncertainty_readings": [],
+          "covariance_index": 0,
+          "covariance_owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "source_variable_indices": [
+            1,
+            0
+          ],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            },
+            {
+              "reading": {
+                "role": "empty_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            }
+          ],
+          "full_source_covariance_required": true
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "local:condition0-real:standard_uncertainty",
+        "kind": "local_standard_uncertainty",
+        "component": "local_standard_uncertainty",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": "condition0-real",
+        "cell": {
+          "value": 0.0006708203932499369,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": true,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "local_square_root_variance",
+          "conditional_on": [
+            "approximate_source_reading",
+            "conditional_digitization",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_23be55338d5bdb6071218e72",
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "known",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [],
+          "uncertainty_readings": [],
+          "covariance_index": 0,
+          "covariance_owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "source_variable_indices": [
+            1,
+            0
+          ],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            },
+            {
+              "reading": {
+                "role": "empty_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            }
+          ],
+          "full_source_covariance_required": true
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:protein_condition1_response",
+        "kind": "final",
+        "component": "protein_condition1_response",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.01,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:empty_condition1_response",
+        "kind": "final",
+        "component": "empty_condition1_response",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.004,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "empty_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:protein_condition0_response",
+        "kind": "final",
+        "component": "protein_condition0_response",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.008,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea"
+          ],
+          "condition_ids": [
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:empty_condition0_response",
+        "kind": "final",
+        "component": "empty_condition0_response",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.00405,
+          "lower": 0.00395,
+          "upper": 0.00415,
+          "relation": "interval",
+          "approximate": true,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "source_response",
+          "conditional_on": [
+            "approximate_source_reading",
+            "conditional_digitization",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "conditional_digitization",
+          "bound_state": {
+            "lower": "available",
+            "upper": "available"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": null,
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "empty_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:condition1_controlled_response",
+        "kind": "final",
+        "component": "condition1_controlled_response",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.006,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "condition_control_difference",
+          "conditional_on": [
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164",
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": "shared_reference_assumption",
+            "condition0": null
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            },
+            {
+              "reading": {
+                "role": "empty_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:condition0_controlled_response",
+        "kind": "final",
+        "component": "condition0_controlled_response",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.00395,
+          "lower": 0.00385,
+          "upper": 0.00405,
+          "relation": "interval",
+          "approximate": true,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "condition_control_difference",
+          "conditional_on": [
+            "approximate_source_reading",
+            "conditional_digitization",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "conditional_digitization",
+          "bound_state": {
+            "lower": "available",
+            "upper": "available"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_23be55338d5bdb6071218e72",
+            "controlled_condition_e0e35f0cc8298064726b76a7"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": null,
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": null,
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            },
+            {
+              "reading": {
+                "role": "empty_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:controlled_response_difference",
+        "kind": "final",
+        "component": "controlled_response_difference",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.002,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "four_arm_condition_difference",
+          "conditional_on": [
+            "canceled_graph_reading",
+            "canceled_representation_difference",
+            "owner_cancellation",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164",
+            "controlled_condition_e0e35f0cc8298064726b76a7",
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": "shared_reference_assumption",
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": "same_reference_with_stated_invariance",
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "unknown",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": null,
+          "covariance_owner_ids": [],
+          "source_variable_indices": [],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            },
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": false
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:contrast_variance",
+        "kind": "final",
+        "component": "contrast_variance",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 3e-07,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "(umol/min)^2",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "linear_joint_covariance",
+          "conditional_on": [
+            "canceled_graph_reading",
+            "canceled_representation_difference",
+            "owner_cancellation",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164",
+            "controlled_condition_e0e35f0cc8298064726b76a7",
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": "shared_reference_assumption",
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": "same_reference_with_stated_invariance",
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "known",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [],
+          "uncertainty_readings": [],
+          "covariance_index": 0,
+          "covariance_owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "source_variable_indices": [
+            1,
+            2
+          ],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            },
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            }
+          ],
+          "full_source_covariance_required": true
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:contrast_standard_uncertainty",
+        "kind": "final",
+        "component": "contrast_standard_uncertainty",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.0005477225575051661,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "umol/min",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "square_root_variance",
+          "conditional_on": [
+            "canceled_graph_reading",
+            "canceled_representation_difference",
+            "owner_cancellation",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164",
+            "controlled_condition_e0e35f0cc8298064726b76a7",
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": "shared_reference_assumption",
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": "same_reference_with_stated_invariance",
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "known",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [],
+          "uncertainty_readings": [],
+          "covariance_index": 0,
+          "covariance_owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "source_variable_indices": [
+            1,
+            2
+          ],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            },
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            }
+          ],
+          "full_source_covariance_required": true
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:contrast_precision",
+        "kind": "final",
+        "component": "contrast_precision",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 3333333.3333333335,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "(umol/min)^-2",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "inverse_variance",
+          "conditional_on": [
+            "canceled_graph_reading",
+            "canceled_representation_difference",
+            "owner_cancellation",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164",
+            "controlled_condition_e0e35f0cc8298064726b76a7",
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": "shared_reference_assumption",
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": "same_reference_with_stated_invariance",
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "known",
+          "model_kind": "none",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [],
+          "uncertainty_readings": [],
+          "covariance_index": 0,
+          "covariance_owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "source_variable_indices": [
+            1,
+            2
+          ],
+          "model_readings": [],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            },
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval_presence"
+              ]
+            }
+          ],
+          "full_source_covariance_required": true
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:source_profile_log_ratio",
+        "kind": "final",
+        "component": "source_profile_log_ratio",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 6.666666666666667,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "dimensionless",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "signed_known_normal_profile",
+          "conditional_on": [
+            "canceled_graph_reading",
+            "canceled_representation_difference",
+            "known_normal_source_means",
+            "owner_cancellation",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164",
+            "controlled_condition_e0e35f0cc8298064726b76a7",
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": "shared_reference_assumption",
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": "same_reference_with_stated_invariance",
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "known",
+          "model_kind": "known_joint_normal_source_means",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": 0,
+          "covariance_owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "source_variable_indices": [
+            1,
+            2
+          ],
+          "model_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            },
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": true
+        },
+        "joint_scope_context": null
+      },
+      {
+        "version": "literature_controlled_response_component_fact_v3",
+        "sheet_ref": "source_411963e90926f0789df482e6",
+        "component_key": "final:source_signed_index",
+        "kind": "final",
+        "component": "source_signed_index",
+        "reading": null,
+        "reading_assignment": null,
+        "pair_key": null,
+        "cell": {
+          "value": 0.9974579674738373,
+          "lower": null,
+          "upper": null,
+          "relation": "eq",
+          "approximate": false,
+          "unit": "dimensionless",
+          "status": "available",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "formula_code": "tanh_half_signed_profile",
+          "conditional_on": [
+            "canceled_graph_reading",
+            "canceled_representation_difference",
+            "known_normal_source_means",
+            "owner_cancellation",
+            "shared_reference_assumption",
+            "synthetic_fixture"
+          ],
+          "bound_kind": "none",
+          "bound_state": {
+            "lower": "not_applicable",
+            "upper": "not_applicable"
+          }
+        },
+        "native_reading": null,
+        "reported_uncertainty": null,
+        "reported_uncertainty_unit": null,
+        "numeric_locations": [
+          {
+            "end": 1325,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1315
+          },
+          {
+            "end": 1337,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 1327
+          },
+          {
+            "end": 523,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 519
+          },
+          {
+            "end": 532,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 531
+          },
+          {
+            "end": 541,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 540
+          },
+          {
+            "end": 550,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 549
+          },
+          {
+            "end": 571,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 570
+          },
+          {
+            "end": 582,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 579
+          },
+          {
+            "end": 594,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 590
+          },
+          {
+            "end": 603,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 602
+          },
+          {
+            "end": 624,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 623
+          },
+          {
+            "end": 636,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 632
+          },
+          {
+            "end": 648,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 644
+          },
+          {
+            "end": 657,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 656
+          },
+          {
+            "end": 678,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 677
+          },
+          {
+            "end": 687,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 686
+          },
+          {
+            "end": 691,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 689
+          },
+          {
+            "end": 696,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 695
+          },
+          {
+            "end": 707,
+            "kind": "utf8_span",
+            "source_ref": "source_ae38224b9782ec94c6596907",
+            "start": 704
+          },
+          {
+            "end": 718,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 717
+          },
+          {
+            "end": 782,
+            "kind": "utf8_span",
+            "source_ref": "source_6b2fd8766e6ed5bf2bcbf1fc",
+            "start": 781
+          },
+          {
+            "kind": "image_region",
+            "region": [
+              20,
+              10,
+              30,
+              205
+            ],
+            "source_ref": "source_536ed1068195efc7ae36f776"
+          }
+        ],
+        "context": {
+          "endpoint_id": "controlled_endpoint_f98167ae9de309db007d8265",
+          "normalization_id": "controlled_normalization_f3ef4e6807ab41e25b03fdea",
+          "subject_construct_ids": [
+            "controlled_subject_construct_337f9f7398e4b337d35050ea",
+            "controlled_subject_construct_fa1702f043cfceb64239c9c5"
+          ],
+          "condition_ids": [
+            "controlled_condition_62ffdac4334bb89f5e34d164",
+            "controlled_condition_e0e35f0cc8298064726b76a7",
+            "controlled_condition_23be55338d5bdb6071218e72"
+          ],
+          "owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_dd575d47b3f5689b5826f4ea",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "owner_state": "known",
+          "endpoint_state": "known",
+          "normalization_state": "known",
+          "subject_construct_state": "known",
+          "condition_state": "known",
+          "control_application": "shared_reference_assumption",
+          "condition_control_applications": {
+            "condition1": "shared_reference_assumption",
+            "condition0": "shared_reference_assumption"
+          },
+          "control_reuse": "same_reference_with_stated_invariance",
+          "protein_arrangements": [
+            "protein_present",
+            "protein_free_control"
+          ],
+          "variance_status": "known",
+          "model_kind": "known_joint_normal_source_means",
+          "representation_state": "single",
+          "source_kinds": [
+            "synthetic_fixture"
+          ],
+          "original_origins": [
+            "synthetic"
+          ],
+          "measurement_methods": [
+            "text",
+            "graph"
+          ]
+        },
+        "dependencies": {
+          "scientific_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            },
+            {
+              "role": "empty_condition0",
+              "reading_key": null
+            }
+          ],
+          "numeric_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "uncertainty_readings": [],
+          "covariance_index": 0,
+          "covariance_owner_ids": [
+            "controlled_physical_observation_c82e1dd48737d327c2bf2a00",
+            "controlled_physical_observation_b0bdaa6bc18834a741debae8"
+          ],
+          "source_variable_indices": [
+            1,
+            2
+          ],
+          "model_readings": [
+            {
+              "role": "protein_condition1",
+              "reading_key": null
+            },
+            {
+              "role": "protein_condition0",
+              "reading_key": null
+            }
+          ],
+          "unresolved_readings": [],
+          "numeric_fields": [
+            {
+              "reading": {
+                "role": "protein_condition1",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            },
+            {
+              "reading": {
+                "role": "protein_condition0",
+                "reading_key": null
+              },
+              "fields": [
+                "value",
+                "threshold",
+                "relation",
+                "approximate",
+                "unit",
+                "status",
+                "origin",
+                "digitization_interval"
+              ]
+            }
+          ],
+          "full_source_covariance_required": true
+        },
+        "joint_scope_context": null
+      }
+    ],
+    "payload_sha256": "d0146f4e458efa623c5fd5e278c5a7a2035d1a341e2d35ca4fb6660c5e95ef72"
+  },
+  "feedback": null
+}

@@ -1,0 +1,20 @@
+..F...............                                                       [100%]
+=================================== FAILURES ===================================
+______ test_progress_public_ports_observe_and_read_original_declared_log _______
+source_snapshot/gene_annotation_episode/progress_records.py:86: in validate_resource_observation
+    raise ValueError('invalid retained log bytes')
+E   ValueError: invalid retained log bytes
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:331: in test_progress_public_ports_observe_and_read_original_declared_log
+    observation = reader.observe_target(target, operation_key='selected-progress-observation')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_progress.py:1227: in observe_target
+    return validate_resource_observation(observation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/progress_records.py:88: in validate_resource_observation
+    raise ContractError('invalid_resource_progress_observation') from error
+E   gene_annotation_episode.domain.ContractError: invalid_resource_progress_observation
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_progress_public_ports_observe_and_read_original_declared_log
+1 failed, 17 passed in 59.73s

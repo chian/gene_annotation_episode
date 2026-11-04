@@ -1,0 +1,2574 @@
+{
+  "record_type": "additive_shared_grader_operation_link_update",
+  "recorded_at": "2026-10-29T06:02:11.146650+00:00",
+  "previous_census": {
+    "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/OPERATION_LINK_UPDATE_017.json",
+    "sha256": "71009258b4fc9c237de517c7c0a74fdb21f7950c5b24e4091ab0a31ddc4bd5c3",
+    "size_bytes": 100494
+  },
+  "root_review": {
+    "path": "verification/tool_graders_blast_vdb_workflow_2026-10-28_673/ROOT_EXTRACTION_REVIEW_006.json",
+    "sha256": "8ec140fda05d827860e74df917d8d5af42ef745701d3f5d4842dda714230935f",
+    "size_bytes": 16359
+  },
+  "accepted_proposal": {
+    "path": "verification/tool_graders_blast_vdb_workflow_2026-10-28_673/EXTRACTION_OPERATION_LINK_PROPOSAL_001.md",
+    "sha256": "9dde4be4c7360dcbad7d89c97d9d0dcb39c78e48ee9cac1052d6242cf7338e38",
+    "size_bytes": 7749
+  },
+  "added_groups": 0,
+  "updated_existing_groups": 1,
+  "combined_rows": [
+    {
+      "key": "blast_pairwise",
+      "label": "BLAST pairwise correspondence",
+      "operation_names": [
+        "bvbrc.homology.pairwise_correspondence",
+        "native.blastn",
+        "native.blastp",
+        "native.blastx",
+        "native.tblastn",
+        "native.tblastx"
+      ],
+      "linked_name_count": 6,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "blast_sequence_database",
+      "label": "BLAST sequence database identification",
+      "operation_names": [
+        "api.blast.fetch",
+        "bvbrc.homology.database_identification",
+        "native.blastn",
+        "native.blastp",
+        "native.blastx",
+        "native.deltablast",
+        "native.psiblast",
+        "native.tblastn",
+        "native.tblastx",
+        "public.blast.collect",
+        "public.blast.search"
+      ],
+      "linked_name_count": 11,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "blast_profile",
+      "label": "BLAST profile database measurements",
+      "operation_names": [
+        "native.deltablast",
+        "native.rpsblast",
+        "native.rpstblastn"
+      ],
+      "linked_name_count": 3,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "blast_vdb",
+      "label": "BLAST VDB correspondence and populations",
+      "operation_names": [
+        "native.blastn_vdb",
+        "native.tblastn_vdb"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "blast_vdb_function",
+      "label": "BLAST VDB candidate-function model",
+      "operation_names": [
+        "native.blastn_vdb",
+        "native.tblastn_vdb"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "hmmer_protein",
+      "label": "HMMER protein search",
+      "operation_names": [
+        "api.hmmer.result",
+        "homology.extract",
+        "native.hmmscan",
+        "native.hmmsearch",
+        "native.jackhmmer"
+      ],
+      "linked_name_count": 5,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "hmmer_nucleotide",
+      "label": "HMMER nucleotide search",
+      "operation_names": [
+        "native.nhmmer",
+        "native.nhmmscan"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "hmmer_alignment",
+      "label": "HMMER profile alignment",
+      "operation_names": [
+        "native.hmmalign"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "infernal_search",
+      "label": "Infernal/Rfam search shared path",
+      "operation_names": [
+        "api.rfam.fetch",
+        "native.cmscan",
+        "native.cmsearch",
+        "rna.cmsearch"
+      ],
+      "linked_name_count": 4,
+      "evidence_source": "verification/tool_graders_shared_search_integration_2026-10-28_586/ROOT_VERIFICATION_001.json"
+    },
+    {
+      "key": "infernal_alignment",
+      "label": "Infernal covariance-model alignment",
+      "operation_names": [
+        "native.cmalign"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "rna_structure",
+      "label": "RNA structure topology and energy",
+      "operation_names": [
+        "analyze_rna_secondary_structure_features",
+        "predict_rna_secondary_structure"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "rna_comparison",
+      "label": "RNA structure comparison",
+      "operation_names": [],
+      "linked_name_count": 0,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "protein_structure",
+      "label": "Protein structure comparison",
+      "operation_names": [
+        "compare_protein_structures"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "genomic_overlap",
+      "label": "Genomic interval overlap",
+      "operation_names": [
+        "analyze_genomic_region_overlap"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "chromatin",
+      "label": "Chromatin contacts and insulation",
+      "operation_names": [
+        "analyze_chromatin_interactions"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "atac",
+      "label": "ATAC differential accessibility",
+      "operation_names": [
+        "analyze_atac_seq_differential_accessibility"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "expression_nmf",
+      "label": "Expression NMF",
+      "operation_names": [
+        "perform_gene_expression_nmf_analysis"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "fluorescence",
+      "label": "Supplied fluorescence-event analysis",
+      "operation_names": [
+        "analyze_cytokine_production_in_cd4_tcells",
+        "perform_facs_cell_sorting"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "gene_tree",
+      "label": "BV-BRC GeneTree phylogeny",
+      "operation_names": [
+        "bvbrc.gene_tree.concatenated_sequence_loci",
+        "bvbrc.gene_tree.gene_tree"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "codon_tree",
+      "label": "BV-BRC CodonTree phylogeny",
+      "operation_names": [
+        "bvbrc.codon_tree.core_genome_codon_protein"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "msa",
+      "label": "BV-BRC multiple sequence alignment",
+      "operation_names": [
+        "bvbrc.msa.mauve_alignment",
+        "bvbrc.msa.ordinary_alignment",
+        "bvbrc.msa.prealigned_analysis",
+        "bvbrc.msa.segment_alignment",
+        "bvbrc.msa.segment_concatenation"
+      ],
+      "linked_name_count": 5,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "metacats",
+      "label": "BV-BRC MetaCATS",
+      "operation_names": [
+        "bvbrc.metacats.auto",
+        "bvbrc.metacats.files",
+        "bvbrc.metacats.groups"
+      ],
+      "linked_name_count": 3,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "genome_alignment",
+      "label": "BV-BRC genome alignment",
+      "operation_names": [
+        "bvbrc.genome_alignment"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "proteome",
+      "label": "BV-BRC proteome comparison",
+      "operation_names": [
+        "bvbrc.proteome_comparison"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "comparative_systems",
+      "label": "BV-BRC comparative systems",
+      "operation_names": [
+        "bvbrc.comparative_systems"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "fastqutils",
+      "label": "BV-BRC read processing measurements",
+      "operation_names": [
+        "bvbrc.fastqutils"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "minhash",
+      "label": "BV-BRC Similar Genome Finder / MinHash",
+      "operation_names": [
+        "api.bvbrc.minhash.fasta",
+        "api.bvbrc.minhash.genome",
+        "api.bvbrc.minhash.result"
+      ],
+      "linked_name_count": 3,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "sequence_composition",
+      "label": "sequence_composition",
+      "operation_names": [
+        "sequence.inspect",
+        "reads.inspect"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "biopython_pairwise",
+      "label": "biopython_pairwise",
+      "operation_names": [
+        "sequence.align",
+        "reads.align"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "minimap2",
+      "label": "minimap2",
+      "operation_names": [
+        "reads.map"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "reference_sites",
+      "label": "reference_sites",
+      "operation_names": [
+        "sequence.sites"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "blast_hsp_columns",
+      "label": "blast_hsp_columns",
+      "operation_names": [
+        "result.blast.hsp"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "sequence_extraction",
+      "label": "sequence_extraction",
+      "operation_names": [
+        "sequence.view"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "sequence_translation",
+      "label": "sequence_translation",
+      "operation_names": [
+        "sequence.translate"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "prodigal",
+      "label": "prodigal",
+      "operation_names": [
+        "genes.predict"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json"
+    },
+    {
+      "key": "hmmer_alignment_preparation",
+      "label": "HMMER alignment preparation",
+      "classification": "supporting_preparation_numerical_and_validation",
+      "sheet_authority": "hmmer_alignment_preparation_sheet_v1",
+      "calculator_authority": "hmmer_alignment_preparation_calculations.calculate_hmmer_alignment_preparation_components",
+      "reader_authority": "hmmer_alignment_preparation_data.populate_hmmer_alignment_preparation_sheet",
+      "inventory_programs": [
+        "alimask",
+        "hmmbuild"
+      ],
+      "inventory_row_count": 2,
+      "operation_names": [
+        "native.alimask.alignment_to_model",
+        "native.alimask.mask_alignment",
+        "native.alimask.mask_model",
+        "native.alimask.model_to_alignment",
+        "native.hmmbuild.build_alignment",
+        "native.hmmbuild.build_single_sequence_matrix"
+      ],
+      "numerical_meaning": "Alignment/model measurements, mask/map relationships and validation; no gene-function confidence.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/hmmer_alignment_preparation_data.py",
+          "line": 712,
+          "end_line": 876,
+          "function": "populate_hmmer_alignment_preparation_sheet",
+          "calls": [
+            "MODES.get",
+            "_ALPHABET_FLAGS.values",
+            "_alignment_records",
+            "_build_associations",
+            "_mapping",
+            "_occurrence_valid",
+            "_requests",
+            "_summary",
+            "alimask_map_context_valid",
+            "bool",
+            "deepcopy",
+            "enumerate",
+            "extract_hmmer_models",
+            "first['issues'].append",
+            "fmt.lower",
+            "hashlib.sha256",
+            "hashlib.sha256(content).hexdigest",
+            "ids.add",
+            "input_results.append",
+            "isinstance",
+            "issue",
+            "len",
+            "next",
+            "occurrence['sha256'].lower",
+            "operation.get",
+            "payload.get",
+            "payload['content'].lstrip",
+            "payload['content'].lstrip().startswith",
+            "payloads['input'].get",
+            "payloads['output'].get",
+            "payloads[direction].setdefault",
+            "payloads[direction].setdefault(role, []).append",
+            "payloads[direction][role].sort",
+            "read_hmmer_alignment_input",
+            "read_hmmer_alignment_output",
+            "selected_alphabet",
+            "set",
+            "settings.get",
+            "sheet['artifact_occurrences'].append",
+            "sheet['associations'].append",
+            "sheet['input_records'].extend",
+            "sheet['issues'].append",
+            "sheet['issues'].extend",
+            "sheet['native_rows'].append",
+            "sheet['output_records'].append",
+            "sheet['output_records'].extend",
+            "sum",
+            "supplied.items"
+          ],
+          "sha256": "0059d261f744368f7124b1d8c368c159d3269057ebfc1749da50e8c5070f08f3"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_alignment_preparation_calculations.py",
+          "line": 863,
+          "end_line": 891,
+          "function": "calculate_hmmer_alignment_preparation_components",
+          "calls": [
+            "_build",
+            "_check",
+            "_mask",
+            "_problem",
+            "_saved_sheet_shape",
+            "all",
+            "any",
+            "bool",
+            "deepcopy",
+            "finite",
+            "isinstance",
+            "problem.get",
+            "result['issues'].append",
+            "selected.update",
+            "set",
+            "sheet.get",
+            "tolerance.values"
+          ],
+          "sha256": "6f6a8235142584cc496257cf42d446f52493527808fc00d242ec4612b4ffa3fe"
+        }
+      ],
+      "linked_name_count": 6
+    },
+    {
+      "key": "hmmer_artifact",
+      "label": "HMMER artifact preparation",
+      "classification": "supporting_preparation_numerical_and_validation",
+      "sheet_authority": "hmmer_artifact_sheet_v1",
+      "calculator_authority": "hmmer_artifact_calculations.calculate_hmmer_artifact_components",
+      "reader_authority": "hmmer_artifact_data.populate_hmmer_artifact_sheet",
+      "inventory_programs": [
+        "hmmconvert",
+        "hmmfetch",
+        "hmmpress"
+      ],
+      "inventory_row_count": 3,
+      "operation_names": [
+        "native.hmmconvert.ascii",
+        "native.hmmconvert.binary",
+        "native.hmmconvert.legacy_hmmer2",
+        "native.hmmfetch.index",
+        "native.hmmfetch.key_file",
+        "native.hmmfetch.single_key",
+        "native.hmmpress.index"
+      ],
+      "numerical_meaning": "Decoded model/key/artifact counts, probability-body differences where decoded, and custody/format checks; opaque content remains unknown.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/hmmer_artifact_data.py",
+          "line": 310,
+          "end_line": 473,
+          "function": "populate_hmmer_artifact_sheet",
+          "calls": [
+            "_artifact_metadata",
+            "_binding_errors",
+            "_build_associations",
+            "_issue",
+            "_label",
+            "_native_rows",
+            "_occurrence_valid",
+            "_operation_valid",
+            "_roles",
+            "accepted.pop",
+            "any",
+            "binding.get",
+            "content.decode",
+            "deepcopy",
+            "enumerate",
+            "extract_hmmer_models",
+            "extraction.get",
+            "hashlib.sha256",
+            "hashlib.sha256(content).hexdigest",
+            "isinstance",
+            "issues.append",
+            "labels.items",
+            "labels.setdefault",
+            "labels.setdefault(label, []).append",
+            "len",
+            "list",
+            "occurrence['sha256'].lower",
+            "operation['settings'].get",
+            "ord",
+            "payloads.get",
+            "range",
+            "seen.add",
+            "seen_extractions.add",
+            "set",
+            "sheet['artifact_occurrences'].append",
+            "sheet['model_extractions'].append",
+            "sheet['native_rows'].append",
+            "sheet['native_rows'].extend",
+            "sheet[occurrence['direction'] + '_records'].extend",
+            "sorted",
+            "str",
+            "supplied.get",
+            "supplied.items",
+            "valid.append",
+            "zip"
+          ],
+          "sha256": "330e00207888bd3d91148e01b3b041398a9e00c14e4dad23d1813e407804da0f"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_artifact_calculations.py",
+          "line": 583,
+          "end_line": 636,
+          "function": "calculate_hmmer_artifact_components",
+          "calls": [
+            "_Calculator",
+            "_operand",
+            "_state",
+            "_validate_sheet",
+            "any",
+            "calculator.artifacts",
+            "calculator.bundle",
+            "calculator.check",
+            "calculator.comparison",
+            "calculator.index_summary",
+            "calculator.issue",
+            "calculator.key_population",
+            "calculator.population",
+            "deepcopy",
+            "effective.get",
+            "isinstance",
+            "result['issues'].append",
+            "set",
+            "sheet.get"
+          ],
+          "sha256": "d8f239031706cdca02d83fef29920325d523ce38f85926a8d17dfb9627468458"
+        }
+      ],
+      "linked_name_count": 7
+    },
+    {
+      "key": "hmmer_emission",
+      "label": "HMMER generated sequences",
+      "classification": "supporting_preparation_numerical_and_validation",
+      "sheet_authority": "hmmer_emission_sheet_v1",
+      "calculator_authority": "hmmer_emission_calculations.calculate_hmmemit_components",
+      "reader_authority": "hmmer_emission_data.populate_hmmemit_sheet",
+      "inventory_programs": [
+        "hmmemit"
+      ],
+      "inventory_row_count": 1,
+      "operation_names": [
+        "native.hmmemit.consensus_simple",
+        "native.hmmemit.consensus_thresholded",
+        "native.hmmemit.sample_core_aligned",
+        "native.hmmemit.sample_core_unaligned",
+        "native.hmmemit.sample_profile"
+      ],
+      "numerical_meaning": "Generated sequence composition, counts, alignment quantities and consensus checks; not observed biological evidence.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/hmmer_emission_data.py",
+          "line": 308,
+          "end_line": 397,
+          "function": "populate_hmmemit_sheet",
+          "calls": [
+            "_associate",
+            "_fasta",
+            "_issue",
+            "_lines",
+            "_occurrence_valid",
+            "_stockholm",
+            "all",
+            "any",
+            "bool",
+            "deepcopy",
+            "extract_hmmer_models",
+            "hashlib.sha256",
+            "hashlib.sha256(content).hexdigest",
+            "isinstance",
+            "issues.append",
+            "len",
+            "mapping.items",
+            "model_extraction.get",
+            "model_extraction.get('population', {}).get",
+            "occurrence['sha256'].lower",
+            "operation.get",
+            "operation['mode'].startswith",
+            "operation['settings'].get",
+            "ord",
+            "payload.get",
+            "payloads.append",
+            "seen_ids.add",
+            "seen_slots.add",
+            "set",
+            "sheet['artifact_occurrences'].append",
+            "sheet['native_rows'].extend",
+            "sheet['output_records'].extend",
+            "type"
+          ],
+          "sha256": "352bfd1ef00100dde7caf66eb412a056940e13dc0de76f644f5cdb43a14e0305"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_emission_calculations.py",
+          "line": 441,
+          "end_line": 491,
+          "function": "calculate_hmmemit_components",
+          "calls": [
+            "_Calculator",
+            "_finite",
+            "any",
+            "calculator.alignment",
+            "calculator.consensus",
+            "calculator.model",
+            "calculator.sequence",
+            "calculator.validate",
+            "deepcopy",
+            "fallback['issues'].append",
+            "invalid",
+            "isinstance",
+            "operation.get",
+            "operation['mode'].startswith",
+            "set",
+            "sheet.get",
+            "supplied.get",
+            "threshold.values"
+          ],
+          "sha256": "6b9a4605c9f8f3d8843777e1b5a658596a6e575fd48a2070f953ef5b8cac08de"
+        }
+      ],
+      "linked_name_count": 5
+    },
+    {
+      "key": "hmmer_simulation",
+      "label": "HMMER score simulation",
+      "classification": "supporting_preparation_numerical_and_validation",
+      "sheet_authority": "hmmer_simulation_sheet_v1",
+      "calculator_authority": "hmmer_simulation_calculations.calculate_hmmsim_components",
+      "reader_authority": "hmmer_simulation_data.populate_hmmsim_sheet",
+      "inventory_programs": [
+        "hmmsim"
+      ],
+      "inventory_row_count": 1,
+      "operation_names": [
+        "native.hmmsim.forward",
+        "native.hmmsim.hybrid",
+        "native.hmmsim.msv",
+        "native.hmmsim.viterbi"
+      ],
+      "numerical_meaning": "Native and independently fitted random-score distribution quantities with their selected populations.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/hmmer_simulation_data.py",
+          "line": 168,
+          "end_line": 568,
+          "function": "populate_hmmsim_sheet",
+          "calls": [
+            "'\\n'.join",
+            "(_INT if integer else _REAL).fullmatch",
+            "SUMMARY_FIELDS.get",
+            "_issue",
+            "_occurrence_valid",
+            "_settings",
+            "abs",
+            "any",
+            "association.update",
+            "bad_keys.intersection",
+            "block.append",
+            "bool",
+            "content.hex",
+            "deepcopy",
+            "enumerate",
+            "extraction.get",
+            "field.startswith",
+            "finish",
+            "float",
+            "group.append",
+            "groups.append",
+            "h.get",
+            "hashlib.sha256",
+            "hashlib.sha256(content).hexdigest",
+            "i.get",
+            "int",
+            "isinstance",
+            "issues.append",
+            "item[3].split",
+            "item[3].strip",
+            "legends.append",
+            "len",
+            "lines",
+            "locator.get",
+            "m.get",
+            "m.get('alphabet', {}).get",
+            "mapping.items",
+            "math.isfinite",
+            "model_ok.append",
+            "models.append",
+            "models[i].get",
+            "name_at",
+            "number",
+            "o['sha256'].lower",
+            "operation.get",
+            "ord",
+            "out.get",
+            "out.items",
+            "parts[0].startswith",
+            "payload['content'].splitlines",
+            "payload['content'][start:end].hex",
+            "points.append",
+            "range",
+            "raw.decode",
+            "raw.decode('utf-8', errors='surrogateescape').rstrip",
+            "record.get",
+            "recorded_tail_masses",
+            "row",
+            "s.startswith",
+            "s.strip",
+            "s[1:].strip",
+            "seen.add",
+            "segment.hex",
+            "set",
+            "settings.get",
+            "sheet['artifact_occurrences'].append",
+            "sheet['associations'].append",
+            "sheet['native_rows'].append",
+            "states.append",
+            "states.get",
+            "states.items",
+            "str",
+            "struct.iter_unpack",
+            "text.lstrip",
+            "text.lstrip().startswith",
+            "text.split",
+            "text.strip",
+            "token.lower",
+            "token.lower().lstrip",
+            "tokens.append",
+            "type",
+            "valid_payloads['input'].get",
+            "valid_payloads[direction][role].append",
+            "validity.get",
+            "values.append",
+            "values.get",
+            "zip"
+          ],
+          "sha256": "91fb0f93c55aa5f085ea25a22d807cf860724292f712e1ee600feb7eae2f16a7"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_simulation_calculations.py",
+          "line": 121,
+          "end_line": 571,
+          "function": "calculate_hmmsim_components",
+          "calls": [
+            "SUMMARY_UNITS.get",
+            "_OPS[selection['comparison']]",
+            "_component",
+            "_exponential_survival",
+            "_exponential_survival if family == 'exponential' else _gumbel_survival",
+            "_finite",
+            "_fixed_location",
+            "_gumbel_fit",
+            "_input",
+            "abs",
+            "add",
+            "all",
+            "any",
+            "cal_source['payload'].get",
+            "cal_source['payload'].get('values', {}).get",
+            "calibration",
+            "check",
+            "criterion.get",
+            "data.get",
+            "data.get('states', {}).get",
+            "deepcopy",
+            "enumerate",
+            "fitrow['components'].get",
+            "fits.append",
+            "groups.items",
+            "groups.setdefault",
+            "groups.setdefault((r['locator']['occurrence_id'], tuple(r['model_keys'])), []).append",
+            "isinstance",
+            "issue",
+            "iter",
+            "len",
+            "list",
+            "mapping.items",
+            "math.floor",
+            "math.fsum",
+            "math.sqrt",
+            "max",
+            "min",
+            "model.get",
+            "native['payload'].get",
+            "native_component",
+            "next",
+            "operation.get",
+            "p.setdefault",
+            "payload.get",
+            "payload.get('states', {}).get",
+            "payload.get('values', {}).get",
+            "r['payload'].get",
+            "r['payload'].get('states', {}).get",
+            "recorded_tail_masses",
+            "residuals",
+            "result['checks'].append",
+            "result['issues'].append",
+            "result['rows'].append",
+            "s['payload'].get",
+            "s['payload'].get('values', {}).get",
+            "selections.append",
+            "set",
+            "settings.get",
+            "sheet.get",
+            "sorted",
+            "source['payload'].get",
+            "source['payload'].get('states', {}).get",
+            "str",
+            "sum",
+            "summary['payload'].get",
+            "summary['payload'].get('states', {}).get",
+            "survivor",
+            "tuple",
+            "type",
+            "variants.append",
+            "vectors[0]['payload'].get"
+          ],
+          "sha256": "e7f29ac650c56c516e11db911f99576c9db4b01c5fef1c1904556ebcacf3a153"
+        }
+      ],
+      "linked_name_count": 4
+    },
+    {
+      "key": "hmmer_statistics",
+      "label": "HMMER model statistics",
+      "classification": "supporting_preparation_numerical_and_validation",
+      "sheet_authority": "hmmer_statistics_sheet_v1",
+      "calculator_authority": "hmmer_statistics_calculations.calculate_hmmstat_components",
+      "reader_authority": "hmmer_statistics_data.populate_hmmstat_sheet",
+      "inventory_programs": [
+        "hmmstat"
+      ],
+      "inventory_row_count": 1,
+      "operation_names": [
+        "native.hmmstat.summary"
+      ],
+      "numerical_meaning": "Native model statistics and explicit-parameter recalculation; missing background is unavailable.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/hmmer_statistics_data.py",
+          "line": 180,
+          "end_line": 248,
+          "function": "populate_hmmstat_sheet",
+          "calls": [
+            "_header",
+            "_issue",
+            "_map_payloads",
+            "abs",
+            "any",
+            "deepcopy",
+            "enumerate",
+            "extract_hmmer_models",
+            "indices.count",
+            "inputs.get",
+            "issues.append",
+            "issues.extend",
+            "len",
+            "model.get",
+            "model_extraction.get",
+            "outputs.get",
+            "parse_hmmstat_summary",
+            "problems.append",
+            "sheet['associations'].append",
+            "type",
+            "valid_operation"
+          ],
+          "sha256": "4e1948f18398142e7dc21f56f8d6da6fa4ba190c0e62b9c58d3bdd7bb06706e7"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_statistics_calculations.py",
+          "line": 57,
+          "end_line": 287,
+          "function": "calculate_hmmstat_components",
+          "calls": [
+            "_combined",
+            "_component",
+            "_finite",
+            "_hmmer2",
+            "abs",
+            "any",
+            "association.get",
+            "background.values",
+            "calculate_hmmer_model_components",
+            "check",
+            "deepcopy",
+            "entry_states.append",
+            "entry_terms.append",
+            "enumerate",
+            "extraction.get",
+            "isinstance",
+            "issue",
+            "json.dumps",
+            "len",
+            "list",
+            "math.fsum",
+            "math.log",
+            "math.log2",
+            "model.get",
+            "model['initial'].get",
+            "native_by_key.get",
+            "native_hmmstat_parameters",
+            "next",
+            "occupancy.append",
+            "operands",
+            "p.get",
+            "range",
+            "result['checks'].append",
+            "result['issues'].append",
+            "result['rows'].append",
+            "row['composition']['probabilities'].append",
+            "row['composition']['weights'].append",
+            "row['native_comparisons'].append",
+            "row['native_record_keys'].append",
+            "row['positions'].append",
+            "sheet.get",
+            "transition_values.append",
+            "type",
+            "valid_operation",
+            "validation.values",
+            "zip"
+          ],
+          "sha256": "20eefc3402c2c4237315f671f76a99cc29aa1582a729be19b417050d6ab36e74"
+        }
+      ],
+      "linked_name_count": 1
+    },
+    {
+      "key": "hmmer_fm",
+      "label": "HMMER FM index and literal matches",
+      "classification": "supporting_preparation_numerical_and_validation",
+      "sheet_authority": "hmmer_fm_sheet_v1",
+      "calculator_authority": "hmmer_fm_calculations.calculate_hmmer_fm_components",
+      "reader_authority": "hmmer_fm_data.populate_hmmer_fm_sheet",
+      "inventory_programs": [
+        "makehmmerdb",
+        "hmmerfm-exactmatch"
+      ],
+      "inventory_row_count": 2,
+      "operation_names": [
+        "native.hmmerfm-exactmatch.count_only",
+        "native.hmmerfm-exactmatch.locations",
+        "native.makehmmerdb.build"
+      ],
+      "numerical_meaning": "Index/source populations and literal-location/count validation; raw FM intervals are distinct from validated source matches.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/hmmer_fm_data.py",
+          "line": 595,
+          "end_line": 714,
+          "function": "populate_hmmer_fm_sheet",
+          "calls": [
+            "_associate_queries",
+            "_diagnostics",
+            "_fasta",
+            "_hits",
+            "_occurrence_issues",
+            "_queries",
+            "all",
+            "any",
+            "bool",
+            "candidates.append",
+            "deepcopy",
+            "enumerate",
+            "extract_hmmer_fm_database",
+            "hashlib.sha256",
+            "hashlib.sha256(i['content']).hexdigest",
+            "isinstance",
+            "issue",
+            "issues.append",
+            "issues.extend",
+            "item.get",
+            "len",
+            "list",
+            "mapping.items",
+            "operation.get",
+            "operation['settings'].get",
+            "payloads['input'].get",
+            "payloads['output' if is_build else 'input'].get",
+            "payloads['output'].get",
+            "payloads[direction].get",
+            "payloads[direction][role].append",
+            "roles.items",
+            "seen.add",
+            "set",
+            "sheet['artifact_occurrences'].append",
+            "sheet['associations']['hit_targets'].append",
+            "sheet['associations']['segments'].append",
+            "sheet['input_records'].extend",
+            "sorted",
+            "source_binding.get",
+            "targets_by_name.get",
+            "targets_by_name.setdefault",
+            "targets_by_name.setdefault(segment['name'], {}).setdefault",
+            "targets_by_name.setdefault(segment['name'], {}).setdefault(segment['target_id'], []).append"
+          ],
+          "sha256": "8da3babc7e4a1997db3e2af0d00db99f60d14455870c06f054c5af68dd9aece5"
+        },
+        {
+          "path": "gene_annotation_episode/hmmer_fm_calculations.py",
+          "line": 522,
+          "end_line": 545,
+          "function": "calculate_hmmer_fm_components",
+          "calls": [
+            "_build_components",
+            "_exact_components",
+            "any",
+            "deepcopy",
+            "isinstance",
+            "issue",
+            "result['issues'].append",
+            "result['issues'].extend",
+            "set",
+            "sheet.get",
+            "supplied.get",
+            "type"
+          ],
+          "sha256": "6c63a268ee6c9f513608c42a3207dfe9622e6744bccbf284d8a741bf61fa6592"
+        }
+      ],
+      "linked_name_count": 3
+    },
+    {
+      "key": "infernal_preparation",
+      "label": "Infernal preparation (one shared sheet, three branches)",
+      "classification": "supporting_preparation_mixed_numerical_and_artifact_validation",
+      "sheet_authority": "infernal_preparation_sheet_v1",
+      "branches": [
+        {
+          "label": "Statistics/build/calibration",
+          "programs": [
+            "cmbuild",
+            "cmcalibrate",
+            "cmstat"
+          ],
+          "classification": "numerical_statistics_and_validation",
+          "reader": "infernal_preparation_statistics.populate_infernal_statistics_sheet",
+          "calculator_or_validator": "infernal_preparation_calculations.calculate_infernal_statistics",
+          "operation_names": [
+            "native.cmbuild.build",
+            "native.cmbuild.refine",
+            "native.cmcalibrate.calibrate",
+            "native.cmcalibrate.forecast",
+            "native.cmcalibrate.memory_estimate",
+            "native.cmcalibrate.merge_scores",
+            "native.cmcalibrate.partition_scores",
+            "native.cmcalibrate.split_commands",
+            "native.cmstat.evalues_at_ga",
+            "native.cmstat.evalues_at_nc",
+            "native.cmstat.evalues_at_score",
+            "native.cmstat.evalues_at_tc",
+            "native.cmstat.scores_at_evalue",
+            "native.cmstat.scores_at_pvalue",
+            "native.cmstat.summary"
+          ],
+          "linked_name_count": 15,
+          "evidence": [
+            {
+              "path": "gene_annotation_episode/infernal_preparation_statistics.py",
+              "line": 705,
+              "end_line": 812,
+              "function": "populate_infernal_statistics_sheet",
+              "calls": [
+                "ValueError",
+                "_add_association",
+                "_alignment_records",
+                "_bind_native_rows",
+                "_model_ok",
+                "_problem",
+                "_row",
+                "_same_field",
+                "_same_model",
+                "any",
+                "bool",
+                "by_ref.get",
+                "deepcopy",
+                "enumerate",
+                "extract_infernal_models",
+                "iter",
+                "len",
+                "mapping.get",
+                "mapping.items",
+                "new_sheet",
+                "next",
+                "operation.get",
+                "operation['settings'].get",
+                "outputs.get",
+                "parse_cmcalibrate_sidecar",
+                "parser",
+                "records.extend",
+                "set",
+                "sheet['issues'].extend",
+                "sheet['native_rows'].append",
+                "sheet['native_rows'].extend",
+                "sheet[direction].extend",
+                "sum",
+                "type",
+                "validate_artifact",
+                "validate_common_sheet"
+              ],
+              "sha256": "12d5a40657b4bb38e357dd7c44d15e80b319f24db8d18617898548885c4a1f1b"
+            },
+            {
+              "path": "gene_annotation_episode/infernal_preparation_calculations.py",
+              "line": 546,
+              "end_line": 637,
+              "function": "calculate_infernal_statistics",
+              "calls": [
+                "ValueError",
+                "_calibration",
+                "_chunks",
+                "_conversion",
+                "_derived",
+                "_header_checks",
+                "_inputs",
+                "_issue",
+                "_missing",
+                "_model",
+                "_paired",
+                "_parameters",
+                "_partition_checks",
+                "_row_result",
+                "all",
+                "any",
+                "check",
+                "deepcopy",
+                "enumerate",
+                "field_input",
+                "len",
+                "new_calculations",
+                "operation['settings'].get",
+                "parameters.get",
+                "r.get",
+                "request.get",
+                "require_finite_json",
+                "result['rows'].append",
+                "row.get",
+                "row['values'].items",
+                "set",
+                "target['checks'].append",
+                "type",
+                "validate_common_sheet",
+                "value"
+              ],
+              "sha256": "df3f3fbd37733298a96bca6d8f6a5b9dbe7519850f7cc84a7094c11b3d81187d"
+            }
+          ]
+        },
+        {
+          "label": "Generated sequences",
+          "programs": [
+            "cmemit"
+          ],
+          "classification": "generated_data_numerical_components_and_validation",
+          "reader": "infernal_preparation_emission.populate_cmemit_sheet",
+          "calculator_or_validator": "infernal_preparation_emission_calculations.calculate_cmemit_components",
+          "operation_names": [
+            "native.cmemit.consensus",
+            "native.cmemit.sample_aligned",
+            "native.cmemit.sample_unaligned"
+          ],
+          "linked_name_count": 3,
+          "evidence": [
+            {
+              "path": "gene_annotation_episode/infernal_preparation_emission.py",
+              "line": 660,
+              "end_line": 724,
+              "function": "populate_cmemit_sheet",
+              "calls": [
+                "ValueError",
+                "_add",
+                "_associate",
+                "_clustal",
+                "_fasta_alignment",
+                "_fasta_parts",
+                "_location",
+                "_phylip",
+                "_sequence",
+                "_settings",
+                "_stockholm",
+                "_text",
+                "_trace",
+                "deepcopy",
+                "enumerate",
+                "keys.append",
+                "len",
+                "model.get",
+                "model.get('locator', {}).get",
+                "new_sheet",
+                "operation['settings'].get",
+                "selected_format.lower",
+                "set",
+                "sheet['issues'].extend",
+                "text.strip",
+                "type",
+                "validate_common_sheet"
+              ],
+              "sha256": "6ecd3b270a43470892936aa111b9860af770f0781c9a8e47a28d815fec92fa32"
+            },
+            {
+              "path": "gene_annotation_episode/infernal_preparation_emission_calculations.py",
+              "line": 283,
+              "end_line": 342,
+              "function": "calculate_cmemit_components",
+              "calls": [
+                "ValueError",
+                "_alignment_components",
+                "_association_check",
+                "_components",
+                "_sequence_components",
+                "_validate_sheet",
+                "all",
+                "any",
+                "bool",
+                "check",
+                "checks.append",
+                "deepcopy",
+                "field_input",
+                "new_calculations",
+                "result['rows'].append",
+                "settings.get",
+                "sum",
+                "type",
+                "value"
+              ],
+              "sha256": "86627c73cc061c79feaab3f5a36f8dff3e1ebec26c922f1b9d270ceda4e78716"
+            }
+          ]
+        },
+        {
+          "label": "Artifact validation",
+          "programs": [
+            "cmconvert",
+            "cmfetch",
+            "cmpress"
+          ],
+          "classification": "artifact_validation_with_counts_and_bytes_not_scientific_scoring",
+          "reader": "infernal_preparation_artifacts.populate_infernal_artifact_sheet",
+          "calculator_or_validator": "infernal_preparation_artifacts.validate_infernal_artifact_sheet",
+          "operation_names": [
+            "native.cmconvert.ascii",
+            "native.cmconvert.binary",
+            "native.cmconvert.filter_hmm",
+            "native.cmconvert.legacy_ascii",
+            "native.cmconvert.maximum_likelihood_hmm",
+            "native.cmfetch.index",
+            "native.cmfetch.key_file",
+            "native.cmfetch.single_key",
+            "native.cmpress.press"
+          ],
+          "linked_name_count": 9,
+          "evidence": [
+            {
+              "path": "gene_annotation_episode/infernal_preparation_artifacts.py",
+              "line": 308,
+              "end_line": 392,
+              "function": "populate_infernal_artifact_sheet",
+              "calls": [
+                "ValueError",
+                "_artifact_row",
+                "_empty_fetch_refs",
+                "_expected_outputs",
+                "_key_rows",
+                "_operation",
+                "_payload_map",
+                "_same_context",
+                "any",
+                "enumerate",
+                "expected.items",
+                "extract_infernal_models",
+                "field_input",
+                "hashlib.sha256",
+                "hashlib.sha256(data).hexdigest",
+                "inputs.get",
+                "issue",
+                "len",
+                "locator",
+                "mapping.items",
+                "mapping.values",
+                "new_sheet",
+                "outputs.get",
+                "parse_infernal_artifact_operation",
+                "set",
+                "sheet['associations'].append",
+                "sheet['issues'].append",
+                "sheet['issues'].extend",
+                "sheet['native_rows'].extend",
+                "sheet['output_records'].append",
+                "sheet[collection].extend",
+                "validate_common_sheet",
+                "value"
+              ],
+              "sha256": "0165247ca084eccf244b1b73a804165983a31a4078859e3a60536bcad4785c10"
+            },
+            {
+              "path": "gene_annotation_episode/infernal_preparation_artifacts.py",
+              "line": 432,
+              "end_line": 611,
+              "function": "validate_infernal_artifact_sheet",
+              "calls": [
+                "Counter",
+                "ValueError",
+                "_derived",
+                "_expected_outputs",
+                "_operation",
+                "_parameters",
+                "_population",
+                "_same_context",
+                "add",
+                "all",
+                "any",
+                "artifacts.get",
+                "artifacts.values",
+                "binary_checks.extend",
+                "bindings.get",
+                "bool",
+                "check",
+                "checks.append",
+                "checks.extend",
+                "deepcopy",
+                "field_input",
+                "issue",
+                "len",
+                "local_checks.append",
+                "locator",
+                "new_calculations",
+                "problem",
+                "r['calibration'].values",
+                "result['issues'].append",
+                "result['rows'].append",
+                "set",
+                "sum",
+                "type",
+                "validate_common_sheet"
+              ],
+              "sha256": "0165247ca084eccf244b1b73a804165983a31a4078859e3a60536bcad4785c10"
+            }
+          ]
+        }
+      ],
+      "inventory_programs": [
+        "cmbuild",
+        "cmcalibrate",
+        "cmconvert",
+        "cmemit",
+        "cmfetch",
+        "cmpress",
+        "cmstat"
+      ],
+      "inventory_row_count": 7,
+      "operation_names": [
+        "native.cmbuild.build",
+        "native.cmbuild.refine",
+        "native.cmcalibrate.calibrate",
+        "native.cmcalibrate.forecast",
+        "native.cmcalibrate.memory_estimate",
+        "native.cmcalibrate.merge_scores",
+        "native.cmcalibrate.partition_scores",
+        "native.cmcalibrate.split_commands",
+        "native.cmconvert.ascii",
+        "native.cmconvert.binary",
+        "native.cmconvert.filter_hmm",
+        "native.cmconvert.legacy_ascii",
+        "native.cmconvert.maximum_likelihood_hmm",
+        "native.cmemit.consensus",
+        "native.cmemit.sample_aligned",
+        "native.cmemit.sample_unaligned",
+        "native.cmfetch.index",
+        "native.cmfetch.key_file",
+        "native.cmfetch.single_key",
+        "native.cmpress.press",
+        "native.cmstat.evalues_at_ga",
+        "native.cmstat.evalues_at_nc",
+        "native.cmstat.evalues_at_score",
+        "native.cmstat.evalues_at_tc",
+        "native.cmstat.scores_at_evalue",
+        "native.cmstat.scores_at_pvalue",
+        "native.cmstat.summary"
+      ],
+      "linked_name_count": 27,
+      "numerical_meaning": "18 statistics/generated-data modes plus 9 artifact-validation modes; the latter compute counts/bytes and checks, not scientific-confidence scores. Branches are not extra independent analyses."
+    },
+    {
+      "key": "bvbrc_data_page",
+      "label": "BV-BRC Data pages/counts/facets",
+      "classification": "supporting_acquisition_numerical_components",
+      "sheet_authority": "bvbrc_data_sheet_v1",
+      "reader_authority": "bvbrc_data_readers.parse_data_snapshot",
+      "calculator_authority": [
+        "bvbrc_data_calculators.calculate_page_counts",
+        "bvbrc_data_calculators.calculate_facet_fractions"
+      ],
+      "operation_names": [
+        "api.bvbrc.data.query",
+        "api.bvbrc.data.result"
+      ],
+      "linked_name_count": 2,
+      "numerical_meaning": "Native/valid/invalid row counts and same-response exact-population facet fractions; counts are not evidence confidence.",
+      "pipeline_qualification": "query acquires/parses the selected response; result publication invokes the calculators or molecular extractor. Two named operations are pipeline links, not two independent analyses.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_data_readers.py",
+          "line": 383,
+          "end_line": 405,
+          "function": "parse_data_snapshot",
+          "calls": [
+            "ValueError",
+            "_decode_native_payload",
+            "_failed",
+            "_issue",
+            "_prepared",
+            "_request_matches",
+            "isinstance",
+            "snapshot.media_type.split",
+            "snapshot.media_type.split(';', 1)[0].strip",
+            "snapshot.media_type.split(';', 1)[0].strip().lower",
+            "type"
+          ],
+          "sha256": "265b6e42d32ef299449bfaa7cd968d7be036277ff6343ee488aa28c94e281a7e"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_data_calculators.py",
+          "line": 25,
+          "end_line": 45,
+          "function": "calculate_page_counts",
+          "calls": [
+            "ValueError",
+            "len",
+            "sum",
+            "validate",
+            "validate_data_sheet"
+          ],
+          "sha256": "13cfddc87538b601ec418afa62272257891945ecd65699f8662e1846b6a5b437"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_data_calculators.py",
+          "line": 84,
+          "end_line": 120,
+          "function": "calculate_facet_fractions",
+          "calls": [
+            "ValueError",
+            "_denominator_reason",
+            "fractions.append",
+            "math.isfinite",
+            "validate",
+            "validate_data_sheet"
+          ],
+          "sha256": "13cfddc87538b601ec418afa62272257891945ecd65699f8662e1846b6a5b437"
+        }
+      ]
+    },
+    {
+      "key": "bvbrc_data_feature_sequence",
+      "label": "BV-BRC feature-sequence joins",
+      "classification": "supporting_acquisition_numerical_components",
+      "sheet_authority": "bvbrc_feature_sequence_sheet_v1",
+      "reader_authority": "bvbrc_data_feature_sequences.extract_feature_sequence_join",
+      "calculator_authority": [
+        "bvbrc_data_calculators.calculate_feature_sequence_counts"
+      ],
+      "operation_names": [
+        "api.bvbrc.data.query",
+        "api.bvbrc.data.result"
+      ],
+      "linked_name_count": 2,
+      "numerical_meaning": "Selected features, native sequence occurrences, distinct exact sequence identities, missing/conflicting relationships and length agreement.",
+      "pipeline_qualification": "query acquires/parses the selected response; result publication invokes the calculators or molecular extractor. Two named operations are pipeline links, not two independent analyses.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_data_feature_sequences.py",
+          "line": 402,
+          "end_line": 455,
+          "function": "extract_feature_sequence_join",
+          "calls": [
+            "_base_edge",
+            "_edge",
+            "_feature_conflicts",
+            "_issue",
+            "_pages",
+            "_requirement",
+            "_scalar",
+            "_unique",
+            "bool",
+            "deepcopy",
+            "dict.fromkeys",
+            "enumerate",
+            "features.get",
+            "index.setdefault",
+            "index.setdefault(value, []).append",
+            "len",
+            "list",
+            "result['edges'].append",
+            "result['requirements'].append",
+            "result['requirements'].extend",
+            "str",
+            "sum",
+            "validate"
+          ],
+          "sha256": "70bc708df1e869e7f35547fe9d501b89e07d94859c29c0bde846c7dc1c9edfe3"
+        },
+        {
+          "path": "gene_annotation_episode/bvbrc_data_calculators.py",
+          "line": 123,
+          "end_line": 196,
+          "function": "calculate_feature_sequence_counts",
+          "calls": [
+            "ValueError",
+            "edge_keys.add",
+            "feature_rows.update",
+            "int",
+            "joined.append",
+            "len",
+            "occurrences.add",
+            "ordinal.isascii",
+            "ordinal.isdigit",
+            "pages.get",
+            "pages.items",
+            "represented.add",
+            "row['row_key'].removeprefix",
+            "row['row_key'].startswith",
+            "set",
+            "str",
+            "sum",
+            "tuple",
+            "validate"
+          ],
+          "sha256": "13cfddc87538b601ec418afa62272257891945ecd65699f8662e1846b6a5b437"
+        }
+      ]
+    },
+    {
+      "key": "bvbrc_data_molecular",
+      "label": "BV-BRC molecular measurements and relationships",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "bvbrc_molecular_sheet_v1",
+      "reader_authority": "bvbrc_data_molecular.extract_molecular_experiment_rows",
+      "calculator_authority": [],
+      "operation_names": [
+        "api.bvbrc.data.query",
+        "api.bvbrc.data.result"
+      ],
+      "linked_name_count": 2,
+      "numerical_meaning": "Retains source numerical measurements and experiment/bioset/feature/condition/unit associations. No separate numerical scoring calculator.",
+      "pipeline_qualification": "query acquires/parses the selected response; result publication invokes the calculators or molecular extractor. Two named operations are pipeline links, not two independent analyses.",
+      "evidence": [
+        {
+          "path": "gene_annotation_episode/bvbrc_data_molecular.py",
+          "line": 406,
+          "end_line": 517,
+          "function": "extract_molecular_experiment_rows",
+          "calls": [
+            "_add_requirement",
+            "_disagree",
+            "_index",
+            "_issue",
+            "_link",
+            "_location",
+            "_metadata",
+            "_pages",
+            "_require",
+            "_string",
+            "_supplied",
+            "_supplied_rows",
+            "_unavailable_number",
+            "all",
+            "bioset.update",
+            "bool",
+            "deepcopy",
+            "dict.fromkeys",
+            "feature.update",
+            "issues.append",
+            "len",
+            "list",
+            "measurement['issue_codes'].append",
+            "metadata.extend",
+            "pages.items",
+            "pages.values",
+            "result['issues'].extend",
+            "result['missing_result_ids'].append",
+            "result['rows'].append",
+            "set",
+            "type",
+            "validate"
+          ],
+          "sha256": "78612019fe670425b2ce49f01d2de1fa9913c197d3484a6e48e2b8550ed123ac"
+        }
+      ]
+    },
+    {
+      "key": "raw_sequence_masking",
+      "label": "Raw sequence masking extent",
+      "classification": "supporting_preparation_numerical_and_validation",
+      "sheet_authority": "sequence_masking_sheet_v1",
+      "reader_authority": "sequence_masking_inputs.populate_sequence_masking_sheet",
+      "calculator_authority": "sequence_masking_calculations.calculate_sequence_masking_components",
+      "shared_components": [
+        "hmmer_search_grader._union",
+        "genomic_overlap_calculations._ratio"
+      ],
+      "operation_names": [
+        "native.dustmasker.mask",
+        "native.segmasker.mask",
+        "native.windowmasker.mask",
+        "native.convert2blastmask.convert_mask"
+      ],
+      "linked_name_count": 4,
+      "evidence_source": "verification/tool_graders_blast_masking_integration_2026-10-28_619/ROOT_VERIFICATION_003.json",
+      "meaning": "Input lengths, native/merged intervals, changed/masked/unmasked positions and masked fractions; not annotation confidence.",
+      "additional_link_evidence": "verification/tool_graders_blast_mask_conversion_workflow_2026-10-28_641/ROOT_VERIFICATION_001.json"
+    },
+    {
+      "key": "windowmasker_reference_statistics",
+      "label": "WindowMasker native reference statistics",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "windowmasker_statistics_v1",
+      "reader_authority": "windowmasker_statistics.parse_windowmasker_statistics",
+      "validator_authority": "windowmasker_statistics.validate_windowmasker_statistics",
+      "calculator_authority": [],
+      "operation_names": [
+        "native.windowmasker.mask",
+        "native.windowmasker.create_counts"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_blast_masking_integration_2026-10-28_619/ROOT_VERIFICATION_003.json",
+      "meaning": "Native unit counts, percentile rows, reported thresholds and original reference associations; no invented scoring."
+    },
+    {
+      "key": "blast_database_preparation",
+      "label": "BLAST database preparation validation",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_artifact_set_v1",
+      "reader_authority": "blast_database_preparation.populate_database_artifact_set",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "operation_names": [
+        "native.makeblastdb.create_sequence_database",
+        "native.blastdb_aliastool.convert_gi_list",
+        "native.blastdb_aliastool.convert_seqid_list",
+        "native.blastdb_aliastool.create_subset_alias",
+        "native.blastdb_aliastool.aggregate_databases",
+        "native.blastdb_aliastool.aggregate_volumes",
+        "native.makembindex.create_megablast_index",
+        "native.makeprofiledb.create_profile_database"
+      ],
+      "linked_name_count": 8,
+      "evidence_source": "verification/tool_graders_blast_utility_workflow_2026-10-28_635/VERIFICATION_001.json",
+      "qualification": "Supporting typed result. Selected local Workflow path verified; complete utility/resource/format closure not established. Additional nine654 modes have exact mode-specific v2 authorities and selected local native Workflow/recalculation/closed-replay evidence; this is not complete utility/format/resource closure.",
+      "additional_operation_authorities": [
+        {
+          "operation_name": "native.blastdb_aliastool.convert_gi_list",
+          "sheet_authority": "blast_database_artifact_set_v2",
+          "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": null,
+            "input_occurrence_ids": [
+              "ids"
+            ],
+            "mode": "convert_gi_list",
+            "molecule": "unknown",
+            "parameters": {
+              "input_occurrence_id": "ids",
+              "output_path": "result/ids.bgl"
+            },
+            "program": "blastdb_aliastool",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        },
+        {
+          "operation_name": "native.blastdb_aliastool.convert_seqid_list",
+          "sheet_authority": "blast_database_artifact_set_v2",
+          "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": null,
+            "input_occurrence_ids": [
+              "ids"
+            ],
+            "mode": "convert_seqid_list",
+            "molecule": "unknown",
+            "parameters": {
+              "input_occurrence_id": "ids",
+              "output_path": "result/ids.bsl",
+              "seqid_database_key": null,
+              "title": "654 original selected identifiers"
+            },
+            "program": "blastdb_aliastool",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        },
+        {
+          "operation_name": "native.blastdb_aliastool.create_subset_alias",
+          "sheet_authority": "blast_database_artifact_set_v2",
+          "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": "A",
+            "input_occurrence_ids": [
+              "ids"
+            ],
+            "mode": "create_subset_alias",
+            "molecule": "dna",
+            "parameters": {
+              "output_prefix": "result/subset",
+              "restriction": {
+                "format": "seqid_list_binary",
+                "kind": "seqid_list",
+                "occurrence_id": "ids"
+              },
+              "source_database_key": "A",
+              "title": "654 retained binary subset"
+            },
+            "program": "blastdb_aliastool",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        },
+        {
+          "operation_name": "native.blastdb_aliastool.aggregate_databases",
+          "sheet_authority": "blast_database_artifact_set_v2",
+          "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": null,
+            "input_occurrence_ids": [
+              "db-list"
+            ],
+            "mode": "aggregate_databases",
+            "molecule": "dna",
+            "parameters": {
+              "classic_list": {
+                "entries": [
+                  {
+                    "database_key": "B",
+                    "line_number": 1,
+                    "native_path_index": 0,
+                    "native_reference": "db_b/tiny",
+                    "ordinal": 0
+                  },
+                  {
+                    "database_key": "A",
+                    "line_number": 3,
+                    "native_path_index": 0,
+                    "native_reference": "db_a/tiny",
+                    "ordinal": 1
+                  },
+                  {
+                    "database_key": "B",
+                    "line_number": 4,
+                    "native_path_index": 0,
+                    "native_reference": "db_b/tiny",
+                    "ordinal": 2
+                  }
+                ],
+                "input_occurrence_id": "db-list",
+                "source": "file"
+              },
+              "output_prefix": "result/aggregate",
+              "title": "654 repeated copies of original096",
+              "vdb_list": null
+            },
+            "program": "blastdb_aliastool",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        },
+        {
+          "operation_name": "native.blastdb_aliastool.aggregate_volumes",
+          "sheet_authority": "blast_database_artifact_set_v2",
+          "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": "A",
+            "input_occurrence_ids": [],
+            "mode": "aggregate_volumes",
+            "molecule": "dna",
+            "parameters": {
+              "num_volumes": 2,
+              "output_prefix": "result/volumes",
+              "source_database_key": "A",
+              "title": "654 two explicitly selected copies",
+              "volume_entries": [
+                {
+                  "database_key": "A",
+                  "line_number": null,
+                  "native_path_index": 0,
+                  "native_reference": "volume_A",
+                  "ordinal": 0
+                },
+                {
+                  "database_key": "B",
+                  "line_number": null,
+                  "native_path_index": 0,
+                  "native_reference": "volume_B",
+                  "ordinal": 1
+                }
+              ]
+            },
+            "program": "blastdb_aliastool",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        },
+        {
+          "operation_name": "native.makembindex.create_megablast_index",
+          "sheet_authority": "blast_database_artifact_set_v2",
+          "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": "A",
+            "input_occurrence_ids": [],
+            "mode": "create_megablast_index",
+            "molecule": "dna",
+            "parameters": {
+              "db_mask": null,
+              "idmap": false,
+              "input_format": "blastdb",
+              "input_occurrence_id": null,
+              "legacy": false,
+              "nmer": 8,
+              "old_style_index": false,
+              "output_prefix": null,
+              "source_database_key": "A",
+              "statistics_path": null,
+              "stride": 3,
+              "verbosity": "verbose",
+              "volume_size_mb": 1,
+              "ws_hint": 8
+            },
+            "program": "makembindex",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        },
+        {
+          "operation_name": "native.makeprofiledb.create_profile_database",
+          "sheet_authority": "blast_database_artifact_set_v2",
+          "reader_authority": "blast_preparation_population.populate_blast_preparation_artifact_set",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": null,
+            "input_occurrence_ids": [
+              "profiles",
+              "pssm"
+            ],
+            "mode": "create_profile_database",
+            "molecule": "protein",
+            "parameters": {
+              "create_sequence_indexes": true,
+              "database_format_version": 5,
+              "exclude_invalid": true,
+              "force_threshold": true,
+              "gap_extend": null,
+              "gap_open": null,
+              "input_format": "pssm_asn1_text",
+              "matrix": "BLOSUM62",
+              "max_smp_per_volume": 2500,
+              "observations_threshold": 6.0,
+              "output_prefix": "result/profiles",
+              "profile_entries": [
+                {
+                  "input_occurrence_id": "pssm",
+                  "line_number": 1,
+                  "native_reference": "inputs/webpsi.2ndround.pssm.asn",
+                  "ordinal": 0,
+                  "token_ordinal": 0
+                }
+              ],
+              "profile_list_occurrence_id": "profiles",
+              "profile_type": "rps",
+              "scale": 1.0,
+              "taxid": null,
+              "taxid_map_occurrence_id": null,
+              "title": "654 unchanged authentic 28-row profile",
+              "word_score_threshold": 9.82
+            },
+            "program": "makeprofiledb",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        }
+      ]
+    },
+    {
+      "key": "blast_database_sequence_extraction",
+      "label": "BLAST database sequence extraction",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_sequence_extraction_v1",
+      "reader_authority": "blast_database_extraction.parse_blastdbcmd_sequences",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "operation_names": [
+        "native.blastdbcmd.extract_sequences",
+        "native.blast_vdb_cmd.extract_sequences"
+      ],
+      "linked_name_count": 2,
+      "evidence_source": "verification/tool_graders_blast_utility_workflow_2026-10-28_635/VERIFICATION_001.json",
+      "qualification": "Supporting typed result. Selected local Workflow path verified; complete utility/resource/format closure not established. One673 selected VDB extraction path now has actual native Workflow, parent/root admission and qualified saved replay proof. It shares symbol normalization/counting and adds no numerical grader; remaining VDB modes and variants are unfinished.",
+      "additional_operation_authorities": [
+        {
+          "operation_name": "native.blast_vdb_cmd.extract_sequences",
+          "common_typed_family": "SequenceExtraction",
+          "sheet_authority": "blast_sequence_extraction_v2",
+          "reader_authority": "blast_vdb_utility_inputs.parse_blast_vdb_extraction",
+          "lexical_reader_authority": "blast_vdb_inputs.read_blast_vdb_sequence_table",
+          "saved_normalization_authority": "blast_vdb_utility_inputs.normalize_blast_vdb_extraction",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_result -> validate_blast_utility_record(SequenceExtraction)",
+          "version_relationship_validator": "blast_vdb_utility_contracts.validate_vdb_sequence_extraction",
+          "calculator_authority": [],
+          "shared_component_authority": "blast_database_extraction.normalize_blast_utility_sequence_symbols",
+          "verification": {
+            "path": "verification/tool_graders_blast_vdb_workflow_2026-10-28_673/ROOT_EXTRACTION_REVIEW_006.json",
+            "sha256": "8ec140fda05d827860e74df917d8d5af42ef745701d3f5d4842dda714230935f",
+            "size_bytes": 16359
+          },
+          "selected_variant": {
+            "database_source": "db",
+            "database_input_kind": "path",
+            "selection_kind": "entries",
+            "entry_source": "entry",
+            "include_filtered_reads": false,
+            "resource": "local",
+            "selected_entries": [
+              "gnl|SRA|ERR3487613.1.1",
+              "gnl|SRA|ERR3487613.1.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "blast_database_inspection",
+      "label": "BLAST database metadata inspection",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_inspection_v1",
+      "reader_authority": "blast_database_inspection.parse_blast_database_inspection",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "operation_names": [
+        "native.blastdbcmd.info",
+        "native.blastdbcmd.metadata",
+        "native.blastdb_aliastool.inspect_seqid_list",
+        "native.makembindex.show_filters"
+      ],
+      "linked_name_count": 4,
+      "evidence_source": "verification/tool_graders_blast_utility_workflow_2026-10-28_635/VERIFICATION_001.json",
+      "qualification": "Supporting typed result. Selected local Workflow path verified; complete utility/resource/format closure not established. Additional nine654 modes have exact mode-specific v2 authorities and selected local native Workflow/recalculation/closed-replay evidence; this is not complete utility/format/resource closure.",
+      "additional_operation_authorities": [
+        {
+          "operation_name": "native.blastdb_aliastool.inspect_seqid_list",
+          "sheet_authority": "blast_database_inspection_v2",
+          "reader_authority": "blast_preparation_inputs.parse_blast_seqid_list_info",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": null,
+            "input_occurrence_ids": [
+              "ids"
+            ],
+            "mode": "inspect_seqid_list",
+            "molecule": "unknown",
+            "parameters": {
+              "input_occurrence_id": "ids"
+            },
+            "program": "blastdb_aliastool",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        },
+        {
+          "operation_name": "native.makembindex.show_filters",
+          "sheet_authority": "blast_database_inspection_v2",
+          "reader_authority": "blast_preparation_inputs.parse_makembindex_diagnostics",
+          "assembly_authority": "blast_preparation_result_assembly.assemble_blast_preparation_result",
+          "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+          "calculator_authority": [],
+          "selected_operation": {
+            "database_key": "A",
+            "input_occurrence_ids": [],
+            "mode": "show_filters",
+            "molecule": "dna",
+            "parameters": {
+              "source_database_key": "A"
+            },
+            "program": "makembindex",
+            "version": "blast_utility_operation_v2"
+          },
+          "verification": {
+            "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+            "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+            "size_bytes": 18017
+          }
+        }
+      ]
+    },
+    {
+      "key": "blast_database_integrity",
+      "label": "BLAST database integrity diagnostics",
+      "classification": "typed_extraction_and_validation_without_independent_calculator",
+      "sheet_authority": "blast_database_integrity_v1",
+      "reader_authority": "blast_database_inspection.parse_blastdbcheck_diagnostics",
+      "validator_authority": "blast_utility_contracts.validate_blast_utility_record",
+      "calculator_authority": [],
+      "operation_names": [
+        "native.blastdbcheck.integrity"
+      ],
+      "linked_name_count": 1,
+      "evidence_source": "verification/tool_graders_blast_utility_workflow_2026-10-28_635/VERIFICATION_001.json",
+      "qualification": "Supporting typed results; no independent scientific-confidence score. Native integrity execution returned an actual failure, faithfully delivered; successful integrity validation remains unverified."
+    }
+  ],
+  "shared_groups": 51,
+  "numerical_groups": 45,
+  "typed_only_groups": 6,
+  "linked_numerical_groups": 44,
+  "linked_typed_only_groups": 6,
+  "operation_name_links": 154,
+  "distinct_operation_names": 141,
+  "distinct_numerically_linked_operation_names": 125,
+  "new_completed_full_inventory_rows": 0,
+  "operation_names": [
+    "analyze_atac_seq_differential_accessibility",
+    "analyze_chromatin_interactions",
+    "analyze_cytokine_production_in_cd4_tcells",
+    "analyze_genomic_region_overlap",
+    "analyze_rna_secondary_structure_features",
+    "api.blast.fetch",
+    "api.bvbrc.data.query",
+    "api.bvbrc.data.result",
+    "api.bvbrc.minhash.fasta",
+    "api.bvbrc.minhash.genome",
+    "api.bvbrc.minhash.result",
+    "api.hmmer.result",
+    "api.rfam.fetch",
+    "bvbrc.codon_tree.core_genome_codon_protein",
+    "bvbrc.comparative_systems",
+    "bvbrc.fastqutils",
+    "bvbrc.gene_tree.concatenated_sequence_loci",
+    "bvbrc.gene_tree.gene_tree",
+    "bvbrc.genome_alignment",
+    "bvbrc.homology.database_identification",
+    "bvbrc.homology.pairwise_correspondence",
+    "bvbrc.metacats.auto",
+    "bvbrc.metacats.files",
+    "bvbrc.metacats.groups",
+    "bvbrc.msa.mauve_alignment",
+    "bvbrc.msa.ordinary_alignment",
+    "bvbrc.msa.prealigned_analysis",
+    "bvbrc.msa.segment_alignment",
+    "bvbrc.msa.segment_concatenation",
+    "bvbrc.proteome_comparison",
+    "compare_protein_structures",
+    "genes.predict",
+    "homology.extract",
+    "native.alimask.alignment_to_model",
+    "native.alimask.mask_alignment",
+    "native.alimask.mask_model",
+    "native.alimask.model_to_alignment",
+    "native.blast_vdb_cmd.extract_sequences",
+    "native.blastdb_aliastool.aggregate_databases",
+    "native.blastdb_aliastool.aggregate_volumes",
+    "native.blastdb_aliastool.convert_gi_list",
+    "native.blastdb_aliastool.convert_seqid_list",
+    "native.blastdb_aliastool.create_subset_alias",
+    "native.blastdb_aliastool.inspect_seqid_list",
+    "native.blastdbcheck.integrity",
+    "native.blastdbcmd.extract_sequences",
+    "native.blastdbcmd.info",
+    "native.blastdbcmd.metadata",
+    "native.blastn",
+    "native.blastn_vdb",
+    "native.blastp",
+    "native.blastx",
+    "native.cmalign",
+    "native.cmbuild.build",
+    "native.cmbuild.refine",
+    "native.cmcalibrate.calibrate",
+    "native.cmcalibrate.forecast",
+    "native.cmcalibrate.memory_estimate",
+    "native.cmcalibrate.merge_scores",
+    "native.cmcalibrate.partition_scores",
+    "native.cmcalibrate.split_commands",
+    "native.cmconvert.ascii",
+    "native.cmconvert.binary",
+    "native.cmconvert.filter_hmm",
+    "native.cmconvert.legacy_ascii",
+    "native.cmconvert.maximum_likelihood_hmm",
+    "native.cmemit.consensus",
+    "native.cmemit.sample_aligned",
+    "native.cmemit.sample_unaligned",
+    "native.cmfetch.index",
+    "native.cmfetch.key_file",
+    "native.cmfetch.single_key",
+    "native.cmpress.press",
+    "native.cmscan",
+    "native.cmsearch",
+    "native.cmstat.evalues_at_ga",
+    "native.cmstat.evalues_at_nc",
+    "native.cmstat.evalues_at_score",
+    "native.cmstat.evalues_at_tc",
+    "native.cmstat.scores_at_evalue",
+    "native.cmstat.scores_at_pvalue",
+    "native.cmstat.summary",
+    "native.convert2blastmask.convert_mask",
+    "native.deltablast",
+    "native.dustmasker.mask",
+    "native.hmmalign",
+    "native.hmmbuild.build_alignment",
+    "native.hmmbuild.build_single_sequence_matrix",
+    "native.hmmconvert.ascii",
+    "native.hmmconvert.binary",
+    "native.hmmconvert.legacy_hmmer2",
+    "native.hmmemit.consensus_simple",
+    "native.hmmemit.consensus_thresholded",
+    "native.hmmemit.sample_core_aligned",
+    "native.hmmemit.sample_core_unaligned",
+    "native.hmmemit.sample_profile",
+    "native.hmmerfm-exactmatch.count_only",
+    "native.hmmerfm-exactmatch.locations",
+    "native.hmmfetch.index",
+    "native.hmmfetch.key_file",
+    "native.hmmfetch.single_key",
+    "native.hmmpress.index",
+    "native.hmmscan",
+    "native.hmmsearch",
+    "native.hmmsim.forward",
+    "native.hmmsim.hybrid",
+    "native.hmmsim.msv",
+    "native.hmmsim.viterbi",
+    "native.hmmstat.summary",
+    "native.jackhmmer",
+    "native.makeblastdb.create_sequence_database",
+    "native.makehmmerdb.build",
+    "native.makembindex.create_megablast_index",
+    "native.makembindex.show_filters",
+    "native.makeprofiledb.create_profile_database",
+    "native.nhmmer",
+    "native.nhmmscan",
+    "native.psiblast",
+    "native.rpsblast",
+    "native.rpstblastn",
+    "native.segmasker.mask",
+    "native.tblastn",
+    "native.tblastn_vdb",
+    "native.tblastx",
+    "native.windowmasker.create_counts",
+    "native.windowmasker.mask",
+    "perform_facs_cell_sorting",
+    "perform_gene_expression_nmf_analysis",
+    "predict_rna_secondary_structure",
+    "public.blast.collect",
+    "public.blast.search",
+    "reads.align",
+    "reads.inspect",
+    "reads.map",
+    "result.blast.hsp",
+    "rna.cmsearch",
+    "sequence.align",
+    "sequence.inspect",
+    "sequence.sites",
+    "sequence.translate",
+    "sequence.view"
+  ],
+  "numerically_linked_operation_names": [
+    "analyze_atac_seq_differential_accessibility",
+    "analyze_chromatin_interactions",
+    "analyze_cytokine_production_in_cd4_tcells",
+    "analyze_genomic_region_overlap",
+    "analyze_rna_secondary_structure_features",
+    "api.blast.fetch",
+    "api.bvbrc.data.query",
+    "api.bvbrc.data.result",
+    "api.bvbrc.minhash.fasta",
+    "api.bvbrc.minhash.genome",
+    "api.bvbrc.minhash.result",
+    "api.hmmer.result",
+    "api.rfam.fetch",
+    "bvbrc.codon_tree.core_genome_codon_protein",
+    "bvbrc.comparative_systems",
+    "bvbrc.fastqutils",
+    "bvbrc.gene_tree.concatenated_sequence_loci",
+    "bvbrc.gene_tree.gene_tree",
+    "bvbrc.genome_alignment",
+    "bvbrc.homology.database_identification",
+    "bvbrc.homology.pairwise_correspondence",
+    "bvbrc.metacats.auto",
+    "bvbrc.metacats.files",
+    "bvbrc.metacats.groups",
+    "bvbrc.msa.mauve_alignment",
+    "bvbrc.msa.ordinary_alignment",
+    "bvbrc.msa.prealigned_analysis",
+    "bvbrc.msa.segment_alignment",
+    "bvbrc.msa.segment_concatenation",
+    "bvbrc.proteome_comparison",
+    "compare_protein_structures",
+    "genes.predict",
+    "homology.extract",
+    "native.alimask.alignment_to_model",
+    "native.alimask.mask_alignment",
+    "native.alimask.mask_model",
+    "native.alimask.model_to_alignment",
+    "native.blastn",
+    "native.blastn_vdb",
+    "native.blastp",
+    "native.blastx",
+    "native.cmalign",
+    "native.cmbuild.build",
+    "native.cmbuild.refine",
+    "native.cmcalibrate.calibrate",
+    "native.cmcalibrate.forecast",
+    "native.cmcalibrate.memory_estimate",
+    "native.cmcalibrate.merge_scores",
+    "native.cmcalibrate.partition_scores",
+    "native.cmcalibrate.split_commands",
+    "native.cmconvert.ascii",
+    "native.cmconvert.binary",
+    "native.cmconvert.filter_hmm",
+    "native.cmconvert.legacy_ascii",
+    "native.cmconvert.maximum_likelihood_hmm",
+    "native.cmemit.consensus",
+    "native.cmemit.sample_aligned",
+    "native.cmemit.sample_unaligned",
+    "native.cmfetch.index",
+    "native.cmfetch.key_file",
+    "native.cmfetch.single_key",
+    "native.cmpress.press",
+    "native.cmscan",
+    "native.cmsearch",
+    "native.cmstat.evalues_at_ga",
+    "native.cmstat.evalues_at_nc",
+    "native.cmstat.evalues_at_score",
+    "native.cmstat.evalues_at_tc",
+    "native.cmstat.scores_at_evalue",
+    "native.cmstat.scores_at_pvalue",
+    "native.cmstat.summary",
+    "native.convert2blastmask.convert_mask",
+    "native.deltablast",
+    "native.dustmasker.mask",
+    "native.hmmalign",
+    "native.hmmbuild.build_alignment",
+    "native.hmmbuild.build_single_sequence_matrix",
+    "native.hmmconvert.ascii",
+    "native.hmmconvert.binary",
+    "native.hmmconvert.legacy_hmmer2",
+    "native.hmmemit.consensus_simple",
+    "native.hmmemit.consensus_thresholded",
+    "native.hmmemit.sample_core_aligned",
+    "native.hmmemit.sample_core_unaligned",
+    "native.hmmemit.sample_profile",
+    "native.hmmerfm-exactmatch.count_only",
+    "native.hmmerfm-exactmatch.locations",
+    "native.hmmfetch.index",
+    "native.hmmfetch.key_file",
+    "native.hmmfetch.single_key",
+    "native.hmmpress.index",
+    "native.hmmscan",
+    "native.hmmsearch",
+    "native.hmmsim.forward",
+    "native.hmmsim.hybrid",
+    "native.hmmsim.msv",
+    "native.hmmsim.viterbi",
+    "native.hmmstat.summary",
+    "native.jackhmmer",
+    "native.makehmmerdb.build",
+    "native.nhmmer",
+    "native.nhmmscan",
+    "native.psiblast",
+    "native.rpsblast",
+    "native.rpstblastn",
+    "native.segmasker.mask",
+    "native.tblastn",
+    "native.tblastn_vdb",
+    "native.tblastx",
+    "native.windowmasker.mask",
+    "perform_facs_cell_sorting",
+    "perform_gene_expression_nmf_analysis",
+    "predict_rna_secondary_structure",
+    "public.blast.collect",
+    "public.blast.search",
+    "reads.align",
+    "reads.inspect",
+    "reads.map",
+    "result.blast.hsp",
+    "rna.cmsearch",
+    "sequence.align",
+    "sequence.inspect",
+    "sequence.sites",
+    "sequence.translate",
+    "sequence.view"
+  ],
+  "unlinked_numerical_groups": [
+    "rna_comparison"
+  ],
+  "inherited_source_pins": [
+    {
+      "path": "gene_annotation_episode/native_blast_utility_tool_info.py",
+      "sha256": "dc0657a7249ca53176101cdab3b6f6177a31dcea9a9d082028c9b2934f8c0288",
+      "size_bytes": 7077
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_worker.py",
+      "sha256": "9c5854cf8b2fbab907f4bb078858cae5c6596976ffe8e3781954f992fa6799b7",
+      "size_bytes": 28041
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_preparation.py",
+      "sha256": "e8d02e893bed865c47e315071ce93f208d4ff59c63fefe6ecb2bcab0a6653c4f",
+      "size_bytes": 17519
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_extraction.py",
+      "sha256": "1df530309a202b030234424af69817a36f1e1332b0556d6aa9af63af8f2b6f36",
+      "size_bytes": 14784
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_inspection.py",
+      "sha256": "fd63263bd6eb2d6155917fd57671bd23de1deaf71e194ae63a58676f26192c71",
+      "size_bytes": 20676
+    },
+    {
+      "path": "gene_annotation_episode/blast_utility_contracts.py",
+      "sha256": "f02195dccbeba56b8e5b02b2f5766e96233c4f74964a74b2d43dd398a5548abf",
+      "size_bytes": 33746
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_tool_info.py",
+      "sha256": "b59a324069f808d7022bae444da9f2504feb4795be0218bc4ec5949e71f4c556",
+      "size_bytes": 10410
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_result_worker.py",
+      "sha256": "1799329a0d4dafe30dc24f2ebb98c4b1c5cb4460eac153d8533009c8e417c667",
+      "size_bytes": 16503
+    },
+    {
+      "path": "gene_annotation_episode/sequence_masking_calculations.py",
+      "sha256": "d90a002166160fc1bd96bad03f4ddf08a920f4e82483642548a4cfc3cdb5ad6c",
+      "size_bytes": 4878
+    }
+  ],
+  "added_verification_pins": [
+    {
+      "path": "verification/tool_graders_blast_vdb_workflow_2026-10-28_673/ROOT_EXTRACTION_REVIEW_006.json",
+      "sha256": "8ec140fda05d827860e74df917d8d5af42ef745701d3f5d4842dda714230935f",
+      "size_bytes": 16359
+    },
+    {
+      "path": "verification/tool_graders_blast_vdb_workflow_2026-10-28_673/EXTRACTION_OPERATION_LINK_PROPOSAL_001.md",
+      "sha256": "9dde4be4c7360dcbad7d89c97d9d0dcb39c78e48ee9cac1052d6242cf7338e38",
+      "size_bytes": 7749
+    }
+  ],
+  "qualification": "Preserves every654 census link and its historical proof. Adds only native.blast_vdb_cmd.extract_sequences to the existing typed extraction group, after original Workflow and current-source retained revalidation. No new numerical grader or full inventory completion. Separate info/paths/paths_all and other variants/resources/presentation remain unfinished. Active inventory305; both formatters excluded.",
+  "inherited_verification_pins": [
+    {
+      "path": "verification/tool_graders_blast_mask_conversion_workflow_2026-10-28_641/OPERATION_LINK_UPDATE_001.json",
+      "sha256": "250351c5e93760702c2fd3d9eab974ab48f97527969dd14472bb6038dbe25243",
+      "size_bytes": 75407
+    },
+    {
+      "path": "verification/tool_graders_blast_preparation_workflow_2026-10-28_654/VERIFICATION_013.json",
+      "sha256": "080f5c0d3c45ecc98f3bce5b2aaef803aec64a1149d04dd15134f20b8485ce45",
+      "size_bytes": 18017
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/receipt.json",
+      "sha256": "9c7b2b18a30292bb0233705e19e3e1d71972437956c2c159e39a11b6c14f2b28",
+      "size_bytes": 1633
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/check117c_continuation654/receipt.json",
+      "sha256": "e46dda11801cc2bbba5686c4f62aa96cbac8a702515966f421ce9b3e870bd5c9",
+      "size_bytes": 1658
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/a9271623a430a35500facb1ea918c0f9f8cc4f70227e0ebe90ae6d2424cf9b90/native-blast-utility-actions/f6f7f360bc2bbde0e3f22d8a74ec07b033320aaf82fd246d4770c8629a676d9f/receipt.json",
+      "sha256": "df3deac77d779cf37ba4a50b63ef3d2d1e3fcd9d4492432062e4e619280c100e",
+      "size_bytes": 48521
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/b5e68e7c66b0c6d58eae74fcc3ecce32b6d0c4291a3b17d0313e8e0d1f42fe48/2608d8b1ac6f90eb8c5d2a53257df4b41e6806c754b821fc9ab63fd4119b1c51/native.json",
+      "sha256": "0bd4a10725f1777a881af40e66d0e57f9596c76b1b48a1fa1ea050f2c99f2c5f",
+      "size_bytes": 5001
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/5cb187e6253a684e81bb63a8facb677dba011b90aa5397f1cc78678cef3d8742/native-blast-utility-actions/fd8efc8a394821232a2670ded8d305726555b288302b63c48de4ced54a9f849c/receipt.json",
+      "sha256": "fe11129f3d15f4257cda58a72ba3f4b22aef10c153581b813e8cc2b5df8d9c84",
+      "size_bytes": 48883
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/ef808e7c7eaab9b123932848f4f4e8940b74d6c9b27bfc807c6e557438ad15c6/62b01606f1d5723084790f35c71592bb2f0eb203afcdffe95a527e9ea4451c8e/native.json",
+      "sha256": "12f5a46e8f81e80050f3f416a3a03d0fdf8ffc58ef7504c70734a25b274a914d",
+      "size_bytes": 5001
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/d8d37fca7b3e37f9c5c64f4e7d3d1ce5c587bb246e95a89cecd3698201df61c8/native-blast-utility-actions/321136821f202158bf06a38211388c0472aebe917c6decca45687ddd62c4605f/receipt.json",
+      "sha256": "d01b63448385b43a0dac2d80d84855ba12b22ca9ffde9f0e9375a6e4e8b44cb2",
+      "size_bytes": 126865
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/ef94484b8743409198aace2f38bcd7d4c856b9625291da0c2002ff9e2bcea621/e4ba4b711bb59ad0a49bebcd95247c4076d1948d17c33577ff3a042ea76c9450/native.json",
+      "sha256": "8931770e183b9e03b734a5b125b8a44322875d19c69a5bc38cb63a739ffbc514",
+      "size_bytes": 5001
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/3d4a20b3ddbe719a6c77487126a4aa1ff16b8e0c8b523a43ab57b7337a3cc823/native-blast-utility-actions/e2812fa965c070dbffa42e4b2aa9cd9cdd038b054c8335d3a48211cc93688f6f/receipt.json",
+      "sha256": "fb83a2bc58d4d280ad8784b860e4001bf4acba9422d5dfabcfcd358ff6adeef4",
+      "size_bytes": 206505
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/0e082290c667971037a74ad6a9f8f7b4fae3ab84ec786f375834ae53c1968b1c/c1d40bafde35f8e9c6d35880c211be9660562bf8251da07426a373e8ad36ed5e/native.json",
+      "sha256": "0cd44a8c59b5ba0a4f9215ef7f636de9f3b26407c32635828d0fb8fcde20dce7",
+      "size_bytes": 5001
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/d00f345e1770e5d2dcf4f609b9661f960434150c04c5e20f50577f5f4439298b/native-blast-utility-actions/2b0a2223cd43d7ae67a1e120f907547a3384ca4b9ac431de5f37101656611c38/receipt.json",
+      "sha256": "2e7fa2da2d61e2e39eaf3b929e06832dee42833b924bbd4f54f85201dc5b7dec",
+      "size_bytes": 278921
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ac496d288b67a933db2c5cc2e0f58442d356440456bdecebace6d48a2824353/2a86397f60e60ec4c353a80a80c48c6ddfddde16da1a86ff1519af518b0d8918/native.json",
+      "sha256": "c77c8d19250ade22e22423eeca6288faaa8adb1ec831aa838fe39799324436ad",
+      "size_bytes": 5001
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/6233f14cf3a55c789d269a942942c9b3f8e0470caab21f4da0f8a2e0ffbb13c1/native-blast-utility-actions/9c079b55326e00cfcb1c42ae29d033a04d476c59be294d54db6f65d3cd8f5cbe/receipt.json",
+      "sha256": "509d7e078eecfffc2525c38a55a96950735593ba9902b5ac7c283c8509ab1460",
+      "size_bytes": 162148
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/1ef6200354d1c26b3dc4978f8ddc3bac63e0fc0eee06c3eaa4e72aa402f9310a/38b47b757750d6a50b5ed5317794ec6d87dac8a2ccfc3deb6f92947495ce0c72/native.json",
+      "sha256": "2324277d6d6e87f1ee4904ef3e1678da326bc429d4975706adebcaa1b9e4b4a3",
+      "size_bytes": 5027
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/4253b327032cde93a6e61d50c617e42c1241a7f4c9d20a99ad3f1dadec3d653b/native-blast-utility-actions/c8b09c145085710cc282c5ffe7d22a8a72a0366969278c58235b8c595abe83fa/receipt.json",
+      "sha256": "ec263797e0ff4102f1432396a22e4c4f04cf88cfa9ed82b895fc04558695bb57",
+      "size_bytes": 112434
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/9ef19efaa42c72c3cbff51973be0da1f8383a28791acde98b0f935ee9e7250c6/7beb987a1a9dbf8065f3f20eb6cb377b322abba9401ce03b786a618c24f5fdb5/native.json",
+      "sha256": "8780d4af38459029535685c476d5287cd51719bc562e644831f10eeda18c66ea",
+      "size_bytes": 5027
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/6af368fc75fce1ed6a7c05426e97af01d65d8eae86ac53979217739f3e280fd9/native-blast-utility-actions/3f2e67998aa2f06f9dad308642851ed9d8d42c5a2105fd698de24ecd31bc3881/receipt.json",
+      "sha256": "e632a6921ad52d11b67f94aeae6fe911e6206aeb870bd023358ac35849385983",
+      "size_bytes": 42459
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/0f91a2fa8f15aa2fb383d2680fca10528285874f9a2231a0a4612c728960af4b/7f95eeca2f48fbd5d6bc35ac79e1d7a8be85e263189bca5c09cf398ccf73c6f4/native.json",
+      "sha256": "ac267f31060014f91631981f22b595d93c7baf5eb55ce88b853b526922dbbfe3",
+      "size_bytes": 5001
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/run/execution-results/a3fb9043a88800fdc66fa28df1186ca1413d658fd4daa0cb9d4dfb39980a4273/native-blast-utility-actions/624e1f18cae65e249d196ed7f9d3b808e93a35700d57672a1aac9743f8a2acb2/receipt.json",
+      "sha256": "f80aa8da92b7a23575461433a91a99e5948864e3dea444caf8e6b973a4da864d",
+      "size_bytes": 99872
+    },
+    {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/b8a42613d3a7c868759b37b88c57d919a3f3c9044229e1dcb632126fa76d8073/f237e42a566de67e467960a4a5ed5a1e7795f1575480fe2ab92df0542c0b778d/native.json",
+      "sha256": "730f66f3a92b553759abf15083cdcd7deb533f4c3e663ea22903cb1cc6ed3bde",
+      "size_bytes": 5027
+    }
+  ]
+}

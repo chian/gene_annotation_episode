@@ -1,0 +1,111 @@
+{
+  "changed_record_refs": [
+    "source_517f28956a028a770036c72d",
+    "context_650634ff8beac1ff424d19ce",
+    "term_7fd331e94501d86a0d2b9859",
+    "reference_baa4c561cc923a75d5d5f592",
+    "observation_693eaf38472a1411e935280f"
+  ],
+  "feedback": null,
+  "operation_ref": "api_operation_2419a96d215b9e2edc866e01",
+  "record_refs": [
+    "source_517f28956a028a770036c72d",
+    "context_650634ff8beac1ff424d19ce",
+    "term_7fd331e94501d86a0d2b9859",
+    "reference_baa4c561cc923a75d5d5f592",
+    "observation_693eaf38472a1411e935280f"
+  ],
+  "result": {
+    "acquisition_receipt": {
+      "arguments": {},
+      "assignment_sha256": "f8b1692b8e4649bef0d3b730eaa91b0a2b51fc820f3a5856c87ea39de50dbc6b",
+      "episode_id": "results-child",
+      "handoff_ref": "source_b398ba451f859c52ed83b6de",
+      "operation_key": "api-run:results-child:0",
+      "record_refs": [
+        "source_517f28956a028a770036c72d",
+        "context_650634ff8beac1ff424d19ce",
+        "term_7fd331e94501d86a0d2b9859",
+        "reference_baa4c561cc923a75d5d5f592",
+        "observation_693eaf38472a1411e935280f"
+      ],
+      "run_id": "api-run",
+      "selector": {
+        "page": 2
+      },
+      "selector_sha256": "d2b1aa3ff997f14c3e8732df2a969a3ace7ea9912524a0d5e0a954b06910f3eb",
+      "snapshot_sha256": "64fb05f19b810874965b352f0ff6c140b8fcb621990f519b109459195edeba24",
+      "source_ref": "source_517f28956a028a770036c72d",
+      "tool_name": "api.hmmer.result",
+      "validation_keys": [
+        "requested_result_page"
+      ],
+      "version": "api_result_acquisition_receipt_v1"
+    },
+    "database": {
+      "id": "pdb",
+      "version": "fixture-version"
+    },
+    "functional_or_lineage_assignment": "not_performed",
+    "handoff_ref": "source_b398ba451f859c52ed83b6de",
+    "job_id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+    "job_ref": "provider_job_1108a26f2126a812c71c2909",
+    "native_search_stats": {
+      "Z": 170694.0,
+      "Z_setby": 0,
+      "algo": "phmmer",
+      "database": "pdb",
+      "domZ": 3.0,
+      "domZ_setby": 0,
+      "elapsed": 0.22888848185539246,
+      "first_gained_index": null,
+      "id": "280e4b1f-75a9-46c6-97e6-60f2f92c16f1",
+      "n_past_bias": 3002,
+      "n_past_fwd": 6,
+      "n_past_msv": 3551,
+      "n_past_vit": 164,
+      "ndropped": null,
+      "ngained": null,
+      "nhits": 3,
+      "nincluded": 1,
+      "nlost": null,
+      "nmodels": 1,
+      "nreported": 3,
+      "nseqs": 170694,
+      "sys": 0.0,
+      "user": 0.0
+    },
+    "next_page": null,
+    "page": 2,
+    "page_count": 2,
+    "projection_errors": [],
+    "records": [
+      {
+        "accession": "6w2p_A",
+        "bitscore": 12.76318645477295,
+        "domain_observation_refs": [
+          "observation_693eaf38472a1411e935280f"
+        ],
+        "domain_publications": [
+          {
+            "domain_array_index": 0,
+            "observation_ref": "observation_693eaf38472a1411e935280f"
+          }
+        ],
+        "evalue": 0.7637289469254089,
+        "linked_uniprot_accession": "P27695",
+        "native_accession": null,
+        "native_array_index": 0,
+        "native_index": 2,
+        "native_name": "000129132",
+        "provider_accession": "6w2p_A",
+        "reference_ref": "reference_baa4c561cc923a75d5d5f592",
+        "source_label": "DNA-(apurinic or apyrimidinic site) lyase",
+        "taxon_id": 9606
+      }
+    ],
+    "source_ref": "source_517f28956a028a770036c72d",
+    "status": "SUCCESS"
+  },
+  "status": "completed"
+}

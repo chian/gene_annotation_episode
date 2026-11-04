@@ -1,0 +1,15 @@
+{
+  "before_import": "verified",
+  "after_import": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/probe_runtime.py\", line 22, in <module>\n    verify_software(software)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software/gene_annotation_episode/native_chromatin_interaction_driver.py\", line 185, in verify_software\n    verify_hic_native_runtime(software[\"native_runtime\"], file_identity=file_identity)\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software/gene_annotation_episode/native_chromatin_hic_runtime.py\", line 57, in verify_hic_native_runtime\n    require(set(_runtime_files()) <= set(pins), \"native_dependency_unavailable\")\n  File \"/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software/gene_annotation_episode/native_chromatin_interaction_contracts.py\", line 39, in require\n    raise ValueError(code)\nValueError: native_dependency_unavailable\n",
+  "added_native_paths": [
+    "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/numpy.libs/libgfortran-83c28eba-b4027c22.so.5.0.0",
+    "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/numpy.libs/libquadmath-2284e583-a9307bba.so.0.0.0",
+    "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-017048f4.so",
+    "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+    "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/numpy/linalg/_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+    "/usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+    "/usr/lib/python3.12/lib-dynload/mmap.cpython-312-x86_64-linux-gnu.so",
+    "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33"
+  ]
+}

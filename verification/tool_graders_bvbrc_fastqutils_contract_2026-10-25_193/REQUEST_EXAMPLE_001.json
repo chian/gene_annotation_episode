@@ -1,0 +1,531 @@
+{
+  "identity": "synthetic_request_builder_example_not_production_selector",
+  "selections": {
+    "input_reads": {
+      "kind": "measurement",
+      "record_ref": "m_before_reads",
+      "metric": "fastq_read_count",
+      "target_field": null
+    },
+    "read_retention": {
+      "kind": "component",
+      "record_ref": "c_retention_reads",
+      "metric": "read_retention_fraction",
+      "target_field": null
+    },
+    "retention_status": {
+      "kind": "request_status",
+      "record_ref": null,
+      "metric": null,
+      "target_field": "read_retention"
+    }
+  },
+  "requested_schema": {
+    "type": "object",
+    "properties": {
+      "input_reads": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable",
+              "invalid",
+              "incompatible"
+            ]
+          },
+          "measurement_ref": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          },
+          "quantity": {
+            "type": "string",
+            "enum": [
+              "fastq_read_count",
+              "fastq_base_count",
+              "fastq_symbol_count",
+              "fastq_min_length",
+              "fastq_max_length",
+              "fastq_length_histogram_count",
+              "quality_character_count",
+              "phred_histogram_count",
+              "verified_pair_count",
+              "fastqc_total_sequences",
+              "fastqc_flagged_sequences",
+              "fastqc_total_bases_display",
+              "fastqc_min_length",
+              "fastqc_max_length",
+              "fastqc_gc_percent",
+              "fastqc_base_quality_mean",
+              "fastqc_base_quality_median",
+              "fastqc_base_quality_lower_quartile",
+              "fastqc_base_quality_upper_quartile",
+              "fastqc_base_quality_p10",
+              "fastqc_base_quality_p90",
+              "fastqc_tile_quality_deviation",
+              "fastqc_sequence_quality_count",
+              "fastqc_base_content_percent",
+              "fastqc_n_percent",
+              "fastqc_sequence_gc_smoothed_count",
+              "fastqc_length_bin_count",
+              "fastqc_total_deduplicated_percent",
+              "fastqc_duplication_bin_percent",
+              "fastqc_overrepresented_count",
+              "fastqc_overrepresented_percent",
+              "fastqc_adapter_percent",
+              "fastqc_kmer_scaled_count",
+              "fastqc_kmer_pvalue",
+              "fastqc_kmer_obs_exp_max",
+              "trim_processed_count",
+              "trim_removed_short_count",
+              "trim_removed_short_percent",
+              "trim_removed_n_count",
+              "trim_removed_n_percent",
+              "trim_removed_long_count",
+              "trim_removed_long_percent",
+              "trim_validation_pair_count",
+              "trim_removed_pair_count",
+              "trim_removed_pair_percent",
+              "trim_native_option",
+              "trim_adapter_detection_count",
+              "fastq_pair_left_paired",
+              "fastq_pair_right_paired",
+              "fastq_pair_left_single",
+              "fastq_pair_right_single",
+              "hostile_reads_in",
+              "hostile_reads_out",
+              "hostile_reads_removed",
+              "hostile_removed_proportion",
+              "bam_record_count",
+              "bam_primary_record_count",
+              "bam_secondary_record_count",
+              "bam_supplementary_record_count",
+              "bam_mapped_primary_count",
+              "bam_mapq_histogram_count",
+              "bam_mapq_unavailable_count"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "missing",
+              "not_measured",
+              "failed",
+              "malformed",
+              "truncated",
+              "incompatible",
+              "undefined"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "reads",
+              "bases",
+              "pairs",
+              "alignment_records",
+              "phred",
+              "phred_deviation",
+              "percent",
+              "fraction",
+              "ratio",
+              "expected_errors",
+              "scaled_native_count",
+              "native_count",
+              "dimensionless",
+              "ascii",
+              "bp",
+              "kbp",
+              "Mbp",
+              "Gbp"
+            ]
+          },
+          "meaning": {
+            "type": "string",
+            "enum": [
+              "observed_count",
+              "observed_native",
+              "native_normalized",
+              "native_estimate",
+              "native_configuration"
+            ]
+          },
+          "population_ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            }
+          },
+          "requirement_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            }
+          },
+          "diagnostic_codes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "missing_artifact",
+                "partial_transfer",
+                "malformed_native",
+                "nonfinite_native",
+                "unsupported_format",
+                "unsupported_version",
+                "producer_version_unproven",
+                "compression_suffix_mismatch",
+                "truncated_compressed_stream",
+                "missing_bgzf_eof",
+                "unknown_quality_encoding",
+                "invalid_quality_score",
+                "invalid_sequence_symbol",
+                "ambiguous_pair_key",
+                "missing_mate",
+                "association_unresolved",
+                "stage_execution_unknown",
+                "stage_reused_report",
+                "artifact_collision",
+                "input_path_reused",
+                "unknown_reference",
+                "reference_incomplete",
+                "missing_denominator",
+                "zero_denominator",
+                "incompatible_population",
+                "count_inconsistent",
+                "not_retained_by_service",
+                "report_overwritten",
+                "unsupported_report_section",
+                "native_fallback_value",
+                "rounded_native_value",
+                "truncated_native_display",
+                "native_estimator",
+                "synthetic_identity",
+                "missing_requested_value"
+              ]
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "measurement_ref",
+          "quantity",
+          "state",
+          "value",
+          "unit",
+          "meaning",
+          "population_ref",
+          "source_refs",
+          "requirement_refs",
+          "diagnostic_codes"
+        ],
+        "additionalProperties": false,
+        "x-bvbrc-fastqutils": {
+          "kind": "measurement",
+          "record_ref": "m_before_reads",
+          "metric": "fastq_read_count",
+          "target_field": null
+        }
+      },
+      "read_retention": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable",
+              "invalid",
+              "incompatible"
+            ]
+          },
+          "component_ref": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          },
+          "quantity": {
+            "type": "string",
+            "enum": [
+              "gc_acgt_fraction",
+              "n_fraction",
+              "ambiguous_fraction",
+              "mean_read_length",
+              "mean_phred",
+              "q_ge_threshold_fraction",
+              "phred_implied_expected_errors",
+              "phred_implied_error_fraction",
+              "read_retention_fraction",
+              "base_retention_fraction",
+              "pair_retention_fraction",
+              "removed_count",
+              "removed_fraction",
+              "native_report_retention_fraction",
+              "distinct_mapped_read_fraction",
+              "primary_record_fraction",
+              "report_count_difference"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "missing",
+              "not_measured",
+              "failed",
+              "malformed",
+              "truncated",
+              "incompatible",
+              "undefined"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "reads",
+              "bases",
+              "pairs",
+              "alignment_records",
+              "phred",
+              "phred_deviation",
+              "percent",
+              "fraction",
+              "ratio",
+              "expected_errors",
+              "scaled_native_count",
+              "native_count",
+              "dimensionless",
+              "ascii",
+              "bp",
+              "kbp",
+              "Mbp",
+              "Gbp"
+            ]
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "composition_v1",
+              "quality_phred_v1",
+              "retention_v1",
+              "mapping_v1",
+              "report_consistency_v1"
+            ]
+          },
+          "population_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            }
+          },
+          "operand_measurement_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            }
+          },
+          "numerator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "denominator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meaning": {
+            "type": "string",
+            "enum": [
+              "derived_descriptive",
+              "phred_model_prediction",
+              "native_report_derived"
+            ]
+          },
+          "requirement_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            }
+          },
+          "diagnostic_codes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "missing_artifact",
+                "partial_transfer",
+                "malformed_native",
+                "nonfinite_native",
+                "unsupported_format",
+                "unsupported_version",
+                "producer_version_unproven",
+                "compression_suffix_mismatch",
+                "truncated_compressed_stream",
+                "missing_bgzf_eof",
+                "unknown_quality_encoding",
+                "invalid_quality_score",
+                "invalid_sequence_symbol",
+                "ambiguous_pair_key",
+                "missing_mate",
+                "association_unresolved",
+                "stage_execution_unknown",
+                "stage_reused_report",
+                "artifact_collision",
+                "input_path_reused",
+                "unknown_reference",
+                "reference_incomplete",
+                "missing_denominator",
+                "zero_denominator",
+                "incompatible_population",
+                "count_inconsistent",
+                "not_retained_by_service",
+                "report_overwritten",
+                "unsupported_report_section",
+                "native_fallback_value",
+                "rounded_native_value",
+                "truncated_native_display",
+                "native_estimator",
+                "synthetic_identity",
+                "missing_requested_value"
+              ]
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "component_ref",
+          "quantity",
+          "state",
+          "value",
+          "unit",
+          "method",
+          "population_refs",
+          "operand_measurement_refs",
+          "numerator",
+          "denominator",
+          "threshold",
+          "meaning",
+          "requirement_refs",
+          "diagnostic_codes"
+        ],
+        "additionalProperties": false,
+        "x-bvbrc-fastqutils": {
+          "kind": "component",
+          "record_ref": "c_retention_reads",
+          "metric": "read_retention_fraction",
+          "target_field": null
+        }
+      },
+      "retention_status": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "const": "available"
+          },
+          "field": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable",
+              "invalid",
+              "incompatible"
+            ]
+          },
+          "requirement_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:/%~-]*$"
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "field",
+          "state",
+          "requirement_refs"
+        ],
+        "additionalProperties": false,
+        "x-bvbrc-fastqutils": {
+          "kind": "request_status",
+          "record_ref": null,
+          "metric": null,
+          "target_field": "read_retention"
+        }
+      }
+    },
+    "required": [
+      "input_reads",
+      "read_retention",
+      "retention_status"
+    ],
+    "additionalProperties": false
+  }
+}

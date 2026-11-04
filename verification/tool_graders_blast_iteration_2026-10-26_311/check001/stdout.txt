@@ -1,0 +1,54 @@
+........................................................................ [ 86%]
+....F......                                                              [100%]
+=================================== FAILURES ===================================
+_ test_saved_sheet_offline_recalculation_changes_only_explicit_sequence_model __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x743b0db42db0>
+
+    def test_saved_sheet_offline_recalculation_changes_only_explicit_sequence_model(monkeypatch):
+        args = make_inputs([["A", "B", "B"], ["B", "C"]])
+        add_pair(args)
+        add_pssm(args)
+        sheet = json.loads(json.dumps(populate(**args)))
+        before = deepcopy(sheet)
+        def forbidden(*args, **kwargs):
+            raise AssertionError("I/O, acquisition, subprocess or Store/model access")
+        for target, name in ((builtins, "open"), (Path, "open"), (socket, "socket"), (socket, "create_connection"),
+                             (subprocess, "Popen"), (subprocess, "run")):
+            monkeypatch.setattr(target, name, forbidden)
+>       from gene_annotation_episode.state import Store
+
+../../../tests/test_blast_iteration_calculators.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/state.py:18: in <module>
+    from .domain import (ContractError, MOLECULES, ROLES, RECORD_SCHEMAS, REASONING_SCHEMA,
+../../../gene_annotation_episode/domain.py:12: in <module>
+    import jsonschema
+../../../.venv/lib/python3.12/site-packages/jsonschema/__init__.py:16: in <module>
+    from jsonschema.validators import (
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:19: in <module>
+    from jsonschema_specifications import REGISTRY as SPECIFICATIONS
+../../../.venv/lib/python3.12/site-packages/jsonschema_specifications/__init__.py:11: in <module>
+    REGISTRY = (_schemas() @ _EMPTY_REGISTRY).crawl()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/referencing/_core.py:389: in __rmatmul__
+    for resource in new:
+../../../.venv/lib/python3.12/site-packages/jsonschema_specifications/_core.py:37: in _schemas
+    contents = json.loads(path.read_text(encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (PosixPath('/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/jsonschema_specifications/schemas/draft7/metaschema.json'),)
+kwargs = {'mode': 'r', 'encoding': 'utf-8', 'errors': None}
+
+    def forbidden(*args, **kwargs):
+>       raise AssertionError("I/O, acquisition, subprocess or Store/model access")
+E       AssertionError: I/O, acquisition, subprocess or Store/model access
+
+../../../tests/test_blast_iteration_calculators.py:489: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_iteration_calculators.py::test_saved_sheet_offline_recalculation_changes_only_explicit_sequence_model
+1 failed, 82 passed in 2.09s

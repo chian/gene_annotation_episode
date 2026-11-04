@@ -1,0 +1,24 @@
+....FFFF                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-False] _
+source_snapshot/tests/test_uniprot_returns.py:546: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    assert (native_source in known) == source
+E   AssertionError: assert ('source_89afb0f1ebd49b655381b865' in {'artifact_6d3d4c9548bdce98bc3d0de59ac0a62d7c4db11a6179dfa85a1a5a052dbf41f8', 'artifact_844012cf75310ad5d2c2ad826e00f6...artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a', 'collection_452610f23b5195ad2d028e74', ...}) == False
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-False] _
+source_snapshot/tests/test_uniprot_returns.py:548: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    assert (sequence_artifact in known) == sequence
+E   AssertionError: assert ('artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a' in {'artifact_844012cf75310ad5d2c2ad826e00f6abada566391bad32890ca986d14d111425', 'artifact_90191b4cec9ce12252dd592c0e9b58...artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a', 'collection_452610f23b5195ad2d028e74', ...}) == False
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-True] _
+source_snapshot/tests/test_uniprot_returns.py:546: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    assert (native_source in known) == source
+E   AssertionError: assert ('source_89afb0f1ebd49b655381b865' in {'artifact_844012cf75310ad5d2c2ad826e00f6abada566391bad32890ca986d14d111425', 'artifact_90191b4cec9ce12252dd592c0e9b58...artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a', 'collection_452610f23b5195ad2d028e74', ...}) == False
+_ test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-True] _
+source_snapshot/tests/test_uniprot_returns.py:549: in test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay
+    assert record_id not in known
+E   AssertionError: assert 'reference_5899a114c4859e68846b60af' not in {'artifact_085c106ddd811781d8ffcd0f70f7e303ff2e88c45ca35a5350b3d815c0cf5659', 'artifact_844012cf75310ad5d2c2ad826e00f6...artifact_f0cdd3744b5bc986fd574175ecb7155c0ed57c7749098f20300735a3c849560a', 'collection_452610f23b5195ad2d028e74', ...}
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-False]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-False]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-True]
+FAILED source_snapshot/tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-True]
+4 failed, 4 passed in 222.42s (0:03:42)

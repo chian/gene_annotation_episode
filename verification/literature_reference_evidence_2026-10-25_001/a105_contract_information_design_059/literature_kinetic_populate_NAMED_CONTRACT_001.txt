@@ -1,0 +1,810 @@
+literature.kinetic.populate complete declared contract
+
+Root: Definition1
+
+Each local Definition names one exact structure. Repeated references have the same complete meaning; array positions preserve order. All fields and constraints below are present; no definitions are omitted.
+
+Definition1 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition2 |
+| required | Definition99 |
+| additionalProperties | false |
+
+Definition2 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| version | Definition3 |
+| source_ref | Definition4 |
+| source_kind | Definition5 |
+| numerator | Definition7 |
+| denominator | Definition7 |
+| comparison | Definition76 |
+
+Definition3 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| const | a105_kinetic_source_selection_v1 |
+
+Definition4 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| pattern | ^(?:[a-z][a-z_]*_[a-f0-9]{24,64}\|@[A-Za-z][A-Za-z0-9_]*)$ |
+| description | An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs. |
+
+Definition5 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition6 |
+
+Definition6 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | primary_source |
+| 1 | synthetic_fixture |
+
+Definition7 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| anyOf | Definition8 |
+
+Definition8 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | Definition9 |
+| 1 | Definition29 |
+
+Definition9 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition10 |
+| required | Definition75 |
+| additionalProperties | false |
+
+Definition10 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| parameter_kind | Definition11 |
+| subject | Definition25 |
+| context | Definition31 |
+| measurement_identity | Definition27 |
+| measurement | Definition34 |
+| qualification | Definition42 |
+| uncertainty | Definition46 |
+
+Definition11 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition12 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition12 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition13 |
+| witnesses | Definition15 |
+
+Definition13 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition14 |
+
+Definition14 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | Km |
+| 1 | kcat |
+| 2 | catalytic_efficiency |
+| 3 | unknown |
+| 4 | conflicting |
+
+Definition15 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | array |
+| items | Definition16 |
+
+Definition16 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition17 |
+| required | Definition23 |
+| additionalProperties | false |
+
+Definition17 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| source_ref | Definition4 |
+| representation | Definition18 |
+| start | Definition20 |
+| end | Definition21 |
+| quote | Definition22 |
+
+Definition18 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition19 |
+
+Definition19 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | original |
+| 1 | text |
+
+Definition20 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | integer |
+| minimum | 0 |
+
+Definition21 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | integer |
+| minimum | 1 |
+
+Definition22 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | string |
+| minLength | 1 |
+
+Definition23 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | source_ref |
+| 1 | representation |
+| 2 | start |
+| 3 | end |
+| 4 | quote |
+
+Definition24 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | value |
+| 1 | witnesses |
+
+Definition25 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition26 |
+| required | Definition30 |
+| additionalProperties | false |
+
+Definition26 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| organism | Definition27 |
+| genotype | Definition27 |
+| molecule | Definition27 |
+| construct | Definition27 |
+
+Definition27 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| anyOf | Definition28 |
+
+Definition28 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | Definition16 |
+| 1 | Definition29 |
+
+Definition29 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | null |
+
+Definition30 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | organism |
+| 1 | genotype |
+| 2 | molecule |
+| 3 | construct |
+
+Definition31 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition32 |
+| required | Definition33 |
+| additionalProperties | false |
+
+Definition32 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| substrate | Definition27 |
+| preparation | Definition27 |
+| experiment | Definition27 |
+| experimental_system | Definition27 |
+| conditions | Definition27 |
+| endpoint | Definition27 |
+| normalization | Definition27 |
+
+Definition33 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | substrate |
+| 1 | preparation |
+| 2 | experiment |
+| 3 | experimental_system |
+| 4 | conditions |
+| 5 | endpoint |
+| 6 | normalization |
+
+Definition34 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| anyOf | Definition35 |
+
+Definition35 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | Definition36 |
+| 1 | Definition29 |
+
+Definition36 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition37 |
+| required | Definition41 |
+| additionalProperties | false |
+
+Definition37 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| number | Definition38 |
+| unit | Definition27 |
+
+Definition38 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition39 |
+| required | Definition40 |
+| additionalProperties | false |
+
+Definition39 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| witness | Definition16 |
+| number_start | Definition20 |
+| number_end | Definition21 |
+
+Definition40 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | witness |
+| 1 | number_start |
+| 2 | number_end |
+
+Definition41 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | number |
+| 1 | unit |
+
+Definition42 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition43 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition43 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition44 |
+| witnesses | Definition15 |
+
+Definition44 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition45 |
+
+Definition45 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | reported_point |
+| 1 | source_qualified_approximate |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition46 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition47 |
+| required | Definition74 |
+| additionalProperties | false |
+
+Definition47 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| statistic | Definition48 |
+| magnitude | Definition52 |
+| interval | Definition54 |
+| unit | Definition27 |
+| unit_relationship | Definition59 |
+| confidence_level | Definition27 |
+| count | Definition63 |
+| repetition_basis | Definition66 |
+| estimate_basis | Definition70 |
+
+Definition48 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition49 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition49 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition50 |
+| witnesses | Definition15 |
+
+Definition50 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition51 |
+
+Definition51 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | sd |
+| 1 | sem |
+| 2 | ci |
+| 3 | unspecified |
+| 4 | unreported |
+
+Definition52 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| anyOf | Definition53 |
+
+Definition53 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | Definition38 |
+| 1 | Definition29 |
+
+Definition54 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| anyOf | Definition55 |
+
+Definition55 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | Definition56 |
+| 1 | Definition29 |
+
+Definition56 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition57 |
+| required | Definition58 |
+| additionalProperties | false |
+
+Definition57 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| witness | Definition16 |
+| lower_start | Definition20 |
+| lower_end | Definition20 |
+| upper_start | Definition20 |
+| upper_end | Definition20 |
+
+Definition58 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | witness |
+| 1 | lower_start |
+| 2 | lower_end |
+| 3 | upper_start |
+| 4 | upper_end |
+
+Definition59 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition60 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition60 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition61 |
+| witnesses | Definition15 |
+
+Definition61 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition62 |
+
+Definition62 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | same_as_parameter |
+| 1 | explicit_unit |
+| 2 | unknown |
+
+Definition63 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| anyOf | Definition64 |
+
+Definition64 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | Definition65 |
+| 1 | Definition29 |
+
+Definition65 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition39 |
+| required | Definition40 |
+| additionalProperties | false |
+| description | Select the complete reported repetition numeral, which may be decimal digits or an English cardinal word expression. Outer witness offsets are UTF8 bytes; number_start and number_end are Unicode character positions inside that exact quote. Do not supply a converted number. Qualified or unsupported counts retain partial source information; repetition meaning is selected separately. |
+
+Definition66 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition67 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition67 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition68 |
+| witnesses | Definition15 |
+
+Definition68 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition69 |
+
+Definition69 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | biological_preparations |
+| 1 | technical_measurements |
+| 2 | unspecified |
+
+Definition70 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition71 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition71 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition72 |
+| witnesses | Definition15 |
+
+Definition72 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition73 |
+
+Definition73 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | fit_to_averaged_curve |
+| 1 | between_fitted_parameters |
+| 2 | unknown |
+
+Definition74 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | statistic |
+| 1 | magnitude |
+| 2 | interval |
+| 3 | unit |
+| 4 | unit_relationship |
+| 5 | confidence_level |
+| 6 | count |
+| 7 | repetition_basis |
+| 8 | estimate_basis |
+
+Definition75 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | parameter_kind |
+| 1 | subject |
+| 2 | context |
+| 3 | measurement_identity |
+| 4 | measurement |
+| 5 | qualification |
+| 6 | uncertainty |
+
+Definition76 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition77 |
+| required | Definition98 |
+| additionalProperties | false |
+
+Definition77 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| subject_relationship | Definition78 |
+| parameter_definition_relationship | Definition82 |
+| substrate_arrangement | Definition86 |
+| comparison_scope | Definition90 |
+| nonintended_conditions_relationship | Definition94 |
+
+Definition78 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition79 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition79 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition80 |
+| witnesses | Definition15 |
+
+Definition80 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition81 |
+
+Definition81 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | same_molecule_and_construct |
+| 1 | different |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition82 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition83 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition83 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition84 |
+| witnesses | Definition15 |
+
+Definition84 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition85 |
+
+Definition85 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | same |
+| 1 | different |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition86 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition87 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition87 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition88 |
+| witnesses | Definition15 |
+
+Definition88 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition89 |
+
+Definition89 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | separate_assays |
+| 1 | mixed_substrates |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition90 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition91 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition91 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition92 |
+| witnesses | Definition15 |
+
+Definition92 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition93 |
+
+Definition93 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | reported_protocols |
+| 1 | common_conditions |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition94 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| type | object |
+| properties | Definition95 |
+| required | Definition24 |
+| additionalProperties | false |
+
+Definition95 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| value | Definition96 |
+| witnesses | Definition15 |
+
+Definition96 — object
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| enum | Definition97 |
+
+Definition97 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | matched |
+| 1 | different |
+| 2 | unknown |
+| 3 | conflicting |
+
+Definition98 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | subject_relationship |
+| 1 | parameter_definition_relationship |
+| 2 | substrate_arrangement |
+| 3 | comparison_scope |
+| 4 | nonintended_conditions_relationship |
+
+Definition99 — array
+
+| Field or position | Declared value or structure |
+| --- | --- |
+| 0 | version |
+| 1 | source_ref |
+| 2 | source_kind |
+| 3 | numerator |
+| 4 | denominator |
+| 5 | comparison |

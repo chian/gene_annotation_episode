@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P18",
+  "name": "Explain conflicting biological results with discriminating scope contrasts",
+  "description": "Compare incompatible biological claims by testing whether a difference in organism, molecular state, assay window, relation or construct predicts the disagreement. Preserve genuine conflict when available observations do not distinguish the explanations.",
+  "use_when": "Studies or assays appear to support incompatible assignments or dependencies.",
+  "live_alternatives": [
+    "Results genuinely conflict under comparable conditions.",
+    "Both hold in different states/organisms/windows.",
+    "A proxy has been given a stronger interpretation.",
+    "A specific construct or record error explains a result."
+  ],
+  "decision_guidance": [
+    "State the incompatible biological relations and the matching conditions needed for a real contradiction; source identity does not decide which relation is correct.",
+    "Seek evidence testing the proposed explanation, not just metadata differences.",
+    "Plausible scope differences are not resolutions until a discriminating comparison exists."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "A corrected construct/condition is linked to the discrepancy",
+      "then_consider": "Revise only the interpretation supported by the correction."
+    },
+    {
+      "if_observed": "Scope explanation remains untested",
+      "then_consider": "Retain conflict and the missing comparison."
+    },
+    {
+      "if_observed": "Records concern different outputs/phases",
+      "then_consider": "Restrict claims without calling them equivalent replications."
+    }
+  ],
+  "boundary": "The starting evidence contains incompatible biological claims at apparently comparable scope; the problem is to test an explanation for the disagreement. P04 revises a failed attachment within one explanation. Organism, condition or construct differences are candidate explanations, not automatic resolutions. This is not a publication search, paper-ranking or literature-reading process, and no observation or saved credit is rewritten.",
+  "evidence": [
+    {
+      "case_group": "cellular_y_complex",
+      "case_id": "cellular_y_complex",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4978174/",
+      "source_locator": "Reported disagreement/strain effects; three-paper comparison in cellular detailed trace.",
+      "observation": "One study disputed the sinR explanation and reported strain-dependent phosphorelay effects while other data supported RNA-processing participation.",
+      "limit": "Later selected RNA evidence did not resolve the direct-phosphorelay dispute."
+    },
+    {
+      "case_group": "causal_tsaE_turnover",
+      "case_id": "causal_tsaE_turnover",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4330362/",
+      "source_locator": "2015 mutant Results/supplementary assays and 2018 discussion of unresolved comparison.",
+      "observation": "E. coli endpoint formation despite low ATPase differed from Thermotoga repeated-turnover evidence, explicitly left unreconciled.",
+      "limit": "Organism and assay differences are limits, not demonstrated solutions."
+    },
+    {
+      "case_group": "replacement_lysU",
+      "case_id": "replacement_lysU",
+      "source_url": "https://febs.onlinelibrary.wiley.com/doi/10.1111/febs.14113",
+      "source_locator": "Case-record observation; inspected scope: 1990 abstract plus complete relevant 2017 primary Results subsection read; conflicting conditions were not experimentally reconciled.",
+      "observation": "A later K12 study found no temperature/media growth difference despite an earlier heat requirement.",
+      "limit": "Older source was abstract-level; conditions were not experimentally reconciled."
+    },
+    {
+      "case_group": "spec_yjjg_conditional_salvage_cleanup",
+      "case_id": "spec_yjjg_conditional_salvage_cleanup",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3195379/",
+      "source_locator": "Case-record observation; inspected scope: 2007 salvage relevant whole results and media methods; 2011 relevant dgt/yjjG comparisons, discussion and medium composition inspected. 2007 housecleaning primary abstract only; publisher PDF access failed.",
+      "observation": "Later work reproduced salvage contribution in enriched medium but found little effect in unenriched minimal medium and an alternative dgt route.",
+      "limit": "This bounds the phenotype rather than making salvage and housecleaning mutually exclusive."
+    }
+  ]
+}

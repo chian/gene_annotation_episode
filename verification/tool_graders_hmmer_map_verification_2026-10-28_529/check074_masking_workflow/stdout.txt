@@ -1,0 +1,77 @@
+F..F..F..EEE                                                             [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_actual_nested_masking_returns_share_retained_calculations[windowmasker-create_counts] _
+source_snapshot/tests/test_native_blast_masking_workflow.py:212: in native_case
+    case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_workflow.py:77: in nested_case
+    request = requested_job_from_native_blast_masking(job)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:215: in requested_job_from_native_blast_masking
+    job = validate_native_blast_masking_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:125: in validate_native_blast_masking_job
+    _schema(job, NATIVE_BLAST_MASKING_JOB_SCHEMA)
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:85: in _schema
+    _error("schema_mismatch")
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:80: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch
+_ ERROR at setup of test_selected_contracts_grants_and_practical_accounting[windowmasker-create_counts] _
+source_snapshot/tests/test_native_blast_masking_workflow.py:212: in native_case
+    case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_workflow.py:77: in nested_case
+    request = requested_job_from_native_blast_masking(job)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:215: in requested_job_from_native_blast_masking
+    job = validate_native_blast_masking_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:125: in validate_native_blast_masking_job
+    _schema(job, NATIVE_BLAST_MASKING_JOB_SCHEMA)
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:85: in _schema
+    _error("schema_mismatch")
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:80: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch
+_ ERROR at setup of test_closed_native_result_and_received_forms_replay_without_work[windowmasker-create_counts] _
+source_snapshot/tests/test_native_blast_masking_workflow.py:212: in native_case
+    case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_blast_masking_workflow.py:77: in nested_case
+    request = requested_job_from_native_blast_masking(job)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:215: in requested_job_from_native_blast_masking
+    job = validate_native_blast_masking_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:125: in validate_native_blast_masking_job
+    _schema(job, NATIVE_BLAST_MASKING_JOB_SCHEMA)
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:85: in _schema
+    _error("schema_mismatch")
+source_snapshot/gene_annotation_episode/native_blast_masking_contracts.py:80: in _error
+    raise ContractError(PREFIX + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_masking_schema_mismatch
+=================================== FAILURES ===================================
+_ test_actual_nested_masking_returns_share_retained_calculations[dustmasker-mask] _
+source_snapshot/tests/test_native_blast_masking_workflow.py:233: in test_actual_nested_masking_returns_share_retained_calculations
+    assert sheet['operation'] == calculated['operation'] == bundle['operation']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'operation'
+_ test_actual_nested_masking_returns_share_retained_calculations[segmasker-mask] _
+source_snapshot/tests/test_native_blast_masking_workflow.py:233: in test_actual_nested_masking_returns_share_retained_calculations
+    assert sheet['operation'] == calculated['operation'] == bundle['operation']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'operation'
+_ test_actual_nested_masking_returns_share_retained_calculations[windowmasker-mask] _
+source_snapshot/tests/test_native_blast_masking_workflow.py:233: in test_actual_nested_masking_returns_share_retained_calculations
+    assert sheet['operation'] == calculated['operation'] == bundle['operation']
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'operation'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_blast_masking_workflow.py::test_actual_nested_masking_returns_share_retained_calculations[dustmasker-mask]
+FAILED source_snapshot/tests/test_native_blast_masking_workflow.py::test_actual_nested_masking_returns_share_retained_calculations[segmasker-mask]
+FAILED source_snapshot/tests/test_native_blast_masking_workflow.py::test_actual_nested_masking_returns_share_retained_calculations[windowmasker-mask]
+ERROR source_snapshot/tests/test_native_blast_masking_workflow.py::test_actual_nested_masking_returns_share_retained_calculations[windowmasker-create_counts]
+ERROR source_snapshot/tests/test_native_blast_masking_workflow.py::test_selected_contracts_grants_and_practical_accounting[windowmasker-create_counts]
+ERROR source_snapshot/tests/test_native_blast_masking_workflow.py::test_closed_native_result_and_received_forms_replay_without_work[windowmasker-create_counts]
+3 failed, 6 passed, 3 errors in 206.55s (0:03:26)

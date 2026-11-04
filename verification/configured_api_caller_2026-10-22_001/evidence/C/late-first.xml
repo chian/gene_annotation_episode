@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="12.095" timestamp="2026-10-22T04:48:27.292727-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_scientific_checkpoint_fork" name="test_late_observed_database_change_cannot_be_labelled_preserved[False]" time="6.161"><failure message="Failed: DID NOT RAISE ScientificCheckpointForkError">tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-late-first-20261022-001/test_late_observed_database_ch0')
+native = False
+
+    @pytest.mark.parametrize('native', [False, True])
+    def test_late_observed_database_change_cannot_be_labelled_preserved(tmp_path, native):
+        source = checkpoint_source_fixture(tmp_path)
+        target = (source['arguments']['source_run_directory']/'native-jobs/jobs.sqlite' if native else
+            source['arguments']['source_workspace']/'state.sqlite3')
+        database_files = custody._database_files
+        changed = False
+        def external_writer(path):
+            nonlocal changed
+            if path == target and not changed:
+                changed = True
+                db = sqlite3.connect(path)
+                try:
+                    db.execute('PRAGMA user_version=17')
+                finally:
+                    db.close()
+            return database_files(path)
+        with patch.object(custody, '_database_files', external_writer):
+&gt;           value = failure(source, tmp_path/'new', 'source_changed')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:828: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-late-first-20261022-001/test_late_observ..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_c1cf61ee3d1b8ea8ee5ace23', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-late-first-20261022-001/test_late_observed_database_ch0/new')
+code = 'source_changed'
+
+    def failure(source, destination, code):
+&gt;       with pytest.raises(custody.ScientificCheckpointForkError) as error:
+E       Failed: DID NOT RAISE ScientificCheckpointForkError
+
+tests/test_scientific_checkpoint_fork.py:236: Failed</failure></testcase><testcase classname="tests.test_scientific_checkpoint_fork" name="test_late_observed_database_change_cannot_be_labelled_preserved[True]" time="5.518"><failure message="Failed: DID NOT RAISE ScientificCheckpointForkError">tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-late-first-20261022-001/test_late_observed_database_ch1')
+native = True
+
+    @pytest.mark.parametrize('native', [False, True])
+    def test_late_observed_database_change_cannot_be_labelled_preserved(tmp_path, native):
+        source = checkpoint_source_fixture(tmp_path)
+        target = (source['arguments']['source_run_directory']/'native-jobs/jobs.sqlite' if native else
+            source['arguments']['source_workspace']/'state.sqlite3')
+        database_files = custody._database_files
+        changed = False
+        def external_writer(path):
+            nonlocal changed
+            if path == target and not changed:
+                changed = True
+                db = sqlite3.connect(path)
+                try:
+                    db.execute('PRAGMA user_version=17')
+                finally:
+                    db.close()
+            return database_files(path)
+        with patch.object(custody, '_database_files', external_writer):
+&gt;           value = failure(source, tmp_path/'new', 'source_changed')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:828: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-late-first-20261022-001/test_late_observ..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_add3f1513d06d590ba7d816a', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-late-first-20261022-001/test_late_observed_database_ch1/new')
+code = 'source_changed'
+
+    def failure(source, destination, code):
+&gt;       with pytest.raises(custody.ScientificCheckpointForkError) as error:
+E       Failed: DID NOT RAISE ScientificCheckpointForkError
+
+tests/test_scientific_checkpoint_fork.py:236: Failed</failure></testcase></testsuite></testsuites>

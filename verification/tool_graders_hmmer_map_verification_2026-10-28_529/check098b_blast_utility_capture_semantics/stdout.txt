@@ -1,0 +1,18 @@
+........................................................................ [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 45%]
+........................................................................ [ 60%]
+........................................................................ [ 76%]
+.....................F.................................................. [ 91%]
+.........................................                                [100%]
+=================================== FAILURES ===================================
+___ test_failed_partial_build_retains_outputs_without_success_or_prefix_file ___
+source_snapshot/tests/test_native_blast_utility_practical_630.py:185: in test_failed_partial_build_retains_outputs_without_success_or_prefix_file
+    assert next(row for row in bundle['artifacts'] if row['role'] == 'database_file')['completeness'] == 'partial'
+E   AssertionError: assert 'complete' == 'partial'
+E     
+E     - partial
+E     + complete
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_blast_utility_practical_630.py::test_failed_partial_build_retains_outputs_without_success_or_prefix_file
+1 failed, 472 passed in 354.92s (0:05:54)

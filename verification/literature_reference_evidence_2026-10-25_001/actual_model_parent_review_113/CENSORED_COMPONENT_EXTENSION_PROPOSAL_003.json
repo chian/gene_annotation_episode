@@ -1,0 +1,46 @@
+{
+  "evidence_class": "source-case-grounded mathematical component extension proposal; not a new goal, policy, source finding, confidence interval or implemented grader",
+  "source_scope": "same root-reviewed PMC2223550/Table2 H2return; no new paper or source packet opened",
+  "reported_reference_point": "5",
+  "reported_test_constraint": {
+    "bound": "lt",
+    "threshold": "1/100",
+    "unit": "umolH2/min/mg"
+  },
+  "derived_constraints_conditional_on_reported_operands": {
+    "retained_fraction": {
+      "bound": "lt",
+      "threshold": "1/500",
+      "formula": "test/reference; positive reported point reference"
+    },
+    "fractional_decrease": {
+      "bound": "gt",
+      "threshold": "499/500",
+      "formula": "1-test/reference"
+    },
+    "rate_difference": {
+      "bound": "gt",
+      "threshold": "499/100",
+      "formula": "reference-test",
+      "unit": "umolH2/min/mg"
+    }
+  },
+  "point_values": "remain null for the censored contrast; no replacement of the limit with a point",
+  "scientific_meaning": "coupled H2endpoint constraints only; hydrogenase reporter removal does not isolate Bcd activity",
+  "dependence": "same reference5 reused, and all three calculations depend on same reported inputs; no new independent assay",
+  "uncertainty": "source sampling uncertainty remains unknown; these inequalities are not confidence bounds or probabilities",
+  "existing_implementation_evidence": {
+    "path": "gene_annotation_episode/literature_rate_calculations.py",
+    "sha256": "17163020eb4449360efd208174f06e6df6c92f375fedacf5f45267a84ee67545",
+    "lines": [
+      346,
+      354
+    ],
+    "behavior": "native thresholds retained for reference/test rows only; derived contrast bounds not calculated",
+    "actual_old_return": "all three censored derived cells have null point, null threshold and bound none"
+  },
+  "contract_consideration": "existing native27field row already has threshold/bound/origin; inspect complete calculation/storage/replay consumers and preserve historical descriptors/results before proposing implementation",
+  "next_workload": "fresh separately owned basic bound-arithmetic repair after interface review; do not edit114ownedpromptfiles or source papers",
+  "printed_in_chat_before_coding": true,
+  "status": "unimplemented required useful partial calculation; wider goal incomplete"
+}

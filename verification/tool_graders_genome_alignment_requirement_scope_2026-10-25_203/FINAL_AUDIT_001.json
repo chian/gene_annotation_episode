@@ -1,0 +1,74 @@
+{
+  "authority_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "baseline_files_unchanged": 1052,
+  "changed_plan_union_bases": 677,
+  "completed_at": "2026-10-25T22:38:51.880372+00:00",
+  "distinct_passing_cases": 855,
+  "external_network": false,
+  "extra_fixture_files_unchanged": 7,
+  "fixture_candidate_source_files_unchanged": 1053,
+  "fixture_failures_reproduced_on_baseline": [
+    "tests/test_bvbrc_genome_alignment_calculators.py::test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[bound]",
+    "tests/test_bvbrc_genome_alignment_calculators.py::test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[conflicting]",
+    "tests/test_bvbrc_genome_alignment_calculators.py::test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[missing]",
+    "tests/test_bvbrc_genome_alignment_calculators.py::test_real_retained_native_bytes_parse_into_the_saved_D_data",
+    "tests/test_bvbrc_genome_alignment_calculators.py::test_v4_retained_synthetic_reverse_overlap_source_extraction_and_denominators",
+    "tests/test_bvbrc_genome_alignment_inputs.py::test_retained_source_default_is_labelled_expectation_not_deployment"
+  ],
+  "implementation_changes": [
+    "gene_annotation_episode/bvbrc_genome_alignment_sheet.py"
+  ],
+  "live_bvbrc": false,
+  "new_http_calls_during_saved_replay": 0,
+  "new_native_alignment": false,
+  "new_tests": [
+    "tests/test_genome_alignment_requirement_scope.py"
+  ],
+  "original_action_unchanged": true,
+  "original_diagnostic_files_unchanged": 192,
+  "production_application": false,
+  "remote_jobs": false,
+  "repair_source_files_unchanged_during_tests": 1053,
+  "runs": {
+    "repair_completed_fixtures_002": {
+      "exit_code": 0,
+      "failed": 0,
+      "network_scope": "AF_INET and AF_INET6 connections forbidden",
+      "passed": 6,
+      "seconds": 0.9026790650095791
+    },
+    "repair_core_001": {
+      "exit_code": 1,
+      "failed": 6,
+      "network_scope": "AF_INET and AF_INET6 connections forbidden",
+      "passed": 750,
+      "seconds": 482.6103304789867
+    },
+    "repair_episode_001": {
+      "exit_code": 0,
+      "failed": 0,
+      "network_scope": "controlled 127.0.0.1 HTTP only",
+      "passed": 6,
+      "seconds": 1109.8133662189357
+    },
+    "repair_host_001": {
+      "exit_code": 0,
+      "failed": 0,
+      "network_scope": "AF_INET and AF_INET6 connections forbidden",
+      "passed": 13,
+      "seconds": 902.0424694350222
+    },
+    "repair_scope_001": {
+      "exit_code": 0,
+      "failed": 0,
+      "network_scope": "AF_INET and AF_INET6 connections forbidden",
+      "passed": 80,
+      "seconds": 1.8280208769720048
+    }
+  },
+  "same_plan_recalculation_equal": true,
+  "saved_replay_counts_unchanged": true,
+  "unresolved_pytest_failures": [],
+  "wall_time_limit": null,
+  "workflow_evidence_directory": "repair_candidate/verification/tool_graders_bvbrc_genome_alignment_episode_flow_2026-10-25/runs/mauve-v4-xrhnri2v"
+}

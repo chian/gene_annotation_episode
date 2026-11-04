@@ -1,0 +1,163 @@
+{
+  "component_order": [
+    "errors",
+    "gc",
+    "retained"
+  ],
+  "counts": [
+    {
+      "actions": 1,
+      "cumulative_credits": [
+        0.0
+      ],
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "observations": 1,
+      "raw_marginal_gains": [
+        0.0
+      ],
+      "role": "annotation",
+      "state": "yielded"
+    },
+    {
+      "actions": 3,
+      "cumulative_credits": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "observations": 3,
+      "raw_marginal_gains": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "role": "scientific_process",
+      "state": "yielded"
+    },
+    {
+      "actions": 1,
+      "cumulative_credits": [
+        2
+      ],
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "observations": 1,
+      "raw_marginal_gains": [
+        2.0
+      ],
+      "role": "launch",
+      "state": "yielded"
+    },
+    {
+      "actions": 2,
+      "cumulative_credits": [
+        0,
+        2
+      ],
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "observations": 2,
+      "raw_marginal_gains": [
+        0.0,
+        2.0
+      ],
+      "role": "launch_api",
+      "state": "yielded"
+    },
+    {
+      "actions": 11,
+      "cumulative_credits": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        6,
+        6,
+        9,
+        9,
+        12
+      ],
+      "final_expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "observations": 11,
+      "raw_marginal_gains": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0,
+        0.0,
+        3.0,
+        0.0,
+        3.0,
+        0.0,
+        3.0
+      ],
+      "role": "results",
+      "state": "yielded"
+    }
+  ],
+  "exit_code": 0,
+  "numerical_values": {
+    "errors": 0.001,
+    "gc": 0.5555555555555556,
+    "read_count": 2,
+    "retained": 0.75
+  },
+  "observations": 18,
+  "original_example_hashes": {
+    "examples/workflow/archive.json": "51e185aa71e402e5fed84c63cd2b166de81c3aac78faac1bc26793f7c3d103fa",
+    "examples/workflow/choices.json": "792bc539e92e0a15e948e00e1b45b552624519d783fc2881ac5039ea449ffec0",
+    "examples/workflow/commands.json": "f15867bc0957950dac954afbe5eb8ffa051e920a96bec567ef97b68303f1d4e4",
+    "examples/workflow/components.json": "01390cc29cf8ddf40c622984e0087b4cba9ba3bb48bd1c0914ffe2bc600de239",
+    "examples/workflow/counts.json": "1f59cb54786c4292202218f740ef3f8155ebad14792552cf0f34fd446e34662e",
+    "examples/workflow/parse_action.json": "5b5bca86c47ebcb484dca64e17a5fbe9c87fa01614c68d303b9e5b4b8064a2fe",
+    "examples/workflow/publication.json": "21d6c1f6a9450756a48b099ed7ae6d73b83b674373a481d8e994dacff2c8bb59",
+    "examples/workflow/qualification.json": "1f8c4ccc7aeafef5f5d6879b19b66672e8bcfbb8d385660cc86c89976571d948",
+    "examples/workflow/root_admission.json": "121c19e20acd240ceb4feea11b347eae541d872bf93452d472c73126567de802",
+    "examples/workflow/root_received_form.json": "3bd7d844150259c5aa3aa3110faa6beb49d9dc9906dca159ec33c3377b9d46bc",
+    "examples/workflow/sheet.json": "1b56a044ac98068fec3d82904817fc3bf508e5086e9811a2f43cb962631a8401",
+    "examples/workflow/supplied_material.json": "ca6c0990e382bfb4170bfa80d286f1d595672e8c5823038373fc653d9ea45ff2",
+    "examples/workflow/typed_form.json": "2f1618579fff2bab6a9e699962c34596ef262be1b0c766365855952a3bd79db7"
+  },
+  "own_actions": 18,
+  "qualification": "Historical 198 development snapshot, before root saved component-order repair and before 208 composition. Original component order bug is preserved; the newer test adds an explicit order assertion. Parent/scientific continuation and zero scientific-credit projection are controlled, along with transport/choices. Execution endpoint estimators, shared method_loop, custody and return admission are real. No live task, native producer, model, or W05 credit verification. External harness changed during this run; receipt preserves that fact.",
+  "receipt": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/receipt.json",
+  "return_source_sha256": "bfa0d06490e72011444c70601b79b75db96dfdee9587b5fbacaf92020b3a0eab",
+  "scientific_implementation_sha256": "e25e6accdeb551f989701d50b2bfed8a6f9393da31848cbc62a0fb2f5856e135"
+}

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="6" time="24.427" timestamp="2026-10-30T10:14:41.198349-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_itc_binding_tool" name="test_registered_itc_fit_same_episode_next_iteration_saved_and_closed_replay" time="9.174"><failure message="assert 'competing explanations' in &quot;Determine what the supplied target does within the parent's assigned question, scope and constraints. Start with the ... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.&quot;">source_snapshot/tests/test_itc_binding_tool.py:265: in test_registered_itc_fit_same_episode_next_iteration_saved_and_closed_replay
+    asyncio.run(root.run_async(workflow.context))
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_itc_binding_tool.py:92: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_runtime.py:181: in complete
+    assert "competing explanations" in instructions
+E   assert 'competing explanations' in "Determine what the supplied target does within the parent's assigned question, scope and constraints. Start with the ... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory."</failure></testcase><testcase classname="tests.test_itc_binding_tool" name="test_itc_registry_without_current_selected_episode_cannot_fit" time="3.891" /><testcase classname="tests.test_itc_binding_tool" name="test_known_terminal_worker_failure_is_durable_and_never_invented_fit_zero[nonzero-local_job_execution_failed]" time="2.104"><failure message="TypeError: 'NoneType' object is not subscriptable">source_snapshot/tests/test_itc_binding_tool.py:491: in test_known_terminal_worker_failure_is_durable_and_never_invented_fit_zero
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_itc_binding_tool.py:477: in inspect_failed
+    assert value['status'] == 'failed' and value['feedback']['code'] == code
+           ^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable</failure></testcase><testcase classname="tests.test_itc_binding_tool" name="test_known_terminal_worker_failure_is_durable_and_never_invented_fit_zero[oom-local_job_resource_limit]" time="3.572"><failure message="TypeError: 'NoneType' object is not subscriptable">source_snapshot/tests/test_itc_binding_tool.py:491: in test_known_terminal_worker_failure_is_durable_and_never_invented_fit_zero
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_itc_binding_tool.py:477: in inspect_failed
+    assert value['status'] == 'failed' and value['feedback']['code'] == code
+           ^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable</failure></testcase><testcase classname="tests.test_itc_binding_tool" name="test_known_terminal_worker_failure_is_durable_and_never_invented_fit_zero[output_missing-local_job_output_missing]" time="2.346"><failure message="TypeError: 'NoneType' object is not subscriptable">source_snapshot/tests/test_itc_binding_tool.py:491: in test_known_terminal_worker_failure_is_durable_and_never_invented_fit_zero
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_itc_binding_tool.py:477: in inspect_failed
+    assert value['status'] == 'failed' and value['feedback']['code'] == code
+           ^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable</failure></testcase><testcase classname="tests.test_itc_binding_tool" name="test_unreleased_original_software_mismatch_rejects_before_dispatch" time="0.951" /></testsuite></testsuites>

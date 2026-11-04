@@ -1,0 +1,311 @@
+{
+  "actual_saved_numeric_admission_established": false,
+  "correction_to_launch_receipt": "The launch receipt status initial_decision_pending was conservative/stale: its own counts already had4 selected actions and2 observations. This receipt inspects the actual selected commissioning boundary. It does not prove numerical population or delivery.",
+  "counts": {
+    "runtime_actions": 4,
+    "runtime_completion_slots": 2,
+    "runtime_observations": 2,
+    "runtime_report_attempts": 0
+  },
+  "private_model_content_or_provider_logs_read": false,
+  "public_actions": [
+    {
+      "episode": "episode_80c74788f0b367d06930159b6c0fd4ad92ec459cb2ad2edc962d361903b74cd2",
+      "feedback": null,
+      "index": 0,
+      "kind": "episode_child",
+      "status": "pending",
+      "tool": null
+    },
+    {
+      "episode": "episode_80c74788f0b367d06930159b6c0fd4ad92ec459cb2ad2edc962d361903b74cd2",
+      "feedback": null,
+      "index": 1,
+      "kind": "wait",
+      "status": null,
+      "tool": null
+    },
+    {
+      "episode": "episode_5f8378ef3ad8b227430c7256331a93b8c8c45987337668adf9dd1a73f6f96a0b",
+      "feedback": null,
+      "index": 0,
+      "kind": "tool",
+      "status": "completed",
+      "tool": "source.read"
+    },
+    {
+      "episode": "episode_5f8378ef3ad8b227430c7256331a93b8c8c45987337668adf9dd1a73f6f96a0b",
+      "feedback": null,
+      "index": 1,
+      "kind": "tool",
+      "status": "completed",
+      "tool": "source.read"
+    }
+  ],
+  "safe_worker_prefixes": [
+    {
+      "pid": 1444415,
+      "safe_prefix": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-P",
+        "-m",
+        "method_loop.durable_worker",
+        "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_020/live_001/run/episode-execution"
+      ]
+    }
+  ],
+  "selected_commissions": [
+    {
+      "assignment": {
+        "question_context_refs": [],
+        "requested_rate_components": [
+          "reference_rate",
+          "test_rate",
+          "rate_difference",
+          "retained_fraction",
+          "fractional_decrease"
+        ],
+        "source_refs": [
+          "source_0b8cba800e58dcd678d58126"
+        ],
+        "version": "literature_assignment_v1"
+      },
+      "bound_fields_absent_from_initial": true,
+      "decision_index": 0,
+      "exact_declared_partner_schema": {},
+      "initial_interpretations": {
+        "basis_observation_refs": [],
+        "endpoint_scope": "unresolved",
+        "remaining_issue_codes": []
+      },
+      "parent_episode_id": "episode_80c74788f0b367d06930159b6c0fd4ad92ec459cb2ad2edc962d361903b74cd2",
+      "partner_bound_fields": [],
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "basis_observation_refs": {
+            "items": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "observation"
+            },
+            "type": "array"
+          },
+          "endpoint_scope": {
+            "enum": [
+              "direct_bcd_step",
+              "coupled_system",
+              "other",
+              "unresolved"
+            ],
+            "type": "string"
+          },
+          "literature_rate_cells": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "assayed_subject_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "component": {
+                  "enum": [
+                    "reference_rate",
+                    "test_rate",
+                    "rate_difference",
+                    "retained_fraction",
+                    "fractional_decrease",
+                    "reference_mean_se",
+                    "test_mean_se",
+                    "difference_se",
+                    "signed_profile_log_ratio",
+                    "source_signed_index"
+                  ],
+                  "type": "string"
+                },
+                "conditional_on": {
+                  "items": {
+                    "enum": [
+                      "independent_normal_groups",
+                      "independent_groups"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "endpoint_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "evidence_source_ref": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "source"
+                },
+                "experiment_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "normalization_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "origin": {
+                  "enum": [
+                    "reported",
+                    "graph_derived",
+                    "synthetic",
+                    "derived",
+                    "proposed"
+                  ],
+                  "type": "string"
+                },
+                "reference_condition_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "sheet_ref": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "source"
+                },
+                "status": {
+                  "enum": [
+                    "populated",
+                    "unavailable"
+                  ],
+                  "type": "string"
+                },
+                "test_condition_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "unavailable_reason": {
+                  "enum": [
+                    "nonfinite_calculation",
+                    "missing_reference_arm",
+                    "missing_test_arm",
+                    "conflicting_source_identity",
+                    "ambiguous_reference_arm",
+                    "ambiguous_test_arm",
+                    "source_measurement_unavailable",
+                    "censored_measurement",
+                    "conflicting_measurement",
+                    "mean_uncertainty_unreported",
+                    "observation_model_unspecified",
+                    "measurement_count_unreported",
+                    "insufficient_measurement_count",
+                    "positive_sd_required",
+                    "zero_reference_rate",
+                    "dependence_unknown",
+                    "profile_requires_sample_sd",
+                    "numerical_model_range",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "enum": [
+                    "umol/min",
+                    "nmol/min",
+                    "mmol/min",
+                    "uM/min",
+                    "nM/min",
+                    "per_min",
+                    "per_s",
+                    "umol/min/mg",
+                    "nmol/min/mg",
+                    "fraction",
+                    "dimensionless",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "assayed_subject_ref",
+                "component",
+                "conditional_on",
+                "endpoint_ref",
+                "evidence_source_ref",
+                "experiment_ref",
+                "normalization_ref",
+                "origin",
+                "reference_condition_ref",
+                "sheet_ref",
+                "status",
+                "test_condition_ref",
+                "unavailable_reason",
+                "unit",
+                "value"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "x-source": "literature_rate_cells"
+          },
+          "remaining_issue_codes": {
+            "items": {
+              "enum": [
+                "preparation_identity",
+                "activity_unit_definition",
+                "arm_comparability",
+                "partner_presence",
+                "endpoint_attribution",
+                "censoring",
+                "uncertainty_meaning",
+                "restoration_identity"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "literature_rate_cells",
+          "basis_observation_refs",
+          "endpoint_scope",
+          "remaining_issue_codes"
+        ],
+        "type": "object"
+      },
+      "selected_action_sha256": "b0b66fe6285e3aacf378472ed9248076b707fa706d83be08a09d6be6a03106f8",
+      "selected_role": "literature"
+    }
+  ],
+  "source_interpretation_reassessed": false,
+  "status": "actual_model_selected_commission_inspected",
+  "written_utc": "2026-10-26T08:43:21.932638+00:00"
+}

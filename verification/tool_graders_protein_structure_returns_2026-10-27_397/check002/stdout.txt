@@ -1,0 +1,40 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_exact_seven_operands_and_requested_sources_read_only_reopen _______
+
+f = <verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers.Fixture object at 0x790cd03ada00>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x790cd03ade50>
+
+    def test_exact_seven_operands_and_requested_sources_read_only_reopen(f, monkeypatch):
+>       child, view, form = original(f)
+                            ^^^^^^^^^^^
+
+source_snapshot/tests/test_native_protein_structure_returns.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_native_protein_structure_returns.py:31: in original
+    view = f.publish(child, comparison=kwargs.get("saved", False))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py:221: in publish
+    for rows in project_protein_structure_results(projection_input, selection=child.assignment["selector"]["projections"]):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = {'kind': 'extraction', 'sequence': {'version': 'protein_structure_sequence_v1', 'state': 'complete', 'selection': {'st...3e1a95f26a2dab60ebddd12c1446d5db851490439a369c61b7652', 'byte_length': 4, 'format': 'ascii_protein_sequence_v1'}, ...}}
+selection = ()
+
+    def project_protein_structure_results(result: ProjectionInput, *, selection: list[ProjectionSelection]) -> list[ProjectionRows]:
+        """Copy only selected populated fields, preserving exact numerical values.
+    
+        Unknown whole populations raise selected_field_unavailable; a caller can
+        retain that failure for this projection and independently project others.
+        Known empty populations return explicit zero counts. Missing explicit
+        requests survive as typed unresolved rows (380 additive clarification).
+        """
+        if type(selection) is not list:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1057: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_protein_structure_returns.py::test_exact_seven_operands_and_requested_sources_read_only_reopen
+1 failed in 5.18s

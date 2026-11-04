@@ -1,0 +1,63 @@
+..F
+=================================== FAILURES ===================================
+_____ test_saved_calculation_and_original_read_replay_need_no_native_call ______
+
+homology_run = namespace(store=<gene_annotation_episode.state.Store object at 0x79a023679fd0>, workflow=<gene_annotation_episode.runt...'adapter_version': '1', 'implementation_sha256': '0e12e3f2bf4a0f29d38a7108a22214ec58160f1e7d638d34d12350f3c90e85e1'}]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79a023208b00>
+
+    def test_saved_calculation_and_original_read_replay_need_no_native_call(homology_run, monkeypatch):
+        run = homology_run
+        publication = run.body['publication']
+        saved = publication['adapter_result']
+        sheet_bytes = run.store.get_artifact(saved['sheet_content']['artifact_ref'])
+        component_bytes = run.store.get_artifact(saved['components_content']['artifact_ref'])
+        sheet = json.loads(sheet_bytes)
+        original = deepcopy(run.body)
+        calls = deepcopy(run.native.calls)
+        counts = {table: run.store.db.execute('SELECT count(*) FROM ' + table).fetchone()[0]
+            for table in ('runtime_actions', 'runtime_model_calls', 'runtime_observations')}
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError('saved result read/replay attempted acquisition, parsing or recalculation')
+    
+        monkeypatch.setattr(run.native, 'rpc', forbidden)
+        monkeypatch.setattr(run.native, 'task_info', forbidden)
+        monkeypatch.setattr(run.native, 'download', forbidden)
+        monkeypatch.setattr('subprocess.run', forbidden)
+        monkeypatch.setattr('subprocess.Popen', forbidden)
+        monkeypatch.setattr(adapter, 'consume_bundle', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.bvbrc_homology_grader.build_homology_sheet', forbidden)
+        rescored = calculate_homology_scores(sheet, database_model={'temperature_bits': 1})
+        original_components = json.loads(component_bytes)
+        prior_kernel = original_components['queries'][0]['conditional_function_weights']
+        new_kernel = rescored['queries'][0]['conditional_function_weights']
+        assert prior_kernel['parameters']['temperature_bits'] == 2
+        assert new_kernel['parameters']['temperature_bits'] == 1
+        assert prior_kernel['unannotated_reference_kernel_mass'] == 1.75
+        assert new_kernel['unannotated_reference_kernel_mass'] == 1.3125
+        assert new_kernel['unadjusted_probabilities'] is None
+        assert rescored['alignment_supplements'] == original_components['alignment_supplements']
+        assert sheet == json.loads(sheet_bytes)
+        monkeypatch.setattr('gene_annotation_episode.bvbrc_homology_grader.calculate_homology_scores', forbidden)
+        monkeypatch.setattr(adapter, 'calculate_homology_scores', forbidden)
+        assert run.api.read_result(run.final_ref, run.scope) == original
+        context = run.api.appservice.custody.context(run.results_record['episode_id'])
+        operation_key = publication['origin']['operation_key']
+        action_index = int(operation_key.rsplit(':', 1)[1])
+        action = run.workflow.journal.row('runtime_actions', context.episode_id, action_index)
+        selection = json.loads(action['action'])
+>       assert asyncio.run(run.api.execute(context, selection['tool'], selection['arguments'], operation_key)) == json.loads(action['result'])
+E       AssertionError: assert {'changed_rec...7', ...], ...} == {'changed_rec...ork_v1'}, ...}
+E         
+E         Omitting 6 identical items, use -vv to show
+E         Right contains 1 more item:
+E         {'pending_work_after_action': {'captured_at': '2026-10-25T02:17:14.563222+00:00',
+E                                        'items': [],
+E                                        'version': 'pending_work_v1'}}
+E         Use -v to get more diff
+
+tests/test_bvbrc_homology_workflow.py:444: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_homology_workflow.py::test_saved_calculation_and_original_read_replay_need_no_native_call
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 2 passed in 688.48s (0:11:28)

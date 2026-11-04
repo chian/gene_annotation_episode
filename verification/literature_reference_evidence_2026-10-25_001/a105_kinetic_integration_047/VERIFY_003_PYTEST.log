@@ -1,0 +1,22 @@
+....................FF.F.......................
+=================================== FAILURES ===================================
+_ test_detached_saved_contract_rejects_invalid_types_and_identity_associations[measurement_key] _
+tests/test_literature_kinetic_storage.py:232: in test_detached_saved_contract_rejects_invalid_types_and_identity_associations
+    with pytest.raises(ExperimentalContractError, match="kinetic_saved_mismatch"):
+E   Failed: DID NOT RAISE ExperimentalContractError
+_ test_detached_saved_contract_rejects_invalid_types_and_identity_associations[physical_owner] _
+tests/test_literature_kinetic_storage.py:232: in test_detached_saved_contract_rejects_invalid_types_and_identity_associations
+    with pytest.raises(ExperimentalContractError, match="kinetic_saved_mismatch"):
+E   Failed: DID NOT RAISE ExperimentalContractError
+__ test_reused_physical_observation_and_preparation_identity_remain_distinct ___
+tests/test_literature_kinetic_storage.py:247: in test_reused_physical_observation_and_preparation_identity_remain_distinct
+    assert rows[3]["numerator"]["physical_observation_ref"] != rows[3]["denominator"]["physical_observation_ref"]
+E   assert None != None
+=========================== short test summary info ============================
+FAILED tests/test_literature_kinetic_storage.py::test_detached_saved_contract_rejects_invalid_types_and_identity_associations[measurement_key]
+FAILED tests/test_literature_kinetic_storage.py::test_detached_saved_contract_rejects_invalid_types_and_identity_associations[physical_owner]
+FAILED tests/test_literature_kinetic_storage.py::test_reused_physical_observation_and_preparation_identity_remain_distinct
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/chia/repos/gene_annotation_episode/gene_annotation_episode/state.py:95: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+3 failed, 44 passed in 103.44s (0:01:43)

@@ -1,0 +1,346 @@
+GOAL
+
+Implement and verify the literature-search, source-extraction and aspect-specific grading functions that populate the existing numerical evidence-axis scoring sheets for gene annotation.
+
+An episode must be able to commission a specific literature investigation, find and examine relevant original sources through the existing LiteratureEpisodes, extract the measurements and experimental relationships required by the selected sheet components, calculate those components deterministically wherever possible, and return the requested populated cells through the ordinary typed episode boundary.
+
+Deliver working code and demonstrated populated sheets, not just research summaries, prompt drafts, schemas or tables of source claims.
+
+This is the literature portion of W04. Another session owns bioinformatics tool graders. W05 separately connects evidence-axis selection to its corresponding scoring sheet and connects the populated sheets to final annotation scoring. Do not take over either task.
+
+The requirements in this message are the task’s controlling instructions. Preserve this goal verbatim. Mutable implementation files and previous assistant proposals cannot silently redefine it. Record later corrections additively.
+
+STARTING POINT
+
+Ten numerical scoring-sheet research proposals already exist. The work is not to invent ten replacements.
+
+Their current delivery index is:
+research/experimental_scoring_review_2026-10-23/SCORING_SHEETS_PROGRESS_2026-10-24_016.md
+
+That index identifies the current sheets, exact population contracts, corrections and worked examples. Read those actual deliverables before implementing their populators. Earlier drafts include rejected scoring approaches; their existence does not authorize reuse.
+
+The current investigation-text publication is:
+research/slotted_process_library/publications/2026-10-24-001/
+
+Existing literature implementation begins in:
+gene_annotation_episode/literature_episodes.py
+
+Existing evidence-axis contract and scoring helpers exist, but do not assume they implement the later numerical proposals. Trace their actual behavior and consumers.
+
+Research delivery does not mean production implementation, user adoption of every proposed coefficient, or calibrated annotation probabilities. Preserve those distinctions.
+
+SCOPE: THE TEN RETAINED AXES
+
+A101 — Sequence homology.
+Literature can establish experimentally characterized reference functions, relevant residues, functional distinctions and reported comparison measurements. New sequence analyses belong to the tool-grader session.
+
+A102 — Structural homology.
+Literature can supply characterized structural comparisons and the molecular features that make a comparison informative. Keep reported comparison measurements separate from functional interpretation and from new structural calculations.
+
+A103 — Genomic arrangement/neighborhood.
+Extract relevant gene arrangements, experimentally established relationships, organism/strain context and reported quantitative neighborhood evidence. Do not convert a verbal statement of proximity into an invented association score.
+
+A104 — Evolutionary history/phylogeny.
+The user’s definition concerns agreement between the protein-family phylogeny and the organismal reference tree, together with placement within a clade of conserved function. Preserve characterized-function coverage, mixed-function clades, rapidly changing specificity, outliers and horizontal-transfer limitations. Frequent horizontal transfer can make broad organismal-tree correspondence uninformative; very local relationships may still be useful. Do not replace this with generic “evolutionary support.”
+
+A105 — Experimental molecular activity.
+Extract direct molecular activity and specificity evidence, including evidence measured on relevant homologs. Keep perturbation/restoration evidence in A106. Distinguish what the assay measured from what function that measurement establishes.
+
+A106 — Perturbation and restoration.
+Extract the actual perturbation, reference and restoration conditions, measured effects, controls, expression/activity amounts, experimental comparability and effect isolation. Relevant homolog experiments are included with an explicit correspondence to the target.
+
+A107 — Required partner presence and coexpression.
+Extract which partner molecules are required and the evidence defining that requirement. Preserve genomic presence measurements and coexpression statistics as separate quantities. A statement that a protein belongs to a complex does not establish that all required partners exist in the target system.
+
+A108 — Organism and sample plausibility.
+Extract the organism/sample conditions and requirements that make a proposed function plausible or implausible. Use measurable conditions where available. Interpretive judgments must address specific defined questions, not produce a blanket plausibility grade.
+
+A110 — Biochemical/pathway consistency.
+Retain this as a separate axis. Extract reaction, pathway, substrate/product, resource and conservation evidence needed by its existing sheet. Preserve the distinction between a measured biochemical outcome and assumptions about the rest of the pathway.
+
+A111 — Experimental structural evidence and correspondence.
+Extract what an experimental structure establishes about the characterized molecule and functional feature. Preserve the chain from that molecule to the annotation target through actual sequence, structural or other justified correspondence. Evidence on another protein is not a direct experiment on the target.
+
+A109 is removed. Do not restore it. Do not merge A110 into A108.
+
+Literature can populate relevant parts of every retained axis. Do not divide the axes into “literature axes” and “tool axes.” The distinction concerns how particular cells obtain their information.
+
+THREE SEPARATE RESPONSIBILITIES
+
+1. Investigation prompt.
+This tells the episode what to investigate, what distinctions matter and what decisions it can make.
+
+2. Numerical scoring sheet.
+This contains actual numerical inputs and components that can contribute to annotation scoring. Units, denominators, uncertainty, missingness and relationships must be defined. A table of claims, citations and conditions is supporting recordkeeping, not a scoring sheet.
+
+3. Extractors, graders and deterministic calculators.
+These populate the specific cells in item 2. Design them from those cells backward. Do not build a generic literature summarizer and later try to reinterpret its output as a score.
+
+Keep these responsibilities separate in code and presentation. A JSON file containing prose rules is not a substitute for executable calculations. Do not paste the complete scoring sheet or calculation implementation into an investigation prompt.
+
+ARCHITECTURE CONSTRAINTS
+
+Episodes are iterative problem-solving processes. Tools perform operations.
+
+Use the existing shared method_loop and LiteratureEpisodes. The existing permitted literature child relationships are:
+
+literature
+  → literature_strategy
+    → literature_search
+      → literature_page
+        → literature_table
+        → literature_ordered
+        → literature_targeted
+
+These relationships limit available decisions. They are not a mandatory itinerary. Do not automatically instantiate every level or require a prescribed reading order.
+
+Literature and bioinformatics remain separate episode structures. They can exchange scoped findings and motivate each other. Do not introduce LibraryEpisodes, new per-axis episode types, bioinformatics launch/monitor episodes inside literature, or a private autonomous extraction loop.
+
+A specific literature aspect is supplied to the appropriate existing episode as an assignment and matched extraction/judgment instructions. It is not a new fourth construction slot.
+
+Preserve the existing construction-slot names:
+evidence_axis
+thought_pattern
+child_tool_info
+
+The parent defines the job, scope, constraints and requested typed return. The child owns its iterative search, reading and interpretation decisions.
+
+The annotation target may initially be only a sequence, a selected file record, a region or snippets. Do not require a searchable public name or an initial candidate annotation. Candidate functions may emerge during investigation. When a particular comparison does require a candidate, make that requirement local to that comparison.
+
+DEFINE THE HANDOFFS BEFORE PARALLEL CODING
+
+Inspect the complete affected implementation paths. Then define concrete schemas, function signatures, file ownership and dependencies for these boundaries:
+
+1. Commission:
+   supplied target material or explicitly scoped access;
+   the evidence axis and specific information objective;
+   requested sheet components;
+   relevant already-known facts;
+   any candidate function being examined, if one exists;
+   the parent’s requested return form.
+
+2. Acquired evidence:
+   original source and representation;
+   exact passage, table cells, figure panel or supplementary material;
+   actual experimental subjects and conditions;
+   source locations sufficient to validate each extraction.
+
+3. Extracted inputs:
+   the exact numerical and relational fields required by the sheet;
+   units, denominators, uncertainty and missingness;
+   the original experiment, observation and control relationships;
+   separately identified interpretive decisions where necessary.
+
+4. Calculated components:
+   numerical outputs;
+   exact operands and calculation parameters;
+   propagated uncertainty or explicit limits;
+   dependency information sufficient to prevent duplicate contribution.
+
+5. Return and persistence:
+   the parent’s requested subset of populated cells;
+   necessary qualifications and unavailable-input reasons;
+   complete structured evidence retained for scoped later access;
+   validation through the ordinary child-to-parent boundary.
+
+For each sheet cell, identify its actual source, population function, calculator and consumer. If a cell depends on a bioinformatics result, document the exact required data contract and consume that result. Do not implement a competing tool grader.
+
+Do not let source acquisition hide inside a supposedly deterministic calculator. Network access and source reading remain explicitly selected episode work.
+
+NUMERICAL AND SCIENTIFIC REQUIREMENTS
+
+Use reported measurements and existing numerical scores wherever available.
+
+For each numerical cell, retain:
+- the measured quantity and actual subject;
+- value and unit;
+- numerator, denominator and normalization basis where applicable;
+- conditions and endpoint;
+- uncertainty type, magnitude and sampling basis;
+- whether it is reported, graph-derived, calculated, proposed or synthetic;
+- source location and calculation dependencies;
+- explicit unavailable, conflicting, censored or inapplicable status.
+
+Do not treat an unreported value as zero or one. Do not treat nondetection as an exact zero. Do not turn SD, SEM, confidence limits, detection limits and mathematical bounds into interchangeable quantities.
+
+Keep the underlying measurements separate from score transformations. A reported ratio is not automatically an evidence score.
+
+Implement component calculations as ordinary deterministic functions. Their operands, transformations, sums and multipliers must be explicit and testable. Preserve the existing proposals’ status; implementing a named proposed calculation does not silently adopt it as the default annotation policy.
+
+Do not substitute “low/medium/high,” “weak/moderate/strong,” or similar categories encoded as numbers for actual component calculations. Finite categories may describe experimental arrangements or missingness; that does not make them numerical evidence.
+
+Do not produce one intuitive “experimental reliability,” “relevance” or “transfer” number and call the task complete. Those quantities must be assembled from their defined components.
+
+Where applicable, distinguish:
+- experimental comparability: similarities and differences outside the variable deliberately tested;
+- effect isolation: how specifically the observed outcome belongs to the intended molecule or change;
+- relevance of the measured endpoint to the functional inference;
+- validity and limitations of the experimental method;
+- signal strength;
+- consistency and dependence across observations;
+- uncertainty;
+- correspondence between the assayed subject and the annotation target;
+- correspondence between the experimental system and the target system.
+
+These are questions to resolve through the existing sheet, not permission to invent another generic list of score categories.
+
+Establish the experimental arrangement before interpreting a number. For example, reduced abundance has different implications if a mutant replaces wild type versus being present alongside wild type. The mixture also creates a separate attribution problem. Do not assign the same generic penalty to both arrangements.
+
+Evidence transfer is not restricted to sequence homology. Preserve whichever measured sequence, structure, functional-site, evolutionary, contextual or experimentally demonstrated correspondence actually justifies the inference.
+
+Keep the finding on the assayed molecule separate from the relationship that makes it informative about the target.
+
+WHEN INTERPRETATION REQUIRES A MODEL
+
+Use deterministic parsing, unit conversion, validation and arithmetic whenever possible.
+
+When prose requires interpretation, give the existing literature episode a predefined extraction/judgment prompt matched to the exact requested aspect and output fields.
+
+The prompt must define:
+- the concrete question;
+- which source material must support the answer;
+- the relevant experimental distinctions;
+- allowed output meanings;
+- what makes an answer unknown or conflicting;
+- which sheet cells the answer populates.
+
+The model may interpret an experiment or identify the appropriate measured operands. It must not invent missing measurements, choose an unexplained overall score or perform arithmetic that belongs in a calculator.
+
+Where no applicable quantitative measurement exists and a numerical judgment is genuinely necessary, make the specific question, criteria and numerical meaning explicit for user review. That exception must not replace available measured components.
+
+Validate extracted relationships as well as JSON syntax. A syntactically valid value attached to the wrong protein, condition, endpoint, table header or denominator is wrong.
+
+Do not add a second model call merely to restate recorded facts or compose a parent report.
+
+SOURCE IDENTITY, DEPENDENCE AND NEGATIVE FINDINGS
+
+A paper, its supplement, a database entry and a later review can represent the same original experiment. Do not count those as independent evidence.
+
+Do not infer shared experiment identity merely because two numbers match.
+
+Distinguish biological replication, technical repetition, shared controls, reused observations, complementary endpoints and genuinely independent findings.
+
+Preserve contradictory evidence and qualifications. Failure to find an experiment is not evidence that the experiment produced a negative result.
+
+Preserve source-to-target correspondence and exact measurement identity across return, persistence and reconstruction. Do not preload source records from unrelated earlier runs.
+
+Do not grade the reputation of a paper as a substitute for evaluating its actual experiment. Citation counts and publication counts are not automatically independent replication or evidence validity.
+
+PROMPTS AND COMMUNICATION
+
+Every decision prompt has two separately constructed parts:
+
+TASK:
+Detailed instructions needed on every iteration: the actual assignment, scope, decisions, scientific distinctions, limitations and requested output. Supply the complete TASK again after lookups and reconstruction.
+
+STEERING:
+Concise factual information affecting the next decision: relevant findings, specific attempts already made, missing inputs, actionable failures and the episode’s own action-category yields and expectations where appropriate.
+
+Do not shorten TASK into a role label. Do not expand STEERING into a transcript, narrative recap or source inventory.
+
+JSON is the structured intermediate used to construct the prompt. Render useful text and tables; do not dump the entire stored JSON into the model context.
+
+Keep host bookkeeping, hashes and persistence metadata out of decision text. Include only the identifiers or locators actually needed to select or examine material.
+
+Children receive their assignment and relevant supplied facts, not parent histories or parent yields. Parents receive the requested validated result, not the child’s private history.
+
+Source quotations may be supplied as scoped source evidence for extraction. They are not permission for unrestricted prose in inter-episode return forms.
+
+Print proposed extraction/judgment templates and filled examples in chat for user steering before broadly replicating them. The user does not read files on our behalf.
+
+CREDIT AND CONTINUATION
+
+Keep annotation score, investigation progress, monitoring information and timing separate.
+
+Searching, reading bytes, finding citations, populating bookkeeping or rendering a report does not by itself manufacture scientific progress.
+
+One completed own action supplies one local observation. Internal lookup/model calls used to reach that action do not become extra yield cycles. A child’s internal actions do not become multiple parent observations.
+
+Preserve the configured controller’s ownership of continuation. Do not introduce scientific acceptance gates, reading quotas, mandatory full-paper coverage, hidden turn limits or extra approval mechanisms.
+
+Do not change the final annotation formula, hypervolume policy, historical scores or W05 wiring as part of this task.
+
+RESEARCH WORKFLOW AND CONTEXT RESET
+
+Use the retained 142-case-group research and its corrections. Find additional primary papers or datasets when needed to resolve a concrete extraction or scoring gap. Do not restart the research collection from scratch.
+
+After every paper or retained paper-specific packet, and BEFORE converting it into scoring components or opening the next paper:
+1. Reread this complete goal and operating instructions.
+2. Reread the full applicable design/user-authority set specified by research/experimental_scoring_review_2026-10-23/AGENTS.md.
+3. Reread the relevant current sheet and exact population contract.
+4. Read the latest user instructions last.
+5. Then explain how the source supplies the required cells, calculations and limitations.
+
+Do not replace these rereads with memory, headings or truncated snippets.
+
+The user’s controlling statements include:
+“Graders/readers are what POPULATE the scoring rubric”
+“THE PAPERS DO NOT OVERRIDE THE TEMPLATE. THEY GET CONVERTED THOUGHTFULLY”
+“These individual scores need to be multipliers or sum in some way.”
+
+The previous research-only phase is complete. This goal authorizes implementation of its literature populators; it does not authorize rewriting the permanent research records.
+
+PARALLEL WORK AND FILE OWNERSHIP
+
+Plan the modules and handoffs first. Then use fresh subagents with explicit, disjoint workloads as capacity permits.
+
+Assign work by concrete component families and their shared interfaces, not merely by arbitrary axis titles. Reuse genuinely shared mechanics without replacing aspect-specific scientific reasoning with one generic grader.
+
+Each worker receives:
+- this full goal and relevant user constraints;
+- exact input and output contracts;
+- owned files;
+- dependencies and the specific outputs required from them;
+- verification requirements;
+- explicit exclusions.
+
+Use new literature-specific implementation modules, tests and verification directories where practical. The other session owns tool graders, execution-service work and its progress records. Do not edit its candidate trees, tool-grader accounting or active verification runs.
+
+Identify shared-file changes before making them. Coordinate ownership for shared runtime, communication, schema and scoring entry points; avoid competing rewrites. Continue independent implementation while resolving those boundaries.
+
+Integration is part of this task. An isolated candidate is not a claim that production wiring is complete.
+
+COMPLETION CRITERIA
+
+For each of the ten axes:
+
+1. A coverage table identifies every literature-populatable component and its exact sheet fields. Tool-only inputs and other dependencies are explicit.
+2. Actual extraction functions and, where needed, aspect-specific judgment prompts populate those fields.
+3. Deterministic calculators produce the defined numerical components, with uncertainty and missing-input behavior.
+4. Worked primary-source examples demonstrate real populated cells and checked calculations. Include contrasting experimental arrangements where the interpretation changes. Clearly label synthetic fixtures.
+5. Tests cover relevant wrong-subject, wrong-condition, wrong-denominator, missing, censored, conflicting, dependent and duplicate-representation cases.
+6. The existing literature episode can select the work and deliver the requested cells through the real typed return path. Saved reconstruction preserves values and provenance without hidden reacquisition or reinterpretation.
+7. The implementation’s actual scope and remaining scientific limitations are printed clearly in chat.
+
+Across the complete task:
+
+- Verify the shared episode integration, not only isolated helper functions.
+- Verify that source facts reach the receiving episode with their intended meanings.
+- Verify that prompt rendering preserves detailed TASK and concise STEERING.
+- Verify that extraction, calculation and report construction do not add synthetic observations.
+- Distinguish fixture tests, controlled transports/model responses and actual model-backed literature execution. Do not present one as another.
+- Preserve partial useful work when some requested information is unavailable.
+- Deliver the exact populated-sheet interface needed by W05 without claiming W05 is complete.
+
+Unknown facts in a paper do not make the implementation defective if it correctly returns unknown. An unimplemented calculation or extractor is unfinished work and must be reported as such.
+
+MAINTAIN THIS FIXED CHECKLIST
+
+Keep completed items visible. Add evidence and remaining work without silently changing item meanings.
+
+[ ] L00 — Inspect existing sheets and implementation; define coverage, interfaces and ownership.
+[ ] L01 — Implement shared literature extraction, validation and calculation mechanics.
+[ ] A105 — Implement and verify experimental molecular activity population.
+[ ] A101 — Implement and verify sequence-homology literature population.
+[ ] A102 — Implement and verify structural-homology literature population.
+[ ] A103 — Implement and verify genomic-neighborhood literature population.
+[ ] A104 — Implement and verify evolutionary-history literature population.
+[ ] A106 — Implement and verify perturbation/restoration population.
+[ ] A107 — Implement and verify required-partner/coexpression literature population.
+[ ] A108 — Implement and verify organism/sample-plausibility population.
+[ ] A110 — Implement and verify biochemical/pathway-consistency population.
+[ ] A111 — Implement and verify experimental-structure/correspondence population.
+[ ] L02 — Complete existing LiteratureEpisodes integration and typed returns.
+[ ] L03 — Complete cross-component verification and the explicit W05 handoff.
+
+Begin with the interface plan and one concrete A105 extraction-to-numerical-cell example printed in chat. Then proceed through the defined parallel workloads. Continue until the implementation and verification criteria are satisfied; do not stop at a literature review or a collection of proposed prompts.

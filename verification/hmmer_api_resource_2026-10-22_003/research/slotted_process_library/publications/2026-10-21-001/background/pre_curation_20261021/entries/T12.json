@@ -1,0 +1,130 @@
+{
+  "slot": "tools",
+  "id": "T12",
+  "name": "Regulatory DNA sites, inputs and measured-output correspondence",
+  "description": "Compare exact regulatory DNA sequences and mapped promoters, expose motif matches under a supplied model, and retain separate binding, molecular-input/state and transcription-output records.",
+  "capability_operations": [
+    {
+      "operation": "Compare selected operator or promoter sequences",
+      "inputs": {
+        "sequences": "identified oligonucleotides or genomic intervals with strand/coordinates",
+        "correspondence": "declared common reference and positional convention"
+      },
+      "outputs": {
+        "differences": "exact substitutions, indels and motif-position correspondence",
+        "scope": "selected sites only, without an inferred regulon"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Scan supplied sequences with an explicit motif model",
+      "inputs": {
+        "motif": "supplied PWM/PSSM and alphabet",
+        "sequences": "actual FASTA and background model",
+        "parameters": "explicit score/significance/multiple-testing settings"
+      },
+      "outputs": {
+        "matches": "positions, strands, model scores and conditional p/qvalues",
+        "provenance": "motif, sequence and background identity"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Join source records at exact target/condition identities",
+      "inputs": {
+        "records": "separate binding, reporter/transcript, abundance and protein-state observations",
+        "keys": "actual target/promoter variant, protein state, sample and assay condition"
+      },
+      "outputs": {
+        "table": "measured links and unmatched observations; activation/repression only when directly recorded"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "sequence.align/sites, public.ncbi.sequence and reference.neighborhood provide general sequence/feature primitives. No FIMO or regulator-inference callable confirmed in repository catalog."
+    ],
+    "research_operations_performed": [
+      "root/regulatory_specificity/raw/iscr_comparison_probe.json: seven published 30-mer oligos compared at exact positions; selected source competition ratios calculated."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "FIMO was identified from official documentation as a motif+FASTA scanner, but it was not executed and its installation/registry binding was not established. New regulon reconstruction is not supplied."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "DNA-binding, footprinting, reporter, redox-treatment and metal/cofactor measurements remain author experiments."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "A motif match supplies a model-based candidate site, not regulatory direction or a productive cellular effect.",
+    "A bound site can have no detected output in tested conditions; affinity at one site does not measure exclusion of other targets.",
+    "An environmental treatment can act through a cofactor/feedback route; it does not establish direct ligand binding to the regulator."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "use": "Actual oligo and source comparisons separated altered target recognition, preserved single-site affinity, nonfunctional footprinted sites and promoter-specific output.",
+      "execution_scope": "No new motif scan, regulon, intracellular state quantification or binding assay.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "use": "Conserved upstream sites and binding linked a dual kinase/regulator to riboflavin genes, while operator positions only suggested activation.",
+      "execution_scope": "Authors comparative and binding work; no motif scan repeated.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_16_malr",
+      "use": "Measured promoter binding did not change when maltose was added, despite MalR-dependent nutrient expression/growth.",
+      "execution_scope": "Author tests; no direct maltose-binding conclusion or new reporter assay.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "pxpT_pxpR_access_and_sensing",
+      "use": "Binding to 5-OP and promoter-site perturbations contributed different measured links in a repressive regulatory route.",
+      "execution_scope": "Author ITC/reporters; raw binding data not obtained; growth did not directly measure purified transport.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2709974/",
+      "source_locator": "Table 1; Figures 3,6–7; trace I1–I12; raw/iscr_comparison_probe.json",
+      "observation": "Actual oligo and source comparisons separated altered target recognition, preserved single-site affinity, nonfunctional footprinted sites and promoter-specific output.",
+      "limit": "No new motif scan, regulon, intracellular state quantification or binding assay."
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "case_id": "context_rbkr_regulator_kinase_2017",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5397151/",
+      "source_locator": "Case-record observation; inspected scope: Complete genomic reconstruction, dual-function results, evolutionary caveats, and relevant bioinformatics/DNA-binding/kinase methods read. Structure section not exhaustively inspected; no motif scan or assay repeated.",
+      "observation": "Conserved upstream sites and binding linked a dual kinase/regulator to riboflavin genes, while operator positions only suggested activation.",
+      "limit": "Authors comparative and binding work; no motif scan repeated."
+    },
+    {
+      "case_group": "organism_16_malr",
+      "case_id": "organism_16_malr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3911195/",
+      "source_locator": "Case-record observation; inspected scope: Relevant Results including deletion, reporter rescue and sugar-independent DNA binding; growth/deletion/purification Methods inspected.",
+      "observation": "Measured promoter binding did not change when maltose was added, despite MalR-dependent nutrient expression/growth.",
+      "limit": "Author tests; no direct maltose-binding conclusion or new reporter assay."
+    },
+    {
+      "case_group": "pxpT_pxpR_access_and_sensing",
+      "case_id": "pxpT_pxpR_access_and_sensing",
+      "source_url": "https://journals.asm.org/doi/10.1128/aem.02181-25",
+      "source_locator": "Case-record observation; inspected scope: Indexed complete relevant regulatory Results, transport Discussion, figure descriptions and culture/purification Methods inspected. Direct publisher fetch 403; raw binding data not obtained. Current published 2026 article used, not 2025 preprint.",
+      "observation": "Binding to 5-OP and promoter-site perturbations contributed different measured links in a repressive regulatory route.",
+      "limit": "Author ITC/reporters; raw binding data not obtained; growth did not directly measure purified transport."
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "scope": "Four retrospective investigations with known published outcomes disclosed. Authors performed biological experiments. Observation references resolve to cases.jsonl or the explicitly named primary paths. Choices are reconstructed, and independent coordinate/arithmetic probes are labeled. No implementation, adopted axes or runtime procedure is introduced.",
+  "traces": [
+    {
+      "case_id": "replacement_queH",
+      "starting_alternatives": [
+        "The retained pathway stops at oQ.",
+        "A different protein supplies oQ reduction.",
+        "A candidate is associated indirectly with the pathway."
+      ],
+      "routes": [
+        {
+          "route_id": "Q_route_distribution_to_chemistry",
+          "observed_evidence_refs": [
+            "Q1"
+          ],
+          "changed_next_uncertainty": "An annotation gap cannot distinguish lost product from missing gene identity.",
+          "next_probe_reported": "Measure mature Q in a QueG-lacking, DUF208-containing organism.",
+          "why_this_probe_vs_another_reconstructed": "Another neighborhood scan could strengthen association while leaving the product itself uncertain. Measuring the endpoint first checks whether there is a real function to explain.",
+          "result_refs": [
+            "Q2"
+          ],
+          "next_choice_reconstructed": "Now separate candidate responsibility from mere coexistence; choose a tractable native system with both alternatives."
+        },
+        {
+          "route_id": "Q_route_native_overlap_and_transfer",
+          "observed_evidence_refs": [
+            "Q2"
+          ],
+          "next_probe_reported": "Authors selected A. baylyi because genetic manipulation of L. salivarius was difficult; compare both single deletions with the double deletion.",
+          "why_this_probe_vs_another_reconstructed": "A single deletion can be silent when two routes overlap. Combined perturbation makes that explanation testable before calling the gene dispensable.",
+          "result_refs": [
+            "Q3"
+          ],
+          "changed_next_uncertainty": "Does the implicated family supply the conversion beyond this one genomic background?",
+          "next_probe_reported_2": "Transfer diverse DUF208 genes into E. coli ΔqueG and read the tRNA nucleosides.",
+          "why_this_probe_vs_another_reconstructed_2": "A second growth rescue would be less specific than tracking substrate and product at the blocked modification.",
+          "result_refs_2": [
+            "Q4"
+          ],
+          "bounded_assignment_ref": "cases.jsonl:replacement_queH.annotation_consequence"
+        },
+        {
+          "route_id": "Q_route_mechanism_after_function",
+          "observed_evidence_refs": [
+            "Q5"
+          ],
+          "changed_next_uncertainty": "The in-vivo assignment survives; mechanism and preparation requirements remain open.",
+          "next_probe_reported": "Inspect the later structure and failed-product assays; independently parse the deposited coordinates.",
+          "why_this_probe_vs_another_reconstructed": "A negative cofactor spectrum is too narrow to select a complete chemical mechanism. Coordinates can check the proposed geometry without pretending to assay turnover.",
+          "result_refs": [
+            "Q6",
+            "own_Q_coordinate_probe"
+          ],
+          "bounded_assignment": "The deposited metal-ligand geometry revises a disulfide-based proposal. It neither proves the native metal nor closes productive catalysis."
+        }
+      ],
+      "own_actual_probe": {
+        "evidence_id": "own_Q_coordinate_probe",
+        "origin": "performed_here_read_only",
+        "input_url": "https://files.rcsb.org/download/7LC5.pdb",
+        "artifact": "raw/7LC5-coordinate-probe.json",
+        "operation": "Parsed deposited coordinates and computed Euclidean atom distances; no refinement.",
+        "observed_result": "Cys9–Cys10 SG: 4.103 Å; Cys9 SG–Fe502: 2.260 Å; Cys10 SG–Fe502: 2.355 Å. Deposited nonwater species include SF4, FE and CL.",
+        "interpretive_limit": "This is the reconstituted crystal model, not a native metal measurement or enzyme experiment."
+      }
+    },
+    {
+      "case_id": "replacement_folM",
+      "starting_alternatives": [
+        "FolM is the routine alternative DHFR.",
+        "FolM has a secondary DHFR capacity exposed by the engineered background.",
+        "A different physiological pterin substrate explains FolM conservation."
+      ],
+      "routes": [
+        {
+          "route_id": "F_route_capacity_not_routine_role",
+          "observed_evidence_refs": [
+            "F1",
+            "F2"
+          ],
+          "changed_next_uncertainty": "The capacity to help a deficient background is supported; ordinary pathway responsibility is unsettled.",
+          "next_probe_reported": "The 2003 authors explicitly leave physiological conditions open (F3); the later study compares genomic co-occurrence with alternative pterin pathways.",
+          "why_this_probe_vs_another_reconstructed": "Repeating high-copy rescue could measure capacity again. A pathway comparison instead asks what demand exists in ordinary cells.",
+          "result_refs": [
+            "F3",
+            "F4"
+          ],
+          "bounded_assignment": "Do not erase the DHFR activity; keep it separate from the normal-substrate question."
+        },
+        {
+          "route_id": "F_route_candidate_cofactor_to_substrate",
+          "observed_evidence_refs": [
+            "F4"
+          ],
+          "changed_next_uncertainty": "A cofactor-supply phenotype may arise through biosynthesis, recycling or another indirect defect.",
+          "next_probe_reported": "Compare purified FolM with several pterins and cofactors; relate the engineered rescue to measured pterin pools and native pathway demand.",
+          "why_this_probe_vs_another_reconstructed": "More complementation alone cannot identify which molecule the protein reduces. Substrate discrimination tests the proposed chemical step, while the cellular contrast asks whether that chemistry matters.",
+          "result_refs": [
+            "F5",
+            "F6"
+          ],
+          "bounded_assignment_ref": "cases.jsonl:replacement_folM.annotation_consequence",
+          "remaining_boundary": "The native P. aeruginosa experiment changes FolX; it corroborates the cofactor route without becoming a direct native FolM deletion result. E. coli’s own downstream use remains open in this paper."
+        }
+      ],
+      "own_actual_probe": null,
+      "why_no_new_sequence_probe": "The decisive distinction depends on authors’ genotype, medium, pterin and substrate measurements. Re-reading a sequence motif would not resolve physiological responsibility."
+    },
+    {
+      "case_id": "replacement_bioZ",
+      "extension_id": "F05_same_reaction_vs_bypass_2026_10_21",
+      "primary_source_id": "bioZ_2020",
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "scope": "Known outcomes disclosed. Biology is author-reported; route accounting and choices are our retrospective reconstruction. Existing case record and its inspection limits remain unchanged.",
+      "starting_alternatives": [
+        {
+          "branch_id": "BZ_same_step",
+          "explanation": "A rescuing BioZ performs the BioH hydrolysis step while the original methylated entry route remains necessary."
+        },
+        {
+          "branch_id": "BZ_entry_bypass",
+          "explanation": "BioZ changes entry chemistry and supplies the downstream pimeloyl-ACP requirement without BioC or BioH."
+        },
+        {
+          "branch_id": "BZ_indirect_relief",
+          "explanation": "Rescue reflects indirect lipid-metabolic relief or an unrecognized supply rather than the proposed local catalytic step."
+        }
+      ],
+      "routes": [
+        {
+          "route_id": "BZ_genotype_boundary",
+          "observed_evidence_refs": [
+            "cases.jsonl:replacement_bioZ:BZ1"
+          ],
+          "source_location": "Results opening subsection; Figure 3; deletion/complementation Methods",
+          "starting_record_limit": "The 2020 authors describe earlier ΔbioH rescue and an earlier negative bioC result; the earlier publication itself was not independently reinspected here.",
+          "changed_next_uncertainty": "A terminal growth rescue has not located the restored reaction. The contradictory bioC claim makes genotype and boundary verification consequential.",
+          "next_probe_reported": "Reassess clean bioC, bioH and double-deletion strains and distinguish biotin-cluster BioZ constructs from fatty-acid-cluster FabH controls.",
+          "why_this_probe_vs_another_reconstructed": "More similarity searching cannot decide whether upstream methylation remains required. Removing that step makes the two route explanations predict different rescue behavior.",
+          "result_reference": "Source Figure 3 and existing BZ1: BioZ supports the double deletion. The paper suggests an earlier strain/allele mix-up; that historical explanation is not independently proven here.",
+          "bounded_inference": "The written canonical route plus a hydrolysis-only replacement is insufficient. A bypass or additional unmodeled supply must remain live until chemistry is examined."
+        },
+        {
+          "route_id": "BZ_acyl_carbon_and_reduction_accounting",
+          "source_location": "Introduction/Figure 1; condensation Results/Figures 5–7; coupled-assay Methods",
+          "own_actual_probe_ref": "raw/route_bookkeeping_probe.json#/bioZ",
+          "comparison": [
+            {
+              "branch_id": "BZ_same_step",
+              "projected_boundary": "BioC methylation, two FAS elongations, BioH hydrolysis",
+              "carbon_ledger": "3 + 3 + 3 + 1 temporary methyl = 7 pimeloyl + 2 CO2 + 1 methanol",
+              "candidate_obligation": "Requires a methylated precursor and its upstream supply; changing only the esterase does not supply that precursor."
+            },
+            {
+              "branch_id": "BZ_entry_bypass",
+              "projected_boundary": "Activated glutaryl/malonyl inputs through one FAS completion cycle",
+              "carbon_ledger": "5 + 3 = 7 pimeloyl + 1 CO2",
+              "candidate_obligation": "Requires glutaryl input plus malonyl-ACP and downstream reductions, rather than a BioC-installed methyl group."
+            }
+          ],
+          "changed_next_uncertainty": "Both explanations can restore the same final requirement, but only the bypass explains the double-deletion rescue within the stated pathway. Which activated substrates and product actually occur?",
+          "next_probe_reported": "Purified/coupled substrate comparisons, product-mass measurements and downstream BioF-dependent use of the product.",
+          "why_this_probe_vs_another_reconstructed": "Another growth rescue cannot distinguish a hydrolytic enzyme from a condensing route. Substrate/product observations locate the reaction that the growth assay leaves ambiguous.",
+          "result_reference": "Existing BZ1 and source Figures 5–7 support glutaryl-CoA plus malonyl-ACP entry to a pimeloyl-ACP product; weaker activity with swapped carriers does not establish their native availability.",
+          "bounded_inference": "Support pathway replacement, not a BioH-demethylase annotation for BioZ. The projected two-versus-four reduction count is not a measured cellular energetic advantage."
+        },
+        {
+          "route_id": "BZ_supply_and_assay_boundary",
+          "source_location": "Resting-cell and CaiB Results/Figures 8–9; Methods",
+          "observed_evidence_refs": [
+            "cases.jsonl:replacement_bioZ:BZ1"
+          ],
+          "changed_next_uncertainty": "An in-vitro balanced route still needs an accessible native primer.",
+          "next_probe_reported": "Examine precursor supplementation and CaiB-dependent glutaryl-CoA supply.",
+          "why_this_probe_vs_another_reconstructed": "A candidate substrate can react in a tube without being present or supplied adequately in a cell; testing upstream supply addresses a different uncertainty than repeating condensation.",
+          "bounded_inference": "The source connects the route to native precursor supply but does not measure its steady-state flux. The coupled assay includes 1 mM SAM and 1 mM NADPH; zero BioC methyl transfers refers only to acyl assembly, not whole biotin synthesis."
+        }
+      ],
+      "own_actual_probe": {
+        "probe_id": "replacement_bioZ_thyX_bookkeeping_2026_10_21",
+        "component": "bioZ",
+        "artifact": "raw/route_bookkeeping_probe.json",
+        "script": "raw/route_bookkeeping_probe.py",
+        "performed": "Integer acyl-carbon balances, conditional reducing-step counts, and conversion of reported assay amounts to concentrations.",
+        "not_performed": "No fitted fluxes, native pools, total energetic comparison, product-yield calculation or new enzyme assay."
+      },
+      "complete_relevant_paths_read": [
+        "Main Introduction/Figure 1",
+        "All main Results from clean-deletion reassessment through native CaiB supply, including Figures 3–9 captions",
+        "Complete main Methods, including media, deletion construction, purification, ACP synthesis, extract/bioassay preparation, coupled reactions, MS/HPLC and resting cells"
+      ],
+      "remaining_inspection_bounds": [
+        "Supplementary figures and numeric source-data spreadsheets were not downloaded or reanalyzed.",
+        "The source Results mention NADH in the condensation system; coupled DTB Methods list NADPH. Their scopes are preserved without selecting an exclusive native donor.",
+        "Preparation/assay limitations and incomplete BioZ activity for some donor orthologs are not converted to biological absence.",
+        "The canonical route has no exclusive NADPH/NADH allocation in this calculation. The four-versus-two count represents two-electron reduction events, not named-cofactor molecule requirements."
+      ]
+    },
+    {
+      "case_id": "replacement_thyX",
+      "extension_id": "F05_same_reaction_vs_bypass_2026_10_21",
+      "primary_source_id": "thyX_2007",
+      "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "scope": "Known outcomes disclosed. Authors performed genetics, growth and labeling; our arithmetic is a projected cofactor ledger and growth-rate conversion, not a reconstruction of their dynamic model. Existing case record is preserved.",
+      "starting_alternatives": [
+        {
+          "branch_id": "TX_insufficient_conversion",
+          "explanation": "Heterologous ThyA has insufficient effective conversion in this context; expression, kinetics or other compatibility may limit rescue."
+        },
+        {
+          "branch_id": "TX_changed_recycling_demand",
+          "explanation": "ThyA makes dTMP but changes the folate product to DHF, imposing regeneration demand not imposed by the ThyX turnover."
+        },
+        {
+          "branch_id": "TX_salvage_or_pool_supply",
+          "explanation": "External thymidine bypasses de-novo demand, or added reduced folate might replenish the limiting supply."
+        }
+      ],
+      "routes": [
+        {
+          "route_id": "TX_rescue_vs_reaction_capacity",
+          "observed_evidence_refs": [
+            "cases.jsonl:replacement_thyX:TX1"
+          ],
+          "source_location": "Complementation and labeling Results; Figures 3–4; construction/labeling Methods",
+          "changed_next_uncertainty": "Slow rescue alone cannot distinguish absent chemistry from an insufficiently supported reaction cycle.",
+          "next_probe_reported": "Compare ThyA alone, ThyA plus FolA, native ThyX and vector control; examine de-novo dT labeling rather than only growth.",
+          "why_this_probe_vs_another_reconstructed": "A larger single growth endpoint would still conflate catalytic output with supply. Labeling checks that the replacement actually reaches the desired nucleotide, while the added reductase tests the new recycling obligation.",
+          "bounded_inference": "The evidence supports ThyA conversion with an important recycling limitation. It does not directly measure folate pools, equalize ThyA protein abundance across constructs or establish every kinetic cause of the growth difference."
+        },
+        {
+          "route_id": "TX_folate_and_hydride_accounting",
+          "source_location": "Introduction/Figure 1; mathematical-model Methods read only for assumptions",
+          "own_actual_probe_ref": "raw/route_bookkeeping_probe.json#/thyX_thyA",
+          "comparison": [
+            {
+              "branch_id": "TX_changed_recycling_demand",
+              "projection": "GlyA + ThyA converts THF to DHF once per dTMP; adding one DHF-reduction turnover closes this cycle."
+            },
+            {
+              "branch_id": "TX_native_return",
+              "projection": "GlyA + ThyX returns THF without a DHF product; a productive turnover still consumes an external reducing equivalent."
+            }
+          ],
+          "calculation_result": "For 100 normalized product events, the first unclosed route accumulates 100 DHF while consuming 100 THF; FolA closes that ledger. ThyX has zero net folate-form loss in the same projection. These are event counts, not measured cell pools or rates.",
+          "why_this_probe_vs_another_reconstructed": "Tracking only final dTMP hides the new regeneration obligation. Reaction addition exposes which component must now supply a reaction even when two completed pathways have the same projected net.",
+          "bounded_inference": "If ThyX uses NADPH, the completed GlyA/ThyX and GlyA/ThyA/FolA projections have the same external net. Equal net bookkeeping therefore does not establish interchangeable enzyme requirements. The paper describes ThyX-family NAD(P)H use; its native donor was not measured in this experiment."
+        },
+        {
+          "route_id": "TX_condition_and_readout_compatibility",
+          "source_location": "Minimal-medium growth Results/Figure 3; Table 2/footnotes; labeling Methods/Figure 4; folate-addition Results/Figure 5",
+          "own_actual_probe_ref": "raw/route_bookkeeping_probe.json#/thyX_thyA/minimal_MA_no_thymidine",
+          "next_uncertainty": "Can the size of rescue or a supplementation result be transferred across media and readouts?",
+          "actual_calculation": "Reported doubling times were converted using mu = ln(2)/Td. Relative to the parent, ThyA alone gives 0.332 in minimal MA and 0.425 in enriched MPYE; ThyA+FolA gives 0.954 and 0.917 respectively.",
+          "why_this_probe_vs_another_reconstructed": "Keeping condition-specific ratios avoids mistaking a general qualitative rescue for a portable quantitative efficiency. Chromosomal-DNA labeling from MPYE early-stationary cultures measures something different from exponential minimal-medium growth.",
+          "bounded_inference": "Thymidine supplementation changes de-novo demand in this salvage-capable strain; the need is conditional. Exogenous folate inhibited multiple strains, so failure of folate feeding cannot by itself identify uptake, regulation or a precise depleted pool."
+        }
+      ],
+      "own_actual_probe": {
+        "probe_id": "replacement_bioZ_thyX_bookkeeping_2026_10_21",
+        "component": "thyX_thyA",
+        "artifact": "raw/route_bookkeeping_probe.json",
+        "script": "raw/route_bookkeeping_probe.py",
+        "performed": "Integer addition of projected reactions, hypothetical 100-event normalization and conversion of author-reported doubling times.",
+        "not_performed": "No native donor/pool measurement, growth prediction, parameter fitting, isotope-chromatogram reanalysis or simulation of the authors’ model."
+      },
+      "complete_relevant_paths_read": [
+        "Main Introduction and Figure 1 description",
+        "Complete main construction, growth, labeling and model Methods",
+        "Complete main Results including complementation, isotope incorporation, folate additions and reported model outcomes",
+        "Complete main Discussion"
+      ],
+      "remaining_inspection_bounds": [
+        "Supplementary kinetic parameter files were not obtained, and the authors’ model was not executed. Their ~50 micromolar total-folate pool is a modeling assumption here, not a measured R. capsulatus pool.",
+        "Protons, water and transient flavin states are omitted from the projected ledger; it is not a complete atom/charge-balanced chemical equation.",
+        "Other reductases, de-novo folate supply, dilution and side reactions can alter in-vivo balances; no FolA-specific universal necessity is inferred."
+      ]
+    }
+  ],
+  "cross_case_decision_constraint": {
+    "status": "Candidate reusable constraint tested in existing F05; cross-link to F02, without renaming, merging or creating a slot.",
+    "constraint": "A growth or terminal-product rescue may fit more than one reaction route. Preserve each route’s required inputs, carrier/cofactor forms, coproducts and regeneration obligations at an explicit boundary; choose a contrast whose predicted outcomes differ. Same local conversion requires evidence for that conversion. A balanced bypass remains conditionally possible until input supply and productive operation are evidenced.",
+    "compatibility_limits": [
+      "BioZ changes carbon entry and bypasses a two-enzyme methylation/demethylation module. ThyA versus ThyX changes folate return and the location of the reduction obligation while preserving the same desired nucleotide output.",
+      "The common reasoning constraint transfers; BioZ-specific substrate probes and ThyX-specific folate/genotype contrasts do not transfer as interchangeable tests.",
+      "A reduced local cofactor count does not establish total energetic savings. Equal projected external stoichiometry does not establish the same internal enzyme demand.",
+      "Balanced accounting alone proves neither native pathway use nor adequate capacity; complete reaction, carrier, supply, medium and assay boundaries must accompany the claim.",
+      "Growth rates, terminal products and isotope-normalized DNA signals are different observations. Their numerical values cannot be exchanged or counted as independent duplicates of the same assay."
+    ],
+    "central_table_ownership": "Root maintains follow_up_lanes.md; F01–F05 and its three slots were read but not edited."
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "record_type": "root_verification_progress_not_completion",
+  "recorded_at": "2026-10-28T20:13:39.832080+00:00",
+  "scope": "UniProt requested returns and scientific received-context repair",
+  "checks": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check059_uniprot_host_workflow",
+      "case_outcomes": {
+        "failed": 8,
+        "passed": 213
+      },
+      "failed_cases": [
+        "tests/test_uniprot_returns.py::test_changed_material_bytes_are_rejected_before_first_projection[native]",
+        "tests/test_uniprot_returns.py::test_changed_material_bytes_are_rejected_before_first_projection[sequence]",
+        "tests/test_uniprot_returns.py::test_saved_unadmitted_form_cannot_skip_material_authentication",
+        "tests/test_uniprot_returns.py::test_empty_selection_returns_no_page_or_material",
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-False]",
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-False]",
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-True]",
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-True]"
+      ],
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check059_uniprot_host_workflow/handle.json",
+        "unit": "gene-local-job-ce9e9e329f8844e8a8e43e892e9c5eeb.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check060_uniprot_host_failed_cases",
+      "case_outcomes": {
+        "failed": 4,
+        "passed": 4
+      },
+      "failed_cases": [
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-False]",
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-False]",
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[False-True]",
+        "tests/test_uniprot_returns.py::test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay[True-True]"
+      ],
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check060_uniprot_host_failed_cases/handle.json",
+        "unit": "gene-local-job-a901192a93a5462e93ba5896cd447494.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      }
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context",
+      "case_outcomes": {
+        "failed": 12,
+        "passed": 38
+      },
+      "failed_cases": [
+        "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[False]",
+        "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history[True]",
+        "tests/test_episode_receipts.py::test_native_workbook_pages_return_one_finding_through_child_form_and_replay",
+        "tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[False]",
+        "tests/test_episode_receipts.py::test_selected_state_read_delivers_existing_findings_but_detail_read_does_not[True]",
+        "tests/test_episode_receipts.py::test_different_parent_scalar_does_not_grant_unreceived_information_to_child",
+        "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[False]",
+        "tests/test_episode_receipts.py::test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary[True]",
+        "tests/test_runtime_decision_exchanges.py::test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation",
+        "tests/test_runtime_decision_exchanges.py::test_own_input_detail_requests_stay_inside_pending_decision",
+        "tests/test_runtime_decision_exchanges.py::test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context",
+        "tests/test_runtime_decision_exchanges.py::test_injected_legacy_default_and_markerless_resume_do_not_migrate"
+      ],
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check061_received_scientific_context/handle.json",
+        "unit": "gene-local-job-9897dce685af480faeb94dfd8d32cbf5.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      }
+    }
+  ],
+  "findings": [
+    "059 executed 221 cases: 213 passed and 8 failed. Four host failures were generator-truthiness assertions; four actual Workflow cases could not import an unstaged fixture.",
+    "060 executed 8 cases: four repaired assertions passed. Four actual Workflow cases exposed global scientific record visibility under a supported custom credit callable.",
+    "Root implemented RECEIVED_CONTEXT_REPAIR_008.md: received scientific information is selected independently of whether the credit callable accepts receipt arguments. Credit calculations and continuation were not changed.",
+    "061 executed 50 cases: 38 passed and 12 failed. All four actual UniProt Workflow grant variants passed, including exact requested returns and closed replay after native bytes were withdrawn.",
+    "The direct-protocol regression edited by root still constructs retired CreditPolicy and therefore has not verified that path. Several other selected regressions explicitly use removed root tools. Full failure classification and any warranted correction remain unfinished; the broader runtime repair is not declared verified."
+  ],
+  "completion_increment": 0,
+  "pending_presentation_feedback": [
+    "API-results own TASK/STEERING template603",
+    "Immediate scientific-parent selected-return displays607"
+  ],
+  "presentation_implemented": false
+}

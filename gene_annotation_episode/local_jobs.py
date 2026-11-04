@@ -79,12 +79,13 @@ def check_scratch_budget(cwd: Path, policy: LocalJobPolicy, *, additional_bytes:
 def run_local_job(command: list[str], *, cwd: Path, policy: LocalJobPolicy,
                   stdout_path: Path | None = None, stderr_path: Path | None = None,
                   stdin_path: Path | None = None, env: Mapping[str, str] | None = None,
-                  cancel_event: threading.Event | None = None, statistics=None) -> LocalJobResult:
+                  cancel_event: threading.Event | None = None, statistics=None,
+                  cpu_threads: int = 1) -> LocalJobResult:
     """Wait through the same durable lifecycle used by detached execution."""
     from .native_lifecycle import run_blocking
     return run_blocking(command, cwd=cwd, policy=policy, stdout_path=stdout_path,
         stderr_path=stderr_path, stdin_path=stdin_path, env=env, cancel_event=cancel_event,
-        statistics=statistics)
+        statistics=statistics, cpu_threads=cpu_threads)
 
 
 async def run_cancellable_native(function, *args, **kwargs):

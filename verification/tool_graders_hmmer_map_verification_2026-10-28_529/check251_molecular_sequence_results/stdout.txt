@@ -1,0 +1,13 @@
+............................F.....                                       [100%]
+=================================== FAILURES ===================================
+_ test_subclass_return_wiring_rejects_forgery_non_immediate_and_unselected_duplicate[non_immediate_child] _
+source_snapshot/tests/test_molecular_sequence_results.py:279: in test_subclass_return_wiring_rejects_forgery_non_immediate_and_unselected_duplicate
+    custody.store.db.execute("INSERT INTO runtime_episodes VALUES(?,?,?,?)", (custody.owner.run_id, child_id, canonical(path), canonical(deepcopy(custody.child.request))))
+                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/copy.py:151: in deepcopy
+    rv = reductor(4)
+         ^^^^^^^^^^^
+E   TypeError: cannot pickle 'mappingproxy' object
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_molecular_sequence_results.py::test_subclass_return_wiring_rejects_forgery_non_immediate_and_unselected_duplicate[non_immediate_child]
+1 failed, 33 passed in 60.03s (0:01:00)

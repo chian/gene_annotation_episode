@@ -1,0 +1,117 @@
+STEERING
+
+Own action yields
+
+| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |
+| --- | --- | --- | --- | --- | --- |
+| tool/source.read | 2 | -0.25 | unavailable | parameters_unbound | 1 |
+
+Current continuation expectation
+
+| Completed actions | Expected next gain | Uncertainty | Continuation cost |
+| --- | --- | --- | --- |
+| 2 | 0.5 | lower=-0.1; upper=0.9; approximate Laplace model band; alpha=0.05 | 0.001 |
+
+Relevant received experimental facts
+
+| Field | Supplied value |
+| --- | --- |
+| [0].id | assessment_qualification |
+| [0].hypothesis_ref | hypothesis_function |
+| [0].observation_ref | observation_activity |
+| [0].relation | weakens |
+| [0].applicability | direct |
+| [0].extent_basis | observed_extent |
+| [0].condition_refs[0] | context_assay |
+| [0].assumption_refs | none supplied |
+| [0].investigation_finding.source_claim.subject_refs[0] | reference_enzyme |
+| [0].investigation_finding.source_claim.predicate | catalyzes |
+| [0].investigation_finding.source_claim.value.type | term_ref |
+| [0].investigation_finding.source_claim.value.ref | term_reaction |
+| [0].investigation_finding.source_claim.context_refs[0] | context_assay |
+| [0].investigation_finding.qualification.kind | measurement_does_not_establish_claim |
+| [0].investigation_finding.qualification.context_refs[0] | context_assay |
+| [0].investigation_finding.qualification.assumption_refs | none supplied |
+| [0].investigation_finding.status | retained |
+| [0].investigation_finding.withdrawal_reason | not_withdrawn |
+| [0].investigation_finding.same_source_claim_as_ref | unknown |
+| [0].investigation_finding.replaces_refs | none supplied |
+| [0].origin | reasoning |
+| [1].id | observation_activity |
+| [1].kind | biochemical_assay |
+| [1].subject_refs[0] | reference_enzyme |
+| [1].source_subject_refs[0] | reference_enzyme |
+| [1].measurements[0].name | activity |
+| [1].measurements[0].value.type | number |
+| [1].measurements[0].value.value | 0.2 |
+| [1].measurements[0].value.bound | less_than |
+| [1].measurements[0].value.qualifier | approximate |
+| [1].measurements[0].value.unit_ref | term_unit |
+| [1].measurements[0].value.uncertainty.representation | plus_minus |
+| [1].measurements[0].value.uncertainty.magnitude | 0.03 |
+| [1].measurements[0].value.uncertainty.statistic | unspecified |
+| [1].measurements[1].name | assay_outcome |
+| [1].measurements[1].value.type | enum |
+| [1].measurements[1].value.value | not_measured |
+| [1].dependencies[0] | context_assay |
+| [1].anchor.source_ref | source_constructed |
+| [1].anchor.artifact_ref | artifact_constructed |
+| [1].anchor.start | 0 |
+| [1].anchor.end | 75 |
+| [1].anchor.quote | Enzyme X variant: activity <0.2 U/mg at pH 7.5; product was not identified. |
+| [1].origin | extracted |
+| [2].id | hypothesis_function |
+| [2].subject_refs[0] | reference_enzyme |
+| [2].predicate | catalyzes |
+| [2].value.type | term_ref |
+| [2].value.ref | term_reaction |
+| [2].context_refs[0] | context_assay |
+| [2].origin | reasoning |
+| [3].id | context_assay |
+| [3].context_type | assay_condition |
+| [3].name | pH 7.5; 50 mM buffer |
+| [3].related_refs[0] | reference_enzyme |
+| [3].attributes[0].name | ph |
+| [3].attributes[0].value.type | number |
+| [3].attributes[0].value.value | 7.5 |
+| [3].attributes[0].value.unit_ref | unknown |
+| [3].anchor.source_ref | source_constructed |
+| [3].anchor.artifact_ref | artifact_constructed |
+| [3].anchor.start | 0 |
+| [3].anchor.end | 75 |
+| [3].anchor.quote | Enzyme X variant: activity <0.2 U/mg at pH 7.5; product was not identified. |
+| [4].id | reference_enzyme |
+| [4].reference_type | construct |
+| [4].label | enzyme X variant |
+| [4].accession | source_entity_aaaaaaaaaaaaaaaaaaaaaaaa |
+| [4].source_ref | source_constructed |
+| [4].anchor.source_ref | source_constructed |
+| [4].anchor.artifact_ref | artifact_constructed |
+| [4].anchor.start | 0 |
+| [4].anchor.end | 75 |
+| [4].anchor.quote | Enzyme X variant: activity <0.2 U/mg at pH 7.5; product was not identified. |
+| [5].id | term_reaction |
+| [5].label | reaction R |
+| [5].term_type | reaction |
+| [5].namespace | RHEA |
+| [5].accession | RHEA:12345 |
+| [5].anchor | unknown |
+| [6].id | term_unit |
+| [6].label | U/mg |
+| [6].term_type | unit |
+| [6].namespace | source_local |
+| [6].accession | source_term_bbbbbbbbbbbbbbbbbbbbbbbb |
+| [6].source_ref | source_constructed |
+| [6].anchor.source_ref | source_constructed |
+| [6].anchor.artifact_ref | artifact_constructed |
+| [6].anchor.start | 0 |
+| [6].anchor.end | 75 |
+| [6].anchor.quote | Enzyme X variant: activity <0.2 U/mg at pH 7.5; product was not identified. |
+
+Admitted requested child returns
+
+| Field | Supplied value |
+| --- | --- |
+| [0].changed_assessment_refs[0] | assessment_qualification |
+| [0].interpretation_basis_refs[0] | observation_activity |
+| [0].unresolved_hypothesis_refs[0] | hypothesis_function |

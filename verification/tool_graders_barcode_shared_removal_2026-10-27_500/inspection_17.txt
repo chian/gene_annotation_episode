@@ -1,0 +1,357 @@
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: _execute
+925:     def _execute(self, state, tool_name, arguments, operation_key):
+926:         self.validate_assignment(state.assignment)
+927:         self.validate_action(state.assignment, tool_name, arguments)
+928:         context = state.context()
+929:         updated = None
+930:         outcome = {'facts': {}, 'native_outcome': None}
+931:         workspace = state.assignment['workspace']
+932:         if tool_name == 'practical.context.set':
+933:             cwd = confined(arguments['cwd'], workspace)
+934:             if not cwd.is_dir():
+935:                 outcome['native_outcome'] = {'failure': {'code': 'practical_working_directory_missing',
+936:                                                          'path': str(cwd)}}
+937:             else:
+938:                 updated = {'revision': context['revision']+1, 'cwd': str(cwd),
+939:                            'environment': arguments['environment']}
+940:                 if updated['cwd'] == context['cwd'] and updated['environment'] == context['environment']:
+941:                     updated['revision'] = context['revision']
+942:         elif tool_name == 'practical.directory.create':
+943:             path = confined(arguments['path'], workspace)
+944:             path.mkdir(parents=True, exist_ok=True)
+945:             outcome['native_outcome'] = {'path': str(path), 'is_directory': path.is_dir()}
+946:         elif tool_name == 'practical.file.write':
+947:             path = confined(arguments['path'], workspace)
+948:             data = arguments['text'].encode('utf-8')
+949:             # Idempotent publication of these exact selected bytes. A separate
+950:             # action may intentionally replace them; replay cannot change them.
+951:             temporary = path.with_name('.'+path.name+'.'+digest(operation_key)+'.writing')
+952:             with temporary.open('wb') as stream:
+953:                 stream.write(data); stream.flush(); os.fsync(stream.fileno())
+954:             os.replace(temporary, path)
+955:             outcome['native_outcome'] = {'path': str(path), 'sha256': hashlib.sha256(data).hexdigest()}
+956:         elif tool_name == 'practical.file.read':
+957:             path = confined(arguments['path'], self.configuration['workspace'])
+958:             with path.open('rb') as stream:
+959:                 stream.seek(arguments['offset'])
+960:                 raw = stream.read(arguments['limit'])
+961:             outcome['native_outcome'] = {'path': str(path), 'offset': arguments['offset'],
+962:                 'returned_bytes': len(raw), 'size_bytes': path.stat().st_size,
+963:                 'bytes_base64': base64.b64encode(raw).decode('ascii'),
+964:                 'text_utf8': raw.decode('utf-8', errors='replace')}
+965:         elif tool_name == 'practical.inspect':
+966:             pass
+967:         elif tool_name == 'practical.inventory.refresh':
+968:             from .execution_inventory import validate_catalog
+969:             path = confined(arguments['path'], self.configuration['workspace'])
+970:             raw = path.read_bytes()
+971:             outcome['inventory_bytes_base64'] = base64.b64encode(raw).decode('ascii')
+972:             try:
+973:                 outcome['inventory_catalog'] = validate_catalog(json.loads(raw))
+974:             except (ValueError, UnicodeError, TypeError) as error:
+975:                 outcome['inventory_failure'] = {'code': 'practical_inventory_catalog_invalid',
+976:                                                 'exception_type': type(error).__name__}
+977:         elif tool_name in {'practical.command.run', 'practical.job.start'}:
+978:             requested = tool_name == 'practical.job.start'
+979:             command = state.assignment['requested_job'] if requested else arguments
+980:             # Request identity is immutable. Context only supplies cwd; the
+981:             # requested job's explicit environment is not silently substituted.
+982:             env = command['environment'] if requested else {**context['environment'], **command['environment']}
+983:             cwd = confined(context['cwd'], workspace)
+984:             if requested:
+985:                 try:
+986:                     handle = self._job_handle(state)
+987:                 except ValueError:
+988:                     if 'retry_failed_execution_id' in arguments:
+989:                         return {'facts': {'paths': path_facts(state.assignment)},
+990:                             'native_outcome': {'failure': {'code': 'requested_job_not_started'}}}, None
+991:                     handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+992:                         native_hmmer='native_hmmer' in command, native_infernal='native_infernal' in command,
+993:                         native_infernal_preparation='native_infernal_preparation' in command,
+994:                         native_hmmer_preparation='native_hmmer_preparation' in command,
+995:                         native_blast='native_blast' in command,
+996:                         native_rna_structure='native_rna_structure' in command,
+997:                         native_protein_structure='native_protein_structure' in command,
+998:                         native_genomic_overlap='native_genomic_overlap' in command,
+999:                         native_chromatin_interactions='native_chromatin_interactions' in command,
+1000:                         native_atac_differential='native_atac_differential' in command,
+1001:                         native_expression_nmf='native_expression_nmf' in command,
+1002:                         native_barcode='native_barcode' in command)
+1003:                 if 'retry_failed_execution_id' in arguments:
+1004:                     strict_owner = None
+1005:                     if 'native_barcode' in command:
+1006:                         strict_owner = self._barcode_plan(state.assignment, str(handle.path),
+1007:                             run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+1008:                     elif 'native_expression_nmf' in command:
+1009:                         strict_owner = self._expression_nmf_plan(state.assignment, str(handle.path),
+1010:                             run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+1011:                     elif 'native_atac_differential' in command:
+1012:                         strict_owner = self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1013:                             origin_episode_id=state.episode_id)['identity']
+1014:                     elif 'native_chromatin_interactions' in command:
+1015:                         strict_owner = self._chromatin_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1016:                             origin_episode_id=state.episode_id)['identity']
+1017:                     elif 'native_genomic_overlap' in command:
+1018:                         strict_owner = self._genomic_overlap_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1019:                             origin_episode_id=state.episode_id)['identity']
+1020:                     elif 'native_protein_structure' in command:
+1021:                         strict_owner = self._protein_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1022:                             origin_episode_id=state.episode_id)['identity']
+1023:                     old = native.status(handle)
+1024:                     if 'native_blast' in command or 'native_rna_structure' in command:
+1025:                         self._job_fact(state, handle, old)
+1026:                     if (arguments['retry_failed_execution_id'] != str(handle.path)
+1027:                             or not old['terminal'] or old['metadata'].get('native_returncode') == 0
+1028:                             or ('native_blast' in command or 'native_rna_structure' in command)
+1029:                                 and old['metadata'].get('native_returncode') is None
+1030:                             or {'native_protein_structure', 'native_genomic_overlap', 'native_chromatin_interactions',
+1031:                                 'native_atac_differential', 'native_expression_nmf', 'native_barcode'} & set(command) and (
+1032:                                 old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
+1033:                                 or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')):
+1034:                         return {'facts': {'requested_job': self._job_fact(state, handle, old),
+1035:                             'paths': path_facts(state.assignment)}, 'native_outcome': {
+1036:                             'failure': {'code': 'practical_retry_requires_original_failed_execution'},
+1037:                             'observation': old,
+1038:                             **({} if strict_owner is None else {
+1039:                                 'attempt_id': strict_owner['attempt_id'],
+1040:                                 'attempt_operation_key': strict_owner['operation_key']})}}, None
+1041:                     handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env,
+1042:                         native_hmmer='native_hmmer' in command, native_infernal='native_infernal' in command,
+1043:                         native_infernal_preparation='native_infernal_preparation' in command,
+1044:                         native_hmmer_preparation='native_hmmer_preparation' in command,
+1045:                         native_blast='native_blast' in command,
+1046:                         native_rna_structure='native_rna_structure' in command,
+1047:                         native_protein_structure='native_protein_structure' in command,
+1048:                         native_genomic_overlap='native_genomic_overlap' in command,
+1049:                         native_chromatin_interactions='native_chromatin_interactions' in command,
+1050:                         native_atac_differential='native_atac_differential' in command,
+1051:                         native_expression_nmf='native_expression_nmf' in command,
+1052:                         native_barcode='native_barcode' in command)
+1053:             else:
+1054:                 handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env)
+1055:             if requested:
+1056:                 if 'native_barcode' in command:
+1057:                     self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1058:                         origin_episode_id=state.episode_id)
+1059:                 elif 'native_expression_nmf' in command:
+1060:                     self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1061:                         origin_episode_id=state.episode_id)
+1062:                 if 'native_atac_differential' in command:
+1063:                     self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1064:                         origin_episode_id=state.episode_id)
+1065:                 if 'native_chromatin_interactions' in command:
+1066:                     self._chromatin_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1067:                         origin_episode_id=state.episode_id)
+1068:                 if 'native_genomic_overlap' in command:
+1069:                     self._genomic_overlap_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1070:                         origin_episode_id=state.episode_id)
+1071:                 if 'native_protein_structure' in command:
+1072:                     self._protein_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1073:                         origin_episode_id=state.episode_id)
+1074:                 view = native.status(handle)
+1075:                 outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+1076:                 outcome['native_outcome'] = view
+1077:                 if 'native_barcode' in command:
+1078:                     owner = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1079:                         origin_episode_id=state.episode_id)['identity']
+1080:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1081:                         'attempt_operation_key': owner['operation_key']}
+1082:                 elif 'native_expression_nmf' in command:
+1083:                     owner = self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1084:                         origin_episode_id=state.episode_id)['identity']
+1085:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1086:                         'attempt_operation_key': owner['operation_key']}
+1087:                 elif 'native_atac_differential' in command:
+1088:                     owner = self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1089:                         origin_episode_id=state.episode_id)['identity']
+1090:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1091:                         'attempt_operation_key': owner['operation_key']}
+1092:                 elif 'native_chromatin_interactions' in command:
+1093:                     owner = self._chromatin_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1094:                         origin_episode_id=state.episode_id)['identity']
+1095:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1096:                         'attempt_operation_key': owner['operation_key']}
+1097:                 elif 'native_genomic_overlap' in command:
+1098:                     owner = self._genomic_overlap_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1099:                         origin_episode_id=state.episode_id)['identity']
+1100:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1101:                         'attempt_operation_key': owner['operation_key']}
+1102:                 elif 'native_protein_structure' in command:
+1103:                     owner = self._protein_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1104:                         origin_episode_id=state.episode_id)['identity']
+1105:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1106:                         'attempt_operation_key': owner['operation_key']}
+1107:                 elif 'native_blast' in command:
+1108:                     from .native_blast_local import local_blast_plan
+1109:                     owner = local_blast_plan(state.assignment, str(handle.path))['identity']
+1110:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1111:                         'attempt_operation_key': owner['operation_key']}
+1112:                 elif 'native_rna_structure' in command:
+1113:                     owner = self._rna_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1114:                         origin_episode_id=state.episode_id)['identity']
+1115:                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+1116:                         'attempt_operation_key': owner['operation_key']}
+1117:             else:
+1118:                 # Waiting for this one selected command is execution, not an
+1119:                 # autonomous investigation. The native lifecycle is durable.
+1120:                 try:
+1121:                     result = native.wait_job(handle)
+1122:                     rc, detail = result.returncode, result.metadata
+1123:                 except AcquisitionError as error:
+1124:                     view = native.status(handle)
+1125:                     rc, detail = view['metadata'].get('native_returncode'), {
+1126:                         'failure_code': error.code, 'observation': view}
+1127:                 outcome['facts']['command'] = {'argv': command['argv'], 'environment': env,
+1128:                     'returncode': rc, 'execution_id': str(handle.path)}
+1129:                 body = handle.read()
+1130:                 outcome['native_outcome'] = {'metadata': detail, 'stdout_path': body['stdout'],
+1131:                     'stderr_path': body['stderr'],
+1132:                     'stdout': log_tail(body['stdout']), 'stderr': log_tail(body['stderr'])}
+1133:         elif tool_name in {'practical.job.status', 'practical.job.collect'}:
+1134:             handle = self._job_handle(state)
+1135:             if 'native_barcode' in state.assignment['requested_job']:
+1136:                 self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1137:                     origin_episode_id=state.episode_id)
+1138:             elif 'native_expression_nmf' in state.assignment['requested_job']:
+1139:                 self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1140:                     origin_episode_id=state.episode_id)
+1141:             if 'native_atac_differential' in state.assignment['requested_job']:
+1142:                 self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1143:                     origin_episode_id=state.episode_id)
+1144:             if 'native_chromatin_interactions' in state.assignment['requested_job']:
+1145:                 self._chromatin_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1146:                     origin_episode_id=state.episode_id)
+1147:             if 'native_genomic_overlap' in state.assignment['requested_job']:
+1148:                 self._genomic_overlap_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1149:                     origin_episode_id=state.episode_id)
+1150:             if 'native_protein_structure' in state.assignment['requested_job']:
+1151:                 self._protein_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1152:                     origin_episode_id=state.episode_id)
+1153:             view = native.status(handle)
+1154:             outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+1155:             body = handle.read()
+1156:             if 'native_barcode' in state.assignment['requested_job']:
+1157:                 from .native_barcode_observations import barcode_observed_files
+1158:                 plan = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1159:                     origin_episode_id=state.episode_id)
+1160:                 outputs, logs, _ = barcode_observed_files(plan, view,
+1161:                     log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+1162:                 outcome['native_outcome'] = {**view,
+1163:                     'observed_logs': logs, 'observed_outputs': outputs,
+1164:                     'attempt_id': plan['identity']['attempt_id'],
+1165:                     'attempt_operation_key': plan['identity']['operation_key']}
+1166:             elif 'native_expression_nmf' in state.assignment['requested_job']:
+1167:                 from .native_expression_nmf_observations import expression_nmf_observed_files
+1168:                 plan = self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1169:                     origin_episode_id=state.episode_id)
+1170:                 outputs, logs, _ = expression_nmf_observed_files(plan, view,
+1171:                     log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+1172:                 outcome['native_outcome'] = {**view,
+1173:                     'observed_logs': logs, 'observed_outputs': outputs,
+1174:                     'attempt_id': plan['identity']['attempt_id'],
+1175:                     'attempt_operation_key': plan['identity']['operation_key']}
+1176:             elif 'native_atac_differential' in state.assignment['requested_job']:
+1177:                 from .native_atac_differential_observations import atac_observed_files
+1178:                 plan = self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1179:                     origin_episode_id=state.episode_id)
+1180:                 outputs, logs, _ = atac_observed_files(plan, view,
+1181:                     log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+1182:                 outcome['native_outcome'] = {**view,
+1183:                     'observed_logs': logs, 'observed_outputs': outputs,
+1184:                     'attempt_id': plan['identity']['attempt_id'],
+1185:                     'attempt_operation_key': plan['identity']['operation_key']}
+1186:             elif 'native_chromatin_interactions' in state.assignment['requested_job']:
+1187:                 from .native_chromatin_interaction_observations import chromatin_observed_files
+1188:                 plan = self._chromatin_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1189:                     origin_episode_id=state.episode_id)
+1190:                 outputs, logs, _ = chromatin_observed_files(plan, view,
+1191:                     log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+1192:                 outcome['native_outcome'] = {**view,
+1193:                     'observed_logs': {row['role']: row for row in logs}, 'observed_outputs': outputs,
+1194:                     'attempt_id': plan['identity']['attempt_id'],
+1195:                     'attempt_operation_key': plan['identity']['operation_key']}
+1196:             elif 'native_genomic_overlap' in state.assignment['requested_job']:
+1197:                 from .native_genomic_overlap_observations import genomic_overlap_observed_files
+1198:                 plan = self._genomic_overlap_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1199:                     origin_episode_id=state.episode_id)
+1200:                 outputs, logs, _ = genomic_overlap_observed_files(plan, view,
+1201:                     log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+1202:                 outcome['native_outcome'] = {**view,
+1203:                     'observed_logs': {row['role']: row for row in logs}, 'observed_outputs': outputs,
+1204:                     'attempt_id': plan['identity']['attempt_id'],
+1205:                     'attempt_operation_key': plan['identity']['operation_key']}
+1206:             elif 'native_protein_structure' in state.assignment['requested_job']:
+1207:                 from .native_protein_structure_contracts import BUNDLE_FILENAME
+1208:                 from .native_protein_structure_driver import confined_file
+1209:                 plan = self._protein_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1210:                     origin_episode_id=state.episode_id)
+1211:                 logs, outputs = {}, []
+1212:                 for selected in [*state.assignment['requested_job']['native_protein_structure']['outputs'],
+1213:                         {'role': 'native_protein_structure_bundle', 'format': 'json', 'relative_path': BUNDLE_FILENAME}]:
+1214:                     path = confined_file(Path(plan['attempt_directory']), selected['relative_path'])
+1215:                     text_log = selected['role'] in {'stdout', 'stderr'}
+1216:                     detail = _output_details(path, text_log=text_log)
+1217:                     outputs.append({'role': selected['role'], 'available': detail['available'],
+1218:                         'bytes': detail.get('bytes'), 'writer_closed': detail['available'] and view['terminal']})
+1219:                     if text_log:
+1220:                         logs[selected['role']] = detail
+1221:                 outcome['native_outcome'] = {**view, 'observed_logs': logs, 'observed_outputs': outputs,
+1222:                     'attempt_id': plan['identity']['attempt_id'],
+1223:                     'attempt_operation_key': plan['identity']['operation_key']}
+1224:             elif 'native_rna_structure' in state.assignment['requested_job']:
+1225:                 from .native_rna_structure_contracts import BUNDLE_FILENAME
+1226:                 from .native_rna_structure_driver import confined_file
+1227:                 plan = self._rna_plan(state.assignment, str(handle.path), run_id=state.run_id,
+1228:                     origin_episode_id=state.episode_id)
+1229:                 logs, outputs = {}, []
+1230:                 for selected in [*state.assignment['requested_job']['native_rna_structure']['outputs'],
+1231:                         {'role': 'native_rna_structure_bundle', 'format': 'json', 'relative_path': BUNDLE_FILENAME}]:
+1232:                     path = confined_file(Path(plan['attempt_directory']), selected['relative_path'])
+1233:                     text_log = selected['role'] in {'stdout', 'stderr'}
+1234:                     detail = _output_details(path, text_log=text_log)
+1235:                     outputs.append({'role': selected['role'], 'available': detail['available'],
+1236:                         'bytes': detail.get('bytes'), 'writer_closed': detail['available'] and view['terminal']})
+1237:                     if text_log:
+1238:                         logs[selected['role']] = detail
+1239:                 outcome['native_outcome'] = {**view, 'observed_logs': logs, 'observed_outputs': outputs,
+1240:                     'attempt_id': plan['identity']['attempt_id'],
+1241:                     'attempt_operation_key': plan['identity']['operation_key']}
+1242:             elif 'native_blast' in state.assignment['requested_job']:
+1243:                 from .native_blast_local import local_blast_plan
+1244:                 plan = local_blast_plan(state.assignment, str(handle.path))
+1245:                 logs, outputs = {}, []
+1246:                 selected_outputs = [*state.assignment['requested_job']['native_blast']['outputs'],
+1247:                     {'role': 'native_blast_bundle', 'format': 'json', 'relative_path': 'bundle.json'}]
+1248:                 for selected in selected_outputs:
+1249:                     from .native_blast_driver import _confined_file
+1250:                     path = _confined_file(Path(plan['attempt_directory']), selected['relative_path'])
+1251:                     text_log = selected['role'] in {'stdout', 'stderr'}
+1252:                     detail = _output_details(path, text_log=text_log)
+1253:                     outputs.append({'role': selected['role'], 'available': detail['available'],
+1254:                         'bytes': detail.get('bytes'), 'writer_closed': detail['available'] and view['terminal']})
+1255:                     if text_log:
+1256:                         logs[selected['role']] = detail
+1257:                 outcome['native_outcome'] = {**view, 'observed_logs': logs, 'observed_outputs': outputs,
+1258:                     'attempt_id': plan['identity']['attempt_id'],
+1259:                     'attempt_operation_key': plan['identity']['operation_key']}
+1260:             elif 'native_hmmer_preparation' in state.assignment['requested_job']:
+1261:                 from .native_hmmer_preparation_local import local_hmmer_preparation_plan
+1262:                 plan = local_hmmer_preparation_plan(state.assignment, str(handle.path))
+1263:                 logs, outputs = {}, []
+1264:                 for selected in state.assignment['requested_job']['native_hmmer_preparation']['outputs']:
+1265:                     path = confined(Path(plan['attempt_directory']) / selected['relative_path'], workspace)
+1266:                     text_log = selected['role'] in {'stdout', 'stderr'} and selected['format'] != 'hmmer_binary'
+1267:                     detail = _output_details(path, text_log=text_log)
+1268:                     outputs.append({'role': selected['role'], 'available': detail['available'],
+1269:                         'bytes': detail.get('bytes'), 'writer_closed': detail['available'] and view['terminal']})
+1270:                     if text_log:
+1271:                         logs[selected['role']] = detail
+1272:                 outcome['native_outcome'] = {**view, 'observed_logs': logs, 'observed_outputs': outputs}
+1273:             else:
+1274:                 logs = {name: log_tail(body[name]) for name in ('stdout', 'stderr')}
+1275:                 outcome['native_outcome'] = {**view, 'observed_logs': logs}
+1276:         else:
+1277:             raise ValueError('practical_operation_not_bound')
+1278:         outcome['facts']['paths'] = path_facts(state.assignment)
+1279:         return outcome, updated

@@ -1,0 +1,194 @@
+..........................................FFFF......                     [100%]
+=================================== FAILURES ===================================
+_ test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_create] _
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group3-20261022-001/test_fd_stage_and_actual_memor0')
+cut = 'before_create'
+
+    @pytest.mark.parametrize('cut', ['before_create', 'constructor', 'before_lineage'])
+    def test_fd_stage_and_actual_memory_store_resist_parent_replacement(tmp_path, cut):
+        source = checkpoint_source_fixture(tmp_path)
+        before = tree(source['arguments']['source_implementation_root'])
+        parent, moved = tmp_path/'publication-parent', tmp_path/'moved-parent'
+        parent.mkdir()
+        destination = parent/'new'
+        create, initialize, add_lineage = custody._create_stage, Store.__init__, custody._add_lineage
+        observations = []
+        def move():
+            parent.rename(moved)
+            parent.mkdir()
+            (parent/'sentinel').write_bytes(b'replacement must stay untouched')
+        def creating(owner):
+            if cut == 'before_create':
+                move()
+            return create(owner)
+        def constructor(self, path):
+            if cut == 'constructor':
+                move()
+            initialize(self, path)
+            assert type(self) is custody._PinnedStore
+            assert [(r[1], r[2]) for r in self.db.execute('PRAGMA database_list')] == [('main', '')]
+            assert self.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
+            assert type(self).artifact is Store.artifact and type(self).put is Store.put
+            assert type(self).get is Store.get and type(self).transaction is Store.transaction
+            observations.append('actual_super_constructor_on_original_pages')
+        def lineage(*args, **kwargs):
+            if cut == 'before_lineage':
+                move()
+            return add_lineage(*args, **kwargs)
+        with patch.object(custody, '_create_stage', creating), patch.object(Store, '__init__', constructor), \
+                patch.object(custody, '_add_lineage', lineage):
+            value = failure(source, destination, 'publication_failure')
+        assert observations == ['actual_super_constructor_on_original_pages']
+        assert value['publication_state'] == 'retained_stage'
+        stage = Path(value['staging_workspace'])
+        assert stage.parent == moved and stage.is_dir()
+>       assert tree(parent) == {'sentinel': (sha(b'replacement must stay untouched'),
+            len(b'replacement must stay untouched'), 0o644)}
+E       AssertionError: assert {'sentinel': ...26', 31, 436)} == {'sentinel': ...26', 31, 420)}
+E         
+E         Differing items:
+E         {'sentinel': ('be03a38a013c0eddb00a95c6d50ab755efc06d903c443a23af1a4c7f8ce31d26', 31, 436)} != {'sentinel': ('be03a38a013c0eddb00a95c6d50ab755efc06d903c443a23af1a4c7f8ce31d26', 31, 420)}
+E         Use -v to get more diff
+
+tests/test_scientific_checkpoint_fork.py:661: AssertionError
+_ test_fd_stage_and_actual_memory_store_resist_parent_replacement[constructor] _
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group3-20261022-001/test_fd_stage_and_actual_memor1')
+cut = 'constructor'
+
+    @pytest.mark.parametrize('cut', ['before_create', 'constructor', 'before_lineage'])
+    def test_fd_stage_and_actual_memory_store_resist_parent_replacement(tmp_path, cut):
+        source = checkpoint_source_fixture(tmp_path)
+        before = tree(source['arguments']['source_implementation_root'])
+        parent, moved = tmp_path/'publication-parent', tmp_path/'moved-parent'
+        parent.mkdir()
+        destination = parent/'new'
+        create, initialize, add_lineage = custody._create_stage, Store.__init__, custody._add_lineage
+        observations = []
+        def move():
+            parent.rename(moved)
+            parent.mkdir()
+            (parent/'sentinel').write_bytes(b'replacement must stay untouched')
+        def creating(owner):
+            if cut == 'before_create':
+                move()
+            return create(owner)
+        def constructor(self, path):
+            if cut == 'constructor':
+                move()
+            initialize(self, path)
+            assert type(self) is custody._PinnedStore
+            assert [(r[1], r[2]) for r in self.db.execute('PRAGMA database_list')] == [('main', '')]
+            assert self.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
+            assert type(self).artifact is Store.artifact and type(self).put is Store.put
+            assert type(self).get is Store.get and type(self).transaction is Store.transaction
+            observations.append('actual_super_constructor_on_original_pages')
+        def lineage(*args, **kwargs):
+            if cut == 'before_lineage':
+                move()
+            return add_lineage(*args, **kwargs)
+        with patch.object(custody, '_create_stage', creating), patch.object(Store, '__init__', constructor), \
+                patch.object(custody, '_add_lineage', lineage):
+            value = failure(source, destination, 'publication_failure')
+        assert observations == ['actual_super_constructor_on_original_pages']
+        assert value['publication_state'] == 'retained_stage'
+        stage = Path(value['staging_workspace'])
+        assert stage.parent == moved and stage.is_dir()
+>       assert tree(parent) == {'sentinel': (sha(b'replacement must stay untouched'),
+            len(b'replacement must stay untouched'), 0o644)}
+E       AssertionError: assert {'sentinel': ...26', 31, 436)} == {'sentinel': ...26', 31, 420)}
+E         
+E         Differing items:
+E         {'sentinel': ('be03a38a013c0eddb00a95c6d50ab755efc06d903c443a23af1a4c7f8ce31d26', 31, 436)} != {'sentinel': ('be03a38a013c0eddb00a95c6d50ab755efc06d903c443a23af1a4c7f8ce31d26', 31, 420)}
+E         Use -v to get more diff
+
+tests/test_scientific_checkpoint_fork.py:661: AssertionError
+_ test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_lineage] _
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group3-20261022-001/test_fd_stage_and_actual_memor2')
+cut = 'before_lineage'
+
+    @pytest.mark.parametrize('cut', ['before_create', 'constructor', 'before_lineage'])
+    def test_fd_stage_and_actual_memory_store_resist_parent_replacement(tmp_path, cut):
+        source = checkpoint_source_fixture(tmp_path)
+        before = tree(source['arguments']['source_implementation_root'])
+        parent, moved = tmp_path/'publication-parent', tmp_path/'moved-parent'
+        parent.mkdir()
+        destination = parent/'new'
+        create, initialize, add_lineage = custody._create_stage, Store.__init__, custody._add_lineage
+        observations = []
+        def move():
+            parent.rename(moved)
+            parent.mkdir()
+            (parent/'sentinel').write_bytes(b'replacement must stay untouched')
+        def creating(owner):
+            if cut == 'before_create':
+                move()
+            return create(owner)
+        def constructor(self, path):
+            if cut == 'constructor':
+                move()
+            initialize(self, path)
+            assert type(self) is custody._PinnedStore
+            assert [(r[1], r[2]) for r in self.db.execute('PRAGMA database_list')] == [('main', '')]
+            assert self.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
+            assert type(self).artifact is Store.artifact and type(self).put is Store.put
+            assert type(self).get is Store.get and type(self).transaction is Store.transaction
+            observations.append('actual_super_constructor_on_original_pages')
+        def lineage(*args, **kwargs):
+            if cut == 'before_lineage':
+                move()
+            return add_lineage(*args, **kwargs)
+        with patch.object(custody, '_create_stage', creating), patch.object(Store, '__init__', constructor), \
+                patch.object(custody, '_add_lineage', lineage):
+            value = failure(source, destination, 'publication_failure')
+        assert observations == ['actual_super_constructor_on_original_pages']
+        assert value['publication_state'] == 'retained_stage'
+        stage = Path(value['staging_workspace'])
+        assert stage.parent == moved and stage.is_dir()
+>       assert tree(parent) == {'sentinel': (sha(b'replacement must stay untouched'),
+            len(b'replacement must stay untouched'), 0o644)}
+E       AssertionError: assert {'sentinel': ...26', 31, 436)} == {'sentinel': ...26', 31, 420)}
+E         
+E         Differing items:
+E         {'sentinel': ('be03a38a013c0eddb00a95c6d50ab755efc06d903c443a23af1a4c7f8ce31d26', 31, 436)} != {'sentinel': ('be03a38a013c0eddb00a95c6d50ab755efc06d903c443a23af1a4c7f8ce31d26', 31, 420)}
+E         Use -v to get more diff
+
+tests/test_scientific_checkpoint_fork.py:661: AssertionError
+___________ test_replaced_working_inode_is_checked_before_truncation ___________
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-group3-20261022-001/test_replaced_working_inode_is0')
+
+    def test_replaced_working_inode_is_checked_before_truncation(tmp_path):
+        source = checkpoint_source_fixture(tmp_path)
+        add_lineage = custody._add_lineage
+        replacement = b'EXTERNAL replacement must not be truncated'
+        def changed(store, *args, **kwargs):
+            result = add_lineage(store, *args, **kwargs)
+            path = store.path.anchor/'state.sqlite3'
+            path.unlink()
+            path.write_bytes(replacement)
+            return result
+        with patch.object(custody, '_add_lineage', changed):
+>           value = failure(source, tmp_path/'new', 'destination_lineage_failure')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:683: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+source = {'arguments': {'source_workspace': PosixPath('/tmp/scientific-checkpoint-c006-group3-20261022-001/test_replaced_workin..., 'scratch_bytes': 4194304, 'wall_seconds': None}, 'max_cpu': 1, ...}, 'target': 'input_19fdfbf07824b593ef8065df', ...}
+destination = PosixPath('/tmp/scientific-checkpoint-c006-group3-20261022-001/test_replaced_working_inode_is0/new')
+code = 'destination_lineage_failure'
+
+    def failure(source, destination, code):
+>       with pytest.raises(custody.ScientificCheckpointForkError) as error:
+E       Failed: DID NOT RAISE ScientificCheckpointForkError
+
+tests/test_scientific_checkpoint_fork.py:226: Failed
+=========================== short test summary info ============================
+FAILED tests/test_scientific_checkpoint_fork.py::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_create]
+FAILED tests/test_scientific_checkpoint_fork.py::test_fd_stage_and_actual_memory_store_resist_parent_replacement[constructor]
+FAILED tests/test_scientific_checkpoint_fork.py::test_fd_stage_and_actual_memory_store_resist_parent_replacement[before_lineage]
+FAILED tests/test_scientific_checkpoint_fork.py::test_replaced_working_inode_is_checked_before_truncation
+4 failed, 48 passed in 238.77s (0:03:58)

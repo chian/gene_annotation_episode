@@ -1,0 +1,869 @@
+--- gene_annotation_episode/execution_episodes.py
++++ gene_annotation_episode/execution_episodes.py
+@@ -114,11 +114,6 @@
+         self._practical = {}
+         for resource_id, configuration in self.resources.items():
+             kind = KINDS[configuration['kind']]
+-            if 'native_barcode' in configuration:
+-                from .native_barcode_contracts import validate_barcode_bindings
+-                if kind != 'local':
+-                    raise ValueError('native_barcode_resource_execution_binding_unfinished:' + kind)
+-                validate_barcode_bindings(configuration['native_barcode'])
+             if 'native_expression_nmf' in configuration:
+                 from .native_expression_nmf_contracts import validate_expression_nmf_bindings
+                 if kind != 'local':
+@@ -198,13 +193,7 @@
+         from .native_protein_structure_returns import NativeProteinStructureReturns
+         self.native_protein_structure_results = NativeProteinStructureResults(self)
+         self.native_protein_structure_returns = NativeProteinStructureReturns(self)
+-        self.native_barcode_results = self.native_barcode_returns = None
+         self.native_expression_nmf_results = self.native_expression_nmf_returns = None
+-        if any(configuration.get('native_barcode') for configuration in self.resources.values()):
+-            from .native_barcode_results import NativeBarcodeResults
+-            from .barcode_returns import BarcodeReturns
+-            self.native_barcode_results = NativeBarcodeResults(self)
+-            self.native_barcode_returns = BarcodeReturns(self)
+         if any(configuration.get('native_expression_nmf') for configuration in self.resources.values()):
+             from .native_expression_nmf_results import NativeExpressionNMFResults
+             from .expression_nmf_returns import ExpressionNMFReturns
+@@ -302,11 +291,6 @@
+         if kind != 'api':
+             schema['properties']['resource_kind'] = {'type': 'string', 'const': kind}
+             alternatives = []
+-            barcode = self.resources[resource_id].get('native_barcode', [])
+-            if barcode:
+-                from .native_barcode_tool_information import barcode_tool_contracts
+-                alternatives.extend(row['input_schema'] for row in barcode_tool_contracts(
+-                    barcode, resource_kind=kind, resource_id=resource_id))
+             nmf = self.resources[resource_id].get('native_expression_nmf', [])
+             if nmf:
+                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
+@@ -385,12 +369,6 @@
+         self.credit_kind(role)
+         if role == 'results':
+             schema = deepcopy(RESULTS_SCHEMA)
+-            if self.native_barcode_results is not None:
+-                from .barcode_result_contracts import BARCODE_RESULT_SELECTOR_SCHEMA
+-                schema['properties']['selector'].setdefault('allOf', []).append({
+-                    'if': {'required': ['version'], 'properties': {'version': {
+-                        'const': 'barcode_result_selector_v1'}}},
+-                    'then': deepcopy(BARCODE_RESULT_SELECTOR_SCHEMA)})
+             if self.native_expression_nmf_results is not None:
+                 from .expression_nmf_result_contracts import EXPRESSION_NMF_RESULT_SELECTOR_SCHEMA
+                 schema['properties']['selector'].setdefault('allOf', []).append({
+@@ -541,33 +519,6 @@
+                 return True
+         return self.native_genomic_overlap_returns.resolve_received(context, reference, namespace)
+ 
+-    def _barcode_reference_access(self, context, reference, namespace):
+-        host = self.native_barcode_results
+-        if host is None or not host.owns_reference(reference):
+-            return None
+-        if namespace not in {None, 'artifact'}:
+-            return False
+-        if host.applies(context):
+-            if host.resolve_own(context, reference, namespace):
+-                return True
+-            selector = plain(context.assignment)['selector']
+-            supplied = selector.get('saved_sheet_file')
+-            if (selector.get('mode') == 'saved_sheet_recalculation' and isinstance(supplied, dict)
+-                    and supplied.get('artifact_ref') == reference):
+-                self.native_barcode_returns.authenticate_received_saved_sheet(context, supplied)
+-                return True
+-        return self.native_barcode_returns.resolve_received(context, reference, namespace)
+-
+-    @staticmethod
+-    def _barcode_selector(assignment):
+-        return assignment.get('selector', {}).get('version') == 'barcode_result_selector_v1'
+-
+-    def _retained_barcode_target(self, context, assignment, scope):
+-        if not self._barcode_selector(assignment):
+-            return None
+-        if self.native_barcode_results is None:
+-            raise ValueError('native_barcode_results_binding_unavailable')
+-        return self.native_barcode_results.retained_target(context, assignment, scope)
+ 
+     def _expression_nmf_reference_access(self, context, reference, namespace):
+         host = self.native_expression_nmf_results
+@@ -673,18 +624,11 @@
+             raise ValueError('native_genomic_overlap_results_binding_unavailable')
+         return self.native_genomic_overlap_results.retained_target(context, assignment, scope)
+ 
+-    def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=(), barcode_assignments=()):
++    def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=()):
+         from .execution_input_versions import validate_execution_input_versions
+         return validate_execution_input_versions(self, versions, scope, context=context,
+-            atac_assignments=atac_assignments, nmf_assignments=nmf_assignments,
+-            barcode_assignments=barcode_assignments)
+-
+-    def _barcode_inputs(self, context, assignment):
+-        if 'native_barcode' not in assignment.get('requested_job', {}):
+-            return []
+-        from .barcode_operands import validate_barcode_job_inputs
+-        return validate_barcode_job_inputs(self.store, context, assignment,
+-            reference_access=self.resolve_received_reference)
++            atac_assignments=atac_assignments, nmf_assignments=nmf_assignments)
++
+ 
+     def _expression_nmf_inputs(self, context, assignment):
+         if 'native_expression_nmf' not in assignment.get('requested_job', {}):
+@@ -729,7 +673,6 @@
+             selected = self._launch(selected, scope=scope)
+             from .protein_structure_operands import validate_protein_structure_job_inputs
+             for request in selected['requests'].values():
+-                self._barcode_inputs(parent, request)
+                 self._expression_nmf_inputs(parent, request)
+                 self._atac_inputs(parent, request)
+                 self._chromatin_inputs(parent, request)
+@@ -737,8 +680,7 @@
+                 validate_protein_structure_job_inputs(self.store, parent, request,
+                     returns=self.native_protein_structure_returns)
+             self._versions(selected['immutable_input_versions'], scope, context=parent,
+-                atac_assignments=selected['requests'].values(), nmf_assignments=selected['requests'].values(),
+-                barcode_assignments=selected['requests'].values())
++                atac_assignments=selected['requests'].values(), nmf_assignments=selected['requests'].values())
+             from .native_blast_database_result_publication import validate_native_job_inputs
+             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             for request in selected['requests'].values():
+@@ -748,14 +690,12 @@
+                 validate_rna_structure_job_inputs(self.store, parent, request)
+             return selected
+         if role == 'results':
+-            barcode_target = self._retained_barcode_target(parent, selected, scope)
+             nmf_target = self._retained_expression_nmf_target(parent, selected, scope)
+             atac_target = self._retained_atac_target(parent, selected, scope)
+             chromatin_target = self._retained_chromatin_target(parent, selected, scope)
+             overlap_target = self._retained_genomic_overlap_target(parent, selected, scope)
+             retained = self._retained_protein_result(parent, selected, scope)
+-            target = (barcode_target if barcode_target is not None else
+-                nmf_target if nmf_target is not None else
++            target = (nmf_target if nmf_target is not None else
+                 atac_target if atac_target is not None else
+                 chromatin_target if chromatin_target is not None else
+                 overlap_target if overlap_target is not None else
+@@ -794,7 +734,6 @@
+             raise ValueError('resource_child_role_owned_by_launch')
+         original = self._launch(plain(parent.assignment))
+         self._match_request(original, selected)
+-        self._barcode_inputs(parent, selected)
+         self._expression_nmf_inputs(parent, selected)
+         self._atac_inputs(parent, selected)
+         self._chromatin_inputs(parent, selected)
+@@ -803,8 +742,7 @@
+         validate_protein_structure_job_inputs(self.store, parent, selected,
+             returns=self.native_protein_structure_returns)
+         self._versions(original['immutable_input_versions'], scope, context=parent,
+-            atac_assignments=[selected], nmf_assignments=[selected],
+-            barcode_assignments=[selected])
++            atac_assignments=[selected], nmf_assignments=[selected])
+         from .native_blast_database_result_publication import validate_native_job_inputs
+         from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+         validate_native_job_inputs(self.store, parent, selected)
+@@ -825,7 +763,6 @@
+             value = self._launch(plain(context.assignment), scope=context.scope)
+             from .protein_structure_operands import validate_protein_structure_job_inputs
+             for request in value['requests'].values():
+-                self._barcode_inputs(context, request)
+                 self._expression_nmf_inputs(context, request)
+                 self._atac_inputs(context, request)
+                 self._chromatin_inputs(context, request)
+@@ -833,13 +770,11 @@
+                 validate_protein_structure_job_inputs(self.store, context, request,
+                     returns=self.native_protein_structure_returns)
+             self._versions(value['immutable_input_versions'], context.scope, context=context,
+-                atac_assignments=value['requests'].values(), nmf_assignments=value['requests'].values(),
+-                barcode_assignments=value['requests'].values())
++                atac_assignments=value['requests'].values(), nmf_assignments=value['requests'].values())
+         else:
+             target = self._target(context)
+             self._selector(plain(context.assignment), target)
+-            if (self._barcode_selector(plain(context.assignment))
+-                    or self._expression_nmf_selector(plain(context.assignment))
++            if (self._expression_nmf_selector(plain(context.assignment))
+                     or self._atac_selector(plain(context.assignment))
+                     or self._chromatin_selector(plain(context.assignment))
+                     or self._genomic_overlap_selector(plain(context.assignment))
+@@ -858,7 +793,6 @@
+         if row is not None:
+             original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
+             self._match_request(original, plain(context.assignment))
+-            self._barcode_inputs(context, plain(context.assignment))
+             self._expression_nmf_inputs(context, plain(context.assignment))
+             self._atac_inputs(context, plain(context.assignment))
+             self._chromatin_inputs(context, plain(context.assignment))
+@@ -867,8 +801,7 @@
+             validate_protein_structure_job_inputs(self.store, context, plain(context.assignment),
+                 returns=self.native_protein_structure_returns)
+             self._versions(original['immutable_input_versions'], context.scope, context=context,
+-                atac_assignments=[plain(context.assignment)], nmf_assignments=[plain(context.assignment)],
+-                barcode_assignments=[plain(context.assignment)])
++                atac_assignments=[plain(context.assignment)], nmf_assignments=[plain(context.assignment)])
+             from .native_blast_database_result_publication import validate_native_job_inputs
+             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             validate_native_job_inputs(self.store, context, plain(context.assignment))
+@@ -1054,10 +987,6 @@
+                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+             native_entries = []
+-            if configuration.get('native_barcode'):
+-                from .native_barcode_tool_information import barcode_tool_contracts
+-                native_entries.extend(barcode_tool_contracts(configuration['native_barcode'],
+-                    resource_kind=kind, resource_id=resource_id))
+             if configuration.get('native_expression_nmf'):
+                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
+                 native_entries.extend(expression_nmf_tool_contracts(configuration['native_expression_nmf'],
+@@ -1199,12 +1128,7 @@
+         if context.role == 'results':
+             assignment = plain(context.assignment)
+             retained = self._retained_protein_result(context, assignment, context.scope)
+-            if self._barcode_selector(assignment):
+-                from .barcode_execution_information import describe_barcode_result
+-                value['execution_target'] = self._target(context)
+-                value['execution_target_description'] = describe_barcode_result(
+-                    value['execution_target'], selector=assignment['selector'])
+-            elif self._expression_nmf_selector(assignment):
++            if self._expression_nmf_selector(assignment):
+                 from .expression_nmf_execution_information import describe_expression_nmf_result
+                 value['execution_target'] = self._target(context)
+                 value['execution_target_description'] = describe_expression_nmf_result(
+@@ -1249,9 +1173,6 @@
+ 
+     def _target(self, context):
+         assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
+-        barcode = self._retained_barcode_target(context, assignment, context.scope)
+-        if barcode is not None:
+-            return barcode
+         nmf = self._retained_expression_nmf_target(context, assignment, context.scope)
+         if nmf is not None:
+             return nmf
+@@ -1329,15 +1250,6 @@
+         return assignment.get('selector', {}).get('version') == 'native_rna_structure_comparison_selector_v1'
+ 
+     def _selector(self, assignment, target):
+-        native_barcode = 'native_barcode' in target.get('assignment', {}).get('requested_job', {})
+-        if self._barcode_selector(assignment) or native_barcode:
+-            if self.native_barcode_results is None:
+-                raise ValueError('native_barcode_results_binding_unavailable')
+-            if not native_barcode or target.get('resource_kind') != 'local':
+-                raise ValueError('barcode_result_target_conflict')
+-            from .barcode_result_contracts import validate_barcode_result_selector
+-            return validate_barcode_result_selector(assignment['selector'],
+-                job=target['assignment']['requested_job']['native_barcode'])
+         native_nmf = 'native_expression_nmf' in target.get('assignment', {}).get('requested_job', {})
+         if self._expression_nmf_selector(assignment) or native_nmf:
+             if self.native_expression_nmf_results is None:
+@@ -1459,10 +1371,6 @@
+         return value
+ 
+     def catalog(self, context):
+-        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-            from .native_barcode_results import operation_catalog as barcode_result_catalog
+-            self._selector(plain(context.assignment), self._target(context))
+-            return barcode_result_catalog()
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             from .native_expression_nmf_results import operation_catalog as nmf_result_catalog
+             self._selector(plain(context.assignment), self._target(context))
+@@ -1546,10 +1454,6 @@
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
+-            if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-                self._selector(plain(context.assignment), target)
+-                return await self.native_barcode_results.execute(
+-                    context, target, tool_name, arguments, operation_key)
+             if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+                 self._selector(plain(context.assignment), target)
+                 return await self.native_expression_nmf_results.execute(
+@@ -1846,9 +1750,6 @@
+ 
+     def received_report_sources(self, role):
+         result = {}
+-        if self.native_barcode_returns is not None and role in {'annotation', 'scientific_process'}:
+-            from .barcode_return_views import barcode_fact_sources
+-            result.update(barcode_fact_sources())
+         if self.native_expression_nmf_returns is not None and role in {'annotation', 'scientific_process'}:
+             from .expression_nmf_return_views import expression_nmf_fact_sources
+             result.update(expression_nmf_fact_sources())
+@@ -1906,9 +1807,6 @@
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
+-        if (self.native_barcode_returns is not None
+-                and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
+-            result.update(self.native_barcode_returns.facts_for_closure(context, schema))
+         if (self.native_expression_nmf_returns is not None
+                 and context.role in {'annotation', 'scientific_process'} and schema.get('properties') is not None):
+             result.update(self.native_expression_nmf_returns.facts_for_closure(context, schema))
+@@ -1972,9 +1870,6 @@
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
+-        barcode = self._barcode_reference_access(context, reference, namespace)
+-        if barcode is not None:
+-            return barcode
+         nmf = self._expression_nmf_reference_access(context, reference, namespace)
+         if nmf is not None:
+             return nmf
+@@ -2094,8 +1989,6 @@
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
+-        if self.native_barcode_returns is not None:
+-            self.native_barcode_returns.validate_received_report(context, form, schema)
+         if self.native_expression_nmf_returns is not None:
+             self.native_expression_nmf_returns.validate_received_report(context, form, schema)
+         if self.atac_returns is not None:
+@@ -2140,9 +2033,6 @@
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
+-        if self.native_barcode_results is not None and role == 'results':
+-            from .barcode_return_views import barcode_fact_sources
+-            values.update(barcode_fact_sources())
+         if self.native_expression_nmf_results is not None and role == 'results':
+             from .expression_nmf_return_views import expression_nmf_fact_sources
+             values.update(expression_nmf_fact_sources())
+@@ -2208,9 +2098,6 @@
+             'Whether this assignment has actual verified endpoint information. Generic native results mean requested current-filesystem acquisition plus independently observed successful exact execution, without a producing-attempt or atomic-version claim. RNA results mean complete requested original-bundle or retained-sheet delivery, including specific unavailable values; this does not assert native success. Yielding alone is false.'}
+         from .native_hmmer_acquisition import ORIGIN as hmmer_origin
+         origins = [NATIVE_RESULT_ORIGIN, hmmer_origin]
+-        if self.native_barcode_results is not None:
+-            from .native_barcode_results import ORIGIN as barcode_origin
+-            origins.append(barcode_origin)
+         if self.native_expression_nmf_results is not None:
+             from .native_expression_nmf_results import ORIGIN as nmf_origin
+             origins.append(nmf_origin)
+@@ -2275,11 +2162,6 @@
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
+-        if self.native_barcode_results is not None:
+-            from .barcode_return_views import FACT_SOURCES
+-            native_empty.update({source: [] for source in FACT_SOURCES})
+-            if self.native_barcode_results.applies(context):
+-                return {**native_empty, **self.native_barcode_results.facts(context)}
+         if self.native_expression_nmf_results is not None:
+             from .expression_nmf_return_views import FACT_SOURCES
+             native_empty.update({source: [] for source in FACT_SOURCES})
+@@ -2379,9 +2261,6 @@
+     def received_form_references(self, context, form, schema, operation_key):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         references = []
+-        if self.native_barcode_returns is not None:
+-            references.extend(self.native_barcode_returns.record_admission(
+-                context, form, schema, operation_key))
+         if self.native_expression_nmf_returns is not None:
+             references.extend(self.native_expression_nmf_returns.record_admission(
+                 context, form, schema, operation_key))
+@@ -2479,7 +2358,6 @@
+                 [assignment] if context.role == 'launch_local' else [])
+             references = []
+             for request in requests:
+-                references.extend(self._barcode_inputs(context, request))
+                 references.extend(self._expression_nmf_inputs(context, request))
+                 references.extend(self._atac_inputs(context, request))
+                 references.extend(self._chromatin_inputs(context, request))
+@@ -2491,12 +2369,6 @@
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
+-        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-            selector = self._selector(assignment, target)
+-            if selector['mode'] == 'saved_sheet_recalculation':
+-                self.native_barcode_returns.authenticate_received_saved_sheet(context, selector['saved_sheet_file'])
+-                selected.append(selector['saved_sheet_file']['artifact_ref'])
+-            return list(dict.fromkeys(selected))
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             selector = self._selector(assignment, target)
+             if selector['mode'] == 'saved_sheet_recalculation':
+@@ -2556,9 +2428,6 @@
+ 
+     def resolve(self, context, reference, namespace):
+         try:
+-            barcode = self._barcode_reference_access(context, reference, namespace)
+-            if barcode is not None:
+-                return barcode
+             nmf = self._expression_nmf_reference_access(context, reference, namespace)
+             if nmf is not None:
+                 return nmf
+@@ -2776,8 +2645,6 @@
+             return False
+ 
+     def validate_report(self, context, form, original_schema):
+-        if self.native_barcode_returns is not None:
+-            self.native_barcode_returns.validate_received_report(context, form, original_schema)
+         if self.native_expression_nmf_returns is not None:
+             self.native_expression_nmf_returns.validate_received_report(context, form, original_schema)
+         if self.atac_returns is not None:
+@@ -2795,8 +2662,6 @@
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
+-        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-            return self.native_barcode_results.credit_view(context, receiver_selection)
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             return self.native_expression_nmf_results.credit_view(context, receiver_selection)
+         if self.atac_results is not None and self.atac_results.applies(context):
+@@ -2857,8 +2722,6 @@
+         return self.project_credit(context, receiver_selection)
+ 
+     def _native_results_complete(self, context, bodies):
+-        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-            return False  # The original requested barcode delivery receipt owns completion.
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             return False  # The original requested NMF delivery receipt owns completion.
+         if self.atac_results is not None and self.atac_results.applies(context):
+@@ -2904,9 +2767,6 @@
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
+-        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-            proof = self.native_barcode_results.completion(context)
+-            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             proof = self.native_expression_nmf_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -2989,9 +2849,6 @@
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
+-        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-            proof = self.native_barcode_results.completion(context)
+-            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             proof = self.native_expression_nmf_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+@@ -3045,8 +2902,6 @@
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
+-        if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+-            return proof == self.native_barcode_results.completion(context)
+         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+             return proof == self.native_expression_nmf_results.completion(context)
+         if self.atac_results is not None and self.atac_results.applies(context):
+--- gene_annotation_episode/communication.py
++++ gene_annotation_episode/communication.py
+@@ -130,24 +130,11 @@
+     chromatin_sources = None
+     atac_sources = None
+     expression_nmf_sources = None
+-    barcode_sources = None
+ 
+     def check(node, path, depth=0):
+         nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+-        nonlocal chromatin_sources, atac_sources, expression_nmf_sources, barcode_sources
++        nonlocal chromatin_sources, atac_sources, expression_nmf_sources
+         source = node.get("x-source") if isinstance(node, dict) else None
+-        if isinstance(source, str) and source.startswith("barcode_"):
+-            if depth != 1:
+-                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+-            if barcode_sources is None:
+-                from .barcode_return_views import barcode_fact_sources
+-                barcode_sources = barcode_fact_sources()
+-            expected = barcode_sources.get(source, {}).get("report_schema")
+-            if (expected is None or not _schema_cacheable(node)
+-                    or json.dumps(node, sort_keys=True, allow_nan=False)
+-                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+-                raise ReportBoundaryError(f"{path}: Barcode fact schema must match its registered source", code="invalid_schema")
+-            return
+         if isinstance(source, str) and source.startswith("expression_nmf_"):
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+@@ -435,7 +422,7 @@
+     parent_schema = schema
+     native = {name: node for name, node in schema["properties"].items()
+         if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+-        or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))}
++        or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))}
+     if native:
+         parent_schema = {**schema, "properties": dict(schema["properties"])}
+         for name, node in native.items():
+@@ -454,12 +441,6 @@
+                         validate_chromatin_fact_values(node["x-source"], payload[name])
+                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+                         raise ReportBoundaryError("Invalid recorded chromatin fact", code="invalid_form", field=name) from error
+-                elif str(node.get("x-source", "")).startswith("barcode_"):
+-                    from .barcode_return_views import validate_barcode_fact_values
+-                    try:
+-                        validate_barcode_fact_values(node["x-source"], payload[name])
+-                    except (ValueError, TypeError, OverflowError, RecursionError) as error:
+-                        raise ReportBoundaryError("Invalid recorded barcode fact", code="invalid_form", field=name) from error
+                 elif str(node.get("x-source", "")).startswith("expression_nmf_"):
+                     from .expression_nmf_return_views import validate_expression_nmf_fact_values
+                     try:
+@@ -515,7 +496,7 @@
+         if value is None or not isinstance(node, dict):
+             return
+         if (node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+-                or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))):
++                or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))):
+             resource = node
+         if resource is not None and "$ref" in node:
+             pointer = node["$ref"]
+--- gene_annotation_episode/execution_progress.py
++++ gene_annotation_episode/execution_progress.py
+@@ -104,13 +104,6 @@
+         operation = request.get('program', request.get('operation', request.get('collection', assignment.get('algorithm'))))
+         return {'resource_kind': 'api', 'service_or_program': service,
+                 'operation': operation, 'output_format': formats.get(service)}
+-    barcode = assignment['requested_job'].get('native_barcode')
+-    if barcode is not None:
+-        return {'resource_kind': target['resource_kind'],
+-            'service_or_program': barcode['operation'], 'operation': barcode['operation'],
+-            'input_format': barcode['request']['format'],
+-            'input_compression': barcode['request']['compression'],
+-            'output_format': 'barcode_bundle_v1'}
+     nmf = assignment['requested_job'].get('native_expression_nmf')
+     if nmf is not None:
+         return {'resource_kind': target['resource_kind'],
+@@ -262,15 +255,6 @@
+         if (config is None or config['kind'] != ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
+                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):
+             raise ValueError('practical_execution_resource_identity_conflict')
+-        if 'native_barcode' in assignment['requested_job']:
+-            self.operations[resource_id].validate_assignment(assignment)
+-            detail = receipt['outcome'].get('native_outcome') or {}
+-            key = detail.get('attempt_operation_key')
+-            attempt_id = detail.get('attempt_id')
+-            if (not isinstance(key, str) or not key or digest(key) != attempt_id
+-                    or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
+-                        digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
+-                raise ValueError('native_barcode_original_attempt_mismatch')
+         if 'native_expression_nmf' in assignment['requested_job']:
+             self.operations[resource_id].validate_assignment(assignment)
+             detail = receipt['outcome'].get('native_outcome') or {}
+@@ -437,11 +421,6 @@
+         called = receipt.get('tool_name', receipt.get('name'))
+         if not isinstance(called, str) or not called:
+             raise ContractError('execution_called_operation_unavailable')
+-        if (target['resource_kind'] != 'api'
+-                and 'native_barcode' in target['assignment']['requested_job']):
+-            from .barcode_execution_information import describe_barcode_result
+-            return describe_barcode_result(target, called_operation=called,
+-                selector=None if selector is None else plain(selector))
+         if (target['resource_kind'] != 'api'
+                 and 'native_expression_nmf' in target['assignment']['requested_job']):
+             from .expression_nmf_execution_information import describe_expression_nmf_result
+@@ -932,7 +911,7 @@
+             return True
+         if (target['resource_kind'] == 'local'
+                 and {'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+-                     'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf', 'native_barcode'}
++                     'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf'}
+                     & set(target['assignment']['requested_job'])):
+             _, body = self._native(target['handle'], target['scope'])
+             return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'
+--- gene_annotation_episode/practical_execution_operations.py
++++ gene_annotation_episode/practical_execution_operations.py
+@@ -90,14 +90,11 @@
+                                         'native_infernal_preparation', 'native_hmmer_preparation', 'native_blast',
+                                         'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                                         'native_chromatin_interactions', 'native_atac_differential',
+-                                        'native_expression_nmf', 'native_barcode'}
++                                        'native_expression_nmf'}
+                 or configuration['kind'] != 'local'):
+             raise ValueError('explicit_local_practical_configuration_required')
+         self.configuration = json.loads(json.dumps(configuration, allow_nan=False))
+         self.policy = LocalJobPolicy(**configuration['policy'])
+-        if 'native_barcode' in configuration:
+-            from .native_barcode_contracts import validate_barcode_bindings
+-            validate_barcode_bindings(configuration['native_barcode'])
+         if 'native_expression_nmf' in configuration:
+             from .native_expression_nmf_contracts import validate_expression_nmf_bindings
+             validate_expression_nmf_bindings(configuration['native_expression_nmf'])
+@@ -137,20 +134,7 @@
+         return {'facts': {'paths': path_facts(assignment)}}
+ 
+     def validate_assignment(self, assignment):
+-        if 'native_barcode' in assignment['requested_job']:
+-            from .native_barcode_contracts import POLICY, validate_barcode_requested_job
+-            job = validate_barcode_requested_job(assignment['requested_job'])['native_barcode']
+-            selection = {key: job[key] for key in ('operation', 'software')}
+-            if selection not in self.configuration.get('native_barcode', []):
+-                raise ValueError('native_barcode_operation_software_not_bound')
+-            if assignment.get('resource_kind') != 'local':
+-                raise ValueError('native_barcode_local_resource_required')
+-            if not assignment.get('resource_id'):
+-                raise ValueError('native_barcode_resource_identity_required')
+-            confined(assignment['workspace'], self.configuration['workspace'])
+-            if self.policy.to_dict() != POLICY:
+-                raise ValueError('native_barcode_local_policy_conflict')
+-        elif 'native_expression_nmf' in assignment['requested_job']:
++        if 'native_expression_nmf' in assignment['requested_job']:
+             from .native_expression_nmf_contracts import POLICY, validate_expression_nmf_requested_job
+             job = validate_expression_nmf_requested_job(assignment['requested_job'])['native_expression_nmf']
+             selection = {key: job[key] for key in ('operation', 'mode', 'software')}
+@@ -318,13 +302,10 @@
+                 native_hmmer=False, native_infernal=False, native_infernal_preparation=False,
+                 native_hmmer_preparation=False, native_blast=False, native_rna_structure=False,
+                 native_protein_structure=False, native_genomic_overlap=False, native_chromatin_interactions=False,
+-                native_atac_differential=False, native_expression_nmf=False, native_barcode=False):
++                native_atac_differential=False, native_expression_nmf=False):
+         root = self._action_directory(state, operation_key)
+         handle = native.NativeJobHandle(root/'native.json')
+-        if native_barcode:
+-            from .native_barcode_local import prepare_local_barcode
+-            handle = prepare_local_barcode(state, operation_key, root=root, policy=self.policy)
+-        elif native_expression_nmf:
++        if native_expression_nmf:
+             from .native_expression_nmf_local import prepare_local_expression_nmf
+             handle = prepare_local_expression_nmf(state, operation_key, root=root, policy=self.policy)
+         elif native_atac_differential:
+@@ -464,18 +445,6 @@
+             raise ValueError('native_expression_nmf_original_attempt_mismatch')
+         return plan
+ 
+-    def _barcode_plan(self, assignment, execution_id, *, run_id=None, origin_episode_id=None,
+-                      original_operation_key=None, attempt_id=None, resource_id=None):
+-        """Authenticate the selected barcode attempt without reading input data."""
+-        from .native_barcode_local import local_barcode_plan
+-        self.validate_assignment(assignment)
+-        plan = local_barcode_plan(assignment, execution_id)
+-        expected = {'run_id': run_id, 'episode_id': origin_episode_id,
+-            'operation_key': original_operation_key, 'attempt_id': attempt_id, 'resource_id': resource_id}
+-        if (plan['policy'] != self.policy.to_dict() or any(value is not None and
+-                plan['identity'][key] != value for key, value in expected.items())):
+-            raise ValueError('native_barcode_original_attempt_mismatch')
+-        return plan
+ 
+     def _job_fact(self, state, handle, view):
+         request = state.assignment['requested_job']
+@@ -487,11 +456,7 @@
+         chromatin_plan = None
+         atac_plan = None
+         expression_nmf_plan = None
+-        barcode_plan = None
+-        if 'native_barcode' in request:
+-            barcode_plan = self._barcode_plan(state.assignment, str(handle.path),
+-                run_id=state.run_id, origin_episode_id=state.episode_id)
+-        elif 'native_expression_nmf' in request:
++        if 'native_expression_nmf' in request:
+             expression_nmf_plan = self._expression_nmf_plan(state.assignment, str(handle.path),
+                 run_id=state.run_id, origin_episode_id=state.episode_id)
+         if 'native_atac_differential' in request:
+@@ -567,10 +532,7 @@
+         if atac_plan is not None:
+             attempt = Path(atac_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in atac_plan['outputs']]
+-        if barcode_plan is not None:
+-            attempt = Path(barcode_plan['attempt_directory'])
+-            outputs = [str(attempt / row['relative_path']) for row in barcode_plan['outputs']]
+-        elif expression_nmf_plan is not None:
++        if expression_nmf_plan is not None:
+             attempt = Path(expression_nmf_plan['attempt_directory'])
+             outputs = [str(attempt / row['relative_path']) for row in expression_nmf_plan['outputs']]
+         return {'requested_job_sha256': digest(request), 'argv': request['argv'],
+@@ -588,28 +550,7 @@
+             raise ValueError('positive_log_window_required')
+         if any(role not in {'stdout', 'stderr'} for role in log_roles):
+             raise ValueError('unsupported_native_log_role')
+-        if 'native_barcode' in assignment['requested_job']:
+-            from .native_barcode_observations import barcode_observed_files
+-            plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
+-                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+-            view = native.status(native.NativeJobHandle(Path(execution_id)))
+-            metadata = view['metadata']
+-            rc = metadata.get('native_returncode')
+-            observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+-                              'running' if view['state'] == 'running' else
+-                              'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+-            failure = None if observed_state != 'failed' else (
+-                'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+-            measurements = []
+-            if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+-                measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+-            outputs, logs, available = barcode_observed_files(plan, view,
+-                log_window_bytes=log_window_bytes, log_roles=log_roles)
+-            return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+-                'returncode': rc, 'failure_code': failure, 'result_available': available,
+-                'measurements': measurements, 'outputs': outputs, 'logs': logs,
+-                'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+-        elif 'native_expression_nmf' in assignment['requested_job']:
++        if 'native_expression_nmf' in assignment['requested_job']:
+             from .native_expression_nmf_observations import expression_nmf_observed_files
+             plan = self._expression_nmf_plan(assignment, execution_id, attempt_id=attempt_id,
+                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+@@ -834,12 +775,7 @@
+     def read_output(self, assignment, execution_id, *, path, offset, limit,
+                     attempt_id=None, **identity):
+         """Read the selected bounded output bytes; never start or collect work."""
+-        if 'native_barcode' in assignment['requested_job']:
+-            from .native_barcode_observations import read_barcode_output
+-            plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
+-                **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+-            return read_barcode_output(plan, path=str(path), offset=offset, limit=limit)
+-        elif 'native_expression_nmf' in assignment['requested_job']:
++        if 'native_expression_nmf' in assignment['requested_job']:
+             from .native_expression_nmf_observations import read_expression_nmf_output
+             plan = self._expression_nmf_plan(assignment, execution_id, attempt_id=attempt_id,
+                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+@@ -998,14 +934,10 @@
+                         native_genomic_overlap='native_genomic_overlap' in command,
+                         native_chromatin_interactions='native_chromatin_interactions' in command,
+                         native_atac_differential='native_atac_differential' in command,
+-                        native_expression_nmf='native_expression_nmf' in command,
+-                        native_barcode='native_barcode' in command)
++                        native_expression_nmf='native_expression_nmf' in command)
+                 if 'retry_failed_execution_id' in arguments:
+                     strict_owner = None
+-                    if 'native_barcode' in command:
+-                        strict_owner = self._barcode_plan(state.assignment, str(handle.path),
+-                            run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+-                    elif 'native_expression_nmf' in command:
++                    if 'native_expression_nmf' in command:
+                         strict_owner = self._expression_nmf_plan(state.assignment, str(handle.path),
+                             run_id=state.run_id, origin_episode_id=state.episode_id)['identity']
+                     elif 'native_atac_differential' in command:
+@@ -1028,7 +960,7 @@
+                             or ('native_blast' in command or 'native_rna_structure' in command)
+                                 and old['metadata'].get('native_returncode') is None
+                             or {'native_protein_structure', 'native_genomic_overlap', 'native_chromatin_interactions',
+-                                'native_atac_differential', 'native_expression_nmf', 'native_barcode'} & set(command) and (
++                                'native_atac_differential', 'native_expression_nmf'} & set(command) and (
+                                 old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
+                                 or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')):
+                         return {'facts': {'requested_job': self._job_fact(state, handle, old),
+@@ -1048,15 +980,11 @@
+                         native_genomic_overlap='native_genomic_overlap' in command,
+                         native_chromatin_interactions='native_chromatin_interactions' in command,
+                         native_atac_differential='native_atac_differential' in command,
+-                        native_expression_nmf='native_expression_nmf' in command,
+-                        native_barcode='native_barcode' in command)
++                        native_expression_nmf='native_expression_nmf' in command)
+             else:
+                 handle = self._handle(state, operation_key, command['argv'], cwd=cwd, env=env)
+             if requested:
+-                if 'native_barcode' in command:
+-                    self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+-                        origin_episode_id=state.episode_id)
+-                elif 'native_expression_nmf' in command:
++                if 'native_expression_nmf' in command:
+                     self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                         origin_episode_id=state.episode_id)
+                 if 'native_atac_differential' in command:
+@@ -1074,12 +1002,7 @@
+                 view = native.status(handle)
+                 outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+                 outcome['native_outcome'] = view
+-                if 'native_barcode' in command:
+-                    owner = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+-                        origin_episode_id=state.episode_id)['identity']
+-                    outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+-                        'attempt_operation_key': owner['operation_key']}
+-                elif 'native_expression_nmf' in command:
++                if 'native_expression_nmf' in command:
+                     owner = self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                         origin_episode_id=state.episode_id)['identity']
+                     outcome['native_outcome'] = {**view, 'attempt_id': owner['attempt_id'],
+@@ -1132,10 +1055,7 @@
+                     'stdout': log_tail(body['stdout']), 'stderr': log_tail(body['stderr'])}
+         elif tool_name in {'practical.job.status', 'practical.job.collect'}:
+             handle = self._job_handle(state)
+-            if 'native_barcode' in state.assignment['requested_job']:
+-                self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+-                    origin_episode_id=state.episode_id)
+-            elif 'native_expression_nmf' in state.assignment['requested_job']:
++            if 'native_expression_nmf' in state.assignment['requested_job']:
+                 self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+             if 'native_atac_differential' in state.assignment['requested_job']:
+@@ -1153,17 +1073,7 @@
+             view = native.status(handle)
+             outcome['facts']['requested_job'] = self._job_fact(state, handle, view)
+             body = handle.read()
+-            if 'native_barcode' in state.assignment['requested_job']:
+-                from .native_barcode_observations import barcode_observed_files
+-                plan = self._barcode_plan(state.assignment, str(handle.path), run_id=state.run_id,
+-                    origin_episode_id=state.episode_id)
+-                outputs, logs, _ = barcode_observed_files(plan, view,
+-                    log_window_bytes=8192, log_roles=('stdout', 'stderr'))
+-                outcome['native_outcome'] = {**view,
+-                    'observed_logs': logs, 'observed_outputs': outputs,
+-                    'attempt_id': plan['identity']['attempt_id'],
+-                    'attempt_operation_key': plan['identity']['operation_key']}
+-            elif 'native_expression_nmf' in state.assignment['requested_job']:
++            if 'native_expression_nmf' in state.assignment['requested_job']:
+                 from .native_expression_nmf_observations import expression_nmf_observed_files
+                 plan = self._expression_nmf_plan(state.assignment, str(handle.path), run_id=state.run_id,
+                     origin_episode_id=state.episode_id)
+--- gene_annotation_episode/practical_execution_records.py
++++ gene_annotation_episode/practical_execution_records.py
+@@ -65,7 +65,6 @@
+ from .native_chromatin_interaction_contracts import chromatin_interaction_execution_schema
+ from .native_atac_differential_contracts import atac_execution_schema
+ from .native_expression_nmf_contracts import NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA
+-from .native_barcode_contracts import NATIVE_BARCODE_REQUESTED_JOB_SCHEMA
+ REQUESTED_JOB_SCHEMA = {'anyOf': [GENERIC_REQUESTED_JOB_SCHEMA,
+     NATIVE_HMMER_REQUESTED_JOB_SCHEMA, NATIVE_HMMER_PREPARATION_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA,
+@@ -74,8 +73,7 @@
+     NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA, NATIVE_PROTEIN_STRUCTURE_REQUESTED_JOB_SCHEMA,
+     genomic_overlap_execution_schema('RequestedJob'),
+     chromatin_interaction_execution_schema('RequestedJob'),
+-    atac_execution_schema('RequestedJob'), NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA,
+-    NATIVE_BARCODE_REQUESTED_JOB_SCHEMA]}
++    atac_execution_schema('RequestedJob'), NATIVE_EXPRESSION_NMF_REQUESTED_JOB_SCHEMA]}
+ _PREDICATE_OPERANDS = {
+     'context_cwd': {'path': _PATH_SCHEMA},
+     'context_environment': {'name': {'type': 'string', 'pattern': '^[A-Za-z_][A-Za-z0-9_]*$'},
+@@ -246,14 +244,7 @@
+         raise ValueError('invalid_practical_assignment')
+     _path(value['workspace'])
+     job = _object(value['requested_job'], code='invalid_practical_job')
+-    if 'native_barcode' in job:
+-        from .native_barcode_contracts import validate_barcode_requested_job
+-        job = validate_barcode_requested_job(job)
+-        if value['resource_kind'] != 'local':
+-            raise ValueError('native_barcode_local_resource_required')
+-        if not value.get('resource_id'):
+-            raise ValueError('native_barcode_resource_identity_required')
+-    elif 'native_expression_nmf' in job:
++    if 'native_expression_nmf' in job:
+         from .native_expression_nmf_contracts import validate_expression_nmf_requested_job
+         job = validate_expression_nmf_requested_job(job)
+         if value['resource_kind'] != 'local':
+--- gene_annotation_episode/execution_input_versions.py
++++ gene_annotation_episode/execution_input_versions.py
+@@ -1,6 +1,6 @@
+ """Validate supplied execution identities within their original received scope.
+ 
+-Exact selected ATAC BAMs, expression matrices and barcode input files use
++Exact selected ATAC BAMs and expression matrices use
+ authenticated Store metadata here. Their bounded native drivers verify actual
+ bytes before execution. Generic inputs keep the existing byte-validation
+ behavior. This helper grants no action or credit.
+@@ -13,7 +13,7 @@
+ 
+ 
+ def validate_execution_input_versions(owner, versions, scope, *, context, atac_assignments=(),
+-                                      nmf_assignments=(), barcode_assignments=()):
++                                      nmf_assignments=()):
+     # Only exact selected BAMs already admitted through original receipt
+     # inheritance may use bare artifact custody. Generic artifacts retain
+     # their ordinary Store scope requirement.
+@@ -42,24 +42,7 @@
+             raise ValueError('expression_nmf_input_not_received')
+         selected_files[file['artifact_ref']] = file
+         failure_prefixes[file['artifact_ref']] = 'expression_nmf'
+-    for assignment in barcode_assignments:
+-        job = assignment.get('requested_job', {}).get('native_barcode')
+-        if job is None:
+-            continue
+-        admitted = owner._barcode_inputs(context, assignment)
+-        owner.store.validate_scope(plain(scope), parent_scope=plain(context.scope))
+-        for binding in job['inputs'].values():
+-            if binding is None:
+-                continue
+-            file = binding['file']
+-            if file['artifact_ref'] not in admitted:
+-                raise ValueError('barcode_input_not_received')
+-            selected_files[file['artifact_ref']] = file
+-            failure_prefixes[file['artifact_ref']] = 'barcode'
+     for supplied in versions:
+-        if (getattr(owner, 'native_barcode_results', None) is not None
+-                and owner._barcode_reference_access(context, supplied['reference'], None) is False):
+-            raise ValueError('barcode_input_protected_reference_denied')
+         if (getattr(owner, 'native_expression_nmf_results', None) is not None
+                 and owner._expression_nmf_reference_access(context, supplied['reference'], None) is False):
+             raise ValueError('expression_nmf_input_protected_reference_denied')

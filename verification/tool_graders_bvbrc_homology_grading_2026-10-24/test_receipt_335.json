@@ -1,0 +1,41 @@
+{
+  "additional_case": "native metadata bindings previously read against another description cannot rebind by equal ordinal",
+  "captured_summary": "335 passed in 1.01s",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_bvbrc_homology_inputs.py",
+    "tests/test_bvbrc_homology_grader.py",
+    "tests/test_blast_explicit_associations.py",
+    "tests/test_blast_grading_inputs.py",
+    "tests/test_blast_pairwise_grader.py",
+    "tests/test_blast_database_grader.py",
+    "tests/test_blast_reference_metadata.py",
+    "tests/test_blast_graders_integration.py"
+  ],
+  "episode_communication_verified": false,
+  "exit_code": 0,
+  "live_service_called": false,
+  "new_homology_cases": 131,
+  "passed": 335,
+  "scientific_program_executed": false,
+  "source_sha256": {
+    "gene_annotation_episode/blast_database_grader.py": "89d9baee34c457263d42b1e521994da37518038020b4ddd8c034e35dbb744fcb",
+    "gene_annotation_episode/blast_grading_inputs.py": "50c90389c8607a79bfa38a7911629269cad4921633b469d7a5239cccc10e2758",
+    "gene_annotation_episode/blast_pairwise_grader.py": "d5b0d9484cc886ad36d20decc187688c792f0cae92ac099ec8ce3a3726ad320d",
+    "gene_annotation_episode/bvbrc_homology_grader.py": "e23bee28190532b24a7115ac37144eccbd28fc13a7a2f367f09f3d7289d177b9",
+    "gene_annotation_episode/bvbrc_homology_inputs.py": "1059d25d32169c23b091653d6c58b8c7e40bae40dda519dfda261eef78806d76",
+    "gene_annotation_episode/bvbrc_homology_metadata.py": "32ba4339610c9b9d4fb413aeda92a46b624ecbed7d4b27bb92ee49976e432f04",
+    "tests/test_blast_database_grader.py": "23846d992e60202101bb84912bb8b733d8ca36fe2838b9d359ae207093d5b962",
+    "tests/test_blast_explicit_associations.py": "375c3ada2eba6d82c79a2fde209ca5de6a8a7859cb5b465228ce99a20c4fb904",
+    "tests/test_blast_graders_integration.py": "007d2a46519774638b856d3cc34fb22ad7f1bc34416a0c979083028e6a64bed1",
+    "tests/test_blast_grading_inputs.py": "b83a985bf81af817745449e858aa90395263238a8edbd2821f150a970bd5b843",
+    "tests/test_blast_pairwise_grader.py": "be2a3159187e0bd0a7850caa7ed1e47452c0cdceda3157fb2a93c4851cbc3723",
+    "tests/test_blast_reference_metadata.py": "628f0edc261a596b41246ae6ef95ac01899837ff192bfe079d2aefa3136bc76a",
+    "tests/test_bvbrc_homology_grader.py": "713f11b1564d7b4aed0f742292da86d103d7c702c12924f7dba426f61ac75c74",
+    "tests/test_bvbrc_homology_inputs.py": "ea65e8d9b3b3099fc979e955a03b85605993dc2a0ec11d5f1e3782eaf3cf2344"
+  },
+  "verification_kind": "SYNTHETIC pure adapter and affected existing BLAST tests; no new scientific execution"
+}

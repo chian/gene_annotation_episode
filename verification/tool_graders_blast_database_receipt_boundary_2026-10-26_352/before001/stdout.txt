@@ -1,0 +1,129 @@
+FFFFF..                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[initial] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_receipt_boundary_2026-10-26_352/before001/temporary/test_source_custody_does_not_e0')
+kind = 'initial'
+
+    @pytest.mark.parametrize('kind', ['initial', 'decision_input', 'own_action',
+        'child_form', 'report_redelivery'])
+    def test_source_custody_does_not_expand_receipts_and_explicit_refs_survive(tmp_path, kind):
+        with Store(tmp_path / 'store') as store:
+            source, bundle, selected, hidden = source_record(store)
+            original = deepcopy(store.get(source))
+            receipts = EpisodeReceipts(store, 'synthetic-352')
+            receipts.bind('parent')
+            receipts.receive('parent', [source], kind=kind, source_index=0)
+>           assert set(receipts.known('parent')) == {source}
+E           AssertionError: assert {'artifact_ab...64a9ec11a5b7'} == {'source_f4f2...64a9ec11a5b7'}
+E             
+E             Extra items in the left set:
+E             'artifact_d21575f74d594fb9611d5fc1bbe507bdfbe1036fbae7cb09987f0d8ac7738e1e'
+E             'artifact_ab4f0189f913f710f13c90a852a7235fb3f35ba583f386a6a69580bf0728a97d'
+E             'artifact_d5ca25a9d9722a294807b3c3db3de84c726f797dadce6a85ed914b4e50335266'
+E             Use -v to get more diff
+
+../../../tests/test_native_blast_database_receipt_boundary.py:50: AssertionError
+_ test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[decision_input] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_receipt_boundary_2026-10-26_352/before001/temporary/test_source_custody_does_not_e1')
+kind = 'decision_input'
+
+    @pytest.mark.parametrize('kind', ['initial', 'decision_input', 'own_action',
+        'child_form', 'report_redelivery'])
+    def test_source_custody_does_not_expand_receipts_and_explicit_refs_survive(tmp_path, kind):
+        with Store(tmp_path / 'store') as store:
+            source, bundle, selected, hidden = source_record(store)
+            original = deepcopy(store.get(source))
+            receipts = EpisodeReceipts(store, 'synthetic-352')
+            receipts.bind('parent')
+            receipts.receive('parent', [source], kind=kind, source_index=0)
+>           assert set(receipts.known('parent')) == {source}
+E           AssertionError: assert {'artifact_ab...64a9ec11a5b7'} == {'source_f4f2...64a9ec11a5b7'}
+E             
+E             Extra items in the left set:
+E             'artifact_d21575f74d594fb9611d5fc1bbe507bdfbe1036fbae7cb09987f0d8ac7738e1e'
+E             'artifact_ab4f0189f913f710f13c90a852a7235fb3f35ba583f386a6a69580bf0728a97d'
+E             'artifact_d5ca25a9d9722a294807b3c3db3de84c726f797dadce6a85ed914b4e50335266'
+E             Use -v to get more diff
+
+../../../tests/test_native_blast_database_receipt_boundary.py:50: AssertionError
+_ test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[own_action] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_receipt_boundary_2026-10-26_352/before001/temporary/test_source_custody_does_not_e2')
+kind = 'own_action'
+
+    @pytest.mark.parametrize('kind', ['initial', 'decision_input', 'own_action',
+        'child_form', 'report_redelivery'])
+    def test_source_custody_does_not_expand_receipts_and_explicit_refs_survive(tmp_path, kind):
+        with Store(tmp_path / 'store') as store:
+            source, bundle, selected, hidden = source_record(store)
+            original = deepcopy(store.get(source))
+            receipts = EpisodeReceipts(store, 'synthetic-352')
+            receipts.bind('parent')
+            receipts.receive('parent', [source], kind=kind, source_index=0)
+>           assert set(receipts.known('parent')) == {source}
+E           AssertionError: assert {'artifact_ab...64a9ec11a5b7'} == {'source_f4f2...64a9ec11a5b7'}
+E             
+E             Extra items in the left set:
+E             'artifact_d21575f74d594fb9611d5fc1bbe507bdfbe1036fbae7cb09987f0d8ac7738e1e'
+E             'artifact_ab4f0189f913f710f13c90a852a7235fb3f35ba583f386a6a69580bf0728a97d'
+E             'artifact_d5ca25a9d9722a294807b3c3db3de84c726f797dadce6a85ed914b4e50335266'
+E             Use -v to get more diff
+
+../../../tests/test_native_blast_database_receipt_boundary.py:50: AssertionError
+_ test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[child_form] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_receipt_boundary_2026-10-26_352/before001/temporary/test_source_custody_does_not_e3')
+kind = 'child_form'
+
+    @pytest.mark.parametrize('kind', ['initial', 'decision_input', 'own_action',
+        'child_form', 'report_redelivery'])
+    def test_source_custody_does_not_expand_receipts_and_explicit_refs_survive(tmp_path, kind):
+        with Store(tmp_path / 'store') as store:
+            source, bundle, selected, hidden = source_record(store)
+            original = deepcopy(store.get(source))
+            receipts = EpisodeReceipts(store, 'synthetic-352')
+            receipts.bind('parent')
+            receipts.receive('parent', [source], kind=kind, source_index=0)
+>           assert set(receipts.known('parent')) == {source}
+E           AssertionError: assert {'artifact_ab...64a9ec11a5b7'} == {'source_f4f2...64a9ec11a5b7'}
+E             
+E             Extra items in the left set:
+E             'artifact_d21575f74d594fb9611d5fc1bbe507bdfbe1036fbae7cb09987f0d8ac7738e1e'
+E             'artifact_ab4f0189f913f710f13c90a852a7235fb3f35ba583f386a6a69580bf0728a97d'
+E             'artifact_d5ca25a9d9722a294807b3c3db3de84c726f797dadce6a85ed914b4e50335266'
+E             Use -v to get more diff
+
+../../../tests/test_native_blast_database_receipt_boundary.py:50: AssertionError
+_ test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[report_redelivery] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_receipt_boundary_2026-10-26_352/before001/temporary/test_source_custody_does_not_e4')
+kind = 'report_redelivery'
+
+    @pytest.mark.parametrize('kind', ['initial', 'decision_input', 'own_action',
+        'child_form', 'report_redelivery'])
+    def test_source_custody_does_not_expand_receipts_and_explicit_refs_survive(tmp_path, kind):
+        with Store(tmp_path / 'store') as store:
+            source, bundle, selected, hidden = source_record(store)
+            original = deepcopy(store.get(source))
+            receipts = EpisodeReceipts(store, 'synthetic-352')
+            receipts.bind('parent')
+            receipts.receive('parent', [source], kind=kind, source_index=0)
+>           assert set(receipts.known('parent')) == {source}
+E           AssertionError: assert {'artifact_ab...64a9ec11a5b7'} == {'source_f4f2...64a9ec11a5b7'}
+E             
+E             Extra items in the left set:
+E             'artifact_d21575f74d594fb9611d5fc1bbe507bdfbe1036fbae7cb09987f0d8ac7738e1e'
+E             'artifact_ab4f0189f913f710f13c90a852a7235fb3f35ba583f386a6a69580bf0728a97d'
+E             'artifact_d5ca25a9d9722a294807b3c3db3de84c726f797dadce6a85ed914b4e50335266'
+E             Use -v to get more diff
+
+../../../tests/test_native_blast_database_receipt_boundary.py:50: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_receipt_boundary.py::test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[initial]
+FAILED ../../../tests/test_native_blast_database_receipt_boundary.py::test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[decision_input]
+FAILED ../../../tests/test_native_blast_database_receipt_boundary.py::test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[own_action]
+FAILED ../../../tests/test_native_blast_database_receipt_boundary.py::test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[child_form]
+FAILED ../../../tests/test_native_blast_database_receipt_boundary.py::test_source_custody_does_not_expand_receipts_and_explicit_refs_survive[report_redelivery]
+5 failed, 2 passed, 3 deselected in 18.13s

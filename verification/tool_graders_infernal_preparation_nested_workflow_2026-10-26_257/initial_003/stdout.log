@@ -1,0 +1,202 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 39 items / 34 deselected / 5 selected
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py::test_selected_native_preparation_and_both_original_typed_forms[cmemit-consensus] ERROR [ 20%]
+RETAINED FAILURE tests/test_native_infernal_preparation_nested_workflow.py::test_selected_native_preparation_and_both_original_typed_forms[cmemit-consensus]
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal...preparation_nested_workflow_2026-10-26_257/initial_003/temporary/pytest'), _retention_count=3, _retention_policy='all')
+request = <SubRequest 'native_case' for <Function test_selected_native_preparation_and_both_original_typed_forms[cmemit-consensus]>>
+
+    @pytest.fixture(scope='module', params=MODES, ids=['-'.join(mode) for mode in MODES])
+    def native_case(tmp_path_factory, request):
+>       case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py:244: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_nested_workflow.py:212: in nested_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_native_infernal_preparation_nested_workflow.py:209: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_infernal_preparation_nested_workflow.nested_case.<locals>.Choices object at 0x7281c8fc5880>
+episode_id = 'episode_2ead797bccf6a3c8826cda15d89b06cf32aa334f39981fda896a67cebfae4c68'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+current = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...s_aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, current, schema):
+        self.calls.append({'episode_id': episode_id, 'role': role, 'instructions': instructions,
+            'context': deepcopy(current), 'schema': plain(schema)})
+        assert not current.get('feedback'), current.get('feedback')
+        if 'practical_assignment' in current:
+            assert current['practical_assignment'] == assignment
+            answer = selected('practical.job.start')
+        elif current.get('execution_assignment', {}).get('version') == 'execution_launch_assignment_v1':
+            answer = child('launch_local', assignment, scope, handoff_form)
+        elif current.get('execution_assignment', {}).get('version') == RESULTS_VERSION:
+            answer = selected('execution.results.collect')
+        elif 'scientific_process' not in current:
+            answer = child('scientific_process', science_assignment, scope, science_form)
+        else:
+            self.science_calls += 1
+            if self.science_calls == 1:
+                answer = child('launch', launch, scope, handoff_form)
+            else:
+                assert self.science_calls == 2
+                self.handoff, = current['child_reports'][-1]['references']
+                target = flow.progress_provider.job_provider.targets.read_target(self.handoff, scope)
+                # Engineering synchronization polls this original handle;
+                # it neither submits a second job nor adds episode credit.
+                result = await asyncio.to_thread(native.wait_job,
+                    native.NativeJobHandle(Path(target['execution_id'])))
+                assert result.returncode == 0
+                self.plan = local_infernal_preparation_plan(assignment, target['execution_id'])
+                answer = child('results', {'version': RESULTS_VERSION, 'handoff_ref': self.handoff,
+                    'selector': selector}, scope, results_form)
+        answer = plain(answer)
+        errors = list(Draft202012Validator(plain(schema)).iter_errors(answer))
+        if errors:
+            (tmp_path / 'schema-failure.json').write_text(json.dumps({
+                'answer': answer, 'schema': plain(schema)}, indent=2) + '\n')
+            leaves = []
+            def explain(error):
+                if error.context:
+                    for nested in error.context:
+                        explain(nested)
+                else:
+                    leaves.append({'path': list(error.absolute_path), 'message': error.message[:500]})
+            for error in errors:
+                explain(error)
+>           raise AssertionError(leaves)
+E           AssertionError: [{'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['reason']"}, {'path': ['selection'], 'message': "'commit' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"}, {'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['wait']"}, {'path': ['selection'], 'message': "'condition' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"}, {'path': ['selection', 'scope'], 'message': "'read_selection_refs' is a required property"}, {'path': ['selection', 'scope'], 'message': "'segments' is a required property"}, {'path': ['selection', 'assignment'], 'message': "{'selection': {'version': 'scientific_process_selection_v3', 'evidence_axis': {'version': 'scientific_process_option_ref_v1', 'library_id': '14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a', 'slot': 'evidence_axis', 'option_id': 'A101', 'entry_sha256': '5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e'}, 'thought_pattern': {'version': 'scientific_process_option_ref_v1', 'library_id': '14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a', 'slot': 'tho"}, {'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['redeliver_report']"}, {'path': ['selection'], 'message': "'delivery_ref' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'role', 'scope' were unexpected)"}]
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py:181: AssertionError
+
+
+==================================== ERRORS ====================================
+_ ERROR at setup of test_selected_native_preparation_and_both_original_typed_forms[cmemit-consensus] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal...preparation_nested_workflow_2026-10-26_257/initial_003/temporary/pytest'), _retention_count=3, _retention_policy='all')
+request = <SubRequest 'native_case' for <Function test_selected_native_preparation_and_both_original_typed_forms[cmemit-consensus]>>
+
+    @pytest.fixture(scope='module', params=MODES, ids=['-'.join(mode) for mode in MODES])
+    def native_case(tmp_path_factory, request):
+>       case = nested_case(tmp_path_factory.mktemp('-'.join(request.param)), *request.param)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py:244: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_infernal_preparation_nested_workflow.py:212: in nested_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_native_infernal_preparation_nested_workflow.py:209: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:913: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_infernal_preparation_nested_workflow.nested_case.<locals>.Choices object at 0x7281c8fc5880>
+episode_id = 'episode_2ead797bccf6a3c8826cda15d89b06cf32aa334f39981fda896a67cebfae4c68'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+current = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...s_aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, current, schema):
+        self.calls.append({'episode_id': episode_id, 'role': role, 'instructions': instructions,
+            'context': deepcopy(current), 'schema': plain(schema)})
+        assert not current.get('feedback'), current.get('feedback')
+        if 'practical_assignment' in current:
+            assert current['practical_assignment'] == assignment
+            answer = selected('practical.job.start')
+        elif current.get('execution_assignment', {}).get('version') == 'execution_launch_assignment_v1':
+            answer = child('launch_local', assignment, scope, handoff_form)
+        elif current.get('execution_assignment', {}).get('version') == RESULTS_VERSION:
+            answer = selected('execution.results.collect')
+        elif 'scientific_process' not in current:
+            answer = child('scientific_process', science_assignment, scope, science_form)
+        else:
+            self.science_calls += 1
+            if self.science_calls == 1:
+                answer = child('launch', launch, scope, handoff_form)
+            else:
+                assert self.science_calls == 2
+                self.handoff, = current['child_reports'][-1]['references']
+                target = flow.progress_provider.job_provider.targets.read_target(self.handoff, scope)
+                # Engineering synchronization polls this original handle;
+                # it neither submits a second job nor adds episode credit.
+                result = await asyncio.to_thread(native.wait_job,
+                    native.NativeJobHandle(Path(target['execution_id'])))
+                assert result.returncode == 0
+                self.plan = local_infernal_preparation_plan(assignment, target['execution_id'])
+                answer = child('results', {'version': RESULTS_VERSION, 'handoff_ref': self.handoff,
+                    'selector': selector}, scope, results_form)
+        answer = plain(answer)
+        errors = list(Draft202012Validator(plain(schema)).iter_errors(answer))
+        if errors:
+            (tmp_path / 'schema-failure.json').write_text(json.dumps({
+                'answer': answer, 'schema': plain(schema)}, indent=2) + '\n')
+            leaves = []
+            def explain(error):
+                if error.context:
+                    for nested in error.context:
+                        explain(nested)
+                else:
+                    leaves.append({'path': list(error.absolute_path), 'message': error.message[:500]})
+            for error in errors:
+                explain(error)
+>           raise AssertionError(leaves)
+E           AssertionError: [{'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['reason']"}, {'path': ['selection'], 'message': "'commit' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"}, {'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['wait']"}, {'path': ['selection'], 'message': "'condition' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"}, {'path': ['selection', 'scope'], 'message': "'read_selection_refs' is a required property"}, {'path': ['selection', 'scope'], 'message': "'segments' is a required property"}, {'path': ['selection', 'assignment'], 'message': "{'selection': {'version': 'scientific_process_selection_v3', 'evidence_axis': {'version': 'scientific_process_option_ref_v1', 'library_id': '14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a', 'slot': 'evidence_axis', 'option_id': 'A101', 'entry_sha256': '5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e'}, 'thought_pattern': {'version': 'scientific_process_option_ref_v1', 'library_id': '14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a', 'slot': 'tho"}, {'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['redeliver_report']"}, {'path': ['selection'], 'message': "'delivery_ref' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'role', 'scope' were unexpected)"}]
+
+../../../tests/test_native_infernal_preparation_nested_workflow.py:181: AssertionError
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_nested_workflow_2026-10-26_257/initial_003/tests.xml -
+=========================== short test summary info ============================
+ERROR ../../../tests/test_native_infernal_preparation_nested_workflow.py::test_selected_native_preparation_and_both_original_typed_forms[cmemit-consensus] - AssertionError: [{'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['reason']"}, {'path': ['selection'], 'message': "'commit' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"}, {'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['wait']"}, {'path': ['selection'], 'message': "'condition' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'purpose', 'role', 'schema_json', 'scope' were unexpected)"}, {'path': ['selection', 'scope'], 'message': "'read_selection_refs' is a required property"}, {'path': ['selection', 'scope'], 'message': "'segments' is a required property"}, {'path': ['selection', 'assignment'], 'message': "{'selection': {'version': 'scientific_process_selection_v3', 'evidence_axis': {'version': 'scientific_process_option_ref_v1', 'library_id': '14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a', 'slot': 'evidence_axis', 'option_id': 'A101', 'entry_sha256': '5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e'}, 'thought_pattern': {'version': 'scientific_process_option_ref_v1', 'library_id': '14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a', 'slot': 'tho"}, {'path': ['selection', 'kind'], 'message': "'episode_child' is not one of ['redeliver_report']"}, {'path': ['selection'], 'message': "'delivery_ref' is a required property"}, {'path': ['selection'], 'message': "Additional properties are not allowed ('assignment', 'goal', 'initial_report_json', 'role', 'scope' were unexpected)"}]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+======================= 34 deselected, 1 error in 7.30s ========================

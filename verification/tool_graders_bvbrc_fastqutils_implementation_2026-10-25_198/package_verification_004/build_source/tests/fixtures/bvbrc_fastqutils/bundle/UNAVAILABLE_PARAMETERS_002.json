@@ -1,0 +1,131 @@
+{
+  "version": "fastqutils_provider_v2",
+  "analysis_id": "example195",
+  "documents": [
+    {
+      "document_id": "reads",
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "selected_reads"
+      },
+      "format": "fastq",
+      "producer_version": null
+    },
+    {
+      "document_id": "hostile",
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "selected_hostile"
+      },
+      "format": "hostile_json_1_1_0",
+      "producer_version": "1.1.0"
+    },
+    {
+      "document_id": "qc",
+      "selection": {
+        "kind": "output_requirement",
+        "requirement_id": "optional_qc"
+      },
+      "format": "fastqc_html_0_12_1",
+      "producer_version": "0.12.1"
+    }
+  ],
+  "metadata_bindings": [
+    {
+      "metadata_id": "assert_hostile_stage",
+      "kind": "association_assertion",
+      "evidence": {
+        "content": {
+          "source_ref": "source_metadata195",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_metadata195",
+          "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+          "byte_count": 451
+        },
+        "pointer": "/declarations/1"
+      }
+    }
+  ],
+  "calculation_requests": [
+    {
+      "calculation_id": "composition_reads",
+      "method": "composition_v1",
+      "population": {
+        "selection": "semantic",
+        "document_id": "reads",
+        "population_key": "fastq_reads",
+        "population_ordinal": 0
+      }
+    },
+    {
+      "calculation_id": "quality_reads",
+      "method": "quality_phred_v1",
+      "population": {
+        "selection": "semantic",
+        "document_id": "reads",
+        "population_key": "fastq_quality_characters",
+        "population_ordinal": 0
+      },
+      "quality_thresholds": [
+        30
+      ]
+    },
+    {
+      "calculation_id": "retention_hostile",
+      "method": "retention_v1",
+      "comparison_kind": "native_report_retention",
+      "before_population": {
+        "selection": "semantic",
+        "document_id": "hostile",
+        "population_key": "hostile_in",
+        "population_ordinal": 0
+      },
+      "after_population": {
+        "selection": "semantic",
+        "document_id": "hostile",
+        "population_key": "hostile_out",
+        "population_ordinal": 0
+      },
+      "before_measurement": {
+        "selection": "semantic",
+        "document_id": "hostile",
+        "section_key": "hostile_report",
+        "section_ordinal": 0,
+        "metric": "hostile_reads_in",
+        "rows": {
+          "kind": "ordinal",
+          "ordinal": 0
+        },
+        "axis": {
+          "kind": "exact",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          }
+        }
+      },
+      "after_measurement": {
+        "selection": "semantic",
+        "document_id": "hostile",
+        "section_key": "hostile_report",
+        "section_ordinal": 0,
+        "metric": "hostile_reads_out",
+        "rows": {
+          "kind": "ordinal",
+          "ordinal": 0
+        },
+        "axis": {
+          "kind": "exact",
+          "axis": {
+            "kind": "none",
+            "label": null,
+            "lower": null,
+            "upper": null
+          }
+        }
+      }
+    }
+  ]
+}

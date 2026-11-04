@@ -1,0 +1,20 @@
+.................F...................................................... [ 20%]
+........................................................................ [ 40%]
+........................................................................ [ 61%]
+........................................................................ [ 81%]
+.................................................................        [100%]
+=================================== FAILURES ===================================
+_________ test_historical_saved_reported_count_meaning_is_not_repriced _________
+source_snapshot/tests/test_blast_shared_sheet_projection.py:251: in test_historical_saved_reported_count_meaning_is_not_repriced
+    legacy_source = tools._source("ncbi_blast", None, snapshot=legacy_snapshot,
+source_snapshot/gene_annotation_episode/tools.py:383: in _source
+    return self._put("source", {
+source_snapshot/gene_annotation_episode/tools.py:407: in _put
+    self._written.append(result["id"])
+    ^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tools.py:132: in _written
+    raise ContractError("publication_outside_tool_operation")
+E   gene_annotation_episode.domain.ContractError: publication_outside_tool_operation
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_shared_sheet_projection.py::test_historical_saved_reported_count_meaning_is_not_repriced
+1 failed, 352 passed in 350.94s (0:05:50)

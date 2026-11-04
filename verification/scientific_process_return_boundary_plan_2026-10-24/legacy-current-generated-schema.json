@@ -1,0 +1,274 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "chosen_name": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "completed_actions": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "credit": {
+            "type": "number"
+          },
+          "credit_binding_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "scientific_credit_binding"
+          },
+          "credit_kind": {
+            "enum": [
+              "scientific",
+              "monitoring",
+              "operational",
+              null
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "episode_yield": {
+            "additionalProperties": false,
+            "properties": {
+              "completed_actions": {
+                "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "continuation_cost": {
+                "description": "The actual child's decision threshold in its configured controller units.",
+                "minimum": 0,
+                "type": "number"
+              },
+              "expected_next_gain": {
+                "additionalProperties": false,
+                "properties": {
+                  "alpha": {
+                    "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                    "type": "number"
+                  },
+                  "lower": {
+                    "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                    "type": "number"
+                  },
+                  "status_code": {
+                    "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                    "enum": [
+                      0,
+                      -1,
+                      -2
+                    ],
+                    "type": "integer"
+                  },
+                  "uncertainty_code": {
+                    "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                    "enum": [
+                      -1,
+                      0,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "upper": {
+                    "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                    "type": "number"
+                  },
+                  "value": {
+                    "description": "The original band point in this child's configured controller units.",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "value",
+                  "lower",
+                  "upper",
+                  "status_code",
+                  "uncertainty_code",
+                  "alpha"
+                ],
+                "type": "object"
+              },
+              "stop_requested": {
+                "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "completed_actions",
+              "expected_next_gain",
+              "continuation_cost",
+              "stop_requested"
+            ],
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "initial_credit": {
+            "type": "number"
+          },
+          "invocation_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "scientific_invocation"
+          },
+          "origin_kind": {
+            "enum": [
+              "ordinary_child",
+              "approach_revision"
+            ],
+            "type": "string"
+          },
+          "parent_invocation_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "scientific_invocation"
+          },
+          "preparation_operation_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "scientific_preparation"
+          },
+          "selection": {
+            "additionalProperties": false,
+            "properties": {
+              "annotation_ref": {
+                "additionalProperties": false,
+                "properties": {
+                  "entry_sha256": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "scientific_option_digest"
+                  },
+                  "library_id": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "scientific_process_library"
+                  },
+                  "option_id": {
+                    "enum": [
+                      "A01"
+                    ],
+                    "type": "string"
+                  },
+                  "slot": {
+                    "const": "evidence_axis",
+                    "type": "string"
+                  },
+                  "version": {
+                    "const": "scientific_process_option_ref_v1",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "version",
+                  "library_id",
+                  "slot",
+                  "option_id",
+                  "entry_sha256"
+                ],
+                "type": "object"
+              },
+              "thought_ref": {
+                "additionalProperties": false,
+                "properties": {
+                  "entry_sha256": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "scientific_option_digest"
+                  },
+                  "library_id": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "scientific_process_library"
+                  },
+                  "option_id": {
+                    "enum": [
+                      "P01",
+                      "P99"
+                    ],
+                    "type": "string"
+                  },
+                  "slot": {
+                    "const": "thought_pattern",
+                    "type": "string"
+                  },
+                  "version": {
+                    "const": "scientific_process_option_ref_v1",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "version",
+                  "library_id",
+                  "slot",
+                  "option_id",
+                  "entry_sha256"
+                ],
+                "type": "object"
+              },
+              "tools": {
+                "items": {
+                  "enum": [
+                    "fixture.inspect"
+                  ],
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "version": {
+                "const": "scientific_process_selection_v3",
+                "type": "string"
+              }
+            },
+            "required": [
+              "version",
+              "annotation_ref",
+              "thought_ref",
+              "tools"
+            ],
+            "type": "object"
+          },
+          "version": {
+            "const": "scientific_process_result_v1",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "invocation_ref",
+          "parent_invocation_ref",
+          "origin_kind",
+          "preparation_operation_ref",
+          "selection",
+          "initial_credit",
+          "credit",
+          "credit_kind",
+          "credit_binding_ref",
+          "completed_actions",
+          "episode_yield"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "x-source": "scientific_process_results"
+    }
+  },
+  "required": [
+    "chosen_name"
+  ],
+  "type": "object"
+}

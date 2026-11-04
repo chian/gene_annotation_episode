@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="34" time="1.215" timestamp="2026-10-25T20:40:55.671328-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_result_worker" name="test_native_five_families_complete_numerical_projection[cmsearch-search_hit]" time="0.020" /><testcase classname="tests.test_native_infernal_result_worker" name="test_native_five_families_complete_numerical_projection[cmscan-search_hit]" time="0.014" /><testcase classname="tests.test_native_infernal_result_worker" name="test_native_five_families_complete_numerical_projection[cmsearch-search_sequence]" time="0.013" /><testcase classname="tests.test_native_infernal_result_worker" name="test_native_five_families_complete_numerical_projection[cmalign-alignment_sequence]" time="0.075" /><testcase classname="tests.test_native_infernal_result_worker" name="test_native_five_families_complete_numerical_projection[cmalign-alignment_column]" time="0.077" /><testcase classname="tests.test_native_infernal_result_worker" name="test_native_five_families_complete_numerical_projection[cmalign-alignment_pair]" time="0.074" /><testcase classname="tests.test_native_infernal_result_worker" name="test_no_original_paths_network_store_or_native_execution" time="0.001"><failure message="ModuleNotFoundError: No module named 'gene_annotation_episode.store'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_worker_2026-10-26_224/pytest_001/test_no_original_paths_network0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x75551a1beea0&gt;
+
+    def test_no_original_paths_network_store_or_native_execution(tmp_path, monkeypatch):
+        plan = plan_for(tmp_path)
+        original_open = Path.open
+        allowed = {Path(r["path"]) for r in plan["artifacts"]}
+        output = Path(plan["directory"])
+        def confined_open(path, mode="r", *args, **kwargs):
+            if not any(flag in mode for flag in "wax+"):
+                assert path in allowed or path.is_relative_to(output), "original/unselected path was opened"
+            return original_open(path, mode, *args, **kwargs)
+        def forbidden(*args, **kwargs):
+            pytest.fail("grading attempted acquisition, execution or Store access")
+&gt;       from gene_annotation_episode.store import Store
+E       ModuleNotFoundError: No module named 'gene_annotation_episode.store'
+
+../../tests/test_native_infernal_result_worker.py:196: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_native_infernal_result_worker" name="test_metric_subset_preserves_observation_and_requested_order_is_native" time="0.032" /><testcase classname="tests.test_native_infernal_result_worker" name="test_original_record_ordinal_not_tblout_query_position" time="0.014" /><testcase classname="tests.test_native_infernal_result_worker" name="test_duplicate_search_names_unbound_without_ordinal_guess" time="0.014" /><testcase classname="tests.test_native_infernal_result_worker" name="test_metadata_conflicts_do_not_overwrite_actual_input[length-999]" time="0.012" /><testcase classname="tests.test_native_infernal_result_worker" name="test_metadata_conflicts_do_not_overwrite_actual_input[sequence-AAAA]" time="0.012" /><testcase classname="tests.test_native_infernal_result_worker" name="test_metadata_conflicts_do_not_overwrite_actual_input[name-wrong]" time="0.013" /><testcase classname="tests.test_native_infernal_result_worker" name="test_binding_requires_both_ordinal_and_native_identity[wrong-None]" time="0.012" /><testcase classname="tests.test_native_infernal_result_worker" name="test_binding_requires_both_ordinal_and_native_identity[mrum-tRNA.1-unobserved_accession]" time="0.012" /><testcase classname="tests.test_native_infernal_result_worker" name="test_binding_requires_both_ordinal_and_native_identity[None-None]" time="0.012" /><testcase classname="tests.test_native_infernal_result_worker" name="test_absent_optional_external_binding_is_typed_unknown" time="0.012" /><testcase classname="tests.test_native_infernal_result_worker" name="test_native_failure_preserves_saved_inputs_and_specific_missingness" time="0.006" /><testcase classname="tests.test_native_infernal_result_worker" name="test_no_hit_output_is_zero_rows_not_a_biological_absence_score" time="0.008"><failure message="assert False">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_worker_2026-10-26_224/pytest_001/test_no_hit_output_is_zero_row0')
+
+    def test_no_hit_output_is_zero_rows_not_a_biological_absence_score(tmp_path):
+        plan = plan_for(tmp_path)
+        plan["bundle"]["requested_job"]["native_infernal"]["table_format"] = 1
+        replace_bytes(plan, "tblout", (SEARCHES / "cmsearch_no_hits.hits.tbl").read_bytes())
+        manifest, sheet, scores, rows, _ = execute(plan)
+&gt;       assert manifest["numerical_complete"]
+E       assert False
+
+../../tests/test_native_infernal_result_worker.py:304: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_result_worker" name="test_invalid_native_cell_preserves_other_components_and_truncated_rows" time="0.012" /><testcase classname="tests.test_native_infernal_result_worker" name="test_selected_native_modes_preserved_without_changing_parameters" time="0.014" /><testcase classname="tests.test_native_infernal_result_worker" name="test_selected_oskip_without_footer_still_qualifies_aggregate_population" time="0.014"><failure message="assert 1.0 is None">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_worker_2026-10-26_224/pytest_001/test_selected_oskip_without_fo0')
+
+    def test_selected_oskip_without_footer_still_qualifies_aggregate_population(tmp_path):
+        plan = plan_for(tmp_path, "cmscan", "search_sequence")
+        job = plan["bundle"]["requested_job"]["native_infernal"]
+        job["options"] += ["--oskip"]
+        table = Path(captured(plan, "tblout")["path"]).read_text()
+        replace_bytes(plan, "tblout", "\n".join(line for line in table.splitlines() if not line.startswith("# Option settings:")) + "\n")
+        _, sheet, scores, rows, _ = execute(plan)
+        assert sheet["artifacts"][0]["effective_complete"] is True
+&gt;       assert scores["sequence_strand_aggregates"][0]["union_span_fraction"] is None
+E       assert 1.0 is None
+
+../../tests/test_native_infernal_result_worker.py:344: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_result_worker" name="test_alignment_native_modes_and_unknown_cells_are_preserved[global]" time="0.023" /><testcase classname="tests.test_native_infernal_result_worker" name="test_alignment_native_modes_and_unknown_cells_are_preserved[submodel]" time="0.025" /><testcase classname="tests.test_native_infernal_result_worker" name="test_alignment_native_modes_and_unknown_cells_are_preserved[matchonly]" time="0.027" /><testcase classname="tests.test_native_infernal_result_worker" name="test_alignment_native_modes_and_unknown_cells_are_preserved[noprob]" time="0.023" /><testcase classname="tests.test_native_infernal_result_worker" name="test_alignment_native_modes_and_unknown_cells_are_preserved[sample_serial]" time="0.024" /><testcase classname="tests.test_native_infernal_result_worker" name="test_same_name_mapali_inherited_prefix_and_new_input_have_distinct_bindings" time="0.088" /><testcase classname="tests.test_native_infernal_result_worker" name="test_alignment_population_uses_original_calculator_parameter" time="0.072" /><testcase classname="tests.test_native_infernal_result_worker" name="test_original_tu_xn_ia_identity_survives_native_normalization" time="0.092"><failure message="assert False">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_worker_2026-10-26_224/pytest_001/test_original_tu_xn_ia_identit0')
+
+    def test_original_tu_xn_ia_identity_survives_native_normalization(tmp_path):
+        plan = plan_for(tmp_path, "cmalign", "alignment_sequence")
+        sequences = Path(captured(plan, "sequences", "input")["path"]).read_text()
+        # T/U and I/A have different original identities despite native digitization.
+        sequences = sequences.replace("U", "T").replace("A", "I")
+        replace_bytes(plan, "sequences", sequences, "input")
+        manifest, sheet, _, rows, _ = execute(plan)
+&gt;       assert manifest["numerical_complete"]
+E       assert False
+
+../../tests/test_native_infernal_result_worker.py:409: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_result_worker" name="test_missing_matchonly_sidecar_preserves_native_score_without_invented_subject" time="0.026" /><testcase classname="tests.test_native_infernal_result_worker" name="test_saved_sheet_recalculation_without_parser_or_io[cmsearch-search_hit]" time="0.015" /><testcase classname="tests.test_native_infernal_result_worker" name="test_saved_sheet_recalculation_without_parser_or_io[cmalign-alignment_pair]" time="0.108" /><testcase classname="tests.test_native_infernal_result_worker" name="test_cli_entrypoint_and_all_output_files" time="0.012" /></testsuite></testsuites>

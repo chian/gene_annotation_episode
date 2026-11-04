@@ -1,0 +1,11 @@
+--- helper-draft001
++++ helper-current
+@@ -48,7 +48,7 @@
+   row=db.execute('SELECT * FROM runtime_runs WHERE run_id=?',(run_id,)).fetchone()
+   if row is None:return {'status':'not_yet_available','reason':'new_runtime_row_not_visible','run_id':run_id}
+   settings=json.loads(row['settings'])
+-  roots=[dict(r) for r in db.execute('SELECT * FROM runtime_episodes WHERE run_id=?',(run_id,)) if json.loads(r['path'])==[['annotation','root']]]
++  roots=[dict(r) for r in db.execute('SELECT * FROM runtime_episodes WHERE run_id=? AND json(path)=json(?)',(run_id,json.dumps([['annotation','root']])))]
+   if not roots:return {'status':'not_yet_available','reason':'root_not_visible','run_id':run_id}
+   if len(roots)!=1:raise ValueError('new_root_identity_ambiguous')
+   root=roots[0];episode_id=root['episode_id']

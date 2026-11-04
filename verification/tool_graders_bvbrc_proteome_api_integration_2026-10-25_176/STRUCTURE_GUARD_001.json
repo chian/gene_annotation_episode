@@ -1,0 +1,42 @@
+{
+  "appservice_change": "Only optional ArtifactMember.requirement_ids relative to accepted175",
+  "new_member_field": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uniqueItems": true
+  },
+  "proteome_change": "Only NativeDocumentSelection disjoint union; historical branch unchanged",
+  "new_document_variant": {
+    "type": "object",
+    "properties": {
+      "document_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "role": {
+        "const": "proteome_native_projection"
+      },
+      "declared_format": {
+        "$ref": "#/$defs/HostDeclaredFormat"
+      },
+      "source_contract": {
+        "$ref": "#/$defs/NativeSourceContract"
+      },
+      "requirement_id": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "document_id",
+      "role",
+      "declared_format",
+      "source_contract",
+      "requirement_id"
+    ],
+    "additionalProperties": false
+  }
+}

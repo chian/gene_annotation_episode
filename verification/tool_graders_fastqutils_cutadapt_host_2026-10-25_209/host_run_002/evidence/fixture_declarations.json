@@ -1,0 +1,527 @@
+{
+  "fixtures": {
+    "declarations": {
+      "declarations": []
+    },
+    "parameters": {
+      "analysis_id": "testC198",
+      "calculation_requests": [
+        {
+          "after_measurement": {
+            "axis": {
+              "axis": {
+                "kind": "none",
+                "label": null,
+                "lower": null,
+                "upper": null
+              },
+              "kind": "exact"
+            },
+            "document_id": "trim",
+            "metric": "cutadapt_written_bases",
+            "rows": {
+              "kind": "all"
+            },
+            "section_key": "cutadapt_summary",
+            "section_ordinal": 0,
+            "selection": "semantic"
+          },
+          "after_population": {
+            "document_id": "trim",
+            "population_key": "cutadapt_output_bases",
+            "population_ordinal": 0,
+            "selection": "semantic"
+          },
+          "before_measurement": {
+            "axis": {
+              "axis": {
+                "kind": "none",
+                "label": null,
+                "lower": null,
+                "upper": null
+              },
+              "kind": "exact"
+            },
+            "document_id": "trim",
+            "metric": "cutadapt_processed_bases",
+            "rows": {
+              "kind": "all"
+            },
+            "section_key": "cutadapt_summary",
+            "section_ordinal": 0,
+            "selection": "semantic"
+          },
+          "before_population": {
+            "document_id": "trim",
+            "population_key": "cutadapt_input_bases",
+            "population_ordinal": 0,
+            "selection": "semantic"
+          },
+          "calculation_id": "cutadapt_bases",
+          "comparison_kind": "native_report_retention",
+          "method": "retention_v1"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "trim",
+          "format": "trim_galore_report_0_6_10",
+          "producer_version": null,
+          "selection": {
+            "kind": "output_requirement",
+            "requirement_id": "selected_trim"
+          }
+        },
+        {
+          "document_id": "final",
+          "format": "fastq",
+          "producer_version": null,
+          "selection": {
+            "kind": "output_requirement",
+            "requirement_id": "selected_final"
+          }
+        }
+      ],
+      "metadata_bindings": [],
+      "version": "fastqutils_provider_v2"
+    },
+    "requested_form": {
+      "fields": [
+        {
+          "field": "cutadapt_input_reads",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "trim",
+                "metric": "cutadapt_processed_count",
+                "rows": {
+                  "kind": "all"
+                },
+                "section_key": "cutadapt_summary",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "cutadapt_output_reads",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "trim",
+                "metric": "cutadapt_written_count",
+                "rows": {
+                  "kind": "all"
+                },
+                "section_key": "cutadapt_summary",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "cutadapt_output_bases",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "trim",
+                "metric": "cutadapt_written_bases",
+                "rows": {
+                  "kind": "all"
+                },
+                "section_key": "cutadapt_summary",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "trimgalore_input_reads",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "trim",
+                "metric": "trim_processed_count",
+                "rows": {
+                  "kind": "all"
+                },
+                "section_key": "trim_summary",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "final_reads",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "final",
+                "metric": "fastq_read_count",
+                "rows": {
+                  "kind": "all"
+                },
+                "section_key": "fastq_summary",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "final_bases",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "measurement",
+              "selector": {
+                "axis": {
+                  "axis": {
+                    "kind": "none",
+                    "label": null,
+                    "lower": null,
+                    "upper": null
+                  },
+                  "kind": "exact"
+                },
+                "document_id": "final",
+                "metric": "fastq_base_count",
+                "rows": {
+                  "kind": "all"
+                },
+                "section_key": "fastq_summary",
+                "section_ordinal": 0,
+                "selection": "semantic"
+              }
+            }
+          }
+        },
+        {
+          "field": "cutadapt_base_retention",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "component",
+              "selector": {
+                "calculation_id": "cutadapt_bases",
+                "metric": "native_report_retention_fraction",
+                "selection": "semantic",
+                "threshold": null
+              }
+            }
+          }
+        },
+        {
+          "field": "requirements",
+          "selection": {
+            "availability_requirement": "typed_state",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "requirements"
+            }
+          }
+        }
+      ],
+      "version": "fastqutils_projection_v2"
+    },
+    "submitted_parameters": {
+      "output_file": "fixture",
+      "output_path": "/fixture/output",
+      "paired_end_libs": [],
+      "recipe": [
+        "TRIM"
+      ],
+      "reference_genome_id": "synthetic_reference195",
+      "single_end_libs": [
+        {
+          "read": "/synthetic/input.fastq"
+        }
+      ],
+      "srr_libs": []
+    }
+  },
+  "native_inputs": {
+    "final": {
+      "byte_count": 99,
+      "file": "synthetic_trimmed.fq",
+      "sha256": "992f92a6ad75672dd34ff1f487de27d5e3d7aaf533e0ed3a87fe1f02d998f461"
+    },
+    "trim": {
+      "byte_count": 2054,
+      "file": "synthetic.fastq_trimming_report.txt",
+      "sha256": "9427473a29aa6a3bf073d252b28c03effbeb0d7cb1b2999d2630e593121ebf63"
+    }
+  },
+  "original_provider_bundle_injected": false,
+  "qualification": "Actual retained local native output on synthetic reads; controlled task and Workspace transport.",
+  "requested_fields": {
+    "cutadapt_base_retention": {
+      "availability_requirement": "available_value",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "component",
+        "selector": {
+          "calculation_id": "cutadapt_bases",
+          "metric": "native_report_retention_fraction",
+          "selection": "semantic",
+          "threshold": null
+        }
+      }
+    },
+    "cutadapt_input_reads": {
+      "availability_requirement": "available_value",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "measurement",
+        "selector": {
+          "axis": {
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "kind": "exact"
+          },
+          "document_id": "trim",
+          "metric": "cutadapt_processed_count",
+          "rows": {
+            "kind": "all"
+          },
+          "section_key": "cutadapt_summary",
+          "section_ordinal": 0,
+          "selection": "semantic"
+        }
+      }
+    },
+    "cutadapt_output_bases": {
+      "availability_requirement": "available_value",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "measurement",
+        "selector": {
+          "axis": {
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "kind": "exact"
+          },
+          "document_id": "trim",
+          "metric": "cutadapt_written_bases",
+          "rows": {
+            "kind": "all"
+          },
+          "section_key": "cutadapt_summary",
+          "section_ordinal": 0,
+          "selection": "semantic"
+        }
+      }
+    },
+    "cutadapt_output_reads": {
+      "availability_requirement": "available_value",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "measurement",
+        "selector": {
+          "axis": {
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "kind": "exact"
+          },
+          "document_id": "trim",
+          "metric": "cutadapt_written_count",
+          "rows": {
+            "kind": "all"
+          },
+          "section_key": "cutadapt_summary",
+          "section_ordinal": 0,
+          "selection": "semantic"
+        }
+      }
+    },
+    "final_bases": {
+      "availability_requirement": "available_value",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "measurement",
+        "selector": {
+          "axis": {
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "kind": "exact"
+          },
+          "document_id": "final",
+          "metric": "fastq_base_count",
+          "rows": {
+            "kind": "all"
+          },
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "selection": "semantic"
+        }
+      }
+    },
+    "final_reads": {
+      "availability_requirement": "available_value",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "measurement",
+        "selector": {
+          "axis": {
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "kind": "exact"
+          },
+          "document_id": "final",
+          "metric": "fastq_read_count",
+          "rows": {
+            "kind": "all"
+          },
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "selection": "semantic"
+        }
+      }
+    },
+    "requirements": {
+      "availability_requirement": "typed_state",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "requirements"
+      }
+    },
+    "trimgalore_input_reads": {
+      "availability_requirement": "available_value",
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "target": {
+        "kind": "measurement",
+        "selector": {
+          "axis": {
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            },
+            "kind": "exact"
+          },
+          "document_id": "trim",
+          "metric": "trim_processed_count",
+          "rows": {
+            "kind": "all"
+          },
+          "section_key": "trim_summary",
+          "section_ordinal": 0,
+          "selection": "semantic"
+        }
+      }
+    }
+  },
+  "workspace_outputs": {
+    "final": [
+      "/fixture/output/synthetic_trimmed.fq",
+      "07309784-c0ab-5fce-85d9-713fb51a2a38"
+    ],
+    "trim": [
+      "/fixture/output/synthetic.fastq_trimming_report.txt",
+      "b2417dae-1abe-5df8-99ec-1a66d7db651b"
+    ]
+  }
+}

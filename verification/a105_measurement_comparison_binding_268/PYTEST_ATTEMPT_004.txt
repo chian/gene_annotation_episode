@@ -1,0 +1,47 @@
+......................F.F....                                            [100%]
+=================================== FAILURES ===================================
+_________ test_original_report_repair_redelivery_without_repopulation __________
+tests/test_literature_measurement_comparison_binding_268.py:436: in test_original_report_repair_redelivery_without_repopulation
+    original_operation = store.db.execute('SELECT outcome FROM literature_measurement_comparison_operations').fetchone()[0]
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   sqlite3.OperationalError: no such table: literature_measurement_comparison_operations
+_ test_selected_shared_loop_return_and_first_cold_reconstruction[None-True-False-True] _
+tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+tests/test_literature_measurement_comparison_binding_268.py:538: in test_selected_shared_loop_return_and_first_cold_reconstruction
+    asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4341: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4663: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_binding_268.py::test_original_report_repair_redelivery_without_repopulation
+FAILED tests/test_literature_measurement_comparison_binding_268.py::test_selected_shared_loop_return_and_first_cold_reconstruction[None-True-False-True]
+2 failed, 27 passed in 158.83s (0:02:38)

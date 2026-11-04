@@ -1,0 +1,27 @@
+{
+  "record_type": "implementation_boundary_and_review",
+  "demonstrated_defect": "Selected MinHash results-commission failures lose the host-supplied source, field and JSON location when DecisionSource.apply_response reduces ContractError to str(error).",
+  "owner": "root",
+  "owned_file": "gene_annotation_episode/runtime.py",
+  "before_sha256": "9420acfc63becef2f11b09e26f465fd6b6b85cf0eac8032404670e3d626ad2c5",
+  "input": "A ContractError raised while preparing an explicitly selected execution_results_assignment_v1 with bvbrc_minhash_result_selector_v2.",
+  "output": "Existing action_contract feedback with unchanged string detail, plus input_detail containing only supplied affected source/artifact/handoff, pair index, row index, genome ID, scalar field and record path.",
+  "affected_consumers": [
+    "DecisionSource.apply_response",
+    "record_effect/checkpoint/restore",
+    "model_snapshot/state_frame/apply_state_frame",
+    "scientific_process_prompt actionable-feedback table"
+  ],
+  "constraints": [
+    "No new response or message template",
+    "No new completed action or observation",
+    "No retry or selection by infrastructure",
+    "Do not change unrelated errors or historical stored effects",
+    "Do not expose complete selected input documents"
+  ],
+  "verification": [
+    "The two D522 actual selected Workflow failures retain affected source/field details",
+    "Existing action-validation feedback and MinHash custody/episode regressions"
+  ],
+  "status": "planned_before_edit"
+}

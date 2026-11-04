@@ -1,0 +1,228 @@
+.............FF......................................................... [ 39%]
+..............................FFF...........F........................... [ 78%]
+........................................                                 [100%]
+=================================== FAILURES ===================================
+____________ test_covariance_metadata_scoped_without_matrix[known] _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pytest_003/test_covariance_metadata_scope0')
+covariance = 'known'
+
+    @pytest.mark.parametrize('covariance',['known','estimated','unknown','unsupported'])
+    def test_covariance_metadata_scoped_without_matrix(tmp_path,covariance):
+        store,ctx,args,binding,_=setup(tmp_path/'state',['substrate_loss','substrate_loss_variance'],covariance=covariance)
+        try:
+            _,_,rows=selected(store,ctx,args,binding)
+            c=rows[-1]['covariance_context']
+            assert c['selection_status']=='selected'
+            assert c['variance_status']==(None if covariance=='unsupported' else covariance)
+>           assert 'matrix' not in canonical(rows) and 'covariance"' not in canonical(rows)
+E           assert ('matrix' not in '[{"assertio...start":0}]}]'
+E             
+E             'matrix' is contained here:
+E               tart":0}]}] and 'covariance"' not in '[{"assertio...start":0}]}]'
+E             
+E             'covariance"' is contained here:
+E               ct_linear_covariance","unit":"(uM)^2","value":0.86},"component":"substrate_loss_variance","covariance_context":{"artifact_ref":"artifact_73c9ea6975dbff79803f149c7c7397d40075b03eaa75138e5f383bb7543991c0","basis":"joint_covariance_of_selected_estimates","dependency_keys":[["source_observation:cdd8de664127d3666f60180cd0a630e5d9da9ca8eb2832896a997d3f6a7b70ad","calibration:905fdaf66f7a16f7a27f5b5d5cd3cc034f0fa1d768e74f02107db33f41e5ed3f","normalization:905fdaf66f7a16f7a27f5b5d5cd3cc034f0fa1d768e74f02107db33f41e5ed3f"],["source_observation:8770f4862e1a7f0bb...
+E             
+E             ...Full output truncated (2 lines hidden), use '-vv' to show)
+
+tests/test_literature_concentration_window_binding_281.py:253: AssertionError
+__________ test_covariance_metadata_scoped_without_matrix[estimated] ___________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pytest_003/test_covariance_metadata_scope1')
+covariance = 'estimated'
+
+    @pytest.mark.parametrize('covariance',['known','estimated','unknown','unsupported'])
+    def test_covariance_metadata_scoped_without_matrix(tmp_path,covariance):
+        store,ctx,args,binding,_=setup(tmp_path/'state',['substrate_loss','substrate_loss_variance'],covariance=covariance)
+        try:
+            _,_,rows=selected(store,ctx,args,binding)
+            c=rows[-1]['covariance_context']
+            assert c['selection_status']=='selected'
+            assert c['variance_status']==(None if covariance=='unsupported' else covariance)
+>           assert 'matrix' not in canonical(rows) and 'covariance"' not in canonical(rows)
+E           assert ('matrix' not in '[{"assertio...start":0}]}]'
+E             
+E             'matrix' is contained here:
+E               tart":0}]}] and 'covariance"' not in '[{"assertio...start":0}]}]'
+E             
+E             'covariance"' is contained here:
+E               ct_linear_covariance","unit":"(uM)^2","value":0.86},"component":"substrate_loss_variance","covariance_context":{"artifact_ref":"artifact_a4f222b64113c2879d7fc60c3046bbe1f6b7629faa90c7f0cccd26f4c1da01b6","basis":"joint_covariance_of_selected_estimates","dependency_keys":[["source_observation:cdd8de664127d3666f60180cd0a630e5d9da9ca8eb2832896a997d3f6a7b70ad","calibration:905fdaf66f7a16f7a27f5b5d5cd3cc034f0fa1d768e74f02107db33f41e5ed3f","normalization:905fdaf66f7a16f7a27f5b5d5cd3cc034f0fa1d768e74f02107db33f41e5ed3f"],["source_observation:8770f4862e1a7f0bb...
+E             
+E             ...Full output truncated (2 lines hidden), use '-vv' to show)
+
+tests/test_literature_concentration_window_binding_281.py:253: AssertionError
+_ test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[direct] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pytest_003/test_selected_worksheet_links_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7cd43f2e1100>
+mode = 'direct'
+
+    @pytest.mark.parametrize('mode', ['direct', 'nested', 'repair'])
+    def test_selected_worksheet_links_forwarding_and_first_cold_reconstruction(tmp_path, monkeypatch, mode):
+        """An ordinary interpretation action supplies constrained scientific links.
+    
+        It is part of the same iterative episode, not an extra report-composer call.
+        Two selected population actions remain two actions; formatting adds none.
+        """
+        nested, repair = mode == 'nested', mode == 'repair'
+>       store, original_context, arguments, _, _ = setup(tmp_path/'state', PRECISION, actual_source=True)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_a105_worksheet_integration_271.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_kinetic_summary_precision_binding_251.py:38: in setup
+    raw = (pinned/'elife-06181-v2.pdf').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verific..._006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[nested] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pytest_003/test_selected_worksheet_links_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7cd440084d70>
+mode = 'nested'
+
+    @pytest.mark.parametrize('mode', ['direct', 'nested', 'repair'])
+    def test_selected_worksheet_links_forwarding_and_first_cold_reconstruction(tmp_path, monkeypatch, mode):
+        """An ordinary interpretation action supplies constrained scientific links.
+    
+        It is part of the same iterative episode, not an extra report-composer call.
+        Two selected population actions remain two actions; formatting adds none.
+        """
+        nested, repair = mode == 'nested', mode == 'repair'
+>       store, original_context, arguments, _, _ = setup(tmp_path/'state', PRECISION, actual_source=True)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_a105_worksheet_integration_271.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_kinetic_summary_precision_binding_251.py:38: in setup
+    raw = (pinned/'elife-06181-v2.pdf').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verific..._006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[repair] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pytest_003/test_selected_worksheet_links_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7cd440087e00>
+mode = 'repair'
+
+    @pytest.mark.parametrize('mode', ['direct', 'nested', 'repair'])
+    def test_selected_worksheet_links_forwarding_and_first_cold_reconstruction(tmp_path, monkeypatch, mode):
+        """An ordinary interpretation action supplies constrained scientific links.
+    
+        It is part of the same iterative episode, not an extra report-composer call.
+        Two selected population actions remain two actions; formatting adds none.
+        """
+        nested, repair = mode == 'nested', mode == 'repair'
+>       store, original_context, arguments, _, _ = setup(tmp_path/'state', PRECISION, actual_source=True)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_a105_worksheet_integration_271.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_kinetic_summary_precision_binding_251.py:38: in setup
+    raw = (pinned/'elife-06181-v2.pdf').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verific..._006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/research/experimental_scoring_review_2026-10-23/a105_independent_preparation_case_242/sources/elife-06181-v2.pdf'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_one_selected_original_source_common_worksheet_and_first_cold _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pytest_003/test_one_selected_original_sou0')
+
+    def test_one_selected_original_source_common_worksheet_and_first_cold(tmp_path):
+>       store, ctx, args, _, _ = setup(tmp_path/'state', SELECTED, original=True)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_a105_worksheet_comparison_273.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_binding_268.py:37: in setup
+    selection, docs, _ = original_nfn_fixture()
+                         ^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_comparison_components_258.py:278: in original_nfn_fixture
+    s=deepcopy(json.loads((PACKET/'NFN_PARENT_CONVERSION_SELECTION_ILLUSTRATION_001.json').read_text()))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verification/a105_measurement_comparison_components_258/NFN_PARENT_CONVERSION_SELECTION_ILLUSTRATION_001.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/a105_concentration_window_binding_281/pin_003/verification/a105_measurement_comparison_components_258/NFN_PARENT_CONVERSION_SELECTION_ILLUSTRATION_001.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_concentration_window_binding_281.py::test_covariance_metadata_scoped_without_matrix[known]
+FAILED tests/test_literature_concentration_window_binding_281.py::test_covariance_metadata_scoped_without_matrix[estimated]
+FAILED tests/test_literature_a105_worksheet_integration_271.py::test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[direct]
+FAILED tests/test_literature_a105_worksheet_integration_271.py::test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[nested]
+FAILED tests/test_literature_a105_worksheet_integration_271.py::test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[repair]
+FAILED tests/test_literature_a105_worksheet_comparison_273.py::test_one_selected_original_source_common_worksheet_and_first_cold
+6 failed, 178 passed in 226.93s (0:03:46)

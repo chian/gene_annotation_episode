@@ -140,6 +140,13 @@ def describe_execution_target(target):
             'service_or_program': nmf['operation'], 'operation': nmf['operation'],
             'mode': nmf['mode'], 'input_format': 'delimited_expression_matrix',
             'output_format': 'expression_nmf_native_manifest_v1'}
+    macs2_peak = assignment['requested_job'].get('native_macs2_peak')
+    if macs2_peak is not None:
+        request = macs2_peak['request']
+        return {'resource_kind': target['resource_kind'],
+            'service_or_program': request['operation'],
+            'operation': request['operation'], 'mode': request['mode'],
+            'input_format': 'MACS2_AUTO', 'output_format': 'macs2_peak_command_seal_v1'}
     atac = assignment['requested_job'].get('native_atac_differential')
     if atac is not None:
         request = atac['request']
@@ -255,10 +262,22 @@ class ExecutionTargetReader:
             raise ContractError('execution_target_unavailable_or_outside_scope',
                 detail={'reason': str(error)}) from error
 
-    def _native(self, handle, scope, *, _seen=()):
+    def _read_native_receipt(self, reference, scope, reads):
+        """Reuse only successful immutable receipt reads in one metadata operation."""
+        try:
+            key = (self.run_id, reference, canonical(plain(scope)))
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            # Invalid/non-JSON selections retain the original owner's errors.
+            return self.receipts.read(reference, scope)
+        if key not in reads:
+            reads[key] = deepcopy(self.receipts.read(reference, scope))
+        return deepcopy(reads[key])
+
+    def _native(self, handle, scope, *, _seen=(), _receipt_reads=None):
         if handle in _seen:
             raise ValueError('native_blast_masking_receipt_ancestry_cycle')
-        body = self.receipts.read(handle, scope)
+        reads = {} if _receipt_reads is None else _receipt_reads
+        body = self._read_native_receipt(handle, scope, reads)
         source = self.store.get(handle)
         snapshot = json.loads(self.store.get_artifact(source['request_ref']))
         assignment, receipt = snapshot['assignment'], body['receipt']
@@ -302,7 +321,7 @@ class ExecutionTargetReader:
             if reference is not None:
                 if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
                     raise ValueError('native_flux_balance_receipt_ancestry_conflict')
-                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle))
+                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle), _receipt_reads=reads)
                 prior_detail = prior['receipt']['outcome'].get('native_outcome') or {}
                 if (original['resource_id'] != resource_id or original['execution_id'] != job['execution_id']
                         or original['assignment']['workspace'] != assignment['workspace']
@@ -329,7 +348,7 @@ class ExecutionTargetReader:
             starts = self.receipts._sources(self.receipts._accession(origin_episode_id, operation_key))
             if len(starts) != 1:
                 raise ValueError('native_flux_balance_original_start_receipt_missing')
-            start = self.receipts.read(starts[0]['id'], body['scope'])
+            start = self._read_native_receipt(starts[0]['id'], body['scope'], reads)
             start_receipt = start['receipt']
             start_job = start_receipt['outcome'].get('facts', {}).get('requested_job', {})
             start_detail = start_receipt['outcome'].get('native_outcome') or {}
@@ -356,7 +375,7 @@ class ExecutionTargetReader:
             if reference is not None:
                 if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
                     raise ValueError('native_blast_utility_receipt_ancestry_conflict')
-                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle))
+                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle), _receipt_reads=reads)
                 prior_plan = (prior['receipt']['outcome'].get('native_outcome') or {}).get('native_blast_utility_plan')
                 if (canonical(plan) != canonical(prior_plan) or original['resource_id'] != resource_id
                         or original['execution_id'] != job['execution_id']
@@ -399,7 +418,7 @@ class ExecutionTargetReader:
             if reference is not None:
                 if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
                     raise ValueError('native_blast_masking_receipt_ancestry_conflict')
-                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle))
+                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle), _receipt_reads=reads)
                 prior_plan = (prior['receipt']['outcome'].get('native_outcome') or {}).get('native_blast_masking_plan')
                 if (canonical(plan) != canonical(prior_plan) or original['resource_id'] != resource_id
                         or original['execution_id'] != job['execution_id']
@@ -448,6 +467,111 @@ class ExecutionTargetReader:
                     or job['execution_id'] != str(Path(assignment['workspace']) / '.episode-operations' /
                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
                 raise ValueError('native_expression_nmf_original_attempt_mismatch')
+        if 'native_lumpy' in assignment['requested_job']:
+            from .native_lumpy_execution import (
+                lumpy_plan, validate_lumpy_original_controls,
+            )
+            self.operations[resource_id].validate_assignment(assignment)
+            detail = receipt['outcome'].get('native_outcome') or {}
+            plan = detail.get('native_lumpy_plan')
+            if type(plan) is not dict:
+                raise ValueError('native_lumpy_original_controls_required')
+            plan = validate_lumpy_original_controls(plan,
+                detail.get('native_lumpy_handle'), detail.get('native_lumpy_request_raw'))
+            expected_plan = lumpy_plan(assignment, plan['identity'], policy=plan['policy'])
+            owner = plan['identity']
+            reference = receipt['arguments'].get('receipt_ref')
+            if reference is not None:
+                if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
+                    raise ValueError('native_lumpy_receipt_ancestry_conflict')
+                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle), _receipt_reads=reads)
+                prior_detail = prior['receipt']['outcome'].get('native_outcome') or {}
+                if (original['resource_id'] != resource_id or original['execution_id'] != job['execution_id']
+                        or canonical(original['assignment']) != canonical(assignment)
+                        or any(canonical(detail.get(key)) != canonical(prior_detail.get(key)) for key in (
+                            'native_lumpy_plan', 'native_lumpy_handle', 'native_lumpy_request_raw'))):
+                    raise ValueError('native_lumpy_receipt_ancestry_conflict')
+                origin_episode_id = original['origin_episode_id']
+            elif owner['episode_id'] != origin_episode_id:
+                raise ValueError('native_lumpy_original_owner_conflict')
+            observed = detail.get('observation', detail)
+            if (canonical(plan) != canonical(expected_plan) or owner['run_id'] != self.run_id
+                    or owner['resource_id'] != resource_id or owner['episode_id'] != origin_episode_id
+                    or owner['execution_id'] != job['execution_id']
+                    or owner['requested_job_sha256'] != digest(assignment['requested_job'])
+                    or owner['operation_key'] != detail.get('attempt_operation_key')
+                    or owner['attempt_id'] != detail.get('attempt_id')
+                    or observed.get('metadata', {}).get('policy') != plan['policy']
+                    or self.operations[resource_id].policy.to_dict() != plan['policy']):
+                raise ValueError('native_lumpy_original_attempt_mismatch')
+            starts = self.receipts._sources(self.receipts._accession(origin_episode_id, owner['operation_key']))
+            if len(starts) != 1:
+                raise ValueError('native_lumpy_original_start_receipt_missing')
+            start = self._read_native_receipt(starts[0]['id'], body['scope'], reads)
+            start_receipt = start['receipt']
+            start_job = start_receipt['outcome'].get('facts', {}).get('requested_job', {})
+            start_detail = start_receipt['outcome'].get('native_outcome') or {}
+            if (start['episode_id'] != origin_episode_id or start['assignment_sha256'] != digest(assignment)
+                    or start_receipt['tool_name'] != 'practical.job.start'
+                    or start_receipt['operation_key'] != owner['operation_key']
+                    or any(start_job.get(key) != job.get(key) for key in (
+                        'execution_id', 'resource_kind', 'requested_job_sha256', 'argv', 'environment'))
+                    or any(canonical(detail.get(key)) != canonical(start_detail.get(key)) for key in (
+                        'native_lumpy_plan', 'native_lumpy_handle', 'native_lumpy_request_raw'))):
+                raise ValueError('native_lumpy_original_start_receipt_conflict')
+
+        if 'native_macs2_peak' in assignment['requested_job']:
+            from .native_macs2_peak_execution import (
+                macs2_peak_plan, validate_macs2_peak_original_controls,
+            )
+            self.operations[resource_id].validate_assignment(assignment)
+            detail = receipt['outcome'].get('native_outcome') or {}
+            plan = detail.get('native_macs2_peak_plan')
+            if type(plan) is not dict:
+                raise ValueError('native_macs2_peak_original_controls_required')
+            plan = validate_macs2_peak_original_controls(plan,
+                detail.get('native_macs2_peak_handle'), detail.get('native_macs2_peak_request_raw'))
+            expected_plan = macs2_peak_plan(assignment, plan['identity'], policy=plan['policy'])
+            owner = plan['identity']
+            reference = receipt['arguments'].get('receipt_ref')
+            if reference is not None:
+                if receipt['tool_name'] not in {'practical.job.status', 'practical.job.collect'}:
+                    raise ValueError('native_macs2_peak_receipt_ancestry_conflict')
+                original, prior = self._native(reference, body['scope'], _seen=(*_seen, handle), _receipt_reads=reads)
+                prior_detail = prior['receipt']['outcome'].get('native_outcome') or {}
+                if (original['resource_id'] != resource_id or original['execution_id'] != job['execution_id']
+                        or canonical(original['assignment']) != canonical(assignment)
+                        or any(canonical(detail.get(key)) != canonical(prior_detail.get(key)) for key in (
+                            'native_macs2_peak_plan', 'native_macs2_peak_handle', 'native_macs2_peak_request_raw'))):
+                    raise ValueError('native_macs2_peak_receipt_ancestry_conflict')
+                origin_episode_id = original['origin_episode_id']
+            elif owner['episode_id'] != origin_episode_id:
+                raise ValueError('native_macs2_peak_original_owner_conflict')
+            observed = detail.get('observation', detail)
+            if (canonical(plan) != canonical(expected_plan) or owner['run_id'] != self.run_id
+                    or owner['resource_id'] != resource_id or owner['episode_id'] != origin_episode_id
+                    or owner['execution_id'] != job['execution_id']
+                    or owner['requested_job_sha256'] != digest(assignment['requested_job'])
+                    or owner['operation_key'] != detail.get('attempt_operation_key')
+                    or owner['attempt_id'] != detail.get('attempt_id')
+                    or observed.get('metadata', {}).get('policy') != plan['policy']
+                    or self.operations[resource_id].policy.to_dict() != plan['policy']):
+                raise ValueError('native_macs2_peak_original_attempt_mismatch')
+            starts = self.receipts._sources(self.receipts._accession(origin_episode_id, owner['operation_key']))
+            if len(starts) != 1:
+                raise ValueError('native_macs2_peak_original_start_receipt_missing')
+            start = self._read_native_receipt(starts[0]['id'], body['scope'], reads)
+            start_receipt = start['receipt']
+            start_job = start_receipt['outcome'].get('facts', {}).get('requested_job', {})
+            start_detail = start_receipt['outcome'].get('native_outcome') or {}
+            if (start['episode_id'] != origin_episode_id or start['assignment_sha256'] != digest(assignment)
+                    or start_receipt['tool_name'] != 'practical.job.start'
+                    or start_receipt['operation_key'] != owner['operation_key']
+                    or any(start_job.get(key) != job.get(key) for key in (
+                        'execution_id', 'resource_kind', 'requested_job_sha256', 'argv', 'environment'))
+                    or any(canonical(detail.get(key)) != canonical(start_detail.get(key)) for key in (
+                        'native_macs2_peak_plan', 'native_macs2_peak_handle', 'native_macs2_peak_request_raw'))):
+                raise ValueError('native_macs2_peak_original_start_receipt_conflict')
         if 'native_atac_differential' in assignment['requested_job']:
             self.operations[resource_id].validate_assignment(assignment)
             detail = receipt['outcome'].get('native_outcome') or {}
@@ -533,11 +657,18 @@ class ExecutionTargetReader:
             'origin_episode_id': origin_episode_id, 'assignment': assignment, 'scope': body['scope']})
         return target, body
 
-    def read_target(self, handle, scope):
+    def read_target(self, handle, scope, *, include_native_receipt=False):
+        return self._read_target(handle, scope, include_native_receipt=include_native_receipt)
+
+    def _read_target(self, handle, scope, *, include_native_receipt=False, _receipt_reads=None):
         try:
+            if type(include_native_receipt) is not bool:
+                raise ValueError('execution_target_receipt_selection_invalid')
             source = self.store.get(handle)
             if source.get('provider') == PROVIDER:
-                return self._native(handle, scope)[0]
+                target, receipt = (self._native(handle, scope) if _receipt_reads is None else
+                    self._native(handle, scope, _receipt_reads=_receipt_reads))
+                return (target, receipt) if include_native_receipt else target
             if self.api_execution is None:
                 raise ValueError('execution_target_unavailable')
             target = validate_target(self.api_execution.read_target(handle, scope))
@@ -551,7 +682,7 @@ class ExecutionTargetReader:
             if (_appservice_target(target)
                     and configuration.get('execution_contract') != 'bvbrc_appservice_execution_v1'):
                 raise ValueError('bvbrc_appservice_execution_contract_required')
-            return target
+            return (target, None) if include_native_receipt else target
         except (ValueError, KeyError, OSError) as error:
             raise ContractError('execution_target_unavailable_or_outside_scope',
                 detail={'reason': str(error)}) from error
@@ -641,6 +772,25 @@ class ExecutionTargetReader:
                 'return_fields': ['path', 'offset', 'returned_bytes', 'size_bytes', 'bytes_base64', 'text_utf8'],
                 'return_fact_sources': ['execution_result_refs', 'execution_result_origin'],
             }]
+            if 'native_macs2_peak' in target['assignment']['requested_job']:
+                from .local_file_capture_results import SELECTOR_SCHEMA, ORIGIN
+                from .native_macs2_peak_execution import macs2_peak_output_files
+                request = target['assignment']['requested_job']['native_macs2_peak']['request']
+                value['selected_outputs'] = macs2_peak_output_files(request)
+                value['result_selector_schema'] = deepcopy(SELECTOR_SCHEMA)
+                value['status_meanings'] = {'observed_state': 'original_selected_local_attempt',
+                    'logs': 'selected_original_stdout_stderr_windows',
+                    'result_available': 'observed_producer_seal_path_availability',
+                    'capture_provenance': deepcopy(ORIGIN),
+                    'scientific_result_validation': 'separate_explicit_retained_peak_reader',
+                    'process_liveness_establishes_productive_work': False}
+                value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
+                value['extractors'][1] = {'operation': 'execution.results.collect',
+                    'implementation': 'gene_annotation_episode.local_file_capture_results.LocalFileSourceResults.execute',
+                    'return_fields': ['version', 'operation', 'job', 'files', 'provenance', 'failure'],
+                    'return_fact_sources': ['execution_file_source_refs', 'execution_file_capture_outcomes'],
+                    'scientific_annotation_score': False}
+                return value
             if 'native_blast_utility' in target['assignment']['requested_job']:
                 from .blast_utility_result_views import (
                     NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA,
@@ -1173,11 +1323,50 @@ class ExecutionTargetReader:
             'attempt_id': detail.get('attempt_id'),
             'original_operation_key': detail.get('attempt_operation_key') or (
                 receipt['operation_key'] if digest(receipt['operation_key']) == detail.get('attempt_id') else None)}
-        if {'native_fluorescence', 'native_blast_masking', 'native_blast_utility', 'native_flux_balance'} & set(target['assignment']['requested_job']):
+        if {'native_fluorescence', 'native_blast_masking', 'native_blast_utility', 'native_flux_balance',
+                'native_lumpy'} & set(target['assignment']['requested_job']):
             value.update(resource_id=target['resource_id'], requested_job_sha256=target['request_sha256'])
         if 'native_flux_balance' in target['assignment']['requested_job']:
             value['native_flux_balance_input_binding_file'] = detail['native_flux_balance_input_binding_file']
         return value
+
+    @staticmethod
+    def _failed_handoff_profile(target):
+        if target['resource_kind'] == 'local':
+            return bool({'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
+                'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf',
+                'native_fluorescence', 'native_blast_masking', 'native_blast_utility', 'native_flux_balance',
+                'native_lumpy'} & set(target['assignment']['requested_job']))
+        return (target['resource_kind'] == 'hpc' and bool(
+            {'native_blast_database', 'native_blast_standard_database'} & set(target['assignment']['requested_job'])))
+
+    @classmethod
+    def _handoff_values(cls, target, body):
+        """Decide only from an already qualified original stored receipt."""
+        if target['resource_kind'] == 'api':
+            return True, True
+        status = body['receipt']['outcome']['facts']['requested_job']['status']
+        usable = status in {'submitted', 'running', 'completed'}
+        return usable, usable or status == 'failed' and cls._failed_handoff_profile(target)
+
+    def _handoff_reader(self):
+        """Return a detached metadata reader whose reuse ends with its caller."""
+        receipts, targets = {}, {}
+        def read(handle, scope):
+            try:
+                key = (self.run_id, handle, canonical(plain(scope)))
+            except (ValueError, TypeError, OverflowError, RecursionError):
+                target, body = self._read_target(handle, scope, include_native_receipt=True)
+                return deepcopy((target, *self._handoff_values(target, body)))
+            if key not in targets:
+                candidate_receipts = dict(receipts)
+                target, body = self._read_target(handle, scope, include_native_receipt=True,
+                    _receipt_reads=candidate_receipts)
+                usable, returnable = self._handoff_values(target, body)
+                receipts.update(candidate_receipts)
+                targets[key] = (deepcopy(target), usable, returnable)
+            return deepcopy(targets[key])
+        return read
 
     def usable_handoff(self, target):
         """Original endpoint evidence; a later failure cannot rewrite it."""
@@ -1185,26 +1374,17 @@ class ExecutionTargetReader:
         if target['resource_kind'] == 'api':
             return True  # The API reader accepts its verified handoff sources.
         _, body = self._native(target['handle'], target['scope'])
-        return body['receipt']['outcome']['facts']['requested_job']['status'] in {
-            'submitted', 'running', 'completed'}
+        return self._handoff_values(target, body)[0]
 
     def returnable_handoff(self, target):
         """An authenticated failed native attempt can own qualified partial work."""
         target = self._qualified(target)
         if self.usable_handoff(target):
             return True
-        if (target['resource_kind'] == 'local'
-                and {'native_rna_structure', 'native_protein_structure', 'native_genomic_overlap',
-                     'native_chromatin_interactions', 'native_atac_differential', 'native_expression_nmf',
-                     'native_fluorescence', 'native_blast_masking', 'native_blast_utility', 'native_flux_balance'}
-                    & set(target['assignment']['requested_job'])):
-            _, body = self._native(target['handle'], target['scope'])
-            return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'
-        if (target['resource_kind'] != 'hpc'
-                or not ({'native_blast_database', 'native_blast_standard_database'} & set(target['assignment']['requested_job']))):
+        if not self._failed_handoff_profile(target):
             return False
         _, body = self._native(target['handle'], target['scope'])
-        return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'
+        return self._handoff_values(target, body)[1]
 
     def observe_target(self, target, *, operation_key, native_operation=None,
                        observation_context=None):

@@ -1,0 +1,12 @@
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -581,7 +581,8 @@
+         _section(parts, role.capitalize() + " source observation identity", _table(
+             ("Meaning", "Source definition"), (("physical observation", label(metadata.get("physical_observation_ref"))),)))
+         _section(parts, role.capitalize() + " reported uncertainty meaning", _values(_pick(metadata.get("uncertainty", {}),
+-            ("statistic", "canonical_unit", "repetition_basis", "estimate_basis", "unavailable_reason"))))
++            ("statistic", "canonical_unit", "repetition_basis", "estimate_basis", "unavailable_reason",
++             "count_reading_status", "count_unavailable_reason", "count_notation", "count_relation", "count_approximate"))))
+         requested = next((r.get(role, {}).get("uncertainty_values", {}) for r in rows
+             if r.get("component") == role + "_parameter"), None)
+         if requested is not None:

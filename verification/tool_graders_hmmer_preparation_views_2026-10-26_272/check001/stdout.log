@@ -1,0 +1,228 @@
+......FFF.....FF.......FFF............................F..                [100%]
+=================================== FAILURES ===================================
+__ test_every_mode_projects_every_declared_scalar_and_check[hmmconvert-ascii] __
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1247: in walk
+    reference(child)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1237: in reference
+    _error("input_record_reference_unknown")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_record_reference_unknown
+_ test_every_mode_projects_every_declared_scalar_and_check[hmmconvert-binary] __
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1247: in walk
+    reference(child)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1237: in reference
+    _error("input_record_reference_unknown")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_record_reference_unknown
+_ test_every_mode_projects_every_declared_scalar_and_check[hmmconvert-legacy_hmmer2] _
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1247: in walk
+    reference(child)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1237: in reference
+    _error("input_record_reference_unknown")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_record_reference_unknown
+_ test_every_mode_projects_every_declared_scalar_and_check[hmmfetch-single_key] _
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1353: in project_preparation_result
+    saved = _Saved(grading, occurrences)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:726: in __init__
+    self.add_record(key, row, self.row_occurrence(key, kind, row))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:748: in row_occurrence
+    oid = row.get("occurrence_id") or row.get("locator", {}).get("occurrence_id")
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+_ test_every_mode_projects_every_declared_scalar_and_check[hmmfetch-key_file] __
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1247: in walk
+    reference(child)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1237: in reference
+    _error("input_record_reference_unknown")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_record_reference_unknown
+_ test_every_mode_projects_every_declared_scalar_and_check[makehmmerdb-build] __
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1268: in walk
+    reference(value)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1233: in reference
+    reference(key, occurrence=True)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1224: in reference
+    _error("input_occurrence_relationship_invalid")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_occurrence_relationship_invalid
+_ test_every_mode_projects_every_declared_scalar_and_check[hmmerfm-exactmatch-locations] _
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1268: in walk
+    reference(value)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1233: in reference
+    reference(key, occurrence=True)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1224: in reference
+    _error("input_occurrence_relationship_invalid")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_occurrence_relationship_invalid
+_ test_every_mode_projects_every_declared_scalar_and_check[hmmerfm-exactmatch-count_only] _
+../../../tests/test_hmmer_preparation_result_views.py:63: in test_every_mode_projects_every_declared_scalar_and_check
+    result = project(grading, occurrences, selected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1268: in walk
+    reference(value)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1233: in reference
+    reference(key, occurrence=True)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1224: in reference
+    _error("input_occurrence_relationship_invalid")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_occurrence_relationship_invalid
+_________ test_projection_forbids_all_io_parsing_calculation_and_store _________
+../../../tests/test_hmmer_preparation_result_views.py:251: in test_projection_forbids_all_io_parsing_calculation_and_store
+    assert project(grading, occurrences, selection(quantities=list(entry["quantities"]), checks=entry["checks"]))["rows"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../tests/test_hmmer_preparation_result_views.py:49: in project
+    return views.project_preparation_result(grading, selector=selector, source_ref="source:original", occurrences=occurrences)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1385: in project_preparation_result
+    checks = saved.matching_checks(row, key, kind, collection, projection["checks"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1209: in matching_checks
+    oids = self.input_occurrences(check["inputs"], allowed_keys, allowed_oids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1271: in input_occurrences
+    walk(inputs)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1241: in walk
+    walk(child, field)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1247: in walk
+    reference(child)
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:1237: in reference
+    _error("input_record_reference_unknown")
+../../../gene_annotation_episode/hmmer_preparation_result_views.py:42: in _error
+    raise ContractError("native_hmmer_preparation_projection_" + code)
+E   gene_annotation_episode.domain.ContractError: native_hmmer_preparation_projection_input_record_reference_unknown
+=========================== short test summary info ============================
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[hmmconvert-ascii]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[hmmconvert-binary]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[hmmconvert-legacy_hmmer2]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[hmmfetch-single_key]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[hmmfetch-key_file]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[makehmmerdb-build]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[hmmerfm-exactmatch-locations]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_every_mode_projects_every_declared_scalar_and_check[hmmerfm-exactmatch-count_only]
+FAILED ../../../tests/test_hmmer_preparation_result_views.py::test_projection_forbids_all_io_parsing_calculation_and_store
+9 failed, 48 passed in 5.12s

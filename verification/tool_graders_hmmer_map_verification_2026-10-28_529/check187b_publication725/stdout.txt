@@ -1,0 +1,151 @@
+F...F...........FFFFFFFFFFFFF                                            [100%]
+=================================== FAILURES ===================================
+__________ test_input_source_is_real_immutable_noncyclic_and_detached __________
+source_snapshot/tests/test_restriction_mapping_publication_725.py:77: in test_input_source_is_real_immutable_noncyclic_and_detached
+    assert result["witness"]["sequence"] == "aCGTGAATTCGGATCC"
+E   AssertionError: assert 'ACGTGAATTCGGATCC' == 'aCGTGAATTCGGATCC'
+E     
+E     - aCGTGAATTCGGATCC
+E     ? ^
+E     + ACGTGAATTCGGATCC
+E     ? ^
+___ test_input_rejects_wrong_arguments_scope_and_strict_values[wrong_scope] ____
+source_snapshot/tests/test_restriction_mapping_publication_725.py:140: in test_input_rejects_wrong_arguments_scope_and_strict_values
+    with pytest.raises((ContractError, ValueError), match="restriction_"):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'restriction_'
+E     Actual message: 'unknown_or_empty_scope'
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[missing_mapping] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[malformed_mapping] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[symlink_mapping] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[missing_native] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[malformed_manifest] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[manifest_path] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[digest_conflict] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[software_conflict] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[catalog_conflict] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[native_binding] _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:253: in test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back
+    retained = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_____ test_original_job_publishes_complete_bytes_once_without719_or_native _____
+source_snapshot/tests/test_restriction_mapping_publication_725.py:289: in test_original_job_publishes_complete_bytes_once_without719_or_native
+    read = read_published_restriction_result(store, outcome["result"]["source_ref"], scope=selector["reservation_arguments"]["scope"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_saved_reads_allow_store_io_only_and_preserve_original_without_new_input _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:332: in test_saved_reads_allow_store_io_only_and_preserve_original_without_new_input
+    retained = read_published_restriction_result(store, source_ref, scope=selector["reservation_arguments"]["scope"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+_ test_published_result_rejects_wrong_scope_forged_source_and_mutated_artifact _
+source_snapshot/tests/test_restriction_mapping_publication_725.py:343: in test_published_result_rejects_wrong_scope_forged_source_and_mutated_artifact
+    read = read_published_restriction_result(store, state["published_source_ref"], scope=scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:408: in read_published_restriction_result
+    _require(source.get("parent_source_refs") == parents and source.get("operand_refs") == [bound["witness"]["sequence_ref"]]
+source_snapshot/gene_annotation_episode/restriction_mapping_publication.py:26: in _require
+    raise ContractError("restriction_" + code)
+E   gene_annotation_episode.domain.ContractError: restriction_source_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_input_source_is_real_immutable_noncyclic_and_detached
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_input_rejects_wrong_arguments_scope_and_strict_values[wrong_scope]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[missing_mapping]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[malformed_mapping]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[symlink_mapping]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[missing_native]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[malformed_manifest]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[manifest_path]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[digest_conflict]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[software_conflict]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[catalog_conflict]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_closed_job_engineering_partial_capture_is_preserved_and_rolled_back[native_binding]
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_original_job_publishes_complete_bytes_once_without719_or_native
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_saved_reads_allow_store_io_only_and_preserve_original_without_new_input
+FAILED source_snapshot/tests/test_restriction_mapping_publication_725.py::test_published_result_rejects_wrong_scope_forged_source_and_mutated_artifact
+15 failed, 14 passed in 40.45s

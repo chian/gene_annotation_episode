@@ -1,0 +1,11 @@
+........................................................................ [ 28%]
+........................................................................ [ 56%]
+........................................................................ [ 84%]
+........................................                                 [100%]
+=============================== warnings summary ===============================
+tests/test_fluorescence_preparation.py::test_native_nonfinite_preparation_stays_invalid_with_raw_retained
+  /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check044_fluorescence_preparation_reports_current/dependencies/flowio/flowdata.py:728: RuntimeWarning: overflow encountered in power
+    tmp_events[:, chan_idx] = (10 ** (chan_decades * tmp_events[:, chan_idx] / chan_range)) * chan_log0
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+256 passed, 1 warning in 2.82s

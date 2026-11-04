@@ -1,0 +1,785 @@
+{
+  "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+  "form": {
+    "completed": true,
+    "detail": [
+      {
+        "field": "bvbrc_alignment_field:analysis/sites",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": [
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment",
+            "column_0based": 1,
+            "eligible_count": 3,
+            "internal_gap_count": 1,
+            "literal_entropy_bits": 0.9182958340544896,
+            "native_score_recalculated": 92.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "A",
+            "terminal_gap_excluded_count": 1
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment",
+            "column_0based": 2,
+            "eligible_count": 4,
+            "internal_gap_count": 0,
+            "literal_entropy_bits": 0.8112781244591328,
+            "native_score_recalculated": 81.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "C",
+            "terminal_gap_excluded_count": 0
+          }
+        ]
+      }
+    ],
+    "missing": [
+      {
+        "field": "bvbrc_alignment_field:%40requirements/missing",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": [
+          {
+            "kind": "scientific_metadata",
+            "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven",
+            "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+            "role_ref": "bvbrc_alignment_role:%40requirements/run",
+            "source_refs": []
+          }
+        ]
+      }
+    ],
+    "numbers": [
+      {
+        "field": "bvbrc_alignment_field:analysis/cells",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_cell_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "characters",
+          "value": 28
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/entropy",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 3,
+          "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+          "numerator": null,
+          "origin": "calculated",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "bits",
+          "value": 0.9182958340544896
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/gaps",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": 28,
+          "method_ref": "bvbrc_alignment_method:analysis/gap_cell_fraction",
+          "numerator": 6,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "fraction",
+          "value": 0.21428571428571427
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/members",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_row_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "rows",
+          "value": 4
+        }
+      },
+      {
+        "field": "bvbrc_alignment_field:analysis/native_score",
+        "source_ref": "source_88af3848dbab8e698365e66e",
+        "value": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "native_observation",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "hundredths_of_bit",
+          "value": 92.0
+        }
+      }
+    ],
+    "references": [
+      "source_ea50266648e40f2edf6af55d",
+      "source_4afb953409b1f52bfd184397",
+      "source_88af3848dbab8e698365e66e"
+    ],
+    "yield": {
+      "completed_actions": 6,
+      "continuation_cost": 0.1,
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "stop_requested": true
+    }
+  },
+  "schema": {
+    "additionalProperties": false,
+    "properties": {
+      "completed": {
+        "type": "boolean",
+        "x-source": "execution_completed"
+      },
+      "detail": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "bvbrc_alignment_field"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            },
+            "value": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "alignment_ref": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_alignment_alignment"
+                  },
+                  "column_0based": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "eligible_count": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "internal_gap_count": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "literal_entropy_bits": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "native_score_recalculated": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "population_ref": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_alignment_population"
+                  },
+                  "requirement_refs": {
+                    "items": {
+                      "format": "identifier",
+                      "type": "string",
+                      "x-reference-namespace": "bvbrc_alignment_requirement"
+                    },
+                    "minItems": 0,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "score_residual": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "strict_majority_consensus": {
+                    "format": "alignment_symbol",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "terminal_gap_excluded_count": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "alignment_ref",
+                  "population_ref",
+                  "column_0based",
+                  "eligible_count",
+                  "internal_gap_count",
+                  "terminal_gap_excluded_count",
+                  "literal_entropy_bits",
+                  "native_score_recalculated",
+                  "score_residual",
+                  "strict_majority_consensus",
+                  "requirement_refs"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": [
+                "array",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "source_ref",
+            "field",
+            "value"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "bvbrc_alignment_msa_sites"
+      },
+      "missing": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "bvbrc_alignment_field"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            },
+            "value": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "definition",
+                      "input_metadata",
+                      "input_bytes",
+                      "original_task",
+                      "task_manifest",
+                      "output_metadata",
+                      "output_bytes",
+                      "byte_version_evidence",
+                      "scientific_metadata",
+                      "parser_binding"
+                    ],
+                    "type": "string"
+                  },
+                  "reason_ref": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_alignment_reason"
+                  },
+                  "requirement_ref": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_alignment_requirement"
+                  },
+                  "role_ref": {
+                    "format": "identifier",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "x-reference-namespace": "bvbrc_alignment_role"
+                  },
+                  "source_refs": {
+                    "items": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "source"
+                    },
+                    "minItems": 0,
+                    "type": "array",
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "requirement_ref",
+                  "kind",
+                  "role_ref",
+                  "source_refs",
+                  "reason_ref"
+                ],
+                "type": "object"
+              },
+              "minItems": 0,
+              "type": "array"
+            }
+          },
+          "required": [
+            "source_ref",
+            "field",
+            "value"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "bvbrc_alignment_requirements"
+      },
+      "numbers": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "bvbrc_alignment_field"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            },
+            "value": {
+              "additionalProperties": false,
+              "properties": {
+                "denominator": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "method_ref": {
+                  "format": "identifier",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "bvbrc_alignment_method"
+                },
+                "numerator": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "origin": {
+                  "enum": [
+                    "native_observation",
+                    "calculated",
+                    "fitted",
+                    "derived",
+                    "native_observed",
+                    "native_fitted"
+                  ],
+                  "type": "string"
+                },
+                "population_ref": {
+                  "format": "identifier",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "bvbrc_alignment_population"
+                },
+                "requirement_refs": {
+                  "items": {
+                    "format": "identifier",
+                    "type": "string",
+                    "x-reference-namespace": "bvbrc_alignment_requirement"
+                  },
+                  "minItems": 0,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "state": {
+                  "enum": [
+                    "available",
+                    "missing",
+                    "not_measured",
+                    "failed",
+                    "truncated",
+                    "incompatible"
+                  ],
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "rows",
+                    "columns",
+                    "characters",
+                    "positions",
+                    "sequences",
+                    "observations",
+                    "members",
+                    "taxa",
+                    "pairs",
+                    "tips",
+                    "nodes",
+                    "edges",
+                    "splits",
+                    "fraction",
+                    "signed_fraction",
+                    "bits",
+                    "hundredths_of_bit",
+                    "pseudocount_per_cell",
+                    "augmented_observations",
+                    "expected_observations",
+                    "cells",
+                    "chi_square",
+                    "degrees_of_freedom",
+                    "probability",
+                    "natural_log_probability",
+                    "expected_substitutions_per_model_site",
+                    "joint_mixed_partition_model_site",
+                    "native_unknown",
+                    "percent",
+                    "native_statistic",
+                    "nucleotides",
+                    "nucleotide_placements"
+                  ],
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "value",
+                "state",
+                "unit",
+                "origin",
+                "method_ref",
+                "population_ref",
+                "numerator",
+                "denominator",
+                "requirement_refs"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "source_ref",
+            "field",
+            "value"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "bvbrc_alignment_measurements"
+      },
+      "references": {
+        "items": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "execution_result"
+        },
+        "type": "array",
+        "uniqueItems": true,
+        "x-source": "execution_result_refs"
+      },
+      "yield": {
+        "additionalProperties": false,
+        "properties": {
+          "completed_actions": {
+            "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "continuation_cost": {
+            "description": "The actual child's decision threshold in its configured controller units.",
+            "minimum": 0,
+            "type": "number"
+          },
+          "expected_next_gain": {
+            "additionalProperties": false,
+            "properties": {
+              "alpha": {
+                "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                "type": "number"
+              },
+              "lower": {
+                "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                "type": "number"
+              },
+              "status_code": {
+                "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                "enum": [
+                  0,
+                  -1,
+                  -2
+                ],
+                "type": "integer"
+              },
+              "uncertainty_code": {
+                "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2
+                ],
+                "type": "integer"
+              },
+              "upper": {
+                "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                "type": "number"
+              },
+              "value": {
+                "description": "The original band point in this child's configured controller units.",
+                "type": "number"
+              }
+            },
+            "required": [
+              "value",
+              "lower",
+              "upper",
+              "status_code",
+              "uncertainty_code",
+              "alpha"
+            ],
+            "type": "object"
+          },
+          "stop_requested": {
+            "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "completed_actions",
+          "expected_next_gain",
+          "continuation_cost",
+          "stop_requested"
+        ],
+        "type": [
+          "object",
+          "null"
+        ],
+        "x-source": "episode_yield"
+      }
+    },
+    "required": [
+      "completed",
+      "references",
+      "yield",
+      "numbers",
+      "missing",
+      "detail"
+    ],
+    "type": "object"
+  },
+  "reference_occurrences": [
+    {
+      "path": "/detail/0/field",
+      "namespace": "bvbrc_alignment_field",
+      "value": "bvbrc_alignment_field:analysis/sites"
+    },
+    {
+      "path": "/detail/0/source_ref",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    },
+    {
+      "path": "/detail/0/value/0/alignment_ref",
+      "namespace": "bvbrc_alignment_alignment",
+      "value": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment"
+    },
+    {
+      "path": "/detail/0/value/0/population_ref",
+      "namespace": "bvbrc_alignment_population",
+      "value": "bvbrc_alignment_population:analysis/whole"
+    },
+    {
+      "path": "/detail/0/value/1/alignment_ref",
+      "namespace": "bvbrc_alignment_alignment",
+      "value": "bvbrc_alignment_alignment:analysis/artifact_b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338%23alignment"
+    },
+    {
+      "path": "/detail/0/value/1/population_ref",
+      "namespace": "bvbrc_alignment_population",
+      "value": "bvbrc_alignment_population:analysis/whole"
+    },
+    {
+      "path": "/missing/0/field",
+      "namespace": "bvbrc_alignment_field",
+      "value": "bvbrc_alignment_field:%40requirements/missing"
+    },
+    {
+      "path": "/missing/0/source_ref",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    },
+    {
+      "path": "/missing/0/value/0/reason_ref",
+      "namespace": "bvbrc_alignment_reason",
+      "value": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven"
+    },
+    {
+      "path": "/missing/0/value/0/requirement_ref",
+      "namespace": "bvbrc_alignment_requirement",
+      "value": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven"
+    },
+    {
+      "path": "/missing/0/value/0/role_ref",
+      "namespace": "bvbrc_alignment_role",
+      "value": "bvbrc_alignment_role:%40requirements/run"
+    },
+    {
+      "path": "/numbers/0/field",
+      "namespace": "bvbrc_alignment_field",
+      "value": "bvbrc_alignment_field:analysis/cells"
+    },
+    {
+      "path": "/numbers/0/source_ref",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    },
+    {
+      "path": "/numbers/0/value/method_ref",
+      "namespace": "bvbrc_alignment_method",
+      "value": "bvbrc_alignment_method:analysis/selected_cell_count"
+    },
+    {
+      "path": "/numbers/0/value/population_ref",
+      "namespace": "bvbrc_alignment_population",
+      "value": "bvbrc_alignment_population:analysis/whole"
+    },
+    {
+      "path": "/numbers/1/field",
+      "namespace": "bvbrc_alignment_field",
+      "value": "bvbrc_alignment_field:analysis/entropy"
+    },
+    {
+      "path": "/numbers/1/source_ref",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    },
+    {
+      "path": "/numbers/1/value/method_ref",
+      "namespace": "bvbrc_alignment_method",
+      "value": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1"
+    },
+    {
+      "path": "/numbers/1/value/population_ref",
+      "namespace": "bvbrc_alignment_population",
+      "value": "bvbrc_alignment_population:analysis/whole"
+    },
+    {
+      "path": "/numbers/2/field",
+      "namespace": "bvbrc_alignment_field",
+      "value": "bvbrc_alignment_field:analysis/gaps"
+    },
+    {
+      "path": "/numbers/2/source_ref",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    },
+    {
+      "path": "/numbers/2/value/method_ref",
+      "namespace": "bvbrc_alignment_method",
+      "value": "bvbrc_alignment_method:analysis/gap_cell_fraction"
+    },
+    {
+      "path": "/numbers/2/value/population_ref",
+      "namespace": "bvbrc_alignment_population",
+      "value": "bvbrc_alignment_population:analysis/whole"
+    },
+    {
+      "path": "/numbers/3/field",
+      "namespace": "bvbrc_alignment_field",
+      "value": "bvbrc_alignment_field:analysis/members"
+    },
+    {
+      "path": "/numbers/3/source_ref",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    },
+    {
+      "path": "/numbers/3/value/method_ref",
+      "namespace": "bvbrc_alignment_method",
+      "value": "bvbrc_alignment_method:analysis/selected_row_count"
+    },
+    {
+      "path": "/numbers/3/value/population_ref",
+      "namespace": "bvbrc_alignment_population",
+      "value": "bvbrc_alignment_population:analysis/whole"
+    },
+    {
+      "path": "/numbers/4/field",
+      "namespace": "bvbrc_alignment_field",
+      "value": "bvbrc_alignment_field:analysis/native_score"
+    },
+    {
+      "path": "/numbers/4/source_ref",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    },
+    {
+      "path": "/numbers/4/value/population_ref",
+      "namespace": "bvbrc_alignment_population",
+      "value": "bvbrc_alignment_population:analysis/whole"
+    },
+    {
+      "path": "/references/0",
+      "namespace": "execution_result",
+      "value": "source_ea50266648e40f2edf6af55d"
+    },
+    {
+      "path": "/references/1",
+      "namespace": "execution_result",
+      "value": "source_4afb953409b1f52bfd184397"
+    },
+    {
+      "path": "/references/2",
+      "namespace": "execution_result",
+      "value": "source_88af3848dbab8e698365e66e"
+    }
+  ],
+  "lookup_count": 33,
+  "unique_namespace_values": 19,
+  "namespace_counts": {
+    "bvbrc_alignment_field": 7,
+    "execution_result": 10,
+    "bvbrc_alignment_alignment": 2,
+    "bvbrc_alignment_population": 7,
+    "bvbrc_alignment_reason": 1,
+    "bvbrc_alignment_requirement": 1,
+    "bvbrc_alignment_role": 1,
+    "bvbrc_alignment_method": 4
+  },
+  "status": "form_saved_admission_still_in_progress"
+}

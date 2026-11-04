@@ -1,0 +1,26 @@
+..............................F....                                      [100%]
+=================================== FAILURES ===================================
+_ test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader __
+source_snapshot/tests/test_flux_balance_resource_registration_707.py:79: in test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader
+    assert family.initialize(context).assignment == state.assignment
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:985: in initialize
+    self._check_parent_inputs(context)
+source_snapshot/gene_annotation_episode/execution_episodes.py:1045: in _check_parent_inputs
+    self._versions(original['immutable_input_versions'], context.scope, context=context,
+source_snapshot/gene_annotation_episode/execution_episodes.py:805: in _versions
+    return validate_execution_input_versions(self, versions, scope, context=context,
+source_snapshot/gene_annotation_episode/execution_input_versions.py:114: in validate_execution_input_versions
+    if owner._protein_reference_access(context, supplied['reference'], None) is False:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:574: in _protein_reference_access
+    record = self.store.get(reference)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_resource_registration_707.py:76: in without_current_source
+    assert ref != f.source, 'host rebound receiving control to current source'
+E   AssertionError: host rebound receiving control to current source
+E   assert 'source_1957c0eca70890db2023ec2a' != 'source_1957c0eca70890db2023ec2a'
+E    +  where 'source_1957c0eca70890db2023ec2a' = namespace(store=<gene_annotation_episode.state.Store object at 0x7cea911c6810>, records=<test_bvbrc_appservice_custody...rs_hmmer_map_verification_2026-10-28_529/check169b_resource707/temporary/pytest/test_resource_initialize_and_r0/work')).source
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_resource_registration_707.py::test_resource_initialize_and_reopen_keep_frozen_sources_and_original_reader
+1 failed, 34 passed in 549.75s (0:09:09)

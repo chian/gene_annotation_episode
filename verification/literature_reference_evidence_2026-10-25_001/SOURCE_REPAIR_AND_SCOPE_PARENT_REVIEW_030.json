@@ -1,0 +1,170 @@
+{
+  "written_utc": "2026-10-26T12:37:36.686671+00:00",
+  "meaning": "Independent read-only operational review of preserved controlled runtime records; no new paper interpretation, acquisition, model choice, replay or scientific credit",
+  "source_manifests": [
+    {
+      "path": "amount_components_027/SOURCE_MANIFEST_002.json",
+      "sha256": "03d9261470442b3bc8122e07c8c43e756017343f4f803379f666e78fefa4b5ee"
+    },
+    {
+      "path": "numeric_range_scope_029/SOURCE_MANIFEST_003.json",
+      "sha256": "e0fb0e173373685e984ba4069473840f3b97afd36dc8f9b2d8b81685670b3eec"
+    },
+    {
+      "path": "witness_repair_feedback_030/SOURCE_MANIFEST_FINAL.json",
+      "sha256": "e8cda147d89f212a368c17323e74a4b72d2e34966abc9d196fa455ee7d5fe92b"
+    }
+  ],
+  "reviewed_owned_files": 20,
+  "current_owned_files_matching_reviewed": 19,
+  "current_shared_divergences": [
+    {
+      "path": "gene_annotation_episode/episode_services.py",
+      "reviewed_sha256": "ce567e9df1e5daac6478681083526f17ea7d47d3bc962997ca56e83ca5d7210f",
+      "current_sha256": "0a68608a28db20a79934dcdc38a548673372cfb8e36fa517c8937ea280fd8588",
+      "resolution": "preserve shared main; reconstruct reviewed snapshot from exact patches"
+    }
+  ],
+  "repair_fixture": {
+    "database_sha256": "d639f8e0b3bacf5ef226af05cd78f59bf8ca2145192284f680aba3ecbd7ff1e3",
+    "integrity": "ok",
+    "counts": {
+      "runtime_actions": 4,
+      "runtime_observations": 3,
+      "runtime_forms": 1,
+      "literature_rate_operations": 1,
+      "literature_rate_source_received": 1
+    },
+    "invalid_actions_with_null_credit": 1,
+    "returned_components": [
+      "rate_difference",
+      "difference_se"
+    ],
+    "cells": [
+      {
+        "component": "rate_difference",
+        "value": 0.009000000000000001,
+        "unit": "umol/min/mg",
+        "unavailable_reason": null,
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      {
+        "component": "difference_se",
+        "value": null,
+        "unit": "umol/min/mg",
+        "unavailable_reason": "dependence_unknown",
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    ],
+    "typed_form_equals_received_subset": true,
+    "original_run_ids": [
+      "run_390c0838b3bd4ca68884b9a52db1717d"
+    ],
+    "preserved_files_verified": 48
+  },
+  "nominal_fixture": {
+    "database_sha256": "30814549bc05e2330e500866bc249c23d64b2b2bacdb58c5541e4fdcff190411",
+    "integrity": "ok",
+    "counts": {
+      "runtime_actions": 3,
+      "runtime_observations": 3,
+      "runtime_forms": 1,
+      "literature_amount_operations": 1,
+      "literature_amount_received": 1
+    },
+    "invalid_actions_with_null_credit": 0,
+    "returned_components": [
+      "numerator_amount",
+      "denominator_amount",
+      "amount_difference",
+      "amount_ratio",
+      "reciprocal_amount_ratio",
+      "conditional_mass_denominator_factor",
+      "amount_ratio_variance"
+    ],
+    "cells": [
+      {
+        "component": "numerator_amount",
+        "value": 8.4,
+        "unit": "uM",
+        "unavailable_reason": null,
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      {
+        "component": "denominator_amount",
+        "value": 8.8,
+        "unit": "uM",
+        "unavailable_reason": null,
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      {
+        "component": "amount_difference",
+        "value": -0.40000000000000036,
+        "unit": "uM",
+        "unavailable_reason": null,
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      {
+        "component": "amount_ratio",
+        "value": 0.9545454545454545,
+        "unit": "dimensionless",
+        "unavailable_reason": null,
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      {
+        "component": "reciprocal_amount_ratio",
+        "value": 1.0476190476190477,
+        "unit": "dimensionless",
+        "unavailable_reason": null,
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      {
+        "component": "conditional_mass_denominator_factor",
+        "value": null,
+        "unit": "dimensionless",
+        "unavailable_reason": "mass_factor_not_applicable",
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      {
+        "component": "amount_ratio_variance",
+        "value": null,
+        "unit": "dimensionless",
+        "unavailable_reason": "amount_covariance_unreported",
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    ],
+    "typed_form_equals_received_subset": true,
+    "original_run_ids": [
+      "run_ddfc427fbbb640c4a25366c5a9b51d84"
+    ]
+  },
+  "read_scope_correction": {
+    "previous_large_nominal_json_read": "truncated; not a complete read",
+    "this_check": "full JSON loaded by program; only operational fields/relationships inspected, not full scientific source packet reread",
+    "previous_multi_file_reads": "some aggregate outputs truncated; no complete-read claim for those outputs",
+    "new_primary_scientific_interpretation": false
+  },
+  "audit_harness_corrections": [
+    "decode explicitly expanded JSON columns and compare rows independent of SQL order",
+    "detect and preserve later shared-file divergence rather than replacing it"
+  ],
+  "full_goal_complete": false
+}

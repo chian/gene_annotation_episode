@@ -1,0 +1,22 @@
+Planning command only. No scientific dispatch or tests occurred.
+
+1. Exact command:
+python /tmp/scientific-context-proposal002-xmmw8Rca/measure_page_counterfactual.py
+Exit127:
+/bin/bash: line 105: python: command not found
+Correction: same stdlib-only script invoked with python3; exit0. No source state had been opened by the failed invocation.
+
+2. Exact command:
+rg -n 'source.read|artifact.read|record.read|material.read|artifact|"record"|def read' gene_annotation_episode/tools.py gene_annotation_episode/tool_configuration.py gene_annotation_episode/state.py | head -100
+rg -n 'def read|source.read|artifact.read|record.read|material.read' gene_annotation_episode/public_tools.py gene_annotation_episode/schemas.py gene_annotation_episode/domain.py
+Exit2 because two guessed source file paths do not exist:
+rg: gene_annotation_episode/public_tools.py: No such file or directory (os error 2)
+rg: gene_annotation_episode/schemas.py: No such file or directory (os error 2)
+Correction: actual source.read catalog/dispatch is in tools.py and implementation in materials.py, inspected directly.
+
+3. Exact command:
+rg -n 'store.path|artifacts|chunk_ref|store.artifact|def artifact_path|def install' gene_annotation_episode/materials_packing.py
+rg -n 'def test_|saved_decision_context' /tmp/gene-annotation-hmmer-api-20261022-004/tests/test_api_execution_runtime.py tests/test_runtime_history.py tests/test_wait_estimation_inputs.py tests/test_episode_receipts.py tests/test_fixed_target_seed.py tests/test_application_execution_binding.py
+Exit2 because guessed test_api_execution_runtime.py does not exist. Correction: rg identified actual test_api_execution_planning_runtime.py and its complete selected test body was read; no test executed.
+
+Analysis correction (no code): an initial warning that long_active_resume required rewriting pending history was withdrawn after complete Fixture ScriptedProvider tracing; its pending call already had the bounded index captured on first dispatch. Existing test stays unchanged and separate has_session transition coverage is proposed. Parent and R were notified.

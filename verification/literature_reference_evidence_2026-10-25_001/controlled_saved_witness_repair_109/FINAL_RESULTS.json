@@ -1,0 +1,132 @@
+{
+  "scope": "Bounded original-source/saved local-witness reconstruction repair; engineering fixtures only",
+  "status": "completed_for_bounded_repair",
+  "fixed_goal_unchanged_sha256": "ba5d7d751400cb8faeeda23ea7bbc8c177ec94e6b83ba4797a805b001f73d70e",
+  "broader_literature_goal_complete": false,
+  "source_changes": [
+    {
+      "path": "gene_annotation_episode/literature_controlled_response_inputs.py",
+      "before_sha256": "df4f3ef608b6d7df4b999fdc42471bee6b6603feb8ae7b87e24e0167af019750",
+      "after_sha256": "f29288a43f948e45ea205e50acd341e8fb6c0e435d59556d02c39a9a6eba241b",
+      "diff_file": "literature_controlled_response_inputs.py.diff"
+    },
+    {
+      "path": "gene_annotation_episode/literature_controlled_response_v3_inputs.py",
+      "before_sha256": "33c0b15e8271403f3e8a963c774c7e029bca00b0a1ba78d0c392ff9fcf301f29",
+      "after_sha256": "eee6643ac2b822226176116b8f788baf300e74fa1f9e8194fad9328e099df8c0",
+      "diff_file": "literature_controlled_response_v3_inputs.py.diff"
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_controlled_v3_partial_design_078/build_declarations_007.py",
+      "before_sha256": "c810887b4ddaee3b29ed7365b9fbf07e579efd93e4901386c45490f75e9c9db8",
+      "after_sha256": "400a1ac418dfa1297c018a77711bf90e52b8eebb1afe34841242a261b459391d",
+      "diff_file": "build_declarations_007.py.diff"
+    }
+  ],
+  "new_test_file": "tests/test_literature_controlled_response_saved_local_witnesses.py",
+  "new_test_sha256": "cd8a268087b7fdf0a65b732a20d7a29729b8364565342f2f9854ed00e63f670b",
+  "tests": {
+    "focused": {
+      "passed": 19,
+      "elapsed_seconds": 118.7,
+      "exit_code": 0
+    },
+    "regression": {
+      "passed": 750,
+      "elapsed_seconds": 610.7,
+      "exit_code": 0,
+      "existing_suites": 15
+    },
+    "logs": {
+      "FOCUSED_STDOUT_001.txt": {
+        "sha256": "cfceac75b6410afee85f5e3a90a2fdf7794b19acf1972272ccb360969bc0c799",
+        "terminal_summary": "19 passed in 118.70s (0:01:58)"
+      },
+      "REGRESSION_STDOUT_001.txt": {
+        "sha256": "7605172eff6fab483f363035b6c845f31a5a6cc0f01f8eaae0daabf67eacad2a",
+        "terminal_summary": "750 passed in 610.70s (0:10:10)"
+      }
+    }
+  },
+  "schema_verification": {
+    "all_seven_builder_schemas_exact": {
+      "SELECTION_SCHEMA_V3_007": true,
+      "EXTRACTION_SCHEMA_V3_007": true,
+      "LOCAL_INPUT_SCHEMA_007": true,
+      "LOCAL_OUTPUT_SCHEMA_007": true,
+      "POPULATION_SCHEMA_V3_007": true,
+      "NATIVE_FACT_SCHEMA_V3_007": true,
+      "NATIVE_RETURN_SCHEMA_V3_007": true
+    },
+    "all_meta_valid": true,
+    "unchanged_schemas": {
+      "SELECTION_SCHEMA_V3_007": true,
+      "EXTRACTION_SCHEMA_V3_007": false,
+      "LOCAL_INPUT_SCHEMA_007": true,
+      "LOCAL_OUTPUT_SCHEMA_007": true,
+      "POPULATION_SCHEMA_V3_007": true,
+      "NATIVE_FACT_SCHEMA_V3_007": true,
+      "NATIVE_RETURN_SCHEMA_V3_007": true
+    },
+    "api_unchanged": true,
+    "v1_selection_unchanged": true,
+    "v2_selection_unchanged": true,
+    "v2_extraction_unchanged": true,
+    "implementation_generation": {
+      "literature_assay_inputs.py": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+      "literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+      "literature_partner_source_fields.py": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+      "literature_partner_defined_units.py": "cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca",
+      "literature_kinetic_inputs.py": "78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960",
+      "literature_binding_visual_inputs.py": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
+      "literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
+      "literature_controlled_response_calculations.py": "a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023",
+      "literature_controlled_response_inputs.py": "f29288a43f948e45ea205e50acd341e8fb6c0e435d59556d02c39a9a6eba241b",
+      "literature_controlled_response_v2_inputs.py": "5719084bb3e4eac580498f2efa4f58194d4fccf2797140722e55af1920d61b59",
+      "literature_controlled_response_figure_inputs.py": "7d343aa29f15eb27d0db56ab184de102939c9ff0c8d4c30570a12dcc1ffa1b1d",
+      "literature_controlled_response_owner_calculations.py": "88399f65c495ca6800daf2a64237c7cfe0be481e349424ad1c03e1509969a546",
+      "literature_controlled_response_v3_inputs.py": "eee6643ac2b822226176116b8f788baf300e74fa1f9e8194fad9328e099df8c0",
+      "literature_controlled_response_local_calculations.py": "7c4f70b121db634d8aad6d90b75a7bd1bc31108335de560cb79f09e32b3dd89a"
+    }
+  },
+  "legacy_science_comparison": {
+    "v1_cases": 2,
+    "v1_complete_output_and_source_calls_identical": true,
+    "v2_cases": 14,
+    "v2_scientific_output_and_source_calls_identical": true,
+    "v2_only_serialized_difference": "implementation_dependencies.expected_module_fingerprints.literature_controlled_response_inputs.py",
+    "both_versions_validate_original_own_outputs": true,
+    "old_descriptors_not_migrated": true
+  },
+  "original095_preservation": {
+    "manifest": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/controlled_episode_integration_095/COHERENT_CODE_MANIFEST_001.json",
+    "checked_entries": 785,
+    "changed": []
+  },
+  "coherent_pin": {
+    "module_count": 659,
+    "manifest": "COHERENT_PIN_001.json",
+    "no_claim_all_modules_imported": true
+  },
+  "original_case": {
+    "unknown_global_variance_retained": true,
+    "local_difference": 0.00395,
+    "local_variance": 4.5e-07,
+    "local_variance_unit": "(umol/min)^2",
+    "global_contrast_variance": null,
+    "global_effective_model": "none",
+    "original_scientific_fields_unchanged_except_new_implementation_fingerprints": true
+  },
+  "compatibility_limits": [
+    "New live reads always emit local_pair_extractions, including an empty array for no nominated pairs.",
+    "Optional absence supports only the older shape where originally retained actual witnesses suffice; missing unique witnesses still fail without acquisition.",
+    "Removing the entire optional field can pass standalone consistency when all witnesses remain elsewhere; this is not native custody authentication.",
+    "Old implementation fingerprints/native descriptors are not rewritten or migrated.",
+    "v1/v2 scientific meaning, calculation, schemas, source IO and errors are unchanged; v2 serialized dependency fingerprint changes for the changed shared module."
+  ],
+  "no_governance_or_scoring_changes": true,
+  "paper_reads": 0,
+  "live_model_calls": 0,
+  "native_compbio_jobs": 0,
+  "no_running109_processes": true
+}

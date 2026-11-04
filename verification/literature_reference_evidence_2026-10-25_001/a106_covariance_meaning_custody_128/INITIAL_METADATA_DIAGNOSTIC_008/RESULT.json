@@ -1,0 +1,46 @@
+{
+  "first_initialization_added": [
+    {
+      "type": "index",
+      "name": "sqlite_autoindex_literature_rate_operations_1",
+      "tbl_name": "literature_rate_operations",
+      "sql": null
+    },
+    {
+      "type": "index",
+      "name": "sqlite_autoindex_literature_rate_received_1",
+      "tbl_name": "literature_rate_received",
+      "sql": null
+    },
+    {
+      "type": "index",
+      "name": "sqlite_autoindex_literature_rate_source_received_1",
+      "tbl_name": "literature_rate_source_received",
+      "sql": null
+    },
+    {
+      "type": "table",
+      "name": "literature_rate_operations",
+      "tbl_name": "literature_rate_operations",
+      "sql": "CREATE TABLE literature_rate_operations(\n            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n            signature TEXT NOT NULL, outcome TEXT NOT NULL,\n            PRIMARY KEY(run_id,episode_id,operation_key))"
+    },
+    {
+      "type": "table",
+      "name": "literature_rate_received",
+      "tbl_name": "literature_rate_received",
+      "sql": "CREATE TABLE literature_rate_received(\n            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n            cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))"
+    },
+    {
+      "type": "table",
+      "name": "literature_rate_source_received",
+      "tbl_name": "literature_rate_source_received",
+      "sql": "CREATE TABLE literature_rate_source_received(\n            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,\n            cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))"
+    }
+  ],
+  "first_initialization_removed": [],
+  "reconstruction_schema_equal": true,
+  "rows_before": 14,
+  "rows_after": 14,
+  "code_pin": "pin_007 production generation, no code modifications",
+  "path": "registry.initial_decision_context -> LiteratureEpisodes.initial_decision_context -> _native_rate_display_context -> services.literature_rate_repository -> LiteratureRateRepository.__init__; source_projection -> inherited __init__"
+}

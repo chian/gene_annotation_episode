@@ -1,0 +1,74 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[alignment] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:307: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_alignment_returns.py:253: in _attempt
+    self._require(self._equal(selected.get("scope"), child.scope)
+source_snapshot/gene_annotation_episode/episode_return_records.py:79: in _require
+    raise ValueError(self.failure_prefix + code)
+E   ValueError: bvbrc_alignment_return_original_commission_conflict
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[genome_alignment] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:307: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_genome_alignment_returns.py:266: in _attempt
+    self._require(self._equal(selected.get('scope'), child.scope)
+source_snapshot/gene_annotation_episode/episode_return_records.py:79: in _require
+    raise ValueError(self.failure_prefix + code)
+E   ValueError: bvbrc_genome_alignment_return_original_commission_conflict
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[homology] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:307: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_homology_returns.py:232: in _attempt
+    self._require(self._equal(selected.get("scope"), child.scope)
+source_snapshot/gene_annotation_episode/episode_return_records.py:79: in _require
+    raise ValueError(self.failure_prefix + code)
+E   ValueError: bvbrc_homology_return_original_commission_conflict
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[phylogeny] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:307: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_phylogeny_returns.py:538: in _attempt
+    self._require(self._equal(selected.get("scope"), child.scope)
+source_snapshot/gene_annotation_episode/episode_return_records.py:79: in _require
+    raise ValueError(self.failure_prefix + code)
+E   ValueError: bvbrc_phylogeny_return_original_commission_conflict
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[proteome] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:307: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_proteome_returns.py:358: in _attempt
+    self._require(self._equal(selected.get('scope'), child.scope)
+source_snapshot/gene_annotation_episode/bvbrc_proteome_returns.py:64: in _require
+    raise ProteomeReturnError(code, path)
+E   gene_annotation_episode.bvbrc_proteome_returns.ProteomeReturnError: bvbrc_proteome_return_original_commission_conflict
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[comparative_systems] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:307: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_comparative_systems_returns.py:339: in _attempt
+    self._require(self._equal(selected.get('scope'), child.scope)
+source_snapshot/gene_annotation_episode/bvbrc_comparative_systems_returns.py:58: in _require
+    raise ComparativeSystemsReturnError(code, path)
+E   gene_annotation_episode.bvbrc_comparative_systems_returns.ComparativeSystemsReturnError: bvbrc_comparative_systems_return_original_commission_conflict
+_ test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[fastqutils] _
+source_snapshot/tests/test_bvbrc_compact_family_returns.py:307: in test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads
+    assert f.host._attempt(f.saved.root, 0)[1:] == original[:2]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/bvbrc_fastqutils_returns.py:402: in _attempt
+    self._require(self._equal(selected.get('scope'), child.scope)
+source_snapshot/gene_annotation_episode/bvbrc_fastqutils_returns.py:47: in _require
+    raise FastqUtilsReturnError(code, path)
+E   gene_annotation_episode.bvbrc_fastqutils_returns.FastqUtilsReturnError: bvbrc_fastqutils_return_original_commission_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[alignment]
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[genome_alignment]
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[homology]
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[phylogeny]
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[proteome]
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[comparative_systems]
+FAILED source_snapshot/tests/test_bvbrc_compact_family_returns.py::test_nonempty_original_numerical_rows_survive_compact_and_repeated_contract_reads[fastqutils]
+7 failed in 81.61s (0:01:21)

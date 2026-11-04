@@ -1,0 +1,183 @@
+........................................................................ [  5%]
+........................................................................ [ 11%]
+........................................................................ [ 17%]
+...................F.................................................... [ 23%]
+........................................................................ [ 29%]
+........................................................................ [ 35%]
+........................................................................ [ 41%]
+........................................................................ [ 47%]
+........................................................................ [ 53%]
+........................................................................ [ 59%]
+........................................................................ [ 65%]
+....................................................................F... [ 70%]
+..F......FFFF........................................................... [ 76%]
+........................................................................ [ 82%]
+........................................................................ [ 88%]
+........................................................................ [ 94%]
+..............................................F..................        [100%]
+=================================== FAILURES ===================================
+_ test_primary_original_xml_through_scripted_child_parent_has_no_synthetic_observations _
+tests/test_literature_quantity_integration.py:134: in test_primary_original_xml_through_scripted_child_parent_has_no_synthetic_observations
+    store, context, args = setup_store(tmp_path / 'state', primary=True)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_quantity_integration.py:39: in setup_store
+    artifact = store.artifact(PRIMARY.read_bytes() if primary else SYNTHETIC, 'application/xml')
+                              ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_csid/PMC6265302_original.xml'
+_ test_native_selected_and_saved_only_reconstruction_without_prepared_json[primary_native] _
+tests/test_literature_partner_native_integration.py:164: in test_native_selected_and_saved_only_reconstruction_without_prepared_json
+    store, context, args = setup_case(tmp_path, case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_partner_native_integration.py:44: in setup_case
+    raw = (PRIMARY/'PUBLISHER_RESULTS_RENDERING_001.txt').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_pdx_partner_015/PUBLISHER_RESULTS_RENDERING_001.txt'
+_ test_native_ordinary_typed_parent_receives_actual_source_bindings[primary_native] _
+tests/test_literature_partner_native_integration.py:219: in test_native_ordinary_typed_parent_receives_actual_source_bindings
+    store,context,args = setup_case(tmp_path/'state',case=case)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_partner_native_integration.py:44: in setup_case
+    raw = (PRIMARY/'PUBLISHER_RESULTS_RENDERING_001.txt').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_pdx_partner_015/PUBLISHER_RESULTS_RENDERING_001.txt'
+_ test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe[nadh] _
+tests/test_literature_partner_defined_integration.py:158: in test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe
+    store, context, args = setup_case(tmp_path, case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_partner_defined_integration.py:39: in setup_case
+    html = (PRIMARY / 'PRIMARY_PMC_001.html').read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_partner_matched_017_research/PRIMARY_PMC_001.html'
+_ test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe[h2] _
+tests/test_literature_partner_defined_integration.py:158: in test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe
+    store, context, args = setup_case(tmp_path, case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_partner_defined_integration.py:39: in setup_case
+    html = (PRIMARY / 'PRIMARY_PMC_001.html').read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_partner_matched_017_research/PRIMARY_PMC_001.html'
+____ test_primary_defined_units_reach_the_actual_ordinary_parent_form[nadh] ____
+tests/test_literature_partner_defined_integration.py:176: in test_primary_defined_units_reach_the_actual_ordinary_parent_form
+    store, context, args = setup_case(tmp_path / 'state', case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_partner_defined_integration.py:39: in setup_case
+    html = (PRIMARY / 'PRIMARY_PMC_001.html').read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_partner_matched_017_research/PRIMARY_PMC_001.html'
+_____ test_primary_defined_units_reach_the_actual_ordinary_parent_form[h2] _____
+tests/test_literature_partner_defined_integration.py:176: in test_primary_defined_units_reach_the_actual_ordinary_parent_form
+    store, context, args = setup_case(tmp_path / 'state', case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_partner_defined_integration.py:39: in setup_case
+    html = (PRIMARY / 'PRIMARY_PMC_001.html').read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_configured_return_scientific_review_155/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_partner_matched_017_research/PRIMARY_PMC_001.html'
+_ test_transport_task_and_conditional_meaning_survive_actual_provider_transport _
+tests/test_literature_transport_integration.py:184: in test_transport_task_and_conditional_meaning_survive_actual_provider_transport
+    assert 'transport_curve_'+'a'*64 not in text
+E   AssertionError: assert 'transport_c...aaaaaaaaaaaa' not in 'TASK\n\nEva...c_response |'
+E     
+E     'transport_curve_aa...aaaaaaaaaaaaaaaaaaa' is contained here:
+E       accession=transport_curve_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; label=the source whole-cell kinetic curve; source identity=Source handle 1 | no selected text excerpt |
+E       
+E       Local scientific links
+E       
+E       Record and excerpt labels identify this display; they do not establish independent experiments....
+E     
+E     ...Full output truncated (24 lines hidden), use '-vv' to show
+=========================== short test summary info ============================
+FAILED tests/test_literature_quantity_integration.py::test_primary_original_xml_through_scripted_child_parent_has_no_synthetic_observations
+FAILED tests/test_literature_partner_native_integration.py::test_native_selected_and_saved_only_reconstruction_without_prepared_json[primary_native]
+FAILED tests/test_literature_partner_native_integration.py::test_native_ordinary_typed_parent_receives_actual_source_bindings[primary_native]
+FAILED tests/test_literature_partner_defined_integration.py::test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe[nadh]
+FAILED tests/test_literature_partner_defined_integration.py::test_primary_defined_units_are_selected_and_saved_without_a_numeric_recipe[h2]
+FAILED tests/test_literature_partner_defined_integration.py::test_primary_defined_units_reach_the_actual_ordinary_parent_form[nadh]
+FAILED tests/test_literature_partner_defined_integration.py::test_primary_defined_units_reach_the_actual_ordinary_parent_form[h2]
+FAILED tests/test_literature_transport_integration.py::test_transport_task_and_conditional_meaning_survive_actual_provider_transport
+8 failed, 1209 passed in 1796.52s (0:29:56)
+{
+  "pytest_exit_code": 1,
+  "elapsed_seconds": 1800.7867170289392,
+  "selection": [
+    "tests/test_literature_missing_input_semantics_156.py",
+    "tests/test_literature_structural_scalar_contexts.py",
+    "tests/test_literature_activity_calculations.py",
+    "tests/test_literature_assay_inputs.py",
+    "tests/test_literature_assay_integration.py",
+    "tests/test_literature_quantity_integration.py",
+    "tests/test_literature_source_locations.py",
+    "tests/test_literature_rate_storage.py",
+    "tests/test_literature_rate_native_inputs.py",
+    "tests/test_literature_rate_native_storage.py",
+    "tests/test_literature_rate_native_integration.py",
+    "tests/test_literature_rate_meaning_delivery_143.py",
+    "tests/test_literature_partner_source_fields.py",
+    "tests/test_literature_partner_defined_units.py",
+    "tests/test_literature_partner_defined_inputs.py",
+    "tests/test_literature_numeric_range_scope.py",
+    "tests/test_literature_partner_native_inputs.py",
+    "tests/test_literature_partner_native_storage.py",
+    "tests/test_literature_partner_native_integration.py",
+    "tests/test_literature_partner_defined_integration.py",
+    "tests/test_literature_reaction_native_inputs_129.py",
+    "tests/test_literature_reaction_native_integration_129.py",
+    "tests/test_literature_context_native_observations.py",
+    "tests/test_literature_context_native_integration.py",
+    "tests/test_literature_kinetic_inputs.py",
+    "tests/test_literature_optical_inputs.py",
+    "tests/test_a105_native_binding_dependency_142.py",
+    "tests/test_literature_binding_interaction_storage.py",
+    "tests/test_literature_binding_interaction_integration.py",
+    "tests/test_literature_transport_integration.py",
+    "tests/test_literature_active_site_integration.py",
+    "tests/test_a105_partition_time_joined_149.py",
+    "tests/test_communication.py"
+  ],
+  "pinned_file_count": 5240,
+  "changed_pinned_files": [],
+  "imported_module_count": 287,
+  "imports_outside_pin": {},
+  "scope": "Synthetic engineering verification of table scalar reading, missing input semantics, exact historical records, selected typed returns and saved reconstruction. Not scientific assay coverage or A105 adequacy."
+}

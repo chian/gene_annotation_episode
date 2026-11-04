@@ -1,0 +1,260 @@
+
+FILE: gene_annotation_episode/communication.py FUNCTION: _validate_form
+427: def _validate_form(payload, schema, reference_resolver):
+428:     schema = validate_closed_schema(schema)
+429:     payload = plain(payload)
+430:     _finite(payload)
+431:     # A registered native field is a complete original schema document. Its
+432:     # local #/$defs references belong to that document, not the enclosing form.
+433:     # Validate its actual payload first; only the validation copy of the parent
+434:     # uses a placeholder. Original contracts and returned rows remain exact.
+435:     parent_schema = schema
+436:     native = {name: node for name, node in schema["properties"].items()
+437:         if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+438:         or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))}
+439:     if native:
+440:         parent_schema = {**schema, "properties": dict(schema["properties"])}
+441:         for name, node in native.items():
+442:             if isinstance(payload, dict) and name in payload:
+443:                 if str(node.get("x-source", "")).startswith("execution_protein_structure_"):
+444:                     _validate_protein_structure_fact_rows(payload[name], node["x-source"], name)
+445:                 elif str(node.get("x-source", "")).startswith("genomic_overlap_"):
+446:                     from .genomic_overlap_return_views import validate_genomic_overlap_fact_values
+447:                     try:
+448:                         validate_genomic_overlap_fact_values(node["x-source"], payload[name])
+449:                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+450:                         raise ReportBoundaryError("Invalid recorded overlap fact", code="invalid_form", field=name) from error
+451:                 elif str(node.get("x-source", "")).startswith("chromatin_interaction_"):
+452:                     from .chromatin_interaction_return_views import validate_chromatin_fact_values
+453:                     try:
+454:                         validate_chromatin_fact_values(node["x-source"], payload[name])
+455:                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+456:                         raise ReportBoundaryError("Invalid recorded chromatin fact", code="invalid_form", field=name) from error
+457:                 elif str(node.get("x-source", "")).startswith("barcode_"):
+458:                     from .barcode_return_views import validate_barcode_fact_values
+459:                     try:
+460:                         validate_barcode_fact_values(node["x-source"], payload[name])
+461:                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+462:                         raise ReportBoundaryError("Invalid recorded barcode fact", code="invalid_form", field=name) from error
+463:                 elif str(node.get("x-source", "")).startswith("expression_nmf_"):
+464:                     from .expression_nmf_return_views import validate_expression_nmf_fact_values
+465:                     try:
+466:                         validate_expression_nmf_fact_values(node["x-source"], payload[name])
+467:                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+468:                         raise ReportBoundaryError("Invalid recorded NMF fact", code="invalid_form", field=name) from error
+469:                 elif str(node.get("x-source", "")).startswith("atac_differential_"):
+470:                     from .atac_differential_return_views import validate_atac_fact_values
+471:                     try:
+472:                         validate_atac_fact_values(node["x-source"], payload[name])
+473:                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+474:                         raise ReportBoundaryError("Invalid recorded ATAC fact", code="invalid_form", field=name) from error
+475:                 errors = list(Draft202012Validator(node).iter_errors(payload[name]))
+476:                 if errors:
+477:                     error = errors[0]
+478:                     field = ".".join((name, *map(str, error.absolute_path)))
+479:                     raise ReportBoundaryError(error.message, code=error.validator, field=field)
+480:             parent_schema["properties"][name] = {}
+481:     errors = list(Draft202012Validator(parent_schema).iter_errors(payload))
+482:     if errors:
+483:         error = errors[0]
+484:         raise ReportBoundaryError(error.message, code=error.validator, field=".".join(map(str, error.absolute_path)))
+485: 
+486:     _validate_form_semantics(payload, schema, reference_resolver)
+487:     return payload
+
+FILE: gene_annotation_episode/communication.py FUNCTION: _validate_form_semantics
+512: def _validate_form_semantics(payload, schema, reference_resolver, *, path="report", resource=None):
+513:     """Visit semantic annotations after Draft validation, within a local resource."""
+514:     def visit(value, node, path, resource=None):
+515:         if value is None or not isinstance(node, dict):
+516:             return
+517:         if (node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+518:                 or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))):
+519:             resource = node
+520:         if resource is not None and "$ref" in node:
+521:             pointer = node["$ref"]
+522:             if not isinstance(pointer, str) or not pointer.startswith("#/$defs/"):
+523:                 raise ReportBoundaryError(f"{path}: external native schema reference", code="invalid_schema", field=path)
+524:             target = resource
+525:             try:
+526:                 for token in pointer[2:].split("/"):
+527:                     target = target[token.replace("~1", "/").replace("~0", "~")]
+528:             except (KeyError, TypeError) as error:
+529:                 raise ReportBoundaryError(f"{path}: unresolved native schema reference", code="invalid_schema", field=path) from error
+530:             visit(value, target, path, resource)
+531:         def applies(branch):
+532:             validator = (Draft202012Validator(resource).evolve(schema=branch)
+533:                 if resource is not None else Draft202012Validator(branch))
+534:             return validator.is_valid(value)
+535:         # The full Draft validator has already checked the payload. Semantic
+536:         # annotations still need every applicable branch as well as base fields;
+537:         # a nullable/tagged branch must not bypass its actual reference resolver.
+538:         for keyword in ("anyOf", "oneOf"):
+539:             for branch in node.get(keyword, []):
+540:                 if applies(branch):
+541:                     visit(value, branch, path, resource)
+542:         for branch in node.get("allOf", []):
+543:             visit(value, branch, path, resource)
+544:         if "if" in node:
+545:             selected = "then" if applies(node["if"]) else "else"
+546:             if selected in node:
+547:                 visit(value, node[selected], path, resource)
+548:         if isinstance(value, dict):
+549:             properties = node.get("properties", {})
+550:             for key, child in value.items():
+551:                 if key in properties:
+552:                     visit(child, properties[key], f"{path}.{key}", resource)
+553:         elif isinstance(value, list):
+554:             if "x-unique-by" in node:
+555:                 seen = set()
+556:                 for i, child in enumerate(value):
+557:                     identity = tuple(child[key] for key in node["x-unique-by"])
+558:                     if identity in seen:
+559:                         raise ReportBoundaryError(f"{path}[{i}]: duplicate recorded identity", code="duplicate_identity", field=f"{path}[{i}]")
+560:                     seen.add(identity)
+561:             prefix = node.get("prefixItems", [])
+562:             for i, child in enumerate(value):
+563:                 if i < len(prefix):
+564:                     visit(child, prefix[i], f"{path}[{i}]", resource)
+565:                 elif "items" in node:
+566:                     visit(child, node["items"], f"{path}[{i}]", resource)
+567:         elif isinstance(value, str):
+568:             kind = node.get("format")
+569:             if kind in REFERENCE_FORMATS:
+570:                 if reference_resolver is None or not reference_resolver(value, node.get("x-reference-namespace")):
+571:                     raise ReportBoundaryError(f"{path}: reference is unavailable at this boundary", code="unknown_reference", field=path)
+572:             elif kind == "unit" and value not in UNITS:
+573:                 raise ReportBoundaryError(f"{path}: unknown unit", code="unknown_unit", field=path)
+574:             elif kind == "mathematical_expression" and not _expression(value):
+575:                 raise ReportBoundaryError(f"{path}: invalid expression", code="invalid_expression", field=path)
+576:             elif kind == "dna_sequence" and not re.fullmatch(r"[ACGTRYSWKMBDHVNacgtryswkmbdhvn]+", value):
+577:                 raise ReportBoundaryError(f"{path}: invalid DNA sequence", code="invalid_sequence", field=path)
+578:             elif kind == "protein_sequence" and not re.fullmatch(r"[ACDEFGHIKLMNPQRSTVWYBXZJUO*]+", value):
+579:                 raise ReportBoundaryError(f"{path}: invalid protein sequence", code="invalid_sequence", field=path)
+580:             elif kind == "alignment_symbol" and not re.fullmatch(r"[!-~]", value):
+581:                 raise ReportBoundaryError(f"{path}: invalid alignment symbol", code="invalid_alignment_symbol", field=path)
+582:             elif kind == "alignment_strand" and value not in {"+", "-", "unknown"}:
+583:                 raise ReportBoundaryError(f"{path}: invalid alignment strand", code="invalid_alignment_strand", field=path)
+584:             elif kind == "structure_identifier" and not re.fullmatch(r"[!-~]+", value):
+585:                 raise ReportBoundaryError(f"{path}: invalid structure identifier", code="invalid_structure_identifier", field=path)
+586:             elif kind == "structure_residue_number" and not re.fullmatch(r"-?[0-9]+", value):
+587:                 raise ReportBoundaryError(f"{path}: invalid structure residue number", code="invalid_structure_residue_number", field=path)
+588:             elif kind == "structure_insertion_code" and value != "" and not re.fullmatch(r"[!-~]+", value):
+589:                 raise ReportBoundaryError(f"{path}: invalid structure insertion code", code="invalid_structure_insertion_code", field=path)
+590:     visit(payload, schema, path, resource)
+
+FILE: gene_annotation_episode/execution_progress.py FUNCTION: describe_execution_target
+71: def describe_execution_target(target):
+72:     """Describe a validated original target without a fresh status/file read."""
+73:     assignment = target['assignment']
+74:     if target['resource_kind'] == 'api':
+75:         service = assignment['service']
+76:         formats = {'ncbi_blast': 'blast_json2', 'uniprot': 'uniprot_json',
+77:                    'bvbrc_data': 'bvbrc_json', 'ebi_hmmer': 'hmmer_json',
+78:                    'bvbrc_minhash': 'bvbrc_minhash_rpc_v1'}
+79:         request = assignment.get('request', {})
+80:         if _appservice_target(target):
+81:             return {'resource_kind': 'api', 'service_or_program': service,
+82:                 'operation': request['required_application_id'],
+83:                 'required_application_id': request['required_application_id'],
+84:                 'request_version': request['version'], 'output_format': None,
+85:                 'submitted_parameters': deepcopy(request['parameters']),
+86:                 'submitted_start_parameters': deepcopy(request['start_parameters']),
+87:                 'selected_observation_schema': deepcopy(_APPSERVICE_OBSERVATION_SCHEMA)}
+88:         if service == 'bvbrc_minhash':
+89:             return {'resource_kind': 'api', 'service_or_program': service,
+90:                 'operation': request['mode'], 'mode': request['mode'],
+91:                 'output_format': formats[service]}
+92:         if service == 'rfam_batch':
+93:             return {'resource_kind': 'api', 'service_or_program': service,
+94:                 'operation': request['mode'], 'request_version': request['version'],
+95:                 'output_format': None, 'available_representations': ['json', 'tblout', 'out']}
+96:         if service == 'bvbrc_data' and request.get('version') == 'bvbrc_data_request_v2':
+97:             return {'resource_kind': 'api', 'service_or_program': service,
+98:                 'operation': request['mode'], 'collection': request['collection'],
+99:                 'mode': request['mode'], 'request_version': request['version'],
+100:                 'request_profile': 'solr_query_solr_json_v1',
+101:                 'request_media_type': 'application/solrquery+x-www-form-urlencoded',
+102:                 'expected_response_media_type': 'application/solr+json',
+103:                 'output_format': 'solr_json_envelope_v1'}
+104:         operation = request.get('program', request.get('operation', request.get('collection', assignment.get('algorithm'))))
+105:         return {'resource_kind': 'api', 'service_or_program': service,
+106:                 'operation': operation, 'output_format': formats.get(service)}
+107:     barcode = assignment['requested_job'].get('native_barcode')
+108:     if barcode is not None:
+109:         return {'resource_kind': target['resource_kind'],
+110:             'service_or_program': barcode['operation'], 'operation': barcode['operation'],
+111:             'input_format': barcode['request']['format'],
+112:             'input_compression': barcode['request']['compression'],
+113:             'output_format': 'barcode_bundle_v1'}
+114:     nmf = assignment['requested_job'].get('native_expression_nmf')
+115:     if nmf is not None:
+116:         return {'resource_kind': target['resource_kind'],
+117:             'service_or_program': nmf['operation'], 'operation': nmf['operation'],
+118:             'mode': nmf['mode'], 'input_format': 'delimited_expression_matrix',
+119:             'output_format': 'expression_nmf_native_manifest_v1'}
+120:     atac = assignment['requested_job'].get('native_atac_differential')
+121:     if atac is not None:
+122:         request = atac['request']
+123:         return {'resource_kind': target['resource_kind'],
+124:             'service_or_program': request['operation'],
+125:             'operation': request['operation'], 'mode': request['mode'],
+126:             'input_format': 'bam', 'output_format': 'atac_differential_native_bundle_v1'}
+127:     chromatin = assignment['requested_job'].get('native_chromatin_interactions')
+128:     if chromatin is not None:
+129:         return {'resource_kind': target['resource_kind'],
+130:             'service_or_program': 'analyze_chromatin_interactions',
+131:             'operation': 'analyze_chromatin_interactions',
+132:             'analysis_modes': list(chromatin['request']['analysis_modes']),
+133:             'input_format': chromatin['request']['contact']['format'],
+134:             'output_format': 'chromatin_interaction_native_bundle_v1'}
+135:     overlap = assignment['requested_job'].get('native_genomic_overlap')
+136:     if overlap is not None:
+137:         return {'resource_kind': target['resource_kind'], 'service_or_program': overlap['program'],
+138:             'operation': overlap['request']['operation'], 'mode': overlap['request']['mode'],
+139:             'output_format': 'genomic_overlap_native_batch_v1'}
+140:     protein = assignment['requested_job'].get('native_protein_structure')
+141:     if protein is not None:
+142:         request = protein['request']
+143:         return {'resource_kind': target['resource_kind'], 'service_or_program': protein['program'],
+144:             'operation': request['operation'],
+145:             'mode': request['parameters']['mode'] if request['operation'] == 'compare' else None,
+146:             'output_format': 'native_protein_structure_bundle_v1'}
+147:     rna = assignment['requested_job'].get('native_rna_structure')
+148:     if rna is not None:
+149:         return {'resource_kind': target['resource_kind'], 'service_or_program': rna['program'],
+150:             'operation': rna['operation'], 'mode': rna['mode'],
+151:             'output_format': 'native_rna_structure_bundle_v1'}
+152:     database = assignment['requested_job'].get('native_blast_standard_database')
+153:     if database is not None:
+154:         return {'resource_kind': target['resource_kind'], 'service_or_program': database['program'],
+155:             'operation': database['mode'], 'mode': database['mode'], 'output_format': 'native_blast_standard_database_bundle_v1'}
+156:     database = assignment['requested_job'].get('native_blast_database')
+157:     if database is not None:
+158:         return {'resource_kind': target['resource_kind'], 'service_or_program': database['program'],
+159:             'operation': database['mode'], 'mode': database['mode'], 'output_format': 'native_blast_database_bundle_v1'}
+160:     native_blast = assignment['requested_job'].get('native_blast')
+161:     if native_blast is not None:
+162:         return {'resource_kind': target['resource_kind'], 'service_or_program': native_blast['program'],
+163:             'operation': native_blast['mode'], 'mode': native_blast['mode'],
+164:             'output_format': 'native_blast_bundle_v1'}
+165:     native_hmmer = assignment['requested_job'].get('native_hmmer')
+166:     if native_hmmer is not None:
+167:         return {'resource_kind': target['resource_kind'], 'service_or_program': native_hmmer['program'],
+168:             'operation': native_hmmer['mode'], 'output_format': 'native_hmmer_bundle_v1'}
+169:     preparation = assignment['requested_job'].get('native_hmmer_preparation')
+170:     if preparation is not None:
+171:         return {'resource_kind': target['resource_kind'], 'service_or_program': preparation['program'],
+172:             'operation': preparation['mode'], 'output_format': 'native_hmmer_preparation_bundle_v1'}
+173:     native_infernal = assignment['requested_job'].get('native_infernal')
+174:     if native_infernal is not None:
+175:         return {'resource_kind': target['resource_kind'], 'service_or_program': native_infernal['program'],
+176:             'operation': native_infernal['program'], 'table_format': native_infernal['table_format'],
+177:             'output_format': 'native_infernal_bundle_v1'}
+178:     preparation = assignment['requested_job'].get('native_infernal_preparation')
+179:     if preparation is not None:
+180:         return {'resource_kind': target['resource_kind'], 'service_or_program': preparation['program'],
+181:             'operation': preparation['mode'], 'output_format': 'native_infernal_preparation_bundle_v1'}
+182:     return {'resource_kind': target['resource_kind'],
+183:             'service_or_program': assignment['requested_job']['argv'][0],
+184:             'operation': None, 'output_format': None}

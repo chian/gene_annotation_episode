@@ -1,0 +1,14 @@
+.........................F..............................                 [100%]
+=================================== FAILURES ===================================
+_ test_subject_binding_checks_actual_order_molecule_receipts_and_orientation[dna] _
+../../../tests/test_native_rna_structure_result_publication.py:120: in test_subject_binding_checks_actual_order_molecule_receipts_and_orientation
+    other = store.create_problem(raw_sequence="GGGAAACCC", molecule="dna")["subject_refs"][0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+../../../gene_annotation_episode/materials.py:568: in create_problem
+    raise ContractError("problem_already_exists")
+E   gene_annotation_episode.domain.ContractError: problem_already_exists
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_rna_structure_result_publication.py::test_subject_binding_checks_actual_order_molecule_receipts_and_orientation[dna]
+1 failed, 55 passed in 219.38s (0:03:39)

@@ -1,0 +1,81 @@
+{
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--tb=short",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_views_2026-10-26_272/check005/temporary",
+    "/home/chia/repos/gene_annotation_episode/tests/test_hmmer_preparation_result_views.py"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_views_2026-10-26_272/check005",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "source_sha256": {
+    "gene_annotation_episode/hmmer_preparation_result_views.py": "11a4cfb42601d0256840f76c127448a3ce0f96cbd6055a2bfde20737114eabc4",
+    "tests/test_hmmer_preparation_result_views.py": "d5f4652ac736187285d09f43bf9181215f28f440766c405d50dd522c25d70e13",
+    "gene_annotation_episode/native_hmmer_preparation_worker.py": "983b1edd8fdf1bbd081eab85b141d3f35e0162fed7fcbc2e9c8f54189d4ca110",
+    "tests/test_native_hmmer_preparation_worker.py": "190d2a6b89c4ef35c7b03683c6142ebf81f913bd1b7d796358a1d7dd76e9f9e1",
+    "gene_annotation_episode/hmmer_alignment_preparation_data.py": "17177f61891d65eef10086716c4166f9b7338607cbf862c743ac25d1a7ef7975",
+    "gene_annotation_episode/hmmer_artifact_data.py": "330e00207888bd3d91148e01b3b041398a9e00c14e4dad23d1813e407804da0f",
+    "gene_annotation_episode/hmmer_emission_data.py": "352bfd1ef00100dde7caf66eb412a056940e13dc0de76f644f5cdb43a14e0305",
+    "gene_annotation_episode/hmmer_fm_data.py": "8da3babc7e4a1997db3e2af0d00db99f60d14455870c06f054c5af68dd9aece5",
+    "gene_annotation_episode/hmmer_model_data.py": "10957b8b31595f7084882b6223ef8d002fcb33e58443aeedfa61ec61c2d71c73",
+    "gene_annotation_episode/hmmer_simulation_data.py": "91fb0f93c55aa5f085ea25a22d807cf860724292f712e1ee600feb7eae2f16a7",
+    "gene_annotation_episode/hmmer_statistics_data.py": "4e1948f18398142e7dc21f56f8d6da6fa4ba190c0e62b9c58d3bdd7bb06706e7",
+    "gene_annotation_episode/hmmer_alignment_preparation_calculations.py": "69619b4f1e15438da71e8ddbb0768baa20aad06a9ddb80d0dfbd43cded847f28",
+    "gene_annotation_episode/hmmer_artifact_calculations.py": "eba9bb8c428f1f21b27695d574ec4841c36ab816a836b540a83ecf38d469d080",
+    "gene_annotation_episode/hmmer_emission_calculations.py": "c5fbd39e01ec90d363cc1a7fd9f4018b4d6c8ce63d3326ee3b7735162bd5080d",
+    "gene_annotation_episode/hmmer_fm_calculations.py": "6c63a268ee6c9f513608c42a3207dfe9622e6744bccbf284d8a741bf61fa6592",
+    "gene_annotation_episode/hmmer_model_calculations.py": "26cf2a788aa6bf629227781217cc5ae3ae0f241641e6e2d15f36c39265173be3",
+    "gene_annotation_episode/hmmer_simulation_calculations.py": "e7f29ac650c56c516e11db911f99576c9db4b01c5fef1c1904556ebcacf3a153",
+    "gene_annotation_episode/hmmer_statistics_calculations.py": "4d4fdb16e28eecb6040023ba05dc41f310940ee6f91aa83f1f324379b452ce99"
+  },
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T10:09:50.086905+00:00",
+        "monotonic_ns": 822951784230971,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 27.737449415,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 331776
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_views_2026-10-26_272/check005/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_views_2026-10-26_272/check005/stderr.log"
+}

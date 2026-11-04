@@ -1,0 +1,211 @@
+{
+  "entry_version": "scientific_support_entry_v1",
+  "id": "A111",
+  "slot": "annotation_distinction",
+  "name": "Molecular hypotheses constrained by directly observed structural occupancy, contacts or architecture",
+  "description": "A newly exposed, unadopted support candidate: use the actual subject’s source-grounded structural state to constrain a molecular hypothesis, keeping crystal/model origin, construct, ligand occupancy and geometry distinct from affinity, catalysis, native necessity and homolog function transfer.",
+  "support": {
+    "proposition": "A directly source-grounded bound state, contact geometry or architecture of the actual protein/complex constrains a specified molecular hypothesis under its measured preparation and structural conditions; it is not function transferred from a characterized comparator.",
+    "operands": [
+      {
+        "operand_id": "measured_structural_state",
+        "observation_kinds": [
+          "structure_match"
+        ],
+        "hypothesis_predicates": [
+          "binds",
+          "transports",
+          "feature_structure",
+          "functional_family",
+          "catalyzes",
+          "requires",
+          "partner_dependence",
+          "uses"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "direct",
+          "scope_limited"
+        ],
+        "extent_bases": [
+          "observed_extent"
+        ],
+        "finding_qualifications": [
+          "measurement_does_not_establish_claim",
+          "conditions_limit_transfer",
+          "prediction_not_measurement",
+          "assumption_not_established",
+          "confounding_unresolved",
+          "different_source_subject",
+          "alternatives_not_discriminated"
+        ],
+        "instruction": "Retain exact source/deposit and structure version, construct/chain/assembly, protein/ligand identity, residue numbering, measured versus modeled origin, experimental preparation and structural conditions. Record ligand occupancy, contacts or architecture as the actual bounded source proposition. Assess strengthens for compatible occupancy or feature_structure; weakens for an incompatible claimed state when the observation actually distinguishes it; does_not_discriminate for affinity, catalytic turnover, physiological substrate, contact energy or functional necessity that was not measured. observed_extent uses only actual measured input/source geometry within the assigned scope and can be restricted by target_footprint; it does not fabricate target coordinates. direct requires the actual scoped source subject and condition, never a published comparator standing in for ybhP."
+      },
+      {
+        "operand_id": "attributed_structural_constraint",
+        "observation_kinds": [
+          "structure_match",
+          "comparison",
+          "mechanism"
+        ],
+        "hypothesis_predicates": [
+          "binds",
+          "transports",
+          "feature_structure",
+          "functional_family",
+          "catalyzes",
+          "requires",
+          "partner_dependence",
+          "uses"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "measurement_does_not_establish_claim",
+          "conditions_limit_transfer",
+          "prediction_not_measurement",
+          "assumption_not_established",
+          "confounding_unresolved",
+          "different_source_subject",
+          "alternatives_not_discriminated"
+        ],
+        "instruction": "Preserve actual source_subject_refs and an explicit hypothesis/condition/assumption relationship when the direct structural observation bears on another target or a nonmolecular account. inferred_extent requires a bounded explicit target_footprint and is non-direct; source residues do not become target measurements. context_allocation requires context_account_scope plus nonempty context_scope on both assessment and compatible account and cannot carry target_footprint; it supplies material allocation, not a molecular map. Missing target attribution earns no invented extent. Distinguish this reasoned attribution from the original measured or refined structure and from characterized-comparator function transfer."
+      },
+      {
+        "operand_id": "structure_derived_comparison",
+        "observation_kinds": [
+          "comparison",
+          "mechanism"
+        ],
+        "hypothesis_predicates": [
+          "binds",
+          "transports",
+          "feature_structure",
+          "functional_family",
+          "catalyzes",
+          "requires",
+          "partner_dependence",
+          "uses"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "direct",
+          "scope_limited"
+        ],
+        "extent_bases": [
+          "observed_extent"
+        ],
+        "finding_qualifications": [
+          "measurement_does_not_establish_claim",
+          "conditions_limit_transfer",
+          "prediction_not_measurement",
+          "assumption_not_established",
+          "confounding_unresolved",
+          "different_source_subject",
+          "alternatives_not_discriminated"
+        ],
+        "instruction": "Keep any actually performed coordinate/contact/state comparison dependent on the exact deposited or measured structure, with software/method, chain selection, assembly/symmetry assumptions, geometry and model uncertainty when available. Do not claim a new calculation or independent experiment from reading a retained result. A short distance is neither interaction energy nor proof of catalytic necessity; missing atoms, density models or a reconstituted metal do not establish native chemistry. direct and observed_extent are possible only for the actual matching scoped material; another subject instead needs a separately non-direct attributed assessment. Same-source comparisons and structure records retain their common provenance and are not automatically independent score components."
+      }
+    ],
+    "qualifications": [
+      "TT1927b bound density modeled as octaprenyl pyrophosphate and C40 mass support do not establish an exclusive physiological ligand or cellular task. Occupancy is not an affinity measurement.",
+      "Cas2 donor-contact architecture and selective functional mutant outcomes are distinct facts. Related 5DS4/5DS5 preparations are not independent biological replication; modeled contacts do not establish necessity and E9 geometry does not prove no nuclease activity.",
+      "QueH reconstituted structural metal and the Cys9/Cys10 site do not establish a native metal identity or a disulfide. Substrate decrease without detected Q remains nonproductive/undetermined in that assay.",
+      "DUF1537 ligand complexes can locate sites and closure even when structural searches were uninformative; the sites do not themselves establish exact kinase chemistry. LetB tunnel architecture must be distinguished from a characterized-comparator transfer and from complete native lipid flux.",
+      "Retain actual source_ref, source_subject_refs, condition_refs and assumption_refs. The published examples below are instruction provenance about their named subjects; they are not observations of ybhP/b0790 and were not repeated to prepare this draft.",
+      "At construction and in decision context, resolve these observation kinds through annotation_support_routes for the actual caller-bound annotation policy; an entry does not supply universal component labels, select a projector, mask another kind, change a weight, or create a target finding. An unavailable route declaration remains unavailable.",
+      "Use actual retained assessments in a compatible annotation account. Selecting this entry earns nothing. The current caller-owned applicability × relation × extent arithmetic, same-component maximum, coherent-account integration and derived discrimination remain unchanged for this review basis. A finding qualification is not an automatic numeric discount; no independence, confidence or new score dimension is implied."
+    ],
+    "boundary": "NEW CASE-DRIVEN REVIEW CANDIDATE, separately counted from the original ten. No new observation kind, record schema, axis, weight, function-transfer threshold, affinity rule or catalytic acceptance gate is added. structure_match, comparison and mechanism use their actual caller-bound routes at construction. Refined deposited models and observed ligand/architecture constraints must preserve their actual origin and uncertainty; no new structural search, simulation or coordinate calculation occurs here. Scientific suitability of this independent reusable support route remains for review."
+  },
+  "evidence": [
+    {
+      "case_group": "DUF1537_Zhang_2016",
+      "case_id": "DUF1537_Zhang_2016",
+      "source_url": "https://doi.org/10.1073/pnas.1605546113",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:14#/actual_observations/paper_reported/1",
+      "observation": "Activity-guided D-threonate complex and ADP complex localized distinct substrate/nucleotide sites; ADP structure showed domain closure.",
+      "limit": "Relevant primary structural/results passages inspected; complete supplement not read."
+    },
+    {
+      "case_group": "EF1143_Vorontsov_2011_2014",
+      "case_id": "EF1143_Vorontsov_2011_2014",
+      "source_url": "https://doi.org/10.1074/jbc.M111.250456",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:20#/actual_observations/paper_reported/1",
+      "observation": "Complex structures distinguished catalytic and allosteric binding sites.",
+      "limit": "Relevant primary indexed passages inspected; no full supplement reanalysis or new assay."
+    },
+    {
+      "case_group": "MS53_0025_MAG6390_Korczynska_2014",
+      "case_id": "MS53_0025_MAG6390_Korczynska_2014",
+      "source_url": "https://doi.org/10.1021/bi500595c",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:16#/actual_observations/paper_reported/0",
+      "observation": "Structure revealed binuclear zinc and a separate phosphate-binding environment.",
+      "limit": "Primary abstract/methods and initial context read; complete results not read in this pass."
+    },
+    {
+      "case_group": "TT1927b_Handa_2005",
+      "case_id": "TT1927b_Handa_2005",
+      "source_url": "https://doi.org/10.1110/ps.041183305",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:19#/actual_observations/paper_reported/0",
+      "observation": "Density in the hydrophobic barrel was modeled as octaprenyl pyrophosphate; mass spectrometry supported a C40 isoprenoid.",
+      "limit": "Primary relevant results plus 1WUB inspected; complete methods not read."
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4662619/",
+      "source_locator": "research/slotted_process_library/corpus/causal/cas2/case_trace.json#/key_observations/5/observation",
+      "observation": "A four-Cas1/two-Cas2 complex positions the central donor duplex over Cas2 and terminal donor 3-prime ends in two Cas1 sites. Cas2 R16/R78 are part of a phosphate-backbone clamp; R16E and R78E strongly reduce in vivo acquisition, whereas R77E is tolerated. Cas1 clamp/channel and end-splaying mutants supply additional functional comparisons.",
+      "limit": "Three primary E. coli relevant Results/Methods inspected, with earlier other-species nuclease comparators explicitly limited; new descriptive deposited-coordinate comparison. No biological experiments or new annotation run. | Source observation limit: Contact presence alone does not establish functional necessity: R77 is an explicit tolerated contact-site example. Not every Cas2 contact mutant was directly assayed for binding affinity in isolation."
+    },
+    {
+      "case_group": "cellular_letB",
+      "case_id": "cellular_letB",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7335425/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:8#/actual_observations/0/observation",
+      "observation": "Structure shows a periplasm-length hydrophobic tunnel. Lipid crosslinking places phosphate-bearing material inside it. Length and pore-loop mutants lose ability to complement a sensitized pqiAB/letAB detergent phenotype.",
+      "limit": "Full primary Results on architecture, length threshold, pore-loop mutants and crosslinking read. No structural re-refinement. | Group source-use limits: Cryo-EM, crosslinking and complementation are different connected modalities; they are not three direct transport assays. Lipid identity, direction and net flux remain unresolved."
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8884141/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/5/observation",
+      "observation": "Structure placed Cys9/Cys10 at a separate metal site; in-vitro oQ decreased without detectable Q product.",
+      "limit": "Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun."
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "case_id": "spec_frsa_disputed_pdc_native_unknown",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3788570/",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:7#/actual_observations/1/result",
+      "observation": "Bound electron density was modeled as hexanoate but remained an unknown ligand; docking could not determine native chemistry.",
+      "limit": "2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified."
+    }
+  ]
+}

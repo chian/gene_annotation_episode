@@ -1,0 +1,186 @@
+--- before209/literature_experimental_prompt.py
++++ current209/literature_experimental_prompt.py
+@@ -27,6 +27,8 @@
+ from . import literature_binding_interaction_model_render as _interaction_model
+ from .literature_binding_interaction_model_prompt import BINDING_INTERACTION_MODEL_TASK
+ from . import literature_rate_observation_prompt as _rate_observations
++from . import literature_measurement_validation_render as _measurement_validation
++from .literature_measurement_validation_prompt import MEASUREMENT_VALIDATION_TASK
+ from . import literature_calibration_recovery_render as _calibration_recovery
+ from .literature_calibration_recovery_prompt import CALIBRATION_RECOVERY_TASK
+ from . import literature_compiled_assay_render as _compiled_assay
+@@ -267,11 +269,14 @@
+     ion_rows = list(_ion_discrimination.rows_from_values((state.get("last_local_outcome", {}),
+         state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results)))
+     hidden_ion = _ion_discrimination.hidden_records(ion_rows, records)
++    validation_rows = list(_measurement_validation.rows_from_values((state.get("last_local_outcome", {}),
++        state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results)))
++    hidden_validation = _measurement_validation.hidden_records(validation_rows, records)
+     covariance_support = set(_covariance_support_refs((state.get("last_local_outcome", {}),
+         state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results), records))
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate or reference in hidden_partition or reference in hidden_ion:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate or reference in hidden_partition or reference in hidden_ion or reference in hidden_validation:
+             continue
+         row = records[reference]
+         if reference in covariance_support:
+@@ -335,6 +340,8 @@
+         parts.extend(["", ION_DISCRIMINATION_TASK])
+     if _channel.task_relevant(state) and CHANNEL_TASK not in normalized:
+         parts.extend(["", CHANNEL_TASK])
++    if _measurement_validation.task_relevant(state) and MEASUREMENT_VALIDATION_TASK not in normalized:
++        parts.extend(["", MEASUREMENT_VALIDATION_TASK])
+     if _calibration_recovery.task_relevant(state) and CALIBRATION_RECOVERY_TASK not in normalized:
+         parts.extend(["", CALIBRATION_RECOVERY_TASK])
+     if _rate_observations.RATE_OBSERVATION_TASK not in normalized:
+@@ -390,7 +397,7 @@
+     _section(parts, "Assigned scope", _values(state.get("scope", {})))
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+-        "source_ref", "representation", "artifact_ref", "page", "selection", "requested_calibration_recovery_components", "requested_rate_observation_components", "requested_rate_replicate_components",
++        "source_ref", "representation", "artifact_ref", "page", "selection", "requested_measurement_validation_components", "requested_calibration_recovery_components", "requested_rate_observation_components", "requested_rate_replicate_components",
+         "requested_ion_discrimination_components", "requested_channel_components", "requested_compiled_assay_components", "requested_product_partition_components", "requested_completion_time_components", "requested_active_site_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+@@ -519,6 +526,10 @@
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if isinstance(content, Mapping) and content.get("view") == "measurement_validation_components":
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _measurement_validation.render_received(parts, content["cells"], section=_section, table=_table)
++        return
+     if isinstance(content, Mapping) and content.get("view") == "ion_discrimination_components":
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _ion_discrimination.render_received(parts, content["cells"], section=_section, table=_table)
+@@ -568,7 +579,7 @@
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if (list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
++    if (list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+             or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+@@ -579,7 +590,8 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and (any(_ion_discrimination.rows_from_values(content["records"]))
++            and (any(_measurement_validation.rows_from_values(content["records"]))
++                or any(_ion_discrimination.rows_from_values(content["records"]))
+                 or any(_channel.rows_from_values(content["records"]))
+                 or any(_compiled_assay.rows_from_values(content["records"]))
+                 or any(_calibration_recovery.rows_from_values(content["records"]))
+@@ -589,7 +601,7 @@
+                 or any(_completion_time.rows_from_values(content["records"]))
+                 or any(_active_site.rows_from_values(content["records"]))
+                 or any(_product_partition.rows_from_values(content["records"]))
+-                or any(isinstance(row, Mapping) and row.get("selection", {}).get("tool") in {"literature.product_partition.populate", "literature.channel.populate", "literature.ion_discrimination.populate"}
++                or any(isinstance(row, Mapping) and row.get("selection", {}).get("tool") in {"literature.measurement_validation.populate", "literature.product_partition.populate", "literature.channel.populate", "literature.ion_discrimination.populate"}
+                        for row in content["records"]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         for record in content["records"]:
+@@ -597,10 +609,14 @@
+                 continue
+             prior = record.get("outcome")
+             if prior is not None:
++                admitted_validation_sheets = {row['sheet_ref'] for row in _measurement_validation.rows_from_reports([record.get('admitted_report', {})])}
+                 admitted_ion_sheets = {row['sheet_ref'] for row in _ion_discrimination.rows_from_reports([record.get('admitted_report', {})])}
+                 admitted_channel_sheets = {row['sheet_ref'] for row in _channel.rows_from_reports([record.get('admitted_report', {})])}
+                 prior_content = prior.get('result', {}) if isinstance(prior, Mapping) else {}
+-                if (isinstance(prior_content, Mapping) and (prior_content.get('view') == 'channel_components'
++                if (isinstance(prior_content, Mapping) and (prior_content.get('view') == 'measurement_validation_components'
++                        and (prior_content.get('sheet_ref') in admitted_validation_sheets
++                            or isinstance(record.get('admitted_report'), Mapping))
++                        or prior_content.get('view') == 'channel_components'
+                         and prior_content.get('sheet_ref') in admitted_channel_sheets
+                         or prior_content.get('view') == 'ion_discrimination_components'
+                         and (prior_content.get('sheet_ref') in admitted_ion_sheets
+@@ -1072,6 +1088,7 @@
+     reaction_native = {}
+     rate_observations = {}
+     calibration_recoveries = {}
++    measurement_validations = {}
+     compiled_assays = {}
+     channels = {}
+     ion_comparisons = {}
+@@ -1085,7 +1102,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_ion_discrimination.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_measurement_validation.is_row(row) for row in value):
++                for row in value:
++                    measurement_validations.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_ion_discrimination.is_row(row) for row in value):
+                 for row in value:
+                     ion_comparisons.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(_channel.is_row(row) for row in value):
+@@ -1197,6 +1217,7 @@
+             ordinary.append(remainder)
+     if ordinary:
+         _section(parts, "Admitted requested child returns", values(ordinary))
++    _measurement_validation.render_received(parts, [row for rows in measurement_validations.values() for row in rows], section=_section, table=_table)
+     _compiled_assay.render_received(parts, [row for rows in compiled_assays.values() for row in rows], section=_section, table=_table)
+     _ion_discrimination.render_received(parts, [row for rows in ion_comparisons.values() for row in rows], section=_section, table=_table)
+     _channel.render_received(parts, [row for rows in channels.values() for row in rows], section=_section, table=_table)
+@@ -1395,6 +1416,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_validation_sheets = {row["sheet_ref"] for row in _measurement_validation.rows_from_reports(state.get("child_reports", ()))}
+         received_ion_sheets = {row["sheet_ref"] for row in _ion_discrimination.rows_from_reports(state.get("child_reports", ()))}
+         received_channel_sheets = {row["sheet_ref"] for row in _channel.rows_from_reports(state.get("child_reports", ()))}
+         received_compiled_sheets = {row["sheet_ref"] for row in _compiled_assay.rows_from_reports(state.get("child_reports", ()))}
+@@ -1419,8 +1441,10 @@
+             and content.get('sheet_ref') in received_channel_sheets)
+         ion_forwarded = (isinstance(content, Mapping) and content.get('view') == 'ion_discrimination_components'
+             and content.get('sheet_ref') in received_ion_sheets)
+-        if ion_forwarded or channel_forwarded or (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_ion_sheets | received_channel_sheets | received_compiled_sheets | received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++        validation_forwarded = (isinstance(content, Mapping) and content.get('view') == 'measurement_validation_components'
++            and content.get('sheet_ref') in received_validation_sheets)
++        if validation_forwarded or ion_forwarded or channel_forwarded or (isinstance(outcome, Mapping) and 'result' not in outcome
++                and (received_validation_sheets | received_ion_sheets | received_channel_sheets | received_compiled_sheets | received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1434,7 +1458,8 @@
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+-        if (list(_ion_discrimination.rows_from_reports([state["current_report_update"]])) or
++        if (list(_measurement_validation.rows_from_reports([state["current_report_update"]])) or
++                list(_ion_discrimination.rows_from_reports([state["current_report_update"]])) or
+                 list(_channel.rows_from_reports([state["current_report_update"]])) or
+                 list(_compiled_assay.rows_from_reports([state["current_report_update"]])) or
+                 list(_calibration_recovery.rows_from_reports([state["current_report_update"]])) or
+@@ -1480,12 +1505,16 @@
+     state = _numerical_return.state_view(state)
+     for outcome in lookup_results:
+         kind = _numerical_return.lookup_task_kind(outcome)
+-        if kind == 'literature_ion_discrimination_cells':
++        if kind == 'literature_measurement_validation_cells':
++            state = {**state, 'literature_measurement_validation_work': {'version': 'literature_measurement_validation_task_v1'}}
++        elif kind == 'literature_ion_discrimination_cells':
+             state = {**state, 'literature_ion_discrimination_work': {'version': 'literature_ion_discrimination_task_v1'}}
+         elif kind == 'literature_channel_cells':
+             state = {**state, 'literature_channel_work': {'version': 'literature_channel_task_v1'}}
+         elif kind == 'literature_compiled_assay_cells':
+             state = {**state, 'literature_compiled_assay_work': {'version': 'literature_compiled_assay_task_v1'}}
++    if any(_measurement_validation.rows_from_values(lookup_results)):
++        state = {**state, "literature_measurement_validation_work": {"version": "literature_measurement_validation_task_v1"}}
+     if any(_ion_discrimination.rows_from_values(lookup_results)):
+         state = {**state, "literature_ion_discrimination_work": {"version": "literature_ion_discrimination_task_v1"}}
+     if any(_channel.rows_from_values(lookup_results)):
+@@ -1496,6 +1525,8 @@
+             instructions = text_instructions(instructions) + "\n\n" + COMPILED_ASSAY_TASK
+         if _ion_discrimination.task_relevant(state) and ION_DISCRIMINATION_TASK not in text_instructions(instructions):
+             instructions = text_instructions(instructions) + "\n\n" + ION_DISCRIMINATION_TASK
++        if _measurement_validation.task_relevant(state) and MEASUREMENT_VALIDATION_TASK not in text_instructions(instructions):
++            instructions = text_instructions(instructions) + "\n\n" + MEASUREMENT_VALIDATION_TASK
+         if _channel.task_relevant(state) and CHANNEL_TASK not in text_instructions(instructions):
+             instructions = text_instructions(instructions) + "\n\n" + CHANNEL_TASK
+         return render_reference_evidence_parent_prompt(state, instructions, lookup_results=lookup_results)

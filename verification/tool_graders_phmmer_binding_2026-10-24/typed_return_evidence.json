@@ -1,0 +1,111 @@
+{
+  "actions": [
+    {
+      "cpu": 2,
+      "goal": "Iteratively investigate the assigned job responsibility",
+      "initial_report_json": "{}",
+      "kind": "job_child",
+      "purpose": "Choose subsequent work from actual constrained results",
+      "query_ref": "product_9f0f09471f4436f40be39f73",
+      "role": "job_launch",
+      "schema_json": "{\"type\": \"object\", \"properties\": {\"job_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"homology_job\", \"x-source\": \"job_ref\"}, \"job_cpu\": {\"type\": \"integer\", \"minimum\": 1, \"x-source\": \"job_cpu\"}, \"job_handoff\": {\"type\": [\"object\", \"null\"], \"properties\": {\"job_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"homology_job\"}, \"registry_ref\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"execution_registry\"}, \"backend\": {\"type\": \"string\", \"enum\": [\"single_query_phmmer_jobs_v2\"]}, \"status_interface\": {\"type\": \"string\", \"enum\": [\"homology.status.v1\"]}, \"progress_interface\": {\"type\": \"string\", \"enum\": [\"homology.progress.v1\"]}, \"results_interface\": {\"type\": \"string\", \"enum\": [\"homology.results.v1\"]}}, \"required\": [\"job_ref\", \"registry_ref\", \"backend\", \"status_interface\", \"progress_interface\", \"results_interface\"], \"additionalProperties\": false, \"x-source\": \"job_handoff\"}, \"job_handoff_state\": {\"type\": \"string\", \"enum\": [\"usable\", \"unavailable\"], \"x-source\": \"job_handoff_state\"}, \"job_handoff_failure\": {\"type\": [\"string\", \"null\"], \"enum\": [null, \"job_not_submitted\", \"submission_unconfirmed\", \"native_handle_identity_mismatch\", \"receiving_interface_unavailable\"], \"x-source\": \"job_handoff_failure\"}, \"local_credit\": {\"type\": \"number\", \"x-source\": \"credit\"}}, \"required\": [\"job_ref\", \"job_cpu\", \"job_handoff\", \"job_handoff_state\", \"job_handoff_failure\", \"local_credit\"], \"additionalProperties\": false}",
+      "scope": {
+        "subject_refs": [
+          "input_798569f704218b25247cc044"
+        ]
+      },
+      "search_mode": "native_defaults"
+    },
+    {
+      "arguments": {},
+      "kind": "tool",
+      "tool": "homology.environment"
+    },
+    {
+      "arguments": {},
+      "kind": "tool",
+      "tool": "homology.configure"
+    },
+    {
+      "arguments": {},
+      "kind": "tool",
+      "tool": "homology.stage"
+    },
+    {
+      "arguments": {},
+      "kind": "tool",
+      "tool": "homology.submit"
+    },
+    {
+      "arguments": {},
+      "kind": "tool",
+      "tool": "homology.check_handoff"
+    },
+    {
+      "goal": "Iteratively investigate the assigned job responsibility",
+      "handoff": {
+        "backend": "single_query_phmmer_jobs_v2",
+        "job_ref": "homology_job_54ebd44de967d787fec2f825",
+        "progress_interface": "homology.progress.v1",
+        "registry_ref": "execution_registry_35eb961db5ab4c7d8fb398ac648a18f1",
+        "results_interface": "homology.results.v1",
+        "status_interface": "homology.status.v1"
+      },
+      "initial_report_json": "{}",
+      "kind": "job_child",
+      "purpose": "Choose subsequent work from actual constrained results",
+      "role": "job_results",
+      "schema_json": "{\"type\": \"object\", \"properties\": {\"comparisons\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\", \"x-reference-namespace\": \"observation\"}, \"x-source\": \"changed_record_refs\"}, \"local_credit\": {\"type\": \"number\", \"x-source\": \"credit\"}}, \"required\": [\"comparisons\", \"local_credit\"], \"additionalProperties\": false}",
+      "scope": {
+        "subject_refs": [
+          "input_798569f704218b25247cc044"
+        ]
+      }
+    },
+    {
+      "arguments": {
+        "limit": 10
+      },
+      "kind": "tool",
+      "tool": "homology.extract"
+    }
+  ],
+  "assertions_verified_by_test": [
+    "Original requested observation references returned and admitted",
+    "Numerical components reachable on returned original alignment observation",
+    "No full sheet in model-facing contexts or returned form",
+    "Eight scripted decisions, eight selected actions, eight controller observations",
+    "Reopen/replay adds no scripted decisions, records, actions or observations"
+  ],
+  "classification": "scripted choices with actual native phmmer and original Workflow return/admission",
+  "counts": {
+    "runtime_actions": 8,
+    "runtime_model_calls": 8,
+    "runtime_observations": 8
+  },
+  "qualification": "No configured live LLM or production scientific credit policy; explicit engineering fixture projector supplies zero.",
+  "reports": [
+    {
+      "job_cpu": 2,
+      "job_handoff": {
+        "backend": "single_query_phmmer_jobs_v2",
+        "job_ref": "homology_job_54ebd44de967d787fec2f825",
+        "progress_interface": "homology.progress.v1",
+        "registry_ref": "execution_registry_35eb961db5ab4c7d8fb398ac648a18f1",
+        "results_interface": "homology.results.v1",
+        "status_interface": "homology.status.v1"
+      },
+      "job_handoff_failure": null,
+      "job_handoff_state": "usable",
+      "job_ref": "homology_job_54ebd44de967d787fec2f825",
+      "local_credit": 0.0
+    },
+    {
+      "comparisons": [
+        "observation_1a66a14d9f8ab0b281146068"
+      ],
+      "local_credit": 0.0
+    }
+  ],
+  "state": "final_focused_pytest/test_workflow_return_admission0/workspace/state.sqlite3"
+}

@@ -1,0 +1,29 @@
+........................................F
+=================================== FAILURES ===================================
+____ test_authentication_snapshot_is_reused_only_within_one_form_validation ____
+
+saved = <test_native_infernal_returns.SavedReturns object at 0x7885debcfa40>
+
+    def test_reference_redelivery_deduplicates_exact_received_references(saved):
+        schema = schema_for(GENERIC_REFS)
+        child = saved.child(saved.root, schema)
+        saved.publication(child)
+        original = saved.returned(saved.root, child)
+        alias = schema_for(REFERENCE_SOURCE)
+        repeated = saved.redeliver(saved.root, child, alias)
+        before = list(saved.store.db.iterdump())
+        assert saved.boundary.record_admission(saved.root, repeated, alias, saved.operation(saved.root, 1)) == original['requested_0']
+        assert saved.boundary.received_facts(saved.root, alias) == {REFERENCE_SOURCE: original['requested_0']}
+        assert saved.boundary.received_context(saved.root) == []
+        assert list(saved.store.db.iterdump()) == before
+    
+    
+>   def test_changed_live_context_role_and_conflicting_reference_fields_reject(saved):
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert 2.25 == 1.25
+
+../../../tests/test_native_infernal_returns.py:441: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_returns.py::test_authentication_snapshot_is_reused_only_within_one_form_validation
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 40 passed in 100.13s (0:01:40)

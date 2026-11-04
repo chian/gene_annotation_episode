@@ -1,0 +1,35 @@
+.............................................F.......................... [ 50%]
+......................................................................   [100%]
+=================================== FAILURES ===================================
+_ test_supplied_original_hash_and_case_are_not_reconstructed_from_native_masks _
+
+    def test_supplied_original_hash_and_case_are_not_reconstructed_from_native_masks():
+        f = meta_fixture(data=b'>a\n#Ac\n>b\n-AT\n')
+        artifact = f.bundle['artifacts'][0]; content = r._content(artifact)
+        f.bundle['supplied_contents'].append(content); f.bundle['artifacts'].remove(artifact)
+        f.bundle['original_task']['submitted_parameters']['alignment_file'] = '/synthetic/original'
+        f.bundle['input_bindings'].append({'binding_id':'original','parameter_pointer':'/alignment_file','kind':'retained_bytes',
+            'content':content,'workspace_path':'/synthetic/original','inline_value':None,'link_evidence':None,'members':[]})
+        f.parameters['artifact_selection'][0]['source'] = {'kind':'original_input','input_binding_id':'original','content':content}
+        common = r._empty_common('analysis')
+        common['input_sequences'] = [{'kind':'parsed_document','input_binding_id':'original','document':slot('analysis','alignment'),
+            'member_id_rule':'first_whitespace_token','molecule':'protein','host_member_joins':[],'evidence':[]}]
+        common['automatic_row_joins'] = [{'alignment':slot('analysis','alignment'),'input_binding_ids':['original'],'method':'exact_unique_header',
+            'case_policy':'literal','gap_policy':'literal','transformation_ids':[],'evidence':[]}]
+        f.scientific('common_associations', common)
+        values, _, _ = f.compose(); sheet, components, _ = values[0]
+        alignment = next(d['value'] for d in sheet['documents'] if d['kind']=='alignment')
+        assert [row['sequence'] for row in alignment['rows']] == ['#Ac','-AT']
+        site = components['results'][1]['value']['sites'][0]
+        assert site['excluded_original_hash_rows_by_group'] == [[0],[]]
+        assert site['excluded_terminal_rows_by_group'] == [[],[1]]
+>       assert components['results'][1]['value']['sites'][2]['symbols'] == ['c','T']
+E       AssertionError: assert ['T', 'c'] == ['c', 'T']
+E         
+E         At index 0 diff: 'T' != 'c'
+E         Use -v to get more diff
+
+tests/test_bvbrc_alignment_bundle_resolution.py:714: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_supplied_original_hash_and_case_are_not_reconstructed_from_native_masks
+1 failed, 141 passed, 7 deselected in 13.56s

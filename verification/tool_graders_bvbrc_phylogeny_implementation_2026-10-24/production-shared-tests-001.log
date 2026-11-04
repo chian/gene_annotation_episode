@@ -1,0 +1,117 @@
+............................................................... [ 42%]
+..........................................................EEE........... [ 90%]
+...............                                                          [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_retained_native_codon_alignment_partitions_and_gap_denominator _
+
+    @pytest.fixture(scope="module")
+    def native_documents():
+        from gene_annotation_episode import phylogeny_formats as formats
+        assert Path(formats.__file__).resolve().parent == STAGING / "gene_annotation_episode"
+        result = {}
+        for key, filename in (("alignment", BASE + ".phy"), ("partitions", BASE + ".partitions"),
+                              ("best", "RAxML_bestTree." + BASE), ("supported", "RAxML_bipartitions." + BASE),
+                              ("bootstraps", "RAxML_bootstrap." + BASE)):
+>           data = (NATIVE / filename).read_bytes()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_phylogeny_calculators.py:829: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_retained_native_codon_bootstraps_six_splits_and_root_independent_rf _
+
+    @pytest.fixture(scope="module")
+    def native_documents():
+        from gene_annotation_episode import phylogeny_formats as formats
+        assert Path(formats.__file__).resolve().parent == STAGING / "gene_annotation_episode"
+        result = {}
+        for key, filename in (("alignment", BASE + ".phy"), ("partitions", BASE + ".partitions"),
+                              ("best", "RAxML_bestTree." + BASE), ("supported", "RAxML_bipartitions." + BASE),
+                              ("bootstraps", "RAxML_bootstrap." + BASE)):
+>           data = (NATIVE / filename).read_bytes()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_phylogeny_calculators.py:829: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ ERROR at setup of test_saved_json_recalculation_for_all_functions_without_io_or_imports _
+
+    @pytest.fixture(scope="module")
+    def native_documents():
+        from gene_annotation_episode import phylogeny_formats as formats
+        assert Path(formats.__file__).resolve().parent == STAGING / "gene_annotation_episode"
+        result = {}
+        for key, filename in (("alignment", BASE + ".phy"), ("partitions", BASE + ".partitions"),
+                              ("best", "RAxML_bestTree." + BASE), ("supported", "RAxML_bipartitions." + BASE),
+                              ("bootstraps", "RAxML_bootstrap." + BASE)):
+>           data = (NATIVE / filename).read_bytes()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_phylogeny_calculators.py:829: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+ERROR tests/test_phylogeny_calculators.py::test_retained_native_codon_alignment_partitions_and_gap_denominator
+ERROR tests/test_phylogeny_calculators.py::test_retained_native_codon_bootstraps_six_splits_and_root_independent_rf
+ERROR tests/test_phylogeny_calculators.py::test_saved_json_recalculation_for_all_functions_without_io_or_imports
+147 passed, 3 errors, 9 subtests passed in 0.74s

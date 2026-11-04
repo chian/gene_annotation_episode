@@ -1,0 +1,198 @@
+--- a/gene_annotation_episode/bvbrc_genome_alignment_sheet.py
++++ b/gene_annotation_episode/bvbrc_genome_alignment_sheet.py
+@@ -147,6 +147,22 @@
+         {'requirements': [], 'diagnostics': p['diagnostics']} for p in value['parsed_artifacts']] + value['slot_resolutions']
+ 
+ 
++def _data_requirement_links(value):
++    ids = {r['requirement_id'] for r in value['requirements']}
++    # C validates these rows against its own reports. D also retains their
++    # causes in its complete union. Embedded ArtifactMember IDs instead name
++    # the AppService selector's outputs; native task JSON has its own meaning.
++    for owner, fields in (
++        ('inputs', ('files', 'member_bindings', 'contig_bindings', 'feature_bindings')),
++        ('associations', ('artifacts', 'native_member_joins', 'bbcols_interval_joins')),
++    ):
++        if value[owner] is not None:
++            for field in fields:
++                for row in value[owner][field]:
++                    c._require(all(r in ids for r in row['requirement_ids']),
++                               'requirement_reference_unknown')
++
++
+ def validate_genome_alignment_data(value: dict) -> dict:
+     c._finite(value)
+     c._shape(value, ('schema_version', 'analysis_id', 'original_task', 'document_slots', 'inputs',
+@@ -171,7 +187,7 @@
+         # Outer acquisition reports may precede nested reports. No nested cause
+         # may disappear or conflict, even if unselected by any calculation.
+         c._require(c._same(value[field], c._union([value, *_data_groups(value)], field)), 'component_identity_conflict')
+-    c._links(value, {r['requirement_id'] for r in value['requirements']})
++    _data_requirement_links(value)
+     return deepcopy(value)
+ 
+ 
+--- /dev/null
++++ b/tests/test_genome_alignment_requirement_scope.py
+@@ -0,0 +1,161 @@
++"""Output selections and scientific missing causes have distinct referents.
++
++Native documents are retained examples; C witnesses and extra cause records in
++these shape tests are explicitly synthetic. Actual acquisition/typed-return
++coverage remains in the unchanged host and form-reference tests.
++"""
++from copy import deepcopy
++
++import pytest
++
++from gene_annotation_episode.bvbrc_alignment_values import requirement
++from gene_annotation_episode.bvbrc_appservice_bundle_values import _requirements
++from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
++from gene_annotation_episode.bvbrc_genome_alignment_sheet import validate_genome_alignment_data
++from test_bvbrc_genome_alignment_host import declaration, selection
++from test_bvbrc_genome_alignment_sheet import fixture_data
++
++
++SCIENTIFIC_ROWS = (
++    ('inputs', 'files'), ('inputs', 'member_bindings'),
++    ('inputs', 'contig_bindings'), ('inputs', 'feature_bindings'),
++    ('associations', 'artifacts'), ('associations', 'native_member_joins'),
++    ('associations', 'bbcols_interval_joins'),
++)
++
++
++@pytest.fixture(scope='module')
++def domains():
++    value = fixture_data()
++    inputs = value['inputs']
++    source = inputs['files'][0]
++    if not inputs['contig_bindings']:
++        inputs['contig_bindings'].append({
++            'file_id': source['file_id'], 'record_id': source['records'][0]['record_id'],
++            'sequence_id': None, 'accession': None, 'accession_version': None,
++            'genome_occurrence_indices': [], 'state': 'unverified',
++            'evidence': [], 'requirement_ids': [],
++        })
++    if not inputs['feature_bindings']:
++        inputs['feature_bindings'].append({
++            'feature': {'input_binding_id': 'synthetic-feature-input', 'member_id': 'feature', 'occurrence_index': 0},
++            'original_length': None, 'genome_occurrence_index': 0, 'segments': [],
++            'state': 'unverified', 'evidence': [], 'requirement_ids': [],
++        })
++    # Explicit unverified supplementary metadata is a synthetic cause in the
++    # local owner reports, separately from the fixture's existing bound facts.
++    for owner, field in SCIENTIFIC_ROWS:
++        rid = 'science:' + owner + ':' + field
++        cause = requirement(rid, kind='scientific_metadata', role=None,
++            reason_code='bvbrc_genome_alignment_metadata_record_unverified')
++        value[owner]['requirements'].append(cause)
++        value[owner][field][0]['requirement_ids'].append(rid)
++        value['requirements'].append(deepcopy(cause))
++    for row in value['associations']['artifacts']:
++        row['artifact']['requirement_ids'] = ['selected-output:' + row['role']]
++    return validate_genome_alignment_data(value)
++
++
++def test_output_selection_ids_survive_without_becoming_missing_causes(domains):
++    before = deepcopy(domains)
++    validated = validate_genome_alignment_data(domains)
++    missing = {r['requirement_id'] for r in validated['requirements']}
++    assert all(not set(row['artifact']['requirement_ids']) & missing
++               for row in validated['associations']['artifacts'])
++    assert domains == before == validated
++    validated['associations']['artifacts'][0]['artifact']['requirement_ids'].append('detached-copy')
++    assert domains == before
++
++
++def test_optional_output_selection_field_retains_historical_absence(domains):
++    legacy = deepcopy(domains)
++    for row in legacy['associations']['artifacts']:
++        del row['artifact']['requirement_ids']
++    assert validate_genome_alignment_data(legacy) == legacy
++
++
++@pytest.mark.parametrize('payload', [
++    {'requirement_ids': ['native-selection']},
++    {'requirement_ids': 'native JSON need not be a reference array'},
++    {'requirement_ids': {'original': 7}},
++])
++def test_native_task_json_is_preserved_without_scientific_reference_interpretation(domains, payload):
++    value = deepcopy(domains)
++    for task in (value['original_task'], value['inputs']['original_task'], value['associations']['original_task']):
++        task['submitted_parameters']['native_payload'] = deepcopy(payload)
++    before = deepcopy(value)
++    assert validate_genome_alignment_data(value) == before
++    assert value == before
++
++
++@pytest.mark.parametrize('owner,field', SCIENTIFIC_ROWS)
++@pytest.mark.parametrize('damage', [
++    'unknown', 'output_selection_only', 'other_owner_only', 'duplicate',
++    'nonstring', 'not_array', 'missing_local_cause', 'missing_global_cause', 'conflicting_global_cause',
++])
++def test_scientific_reference_domains_remain_strict(domains, owner, field, damage):
++    value = deepcopy(domains)
++    row = value[owner][field][0]
++    rid = 'science:' + owner + ':' + field
++    expected = 'bvbrc_genome_alignment_argument_invalid'
++    if damage == 'unknown':
++        row['requirement_ids'] = ['unknown-scientific-cause']
++    elif damage == 'output_selection_only':
++        row['requirement_ids'] = value['associations']['artifacts'][0]['artifact']['requirement_ids'][:]
++    elif damage == 'other_owner_only':
++        other = ('associations', 'artifacts') if owner == 'inputs' else ('inputs', 'files')
++        row['requirement_ids'] = ['science:' + ':'.join(other)]
++    elif damage == 'duplicate':
++        row['requirement_ids'] = [rid, rid]
++    elif damage == 'nonstring':
++        row['requirement_ids'] = [True]
++    elif damage == 'not_array':
++        row['requirement_ids'] = rid
++    elif damage == 'missing_local_cause':
++        value[owner]['requirements'] = [r for r in value[owner]['requirements'] if r['requirement_id'] != rid]
++    elif damage == 'missing_global_cause':
++        value['requirements'] = [r for r in value['requirements'] if r['requirement_id'] != rid]
++        expected = 'bvbrc_genome_alignment_provider_component_identity_conflict'
++    else:
++        next(r for r in value['requirements'] if r['requirement_id'] == rid)['role'] = 'conflicting-role'
++        expected = 'bvbrc_genome_alignment_provider_requirement_identity_conflict'
++    with pytest.raises(ValueError, match='^' + expected + '$'):
++        validate_genome_alignment_data(value)
++
++
++@pytest.mark.parametrize('with_inputs,with_associations', [(False, False), (False, True), (True, False)])
++def test_missing_C_values_remain_permitted(with_inputs, with_associations):
++    value = fixture_data(with_inputs=with_inputs, with_associations=with_associations)
++    assert validate_genome_alignment_data(value) == value
++
++
++@pytest.mark.parametrize('ids', [['native', 'native'], [''], [True], 'native'])
++def test_embedded_output_id_schema_is_not_bypassed(domains, ids):
++    value = deepcopy(domains)
++    value['associations']['artifacts'][0]['artifact']['requirement_ids'] = ids
++    with pytest.raises(ValueError, match='^contract_shape_invalid$'):
++        validate_genome_alignment_data(value)
++
++
++@pytest.mark.parametrize('damage', ['unknown', 'scientific_id', 'role', 'format', 'exact_object'])
++def test_output_selection_semantics_keep_the_original_AppService_owner(damage):
++    selector = selection('mauve_v4')
++    arguments = {'requirement_ids': ['native'], 'role': 'genome_alignment_primary',
++                 'declared_format': declaration('mauve_v4'),
++                 'object': {'kind': 'original_target', 'target_id': 'actual-selected-object'}}
++    inputs = {'selector': selector, 'supplied_evidence': [], 'support_receipt_refs': []}
++    validate_contract('ResultSelector', selector)
++    _requirements(inputs, arguments)
++    if damage in ('unknown', 'scientific_id'):
++        arguments['requirement_ids'] = ['unselected' if damage == 'unknown' else 'science:associations:artifacts']
++        code = 'publication_dependency_conflict'
++    else:
++        code = 'publication_requirement_conflict'
++        if damage == 'role':
++            arguments['role'] = 'genome_alignment_backbone'
++        elif damage == 'format':
++            arguments['declared_format'] = declaration('mauve_backbone')
++        else:
++            selector['requirements'][1]['exact_object'] = {'kind': 'original_target', 'target_id': 'different-object'}
++    with pytest.raises(ValueError, match='^' + code + '$'):
++        _requirements(inputs, arguments)

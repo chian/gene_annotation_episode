@@ -1,0 +1,76 @@
+{
+  "attempts": [
+    {
+      "attempt": "check001",
+      "summary": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "4",
+        "skipped": "0",
+        "tests": "427",
+        "time": "2.563",
+        "timestamp": "2026-10-27T23:49:21.368776-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "returncode": 1,
+      "terminal": true,
+      "quiescent": true,
+      "source_dependency_stdlib_binary_unchanged": true,
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true
+      },
+      "current_owned_files_match": {
+        "gene_annotation_episode/bvbrc_minhash_contracts.py": true,
+        "gene_annotation_episode/bvbrc_minhash_grader.py": true,
+        "gene_annotation_episode/bvbrc_minhash_views.py": true,
+        "tests/test_bvbrc_minhash_contracts.py": true,
+        "tests/test_bvbrc_minhash_grader.py": true,
+        "tests/test_bvbrc_minhash_views.py": true,
+        "tests/test_bvbrc_minhash_metadata_views.py": true
+      },
+      "passing_overlap_with_previous": 0
+    },
+    {
+      "attempt": "check002",
+      "summary": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "4",
+        "time": "1.724",
+        "timestamp": "2026-10-27T23:50:40.314065-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "returncode": 0,
+      "terminal": true,
+      "quiescent": true,
+      "source_dependency_stdlib_binary_unchanged": true,
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true
+      },
+      "current_owned_files_match": {
+        "gene_annotation_episode/bvbrc_minhash_contracts.py": true,
+        "gene_annotation_episode/bvbrc_minhash_grader.py": true,
+        "gene_annotation_episode/bvbrc_minhash_views.py": true,
+        "tests/test_bvbrc_minhash_contracts.py": true,
+        "tests/test_bvbrc_minhash_grader.py": true,
+        "tests/test_bvbrc_minhash_views.py": true,
+        "tests/test_bvbrc_minhash_metadata_views.py": true
+      },
+      "passing_overlap_with_previous": 0
+    }
+  ],
+  "distinct_passing_cases": 427,
+  "single_fresh_suite_claim": false,
+  "deferred_integration_nodes": [
+    "test_bvbrc_minhash_metadata_views.py::test_closed_calculation_and_diagnostic_schemas_use_declared_enum_and_path_grammar"
+  ],
+  "verification_level": "pure contracts, numerical calculations and saved projection; complete custody/episode/live paths remain unverified"
+}

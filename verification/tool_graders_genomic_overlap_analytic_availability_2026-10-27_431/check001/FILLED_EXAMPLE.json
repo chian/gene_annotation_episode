@@ -1,0 +1,125 @@
+{
+  "evidence_label": "hand_worked_synthetic_supplied_records",
+  "native_execution_claim": false,
+  "filesystem_recovery_or_custody_claim": false,
+  "test_counts": {
+    "tests.test_genomic_overlap_inputs": 66,
+    "tests.test_genomic_overlap_calculations": 30,
+    "tests.test_genomic_overlap_result_views": 41,
+    "tests.test_genomic_overlap_analytic_capture_loss": 55
+  },
+  "sets": [
+    {
+      "set_key": "A",
+      "result_extent": "complete",
+      "input_data_row_count": 2,
+      "valid_region_count": 2,
+      "region_count": 2,
+      "union_bp": 15
+    },
+    {
+      "set_key": "B",
+      "result_extent": "complete",
+      "input_data_row_count": 1,
+      "valid_region_count": 1,
+      "region_count": 1,
+      "union_bp": 5
+    },
+    {
+      "set_key": "C",
+      "result_extent": "unavailable",
+      "input_data_row_count": null,
+      "valid_region_count": 0,
+      "region_count": null,
+      "union_bp": null
+    }
+  ],
+  "pairs": [
+    {
+      "comparison_key": "comparison_0",
+      "result_extent": "complete",
+      "jaccard_bp": {
+        "numerator": 5,
+        "denominator": 15,
+        "value": 0.3333333333333333,
+        "missing_reason": null
+      },
+      "observed": {
+        "observed_pair_count": 2,
+        "observed_pairwise_bp_sum": 8,
+        "observed_intersection_union_bp": 5,
+        "interpretation": "exact_complete_result"
+      }
+    },
+    {
+      "comparison_key": "comparison_1",
+      "result_extent": "unavailable",
+      "jaccard_bp": {
+        "numerator": null,
+        "denominator": null,
+        "value": null,
+        "missing_reason": "unavailable_input"
+      },
+      "observed": {
+        "observed_pair_count": null,
+        "observed_pairwise_bp_sum": null,
+        "observed_intersection_union_bp": null,
+        "interpretation": "unavailable"
+      }
+    },
+    {
+      "comparison_key": "comparison_2",
+      "result_extent": "unavailable",
+      "jaccard_bp": {
+        "numerator": null,
+        "denominator": null,
+        "value": null,
+        "missing_reason": "unavailable_input"
+      },
+      "observed": {
+        "observed_pair_count": null,
+        "observed_pairwise_bp_sum": null,
+        "observed_intersection_union_bp": null,
+        "interpretation": "unavailable"
+      }
+    }
+  ],
+  "minimum_4_ab_selected": {
+    "a_union_coverage_fraction": {
+      "numerator": 5,
+      "denominator": 15,
+      "value": 0.3333333333333333,
+      "missing_reason": null
+    },
+    "b_union_coverage_fraction": {
+      "numerator": 5,
+      "denominator": 5,
+      "value": 1.0,
+      "missing_reason": null
+    },
+    "a_regions_with_overlap": 1,
+    "b_regions_with_overlap": 1,
+    "a_region_overlap_fraction": {
+      "numerator": 1,
+      "denominator": 2,
+      "value": 0.5,
+      "missing_reason": null
+    },
+    "b_region_overlap_fraction": {
+      "numerator": 1,
+      "denominator": 1,
+      "value": 1.0,
+      "missing_reason": null
+    },
+    "selected_pair_count": 1,
+    "selected_pairwise_bp_sum": 5,
+    "selected_intersection_union_bp": 5,
+    "selected_shared_union_fraction": {
+      "numerator": 5,
+      "denominator": 15,
+      "value": 0.3333333333333333,
+      "missing_reason": null
+    }
+  },
+  "ab_only_failures": []
+}

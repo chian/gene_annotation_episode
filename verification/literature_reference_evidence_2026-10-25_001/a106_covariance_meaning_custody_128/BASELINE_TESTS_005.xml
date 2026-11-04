@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.168" timestamp="2026-10-27T01:44:01.702104-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_parent_population_information" name="test_all_child_population_entries_schemas_and_order_equal_prechange_catalog[literature]" time="3.090"><failure message="AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}&#10;  &#10;  Omitting 3 identical items, use -vv to show&#10;  Differing items:&#10;  {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}&#10;  Left contains 1 more item:&#10;  {'descr...&#10;  &#10;  ...Full output truncated (16 lines hidden), use '-vv' to show">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1830/test_all_child_population_entr0')
+role = 'literature'
+
+    @pytest.mark.parametrize("role", ROLES)
+    def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
+        store, child, args = setup_store(tmp_path)
+        try:
+            binding, _ = enabled_parent(store, child, args["source_ref"])
+            context = replace(child, role=role, path=((role, "synthetic-catalog"),))
+            services = binding.services
+            disabled = LiteratureEpisodes(services)
+            ordinary = disabled.catalog(context)
+&gt;           expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
+                                                ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_parent_population_information.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def native_addition():
+        """Only the new operation is additive; the historical fixture stays exact."""
+        from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
+        entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+&gt;       assert entry["input_schema"] == rate_source_population_schema()
+E       AssertionError: assert {'type': 'obj...': False, ...} == {'type': 'obj...rties': False}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False, ...}, {'type': 'null'}]}, ...}} != {'properties': {'input_mode': {'const': 'native_source_spans'}, 'source_ref': {'type': 'string', 'pattern': '^(?:[a-z]...': ['source_ref', 'representation', 'start', 'end', 'quote'], 'additionalProperties': False}, {'type': 'null'}]}, ...}}
+E         Left contains 1 more item:
+E         {'descr...
+E         
+E         ...Full output truncated (16 lines hidden), use '-vv' to show
+
+tests/test_literature_parent_population_information.py:52: AssertionError</failure></testcase></testsuite></testsuites>

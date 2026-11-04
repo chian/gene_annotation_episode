@@ -1,0 +1,24 @@
+....F................................F..                                 [100%]
+=================================== FAILURES ===================================
+____ test_worker_keeps_missing_zero_and_independent_operands_distinct[zero] ____
+source_snapshot/tests/test_atac_differential_result_worker.py:152: in test_worker_keeps_missing_zero_and_independent_operands_distinct
+    assert output['partitions']
+E   assert None
+_ test_actual_worker_is_bounded_frozen_and_replays_after_original_sources_removed _
+source_snapshot/tests/test_atac_differential_result_preparation.py:32: in test_actual_worker_is_bounded_frozen_and_replays_after_original_sources_removed
+    capture = prepare_atac_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_atac_differential_preparation.py:277: in prepare_atac_result_worker
+    value = validate_prepared_atac_worker(store, dict(version='atac_differential_worker_capture_v1', plan_file=plan_file,
+source_snapshot/gene_annotation_episode/native_atac_differential_preparation.py:173: in validate_prepared_atac_worker
+    body = _read_control(retained_native_file(store, execution['handle_file']))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_atac_differential_driver.py:104: in _read_control
+    require(raw in (canonical(value), canonical(value) + b"\n"), "original_attempt_mismatch")
+source_snapshot/gene_annotation_episode/native_atac_differential_contracts.py:41: in require
+    raise ValueError(code)
+E   ValueError: original_attempt_mismatch
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_atac_differential_result_worker.py::test_worker_keeps_missing_zero_and_independent_operands_distinct[zero]
+FAILED source_snapshot/tests/test_atac_differential_result_preparation.py::test_actual_worker_is_bounded_frozen_and_replays_after_original_sources_removed
+2 failed, 38 passed in 161.62s (0:02:41)

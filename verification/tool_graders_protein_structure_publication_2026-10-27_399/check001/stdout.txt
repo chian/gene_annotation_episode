@@ -1,0 +1,187 @@
+....F.......................F.F.                                         [100%]
+=================================== FAILURES ===================================
+______ test_original_parameters_are_exact_and_new_calculation_is_explicit ______
+
+    def test_original_parameters_are_exact_and_new_calculation_is_explicit():
+        request = native()["request"]
+        original = selector()
+        original["parameters"] = deepcopy(request["parameters"])
+        assert validate_protein_structure_result_selector(original, request=request) == original
+        original["parameters"]["distance_threshold_A"] = 7.5
+        with pytest.raises(ValueError, match="original_commission_mismatch"):
+            validate_protein_structure_result_selector(original, request=request)
+        later, request = saved()
+        later["parameters"]["distance_threshold_A"] = 7.5
+>       assert validate_protein_structure_result_selector(later, request=request) == later
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_selection.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_selection.py:94: in validate_protein_structure_result_selector
+    validate_saved_sheet_descriptor(selected["saved_sheet"])
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1567: in validate_saved_sheet_descriptor
+    return _validate("SavedSheetDescriptor", value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1504: in _validate
+    _relations(value)
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1292: in _relations
+    _relations(x)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+v = {'run_id': 'synthetic-selector-run', 'result_episode_id': 'synthetic-result', 'result_operation_key': 'synthetic-operation', 'result_receipt_key': 'synthetic-receipt', ...}
+
+    def _relations(v):
+        if isinstance(v, list):
+            for x in v:
+                _relations(x)
+            return
+        if not isinstance(v, dict):
+            return
+        for x in v.values():
+            _relations(x)
+        keys = set(v)
+        if keys == {"artifact_ref", "sha256", "byte_length", "format"}:
+            if v["artifact_ref"] != "artifact_" + v["sha256"]:
+                raise ValueError("input_digest_mismatch")
+        elif keys == {"start_0based", "end_exclusive"}:
+            if v["end_exclusive"] < v["start_0based"]:
+                raise ValueError("invalid_schema")
+        elif keys == {"value", "state", "reason", "unit", "origin"}:
+            present = v["state"] == "present"
+            if present != (v["value"] is not None) or present != (v["reason"] is None):
+                raise ValueError("invalid_schema")
+            if present and v["unit"] in ("count", "residue", "pair") and (type(v["value"]) is not int or v["value"] < 0):
+                raise ValueError("invalid_schema")
+        elif keys == {"lexeme", "text", "syntax", "lexical_state", "span"}:
+            absent = v["syntax"] == "absent"
+            if absent != (v["lexical_state"] == "absent") or absent != (v["lexeme"] is None) or absent != (v["text"] is None) or absent != (v["span"] is None):
+                raise ValueError("invalid_schema")
+            if not absent:
+                if v["lexical_state"] == "cif_unknown" and (v["syntax"] != "bare" or v["lexeme"] != "?") or v["lexical_state"] == "cif_not_applicable" and (v["syntax"] != "bare" or v["lexeme"] != "."):
+                    raise ValueError("invalid_schema")
+                if v["lexical_state"] == "pdb_blank" and (v["syntax"] != "pdb_field" or v["text"].strip()):
+                    raise ValueError("invalid_schema")
+        elif keys == {"token", "value", "state", "embedded_standard_uncertainty"}:
+            if (v["state"] == "present") != (v["value"] is not None) or v["embedded_standard_uncertainty"] is not None and (v["state"] != "present" or v["embedded_standard_uncertainty"] < 0):
+                raise ValueError("invalid_schema")
+            if (v["token"]["lexical_state"] != "value") != (v["state"] == "missing"):
+                raise ValueError("invalid_schema")
+        elif keys == {"ordinal_0based", "native_serial_token", "serial_state"}:
+            if (v["serial_state"] == "explicit") != (v["native_serial_token"]["lexical_state"] == "value") or v["serial_state"] == "implicit" and v["native_serial_token"]["syntax"] != "absent":
+                raise ValueError("conflicting_identity")
+        elif "bfactor_semantics" in v and "ca_selection" in v:
+            _check_selection(v)
+        elif keys == {"candidate_atom_row_keys", "selected_atom_row_key", "state", "primary_reason", "qualifications"}:
+            _unique(v["candidate_atom_row_keys"], "conflicting_identity")
+            if v["selected_atom_row_key"] is not None and v["selected_atom_row_key"] not in v["candidate_atom_row_keys"]:
+                raise ValueError("invalid_coordinate_identity")
+            if (v["state"] == "available") != (v["primary_reason"] is None) or v["state"] == "available" and v["selected_atom_row_key"] is None:
+                raise ValueError("invalid_coordinate_identity")
+        elif keys == set(ResultCustody.__annotations__):
+            payload = {"run_id": v["run_id"], "episode_id": v["result_episode_id"], "operation_key": v["result_operation_key"]}
+            if v["result_receipt_key"] != "protein_structure_result_receipt:" + digest(payload):
+>               raise ValueError("conflicting_identity")
+E               ValueError: conflicting_identity
+
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1334: ValueError
+________ test_saved_original_mode_and_structure_selection_cannot_change ________
+
+    def test_saved_original_mode_and_structure_selection_cannot_change():
+        value, request = saved()
+        value["saved_sheet"]["original_mode"] = "evaluate_declared_transform_ca"
+>       with pytest.raises(ValueError, match="original_commission_mismatch"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'original_commission_mismatch'
+E         Actual message: 'conflicting_identity'
+
+source_snapshot/tests/test_protein_structure_selection.py:151: AssertionError
+_____________ test_pure_validation_uses_neither_io_nor_calculators _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7bdf8ece8fe0>
+
+    def test_pure_validation_uses_neither_io_nor_calculators(monkeypatch):
+        from gene_annotation_episode import protein_structure_calculations as calculations
+        value, request = saved()
+        def forbidden(*args, **kwargs):
+            raise AssertionError("selector validation attempted I/O or calculation")
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(Path, "open", forbidden)
+        monkeypatch.setattr(calculations, "calculate_protein_structure_components", forbidden)
+        monkeypatch.setattr(calculations, "fit_ca_transform", forbidden)
+>       assert validate_protein_structure_result_selector(value, request=request) == value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_selection.py:178: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_selection.py:94: in validate_protein_structure_result_selector
+    validate_saved_sheet_descriptor(selected["saved_sheet"])
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1567: in validate_saved_sheet_descriptor
+    return _validate("SavedSheetDescriptor", value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1504: in _validate
+    _relations(value)
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1292: in _relations
+    _relations(x)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+v = {'run_id': 'synthetic-selector-run', 'result_episode_id': 'synthetic-result', 'result_operation_key': 'synthetic-operation', 'result_receipt_key': 'synthetic-receipt', ...}
+
+    def _relations(v):
+        if isinstance(v, list):
+            for x in v:
+                _relations(x)
+            return
+        if not isinstance(v, dict):
+            return
+        for x in v.values():
+            _relations(x)
+        keys = set(v)
+        if keys == {"artifact_ref", "sha256", "byte_length", "format"}:
+            if v["artifact_ref"] != "artifact_" + v["sha256"]:
+                raise ValueError("input_digest_mismatch")
+        elif keys == {"start_0based", "end_exclusive"}:
+            if v["end_exclusive"] < v["start_0based"]:
+                raise ValueError("invalid_schema")
+        elif keys == {"value", "state", "reason", "unit", "origin"}:
+            present = v["state"] == "present"
+            if present != (v["value"] is not None) or present != (v["reason"] is None):
+                raise ValueError("invalid_schema")
+            if present and v["unit"] in ("count", "residue", "pair") and (type(v["value"]) is not int or v["value"] < 0):
+                raise ValueError("invalid_schema")
+        elif keys == {"lexeme", "text", "syntax", "lexical_state", "span"}:
+            absent = v["syntax"] == "absent"
+            if absent != (v["lexical_state"] == "absent") or absent != (v["lexeme"] is None) or absent != (v["text"] is None) or absent != (v["span"] is None):
+                raise ValueError("invalid_schema")
+            if not absent:
+                if v["lexical_state"] == "cif_unknown" and (v["syntax"] != "bare" or v["lexeme"] != "?") or v["lexical_state"] == "cif_not_applicable" and (v["syntax"] != "bare" or v["lexeme"] != "."):
+                    raise ValueError("invalid_schema")
+                if v["lexical_state"] == "pdb_blank" and (v["syntax"] != "pdb_field" or v["text"].strip()):
+                    raise ValueError("invalid_schema")
+        elif keys == {"token", "value", "state", "embedded_standard_uncertainty"}:
+            if (v["state"] == "present") != (v["value"] is not None) or v["embedded_standard_uncertainty"] is not None and (v["state"] != "present" or v["embedded_standard_uncertainty"] < 0):
+                raise ValueError("invalid_schema")
+            if (v["token"]["lexical_state"] != "value") != (v["state"] == "missing"):
+                raise ValueError("invalid_schema")
+        elif keys == {"ordinal_0based", "native_serial_token", "serial_state"}:
+            if (v["serial_state"] == "explicit") != (v["native_serial_token"]["lexical_state"] == "value") or v["serial_state"] == "implicit" and v["native_serial_token"]["syntax"] != "absent":
+                raise ValueError("conflicting_identity")
+        elif "bfactor_semantics" in v and "ca_selection" in v:
+            _check_selection(v)
+        elif keys == {"candidate_atom_row_keys", "selected_atom_row_key", "state", "primary_reason", "qualifications"}:
+            _unique(v["candidate_atom_row_keys"], "conflicting_identity")
+            if v["selected_atom_row_key"] is not None and v["selected_atom_row_key"] not in v["candidate_atom_row_keys"]:
+                raise ValueError("invalid_coordinate_identity")
+            if (v["state"] == "available") != (v["primary_reason"] is None) or v["state"] == "available" and v["selected_atom_row_key"] is None:
+                raise ValueError("invalid_coordinate_identity")
+        elif keys == set(ResultCustody.__annotations__):
+            payload = {"run_id": v["run_id"], "episode_id": v["result_episode_id"], "operation_key": v["result_operation_key"]}
+            if v["result_receipt_key"] != "protein_structure_result_receipt:" + digest(payload):
+>               raise ValueError("conflicting_identity")
+E               ValueError: conflicting_identity
+
+source_snapshot/gene_annotation_episode/protein_structure_contracts.py:1334: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_selection.py::test_original_parameters_are_exact_and_new_calculation_is_explicit
+FAILED source_snapshot/tests/test_protein_structure_selection.py::test_saved_original_mode_and_structure_selection_cannot_change
+FAILED source_snapshot/tests/test_protein_structure_selection.py::test_pure_validation_uses_neither_io_nor_calculators
+3 failed, 29 passed in 1.21s

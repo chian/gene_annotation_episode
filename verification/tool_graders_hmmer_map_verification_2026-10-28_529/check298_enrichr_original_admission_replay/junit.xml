@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="95.399" timestamp="2026-10-30T17:01:56.424100-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_enrichr_workflow" name="test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction[source-only]" time="34.147"><failure message="AssertionError: Replay reopened withdrawn native/control payload bytes&#10;assert 'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8' not in {'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8', 'artifact_602c49618ce2b843e27aba00ec1561...9e339fa17b2e2fcfd3d1c1f9820762682675dee3', 'artifact_9dc60b35d0cc1aec421cb80d5d65eb47009d79840abd76846135ef5ee8bf71ee'}">source_snapshot/tests/test_enrichr_workflow.py:400: in test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction
+    assert replay.run() == archived
+           ^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:272: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:269: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1734: in _finish_async
+    return await _receive_closed_child_async(record, child_result, self.child.request,
+source_snapshot/method_loop/episode.py:1822: in _receive_closed_child_async
+    admitted = request.report_contract.admit(report, audit_identifiers=identifiers)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:180: in admit
+    admitted = validate_form(value, self.schema, self.reference_resolver)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:636: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:726: in _validate_form
+    _validate_form_semantics(payload, schema, reference_resolver)
+source_snapshot/gene_annotation_episode/communication.py:830: in _validate_form_semantics
+    visit(payload, schema, path, resource)
+source_snapshot/gene_annotation_episode/communication.py:792: in visit
+    visit(child, properties[key], f"{path}.{key}", resource)
+source_snapshot/gene_annotation_episode/communication.py:806: in visit
+    visit(child, node["items"], f"{path}[{i}]", resource)
+source_snapshot/gene_annotation_episode/communication.py:810: in visit
+    if reference_resolver is None or not reference_resolver(value, node.get("x-reference-namespace")):
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3776: in resolve
+    return contract_binding['resolver'](reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3069: in resolve
+    if specialist is not None and specialist.resolve(context, reference, namespace):
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:3522: in resolve
+    target = self.job_progress_provider.targets.read_target(reference, context.scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_progress.py:543: in read_target
+    target = validate_target(self.api_execution.read_target(handle, scope))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:780: in read_target
+    body = self._read_handoff(handoff_ref, scope,
+source_snapshot/gene_annotation_episode/api_service_execution.py:729: in _read_handoff
+    snapshot_sha256 = self._load_snapshot(metadata).sha256
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:327: in _load_snapshot
+    fields['content'] = self.store.get_artifact(fields.pop('content_ref'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:389: in no_withdrawn_bytes
+    assert reference not in withdrawn, "Replay reopened withdrawn native/control payload bytes"
+E   AssertionError: Replay reopened withdrawn native/control payload bytes
+E   assert 'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8' not in {'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8', 'artifact_602c49618ce2b843e27aba00ec1561...9e339fa17b2e2fcfd3d1c1f9820762682675dee3', 'artifact_9dc60b35d0cc1aec421cb80d5d65eb47009d79840abd76846135ef5ee8bf71ee'}</failure></testcase><testcase classname="tests.test_enrichr_workflow" name="test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction[rich]" time="58.500"><failure message="AssertionError: Replay reopened withdrawn native/control payload bytes&#10;assert 'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8' not in {'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8', 'artifact_602c49618ce2b843e27aba00ec1561...5d65eb47009d79840abd76846135ef5ee8bf71ee', 'artifact_bf9d149b72ffd9fbef99c1ad4d10771e64f0f6b89f64069cb413736ffea54ba3'}">source_snapshot/tests/test_enrichr_workflow.py:400: in test_registered_enrichr_workflow_windows_custody_and_withdrawn_payload_reconstruction
+    assert replay.run() == archived
+           ^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:272: in run
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:269: in execute
+    record = await self.episode.run_async(self.workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+source_snapshot/method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:498: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1734: in _finish_async
+    return await _receive_closed_child_async(record, child_result, self.child.request,
+source_snapshot/method_loop/episode.py:1822: in _receive_closed_child_async
+    admitted = request.report_contract.admit(report, audit_identifiers=identifiers)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:180: in admit
+    admitted = validate_form(value, self.schema, self.reference_resolver)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:636: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:726: in _validate_form
+    _validate_form_semantics(payload, schema, reference_resolver)
+source_snapshot/gene_annotation_episode/communication.py:830: in _validate_form_semantics
+    visit(payload, schema, path, resource)
+source_snapshot/gene_annotation_episode/communication.py:792: in visit
+    visit(child, properties[key], f"{path}.{key}", resource)
+source_snapshot/gene_annotation_episode/communication.py:806: in visit
+    visit(child, node["items"], f"{path}[{i}]", resource)
+source_snapshot/gene_annotation_episode/communication.py:810: in visit
+    if reference_resolver is None or not reference_resolver(value, node.get("x-reference-namespace")):
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3776: in resolve
+    return contract_binding['resolver'](reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3069: in resolve
+    if specialist is not None and specialist.resolve(context, reference, namespace):
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_episodes.py:3522: in resolve
+    target = self.job_progress_provider.targets.read_target(reference, context.scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/execution_progress.py:543: in read_target
+    target = validate_target(self.api_execution.read_target(handle, scope))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:780: in read_target
+    body = self._read_handoff(handoff_ref, scope,
+source_snapshot/gene_annotation_episode/api_service_execution.py:729: in _read_handoff
+    snapshot_sha256 = self._load_snapshot(metadata).sha256
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/api_service_execution.py:327: in _load_snapshot
+    fields['content'] = self.store.get_artifact(fields.pop('content_ref'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_enrichr_workflow.py:389: in no_withdrawn_bytes
+    assert reference not in withdrawn, "Replay reopened withdrawn native/control payload bytes"
+E   AssertionError: Replay reopened withdrawn native/control payload bytes
+E   assert 'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8' not in {'artifact_31b4bde591d4b73e388af3a5e5c0ae0cb79387b1b7332689aea55d9df6034ec8', 'artifact_602c49618ce2b843e27aba00ec1561...5d65eb47009d79840abd76846135ef5ee8bf71ee', 'artifact_bf9d149b72ffd9fbef99c1ad4d10771e64f0f6b89f64069cb413736ffea54ba3'}</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,2320 @@
+{
+  "$defs": {
+    "artifact_manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "artifacts": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "id": {
+                "pattern": "^artifact_[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "media_type": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "relative_path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "sha256",
+              "media_type",
+              "bytes",
+              "relative_path"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "total_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "version": {
+          "const": "scientific_checkpoint_artifact_inventory_v1"
+        }
+      },
+      "required": [
+        "version",
+        "count",
+        "total_bytes",
+        "artifacts"
+      ],
+      "type": "object"
+    },
+    "committed_reference_manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "input_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "record_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "records": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "data_raw_utf8_bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "data_raw_utf8_sha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "record_type": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "reference": {
+                "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+                "type": "string"
+              },
+              "source_table": {
+                "enum": [
+                  "inputs",
+                  "records"
+                ]
+              }
+            },
+            "required": [
+              "reference",
+              "record_type",
+              "source_table",
+              "data_raw_utf8_sha256",
+              "data_raw_utf8_bytes"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "version": {
+          "const": "scientific_checkpoint_committed_reference_inventory_v1"
+        }
+      },
+      "required": [
+        "version",
+        "input_count",
+        "record_count",
+        "records"
+      ],
+      "type": "object"
+    },
+    "execution_inventory": {
+      "additionalProperties": false,
+      "properties": {
+        "episode_count": {
+          "const": 1
+        },
+        "forbidden_workspace_table_prefixes_absent": {
+          "const": [
+            "api_",
+            "public_search_"
+          ]
+        },
+        "native_registry_configuration": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "bytes"
+          ],
+          "type": "object"
+        },
+        "native_registry_database": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "bytes"
+          ],
+          "type": "object"
+        },
+        "native_registry_empty_tables": {
+          "const": [
+            {
+              "count": 0,
+              "table": "handoffs"
+            },
+            {
+              "count": 0,
+              "table": "orders"
+            },
+            {
+              "count": 0,
+              "table": "samples"
+            }
+          ]
+        },
+        "native_registry_preservation": {
+          "additionalProperties": false,
+          "properties": {
+            "database_after": {
+              "additionalProperties": false,
+              "properties": {
+                "bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "type": "object"
+            },
+            "database_before": {
+              "additionalProperties": false,
+              "properties": {
+                "bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "type": "object"
+            },
+            "mode": {
+              "const": "read_only_immutable_database_absent_or_empty_wal"
+            },
+            "reader_bookkeeping_changes": {
+              "const": []
+            },
+            "shm_after": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "shm_before": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_files_equal": {
+              "const": true
+            },
+            "wal_after": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "wal_before": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "mode",
+            "database_before",
+            "database_after",
+            "wal_before",
+            "wal_after",
+            "shm_before",
+            "shm_after",
+            "source_files_equal",
+            "reader_bookkeeping_changes"
+          ],
+          "type": "object"
+        },
+        "pending_call_count": {
+          "const": 1
+        },
+        "run_count": {
+          "const": 1
+        },
+        "version": {
+          "const": "stopped_fixed_science_execution_inventory_v1"
+        },
+        "workspace_empty_tables": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "const": 0
+              },
+              "table": {
+                "enum": [
+                  "provider_jobs",
+                  "provider_job_failures",
+                  "runtime_commission_intents",
+                  "runtime_timed_commissions",
+                  "runtime_forms",
+                  "runtime_report_attempts"
+                ]
+              }
+            },
+            "required": [
+              "table",
+              "count"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "version",
+        "workspace_empty_tables",
+        "forbidden_workspace_table_prefixes_absent",
+        "native_registry_database",
+        "native_registry_configuration",
+        "native_registry_empty_tables",
+        "run_count",
+        "episode_count",
+        "pending_call_count",
+        "native_registry_preservation"
+      ],
+      "type": "object"
+    },
+    "failure": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "publication_state": {
+                "const": "not_created"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "published_workspace": {
+                "type": "null"
+              },
+              "staging_workspace": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "publication_state": {
+                "const": "retained_stage"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "published_workspace": {
+                "type": "null"
+              },
+              "staging_workspace": {
+                "pattern": "^/[^\u0000]*$",
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "publication_state": {
+                "const": "published_durability_unconfirmed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "cause": {
+                "const": "io_error"
+              },
+              "code": {
+                "const": "publication_failure"
+              },
+              "phase": {
+                "const": "publish"
+              },
+              "source_unchanged": {
+                "const": true
+              },
+              "staging_workspace": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "publication_state": {
+                "const": "published_location_unconfirmed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "cause": {
+                "enum": [
+                  "contract_error",
+                  "io_error"
+                ]
+              },
+              "code": {
+                "const": "publication_failure"
+              },
+              "phase": {
+                "const": "publish"
+              },
+              "source_unchanged": {
+                "const": true
+              },
+              "staging_workspace": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "affected_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "cause": {
+          "enum": [
+            null,
+            "contract_error",
+            "permission_denied",
+            "io_error",
+            "sqlite_error",
+            "unsupported_platform",
+            "process_interrupted"
+          ]
+        },
+        "code": {
+          "enum": [
+            "invalid_request",
+            "source_unavailable",
+            "source_identity_mismatch",
+            "source_schema_unsupported",
+            "source_nonempty_wal_out_of_scope",
+            "source_execution_inventory_out_of_scope",
+            "source_changed",
+            "baseline_incomplete",
+            "reference_invalid",
+            "artifact_custody_failure",
+            "material_custody_failure",
+            "snapshot_mismatch",
+            "destination_invalid",
+            "destination_overlap",
+            "destination_exists",
+            "destination_lineage_failure",
+            "publication_failure",
+            "storage_failure"
+          ]
+        },
+        "errno": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "validate_request",
+            "capture_source",
+            "validate_inventory",
+            "snapshot",
+            "copy_artifacts",
+            "validate_snapshot",
+            "build_lineage",
+            "verify_source",
+            "publish"
+          ]
+        },
+        "publication_state": {
+          "enum": [
+            "not_created",
+            "retained_stage",
+            "published_durability_unconfirmed",
+            "published_location_unconfirmed"
+          ]
+        },
+        "published_workspace": {
+          "anyOf": [
+            {
+              "pattern": "^/[^\u0000]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_unchanged": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "staging_workspace": {
+          "anyOf": [
+            {
+              "pattern": "^/[^\u0000]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "version": {
+          "const": "scientific_checkpoint_fork_failure_v1"
+        }
+      },
+      "required": [
+        "version",
+        "code",
+        "phase",
+        "affected_refs",
+        "staging_workspace",
+        "published_workspace",
+        "publication_state",
+        "source_unchanged",
+        "cause",
+        "errno"
+      ],
+      "type": "object"
+    },
+    "implementation_file_manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "relative_path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "relative_path",
+              "sha256",
+              "bytes"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "implementation_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "source_implementation_root": {
+          "pattern": "^/[^\u0000]*$",
+          "type": "string"
+        },
+        "version": {
+          "const": "scientific_checkpoint_source_file_inventory_v1"
+        }
+      },
+      "required": [
+        "version",
+        "source_implementation_root",
+        "implementation_sha256",
+        "files"
+      ],
+      "type": "object"
+    },
+    "lineage_source_input": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "artifact_ref": {
+          "pattern": "^artifact_[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "operand_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        "parent_source_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "maxItems": 1,
+          "type": "array"
+        },
+        "provider": {
+          "const": "caller.scientific_checkpoint_fork"
+        },
+        "request_ref": {
+          "pattern": "^artifact_[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "type": "null"
+        },
+        "text_ref": {
+          "pattern": "^artifact_[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "uri": {
+          "type": "null"
+        },
+        "version": {
+          "const": "scientific_checkpoint_fork_v1"
+        }
+      },
+      "required": [
+        "provider",
+        "accession",
+        "uri",
+        "artifact_ref",
+        "text_ref",
+        "request_ref",
+        "version",
+        "retrieved_at",
+        "operand_refs",
+        "parent_source_refs"
+      ],
+      "type": "object"
+    },
+    "lineage_source_metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "fixed_target_ref": {
+          "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "original_observations",
+            "observation_index"
+          ]
+        },
+        "meaning": {
+          "const": "prior_run_lineage_not_new_local_observations"
+        },
+        "original_observation_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_artifact_manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "source_episode_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_implementation_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "source_pending_request_raw_utf8_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "source_run_id": {
+          "pattern": "^run_[a-f0-9]{32}$",
+          "type": "string"
+        },
+        "source_settings_raw_utf8_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "source_table_manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "const": "scientific_checkpoint_lineage_source_v1"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "meaning",
+        "source_run_id",
+        "source_episode_id",
+        "source_implementation_sha256",
+        "source_settings_raw_utf8_sha256",
+        "source_pending_request_raw_utf8_sha256",
+        "source_table_manifest_sha256",
+        "source_artifact_manifest_sha256",
+        "original_observation_count",
+        "fixed_target_ref"
+      ],
+      "type": "object"
+    },
+    "lineage_source_output": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "artifact_ref": {
+          "pattern": "^artifact_[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+          "type": "string"
+        },
+        "operand_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        "origin": {
+          "const": "caller"
+        },
+        "parent_source_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "maxItems": 1,
+          "type": "array"
+        },
+        "provider": {
+          "const": "caller.scientific_checkpoint_fork"
+        },
+        "record_type": {
+          "const": "source"
+        },
+        "request_ref": {
+          "pattern": "^artifact_[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "type": "null"
+        },
+        "text_ref": {
+          "pattern": "^artifact_[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "uri": {
+          "type": "null"
+        },
+        "version": {
+          "const": "scientific_checkpoint_fork_v1"
+        }
+      },
+      "required": [
+        "provider",
+        "accession",
+        "uri",
+        "artifact_ref",
+        "text_ref",
+        "request_ref",
+        "version",
+        "retrieved_at",
+        "operand_refs",
+        "parent_source_refs",
+        "id",
+        "record_type",
+        "origin"
+      ],
+      "type": "object"
+    },
+    "observation_index": {
+      "additionalProperties": false,
+      "properties": {
+        "meaning": {
+          "const": "prior_run_lineage_not_new_local_observations"
+        },
+        "observation_artifact_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "observation_artifact_ref": {
+          "pattern": "^artifact_[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "observation_artifact_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "observation_source_ref": {
+          "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+          "type": "string"
+        },
+        "record_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rows": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "decision_index": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "decision_index_present": {
+                "type": "boolean"
+              },
+              "delimiter_bytes": {
+                "const": 1
+              },
+              "delimiter_hex": {
+                "const": "0a"
+              },
+              "episode_id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "raw_text_utf8_bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "raw_text_utf8_offset": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "raw_text_utf8_sha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "run_id": {
+                "pattern": "^run_[a-f0-9]{32}$",
+                "type": "string"
+              },
+              "unit_index": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "unit_ref": {
+                "additionalProperties": false,
+                "properties": {
+                  "episode_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "unit_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "unit_index": {
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "episode_id",
+                  "unit_index",
+                  "unit_id"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "run_id",
+              "episode_id",
+              "unit_index",
+              "decision_index_present",
+              "decision_index",
+              "unit_ref",
+              "raw_text_utf8_offset",
+              "raw_text_utf8_bytes",
+              "raw_text_utf8_sha256",
+              "delimiter_bytes",
+              "delimiter_hex"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "source_episode_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_run_id": {
+          "pattern": "^run_[a-f0-9]{32}$",
+          "type": "string"
+        },
+        "stream_representation": {
+          "const": "original_sqlite_text_utf8_with_separate_lf_delimiters"
+        },
+        "version": {
+          "const": "scientific_checkpoint_observation_index_v1"
+        }
+      },
+      "required": [
+        "version",
+        "meaning",
+        "stream_representation",
+        "source_run_id",
+        "source_episode_id",
+        "observation_source_ref",
+        "observation_artifact_ref",
+        "observation_artifact_sha256",
+        "observation_artifact_bytes",
+        "record_count",
+        "rows"
+      ],
+      "type": "object"
+    },
+    "receipt": {
+      "additionalProperties": false,
+      "properties": {
+        "caller_initial_known_record_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "captured_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "checkpoint": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_manifest": {
+              "additionalProperties": false,
+              "properties": {
+                "bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "type": "object"
+            },
+            "committed_reference_manifest": {
+              "additionalProperties": false,
+              "properties": {
+                "bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "type": "object"
+            },
+            "database": {
+              "additionalProperties": false,
+              "properties": {
+                "bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "type": "object"
+            },
+            "table_manifest": {
+              "additionalProperties": false,
+              "properties": {
+                "bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "database",
+            "table_manifest",
+            "artifact_manifest",
+            "committed_reference_manifest"
+          ],
+          "type": "object"
+        },
+        "destination_workspace": {
+          "pattern": "^/[^\u0000]*$",
+          "type": "string"
+        },
+        "fixed_identity": {
+          "additionalProperties": false,
+          "properties": {
+            "case_ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "problem_ref": {
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+              "type": "string"
+            },
+            "target_ref": {
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+              "type": "string"
+            },
+            "target_sequence_artifact_ref": {
+              "pattern": "^artifact_[a-f0-9]{64}$",
+              "type": "string"
+            },
+            "target_sequence_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "case_ref",
+            "problem_ref",
+            "target_ref",
+            "target_sequence_artifact_ref",
+            "target_sequence_sha256"
+          ],
+          "type": "object"
+        },
+        "fork_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "initial_known_record_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "initial_known_record_refs_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "limitations": {
+          "const": [
+            "new_workspace_not_same_episode_migration",
+            "no_old_job_adoption",
+            "no_relocated_old_run_resumability",
+            "no_new_scientific_or_monitoring_credit",
+            "external_paths_retained_as_original_provenance",
+            "source_run_and_policy_parameters_not_rebound",
+            "later_new_caller_configuration_and_execution_separately_authorized"
+          ]
+        },
+        "lineage": {
+          "additionalProperties": false,
+          "properties": {
+            "index_artifact_ref": {
+              "pattern": "^artifact_[a-f0-9]{64}$",
+              "type": "string"
+            },
+            "index_source_ref": {
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+              "type": "string"
+            },
+            "observation_artifact_ref": {
+              "pattern": "^artifact_[a-f0-9]{64}$",
+              "type": "string"
+            },
+            "observation_source_ref": {
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+              "type": "string"
+            },
+            "original_observation_count": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "observation_source_ref",
+            "index_source_ref",
+            "observation_artifact_ref",
+            "index_artifact_ref",
+            "original_observation_count"
+          ],
+          "type": "object"
+        },
+        "preserved_counts": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "artifacts": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "committed_records": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "input_records": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "staged_proposals": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "tables": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "tables",
+            "artifacts",
+            "artifact_bytes",
+            "input_records",
+            "committed_records",
+            "staged_proposals"
+          ],
+          "type": "object"
+        },
+        "source": {
+          "additionalProperties": false,
+          "properties": {
+            "authority_files": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "checkpoint_relative_path": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
+                  "source_path": {
+                    "pattern": "^/[^\u0000]*$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "source_path",
+                  "checkpoint_relative_path",
+                  "sha256",
+                  "bytes"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "counts": {
+              "additionalProperties": false,
+              "properties": {
+                "actions": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "episodes": {
+                  "const": 1
+                },
+                "model_calls": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "observations": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "model_calls",
+                "actions",
+                "observations",
+                "episodes"
+              ],
+              "type": "object"
+            },
+            "episode_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "execution_inventory": {
+              "additionalProperties": false,
+              "properties": {
+                "episode_count": {
+                  "const": 1
+                },
+                "forbidden_workspace_table_prefixes_absent": {
+                  "const": [
+                    "api_",
+                    "public_search_"
+                  ]
+                },
+                "native_registry_configuration": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                "native_registry_database": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                "native_registry_empty_tables": {
+                  "const": [
+                    {
+                      "count": 0,
+                      "table": "handoffs"
+                    },
+                    {
+                      "count": 0,
+                      "table": "orders"
+                    },
+                    {
+                      "count": 0,
+                      "table": "samples"
+                    }
+                  ]
+                },
+                "native_registry_preservation": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "database_after": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "bytes": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "bytes"
+                      ],
+                      "type": "object"
+                    },
+                    "database_before": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "bytes": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "bytes"
+                      ],
+                      "type": "object"
+                    },
+                    "mode": {
+                      "const": "read_only_immutable_database_absent_or_empty_wal"
+                    },
+                    "reader_bookkeeping_changes": {
+                      "const": []
+                    },
+                    "shm_after": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "bytes": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "path": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "sha256": {
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "sha256",
+                            "bytes"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "shm_before": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "bytes": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "path": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "sha256": {
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "sha256",
+                            "bytes"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "source_files_equal": {
+                      "const": true
+                    },
+                    "wal_after": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "bytes": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "path": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "sha256": {
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "sha256",
+                            "bytes"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "wal_before": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "bytes": {
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "path": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "sha256": {
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "sha256",
+                            "bytes"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "mode",
+                    "database_before",
+                    "database_after",
+                    "wal_before",
+                    "wal_after",
+                    "shm_before",
+                    "shm_after",
+                    "source_files_equal",
+                    "reader_bookkeeping_changes"
+                  ],
+                  "type": "object"
+                },
+                "pending_call_count": {
+                  "const": 1
+                },
+                "run_count": {
+                  "const": 1
+                },
+                "version": {
+                  "const": "stopped_fixed_science_execution_inventory_v1"
+                },
+                "workspace_empty_tables": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "count": {
+                        "const": 0
+                      },
+                      "table": {
+                        "enum": [
+                          "provider_jobs",
+                          "provider_job_failures",
+                          "runtime_commission_intents",
+                          "runtime_timed_commissions",
+                          "runtime_forms",
+                          "runtime_report_attempts"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "table",
+                      "count"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "version",
+                "workspace_empty_tables",
+                "forbidden_workspace_table_prefixes_absent",
+                "native_registry_database",
+                "native_registry_configuration",
+                "native_registry_empty_tables",
+                "run_count",
+                "episode_count",
+                "pending_call_count",
+                "native_registry_preservation"
+              ],
+              "type": "object"
+            },
+            "implementation_file_manifest": {
+              "additionalProperties": false,
+              "properties": {
+                "bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "type": "object"
+            },
+            "implementation_root": {
+              "pattern": "^/[^\u0000]*$",
+              "type": "string"
+            },
+            "implementation_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            "pending": {
+              "additionalProperties": false,
+              "properties": {
+                "call_index": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "purpose": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "request_raw_utf8_bytes": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "request_raw_utf8_sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "response": {
+                  "type": "null"
+                },
+                "selected_action_at_call": {
+                  "const": false
+                }
+              },
+              "required": [
+                "call_index",
+                "purpose",
+                "request_raw_utf8_sha256",
+                "request_raw_utf8_bytes",
+                "response",
+                "selected_action_at_call"
+              ],
+              "type": "object"
+            },
+            "preservation": {
+              "additionalProperties": false,
+              "properties": {
+                "database_after": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                "database_before": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bytes": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "bytes"
+                  ],
+                  "type": "object"
+                },
+                "mode": {
+                  "const": "read_only_immutable_database_absent_or_empty_wal"
+                },
+                "reader_bookkeeping_changes": {
+                  "const": []
+                },
+                "registered_artifact_files_equal": {
+                  "const": true
+                },
+                "shm_after": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "bytes": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "bytes"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "shm_before": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "bytes": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "bytes"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "source_authority_files_equal": {
+                  "const": true
+                },
+                "source_files_equal": {
+                  "const": true
+                },
+                "wal_after": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "bytes": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "bytes"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "wal_before": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "bytes": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "bytes"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "mode",
+                "database_before",
+                "database_after",
+                "wal_before",
+                "wal_after",
+                "shm_before",
+                "shm_after",
+                "source_files_equal",
+                "registered_artifact_files_equal",
+                "source_authority_files_equal",
+                "reader_bookkeeping_changes"
+              ],
+              "type": "object"
+            },
+            "run_directory": {
+              "pattern": "^/[^\u0000]*$",
+              "type": "string"
+            },
+            "run_id": {
+              "pattern": "^run_[a-f0-9]{32}$",
+              "type": "string"
+            },
+            "settings_raw_utf8_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            "workspace": {
+              "pattern": "^/[^\u0000]*$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "workspace",
+            "run_directory",
+            "implementation_root",
+            "run_id",
+            "episode_id",
+            "implementation_sha256",
+            "implementation_file_manifest",
+            "authority_files",
+            "settings_raw_utf8_sha256",
+            "pending",
+            "counts",
+            "execution_inventory",
+            "preservation"
+          ],
+          "type": "object"
+        },
+        "status": {
+          "const": "custody_prepared_no_new_run"
+        },
+        "verification": {
+          "additionalProperties": false,
+          "properties": {
+            "all_committed_input_and_record_refs_explicitly_selected": {
+              "const": true
+            },
+            "all_selected_refs_resolve_through_actual_destination_store": {
+              "const": true
+            },
+            "all_source_rows_preserved_after_destination_additions": {
+              "const": true
+            },
+            "lineage_windows_match_original_raw_text": {
+              "const": true
+            },
+            "new_lineage_sources_validate_through_actual_store": {
+              "const": true
+            },
+            "no_new_run_or_observation_created": {
+              "const": true
+            },
+            "old_run_authority_unchanged": {
+              "const": true
+            },
+            "packed_material_components_equal": {
+              "const": true
+            },
+            "registered_artifact_bytes_equal": {
+              "const": true
+            },
+            "snapshot_database_bytes_equal_source_main": {
+              "const": true
+            },
+            "snapshot_schema_and_rows_equal": {
+              "const": true
+            }
+          },
+          "required": [
+            "snapshot_database_bytes_equal_source_main",
+            "snapshot_schema_and_rows_equal",
+            "all_source_rows_preserved_after_destination_additions",
+            "registered_artifact_bytes_equal",
+            "packed_material_components_equal",
+            "all_committed_input_and_record_refs_explicitly_selected",
+            "all_selected_refs_resolve_through_actual_destination_store",
+            "new_lineage_sources_validate_through_actual_store",
+            "lineage_windows_match_original_raw_text",
+            "old_run_authority_unchanged",
+            "no_new_run_or_observation_created"
+          ],
+          "type": "object"
+        },
+        "version": {
+          "const": "scientific_checkpoint_fork_v1"
+        },
+        "workspace_database_at_publication": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "bytes"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "fork_id",
+        "captured_at",
+        "destination_workspace",
+        "source",
+        "fixed_identity",
+        "checkpoint",
+        "workspace_database_at_publication",
+        "preserved_counts",
+        "lineage",
+        "caller_initial_known_record_refs",
+        "initial_known_record_refs",
+        "initial_known_record_refs_sha256",
+        "verification",
+        "limitations"
+      ],
+      "type": "object"
+    },
+    "request": {
+      "additionalProperties": false,
+      "properties": {
+        "destination_workspace": {
+          "pattern": "^/[^\u0000]*$",
+          "type": "string"
+        },
+        "expected_pending_request_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "expected_source_implementation_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "initial_known_record_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_implementation_root": {
+          "pattern": "^/[^\u0000]*$",
+          "type": "string"
+        },
+        "source_run_directory": {
+          "pattern": "^/[^\u0000]*$",
+          "type": "string"
+        },
+        "source_run_id": {
+          "pattern": "^run_[a-f0-9]{32}$",
+          "type": "string"
+        },
+        "source_workspace": {
+          "pattern": "^/[^\u0000]*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_workspace",
+        "source_run_directory",
+        "source_implementation_root",
+        "source_run_id",
+        "expected_source_implementation_sha256",
+        "expected_pending_request_sha256",
+        "destination_workspace",
+        "initial_known_record_refs"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "destination_workspace": {
+          "pattern": "^/[^\u0000]*$",
+          "type": "string"
+        },
+        "initial_known_record_refs": {
+          "items": {
+            "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "lineage_source_refs": {
+          "additionalProperties": false,
+          "properties": {
+            "index": {
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+              "type": "string"
+            },
+            "observations": {
+              "pattern": "^[a-z][a-z_]*_[a-f0-9]{24,64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "observations",
+            "index"
+          ],
+          "type": "object"
+        },
+        "receipt": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "bytes"
+          ],
+          "type": "object"
+        },
+        "status": {
+          "const": "published"
+        },
+        "version": {
+          "const": "scientific_checkpoint_fork_result_v1"
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "destination_workspace",
+        "receipt",
+        "initial_known_record_refs",
+        "lineage_source_refs"
+      ],
+      "type": "object"
+    },
+    "table_manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "database_encoding": {
+          "enum": [
+            "UTF-8",
+            "UTF-16le",
+            "UTF-16be"
+          ]
+        },
+        "encoding": {
+          "const": "sqlite_storage_class_frame_v1"
+        },
+        "schema_objects": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sql": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "table_name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "table",
+                  "index",
+                  "trigger",
+                  "view"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "table_name",
+              "sql"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "tables": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "column_names": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "row_count": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "typed_rows_sha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "column_names",
+              "row_count",
+              "typed_rows_sha256"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "version": {
+          "const": "sqlite_typed_row_inventory_v1"
+        }
+      },
+      "required": [
+        "version",
+        "encoding",
+        "database_encoding",
+        "schema_objects",
+        "tables"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:scientific-checkpoint-custody-contract:20261022:003",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "PLANNING ONLY. Closed proposed shapes. Relationships and zero-write semantics in CONTRACT.md are also normative; no custody implementation exists."
+}

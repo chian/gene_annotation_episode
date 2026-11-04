@@ -1,0 +1,295 @@
+.............FFFF......F..FFF.                                           [100%]
+=================================== FAILURES ===================================
+_ test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[known] _
+gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+tests/test_literature_kinetic_model_storage.py:37: in test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings
+    validate_form({"numbers": rows}, obj({"numbers": kinetic_model_cells_schema()}), lambda *_: True)
+gene_annotation_episode/communication.py:288: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:292: in _validate_form
+    schema = validate_closed_schema(schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+_ test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[estimated] _
+gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+tests/test_literature_kinetic_model_storage.py:37: in test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings
+    validate_form({"numbers": rows}, obj({"numbers": kinetic_model_cells_schema()}), lambda *_: True)
+gene_annotation_episode/communication.py:288: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:292: in _validate_form
+    schema = validate_closed_schema(schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+_ test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[unknown] _
+gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+tests/test_literature_kinetic_model_storage.py:37: in test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings
+    validate_form({"numbers": rows}, obj({"numbers": kinetic_model_cells_schema()}), lambda *_: True)
+gene_annotation_episode/communication.py:288: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:292: in _validate_form
+    schema = validate_closed_schema(schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+_ test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[absent] _
+gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+tests/test_literature_kinetic_model_storage.py:37: in test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings
+    validate_form({"numbers": rows}, obj({"numbers": kinetic_model_cells_schema()}), lambda *_: True)
+gene_annotation_episode/communication.py:288: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:292: in _validate_form
+    schema = validate_closed_schema(schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.numbers[].kinetic_sheet_ref: unsupported schema keyword
+___________ test_provider_label_is_not_a_committed_native_operation ____________
+tests/test_literature_kinetic_model_storage.py:104: in test_provider_label_is_not_a_committed_native_operation
+    forged = store.put("source", record, origin="tool", scope=context.scope)["id"]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/library_targets.py:302: in validate_scope
+    raise ContractError("invalid_scope")
+E   gene_annotation_episode.domain.ContractError: invalid_scope
+_ test_selected_child_to_parent_model_subset_and_ordinary_observations[known] __
+tests/test_literature_kinetic_model_integration.py:73: in test_selected_child_to_parent_model_subset_and_ordinary_observations
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1362: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:954: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_kinetic_model_integration.py:48: in model_action
+    assert prior["status"] == "completed"
+           ^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_ test_selected_child_to_parent_model_subset_and_ordinary_observations[estimated] _
+tests/test_literature_kinetic_model_integration.py:73: in test_selected_child_to_parent_model_subset_and_ordinary_observations
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1362: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:954: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_kinetic_model_integration.py:48: in model_action
+    assert prior["status"] == "completed"
+           ^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_________ test_catalog_dispatch_page_ancestry_and_exact_return_request _________
+gene_annotation_episode/communication.py:110: in validate_closed_schema
+    _compiled_schema_content(content)
+gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.selected[].kinetic_sheet_ref: unsupported schema keyword
+
+During handling of the above exception, another exception occurred:
+tests/test_literature_kinetic_model_integration.py:101: in test_catalog_dispatch_page_ancestry_and_exact_return_request
+    returned = form_with_facts({}, form, facts)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:468: in form_with_facts
+    schema = validate_closed_schema(schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:281: in _compile_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:260: in check
+    check(node["items"], path + "[]", depth + 1)
+gene_annotation_episode/communication.py:256: in check
+    check(child, path + "." + name, depth + 1)
+gene_annotation_episode/communication.py:244: in check
+    raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+E   gene_annotation_episode.communication.ReportBoundaryError: report.selected[].kinetic_sheet_ref: unsupported schema keyword
+=========================== short test summary info ============================
+FAILED tests/test_literature_kinetic_model_storage.py::test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[known]
+FAILED tests/test_literature_kinetic_model_storage.py::test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[estimated]
+FAILED tests/test_literature_kinetic_model_storage.py::test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[unknown]
+FAILED tests/test_literature_kinetic_model_storage.py::test_actual_existing_numeric_cells_preserve_known_estimated_and_missing_meanings[absent]
+FAILED tests/test_literature_kinetic_model_storage.py::test_provider_label_is_not_a_committed_native_operation
+FAILED tests/test_literature_kinetic_model_integration.py::test_selected_child_to_parent_model_subset_and_ordinary_observations[known]
+FAILED tests/test_literature_kinetic_model_integration.py::test_selected_child_to_parent_model_subset_and_ordinary_observations[estimated]
+FAILED tests/test_literature_kinetic_model_integration.py::test_catalog_dispatch_page_ancestry_and_exact_return_request
+8 failed, 22 passed in 83.32s (0:01:23)

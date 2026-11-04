@@ -1,0 +1,548 @@
+{
+  "schema": "hmmer_alignment_preparation_components_v1",
+  "operation": {
+    "program": "alimask",
+    "mode": "model_to_alignment",
+    "engine_version": "3.4",
+    "settings": {
+      "--dna": true,
+      "--fast": true,
+      "--wpb": true,
+      "--symfrac": 0.6,
+      "--fragthresh": 0.5,
+      "--model2ali": "1-1,2-2,3-3,4-4,5-5"
+    }
+  },
+  "parameters": {
+    "background": null,
+    "probability_tolerance": 0.0001,
+    "summary_rounding_tolerance": {
+      "eff_nseq": 0.005001,
+      "re_per_position": 0.0006
+    }
+  },
+  "rows": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "kind": "mapping",
+      "source_record_key": "input:alignment:0#alignment/0",
+      "output_record_key": null,
+      "model_record_key": null,
+      "summary_record_key": null,
+      "components": {
+        "input_sequence_count": {
+          "value": 3,
+          "state": "present",
+          "unit": "sequence_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "rows"
+            }
+          ]
+        },
+        "input_column_count": {
+          "value": 8,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_count"
+            }
+          ]
+        },
+        "rf_consensus_count": {
+          "value": 6,
+          "state": "present",
+          "unit": "RF_consensus_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.RF"
+            }
+          ]
+        },
+        "input_alignment_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_alignment_record_count",
+          "inputs": []
+        },
+        "processed_alignment_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "selected_alignment_record_count",
+          "inputs": []
+        },
+        "unprocessed_alignment_count": {
+          "value": 0,
+          "state": "present",
+          "unit": "decoded_unprocessed_alignment_record_count",
+          "inputs": []
+        },
+        "requested_interval_count": {
+          "value": 5,
+          "state": "present",
+          "unit": "request_interval_count",
+          "inputs": [
+            {
+              "field": "native_rows.requested_interval"
+            }
+          ]
+        },
+        "native_mapping_row_count": {
+          "value": 5,
+          "state": "present",
+          "unit": "decoded_mapping_row_count",
+          "inputs": []
+        },
+        "mapped_model_position_count": {
+          "value": 5,
+          "state": "present",
+          "unit": "model_position_count",
+          "inputs": []
+        },
+        "requested_union_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "alignment_column_count",
+          "inputs": []
+        }
+      },
+      "coordinates": null,
+      "model_components": null,
+      "source_symbol_counts": null,
+      "intervals": [
+        {
+          "request_record_key": "request#interval/0",
+          "request_ordinal": 0,
+          "requested_start": 1,
+          "requested_end": 1,
+          "requested_coordinate_system": "model",
+          "alignment_start": 1,
+          "alignment_end": 1,
+          "state": "present",
+          "inclusive_span": {
+            "value": 1,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": []
+          }
+        },
+        {
+          "request_record_key": "request#interval/1",
+          "request_ordinal": 1,
+          "requested_start": 2,
+          "requested_end": 2,
+          "requested_coordinate_system": "model",
+          "alignment_start": 2,
+          "alignment_end": 2,
+          "state": "present",
+          "inclusive_span": {
+            "value": 1,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": []
+          }
+        },
+        {
+          "request_record_key": "request#interval/2",
+          "request_ordinal": 2,
+          "requested_start": 3,
+          "requested_end": 3,
+          "requested_coordinate_system": "model",
+          "alignment_start": 3,
+          "alignment_end": 3,
+          "state": "present",
+          "inclusive_span": {
+            "value": 1,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": []
+          }
+        },
+        {
+          "request_record_key": "request#interval/3",
+          "request_ordinal": 3,
+          "requested_start": 4,
+          "requested_end": 4,
+          "requested_coordinate_system": "model",
+          "alignment_start": 5,
+          "alignment_end": 5,
+          "state": "present",
+          "inclusive_span": {
+            "value": 1,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": []
+          }
+        },
+        {
+          "request_record_key": "request#interval/4",
+          "request_ordinal": 4,
+          "requested_start": 5,
+          "requested_end": 5,
+          "requested_coordinate_system": "model",
+          "alignment_start": 6,
+          "alignment_end": 6,
+          "state": "present",
+          "inclusive_span": {
+            "value": 1,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": []
+          }
+        }
+      ],
+      "input_mm": null,
+      "output_mm": null,
+      "reconstruction": {
+        "state": "present",
+        "map": [
+          1,
+          2,
+          3,
+          5,
+          6
+        ],
+        "basis": "fast_wpb",
+        "weights": [
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/0",
+            "weight": 1.0089686098654709
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/1",
+            "weight": 1.0493273542600896
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/2",
+            "weight": 0.9417040358744395
+          }
+        ],
+        "marked_sequences": [
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/0",
+            "sequence": "AC--GT~~"
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/1",
+            "sequence": "ACT-GT~~"
+          },
+          {
+            "record_key": "input:alignment:0#alignment/0/sequence/2",
+            "sequence": "~~ANGT~~"
+          }
+        ],
+        "column_occupancy": [
+          {
+            "alignment_position": 1,
+            "weighted_residue_count": 2.058295965194702,
+            "weighted_residue_gap_count": 2.058295965194702,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 2,
+            "weighted_residue_count": 2.058295965194702,
+            "weighted_residue_gap_count": 2.058295965194702,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 3,
+            "weighted_residue_count": 1.9910314083099365,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 0.6636771559715271,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 4,
+            "weighted_residue_count": 0.9417040348052979,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 0.3139013350009918,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": false
+          },
+          {
+            "alignment_position": 5,
+            "weighted_residue_count": 3.0,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 6,
+            "weighted_residue_count": 3.0,
+            "weighted_residue_gap_count": 3.0,
+            "weighted_occupancy": 1.0,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": true
+          },
+          {
+            "alignment_position": 7,
+            "weighted_residue_count": 0.0,
+            "weighted_residue_gap_count": 0.0,
+            "weighted_occupancy": null,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": false
+          },
+          {
+            "alignment_position": 8,
+            "weighted_residue_count": 0.0,
+            "weighted_residue_gap_count": 0.0,
+            "weighted_occupancy": null,
+            "threshold_float32": 0.6000000238418579,
+            "is_model_position": false
+          }
+        ],
+        "pb_consensus_columns": [
+          1,
+          2,
+          3,
+          5,
+          6
+        ],
+        "issues": []
+      },
+      "native_mappings": [
+        {
+          "record_key": "output:stdout:0#mapping/0",
+          "kind": "mapping",
+          "occurrence_id": "output:stdout:0",
+          "locator": {
+            "artifact_ref": "retained:stdout",
+            "record_ordinal": 12,
+            "byte_start": 715,
+            "byte_end": 756,
+            "line_start": 13,
+            "line_end": 13
+          },
+          "raw": "       1..1        ->        1..1       \n",
+          "tokens": [
+            "1..1",
+            "->",
+            "1..1"
+          ],
+          "valid": true,
+          "request_ordinal": 0,
+          "requested_start": 1,
+          "requested_end": 1,
+          "returned_source_start": 1,
+          "returned_source_end": 1,
+          "target_start": 1,
+          "target_end": 1,
+          "source_coordinate_system": "model",
+          "target_coordinate_system": "alignment",
+          "native_state": "mapped"
+        },
+        {
+          "record_key": "output:stdout:0#mapping/1",
+          "kind": "mapping",
+          "occurrence_id": "output:stdout:0",
+          "locator": {
+            "artifact_ref": "retained:stdout",
+            "record_ordinal": 13,
+            "byte_start": 756,
+            "byte_end": 797,
+            "line_start": 14,
+            "line_end": 14
+          },
+          "raw": "       2..2        ->        2..2       \n",
+          "tokens": [
+            "2..2",
+            "->",
+            "2..2"
+          ],
+          "valid": true,
+          "request_ordinal": 1,
+          "requested_start": 2,
+          "requested_end": 2,
+          "returned_source_start": 2,
+          "returned_source_end": 2,
+          "target_start": 2,
+          "target_end": 2,
+          "source_coordinate_system": "model",
+          "target_coordinate_system": "alignment",
+          "native_state": "mapped"
+        },
+        {
+          "record_key": "output:stdout:0#mapping/2",
+          "kind": "mapping",
+          "occurrence_id": "output:stdout:0",
+          "locator": {
+            "artifact_ref": "retained:stdout",
+            "record_ordinal": 14,
+            "byte_start": 797,
+            "byte_end": 838,
+            "line_start": 15,
+            "line_end": 15
+          },
+          "raw": "       3..3        ->        3..3       \n",
+          "tokens": [
+            "3..3",
+            "->",
+            "3..3"
+          ],
+          "valid": true,
+          "request_ordinal": 2,
+          "requested_start": 3,
+          "requested_end": 3,
+          "returned_source_start": 3,
+          "returned_source_end": 3,
+          "target_start": 3,
+          "target_end": 3,
+          "source_coordinate_system": "model",
+          "target_coordinate_system": "alignment",
+          "native_state": "mapped"
+        },
+        {
+          "record_key": "output:stdout:0#mapping/3",
+          "kind": "mapping",
+          "occurrence_id": "output:stdout:0",
+          "locator": {
+            "artifact_ref": "retained:stdout",
+            "record_ordinal": 15,
+            "byte_start": 838,
+            "byte_end": 879,
+            "line_start": 16,
+            "line_end": 16
+          },
+          "raw": "       4..4        ->        5..5       \n",
+          "tokens": [
+            "4..4",
+            "->",
+            "5..5"
+          ],
+          "valid": true,
+          "request_ordinal": 3,
+          "requested_start": 4,
+          "requested_end": 4,
+          "returned_source_start": 4,
+          "returned_source_end": 4,
+          "target_start": 5,
+          "target_end": 5,
+          "source_coordinate_system": "model",
+          "target_coordinate_system": "alignment",
+          "native_state": "mapped"
+        },
+        {
+          "record_key": "output:stdout:0#mapping/4",
+          "kind": "mapping",
+          "occurrence_id": "output:stdout:0",
+          "locator": {
+            "artifact_ref": "retained:stdout",
+            "record_ordinal": 16,
+            "byte_start": 879,
+            "byte_end": 920,
+            "line_start": 17,
+            "line_end": 17
+          },
+          "raw": "       5..5        ->        6..6       \n",
+          "tokens": [
+            "5..5",
+            "->",
+            "6..6"
+          ],
+          "valid": true,
+          "request_ordinal": 4,
+          "requested_start": 5,
+          "requested_end": 5,
+          "returned_source_start": 5,
+          "returned_source_end": 5,
+          "target_start": 6,
+          "target_end": 6,
+          "source_coordinate_system": "model",
+          "target_coordinate_system": "alignment",
+          "native_state": "mapped"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "code": "parameter_valid",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "input:alignment:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stdout:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stderr:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "input_population_processed",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "source_geometry",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "range_capacity",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {
+        "capacity": 100,
+        "actual": 5
+      }
+    },
+    {
+      "code": "requested_ranges",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "native_mapping",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    }
+  ],
+  "issues": []
+}

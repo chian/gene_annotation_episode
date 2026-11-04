@@ -1,0 +1,57 @@
+{
+  "recorded_utc": "2026-10-26T13:05:03.443882+00:00",
+  "generation": "current-main checkout; not reconstructed unified pin030",
+  "focused": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_witness_repair_feedback.py",
+    "exit_code": 0,
+    "passed": 34,
+    "seconds": 26.56,
+    "log": "TEST_FOCUSED_FINAL.log"
+  },
+  "joined": {
+    "command": "set -o pipefail\n.venv/bin/python -m pytest -q tests/test_literature*.py tests/test_source_locations.py | tee verification/literature_reference_evidence_2026-10-25_001/witness_repair_feedback_030/TEST_JOINED_FINAL.log",
+    "session_id": 86167,
+    "exit_code": 0,
+    "passed": 3750,
+    "skipped": 11,
+    "seconds": 2258.42,
+    "log": "TEST_JOINED_FINAL.log"
+  },
+  "owned_final_hashes_verified": true,
+  "owned_files": [
+    {
+      "path": "gene_annotation_episode/literature_experimental_contracts.py",
+      "before_sha256": "2a959e2a0bc4d09a2b33d65afb69b92d03048502c56a5f037242c76f012c7539",
+      "sha256": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc",
+      "bytes": 7451
+    },
+    {
+      "path": "gene_annotation_episode/literature_assay_inputs.py",
+      "before_sha256": "5f985e6def1311f07500b835c7c5c624aec986eaca2553d5215fd16905ea343b",
+      "sha256": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+      "bytes": 20819
+    },
+    {
+      "path": "gene_annotation_episode/literature_episodes.py",
+      "before_sha256": "dcb01970f3539d887c3a1b91f4a5aaff473aa7e7088b36f76659331ff979e35b",
+      "sha256": "596e4e9b5b31ac2e2ebab03ce201209ba0ea799e9578258380915d4a3592b558",
+      "bytes": 62376
+    },
+    {
+      "path": "tests/test_literature_witness_repair_feedback.py",
+      "before_sha256": null,
+      "sha256": "34a0044c0b1279b66f59245521269306168219aaa03847af795a215731ab5a6b",
+      "bytes": 17819
+    }
+  ],
+  "controlled": {
+    "selected_actions": 4,
+    "observations": 3,
+    "successful_populations": 1,
+    "received_native_subsets": 1
+  },
+  "actual_model_execution": false,
+  "full_active_goal_complete": false,
+  "unified_pin_validation_owner": "parent; separate verification",
+  "unowned_episode_services_sha256_at_terminal": "0a68608a28db20a79934dcdc38a548673372cfb8e36fa517c8937ea280fd8588"
+}

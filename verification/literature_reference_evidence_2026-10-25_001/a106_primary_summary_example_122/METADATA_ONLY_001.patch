@@ -1,0 +1,163 @@
+--- 119pin002/gene_annotation_episode/literature_perturbation_summary.py
++++ 122basis/gene_annotation_episode/literature_perturbation_summary.py
+@@ -39,6 +39,9 @@
+                 "count", "raw_units", "graph", "digitization", "meaning_witnesses")
+ SPREAD_FIELDS = ("kind", "value", "lower", "upper", "coverage", "scale", "variance_status")
+ COUNT_FIELDS = ("n", "unit_kind", "independence")
++INTERPRETATION_BASIS_FIELDS = ("summary_kind", "summary_scale", "spread_kind", "spread_scale",
++    "count_n", "count_unit", "count_independence")
++INTERPRETATION_BASES = ("source_reported", "source_supported_inference", "conditional_assumption", "unresolved")
+ COV_FIELDS = ("first", "second", "kind", "value", "variance_status", "witnesses")
+ _NUMERIC = {"type": ["number", "null"]}
+ _NATURAL_COUNT = {"type": ["integer", "null"], "minimum": 1}
+@@ -154,8 +157,16 @@
+ 
+ 
+ def _entry(entry, field, sources, unit):
+-    _keys(entry, ENTRY_FIELDS, field)
++    # Omission preserves historical v2 inputs/payloads exactly. A supplied basis
++    # qualifies selected meanings; it neither validates source truth nor changes
++    # numerical eligibility or calculation.
++    has_basis = isinstance(entry, dict) and "interpretation_basis" in entry
++    _keys(entry, (*ENTRY_FIELDS, "interpretation_basis") if has_basis else ENTRY_FIELDS, field)
+     entry = deepcopy(entry)
++    if has_basis:
++        _keys(entry["interpretation_basis"], INTERPRETATION_BASIS_FIELDS, field + ".interpretation_basis")
++        for name, basis in entry["interpretation_basis"].items():
++            _choice(basis, INTERPRETATION_BASES, field + ".interpretation_basis." + name)
+     value = entry["value"]
+     if value is not None:
+         _finite(value, field + ".value")
+@@ -457,6 +468,8 @@
+             "summary_scale": entry["summary_scale"], "spread_kind": entry["uncertainty"]["kind"],
+             "spread_scale": entry["uncertainty"]["scale"], "count_unit": entry["count"]["unit_kind"],
+             "independence": entry["count"]["independence"], "n": entry["count"]["n"]}
++        if "interpretation_basis" in entry:
++            descriptors[role]["interpretation_basis"] = deepcopy(entry["interpretation_basis"])
+         digit = entry["digitization"]
+         cells[role+"_summary_value"] = _cell(entry["value"], unit, "selected_summary_value",
+             reason="summary_value_unreported" if entry["value"] is None else None,
+--- 119pin002/gene_annotation_episode/literature_perturbation_summary_storage.py
++++ 122basis/gene_annotation_episode/literature_perturbation_summary_storage.py
+@@ -11,6 +11,7 @@
+ from .literature_perturbation_storage import LiteraturePerturbationRepository, _metadata, perturbation_cells_schema
+ from .literature_perturbation_summary import (
+     COMPONENTS, ROLES, SUMMARY_KINDS, SCALES, SPREAD_KINDS, UNIT_KINDS, VARIANCE_STATUSES, VARIANCE_SCOPES,
++    INTERPRETATION_BASIS_FIELDS, INTERPRETATION_BASES,
+ )
+ 
+ RECORD_VERSION = "literature_perturbation_record_v2"
+@@ -32,7 +33,48 @@
+ UNITS = (*UNITS, *(u+"_squared" for u in UNITS if u != "count"))
+ 
+ 
+-def perturbation_summary_cells_schema():
++def _contributing_roles(component):
++    """Statistical premise custody, including operands of derived components.
++
++    Include roles used by validity prerequisites as well as the arithmetic.
++    This mapping does not select work or assign scientific credit.
++    """
++    for role in ROLES:
++        if component.startswith(role + "_"):
++            return (role,)
++    endpoints = {"reference_endpoint": "W", "perturbed_endpoint": "K", "restored_endpoint": "R"}
++    if component in endpoints:
++        return (endpoints[component],)
++    if component in ("perturbation_difference", "symmetric_effect", "perturbation_mean_variance",
++            "perturbation_variance_lower", "perturbation_variance_upper"):
++        return ("W", "K")
++    if component in ("restoration_difference", "restoration_mean_variance",
++            "restoration_variance_lower", "restoration_variance_upper"):
++        return ("K", "R")
++    if component in ("restoration_fraction_raw", "restoration_agreement", "shared_contrast_covariance"):
++        return ("W", "K", "R")
++    if component == "amount_comparability":
++        return ("A_reference", "A_restored")
++    if component == "perturbation_isolation":
++        return ("W", "K", "B_pert")
++    if component == "restoration_isolation":
++        return ("W", "K", "R", "B_rest")
++    if component == "effect_isolation":
++        return ("W", "K", "R", "B_pert", "B_rest")
++    if component in ("reference_restoration_index", "reference_index_lower", "reference_index_upper"):
++        return ROLES
++    raise ContractError("literature_perturbation_summary_component_selection_invalid")
++
++
++def _basis_map_schema(roles):
++    basis = {"type": "object", "properties": {name: {"type": "string", "enum": list(INTERPRETATION_BASES)}
++        for name in INTERPRETATION_BASIS_FIELDS}, "required": list(INTERPRETATION_BASIS_FIELDS),
++        "additionalProperties": False}
++    return {"type": "object", "properties": {role: deepcopy(basis) for role in roles},
++        "required": [], "minProperties": 1, "additionalProperties": False}
++
++
++def perturbation_summary_cells_schema(*, include_interpretation_basis=True):
+     """Original point meanings plus numerical summary and covariance cells."""
+     schema = deepcopy(perturbation_cells_schema())
+     properties = schema["items"]["properties"]
+@@ -68,6 +110,18 @@
+     })
+     schema["items"]["required"] = list(properties)
+     schema["x-source"] = NAMESPACE
++    if not include_interpretation_basis:
++        # Exact original55-field contract for actual historical v2 forms.
++        return schema
++    # Optional only for historical records that never supplied basis metadata.
++    # Exact saved-value validation forbids dropping it from basis-bearing rows.
++    properties["statistical_interpretation_basis"] = _basis_map_schema(ROLES)
++    groups = {}
++    for component in COMPONENTS:
++        groups.setdefault(_contributing_roles(component), []).append(component)
++    schema["items"]["allOf"] = [{"if": {"properties": {"component": {"enum": names}}},
++        "then": {"properties": {"statistical_interpretation_basis": _basis_map_schema(roles)}}}
++        for roles, names in groups.items()]
+     return schema
+ 
+ 
+@@ -125,11 +179,18 @@
+                     "summary_kind":"unknown","value_scale":"unknown","summary_scale":"unknown",
+                     "spread_kind":"unreported","spread_scale":"unknown","count_unit":"unknown",
+                     "independence":"unknown","n":None}
++                descriptor.pop("interpretation_basis", None)
+                 coverage=(saved["extraction"]["summary_data"]["measurements"][role]["uncertainty"]["coverage"] if role else None)
+-                rows.append({"sheet_ref":reference,"evidence_source_ref":saved["input_source_ref"],
++                row = {"sheet_ref":reference,"evidence_source_ref":saved["input_source_ref"],
+                     "data_source_ref":saved["data_source_ref"],**saved["experimental_bindings"],
+                     "component":name,**cell,"formula_code":FORMULA_CODES[name],**_metadata(saved["extraction"]),
+-                    "measurement_role":role,**descriptor,"reported_coverage":coverage})
++                    "measurement_role":role,**descriptor,"reported_coverage":coverage}
++                bases = {operand: deepcopy(saved["sheet"]["summary_descriptors"][operand]["interpretation_basis"])
++                    for operand in _contributing_roles(name)
++                    if "interpretation_basis" in saved["sheet"]["summary_descriptors"][operand]}
++                if bases:
++                    row["statistical_interpretation_basis"] = bases
++                rows.append(row)
+         validate_schema(rows,perturbation_summary_cells_schema())
+         return rows
+ 
+--- 119pin002/gene_annotation_episode/communication.py
++++ 122basis/gene_annotation_episode/communication.py
+@@ -129,6 +129,21 @@
+     def check(node, path, depth=0):
+         nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+         source = node.get("x-source") if isinstance(node, dict) else None
++        if source == "literature_perturbation_summary_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
++            # Only these two complete registered fact contracts permit their
++            # optional premise metadata. Generic object/keyword rules remain
++            # unchanged. Actual saved-value checks prevent dropping a basis
++            # supplied by the source-bound measurement recipe.
++            expected = (perturbation_summary_cells_schema(),
++                perturbation_summary_cells_schema(include_interpretation_basis=False))
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}):
++                raise ReportBoundaryError(f"{path}: perturbation summary fact schema must match its registered source", code="invalid_schema")
++            return
+         if source == "literature_controlled_response_component_cells":
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")

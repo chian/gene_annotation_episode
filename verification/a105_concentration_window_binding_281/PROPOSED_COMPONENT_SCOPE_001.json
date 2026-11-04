@@ -1,0 +1,402 @@
+{
+  "substrate_start": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "uM",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "substrate_start"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "substrate_end": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "uM",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "substrate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "total_product_start": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "uM",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "total_product_start"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "total_product_end": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "uM",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "fate_product_start": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "uM",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "fate_product_start"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "fate_product_end": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "uM",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "fate_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "coordinate_start": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "s",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "coordinate_start"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "coordinate_end": {
+    "formula": "selected_native_token*unit_multiplier",
+    "unit": "s",
+    "meaning": "Native source operand; not an experimental reliability score.",
+    "operands": [
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "substrate_loss": {
+    "formula": "S0-S1",
+    "unit": "uM",
+    "meaning": "Signed observed change over the selected common window.",
+    "operands": [
+      "substrate_start",
+      "substrate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "total_product_gain": {
+    "formula": "T1-T0",
+    "unit": "uM",
+    "meaning": "Signed observed change over the selected common window.",
+    "operands": [
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "fate_product_gain": {
+    "formula": "F1-F0",
+    "unit": "uM",
+    "meaning": "Signed observed change over the selected common window.",
+    "operands": [
+      "fate_product_start",
+      "fate_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "coordinate_span": {
+    "formula": "t1-t0",
+    "unit": "s",
+    "meaning": "Released coordinate separation, not automatically elapsed time.",
+    "operands": [
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "chemical_discrepancy": {
+    "formula": "(S0-S1)/nuS-(T1-T0)/nuT",
+    "unit": "uM_reaction_equivalents",
+    "meaning": "Signed disagreement between matched chemical readouts under declared stoichiometry.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "chemical_ratio": {
+    "formula": "((S0-S1)/nuS)/((T1-T0)/nuT)",
+    "unit": "dimensionless",
+    "meaning": "Relative agreement of matched substrate loss and total-product gain.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "chemical_relative_discrepancy": {
+    "formula": "chemical_ratio-1",
+    "unit": "dimensionless",
+    "meaning": "Signed relative mismatch of the same chemical readouts.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "fate_fraction": {
+    "formula": "((F1-F0)/nuF)/((T1-T0)/nuT)",
+    "unit": "dimensionless",
+    "meaning": "Specific measured product fate relative to total measured cleavage; not enzyme attribution.",
+    "operands": [
+      "total_product_start",
+      "total_product_end",
+      "fate_product_start",
+      "fate_product_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "substrate_depletion_fraction": {
+    "formula": "(S0-S1)/S0",
+    "unit": "fraction",
+    "meaning": "Fractional depletion, which can limit an initial-regime interpretation.",
+    "operands": [
+      "substrate_start",
+      "substrate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "source_interval_average_substrate": {
+    "formula": "60*substrate_loss/coordinate_span",
+    "unit": "uM/min",
+    "meaning": "Interval-average concentration change; never initial rate, Vmax or kcat.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "scenario_interval_average_substrate": {
+    "formula": "60*substrate_loss/coordinate_span",
+    "unit": "uM/min",
+    "meaning": "Interval-average concentration change; never initial rate, Vmax or kcat.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "scenario",
+    "covariance_required": false
+  },
+  "source_interval_average_total_product": {
+    "formula": "60*total_product_gain/coordinate_span",
+    "unit": "uM/min",
+    "meaning": "Interval-average concentration change; never initial rate, Vmax or kcat.",
+    "operands": [
+      "total_product_start",
+      "total_product_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "scenario_interval_average_total_product": {
+    "formula": "60*total_product_gain/coordinate_span",
+    "unit": "uM/min",
+    "meaning": "Interval-average concentration change; never initial rate, Vmax or kcat.",
+    "operands": [
+      "total_product_start",
+      "total_product_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "scenario",
+    "covariance_required": false
+  },
+  "source_interval_average_fate_product": {
+    "formula": "60*fate_product_gain/coordinate_span",
+    "unit": "uM/min",
+    "meaning": "Interval-average concentration change; never initial rate, Vmax or kcat.",
+    "operands": [
+      "fate_product_start",
+      "fate_product_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": false
+  },
+  "scenario_interval_average_fate_product": {
+    "formula": "60*fate_product_gain/coordinate_span",
+    "unit": "uM/min",
+    "meaning": "Interval-average concentration change; never initial rate, Vmax or kcat.",
+    "operands": [
+      "fate_product_start",
+      "fate_product_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "scenario",
+    "covariance_required": false
+  },
+  "substrate_loss_variance": {
+    "formula": "gradient(substrate_loss)^T*C*gradient(substrate_loss)",
+    "unit": "(uM)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "substrate_start",
+      "substrate_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "total_product_gain_variance": {
+    "formula": "gradient(total_product_gain)^T*C*gradient(total_product_gain)",
+    "unit": "(uM)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "fate_product_gain_variance": {
+    "formula": "gradient(fate_product_gain)^T*C*gradient(fate_product_gain)",
+    "unit": "(uM)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "fate_product_start",
+      "fate_product_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "coordinate_span_variance": {
+    "formula": "gradient(coordinate_span)^T*C*gradient(coordinate_span)",
+    "unit": "(s)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "chemical_discrepancy_variance": {
+    "formula": "gradient(chemical_discrepancy)^T*C*gradient(chemical_discrepancy)",
+    "unit": "(uM_reaction_equivalents)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "chemical_ratio_variance": {
+    "formula": "gradient(chemical_ratio)^T*C*gradient(chemical_ratio)",
+    "unit": "(dimensionless)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "fate_fraction_variance": {
+    "formula": "gradient(fate_fraction)^T*C*gradient(fate_fraction)",
+    "unit": "(dimensionless)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "total_product_start",
+      "total_product_end",
+      "fate_product_start",
+      "fate_product_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "source_interval_average_substrate_variance": {
+    "formula": "gradient(source_interval_average_substrate)^T*C*gradient(source_interval_average_substrate)",
+    "unit": "(uM/min)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "source_interval_average_total_product_variance": {
+    "formula": "gradient(source_interval_average_total_product)^T*C*gradient(source_interval_average_total_product)",
+    "unit": "(uM/min)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "total_product_start",
+      "total_product_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "source_interval_average_fate_product_variance": {
+    "formula": "gradient(source_interval_average_fate_product)^T*C*gradient(source_interval_average_fate_product)",
+    "unit": "(uM/min)^2",
+    "meaning": "Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.",
+    "operands": [
+      "fate_product_start",
+      "fate_product_end",
+      "coordinate_start",
+      "coordinate_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  },
+  "chemical_standardized_discrepancy": {
+    "formula": "chemical_discrepancy/sqrt(chemical_discrepancy_variance)",
+    "unit": "dimensionless",
+    "meaning": "Discrepancy relative to justified joint-estimate uncertainty; no p-value or probability.",
+    "operands": [
+      "substrate_start",
+      "substrate_end",
+      "total_product_start",
+      "total_product_end"
+    ],
+    "population": "source",
+    "covariance_required": true
+  }
+}

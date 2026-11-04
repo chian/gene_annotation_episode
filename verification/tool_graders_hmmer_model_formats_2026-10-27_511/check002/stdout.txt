@@ -1,0 +1,1139 @@
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 19%]
+.................................................................F...... [ 26%]
+........................................................................ [ 32%]
+....................................................F................... [ 39%]
+........................................................................ [ 45%]
+........................................................................ [ 52%]
+........................................................................ [ 58%]
+........................................................................ [ 65%]
+..................................................................FFFFFF [ 71%]
+FFFFFFFFFFFF....FFFFFFFFFFFFFFF......................................... [ 78%]
+........................................................................ [ 84%]
+............................................................FFFFFFFFFFFF [ 91%]
+FFFFFF....FFFFFFFF.FFFFFFFFFFFFFFFFFFF.................................. [ 98%]
+......................                                                   [100%]
+=================================== FAILURES ===================================
+_ test_binary_optional_metadata_uses_typed_values_and_ordered_command_meaning __
+source_snapshot/tests/test_hmmer_model_format_consumers.py:438: in test_binary_optional_metadata_uses_typed_values_and_ordered_command_meaning
+    assert optional["header.COM"]["state"] == "retained"
+           ^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'header.COM'
+___________ test_unsupported_binary_does_not_invent_model_population ___________
+source_snapshot/tests/test_hmmer_statistics_data.py:141: in test_unsupported_binary_does_not_invent_model_population
+    assert sheet["model_extraction"]["population"]["decoded_count"] is None
+E   assert 1 is None
+_ test_all26_retained_native_modes_reach_numerical_artifacts[alimask-mask_alignment] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[alimask-mask_model] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[alimask-model_to_alignment] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[alimask-alignment_to_model] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmbuild-build_alignment] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmbuild-build_single_sequence_matrix] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmconvert-ascii] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmconvert-binary] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmconvert-legacy_hmmer2] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-sample_core_unaligned] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-sample_core_aligned] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-consensus_simple] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-consensus_thresholded] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-sample_profile] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmfetch-single_key] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmfetch-key_file] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__ test_all26_retained_native_modes_reach_numerical_artifacts[hmmfetch-index] __
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__ test_all26_retained_native_modes_reach_numerical_artifacts[hmmpress-index] __
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmstat-summary] __
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[makehmmerdb-build] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmerfm-exactmatch-locations] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_retained_native_modes_reach_numerical_artifacts[hmmerfm-exactmatch-count_only] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:66: in test_all26_retained_native_modes_reach_numerical_artifacts
+    root, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__ test_binary_aliases_keep_distinct_occurrences_and_single_model_population ___
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:83: in test_binary_aliases_keep_distinct_occurrences_and_single_model_population
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, "hmmconvert", "binary")
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_partial_native_conversion_keeps_valid_first_model_and_failure ______
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:99: in test_partial_native_conversion_keeps_valid_first_model_and_failure
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch,
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:40: in read_native
+    plan = json.loads(plan_path.read_bytes())
+                      ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_formats_2026-10-27_511/check002/source_snapshot/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_conversion_failure0/plan.json'
+_ test_current_index_binding_names_exact_source_copy_and_attempt[hmmfetch-index-roles0] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:116: in test_current_index_binding_names_exact_source_copy_and_attempt
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_current_index_binding_names_exact_source_copy_and_attempt[hmmpress-index-roles1] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:116: in test_current_index_binding_names_exact_source_copy_and_attempt
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_fm_build_uses_original_recorded_abi_and_source_relationships _______
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:130: in test_fm_build_uses_original_recorded_abi_and_source_relationships
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, "makehmmerdb", "build")
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_changed_authenticated_worker_inputs_produce_specific_failure[files_reordered] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:144: in test_changed_authenticated_worker_inputs_produce_specific_failure
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_changed_authenticated_worker_inputs_produce_specific_failure[metadata] __
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:144: in test_changed_authenticated_worker_inputs_produce_specific_failure
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_changed_authenticated_worker_inputs_produce_specific_failure[occurrences] _
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:144: in test_changed_authenticated_worker_inputs_produce_specific_failure
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__ test_changed_authenticated_worker_inputs_produce_specific_failure[bundle] ___
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:144: in test_changed_authenticated_worker_inputs_produce_specific_failure
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_____ test_missing_retained_model_preserves_generated_output_measurements ______
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:160: in test_missing_retained_model_preserves_generated_output_measurements
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__________ test_saved_worker_identity_and_numerical_bytes_are_checked __________
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:175: in test_saved_worker_identity_and_numerical_bytes_are_checked
+    _, original, bundle, _, capture = capture_native(store, tmp_path, monkeypatch)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-mask_alignment] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-mask_model] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-model_to_alignment] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-alignment_to_model] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmbuild-build_alignment] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmbuild-build_single_sequence_matrix] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmconvert-ascii] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmconvert-binary] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmconvert-legacy_hmmer2] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-sample_core_unaligned] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-sample_core_aligned] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-consensus_simple] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-consensus_thresholded] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-sample_profile] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-single_key] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-key_file] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-index] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmpress-index] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmstat-summary] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[makehmmerdb-build] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmerfm-exactmatch-locations] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmerfm-exactmatch-count_only] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:46: in test_all26_modes_retain_grade_and_publish_only_requested_artifact
+    bundle, target, capture, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_requested_native_numerical_value_crosses_saved_publication[hmmemit-consensus_simple-length-12] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:77: in test_requested_native_numerical_value_crosses_saved_publication
+    _, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.source_symbol_total-28] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:77: in test_requested_native_numerical_value_crosses_saved_publication
+    _, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.actual_database_bytes-314] _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:77: in test_requested_native_numerical_value_crosses_saved_publication
+    _, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, program, mode)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_______ test_projection_rejects_changed_selection_and_prepared_identity ________
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:97: in test_projection_rejects_changed_selection_and_prepared_identity
+    bundle, _, _, prepared, source = prepare(store, tmp_path, monkeypatch)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:25: in prepare
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch, program, mode)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+___________ test_captured_artifact_survives_unavailable_grade_worker ___________
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:125: in test_captured_artifact_survives_unavailable_grade_worker
+    root, _, bundle, target, capture = capture_native(store, tmp_path, monkeypatch)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__ test_native_numerical_return_exact_completion_credit_and_unchanged_replay ___
+source_snapshot/tests/test_native_hmmer_preparation_results.py:121: in test_native_numerical_return_exact_completion_credit_and_unchanged_replay
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_status_has_no_acquisition_or_credit_and_later_collect_remains_selected __
+source_snapshot/tests/test_native_hmmer_preparation_results.py:165: in test_status_has_no_acquisition_or_credit_and_later_collect_remains_selected
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__________ test_duplicate_bundle_selections_have_one_acquisition_unit __________
+source_snapshot/tests/test_native_hmmer_preparation_results.py:180: in test_duplicate_bundle_selections_have_one_acquisition_unit
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch, selected=selected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+__ test_artifact_only_endpoint_does_not_depend_on_unrequested_grading[False] ___
+source_snapshot/tests/test_native_hmmer_preparation_results.py:202: in test_artifact_only_endpoint_does_not_depend_on_unrequested_grading
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch, selected=selected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+___ test_artifact_only_endpoint_does_not_depend_on_unrequested_grading[True] ___
+source_snapshot/tests/test_native_hmmer_preparation_results.py:202: in test_artifact_only_endpoint_does_not_depend_on_unrequested_grading
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch, selected=selected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_actual_native_partial_conversion_preserves_output_and_failure ______
+source_snapshot/tests/test_native_hmmer_preparation_results.py:219: in test_actual_native_partial_conversion_preserves_output_and_failure
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch, selected=choice,
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:40: in read_native
+    plan = json.loads(plan_path.read_bytes())
+                      ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_formats_2026-10-27_511/check002/source_snapshot/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_conversion_failure0/plan.json'
+________ test_changed_result_receipts_and_source_records_reject[scope] _________
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_changed_result_receipts_and_source_records_reject[assignment] ______
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_changed_result_receipts_and_source_records_reject[operation] _______
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_______ test_changed_result_receipts_and_source_records_reject[quantity] _______
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_changed_result_receipts_and_source_records_reject[population] ______
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+________ test_changed_result_receipts_and_source_records_reject[source] ________
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_______ test_changed_result_receipts_and_source_records_reject[failure] ________
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_changed_result_receipts_and_source_records_reject[completion] ______
+source_snapshot/tests/test_native_hmmer_preparation_results.py:236: in test_changed_result_receipts_and_source_records_reject
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+______ test_unrequested_auxiliary_artifact_denied_without_full_data_read _______
+source_snapshot/tests/test_native_hmmer_preparation_results.py:262: in test_unrequested_auxiliary_artifact_denied_without_full_data_read
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch, selected=selected,
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_ test_arbitrary_grading_exception_text_stays_separate_and_native_failure_survives _
+source_snapshot/tests/test_native_hmmer_preparation_results.py:281: in test_arbitrary_grading_exception_text_stays_separate_and_native_failure_survives
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch, selected=selected,
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:40: in read_native
+    plan = json.loads(plan_path.read_bytes())
+                      ^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_model_formats_2026-10-27_511/check002/source_snapshot/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_conversion_failure0/plan.json'
+_ test_initial_facts_allow_unsaved_construction_but_execute_requires_original __
+source_snapshot/tests/test_native_hmmer_preparation_results.py:295: in test_initial_facts_allow_unsaved_construction_but_execute_requires_original
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+_____ test_unavailable_manifest_is_a_typed_source_less_partial_acquisition _____
+source_snapshot/tests/test_native_hmmer_preparation_results.py:310: in test_unavailable_manifest_is_a_typed_source_less_partial_acquisition
+    case = NativeBoundaryFixture(store, tmp_path, monkeypatch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_results.py:44: in __init__
+    self.native_root, self.plan, self.bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_hmmer_model_format_consumers.py::test_binary_optional_metadata_uses_typed_values_and_ordered_command_meaning
+FAILED source_snapshot/tests/test_hmmer_statistics_data.py::test_unsupported_binary_does_not_invent_model_population
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[alimask-mask_alignment]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[alimask-mask_model]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[alimask-model_to_alignment]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[alimask-alignment_to_model]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmbuild-build_alignment]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmbuild-build_single_sequence_matrix]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmconvert-ascii]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmconvert-binary]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmconvert-legacy_hmmer2]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-sample_core_unaligned]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-sample_core_aligned]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-consensus_simple]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-consensus_thresholded]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmemit-sample_profile]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmfetch-single_key]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmfetch-key_file]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmfetch-index]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmpress-index]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmstat-summary]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[makehmmerdb-build]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmerfm-exactmatch-locations]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_all26_retained_native_modes_reach_numerical_artifacts[hmmerfm-exactmatch-count_only]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_binary_aliases_keep_distinct_occurrences_and_single_model_population
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_partial_native_conversion_keeps_valid_first_model_and_failure
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_current_index_binding_names_exact_source_copy_and_attempt[hmmfetch-index-roles0]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_current_index_binding_names_exact_source_copy_and_attempt[hmmpress-index-roles1]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_fm_build_uses_original_recorded_abi_and_source_relationships
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_changed_authenticated_worker_inputs_produce_specific_failure[files_reordered]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_changed_authenticated_worker_inputs_produce_specific_failure[metadata]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_changed_authenticated_worker_inputs_produce_specific_failure[occurrences]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_changed_authenticated_worker_inputs_produce_specific_failure[bundle]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_missing_retained_model_preserves_generated_output_measurements
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_saved_worker_identity_and_numerical_bytes_are_checked
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-mask_alignment]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-mask_model]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-model_to_alignment]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[alimask-alignment_to_model]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmbuild-build_alignment]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmbuild-build_single_sequence_matrix]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmconvert-ascii]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmconvert-binary]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmconvert-legacy_hmmer2]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-sample_core_unaligned]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-sample_core_aligned]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-consensus_simple]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-consensus_thresholded]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmemit-sample_profile]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-single_key]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-key_file]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmfetch-index]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmpress-index]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmstat-summary]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[makehmmerdb-build]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmerfm-exactmatch-locations]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_all26_modes_retain_grade_and_publish_only_requested_artifact[hmmerfm-exactmatch-count_only]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_requested_native_numerical_value_crosses_saved_publication[hmmemit-consensus_simple-length-12]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.source_symbol_total-28]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_requested_native_numerical_value_crosses_saved_publication[makehmmerdb-build-components.actual_database_bytes-314]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_projection_rejects_changed_selection_and_prepared_identity
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_captured_artifact_survives_unavailable_grade_worker
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_native_numerical_return_exact_completion_credit_and_unchanged_replay
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_status_has_no_acquisition_or_credit_and_later_collect_remains_selected
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_duplicate_bundle_selections_have_one_acquisition_unit
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_artifact_only_endpoint_does_not_depend_on_unrequested_grading[False]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_artifact_only_endpoint_does_not_depend_on_unrequested_grading[True]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_actual_native_partial_conversion_preserves_output_and_failure
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[scope]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[assignment]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[operation]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[quantity]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[population]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[source]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[failure]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_changed_result_receipts_and_source_records_reject[completion]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_unrequested_auxiliary_artifact_denied_without_full_data_read
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_arbitrary_grading_exception_text_stays_separate_and_native_failure_survives
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_initial_facts_allow_unsaved_construction_but_execute_requires_original
+FAILED source_snapshot/tests/test_native_hmmer_preparation_results.py::test_unavailable_manifest_is_a_typed_source_less_partial_acquisition
+80 failed, 1022 passed in 562.42s (0:09:22)

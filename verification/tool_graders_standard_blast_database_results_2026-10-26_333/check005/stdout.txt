@@ -1,0 +1,29 @@
+......................................................................F  [100%]
+=================================== FAILURES ===================================
+_ test_R10_malformed_native_source_preserves_diagnostics_and_valid_rows[tabular7-# BLASTP 2.17.0+\n# Query: q\n# Database: target\n# 2 hits found\nq\ts\t20\nq\ts\n-fields1] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_results_2026-10-26_333/check005/pytest-tmp/test_R10_malformed_native_sour1')
+format = 'tabular7'
+raw = b'# BLASTP 2.17.0+\n# Query: q\n# Database: target\n# 2 hits found\nq\ts\t20\nq\ts\n'
+fields = ['qseqid', 'sseqid', 'bitscore']
+
+    @pytest.mark.parametrize("format,raw,fields", [
+        ("json15", b"{invalid", None),
+        ("tabular7", b"# BLASTP 2.17.0+\n# Query: q\n# Database: target\n# 2 hits found\nq\ts\t20\nq\ts\n", ["qseqid", "sseqid", "bitscore"]),
+    ])
+    def test_R10_malformed_native_source_preserves_diagnostics_and_valid_rows(tmp_path, format, raw, fields):
+        inputs = fixture(doc=raw, fmt=format, fields=fields)
+        subject(inputs, "ACDEFGHI")
+        request = request_for(tmp_path, inputs=inputs)
+        manifest, diagnostics = invoke(request)
+>       assert manifest["status"] == "partial", diagnostics
+E       AssertionError: {'exceptions': [], 'failures': [], 'metadata_issues': [], 'schema': 'native_blast_standard_database_diagnostics_v1'}
+E       assert 'complete' == 'partial'
+E         
+E         - partial
+E         + complete
+
+../../../tests/test_native_blast_standard_database_result_worker.py:254: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_result_worker.py::test_R10_malformed_native_source_preserves_diagnostics_and_valid_rows[tabular7-# BLASTP 2.17.0+\n# Query: q\n# Database: target\n# 2 hits found\nq\ts\t20\nq\ts\n-fields1]
+1 failed, 70 passed in 14.21s

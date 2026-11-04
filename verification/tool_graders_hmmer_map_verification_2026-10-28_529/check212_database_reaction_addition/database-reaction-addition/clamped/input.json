@@ -1,0 +1,125 @@
+{
+"metabolites":[
+{
+"id":"gsh_c",
+"name":"glutathione",
+"compartment":"c",
+"annotation":{
+"chebi":"chebi:57925"
+}
+},
+{
+"id":"nadp_c",
+"name":"NADP+",
+"compartment":"c",
+"annotation":{
+"chebi":"chebi:58349"
+}
+},
+{
+"id":"gssg_c",
+"name":"glutathione disulfide",
+"compartment":"c",
+"annotation":{
+"chebi":"chebi:58297"
+}
+},
+{
+"id":"nadph_c",
+"name":"NADPH",
+"compartment":"c",
+"annotation":{
+"chebi":"chebi:57783"
+}
+},
+{
+"id":"h_c",
+"name":"H+",
+"compartment":"c",
+"annotation":{
+"chebi":"chebi:15378"
+}
+}
+],
+"reactions":[
+{
+"id":"UPTAKE_GSH",
+"name":"control glutathione input",
+"metabolites":{
+"gsh_c":1
+},
+"lower_bound":0.0,
+"upper_bound":10.0,
+"gene_reaction_rule":""
+},
+{
+"id":"UPTAKE_NADP",
+"name":"control NADP+ input",
+"metabolites":{
+"nadp_c":1
+},
+"lower_bound":0.0,
+"upper_bound":10.0,
+"gene_reaction_rule":""
+},
+{
+"id":"SINK_GSSG",
+"name":"selected control glutathione-disulfide endpoint",
+"metabolites":{
+"gssg_c":-1
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":"",
+"objective_coefficient":1.0
+},
+{
+"id":"SINK_NADPH",
+"name":"control NADPH output",
+"metabolites":{
+"nadph_c":-1
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"SINK_H",
+"name":"control H+ output",
+"metabolites":{
+"h_c":-1
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"RHEA11740_ADDITION",
+"name":"2 glutathione + NADP(+) = glutathione disulfide + NADPH + H(+)",
+"metabolites":{
+"gsh_c":-2.0,
+"gssg_c":1.0,
+"h_c":1.0,
+"nadp_c":-1.0,
+"nadph_c":1.0
+},
+"lower_bound":0,
+"upper_bound":1000,
+"gene_reaction_rule":"",
+"annotation":{
+"rhea":"RHEA:11740"
+}
+}
+],
+"genes":[],
+"id":"rhea11740_source_control",
+"name":"Supplied RHEA11740 numerical control",
+"compartments":{
+"c":"caller-selected numerical-control compartment"
+},
+"notes":{
+"compartment_basis":"caller-selected control compartment; source locations are unknown",
+"meaning":"supplied numerical control, not an organism or measured growth model"
+},
+"version":"1"
+}

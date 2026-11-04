@@ -1,0 +1,369 @@
+{
+  "provenance": "synthetic task/custody; actual supplied FASTA bytes",
+  "input_fasta_ascii": {
+    "f0": ">one\nACGT\n>two\nAC\n",
+    "f1": ">three\nAAGT\n"
+  },
+  "inputs": {
+    "schema_version": "bvbrc_genome_alignment_inputs_v1",
+    "original_task": {
+      "resource_id": "synthetic:api",
+      "task_id": "synthetic:GenomeAlignment:1",
+      "required_application_id": "GenomeAlignment",
+      "native_application_id": "GenomeAlignment",
+      "submitted_parameters": {
+        "genome_ids": [
+          "g0",
+          "g1"
+        ],
+        "recipe": "progressiveMauve"
+      },
+      "submitted_start_parameters": {},
+      "scheduler_returned_parameters": null,
+      "effective_parameters": null,
+      "submission_receipt_ref": "synthetic:submission",
+      "submission_operation_key": "synthetic:run:launch:0",
+      "submission_source_ref": "synthetic:request"
+    },
+    "genome_occurrences": [
+      {
+        "occurrence_index": 0,
+        "genome_id": "g0",
+        "parameter_pointer": "/genome_ids/0",
+        "input_binding_id": null,
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:request",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:request",
+              "sha256": "671f215a02f8afe077455cb2fa9ca4e3443af02c34052274d4c8344f3457fb0e",
+              "byte_count": 58
+            },
+            "pointer": "/genome_ids/0"
+          }
+        ]
+      },
+      {
+        "occurrence_index": 1,
+        "genome_id": "g1",
+        "parameter_pointer": "/genome_ids/1",
+        "input_binding_id": null,
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:request",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:request",
+              "sha256": "671f215a02f8afe077455cb2fa9ca4e3443af02c34052274d4c8344f3457fb0e",
+              "byte_count": 58
+            },
+            "pointer": "/genome_ids/1"
+          }
+        ]
+      }
+    ],
+    "invocation": {
+      "requested_recipe": "progressiveMauve",
+      "effective_recipe": "progressiveMauve",
+      "recipe_basis": "observed_argv",
+      "observed_argv": [
+        "progressiveMauve",
+        "f0",
+        "f1"
+      ],
+      "observed_program_version": null,
+      "mode": "multiple_files_concatenated",
+      "mode_basis": "observed_invocation",
+      "ordered_file_ids": [
+        "f0",
+        "f1"
+      ],
+      "evidence": [
+        {
+          "content": {
+            "source_ref": "synthetic:source:invocation",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "synthetic:artifact:invocation",
+            "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+            "byte_count": 38
+          },
+          "pointer": ""
+        }
+      ]
+    },
+    "files": [
+      {
+        "file_id": "f0",
+        "native_path_token": "/staged/f0",
+        "path_state": "bound",
+        "artifact": {
+          "source_ref": "synthetic:source:f0",
+          "raw_artifact_ref": "synthetic:artifact:f0",
+          "sha256": "fffc1cfa4b41239678c85f8cb826f0b4d3b1c1b7e452eb7e9ee7e25f9a83d264"
+        },
+        "content": {
+          "source_ref": "synthetic:source:f0",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "synthetic:artifact:f0",
+          "sha256": "fffc1cfa4b41239678c85f8cb826f0b4d3b1c1b7e452eb7e9ee7e25f9a83d264",
+          "byte_count": 18
+        },
+        "format": "FastA",
+        "genome_occurrence_indices": [
+          0
+        ],
+        "same_run_state": "bound",
+        "record_completeness": "complete",
+        "records": [
+          {
+            "record_id": "f0:0",
+            "entry_1based": 1,
+            "header": "one",
+            "sequence": "ACGT",
+            "source_location": {
+              "artifact": {
+                "source_ref": "synthetic:source:f0",
+                "raw_artifact_ref": "synthetic:artifact:f0",
+                "sha256": "fffc1cfa4b41239678c85f8cb826f0b4d3b1c1b7e452eb7e9ee7e25f9a83d264"
+              },
+              "byte_start_0based": 0,
+              "byte_end_0based_exclusive": 10,
+              "line_start_1based": 1,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          {
+            "record_id": "f0:1",
+            "entry_1based": 2,
+            "header": "two",
+            "sequence": "AC",
+            "source_location": {
+              "artifact": {
+                "source_ref": "synthetic:source:f0",
+                "raw_artifact_ref": "synthetic:artifact:f0",
+                "sha256": "fffc1cfa4b41239678c85f8cb826f0b4d3b1c1b7e452eb7e9ee7e25f9a83d264"
+              },
+              "byte_start_0based": 10,
+              "byte_end_0based_exclusive": 18,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          }
+        ],
+        "retrieval": {
+          "query": null,
+          "requested_record_limit": 25000,
+          "reported_total_records": null,
+          "returned_records": 2,
+          "state": "unknown",
+          "evidence": []
+        },
+        "path_evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "same_run_evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      },
+      {
+        "file_id": "f1",
+        "native_path_token": "/staged/f1",
+        "path_state": "bound",
+        "artifact": {
+          "source_ref": "synthetic:source:f1",
+          "raw_artifact_ref": "synthetic:artifact:f1",
+          "sha256": "9457af2bef9acc194cebd77e1c726546079948a79b4f86a0d29333ef71bc41d3"
+        },
+        "content": {
+          "source_ref": "synthetic:source:f1",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "synthetic:artifact:f1",
+          "sha256": "9457af2bef9acc194cebd77e1c726546079948a79b4f86a0d29333ef71bc41d3",
+          "byte_count": 12
+        },
+        "format": "FastA",
+        "genome_occurrence_indices": [
+          1
+        ],
+        "same_run_state": "bound",
+        "record_completeness": "complete",
+        "records": [
+          {
+            "record_id": "f1:0",
+            "entry_1based": 1,
+            "header": "three",
+            "sequence": "AAGT",
+            "source_location": {
+              "artifact": {
+                "source_ref": "synthetic:source:f1",
+                "raw_artifact_ref": "synthetic:artifact:f1",
+                "sha256": "9457af2bef9acc194cebd77e1c726546079948a79b4f86a0d29333ef71bc41d3"
+              },
+              "byte_start_0based": 0,
+              "byte_end_0based_exclusive": 12,
+              "line_start_1based": 1,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          }
+        ],
+        "retrieval": {
+          "query": null,
+          "requested_record_limit": 25000,
+          "reported_total_records": null,
+          "returned_records": 1,
+          "state": "unknown",
+          "evidence": []
+        },
+        "path_evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "same_run_evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      }
+    ],
+    "member_bindings": [
+      {
+        "member": {
+          "namespace": "mauve1_member_1based",
+          "index": 1
+        },
+        "state": "bound",
+        "genome_occurrence_indices": [
+          0
+        ],
+        "components": [
+          {
+            "file_id": "f0",
+            "record_id": "f0:0",
+            "member_interval_0based_half_open": [
+              0,
+              4
+            ],
+            "record_interval_0based_half_open": [
+              0,
+              4
+            ]
+          },
+          {
+            "file_id": "f0",
+            "record_id": "f0:1",
+            "member_interval_0based_half_open": [
+              4,
+              6
+            ],
+            "record_interval_0based_half_open": [
+              0,
+              2
+            ]
+          }
+        ],
+        "source_length": 6,
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      },
+      {
+        "member": {
+          "namespace": "mauve1_member_1based",
+          "index": 2
+        },
+        "state": "bound",
+        "genome_occurrence_indices": [
+          1
+        ],
+        "components": [
+          {
+            "file_id": "f1",
+            "record_id": "f1:0",
+            "member_interval_0based_half_open": [
+              0,
+              4
+            ],
+            "record_interval_0based_half_open": [
+              0,
+              4
+            ]
+          }
+        ],
+        "source_length": 4,
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:invocation",
+              "sha256": "b19fb3250b132cc065b7b2bd294d523a30ff1a1ed29a7b5d2ceffcf40db1c0cf",
+              "byte_count": 38
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      }
+    ],
+    "contig_bindings": [],
+    "feature_bindings": [],
+    "original_maps": [],
+    "xmfa_source_inputs": null,
+    "genome_census_state": "unknown",
+    "requirements": [],
+    "diagnostics": []
+  },
+  "member_lengths": [
+    6,
+    4
+  ]
+}

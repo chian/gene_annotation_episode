@@ -1,0 +1,311 @@
+{
+  "status": "passed",
+  "written_utc": "2026-10-26T07:27:44.720196+00:00",
+  "scope": "Independent SQL/source/pin inspection of controlled examples; no new source interpretation",
+  "model_backed": false,
+  "pin_files_verified": 599,
+  "pin_manifest_sha256": "d1fcfe32de0561a95c19d6006761d679232a7bad1e8d4819bbc01d3474d4a387",
+  "final_example_manifest_files_verified": 319,
+  "top_receipt_hashes_verified": 4,
+  "main_origins_different_from_pin": [
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_infernal_preparation_results.py",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_infernal_preparation_returns.py"
+  ],
+  "changed_literature_paths_match_pin": true,
+  "cases": [
+    {
+      "case": "primary_native",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        774.0,
+        284.0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 36,
+        "numbers_checked": 4,
+        "rates": {
+          "omitted": {
+            "raw_number": "284",
+            "relation": "point",
+            "canonical_value": 284.0,
+            "spread_kind": "unspecified",
+            "canonical_spread": 33.0
+          },
+          "reference": {
+            "raw_number": "774",
+            "relation": "point",
+            "canonical_value": 774.0,
+            "spread_kind": "unspecified",
+            "canonical_spread": 58.0
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 125
+    },
+    {
+      "case": "matched_native",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        100.0,
+        20.0,
+        90.0,
+        80.0,
+        0.8,
+        70.0,
+        0.875,
+        0.7
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 74,
+        "numbers_checked": 7,
+        "rates": {
+          "addback": {
+            "raw_number": "0.09",
+            "relation": "point",
+            "canonical_value": 90.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "omitted": {
+            "raw_number": "0.02",
+            "relation": "point",
+            "canonical_value": 20.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "reference": {
+            "raw_number": "0.1",
+            "relation": "point",
+            "canonical_value": 100.0,
+            "spread_kind": "SD",
+            "canonical_spread": 10.0
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 125
+    },
+    {
+      "case": "censored_native",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        100.0,
+        null,
+        90.0,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 74,
+        "numbers_checked": 7,
+        "rates": {
+          "addback": {
+            "raw_number": "0.09",
+            "relation": "point",
+            "canonical_value": 90.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "omitted": {
+            "raw_number": "0.005",
+            "relation": "lt",
+            "canonical_value": 5.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "reference": {
+            "raw_number": "0.1",
+            "relation": "point",
+            "canonical_value": 100.0,
+            "spread_kind": "SD",
+            "canonical_spread": 10.0
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 125
+    },
+    {
+      "case": "reused_native",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        100.0,
+        20.0,
+        100.0,
+        80.0,
+        0.8,
+        null,
+        null,
+        null
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 78,
+        "numbers_checked": 8,
+        "rates": {
+          "addback": {
+            "raw_number": "0.1",
+            "relation": "point",
+            "canonical_value": 100.0,
+            "spread_kind": "SD",
+            "canonical_spread": 10.0
+          },
+          "omitted": {
+            "raw_number": "0.02",
+            "relation": "point",
+            "canonical_value": 20.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "reference": {
+            "raw_number": "0.1",
+            "relation": "point",
+            "canonical_value": 100.0,
+            "spread_kind": "SD",
+            "canonical_spread": 10.0
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 125
+    },
+    {
+      "case": "unknown_identity_native",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        100.0,
+        20.0,
+        90.0,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 68,
+        "numbers_checked": 7,
+        "rates": {
+          "addback": {
+            "raw_number": "0.09",
+            "relation": "point",
+            "canonical_value": 90.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "omitted": {
+            "raw_number": "0.02",
+            "relation": "point",
+            "canonical_value": 20.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "reference": {
+            "raw_number": "0.1",
+            "relation": "point",
+            "canonical_value": 100.0,
+            "spread_kind": "SD",
+            "canonical_spread": 10.0
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 125
+    },
+    {
+      "case": "mixed_spread_native",
+      "status": "passed",
+      "selected_operations": 1,
+      "admissions": 1,
+      "cells": 8,
+      "values": [
+        100.0,
+        20.0,
+        90.0,
+        80.0,
+        0.8,
+        70.0,
+        0.875,
+        0.7
+      ],
+      "all_actual_SQL_tables_match": 60,
+      "bindings_and_source_bytes_verified": true,
+      "native_source_arithmetic": {
+        "witnesses_checked": 76,
+        "numbers_checked": 7,
+        "rates": {
+          "addback": {
+            "raw_number": "0.09",
+            "relation": "point",
+            "canonical_value": 90.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "omitted": {
+            "raw_number": "0.02",
+            "relation": "point",
+            "canonical_value": 20.0,
+            "spread_kind": "unreported",
+            "canonical_spread": null
+          },
+          "reference": {
+            "raw_number": "0.1",
+            "relation": "point",
+            "canonical_value": 100.0,
+            "spread_kind": "SD",
+            "canonical_spread": 10.0
+          }
+        }
+      },
+      "actions": 3,
+      "own_observations": 3,
+      "controller_credit": 0,
+      "fresh_replay_source_helpers_disabled": 125
+    }
+  ],
+  "audit_script_sha256": "fb5ae8506b11b94addf26339d2d3059ff7164de080a6eba7b56f513164b40839"
+}

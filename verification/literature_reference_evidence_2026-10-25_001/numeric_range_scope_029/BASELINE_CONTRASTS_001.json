@@ -1,0 +1,316 @@
+[
+  {
+    "case": "allocation",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "token": "3.2",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "allocation",
+    "text": "The mix was divided between two vessels of 180 \u03bcl each and 3.2 \u03bcM enzyme A and 4.6 \u03bcM enzyme B were added to the respective vessels.",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "three_wells",
+    "text": "The buffer was distributed between three wells, and 3.2 \u03bcM A, 4.6 \u03bcM B and 5.1 \u03bcM C were added to their respective wells.",
+    "token": "3.2",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "three_wells",
+    "text": "The buffer was distributed between three wells, and 3.2 \u03bcM A, 4.6 \u03bcM B and 5.1 \u03bcM C were added to their respective wells.",
+    "token": "4.6",
+    "shared": "point",
+    "native": {
+      "selector": {
+        "witness": {
+          "source_ref": "source_synthetic",
+          "representation": "original",
+          "start": 63,
+          "end": 66,
+          "quote": "4.6",
+          "artifact_ref": "artifact_synthetic"
+        },
+        "number_start": 0,
+        "number_end": 3
+      },
+      "raw_number": "4.6",
+      "value": 4.6,
+      "relation": "point",
+      "approximate": false
+    }
+  },
+  {
+    "case": "three_wells",
+    "text": "The buffer was distributed between three wells, and 3.2 \u03bcM A, 4.6 \u03bcM B and 5.1 \u03bcM C were added to their respective wells.",
+    "token": "5.1",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "interval",
+    "text": "The concentration was between 3.2 and 4.6 \u03bcM.",
+    "token": "3.2",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "interval",
+    "text": "The concentration was between 3.2 and 4.6 \u03bcM.",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "qualified_interval",
+    "text": "The concentration was between approximately 3.2 \u03bcM and 4.6 \u03bcM.",
+    "token": "3.2",
+    "shared": {
+      "error": "approximate_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "qualified_interval",
+    "text": "The concentration was between approximately 3.2 \u03bcM and 4.6 \u03bcM.",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "entity_interval",
+    "text": "between 3.2 \u03bcM A and 4.6 \u03bcM B",
+    "token": "3.2",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "entity_interval",
+    "text": "between 3.2 \u03bcM A and 4.6 \u03bcM B",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "unknown_endpoint",
+    "text": "between a low concentration and 4.6 \u03bcM",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "day_endpoints",
+    "text": "between 3.2 on day one and 4.6 \u03bcM on day two",
+    "token": "3.2",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "day_endpoints",
+    "text": "between 3.2 on day one and 4.6 \u03bcM on day two",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "qualified_allocation",
+    "text": "The mix was divided between two vessels and <3.2 \u03bcM A and approximately 4.6 \u03bcM B were added to each respective vessel.",
+    "token": "3.2",
+    "shared": "lt",
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "qualified_allocation",
+    "text": "The mix was divided between two vessels and <3.2 \u03bcM A and approximately 4.6 \u03bcM B were added to each respective vessel.",
+    "token": "4.6",
+    "shared": {
+      "error": "approximate_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "dash",
+    "text": "The mix was divided between two vessels and 3.2\u20134.6 \u03bcM A was added.",
+    "token": "3.2",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "dash",
+    "text": "The mix was divided between two vessels and 3.2\u20134.6 \u03bcM A was added.",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "to",
+    "text": "The mix was divided between two vessels and 3.2 to 4.6 \u03bcM A was added.",
+    "token": "3.2",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "to",
+    "text": "The mix was divided between two vessels and 3.2 to 4.6 \u03bcM A was added.",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  },
+  {
+    "case": "ordinary",
+    "text": "A received 3.2 \u03bcM and B received 4.6 \u03bcM.",
+    "token": "3.2",
+    "shared": "point",
+    "native": {
+      "selector": {
+        "witness": {
+          "source_ref": "source_synthetic",
+          "representation": "original",
+          "start": 11,
+          "end": 14,
+          "quote": "3.2",
+          "artifact_ref": "artifact_synthetic"
+        },
+        "number_start": 0,
+        "number_end": 3
+      },
+      "raw_number": "3.2",
+      "value": 3.2,
+      "relation": "point",
+      "approximate": false
+    }
+  },
+  {
+    "case": "ordinary",
+    "text": "A received 3.2 \u03bcM and B received 4.6 \u03bcM.",
+    "token": "4.6",
+    "shared": "point",
+    "native": {
+      "selector": {
+        "witness": {
+          "source_ref": "source_synthetic",
+          "representation": "original",
+          "start": 34,
+          "end": 37,
+          "quote": "4.6",
+          "artifact_ref": "artifact_synthetic"
+        },
+        "number_start": 0,
+        "number_end": 3
+      },
+      "raw_number": "4.6",
+      "value": 4.6,
+      "relation": "point",
+      "approximate": false
+    }
+  },
+  {
+    "case": "unfamiliar_first",
+    "text": "between unusually low 3.2 and 4.6 \u03bcM",
+    "token": "3.2",
+    "shared": "point",
+    "native": {
+      "selector": {
+        "witness": {
+          "source_ref": "source_synthetic",
+          "representation": "original",
+          "start": 22,
+          "end": 25,
+          "quote": "3.2",
+          "artifact_ref": "artifact_synthetic"
+        },
+        "number_start": 0,
+        "number_end": 3
+      },
+      "raw_number": "3.2",
+      "value": 3.2,
+      "relation": "point",
+      "approximate": false
+    }
+  },
+  {
+    "case": "unfamiliar_first",
+    "text": "between unusually low 3.2 and 4.6 \u03bcM",
+    "token": "4.6",
+    "shared": {
+      "error": "interval_source_number_unsupported:number"
+    },
+    "native": {
+      "error": "interval_source_number_unsupported:number"
+    }
+  }
+]

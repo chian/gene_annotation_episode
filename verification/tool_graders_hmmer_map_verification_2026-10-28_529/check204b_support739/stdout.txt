@@ -1,0 +1,50 @@
+FFFF.............................................................F.....  [100%]
+=================================== FAILURES ===================================
+_ test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans0-1] _
+source_snapshot/tests/test_sequence_support_739.py:81: in test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract
+    assert row['sequence'] == str(native_record.features[1].extract(native_record.seq))
+E   AssertionError: assert 'AGACCGAACG' == 'AGACCGAaCG'
+E     
+E     - AGACCGAaCG
+E     ?        ^
+E     + AGACCGAACG
+E     ?        ^
+_ test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans0--1] _
+source_snapshot/tests/test_sequence_support_739.py:81: in test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract
+    assert row['sequence'] == str(native_record.features[1].extract(native_record.seq))
+E   AssertionError: assert 'CGGTCTCGTT' == 'CGGTCTCGtT'
+E     
+E     - CGGTCTCGtT
+E     ?         -
+E     + CGGTCTCGTT
+E     ?          +
+_ test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans1-1] _
+source_snapshot/tests/test_sequence_support_739.py:81: in test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract
+    assert row['sequence'] == str(native_record.features[1].extract(native_record.seq))
+E   AssertionError: assert 'ACGTTAGACG' == 'aCGTTAGaCG'
+E     
+E     - aCGTTAGaCG
+E     ? ^      ^
+E     + ACGTTAGACG
+E     ? ^      ^
+_ test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans1--1] _
+source_snapshot/tests/test_sequence_support_739.py:81: in test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract
+    assert row['sequence'] == str(native_record.features[1].extract(native_record.seq))
+E   AssertionError: assert 'CGTCTAACGT' == 'CGtCTAACGt'
+E     
+E     - CGtCTAACGt
+E     ?   ^      ^
+E     + CGTCTAACGT
+E     ?   ^      ^
+_ test_selected_current_nucleotide_capture_through_actual_bounded_client_and_shared_cds_path _
+source_snapshot/tests/test_sequence_support_739.py:403: in test_selected_current_nucleotide_capture_through_actual_bounded_client_and_shared_cds_path
+    assert failure is None and snapshot is not None, 'selected_nucleotide_capture_unavailable'
+E   AssertionError: selected_nucleotide_capture_unavailable
+E   assert ({'code': 'provider_connection_failed', 'phase': 'http_request', 'diagnostic': {'exception_type': 'URLError', 'message': '<urlopen error [Errno 101] Network is unreachable>'}} is None)
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_sequence_support_739.py::test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans0-1]
+FAILED source_snapshot/tests/test_sequence_support_739.py::test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans0--1]
+FAILED source_snapshot/tests/test_sequence_support_739.py::test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans1-1]
+FAILED source_snapshot/tests/test_sequence_support_739.py::test_engineered_ordered_circular_and_repeated_parts_match_native_feature_extract[spans1--1]
+FAILED source_snapshot/tests/test_sequence_support_739.py::test_selected_current_nucleotide_capture_through_actual_bounded_client_and_shared_cds_path
+5 failed, 66 passed in 6.20s

@@ -1,0 +1,72 @@
+{
+  "status": "terminal delivered; root review pending",
+  "scope": "code-only synthetic witness presentation repair",
+  "proposal_sha256": "f4fe2aa9c08ac21007fe6fac9ce5fb7dfb36a33287a568c0043eb8456ea5ea5c",
+  "existing_changed_files": {
+    "gene_annotation_episode/literature_kinetic_storage.py": "599606c6e40f00e587934b0a7fcd1c550b46253974dd5b123cfdde228245759e"
+  },
+  "new_test_files": {
+    "tests/test_literature_kinetic_witness_publication.py": "2a5fa181faec2c4280a28515eb6bbe1c447474ae303459f917cd561e17783ae8"
+  },
+  "unchanged_protected_dependencies": {
+    "gene_annotation_episode/literature_kinetic_inputs.py": "1176033e44bb7e2ff065aecd6f1d335fbcab531069e99490cd293dd8a8edb844",
+    "gene_annotation_episode/literature_kinetic_calculations.py": "1ca423165e40b99140bb1a1b431081e240d1ae788f7b5d933823817a6c397f50",
+    "gene_annotation_episode/literature_kinetic_validation.py": "2f21acdab795ba3917d3ce8202d0621c5c222e64cc75f7823a1f31a92d6e71c2",
+    "gene_annotation_episode/literature_rate_storage.py": "171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4"
+  },
+  "artifacts": {
+    "BASELINE_001.json": {
+      "sha256": "7a04485653fea271ae3021c8eefb82b266a1693c116583b5056bdec60c849abd",
+      "bytes": 384
+    },
+    "DEDICATED_TESTS_001.json": {
+      "sha256": "dd6356dbc2fbc495c1c1f6f024a91fa8bf4f1727960b955d2fa83344e23a03ca",
+      "bytes": 239
+    },
+    "FINAL_HANDOFF_001.md": {
+      "sha256": "1b729f1bd64641d24452553d9af65c1bd01858a744622e1d8c26d7e1001de2f8",
+      "bytes": 6508
+    },
+    "IMPLEMENTATION_001.patch": {
+      "sha256": "1e3fe54d00d32e1695906e3e75656ac69c2a069f2fb17799ee9178c84c11cd53",
+      "bytes": 24228
+    },
+    "KINETIC_REGRESSION_001.log": {
+      "sha256": "29b35b61a4834f6b360fb11fef0c1c4163f67285ce157cb6aafa46af5609cc95",
+      "bytes": 431
+    },
+    "PROPOSAL_001.md": {
+      "sha256": "f4fe2aa9c08ac21007fe6fac9ce5fb7dfb36a33287a568c0043eb8456ea5ea5c",
+      "bytes": 11121
+    },
+    "baseline_001/literature_kinetic_storage.py": {
+      "sha256": "1af09288ff81d8839605f0c4cbfb063af2a831587676bb8d00af50d2bee49d16",
+      "bytes": 24979
+    },
+    "snapshot_001/gene_annotation_episode/literature_kinetic_storage.py": {
+      "sha256": "599606c6e40f00e587934b0a7fcd1c550b46253974dd5b123cfdde228245759e",
+      "bytes": 25422
+    },
+    "snapshot_001/tests/test_literature_kinetic_witness_publication.py": {
+      "sha256": "2a5fa181faec2c4280a28515eb6bbe1c447474ae303459f917cd561e17783ae8",
+      "bytes": 22282
+    }
+  },
+  "tests": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_kinetic_witness_publication.py",
+      "exit_code": 0,
+      "passed": 19,
+      "seconds": 39.37
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_kinetic_inputs.py tests/test_literature_kinetic_calculations.py tests/test_literature_kinetic_storage.py tests/test_literature_kinetic_integration.py",
+      "exit_code": 0,
+      "passed": 293,
+      "seconds": 67.01
+    }
+  ],
+  "paper_or_051_source_access": false,
+  "model_inference": false,
+  "historical_pins_changed": false
+}

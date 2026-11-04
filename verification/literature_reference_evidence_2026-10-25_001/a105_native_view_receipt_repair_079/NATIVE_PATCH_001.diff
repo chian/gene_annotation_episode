@@ -1,0 +1,22 @@
+--- before/gene_annotation_episode/literature_ratio_source_storage.py
++++ gene_annotation_episode/literature_ratio_source_storage.py
+@@ -230,6 +230,10 @@
+             key = f'{self.run_id}:{context.episode_id}:{index}'
+             native = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (key,)).fetchone()
+             args = action.get('arguments')
++            # DecisionSource.execute adds this runtime snapshot after the tool
++            # saves its original result. Authenticate the exact tool portion;
++            # the receipt below still hashes the full original runtime result.
++            tool_result = {key: value for key, value in result.items() if key != 'pending_work_after_action'}
+             if (set(action) != {'kind', 'tool', 'arguments'} or not isinstance(args, dict)
+                     or set(args) - {'source_ref', 'frame', 'colour_conversion'}
+                     or args.get('source_ref') != view['input_source_ref']
+@@ -237,7 +241,7 @@
+                     or args.get('colour_conversion', 'preserve') != view['colour_conversion']
+                     or native is None or native['name'] != 'image.view'
+                     or native['arguments'] != canonical(args) or native['scope'] != canonical(plain(context.scope))
+-                    or canonical(result) != native['result']
++                    or canonical(tool_result) != native['result']
+                     or result.get('operation_ref') != native['id']
+                     or native['id'] != identity('operation', {'key': key, 'name': 'image.view', 'arguments': args})
+                     or result.get('result') != {'view_ref': view_ref, 'view': view}

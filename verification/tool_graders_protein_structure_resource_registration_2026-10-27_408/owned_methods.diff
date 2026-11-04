@@ -1,0 +1,67 @@
+--- before:__init__
++++ executed:__init__
+@@ -23,6 +23,11 @@
+         self._practical = {}
+         for resource_id, configuration in self.resources.items():
+             kind = KINDS[configuration['kind']]
++            if 'native_protein_structure' in configuration:
++                from .native_protein_structure_contracts import validate_protein_structure_bindings
++                if kind != 'local':
++                    raise ValueError('native_protein_structure_resource_execution_binding_unfinished:' + kind)
++                validate_protein_structure_bindings(configuration['native_protein_structure'])
+             if 'native_rna_structure' in configuration:
+                 from .native_rna_structure_contracts import validate_rna_structure_bindings
+                 if kind != 'local':
+@@ -73,6 +78,10 @@
+         self.job_progress_provider = ExecutionProgressProvider(store, run_id=run_id,
+             directory=self.directory, resources=self.resources, api_execution=self.api_execution,
+             log_window_bytes=log_window_bytes, log_roles=self.log_roles)
++        from .native_protein_structure_results import NativeProteinStructureResults
++        from .native_protein_structure_returns import NativeProteinStructureReturns
++        self.native_protein_structure_results = NativeProteinStructureResults(self)
++        self.native_protein_structure_returns = NativeProteinStructureReturns(self)
+         self.native_rna_structure_results = self.native_rna_structure_returns = None
+         self.rna_structure_comparison_results = self.rna_structure_comparison_returns = None
+         if any(configuration.get('native_rna_structure') for configuration in self.resources.values()):
+--- before:_request_schema
++++ executed:_request_schema
+@@ -8,6 +8,11 @@
+         if kind != 'api':
+             schema['properties']['resource_kind'] = {'type': 'string', 'const': kind}
+             alternatives = []
++            protein = self.resources[resource_id].get('native_protein_structure', [])
++            if protein:
++                from .native_protein_structure_tool_info import protein_structure_tool_contracts
++                alternatives.extend(row['input_schema'] for row in protein_structure_tool_contracts(
++                    protein, resource_kind='local', resource_id=resource_id))
+             rna = self.resources[resource_id].get('native_rna_structure', [])
+             if rna:
+                 from .native_rna_structure_tool_info import rna_structure_tool_contracts
+--- before:assignment_schema
++++ executed:assignment_schema
+@@ -11,6 +11,12 @@
+                 schema['properties']['selector'] = {'type': 'object', 'allOf': [{
+                     'if': {'required': ['version'], 'properties': {'version': {'enum': versions}}},
+                     'then': {'oneOf': alternatives}}]}
++            if any(configuration.get('native_protein_structure') for configuration in self.resources.values()):
++                from .protein_structure_selection import protein_structure_result_selector_schema
++                schema['properties']['selector'].setdefault('allOf', []).append({
++                    'if': {'required': ['version'], 'properties': {'version': {
++                        'const': 'protein_structure_result_selector_v1'}}},
++                    'then': protein_structure_result_selector_schema()})
+             return schema
+         if role == 'launch':
+             schema = obj({'version': {'const': LAUNCH_VERSION},
+--- before:resource_tool_contracts
++++ executed:resource_tool_contracts
+@@ -121,6 +121,10 @@
+                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+             native_entries = []
++            if configuration.get('native_protein_structure'):
++                from .native_protein_structure_tool_info import protein_structure_tool_contracts
++                native_entries.extend(protein_structure_tool_contracts(configuration['native_protein_structure'],
++                    resource_kind='local', resource_id=resource_id))
+             if configuration.get('native_rna_structure'):
+                 from .native_rna_structure_tool_info import rna_structure_tool_contracts
+                 native_entries.extend(rna_structure_tool_contracts(configuration['native_rna_structure'],

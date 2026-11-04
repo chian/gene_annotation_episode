@@ -1,0 +1,129 @@
+{
+  "evidence_class": "graph-derived conditional120h CFU-density reading; no production grader/model/statisticalconfidence proof",
+  "source_image": "research/experimental_scoring_review_2026-10-23/a106_perturbation_sheet_013/raw/PMC4664914_figure6.jpg",
+  "image_sha256": "098ad8ff78351821e0fcc25dd67294c55b881e2a86451f9f03022cb01c884fdc",
+  "image": {
+    "width": 1395,
+    "height": 1279,
+    "mode": "RGB"
+  },
+  "panel": "Figure6B,120h",
+  "actual_roles": {
+    "W": "wild-type+pBAD18empty",
+    "K": "delta-yeaG+pBAD18empty",
+    "R": "delta-yeaG+pBAD18-yeaG"
+  },
+  "endpoint": "arithmetic mean colony-forming units per mL at120h sustained Nstarvation, as displayed; not a normalized survival probability",
+  "axis": "raw CFU/mL on log10 display; labelled1e6 at y807 and1e9 at y551",
+  "selected_pixel_recipe": {
+    "lower_axis_y": 807.0,
+    "upper_axis_y": 551.0,
+    "W_mean_y": 671.5,
+    "K_mean_y": 730.5,
+    "R_mean_y": 669.5,
+    "W_upper_sd_y": 659.5,
+    "K_upper_sd_y": 712.0,
+    "R_upper_sd_y": 657.5
+  },
+  "pixel_recipe_status": "analyst-nominated line centers after inspecting original figure; not paper-reported numerical means",
+  "point": {
+    "means_CFU_per_mL": {
+      "W": 38716012.820540555,
+      "K": 7879240.830937492,
+      "R": 40862800.27905041
+    },
+    "reported_SD_CFU_per_mL_graph_reading": {
+      "W": 14803928.05660709,
+      "K": 5100955.159246318,
+      "R": 15624799.958781503
+    },
+    "derived_mean_SE_CFU_per_mL": {
+      "W": 8547051.848545957,
+      "K": 2945037.8343150723,
+      "R": 9020982.462236555
+    },
+    "components": {
+      "perturbation_difference": 30836771.989603065,
+      "symmetric_effect": 0.6618007108675734,
+      "restoration_fraction_raw": 1.0696177751430553,
+      "restoration_agreement": 0.9303822248569447
+    },
+    "difference_variance_bounds_unknown_cross_arm_covariance": [
+      31382561015639.23,
+      132068125278920.94
+    ]
+  },
+  "reported_spread_type": "SD",
+  "reported_count": 3,
+  "repetition_support": "main Methods says mean averages of3 independent experiments or more unless specified; Fig6B specifies n3",
+  "unknowns": [
+    "arm-pairing/block identities",
+    "cross-arm covariance",
+    "cross-time covariance",
+    "raw colony counts/dilutions/plated volumes",
+    "full nuisance bounds",
+    "native-versus-restored protein amount",
+    "sampling distribution"
+  ],
+  "reading_choice_ranges": {
+    "meaning": "image of all256 joint +/-1pixel choices including shared axis positions; sensitivity only, not confidence or comprehensive error bound",
+    "means_CFU_per_mL": {
+      "W": [
+        36682010.00626807,
+        40862800.27905041
+      ],
+      "K": [
+        7465293.2971678255,
+        8316141.590239367
+      ],
+      "R": [
+        38716012.820540555,
+        43128626.24530582
+      ]
+    },
+    "SD_CFU_per_mL": {
+      "W": [
+        11992179.055789001,
+        17771587.417291358
+      ],
+      "K": [
+        4419021.425619828,
+        5820701.846228054
+      ],
+      "R": [
+        12657140.598097235,
+        18757014.84655936
+      ]
+    },
+    "components": {
+      "perturbation_difference": [
+        28802769.17533058,
+        32983559.44811292
+      ],
+      "symmetric_effect": [
+        0.6428793434030723,
+        0.6801937642334251
+      ],
+      "restoration_fraction_raw": [
+        1.0,
+        1.1458782302669546
+      ],
+      "restoration_agreement": [
+        0.8541217697330455,
+        1
+      ]
+    }
+  },
+  "unchanged_source_bytes": true,
+  "unavailable_components": {
+    "reference_restoration_index": "no measured applicable C or nuisance-effect B bounds",
+    "index_confidence_interval": "no full joint sampling model; no invented independence",
+    "exact_paper_reported_WKR": "numeric means are graph-derived approximations here"
+  },
+  "limits": [
+    "paper caption supplies SD/n, graph supplies approximate magnitudes",
+    "axis/region nomination remains scientific reading work",
+    "SD is experimental spread; selected pixel range is separate reading-choice sensitivity",
+    "current finite production bar reader linear-axis scope is not claimed to implement this log-axis reading"
+  ]
+}

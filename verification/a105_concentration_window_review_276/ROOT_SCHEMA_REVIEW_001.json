@@ -1,0 +1,127 @@
+{
+  "record_kind": "root_exact_interface_review_not_source_acquisition_or_goal_change",
+  "recorded_utc": "2026-10-28T16:37:44.214552+00:00",
+  "review_scope": "Complete proposal, TASK and713 losslessly rendered schema nodes. Engineering comparison to root already-converted HPLC case. The source-populated example files are hash-checked but not yet read/reviewed; no approval of their full associations.",
+  "manifest_sha256": "17245dda556beac2ddd076a25e5585d6c144c55b1650d63aae070d0bc5a801fc",
+  "artifact_checks": [
+    {
+      "path": "verification/a105_concentration_window_275/COMPONENT_DEFINITIONS_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/OWN_POST_PAPER_RESET_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/PAIRED_CONTRACT_PROPOSAL_001.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/PROPOSAL_CHECKS_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/READER_AND_CALCULATOR_RULES_001.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SCHEMAS_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SCHEMA_NODES_001_PAGE_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SCHEMA_NODES_001_PAGE_002.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SCHEMA_NODES_001_PAGE_003.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SCHEMA_NODES_001_PAGE_004.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SCHEMA_NODES_001_PAGE_005.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SCHEMA_ROOTS_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SOURCE_CALCULATION_INPUTS_PROPOSAL_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SOURCE_EXTRACTION_PROPOSAL_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SOURCE_NUMERICAL_EXAMPLE_001.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SOURCE_SELECTION_PROPOSAL_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SOURCE_SELECTOR_MAP_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SOURCE_SHEET_PROPOSAL_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SYNTHETIC_COVARIANCE_DOCUMENT_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/SYNTHETIC_COVARIANCE_ORACLE_001.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/TASK_PROPOSAL_001.txt",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/TEST_PLAN_001.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/build_example_001.py",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/build_proposal_001.py",
+      "sha256_matches": true
+    },
+    {
+      "path": "verification/a105_concentration_window_275/intern_schemas_001.py",
+      "sha256_matches": true
+    }
+  ],
+  "schema_nodes": 713,
+  "schema_tree_roundtrip_equal": true,
+  "schemas_formally_valid": [
+    "SELECTION",
+    "EXTRACTION",
+    "CALCULATION_INPUTS",
+    "SHEET",
+    "COVARIANCE_DOCUMENT"
+  ],
+  "decision": "Revise exact paired contracts before production release",
+  "required_repairs": [
+    "Retain actual assay/subject/preparation/participant/endpoint/normalization meanings through calculation and sheet outputs.",
+    "Retain analyte-specific basis, reading and unit/record associations, and stoichiometric model values/meaning/support/dependence.",
+    "Represent per-analyte start/end relationships separately from cross-analyte comparison relationships so valid partial deltas survive.",
+    "Validate source-selection-extraction-calculation-sheet associations; a digest cannot replace scientific meaning."
+  ],
+  "production_release": false,
+  "new_paper_or_source_search": false,
+  "goal_unchanged": true
+}

@@ -1,0 +1,140 @@
+{
+  "msa_entropy|eligible_count": {
+    "value": 3,
+    "state": "available",
+    "unit": "characters",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_eligible_count_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|internal_gap_count": {
+    "value": 0,
+    "state": "available",
+    "unit": "characters",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_internal_gap_count_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|terminal_gap_excluded_count": {
+    "value": 1,
+    "state": "available",
+    "unit": "characters",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_terminal_gap_excluded_count_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|literal_entropy_bits": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "bits",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": 3,
+    "requirement_refs": []
+  },
+  "msa_entropy|native_score_recalculated": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "hundredths_of_bit",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_binary64_fixed2_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "msa_entropy|score_residual": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "hundredths_of_bit",
+    "origin": "calculated",
+    "method_ref": "bvbrc_alignment_method:analysis/msa_observed_minus_selected_population_score_v1",
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  },
+  "requirements": [
+    {
+      "requirement_ref": "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven",
+      "kind": "scientific_metadata",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "source_refs": [],
+      "reason_ref": "bvbrc_alignment_reason:%40requirements/alignment_deployed_version_unproven"
+    }
+  ],
+  "qualifications": [
+    {
+      "code": "alignment_deployed_version_unproven",
+      "phase": "association",
+      "severity": "qualification",
+      "role_ref": "bvbrc_alignment_role:%40requirements/run",
+      "requirement_refs": [
+        "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Frun%2Falignment_deployed_version_unproven"
+      ]
+    }
+  ],
+  "collection:msa_entropy": [
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:analysis/protein.afa%23alignment",
+      "population_ref": "bvbrc_alignment_population:analysis/all",
+      "column_0based": 0,
+      "eligible_count": 3,
+      "internal_gap_count": 0,
+      "terminal_gap_excluded_count": 1,
+      "literal_entropy_bits": 0.0,
+      "native_score_recalculated": 0.0,
+      "score_residual": 0.0,
+      "strict_majority_consensus": "A",
+      "requirement_refs": []
+    },
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:analysis/protein.afa%23alignment",
+      "population_ref": "bvbrc_alignment_population:analysis/all",
+      "column_0based": 1,
+      "eligible_count": 3,
+      "internal_gap_count": 0,
+      "terminal_gap_excluded_count": 1,
+      "literal_entropy_bits": 0.0,
+      "native_score_recalculated": 0.0,
+      "score_residual": 0.0,
+      "strict_majority_consensus": "C",
+      "requirement_refs": []
+    },
+    {
+      "alignment_ref": "bvbrc_alignment_alignment:analysis/protein.afa%23alignment",
+      "population_ref": "bvbrc_alignment_population:analysis/all",
+      "column_0based": 2,
+      "eligible_count": 4,
+      "internal_gap_count": 0,
+      "terminal_gap_excluded_count": 0,
+      "literal_entropy_bits": 0.8112781244591328,
+      "native_score_recalculated": 81.0,
+      "score_residual": 0.0,
+      "strict_majority_consensus": "D",
+      "requirement_refs": []
+    }
+  ],
+  "native_score": {
+    "value": 0.0,
+    "state": "available",
+    "unit": "hundredths_of_bit",
+    "origin": "native_observation",
+    "method_ref": null,
+    "population_ref": "bvbrc_alignment_population:analysis/all",
+    "numerator": null,
+    "denominator": null,
+    "requirement_refs": []
+  }
+}

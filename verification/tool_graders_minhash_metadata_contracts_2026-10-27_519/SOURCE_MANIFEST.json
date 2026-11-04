@@ -1,0 +1,62 @@
+{
+  "workload": "A",
+  "files": [
+    {
+      "path": "gene_annotation_episode/bvbrc_minhash_contracts.py",
+      "existed_before": false,
+      "before_sha256": null,
+      "after_sha256": "ed0f114c3659b9e63e47dd024f5100678281abc58ab9c4e3ada4c823b3c7d18a",
+      "bytes": 13733,
+      "ast_parse": "passed",
+      "test_function_count": null
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_minhash_grader.py",
+      "existed_before": true,
+      "before_sha256": "5e9a84c5fcaab6038836c86d491250115e2edff8e17956f10d42fbaf96431610",
+      "after_sha256": "4107d3cc834c7b752a4e46b756bc94274c18756c2764d660f41e51a4d523ed80",
+      "bytes": 22065,
+      "ast_parse": "passed",
+      "test_function_count": null
+    },
+    {
+      "path": "tests/test_bvbrc_minhash_contracts.py",
+      "existed_before": false,
+      "before_sha256": null,
+      "after_sha256": "e0a0e28c8f9c2c5a7c97d9577c17092537d2a5c0c97dee770e197e183c727683",
+      "bytes": 20337,
+      "ast_parse": "passed",
+      "test_function_count": 25
+    },
+    {
+      "path": "tests/test_bvbrc_minhash_grader.py",
+      "existed_before": true,
+      "before_sha256": "193db71b10a5f34815bbdb1da7e946bf54ee5c68b12a6dce7ac15ae5876c5543",
+      "after_sha256": "e13eb2d0d7b528780bdffcc97b0f1eb9cae2e7d97b8caeea3b8811fb53b7d1ff",
+      "bytes": 21317,
+      "ast_parse": "passed",
+      "test_function_count": 31
+    }
+  ],
+  "ports": {
+    "gene_annotation_episode/bvbrc_minhash_contracts.py": {
+      "minhash_result_selector_schema": 65,
+      "validate_minhash_result_selector": 181,
+      "validate_minhash_pair_metadata": 204,
+      "validate_minhash_publication_inputs": 248
+    },
+    "gene_annotation_episode/bvbrc_minhash_grader.py": {
+      "calculate_minhash_shared_hash_fraction": 359,
+      "calculate_minhash_components": 376
+    },
+    "tests/test_bvbrc_minhash_contracts.py": {},
+    "tests/test_bvbrc_minhash_grader.py": {}
+  },
+  "contract_sha256": {
+    "verification/tool_graders_minhash_pair_metadata_boundary_2026-10-27_517/CONTRACT.md": "ba1548a88b359fbde115f83e8e51a3ff80c5536483dbd621586e1e0f6b3beaa2",
+    "verification/tool_graders_minhash_pair_metadata_boundary_2026-10-27_517/ROOT_INTERFACE_CLARIFICATION_001.md": "0436af8f34e7037c0158fdad94b57e4293dcfe6b35b7c138b4cdfab5ffc6ffc0"
+  },
+  "runtime_imports": false,
+  "tests_collected": false,
+  "tests_executed": false
+}

@@ -1,0 +1,473 @@
+{
+  "schema": "cmalign_scores_v1",
+  "operation": {
+    "program": "cmalign",
+    "native_version": "1.1.5",
+    "settings": {
+      "--cpu": "1",
+      "--sample": true,
+      "--seed": "42",
+      "native_options": [
+        "--cpu",
+        "1",
+        "--sample",
+        "--seed",
+        "42"
+      ],
+      "declared_engine_version": "1.1.5 (caller declaration; native stdout retained separately)",
+      "matchonly": false,
+      "global": false,
+      "notrunc": false,
+      "sub": false,
+      "noprob": false,
+      "miss": false,
+      "mapali": false,
+      "algorithm": "sample"
+    }
+  },
+  "alignment_kind": "sampled_alignment",
+  "parameters": {
+    "population": "all"
+  },
+  "sequences": [],
+  "columns": [],
+  "pairs": [],
+  "summary": {
+    "population": "all",
+    "sequence_count": 0,
+    "selected_sequence_count": 0,
+    "alignment_count": 0,
+    "column_count": 0,
+    "pair_count": 0,
+    "pair_map_unavailable_alignment_count": 0,
+    "pair_totals": {
+      "observed_two_nucleotide_pairs": 0,
+      "canonical_pairs": 0,
+      "noncanonical_pairs": 0,
+      "unambiguous_pair_denominator": 0,
+      "canonical_pair_fraction": null,
+      "excluded": {
+        "gap": 0,
+        "missing": 0,
+        "ambiguous": 0,
+        "nonresidue": 0,
+        "unavailable": 0
+      }
+    },
+    "record_keys": [],
+    "duplicate_artifact_groups": [],
+    "meaning": "alignment_geometry_and_native_model_measurements; no_gene_function_confidence_or_independence_claim"
+  },
+  "status": "missing",
+  "issues": [],
+  "definitions": {
+    "retained_nucleotides": {
+      "inputs": [
+        "sequences[].measurements.retained_nucleotides",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count RNA nucleotide or ambiguity letters in native aligned row",
+      "units": "nucleotides",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "model_match_nucleotides": {
+      "inputs": [
+        "sequences[].measurements.model_match_nucleotides",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count nucleotide letters at RF consensus positions",
+      "units": "nucleotides",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "model_gap_positions": {
+      "inputs": [
+        "sequences[].measurements.model_gap_positions",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count - . _ at RF consensus positions; includes unvisited positions, not automatically D states",
+      "units": "positions",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "missing_model_positions": {
+      "inputs": [
+        "sequences[].measurements.missing_model_positions",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count native sequence ~ at RF consensus positions; does not include RF ~ EL columns",
+      "units": "positions",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "nonresidue_model_positions": {
+      "inputs": [
+        "sequences[].measurements.nonresidue_model_positions",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count native sequence * at RF consensus positions; not an observed nucleotide",
+      "units": "positions",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "retained_insert_nucleotides": {
+      "inputs": [
+        "sequences[].measurements.retained_insert_nucleotides",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count nucleotide letters at RF . - _ IL/IR columns",
+      "units": "nucleotides",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "retained_local_end_nucleotides": {
+      "inputs": [
+        "sequences[].measurements.retained_local_end_nucleotides",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count nucleotide letters at RF ~ EL columns",
+      "units": "nucleotides",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "deleted_model_positions": {
+      "inputs": [
+        "sequences[].measurements.deleted_model_positions",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "model_gap_positions only with explicit global and notrunc, no submodel truncation, no native contradiction, and validated model geometry",
+      "units": "positions",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "local_end_skipped_model_positions": {
+      "inputs": [
+        "sequences[].measurements.local_end_skipped_model_positions",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "zero in explicit global nontruncated mode; local mode unavailable without traceback",
+      "units": "positions",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "total_insert_nucleotides": {
+      "inputs": [
+        "sequences[].measurements.total_insert_nucleotides",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "full output: retained insert count; matchonly: sum validated --ifile emission counts",
+      "units": "nucleotides",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "total_local_end_nucleotides": {
+      "inputs": [
+        "sequences[].measurements.total_local_end_nucleotides",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "full output: retained EL count; matchonly: sum validated --elfile emission counts; global zero",
+      "units": "nucleotides",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "omitted_nucleotides": {
+      "inputs": [
+        "sequences[].measurements.omitted_nucleotides",
+        "sequences[].correspondence",
+        "operation.settings"
+      ],
+      "formula_or_native_source": "count validated disjoint original positions removed by match-only rendering",
+      "units": "nucleotides",
+      "population": "one_native_alignment_row",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "original_length": {
+      "inputs": [
+        "mapping.original_length",
+        "supplied_sequences",
+        "native sidecar length"
+      ],
+      "formula_or_native_source": "agreement of supplied actual sequence length, declared length and associated native lengths",
+      "units": "nucleotides",
+      "population": "entire_original_input_sequence",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "validated_metadata"
+    },
+    "model_length": {
+      "inputs": [
+        "model.consensus_length",
+        "alignments.rf_model_positions"
+      ],
+      "formula_or_native_source": "supplied model CLEN or unambiguous sidecar model header, checked against all RF consensus columns",
+      "units": "positions",
+      "population": "entire_CM_consensus",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "validated_metadata"
+    },
+    "model_occupancy": {
+      "inputs": [
+        "model_match_nucleotides",
+        "model_length",
+        "availability.model_mapping"
+      ],
+      "formula_or_native_source": "model_match_nucleotides/model_length",
+      "units": "fraction",
+      "population": "all_CM_consensus_positions_including_missing",
+      "denominator": "model_length",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_without_valid_model_map_or_positive_denominator",
+      "kind": "derived"
+    },
+    "sequence_matched_coverage": {
+      "inputs": [
+        "model_match_nucleotides",
+        "original_length",
+        "availability.original_mapping"
+      ],
+      "formula_or_native_source": "model_match_nucleotides/original_length",
+      "units": "fraction",
+      "population": "entire_original_sequence",
+      "denominator": "original_length",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_without_exact_original_and_model_map_or_positive_denominator",
+      "kind": "derived"
+    },
+    "native_bit_score": {
+      "inputs": [
+        "native_scores.bit_score"
+      ],
+      "formula_or_native_source": "native --sfile bit sc",
+      "units": "bits",
+      "population": "one_native_sequence_alignment",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "printed to two decimal places; model score, not function correctness",
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "native_model_score"
+    },
+    "native_avg_pp": {
+      "inputs": [
+        "native_scores.avg_pp"
+      ],
+      "formula_or_native_source": "native --sfile avg pp",
+      "units": "probability",
+      "population": "all_original_aligned_nucleotides_including_matchonly_omissions",
+      "denominator": "native sequence length",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "rounded to three decimals; conditional on banding/truncation mode",
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "native_model_posterior_statistic"
+    },
+    "posterior_lower_mean": {
+      "inputs": [
+        "posterior.lower_sum_hundredths",
+        "posterior.available_count"
+      ],
+      "formula_or_native_source": "lower_sum_hundredths/(100*available_count)",
+      "units": "probability_bound",
+      "population": "retained_nucleotides_with_available_PP",
+      "denominator": "posterior.available_count",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "native quantization interval, conditional on banding/truncation; not exact posterior or annotation correctness",
+      "missing_behavior": "null_when_no_available_bins",
+      "kind": "derived"
+    },
+    "posterior_upper_mean": {
+      "inputs": [
+        "posterior.upper_sum_hundredths",
+        "posterior.available_count"
+      ],
+      "formula_or_native_source": "upper_sum_hundredths/(100*available_count)",
+      "units": "probability_bound",
+      "population": "retained_nucleotides_with_available_PP",
+      "denominator": "posterior.available_count",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "native quantization interval, conditional on banding/truncation; not exact posterior or annotation correctness",
+      "missing_behavior": "null_when_no_available_bins",
+      "kind": "derived"
+    },
+    "posterior_counts_and_bins": {
+      "inputs": [
+        "posterior.bin_counts",
+        "posterior.available_count",
+        "posterior.unavailable_count"
+      ],
+      "formula_or_native_source": "0:[0,.05); d=1..9:[(10d-5)/100,(10d+5)/100); *:[.95,1]; unavailable is excluded, never zero",
+      "units": "nucleotides_and_probability_bounds",
+      "population": "retained_nucleotides",
+      "denominator": "available_count_for_means",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "upper mean endpoint closed only when every bin is *",
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "native_quantization_counts"
+    },
+    "column_occupancy": {
+      "inputs": [
+        "columns[].populations.*.counts"
+      ],
+      "formula_or_native_source": "residue/(residue+gap)",
+      "units": "fraction",
+      "population": "selected_population_in_one_alignment_column",
+      "denominator": "residue+gap rows",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_for_zero_denominator; missing/nonresidue/unavailable rows excluded and separately counted",
+      "kind": "derived"
+    },
+    "native_pp_cons_bounds": {
+      "inputs": [
+        "columns[].native_pp_cons_bounds"
+      ],
+      "formula_or_native_source": "same native PP quantization bins; native population not inferred",
+      "units": "probability_bounds",
+      "population": "native_consensus_annotation_population_unspecified",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "quantization interval",
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "native_annotation"
+    },
+    "canonical_pair_fraction": {
+      "inputs": [
+        "pairs[].populations.*.counts"
+      ],
+      "formula_or_native_source": "canonical/(canonical+noncanonical); canonical=AU/UA/GC/CG/GU/UG",
+      "units": "fraction",
+      "population": "observed_unambiguous_two_nucleotide_pairs_after_uppercase_T_to_U",
+      "denominator": "canonical+noncanonical rows",
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "consistency with supplied model alignment only, not experimental structure or function",
+      "missing_behavior": "null_for_zero_denominator; gaps/missing/ambiguous/nonresidue/unavailable excluded separately",
+      "kind": "derived"
+    },
+    "pair_counts": {
+      "inputs": [
+        "pairs[].populations.*.counts"
+      ],
+      "formula_or_native_source": "observed_two_nucleotide_pairs=canonical+noncanonical+ambiguous; disjoint exclusions use missing then gap then nonresidue then unavailable then ambiguous precedence",
+      "units": "row_pairs",
+      "population": "selected_population_at_each_supplied_SS_cons_pair",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "extracted_native_geometry_count"
+    },
+    "timing": {
+      "inputs": [
+        "native_scores.band_seconds",
+        "native_scores.alignment_seconds",
+        "native_scores.total_seconds",
+        "native_scores.matrix_mb"
+      ],
+      "formula_or_native_source": "native --sfile band calc/alignment/total seconds and mem (Mb); no inference about queue wait or biological confidence",
+      "units": "seconds_and_native_MB",
+      "population": "one_native_sequence_execution",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": "native printed precision .01; matrix MB is native dynamic-programming matrix allocation estimate",
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "native_execution_information"
+    },
+    "native_coordinates_and_index": {
+      "inputs": [
+        "native_scores.native_index",
+        "native_scores.cm_from",
+        "native_scores.cm_to"
+      ],
+      "formula_or_native_source": "native input-file sequence index and model alignment boundaries; -1 sentinel retained when no occupied position",
+      "units": "indices",
+      "population": "one_native_sequence_alignment",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "native_metadata"
+    },
+    "summary_counts": {
+      "inputs": [
+        "sequences",
+        "alignments",
+        "columns",
+        "pairs",
+        "parameters.population"
+      ],
+      "formula_or_native_source": "count records or sum explicit pair/column counts in selected population; does not assert independence",
+      "units": "records_or_row_pairs",
+      "population": "supplied_artifacts_selected_population",
+      "denominator": null,
+      "coordinate_convention": "alignment_columns_zero_based; sequence_and_model_positions_one_based",
+      "uncertainty": null,
+      "missing_behavior": "null_when_required_data_or_validated_geometry_is_unavailable",
+      "kind": "derived_counts"
+    }
+  }
+}

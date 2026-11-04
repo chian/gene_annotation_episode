@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "pin": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002",
+  "pin_manifest_sha256": "6fdd021bddc32ad9c31c454f84067d13463e73dadc85c32fbdf1eff0b0f9f16b",
+  "root_caller_cwd": "/home/chia/repos/gene_annotation_episode",
+  "changed_cwd": false,
+  "probe_prefix": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-P",
+    "-c"
+  ],
+  "durable_launcher_prefix_verified": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-P",
+    "-m",
+    "method_loop.durable_worker"
+  ],
+  "worker_environment_construction": "selected runtime followed by caller sys.path; inherited PYTHONDONTWRITEBYTECODE=1",
+  "observed": {
+    "cwd": "/home/chia/repos/gene_annotation_episode",
+    "safe_path": true,
+    "dont_write_bytecode": true,
+    "selected_paths": {
+      "durable": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002/method_loop/durable.py",
+      "durable_worker": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002/method_loop/durable_worker.py",
+      "factory": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002/gene_annotation_episode/independent_execution.py",
+      "Store": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002/gene_annotation_episode/state.py",
+      "Episode": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_model_run_019/pin_002/method_loop/episode.py"
+    },
+    "factory_module": "gene_annotation_episode.independent_execution",
+    "factory_name": "open_commission",
+    "implementation_sha256": "9bfe2ebb1f8b93fa812f87186a247f443c014ae6c5598e10aeeadd137a4bab86",
+    "durable_sha256": "8d7a5eed863737a858a56f34de25672c10954ced999ecc2af2ace25750ae5c8f"
+  },
+  "model_calls": 0,
+  "episodes_commissioned": 0,
+  "limitation": "Actual safe-path worker/factory imports and implementation identity only; no commissioned episode or model execution"
+}

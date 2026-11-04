@@ -1,0 +1,734 @@
+{
+  "schema": "blast_database_sheet_v1",
+  "normalized_result": {
+    "schema": "blast_normalized_result_v1",
+    "mode": "database",
+    "resource": "api",
+    "format": "tabular",
+    "query": {
+      "id": "synthetic_query_hit",
+      "title": null,
+      "length": 10
+    },
+    "search": {
+      "program": "blastp",
+      "version": null,
+      "database": null,
+      "parameters": {},
+      "statistics": {},
+      "request": {
+        "program": "blastp",
+        "query_length": 10,
+        "max_target_seqs": 300
+      },
+      "hit_array_present": true,
+      "reported_hit_count": 3
+    },
+    "hits": [
+      {
+        "hit_index": 0,
+        "length": 8,
+        "descriptions": [
+          {
+            "id": "BL_ORD_ID|0"
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "bit_score": 20.0,
+            "evalue": 1e-05,
+            "align_len": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 2,
+            "hit_to": 5,
+            "identity_percent": 100.0
+          },
+          {
+            "bit_score": 18.0,
+            "evalue": 1e-05,
+            "align_len": 4,
+            "query_from": 3,
+            "query_to": 6,
+            "hit_from": 4,
+            "hit_to": 7,
+            "identity_percent": 100.0
+          },
+          {
+            "bit_score": 20.0,
+            "evalue": 1e-05,
+            "align_len": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 2,
+            "hit_to": 5,
+            "identity_percent": 100.0
+          }
+        ]
+      },
+      {
+        "hit_index": 1,
+        "length": 8,
+        "descriptions": [
+          {
+            "id": "BL_ORD_ID|1"
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "bit_score": 18.0,
+            "evalue": 1e-05,
+            "align_len": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 1,
+            "hit_to": 4,
+            "identity_percent": 75.0
+          }
+        ]
+      },
+      {
+        "hit_index": 2,
+        "length": 8,
+        "descriptions": [
+          {
+            "id": "BL_ORD_ID|2"
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "bit_score": 16.0,
+            "evalue": 1e-05,
+            "align_len": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 1,
+            "hit_to": 4,
+            "identity_percent": 75.0
+          }
+        ]
+      }
+    ],
+    "native": {
+      "text": "synthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t1\t4\t2\t5\t1e-05\t20\t10\t8\nsynthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t3\t6\t4\t7\t1e-05\t18\t10\t8\nsynthetic_query_hit\tBL_ORD_ID|0\t100.0\t4\t0\t0\t1\t4\t2\t5\t1e-05\t20\t10\t8\nsynthetic_query_hit\tBL_ORD_ID|1\t75.0\t4\t1\t0\t1\t4\t1\t4\t1e-05\t18\t10\t8\nsynthetic_query_hit\tBL_ORD_ID|2\t75.0\t4\t1\t0\t1\t4\t1\t4\t1e-05\t16\t10\t8\n",
+      "fields": [
+        "qseqid",
+        "sseqid",
+        "pident",
+        "length",
+        "mismatch",
+        "gapopen",
+        "qstart",
+        "qend",
+        "sstart",
+        "send",
+        "evalue",
+        "bitscore",
+        "qlen",
+        "slen"
+      ],
+      "rows": [
+        {
+          "line": 1,
+          "fields": {
+            "qseqid": "synthetic_query_hit",
+            "sseqid": "BL_ORD_ID|0",
+            "pident": "100.0",
+            "length": "4",
+            "mismatch": "0",
+            "gapopen": "0",
+            "qstart": "1",
+            "qend": "4",
+            "sstart": "2",
+            "send": "5",
+            "evalue": "1e-05",
+            "bitscore": "20",
+            "qlen": "10",
+            "slen": "8"
+          }
+        },
+        {
+          "line": 2,
+          "fields": {
+            "qseqid": "synthetic_query_hit",
+            "sseqid": "BL_ORD_ID|0",
+            "pident": "100.0",
+            "length": "4",
+            "mismatch": "0",
+            "gapopen": "0",
+            "qstart": "3",
+            "qend": "6",
+            "sstart": "4",
+            "send": "7",
+            "evalue": "1e-05",
+            "bitscore": "18",
+            "qlen": "10",
+            "slen": "8"
+          }
+        },
+        {
+          "line": 3,
+          "fields": {
+            "qseqid": "synthetic_query_hit",
+            "sseqid": "BL_ORD_ID|0",
+            "pident": "100.0",
+            "length": "4",
+            "mismatch": "0",
+            "gapopen": "0",
+            "qstart": "1",
+            "qend": "4",
+            "sstart": "2",
+            "send": "5",
+            "evalue": "1e-05",
+            "bitscore": "20",
+            "qlen": "10",
+            "slen": "8"
+          }
+        },
+        {
+          "line": 4,
+          "fields": {
+            "qseqid": "synthetic_query_hit",
+            "sseqid": "BL_ORD_ID|1",
+            "pident": "75.0",
+            "length": "4",
+            "mismatch": "1",
+            "gapopen": "0",
+            "qstart": "1",
+            "qend": "4",
+            "sstart": "1",
+            "send": "4",
+            "evalue": "1e-05",
+            "bitscore": "18",
+            "qlen": "10",
+            "slen": "8"
+          }
+        },
+        {
+          "line": 5,
+          "fields": {
+            "qseqid": "synthetic_query_hit",
+            "sseqid": "BL_ORD_ID|2",
+            "pident": "75.0",
+            "length": "4",
+            "mismatch": "1",
+            "gapopen": "0",
+            "qstart": "1",
+            "qend": "4",
+            "sstart": "1",
+            "send": "4",
+            "evalue": "1e-05",
+            "bitscore": "16",
+            "qlen": "10",
+            "slen": "8"
+          }
+        }
+      ],
+      "declared_alignment_row_count": null,
+      "sha256": "277764984f9ca6ea2482b804c2f83f111d8eaa3eda78adb48758c1b01501efce"
+    },
+    "issues": []
+  },
+  "reference_metadata": [],
+  "target_context": {},
+  "database_profile": null,
+  "hits": [
+    {
+      "hit_index": 0,
+      "length": 8,
+      "associations": [
+        {
+          "description_index": 0,
+          "native_description": {
+            "id": "BL_ORD_ID|0"
+          },
+          "accession": "BL_ORD_ID|0",
+          "metadata_index": null,
+          "source": null,
+          "taxid": null,
+          "lineage": [],
+          "functions": [],
+          "origin": {},
+          "assembly": {},
+          "quality_measurements": {
+            "completeness_fraction": null,
+            "contamination_fraction": null,
+            "contig_count": null,
+            "contig_n50": null,
+            "total_sequence_length": null
+          },
+          "sequence_group": null,
+          "study_groups": []
+        }
+      ],
+      "unpaired_metadata": {},
+      "hsp_components": [
+        {
+          "native_scores": {
+            "bit_score": 20.0,
+            "score": null,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": null,
+            "positive": null,
+            "gaps": null
+          },
+          "reported_percentages": {
+            "identity_percent": 100.0,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": null,
+            "identical_pairs": null,
+            "query_gap_columns": null,
+            "reference_gap_columns": null
+          },
+          "fractions": {
+            "query_paired_coverage": null,
+            "reference_paired_coverage": null,
+            "paired_identity": null,
+            "alignment_identity": 1.0
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": null,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": false,
+          "geometry_available": false,
+          "pairs": [],
+          "issues": [
+            {
+              "code": "traceback_not_reported"
+            }
+          ]
+        },
+        {
+          "native_scores": {
+            "bit_score": 18.0,
+            "score": null,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": null,
+            "positive": null,
+            "gaps": null
+          },
+          "reported_percentages": {
+            "identity_percent": 100.0,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": null,
+            "identical_pairs": null,
+            "query_gap_columns": null,
+            "reference_gap_columns": null
+          },
+          "fractions": {
+            "query_paired_coverage": null,
+            "reference_paired_coverage": null,
+            "paired_identity": null,
+            "alignment_identity": 1.0
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": null,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": false,
+          "geometry_available": false,
+          "pairs": [],
+          "issues": [
+            {
+              "code": "traceback_not_reported"
+            }
+          ]
+        },
+        {
+          "native_scores": {
+            "bit_score": 20.0,
+            "score": null,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": null,
+            "positive": null,
+            "gaps": null
+          },
+          "reported_percentages": {
+            "identity_percent": 100.0,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": null,
+            "identical_pairs": null,
+            "query_gap_columns": null,
+            "reference_gap_columns": null
+          },
+          "fractions": {
+            "query_paired_coverage": null,
+            "reference_paired_coverage": null,
+            "paired_identity": null,
+            "alignment_identity": 1.0
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": null,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": false,
+          "geometry_available": false,
+          "pairs": [],
+          "issues": [
+            {
+              "code": "traceback_not_reported"
+            }
+          ]
+        }
+      ],
+      "measurements": {
+        "maximum_bit_score": 20.0,
+        "minimum_evalue": 1e-05,
+        "hsp_count": 3,
+        "traceback_complete": false,
+        "observed_paired_query_positions": null,
+        "observed_paired_reference_positions": null,
+        "query_paired_coverage": null,
+        "reference_paired_coverage": null,
+        "unique_pair_count": null,
+        "identical_unique_pair_count": null,
+        "overlap_pair_representations": null
+      },
+      "sequence_group_index": 0
+    },
+    {
+      "hit_index": 1,
+      "length": 8,
+      "associations": [
+        {
+          "description_index": 0,
+          "native_description": {
+            "id": "BL_ORD_ID|1"
+          },
+          "accession": "BL_ORD_ID|1",
+          "metadata_index": null,
+          "source": null,
+          "taxid": null,
+          "lineage": [],
+          "functions": [],
+          "origin": {},
+          "assembly": {},
+          "quality_measurements": {
+            "completeness_fraction": null,
+            "contamination_fraction": null,
+            "contig_count": null,
+            "contig_n50": null,
+            "total_sequence_length": null
+          },
+          "sequence_group": null,
+          "study_groups": []
+        }
+      ],
+      "unpaired_metadata": {},
+      "hsp_components": [
+        {
+          "native_scores": {
+            "bit_score": 18.0,
+            "score": null,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": null,
+            "positive": null,
+            "gaps": null
+          },
+          "reported_percentages": {
+            "identity_percent": 75.0,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": null,
+            "identical_pairs": null,
+            "query_gap_columns": null,
+            "reference_gap_columns": null
+          },
+          "fractions": {
+            "query_paired_coverage": null,
+            "reference_paired_coverage": null,
+            "paired_identity": null,
+            "alignment_identity": 0.75
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": null,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": false,
+          "geometry_available": false,
+          "pairs": [],
+          "issues": [
+            {
+              "code": "traceback_not_reported"
+            }
+          ]
+        }
+      ],
+      "measurements": {
+        "maximum_bit_score": 18.0,
+        "minimum_evalue": 1e-05,
+        "hsp_count": 1,
+        "traceback_complete": false,
+        "observed_paired_query_positions": null,
+        "observed_paired_reference_positions": null,
+        "query_paired_coverage": null,
+        "reference_paired_coverage": null,
+        "unique_pair_count": null,
+        "identical_unique_pair_count": null,
+        "overlap_pair_representations": null
+      },
+      "sequence_group_index": 1
+    },
+    {
+      "hit_index": 2,
+      "length": 8,
+      "associations": [
+        {
+          "description_index": 0,
+          "native_description": {
+            "id": "BL_ORD_ID|2"
+          },
+          "accession": "BL_ORD_ID|2",
+          "metadata_index": null,
+          "source": null,
+          "taxid": null,
+          "lineage": [],
+          "functions": [],
+          "origin": {},
+          "assembly": {},
+          "quality_measurements": {
+            "completeness_fraction": null,
+            "contamination_fraction": null,
+            "contig_count": null,
+            "contig_n50": null,
+            "total_sequence_length": null
+          },
+          "sequence_group": null,
+          "study_groups": []
+        }
+      ],
+      "unpaired_metadata": {},
+      "hsp_components": [
+        {
+          "native_scores": {
+            "bit_score": 16.0,
+            "score": null,
+            "evalue": 1e-05
+          },
+          "reported_counts": {
+            "align_len": 4,
+            "identity": null,
+            "positive": null,
+            "gaps": null
+          },
+          "reported_percentages": {
+            "identity_percent": 75.0,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "counts": {
+            "alignment_columns": 4,
+            "paired_columns": null,
+            "identical_pairs": null,
+            "query_gap_columns": null,
+            "reference_gap_columns": null
+          },
+          "fractions": {
+            "query_paired_coverage": null,
+            "reference_paired_coverage": null,
+            "paired_identity": null,
+            "alignment_identity": 0.75
+          },
+          "denominators": {
+            "query_length": 10,
+            "reference_length": 8,
+            "paired_columns": null,
+            "alignment_columns": 4
+          },
+          "coordinate_units": {
+            "query": "aa",
+            "reference": "aa",
+            "alignment": "aa"
+          },
+          "traceback_available": false,
+          "geometry_available": false,
+          "pairs": [],
+          "issues": [
+            {
+              "code": "traceback_not_reported"
+            }
+          ]
+        }
+      ],
+      "measurements": {
+        "maximum_bit_score": 16.0,
+        "minimum_evalue": 1e-05,
+        "hsp_count": 1,
+        "traceback_complete": false,
+        "observed_paired_query_positions": null,
+        "observed_paired_reference_positions": null,
+        "query_paired_coverage": null,
+        "reference_paired_coverage": null,
+        "unique_pair_count": null,
+        "identical_unique_pair_count": null,
+        "overlap_pair_representations": null
+      },
+      "sequence_group_index": 2
+    }
+  ],
+  "sequence_groups": [
+    {
+      "group_index": 0,
+      "hit_indices": [
+        0
+      ],
+      "identity_basis": [
+        {
+          "kind": "accession",
+          "value": "BL_ORD_ID|0"
+        }
+      ],
+      "functions": [],
+      "function_assignments": [],
+      "maximum_bit_score": 20.0,
+      "taxids": [],
+      "study_groups": []
+    },
+    {
+      "group_index": 1,
+      "hit_indices": [
+        1
+      ],
+      "identity_basis": [
+        {
+          "kind": "accession",
+          "value": "BL_ORD_ID|1"
+        }
+      ],
+      "functions": [],
+      "function_assignments": [],
+      "maximum_bit_score": 18.0,
+      "taxids": [],
+      "study_groups": []
+    },
+    {
+      "group_index": 2,
+      "hit_indices": [
+        2
+      ],
+      "identity_basis": [
+        {
+          "kind": "accession",
+          "value": "BL_ORD_ID|2"
+        }
+      ],
+      "functions": [],
+      "function_assignments": [],
+      "maximum_bit_score": 16.0,
+      "taxids": [],
+      "study_groups": []
+    }
+  ],
+  "functions": [],
+  "taxonomy": {
+    "taxa": [],
+    "ranks": [],
+    "target_independent_of_search": null,
+    "ambiguous_target_ranks": [],
+    "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+    "sources": [],
+    "origins": []
+  },
+  "source_quality": {
+    "assembly_measurements": [],
+    "numerical_summaries": [],
+    "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+  },
+  "dependence": {
+    "group_count": 3,
+    "duplicate_native_hit_count": 0,
+    "shared_studies": [],
+    "unknown_cross_hit_sequence_identity": true,
+    "meaning": "groups collapse demonstrated sequence identity; distinct groups are not claimed independent experiments"
+  },
+  "database_representation": {
+    "available_for_adjustment": false,
+    "reasons": [
+      "database_profile_not_supplied"
+    ],
+    "function_representation": []
+  },
+  "coverage": {
+    "native_hit_count": 3,
+    "sequence_group_count": 3,
+    "groups_with_explicit_function": 0,
+    "groups_without_explicit_function": 3,
+    "groups_with_native_bit_score": 3,
+    "metadata_row_count": 0,
+    "matched_metadata_row_count": 0,
+    "unmatched_metadata_indices": []
+  },
+  "search_limits": {
+    "requested_hit_limit": 300,
+    "reported_hit_count": 3,
+    "limit_reached": false,
+    "hit_array_present": true,
+    "whole_database_result_complete": null,
+    "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness"
+  },
+  "issues": []
+}

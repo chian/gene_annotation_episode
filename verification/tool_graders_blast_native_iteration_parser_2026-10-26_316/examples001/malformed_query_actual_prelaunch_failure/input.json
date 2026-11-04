@@ -1,0 +1,1677 @@
+{
+  "artifact_key": "synthetic-report-not-emitted",
+  "source_ref": "synthetic:retained-full-report",
+  "original_job": {
+    "version": "native_blast_database_job_v1",
+    "program": "psiblast",
+    "mode": "database",
+    "software": {
+      "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+      "sha256": "a5f2762f6b1024eb690016679e2bac3e2267df2647e3726ed83b890261ae1cce",
+      "engine_version": "2.17.0+"
+    },
+    "environment": {
+      "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+      "SYNTHETIC_RETURNCODE": "0"
+    },
+    "inputs": [
+      {
+        "input_key": "query",
+        "role": "query_sequence",
+        "format": "fasta",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+        "sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+        "size_bytes": 19,
+        "artifact_ref": null
+      },
+      {
+        "input_key": "metadata",
+        "role": "metadata",
+        "format": "json",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/metadata.json",
+        "sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+        "size_bytes": 51,
+        "artifact_ref": null
+      }
+    ],
+    "query": {
+      "kind": "sequence",
+      "input_key": "query",
+      "msa_master_record_ordinal": null,
+      "ignore_msa_master": null
+    },
+    "databases": [
+      {
+        "database_key": "target",
+        "role": "target",
+        "kind": "blast_protein_sequence",
+        "identity": {
+          "namespace": "synthetic",
+          "value": "target",
+          "version": null,
+          "release": null,
+          "scope": null,
+          "preparation_type": "sequence_database",
+          "source": {
+            "source_ref": "source_explicit",
+            "pointer": "/preparation"
+          }
+        },
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+        ],
+        "manifest_file": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.manifest.json",
+          "sha256": "b513e57cedc6111c518c0b8ea83dfdb6529444a202df0673538f2230a929e474",
+          "size_bytes": 2886,
+          "artifact_ref": null
+        },
+        "manifest": {
+          "version": "native_blast_prepared_database_manifest_v1",
+          "database_key": "target",
+          "kind": "blast_protein_sequence",
+          "identity": {
+            "namespace": "synthetic",
+            "value": "target",
+            "version": null,
+            "release": null,
+            "scope": null,
+            "preparation_type": "sequence_database",
+            "source": {
+              "source_ref": "source_explicit",
+              "pointer": "/preparation"
+            }
+          },
+          "native_paths": [
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+          ],
+          "files": [
+            {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target.pin",
+              "sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+              "size_bytes": 30
+            }
+          ],
+          "preparation": {
+            "method": "publisher_package",
+            "preparation_type": "sequence_database",
+            "software": {
+              "name": "fixture preparation",
+              "version": null,
+              "executable_sha256": null
+            },
+            "argv": null,
+            "source": {
+              "source_ref": "source_explicit",
+              "pointer": "/preparation"
+            },
+            "input_manifest": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.inputs.json",
+              "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+              "size_bytes": 22,
+              "artifact_ref": null
+            },
+            "receipt": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.receipt.json",
+              "sha256": "a29df13bb047e1193365943724813b9609be2b0408cb6a8d55da4cb3af0bf005",
+              "size_bytes": 26,
+              "artifact_ref": null
+            }
+          },
+          "metadata_manifests": [
+            {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.metadata.json",
+              "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+              "size_bytes": 25,
+              "artifact_ref": null
+            }
+          ],
+          "access": {
+            "mode": "prepared_local",
+            "offline_configuration": {
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.offline.json",
+              "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+              "size_bytes": 48,
+              "artifact_ref": null
+            }
+          },
+          "inventory_complete": true
+        }
+      }
+    ],
+    "options": [],
+    "outputs": [
+      {
+        "output_key": "stdout",
+        "role": "stdout",
+        "path_kind": "file",
+        "relative_path": "stdout.txt",
+        "format": "text",
+        "fields": [],
+        "delimiter": null,
+        "required": true
+      },
+      {
+        "output_key": "stderr",
+        "role": "stderr",
+        "path_kind": "file",
+        "relative_path": "stderr.txt",
+        "format": "text",
+        "fields": [],
+        "delimiter": null,
+        "required": true
+      },
+      {
+        "output_key": "report",
+        "role": "primary_report",
+        "path_kind": "file",
+        "relative_path": "report",
+        "format": "tabular7",
+        "fields": [
+          "qseqid",
+          "sseqid",
+          "qlen",
+          "slen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "qseq",
+          "sseq",
+          "bitscore"
+        ],
+        "delimiter": "\t",
+        "required": true
+      }
+    ],
+    "metadata_inputs": [
+      {
+        "input_key": "metadata",
+        "consumer": "profile",
+        "schema_id": "unregistered.example"
+      }
+    ],
+    "grading_parameters": {
+      "sequence_database_model": null
+    }
+  },
+  "bundle": {
+    "artifacts": [
+      {
+        "artifact_key": "artifact-4ff8920f21ca67d7f67bcdac7397c8f8a240d274fa9539c34c85a6f72c4c7792",
+        "content_assessment": "not_parsed",
+        "database_key": null,
+        "delimiter": null,
+        "fields": [],
+        "format": "json",
+        "input_key": null,
+        "output_key": null,
+        "relative_path": "custody/producer-manifest",
+        "role": "producer_manifest",
+        "sha256": "d098e8d160a4dc848323696307906022f0194de3d1ad089fcd1acf28da43afd2",
+        "size_bytes": 1666
+      },
+      {
+        "artifact_key": "artifact-d092434601d0c03f0242b9af135f34e7fc74e00ba24c890fa193323df459245c",
+        "content_assessment": "not_parsed",
+        "database_key": null,
+        "delimiter": null,
+        "fields": [],
+        "format": "fasta",
+        "input_key": "query",
+        "output_key": null,
+        "relative_path": "inputs/query",
+        "role": "query_sequence",
+        "sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+        "size_bytes": 19
+      },
+      {
+        "artifact_key": "artifact-2cade9b7a48c8ea99b2f167c313ae6f0c4d96fe3dc5aa0f748dd07af69a33977",
+        "content_assessment": "not_parsed",
+        "database_key": null,
+        "delimiter": null,
+        "fields": [],
+        "format": "json",
+        "input_key": "metadata",
+        "output_key": null,
+        "relative_path": "inputs/metadata",
+        "role": "metadata",
+        "sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+        "size_bytes": 51
+      },
+      {
+        "artifact_key": "artifact-f4c03445e6307cc45e3a050e345907983804d5a96dfb8db07d1f4fa27e512184",
+        "content_assessment": "not_parsed",
+        "database_key": "target",
+        "delimiter": null,
+        "fields": [],
+        "format": "json",
+        "input_key": null,
+        "output_key": null,
+        "relative_path": "custody/database-aa962f43aa13b734bd1704f05204720de1c69a6c1a3969fd131c78c6240e7f57/database_manifest-ce44955d5009ee6fd15b3789c60d2b738e8349160ec55bb97f70306484ddeb3e",
+        "role": "database_manifest",
+        "sha256": "b513e57cedc6111c518c0b8ea83dfdb6529444a202df0673538f2230a929e474",
+        "size_bytes": 2886
+      },
+      {
+        "artifact_key": "artifact-741201c45ccfb2fd9bf7bab2ddc383c25e99d675ea05b88899dd54ef6516416c",
+        "content_assessment": "not_parsed",
+        "database_key": "target",
+        "delimiter": null,
+        "fields": [],
+        "format": "opaque",
+        "input_key": null,
+        "output_key": null,
+        "relative_path": "custody/database-aa962f43aa13b734bd1704f05204720de1c69a6c1a3969fd131c78c6240e7f57/preparation_receipt-6788872a5cb2fd9f195088ea369e94c370966fa457d8f30068613c0c5987d93a",
+        "role": "preparation_receipt",
+        "sha256": "a29df13bb047e1193365943724813b9609be2b0408cb6a8d55da4cb3af0bf005",
+        "size_bytes": 26
+      },
+      {
+        "artifact_key": "database-metadata-2052f05fe5cb23e0d797e3c9eba184586c77ad8165bfedf75ceed751ec74b6c0",
+        "content_assessment": "not_parsed",
+        "database_key": "target",
+        "delimiter": null,
+        "fields": [],
+        "format": "opaque",
+        "input_key": null,
+        "output_key": null,
+        "relative_path": "custody/database-aa962f43aa13b734bd1704f05204720de1c69a6c1a3969fd131c78c6240e7f57/metadata-bbaceb226ceb2d16f1db97133bee74f4ce50f842056e63c3d660a4a8d29a87a6",
+        "role": "metadata",
+        "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+        "size_bytes": 25
+      },
+      {
+        "artifact_key": "database-metadata-24e3fe7fd5c2da1d0d6df360b37c9ac36b2eff1299201454742ba60546a87061",
+        "content_assessment": "not_parsed",
+        "database_key": "target",
+        "delimiter": null,
+        "fields": [],
+        "format": "opaque",
+        "input_key": null,
+        "output_key": null,
+        "relative_path": "custody/database-aa962f43aa13b734bd1704f05204720de1c69a6c1a3969fd131c78c6240e7f57/metadata-7a7490472c3c1db68d7d1b2bc9b7e488b2ca68870930cfa19f7fecbf9712ac62",
+        "role": "metadata",
+        "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+        "size_bytes": 22
+      },
+      {
+        "artifact_key": "database-metadata-d8a5190a76842ea31271045eda18de313604cd67d3c0a8bc5dc742ec2b449c40",
+        "content_assessment": "not_parsed",
+        "database_key": "target",
+        "delimiter": null,
+        "fields": [],
+        "format": "opaque",
+        "input_key": null,
+        "output_key": null,
+        "relative_path": "custody/database-aa962f43aa13b734bd1704f05204720de1c69a6c1a3969fd131c78c6240e7f57/metadata-b067655cd15cfa38670f853cdcf55f527305e5c6b2953399eeac797d8b162f91",
+        "role": "metadata",
+        "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+        "size_bytes": 48
+      }
+    ],
+    "associations": {
+      "external_manifest_keys": [
+        "artifact-f4c03445e6307cc45e3a050e345907983804d5a96dfb8db07d1f4fa27e512184"
+      ],
+      "ignore_msa_master": null,
+      "master_record_ordinal": null,
+      "query_input_key": "query",
+      "selected_options": []
+    },
+    "database_manifest": [
+      {
+        "checks": [
+          {
+            "checked_at": "2026-10-26T18:39:55.377017+00:00",
+            "expected_sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+            "observed_sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target.pin",
+            "size_bytes": 30,
+            "status": "verified"
+          }
+        ],
+        "database_key": "target",
+        "manifest_artifact_key": "artifact-f4c03445e6307cc45e3a050e345907983804d5a96dfb8db07d1f4fa27e512184",
+        "metadata_manifest_artifacts": [
+          {
+            "artifact_key": "database-metadata-2052f05fe5cb23e0d797e3c9eba184586c77ad8165bfedf75ceed751ec74b6c0",
+            "identity": {
+              "artifact_ref": null,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.metadata.json",
+              "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+              "size_bytes": 25
+            }
+          }
+        ],
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+        ],
+        "preparation_receipt_artifact_key": "artifact-741201c45ccfb2fd9bf7bab2ddc383c25e99d675ea05b88899dd54ef6516416c",
+        "sidecar_artifacts": [
+          {
+            "artifact_key": "database-metadata-24e3fe7fd5c2da1d0d6df360b37c9ac36b2eff1299201454742ba60546a87061",
+            "identity": {
+              "artifact_ref": null,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.inputs.json",
+              "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+              "size_bytes": 22
+            },
+            "role": "preparation_input_manifest"
+          },
+          {
+            "artifact_key": "database-metadata-d8a5190a76842ea31271045eda18de313604cd67d3c0a8bc5dc742ec2b449c40",
+            "identity": {
+              "artifact_ref": null,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.offline.json",
+              "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+              "size_bytes": 48
+            },
+            "role": "offline_configuration"
+          }
+        ]
+      }
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "RESOURCE_SETTING": "explicit",
+      "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+      "SYNTHETIC_RETURNCODE": "0",
+      "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/tmp",
+      "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/tmp",
+      "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/tmp",
+      "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/cache"
+    },
+    "failures": [
+      {
+        "artifact_key": "artifact-d092434601d0c03f0242b9af135f34e7fc74e00ba24c890fa193323df459245c",
+        "code": "input_native_incompatible",
+        "database_key": null,
+        "input_key": "query",
+        "native_returncode": null,
+        "output_key": null
+      }
+    ],
+    "identity": {
+      "assignment_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "attempt_id": "129ed7790ef6011695e7264351338c552e6f82ebf33f0fcc317fd1e3aad6d7d9",
+      "episode_id": "synthetic-hpc-child",
+      "execution_id": "313.synthetic",
+      "operation_key": "explicit-selected-operation",
+      "requested_job_sha256": "8bd603247501a8dc7801cfc3c438047f265c78d174db3ebc74fe3be00247fcb9",
+      "resource_id": "synthetic-hpc",
+      "run_id": "synthetic-313",
+      "submission_token": "51f780c9e75a5fca5a427b920d3f1fe579a9bce7244b60818da0c85cbf89b5cf"
+    },
+    "input_manifest": [
+      {
+        "artifact_key": "artifact-d092434601d0c03f0242b9af135f34e7fc74e00ba24c890fa193323df459245c",
+        "expected_sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+        "input_key": "query",
+        "observed_sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+        "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+        "realized_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/inputs/query",
+        "size_bytes": 19
+      },
+      {
+        "artifact_key": "artifact-2cade9b7a48c8ea99b2f167c313ae6f0c4d96fe3dc5aa0f748dd07af69a33977",
+        "expected_sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+        "input_key": "metadata",
+        "observed_sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+        "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/metadata.json",
+        "realized_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/inputs/metadata",
+        "size_bytes": 51
+      }
+    ],
+    "mode": "database",
+    "output_manifest": [
+      {
+        "artifact_keys": [],
+        "inventory_complete": true,
+        "output_key": "stdout",
+        "presence": "missing"
+      },
+      {
+        "artifact_keys": [],
+        "inventory_complete": true,
+        "output_key": "stderr",
+        "presence": "missing"
+      },
+      {
+        "artifact_keys": [],
+        "inventory_complete": true,
+        "output_key": "report",
+        "presence": "missing"
+      }
+    ],
+    "plan": {
+      "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt",
+      "database_paths": {
+        "target": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+        ]
+      },
+      "identity": {
+        "assignment_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "attempt_id": "129ed7790ef6011695e7264351338c552e6f82ebf33f0fcc317fd1e3aad6d7d9",
+        "episode_id": "synthetic-hpc-child",
+        "execution_id": null,
+        "operation_key": "explicit-selected-operation",
+        "requested_job_sha256": "8bd603247501a8dc7801cfc3c438047f265c78d174db3ebc74fe3be00247fcb9",
+        "resource_id": "synthetic-hpc",
+        "run_id": "synthetic-313",
+        "submission_token": "51f780c9e75a5fca5a427b920d3f1fe579a9bce7244b60818da0c85cbf89b5cf"
+      },
+      "input_paths": {
+        "metadata": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/inputs/metadata",
+        "query": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/inputs/query"
+      },
+      "output_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/outputs",
+      "producer_manifest": {
+        "artifact_ref": null,
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/producer-manifest.json",
+        "sha256": "d098e8d160a4dc848323696307906022f0194de3d1ad089fcd1acf28da43afd2",
+        "size_bytes": 1666
+      },
+      "requested_job": {
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+          "-query",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+          "-db",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target",
+          "-outfmt",
+          "7 qseqid sseqid qlen slen qstart qend sstart send qseq sseq bitscore",
+          "-out",
+          "report"
+        ],
+        "environment": {
+          "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+          "SYNTHETIC_RETURNCODE": "0"
+        },
+        "native_blast_database": {
+          "databases": [
+            {
+              "database_key": "target",
+              "identity": {
+                "namespace": "synthetic",
+                "preparation_type": "sequence_database",
+                "release": null,
+                "scope": null,
+                "source": {
+                  "pointer": "/preparation",
+                  "source_ref": "source_explicit"
+                },
+                "value": "target",
+                "version": null
+              },
+              "kind": "blast_protein_sequence",
+              "manifest": {
+                "access": {
+                  "mode": "prepared_local",
+                  "offline_configuration": {
+                    "artifact_ref": null,
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.offline.json",
+                    "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+                    "size_bytes": 48
+                  }
+                },
+                "database_key": "target",
+                "files": [
+                  {
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target.pin",
+                    "sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+                    "size_bytes": 30
+                  }
+                ],
+                "identity": {
+                  "namespace": "synthetic",
+                  "preparation_type": "sequence_database",
+                  "release": null,
+                  "scope": null,
+                  "source": {
+                    "pointer": "/preparation",
+                    "source_ref": "source_explicit"
+                  },
+                  "value": "target",
+                  "version": null
+                },
+                "inventory_complete": true,
+                "kind": "blast_protein_sequence",
+                "metadata_manifests": [
+                  {
+                    "artifact_ref": null,
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.metadata.json",
+                    "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+                    "size_bytes": 25
+                  }
+                ],
+                "native_paths": [
+                  "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+                ],
+                "preparation": {
+                  "argv": null,
+                  "input_manifest": {
+                    "artifact_ref": null,
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.inputs.json",
+                    "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+                    "size_bytes": 22
+                  },
+                  "method": "publisher_package",
+                  "preparation_type": "sequence_database",
+                  "receipt": {
+                    "artifact_ref": null,
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.receipt.json",
+                    "sha256": "a29df13bb047e1193365943724813b9609be2b0408cb6a8d55da4cb3af0bf005",
+                    "size_bytes": 26
+                  },
+                  "software": {
+                    "executable_sha256": null,
+                    "name": "fixture preparation",
+                    "version": null
+                  },
+                  "source": {
+                    "pointer": "/preparation",
+                    "source_ref": "source_explicit"
+                  }
+                },
+                "version": "native_blast_prepared_database_manifest_v1"
+              },
+              "manifest_file": {
+                "artifact_ref": null,
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.manifest.json",
+                "sha256": "b513e57cedc6111c518c0b8ea83dfdb6529444a202df0673538f2230a929e474",
+                "size_bytes": 2886
+              },
+              "native_paths": [
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+              ],
+              "role": "target"
+            }
+          ],
+          "environment": {
+            "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+            "SYNTHETIC_RETURNCODE": "0"
+          },
+          "grading_parameters": {
+            "sequence_database_model": null
+          },
+          "inputs": [
+            {
+              "artifact_ref": null,
+              "format": "fasta",
+              "input_key": "query",
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+              "role": "query_sequence",
+              "sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+              "size_bytes": 19
+            },
+            {
+              "artifact_ref": null,
+              "format": "json",
+              "input_key": "metadata",
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/metadata.json",
+              "role": "metadata",
+              "sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+              "size_bytes": 51
+            }
+          ],
+          "metadata_inputs": [
+            {
+              "consumer": "profile",
+              "input_key": "metadata",
+              "schema_id": "unregistered.example"
+            }
+          ],
+          "mode": "database",
+          "options": [],
+          "outputs": [
+            {
+              "delimiter": null,
+              "fields": [],
+              "format": "text",
+              "output_key": "stdout",
+              "path_kind": "file",
+              "relative_path": "stdout.txt",
+              "required": true,
+              "role": "stdout"
+            },
+            {
+              "delimiter": null,
+              "fields": [],
+              "format": "text",
+              "output_key": "stderr",
+              "path_kind": "file",
+              "relative_path": "stderr.txt",
+              "required": true,
+              "role": "stderr"
+            },
+            {
+              "delimiter": "\t",
+              "fields": [
+                "qseqid",
+                "sseqid",
+                "qlen",
+                "slen",
+                "qstart",
+                "qend",
+                "sstart",
+                "send",
+                "qseq",
+                "sseq",
+                "bitscore"
+              ],
+              "format": "tabular7",
+              "output_key": "report",
+              "path_kind": "file",
+              "relative_path": "report",
+              "required": true,
+              "role": "primary_report"
+            }
+          ],
+          "program": "psiblast",
+          "query": {
+            "ignore_msa_master": null,
+            "input_key": "query",
+            "kind": "sequence",
+            "msa_master_record_ordinal": null
+          },
+          "software": {
+            "engine_version": "2.17.0+",
+            "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+            "sha256": "a5f2762f6b1024eb690016679e2bac3e2267df2647e3726ed83b890261ae1cce"
+          },
+          "version": "native_blast_database_job_v1"
+        }
+      },
+      "resource_environment": {
+        "RESOURCE_SETTING": "explicit"
+      },
+      "version": "native_blast_database_run_plan_v1"
+    },
+    "process": {
+      "finished_at": null,
+      "native_elapsed_seconds": null,
+      "returncode": null,
+      "started": false,
+      "started_at": null
+    },
+    "producer_verification": {
+      "checks": [
+        {
+          "checked_at": "2026-10-26T18:39:55.109960+00:00",
+          "kind": "python",
+          "observed_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+          "path": "/usr/bin/python3.12",
+          "size_bytes": 8020928,
+          "status": "verified"
+        },
+        {
+          "checked_at": "2026-10-26T18:39:55.110067+00:00",
+          "kind": "package",
+          "observed_sha256": "b08e7be9692cc6095dcc1aef62048ed979de4c0ffe5ba610db2f2b0ffc395d5e",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/deployment/gene_annotation_episode/__init__.py",
+          "size_bytes": 78,
+          "status": "verified"
+        },
+        {
+          "checked_at": "2026-10-26T18:39:55.110158+00:00",
+          "kind": "package",
+          "observed_sha256": "0aa2962d617a3217eda2c8c16f5c9c0378201294944f8da0f27c4032c45e2ec1",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/deployment/gene_annotation_episode/blast_pssm_inputs.py",
+          "size_bytes": 22396,
+          "status": "verified"
+        },
+        {
+          "checked_at": "2026-10-26T18:39:55.110266+00:00",
+          "kind": "package",
+          "observed_sha256": "a2a8256445a5a25a98cd7f0771d7d554a7fc19153d509187177acf2deea8ee0b",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/deployment/gene_annotation_episode/native_blast_database_contracts.py",
+          "size_bytes": 59400,
+          "status": "verified"
+        },
+        {
+          "checked_at": "2026-10-26T18:39:55.110357+00:00",
+          "kind": "package",
+          "observed_sha256": "e62bb6f6def146d35a1b649018283c5ff5677101d1b9c98ed8c0928386013502",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/deployment/gene_annotation_episode/native_blast_database_driver.py",
+          "size_bytes": 30456,
+          "status": "verified"
+        },
+        {
+          "checked_at": "2026-10-26T18:39:55.110423+00:00",
+          "kind": "runtime",
+          "observed_sha256": "300a32b114f9e28109df9b8ff846fb06a6669977c3b91090d71716378c38c07f",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/runtime-file",
+          "size_bytes": 52,
+          "status": "verified"
+        }
+      ],
+      "manifest": {
+        "entry_module": "gene_annotation_episode.native_blast_database_driver",
+        "module_root": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/deployment",
+        "package_files": [
+          {
+            "relative_path": "gene_annotation_episode/__init__.py",
+            "sha256": "b08e7be9692cc6095dcc1aef62048ed979de4c0ffe5ba610db2f2b0ffc395d5e",
+            "size_bytes": 78
+          },
+          {
+            "relative_path": "gene_annotation_episode/blast_pssm_inputs.py",
+            "sha256": "0aa2962d617a3217eda2c8c16f5c9c0378201294944f8da0f27c4032c45e2ec1",
+            "size_bytes": 22396
+          },
+          {
+            "relative_path": "gene_annotation_episode/native_blast_database_contracts.py",
+            "sha256": "a2a8256445a5a25a98cd7f0771d7d554a7fc19153d509187177acf2deea8ee0b",
+            "size_bytes": 59400
+          },
+          {
+            "relative_path": "gene_annotation_episode/native_blast_database_driver.py",
+            "sha256": "e62bb6f6def146d35a1b649018283c5ff5677101d1b9c98ed8c0928386013502",
+            "size_bytes": 30456
+          }
+        ],
+        "python": {
+          "path": "/usr/bin/python3.12",
+          "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+          "size_bytes": 8020928
+        },
+        "runtime_files": [
+          {
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/runtime-file",
+            "sha256": "300a32b114f9e28109df9b8ff846fb06a6669977c3b91090d71716378c38c07f",
+            "size_bytes": 52
+          }
+        ],
+        "version": "native_blast_database_producer_manifest_v1"
+      },
+      "manifest_observed_sha256": "d098e8d160a4dc848323696307906022f0194de3d1ad089fcd1acf28da43afd2",
+      "package_inventory_exact": true,
+      "running_module_paths_match": true,
+      "status": "verified"
+    },
+    "program": "psiblast",
+    "realized_argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/inputs/query",
+      "-db",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target",
+      "-outfmt",
+      "7 qseqid sseqid qlen slen qstart qend sstart send qseq sseq bitscore",
+      "-out",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt/outputs/report"
+    ],
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+        "-query",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target",
+        "-outfmt",
+        "7 qseqid sseqid qlen slen qstart qend sstart send qseq sseq bitscore",
+        "-out",
+        "report"
+      ],
+      "environment": {
+        "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+        "SYNTHETIC_RETURNCODE": "0"
+      },
+      "native_blast_database": {
+        "databases": [
+          {
+            "database_key": "target",
+            "identity": {
+              "namespace": "synthetic",
+              "preparation_type": "sequence_database",
+              "release": null,
+              "scope": null,
+              "source": {
+                "pointer": "/preparation",
+                "source_ref": "source_explicit"
+              },
+              "value": "target",
+              "version": null
+            },
+            "kind": "blast_protein_sequence",
+            "manifest": {
+              "access": {
+                "mode": "prepared_local",
+                "offline_configuration": {
+                  "artifact_ref": null,
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.offline.json",
+                  "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+                  "size_bytes": 48
+                }
+              },
+              "database_key": "target",
+              "files": [
+                {
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target.pin",
+                  "sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+                  "size_bytes": 30
+                }
+              ],
+              "identity": {
+                "namespace": "synthetic",
+                "preparation_type": "sequence_database",
+                "release": null,
+                "scope": null,
+                "source": {
+                  "pointer": "/preparation",
+                  "source_ref": "source_explicit"
+                },
+                "value": "target",
+                "version": null
+              },
+              "inventory_complete": true,
+              "kind": "blast_protein_sequence",
+              "metadata_manifests": [
+                {
+                  "artifact_ref": null,
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.metadata.json",
+                  "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+                  "size_bytes": 25
+                }
+              ],
+              "native_paths": [
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+              ],
+              "preparation": {
+                "argv": null,
+                "input_manifest": {
+                  "artifact_ref": null,
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.inputs.json",
+                  "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+                  "size_bytes": 22
+                },
+                "method": "publisher_package",
+                "preparation_type": "sequence_database",
+                "receipt": {
+                  "artifact_ref": null,
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.receipt.json",
+                  "sha256": "a29df13bb047e1193365943724813b9609be2b0408cb6a8d55da4cb3af0bf005",
+                  "size_bytes": 26
+                },
+                "software": {
+                  "executable_sha256": null,
+                  "name": "fixture preparation",
+                  "version": null
+                },
+                "source": {
+                  "pointer": "/preparation",
+                  "source_ref": "source_explicit"
+                }
+              },
+              "version": "native_blast_prepared_database_manifest_v1"
+            },
+            "manifest_file": {
+              "artifact_ref": null,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.manifest.json",
+              "sha256": "b513e57cedc6111c518c0b8ea83dfdb6529444a202df0673538f2230a929e474",
+              "size_bytes": 2886
+            },
+            "native_paths": [
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+            ],
+            "role": "target"
+          }
+        ],
+        "environment": {
+          "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+          "SYNTHETIC_RETURNCODE": "0"
+        },
+        "grading_parameters": {
+          "sequence_database_model": null
+        },
+        "inputs": [
+          {
+            "artifact_ref": null,
+            "format": "fasta",
+            "input_key": "query",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+            "role": "query_sequence",
+            "sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+            "size_bytes": 19
+          },
+          {
+            "artifact_ref": null,
+            "format": "json",
+            "input_key": "metadata",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/metadata.json",
+            "role": "metadata",
+            "sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+            "size_bytes": 51
+          }
+        ],
+        "metadata_inputs": [
+          {
+            "consumer": "profile",
+            "input_key": "metadata",
+            "schema_id": "unregistered.example"
+          }
+        ],
+        "mode": "database",
+        "options": [],
+        "outputs": [
+          {
+            "delimiter": null,
+            "fields": [],
+            "format": "text",
+            "output_key": "stdout",
+            "path_kind": "file",
+            "relative_path": "stdout.txt",
+            "required": true,
+            "role": "stdout"
+          },
+          {
+            "delimiter": null,
+            "fields": [],
+            "format": "text",
+            "output_key": "stderr",
+            "path_kind": "file",
+            "relative_path": "stderr.txt",
+            "required": true,
+            "role": "stderr"
+          },
+          {
+            "delimiter": "\t",
+            "fields": [
+              "qseqid",
+              "sseqid",
+              "qlen",
+              "slen",
+              "qstart",
+              "qend",
+              "sstart",
+              "send",
+              "qseq",
+              "sseq",
+              "bitscore"
+            ],
+            "format": "tabular7",
+            "output_key": "report",
+            "path_kind": "file",
+            "relative_path": "report",
+            "required": true,
+            "role": "primary_report"
+          }
+        ],
+        "program": "psiblast",
+        "query": {
+          "ignore_msa_master": null,
+          "input_key": "query",
+          "kind": "sequence",
+          "msa_master_record_ordinal": null
+        },
+        "software": {
+          "engine_version": "2.17.0+",
+          "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+          "sha256": "a5f2762f6b1024eb690016679e2bac3e2267df2647e3726ed83b890261ae1cce"
+        },
+        "version": "native_blast_database_job_v1"
+      }
+    },
+    "sealed_at": "2026-10-26T18:39:55.379619+00:00",
+    "software": {
+      "observed_sha256": "a5f2762f6b1024eb690016679e2bac3e2267df2647e3726ed83b890261ae1cce",
+      "selected": {
+        "engine_version": "2.17.0+",
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+        "sha256": "a5f2762f6b1024eb690016679e2bac3e2267df2647e3726ed83b890261ae1cce"
+      },
+      "version_source": null
+    },
+    "version": "native_blast_database_bundle_v1"
+  },
+  "attempt_identity": {
+    "identity": {
+      "run_id": "synthetic-313",
+      "episode_id": "synthetic-hpc-child",
+      "resource_id": "synthetic-hpc",
+      "operation_key": "explicit-selected-operation",
+      "assignment_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "requested_job_sha256": "8bd603247501a8dc7801cfc3c438047f265c78d174db3ebc74fe3be00247fcb9",
+      "execution_id": "313.synthetic",
+      "attempt_id": "129ed7790ef6011695e7264351338c552e6f82ebf33f0fcc317fd1e3aad6d7d9",
+      "submission_token": "51f780c9e75a5fca5a427b920d3f1fe579a9bce7244b60818da0c85cbf89b5cf"
+    },
+    "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/attempt",
+    "plan_sha256": "53f53a345d104657d9df810a1e766c693535c318e08ca541b88bd56716b3e091"
+  },
+  "query_operand": {
+    "role": "query",
+    "artifact_key": "artifact-d092434601d0c03f0242b9af135f34e7fc74e00ba24c890fa193323df459245c",
+    "record_ordinal": 0,
+    "native_id": "q",
+    "native_title": "q",
+    "subject_ref": null,
+    "molecule": "protein",
+    "length": 8,
+    "selected_interval": null,
+    "identity": null
+  },
+  "collection": {
+    "schema": "blast_report_collection_v1",
+    "invocation": {
+      "execution_program": "psiblast",
+      "scientific_mode": "database",
+      "resource_kind": "hpc",
+      "query_kind": "sequence",
+      "reference_kind": "sequence",
+      "request": {
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+          "-query",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+          "-db",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target",
+          "-outfmt",
+          "7 qseqid sseqid qlen slen qstart qend sstart send qseq sseq bitscore",
+          "-out",
+          "report"
+        ],
+        "environment": {
+          "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+          "SYNTHETIC_RETURNCODE": "0"
+        },
+        "native_blast_database": {
+          "version": "native_blast_database_job_v1",
+          "program": "psiblast",
+          "mode": "database",
+          "software": {
+            "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+            "sha256": "a5f2762f6b1024eb690016679e2bac3e2267df2647e3726ed83b890261ae1cce",
+            "engine_version": "2.17.0+"
+          },
+          "environment": {
+            "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+            "SYNTHETIC_RETURNCODE": "0"
+          },
+          "inputs": [
+            {
+              "input_key": "query",
+              "role": "query_sequence",
+              "format": "fasta",
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+              "sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+              "size_bytes": 19,
+              "artifact_ref": null
+            },
+            {
+              "input_key": "metadata",
+              "role": "metadata",
+              "format": "json",
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/metadata.json",
+              "sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+              "size_bytes": 51,
+              "artifact_ref": null
+            }
+          ],
+          "query": {
+            "kind": "sequence",
+            "input_key": "query",
+            "msa_master_record_ordinal": null,
+            "ignore_msa_master": null
+          },
+          "databases": [
+            {
+              "database_key": "target",
+              "role": "target",
+              "kind": "blast_protein_sequence",
+              "identity": {
+                "namespace": "synthetic",
+                "value": "target",
+                "version": null,
+                "release": null,
+                "scope": null,
+                "preparation_type": "sequence_database",
+                "source": {
+                  "source_ref": "source_explicit",
+                  "pointer": "/preparation"
+                }
+              },
+              "native_paths": [
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+              ],
+              "manifest_file": {
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.manifest.json",
+                "sha256": "b513e57cedc6111c518c0b8ea83dfdb6529444a202df0673538f2230a929e474",
+                "size_bytes": 2886,
+                "artifact_ref": null
+              },
+              "manifest": {
+                "version": "native_blast_prepared_database_manifest_v1",
+                "database_key": "target",
+                "kind": "blast_protein_sequence",
+                "identity": {
+                  "namespace": "synthetic",
+                  "value": "target",
+                  "version": null,
+                  "release": null,
+                  "scope": null,
+                  "preparation_type": "sequence_database",
+                  "source": {
+                    "source_ref": "source_explicit",
+                    "pointer": "/preparation"
+                  }
+                },
+                "native_paths": [
+                  "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+                ],
+                "files": [
+                  {
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target.pin",
+                    "sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+                    "size_bytes": 30
+                  }
+                ],
+                "preparation": {
+                  "method": "publisher_package",
+                  "preparation_type": "sequence_database",
+                  "software": {
+                    "name": "fixture preparation",
+                    "version": null,
+                    "executable_sha256": null
+                  },
+                  "argv": null,
+                  "source": {
+                    "source_ref": "source_explicit",
+                    "pointer": "/preparation"
+                  },
+                  "input_manifest": {
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.inputs.json",
+                    "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+                    "size_bytes": 22,
+                    "artifact_ref": null
+                  },
+                  "receipt": {
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.receipt.json",
+                    "sha256": "a29df13bb047e1193365943724813b9609be2b0408cb6a8d55da4cb3af0bf005",
+                    "size_bytes": 26,
+                    "artifact_ref": null
+                  }
+                },
+                "metadata_manifests": [
+                  {
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.metadata.json",
+                    "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+                    "size_bytes": 25,
+                    "artifact_ref": null
+                  }
+                ],
+                "access": {
+                  "mode": "prepared_local",
+                  "offline_configuration": {
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.offline.json",
+                    "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+                    "size_bytes": 48,
+                    "artifact_ref": null
+                  }
+                },
+                "inventory_complete": true
+              }
+            }
+          ],
+          "options": [],
+          "outputs": [
+            {
+              "output_key": "stdout",
+              "role": "stdout",
+              "path_kind": "file",
+              "relative_path": "stdout.txt",
+              "format": "text",
+              "fields": [],
+              "delimiter": null,
+              "required": true
+            },
+            {
+              "output_key": "stderr",
+              "role": "stderr",
+              "path_kind": "file",
+              "relative_path": "stderr.txt",
+              "format": "text",
+              "fields": [],
+              "delimiter": null,
+              "required": true
+            },
+            {
+              "output_key": "report",
+              "role": "primary_report",
+              "path_kind": "file",
+              "relative_path": "report",
+              "format": "tabular7",
+              "fields": [
+                "qseqid",
+                "sseqid",
+                "qlen",
+                "slen",
+                "qstart",
+                "qend",
+                "sstart",
+                "send",
+                "qseq",
+                "sseq",
+                "bitscore"
+              ],
+              "delimiter": "\t",
+              "required": true
+            }
+          ],
+          "metadata_inputs": [
+            {
+              "input_key": "metadata",
+              "consumer": "profile",
+              "schema_id": "unregistered.example"
+            }
+          ],
+          "grading_parameters": {
+            "sequence_database_model": null
+          }
+        }
+      },
+      "effective_options": {},
+      "operands": [
+        {
+          "role": "query",
+          "artifact_key": "artifact-d092434601d0c03f0242b9af135f34e7fc74e00ba24c890fa193323df459245c",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": null,
+          "molecule": "protein",
+          "length": 8,
+          "selected_interval": null,
+          "identity": null
+        }
+      ],
+      "completion": {
+        "native_returncode": null,
+        "producer_complete": false
+      }
+    },
+    "artifacts": [
+      {
+        "artifact_key": "synthetic-report-not-emitted",
+        "role": "primary_report",
+        "format": "tabular7",
+        "fields": [
+          "qseqid",
+          "sseqid",
+          "qlen",
+          "slen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "qseq",
+          "sseq",
+          "bitscore"
+        ],
+        "delimiter": "\t",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    ],
+    "searches": [
+      {
+        "search_key": {
+          "artifact_key": "synthetic-report-not-emitted",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/sections/0"
+        },
+        "program_context": {
+          "execution_program": "psiblast",
+          "reported_program": null,
+          "scientific_mode": "database",
+          "query_kind": "sequence",
+          "reference_kind": "sequence",
+          "native_version": null,
+          "geometry_program": "blastp"
+        },
+        "stage": null,
+        "iteration": null,
+        "normalized": {
+          "schema": "blast_normalized_result_v1",
+          "mode": "database",
+          "resource": "hpc",
+          "format": "tabular",
+          "query": {
+            "id": null,
+            "title": null,
+            "length": null
+          },
+          "search": {
+            "program": "psiblast",
+            "version": null,
+            "database": null,
+            "parameters": {},
+            "statistics": {},
+            "request": {
+              "argv": [
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+                "-query",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+                "-db",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target",
+                "-outfmt",
+                "7 qseqid sseqid qlen slen qstart qend sstart send qseq sseq bitscore",
+                "-out",
+                "report"
+              ],
+              "environment": {
+                "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+                "SYNTHETIC_RETURNCODE": "0"
+              },
+              "native_blast_database": {
+                "version": "native_blast_database_job_v1",
+                "program": "psiblast",
+                "mode": "database",
+                "software": {
+                  "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/synthetic-native-command",
+                  "sha256": "a5f2762f6b1024eb690016679e2bac3e2267df2647e3726ed83b890261ae1cce",
+                  "engine_version": "2.17.0+"
+                },
+                "environment": {
+                  "SYNTHETIC_REPORT_BASE64": "IyBQU0lCTEFTVCAyLjE3LjArCiMgUXVlcnk6IHEKIyBEYXRhYmFzZTogc3ludGhldGljX2RiCiMgMiBoaXRzIGZvdW5kCnEJQQk4CTgJMQk0CTEJNAlBQ0RFCUFDREUJNDAKcQlCCTgJOAkxCTQJMQk0CUFDREUJQUNERQkzOQpTZWFyY2ggaGFzIENPTlZFUkdFRCEK",
+                  "SYNTHETIC_RETURNCODE": "0"
+                },
+                "inputs": [
+                  {
+                    "input_key": "query",
+                    "role": "query_sequence",
+                    "format": "fasta",
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/selected-query",
+                    "sha256": "14bc25a2d033ce1a840fc9c5ba948fb44bf3e41446f9f5ab8d956a81035c8f76",
+                    "size_bytes": 19,
+                    "artifact_ref": null
+                  },
+                  {
+                    "input_key": "metadata",
+                    "role": "metadata",
+                    "format": "json",
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/metadata.json",
+                    "sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+                    "size_bytes": 51,
+                    "artifact_ref": null
+                  }
+                ],
+                "query": {
+                  "kind": "sequence",
+                  "input_key": "query",
+                  "msa_master_record_ordinal": null,
+                  "ignore_msa_master": null
+                },
+                "databases": [
+                  {
+                    "database_key": "target",
+                    "role": "target",
+                    "kind": "blast_protein_sequence",
+                    "identity": {
+                      "namespace": "synthetic",
+                      "value": "target",
+                      "version": null,
+                      "release": null,
+                      "scope": null,
+                      "preparation_type": "sequence_database",
+                      "source": {
+                        "source_ref": "source_explicit",
+                        "pointer": "/preparation"
+                      }
+                    },
+                    "native_paths": [
+                      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+                    ],
+                    "manifest_file": {
+                      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.manifest.json",
+                      "sha256": "b513e57cedc6111c518c0b8ea83dfdb6529444a202df0673538f2230a929e474",
+                      "size_bytes": 2886,
+                      "artifact_ref": null
+                    },
+                    "manifest": {
+                      "version": "native_blast_prepared_database_manifest_v1",
+                      "database_key": "target",
+                      "kind": "blast_protein_sequence",
+                      "identity": {
+                        "namespace": "synthetic",
+                        "value": "target",
+                        "version": null,
+                        "release": null,
+                        "scope": null,
+                        "preparation_type": "sequence_database",
+                        "source": {
+                          "source_ref": "source_explicit",
+                          "pointer": "/preparation"
+                        }
+                      },
+                      "native_paths": [
+                        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target"
+                      ],
+                      "files": [
+                        {
+                          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/db-target.pin",
+                          "sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+                          "size_bytes": 30
+                        }
+                      ],
+                      "preparation": {
+                        "method": "publisher_package",
+                        "preparation_type": "sequence_database",
+                        "software": {
+                          "name": "fixture preparation",
+                          "version": null,
+                          "executable_sha256": null
+                        },
+                        "argv": null,
+                        "source": {
+                          "source_ref": "source_explicit",
+                          "pointer": "/preparation"
+                        },
+                        "input_manifest": {
+                          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.inputs.json",
+                          "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+                          "size_bytes": 22,
+                          "artifact_ref": null
+                        },
+                        "receipt": {
+                          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.receipt.json",
+                          "sha256": "a29df13bb047e1193365943724813b9609be2b0408cb6a8d55da4cb3af0bf005",
+                          "size_bytes": 26,
+                          "artifact_ref": null
+                        }
+                      },
+                      "metadata_manifests": [
+                        {
+                          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.metadata.json",
+                          "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+                          "size_bytes": 25,
+                          "artifact_ref": null
+                        }
+                      ],
+                      "access": {
+                        "mode": "prepared_local",
+                        "offline_configuration": {
+                          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_native_iteration_parser_2026-10-26_316/examples001/malformed_query_actual_prelaunch_failure/producer/target.offline.json",
+                          "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+                          "size_bytes": 48,
+                          "artifact_ref": null
+                        }
+                      },
+                      "inventory_complete": true
+                    }
+                  }
+                ],
+                "options": [],
+                "outputs": [
+                  {
+                    "output_key": "stdout",
+                    "role": "stdout",
+                    "path_kind": "file",
+                    "relative_path": "stdout.txt",
+                    "format": "text",
+                    "fields": [],
+                    "delimiter": null,
+                    "required": true
+                  },
+                  {
+                    "output_key": "stderr",
+                    "role": "stderr",
+                    "path_kind": "file",
+                    "relative_path": "stderr.txt",
+                    "format": "text",
+                    "fields": [],
+                    "delimiter": null,
+                    "required": true
+                  },
+                  {
+                    "output_key": "report",
+                    "role": "primary_report",
+                    "path_kind": "file",
+                    "relative_path": "report",
+                    "format": "tabular7",
+                    "fields": [
+                      "qseqid",
+                      "sseqid",
+                      "qlen",
+                      "slen",
+                      "qstart",
+                      "qend",
+                      "sstart",
+                      "send",
+                      "qseq",
+                      "sseq",
+                      "bitscore"
+                    ],
+                    "delimiter": "\t",
+                    "required": true
+                  }
+                ],
+                "metadata_inputs": [
+                  {
+                    "input_key": "metadata",
+                    "consumer": "profile",
+                    "schema_id": "unregistered.example"
+                  }
+                ],
+                "grading_parameters": {
+                  "sequence_database_model": null
+                }
+              }
+            },
+            "hit_array_present": false,
+            "reported_hit_count": null
+          },
+          "hits": [],
+          "native": {
+            "text": "",
+            "fields": [
+              "qseqid",
+              "sseqid",
+              "qlen",
+              "slen",
+              "qstart",
+              "qend",
+              "sstart",
+              "send",
+              "qseq",
+              "sseq",
+              "bitscore"
+            ],
+            "rows": [],
+            "declared_alignment_row_count": null,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "table_layout": {
+              "format": "tabular7",
+              "declared_fields": [
+                "qseqid",
+                "sseqid",
+                "qlen",
+                "slen",
+                "qstart",
+                "qend",
+                "sstart",
+                "send",
+                "qseq",
+                "sseq",
+                "bitscore"
+              ],
+              "delimiter": "\t"
+            }
+          },
+          "issues": [
+            {
+              "code": "blast_query_binding_unavailable",
+              "pointer": "/sections/0",
+              "field": null,
+              "details": {
+                "conflicts": [],
+                "matching_operands": 0
+              }
+            },
+            {
+              "code": "blast_tabular_empty_without_zero_hit_report",
+              "pointer": "/sections/0",
+              "field": null,
+              "details": {}
+            }
+          ]
+        },
+        "row_map": [],
+        "operand_binding": null,
+        "reporting": {
+          "native_hit_array_present": false,
+          "native_hit_count": null,
+          "requested_hit_limit": null,
+          "requested_hsp_limit": null,
+          "native_returncode": null,
+          "producer_complete": false
+        },
+        "native": {
+          "report": {
+            "text": ""
+          },
+          "search": {
+            "text": "",
+            "fields": [
+              "qseqid",
+              "sseqid",
+              "qlen",
+              "slen",
+              "qstart",
+              "qend",
+              "sstart",
+              "send",
+              "qseq",
+              "sseq",
+              "bitscore"
+            ],
+            "rows": [],
+            "declared_alignment_row_count": null
+          },
+          "line_numbers": []
+        },
+        "issues": [
+          {
+            "code": "blast_query_binding_unavailable",
+            "pointer": "/sections/0",
+            "field": null,
+            "details": {
+              "conflicts": [],
+              "matching_operands": 0
+            }
+          },
+          {
+            "code": "blast_tabular_empty_without_zero_hit_report",
+            "pointer": "/sections/0",
+            "field": null,
+            "details": {}
+          }
+        ]
+      }
+    ],
+    "issues": []
+  }
+}

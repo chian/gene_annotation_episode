@@ -1,0 +1,124 @@
+FFF........F                                                             [100%]
+=================================== FAILURES ===================================
+________ test_status_freezes_original_custody_and_replays_without_poll _________
+source_snapshot/tests/test_flux_balance_results_710.py:107: in test_status_freezes_original_custody_and_replays_without_poll
+    result = f.action(context, 'execution.results.status')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_results_710.py:93: in action
+    result = asyncio.run(host.execute(context, target, tool, {}, key))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:201: in execute
+    await self._original(action, receipt, collecting=collecting)
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:132: in _original
+    observation = self.receipts.observation(action)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:601: in observation
+    value = self.validate_observation(value, action.intent)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:115: in validate_observation
+    require(native.get('execution_id') == intent['target']['execution_id']
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:42: in require
+    raise ValueError(code)
+E   ValueError: fba_result_observation_conflict
+_____ test_collect_preserves_unclosed_writer_without_capture[False-False] ______
+source_snapshot/tests/test_flux_balance_results_710.py:127: in test_collect_preserves_unclosed_writer_without_capture
+    result = f.action(context)['result']
+             ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_results_710.py:93: in action
+    result = asyncio.run(host.execute(context, target, tool, {}, key))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:201: in execute
+    await self._original(action, receipt, collecting=collecting)
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:132: in _original
+    observation = self.receipts.observation(action)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:601: in observation
+    value = self.validate_observation(value, action.intent)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:115: in validate_observation
+    require(native.get('execution_id') == intent['target']['execution_id']
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:42: in require
+    raise ValueError(code)
+E   ValueError: fba_result_observation_conflict
+______ test_collect_preserves_unclosed_writer_without_capture[True-False] ______
+source_snapshot/tests/test_flux_balance_results_710.py:127: in test_collect_preserves_unclosed_writer_without_capture
+    result = f.action(context)['result']
+             ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_results_710.py:93: in action
+    result = asyncio.run(host.execute(context, target, tool, {}, key))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:201: in execute
+    await self._original(action, receipt, collecting=collecting)
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:132: in _original
+    observation = self.receipts.observation(action)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:601: in observation
+    value = self.validate_observation(value, action.intent)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:115: in validate_observation
+    require(native.get('execution_id') == intent['target']['execution_id']
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:42: in require
+    raise ValueError(code)
+E   ValueError: fba_result_observation_conflict
+____________ test_real_finite_partial_worker_and_closed_host_replay ____________
+source_snapshot/tests/test_flux_balance_results_710.py:216: in test_real_finite_partial_worker_and_closed_host_replay
+    result = f.action(context);receipt = result['result']
+             ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_results_710.py:93: in action
+    result = asyncio.run(host.execute(context, target, tool, {}, key))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:201: in execute
+    await self._original(action, receipt, collecting=collecting)
+source_snapshot/gene_annotation_episode/native_flux_balance_results.py:132: in _original
+    observation = self.receipts.observation(action)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/genomic_overlap_result_receipts.py:601: in observation
+    value = self.validate_observation(value, action.intent)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:115: in validate_observation
+    require(native.get('execution_id') == intent['target']['execution_id']
+source_snapshot/gene_annotation_episode/flux_balance_result_receipts.py:42: in require
+    raise ValueError(code)
+E   ValueError: fba_result_observation_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_results_710.py::test_status_freezes_original_custody_and_replays_without_poll
+FAILED source_snapshot/tests/test_flux_balance_results_710.py::test_collect_preserves_unclosed_writer_without_capture[False-False]
+FAILED source_snapshot/tests/test_flux_balance_results_710.py::test_collect_preserves_unclosed_writer_without_capture[True-False]
+FAILED source_snapshot/tests/test_flux_balance_results_710.py::test_real_finite_partial_worker_and_closed_host_replay
+4 failed, 8 passed in 296.11s (0:04:56)

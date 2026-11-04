@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="4" failures="0" skipped="0" tests="4" time="1.763" timestamp="2026-10-27T10:56:08.919259-05:00" hostname="chia-Z590-UD"><testcase classname="" name="tests.test_literature_kinetic_model_integration" time="0.000"><error message="collection failure">tests/test_literature_kinetic_model_integration.py:17: in &lt;module&gt;
+    from gene_annotation_episode.literature_experimental_prompt import render_literature_experimental_prompt, EXPERIMENTAL_TASK
+gene_annotation_episode/literature_experimental_prompt.py:23: in &lt;module&gt;
+    from .scientific_process_prompt import _band, _schema, text_instructions
+gene_annotation_episode/scientific_process_prompt.py:13: in &lt;module&gt;
+    from .alignment_result_presentation import alignment_report_presentation
+gene_annotation_episode/alignment_result_presentation.py:10: in &lt;module&gt;
+    from .bvbrc_alignment_bundle_contracts import decode_reference
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:13: in &lt;module&gt;
+    from .bvbrc_appservice_contracts import _Validator, _finite_json, _same, contract_schema
+gene_annotation_episode/bvbrc_appservice_contracts.py:21: in &lt;module&gt;
+    _DOCUMENT = json.loads(Path(__file__).with_name("bvbrc_appservice_schemas.json").read_text())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_001/gene_annotation_episode/bvbrc_appservice_schemas.json'</error></testcase><testcase classname="" name="tests.test_literature_kinetic_integration" time="0.000"><error message="collection failure">tests/test_literature_kinetic_integration.py:27: in &lt;module&gt;
+    from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+../../../../.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests/test_literature_experimental_prompt_delivery.py:13: in &lt;module&gt;
+    from gene_annotation_episode.providers import _SessionConnection, load_config
+gene_annotation_episode/providers.py:23: in &lt;module&gt;
+    from .scientific_process_prompt import (is_published_scientific_context,
+gene_annotation_episode/scientific_process_prompt.py:13: in &lt;module&gt;
+    from .alignment_result_presentation import alignment_report_presentation
+gene_annotation_episode/alignment_result_presentation.py:10: in &lt;module&gt;
+    from .bvbrc_alignment_bundle_contracts import decode_reference
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:13: in &lt;module&gt;
+    from .bvbrc_appservice_contracts import _Validator, _finite_json, _same, contract_schema
+gene_annotation_episode/bvbrc_appservice_contracts.py:21: in &lt;module&gt;
+    _DOCUMENT = json.loads(Path(__file__).with_name("bvbrc_appservice_schemas.json").read_text())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_001/gene_annotation_episode/bvbrc_appservice_schemas.json'</error></testcase><testcase classname="" name="tests.test_literature_parent_population_information" time="0.000"><error message="collection failure">tests/test_literature_parent_population_information.py:20: in &lt;module&gt;
+    from gene_annotation_episode.literature_experimental_prompt import SAVED_NUMERICAL_RETURN_TASK
+gene_annotation_episode/literature_experimental_prompt.py:23: in &lt;module&gt;
+    from .scientific_process_prompt import _band, _schema, text_instructions
+gene_annotation_episode/scientific_process_prompt.py:13: in &lt;module&gt;
+    from .alignment_result_presentation import alignment_report_presentation
+gene_annotation_episode/alignment_result_presentation.py:10: in &lt;module&gt;
+    from .bvbrc_alignment_bundle_contracts import decode_reference
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:13: in &lt;module&gt;
+    from .bvbrc_appservice_contracts import _Validator, _finite_json, _same, contract_schema
+gene_annotation_episode/bvbrc_appservice_contracts.py:21: in &lt;module&gt;
+    _DOCUMENT = json.loads(Path(__file__).with_name("bvbrc_appservice_schemas.json").read_text())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_001/gene_annotation_episode/bvbrc_appservice_schemas.json'</error></testcase><testcase classname="" name="tests.test_joined_native_context_reaction_render_129" time="0.000"><error message="collection failure">tests/test_joined_native_context_reaction_render_129.py:4: in &lt;module&gt;
+    from gene_annotation_episode.literature_experimental_prompt import _received_returns, _source_result
+gene_annotation_episode/literature_experimental_prompt.py:23: in &lt;module&gt;
+    from .scientific_process_prompt import _band, _schema, text_instructions
+gene_annotation_episode/scientific_process_prompt.py:13: in &lt;module&gt;
+    from .alignment_result_presentation import alignment_report_presentation
+gene_annotation_episode/alignment_result_presentation.py:10: in &lt;module&gt;
+    from .bvbrc_alignment_bundle_contracts import decode_reference
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:13: in &lt;module&gt;
+    from .bvbrc_appservice_contracts import _Validator, _finite_json, _same, contract_schema
+gene_annotation_episode/bvbrc_appservice_contracts.py:21: in &lt;module&gt;
+    _DOCUMENT = json.loads(Path(__file__).with_name("bvbrc_appservice_schemas.json").read_text())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_optical_parent_repair_138/pin_137_001/gene_annotation_episode/bvbrc_appservice_schemas.json'</error></testcase></testsuite></testsuites>

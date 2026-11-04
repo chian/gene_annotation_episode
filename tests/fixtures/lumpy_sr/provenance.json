@@ -1,0 +1,42 @@
+{
+  "version": "lumpy_official_split_read_fixture_v1",
+  "objects": [
+    {
+      "name": "run_sr.sh",
+      "role": "upstream_selected_SR_invocation",
+      "url": "https://raw.githubusercontent.com/arq5x/lumpy-sv/f24085f5d7865579e390add664ebbd9383fa0536/lumpy_tests/honeybee/run_sr.sh",
+      "sha256": "f341f2f1e7baf84584924fecbb156fd03a626200b7745fa65f0908791c682ea2",
+      "size_bytes": 147
+    },
+    {
+      "name": "test.filtered_split.bam",
+      "role": "split_read_BAM",
+      "url": "https://s3.amazonaws.com/lumpy/test.filtered_split.bam",
+      "sha256": "866c7b5ece0cc64bd66da080fc962888a7e68064c109618e9b7f1e4aabaa1197",
+      "size_bytes": 7556780
+    },
+    {
+      "name": "test_onlysplit.bam.vcf",
+      "role": "upstream_expected_SR_VCF",
+      "url": "https://s3.amazonaws.com/lumpy/test_onlysplit.bam.vcf",
+      "sha256": "d5e915220930c1a9a85534c46d37902e621254d86ccc33866533e9c1ef807678",
+      "size_bytes": 909083
+    }
+  ],
+  "upstream_test_url": "https://github.com/arq5x/lumpy-sv/blob/f24085f5d7865579e390add664ebbd9383fa0536/lumpy_tests/test.sh",
+  "selected_invocation_file": "run_sr.sh",
+  "caller_label": "test",
+  "declared_reference_build": null,
+  "declared_taxon": null,
+  "declared_biological_sample": null,
+  "native_default_min_non_overlap": 25,
+  "default_source": {
+    "archive": "lumpy-sv-v0.2.13.tar.gz",
+    "archive_sha256": "1a7a5d18875b297acaa68ee1e864ca048654ebc85348920b518dc689d2b7a3cf",
+    "member": "lumpy-sv-v0.2.13/src/lumpy/SV_SplitReadReader.cpp",
+    "sha256": "bb853b12583a4b4034ab272231baf9c7d25e7500ed6d3c133aa62d086a5d3129"
+  },
+  "read_group_selection": null,
+  "upstream_expected_output_meaning": "Official honeybee_sr expected native VCF; upstream compares interval overlap, not byte equality.",
+  "license_for_s3_fixture_bytes": null
+}

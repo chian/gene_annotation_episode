@@ -37,47 +37,140 @@ class MolecularOperationUnpublished(RuntimeError):
 
 
 def itc_reference_access(store, context, reference, namespace):
-    """Finite owner verdict for actual ITC publications; unrelated refs defer.
+    """Keep the ITC-only verdict through the common finite publication owner."""
+    from .molecular_reference_privacy import molecular_reference_restriction
+    return molecular_reference_restriction(store, context, reference, namespace,
+        providers=(ITC_TOOL,))
 
-    Neither source identity nor Store membership grants its private execution
-    control or an unreceived scientific File. This reads only matching metadata
-    and receipts; it never loads a numerical sheet or calls another resolver.
-    """
-    if not isinstance(reference, str):
-        return None
-    if store.db.execute("SELECT 1 FROM tool_operations WHERE name=? "
-            "AND json_extract(result,'$.feedback.diagnostic_ref')=? LIMIT 1", (ITC_TOOL, reference)).fetchone():
-        return False  # Failed-attempt controls can also retain the private environment.
-    rows = store.db.execute("""SELECT source.data FROM records source
-        WHERE source.record_type='source' AND source.origin='tool'
-        AND json_extract(source.data,'$.provider')=? AND json_extract(source.data,'$.version')=?
-        AND (source.id=? OR json_extract(source.data,'$.artifact_ref')=?
-            OR json_extract(source.data,'$.request_ref')=? OR EXISTS(
-                SELECT 1 FROM json_each(source.data,'$.auxiliary_artifact_refs') artifact WHERE artifact.value=?))
-        AND EXISTS(SELECT 1 FROM tool_operations operation, json_each(operation.result,'$.record_refs') published
-            WHERE operation.name=? AND published.value=source.id
-            AND json_extract(operation.result,'$.status') IN ('completed','partial'))""",
-        (ITC_TOOL, RESULT_VERSION, reference, reference, reference, reference, ITC_TOOL))
-    sources = [json.loads(row[0]) for row in rows]
-    if not sources:
-        return None
-    if any(source.get('request_ref') == reference for source in sources):
-        return False
-    kind = 'source' if any(source['id'] == reference for source in sources) else 'artifact'
-    if namespace not in (None, kind):
-        return False
-    from .episode_bindings import BindingContext
-    from .episode_return_records import EpisodeReturnRecords
-    from .episode_receipts import EpisodeReceipts
-    if not isinstance(context, BindingContext):
-        return False
-    try:
-        EpisodeReturnRecords(store, context.run_id, failure_prefix='molecular_reference_').authenticate(context)
-        receipts = EpisodeReceipts.__new__(EpisodeReceipts)
-        receipts.store, receipts.db, receipts.run_id = store, store.db, context.run_id
-        return reference in set(receipts.known(context.episode_id))
-    except (ValueError, TypeError, KeyError):
-        return False
+
+def _molecular_implementation_files(operation):
+    """Pin the selected operation's implementation before its first dispatch."""
+    if operation in {"protein_conservation_native", "protein_conservation_result", "protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result"}:
+        import importlib
+        from importlib import metadata, util
+        from .native_atac_differential_software import _source_closure, _PACKAGES, _OPTIONAL
+        closure = _source_closure(Path(__file__).parent.parent,
+            [_molecular_worker_module(operation)])
+        files = [Path(__file__), *closure.values()]
+        selected = {**_PACKAGES, 'biopython': 'Bio', 'numpy': 'numpy'}
+        for name in selected.values():
+            importlib.import_module(name)
+        selected.update({name: module for name, module in _OPTIONAL.items() if module in sys.modules})
+        for name, module in selected.items():
+            distribution = metadata.distribution(name)
+            root = Path(distribution.locate_file('.')).resolve(strict=True)
+            entries = distribution.files
+            if not entries:
+                raise ContractError('protein_conservation_dependency_files_unavailable')
+            installed = []
+            for entry in entries:
+                # Bytecode and unused console scripts are not imported worker
+                # dependencies. Filter them before requiring physical files in
+                # the explicitly selected, copied package environment.
+                if entry.suffix in {'.pyc', '.pyo'} or '__pycache__' in entry.parts:
+                    continue
+                path = Path(distribution.locate_file(entry))
+                if not path.resolve().is_relative_to(root):
+                    continue
+                path = path.resolve(strict=True)
+                if not path.is_file():
+                    raise ContractError('protein_conservation_dependency_file_unavailable')
+                installed.append(path)
+            specification = util.find_spec(module)
+            if (specification is None or specification.origin is None
+                    or Path(specification.origin).resolve(strict=True) not in installed):
+                raise ContractError('protein_conservation_dependency_import_conflict')
+            files.extend(installed)
+        return list(dict.fromkeys(files))
+    modules = {
+        "protein_disorder": ("protein_disorder_tools.py", "protein_disorder_measurements.py",
+            "protein_disorder_result_contracts.py", "sequence_composition_grader.py", "sequence_mapping.py",
+            "molecular_sequence_result_contracts.py", "acquisition.py", "boundary_validation.py", "domain.py",
+            "execution_contracts.py", "native_atac_differential_driver.py", "native_file_capture.py"),
+        "arsenic_speciation": ("calibrated_signal_contracts.py", "calibrated_signal_sheet.py",
+            "calibrated_signal_calculations.py", "arsenic_speciation_tools.py",
+            "arsenic_speciation_result_contracts.py", "molecular_sequence_input_contracts.py"),
+        "itc_binding": ("itc_binding_contracts.py", "itc_binding_measurements.py",
+            "itc_binding_fit.py", "bivariate_covariance.py"),
+        "liftover_point": ("liftover_contracts.py", "liftover_measurements.py"),
+        "circular_dichroism": ("circular_dichroism_contracts.py", "circular_dichroism_measurements.py",
+            "circular_dichroism_tools.py", "molecular_sequence_input_contracts.py"),
+        "macs2_peak_result": ("macs2_peak_result_worker.py", "macs2_peak_result_contracts.py",
+            "macs2_peak_components.py", "atac_differential_inputs.py", "atac_differential_contracts.py",
+            "atac_differential_result_contracts.py", "native_macs2_peak_execution.py",
+            "native_atac_differential_contracts.py", "native_atac_differential_driver.py"),
+        "homer_motif_result": ("native_homer_worker.py", "homer_motif_contracts.py",
+            "homer_motif_measurements.py", "homer_motif_result_contracts.py",
+            "bvbrc_alignment_values.py", "phylogeny_calculation_contracts.py",
+            "native_flux_balance_storage.py", "native_flux_balance_contracts.py",
+            "native_file_capture.py", "materials.py", "domain.py", "execution_contracts.py"),
+        "tf_binding_native": ("tf_binding_measurements.py", "blast_fasta_record_identity.py",
+            "bvbrc_alignment_values.py", "phylogeny_calculation_contracts.py",
+            "native_flux_balance_storage.py", "domain.py"),
+        "tf_binding_result": ("tf_binding_measurements.py", "blast_fasta_record_identity.py",
+            "bvbrc_alignment_values.py", "phylogeny_calculation_contracts.py",
+            "native_flux_balance_storage.py", "native_file_capture.py", "domain.py"),
+        "protease_kinetics_native": ("molecular_sequence_native.py", "protease_kinetics_measurements.py",
+            "bivariate_covariance.py", "orf_measurements.py", "primer_placement_measurements.py",
+            "glycosylation_measurements.py"),
+        "protease_kinetics_saved": ("molecular_sequence_native.py", "protease_kinetics_measurements.py",
+            "bivariate_covariance.py", "orf_measurements.py", "primer_placement_measurements.py",
+            "glycosylation_measurements.py"),
+    }
+    if operation not in modules:
+        raise ContractError("molecular_tool_operation_unknown")
+    files = ([] if operation in {"protease_kinetics_native", "protease_kinetics_saved"} else [Path(__file__)]) + [Path(__file__).with_name(
+        _molecular_worker_module(operation).rsplit(".", 1)[-1] + ".py"),
+        *(Path(__file__).with_name(name) for name in modules[operation])]
+    distributions = {
+        "liftover_point": (("pyliftover", "pyliftover"),),
+        "tf_binding_native": (("biopython", "Bio"), ("numpy", "numpy")),
+        "tf_binding_result": (("biopython", "Bio"), ("numpy", "numpy")),
+    }
+    for distribution_name, import_name in distributions.get(operation, ()):
+        from importlib import metadata, util
+        from .acquisition import AcquisitionError
+        try:
+            distribution = metadata.distribution(distribution_name)
+            entries = distribution.files
+            if not entries:
+                raise ValueError(distribution_name + "_distribution_files_unavailable")
+            if operation in {"tf_binding_native", "tf_binding_result"}:
+                distribution_root = Path(distribution.locate_file(".")).resolve(strict=True)
+                # Imported package code and native libraries belong to this
+                # selection. Unused console scripts outside its import root do
+                # not become prerequisites of either TF worker.
+                entries = [entry for entry in entries
+                    if Path(distribution.locate_file(entry)).resolve().is_relative_to(distribution_root)]
+            installed = [Path(distribution.locate_file(entry)).resolve(strict=True)
+                for entry in entries if entry.suffix != ".pyc" and "__pycache__" not in entry.parts]
+            specification = util.find_spec(import_name)
+            if (specification is None or specification.origin is None
+                    or Path(specification.origin).resolve(strict=True) not in installed
+                    or any(not path.is_file() for path in installed)):
+                raise ValueError(distribution_name + "_distribution_import_conflict")
+        except (metadata.PackageNotFoundError, OSError, ValueError) as error:
+            reason = ("distribution_metadata_unavailable" if isinstance(error, metadata.PackageNotFoundError)
+                else "distribution_file_unavailable" if isinstance(error, OSError)
+                else "distribution_import_or_files_conflict")
+            raise AcquisitionError(distribution_name + "_not_installed", phase="local_preflight",
+                operational={"software": distribution_name, "reason": reason}) from error
+        files.extend(installed)
+    return list(dict.fromkeys(files))
+
+
+def _molecular_worker_module(operation):
+    module = {"homer_motif_result": "native_homer_worker",
+        "esm_gene_embedding": "esm_gene_embedding_worker",
+        "tf_binding_native": "tf_binding_driver", "tf_binding_result": "tf_binding_result_worker",
+        "protein_conservation_native": "muscle_alignment_driver",
+        "protein_conservation_result": "protein_conservation_result_worker",
+        "protein_phylogeny_iqtree_native": "iqtree_phylogeny_driver",
+        "protein_phylogeny_result": "protein_phylogeny_result_worker",
+        "somatic_variant_native": "somatic_variant_driver",
+        "somatic_variant_result": "somatic_variant_result_worker",
+        "protease_kinetics_native": "molecular_sequence_driver", "protease_kinetics_saved": "molecular_sequence_driver"}
+    return "gene_annotation_episode." + module.get(operation, "sequence_worker")
 
 
 def run_owned_molecular_worker(operation, arguments, *, directory, owned_directory, policy, cancel_event):
@@ -92,11 +185,60 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
     from .acquisition import AcquisitionError
     from .local_jobs import LocalJobPolicy
     directory, owned = Path(directory).resolve(strict=True), Path(owned_directory).resolve(strict=True)
-    if operation != "itc_binding" or directory != owned:
+    if operation not in {"itc_binding", "liftover_point", "circular_dichroism", "macs2_peak_result", "homer_motif_result",
+            "tf_binding_native", "tf_binding_result", "protease_kinetics_native", "protease_kinetics_saved",
+            "protein_conservation_native", "protein_conservation_result", "protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result",
+            "arsenic_speciation", "protein_disorder", "esm_gene_embedding"} or directory != owned:
         raise ContractError("molecular_tool_owned_directory_conflict")
     request, output = owned / "worker-request.json", owned / "worker-result.json"
     handle_path, stdout, stderr = owned / "native-handle.json", owned / "stdout", owned / "stderr"
     payload = dict(operation=operation, arguments=arguments)
+    protease = operation in {"protease_kinetics_native", "protease_kinetics_saved"}
+    esm = operation == "esm_gene_embedding"
+    worker_body, request_raw = payload, None
+    if esm:
+        from .esm_gene_embedding_contracts import validate_esm_worker_request
+        from .esm_gene_embedding_tools import esm_worker_environment, esm_worker_implementation_files
+        if type(arguments) is not dict or set(arguments) != {"request"}:
+            raise ContractError("esm_gene_embedding_worker_request_conflict")
+        esm_request = validate_esm_worker_request(arguments["request"])
+        esm_driver = esm_request["deployment"]["driver"]
+    if protease:
+        from . import molecular_sequence_driver as driver
+        from . import molecular_sequence_native as native_source
+        if type(arguments) is not dict or set(arguments) != {"request"}:
+            raise ContractError("protease_kinetics_worker_request_conflict")
+        worker_body = json.loads(canonical(arguments["request"]))
+        if (driver._request(worker_body) != "analyze_protease_kinetics"
+                or worker_body["version"] != driver.REQUEST_VERSION_V2
+                or worker_body["mode"] != ("native" if operation == "protease_kinetics_native" else "saved_sheet")):
+            raise ContractError("protease_kinetics_worker_request_conflict")
+        request_raw = json.dumps(worker_body, allow_nan=False).encode("utf-8")
+        output = owned / "driver-output" / "declaration.json"
+        if operation == "protease_kinetics_native":
+            selected_native = worker_body["selection"]
+            from .protease_kinetics_measurements import _native_request
+            _native_request(selected_native)
+            native_source._deployment(selected_native["deployment"], version=native_source.DEPLOYMENT_VERSION_V3,
+                source_sha256=native_source.BIOCHEMISTRY_SOURCE_SHA256)
+            if Path(selected_native["output_workspace"]) != output.parent:
+                raise ContractError("protease_kinetics_worker_output_conflict")
+
+    def command(python):
+        if not protease:
+            return [python, "-m", _molecular_worker_module(operation), str(request), str(output)]
+        return [python, "-B", "-m", _molecular_worker_module(operation),
+            "--request-file", str(request), "--request-sha256", hashlib.sha256(request_raw).hexdigest(),
+            "--request-size-bytes", str(len(request_raw)), "--output-directory", str(output.parent)]
+
+    def native_environment():
+        deployment = worker_body["selection"]["deployment"]
+        return {"PYTHONHOME": deployment["runtime"]["home"],
+            "PYTHONPATH": os.pathsep.join(deployment["import_roots"]), "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONNOUSERSITE": "1", "PYTHONSAFEPATH": "1", "TMPDIR": str(owned / "temporary"),
+            "TMP": str(owned / "temporary"), "TEMP": str(owned / "temporary"),
+            **worker_body["selection"]["environment"]}
+
     selection_path = owned / "execution-selection.json"
     if selection_path.exists():
         selected = json.loads(selection_path.read_bytes())
@@ -106,9 +248,18 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
                 or canonical(selected["request"]) != canonical(payload)
                 or selected["cwd"] != str(owned) or type(selected["environment"]) is not dict
                 or any(type(k) is not str or type(v) is not str for k, v in selected["environment"].items())
-                or selected["command"] != [selected["python"]["path"], "-m",
-                    "gene_annotation_episode.sequence_worker", str(request), str(output)]):
+                or selected["command"] != command(selected["python"]["path"])):
             raise ContractError("molecular_tool_execution_selection_conflict")
+        if operation == "protease_kinetics_native":
+            deployment = worker_body["selection"]["deployment"]
+            if (selected["python"] != {key: deployment["runtime"]["executable"][key] for key in ("path", "sha256")}
+                    or canonical(selected["environment"]) != canonical(native_environment())):
+                raise ContractError("protease_kinetics_original_runtime_conflict")
+        if esm and (selected["python"] != dict(path=esm_driver["python_executable"],
+                    sha256=esm_driver["python_sha256"])
+                or canonical(selected["environment"]) != canonical(esm_worker_environment(esm_request, owned))
+                or canonical(selected["implementation_files"]) != canonical(esm_worker_implementation_files(esm_request))):
+            raise ContractError("esm_gene_embedding_original_runtime_conflict")
         # The reservation's original resource/argv/environment remain selected.
         # A different parent environment cannot reprice already launched work.
         selected_policy = LocalJobPolicy(**selected["policy"])
@@ -116,21 +267,57 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
         if handle_path.exists() or request.exists() or output.exists():
             raise ContractError("molecular_tool_original_selection_missing")
         environment = dict(os.environ)
+        if operation in {"tf_binding_native", "tf_binding_result", "arsenic_speciation", "protein_disorder",
+                "protein_conservation_native", "protein_conservation_result", "protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result"} or protease or esm:
+            temporary, cache = owned / "temporary", owned / "cache"
+            temporary.mkdir(exist_ok=True)
+            cache.mkdir(exist_ok=True)
+            environment.update(TMPDIR=str(temporary), TMP=str(temporary), TEMP=str(temporary),
+                XDG_CACHE_HOME=str(cache), PYTHONDONTWRITEBYTECODE="1")
         package_root = str(Path(__file__).resolve().parent.parent)
         environment["PYTHONPATH"] = package_root + os.pathsep + environment.get("PYTHONPATH", "")
-        implementation_files = [Path(__file__), Path(__file__).with_name("sequence_worker.py"),
-            *(Path(__file__).with_name(name) for name in ("itc_binding_contracts.py", "itc_binding_measurements.py",
-                "itc_binding_fit.py", "bivariate_covariance.py"))]
+        if esm:
+            # This operation binds the caller-selected physical runtime. Host
+            # package discovery cannot replace its interpreter or dependencies.
+            implementation_files = None
+            esm_files = esm_worker_implementation_files(esm_request)
+            environment = esm_worker_environment(esm_request, owned)
+            python = dict(path=esm_driver["python_executable"], sha256=esm_driver["python_sha256"])
+        else:
+            implementation_files = _molecular_implementation_files(operation)
+            python = dict(path=sys.executable, sha256=hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest())
+        if operation == "protease_kinetics_native":
+            deployment = worker_body["selection"]["deployment"]
+            index, _ = native_source._manifest(deployment)
+            # Bind the explicitly selected deployment; no host package discovery
+            # or identity substitution supplies its interpreter/source closure.
+            python = {key: deployment["runtime"]["executable"][key] for key in ("path", "sha256")}
+            expected = {str(Path(root) / "gene_annotation_episode" / path.name): path
+                for root in deployment["import_roots"] for path in implementation_files}
+            for path in implementation_files:
+                matches = [pin for name, pin in index.items() if name in expected
+                    and expected[name] == path and pin["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()]
+                if len(matches) != 1:
+                    raise ContractError("protease_kinetics_selected_driver_closure_conflict")
+            implementation_files = None
+            environment = native_environment()
         selected = dict(version="ordinary_molecular_execution_v1",
-            command=[sys.executable, "-m", "gene_annotation_episode.sequence_worker", str(request), str(output)],
+            command=command(python["path"]),
             cwd=str(owned), environment=environment, policy=policy.to_dict(), request=payload,
-            python=dict(path=sys.executable, sha256=hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest()),
+            python=python,
             implementation_files=[dict(path=str(p.resolve()), sha256=hashlib.sha256(p.read_bytes()).hexdigest())
-                for p in implementation_files])
+                for p in implementation_files] if implementation_files is not None else
+                esm_files if esm else [*index.values(), deployment["software_files_file"]])
         selected_policy = policy
         atomic_json(selection_path, selected)
 
     def verify_unstarted_software():
+        if operation == "protease_kinetics_native":
+            deployment = worker_body["selection"]["deployment"]
+            original_index, _ = native_source._manifest(deployment)
+            if canonical(selected["implementation_files"]) != canonical(
+                    [*original_index.values(), deployment["software_files_file"]]):
+                raise ContractError("protease_kinetics_original_manifest_conflict")
         for file in [selected["python"], *selected["implementation_files"]]:
             try:
                 matches = hashlib.sha256(Path(file["path"]).read_bytes()).hexdigest() == file["sha256"]
@@ -141,12 +328,13 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
 
     try:
         if request.exists():
-            if canonical(json.loads(request.read_bytes())) != canonical(payload):
+            if (canonical(json.loads(request.read_bytes())) != canonical(worker_body)
+                    or protease and request.read_bytes() != request_raw):
                 raise ContractError("molecular_tool_worker_request_conflict")
         else:
             if handle_path.exists():
                 raise ContractError("molecular_tool_worker_request_missing")
-            atomic_json(request, payload)
+            atomic_json(request, worker_body)
         if handle_path.exists():
             handle = NativeJobHandle(handle_path)
             body = handle.read()
@@ -172,12 +360,45 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
         if view["terminal"] and view["quiescent"]:
             job = collect(handle)
         else:
+            if operation in {"homer_motif_result", "tf_binding_native", "tf_binding_result", "arsenic_speciation", "protein_disorder",
+                    "protein_conservation_native", "protein_conservation_result", "protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result"} or protease or esm:
+                preserve_observer = True
+            else:
+                preserve_observer = False
+            if preserve_observer and (
+                    cancel_event is not None and cancel_event.is_set()
+                    or view["state"] == "execution_unknown"):
+                prefix = ("somatic_variant_" if operation in {"somatic_variant_native", "somatic_variant_result"} else "protein_phylogeny_" if operation in {"protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result"} else "esm_gene_embedding_" if esm else "protein_conservation_" if operation in {"protein_conservation_native", "protein_conservation_result", "protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result"} else
+                    "protein_disorder_" if operation == "protein_disorder" else "arsenic_speciation_" if operation == "arsenic_speciation" else
+                    "protease_kinetics_" if protease else "homer_motif_" if operation == "homer_motif_result" else "tf_binding_")
+                raise MolecularOperationUnpublished(prefix + "worker_attempt_unconfirmed")
             # A prepared or unreleased handshake can still launch the original
             # command. Its original files must remain available before release.
             if not Path(handle.read()["paths"]["release"]).exists():
                 verify_unstarted_software()
             resume_start(handle, cancel_event=cancel_event)
-            job = wait_job(handle, cancel_event=cancel_event)
+            if preserve_observer:
+                # Stopping this observer must leave the independent original
+                # unit available to the same action's recovery. wait_job's
+                # cancellation policy remains unchanged for all old families.
+                import time
+                while True:
+                    view = status(handle)
+                    if view["terminal"] and view["quiescent"]:
+                        job = collect(handle)
+                        break
+                    if ((cancel_event is not None and cancel_event.is_set())
+                            or view["state"] == "execution_unknown"):
+                        prefix = ("somatic_variant_" if operation in {"somatic_variant_native", "somatic_variant_result"} else "protein_phylogeny_" if operation in {"protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result"} else "esm_gene_embedding_" if esm else "protein_conservation_" if operation in {"protein_conservation_native", "protein_conservation_result", "protein_phylogeny_iqtree_native", "protein_phylogeny_result", "somatic_variant_native", "somatic_variant_result"} else
+                            "protein_disorder_" if operation == "protein_disorder" else "arsenic_speciation_" if operation == "arsenic_speciation" else
+                            "protease_kinetics_" if protease else "homer_motif_" if operation == "homer_motif_result" else "tf_binding_")
+                        raise MolecularOperationUnpublished(prefix + "worker_attempt_unconfirmed")
+                    if cancel_event is None:
+                        time.sleep(.05)
+                    else:
+                        cancel_event.wait(.05)
+            else:
+                job = wait_job(handle, cancel_event=cancel_event)
         if job.returncode != 0 or not output.is_file():
             raise AcquisitionError("local_job_execution_failed" if job.returncode else "local_job_output_missing",
                 phase="local_execution", operational={**job.metadata, "worker_operation": operation})
@@ -255,6 +476,9 @@ def authenticate_itc_invocation(registry, name, arguments, scope, operation_key)
             dict(kind="tool", tool=name, arguments=arguments)):
         raise ContractError("molecular_tool_selected_action_conflict")
     return context, reader
+
+
+authenticate_molecular_invocation = authenticate_itc_invocation
 
 
 def _received(reader, context, reference, namespace):
@@ -347,46 +571,413 @@ def _validate_result(value, request=None):
     return value
 
 
-def read_retained_itc_result(registry, context, reader, source_ref):
-    """Frozen values require the original ordinary publication, not shape alone."""
-    item = _received(reader, context, source_ref, "source")
+def _publication_profile(tool_name):
+    """Finite ordinary producers; a saved read never becomes a new producer."""
+    if tool_name == "generate_gene_embeddings_with_ESM_models":
+        return ("esm_gene_embedding_result_v1", "ordinary_esm_gene_embedding_publication_v1",
+            ("embed",), "esm_gene_embedding_")
+    if tool_name == "detect_and_annotate_somatic_mutations":
+        return ("ordinary_somatic_variant_result_v1", "ordinary_somatic_variant_publication_v1",
+            ("run_native", "calculate_saved"), "somatic_variant_")
+    if tool_name == "analyze_protein_phylogeny":
+        return ("ordinary_protein_phylogeny_result_v1", "ordinary_protein_phylogeny_publication_v1",
+            ("run_native", "calculate_saved"), "protein_phylogeny_")
+    if tool_name == "analyze_protein_conservation":
+        return ("ordinary_protein_conservation_result_v1", "ordinary_protein_conservation_publication_v1",
+            ("run_native", "calculate_saved"), "protein_conservation_")
+    if tool_name == "predict_protein_disorder_regions":
+        return ("ordinary_protein_disorder_result_v1", "ordinary_protein_disorder_publication_v1",
+            ("predict", "calculate_saved"), "protein_disorder_")
+    if tool_name == "analyze_arsenic_speciation_hplc_icpms":
+        return ("ordinary_arsenic_speciation_result_v1", "ordinary_arsenic_speciation_publication_v1",
+            ("calculate", "calculate_saved"), "arsenic_speciation_")
+    if tool_name == "result.variants.vcf":
+        return ("ordinary_vcf_result_v1", "ordinary_vcf_publication_v1",
+            ("analyze", "calculate_saved"), "vcf_result_")
+    if tool_name == ITC_TOOL:
+        return RESULT_VERSION, "ordinary_itc_publication_v1", ("fit", "calculate_saved"), "ordinary_itc_"
+    if tool_name == "liftover_coordinates":
+        return "ordinary_liftover_result_v1", "ordinary_liftover_publication_v1", ("convert",), "ordinary_liftover_"
+    if tool_name == "analyze_circular_dichroism_spectra":
+        return "ordinary_cd_result_v1", "ordinary_cd_publication_v1", ("calculate",), "circular_dichroism_"
+    if tool_name == "analyze_cas9_mutation_outcomes":
+        return ("ordinary_reference_edit_outcome_result_v1", "ordinary_reference_edit_outcome_publication_v1",
+            ("analyze", "calculate_saved"), "reference_edit_outcome_")
+    if tool_name == "result.macs2.peaks":
+        return ("ordinary_macs2_peak_result_v1", "ordinary_macs2_peak_publication_v1",
+            ("parse", "project_saved"), "macs2_peak_")
+    if tool_name == "find_enriched_motifs_with_homer":
+        return ("ordinary_homer_motif_result_v1", "ordinary_homer_motif_publication_v1",
+            ("run_native", "calculate_saved"), "homer_motif_")
+    if tool_name == "identify_transcription_factor_binding_sites":
+        return ("ordinary_tf_binding_result_v1", "ordinary_tf_binding_publication_v1",
+            ("run_native", "calculate_saved"), "tf_binding_")
+    if tool_name == "analyze_protease_kinetics":
+        return ("ordinary_protease_kinetics_result_v1", "ordinary_protease_kinetics_publication_v1",
+            ("run_native", "calculate_saved"), "protease_kinetics_")
+    raise ContractError("molecular_publication_unknown_producer")
+
+
+def _recorded_molecular_action_details(registry, context, arguments, operation_key, tool_name, *,
+        recovery_context=None, recovery_operation_key=None, selected_only=False):
+    """Authenticate one editing action independently of its Source producer."""
+    from .communication import plain
+    from .domain import identity
+    from .episode_bindings import BindingContext
+    from .episode_return_records import EpisodeReturnRecords
+    from .waiting import validate_pending
+    prefix = ("somatic_variant_" if tool_name == "detect_and_annotate_somatic_mutations" else "esm_gene_embedding_" if tool_name == "generate_gene_embeddings_with_ESM_models" else
+        "protein_phylogeny_" if tool_name == "analyze_protein_phylogeny" else
+        "protein_conservation_" if tool_name == "analyze_protein_conservation" else
+        "protein_disorder_" if tool_name == "predict_protein_disorder_regions" else
+        "arsenic_speciation_" if tool_name == "analyze_arsenic_speciation_hplc_icpms" else
+        "vcf_result_" if tool_name == "result.variants.vcf" else
+        "macs2_peak_" if tool_name == "result.macs2.peaks" else
+        "homer_motif_" if tool_name == "find_enriched_motifs_with_homer" else
+        "tf_binding_" if tool_name == "identify_transcription_factor_binding_sites" else
+        "protease_kinetics_" if tool_name == "analyze_protease_kinetics" else "reference_edit_outcome_")
+    if tool_name not in {"analyze_cas9_mutation_outcomes", "result.macs2.peaks", "find_enriched_motifs_with_homer",
+            "identify_transcription_factor_binding_sites", "result.variants.vcf",
+            "analyze_protease_kinetics", "analyze_arsenic_speciation_hplc_icpms",
+            "predict_protein_disorder_regions", "analyze_protein_conservation", "analyze_protein_phylogeny", "detect_and_annotate_somatic_mutations",
+            "generate_gene_embeddings_with_ESM_models"} or not isinstance(context, BindingContext):
+        raise ContractError(prefix + "action_conflict")
+    records = EpisodeReturnRecords(registry.store, context.run_id, failure_prefix=prefix)
+    records.authenticate(context)
+    start = f"{context.run_id}:{context.episode_id}:"
+    suffix = operation_key[len(start):] if type(operation_key) is str and operation_key.startswith(start) else ""
+    if not suffix.isdecimal() or str(int(suffix)) != suffix:
+        raise ContractError(prefix + "action_conflict")
+    if type(selected_only) is not bool or selected_only and tool_name not in {
+            "find_enriched_motifs_with_homer", "identify_transcription_factor_binding_sites",
+            "analyze_protein_conservation", "analyze_protein_phylogeny", "detect_and_annotate_somatic_mutations"}:
+        raise ContractError(prefix + "action_conflict")
+    if selected_only:
+        # Metadata-only denial authority for a private native capture produced
+        # before its public ToolOperation commits. This grants no read/recovery.
+        selected = registry.store.db.execute("SELECT action,result FROM runtime_actions WHERE run_id=? "
+            "AND episode_id=? AND decision_index=?", (context.run_id, context.episode_id, int(suffix))).fetchone()
+        if selected is None:
+            raise ContractError(prefix + "action_conflict")
+        actual_selection = json.loads(selected["action"])
+        if arguments is None:
+            if (type(actual_selection) is not dict or set(actual_selection) != {"kind", "tool", "arguments"}
+                    or actual_selection["kind"] != "tool" or actual_selection["tool"] != tool_name):
+                raise ContractError(prefix + "action_conflict")
+            arguments = actual_selection["arguments"]
+        if canonical(actual_selection) != canonical(
+                dict(kind="tool", tool=tool_name, arguments=arguments)):
+            raise ContractError(prefix + "action_conflict")
+        from .execution_contracts import digest as execution_digest
+        invocation = dict(run_id=context.run_id, episode_id=context.episode_id, operation_key=operation_key,
+            decision_index=int(suffix), request_sha256=execution_digest(plain(context.request)), scope=plain(context.scope))
+        return dict(arguments=deepcopy(arguments), invocation=invocation, outcome=None,
+            operation_ref=identity("operation", dict(key=operation_key, name=tool_name, arguments=arguments)),
+            runtime_outcome=None if selected["result"] is None else json.loads(selected["result"]), pending_recovery=False)
+    row = registry.store.db.execute("""SELECT operation.*, action.action AS selected_action,
+        action.result AS runtime_outcome FROM tool_operations operation JOIN runtime_actions action
+          ON operation.operation_key=action.run_id||':'||action.episode_id||':'||action.decision_index
+        WHERE operation.operation_key=? AND action.run_id=? AND action.episode_id=? AND action.decision_index=?""",
+        (operation_key, context.run_id, context.episode_id, int(suffix))).fetchone()
+    expected = identity("operation", dict(key=operation_key, name=tool_name, arguments=arguments))
+    if (row is None or row["id"] != expected or row["name"] != tool_name
+            or row["arguments"] != canonical(arguments) or row["scope"] != canonical(plain(context.scope))
+            or canonical(json.loads(row["selected_action"])) != canonical(dict(kind="tool", tool=tool_name, arguments=arguments))):
+        raise ContractError(prefix + "action_conflict")
+    outcome = json.loads(row["result"])
+    runtime = None if row["runtime_outcome"] is None else json.loads(row["runtime_outcome"])
+    if type(outcome) is not dict or outcome.get("operation_ref") != expected:
+        raise ContractError(prefix + "action_conflict")
+    pending = runtime is None
+    if pending:
+        if (not isinstance(recovery_context, BindingContext) or recovery_operation_key != operation_key
+                or recovery_context.run_id != context.run_id or recovery_context.episode_id != context.episode_id
+                or not records._equal(recovery_context.request, context.request)):
+            raise ContractError(prefix + "action_conflict")
+        actual, _ = authenticate_molecular_invocation(registry, tool_name, arguments, plain(context.scope), operation_key)
+        if actual is not recovery_context:
+            raise ContractError(prefix + "action_conflict")
+    else:
+        if type(runtime) is not dict:
+            raise ContractError(prefix + "action_conflict")
+        if "pending_work_after_action" in runtime:
+            validate_pending(runtime["pending_work_after_action"])
+        if canonical({key: value for key, value in runtime.items() if key != "pending_work_after_action"}) != row["result"]:
+            raise ContractError(prefix + "action_conflict")
+    if tool_name in {"result.macs2.peaks", "find_enriched_motifs_with_homer", "identify_transcription_factor_binding_sites",
+            "result.variants.vcf", "analyze_protease_kinetics", "analyze_arsenic_speciation_hplc_icpms",
+            "predict_protein_disorder_regions", "analyze_protein_conservation", "analyze_protein_phylogeny", "detect_and_annotate_somatic_mutations", "generate_gene_embeddings_with_ESM_models"}:
+        from .execution_contracts import digest as execution_digest
+        request_sha256 = execution_digest(plain(context.request))
+    else:
+        request_sha256 = hashlib.sha256(canonical(plain(context.request)).encode()).hexdigest()
+    invocation = dict(run_id=context.run_id, episode_id=context.episode_id, operation_key=operation_key,
+        decision_index=int(suffix), request_sha256=request_sha256,
+        scope=plain(context.scope))
+    return dict(arguments=json.loads(row["arguments"]), invocation=invocation, outcome=outcome,
+        operation_ref=expected, runtime_outcome=runtime, pending_recovery=pending)
+
+
+def _recorded_molecular_producer_details(registry, source_ref, tool_name, *,
+        recovery_context=None, recovery_operation_key=None):
+    """Join original producer metadata, with one exact editing-action recovery.
+
+    The old profiles retain their committed-only checks. A NULL runtime outcome
+    is usable only for the new editing producer's actual current invocation;
+    neither a Source handle nor a supplied recovery key establishes authority.
+    """
+    from .communication import plain
+    from .episode_bindings import BindingContext
+    from .episode_return_records import EpisodeReturnRecords
+    _, _, modes, prefix = _publication_profile(tool_name)
+    editing = tool_name in {"analyze_cas9_mutation_outcomes", "result.macs2.peaks", "find_enriched_motifs_with_homer",
+        "identify_transcription_factor_binding_sites", "result.variants.vcf", "analyze_protease_kinetics",
+        "analyze_arsenic_speciation_hplc_icpms", "predict_protein_disorder_regions", "analyze_protein_conservation", "analyze_protein_phylogeny", "detect_and_annotate_somatic_mutations",
+        "generate_gene_embeddings_with_ESM_models"}
+    if ((recovery_context is None) != (recovery_operation_key is None)
+            or recovery_context is not None and (not editing or not isinstance(recovery_context, BindingContext))):
+        raise ContractError(prefix + "publication_conflict")
+    candidates = []
+    rows = registry.store.db.execute("""SELECT operation.*,
+        action.run_id AS producer_run_id, action.episode_id AS producer_episode_id,
+        action.decision_index AS producer_decision_index, action.action AS selected_action,
+        action.result AS recorded_outcome
+        FROM tool_operations operation JOIN runtime_actions action
+          ON (json_extract(action.result,'$.operation_ref')=operation.id
+            OR (? AND action.result IS NULL AND operation.operation_key=?
+              AND operation.operation_key=action.run_id||':'||action.episode_id||':'||action.decision_index))
+        WHERE operation.name=? AND json_extract(operation.result,'$.status') IN ('completed','partial')
+          AND EXISTS(SELECT 1 FROM json_each(operation.result,'$.record_refs') published
+                     WHERE published.value=?)""",
+        (editing and recovery_context is not None, recovery_operation_key, tool_name, source_ref))
+    for row in rows:
+        arguments = json.loads(row["arguments"])
+        if type(arguments) is dict and arguments.get("mode") in modes:
+            if tool_name in {"result.macs2.peaks", "find_enriched_motifs_with_homer", "identify_transcription_factor_binding_sites",
+                    "analyze_protease_kinetics", "analyze_arsenic_speciation_hplc_icpms",
+                    "predict_protein_disorder_regions", "analyze_protein_conservation", "analyze_protein_phylogeny", "detect_and_annotate_somatic_mutations", "generate_gene_embeddings_with_ESM_models"} and source_ref not in json.loads(row["result"]).get("changed_record_refs", []):
+                continue  # An unchanged saved window reads its original Source.
+            candidates.append((row, arguments))
+    if len(candidates) != 1:
+        raise ContractError(prefix + "publication_conflict")
+    row, arguments = candidates[0]
+    records = EpisodeReturnRecords(registry.store, row["producer_run_id"], failure_prefix=prefix)
+    producer = records.context(row["producer_episode_id"])
+    records.authenticate(producer)
+    operation_key = f'{producer.run_id}:{producer.episode_id}:{row["producer_decision_index"]}'
+    if editing:
+        context = recovery_context if row["recorded_outcome"] is None else producer
+        if context is None or not records._equal(context.request, producer.request) or context.path != producer.path:
+            raise ContractError(prefix + "publication_conflict")
+        details = _recorded_molecular_action_details(registry, context, arguments, operation_key, tool_name,
+            recovery_context=recovery_context, recovery_operation_key=recovery_operation_key)
+        outcome = details["outcome"]
+        if (source_ref not in outcome.get("record_refs", []) or type(outcome.get("result")) is not dict
+                or outcome["result"].get("source_ref") != source_ref):
+            raise ContractError(prefix + "publication_conflict")
+        return details
+    runtime_outcome = None if row["recorded_outcome"] is None else json.loads(row["recorded_outcome"])
+    outcome = json.loads(row["result"])
+    if (row["operation_key"] != operation_key
+            or row["scope"] != canonical(plain(producer.scope))
+            or canonical(json.loads(row["selected_action"])) != canonical(
+                dict(kind="tool", tool=tool_name, arguments=arguments))
+            or source_ref not in outcome.get("record_refs", [])):
+        raise ContractError(prefix + "publication_conflict")
+    if (runtime_outcome is None or source_ref not in runtime_outcome.get("record_refs", [])
+            or canonical({k: v for k, v in runtime_outcome.items() if k != "pending_work_after_action"}) != row["result"]):
+        raise ContractError(prefix + "publication_conflict")
+    invocation = dict(run_id=producer.run_id, episode_id=producer.episode_id,
+        operation_key=operation_key, decision_index=row["producer_decision_index"],
+        request_sha256=hashlib.sha256(canonical(plain(producer.request)).encode()).hexdigest(),
+        scope=plain(producer.scope))
+    return dict(arguments=arguments, invocation=invocation, outcome=outcome,
+        operation_ref=row["id"], runtime_outcome=runtime_outcome, pending_recovery=False)
+
+
+def _recorded_molecular_capture_action(registry, operation_ref, tool_name):
+    """Find a capture's actual selected action without requiring a ToolOperation.
+
+    An accession is a candidate identity, never authority by itself. Recompute
+    it from the saved key/tool/full arguments, then use the shared authenticator.
+    This metadata-only port grants no bytes, receipts or pending recovery.
+    """
+    from .domain import identity
+    from .episode_return_records import EpisodeReturnRecords
+    if tool_name not in {"find_enriched_motifs_with_homer", "identify_transcription_factor_binding_sites",
+            "analyze_protein_conservation", "analyze_protein_phylogeny", "detect_and_annotate_somatic_mutations"}:
+        raise ContractError("molecular_capture_unknown_producer")
+    tool = tool_name
+    prefix = _publication_profile(tool)[3]
+    matches = []
+    rows = registry.store.db.execute("SELECT run_id,episode_id,decision_index,action FROM runtime_actions "
+        "WHERE json_extract(action,'$.kind')='tool' AND json_extract(action,'$.tool')=?", (tool,))
+    for row in rows:
+        selected = json.loads(row["action"])
+        if type(row["decision_index"]) is not int or row["decision_index"] < 0:
+            continue
+        key = f'{row["run_id"]}:{row["episode_id"]}:{row["decision_index"]}'
+        arguments = selected.get("arguments")
+        if identity("operation", dict(key=key, name=tool, arguments=arguments)) != operation_ref:
+            continue
+        records = EpisodeReturnRecords(registry.store, row["run_id"], failure_prefix=prefix)
+        context = records.context(row["episode_id"])
+        matches.append(_recorded_molecular_action_details(registry, context, arguments, key, tool, selected_only=True))
+    if len(matches) != 1:
+        raise ContractError(prefix + "capture_action_conflict")
+    return matches[0]
+
+
+def _recorded_homer_capture_action(registry, operation_ref):
+    return _recorded_molecular_capture_action(registry, operation_ref, "find_enriched_motifs_with_homer")
+
+
+def _recorded_molecular_producer(registry, source_ref, tool_name):
+    """Preserve the committed producer reader's original two-value return."""
+    details = _recorded_molecular_producer_details(registry, source_ref, tool_name)
+    return details["arguments"], details["invocation"]
+
+
+def read_retained_molecular_publication(registry, context, reader, source_ref, *, tool_name):
+    """Read an admitted producer's saved values without delivering its Files.
+
+    ITC preserves its existing dual Source/File admission. Source-only producers
+    authenticate metadata and the original selected action before any private
+    native, control or grading bytes are opened. The shared association checks
+    do not calculate measurements, grant receipts or invoke native software.
+    """
+    with registry.store.read_snapshot():
+        return _read_retained_molecular_publication(registry, context, reader, source_ref,
+            tool_name=tool_name)
+
+
+def _publication_bytes(store, reference):
+    """Verify the original artifact ID, metadata and complete retained bytes."""
+    from .native_file_capture import NativeFileCaptureError, _metadata
+    metadata = _metadata(store, reference)
+    # This is an authenticated producer's internal read. Model-facing material
+    # access has separate File permissions; no such permission is conferred here.
+    raw = store.get_artifact(reference)
+    if len(raw) != metadata["size"] or hashlib.sha256(raw).hexdigest() != metadata["sha256"]:
+        raise NativeFileCaptureError("retained_artifact_mismatch")
+    return raw
+
+
+def _read_retained_molecular_publication(registry, context, reader, source_ref, *, tool_name):
+    """The common read within one metadata snapshot; no additional admission."""
+    if tool_name == "generate_gene_embeddings_with_ESM_models":
+        from .esm_gene_embedding_publication import _read
+        return _read(registry, context, reader, source_ref)
+    if tool_name == "detect_and_annotate_somatic_mutations":
+        from .somatic_variant_publication import _read_somatic_variant_publication
+        return _read_somatic_variant_publication(registry, context, reader, source_ref)
+    if tool_name == "analyze_protein_phylogeny":
+        from .protein_phylogeny_publication import _read_protein_phylogeny_publication
+        return _read_protein_phylogeny_publication(registry, context, reader, source_ref)
+    if tool_name == "analyze_protein_conservation":
+        from .protein_conservation_publication import _read_protein_conservation_publication
+        return _read_protein_conservation_publication(registry, context, reader, source_ref)
+    if tool_name == "predict_protein_disorder_regions":
+        from .protein_disorder_tools import read_protein_disorder_publication
+        return read_protein_disorder_publication(registry, context, reader, source_ref)
+    if tool_name == "analyze_arsenic_speciation_hplc_icpms":
+        from .arsenic_speciation_tools import read_arsenic_speciation_publication
+        return read_arsenic_speciation_publication(registry, context, reader, source_ref)
+    if tool_name == "analyze_protease_kinetics":
+        from .protease_kinetics_tools import _read_protease_kinetics_publication
+        return _read_protease_kinetics_publication(registry, context, reader, source_ref)
+    if tool_name == "result.variants.vcf":
+        from .vcf_result_tools import read_retained_vcf_publication
+        return read_retained_vcf_publication(registry, context, reader, source_ref)
+    if tool_name in {"find_n_glycosylation_motifs", "predict_o_glycosylation_hotspots", "align_sequences"}:
+        return registry.molecular_sequence_results_for(context.run_id).read_ordinary_molecular_sequence_publication(
+            context, source_ref, operation=tool_name, read_received=reader)
+    if tool_name == "identify_transcription_factor_binding_sites":
+        from .tf_binding_tools import _read_tf_binding_publication
+        return _read_tf_binding_publication(registry, context, reader, source_ref)
+    if tool_name == "find_enriched_motifs_with_homer":
+        from .homer_motif_tools import _read_homer_publication
+        return _read_homer_publication(registry, context, reader, source_ref)
+    if tool_name == "result.macs2.peaks":
+        from .macs2_peak_tools import _read_publication
+        return _read_publication(registry, context, reader, source_ref)
+    if tool_name == "analyze_cas9_mutation_outcomes":
+        from .reference_edit_outcome_tools import _read_reference_edit_outcome_publication
+        return _read_reference_edit_outcome_publication(registry, context, reader, source_ref)
+    result_version, control_version, _, prefix = _publication_profile(tool_name)
+    if tool_name == ITC_TOOL:
+        item = _received(reader, context, source_ref, "source")
+    else:
+        admitted = reader(context, source_ref, "source", source_metadata_only=True)
+        if admitted["failure"] is not None:
+            raise ContractError("molecular_tool_" + admitted["failure"]["code"])
+        item = admitted["input"]
     source = item["witness"]["record"]
-    value = _validate_result(item["content"]["value"])
-    if source["provider"] != ITC_TOOL or source.get("version") != RESULT_VERSION:
-        raise ContractError("ordinary_itc_producer_required")
-    control = json.loads(registry.store.get_artifact(source["request_ref"]))
+    if (source.get("origin") != "tool" or source.get("provider") != tool_name
+            or source.get("version") != result_version):
+        raise ContractError(prefix + "producer_required")
+    arguments, invocation = _recorded_molecular_producer(registry, source_ref, tool_name)
+    if tool_name == ITC_TOOL:
+        value = _validate_result(item["content"]["value"])
+    elif tool_name == "analyze_circular_dichroism_spectra":
+        from .circular_dichroism_contracts import validate_circular_dichroism_tool_result
+        value = validate_circular_dichroism_tool_result(json.loads(_publication_bytes(registry.store, source["artifact_ref"])))
+    else:
+        from .liftover_measurements import validate_liftover_tool_result
+        value = validate_liftover_tool_result(json.loads(_publication_bytes(registry.store, source["artifact_ref"])))
+    control = json.loads(_publication_bytes(registry.store, source["request_ref"]))
     if (type(control) is not dict or set(control) != {"version", "request", "native_artifact_ref",
             "execution_selection", "native_handle", "execution"}
-            or control["version"] != "ordinary_itc_publication_v1"
-            or control["native_artifact_ref"] != source["artifact_ref"]
-            or canonical(_worker_request(control["request"])) != canonical(value["request"])):
-        raise ContractError("ordinary_itc_publication_conflict")
-    original = control["request"]["invocation"]
-    witness = control["request"]["received_input"]["witness"]
-    if ("operand_refs" in source or source.get("parent_source_refs") != (
-            [witness["reference"]] if witness["namespace"] == "source" else [])):
-        raise ContractError("ordinary_itc_publication_conflict")
-    operation = registry.store.db.execute("SELECT * FROM tool_operations WHERE operation_key=?",
-        (original["operation_key"],)).fetchone()
-    action = registry.store.db.execute("SELECT action,result FROM runtime_actions WHERE run_id=? AND episode_id=? "
-        "AND decision_index=?", (original["run_id"], original["episode_id"], original["decision_index"])).fetchone()
-    from .tool_grading_artifacts import source_tool_grading_entries
+            or control["version"] != control_version
+            or control["native_artifact_ref"] != source["artifact_ref"]):
+        raise ContractError(prefix + "publication_conflict")
+    request = control["request"]
+    if tool_name in {"liftover_coordinates", "analyze_circular_dichroism_spectra"} and (
+            type(request) is not dict or set(request) != {
+                "version", "arguments", "invocation", "received_input", "request"}
+            or request["version"] != ("ordinary_liftover_request_v1" if tool_name == "liftover_coordinates"
+                else "ordinary_cd_request_v1")):
+        raise ContractError(prefix + "publication_conflict")
+    expected = _worker_request(request) if tool_name == ITC_TOOL else request["request"]
+    witness = request["received_input"]["witness"]
+    if tool_name == "liftover_coordinates" and (
+            canonical(expected["chain"]["file"]) != canonical(request["received_input"]["file"])
+            or expected["chain"]["source_ref"] != (
+                witness["reference"] if witness["namespace"] == "source" else None)
+            or canonical(arguments.get("input")) != canonical(
+                dict(namespace=witness["namespace"], reference=witness["reference"]))
+            or arguments.get("chain_format") != expected["chain"]["file"]["format"]
+            or canonical(arguments.get("point")) != canonical(expected["point"])):
+        raise ContractError(prefix + "publication_conflict")
+    if tool_name == "analyze_circular_dichroism_spectra" and (
+            canonical(expected["input_file"]) != canonical(request["received_input"]["file"])
+            or canonical(arguments.get("input")) != canonical(
+                dict(namespace=witness["namespace"], reference=witness["reference"]))):
+        raise ContractError(prefix + "publication_conflict")
+    if (canonical(expected) != canonical(value["request"])
+            or canonical(request["arguments"]) != canonical(arguments)
+            or canonical(request["invocation"]) != canonical(invocation)
+            or "operand_refs" in source or source.get("parent_source_refs") != (
+                [witness["reference"]] if witness["namespace"] == "source" else [])):
+        raise ContractError(prefix + "publication_conflict")
+    from .tool_grading_artifacts import MEDIA_TYPE, source_tool_grading_entries
+    from .native_file_capture import _metadata
+    for reference in source.get("auxiliary_artifact_refs", ()):
+        if _metadata(registry.store, reference)["media_type"] == MEDIA_TYPE:
+            _publication_bytes(registry.store, reference)
     entries = source_tool_grading_entries(registry.store, source_ref)
-    grading = dict(sheet=value["sheet"], scores=value["components"])
-    operation_result = None if operation is None else json.loads(operation["result"])
-    action_result = None if action is None or action["result"] is None else json.loads(action["result"])
-    if (operation is None or action is None or action["result"] is None or operation["name"] != ITC_TOOL
-            or operation["arguments"] != canonical(value["request"]["arguments"])
-            or source_ref not in operation_result.get("record_refs", [])
-            or source_ref not in action_result.get("record_refs", [])
-            or operation_result.get("status") not in ("completed", "partial")
-            or action_result.get("operation_ref") != operation["id"]
-            or operation["scope"] != canonical(original["scope"])
-            or canonical(json.loads(action["action"])) != canonical(dict(kind="tool", tool=ITC_TOOL,
-                arguments=value["request"]["arguments"])) or len(entries) != 1
-            or canonical(entries[0]["grading"]) != canonical(grading)):
-        raise ContractError("ordinary_itc_publication_conflict")
-    return item, value, entries[0]["artifact_ref"]
+    if (len(entries) != 1 or canonical(entries[0]["grading"]) != canonical(
+            dict(sheet=value["sheet"], scores=value["components"]))):
+        raise ContractError(prefix + "publication_conflict")
+    return dict(admission_kind="source_and_file" if tool_name == ITC_TOOL else "source_only",
+        received_input=item, source=source, stored=value, control=control,
+        grading_ref=entries[0]["artifact_ref"])
+
+
+def read_retained_itc_result(registry, context, reader, source_ref):
+    """Preserve the existing ITC reader's admitted input/result/grading triple."""
+    result = read_retained_molecular_publication(registry, context, reader, source_ref, tool_name=ITC_TOOL)
+    return result["received_input"], result["stored"], result["grading_ref"]
 
 
 def _cell(value):
@@ -508,29 +1099,54 @@ def partial_itc_publication(registry, prepared):
         projection_state="unavailable", retained_sources=rows), list(dict.fromkeys(references))
 
 
-def publish_itc_work(registry, arguments, prepared):
-    if arguments["mode"] == "read_stored":
-        projection = prepared["projection"]
-        return projection, [projection["source_ref"], projection["native_file"]["artifact_ref"], projection["grading_ref"]]
+def retain_molecular_publication(registry, prepared, *, tool_name):
+    """Retain an owned worker's validated output through one publication path."""
+    if tool_name == "predict_protein_disorder_regions":
+        from .protein_disorder_tools import _retain_protein_disorder_publication
+        return _retain_protein_disorder_publication(registry, prepared)
+    if tool_name == "analyze_arsenic_speciation_hplc_icpms":
+        from .arsenic_speciation_tools import _retain_arsenic_speciation_publication
+        return _retain_arsenic_speciation_publication(registry, prepared)
+    if tool_name == "analyze_protease_kinetics":
+        from .protease_kinetics_tools import _retain_protease_kinetics_publication
+        return _retain_protease_kinetics_publication(registry, prepared)
+    if tool_name == "result.variants.vcf":
+        from .vcf_result_tools import _retain_vcf_result_publication
+        return _retain_vcf_result_publication(registry, prepared)
+    if tool_name == "analyze_cas9_mutation_outcomes":
+        from .reference_edit_outcome_tools import _retain_reference_edit_outcome_publication
+        return _retain_reference_edit_outcome_publication(registry, prepared)
     from .materials import artifact_file
     from .tool_grading_artifacts import retain_tool_grading
+    result_version, control_version, _, prefix = _publication_profile(tool_name)
     work, stored, item = prepared["work"], prepared["stored"], prepared["item"]
     native = artifact_file(registry.store, work.output_path, "application/json")
-    grading = retain_tool_grading(registry.store, provider=ITC_TOOL, native_artifact_ref=native,
+    if canonical(json.loads(_publication_bytes(registry.store, native))) != canonical(stored):
+        raise ContractError(prefix + "native_capture_conflict")
+    grading = retain_tool_grading(registry.store, provider=tool_name, native_artifact_ref=native,
         grading=dict(sheet=stored["sheet"], scores=stored["components"]))
-    controls = registry.store.artifact(canonical(dict(version="ordinary_itc_publication_v1",
+    controls = registry.store.artifact(canonical(dict(version=control_version,
         request=prepared["request"], native_artifact_ref=native,
         execution_selection=json.loads((work.output_path.parent / "execution-selection.json").read_bytes()),
         native_handle=json.loads((work.output_path.parent / "native-handle.json").read_bytes()),
         execution=work.metadata)), "application/json")
-    source = registry._put("source", dict(provider=ITC_TOOL, accession=None, uri=None,
-        artifact_ref=native, text_ref=None, request_ref=controls, version=RESULT_VERSION,
+    source = registry._put("source", dict(provider=tool_name, accession=None, uri=None,
+        artifact_ref=native, text_ref=None, request_ref=controls, version=result_version,
         retrieved_at=datetime.now(timezone.utc).isoformat(),
         parent_source_refs=[item["witness"]["reference"]] if item["witness"]["namespace"] == "source" else [],
         auxiliary_artifact_refs=[grading]), origin="tool")
-    projection = project_itc_tool_result(stored, selection=arguments, source_ref=source["id"],
-        artifact_ref=native, grading_ref=grading)
-    return projection, [source["id"], native, grading]
+    return dict(source=source, native_artifact_ref=native, grading_ref=grading)
+
+
+def publish_itc_work(registry, arguments, prepared):
+    if arguments["mode"] == "read_stored":
+        projection = prepared["projection"]
+        return projection, [projection["source_ref"], projection["native_file"]["artifact_ref"], projection["grading_ref"]]
+    publication = retain_molecular_publication(registry, prepared, tool_name=ITC_TOOL)
+    projection = project_itc_tool_result(prepared["stored"], selection=arguments,
+        source_ref=publication["source"]["id"], artifact_ref=publication["native_artifact_ref"],
+        grading_ref=publication["grading_ref"])
+    return projection, [publication["source"]["id"], publication["native_artifact_ref"], publication["grading_ref"]]
 
 
 ITC_PARAMETER_SOURCE = "itc_binding_parameters"
@@ -634,172 +1250,37 @@ def project_itc_parameter_return(stored, *, source_ref):
 
 
 def merge_itc_parameter_facts(*groups):
-    """Deduplicate an identical Source group; never overwrite conflicting facts."""
-    result, seen = [], {}
-    for group in groups:
-        if type(group) is not list:
-            raise ContractError("itc_parameter_facts_array_required")
-        for item in group:
-            value = validate_itc_parameter_return(item)
-            reference, body = value["source_ref"], canonical(value)
-            if reference in seen and seen[reference] != body:
-                raise ContractError("itc_parameter_facts_source_conflict")
-            if reference not in seen:
-                result.append(value); seen[reference] = body
-    return result
+    """Keep the ITC API through the shared Source-group merge."""
+    from .molecular_result_facts import merge_molecular_facts
+    return merge_molecular_facts(*groups, fact_source=ITC_PARAMETER_SOURCE)
 
 
 def requested_itc_parameter_fields(schema):
-    """A requested group keeps the complete finite ParameterReturn meaning."""
-    properties = schema.get("properties", {}) if isinstance(schema, Mapping) else {}
-    if not isinstance(properties, Mapping) or not any(isinstance(node, Mapping)
-            and node.get("x-source") == ITC_PARAMETER_SOURCE for node in properties.values()):
-        return []
-    from .communication import plain, validate_closed_schema
-    schema = validate_closed_schema(plain(schema))
-    available = itc_parameter_fact_sources()[ITC_PARAMETER_SOURCE]["report_schema"]
-    fields = []
-    for name, node in schema["properties"].items():
-        if node.get("x-source") == ITC_PARAMETER_SOURCE:
-            if canonical(node) != canonical(available):
-                raise ContractError("itc_parameter_requested_schema_conflict")
-            fields.append(name)
-    return fields
+    """Keep the exact ITC source contract through the finite shared selector."""
+    from .molecular_result_facts import requested_molecular_fact_fields
+    return requested_molecular_fact_fields(schema, fact_source=ITC_PARAMETER_SOURCE)
 
 
 def validate_frozen_itc_parameter_return(form, schema, frozen):
-    """Compare the literal frozen array, without reading its scientific Files."""
-    from .communication import ReportBoundaryError, plain
-    for name in requested_itc_parameter_fields(schema):
-        actual = plain(form).get(name)
-        try:
-            if type(frozen) is not list or type(actual) is not list:
-                raise ContractError("itc_parameter_frozen_source_unavailable")
-            for item in [*actual, *frozen]:
-                validate_itc_parameter_return(item)
-            if canonical(actual) != canonical(frozen):
-                raise ContractError("itc_parameter_frozen_source_mismatch")
-        except ValueError as error:
-            raise ReportBoundaryError("Return differs from the retained ITC parameter facts",
-                code=str(error), field=name) from error
+    """Validate the original ITC cells without reopening their Files."""
+    from .molecular_result_facts import validate_frozen_molecular_return
+    return validate_frozen_molecular_return(form, schema, frozen, fact_source=ITC_PARAMETER_SOURCE)
 
 
 def own_itc_parameter_facts(registry, context, *, read_received):
-    """Join actual selected actions and publications, then copy their saved cells."""
-    from .communication import plain
-    from .episode_return_records import EpisodeReturnRecords
-    records = EpisodeReturnRecords(registry.store, context.run_id, failure_prefix="itc_parameter_")
-    records.authenticate(context)
-    if context.role != "scientific_process":
-        raise ContractError("itc_parameter_scientific_owner_required")
-    result = []
-    rows = registry.store.db.execute("SELECT decision_index,action,result FROM runtime_actions WHERE run_id=? "
-        "AND episode_id=? AND json_extract(action,'$.kind')='tool' AND json_extract(action,'$.tool')=? "
-        "AND json_extract(result,'$.status') IN ('completed','partial') ORDER BY decision_index",
-        (context.run_id, context.episode_id, ITC_TOOL))
-    for row in rows:
-        action, actual = json.loads(row["action"]), json.loads(row["result"])
-        key = f'{context.run_id}:{context.episode_id}:{row["decision_index"]}'
-        operation = registry.store.db.execute("SELECT * FROM tool_operations WHERE operation_key=?", (key,)).fetchone()
-        if (operation is None or operation["name"] != ITC_TOOL
-                or operation["arguments"] != canonical(action["arguments"])
-                or operation["scope"] != canonical(plain(context.scope))
-                or operation["id"] != actual.get("operation_ref")
-                or canonical({k: v for k, v in actual.items() if k != "pending_work_after_action"}) != operation["result"]):
-            raise ContractError("itc_parameter_action_conflict")
-        for reference in actual.get("record_refs", []):
-            source = registry.store.get(reference)
-            if source.get("record_type") != "source" or source.get("provider") != ITC_TOOL:
-                continue
-            item, stored, grading = read_retained_itc_result(registry, context, read_received, reference)
-            required = (reference, item["file"]["artifact_ref"], grading)
-            if not all(ref in actual["record_refs"] for ref in required):
-                raise ContractError("itc_parameter_action_files_conflict")
-            arguments = action["arguments"]
-            if arguments["mode"] == "read_stored":
-                if arguments["result_ref"] != reference:
-                    raise ContractError("itc_parameter_action_source_conflict")
-            else:
-                control = json.loads(registry.store.get_artifact(source["request_ref"]))
-                if control["request"]["invocation"]["operation_key"] != key:
-                    raise ContractError("itc_parameter_action_source_conflict")
-            result.append(project_itc_parameter_return(stored, source_ref=reference))
-    return merge_itc_parameter_facts(result)
+    """Authenticate own ITC actions through the common Source-group owner."""
+    from .molecular_result_facts import own_molecular_facts
+    return own_molecular_facts(registry, context, read_received=read_received,
+        fact_source=ITC_PARAMETER_SOURCE)
 
 
 def frozen_itc_parameter_facts(store, run_id, context):
-    """Read this episode's frozen array literally; absence remains unknown."""
-    from .episode_return_records import EpisodeReturnRecords
-    EpisodeReturnRecords(store, run_id, failure_prefix="itc_parameter_").authenticate(context)
-    row = store.db.execute("SELECT facts FROM runtime_forms WHERE run_id=? AND episode_id=?",
-        (run_id, context.episode_id)).fetchone()
-    if row is None:
-        return None
-    facts = json.loads(row["facts"])
-    if ITC_PARAMETER_SOURCE not in facts:
-        return None
-    values = facts[ITC_PARAMETER_SOURCE]
-    if type(values) is not list:
-        raise ContractError("itc_parameter_frozen_source_invalid")
-    for value in values:
-        validate_itc_parameter_return(value)
-    return deepcopy(values)
+    """Read the original frozen ITC group through the shared owner."""
+    from .molecular_result_facts import frozen_molecular_facts
+    return frozen_molecular_facts(store, run_id, context, fact_source=ITC_PARAMETER_SOURCE)
 
 
 def received_itc_parameter_facts(store, run_id, context):
-    """Consume actual admitted child forms and frozen ancestor report prefixes."""
-    from .episode_receipts import EpisodeReceipts
-    from .episode_return_records import EpisodeReturnRecords
-    from .execution_contracts import digest
-    records = EpisodeReturnRecords(store, run_id, failure_prefix="itc_parameter_")
-    records.authenticate(context)
-    groups, current, prefix, seen = [], context, None, set()
-    while True:
-        if current.episode_id in seen:
-            raise ContractError("itc_parameter_receipt_lineage_cycle")
-        seen.add(current.episode_id)
-        if prefix is None:
-            attempts = [dict(row) for row in store.db.execute("SELECT decision_index,delivery_ref,child_episode_id,"
-                "contract,form FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? "
-                "AND failure IS NULL AND form IS NOT NULL ORDER BY decision_index", (run_id, current.episode_id))]
-        else:
-            attempts = []
-            for frozen in prefix["attempts"]:
-                row = store.db.execute("SELECT decision_index,delivery_ref,child_episode_id,contract,form,failure "
-                    "FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
-                    (run_id, current.episode_id, frozen["decision_index"])).fetchone()
-                if (row is None or row["failure"] is not None or row["form"] is None
-                        or any(row[name] != frozen[name] for name in ("delivery_ref", "child_episode_id"))
-                        or digest(json.loads(row["contract"])) != frozen["contract_sha256"]
-                        or digest(json.loads(row["form"])) != frozen["form_sha256"]):
-                    raise ContractError("itc_parameter_received_prefix_conflict")
-                attempts.append(dict(row))
-        for attempt in attempts:
-            schema = json.loads(attempt["contract"])["measurements"]["schema"]
-            fields = requested_itc_parameter_fields(schema)
-            if not fields:
-                continue
-            _, form, authenticated_schema = records._attempt(current, attempt["decision_index"])
-            if canonical(schema) != canonical(authenticated_schema):
-                raise ContractError("itc_parameter_received_schema_conflict")
-            for name in fields:
-                group = form[name]
-                if type(group) is not list:
-                    raise ContractError("itc_parameter_received_array_required")
-                for value in group:
-                    validate_itc_parameter_return(value)
-                    if itc_reference_access(store, context, value["source_ref"], "source") is not True:
-                        raise ContractError("itc_parameter_received_source_not_granted")
-                groups.append(group)
-        manifest = EpisodeReceipts.read_manifest(store.db, run_id, current.episode_id)
-        parent = manifest["parent_episode_id"]
-        if parent is None:
-            break
-        if "received_report_prefix" not in manifest:
-            raise ContractError("itc_parameter_received_prefix_unavailable")
-        prefix = manifest["received_report_prefix"]
-        parent_context = records.context(parent)
-        if current.path[:-1] != parent_context.path:
-            raise ContractError("itc_parameter_received_lineage_conflict")
-        current = parent_context
-    return merge_itc_parameter_facts(*groups)
+    """Consume actual ITC child forms and frozen ancestor receipt prefixes."""
+    from .molecular_result_facts import received_molecular_facts
+    return received_molecular_facts(store, run_id, context, fact_source=ITC_PARAMETER_SOURCE)

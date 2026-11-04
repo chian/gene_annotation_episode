@@ -1,0 +1,424 @@
+{
+  "version": "genomic_overlap_native_driver_component_verification_v1",
+  "date": "2026-10-27",
+  "status": "assigned_reservation_driver_component_verified",
+  "scientific_tool_complete": false,
+  "ports": [
+    "prepare_local_genomic_overlap",
+    "local_genomic_overlap_plan",
+    "run_genomic_overlap_driver",
+    "main"
+  ],
+  "unresolved_assigned_ports": [],
+  "owned_source_pins": [
+    {
+      "path": "gene_annotation_episode/native_genomic_overlap_driver.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_genomic_overlap_driver.py",
+      "sha256": "a65e5f9b3443da723b522785b097e4ac33412efc2e5ebbc28fa13e74ecbbe87c",
+      "byte_length": 28914
+    },
+    {
+      "path": "gene_annotation_episode/native_genomic_overlap_local.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_genomic_overlap_local.py",
+      "sha256": "68809ca355a5a2a5db256ae0916edcd7f50ba372c0d7e2abcec270ede1f113c9",
+      "byte_length": 10156
+    },
+    {
+      "path": "tests/test_native_genomic_overlap_driver.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_driver.py",
+      "sha256": "de9c31216f70c191aebd019e7484cce30222d2371896ba7cea59ac928c1f0237",
+      "byte_length": 21300
+    },
+    {
+      "path": "tests/test_native_genomic_overlap_local.py",
+      "source_path": "/home/chia/repos/gene_annotation_episode/tests/test_native_genomic_overlap_local.py",
+      "sha256": "69871a5395b4da4f76a4a513edda60865c70efdf6ad50bc15426d4ec8d72e7ed",
+      "byte_length": 14739
+    }
+  ],
+  "final_attempt": "check005",
+  "attempts": [
+    {
+      "name": "check001",
+      "returncode": 1,
+      "tests": 59,
+      "failures": 2,
+      "errors": 0,
+      "pytest_seconds": 186.504,
+      "executed_source_pins_unchanged": true,
+      "binary_pins_unchanged": true,
+      "checkout_drift_paths": [
+        "gene_annotation_episode/native_genomic_overlap_contracts.py",
+        "gene_annotation_episode/native_genomic_overlap_driver.py",
+        "gene_annotation_episode/native_genomic_overlap_local.py",
+        "gene_annotation_episode/native_genomic_overlap_observations.py"
+      ],
+      "receipt": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check001/receipt.json"
+    },
+    {
+      "name": "check002",
+      "returncode": 0,
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "pytest_seconds": 212.971,
+      "executed_source_pins_unchanged": true,
+      "binary_pins_unchanged": true,
+      "checkout_drift_paths": [
+        "gene_annotation_episode/native_genomic_overlap_driver.py",
+        "tests/test_native_genomic_overlap_driver.py"
+      ],
+      "receipt": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check002/receipt.json"
+    },
+    {
+      "name": "check003",
+      "returncode": 0,
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "pytest_seconds": 242.879,
+      "executed_source_pins_unchanged": true,
+      "binary_pins_unchanged": true,
+      "checkout_drift_paths": [
+        "gene_annotation_episode/execution_episodes.py"
+      ],
+      "receipt": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check003/receipt.json"
+    },
+    {
+      "name": "check004",
+      "returncode": 0,
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "pytest_seconds": 351.46,
+      "executed_source_pins_unchanged": true,
+      "binary_pins_unchanged": true,
+      "checkout_drift_paths": [
+        "gene_annotation_episode/native_genomic_overlap_contracts.py",
+        "tests/test_native_genomic_overlap_driver.py"
+      ],
+      "receipt": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check004/receipt.json"
+    },
+    {
+      "name": "check005",
+      "returncode": 0,
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "pytest_seconds": 225.674,
+      "executed_source_pins_unchanged": true,
+      "binary_pins_unchanged": true,
+      "checkout_drift_paths": [],
+      "receipt": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check005/receipt.json"
+    }
+  ],
+  "final_policy_metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-27T13:46:21.456603+00:00",
+        "monotonic_ns": 922343153928228,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 226.700265733,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 66301952
+  },
+  "binary_pins": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+      "resolved": "/usr/bin/python3.12",
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+      "resolved": "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+      "sha256": "b6c6e44b79180f0c9f64f916010c71bcd44baf81e5abe71b63f19aa9d4bc9fb6"
+    }
+  ],
+  "actual_native_evidence": {
+    "classification": "actual_pinned_bedtools_on_synthetic_inputs",
+    "three_set_record": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check005/temporary/pytest/test_real_three_sets_native_to0/ACTUAL_NATIVE_G1.json",
+    "measurements": [
+      {
+        "comparison_key": "AB",
+        "native_pair_count": 2,
+        "pairwise_overlap_bp_sum": 8,
+        "intersection_union_bp": 5,
+        "combined_union_bp": 15,
+        "jaccard_bp": {
+          "numerator": 5,
+          "denominator": 15,
+          "value": 0.3333333333333333,
+          "missing_reason": null
+        }
+      },
+      {
+        "comparison_key": "AC",
+        "native_pair_count": 1,
+        "pairwise_overlap_bp_sum": 5,
+        "intersection_union_bp": 5,
+        "combined_union_bp": 20,
+        "jaccard_bp": {
+          "numerator": 5,
+          "denominator": 20,
+          "value": 0.25,
+          "missing_reason": null
+        }
+      },
+      {
+        "comparison_key": "BC",
+        "native_pair_count": 1,
+        "pairwise_overlap_bp_sum": 2,
+        "intersection_union_bp": 2,
+        "combined_union_bp": 13,
+        "jaccard_bp": {
+          "numerator": 2,
+          "denominator": 13,
+          "value": 0.15384615384615385,
+          "missing_reason": null
+        }
+      }
+    ],
+    "projection": {
+      "version": "genomic_overlap_projection_v1",
+      "source_sheet_sha256": "97c3c9cfcaccc71eac599cb7141e857d74da63928fa3f86b31ec522137146c7f",
+      "parameters": {
+        "version": "genomic_overlap_calculation_parameters_v1",
+        "minimum_overlap_bp": 1,
+        "minimum_a_fraction": {
+          "numerator": 0,
+          "denominator": 1
+        },
+        "minimum_b_fraction": {
+          "numerator": 0,
+          "denominator": 1
+        }
+      },
+      "kind": "pair_metrics",
+      "page": {
+        "offset": 0,
+        "limit": 3,
+        "total_rows": 3,
+        "returned_rows": 3
+      },
+      "result_extent": "complete",
+      "reference_relations": [
+        {
+          "comparison_key": "AB",
+          "a_set_key": "A",
+          "b_set_key": "B",
+          "relation": "unknown",
+          "basis": "insufficient_supplied_identity",
+          "a_reference": null,
+          "b_reference": null,
+          "issues": []
+        },
+        {
+          "comparison_key": "AC",
+          "a_set_key": "A",
+          "b_set_key": "C",
+          "relation": "unknown",
+          "basis": "insufficient_supplied_identity",
+          "a_reference": null,
+          "b_reference": null,
+          "issues": []
+        },
+        {
+          "comparison_key": "BC",
+          "a_set_key": "B",
+          "b_set_key": "C",
+          "relation": "unknown",
+          "basis": "insufficient_supplied_identity",
+          "a_reference": null,
+          "b_reference": null,
+          "issues": []
+        }
+      ],
+      "pair_rows": [
+        {
+          "comparison_key": "AB",
+          "a_set_key": "A",
+          "b_set_key": "B",
+          "result_extent": "complete",
+          "reference_relation": "unknown",
+          "observed_interpretation": "exact_complete_result",
+          "measurements": {
+            "unfiltered.jaccard_bp": {
+              "numerator": 5,
+              "denominator": 15,
+              "value": 0.3333333333333333,
+              "missing_reason": null
+            }
+          },
+          "issues": []
+        },
+        {
+          "comparison_key": "AC",
+          "a_set_key": "A",
+          "b_set_key": "C",
+          "result_extent": "complete",
+          "reference_relation": "unknown",
+          "observed_interpretation": "exact_complete_result",
+          "measurements": {
+            "unfiltered.jaccard_bp": {
+              "numerator": 5,
+              "denominator": 20,
+              "value": 0.25,
+              "missing_reason": null
+            }
+          },
+          "issues": []
+        },
+        {
+          "comparison_key": "BC",
+          "a_set_key": "B",
+          "b_set_key": "C",
+          "result_extent": "complete",
+          "reference_relation": "unknown",
+          "observed_interpretation": "exact_complete_result",
+          "measurements": {
+            "unfiltered.jaccard_bp": {
+              "numerator": 2,
+              "denominator": 13,
+              "value": 0.15384615384615385,
+              "missing_reason": null
+            }
+          },
+          "issues": []
+        }
+      ],
+      "set_rows": [],
+      "occurrence_rows": [],
+      "failures": [],
+      "measurement_fields": [
+        "unfiltered.jaccard_bp"
+      ]
+    },
+    "source_authority": "component fixture references; no full Workflow authority claim",
+    "actual_selected_lifecycle_record": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check005/temporary/pytest/test_real_selected_interpreter0/ACTUAL_LIFECYCLE.json",
+    "never_started_record": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check005/temporary/pytest/test_missing_interpreter_has_l0/ACTUAL_NEVER_STARTED.json",
+    "never_started_execution_failure": {
+      "exception_type": "FileNotFoundError",
+      "errno": 2
+    },
+    "operator_selected_kill_record": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check005/temporary/pytest/test_actual_lifecycle_kill_aft0/ACTUAL_KILLED.json",
+    "killed_service_exit": {
+      "SERVICE_RESULT": "signal",
+      "EXIT_CODE": "killed",
+      "EXIT_STATUS": "KILL",
+      "ended": {
+        "at": "2026-10-27T13:44:06.050653+00:00",
+        "monotonic_ns": 922207747979234,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "killed_terminal": true,
+    "killed_quiescent": true,
+    "killed_first_pair_outcome": "succeeded",
+    "killed_unsealed_second_output_bytes": 294912,
+    "killed_final_batch_exists": false
+  },
+  "synthetic_failure_evidence": {
+    "nonzero_fixture": "deliberately substituted Python subprocess emits one valid overlap row and exits7; subsequent independent pairs use actual bedtools",
+    "synthetic_record": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check005/temporary/pytest/test_synthetic_nonzero_partial0/SYNTHETIC_FAILURE.json",
+    "other_fixtures": [
+      "spawn failure",
+      "prepublication crash",
+      "parsed/canonical/original publication failure",
+      "progress log failure after actual Popen",
+      "direct interruption after pair seal"
+    ],
+    "mixed_empty_canonical_failure_batch": "verification/tool_graders_genomic_overlap_native_driver_2026-10-27_427/check005/temporary/pytest/test_synthetic_canonical_failu0/.episode-operations/4961022bec0ccfc10ef470f6f9e4d4c04dff616acdf00a8f12b2c4c29e83121b/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/genomic-overlap-attempt/bundle.json",
+    "mixed_empty_dispositions": [
+      "native_unavailable",
+      "analytic_empty",
+      "native_unavailable"
+    ],
+    "mixed_empty_b_parse_extent": "complete"
+  },
+  "initial_failed_expectation": {
+    "attempt": "check001",
+    "count": 2,
+    "reason": "test expected partial for invalid-input pair; G1 correctly returned unavailable because no native pair table was executed. Expected test extent corrected; G1 behavior unchanged."
+  },
+  "authority": {
+    "immutable_goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "packet425_contract_sha256": "10974e07f6509a9413db6634ecd1febcd26e1cc9165ef53ab974388dcb33c384",
+    "packet425_data_contract_sha256": "4b8f38595549bd32484121129132474bc6fd3f5e9f7be1130433a6b3a208c00e",
+    "accepted_workload": "verification/tool_graders_genomic_overlap_implementation_2026-10-27_422/EXECUTION_WORKLOADS_004.md",
+    "additive_clarifications": [
+      "EXECUTION_CLARIFICATIONS_005.md",
+      "EMPTY_PUBLICATION_CLARIFICATION_008.md"
+    ],
+    "post_native_objective_all_sixteen_principles_and_accepted_workload_reread": true
+  },
+  "outside_this_component_evidence": [
+    "resource registration and source scope authority",
+    "host observation/output and original-attempt receipt authentication",
+    "production result capture and retained-only result replay",
+    "bounded results worker and requested typed delivery/admission",
+    "full ordinary Workflow path and one-own-action observation accounting"
+  ],
+  "accounting": {
+    "fixed_tally_unchanged": "112/308",
+    "component_completion_increment": 0
+  },
+  "post_verification_checkout_observation": {
+    "at": "2026-10-27T13:48:57.966607+00:00",
+    "reason": "Root added independent pair-seal validator after check005 completed; root owns its subsequent combined checks. No native rerun solely for that refactor.",
+    "files": [
+      {
+        "path": "gene_annotation_episode/native_genomic_overlap_driver.py",
+        "executed_sha256": "a65e5f9b3443da723b522785b097e4ac33412efc2e5ebbc28fa13e74ecbbe87c",
+        "observed_checkout_sha256": "a65e5f9b3443da723b522785b097e4ac33412efc2e5ebbc28fa13e74ecbbe87c"
+      },
+      {
+        "path": "gene_annotation_episode/native_genomic_overlap_local.py",
+        "executed_sha256": "68809ca355a5a2a5db256ae0916edcd7f50ba372c0d7e2abcec270ede1f113c9",
+        "observed_checkout_sha256": "68809ca355a5a2a5db256ae0916edcd7f50ba372c0d7e2abcec270ede1f113c9"
+      },
+      {
+        "path": "tests/test_native_genomic_overlap_driver.py",
+        "executed_sha256": "de9c31216f70c191aebd019e7484cce30222d2371896ba7cea59ac928c1f0237",
+        "observed_checkout_sha256": "de9c31216f70c191aebd019e7484cce30222d2371896ba7cea59ac928c1f0237"
+      },
+      {
+        "path": "tests/test_native_genomic_overlap_local.py",
+        "executed_sha256": "69871a5395b4da4f76a4a513edda60865c70efdf6ad50bc15426d4ec8d72e7ed",
+        "observed_checkout_sha256": "69871a5395b4da4f76a4a513edda60865c70efdf6ad50bc15426d4ec8d72e7ed"
+      },
+      {
+        "path": "gene_annotation_episode/native_genomic_overlap_contracts.py",
+        "executed_sha256": "a17d91cf47fdde93e112298bb44a3b49dd9d09effea2ca565c11fddcc44abd3f",
+        "observed_checkout_sha256": "96724a1f46eb462fb8827da1a08b0432ff5a9375c73de4f5646b26ae536178e4"
+      }
+    ]
+  }
+}

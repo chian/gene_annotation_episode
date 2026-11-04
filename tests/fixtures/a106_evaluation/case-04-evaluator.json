@@ -1,0 +1,141 @@
+{
+  "case_id": "anonymous-case-04",
+  "evaluation_kind": "deposited TnSeq; service execution deferred",
+  "provenance": {
+    "url": "https://rest.uniprot.org/uniprotkb/P71020.fasta",
+    "header": ">sp|P71020|RQCP2_BACSU Ribosome-associated protein quality control protein P2 OS=Bacillus subtilis (strain 168) OX=224308 GN=rqcP2 PE=1 SV=1",
+    "length": 257,
+    "sequence_sha256": "d6758dbf19e809349ce2cb086da8b47e2394d08516d629086ab14271788dcba1"
+  },
+  "input_policy": "Only the anonymous protein sequence and general A106 instructions enter an episode.",
+  "discovery_leads": [
+    {
+      "url": "https://academic.oup.com/nar/article/52/14/8483/7683056",
+      "doi": "10.1093/nar/gkae399",
+      "bioproject": "PRJDB17234",
+      "locator": "Tn-Seq methods and Supplementary Table S2"
+    }
+  ],
+  "expected_findings": [
+    "Resolve the YlmH/rqcP2 naming and B. subtilis 168 experimental-subject correspondence.",
+    "Keep insertion effects in the delta-ssrA background distinct from those in the isogenic parental background.",
+    "Preserve sample/library identities, selection timing, replicates, reference ASM904v1 and the published MAGenTA/Bowtie processing context.",
+    "Inspect archived read layout and source library protocol before choosing the available TnSeq protocol, primer or recipe.",
+    "A new TRANSIT analysis is an explicitly selected reanalysis and not an exact replay of the published MAGenTA fitness calculation.",
+    "Retain signed fitness or log-fold effects in native units, without converting p values into variance.",
+    "Treat conditional fitness and restoration of a reporter phenotype as scoped evidence, retaining redundancy and background dependence.",
+    "Do not count the published table and reanalysis of its original libraries as independent experiments.",
+    "Treat t1/t2 labels as recorded metadata; establish the actual experimental-unit relationship before interpreting uncertainty or combining libraries."
+  ],
+  "limitations": "Read layout and sampled length are verified; MmeI with an explicit empty primer is a candidate supported by reviewed public code. Full-file integrity, mapping compatibility, experimental-unit independence, live service execution, autonomous dataset analysis and numerical subscore remain unverified.",
+  "archive_runs": [
+    {
+      "run_accession": "DRR519806",
+      "sample_accession": "SAMD00665752",
+      "sample_title": "168 wt t1",
+      "library_layout": "SINGLE",
+      "read_count": "14514240",
+      "base_count": "238656319",
+      "fastq_md5": "28d43dac00228564aca7c079f8cd8ee4",
+      "fastq_bytes": "246292744",
+      "fastq_url": "https://ftp.sra.ebi.ac.uk/vol1/fastq/DRR519/DRR519806/DRR519806.fastq.gz"
+    },
+    {
+      "run_accession": "DRR519807",
+      "sample_accession": "SAMD00665753",
+      "sample_title": "168 wt t2",
+      "library_layout": "SINGLE",
+      "read_count": "13061709",
+      "base_count": "214763859",
+      "fastq_md5": "73989f5c143e910f49d8f16b61d7278f",
+      "fastq_bytes": "224823023",
+      "fastq_url": "https://ftp.sra.ebi.ac.uk/vol1/fastq/DRR519/DRR519807/DRR519807.fastq.gz"
+    },
+    {
+      "run_accession": "DRR519808",
+      "sample_accession": "SAMD00665754",
+      "sample_title": "ssrA t1",
+      "library_layout": "SINGLE",
+      "read_count": "12247000",
+      "base_count": "201901462",
+      "fastq_md5": "d47484b4d6d42a09ed7b542422d289d9",
+      "fastq_bytes": "213311525",
+      "fastq_url": "https://ftp.sra.ebi.ac.uk/vol1/fastq/DRR519/DRR519808/DRR519808.fastq.gz"
+    },
+    {
+      "run_accession": "DRR519809",
+      "sample_accession": "SAMD00665755",
+      "sample_title": "ssrA t2",
+      "library_layout": "SINGLE",
+      "read_count": "12895631",
+      "base_count": "212532067",
+      "fastq_md5": "abbff3c71005be5af70643127f177a9d",
+      "fastq_bytes": "220723454",
+      "fastq_url": "https://ftp.sra.ebi.ac.uk/vol1/fastq/DRR519/DRR519809/DRR519809.fastq.gz"
+    }
+  ],
+  "protocol_review": {
+    "checked_at": "2026-11-03",
+    "archive_metadata_url": "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJDB17234&result=read_run&format=tsv",
+    "inspected_prefixes": [
+      {
+        "run_accession": "DRR519808",
+        "prefix_bytes": 65536,
+        "prefix_sha256": "397e921819a804bcdeb1a4fef77da874b1ef24d5fc12f26274eaaf5637f5435c",
+        "complete_records": 3543,
+        "read_length_counts": {
+          "15": 3543
+        }
+      },
+      {
+        "run_accession": "DRR519806",
+        "prefix_bytes": 65536,
+        "prefix_sha256": "25d254bd6e73f7e02e2f4a89116a5520ec009e8d0eefd51a1eba7eb049d530fe",
+        "complete_records": 3601,
+        "read_length_counts": {
+          "15": 3601
+        }
+      },
+      {
+        "run_accession": "DRR519809",
+        "prefix_bytes": 65536,
+        "prefix_sha256": "5f8abea0c782e114514b135b84be5bbf782b4e7f576b52ee4735b60f643d8206",
+        "complete_records": 3578,
+        "read_length_counts": {
+          "15": 3578
+        }
+      },
+      {
+        "run_accession": "DRR519807",
+        "prefix_bytes": 65536,
+        "prefix_sha256": "c64b1dc7d44169dc57fdd1376919a565d7ef4230b7a4292a651df03692a1fc51",
+        "complete_records": 3590,
+        "read_length_counts": {
+          "15": 3590
+        }
+      }
+    ],
+    "scope": "Only the first 65536 compressed bytes of each archive were inspected; no full checksum, mapping, biological independence or live service result is established.",
+    "candidate": {
+      "protocol": "mme1",
+      "primer": "",
+      "recipe": "resampling"
+    },
+    "basis": [
+      "The paper reports a Himar1/MmeI library and the archive reports single-end reads.",
+      "All complete records in the inspected prefixes have length 15; an empty primer is a candidate for pretrimmed reads.",
+      "Reviewed public TPP source accepts length 15 under MmeI; the packaged BV-BRC app exposes this protocol and an explicit primer."
+    ],
+    "source_urls": [
+      "https://transit.readthedocs.io/en/latest/tpp.html",
+      "https://github.com/mad-lab/transit/blob/50e23d6bec2605a24835fbd67f33691e330f3361/src/pytpp/tpp_tools.py",
+      "https://github.com/BV-BRC/p3_tnseq/blob/ce05c0f805cb3b47181b1b18ebc5acc92f853e0a/service-scripts/p3_tnseq.py"
+    ],
+    "remaining": [
+      "Confirm the archive trimming and read orientation against the study protocol and full data.",
+      "Establish mapping specificity and TA-site placement against the selected exact reference.",
+      "Check the deployed service version when access resumes.",
+      "Do not infer biological independence, pairing or shared-library identity solely from t1/t2 labels or collection dates."
+    ]
+  }
+}

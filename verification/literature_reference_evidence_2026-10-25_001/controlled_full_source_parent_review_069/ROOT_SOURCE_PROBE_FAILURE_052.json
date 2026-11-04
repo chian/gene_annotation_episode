@@ -1,0 +1,55 @@
+{
+  "scope": "Actual root constructed-probe assertion failure, not yet assigned to implementation",
+  "case": "unknown_active_owner",
+  "effect": {
+    "value": 0.0043,
+    "lower": 0.0042,
+    "upper": 0.0044,
+    "relation": "interval",
+    "approximate": true,
+    "unit": "umol/min",
+    "status": "available",
+    "origin": "synthetic",
+    "unavailable_reason": null,
+    "formula_code": "four_arm_condition_difference",
+    "conditional_on": [
+      "approximate_source_reading",
+      "conditional_digitization",
+      "shared_reference_assumption",
+      "synthetic_fixture",
+      "unknown_control_reuse"
+    ],
+    "bound_kind": "conditional_digitization",
+    "bound_state": {
+      "lower": "available",
+      "upper": "available"
+    }
+  },
+  "variance": {
+    "value": null,
+    "lower": null,
+    "upper": null,
+    "relation": "none",
+    "approximate": true,
+    "unit": "(umol/min)^2",
+    "status": "unavailable",
+    "origin": "synthetic",
+    "unavailable_reason": [
+      "incomplete_active_covariance"
+    ],
+    "formula_code": "linear_joint_covariance",
+    "conditional_on": [
+      "approximate_source_reading",
+      "conditional_digitization",
+      "shared_reference_assumption",
+      "synthetic_fixture",
+      "unknown_control_reuse"
+    ],
+    "bound_kind": "none",
+    "bound_state": {
+      "lower": "unknown",
+      "upper": "unknown"
+    }
+  },
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 4, in <module>\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"verification/literature_reference_evidence_2026-10-25_001/controlled_full_source_parent_review_069/verify_source_cases_052.py\", line 39, in <module>\n    assert effect['value'] == .00425\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+}

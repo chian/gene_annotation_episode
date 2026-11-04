@@ -1,0 +1,66 @@
+{
+  "slot": "thought_pattern",
+  "id": "P01",
+  "name": "Choose a relevant analogue and bound what transfers",
+  "description": "Use similarity to a characterized system to form bounded explanations. Choose which sequence, local structural machinery, domain architecture, genomic context or organismal circumstance makes the reference informative for the disputed property; revise misleading comparators.",
+  "use_when": "A nearest hit, fold, motif or similar biological context suggests an annotation, but exact chemistry, recognition or role remains open.",
+  "live_alternatives": [
+    "A relevant shared relationship supports transfer of the disputed property.",
+    "Only a partial core is shared; recognition, partners or role differ.",
+    "The comparator or short match is uninformative for this question."
+  ],
+  "decision_guidance": [
+    "Prefer references that separate plausible alternatives, not simply the most familiar name or highest global score. Alignments, structures and context searches are ways to inspect a chosen relationship.",
+    "When a comparison is weak, consider a biologically better reference before treating it as evidence against all relationship.",
+    "Keep catalytic compatibility, target recognition and native role as separate transfer claims; absent catalytic machinery can overturn an inherited chemistry."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Relevant machinery corresponds but specificity differs",
+      "then_consider": "Retain the supported relationship and investigate the differing recognition or contextual features."
+    },
+    {
+      "if_observed": "Expected catalytic machinery is incompatible",
+      "then_consider": "Reopen chemistry and preserve only the relationship actually supported."
+    },
+    {
+      "if_observed": "No informative correspondence is found",
+      "then_consider": "Keep function unresolved; absence of an informative match is not absence of function."
+    }
+  ],
+  "boundary": "Analogy interpretation is the thought; executing a similarity search is a tool operation. P02 deliberately seeks a counterexample to an explicit predictor; P03 compares rival inputs to a fixed system. Raw scores are not automatically significance.",
+  "evidence": [
+    {
+      "case_group": "hemk_prmc",
+      "case_id": "seq_hemk_prmc_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2713863/",
+      "source_locator": "Primary active-site comparison; sequence/hemk_live_routes.json A1–A3.",
+      "observation": "Dam supplied a poor motif comparison; the more relevant M.TaqI comparison supported related active-site geometry without specifying DNA versus protein substrate.",
+      "limit": "Fresh raw scores were uncalibrated and answer-aware; the structural comparison is author-reported."
+    },
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "case_id": "TM0936_Hermann_2007",
+      "source_url": "https://doi.org/10.1038/nature05981",
+      "source_locator": "Case-record observation; inspected scope: Read relevant primary results and methods; live deposited binding-site API retrievals. Original API URLs lacking entity ID returned 404 and were repaired using current PDBe documentation. No repository changes or scientific-case runs.",
+      "observation": "Cytosine-deaminase-like machinery supported a coarse relationship; substrate tests established another specificity.",
+      "limit": "The fold and contact queries do not identify the dominant physiological substrate."
+    },
+    {
+      "case_group": "seq_hisZ_lactococcus",
+      "case_id": "seq_hisZ_lactococcus",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC17719/",
+      "source_locator": "Case-record observation; inspected scope: Primary abstract, genetic results, direct-subunit investigation and discussion inspected through indexed full-text sections. No new comparative genomics run.",
+      "observation": "HisRS-like ancestry did not imply tRNA charging: HisZ instead contributed with HisG to histidine biosynthesis.",
+      "limit": "Genetics/biochemistry are author-performed; no new evolutionary reconstruction."
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "case_id": "seq_yadB_gluQRS_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/",
+      "source_locator": "Case-record observation; inspected scope: Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+      "observation": "Missing recognition architecture and matched tRNA tests redirected a GluRS-like comparison toward queuosine modification.",
+      "limit": "PNAS source was abstract-level; matched Q34 tests were read in the NAR paper."
+    }
+  ]
+}

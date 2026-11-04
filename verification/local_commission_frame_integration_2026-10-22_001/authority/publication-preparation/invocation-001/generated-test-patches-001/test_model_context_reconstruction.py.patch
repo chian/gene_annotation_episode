@@ -1,0 +1,17 @@
+--- a/tests/test_model_context_reconstruction.py
++++ b/tests/test_model_context_reconstruction.py
+@@ -42,7 +42,13 @@
+     child = [r for r in requests if "scientific_process" in r["context"]]
+     assert len(child) == len(sent) == 2
+     for request, actual in zip(child, sent):
+-        assert request["version"] == "runtime_model_call_request_v2"
++        assert request["version"] == "runtime_model_call_request_v3"
++        assert set(request) == {"version", "context", "schema", "model_presentation",
++                                "local_commission_frame"}
++        frame = request["local_commission_frame"]
++        assert frame["version"] == "local_commission_frame_v1"
++        assert frame["run_id"] == run["run_id"]
++        assert frame["pending_captured_at"] == request["context"]["pending_work"]["captured_at"]
+         presentation = request["model_presentation"]
+         assert presentation["version"] == "episode_model_presentation_v1"
+         assert encoded(presentation["context"]) == encoded(actual)

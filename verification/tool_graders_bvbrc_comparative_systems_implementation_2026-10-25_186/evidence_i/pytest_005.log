@@ -1,0 +1,32 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_actual_data_read_supplies_exact_retained_bytes_and_rejects_false_wrappers _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/evidence_i/pytest_005/test_actual_data_read_supplies0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74874af3b530>
+
+    def test_actual_data_read_supplies_exact_retained_bytes_and_rejects_false_wrappers(tmp_path,monkeypatch):
+        def forbidden(*args,**kwargs): raise AssertionError('controlled host test attempted live network')
+        monkeypatch.setattr('socket.create_connection',forbidden)
+        with Store(tmp_path/'state') as store:
+            d=ComparativeDriver(store,tmp_path,resources={'data':{'kind':'api','service':'bvbrc_data'}})
+            d.start(form=requested_form(False),prepare_parent=lambda d:data_input(d,monkeypatch))
+            d.acquire_manifest()
+            d.acquire_native()
+            qualified,producers,raw=collect(d)
+            assert len(d.data_calls)==1 and producers==()
+            assert len(qualified)==1
+            value=qualified[0]
+            assert value['qualified_result']['binding']==d.data_qualified['binding']
+            assert value['qualified_result']['host_qualification']['possession_basis']=='parent_assignment'
+            assert raw[value['raw_binding']['bytes_key']]==d.data_raw
+            assert value['raw_binding']['source_ref']==d.data_content['source_ref']
+            assert value['raw_binding']['byte_count']==len(d.data_raw)
+>           assert d.sheet['supplied_record_sets']['record_sets'][0]['records']
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'records'
+
+tests/test_bvbrc_comparative_systems_host_inputs.py:103: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_host_inputs.py::test_actual_data_read_supplies_exact_retained_bytes_and_rejects_false_wrappers
+1 failed in 71.51s (0:01:11)

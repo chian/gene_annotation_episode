@@ -1,0 +1,419 @@
+{
+  "cases": [
+    {
+      "case": "cutadapt_single",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "AGATCGGAAGAGC",
+        "-q",
+        "20",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_single/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_single/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_single/synthetic.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_single",
+      "started_at": "2026-10-25T22:25:08.181296+00:00",
+      "input_sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "exit_code": 0,
+      "ended_at": "2026-10-25T22:25:08.250677+00:00",
+      "elapsed_seconds": 0.06936146796215326,
+      "files": {
+        "native.json": {
+          "sha256": "44764f3ade4043208c30d8b43656ccc8648a97b2cc328484bcd67d8d51d4b11e",
+          "byte_count": 2497
+        },
+        "synthetic.fastq": {
+          "sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+          "byte_count": 186
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "output.fastq": {
+          "sha256": "bf0326b309189511544d57d874d5fe59b904a5b10a2f015460a4c045c0235b9b",
+          "byte_count": 126
+        },
+        "stdout.log": {
+          "sha256": "545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882",
+          "byte_count": 1369
+        }
+      },
+      "native_summary": {
+        "cutadapt_version": "4.9",
+        "schema_version": [
+          0,
+          3
+        ],
+        "read_counts": {
+          "input": 4,
+          "filtered": {
+            "too_short": null,
+            "too_long": null,
+            "too_many_n": null,
+            "too_many_expected_errors": null,
+            "casava_filtered": null,
+            "discard_trimmed": null,
+            "discard_untrimmed": null
+          },
+          "output": 4,
+          "reverse_complemented": null,
+          "read1_with_adapter": 2,
+          "read2_with_adapter": null
+        },
+        "basepair_counts": {
+          "input": 58,
+          "input_read1": 58,
+          "input_read2": null,
+          "quality_trimmed": 4,
+          "quality_trimmed_read1": 4,
+          "quality_trimmed_read2": null,
+          "poly_a_trimmed": null,
+          "poly_a_trimmed_read1": null,
+          "poly_a_trimmed_read2": null,
+          "output": 28,
+          "output_read1": 28,
+          "output_read2": null
+        }
+      }
+    },
+    {
+      "case": "cutadapt_filtered",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "AGATCGGAAGAGC",
+        "-q",
+        "20",
+        "-m",
+        "6",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered/synthetic.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_filtered",
+      "started_at": "2026-10-25T22:25:08.251537+00:00",
+      "input_sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "exit_code": 0,
+      "ended_at": "2026-10-25T22:25:08.323326+00:00",
+      "elapsed_seconds": 0.07178060594014823,
+      "files": {
+        "native.json": {
+          "sha256": "39244eb0322797a8411a9a5d2457b2d20a05b5a65c75e966c1949e73a7c400e3",
+          "byte_count": 2521
+        },
+        "synthetic.fastq": {
+          "sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+          "byte_count": 186
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "output.fastq": {
+          "sha256": "992f92a6ad75672dd34ff1f487de27d5e3d7aaf533e0ed3a87fe1f02d998f461",
+          "byte_count": 99
+        },
+        "stdout.log": {
+          "sha256": "9ded2d30afa01a2abd75d730cf67c37841ebbfbf557633e48c72208655d42937",
+          "byte_count": 1461
+        }
+      },
+      "native_summary": {
+        "cutadapt_version": "4.9",
+        "schema_version": [
+          0,
+          3
+        ],
+        "read_counts": {
+          "input": 4,
+          "filtered": {
+            "too_short": 1,
+            "too_long": null,
+            "too_many_n": null,
+            "too_many_expected_errors": null,
+            "casava_filtered": null,
+            "discard_trimmed": null,
+            "discard_untrimmed": null
+          },
+          "output": 3,
+          "reverse_complemented": null,
+          "read1_with_adapter": 2,
+          "read2_with_adapter": null
+        },
+        "basepair_counts": {
+          "input": 58,
+          "input_read1": 58,
+          "input_read2": null,
+          "quality_trimmed": 4,
+          "quality_trimmed_read1": 4,
+          "quality_trimmed_read2": null,
+          "poly_a_trimmed": null,
+          "poly_a_trimmed_read1": null,
+          "poly_a_trimmed_read2": null,
+          "output": 24,
+          "output_read1": 24,
+          "output_read2": null
+        }
+      }
+    },
+    {
+      "case": "cutadapt_empty",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "AGATCGGAAGAGC",
+        "-q",
+        "20",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_empty/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_empty/output.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_empty/synthetic.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_empty",
+      "started_at": "2026-10-25T22:25:08.324170+00:00",
+      "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "exit_code": 0,
+      "ended_at": "2026-10-25T22:25:08.397423+00:00",
+      "elapsed_seconds": 0.07324699498713017,
+      "files": {
+        "native.json": {
+          "sha256": "cc023b43dc680d5fd2262f7d82bd41cdbe0002f1c6d56f66ba13cf55abd01a7b",
+          "byte_count": 2333
+        },
+        "synthetic.fastq": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "output.fastq": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "stdout.log": {
+          "sha256": "5395f688013bae235336b8d9099d213f64f480c4a7ca3be341d4faa6cdbb0bc4",
+          "byte_count": 662
+        }
+      },
+      "native_summary": {
+        "cutadapt_version": "4.9",
+        "schema_version": [
+          0,
+          3
+        ],
+        "read_counts": {
+          "input": 0,
+          "filtered": {
+            "too_short": null,
+            "too_long": null,
+            "too_many_n": null,
+            "too_many_expected_errors": null,
+            "casava_filtered": null,
+            "discard_trimmed": null,
+            "discard_untrimmed": null
+          },
+          "output": 0,
+          "reverse_complemented": null,
+          "read1_with_adapter": 0,
+          "read2_with_adapter": null
+        },
+        "basepair_counts": {
+          "input": 0,
+          "input_read1": 0,
+          "input_read2": null,
+          "quality_trimmed": 0,
+          "quality_trimmed_read1": 0,
+          "quality_trimmed_read2": null,
+          "poly_a_trimmed": null,
+          "poly_a_trimmed_read1": null,
+          "poly_a_trimmed_read2": null,
+          "output": 0,
+          "output_read1": 0,
+          "output_read2": null
+        }
+      }
+    },
+    {
+      "case": "cutadapt_paired",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "-j",
+        "1",
+        "-a",
+        "AGATCGGAAGAGC",
+        "-A",
+        "AGATCGGAAGAGC",
+        "-q",
+        "20",
+        "--json",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/native.json",
+        "-o",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/output.fastq",
+        "-p",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/output2.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/synthetic.fastq",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired/synthetic2.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/cutadapt_paired",
+      "started_at": "2026-10-25T22:25:08.398341+00:00",
+      "input_sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "exit_code": 0,
+      "ended_at": "2026-10-25T22:25:08.476250+00:00",
+      "elapsed_seconds": 0.07789617194794118,
+      "files": {
+        "native.json": {
+          "sha256": "9440c91daac6c18d601badec3d67a32e2b53b04e891e430dc6d125b34c4f6fa8",
+          "byte_count": 3670
+        },
+        "synthetic.fastq": {
+          "sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+          "byte_count": 186
+        },
+        "output2.fastq": {
+          "sha256": "bf0326b309189511544d57d874d5fe59b904a5b10a2f015460a4c045c0235b9b",
+          "byte_count": 126
+        },
+        "stderr.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        },
+        "synthetic2.fastq": {
+          "sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+          "byte_count": 186
+        },
+        "output.fastq": {
+          "sha256": "bf0326b309189511544d57d874d5fe59b904a5b10a2f015460a4c045c0235b9b",
+          "byte_count": 126
+        },
+        "stdout.log": {
+          "sha256": "8bde2a82ae595bc6fa500fc1f2d165940874215938768f008bc938933fbd68ac",
+          "byte_count": 2309
+        }
+      },
+      "native_summary": {
+        "cutadapt_version": "4.9",
+        "schema_version": [
+          0,
+          3
+        ],
+        "read_counts": {
+          "input": 4,
+          "filtered": {
+            "too_short": null,
+            "too_long": null,
+            "too_many_n": null,
+            "too_many_expected_errors": null,
+            "casava_filtered": null,
+            "discard_trimmed": null,
+            "discard_untrimmed": null
+          },
+          "output": 4,
+          "reverse_complemented": null,
+          "read1_with_adapter": 2,
+          "read2_with_adapter": 2
+        },
+        "basepair_counts": {
+          "input": 116,
+          "input_read1": 58,
+          "input_read2": 58,
+          "quality_trimmed": 8,
+          "quality_trimmed_read1": 4,
+          "quality_trimmed_read2": 4,
+          "poly_a_trimmed": null,
+          "poly_a_trimmed_read1": null,
+          "poly_a_trimmed_read2": null,
+          "output": 56,
+          "output_read1": 28,
+          "output_read2": 28
+        }
+      }
+    },
+    {
+      "case": "trimgalore_single",
+      "argv": [
+        "perl",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_contract_2026-10-25_193/sources/TrimGalore/trim_galore",
+        "--path_to_cutadapt",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_environment_001/venv/bin/cutadapt",
+        "--adapter",
+        "AGATCGGAAGAGC",
+        "--quality",
+        "20",
+        "--length",
+        "6",
+        "--dont_gzip",
+        "--output_dir",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/trimgalore_single",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/trimgalore_single/synthetic.fastq"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/trimgalore_single",
+      "started_at": "2026-10-25T22:25:08.477180+00:00",
+      "input_sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+      "synthetic_input": true,
+      "native_executable_run": true,
+      "BV_BRC_service_run": false,
+      "no_wall_time_limit": true,
+      "exit_code": 0,
+      "ended_at": "2026-10-25T22:25:08.731343+00:00",
+      "elapsed_seconds": 0.2541545999702066,
+      "files": {
+        "synthetic.fastq": {
+          "sha256": "04ddaaf34488180998a04d33d966d985160f5d901836676dc78a829f8ceac336",
+          "byte_count": 186
+        },
+        "synthetic.fastq_trimming_report.txt": {
+          "sha256": "9427473a29aa6a3bf073d252b28c03effbeb0d7cb1b2999d2630e593121ebf63",
+          "byte_count": 2054
+        },
+        "stderr.log": {
+          "sha256": "f629c8620357f27c403b8acc6deb638d513f2f88248c60f7b114afef12b0ca30",
+          "byte_count": 3682
+        },
+        "synthetic_trimmed.fq": {
+          "sha256": "992f92a6ad75672dd34ff1f487de27d5e3d7aaf533e0ed3a87fe1f02d998f461",
+          "byte_count": 99
+        },
+        "stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "byte_count": 0
+        }
+      }
+    }
+  ],
+  "all_exit_zero": true,
+  "trimgalore_source_sha256": "0ea7a35d1f949790ecd329db5c3c14237a9c0591f246735048baf3a777c3995a",
+  "environment_receipt_sha256": "2a543b46297033801744b23ebc18190526daa2165c37c3d233e03f8139aef8c3",
+  "scratch_bytes": 38710,
+  "scope": "Producer-output examination only; no new parser, calculator, application or live BV-BRC claim."
+}

@@ -8,6 +8,7 @@ import math
 import time
 
 from . import execution_timing
+from .journal_metadata import pack_request
 from method_loop.durable import canonical
 
 
@@ -83,12 +84,17 @@ class Journal:
 
     def save(self, table, values):
         values = {"run_id": self.run_id, **values}
+        if table=='runtime_model_calls' and values.get('request') is not None:
+            values['request']=self.pack_request(values['request'])
         columns = list(values)
         # An outcome update must not replace independently recorded timing.
         # Upsert only supplied fields instead of deleting/recreating the row.
         self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
                         f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
                         + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+
+    def pack_request(self,text):
+        return pack_request(self.store,text)
 
     def measure(self, table, episode_id, index):
         column = {"runtime_model_calls": "call_index", "runtime_actions": "decision_index"}[table]

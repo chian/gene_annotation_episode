@@ -1,0 +1,169 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/source_snapshot
+configfile: pyproject.toml
+collecting ... collected 9 items
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[raw] FAILED [ 11%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[weighted] FAILED [ 22%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[empty] FAILED [ 33%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[insulation] FAILED [ 44%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_saved_recalculation_after_hic_and_native_attempt_removed FAILED [ 55%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_hic_binding_has_actual_runtime_and_no_hdf5_requirement FAILED [ 66%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_original_selected_runtime_mismatch_does_not_read_hic[runtime_digest] PASSED [ 77%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_original_selected_runtime_mismatch_does_not_read_hic[zlib_version] PASSED [ 88%]
+source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_existing_default_cooler_binding_and_actual_dispatch PASSED [100%]
+
+=================================== FAILURES ===================================
+______________ test_actual_hic_producer_and_retained_worker[raw] _______________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r0')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'raw'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+>       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+>           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed
+____________ test_actual_hic_producer_and_retained_worker[weighted] ____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r1')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'weighted'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+>       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+>           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed
+_____________ test_actual_hic_producer_and_retained_worker[empty] ______________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r2')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'empty'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+>       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+>           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed
+___________ test_actual_hic_producer_and_retained_worker[insulation] ___________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_actual_hic_producer_and_r3')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+case = 'insulation'
+
+    @pytest.mark.parametrize('case', ['raw', 'weighted', 'empty', 'insulation'])
+    def test_actual_hic_producer_and_retained_worker(tmp_path, hic_software, case):
+        plan = make_hic_plan(tmp_path, hic_software, case=case)
+>       bundle = helpers.complete(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+>           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed
+________ test_saved_recalculation_after_hic_and_native_attempt_removed _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_saved_recalculation_after0')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+
+    def test_saved_recalculation_after_hic_and_native_attempt_removed(tmp_path, hic_software):
+        plan = make_hic_plan(tmp_path, hic_software, case='weighted')
+>       helpers.complete(plan)
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'chromatin_interaction_run_plan_v1', 'identity': {'run_id': 'hic457-component-fixture', 'episode_id': 'loc...065902a9d61374d95/fccaceaa328ade276f1ce4bcca18842fb027d81859945b80e1fe7f3a4ab63880/chromatin-interaction-attempt', ...}
+
+    def complete(plan):
+        handle = launch(plan)
+        outcome = native.wait_job(handle)
+        assert native.status(handle)["terminal"] and native.status(handle)["quiescent"]
+        if outcome.returncode:
+>           pytest.fail(outcome.stderr_path.read_text() + outcome.stdout_path.read_text())
+E           Failed
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:116: Failed
+_________ test_hic_binding_has_actual_runtime_and_no_hdf5_requirement __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/temporary/pytest/test_hic_binding_has_actual_ru0')
+hic_software = {'python_executable': '/home/chia/repos/gene_annotation_episode/.venv/bin/python', 'python_sha256': 'e50d468e8b0adfb05...annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/selected_hic_software', ...}
+
+    def test_hic_binding_has_actual_runtime_and_no_hdf5_requirement(tmp_path, hic_software):
+        from jsonschema import Draft202012Validator
+        assert 'h5py' not in {row['distribution'] for row in hic_software['dependencies']}
+        runtime = hic_software['native_runtime']
+        assert runtime['files'] and runtime['zlib_compile_version'] and runtime['zlib_runtime_version']
+>       assert any('zlib' in Path(row['path']).name for row in runtime['files'])
+E       assert False
+E        +  where False = any(<generator object test_hic_binding_has_actual_runtime_and_no_hdf5_requirement.<locals>.<genexpr> at 0x7900985f33e0>)
+
+source_snapshot/tests/test_chromatin_hic_execution_binding.py:188: AssertionError
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/junit.xml -
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[raw] - Failed
+FAILED source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[weighted] - Failed
+FAILED source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[empty] - Failed
+FAILED source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_actual_hic_producer_and_retained_worker[insulation] - Failed
+FAILED source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_saved_recalculation_after_hic_and_native_attempt_removed - Failed
+FAILED source_snapshot/tests/test_chromatin_hic_execution_binding.py::test_hic_binding_has_actual_runtime_and_no_hdf5_requirement - assert False
+ +  where False = any(<generator object test_hic_binding_has_actual_runtime_and_no_hdf5_requirement.<locals>.<genexpr> at 0x7900985f33e0>)
+==================== 6 failed, 3 passed in 74.32s (0:01:14) ====================

@@ -1,0 +1,237 @@
+{
+  "$defs": {
+    "ContentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_field": {
+          "enum": [
+            "artifact_ref",
+            "text_ref",
+            "stdout_ref",
+            "stderr_ref"
+          ]
+        },
+        "artifact_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "byte_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_ref": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_ref",
+        "artifact_field",
+        "artifact_ref",
+        "sha256",
+        "byte_count"
+      ],
+      "type": "object"
+    },
+    "SourceEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/ContentBinding"
+        },
+        "pointer": {
+          "pattern": "^(|/.*)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "pointer"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_source_refs": {
+      "additionalProperties": false,
+      "properties": {
+        "blast_archive": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "blast_json15_raw": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "blast_tabular": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "blast_tabular_header": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "homology_metadata_json": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "homology_processed_json": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "blast_json15_raw",
+        "homology_processed_json",
+        "blast_tabular",
+        "blast_tabular_header",
+        "homology_metadata_json",
+        "blast_archive"
+      ],
+      "type": "object"
+    },
+    "database_model": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "function_priors": {
+              "anyOf": [
+                {
+                  "additionalProperties": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "temperature_bits": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "temperature_bits",
+            "function_priors"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "primary_representation": {
+      "enum": [
+        "raw",
+        "processed",
+        "tabular"
+      ]
+    },
+    "scientific_inputs": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SourceEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "scientific_mode": {
+      "enum": [
+        "database_identification",
+        "pairwise_correspondence"
+      ]
+    },
+    "tabular_fields": {
+      "anyOf": [
+        {
+          "const": [
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "version": {
+      "const": "bvbrc_homology_bundle_parameters_v1"
+    }
+  },
+  "required": [
+    "version",
+    "scientific_mode",
+    "primary_representation",
+    "artifact_source_refs",
+    "scientific_inputs",
+    "tabular_fields",
+    "database_model"
+  ],
+  "type": "object"
+}

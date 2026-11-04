@@ -1,0 +1,1526 @@
+{
+  "components": {
+    "assignment_results": [],
+    "assumptions": [
+      "target_duplicate_equivalence",
+      "uniform_candidate_prior",
+      "conditional_on_retained_output",
+      "complete_matching_census"
+    ],
+    "calibrated_annotation_probability": false,
+    "census_results": [
+      {
+        "assignment_scope": "whole_sequence",
+        "base_entity_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "member_instance",
+          "value": 6
+        },
+        "census_key": "census-1",
+        "correction_available": true,
+        "enumeration_complete": true,
+        "function_counts": [
+          {
+            "count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "target_unit",
+              "value": 4
+            },
+            "fraction": {
+              "complete": true,
+              "denominator": 5,
+              "numerator": 4,
+              "unavailable_reason": null,
+              "unit": "fraction",
+              "value": 0.8
+            },
+            "function": {
+              "namespace": "fixture_function",
+              "value": "A"
+            }
+          },
+          {
+            "count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "target_unit",
+              "value": 1
+            },
+            "fraction": {
+              "complete": true,
+              "denominator": 5,
+              "numerator": 1,
+              "unavailable_reason": null,
+              "unit": "fraction",
+              "value": 0.2
+            },
+            "function": {
+              "namespace": "fixture_function",
+              "value": "B"
+            }
+          }
+        ],
+        "issues": [],
+        "model_group_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "target_unit",
+          "value": 5
+        },
+        "model_groups": [
+          {
+            "entity_keys": [
+              "entity:8fb186d0fd5db56b795dfcd2fffd65096c8bf18d967190755fe06caf85741f39"
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "B"
+              }
+            ],
+            "group_key": "model-group:3a4938e67b14de6db0066f540ff1eeaf8c6e1c85fb509d4089f5323a7a281072",
+            "target_unit_keys": [
+              "target-unit:b8fd6b7b8c3c61fa9cfebb4569e2a03fd7f3dc7da115f5dbbcd5d57a47fe1540"
+            ]
+          },
+          {
+            "entity_keys": [
+              "census-extra-2"
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "group_key": "model-group:5e83f3ba9e14553d6e8d088efee1ff1449ce678a5dd74399abb82c622ba29641",
+            "target_unit_keys": [
+              "target-unit:7ae0c74db16287ef60cdd3d67fcdd7392f50f3daff0df7e6526703533eae76cf"
+            ]
+          },
+          {
+            "entity_keys": [
+              "census-extra-0"
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "group_key": "model-group:8cfcce8dcd13d074e64829ddd8e72b6c0ee9e9ba3b22196c018533e9aa8c42cb",
+            "target_unit_keys": [
+              "target-unit:9c0a640586a088719b2021eadde6db5708fcfc67ccda2540b2ea869bcaf51120"
+            ]
+          },
+          {
+            "entity_keys": [
+              "census-extra-1"
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "group_key": "model-group:c5e9fd2cbfaf4edf37a52f962a5ae771395d178f946fe1e514cd4f16afee2b76",
+            "target_unit_keys": [
+              "target-unit:1db720e8df085f3b915881f92fbf60e747159a8f897236eeb23088e3c6b501d1"
+            ]
+          },
+          {
+            "entity_keys": [
+              "entity:3e5d9e1a6154e03dd02f65faacbcddee78b214e52ef457e61e94bbcad20d563c",
+              "entity:d7bc0a04d3e732e38ae6f8639759bbf80df84caca2cee8ef264374dbb4757acb"
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "group_key": "model-group:d2bad089929f32019969321bd57762943fcf036e96ef11d66b3ea48eea385173",
+            "target_unit_keys": [
+              "target-unit:fb1d31845b382ec589a226d85df614835d13ce20fbe6e836471e15e7ad7a52be"
+            ]
+          }
+        ],
+        "namespace": "fixture_function",
+        "observed_entity_links": [],
+        "status": "available",
+        "target_unit_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "target_unit",
+          "value": 5
+        },
+        "target_units": [
+          {
+            "entity_keys": [
+              "census-extra-1"
+            ],
+            "target_unit_key": "target-unit:1db720e8df085f3b915881f92fbf60e747159a8f897236eeb23088e3c6b501d1"
+          },
+          {
+            "entity_keys": [
+              "census-extra-2"
+            ],
+            "target_unit_key": "target-unit:7ae0c74db16287ef60cdd3d67fcdd7392f50f3daff0df7e6526703533eae76cf"
+          },
+          {
+            "entity_keys": [
+              "census-extra-0"
+            ],
+            "target_unit_key": "target-unit:9c0a640586a088719b2021eadde6db5708fcfc67ccda2540b2ea869bcaf51120"
+          },
+          {
+            "entity_keys": [
+              "entity:8fb186d0fd5db56b795dfcd2fffd65096c8bf18d967190755fe06caf85741f39"
+            ],
+            "target_unit_key": "target-unit:b8fd6b7b8c3c61fa9cfebb4569e2a03fd7f3dc7da115f5dbbcd5d57a47fe1540"
+          },
+          {
+            "entity_keys": [
+              "entity:3e5d9e1a6154e03dd02f65faacbcddee78b214e52ef457e61e94bbcad20d563c",
+              "entity:d7bc0a04d3e732e38ae6f8639759bbf80df84caca2cee8ef264374dbb4757acb"
+            ],
+            "target_unit_key": "target-unit:fb1d31845b382ec589a226d85df614835d13ce20fbe6e836471e15e7ad7a52be"
+          }
+        ]
+      }
+    ],
+    "dependency_measurements": {
+      "edges": [],
+      "sample_groups": [],
+      "target_units": [],
+      "unknown_sample_entity_keys": [],
+      "unresolved_dependency_keys": []
+    },
+    "issues": [
+      {
+        "code": "blast_vdb_population_missing",
+        "details": {},
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "source_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      {
+        "code": "blast_vdb_target_context_unbound",
+        "details": {},
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "source_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    ],
+    "model": {
+      "census_selection": [
+        {
+          "assignment_scope": "whole_sequence",
+          "census_key": "census-1",
+          "namespace": "fixture_function"
+        }
+      ],
+      "function_priors": null,
+      "grouping_model": "target_duplicates_only",
+      "temperature_bits": 1,
+      "unknown_source_dependency": "qualify_separate",
+      "version": "vdb_function_kernel_v1"
+    },
+    "retained_measurements_not_used": [
+      "taxonomy",
+      "target_compatibility",
+      "assembly_quality",
+      "annotation_evidence",
+      "native_evalue",
+      "alignment_coverage",
+      "alignment_identity",
+      "sample_relations",
+      "explicit_dependency_relations"
+    ],
+    "schema": "blast_vdb_function_components_v2",
+    "search_key": {
+      "artifact_key": "report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "status": "no_reported_hits",
+    "strata": [
+      {
+        "assigned_reference_kernel_mass": {
+          "linear_status": "zero",
+          "log2_value": null,
+          "reason_code": null,
+          "unit": "kernel_weight",
+          "value": 0.0
+        },
+        "assignment_scope": "whole_sequence",
+        "census_key": "census-1",
+        "conditional_weight_denominator": {
+          "linear_status": "zero",
+          "log2_value": null,
+          "reason_code": null,
+          "unit": "function_mass",
+          "value": 0.0
+        },
+        "counts": {
+          "duplicate_target_units": 0,
+          "eligible_entities": 0,
+          "eligible_hsps": 0,
+          "excluded_entities": 0,
+          "model_groups": 0,
+          "multilabel_target_units": 0,
+          "source_entities": 0,
+          "unassigned_target_units": 0,
+          "unknown_origin_subjects": 0,
+          "unresolved_sample_entities": 0,
+          "unscored_entities": 0
+        },
+        "dependency_complete": true,
+        "functions": [],
+        "grouping_model": "target_duplicates_only",
+        "groups": [],
+        "issues": [],
+        "largest_all_bit_score": {
+          "status": "unavailable",
+          "unavailable_reason": "missing_input",
+          "unit": "bits",
+          "value": null
+        },
+        "largest_assigned_bit_score": {
+          "status": "unavailable",
+          "unavailable_reason": "missing_input",
+          "unit": "bits",
+          "value": null
+        },
+        "metadata_complete": true,
+        "namespace": "fixture_function",
+        "native_reporting": {
+          "native_hit_array_present": true,
+          "native_hit_count": 0,
+          "native_returncode": 0,
+          "producer_complete": true,
+          "requested_hit_limit": null,
+          "requested_hsp_limit": null
+        },
+        "query_axis_kind": "sequence",
+        "report_complete": true,
+        "representation_adjusted_weight_denominator": {
+          "linear_status": "zero",
+          "log2_value": null,
+          "reason_code": null,
+          "unit": "function_mass_per_target_unit",
+          "value": 0.0
+        },
+        "status": "no_reported_hits",
+        "total_reference_kernel_mass": {
+          "linear_status": "zero",
+          "log2_value": null,
+          "reason_code": null,
+          "unit": "kernel_weight",
+          "value": 0.0
+        },
+        "unknown_reference_kernel_fraction": {
+          "linear_status": "unavailable",
+          "log2_value": null,
+          "reason_code": "blast_vdb_function_assignment_namespace_unscored",
+          "unit": "fraction",
+          "value": null
+        },
+        "unknown_reference_kernel_mass": {
+          "linear_status": "zero",
+          "log2_value": null,
+          "reason_code": null,
+          "unit": "kernel_weight",
+          "value": 0.0
+        }
+      }
+    ]
+  },
+  "episode_return_verified": false,
+  "fixture_kind": "synthetic_native_format_and_explicit_supplied_metadata",
+  "live_database_execution": false,
+  "model": {
+    "census_selection": [
+      {
+        "assignment_scope": "whole_sequence",
+        "census_key": "census-1",
+        "namespace": "fixture_function"
+      }
+    ],
+    "function_priors": null,
+    "grouping_model": "target_duplicates_only",
+    "temperature_bits": 1,
+    "unknown_source_dependency": "qualify_separate",
+    "version": "vdb_function_kernel_v1"
+  },
+  "schema": "vdb_function_calculator_verification_example_v1",
+  "sheet": {
+    "assignment_records": [],
+    "base_components": {
+      "feature_components": [],
+      "hsps": [],
+      "issues": [
+        {
+          "code": "blast_vdb_target_context_unbound",
+          "details": {},
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "source_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        {
+          "code": "blast_vdb_population_missing",
+          "details": {},
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "search_key": {
+            "artifact_key": "report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/search"
+          },
+          "source_pointer": "/BlastOutput2/0/report/results/search"
+        }
+      ],
+      "membership": {
+        "catalogue_members": [],
+        "complete_for_reported_subjects": true,
+        "counts_by_kind": [
+          {
+            "catalog_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            },
+            "kind": "read",
+            "origin_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            }
+          },
+          {
+            "catalog_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            },
+            "kind": "reference",
+            "origin_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            }
+          },
+          {
+            "catalog_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            },
+            "kind": "wgs_sequence",
+            "origin_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            }
+          },
+          {
+            "catalog_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            },
+            "kind": "unknown",
+            "origin_member_count": {
+              "status": "available",
+              "unavailable_reason": null,
+              "unit": "member",
+              "value": 0
+            }
+          }
+        ],
+        "native_search_statistics": {
+          "db_len": 999,
+          "db_num": 123,
+          "eff_space": 4242
+        },
+        "origin_ambiguous_subject_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "subject",
+          "value": 0
+        },
+        "origin_bound_subject_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "subject",
+          "value": 0
+        },
+        "origin_members": [],
+        "origin_unbound_subject_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "subject",
+          "value": 0
+        },
+        "origins": [],
+        "reported_hsp_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "hsp",
+          "value": 0
+        },
+        "reported_subject_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "subject",
+          "value": 0
+        },
+        "row_keys": {
+          "hits": [],
+          "search": {
+            "description_ordinal": null,
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            }
+          }
+        },
+        "selected_dataset_keys": [
+          "D0",
+          "D1",
+          "D2"
+        ]
+      },
+      "population_components": {
+        "function_weight_model": {
+          "components": null,
+          "reason": "vdb_function_weight_model_not_defined",
+          "status": "unavailable"
+        },
+        "issues": [
+          {
+            "code": "blast_vdb_population_missing",
+            "details": {},
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": "/BlastOutput2/0/report/results/search"
+          }
+        ],
+        "records": []
+      },
+      "sample_groups": {
+        "catalog_sample_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "sample",
+          "value": 0
+        },
+        "complete_for_origin_members": true,
+        "groups": [],
+        "observed_origin_sample_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "sample",
+          "value": 0
+        },
+        "unresolved_origin_member_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "member",
+          "value": 0
+        }
+      },
+      "schema": "blast_vdb_components_v1",
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "sequence_groups": {
+        "complete_for_reported_subjects": true,
+        "demonstrated_group_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "sequence_group",
+          "value": 0
+        },
+        "duplicate_subject_representations": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "subject",
+          "value": 0
+        },
+        "grouped_subject_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "subject",
+          "value": 0
+        },
+        "groups": [],
+        "ungrouped_subject_count": {
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "subject",
+          "value": 0
+        }
+      },
+      "source_quality": {
+        "issues": [],
+        "missing_member_keys": [],
+        "records": []
+      },
+      "status": "no_reported_hits",
+      "subjects": [],
+      "taxonomy": {
+        "issues": [
+          {
+            "code": "blast_vdb_target_context_unbound",
+            "details": {},
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source_pointer": "/BlastOutput2/0/report/results/search"
+          }
+        ],
+        "sample_context": [],
+        "sequence_group_ranks": [],
+        "subject_taxa": [],
+        "target_independent_of_search": null,
+        "target_status": "unavailable"
+      }
+    },
+    "base_sheet": {
+      "dataset_records": [
+        {
+          "assembly_links": [],
+          "dataset_key": "D0",
+          "dataset_type": "sra",
+          "identifier": {
+            "namespace": "synthetic",
+            "value": "D0",
+            "version": null
+          },
+          "metadata_keys": [],
+          "run_identifiers": [],
+          "sample_links": [
+            {
+              "biosample_identifier": null,
+              "sample_identifier": {
+                "namespace": "sample",
+                "value": "S0",
+                "version": null
+              },
+              "sample_key": "S0",
+              "source": {
+                "pointer": "/sample",
+                "source_ref": "synthetic:supplied"
+              }
+            }
+          ],
+          "search_context": {
+            "include_filtered_reads": false,
+            "input_pssm_key": null,
+            "query_extent": {
+              "interval": null,
+              "mode": "full",
+              "source": {
+                "pointer": "/invocation/query_extent",
+                "source_ref": "synthetic:supplied"
+              }
+            },
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source": {
+              "pointer": "/invocation",
+              "source_ref": "synthetic:supplied"
+            },
+            "sra_mode": 0,
+            "subject_genetic_code": null
+          },
+          "selected_input": {
+            "kind": "alias",
+            "value": "synthetic-selected"
+          },
+          "snapshot": {
+            "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "release": "r1",
+            "snapshot_id": null
+          },
+          "source": {
+            "pointer": "/datasets/D0",
+            "source_ref": "synthetic:supplied"
+          }
+        },
+        {
+          "assembly_links": [],
+          "dataset_key": "D1",
+          "dataset_type": "sra",
+          "identifier": {
+            "namespace": "synthetic",
+            "value": "D1",
+            "version": null
+          },
+          "metadata_keys": [],
+          "run_identifiers": [],
+          "sample_links": [
+            {
+              "biosample_identifier": null,
+              "sample_identifier": {
+                "namespace": "sample",
+                "value": "S1",
+                "version": null
+              },
+              "sample_key": "S1",
+              "source": {
+                "pointer": "/sample",
+                "source_ref": "synthetic:supplied"
+              }
+            }
+          ],
+          "search_context": {
+            "include_filtered_reads": false,
+            "input_pssm_key": null,
+            "query_extent": {
+              "interval": null,
+              "mode": "full",
+              "source": {
+                "pointer": "/invocation/query_extent",
+                "source_ref": "synthetic:supplied"
+              }
+            },
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source": {
+              "pointer": "/invocation",
+              "source_ref": "synthetic:supplied"
+            },
+            "sra_mode": 0,
+            "subject_genetic_code": null
+          },
+          "selected_input": {
+            "kind": "alias",
+            "value": "synthetic-selected"
+          },
+          "snapshot": {
+            "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "release": "r1",
+            "snapshot_id": null
+          },
+          "source": {
+            "pointer": "/datasets/D1",
+            "source_ref": "synthetic:supplied"
+          }
+        },
+        {
+          "assembly_links": [],
+          "dataset_key": "D2",
+          "dataset_type": "sra",
+          "identifier": {
+            "namespace": "synthetic",
+            "value": "D2",
+            "version": null
+          },
+          "metadata_keys": [],
+          "run_identifiers": [],
+          "sample_links": [
+            {
+              "biosample_identifier": null,
+              "sample_identifier": {
+                "namespace": "sample",
+                "value": "S2",
+                "version": null
+              },
+              "sample_key": "S2",
+              "source": {
+                "pointer": "/sample",
+                "source_ref": "synthetic:supplied"
+              }
+            }
+          ],
+          "search_context": {
+            "include_filtered_reads": false,
+            "input_pssm_key": null,
+            "query_extent": {
+              "interval": null,
+              "mode": "full",
+              "source": {
+                "pointer": "/invocation/query_extent",
+                "source_ref": "synthetic:supplied"
+              }
+            },
+            "search_key": {
+              "artifact_key": "report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/BlastOutput2/0/report/results/search"
+            },
+            "source": {
+              "pointer": "/invocation",
+              "source_ref": "synthetic:supplied"
+            },
+            "sra_mode": 0,
+            "subject_genetic_code": null
+          },
+          "selected_input": {
+            "kind": "alias",
+            "value": "synthetic-selected"
+          },
+          "snapshot": {
+            "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "release": "r1",
+            "snapshot_id": null
+          },
+          "source": {
+            "pointer": "/datasets/D2",
+            "source_ref": "synthetic:supplied"
+          }
+        }
+      ],
+      "feature_bindings": [],
+      "member_bindings": [],
+      "population_records": null,
+      "query_binding": {
+        "axis_kind": "sequence",
+        "coordinate_unit": "nt",
+        "full_length": 8,
+        "master_mapping_ref": null,
+        "operand": {
+          "artifact_key": "synthetic:query",
+          "identity": null,
+          "length": 8,
+          "molecule": "dna",
+          "native_id": "q",
+          "native_title": "q",
+          "record_ordinal": 0,
+          "role": "query",
+          "selected_interval": null,
+          "subject_ref": "synthetic:query"
+        },
+        "pssm_key": null,
+        "sequence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "reference_metadata": [],
+      "report_source": {
+        "artifact_key": "report",
+        "artifact_ref": "synthetic:report",
+        "member_ordinal": null,
+        "member_sha256": null
+      },
+      "schema": "blast_vdb_search_sheet_v1",
+      "search": {
+        "issues": [],
+        "iteration": null,
+        "native": {
+          "line_numbers": null,
+          "report": {
+            "params": {},
+            "program": "blastn",
+            "results": {
+              "search": {
+                "hits": [],
+                "query_id": "q",
+                "query_len": 8,
+                "query_title": "q",
+                "stat": {
+                  "db_len": 999,
+                  "db_num": 123,
+                  "eff_space": 4242
+                }
+              }
+            },
+            "search_target": {
+              "db": "synthetic-selected"
+            },
+            "version": "BLASTN 2.17.0+"
+          },
+          "search": {
+            "hits": [],
+            "query_id": "q",
+            "query_len": 8,
+            "query_title": "q",
+            "stat": {
+              "db_len": 999,
+              "db_num": 123,
+              "eff_space": 4242
+            }
+          }
+        },
+        "normalized": {
+          "format": "json2",
+          "hits": [],
+          "issues": [],
+          "mode": "database",
+          "native": {
+            "archive_member": null,
+            "document": {
+              "BlastOutput2": [
+                {
+                  "report": {
+                    "params": {},
+                    "program": "blastn",
+                    "results": {
+                      "search": {
+                        "hits": [],
+                        "query_id": "q",
+                        "query_len": 8,
+                        "query_title": "q",
+                        "stat": {
+                          "db_len": 999,
+                          "db_num": 123,
+                          "eff_space": 4242
+                        }
+                      }
+                    },
+                    "search_target": {
+                      "db": "synthetic-selected"
+                    },
+                    "version": "BLASTN 2.17.0+"
+                  }
+                }
+              ]
+            },
+            "sha256": "24466b829da2ad1e737dd85299fcc6ec0bcbc585f8ab794ce95699e5e58114ea"
+          },
+          "query": {
+            "id": "q",
+            "length": 8,
+            "title": "q"
+          },
+          "resource": "hpc",
+          "schema": "blast_normalized_result_v1",
+          "search": {
+            "database": "synthetic-selected",
+            "hit_array_present": true,
+            "parameters": {},
+            "program": "blastn_vdb",
+            "reported_hit_count": 0,
+            "request": {
+              "synthetic": true
+            },
+            "statistics": {
+              "db_len": 999,
+              "db_num": 123,
+              "eff_space": 4242
+            },
+            "version": "BLASTN 2.17.0+"
+          }
+        },
+        "operand_binding": {
+          "artifact_key": "synthetic:query",
+          "identity": null,
+          "length": 8,
+          "molecule": "dna",
+          "native_id": "q",
+          "native_title": "q",
+          "record_ordinal": 0,
+          "role": "query",
+          "selected_interval": null,
+          "subject_ref": "synthetic:query"
+        },
+        "program_context": {
+          "execution_program": "blastn_vdb",
+          "geometry_program": "blastn",
+          "native_version": "BLASTN 2.17.0+",
+          "query_kind": "sequence",
+          "reference_kind": "vdb_mixed",
+          "reported_program": "blastn",
+          "scientific_mode": "database"
+        },
+        "reporting": {
+          "native_hit_array_present": true,
+          "native_hit_count": 0,
+          "native_returncode": 0,
+          "producer_complete": true,
+          "requested_hit_limit": null,
+          "requested_hsp_limit": null
+        },
+        "row_map": [],
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "stage": null
+      },
+      "sequence_identity_bindings": [],
+      "target_context": null
+    },
+    "census_records": [
+      {
+        "annotation_bindings": [],
+        "annotation_snapshot": {
+          "assignment_namespace": "fixture_function",
+          "content_sha256": "0f93eecf5fa767c4f4d471219e707f9602fbcc0d6ad226e310f747f9c5d6ab90",
+          "identifier": {
+            "namespace": "snapshot",
+            "value": "fixture-annotation",
+            "version": null
+          },
+          "source": {
+            "pointer": "/enumeration",
+            "source_ref": "synthetic:independent-census"
+          }
+        },
+        "assignment_scope": "whole_sequence",
+        "census_key": "census-1",
+        "datasets": [
+          {
+            "dataset_key": "D0",
+            "identifier": {
+              "namespace": "synthetic",
+              "value": "D0",
+              "version": null
+            },
+            "include_filtered_reads": false,
+            "selected_input": {
+              "kind": "alias",
+              "value": "synthetic-selected"
+            },
+            "snapshot": {
+              "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "release": "r1",
+              "snapshot_id": null
+            },
+            "sra_mode": 0
+          },
+          {
+            "dataset_key": "D1",
+            "identifier": {
+              "namespace": "synthetic",
+              "value": "D1",
+              "version": null
+            },
+            "include_filtered_reads": false,
+            "selected_input": {
+              "kind": "alias",
+              "value": "synthetic-selected"
+            },
+            "snapshot": {
+              "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "release": "r1",
+              "snapshot_id": null
+            },
+            "sra_mode": 0
+          },
+          {
+            "dataset_key": "D2",
+            "identifier": {
+              "namespace": "synthetic",
+              "value": "D2",
+              "version": null
+            },
+            "include_filtered_reads": false,
+            "selected_input": {
+              "kind": "alias",
+              "value": "synthetic-selected"
+            },
+            "snapshot": {
+              "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "release": "r1",
+              "snapshot_id": null
+            },
+            "sra_mode": 0
+          }
+        ],
+        "dependency_records": [],
+        "entities": [
+          {
+            "address": {
+              "assignment_scope": "whole_sequence",
+              "feature_identifier": null,
+              "member_key": {
+                "dataset_key": "D0",
+                "member_identifier": {
+                  "namespace": "synthetic",
+                  "value": "a1",
+                  "version": null
+                },
+                "member_kind": "read"
+              }
+            },
+            "entity_key": "entity:d7bc0a04d3e732e38ae6f8639759bbf80df84caca2cee8ef264374dbb4757acb",
+            "function_assignment_sources": [
+              {
+                "pointer": "/enumeration",
+                "source_ref": "synthetic:independent-census"
+              }
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "origin_sample_keys": [
+              "S0"
+            ],
+            "parent_sequence_identity": {
+              "length": 8,
+              "molecule": "nt",
+              "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b"
+            },
+            "sample_relation_status": "available",
+            "source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "target_identity": {
+              "assignment_scope": "whole_sequence",
+              "coding": null,
+              "length": 8,
+              "molecule": "nt",
+              "representation": "full_member_nt_v1",
+              "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b"
+            }
+          },
+          {
+            "address": {
+              "assignment_scope": "whole_sequence",
+              "feature_identifier": null,
+              "member_key": {
+                "dataset_key": "D1",
+                "member_identifier": {
+                  "namespace": "synthetic",
+                  "value": "a2",
+                  "version": null
+                },
+                "member_kind": "read"
+              }
+            },
+            "entity_key": "entity:3e5d9e1a6154e03dd02f65faacbcddee78b214e52ef457e61e94bbcad20d563c",
+            "function_assignment_sources": [
+              {
+                "pointer": "/enumeration",
+                "source_ref": "synthetic:independent-census"
+              }
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "origin_sample_keys": [
+              "S1"
+            ],
+            "parent_sequence_identity": {
+              "length": 8,
+              "molecule": "nt",
+              "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b"
+            },
+            "sample_relation_status": "available",
+            "source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "target_identity": {
+              "assignment_scope": "whole_sequence",
+              "coding": null,
+              "length": 8,
+              "molecule": "nt",
+              "representation": "full_member_nt_v1",
+              "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b"
+            }
+          },
+          {
+            "address": {
+              "assignment_scope": "whole_sequence",
+              "feature_identifier": null,
+              "member_key": {
+                "dataset_key": "D2",
+                "member_identifier": {
+                  "namespace": "synthetic",
+                  "value": "b1",
+                  "version": null
+                },
+                "member_kind": "read"
+              }
+            },
+            "entity_key": "entity:8fb186d0fd5db56b795dfcd2fffd65096c8bf18d967190755fe06caf85741f39",
+            "function_assignment_sources": [
+              {
+                "pointer": "/enumeration",
+                "source_ref": "synthetic:independent-census"
+              }
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "B"
+              }
+            ],
+            "origin_sample_keys": [
+              "S2"
+            ],
+            "parent_sequence_identity": {
+              "length": 8,
+              "molecule": "nt",
+              "sha256": "35a5af5caaf82f286bd737973362b3092ef6660f029522090c9336885a7b02b3"
+            },
+            "sample_relation_status": "available",
+            "source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "target_identity": {
+              "assignment_scope": "whole_sequence",
+              "coding": null,
+              "length": 8,
+              "molecule": "nt",
+              "representation": "full_member_nt_v1",
+              "sha256": "35a5af5caaf82f286bd737973362b3092ef6660f029522090c9336885a7b02b3"
+            }
+          },
+          {
+            "address": {
+              "assignment_scope": "whole_sequence",
+              "feature_identifier": null,
+              "member_key": {
+                "dataset_key": "D0",
+                "member_identifier": {
+                  "namespace": "synthetic",
+                  "value": "extra0",
+                  "version": null
+                },
+                "member_kind": "read"
+              }
+            },
+            "entity_key": "census-extra-0",
+            "function_assignment_sources": [
+              {
+                "pointer": "/enumeration",
+                "source_ref": "synthetic:independent-census"
+              }
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "origin_sample_keys": [
+              "S0"
+            ],
+            "parent_sequence_identity": {
+              "length": 8,
+              "molecule": "nt",
+              "sha256": "8261a311fae8519b11128d5b0dbc1cb68ac33412b8b65306409837e2e1970972"
+            },
+            "sample_relation_status": "available",
+            "source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "target_identity": {
+              "assignment_scope": "whole_sequence",
+              "coding": null,
+              "length": 8,
+              "molecule": "nt",
+              "representation": "full_member_nt_v1",
+              "sha256": "8261a311fae8519b11128d5b0dbc1cb68ac33412b8b65306409837e2e1970972"
+            }
+          },
+          {
+            "address": {
+              "assignment_scope": "whole_sequence",
+              "feature_identifier": null,
+              "member_key": {
+                "dataset_key": "D0",
+                "member_identifier": {
+                  "namespace": "synthetic",
+                  "value": "extra1",
+                  "version": null
+                },
+                "member_kind": "read"
+              }
+            },
+            "entity_key": "census-extra-1",
+            "function_assignment_sources": [
+              {
+                "pointer": "/enumeration",
+                "source_ref": "synthetic:independent-census"
+              }
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "origin_sample_keys": [
+              "S0"
+            ],
+            "parent_sequence_identity": {
+              "length": 8,
+              "molecule": "nt",
+              "sha256": "c43438c13e73b7421a15b60792e6687de29a7e92889d88d74a204f9e88491277"
+            },
+            "sample_relation_status": "available",
+            "source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "target_identity": {
+              "assignment_scope": "whole_sequence",
+              "coding": null,
+              "length": 8,
+              "molecule": "nt",
+              "representation": "full_member_nt_v1",
+              "sha256": "c43438c13e73b7421a15b60792e6687de29a7e92889d88d74a204f9e88491277"
+            }
+          },
+          {
+            "address": {
+              "assignment_scope": "whole_sequence",
+              "feature_identifier": null,
+              "member_key": {
+                "dataset_key": "D0",
+                "member_identifier": {
+                  "namespace": "synthetic",
+                  "value": "extra2",
+                  "version": null
+                },
+                "member_kind": "read"
+              }
+            },
+            "entity_key": "census-extra-2",
+            "function_assignment_sources": [
+              {
+                "pointer": "/enumeration",
+                "source_ref": "synthetic:independent-census"
+              }
+            ],
+            "functions": [
+              {
+                "namespace": "fixture_function",
+                "value": "A"
+              }
+            ],
+            "origin_sample_keys": [
+              "S0"
+            ],
+            "parent_sequence_identity": {
+              "length": 8,
+              "molecule": "nt",
+              "sha256": "9a812189ad64a7b37c4e1921fb88a4bed519ece0f0988e3ca8126480211e1c64"
+            },
+            "sample_relation_status": "available",
+            "source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "target_identity": {
+              "assignment_scope": "whole_sequence",
+              "coding": null,
+              "length": 8,
+              "molecule": "nt",
+              "representation": "full_member_nt_v1",
+              "sha256": "9a812189ad64a7b37c4e1921fb88a4bed519ece0f0988e3ca8126480211e1c64"
+            }
+          }
+        ],
+        "enumeration": {
+          "base_count_unit": "member_instance",
+          "complete": true,
+          "native_record": {
+            "fixture_kind": "synthetic_independent_full_enumeration"
+          },
+          "pagination_complete": true,
+          "reported_total": 6,
+          "source": {
+            "pointer": "/enumeration",
+            "source_ref": "synthetic:independent-census"
+          }
+        },
+        "function_namespace": "fixture_function",
+        "identity_proofs": [
+          {
+            "entity_key": "entity:d7bc0a04d3e732e38ae6f8639759bbf80df84caca2cee8ef264374dbb4757acb",
+            "linkage_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "normalization": "full_member_nt_v1",
+            "sequence_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "symbols": "ACGTACGT"
+          },
+          {
+            "entity_key": "entity:3e5d9e1a6154e03dd02f65faacbcddee78b214e52ef457e61e94bbcad20d563c",
+            "linkage_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "normalization": "full_member_nt_v1",
+            "sequence_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "symbols": "ACGTACGT"
+          },
+          {
+            "entity_key": "entity:8fb186d0fd5db56b795dfcd2fffd65096c8bf18d967190755fe06caf85741f39",
+            "linkage_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "normalization": "full_member_nt_v1",
+            "sequence_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "symbols": "ACGTTCGT"
+          },
+          {
+            "entity_key": "census-extra-0",
+            "linkage_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "normalization": "full_member_nt_v1",
+            "sequence_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "symbols": "AACGTACG"
+          },
+          {
+            "entity_key": "census-extra-1",
+            "linkage_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "normalization": "full_member_nt_v1",
+            "sequence_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "symbols": "ACGTAACG"
+          },
+          {
+            "entity_key": "census-extra-2",
+            "linkage_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "normalization": "full_member_nt_v1",
+            "sequence_source": {
+              "pointer": "/enumeration",
+              "source_ref": "synthetic:independent-census"
+            },
+            "symbols": "ACGTACGA"
+          }
+        ],
+        "native_record": {
+          "fixture_kind": "synthetic_independent_census"
+        },
+        "scope": "searched_population",
+        "source": {
+          "pointer": "/enumeration",
+          "source_ref": "synthetic:independent-census"
+        }
+      }
+    ],
+    "dependency_records": [],
+    "entities": [],
+    "issues": [
+      {
+        "code": "blast_vdb_target_context_unbound",
+        "details": {},
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "source_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      {
+        "code": "blast_vdb_population_missing",
+        "details": {},
+        "hit_ordinal": null,
+        "hsp_ordinal": null,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "source_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    ],
+    "link_results": [
+      {
+        "input_pointers": [
+          "/census_records/0"
+        ],
+        "issues": [],
+        "reason_code": null,
+        "record_key": "census-1",
+        "record_kind": "census",
+        "status": "available"
+      }
+    ],
+    "observations": [],
+    "schema": "blast_vdb_function_sheet_v2"
+  },
+  "sheet_canonical_sha256": "69e399931bac6cdaf910dbd4fd2ddc7920d4be2462baf1f40b3dc427d0a46c04"
+}

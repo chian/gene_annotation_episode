@@ -1,0 +1,17 @@
+--- baseline/episode_services.py
++++ gene_annotation_episode/episode_services.py
+@@ -102,6 +102,14 @@
+             self._literature_rate_repository = LiteratureRateRepository(
+                 self.workflow.store, self.workflow.run_id)
+         return self._literature_rate_repository
++
++    def literature_rate_observation_repository(self):
++        """Access selected original XLSX entries and saved requested subsets."""
++        from .literature_rate_observation_storage import LiteratureRateObservationRepository
++        if not hasattr(self, '_literature_rate_observation_repository'):
++            self._literature_rate_observation_repository = LiteratureRateObservationRepository(
++                self.workflow.store, self.workflow.run_id)
++        return self._literature_rate_observation_repository
+ 
+     def literature_rate_replicate_repository(self):
+         """Access explicitly selected raw-rate tables and saved typed subsets."""

@@ -1,0 +1,35 @@
+........................................................................ [ 55%]
+.....................F...................................                [100%]
+=================================== FAILURES ===================================
+______________ test_forged_saved_facts_are_rejected[requirement] _______________
+
+change = 'requirement'
+
+    @pytest.mark.parametrize('change',['value','method','unit','population','requirement','extra_field','null','selector'])
+    def test_forged_saved_facts_are_rejected(change):
+        args=operands(basic_fixture());fields={'count':selection('measurement','analysis','alignment',metric='member_count',selector={})}
+        form=c.requested_form_schema(fields,provider='msa');facts=p.project_requested_facts(**args,requested_form=form)
+        if change=='value':facts['count']['value']=3
+        elif change=='method':facts['count']['method_ref']=None
+        elif change=='unit':facts['count']['unit']='columns'
+        elif change=='population':facts['count']['population_ref']=c.encode_reference('population','sibling','whole')
+>       elif change=='requirement':facts['count']['requirement_refs']=[c.encode_reference('requirement','@requirements','invented')]
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_alignment_bundle_projection.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:123: in encode_reference
+    require(kind not in ('requirement', 'reason') or analysis_id == '@requirements', 'reference_scope_invalid')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'reference_scope_invalid'
+
+    def require(condition, code='shape_invalid'):
+        if not condition:
+>           raise ValueError('bvbrc_alignment_bundle_' + code)
+E           ValueError: bvbrc_alignment_bundle_reference_scope_invalid
+
+gene_annotation_episode/bvbrc_alignment_bundle_contracts.py:48: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_projection.py::test_forged_saved_facts_are_rejected[requirement]
+1 failed, 128 passed in 94.19s (0:01:34)

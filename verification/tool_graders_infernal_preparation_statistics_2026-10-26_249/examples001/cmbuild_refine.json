@@ -1,0 +1,2587 @@
+{
+  "sheet": {
+    "schema": "infernal_preparation_sheet_v1",
+    "operation": {
+      "program": "cmbuild",
+      "mode": "refine",
+      "engine_version": "1.1.5",
+      "settings": {}
+    },
+    "artifacts": [
+      {
+        "role": "alignment",
+        "format": "stockholm",
+        "artifact_ref": "alignment",
+        "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+        "size_bytes": 149,
+        "completeness": "complete"
+      },
+      {
+        "role": "built_models",
+        "format": "infernal_cm_ascii",
+        "artifact_ref": "built_models",
+        "sha256": "0bf8fc4863748d17a8b0d4bcde72673e7bcc7ad9a8eeee324e867dfe3c655edd",
+        "size_bytes": 9700,
+        "completeness": "complete"
+      },
+      {
+        "role": "stdout",
+        "format": "infernal_stdout",
+        "artifact_ref": "stdout",
+        "sha256": "b3b586b571af45e85dd0ab84088656705389ec0cdcd70742cc81f4a294a60e6b",
+        "size_bytes": 1434,
+        "completeness": "complete"
+      },
+      {
+        "role": "refined_alignment",
+        "format": "stockholm",
+        "artifact_ref": "refined_alignment",
+        "sha256": "1b06b294d40b3d1fe02a19f506a4a9a6bdbdbb5370ee7dbb532e1a8454dd752d",
+        "size_bytes": 241,
+        "completeness": "complete"
+      },
+      {
+        "role": "processed_alignment",
+        "format": "stockholm",
+        "artifact_ref": "processed_alignment",
+        "sha256": "1b06b294d40b3d1fe02a19f506a4a9a6bdbdbb5370ee7dbb532e1a8454dd752d",
+        "size_bytes": 241,
+        "completeness": "complete"
+      }
+    ],
+    "input_records": [
+      {
+        "kind": "training_alignment",
+        "record_key": "alignment#training_alignment/0",
+        "locator": {
+          "artifact_ref": "alignment",
+          "record_ordinal": 0,
+          "line_start": 1,
+          "line_end": 9,
+          "byte_start": 0,
+          "byte_end": 149
+        },
+        "format": "stockholm",
+        "name": "fixture246",
+        "accession": "TEST246",
+        "content_validation": "parsed",
+        "sequence_names": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "values": {
+          "row_count": {
+            "value": 3,
+            "state": "present",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 9,
+                  "byte_start": 0,
+                  "byte_end": 149
+                },
+                "field": "sequence_rows"
+              }
+            ],
+            "native_token": null
+          },
+          "column_count": {
+            "value": 12,
+            "state": "present",
+            "basis": "derived",
+            "unit": "column",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 9,
+                  "byte_start": 0,
+                  "byte_end": 149
+                },
+                "field": "aligned_sequences"
+              }
+            ],
+            "native_token": null
+          },
+          "checksum": {
+            "value": 1727146044,
+            "state": "present",
+            "basis": "derived",
+            "unit": "dimensionless",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 9,
+                  "byte_start": 0,
+                  "byte_end": 149
+                },
+                "field": "aligned_sequences"
+              }
+            ],
+            "native_token": null
+          },
+          "rf_column_count": {
+            "value": 12,
+            "state": "present",
+            "basis": "derived",
+            "unit": "column",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 9,
+                  "byte_start": 0,
+                  "byte_end": 149
+                },
+                "field": "#=GC RF"
+              }
+            ],
+            "native_token": null
+          }
+        }
+      }
+    ],
+    "output_records": [
+      {
+        "kind": "model",
+        "record_key": "built_models#model/0",
+        "locator": {
+          "artifact_ref": "built_models",
+          "record_ordinal": 0,
+          "line_start": 1,
+          "line_end": 137,
+          "byte_start": 0,
+          "byte_end": 9700
+        },
+        "format": "infernal_cm_ascii",
+        "writer_version": "1.1.5 | Sep 2023",
+        "model_type": "cm",
+        "name": "fixture246",
+        "accession": null,
+        "description": null,
+        "alphabet": "RNA",
+        "content_validation": "parsed_headers_and_boundaries",
+        "fields": {
+          "CLEN": {
+            "value": 12,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 5,
+                  "line_end": 5,
+                  "byte_start": 75,
+                  "byte_end": 87
+                },
+                "field": "CLEN"
+              }
+            ],
+            "native_token": "12"
+          },
+          "W": {
+            "value": 25,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 6,
+                  "line_end": 6,
+                  "byte_start": 87,
+                  "byte_end": 99
+                },
+                "field": "W"
+              }
+            ],
+            "native_token": "25"
+          },
+          "NSEQ": {
+            "value": 3,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 21,
+                  "line_end": 21,
+                  "byte_start": 484,
+                  "byte_end": 495
+                },
+                "field": "NSEQ"
+              }
+            ],
+            "native_token": "3"
+          },
+          "EFFN": {
+            "value": 3.0,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 495,
+                  "byte_end": 513
+                },
+                "field": "EFFN"
+              }
+            ],
+            "native_token": "3.000000"
+          },
+          "STATES": {
+            "value": 40,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 3,
+                  "line_end": 3,
+                  "byte_start": 51,
+                  "byte_end": 63
+                },
+                "field": "STATES"
+              }
+            ],
+            "native_token": "40"
+          },
+          "NODES": {
+            "value": 10,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 4,
+                  "line_end": 4,
+                  "byte_start": 63,
+                  "byte_end": 75
+                },
+                "field": "NODES"
+              }
+            ],
+            "native_token": "10"
+          },
+          "CKSUM": {
+            "value": 1727146044,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "dimensionless",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 23,
+                  "line_end": 23,
+                  "byte_start": 513,
+                  "byte_end": 533
+                },
+                "field": "CKSUM"
+              }
+            ],
+            "native_token": "1727146044"
+          },
+          "GA": {
+            "value": null,
+            "state": "missing",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "TC": {
+            "value": null,
+            "state": "missing",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "NC": {
+            "value": null,
+            "state": "missing",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          }
+        },
+        "flags": {
+          "RF": "no",
+          "CONS": "yes",
+          "MAP": "yes"
+        },
+        "null_background": [
+          {
+            "value": 0.0,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "log2_odds",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 24,
+                  "line_end": 24,
+                  "byte_start": 533,
+                  "byte_end": 570
+                },
+                "field": "NULL.0"
+              }
+            ],
+            "native_token": "0.000"
+          },
+          {
+            "value": 0.0,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "log2_odds",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 24,
+                  "line_end": 24,
+                  "byte_start": 533,
+                  "byte_end": 570
+                },
+                "field": "NULL.1"
+              }
+            ],
+            "native_token": "0.000"
+          },
+          {
+            "value": 0.0,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "log2_odds",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 24,
+                  "line_end": 24,
+                  "byte_start": 533,
+                  "byte_end": 570
+                },
+                "field": "NULL.2"
+              }
+            ],
+            "native_token": "0.000"
+          },
+          {
+            "value": 0.0,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "log2_odds",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 24,
+                  "line_end": 24,
+                  "byte_start": 533,
+                  "byte_end": 570
+                },
+                "field": "NULL.3"
+              }
+            ],
+            "native_token": "0.000"
+          }
+        ],
+        "calibration": {
+          "ECMLC": null,
+          "ECMGC": null,
+          "ECMLI": null,
+          "ECMGI": null
+        },
+        "efp7gf": {
+          "locator": {
+            "artifact_ref": "built_models",
+            "record_ordinal": 0,
+            "line_start": 25,
+            "line_end": 25,
+            "byte_start": 570,
+            "byte_end": 595
+          },
+          "location": {
+            "value": -2.1516,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 25,
+                  "line_end": 25,
+                  "byte_start": 570,
+                  "byte_end": 595
+                },
+                "field": "EFP7GF.location"
+              }
+            ],
+            "native_token": "-2.1516"
+          },
+          "scale": {
+            "value": 0.82038,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "inverse_bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 25,
+                  "line_end": 25,
+                  "byte_start": 570,
+                  "byte_end": 595
+                },
+                "field": "EFP7GF.scale"
+              }
+            ],
+            "native_token": "0.82038"
+          }
+        },
+        "filter_hmm": {
+          "locator": {
+            "artifact_ref": "built_models",
+            "record_ordinal": 0,
+            "line_start": 78,
+            "line_end": 137,
+            "byte_start": 6827,
+            "byte_end": 9700
+          },
+          "writer_version": "3.4 | Aug 2023",
+          "name": "fixture246",
+          "accession": null,
+          "description": null,
+          "alphabet": "RNA",
+          "fields": {
+            "LENG": {
+              "value": 12,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "nt",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "built_models",
+                    "record_ordinal": 0,
+                    "line_start": 80,
+                    "line_end": 80,
+                    "byte_start": 6870,
+                    "byte_end": 6879
+                  },
+                  "field": "LENG"
+                }
+              ],
+              "native_token": "12"
+            },
+            "MAXL": {
+              "value": 73,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "nt",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "built_models",
+                    "record_ordinal": 0,
+                    "line_start": 81,
+                    "line_end": 81,
+                    "byte_start": 6879,
+                    "byte_end": 6888
+                  },
+                  "field": "MAXL"
+                }
+              ],
+              "native_token": "73"
+            },
+            "NSEQ": {
+              "value": 3,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "count",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "built_models",
+                    "record_ordinal": 0,
+                    "line_start": 90,
+                    "line_end": 90,
+                    "byte_start": 7138,
+                    "byte_end": 7146
+                  },
+                  "field": "NSEQ"
+                }
+              ],
+              "native_token": "3"
+            },
+            "EFFN": {
+              "value": 2.364258,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "count",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "built_models",
+                    "record_ordinal": 0,
+                    "line_start": 91,
+                    "line_end": 91,
+                    "byte_start": 7146,
+                    "byte_end": 7161
+                  },
+                  "field": "EFFN"
+                }
+              ],
+              "native_token": "2.364258"
+            },
+            "CKSUM": {
+              "value": 1727146044,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "dimensionless",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "built_models",
+                    "record_ordinal": 0,
+                    "line_start": 92,
+                    "line_end": 92,
+                    "byte_start": 7161,
+                    "byte_end": 7178
+                  },
+                  "field": "CKSUM"
+                }
+              ],
+              "native_token": "1727146044"
+            }
+          },
+          "stats": [
+            {
+              "locator": {
+                "artifact_ref": "built_models",
+                "record_ordinal": 0,
+                "line_start": 93,
+                "line_end": 93,
+                "byte_start": 7178,
+                "byte_end": 7217
+              },
+              "mode": "LOCAL",
+              "algorithm": "MSV",
+              "location": {
+                "value": -6.6221,
+                "state": "present",
+                "basis": "model_header",
+                "unit": "bit",
+                "inputs": [
+                  {
+                    "locator": {
+                      "artifact_ref": "built_models",
+                      "record_ordinal": 0,
+                      "line_start": 93,
+                      "line_end": 93,
+                      "byte_start": 7178,
+                      "byte_end": 7217
+                    },
+                    "field": "STATS.MSV.location"
+                  }
+                ],
+                "native_token": "-6.6221"
+              },
+              "scale": {
+                "value": 0.82038,
+                "state": "present",
+                "basis": "model_header",
+                "unit": "inverse_bit",
+                "inputs": [
+                  {
+                    "locator": {
+                      "artifact_ref": "built_models",
+                      "record_ordinal": 0,
+                      "line_start": 93,
+                      "line_end": 93,
+                      "byte_start": 7178,
+                      "byte_end": 7217
+                    },
+                    "field": "STATS.MSV.scale"
+                  }
+                ],
+                "native_token": "0.82038"
+              }
+            },
+            {
+              "locator": {
+                "artifact_ref": "built_models",
+                "record_ordinal": 0,
+                "line_start": 94,
+                "line_end": 94,
+                "byte_start": 7217,
+                "byte_end": 7256
+              },
+              "mode": "LOCAL",
+              "algorithm": "VITERBI",
+              "location": {
+                "value": -6.8751,
+                "state": "present",
+                "basis": "model_header",
+                "unit": "bit",
+                "inputs": [
+                  {
+                    "locator": {
+                      "artifact_ref": "built_models",
+                      "record_ordinal": 0,
+                      "line_start": 94,
+                      "line_end": 94,
+                      "byte_start": 7217,
+                      "byte_end": 7256
+                    },
+                    "field": "STATS.VITERBI.location"
+                  }
+                ],
+                "native_token": "-6.8751"
+              },
+              "scale": {
+                "value": 0.82038,
+                "state": "present",
+                "basis": "model_header",
+                "unit": "inverse_bit",
+                "inputs": [
+                  {
+                    "locator": {
+                      "artifact_ref": "built_models",
+                      "record_ordinal": 0,
+                      "line_start": 94,
+                      "line_end": 94,
+                      "byte_start": 7217,
+                      "byte_end": 7256
+                    },
+                    "field": "STATS.VITERBI.scale"
+                  }
+                ],
+                "native_token": "0.82038"
+              }
+            },
+            {
+              "locator": {
+                "artifact_ref": "built_models",
+                "record_ordinal": 0,
+                "line_start": 95,
+                "line_end": 95,
+                "byte_start": 7256,
+                "byte_end": 7295
+              },
+              "mode": "LOCAL",
+              "algorithm": "FORWARD",
+              "location": {
+                "value": -1.8467,
+                "state": "present",
+                "basis": "model_header",
+                "unit": "bit",
+                "inputs": [
+                  {
+                    "locator": {
+                      "artifact_ref": "built_models",
+                      "record_ordinal": 0,
+                      "line_start": 95,
+                      "line_end": 95,
+                      "byte_start": 7256,
+                      "byte_end": 7295
+                    },
+                    "field": "STATS.FORWARD.location"
+                  }
+                ],
+                "native_token": "-1.8467"
+              },
+              "scale": {
+                "value": 0.82038,
+                "state": "present",
+                "basis": "model_header",
+                "unit": "inverse_bit",
+                "inputs": [
+                  {
+                    "locator": {
+                      "artifact_ref": "built_models",
+                      "record_ordinal": 0,
+                      "line_start": 95,
+                      "line_end": 95,
+                      "byte_start": 7256,
+                      "byte_end": 7295
+                    },
+                    "field": "STATS.FORWARD.scale"
+                  }
+                ],
+                "native_token": "0.82038"
+              }
+            }
+          ]
+        },
+        "topology": {
+          "base_pair_nodes": {
+            "value": 4,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 76,
+                  "byte_start": 598,
+                  "byte_end": 6824
+                },
+                "field": "base_pair_nodes"
+              }
+            ],
+            "native_token": null
+          },
+          "bifurcation_nodes": {
+            "value": 0,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 76,
+                  "byte_start": 598,
+                  "byte_end": 6824
+                },
+                "field": "bifurcation_nodes"
+              }
+            ],
+            "native_token": null
+          },
+          "total_nodes": {
+            "value": 10,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 76,
+                  "byte_start": 598,
+                  "byte_end": 6824
+                },
+                "field": "total_nodes"
+              }
+            ],
+            "native_token": null
+          },
+          "total_states": {
+            "value": 40,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 76,
+                  "byte_start": 598,
+                  "byte_end": 6824
+                },
+                "field": "total_states"
+              }
+            ],
+            "native_token": null
+          }
+        },
+        "source_fields": {
+          "date": [
+            "Mon Oct 26 00:07:34 2026"
+          ],
+          "commands": [
+            "[1] /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild --refine refined.sto -O processed.sto built.cm seed.sto"
+          ],
+          "other_headers": [
+            {
+              "tag": "PBEGIN",
+              "tokens": [
+                "0.05"
+              ]
+            },
+            {
+              "tag": "PEND",
+              "tokens": [
+                "0.05"
+              ]
+            },
+            {
+              "tag": "WBETA",
+              "tokens": [
+                "1e-07"
+              ]
+            },
+            {
+              "tag": "QDBBETA1",
+              "tokens": [
+                "1e-07"
+              ]
+            },
+            {
+              "tag": "QDBBETA2",
+              "tokens": [
+                "1e-15"
+              ]
+            },
+            {
+              "tag": "N2OMEGA",
+              "tokens": [
+                "1.52588e-05"
+              ]
+            },
+            {
+              "tag": "N3OMEGA",
+              "tokens": [
+                "1.52588e-05"
+              ]
+            },
+            {
+              "tag": "ELSELF",
+              "tokens": [
+                "-0.08926734"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "training_alignment",
+        "record_key": "processed_alignment#training_alignment/0",
+        "locator": {
+          "artifact_ref": "processed_alignment",
+          "record_ordinal": 0,
+          "line_start": 1,
+          "line_end": 14,
+          "byte_start": 0,
+          "byte_end": 241
+        },
+        "format": "stockholm",
+        "name": "fixture246",
+        "accession": null,
+        "content_validation": "parsed",
+        "sequence_names": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "values": {
+          "row_count": {
+            "value": 3,
+            "state": "present",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "processed_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "sequence_rows"
+              }
+            ],
+            "native_token": null
+          },
+          "column_count": {
+            "value": 12,
+            "state": "present",
+            "basis": "derived",
+            "unit": "column",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "processed_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "aligned_sequences"
+              }
+            ],
+            "native_token": null
+          },
+          "checksum": {
+            "value": 1727146044,
+            "state": "present",
+            "basis": "derived",
+            "unit": "dimensionless",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "processed_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "aligned_sequences"
+              }
+            ],
+            "native_token": null
+          },
+          "rf_column_count": {
+            "value": 12,
+            "state": "present",
+            "basis": "derived",
+            "unit": "column",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "processed_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "#=GC RF"
+              }
+            ],
+            "native_token": null
+          }
+        }
+      },
+      {
+        "kind": "training_alignment",
+        "record_key": "refined_alignment#training_alignment/0",
+        "locator": {
+          "artifact_ref": "refined_alignment",
+          "record_ordinal": 0,
+          "line_start": 1,
+          "line_end": 14,
+          "byte_start": 0,
+          "byte_end": 241
+        },
+        "format": "stockholm",
+        "name": "fixture246",
+        "accession": null,
+        "content_validation": "parsed",
+        "sequence_names": [
+          "s1",
+          "s2",
+          "s3"
+        ],
+        "values": {
+          "row_count": {
+            "value": 3,
+            "state": "present",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "refined_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "sequence_rows"
+              }
+            ],
+            "native_token": null
+          },
+          "column_count": {
+            "value": 12,
+            "state": "present",
+            "basis": "derived",
+            "unit": "column",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "refined_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "aligned_sequences"
+              }
+            ],
+            "native_token": null
+          },
+          "checksum": {
+            "value": 1727146044,
+            "state": "present",
+            "basis": "derived",
+            "unit": "dimensionless",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "refined_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "aligned_sequences"
+              }
+            ],
+            "native_token": null
+          },
+          "rf_column_count": {
+            "value": 12,
+            "state": "present",
+            "basis": "derived",
+            "unit": "column",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "refined_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "#=GC RF"
+              }
+            ],
+            "native_token": null
+          }
+        }
+      }
+    ],
+    "native_rows": [
+      {
+        "kind": "build_refinement",
+        "record_key": "stdout#build_refinement/0",
+        "locator": {
+          "artifact_ref": "stdout",
+          "record_ordinal": 0,
+          "line_start": 16,
+          "line_end": 16,
+          "byte_start": 741,
+          "byte_end": 774
+        },
+        "model_keys": [
+          "built_models#model/0"
+        ],
+        "identity": {
+          "name": "fixture246",
+          "input_alignment_index": 1,
+          "native_index": 1,
+          "iteration": 1
+        },
+        "values": {
+          "bit_score_sum": {
+            "value": 41.11,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 0,
+                  "line_start": 16,
+                  "line_end": 16,
+                  "byte_start": 741,
+                  "byte_end": 774
+                },
+                "field": "bit_score_sum"
+              }
+            ],
+            "native_token": "41.11"
+          },
+          "fractional_difference": {
+            "value": null,
+            "state": "missing",
+            "basis": "native_reported",
+            "unit": "fraction",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 0,
+                  "line_start": 16,
+                  "line_end": 16,
+                  "byte_start": 741,
+                  "byte_end": 774
+                },
+                "field": "fractional_difference"
+              }
+            ],
+            "native_token": "-"
+          }
+        },
+        "series": []
+      },
+      {
+        "kind": "build_refinement",
+        "record_key": "stdout#build_refinement/1",
+        "locator": {
+          "artifact_ref": "stdout",
+          "record_ordinal": 1,
+          "line_start": 17,
+          "line_end": 17,
+          "byte_start": 774,
+          "byte_end": 807
+        },
+        "model_keys": [
+          "built_models#model/0"
+        ],
+        "identity": {
+          "name": "fixture246",
+          "input_alignment_index": 1,
+          "native_index": 1,
+          "iteration": 2
+        },
+        "values": {
+          "bit_score_sum": {
+            "value": 41.11,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 1,
+                  "line_start": 17,
+                  "line_end": 17,
+                  "byte_start": 774,
+                  "byte_end": 807
+                },
+                "field": "bit_score_sum"
+              }
+            ],
+            "native_token": "41.11"
+          },
+          "fractional_difference": {
+            "value": 0.0,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "fraction",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 1,
+                  "line_start": 17,
+                  "line_end": 17,
+                  "byte_start": 774,
+                  "byte_end": 807
+                },
+                "field": "fractional_difference"
+              }
+            ],
+            "native_token": "0.000"
+          }
+        },
+        "series": []
+      },
+      {
+        "kind": "build",
+        "record_key": "stdout#build/2",
+        "locator": {
+          "artifact_ref": "stdout",
+          "record_ordinal": 2,
+          "line_start": 22,
+          "line_end": 22,
+          "byte_start": 1163,
+          "byte_end": 1247
+        },
+        "model_keys": [
+          "built_models#model/0"
+        ],
+        "identity": {
+          "native_index": 1,
+          "name": "fixture246",
+          "description": null
+        },
+        "values": {
+          "nseq": {
+            "value": 3,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "nseq"
+              }
+            ],
+            "native_token": "3"
+          },
+          "eff_nseq": {
+            "value": 3.0,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "eff_nseq"
+              }
+            ],
+            "native_token": "3.00"
+          },
+          "alignment_length": {
+            "value": 12,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "column",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "alignment_length"
+              }
+            ],
+            "native_token": "12"
+          },
+          "consensus_length": {
+            "value": 12,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "consensus_length"
+              }
+            ],
+            "native_token": "12"
+          },
+          "base_pairs": {
+            "value": 4,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "base_pairs"
+              }
+            ],
+            "native_token": "4"
+          },
+          "bifurcations": {
+            "value": 0,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "bifurcations"
+              }
+            ],
+            "native_token": "0"
+          },
+          "cm_relative_entropy": {
+            "value": 1.248,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "bit_per_position",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "cm_relative_entropy"
+              }
+            ],
+            "native_token": "1.248"
+          },
+          "hmm_relative_entropy": {
+            "value": 1.081,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "bit_per_position",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "hmm_relative_entropy"
+              }
+            ],
+            "native_token": "1.081"
+          }
+        },
+        "series": []
+      }
+    ],
+    "associations": [
+      {
+        "relation": "inspected",
+        "input_keys": [
+          "built_models#model/0"
+        ],
+        "output_keys": [
+          "stdout#build_refinement/0"
+        ],
+        "status": "validated"
+      },
+      {
+        "relation": "inspected",
+        "input_keys": [
+          "built_models#model/0"
+        ],
+        "output_keys": [
+          "stdout#build_refinement/1"
+        ],
+        "status": "validated"
+      },
+      {
+        "relation": "inspected",
+        "input_keys": [
+          "built_models#model/0"
+        ],
+        "output_keys": [
+          "stdout#build/2"
+        ],
+        "status": "validated"
+      },
+      {
+        "relation": "built_from",
+        "input_keys": [
+          "refined_alignment#training_alignment/0"
+        ],
+        "output_keys": [
+          "built_models#model/0"
+        ],
+        "status": "validated"
+      }
+    ],
+    "issues": []
+  },
+  "calculations": {
+    "schema": "infernal_preparation_calculations_v1",
+    "operation": {
+      "program": "cmbuild",
+      "mode": "refine",
+      "engine_version": "1.1.5",
+      "settings": {}
+    },
+    "parameters": {},
+    "rows": [
+      {
+        "record_key": "alignment#training_alignment/0",
+        "components": {
+          "paired_consensus_fraction": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "fraction",
+            "inputs": [],
+            "native_token": null
+          },
+          "paired_consensus_numerator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "consensus_length_denominator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_calculated": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "actual_calibration_nt": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "partition_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "total_calibration_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_seconds": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "second",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_bytes": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "byte",
+            "inputs": [],
+            "native_token": null
+          },
+          "effective_random_hit_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_evalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_pvalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "evalue_at_score": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_conversion_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_rounding_half_width": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          }
+        },
+        "checks": [
+          {
+            "check": "training_alignment_complete",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 9,
+                  "byte_start": 0,
+                  "byte_end": 149
+                },
+                "field": "content_validation"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "record_key": "processed_alignment#training_alignment/0",
+        "components": {
+          "paired_consensus_fraction": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "fraction",
+            "inputs": [],
+            "native_token": null
+          },
+          "paired_consensus_numerator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "consensus_length_denominator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_calculated": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "actual_calibration_nt": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "partition_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "total_calibration_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_seconds": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "second",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_bytes": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "byte",
+            "inputs": [],
+            "native_token": null
+          },
+          "effective_random_hit_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_evalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_pvalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "evalue_at_score": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_conversion_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_rounding_half_width": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          }
+        },
+        "checks": [
+          {
+            "check": "training_alignment_complete",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "processed_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "content_validation"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "record_key": "refined_alignment#training_alignment/0",
+        "components": {
+          "paired_consensus_fraction": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "fraction",
+            "inputs": [],
+            "native_token": null
+          },
+          "paired_consensus_numerator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "consensus_length_denominator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_calculated": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "actual_calibration_nt": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "partition_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "total_calibration_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_seconds": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "second",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_bytes": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "byte",
+            "inputs": [],
+            "native_token": null
+          },
+          "effective_random_hit_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_evalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_pvalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "evalue_at_score": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_conversion_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_rounding_half_width": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          }
+        },
+        "checks": [
+          {
+            "check": "training_alignment_complete",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "refined_alignment",
+                  "record_ordinal": 0,
+                  "line_start": 1,
+                  "line_end": 14,
+                  "byte_start": 0,
+                  "byte_end": 241
+                },
+                "field": "content_validation"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "record_key": "stdout#build_refinement/0",
+        "components": {
+          "paired_consensus_fraction": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "fraction",
+            "inputs": [],
+            "native_token": null
+          },
+          "paired_consensus_numerator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "consensus_length_denominator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_calculated": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "actual_calibration_nt": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "partition_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "total_calibration_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_seconds": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "second",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_bytes": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "byte",
+            "inputs": [],
+            "native_token": null
+          },
+          "effective_random_hit_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_evalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_pvalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "evalue_at_score": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_conversion_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_rounding_half_width": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          }
+        },
+        "checks": [
+          {
+            "check": "model_reference_valid",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 0,
+                  "line_start": 16,
+                  "line_end": 16,
+                  "byte_start": 741,
+                  "byte_end": 774
+                },
+                "field": "model_keys"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "record_key": "stdout#build_refinement/1",
+        "components": {
+          "paired_consensus_fraction": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "fraction",
+            "inputs": [],
+            "native_token": null
+          },
+          "paired_consensus_numerator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "consensus_length_denominator": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_calculated": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "actual_calibration_nt": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "partition_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "total_calibration_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_seconds": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "second",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_bytes": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "byte",
+            "inputs": [],
+            "native_token": null
+          },
+          "effective_random_hit_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_evalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_pvalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "evalue_at_score": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_conversion_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_rounding_half_width": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          }
+        },
+        "checks": [
+          {
+            "check": "model_reference_valid",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 1,
+                  "line_start": 17,
+                  "line_end": 17,
+                  "byte_start": 774,
+                  "byte_end": 807
+                },
+                "field": "model_keys"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "record_key": "stdout#build/2",
+        "components": {
+          "paired_consensus_fraction": {
+            "value": 0.6666666666666666,
+            "state": "present",
+            "basis": "derived",
+            "unit": "fraction",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "base_pairs"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "consensus_length"
+              }
+            ],
+            "native_token": null
+          },
+          "paired_consensus_numerator": {
+            "value": 8,
+            "state": "present",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "base_pairs"
+              }
+            ],
+            "native_token": null
+          },
+          "consensus_length_denominator": {
+            "value": 12,
+            "state": "present",
+            "basis": "native_reported",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "consensus_length"
+              }
+            ],
+            "native_token": "12"
+          },
+          "mu_extrap_calculated": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "mu_extrap_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "actual_calibration_nt": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "nt",
+            "inputs": [],
+            "native_token": null
+          },
+          "partition_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "total_calibration_chunk_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "count",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_seconds": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "second",
+            "inputs": [],
+            "native_token": null
+          },
+          "predicted_bytes": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "byte",
+            "inputs": [],
+            "native_token": null
+          },
+          "effective_random_hit_count": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_evalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "score_at_pvalue": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "evalue_at_score": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "expected_count",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_conversion_residual": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          },
+          "native_rounding_half_width": {
+            "value": null,
+            "state": "incompatible",
+            "basis": "derived",
+            "unit": "bit",
+            "inputs": [],
+            "native_token": null
+          }
+        },
+        "checks": [
+          {
+            "check": "model_reference_valid",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "model_keys"
+              }
+            ]
+          },
+          {
+            "check": "paired_topology_coherent",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "base_pairs"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "consensus_length"
+              }
+            ]
+          },
+          {
+            "check": "build_header_counts_consistent",
+            "outcome": "pass",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "nseq"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 21,
+                  "line_end": 21,
+                  "byte_start": 484,
+                  "byte_end": 495
+                },
+                "field": "NSEQ"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "consensus_length"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 5,
+                  "line_end": 5,
+                  "byte_start": 75,
+                  "byte_end": 87
+                },
+                "field": "CLEN"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "eff_nseq"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 495,
+                  "byte_end": 513
+                },
+                "field": "EFFN"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "base_pairs"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 76,
+                  "byte_start": 598,
+                  "byte_end": 6824
+                },
+                "field": "base_pair_nodes"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "stdout",
+                  "record_ordinal": 2,
+                  "line_start": 22,
+                  "line_end": 22,
+                  "byte_start": 1163,
+                  "byte_end": 1247
+                },
+                "field": "bifurcations"
+              },
+              {
+                "locator": {
+                  "artifact_ref": "built_models",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 76,
+                  "byte_start": 598,
+                  "byte_end": 6824
+                },
+                "field": "bifurcation_nodes"
+              }
+            ]
+          },
+          {
+            "check": "build_population_complete",
+            "outcome": "pass",
+            "inputs": []
+          }
+        ]
+      }
+    ],
+    "issues": []
+  }
+}

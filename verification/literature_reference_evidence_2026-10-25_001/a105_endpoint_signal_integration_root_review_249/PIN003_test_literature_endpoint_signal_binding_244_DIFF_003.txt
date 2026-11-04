@@ -1,0 +1,104 @@
+--- pin002/tests/test_literature_endpoint_signal_binding_244.py
++++ pin003/tests/test_literature_endpoint_signal_binding_244.py
+@@ -143,6 +143,7 @@
+     store,ctx,args,binding,_=setup(tmp_path/'state')
+     try:
+         r=args['selection']['relationships']['baseline_applicability'];r['value']=meaning
++        if meaning!='explicit_conditional_scenario':args['selection']['source_kind']='synthetic_fixture'
+         if meaning=='supported':args['selection']['relationships']['fast_component_completion']['value']='supported'
+         if meaning=='conflicting':r['image_regions'].append([60,30,204,185])
+         _,_,rows=selected(store,ctx,args,binding)
+@@ -207,6 +208,63 @@
+     finally:store.close()
+ 
+ 
++def test_failed_endpoint_history_keeps_task_and_withholds_original_input_dump(tmp_path):
++    store,ctx,args,_,_=setup(tmp_path/'state')
++    try:
++        state={'literature_experimental_work':{'version':'literature_experimental_task_v1','aspect':'source_experimental_evidence'},
++            'literature_assignment':plain(ctx.assignment),'working_state':{}}
++        history={'status':'completed','result':{'view':'records','records':[{
++            'selection':{'kind':'tool','tool':'literature.figure.populate','arguments':args},
++            'outcome':{'status':'invalid','result':None,'feedback':{'code':'controlled_missing_source'}}}]}}
++        prompt=render_literature_experimental_prompt(state,'Repair the selected source dependency.',lookup_results=[history])
++        task,steering=prompt.split('\n\nSTEERING\n')
++        assert ENDPOINT_SIGNAL_TASK in task
++        assert 'controlled_missing_source' in steering
++        assert '∼0.6' not in steering and 'support_region' not in steering and 'point_rgb' not in steering
++    finally:store.close()
++
++
++def test_union_contract_lookup_keeps_both_distinct_actual_tasks(tmp_path):
++    from gene_annotation_episode.episode_contract_information import operation_contract_information
++    store,ctx,_,binding,_=setup(tmp_path/'state')
++    try:
++        state={'literature_experimental_work':{'version':'literature_experimental_task_v1','aspect':'source_experimental_evidence'},
++            'literature_assignment':plain(ctx.assignment),'working_state':{},'contract_information_profile':'operation_contract_information_v1'}
++        lookup=operation_contract_information(catalog=binding.catalog(ctx),operation='literature.figure.populate')
++        task=render_literature_experimental_prompt(state,'Choose the appropriate figure interpretation.',lookup_results=[lookup]).split('\n\nSTEERING\n')[0]
++        assert ENDPOINT_SIGNAL_TASK in task and FIGURE_TASK in task
++    finally:store.close()
++
++
++def test_explicit_synthetic_zero_total_does_not_become_nondetection_or_fraction(tmp_path):
++    from io import BytesIO
++    from PIL import Image
++    store,ctx,args,binding,source=setup(tmp_path/'state',['total_amplitude','retained_fraction'])
++    try:
++        primary=source(b'Explicit synthetic endpoint fixture, not a scientific observation.','controlled_synthetic_endpoint244')
++        im=Image.new('RGB',(32,32),'black');stream=BytesIO();im.save(stream,format='PNG');im.close();raw=stream.getvalue()
++        image=source(raw,'controlled_synthetic_endpoint_image244',parents=[primary])
++        selection=args['selection'];selection['source_ref']=primary;selection['source_kind']='synthetic_fixture'
++        selection['image'].update(source_ref=image,expected_sha256=hashlib.sha256(raw).hexdigest(),width=32,height=32,
++            panel_region=[0,0,32,32],image_origin='synthetic')
++        for role,x,y in [('initial',1,10),('baseline_at_addition',2,4),('late',3,10)]:
++            p=selection['image']['points'][role];region=[x,y,x+1,y+1]
++            p.update(x=x,y=y,y_enclosure=[y,y],support_region=region,semantic_witnesses=[],physical_estimate_owner=None)
++            p['image_witness']['region']=region
++        for value in selection['relationships'].values():value.update(witnesses=[],image_regions=[[0,0,32,32]])
++        selection['relationships']['ordinate_direction']['value']='increases_downward'
++        selection['context']={name:None for name in selection['context']}
++        args['return_context']={name:[] for name in args['return_context']}
++        assignment={**plain(ctx.assignment),'source_refs':[primary,image]}
++        ctx=replace(ctx,assignment=assignment,received_record_refs=(*ctx.received_record_refs,primary,image))
++        _,_,rows=selected(store,ctx,args,binding)
++        assert rows[0]['value']==0 and rows[0]['status']=='populated'
++        assert rows[1]['value'] is rows[1]['conditional_value'] is None
++        assert 'zero_total_amplitude' in rows[1]['unavailable_reasons']
++        assert rows[0]['source_kind']=='synthetic_fixture'
++    finally:store.close()
++
++
+ def block_science(monkeypatch):
+     from gene_annotation_episode import literature_endpoint_signal_inputs as inputs
+     from gene_annotation_episode import literature_endpoint_signal_calculations as calculations
+@@ -297,7 +355,9 @@
+     store,ctx,args,binding,_=setup(tmp_path/'state',selected_names)
+     try:
+         if mode=='missing_baseline':args['selection']['image']['points']['baseline_at_addition']=None
+-        elif mode=='already_applied':args['selection']['relationships']['correction_stage']['value']='already_applied'
++        elif mode=='already_applied':
++            args['selection']['relationships']['correction_stage']['value']='already_applied'
++            args['selection']['source_kind']='synthetic_fixture'
+         else:args['selection']['image']['expected_sha256']='0'*64
+         _,_,rows=selected(store,ctx,args,binding)
+         assert rows[0]['value']==(None if mode=='image_unavailable' else 142)
+@@ -332,7 +392,7 @@
+     finally:store.close()
+ 
+ 
+-@pytest.mark.parametrize('field',['row','sheet','schema','source','receipt'])
++@pytest.mark.parametrize('field',['row','sheet','schema','source','receipt','receipt_type'])
+ def test_saved_tampering_rejects_without_repair(tmp_path,monkeypatch,field):
+     store,ctx,args,binding,_=setup(tmp_path/'state')
+     try:
+@@ -345,7 +405,8 @@
+                 elif field=='sheet':value['sheet']['cells'][0]['conditional_value']=.125
+                 elif field=='schema':del value['original_schemas']['rows']['items']['allOf']
+                 elif field=='source':value['input_artifact_ref']='artifact_'+'0'*64
+-                else:value['original_implementation']['files']={}
++                elif field=='receipt':value['original_implementation']['files']={}
++                else:value['original_implementation']['files']=None
+             return value
+         monkeypatch.setattr(repo,'_json',changed);block_science(monkeypatch)
+         with pytest.raises(ContractError):repo.read(ref)

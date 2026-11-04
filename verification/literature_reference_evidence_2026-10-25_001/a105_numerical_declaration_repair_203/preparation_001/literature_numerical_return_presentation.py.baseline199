@@ -1,0 +1,112 @@
+"""Present registered numerical returns without reproducing a scoring sheet.
+
+Only exact channel, compiled-assay and ion-discrimination declarations receive this treatment.
+The original closed contracts remain with the host; this pure detached view is
+neither a schema accepted by validation nor a replacement return contract.
+"""
+from collections.abc import Mapping
+from .domain import canonical
+
+
+MEANINGS = {
+    'literature_ion_discrimination_cells': 'Requested source ion-discrimination numerical components with actual biological/ion/construct meanings, source scope, distinct reported/estimator/nominal/conditional physical domains, dependencies and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+    'literature_channel_cells': 'Requested source electrical numerical sections with actual experimental meanings, measurement dependencies, applicability and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+    'literature_compiled_assay_cells': 'Requested within-assay numerical sections with actual subject, endpoint, corrections, normalization, controls, measurement dependencies and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+}
+
+
+def _copy(value):
+    if isinstance(value, Mapping):
+        return {name: _copy(child) for name, child in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_copy(child) for child in value]
+    return value
+
+
+def _registered(source):
+    if source == 'literature_ion_discrimination_cells':
+        from .literature_ion_discrimination_storage import ion_discrimination_cells_schema
+        return ion_discrimination_cells_schema()
+    if source == 'literature_channel_cells':
+        from .literature_channel_storage import channel_cells_schema
+        return channel_cells_schema()
+    if source == 'literature_compiled_assay_cells':
+        from .literature_compiled_assay_storage import compiled_assay_cells_schema
+        return compiled_assay_cells_schema()
+    return None
+
+
+def _compact(node):
+    if not isinstance(node, Mapping) or node.get('x-source') not in MEANINGS:
+        return node
+    source = node['x-source']
+    if canonical(_copy(node)) != canonical(_registered(source)):
+        return node
+    shown = {name: _copy(value) for name, value in node.items() if name != 'items'}
+    shown['description'] = MEANINGS[source]
+    return shown
+
+
+def return_schema_view(schema):
+    """Keep actual interpretation constraints and compact exact fact nodes."""
+    shown = _copy(schema)
+    if not isinstance(shown, dict):
+        return shown
+    if shown.get('x-source') in MEANINGS:
+        return _compact(shown)
+    if isinstance(shown.get('properties'), dict):
+        shown['properties'] = {name: _compact(node) for name, node in shown['properties'].items()}
+    return shown
+
+
+def state_view(state):
+    """Copy only declared schema locations; scientific values stay unchanged."""
+    shown = dict(state)
+    if isinstance(state.get('requested_form'), Mapping):
+        shown['requested_form'] = return_schema_view(state['requested_form'])
+    goal = state.get('goal')
+    if isinstance(goal, Mapping) and isinstance(goal.get('result_contract'), Mapping):
+        shown['goal'] = {**goal, 'result_contract': return_schema_view(goal['result_contract'])}
+    facts = state.get('available_report_facts')
+    if isinstance(facts, Mapping):
+        shown['available_report_facts'] = {name: ({**entry,
+            'report_schema': return_schema_view(entry['report_schema'])}
+            if name in MEANINGS and isinstance(entry, Mapping) and 'report_schema' in entry else entry)
+            for name, entry in facts.items()}
+    return shown
+
+
+def lookup_task_kind(outcome):
+    """Only an actual requested contract makes the corresponding task relevant."""
+    result = outcome.get('result') if isinstance(outcome, Mapping) else None
+    if not isinstance(result, Mapping) or outcome.get('status') != 'completed':
+        return None
+    if result.get('information_kind') == 'return_contract_information_v1':
+        source = result.get('source')
+        if source in MEANINGS:
+            return source
+    if result.get('information_kind') == 'operation_contract_information_v1':
+        return {'literature.channel.populate': 'literature_channel_cells',
+            'literature.ion_discrimination.populate': 'literature_ion_discrimination_cells',
+            'literature.assay.components.populate': 'literature_compiled_assay_cells'}.get(result.get('operation'))
+    return None
+
+
+def requested_return_text(result):
+    """Profile-only presentation of an exact requested registered return type.
+
+    The original lookup retains its complete schema/text for host custody.
+    Existing profile expansion resolves the explicit fact reference unchanged.
+    Legacy expanded presentation does not call this function.
+    """
+    source = result.get('source')
+    if (result.get('information_kind') != 'return_contract_information_v1' or source not in MEANINGS
+            or canonical(_copy(result.get('report_schema'))) != canonical(_registered(source))):
+        return None
+    return (MEANINGS[source] + '\n\nChoose a top-level field name for this recorded return. '
+        'Its declaration contains only $ref with the exact value episode-fact:' + source
+        + '. The existing contract-information profile expands that reference to the original complete closed type. '
+        'Keep model-authored interpretations in separate fields with their original constrained meanings.')
+
+
+__all__ = ['return_schema_view', 'state_view', 'lookup_task_kind', 'requested_return_text']

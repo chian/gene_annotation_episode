@@ -1,0 +1,212 @@
+--- reviewed11bb/verify_resource_preparation001.py
++++ finalf0ade/verify_resource_preparation001.py
+@@ -7,6 +7,7 @@
+ from __future__ import annotations
+ 
+ import argparse
++from datetime import datetime
+ import hashlib
+ import json
+ import os
+@@ -23,9 +24,13 @@
+ ADOPTED_SCOPE = Path('/home/chia/repos/gene_annotation_episode/docs/CONFIGURED_RESOURCE_CALLER_ACTUAL_SCOPE_2026-10-22_001.md')
+ ADOPTED_FOCUS = Path('/tmp/configured-resource-caller-scope-20261022-001/FOCUS_ADOPTED001.txt')
+ PRIOR_VERIFIER = Path('/tmp/configured-literature-actual-verifier-20261022-001-FW9HWYzm/verify_actual_preparation001.py')
+-PACKET_MANIFEST_SHA = 'PENDING_FINAL_PACKET_MANIFEST_SHA'
+-PACKET_MEMBER_COUNT = 0
+-INPUT_MANIFEST_SHA = 'PENDING_FINAL_INPUT_MANIFEST_SHA'
++PACKET_MANIFEST_SHA = '9a1552710f364f918c520ab2c1eb6f58727fbf4a2d2d15d445bcf128f21a5d27'
++PACKET_MEMBER_COUNT = 39
++INPUT_MANIFEST_SHA = 'e398322011562a864f56a24ecc1bfa798854e83f78e96b07132ee04ed3db23f1'
++ROOT_PREPARATION_EVIDENCE = Path('/tmp/configured-resource-investigation-root-preparation-20261022-001')
++ROOT_INVOCATION = ROOT_PREPARATION_EVIDENCE / 'INVOCATION001.json'
++ROOT_STDOUT_BASENAME = 'STDOUT001.log'
++ROOT_STDERR_BASENAME = 'STDERR001.log'
+ RUN = Path('/home/chia/gene_annotation_episode_runs/configured_resource_investigation_001')
+ ENGINEERING = Path('/tmp/configured-resource-investigation-preparation-20261022-001')
+ CODE = Path('/tmp/gene-annotation-configured-caller-20261022-007')
+@@ -150,9 +155,23 @@
+     rows = manifest['members']
+     require(len(rows) == count, 'manifest member count')
+     require(regular_members(root) == set(rows) | {name}, 'manifest regular membership')
++    if root == PLAN:
++        require(manifest['version'] == 'configured_resource_caller_preparation_packet_manifest_v1'
++                and manifest['root'] == str(PLAN) and manifest['member_count'] == 39
++                and manifest['total_bytes'] == sum(row['bytes'] for row in rows.values()) == 356195
++                and manifest['manifest_excludes_itself'] is True
++                and manifest['core_input_member_count'] == 14
++                and manifest['input_manifest_sha256'] == INPUT_MANIFEST_SHA
++                and manifest['operator_sha256'] == '97fb06e0523cb50fefc5c8691819942226668ce2252276cf099089960bde9827'
++                and manifest['member_mode'] == '0444' and manifest['root_mode'] == '0500'
++                and format(stat.S_IMODE(root.lstat().st_mode), '04o') == '0500', 'exact resource packet manifest format')
+     for relative, row in rows.items():
+         path = member(root, relative)
+-        require(row['path'] == str(path), 'manifest path identity')
++        if root == PLAN:
++            require(set(row) == {'sha256', 'bytes', 'mode'} and row['mode'] == '0444'
++                    and format(stat.S_IMODE(path.lstat().st_mode), '04o') == row['mode'], 'resource packet member format/mode')
++        else:
++            require(row['path'] == str(path), 'manifest path identity')
+         matches(path, row)
+     CHECKS.append({'check': 'exact_manifest', 'path': str(root / name), 'members': count})
+     return manifest
+@@ -266,8 +285,23 @@
+         deltas['changes']['parameters'], parameter_paths)
+     require(read(PLAN / 'PARAMETER_TEMPLATE001.json') == expected_template, 'exact three parameter leaves')
+     require(expected_template['services']['api_timing'] == deltas['API_binding'], 'exact relocated API binding')
+-    for name in ('EXPECTED_HANDOFF001.json', 'SCHEMAS004.json'):
++    for name in ('EXPECTED_HANDOFF001.json', 'SCHEMAS004.json', 'PUBLICATION_INPUTS001.json'):
+         require(raw(PLAN / name) == raw(BASELINE / name), 'unchanged original authority ' + name)
++    for copied, original in (('BASELINE_CONFIG001.toml', 'config.toml'),
++                             ('BASELINE_C_REQUEST001.json', 'C_REQUEST001.json'),
++                             ('BASELINE_PARAMETER_TEMPLATE001.json', 'PARAMETER_TEMPLATE001.json')):
++        require(raw(PLAN / copied) == raw(BASELINE / original), 'local baseline authority copy')
++    require(raw(PLAN / 'ADOPTED_SCOPE001.md') == raw(ADOPTED_SCOPE)
++            and raw(PLAN / 'ADOPTED_INPUT_DELTAS001.json') == raw(RESOURCE_PLAN / 'INPUT_DELTAS001.json'), 'local adopted authority copies')
++    inputs = read(PLAN / 'INPUTS001.json')
++    require(inputs['version'] == 'configured_resource_caller_preparation_inputs_v1'
++            and inputs['adopted_scope_sha256'] == FIXED_HASHES[ADOPTED_SCOPE]
++            and inputs['adopted_focus_sha256'] == FIXED_HASHES[ADOPTED_FOCUS], 'resource input authority labels')
++    for field, path in (('accepted_plan_manifest', RESOURCE_PLAN / 'MANIFEST_FINAL001.json'),
++                        ('input_delta_plan', RESOURCE_PLAN / 'INPUT_DELTAS001.json'),
++                        ('parent_preparation_operator', BASELINE / 'prepare_caller001.py')):
++        require(inputs[field]['path'] == str(path), 'exact resource input authority path')
++        matches(path, inputs[field])
+     original_focus = raw(RESOURCE_PLAN / 'FOCUS_DRAFT001.txt')
+     old_phrase = b'the existing literature hierarchy and its library are unchanged.'
+     new_phrase = b'the existing literature hierarchy is unchanged.'
+@@ -279,7 +313,64 @@
+                    'focus_sha256': witness(ADOPTED_FOCUS)['sha256']})
+ 
+ 
+-def verify():
++
++def utc_stamp(value):
++    require(isinstance(value, str), 'execution timestamp must be string')
++    parsed = datetime.fromisoformat(value)
++    require(parsed.tzinfo is not None and parsed.utcoffset().total_seconds() == 0, 'execution timestamp must be UTC')
++    return parsed
++
++
++def verify_execution_receipts(invocation_path):
++    require(invocation_path == ROOT_INVOCATION, 'exact root external invocation path')
++    invocation = read(invocation_path)
++    require(set(invocation) == {'version', 'argv', 'cwd', 'explicit_environment', 'started_at_utc',
++        'finished_at_utc', 'exit_code', 'stdout', 'stderr', 'operator', 'input_manifest',
++        'source_pin_before', 'source_pin_after', 'status'}, 'closed root invocation fields')
++    expected_operator_argv = [str(PLAN / 'prepare_caller001.py'), '--prepare',
++                             '--input-manifest-sha256', INPUT_MANIFEST_SHA]
++    expected_environment = {'PYTHONPATH': str(CODE), 'PYTHONDONTWRITEBYTECODE': '1'}
++    require(invocation['version'] == 'root_configured_resource_preparation_invocation_v1'
++            and invocation['status'] == 'exited' and type(invocation['exit_code']) is int
++            and invocation['exit_code'] == 0, 'external root subprocess did not exit0')
++    require(invocation['argv'] == ['/home/chia/repos/gene_annotation_episode/.venv/bin/python', *expected_operator_argv]
++            and invocation['cwd'] == str(CODE) and invocation['explicit_environment'] == expected_environment,
++            'exact external preparation argv/cwd/environment')
++    for name in ('source_pin_before', 'source_pin_after'):
++        require(canonical(invocation[name]) == canonical({'sha256': PIN, 'file_count': 137}), 'external preparation source guards')
++    for name, path in (('operator', PLAN / 'prepare_caller001.py'), ('input_manifest', PLAN / 'INPUTS001.json'),
++                       ('stdout', ROOT_PREPARATION_EVIDENCE / ROOT_STDOUT_BASENAME),
++                       ('stderr', ROOT_PREPARATION_EVIDENCE / ROOT_STDERR_BASENAME)):
++        descriptor = invocation[name]
++        require(set(descriptor) == {'path', 'sha256', 'bytes'} and descriptor['path'] == str(path),
++                'closed exact external descriptor ' + name)
++        matches(path, descriptor)  # stdout/stderr are byte-hashed only; no log content interpreted.
++    started = read(ENGINEERING / 'OPERATOR_EXECUTION_STARTED001.json')
++    finished = read(ENGINEERING / 'OPERATOR_EXECUTION_FINISHED001.json')
++    require(set(started) == {'argv', 'cwd', 'explicit_environment', 'started_at_utc', 'operator', 'scope_sha256'}
++            and set(finished) == {'started_at_utc', 'finished_at_utc', 'status', 'exit_code', 'last_phase'},
++            'closed planned operator execution record fields')
++    require(started['argv'] == expected_operator_argv and started['cwd'] == str(CODE)
++            and started['explicit_environment'] == expected_environment
++            and started['operator'] == invocation['operator']
++            and started['scope_sha256'] == FIXED_HASHES[ADOPTED_SCOPE], 'internal execution start authority')
++    require(finished['status'] == 'prepared_not_started' and type(finished['exit_code']) is int
++            and finished['exit_code'] == 0 and finished['last_phase'] == 'source_after_guard'
++            and finished['started_at_utc'] == started['started_at_utc'], 'internal preparation finish is not successful')
++    require(utc_stamp(invocation['started_at_utc']) <= utc_stamp(started['started_at_utc'])
++            <= utc_stamp(finished['finished_at_utc']) <= utc_stamp(invocation['finished_at_utc']),
++            'external/internal execution chronology')
++    require(not os.path.lexists(ENGINEERING / 'FAILURE001.json')
++            and not os.path.lexists(ENGINEERING / 'SOURCE_AFTER_FAILURE001.json'), 'late preparation failure/partial evidence retained')
++    CHECKS.append({'check': 'external_process_receipt_and_operator_records', 'external_receipt': witness(invocation_path),
++                   'external_exit_code': 0, 'internal_status': finished['status'],
++                   'start_utc': invocation['started_at_utc'], 'finish_utc': invocation['finished_at_utc'],
++                   'stdout_stderr': 'exact descriptor bytes hashed only',
++                   'one_recorded_subprocess_not_exhaustive_process_census': True})
++    return invocation
++
++
++def verify(preparation_invocation):
+     require(len(PACKET_MANIFEST_SHA) == len(INPUT_MANIFEST_SHA) == 64 and PACKET_MEMBER_COUNT > 0, 'final reviewed packet pins required')
+     for path, expected_sha in FIXED_HASHES.items():
+         require(witness(path)['sha256'] == expected_sha, 'fixed authority identity: ' + str(path))
+@@ -287,10 +378,18 @@
+     verify_manifest(PLAN, 'MANIFEST_FINAL001.json', PACKET_MEMBER_COUNT)
+     verify_resource_plan()
+     verify_input_derivation()
++    invocation = verify_execution_receipts(preparation_invocation)
+     inputs = read(PLAN / 'INPUTS001.json')
+     require(inputs['destination_run_directory'] == str(RUN) and inputs['implementation_root'] == str(CODE)
+             and inputs['implementation_sha256'] == PIN and inputs['runtime_file_count'] == 137, 'input execution identity')
++    require(set(inputs['members']) == {'ADOPTED_INPUT_DELTAS001.json', 'ADOPTED_SCOPE001.md',
++        'BASELINE_CONFIG001.toml', 'BASELINE_C_REQUEST001.json', 'BASELINE_PARAMETER_TEMPLATE001.json',
++        'C_REQUEST001.json', 'EXPECTED_HANDOFF001.json', 'OPERATOR_OUTPUT_SCHEMA001.json',
++        'PARAMETER_TEMPLATE001.json', 'PUBLICATION_INPUTS001.json', 'SCHEMAS004.json',
++        'config.toml', 'focus.txt', 'prepare_caller001.py'}, 'exact fourteen core resource inputs')
+     for name, row in inputs['members'].items():
++        require(set(row) == {'path', 'sha256', 'bytes'} and row['path'] == str(member(PLAN, name)),
++                'closed exact core input descriptor')
+         matches(member(PLAN, name), row)
+     provenance_root = Path('/home/chia/repos/gene_annotation_episode/verification/progress_checkpoint_2026-10-22_015')
+     for name, row in inputs['source_provenance'].items():
+@@ -381,6 +480,14 @@
+     require(len(committed['records']) == len(refs) == 193 and refs <= set(selected)
+             and committed['input_count'] == 1 and committed['record_count'] == 192
+             and native_refs == expected['original_native_receipts'], '193 inherited refs / four native receipts')
++    c_verification = read(RUN / 'caller-inputs/C_VERIFICATION001.json')
++    require(c_verification == {
++        'committed_refs': 193, 'native_receipts': native_refs, 'selected_refs': 198, 'final_refs': 200,
++        'receipt': result['receipt'],
++        'checkpoint': {'path': str(CHECKPOINT), 'sha256': receipt['checkpoint']['database']['sha256'],
++                       'bytes': receipt['checkpoint']['database']['bytes']},
++        'working_database_publication_hash_checked_before_prepare': True},
++        'exact retained C producer verification record')
+     artifacts = read(checkpoint_paths['artifact_manifest'])
+     require(artifacts['count'] == len(artifacts['artifacts']) == 144 and artifacts['total_bytes'] == 4201310, 'artifact inventory counts')
+     for row in artifacts['artifacts']:
+@@ -494,12 +601,15 @@
+         require(witness(Path(path)) == row, 'selected input guard changed: ' + path)
+     return {'version': 'independent_resource_preparation_verification_v1', 'status': 'verified_prepared_not_started',
+             'source_pin': source_pin, 'checks': CHECKS, 'selected_inputs_unchanged': True,
+-            'preparation_invocation_count': 'recorded by root external invocation metadata; not independently inferred from output copies',
++            'external_preparation_process_receipt': witness(preparation_invocation),
++            'external_preparation_exit_code': invocation['exit_code'],
+             'witnesses': [SEEN[path] for path in sorted(SEEN)],
+             'limits': ['exact relevant closed fields/relationships checked; full JSON Schema validation is recorded operator evidence',
+                        'no application imports, preparation, episode/model/HTTP/native/test calls',
+                        'SQL only NEW immutable checkpoint and NEW inactive native registry; every connection explicitly closed',
+                        'NEW working database SQL not performed; its preserved counts remain recorded operator evidence',
++                       'NEW working record-resolution assertions remain C producer evidence; immutable checkpoint rows are independently hashed/counted',
++                       'NEW statistics history is not queried; this preparation review does not claim an observed prospective forecast',
+                        'original/active databases and private provider logs never opened',
+                        'raw inherited observations hashed by index only; no new observations or credit inferred',
+                        'historical custody working hash and current post-prepare working hash are distinct witnesses even when equal',
+@@ -509,14 +619,15 @@
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('--output', type=Path, required=True)
++    parser.add_argument('--preparation-invocation', type=Path, required=True)
+     arguments = parser.parse_args()
+     sys.dont_write_bytecode = True
+     output = arguments.output
+     no_links(output)
+-    require(output.parent.is_dir() and all(not output.is_relative_to(root) for root in (PLAN, BASELINE, RESOURCE_PLAN, RUN, ENGINEERING, CODE)), 'output must be new and outside inputs')
++    require(output.parent.is_dir() and all(not output.is_relative_to(root) for root in (PLAN, BASELINE, RESOURCE_PLAN, RUN, ENGINEERING, ROOT_PREPARATION_EVIDENCE, CODE)), 'output must be new and outside inputs')
+     require(not os.path.lexists(output), 'exclusive new output required')
+     try:
+-        report = verify()
++        report = verify(arguments.preparation_invocation)
+         exit_code = 0
+     except Exception as error:
+         report = {'version': 'independent_resource_preparation_verification_v1', 'status': 'verification_failed',

@@ -1,0 +1,26 @@
+....F
+=================================== FAILURES ===================================
+________________ test_honest_native_absence_is_complete_custody ________________
+../../../tests/test_native_rna_structure_acquisition.py:54: in test_honest_native_absence_is_complete_custody
+    f = F.Fixture(store, tmp_path / "fixture", failure=True)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../fixture_helpers.py:133: in __init__
+    native = CORE.native_record(self.request, prediction_structure="(((...)))" if prediction else None,
+../../tool_graders_rna_structure_core_2026-10-26_354/fixture_helpers.py:68: in native_record
+    errors.append(issue(native_failure, stage="native", record_key=request["record_key"], field="/" + selected_field))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/rna_structure_contracts.py:164: in issue
+    return validate_rna_issue(value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/rna_structure_contracts.py:142: in checked
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/rna_structure_contracts.py:256: in validate_rna_issue
+    _require(value["stage"] in ISSUE_STAGES and value["code"] in RNA_ISSUE_CODES)
+../../../gene_annotation_episode/rna_structure_contracts.py:115: in _require
+    raise ValueError(code)
+E   ValueError: rna_invalid_native_schema
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_rna_structure_acquisition.py::test_honest_native_absence_is_complete_custody
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 4 passed in 12.99s

@@ -1,0 +1,271 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _selector
+1331:     def _selector(self, assignment, target):
+1332:         native_barcode = 'native_barcode' in target.get('assignment', {}).get('requested_job', {})
+1333:         if self._barcode_selector(assignment) or native_barcode:
+1334:             if self.native_barcode_results is None:
+1335:                 raise ValueError('native_barcode_results_binding_unavailable')
+1336:             if not native_barcode or target.get('resource_kind') != 'local':
+1337:                 raise ValueError('barcode_result_target_conflict')
+1338:             from .barcode_result_contracts import validate_barcode_result_selector
+1339:             return validate_barcode_result_selector(assignment['selector'],
+1340:                 job=target['assignment']['requested_job']['native_barcode'])
+1341:         native_nmf = 'native_expression_nmf' in target.get('assignment', {}).get('requested_job', {})
+1342:         if self._expression_nmf_selector(assignment) or native_nmf:
+1343:             if self.native_expression_nmf_results is None:
+1344:                 raise ValueError('native_expression_nmf_results_binding_unavailable')
+1345:             if not native_nmf or target.get('resource_kind') != 'local':
+1346:                 raise ValueError('expression_nmf_result_target_conflict')
+1347:             from .expression_nmf_result_contracts import validate_expression_nmf_result_selector
+1348:             return validate_expression_nmf_result_selector(assignment['selector'],
+1349:                 job=target['assignment']['requested_job']['native_expression_nmf'])
+1350:         native_atac = 'native_atac_differential' in target.get('assignment', {}).get('requested_job', {})
+1351:         if self._atac_selector(assignment) or native_atac:
+1352:             if self.atac_results is None:
+1353:                 raise ValueError('native_atac_results_binding_unavailable')
+1354:             if not native_atac or target.get('resource_kind') != 'local':
+1355:                 raise ValueError('atac_result_target_conflict')
+1356:             from .atac_differential_execution_information import validate_atac_result_selector
+1357:             return validate_atac_result_selector(assignment['selector'],
+1358:                 request=target['assignment']['requested_job']['native_atac_differential']['request'])
+1359:         native_chromatin = 'native_chromatin_interactions' in target.get('assignment', {}).get('requested_job', {})
+1360:         if self._chromatin_selector(assignment) or native_chromatin:
+1361:             if self.native_chromatin_interaction_results is None:
+1362:                 raise ValueError('native_chromatin_results_binding_unavailable')
+1363:             if not native_chromatin or target.get('resource_kind') != 'local':
+1364:                 raise ValueError('chromatin_result_target_conflict')
+1365:             from .chromatin_interaction_execution_information import validate_chromatin_result_selector
+1366:             return validate_chromatin_result_selector(assignment['selector'],
+1367:                 request=target['assignment']['requested_job']['native_chromatin_interactions']['request'])
+1368:         native_overlap = 'native_genomic_overlap' in target.get('assignment', {}).get('requested_job', {})
+1369:         if self._genomic_overlap_selector(assignment) or native_overlap:
+1370:             if self.native_genomic_overlap_results is None:
+1371:                 raise ValueError('native_genomic_overlap_results_binding_unavailable')
+1372:             if not native_overlap or target.get('resource_kind') != 'local':
+1373:                 raise ValueError('genomic_overlap_result_target_conflict')
+1374:             # Reuse the worker's pure selector/ordered-request validation;
+1375:             # this does not open files or execute the worker.
+1376:             from .genomic_overlap_result_worker import _selector
+1377:             from .genomic_overlap_contracts import validate_genomic_overlap_record
+1378:             value = validate_genomic_overlap_record('Selector', assignment['selector'])
+1379:             value = _selector(value, mode=value['mode'],
+1380:                 request=target['assignment']['requested_job']['native_genomic_overlap']['request'])
+1381:             if (value['mode'] == 'native_result') != (value['saved_sheet_file'] is None):
+1382:                 raise ValueError('genomic_overlap_result_saved_sheet_mode_conflict')
+1383:             if value['saved_sheet_file'] is not None:
+1384:                 from .genomic_overlap_return_views import SAVED_SOURCE, validate_genomic_overlap_fact_values
+1385:                 validate_genomic_overlap_fact_values(SAVED_SOURCE, [value['saved_sheet_file']])
+1386:             return value
+1387:         if (assignment.get('selector', {}).get('version') == 'protein_structure_result_selector_v1'
+1388:                 or is_native_protein_structure_target(target)):
+1389:             if not is_native_protein_structure_target(target):
+1390:                 raise ValueError('original_commission_mismatch')
+1391:             from .protein_structure_selection import validate_protein_structure_result_selector
+1392:             return validate_protein_structure_result_selector(assignment['selector'],
+1393:                 request=target['assignment']['requested_job']['native_protein_structure']['request'])
+1394:         if self._comparison_selector(assignment):
+1395:             if self.rna_structure_comparison_results is None:
+1396:                 raise ValueError('rna_comparison_results_binding_unavailable')
+1397:             if not is_native_rna_structure_target(target):
+1398:                 raise ValueError('rna_comparison_anchor_required')
+1399:             from .rna_structure_comparison_contracts import validate_rna_comparison_selector
+1400:             return validate_rna_comparison_selector(assignment['selector'])
+1401:         if is_native_rna_structure_target(target):
+1402:             if self.native_rna_structure_results is None:
+1403:                 raise ValueError('native_rna_structure_results_binding_unavailable')
+1404:             from .rna_structure_result_views import validate_rna_structure_result_selector
+1405:             return validate_rna_structure_result_selector(assignment['selector'],
+1406:                 mode=target['assignment']['requested_job']['native_rna_structure']['mode'])
+1407:         if target['resource_kind'] == 'api':
+1408:             return self.api_execution.validate_result_selector(target, assignment['selector'])
+1409:         if is_standard_blast_database_target(target):
+1410:             if self.native_blast_standard_database_results is None:
+1411:                 raise ValueError('native_blast_standard_database_results_binding_unavailable')
+1412:             from .native_blast_standard_database_result_views import validate_standard_blast_database_selector
+1413:             return validate_standard_blast_database_selector(assignment['selector'],
+1414:                 program=target['assignment']['requested_job']['native_blast_standard_database']['program'])
+1415:         if is_native_blast_database_target(target):
+1416:             if self.native_blast_database_results is None:
+1417:                 raise ValueError('native_blast_database_results_binding_unavailable')
+1418:             from .native_blast_database_result_views import validate_native_blast_database_result_selector
+1419:             return validate_native_blast_database_result_selector(assignment['selector'],
+1420:                 program=target['assignment']['requested_job']['native_blast_database']['program'])
+1421:         if is_native_hmmer_preparation_target(target):
+1422:             if self.native_hmmer_preparation_results is None:
+1423:                 raise ValueError('native_hmmer_preparation_results_binding_unavailable')
+1424:             from .hmmer_preparation_result_views import validate_preparation_result_selector
+1425:             job = target['assignment']['requested_job']['native_hmmer_preparation']
+1426:             return validate_preparation_result_selector(assignment['selector'], program=job['program'], mode=job['mode'])
+1427:         if is_native_hmmer_target(target):
+1428:             from .hmmer_native_result_views import validate_native_hmmer_result_selector
+1429:             return validate_native_hmmer_result_selector(assignment['selector'],
+1430:                 program=target['assignment']['requested_job']['native_hmmer']['program'])
+1431:         if is_native_blast_target(target):
+1432:             if self.native_blast_results is None:
+1433:                 raise ValueError('native_blast_results_binding_unavailable')
+1434:             from .blast_pairwise_result_views import validate_native_blast_result_selector
+1435:             return validate_native_blast_result_selector(assignment['selector'],
+1436:                 program=target['assignment']['requested_job']['native_blast']['program'])
+1437:         if is_native_infernal_target(target):
+1438:             if self.native_infernal_results is None:
+1439:                 raise ValueError('native_infernal_results_binding_unavailable')
+1440:             from .infernal_native_result_views import validate_native_infernal_result_selector
+1441:             return validate_native_infernal_result_selector(assignment['selector'],
+1442:                 program=target['assignment']['requested_job']['native_infernal']['program'])
+1443:         if is_native_infernal_preparation_target(target):
+1444:             if self.native_infernal_preparation_results is None:
+1445:                 raise ValueError('native_infernal_preparation_results_binding_unavailable')
+1446:             from .infernal_preparation_result_views import validate_preparation_result_selector
+1447:             job = target['assignment']['requested_job']['native_infernal_preparation']
+1448:             return validate_preparation_result_selector(assignment['selector'], program=job['program'], mode=job['mode'])
+1449:         value = checked(assignment['selector'], NATIVE_SELECTOR_SCHEMA, 'invalid_execution_native_selector')
+1450:         paths = list(value.get('paths', []))
+1451:         if 'path' in value:
+1452:             if value['path'] in paths:
+1453:                 raise ValueError('ambiguous_execution_results_selector')
+1454:             paths.append(value['path'])
+1455:         if not paths or ('offset' in value or 'limit' in value) and 'path' not in value:
+1456:             raise ValueError('execution_results_paths_required')
+1457:         for path in paths:
+1458:             confined(path, target['assignment']['workspace'])
+1459:         return value
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: catalog
+1461:     def catalog(self, context):
+1462:         if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+1463:             from .native_barcode_results import operation_catalog as barcode_result_catalog
+1464:             self._selector(plain(context.assignment), self._target(context))
+1465:             return barcode_result_catalog()
+1466:         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+1467:             from .native_expression_nmf_results import operation_catalog as nmf_result_catalog
+1468:             self._selector(plain(context.assignment), self._target(context))
+1469:             return nmf_result_catalog()
+1470:         if self.atac_results is not None and self.atac_results.applies(context):
+1471:             from .native_atac_differential_results import operation_catalog as atac_result_catalog
+1472:             self._selector(plain(context.assignment), self._target(context))
+1473:             return atac_result_catalog()
+1474:         if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+1475:             from .native_chromatin_interaction_results import operation_catalog as chromatin_result_catalog
+1476:             self._selector(plain(context.assignment), self._target(context))
+1477:             return chromatin_result_catalog()
+1478:         if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+1479:             from .native_genomic_overlap_results import operation_catalog as overlap_result_catalog
+1480:             self._selector(plain(context.assignment), self._target(context))
+1481:             return overlap_result_catalog()
+1482:         if self.native_protein_structure_results.applies(context):
+1483:             from .protein_structure_selection import validate_protein_structure_result_selector
+1484:             from .native_protein_structure_results import operation_catalog as protein_result_catalog
+1485:             validate_protein_structure_result_selector(plain(context.assignment)['selector'])
+1486:             return protein_result_catalog()
+1487:         if context.role in ROLE_KINDS:
+1488:             return self._delegate(context).catalog(context)
+1489:         if context.role == 'launch':
+1490:             return launch_operation_catalog()
+1491:         target = self._target(context)
+1492:         if is_native_protein_structure_target(target):
+1493:             self._selector(plain(context.assignment), target)
+1494:         if self._comparison_selector(plain(context.assignment)):
+1495:             self._selector(plain(context.assignment), target)
+1496:             from .rna_structure_comparison_results import operation_catalog as comparison_catalog
+1497:             return comparison_catalog()
+1498:         if is_native_rna_structure_target(target):
+1499:             self._selector(plain(context.assignment), target)
+1500:             from .native_rna_structure_results import operation_catalog as rna_result_catalog
+1501:             return rna_result_catalog()
+1502:         if is_standard_blast_database_target(target):
+1503:             self._selector(plain(context.assignment), target)
+1504:             from .native_blast_standard_database_results import operation_catalog as database_catalog
+1505:             return database_catalog()
+1506:         if is_native_blast_database_target(target):
+1507:             selector = self._selector(plain(context.assignment), target)
+1508:             from .native_blast_database_results import operation_catalog as database_catalog
+1509:             return database_catalog(selector)
+1510:         if target['resource_kind'] == 'api':
+1511:             return self.api_execution.catalog(context)
+1512:         if is_native_hmmer_preparation_target(target):
+1513:             if self.native_hmmer_preparation_results is None:
+1514:                 raise ValueError('native_hmmer_preparation_results_binding_unavailable')
+1515:             from .native_hmmer_preparation_results import operation_catalog as hmmer_preparation_result_catalog
+1516:             return hmmer_preparation_result_catalog()
+1517:         if is_native_hmmer_target(target):
+1518:             from .native_hmmer_results import operation_catalog as hmmer_result_catalog
+1519:             return hmmer_result_catalog()
+1520:         if is_native_blast_target(target):
+1521:             if self.native_blast_results is None:
+1522:                 raise ValueError('native_blast_results_binding_unavailable')
+1523:             from .native_blast_results import operation_catalog as blast_result_catalog
+1524:             return blast_result_catalog()
+1525:         if is_native_infernal_target(target):
+1526:             if self.native_infernal_results is None:
+1527:                 raise ValueError('native_infernal_results_binding_unavailable')
+1528:             from .native_infernal_results import operation_catalog as infernal_result_catalog
+1529:             return infernal_result_catalog()
+1530:         if is_native_infernal_preparation_target(target):
+1531:             if self.native_infernal_preparation_results is None:
+1532:                 raise ValueError('native_infernal_preparation_results_binding_unavailable')
+1533:             from .native_infernal_preparation_results import operation_catalog as preparation_result_catalog
+1534:             return preparation_result_catalog()
+1535:         return native_result_operation_catalog()
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: execute
+1537:     async def execute(self, context, tool_name, arguments, operation_key):
+1538:         if context.role in ROLE_KINDS:
+1539:             self._check_parent_inputs(context)
+1540:             return await self._delegate(context).execute(context, tool_name, arguments, operation_key)
+1541:         try:
+1542:             catalog = {entry['name']: entry for entry in self.catalog(context)}
+1543:             if tool_name not in catalog:
+1544:                 raise ValueError('execution_operation_not_available')
+1545:             arguments = checked(arguments, catalog[tool_name]['input_schema'], 'invalid_execution_operation_arguments')
+1546:             if context.role == 'launch':
+1547:                 return _outcome(self.initial_decision_context(context))
+1548:             target = self._target(context)
+1549:             if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+1550:                 self._selector(plain(context.assignment), target)
+1551:                 return await self.native_barcode_results.execute(
+1552:                     context, target, tool_name, arguments, operation_key)
+1553:             if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+1554:                 self._selector(plain(context.assignment), target)
+1555:                 return await self.native_expression_nmf_results.execute(
+1556:                     context, target, tool_name, arguments, operation_key)
+1557:             if self.atac_results is not None and self.atac_results.applies(context):
+1558:                 self._selector(plain(context.assignment), target)
+1559:                 return await self.atac_results.execute(context, target, tool_name, arguments, operation_key)
+1560:             if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+1561:                 self._selector(plain(context.assignment), target)
+1562:                 return await self.native_chromatin_interaction_results.execute(
+1563:                     context, target, tool_name, arguments, operation_key)
+1564:             if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+1565:                 self._selector(plain(context.assignment), target)
+1566:                 return await self.native_genomic_overlap_results.execute(
+1567:                     context, target, tool_name, arguments, operation_key)
+1568:             if self.native_protein_structure_results.applies(context):
+1569:                 self._selector(plain(context.assignment), target)
+1570:                 return await self.native_protein_structure_results.execute(
+1571:                     context, target, tool_name, arguments, operation_key)
+1572:             if self._comparison_selector(plain(context.assignment)):
+1573:                 return await self.rna_structure_comparison_results.execute(
+1574:                     context, target, tool_name, arguments, operation_key)
+1575:             if is_native_rna_structure_target(target):
+1576:                 return await self.native_rna_structure_results.execute(context, target, tool_name, arguments, operation_key)
+1577:             if is_standard_blast_database_target(target):
+1578:                 return await self.native_blast_standard_database_results.execute(context, target, tool_name, arguments, operation_key)
+1579:             if is_native_blast_database_target(target):
+1580:                 return await self.native_blast_database_results.execute(context, target, tool_name, arguments, operation_key)
+1581:             if target['resource_kind'] == 'api':
+1582:                 return await self.api_execution.execute(context, tool_name, arguments, operation_key)
+1583:             if is_native_hmmer_preparation_target(target):
+1584:                 return await self.native_hmmer_preparation_results.execute(
+1585:                     context, target, tool_name, arguments, operation_key)
+1586:             if is_native_hmmer_target(target):
+1587:                 return await self.native_hmmer_results.execute(context, target, tool_name, arguments, operation_key)
+1588:             if is_native_blast_target(target):
+1589:                 return await self.native_blast_results.execute(context, target, tool_name, arguments, operation_key)
+1590:             if is_native_infernal_target(target):
+1591:                 return await self.native_infernal_results.execute(context, target, tool_name, arguments, operation_key)
+1592:             if is_native_infernal_preparation_target(target):
+1593:                 return await self.native_infernal_preparation_results.execute(
+1594:                     context, target, tool_name, arguments, operation_key)
+1595:             return await self._execute_native_results(context, target, tool_name, arguments, operation_key)
+1596:         except (ValueError, TypeError) as error:
+1597:             return _outcome(code=str(error))

@@ -1,0 +1,21 @@
+{
+  "connection": {
+    "command": [
+      "codex",
+      "app-server",
+      "--stdio"
+    ]
+  },
+  "FAST": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "none"
+  },
+  "REASONING": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium"
+  },
+  "routing": {
+    "decide": "REASONING",
+    "child_interpretation": "REASONING"
+  }
+}

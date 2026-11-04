@@ -1,0 +1,114 @@
+{
+  "association": "Controlled FastqUtils service and Workspace association; not a live service result.",
+  "fixtures": {
+    "declarations": {
+      "declarations": []
+    },
+    "parameters": {
+      "analysis_id": "samstat218current",
+      "calculation_requests": [
+        {
+          "calculation_id": "mapping",
+          "method": "samstat_report_mapping_v1",
+          "populations": [
+            {
+              "document_id": "report",
+              "population_key": "samstat_report_records",
+              "population_ordinal": 0,
+              "selection": "semantic"
+            }
+          ]
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "report",
+          "format": "samstat_html",
+          "producer_version": null,
+          "selection": {
+            "kind": "output_requirement",
+            "requirement_id": "selected_report"
+          }
+        }
+      ],
+      "metadata_bindings": [],
+      "version": "fastqutils_provider_v2"
+    },
+    "requested_form": {
+      "fields": [
+        {
+          "field": "mapped",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "component",
+              "selector": {
+                "calculation_id": "mapping",
+                "metric": "samstat_report_mapped_record_fraction",
+                "selection": "semantic",
+                "threshold": null
+              }
+            }
+          }
+        },
+        {
+          "field": "high",
+          "selection": {
+            "availability_requirement": "available_value",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "component",
+              "selector": {
+                "calculation_id": "mapping",
+                "metric": "samstat_report_ge30_record_fraction",
+                "selection": "semantic",
+                "threshold": null
+              }
+            }
+          }
+        },
+        {
+          "field": "requirements",
+          "selection": {
+            "availability_requirement": "typed_state",
+            "cardinality": "one_target",
+            "expected_cardinality": 1,
+            "target": {
+              "kind": "requirements"
+            }
+          }
+        }
+      ],
+      "version": "fastqutils_projection_v2"
+    },
+    "submitted_parameters": {
+      "output_file": "selected",
+      "output_path": "/fixture/output",
+      "paired_end_libs": [],
+      "recipe": [
+        "ALIGN"
+      ],
+      "reference_genome_id": "83333.1",
+      "single_end_libs": [
+        {
+          "platform": "illumina",
+          "read": "/fixture/input/mixed.fastq"
+        }
+      ],
+      "srr_libs": []
+    }
+  },
+  "native_byte_count": 25440,
+  "native_sha256": "e7cdccbe6c1225fe02f13d1a51297ab8e794ab31599b1d23039441aad19c4d19",
+  "outputs": {
+    "report": [
+      "/fixture/output/mixed.sam.samstat.html",
+      "4d80e38b-1f93-5e6a-9fe2-f8620cda1f11"
+    ]
+  },
+  "provider_envelope_injected": false,
+  "retained_native_producer_output": true
+}

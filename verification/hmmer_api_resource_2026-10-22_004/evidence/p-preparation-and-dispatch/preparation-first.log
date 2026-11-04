@@ -1,0 +1,520 @@
+FF.......                                                                [100%]
+=================================== FAILURES ===================================
+_ test_shared_preparation_matches_fresh_assignment_order_and_ordinary_search[False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-881/test_shared_preparation_matche0')
+explicit = False
+
+    @pytest.mark.parametrize('explicit', [False, True])
+    def test_shared_preparation_matches_fresh_assignment_order_and_ordinary_search(tmp_path, explicit):
+        store, client, tools, ports, scope = configured(tmp_path)
+        with store:
+>           subject = rootless_sequence(store)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_execution_preparation.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_api_execution_preparation.py:40: in rootless_sequence
+    return store.put('reference', {'reference_type': 'protein', 'source_ref': source['id'],
+gene_annotation_episode/state.py:1418: in put
+    self._validate_record(kind, record, origin)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.state.Store object at 0x731f9a323080>
+kind = 'reference'
+data = {'reference_type': 'protein', 'source_ref': 'source_0a518fdc19fc055e53c1e143', 'accession': 'FIXTURE', 'label': 'fixture protein', ...}
+origin = 'external'
+
+    def _validate_record(self, kind, data, origin):
+        if kind == 'interpretation_account':
+            # Share representation/reference/coherence validation. The stored
+            # kind and ownership remain distinct from an annotation.
+            return self._validate_record('annotation', data, origin)
+        validate_schema(data, RECORD_SCHEMAS[kind])
+        if origin not in {"caller", "external", "tool", "reasoning", "extracted"}:
+            raise ContractError("unknown_origin")
+        visual_observation = kind == "observation" and data.get("visual_anchor") is not None
+        if origin == "reasoning" and kind not in {"feature", "hypothesis", "assessment", "annotation"} and not visual_observation:
+            raise ContractError("origin_not_allowed")
+        if kind == "image_view" and origin != "tool":
+            raise ContractError("image_view_requires_native_tool_origin")
+        if kind == "native_execution" and origin != "tool":
+            raise ContractError("native_execution_requires_native_tool_origin")
+        if origin == "extracted" and kind not in {"term", "observation", "reference", "context"}:
+            raise ContractError("origin_not_allowed")
+        custody = {"pmc_version", "pmc_catalog", "pmc_object", "pmc_asset", "archive_member", "source_derivative"}
+        if kind in custody and origin not in {"tool", "external"}:
+            raise ContractError("catalog_or_derivative_requires_source_publisher")
+        for ref, path in self._refs(data, with_paths=True):
+            self._require(ref, field_path=path)
+        self._validate_atoms(data)
+        def constrained_refs(value, path=()):
+            if isinstance(value, dict):
+                for key, child in value.items():
+                    admitted = {"context_refs": {"context", "hypothesis"}, "term_refs": {"term"},
+                        "condition_refs": {"context", "hypothesis", "observation", "term"},
+                        "assumption_refs": {"hypothesis"}}
+                    if key in admitted:
+                        for index, ref in enumerate(child):
+                            self._require(ref, admitted[key], field_path=(*path, key, index))
+                    if key in {"dependencies", "related_refs"}:
+                        for ref in child:
+                            if self.get(ref)["record_type"] == "artifact":
+                                raise ContractError("semantic_dependency_requires_record")
+                    constrained_refs(child, (*path, key))
+            elif isinstance(value, list):
+                for index, child in enumerate(value):
+                    constrained_refs(child, (*path, index))
+        constrained_refs(data)
+        if kind == "native_execution":
+            from .execution_recording import NativeMeasurement
+            from .domain import NATIVE_EXECUTION_OPERATIONS
+            self._require(data['measurement_artifact_ref'], {'artifact'})
+            measured = NativeMeasurement.from_record(json.loads(self.get_artifact(data['measurement_artifact_ref'])))
+            if measured.execution_class.phase != NATIVE_EXECUTION_OPERATIONS[data['operation']]:
+                raise ContractError('native_execution_operation_phase_mismatch')
+            roles = [operand['role'] for operand in data['operands']]
+            if len(set(roles)) != len(roles):
+                raise ContractError('native_execution_operand_role_repeated')
+            for operand in data['operands']:
+                if operand['role'] == 'input_source':
+                    self._require(operand['subject_ref'], {'source'})
+                else:
+                    self._require(operand['subject_ref'], {'input', 'reference', 'read_subject', 'feature', 'product'})
+                    length = getattr(measured.execution_class, operand['role']+'_residues')
+                    if length is not None and self.subject_length(operand['subject_ref']) != length:
+                        raise ContractError('native_execution_operand_length_mismatch')
+            if measured.execution_class.phase == 'pairwise_sequence_alignment':
+                if set(roles) != {'query', 'reference'} or data['operation'] != 'align_pair':
+                    raise ContractError('native_alignment_requires_query_and_reference_operands')
+            if measured.execution_class.phase == 'spreadsheet_selection':
+                if set(roles) != {'input_source'} or data['operation'] not in {'xlsx_sheets', 'xlsx_rows'}:
+                    raise ContractError('native_spreadsheet_requires_source_operand')
+                if measured.execution_class.query_residues is not None or measured.execution_class.reference_residues is not None:
+                    raise ContractError('spreadsheet_workload_has_no_sequence_residues')
+            if measured.execution_class.phase == 'protein_homology_search':
+                if set(roles) != {'query'} or data['operation'] != 'phmmer_search':
+                    raise ContractError('native_homology_requires_query_operand')
+                if self.subject_unit(data['operands'][0]['subject_ref']) != 'aa':
+                    raise ContractError('native_homology_requires_protein_query')
+        if kind == "source":
+            for ref in data.get("operand_refs", []):
+                self._require(ref, {"input", "reference", "read_subject", "feature", "product"})
+                self.subject_length(ref)
+            if "query_selection_ref" in data:
+                self._require(data["query_selection_ref"], {"read_selection"})
+            for ref in data.get("parent_source_refs", []):
+                self._require(ref, {"source"})
+            for key in ("artifact_ref", "text_ref", "request_ref"):
+                if data[key] is not None:
+                    self._require(data[key], {"artifact"})
+            for ref in data.get("auxiliary_artifact_refs", []):
+                self._require(ref, {"artifact"})
+            for key in ("stdout_ref", "stderr_ref"):
+                if key in data:
+                    self._require(data[key], {"artifact"})
+        if kind == "image_view":
+            from PIL import Image
+            source = self._require(data["source_ref"], {"source"})
+            original = self._require(data["input_source_ref"], {"source"})
+            if source["origin"] != "tool" or source["provider"] != "image.view":
+                raise ContractError("native_image_view_source_required")
+            if source["artifact_ref"] != data["image_artifact_ref"]:
+                raise ContractError("image_view_display_source_mismatch")
+            if source.get("parent_source_refs") != [data["input_source_ref"]]:
+                raise ContractError("image_view_parent_source_mismatch")
+            if original["artifact_ref"] != data["original_artifact_ref"]:
+                raise ContractError("image_view_original_source_mismatch")
+            if data["frame"] >= data["frame_count"]:
+                raise ContractError("image_frame_outside_source")
+            if source["request_ref"] is None:
+                raise ContractError("image_view_native_metadata_required")
+            native = json.loads(self.get_artifact(source["request_ref"]))
+            if canonical(native) != canonical({key: value for key, value in data.items() if key != "source_ref"}):
+                raise ContractError("image_view_native_metadata_mismatch")
+            if source["version"] != data["software_version"]:
+                raise ContractError("image_view_software_version_mismatch")
+            # MIME registration is first-writer metadata; identical original
+            # and rendered PNG bytes can legitimately retain an opaque MIME.
+            with Image.open(materials.artifact_path(self, data["image_artifact_ref"])) as image:
+                if image.format != "PNG" or image.size != (data["width"], data["height"]):
+                    raise ContractError("image_view_display_dimensions_mismatch")
+        if kind in {"term", "reference", "context", "observation", "material", "material_link", "parse_attempt", "collection", "reaction_record", "chemical_record"}:
+            self._require(data["source_ref"], {"source"})
+        if kind in {"reaction_record", "chemical_record"}:
+            source = self._require(data["source_ref"], {"source"})
+            provider = "rhea" if kind == "reaction_record" else "chebi"
+            if origin != "external" or source["provider"] != provider:
+                raise ContractError("native_chemistry_requires_matching_public_source")
+            if kind == "reaction_record":
+                for item in data["participants"]:
+                    chemical = self._require(item["chemical_ref"], {"reference"})
+                    if chemical["reference_type"] != "chemical" or chemical["source_ref"] != data["source_ref"]:
+                        raise ContractError("reaction_participant_source_mismatch")
+        if kind == "reference" and data.get("native_record_ref") is not None:
+            details = self._require(data["native_record_ref"], {"reaction_record", "chemical_record"})
+            expected = "reaction" if details["record_type"] == "reaction_record" else "chemical"
+            if (data["reference_type"] != expected or origin != "external"
+                    or details["source_ref"] != data["source_ref"] or details["accession"] != data["accession"]):
+                raise ContractError("native_chemistry_reference_mismatch")
+        if kind in custody:
+            self._require(data["source_ref"], {"source"})
+        if kind == "pmc_catalog":
+            self._require(data["version_ref"], {"pmc_version"})
+            if data["metadata_source_ref"] is not None:
+                self._require(data["metadata_source_ref"], {"source"})
+        if kind == "pmc_object":
+            selected = self._require(data["version_ref"], {"pmc_version"})
+            if not data["object_key"].startswith(selected["prefix"]):
+                raise ContractError("listed_object_version_identity_mismatch")
+        if kind == "pmc_asset":
+            catalog = self._require(data["catalog_ref"], {"pmc_catalog"})
+            selected = self._require(data["version_ref"], {"pmc_version"})
+            if catalog["version_ref"] != selected["id"] or catalog["metadata_source_ref"] != data["source_ref"]:
+                raise ContractError("asset_catalog_identity_mismatch")
+            from .literature_assets import advertised_asset
+            actual = advertised_asset(data["original_uri"], prefix=selected["prefix"])
+            if any(data[key] != value for key, value in actual.items()):
+                raise ContractError("asset_advertisement_identity_mismatch")
+        if kind == "source_derivative":
+            self._require(data["parent_source_ref"], {"source"})
+            if data["selection_ref"] is not None:
+                member = self._require(data["selection_ref"], {"archive_member"})
+                if member["source_ref"] != data["parent_source_ref"]:
+                    raise ContractError("archive_derivative_parent_mismatch")
+        if kind == "material":
+            for field in ("sample_ref", "library_ref"):
+                if data[field] is not None:
+                    self._require(data[field], {"context"})
+        if kind in {"collection", "parse_attempt"}:
+            self._require(data["material_ref"], {"material"})
+        if kind == "parse_attempt" and data["collection_ref"] is not None:
+            self._require(data["collection_ref"], {"collection"})
+        if kind == "parse_attempt" and data.get("native_source_ref") is not None:
+            native = self._require(data["native_source_ref"], {"source"})
+            if (native["origin"] != "tool" or native["provider"] != "material.genbank"
+                    or native["version"] != data["parser_version"]
+                    or native.get("parent_source_refs") != [data["source_ref"]]
+                    or native["request_ref"] is None):
+                raise ContractError("native_genbank_source_identity_mismatch")
+            request = json.loads(self.get_artifact(native["request_ref"]))
+            if any(request.get(key) != data[key] for key in ("material_ref", "parse_key", "parser_version")) or request.get("input_source_ref") != data["source_ref"]:
+                raise ContractError("native_genbank_source_identity_mismatch")
+        if kind == "read_selection":
+            if origin != "tool" or not libraries.is_library(self.get_input(data["library_ref"])):
+                raise ContractError("read_selection_requires_fixed_library_tool_origin")
+        if kind == "material_link":
+            self._require(data["left_ref"], {"material"})
+            self._require(data["right_ref"], {"material"})
+        if kind == "reference" and data.get("member_ref") is not None:
+            member = self._require(data["member_ref"], {"collection_member"})
+            if (any(data[field] != member[field] for field in ("source_ref", "molecule", "length"))
+                    or data["sequence_ref"] != materials.packing.content_ref(self, member, "sequence")):
+                raise ContractError("member_reference_identity_mismatch")
+            expected_label = {"label": member["name"][:512], "label_is_preview": len(member["name"]) > 512,
+                "label_full_characters": len(member["name"]), "label_full_utf8_bytes": len(member["name"].encode("utf-8"))}
+            if any(data.get(key) != value for key, value in expected_label.items()):
+                raise ContractError("member_reference_label_metadata_mismatch")
+        if kind == "context":
+            if origin == "extracted":
+                self._anchor(data.get("anchor"), data["source_ref"])
+                if data["name"] not in data["anchor"]["quote"]:
+                    raise ContractError("context_name_not_in_source_span", detail={"field_path": ["name"]})
+            elif data.get("anchor") is not None:
+                self._anchor(data["anchor"], data["source_ref"])
+        if kind == "term":
+            if origin == "extracted":
+                self._anchor(data["anchor"], data["source_ref"])
+                expected_accession = identity("source_term", {"source_ref": data["source_ref"], "label": data["label"], "anchor": data["anchor"]})
+                if data["namespace"] != "source_local" or data["accession"] != expected_accession:
+                    raise ContractError("extracted_term_identity_mismatch")
+                if data["label"] not in data["anchor"]["quote"]:
+                    raise ContractError("term_label_not_in_source_span")
+            elif data["anchor"] is not None:
+                self._anchor(data["anchor"], data["source_ref"])
+        if kind == "reference" and origin == "extracted":
+            self._anchor(data.get("anchor"), data["source_ref"])
+            expected_accession = identity("source_entity", {"source_ref": data["source_ref"], "label": data["label"], "anchor": data["anchor"]})
+            if data["accession"] != expected_accession or data["sequence_ref"] is not None or data["length"] is not None:
+                raise ContractError("extracted_subject_identity_mismatch")
+            if data["label"] not in data["anchor"]["quote"]:
+                raise ContractError("subject_label_not_in_source_span")
+        if kind == "reference" and data["sequence_ref"] is not None:
+            if data.get("member_ref") is not None:
+                # The native index already established ASCII sequence symbols.
+                # A selected member window must not hydrate a whole chromosome.
+                length = self._require(data["sequence_ref"], {"artifact"})["size"]
+            else:
+                # A native result can identify a large reference. Verification
+                # must not hydrate that entire artifact in the workflow host.
+                path = materials.artifact_path(self, data["sequence_ref"])
+                length = 0
+                with path.open("rb") as stream:
+                    for chunk in iter(lambda: stream.read(1024*1024), b""):
+                        length += len(chunk.decode("ascii"))
+            if data["length"] != length:
+>               raise ContractError("reference_sequence_length_mismatch")
+E               gene_annotation_episode.domain.ContractError: reference_sequence_length_mismatch
+
+gene_annotation_episode/state.py:924: ContractError
+_ test_shared_preparation_matches_fresh_assignment_order_and_ordinary_search[True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-881/test_shared_preparation_matche1')
+explicit = True
+
+    @pytest.mark.parametrize('explicit', [False, True])
+    def test_shared_preparation_matches_fresh_assignment_order_and_ordinary_search(tmp_path, explicit):
+        store, client, tools, ports, scope = configured(tmp_path)
+        with store:
+>           subject = rootless_sequence(store)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_execution_preparation.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_api_execution_preparation.py:40: in rootless_sequence
+    return store.put('reference', {'reference_type': 'protein', 'source_ref': source['id'],
+gene_annotation_episode/state.py:1418: in put
+    self._validate_record(kind, record, origin)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.state.Store object at 0x731f965dfc20>
+kind = 'reference'
+data = {'reference_type': 'protein', 'source_ref': 'source_0a518fdc19fc055e53c1e143', 'accession': 'FIXTURE', 'label': 'fixture protein', ...}
+origin = 'external'
+
+    def _validate_record(self, kind, data, origin):
+        if kind == 'interpretation_account':
+            # Share representation/reference/coherence validation. The stored
+            # kind and ownership remain distinct from an annotation.
+            return self._validate_record('annotation', data, origin)
+        validate_schema(data, RECORD_SCHEMAS[kind])
+        if origin not in {"caller", "external", "tool", "reasoning", "extracted"}:
+            raise ContractError("unknown_origin")
+        visual_observation = kind == "observation" and data.get("visual_anchor") is not None
+        if origin == "reasoning" and kind not in {"feature", "hypothesis", "assessment", "annotation"} and not visual_observation:
+            raise ContractError("origin_not_allowed")
+        if kind == "image_view" and origin != "tool":
+            raise ContractError("image_view_requires_native_tool_origin")
+        if kind == "native_execution" and origin != "tool":
+            raise ContractError("native_execution_requires_native_tool_origin")
+        if origin == "extracted" and kind not in {"term", "observation", "reference", "context"}:
+            raise ContractError("origin_not_allowed")
+        custody = {"pmc_version", "pmc_catalog", "pmc_object", "pmc_asset", "archive_member", "source_derivative"}
+        if kind in custody and origin not in {"tool", "external"}:
+            raise ContractError("catalog_or_derivative_requires_source_publisher")
+        for ref, path in self._refs(data, with_paths=True):
+            self._require(ref, field_path=path)
+        self._validate_atoms(data)
+        def constrained_refs(value, path=()):
+            if isinstance(value, dict):
+                for key, child in value.items():
+                    admitted = {"context_refs": {"context", "hypothesis"}, "term_refs": {"term"},
+                        "condition_refs": {"context", "hypothesis", "observation", "term"},
+                        "assumption_refs": {"hypothesis"}}
+                    if key in admitted:
+                        for index, ref in enumerate(child):
+                            self._require(ref, admitted[key], field_path=(*path, key, index))
+                    if key in {"dependencies", "related_refs"}:
+                        for ref in child:
+                            if self.get(ref)["record_type"] == "artifact":
+                                raise ContractError("semantic_dependency_requires_record")
+                    constrained_refs(child, (*path, key))
+            elif isinstance(value, list):
+                for index, child in enumerate(value):
+                    constrained_refs(child, (*path, index))
+        constrained_refs(data)
+        if kind == "native_execution":
+            from .execution_recording import NativeMeasurement
+            from .domain import NATIVE_EXECUTION_OPERATIONS
+            self._require(data['measurement_artifact_ref'], {'artifact'})
+            measured = NativeMeasurement.from_record(json.loads(self.get_artifact(data['measurement_artifact_ref'])))
+            if measured.execution_class.phase != NATIVE_EXECUTION_OPERATIONS[data['operation']]:
+                raise ContractError('native_execution_operation_phase_mismatch')
+            roles = [operand['role'] for operand in data['operands']]
+            if len(set(roles)) != len(roles):
+                raise ContractError('native_execution_operand_role_repeated')
+            for operand in data['operands']:
+                if operand['role'] == 'input_source':
+                    self._require(operand['subject_ref'], {'source'})
+                else:
+                    self._require(operand['subject_ref'], {'input', 'reference', 'read_subject', 'feature', 'product'})
+                    length = getattr(measured.execution_class, operand['role']+'_residues')
+                    if length is not None and self.subject_length(operand['subject_ref']) != length:
+                        raise ContractError('native_execution_operand_length_mismatch')
+            if measured.execution_class.phase == 'pairwise_sequence_alignment':
+                if set(roles) != {'query', 'reference'} or data['operation'] != 'align_pair':
+                    raise ContractError('native_alignment_requires_query_and_reference_operands')
+            if measured.execution_class.phase == 'spreadsheet_selection':
+                if set(roles) != {'input_source'} or data['operation'] not in {'xlsx_sheets', 'xlsx_rows'}:
+                    raise ContractError('native_spreadsheet_requires_source_operand')
+                if measured.execution_class.query_residues is not None or measured.execution_class.reference_residues is not None:
+                    raise ContractError('spreadsheet_workload_has_no_sequence_residues')
+            if measured.execution_class.phase == 'protein_homology_search':
+                if set(roles) != {'query'} or data['operation'] != 'phmmer_search':
+                    raise ContractError('native_homology_requires_query_operand')
+                if self.subject_unit(data['operands'][0]['subject_ref']) != 'aa':
+                    raise ContractError('native_homology_requires_protein_query')
+        if kind == "source":
+            for ref in data.get("operand_refs", []):
+                self._require(ref, {"input", "reference", "read_subject", "feature", "product"})
+                self.subject_length(ref)
+            if "query_selection_ref" in data:
+                self._require(data["query_selection_ref"], {"read_selection"})
+            for ref in data.get("parent_source_refs", []):
+                self._require(ref, {"source"})
+            for key in ("artifact_ref", "text_ref", "request_ref"):
+                if data[key] is not None:
+                    self._require(data[key], {"artifact"})
+            for ref in data.get("auxiliary_artifact_refs", []):
+                self._require(ref, {"artifact"})
+            for key in ("stdout_ref", "stderr_ref"):
+                if key in data:
+                    self._require(data[key], {"artifact"})
+        if kind == "image_view":
+            from PIL import Image
+            source = self._require(data["source_ref"], {"source"})
+            original = self._require(data["input_source_ref"], {"source"})
+            if source["origin"] != "tool" or source["provider"] != "image.view":
+                raise ContractError("native_image_view_source_required")
+            if source["artifact_ref"] != data["image_artifact_ref"]:
+                raise ContractError("image_view_display_source_mismatch")
+            if source.get("parent_source_refs") != [data["input_source_ref"]]:
+                raise ContractError("image_view_parent_source_mismatch")
+            if original["artifact_ref"] != data["original_artifact_ref"]:
+                raise ContractError("image_view_original_source_mismatch")
+            if data["frame"] >= data["frame_count"]:
+                raise ContractError("image_frame_outside_source")
+            if source["request_ref"] is None:
+                raise ContractError("image_view_native_metadata_required")
+            native = json.loads(self.get_artifact(source["request_ref"]))
+            if canonical(native) != canonical({key: value for key, value in data.items() if key != "source_ref"}):
+                raise ContractError("image_view_native_metadata_mismatch")
+            if source["version"] != data["software_version"]:
+                raise ContractError("image_view_software_version_mismatch")
+            # MIME registration is first-writer metadata; identical original
+            # and rendered PNG bytes can legitimately retain an opaque MIME.
+            with Image.open(materials.artifact_path(self, data["image_artifact_ref"])) as image:
+                if image.format != "PNG" or image.size != (data["width"], data["height"]):
+                    raise ContractError("image_view_display_dimensions_mismatch")
+        if kind in {"term", "reference", "context", "observation", "material", "material_link", "parse_attempt", "collection", "reaction_record", "chemical_record"}:
+            self._require(data["source_ref"], {"source"})
+        if kind in {"reaction_record", "chemical_record"}:
+            source = self._require(data["source_ref"], {"source"})
+            provider = "rhea" if kind == "reaction_record" else "chebi"
+            if origin != "external" or source["provider"] != provider:
+                raise ContractError("native_chemistry_requires_matching_public_source")
+            if kind == "reaction_record":
+                for item in data["participants"]:
+                    chemical = self._require(item["chemical_ref"], {"reference"})
+                    if chemical["reference_type"] != "chemical" or chemical["source_ref"] != data["source_ref"]:
+                        raise ContractError("reaction_participant_source_mismatch")
+        if kind == "reference" and data.get("native_record_ref") is not None:
+            details = self._require(data["native_record_ref"], {"reaction_record", "chemical_record"})
+            expected = "reaction" if details["record_type"] == "reaction_record" else "chemical"
+            if (data["reference_type"] != expected or origin != "external"
+                    or details["source_ref"] != data["source_ref"] or details["accession"] != data["accession"]):
+                raise ContractError("native_chemistry_reference_mismatch")
+        if kind in custody:
+            self._require(data["source_ref"], {"source"})
+        if kind == "pmc_catalog":
+            self._require(data["version_ref"], {"pmc_version"})
+            if data["metadata_source_ref"] is not None:
+                self._require(data["metadata_source_ref"], {"source"})
+        if kind == "pmc_object":
+            selected = self._require(data["version_ref"], {"pmc_version"})
+            if not data["object_key"].startswith(selected["prefix"]):
+                raise ContractError("listed_object_version_identity_mismatch")
+        if kind == "pmc_asset":
+            catalog = self._require(data["catalog_ref"], {"pmc_catalog"})
+            selected = self._require(data["version_ref"], {"pmc_version"})
+            if catalog["version_ref"] != selected["id"] or catalog["metadata_source_ref"] != data["source_ref"]:
+                raise ContractError("asset_catalog_identity_mismatch")
+            from .literature_assets import advertised_asset
+            actual = advertised_asset(data["original_uri"], prefix=selected["prefix"])
+            if any(data[key] != value for key, value in actual.items()):
+                raise ContractError("asset_advertisement_identity_mismatch")
+        if kind == "source_derivative":
+            self._require(data["parent_source_ref"], {"source"})
+            if data["selection_ref"] is not None:
+                member = self._require(data["selection_ref"], {"archive_member"})
+                if member["source_ref"] != data["parent_source_ref"]:
+                    raise ContractError("archive_derivative_parent_mismatch")
+        if kind == "material":
+            for field in ("sample_ref", "library_ref"):
+                if data[field] is not None:
+                    self._require(data[field], {"context"})
+        if kind in {"collection", "parse_attempt"}:
+            self._require(data["material_ref"], {"material"})
+        if kind == "parse_attempt" and data["collection_ref"] is not None:
+            self._require(data["collection_ref"], {"collection"})
+        if kind == "parse_attempt" and data.get("native_source_ref") is not None:
+            native = self._require(data["native_source_ref"], {"source"})
+            if (native["origin"] != "tool" or native["provider"] != "material.genbank"
+                    or native["version"] != data["parser_version"]
+                    or native.get("parent_source_refs") != [data["source_ref"]]
+                    or native["request_ref"] is None):
+                raise ContractError("native_genbank_source_identity_mismatch")
+            request = json.loads(self.get_artifact(native["request_ref"]))
+            if any(request.get(key) != data[key] for key in ("material_ref", "parse_key", "parser_version")) or request.get("input_source_ref") != data["source_ref"]:
+                raise ContractError("native_genbank_source_identity_mismatch")
+        if kind == "read_selection":
+            if origin != "tool" or not libraries.is_library(self.get_input(data["library_ref"])):
+                raise ContractError("read_selection_requires_fixed_library_tool_origin")
+        if kind == "material_link":
+            self._require(data["left_ref"], {"material"})
+            self._require(data["right_ref"], {"material"})
+        if kind == "reference" and data.get("member_ref") is not None:
+            member = self._require(data["member_ref"], {"collection_member"})
+            if (any(data[field] != member[field] for field in ("source_ref", "molecule", "length"))
+                    or data["sequence_ref"] != materials.packing.content_ref(self, member, "sequence")):
+                raise ContractError("member_reference_identity_mismatch")
+            expected_label = {"label": member["name"][:512], "label_is_preview": len(member["name"]) > 512,
+                "label_full_characters": len(member["name"]), "label_full_utf8_bytes": len(member["name"].encode("utf-8"))}
+            if any(data.get(key) != value for key, value in expected_label.items()):
+                raise ContractError("member_reference_label_metadata_mismatch")
+        if kind == "context":
+            if origin == "extracted":
+                self._anchor(data.get("anchor"), data["source_ref"])
+                if data["name"] not in data["anchor"]["quote"]:
+                    raise ContractError("context_name_not_in_source_span", detail={"field_path": ["name"]})
+            elif data.get("anchor") is not None:
+                self._anchor(data["anchor"], data["source_ref"])
+        if kind == "term":
+            if origin == "extracted":
+                self._anchor(data["anchor"], data["source_ref"])
+                expected_accession = identity("source_term", {"source_ref": data["source_ref"], "label": data["label"], "anchor": data["anchor"]})
+                if data["namespace"] != "source_local" or data["accession"] != expected_accession:
+                    raise ContractError("extracted_term_identity_mismatch")
+                if data["label"] not in data["anchor"]["quote"]:
+                    raise ContractError("term_label_not_in_source_span")
+            elif data["anchor"] is not None:
+                self._anchor(data["anchor"], data["source_ref"])
+        if kind == "reference" and origin == "extracted":
+            self._anchor(data.get("anchor"), data["source_ref"])
+            expected_accession = identity("source_entity", {"source_ref": data["source_ref"], "label": data["label"], "anchor": data["anchor"]})
+            if data["accession"] != expected_accession or data["sequence_ref"] is not None or data["length"] is not None:
+                raise ContractError("extracted_subject_identity_mismatch")
+            if data["label"] not in data["anchor"]["quote"]:
+                raise ContractError("subject_label_not_in_source_span")
+        if kind == "reference" and data["sequence_ref"] is not None:
+            if data.get("member_ref") is not None:
+                # The native index already established ASCII sequence symbols.
+                # A selected member window must not hydrate a whole chromosome.
+                length = self._require(data["sequence_ref"], {"artifact"})["size"]
+            else:
+                # A native result can identify a large reference. Verification
+                # must not hydrate that entire artifact in the workflow host.
+                path = materials.artifact_path(self, data["sequence_ref"])
+                length = 0
+                with path.open("rb") as stream:
+                    for chunk in iter(lambda: stream.read(1024*1024), b""):
+                        length += len(chunk.decode("ascii"))
+            if data["length"] != length:
+>               raise ContractError("reference_sequence_length_mismatch")
+E               gene_annotation_episode.domain.ContractError: reference_sequence_length_mismatch
+
+gene_annotation_episode/state.py:924: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_api_execution_preparation.py::test_shared_preparation_matches_fresh_assignment_order_and_ordinary_search[False]
+FAILED tests/test_api_execution_preparation.py::test_shared_preparation_matches_fresh_assignment_order_and_ordinary_search[True]
+2 failed, 7 passed in 5.54s

@@ -342,6 +342,10 @@ class ScalarScoreYieldEstimator:
         # Timing/snapshot history is paired with these SAME completed actions.
         # No previous prediction or another child's yield history is supplied.
         result = self.estimate_with_context(tuple(history), self.parameters, tuple(contexts))
+        if result is None and getattr(self.estimate_with_context, 'uses_template_when_unbound', False):
+            # An opt-in binding can leave historical actions without its
+            # operands exactly on the original estimator and provenance.
+            return estimate_score_yield(history, self.parameters)
         if not isinstance(result, YieldEstimate) or result.turns != len(history):
             raise TypeError("contextual_estimator_must_return_same_action_history_estimate")
         if result.estimator_binding is None:

@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="25" skipped="0" tests="25" time="80.531" timestamp="2026-10-25T23:34:47.002102-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_reference_resolution" name="test_resolver_preserves_full_registry_namespaces_and_scope" time="3.363"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'">tests/test_reference_resolution.py:52: in test_resolver_preserves_full_registry_namespaces_and_scope
+    assert resolve(ref, namespace) == allowed, (ref, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:2534: in resolve
+    if (self.native_event_information is not None and context is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'</failure></testcase><testcase classname="tests.test_reference_resolution" name="test_member_custody_header_activation_and_actual_form" time="4.279"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'">tests/test_reference_resolution.py:75: in test_member_custody_header_activation_and_actual_form
+    assert not resolve(member) and not resolve(header)
+               ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:2534: in resolve
+    if (self.native_event_information is not None and context is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'</failure></testcase><testcase classname="tests.test_reference_resolution" name="test_resolver_does_not_hydrate_unrelated_record_rows" time="28.229"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'">tests/test_reference_resolution.py:104: in test_resolver_does_not_hydrate_unrelated_record_rows
+    assert resolve(selected["id"], "hypothesis")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:2534: in resolve
+    if (self.native_event_information is not None and context is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'</failure></testcase><testcase classname="tests.test_reference_resolution" name="test_subject_namespace_keeps_actual_mapped_features_and_products" time="4.816"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'">tests/test_reference_resolution.py:130: in test_subject_namespace_keeps_actual_mapped_features_and_products
+    assert resolve(ref, "subject") == (ref in original["subject"]) == (target == left)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:2534: in resolve
+    if (self.native_event_information is not None and context is not None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'native_event_information'</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#/$defs/shared]" time="2.386"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:76: in test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#shared]" time="1.970"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:76: in test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments0]" time="1.205"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:109: in test_composed_transport_preserves_omission_and_explicit_nullable_values
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments1]" time="3.220"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:109: in test_composed_transport_preserves_omission_and_explicit_nullable_values
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_composed_transport_preserves_omission_and_explicit_nullable_values[arguments2]" time="1.548"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:109: in test_composed_transport_preserves_omission_and_explicit_nullable_values
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_restriction_can_require_an_optional_actual_field_without_null_substitution" time="2.018"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:125: in test_restriction_can_require_an_optional_actual_field_without_null_substitution
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_conditional_presence_and_max_properties_are_host_constraints[arguments0-True]" time="1.618"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_conditional_presence_and_max_properties_are_host_constraints[arguments1-False]" time="1.346"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_conditional_presence_and_max_properties_are_host_constraints[arguments2-False]" time="1.722"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_conditional_presence_and_max_properties_are_host_constraints[arguments3-True]" time="1.889"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:147: in test_conditional_presence_and_max_properties_are_host_constraints
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_schema_shaped_literals_remain_data_in_composition_and_json_transport[False]" time="1.597"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:167: in test_schema_shaped_literals_remain_data_in_composition_and_json_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_schema_shaped_literals_remain_data_in_composition_and_json_transport[True]" time="1.758"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:167: in test_schema_shaped_literals_remain_data_in_composition_and_json_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_boolean_property_schema_is_data_contract_not_an_action_discriminator" time="1.697"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:183: in test_boolean_property_schema_is_data_contract_not_an_action_discriminator
+    case, workflow, _, child = configured_child(tmp_path, store, actual, None)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{]" time="1.724"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[[]]" time="1.124"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[null]" time="1.750"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{&quot;value&quot;:2,&quot;value&quot;:3}]" time="2.147"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{&quot;value&quot;:NaN}]" time="1.592"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_invalid_json_argument_transport_returns_action_feedback_before_dispatch[{&quot;value&quot;:1e10000}]" time="1.496"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:198: in test_invalid_json_argument_transport_returns_action_feedback_before_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_recorded_response_reuses_its_original_host_contract_without_provider_dispatch" time="1.269"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">tests/test_scientific_process_schema_transport.py:216: in test_recorded_response_reuses_its_original_host_contract_without_provider_dispatch
+    case, workflow, _, child = configured_child(tmp_path, store, actual,
+tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_scientific_assignment_json_transport_preserves_arbitrary_finite_context" time="3.419"><failure message="AssertionError: assert False&#10; +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Resolve the scoped fixture alternatives using changing outcomes', 'scope': {'subject_refs': ['input_0cf8c100d09446c95154fa4b']}, ...}, 'report_update': {}})&#10; +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...chema_json'], 'type': 'object'}]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid&#10; +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...chema_json'], 'type': 'object'}]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})">tests/test_scientific_process_schema_transport.py:263: in test_scientific_assignment_json_transport_preserves_arbitrary_finite_context
+    assert Draft202012Validator(host).is_valid(decoded)
+E   AssertionError: assert False
+E    +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Resolve the scoped fixture alternatives using changing outcomes', 'scope': {'subject_refs': ['input_0cf8c100d09446c95154fa4b']}, ...}, 'report_update': {}})
+E    +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...chema_json'], 'type': 'object'}]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E    +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...chema_json'], 'type': 'object'}]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})</failure></testcase></testsuite></testsuites>

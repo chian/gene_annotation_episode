@@ -1,0 +1,604 @@
+{
+  "facts_0": [
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fread_count",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [],
+            "kind": "measurement",
+            "payload": {
+              "association_ref": null,
+              "axis": {
+                "kind": "none",
+                "label_ref": null,
+                "lower": null,
+                "upper": null
+              },
+              "document_id": "reads",
+              "meaning": "observed_count",
+              "measurement_ref": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+              "native_token_ref": null,
+              "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+              "precision": "exact_for_retained_population",
+              "quantity": "fastq_read_count",
+              "state": "available",
+              "unit": "reads",
+              "value": 2
+            },
+            "record_ref": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+            "requirement_refs": [],
+            "source_refs": [
+              "source_174d1d7904299a3dbed1ddf7"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "available_value",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "measurement",
+            "selector": {
+              "axis": {
+                "axis": {
+                  "kind": "none",
+                  "label": null,
+                  "lower": null,
+                  "upper": null
+                },
+                "kind": "exact"
+              },
+              "document_id": "reads",
+              "metric": "fastq_read_count",
+              "record_ref": null,
+              "rows": {
+                "kind": "all",
+                "ordinal": null
+              },
+              "section_key": "fastq_summary",
+              "section_ordinal": 0,
+              "selection": "semantic"
+            }
+          }
+        },
+        "state": "satisfied"
+      }
+    }
+  ],
+  "facts_1": [
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fgc",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [],
+            "kind": "component",
+            "payload": {
+              "calculation_id": "composition_reads",
+              "component_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F27a0cafb67817ace421592a4d07629ca87eec923def5639d2fd9a65ece9b177b%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+              "denominator": 9,
+              "encoding_basis": null,
+              "lineage_basis": null,
+              "meaning": "derived_descriptive",
+              "method": "composition_v1",
+              "numerator": 5,
+              "operand_measurement_refs": [
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8"
+              ],
+              "parameter_sha256": "553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa",
+              "population_refs": [
+                "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+                "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+              ],
+              "quantity": "gc_acgt_fraction",
+              "state": "available",
+              "threshold": null,
+              "uncertainty": "not_estimated",
+              "unit": "fraction",
+              "value": 0.5555555555555556
+            },
+            "record_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F27a0cafb67817ace421592a4d07629ca87eec923def5639d2fd9a65ece9b177b%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+            "requirement_refs": [],
+            "source_refs": [
+              "source_174d1d7904299a3dbed1ddf7"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "available_value",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "component",
+            "selector": {
+              "calculation_id": "composition_reads",
+              "metric": "gc_acgt_fraction",
+              "record_ref": null,
+              "selection": "semantic",
+              "threshold": null
+            }
+          }
+        },
+        "state": "satisfied"
+      }
+    },
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Ferrors",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [
+              "explicit_encoding_assumption"
+            ],
+            "kind": "component",
+            "payload": {
+              "calculation_id": "quality_reads",
+              "component_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F27a0cafb67817ace421592a4d07629ca87eec923def5639d2fd9a65ece9b177b%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+              "denominator": null,
+              "encoding_basis": {
+                "basis": "explicit_source_bound_declaration",
+                "declaration": {
+                  "basis": "explicit_assumption",
+                  "document_id": "reads",
+                  "encoding": "phred33",
+                  "version": "fastqutils_encoding_declaration_v1"
+                },
+                "encoding": "phred33",
+                "evidence": {
+                  "content": {
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "artifact_791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+                    "byte_count": 334,
+                    "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+                    "source_ref": "source_c48a23530ba754fc5582c23c"
+                  },
+                  "pointer": "/declarations/0"
+                },
+                "metadata_id": "encoding_reads",
+                "native_locator": null
+              },
+              "lineage_basis": null,
+              "meaning": "phred_model_prediction",
+              "method": "quality_phred_v1",
+              "numerator": 0.001,
+              "operand_measurement_refs": [
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+              ],
+              "parameter_sha256": "553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa",
+              "population_refs": [
+                "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+              ],
+              "quantity": "phred_implied_expected_errors",
+              "state": "available",
+              "threshold": null,
+              "uncertainty": "phred_model_only",
+              "unit": "expected_errors",
+              "value": 0.001
+            },
+            "record_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F27a0cafb67817ace421592a4d07629ca87eec923def5639d2fd9a65ece9b177b%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+            "requirement_refs": [
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding"
+            ],
+            "source_refs": [
+              "source_174d1d7904299a3dbed1ddf7",
+              "source_c48a23530ba754fc5582c23c"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding"
+        ],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "available_value",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "component",
+            "selector": {
+              "calculation_id": "quality_reads",
+              "metric": "phred_implied_expected_errors",
+              "record_ref": null,
+              "selection": "semantic",
+              "threshold": null
+            }
+          }
+        },
+        "state": "satisfied"
+      }
+    },
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fretained",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [
+              "native_report_local_lineage"
+            ],
+            "kind": "component",
+            "payload": {
+              "calculation_id": "retention_hostile",
+              "component_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F27a0cafb67817ace421592a4d07629ca87eec923def5639d2fd9a65ece9b177b%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+              "denominator": 8,
+              "encoding_basis": null,
+              "lineage_basis": {
+                "basis": "native_report",
+                "declaration": null,
+                "evidence": null,
+                "metadata_id": null,
+                "native_lineage_ref": "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+              },
+              "meaning": "native_report_derived",
+              "method": "retention_v1",
+              "numerator": 6,
+              "operand_measurement_refs": [
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+                "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+              ],
+              "parameter_sha256": "553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa",
+              "population_refs": [
+                "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+                "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+              ],
+              "quantity": "native_report_retention_fraction",
+              "state": "available",
+              "threshold": null,
+              "uncertainty": "native_reporting_precision",
+              "unit": "fraction",
+              "value": 0.75
+            },
+            "record_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F27a0cafb67817ace421592a4d07629ca87eec923def5639d2fd9a65ece9b177b%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+            "requirement_refs": [],
+            "source_refs": [
+              "source_83eaf91357ea961f80bce0f8"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "available_value",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "component",
+            "selector": {
+              "calculation_id": "retention_hostile",
+              "metric": "native_report_retention_fraction",
+              "record_ref": null,
+              "selection": "semantic",
+              "threshold": null
+            }
+          }
+        },
+        "state": "satisfied"
+      }
+    }
+  ],
+  "facts_2": [
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fqc",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [],
+            "kind": "category",
+            "payload": {
+              "association_ref": null,
+              "category_ref": "bvbrc_fastqutils_category:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcategories%2F0",
+              "native_label_ref": "bvbrc_fastqutils_label:testC198/%2Frecords%2Fbvbrc_fastqutils_category%3AtestC198~1%252Fdocuments%252Fqc%252Fsha256%252Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%252Fcategories%252F0%2Fnative_label",
+              "value": "pass"
+            },
+            "record_ref": "bvbrc_fastqutils_category:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fcategories%2F0",
+            "requirement_refs": [],
+            "source_refs": [
+              "source_c1234c3268f851f58e3bb980"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "available_value",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "category",
+            "selector": {
+              "document_id": "qc",
+              "record_ref": null,
+              "section_key": "fastqc_basic_statistics",
+              "section_ordinal": 0,
+              "selection": "semantic"
+            }
+          }
+        },
+        "state": "satisfied"
+      }
+    }
+  ],
+  "facts_3": [
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fpopulation",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [],
+            "kind": "population",
+            "payload": {
+              "association_ref": null,
+              "encoding_basis": {
+                "basis": "explicit_source_bound_declaration",
+                "declaration": {
+                  "basis": "explicit_assumption",
+                  "document_id": "reads",
+                  "encoding": "phred33",
+                  "version": "fastqutils_encoding_declaration_v1"
+                },
+                "encoding": "phred33",
+                "evidence": {
+                  "content": {
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "artifact_791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+                    "byte_count": 334,
+                    "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+                    "source_ref": "source_c48a23530ba754fc5582c23c"
+                  },
+                  "pointer": "/declarations/0"
+                },
+                "metadata_id": "encoding_reads",
+                "native_locator": null
+              },
+              "kind": "fastq_reads",
+              "member_artifact_refs": [
+                "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+              ],
+              "parent_population_refs": [],
+              "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+              "quality_encoding": "phred33",
+              "representation": "emitted_bytes",
+              "scope": "complete"
+            },
+            "record_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "requirement_refs": [],
+            "source_refs": [
+              "source_174d1d7904299a3dbed1ddf7",
+              "source_c48a23530ba754fc5582c23c"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "available_value",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "population",
+            "selector": {
+              "document_id": "reads",
+              "population_key": "fastq_reads",
+              "population_ordinal": 0,
+              "record_ref": null,
+              "selection": "semantic"
+            }
+          }
+        },
+        "state": "satisfied"
+      }
+    }
+  ],
+  "facts_4": [
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fassociation",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [
+              "association_unresolved"
+            ],
+            "kind": "association",
+            "payload": {
+              "artifact_refs": [
+                "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+              ],
+              "association_ref": "bvbrc_fastqutils_association:testC198/%2Fmetadata%2Fassert_hostile",
+              "basis": "explicit_assertion",
+              "branch": "clean",
+              "library_ref": "bvbrc_fastqutils_library:testC198/%2Ftasks%2Fsource_b9e522558d2409b50fddbe80%2Finputs%2Fpaired_end_libs%2F0",
+              "mate": "combined",
+              "stage_ref": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_b9e522558d2409b50fddbe80%2Frecipe%2F4",
+              "state": "unresolved"
+            },
+            "record_ref": "bvbrc_fastqutils_association:testC198/%2Fmetadata%2Fassert_hostile",
+            "requirement_refs": [],
+            "source_refs": [
+              "source_83eaf91357ea961f80bce0f8",
+              "source_c48a23530ba754fc5582c23c"
+            ],
+            "state": "missing"
+          }
+        ],
+        "requirement_refs": [],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "typed_state",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "association",
+            "selector": {
+              "branch": "clean",
+              "document_id": "hostile",
+              "input_pointer": "/paired_end_libs/0",
+              "mate": "combined",
+              "recipe_ordinal": 4,
+              "record_ref": null,
+              "selection": "semantic"
+            }
+          }
+        },
+        "state": "satisfied"
+      }
+    }
+  ],
+  "facts_5": [
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Frequirements",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [],
+            "kind": "requirements",
+            "payload": {
+              "requirements": [
+                {
+                  "affected_refs": [
+                    "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+                  ],
+                  "code": "stage_execution_unknown",
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+                  "required_data": "native_execution_evidence",
+                  "source_refs": [
+                    "source_83eaf91357ea961f80bce0f8"
+                  ],
+                  "state": "unresolved"
+                },
+                {
+                  "affected_refs": [
+                    "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+                  ],
+                  "code": "unknown_quality_encoding",
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+                  "required_data": "quality_encoding",
+                  "source_refs": [
+                    "source_174d1d7904299a3dbed1ddf7"
+                  ],
+                  "state": "unavailable"
+                },
+                {
+                  "affected_refs": [
+                    "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+                  ],
+                  "code": "producer_version_unproven",
+                  "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fproducer_version_unproven",
+                  "required_data": "native_version",
+                  "source_refs": [
+                    "source_174d1d7904299a3dbed1ddf7"
+                  ],
+                  "state": "unavailable"
+                }
+              ]
+            },
+            "record_ref": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Frequirements",
+            "requirement_refs": [
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+              "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fproducer_version_unproven"
+            ],
+            "source_refs": [
+              "source_83eaf91357ea961f80bce0f8",
+              "source_174d1d7904299a3dbed1ddf7"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0%2Funknown_quality_encoding",
+          "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fproducer_version_unproven"
+        ],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "typed_state",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "kind": "requirements"
+          }
+        },
+        "state": "satisfied"
+      }
+    }
+  ],
+  "facts_6": [
+    {
+      "field": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fstatus",
+      "source_ref": "source_447fa954619c6746ffb5e6e8",
+      "value": {
+        "diagnostic_codes": [],
+        "matched_count": 1,
+        "records": [
+          {
+            "diagnostic_codes": [],
+            "kind": "request_status",
+            "payload": {
+              "field": "read_count",
+              "matched_count": 1,
+              "requirement_refs": [],
+              "satisfied": true,
+              "state": "satisfied"
+            },
+            "record_ref": "bvbrc_fastqutils_field:testC198/%2Ffacts%2Fstatus",
+            "requirement_refs": [],
+            "source_refs": [
+              "source_174d1d7904299a3dbed1ddf7"
+            ],
+            "state": "available"
+          }
+        ],
+        "requirement_refs": [],
+        "satisfied": true,
+        "selection": {
+          "availability_requirement": "typed_state",
+          "cardinality": "one_target",
+          "expected_cardinality": 1,
+          "target": {
+            "field": "read_count",
+            "kind": "request_status"
+          }
+        },
+        "state": "satisfied"
+      }
+    }
+  ]
+}

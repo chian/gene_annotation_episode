@@ -1,0 +1,38 @@
+{
+  "kind": "additive_initial_test_run_record",
+  "source_versions": "Initial test sources were not separately snapshotted; these exact failures and counts were returned by pytest during this task. Later receipts pin final source hashes.",
+  "runs": [
+    {
+      "command": ".venv/bin/python -m pytest tests/test_bvbrc_metacats_biological_calculators.py -q",
+      "result": "1 failed, 78 passed in 2.13s",
+      "failure": "test_metadata_only_groups_are_retained_without_r_order",
+      "actual_group_order": [
+        "B",
+        "C",
+        "A"
+      ],
+      "incorrect_expected_group_order": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correction": "Preserve the actual supplied first-occurrence group order in the test; no production change or retained artifact change."
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/test_bvbrc_metacats_biological_calculators.py tests/test_bvbrc_metacats_expected_adequacy.py tests/test_bvbrc_metacats_count_identity_v2.py -q",
+      "result": "1 failed, 117 passed in 22.97s",
+      "failure": "test_confirmed_native_count_collision_now_has_two_distinct_future_ids",
+      "exception": "KeyError: 'input_alignment'",
+      "correction": "Use the existing retained receipt's actual 'alignment' key; no production change or retained artifact change."
+    }
+  ],
+  "later_results": [
+    "154 passed in 5.61s",
+    "157 passed in 5.57s",
+    "159 passed in 5.70s"
+  ],
+  "broad_pinned_results": [
+    "TEST_RESULTS_001.json",
+    "TEST_RESULTS_002.json"
+  ]
+}

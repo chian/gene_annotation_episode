@@ -1,0 +1,394 @@
+.....FF                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[nested] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_worksheet_integration_271/attempt_001/pytest/test_selected_worksheet_links_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c034b2dccb0>
+mode = 'nested'
+
+    @pytest.mark.parametrize('mode', ['direct', 'nested', 'repair'])
+    def test_selected_worksheet_links_forwarding_and_first_cold_reconstruction(tmp_path, monkeypatch, mode):
+        """An ordinary interpretation action supplies constrained scientific links.
+    
+        It is part of the same iterative episode, not an extra report-composer call.
+        Two selected population actions remain two actions; formatting adds none.
+        """
+        nested, repair = mode == 'nested', mode == 'repair'
+        store, original_context, arguments, _, _ = setup(tmp_path/'state', PRECISION, actual_source=True)
+        for name in ('molecule', 'construct'):
+            witness = arguments['selection']['kinetic_selection']['numerator']['subject'][name]
+            arguments['return_context'][name] = [{'start': witness['start'], 'end': witness['end']}]
+        native_arguments = deepcopy(arguments['selection']['kinetic_selection'])
+        source_refs = list(original_context.received_record_refs)
+        child_template = _template(PRECISION)
+        outer_template = _template(FORWARDED if nested else PRECISION)
+        full_assignment = {**plain(original_context.assignment), **child_template['assignment_rosters']}
+        outer_assignment = {**plain(original_context.assignment), **outer_template['assignment_rosters']}
+        empty = {'version': VERSION, 'assertion_refs': [], 'quantity_links': [], 'assertion_links': []}
+        captured, prompts, selected_outcomes = [], [], []
+        native_ref = None
+    
+        def commission(role, assignment, template):
+            return {'selection': {'kind': 'episode_child', 'role': role, 'assignment': assignment,
+                'goal': 'Evaluate the selected source kinetic parameter and the precision of that same report.',
+                'scope': plain(original_context.scope),
+                'purpose': 'Return the requested numerical sections and their constrained shared-report relationships.',
+                'schema_json': json.dumps(template['submitted_form']),
+                'initial_report_json': json.dumps({'assessment_context': empty})}, 'report_update': {}}
+    
+        def native_work(view):
+            prompts.append(_prompt(view))
+            return {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate',
+                'arguments': native_arguments}, 'report_update': {'assessment_context': empty}}
+    
+        def precision_work(view):
+            nonlocal native_ref
+            outcome = view['last_local_outcome']
+            selected_outcomes.append(deepcopy(outcome))
+            native_ref = outcome['result']['sheet_ref']
+            prompts.append(_prompt(view))
+            return {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate',
+                'arguments': arguments}, 'report_update': {'assessment_context': empty}}
+    
+        def reasoning(view, context):
+            # This actual scientific action records the studied construct. It is
+            # selected in an ordinary iteration while interpreting the two views.
+            commit = {key: [] for key in store.reasoning_schema()['required']}
+            witness = native_arguments['numerator']['subject']['construct']
+            artifact = store.get(witness['source_ref'])['text_ref']
+            commit['source_subjects'] = [{'alias': 'studied_construct271', 'reference_type': 'assay',
+                'source_ref': witness['source_ref'], 'label': witness['quote'],
+                'anchor': {'source_ref': witness['source_ref'], 'artifact_ref': artifact,
+                    'start': witness['start'], 'end': witness['end'], 'quote': witness['quote']}}]
+            requested = view.get('requested_form')
+            update = ({'assessment_context': context} if isinstance(requested, dict)
+                and 'assessment_context' in requested.get('properties', {}) else {})
+            return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': update}
+    
+        def interpret_selected(view):
+            outcome = view['last_local_outcome']
+            selected_outcomes.append(deepcopy(outcome))
+            prompts.append(_prompt(view))
+            context = _context(native_ref, outcome['result']['sheet_ref'])
+            if repair:
+                context['quantity_links'][0]['relation'] = 'same_count_report'
+            return reasoning(view, context)
+    
+        def repair_delivery(view):
+            assert view['feedback']['reason'] == 'a105_worksheet_link_not_supported'
+            assert view['child_reports'] == []
+            schema = deepcopy(outer_template['submitted_form'])
+            del schema['properties']['assessment_context']
+            schema['required'].remove('assessment_context')
+            return {'selection': {'kind': 'redeliver_report',
+                'delivery_ref': view['feedback']['delivery_ref'],
+                'purpose': 'Return the valid original numerical facts without the unsupported saved relationship interpretation.',
+                'schema_json': json.dumps(schema)}, 'report_update': {}}
+    
+        def integrate(view):
+            form, = view['child_reports']
+            captured.append(deepcopy(form))
+            expected = FORWARDED if nested and len(captured) == 2 else PRECISION
+            assert [row['component'] for row in form['precision']] == expected
+            assert [row['component'] for row in form['native_parameter']] == ['numerator_parameter']
+            if repair:
+                assert 'assessment_context' not in form
+            else:
+                assert len(form['assessment_context']['quantity_links']) == (2 if expected == FORWARDED else 5)
+            assert form['native_parameter'][0]['value'] == .000186
+            values = {row['component']: row['cell'] for row in form['precision']}
+            assert values['source_reported_sd']['value'] == .000006
+            if 'source_statistical_estimator_count' in values:
+                assert values['source_statistical_estimator_count']['value'] is None
+                assert values['source_mean_standard_error']['value'] is None
+            assert values['scenario_mean_standard_error']['value'] == pytest.approx(4.242640687119285e-6)
+            text = _prompt(view)
+            steering = text.split('\n\nSTEERING\n', 1)[1]
+            assert steering.count('A105 experimental evidence worksheet') == (0 if repair else 1)
+            if not repair:
+                assert 'dependent views' in steering
+            assert VERSION not in steering
+            assert 'quantity_links[' not in steering
+            prompts.append(text)
+            return reasoning(view, _context(form['native_parameter'][0]['sheet_ref'],
+                form['precision'][0]['sheet_ref'], narrowed=nested))
+    
+        script = [commission('literature', outer_assignment, outer_template)]
+        if nested:
+            strategy_assignment = {'version': 'strategy_assignment_v1', 'question_context_refs': [],
+                'prior_search_refs': source_refs, **child_template['assignment_rosters']}
+            script.append(commission('literature_strategy', strategy_assignment, child_template))
+        script += [native_work, precision_work, interpret_selected]
+        if repair:
+            script.append(repair_delivery)
+        script.append(integrate)
+        if nested:
+            script.append(integrate)
+        provider = ScriptedProvider(script)
+        progress = ScientificFindingProgress(FindingProgressPolicy(1))
+        try:
+>           asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial,
+                    2 if len(path) == 1 or nested and len(path) == 2 else 3),
+                project_credit=progress, binding_definitions={'credit': progress.as_record()},
+                initial_known_record_refs=source_refs,
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
+                    reference_parent_sources=source_refs),)))
+
+tests/test_literature_a105_worksheet_integration_271.py:250: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4341: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4663: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+view = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...cenario_mean_variance', ...}, ...]}], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+
+    def integrate(view):
+        form, = view['child_reports']
+        captured.append(deepcopy(form))
+        expected = FORWARDED if nested and len(captured) == 2 else PRECISION
+        assert [row['component'] for row in form['precision']] == expected
+        assert [row['component'] for row in form['native_parameter']] == ['numerator_parameter']
+        if repair:
+            assert 'assessment_context' not in form
+        else:
+            assert len(form['assessment_context']['quantity_links']) == (2 if expected == FORWARDED else 5)
+        assert form['native_parameter'][0]['value'] == .000186
+        values = {row['component']: row['cell'] for row in form['precision']}
+        assert values['source_reported_sd']['value'] == .000006
+        if 'source_statistical_estimator_count' in values:
+            assert values['source_statistical_estimator_count']['value'] is None
+            assert values['source_mean_standard_error']['value'] is None
+        assert values['scenario_mean_standard_error']['value'] == pytest.approx(4.242640687119285e-6)
+        text = _prompt(view)
+        steering = text.split('\n\nSTEERING\n', 1)[1]
+>       assert steering.count('A105 experimental evidence worksheet') == (0 if repair else 1)
+E       AssertionError: assert 2 == 1
+E        +  where 2 = <built-in method count of str object at 0x30502730>('A105 experimental evidence worksheet')
+E        +    where <built-in method count of str object at 0x30502730> = '\nOwn action yields\n\nNone supplied.\n\nActionable feedback\n\n| Field | Supplied value |\n| --- | --- |\n| category... 2, returned set 1, scenario mean variance / cell value | conditional precision of this report under stated premises |'.count
+
+tests/test_literature_a105_worksheet_integration_271.py:227: AssertionError
+_ test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[repair] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/a105_worksheet_integration_271/attempt_001/pytest/test_selected_worksheet_links_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c034b2dd820>
+mode = 'repair'
+
+    @pytest.mark.parametrize('mode', ['direct', 'nested', 'repair'])
+    def test_selected_worksheet_links_forwarding_and_first_cold_reconstruction(tmp_path, monkeypatch, mode):
+        """An ordinary interpretation action supplies constrained scientific links.
+    
+        It is part of the same iterative episode, not an extra report-composer call.
+        Two selected population actions remain two actions; formatting adds none.
+        """
+        nested, repair = mode == 'nested', mode == 'repair'
+        store, original_context, arguments, _, _ = setup(tmp_path/'state', PRECISION, actual_source=True)
+        for name in ('molecule', 'construct'):
+            witness = arguments['selection']['kinetic_selection']['numerator']['subject'][name]
+            arguments['return_context'][name] = [{'start': witness['start'], 'end': witness['end']}]
+        native_arguments = deepcopy(arguments['selection']['kinetic_selection'])
+        source_refs = list(original_context.received_record_refs)
+        child_template = _template(PRECISION)
+        outer_template = _template(FORWARDED if nested else PRECISION)
+        full_assignment = {**plain(original_context.assignment), **child_template['assignment_rosters']}
+        outer_assignment = {**plain(original_context.assignment), **outer_template['assignment_rosters']}
+        empty = {'version': VERSION, 'assertion_refs': [], 'quantity_links': [], 'assertion_links': []}
+        captured, prompts, selected_outcomes = [], [], []
+        native_ref = None
+    
+        def commission(role, assignment, template):
+            return {'selection': {'kind': 'episode_child', 'role': role, 'assignment': assignment,
+                'goal': 'Evaluate the selected source kinetic parameter and the precision of that same report.',
+                'scope': plain(original_context.scope),
+                'purpose': 'Return the requested numerical sections and their constrained shared-report relationships.',
+                'schema_json': json.dumps(template['submitted_form']),
+                'initial_report_json': json.dumps({'assessment_context': empty})}, 'report_update': {}}
+    
+        def native_work(view):
+            prompts.append(_prompt(view))
+            return {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate',
+                'arguments': native_arguments}, 'report_update': {'assessment_context': empty}}
+    
+        def precision_work(view):
+            nonlocal native_ref
+            outcome = view['last_local_outcome']
+            selected_outcomes.append(deepcopy(outcome))
+            native_ref = outcome['result']['sheet_ref']
+            prompts.append(_prompt(view))
+            return {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate',
+                'arguments': arguments}, 'report_update': {'assessment_context': empty}}
+    
+        def reasoning(view, context):
+            # This actual scientific action records the studied construct. It is
+            # selected in an ordinary iteration while interpreting the two views.
+            commit = {key: [] for key in store.reasoning_schema()['required']}
+            witness = native_arguments['numerator']['subject']['construct']
+            artifact = store.get(witness['source_ref'])['text_ref']
+            commit['source_subjects'] = [{'alias': 'studied_construct271', 'reference_type': 'assay',
+                'source_ref': witness['source_ref'], 'label': witness['quote'],
+                'anchor': {'source_ref': witness['source_ref'], 'artifact_ref': artifact,
+                    'start': witness['start'], 'end': witness['end'], 'quote': witness['quote']}}]
+            requested = view.get('requested_form')
+            update = ({'assessment_context': context} if isinstance(requested, dict)
+                and 'assessment_context' in requested.get('properties', {}) else {})
+            return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': update}
+    
+        def interpret_selected(view):
+            outcome = view['last_local_outcome']
+            selected_outcomes.append(deepcopy(outcome))
+            prompts.append(_prompt(view))
+            context = _context(native_ref, outcome['result']['sheet_ref'])
+            if repair:
+                context['quantity_links'][0]['relation'] = 'same_count_report'
+            return reasoning(view, context)
+    
+        def repair_delivery(view):
+            assert view['feedback']['reason'] == 'a105_worksheet_link_not_supported'
+            assert view['child_reports'] == []
+            schema = deepcopy(outer_template['submitted_form'])
+            del schema['properties']['assessment_context']
+            schema['required'].remove('assessment_context')
+            return {'selection': {'kind': 'redeliver_report',
+                'delivery_ref': view['feedback']['delivery_ref'],
+                'purpose': 'Return the valid original numerical facts without the unsupported saved relationship interpretation.',
+                'schema_json': json.dumps(schema)}, 'report_update': {}}
+    
+        def integrate(view):
+            form, = view['child_reports']
+            captured.append(deepcopy(form))
+            expected = FORWARDED if nested and len(captured) == 2 else PRECISION
+            assert [row['component'] for row in form['precision']] == expected
+            assert [row['component'] for row in form['native_parameter']] == ['numerator_parameter']
+            if repair:
+                assert 'assessment_context' not in form
+            else:
+                assert len(form['assessment_context']['quantity_links']) == (2 if expected == FORWARDED else 5)
+            assert form['native_parameter'][0]['value'] == .000186
+            values = {row['component']: row['cell'] for row in form['precision']}
+            assert values['source_reported_sd']['value'] == .000006
+            if 'source_statistical_estimator_count' in values:
+                assert values['source_statistical_estimator_count']['value'] is None
+                assert values['source_mean_standard_error']['value'] is None
+            assert values['scenario_mean_standard_error']['value'] == pytest.approx(4.242640687119285e-6)
+            text = _prompt(view)
+            steering = text.split('\n\nSTEERING\n', 1)[1]
+            assert steering.count('A105 experimental evidence worksheet') == (0 if repair else 1)
+            if not repair:
+                assert 'dependent views' in steering
+            assert VERSION not in steering
+            assert 'quantity_links[' not in steering
+            prompts.append(text)
+            return reasoning(view, _context(form['native_parameter'][0]['sheet_ref'],
+                form['precision'][0]['sheet_ref'], narrowed=nested))
+    
+        script = [commission('literature', outer_assignment, outer_template)]
+        if nested:
+            strategy_assignment = {'version': 'strategy_assignment_v1', 'question_context_refs': [],
+                'prior_search_refs': source_refs, **child_template['assignment_rosters']}
+            script.append(commission('literature_strategy', strategy_assignment, child_template))
+        script += [native_work, precision_work, interpret_selected]
+        if repair:
+            script.append(repair_delivery)
+        script.append(integrate)
+        if nested:
+            script.append(integrate)
+        provider = ScriptedProvider(script)
+        progress = ScientificFindingProgress(FindingProgressPolicy(1))
+        try:
+>           asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial,
+                    2 if len(path) == 1 or nested and len(path) == 2 else 3),
+                project_credit=progress, binding_definitions={'credit': progress.as_record()},
+                initial_known_record_refs=source_refs,
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True,
+                    reference_parent_sources=source_refs),)))
+
+tests/test_literature_a105_worksheet_integration_271.py:250: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4341: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4663: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1087: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+view = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...observations |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+
+    def integrate(view):
+>       form, = view['child_reports']
+        ^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_literature_a105_worksheet_integration_271.py:209: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_literature_a105_worksheet_integration_271.py::test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[nested]
+FAILED tests/test_literature_a105_worksheet_integration_271.py::test_selected_worksheet_links_forwarding_and_first_cold_reconstruction[repair]
+2 failed, 5 passed in 96.56s (0:01:36)

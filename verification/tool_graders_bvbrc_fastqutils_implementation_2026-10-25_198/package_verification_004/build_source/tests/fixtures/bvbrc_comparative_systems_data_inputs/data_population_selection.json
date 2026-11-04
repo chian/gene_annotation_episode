@@ -1,0 +1,97 @@
+{
+  "example_id": "data_population_selection",
+  "schema_name": "DataPopulationSelectionV1",
+  "basis": "manually_assembled_proposed_contract_over_source_executed_synthetic",
+  "value": {
+    "version": "bvbrc_comparative_systems_data_selection_v1",
+    "record_sets": [
+      {
+        "record_set_id": "later_pathway_records",
+        "collection": "pathway",
+        "source_refs": [
+          "synthetic_data_pathway"
+        ],
+        "declared_genome_population": {
+          "population_id": "later_pathway_genomes",
+          "kind": "declared_query_genomes",
+          "member_kind": "genome_id",
+          "members": [
+            "1.1",
+            "2.1",
+            "3.1"
+          ],
+          "source_locations": [],
+          "raw_occurrence_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_genomes",
+            "method_id": "record_occurrences",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "distinct_valid_member_count": {
+            "state": "available",
+            "value": 3,
+            "unit": "genome",
+            "origin": "derived_retained_records",
+            "population_id": "later_pathway_genomes",
+            "method_id": "distinct_valid_members",
+            "input_refs": [],
+            "uncertainty": null,
+            "qualification_codes": []
+          },
+          "completeness": "complete_for_declared_population",
+          "missing_members": [],
+          "unresolved_members": [],
+          "relationship_to_original_task": "later_selected_snapshot",
+          "qualification_codes": []
+        },
+        "query_population_key": "b2828e19de6d541338f8a3b7147789a41e8925e72d1a2390d08fe4329a98ed3e",
+        "selected_fields": [
+          "id",
+          "annotation",
+          "ec_description",
+          "ec_number",
+          "feature_id",
+          "genome_id",
+          "pathway_class",
+          "pathway_id",
+          "pathway_name",
+          "patric_id",
+          "product"
+        ],
+        "sort": [
+          {
+            "field": "id",
+            "direction": "asc"
+          }
+        ],
+        "annotation_filter": "exact_PATRIC",
+        "relationship_to_original_task": "later_selected_snapshot",
+        "snapshot_evidence": {
+          "kind": "single_complete_response",
+          "snapshot_id": null,
+          "source_locations": [
+            {
+              "source_ref": "synthetic_data_pathway",
+              "raw_artifact_ref": "synthetic_data_pathway_bytes",
+              "document_id": null,
+              "json_pointer": "/response",
+              "table": null,
+              "row_ordinal": null,
+              "column_ordinal": null,
+              "native_field": null
+            }
+          ]
+        },
+        "release": null,
+        "roles": [
+          "pathway_records"
+        ]
+      }
+    ]
+  }
+}

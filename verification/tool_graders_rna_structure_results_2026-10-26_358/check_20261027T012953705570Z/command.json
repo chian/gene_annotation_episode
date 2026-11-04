@@ -1,0 +1,37 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "--tb=short",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_results_2026-10-26_358/check_20261027T012953705570Z/tmp/pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_acquisition.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_result_publication.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_result_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_recalculation.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_rna_structure_returns.py",
+    "-k",
+    "numeric_coordinate or invalid_topology or known_empty or region_exterior or failure_selection or invalid_or_duplicate"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "source_sha256": {
+    "gene_annotation_episode/native_rna_structure_acquisition.py": "252faf599f6cf4da063a1e0c33fdcfb3c4792873ee50b9e48776f3e036f317f2",
+    "gene_annotation_episode/native_rna_structure_result_worker.py": "4e329b2dcd5ec6bce1c08fd940ef79adf7fc96478b12d524e0129233e7dd5441",
+    "gene_annotation_episode/native_rna_structure_result_publication.py": "50483a387b4bc73e75a4056c94de72cc07a3dee382b317669ba48fa8793cd3d4",
+    "gene_annotation_episode/rna_structure_result_views.py": "3a69b5f65e91df2d42f2633779ef841abe88e9787e225d95b7e5cdb32eea69bf",
+    "gene_annotation_episode/native_rna_structure_results.py": "1d454ba50fef3607b61319c8cdac4e0ff793abb3e2298d443aa522329a76640a",
+    "gene_annotation_episode/native_rna_structure_returns.py": "fb36e0a8d7f699fc71354ce3af14a8f3bd41e14ec302f7dfbfa3cf524d3b5cef",
+    "tests/test_native_rna_structure_acquisition.py": "a9edbe70e497a5716dc2c0748e3c2dcfe6e126661e5c7d8aa7fa52955d9f37ea",
+    "tests/test_native_rna_structure_result_publication.py": "2ff39ccb639401b749911e9cb4ed6ba736dced09db0c4fda9fd6b486221d625c",
+    "tests/test_native_rna_structure_result_views.py": "27d44ae4d20fee71e23219e12930bd949162fa653b7afdb9ff903b2acbc1bf0a",
+    "tests/test_native_rna_structure_recalculation.py": "acabea868ea95ef666df68683241f7171ecd52bd7c4dd80f39c18ecc07c40ffc",
+    "tests/test_native_rna_structure_returns.py": "bcc578f68f5c8c6c656d35449dd92f4d31bcd9ff2cc654197ea327a057557a5a"
+  }
+}

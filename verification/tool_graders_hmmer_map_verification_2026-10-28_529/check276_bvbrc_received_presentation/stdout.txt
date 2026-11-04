@@ -1,0 +1,13 @@
+....F....                                                                [100%]
+=================================== FAILURES ===================================
+_ test_local_file_source_probe_preserves_registered_capture_authority[foreign_scope] _
+source_snapshot/tests/test_execution_local_file_sources.py:687: in test_local_file_source_probe_preserves_registered_capture_authority
+    case.saved.scope = {'subject_refs': store.create_problem(
+source_snapshot/gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+source_snapshot/gene_annotation_episode/materials.py:574: in create_problem
+    raise ContractError("problem_already_exists")
+E   gene_annotation_episode.domain.ContractError: problem_already_exists
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_execution_local_file_sources.py::test_local_file_source_probe_preserves_registered_capture_authority[foreign_scope]
+1 failed, 8 passed in 78.82s (0:01:18)

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="3.764" timestamp="2026-10-25T18:22:51.192106-05:00" hostname="chia-Z590-UD"><testcase classname="verification.tool_graders_fastqutils_cutadapt_host_2026-10-25_209.test_native_cutadapt_host" name="test_retained_trimgalore_cutadapt_bytes_actual_host_two_returns_and_saved_replay" time="2.364"><failure message="assert &lt;generator ob...x72e7a12e3b90&gt; == []&#10;  &#10;  Full diff:&#10;  - []&#10;  + &lt;generator object EpisodeReceipts.known.&lt;locals&gt;.&lt;genexpr&gt; at 0x72e7a12e3b90&gt;">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_cutadapt_host_2026-10-25_209/host_run_001/tmp/test_retained_trimgalore_cutad0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x72e7a211f200&gt;
+
+    def test_retained_trimgalore_cutadapt_bytes_actual_host_two_returns_and_saved_replay(tmp_path, monkeypatch):
+        def no_network(*args, **kwargs):
+            raise AssertionError('Controlled host verification attempted live transport')
+    
+        for name in ('socket.create_connection', 'socket.socket.connect', 'urllib.request.OpenerDirector.open'):
+            monkeypatch.setattr(name, no_network)
+        # Reuse precisely the original 204 parameters/form. Its handcrafted bundle
+        # is used only as a fixture declaration source and is never sent to the host.
+        monkeypatch.setattr(native_fixture, 'NATIVE', NATIVE)
+        data, fields = native_fixture.fixture()
+        assert tuple(fields) == EXPECTED_NAMES
+        params = deepcopy(data[3])
+        assert params['metadata_bindings'] == []
+        assert [row['selection'] for row in params['documents']] == [
+            {'kind': 'output_requirement', 'requirement_id': 'selected_trim'},
+            {'kind': 'output_requirement', 'requirement_id': 'selected_final'}]
+        selected_form = validate_requested_form(native_fixture.f.schema(fields))
+        fixture_map = {'parameters': params, 'requested_form': selected_form,
+                       'declarations': {'declarations': []},
+                       'submitted_parameters': deepcopy(data[0]['original_task']['submitted_parameters'])}
+        submitted = fixture_map['submitted_parameters']
+        assert submitted['recipe'] == ['TRIM']
+        assert submitted['paired_end_libs'] == submitted['srr_libs'] == []
+        assert submitted['single_end_libs'] == [{'read': '/synthetic/input.fastq'}]
+        output_objects = {name: ('/fixture/output/' + FILES[name], str(uuid.uuid5(
+            uuid.NAMESPACE_URL, 'controlled-cutadapt-host209:' + name))) for name in NAMES}
+        native_bytes = {name: (NATIVE / FILES[name]).read_bytes() for name in NAMES}
+        monkeypatch.setattr(host_fixture, 'fixture', lambda name: deepcopy(fixture_map[name]))
+        monkeypatch.setattr(host_fixture, 'raw', lambda name: native_bytes[name])
+        monkeypatch.setattr(host_fixture, 'NAMES', NAMES)
+        monkeypatch.setattr(host_fixture, 'OUTPUTS', output_objects)
+        save('fixture_declarations', dict(fixtures=fixture_map, requested_fields=fields,
+            workspace_outputs=output_objects,
+            native_inputs={name: dict(file=FILES[name], sha256=hashlib.sha256(raw).hexdigest(), byte_count=len(raw))
+                           for name, raw in native_bytes.items()},
+            original_provider_bundle_injected=False,
+            qualification='Actual retained local native output on synthetic reads; controlled task and Workspace transport.'))
+    
+        with Store(tmp_path / 'state') as store:
+            d = host_fixture.FastqDriver(store, tmp_path)
+&gt;           assert d.saved.receipts.known(d.saved.root.episode_id) == []
+E           assert &lt;generator ob...x72e7a12e3b90&gt; == []
+E             
+E             Full diff:
+E             - []
+E             + &lt;generator object EpisodeReceipts.known.&lt;locals&gt;.&lt;genexpr&gt; at 0x72e7a12e3b90&gt;
+
+../test_native_cutadapt_host.py:149: AssertionError</failure></testcase></testsuite></testsuites>

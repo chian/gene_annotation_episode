@@ -1,0 +1,25 @@
+#!/home/chia/repos/gene_annotation_episode/.venv/bin/python
+import json, os, pathlib, sys
+argv = sys.argv[1:]
+with open("native-invocations.log", "a") as log:
+    log.write(json.dumps({"argv": argv, "cwd": os.getcwd()}) + "\n")
+assert sys.stdin.read() == ""
+mode = os.environ["SYNTHETIC_BEHAVIOR"]
+print("synthetic stdout:" + "x" * 1048583)
+sys.stderr.write("synthetic stderr\n")
+report = pathlib.Path(argv[argv.index("-out") + 1])
+if mode != "missing":
+    if mode == "symlink":
+        report.symlink_to(pathlib.Path(os.environ["OUTSIDE_FILE"]))
+    else:
+        report.write_bytes(b'{"synthetic":true,"not_native_measurements":true}\n' if mode != "nonzero" else b'{"partial":')
+for flag in ("-out_pssm", "-out_ascii_pssm"):
+    if flag in argv and mode != "no_checkpoint":
+        prefix = pathlib.Path(argv[argv.index(flag) + 1])
+        prefix.write_bytes(b"synthetic base checkpoint\n")
+        subdir = prefix.parent / "native-emitted-subdir"
+        subdir.mkdir()
+        (subdir / "arbitrary-name").write_bytes(b"synthetic second checkpoint\n")
+if mode == "family_escape" and "-out_pssm" in argv:
+    (pathlib.Path(argv[argv.index("-out_pssm") + 1]).parent / "escape").symlink_to(pathlib.Path(os.environ["OUTSIDE_FILE"]))
+raise SystemExit(7 if mode == "nonzero" else 0)

@@ -1,0 +1,1830 @@
+{
+  "record_kind": "read_only_native_contract_candidates_not_production_implementation",
+  "created_at_utc": "2026-10-24T22:54:34.064446+00:00",
+  "authoritative_goal": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "discipline": "Complete text read; objective and all DESIGN PRINCIPLES reread after substantial native study, between AppService, Workspace and MinHash study, and before handoff. Current complete contract reread before handoff."
+  },
+  "scope": "Generic AppService/Workspace/HTTP transfer/MinHash primitives only; no app-specific artifact parsers, external planner, submit_workflow, NCBI job, literature, W05, formula change or production code.",
+  "verification_scope": {
+    "official_sources_retained": true,
+    "wrapper_audit_repeated": false,
+    "live_public_inspection": "One unauthenticated read-only AppService.enumerate_apps POST returned HTTP 403 Cloudflare HTML challenge.",
+    "successful_live_native_rpc": false,
+    "submission": false,
+    "upload": false,
+    "credential_inspection": false,
+    "ssh": false,
+    "production_binding_tested": false
+  },
+  "effect_taxonomy_note": "The requested effect values none/create-node/upload/submit cannot accurately label every native auxiliary effect. Workspace.get (when not metadata-only), get_download_url, and Minhash.compute_genome_distance_for_fasta2 use null + explicit qualification because native ACL/download-capability mutations must not be called mutation-free. No production taxonomy is implemented here.",
+  "common_types": {
+    "ObjectMeta": [
+      [
+        0,
+        "name",
+        "string",
+        "Object name."
+      ],
+      [
+        1,
+        "type",
+        "string",
+        "Native workspace type; Directory input normalizes to folder in inspected implementation."
+      ],
+      [
+        2,
+        "parent_path",
+        "string",
+        "Implementation emits parent path ending /, not full object path despite spec prose; canonical full path is parent_path + name."
+      ],
+      [
+        3,
+        "creation_time",
+        "string",
+        "Implementation normalizes to UTC ISO-8601 with Z."
+      ],
+      [
+        4,
+        "object_id",
+        "string",
+        "Workspace UUID; distinct from Shock node UUID."
+      ],
+      [
+        5,
+        "object_owner",
+        "string",
+        "Owner user ID."
+      ],
+      [
+        6,
+        "size",
+        "int",
+        "File bytes; spec says directory child count but implementation top-level folder returns 0 and directory count completeness is not established."
+      ],
+      [
+        7,
+        "user_metadata",
+        "mapping<string,string>",
+        "Preserve actual native metadata values; source performs only shallow validation."
+      ],
+      [
+        8,
+        "automatic_metadata",
+        "mapping<string,string>",
+        "Includes is_folder in implementation; preserve actual types and inspection fields."
+      ],
+      [
+        9,
+        "user_permission",
+        "string",
+        "Native permission code."
+      ],
+      [
+        10,
+        "global_permission",
+        "string",
+        "Native permission code."
+      ],
+      [
+        11,
+        "shockurl",
+        "string",
+        "Empty string or Shock node URL."
+      ],
+      [
+        12,
+        "error",
+        "string, declared extension",
+        "Present in current spec; success generator emits 12 elements and omits this field. Do not require it or discard it if present."
+      ]
+    ],
+    "RPC": {
+      "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+      "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+      "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+      "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+      "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+    }
+  },
+  "primitives": [
+    {
+      "primitive_id": "appservice.enumerate_apps",
+      "service": "AppService",
+      "native_method": "AppService.enumerate_apps",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/AppService.spec",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/AppService.spec",
+          "lines": "1-82",
+          "sha256": "e985ab4171c38bbf556d5220642c0b64ffab68ee1ecdb915f19fc6a270887e8b"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "lines": "436-461",
+          "sha256": "fc36082421440fad5ac270e2b709c717e692b44b1c3e62e1b99ed53864131a76"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/Util.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/Util.pm",
+          "lines": "245-282",
+          "sha256": "3b1df3b0b06b1c10fae26b864db5f817357745645469b64d0e634cb8fbf8b0b3"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/javascript/AppService/Client.js",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/javascript/AppService/Client.js",
+          "lines": "17-44",
+          "sha256": "69c352ff20ef31b399b0faf9ea404842ad9b9c425501f1149e149b05cba9a674"
+        }
+      ],
+      "ordered_native_params": [],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "required",
+        "transport": "Authorization header token; no token was inspected or sent."
+      },
+      "mutation_effect": "none",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "Each App.id names an application, not a task.",
+      "status_timing_fields": [],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename."
+      ],
+      "missing_partial_error_states": [
+        "No configured/readable application directory can produce empty list in source; empty does not prove no applications exist.",
+        "Malformed application JSON can fail enumeration.",
+        "Non-JSON transport denial is separate from JSON-RPC method error."
+      ],
+      "unresolved": [
+        "Actual deployed application definitions and successful native envelope remain unavailable.",
+        "Official client default base is https://p3.theseed.org/services/app_service; only the BV-BRC website service URL was probed. No alternate endpoint was tried."
+      ],
+      "examples": [
+        {
+          "kind": "actual_read_only_http_observation",
+          "request_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/observations/enumerate_apps.request.json",
+          "response_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/observations/enumerate_apps.response.bin",
+          "observation_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/observations/enumerate_apps.observation.json",
+          "summary": "Unauthenticated params:[] POST to https://www.bv-brc.org/services/app_service returned HTTP 403 HTML Cloudflare challenge; no service JSON-RPC result."
+        }
+      ],
+      "live_verification": "one bounded unauthenticated read-only request ran; front-door rejection only",
+      "response_result_shape": "result[0] is list<App>. App includes id/script/label/description/parameters; preserve all returned application fields."
+    },
+    {
+      "primitive_id": "appservice.start_app2",
+      "service": "AppService",
+      "native_method": "AppService.start_app2",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/AppService.spec",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/AppService.spec",
+          "lines": "1-90",
+          "sha256": "e985ab4171c38bbf556d5220642c0b64ffab68ee1ecdb915f19fc6a270887e8b"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "lines": "672-710",
+          "sha256": "fc36082421440fad5ac270e2b709c717e692b44b1c3e62e1b99ed53864131a76"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/Util.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/Util.pm",
+          "lines": "154-218",
+          "sha256": "3b1df3b0b06b1c10fae26b864db5f817357745645469b64d0e634cb8fbf8b0b3"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/service-scripts/p3x-submit-job.pl",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/service-scripts/p3x-submit-job.pl",
+          "lines": "92-158",
+          "sha256": "ca630a32b762b739c0add5251731bb0e7fd99e9ee20de15719492a8a09a5a3e7"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/SchedulerDB.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/SchedulerDB.pm",
+          "lines": "136-233",
+          "sha256": "10e00d746d5ef09d3f11eb56e87f6ea12fc902d2484c93a1564cc030f467f7f3"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "app_id",
+          "native_type": "string",
+          "required": true
+        },
+        {
+          "position": 1,
+          "name": "params",
+          "native_type": "task_parameters: mapping<string,string> declared; JSON object actually accepted",
+          "required": true
+        },
+        {
+          "position": 2,
+          "name": "start_params",
+          "native_type": "StartParams structure",
+          "required": true,
+          "declared_members": {
+            "parent_id": "task_id/string",
+            "workspace": "workspace_id/string",
+            "base_url": "string",
+            "container_id": "string",
+            "user_metadata": "string",
+            "reservation": "string",
+            "data_container_id": "string",
+            "disable_preflight": "int",
+            "preflight_data": "mapping<string,string>"
+          }
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "required",
+        "transport": "Authorization header token"
+      },
+      "mutation_effect": "submit",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "result[0].id is the created task identity; source obtains SQL last_insert_id. Preserve its raw numeric/string representation and selected app association.",
+      "status_timing_fields": [
+        {
+          "field": "state_code",
+          "meaning": "Initial task state code resolved from queued; schema initializes Q. It is not query_tasks.status."
+        },
+        {
+          "field": "req_runtime",
+          "meaning": "Requested runtime from preflight; source fallback 3*86400 indicates seconds. This is a request limit, not observed duration."
+        },
+        {
+          "field": "req_cpu / req_memory",
+          "meaning": "Native preflight resource request values. Units/format are not established generically here; preserve raw."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename."
+      ],
+      "missing_partial_error_states": [
+        "Disabled submissions; native preflight failure; unknown app/container; database insertion failure; task output JSON missing/malformed; HTTP/RPC failure.",
+        "A response lost after task creation leaves submission outcome uncertain; a new start_app2 can create a second task.",
+        "No native idempotency/request-key field is declared."
+      ],
+      "unresolved": [
+        "Successful deployed receipt shape is source-derived, not live observed.",
+        "Per-application mandatory parameters and outputs are intentionally delegated to the separate application contract workload.",
+        "Do not equate failed receipt acquisition with non-submission."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_shape_only_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "AppService.start_app2",
+            "params": [
+              "<selected-app-id>",
+              {
+                "<app-parameter>": "<explicit-selected-value>"
+              },
+              {
+                "base_url": "https://www.bv-brc.org"
+              }
+            ],
+            "id": "<correlation-id>"
+          },
+          "qualification": "Placeholders demonstrate positional structure only; not a valid prepared scientific job."
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": {
+        "declared": "result[0]: Task as declared in AppService.spec",
+        "implementation": "result[0]: raw SchedulerDB.create_task hash, not query_tasks formatted Task. Keys include id, owner, base_url, parent_task, state_code, application_id, params (serialized JSON string), output_path/output_file when supplied, app_spec (serialized JSON string), monitor_url, req_memory, req_cpu, req_runtime, req_policy_data, req_is_control_task, user_metadata; optional container_id/data_container_id. submit_time is inserted in SQL but not added to the return hash here."
+      },
+      "notes": [
+        "The argument is native StartParams, not an untyped context object. All three positional arguments are required by native client; implementation validates start_params as a hash without requiring every declared member.",
+        "task_parameters is declared mapping<string,string>; AppService validates only a hash and persists arbitrary JSON including nested arrays/objects required by real applications. Application schemas are a separate workload.",
+        "disable_preflight is not a caller bypass: p3x-submit-job checks staff status and otherwise still runs native preflight.",
+        "start_app2 performs native preflight and then creates a task. A successful receipt is neither scientific completion nor acquired output."
+      ]
+    },
+    {
+      "primitive_id": "appservice.query_tasks",
+      "service": "AppService",
+      "native_method": "AppService.query_tasks",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/AppService.spec",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/AppService.spec",
+          "lines": "22-90",
+          "sha256": "e985ab4171c38bbf556d5220642c0b64ffab68ee1ecdb915f19fc6a270887e8b"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "lines": "780-807",
+          "sha256": "fc36082421440fad5ac270e2b709c717e692b44b1c3e62e1b99ed53864131a76"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/SchedulerDB.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/SchedulerDB.pm",
+          "lines": "399-438; 1439-1479",
+          "sha256": "10e00d746d5ef09d3f11eb56e87f6ea12fc902d2484c93a1564cc030f467f7f3"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/Schema.sql",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/Schema.sql",
+          "lines": "88-101",
+          "sha256": "7a828200b6e2c9a2accb1522e344f763eb195e16b7726c7fddcb8aeeeec02f0e"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "task_ids",
+          "native_type": "list<string task_id>",
+          "required": true
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "required",
+        "transport": "Authorization header token"
+      },
+      "mutation_effect": "none",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "result[0] maps requested task IDs to task records; match key and record id to the selected retained task receipt.",
+      "status_timing_fields": [
+        {
+          "field": "status",
+          "native_type": "string",
+          "meaning": "TaskState.service_status returned by query_tasks; preserved verbatim.",
+          "source_values": [
+            "queued",
+            "pending",
+            "completed",
+            "failed",
+            "deleted"
+          ],
+          "qualification": "These values come from retained schema initialization, not an exhaustive live deployment enum. Terminated maps to failed in that schema. Unknown states must stay unknown."
+        },
+        {
+          "field": "submit_time",
+          "native_type": "string",
+          "meaning": "Task.submit_time, initially CURRENT_TIMESTAMP() at task insert. query_tasks replaces database default sentinel with empty string.",
+          "unit": "database datetime text; timezone is not attached by this query",
+          "unknown": "Deployment database timezone and event clock not established."
+        },
+        {
+          "field": "start_time",
+          "native_type": "string",
+          "meaning": "Recorded Task.start_time; database default sentinel becomes empty string.",
+          "unit": "database datetime text",
+          "unknown": "This query does not establish precise scheduler event definition or clock timezone."
+        },
+        {
+          "field": "completed_time",
+          "native_type": "string",
+          "meaning": "Query projection of Task.finish_time; database default sentinel becomes empty string.",
+          "unit": "database datetime text",
+          "unknown": "Not proof of scientific success; assess status separately."
+        },
+        {
+          "field": "elapsed_time",
+          "native_type": "string",
+          "meaning": "SQL TIMEDIFF(finish_time,start_time) only when both differ from defaults; otherwise empty string.",
+          "unit": "MySQL time-duration string, commonly HH:MM:SS; not a numeric seconds field",
+          "unknown": "No queue wait or total turnaround field is supplied. Do not substitute HTTP duration or a partial running timer."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename."
+      ],
+      "missing_partial_error_states": [
+        "Only digit-only IDs survive source query filtering; nonexistent IDs are omitted. Empty/invalid requested IDs can yield {}.",
+        "A missing map entry is not a completed/failed task and not measured zero.",
+        "Empty timestamp fields mean unknown/not yet recorded, not zero elapsed.",
+        "No per-task error reason, exit code, progress percentage or current stdout bytes appear in this method."
+      ],
+      "unresolved": [
+        "Current state vocabulary, deployed timestamp timezone, and successful status reply unobserved.",
+        "Source accepts user_id but does not add an owner predicate to this SQL. Only caller-selected, already associated task IDs belong in the workflow; this is source inspection, not an access test."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "AppService.query_tasks",
+            "params": [
+              [
+                "<selected-task-id>"
+              ]
+            ],
+            "id": "<correlation-id>"
+          },
+          "result_shape": "{\"result\":[{\"<task-id>\":{\"id\":\"<same-task-id>\",\"status\":\"<native-state>\",\"start_time\":\"\",\"elapsed_time\":\"\",...}}]}"
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "result[0]: map<task_id,Task>. Source projected keys: id,parent_id,app,workspace(null),parameters(JSON-decoded object),user_id,status,submit_time,start_time,completed_time,elapsed_time,storage_location(active/archive),application_name. Declared awe_status/stdout_shock_node/stderr_shock_node are absent from this projection."
+    },
+    {
+      "primitive_id": "appservice.read_stdout",
+      "service": "AppService HTTP",
+      "native_method": "GET {app_service_base}/task_info/{task_id}/stdout",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "lines": "62-193",
+          "sha256": "fc36082421440fad5ac270e2b709c717e692b44b1c3e62e1b99ed53864131a76"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/AppService.psgi",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/AppService.psgi",
+          "lines": "48-58",
+          "sha256": "81979608a69d25f634ecf7c20e80131c4e404c3978b42a182c50451c658dae4f"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "task_id path segment",
+          "native_type": "string matching [a-zA-Z0-9_-]+",
+          "required": true
+        },
+        {
+          "position": 1,
+          "name": "Range header",
+          "native_type": "optional HTTP byte-range string",
+          "required": false,
+          "qualification": "Inspected server does not read it; this is a request property, not a supported native offset parameter."
+        }
+      ],
+      "response_envelope": {
+        "protocol": "HTTP, not JSON-RPC",
+        "success": "200 raw response body streamed through server sed redaction; no range acknowledgment or Content-Range produced by this method.",
+        "error": "401 authentication absent, 403 non-owner/non-admin, 404 task/file/path unavailable, 500 invalid OAuth token according to source; retain actual deployed headers/status/body."
+      },
+      "auth_requirement": {
+        "declared": "required",
+        "transport": "Authorization: OAuth <token>; Basic is also accepted by source. Task owner or admin check follows. No credential values inspected."
+      },
+      "mutation_effect": "none",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "Selected retained task_id + stream name + exact request URL and acquisition timestamp; no new job or artifact identity.",
+      "status_timing_fields": [
+        {
+          "field": "local observed_at / HTTP duration",
+          "meaning": "Client acquisition timing only."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename.",
+        "Exact requested byte interval and actual status/Content-Range/Content-Length/body byte count; reported total/ETag only if present.",
+        "Keep complete acquired response bytes separately from any local slice. A 200 body is a full returned representation, not the requested offset window.",
+        "Server removes token signature substrings; offsets relate only to returned redacted representation, and log growth/completeness is unknown."
+      ],
+      "missing_partial_error_states": [
+        "No log yet and invalid task can both produce 404.",
+        "Zero-byte success is an empty observed stream, not proof the job has finished.",
+        "Ignored Range, truncated transfer, still-growing log, and unavailable log are distinct states."
+      ],
+      "unresolved": [
+        "No authenticated log request was run. Current front-end/middleware range behavior is unobserved.",
+        "No immutable log version, total-size snapshot, EOF flag or byte-offset cursor is supplied by this endpoint."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "method": "GET",
+            "path": "/task_info/<selected-task-id>/stdout",
+            "headers": {
+              "Range": "bytes=0-1023"
+            }
+          },
+          "source_behavior": "200 and complete redacted file stream; requested range not honored by _task_info itself."
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "Raw redacted log bytes at acquisition; server may return a still-growing file."
+    },
+    {
+      "primitive_id": "appservice.read_stderr",
+      "service": "AppService HTTP",
+      "native_method": "GET {app_service_base}/task_info/{task_id}/stderr",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/Bio/KBase/AppService/AppServiceImpl.pm",
+          "lines": "62-193",
+          "sha256": "fc36082421440fad5ac270e2b709c717e692b44b1c3e62e1b99ed53864131a76"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/app_service/90c6a00d5a75f0597a53505a31b4d248767ba1d2/lib/AppService.psgi",
+          "revision": "90c6a00d5a75f0597a53505a31b4d248767ba1d2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/app_service/lib/AppService.psgi",
+          "lines": "48-58",
+          "sha256": "81979608a69d25f634ecf7c20e80131c4e404c3978b42a182c50451c658dae4f"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "task_id path segment",
+          "native_type": "string matching [a-zA-Z0-9_-]+",
+          "required": true
+        },
+        {
+          "position": 1,
+          "name": "Range header",
+          "native_type": "optional HTTP byte-range string",
+          "required": false,
+          "qualification": "Inspected server does not read it; this is a request property, not a supported native offset parameter."
+        }
+      ],
+      "response_envelope": {
+        "protocol": "HTTP, not JSON-RPC",
+        "success": "200 raw response body streamed through server sed redaction; no range acknowledgment or Content-Range produced by this method.",
+        "error": "401 authentication absent, 403 non-owner/non-admin, 404 task/file/path unavailable, 500 invalid OAuth token according to source; retain actual deployed headers/status/body."
+      },
+      "auth_requirement": {
+        "declared": "required",
+        "transport": "Authorization: OAuth <token>; Basic is also accepted by source. Task owner or admin check follows. No credential values inspected."
+      },
+      "mutation_effect": "none",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "Selected retained task_id + stream name + exact request URL and acquisition timestamp; no new job or artifact identity.",
+      "status_timing_fields": [
+        {
+          "field": "local observed_at / HTTP duration",
+          "meaning": "Client acquisition timing only."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename.",
+        "Exact requested byte interval and actual status/Content-Range/Content-Length/body byte count; reported total/ETag only if present.",
+        "Keep complete acquired response bytes separately from any local slice. A 200 body is a full returned representation, not the requested offset window.",
+        "Server removes token signature substrings; offsets relate only to returned redacted representation, and log growth/completeness is unknown."
+      ],
+      "missing_partial_error_states": [
+        "No log yet and invalid task can both produce 404.",
+        "Zero-byte success is an empty observed stream, not proof the job has finished.",
+        "Ignored Range, truncated transfer, still-growing log, and unavailable log are distinct states."
+      ],
+      "unresolved": [
+        "No authenticated log request was run. Current front-end/middleware range behavior is unobserved.",
+        "No immutable log version, total-size snapshot, EOF flag or byte-offset cursor is supplied by this endpoint."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "method": "GET",
+            "path": "/task_info/<selected-task-id>/stderr",
+            "headers": {
+              "Range": "bytes=0-1023"
+            }
+          },
+          "source_behavior": "200 and complete redacted file stream; requested range not honored by _task_info itself."
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "Raw redacted log bytes at acquisition; server may return a still-growing file."
+    },
+    {
+      "primitive_id": "workspace.ls",
+      "service": "Workspace",
+      "native_method": "Workspace.ls",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/Workspace.spec",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/Workspace.spec",
+          "lines": "1-64; 240-269",
+          "sha256": "3d617e0fa4a1deab3240c8ed85c2f55a2bb45196a2d29e9f91e60e06e474d1db"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "lines": "273-320; 1389-1458; 3830-3884",
+          "sha256": "0efbc5f63b31278d7926ccc9919f8c0dc0cdd412c92b1783225a45ab6165fc10"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "input",
+          "native_type": "list_params structure",
+          "required": true,
+          "required_members": {
+            "paths": "list<string FullObjectPath>"
+          },
+          "optional_members": {
+            "excludeDirectories": "int bool, default 0",
+            "excludeObjects": "int bool, default 0",
+            "recursive": "int bool, default 0",
+            "fullHierachicalOutput": "int bool, default 0; spelling is native",
+            "query": "mapping<string,list<string>>, default {}",
+            "adminmode": "int bool, admin only"
+          }
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "optional",
+        "meaning": "Public-readable objects may be accessible without auth; private objects require an authenticated identity with read permission. Token transport uses Authorization header."
+      },
+      "mutation_effect": "none",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "Every returned ObjectMeta[4] identifies an object; derive path from actual [2]+[0]. Listing does not prove task provenance.",
+      "status_timing_fields": [
+        {
+          "field": "ObjectMeta[3]",
+          "meaning": "Object creation timestamp, not analysis runtime."
+        },
+        {
+          "field": "ObjectMeta[6]",
+          "meaning": "File size bytes; directory values are not reliable file-byte denominators."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename."
+      ],
+      "missing_partial_error_states": [
+        "Permission/path/method errors propagate via RPC. Empty map or absent requested path key can represent no listed contents.",
+        "No native count, cursor, limit, offset or truncation flag is declared/used by this method. A wrapper limit cannot become a supported native limit.",
+        "Hidden names are not filtered by this native path; preserve them."
+      ],
+      "unresolved": [
+        "Successful deployed listing and actual object-type metadata unobserved.",
+        "No native pagination or stable ordering guarantee was established. Query supports native Mongo-like fields; no general unvalidated query planner is proposed."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "Workspace.ls",
+            "params": [
+              {
+                "paths": [
+                  "/<owner>/<workspace>/.<output>/"
+                ],
+                "recursive": 0,
+                "excludeDirectories": 0,
+                "excludeObjects": 0,
+                "fullHierachicalOutput": 0,
+                "query": {}
+              }
+            ],
+            "id": "<correlation-id>"
+          }
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "result[0]: mapping<path,list<ObjectMeta>>. fullHierachicalOutput=0 uses input paths as map keys; =1 groups by metadata parent path after removing trailing slash. Empty directories can be absent keys (source only creates keys while pushing results)."
+    },
+    {
+      "primitive_id": "workspace.get",
+      "service": "Workspace",
+      "native_method": "Workspace.get",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/Workspace.spec",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/Workspace.spec",
+          "lines": "111-130",
+          "sha256": "3d617e0fa4a1deab3240c8ed85c2f55a2bb45196a2d29e9f91e60e06e474d1db"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "lines": "273-360; 2855-2916",
+          "sha256": "0efbc5f63b31278d7926ccc9919f8c0dc0cdd412c92b1783225a45ab6165fc10"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/Bio/P3/Workspace/WorkspaceClient.pm",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/Bio/P3/Workspace/WorkspaceClient.pm",
+          "lines": "493-537",
+          "sha256": "8db65bf4c547ed9fec3aea6bcdb2c17a6a3e85656e75cda5b20324a7f2c6c391"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "input",
+          "native_type": "get_params structure",
+          "required": true,
+          "required_members": {
+            "objects": "list<string FullObjectPath>"
+          },
+          "optional_members": {
+            "metadata_only": "int bool, default 0",
+            "adminmode": "int bool, admin only"
+          }
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "optional",
+        "meaning": "Public-readable objects may be accessible without auth; private objects require an authenticated identity with read permission. Token transport uses Authorization header."
+      },
+      "mutation_effect": null,
+      "native_auxiliary_mutations": [
+        "For Shock-backed content, _retrieve_object_data makes the existing Shock node public for publicly readable workspaces or PUTs /acl/all?users=<current-user> before returning the Shock URL."
+      ],
+      "returned_identity": "Returned ObjectMeta object UUID/path plus position associated with each requested objects entry.",
+      "status_timing_fields": [
+        {
+          "field": "ObjectMeta[3],[6]",
+          "meaning": "Creation timestamp/file-byte size; not acquisition completeness."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename."
+      ],
+      "missing_partial_error_states": [
+        "Missing top-level directory, insufficient permission or missing object can fail the call; no reliable per-object partial-return contract is established.",
+        "Metadata-only omission of data differs from empty string content.",
+        "Shock URL content must not be parsed as scientific output."
+      ],
+      "unresolved": [
+        "Exact deployed partial error behavior and successful envelopes unobserved.",
+        "Source reads local files without explicit open failure checking; an empty string can be ambiguous.",
+        "The final executor effect taxonomy must account for documented ACL side effects if this non-metadata path is exposed."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "Workspace.get",
+            "params": [
+              {
+                "objects": [
+                  "/<owner>/<workspace>/artifact.txt"
+                ],
+                "metadata_only": 1
+              }
+            ],
+            "id": "<correlation-id>"
+          },
+          "result_shape": "{\"result\":[[[ObjectMeta]]]} (metadata only)"
+        }
+      ],
+      "live_verification": "not invoked",
+      "mutation_effect_qualification": "The requested four-value effect taxonomy has no ACL-grant class. metadata_only=1 is none; metadata_only=0 may modify Shock ACLs, so unconditional none would be false.",
+      "response_result_shape": "result[0]: list<[ObjectMeta,ObjectData]>. With metadata_only=1, each entry contains only [ObjectMeta]. With metadata_only=0, local-backed file yields text string, directory yields empty string, Shock-backed file yields its Shock node URL; a URL is not file bytes."
+    },
+    {
+      "primitive_id": "workspace.get_download_url",
+      "service": "Workspace",
+      "native_method": "Workspace.get_download_url",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/Workspace.spec",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/Workspace.spec",
+          "lines": "166-181",
+          "sha256": "3d617e0fa4a1deab3240c8ed85c2f55a2bb45196a2d29e9f91e60e06e474d1db"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "lines": "3212-3339",
+          "sha256": "0efbc5f63b31278d7926ccc9919f8c0dc0cdd412c92b1783225a45ab6165fc10"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "input",
+          "native_type": "get_download_url_params structure",
+          "required": true,
+          "required_members": {
+            "objects": "list<string FullObjectPath>"
+          }
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "optional",
+        "meaning": "Public-readable objects may be accessible without auth; private objects require an authenticated identity with read permission. Token transport uses Authorization header."
+      },
+      "mutation_effect": null,
+      "native_auxiliary_mutations": [
+        "Inserts expiring download-key documents into Workspace downloads collection.",
+        "For Shock-backed objects may PUT read ACL for selected user."
+      ],
+      "returned_identity": "One URL or null per input object in input order; retain object/request association. URL is an expiring capability, not a task or Workspace UUID.",
+      "status_timing_fields": [
+        {
+          "field": "URL validity",
+          "meaning": "Native spec says limited lifetime. Source configuration download-lifetime, fallback 3600 seconds; expiry timestamp is not returned. Do not assert every URL expires in exactly one hour."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename."
+      ],
+      "missing_partial_error_states": [
+        "Directories can produce null URL entries.",
+        "Permission/missing path errors remain RPC failure.",
+        "Expired/invalid download URL is not an acquired artifact.",
+        "Replayed response may contain expired URL; replay does not authorize reacquisition/new capability creation."
+      ],
+      "unresolved": [
+        "Configured lifetime, exact live URL base and successful response unobserved.",
+        "Effect taxonomy needs a capability/ACL side-effect representation."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "Workspace.get_download_url",
+            "params": [
+              {
+                "objects": [
+                  "/<owner>/<workspace>/artifact.txt"
+                ]
+              }
+            ],
+            "id": "<correlation-id>"
+          },
+          "result_shape": "{\"result\":[[\"https://<configured-base>/download/<opaque-key>/artifact.txt\"]]}"
+        }
+      ],
+      "live_verification": "not invoked",
+      "mutation_effect_qualification": "Capability creation and optional ACL grant do not fit none/create-node/upload/submit; this is not scientifically submitting work, but not remotely mutation-free.",
+      "response_result_shape": "result[0]: list<string|null>. Declared strings; implementation pushes undef/null for directory/non-file entries. URLs have configured download base + /download/<opaque-key>/<escaped-name>."
+    },
+    {
+      "primitive_id": "workspace.create",
+      "service": "Workspace",
+      "native_method": "Workspace.create",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/Workspace.spec",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/Workspace.spec",
+          "lines": "64-96",
+          "sha256": "3d617e0fa4a1deab3240c8ed85c2f55a2bb45196a2d29e9f91e60e06e474d1db"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "lines": "787-798; 847-952; 1025-1218; 2518-2573",
+          "sha256": "0efbc5f63b31278d7926ccc9919f8c0dc0cdd412c92b1783225a45ab6165fc10"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "input",
+          "native_type": "create_params structure",
+          "required": true,
+          "required_members": {
+            "objects": "list<tuple<FullObjectPath string,ObjectType string,UserMetadata mapping<string,string>,ObjectData string,creation_time string>>"
+          },
+          "optional_members": {
+            "permission": "WorkspacePerm string, default n",
+            "createUploadNodes": "int bool, default 0",
+            "downloadLinks": "int bool declared; implementation uses differently named downloadFromLinks (not in selected upload scope)",
+            "overwrite": "int bool, default 0",
+            "adminmode": "int bool, admin only",
+            "setowner": "string, admin only"
+          },
+          "tuple_optionality": "Implementation defaults missing metadata to {}; data omitted/null is accepted for folders/upload nodes; creation_time is optional and admin/workspace-service-only. Preserve all explicitly selected values."
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "required",
+        "transport": "Authorization token with destination write permissions."
+      },
+      "mutation_effect": "create-node",
+      "native_auxiliary_mutations": [
+        "Can create missing ancestor folders and Workspace entries within the one native call.",
+        "createUploadNodes=1 creates a new empty Shock node and grants upload ACL; Workspace entry initially has size 0.",
+        "overwrite=1 deletes an existing entry before creating a replacement; this can change object UUID. No atomic all-or-nothing rollback is established.",
+        "createUploadNodes=0 can store inline ObjectData directly; distinguish that input transfer from the selected empty-node mode."
+      ],
+      "returned_identity": "Every output ObjectMeta has Workspace UUID [4] and optional Shock node URL [11]. Match target by canonical path/type, not first row; source groups creation in hashes and can add ancestor rows.",
+      "status_timing_fields": [
+        {
+          "field": "ObjectMeta[3]",
+          "meaning": "Node/object creation time, not upload completion."
+        },
+        {
+          "field": "ObjectMeta[6]",
+          "meaning": "Starts at 0 for empty Shock upload node; does not prove input file contains zero bytes."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename."
+      ],
+      "missing_partial_error_states": [
+        "Invalid path/type/metadata/permissions; existing destination with overwrite=0; cannot overwrite directory with object; non-admin ownership/time override.",
+        "Existing folders may be omitted from result.",
+        "Lost response after create leaves created-node identity uncertain. Do not blindly create or overwrite again.",
+        "Partial side effects after later failure are possible; no transaction boundary was proven."
+      ],
+      "unresolved": [
+        "Live created metadata and deployed permitted Workspace types unobserved.",
+        "Default/non-upload modes are described for fidelity; no inline content or link-download action was invoked."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "Workspace.create",
+            "params": [
+              {
+                "objects": [
+                  [
+                    "/<owner>/<workspace>/input.fa",
+                    "contigs",
+                    {},
+                    ""
+                  ]
+                ],
+                "createUploadNodes": 1,
+                "overwrite": 0
+              }
+            ],
+            "id": "<correlation-id>"
+          },
+          "qualification": "contigs is illustrative only; validate actual allowed native type from selected app/input contract. Returned target must be matched, not assumed at result[0][0]."
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "result[0]: list<ObjectMeta>; current success generator emits 12-field metadata tuples. Native upload node is present but file content is not uploaded yet."
+    },
+    {
+      "primitive_id": "workspace.download_http",
+      "service": "Workspace download HTTP",
+      "native_method": "GET exact URL returned by selected Workspace.get_download_url",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/Workspace.spec",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/Workspace.spec",
+          "lines": "166-181",
+          "sha256": "3d617e0fa4a1deab3240c8ed85c2f55a2bb45196a2d29e9f91e60e06e474d1db"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/Bio/P3/Workspace/WorkspaceImpl.pm",
+          "lines": "1877-2198",
+          "sha256": "0efbc5f63b31278d7926ccc9919f8c0dc0cdd412c92b1783225a45ab6165fc10"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/WorkspaceDownload.psgi",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/WorkspaceDownload.psgi",
+          "lines": "75-87",
+          "sha256": "4269f4193afff15dcf2c75c3790d4b5486f25a32ecff3ed8b597c6a0d1d4e6b2"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "url",
+          "native_type": "string retained capability URL",
+          "required": true
+        },
+        {
+          "position": 1,
+          "name": "Range header",
+          "native_type": "optional bytes=start-end or bytes=start- (single range)",
+          "required": false
+        }
+      ],
+      "response_envelope": {
+        "protocol": "HTTP, not JSON-RPC",
+        "success": "200 full body or 206 byte range. Source emits Content-Range and Content-Length for parsed single range; application/octet-stream attachment response.",
+        "error": "Source invalid download key/path/file -> 404. Retain actual proxy/server/error bodies and statuses; a 200/206 header can precede an incomplete failed Shock upstream transfer."
+      },
+      "auth_requirement": {
+        "declared": "No additional authentication required for a valid capability URL. Treat URL as transient access capability; never fabricate one."
+      },
+      "mutation_effect": "none",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "The retained URL receipt + source Workspace identity + actual acquired bytes; response is not inherently task-reported output without original task association.",
+      "status_timing_fields": [
+        {
+          "field": "Content-Range",
+          "meaning": "bytes start-end/total; inclusive byte endpoints in returned representation."
+        },
+        {
+          "field": "Content-Length",
+          "meaning": "Declared response bytes, not automatically validated count."
+        },
+        {
+          "field": "local HTTP duration",
+          "meaning": "Acquisition duration; never analysis execution duration."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename.",
+        "Preserve full bytes with local checksum and actual byte count; retain requested range separately from observed Content-Range, status, content length and any ETag/Last-Modified.",
+        "Preserve local short-read/error state and source object reported size; do not synthesize a complete file from a partial body.",
+        "For 200 after a Range request, record full representation received; do not label it as requested-offset bytes."
+      ],
+      "missing_partial_error_states": [
+        "Source supports single prefix/open-ended byte range, not suffix/multi-range generally.",
+        "End is clipped to recorded object size-1; range begin bounds/416 behavior are not validated by this implementation.",
+        "Full nonrange source can omit Content-Length; ETag is not set by inspected code.",
+        "Shock path emits success headers before upstream body/status completes, so received length must be checked."
+      ],
+      "unresolved": [
+        "No real capability URL was acquired or downloaded; live Range behavior and deployed proxy headers unverified.",
+        "Record-size freshness, explicit expiry enforcement/cleanup timing and download backend version unverified."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "method": "GET",
+            "url": "<retained-download-url>",
+            "headers": {
+              "Range": "bytes=0-1023"
+            }
+          },
+          "expected_source_headers": "206; Content-Range bytes 0-1023/<reported-total>; Content-Length 1024, when reported size exceeds 1023. Actual responses still require validation."
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "Complete raw bytes of returned representation or explicit byte segment."
+    },
+    {
+      "primitive_id": "shock.upload_http",
+      "service": "Shock HTTP via Workspace-created node",
+      "native_method": "PUT exact ObjectMeta[11] Shock node URL",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/Workspace/f3a13dc5abc43de6951e2dbc4c4407463b8264b0/lib/Bio/P3/Workspace/WorkspaceClientExt.pm",
+          "revision": "f3a13dc5abc43de6951e2dbc4c4407463b8264b0",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Workspace/lib/Bio/P3/Workspace/WorkspaceClientExt.pm",
+          "lines": "356-395; 407-479",
+          "sha256": "6d866c7e5ed23da2f3294d4005d2ea2f5e853fe0898ab9628a65a8fa1b910813"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/MG-RAST/Shock/9419e651c08a639466c2c57cf51c012eae3e40e2/docs/API/shock-openapi.yaml",
+          "revision": "9419e651c08a639466c2c57cf51c012eae3e40e2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Shock/docs/API/shock-openapi.yaml",
+          "lines": "318-366",
+          "sha256": "2e602a20680064bdfc4c1304d957fc7a85c28307277577ffa5741b496dc2a439"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/MG-RAST/Shock/9419e651c08a639466c2c57cf51c012eae3e40e2/shock-server/controller/node/update.go",
+          "revision": "9419e651c08a639466c2c57cf51c012eae3e40e2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Shock/shock-server/controller/node/update.go",
+          "lines": "19-137",
+          "sha256": "44e8cd0cd8e6c885238cf148c33c3369a785acf9b3db03f521f9a8e940f439d3"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/MG-RAST/Shock/9419e651c08a639466c2c57cf51c012eae3e40e2/shock-server/responder/responder.go",
+          "revision": "9419e651c08a639466c2c57cf51c012eae3e40e2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Shock/shock-server/responder/responder.go",
+          "lines": "1-64",
+          "sha256": "f830d9f4e69d95472f964b32a859ead4d9b21ccde09290a1c9a22dc76cafbd79"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/MG-RAST/Shock/9419e651c08a639466c2c57cf51c012eae3e40e2/docs/API/api.md",
+          "revision": "9419e651c08a639466c2c57cf51c012eae3e40e2",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Shock/docs/API/api.md",
+          "lines": "46-115",
+          "sha256": "d1bd72caf8620e476eae6e362eda11d2a3709bfcbf8d9698d5ee8e2637a0b6f1"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "node_url",
+          "native_type": "string from retained selected create receipt ObjectMeta[11]",
+          "required": true
+        },
+        {
+          "position": 1,
+          "name": "upload",
+          "native_type": "multipart/form-data file part named upload containing exact selected bytes",
+          "required": true
+        },
+        {
+          "position": 2,
+          "name": "Authorization",
+          "native_type": "HTTP OAuth token header",
+          "required": true
+        }
+      ],
+      "response_envelope": {
+        "protocol": "HTTP multipart request; JSON Shock response, not JSON-RPC.",
+        "success": "Official Shock controller returns HTTP 200 JSON {status:200,data:<node>,error:null}. Node includes id and file metadata when supplied; older docs show same envelope.",
+        "error": "Current official Shock responder returns {status:<HTTP code>,data:null,error:[message,...]}; documentation prose says string|null, so preserve actual error shape. Authentication/permission errors 401, missing node 404, invalid multipart/update 400, backend error 500 appear in current source. Exact deployed Shock revision is unknown."
+      },
+      "auth_requirement": {
+        "declared": "BV-BRC native client sends Authorization: OAuth <token>; node must authorize write. Generic Shock can be configured for anonymous writes, but that is not assumed for BV-BRC."
+      },
+      "mutation_effect": "upload",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "data.id is Shock node UUID, which must match node_url; retain distinct source Workspace ObjectMeta[4] UUID and path association.",
+      "status_timing_fields": [
+        {
+          "field": "status",
+          "meaning": "HTTP/transport status, not scientific job state."
+        },
+        {
+          "field": "data.file.size",
+          "meaning": "Stored file bytes when returned."
+        },
+        {
+          "field": "data.file.checksum",
+          "meaning": "Native reported checksum map; algorithm keys must be retained, not presumed."
+        },
+        {
+          "field": "data.created_on / last_modified",
+          "meaning": "Node metadata timestamps, not job timing."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename.",
+        "Exact selected input byte artifact and checksum; multipart part name/filename/content type; destination source create-receipt identity.",
+        "Whole upload response and server file metadata. Validate returned size/checksum when available against the selected input bytes; missing is unknown.",
+        "Never consider the earlier empty-node create receipt as upload completion."
+      ],
+      "missing_partial_error_states": [
+        "Created but unuploaded node; interrupted or response-lost upload; malformed multipart; missing node; permission failure; reported size/checksum mismatch.",
+        "Shock docs state node file is immutable after set. Retrying an uncertain upload is not presumed safe or a request to create a replacement node."
+      ],
+      "unresolved": [
+        "No upload was run and no native BV-BRC Shock response was acquired.",
+        "Current upstream Shock docs/source revision is not proof of BV-BRC deployed Shock version.",
+        "Workspace automatic size metadata may update later; this task did not study or invoke update_auto_meta as an extra operation."
+      ],
+      "examples": [
+        {
+          "kind": "source_derived_not_invoked",
+          "request_description": "PUT <retained-create-target-shockurl> with multipart file field upload, containing selected input bytes; Authorization OAuth token supplied by authorized caller only.",
+          "success_shape": {
+            "status": 200,
+            "data": {
+              "id": "<same-shock-node-id>",
+              "file": {
+                "size": "<native-byte-count>",
+                "checksum": {
+                  "<native-algorithm>": "<native-value>"
+                }
+              }
+            },
+            "error": null
+          },
+          "qualification": "Placeholders are explanatory, not a fabricated live node receipt."
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "Shock node data, including actual reported file.size/checksum/name/created_on/last_modified/version if present. Retain whole result; do not fabricate omitted file metadata."
+    },
+    {
+      "primitive_id": "minhash.compute_genome_distance_for_genome2",
+      "service": "Minhash",
+      "native_method": "Minhash.compute_genome_distance_for_genome2",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/Minhash.spec",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/Minhash.spec",
+          "lines": "27-54",
+          "sha256": "6d9807437c50270ccce2767be5ac092398df4b6d56a16fecdb23a92e4ac24deb"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/lib/Bio/P3/Minhash/MinhashImpl.pm",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/lib/Bio/P3/Minhash/MinhashImpl.pm",
+          "lines": "352-498; 557-664",
+          "sha256": "ffd10b7844304bd4494adb21f664250f0164486922e3636b6e6303d5bacd6ea3"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/scripts/minhash-search.pl",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/scripts/minhash-search.pl",
+          "lines": "1-197",
+          "sha256": "cba5a2fe6d49151b71b0108a6831ad519e50a653a52370cb4a4f1b4a36fcc010"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/lib/Bio/P3/Minhash/Client.pm",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/lib/Bio/P3/Minhash/Client.pm",
+          "lines": "353-395; 455-499",
+          "sha256": "922f43ba699c5724e7926084d8d72a6e7502e69e1e781c87e87e042ccde00b4a"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/lib/Bio/P3/Minhash/Service.pm",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/lib/Bio/P3/Minhash/Service.pm",
+          "lines": "31-47; 225-354",
+          "sha256": "48e6a88edae4aeb58eaaccee142b56f0866cc315d72d40612f4676f29df55787"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/marbl/Mash/5df1f984a06d568b4c47540042a0e619fd1f7bdd/src/mash/CommandDistance.cpp",
+          "revision": "5df1f984a06d568b4c47540042a0e619fd1f7bdd",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/src/mash/CommandDistance.cpp",
+          "lines": "286; 336-450",
+          "sha256": "ef4fea79af61e8094cac78abf5b9782d8957ef53af9773717f43e23d3556af82"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/marbl/Mash/5df1f984a06d568b4c47540042a0e619fd1f7bdd/doc/sphinx/distances.rst",
+          "revision": "5df1f984a06d568b4c47540042a0e619fd1f7bdd",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/doc/sphinx/distances.rst",
+          "lines": "1-118",
+          "sha256": "276170aa11c1d1423b810c4e7430b6dddfec44e63efdaf23cfde46fca4900232"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/marbl/Mash/5df1f984a06d568b4c47540042a0e619fd1f7bdd/test/ref/genomes.dist",
+          "revision": "5df1f984a06d568b4c47540042a0e619fd1f7bdd",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist",
+          "lines": "1-3",
+          "sha256": "205f7b6c5390833923d7e01bf11d30e568c0c6c13bfb368fb8817d57186d064c"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "genome_id",
+          "native_type": "string",
+          "required": true,
+          "meaning": "BV-BRC genome identifier whose contig sketch/sequence is retrieved by service"
+        },
+        {
+          "position": 1,
+          "name": "max_pvalue",
+          "native_type": "float",
+          "required": true,
+          "meaning": "Maximum Mash p-value threshold, documented 0-1."
+        },
+        {
+          "position": 2,
+          "name": "max_distance",
+          "native_type": "float",
+          "required": true,
+          "meaning": "Maximum Mash distance threshold, documented 0-1."
+        },
+        {
+          "position": 3,
+          "name": "max_hits",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Requested maximum returned hits; source off-by-one qualification below."
+        },
+        {
+          "position": 4,
+          "name": "include_reference",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Native truthy flag; ordinarily 0/1."
+        },
+        {
+          "position": 5,
+          "name": "include_representative",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Native truthy flag; ordinarily 0/1."
+        },
+        {
+          "position": 6,
+          "name": "bacterial",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Include bacterial reference sketches; wrapper alias include_bacterial is not native name."
+        },
+        {
+          "position": 7,
+          "name": "viral",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Include viral reference sketches; wrapper alias include_viral is not native name."
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "optional",
+        "meaning": "Genome mode uses public or caller-visible genome contigs. FASTA mode needs permission to read selected Workspace path; private data requires auth despite optional method declaration. No credential lookup performed."
+      },
+      "mutation_effect": "none",
+      "native_auxiliary_mutations": [],
+      "returned_identity": "No async task identity. Request identity + query genome/path binds each returned reference genome_id row. Preserve duplicates and result order.",
+      "status_timing_fields": [
+        {
+          "field": "HTTP duration",
+          "meaning": "Only locally measured request turnaround if called; no native queue/start/completion fields or AppService job ID."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename.",
+        "Complete response and every row in native order, including duplicate genome IDs, original numeric lexemes/counts string; input path/genome ID and exact thresholds/reference flags.",
+        "Retain supplied input bytes/Workspace object identity where available; actual selected database sketch version, k, hash seed, sketch size, lengths and reference set membership remain explicit unknown metadata unless acquired independently.",
+        "No fictitious output_path/output_file artifact: native method takes neither."
+      ],
+      "missing_partial_error_states": [
+        "No returned rows differs from a proven successful zero-hit population result: both service and minhash-search fail to inspect all child-process exit statuses after pipes.",
+        "Invalid argument scalar/reference type throws RPC error, but semantic range validation is not comprehensive in native implementation.",
+        "Both bacterial=0 and viral=0 leave no reference collections; do not interpret resulting empty/failure behavior as a scientific negative.",
+        "Source loop last if n++ > max_hits permits up to max_hits+1 rows before further filtering; no returned total/truncated flag.",
+        "Underlying minhash-search skips reference identifiers it cannot map to genome IDs, warns server-side, sorts by distance then numeric taxon/index, and does not deduplicate across collections.",
+        "A returned list is threshold-filtered and capped, not a complete database population.",
+        "After truncating candidate rows, genome2 checks returned IDs against Data API genome and drops nonreturned IDs; it may return fewer than requested without filling the gap."
+      ],
+      "unresolved": [
+        "No successful BV-BRC MinHash request/response was observed.",
+        "Current public MinHash endpoint, deployed Mash version and reference sketch releases/configuration remain unverified. Generated native client fallback is localhost:7138, not an established public endpoint.",
+        "Service response omits k/seed/sketch configuration/query and reference sequence lengths and reference population size; full native Mash pvalue/distance recalculation is blocked without those supplied inputs.",
+        "Native distance and pvalue may be JSON strings; preserve raw types until a real response validates the parser."
+      ],
+      "examples": [
+        {
+          "kind": "native_upstream_Mash_retained_fixture_not_BV_BRC_live",
+          "source_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist",
+          "row": "genome1.fna\treads\t0.12101\t4.48626e-214\t41/1000",
+          "checkable_components": {
+            "shared_hashes": 41,
+            "compared_union_hashes": 1000,
+            "shared_hash_fraction": 0.041
+          },
+          "qualification": "This upstream native test fixture establishes Mash row meanings only. It is not a BV-BRC genome-id response or scientific measurement of any user input."
+        },
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "Minhash.compute_genome_distance_for_genome2",
+            "params": [
+              "<selected-genome-id>",
+              0.01,
+              0.1,
+              10,
+              1,
+              1,
+              1,
+              0
+            ],
+            "id": "<correlation-id>"
+          }
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "result[0]: list<[genome_id string,distance float|string,pvalue float|string,counts string]>. Return directly in same RPC; no AppService status/log/output-path contract.",
+      "numerical_measurements": [
+        {
+          "field": "row[1] distance",
+          "native_type": "float declared; split tab text in Perl may serialize as numeric string",
+          "kind": "native derived estimate",
+          "meaning": "Mash estimate of mutation distance from sampled k-mer Jaccard overlap; not alignment identity, coverage, ANI measurement or annotation probability.",
+          "formula": "For j=x/s: D=0 when x=s; D=1 when x=0; otherwise min(1,-ln(2*j/(1+j))/k) in retained Mash source.",
+          "exact_inputs": "Native counts x/s and k-mer length k from actual sketches; service returns distance/counts but not k.",
+          "unit": "dimensionless mutation-rate estimate",
+          "population_denominator": "Sampled union of two k-mer hash sketches, with denominator s actually output, not number of genomes or alignment bases.",
+          "uncertainty": "No per-hit confidence interval returned. pvalue is a separate random-overlap statistic.",
+          "missing_behavior": "Preserve missing/malformed as missing/invalid, never zero; do not recompute without actual k."
+        },
+        {
+          "field": "row[2] pvalue",
+          "native_type": "float declared; split text may serialize as numeric string",
+          "kind": "native derived tail probability",
+          "meaning": "Probability under Mash random-sequence overlap null of at least x shared hashes. This is not function correctness probability.",
+          "formula": "p=P[Binomial(s,j_r)>=x], j_r=r1*r2/(r1+r2-r1*r2), ri=li/(li+|alphabet|^k); retained source returns 1 for x=0.",
+          "exact_inputs": "x,s, reference/query length estimates, k and alphabet/k-mer space; service returns only pvalue and counts.",
+          "unit": "dimensionless probability",
+          "population_denominator": "The pair of compared sequence/sketch objects under random-overlap model; not a multiple-testing-adjusted database E-value.",
+          "uncertainty": "Native p-value, not confidence interval; printed zero can reflect floating-point underflow/rounding.",
+          "missing_behavior": "Unknown unless returned. Zero remains zero as reported, without claiming mathematically exact chance zero."
+        },
+        {
+          "field": "row[3] counts",
+          "native_type": "string x/s",
+          "kind": "native measured sketch counts",
+          "meaning": "Shared hash count x and compared union-hash count s as emitted by mash dist. Preserve original string and each parsed integer.",
+          "formula": "x=matching hashes seen while merging sorted sketches; s=union hashes considered, capped by configured sketch size; j=x/s if s>0.",
+          "exact_inputs": "Native counts token; do not assume denominator 1000.",
+          "unit": "hash counts; j dimensionless",
+          "population_denominator": "Sampled k-mer hash union, possibly fewer than nominal sketch size. Not read counts, base counts, genome count or query coverage.",
+          "uncertainty": "Sketching gives an estimate; service does not return sketches or an interval.",
+          "missing_behavior": "Reject malformed/noninteger/negative counts or x>s; denominator zero makes derived j undefined. Retain native row and error qualification."
+        },
+        {
+          "field": "derived shared_hash_fraction",
+          "native_type": "number only when counts valid and denominator>0",
+          "kind": "separate deterministic calculation candidate",
+          "meaning": "Estimated sampled Jaccard similarity j, inspectable independently from Mash distance.",
+          "formula": "x/s",
+          "exact_inputs": "Parsed native counts numerator and denominator.",
+          "unit": "dimensionless fraction",
+          "population_denominator": "s returned native compared union hashes.",
+          "uncertainty": "No interval available without explicit sketch/statistical parameters.",
+          "missing_behavior": "Unknown when counts absent/invalid or s=0; do not default."
+        }
+      ],
+      "reference_selection": {
+        "bacterial": "When selected: reference sketch if include_reference; representative sketch if include_representative; if neither, all bacterial genomes sketch.",
+        "viral": "When selected: one combined reference+representative viral sketch if either flag true; otherwise configured list of all viral sketches.",
+        "population": "Actual files, releases and numbers of genomes are deployment configuration, absent from returned rows."
+      },
+      "input_semantics": "Uses existing per-genome .msh if present, then downloaded genome .fna if present, otherwise retrieves contigs through Data API. This server-side resolution is part of the native direct operation, not a newly invented workflow."
+    },
+    {
+      "primitive_id": "minhash.compute_genome_distance_for_fasta2",
+      "service": "Minhash",
+      "native_method": "Minhash.compute_genome_distance_for_fasta2",
+      "source_status": "official_source_inspected; deployed revision unverified",
+      "official_sources": [
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/Minhash.spec",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/Minhash.spec",
+          "lines": "27-54",
+          "sha256": "6d9807437c50270ccce2767be5ac092398df4b6d56a16fecdb23a92e4ac24deb"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/lib/Bio/P3/Minhash/MinhashImpl.pm",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/lib/Bio/P3/Minhash/MinhashImpl.pm",
+          "lines": "352-498; 557-664",
+          "sha256": "ffd10b7844304bd4494adb21f664250f0164486922e3636b6e6303d5bacd6ea3"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/scripts/minhash-search.pl",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/scripts/minhash-search.pl",
+          "lines": "1-197",
+          "sha256": "cba5a2fe6d49151b71b0108a6831ad519e50a653a52370cb4a4f1b4a36fcc010"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/lib/Bio/P3/Minhash/Client.pm",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/lib/Bio/P3/Minhash/Client.pm",
+          "lines": "353-395; 455-499",
+          "sha256": "922f43ba699c5724e7926084d8d72a6e7502e69e1e781c87e87e042ccde00b4a"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/BV-BRC/p3_minhash/2220db387ee6b068993e1765138ac76b853ccde4/lib/Bio/P3/Minhash/Service.pm",
+          "revision": "2220db387ee6b068993e1765138ac76b853ccde4",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/p3_minhash/lib/Bio/P3/Minhash/Service.pm",
+          "lines": "31-47; 225-354",
+          "sha256": "48e6a88edae4aeb58eaaccee142b56f0866cc315d72d40612f4676f29df55787"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/marbl/Mash/5df1f984a06d568b4c47540042a0e619fd1f7bdd/src/mash/CommandDistance.cpp",
+          "revision": "5df1f984a06d568b4c47540042a0e619fd1f7bdd",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/src/mash/CommandDistance.cpp",
+          "lines": "286; 336-450",
+          "sha256": "ef4fea79af61e8094cac78abf5b9782d8957ef53af9773717f43e23d3556af82"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/marbl/Mash/5df1f984a06d568b4c47540042a0e619fd1f7bdd/doc/sphinx/distances.rst",
+          "revision": "5df1f984a06d568b4c47540042a0e619fd1f7bdd",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/doc/sphinx/distances.rst",
+          "lines": "1-118",
+          "sha256": "276170aa11c1d1423b810c4e7430b6dddfec44e63efdaf23cfde46fca4900232"
+        },
+        {
+          "official_source_url": "https://raw.githubusercontent.com/marbl/Mash/5df1f984a06d568b4c47540042a0e619fd1f7bdd/test/ref/genomes.dist",
+          "revision": "5df1f984a06d568b4c47540042a0e619fd1f7bdd",
+          "retained_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist",
+          "lines": "1-3",
+          "sha256": "205f7b6c5390833923d7e01bf11d30e568c0c6c13bfb368fb8817d57186d064c"
+        }
+      ],
+      "ordered_native_params": [
+        {
+          "position": 0,
+          "name": "ws_fasta_path",
+          "native_type": "string",
+          "required": true,
+          "meaning": "Workspace path to supplied sequence file; not inline FASTA, client-local filesystem path, URL or output path"
+        },
+        {
+          "position": 1,
+          "name": "max_pvalue",
+          "native_type": "float",
+          "required": true,
+          "meaning": "Maximum Mash p-value threshold, documented 0-1."
+        },
+        {
+          "position": 2,
+          "name": "max_distance",
+          "native_type": "float",
+          "required": true,
+          "meaning": "Maximum Mash distance threshold, documented 0-1."
+        },
+        {
+          "position": 3,
+          "name": "max_hits",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Requested maximum returned hits; source off-by-one qualification below."
+        },
+        {
+          "position": 4,
+          "name": "include_reference",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Native truthy flag; ordinarily 0/1."
+        },
+        {
+          "position": 5,
+          "name": "include_representative",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Native truthy flag; ordinarily 0/1."
+        },
+        {
+          "position": 6,
+          "name": "bacterial",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Include bacterial reference sketches; wrapper alias include_bacterial is not native name."
+        },
+        {
+          "position": 7,
+          "name": "viral",
+          "native_type": "int",
+          "required": true,
+          "meaning": "Include viral reference sketches; wrapper alias include_viral is not native name."
+        }
+      ],
+      "response_envelope": {
+        "request": "HTTP POST JSON object; method is exact service.method; params is the ordered array below; client-generated id is correlation only. Official generated clients use JSON-RPC 1.1 by default.",
+        "success": "Object with result array containing one native method return value, plus RPC id/version fields as actually supplied. Do not discard outer result or id.",
+        "error": "Retain HTTP status/headers/body even when non-JSON. For JSON-RPC preserve the whole error object: code, message, data/error and any additional fields. Perl service exceptions use -32603. Version-specific envelope fields and error details depend on the service transport; they were not observed live here.",
+        "server_variants": "Retained AppService AsyncService explicitly emits jsonrpc:2.0. AppService.psgi uses a generated Service.pm absent from the app_service checkout. Workspace and Minhash retained Service.pm delegate final encoding to RPC::Any and preserve version-specific errors. Client-side result[0] is the source-established method value; no successful live envelope was obtained.",
+        "mutation_replay": "RPC id is not an idempotency key in these specs. A timed-out mutating request has unknown remote outcome; no automatic retry or substitute operation is implied."
+      },
+      "auth_requirement": {
+        "declared": "optional",
+        "meaning": "Genome mode uses public or caller-visible genome contigs. FASTA mode needs permission to read selected Workspace path; private data requires auth despite optional method declaration. No credential lookup performed."
+      },
+      "mutation_effect": null,
+      "native_auxiliary_mutations": [
+        "Internal Workspace content access may adjust Shock ACLs through Workspace.get, despite no AppService job creation."
+      ],
+      "returned_identity": "No async task identity. Request identity + query genome/path binds each returned reference genome_id row. Preserve duplicates and result order.",
+      "status_timing_fields": [
+        {
+          "field": "HTTP duration",
+          "meaning": "Only locally measured request turnaround if called; no native queue/start/completion fields or AppService job ID."
+        }
+      ],
+      "raw_output_retention_needs": [
+        "Complete exact selected method, ordered parameters and correlation ID; authentication presence/type only in non-secret provenance.",
+        "Complete HTTP status/headers and raw response body, including non-JSON error bodies; preserve native number/string/null distinctions.",
+        "Local acquisition timestamp and measured HTTP duration, distinct from any task execution timestamps.",
+        "Request/receipt association and selected task or Workspace object identities; no inferred association from a similar filename.",
+        "Complete response and every row in native order, including duplicate genome IDs, original numeric lexemes/counts string; input path/genome ID and exact thresholds/reference flags.",
+        "Retain supplied input bytes/Workspace object identity where available; actual selected database sketch version, k, hash seed, sketch size, lengths and reference set membership remain explicit unknown metadata unless acquired independently.",
+        "No fictitious output_path/output_file artifact: native method takes neither."
+      ],
+      "missing_partial_error_states": [
+        "No returned rows differs from a proven successful zero-hit population result: both service and minhash-search fail to inspect all child-process exit statuses after pipes.",
+        "Invalid argument scalar/reference type throws RPC error, but semantic range validation is not comprehensive in native implementation.",
+        "Both bacterial=0 and viral=0 leave no reference collections; do not interpret resulting empty/failure behavior as a scientific negative.",
+        "Source loop last if n++ > max_hits permits up to max_hits+1 rows before further filtering; no returned total/truncated flag.",
+        "Underlying minhash-search skips reference identifiers it cannot map to genome IDs, warns server-side, sorts by distance then numeric taxon/index, and does not deduplicate across collections.",
+        "A returned list is threshold-filtered and capped, not a complete database population."
+      ],
+      "unresolved": [
+        "No successful BV-BRC MinHash request/response was observed.",
+        "Current public MinHash endpoint, deployed Mash version and reference sketch releases/configuration remain unverified. Generated native client fallback is localhost:7138, not an established public endpoint.",
+        "Service response omits k/seed/sketch configuration/query and reference sequence lengths and reference population size; full native Mash pvalue/distance recalculation is blocked without those supplied inputs.",
+        "Native distance and pvalue may be JSON strings; preserve raw types until a real response validates the parser."
+      ],
+      "examples": [
+        {
+          "kind": "native_upstream_Mash_retained_fixture_not_BV_BRC_live",
+          "source_path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist",
+          "row": "genome1.fna\treads\t0.12101\t4.48626e-214\t41/1000",
+          "checkable_components": {
+            "shared_hashes": 41,
+            "compared_union_hashes": 1000,
+            "shared_hash_fraction": 0.041
+          },
+          "qualification": "This upstream native test fixture establishes Mash row meanings only. It is not a BV-BRC genome-id response or scientific measurement of any user input."
+        },
+        {
+          "kind": "source_derived_not_invoked",
+          "request": {
+            "version": "1.1",
+            "method": "Minhash.compute_genome_distance_for_fasta2",
+            "params": [
+              "/<owner>/<workspace>/input.fa",
+              0.01,
+              0.1,
+              10,
+              1,
+              1,
+              1,
+              0
+            ],
+            "id": "<correlation-id>"
+          }
+        }
+      ],
+      "live_verification": "not invoked",
+      "response_result_shape": "result[0]: list<[genome_id string,distance float|string,pvalue float|string,counts string]>. Return directly in same RPC; no AppService status/log/output-path contract.",
+      "numerical_measurements": [
+        {
+          "field": "row[1] distance",
+          "native_type": "float declared; split tab text in Perl may serialize as numeric string",
+          "kind": "native derived estimate",
+          "meaning": "Mash estimate of mutation distance from sampled k-mer Jaccard overlap; not alignment identity, coverage, ANI measurement or annotation probability.",
+          "formula": "For j=x/s: D=0 when x=s; D=1 when x=0; otherwise min(1,-ln(2*j/(1+j))/k) in retained Mash source.",
+          "exact_inputs": "Native counts x/s and k-mer length k from actual sketches; service returns distance/counts but not k.",
+          "unit": "dimensionless mutation-rate estimate",
+          "population_denominator": "Sampled union of two k-mer hash sketches, with denominator s actually output, not number of genomes or alignment bases.",
+          "uncertainty": "No per-hit confidence interval returned. pvalue is a separate random-overlap statistic.",
+          "missing_behavior": "Preserve missing/malformed as missing/invalid, never zero; do not recompute without actual k."
+        },
+        {
+          "field": "row[2] pvalue",
+          "native_type": "float declared; split text may serialize as numeric string",
+          "kind": "native derived tail probability",
+          "meaning": "Probability under Mash random-sequence overlap null of at least x shared hashes. This is not function correctness probability.",
+          "formula": "p=P[Binomial(s,j_r)>=x], j_r=r1*r2/(r1+r2-r1*r2), ri=li/(li+|alphabet|^k); retained source returns 1 for x=0.",
+          "exact_inputs": "x,s, reference/query length estimates, k and alphabet/k-mer space; service returns only pvalue and counts.",
+          "unit": "dimensionless probability",
+          "population_denominator": "The pair of compared sequence/sketch objects under random-overlap model; not a multiple-testing-adjusted database E-value.",
+          "uncertainty": "Native p-value, not confidence interval; printed zero can reflect floating-point underflow/rounding.",
+          "missing_behavior": "Unknown unless returned. Zero remains zero as reported, without claiming mathematically exact chance zero."
+        },
+        {
+          "field": "row[3] counts",
+          "native_type": "string x/s",
+          "kind": "native measured sketch counts",
+          "meaning": "Shared hash count x and compared union-hash count s as emitted by mash dist. Preserve original string and each parsed integer.",
+          "formula": "x=matching hashes seen while merging sorted sketches; s=union hashes considered, capped by configured sketch size; j=x/s if s>0.",
+          "exact_inputs": "Native counts token; do not assume denominator 1000.",
+          "unit": "hash counts; j dimensionless",
+          "population_denominator": "Sampled k-mer hash union, possibly fewer than nominal sketch size. Not read counts, base counts, genome count or query coverage.",
+          "uncertainty": "Sketching gives an estimate; service does not return sketches or an interval.",
+          "missing_behavior": "Reject malformed/noninteger/negative counts or x>s; denominator zero makes derived j undefined. Retain native row and error qualification."
+        },
+        {
+          "field": "derived shared_hash_fraction",
+          "native_type": "number only when counts valid and denominator>0",
+          "kind": "separate deterministic calculation candidate",
+          "meaning": "Estimated sampled Jaccard similarity j, inspectable independently from Mash distance.",
+          "formula": "x/s",
+          "exact_inputs": "Parsed native counts numerator and denominator.",
+          "unit": "dimensionless fraction",
+          "population_denominator": "s returned native compared union hashes.",
+          "uncertainty": "No interval available without explicit sketch/statistical parameters.",
+          "missing_behavior": "Unknown when counts absent/invalid or s=0; do not default."
+        }
+      ],
+      "reference_selection": {
+        "bacterial": "When selected: reference sketch if include_reference; representative sketch if include_representative; if neither, all bacterial genomes sketch.",
+        "viral": "When selected: one combined reference+representative viral sketch if either flag true; otherwise configured list of all viral sketches.",
+        "population": "Actual files, releases and numbers of genomes are deployment configuration, absent from returned rows."
+      },
+      "input_semantics": "Service copies the Workspace object to a temporary file then invokes minhash-search. Expected selected mode is supplied FASTA; script also recognizes GTO/FASTQ/gzip in source, but no extra scientific modes are added by this contract.",
+      "mutation_effect_qualification": "Native direct synchronous computation creates no AppService task; however its internal Workspace content acquisition may change Shock ACLs. The four requested effect labels do not cover that auxiliary effect, so this is not labeled mutation-free."
+    }
+  ],
+  "handoff_blockers": [
+    "Authenticated selected task/status/log and create/upload/submission receipts have not been observed.",
+    "No successful public service RPC result: front-door challenge, without evidence about actual service authorization behavior.",
+    "Effect/replay implementation must account for capability/ACL side effects plus separate create/upload/submit receipts.",
+    "Application parameter/native artifact schemas and task-owned output associations belong to the separate application workload.",
+    "MinHash reference releases/sketch parameters and deployed versions are missing; shared hash fraction can be recalculated from supplied valid counts, but native distance/pvalue cannot be fully independently recomputed from RPC rows alone."
+  ],
+  "final_contract_review_at_utc": "2026-10-24T22:59:39.631823+00:00",
+  "review_corrections": [
+    {
+      "field": "minhash.compute_genome_distance_for_fasta2.mutation_effect",
+      "correction": "Changed from none to null with explicit qualification: internal Workspace content acquisition may adjust existing Shock ACLs. This agrees with Workspace.get and does not describe the call as externally mutation-free."
+    },
+    {
+      "field": "workspace.get.native_auxiliary_mutations",
+      "correction": "Clarified that public-access handling makes the existing Shock node public; it does not create a new node."
+    }
+  ]
+}

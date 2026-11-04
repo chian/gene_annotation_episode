@@ -1,0 +1,32 @@
+{
+  "kind": "Implementation gaps from inspected current contracts, not new goal requirements or absent-paper claims",
+  "inherits": "PROGRESS_172_001.json plus prior scientific168 review",
+  "gaps": [
+    {
+      "component": "Reported within-run and between-run CV",
+      "current_status": "169 has an absolute measured_spread input and a derived SD/M CV; no dedicated reported within-run/between-run CV fields or selected-reader path.",
+      "why_distinct": "A reported relative CV must not enter the absolute SD input. Missing input to169 does not establish that a paper omits CV.",
+      "workload173": "Keep role-correct partial returns; do not silently relabel reported CV as SD. Additional reader remains unfinished."
+    },
+    {
+      "component": "Reported control-signal separation statistic (e.g. Z-prime)",
+      "current_status": "No169 input/derived component for this source-native statistic; no generic overall validity grade can substitute.",
+      "why_distinct": "Reported statistic without original control means and SD can be retained as reported only; no recomputation, universal range restriction or adopted threshold.",
+      "workload173": "Outside agreed integration ownership; retain open."
+    },
+    {
+      "component": "Linear reporter calibration fit and sample/blank conversion",
+      "current_status": "169 computes a recovery pair; it does not read slope/intercept, fit uncertainty or transform sample/blank responses through a linear calibration. Existing optical calculator is a different NADH extinction model.",
+      "why_distinct": "An applicable slope and same-calibration blank differ from residual recovery; avoid double correction and double intercept subtraction.",
+      "workload173": "No silent expansion of current recovery op; remain explicit separate unfinished conversion."
+    },
+    {
+      "component": "Common A105 numerical section assembly and assay-specific compilation",
+      "current_status": "Numerical component modules exist; no completed scientifically adequate common whole-A105 assembly.",
+      "why_distinct": "Reader operation counts or ratio outputs alone do not prove reliability/validity/relevance scoring adequacy.",
+      "workload173": "Integrate this source-control numerical section without claiming whole-A105 completion."
+    }
+  ],
+  "new_axes": 0,
+  "goal_changed": false
+}

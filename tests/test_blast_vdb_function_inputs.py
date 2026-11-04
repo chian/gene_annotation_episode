@@ -424,7 +424,7 @@ def test_native_gbseq_feature_assignment_is_extracted_from_exact_bound_record():
 
 @pytest.mark.parametrize("filename", ["whole_sequence.json", "translated_features.json", "translated_siblings.json"])
 def test_complete_frozen_fixtures_validate_without_base_recalculation(filename, monkeypatch):
-    path = Path(__file__).resolve().parents[1] / "verification/tool_graders_blast_vdb_function_inputs_2026-10-26_342/fixtures_001" / filename
+    path = Path(__file__).resolve().parent / "fixtures/blast_vdb_saved_function_inputs" / filename
     frozen = json.loads(path.read_text())
     def forbidden(*args, **kwargs):
         raise AssertionError("frozen validation must consume saved values")
@@ -434,7 +434,12 @@ def test_complete_frozen_fixtures_validate_without_base_recalculation(filename, 
     monkeypatch.setattr(v1, "_recheck_metadata", forbidden)
     monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
     monkeypatch.setattr(module, "extract_blast_vdb_feature_function_assignments", forbidden)
-    assert module.validate_blast_vdb_function_sheet(frozen) == frozen
+    original = json.dumps(frozen, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    validated = module.validate_blast_vdb_function_sheet(frozen)
+    assert validated == frozen
+    assert json.dumps(validated, sort_keys=True, separators=(",", ":"), allow_nan=False) == original
+    assert all("endpoint_spans" not in row["native_components"]
+        and len(row["native_components"]["fractions"]) == 4 for row in validated["base_components"]["hsps"])
 
 
 def test_saved_eligible_observation_cannot_disappear_with_its_entity_index():
@@ -561,3 +566,132 @@ def test_saved_feature_component_requires_its_original_feature_binding():
     sheet["base_components"]["feature_components"][0]["feature_binding_indices"] = []
     with pytest.raises(ValueError, match="^blast_vdb_function_reference_out_of_range$"):
         module.validate_blast_vdb_function_sheet(sheet)
+
+
+def current_span_sheet(case):
+    """Current producer output; no native executable or stored fixture rewrite."""
+    if case == "translated_siblings":
+        return populate(translated_case(siblings=True))
+    if case == "whole":
+        values, assignments = whole_case()
+        return populate(values, assignments)
+    native = hsp()
+    if case == "missing_traceback":
+        native.pop("qseq"); native.pop("hseq")
+        search = collect(hits=[dict(len=8, description=[dict(id="x", accession="x")], hsps=[native])])["searches"][0]
+        values = inputs(search)
+    else:
+        assert case == "unknown_operand_lengths"
+        document = {"BlastOutput2": [{"report": dict(program="blastn", version="BLASTN 2.17.0+",
+            search_target={"db": "synthetic-selected"}, params={}, results={"search": dict(query_id="q", query_title="q",
+                hits=[dict(description=[dict(id="x", accession="x")], hsps=[native])])})}]}
+        search = collect(raw=json.dumps(document).encode())["searches"][0]
+        values = inputs(search)
+        values["query_binding"] = None
+        values["sequence_identity_bindings"] = []
+        for row in values["reference_metadata"]:
+            row["sequence"] = None
+    return populate(values, [explicit(values)])
+
+
+@pytest.mark.parametrize("case", ["whole", "translated_siblings", "missing_traceback", "unknown_operand_lengths"])
+def test_current_shared_span_shape_validates_frozen_without_native_or_base_work(case, monkeypatch):
+    from gene_annotation_episode import alignment_correspondence as common
+    from gene_annotation_episode import blast_pairwise_grader as paired
+    frozen = current_span_sheet(case)
+    before = json.dumps(frozen, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    components = frozen["base_components"]["hsps"][0]["native_components"]
+    assert len(components) == 12 and len(components["fractions"]) == 6
+    assert set(components["endpoint_spans"]) == {"query", "reference"}
+    if case == "missing_traceback":
+        assert components["traceback_available"] is False and components["geometry_available"] is False
+        assert components["endpoint_spans"]["query"]["positions"] == 8
+        assert components["endpoint_spans"]["reference"]["positions"] == 8
+    elif case == "unknown_operand_lengths":
+        for axis in ("query", "reference"):
+            assert components["endpoint_spans"][axis]["positions"] == 8
+            assert components["endpoint_spans"][axis]["operand_length"] is None
+            assert components["fractions"][axis + "_span_coverage"] is None
+    elif case == "translated_siblings":
+        assert any(row["native_components"]["endpoint_spans"]["reference"] is None
+            for row in frozen["base_components"]["hsps"])
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("saved span validation attempted native/base work")
+
+    for name in ("populate_blast_vdb_sheet", "_reparse", "_recheck_metadata",
+            "parse_ncbi_sra_runinfo", "parse_blast_vdb_member_sequences", "parse_ncbi_gbseq_vdb_metadata"):
+        monkeypatch.setattr(v1, name, forbidden)
+    for name in ("_axis_geometry", "_axis_positions", "_read_alignment_components", "alignment_component_artifacts",
+            "alignment_components", "blast_hsp_column_correspondence"):
+        monkeypatch.setattr(paired, name, forbidden)
+    for name in ("populate_correspondence_sheet", "calculate_correspondence_components"):
+        monkeypatch.setattr(common, name, forbidden)
+    monkeypatch.setattr(base, "calculate_blast_vdb_components", forbidden)
+    monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
+    monkeypatch.setattr(module, "extract_blast_vdb_feature_function_assignments", forbidden)
+    monkeypatch.setattr(builtins, "open", forbidden)
+    monkeypatch.setattr(socket, "socket", forbidden)
+    monkeypatch.setattr(subprocess, "Popen", forbidden)
+    validated = module.validate_blast_vdb_function_sheet(frozen)
+    assert json.dumps(validated, sort_keys=True, separators=(",", ":"), allow_nan=False) == before
+    assert json.dumps(frozen, sort_keys=True, separators=(",", ":"), allow_nan=False) == before
+    assert validated is not frozen
+
+
+@pytest.mark.parametrize("change", [
+    lambda c: c.pop("endpoint_spans"),
+    lambda c: c["fractions"].pop("query_span_coverage"),
+    lambda c: (c["fractions"].pop("query_span_coverage"), c["fractions"].pop("reference_span_coverage")),
+    lambda c: c["endpoint_spans"].update(extra=None),
+    lambda c: c["endpoint_spans"]["query"].update(extra=0),
+    lambda c: c["endpoint_spans"]["query"].update(positions=7),
+    lambda c: c["endpoint_spans"]["query"].update(positions=True),
+    lambda c: c["endpoint_spans"]["query"].update(positions=8.0),
+    lambda c: c["endpoint_spans"]["query"].update(interval=[1, 9]),
+    lambda c: c["endpoint_spans"]["query"].update(interval=[-1, 7]),
+    lambda c: c["endpoint_spans"]["query"].update(operand_length=9),
+    lambda c: c["endpoint_spans"]["query"].update(operand_length=None),
+    lambda c: c["endpoint_spans"]["query"].update(direction=-1),
+    lambda c: c["endpoint_spans"]["query"].update(alignment_symbol_width=3),
+    lambda c: c["endpoint_spans"]["query"].update(unit="aa"),
+    lambda c: c["fractions"].update(query_span_coverage=.5),
+    lambda c: c["endpoint_spans"].update(reference=None),
+    lambda c: c["fractions"].update(query_span_coverage=None),
+    lambda c: c["fractions"].update(extra=0),
+])
+def test_current_shared_span_fields_reject_mixed_shapes_and_forged_relationships(change):
+    saved = current_span_sheet("whole")
+    change(saved["base_components"]["hsps"][0]["native_components"])
+    with pytest.raises(ValueError, match="^blast_vdb_function_record_fields_invalid$"):
+        module.validate_blast_vdb_function_sheet(saved)
+
+
+@pytest.mark.parametrize("case", ["whole", "missing_traceback", "unknown_operand_lengths"])
+@pytest.mark.parametrize("axis", ["query", "reference"])
+def test_current_known_span_cannot_be_erased_with_its_fraction(case, axis):
+    saved = current_span_sheet(case)
+    row = saved["base_components"]["hsps"][0]
+    assert row[axis + "_span"]["value"] == 8
+    assert row["native_components"]["endpoint_spans"][axis]["positions"] == 8
+    row["native_components"]["endpoint_spans"][axis] = None
+    row["native_components"]["fractions"][axis + "_span_coverage"] = None
+    with pytest.raises(ValueError, match="^blast_vdb_function_record_fields_invalid$"):
+        module.validate_blast_vdb_function_sheet(saved)
+
+
+def test_current_unavailable_span_cannot_be_injected_with_its_fraction():
+    saved = current_span_sheet("translated_siblings")
+    donor = saved["base_components"]["hsps"][0]
+    row, = [item for item in saved["base_components"]["hsps"]
+        if item["row_key"]["hit_ordinal"] == 0 and item["native_hsp"].get("hit_frame") == 2]
+    assert row["reference_span"]["value"] is None
+    assert row["native_components"]["endpoint_spans"]["reference"] is None
+    assert row["native_components"]["fractions"]["reference_span_coverage"] is None
+    assert row["native_hsp"]["hit_from"] == donor["native_hsp"]["hit_from"]
+    assert row["native_hsp"]["hit_to"] == donor["native_hsp"]["hit_to"]
+    row["native_components"]["endpoint_spans"]["reference"] = deepcopy(
+        donor["native_components"]["endpoint_spans"]["reference"])
+    row["native_components"]["fractions"]["reference_span_coverage"] = donor["native_components"]["fractions"]["reference_span_coverage"]
+    with pytest.raises(ValueError, match="^blast_vdb_function_record_fields_invalid$"):
+        module.validate_blast_vdb_function_sheet(saved)

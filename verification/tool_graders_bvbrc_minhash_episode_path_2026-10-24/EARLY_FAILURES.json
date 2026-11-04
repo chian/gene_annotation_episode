@@ -1,0 +1,37 @@
+{
+  "schema": "minhash_episode_test_attempts_v1",
+  "evidence_kind": "scripted engineering tests with synthetic urllib interception",
+  "attempts": [
+    {
+      "directory": "pytest-run",
+      "outcome": "initial harness setup error before test execution",
+      "detail": "The parent of the requested pytest --basetemp did not yet exist. Created the owned verification directory and reran."
+    },
+    {
+      "directory": "pytest-run",
+      "outcome": "1 failed, stopped after first failure",
+      "elapsed_seconds": 17.58,
+      "boundary": "launch to API child handoff facts",
+      "code": "bvbrc_minhash_projection_invalid:qualified_results_array:qualified_results",
+      "cause": "Host supplied an empty tuple when no MinHash fact families were requested; the projector requires an array/list.",
+      "production_fix_owner": "root"
+    },
+    {
+      "directory": "pytest-run-002",
+      "outcome": "1 failed, stopped after first failure",
+      "elapsed_seconds": 43.56,
+      "boundary": "scientific child to count-only root typed return",
+      "code": "unknown_reference",
+      "field": "report.counts[0].source_ref",
+      "cause": "Received numerical rows were available, but the scientific child could not resolve the source reference in its requested count return.",
+      "production_fix_owner": "root"
+    },
+    {
+      "directory": "pytest-partial-001",
+      "junit": "pytest-partial-001.xml",
+      "outcome": "1 passed, 6 deselected",
+      "elapsed_seconds": 35.83,
+      "scope": "Partial native-shaped rows retain valid cells and unknown values without completing the practical result assignment."
+    }
+  ]
+}

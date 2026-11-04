@@ -1,0 +1,42 @@
+{
+  "commands": {
+    "consumers": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q tests/test_hmmer_api_connected.py tests/test_hmmer_api_reconstruction.py tests/test_hmmer_api_adapter.py tests/test_hmmer_api_information.py tests/test_hmmer_api_progress.py tests/test_hmmer_api_caller_configuration.py tests/test_api_timing_connected.py tests/test_api_execution_preparation.py tests/test_api_execution_tool.py tests/test_api_execution_planning_binding.py tests/test_api_execution_planning_runtime.py tests/test_api_execution_planning_connected.py tests/test_assembled_service_setup.py tests/test_resource_service_setup.py --junitxml=/tmp/api-planning-root-final-20261022-004/consumers.xml",
+    "detached": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q tests/test_api_execution_planning_reconstruction.py --junitxml=/tmp/api-planning-root-final-20261022-004/detached.xml",
+    "legacy": "/home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q tests/test_hmmer_api_result_states.py tests/test_hmmer_api_operations.py tests/test_hmmer_api_publication.py tests/test_public_search.py --junitxml=/tmp/api-planning-root-final-20261022-004/legacy.xml"
+  },
+  "detached_case_result": {
+    "passed": 1,
+    "seconds": 26.97
+  },
+  "disjoint_file_sets": true,
+  "final_case_counts": null,
+  "legacy_and_consumer_results": "pending parent confirmation",
+  "test_files": {
+    "consumers": [
+      "tests/test_hmmer_api_connected.py",
+      "tests/test_hmmer_api_reconstruction.py",
+      "tests/test_hmmer_api_adapter.py",
+      "tests/test_hmmer_api_information.py",
+      "tests/test_hmmer_api_progress.py",
+      "tests/test_hmmer_api_caller_configuration.py",
+      "tests/test_api_timing_connected.py",
+      "tests/test_api_execution_preparation.py",
+      "tests/test_api_execution_tool.py",
+      "tests/test_api_execution_planning_binding.py",
+      "tests/test_api_execution_planning_runtime.py",
+      "tests/test_api_execution_planning_connected.py",
+      "tests/test_assembled_service_setup.py",
+      "tests/test_resource_service_setup.py"
+    ],
+    "detached": [
+      "tests/test_api_execution_planning_reconstruction.py"
+    ],
+    "legacy": [
+      "tests/test_hmmer_api_result_states.py",
+      "tests/test_hmmer_api_operations.py",
+      "tests/test_hmmer_api_publication.py",
+      "tests/test_public_search.py"
+    ]
+  },
+  "version": "api004_root_selections_draft_v1"
+}

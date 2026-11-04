@@ -1,0 +1,214 @@
+--- verification/tool_graders_hmmer_map_verification_2026-10-28_529/check152a_parsing689/source_snapshot/gene_annotation_episode/flux_balance_readers.py
++++ gene_annotation_episode/flux_balance_readers.py
+@@ -51,10 +51,14 @@
+ 
+ class _SourceFiles(dict):
+     """Per-call supplied JSON documents; never a file-opening registry."""
+-    def __init__(self, files, *, documents=None, current=None):
++    def __init__(self, files, *, documents=None, current=None, prior_files=None):
+         super().__init__(files)
+         self.documents = dict(getattr(files, "documents", {}))
+         self.documents.update(documents or {})
++        # Extra typed Files are not producer roles. A role address must never
++        # acquire a new spelling merely because prior bytes were supplied.
++        self.prior_files = dict(getattr(files, "prior_files", {}))
++        self.prior_files.update(prior_files or {})
+         self.current = current
+ 
+ 
+@@ -78,9 +82,16 @@
+ 
+ def _location(file, pointer, files):
+     documents = getattr(files, "documents", {})
++    if (file["artifact_ref"] in getattr(files, "prior_files", {})
++            and pointer != "" and file["artifact_ref"] not in documents):
++        raise ValueError("schema_invalid:/pointer")
+     if file["artifact_ref"] in documents:
+         _pointer(documents[file["artifact_ref"]], pointer)
+     return {"file": deepcopy(file), "pointer": pointer}
++
++
++def _retained_address(file, files):
++    return file in files.values() or file in getattr(files, "prior_files", {}).values()
+ 
+ 
+ def _issue(code, source=None, pointer=None, *, index=None, reaction=None,
+@@ -151,7 +162,7 @@
+                 raise ValueError(f"artifact_missing:{pointer}/role")
+             return _location(files[value["role"]], value["pointer"], files)
+         if set(value) == {"file", "pointer"}:
+-            if value["file"] not in files.values():
++            if not _retained_address(value["file"], files):
+                 raise ValueError("artifact_identity_conflict:/file")
+             return _location(value["file"], value["pointer"], files)
+     if set(properties) == {"artifact_ref", "sha256", "size_bytes", "format"}:
+@@ -164,7 +175,7 @@
+             if value["identity"] != {key: file[key] for key in ("sha256", "size_bytes")}:
+                 raise ValueError("artifact_identity_conflict:")
+             return deepcopy(file)
+-        if value not in files.values():
++        if not _retained_address(value, files):
+             raise ValueError("artifact_identity_conflict:")
+         return deepcopy(value)
+     if type(value) is dict and properties:
+@@ -881,6 +892,124 @@
+     return result
+ 
+ 
++def _original_selected_request(raw, expected):
++    """Check original selection identity before any address binding/admission."""
++    if not _keys("SelectedRequestPayload", raw):
++        raise ValueError("schema_invalid:")
++    if (raw["version"] != "flux_balance_selected_request_v1"
++            or validate_flux_balance_record("FBAAttemptIdentity", raw["attempt"]) != expected
++            or digest(raw["requested_job"]) != expected["requested_job_sha256"]):
++        raise ValueError("artifact_identity_conflict:/attempt")
++
++
++def _prior_source_uses(raw):
++    """Only declared request operands may select external source bytes."""
++    request = raw.get("requested_job")
++    job = request.get("native_flux_balance") if type(request) is dict else None
++    if type(job) is not dict:
++        return []
++    base = "/requested_job/native_flux_balance"
++    uses = []
++    model = job.get("model_input")
++    if type(model) is dict and model.get("acquisition_receipt_file") is not None:
++        uses.append((model["acquisition_receipt_file"], base + "/model_input/acquisition_receipt_file", ""))
++    changes = job.get("constraints")
++    if type(changes) is list:
++        for index, change in enumerate(changes):
++            if type(change) is not dict:
++                continue
++            for side in ("lower", "upper"):
++                bound = change.get(side)
++                source = bound.get("source") if type(bound) is dict else None
++                if type(source) is dict and set(source) == {"file", "pointer"}:
++                    uses.append((source["file"], f"{base}/constraints/{index}/{side}/source", source["pointer"]))
++    # Producer role addresses are bound through the eight-role registry only.
++    return [use for use in uses if type(use[0]) is dict
++            and set(use[0]) == {"artifact_ref", "sha256", "size_bytes", "format"}]
++
++
++def _admit_prior_source_bytes(payloads, files, expected, prior_sources, retained, issues):
++    """Verify explicitly supplied prior data; this does not confer host access."""
++    rows = [] if prior_sources is None else prior_sources
++    if type(rows) is not list:
++        issues.append(_issue("schema_invalid", pointer="/prior_sources"))
++        rows = []
++    selected_file = files.get("selected_request")
++    if selected_file is None:
++        if rows:
++            issues.append(_issue("input_missing", pointer="/prior_sources/selected_request"))
++        return files
++    try:
++        raw = _json(payloads["selected_request"]["bytes"], selected_file)
++        _original_selected_request(raw, expected)
++    except ValueError:
++        # The ordinary selected-request parser records the original failure.
++        # No external File can be admitted from this unassociated selection.
++        return files
++    wanted, uses, conflicting = {}, [], set()
++    for candidate, where, pointer in _prior_source_uses(raw):
++        try:
++            file = validate_flux_balance_record("File", candidate)
++        except ValueError as error:
++            issues.append(_error_issue(error, selected_file, "/selected_request" + where))
++            continue
++        if file in files.values():
++            continue
++        ref = file["artifact_ref"]
++        if ref in wanted and wanted[ref] != file:
++            conflicting.add(ref)
++            issues.append(_issue("artifact_identity_conflict", selected_file, "/selected_request" + where))
++        wanted.setdefault(ref, file)
++        uses.append((file, where, pointer))
++    supplied, counts = {}, Counter()
++    native_refs = {file["artifact_ref"] for file in files.values()}
++    for index, row in enumerate(rows):
++        where = f"/prior_sources/{index}"
++        try:
++            if type(row) is not dict or set(row) != {"file", "bytes"}:
++                raise ValueError("schema_invalid:")
++            file = validate_flux_balance_record("File", row["file"])
++            ref = file["artifact_ref"]
++            counts[ref] += 1
++            if counts[ref] > 1:
++                conflicting.add(ref)
++                raise ValueError("schema_invalid:/file")
++            if ref in native_refs or wanted.get(ref) != file:
++                conflicting.add(ref)
++                raise ValueError("artifact_identity_conflict:/file")
++            _verify_bytes(row["bytes"], file)
++            supplied[ref] = (file, row["bytes"])
++        except ValueError as error:
++            issues.append(_error_issue(error, None, where))
++    prior_files, documents = {}, {}
++    for ref, file in wanted.items():
++        if ref in conflicting or ref not in supplied:
++            continue
++        if ref in retained and retained[ref] != file:
++            issues.append(_issue("artifact_identity_conflict", pointer="/prior_sources"))
++            continue
++        prior_files[ref] = file
++        retained[ref] = file
++        pointers = [pointer for used, _, pointer in uses if used == file]
++        if any(pointer != "" for pointer in pointers):
++            try:
++                document = _json(supplied[ref][1], file)
++                digest(document)  # Reject nonfinite decoded JSON before pointer use.
++                documents[ref] = document
++            except ValueError:
++                pass  # Each selected subvalue use receives its own located issue.
++    result = _SourceFiles(files, documents=documents, prior_files=prior_files)
++    for file, where, pointer in uses:
++        if prior_files.get(file["artifact_ref"]) != file:
++            issues.append(_issue("artifact_missing", selected_file, "/selected_request" + where))
++        else:
++            try:
++                _location(file, pointer, result)
++            except ValueError as error:
++                issues.append(_error_issue(error, selected_file, "/selected_request" + where))
++    return result
++
++
+ def _selected_request(payloads, files, expected, issues):
+     if "selected_request" not in files:
+         issues.append(_issue("input_missing", pointer="/selected_request"))
+@@ -890,13 +1019,15 @@
+         raw = _json(payloads["selected_request"]["bytes"], source)
+         files = _SourceFiles(files, documents={source["artifact_ref"]: raw}, current=source["artifact_ref"])
+         # Digest the exact selected job, before source-address binding changes it.
++        _original_selected_request(raw, expected)
+         value = _record("SelectedRequestPayload", raw, files)
+-        if value["attempt"] != expected or digest(raw["requested_job"]) != expected["requested_job_sha256"]:
+-            raise ValueError("artifact_identity_conflict:/attempt")
+         model = value["requested_job"]["native_flux_balance"]["model_input"]
+         if "original_model" in files and (model["format"] != files["original_model"]["format"] or
+-                any(model["file"][key] != files["original_model"][key] for key in ("sha256", "size_bytes"))):
++                any(model["file"][key] != files["original_model"][key] for key in ("sha256", "size_bytes"))
++                or (model["artifact_ref"] is not None and model["artifact_ref"] != files["original_model"]["artifact_ref"])):
+             raise ValueError("model_identity_conflict:/requested_job/native_flux_balance/model_input")
++        if model["artifact_ref"] is not None and "original_model" not in files:
++            raise ValueError("artifact_missing:/requested_job/native_flux_balance/model_input")
+         return value
+     except ValueError as error:
+         issues.append(_error_issue(error, source, "/selected_request"))
+@@ -1270,7 +1401,7 @@
+     return qualified_changes, objective_state, realization
+ 
+ 
+-def parse_fba_capture(payloads: dict, *, expected: dict) -> dict:
++def parse_fba_capture(payloads: dict, *, expected: dict, prior_sources: list[dict] | None = None) -> dict:
+     """Decode an explicitly supplied eight-role capture; this is not runtime custody.
+ 
+     Unavailable or mismatched roles cannot supply source-address authority.
+@@ -1316,6 +1447,7 @@
+             except ValueError:
+                 pass  # The specific role parser records its located decode error.
+     usable = _SourceFiles(usable, documents=documents)
++    usable = _admit_prior_source_bytes(payloads, usable, expected, prior_sources, retained, issues)
+     selected = _selected_request(payloads, usable, expected, issues)
+     application_issues = []
+     manifest = _manifest(payloads, usable, expected, selected, issues, application_issues)

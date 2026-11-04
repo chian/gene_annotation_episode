@@ -1,0 +1,21 @@
+.....................F                                                   [100%]
+=================================== FAILURES ===================================
+____ test_atac_input_identity_replay_original_closed_workflow_is_unchanged _____
+source_snapshot/tests/test_atac_input_identity_replay.py:271: in test_atac_input_identity_replay_original_closed_workflow_is_unchanged
+    flow, _ = F.assemble(store, directory, NoNewDecisions(), configuration)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/verification/tool_graders_atac_episode_path_2026-10-27_478/fixture_helpers.py:123: in assemble
+    flow = Workflow(store, tools, provider, directory / 'run', RUN_ID,
+source_snapshot/gene_annotation_episode/runtime.py:1842: in __init__
+    composition = compose_episode_bindings(self.services, store=store, journal=self.journal,
+source_snapshot/gene_annotation_episode/episode_composition.py:145: in compose_episode_bindings
+    binding = reopen_scientific_binding(services, descriptor=descriptor, directory=directory)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_composition.py:80: in reopen_scientific_binding
+    _same_record(binding.as_record(), descriptor, reference)
+source_snapshot/gene_annotation_episode/episode_composition.py:49: in _same_record
+    raise _failure('identity_conflict', reference)
+E   method_loop.durable.DurableExecutionError: identity_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_atac_input_identity_replay.py::test_atac_input_identity_replay_original_closed_workflow_is_unchanged
+1 failed, 21 passed in 70.12s (0:01:10)

@@ -1,0 +1,7548 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gene-annotation:review:comparative-systems:handoffs:001",
+  "$comment": "Review-only proposal. Shape validation never confers custody, scientific completeness, or live provenance. See SCHEMA_DECISIONS_001.md for relational invariants.",
+  "$ref": "#/$defs/ComparativeSystemsSheetV1",
+  "$defs": {
+    "DiagnosticCodeV1": {
+      "type": "string",
+      "enum": [
+        "outer_json_invalid",
+        "duplicate_json_key",
+        "format_incompatible",
+        "tsv_header_mismatch",
+        "tsv_row_width_mismatch",
+        "numeric_token_invalid",
+        "nonfinite_number",
+        "artifact_truncated",
+        "original_task_mismatch",
+        "producer_version_unverified",
+        "native_first_object_discard",
+        "native_query_completeness_unknown",
+        "group_membership_unknown",
+        "native_identifier_placeholder",
+        "identity_conflict",
+        "duplicate_identical_representation",
+        "duplicate_record_conflict",
+        "inner_join_missing",
+        "inner_join_many_to_many",
+        "variant_matrix_extra_column",
+        "genome_name_collision",
+        "conflicting_native_categories",
+        "hex_count_width_ambiguous",
+        "native_formula_mismatch",
+        "reference_release_unknown",
+        "reference_membership_missing",
+        "population_incomplete",
+        "population_incompatible",
+        "empty_denominator",
+        "unrequested_dependency_missing",
+        "page_gap",
+        "page_overlap",
+        "snapshot_consistency_unknown",
+        "data_input_binding_mismatch",
+        "data_input_unavailable",
+        "unsupported_server_filter",
+        "annotation_filter_applied",
+        "later_snapshot_not_original",
+        "missing_required_field",
+        "incomplete_reference_membership",
+        "native_category_imputed",
+        "absent_record_not_measured",
+        "dependent_representation",
+        "invalid_component_request",
+        "ambiguous_document_selection",
+        "missing_document_selection",
+        "byte_identity_mismatch",
+        "no_native_rows",
+        "not_selected",
+        "source_version_mismatch"
+      ]
+    },
+    "RoleV1": {
+      "type": "string",
+      "enum": [
+        "family_summary",
+        "pathway_summary",
+        "pathway_ec_summary",
+        "pathway_associations",
+        "subsystem_summary",
+        "subsystem_associations",
+        "subsystem_overview",
+        "subsystem_variants",
+        "family_feature_records",
+        "pathway_records",
+        "subsystem_records",
+        "genome_records",
+        "family_reference",
+        "pathway_reference",
+        "subsystem_reference",
+        "original_genome_population",
+        "producer_identity",
+        "native_document",
+        "reference_membership"
+      ]
+    },
+    "TableV1": {
+      "type": "string",
+      "enum": [
+        "plfam",
+        "pgfam",
+        "pathway",
+        "ecnumber",
+        "genes",
+        "subsystems",
+        "overview",
+        "pathways_tsv",
+        "subsystems_tsv",
+        "variant_matrix",
+        "data_rows",
+        "document"
+      ]
+    },
+    "BasisV1": {
+      "type": "string",
+      "enum": [
+        "service_artifact",
+        "source_executed_synthetic",
+        "synthetic_fixture",
+        "supplied_data_api"
+      ]
+    },
+    "CompletenessV1": {
+      "type": "string",
+      "enum": [
+        "complete_for_declared_population",
+        "partial",
+        "unknown",
+        "incompatible"
+      ]
+    },
+    "CellReferenceV1": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "native",
+            "sheet",
+            "supplied",
+            "component"
+          ]
+        },
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+        }
+      },
+      "required": [
+        "kind",
+        "owner_id",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "SourceLocationV1": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "document_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "json_pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+        },
+        "table": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TableV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "row_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "column_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source_ref",
+        "raw_artifact_ref",
+        "document_id",
+        "json_pointer",
+        "table",
+        "row_ordinal",
+        "column_ordinal",
+        "native_field"
+      ],
+      "additionalProperties": false
+    },
+    "NumericCellV1": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "available",
+            "missing",
+            "not_measured",
+            "failed",
+            "truncated",
+            "incompatible",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "occurrence",
+            "genome",
+            "feature",
+            "feature_token",
+            "ec_token",
+            "role_token",
+            "family",
+            "subsystem_name",
+            "record",
+            "genome_ec_pair",
+            "genome_role_pair",
+            "ec_genome_opportunity",
+            "role_genome_opportunity",
+            "amino_acid",
+            "fraction",
+            "percent",
+            "feature_per_ec_genome",
+            "feature_per_role_genome",
+            "occurrence_per_positive_genome",
+            "dimensionless"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "program_reported_derived",
+            "derived_retained_records",
+            "derived_supplied_records",
+            "derived_calculation",
+            "unavailable"
+          ]
+        },
+        "population_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "method_id": {
+          "type": "string",
+          "enum": [
+            "native_field",
+            "native_hex_exact_width",
+            "distinct_valid_members",
+            "record_occurrences",
+            "distinct_valid_feature_pairs",
+            "distinct_valid_genome_ec_pairs",
+            "distinct_valid_genome_role_pairs",
+            "opportunity_product",
+            "ratio",
+            "coefficient_of_variation",
+            "set_intersection",
+            "set_union",
+            "set_jaccard",
+            "explicit_category_exact_set",
+            "reported_formula_check",
+            "unavailable"
+          ]
+        },
+        "input_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CellReferenceV1"
+          }
+        },
+        "uncertainty": {
+          "type": "null"
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "unit",
+        "origin",
+        "population_id",
+        "method_id",
+        "input_refs",
+        "uncertainty",
+        "qualification_codes"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "available"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "NativeNumberV1": {
+      "type": "object",
+      "properties": {
+        "native_field": {
+          "type": "string"
+        },
+        "raw_lexeme": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "location": {
+          "$ref": "#/$defs/SourceLocationV1"
+        },
+        "cell": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "native_field",
+        "raw_lexeme",
+        "location",
+        "cell"
+      ],
+      "additionalProperties": false
+    },
+    "DiagnosticV1": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/DiagnosticCodeV1"
+        },
+        "phase": {
+          "type": "string",
+          "enum": [
+            "decode",
+            "association",
+            "population",
+            "calculation",
+            "projection"
+          ]
+        },
+        "document_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "row_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RoleV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "affected_field_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "required_input_role": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RoleV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "phase",
+        "document_id",
+        "row_ordinal",
+        "field",
+        "source_refs",
+        "locations",
+        "affected_field_ids",
+        "required_input_role"
+      ],
+      "additionalProperties": false
+    },
+    "RequirementV1": {
+      "type": "object",
+      "properties": {
+        "requirement_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "code": {
+          "$ref": "#/$defs/DiagnosticCodeV1"
+        },
+        "required_input_role": {
+          "$ref": "#/$defs/RoleV1"
+        },
+        "document_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "affected_field_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "requirement_id",
+        "code",
+        "required_input_role",
+        "document_id",
+        "affected_field_ids",
+        "source_refs"
+      ],
+      "additionalProperties": false
+    },
+    "ProducerEvidenceV1": {
+      "type": "object",
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_kind": {
+          "type": "string",
+          "enum": [
+            "source_examined",
+            "source_executed",
+            "deployed_attested",
+            "unknown"
+          ]
+        },
+        "repository_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "commit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "runtime_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dependency_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_release": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        }
+      },
+      "required": [
+        "evidence_id",
+        "identity_kind",
+        "repository_url",
+        "commit",
+        "source_sha256",
+        "runtime_version",
+        "dependency_version",
+        "reference_release",
+        "source_locations"
+      ],
+      "additionalProperties": false
+    },
+    "QualifiedProducerEvidenceV1": {
+      "type": "object",
+      "properties": {
+        "evidence": {
+          "$ref": "#/$defs/ProducerEvidenceV1"
+        },
+        "qualification": {
+          "type": "object",
+          "properties": {
+            "original_task_ref": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "basis": {
+              "type": "string",
+              "enum": [
+                "source_only",
+                "source_execution",
+                "native_task_bound",
+                "unknown"
+              ]
+            },
+            "evidence_source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "host_binding_verified": {
+              "const": true
+            },
+            "evidence_fields_verified": {
+              "const": true
+            },
+            "receiver_possession_verified": {
+              "const": true
+            }
+          },
+          "required": [
+            "original_task_ref",
+            "basis",
+            "evidence_source_refs",
+            "host_binding_verified",
+            "evidence_fields_verified",
+            "receiver_possession_verified"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "evidence",
+        "qualification"
+      ],
+      "additionalProperties": false
+    },
+    "OriginalRequestV1": {
+      "type": "object",
+      "properties": {
+        "application": {
+          "const": "ComparativeSystems"
+        },
+        "task_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "request_source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "genome_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "genome_groups": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "output_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "output_file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executed_genome_ids": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executed_population_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        }
+      },
+      "required": [
+        "application",
+        "task_ref",
+        "request_source_ref",
+        "genome_ids",
+        "genome_groups",
+        "output_path",
+        "output_file",
+        "executed_genome_ids",
+        "executed_population_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "SourceDocumentV1": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "$ref": "#/$defs/RoleV1"
+        },
+        "format_profile": {
+          "type": "string",
+          "enum": [
+            "comparative_systems_pathways_json_v1",
+            "comparative_systems_subsystems_json_v1",
+            "comparative_systems_families_json_v1",
+            "comparative_systems_pathways_tsv_v1",
+            "comparative_systems_subsystems_tsv_v1",
+            "comparative_systems_variant_matrix_source670b_v1"
+          ]
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "transfer_body_complete": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "unknown"
+          ]
+        },
+        "object_complete": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "unknown"
+          ]
+        },
+        "original_task_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "producer_evidence_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "basis": {
+          "$ref": "#/$defs/BasisV1"
+        }
+      },
+      "required": [
+        "document_id",
+        "role",
+        "format_profile",
+        "source_ref",
+        "raw_artifact_ref",
+        "byte_count",
+        "sha256",
+        "transfer_body_complete",
+        "object_complete",
+        "original_task_ref",
+        "producer_evidence_id",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "PopulationV1": {
+      "type": "object",
+      "properties": {
+        "population_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "requested_direct_genomes",
+            "executed_genomes",
+            "declared_query_genomes",
+            "native_view_represented_genomes",
+            "native_retained_records",
+            "supplied_data_records",
+            "selected_component_membership"
+          ]
+        },
+        "member_kind": {
+          "type": "string",
+          "enum": [
+            "genome_id",
+            "record_id",
+            "family_id",
+            "ec_number",
+            "role_id",
+            "feature_id"
+          ]
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "raw_occurrence_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "distinct_valid_member_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "completeness": {
+          "$ref": "#/$defs/CompletenessV1"
+        },
+        "missing_members": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "unresolved_members": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "relationship_to_original_task": {
+          "type": "string",
+          "enum": [
+            "original_execution_snapshot",
+            "later_selected_snapshot",
+            "unverified",
+            "not_applicable"
+          ]
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "population_id",
+        "kind",
+        "member_kind",
+        "members",
+        "source_locations",
+        "raw_occurrence_count",
+        "distinct_valid_member_count",
+        "completeness",
+        "missing_members",
+        "unresolved_members",
+        "relationship_to_original_task",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "NativeFieldV1": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "raw_text": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/SourceLocationV1"
+        }
+      },
+      "required": [
+        "name",
+        "raw_text",
+        "location"
+      ],
+      "additionalProperties": false
+    },
+    "NativeTableRowV1": {
+      "type": "object",
+      "properties": {
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "numeric_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeNumberV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "row_ordinal",
+        "tokens",
+        "status",
+        "numeric_fields",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "NativeTableV1": {
+      "type": "object",
+      "properties": {
+        "table": {
+          "$ref": "#/$defs/TableV1"
+        },
+        "json_pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+        },
+        "raw_text": {
+          "type": "string"
+        },
+        "dialect": {
+          "type": "string",
+          "enum": [
+            "manual_tabs_unquoted",
+            "pandas_tsv",
+            "pinned_variant_matrix"
+          ]
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeTableRowV1"
+          }
+        }
+      },
+      "required": [
+        "table",
+        "json_pointer",
+        "raw_text",
+        "dialect",
+        "headers",
+        "rows"
+      ],
+      "additionalProperties": false
+    },
+    "NativeMetadataV1": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "$ref": "#/$defs/SourceLocationV1"
+        },
+        "value": {
+          "$ref": "#/$defs/JSONValueV1"
+        }
+      },
+      "required": [
+        "location",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "JSONValueV1": {
+      "oneOf": [
+        {
+          "type": [
+            "null",
+            "boolean",
+            "number",
+            "string"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JSONValueV1"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/JSONValueV1"
+          }
+        }
+      ]
+    },
+    "NativeDocumentResultV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_native_v1"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "invalid",
+            "failed"
+          ]
+        },
+        "document": {
+          "$ref": "#/$defs/SourceDocumentV1"
+        },
+        "tables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeTableV1"
+          }
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeMetadataV1"
+          }
+        },
+        "reported_numbers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeNumberV1"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticV1"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "document",
+        "tables",
+        "metadata",
+        "reported_numbers",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "EntityV1": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "genome",
+            "family",
+            "pathway",
+            "pathway_ec",
+            "subsystem",
+            "subsystem_role",
+            "overview",
+            "variant",
+            "pair",
+            "population",
+            "document"
+          ]
+        },
+        "family_kind": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "plfam",
+                "pgfam"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "genome_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "family_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pathway_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ec_number": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subsystem_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "role_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "superclass_native": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "superclass_aggregation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "class_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subclass": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subsystem_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "comparison_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "family_kind",
+        "genome_id",
+        "family_id",
+        "pathway_id",
+        "ec_number",
+        "subsystem_id",
+        "role_id",
+        "superclass_native",
+        "superclass_aggregation",
+        "class_name",
+        "subclass",
+        "subsystem_name",
+        "comparison_id"
+      ],
+      "additionalProperties": false
+    },
+    "AssociationRowV1": {
+      "type": "object",
+      "properties": {
+        "association_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "document_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "record_set_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "table": {
+          "$ref": "#/$defs/TableV1"
+        },
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "identifiers": {
+          "type": "object",
+          "properties": {
+            "record_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "genome_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "feature_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "patric_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pathway_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ec_number": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "subsystem_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "role_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "plfam_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pgfam_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "accession": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sequence_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "record_id",
+            "genome_id",
+            "feature_id",
+            "patric_id",
+            "pathway_id",
+            "ec_number",
+            "subsystem_id",
+            "role_id",
+            "plfam_id",
+            "pgfam_id",
+            "accession",
+            "sequence_id"
+          ],
+          "additionalProperties": false
+        },
+        "active_category": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "active",
+                "likely",
+                "inactive"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeFieldV1"
+          }
+        },
+        "identity_status": {
+          "type": "string",
+          "enum": [
+            "valid",
+            "partial",
+            "conflicting"
+          ]
+        },
+        "coordinate_convention": {
+          "type": "string",
+          "enum": [
+            "one_based_inclusive",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "association_id",
+        "document_id",
+        "record_set_id",
+        "table",
+        "row_ordinal",
+        "identifiers",
+        "active_category",
+        "fields",
+        "identity_status",
+        "coordinate_convention",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "GenomeFamilyCountV1": {
+      "type": "object",
+      "properties": {
+        "genome_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "genome_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reported_occurrences": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "presence_state": {
+          "type": "string",
+          "enum": [
+            "recorded_positive",
+            "zero_in_qualified_record_population",
+            "no_record_completeness_unknown",
+            "not_measured",
+            "failed",
+            "truncated",
+            "incompatible",
+            "conflicting"
+          ]
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        }
+      },
+      "required": [
+        "genome_id",
+        "genome_ordinal",
+        "reported_occurrences",
+        "presence_state",
+        "source_locations"
+      ],
+      "additionalProperties": false
+    },
+    "FamilyRowV1": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        },
+        "raw_hex_counts": {
+          "type": "string"
+        },
+        "positive_genome_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "genome_counts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GenomeFamilyCountV1"
+          }
+        },
+        "reported_feature_occurrences": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_genome_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_length_min": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_length_max": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_length_mean": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_length_population_sd": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "positive_genome_count_from_list": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "document_id",
+        "native_row_ordinal",
+        "entity",
+        "source_locations",
+        "qualification_codes",
+        "raw_hex_counts",
+        "positive_genome_ids",
+        "genome_counts",
+        "reported_feature_occurrences",
+        "reported_genome_count",
+        "reported_length_min",
+        "reported_length_max",
+        "reported_length_mean",
+        "reported_length_population_sd",
+        "positive_genome_count_from_list"
+      ],
+      "additionalProperties": false
+    },
+    "PathwayRowV1": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        },
+        "reported_genome_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_ec_token_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_feature_token_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_genome_ec_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_ec_conservation_percent": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_gene_conservation": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "document_id",
+        "native_row_ordinal",
+        "entity",
+        "source_locations",
+        "qualification_codes",
+        "reported_genome_count",
+        "reported_ec_token_count",
+        "reported_feature_token_count",
+        "reported_genome_ec_count",
+        "reported_ec_conservation_percent",
+        "reported_gene_conservation"
+      ],
+      "additionalProperties": false
+    },
+    "PathwayECRowV1": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        },
+        "reported_genome_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_ec_token_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_feature_token_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_genome_ec_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "document_id",
+        "native_row_ordinal",
+        "entity",
+        "source_locations",
+        "qualification_codes",
+        "reported_genome_count",
+        "reported_ec_token_count",
+        "reported_feature_token_count",
+        "reported_genome_ec_count"
+      ],
+      "additionalProperties": false
+    },
+    "SubsystemRowV1": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        },
+        "reported_role_token_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_feature_token_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_genome_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_gene_conservation": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_role_conservation_percent": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_record_genome_fraction": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "document_id",
+        "native_row_ordinal",
+        "entity",
+        "source_locations",
+        "qualification_codes",
+        "reported_role_token_count",
+        "reported_feature_token_count",
+        "reported_genome_count",
+        "reported_gene_conservation",
+        "reported_role_conservation_percent",
+        "reported_record_genome_fraction"
+      ],
+      "additionalProperties": false
+    },
+    "OverviewRowV1": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "superclass",
+            "class",
+            "subclass"
+          ]
+        },
+        "reported_subsystem_name_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_feature_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "document_id",
+        "native_row_ordinal",
+        "entity",
+        "source_locations",
+        "qualification_codes",
+        "level",
+        "reported_subsystem_name_count",
+        "reported_feature_count"
+      ],
+      "additionalProperties": false
+    },
+    "VariantRowV1": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        },
+        "raw_tokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "header_field_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "data_field_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reported_active_occurrences": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_likely_occurrences": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_inactive_placeholder": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "reported_missing_genome_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "document_id",
+        "native_row_ordinal",
+        "entity",
+        "source_locations",
+        "qualification_codes",
+        "raw_tokens",
+        "header_field_count",
+        "data_field_count",
+        "reported_active_occurrences",
+        "reported_likely_occurrences",
+        "reported_inactive_placeholder",
+        "reported_missing_genome_count"
+      ],
+      "additionalProperties": false
+    },
+    "DuplicateGroupV1": {
+      "type": "object",
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "identical_record",
+            "conflicting_record",
+            "dependent_view"
+          ]
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CellReferenceV1"
+          }
+        },
+        "native_unique_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "affected_field_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "group_id",
+        "kind",
+        "members",
+        "native_unique_key",
+        "affected_field_ids"
+      ],
+      "additionalProperties": false
+    },
+    "JoinResultV1": {
+      "type": "object",
+      "properties": {
+        "join_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "left_view_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "right_view_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "genome_id",
+              "feature_id",
+              "patric_id",
+              "subsystem_id",
+              "role_id",
+              "pathway_id",
+              "ec_number"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "join_kind": {
+          "const": "inner"
+        },
+        "left_occurrence_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "right_occurrence_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "output_occurrence_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "unmatched_left_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CellReferenceV1"
+          }
+        },
+        "unmatched_right_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CellReferenceV1"
+          }
+        },
+        "multiplicity": {
+          "type": "string",
+          "enum": [
+            "one_to_one",
+            "one_to_many",
+            "many_to_one",
+            "many_to_many",
+            "unknown"
+          ]
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "join_id",
+        "left_view_id",
+        "right_view_id",
+        "keys",
+        "join_kind",
+        "left_occurrence_count",
+        "right_occurrence_count",
+        "output_occurrence_count",
+        "unmatched_left_refs",
+        "unmatched_right_refs",
+        "multiplicity",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "ReferenceMembershipV1": {
+      "type": "object",
+      "properties": {
+        "membership_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "component_kind": {
+          "type": "string",
+          "enum": [
+            "ec_number",
+            "role_id"
+          ]
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "map_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "release": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completeness": {
+          "$ref": "#/$defs/CompletenessV1"
+        },
+        "basis": {
+          "$ref": "#/$defs/BasisV1"
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "membership_id",
+        "component_kind",
+        "entity",
+        "members",
+        "map_id",
+        "release",
+        "completeness",
+        "basis",
+        "source_locations",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "InputSelectionV1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "requirement"
+            },
+            "requirement_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "requirement_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "possessed_artifact"
+            },
+            "source_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "raw_artifact_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "source_ref",
+            "raw_artifact_ref"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "DocumentSelectionV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_document_selection_v1"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "document_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "$ref": "#/$defs/RoleV1"
+              },
+              "format_profile": {
+                "type": "string",
+                "enum": [
+                  "comparative_systems_pathways_json_v1",
+                  "comparative_systems_subsystems_json_v1",
+                  "comparative_systems_families_json_v1",
+                  "comparative_systems_pathways_tsv_v1",
+                  "comparative_systems_subsystems_tsv_v1",
+                  "comparative_systems_variant_matrix_source670b_v1"
+                ]
+              },
+              "producer_evidence_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "input": {
+                "$ref": "#/$defs/InputSelectionV1"
+              }
+            },
+            "required": [
+              "document_id",
+              "role",
+              "format_profile",
+              "producer_evidence_id",
+              "input"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "authoritative_views": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "view_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "document_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "table": {
+                "$ref": "#/$defs/TableV1"
+              }
+            },
+            "required": [
+              "view_id",
+              "document_id",
+              "table"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "dependent_views": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "left_view_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "right_view_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "left_view_id",
+              "right_view_id"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "version",
+        "documents",
+        "authoritative_views",
+        "dependent_views"
+      ],
+      "additionalProperties": false
+    },
+    "PopulationAssignmentsV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_population_assignments_v1"
+        },
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "population_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "requested_direct_genomes",
+                  "executed_genomes",
+                  "native_view_represented_genomes",
+                  "native_retained_records",
+                  "selected_component_membership"
+                ]
+              },
+              "view_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "entity": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/EntityV1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "component_kind": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "ec_number",
+                      "role_id",
+                      "family_id"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "population_id",
+              "kind",
+              "view_id",
+              "entity",
+              "component_kind"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "version",
+        "assignments"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Issue": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/Data__IssueCode"
+        },
+        "phase": {
+          "type": "string",
+          "enum": [
+            "transport",
+            "format",
+            "field",
+            "population",
+            "join",
+            "projection"
+          ]
+        },
+        "row_index": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__Field"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "http_status": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "phase",
+        "row_index",
+        "field",
+        "native_path",
+        "http_status"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Sort": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/Data__Field"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        }
+      },
+      "required": [
+        "field",
+        "direction"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Predicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "field": {
+              "$ref": "#/$defs/Data__Field"
+            },
+            "operator": {
+              "const": "eq"
+            },
+            "value": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "required": [
+            "field",
+            "operator",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": {
+              "$ref": "#/$defs/Data__Field"
+            },
+            "operator": {
+              "const": "in"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "field",
+            "operator",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": {
+              "$ref": "#/$defs/Data__Field"
+            },
+            "operator": {
+              "const": "range"
+            },
+            "lower": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "lower_inclusive": {
+              "type": "boolean"
+            },
+            "upper": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "upper_inclusive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "field",
+            "operator",
+            "lower",
+            "lower_inclusive",
+            "upper",
+            "upper_inclusive"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": {
+              "$ref": "#/$defs/Data__Field"
+            },
+            "operator": {
+              "const": "exists"
+            },
+            "present": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "field",
+            "operator",
+            "present"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Data__FacetRequest": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/Data__Field"
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "min_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "count",
+            "index"
+          ]
+        },
+        "include_missing": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "field",
+        "offset",
+        "limit",
+        "min_count",
+        "sort",
+        "include_missing"
+      ],
+      "additionalProperties": false
+    },
+    "Data__DataQuery": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_request_v2"
+        },
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "page",
+            "count",
+            "facet"
+          ]
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Predicate"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Field"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Sort"
+          }
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 25000
+        },
+        "facet": {
+          "$ref": "#/$defs/Data__FacetRequest"
+        }
+      },
+      "required": [
+        "version",
+        "collection",
+        "mode",
+        "filters"
+      ],
+      "additionalProperties": false
+    },
+    "Data__EffectiveQuery": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_effective_query_v2"
+        },
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "page",
+            "count",
+            "facet"
+          ]
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Predicate"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Field"
+          },
+          "uniqueItems": true
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Sort"
+          }
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 25000
+        },
+        "facet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__FacetRequest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "collection",
+        "mode",
+        "filters",
+        "fields",
+        "sort",
+        "offset",
+        "limit",
+        "facet"
+      ],
+      "additionalProperties": false
+    },
+    "Data__QueryPopulation": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_population_v1"
+        },
+        "base_url": {
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Predicate"
+          }
+        },
+        "visibility": {
+          "const": "public_unauthenticated"
+        },
+        "compiler_version": {
+          "const": "bvbrc_solr_compiler_v1"
+        },
+        "field_contract_version": {
+          "const": "bvbrc_data_fields_2026_10_24_v1"
+        },
+        "population_key": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "base_url",
+        "collection",
+        "filters",
+        "visibility",
+        "compiler_version",
+        "field_contract_version",
+        "population_key"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Header": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "Data__PageSelector": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 25000
+        }
+      },
+      "required": [
+        "offset",
+        "limit"
+      ],
+      "additionalProperties": false
+    },
+    "Data__PreparedQuery": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_prepared_v2"
+        },
+        "service": {
+          "const": "bvbrc_data"
+        },
+        "original_request": {
+          "$ref": "#/$defs/Data__DataQuery"
+        },
+        "page_selector": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__PageSelector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effective_request": {
+          "$ref": "#/$defs/Data__EffectiveQuery"
+        },
+        "query_population": {
+          "$ref": "#/$defs/Data__QueryPopulation"
+        },
+        "field_selection": {
+          "type": "object",
+          "properties": {
+            "requested_fields": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/Data__Field"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "defaulted_fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Field"
+              },
+              "uniqueItems": true
+            },
+            "custody_added_fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Field"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "requested_fields",
+            "defaulted_fields",
+            "custody_added_fields"
+          ],
+          "additionalProperties": false
+        },
+        "sort_selection": {
+          "type": "object",
+          "properties": {
+            "requested_sort": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/Data__Sort"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "defaulted_sort": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Sort"
+              }
+            },
+            "tie_breaker_added": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Data__Sort"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "requested_sort",
+            "defaulted_sort",
+            "tie_breaker_added"
+          ],
+          "additionalProperties": false
+        },
+        "request_profile": {
+          "const": "solr_query_solr_json_v1"
+        },
+        "native_request": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "const": "GET"
+            },
+            "url": {
+              "type": "string"
+            },
+            "headers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Header"
+              }
+            },
+            "body": {
+              "type": "null"
+            },
+            "query_parameters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "method",
+            "url",
+            "headers",
+            "body",
+            "query_parameters"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "version",
+        "service",
+        "original_request",
+        "page_selector",
+        "effective_request",
+        "query_population",
+        "field_selection",
+        "sort_selection",
+        "request_profile",
+        "native_request"
+      ],
+      "additionalProperties": false
+    },
+    "Data__NativeAtom": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "string_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "number_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "boolean_value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "number_lexeme": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "string_value",
+        "number_value",
+        "boolean_value",
+        "number_lexeme"
+      ],
+      "additionalProperties": false
+    },
+    "Data__NativeCell": {
+      "type": "object",
+      "properties": {
+        "cell_key": {
+          "type": "string"
+        },
+        "field": {
+          "$ref": "#/$defs/Data__Field"
+        },
+        "native_path": {
+          "type": "string"
+        },
+        "presence": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "null",
+            "unselected"
+          ]
+        },
+        "native_shape": {
+          "type": "string",
+          "enum": [
+            "scalar",
+            "array",
+            "object",
+            "absent",
+            "null"
+          ]
+        },
+        "atoms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__NativeAtom"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "valid",
+            "invalid",
+            "unrepresentable",
+            "missing",
+            "unselected"
+          ]
+        },
+        "field_schema_status": {
+          "type": "string",
+          "enum": [
+            "match",
+            "observed_exception",
+            "mismatch",
+            "not_evaluated"
+          ]
+        },
+        "issue_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__IssueCode"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "cell_key",
+        "field",
+        "native_path",
+        "presence",
+        "native_shape",
+        "atoms",
+        "status",
+        "field_schema_status",
+        "issue_codes"
+      ],
+      "additionalProperties": false
+    },
+    "Data__NumericCell": {
+      "type": "object",
+      "properties": {
+        "cell_key": {
+          "type": "string"
+        },
+        "field": {
+          "$ref": "#/$defs/Data__Field"
+        },
+        "native_path": {
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/Data__NumericStatus"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__UnavailableReason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quantity_kind": {
+          "type": "string"
+        },
+        "unit_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "nucleotide",
+                "amino_acid",
+                "document",
+                "fraction"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit_basis": {
+          "type": "string",
+          "enum": [
+            "field_definition",
+            "supplied",
+            "unknown"
+          ]
+        },
+        "unit_cell_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "denominator_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "denominator_basis": {
+          "type": "string",
+          "enum": [
+            "native",
+            "supplied",
+            "unknown"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "native_reported",
+            "derived_from_native_text",
+            "unavailable"
+          ]
+        },
+        "uncertainty_cell_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "issue_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__IssueCode"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "cell_key",
+        "field",
+        "native_path",
+        "value",
+        "status",
+        "reason",
+        "quantity_kind",
+        "unit_code",
+        "unit_basis",
+        "unit_cell_keys",
+        "denominator_value",
+        "denominator_basis",
+        "origin",
+        "uncertainty_cell_keys",
+        "issue_codes"
+      ],
+      "additionalProperties": false
+    },
+    "Data__NativeRow": {
+      "type": "object",
+      "properties": {
+        "row_key": {
+          "type": "string"
+        },
+        "row_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "native_path": {
+          "type": "string"
+        },
+        "native_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "valid",
+            "partial",
+            "invalid"
+          ]
+        },
+        "cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__NativeCell"
+          }
+        },
+        "numerical_cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__NumericCell"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "row_key",
+        "row_index",
+        "native_path",
+        "native_id",
+        "status",
+        "cells",
+        "numerical_cells",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Qualification": {
+      "type": "object",
+      "properties": {
+        "service_matches": {
+          "type": "boolean"
+        },
+        "request_matches": {
+          "type": "boolean"
+        },
+        "transport_complete": {
+          "type": "boolean"
+        },
+        "http_success": {
+          "type": "boolean"
+        },
+        "format_valid": {
+          "type": "boolean"
+        },
+        "population_metadata_valid": {
+          "type": "boolean"
+        },
+        "native_partial_results": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requested_fields_valid": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "failed"
+          ]
+        }
+      },
+      "required": [
+        "service_matches",
+        "request_matches",
+        "transport_complete",
+        "http_success",
+        "format_valid",
+        "population_metadata_valid",
+        "native_partial_results",
+        "requested_fields_valid",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "Data__NativePopulation": {
+      "type": "object",
+      "properties": {
+        "population_key": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "compiled_query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "echoed_query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "echoed_filter_queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reported_total": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_num_found_exact": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exactness": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "provider_reported",
+            "inexact",
+            "unknown"
+          ]
+        },
+        "native_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "population_key",
+        "compiled_query",
+        "echoed_query",
+        "echoed_filter_queries",
+        "reported_total",
+        "native_num_found_exact",
+        "exactness",
+        "native_location"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Page": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "page",
+            "count",
+            "facet"
+          ]
+        },
+        "requested_offset": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requested_limit": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response_start": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_content_range": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "returned_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "valid_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "invalid_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reported_total": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "count_exactness": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "provider_reported",
+            "inexact",
+            "unknown"
+          ]
+        },
+        "response_complete": {
+          "type": "boolean"
+        },
+        "population_coverage": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "subset",
+            "unknown"
+          ]
+        },
+        "next_offset": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "next_offset_basis": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "reported_more",
+                "total_unknown"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "mode",
+        "requested_offset",
+        "requested_limit",
+        "response_start",
+        "native_content_range",
+        "returned_row_count",
+        "valid_row_count",
+        "invalid_row_count",
+        "reported_total",
+        "count_exactness",
+        "response_complete",
+        "population_coverage",
+        "next_offset",
+        "next_offset_basis"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Count": {
+      "type": "object",
+      "properties": {
+        "population_key": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reported_value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exactness": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "provider_reported",
+            "inexact",
+            "unknown"
+          ]
+        },
+        "availability": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__UnavailableReason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "population_key",
+        "reported_value",
+        "exactness",
+        "availability",
+        "reason",
+        "native_location"
+      ],
+      "additionalProperties": false
+    },
+    "Data__FacetBucket": {
+      "type": "object",
+      "properties": {
+        "bucket_key": {
+          "type": "string"
+        },
+        "term_cell_key": {
+          "type": "string"
+        },
+        "native_path": {
+          "type": "string"
+        },
+        "term": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__NativeAtom"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_missing_bucket": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "valid",
+            "invalid"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "bucket_key",
+        "term_cell_key",
+        "native_path",
+        "term",
+        "is_missing_bucket",
+        "count",
+        "status",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Facet": {
+      "type": "object",
+      "properties": {
+        "population_key": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "request": {
+          "$ref": "#/$defs/Data__FacetRequest"
+        },
+        "native_location": {
+          "type": "string"
+        },
+        "buckets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__FacetBucket"
+          }
+        },
+        "returned_nonmissing_bucket_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bucket_window_status": {
+          "type": "string",
+          "enum": [
+            "exhausted_window",
+            "more_unknown",
+            "invalid"
+          ]
+        },
+        "all_categories_complete": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "population_key",
+        "request",
+        "native_location",
+        "buckets",
+        "returned_nonmissing_bucket_count",
+        "bucket_window_status",
+        "all_categories_complete",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__DataSheet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_sheet_v1"
+        },
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "page",
+            "count",
+            "facet"
+          ]
+        },
+        "custody": {
+          "type": "object",
+          "properties": {
+            "native_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "retrieved_at": {
+              "type": "string"
+            },
+            "requested_url": {
+              "type": "string"
+            },
+            "effective_url": {
+              "type": "string"
+            },
+            "media_type": {
+              "type": "string"
+            },
+            "native_profile": {
+              "type": "string",
+              "enum": [
+                "json_array_with_headers_v1",
+                "solr_json_envelope_v1"
+              ]
+            },
+            "prepared_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "field_contract_version": {
+              "const": "bvbrc_data_fields_2026_10_24_v1"
+            }
+          },
+          "required": [
+            "native_sha256",
+            "retrieved_at",
+            "requested_url",
+            "effective_url",
+            "media_type",
+            "native_profile",
+            "prepared_sha256",
+            "field_contract_version"
+          ],
+          "additionalProperties": false
+        },
+        "transport": {
+          "type": "object",
+          "properties": {
+            "http_status": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "body_complete": {
+              "type": "boolean"
+            },
+            "headers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Header"
+              }
+            },
+            "failure_code": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "automatic_redirects": {
+              "const": false
+            },
+            "native_query_time_ms": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "http_status",
+            "body_complete",
+            "headers",
+            "failure_code",
+            "automatic_redirects",
+            "native_query_time_ms"
+          ],
+          "additionalProperties": false
+        },
+        "qualification": {
+          "$ref": "#/$defs/Data__Qualification"
+        },
+        "population": {
+          "$ref": "#/$defs/Data__NativePopulation"
+        },
+        "selected_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Field"
+          },
+          "uniqueItems": true
+        },
+        "page": {
+          "$ref": "#/$defs/Data__Page"
+        },
+        "count": {
+          "$ref": "#/$defs/Data__Count"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__NativeRow"
+          }
+        },
+        "facets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Facet"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "collection",
+        "mode",
+        "custody",
+        "transport",
+        "qualification",
+        "population",
+        "selected_fields",
+        "page",
+        "count",
+        "rows",
+        "facets",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__ParseResult": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_parse_result_v1"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "failed"
+          ]
+        },
+        "sheet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__DataSheet"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        },
+        "retained_native_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "sheet",
+        "failures",
+        "retained_native_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "Data__PageComponents": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_page_components_v1"
+        },
+        "native_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "valid_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "invalid_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reported_population_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "population_exactness": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "provider_reported",
+            "inexact",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "native_row_count",
+        "valid_row_count",
+        "invalid_row_count",
+        "reported_population_count",
+        "population_exactness"
+      ],
+      "additionalProperties": false
+    },
+    "Data__FacetFraction": {
+      "type": "object",
+      "properties": {
+        "bucket_key": {
+          "type": "string"
+        },
+        "numerator": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__UnavailableReason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "bucket_key",
+        "numerator",
+        "denominator",
+        "fraction",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "Data__FacetComponents": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_facet_components_v1"
+        },
+        "denominator_policy": {
+          "const": "same_response_exact_document_count"
+        },
+        "population_key": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "fractions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__FacetFraction"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "denominator_policy",
+        "population_key",
+        "fractions"
+      ],
+      "additionalProperties": false
+    },
+    "Data__RowLocation": {
+      "type": "object",
+      "properties": {
+        "native_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "row_key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "native_sha256",
+        "collection",
+        "row_key"
+      ],
+      "additionalProperties": false
+    },
+    "Data__CellLocation": {
+      "type": "object",
+      "properties": {
+        "native_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "row_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cell_key": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "source_level": {
+          "type": "string",
+          "enum": [
+            "row",
+            "feature",
+            "sequence",
+            "result",
+            "bioset",
+            "experiment",
+            "facet"
+          ]
+        }
+      },
+      "required": [
+        "native_sha256",
+        "collection",
+        "row_key",
+        "cell_key",
+        "field",
+        "source_level"
+      ],
+      "additionalProperties": false
+    },
+    "Data__AcquisitionRequirement": {
+      "type": "object",
+      "properties": {
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "field": {
+          "$ref": "#/$defs/Data__Field"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sequence_kind": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "AA",
+                "NA"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/Data__UnavailableReason"
+        }
+      },
+      "required": [
+        "collection",
+        "field",
+        "values",
+        "sequence_kind",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "Data__FeatureSequenceEdge": {
+      "type": "object",
+      "properties": {
+        "edge_key": {
+          "type": "string"
+        },
+        "feature_id": {
+          "type": "string"
+        },
+        "feature_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__RowLocation"
+          }
+        },
+        "sequence_kind": {
+          "type": "string",
+          "enum": [
+            "AA",
+            "NA"
+          ]
+        },
+        "native_md5": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__RowLocation"
+          }
+        },
+        "sequence_cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__CellLocation"
+          }
+        },
+        "feature_metadata_cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__CellLocation"
+          }
+        },
+        "sequence_length": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feature_length": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_md5_match": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "length_match": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "join_status": {
+          "$ref": "#/$defs/Data__JoinStatus"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__UnavailableReason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "edge_key",
+        "feature_id",
+        "feature_rows",
+        "sequence_kind",
+        "native_md5",
+        "sequence_rows",
+        "sequence_cells",
+        "feature_metadata_cells",
+        "sequence_length",
+        "feature_length",
+        "raw_md5_match",
+        "length_match",
+        "join_status",
+        "reason",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__FeatureSequenceSheet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_feature_sequence_sheet_v1"
+        },
+        "selection": {
+          "type": "object",
+          "properties": {
+            "feature_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "sequence_kind": {
+              "type": "string",
+              "enum": [
+                "AA",
+                "NA",
+                "both"
+              ]
+            }
+          },
+          "required": [
+            "feature_ids",
+            "sequence_kind"
+          ],
+          "additionalProperties": false
+        },
+        "input_native_sha256s": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "uniqueItems": true
+        },
+        "input_page_counts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "native_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "collection": {
+                "$ref": "#/$defs/Data__Collection"
+              },
+              "retained_row_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "valid_row_count": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "native_sha256",
+              "collection",
+              "retained_row_count",
+              "valid_row_count"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__FeatureSequenceEdge"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__AcquisitionRequirement"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "selection",
+        "input_native_sha256s",
+        "input_page_counts",
+        "edges",
+        "requirements",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__FeatureSequenceComponents": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_feature_sequence_components_v1"
+        },
+        "selected_feature_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retained_feature_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "native_sequence_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "distinct_joined_aa_sequence_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "distinct_joined_na_sequence_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "relation_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing_key_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conflicting_relation_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "length_agreement_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "version",
+        "selected_feature_count",
+        "retained_feature_row_count",
+        "native_sequence_record_count",
+        "distinct_joined_aa_sequence_count",
+        "distinct_joined_na_sequence_count",
+        "relation_count",
+        "missing_key_count",
+        "missing_record_count",
+        "conflicting_relation_count",
+        "length_agreement_count"
+      ],
+      "additionalProperties": false
+    },
+    "Data__SuppliedMetadata": {
+      "type": "object",
+      "properties": {
+        "result_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bioset_id": {
+          "type": "string"
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string"
+            },
+            "record_path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref",
+            "record_path"
+          ],
+          "additionalProperties": false
+        },
+        "sample_ids": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "biological_replicate_ids": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "technical_replicate_ids": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "measurement_units": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "$ref": "#/$defs/Data__MolecularMeasurementField"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "field",
+              "unit"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "normalization_method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pvalue_correction_method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contrast": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator_condition": {
+                  "type": "string"
+                },
+                "denominator_condition": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "numerator_condition",
+                "denominator_condition"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "result_id",
+        "bioset_id",
+        "provenance",
+        "sample_ids",
+        "biological_replicate_ids",
+        "technical_replicate_ids",
+        "measurement_units",
+        "normalization_method",
+        "pvalue_correction_method",
+        "contrast"
+      ],
+      "additionalProperties": false
+    },
+    "Data__MolecularLink": {
+      "type": "object",
+      "properties": {
+        "expected_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__RowLocation"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "matched",
+            "missing_key",
+            "missing_input",
+            "missing_record",
+            "conflict"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__UnavailableReason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "expected_id",
+        "rows",
+        "status",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "Data__MolecularMetadata": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "source_level": {
+          "type": "string",
+          "enum": [
+            "result",
+            "bioset",
+            "experiment",
+            "supplied"
+          ]
+        },
+        "cells": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/Data__CellLocation"
+              },
+              {
+                "$ref": "#/$defs/Data__SuppliedCellLocation"
+              }
+            ]
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "reported",
+            "supplied",
+            "missing",
+            "conflict"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__UnavailableReason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "field",
+        "source_level",
+        "cells",
+        "status",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "Data__MolecularRow": {
+      "type": "object",
+      "properties": {
+        "row_key": {
+          "type": "string"
+        },
+        "result_id": {
+          "type": "string"
+        },
+        "result_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__RowLocation"
+          }
+        },
+        "exp_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bioset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feature_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "entity_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "experiment": {
+          "$ref": "#/$defs/Data__MolecularLink"
+        },
+        "bioset": {
+          "$ref": "#/$defs/Data__MolecularLink"
+        },
+        "feature": {
+          "$ref": "#/$defs/Data__MolecularLink"
+        },
+        "measurements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__NumericCell"
+          }
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__MolecularMetadata"
+          }
+        },
+        "relationship_status": {
+          "type": "string",
+          "enum": [
+            "matched",
+            "partial",
+            "conflict"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "row_key",
+        "result_id",
+        "result_rows",
+        "exp_id",
+        "bioset_id",
+        "feature_id",
+        "entity_id",
+        "experiment",
+        "bioset",
+        "feature",
+        "measurements",
+        "metadata",
+        "relationship_status",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__MolecularSheet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_molecular_sheet_v1"
+        },
+        "selected_result_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "input_native_sha256s": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "uniqueItems": true
+        },
+        "supplied_metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__SuppliedMetadata"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__MolecularRow"
+          }
+        },
+        "missing_result_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__AcquisitionRequirement"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__Issue"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "selected_result_ids",
+        "input_native_sha256s",
+        "supplied_metadata",
+        "rows",
+        "missing_result_ids",
+        "requirements",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Data__Projection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "query_metadata"
+            }
+          },
+          "required": [
+            "family"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "collection_rows"
+            },
+            "row_indices": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "numeric_fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Field"
+              },
+              "uniqueItems": true
+            },
+            "metadata_fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Field"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "family",
+            "row_indices",
+            "numeric_fields",
+            "metadata_fields"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "feature_sequence"
+            },
+            "feature_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "sequence_kind": {
+              "type": "string",
+              "enum": [
+                "AA",
+                "NA",
+                "both"
+              ]
+            },
+            "feature_metadata_fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__Field"
+              },
+              "uniqueItems": true
+            },
+            "include_sequence_values": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "family",
+            "feature_ids",
+            "sequence_kind",
+            "feature_metadata_fields",
+            "include_sequence_values"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "molecular_experiment"
+            },
+            "result_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "measurement_fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Data__MolecularMeasurementField"
+              },
+              "uniqueItems": true
+            },
+            "metadata_fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_level": {
+                    "type": "string",
+                    "enum": [
+                      "result",
+                      "bioset",
+                      "experiment",
+                      "supplied"
+                    ]
+                  },
+                  "field": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "source_level",
+                  "field"
+                ],
+                "additionalProperties": false
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "family",
+            "result_ids",
+            "measurement_fields",
+            "metadata_fields"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Data__ResultSelector": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_result_selector_v2"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__PageSelector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projection": {
+          "$ref": "#/$defs/Data__Projection"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "collection": {
+                "$ref": "#/$defs/Data__Collection"
+              },
+              "source_ref": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "collection",
+              "source_ref"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "supplied_metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__SuppliedMetadata"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "page",
+        "projection",
+        "inputs",
+        "supplied_metadata"
+      ],
+      "additionalProperties": false
+    },
+    "Data__ResultBinding": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string"
+        },
+        "native_artifact_ref": {
+          "type": "string"
+        },
+        "native_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "grading_artifact_ref": {
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/$defs/Data__Collection"
+        },
+        "acquisition_assignment_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "selector_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "source_ref",
+        "native_artifact_ref",
+        "native_sha256",
+        "grading_artifact_ref",
+        "collection",
+        "acquisition_assignment_sha256",
+        "selector_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "Data__MetadataBinding": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string"
+        },
+        "native_artifact_ref": {
+          "type": "string"
+        },
+        "native_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "record_path": {
+          "type": "string"
+        },
+        "metadata_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "source_ref",
+        "native_artifact_ref",
+        "native_sha256",
+        "record_path",
+        "metadata_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "Data__PublishedGrading": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_grading_v1"
+        },
+        "prepared": {
+          "$ref": "#/$defs/Data__PreparedQuery"
+        },
+        "selector": {
+          "$ref": "#/$defs/Data__ResultSelector"
+        },
+        "parse_result": {
+          "$ref": "#/$defs/Data__ParseResult"
+        },
+        "page_components": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__PageComponents"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "facet_components": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__FacetComponents"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feature_sequence_sheet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__FeatureSequenceSheet"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feature_sequence_components": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__FeatureSequenceComponents"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "molecular_sheet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Data__MolecularSheet"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "input_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__ResultBinding"
+          }
+        },
+        "metadata_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Data__MetadataBinding"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "prepared",
+        "selector",
+        "parse_result",
+        "page_components",
+        "facet_components",
+        "feature_sequence_sheet",
+        "feature_sequence_components",
+        "molecular_sheet",
+        "input_bindings",
+        "metadata_bindings"
+      ],
+      "additionalProperties": false
+    },
+    "Data__QualifiedResult": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_data_qualified_result_v1"
+        },
+        "service": {
+          "const": "bvbrc_data"
+        },
+        "binding": {
+          "$ref": "#/$defs/Data__ResultBinding"
+        },
+        "host_qualification": {
+          "type": "object",
+          "properties": {
+            "run_id": {
+              "type": "string"
+            },
+            "source_episode_id": {
+              "type": "string"
+            },
+            "receiver_episode_id": {
+              "type": "string"
+            },
+            "scope_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "receipt_verified": {
+              "const": true
+            },
+            "native_bytes_verified": {
+              "const": true
+            },
+            "grading_custody_verified": {
+              "const": true
+            },
+            "original_selection_verified": {
+              "const": true
+            },
+            "input_bindings_verified": {
+              "const": true
+            },
+            "receiver_possession_verified": {
+              "const": true
+            },
+            "possession_basis": {
+              "type": "string",
+              "enum": [
+                "own_completed_action",
+                "admitted_return",
+                "parent_assignment",
+                "current_child_return"
+              ]
+            }
+          },
+          "required": [
+            "run_id",
+            "source_episode_id",
+            "receiver_episode_id",
+            "scope_sha256",
+            "receipt_verified",
+            "native_bytes_verified",
+            "grading_custody_verified",
+            "original_selection_verified",
+            "input_bindings_verified",
+            "receiver_possession_verified",
+            "possession_basis"
+          ],
+          "additionalProperties": false
+        },
+        "grading": {
+          "$ref": "#/$defs/Data__PublishedGrading"
+        },
+        "input_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "binding": {
+                "$ref": "#/$defs/Data__ResultBinding"
+              },
+              "sheet": {
+                "$ref": "#/$defs/Data__DataSheet"
+              }
+            },
+            "required": [
+              "binding",
+              "sheet"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "version",
+        "service",
+        "binding",
+        "host_qualification",
+        "grading",
+        "input_results"
+      ],
+      "additionalProperties": false
+    },
+    "Data__IssueCode": {
+      "type": "string",
+      "enum": [
+        "bvbrc_response_service_mismatch",
+        "bvbrc_response_request_mismatch",
+        "bvbrc_response_body_incomplete",
+        "bvbrc_unsupported_media_type",
+        "bvbrc_invalid_json_response",
+        "bvbrc_expected_native_row_array",
+        "bvbrc_expected_solr_response",
+        "bvbrc_native_error",
+        "bvbrc_native_partial_results",
+        "bvbrc_population_metadata_conflict",
+        "bvbrc_invalid_facet_pairs",
+        "bvbrc_invalid_native_field",
+        "bvbrc_join_conflict",
+        "bvbrc_missing_native_identity",
+        "bvbrc_schema_observed_variant",
+        "bvbrc_unrepresentable_numeric_value",
+        "bvbrc_input_unavailable",
+        "bvbrc_native_md5_mismatch",
+        "bvbrc_native_length_mismatch",
+        "bvbrc_provider_http_error"
+      ]
+    },
+    "Data__Field": {
+      "type": "string",
+      "enum": [
+        "aa_length",
+        "aa_sequence_md5",
+        "aa_variant",
+        "accession",
+        "active",
+        "alignments",
+        "alt_locus_tag",
+        "analysis_group_1",
+        "analysis_group_2",
+        "analysis_method",
+        "annotation",
+        "assembly_accession",
+        "assembly_method",
+        "bioset_id",
+        "bioset_type",
+        "biosets",
+        "cds",
+        "cds_mean",
+        "cds_sd",
+        "checkm_completeness",
+        "checkm_contamination",
+        "chromosome",
+        "chromosomes",
+        "class",
+        "classification",
+        "classifier_round",
+        "classifier_score",
+        "codon_start",
+        "contig_l50",
+        "contig_n50",
+        "contigs",
+        "core_families",
+        "core_family_ids",
+        "counts",
+        "definition",
+        "description",
+        "detection_instrument",
+        "detection_method",
+        "e_value",
+        "ec_description",
+        "ec_number",
+        "end",
+        "entity_count",
+        "entity_id",
+        "entity_name",
+        "entity_type",
+        "evidence",
+        "evidence_code",
+        "exp_id",
+        "exp_name",
+        "exp_type",
+        "family_id",
+        "family_product",
+        "family_type",
+        "feature_id",
+        "feature_id_a",
+        "feature_id_b",
+        "feature_type",
+        "figfam_id",
+        "file_path",
+        "fpkm",
+        "gc_content",
+        "gene",
+        "gene_id",
+        "genetic_code",
+        "genome_count",
+        "genome_ec",
+        "genome_id",
+        "genome_id_a",
+        "genome_id_b",
+        "genome_length",
+        "genome_length_mean",
+        "genome_length_sd",
+        "genome_name",
+        "genome_status",
+        "genomes",
+        "go",
+        "go_id",
+        "go_name",
+        "hypothetical_cds_ratio_mean",
+        "hypothetical_cds_ratio_sd",
+        "id",
+        "id_type",
+        "id_value",
+        "interaction_type",
+        "interactor_a",
+        "interactor_b",
+        "interactor_type_a",
+        "interactor_type_b",
+        "interpro_description",
+        "interpro_id",
+        "length",
+        "lineage_ids",
+        "lineage_names",
+        "lineage_ranks",
+        "location",
+        "locus_tag",
+        "log2_fc",
+        "map_location",
+        "map_name",
+        "map_type",
+        "md5",
+        "measurement_technique",
+        "method",
+        "mol_type",
+        "na_length",
+        "na_sequence_md5",
+        "occurrence",
+        "ontology",
+        "other_ids",
+        "other_value",
+        "p_value",
+        "parent_id",
+        "pathway_class",
+        "pathway_ec",
+        "pathway_id",
+        "pathway_name",
+        "patric_id",
+        "pdb_accession",
+        "pdb_id",
+        "pgfam_id",
+        "plasmid",
+        "plasmids",
+        "plfam_cds_ratio_mean",
+        "plfam_cds_ratio_sd",
+        "plfam_id",
+        "prediction_method",
+        "product",
+        "property",
+        "protein_id",
+        "public",
+        "public_identifier",
+        "public_repository",
+        "refseq_locus_tag",
+        "refseq_locus_tag_a",
+        "refseq_locus_tag_b",
+        "resolution",
+        "result_type",
+        "role_id",
+        "role_name",
+        "rrna",
+        "samples",
+        "score",
+        "segments",
+        "sequence",
+        "sequence_id",
+        "sequence_md5",
+        "sequence_status",
+        "sequence_type",
+        "sequencing_depth",
+        "sequencing_platform",
+        "sf_category",
+        "sf_id",
+        "sf_name",
+        "sf_sequence",
+        "sf_sequence_md5",
+        "sfvt_genome_count",
+        "sfvt_genome_ids",
+        "sfvt_id",
+        "sfvt_sequence",
+        "sfvt_sequence_md5",
+        "sfvt_variations",
+        "source",
+        "source_aa_sequence",
+        "source_db",
+        "source_id",
+        "source_sf_location",
+        "start",
+        "strand",
+        "subclass",
+        "subsystem_id",
+        "subsystem_name",
+        "superclass",
+        "taxon_id",
+        "taxon_id_a",
+        "taxon_id_b",
+        "taxon_id_i",
+        "taxon_lineage_ids",
+        "taxon_lineage_names",
+        "taxon_name",
+        "taxon_rank",
+        "topology",
+        "tpm",
+        "treatment_amount",
+        "treatment_duration",
+        "treatment_name",
+        "treatment_type",
+        "trna",
+        "uniprot_id",
+        "uniprotkb_accession",
+        "value",
+        "variant_types",
+        "version",
+        "z_score"
+      ]
+    },
+    "Data__Collection": {
+      "type": "string",
+      "enum": [
+        "genome",
+        "genome_feature",
+        "genome_sequence",
+        "feature_sequence",
+        "protein_family_ref",
+        "protein_feature",
+        "sequence_feature",
+        "sequence_feature_vt",
+        "structured_assertion",
+        "id_ref",
+        "taxonomy",
+        "pathway",
+        "pathway_ref",
+        "subsystem",
+        "subsystem_ref",
+        "enzyme_class_ref",
+        "gene_ontology_ref",
+        "protein_structure",
+        "ppi",
+        "experiment",
+        "bioset",
+        "bioset_result"
+      ]
+    },
+    "Data__NumericStatus": {
+      "type": "string",
+      "enum": [
+        "reported",
+        "parsed_numeric_text",
+        "missing",
+        "unselected",
+        "invalid",
+        "incompatible",
+        "not_measured"
+      ]
+    },
+    "Data__UnavailableReason": {
+      "type": "string",
+      "enum": [
+        "not_selected",
+        "native_field_absent",
+        "native_null",
+        "source_reports_not_measured",
+        "missing_input_page",
+        "missing_join_key",
+        "missing_sequence_record",
+        "missing_feature_record",
+        "ambiguous_join",
+        "sequence_type_mismatch",
+        "sequence_text_unavailable",
+        "native_value_invalid",
+        "unrepresentable_numeric_value",
+        "unknown_units",
+        "unknown_denominator",
+        "inexact_population",
+        "population_conflict",
+        "empty_population",
+        "native_format_unverified",
+        "native_partial_results",
+        "transport_incomplete",
+        "requested_row_absent",
+        "conflicting_metadata",
+        "incompatible_input"
+      ]
+    },
+    "Data__JoinStatus": {
+      "type": "string",
+      "enum": [
+        "joined",
+        "repeated_identical",
+        "missing_feature",
+        "missing_key",
+        "missing_record",
+        "missing_sequence",
+        "type_mismatch",
+        "conflict"
+      ]
+    },
+    "Data__MolecularMeasurementField": {
+      "type": "string",
+      "enum": [
+        "counts",
+        "fpkm",
+        "tpm",
+        "log2_fc",
+        "p_value",
+        "z_score",
+        "other_value"
+      ]
+    },
+    "Data__SuppliedCellLocation": {
+      "type": "object",
+      "properties": {
+        "cell_key": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string",
+          "enum": [
+            "sample_ids",
+            "biological_replicate_ids",
+            "technical_replicate_ids",
+            "measurement_units",
+            "normalization_method",
+            "pvalue_correction_method",
+            "contrast"
+          ]
+        },
+        "source_level": {
+          "const": "supplied"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "record_path": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+        }
+      },
+      "required": [
+        "cell_key",
+        "field",
+        "source_level",
+        "source_ref",
+        "record_path"
+      ],
+      "additionalProperties": false
+    },
+    "QualifiedDataInputV1": {
+      "type": "object",
+      "properties": {
+        "qualified_result": {
+          "$ref": "#/$defs/Data__QualifiedResult"
+        },
+        "raw_binding": {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "raw_artifact_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "byte_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bytes_key": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "source_ref",
+            "raw_artifact_ref",
+            "sha256",
+            "byte_count",
+            "bytes_key"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "qualified_result",
+        "raw_binding"
+      ],
+      "additionalProperties": false
+    },
+    "SnapshotEvidenceV1": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "single_complete_response",
+            "immutable_snapshot",
+            "unknown"
+          ]
+        },
+        "snapshot_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "snapshot_id",
+        "source_locations"
+      ],
+      "additionalProperties": false
+    },
+    "DataPopulationSelectionV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_data_selection_v1"
+        },
+        "record_sets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "record_set_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "collection": {
+                "type": "string",
+                "enum": [
+                  "genome",
+                  "genome_feature",
+                  "pathway",
+                  "subsystem",
+                  "protein_family_ref",
+                  "pathway_ref",
+                  "subsystem_ref"
+                ]
+              },
+              "source_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "declared_genome_population": {
+                "$ref": "#/$defs/PopulationV1"
+              },
+              "query_population_key": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "selected_fields": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Data__Field"
+                },
+                "uniqueItems": true
+              },
+              "sort": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Data__Sort"
+                }
+              },
+              "annotation_filter": {
+                "type": "string",
+                "enum": [
+                  "exact_PATRIC",
+                  "none"
+                ]
+              },
+              "relationship_to_original_task": {
+                "type": "string",
+                "enum": [
+                  "original_execution_snapshot",
+                  "later_selected_snapshot",
+                  "unverified"
+                ]
+              },
+              "snapshot_evidence": {
+                "$ref": "#/$defs/SnapshotEvidenceV1"
+              },
+              "release": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RoleV1"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "record_set_id",
+              "collection",
+              "source_refs",
+              "declared_genome_population",
+              "query_population_key",
+              "selected_fields",
+              "sort",
+              "annotation_filter",
+              "relationship_to_original_task",
+              "snapshot_evidence",
+              "release",
+              "roles"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "version",
+        "record_sets"
+      ],
+      "additionalProperties": false
+    },
+    "SuppliedRecordV1": {
+      "type": "object",
+      "properties": {
+        "record_set_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "page_row_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_unique_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_row": {
+          "$ref": "#/$defs/Data__NativeRow"
+        },
+        "association": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssociationRowV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_state": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded_by_explicit_filter",
+            "filter_undetermined"
+          ]
+        },
+        "duplicate_state": {
+          "type": "string",
+          "enum": [
+            "unique",
+            "identical_repeat",
+            "conflicting_repeat"
+          ]
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "record_set_id",
+        "source_ref",
+        "native_sha256",
+        "page_row_key",
+        "native_unique_key",
+        "native_row",
+        "association",
+        "filter_state",
+        "duplicate_state",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "PageEvidenceV1": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/Data__ResultBinding"
+        },
+        "requested_offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "response_start": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "returned_row_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reported_total": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "num_found_exact": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "body_complete": {
+          "type": "boolean"
+        },
+        "partial_results": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "snapshot_evidence": {
+          "$ref": "#/$defs/SnapshotEvidenceV1"
+        }
+      },
+      "required": [
+        "binding",
+        "requested_offset",
+        "response_start",
+        "returned_row_count",
+        "reported_total",
+        "num_found_exact",
+        "body_complete",
+        "partial_results",
+        "snapshot_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "SuppliedRecordSetV1": {
+      "type": "object",
+      "properties": {
+        "record_set_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collection": {
+          "type": "string",
+          "enum": [
+            "genome",
+            "genome_feature",
+            "pathway",
+            "subsystem",
+            "protein_family_ref",
+            "pathway_ref",
+            "subsystem_ref"
+          ]
+        },
+        "population": {
+          "$ref": "#/$defs/PopulationV1"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PageEvidenceV1"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SuppliedRecordV1"
+          }
+        },
+        "annotation_filter": {
+          "type": "string",
+          "enum": [
+            "exact_PATRIC",
+            "none"
+          ]
+        },
+        "page_coverage": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "unknown",
+            "incompatible"
+          ]
+        },
+        "snapshot_consistency": {
+          "type": "string",
+          "enum": [
+            "single_response",
+            "proven_same_snapshot",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "original_query_record_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "locally_included_record_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        }
+      },
+      "required": [
+        "record_set_id",
+        "collection",
+        "population",
+        "pages",
+        "rows",
+        "annotation_filter",
+        "page_coverage",
+        "snapshot_consistency",
+        "original_query_record_count",
+        "locally_included_record_count"
+      ],
+      "additionalProperties": false
+    },
+    "SuppliedRecordSetsV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_supplied_records_v1"
+        },
+        "selection": {
+          "$ref": "#/$defs/DataPopulationSelectionV1"
+        },
+        "record_sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SuppliedRecordSetV1"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RequirementV1"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticV1"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "selection",
+        "record_sets",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ComparativeSystemsSheetV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_sheet_v1"
+        },
+        "analysis_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "original_request": {
+          "$ref": "#/$defs/OriginalRequestV1"
+        },
+        "source_documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceDocumentV1"
+          }
+        },
+        "producer_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProducerEvidenceV1"
+          }
+        },
+        "populations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PopulationV1"
+          }
+        },
+        "document_selection": {
+          "$ref": "#/$defs/DocumentSelectionV1"
+        },
+        "population_assignments": {
+          "$ref": "#/$defs/PopulationAssignmentsV1"
+        },
+        "native_documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeDocumentResultV1"
+          }
+        },
+        "family_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FamilyRowV1"
+          }
+        },
+        "pathway_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PathwayRowV1"
+          }
+        },
+        "pathway_ec_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PathwayECRowV1"
+          }
+        },
+        "subsystem_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubsystemRowV1"
+          }
+        },
+        "association_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AssociationRowV1"
+          }
+        },
+        "overview_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OverviewRowV1"
+          }
+        },
+        "variant_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VariantRowV1"
+          }
+        },
+        "supplied_record_sets": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SuppliedRecordSetsV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_memberships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReferenceMembershipV1"
+          }
+        },
+        "duplicate_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DuplicateGroupV1"
+          }
+        },
+        "join_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JoinResultV1"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RequirementV1"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticV1"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "analysis_id",
+        "original_request",
+        "source_documents",
+        "producer_evidence",
+        "populations",
+        "document_selection",
+        "population_assignments",
+        "native_documents",
+        "family_rows",
+        "pathway_rows",
+        "pathway_ec_rows",
+        "subsystem_rows",
+        "association_rows",
+        "overview_rows",
+        "variant_rows",
+        "supplied_record_sets",
+        "reference_memberships",
+        "duplicate_groups",
+        "join_results",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "QuantityV1": {
+      "type": "string",
+      "enum": [
+        "family_returned_genome_occupancy",
+        "family_record_genome_occupancy",
+        "family_occurrences_per_positive_genome",
+        "family_length_cv",
+        "pathway_retained_ec_occupancy_percent",
+        "pathway_retained_feature_density",
+        "pathway_record_ec_occupancy_percent",
+        "pathway_record_feature_density",
+        "subsystem_retained_role_occupancy_percent",
+        "subsystem_retained_feature_density",
+        "subsystem_record_role_occupancy_percent",
+        "subsystem_record_feature_density",
+        "subsystem_explicit_category_genome_count",
+        "observed_family_set_intersection_count",
+        "observed_family_set_union_count",
+        "observed_family_set_jaccard",
+        "reference_component_representation",
+        "reported_formula_check"
+      ]
+    },
+    "ViewSelectionV1": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "native_view",
+            "supplied_record_set"
+          ]
+        },
+        "view_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "record_set_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "view_id",
+        "record_set_id"
+      ],
+      "additionalProperties": false
+    },
+    "ComponentRequestV1": {
+      "type": "object",
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantity": {
+          "$ref": "#/$defs/QuantityV1"
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "view_selection": {
+          "$ref": "#/$defs/ViewSelectionV1"
+        },
+        "population_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family_kind": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "plfam",
+                "pgfam"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "comparison_genome_ids": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_membership_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "category": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "active",
+                "likely",
+                "inactive"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_formula": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "pathway_ec_conservation",
+                "pathway_gene_conservation",
+                "subsystem_role_conservation",
+                "subsystem_gene_conservation",
+                "subsystem_prop_active"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "component_id",
+        "quantity",
+        "entity",
+        "view_selection",
+        "population_id",
+        "family_kind",
+        "comparison_genome_ids",
+        "reference_membership_id",
+        "category",
+        "native_formula"
+      ],
+      "additionalProperties": false
+    },
+    "CalculationParametersV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_calculation_parameters_v1"
+        },
+        "requests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ComponentRequestV1"
+          }
+        },
+        "duplicate_policy": {
+          "const": "preserve_native_occurrences_and_deduplicate_identical_record_ids"
+        },
+        "absolute_tolerance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "relative_tolerance": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "version",
+        "requests",
+        "duplicate_policy",
+        "absolute_tolerance",
+        "relative_tolerance"
+      ],
+      "additionalProperties": false
+    },
+    "RatioComponentV1": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "denominator": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "scale": {
+          "enum": [
+            1,
+            100
+          ]
+        },
+        "output": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "genome_population_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "component_population_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator",
+        "scale",
+        "output",
+        "genome_population_id",
+        "component_population_id"
+      ],
+      "additionalProperties": false
+    },
+    "CalculatedComponentV1": {
+      "type": "object",
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantity": {
+          "$ref": "#/$defs/QuantityV1"
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "value": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "ratio": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RatioComponentV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "input_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CellReferenceV1"
+          }
+        },
+        "population_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "reference_membership_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "component_id",
+        "quantity",
+        "entity",
+        "value",
+        "ratio",
+        "input_refs",
+        "population_ids",
+        "reference_membership_id",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "ComparativeSystemsComponentsV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_components_v1"
+        },
+        "formula_version": {
+          "const": "bvbrc_comparative_systems_formulas_v1"
+        },
+        "analysis_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sheet_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "parameters": {
+          "$ref": "#/$defs/CalculationParametersV1"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CalculatedComponentV1"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RequirementV1"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticV1"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "formula_version",
+        "analysis_id",
+        "sheet_sha256",
+        "parameters",
+        "components",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ProviderParametersV1": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "document_selection": {
+          "$ref": "#/$defs/DocumentSelectionV1"
+        },
+        "population_assignments": {
+          "$ref": "#/$defs/PopulationAssignmentsV1"
+        },
+        "producer_evidence_selections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "evidence_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "raw_artifact_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "record_path": {
+                "type": "string",
+                "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+              }
+            },
+            "required": [
+              "evidence_id",
+              "source_ref",
+              "raw_artifact_ref",
+              "record_path"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "supplied_data_selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataPopulationSelectionV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_memberships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReferenceMembershipV1"
+          }
+        },
+        "calculation_parameters": {
+          "$ref": "#/$defs/CalculationParametersV1"
+        }
+      },
+      "required": [
+        "analysis_id",
+        "document_selection",
+        "population_assignments",
+        "producer_evidence_selections",
+        "supplied_data_selection",
+        "reference_memberships",
+        "calculation_parameters"
+      ],
+      "additionalProperties": false
+    },
+    "NativeMeasurementFieldV1": {
+      "type": "string",
+      "enum": [
+        "positive_genome_count_from_list",
+        "reported_active_occurrences",
+        "reported_ec_conservation_percent",
+        "reported_ec_token_count",
+        "reported_feature_count",
+        "reported_feature_occurrences",
+        "reported_feature_token_count",
+        "reported_gene_conservation",
+        "reported_genome_count",
+        "reported_genome_ec_count",
+        "reported_inactive_placeholder",
+        "reported_length_max",
+        "reported_length_mean",
+        "reported_length_min",
+        "reported_length_population_sd",
+        "reported_likely_occurrences",
+        "reported_missing_genome_count",
+        "reported_record_genome_fraction",
+        "reported_role_conservation_percent",
+        "reported_role_token_count",
+        "reported_subsystem_name_count"
+      ]
+    },
+    "FactSelectorV1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "measurement"
+            },
+            "view_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "entity": {
+              "$ref": "#/$defs/EntityV1"
+            },
+            "native_field": {
+              "$ref": "#/$defs/NativeMeasurementFieldV1"
+            }
+          },
+          "required": [
+            "kind",
+            "view_id",
+            "entity",
+            "native_field"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "computed_measurement"
+            },
+            "component_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "component_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "ratio"
+            },
+            "component_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "component_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "population"
+            },
+            "population_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "population_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "membership"
+            },
+            "entity": {
+              "$ref": "#/$defs/EntityV1"
+            },
+            "genome_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "member_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "population_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "entity",
+            "genome_id",
+            "member_id",
+            "population_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "requirement"
+            },
+            "required_input_role": {
+              "$ref": "#/$defs/RoleV1"
+            }
+          },
+          "required": [
+            "kind",
+            "required_input_role"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "qualification"
+            },
+            "code": {
+              "$ref": "#/$defs/DiagnosticCodeV1"
+            }
+          },
+          "required": [
+            "kind",
+            "code"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "request_status"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "RequestedFieldV1": {
+      "type": "object",
+      "properties": {
+        "field_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selector": {
+          "$ref": "#/$defs/FactSelectorV1"
+        },
+        "expected_cardinality": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "availability_requirement": {
+          "type": "string",
+          "enum": [
+            "typed_state",
+            "available_value",
+            "available_complete_population"
+          ]
+        }
+      },
+      "required": [
+        "field_id",
+        "selector",
+        "expected_cardinality",
+        "availability_requirement"
+      ],
+      "additionalProperties": false
+    },
+    "RequestedSelectionV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_requested_selection_v1"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RequestedFieldV1"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "MembershipFactV1": {
+      "type": "object",
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/EntityV1"
+        },
+        "genome_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "member_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "population_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "presence_state": {
+          "type": "string",
+          "enum": [
+            "recorded_positive",
+            "zero_in_qualified_record_population",
+            "no_record_completeness_unknown",
+            "not_measured",
+            "failed",
+            "truncated",
+            "incompatible",
+            "conflicting"
+          ]
+        },
+        "source_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceLocationV1"
+          }
+        }
+      },
+      "required": [
+        "entity",
+        "genome_id",
+        "member_id",
+        "population_id",
+        "presence_state",
+        "source_locations"
+      ],
+      "additionalProperties": false
+    },
+    "PopulationFactV1": {
+      "type": "object",
+      "properties": {
+        "population_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "requested_direct_genomes",
+            "executed_genomes",
+            "declared_query_genomes",
+            "native_view_represented_genomes",
+            "native_retained_records",
+            "supplied_data_records",
+            "selected_component_membership"
+          ]
+        },
+        "raw_occurrence_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "distinct_valid_member_count": {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        "completeness": {
+          "$ref": "#/$defs/CompletenessV1"
+        },
+        "qualification_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticCodeV1"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "population_id",
+        "kind",
+        "raw_occurrence_count",
+        "distinct_valid_member_count",
+        "completeness",
+        "qualification_codes"
+      ],
+      "additionalProperties": false
+    },
+    "FactValueV1": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/NumericCellV1"
+        },
+        {
+          "$ref": "#/$defs/RatioComponentV1"
+        },
+        {
+          "$ref": "#/$defs/PopulationFactV1"
+        },
+        {
+          "$ref": "#/$defs/MembershipFactV1"
+        },
+        {
+          "$ref": "#/$defs/RequirementV1"
+        },
+        {
+          "$ref": "#/$defs/DiagnosticV1"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "satisfied",
+                "partial",
+                "invalid",
+                "unavailable"
+              ]
+            },
+            "affected_field_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status",
+            "affected_field_ids"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ProjectedFieldV1": {
+      "type": "object",
+      "properties": {
+        "field_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FactValueV1"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "satisfied",
+            "partial",
+            "invalid",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "field_id",
+        "values",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "ProviderFactsV1": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/ProjectedFieldV1"
+      }
+    },
+    "RequestedFactV1": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "$ref": "#/$defs/ProjectedFieldV1"
+        }
+      },
+      "required": [
+        "source_ref",
+        "field",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "RequestedFactsV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_comparative_systems_requested_facts_v1"
+        },
+        "facts": {
+          "$ref": "#/$defs/ProviderFactsV1"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "satisfied",
+            "partial",
+            "invalid",
+            "unavailable"
+          ]
+        },
+        "missing_requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RequirementV1"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticV1"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "facts",
+        "status",
+        "missing_requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ProviderResultV1": {
+      "type": "object",
+      "properties": {
+        "adapter_id": {
+          "const": "bvbrc_comparative_systems"
+        },
+        "adapter_version": {
+          "const": "1"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "sheet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ComparativeSystemsSheetV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "components": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ComparativeSystemsComponentsV1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "facts": {
+          "$ref": "#/$defs/ProviderFactsV1"
+        },
+        "missing_requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RequirementV1"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DiagnosticV1"
+          }
+        }
+      },
+      "required": [
+        "adapter_id",
+        "adapter_version",
+        "status",
+        "sheet",
+        "components",
+        "facts",
+        "missing_requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

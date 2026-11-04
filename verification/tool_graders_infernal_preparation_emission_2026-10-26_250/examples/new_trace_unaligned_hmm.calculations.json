@@ -1,0 +1,1403 @@
+{
+  "schema": "infernal_preparation_calculations_v1",
+  "operation": {
+    "program": "cmemit",
+    "mode": "sample_unaligned",
+    "engine_version": "1.1.5",
+    "settings": {
+      "-N": 2,
+      "--idx": 1,
+      "--seed": 181,
+      "--rna": true,
+      "--dna": false,
+      "--hmmonly": true,
+      "--nohmmonly": false,
+      "-l": false,
+      "--iid": false,
+      "--u5p": false,
+      "--u3p": false
+    }
+  },
+  "parameters": {},
+  "rows": [
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/model.cm#model/0",
+      "components": {
+        "actual_sequence_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "model_keys"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "model_keys"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "column_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/model.cm",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 144,
+                "byte_start": 0,
+                "byte_end": 10256
+              },
+              "field": "record_key"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_model_population_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/model.cm",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 144,
+                "byte_start": 0,
+                "byte_end": 10256
+              },
+              "field": "record_key"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_sequence_count_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "model_keys"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "model_keys"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/model.cm",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 144,
+                "byte_start": 0,
+                "byte_end": 10256
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out#generated_sequence/0",
+      "components": {
+        "actual_sequence_count": {
+          "value": 1,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "record_key"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.ambiguity_count"
+            }
+          ],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": 12,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "column_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.gap_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.gap_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": 7,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.gc_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": 12,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": 0.5833333333333334,
+          "state": "present",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.gc_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": 12,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "values.residue_count"
+            }
+          ],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_counts_consistent",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_residue_digest_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_alphabet_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_embedding_interval_valid",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_embedding_length_matches",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_sample_index_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_generated_name_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_model_association",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "model_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_output_capture_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 2,
+                "byte_start": 0,
+                "byte_end": 33
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out#generated_sequence/1",
+      "components": {
+        "actual_sequence_count": {
+          "value": 1,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "record_key"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.ambiguity_count"
+            }
+          ],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": 11,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "column_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.gap_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.gap_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.column_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": 7,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.gc_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": 11,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": 0.6363636363636364,
+          "state": "present",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.gc_count"
+            },
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.canonical_count"
+            }
+          ],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": 11,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "values.residue_count"
+            }
+          ],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_counts_consistent",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_residue_digest_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_alphabet_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_embedding_interval_valid",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_embedding_length_matches",
+          "outcome": "not_applicable",
+          "inputs": []
+        },
+        {
+          "check": "cmemit_sample_index_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_generated_name_matches",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "sequence"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_model_association",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "model_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_output_capture_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 3,
+                "line_end": 4,
+                "byte_start": 33,
+                "byte_end": 65
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt#generated_trace/0",
+      "components": {
+        "actual_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "column_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": 9.94,
+          "state": "present",
+          "basis": "native_reported",
+          "unit": "bit",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 0,
+                "line_start": 2,
+                "line_end": 2,
+                "byte_start": 21,
+                "byte_end": 50
+              },
+              "field": "SCORE"
+            }
+          ],
+          "native_token": "9.94"
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "native_reported",
+          "unit": "bit",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 3,
+                "byte_start": 50,
+                "byte_end": 79
+              },
+              "field": "STRUCTURE SCORE"
+            }
+          ],
+          "native_token": "0.00"
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_trace_decoded",
+          "outcome": "unknown",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 29,
+                "byte_start": 0,
+                "byte_end": 892
+              },
+              "field": "record_key"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_model_association",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 29,
+                "byte_start": 0,
+                "byte_end": 892
+              },
+              "field": "model_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_output_capture_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 29,
+                "byte_start": 0,
+                "byte_end": 892
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt#generated_trace/1",
+      "components": {
+        "actual_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "column_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "expected_sequence_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [],
+          "native_token": null
+        },
+        "gap_fraction": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_denominator": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "gc_fraction_canonical": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "fraction",
+          "inputs": [],
+          "native_token": null
+        },
+        "residue_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [],
+          "native_token": null
+        },
+        "row_count": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [],
+          "native_token": null
+        },
+        "score_bits": {
+          "value": 6.14,
+          "state": "present",
+          "basis": "native_reported",
+          "unit": "bit",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 1,
+                "line_start": 31,
+                "line_end": 31,
+                "byte_start": 913,
+                "byte_end": 942
+              },
+              "field": "SCORE"
+            }
+          ],
+          "native_token": "6.14"
+        },
+        "structure_score_bits": {
+          "value": null,
+          "state": "not_measured",
+          "basis": "native_reported",
+          "unit": "bit",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 1,
+                "line_start": 32,
+                "line_end": 32,
+                "byte_start": 942,
+                "byte_end": 971
+              },
+              "field": "STRUCTURE SCORE"
+            }
+          ],
+          "native_token": "0.00"
+        }
+      },
+      "checks": [
+        {
+          "check": "cmemit_trace_decoded",
+          "outcome": "unknown",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 1,
+                "line_start": 30,
+                "line_end": 58,
+                "byte_start": 892,
+                "byte_end": 1773
+              },
+              "field": "record_key"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_model_association",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 1,
+                "line_start": 30,
+                "line_end": 58,
+                "byte_start": 892,
+                "byte_end": 1773
+              },
+              "field": "model_keys"
+            }
+          ]
+        },
+        {
+          "check": "cmemit_output_capture_complete",
+          "outcome": "pass",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/trace_unaligned_hmm/traces.txt",
+                "record_ordinal": 1,
+                "line_start": 30,
+                "line_end": 58,
+                "byte_start": 892,
+                "byte_end": 1773
+              },
+              "field": "record_key"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

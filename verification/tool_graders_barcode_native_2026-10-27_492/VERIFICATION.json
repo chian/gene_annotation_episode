@@ -1,0 +1,121 @@
+{
+  "fixed_tool_id": "B-L130-analyze_barcode_sequencing_data",
+  "alias": "SA-0372",
+  "resource_row": "B-L130-analyze_barcode_sequencing_data::local",
+  "scope": "finite native producer and local preparation; complete Workflow integration remains separately owned",
+  "final_check": "check004",
+  "tests_passed": 38,
+  "pytest_seconds": 183.62,
+  "native_handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_native_2026-10-27_492/check004/handle.json",
+  "unit": "gene-local-job-0e9a7c14a57a4cccac25667a45dca830.service",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_native_2026-10-27_492/check004/handle.json",
+    "unit": "gene-local-job-0e9a7c14a57a4cccac25667a45dca830.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-28T00:01:57.084429+00:00",
+          "monotonic_ns": 959278781755795,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 186.696169971,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 376926208
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true
+  },
+  "software_file": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_native_2026-10-27_492/check004/native-software.json",
+  "versions": {
+    "pluggy": "1.7.0",
+    "jsonschema": "4.25.1",
+    "Pygments": "2.21.0",
+    "jsonschema-specifications": "2025.9.1",
+    "attrs": "26.1.0",
+    "biopython": "1.85",
+    "referencing": "0.37.0",
+    "numpy": "2.2.6",
+    "rpds-py": "2026.9.1",
+    "typing_extensions": "4.16.0",
+    "iniconfig": "2.3.1",
+    "pytest": "8.4.2",
+    "scipy": "1.15.3",
+    "packaging": "26.3"
+  },
+  "numerical_example": {
+    "total_reads": 12,
+    "extracted_reads": 10,
+    "counts": [
+      4,
+      3,
+      2,
+      1
+    ],
+    "min_count": 2,
+    "retained_types": 3,
+    "retained_reads": 9,
+    "pair_distances": [
+      1,
+      4,
+      3
+    ],
+    "merge_heights": [
+      1,
+      3.5
+    ],
+    "cut_threshold": 3,
+    "cluster_reads": [
+      7,
+      2
+    ],
+    "mapped_target_reads": [
+      7,
+      2
+    ],
+    "duplicate_exact_mapping_rows_multiply_reads": false
+  },
+  "verification_limits": [
+    "synthetic biological input fixtures with real native dependencies",
+    "local preparation protocol tested with selected-state fixture; root owns full PracticalState and Workflow integration",
+    "complete-population capacity rejection tested by explicit fault injection; no 20-GiB exhaustion stress run",
+    "no API or HPC resource route and no configured-model scientific investigation"
+  ]
+}

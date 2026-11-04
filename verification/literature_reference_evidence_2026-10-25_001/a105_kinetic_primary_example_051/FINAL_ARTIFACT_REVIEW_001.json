@@ -1,0 +1,232 @@
+{
+  "status": "passed",
+  "successful_generation": "controlled_005",
+  "pin_files_verified": 676,
+  "both_harness_files_match_executed_pin": true,
+  "original038_files_exact": true,
+  "finite_count_source_span_matches_exact_primary_bytes": true,
+  "source_uncertainty_and_per_arm_timing_verified": [
+    {
+      "alternative": "IMP",
+      "role": "numerator",
+      "timing_witness": "After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl.",
+      "source_spread": 8,
+      "known_word_count_delivered_separately_from_native_numeric_count": true
+    },
+    {
+      "alternative": "IMP",
+      "role": "denominator",
+      "timing_witness": "The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution.",
+      "source_spread": 0.0015,
+      "known_word_count_delivered_separately_from_native_numeric_count": true
+    },
+    {
+      "alternative": "FBP",
+      "role": "numerator",
+      "timing_witness": "After 4 min at 30 °C, the reactions were quenched using 40 µL of 10% HCl.",
+      "source_spread": 8,
+      "known_word_count_delivered_separately_from_native_numeric_count": true
+    },
+    {
+      "alternative": "FBP",
+      "role": "denominator",
+      "timing_witness": "The reactions were preincubated for 5 min at 30 °C prior to the addition of enzyme and quenched 15 min thereafter by adding one-fourth volume of acidic malachite green dye solution.",
+      "source_spread": 0.001,
+      "known_word_count_delivered_separately_from_native_numeric_count": true
+    }
+  ],
+  "shared_PAP_summary_identity_verified": true,
+  "sheets": [
+    {
+      "alternative": "IMP",
+      "cells": {
+        "denominator_parameter": {
+          "approximate": false,
+          "conditional_on": [],
+          "formula": "source_denominator_parameter",
+          "origin": "reported",
+          "relation": "eq",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "uM^-1min^-1",
+          "value": 0.0027
+        },
+        "log_parameter_contrast": {
+          "approximate": false,
+          "conditional_on": [
+            "supplied_subject_and_parameter_relationships",
+            "reported_protocol_comparison"
+          ],
+          "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+          "origin": "derived",
+          "relation": "none",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 9.652173124255222
+        },
+        "numerator_parameter": {
+          "approximate": false,
+          "conditional_on": [],
+          "formula": "source_numerator_parameter",
+          "origin": "reported",
+          "relation": "eq",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "uM^-1min^-1",
+          "value": 42.0
+        },
+        "parameter_difference": {
+          "approximate": false,
+          "conditional_on": [
+            "supplied_subject_and_parameter_relationships",
+            "reported_protocol_comparison"
+          ],
+          "formula": "numerator_parameter-denominator_parameter",
+          "origin": "derived",
+          "relation": "none",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "uM^-1min^-1",
+          "value": 41.9973
+        },
+        "parameter_ratio": {
+          "approximate": false,
+          "conditional_on": [
+            "supplied_subject_and_parameter_relationships",
+            "reported_protocol_comparison"
+          ],
+          "formula": "numerator_parameter/denominator_parameter",
+          "origin": "derived",
+          "relation": "none",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 15555.555555555555
+        }
+      },
+      "numerator_measurement_id": "kinetic_source_token_e847e0887ef79896405d2c16",
+      "numerator_physical_summary_id": "kinetic_physical_observation_3ac47841397fab669fa60e34"
+    },
+    {
+      "alternative": "FBP",
+      "cells": {
+        "denominator_parameter": {
+          "approximate": false,
+          "conditional_on": [],
+          "formula": "source_denominator_parameter",
+          "origin": "reported",
+          "relation": "eq",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "uM^-1min^-1",
+          "value": 0.025
+        },
+        "log_parameter_contrast": {
+          "approximate": false,
+          "conditional_on": [
+            "supplied_subject_and_parameter_relationships",
+            "reported_protocol_comparison"
+          ],
+          "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+          "origin": "derived",
+          "relation": "none",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 7.426549072397305
+        },
+        "numerator_parameter": {
+          "approximate": false,
+          "conditional_on": [],
+          "formula": "source_numerator_parameter",
+          "origin": "reported",
+          "relation": "eq",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "uM^-1min^-1",
+          "value": 42.0
+        },
+        "parameter_difference": {
+          "approximate": false,
+          "conditional_on": [
+            "supplied_subject_and_parameter_relationships",
+            "reported_protocol_comparison"
+          ],
+          "formula": "numerator_parameter-denominator_parameter",
+          "origin": "derived",
+          "relation": "none",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "uM^-1min^-1",
+          "value": 41.975
+        },
+        "parameter_ratio": {
+          "approximate": false,
+          "conditional_on": [
+            "supplied_subject_and_parameter_relationships",
+            "reported_protocol_comparison"
+          ],
+          "formula": "numerator_parameter/denominator_parameter",
+          "origin": "derived",
+          "relation": "none",
+          "status": "populated",
+          "threshold": null,
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 1680.0
+        }
+      },
+      "numerator_measurement_id": "kinetic_source_token_e847e0887ef79896405d2c16",
+      "numerator_physical_summary_id": "kinetic_physical_observation_3ac47841397fab669fa60e34"
+    }
+  ],
+  "separate_attempts_not_additive_scientific_evidence": {
+    "controlled_001": {
+      "exit_code": 1,
+      "runtime_actions": 3,
+      "runtime_observations": 0,
+      "literature_kinetic_operations": 0,
+      "null_table_counts_mean_table_not_initialized": true
+    },
+    "controlled_002": {
+      "exit_code": 1,
+      "runtime_actions": 0,
+      "runtime_observations": 0,
+      "literature_kinetic_operations": null,
+      "null_table_counts_mean_table_not_initialized": true
+    },
+    "controlled_003": {
+      "exit_code": 1,
+      "runtime_actions": null,
+      "runtime_observations": null,
+      "literature_kinetic_operations": null,
+      "null_table_counts_mean_table_not_initialized": true
+    },
+    "controlled_004": {
+      "exit_code": 1,
+      "runtime_actions": 0,
+      "runtime_observations": 0,
+      "literature_kinetic_operations": null,
+      "null_table_counts_mean_table_not_initialized": true
+    },
+    "controlled_005": {
+      "exit_code": 0,
+      "runtime_actions": 4,
+      "runtime_observations": 4,
+      "literature_kinetic_operations": 2,
+      "null_table_counts_mean_table_not_initialized": true
+    }
+  },
+  "configured_model_run": false,
+  "whole_A105_complete": false
+}

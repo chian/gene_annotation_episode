@@ -1,0 +1,108 @@
+--- a/tests/test_literature_parent_population_information.py
++++ b/tests/test_literature_parent_population_information.py
+@@ -45,11 +45,22 @@
+     return json.loads(raw)
+ 
+ 
++def current_baseline():
++    """Retain the fourteen historical operations and their current input guidance."""
++    from gene_annotation_episode.literature_partner_native_inputs import partner_source_population_schema
++    from gene_annotation_episode.literature_partner_operand_information import partner_source_population_schema_with_information
++    rows = baseline()
++    partner, = [row for row in rows if row["name"] == "literature.partner.source.populate"]
++    assert partner["input_schema"] == partner_source_population_schema()
++    partner["input_schema"] = partner_source_population_schema_with_information()
++    return rows
++
++
+ def native_addition():
+     """Only the new operation is additive; the historical fixture stays exact."""
+-    from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
++    from gene_annotation_episode.literature_native_rate_operand_information import rate_source_population_schema_with_information
+     entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+-    assert entry["input_schema"] == rate_source_population_schema()
++    assert entry["input_schema"] == rate_source_population_schema_with_information()
+     assert "without a prepared CSV/TSV" in entry["description"]
+     assert "Source-defined U/mg" in entry["description"]
+     return entry
+@@ -88,6 +99,15 @@
+     return entry
+ 
+ 
++def interaction_addition():
++    """The four-cell source binding comparison is a separate additive operation."""
++    from gene_annotation_episode.literature_binding_interaction_inputs import binding_interaction_arguments_schema
++    entry, = [row for row in _population_catalog() if row["name"] == "literature.binding.interaction.populate"]
++    assert entry["input_schema"] == binding_interaction_arguments_schema()
++    assert "four selected original-image binding cells" in entry["description"]
++    return entry
++
++
+ def enabled_parent(store, child, source):
+     services, _ = service_binding(store, child)
+     binding = LiteratureEpisodes(services, rate_population=True,
+@@ -111,7 +131,7 @@
+         services = binding.services
+         disabled = LiteratureEpisodes(services)
+         ordinary = disabled.catalog(context)
+-        expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
++        expected = ordinary + current_baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]
+         before = deepcopy(expected)
+         assert binding.catalog(context) == expected
+         # No schema aliasing between separate catalog construction calls.
+@@ -145,18 +165,35 @@
+         monkeypatch.setattr(binding.services, "execute_tool", forbidden)
+         monkeypatch.setattr(binding.services, "scientific_credit", forbidden)
+         rows_before = store.db.total_changes
+-        schema_before = list(store.db.execute("SELECT name FROM sqlite_master ORDER BY name"))
++        def schema_state():
++            return [tuple(row) for row in store.db.execute(
++                "SELECT type,name,tbl_name,sql FROM sqlite_master ORDER BY type,name")]
++
++        schema_before = schema_state()
+         original_parent = parent.as_record()
+         information = registry.initial_decision_context(parent)
++        initialized_schema = schema_state()
++        # The first rate display initializes its existing empty repositories.
++        # Admit exactly those tables/indexes; every prior schema row must survive.
++        rate_tables = {"literature_rate_operations", "literature_rate_received",
++                       "literature_rate_source_received"}
++        assert set(schema_before) <= set(initialized_schema)
++        expected_additions = {("table", name, name) for name in rate_tables} | {
++            ("index", "sqlite_autoindex_" + name + "_1", name) for name in rate_tables}
++        assert {row[:3] for row in set(initialized_schema) - set(schema_before)} == expected_additions
++        assert all(store.db.execute("SELECT count(*) FROM " + name).fetchone()[0] == 0
++                   for name in rate_tables)
++        assert store.db.total_changes == rows_before
++        schema_before = initialized_schema
+         assert rebuilt.initial_decision_context(parent) == information
+         descriptor_info = information["reference_evidence_parent"]
+         assert descriptor_info["source_refs"] == [args["source_ref"]]
+         assert descriptor_info["source_custody"][0]["artifact_ref"] == store.get(args["source_ref"])["artifact_ref"]
+-        expected = [{key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition()]]
++        expected = [{key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]]
+         assert descriptor_info["child_population_operations"] == expected
+         assert all(set(row) == {"name", "description"} for row in expected)
+         assert store.db.total_changes == rows_before
+-        assert list(store.db.execute("SELECT name FROM sqlite_master ORDER BY name")) == schema_before
++        assert schema_state() == schema_before
+         assert parent.as_record() == original_parent
+         with pytest.raises(LookupError, match="episode_role_not_bound:annotation"):
+             registry.for_role("annotation")
+@@ -166,6 +203,7 @@
+         descriptor_info["child_population_operations"][0]["description"] = "changed fixture"
+         assert rebuilt.initial_decision_context(parent)["reference_evidence_parent"]["child_population_operations"] == expected
+         assert store.db.total_changes == rows_before
++        assert schema_state() == schema_before
+     finally:
+         store.close()
+ 
+@@ -315,7 +353,7 @@
+         def commission(inputs):
+             descriptor = inputs["reference_evidence_parent"]
+             assert descriptor["child_population_operations"] == [
+-                {key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition()]]
++                {key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]]
+             assert not any(row["name"].startswith("literature.") for row in inputs["tools"])
+             assert inputs["child_reports"] == []
+             assert not store.list("observation") and not store.list("assessment")

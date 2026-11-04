@@ -1,0 +1,78 @@
+{
+  "status": "selected_before_execution",
+  "tests": [
+    "test_api_bvbrc_minhash.py",
+    "test_bvbrc_minhash_metadata_custody.py",
+    "test_bvbrc_minhash_pair_metadata_episode_path.py",
+    "test_bvbrc_minhash_episode_path.py",
+    "test_bvbrc_minhash_return_boundaries.py",
+    "test_bvbrc_minhash_metadata_views.py::test_closed_calculation_and_diagnostic_schemas_use_declared_enum_and_path_grammar",
+    "test_communication.py",
+    "test_api_service_integration.py",
+    "test_api_service_recovery.py",
+    "test_api_service_result_ordering.py",
+    "test_action_validation_feedback.py"
+  ],
+  "support_files": [
+    "cases/gene_001/target.faa",
+    "examples/api_services.json"
+  ],
+  "owned_source_checks": [
+    {
+      "path": "gene_annotation_episode/api_bvbrc_minhash.py",
+      "matches_worker_manifest": true,
+      "sha256": "9d06d16064845a26be5e026b478e66384506f3a41204b786e90b71a62a1c0e24"
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_minhash_host.py",
+      "matches_worker_manifest": true,
+      "sha256": "136839a959fa6c58f1aaadc6f612ed6adddea1850b7f396b68ad2ac9dd81230b"
+    },
+    {
+      "path": "gene_annotation_episode/api_service_execution.py",
+      "matches_worker_manifest": true,
+      "sha256": "3af68ffbf341bbb438445972afc1475fc30e1e2a6b55012252e649031e2b06a1"
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "matches_worker_manifest": true,
+      "sha256": "19fb8db9725a4575ae6997a591a6854e773696357f2680e77b44be9a5a0c6276"
+    },
+    {
+      "path": "gene_annotation_episode/execution_progress.py",
+      "matches_worker_manifest": true,
+      "sha256": "fd2c6619595c12c21295e4ef9d333aba422affe068bdb0df065ae5c88dfe11ce"
+    },
+    {
+      "path": "gene_annotation_episode/communication.py",
+      "matches_worker_manifest": true,
+      "sha256": "0ac32cadfd77c56556ee05ad6c0b2513ff5250bda61385f47c4b306f230a68e5"
+    },
+    {
+      "path": "tests/test_api_bvbrc_minhash.py",
+      "matches_worker_manifest": true,
+      "sha256": "52b9f845445962d3d9e4c62b33aa0bbcac5984f71fc5ff2c616660cc465f6530"
+    },
+    {
+      "path": "tests/test_bvbrc_minhash_metadata_custody.py",
+      "matches_worker_manifest": true,
+      "sha256": "7c1fbd8a104385b0bcdf58a996fa3022fb1c688974ad35fbac5a9901993d80cd"
+    },
+    {
+      "path": "tests/bvbrc_minhash_metadata_episode_fixture.py",
+      "matches_worker_manifest": true,
+      "sha256": "60eec0660ff7cbbd240acfa6ec85186fdf58d70cad1a8ca0ae74134ab65f6027"
+    },
+    {
+      "path": "tests/test_bvbrc_minhash_pair_metadata_episode_path.py",
+      "matches_worker_manifest": true,
+      "sha256": "3d988594f5891b83db93406384d05b979f29943aff0f486241efe6a56ad1a83d"
+    },
+    {
+      "path": "gene_annotation_episode/runtime.py",
+      "sha256": "058449f0c9c16ac140c49205397e669958dec92a82b9f52c5a15ce200dfe1f25",
+      "owner": "root"
+    }
+  ],
+  "scope": "B521 service/custody/recovery, D522 complete selected Workflow and deferred C520 schema, with affected generic service/communication/feedback regressions. No rerun of unchanged 427 A/C component checks."
+}

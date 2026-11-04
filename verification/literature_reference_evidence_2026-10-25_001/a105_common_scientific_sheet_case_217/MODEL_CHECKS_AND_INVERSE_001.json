@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "model": "single_site_equilibrium_binding_only_sensitivity",
+  "rows": {
+    "T252N": {
+      "required_free_substrate_uM_exact": "6893/285",
+      "required_free_substrate_uM": 24.185964912280703,
+      "forward_substitution_product_ratio_exact": "46/103",
+      "reported_product_ratio_exact": "46/103",
+      "interpretation": "Inverse conditional binding-only model; NOT measured or inferred actual assay substrate.",
+      "analytic_D_gradient_order": [
+        "P_test",
+        "P_reference",
+        "Kd_test",
+        "Kd_reference",
+        "shared_S"
+      ],
+      "analytic_D_gradient": [
+        0.010869565217391304,
+        -0.0048543689320388345,
+        0.0004916420845624386,
+        -0.0004995504046358277,
+        -7.908320073389172e-06
+      ],
+      "central_difference_gradient": [
+        0.010869565253635268,
+        -0.004854368948220071,
+        0.0004916420845762067,
+        -0.0004995504047459557,
+        -7.908320151239767e-06
+      ],
+      "gradient_status": "passed independent finite-difference checks"
+    },
+    "T252N/V253T": {
+      "required_free_substrate_uM_exact": "3033/185",
+      "required_free_substrate_uM": 16.394594594594594,
+      "forward_substitution_product_ratio_exact": "66/103",
+      "reported_product_ratio_exact": "66/103",
+      "interpretation": "Inverse conditional binding-only model; NOT measured or inferred actual assay substrate.",
+      "analytic_D_gradient_order": [
+        "P_test",
+        "P_reference",
+        "Kd_test",
+        "Kd_reference",
+        "shared_S"
+      ],
+      "analytic_D_gradient": [
+        0.007575757575757576,
+        -0.0048543689320388345,
+        0.0004970178926441351,
+        -0.0004995504046358277,
+        -2.5325119916926086e-06
+      ],
+      "central_difference_gradient": [
+        0.007575757601014315,
+        -0.0048543689482241125,
+        0.0004970178926061442,
+        -0.0004995504045917581,
+        -2.5325120167618564e-06
+      ],
+      "gradient_status": "passed independent finite-difference checks"
+    }
+  },
+  "source_scope": "Same retained207 paper only; paper quantities already frozen in NUMERICAL_ORACLES_001.json.",
+  "limits": [
+    "Product-assay S unreported in inspected article; no actual concentration estimate follows.",
+    "Differences in inverse S across mutants do not establish statistical contradiction without compatible assays/model/uncertainty.",
+    "No covariance, probability, active fraction or causal attribution invented."
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "artifacts": [
+    {
+      "format": "stockholm",
+      "relative_path": "outputs/stockholm",
+      "role": "stockholm",
+      "sha256": "bfae41ce2cd11ca9aee748a87eb0960de1ebde54d4b3c7247acc9dc073fb022d",
+      "size_bytes": 980
+    },
+    {
+      "format": "text",
+      "relative_path": "outputs/stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "environment": {
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt/tmp",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt/tmp",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt/tmp",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt/cache"
+  },
+  "failures": [],
+  "finished_at": "2026-10-24T21:12:27.799570+00:00",
+  "identity": {
+    "attempt_id": "c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde",
+    "episode_id": "episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/native.json",
+    "operation_key": "native-hmmer-results:episode_4c69181e156cb86d47afaf0094e718fd17060a4fd74d20cdd47404308215c70e:0",
+    "requested_job_sha256": "16749d0180695911b9d61f6e82c71683b682e08b105c40adaa7d83aecd5575ba",
+    "resource_id": "here",
+    "run_id": "native-hmmer-results"
+  },
+  "inputs": [
+    {
+      "actual_sha256": "ccad2ee0e0eaa8d4bf88bc0bfd021525c3d8dfbf13d2896395abbc10f17be7df",
+      "artifact_ref": "fixture:sha256:ccad2ee0e0eaa8d4bf88bc0bfd021525c3d8dfbf13d2896395abbc10f17be7df",
+      "expected_sha256": "ccad2ee0e0eaa8d4bf88bc0bfd021525c3d8dfbf13d2896395abbc10f17be7df",
+      "expected_size_bytes": 10308,
+      "format": "hmmer3_ascii",
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/profile.hmm",
+      "relative_path": "inputs/profile.hmm",
+      "role": "profile",
+      "size_bytes": 10308
+    },
+    {
+      "actual_sha256": "2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+      "artifact_ref": "fixture:sha256:2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+      "expected_sha256": "2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+      "expected_size_bytes": 132,
+      "format": "fasta",
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/sequences.fa",
+      "relative_path": "inputs/sequences.fa",
+      "role": "sequences",
+      "size_bytes": 132
+    },
+    {
+      "actual_sha256": "a627ec3bd911bff3e6882033642e4d5917f590f36332c8ba1a7d4afcc8d59092",
+      "artifact_ref": "fixture:sha256:a627ec3bd911bff3e6882033642e4d5917f590f36332c8ba1a7d4afcc8d59092",
+      "expected_sha256": "a627ec3bd911bff3e6882033642e4d5917f590f36332c8ba1a7d4afcc8d59092",
+      "expected_size_bytes": 353,
+      "format": "stockholm",
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/seed.sto",
+      "relative_path": "inputs/mapali.sto",
+      "role": "mapali",
+      "size_bytes": 353
+    }
+  ],
+  "mode": "align",
+  "operand_bindings": [
+    {
+      "native_accession": null,
+      "native_name": "test1",
+      "operand_role": "sequences",
+      "record_ordinal": 0,
+      "reference_ref": null,
+      "subject_ref": "input_3dd958113e01907fa43ae049"
+    },
+    {
+      "native_accession": null,
+      "native_name": "test2",
+      "operand_role": "sequences",
+      "record_ordinal": 1,
+      "reference_ref": null,
+      "subject_ref": "input_11dd65c91cb63e06ea1c2740"
+    },
+    {
+      "native_accession": null,
+      "native_name": "test3",
+      "operand_role": "sequences",
+      "record_ordinal": 2,
+      "reference_ref": null,
+      "subject_ref": "input_219da1b52fbf7006d6f4f322"
+    },
+    {
+      "native_accession": null,
+      "native_name": "test4",
+      "operand_role": "sequences",
+      "record_ordinal": 3,
+      "reference_ref": null,
+      "subject_ref": "input_473b5eff599a3d69e8486413"
+    }
+  ],
+  "program": "hmmalign",
+  "realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmalign",
+    "--mapali",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt/inputs/mapali.sto",
+    "--informat",
+    "fasta",
+    "--outformat",
+    "Stockholm",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt/inputs/profile.hmm",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_results_integration_2026-10-24/final-pytest/test_selected_native_results_r10/workspace/.episode-operations/f066f6ac7bf55d1ac066b75efe0b6187a31f40d09b62f8d697f45e48c79c1dfd/c0b19e8d0d08384f9f70ed6adf5ed4a27b404d713295ee2d5fe662823a95acde/hmmer-attempt/inputs/sequences.fa"
+  ],
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmalign",
+      "--mapali",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/seed.sto",
+      "--informat",
+      "fasta",
+      "--outformat",
+      "Stockholm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/profile.hmm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/sequences.fa"
+    ],
+    "environment": {},
+    "native_hmmer": {
+      "environment": {},
+      "grading_parameters": {},
+      "metadata": {},
+      "mode": "align",
+      "operand_bindings": [
+        {
+          "native_accession": null,
+          "native_name": "test1",
+          "operand_role": "sequences",
+          "record_ordinal": 0,
+          "reference_ref": null,
+          "subject_ref": "input_3dd958113e01907fa43ae049"
+        },
+        {
+          "native_accession": null,
+          "native_name": "test2",
+          "operand_role": "sequences",
+          "record_ordinal": 1,
+          "reference_ref": null,
+          "subject_ref": "input_11dd65c91cb63e06ea1c2740"
+        },
+        {
+          "native_accession": null,
+          "native_name": "test3",
+          "operand_role": "sequences",
+          "record_ordinal": 2,
+          "reference_ref": null,
+          "subject_ref": "input_219da1b52fbf7006d6f4f322"
+        },
+        {
+          "native_accession": null,
+          "native_name": "test4",
+          "operand_role": "sequences",
+          "record_ordinal": 3,
+          "reference_ref": null,
+          "subject_ref": "input_473b5eff599a3d69e8486413"
+        }
+      ],
+      "operands": [
+        {
+          "artifact_ref": "fixture:sha256:ccad2ee0e0eaa8d4bf88bc0bfd021525c3d8dfbf13d2896395abbc10f17be7df",
+          "format": "hmmer3_ascii",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/profile.hmm",
+          "role": "profile",
+          "sha256": "ccad2ee0e0eaa8d4bf88bc0bfd021525c3d8dfbf13d2896395abbc10f17be7df",
+          "size_bytes": 10308
+        },
+        {
+          "artifact_ref": "fixture:sha256:2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/sequences.fa",
+          "role": "sequences",
+          "sha256": "2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+          "size_bytes": 132
+        },
+        {
+          "artifact_ref": "fixture:sha256:a627ec3bd911bff3e6882033642e4d5917f590f36332c8ba1a7d4afcc8d59092",
+          "format": "stockholm",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/seed.sto",
+          "role": "mapali",
+          "sha256": "a627ec3bd911bff3e6882033642e4d5917f590f36332c8ba1a7d4afcc8d59092",
+          "size_bytes": 353
+        }
+      ],
+      "options": [],
+      "outputs": [
+        {
+          "format": "stockholm",
+          "relative_path": "outputs/stockholm",
+          "role": "stockholm"
+        },
+        {
+          "format": "text",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        }
+      ],
+      "program": "hmmalign",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmalign",
+        "sha256": "62ed2fb6121213ca9a74ec4b80d3af69e60ef870b687610bf3c58e91f821ef89"
+      },
+      "version": "native_hmmer_job_v1"
+    }
+  },
+  "returncode": 0,
+  "software": {
+    "actual_sha256": "62ed2fb6121213ca9a74ec4b80d3af69e60ef870b687610bf3c58e91f821ef89",
+    "declared_engine_version": "3.4",
+    "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmalign",
+    "expected_sha256": "62ed2fb6121213ca9a74ec4b80d3af69e60ef870b687610bf3c58e91f821ef89"
+  },
+  "started_at": "2026-10-24T21:12:27.594551+00:00",
+  "version": "native_hmmer_bundle_v1"
+}

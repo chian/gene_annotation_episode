@@ -1,0 +1,230 @@
+..............F...............................................FFFFF..... [ 85%]
+............                                                             [100%]
+=================================== FAILURES ===================================
+____ test_b06_unrequested_grandchild_private_sibling_and_scope_do_not_grant ____
+
+f = <test_chromatin_interaction_returns.RuntimeFixture object at 0x745a493249b0>
+
+    def test_b06_unrequested_grandchild_private_sibling_and_scope_do_not_grant(f):
+        science = f.child(f.root, schema_for(PROJECTION_SOURCE), role="scientific_process")
+        grandchild = f.child(science, schema_for(*FACT_SOURCES))
+        f.own(grandchild)
+        f.returned(science, grandchild)
+        f.returned(f.root, science)
+        private = f.child(f.root, schema_for(SAVED_SOURCE), index=1)
+        f.own(private)
+        for ref in references(f.bundle):
+            f.store.put("source", {"provider": "synthetic.public-source", "accession": None,
+                "uri": None, "artifact_ref": ref, "text_ref": None, "request_ref": None,
+                "version": None, "retrieved_at": None}, origin="caller")
+        f.receipts.receive(f.root.episode_id, references(f.bundle), kind="own_action")
+>       assert f.store.reference_subset(references(f.bundle), f.root.scope) == references(f.bundle)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:413: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/state.py:1715: in reference_subset
+    scope = self.validate_scope(scope)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x745a49327dd0>
+scope = mappingproxy({'subject_refs': ('input_4bd735641bcb5bc63e61db8b',)})
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+source_snapshot/gene_annotation_episode/library_targets.py:302: ContractError
+________ test_b22_unsaved_construction_uses_exact_frozen_manifest[None] ________
+
+f = <test_chromatin_interaction_returns.RuntimeFixture object at 0x745a495ac9e0>
+alter = None
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+>       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_ test_b22_unsaved_construction_uses_exact_frozen_manifest[saved_without_commission] _
+
+f = <test_chromatin_interaction_returns.RuntimeFixture object at 0x745a4918da60>
+alter = 'saved_without_commission'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+>       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+____ test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_action] ____
+
+f = <test_chromatin_interaction_returns.RuntimeFixture object at 0x745a49338e30>
+alter = 'prior_action'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+>       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+_____ test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_form] _____
+
+f = <test_chromatin_interaction_returns.RuntimeFixture object at 0x745a491d3b90>
+alter = 'prior_form'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+>       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+____ test_b22_unsaved_construction_uses_exact_frozen_manifest[wrong_parent] ____
+
+f = <test_chromatin_interaction_returns.RuntimeFixture object at 0x745a494e5bb0>
+alter = 'wrong_parent'
+
+    @pytest.mark.parametrize("alter", [None, "saved_without_commission", "prior_action", "prior_form", "wrong_parent"])
+    def test_b22_unsaved_construction_uses_exact_frozen_manifest(f, alter):
+        child = f.child(f.root, schema_for(SAVED_SOURCE))
+        _, origin = f.own(child)
+        f.returned(f.root, child)
+>       other = f.child(f.root, schema_for(), index=1, role="scientific_process")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_chromatin_interaction_returns.py:798: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_chromatin_interaction_returns.py:203: in child
+    contract = TypedReportContract("Return requested chromatin facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return requested chromatin facts', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+source_snapshot/method_loop/communication.py:36: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_interaction_returns.py::test_b06_unrequested_grandchild_private_sibling_and_scope_do_not_grant
+FAILED source_snapshot/tests/test_chromatin_interaction_returns.py::test_b22_unsaved_construction_uses_exact_frozen_manifest[None]
+FAILED source_snapshot/tests/test_chromatin_interaction_returns.py::test_b22_unsaved_construction_uses_exact_frozen_manifest[saved_without_commission]
+FAILED source_snapshot/tests/test_chromatin_interaction_returns.py::test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_action]
+FAILED source_snapshot/tests/test_chromatin_interaction_returns.py::test_b22_unsaved_construction_uses_exact_frozen_manifest[prior_form]
+FAILED source_snapshot/tests/test_chromatin_interaction_returns.py::test_b22_unsaved_construction_uses_exact_frozen_manifest[wrong_parent]
+6 failed, 78 passed in 461.29s (0:07:41)

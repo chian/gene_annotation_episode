@@ -1,0 +1,32 @@
+{
+  "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_alignment_2026-10-26_220/examples/mapali/sheet.json",
+  "source_sha256_before": "2ea889c0369f3d9713fc3f08e3d403454c15b3e6d8944e331eb7fd31e4187319",
+  "source_sha256_after": "2ea889c0369f3d9713fc3f08e3d403454c15b3e6d8944e331eb7fd31e4187319",
+  "saved_all_population_scores_equal": true,
+  "original_sheet_unchanged": true,
+  "blocked_operations": [
+    "all cmalign native parsers",
+    "Stockholm grammar reader",
+    "PP text parser",
+    "builtins.open",
+    "io.open",
+    "socket.socket",
+    "urllib.request.urlopen",
+    "subprocess.Popen",
+    "os.system"
+  ],
+  "all_sequence_components_retained": 6,
+  "selected_counts": {
+    "all": 6,
+    "newly_aligned": 1,
+    "inherited": 5
+  },
+  "executed_python_source_files": [
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cmalign_grader.py",
+    "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/hmmalign_inputs.py",
+    "/usr/lib/python3.12/copy.py",
+    "/usr/lib/python3.12/json/__init__.py",
+    "/usr/lib/python3.12/json/encoder.py"
+  ],
+  "model_service_calls": "none: calculator calls only numerical validation, ratios and standard-library copying/JSON validation"
+}

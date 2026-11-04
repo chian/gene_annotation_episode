@@ -1,0 +1,174 @@
+{
+  "schema_version": "fastqutils_components_v2",
+  "analysis_id": "cutadapt_parser_205",
+  "sheet_sha256": "5e6d0bcff98d95417084075dee0e85d405b95594633e30fe6b6d80d57eb28908",
+  "parameters": {
+    "version": "fastqutils_calculators_v2",
+    "analysis_id": "cutadapt_parser_205",
+    "calculations": [
+      {
+        "calculation_id": "base_retention",
+        "method": "retention_v1",
+        "state": "ready",
+        "population_refs": [
+          "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_input_bases%2F0",
+          "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_output_bases%2F0"
+        ],
+        "operand_measurement_refs": [
+          "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F5",
+          "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F8"
+        ],
+        "comparison_kind": "base_retention",
+        "quality_thresholds": [],
+        "read_key_rule": null,
+        "lineage_ref": "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Flineage%2F1",
+        "lineage_basis": {
+          "basis": "native_report",
+          "metadata_id": null,
+          "evidence": null,
+          "declaration": null,
+          "native_lineage_ref": "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Flineage%2F1"
+        },
+        "requirement_refs": [],
+        "diagnostic_codes": []
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "bvbrc_fastqutils_component:cutadapt_parser_205/%2Fsheets%2F5e6d0bcff98d95417084075dee0e85d405b95594633e30fe6b6d80d57eb28908%2Fparameters%2F2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe%2Fcalculations%2Fbase_retention%2Fbase_retention_fraction%2Fnone",
+      "metric": "base_retention_fraction",
+      "state": "available",
+      "value": 0.4827586206896552,
+      "unit": "fraction",
+      "method": "retention_v1",
+      "population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_input_bases%2F0",
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_output_bases%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F5",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F8"
+      ],
+      "numerator": 28,
+      "denominator": 58,
+      "threshold": null,
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "parameter_sha256": "2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe",
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ],
+      "calculation_id": "base_retention",
+      "encoding_basis": null,
+      "lineage_basis": {
+        "basis": "native_report",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_lineage_ref": "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Flineage%2F1"
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_component:cutadapt_parser_205/%2Fsheets%2F5e6d0bcff98d95417084075dee0e85d405b95594633e30fe6b6d80d57eb28908%2Fparameters%2F2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe%2Fcalculations%2Fbase_retention%2Fremoved_count%2Fnone",
+      "metric": "removed_count",
+      "state": "available",
+      "value": 30,
+      "unit": "bases",
+      "method": "retention_v1",
+      "population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_input_bases%2F0",
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_output_bases%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F5",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F8"
+      ],
+      "numerator": 30,
+      "denominator": null,
+      "threshold": null,
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "parameter_sha256": "2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe",
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ],
+      "calculation_id": "base_retention",
+      "encoding_basis": null,
+      "lineage_basis": {
+        "basis": "native_report",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_lineage_ref": "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Flineage%2F1"
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_component:cutadapt_parser_205/%2Fsheets%2F5e6d0bcff98d95417084075dee0e85d405b95594633e30fe6b6d80d57eb28908%2Fparameters%2F2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe%2Fcalculations%2Fbase_retention%2Fremoved_fraction%2Fnone",
+      "metric": "removed_fraction",
+      "state": "available",
+      "value": 0.5172413793103449,
+      "unit": "fraction",
+      "method": "retention_v1",
+      "population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_input_bases%2F0",
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fpopulations%2Fcutadapt_output_bases%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F5",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Fcells%2F8"
+      ],
+      "numerator": 30,
+      "denominator": 58,
+      "threshold": null,
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "parameter_sha256": "2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe",
+      "diagnostic_codes": [
+        "native_report_local_lineage"
+      ],
+      "calculation_id": "base_retention",
+      "encoding_basis": null,
+      "lineage_basis": {
+        "basis": "native_report",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_lineage_ref": "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2F545abf64c4c97154366e14c5fe7fb77101b622fabc57a1bd83b5b877e8cbc882%2Flineage%2F1"
+      }
+    }
+  ],
+  "requirements": [],
+  "diagnostics": [
+    {
+      "code": "native_report_local_lineage",
+      "affected_refs": [
+        "bvbrc_fastqutils_component:cutadapt_parser_205/%2Fsheets%2F5e6d0bcff98d95417084075dee0e85d405b95594633e30fe6b6d80d57eb28908%2Fparameters%2F2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe%2Fcalculations%2Fbase_retention%2Fbase_retention_fraction%2Fnone"
+      ],
+      "source_refs": [
+        "source:synthetic"
+      ],
+      "locator": null
+    },
+    {
+      "code": "native_report_local_lineage",
+      "affected_refs": [
+        "bvbrc_fastqutils_component:cutadapt_parser_205/%2Fsheets%2F5e6d0bcff98d95417084075dee0e85d405b95594633e30fe6b6d80d57eb28908%2Fparameters%2F2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe%2Fcalculations%2Fbase_retention%2Fremoved_count%2Fnone"
+      ],
+      "source_refs": [
+        "source:synthetic"
+      ],
+      "locator": null
+    },
+    {
+      "code": "native_report_local_lineage",
+      "affected_refs": [
+        "bvbrc_fastqutils_component:cutadapt_parser_205/%2Fsheets%2F5e6d0bcff98d95417084075dee0e85d405b95594633e30fe6b6d80d57eb28908%2Fparameters%2F2783884c7647c2718e834250c1cf6158be52d4c66b0cfe34246f78202eef3cbe%2Fcalculations%2Fbase_retention%2Fremoved_fraction%2Fnone"
+      ],
+      "source_refs": [
+        "source:synthetic"
+      ],
+      "locator": null
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 514, in <module>
+    main()
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 494, in main
+    audit_copy(args.reopen_owned_copy.resolve(), args.pin.resolve())
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 271, in audit_copy
+    require(all(canonical(action_result[k]) == canonical(v) for k, v in outcome.items()), "saved_operation_differs_from_action_outcome")
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 59, in require
+    raise AssertionError(code)
+AssertionError: saved_operation_differs_from_action_outcome

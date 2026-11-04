@@ -1,0 +1,545 @@
+"""Synthetic-only electrical source and numerical controls.
+
+No fixture represents an original paper, model response, independent scientific
+experiment, completed assay coverage or a completed A105 scoring sheet.
+"""
+from copy import deepcopy
+from fractions import Fraction
+import hashlib
+import json
+import math
+
+import pytest
+
+from gene_annotation_episode.domain import ContractError, validate_schema
+from gene_annotation_episode.literature_channel_calculations import (
+    COMPONENTS, PRIMITIVE_ORDER, QUANTITIES, populate_channel_components,
+)
+from gene_annotation_episode.literature_channel_inputs import (
+    LITERAL_FIELDS, channel_population_schema, channel_extraction_schema,
+    channel_calculation_inputs, read_channel_inputs,
+)
+from gene_annotation_episode.literature_channel_prompt import CHANNEL_TASK
+from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
+
+
+class Source:
+    def __init__(self, *, current="1.8", current_unit="pA", voltage="−200", voltage_unit="mV",
+                 reversal="53", reversal_unit="mV", conductance="7", conductance_unit="pS",
+                 current_prefix="", current_suffix="", reversal_spread=None):
+        self.reference = "source_" + "a"*24
+        self.covariance_ref = "source_" + "b"*24
+        self.tokens = dict(current=current, applied_voltage=voltage, reversal_voltage=reversal,
+                           reported_conductance=conductance)
+        self.units = dict(current=current_unit, applied_voltage=voltage_unit,
+                          reversal_voltage=reversal_unit, reported_conductance=conductance_unit)
+        self.cells = {role: f"<td>{current_prefix if role == 'current' else ''}{token}"
+                     f"{current_suffix if role == 'current' else ''}"
+                     f"{' ± ' + reversal_spread if role == 'reversal_voltage' and reversal_spread else ''}</td>"
+                     for role, token in self.tokens.items()}
+        headers = ''.join(f"<th>{role} ({self.units[role]})</th>" for role in QUANTITIES)
+        self.text = ("<article><p>Synthetic membrane experiment. Same applicable ionic condition. "
+                     "Current-step magnitude; signed current; single preparation; closed-channel baseline. "
+                     "An unrelated biionic reversal was 119 mV. Spread meaning unspecified. "
+                     "Known synthetic primitive covariance.</p><table><tr>" + headers + "</tr><tr>"
+                     + ''.join(self.cells.values()) + "</tr></table></article>")
+        self.content = self.text.encode()
+        self.artifact = "artifact_" + hashlib.sha256(self.content).hexdigest()
+        self.calls = []
+        self.covariance = None
+
+    def witness(self, token, *, occurrence=0):
+        start = -1
+        for _ in range(occurrence+1):
+            start = self.text.index(token, start+1)
+        return {"source_ref": self.reference, "representation": "original", "quote": token,
+                "start": len(self.text[:start].encode()), "end": len(self.text[:start+len(token)].encode())}
+
+    def number(self, token, *, container=None):
+        container = token if container is None else container
+        start = container.index(token)
+        return {"witness": self.witness(container), "number_start": start, "number_end": start+len(token)}
+
+    def interpreted(self, value, quote=None):
+        return {"value": value, "witnesses": [] if quote is None else [self.witness(quote)]}
+
+    def args(self):
+        measurements = {}
+        cell_start = self.text.index('</tr><tr>') + len('</tr><tr>')
+        for role in QUANTITIES:
+            header = f"<th>{role} ({self.units[role]})</th>"
+            uw = self.witness(header)
+            index = header.index(self.units[role])
+            uw.update(start=uw["start"]+len(header[:index].encode()),
+                      end=uw["start"]+len(header[:index+len(self.units[role])].encode()), quote=self.units[role])
+            number = self.number(self.tokens[role], container=self.cells[role])
+            number['witness'].update(start=len(self.text[:cell_start].encode()),
+                                     end=len(self.text[:cell_start+len(self.cells[role])].encode()))
+            cell_start += len(self.cells[role])
+            measurements[role] = {"number": number,
+                "unit": uw, "context": self.witness("Same applicable ionic condition"), "spread": None,
+                "spread_kind": self.interpreted("unknown")}
+        return {"source_ref": self.reference, "source_kind": "synthetic_fixture",
+                "literals": {name: None for name in LITERAL_FIELDS},
+                "arrangement_kind": self.interpreted("single_preparation", "single preparation"),
+                "current_kind": self.interpreted("current_step_magnitude", "Current-step magnitude"),
+                "arrangement_relation": self.interpreted("same_electrical_arrangement_supported", "Same applicable ionic condition"),
+                "measurements": measurements, "covariance_source_ref": None,
+                "variance_status": "unknown", "variance_witnesses": []}
+
+    def read(self, reference, representation):
+        self.calls.append((reference, representation))
+        assert representation == "original"
+        if reference == self.covariance_ref:
+            raw = self.covariance if isinstance(self.covariance, bytes) else json.dumps(self.covariance).encode()
+            return {"artifact_ref": "artifact_" + hashlib.sha256(raw).hexdigest(), "content": raw}
+        assert reference == self.reference
+        return {"artifact_ref": self.artifact, "content": self.content}
+
+
+def run(source, args=None):
+    extraction = read_channel_inputs(source.args() if args is None else args, read_source=source.read)
+    return extraction, populate_channel_components(channel_calculation_inputs(extraction))
+
+
+def inputs(**changes):
+    result = {"values": dict(current=1.8, applied_voltage=-200, reversal_voltage=53, reported_conductance=7),
+        "exact_values": {name: None for name in QUANTITIES},
+        "measurement_keys": {name: "measurement_" + name for name in QUANTITIES},
+        "current_kind": "current_step_magnitude", "arrangement_relation": "same_electrical_arrangement_supported",
+        "covariance": None, "variance_status": "unknown", "origin": "synthetic"}
+    result.update(changes)
+    return result
+
+
+def assert_error(code, function, *args, **kwargs):
+    with pytest.raises(ExperimentalContractError) as caught:
+        function(*args, **kwargs)
+    assert caught.value.code == code
+
+
+def test_exact_source_chord_and_separate_reported_value():
+    source = Source()
+    extraction, sheet = run(source)
+    cells = sheet["cells"]
+    assert set(cells) == set(COMPONENTS)
+    assert cells["chord_conductance"]["value"] == float(Fraction(1800,253))
+    assert cells["reported_conductance"]["value"] == 7
+    assert cells["absolute_driving_voltage"]["value"] == 253
+    assert cells["charge_equivalent_rate"]["value"] == float(Fraction("1.8e-12")/Fraction("1.602176634e-19"))
+    assert cells["charge_equivalent_rate"]["unit"] == "elementary_charge_equivalents_per_s"
+    assert cells["chord_conductance_variance"]["unavailable_reason"] == "primitive_covariance_not_supplied"
+    assert cells["chord_conductance"]["operand_roles"] == list(PRIMITIVE_ORDER)
+    assert len(cells["chord_conductance"]["measurement_keys"]) == 3
+    assert extraction["values"]["applied_voltage"] == -200
+    assert source.calls == [(source.reference, "original")]
+    assert cells["current"]["origin"] == "synthetic"
+    assert cells["chord_conductance"]["origin"] == "derived"
+
+
+@pytest.mark.parametrize("role,token,unit,expected", [
+    ("current", "0.0018", "nA", 1.8), ("current", "1.8e-12", "A", 1.8),
+    ("current", "1.8", "pA", 1.8), ("applied_voltage", "−0.2", "V", -200),
+    ("reversal_voltage", "0.053", "V", 53), ("reported_conductance", "0.007", "nS", 7),
+    ("reported_conductance", "7e-12", "S", 7), ("reported_conductance", "7", "pS", 7)])
+def test_exact_supported_unit_conversions(role, token, unit, expected):
+    keywords = {"current": ("current", "current_unit"), "applied_voltage": ("voltage", "voltage_unit"),
+                "reversal_voltage": ("reversal", "reversal_unit"),
+                "reported_conductance": ("conductance", "conductance_unit")}
+    k1,k2 = keywords[role]
+    extraction, _ = run(Source(**{k1:token,k2:unit}))
+    assert extraction["values"][role] == expected
+    exact = extraction["exact_values"][role]
+    assert Fraction(int(exact["numerator"]),int(exact["denominator"])) == Fraction(str(expected))
+
+
+@pytest.mark.parametrize("prefix,suffix,code", [
+    ("<", "", "point_electrical_number_required"), ("&lt;", "", "point_electrical_number_required"),
+    (">", "", "lower_bound_source_number_unsupported"), ("approximately ", "", "approximate_source_number_unsupported"),
+    ("± ", "", "uncertainty_is_not_rate_point"), ("1", "", "partial_source_numeric_token"),
+    ("−", "", "partial_source_numeric_token"), ("", "0", "partial_source_numeric_token"),
+    ("", "–20", "interval_source_number_unsupported"),
+    ("between ", " and 20", "interval_source_number_unsupported"),
+    ("", " ×10^3", "nonliteral_scientific_expression"),
+    ("−<br/>", "", "partial_source_numeric_token")])
+def test_scalar_clipping_bounds_intervals_and_uncertainty_do_not_become_points(prefix,suffix,code):
+    source = Source(current_prefix=prefix,current_suffix=suffix)
+    assert_error(code, read_channel_inputs, source.args(), read_source=source.read)
+
+
+def test_source_quote_is_verified_outside_nominated_numeric_token():
+    source = Source()
+    args = source.args()
+    args["measurements"]["current"]["number"]["witness"]["quote"] = "<td>9.9</td>"
+    assert_error("source_quote_mismatch", read_channel_inputs, args, read_source=source.read)
+
+
+@pytest.mark.parametrize("unit", ["pA/s","pA per cell","pA^2","pA²","mA","µA","p A","p<br/>A"])
+def test_compound_or_unsupported_current_unit_is_rejected(unit):
+    source = Source(current_unit=unit)
+    assert_error("unsupported_electrical_unit", read_channel_inputs, source.args(), read_source=source.read)
+
+
+def test_inline_unit_formatting_preserves_source_bytes_and_conversion():
+    source = Source(current_unit="p<italic>A</italic>")
+    extraction,_ = run(source)
+    assert extraction["measurements"]["current"]["unit"]["raw_unit"] == "p<italic>A</italic>"
+    assert extraction["values"]["current"] == 1.8
+
+
+def test_clipping_unit_prefix_does_not_change_scale():
+    source = Source()
+    args = source.args()
+    unit = args["measurements"]["current"]["unit"]
+    unit.update(start=unit["start"]+1, quote="A")
+    assert_error("partial_electrical_unit", read_channel_inputs, args, read_source=source.read)
+
+
+def test_shared_header_cannot_override_explicit_unit_beside_point():
+    source = Source(current_suffix=" nA")
+    assert_error("electrical_explicit_unit_mismatch", read_channel_inputs, source.args(), read_source=source.read)
+
+
+@pytest.mark.parametrize("suffix,code", [
+    (" ± 0.2 nA", "electrical_explicit_unit_mismatch"),
+    (" ± 0.2 mV", "electrical_explicit_unit_mismatch"),
+    (" ± 0.2 pS", "electrical_explicit_unit_mismatch"),
+    (" ± 0.2 pA/s", "partial_electrical_unit"),
+    (" ± 0.2 pA per cell", "partial_electrical_unit"),
+    (" ± 0.2 pA²", "partial_electrical_unit"),
+    (" ± 0.2 (nA)", "electrical_explicit_unit_mismatch"),
+    (" ± 0.2 (pA)/s", "partial_electrical_unit"),
+    (" ± 0.2 pA)/s", "partial_electrical_unit"),
+    (" ± 0.2 pA) per cell", "partial_electrical_unit"),
+    (" ± 0.2 <italic>nA</italic>", "electrical_explicit_unit_mismatch"),
+    (" &plusmn; 0.2 nA", "electrical_explicit_unit_mismatch"),
+    (" ±<br/>0.2<br/>nA", "electrical_explicit_unit_mismatch"),
+    (" +/- 0.2 nA", "electrical_explicit_unit_mismatch"),
+    (" + − 0.2 nA", "electrical_explicit_unit_mismatch"),
+])
+def test_unit_after_unselected_spread_constrains_mean_scale_and_dimension(suffix,code):
+    source = Source(current_suffix=suffix)
+    args = source.args()
+    assert args["measurements"]["current"]["spread"] is None
+    assert_error(code, read_channel_inputs, args, read_source=source.read)
+
+
+@pytest.mark.parametrize("suffix", [" ± 0.2 pA", " ± 0.2", " ± .2 pA", " ± 2e-1 pA",
+    " +/- 0.2 pA", " + − 0.2 pA", " &plusmn; 0.2 pA", " &#177; 0.2 pA",
+    " &#xB1; 0.2 pA", " ± <italic>0.2</italic> pA", " ±<br/>0.2<br/>pA",
+    " ± 0.2 (pA)"])
+def test_matching_unit_after_unselected_spread_preserves_mean_without_inventing_spread(suffix):
+    source = Source(current_suffix=suffix)
+    extraction,sheet = run(source)
+    assert extraction["values"]["current"] == 1.8
+    assert extraction["measurements"]["current"]["spread"] is None
+    assert sheet["cells"]["chord_conductance_variance"]["value"] is None
+
+
+@pytest.mark.parametrize("suffix", [" ±", " +/", " +", " plus/minus 0.2 nA", " ± approximately 0.2 nA",
+    " ± <0.2 nA", " ± ~0.2 nA", " ± ±0.2 nA", " ± NaN nA"])
+def test_partial_or_qualified_unselected_spread_cannot_hide_trailing_units(suffix):
+    source = Source(current_suffix=suffix)
+    assert_error("electrical_spread_syntax_unsupported", read_channel_inputs, source.args(), read_source=source.read)
+
+
+@pytest.mark.parametrize("suffix,code", [
+    (" ± -0.2 pA", "nonnegative_source_number_required"),
+    (" ± 0.2–0.3 pA", "interval_source_number_unsupported"),
+    (" ± 0.2%", "relative_spread_unit_unsupported"),
+    (" ± 0.2e pA", "partial_source_numeric_token"),
+    (" ± 0.<italic>2</italic> pA", "partial_source_numeric_token"),
+    (" ± 1e-9999 pA", "numerical_model_range"),
+    (" ± 0.2 foo nA", "electrical_spread_suffix_unsupported"),
+    (" ± 0.2 ± 0.1 nA", "electrical_spread_syntax_unsupported"),
+    (" ± 0.2 p<br/>A", "electrical_spread_suffix_unsupported"),
+])
+def test_full_unselected_spread_uses_scalar_clipping_range_and_relative_guards(suffix,code):
+    source = Source(current_suffix=suffix)
+    assert_error(code, read_channel_inputs, source.args(), read_source=source.read)
+
+
+def test_unselected_spread_does_not_borrow_a_unit_from_another_table_cell():
+    source = Source(current_suffix=" ± 0.2</td><td>nA")
+    extraction,_ = run(source)
+    assert extraction["values"]["current"] == 1.8
+
+
+def test_selected_spread_and_mean_both_require_the_actual_common_unit():
+    source = Source(current_suffix=" ± 0.2 nA")
+    args = source.args()
+    args["measurements"]["current"]["spread"] = source.number("0.2", container=source.cells["current"])
+    assert_error("electrical_explicit_unit_mismatch", read_channel_inputs, args, read_source=source.read)
+
+
+def test_electrical_dimension_mismatch_is_not_scale_conversion():
+    source = Source(current_unit="mV")
+    assert_error("electrical_unit_dimension_mismatch", read_channel_inputs, source.args(), read_source=source.read)
+
+
+def test_reported_spread_remains_unspecified_without_covariance():
+    source = Source(reversal_spread="1")
+    args = source.args()
+    m = args["measurements"]["reversal_voltage"]
+    m["spread"] = source.number("1", container="<td>53 ± 1</td>")
+    m["spread_kind"] = source.interpreted("unspecified", "Spread meaning unspecified")
+    extraction,sheet = run(source,args)
+    assert extraction["measurements"]["reversal_voltage"]["spread"]["value"] == 1
+    assert extraction["measurements"]["reversal_voltage"]["spread_kind"]["value"] == "unspecified"
+    assert sheet["cells"]["chord_conductance_variance"]["value"] is None
+
+
+def test_percent_spread_does_not_become_absolute_voltage_uncertainty():
+    source = Source(reversal_spread="1%")
+    args = source.args()
+    args["measurements"]["reversal_voltage"]["spread"] = source.number("1", container="<td>53 ± 1%</td>")
+    assert_error("relative_spread_unit_unsupported", read_channel_inputs, args, read_source=source.read)
+
+
+def test_salt_and_biionic_reversal_values_have_distinct_measurement_owners():
+    source = Source()
+    extraction,_ = run(source)
+    args = source.args()
+    args["measurements"]["reversal_voltage"]["number"] = source.number("119", container="biionic reversal was 119 mV")
+    args["measurements"]["reversal_voltage"]["context"] = source.witness("biionic reversal was 119 mV")
+    args["arrangement_relation"] = source.interpreted("different_electrical_arrangements", "biionic reversal was 119 mV")
+    other,sheet = run(source,args)
+    assert extraction["measurement_keys"]["reversal_voltage"] != other["measurement_keys"]["reversal_voltage"]
+    assert other["values"]["reversal_voltage"] == 119
+    assert sheet["cells"]["chord_conductance"]["unavailable_reason"] == "different_electrical_arrangements"
+
+
+def test_reusing_the_same_numeric_span_retains_one_physical_identity():
+    source = Source(voltage="53")
+    args = source.args()
+    args["measurements"]["applied_voltage"] = deepcopy(args["measurements"]["reversal_voltage"])
+    extraction,sheet = run(source,args)
+    assert extraction["measurement_keys"]["applied_voltage"] == extraction["measurement_keys"]["reversal_voltage"]
+    assert len(sheet["cells"]["absolute_driving_voltage"]["measurement_keys"]) == 1
+    assert sheet["cells"]["chord_conductance"]["unavailable_reason"] == "zero_driving_voltage"
+
+
+def test_equal_numbers_at_different_source_spans_stay_distinct():
+    extraction,_ = run(Source(voltage="53"))
+    assert extraction["measurement_keys"]["applied_voltage"] != extraction["measurement_keys"]["reversal_voltage"]
+
+
+@pytest.mark.parametrize("relation,reason", [
+    ("unknown","reversal_condition_applicability_not_supplied"),
+    ("conflicting","reversal_condition_applicability_conflicting"),
+    ("different_electrical_arrangements","different_electrical_arrangements")])
+def test_applicability_controls_chord_but_not_native_or_charge_values(relation,reason):
+    sheet = populate_channel_components(inputs(arrangement_relation=relation))
+    assert sheet["cells"]["current"]["value"] == 1.8
+    assert sheet["cells"]["chord_conductance"]["unavailable_reason"] == reason
+    assert sheet["cells"]["charge_equivalent_rate"]["value"] > 0
+
+
+@pytest.mark.parametrize("kind,reason", [("unknown","current_kind_not_supplied"),
+                                       ("conflicting","current_kind_conflicting")])
+def test_unknown_current_meaning_retains_point_without_flux_or_chord(kind,reason):
+    cells = populate_channel_components(inputs(current_kind=kind))["cells"]
+    assert cells["current"]["value"] == 1.8
+    assert cells["absolute_driving_voltage"]["value"] == 253
+    assert cells["chord_conductance"]["unavailable_reason"] == reason
+    assert cells["charge_equivalent_rate"]["unavailable_reason"] == reason
+
+
+def test_partial_quantities_are_preserved():
+    data = inputs()
+    data["values"]["current"] = None
+    cells = populate_channel_components(data)["cells"]
+    assert cells["current"]["value"] is None
+    assert cells["current"]["unavailable_reason"] == "electrical_measurement_not_supplied"
+    assert cells["absolute_driving_voltage"]["value"] == 253
+    assert cells["chord_conductance"]["unavailable_reason"] == "electrical_inputs_not_supplied"
+
+
+def test_zero_reversal_counterexample_is_not_the_same_chord():
+    data = inputs()
+    original = populate_channel_components(data)["cells"]["chord_conductance"]["value"]
+    data["values"]["reversal_voltage"] = 0
+    wrong = populate_channel_components(data)["cells"]["chord_conductance"]["value"]
+    assert wrong == 9
+    assert wrong/original-1 == pytest.approx(.265)
+
+
+@pytest.mark.parametrize("sign_i,sign_d", [(1,1),(1,-1),(-1,1),(-1,-1)])
+def test_full_covariance_gradient_has_correct_absolute_value_signs(sign_i,sign_d):
+    data = inputs(current_kind="signed_current", covariance=[[.04,.01,.02],[.01,1,.5],[.02,.5,4]],
+                  variance_status="known")
+    data["values"].update(current=2*sign_i, applied_voltage=2+8*sign_d, reversal_voltage=2)
+    cells = populate_channel_components(data)["cells"]
+    gradient = (Fraction(125*sign_i), Fraction(-125*sign_d,4), Fraction(125*sign_d,4))
+    matrix = [[Fraction(str(v)) for v in row] for row in data["covariance"]]
+    expected = sum(gradient[i]*matrix[i][j]*gradient[j] for i in range(3) for j in range(3))
+    assert cells["chord_conductance"]["value"] == 250
+    assert cells["chord_conductance_variance"]["value"] == float(expected)
+    assert cells["chord_conductance_standard_uncertainty"]["value"] == pytest.approx(math.sqrt(float(expected)))
+
+
+def test_shared_voltage_error_cancels_in_difference_without_assuming_independence():
+    data = inputs(covariance=[[0,0,0],[0,4,4],[0,4,4]],variance_status="known")
+    cells = populate_channel_components(data)["cells"]
+    assert cells["chord_conductance_variance"]["value"] == 0
+    independent = deepcopy(data)
+    independent["covariance"][1][2] = independent["covariance"][2][1] = 0
+    assert populate_channel_components(independent)["cells"]["chord_conductance_variance"]["value"] > 0
+
+
+@pytest.mark.parametrize("matrix,code", [
+    ([[1,0],[0,1]],"three_by_three_covariance_required"),
+    ([[1,.1,0],[0,1,0],[0,0,1]],"symmetric_covariance_required"),
+    ([[1,2,0],[2,1,0],[0,0,1]],"positive_semidefinite_covariance_required"),
+    ([[1,0,0],[0,1,0],[0,0,-1]],"positive_semidefinite_covariance_required"),
+    ([[True,0,0],[0,1,0],[0,0,1]],"finite_number_required")])
+def test_invalid_covariance_is_rejected_without_repair(matrix,code):
+    assert_error(code,populate_channel_components,inputs(covariance=matrix,variance_status="known"))
+
+
+def test_missing_covariance_owner_is_not_independence():
+    data = inputs(covariance=[[1,0,0],[0,1,0],[0,0,1]],variance_status="known")
+    data["measurement_keys"]["reversal_voltage"] = None
+    assert populate_channel_components(data)["cells"]["chord_conductance_variance"]["unavailable_reason"] == "primitive_measurement_identity_not_supplied"
+
+
+def test_unknown_variance_status_does_not_establish_sampling_variance():
+    data = inputs(covariance=[[1,0,0],[0,1,0],[0,0,1]])
+    assert populate_channel_components(data)["cells"]["chord_conductance_variance"]["unavailable_reason"] == "primitive_variance_status_unknown"
+
+
+def test_zero_current_retains_zero_chord_but_absolute_value_uncertainty_is_unavailable():
+    data = inputs(covariance=[[1,0,0],[0,1,0],[0,0,1]],variance_status="known")
+    data["values"]["current"] = 0
+    cells = populate_channel_components(data)["cells"]
+    assert cells["current"]["value"] == cells["charge_equivalent_rate"]["value"] == cells["chord_conductance"]["value"] == 0
+    assert cells["chord_conductance_variance"]["unavailable_reason"] == "absolute_current_not_differentiable_at_zero"
+
+
+def test_zero_driving_voltage_does_not_produce_infinity():
+    data = inputs()
+    data["values"]["applied_voltage"] = data["values"]["reversal_voltage"]
+    assert populate_channel_components(data)["cells"]["chord_conductance"]["unavailable_reason"] == "zero_driving_voltage"
+
+
+@pytest.mark.parametrize("role,code", [("current","nonnegative_current_magnitude_required"),
+                                      ("reported_conductance","nonnegative_reported_conductance_required")])
+def test_negative_magnitude_is_not_silently_absolute(role,code):
+    data = inputs()
+    data["values"][role] = -1
+    assert_error(code,populate_channel_components,data)
+
+
+def test_alias_cannot_give_one_measurement_two_values():
+    data = inputs()
+    data["measurement_keys"]["applied_voltage"] = data["measurement_keys"]["reversal_voltage"]
+    assert_error("shared_measurement_value_mismatch",populate_channel_components,data)
+
+
+def test_alias_cannot_give_one_measurement_two_covariance_rows():
+    data = inputs(covariance=[[1,0,0],[0,1,0],[0,0,1]],variance_status="known")
+    data["measurement_keys"]["applied_voltage"] = data["measurement_keys"]["reversal_voltage"]
+    data["values"]["applied_voltage"] = data["values"]["reversal_voltage"]
+    assert_error("shared_measurement_covariance_mismatch",populate_channel_components,data)
+
+
+def test_one_numeric_identity_cannot_be_current_and_voltage():
+    data = inputs()
+    data["measurement_keys"]["current"] = data["measurement_keys"]["reversal_voltage"]
+    assert_error("shared_measurement_dimension_mismatch",populate_channel_components,data)
+
+
+def test_exact_values_are_checked_against_the_native_values():
+    data = inputs()
+    data["exact_values"]["current"] = {"numerator":"19","denominator":"10"}
+    assert_error("exact_value_mismatch",populate_channel_components,data)
+
+
+def test_extreme_intermediate_arithmetic_does_not_overflow_a_finite_chord():
+    data = inputs(current_kind="signed_current")
+    data["values"].update(current=1e307,applied_voltage=1e308,reversal_voltage=-1e308)
+    cells = populate_channel_components(data)["cells"]
+    assert cells["absolute_driving_voltage"]["unavailable_reason"] == "numerical_model_range"
+    assert cells["chord_conductance"]["value"] == 50
+    assert cells["charge_equivalent_rate"]["unavailable_reason"] == "numerical_model_range"
+
+
+def test_nonzero_result_underflow_is_not_reported_as_zero():
+    data = inputs()
+    data["values"].update(current=1e-300,applied_voltage=1e308,reversal_voltage=0)
+    assert populate_channel_components(data)["cells"]["chord_conductance"]["unavailable_reason"] == "numerical_model_range"
+
+
+def covariance_args(source):
+    args = source.args()
+    extraction = read_channel_inputs(args,read_source=source.read)
+    source.covariance = {"version":"a105_channel_covariance_v1", "primitive_order":list(PRIMITIVE_ORDER),
+        "primitive_measurement_keys":[extraction["measurement_keys"][name] for name in PRIMITIVE_ORDER],
+        "primitive_units":["pA","mV","mV"], "covariance":[[.04,0,0],[0,1,0],[0,0,4]],"origin":"synthetic"}
+    args.update(covariance_source_ref=source.covariance_ref,variance_status="known",
+                variance_witnesses=[source.witness("Known synthetic primitive covariance")])
+    return args
+
+
+def test_source_covariance_has_exact_primitive_owner_order_and_no_extra_reads():
+    source=Source()
+    args=covariance_args(source)
+    source.calls.clear()
+    extraction,sheet=run(source,args)
+    assert extraction["covariance_origin"] == "synthetic"
+    assert sheet["cells"]["chord_conductance_variance"]["value"] > 0
+    assert source.calls == [(source.reference,"original"),(source.covariance_ref,"original")]
+
+
+@pytest.mark.parametrize("field,value,code", [
+    ("primitive_measurement_keys",["wrong"]*3,"covariance_measurement_owner_mismatch"),
+    ("primitive_units",["A","V","V"],"covariance_primitive_unit_mismatch"),
+    ("primitive_order",list(reversed(PRIMITIVE_ORDER)),"covariance_primitive_order_mismatch"),
+    ("version","unknown","covariance_version_mismatch")])
+def test_source_covariance_owner_and_unit_mismatch_is_rejected(field,value,code):
+    source=Source()
+    args=covariance_args(source)
+    source.covariance[field]=value
+    assert_error(code,read_channel_inputs,args,read_source=source.read)
+
+
+def test_source_covariance_json_underflow_is_not_silent_zero():
+    source=Source()
+    args=covariance_args(source)
+    raw=json.dumps(source.covariance)
+    source.covariance=raw.replace('0.04','1e-9999').encode()
+    assert_error("numerical_model_range",read_channel_inputs,args,read_source=source.read)
+
+
+def test_source_covariance_json_duplicate_keys_are_not_ignored():
+    source=Source()
+    args=covariance_args(source)
+    source.covariance=json.dumps(source.covariance).replace('{','{"origin":"reported",',1).encode()
+    assert_error("duplicate_json_key",read_channel_inputs,args,read_source=source.read)
+
+
+def test_closed_schema_refuses_supplied_scientific_numbers():
+    source=Source()
+    args=source.args()
+    args["measurements"]["current"]["value"]=999
+    with pytest.raises(ContractError):
+        validate_schema(args,channel_population_schema())
+
+
+def test_native_extraction_is_validatable_without_source_access():
+    source=Source()
+    extraction,_=run(source)
+    source.calls.clear()
+    validate_schema(extraction,channel_extraction_schema())
+    channel_calculation_inputs(extraction)
+    assert source.calls == []
+
+
+def test_task_keeps_seven_complete_scientific_paragraphs_separate_from_sheet():
+    assert len(CHANNEL_TASK.split('\n\n')) == 7
+    assert 'closed-channel baseline is not a protein-free membrane control' in CHANNEL_TASK
+    assert 'salt-gradient and biionic measurements distinct' in CHANNEL_TASK
+    assert 'independent protein preparations' in CHANNEL_TASK
+    assert 'Do not reinterpret an unspecified spread as SD, SEM or known sampling variance' in CHANNEL_TASK
+    assert 'nominate' in CHANNEL_TASK.lower()
+    assert 'chord_conductance_variance' not in CHANNEL_TASK

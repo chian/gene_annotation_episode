@@ -1,0 +1,136 @@
+F
+=================================== FAILURES ===================================
+_ test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction[True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1818/test_actual_original_form_subs0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1203b3d9d0>
+request_native = True
+
+    @pytest.mark.parametrize('request_native',[True,False])
+    def test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction(tmp_path,monkeypatch,request_native):
+        store,context,args,sources,data=native_fixture(tmp_path/'state')
+        with store:
+            assignment=dict(version='literature_assignment_v1',question_context_refs=[],source_refs=list(context.received_record_refs),
+                requested_context_components=['selected_point'],requested_context_native_positions=[0])
+            fields={'chosen_context':context_semantic_cells_schema()}
+            if request_native:fields['native_context']=native_observations_schema()
+            form=obj(fields);captured={};empty={name:[] for name in store.reasoning_schema()['required']}
+            root=sources['root'];quote=store.get_artifact(root['artifact_ref']).decode()
+            def next_action(inputs,kind):
+                captured[kind]=deepcopy(inputs)
+                text=render_literature_experimental_prompt(inputs,'Constructed native contextual investigation')
+                steering=text.split('\n\nSTEERING\n',1)[1]
+                if kind=='own' or request_native:
+                    assert 'Native context observations' in steering
+                    assert 'source-reported measurement' in steering and 'technical' in steering
+                if kind=='parent':
+                    report,=inputs['child_reports'];assert report['chosen_context'][0]['value']==.5
+                    if request_native:
+                        row,=report['native_context'];assert row['observation_position']==0 and row['lower']==1
+                        assert row['reported_count']==3 and row['replicate_kind']=='technical'
+                        assert 'Culture B' not in steering
+                    else:
+                        assert 'native_context' not in report and 'Native context observations' not in steering
+                for private in ['private-glucose','context_native_literal_','context_native_measurement_']:
+                    assert private not in steering
+                commit=deepcopy(empty);commit['source_subjects']=[dict(alias=kind,reference_type='assay',source_ref=root['id'],label='context' if kind=='own' else 'experiment',
+                    anchor=dict(source_ref=root['id'],artifact_ref=root['artifact_ref'],start=0,end=len(quote),quote=quote))]
+                return dict(selection=dict(kind='reason',commit=commit),report_update={})
+            provider=ScriptedProvider([
+                dict(selection=dict(kind='episode_child',role='literature',assignment=assignment,goal='Evaluate the constructed glucose context evidence',
+                    scope=plain(context.scope),purpose='Return selected coverage and explicitly requested native observations',schema_json=json.dumps(form),initial_report_json='{}'),report_update={}),
+                dict(selection=dict(kind='tool',tool='literature.context.populate',arguments=args),report_update={}),
+                lambda inputs:next_action(inputs,'own'),lambda inputs:next_action(inputs,'parent')])
+            scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+>           result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+                controller_factory=lambda path,initial:FixtureController(str(path),initial,2),project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,
+                    reference_parent_sources=[root['id']]),),binding_definitions={'credit':scorer.as_record()}))
+
+tests/test_literature_context_native_integration.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4132: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4454: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_context_native_integration.py:60: in <lambda>
+    lambda inputs:next_action(inputs,'own'),lambda inputs:next_action(inputs,'parent')])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...action_cells |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+kind = 'own'
+
+    def next_action(inputs,kind):
+        captured[kind]=deepcopy(inputs)
+        text=render_literature_experimental_prompt(inputs,'Constructed native contextual investigation')
+        steering=text.split('\n\nSTEERING\n',1)[1]
+        if kind=='own' or request_native:
+            assert 'Native context observations' in steering
+            assert 'source-reported measurement' in steering and 'technical' in steering
+        if kind=='parent':
+            report,=inputs['child_reports'];assert report['chosen_context'][0]['value']==.5
+            if request_native:
+                row,=report['native_context'];assert row['observation_position']==0 and row['lower']==1
+                assert row['reported_count']==3 and row['replicate_kind']=='technical'
+                assert 'Culture B' not in steering
+            else:
+                assert 'native_context' not in report and 'Native context observations' not in steering
+        for private in ['private-glucose','context_native_literal_','context_native_measurement_']:
+>           assert private not in steering
+E           AssertionError: assert 'context_native_literal_' not in '\nOwn actio...gn_unknown |'
+E             
+E             'context_native_literal_' is contained here:
+E               accession=context_native_literal_5eca15eb4e705e94c84f10dd; context_refs=none supplied; label=Culture A measured glucose 1 mM; length=unknown; molecule=unknown; origin=tool; reference_type=literature_result; term_refs=none supplied; source identity=Source handle 2; sequence association=unknown | Passage 18 |
+E             ?           +++++++++++++++++++++++
+E               | Entity 9 | reference | accession=context_native_literal_bf836f5bf5636c456dd444ea; context_refs=none supplied; label=Culture A measured glucose 1 mM; length=unknown; molecule=unknown; ori...
+E             
+E             ...Full output truncated (131 lines hidden), use '-vv' to show
+
+tests/test_literature_context_native_integration.py:52: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_context_native_integration.py::test_actual_original_form_subset_own_parent_and_first_readonly_reconstruction[True]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 8.22s

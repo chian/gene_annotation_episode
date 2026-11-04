@@ -1,0 +1,57 @@
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+________ test_reader_rejects_tampered_facts_and_cross_scope_references _________
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x714def1cedb0>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-860/test_reader_rejects_tampered_f0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x714e118e0c50>
+
+    def test_reader_rejects_tampered_facts_and_cross_scope_references(resources, tmp_path, monkeypatch):
+        r = resources
+        h = timing_host(r, tmp_path/'fact-validation', monkeypatch, counts={'results': 1})
+        handoff = launch_and_handoff(h, r); h.client.state = 'SUCCESS'
+        assigned = h.api.prepare_assignment(h.workflow.binding_context(h.owner.source), 'results', result_assignment(handoff), r.scope, 'results')
+        episode, boundary = resource_episode(h, r, 'results', assigned, schema=timing_form())
+        h.workflow.provider = ScriptedProvider([own('api_search.acquire', page=1)])
+        record = asyncio.run(episode.run_async(boundary)); asyncio.run(episode.build_result(record))
+        form = json.loads(h.workflow.journal.row('runtime_forms', episode.source.episode_id)['form'])
+        row, = form['durations']
+        h.workflow.validate_report(form, r.scope, schema=timing_form(), source=episode.source)
+        wrong = deepcopy(form); wrong['durations'][0]['elapsed_seconds'] += 1
+        with pytest.raises(ReportBoundaryError, match='differ from their source'):
+            h.workflow.validate_report(wrong, r.scope, schema=timing_form(), source=episode.source)
+        with pytest.raises(ValueError, match='outside_scope'):
+            h.workflow.api_timing_reader.read_source(row['receipt_ref'], scope={'subject_refs': r.scope['subject_refs'],
+                'segments': [{'target_ref': r.scope['subject_refs'][0], 'start': 0, 'end': 1, 'unit': 'aa'}]})
+        source = r.store.get(row['receipt_ref'])
+        original = r.store.get_artifact(source['artifact_ref'])
+        body = json.loads(original); body['witness']['elapsed_seconds'] += 1
+        # Fault injection preserves the source handle to prove body integrity is checked.
+        from gene_annotation_episode.materials import artifact_path as material_path
+        material_path(r.store, source['artifact_ref']).write_bytes(canonical(body).encode())
+        with pytest.raises((ValueError, ContractError)):
+            h.workflow.api_timing_reader.read_source(row['receipt_ref'], scope=r.scope)
+>       material_path(r.store, source['artifact_ref']).write_bytes(original)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api_timing_runtime.py:223: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x714def1cedb0>
+ref = 'artifact_5f3f8a723883b9b4718c22949e39ed453fad094d952d5ede9682b2d99972417c'
+
+    def artifact_path(store, ref):
+        artifact = store._require(ref, {"artifact"})
+        path = store.path / "artifacts" / artifact["sha256"][:2] / artifact["sha256"]
+        digest = hashlib.sha256()
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+        if digest.hexdigest() != artifact["sha256"]:
+>           raise ContractError("artifact_digest_mismatch")
+E           gene_annotation_episode.domain.ContractError: artifact_digest_mismatch
+
+gene_annotation_episode/materials.py:138: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_api_timing_runtime.py::test_reader_rejects_tampered_facts_and_cross_scope_references
+1 failed, 3 passed in 87.62s (0:01:27)

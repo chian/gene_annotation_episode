@@ -1,0 +1,196 @@
+{
+  "version": "bvbrc_appservice_artifact_bundle_v1",
+  "original_task": {
+    "effective_parameters": null,
+    "native_application_id": "GenomeComparison",
+    "required_application_id": "GenomeComparison",
+    "resource_id": "selected-api",
+    "scheduler_returned_parameters": {
+      "evidence": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_c07b1a8991fb71ac43b596aa02a3d8ca6f97ff5bd6c806270c4f44b5f0086a10",
+          "byte_count": 532,
+          "sha256": "c07b1a8991fb71ac43b596aa02a3d8ca6f97ff5bd6c806270c4f44b5f0086a10",
+          "source_ref": "source_5e3520d120fffa6d6864df76"
+        },
+        "pointer": "/result/0/parameters"
+      },
+      "value": {
+        "genome_ids": [],
+        "max_e_val": 1e-05,
+        "min_ident": 0.1,
+        "min_positives": 0.2,
+        "min_seq_cov": 0.3,
+        "output_file": "comparison",
+        "output_path": "/synthetic/work/output",
+        "reference_genome_index": 2,
+        "user_feature_groups": [],
+        "user_genomes": [
+          "/synthetic/work/unused.faa",
+          "/synthetic/work/ref.faa",
+          "/synthetic/work/subject.faa"
+        ]
+      }
+    },
+    "submission_operation_key": "appservice-custody-fixture:episode_b3665a9b0ee2cde676f8c851615d8eaf18e329f8e5e451c5b9f736e568f8f058:1",
+    "submission_source_ref": "source_5e3520d120fffa6d6864df76",
+    "submitted_parameters": {
+      "genome_ids": [],
+      "max_e_val": 1e-05,
+      "min_ident": 0.1,
+      "min_positives": 0.2,
+      "min_seq_cov": 0.3,
+      "output_file": "comparison",
+      "output_path": "/synthetic/work/output",
+      "reference_genome_index": 2,
+      "user_feature_groups": [],
+      "user_genomes": [
+        "/synthetic/work/unused.faa",
+        "/synthetic/work/ref.faa",
+        "/synthetic/work/subject.faa"
+      ]
+    },
+    "submitted_start_parameters": {},
+    "task_id": "123",
+    "submission_receipt_ref": "source_5d7d1a1920b2d38a2ae564b2"
+  },
+  "artifacts": [
+    {
+      "role": "proteome_native_projection",
+      "source_ref": "synthetic-native",
+      "raw_artifact_ref": "synthetic-native",
+      "sha256": "37a1480ff9e84d01e74eab7b42254db293e48763842d51f48b8eab139978a4b6",
+      "byte_count": 572,
+      "workspace_object": {
+        "path": "/synthetic/synthetic-native",
+        "uuid": "uuid-synthetic-native",
+        "type": "json",
+        "metadata_receipt_ref": "metadata-synthetic-native"
+      },
+      "task_association": {
+        "kind": "task_result_manifest",
+        "evidence_ref": "synthetic-manifest",
+        "pointer": "/output_files/0",
+        "task_id": "123",
+        "output_path": "/synthetic/synthetic-native",
+        "output_uuid": "uuid-synthetic-native",
+        "byte_version_status": "unknown",
+        "version_evidence": []
+      },
+      "transfer": {
+        "receipt_ref": "receipt-synthetic-native",
+        "body_complete": true,
+        "requested_range": null,
+        "observed_range": null,
+        "total_size": 572,
+        "object_complete": "yes"
+      },
+      "declared_format": {
+        "format": "genome_comparison_json_v1",
+        "version": null,
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      }
+    }
+  ],
+  "input_bindings": [
+    {
+      "binding_id": "input-ref",
+      "parameter_pointer": "/user_genomes/1",
+      "kind": "retained_bytes",
+      "content": {
+        "source_ref": "synthetic-ref",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "synthetic-ref",
+        "sha256": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+        "byte_count": 18
+      },
+      "workspace_path": "/synthetic/work/ref.faa",
+      "inline_value": null,
+      "link_evidence": null,
+      "members": []
+    },
+    {
+      "binding_id": "input-subject",
+      "parameter_pointer": "/user_genomes/2",
+      "kind": "retained_bytes",
+      "content": {
+        "source_ref": "synthetic-subject",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "synthetic-subject",
+        "sha256": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+        "byte_count": 17
+      },
+      "workspace_path": "/synthetic/work/subject.faa",
+      "inline_value": null,
+      "link_evidence": null,
+      "members": []
+    }
+  ],
+  "query_bindings": [],
+  "supplied_scientific_metadata": [
+    {
+      "content": {
+        "source_ref": "synthetic-supplied-data",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "synthetic-supplied-data",
+        "sha256": "fb39645e1fc50cc62dc41fc5a855ee6d2cea48285900e4a53f67b84aadec0ba4",
+        "byte_count": 4847
+      },
+      "pointer": ""
+    }
+  ],
+  "supplied_contents": [
+    {
+      "source_ref": "synthetic-ref",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "synthetic-ref",
+      "sha256": "ac2e70a42d993ca2ef47f7c740be473cf824d2dca404cbdedcecb47294db8c8f",
+      "byte_count": 18
+    },
+    {
+      "source_ref": "synthetic-subject",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "synthetic-subject",
+      "sha256": "792b0971960dde219e3b2fe0059b525b32cfd945130ee88dc30dba352221b015",
+      "byte_count": 17
+    },
+    {
+      "source_ref": "synthetic-features",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "synthetic-features",
+      "sha256": "644acbf08572d3e78a0603a1aa82fed1b483a1758594b35f4dff88ce5bb7f975",
+      "byte_count": 139
+    },
+    {
+      "source_ref": "synthetic-genomes",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "synthetic-genomes",
+      "sha256": "2615cf432955116990459e86d502bb41ea1a9e774b1763612e4728b7d3dcf6a1",
+      "byte_count": 36
+    },
+    {
+      "source_ref": "synthetic-sequences",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "synthetic-sequences",
+      "sha256": "ae95491bfc3f99e19231e0cc08a993b7771ec86075e66c1c3396b1814968051e",
+      "byte_count": 68
+    },
+    {
+      "source_ref": "source_5e3520d120fffa6d6864df76",
+      "artifact_field": "request_ref",
+      "artifact_ref": "artifact_b943adbb526bee33af22c03c5c8aaca64f7fa1985b30941a4f624139bbc766e3",
+      "sha256": "b943adbb526bee33af22c03c5c8aaca64f7fa1985b30941a4f624139bbc766e3",
+      "byte_count": 8858
+    }
+  ],
+  "acquisition_receipt_refs": [
+    "receipt-synthetic-native"
+  ],
+  "requested_selector_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "status": "ok",
+  "missing_requirements": [],
+  "diagnostics": []
+}

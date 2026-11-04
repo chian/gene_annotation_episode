@@ -1,0 +1,177 @@
+[
+  {
+    "table_key": "p0:bins",
+    "population_key": "p0",
+    "role": "bins",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "tsv",
+    "shape": [
+      4,
+      4
+    ],
+    "dtype_descriptor": {
+      "kind": "scalar",
+      "dtype": "utf8_tsv_int64"
+    },
+    "row_count": 4,
+    "native_source_locator": {
+      "kind": "hic_bytes",
+      "value": {
+        "offset": 147,
+        "size_bytes": 67,
+        "section": "zoom_index"
+      }
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "sha256": "b89ac2b53406386a04923a4ae814b7b6b322b98d7f43ef84c458bde29df6365a",
+      "size_bytes": 79,
+      "format": "chromatin_contact_tables_v1:bins"
+    }
+  },
+  {
+    "table_key": "p0:contacts",
+    "population_key": "p0",
+    "role": "contacts",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      9
+    ],
+    "dtype_descriptor": {
+      "kind": "structured",
+      "fields": [
+        {
+          "name": "bin1_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "bin2_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "value",
+          "dtype": "<f4"
+        },
+        {
+          "name": "source_block",
+          "dtype": "<i8"
+        },
+        {
+          "name": "source_row",
+          "dtype": "<i8"
+        }
+      ]
+    },
+    "row_count": 9,
+    "native_source_locator": {
+      "kind": "hic_bytes",
+      "value": {
+        "offset": 159,
+        "size_bytes": 55,
+        "section": "zoom_index"
+      }
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_f556835fbc0b579d39fcdba69f74df3767d00efd42e3daaa4499706b884390d4",
+      "sha256": "f556835fbc0b579d39fcdba69f74df3767d00efd42e3daaa4499706b884390d4",
+      "size_bytes": 516,
+      "format": "chromatin_contact_tables_v1:contacts"
+    }
+  },
+  {
+    "table_key": "p0:weights",
+    "population_key": "p0",
+    "role": "weights",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      4
+    ],
+    "dtype_descriptor": {
+      "kind": "scalar",
+      "dtype": "<f8"
+    },
+    "row_count": 4,
+    "native_source_locator": {
+      "kind": "hic_vector",
+      "value": {
+        "normalization_type": "SYNTHETIC_DIVISIVE",
+        "chromosome_index": 0,
+        "unit": "BP",
+        "resolution_bp": 10,
+        "bin_index": null
+      }
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_1bcb2f7e402ad133ea314de2754741e76b4ea8d8bea57a754bc3b78f3d940286",
+      "sha256": "1bcb2f7e402ad133ea314de2754741e76b4ea8d8bea57a754bc3b78f3d940286",
+      "size_bytes": 160,
+      "format": "chromatin_contact_tables_v1:weights"
+    }
+  },
+  {
+    "table_key": "p0:cell_states",
+    "population_key": "p0",
+    "role": "cell_states",
+    "availability": "present",
+    "absence_reason": null,
+    "encoding": "npy",
+    "shape": [
+      0
+    ],
+    "dtype_descriptor": {
+      "kind": "structured",
+      "fields": [
+        {
+          "name": "bin1_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "bin2_id",
+          "dtype": "<i8"
+        },
+        {
+          "name": "state",
+          "dtype": "|u1"
+        }
+      ]
+    },
+    "row_count": 0,
+    "native_source_locator": {
+      "kind": "hic_bytes",
+      "value": {
+        "offset": 159,
+        "size_bytes": 55,
+        "section": "zoom_index"
+      }
+    },
+    "extent": "complete",
+    "file": {
+      "artifact_ref": "artifact_c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "sha256": "c861f3ebdffac8cf05f105e7f64d663f2f2ecd3d8cf6a733674c30e84f9afd26",
+      "size_bytes": 192,
+      "format": "chromatin_contact_tables_v1:cell_states"
+    }
+  },
+  {
+    "table_key": "p0:dense_values",
+    "population_key": "p0",
+    "role": "dense_values",
+    "availability": "not_native_representation",
+    "absence_reason": null,
+    "encoding": null,
+    "shape": null,
+    "dtype_descriptor": null,
+    "row_count": null,
+    "native_source_locator": null,
+    "extent": "unavailable",
+    "file": null
+  }
+]

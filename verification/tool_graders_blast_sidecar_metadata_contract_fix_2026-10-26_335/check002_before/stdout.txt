@@ -1,0 +1,2347 @@
+FFFFFFFFFFFFFFF....FFFF............FFFFFFFFFFFFFFFFFFFF........FFFFFFFFF [ 96%]
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-native6] _
+
+name = 'native6', role = 'preparation_input_manifest'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a9943d4fb0>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+_ test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-native6_shared] _
+
+name = 'native6_shared', role = 'preparation_input_manifest'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a9943aec00>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+_ test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-standard_blastn] _
+
+name = 'standard_blastn', role = 'preparation_input_manifest'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a97611eab0>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+_ test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-standard_blastp] _
+
+name = 'standard_blastp', role = 'preparation_input_manifest'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a976123a10>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+_ test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-native6] _
+
+name = 'native6', role = 'offline_configuration'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a97612f0e0>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+_ test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-native6_shared] _
+
+name = 'native6_shared', role = 'offline_configuration'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a97612ce60>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+_ test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-standard_blastn] _
+
+name = 'standard_blastn', role = 'offline_configuration'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a9761214c0>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+_ test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-standard_blastp] _
+
+name = 'standard_blastp', role = 'offline_configuration'
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_public_validator_accepts_7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70a97611d490>
+
+    @pytest.mark.parametrize("name", CASES)
+    @pytest.mark.parametrize("role", ROLES)
+    def test_public_validator_accepts_real_retained_producer_sidecars(name, role, tmp_path, monkeypatch):
+        case = load_case(name)  # Independent public N validation is part of every case.
+        payload, descriptor, catalog = payload_for(case, (role,))
+        original = deepcopy((case["job"], payload, descriptor, catalog))
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("supplied-byte metadata validation performed I/O, execution or native6 job adaptation")
+    
+        monkeypatch.setattr(Path, "read_bytes", forbidden)
+        monkeypatch.setattr(socket, "socket", forbidden)
+        monkeypatch.setattr(subprocess, "Popen", forbidden)
+        monkeypatch.setattr(native, "validate_native_blast_database_job", forbidden)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "public-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid", result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert 'invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:153: AssertionError
+__ test_native6_preparation_uses_both_original_sidecar_roles[roles0-native6] ___
+
+name = 'native6', roles = ('preparation_input_manifest',)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_preparation_uses_0')
+
+    @pytest.mark.parametrize("name", ("native6", "native6_shared"))
+    @pytest.mark.parametrize("roles", [(ROLES[0],), (ROLES[1],), ROLES])
+    def test_native6_preparation_uses_both_original_sidecar_roles(name, roles, tmp_path):
+        case = load_case(name)
+        payload, _, _ = payload_for(case, roles)
+        result = prepare(case, payload, tmp_path)
+        (tmp_path / "prepared.json").write_text(json.dumps(result, indent=2))
+        validation = result["metadata"][0]
+        assert validation["status"] == "valid"
+>       assert validation["issues"] == [], validation["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', '...t_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert [{'code': 'na...ata_v1', ...}] == []
+E         
+E         Left contains 3 more items, first extra item: {'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:170: AssertionError
+_ test_native6_preparation_uses_both_original_sidecar_roles[roles0-native6_shared] _
+
+name = 'native6_shared', roles = ('preparation_input_manifest',)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_preparation_uses_1')
+
+    @pytest.mark.parametrize("name", ("native6", "native6_shared"))
+    @pytest.mark.parametrize("roles", [(ROLES[0],), (ROLES[1],), ROLES])
+    def test_native6_preparation_uses_both_original_sidecar_roles(name, roles, tmp_path):
+        case = load_case(name)
+        payload, _, _ = payload_for(case, roles)
+        result = prepare(case, payload, tmp_path)
+        (tmp_path / "prepared.json").write_text(json.dumps(result, indent=2))
+        validation = result["metadata"][0]
+        assert validation["status"] == "valid"
+>       assert validation["issues"] == [], validation["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', '...t_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert [{'code': 'na...ata_v1', ...}] == []
+E         
+E         Left contains 3 more items, first extra item: {'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:170: AssertionError
+__ test_native6_preparation_uses_both_original_sidecar_roles[roles1-native6] ___
+
+name = 'native6', roles = ('offline_configuration',)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_preparation_uses_2')
+
+    @pytest.mark.parametrize("name", ("native6", "native6_shared"))
+    @pytest.mark.parametrize("roles", [(ROLES[0],), (ROLES[1],), ROLES])
+    def test_native6_preparation_uses_both_original_sidecar_roles(name, roles, tmp_path):
+        case = load_case(name)
+        payload, _, _ = payload_for(case, roles)
+        result = prepare(case, payload, tmp_path)
+        (tmp_path / "prepared.json").write_text(json.dumps(result, indent=2))
+        validation = result["metadata"][0]
+        assert validation["status"] == "valid"
+>       assert validation["issues"] == [], validation["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', '...t_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert [{'code': 'na...ata_v1', ...}] == []
+E         
+E         Left contains 3 more items, first extra item: {'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:170: AssertionError
+_ test_native6_preparation_uses_both_original_sidecar_roles[roles1-native6_shared] _
+
+name = 'native6_shared', roles = ('offline_configuration',)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_preparation_uses_3')
+
+    @pytest.mark.parametrize("name", ("native6", "native6_shared"))
+    @pytest.mark.parametrize("roles", [(ROLES[0],), (ROLES[1],), ROLES])
+    def test_native6_preparation_uses_both_original_sidecar_roles(name, roles, tmp_path):
+        case = load_case(name)
+        payload, _, _ = payload_for(case, roles)
+        result = prepare(case, payload, tmp_path)
+        (tmp_path / "prepared.json").write_text(json.dumps(result, indent=2))
+        validation = result["metadata"][0]
+        assert validation["status"] == "valid"
+>       assert validation["issues"] == [], validation["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', '...t_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert [{'code': 'na...ata_v1', ...}] == []
+E         
+E         Left contains 3 more items, first extra item: {'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:170: AssertionError
+__ test_native6_preparation_uses_both_original_sidecar_roles[roles2-native6] ___
+
+name = 'native6'
+roles = ('preparation_input_manifest', 'offline_configuration')
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_preparation_uses_4')
+
+    @pytest.mark.parametrize("name", ("native6", "native6_shared"))
+    @pytest.mark.parametrize("roles", [(ROLES[0],), (ROLES[1],), ROLES])
+    def test_native6_preparation_uses_both_original_sidecar_roles(name, roles, tmp_path):
+        case = load_case(name)
+        payload, _, _ = payload_for(case, roles)
+        result = prepare(case, payload, tmp_path)
+        (tmp_path / "prepared.json").write_text(json.dumps(result, indent=2))
+        validation = result["metadata"][0]
+        assert validation["status"] == "valid"
+>       assert validation["issues"] == [], validation["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', '...t_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert [{'code': 'na...ata_v1', ...}] == []
+E         
+E         Left contains 6 more items, first extra item: {'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:170: AssertionError
+_ test_native6_preparation_uses_both_original_sidecar_roles[roles2-native6_shared] _
+
+name = 'native6_shared'
+roles = ('preparation_input_manifest', 'offline_configuration')
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_preparation_uses_5')
+
+    @pytest.mark.parametrize("name", ("native6", "native6_shared"))
+    @pytest.mark.parametrize("roles", [(ROLES[0],), (ROLES[1],), ROLES])
+    def test_native6_preparation_uses_both_original_sidecar_roles(name, roles, tmp_path):
+        case = load_case(name)
+        payload, _, _ = payload_for(case, roles)
+        result = prepare(case, payload, tmp_path)
+        (tmp_path / "prepared.json").write_text(json.dumps(result, indent=2))
+        validation = result["metadata"][0]
+        assert validation["status"] == "valid"
+>       assert validation["issues"] == [], validation["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', '...t_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert [{'code': 'na...ata_v1', ...}] == []
+E         
+E         Left contains 6 more items, first extra item: {'code': 'native_blast_metadata_source_unavailable', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:170: AssertionError
+_________ test_retained332_n_valid_counterexample_and_literal_pointer __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_retained332_n_valid_count0')
+
+    def test_retained332_n_valid_counterexample_and_literal_pointer(tmp_path):
+        case, payload, descriptor, catalog, historical = counterexample332()
+        assert historical["status"] == "invalid"
+        assert "sidecar_capture_key_conflict" in details(historical)
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "counterexample332-after.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid" and not result["issues"], result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-meta', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert ('invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++)
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:212: AssertionError
+_ test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-preparation_input_manifest-native6] _
+
+name = 'native6', role = 'preparation_input_manifest'
+change = 'logical_role_key', expected = 'sidecar_capture_key_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'sidecar_capture_key_conflict' in set()
+E        +  where set() = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-preparation_input_manifest-standard_blastp] _
+
+name = 'standard_blastp', role = 'preparation_input_manifest'
+change = 'logical_role_key', expected = 'sidecar_capture_key_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'sidecar_capture_key_conflict' in set()
+E        +  where set() = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-offline_configuration-native6] _
+
+name = 'native6', role = 'offline_configuration', change = 'logical_role_key'
+expected = 'sidecar_capture_key_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'sidecar_capture_key_conflict' in set()
+E        +  where set() = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-offline_configuration-standard_blastp] _
+
+name = 'standard_blastp', role = 'offline_configuration'
+change = 'logical_role_key', expected = 'sidecar_capture_key_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'sidecar_capture_key_conflict' in set()
+E        +  where set() = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-preparation_input_manifest-native6] _
+
+name = 'native6', role = 'preparation_input_manifest', change = 'document_hash'
+expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-preparation_input_manifest-standard_blastp] _
+
+name = 'standard_blastp', role = 'preparation_input_manifest'
+change = 'document_hash', expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-offline_configuration-native6] _
+
+name = 'native6', role = 'offline_configuration', change = 'document_hash'
+expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-offline_configuration-standard_blastp] _
+
+name = 'standard_blastp', role = 'offline_configuration'
+change = 'document_hash', expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-preparation_input_manifest-native6] _
+
+name = 'native6', role = 'preparation_input_manifest', change = 'document_size'
+expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-preparation_input_manifest-standard_blastp] _
+
+name = 'standard_blastp', role = 'preparation_input_manifest'
+change = 'document_size', expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-offline_configuration-native6] _
+
+name = 'native6', role = 'offline_configuration', change = 'document_size'
+expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-offline_configuration-standard_blastp] _
+
+name = 'standard_blastp', role = 'offline_configuration'
+change = 'document_size', expected = 'selected_document_digest_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'selected_document_digest_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-preparation_input_manifest-native6] _
+
+name = 'native6', role = 'preparation_input_manifest', change = 'document_bytes'
+expected = 'document_bytes_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_bytes_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-preparation_input_manifest-standard_blastp] _
+
+name = 'standard_blastp', role = 'preparation_input_manifest'
+change = 'document_bytes', expected = 'document_bytes_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_bytes_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-offline_configuration-native6] _
+
+name = 'native6', role = 'offline_configuration', change = 'document_bytes'
+expected = 'document_bytes_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_bytes_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-offline_configuration-standard_blastp] _
+
+name = 'standard_blastp', role = 'offline_configuration'
+change = 'document_bytes', expected = 'document_bytes_conflict'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_bytes_conflict' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-preparation_input_manifest-native6] _
+
+name = 'native6', role = 'preparation_input_manifest', change = 'source_key'
+expected = 'document_key_undeclared'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_key_undeclared' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-preparation_input_manifest-standard_blastp] _
+
+name = 'standard_blastp', role = 'preparation_input_manifest'
+change = 'source_key', expected = 'document_key_undeclared'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_key_undeclared' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-offline_configuration-native6] _
+
+name = 'native6', role = 'offline_configuration', change = 'source_key'
+expected = 'document_key_undeclared'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_key_undeclared' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-offline_configuration-standard_blastp] _
+
+name = 'standard_blastp', role = 'offline_configuration', change = 'source_key'
+expected = 'document_key_undeclared'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'document_key_undeclared' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-preparation_input_manifest-native6] _
+
+name = 'native6', role = 'preparation_input_manifest', change = 'source_pointer'
+expected = 'source_locator_not_supported'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'source_locator_not_supported' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-preparation_input_manifest-standard_blastp] _
+
+name = 'standard_blastp', role = 'preparation_input_manifest'
+change = 'source_pointer', expected = 'source_locator_not_supported'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'source_locator_not_supported' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-7e78b8673dc25c7a3378260d3da9124b5c6f8ae4e63ada71f4315cef066a3d58', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-offline_configuration-native6] _
+
+name = 'native6', role = 'offline_configuration', change = 'source_pointer'
+expected = 'source_locator_not_supported'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'source_locator_not_supported' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-offline_configuration-standard_blastp] _
+
+name = 'standard_blastp', role = 'offline_configuration'
+change = 'source_pointer', expected = 'source_locator_not_supported'
+
+    @pytest.mark.parametrize("name", ("native6", "standard_blastp"))
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("arbitrary_key", "sidecar_capture_key_conflict"),
+        ("logical_role_key", "sidecar_capture_key_conflict"),
+        ("selected_path", "sidecar_capture_key_conflict"),
+        ("selected_artifact_ref", "sidecar_capture_key_conflict"),
+        ("selected_absent", "sidecar_capture_key_conflict"),
+        ("document_hash", "selected_document_digest_conflict"),
+        ("document_size", "selected_document_digest_conflict"),
+        ("document_bytes", "document_bytes_conflict"),
+        ("source_key", "document_key_undeclared"),
+        ("source_pointer", "source_locator_not_supported"),
+        ("document_absent", "document_bytes_unavailable"),
+        ("duplicate_document", "document_key_duplicate"),
+    ])
+    def test_public_sidecar_guards_are_preserved(name, role, change, expected):
+        case = load_case(name)
+        payload, descriptor, catalog = payload_for(case, (role,))
+        database = case["job"]["databases"][0]
+        owner, field = ((database["manifest"]["preparation"], "input_manifest") if role == ROLES[0]
+                        else (database["manifest"]["access"], "offline_configuration"))
+        document = catalog["documents"][0]
+        if change == "arbitrary_key":
+            document["artifact_key"] = "unselected-capture"
+        elif change == "logical_role_key":
+            document["artifact_key"] = metadata_key(database["database_key"], owner[field], role)
+        elif change == "selected_path":
+            owner[field]["path"] += ".other-original-source"
+        elif change == "selected_artifact_ref":
+            owner[field]["artifact_ref"] = "other-original-artifact"
+        elif change == "selected_absent":
+            owner[field] = None
+        elif change == "document_hash":
+            document["sha256"] = "0" * 64
+        elif change == "document_size":
+            document["size_bytes"] += 1
+        elif change == "document_bytes":
+            document["contents"] += b"changed"
+        elif change == "source_key":
+            payload["sequence_records"][0]["source"]["source_ref"] = "unselected-source"
+        elif change == "source_pointer":
+            payload["sequence_records"][0]["source"]["pointer"] = "/invented-location"
+        elif change == "document_absent":
+            catalog["documents"] = []
+        elif change == "duplicate_document":
+            payload["documents"].append(deepcopy(payload["documents"][0]))
+        result = validate(case, payload, descriptor, catalog)
+>       assert expected in details(result)
+E       AssertionError: assert 'source_locator_not_supported' in {'sidecar_capture_key_conflict'}
+E        +  where {'sidecar_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-8bd6565d8c6454499f2a573e427be94149acf99be103f0a34b315390db62a0ae', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:267: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[selected_identity-sidecar_identity_conflict-preparation_input_manifest] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p0')
+role = 'preparation_input_manifest', change = 'selected_identity'
+expected = 'sidecar_identity_conflict'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [1]
+E         
+E         Right contains one more item: 1
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[selected_identity-sidecar_identity_conflict-offline_configuration] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p1')
+role = 'offline_configuration', change = 'selected_identity'
+expected = 'sidecar_identity_conflict'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [0]
+E         
+E         Right contains one more item: 0
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[wrong_capture_key-metadata_capture_key_conflict-preparation_input_manifest] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p2')
+role = 'preparation_input_manifest', change = 'wrong_capture_key'
+expected = 'metadata_capture_key_conflict'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [1]
+E         
+E         Right contains one more item: 1
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[wrong_capture_key-metadata_capture_key_conflict-offline_configuration] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p3')
+role = 'offline_configuration', change = 'wrong_capture_key'
+expected = 'metadata_capture_key_conflict'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [0]
+E         
+E         Right contains one more item: 0
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[absent_capture-artifact_bytes_unavailable-preparation_input_manifest] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p4')
+role = 'preparation_input_manifest', change = 'absent_capture'
+expected = 'artifact_bytes_unavailable'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [1]
+E         
+E         Right contains one more item: 1
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[absent_capture-artifact_bytes_unavailable-offline_configuration] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p5')
+role = 'offline_configuration', change = 'absent_capture'
+expected = 'artifact_bytes_unavailable'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [0]
+E         
+E         Right contains one more item: 0
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[duplicate_role-sidecar_role_unresolved-preparation_input_manifest] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p6')
+role = 'preparation_input_manifest', change = 'duplicate_role'
+expected = 'sidecar_role_unresolved'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [1]
+E         
+E         Right contains one more item: 1
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[duplicate_role-sidecar_role_unresolved-offline_configuration] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p7')
+role = 'offline_configuration', change = 'duplicate_role'
+expected = 'sidecar_role_unresolved'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+        assert expected in details(result)
+        sibling = ROLES.index(role) ^ 1
+>       assert [r["record_ordinal"] for r in result["normalized"]["sequence_records"]] == [sibling]
+E       assert [] == [0]
+E         
+E         Right contains one more item: 0
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:298: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[changed_bytes-artifact_digest_conflict-preparation_input_manifest] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p8')
+role = 'preparation_input_manifest', change = 'changed_bytes'
+expected = 'artifact_digest_conflict'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+>       assert expected in details(result)
+E       AssertionError: assert 'artifact_digest_conflict' in {'document_bytes_unavailable', 'metadata_capture_key_conflict'}
+E        +  where {'document_bytes_unavailable', 'metadata_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-d3448eb05c235833b36291cefad60075feb629a92d909bc77424118b6dfc0aca', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:296: AssertionError
+_ test_native6_resolver_guards_preserve_valid_sibling[changed_bytes-artifact_digest_conflict-offline_configuration] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_native6_resolver_guards_p9')
+role = 'offline_configuration', change = 'changed_bytes'
+expected = 'artifact_digest_conflict'
+
+    @pytest.mark.parametrize("role", ROLES)
+    @pytest.mark.parametrize("change,expected", [
+        ("selected_identity", "sidecar_identity_conflict"),
+        ("wrong_capture_key", "metadata_capture_key_conflict"),
+        ("absent_capture", "artifact_bytes_unavailable"),
+        ("duplicate_role", "sidecar_role_unresolved"),
+        ("changed_bytes", "artifact_digest_conflict"),
+    ])
+    def test_native6_resolver_guards_preserve_valid_sibling(tmp_path, role, change, expected):
+        case = load_case("native6")
+        payload, _, _ = payload_for(case)
+        _, slot, entry = sidecar(case, role)
+        if change == "selected_identity":
+            slot["identity"]["path"] += ".wrong"
+        elif change == "wrong_capture_key":
+            slot["artifact_key"] = "wrong-selected-capture"
+        elif change == "absent_capture":
+            slot["artifact_key"] = None
+        elif change == "duplicate_role":
+            case["bundle"]["database_manifest"][0]["sidecar_artifacts"].append(deepcopy(slot))
+        elif change == "changed_bytes":
+            corrupt = tmp_path / "changed-source"
+            corrupt.write_bytes(case["contents"][entry["artifact_key"]] + b"changed")
+            entry["path"] = str(corrupt)
+        result = prepare(case, payload, tmp_path)["metadata"][0]
+>       assert expected in details(result)
+E       AssertionError: assert 'artifact_digest_conflict' in {'document_bytes_unavailable', 'metadata_capture_key_conflict'}
+E        +  where {'document_bytes_unavailable', 'metadata_capture_key_conflict'} = details({'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', 'input_key': 'sidecar-evidence', 'artifact_ref': 'artifact-d3448eb05c235833b36291cefad60075feb629a92d909bc77424118b6dfc0aca', ...})
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:296: AssertionError
+_ test_identical_bytes_at_distinct_role_paths_keep_original_relations[native6] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_identical_bytes_at_distin0')
+family = 'native6'
+
+    @pytest.mark.parametrize("family", ("native6", "standard5"))
+    def test_identical_bytes_at_distinct_role_paths_keep_original_relations(tmp_path, family):
+        # Execute the existing N fixture's deliberately synthetic script, never BLAST.
+        if family == "native6":
+            import test_native_blast_database_driver as producer
+            operation = "native_blast_database"
+        else:
+            import test_native_blast_standard_database_driver as producer
+            operation = "native_blast_standard_database"
+        path, plan, _ = producer.fixture(tmp_path / "synthetic-producer")
+        database = plan["requested_job"][operation]["databases"][0]
+        manifest = database["manifest"]
+        first = manifest["preparation"]["input_manifest"]
+        second = manifest["access"]["offline_configuration"]
+        manifest["access"]["offline_configuration"] = producer.write(second["path"], Path(first["path"]).read_bytes())
+        database["manifest_file"] = producer.save_json(Path(database["manifest_file"]["path"]), manifest)
+        producer.refresh_plan(path, plan)
+        process, bundle = producer.run_fixture(path, plan)
+        assert process.returncode == 0, process.stderr.decode()
+        assert producer.validate_bundle(bundle, plan) == bundle
+        entries, contents = [], {}
+        for row in bundle["artifacts"]:
+            source = path.parent / row["relative_path"]
+            raw = source.read_bytes()
+            assert sha(raw) == row["sha256"] and len(raw) == row["size_bytes"]
+            contents[row["artifact_key"]] = raw
+            entries.append(dict(row, path=str(source), artifact_ref="artifact-" + sha(raw),
+                                source_ref="source-" + row["artifact_key"]))
+        case = dict(job=plan["requested_job"][operation], bundle=bundle, contents=contents,
+            artifact_catalog=dict(bundle_source_ref="source-synthetic-equal-bytes", bundle_artifact_ref="bundle-synthetic-equal-bytes",
+                bundle_sha256=sha(canonical(bundle)), entries=entries, retained_sources=[]))
+        payload, descriptor, catalog = payload_for(case)
+        sides = bundle["database_manifest"][0]["sidecar_artifacts"]
+        assert sides[0]["identity"]["sha256"] == sides[1]["identity"]["sha256"]
+        assert sides[0]["identity"]["path"] != sides[1]["identity"]["path"]
+        assert sides[0]["artifact_key"] != sides[1]["artifact_key"]
+        assert catalog["documents"][0]["artifact_ref"] == catalog["documents"][1]["artifact_ref"]
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "equal-bytes-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid" and result["issues"] == [], result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert ('invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++)
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:341: AssertionError
+_ test_identical_bytes_at_distinct_role_paths_keep_original_relations[standard5] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_sidecar_metadata_contract_fix_2026-10-26_335/check002_before/temporary/pytest/test_identical_bytes_at_distin1')
+family = 'standard5'
+
+    @pytest.mark.parametrize("family", ("native6", "standard5"))
+    def test_identical_bytes_at_distinct_role_paths_keep_original_relations(tmp_path, family):
+        # Execute the existing N fixture's deliberately synthetic script, never BLAST.
+        if family == "native6":
+            import test_native_blast_database_driver as producer
+            operation = "native_blast_database"
+        else:
+            import test_native_blast_standard_database_driver as producer
+            operation = "native_blast_standard_database"
+        path, plan, _ = producer.fixture(tmp_path / "synthetic-producer")
+        database = plan["requested_job"][operation]["databases"][0]
+        manifest = database["manifest"]
+        first = manifest["preparation"]["input_manifest"]
+        second = manifest["access"]["offline_configuration"]
+        manifest["access"]["offline_configuration"] = producer.write(second["path"], Path(first["path"]).read_bytes())
+        database["manifest_file"] = producer.save_json(Path(database["manifest_file"]["path"]), manifest)
+        producer.refresh_plan(path, plan)
+        process, bundle = producer.run_fixture(path, plan)
+        assert process.returncode == 0, process.stderr.decode()
+        assert producer.validate_bundle(bundle, plan) == bundle
+        entries, contents = [], {}
+        for row in bundle["artifacts"]:
+            source = path.parent / row["relative_path"]
+            raw = source.read_bytes()
+            assert sha(raw) == row["sha256"] and len(raw) == row["size_bytes"]
+            contents[row["artifact_key"]] = raw
+            entries.append(dict(row, path=str(source), artifact_ref="artifact-" + sha(raw),
+                                source_ref="source-" + row["artifact_key"]))
+        case = dict(job=plan["requested_job"][operation], bundle=bundle, contents=contents,
+            artifact_catalog=dict(bundle_source_ref="source-synthetic-equal-bytes", bundle_artifact_ref="bundle-synthetic-equal-bytes",
+                bundle_sha256=sha(canonical(bundle)), entries=entries, retained_sources=[]))
+        payload, descriptor, catalog = payload_for(case)
+        sides = bundle["database_manifest"][0]["sidecar_artifacts"]
+        assert sides[0]["identity"]["sha256"] == sides[1]["identity"]["sha256"]
+        assert sides[0]["identity"]["path"] != sides[1]["identity"]["path"]
+        assert sides[0]["artifact_key"] != sides[1]["artifact_key"]
+        assert catalog["documents"][0]["artifact_ref"] == catalog["documents"][1]["artifact_ref"]
+        result = validate(case, payload, descriptor, catalog)
+        (tmp_path / "equal-bytes-validation.json").write_text(json.dumps(result, indent=2))
+>       assert result["status"] == "valid" and result["issues"] == [], result["issues"]
+E       AssertionError: [{'code': 'native_blast_metadata_payload_invalid', 'input_key': 'sidecar-evidence', 'consumer': 'query_identity', 'schema_id': 'native_blast_database_query_metadata_v1', ...}]
+E       assert ('invalid' == 'valid'
+E         
+E         - valid
+E         + invalid
+E         ? ++)
+
+../../../tests/test_native_blast_database_sidecar_metadata.py:341: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-native6_shared]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-standard_blastn]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[preparation_input_manifest-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-native6_shared]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-standard_blastn]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_validator_accepts_real_retained_producer_sidecars[offline_configuration-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_preparation_uses_both_original_sidecar_roles[roles0-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_preparation_uses_both_original_sidecar_roles[roles0-native6_shared]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_preparation_uses_both_original_sidecar_roles[roles1-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_preparation_uses_both_original_sidecar_roles[roles1-native6_shared]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_preparation_uses_both_original_sidecar_roles[roles2-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_preparation_uses_both_original_sidecar_roles[roles2-native6_shared]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_retained332_n_valid_counterexample_and_literal_pointer
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-preparation_input_manifest-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-preparation_input_manifest-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-offline_configuration-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[logical_role_key-sidecar_capture_key_conflict-offline_configuration-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-preparation_input_manifest-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-preparation_input_manifest-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-offline_configuration-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_hash-selected_document_digest_conflict-offline_configuration-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-preparation_input_manifest-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-preparation_input_manifest-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-offline_configuration-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_size-selected_document_digest_conflict-offline_configuration-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-preparation_input_manifest-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-preparation_input_manifest-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-offline_configuration-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[document_bytes-document_bytes_conflict-offline_configuration-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-preparation_input_manifest-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-preparation_input_manifest-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-offline_configuration-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_key-document_key_undeclared-offline_configuration-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-preparation_input_manifest-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-preparation_input_manifest-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-offline_configuration-native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_public_sidecar_guards_are_preserved[source_pointer-source_locator_not_supported-offline_configuration-standard_blastp]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[selected_identity-sidecar_identity_conflict-preparation_input_manifest]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[selected_identity-sidecar_identity_conflict-offline_configuration]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[wrong_capture_key-metadata_capture_key_conflict-preparation_input_manifest]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[wrong_capture_key-metadata_capture_key_conflict-offline_configuration]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[absent_capture-artifact_bytes_unavailable-preparation_input_manifest]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[absent_capture-artifact_bytes_unavailable-offline_configuration]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[duplicate_role-sidecar_role_unresolved-preparation_input_manifest]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[duplicate_role-sidecar_role_unresolved-offline_configuration]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[changed_bytes-artifact_digest_conflict-preparation_input_manifest]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_native6_resolver_guards_preserve_valid_sibling[changed_bytes-artifact_digest_conflict-offline_configuration]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_identical_bytes_at_distinct_role_paths_keep_original_relations[native6]
+FAILED ../../../tests/test_native_blast_database_sidecar_metadata.py::test_identical_bytes_at_distinct_role_paths_keep_original_relations[standard5]
+51 failed, 24 passed in 3.98s

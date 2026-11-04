@@ -1,0 +1,766 @@
+[
+  {
+    "pointer": "/biomni_entries/34",
+    "row": {
+      "id": "biomni.tool.cell_biology.perform_facs_cell_sorting",
+      "module": "biomni.tool.cell_biology",
+      "name": "perform_facs_cell_sorting",
+      "surface": "biomni_native",
+      "registered_in_biomni_catalog": true,
+      "classification": "scientific_algorithm",
+      "in_algorithm_or_data_reader_scope": true,
+      "scope_reason": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+      "description": "Performs Fluorescence-Activated Cell Sorting (FACS) to enrich cell populations based on fluorescence characteristics.",
+      "catalog_schema": {
+        "description": "Performs Fluorescence-Activated Cell Sorting (FACS) to enrich cell populations based on fluorescence characteristics.",
+        "name": "perform_facs_cell_sorting",
+        "optional_parameters": [
+          {
+            "default": null,
+            "description": "Minimum threshold for the fluorescence parameter. Cells below this value will be excluded",
+            "name": "threshold_min",
+            "type": "float"
+          },
+          {
+            "default": null,
+            "description": "Maximum threshold for the fluorescence parameter. Cells above this value will be excluded",
+            "name": "threshold_max",
+            "type": "float"
+          },
+          {
+            "default": "sorted_cells.csv",
+            "description": "Filename to save the sorted cell population data",
+            "name": "output_file",
+            "type": "str"
+          }
+        ],
+        "required_parameters": [
+          {
+            "default": null,
+            "description": "Path to the FCS file containing flow cytometry data",
+            "name": "cell_suspension_data",
+            "type": "str"
+          },
+          {
+            "default": null,
+            "description": "The fluorescence parameter to use for sorting (e.g., 'GFP', 'FITC', 'PE')",
+            "name": "fluorescence_parameter",
+            "type": "str"
+          }
+        ]
+      },
+      "catalog_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/cell_biology.py",
+        "line": 50
+      },
+      "implementation_present": true,
+      "callable": "biomni.tool.cell_biology.perform_facs_cell_sorting",
+      "reviewed_qualifications": [],
+      "future_grader_requirement": "Retain actual native bytes/objects and the exact executed branch, parameters and provenance; use deterministic source-field readers and explicit numerical calculators with stated units/denominators. No category-to-number evidence grade; a generated log, label or successful call is not a result or reliability probability.",
+      "callable_signature": "perform_facs_cell_sorting(cell_suspension_data, fluorescence_parameter, threshold_min=None, threshold_max=None, output_file='sorted_cells.csv')",
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cell_biology.py",
+        "line": 369,
+        "end_line": 470,
+        "sha256": "0b01056065142f8191a4924b3a444160a747d11c2e71bf2e4b69531322e5433a"
+      },
+      "implementation_docstring": "Performs Fluorescence-Activated Cell Sorting (FACS) to enrich cell populations based on fluorescence characteristics.\n\nParameters\n----------\ncell_suspension_data : str\n    Path to the FCS file containing flow cytometry data\nfluorescence_parameter : str\n    The fluorescence parameter to use for sorting (e.g., 'GFP', 'FITC', 'PE')\nthreshold_min : float, optional\n    Minimum threshold for the fluorescence parameter. Cells below this value will be excluded\nthreshold_max : float, optional\n    Maximum threshold for the fluorescence parameter. Cells above this value will be excluded\noutput_file : str, optional\n    Filename to save the sorted cell population data\n\nReturns\n-------\nstr\n    Research log detailing the FACS cell sorting process",
+      "input_contract": {
+        "signature": "cell_suspension_data, fluorescence_parameter, threshold_min=None, threshold_max=None, output_file='sorted_cells.csv'",
+        "details": "Exact argument schema is catalog_schema; full native docstring above declares input units/shapes and formats when present. Undocumented constraints remain unknown."
+      },
+      "output_contract": {
+        "native_return_annotation": null,
+        "native_documented_return_section": "-------\nstr\n    Research log detailing the FACS cell sorting process",
+        "formats_mentioned_in_actual_function": [
+          {
+            "format": "CSV",
+            "line": 374,
+            "source_text": "output_file=\"sorted_cells.csv\","
+          },
+          {
+            "format": "FCS",
+            "line": 381,
+            "source_text": "Path to the FCS file containing flow cytometry data"
+          },
+          {
+            "format": "Plain-text report",
+            "line": 394,
+            "source_text": "Research log detailing the FACS cell sorting process"
+          }
+        ],
+        "format_evidence_note": "Source-grounded format mentions can describe input, output or optional branches. Actual returned values and artifact writes/paths are retained separately; a mentioned format is not a successful production claim."
+      },
+      "reachable_same_module_implementations": [],
+      "python_imports": [
+        {
+          "module": "os",
+          "root": "os",
+          "line": 397
+        },
+        {
+          "module": "pandas",
+          "root": "pandas",
+          "line": 399
+        },
+        {
+          "module": "flowkit",
+          "root": "flowkit",
+          "line": 411
+        }
+      ],
+      "python_prerequisites": [
+        {
+          "root": "flowkit",
+          "reference_environment": "not_found_in_inspected_site_packages",
+          "path": null
+        },
+        {
+          "root": "os",
+          "reference_environment": "python_standard_library"
+        },
+        {
+          "root": "pandas",
+          "reference_environment": "source_or_binary_present_unimported",
+          "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/pandas"
+        }
+      ],
+      "import_module_filesystem_presence": [
+        {
+          "module": "flowkit",
+          "status": "not_found_as_static_module_path",
+          "path": null
+        },
+        {
+          "module": "os",
+          "status": "standard_library_root"
+        },
+        {
+          "module": "pandas",
+          "status": "source_or_binary_present_unimported",
+          "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/pandas"
+        }
+      ],
+      "unresolved_global_names_static": [],
+      "native_calls": [
+        {
+          "line": 407,
+          "callable": "isinstance"
+        },
+        {
+          "line": 435,
+          "callable": "len"
+        },
+        {
+          "line": 454,
+          "callable": "cell_df[fluorescence_parameter].mean"
+        },
+        {
+          "line": 455,
+          "callable": "cell_df[fluorescence_parameter].median"
+        },
+        {
+          "line": 461,
+          "callable": "cell_df.to_csv"
+        },
+        {
+          "line": 409,
+          "callable": "cell_suspension_data.lower().endswith"
+        },
+        {
+          "line": 426,
+          "callable": "cell_suspension_data.copy"
+        },
+        {
+          "line": 431,
+          "callable": "ValueError"
+        },
+        {
+          "line": 422,
+          "callable": "pd.read_csv"
+        },
+        {
+          "line": 450,
+          "callable": "len"
+        },
+        {
+          "line": 463,
+          "callable": "os.path.abspath"
+        },
+        {
+          "line": 409,
+          "callable": "cell_suspension_data.lower"
+        },
+        {
+          "line": 413,
+          "callable": "fk.Sample"
+        },
+        {
+          "line": 414,
+          "callable": "pd.DataFrame"
+        },
+        {
+          "line": 427,
+          "callable": "len"
+        },
+        {
+          "line": 440,
+          "callable": "len"
+        },
+        {
+          "line": 444,
+          "callable": "len"
+        },
+        {
+          "line": 447,
+          "callable": "len"
+        },
+        {
+          "line": 469,
+          "callable": "str"
+        },
+        {
+          "line": 414,
+          "callable": "fcs_data.get_dataframe"
+        },
+        {
+          "line": 419,
+          "callable": "pd.read_csv"
+        },
+        {
+          "line": 423,
+          "callable": "len"
+        },
+        {
+          "line": 415,
+          "callable": "len"
+        }
+      ],
+      "return_expressions_including_nested_helpers": [
+        {
+          "line": 465,
+          "expression": "log"
+        },
+        {
+          "line": 470,
+          "expression": "log"
+        }
+      ],
+      "native_artifact_write_expressions": [
+        {
+          "line": 461,
+          "expression": "cell_df.to_csv(output_file, index=False)"
+        }
+      ],
+      "native_assignments_including_output_paths_and_calculations": [
+        {
+          "line": 402,
+          "expression": "log = '# FACS-based Cell Sorting and Enrichment Research Log\\n\\n'"
+        },
+        {
+          "line": 435,
+          "expression": "original_count = len(cell_df)"
+        },
+        {
+          "line": 447,
+          "expression": "enrichment_percent = len(cell_df) / original_count * 100 if original_count > 0 else 0"
+        },
+        {
+          "line": 454,
+          "expression": "mean_fluorescence = cell_df[fluorescence_parameter].mean()"
+        },
+        {
+          "line": 455,
+          "expression": "median_fluorescence = cell_df[fluorescence_parameter].median()"
+        },
+        {
+          "line": 426,
+          "expression": "cell_df = cell_suspension_data.copy()"
+        },
+        {
+          "line": 439,
+          "expression": "cell_df = cell_df[cell_df[fluorescence_parameter] >= threshold_min]"
+        },
+        {
+          "line": 443,
+          "expression": "cell_df = cell_df[cell_df[fluorescence_parameter] <= threshold_max]"
+        },
+        {
+          "line": 422,
+          "expression": "cell_df = pd.read_csv(cell_suspension_data)"
+        },
+        {
+          "line": 413,
+          "expression": "fcs_data = fk.Sample(cell_suspension_data)"
+        },
+        {
+          "line": 414,
+          "expression": "cell_df = pd.DataFrame(fcs_data.get_dataframe())"
+        },
+        {
+          "line": 419,
+          "expression": "cell_df = pd.read_csv(cell_suspension_data)"
+        }
+      ],
+      "command_invocations": [],
+      "literal_endpoint_and_download_urls": [],
+      "fallback_mock_and_randomness_source_lines": [
+        {
+          "line": 417,
+          "text": "# Fallback if flowkit is not available"
+        }
+      ],
+      "execution_routes": {
+        "algorithm_execution": {
+          "placement": "worker_process_or_local_subprocess",
+          "local_stage": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+          "remote_scientific_stage": null,
+          "api_algorithm_implementation": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+          "live_execution_verified": false
+        },
+        "input_acquisition": {
+          "mode": "supplied_inputs_or_local_assets",
+          "details": "Caller-supplied arguments/files and explicitly referenced local source data; required assets are not proved present by a description.",
+          "live_acquisition_verified": false
+        },
+        "model_and_software_acquisition": {
+          "mode": "prerequisites_and_delegated_loading_unverified",
+          "details": "See per-tool imports, commands and asset paths. Any nested library download behavior not explicitly described below remains unverified.",
+          "live_acquisition_verified": false
+        },
+        "generic_transport": {
+          "local_worker": "Gentner has an Academy thread executor; local means computation in its selected worker process or subprocess, not a claim that this machine can run the tool.",
+          "globus_parsl": "Generic Globus/Parsl transports exist; actual endpoint/provider, authentication, environment, shared files and allocation must be supplied and verified.",
+          "hpc_deployment_verified": false,
+          "hpc_note": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution."
+        },
+        "resource_evidence": [
+          {
+            "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/cell_biology.py",
+            "line": 369,
+            "end_line": 470,
+            "sha256": "0b01056065142f8191a4924b3a444160a747d11c2e71bf2e4b69531322e5433a"
+          }
+        ],
+        "local": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+        "api": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+        "hpc": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution.",
+        "executed_for_inventory": false,
+        "optional_natural_language_api_query_builder": false,
+        "network_signal_scope_note": "literal_endpoint_and_download_urls and broad same-class dependency closures are source-discovery evidence only; they do not determine algorithm placement."
+      },
+      "missing_or_unverified_prerequisites": {
+        "imports_not_found_in_reference_environment": [
+          "flowkit"
+        ],
+        "import_modules_not_found_as_static_paths": [
+          "flowkit"
+        ],
+        "unresolved_global_names": [],
+        "native_commands": "See exact command_invocations and native_assignments; present wrappers are not proof of executable versions or working command syntax.",
+        "input_data_models_databases": "Caller must supply all required schema arguments and input assets/checkpoints/databases named by native paths and docstrings; existence was not assumed from descriptions.",
+        "remote_service": "See execution_routes.algorithm_execution, input_acquisition and model_and_software_acquisition separately; no scientific service or acquisition was exercised, and delegated library behavior remains qualified."
+      }
+    }
+  },
+  {
+    "pointer": "/biomni_entries/114",
+    "row": {
+      "id": "biomni.tool.immunology.analyze_cytokine_production_in_cd4_tcells",
+      "module": "biomni.tool.immunology",
+      "name": "analyze_cytokine_production_in_cd4_tcells",
+      "surface": "biomni_native",
+      "registered_in_biomni_catalog": true,
+      "classification": "scientific_algorithm",
+      "in_algorithm_or_data_reader_scope": true,
+      "scope_reason": "Concrete analysis of supplied data or an explicit predictive model; implementation validity and deployment remain separately qualified.",
+      "description": "Analyze cytokine production (IFN-\u03b3, IL-17) in CD4+ T cells after antigen stimulation.",
+      "catalog_schema": {
+        "description": "Analyze cytokine production (IFN-\u03b3, IL-17) in CD4+ T cells after antigen stimulation.",
+        "name": "analyze_cytokine_production_in_cd4_tcells",
+        "optional_parameters": [
+          {
+            "default": "./results",
+            "description": "Directory to save the results file",
+            "name": "output_dir",
+            "type": "str"
+          }
+        ],
+        "required_parameters": [
+          {
+            "default": null,
+            "description": "Dictionary mapping stimulation conditions to FCS file paths. Expected keys: 'unstimulated', 'Mtb300', 'CMV', 'SEB'",
+            "name": "fcs_files_dict",
+            "type": "dict"
+          }
+        ]
+      },
+      "catalog_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/tool_description/immunology.py",
+        "line": 206
+      },
+      "implementation_present": true,
+      "callable": "biomni.tool.immunology.analyze_cytokine_production_in_cd4_tcells",
+      "reviewed_qualifications": [],
+      "future_grader_requirement": "Retain actual native bytes/objects and the exact executed branch, parameters and provenance; use deterministic source-field readers and explicit numerical calculators with stated units/denominators. No category-to-number evidence grade; a generated log, label or successful call is not a result or reliability probability.",
+      "callable_signature": "analyze_cytokine_production_in_cd4_tcells(fcs_files_dict, output_dir='./results')",
+      "implementation_source": {
+        "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/immunology.py",
+        "line": 1178,
+        "end_line": 1328,
+        "sha256": "c27999bfd78682e5a98d95d08b8a27ef679b9f903e47f8b3576ee01c816b6f50"
+      },
+      "implementation_docstring": "Analyze cytokine production (IFN-\u03b3, IL-17) in CD4+ T cells after antigen stimulation.\n\nParameters\n----------\nfcs_files_dict : dict\n    Dictionary mapping stimulation conditions to FCS file paths.\n    Expected keys: 'unstimulated', 'Mtb300', 'CMV', 'SEB'\n    Example: {'unstimulated': 'path/to/unstim.fcs', 'Mtb300': 'path/to/mtb.fcs'}\n\noutput_dir : str, optional\n    Directory to save the results file (default: './results')\n\nReturns\n-------\nstr\n    Research log summarizing the analysis steps and results",
+      "input_contract": {
+        "signature": "fcs_files_dict, output_dir='./results'",
+        "details": "Exact argument schema is catalog_schema; full native docstring above declares input units/shapes and formats when present. Undocumented constraints remain unknown."
+      },
+      "output_contract": {
+        "native_return_annotation": null,
+        "native_documented_return_section": "-------\nstr\n    Research log summarizing the analysis steps and results",
+        "formats_mentioned_in_actual_function": [
+          {
+            "format": "CSV",
+            "line": 1303,
+            "source_text": "results_file = os.path.join(output_dir, \"cytokine_frequencies.csv\")"
+          },
+          {
+            "format": "FCS",
+            "line": 1184,
+            "source_text": "Dictionary mapping stimulation conditions to FCS file paths."
+          },
+          {
+            "format": "Plain-text report",
+            "line": 1194,
+            "source_text": "Research log summarizing the analysis steps and results"
+          }
+        ],
+        "format_evidence_note": "Source-grounded format mentions can describe input, output or optional branches. Actual returned values and artifact writes/paths are retained separately; a mentioned format is not a successful production claim."
+      },
+      "reachable_same_module_implementations": [],
+      "python_imports": [
+        {
+          "module": "os",
+          "root": "os",
+          "line": 1197
+        },
+        {
+          "module": "pandas",
+          "root": "pandas",
+          "line": 1199
+        },
+        {
+          "module": "FlowCytometryTools",
+          "root": "FlowCytometryTools",
+          "names": [
+            "FCMeasurement"
+          ],
+          "line": 1200
+        }
+      ],
+      "python_prerequisites": [
+        {
+          "root": "FlowCytometryTools",
+          "reference_environment": "not_found_in_inspected_site_packages",
+          "path": null
+        },
+        {
+          "root": "os",
+          "reference_environment": "python_standard_library"
+        },
+        {
+          "root": "pandas",
+          "reference_environment": "source_or_binary_present_unimported",
+          "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/pandas"
+        }
+      ],
+      "import_module_filesystem_presence": [
+        {
+          "module": "FlowCytometryTools",
+          "status": "not_found_as_static_module_path",
+          "path": null
+        },
+        {
+          "module": "os",
+          "status": "standard_library_root"
+        },
+        {
+          "module": "pandas",
+          "status": "source_or_binary_present_unimported",
+          "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/pandas"
+        }
+      ],
+      "unresolved_global_names_static": [],
+      "native_calls": [
+        {
+          "line": 1218,
+          "callable": "fcs_files_dict.items"
+        },
+        {
+          "line": 1203,
+          "callable": "os.path.exists"
+        },
+        {
+          "line": 1204,
+          "callable": "os.makedirs"
+        },
+        {
+          "line": 1222,
+          "callable": "FCMeasurement"
+        },
+        {
+          "line": 1234,
+          "callable": "next"
+        },
+        {
+          "line": 1284,
+          "callable": "pd.DataFrame"
+        },
+        {
+          "line": 1303,
+          "callable": "os.path.join"
+        },
+        {
+          "line": 1304,
+          "callable": "df_results.to_csv"
+        },
+        {
+          "line": 1309,
+          "callable": "df_results.to_string"
+        },
+        {
+          "line": 1226,
+          "callable": "sample.compensate"
+        },
+        {
+          "line": 1249,
+          "callable": "sample.gate"
+        },
+        {
+          "line": 1287,
+          "callable": "results[condition].items"
+        },
+        {
+          "line": 1215,
+          "callable": "', '.join"
+        },
+        {
+          "line": 1219,
+          "callable": "os.path.basename"
+        },
+        {
+          "line": 1244,
+          "callable": "', '.join"
+        },
+        {
+          "line": 1264,
+          "callable": "cd4_positive.gate"
+        },
+        {
+          "line": 1250,
+          "callable": "len"
+        },
+        {
+          "line": 1250,
+          "callable": "len"
+        },
+        {
+          "line": 1268,
+          "callable": "len"
+        },
+        {
+          "line": 1277,
+          "callable": "str"
+        },
+        {
+          "line": 1299,
+          "callable": "max"
+        },
+        {
+          "line": 1268,
+          "callable": "len"
+        },
+        {
+          "line": 1268,
+          "callable": "len"
+        }
+      ],
+      "return_expressions_including_nested_helpers": [
+        {
+          "line": 1328,
+          "expression": "log"
+        }
+      ],
+      "native_artifact_write_expressions": [
+        {
+          "line": 1304,
+          "expression": "df_results.to_csv(results_file)"
+        }
+      ],
+      "native_assignments_including_output_paths_and_calculations": [
+        {
+          "line": 1206,
+          "expression": "log = '# Cytokine Production Analysis by Flow Cytometry\\n\\n'"
+        },
+        {
+          "line": 1209,
+          "expression": "results = {}"
+        },
+        {
+          "line": 1212,
+          "expression": "required_conditions = ['unstimulated', 'Mtb300', 'CMV', 'SEB']"
+        },
+        {
+          "line": 1213,
+          "expression": "missing_conditions = [cond for cond in required_conditions if cond not in fcs_files_dict]"
+        },
+        {
+          "line": 1222,
+          "expression": "sample = FCMeasurement(ID=condition, datafile=fcs_file)"
+        },
+        {
+          "line": 1232,
+          "expression": "channels = sample.channel_names"
+        },
+        {
+          "line": 1233,
+          "expression": "cytokine_channels = [ch for ch in channels if 'IFN' in ch or 'IL-17' in ch]"
+        },
+        {
+          "line": 1234,
+          "expression": "cd4_channel = next((ch for ch in channels if 'CD4' in ch), None)"
+        },
+        {
+          "line": 1284,
+          "expression": "df_results = pd.DataFrame()"
+        },
+        {
+          "line": 1303,
+          "expression": "results_file = os.path.join(output_dir, 'cytokine_frequencies.csv')"
+        },
+        {
+          "line": 1226,
+          "expression": "sample = sample.compensate()"
+        },
+        {
+          "line": 1249,
+          "expression": "cd4_positive = sample.gate(f'{cd4_channel} > 1000')"
+        },
+        {
+          "line": 1253,
+          "expression": "cytokine_data = {}"
+        },
+        {
+          "line": 1274,
+          "expression": "results[condition] = cytokine_data"
+        },
+        {
+          "line": 1293,
+          "expression": "background = results['unstimulated']"
+        },
+        {
+          "line": 1264,
+          "expression": "cytokine_positive = cd4_positive.gate(f'{cytokine_channel} > 500')"
+        },
+        {
+          "line": 1267,
+          "expression": "frequency = len(cytokine_positive.data) / len(cd4_positive.data) * 100 if len(cd4_positive.data) > 0 else 0"
+        },
+        {
+          "line": 1272,
+          "expression": "cytokine_data[cytokine_name] = frequency"
+        },
+        {
+          "line": 1288,
+          "expression": "df_results.loc[condition, cytokine] = frequency"
+        },
+        {
+          "line": 1257,
+          "expression": "cytokine_name = 'IFN-\u03b3'"
+        },
+        {
+          "line": 1320,
+          "expression": "mtb_response = results['Mtb300'][cytokine]"
+        },
+        {
+          "line": 1321,
+          "expression": "cmv_response = results['CMV'][cytokine]"
+        },
+        {
+          "line": 1322,
+          "expression": "seb_response = results['SEB'][cytokine]"
+        },
+        {
+          "line": 1259,
+          "expression": "cytokine_name = 'IL-17'"
+        },
+        {
+          "line": 1298,
+          "expression": "background_subtracted = results[condition][cytokine] - background[cytokine]"
+        },
+        {
+          "line": 1299,
+          "expression": "background_subtracted = max(0, background_subtracted)"
+        },
+        {
+          "line": 1300,
+          "expression": "df_results.loc[condition, f'{cytokine} (background-subtracted)'] = background_subtracted"
+        }
+      ],
+      "command_invocations": [],
+      "literal_endpoint_and_download_urls": [],
+      "fallback_mock_and_randomness_source_lines": [],
+      "execution_routes": {
+        "algorithm_execution": {
+          "placement": "worker_process_or_local_subprocess",
+          "local_stage": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+          "remote_scientific_stage": null,
+          "api_algorithm_implementation": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+          "live_execution_verified": false
+        },
+        "input_acquisition": {
+          "mode": "supplied_inputs_or_local_assets",
+          "details": "Caller-supplied arguments/files and explicitly referenced local source data; required assets are not proved present by a description.",
+          "live_acquisition_verified": false
+        },
+        "model_and_software_acquisition": {
+          "mode": "prerequisites_and_delegated_loading_unverified",
+          "details": "See per-tool imports, commands and asset paths. Any nested library download behavior not explicitly described below remains unverified.",
+          "live_acquisition_verified": false
+        },
+        "generic_transport": {
+          "local_worker": "Gentner has an Academy thread executor; local means computation in its selected worker process or subprocess, not a claim that this machine can run the tool.",
+          "globus_parsl": "Generic Globus/Parsl transports exist; actual endpoint/provider, authentication, environment, shared files and allocation must be supplied and verified.",
+          "hpc_deployment_verified": false,
+          "hpc_note": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution."
+        },
+        "resource_evidence": [
+          {
+            "path": "reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/immunology.py",
+            "line": 1178,
+            "end_line": 1328,
+            "sha256": "c27999bfd78682e5a98d95d08b8a27ef679b9f903e47f8b3576ee01c816b6f50"
+          }
+        ],
+        "local": "Native Python operations and/or selected local library/CLI calls in the execution worker. Dependency-internal behavior and runtime compatibility remain unverified.",
+        "api": "No distinct remote scientific-computation implementation identified in the inspected wrapper; delegated library internals are not thereby proved offline.",
+        "hpc": "No tool-specific HPC deployment is established. Default Parsl uses LocalProvider. URLs, source availability and transport adapters do not prove HPC execution.",
+        "executed_for_inventory": false,
+        "optional_natural_language_api_query_builder": false,
+        "network_signal_scope_note": "literal_endpoint_and_download_urls and broad same-class dependency closures are source-discovery evidence only; they do not determine algorithm placement."
+      },
+      "missing_or_unverified_prerequisites": {
+        "imports_not_found_in_reference_environment": [
+          "FlowCytometryTools"
+        ],
+        "import_modules_not_found_as_static_paths": [
+          "FlowCytometryTools"
+        ],
+        "unresolved_global_names": [],
+        "native_commands": "See exact command_invocations and native_assignments; present wrappers are not proof of executable versions or working command syntax.",
+        "input_data_models_databases": "Caller must supply all required schema arguments and input assets/checkpoints/databases named by native paths and docstrings; existence was not assumed from descriptions.",
+        "remote_service": "See execution_routes.algorithm_execution, input_acquisition and model_and_software_acquisition separately; no scientific service or acquisition was exercised, and delegated library behavior remains qualified."
+      }
+    }
+  }
+]

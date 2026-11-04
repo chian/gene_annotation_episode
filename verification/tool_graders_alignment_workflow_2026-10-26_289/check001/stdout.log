@@ -1,0 +1,493 @@
+.....FFF..                                                               [100%]
+=================================== FAILURES ===================================
+__ test_blast_hsp_is_acquired_received_then_selected_and_returned[ordinary-2] __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_workflow_2026-10-26_289/check001/temporary/test_blast_hsp_is_acquired_rec0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7189a276bb00>
+shape = 'ordinary', offset = 2
+
+    @pytest.mark.parametrize('shape,offset', [('ordinary', 2), ('empty', 8), ('missing', 0)])
+    def test_blast_hsp_is_acquired_received_then_selected_and_returned(tmp_path, monkeypatch, shape, offset):
+        class Responses(Client):
+            fetched = None
+            def blast(self, action, **arguments):
+                response = super().blast(action, **arguments)
+                if action == 'fetch' and shape != 'missing':
+                    body = json.loads(response.content)
+                    hsp = body['BlastOutput2'][0]['report']['results']['search']['hits'][0]['hsps'][0]
+                    hsp.update(qseq='MACDEFGH', hseq='MACAEFGH', midline='||| ||||', identity=7)
+                    response = replace(response, content=json.dumps(body).encode())
+                if action == 'fetch':
+                    self.fetched = response.content
+                return response
+    
+        client = Responses()
+        resources = {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}
+        factory = ExecutionServiceFactory(resources, {}, 3, 2, .5)
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+            scope = store.validate_scope({'subject_refs': [target]})
+            tools = ToolRegistry(store, clients=client)
+            directory = tmp_path / 'run'
+            descriptor, library = _descriptor(directory, tools)
+            request = assignment('blast', 'ncbi_blast', {'subject_ref': target, 'program': 'blastp', 'database': 'swissprot'})
+            launch = launch_assignment({'blast': request})
+            handoff_form = form('execution_handoff_refs')
+            result_form = obj({'complete': {'type': 'boolean', 'x-source': 'execution_completed'},
+                'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}})
+    
+            class Choices:
+                parent_calls = 0
+                calls = []
+                hsp = None
+                child_id = None
+                requested_schema = None
+                async def complete(self, episode_id, role, instructions, current, output_schema):
+                    assert not current.get('feedback'), current.get('feedback')
+                    self.calls.append((episode_id, deepcopy(current)))
+                    execution = current.get('execution_assignment', {})
+                    if execution.get('version') == 'execution_launch_assignment_v1':
+                        return child('launch_api', request, scope, handoff_form)
+                    if execution.get('version') == 'api_service_assignment_v1':
+                        return selected('api.blast.submit')
+                    if execution.get('version') == 'execution_results_assignment_v1':
+                        return selected('api.blast.fetch')
+                    if 'scientific_process' in current:
+                        self.child_id = episode_id
+                        assert self.hsp in set(workflow.receipts.known(episode_id))
+                        return selected('result.blast.hsp', {'observation_ref': self.hsp,
+                            'column_offset': offset, 'column_limit': 4})
+                    self.parent_calls += 1
+                    if self.parent_calls == 1:
+                        assert store.count('observation') == 0
+                        return child('launch', launch, scope, handoff_form)
+                    if self.parent_calls == 2:
+                        handoff, = current['child_reports'][-1]['references']
+                        return child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': {}}, scope, result_form)
+                    assert self.parent_calls == 3
+                    match, = current['child_reports'][-1]['matches']
+                    self.hsp = match['hsp_ref']
+                    assert self.hsp in set(workflow.receipts.known(episode_id))
+                    self.requested_schema = _site_form(BLAST, alignment_ref=self.hsp,
+                        window={'column_offset': offset, 'column_limit': 4})
+                    return _commission(library, scope, ['result.blast.hsp'], [target, self.hsp], self.requested_schema)
+                async def release(self, episode_id):
+                    pass
+    
+            decisions = Choices()
+>           workflow = Workflow(store, tools, decisions, directory, 'alignment-site-api-' + shape,
+                _controller({'annotation': 3, 'scientific_process': 1}), zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_service_factory=factory,
+                episode_service_binding=factory.as_record(), episode_service_inputs='actual_tool_registry_v1',
+                annotation_child_roles=('launch', 'results', 'scientific_process'),
+                episode_record_receipts=True, initial_known_record_refs=[])
+
+../../../tests/test_alignment_site_workflow.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.Workflow object at 0x7189a2768440>
+store = <gene_annotation_episode.state.Store object at 0x7189a276af60>
+tools = <gene_annotation_episode.tools.ToolRegistry object at 0x7189a3734a10>
+provider = <test_alignment_site_workflow.test_blast_hsp_is_acquired_received_then_selected_and_returned.<locals>.Choices object at 0x7189c4dca840>
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_workflow_2026-10-26_289/check001/temporary/test_blast_hsp_is_acquired_rec0/run')
+run_id = 'alignment-site-api-ordinary'
+controller_factory = <function _controller.<locals>.factory at 0x7189a303e520>
+project_credit = <function zero_fixture_credit at 0x7189c6fdbc40>
+credit_binding = None, restoration_settings = None
+execution_expectations = None, job_episodes = None, controller_binding = None
+project_child_credit = None, child_credit_binding = None
+resource_estimator = None, project_annotation_score = None
+annotation_score_binding = None, initial_known_record_refs = []
+native_timing_information = None, episode_binding_factories = None
+episode_binding_descriptors = [{'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process', 'implementation_sha256': '25cfd323c..._sha256': '0c4574a4bcb376f1de69fa5c48ea4b38b2c01ef6d5fc18f75651f2d84c867bf1'}, 'child_roles': ['scientific_process']}}]
+role_credit_bindings = None, job_progress_provider = None
+execution_binding = None
+episode_service_factory = ExecutionServiceFactory(resources=mappingproxy({'blast': mappingproxy({'kind': 'api', 'service': 'ncbi_blast'})}), ini..., monitoring_information_unit=0.5, log_window_bytes=8192, log_roles=('stdout', 'stderr'), monitor_outcome_page_size=20)
+episode_service_binding = {'version': 'execution_service_factory_v1', 'resources': {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}, 'initial_information': {}, 'handoff_unit': 3, ...}
+progress_receipt_order = 'received_progress_order_v1'
+episode_record_receipts = True, wait_inputs_version = 'wait_inputs_binding_v2'
+completed_action_inputs_version = 'completed_action_inputs_binding_v1'
+native_job_events = None, episode_service_inputs = 'actual_tool_registry_v1'
+annotation_child_roles = ('launch', 'results', 'scientific_process')
+root_role = 'annotation', decision_protocol = None
+root_action_boundary = 'root_episode_commissioning_v1'
+
+    def __init__(self, store, tools, provider, directory, run_id, controller_factory, project_credit,
+                 credit_binding=None, restoration_settings=None, execution_expectations=None,
+                 job_episodes=None, controller_binding=None, project_child_credit=None,
+                 child_credit_binding=None, resource_estimator=None,
+                 project_annotation_score=None, annotation_score_binding=None,
+                 initial_known_record_refs=None, native_timing_information=None,
+                 episode_binding_factories=None, episode_binding_descriptors=None,
+                 role_credit_bindings=None, job_progress_provider=None, execution_binding=None,
+                 episode_service_factory=None, episode_service_binding=None,
+                 progress_receipt_order='received_progress_order_v1',
+                 episode_record_receipts=False, wait_inputs_version='wait_inputs_binding_v2',
+                 completed_action_inputs_version='completed_action_inputs_binding_v1',
+                 native_job_events=None, episode_service_inputs=None,
+                 annotation_child_roles=None, root_role='annotation', decision_protocol=None,
+                 root_action_boundary=ROOT_BOUNDARY_VERSION):
+        self.root_role = root_role
+        if root_action_boundary not in (None, ROOT_BOUNDARY_VERSION):
+            raise ValueError('unsupported_root_action_boundary')
+        self.root_action_boundary = root_action_boundary
+        self.decision_protocol = _decision_protocol(decision_protocol)
+        self.annotation_child_roles = _annotation_child_roles(annotation_child_roles)
+        native_job_events = native_job_event_configuration(native_job_events)
+        if native_job_events is not None:
+            if job_episodes is None:
+                raise ValueError('native_job_events_requires_job_binding')
+            statistics = getattr(job_episodes, 'statistics', None)
+            if statistics is not None and statistics.resource_id != native_job_events['resource_id']:
+                raise ValueError('native_event_resource_binding_mismatch')
+        self.native_job_events = native_job_events
+        if type(episode_record_receipts) is not bool:
+            raise TypeError('episode_record_receipts_must_be_bool')
+        if episode_record_receipts and (not isinstance(initial_known_record_refs, (list, tuple))
+                or any(not isinstance(ref, str) or not ref for ref in initial_known_record_refs)):
+            raise ValueError('receipt_binding_requires_explicit_initial_known_record_refs')
+        self.episode_record_receipts = episode_record_receipts
+        if wait_inputs_version not in {'wait_inputs_binding_v1', 'wait_inputs_binding_v2'}:
+            raise ValueError('unsupported_wait_inputs_binding')
+        self.wait_inputs_version = wait_inputs_version
+        if completed_action_inputs_version not in {None, 'completed_action_inputs_binding_v1'}:
+            raise ValueError('unsupported_completed_action_inputs_binding')
+        self.completed_action_inputs_version = completed_action_inputs_version
+        self.episode_application_services_binding = service_binding(
+            episode_service_factory, episode_service_binding, inputs=episode_service_inputs)
+        if self.episode_application_services_binding is not None and any(value is not None for value in
+                (episode_binding_factories, episode_binding_descriptors, role_credit_bindings, job_progress_provider)):
+>           raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
+E           ValueError: episode_service_factory_and_direct_services_are_exclusive
+
+../../../gene_annotation_episode/runtime.py:1493: ValueError
+___ test_blast_hsp_is_acquired_received_then_selected_and_returned[empty-8] ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_workflow_2026-10-26_289/check001/temporary/test_blast_hsp_is_acquired_rec1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7189a26c19d0>
+shape = 'empty', offset = 8
+
+    @pytest.mark.parametrize('shape,offset', [('ordinary', 2), ('empty', 8), ('missing', 0)])
+    def test_blast_hsp_is_acquired_received_then_selected_and_returned(tmp_path, monkeypatch, shape, offset):
+        class Responses(Client):
+            fetched = None
+            def blast(self, action, **arguments):
+                response = super().blast(action, **arguments)
+                if action == 'fetch' and shape != 'missing':
+                    body = json.loads(response.content)
+                    hsp = body['BlastOutput2'][0]['report']['results']['search']['hits'][0]['hsps'][0]
+                    hsp.update(qseq='MACDEFGH', hseq='MACAEFGH', midline='||| ||||', identity=7)
+                    response = replace(response, content=json.dumps(body).encode())
+                if action == 'fetch':
+                    self.fetched = response.content
+                return response
+    
+        client = Responses()
+        resources = {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}
+        factory = ExecutionServiceFactory(resources, {}, 3, 2, .5)
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+            scope = store.validate_scope({'subject_refs': [target]})
+            tools = ToolRegistry(store, clients=client)
+            directory = tmp_path / 'run'
+            descriptor, library = _descriptor(directory, tools)
+            request = assignment('blast', 'ncbi_blast', {'subject_ref': target, 'program': 'blastp', 'database': 'swissprot'})
+            launch = launch_assignment({'blast': request})
+            handoff_form = form('execution_handoff_refs')
+            result_form = obj({'complete': {'type': 'boolean', 'x-source': 'execution_completed'},
+                'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}})
+    
+            class Choices:
+                parent_calls = 0
+                calls = []
+                hsp = None
+                child_id = None
+                requested_schema = None
+                async def complete(self, episode_id, role, instructions, current, output_schema):
+                    assert not current.get('feedback'), current.get('feedback')
+                    self.calls.append((episode_id, deepcopy(current)))
+                    execution = current.get('execution_assignment', {})
+                    if execution.get('version') == 'execution_launch_assignment_v1':
+                        return child('launch_api', request, scope, handoff_form)
+                    if execution.get('version') == 'api_service_assignment_v1':
+                        return selected('api.blast.submit')
+                    if execution.get('version') == 'execution_results_assignment_v1':
+                        return selected('api.blast.fetch')
+                    if 'scientific_process' in current:
+                        self.child_id = episode_id
+                        assert self.hsp in set(workflow.receipts.known(episode_id))
+                        return selected('result.blast.hsp', {'observation_ref': self.hsp,
+                            'column_offset': offset, 'column_limit': 4})
+                    self.parent_calls += 1
+                    if self.parent_calls == 1:
+                        assert store.count('observation') == 0
+                        return child('launch', launch, scope, handoff_form)
+                    if self.parent_calls == 2:
+                        handoff, = current['child_reports'][-1]['references']
+                        return child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': {}}, scope, result_form)
+                    assert self.parent_calls == 3
+                    match, = current['child_reports'][-1]['matches']
+                    self.hsp = match['hsp_ref']
+                    assert self.hsp in set(workflow.receipts.known(episode_id))
+                    self.requested_schema = _site_form(BLAST, alignment_ref=self.hsp,
+                        window={'column_offset': offset, 'column_limit': 4})
+                    return _commission(library, scope, ['result.blast.hsp'], [target, self.hsp], self.requested_schema)
+                async def release(self, episode_id):
+                    pass
+    
+            decisions = Choices()
+>           workflow = Workflow(store, tools, decisions, directory, 'alignment-site-api-' + shape,
+                _controller({'annotation': 3, 'scientific_process': 1}), zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_service_factory=factory,
+                episode_service_binding=factory.as_record(), episode_service_inputs='actual_tool_registry_v1',
+                annotation_child_roles=('launch', 'results', 'scientific_process'),
+                episode_record_receipts=True, initial_known_record_refs=[])
+
+../../../tests/test_alignment_site_workflow.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.Workflow object at 0x7189a1e10440>
+store = <gene_annotation_episode.state.Store object at 0x7189a26c07d0>
+tools = <gene_annotation_episode.tools.ToolRegistry object at 0x7189a26c3fb0>
+provider = <test_alignment_site_workflow.test_blast_hsp_is_acquired_received_then_selected_and_returned.<locals>.Choices object at 0x7189a26fbef0>
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_workflow_2026-10-26_289/check001/temporary/test_blast_hsp_is_acquired_rec1/run')
+run_id = 'alignment-site-api-empty'
+controller_factory = <function _controller.<locals>.factory at 0x7189a2705bc0>
+project_credit = <function zero_fixture_credit at 0x7189c6fdbc40>
+credit_binding = None, restoration_settings = None
+execution_expectations = None, job_episodes = None, controller_binding = None
+project_child_credit = None, child_credit_binding = None
+resource_estimator = None, project_annotation_score = None
+annotation_score_binding = None, initial_known_record_refs = []
+native_timing_information = None, episode_binding_factories = None
+episode_binding_descriptors = [{'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process', 'implementation_sha256': '25cfd323c..._sha256': '9095cd937cfe808f4c33248cc18904acdac38fae24f0340afb1c2e1477ccb238'}, 'child_roles': ['scientific_process']}}]
+role_credit_bindings = None, job_progress_provider = None
+execution_binding = None
+episode_service_factory = ExecutionServiceFactory(resources=mappingproxy({'blast': mappingproxy({'kind': 'api', 'service': 'ncbi_blast'})}), ini..., monitoring_information_unit=0.5, log_window_bytes=8192, log_roles=('stdout', 'stderr'), monitor_outcome_page_size=20)
+episode_service_binding = {'version': 'execution_service_factory_v1', 'resources': {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}, 'initial_information': {}, 'handoff_unit': 3, ...}
+progress_receipt_order = 'received_progress_order_v1'
+episode_record_receipts = True, wait_inputs_version = 'wait_inputs_binding_v2'
+completed_action_inputs_version = 'completed_action_inputs_binding_v1'
+native_job_events = None, episode_service_inputs = 'actual_tool_registry_v1'
+annotation_child_roles = ('launch', 'results', 'scientific_process')
+root_role = 'annotation', decision_protocol = None
+root_action_boundary = 'root_episode_commissioning_v1'
+
+    def __init__(self, store, tools, provider, directory, run_id, controller_factory, project_credit,
+                 credit_binding=None, restoration_settings=None, execution_expectations=None,
+                 job_episodes=None, controller_binding=None, project_child_credit=None,
+                 child_credit_binding=None, resource_estimator=None,
+                 project_annotation_score=None, annotation_score_binding=None,
+                 initial_known_record_refs=None, native_timing_information=None,
+                 episode_binding_factories=None, episode_binding_descriptors=None,
+                 role_credit_bindings=None, job_progress_provider=None, execution_binding=None,
+                 episode_service_factory=None, episode_service_binding=None,
+                 progress_receipt_order='received_progress_order_v1',
+                 episode_record_receipts=False, wait_inputs_version='wait_inputs_binding_v2',
+                 completed_action_inputs_version='completed_action_inputs_binding_v1',
+                 native_job_events=None, episode_service_inputs=None,
+                 annotation_child_roles=None, root_role='annotation', decision_protocol=None,
+                 root_action_boundary=ROOT_BOUNDARY_VERSION):
+        self.root_role = root_role
+        if root_action_boundary not in (None, ROOT_BOUNDARY_VERSION):
+            raise ValueError('unsupported_root_action_boundary')
+        self.root_action_boundary = root_action_boundary
+        self.decision_protocol = _decision_protocol(decision_protocol)
+        self.annotation_child_roles = _annotation_child_roles(annotation_child_roles)
+        native_job_events = native_job_event_configuration(native_job_events)
+        if native_job_events is not None:
+            if job_episodes is None:
+                raise ValueError('native_job_events_requires_job_binding')
+            statistics = getattr(job_episodes, 'statistics', None)
+            if statistics is not None and statistics.resource_id != native_job_events['resource_id']:
+                raise ValueError('native_event_resource_binding_mismatch')
+        self.native_job_events = native_job_events
+        if type(episode_record_receipts) is not bool:
+            raise TypeError('episode_record_receipts_must_be_bool')
+        if episode_record_receipts and (not isinstance(initial_known_record_refs, (list, tuple))
+                or any(not isinstance(ref, str) or not ref for ref in initial_known_record_refs)):
+            raise ValueError('receipt_binding_requires_explicit_initial_known_record_refs')
+        self.episode_record_receipts = episode_record_receipts
+        if wait_inputs_version not in {'wait_inputs_binding_v1', 'wait_inputs_binding_v2'}:
+            raise ValueError('unsupported_wait_inputs_binding')
+        self.wait_inputs_version = wait_inputs_version
+        if completed_action_inputs_version not in {None, 'completed_action_inputs_binding_v1'}:
+            raise ValueError('unsupported_completed_action_inputs_binding')
+        self.completed_action_inputs_version = completed_action_inputs_version
+        self.episode_application_services_binding = service_binding(
+            episode_service_factory, episode_service_binding, inputs=episode_service_inputs)
+        if self.episode_application_services_binding is not None and any(value is not None for value in
+                (episode_binding_factories, episode_binding_descriptors, role_credit_bindings, job_progress_provider)):
+>           raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
+E           ValueError: episode_service_factory_and_direct_services_are_exclusive
+
+../../../gene_annotation_episode/runtime.py:1493: ValueError
+__ test_blast_hsp_is_acquired_received_then_selected_and_returned[missing-0] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_workflow_2026-10-26_289/check001/temporary/test_blast_hsp_is_acquired_rec2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7189a1e13e90>
+shape = 'missing', offset = 0
+
+    @pytest.mark.parametrize('shape,offset', [('ordinary', 2), ('empty', 8), ('missing', 0)])
+    def test_blast_hsp_is_acquired_received_then_selected_and_returned(tmp_path, monkeypatch, shape, offset):
+        class Responses(Client):
+            fetched = None
+            def blast(self, action, **arguments):
+                response = super().blast(action, **arguments)
+                if action == 'fetch' and shape != 'missing':
+                    body = json.loads(response.content)
+                    hsp = body['BlastOutput2'][0]['report']['results']['search']['hits'][0]['hsps'][0]
+                    hsp.update(qseq='MACDEFGH', hseq='MACAEFGH', midline='||| ||||', identity=7)
+                    response = replace(response, content=json.dumps(body).encode())
+                if action == 'fetch':
+                    self.fetched = response.content
+                return response
+    
+        client = Responses()
+        resources = {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}
+        factory = ExecutionServiceFactory(resources, {}, 3, 2, .5)
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
+            scope = store.validate_scope({'subject_refs': [target]})
+            tools = ToolRegistry(store, clients=client)
+            directory = tmp_path / 'run'
+            descriptor, library = _descriptor(directory, tools)
+            request = assignment('blast', 'ncbi_blast', {'subject_ref': target, 'program': 'blastp', 'database': 'swissprot'})
+            launch = launch_assignment({'blast': request})
+            handoff_form = form('execution_handoff_refs')
+            result_form = obj({'complete': {'type': 'boolean', 'x-source': 'execution_completed'},
+                'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}})
+    
+            class Choices:
+                parent_calls = 0
+                calls = []
+                hsp = None
+                child_id = None
+                requested_schema = None
+                async def complete(self, episode_id, role, instructions, current, output_schema):
+                    assert not current.get('feedback'), current.get('feedback')
+                    self.calls.append((episode_id, deepcopy(current)))
+                    execution = current.get('execution_assignment', {})
+                    if execution.get('version') == 'execution_launch_assignment_v1':
+                        return child('launch_api', request, scope, handoff_form)
+                    if execution.get('version') == 'api_service_assignment_v1':
+                        return selected('api.blast.submit')
+                    if execution.get('version') == 'execution_results_assignment_v1':
+                        return selected('api.blast.fetch')
+                    if 'scientific_process' in current:
+                        self.child_id = episode_id
+                        assert self.hsp in set(workflow.receipts.known(episode_id))
+                        return selected('result.blast.hsp', {'observation_ref': self.hsp,
+                            'column_offset': offset, 'column_limit': 4})
+                    self.parent_calls += 1
+                    if self.parent_calls == 1:
+                        assert store.count('observation') == 0
+                        return child('launch', launch, scope, handoff_form)
+                    if self.parent_calls == 2:
+                        handoff, = current['child_reports'][-1]['references']
+                        return child('results', {'version': 'execution_results_assignment_v1',
+                            'handoff_ref': handoff, 'selector': {}}, scope, result_form)
+                    assert self.parent_calls == 3
+                    match, = current['child_reports'][-1]['matches']
+                    self.hsp = match['hsp_ref']
+                    assert self.hsp in set(workflow.receipts.known(episode_id))
+                    self.requested_schema = _site_form(BLAST, alignment_ref=self.hsp,
+                        window={'column_offset': offset, 'column_limit': 4})
+                    return _commission(library, scope, ['result.blast.hsp'], [target, self.hsp], self.requested_schema)
+                async def release(self, episode_id):
+                    pass
+    
+            decisions = Choices()
+>           workflow = Workflow(store, tools, decisions, directory, 'alignment-site-api-' + shape,
+                _controller({'annotation': 3, 'scientific_process': 1}), zero_fixture_credit,
+                episode_binding_descriptors=[descriptor], episode_service_factory=factory,
+                episode_service_binding=factory.as_record(), episode_service_inputs='actual_tool_registry_v1',
+                annotation_child_roles=('launch', 'results', 'scientific_process'),
+                episode_record_receipts=True, initial_known_record_refs=[])
+
+../../../tests/test_alignment_site_workflow.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.Workflow object at 0x7189a32847d0>
+store = <gene_annotation_episode.state.Store object at 0x7189a1e11280>
+tools = <gene_annotation_episode.tools.ToolRegistry object at 0x7189e96edac0>
+provider = <test_alignment_site_workflow.test_blast_hsp_is_acquired_received_then_selected_and_returned.<locals>.Choices object at 0x7189a3c014c0>
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_workflow_2026-10-26_289/check001/temporary/test_blast_hsp_is_acquired_rec2/run')
+run_id = 'alignment-site-api-missing'
+controller_factory = <function _controller.<locals>.factory at 0x7189a278e340>
+project_credit = <function zero_fixture_credit at 0x7189c6fdbc40>
+credit_binding = None, restoration_settings = None
+execution_expectations = None, job_episodes = None, controller_binding = None
+project_child_credit = None, child_credit_binding = None
+resource_estimator = None, project_annotation_score = None
+annotation_score_binding = None, initial_known_record_refs = []
+native_timing_information = None, episode_binding_factories = None
+episode_binding_descriptors = [{'version': 'scientific_process_episodes_v8', 'binding_id': 'scientific_process', 'implementation_sha256': '25cfd323c..._sha256': '1583a5351855733bc1d98c5df07d473f7cfae63447b4189efa5d6b01fc14a717'}, 'child_roles': ['scientific_process']}}]
+role_credit_bindings = None, job_progress_provider = None
+execution_binding = None
+episode_service_factory = ExecutionServiceFactory(resources=mappingproxy({'blast': mappingproxy({'kind': 'api', 'service': 'ncbi_blast'})}), ini..., monitoring_information_unit=0.5, log_window_bytes=8192, log_roles=('stdout', 'stderr'), monitor_outcome_page_size=20)
+episode_service_binding = {'version': 'execution_service_factory_v1', 'resources': {'blast': {'kind': 'api', 'service': 'ncbi_blast'}}, 'initial_information': {}, 'handoff_unit': 3, ...}
+progress_receipt_order = 'received_progress_order_v1'
+episode_record_receipts = True, wait_inputs_version = 'wait_inputs_binding_v2'
+completed_action_inputs_version = 'completed_action_inputs_binding_v1'
+native_job_events = None, episode_service_inputs = 'actual_tool_registry_v1'
+annotation_child_roles = ('launch', 'results', 'scientific_process')
+root_role = 'annotation', decision_protocol = None
+root_action_boundary = 'root_episode_commissioning_v1'
+
+    def __init__(self, store, tools, provider, directory, run_id, controller_factory, project_credit,
+                 credit_binding=None, restoration_settings=None, execution_expectations=None,
+                 job_episodes=None, controller_binding=None, project_child_credit=None,
+                 child_credit_binding=None, resource_estimator=None,
+                 project_annotation_score=None, annotation_score_binding=None,
+                 initial_known_record_refs=None, native_timing_information=None,
+                 episode_binding_factories=None, episode_binding_descriptors=None,
+                 role_credit_bindings=None, job_progress_provider=None, execution_binding=None,
+                 episode_service_factory=None, episode_service_binding=None,
+                 progress_receipt_order='received_progress_order_v1',
+                 episode_record_receipts=False, wait_inputs_version='wait_inputs_binding_v2',
+                 completed_action_inputs_version='completed_action_inputs_binding_v1',
+                 native_job_events=None, episode_service_inputs=None,
+                 annotation_child_roles=None, root_role='annotation', decision_protocol=None,
+                 root_action_boundary=ROOT_BOUNDARY_VERSION):
+        self.root_role = root_role
+        if root_action_boundary not in (None, ROOT_BOUNDARY_VERSION):
+            raise ValueError('unsupported_root_action_boundary')
+        self.root_action_boundary = root_action_boundary
+        self.decision_protocol = _decision_protocol(decision_protocol)
+        self.annotation_child_roles = _annotation_child_roles(annotation_child_roles)
+        native_job_events = native_job_event_configuration(native_job_events)
+        if native_job_events is not None:
+            if job_episodes is None:
+                raise ValueError('native_job_events_requires_job_binding')
+            statistics = getattr(job_episodes, 'statistics', None)
+            if statistics is not None and statistics.resource_id != native_job_events['resource_id']:
+                raise ValueError('native_event_resource_binding_mismatch')
+        self.native_job_events = native_job_events
+        if type(episode_record_receipts) is not bool:
+            raise TypeError('episode_record_receipts_must_be_bool')
+        if episode_record_receipts and (not isinstance(initial_known_record_refs, (list, tuple))
+                or any(not isinstance(ref, str) or not ref for ref in initial_known_record_refs)):
+            raise ValueError('receipt_binding_requires_explicit_initial_known_record_refs')
+        self.episode_record_receipts = episode_record_receipts
+        if wait_inputs_version not in {'wait_inputs_binding_v1', 'wait_inputs_binding_v2'}:
+            raise ValueError('unsupported_wait_inputs_binding')
+        self.wait_inputs_version = wait_inputs_version
+        if completed_action_inputs_version not in {None, 'completed_action_inputs_binding_v1'}:
+            raise ValueError('unsupported_completed_action_inputs_binding')
+        self.completed_action_inputs_version = completed_action_inputs_version
+        self.episode_application_services_binding = service_binding(
+            episode_service_factory, episode_service_binding, inputs=episode_service_inputs)
+        if self.episode_application_services_binding is not None and any(value is not None for value in
+                (episode_binding_factories, episode_binding_descriptors, role_credit_bindings, job_progress_provider)):
+>           raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
+E           ValueError: episode_service_factory_and_direct_services_are_exclusive
+
+../../../gene_annotation_episode/runtime.py:1493: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_alignment_site_workflow.py::test_blast_hsp_is_acquired_received_then_selected_and_returned[ordinary-2]
+FAILED ../../../tests/test_alignment_site_workflow.py::test_blast_hsp_is_acquired_received_then_selected_and_returned[empty-8]
+FAILED ../../../tests/test_alignment_site_workflow.py::test_blast_hsp_is_acquired_received_then_selected_and_returned[missing-0]
+3 failed, 7 passed in 88.98s (0:01:28)

@@ -1,0 +1,102 @@
+{
+  "status": "existing_pure_output_not_selected_integration",
+  "source": "verification/a105_measurement_comparison_components_258/SYNTHETIC_COMMON_SHEET_ACTUAL_010.json",
+  "cells": [
+    {
+      "component": "combined_estimate",
+      "value": 20.545454545454547,
+      "exact_value": {
+        "numerator": "226",
+        "denominator": "11"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "umol/min/mg",
+      "relation": "point",
+      "approximate": false,
+      "interpretation": "known_covariance_common_estimate",
+      "formula": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+      "meaning_code": "combined_estimate",
+      "origin": "derived",
+      "input_origins": [
+        "synthetic"
+      ],
+      "operand_roles": [
+        "left",
+        "right"
+      ],
+      "operand_keys": [
+        "literature_measurement_ae753b8f1a2d4e9723b92fdb",
+        "literature_measurement_ba60ae72eb8c785f98d6a1e3"
+      ],
+      "model_keys": [
+        "measurement_comparison_conversion_2d968fe5c2786daae80e7590",
+        "measurement_comparison_common_model_41583ebbc617049e5e4558b8"
+      ],
+      "contribution_key": "measurement_comparison_contribution_914e4935d114558c389c9264",
+      "uncertainty": {
+        "covariance_source_refs": [
+          "source_661622e55078f84532ae83a53a9147fbd5492df5bb8c30beceb2bcafc0742890"
+        ],
+        "variance_status": "known",
+        "scope": "selected_estimator_covariance",
+        "sampling_distribution": "not_assumed"
+      },
+      "reasons": {
+        "source": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      }
+    },
+    {
+      "component": "combined_variance",
+      "value": 3.1818181818181817,
+      "exact_value": {
+        "numerator": "35",
+        "denominator": "11"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "(umol/min/mg)^2",
+      "relation": "point",
+      "approximate": false,
+      "interpretation": "known_covariance_common_estimate",
+      "formula": "if(V_D>0,(V_L*V_R-C_LR^2)/V_D,if(V_D==0&&D==0,V_L,unavailable))",
+      "meaning_code": "combined_variance",
+      "origin": "derived",
+      "input_origins": [
+        "synthetic"
+      ],
+      "operand_roles": [
+        "left",
+        "right"
+      ],
+      "operand_keys": [
+        "literature_measurement_ae753b8f1a2d4e9723b92fdb",
+        "literature_measurement_ba60ae72eb8c785f98d6a1e3"
+      ],
+      "model_keys": [
+        "measurement_comparison_conversion_2d968fe5c2786daae80e7590",
+        "measurement_comparison_common_model_41583ebbc617049e5e4558b8"
+      ],
+      "contribution_key": "measurement_comparison_contribution_914e4935d114558c389c9264",
+      "uncertainty": {
+        "covariance_source_refs": [
+          "source_661622e55078f84532ae83a53a9147fbd5492df5bb8c30beceb2bcafc0742890"
+        ],
+        "variance_status": "known",
+        "scope": "selected_estimator_covariance",
+        "sampling_distribution": "not_assumed"
+      },
+      "reasons": {
+        "source": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      }
+    }
+  ]
+}

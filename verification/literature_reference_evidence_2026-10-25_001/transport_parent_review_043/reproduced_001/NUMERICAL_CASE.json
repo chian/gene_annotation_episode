@@ -1,0 +1,531 @@
+{
+  "version": "owner043_transport_research_v1",
+  "primary_doi": "10.1128/JB.00599-17",
+  "synthetic_scientific_measurements": false,
+  "cells": {
+    "whole_cell_reported_rate_fold": {
+      "value": 6,
+      "unit": "dimensionless",
+      "formula": "reported fold",
+      "origin": "reported",
+      "evaluates": "BtsT-expression arm / empty-vector arm uptake-rate ratio",
+      "source": "Results before Fig3",
+      "limits": "Rounded narrative fold; no native rates/covariance"
+    },
+    "whole_cell_increment_fraction": {
+      "value": 0.8333333333333334,
+      "unit": "dimensionless",
+      "formula": "1-1/reported_rate_fold",
+      "origin": "derived",
+      "evaluates": "Increment over comparator as fraction of observed BtsT-arm rate",
+      "source": "Results before Fig3",
+      "limits": "Conditional comparable-background diagnostic, not a molecular attribution fraction or confidence"
+    },
+    "plateau_reported_amount": {
+      "value": 0.5,
+      "unit": "nmol/mg_total_cell_protein",
+      "formula": "reported prose amount",
+      "origin": "reported",
+      "evaluates": "Narrative approximate accumulated amount",
+      "source": "Results before Fig3",
+      "limits": "Graph plateau nearer .6; not rate"
+    },
+    "plateau_comparator_amount": {
+      "value": 0.125,
+      "unit": "nmol/mg_total_cell_protein",
+      "formula": "0.5/4",
+      "origin": "derived",
+      "evaluates": "Comparator accumulation inferred from reported approximate plateau and fourfold relation",
+      "source": "Results before Fig3",
+      "limits": "Not directly extracted comparator observation; not initial flux"
+    },
+    "plateau_increment": {
+      "value": 0.375,
+      "unit": "nmol/mg_total_cell_protein",
+      "formula": "0.5-0.5/4",
+      "origin": "derived",
+      "evaluates": "Difference of reported approximate plateau amounts",
+      "source": "Results before Fig3",
+      "limits": "Shares same observations as fourfold ratio"
+    },
+    "plateau_increment_fraction": {
+      "value": 0.75,
+      "unit": "dimensionless",
+      "formula": "1-1/4",
+      "origin": "derived",
+      "evaluates": "Comparator-associated fraction of reported plateau difference",
+      "source": "Results before Fig3",
+      "limits": "Not rate contribution or molecular attribution"
+    },
+    "cold_pyruvate_remaining_fraction": {
+      "value": 0.075,
+      "unit": "dimensionless",
+      "formula": "0.06/0.80",
+      "origin": "derived",
+      "evaluates": "Remaining tracer uptake fraction relative to shared control",
+      "source": "Fig4B manual visual heights",
+      "limits": "Graph-derived numerator and denominator, no background correction; not other-substrate transport"
+    },
+    "cold_pyruvate_reduction_fraction": {
+      "value": 0.925,
+      "unit": "dimensionless",
+      "formula": "1-0.06/0.80",
+      "origin": "derived",
+      "evaluates": "Reduction in tracer uptake under compound challenge",
+      "source": "Fig4B manual visual heights",
+      "limits": "Not Ki/Kd or biological confidence"
+    },
+    "cold_pyruvate_reduction_reading_interval": {
+      "value": null,
+      "unit": "dimensionless",
+      "interval": [
+        0.8974358974358975,
+        0.9512195121951219
+      ],
+      "origin": "derived",
+      "bound_kind": "visual_reading_resolution",
+      "not_sampling_uncertainty": true,
+      "formula": "[1-Iupper/Clower,1-Ilower/Cupper]",
+      "source": "Fig4B visual reading allowance \u00b10.02 nmol/mg/min",
+      "shared_control": "fig4B_control"
+    },
+    "Br_pyruvate_remaining_fraction": {
+      "value": 0.049999999999999996,
+      "unit": "dimensionless",
+      "formula": "0.04/0.80",
+      "origin": "derived",
+      "evaluates": "Remaining tracer uptake fraction relative to shared control",
+      "source": "Fig4B manual visual heights",
+      "limits": "Graph-derived numerator and denominator, no background correction; not other-substrate transport"
+    },
+    "Br_pyruvate_reduction_fraction": {
+      "value": 0.95,
+      "unit": "dimensionless",
+      "formula": "1-0.04/0.80",
+      "origin": "derived",
+      "evaluates": "Reduction in tracer uptake under compound challenge",
+      "source": "Fig4B manual visual heights",
+      "limits": "Not Ki/Kd or biological confidence"
+    },
+    "Br_pyruvate_reduction_reading_interval": {
+      "value": null,
+      "unit": "dimensionless",
+      "interval": [
+        0.9230769230769231,
+        0.975609756097561
+      ],
+      "origin": "derived",
+      "bound_kind": "visual_reading_resolution",
+      "not_sampling_uncertainty": true,
+      "formula": "[1-Iupper/Clower,1-Ilower/Cupper]",
+      "source": "Fig4B visual reading allowance \u00b10.02 nmol/mg/min",
+      "shared_control": "fig4B_control"
+    },
+    "relative_km_printed_spread": {
+      "value": 0.3878787878787879,
+      "unit": "dimensionless",
+      "formula": "6.4/16.5",
+      "origin": "derived",
+      "evaluates": "Relative magnitude of printed Km spread",
+      "source": "Results characterization final sentence",
+      "limits": "Unspecified parameter error; not SD/SEM/variance"
+    },
+    "gradient_reported_both_rate": {
+      "value": 27.7,
+      "unit": "nmol/mg_reconstituted_protein/min",
+      "formula": "reported27.7; rate dimension from Fig5B",
+      "origin": "reported",
+      "evaluates": "Initial uptake-rate bar under both gradients",
+      "source": "Results gradient section; Fig5B",
+      "limits": "Prose omits time denominator; figure supplies/min"
+    },
+    "gradient_prose_half_rate": {
+      "value": 13.85,
+      "unit": "nmol/mg_reconstituted_protein/min",
+      "formula": "27.7/2",
+      "origin": "derived",
+      "evaluates": "Approximate individual-gradient rate using narrative twofold relation",
+      "source": "Results/discussion gradients",
+      "limits": "Not independent raw observation; Fig5B visual \u0394pH bar differs"
+    },
+    "gradient_individual_to_both_ratio": {
+      "value": 0.5,
+      "unit": "dimensionless",
+      "formula": "(27.7/2)/27.7",
+      "origin": "derived",
+      "evaluates": "Reported approximate gradient response ratio",
+      "source": "Results/discussion gradients",
+      "limits": "A physical response, not a quality coefficient or H+ stoichiometry"
+    },
+    "nominal_delta_pH": {
+      "value": 1.7999999999999998,
+      "unit": "pH_units",
+      "formula": "7.6-5.8",
+      "origin": "derived",
+      "evaluates": "Nominal internal-minus-external buffer pH",
+      "source": "Proteoliposome Methods",
+      "limits": "Not observed maintained gradient"
+    },
+    "nominal_proton_concentration_ratio": {
+      "value": 63.0957344480193,
+      "unit": "dimensionless",
+      "formula": "10^(7.6-5.8)",
+      "origin": "derived",
+      "evaluates": "Nominal external/internal H+ activity ratio from buffer pH",
+      "source": "Proteoliposome Methods",
+      "limits": "pH/activity context only; no proton flux"
+    },
+    "nominal_diluted_protein": {
+      "value": 0.02,
+      "unit": "mg/mL",
+      "formula": "4/200",
+      "origin": "derived",
+      "evaluates": "Protein concentration after dilution",
+      "source": "Proteoliposome Methods",
+      "limits": "Not active incorporated BtsT count"
+    },
+    "counterflow_cold_carryover": {
+      "value": 50.0,
+      "unit": "uM",
+      "formula": "10000/200",
+      "origin": "derived",
+      "evaluates": "Cold pyruvate carryover matching reported external total",
+      "source": "Counterflow Methods",
+      "limits": "Applies to pyruvate-loaded arm, not lactate-loaded arm"
+    },
+    "counterflow_total_external_pyruvate": {
+      "value": 54.7,
+      "unit": "uM",
+      "formula": "10000/200+4.7",
+      "origin": "derived",
+      "evaluates": "Total external pyruvate matching stated54.7",
+      "source": "Counterflow Methods",
+      "limits": "Not4.7 total; no whole-cell Km correction"
+    },
+    "counterflow_labeled_fraction": {
+      "value": 0.08592321755027423,
+      "unit": "dimensionless",
+      "formula": "4.7/54.7",
+      "origin": "derived",
+      "evaluates": "Nominal labeled/total external pyruvate",
+      "source": "Counterflow Methods",
+      "limits": "Does not establish tracer recovery or count calibration"
+    },
+    "source_profile_log_ratio": {
+      "value": null,
+      "status": "unavailable",
+      "reason": "Effect covariance and supported sampling model unavailable"
+    },
+    "source_signed_index": {
+      "value": null,
+      "status": "unavailable",
+      "reason": "No profile log ratio"
+    },
+    "protein_specific_gradient_effect": {
+      "value": null,
+      "status": "unavailable",
+      "reason": "Numeric matched empty-liposome rates unavailable"
+    },
+    "proton_pyruvate_stoichiometry": {
+      "value": null,
+      "status": "unavailable",
+      "reason": "No paired proton and pyruvate flux"
+    },
+    "counterflow_initial_rate": {
+      "value": null,
+      "status": "unavailable",
+      "reason": "Prose rate vs graph accumulation endpoint, nonzero intercept and missing window"
+    },
+    "alternative_substrate_transport_rate": {
+      "value": null,
+      "status": "unavailable",
+      "reason": "Competition does not measure this endpoint"
+    }
+  },
+  "manual_graph_inputs": {
+    "control": 0.8,
+    "cold_pyruvate": 0.06,
+    "Br_pyruvate": 0.04,
+    "unit": "nmol/mg/min",
+    "origin": "graph_derived",
+    "method": "manual visual approximate bar height, Figure4B",
+    "reading_allowance": 0.02,
+    "allowance_is_sampling_uncertainty": false,
+    "control_identity": "fig4B_control"
+  },
+  "same_curve_conditional_example": {
+    "version": "a105_transport_response_v1",
+    "primitive_order": [
+      "substrate_test",
+      "substrate_reference",
+      "km"
+    ],
+    "inputs": {
+      "values": {
+        "substrate_test": 10.0,
+        "substrate_reference": 40.0,
+        "km": 16.5
+      },
+      "curve_keys": {
+        "substrate_test": "declared_fig4C_whole_cell_curve",
+        "substrate_reference": "declared_fig4C_whole_cell_curve",
+        "km": "declared_fig4C_whole_cell_curve"
+      },
+      "measurement_keys": {
+        "substrate_test": "fig4C_10uM",
+        "substrate_reference": "fig4C_40uM",
+        "km": "fig4C_Km"
+      },
+      "covariance": null,
+      "variance_status": "unknown",
+      "observation_model": "michaelis_menten",
+      "origin": "derived"
+    },
+    "cells": {
+      "substrate_test": {
+        "value": 10.0,
+        "unit": "uM",
+        "status": "populated",
+        "formula": "substrate_test",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "substrate_reference": {
+        "value": 40.0,
+        "unit": "uM",
+        "status": "populated",
+        "formula": "substrate_reference",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "apparent_km": {
+        "value": 16.5,
+        "unit": "uM",
+        "status": "populated",
+        "formula": "km",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "test_saturation": {
+        "value": 0.37735849056603776,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "substrate_test/(km+substrate_test)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "reference_saturation": {
+        "value": 0.7079646017699115,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "substrate_reference/(km+substrate_reference)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "condition_response": {
+        "value": 0.5330188679245284,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "log_condition_response": {
+        "value": -0.6291984559596719,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "log(condition_response)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "condition_response_variance": {
+        "value": null,
+        "unit": "dimensionless_squared",
+        "status": "unavailable",
+        "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+        "origin": "derived",
+        "unavailable_reason": "primitive_covariance_unreported",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ]
+      },
+      "condition_response_standard_uncertainty": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "sqrt(condition_response_variance)",
+        "origin": "derived",
+        "unavailable_reason": "primitive_covariance_unreported",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ]
+      }
+    }
+  },
+  "cross_physical_preparation_rejection": {
+    "version": "a105_transport_response_v1",
+    "primitive_order": [
+      "substrate_test",
+      "substrate_reference",
+      "km"
+    ],
+    "inputs": {
+      "values": {
+        "substrate_test": 10.0,
+        "substrate_reference": 40.0,
+        "km": 16.5
+      },
+      "curve_keys": {
+        "substrate_test": "declared_fig4C_whole_cell_curve",
+        "substrate_reference": "fig5_proteoliposome_curve",
+        "km": "declared_fig4C_whole_cell_curve"
+      },
+      "measurement_keys": {
+        "substrate_test": "fig4C_10uM",
+        "substrate_reference": "fig4C_40uM",
+        "km": "fig4C_Km"
+      },
+      "covariance": null,
+      "variance_status": "unknown",
+      "observation_model": "michaelis_menten",
+      "origin": "derived"
+    },
+    "cells": {
+      "substrate_test": {
+        "value": 10.0,
+        "unit": "uM",
+        "status": "populated",
+        "formula": "substrate_test",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "substrate_reference": {
+        "value": 40.0,
+        "unit": "uM",
+        "status": "populated",
+        "formula": "substrate_reference",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "apparent_km": {
+        "value": 16.5,
+        "unit": "uM",
+        "status": "populated",
+        "formula": "km",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "test_saturation": {
+        "value": 0.37735849056603776,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "substrate_test/(km+substrate_test)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "reference_saturation": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "substrate_reference/(km+substrate_reference)",
+        "origin": "derived",
+        "unavailable_reason": "different_kinetic_curves",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "condition_response": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+        "origin": "derived",
+        "unavailable_reason": "different_kinetic_curves",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "log_condition_response": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "log(condition_response)",
+        "origin": "derived",
+        "unavailable_reason": "different_kinetic_curves",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ]
+      },
+      "condition_response_variance": {
+        "value": null,
+        "unit": "dimensionless_squared",
+        "status": "unavailable",
+        "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+        "origin": "derived",
+        "unavailable_reason": "different_kinetic_curves",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ]
+      },
+      "condition_response_standard_uncertainty": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "formula": "sqrt(condition_response_variance)",
+        "origin": "derived",
+        "unavailable_reason": "different_kinetic_curves",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ]
+      }
+    }
+  },
+  "proposal_equations": {
+    "whole_cell_difference": "d_i=vB_i-vEV_i; Var(mean_d)=sample_var(d)/n only for actual independent matched pairs",
+    "gradient_difference_of_differences": "e=[1,-1,-1,1] x; V=l C l^T",
+    "competition_logcontrast": "z_j=log((vcontrol-bcontrol)/(vj-bj)); full common-control covariance",
+    "known_normal_signed_route": "S=e*abs(e)/(2V), B=tanh(S/2), only supported known-normal positive variance",
+    "not_computed": "No source-to-target or W05 aggregation"
+  },
+  "checks": {
+    "status": "passed",
+    "scope": "native arithmetic and existing pure same-curve response/rejection only; no source-native repository or model execution"
+  }
+}

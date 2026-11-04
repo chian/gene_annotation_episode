@@ -1,0 +1,41 @@
+Read interactions and other kinds of data from .hic and Cooler files and write 
+them to stdout. 
+
+
+/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite003/hictk dump [OPTIONS] uri
+
+
+POSITIONALS:
+  uri TEXT:(.[ms]cool) OR (.hic) REQUIRED
+                              Path to a .hic, .cool or .mcool file (Cooler URI syntax 
+                              supported). 
+
+OPTIONS:
+  -h,     --help              Print this help message and exit 
+          --resolution UINT:NONNEGATIVE 
+                              HiC matrix resolution (ignored when file is in .cool format). 
+          --matrix-type ENUM:{observed,oe,expected} [observed]  
+                              Matrix type (ignored when file is not in .hic format). 
+          --matrix-unit ENUM:{BP,FRAG} [BP]  
+                              Matrix unit (ignored when file is not in .hic format). 
+  -t,     --table TEXT:{chroms,bins,pixels,normalizations,resolutions,cells,weights} [pixels]  
+                              Name of the table to dump. 
+  -r,     --range TEXT [all]  Excludes: --query-file --cis-only --trans-only 
+                              Coordinates of the genomic regions to be dumped following UCSC 
+                              style notation (chr1:0-1000). 
+          --range2 TEXT [all]  Needs: --range Excludes: --query-file --cis-only --trans-only 
+                              Coordinates of the genomic regions to be dumped following UCSC 
+                              style notation (chr1:0-1000). 
+          --query-file TEXT:(FILE) OR ({-}) Excludes: --range --range2 --cis-only --trans-only 
+                              Path to a BEDPE file with the list of coordinates to be fetched 
+                              (pass - to read queries from stdin). 
+          --cis-only Excludes: --range --range2 --query-file --trans-only 
+                              Dump intra-chromosomal interactions only. 
+          --trans-only Excludes: --range --range2 --query-file --cis-only 
+                              Dump inter-chromosomal interactions only. 
+  -b,     --balance TEXT [NONE]  
+                              Balance interactions using the given method. 
+          --sorted, --unsorted{false} 
+                              Return interactions in ascending order. 
+          --join, --no-join{false} 
+                              Output pixels in BG2 format. 

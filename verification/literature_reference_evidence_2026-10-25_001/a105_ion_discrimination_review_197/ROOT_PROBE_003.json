@@ -1,0 +1,216 @@
+{
+  "time": 1793150302.2307217,
+  "scope": "Synthetic independent numerical and semantic review; no new paper packet.",
+  "checks": [
+    {
+      "name": "Voltage 100 \u00b1 3 mV; selectivity elsewhere.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "source_number_unit_role_mismatch"
+      }
+    },
+    {
+      "name": "Rate 30 \u00b1 2 per_min; other unit ions/s.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "source_number_unit_role_mismatch"
+      }
+    },
+    {
+      "name": "Rate 30 ions/s)\u207b\u00b9.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "partial_source_rate_unit"
+      }
+    },
+    {
+      "name": "Rate 30 ions/s)^-1.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "partial_source_rate_unit"
+      }
+    },
+    {
+      "name": "Rate 30 ions/s.",
+      "passed": true,
+      "detail": {
+        "expected": "accept",
+        "actual": "accept",
+        "error": null
+      }
+    },
+    {
+      "name": "Selectivity about100-fold.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "partial_source_numeric_token"
+      }
+    },
+    {
+      "name": "Reported selectivity 100%.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "source_number_unit_role_mismatch"
+      }
+    },
+    {
+      "name": "Value 100 mg.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "source_number_unit_role_mismatch"
+      }
+    },
+    {
+      "name": "Value 100 \u00b0C.",
+      "passed": true,
+      "detail": {
+        "expected": "reject",
+        "actual": "reject",
+        "error": "source_number_unit_role_mismatch"
+      }
+    },
+    {
+      "name": "Reported selectivity 100-fold.",
+      "passed": true,
+      "detail": {
+        "expected": "accept",
+        "actual": "accept",
+        "error": null
+      }
+    },
+    {
+      "name": "correlated_ratio_and_log_uncertainty",
+      "passed": true,
+      "detail": {
+        "R": 6.0,
+        "variance_R": 0.36,
+        "variance_log_R": 0.01,
+        "exact_expected_variance_R": "9/25",
+        "exact_expected_variance_log_R": "1/100"
+      }
+    },
+    {
+      "name": "signed_or_zero_0_0.15",
+      "passed": true,
+      "detail": {
+        "value": 0.0,
+        "scientific_applicability": "supported_for_selected_comparison",
+        "zero_denominator_case": "selected_estimator_nonzero"
+      }
+    },
+    {
+      "name": "signed_or_zero_-0.03_0.15",
+      "passed": true,
+      "detail": {
+        "value": -0.2,
+        "scientific_applicability": "estimator_comparison_only",
+        "zero_denominator_case": "selected_estimator_nonzero"
+      }
+    },
+    {
+      "name": "signed_or_zero_-0.9_-0.15",
+      "passed": true,
+      "detail": {
+        "value": 6.0,
+        "scientific_applicability": "estimator_comparison_only",
+        "zero_denominator_case": "selected_estimator_nonzero"
+      }
+    },
+    {
+      "name": "signed_or_zero_0.9_0",
+      "passed": true,
+      "detail": {
+        "value": null,
+        "scientific_applicability": "unresolved",
+        "zero_denominator_case": "selected_estimator_is_zero"
+      }
+    },
+    {
+      "name": "native_meaning_charge_equivalent_rate",
+      "passed": true,
+      "detail": {
+        "quantity_kind": "charge_equivalent_rate",
+        "origin": "reported",
+        "derivation": "unknown",
+        "threshold": 30.0
+      }
+    },
+    {
+      "name": "native_meaning_signed_reporter_estimator",
+      "passed": true,
+      "detail": {
+        "quantity_kind": "signed_reporter_estimator",
+        "origin": "reported",
+        "derivation": "unknown",
+        "threshold": 30.0
+      }
+    },
+    {
+      "name": "native_meaning_unknown",
+      "passed": true,
+      "detail": {
+        "quantity_kind": "unknown",
+        "origin": "reported",
+        "derivation": "unknown",
+        "threshold": 30.0
+      }
+    },
+    {
+      "name": "native_meaning_conflicting",
+      "passed": true,
+      "detail": {
+        "quantity_kind": "conflicting",
+        "origin": "reported",
+        "derivation": "unknown",
+        "threshold": 30.0
+      }
+    },
+    {
+      "name": "two_sheet_refs_same_whole_estimator",
+      "passed": true,
+      "detail": [
+        "reused_activity_not_ion_discrimination"
+      ]
+    },
+    {
+      "name": "same_estimator_inconsistent_values",
+      "passed": true,
+      "detail": [
+        "shared_activity_estimator_inconsistent"
+      ]
+    },
+    {
+      "name": "shared_amount_is_not_same_entire_activity",
+      "passed": true,
+      "detail": {
+        "R": 6.0,
+        "variance": null
+      }
+    },
+    {
+      "name": "synthetic_mean_remains_partial_for_primary_request",
+      "passed": true,
+      "detail": [
+        "synthetic_activity_for_nonsynthetic_selection"
+      ]
+    }
+  ],
+  "passed": 23,
+  "total": 23,
+  "imports_outside_pin": {},
+  "changed_pinned_files": []
+}

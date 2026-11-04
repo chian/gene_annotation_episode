@@ -23,6 +23,7 @@ import re
 
 from . import blast_grading_inputs as _native
 from . import blast_report_collection as _collection
+from . import alignment_correspondence as _correspondence
 from .blast_pairwise_grader import alignment_components
 from .blast_profile_inputs import _validate_sheet
 from .blast_program_context import resolve_blast_program_context
@@ -70,7 +71,7 @@ def _positive(value):
 
 def _fraction(numerator, denominator, *, complete=True):
     return {"numerator": numerator, "denominator": denominator,
-            "value": numerator / denominator if complete and numerator is not None and denominator else None,
+            "value": _correspondence._ratio(numerator, denominator) if complete else None,
             "unit": "fraction"}
 
 
@@ -331,7 +332,7 @@ def _query_lengths(sheet, geometry, issues):
         issues.append(_issue(key, "blast_profile_query_binding_conflict", pointer=key["search_pointer"]))
         return reported, None, None
     full, selected = binding["full_length"], operand["selected_interval"]
-    acceptable = {full} | ({selected[1] - selected[0]} if selected is not None else set())
+    acceptable = {full} | ({_correspondence.interval_length(selected)} if selected is not None else set())
     if operand["length"] != full or reported is not None and reported not in acceptable:
         issues.append(_issue(key, "blast_profile_query_length_conflict", pointer=key["search_pointer"],
                              reported=reported, supplied=full))
@@ -473,7 +474,7 @@ def _intersection(left, right):
 
 
 def _size(intervals):
-    return sum(end - start for start, end in intervals)
+    return _correspondence.interval_union_length(intervals)
 
 
 def _threshold(record, name, records):
@@ -555,8 +556,11 @@ def calculate_blast_profile_components(sheet) -> dict:
             "query_axis_kind": "sequence", "reference_axis_kind": "profile_model", "native_components": components,
             "reported_query_length": reported, "full_query_length": full, "selected_query_interval": selected,
             "reported_model_length": row["hit"]["length"],
-            "representative_symbol_identity": _fraction(counts["identical_pairs"] if eligible else None,
-                                                        counts["paired_columns"] if eligible else None),
+            "representative_symbol_identity": {
+                "numerator": counts["identical_pairs"] if eligible else None,
+                "denominator": counts["paired_columns"] if eligible else None,
+                "value": components["fractions"]["paired_identity"] if eligible else None,
+                "unit": "fraction"},
             "model_matches": matches, "issues": local})
         issues.extend(issue for issue in local if issue not in issues)
     models = []
@@ -610,7 +614,7 @@ def calculate_blast_profile_components(sheet) -> dict:
             "geometry_complete": complete, "observed_paired_query_intervals": query_intervals,
             "observed_paired_model_intervals": model_intervals, "paired_query_units": qcount,
             "paired_model_positions": mcount, "query_coverage": _fraction(qcount, full, complete=complete),
-            "selected_query_coverage": _fraction(selected_count, selected[1] - selected[0] if selected is not None else None,
+            "selected_query_coverage": _fraction(selected_count, _correspondence.interval_length(selected),
                                                  complete=complete),
             "model_coverage": _fraction(mcount, model_denominator, complete=complete),
             "query_unit": qunit, "model_unit": "position", "issues": local})

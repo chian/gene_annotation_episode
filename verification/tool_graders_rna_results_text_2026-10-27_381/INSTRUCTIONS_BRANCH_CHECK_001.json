@@ -1,0 +1,11 @@
+{
+  "new_branch_lines": [
+    "        if context.role == 'results':",
+    "            from .rna_structure_comparison_presentation import is_rna_comparison_results_context",
+    "            assignment = plain(context.assignment)",
+    "            if is_rna_comparison_results_context({'execution_assignment': assignment}):",
+    "                from .rna_structure_comparison_prompt import rna_comparison_results_instructions",
+    "                return rna_comparison_results_instructions(assignment)"
+  ],
+  "original_suffix_exact": true
+}

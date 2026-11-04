@@ -1,0 +1,25 @@
+--- original/gene_annotation_episode/hmmer_preparation_result_views.py
++++ gene_annotation_episode/hmmer_preparation_result_views.py
+@@ -749,6 +749,8 @@
+             seen.add(oid)
+         if seen != set(grading["formats"]):
+             _error("sheet_format_population_mismatch")
++        if self.family == "alignment_preparation":
++            self._alignment_input_context()
+         if self.program == "alimask":
+             self._map_context()
+         for collection, kinds in self.definitions.items():
+@@ -825,6 +827,13 @@
+                 _text(oid)
+                 if type(digest) is not str or re.fullmatch("[0-9a-fA-F]{64}", digest) is None:
+                     _error("source_binding_digest_invalid")
++
++    def _alignment_input_context(self):
++        # Original occurrence custody and declared formats have been admitted.
++        # Optional saved facts are validated without probing or decoding bytes.
++        from .hmmer_alignment_input_validation import saved_alignment_decoding_valid
++        if not saved_alignment_decoding_valid(self.sheet, formats=self.grading["formats"]):
++            _error("input_decoding_invalid")
+ 
+     def _map_context(self):
+         # Validate retained operands only. This never invokes reconstruction or

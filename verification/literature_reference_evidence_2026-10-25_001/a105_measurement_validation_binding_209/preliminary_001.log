@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+_ ERROR collecting tests/test_literature_measurement_validation_binding_209.py _
+ImportError while importing test module '/home/chia/repos/gene_annotation_episode/tests/test_literature_measurement_validation_binding_209.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_measurement_validation_binding_209.py:18: in <module>
+    from gene_annotation_episode.communication import ReportBoundaryError, obj, plain, validate_closed_schema, validate_form, form_with_facts
+E   ImportError: cannot import name 'obj' from 'gene_annotation_episode.communication' (/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py)
+=========================== short test summary info ============================
+ERROR tests/test_literature_measurement_validation_binding_209.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.31s

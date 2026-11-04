@@ -1,0 +1,120 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_result_worker.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_result_publication.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 115.629039569,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 1,
+    "observed_scratch_bytes": 97398784,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "SERVICE_RESULT": "exit-code",
+      "ended": {
+        "at": "2026-10-26T06:13:34.871322+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 808776568653490
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 1,
+  "source_hashes_after": {
+    "gene_annotation_episode/infernal_preparation_artifacts.py": "0165247ca084eccf244b1b73a804165983a31a4078859e3a60536bcad4785c10",
+    "gene_annotation_episode/infernal_preparation_calculations.py": "df3f3fbd37733298a96bca6d8f6a5b9dbe7519850f7cc84a7094c11b3d81187d",
+    "gene_annotation_episode/infernal_preparation_emission.py": "6ecd3b270a43470892936aa111b9860af770f0781c9a8e47a28d815fec92fa32",
+    "gene_annotation_episode/infernal_preparation_emission_calculations.py": "86627c73cc061c79feaab3f5a36f8dff3e1ebec26c922f1b9d270ceda4e78716",
+    "gene_annotation_episode/infernal_preparation_models.py": "adc0f2aa2b1d4f0416cddd6ecd53139f78df100005d3ba3f6a0e1ba8a665101b",
+    "gene_annotation_episode/infernal_preparation_result_views.py": "65df80edb071c0fa1aa70596f84d2ab086eb21b180600a0761c7ac6c9446c344",
+    "gene_annotation_episode/infernal_preparation_schema.py": "97a1422127316118423325ff8cdd7d3c0a0b2751f1facae9b3a49262c7171eba",
+    "gene_annotation_episode/infernal_preparation_statistics.py": "12d5a40657b4bb38e357dd7c44d15e80b319f24db8d18617898548885c4a1f1b",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/materials.py": "ad433751338bf78b886190f20d8022fd9c1db502911440106b14b05f36f5d0d9",
+    "gene_annotation_episode/native_infernal_preparation_acquisition.py": "68f495297c3eebfeb7637fc402f8b69f29028029b14ece9d2cf3349a3657ae4d",
+    "gene_annotation_episode/native_infernal_preparation_contracts.py": "e8851074d59d1b354348ac6143dd0e1e72f036356afe6d2eb2f9823fd23d9496",
+    "gene_annotation_episode/native_infernal_preparation_driver.py": "af01418dd47e6cc1c28710271a295ade86ce1b2d98a36bfd7fe5dff265fb81fd",
+    "gene_annotation_episode/native_infernal_preparation_local.py": "03ed971b8db1c8b3494bf36357469d2cf577792de2046a70cdc619a118009281",
+    "gene_annotation_episode/native_infernal_preparation_result_publication.py": "9936b778fa86db772fd123f9bd145fab9fc6e0ecd1ab21ce1560cd46392f9ae2",
+    "gene_annotation_episode/native_infernal_preparation_result_worker.py": "1009a3dd808e190b2a904b97e2be3a41dd6fbf851a58053eaf779edd6c7cd205",
+    "gene_annotation_episode/native_infernal_preparation_worker.py": "361ecf805c572f5439b9ccd9335d18edc5b3d44f2f70bedb8b8990b1d45614ef",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "gene_annotation_episode/tool_grading_artifacts.py": "fe7638d7dbed16d893ba63e054956a139d3949364a8d38303b8cd3abc6a39268",
+    "tests/test_native_infernal_preparation_result_publication.py": "92c9af5e4c4bea0e497cbb26ecc2cd5e5302b5f021316f2302da6a187329e1ad",
+    "tests/test_native_infernal_preparation_result_worker.py": "c15ee25ecab948399e6c43c7f16a0361ded0116c5dacaa82daf251319670c1b0",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/PUBLICATION_HANDOFF_001.md": "d6c0f3710081e6a2a8b0d67e75c413db96b072d97b9161f4374117cf31599c6a",
+    "verification/tool_graders_infernal_preparation_capture_2026-10-26_252/NATIVE_CAPTURE_EXAMPLES_002.json": "5715d59baee82ebfd11c4d57a94635c84b3758aaa7ee1117c23ca4bca1849ccb",
+    "verification/tool_graders_infernal_preparation_publication_2026-10-26_254/run_tests.py": "f0606c9002c85de33fd155bc7e3b3cae2ddb165e61b99f2b3ecc96b895f882e8"
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/infernal_preparation_artifacts.py": "0165247ca084eccf244b1b73a804165983a31a4078859e3a60536bcad4785c10",
+    "gene_annotation_episode/infernal_preparation_calculations.py": "df3f3fbd37733298a96bca6d8f6a5b9dbe7519850f7cc84a7094c11b3d81187d",
+    "gene_annotation_episode/infernal_preparation_emission.py": "6ecd3b270a43470892936aa111b9860af770f0781c9a8e47a28d815fec92fa32",
+    "gene_annotation_episode/infernal_preparation_emission_calculations.py": "86627c73cc061c79feaab3f5a36f8dff3e1ebec26c922f1b9d270ceda4e78716",
+    "gene_annotation_episode/infernal_preparation_models.py": "adc0f2aa2b1d4f0416cddd6ecd53139f78df100005d3ba3f6a0e1ba8a665101b",
+    "gene_annotation_episode/infernal_preparation_result_views.py": "65df80edb071c0fa1aa70596f84d2ab086eb21b180600a0761c7ac6c9446c344",
+    "gene_annotation_episode/infernal_preparation_schema.py": "97a1422127316118423325ff8cdd7d3c0a0b2751f1facae9b3a49262c7171eba",
+    "gene_annotation_episode/infernal_preparation_statistics.py": "12d5a40657b4bb38e357dd7c44d15e80b319f24db8d18617898548885c4a1f1b",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/materials.py": "ad433751338bf78b886190f20d8022fd9c1db502911440106b14b05f36f5d0d9",
+    "gene_annotation_episode/native_infernal_preparation_acquisition.py": "68f495297c3eebfeb7637fc402f8b69f29028029b14ece9d2cf3349a3657ae4d",
+    "gene_annotation_episode/native_infernal_preparation_contracts.py": "e8851074d59d1b354348ac6143dd0e1e72f036356afe6d2eb2f9823fd23d9496",
+    "gene_annotation_episode/native_infernal_preparation_driver.py": "af01418dd47e6cc1c28710271a295ade86ce1b2d98a36bfd7fe5dff265fb81fd",
+    "gene_annotation_episode/native_infernal_preparation_local.py": "03ed971b8db1c8b3494bf36357469d2cf577792de2046a70cdc619a118009281",
+    "gene_annotation_episode/native_infernal_preparation_result_publication.py": "9936b778fa86db772fd123f9bd145fab9fc6e0ecd1ab21ce1560cd46392f9ae2",
+    "gene_annotation_episode/native_infernal_preparation_result_worker.py": "1009a3dd808e190b2a904b97e2be3a41dd6fbf851a58053eaf779edd6c7cd205",
+    "gene_annotation_episode/native_infernal_preparation_worker.py": "361ecf805c572f5439b9ccd9335d18edc5b3d44f2f70bedb8b8990b1d45614ef",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "gene_annotation_episode/tool_grading_artifacts.py": "fe7638d7dbed16d893ba63e054956a139d3949364a8d38303b8cd3abc6a39268",
+    "tests/test_native_infernal_preparation_result_publication.py": "92c9af5e4c4bea0e497cbb26ecc2cd5e5302b5f021316f2302da6a187329e1ad",
+    "tests/test_native_infernal_preparation_result_worker.py": "c15ee25ecab948399e6c43c7f16a0361ded0116c5dacaa82daf251319670c1b0",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/PUBLICATION_HANDOFF_001.md": "d6c0f3710081e6a2a8b0d67e75c413db96b072d97b9161f4374117cf31599c6a",
+    "verification/tool_graders_infernal_preparation_capture_2026-10-26_252/NATIVE_CAPTURE_EXAMPLES_002.json": "5715d59baee82ebfd11c4d57a94635c84b3758aaa7ee1117c23ca4bca1849ccb",
+    "verification/tool_graders_infernal_preparation_publication_2026-10-26_254/run_tests.py": "f0606c9002c85de33fd155bc7e3b3cae2ddb165e61b99f2b3ecc96b895f882e8"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_publication_2026-10-26_254/publication_001/stdout.log"
+}

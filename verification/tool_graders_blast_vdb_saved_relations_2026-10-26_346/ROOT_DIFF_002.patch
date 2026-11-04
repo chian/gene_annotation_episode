@@ -1,0 +1,85 @@
+--- before_002/gene_annotation_episode/blast_vdb_function_inputs.py
++++ gene_annotation_episode/blast_vdb_function_inputs.py
+@@ -1695,9 +1695,14 @@
+         key = observation["assignment_key"]
+         candidates = []
+         if key is not None:
+-            if key not in assignments or len(assignments[key]) != 1 or key not in entity["assignment_keys"]:
++            # Conflicting identities can name different entities. Retain the
++            # incompatible observation at each unambiguous entity address;
++            # the shared link above still includes every conflicting record.
++            matching = [a for _, a in assignments.get(key, [])
++                        if _assignment_address(a) == entity["address"]]
++            if len(matching) != 1 or key not in entity["assignment_keys"]:
+                 _fail("reference_out_of_range")
+-            assignment = assignments[key][0][1]
++            assignment = matching[0]
+             if assignment["function"] != observation["function"]:
+                 _fail()
+             candidates = [assignment]
+@@ -1740,7 +1745,9 @@
+         if {_token(r) for r in eligible[entity["entity_key"]]} != {_token(r) for r in expected_eligible}:
+             _fail("reference_out_of_range")
+         for key in entity["assignment_keys"]:
+-            if len(assignments[key]) != 1:
++            matching = [a for _, a in assignments[key]
++                        if _assignment_address(a) == entity["address"]]
++            if len(matching) != 1:
+                 continue
+             for subject in context["subjects"]:
+                 for row in subject["hsp_row_keys"]:
+--- before_002/tests/test_blast_vdb_function_saved_relations.py
++++ tests/test_blast_vdb_function_saved_relations.py
+@@ -65,3 +65,52 @@
+     monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
+     result = module.validate_blast_vdb_function_sheet(sheet)
+     assert result == sheet == original and result is not sheet
++
++
++def conflicting_feature_assignment(destination):
++    original = json.loads((FIXTURES / "translated_features.json").read_text())
++    declaration = deepcopy(original["assignment_records"][0])
++    if destination == "missing_feature":
++        declaration["target"]["feature_identifier"]["value"] = "different-feature"
++    else:
++        declaration["target"] = deepcopy(original["assignment_records"][1]["target"])
++    populated = module.populate_blast_vdb_function_sheet(original["base_sheet"],
++        supplied_assignments=[declaration], dependency_records=[], census_records=[])
++    return original, declaration, populated
++
++
++@pytest.mark.parametrize("destination", ["missing_feature", "other_bound_feature"])
++def test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings(destination, monkeypatch):
++    original, declaration, sheet = conflicting_feature_assignment(destination)
++    key = declaration["assignment_key"]
++    variants = [a for a in sheet["assignment_records"] if a["assignment_key"] == key]
++    assert len(variants) == 2 and declaration in variants
++    link = next(r for r in sheet["link_results"] if r["record_kind"] == "assignment" and r["record_key"] == key)
++    assert link["status"] == "incompatible" and len(link["input_pointers"]) == 2
++    affected = [o for o in sheet["observations"] if o["assignment_key"] == key]
++    assert len(affected) == (1 if destination == "missing_feature" else 2)
++    assert all(o["qualification"] == "incompatible" for o in affected)
++    # The independent B feature retains its complete original numerical row.
++    expected = [o for o in original["observations"] if o["function"] and o["function"]["value"] == "B"]
++    actual = [o for o in sheet["observations"] if o["function"] and o["function"]["value"] == "B"]
++    assert actual == expected and all(o["qualification"] == "available" for o in actual)
++    def forbidden(*args, **kwargs):
++        raise AssertionError("Saved conflict validation cannot parse, repopulate or recalculate")
++    for port in ("_reparse", "_recheck_metadata", "populate_blast_vdb_sheet", "parse_ncbi_sra_runinfo", "parse_ncbi_gbseq_vdb_metadata", "parse_blast_vdb_member_sequences"):
++        monkeypatch.setattr(v1, port, forbidden)
++    monkeypatch.setattr(base, "calculate_blast_vdb_components", forbidden)
++    monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
++    assert module.validate_blast_vdb_function_sheet(sheet) == sheet
++
++
++@pytest.mark.parametrize("destination", ["missing_feature", "other_bound_feature"])
++@pytest.mark.parametrize("change", ["remove_observation", "claim_available"])
++def test_saved_conflict_cannot_disappear_or_gain_available_qualification(destination, change):
++    _, declaration, sheet = conflicting_feature_assignment(destination)
++    observation = next(o for o in sheet["observations"] if o["assignment_key"] == declaration["assignment_key"])
++    if change == "remove_observation":
++        sheet["observations"].remove(observation)
++    else:
++        observation.update(qualification="available", reason_code=None, issues=[])
++    with pytest.raises(ValueError, match="^blast_vdb_function_(reference_out_of_range|record_fields_invalid)$"):
++        module.validate_blast_vdb_function_sheet(sheet)

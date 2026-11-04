@@ -11,6 +11,9 @@ import json
 import math
 import os
 from pathlib import Path
+import shutil
+import socket
+import sqlite3
 
 import pytest
 
@@ -286,3 +289,234 @@ def test_closed_workflow_and_result_replay_performs_no_new_work(connected_case, 
         _, _, archive = asyncio.run(F.run_root(flow, case.configuration))
         assert archive == case.archive
         assert {table: F.rows(store, table) for table in F.TABLES} == before
+
+
+def test_explicit_retained_closed_nmf_workflow_replays_without_fit_or_calculation(tmp_path, monkeypatch):
+    """Reopen a separately pinned completed case, independently of connected_case."""
+    from gene_annotation_episode import acquisition, expression_nmf_calculations as calculations
+    from gene_annotation_episode import expression_nmf_result_views as projections
+    from gene_annotation_episode import expression_nmf_result_worker as worker
+    from gene_annotation_episode import expression_nmf_sheet as sheets
+    from gene_annotation_episode import native_expression_nmf_driver as driver
+    from gene_annotation_episode import native_expression_nmf_preparation as preparation
+    from gene_annotation_episode import native_expression_nmf_results as native_results
+    from gene_annotation_episode import native_lifecycle
+    from gene_annotation_episode.execution_progress import ExecutionTargetReader
+    from gene_annotation_episode.tools import ToolRegistry
+
+    environment = 'HMMER_NATIVE_ORACLE_NMF_RETAINED'
+    selected = os.environ.get(environment + '_PROOF')
+    if not selected:
+        pytest.skip('requires an explicitly selected immutable completed NMF case')
+
+    def pin(path):
+        path = Path(path).resolve(strict=True)
+        raw = path.read_bytes()
+        return dict(path=str(path), sha256=hashlib.sha256(raw).hexdigest(), size_bytes=len(raw))
+
+    def tree_pins(directory):
+        return {str(path.relative_to(directory)): pin(path)
+            for path in sorted(Path(directory).rglob('*')) if path.is_file()}
+
+    def database_pins(directory):
+        return [dict(name=name, sha256=value['sha256'], size_bytes=value['size_bytes'])
+            for name in ('state.sqlite3', 'state.sqlite3-wal', 'state.sqlite3-shm')
+            if (path := Path(directory) / name).is_file() for value in [pin(path)]]
+
+    def all_rows(store):
+        tables = [row[0] for row in store.db.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name") if not row[0].startswith('sqlite_')]
+        assert all(name.replace('_', '').isalnum() for name in tables)
+        return {table: F.rows(store, table) for table in tables}
+
+    def table_columns(store):
+        return {name: [dict(row) for row in store.db.execute('PRAGMA table_info(' + name + ')')]
+            for (name,) in store.db.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
+            if not name.startswith('sqlite_')}
+
+    def unchanged_rows(before, after, before_columns, after_columns):
+        additions = {'runtime_execution_file_capture_admissions', 'runtime_execution_file_captures',
+            'runtime_flux_balance_request_bindings'}
+        assert set(after) - set(before) <= additions and set(before) <= set(after)
+        assert all(not after[name] for name in set(after) - set(before))
+        for name, rows in before.items():
+            columns, actual = before_columns[name], after_columns[name]
+            extra = actual[len(columns):]
+            assert actual[:len(columns)] == columns
+            if extra:
+                assert name == 'runtime_report_attempts' and extra == [dict(cid=len(columns),
+                    name='report_contract_declaration', type='TEXT', notnull=0, dflt_value=None, pk=0)]
+            keys = {row['name'] for row in columns}
+            assert len(after[name]) == len(rows)
+            assert [{key: value for key, value in row.items() if key in keys} for row in after[name]] == rows
+            assert all(set(row) - keys == {column['name'] for column in extra}
+                and all(row[column['name']] is None for column in extra) for row in after[name])
+
+    output = tmp_path / 'NMF_RETAINED_REPLAY.json'
+    audit = dict(version='expression_nmf_retained_closed_replay_v1', phase='selected', passed=False,
+        original_authenticated=False, owned_database_cloned=False, closed_replay_verified=False,
+        literal_results_verified=False, typed_parent_delivery_verified=False,
+        saved_sheet_permissions_verified=False, histories_unchanged=False, originals_unchanged=False,
+        forbidden_work_attempts=[], qualification=(
+            'Historical completed local NMF Workflow replay only; no fit, saved calculation or new scientific claim.'))
+    F.write(output, audit)
+    store = None
+    try:
+        proof_path = Path(selected).resolve(strict=True)
+        assert proof_path.name == 'CASE.json'
+        original = proof_path.parent
+        controls = {name: pin(original / name) for name in ('CASE.json', 'fixture-configuration.json', 'SAVED_CHECK.json')}
+        for name, suffix in (('CASE.json', '_PROOF_SHA256'),
+                ('fixture-configuration.json', '_CONFIGURATION_SHA256'), ('SAVED_CHECK.json', '_SAVED_CHECK_SHA256')):
+            assert controls[name]['sha256'] == os.environ[environment + suffix]
+        proof = json.loads(proof_path.read_bytes())
+        configuration = json.loads((original / 'fixture-configuration.json').read_bytes())
+        saved = json.loads((original / 'SAVED_CHECK.json').read_bytes())
+        assert configuration['goal'] == F.TASK == proof['archive']['request']['goal']['objective']
+        assert configuration['scope'] == proof['archive']['request']['message']['scope']
+        assert configuration['scientific_binding']['version'] == 'scientific_process_episodes_v8'
+        assert proof['archive']['run_id'] == F.RUN_ID
+        assert proof['archive']['ended_by'] == 'yield_stop'
+        assert proof['forwarded'] == dict(nmf=[form['nmf'][0] for form in proof['returned']])
+        assert all(form['completed'] and not form['failures'] for form in proof['returned'])
+        bundle = database_pins(original / 'state')
+        bundle_digest = hashlib.sha256(F.canonical(bundle).encode('utf-8')).hexdigest()
+        assert bundle_digest == os.environ[environment + '_SQLITE_PINS_SHA256']
+        original_artifacts = tree_pins(original / 'state/artifacts')
+        original_run = tree_pins(original / 'run')
+        audit.update(original_authenticated=True, controls=controls, original_sqlite_bundle=bundle,
+            original_sqlite_bundle_sha256=bundle_digest,
+            recorded_scientific_binding=configuration['scientific_binding'])
+        staging = tmp_path / 'sqlite-staging'
+        staging.mkdir()
+        for row in bundle:
+            shutil.copyfile(original / 'state' / row['name'], staging / row['name'])
+        assert database_pins(staging) == bundle
+        owned = tmp_path / 'owned-retained-nmf'
+        (owned / 'state').mkdir(parents=True)
+        source_db, destination_db = sqlite3.connect(staging / 'state.sqlite3'), sqlite3.connect(owned / 'state/state.sqlite3')
+        try:
+            source_db.execute('PRAGMA query_only=ON')
+            source_db.backup(destination_db)
+        finally:
+            destination_db.close(); source_db.close()
+        shutil.copytree(original / 'state/artifacts', owned / 'state/artifacts')
+        shutil.copytree(original / 'run', owned / 'run')
+        audit['owned_database_cloned'] = True
+        F.write(output, audit)
+        store = Store(owned / 'state')
+        before = all_rows(store)
+        before_columns = table_columns(store)
+        before_counts = {name: len(rows) for name, rows in before.items()}
+        input_ref = saved['original_receipt']['native']['original_plan']['requested_job']['native_expression_nmf']['input']['artifact_ref']
+        assert not (store.path / 'artifacts' / input_ref[9:11] / input_ref[9:]).exists()
+        original_input = Path(saved['original_receipt']['native']['original_plan']['requested_job']['native_expression_nmf']['input']['path'])
+        original_open, builtin_open, io_open, os_open = Path.open, __import__('builtins').open, __import__('io').open, os.open
+
+        def forbidden(*args, **kwargs):
+            audit['forbidden_work_attempts'].append(dict(argument_types=[type(value).__name__ for value in args]))
+            raise AssertionError('retained NMF replay attempted fit, calculation, native work or network')
+
+        def check_path(value, *, dir_fd=None):
+            if isinstance(value, int): return
+            path = Path(os.fsdecode(value))
+            if not path.is_absolute():
+                path = (Path(os.readlink('/proc/self/fd/' + str(dir_fd))) if dir_fd is not None else Path.cwd()) / path
+            path = Path(os.path.normpath(path))
+            if (path.is_relative_to(original) or path == original_input
+                    or path == store.path / 'artifacts' / input_ref[9:11] / input_ref[9:]):
+                audit['forbidden_work_attempts'].append(dict(path=str(path)))
+                raise AssertionError('retained NMF replay reopened original files or input bytes')
+
+        def checked_path(path, *args, **kwargs): check_path(path); return original_open(path, *args, **kwargs)
+        def checked_builtin(path, *args, **kwargs): check_path(path); return builtin_open(path, *args, **kwargs)
+        def checked_io(path, *args, **kwargs): check_path(path); return io_open(path, *args, **kwargs)
+        def checked_os(path, flags, *args, **kwargs):
+            check_path(path, dir_fd=kwargs.get('dir_fd')); return os_open(path, flags, *args, **kwargs)
+
+        class NoNewDecisions:
+            async def complete(self, *args, **kwargs): return forbidden(*args, **kwargs)
+            async def release(self, episode_id): pass
+
+        with monkeypatch.context() as guard:
+            for name in ('prepare_job', 'start_prepared', 'resume_start', 'status', 'wait_job', 'collect', 'cancel'):
+                guard.setattr(native_lifecycle, name, forbidden)
+            for module, names in (
+                (driver, ('run_expression_nmf', 'retain_expression_nmf_artifacts', 'execute_expression_nmf_plan')),
+                (calculations, ('calculate_nmf_sheet', 'reconstruct_nmf', 'residual_measurements', 'component_measurements')),
+                (sheets, ('load_expression_nmf_artifacts', 'populate_nmf_sheet')),
+                (projections, ('project_nmf_result',)),
+                (worker, ('execute_expression_nmf_worker', 'load_expression_nmf_artifacts',
+                    'populate_nmf_sheet', 'calculate_nmf_sheet', 'project_nmf_result')),
+                (preparation, ('prepare_expression_nmf_result_worker',)),
+                (native_results, ('capture_expression_nmf_native_files', 'prepare_expression_nmf_result_worker')),
+            ):
+                for name in names: guard.setattr(module, name, forbidden)
+            guard.setattr(native_results.NativeExpressionNMFResults, '_worker', forbidden)
+            guard.setattr(ExecutionTargetReader, 'observe_target', forbidden)
+            guard.setattr(acquisition.PublicClients, '_http', forbidden)
+            guard.setattr(socket, 'create_connection', forbidden)
+            guard.setattr(socket.socket, 'connect', forbidden)
+            guard.setattr(socket.socket, 'connect_ex', forbidden)
+            guard.setattr(ToolRegistry, '_source', forbidden)
+            guard.setattr(Store, 'artifact', forbidden)
+            guard.setattr(Path, 'open', checked_path)
+            guard.setattr('builtins.open', checked_builtin)
+            guard.setattr('io.open', checked_io)
+            guard.setattr(os, 'open', checked_os)
+            flow, _ = F.assemble(store, owned, NoNewDecisions(), configuration)
+            owner = flow.episode_bindings.for_role('results')
+            root, record, archive = asyncio.run(F.run_root(flow, configuration))
+            assert archive == proof['archive']
+            final = plain(asyncio.run(root.build_result(record)).as_record())
+            assert final == dict(credit=0, pending_handles=[])
+            audit.update(closed_replay_verified=True, archive=archive, final_result=final)
+            contexts = {row['episode_id']: owner.native_expression_nmf_returns.context(row['episode_id'])
+                for row in F.walk(archive)}
+            science, = [context for context in contexts.values() if context.role == 'scientific_process']
+            parent = contexts[archive['episode_id']]
+            result_contexts = [contexts[row['episode_id']] for row in F.walk(archive)
+                if contexts[row['episode_id']].role == 'results']
+            actual_returned = []
+            for context in result_contexts:
+                key = f'{F.RUN_ID}:{context.episode_id}:0'
+                action = flow.journal.row('runtime_actions', context.episode_id, 0)
+                original_outcome = json.loads(action['result'])
+                completion = owner.completion_for_action(context, key)
+                repeated = asyncio.run(owner.execute(context, 'execution.results.collect', {}, key))
+                assert repeated == {name: value for name, value in original_outcome.items() if name != 'pending_work_after_action'}
+                assert completion is not None and owner.verify_completion(context, completion)
+                actual_returned.append(json.loads(flow.journal.row('runtime_forms', context.episode_id)['form']))
+            assert actual_returned == proof['returned']
+            audit['literal_results_verified'] = True
+            scientific_form = json.loads(flow.journal.row('runtime_forms', science.episode_id)['form'])
+            assert scientific_form == proof['forwarded']
+            parent_form = plain(science.request)['report_contract']['measurements']['schema']
+            assert owner.native_expression_nmf_returns.received_facts(parent, parent_form) == {
+                F.PROJECTION_SOURCE: proof['forwarded']['nmf']}
+            audit['typed_parent_delivery_verified'] = True
+            from test_expression_nmf_retained_finish import verify_retained_nmf_sheet_permissions
+            permissions = verify_retained_nmf_sheet_permissions(flow=flow, owner=owner, science=science, parent=parent,
+                result_contexts=result_contexts, configuration=configuration, saved=saved,
+                monkeypatch=monkeypatch, forbidden=forbidden)
+            audit.update(saved_sheet_permissions_verified=True, **permissions)
+        unchanged_rows(before, all_rows(store), before_columns, table_columns(store))
+        assert {name: len(rows) for name, rows in all_rows(store).items() if name in before_counts} == before_counts
+        assert audit['forbidden_work_attempts'] == []
+        assert {name: pin(original / name) for name in controls} == controls
+        assert database_pins(original / 'state') == bundle
+        assert tree_pins(original / 'state/artifacts') == original_artifacts and tree_pins(original / 'run') == original_run
+        audit.update(histories_unchanged=True, originals_unchanged=True, passed=True, phase='verified',
+            table_counts_before=before_counts, table_counts_after={name: len(rows) for name, rows in all_rows(store).items()})
+    except BaseException as error:
+        audit['failure'] = dict(exception_type=type(error).__name__, message=str(error))
+        raise
+    finally:
+        if store is not None:
+            try:
+                audit['actual_table_counts'] = {name: len(rows) for name, rows in all_rows(store).items()}
+            except BaseException as error:
+                audit['history_capture_failure'] = dict(exception_type=type(error).__name__, message=str(error))
+            finally: store.close()
+            audit['owned_database'] = pin(store.path / 'state.sqlite3')
+        F.write(output, audit)

@@ -1,0 +1,33 @@
+{
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_primary_summary_example_122/pin_002_unit",
+  "python": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "."
+  },
+  "argv": [
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_literature_perturbation_summary.py",
+    "tests/test_literature_perturbation_summary_integration.py",
+    "tests/test_literature_perturbation_inputs.py",
+    "tests/test_literature_perturbation_calculations.py",
+    "tests/test_literature_perturbation_integration.py",
+    "tests/test_literature_perturbation_interpretation_basis.py",
+    "tests/test_literature_perturbation_missing_amount_unit.py",
+    "tests/test_communication.py",
+    "--deselect=tests/test_literature_perturbation_integration.py::test_saved_source_values_exact_typed_subset_and_no_source_reread[True]",
+    "--deselect=tests/test_literature_perturbation_integration.py::test_source_perturbation_selected_in_ordinary_child_and_received_once[True]",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a106_primary_summary_example_122/UNIT_FINAL_TESTS_003.xml"
+  ],
+  "stdout": "UNIT_FINAL_STDOUT_003.txt",
+  "stderr": "UNIT_FINAL_STDERR_003.txt",
+  "session_id": 73008,
+  "exit_code": 0,
+  "passed": 342,
+  "deselected": 2,
+  "seconds": 78.26
+}

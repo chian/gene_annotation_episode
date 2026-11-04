@@ -1,0 +1,204 @@
+......F................................................................. [ 90%]
+........                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress _
+
+self = <test_recursive_monitoring.test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress.<locals>.ApplicationProvider object at 0x7fc67435aab0>
+episode_id = 'episode_de9e479e7a37265e9ff07a1d0648252fc5177f36f1769ba5f8948bfd64231301'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+context = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...11441f0583'], 'state': 'executing'}], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+output_schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+>       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1323/test_run_workflow_consumes_sel0')
+
+    def test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress(tmp_path):
+        with Store(tmp_path / "state") as store:
+            store.create_problem(raw_sequence="MKWAA", molecule="protein")
+            scope = store.validate_scope({"subject_refs": store.problem()["subject_refs"]})
+            directory = tmp_path / "run"
+            executions = DurableExecutionStore(directory / "episode-execution")
+            gate = tmp_path / "target.gate"
+            os.mkfifo(gate)
+            job = LiveJob(tmp_path, store, scope)
+            targets, retained, controllers, selections, delivered = {}, {}, {}, [], []
+            binding = MonitorEpisodes(None, outcome_page_size=1)
+            definitions = binding.fact_sources("monitor")
+            schema = obj({
+                "progress": definitions["monitoring_progress_refs"]["report_schema"],
+                "state": definitions["monitoring_execution_state"]["report_schema"],
+                "available": definitions["monitoring_result_available"]["report_schema"],
+                "assessment": {"type": "string", "enum": ["work_observed", "unresolved"]}})
+    
+            def provider_for(run_id):
+                if run_id not in retained:
+                    retained[run_id] = ProgressProvider(store, executions, run_id=run_id, job_provider=job)
+                return retained[run_id]
+    
+            def project(context, selection):
+                # Explicit fixture units supplied through the supported caller port.
+                # Projection consumes actual C7 receipt/outcome selection, without
+                # deriving a second scientific score or counting read timestamps.
+                selections.append((context, deepcopy(selection)))
+                progress = provider_for(context.run_id)
+                known = {progress.observation_identity(ref, scope) for ref in selection["known_progress_refs"]}
+                baseline = {progress.observation_identity(ref, scope) for ref in selection["initial_progress_refs"]}
+                return {"credit": len(known - baseline)}
+    
+            def controller(path, initial):
+                value = FixtureController(str(path), initial, 3 if len(path) == 4 else 2)
+                controllers[path] = value
+                return value
+    
+            def child(handle):
+                return {"selection": {"kind": "episode_child", "role": "monitor",
+                    "assignment": assignment(handle), "goal": "Investigate the selected exposed progress",
+                    "scope": scope, "purpose": "Return original observations and constrained progress interpretation",
+                    "schema_json": json.dumps(schema), "initial_report_json": '{"assessment":"unresolved"}'},
+                    "report_update": {}}
+    
+            def observe(context):
+                if context["child_reports"]:
+                    form, = context["child_reports"]
+                    assert form["assessment"] == "work_observed"
+                    assert form["available"] is (form["state"] == "executing"
+                        and context["monitor_assignment"]["target_handle"] == targets["middle"]["handle"])
+                    delivered.append(form)
+                return {"selection": {"kind": "tool", "tool": "progress.observe",
+                    "arguments": {"requested_fields": list(FIELDS)}}, "report_update": {"assessment": "work_observed"}}
+    
+            def select_dependency(context, handle):
+                assert handle in {row["handle"] for row in context["monitor_direct_dependencies"]}
+                return child(handle)
+    
+            def read_job_log(context):
+                snapshot = context["last_local_outcome"]["result"]
+                assert snapshot["measurements"][0]["value"] == 1
+                return {"selection": {"kind": "tool", "tool": "progress.log", "arguments": {
+                    "progress_ref": snapshot["progress_ref"], "log_index": 0}}, "report_update": {"assessment": "work_observed"}}
+    
+            def repeat_job_observation(context):
+                assert context["last_local_outcome"]["result"]["text"] == "batch 1 complete\n"
+                job.timestamp = datetime.now(timezone.utc).isoformat()
+                return observe(context)
+    
+            def science_uses_form(context):
+                form, = context["child_reports"]
+                assert set(form) == {"progress", "state", "available", "assessment"}
+                assert form["state"] == "executing" and form["available"] is False
+                assert len(form["progress"]) == 3
+                assert executions.status(targets["target"]["handle"])["liveness"] == "live"
+                assert job.process.poll() is None
+                delivered.append(form)
+                return {"selection": {"kind": "tool", "tool": "episode.history",
+                    "arguments": {"view": "records", "decision_indices": [0]}}, "report_update": {}}
+    
+            class ApplicationProvider(ScriptedProvider):
+                async def complete(self, *args, **kwargs):
+                    if not targets:
+                        run_id = json.loads((directory / "run.json").read_text())["run_id"]
+                        targets["target"] = durable_target(tmp_path, store, executions,
+                            run_id=run_id, arguments={"gate": str(gate)})
+                        for key in ("middle", "unselected"):
+                            targets[key] = durable_target(tmp_path, store, executions, key=key,
+                                parent=targets["target"], run_id=run_id)
+                        executions.start(targets["target"]["handle"])
+                        await asyncio.wait_for(executions.wait_events(event_condition(
+                            targets["target"]["handle"], "progress_committed")), 10)
+                        progress = provider_for(run_id)
+                        progress.expose(targets["target"]["handle"], operation_key="selected-direct-commissions",
+                            dependencies=[{"handle": targets[key]["handle"], "kind": "episode",
+                                "relation_ref": content_digest(targets[key]), "observed_at": job.timestamp,
+                                "state": "pending"} for key in ("middle", "unselected")])
+                        progress.expose(targets["middle"]["handle"], operation_key="selected-job-submission",
+                            dependencies=[{"handle": job.handle, "kind": "job", "relation_ref": job.source["id"],
+                                "observed_at": job.timestamp, "state": "executing"}])
+                        assert progress.flush_notifications() == {"published": 2, "pending": 0}
+                    return await super().complete(*args, **kwargs)
+    
+            scripted = ApplicationProvider([
+                lambda context: child(targets["target"]["handle"]),
+                lambda context: select_dependency(context, targets["middle"]["handle"]),
+                lambda context: select_dependency(context, job.handle),
+                observe, read_job_log, repeat_job_observation, observe, observe, science_uses_form])
+            try:
+>               summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=scripted,
+                    run_dir=directory, controller_factory=controller, project_credit=lambda store, scope: 0,
+                    episode_binding_descriptors=[binding.as_record()],
+                    role_credit_bindings={"monitor": {"definition": {"kind": "fixture_unique_observation",
+                        "units": "fixture_information"}, "project": project}}, job_progress_provider=job))
+
+tests/test_recursive_monitoring.py:646: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:3817: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4139: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1215: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:912: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_recursive_monitoring.test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress.<locals>.ApplicationProvider object at 0x7fc67435aab0>
+args = ('episode_de9e479e7a37265e9ff07a1d0648252fc5177f36f1769ba5f8948bfd64231301', 'REASONING', 'You own an iterative scient...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+kwargs = {}
+
+    async def complete(self, *args, **kwargs):
+        if not targets:
+            run_id = json.loads((directory / "run.json").read_text())["run_id"]
+            targets["target"] = durable_target(tmp_path, store, executions,
+                run_id=run_id, arguments={"gate": str(gate)})
+            for key in ("middle", "unselected"):
+                targets[key] = durable_target(tmp_path, store, executions, key=key,
+                    parent=targets["target"], run_id=run_id)
+            executions.start(targets["target"]["handle"])
+            await asyncio.wait_for(executions.wait_events(event_condition(
+                targets["target"]["handle"], "progress_committed")), 10)
+            progress = provider_for(run_id)
+            progress.expose(targets["target"]["handle"], operation_key="selected-direct-commissions",
+                dependencies=[{"handle": targets[key]["handle"], "kind": "episode",
+                    "relation_ref": content_digest(targets[key]), "observed_at": job.timestamp,
+                    "state": "pending"} for key in ("middle", "unselected")])
+            progress.expose(targets["middle"]["handle"], operation_key="selected-job-submission",
+                dependencies=[{"handle": job.handle, "kind": "job", "relation_ref": job.source["id"],
+                    "observed_at": job.timestamp, "state": "executing"}])
+            assert progress.flush_notifications() == {"published": 2, "pending": 0}
+>       return await super().complete(*args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+tests/test_recursive_monitoring.py:638: RuntimeError
+=========================== short test summary info ============================
+FAILED tests/test_recursive_monitoring.py::test_run_workflow_consumes_selected_recursive_forms_and_actual_retained_job_progress
+1 failed, 79 passed in 391.00s (0:06:31)

@@ -1,0 +1,246 @@
+{
+  "schema": "fluorescence_preparation_proposed_interfaces_v1",
+  "status": "proposal_only",
+  "authority": "PROPOSAL_001.md",
+  "execution_performed": false,
+  "closed_shape_definitions": "PROPOSAL_001.md section 5; existing types from common fluorescence contracts",
+  "ports": [
+    {
+      "owner": "S",
+      "file": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "signature": "existing shared validators",
+      "input": "old and new Sheet/Domain/Event",
+      "output": "same validated types with optional Domain.scaling and derived finite state",
+      "consumers": [
+        "B",
+        "A",
+        "P",
+        "R",
+        "C"
+      ],
+      "verification_file": "tests/test_fluorescence_prepared_core.py"
+    },
+    {
+      "owner": "S",
+      "file": "gene_annotation_episode/fluorescence_event_calculations.py",
+      "signature": "calculate_fluorescence_sheet(sheet, *, parameters)",
+      "input": "same Sheet and CalculationParameters",
+      "output": "same Components; accepts derived event state",
+      "consumers": [
+        "B",
+        "existing result_views"
+      ],
+      "verification_file": "tests/test_fluorescence_prepared_core.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_preparation_contracts.py",
+      "signature": "validate_preparation_request(value, *, input_domains)",
+      "input": "PreparationRequest and declared input domains",
+      "output": "validated copy",
+      "consumers": [
+        "A",
+        "P"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_preparation_contracts.py",
+      "signature": "validate_resolved_preparation(value, *, request)",
+      "input": "ResolvedPreparation and selected request",
+      "output": "validated copy",
+      "consumers": [
+        "A",
+        "B",
+        "P"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_preparation_contracts.py",
+      "signature": "validate_prepared_event_data(value, *, request, parent)",
+      "input": "PreparedEventData; PreparationRequest; EventParseResult",
+      "output": "validated copy",
+      "consumers": [
+        "A",
+        "B",
+        "P"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_preparation_contracts.py",
+      "signature": "validate_preparation_outcome(value, *, request, parent)",
+      "input": "PreparationOutcome; PreparationRequest; EventParseResult",
+      "output": "validated copy",
+      "consumers": [
+        "A",
+        "P"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_preparation_contracts.py",
+      "signature": "assemble_prepared_parse(outcome, *, request, parent, data_file, parameters_file)",
+      "input": "PreparationOutcome; selected request; EventParseResult; actual FileIdentity or null; parameter FileIdentity",
+      "output": "existing EventParseResult with generated domain and preserved primary identities",
+      "consumers": [
+        "A"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_event_preparation.py",
+      "signature": "prepare_fcs_scaling(raw, *, parent, request)",
+      "input": "exact FCS bytes; authenticated parent EventParseResult; selected scaling PreparationRequest",
+      "output": "PreparationOutcome",
+      "consumers": [
+        "A"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_event_preparation.py",
+      "signature": "prepare_spill_compensation(parent, *, matrix, request)",
+      "input": "authenticated EventParseResult; MatrixReadResult; selected compensation PreparationRequest",
+      "output": "PreparationOutcome",
+      "consumers": [
+        "A"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation.py"
+    },
+    {
+      "owner": "P",
+      "file": "gene_annotation_episode/fluorescence_preparation_readers.py",
+      "signature": "read_fcs_spill_matrix(raw, *, source, locator, channels)",
+      "input": "exact FCS bytes; Source; selected keyword/dataset; positional Channels",
+      "output": "MatrixReadResult",
+      "consumers": [
+        "A",
+        "P"
+      ],
+      "verification_file": "tests/test_fluorescence_preparation_readers.py"
+    },
+    {
+      "owner": "R",
+      "file": "gene_annotation_episode/fluorescence_native_report_contracts.py",
+      "signature": "validate_report_input(value, *, definitions, event_inputs, preparations)",
+      "input": "ReportInput; exact selected declarations",
+      "output": "validated copy",
+      "consumers": [
+        "A",
+        "R"
+      ],
+      "verification_file": "tests/test_fluorescence_native_reports.py"
+    },
+    {
+      "owner": "R",
+      "file": "gene_annotation_episode/fluorescence_native_report_contracts.py",
+      "signature": "validate_report_parse_result(value, *, binding)",
+      "input": "NativeReportParseResult; original ReportInput",
+      "output": "validated copy",
+      "consumers": [
+        "A",
+        "B",
+        "R"
+      ],
+      "verification_file": "tests/test_fluorescence_native_reports.py"
+    },
+    {
+      "owner": "R",
+      "file": "gene_annotation_episode/fluorescence_native_reports.py",
+      "signature": "parse_fluorescence_native_reports(raw, *, binding, association_raw)",
+      "input": "retained report bytes; exact ReportInput; received association bytes or null",
+      "output": "NativeReportParseResult; extracted numbers only",
+      "consumers": [
+        "A"
+      ],
+      "verification_file": "tests/test_fluorescence_native_reports.py"
+    },
+    {
+      "owner": "A",
+      "file": "gene_annotation_episode/native_fluorescence_contracts.py",
+      "signature": "validate_fluorescence_prepared_batch(value, *, original_plan, preparation_index, parent_batch_file)",
+      "input": "PreparedBatch; original RunPlan; selected index; actual parent FileIdentity",
+      "output": "validated copy",
+      "consumers": [
+        "B",
+        "A"
+      ],
+      "verification_file": "tests/test_native_fluorescence_contracts.py"
+    },
+    {
+      "owner": "A",
+      "file": "gene_annotation_episode/native_fluorescence_contracts.py",
+      "signature": "validate_fluorescence_report_batch(value, *, original_plan, report_index)",
+      "input": "ReportBatch; original RunPlan; selected report index",
+      "output": "validated copy",
+      "consumers": [
+        "B",
+        "A"
+      ],
+      "verification_file": "tests/test_native_fluorescence_contracts.py"
+    },
+    {
+      "owner": "A",
+      "file": "gene_annotation_episode/native_fluorescence_driver.py",
+      "signature": "run_fluorescence_driver(plan)",
+      "input": "original selected RunPlan; admitted bytes and actual pinned software",
+      "output": "immutable original/prepared/report outputs and NativeManifest v1 or v2",
+      "consumers": [
+        "B",
+        "C"
+      ],
+      "verification_file": "tests/test_native_fluorescence_driver.py"
+    },
+    {
+      "owner": "B",
+      "file": "gene_annotation_episode/fluorescence_result_worker.py",
+      "signature": "execute_fluorescence_worker(plan)",
+      "input": "original RunPlan+NativeCapture or actually received saved Sheet",
+      "output": "existing five worker outputs and WorkerResult; one shared calculation",
+      "consumers": [
+        "C"
+      ],
+      "verification_file": "tests/test_fluorescence_result_worker.py"
+    },
+    {
+      "owner": "C",
+      "file": "gene_annotation_episode/fluorescence_result_receipts.py",
+      "signature": "existing validate_worker/publication/owns_reference consumers",
+      "input": "verified worker/capture/commission controls",
+      "output": "existing requested fact groups and preserved original owner",
+      "consumers": [
+        "root",
+        "FluorescenceReturns"
+      ],
+      "verification_file": "tests/test_fluorescence_result_receipts.py"
+    }
+  ],
+  "required_methods": [
+    "fcs_scale_flowio_1_4_0",
+    "spill_compensate_flowutils_1_2_2"
+  ],
+  "optional_not_delegated": [
+    "logicle execution",
+    "external CSV/TSV matrices",
+    "FlowJo XML",
+    "spectral unmixing",
+    "matrix fitting",
+    "new report formatter/exporter"
+  ],
+  "report_profiles": [
+    "biomni_facs_log_548_v1",
+    "biomni_cytokine_log_548_v1",
+    "biomni_cytokine_csv_548_v1"
+  ],
+  "shared_sheet": "fluorescence_event_population_sheet_v1",
+  "shared_calculator": "fluorescence_event_calculations.calculate_fluorescence_sheet",
+  "native_verification_limit": "No legacy success report artifact inspected; source-defined formats are not authentic successful execution evidence."
+}

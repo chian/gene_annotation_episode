@@ -1,0 +1,20 @@
+F.........................................                               [100%]
+=================================== FAILURES ===================================
+_ test_actual_parsed_inputs_keep_original_track_mapping_and_sequence_occurrences _
+
+    def test_actual_parsed_inputs_keep_original_track_mapping_and_sequence_occurrences():
+        result = build(case())
+        value = result["value"]
+        assert result["status"] == "partial"
+>       assert [(b["input_key"], b["track_key"], b["inventory_key"]) for b in value["track_bindings"]] == [
+            ("/user_genomes/0", "comp_genome_1", None), ("/user_genomes/1", "ref_genome", "ref"),
+            ("/user_genomes/2", "comp_genome_2", "subject")]
+E       AssertionError: assert [('/user_geno...', 'subject')] == [('/user_geno...', 'subject')]
+E         
+E         At index 0 diff: ('/user_genomes/1', 'ref_genome', 'ref') != ('/user_genomes/0', 'comp_genome_1', None)
+E         Use -v to get more diff
+
+tests/test_bvbrc_proteome_joins.py:114: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_joins.py::test_actual_parsed_inputs_keep_original_track_mapping_and_sequence_occurrences
+1 failed, 41 passed in 2.51s

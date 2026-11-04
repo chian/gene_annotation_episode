@@ -51,10 +51,12 @@ def acquisition(tmp_path, request):
             driver.client.body = case['body']
             args['byte_range'] = case['range']
             original_download = driver.client.download
-            def download(url, *, byte_range=None):
-                snapshot = original_download(url, byte_range=byte_range)
+            def download(url, *, max_bytes, byte_range=None):
+                snapshot = original_download(url, max_bytes=max_bytes, byte_range=byte_range)
                 return replace(snapshot, transport={**snapshot.transport,
                     'status': case['http_status'], 'body_complete': case['body_complete'],
+                    'declared_body_bytes': (int(case['headers']['content-length'])
+                        if 'content-length' in case['headers'] else None),
                     'headers': case['headers']})
             driver.client.download = download
         call = driver.call('download', args, context=context)

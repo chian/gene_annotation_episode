@@ -1,0 +1,44 @@
+....F
+=================================== FAILURES ===================================
+_ test_create_upload_submit_require_original_input_and_selected_upload_evidence _
+
+driver = <test_bvbrc_appservice_inputs.Driver object at 0x7704e3c75bb0>
+
+    def test_create_upload_submit_require_original_input_and_selected_upload_evidence(driver):
+        query = retained_input(driver)
+        driver.tree(query)
+        preparation = driver.call("prepare", {"definition": {"kind": "packaged", "required_application_id": "Homology"}})
+        with pytest.raises(AppServiceInputError, match="input_evidence_missing"):
+            driver.bind("submit", {"preparation_receipt_ref": preparation["source_ref"], "input_evidence_refs": []})
+        driver.client.value = [metadata(shock_url="https://shock.example.invalid/node/" + SHOCK_UUID)["native_row"]]
+        created = driver.call("workspace_create", {"objects": [{"target_id": "query", "data_binding_id": "query", "creation_time": None}],
+            "options": {"createUploadNodes": 1}})
+>       upload = driver.call("upload", {"created_object": {"receipt_ref": created["source_ref"], "row_pointer": "/result/0/0"},
+            "input_binding_id": "query", "filename": "original.fa"})
+
+tests/test_bvbrc_appservice_inputs.py:284: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_bvbrc_appservice_inputs.Driver object at 0x7704e3c75bb0>
+suffix = 'upload'
+args = {'created_object': {'receipt_ref': 'source_ab6aca9af70b105fddd948dc', 'row_pointer': '/result/0/0'}, 'input_binding_id': 'query', 'filename': 'original.fa'}
+context = BindingContext(run_id='appservice-custody-fixture', episode_id='episode_b3665a9b0ee2cde676f8c851615d8eaf18e329f8e5e451...required': ('refs',), 'type': 'object'})}), 'information': mappingproxy({'refs': 'refs'})})}), received_record_refs=())
+
+    def call(self, suffix, args, *, context=None):
+        context, key, prepared = self.bind(suffix, args, context=context)
+        directory = self.api._manifest(context) / "actions" / digest(key)
+        directory.mkdir(exist_ok=True)
+        _immutable(directory / "intent.json", {"run_id": context.run_id, "episode_id": context.episode_id,
+            "operation_key": key, "name": PREFIX + suffix, "arguments": args,
+            "assignment_sha256": digest(context.assignment), "prepared": prepared,
+            "started_at": "2026-10-24T12:00:00+00:00"})
+        call = asyncio.run(perform_selected_call(self.api, context, self.service, prepared,
+            operation_key=key, directory=directory, fresh=True))
+>       assert call["failure"] is None
+E       AssertionError: assert {'code': 'api_selected_primitive_failed', 'phase': 'transport', 'affected_refs': ['api_effect_2cea3a2501103371a767c0544c542031ce3bb7937f7621145872c31a5a8f3acc'], 'affected_pointers': [], ...} is None
+
+tests/test_bvbrc_appservice_inputs.py:123: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_inputs.py::test_create_upload_submit_require_original_input_and_selected_upload_evidence
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 4 passed in 29.45s

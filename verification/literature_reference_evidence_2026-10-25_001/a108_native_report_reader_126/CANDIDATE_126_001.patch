@@ -1,0 +1,863 @@
+--- a/gene_annotation_episode/literature_context_inputs.py
++++ b/gene_annotation_episode/literature_context_inputs.py
+@@ -281,9 +281,14 @@
+ 
+ def _measurements(reference, sources):
+     if reference is None:
+-        return None, None
++        return None, None, None
+     source = sources.source(reference, "original")
+     data = _json_measurements(source["content"])
++    from .literature_context_native_inputs import DATA_VERSION as NATIVE_DATA_VERSION, read_native_selection
++    native = None
++    if isinstance(data, dict) and data.get("version") == NATIVE_DATA_VERSION:
++        data, native = read_native_selection(data, sources=sources,
++            reference=reference, artifact_ref=source["artifact_ref"])
+     from .literature_context_meanings import DATA_VERSION as MEANINGS_DATA_VERSION
+     version = data.get("version") if isinstance(data, dict) else None
+     _keys(data, ("version", "inputs", "meanings") if version == MEANINGS_DATA_VERSION
+@@ -300,7 +305,13 @@
+         for observation in context["observations"]:
+             observation["measurement_key"] = _physical_key(
+                 "measurement", reference, source["artifact_ref"], observation["measurement_key"])
+-    return data, inputs
++    if native is not None:
++        for context in native["contexts"]:
++            context["key"] = _physical_key("context", reference, source["artifact_ref"], context["key"])
++            for observation in context["observations"]:
++                observation["measurement_key"] = _physical_key(
++                    "measurement", reference, source["artifact_ref"], observation["measurement_key"])
++    return data, inputs, native
+ 
+ 
+ def read_context_inputs(arguments, *, read_source):
+@@ -324,7 +335,7 @@
+     _list(arguments["interpretation_witnesses"], "interpretation_witnesses")
+     interpretations = [sources.witness(value, f"interpretation_witnesses[{i}]")
+                        for i, value in enumerate(arguments["interpretation_witnesses"])]
+-    observations, inputs = _measurements(arguments["data_source_ref"], sources)
++    observations, inputs, native = _measurements(arguments["data_source_ref"], sources)
+     from .literature_context_meanings import (
+         DATA_VERSION as MEANINGS_DATA_VERSION, INPUT_VERSION as MEANINGS_INPUT_VERSION,
+         read_meanings,
+@@ -336,7 +347,8 @@
+             "sources": list(sources.references), "literals": literals,
+             "interpretations": interpretations, "observations": observations,
+             "calculation_inputs": inputs,
+-            **({"meanings": meanings} if meanings is not None else {})}
++            **({"meanings": meanings} if meanings is not None else {}),
++            **({"native_evidence": native} if native is not None else {})}
+ 
+ 
+ __all__ = ["VERSION", "DATA_VERSION", "LITERAL_FIELDS", "SOURCE_KINDS", "QUESTION_KINDS",
+--- /dev/null
++++ b/gene_annotation_episode/literature_context_native_inputs.py
+@@ -0,0 +1,209 @@
++"""Exact reported-point selectors for A108 context observations.
++
++This finite reader identifies source numbers, never biological truth, operating
++ranges, independent sampling or habitat exposure from a nominal culture setting.
++"""
++from copy import deepcopy
++from fractions import Fraction
++import html
++import math
++import re
++
++from .domain import identity
++from .literature_assay_inputs import _fail, _keys, _text
++from .literature_partner_source_fields import read_source_number, _contexts
++
++DATA_VERSION = "a108_source_context_selection_v1"
++TRACE_VERSION = "a108_context_native_evidence_v1"
++VALUE_BASES = ("source_reported_measurement", "source_reported_setting",
++    "source_supported_inference", "conditional_assumption", "unresolved")
++_SETTINGS = ("question_kind", "origin", "scope_status", "frame_status", "pairing", "weight_basis",
++    "sampling_design", "alpha", "permitted_remainder")
++_OBS_FIELDS = ("requirement_key", "measurement_identity", "unit", "value", "value_basis", "basis_witness",
++    "reported_sd", "reported_sem", "reported_plusminus", "reported_count", "count_relation", "replicate_kind")
++
++
++def _choice(value, allowed, field):
++    if not isinstance(value,str) or value not in allowed:
++        _fail("unsupported_context_native_meaning",field)
++
++
++def _witness(value, sources, field):
++    return None if value is None else sources.witness(value,field)
++
++
++def _unit(value, expected, sources, field):
++    selected=sources.witness(value,field)
++    raw=html.unescape(re.sub(r"</?[A-Za-z_][^<>]*>","",selected["quote"]))
++    raw=re.sub(r"\s+","",raw).replace("µ","u").replace("μ","u")
++    prefix,suffix=_contexts(sources,selected,0,len(selected["quote"]))
++    if (prefix[-1:] and (prefix[-1:].isalpha() or prefix[-1:] in "_/µμ")) or (
++            suffix[:1] and (suffix[:1].isalnum() or suffix[:1] in "/_^−-⁻%")):
++        _fail("partial_context_native_unit",field)
++    if re.match(r"\s*(?:/|\^|[-−⁻]\s*[0-9¹])",suffix):
++        _fail("partial_context_native_unit",field)
++    simple={"mM":("mM",1),"uM":("uM",1),"nm":("nm",1),"min":("minutes",1),"minutes":("minutes",1)}
++    if raw in simple:
++        canonical,multiplier=simple[raw]
++        if canonical=="uM" and expected=="mM": canonical,multiplier="mM",Fraction(1,1000)
++        elif canonical=="mM" and expected=="uM": canonical,multiplier="uM",1000
++    elif raw in ("ppbv","ppb"):
++        canonical,multiplier="ppbv_H2_gas",1
++    elif raw in ("ppmv","ppm"):
++        canonical,multiplier="ppmv_H2_gas",1
++    elif raw in ("%","percent") and expected in ("percent_O2_gas","percent_O2_saturation_solution"):
++        # Physical phase and chemical meaning are explicit source interpretations,
++        # retained with each requirement/observation, never inferred from '%'.
++        canonical,multiplier=expected,1
++    else:
++        _fail("unsupported_context_native_unit",field)
++    if canonical!=expected:
++        _fail("context_native_unit_mismatch",field)
++    return {"witness":selected,"raw_unit":raw,"unit":canonical,"multiplier":float(multiplier)}
++
++
++def _quantity(value, expected, sources, field, *, spread=False):
++    if value is None:
++        return None
++    _keys(value,("number","unit_witness"),field)
++    parsed=read_source_number(value["number"],sources=sources,role="spread" if spread else "rate")
++    if parsed["relation"]!="point":
++        _fail("context_native_exact_point_required",field)
++    unit=_unit(value["unit_witness"],expected,sources,field+".unit_witness")
++    selected=parsed["selector"]
++    _,suffix=_contexts(sources,selected["witness"],selected["number_start"],selected["number_end"])
++    visible=html.unescape(re.sub(r"</?[A-Za-z_][^<>]*>","",suffix)).replace("µ","u").replace("μ","u")
++    printed=re.match(r"\s*(mM|uM|nm|minutes|min|ppbv|ppb|ppmv|ppm|percent|%)(?=$|[^A-Za-z])",visible)
++    if printed is not None:
++        tail=visible[printed.end():]
++        if re.match(r"\s*(?:[/^]|[-−⁻]\s*[0-9¹])",tail):
++            _fail("unsupported_explicit_context_native_unit",field)
++        aliases={"min":"minutes","ppb":"ppbv","ppm":"ppmv","percent":"%"}
++        actual=aliases.get(printed.group(1),printed.group(1));declared=aliases.get(unit["raw_unit"],unit["raw_unit"])
++        if actual!=declared:
++            _fail("context_native_explicit_unit_mismatch",field)
++    exact=Fraction(parsed["raw_number"].replace("−","-"))*Fraction(str(unit["multiplier"]))
++    try: converted=float(exact)
++    except (OverflowError,ValueError): _fail("numerical_model_range",field)
++    if not math.isfinite(converted) or converted==0 and exact!=0:
++        _fail("numerical_model_range",field)
++    return {"number":parsed,"unit":unit,"value":converted,"relation":"point"}
++
++
++def _point(value):
++    return None if value is None else {"lower":value,"upper":value,"lower_closed":True,"upper_closed":True}
++
++
++def _key(kind,witness,fallback):
++    return identity("context_native_"+kind,witness if witness is not None else fallback)
++
++
++def _source_refs(value):
++    result=[]
++    def visit(item):
++        if isinstance(item,dict):
++            if "source_ref" in item and "artifact_ref" in item:
++                result.append(item["source_ref"])
++            for child in item.values():visit(child)
++        elif isinstance(item,list):
++            for child in item:visit(child)
++    visit(value)
++    return list(dict.fromkeys(result))
++
++
++def native_direct_references(extraction,initial):
++    trace=extraction.get("native_evidence")
++    return list(dict.fromkeys([*initial,*(trace["source_refs"] if trace is not None else [])]))
++
++
++def read_native_selection(data, *, sources, reference, artifact_ref):
++    """Normalize one exact source recipe to the unchanged v2 numerical inputs.
++
++    All native values/spreads/counts are selected in authorized source bytes.
++    Equal-unit weight1 and alpha are declared method parameters, not readings.
++    Only discrete tested-point domains are supported by this first route.
++    """
++    from .literature_context_inputs import _validate_inputs, NATIVE_UNITS
++    _keys(data,("version","selection","meanings"),"native_data_source")
++    if data["version"]!=DATA_VERSION:
++        _fail("unsupported_context_native_version","native_data_source.version")
++    selection=data["selection"]
++    _keys(selection,(*_SETTINGS,"requirements","routes","contexts"),"native_selection")
++    inputs={name:deepcopy(selection[name]) for name in _SETTINGS}
++    if inputs["pairing"] not in ("paired","unknown"):
++        _fail("context_native_unpaired_reader_unimplemented","native_selection.pairing")
++    if inputs["weight_basis"]!="equal_units":
++        _fail("context_native_weight_reader_unimplemented","native_selection.weight_basis")
++    inputs.update(requirements=[],routes=deepcopy(selection["routes"]),contexts=[],marginals=[])
++    req_trace=[]
++    if not isinstance(selection["requirements"],list):_fail("array_required","native_selection.requirements")
++    for i,req in enumerate(selection["requirements"]):
++        path=f"native_selection.requirements[{i}]"
++        _keys(req,("key","unit","supported","incompatible"),path)
++        _choice(req["unit"],tuple(u for u in NATIVE_UNITS if u!="state"),path+".unit")
++        core={"key":req["key"],"unit":req["unit"]}; evidence={"key":req["key"],"unit":req["unit"]}
++        for name in ("supported","incompatible"):
++            if not isinstance(req[name],list):_fail("array_required",path+"."+name)
++            points=[_quantity(v,req["unit"],sources,f"{path}.{name}[{j}]") for j,v in enumerate(req[name])]
++            if any(p is None for p in points):_fail("context_native_domain_point_required",path+"."+name)
++            core[name]=[_point(p["value"]) for p in points];evidence[name]=points
++        inputs["requirements"].append(core);req_trace.append(evidence)
++    reqs={r["key"]:r for r in inputs["requirements"]}
++    contexts=[]
++    if not isinstance(selection["contexts"],list):_fail("array_required","native_selection.contexts")
++    for i,context in enumerate(selection["contexts"]):
++        path=f"native_selection.contexts[{i}]"
++        _keys(context,("key","identity","setting","setting_kind","sample_unit","cluster","weight","scope_match","observations"),path)
++        _choice(context["setting_kind"],("sample","environment","growth_condition","assay_condition","organism"),path+".setting_kind")
++        witnesses={field:_witness(context[field],sources,path+"."+field) for field in ("identity","setting","sample_unit","cluster")}
++        context_key=_key("context",witnesses["identity"],{"source_ref":reference,"artifact_ref":artifact_ref,"key":context["key"]})
++        cluster_key=None if witnesses["cluster"] is None else _key("cluster",witnesses["cluster"],None)
++        weight=context["weight"]
++        if weight not in (None,"equal_unit"):
++            _fail("context_native_equal_unit_weight_required",path+".weight")
++        core={"key":context_key,"weight":None if weight is None else 1,"cluster_key":cluster_key,
++            "scope_match":context["scope_match"],"observations":[]}
++        trace={"key":context_key,"setting_kind":context["setting_kind"],**witnesses,"observations":[]}
++        if not isinstance(context["observations"],list):_fail("array_required",path+".observations")
++        for j,obs in enumerate(context["observations"]):
++            opath=f"{path}.observations[{j}]";_keys(obs,_OBS_FIELDS,opath)
++            if obs["requirement_key"] not in reqs:_fail("unknown_requirement_reference",opath+".requirement_key")
++            _choice(obs["unit"],NATIVE_UNITS,opath+".unit")
++            _choice(obs["value_basis"],VALUE_BASES,opath+".value_basis")
++            reading=_quantity(obs["value"],obs["unit"],sources,opath+".value")
++            physical=_witness(obs["measurement_identity"],sources,opath+".measurement_identity")
++            basis=_witness(obs["basis_witness"],sources,opath+".basis_witness")
++            fallback={"source_ref":reference,"artifact_ref":artifact_ref,"context_key":context_key,"requirement_key":obs["requirement_key"]}
++            if reading is not None:
++                number=reading["number"];w=number["selector"]["witness"]
++                fallback={"source_ref":w["source_ref"],"artifact_ref":w["artifact_ref"],
++                    "start":w["start"]+len(w["quote"][:number["selector"]["number_start"]].encode()),
++                    "end":w["start"]+len(w["quote"][:number["selector"]["number_end"]].encode()),"unit":obs["unit"]}
++            measurement_key=_key("measurement",physical,fallback)
++            spreads={name:_quantity(obs[name],obs["unit"],sources,opath+"."+name,spread=True)
++                for name in ("reported_sd","reported_sem","reported_plusminus")}
++            count=None if obs["reported_count"] is None else read_source_number(obs["reported_count"],sources=sources,role="condition")
++            if count is not None:
++                exact=Fraction(count["raw_number"].replace("−","-"))
++                if exact.denominator!=1 or exact<0:_fail("context_native_integer_count_required",opath+".reported_count")
++                reported_count=int(exact)
++            else:reported_count=None
++            _choice(obs["count_relation"],("exact","unknown"),opath+".count_relation")
++            if count is not None and obs["count_relation"]!="exact":
++                _fail("context_native_exact_count_relation_required",opath+".count_relation")
++            item={"requirement_key":obs["requirement_key"],"measurement_key":measurement_key,"unit":obs["unit"],
++                "interval":_point(None if reading is None else reading["value"]),"relation":"numeric",
++                **{name:None if value is None else value["value"] for name,value in spreads.items()},
++                "reported_count":reported_count,"count_relation":obs["count_relation"],"replicate_kind":obs["replicate_kind"]}
++            core["observations"].append(item)
++            trace["observations"].append({"requirement_key":obs["requirement_key"],"measurement_key":measurement_key,
++                "measurement_identity":physical,"value":reading,"value_basis":obs["value_basis"],"basis_witness":basis,
++                **spreads,"reported_count":count})
++        inputs["contexts"].append(core);contexts.append(trace)
++    # Apply the exact established scientific numeric/roster validation before
++    # returning any extraction. It supplies no new scoring gate.
++    _validate_inputs(inputs)
++    evidence={"version":TRACE_VERSION,"recipe":deepcopy(data),"requirements":req_trace,"contexts":contexts}
++    evidence["source_refs"]=_source_refs({"requirements":req_trace,"contexts":contexts})
++    normalized={"version":"a108_source_context_measurements_v2","inputs":inputs,"meanings":deepcopy(data["meanings"])}
++    return normalized,evidence
+--- /dev/null
++++ b/gene_annotation_episode/literature_context_native_render.py
+@@ -0,0 +1,29 @@
++"""Scientific display of explicitly available native context observations."""
++from collections.abc import Mapping
++
++
++def is_row(value):
++    return (isinstance(value,Mapping) and value.get('bound_kind')=='reported_point_not_operating_domain'
++        and 'observation_position' in value and 'context_ref' in value and 'measurement_ref' in value)
++
++
++def render_rows(parts,rows,records,*,section,table):
++    if not rows:return
++    records=records or {}
++    def meaning(reference):
++        if reference is None:return 'unknown'
++        record=records.get(reference)
++        if not isinstance(record,Mapping):return 'meaning unavailable in the received scientific records'
++        return record.get('label',record.get('name','unknown'))
++    contexts={r['context_ref']:'Context '+str(i+1) for i,r in enumerate({r['context_ref']:r for r in rows}.values())}
++    measurements={r['measurement_ref']:'Measurement '+str(i+1) for i,r in enumerate({r['measurement_ref']:r for r in rows}.values())}
++    bases={'source_reported_measurement':'source-reported measurement','source_reported_setting':'source-reported nominal setting',
++        'source_supported_inference':'source-supported inference','conditional_assumption':'conditional assumption','unresolved':'unknown'}
++    section(parts,'Native context observations',table(
++        ('Context','Biological setting','Requirement','Measurement','Reported point','Unit','Value basis','Basis evidence',
++         'SD','SEM','Untyped spread','Reported n','Repetition kind','Sample unit','Cluster','Pairing','Scope match'),
++        ((contexts[r['context_ref']],meaning(r['context_ref']),meaning(r['requirement_ref']),measurements[r['measurement_ref']],
++          r['lower'],r['unit'],bases[r['value_basis']],meaning(r['basis_ref']),r['reported_sd'],r['reported_sem'],r['reported_plusminus'],
++          r['reported_count'],r['replicate_kind'],meaning(r['sample_unit_ref']),meaning(r['cluster_ref']),r['pairing'],r['scope_match']) for r in rows)))
++    section(parts,'Native observation interpretation',
++        'Reported points are separate from operating domains and sampling confidence intervals. A nominal culture setting does not establish measured habitat exposure. Reused measurement labels retain a shared source observation; reported repetition counts do not supply an independent context-sampling denominator.')
+--- /dev/null
++++ b/gene_annotation_episode/literature_context_native_storage.py
+@@ -0,0 +1,327 @@
++"""Separately requested native observations from the one committed A108 sheet.
++
++This is reader information, not another score or population operation. Original
++source bytes and parsers are never consulted during saved delivery/replay.
++"""
++from copy import deepcopy
++import json
++
++from .domain import ContractError, canonical, identity, obj, validate_schema
++from .literature_context_inputs import NATIVE_UNITS
++from .literature_context_storage import LiteratureContextSemanticProjection
++from .literature_context_native_inputs import VALUE_BASES, TRACE_VERSION
++
++NAMESPACE = "literature_context_native_observations"
++POSITIONS_FIELD = "requested_context_native_positions"
++
++
++def positions_schema():
++    return {"type":"array","uniqueItems":True,"items":{"anyOf":[
++        {"type":"integer","minimum":0},{"type":"string","const":"all"}]}}
++
++
++def native_observations_schema():
++    def ref(kind,nullable=False):
++        return {"type":["string","null"] if nullable else "string","format":"reference","x-reference-namespace":kind}
++    number={"type":["number","null"]}
++    return {"type":"array","x-source":NAMESPACE,"items":obj({
++        **{name:ref("source") for name in ("sheet_ref","evidence_source_ref","data_source_ref")},
++        "context_ref":ref("context"),"requirement_ref":ref("reference"),"measurement_ref":ref("reference"),
++        "basis_ref":ref("reference",True),"sample_unit_ref":ref("reference",True),"cluster_ref":ref("reference",True),
++        "observation_position":{"type":"integer","minimum":0},
++        "unit":{"type":"string","enum":list(NATIVE_UNITS)},"lower":dict(number),"upper":dict(number),
++        "lower_closed":{"type":"boolean"},"upper_closed":{"type":"boolean"},
++        "reported_relation":{"type":"string","enum":["point","unreported"]},
++        **{name:{**number,"minimum":0} for name in ("reported_sd","reported_sem","reported_plusminus")},
++        "reported_count":{"type":["integer","null"],"minimum":0},
++        "count_relation":{"type":"string","enum":["exact","unknown"]},
++        "replicate_kind":{"type":"string","enum":["biological","technical","timepoint","unknown"]},
++        "value_basis":{"type":"string","enum":list(VALUE_BASES)},
++        "origin":{"type":"string","enum":["reported","synthetic"]},
++        "scope_match":{"type":"string","enum":["matched","unresolved","conflicting"]},
++        "pairing":{"type":"string","enum":["paired","unknown"]},
++        "context_kind":{"type":"string","enum":["sample","environment","growth_condition","assay_condition","organism"]},
++        "bound_kind":{"type":"string","const":"reported_point_not_operating_domain"}})}
++
++
++def publish_native_observations(extraction, meanings, publish):
++    """Bind retained point values to actual context/requirement/source identities."""
++    trace=extraction["native_evidence"];inputs=extraction["calculation_inputs"]
++    if inputs["origin"] not in ("reported","synthetic"):
++        raise ContractError("context_native_origin_mismatch")
++    req_refs={req["key"]:binding["requirement_ref"] for req,binding in zip(inputs["requirements"],meanings["requirements"])}
++    core_contexts={context["key"]:context for context in inputs["contexts"]}
++    data_ref=extraction["arguments"]["data_source_ref"]
++    def reference(witness,role,fallback=None):
++        if witness is None and fallback is None:return None
++        anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
++        return publish("reference",{"reference_type":"literature_result","source_ref":data_ref if witness is None else witness["source_ref"],
++            "accession":identity("context_literal",{"native_role":role,"anchor":anchor,"fallback":fallback if anchor is None else None}),
++            "label":"Unreported "+role if witness is None else witness["quote"],"sequence_ref":None,"molecule":None,"length":None,
++            "term_refs":[],"context_refs":[],"anchor":anchor})
++    rows=[];seen={}
++    for selected in trace["contexts"]:
++        core=core_contexts[selected["key"]]
++        witness=selected["setting"] or selected["identity"]
++        anchor=None if witness is None else {k:witness[k] for k in ("source_ref","artifact_ref","start","end","quote")}
++        # Unknown settings are scoped by the actual context identity, not
++        # silently merged into one biological state merely through equal labels.
++        name=("Unreported biological setting (context "+str(list(core_contexts).index(selected["key"])+1)+")"
++              if witness is None else witness["quote"])
++        context_ref=publish("context",{"context_type":selected["setting_kind"],"source_ref":data_ref if witness is None else witness["source_ref"],
++            "name":name,"attributes":[],"related_refs":[],"anchor":anchor})
++        sample_ref=reference(selected["sample_unit"],"sampling unit")
++        cluster_ref=reference(selected["cluster"],"sampling cluster")
++        observations={obs["requirement_key"]:obs for obs in core["observations"]}
++        for native in selected["observations"]:
++            obs=observations[native["requirement_key"]]
++            reading=native["value"]
++            witness=native["measurement_identity"]
++            if witness is None and reading is not None:
++                number=reading["number"];selector=number["selector"];selected=selector["witness"]
++                # Numeric source identity survives a different surrounding quote
++                # or recipe. A wider excerpt is not a second observation.
++                start=selected["start"]+len(selected["quote"][:selector["number_start"]].encode("utf-8"))
++                witness={**selected,"start":start,"end":start+len(number["raw_number"].encode("utf-8")),"quote":number["raw_number"]}
++            measurement_ref=reference(witness,"native observation",native["measurement_key"])
++            interval=obs["interval"]
++            row={"evidence_source_ref":extraction["arguments"]["source_ref"],"data_source_ref":data_ref,
++                "context_ref":context_ref,"requirement_ref":req_refs[native["requirement_key"]],"measurement_ref":measurement_ref,
++                "basis_ref":reference(native["basis_witness"],"reported observation basis"),"sample_unit_ref":sample_ref,"cluster_ref":cluster_ref,
++                "unit":obs["unit"],"lower":None if interval is None else interval["lower"],"upper":None if interval is None else interval["upper"],
++                "lower_closed":interval is not None,"upper_closed":interval is not None,
++                "reported_relation":"unreported" if interval is None else "point",
++                **{name:obs[name] for name in ("reported_sd","reported_sem","reported_plusminus","reported_count","count_relation","replicate_kind")},
++                "value_basis":native["value_basis"],"origin":inputs["origin"],"scope_match":core["scope_match"],"pairing":inputs["pairing"],"context_kind":selected["setting_kind"],
++                "bound_kind":"reported_point_not_operating_domain"}
++            key=selected["key"],native["requirement_key"]
++            if key in seen:
++                if seen[key]!=row:raise ContractError("context_native_alias_meaning_conflict")
++                continue
++            seen[key]=deepcopy(row);row["observation_position"]=len(rows);rows.append(row)
++    return rows
++
++
++def native_row_references(rows):
++    return list(dict.fromkeys(value for row in rows for key,value in row.items() if key.endswith("_ref") and value is not None))
++
++
++class LiteratureContextNativeObservations(LiteratureContextSemanticProjection):
++    received_table="literature_context_native_observations_received"
++
++    def read(self,sheet_ref):
++        saved=super().read(sheet_ref)
++        if saved["extraction"].get("native_evidence",{}).get("version")!=TRACE_VERSION or "native_observations" not in saved:
++            raise ContractError("literature_context_native_observations_unavailable")
++        source=self.store.get(sheet_ref);request=json.loads(self.store.get_artifact(source["request_ref"]))
++        operation=self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id,request["episode_id"],request["operation_key"])).fetchone()
++        outcome=json.loads(operation["outcome"])
++        if outcome["result"].get("native_observations")!=saved["native_observations"]:
++            raise ContractError("literature_context_native_saved_mismatch")
++        return saved
++
++    def _positions(self,positions):
++        if not isinstance(positions,(list,tuple)) or any(type(p) not in (str,int) for p in positions):
++            raise ContractError("context_native_positions_invalid")
++        if len(set(positions))!=len(positions):
++            raise ContractError("context_native_positions_invalid")
++        if "all" in positions and tuple(positions)!=("all",):
++            raise ContractError("context_native_positions_invalid")
++        if any(p!="all" and (type(p) is not int or p<0) for p in positions):
++            raise ContractError("context_native_positions_invalid")
++        return tuple(positions)
++
++    def project_rows(self,sheet_refs,*,permitted_record_refs,positions=("all",)):
++        positions=self._positions(positions);result=[]
++        for sheet_ref in dict.fromkeys(sheet_refs):
++            if sheet_ref not in permitted_record_refs:raise ContractError("literature_sheet_not_received")
++            saved=self.read(sheet_ref)
++            rows=saved["native_observations"]
++            if positions!=("all",) and any(p>=len(rows) for p in positions):
++                raise ContractError("context_native_position_unavailable")
++            result.extend({"sheet_ref":sheet_ref,**deepcopy(row)} for row in rows
++                if positions==("all",) or row["observation_position"] in positions)
++        validate_schema(result,native_observations_schema())
++        return result
++
++    def validate_returned_values(self,rows,*,permitted_record_refs):
++        validate_schema(rows,native_observations_schema());seen=set()
++        for row in rows:
++            key=row["sheet_ref"],row["observation_position"]
++            if key in seen:raise ContractError("duplicate_context_native_observation")
++            seen.add(key)
++            expected=self.project_rows([key[0]],permitted_record_refs=permitted_record_refs,positions=[key[1]])
++            if len(expected)!=1 or canonical(row)!=canonical(expected[0]):
++                raise ContractError("context_native_return_differs_from_saved")
++
++    def fact_rows(self,context,sheet_refs,*,positions=("all",)):
++        if context.run_id!=self.run_id:raise ContractError("literature_run_mismatch")
++        positions=self._positions(positions);received=None;result=[]
++        for sheet_ref in dict.fromkeys(sheet_refs):
++            if sheet_ref not in context.received_record_refs:raise ContractError("literature_sheet_not_received")
++            self.project_rows([sheet_ref],permitted_record_refs=context.received_record_refs,positions=[])
++            if self._sheet_owner(sheet_ref)==context.episode_id:
++                result.extend(self.project_rows([sheet_ref],permitted_record_refs=context.received_record_refs,positions=positions))
++            else:
++                if received is None:received=self.received_rows(context)
++                result.extend(deepcopy(row) for row in received if row["sheet_ref"]==sheet_ref and
++                    (positions==("all",) or row["observation_position"] in positions))
++        return result
++
++    def validate_fact_rows(self,context,rows):
++        self.validate_returned_values(rows,permitted_record_refs=context.received_record_refs)
++        expected={(r["sheet_ref"],r["observation_position"]):r for r in self.fact_rows(context,
++            list(dict.fromkeys(r["sheet_ref"] for r in rows)),positions=list(dict.fromkeys(r["observation_position"] for r in rows)))}
++        if any(canonical(r)!=canonical(expected.get((r["sheet_ref"],r["observation_position"]))) for r in rows):
++            raise ContractError("context_native_observation_not_received")
++
++
++    # These three receipt methods retain the existing rate-receipt proof
++    # structure exactly, with the native namespace and row-position identity.
++    def _runtime_delivery_cells(self, context, operation_key):
++        """Authenticate runtime admission; other keys are a trusted manual API.
++
++        A saved digest is not proof that runtime admitted the subset. Its actual
++        successful form and original child contract supply that proof. Reading
++        an old authentic runtime receipt needs no backfilled binding or history.
++        """
++        if not isinstance(operation_key, str) or not operation_key:
++            raise ContractError("operation_key_required")
++        prefix = self.run_id + ":" + context.episode_id + ":"
++        if not operation_key.startswith(prefix) and not operation_key.endswith(":typed_form"):
++            return None
++        suffix = operation_key[len(prefix):].split(":") if operation_key.startswith(prefix) else []
++        if (len(suffix) != 2 or not suffix[0].isascii() or not suffix[0].isdigit()
++                or suffix[1] != "typed_form"):
++            raise ContractError("literature_delivery_binding_mismatch")
++        try:
++            index = int(suffix[0])
++        except ValueError as error:
++            raise ContractError("literature_delivery_binding_mismatch") from error
++        if index > 2**63 - 1 or str(index) != suffix[0]:
++            raise ContractError("literature_delivery_binding_mismatch")
++        installed = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_report_attempts'").fetchone()
++        attempt = self.store.db.execute("SELECT form,contract,failure,child_episode_id,delivery_ref FROM runtime_report_attempts "
++            "WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
++            (self.run_id, context.episode_id, index)).fetchone() if installed else None
++        if attempt is None or attempt["form"] is None or attempt["failure"] is not None:
++            raise ContractError("literature_delivery_binding_mismatch")
++        try:
++            form, contract = json.loads(attempt["form"]), json.loads(attempt["contract"])
++            if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_episodes'").fetchone() is None:
++                raise ContractError("literature_delivery_binding_mismatch")
++            child = self.store.db.execute("SELECT request FROM runtime_episodes WHERE run_id=? AND episode_id=?",
++                (self.run_id, attempt["child_episode_id"])).fetchone()
++            if child is None:
++                raise ContractError("literature_delivery_binding_mismatch")
++            original_contract = json.loads(child["request"])["report_contract"]
++            if canonical(original_contract) != canonical(contract):
++                # A selected report repair can legitimately revise the form.
++                # Authenticate that actual decision and its original delivery,
++                # rather than pretending it was the child's initial contract.
++                installed_action = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_actions'").fetchone()
++                action = self.store.db.execute("SELECT action FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?",
++                    (self.run_id, context.episode_id, index)).fetchone() if installed_action else None
++                installed_decision = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_model_calls'").fetchone()
++                # Report repair runs before ActionLeaf/action publication. Read
++                # only its public selected choice, never provider history,
++                # request text, complete responses or private reasoning.
++                decision = self.store.db.execute("SELECT CASE WHEN json_valid(response) THEN response -> '$.selection' END AS selected "
++                    "FROM runtime_model_calls WHERE run_id=? AND episode_id=? AND call_index=? AND purpose='decision'",
++                    (self.run_id, context.episode_id, index)).fetchone() if installed_decision else None
++                selected = json.loads(action["action"]) if action else None
++                chosen = json.loads(decision["selected"]) if decision and decision["selected"] is not None else None
++                if selected is not None and chosen is not None and canonical(selected) != canonical(chosen):
++                    raise ContractError("literature_delivery_binding_mismatch")
++                selected = selected if selected is not None else chosen
++                if not isinstance(selected, dict):
++                    raise ContractError("literature_delivery_binding_mismatch")
++                prior = self.store.db.execute("SELECT child_episode_id,contract FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? "
++                    "AND delivery_ref=? AND decision_index<? ORDER BY decision_index LIMIT 1",
++                    (self.run_id, context.episode_id, selected.get("delivery_ref"), index)).fetchone()
++                if (selected.get("kind") != "redeliver_report" or prior is None
++                        or attempt["delivery_ref"] != selected.get("delivery_ref")
++                        or prior["child_episode_id"] != attempt["child_episode_id"]
++                        or canonical(json.loads(prior["contract"])) != canonical(original_contract)
++                        or selected.get("purpose") != contract["decision"]
++                        or canonical(json.loads(selected["schema_json"])) != canonical(contract["measurements"]["schema"])):
++                    raise ContractError("literature_delivery_binding_mismatch")
++            namespace = NAMESPACE
++            fields = [name for name, node in contract["measurements"]["schema"]["properties"].items()
++                if node.get("x-source") == namespace]
++            if not fields:
++                raise ContractError("literature_delivery_binding_mismatch")
++            return [row for name in fields for row in form[name]]
++        except (KeyError, TypeError, ValueError) as error:
++            raise ContractError("literature_delivery_binding_mismatch") from error
++
++
++    def _receive_rows(self, context, cells, operation_key):
++        """Record exactly the already admitted subset, adding no observation."""
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        with self.store.transaction():
++            original = self._runtime_delivery_cells(context, operation_key)
++            if original is not None and canonical(original) != canonical(cells):
++                raise ContractError("literature_delivery_binding_mismatch")
++            self.validate_returned_values(cells,
++                permitted_record_refs=[row["sheet_ref"] for row in cells])
++            data = canonical(cells)
++            old = self.store.db.execute(f"SELECT cells FROM {self.received_table} WHERE "
++                "run_id=? AND episode_id=? AND operation_key=?",
++                (self.run_id, context.episode_id, operation_key)).fetchone()
++            if old is not None and old["cells"] != data:
++                raise ContractError("literature_rate_delivery_identity_conflict")
++            digest = self._delivery_digest(cells)
++            bound = self._delivery_binding(context, operation_key)
++            if bound is not None and bound[0] != digest:
++                raise ContractError("literature_delivery_binding_mismatch")
++            if old is not None and bound is None and original is None:
++                raise ContractError("literature_delivery_binding_unavailable")
++            if old is not None and bound is None:
++                # The original runtime form is sufficient proof. Preserve old
++                # state rather than backfilling a newly invented admission.
++                return
++            self._install_delivery_bindings()
++            self.store.db.execute(f"INSERT OR IGNORE INTO {self.received_table} VALUES(?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, data))
++            self.store.db.execute(f"INSERT OR IGNORE INTO {self._delivery_table} VALUES(?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, digest))
++
++
++    def _received_rows(self, context):
++        """Forward copied admitted cells, not the complete private child sheet."""
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        result, seen = [], set()
++        rows = self.store.db.execute(f"SELECT operation_key,cells FROM {self.received_table} WHERE "
++            "run_id=? AND episode_id=? ORDER BY rowid", (self.run_id, context.episode_id))
++        for saved in rows:
++            cells = json.loads(saved["cells"])
++            original = self._runtime_delivery_cells(context, saved["operation_key"])
++            bound = self._delivery_binding(context, saved["operation_key"])
++            if bound is None and original is None:
++                raise ContractError("literature_delivery_binding_unavailable")
++            if (bound is not None and bound[0] != self._delivery_digest(cells)
++                    or original is not None and canonical(original) != canonical(cells)):
++                raise ContractError("literature_delivery_binding_mismatch")
++            self.validate_returned_values(cells, permitted_record_refs=[row["sheet_ref"] for row in cells])
++            for row in cells:
++                key = (row["sheet_ref"], row["observation_position"])
++                if key not in seen:
++                    seen.add(key)
++                    result.append(deepcopy(row))
++        return result
++
++
++    def receive_rows(self,context,rows,operation_key):
++        with self.store.transaction():
++            self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
++                run_id TEXT NOT NULL,episode_id TEXT NOT NULL,operation_key TEXT NOT NULL,
++                cells TEXT NOT NULL,PRIMARY KEY(run_id,episode_id,operation_key))""")
++            return self._receive_rows(context,rows,operation_key)
++
++    def received_rows(self,context):
++        if context.run_id!=self.run_id:raise ContractError("literature_run_mismatch")
++        return self._received_rows(context) if self._installed() else []
+--- a/gene_annotation_episode/literature_context_storage.py
++++ b/gene_annotation_episode/literature_context_storage.py
+@@ -81,6 +81,12 @@
+         *(entry["source_ref"] for entry in args["interpretation_witnesses"])]))
+ 
+ 
++def _extraction_direct_references(args, extraction):
++    from .literature_context_native_inputs import native_direct_references
++    return native_direct_references(extraction,
++        meaning_direct_references(args, extraction, _direct_references(args)))
++
++
+ class LiteratureContextRepository(LiteratureRateRepository):
+     provider = PROVIDER
+     components = COMPONENTS
+@@ -91,6 +97,10 @@
+ 
+     def semantic_projection(self):
+         return LiteratureContextSemanticProjection(self.store, self.run_id)
++
++    def native_observations(self):
++        from .literature_context_native_storage import LiteratureContextNativeObservations
++        return LiteratureContextNativeObservations(self.store, self.run_id)
+ 
+     def cells_schema(self):
+         return context_cells_schema()
+@@ -176,7 +186,7 @@
+                 raise ContractError("literature_source_representation_unavailable")
+             return {"artifact_ref": artifact, "content": self.store.get_artifact(artifact)}
+         extraction = read_context_inputs(args, read_source=read_source)
+-        direct = meaning_direct_references(args, extraction, direct)
++        direct = _extraction_direct_references(args, extraction)
+         if set(extraction["sources"]) != set(direct):
+             raise ContractError("literature_context_direct_source_mismatch")
+         inputs = extraction["calculation_inputs"]
+@@ -236,6 +246,11 @@
+                 if record_version == MEANINGS_RECORD_VERSION else None)
+             if semantic_bindings is not None:
+                 payload["semantic_bindings"] = semantic_bindings
++            native_rows = None
++            if "native_evidence" in extraction:
++                from .literature_context_native_storage import publish_native_observations
++                native_rows = publish_native_observations(extraction, semantic_bindings, publish)
++                payload["native_observations"] = native_rows
+             metadata = _metadata(extraction, sheet)
+             if semantic_bindings is not None:
+                 metadata = semantic_metadata(metadata, semantic_bindings)
+@@ -246,14 +261,16 @@
+             sheet_ref = publish("source", {"provider": self.provider, "accession": None, "uri": None,
+                 "artifact_ref": artifact, "text_ref": artifact, "request_ref": request,
+                 "version": record_version, "retrieved_at": None, "parent_source_refs": parents})
++            from .literature_context_native_storage import native_row_references
+             outcome = {"status": "completed", "operation_ref": identity("operation", {
+                 "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
+                 "record_refs": list(dict.fromkeys([sheet_ref, *parents,
+                     *(reference for reference in bindings.values() if reference),
+-                    *(binding_references(semantic_bindings) if semantic_bindings is not None else [])])),
++                    *(binding_references(semantic_bindings) if semantic_bindings is not None else []),
++                    *(native_row_references(native_rows) if native_rows is not None else [])])),
+                 "changed_record_refs": created, "result": {"sheet_ref": sheet_ref,
+                     "cells": sheet["cells"], "assay_interpretation": extraction["literals"],
+-                    **metadata}, "feedback": None}
++                    **metadata, **({"native_observations": native_rows} if native_rows is not None else {})}, "feedback": None}
+             self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
+                 (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+         return outcome
+@@ -271,8 +288,7 @@
+             (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
+         if (source["version"] != self.record_version
+                 or operation["signature"] != canonical({"arguments": args, "scope": request["scope"]})
+-                or saved["direct_input_source_refs"] != meaning_direct_references(
+-                    args, extraction, _direct_references(args))
++                or saved["direct_input_source_refs"] != _extraction_direct_references(args, extraction)
+                 or set(extraction["sources"]) != set(saved["direct_input_source_refs"])
+                 or self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]
+                 or saved["data_source_ref"] != args["data_source_ref"]
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -278,6 +278,8 @@
+                          "literature_context_inputs.py", "literature_context_calculations.py",
+                          "literature_context_storage.py", "literature_context_prompt.py",
+                          "literature_context_meanings.py", "literature_context_meanings_render.py",
++                         "literature_context_native_inputs.py", "literature_context_native_storage.py",
++                         "literature_context_native_render.py",
+                          "literature_figure_measurements.py", "literature_figure_inputs.py",
+                          "literature_figure_storage.py", "literature_figure_prompt.py",
+                          "literature_partner_calculations.py", "literature_partner_inputs.py",
+@@ -402,6 +404,8 @@
+             from .literature_context_calculations import COMPONENTS as CONTEXT_COMPONENTS
+             schema["properties"]["requested_context_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(CONTEXT_COMPONENTS)}}
++            from .literature_context_native_storage import positions_schema
++            schema["properties"]["requested_context_native_positions"] = positions_schema()
+             from .literature_figure_storage import COMPONENTS as FIGURE_COMPONENTS
+             schema["properties"]["requested_figure_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(FIGURE_COMPONENTS)}}
+@@ -934,6 +938,7 @@
+         from .literature_structure_storage import structure_cells_schema
+         from .literature_reaction_storage import reaction_cells_schema, reaction_semantic_cells_schema
+         from .literature_context_storage import context_cells_schema, context_semantic_cells_schema
++        from .literature_context_native_storage import native_observations_schema
+         from .literature_figure_storage import figure_cells_schema
+         from .literature_partner_storage import partner_cells_schema
+         from .literature_amount_storage import amount_cells_schema
+@@ -985,6 +990,9 @@
+             "literature_context_cells": {"type": "array", "meaning":
+                 "Saved organism/sample compatibility bounds with the original capability-versus-coverage question, actual context frame, weights, pairing, mapping and domain qualifications. Unpaired fractions use bounds; unexamined biological situations remain unknown. Conditional Hoeffding sampling is separate from logical domains and requires the actual independent context design. Source assay observations are not additional biological samples, target-transfer weights or annotation credit.",
+                 "report_schema": context_cells_schema()},
++            "literature_context_native_observations": {"type": "array", "meaning":
++                "Explicitly requested source-reported context points, separate spread/count meanings and actual biological settings. Nominal culture settings remain distinct from measured local/habitat exposures. Repeated representations retain physical measurement identity; reported n is not a context-sampling denominator. These reader facts come from the same committed sheet and add no assay, score or credit.",
++                "report_schema": native_observations_schema()},
+             "literature_context_semantic_cells": {"type": "array", "meaning":
+                 "The same A108 numerical components with distinct scoped requirements and alternative routes, source-supported entity/property/biological-setting/function meanings, exact route membership and joint-scope evidence. Missing meanings remain unknown; unnamed handles assert no substance or independent evidence. Logical domains, source relations and capability-versus-coverage distinctions retain their existing conditional meanings. This is a closed return view, not another sheet or axis.",
+                 "report_schema": context_semantic_cells_schema()},
+@@ -1095,6 +1103,23 @@
+                 SOURCE_COMPONENTS, self._ratio_source_repository),)
+         return result
+ 
++    def _context_native_facts(self, context, references):
++        from .literature_context_storage import PROVIDER
++        repository = self.services.literature_context_repository()
++        adapter = repository.native_observations()
++        rows = []
++        positions = context.assignment.get("requested_context_native_positions", ["all"])
++        for reference in dict.fromkeys(references):
++            if reference not in context.received_record_refs:
++                continue
++            source = self.services.read_record(reference)
++            if (source.get("record_type") == "source" and source.get("provider") == PROVIDER
++                    and source.get("version") == "literature_context_record_v2"):
++                saved = repository.read(reference)
++                if "native_observations" in saved:
++                    rows.extend(adapter.fact_rows(context, [reference], positions=positions))
++        return rows
++
+     def _rate_facts(self, context, references):
+         result = {}
+         for namespace, requested_field, provider, defaults, repository in self._population_routes():
+@@ -1154,6 +1179,7 @@
+                     keys = adapter.requested_component_keys(reference, context.assignment)
+                     rows.extend(adapter.fact_cells(context, [reference], components=keys))
+             result["literature_gel_component_cells"] = rows
++        result["literature_context_native_observations"] = self._context_native_facts(context, references)
+         return result
+ 
+     def received_report_sources(self, role):
+@@ -1175,6 +1201,9 @@
+             cells = self._gel_repository().received_cells(context)
+             if cells:
+                 result["literature_gel_component_cells"] = cells
++        native_rows = self.services.literature_context_repository().native_observations().received_rows(context)
++        if native_rows:
++            result["literature_context_native_observations"] = native_rows
+         return result
+ 
+     def received_form_references(self, context, form, schema, operation_key):
+@@ -1204,6 +1233,12 @@
+             if cells:
+                 adapter.receive_cells(context, cells, operation_key)
+                 references.extend(adapter.cell_record_refs(cells))
++        native_rows = [row for name, node in schema.get("properties", {}).items()
++            if node.get("x-source") == "literature_context_native_observations" for row in form[name]]
++        if native_rows:
++            from .literature_context_native_storage import native_row_references
++            self.services.literature_context_repository().native_observations().receive_rows(context, native_rows, operation_key)
++            references.extend(native_row_references(native_rows))
+         return list(dict.fromkeys(references))
+ 
+     def validate_received_report(self, context, form, schema):
+@@ -1246,6 +1281,24 @@
+                         raise ContractError("unrequested_literature_rate_component")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
++        native_adapter = self.services.literature_context_repository().native_observations()
++        for name, node in schema.get("properties", {}).items():
++            if node.get("x-source") != "literature_context_native_observations":
++                continue
++            rows = form[name]
++            permitted = set(context.received_record_refs)
++            if any(row["sheet_ref"] not in permitted for row in rows):
++                selection = self.services.record_selection(context)
++                if selection.get("run_id") != context.run_id or selection.get("episode_id") != context.episode_id:
++                    raise ReportBoundaryError("Literature return receiver differs", code="literature_context_native_receiver_mismatch", field=name)
++                permitted.update(selection["known_record_refs"])
++            try:
++                native_adapter.validate_fact_rows(replace(context, received_record_refs=tuple(permitted)), rows)
++                positions = native_adapter._positions(context.assignment.get("requested_context_native_positions", ["all"]))
++                if positions != ("all",) and any(row["observation_position"] not in positions for row in rows):
++                    raise ContractError("unrequested_context_native_observation")
++            except ContractError as error:
++                raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+         if self.controlled_response_population:
+             adapter = self._controlled_response_repository()
+             for name, node in schema.get("properties", {}).items():
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -543,6 +543,10 @@
+         reaction_meanings(parts, content, controlled_records, section=_section, table=_table)
+         _amount_metadata(parts, content)
+         _covariance_meanings(parts, ({"component": name, **cell} for name, cell in cells.items()), controlled_records)
++    native_context_rows = content.get("native_observations")
++    if isinstance(native_context_rows, (tuple, list)) and native_context_rows:
++        from .literature_context_native_render import render_rows as render_native_context
++        render_native_context(parts, native_context_rows, controlled_records, section=_section, table=_table)
+     assay = content.get("assay_interpretation")
+     if isinstance(assay, Mapping):
+         rows = []
+@@ -825,6 +829,8 @@
+     gel = {}
+     native_rate = {}
+     rate_domains = {}
++    native_context = {}
++    from .literature_context_native_render import is_row as native_context_row, render_rows as render_native_context
+     covariance_rows = []
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
+     from .literature_gel_render import is_row as gel_row, render_received as gel_received
+@@ -834,7 +840,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_rate_domains.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(native_context_row(row) for row in value):
++                for row in value:
++                    native_context.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_rate_domains.is_row(row) for row in value):
+                 for row in value:
+                     rate_domains.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(_native_rate.is_row(row) for row in value):
+@@ -959,6 +968,8 @@
+             "sheet_ref", "evidence_source_ref", "data_source_ref", "assayed_subject_ref",
+             "organism_ref", "strain_ref", "experiment_ref", "function_ref", "biological_context_ref",
+             "sample_frame_ref", "endpoint_ref", "condition_ref"))))
++    for rows in native_context.values():
++        render_native_context(parts, rows, records, section=_section, table=_table)
+     for sheet_ref, rows in figures.items():
+         first = rows[0]
+         cell_fields = ("value", "lower", "upper", "unit", "origin", "bound_kind",

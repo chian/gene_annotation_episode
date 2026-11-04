@@ -1,0 +1,846 @@
+--- actual073before
++++ current073provisional
+@@ -2,8 +2,9 @@
+ 
+ Selections assign scientific meanings. Exact bytes/geometry establish custody
+ only; original runtime authorization and outcome binding remain caller owned.
+-This first reader supports text/structured source covariance; graph nominations
+-are retained as explicit unimplemented capability, never made-up ordinates.
++The v1 profile retains its original text/structured covariance semantics and
++unimplemented graph nominations. Explicit HOST stages also serve full v2, whose
++graph facade supplies actual063 measurements before shared science assembly.
+ """
+ from __future__ import annotations
+ 
+@@ -216,8 +217,12 @@
+ 
+ def validate_controlled_response_selection(arguments):
+     """Validate the whole closed nomination before any callback or decoding."""
++    return _validate_selection(arguments, _SELECTION_SCHEMA)
++
++
++def _validate_selection(arguments, schema):
+     try:
+-        Draft202012Validator(_SELECTION_SCHEMA).validate(arguments)
++        Draft202012Validator(schema).validate(arguments)
+         json.dumps(arguments, allow_nan=False)
+     except Exception as error:
+         if not isinstance(error, (ValueError, TypeError)) and error.__class__.__module__.split(".")[0] != "jsonschema":
+@@ -299,6 +304,7 @@
+ 
+ class _Context:
+     def __init__(self, arguments, callback):
++        self.unavailable_errors = {}
+         if not callable(callback):
+             _fail("source_reader_required", "read_source")
+         self.cache, self.roster = {}, []
+@@ -315,10 +321,12 @@
+             except OSError as error:
+                 if error.errno not in (errno.ENOENT, errno.EIO, errno.ETIMEDOUT):
+                     raise
++                self.unavailable_errors[(reference, representation)] = error
+                 loaded = _Unavailable()
+                 record.update(state="unavailable", diagnostics=[_diag("source_dependency_unavailable",
+                     "sources", "dependency", [reference])])
+-            except EOFError:
++            except EOFError as error:
++                self.unavailable_errors[(reference, representation)] = error
+                 loaded = _Unavailable()
+                 record.update(state="unavailable", diagnostics=[_diag("source_dependency_unavailable",
+                     "sources", "dependency", [reference])])
+@@ -595,7 +603,8 @@
+     if witness["canonical_locator"] is None:
+         return result
+     try:
+-        reading = {"interval": _interval, "confidence": _confidence, "count": _count_reading}[kind](selected, context.native)
++        parse_selection = _ci_literal_subselection(selected) if kind == "interval" and getattr(context,"profile","v1") == "v2" else selected
++        reading = {"interval": _interval, "confidence": _confidence, "count": _count_reading}[kind](parse_selection, context.native)
+     except ExperimentalContractError as error:
+         sentence_stop = False
+         if kind == "confidence" and error.code == "partial_source_confidence_level":
+@@ -622,6 +631,13 @@
+ 
+ 
+ def _uncertainty(context, selected, response_unit, endpoint, field):
++    if hasattr(context, "saved_uncertainty"):
++        saved = context.saved_uncertainty
++        if saved["selection"] != selected: _fail("saved_selection_mismatch", field)
++        return deepcopy(saved["value"])
++    tagged = getattr(context, "profile", "v1") == "v2"
++    response_carrier = response_unit
++    response_unit = response_unit["record"] if tagged and response_unit is not None else response_unit
+     meanings = {key: _interpretation(context, selected[key], field + "." + key) for key in
+         ("statistic", "unit_relationship", "repetition_basis", "estimate_basis")}
+     magnitude = _number(context, selected["magnitude"], field + ".magnitude", "spread") if selected["magnitude"] else None
+@@ -641,8 +657,11 @@
+     if magnitude and magnitude["status"] == "parsed" and effective_unit and effective_unit["status"] == "supported":
+         try:
+             actual_number = _native_number(magnitude["selection"], context.native, "spread")
+-            actual_unit = _native_unit(effective_unit["selection"], context.native,
++            actual_unit = (_native_unit(effective_unit["selection"], context.native,
+                 effective_unit["selection"]["definition"]["endpoint"] if effective_unit["definition_witnesses"] else None)
++                if not tagged or relationship == "explicit_unit" else
++                {"canonical_unit": effective_unit["canonical_unit"], "raw_unit": effective_unit["raw_unit"],
++                 "source_defined_unit": None})
+             _check_explicit_unit(actual_number, actual_unit, context.native)
+         except ExperimentalContractError as error:
+             if error.code == "source_spread_unit_mismatch":
+@@ -650,6 +669,25 @@
+                 diagnostics.append(_diag("source_uncertainty_unit_conflicting", field, "source_interpretation"))
+             else:
+                 raise
++    if tagged and interval and interval["status"] == "parsed" and effective_unit and effective_unit["status"] == "supported":
++        narrowed = _ci_literal_subselection(interval["selection"])
++        witness = {**narrowed["witness"], "artifact_ref": interval["witness"]["artifact_ref"]}
++        _, suffix = _field_contexts(context.native, witness, 0, len(witness["quote"]))
++        if _retained_printed_unit_conflict(suffix, effective_unit):
++            effective_unit = None
++            diagnostics.append(_diag("source_uncertainty_unit_conflicting", field, "source_interpretation"))
++    result = _assemble_uncertainty(selected, meanings=meanings, magnitude=magnitude,
++        interval=interval, confidence=confidence, count=count, unit=unit,
++        effective_unit=effective_unit, diagnostics=diagnostics, field=field)
++    if tagged and result["effective_unit"] is not None:
++        result["effective_unit"] = (deepcopy(response_carrier) if relationship == "same_as_response"
++            else {"kind": "text", "record": result["effective_unit"]})
++    return result
++
++
++def _assemble_uncertainty(selected, *, meanings, magnitude, interval, confidence,
++                          count, unit, effective_unit, diagnostics, field):
++    """Arithmetic on retained readings shared by live and detached science."""
+     statistic = meanings["statistic"]["effective_value"]
+     if (statistic == "unreported" and any(item is not None for item in (magnitude, interval, confidence))
+             or statistic == "ci" and magnitude is not None
+@@ -906,7 +944,7 @@
+         "source_validation": "unassessed", "projection_state": "unavailable", "diagnostics": []}
+ 
+ 
+-def _covariance(context, selected, arms, relationships):
++def _covariance(context, selected, arms, relationships, *, owner_profile=False):
+     if selected is None:
+         return None
+     result = _empty_covariance(selected)
+@@ -986,6 +1024,8 @@
+         binding.update(label_witness=label, owner_witness=owner, correspondence=correspondence,
+             source_variable_index=index, resolved_owner_id=physical["canonical_id"] if state == "known" else None,
+             state=state, diagnostics=_unique_diagnostics([label, owner, correspondence]))
++    if owner_profile:
++        return _project_owner_covariance(result, matrix, arms, relationships)
+     if result["source_validation"] != "valid":
+         return result
+     states = [result["bindings"][role]["state"] for role in PRIMITIVE_ORDER]
+@@ -1165,37 +1205,16 @@
+     This function never calls a sheet calculator or makes an episode observation.
+     """
+     selected = validate_controlled_response_selection(arguments)
+-    context = _Context(selected, read_source)
+-    # Authenticate every nominated witness even when an independent data format
+-    # will later be unsupported. A malformed covariance cannot hide a forged
+-    # label/model nomination. Unavailable bytes remain explicitly unavailable.
+-    def authenticate(value, field):
+-        if isinstance(value, dict):
+-            if "quote" in value and ("source_ref" in value or value.get("kind") == "image"):
+-                context.witness(value, field)
+-            for key, item in value.items():
+-                authenticate(item, field + "." + key)
+-        elif isinstance(value, list):
+-            for i, item in enumerate(value):
+-                authenticate(item, f"{field}[{i}]")
+-    authenticate(selected, "arguments")
+-    relationships = _relationships(context, selected["relationships"])
+-    arms = {role: _arm(context, selected["arms"][role], "arms." + role) for role in PRIMITIVE_ORDER}
+-    _resolve_control_alias(arms, relationships)
+-    requested = {name: _interpretation(context, selected[name], name) for name in ("variance_status", "model_kind")}
+-    covariance = _covariance(context, selected["covariance"], arms, relationships)
+-    effective = _effective_model(requested, covariance, arms)
+-    parsed = _calculation_inputs(arms, relationships, covariance, effective)
+-    validate_controlled_response_inputs(parsed)
+-    result = {"version": VERSION, "selection": selected, "sources": context.roster,
+-        "images": context.images, "arms": arms, "relationships": relationships,
+-        "covariance": covariance, "requested_model": requested, "effective_model": effective,
+-        "calculation_inputs": parsed, "diagnostics": [],
+-        "implementation_dependencies": {"reader_contract_version": VERSION,
+-            "calculator_contract_version": INPUT_VERSION, "expected_module_fingerprints": deepcopy(DEPENDENCIES)}}
+-    result["diagnostics"] = _unique_diagnostics(result)
+-    json.dumps(result, allow_nan=False)
+-    return deepcopy(result)
++    with SourceContext(selected, read_source) as context:
++        arms = {}
++        for role in PRIMITIVE_ORDER:
++            nominated = context.arguments["arms"][role]
++            if nominated is None:
++                arms[role] = None
++            else:
++                # The legacy ordering (meaning, measurement, context) is retained.
++                arms[role] = _arm(context, nominated, "arms." + role)
++        return finish_controlled_response_inputs(context, arms=arms)
+ 
+ 
+ _RESULT_FIELDS = {'Diagnostic': ('code', 'field', 'domain', 'source_refs'),
+@@ -1481,7 +1500,7 @@
+             _fail("saved_unit_registry_mismatch", field)
+ 
+ 
+-def validate_controlled_response_extraction(arguments, extraction):
++def _validate_v1_saved_science(arguments, extraction):
+     """Check detached saved consistency, never grant custody or source access.
+ 
+     No callback, acquisition, image decoder or source literal reader is invoked.
+@@ -1733,6 +1752,657 @@
+     return deepcopy(extraction)
+ 
+ 
++def validate_controlled_response_extraction(arguments, extraction):
++    selected = validate_controlled_response_selection(arguments)
++    return validate_controlled_response_saved_science(selected, extraction,
++        measurement_checks=None)
++
++
+ __all__ = ["VERSION", "SELECTION_VERSION", "COVARIANCE_VERSION", "DEPENDENCIES",
+     "controlled_response_arguments_schema", "validate_controlled_response_selection",
+     "read_controlled_response_inputs", "validate_controlled_response_extraction"]
++
++# HOST stages are deliberately explicit imports, outside the original __all__.
++class _StageValue(dict):
++    def __init__(self, context, value):
++        super().__init__(deepcopy(value))
++        self._context = context
++
++
++class SourceContext(_Context):
++    """One validated, prefetched source closure; no provider survives close."""
++    def __init__(self, arguments, callback):
++        self.arguments = deepcopy(arguments)
++        self._profile = "v2" if arguments["version"].endswith("_v2") else "v1"
++        self.closed = False
++        self._endpoints = {}
++        self.visual = None
++        try:
++            super().__init__(self.arguments, callback)
++            _authenticate_request(self, self.arguments, "arguments")
++            self.relationships = _relationships(self, self.arguments["relationships"])
++        except BaseException:
++            self.close()
++            raise
++
++    @property
++    def profile(self):
++        return self._profile
++
++    def read_source(self, source_ref, representation):
++        self._active()
++        value = self.source(source_ref, representation)
++        return dict(value)
++
++    def _active(self):
++        if self.closed:
++            _fail("source_context_closed", "context")
++
++    def close(self):
++        if self.closed:
++            return
++        if self.visual is not None:
++            for decoded in self.visual.decoded.values():
++                if isinstance(decoded, tuple) and len(decoded) > 1:
++                    decoded[1].close()
++            self.visual.decoded.clear()
++            self.visual.images.clear()
++        if hasattr(self, "cache"):
++            self.cache.clear()
++        if hasattr(self, "native"):
++            self.native.cache.clear()
++            self.native.references.clear()
++        if self.visual is not None:
++            self.visual.sources.clear()
++        if hasattr(self, "unavailable_errors"):
++            self.unavailable_errors.clear()
++        self._endpoints.clear()
++        self.closed = True
++
++    def __enter__(self):
++        self._active()
++        return self
++
++    def __exit__(self, *exception):
++        self.close()
++
++
++def _authenticate_request(context, value, field):
++    if isinstance(value, dict):
++        if "quote" in value and ("source_ref" in value or value.get("kind") == "image"):
++            context.witness(value, field)
++        for key, item in value.items():
++            _authenticate_request(context, item, field + "." + key)
++    elif isinstance(value, list):
++        for i, item in enumerate(value):
++            _authenticate_request(context, item, f"{field}[{i}]")
++
++
++def open_controlled_response_sources(arguments, *, read_source):
++    if isinstance(arguments, dict) and arguments.get("version") == "controlled_response_source_selection_v2":
++        from .literature_controlled_response_v2_inputs import validate_controlled_response_v2_selection
++        selected = validate_controlled_response_v2_selection(arguments)
++    else:
++        selected = validate_controlled_response_selection(arguments)
++    return SourceContext(selected, read_source)
++
++
++def _owned(context, value, field):
++    context._active()
++    if not isinstance(value, _StageValue) or value._context is not context:
++        _fail("source_stage_context_mismatch", field)
++
++
++def _selected_arm_field(context, selected):
++    context._active()
++    for role, nominated in context.arguments["arms"].items():
++        if nominated is not None and nominated == selected:
++            return "arms." + role
++    _fail("unselected_arm_science", "selected_arm")
++
++
++def read_controlled_response_arm_science(context, selected_arm):
++    field = _selected_arm_field(context, selected_arm)
++    meanings = {name: _meaning(context, selected_arm[name], name, field + "." + name) for name in _MEANINGS}
++    science = _StageValue(context, {"selection": selected_arm,
++        "context": {name: context.witness(w, field + ".context." + name) for name,w in selected_arm["context"].items()},
++        "protein_arrangement": _interpretation(context, selected_arm["protein_arrangement"], field + ".protein_arrangement"),
++        "meanings": meanings, "intended_factor_level": context.witness(selected_arm["intended_factor_level"], field + ".intended_factor_level")})
++    context._endpoints[id(science["meanings"]["endpoint"])] = (science["meanings"]["endpoint"], field)
++    return science
++
++
++def _exact_response(measurement, *, graph=False):
++    unit = measurement["unit"]
++    if unit is None or unit["status"] != "supported":
++        return None
++    scale = _fraction(unit["exact_scale"])
++    if graph:
++        pixels = measurement["pixel_result"]
++        if pixels["status"] != "measured":
++            return None
++        point = _fraction(pixels["native_ordinate"]) * scale
++        lower, upper = (_fraction(pixels["native_bounds"][s]) * scale for s in ("lower", "upper"))
++        return {"point": _rational(point), "lower": _rational(lower), "upper": _rational(upper),
++            "relation": "interval", "approximate": True, "unit": unit["canonical_unit"]}
++    if measurement["reading_status"] != "exact":
++        return None
++    number = measurement["candidates"][0]
++    q = Fraction(number["raw_expression"].replace("−", "-")) * scale
++    relation = "eq" if number["relation"] == "point" else number["relation"]
++    return {"point": _rational(q) if relation == "eq" else None,
++        "lower": _rational(q) if relation in ("eq", "gt", "ge") else None,
++        "upper": _rational(q) if relation in ("eq", "lt", "le") else None,
++        "relation": relation, "approximate": bool(number["approximate"]), "unit": unit["canonical_unit"]}
++
++
++def _reading_from_text(context, selected, extraction):
++    stub = {"selection": {"source_kind": "primary_source"}, "measurement": extraction,
++        "meanings": {name: {"canonical_id": None, "resolved_state": "unknown"} for name in _MEANINGS},
++        "protein_arrangement": {"effective_value": "unknown"}}
++    operand = _operand_from_arm(stub)
++    if operand is None:
++        operand = {"value": None, "threshold": None, "relation": "none", "approximate": False,
++            "unit": extraction["unit"]["native_registry_unit"] if extraction["unit"] else None,
++            "status": "missing", "origin": "reported", "digitization_interval": None}
++    return _StageValue(context, {"selection": selected, "extraction": extraction,
++        "operand_projection": {k:operand[k] for k in ("value", "threshold", "relation", "approximate", "unit", "status", "origin", "digitization_interval")},
++        "unit_semantics": {"kind": "text", "record": extraction["unit"]} if extraction["unit"] is not None else None,
++        "exact_response": _exact_response(extraction), "source_observation_id": extraction["source_observation_id"],
++        "graph_details": None})
++
++
++def read_controlled_response_text_measurement(context, selected, *, endpoint):
++    context._active()
++    if selected is not None and selected.get("kind") != "source_literal":
++        _fail("source_text_measurement_required", "selected")
++    matching = [(role, arm) for role,arm in context.arguments["arms"].items()
++                if arm is not None and arm["measurement"] == selected]
++    if not matching:
++        _fail("unselected_measurement", "selected")
++    endpoint_binding = context._endpoints.get(id(endpoint))
++    if endpoint_binding is None or endpoint_binding[0] is not endpoint:
++        _fail("source_stage_context_mismatch", "endpoint")
++    field = endpoint_binding[1]
++    role = field.split(".",1)[1]
++    arm = context.arguments["arms"][role]
++    if arm["measurement"] != selected or endpoint["selection"] != arm["endpoint"]:
++        _fail("source_stage_endpoint_mismatch", "endpoint")
++    extraction = _measurement(context, selected, endpoint, "arms." + role + ".measurement")
++    return _reading_from_text(context, selected, extraction)
++
++
++def finish_controlled_response_arm(context, arm_science, *, measurement):
++    _owned(context, arm_science, "arm_science")
++    _owned(context, measurement, "measurement")
++    selected = arm_science["selection"]
++    field = _selected_arm_field(context, selected)
++    if selected["measurement"] != measurement["selection"]:
++        _fail("source_stage_measurement_mismatch", field)
++    result = deepcopy(dict(arm_science))
++    result["measurement"] = deepcopy(measurement["extraction"])
++    carrier = measurement["unit_semantics"]
++    response_unit = carrier if context.profile == "v2" else (carrier["record"] if carrier else None)
++    result["reported_uncertainty"] = _uncertainty(context, selected["reported_uncertainty"], response_unit,
++        result["meanings"]["endpoint"], field + ".reported_uncertainty")
++    if context.profile == "v1":
++        result["calculation_operand"] = _operand_from_arm(result)
++    else:
++        operand = deepcopy(measurement["operand_projection"])
++        operand.update({name + "_id": result["meanings"][name]["canonical_id"] for name in _MEANINGS})
++        operand.update(source_observation_id=measurement["source_observation_id"],
++            protein_arrangement=result["protein_arrangement"]["effective_value"],
++            meaning_statuses={name:result["meanings"][name]["resolved_state"] for name in _MEANINGS})
++        if selected["source_kind"] == "synthetic_fixture":
++            operand["origin"] = "synthetic"
++        # Retain a real nomination identity for authenticated failed graph attempts.
++        if operand["status"] != "missing" and operand["source_observation_id"] is None:
++            candidates = [w["canonical_locator"] for w in result["measurement"]["graph_witnesses"] if w["canonical_locator"]]
++            image = next((i for i in context.images if selected["measurement"] and i["image_id"] == selected["measurement"].get("image_id")), None)
++            if image and image["artifact_ref"] and candidates:
++                operand["source_observation_id"] = identity("controlled_graph_nomination", {
++                    "artifact_ref": image["artifact_ref"], "byte_sha256": image["byte_sha256"], "nomination": selected["measurement"]})
++            else:
++                operand.update(status="missing", value=None, threshold=None, relation="none", digitization_interval=None)
++        result["calculation_operand"] = operand
++        result["graph_details"] = deepcopy(measurement["graph_details"])
++    result["diagnostics"] = _unique_diagnostics([result["context"], result["meanings"], result["protein_arrangement"],
++        result["measurement"], result["reported_uncertainty"]])
++    return _StageValue(context, result)
++
++
++def _project_owner_covariance(result, matrix, arms, relationships):
++    """Validate all supplied owners/full rows before taking any marginal."""
++    from .literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
++    result.pop("projection_indices")
++    result["provided_owner_projection"] = []
++    if result["source_validation"] != "valid":
++        return result
++    reference = result["source_ref"]
++    def partial(code, state="binding_conflicting", domain="source_binding"):
++        result.update(projection_state=state, diagnostics=[_diag(code, "covariance.projection", domain, [reference])])
++        return result
++    bindings = [(role, b) for role,b in result["bindings"].items() if b["state"] == "known"]
++    if any(b["state"] == "conflicting" for b in result["bindings"].values()):
++        return partial("covariance_owner_conflicting")
++    by_owner, by_index = {}, {}
++    for role,binding in bindings:
++        owner, index = binding["resolved_owner_id"], binding["source_variable_index"]
++        if index in by_index and by_index[index] != owner:
++            return partial("covariance_owner_conflicting")
++        by_index[index] = owner
++        by_owner.setdefault(owner, []).append((role, index))
++        variable = result["variables"][index]
++        if variable["native_registry_unit"] is None:
++            return partial("source_covariance_unit_unsupported", "unavailable", "reader_capability")
++        operand = arms[role]["calculation_operand"]
++        if operand["unit"] and RATE_UNITS[operand["unit"]][0] != RATE_UNITS[variable["native_registry_unit"]][0]:
++            return partial("covariance_owner_dimension_conflict")
++    for owner, rows in by_owner.items():
++        for role, i in rows:
++            for other_role, j in rows:
++                a,b = result["variables"][i], result["variables"][j]
++                if RATE_UNITS[a["native_registry_unit"]][0] != RATE_UNITS[b["native_registry_unit"]][0]:
++                    return partial("covariance_owner_dimension_conflict")
++                sa,sb = _fraction(a["exact_scale"]), _fraction(b["exact_scale"])
++                if any(sa * matrix[i][k] != sb * matrix[j][k] for k in range(len(matrix))):
++                    return partial("covariance_shared_rows_conflicting")
++    for owner, rows in sorted(by_owner.items(), key=lambda item:min(i for _,i in item[1])):
++        index = min(i for _,i in rows)
++        result["provided_owner_projection"].append({"physical_observation_id": owner,
++            "source_variable_index": index, "roles": [r for r in PRIMITIVE_ORDER if any(r == role for role,_ in rows)],
++            "native_registry_unit": result["variables"][index]["native_registry_unit"]})
++    rows = result["provided_owner_projection"]
++    if not rows:
++        return partial("covariance_owner_unresolved", "binding_unresolved")
++    indices = [row["source_variable_index"] for row in rows]
++    projected = [[matrix[i][j] for j in indices] for i in indices]
++    result["projected_exact_matrix"] = [[_rational(v) for v in row] for row in projected]
++    finite = [[_finite(v) for v in row] for row in projected]
++    if any(v is None for row in finite for v in row):
++        return partial("covariance_projection_numeric_range", "numeric_range", "reader_capability")
++    finite_exact = [[Fraction(str(v)) for v in row] for row in finite]
++    if not _psd(finite_exact):
++        return partial("covariance_projection_precision_invalid", "precision_invalid", "reader_capability")
++    covariance = {"physical_observation_ids": [r["physical_observation_id"] for r in rows],
++        "units": [r["native_registry_unit"] for r in rows], "matrix": finite}
++    trial = {"version": "controlled_response_owner_inputs_v2", "arms": {r:arms[r]["calculation_operand"] if arms[r] else None for r in PRIMITIVE_ORDER},
++        "relationships": _relationships_inputs(relationships), "covariance": covariance,
++        "variance_status": "known", "model_kind": "none"}
++    try:
++        validate_controlled_response_owner_inputs(trial)
++    except ExperimentalContractError:
++        return partial("covariance_owner_dimension_conflict")
++    result.update(calculation_covariance=covariance, projection_state="available")
++    if finite_exact != projected:
++        result["diagnostics"].append(_diag("numeric_projection_rounding", "covariance.projection", "reader_capability", [reference]))
++    return result
++
++
++def _representations(arms):
++    from .literature_controlled_response_owner_calculations import _groups
++    groups = _groups([arm["calculation_operand"] if arm else None for arm in arms.values()])
++    result = []
++    for group in groups:
++        roles = group["roles"]
++        domains = [_exact_response(arms[r]["measurement"], graph=bool(arms[r].get("graph_details"))) if arms[r] else None for r in roles]
++        readings = [{"role": r, "source_reading_id": arms[r]["calculation_operand"]["source_observation_id"] if arms[r] else None,
++            "exact_domain": d} for r,d in zip(roles, domains)]
++        canceled = group["known_owner"] and group["coefficient"] == 0
++        science = all(arms[r] and all(v["resolved_state"] == "known" for v in arms[r]["meanings"].values()) for r in roles)
++        equal = all(d is not None and d == domains[0] for d in domains)
++        disjoint = any(_response_domains_disjoint(a,b) for i,a in enumerate(domains) for b in domains[:i] if a and b)
++        if not science:
++            method,state = "unresolved", "unresolved_science"
++        elif canceled:
++            method,state = "owner_cancellation", "canceled_readings_retained"
++        elif len(roles) == 1:
++            method,state = "single_reading", "single"
++        elif equal:
++            method,state = "exact_equivalence", "exact_equivalent"
++        else:
++            method,state = "unresolved", "conflicting_active_domains" if disjoint else "unresolved_active_model"
++        qualifications = []
++        if any(arms[r] and arms[r].get("graph_details") for r in roles):
++            qualifications.append("conditional_digitization_not_sampling")
++        if canceled:
++            if any(d is None for d in domains): qualifications.append("canceled_numeric_unavailable")
++            if any(arms[r]["calculation_operand"]["unit"] is None for r in roles): qualifications.append("canceled_unit_unknown")
++            if disjoint: qualifications.append("canceled_numeric_conflict")
++        elif state == "unresolved_active_model":
++            qualifications.append("active_reconciliation_unimplemented")
++        result.append({"physical_observation_id": group["physical_observation_id"], "roles": roles,
++            "readings": readings, "net_coefficient": group["coefficient"], "method": method, "state": state,
++            "canonical_source_reading_id": readings[0]["source_reading_id"] if method in ("single_reading", "exact_equivalence") else None,
++            "qualifications": qualifications, "diagnostics": []})
++    return result
++
++
++def finish_controlled_response_inputs(context, *, arms):
++    context._active()
++    _closed(arms, PRIMITIVE_ORDER, "arms")
++    relationships = deepcopy(context.relationships)
++    for role, arm in arms.items():
++        if (arm is None) != (context.arguments["arms"][role] is None) or arm is not None and arm["selection"] != context.arguments["arms"][role]:
++            _fail("source_stage_arm_mismatch", "arms." + role)
++        if context.profile == "v2" and arm is not None:
++            _owned(context, arm, "arms." + role)
++    if context.profile == "v1":
++        _resolve_control_alias(arms, relationships)
++    requested = {name:_interpretation(context, context.arguments[name], name) for name in ("variance_status", "model_kind")}
++    covariance = _covariance(context, context.arguments["covariance"], arms, relationships, owner_profile=context.profile == "v2")
++    if context.profile == "v2" and covariance is not None and "projection_indices" in covariance:
++        covariance.pop("projection_indices")
++        covariance["provided_owner_projection"] = []
++    effective = _effective_model(requested, covariance, arms)
++    parsed = _calculation_inputs(arms, relationships, covariance, effective)
++    version, input_version, dependencies = VERSION, INPUT_VERSION, DEPENDENCIES
++    if context.profile == "v2":
++        from .literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
++        from .literature_controlled_response_v2_inputs import _dependencies
++        version, input_version = "controlled_response_source_extraction_v2", "controlled_response_owner_inputs_v2"
++        parsed["version"] = input_version
++        validate_controlled_response_owner_inputs(parsed)
++        dependencies = _dependencies()
++    else:
++        validate_controlled_response_inputs(parsed)
++    result = {"version": version, "selection": deepcopy(context.arguments), "sources": deepcopy(context.roster),
++        "images": deepcopy(context.images), "arms": {r:deepcopy(dict(a)) if a is not None else None for r,a in arms.items()},
++        "relationships": relationships, "covariance": covariance, "requested_model": requested, "effective_model": effective,
++        "calculation_inputs": parsed, "diagnostics": [], "implementation_dependencies": {
++            "reader_contract_version": version, "calculator_contract_version": input_version, "expected_module_fingerprints": deepcopy(dependencies)}}
++    if context.profile == "v2":
++        result["representation_reconciliations"] = _representations(arms)
++    result["diagnostics"] = _unique_diagnostics(result)
++    json.dumps(result, allow_nan=False)
++    return deepcopy(result)
++
++
++def validate_controlled_response_saved_science(arguments, extraction, *, measurement_checks):
++    """Single detached-science entrance; profiles retain their original contracts."""
++    if isinstance(arguments, dict) and arguments.get("version") == SELECTION_VERSION:
++        return _validate_v1_saved_science(arguments, extraction)
++    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
++
++
++class _SavedSourceContext:
++    """Retained witness algebra only. Never holds a provider or decoded frame."""
++    profile = "v2"
++    def __init__(self, arguments, extraction):
++        self.arguments = arguments
++        self.images = extraction["images"]
++        self.roster = extraction["sources"]
++        self.sources = {(s["source_ref"],s["representation"]):s for s in self.roster}
++        self.witnesses = {}
++        self.closed = False
++        self._endpoints = {}
++        def walk(value):
++            if isinstance(value, dict):
++                if set(value) == set(_RESULT_FIELDS["WitnessRecord"]):
++                    self.witnesses.setdefault(json.dumps(value["selection"],sort_keys=True), value)
++                else:
++                    for key,item in value.items():
++                        if key != "selection": walk(item)
++            elif isinstance(value,list):
++                for item in value: walk(item)
++        walk(extraction)
++        self.covariance = extraction["covariance"]
++
++    def _active(self):
++        if self.closed: _fail("source_context_closed", "context")
++
++    def witness(self, selected, field):
++        if selected is None: return None
++        nomination = selected if "kind" in selected else {"kind":"text", **selected}
++        key = json.dumps(nomination,sort_keys=True)
++        record = self.witnesses.get(key)
++        if record is None:
++            _fail("saved_witness_missing", field)
++        _saved_witness(record, selected, self.sources, field)
++        return deepcopy(record)
++
++    def source(self, reference, representation):
++        # Only the ORIGINAL full structured covariance text is retained for
++        # strict source-N validation; this is not source acquisition/reparsing.
++        if self.covariance is None or (reference,representation) != (self.covariance["source_ref"],"original"):
++            _fail("unselected_source_read", "source_ref")
++        source = self.sources[(reference,representation)]
++        if source["state"] == "unavailable":
++            raise _Unavailable()
++        if self.covariance["raw_text"] is None:
++            # The original source had unsupported UTF8 bytes. No invented bytes.
++            raise _SavedUnsupportedCovariance()
++        raw = self.covariance["raw_text"].encode()
++        if _hash(raw) != source["byte_sha256"] or self.covariance["byte_sha256"] != source["byte_sha256"] or self.covariance["artifact_ref"] != source["artifact_ref"]:
++            _fail("saved_covariance_source_mismatch", "covariance")
++        return {"artifact_ref":source["artifact_ref"], "content":raw}
++
++
++class _SavedUnsupportedCovariance(Exception):
++    pass
++
++
++def _saved_uncertainty_v2(selected, record, measurement_reading, sources, field):
++    """Validate original spread facts, then use the same arithmetic assembly."""
++    if record["selection"] != selected:
++        _fail("saved_selection_mismatch", field)
++    for key,item in record["meanings"].items():
++        _saved_interpretation(item, selected[key], sources, field+"."+key)
++    for key in ("magnitude",):
++        if selected[key] is None:
++            if record[key] is not None: _fail("saved_selection_mismatch", field+"."+key)
++        else:
++            _saved_number(record[key],selected[key],sources,field+"."+key)
++    _saved_unit(record["unit"],selected["unit"],sources,field+".unit")
++    for key in ("interval","confidence_level","count"):
++        item,nomination = record[key],selected[key]
++        if nomination is None:
++            if item is not None: _fail("saved_selection_mismatch",field+"."+key)
++            continue
++        if item["selection"] != nomination:
++            _fail("saved_selection_mismatch",field+"."+key)
++        witness = nomination if key=="confidence_level" else nomination["witness"]
++        _saved_witness(item["witness"],witness,sources,field+"."+key)
++        if key=="interval" and item["status"]=="parsed":
++            _ci_literal_subselection(nomination)
++            quote=nomination["witness"]["quote"]
++            raw=[quote[nomination[s+"_start"]:nomination[s+"_end"]] for s in ("lower","upper")]
++            if item["raw_values"]!=raw or item["values"]!=[float(v.replace("−","-")) for v in raw] or Fraction(raw[0].replace("−","-"))>Fraction(raw[1].replace("−","-")):
++                _fail("saved_interval_literal_mismatch",field)
++        if key=="confidence_level" and item["status"]=="parsed":
++            quote=nomination["quote"].strip()
++            try: value=_finite(Fraction(quote[:-1].strip().replace("−","-"))/100) if quote.endswith("%") else None
++            except ValueError: value=None
++            if item["value"]!=value or value is None or not 0<value<1:
++                _fail("saved_confidence_literal_mismatch",field)
++        if key=="count" and item["reading"]:
++            reading=item["reading"]
++            raw=nomination["witness"]["quote"][nomination["number_start"]:nomination["number_end"]]
++            enriched={**nomination,"witness":{**nomination["witness"],"artifact_ref":item["witness"]["artifact_ref"]}}
++            if reading["raw_number"]!=raw or reading["selector"]!=enriched:
++                _fail("saved_count_literal_mismatch",field)
++            count=int(raw.replace("−","-")) if re.fullmatch(r"[-−]?[0-9]+",raw) else _cardinal_count(raw)
++            if reading["status"] in ("exact","qualified","not_positive") and reading["value"]!=count:
++                _fail("saved_count_literal_mismatch",field)
++    meanings=record["meanings"]
++    relationship=meanings["unit_relationship"]["effective_value"]
++    carrier=measurement_reading["unit_semantics"]
++    response_unit=carrier["record"] if carrier else None
++    unit=record["unit"]
++    effective=response_unit if relationship=="same_as_response" else unit if relationship=="explicit_unit" else None
++    diagnostics=[]
++    if relationship=="conflicting":
++        diagnostics.append(_diag("source_uncertainty_unit_conflicting",field,"source_interpretation"))
++    if relationship=="same_as_response" and unit and response_unit and (unit["canonical_unit"],unit["exact_scale"])!=(response_unit["canonical_unit"],response_unit["exact_scale"]):
++        effective=None
++        diagnostics.append(_diag("source_uncertainty_unit_conflicting",field,"source_interpretation"))
++    # Native explicit-unit detection uses the retained full selected quote where
++    # available. If adjacent source context was outside the saved quote, the
++    # original typed conflict is retained (custody remains the native caller's).
++    magnitude=record["magnitude"]
++    if magnitude and magnitude["status"]=="parsed" and effective and effective["status"]=="supported":
++        from .literature_rate_native_inputs import _PRINTED_UNIT
++        suffix=selected["magnitude"]["witness"]["quote"][selected["magnitude"]["number_end"]:].lstrip()
++        match=_PRINTED_UNIT.match(suffix)
++        mismatch=bool(match and _plain_unit(match.group())!=(effective["canonical_unit"],_fraction(effective["exact_scale"])) and match.group().replace(" ","")!="U/mg")
++        retained_conflict=any(d["code"]=="source_uncertainty_unit_conflicting" for d in record["diagnostics"])
++        if mismatch or retained_conflict:
++            effective=None
++            if not diagnostics: diagnostics.append(_diag("source_uncertainty_unit_conflicting",field,"source_interpretation"))
++    if record["interval"] and record["interval"]["status"]=="parsed" and effective and effective["status"]=="supported":
++        interval_selection=selected["interval"]
++        narrowed=_ci_literal_subselection(interval_selection)
++        end=narrowed["witness"]["end"]-interval_selection["witness"]["start"]
++        quote=interval_selection["witness"]["quote"].encode()
++        suffix=quote[end:].decode()
++        retained_conflict=any(d["code"]=="source_uncertainty_unit_conflicting" for d in record["diagnostics"])
++        if _retained_printed_unit_conflict(suffix,effective) or retained_conflict:
++            effective=None
++            if not diagnostics: diagnostics.append(_diag("source_uncertainty_unit_conflicting",field,"source_interpretation"))
++    expected=_assemble_uncertainty(selected,meanings=meanings,magnitude=magnitude,interval=record["interval"],
++        confidence=record["confidence_level"],count=record["count"],unit=unit,effective_unit=effective,diagnostics=diagnostics,field=field)
++    if expected["effective_unit"] is not None:
++        expected["effective_unit"]=deepcopy(carrier) if relationship=="same_as_response" else {"kind":"text","record":expected["effective_unit"]}
++    if record!=expected:
++        _fail("saved_uncertainty_projection_mismatch",field)
++    return deepcopy(record)
++
++
++def _validate_v2_saved_science(arguments, extraction, *, measurement_checks):
++    from . import literature_controlled_response_v2_inputs as facade
++    selected=facade.validate_controlled_response_v2_selection(arguments)
++    try:
++        Draft202012Validator(facade._extraction_schema()).validate(extraction)
++        json.dumps(extraction,allow_nan=False)
++    except (ValueError,TypeError) as error:
++        raise ExperimentalContractError("saved_extraction_schema_invalid","extraction") from error
++    except Exception as error:
++        if error.__class__.__module__.split(".")[0]!="jsonschema": raise
++        raise ExperimentalContractError("saved_extraction_schema_invalid","extraction") from error
++    if extraction["selection"]!=selected:
++        _fail("saved_selection_mismatch","extraction")
++    dependencies={"reader_contract_version":"controlled_response_source_extraction_v2", "calculator_contract_version":"controlled_response_owner_inputs_v2",
++        "expected_module_fingerprints":facade._dependencies()}
++    if extraction["implementation_dependencies"]!=dependencies:
++        _fail("saved_dependency_contract_mismatch","implementation_dependencies")
++    sources=facade._saved_roster(selected,extraction)
++    def retained_witnesses(value):
++        if isinstance(value,dict):
++            if set(value)==set(_RESULT_FIELDS["WitnessRecord"]):
++                facade._check_witness(value,value["selection"],sources,extraction["images"],"saved_witness")
++            else:
++                for key,item in value.items():
++                    if key!="selection": retained_witnesses(item)
++        elif isinstance(value,list):
++            for item in value: retained_witnesses(item)
++    retained_witnesses(extraction)
++    context=_SavedSourceContext(selected,extraction)
++    arms={}
++    for role,arm in extraction["arms"].items():
++        nomination=selected["arms"][role]
++        if nomination is None:
++            if arm is not None: _fail("saved_selection_mismatch",role)
++            arms[role]=None
++            continue
++        if arm is None or arm["selection"]!=nomination:
++            _fail("saved_selection_mismatch",role)
++        for name in _MEANINGS:
++            _saved_meaning(arm["meanings"][name],nomination[name],sources,name,"arms."+role+"."+name)
++        _saved_interpretation(arm["protein_arrangement"],nomination["protein_arrangement"],sources,"arms."+role)
++        for key,record in arm["context"].items():
++            facade._check_witness(record,nomination["context"][key],sources,extraction["images"],"arms."+role+".context."+key)
++        facade._check_witness(arm["intended_factor_level"],nomination["intended_factor_level"],sources,extraction["images"],"arms."+role)
++        measurement=nomination["measurement"]
++        if not callable(measurement_checks): _fail("saved_measurement_checks_required","measurement_checks")
++        reading=measurement_checks(measurement,arm["measurement"],source_records=extraction["sources"],image_records=extraction["images"])
++        if reading["graph_details"]!=arm["graph_details"]:
++            _fail("saved_graph_measurement_mismatch",role)
++        reading=_StageValue(context,dict(reading))
++        # Rebuild projected operand with the same finish function, using only
++        # validated retained spread facts rather than a native literal reader.
++        context.saved_uncertainty={"selection":nomination["reported_uncertainty"],"value":_saved_uncertainty_v2(
++            nomination["reported_uncertainty"],arm["reported_uncertainty"],reading,sources,"arms."+role+".reported_uncertainty")}
++        science=read_controlled_response_arm_science(context,nomination)
++        expected=finish_controlled_response_arm(context,science,measurement=reading)
++        if dict(expected)!=arm:
++            _fail("saved_operand_projection_mismatch",role)
++        arms[role]=expected
++    relationships=_relationships(context,selected["relationships"])
++    if relationships!=extraction["relationships"]:
++        _fail("saved_relationships_mismatch","relationships")
++    requested={name:_interpretation(context,selected[name],name) for name in ("variance_status","model_kind")}
++    if requested!=extraction["requested_model"]:
++        _fail("saved_requested_model_mismatch","requested_model")
++    try:
++        covariance=_covariance(context,selected["covariance"],arms,relationships,owner_profile=True)
++    except _SavedUnsupportedCovariance:
++        covariance=deepcopy(extraction["covariance"])
++        empty=_empty_covariance(selected["covariance"])
++        empty.pop("projection_indices");empty["provided_owner_projection"]=[]
++        for key in ("variables","matrix_tokens","exact_matrix","bindings","projected_exact_matrix","calculation_covariance","source_model","source_validation"):
++            if covariance[key]!=empty[key]: _fail("saved_covariance_invalid_state_mismatch","covariance")
++        if covariance["projection_state"]!="unsupported_format": _fail("saved_covariance_invalid_state_mismatch","covariance")
++    if covariance is not None and "projection_indices" in covariance:
++        covariance.pop("projection_indices");covariance["provided_owner_projection"]=[]
++    if covariance!=extraction["covariance"]:
++        _fail("saved_covariance_projection_mismatch","covariance")
++    effective=_effective_model(requested,covariance,arms)
++    if effective!=extraction["effective_model"]:
++        _fail("saved_effective_model_mismatch","effective_model")
++    parsed=_calculation_inputs(arms,relationships,covariance,effective)
++    parsed["version"]="controlled_response_owner_inputs_v2"
++    if parsed!=extraction["calculation_inputs"]:
++        _fail("saved_calculation_projection_mismatch","calculation_inputs")
++    from .literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
++    validate_controlled_response_owner_inputs(parsed)
++    if _representations(arms)!=extraction["representation_reconciliations"]:
++        _fail("saved_representation_projection_mismatch","representation_reconciliations")
++    expected=deepcopy(extraction);expected["diagnostics"]=[]
++    if _unique_diagnostics(expected)!=extraction["diagnostics"]:
++        _fail("saved_diagnostics_mismatch","diagnostics")
++    return deepcopy(extraction)
++
++
++def _response_domains_disjoint(a,b):
++    for left,right in ((a,b),(b,a)):
++        if left["upper"] is not None and right["lower"] is not None:
++            upper,lower=_fraction(left["upper"]),_fraction(right["lower"])
++            if upper<lower or upper==lower and (left["relation"]=="lt" or right["relation"]=="gt"):
++                return True
++    return False
++
++
++def _ci_literal_subselection(selected):
++    """Read an explicitly positioned CI inside a full selected source field.
++
++    The saved selection/witness stays original. The unchanged literal parser
++    receives only the containing bracket pair, with exact original offsets.
++    """
++    quote=selected["witness"]["quote"]
++    pattern=r"[\[(]\s*(?P<lower>[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?)\s*,\s*(?P<upper>[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?)\s*[\])]"
++    for match in re.finditer(pattern,quote):
++        if (quote[match.start()],quote[match.end()-1]) not in (("[","]"),("(",")")):
++            continue
++        if all((selected[side+"_start"],selected[side+"_end"])==match.span(side) for side in ("lower","upper")):
++            witness=deepcopy(selected["witness"])
++            witness["start"]+=len(quote[:match.start()].encode())
++            witness["end"]=witness["start"]+len(match.group().encode())
++            witness["quote"]=match.group()
++            return {"witness":witness,**{side+suffix:selected[side+suffix]-match.start() for side in ("lower","upper") for suffix in ("_start","_end")}}
++    _fail("ci_interval_selector_mismatch","uncertainty.interval")
++
++
++def _retained_printed_unit_conflict(suffix,unit):
++    from .literature_rate_native_inputs import _PRINTED_UNIT
++    from .literature_partner_source_fields import _unit_continuation
++    visible=suffix.lstrip()
++    match=_PRINTED_UNIT.match(visible)
++    if match is None: return False
++    if _unit_continuation(visible[match.end():]) or re.match(r"\s+per\b",visible[match.end():]):
++        _fail("partial_source_rate_unit","uncertainty.interval")
++    token=match.group()
++    if re.fullmatch(r"U\s*/\s*mg",token):
++        if unit["definition_witnesses"] is None:
++            _fail("source_defined_unit_definition_required","uncertainty.interval")
++        return False
++    return _plain_unit(token)!=(unit["canonical_unit"],_fraction(unit["exact_scale"]))

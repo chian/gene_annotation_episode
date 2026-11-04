@@ -141,6 +141,216 @@ def _compile_closed_schema(schema):
         nonlocal flux_balance_sources
         nonlocal masking_sources, blast_utility_sources
         source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "bvbrc_application_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .bvbrc_application_returns import application_fact_sources
+            expected = application_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: application fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "somatic_variant_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .somatic_variant_contracts import somatic_fact_sources
+            expected = somatic_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: somatic fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "esm_gene_embedding_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .esm_gene_embedding_contracts import esm_gene_embedding_fact_sources
+            expected = esm_gene_embedding_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: ESM fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "protein_conservation_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .protein_conservation_result_contracts import conservation_fact_sources
+            expected = conservation_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: conservation fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "protein_phylogeny_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .protein_phylogeny_result_contracts import phylogeny_fact_sources
+            expected = phylogeny_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: phylogeny fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "primer_placement_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .primer_placement_result_contracts import ordinary_primer_placement_fact_sources
+            expected = ordinary_primer_placement_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: primer placement fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "protein_disorder_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .protein_disorder_result_contracts import ordinary_disorder_fact_sources
+            expected = ordinary_disorder_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: protein disorder fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "arsenic_speciation_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .arsenic_speciation_result_contracts import ordinary_arsenic_fact_sources
+            expected = ordinary_arsenic_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: arsenic speciation fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "vcf_result_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .vcf_result_tools import vcf_result_fact_sources
+            expected = vcf_result_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: VCF result fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "tf_binding_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .tf_binding_result_contracts import tf_binding_fact_sources
+            expected = tf_binding_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: TF binding fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "protease_kinetics_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .protease_kinetics_result_contracts import ordinary_protease_kinetics_fact_sources
+            expected = ordinary_protease_kinetics_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: protease kinetics fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "homer_motif_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .homer_motif_result_contracts import homer_motif_fact_sources
+            expected = homer_motif_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: HOMER motif fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "macs2_peak_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .macs2_peak_result_contracts import macs2_peak_fact_sources
+            expected = macs2_peak_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: MACS2 peak fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "reference_edit_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .reference_edit_outcome_tools import reference_edit_outcome_fact_sources
+            expected = reference_edit_outcome_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: reference editing outcome fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "orf_measurements":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .molecular_sequence_result_contracts import ordinary_orf_fact_sources
+            expected = ordinary_orf_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: ORF fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "n_glycosylation_motif_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .molecular_sequence_result_contracts import ordinary_molecular_sequence_fact_sources
+            expected = ordinary_molecular_sequence_fact_sources("find_n_glycosylation_motifs")[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: N-glycosylation fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "o_glycosylation_hotspot_outcomes":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .molecular_sequence_result_contracts import ordinary_molecular_sequence_fact_sources
+            expected = ordinary_molecular_sequence_fact_sources("predict_o_glycosylation_hotspots")[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: O-glycosylation fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source in {"protein_structure_action_views", "protein_structure_action_sequences",
+                "protein_structure_action_saved_sheets"}:
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .protein_structure_action_records import protein_structure_action_fact_sources
+            expected = protein_structure_action_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: protein action fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "execution_addgene_sequence_facts":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .addgene_sequence_facts import ADDGENE_SEQUENCE_FACTS_SCHEMA
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(ADDGENE_SEQUENCE_FACTS_SCHEMA, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: Addgene fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "circular_dichroism_summaries":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .circular_dichroism_contracts import circular_dichroism_fact_sources
+            expected = circular_dichroism_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: CD fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "liftover_point_mappings":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .liftover_contracts import liftover_fact_sources
+            expected = liftover_fact_sources()[source]["report_schema"]
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: liftover fact schema must match its registered source", code="invalid_schema")
+            return
         if isinstance(source, str) and source in {"execution_enrichr_tables", "execution_enrichr_rows"}:
             if depth != 1:
                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
@@ -425,6 +635,16 @@ def _compile_closed_schema(schema):
                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
                 raise ReportBoundaryError(f"{path}: raw replicate fact schema must match its registered source", code="invalid_schema")
             return
+        if source in {"literature_intervention_grading_cells", "literature_a106_subscore_cells"}:
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_intervention_storage import intervention_cells_schema
+            from .literature_a106_subscore import cells_schema as subscore_schema
+            registered = intervention_cells_schema if source == "literature_intervention_grading_cells" else subscore_schema
+            if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(registered(), sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: intervention grading fact schema must match its registered source", code="invalid_schema")
+            return
         if source == "literature_assay_grading_cells":
             if depth != 1:
                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
@@ -442,6 +662,14 @@ def _compile_closed_schema(schema):
             if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
                     != json.dumps(aggregation_cells_schema(), sort_keys=True, allow_nan=False)):
                 raise ReportBoundaryError(f"{path}: A105 aggregation fact schema must match its registered source", code='invalid_schema')
+            return
+        if source == 'literature_a108_subscore_cells':
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code='invalid_schema')
+            from .literature_a108_subscore import cells_schema
+            if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(cells_schema(), sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: A108 subscore schema must match its registered source", code='invalid_schema')
             return
         if source == "literature_completion_time_cells":
             if depth != 1:
@@ -637,6 +865,212 @@ def _validate_form(payload, schema, reference_resolver):
     schema = validate_closed_schema(schema)
     payload = plain(payload)
     for name, node in schema["properties"].items():
+        if (node.get("x-source") == "somatic_variant_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .somatic_variant_contracts import validate_somatic_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("somatic_variant_return_array_required")
+                for value in payload[name]:
+                    validate_somatic_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained somatic variant facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "esm_gene_embedding_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .esm_gene_embedding_contracts import validate_esm_embedding_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("esm_gene_embedding_return_array_required")
+                for value in payload[name]:
+                    validate_esm_embedding_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained ESM representation facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "bvbrc_application_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .bvbrc_application_returns import validate_application_rows
+            try:
+                validate_application_rows(payload[name])
+            except (ValueError, TypeError, OverflowError, RecursionError) as error:
+                raise ReportBoundaryError("Invalid retained application facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "protein_conservation_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .protein_conservation_result_contracts import validate_conservation_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("protein_conservation_return_array_required")
+                for value in payload[name]:
+                    validate_conservation_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained conservation facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "protein_phylogeny_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .protein_phylogeny_result_contracts import validate_phylogeny_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("protein_phylogeny_return_array_required")
+                for value in payload[name]:
+                    validate_phylogeny_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained phylogeny facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "primer_placement_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .primer_placement_result_contracts import validate_ordinary_primer_placement_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("primer_placement_return_array_required")
+                for value in payload[name]:
+                    validate_ordinary_primer_placement_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained primer placement facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "protein_disorder_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .protein_disorder_result_contracts import validate_ordinary_disorder_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("protein_disorder_return_array_required")
+                for value in payload[name]:
+                    validate_ordinary_disorder_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained protein disorder measurement facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "arsenic_speciation_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .arsenic_speciation_result_contracts import validate_ordinary_arsenic_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("arsenic_speciation_return_array_required")
+                for value in payload[name]:
+                    validate_ordinary_arsenic_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained arsenic speciation measurement facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "vcf_result_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .vcf_result_measurements import validate_vcf_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("vcf_result_return_array_required")
+                for value in payload[name]:
+                    validate_vcf_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained VCF result facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "tf_binding_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .tf_binding_result_contracts import validate_tf_binding_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("tf_binding_return_array_required")
+                for value in payload[name]:
+                    validate_tf_binding_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained native TF score facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "protease_kinetics_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .protease_kinetics_result_contracts import validate_ordinary_protease_kinetics_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("protease_kinetics_return_array_required")
+                for value in payload[name]:
+                    validate_ordinary_protease_kinetics_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained protease kinetics measurement facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "homer_motif_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .homer_motif_result_contracts import validate_homer_motif_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("homer_motif_return_array_required")
+                for value in payload[name]:
+                    validate_homer_motif_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained native HOMER motif facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "macs2_peak_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .macs2_peak_result_contracts import validate_macs2_peak_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("macs2_peak_return_array_required")
+                for value in payload[name]:
+                    validate_macs2_peak_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained native MACS2 peak facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "reference_edit_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .reference_edit_outcomes import validate_reference_edit_outcome_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("reference_edit_outcome_return_array_required")
+                for value in payload[name]:
+                    validate_reference_edit_outcome_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained reference editing outcome facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "orf_measurements"
+                and isinstance(payload, dict) and name in payload):
+            from .molecular_sequence_result_contracts import validate_ordinary_orf_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("ordinary_orf_return_array_required")
+                for value in payload[name]:
+                    validate_ordinary_orf_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained ORF measurement facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "n_glycosylation_motif_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .molecular_sequence_result_contracts import validate_ordinary_molecular_sequence_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("ordinary_n_glycosylation_return_array_required")
+                for value in payload[name]:
+                    validate_ordinary_molecular_sequence_return(value, operation="find_n_glycosylation_motifs")
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained N-glycosylation motif facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "o_glycosylation_hotspot_outcomes"
+                and isinstance(payload, dict) and name in payload):
+            from .molecular_sequence_result_contracts import validate_ordinary_molecular_sequence_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("ordinary_o_glycosylation_return_array_required")
+                for value in payload[name]:
+                    validate_ordinary_molecular_sequence_return(value, operation="predict_o_glycosylation_hotspots")
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained O-glycosylation hotspot facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "execution_addgene_sequence_facts"
+                and isinstance(payload, dict) and name in payload):
+            from .addgene_sequence_facts import validate_addgene_sequence_fact
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("addgene_sequence_fact_array_required")
+                for value in payload[name]:
+                    validate_addgene_sequence_fact(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained Addgene sequence facts",
+                    code=str(error), field=name) from error
+        if (node.get("x-source") == "circular_dichroism_summaries"
+                and isinstance(payload, dict) and name in payload):
+            from .circular_dichroism_contracts import validate_circular_dichroism_return
+            try:
+                if type(payload[name]) is not list:
+                    raise ValueError("circular_dichroism_return_array_required")
+                for value in payload[name]:
+                    validate_circular_dichroism_return(value)
+            except ValueError as error:
+                raise ReportBoundaryError("Invalid retained CD summary facts",
+                    code=str(error), field=name) from error
         if (node.get("x-source") == "uniprot_selected_returns"
                 and isinstance(payload, dict) and name in payload):
             from .uniprot_return_contracts import validate_uniprot_selected_values, UniProtReturnValidationError
@@ -653,7 +1087,9 @@ def _validate_form(payload, schema, reference_resolver):
     # uses a placeholder. Original contracts and returned rows remain exact.
     parent_schema = schema
     native = {name: node for name, node in schema["properties"].items()
-        if node.get("x-source") in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+        if node.get("x-source") in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells",
+            "protein_structure_action_views", "protein_structure_action_sequences", "protein_structure_action_saved_sheets",
+            "macs2_peak_outcomes", "homer_motif_outcomes", "tf_binding_outcomes", "vcf_result_outcomes", "protease_kinetics_outcomes", "arsenic_speciation_outcomes", "protein_disorder_outcomes", "primer_placement_outcomes", "protein_conservation_outcomes", "protein_phylogeny_outcomes", "bvbrc_application_outcomes", "esm_gene_embedding_outcomes", "somatic_variant_outcomes"}
         or str(node.get("x-source", "")).startswith(("execution.blast_utility_", "execution.masking_", "execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "fluorescence_", "flux_balance_"))}
     if native:
         parent_schema = {**schema, "properties": dict(schema["properties"])}
@@ -671,7 +1107,9 @@ def _validate_form(payload, schema, reference_resolver):
                         validate_masking_fact_values(node["x-source"], payload[name])
                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
                         raise ReportBoundaryError("Invalid recorded masking fact", code="invalid_form", field=name) from error
-                elif str(node.get("x-source", "")).startswith("execution_protein_structure_"):
+                elif (str(node.get("x-source", "")).startswith("execution_protein_structure_")
+                        or node.get("x-source") in {"protein_structure_action_views",
+                            "protein_structure_action_sequences", "protein_structure_action_saved_sheets"}):
                     _validate_protein_structure_fact_rows(payload[name], node["x-source"], name)
                 elif str(node.get("x-source", "")).startswith("genomic_overlap_"):
                     from .genomic_overlap_return_views import validate_genomic_overlap_fact_values
@@ -726,7 +1164,9 @@ def _validate_form(payload, schema, reference_resolver):
 
 def _validate_protein_structure_fact_rows(rows, source, field):
     """Strict native shapes, distinct from actual receipt and operand authority."""
-    from .protein_structure_contracts import validate_saved_sheet_descriptor, validate_structure_sequence_descriptor
+    from .protein_structure_contracts import (validate_saved_sheet_descriptor, validate_structure_sequence_descriptor,
+        validate_saved_sheet_descriptor_v2, validate_structure_sequence_descriptor_v2)
+    from .protein_structure_action_records import validate_protein_structure_action_view
     from .protein_structure_result_views import (
         validate_protein_structure_projection_result, validate_protein_structure_failure_return,
     )
@@ -735,6 +1175,9 @@ def _validate_protein_structure_fact_rows(rows, source, field):
         "execution_protein_structure_saved_sheets": validate_saved_sheet_descriptor,
         "execution_protein_structure_sequences": validate_structure_sequence_descriptor,
         "execution_protein_structure_failures": validate_protein_structure_failure_return,
+        "protein_structure_action_views": validate_protein_structure_action_view,
+        "protein_structure_action_sequences": validate_structure_sequence_descriptor_v2,
+        "protein_structure_action_saved_sheets": validate_saved_sheet_descriptor_v2,
     }
     if type(rows) is not list:
         raise ReportBoundaryError("Protein facts must be an array", code="type", field=field)
@@ -751,7 +1194,9 @@ def _validate_form_semantics(payload, schema, reference_resolver, *, path="repor
     def visit(value, node, path, resource=None):
         if value is None or not isinstance(node, dict):
             return
-        if (node.get("x-source") in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+        if (node.get("x-source") in {"literature_concentration_window_cells", "literature_measurement_comparison_cells", "literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells",
+                "protein_structure_action_views", "protein_structure_action_sequences", "protein_structure_action_saved_sheets",
+                "macs2_peak_outcomes", "homer_motif_outcomes", "tf_binding_outcomes", "vcf_result_outcomes", "protease_kinetics_outcomes", "arsenic_speciation_outcomes", "protein_disorder_outcomes", "primer_placement_outcomes", "protein_conservation_outcomes", "protein_phylogeny_outcomes", "bvbrc_application_outcomes", "esm_gene_embedding_outcomes", "somatic_variant_outcomes"}
                 or str(node.get("x-source", "")).startswith(("execution.blast_utility_", "execution.masking_", "execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "fluorescence_", "flux_balance_"))):
             resource = node
         if resource is not None and "$ref" in node:

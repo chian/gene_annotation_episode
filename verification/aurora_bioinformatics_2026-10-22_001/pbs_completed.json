@@ -1,0 +1,77 @@
+{
+  "observed_utc": "2026-10-22T15:25:13.328349+00:00",
+  "command": [
+    "qstat",
+    "-x",
+    "-f",
+    "-F",
+    "json",
+    "8953621.aurora-pbs-0001.hostmgmt.cm.aurora.alcf.anl.gov"
+  ],
+  "data": {
+    "Jobs": {
+      "8953621.aurora-pbs-0001.hostmgmt.cm.aurora.alcf.anl.gov": {
+        "Job_Name": "ga-align-test",
+        "resources_used": {
+          "cpupercent": 5,
+          "cput": "00:00:02",
+          "mem": "103456kb",
+          "ncpus": 208,
+          "ngpus": 0,
+          "vmem": "138260kb",
+          "walltime": "00:02:21"
+        },
+        "job_state": "F",
+        "queue": "debug",
+        "Account_Name": "BioReason-Aurora-Test",
+        "ctime": "Thu Oct 22 15:17:51 2026",
+        "exec_host": "x4418c4s1b0n0/0*208",
+        "exec_vnode": "(x4418c4s1b0n0:ncpus=208)",
+        "Priority": 0,
+        "qtime": "Thu Oct 22 15:17:51 2026",
+        "Resource_List": {
+          "allow_account_check_failure": "True",
+          "allow_negative_allocation": "True",
+          "award_category": "Discretionary",
+          "award_type": "Discretionary",
+          "backfill_factor": 84600,
+          "backfill_max": 50,
+          "base_score": 51,
+          "bkc_definition": "compute_aurora_prod_20261002T162246_af5b0375_b4fd227",
+          "burn_ratio": 0,
+          "current_allocation": 863173952,
+          "enable_2nd_fp64": "True",
+          "enable_backfill": 0,
+          "enable_fifo": 1,
+          "enable_wfp": 0,
+          "fifo_factor": 1800,
+          "filesystems": "flare",
+          "flare_fs": "True",
+          "hbm_mode": "flat",
+          "ncpus": 208,
+          "ni_resource": "aurora",
+          "nodect": 1,
+          "overburn": "False",
+          "place": "scatter",
+          "project_priority": 2,
+          "route_backfill": "False",
+          "score_boost": 0,
+          "select": 1,
+          "snc_mode": "quad",
+          "total_allocation": 864000000,
+          "total_cpus": 10624,
+          "walltime": "00:05:00",
+          "wfp_factor": 100000
+        },
+        "stime": "Thu Oct 22 15:20:32 2026",
+        "obittime": "Thu Oct 22 15:23:28 2026",
+        "comment": "Job run at Thu Oct 22 at 15:20 on (x4418c4s1b0n0:ncpus=208) and finished",
+        "etime": "Thu Oct 22 15:17:51 2026",
+        "run_count": 1,
+        "eligible_time": "00:02:42",
+        "Exit_status": 0,
+        "project": "BioReason-Aurora-Test"
+      }
+    }
+  }
+}

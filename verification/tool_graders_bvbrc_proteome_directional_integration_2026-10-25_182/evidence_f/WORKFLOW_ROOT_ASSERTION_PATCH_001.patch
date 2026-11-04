@@ -1,0 +1,14 @@
+--- a/tests/test_bvbrc_proteome_directional_episode_path.py
++++ b/tests/test_bvbrc_proteome_directional_episode_path.py
+@@ -223,6 +223,11 @@
+         artifact = body['bundle']['artifacts'][0]
+         assert store.get_artifact(artifact['raw_artifact_ref']) == native('2221')
+         root_context = api.appservice.custody.context(archived['episode_id'])
++        root_attempt = workflow.journal.row('runtime_report_attempts', archived['episode_id'], 0)
++        assert root_attempt['child_episode_id'] == science['episode_id']
++        assert root_attempt['failure'] is None
++        assert json.loads(root_attempt['form']) == forwarded
++        assert json.loads(root_attempt['contract'])['measurements']['schema'] == parent_schema
+         assert family.received_report_facts(root_context) == {}
+         assert workflow.catalog(scope, source=episode.source) == []
+         assert store.count('annotation') == 0

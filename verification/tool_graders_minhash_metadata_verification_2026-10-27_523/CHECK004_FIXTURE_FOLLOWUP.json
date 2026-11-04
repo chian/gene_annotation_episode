@@ -1,0 +1,7 @@
+{
+  "classification": "additional fixture serialization issue identified statically after check004 froze",
+  "file": "tests/test_bvbrc_minhash_metadata_custody.py",
+  "function": "admit",
+  "reason": "BindingContext freezes the whole report contract as mappingproxy; domain.canonical calls json.dumps without proxy support. Comparing only a plain schema did not normalize the stored contract. Convert the complete fixture contract with communication.plain before exact comparison and canonical serialization.",
+  "verification": "Current check004 preserves the previous snapshot. Next affected rerun required; no application imports or execution used to identify this."
+}

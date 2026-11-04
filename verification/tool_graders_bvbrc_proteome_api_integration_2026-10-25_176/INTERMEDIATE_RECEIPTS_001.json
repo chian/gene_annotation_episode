@@ -1,0 +1,14 @@
+{
+  "classification": "Intermediate diagnostics only; none supplies stable final-source verification",
+  "missing_evidence": "Contemporaneous before-run source/test hash manifests were not captured for TEST_001 through TEST_011. They are not reconstructed.",
+  "known_edits_during_execution": {
+    "TEST_003": "019 changed AppService schemas/bundle-values, proteome provider schema/contracts/resolution/projection, binder bundle argument and tool information during this regression process.",
+    "TEST_006": "Copied missing historical test assets and amended test_bvbrc_appservice_contracts.py for the optional ArtifactMember field during this process.",
+    "TEST_007": "Expanded/edited test_bvbrc_proteome_host_integration.py while its imported earlier test was running; also strengthened the saved bundle range check. The reported line mapping was consequently stale.",
+    "TEST_009": "The saved bundle range check, AppService schema formatting preservation and host test corrections changed during this process.",
+    "TEST_010": "AppService schema whitespace preservation and the host test file changed during this process; this is intermediate even where loaded test behavior was unaffected.",
+    "TEST_011": "Corrected the two negative tests' binder attribute spelling in the shared host test file after this run had imported its selected positive tests. Treat as intermediate."
+  },
+  "TEST_007_root_cause": "The loaded assertion expected only the publication source. Its real typed form correctly required three sources: publication, native document and explicitly requested reference FASTA inventory. The numerical and constructor assertions and first typed admission had succeeded. The corrected assertion explicitly names all three; no custody data was removed.",
+  "policy_for_final": "Let all active intermediate runs end naturally; freeze implementation and tests; record complete before/after candidate hashes around one run of the affected complete groups. If that run fails, wait for its natural completion before changing code."
+}

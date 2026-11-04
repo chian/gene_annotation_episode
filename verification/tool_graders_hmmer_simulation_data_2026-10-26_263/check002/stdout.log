@@ -1,0 +1,23 @@
+..........................................................F............. [ 88%]
+.........                                                                [100%]
+=================================== FAILURES ===================================
+_______________ test_viterbi_concrete_independent_numeric_answer _______________
+
+    def test_viterbi_concrete_independent_numeric_answer():
+        sheet = populate_hmmsim_sheet(**native_case())
+        calc = calculate_hmmsim_components(sheet)
+        stats = rows(calc, "score_statistics")[0]
+        fit = rows(calc, "fit", "independent")[0]
+        assert value(stats, "mean") == pytest.approx(-5.619071923450204, abs=1e-13)
+        assert value(stats, "x10") == pytest.approx(-0.6476082390605439, abs=1e-14)
+>       assert value(fit, "mu") == pytest.approx(-6.414576359999045, abs=1e-8)
+E       assert -6.414575769460952 == -6.414576359999045 ± 1.0e-08
+E         
+E         comparison failed
+E         Obtained: -6.414575769460952
+E         Expected: -6.414576359999045 ± 1.0e-08
+
+../../../tests/test_hmmer_simulation_calculations.py:42: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_hmmer_simulation_calculations.py::test_viterbi_concrete_independent_numeric_answer
+1 failed, 80 passed in 1.03s

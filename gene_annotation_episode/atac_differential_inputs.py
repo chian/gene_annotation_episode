@@ -502,12 +502,27 @@ def iter_atac_track_rows(track: ParsedAtacTrack, *, chromosome: str,
     # Do not stop at a later chromosome: exhausting validates final table identity.
 
 
-def _mode_issues(artifact, binding, key):
+MACS2_PEAK_PARSE_PROFILES = ('atac_single_end_no_control', 'matched_control_native_model')
+
+
+def _mode_issues(artifact, binding, key, *, parse_profile='atac_single_end_no_control'):
+    if type(parse_profile) is not str or parse_profile not in MACS2_PEAK_PARSE_PROFILES:
+        raise ValueError('invalid_macs2_peak_parse_profile')
     items = []
     p = binding['selected_parameters']
-    if (binding['selected_format'] != 'BAM' or binding['paired_end'] is not False
+    if parse_profile == 'atac_single_end_no_control':
+        unsupported = (binding['selected_format'] != 'BAM' or binding['paired_end'] is not False
             or p['broad'] is not False or p['downsample'] is not False or p['nomodel'] is not True
-            or binding['supplied_control_sample_ids'] != [] or binding['supplied_control_input_refs'] != []):
+            or binding['supplied_control_sample_ids'] != [] or binding['supplied_control_input_refs'] != [])
+    else:
+        unsupported = (binding['selected_format'] not in (
+                'AUTO', 'BAM', 'SAM', 'BED', 'ELAND', 'ELANDMULTI', 'ELANDEXPORT', 'BOWTIE')
+            or binding['paired_end'] is not False or p['nomodel'] is not False
+            or p['broad'] is not False or p['downsample'] is not False
+            or len(binding['treatment_input_refs']) != 1 or len(binding['sample_ids']) != 1
+            or binding['supplied_control_sample_ids'] is None or len(binding['supplied_control_sample_ids']) != 1
+            or binding['supplied_control_input_refs'] is None or len(binding['supplied_control_input_refs']) != 1)
+    if unsupported:
         items.append(_native_issue('unsupported_mode', artifact, key, requirement='compatible_native_mode'))
     if p['spmr'] is not False:
         items.append(_native_issue('unsupported_normalization', artifact, key, field='spmr',
@@ -527,7 +542,7 @@ def _score_basis(callpeak):
     return 'unknown'
 
 
-def _parse_table(content, artifact, binding, kind, category=None):
+def _parse_table(content, artifact, binding, kind, category=None, *, parse_profile='atac_single_end_no_control'):
     xls = kind == 'xls'
     differential = kind == 'bdgdiff'
     if differential:
@@ -561,7 +576,7 @@ def _parse_table(content, artifact, binding, kind, category=None):
         result['issues'].append(_native_issue('native_bdgdiff_coordinate_displacement' if pinned else 'unsupported_mode',
                                             artifact, key, requirement='compatible_native_mode'))
     else:
-        result['issues'].extend(_mode_issues(artifact, binding, key))
+        result['issues'].extend(_mode_issues(artifact, binding, key, parse_profile=parse_profile))
         result.update(callpeak_run_key=key, coordinate_convention='one_based_inclusive' if xls else 'zero_based_half_open')
         if xls:
             result.update(reported_metadata=_metadata(), reported_numbers=_reported_numbers(), peak_geometry=[])
@@ -624,7 +639,7 @@ def _parse_table(content, artifact, binding, kind, category=None):
             if result['state']['format'] != 'unsupported':
                 result['state']['format'] = 'malformed'
             result['issues'].append(_native_issue('missing_column_header', artifact, key, requirement='compatible_native_mode'))
-        _finish_metadata(result, binding)
+        _finish_metadata(result, binding, parse_profile=parse_profile)
     return _seal(result, stats, read_failed=read_failed)
 
 
@@ -803,7 +818,7 @@ def _read_metadata(text, locator, result):
         _store_number(result, 'shift_bp', match[2], locator, integer=True, sign=-1 if match[1] == '5' else 1)
 
 
-def _finish_metadata(result, callpeak):
+def _finish_metadata(result, callpeak, *, parse_profile='atac_single_end_no_control'):
     metadata, numbers = result['reported_metadata'], result['reported_numbers']
     artifact, key = result['artifact'], result['binding_key']
     def conflict(field):
@@ -811,6 +826,10 @@ def _finish_metadata(result, callpeak):
                                             requirement='original_native_metadata'))
     for reported, selected in (('format', callpeak['selected_format']), ('paired_end', callpeak['paired_end']),
                                ('broad', callpeak['selected_parameters']['broad']), ('macs_version', artifact['producer_version'])):
+        if (parse_profile == 'matched_control_native_model' and reported == 'format' and selected == 'AUTO'):
+            # AUTO is the selected native reader choice, not a detected format.
+            # Preserve a separately reported format without inferring one.
+            continue
         if metadata[reported] is not None and selected is not None and metadata[reported] != selected:
             conflict(reported)
     if metadata['format'] is not None and metadata['paired_end'] is not None:
@@ -863,18 +882,21 @@ def _finish_metadata(result, callpeak):
 
 
 def parse_macs2_peaks_xls(content: bytes | BinaryIO | None, *, artifact: AtacArtifact,
-                          callpeak: AtacCallpeakBinding) -> ParsedMacs2PeaksXls:
-    return _parse_table(content, artifact, callpeak, 'xls')
+                          callpeak: AtacCallpeakBinding,
+                          parse_profile='atac_single_end_no_control') -> ParsedMacs2PeaksXls:
+    return _parse_table(content, artifact, callpeak, 'xls', parse_profile=parse_profile)
 
 
 def parse_macs2_narrowpeak(content: bytes | BinaryIO | None, *, artifact: AtacArtifact,
-                          callpeak: AtacCallpeakBinding) -> ParsedMacs2NarrowPeak:
-    return _parse_table(content, artifact, callpeak, 'narrowpeak')
+                          callpeak: AtacCallpeakBinding,
+                          parse_profile='atac_single_end_no_control') -> ParsedMacs2NarrowPeak:
+    return _parse_table(content, artifact, callpeak, 'narrowpeak', parse_profile=parse_profile)
 
 
 def parse_macs2_summits_bed(content: bytes | BinaryIO | None, *, artifact: AtacArtifact,
-                           callpeak: AtacCallpeakBinding) -> ParsedMacs2Summits:
-    return _parse_table(content, artifact, callpeak, 'summits')
+                           callpeak: AtacCallpeakBinding,
+                           parse_profile='atac_single_end_no_control') -> ParsedMacs2Summits:
+    return _parse_table(content, artifact, callpeak, 'summits', parse_profile=parse_profile)
 
 
 def parse_macs2_bdgdiff_bed(content: bytes | BinaryIO | None, *, artifact: AtacArtifact,

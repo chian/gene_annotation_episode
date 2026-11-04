@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="13" time="61.038" timestamp="2026-10-26T07:14:10.520245-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_alignment_site_publication" name="test_actual_alignment_selected_positions_publish_exact_distinct_population[dna-ACGTTGCA]" time="5.590"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_6d14faea1bd53b20f7174bc4', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_actual_alignment_selected0')
+molecule = 'dna', sequence = 'ACGTTGCA'
+
+    @pytest.mark.parametrize('molecule,sequence', [('dna', 'ACGTTGCA'),
+        ('rna', 'ACGUUGCA'), ('protein', 'MACDEFGH')])
+    def test_actual_alignment_selected_positions_publish_exact_distinct_population(tmp_path, molecule, sequence):
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)['subject_refs']
+            tools = ToolRegistry(store)
+            aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': target,
+                'molecule': molecule, 'mode': 'global'}, operation_key='align')
+            assert aligned['status'] == 'completed', aligned
+            arguments = {'alignment_ref': aligned['result']['observation_ref'], 'positions': [2, 0, 2]}
+            result = tools.execute('sequence.sites', arguments, operation_key='sites')
+&gt;           assert result['status'] == 'completed', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_6d14faea1bd53b20f7174bc4', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:24: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_publication" name="test_actual_alignment_selected_positions_publish_exact_distinct_population[rna-ACGUUGCA]" time="4.828"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_3142a8e4133195e87dd178b2', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_actual_alignment_selected1')
+molecule = 'rna', sequence = 'ACGUUGCA'
+
+    @pytest.mark.parametrize('molecule,sequence', [('dna', 'ACGTTGCA'),
+        ('rna', 'ACGUUGCA'), ('protein', 'MACDEFGH')])
+    def test_actual_alignment_selected_positions_publish_exact_distinct_population(tmp_path, molecule, sequence):
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)['subject_refs']
+            tools = ToolRegistry(store)
+            aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': target,
+                'molecule': molecule, 'mode': 'global'}, operation_key='align')
+            assert aligned['status'] == 'completed', aligned
+            arguments = {'alignment_ref': aligned['result']['observation_ref'], 'positions': [2, 0, 2]}
+            result = tools.execute('sequence.sites', arguments, operation_key='sites')
+&gt;           assert result['status'] == 'completed', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_3142a8e4133195e87dd178b2', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:24: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_publication" name="test_actual_alignment_selected_positions_publish_exact_distinct_population[protein-MACDEFGH]" time="4.683"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_f682b0a953742eb16f9a9ae9', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_actual_alignment_selected2')
+molecule = 'protein', sequence = 'MACDEFGH'
+
+    @pytest.mark.parametrize('molecule,sequence', [('dna', 'ACGTTGCA'),
+        ('rna', 'ACGUUGCA'), ('protein', 'MACDEFGH')])
+    def test_actual_alignment_selected_positions_publish_exact_distinct_population(tmp_path, molecule, sequence):
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence=sequence, molecule=molecule)['subject_refs']
+            tools = ToolRegistry(store)
+            aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': target,
+                'molecule': molecule, 'mode': 'global'}, operation_key='align')
+            assert aligned['status'] == 'completed', aligned
+            arguments = {'alignment_ref': aligned['result']['observation_ref'], 'positions': [2, 0, 2]}
+            result = tools.execute('sequence.sites', arguments, operation_key='sites')
+&gt;           assert result['status'] == 'completed', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_f682b0a953742eb16f9a9ae9', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:24: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_publication" name="test_known_no_alignment_preserves_zero_coverage_and_unknown_identity" time="5.378"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_0aa52ca23083ac59e428f583', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_known_no_alignment_preser0')
+
+    def test_known_no_alignment_preserves_zero_coverage_and_unknown_identity(tmp_path):
+        path = tmp_path / 'pair.fa'
+        path.write_text('&gt;query\nAAAA\n&gt;reference\nTTTT\n')
+        with Store(tmp_path / 'state') as store:
+            query, reference = store.create_problem(path, molecule='dna')['subject_refs']
+            tools = ToolRegistry(store)
+            aligned = tools.execute('sequence.align', {'query_ref': query, 'reference_ref': reference,
+                'molecule': 'dna', 'mode': 'local'}, operation_key='align')
+            assert aligned['status'] == 'completed', aligned
+            result = tools.execute('sequence.sites', {'alignment_ref': aligned['result']['observation_ref'],
+                'window': {'start': 0, 'end': 4}}, operation_key='sites')
+&gt;           assert result['status'] == 'completed', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_0aa52ca23083ac59e428f583', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:54: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_publication" name="test_blast_column_grading_is_retained_without_another_scientific_record[True-2-4]" time="4.424"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_be5d8a2e76a493f907cd83d7', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_blast_column_grading_is_r0')
+alignment = True, offset = 2, expected_rows = 4
+
+    @pytest.mark.parametrize('alignment,offset,expected_rows', [(True, 2, 4), (True, 8, 0), (False, 0, None)])
+    def test_blast_column_grading_is_retained_without_another_scientific_record(tmp_path, alignment, offset, expected_rows):
+        store, tools, target, hsp, _ = published(tmp_path, alignment=alignment)
+        with store:
+            counts = store.count('source'), store.count('observation'), store.count('annotation')
+            args = {'observation_ref': hsp, 'column_offset': offset, 'column_limit': 4}
+            result = tools.execute('result.blast.hsp', args, operation_key='selected-columns',
+                permitted_record_refs=[hsp])
+&gt;           assert result['status'] == 'completed', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_be5d8a2e76a493f907cd83d7', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:70: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_publication" name="test_blast_column_grading_is_retained_without_another_scientific_record[True-8-0]" time="4.888"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_21a5b7097f0e57910ba4abcb', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_blast_column_grading_is_r1')
+alignment = True, offset = 8, expected_rows = 0
+
+    @pytest.mark.parametrize('alignment,offset,expected_rows', [(True, 2, 4), (True, 8, 0), (False, 0, None)])
+    def test_blast_column_grading_is_retained_without_another_scientific_record(tmp_path, alignment, offset, expected_rows):
+        store, tools, target, hsp, _ = published(tmp_path, alignment=alignment)
+        with store:
+            counts = store.count('source'), store.count('observation'), store.count('annotation')
+            args = {'observation_ref': hsp, 'column_offset': offset, 'column_limit': 4}
+            result = tools.execute('result.blast.hsp', args, operation_key='selected-columns',
+                permitted_record_refs=[hsp])
+&gt;           assert result['status'] == 'completed', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_21a5b7097f0e57910ba4abcb', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:70: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_publication" name="test_blast_column_grading_is_retained_without_another_scientific_record[False-0-None]" time="4.592"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_971f77c6418210f47bf11975', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_blast_column_grading_is_r2')
+alignment = False, offset = 0, expected_rows = None
+
+    @pytest.mark.parametrize('alignment,offset,expected_rows', [(True, 2, 4), (True, 8, 0), (False, 0, None)])
+    def test_blast_column_grading_is_retained_without_another_scientific_record(tmp_path, alignment, offset, expected_rows):
+        store, tools, target, hsp, _ = published(tmp_path, alignment=alignment)
+        with store:
+            counts = store.count('source'), store.count('observation'), store.count('annotation')
+            args = {'observation_ref': hsp, 'column_offset': offset, 'column_limit': 4}
+            result = tools.execute('result.blast.hsp', args, operation_key='selected-columns',
+                permitted_record_refs=[hsp])
+&gt;           assert result['status'] == 'completed', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_971f77c6418210f47bf11975', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:70: AssertionError</failure></testcase><testcase classname="tests.test_alignment_site_publication" name="test_site_grading_failure_keeps_existing_native_source_and_typed_partial" time="4.780"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_a61f41553064c0f6eee4ed1c', 'record_refs': [], 'result': None, ...}&#10;assert 'invalid' == 'partial'&#10;  &#10;  - partial&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_site_grading_failure_keep0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x794078d1b9b0&gt;
+
+    def test_site_grading_failure_keeps_existing_native_source_and_typed_partial(tmp_path, monkeypatch):
+        import gene_annotation_episode.alignment_site_inputs as inputs
+        with Store(tmp_path / 'state') as store:
+            target, = store.create_problem(raw_sequence='ACGTTGCA', molecule='dna')['subject_refs']
+            tools = ToolRegistry(store)
+            aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': target,
+                'molecule': 'dna', 'mode': 'global'}, operation_key='align')
+            def fail(*args, **kwargs):
+                raise ValueError('injected_selected_site_grading_failure')
+            monkeypatch.setattr(inputs, 'extract_biopython_reference_sites', fail)
+            result = tools.execute('sequence.sites', {'alignment_ref': aligned['result']['observation_ref'],
+                'positions': [2]}, operation_key='failed-grading')
+&gt;           assert result['status'] == 'partial', result
+E           AssertionError: {'status': 'invalid', 'operation_ref': 'operation_a61f41553064c0f6eee4ed1c', 'record_refs': [], 'result': None, ...}
+E           assert 'invalid' == 'partial'
+E             
+E             - partial
+E             + invalid
+
+../../../tests/test_alignment_site_publication.py:112: AssertionError</failure></testcase><testcase classname="tests.test_blast_result_views" name="test_bounded_native_alignment_preserves_scores_gaps_reverse_coordinates_and_custody" time="4.087"><failure message="gene_annotation_episode.domain.ContractError: site_record_identity_conflict">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_bounded_native_alignment_0')
+
+    def test_bounded_native_alignment_preserves_scores_gaps_reverse_coordinates_and_custody(tmp_path):
+        store, tools, target, observation, result = published(tmp_path)
+        with store:
+            before = store.count('observation'), store.count('source')
+            scope = store.validate_scope(None)
+&gt;           window = read_blast_hsp(store, observation, 2, 4, permitted_inputs=[observation], scope=scope)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_result_views.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/blast_result_views.py:158: in read_blast_hsp
+    grading = blast_grading(store, observation, source, reference, native,
+../../../gene_annotation_episode/alignment_site_native.py:198: in blast_grading
+    operands = {role: operand_descriptor(store, ref, alignment_unit=alignment_unit,
+../../../gene_annotation_episode/alignment_site_native.py:46: in operand_descriptor
+    immutable_record(record)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+record = {'context_source_refs': [], 'description': '', 'id': 'input_12bd695ab2db56e9ad4ddefa', 'input_issues': [], ...}
+
+    def immutable_record(record):
+        payload = {k: v for k, v in record.items() if k not in {'id', 'record_type', 'origin'}}
+        if record['id'] != identity(record['record_type'], {'origin': record['origin'], 'record': payload}):
+&gt;           raise ContractError('site_record_identity_conflict')
+E           gene_annotation_episode.domain.ContractError: site_record_identity_conflict
+
+../../../gene_annotation_episode/alignment_site_native.py:17: ContractError</failure></testcase><testcase classname="tests.test_blast_result_views" name="test_unreceived_hsp_and_cached_tool_reply_cannot_bypass_host_permission" time="4.019"><failure message="AssertionError: assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_unreceived_hsp_and_cached0')
+
+    def test_unreceived_hsp_and_cached_tool_reply_cannot_bypass_host_permission(tmp_path):
+        store, tools, _, observation, _ = published(tmp_path)
+        with store:
+            args = {'observation_ref': observation, 'column_offset': 0, 'column_limit': 3}
+            allowed = tools.execute('result.blast.hsp', args, operation_key='read', permitted_record_refs=[observation])
+&gt;           assert allowed['status'] == 'completed'
+E           AssertionError: assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+../../../tests/test_blast_result_views.py:74: AssertionError</failure></testcase><testcase classname="tests.test_blast_result_views" name="test_scope_and_native_record_integrity_are_required_even_with_received_reference" time="4.277" /><testcase classname="tests.test_blast_result_views" name="test_missing_alignment_stays_unknown_while_actual_scores_remain_available" time="4.830"><failure message="gene_annotation_episode.domain.ContractError: site_record_identity_conflict">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_missing_alignment_stays_u0')
+
+    def test_missing_alignment_stays_unknown_while_actual_scores_remain_available(tmp_path):
+        store, _, _, observation, _ = published(tmp_path, alignment=False)
+        with store:
+&gt;           result = read_blast_hsp(store, observation, 0, 8, permitted_inputs=[observation], scope=None)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_result_views.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/blast_result_views.py:158: in read_blast_hsp
+    grading = blast_grading(store, observation, source, reference, native,
+../../../gene_annotation_episode/alignment_site_native.py:198: in blast_grading
+    operands = {role: operand_descriptor(store, ref, alignment_unit=alignment_unit,
+../../../gene_annotation_episode/alignment_site_native.py:46: in operand_descriptor
+    immutable_record(record)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+record = {'context_source_refs': [], 'description': '', 'id': 'input_12bd695ab2db56e9ad4ddefa', 'input_issues': [], ...}
+
+    def immutable_record(record):
+        payload = {k: v for k, v in record.items() if k not in {'id', 'record_type', 'origin'}}
+        if record['id'] != identity(record['record_type'], {'origin': record['origin'], 'record': payload}):
+&gt;           raise ContractError('site_record_identity_conflict')
+E           gene_annotation_episode.domain.ContractError: site_record_identity_conflict
+
+../../../gene_annotation_episode/alignment_site_native.py:17: ContractError</failure></testcase><testcase classname="tests.test_blast_result_views" name="test_recorded_hsp_facts_fill_closed_parent_form_and_service_port_preserves_host_inputs" time="4.104"><failure message="AssertionError: assert ('invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid)">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_alignment_sites_2026-10-26_284/check001/temporary/test_recorded_hsp_facts_fill_c0')
+
+    def test_recorded_hsp_facts_fill_closed_parent_form_and_service_port_preserves_host_inputs(tmp_path):
+        from gene_annotation_episode.blast_result_views import BLAST_HSP_FACT_SCHEMA
+        store, tools, target, observation, acquired = published(tmp_path)
+        with store:
+            facts = blast_hsp_facts(store, acquired['record_refs'])
+            assert len(facts) == 1 and facts[0]['hsp_ref'] == observation
+            assert facts[0]['target_coverage'] == 7/18  # Native reference/hit coverage.
+            form = {'type': 'object', 'additionalProperties': False, 'required': ['matches'],
+                'properties': {'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}}}
+            returned = form_with_facts({}, form, {'execution_blast_hsps': facts})
+            validate_form(returned, form, lambda ref, ns: ref in acquired['record_refs'] and ns == 'execution_result')
+            source_refs = [observation]
+            context = BindingContext('run', 'child', 'scientific_process', (('scientific_process', 'child'),),
+                {'subject_refs': [target]}, {}, {}, source_refs)
+            source_refs.clear()
+            assert context.received_record_refs == (observation,)
+            assert 'received_record_refs' not in context.as_record()  # Host-only authorization.
+            services = WorkflowServices(SimpleNamespace(tools=tools))
+            read = asyncio.run(services.execute_tool('result.blast.hsp',
+                {'observation_ref': observation, 'column_offset': 0, 'column_limit': 2},
+                scope=context.scope, operation_key='service-read', permitted_record_refs=context.received_record_refs))
+&gt;           assert read['status'] == 'completed' and read['result']['alignment']['query'] == 'AC'
+E           AssertionError: assert ('invalid' == 'completed'
+E             
+E             - completed
+E             + invalid)
+
+../../../tests/test_blast_result_views.py:131: AssertionError</failure></testcase></testsuite></testsuites>

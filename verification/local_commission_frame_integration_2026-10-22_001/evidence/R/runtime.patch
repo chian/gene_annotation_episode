@@ -1,0 +1,233 @@
+--- baseline007/gene_annotation_episode/runtime.py
++++ final007/gene_annotation_episode/runtime.py
+@@ -52,9 +52,11 @@
+ from .episode_commissions import CommissionCoordinator
+ from .episode_completion import CompletionLedger, EFFECT_VERSION
+ from .episode_admission import ReceiverBindingV1, admit_return
+-from .waiting import WaitStore, estimate_wait, completed_action_context, validate_condition
++from .waiting import (WaitStore, estimate_wait, completed_action_context, validate_condition,
++    CONTEXT_COMMISSION_VERSION, validate_completed_action_commission_context)
+ from .wait_estimation_inputs import WaitInputs
+ from .local_return_history import LocalReturnHistory
++from .local_commission_frame import LocalCommissionFrame, validate_local_commission_frame
+ from .model_context_presentation import (MODE as MODEL_PRESENTATION_MODE,
+     REQUEST_VERSION as MODEL_CALL_REQUEST_VERSION, prepare_model_context_presentation,
+     validate_model_context_presentation)
+@@ -62,6 +64,34 @@
+ 
+ _API_PLANNING_FIELDS = ('api_reported_execution_expectations', 'api_reported_execution_forecasts',
+                         'api_execution_options', 'api_timing_planning_disposition')
++LOCAL_COMMISSION_FRAME_PAGE_SIZE = 16
++COMMISSION_MODEL_CALL_REQUEST_VERSION = 'runtime_model_call_request_v3'
++
++
++def _saved_commission_frame(request, *, run_id, episode_id):
++    """Read only the original factual metadata, never current execution state."""
++    if not isinstance(request, dict):
++        raise ContractError('local_commission_frame_invalid_input', detail={'path': ['request']})
++    versioned = request.get('version') == COMMISSION_MODEL_CALL_REQUEST_VERSION
++    if not versioned:
++        if 'local_commission_frame' in request:
++            raise ContractError('local_commission_frame_invalid_input',
++                detail={'path': ['request', 'version']})
++        return None
++    fields = {'version', 'context', 'schema', 'local_commission_frame'}
++    if 'model_presentation' in request:
++        fields.add('model_presentation')
++    if (set(request) != fields or not isinstance(request['context'], dict)
++            or not isinstance(request['schema'], dict)):
++        raise ContractError('local_commission_frame_invalid_input',
++            detail={'path': ['request']})
++    frame = request['local_commission_frame']
++    try:
++        return validate_local_commission_frame(frame, run_id=run_id, episode_id=episode_id,
++            pending=request['context'].get('pending_work'),
++            controller_credit=frame.get('controller_credit') if isinstance(frame, dict) else None)
++    except ValueError as error:
++        raise ContractError(str(error), detail={'path': ['request', 'local_commission_frame']}) from error
+ 
+ def _plain(value):
+     if hasattr(value, "as_record"):
+@@ -351,12 +381,15 @@
+     and make replay depend on when that callback happened to execute.
+     """
+     def __init__(self, controller, journal, episode_id, *, include_native=False,
+-                 capture_current_completion=None):
++                 capture_current_completion=None, capture_current_commission_frame=None):
+         if capture_current_completion is not None and not callable(capture_current_completion):
+             raise TypeError('completion_evidence_capture_must_be_callable')
++        if capture_current_commission_frame is not None and not callable(capture_current_commission_frame):
++            raise TypeError('commission_frame_capture_must_be_callable')
+         self.controller, self.journal, self.episode_id = controller, journal, episode_id
+         self.include_native = include_native
+         self.capture_current_completion = capture_current_completion
++        self.capture_current_commission_frame = capture_current_commission_frame
+         self.epoch = controller.epoch
+ 
+     def observe(self, unit_label, value, *, is_root):
+@@ -384,10 +417,31 @@
+             context = json.loads(old[0])
+             if unit_ref is not None and 'current_completion_evidence' in context:
+                 self._completion_packet(context['current_completion_evidence'], index, unit_ref)
++            call = self.journal.row('runtime_model_calls', self.episode_id, index)
++            request = None if call is None else json.loads(call['request'])
++            selected_frame = (None if request is None else _saved_commission_frame(request,
++                run_id=self.journal.run_id, episode_id=self.episode_id))
++            if context.get('version') == CONTEXT_COMMISSION_VERSION:
++                if selected_frame is None or self.capture_current_commission_frame is None:
++                    raise ContractError('local_commission_frame_identity_conflict')
++                action = self.journal.row('runtime_actions', self.episode_id, index)
++                after = json.loads(action['result'])
++                context = validate_completed_action_commission_context(context,
++                    run_id=self.journal.run_id, episode_id=self.episode_id,
++                    selected_frame=selected_frame,
++                    pending_at_selection=request['context'].get('pending_work'),
++                    pending_after_action=after.get('pending_work_after_action'),
++                    controller_credit=selected_frame['controller_credit'])
++            elif (selected_frame is not None or 'local_commission_frame_at_selection' in context
++                    or 'local_commission_frame_after_action' in context):
++                raise ContractError('local_commission_frame_identity_conflict')
+         else:
+             call = self.journal.row("runtime_model_calls", self.episode_id, index)
+             action = self.journal.row("runtime_actions", self.episode_id, index)
+-            decision_context = json.loads(call["request"])["context"]
++            request = json.loads(call['request'])
++            decision_context = request['context']
++            selected_frame = _saved_commission_frame(request,
++                run_id=self.journal.run_id, episode_id=self.episode_id)
+             supplied = decision_context.get('execution_expectations')
+             context = {"version": "completed_action_estimation_context_v1", "expectations": supplied,
+                 "decision_time": execution_timing.snapshot(call["timing"]),
+@@ -400,9 +454,20 @@
+             if unit_ref is not None and self.capture_current_completion is not None:
+                 packet = self._completion_packet(
+                     self.capture_current_completion(unit_ref, index, value), index, unit_ref)
++            frame_arguments = {}
++            if selected_frame is not None:
++                if self.capture_current_commission_frame is None:
++                    raise ContractError('local_commission_frame_identity_conflict')
++                credit_binding = selected_frame['controller_credit']
++                frame_arguments = {
++                    'local_commission_frame_at_selection': selected_frame,
++                    'local_commission_frame_after_action': self.capture_current_commission_frame(
++                        pending=after.get('pending_work_after_action'), controller_credit=credit_binding),
++                    'run_id': self.journal.run_id, 'episode_id': self.episode_id,
++                    'controller_credit': credit_binding}
+             if 'pending_work' in decision_context and (
+                     after.get('pending_work_after_action') is not None or after.get('wait_outcome') is not None
+-                    or packet is not None):
++                    or packet is not None or selected_frame is not None):
+                 support = decision_context.get('waiting_support', {})
+                 context = completed_action_context(context,
+                     pending_at_selection=decision_context['pending_work'],
+@@ -413,14 +478,14 @@
+                     duration_expectations=support.get('duration_expectations', ()),
+                     own_completed_action_history=support.get('own_completed_action_history', ()),
+                     local_return_history_at_selection=support.get('local_return_history'),
+-                    current_completion_evidence=packet)
+-            elif packet is not None:
++                    current_completion_evidence=packet, **frame_arguments)
++            elif packet is not None or selected_frame is not None:
+                 # A historical/direct call can lack pending-work support.
+                 # Retain that missingness while supplying its actual current
+                 # identity and delivery, rather than recapturing selection.
+                 context = completed_action_context(context, pending_at_selection=None,
+                     pending_after_action=after.get('pending_work_after_action'),
+-                    current_completion_evidence=packet)
++                    current_completion_evidence=packet, **frame_arguments)
+             if 'resource_tool_estimates' in decision_context or 'resource_tool_estimates' in after:
+                 context["resource_tool_estimates_at_selection"] = decision_context.get('resource_tool_estimates', [])
+                 context["resource_tool_estimates_after_action"] = after.get(
+@@ -442,7 +507,8 @@
+ 
+     def transitioned(self, epoch):
+         return type(self)(self.controller.transitioned(epoch), self.journal, self.episode_id,
+-            include_native=self.include_native, capture_current_completion=self.capture_current_completion)
++            include_native=self.include_native, capture_current_completion=self.capture_current_completion,
++            capture_current_commission_frame=self.capture_current_commission_frame)
+ 
+ class FeedbackEpisode(Episode):
+     async def _acquire_unit_async(self, ctx, scope, records, item, *, unit_offset=0):
+@@ -755,14 +821,23 @@
+                     detail={'path': ['request']}) from error
+             if row["purpose"] != "decision":
+                 raise WorkflowError("saved decision contract differs from reconstruction")
+-            fields = ({'version', 'context', 'schema', 'model_presentation'}
+-                      if presentation_enabled else {'context', 'schema'})
++            factual = (isinstance(saved, dict)
++                       and saved.get('version') == COMMISSION_MODEL_CALL_REQUEST_VERSION)
++            fields = ({'version', 'context', 'schema', 'local_commission_frame'} if factual else
++                      {'version', 'context', 'schema'} if presentation_enabled else {'context', 'schema'})
++            if presentation_enabled:
++                fields.add('model_presentation')
++            expected_version = (COMMISSION_MODEL_CALL_REQUEST_VERSION if factual
++                                else MODEL_CALL_REQUEST_VERSION)
+             if (not isinstance(saved, dict) or set(saved) != fields
+-                    or presentation_enabled and saved['version'] != MODEL_CALL_REQUEST_VERSION):
++                    or (factual or presentation_enabled) and saved['version'] != expected_version):
+                 # Immutable mode applies from the first call, including saved
+                 # completed calls. A mixed history cannot change instructions
+                 # inside an existing episode/role conversation.
+                 raise ContractError('model_presentation_contract_conflict',
++                    detail={'path': ['request', 'version']})
++            if factual and self.workflow.execution_binding is None:
++                raise ContractError('local_commission_frame_identity_conflict',
+                     detail={'path': ['request', 'version']})
+             for name in ('context', 'schema'):
+                 if not isinstance(saved[name], dict):
+@@ -773,6 +848,7 @@
+             # new decisions, not retrospective reconstruction of earlier ones.
+             schema = saved["schema"]
+             context = saved["context"]
++            _saved_commission_frame(saved, run_id=self.workflow.run_id, episode_id=self.episode_id)
+             if row["response"] is not None:
+                 return json.loads(row["response"]), index, context, schema
+             if presentation_enabled:
+@@ -860,7 +936,20 @@
+                 presentation = validate_model_context_presentation(presentation,
+                     original_context=context, **operands)
+                 saved.update(version=MODEL_CALL_REQUEST_VERSION, model_presentation=presentation)
+-            request_text = _json(saved)
++            if self.workflow.execution_binding is not None:
++                saved.update(version=COMMISSION_MODEL_CALL_REQUEST_VERSION,
++                    local_commission_frame=self.workflow.capture_local_commission_frame(self.episode_id,
++                        pending=context.get('pending_work'),
++                        controller_credit=self.workflow.source_controller_credit(self)))
++            if (saved.get('version') == COMMISSION_MODEL_CALL_REQUEST_VERSION
++                    and not presentation_enabled):
++                # The first non-presented dispatch retains the caller's key
++                # order. Persist that order too so an interrupted v3 retry
++                # supplies the identical original provider context/schema.
++                request_text = json.dumps(_plain(saved), sort_keys=False,
++                    separators=(',', ':'), ensure_ascii=False, allow_nan=False)
++            else:
++                request_text = _json(saved)
+             if presentation_enabled:
+                 # Dispatch the captured representation from the first attempt
+                 # too: storage sorts keys, but provider JSON retains their
+@@ -1312,6 +1401,7 @@
+         self.completions = CompletionLedger(store, self.journal)
+         self.wait_store = WaitStore(store, run_id)
+         self.local_return_history = LocalReturnHistory(store, self.journal, self.execution_backend)
++        self.local_commission_frame = LocalCommissionFrame(store, self.journal, self.execution_backend)
+         self.progress_provider = None
+         self.role_credit_projectors = {}
+         self.role_credit_definitions = {}
+@@ -2293,7 +2383,16 @@
+             lambda unit_ref, index, value: self.capture_completion_evidence(episode_id,
+                 original_decision_index=index, unit_ref=unit_ref, controller_input=value))
+         return ExecutionContextController(controller, self.journal, episode_id,
+-            include_native=native, capture_current_completion=capture)
++            include_native=native, capture_current_completion=capture,
++            capture_current_commission_frame=(None if self.execution_binding is None else
++                lambda *, pending, controller_credit: self.capture_local_commission_frame(episode_id,
++                    pending=pending, controller_credit=controller_credit)))
++
++    def capture_local_commission_frame(self, episode_id, *, pending, controller_credit):
++        captured = self.local_commission_frame.capture(episode_id, pending=pending,
++            controller_credit=controller_credit, page_size=LOCAL_COMMISSION_FRAME_PAGE_SIZE)
++        return validate_local_commission_frame(captured, run_id=self.run_id,
++            episode_id=episode_id, pending=pending, controller_credit=controller_credit)
+ 
+     def capture_completion_evidence(self, episode_id, *, original_decision_index,
+                                     unit_ref, controller_input):

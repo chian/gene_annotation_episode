@@ -1,0 +1,40 @@
+{
+  "evidence_class": "root engineering follow-up for already printed censored-component proposal; not replacement goal or adopted implementation",
+  "complete_current_calculator_read": {
+    "path": "gene_annotation_episode/literature_rate_calculations.py",
+    "lines": [
+      1,
+      378
+    ],
+    "sha256": "17163020eb4449360efd208174f06e6df6c92f375fedacf5f45267a84ee67545"
+  },
+  "relevant_existing_storage_path": {
+    "path": "gene_annotation_episode/literature_rate_storage.py",
+    "read_ranges": [
+      [
+        1,
+        160
+      ],
+      [
+        250,
+        465
+      ],
+      [
+        520,
+        793
+      ]
+    ],
+    "important_behavior": "_validate_native_saved currently authenticates only raw individual thresholds and requires every derived threshold/bound to remain None/none"
+  },
+  "necessary_implementation_review": [
+    "New calculation must preserve old saved outputs and not silently reinterpret/recalculate them on read.",
+    "A private explicit calculation-contract marker for newly written native payloads is a candidate; absent marker preserves original raw-only bound validation.",
+    "Same existing 10 component names and native27-field return can represent usable one-sided constraints while point remains unavailable.",
+    "New saved-bound validation must authenticate exact original source associations and selected output without native source IO/model refitting.",
+    "Only compatible witnessed endpoint/normalization and actual supported unit conversions allow contrast arithmetic; no bound can bypass another unresolved pair relationship.",
+    "Preserve strict vs inclusive inequality, signs/nonzero denominator requirements, approximation, finite numerical projection and source dependence.",
+    "No sampling CI, likelihood model, physical nonnegativity assumption, active fraction, target transfer or extra observation follows from a reported limit.",
+    "Read complete affected paths and propose minimal version/compatibility plan before new coding workload mutates files."
+  ],
+  "next_scope": "fresh arithmetic owner, separate from114renderer and future ordinary-sourcefactsformatter; same fixed user goal remains active"
+}

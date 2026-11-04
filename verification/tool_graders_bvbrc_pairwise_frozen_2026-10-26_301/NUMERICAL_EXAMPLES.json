@@ -1,0 +1,530 @@
+{
+  "conditional_function_weights": null,
+  "contradictory_reference": {
+    "artifact": {
+      "byte_count": 57926,
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-y655un2j/contradictory-reference-claim-result.json",
+      "sha256": "173673f4bad0ad0276a7dd8d3178666898f17a439eb8db031902bb5bce2558c9"
+    },
+    "diagnostics": [
+      {
+        "code": "output_version_unproven",
+        "evidence_refs": [
+          "source_790c516c5ca3d4a8a9240258"
+        ],
+        "path": "",
+        "phase": "association",
+        "severity": "qualification"
+      },
+      {
+        "code": "output_version_unproven",
+        "evidence_refs": [
+          "source_5b79b481a7763cf9d9904936"
+        ],
+        "path": "",
+        "phase": "association",
+        "severity": "qualification"
+      },
+      {
+        "code": "homology_subject_sequence_identity_conflict",
+        "evidence_refs": [],
+        "path": "/subject_binding",
+        "phase": "association",
+        "severity": "error"
+      },
+      {
+        "code": "homology_database_population_unavailable",
+        "evidence_refs": [],
+        "path": "",
+        "phase": "native_decode",
+        "severity": "qualification"
+      },
+      {
+        "code": "homology_pairwise_subject_membership_unproved",
+        "evidence_refs": [
+          "artifact_b1aab9b8d224666ea50f9828454662baadf851165218f72f295987587851be98"
+        ],
+        "path": "/BlastOutput2/0",
+        "phase": "native_decode",
+        "severity": "error"
+      },
+      {
+        "code": "homology_blast_sheet_unavailable",
+        "evidence_refs": [
+          "artifact_b1aab9b8d224666ea50f9828454662baadf851165218f72f295987587851be98"
+        ],
+        "path": "/BlastOutput2/0",
+        "phase": "native_decode",
+        "severity": "error"
+      },
+      {
+        "code": "homology_pairwise_subject_membership_unproved",
+        "evidence_refs": [],
+        "path": "/facts/query_coverage",
+        "phase": "return",
+        "severity": "error"
+      },
+      {
+        "code": "homology_pairwise_subject_membership_unproved",
+        "evidence_refs": [],
+        "path": "/facts/reference_coverage",
+        "phase": "return",
+        "severity": "error"
+      },
+      {
+        "code": "homology_pairwise_subject_membership_unproved",
+        "evidence_refs": [],
+        "path": "/facts/aligned_pairs",
+        "phase": "return",
+        "severity": "error"
+      },
+      {
+        "code": "homology_pairwise_subject_membership_unproved",
+        "evidence_refs": [],
+        "path": "/facts/identity",
+        "phase": "return",
+        "severity": "error"
+      }
+    ],
+    "facts": {
+      "aligned_pairs": null,
+      "identity": null,
+      "missing": [
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_pairwise_subject_membership_unproved",
+          "requirement_id": "homology:60bccebd6219da9313e5",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "homology_subject_sequence_identity_conflict",
+          "requirement_id": "homology:d0a7e2b928459d4b473f",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_pairwise_subject_membership_unproved",
+          "requirement_id": "homology:4229207d8ad08be20665",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_pairwise_subject_membership_unproved",
+          "requirement_id": "homology:ba6643a2850c72e5e291",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_pairwise_subject_membership_unproved",
+          "requirement_id": "homology:0b6e9bc5dc2fb320e8d9",
+          "role": null,
+          "source_refs": []
+        }
+      ],
+      "query_coverage": null,
+      "reference_coverage": null
+    },
+    "missing_requirements": [
+      {
+        "kind": "scientific_metadata",
+        "reason_code": "homology_pairwise_subject_membership_unproved",
+        "requirement_id": "homology:60bccebd6219da9313e5",
+        "role": null,
+        "source_refs": []
+      },
+      {
+        "kind": "input_metadata",
+        "reason_code": "homology_subject_sequence_identity_conflict",
+        "requirement_id": "homology:d0a7e2b928459d4b473f",
+        "role": null,
+        "source_refs": []
+      },
+      {
+        "kind": "scientific_metadata",
+        "reason_code": "homology_pairwise_subject_membership_unproved",
+        "requirement_id": "homology:4229207d8ad08be20665",
+        "role": null,
+        "source_refs": []
+      },
+      {
+        "kind": "scientific_metadata",
+        "reason_code": "homology_pairwise_subject_membership_unproved",
+        "requirement_id": "homology:ba6643a2850c72e5e291",
+        "role": null,
+        "source_refs": []
+      },
+      {
+        "kind": "scientific_metadata",
+        "reason_code": "homology_pairwise_subject_membership_unproved",
+        "requirement_id": "homology:0b6e9bc5dc2fb320e8d9",
+        "role": null,
+        "source_refs": []
+      }
+    ],
+    "status": "partial"
+  },
+  "coordinate_units": {
+    "alignment": "aa",
+    "query": "nt",
+    "reference": "aa"
+  },
+  "database_model": null,
+  "final_projection_status": "satisfied",
+  "formulas": {
+    "alignment_identity": "identical_paired_columns / all_alignment_columns",
+    "native_scores": "preserved_per_HSP_without_summing_alternative_or_overlapping_HSPs",
+    "paired_identity": "identical_paired_columns / paired_columns",
+    "query_paired_coverage": "union_of_paired_query_positions / supplied_query_length",
+    "reference_paired_coverage": "union_of_paired_reference_positions / reported_reference_length"
+  },
+  "hsp_counts": {
+    "alignment_columns": 3,
+    "identical_pairs": 3,
+    "paired_columns": 3,
+    "paired_query_positions": 9,
+    "paired_reference_positions": 3,
+    "query_gap_columns": 0,
+    "reference_gap_columns": 0
+  },
+  "hsp_native_scores": {
+    "bit_score": 20,
+    "evalue": 0.0,
+    "score": 40
+  },
+  "input_sequences": {
+    "query": "ATGAAAACTGGGTAA",
+    "reference": "MKTGG"
+  },
+  "measurements_forwarded_to_root": [
+    {
+      "field": "aligned_pairs",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 3
+    },
+    {
+      "field": "identity",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 1.0
+    },
+    {
+      "field": "query_coverage",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 0.6
+    },
+    {
+      "field": "reference_coverage",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 0.6
+    }
+  ],
+  "measurements_received_by_results_parent": [
+    {
+      "field": "aligned_pairs",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 3
+    },
+    {
+      "field": "identity",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 1.0
+    },
+    {
+      "field": "query_coverage",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 0.6
+    },
+    {
+      "field": "reference_coverage",
+      "source_ref": "source_768ee38b69529b72027ba646",
+      "value": 0.6
+    }
+  ],
+  "native_bytes": {
+    "byte_count": 507,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-y655un2j/native-raw.json",
+    "sha256": "b1aab9b8d224666ea50f9828454662baadf851165218f72f295987587851be98"
+  },
+  "pairwise_union": {
+    "complete_for_reported_hsps": true,
+    "conflicts": [],
+    "counts": {
+      "distinct_residue_pairs": 3,
+      "hsps_with_geometry": 1,
+      "hsps_without_geometry": 0,
+      "identical_residue_pairs": 3,
+      "paired_query_positions": 9,
+      "paired_reference_positions": 3
+    },
+    "denominators": {
+      "distinct_residue_pairs": 3,
+      "query_length": 15,
+      "reference_length": 5
+    },
+    "fractions": {
+      "paired_identity": 1.0,
+      "query_paired_coverage": 0.6,
+      "reference_paired_coverage": 0.6
+    },
+    "identical_mapping_hsp_groups": [],
+    "meaning": "union_of_observed_correspondences_not_a_selected_global_alignment",
+    "pairs": [
+      {
+        "hsp_indices": [
+          0
+        ],
+        "identical": true,
+        "query_end": 3,
+        "query_start": 0,
+        "reference_end": 1,
+        "reference_start": 0
+      },
+      {
+        "hsp_indices": [
+          0
+        ],
+        "identical": true,
+        "query_end": 6,
+        "query_start": 3,
+        "reference_end": 2,
+        "reference_start": 1
+      },
+      {
+        "hsp_indices": [
+          0
+        ],
+        "identical": true,
+        "query_end": 9,
+        "query_start": 6,
+        "reference_end": 3,
+        "reference_start": 2
+      }
+    ]
+  },
+  "partial_publications": [
+    {
+      "facts": {
+        "aligned_pairs": null,
+        "identity": null,
+        "missing": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native",
+            "role": "blast_json15_raw",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "homology_selected_artifact_missing",
+            "requirement_id": "homology:86faecfd7e33d79fff8b",
+            "role": "blast_json15_raw",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:6f6ed035972224a1e7e1",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "input_metadata",
+            "reason_code": "homology_pairwise_native_query_unavailable",
+            "requirement_id": "homology:d7e9f6ec8b84bede43c5",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:e5a3c61d568ebd084a6b",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:3f1b7a57a1ef3cfd1d54",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:60a473a215417477c393",
+            "role": null,
+            "source_refs": []
+          }
+        ],
+        "query_coverage": null,
+        "reference_coverage": null
+      },
+      "missing_requirements": [
+        {
+          "kind": "output_bytes",
+          "reason_code": "output_bytes_missing",
+          "requirement_id": "native",
+          "role": "blast_json15_raw",
+          "source_refs": []
+        },
+        {
+          "kind": "output_bytes",
+          "reason_code": "homology_selected_artifact_missing",
+          "requirement_id": "homology:86faecfd7e33d79fff8b",
+          "role": "blast_json15_raw",
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_requested_query_unavailable",
+          "requirement_id": "homology:6f6ed035972224a1e7e1",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "input_metadata",
+          "reason_code": "homology_pairwise_native_query_unavailable",
+          "requirement_id": "homology:d7e9f6ec8b84bede43c5",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_requested_query_unavailable",
+          "requirement_id": "homology:e5a3c61d568ebd084a6b",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_requested_query_unavailable",
+          "requirement_id": "homology:3f1b7a57a1ef3cfd1d54",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_requested_query_unavailable",
+          "requirement_id": "homology:60a473a215417477c393",
+          "role": null,
+          "source_refs": []
+        }
+      ],
+      "source_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-y655un2j/run/api-service-execution/b7096495bc626ef41403b413a6fe6bf71844a8adc9a65907210cbd36de489a38/episodes/f3bcc42cab8b346c00155be2658012d32216a0eb59f65818f02984363adf5a5a/actions/a91eaa1dee04f99e88a2256d502dfce31406f67b4ef8bd1ce964b6d1bd870272/scientific_adapter_result.json",
+      "status": "partial"
+    }
+  ],
+  "recalculation_and_replay": {
+    "counts_after": {
+      "runtime_actions": 16,
+      "runtime_model_calls": 16,
+      "runtime_observations": 16,
+      "runtime_report_attempts": 4
+    },
+    "counts_before": {
+      "runtime_actions": 16,
+      "runtime_model_calls": 16,
+      "runtime_observations": 16,
+      "runtime_report_attempts": 4
+    },
+    "durable_action_unchanged": true,
+    "host_outcome": {
+      "changed_record_refs": [
+        "source_844e3e728fcde3f231444274",
+        "source_5b79b481a7763cf9d9904936",
+        "source_f3b20f4f4e424a01307fae6a",
+        "source_768ee38b69529b72027ba646",
+        "source_8d264648f95976175487edda",
+        "source_5bb3be8b49cc403a160d82ec",
+        "source_e5b0d4395effa23e3d0e5d83"
+      ],
+      "feedback": null,
+      "operation_ref": "api_operation_59b12ce2ad2dd643436d0d98",
+      "record_refs": [
+        "source_844e3e728fcde3f231444274",
+        "source_5b79b481a7763cf9d9904936",
+        "source_f3b20f4f4e424a01307fae6a",
+        "source_768ee38b69529b72027ba646",
+        "source_8d264648f95976175487edda",
+        "source_5bb3be8b49cc403a160d82ec",
+        "source_e5b0d4395effa23e3d0e5d83"
+      ],
+      "result": {
+        "event": {
+          "facts": {
+            "body_complete": true,
+            "diagnostics": [],
+            "failure": null,
+            "http_status": 200,
+            "operation": "api.bvbrc_appservice.download",
+            "parse_status": "ok",
+            "projection": {
+              "body_complete": true,
+              "byte_count": 507,
+              "metadata_size": 507,
+              "object_complete": "yes",
+              "observed_range": null,
+              "received_range": null,
+              "requested_range": null,
+              "sha256": "b1aab9b8d224666ea50f9828454662baadf851165218f72f295987587851be98",
+              "total_size": 507
+            }
+          },
+          "failure_code": null,
+          "handoff_ready": false,
+          "kind": "response",
+          "native_handle": {
+            "task_id": "123"
+          },
+          "result_available": true,
+          "state": "completed"
+        },
+        "missing_requirements": [],
+        "publication_ref": "source_8d264648f95976175487edda",
+        "receipt_contract": "AcquisitionReceipt",
+        "result_record_refs": [
+          "source_768ee38b69529b72027ba646"
+        ],
+        "service": "bvbrc_appservice",
+        "source_ref": "source_768ee38b69529b72027ba646",
+        "support_receipt_ref": "source_844e3e728fcde3f231444274"
+      },
+      "status": "completed"
+    },
+    "host_outcome_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-y655un2j/run/api-service-execution/b7096495bc626ef41403b413a6fe6bf71844a8adc9a65907210cbd36de489a38/episodes/f3bcc42cab8b346c00155be2658012d32216a0eb59f65818f02984363adf5a5a/actions/54caf86b7c0094451718193a2688ffd7a175b9e8f040c613ebb749892ef23c24/outcome.json",
+    "native_calls_added": 0,
+    "operation_key": "homology-pairwise-selected-workflow:episode_098e9c0bbcd989e657cb4608a363af187cd0c7fef97ec489823c9f2cb90ffa17:6",
+    "saved_sheet_recalculation_equal": true,
+    "workflow_pending_work_after_action": {
+      "captured_at": "2026-10-26T15:02:33.982671+00:00",
+      "items": [],
+      "version": "pending_work_v1"
+    }
+  },
+  "representation": "Synthetic native BLAST JSON15 bytes processed by actual production code; no BLAST/service execution",
+  "returned_values": {
+    "aligned_pairs": 3,
+    "identity": 1.0,
+    "query_coverage": 0.6,
+    "reference_coverage": 0.6
+  },
+  "scientific_mode": "pairwise_correspondence",
+  "source_components": {
+    "byte_count": 8174,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-y655un2j/components.json",
+    "sha256": "256f4bad26108976d792577c655ba54b88ac723ceb51646180e60be279f93387"
+  },
+  "source_sheet": {
+    "byte_count": 32107,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_pairwise_frozen_2026-10-26_301/snapshot/verification/tool_graders_bvbrc_homology_pairwise_workflow_2026-10-24/runs/pairwise-y655un2j/sheet.json",
+    "sha256": "07df23c5677461a88a01abc6788e94a35c80a14ee7f50a789fc7ccec681e60de"
+  },
+  "task_association_qualification": [
+    "unknown"
+  ]
+}

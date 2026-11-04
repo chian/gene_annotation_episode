@@ -1,0 +1,64 @@
+--- verification/tool_graders_hmmer_map_integration_2026-10-28_526/before/gene_annotation_episode/hmmer_preparation_result_views.py
++++ gene_annotation_episode/hmmer_preparation_result_views.py
+@@ -718,6 +718,8 @@
+         if self.sheet is None or self.calculations is None:
+             if self.sheet is not None or self.calculations is not None:
+                 _error("grading_availability_inconsistent")
++            if self.program == "alimask":
++                self._map_context()
+             return
+         _fields(self.sheet, {"schema", "operation", "artifact_occurrences", "issues"} | _SHEET_EXTRA[self.family], "sheet_fields_invalid")
+         if self.sheet["schema"] != "hmmer_" + self.family + "_sheet_v1" or self.sheet["operation"] != operation:
+@@ -747,6 +749,8 @@
+             seen.add(oid)
+         if seen != set(grading["formats"]):
+             _error("sheet_format_population_mismatch")
++        if self.program == "alimask":
++            self._map_context()
+         for collection, kinds in self.definitions.items():
+             source = self.calculations["rows"] if collection == "calculations" else self.sheet[collection]
+             if type(source) is not list:
+@@ -790,7 +794,9 @@
+         }
+         if set(self.grading["requested_parameters"]) - parameters[self.family]:
+             _error("requested_parameters_undeclared")
+-        allowed = {"artifact_bindings"} if self.family == "artifact" else {"producer_contract", "source_binding"} if self.family == "fm" else set()
++        allowed = ({"artifact_bindings"} if self.family == "artifact" else
++            {"producer_contract", "source_binding"} if self.family == "fm" else
++            {"map_reconstruction_context"} if self.program == "alimask" else set())
+         if set(metadata) - allowed:
+             _error("metadata_unrelated")
+         for binding in metadata.get("artifact_bindings", []):
+@@ -816,6 +822,32 @@
+                 _text(oid)
+                 if type(digest) is not str or re.fullmatch("[0-9a-fA-F]{64}", digest) is None:
+                     _error("source_binding_digest_invalid")
++
++    def _map_context(self):
++        # Validate retained operands only. This never invokes reconstruction or
++        # resolves a currently installed executable to populate missing context.
++        from .hmmer_alignment_preparation_data import alimask_map_context_valid
++        metadata = self.grading["metadata"]
++        present = "map_reconstruction_context" in metadata
++        context = metadata.get("map_reconstruction_context")
++        source = self.slots.get(("input", "alignment", 0))
++        if present and (source is None or not alimask_map_context_valid(context,
++                settings=self.grading["operation"]["settings"], operation=self.grading["operation"],
++                source_occurrence={key: source[key] for key in _M1_FIELDS})):
++            _error("map_context_invalid")
++        if self.sheet is None:
++            return
++        first_key = source["occurrence_id"] + "#alignment/0" if source else None
++        for direction in ("input_records", "output_records"):
++            for record in self.sheet[direction]:
++                first = direction == "input_records" and record.get("kind") == "alignment" and record.get("record_key") == first_key
++                if first and ("map_reconstruction_context" in record) != present:
++                    _error("map_context_metadata_mismatch")
++                if "map_reconstruction_context" in record:
++                    if not first or record["map_reconstruction_context"] != context:
++                        _error("map_context_metadata_mismatch")
++                    if not alimask_map_context_valid(context, settings=self.grading["operation"]["settings"], alignment=record):
++                        _error("map_context_invalid")
+ 
+     def add_record(self, key, row, oid, *, model=False):
+         _text(key)

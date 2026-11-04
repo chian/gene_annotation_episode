@@ -1,0 +1,21 @@
+........................................F                                [100%]
+=================================== FAILURES ===================================
+_______ test_filtered_native_rows_never_become_whole_family_denominator ________
+
+    def test_filtered_native_rows_never_become_whole_family_denominator():
+        f = meta_native_fixture('official_na')
+        family = {'family_request_id': 'native-whole', 'family': {'family_id': 'whole', 'analysis_ids': ['analysis'], 'category_ids': ['GROUP'],
+            'test_kind': 'omnibus', 'eligibility': 'variable_site_positive_df', 'population_state': 'complete', 'total_test_count': None, 'assumption': None,
+            'p_value_basis': 'native_unadjusted', 'evidence': [], 'selection': 'all_eligible', 'tests': []},
+            'p_values': {'kind': 'native_tables', 'tables': [slot('analysis','raw_omnibus')], 'eligibility_statistics_requests': []},
+            'method': 'holm', 'alpha': .05, 'dependence_assumption': 'none_required_between_tests'}
+        f.parameters['multiplicity_families'] = [family]
+        raw_result, sheets, _ = composed_family(f)
+>       assert raw_result['value']['total_test_count'] == 312
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests/test_bvbrc_alignment_bundle_resolution.py:564: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_filtered_native_rows_never_become_whole_family_denominator
+1 failed, 40 passed in 56.79s

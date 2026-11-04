@@ -12,7 +12,7 @@ EXPERIMENT_TYPES = {
             "sample weights and frame versus organism capability and unexamined states",
             "detection limits, reported spread, logical domains and sampling uncertainty",
         ),
-        "readers": ("read_context_inputs", "read_native_selection"),
+        "readers": ("read_context_inputs", "read_native_selection", "read_source_selection"),
         "calculator": "populate_context_compatibility",
         "combination": "Existing conjunction within routes, disjunction across routes/states, weighted coverage and unpaired Frechet bounds.",
     },

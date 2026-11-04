@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="12" time="11.823" timestamp="2026-10-25T11:18:08.447381-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_retention_handoff_and_custody_have_original_parameter_pointer" time="6.715" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[source]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[digest]" time="0.010" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[length]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[field]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[artifact]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_requires_source_possession_and_exact_pointer" time="0.010" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_real_receipt_builder_correlates_task_id_with_retained_native_response[event_task]" time="0.039" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_real_receipt_builder_correlates_task_id_with_retained_native_response[effect_task]" time="0.016" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_host_rejects_wrong_task_after_real_record_authentication" time="0.030" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_replay_retains_request_original_actions_and_no_new_transport" time="0.109" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_request_source_crosses_declared_returns_and_results_assignment" time="4.404"><failure message="KeyError: 'runtime_report_attempts'">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1429/test_request_source_crosses_de0')
+
+    def test_request_source_crosses_declared_returns_and_results_assignment(tmp_path):
+        s = retained_submission(tmp_path)
+        try:
+            d, refs = s.driver, [s.handoff["source_ref"], s.task["submission_source_ref"]]
+            def admit(parent, child):
+                # SavedRecords' helper delivers one ref. Retain the same original
+                # declared refs-array contract while delivering both actual refs.
+                d.saved.admit(parent, child, refs[0])
+                form = {"refs": refs}
+                d.saved.journal.save("runtime_forms", {"episode_id": child.episode_id,
+                    "facts": canonical({"committed_record_refs": refs}), "form": canonical(form)})
+                index = int(child.path[-1][1][6:])
+                old = d.saved.journal.row("runtime_report_attempts", parent.episode_id, index)
+                d.saved.journal.save("runtime_report_attempts", {**old, "form": canonical(form)})
+                d.saved.receipts.receive(parent.episode_id, refs, kind="child_form", source_index=index)
+&gt;           admit(d.launch, s.context)
+
+tests/test_bvbrc_appservice_request_content.py:178: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_appservice_request_content.py:175: in admit
+    old = d.saved.journal.row("runtime_report_attempts", parent.episode_id, index)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.episode_journal.Journal object at 0x77632ee48530&gt;
+table = 'runtime_report_attempts'
+episode_id = 'episode_ba0a2af0626d60ca5a8f1fc4a85f2fa0594e3b8783e479b4e42b2d2f2725fcee'
+index = 0
+
+    def row(self, table, episode_id=None, index=None):
+        keys, args = ["run_id=?"], [self.run_id]
+        if episode_id is not None:
+            keys.append("episode_id=?"); args.append(episode_id)
+        if index is not None:
+&gt;           name = {"runtime_model_calls": "call_index", "runtime_actions": "decision_index",
+                    "runtime_observations": "unit_index"}[table]
+E           KeyError: 'runtime_report_attempts'
+
+gene_annotation_episode/episode_journal.py:76: KeyError</failure></testcase></testsuite></testsuites>

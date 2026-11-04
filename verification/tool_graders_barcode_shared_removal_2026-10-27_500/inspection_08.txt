@@ -1,0 +1,309 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: validate_report
+2778:     def validate_report(self, context, form, original_schema):
+2779:         if self.native_barcode_returns is not None:
+2780:             self.native_barcode_returns.validate_received_report(context, form, original_schema)
+2781:         if self.native_expression_nmf_returns is not None:
+2782:             self.native_expression_nmf_returns.validate_received_report(context, form, original_schema)
+2783:         if self.atac_returns is not None:
+2784:             self.atac_returns.validate_received_report(context, form, original_schema)
+2785:         if self.native_chromatin_interaction_returns is not None:
+2786:             self.native_chromatin_interaction_returns.validate_received_report(context, form, original_schema)
+2787:         if self.native_genomic_overlap_returns is not None:
+2788:             self.native_genomic_overlap_returns.validate_received_report(context, form, original_schema)
+2789:         self.native_protein_structure_returns.validate_received_report(context, form, original_schema)
+2790:         validate_form(form, original_schema, lambda ref, ns: self.resolve(context, ref, ns))
+2791:         facts = self.facts(context, {})
+2792:         for name, declared in plain(original_schema).get('properties', {}).items():
+2793:             source = declared.get('x-source')
+2794:             if source in facts and form[name] != facts[source]:
+2795:                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: project_credit
+2797:     def project_credit(self, context, receiver_selection):
+2798:         if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+2799:             return self.native_barcode_results.credit_view(context, receiver_selection)
+2800:         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+2801:             return self.native_expression_nmf_results.credit_view(context, receiver_selection)
+2802:         if self.atac_results is not None and self.atac_results.applies(context):
+2803:             return self.atac_results.credit_view(context, receiver_selection)
+2804:         if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+2805:             return self.native_chromatin_interaction_results.credit_view(context, receiver_selection)
+2806:         if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+2807:             return self.native_genomic_overlap_results.credit_view(context, receiver_selection)
+2808:         if self.native_protein_structure_results.applies(context):
+2809:             return self.native_protein_structure_results.credit_view(context, receiver_selection)
+2810:         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+2811:             return self.rna_structure_comparison_results.credit_view(context, receiver_selection)
+2812:         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+2813:             return self.native_rna_structure_results.credit_view(context, receiver_selection)
+2814:         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+2815:             return self.native_blast_standard_database_results.credit_view(context, receiver_selection)
+2816:         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+2817:             return self.native_blast_database_results.credit_view(context, receiver_selection)
+2818:         if self.native_hmmer_preparation_results is not None and self.native_hmmer_preparation_results.applies(context):
+2819:             return self.native_hmmer_preparation_results.credit_view(context, receiver_selection)
+2820:         if self.native_infernal_preparation_results is not None and self.native_infernal_preparation_results.applies(context):
+2821:             return self.native_infernal_preparation_results.credit_view(context, receiver_selection)
+2822:         if self.native_blast_results is not None and self.native_blast_results.applies(context):
+2823:             return self.native_blast_results.credit_view(context, receiver_selection)
+2824:         if self.native_infernal_results is not None and self.native_infernal_results.applies(context):
+2825:             return self.native_infernal_results.credit_view(context, receiver_selection)
+2826:         if self.native_hmmer_results.applies(context):
+2827:             return self.native_hmmer_results.credit_view(context, receiver_selection)
+2828:         if context.role in {'launch_local', 'launch_hpc'}:
+2829:             return self._delegate(context).credit_view(context, receiver_selection)
+2830:         if context.role == 'launch_api' or context.role == 'results' and self._target(context)['resource_kind'] == 'api':
+2831:             return self.api_execution.credit_view(context, receiver_selection)
+2832:         selected, handoffs, results = self._received(context, receiver_selection)
+2833:         handoffs = {ref: target for ref, target in handoffs.items()
+2834:             if self.job_progress_provider.targets.usable_handoff(target)}
+2835:         initial = set(selected['initial_known_record_refs'])
+2836:         baseline = {(target['resource_id'], target['execution_id']) for ref, target in handoffs.items() if ref in initial}
+2837:         identities = {(target['resource_id'], target['execution_id']) for target in handoffs.values()}
+2838:         handoff_count = len(identities-baseline) if context.role == 'launch' else 0
+2839:         seen, acquired_count = set(), 0
+2840:         for reference, body in sorted(results.items(), key=lambda item: (item[0] not in initial, item[0])):
+2841:             if not body['windows']:
+2842:                 continue
+2843:             contribution = (body['target']['resource_id'], body['target']['execution_id'], tuple(sorted(
+2844:                 (window['path'], window['offset'], window['returned_bytes'], digest(window['bytes_base64']))
+2845:                 for window in body['windows'])))
+2846:             if context.role == 'results' and contribution not in seen and reference not in initial:
+2847:                 acquired_count += 1
+2848:             seen.add(contribution)
+2849:         credit = self.handoff_unit*handoff_count + self.acquired_record_unit*acquired_count
+2850:         return {'credit': credit, 'operational_credit': credit, 'new_handoff_count': handoff_count,
+2851:             'new_acquired_record_count': acquired_count, 'operational_credit_binding': {
+2852:                 'version': 'execution_received_records_credit_v1', 'handoff_unit': self.handoff_unit,
+2853:                 'acquired_record_unit': self.acquired_record_unit,
+2854:                 'qualification': 'original_request_resource_scope_selector_and_actual_received_unique_information'}}
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _native_results_complete
+2859:     def _native_results_complete(self, context, bodies):
+2860:         if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+2861:             return False  # The original requested barcode delivery receipt owns completion.
+2862:         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+2863:             return False  # The original requested NMF delivery receipt owns completion.
+2864:         if self.atac_results is not None and self.atac_results.applies(context):
+2865:             return False  # The original ATAC requested-delivery receipt owns this endpoint.
+2866:         if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+2867:             return False  # The exact original chromatin receipt owns completion.
+2868:         if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+2869:             return False  # Its original qualified result receipt owns completion.
+2870:         if self.native_protein_structure_results.applies(context):
+2871:             return False  # Only the completed original protein receipt owns this endpoint.
+2872:         if is_native_rna_structure_target(self._target(context)):
+2873:             return False  # RNA's original requested qualified delivery owns its endpoint.
+2874:         if is_standard_blast_database_target(self._target(context)):
+2875:             return False  # Only its original frozen publication proves this endpoint.
+2876:         if is_native_blast_database_target(self._target(context)):
+2877:             return False  # Only its original frozen publication proves this endpoint.
+2878:         if not bodies:
+2879:             return False
+2880:         closed = [body for body in bodies if body['observation']['state'] == 'completed'
+2881:                   and body['observation']['returncode'] == 0]
+2882:         if not closed:
+2883:             return False
+2884:         target = self._target(context)
+2885:         requested = self._windows(self._selector(plain(context.assignment), target))
+2886:         for path, (start, length) in requested.items():
+2887:             # A pre-terminal read remains useful partial custody. Completion
+2888:             # here establishes requested acquisition alongside a successful
+2889:             # exact attempt observation; current files have no verified
+2890:             # producing-attempt identity or common atomic version.
+2891:             windows = [window for body in closed for window in body['windows'] if window['path'] == path]
+2892:             if not windows:
+2893:                 return False
+2894:             end = max(window['size_bytes'] for window in windows)
+2895:             if length is not None:
+2896:                 end = min(end, start+length)
+2897:             cursor = start
+2898:             for window in sorted(windows, key=lambda item: item['offset']):
+2899:                 if window['offset'] > cursor:
+2900:                     return False
+2901:                 cursor = max(cursor, window['offset']+window['returned_bytes'])
+2902:             if cursor < end:
+2903:                 return False
+2904:         return True
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _proof_for_action
+2906:     def _proof_for_action(self, context, operation_key):
+2907:         if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+2908:             proof = self.native_barcode_results.completion(context)
+2909:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2910:         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+2911:             proof = self.native_expression_nmf_results.completion(context)
+2912:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2913:         if self.atac_results is not None and self.atac_results.applies(context):
+2914:             proof = self.atac_results.completion(context)
+2915:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2916:         if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+2917:             proof = self.native_chromatin_interaction_results.completion(context)
+2918:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2919:         if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+2920:             proof = self.native_genomic_overlap_results.completion(context)
+2921:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2922:         if self.native_protein_structure_results.applies(context):
+2923:             proof = self.native_protein_structure_results.completion(context)
+2924:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2925:         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+2926:             proof = self.rna_structure_comparison_results.completion(context)
+2927:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2928:         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+2929:             proof = self.native_rna_structure_results.completion(context)
+2930:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2931:         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+2932:             proof = self.native_blast_standard_database_results.completion(context)
+2933:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2934:         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+2935:             proof = self.native_blast_database_results.completion(context)
+2936:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2937:         prefix = context.run_id+':'+context.episode_id+':'
+2938:         index = operation_key.removeprefix(prefix)
+2939:         if (not operation_key.startswith(prefix) or not index.isdecimal()
+2940:                 or str(int(index)) != index):
+2941:             return None
+2942:         row = self.store.db.execute('SELECT action,result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+2943:             'AND decision_index=?', (context.run_id, context.episode_id, int(index))).fetchone()
+2944:         if row is None or row['result'] is None:
+2945:             return None
+2946:         result = json.loads(row['result'])
+2947:         if result.get('status') != 'completed':
+2948:             return None
+2949:         if context.role == 'launch':
+2950:             qualified = []
+2951:             for reference in result.get('record_refs', []):
+2952:                 try:
+2953:                     target = self.job_progress_provider.targets.read_target(reference, context.scope)
+2954:                     self._context_target(context, target)
+2955:                     if self.job_progress_provider.targets.usable_handoff(target):
+2956:                         qualified.append(reference)
+2957:                 except (ValueError, KeyError):
+2958:                     pass
+2959:             complete = bool(qualified)
+2960:             keys, endpoint = ['received_usable_handoff'], 'usable_handoff'
+2961:         else:
+2962:             # Only windows actually returned by this completed own action and
+2963:             # preceding received records may establish the acquisition endpoint.
+2964:             bodies = []
+2965:             rows = self.store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+2966:                 'AND decision_index<=? AND result IS NOT NULL ORDER BY decision_index',
+2967:                 (context.run_id, context.episode_id, int(index)))
+2968:             for earlier in rows:
+2969:                 outcome = json.loads(earlier[0])
+2970:                 if outcome.get('status') != 'completed':
+2971:                     continue
+2972:                 for reference in outcome.get('record_refs', []):
+2973:                     body = self._read_result(reference, context.scope)
+2974:                     if body is not None and body['assignment'] == plain(context.assignment):
+2975:                         bodies.append(body)
+2976:             complete = self._native_results_complete(context, bodies)
+2977:             keys = ['requested_filesystem_acquisition', 'successful_exact_attempt_observed',
+2978:                     'attempt_output_version_unverified']
+2979:             endpoint = 'usable_handoff'
+2980:         if not complete:
+2981:             return None
+2982:         receipt = {'action': json.loads(row['action']), 'outcome': result,
+2983:             'endpoint': endpoint, 'validation_keys': keys}
+2984:         if context.role == 'results':
+2985:             receipt['supporting_receipt_sha256s'] = [digest(body) for body in bodies]
+2986:         return {'version': 'practical_completion_v1', 'run_id': context.run_id,
+2987:             'episode_id': context.episode_id, 'assignment_sha256': digest(context.assignment),
+2988:             'endpoint': endpoint, 'operation_key': operation_key, 'receipt_sha256': digest(receipt),
+2989:             'validation_keys': keys}
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: completion_for_action
+2991:     def completion_for_action(self, context, operation_key):
+2992:         if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+2993:             proof = self.native_barcode_results.completion(context)
+2994:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2995:         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+2996:             proof = self.native_expression_nmf_results.completion(context)
+2997:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+2998:         if self.atac_results is not None and self.atac_results.applies(context):
+2999:             proof = self.atac_results.completion(context)
+3000:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3001:         if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+3002:             proof = self.native_chromatin_interaction_results.completion(context)
+3003:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3004:         if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+3005:             proof = self.native_genomic_overlap_results.completion(context)
+3006:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3007:         if self.native_protein_structure_results.applies(context):
+3008:             proof = self.native_protein_structure_results.completion(context)
+3009:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3010:         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+3011:             proof = self.rna_structure_comparison_results.completion(context)
+3012:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3013:         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+3014:             proof = self.native_rna_structure_results.completion(context)
+3015:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3016:         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+3017:             proof = self.native_blast_standard_database_results.completion(context)
+3018:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3019:         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+3020:             proof = self.native_blast_database_results.completion(context)
+3021:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3022:         if context.role in ROLE_KINDS:
+3023:             return self._delegate(context).completion_for_action(context, operation_key)
+3024:         if context.role == 'results' and self._target(context)['resource_kind'] == 'api':
+3025:             return self.api_execution.completion_for_action(context, operation_key)
+3026:         if self.native_hmmer_preparation_results is not None and self.native_hmmer_preparation_results.applies(context):
+3027:             proof = self.native_hmmer_preparation_results.completion(context)
+3028:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3029:         if self.native_infernal_preparation_results is not None and self.native_infernal_preparation_results.applies(context):
+3030:             proof = self.native_infernal_preparation_results.completion(context)
+3031:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3032:         if self.native_blast_results is not None and self.native_blast_results.applies(context):
+3033:             proof = self.native_blast_results.completion(context)
+3034:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3035:         if self.native_infernal_results is not None and self.native_infernal_results.applies(context):
+3036:             proof = self.native_infernal_results.completion(context)
+3037:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3038:         if self.native_hmmer_results.applies(context):
+3039:             proof = self.native_hmmer_results.completion(context)
+3040:             return proof if proof is not None and proof['operation_key'] == operation_key else None
+3041:         return self._proof_for_action(context, operation_key)
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: verify_completion
+3043:     def verify_completion(self, context, proof):
+3044:         try:
+3045:             proof = validate_completion_proof(plain(proof))
+3046:         except (ValueError, TypeError):
+3047:             return False
+3048:         if self.native_barcode_results is not None and self.native_barcode_results.applies(context):
+3049:             return proof == self.native_barcode_results.completion(context)
+3050:         if self.native_expression_nmf_results is not None and self.native_expression_nmf_results.applies(context):
+3051:             return proof == self.native_expression_nmf_results.completion(context)
+3052:         if self.atac_results is not None and self.atac_results.applies(context):
+3053:             return proof == self.atac_results.completion(context)
+3054:         if self.native_chromatin_interaction_results is not None and self.native_chromatin_interaction_results.applies(context):
+3055:             return proof == self.native_chromatin_interaction_results.completion(context)
+3056:         if self.native_genomic_overlap_results is not None and self.native_genomic_overlap_results.applies(context):
+3057:             return proof == self.native_genomic_overlap_results.completion(context)
+3058:         if self.native_protein_structure_results.applies(context):
+3059:             return proof == self.native_protein_structure_results.completion(context)
+3060:         if self.rna_structure_comparison_results is not None and self.rna_structure_comparison_results.applies(context):
+3061:             return proof == self.rna_structure_comparison_results.completion(context)
+3062:         if self.native_rna_structure_results is not None and self.native_rna_structure_results.applies(context):
+3063:             return proof == self.native_rna_structure_results.completion(context)
+3064:         if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
+3065:             return proof == self.native_blast_standard_database_results.completion(context)
+3066:         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+3067:             return proof == self.native_blast_database_results.completion(context)
+3068:         if context.role in {'launch_local', 'launch_hpc'}:
+3069:             return self.state(context).verify_completion(proof)
+3070:         if context.role == 'launch_api' or context.role == 'results' and self._target(context)['resource_kind'] == 'api':
+3071:             return self.api_execution.verify_completion(context, proof)
+3072:         if self.native_hmmer_preparation_results is not None and self.native_hmmer_preparation_results.applies(context):
+3073:             return proof == self.native_hmmer_preparation_results.completion(context)
+3074:         if self.native_infernal_preparation_results is not None and self.native_infernal_preparation_results.applies(context):
+3075:             return proof == self.native_infernal_preparation_results.completion(context)
+3076:         if self.native_blast_results is not None and self.native_blast_results.applies(context):
+3077:             return proof == self.native_blast_results.completion(context)
+3078:         if self.native_infernal_results is not None and self.native_infernal_results.applies(context):
+3079:             return proof == self.native_infernal_results.completion(context)
+3080:         if self.native_hmmer_results.applies(context):
+3081:             return proof == self.native_hmmer_results.completion(context)
+3082:         return bool(proof and canonical(proof) == canonical(self._proof_for_action(context, proof.get('operation_key', ''))))

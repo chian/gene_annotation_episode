@@ -1,0 +1,23 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check002/source_snapshot
+configfile: pyproject.toml
+collecting ... collected 7 items
+
+source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_selected_library_launch_native_sheet_calculation_and_exact_typed_return FAILED [ 14%]
+source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_explicitly_received_sheet_recalculates_after_native_source_loss PASSED [ 28%]
+source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_projection_only_forwarding_grants_no_hidden_saved_sheet PASSED [ 42%]
+source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_validated_practical_endpoints_preserve_final_gain_without_extra_turn PASSED [ 57%]
+source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_reconstructed_finished_workflow_replays_original_actions_and_proofs PASSED [ 71%]
+source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_actual_incomplete_native_results_preserve_independent_pairs_without_endpoint[invalid_c] PASSED [ 85%]
+source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_actual_incomplete_native_results_preserve_independent_pairs_without_endpoint[missing_ac_stdout] PASSED [100%]
+
+=================================== FAILURES ===================================
+_ test_selected_library_launch_native_sheet_calculation_and_exact_typed_return _
+source_snapshot/tests/test_native_genomic_overlap_workflow.py:181: in test_selected_library_launch_native_sheet_calculation_and_exact_typed_return
+    assert not {"genomic_region_overlap_sheet_v1", "genomic_region_overlap_components_v1"}.intersection(
+E   TypeError: unhashable type: 'dict'
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_workflow_2026-10-27_437/check002/junit.xml -
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_genomic_overlap_workflow.py::test_selected_library_launch_native_sheet_calculation_and_exact_typed_return - TypeError: unhashable type: 'dict'
+=================== 1 failed, 6 passed in 640.21s (0:10:40) ====================

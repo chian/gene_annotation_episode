@@ -1,0 +1,10 @@
+{
+  "record_type": "demonstrated_integration_repair",
+  "owner": "root",
+  "production_file": "gene_annotation_episode/bvbrc_minhash_host.py",
+  "before_sha256": "136839a959fa6c58f1aaadc6f612ed6adddea1850b7f396b68ad2ac9dd81230b",
+  "evidence": "check003 selected Workflow first results setup; runtime feedback minhash_metadata_source_not_received despite original admitted metadata source",
+  "cause": "ExecutionEpisodes.initial_references runs during Workflow.build before parent runtime_actions commission and child runtime_episodes rows are saved. Host required the parent commission row at this prospective stage.",
+  "repair_contract": "Keep exact committed parent action proof whenever present. Only for a not-yet-saved child with no parent action, inspect the original saved parent model response at the child decision index; require episode_child/results, exact selected assignment (decode atomic assignment JSON only), scope and requested form equality. Then prove parent source receipt strictly before that index. A saved child cannot use this fallback. No new rows, work, reference inheritance or observations are created.",
+  "verification": "Existing full Workflow/custody tests plus targeted negative prospective construction, missing selection, changed selection/scope/form and saved-child-without-parent-action cases."
+}

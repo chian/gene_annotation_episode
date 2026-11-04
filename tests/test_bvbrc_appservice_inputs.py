@@ -48,13 +48,16 @@ class NativeClient(Client):
                 "effective_url": url, "automatic_redirects": False, "headers": {},
                 "request": {"method": "PUT", "url": url, "body_bytes": len(sent), "body_sha256": hashlib.sha256(sent).hexdigest()}})
 
-    def download(self, url, *, byte_range=None):
+    def download(self, url, *, max_bytes, byte_range=None):
         self.calls.append(("download", url, byte_range))
         body = self.body
+        assert len(body) <= max_bytes, 'this complete-response fixture exceeds the selected byte limit'
         return SourceSnapshot("bvbrc_analysis", url, {"kind": "download", "url": url,
-            "requested_byte_range": None if byte_range is None else list(byte_range)},
+            "requested_byte_range": None if byte_range is None else list(byte_range), "max_bytes": max_bytes},
             "2026-10-24T12:00:00+00:00", body, "application/json", {"status": 200,
                 "body_complete": True, "received_body_bytes": len(body), "effective_url": url,
+                "response_byte_limit": max_bytes, "observed_body_bytes": len(body),
+                "retained_body_bytes": len(body), "declared_body_bytes": len(body),
                 "automatic_redirects": False, "headers": {"content-length": str(len(body))},
                 "request": {"method": "GET", "url": url}})
 
@@ -239,7 +242,7 @@ def receipt_row(receipt, pointer="/result/0/0"):
 
 
 def download_args(obj, capability):
-    return {"object": obj, "capability": capability, "byte_range": None, "requirement_ids": ["native"],
+    return {"object": obj, "capability": capability, "byte_range": None, "max_bytes": 1048576, "requirement_ids": ["native"],
         "role": "native_output", "declared_format": selector()["requirements"][0]["declared_format"]}
 
 

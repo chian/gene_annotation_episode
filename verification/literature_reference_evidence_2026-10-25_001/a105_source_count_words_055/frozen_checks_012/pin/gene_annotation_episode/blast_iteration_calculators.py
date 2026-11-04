@@ -1,0 +1,861 @@
+"""Pure per-search PSI/DELTA composition; no round selection or accumulation.
+
+Raw counts count retained records, not biological members. Membership counts
+count supplied exact native identifiers. Requested comparisons use qualified
+returned identities, never a database census or a native convergence test.
+All alignment, function-weight, profile and PSSM calculations are delegated.
+"""
+from __future__ import annotations
+
+from copy import deepcopy
+import math
+
+from . import blast_sequence_database as _sequence
+from . import blast_profile_inputs as _profile_inputs
+from . import blast_profile_calculators as _profile
+from . import blast_pssm_calculators as _pssm
+from .blast_program_context import resolve_blast_program_context
+from .blast_iteration_inputs import _validate, _copy, _token, _integer, _text
+
+
+_ISSUES = frozenset("""collector_issue dependency_issue dependency_contract_rejected
+orphan_search_key duplicate_search_association conflicting_search_association
+report_source_unavailable report_source_conflict native_projection_conflict
+member_source_unavailable member_source_conflict table_layout_unavailable
+stage_unavailable stage_conflict query_relation_unavailable query_relation_conflict
+database_relation_unavailable database_relation_conflict native_count_unavailable
+native_count_conflict native_row_invalid threshold_unavailable threshold_invalid
+threshold_conflict effective_option_source_unavailable phase_semantics_unavailable
+checkpoint_missing checkpoint_key_ambiguous checkpoint_relation_unavailable
+checkpoint_relation_conflict checkpoint_binding_duplicate master_axis_conflict
+membership_source_unavailable membership_incomplete membership_conflict membership_duplicate
+observation_source_unavailable observation_scope_unavailable observation_scope_conflict
+convergence_conflict convergence_duplicate comparison_search_missing comparison_order_conflict
+comparison_basis_incompatible returned_identity_unavailable returned_identity_conflict
+returned_set_incomplete execution_completion_unqualified""".split())
+_ROLES = ("report_sources", "query_bindings", "search_bindings", "sequence_metadata", "profile_metadata")
+
+
+def _issue(code, key=None, *, pointer=None, hit=None, hsp=None, **details):
+    assert code in _ISSUES
+    return dict(code="blast_iteration_" + code, search_key=deepcopy(key), hit_ordinal=hit,
+                hsp_ordinal=hsp, source_pointer=pointer, details=deepcopy(details))
+
+
+def _availability(status="available", reason=None):
+    return {"status": status, "reason": reason}
+
+
+def _cell(value=None, *, unit="record_count", origin="native_report", pointers=(),
+          status=None, reason=None):
+    status = status or ("available" if value is not None else "unavailable")
+    return dict(value=value if status == "available" else None, status=status,
+                unavailable_reason=None if status == "available" else reason or
+                    ("incompatible_input" if status == "incompatible" else "missing_input"),
+                unit=unit, origin=origin, input_pointers=list(pointers))
+
+
+def _state(value=None, **kwargs):
+    return _cell(value, unit="native_boolean", **kwargs)
+
+
+def _number(value):
+    return type(value) is int or type(value) is float and math.isfinite(value)
+
+
+def _model(value):
+    """The 303 model's caller validation, without running a score calculation."""
+    try:
+        value = _copy(value)
+    except ValueError as error:
+        raise ValueError("blast_iteration_model_parameters_invalid") from error
+    if value is None:
+        return
+    valid = type(value) is dict and not set(value) - {"temperature_bits", "function_priors"}
+    if valid:
+        temperature, priors = value.get("temperature_bits", 1), value.get("function_priors")
+        valid = _number(temperature) and temperature > 0
+        valid &= priors is None or type(priors) is dict and bool(priors) and all(
+            _text(k) and _number(v) and v >= 0 for k, v in priors.items()) and sum(priors.values()) > 0
+    if not valid:
+        raise ValueError("blast_iteration_model_parameters_invalid")
+
+
+def _conflicts(left, right):
+    if left is None or right is None:
+        return False
+    if type(left) is dict and type(right) is dict:
+        return any(_conflicts(left[k], right[k]) for k in left.keys() & right.keys())
+    return left != right
+
+
+def _indices(sheet, issues):
+    keys = {_token(s["search_key"]) for s in sheet["collection"]["searches"]}
+    index = {role: {} for role in _ROLES}
+    for role in _ROLES:
+        for i, row in enumerate(sheet[role]):
+            token = _token(row["search_key"])
+            index[role].setdefault(token, []).append(i)
+            if token not in keys:
+                issues.append(_issue("orphan_search_key", row["search_key"], pointer=f"/{role}/{i}",
+                                     role=role, input_index=i))
+    return index
+
+
+def _association(sheet, index, role, key, issues):
+    indices = index[role].get(_token(key), [])
+    status = "available"
+    if len(indices) > 1:
+        issues.append(_issue("duplicate_search_association", key, role=role, input_indices=indices))
+        status = "unavailable"
+        rows = [sheet[role][i] for i in indices]
+        if any(_conflicts(a, b) for i, a in enumerate(rows) for b in rows[i + 1:]):
+            issues.append(_issue("conflicting_search_association", key, role=role, input_indices=indices,
+                                 assertions=rows))
+            status = "incompatible"
+    return (sheet[role][indices[0]] if len(indices) == 1 else None), indices, status
+
+
+def _source(sheet, search, source, role_status, issues):
+    key = search["search_key"]
+    if source is None:
+        issues.append(_issue("report_source_unavailable", key))
+        return role_status if role_status != "available" else "unavailable"
+    if any(source[k] != key[k] for k in ("artifact_key", "member_ordinal")):
+        issues.append(_issue("report_source_conflict", key, report_source=source))
+        return "incompatible"
+    artifacts = [a for a in sheet["collection"]["artifacts"] if a.get("artifact_key") == key["artifact_key"]]
+    if len(artifacts) != 1:
+        issues.append(_issue("report_source_unavailable", key, matching_artifact_count=len(artifacts)))
+        return "unavailable"
+    artifact, native = artifacts[0], search["normalized"]["native"]
+    invocation = sheet["collection"]["invocation"]
+    expected = {**invocation["completion"], **{k: invocation["effective_options"].get(k)
+                for k in ("requested_hit_limit", "requested_hsp_limit")}}
+    if (any(search["reporting"].get(k) != value for k, value in expected.items())
+            or search["normalized"].get("resource") != invocation["resource_kind"]
+            or search["normalized"]["search"].get("request") != invocation["request"]
+            or search["operand_binding"] is not None and search["operand_binding"] not in invocation["operands"]):
+        issues.append(_issue("report_source_conflict", key, component="collection_invocation", expected_reporting=expected))
+        return "incompatible"
+    if artifact.get("sha256") is None or native.get("sha256") is None:
+        issues.append(_issue("report_source_unavailable", key, component="artifact_digest"))
+        return "unavailable"
+    if artifact.get("sha256") != native.get("sha256"):
+        issues.append(_issue("report_source_conflict", key, artifact_sha256=artifact.get("sha256"),
+                             search_sha256=native.get("sha256")))
+        return "incompatible"
+    member = native.get("archive_member")
+    if key["member_ordinal"] is not None:
+        members = [m for m in artifact.get("members", []) if m.get("member_ordinal") == key["member_ordinal"]]
+        if (not isinstance(member, dict) or member.get("sha256") is None or len(members) != 1
+                or members[0].get("sha256") is None):
+            issues.append(_issue("member_source_unavailable", key))
+            return "unavailable"
+        if (member.get("ordinal") != key["member_ordinal"] or member["sha256"] != source["member_sha256"]
+                or members[0]["sha256"] != source["member_sha256"] or members[0].get("name") != member.get("name")
+                or artifact.get("format") != "json2_archive"):
+            issues.append(_issue("member_source_conflict", key, report_source=source, member=member,
+                                 manifest_members=members))
+            return "incompatible"
+    elif member is not None or artifact.get("format") == "json2_archive":
+        issues.append(_issue("member_source_conflict", key, member=member))
+        return "incompatible"
+    if search["normalized"]["format"] == "tabular":
+        layout = native.get("table_layout")
+        if layout is None:
+            issues.append(_issue("table_layout_unavailable", key))
+            return "unavailable"
+        expected = {"format": artifact.get("format"), "declared_fields": artifact.get("fields"),
+                    "delimiter": artifact.get("delimiter") or "\t"}
+        if layout != expected:
+            issues.append(_issue("report_source_conflict", key, table_layout=layout, artifact_layout=expected))
+            return "incompatible"
+    elif artifact.get("format") not in ("json2", "json15", "json2_archive"):
+        issues.append(_issue("report_source_conflict", key, format=artifact.get("format")))
+        return "incompatible"
+    return "available"
+
+
+def _projection(search, source, issues):
+    """Reuse 305's location/projection check, with no admission or scoring.
+
+    The helper consumes only {search, report_source:{artifact_ref}}. A null ref
+    when absent is a missing locator, not fabricated provenance; returned row
+    locators are discarded. It reuses 293's actual JSON/table projection and
+    validates pointers, labels, row maps, query/reporting facts. It does not
+    authenticate bytes/custody, qualify stage/query biology, or calculate scores.
+    """
+    local = []
+    _, _, ok = _profile._source_rows({"search": search, "report_source": {
+        "artifact_ref": source["artifact_ref"] if source else None}}, local)
+    for original in local:
+        issues.append(_issue("dependency_issue", search["search_key"],
+            pointer=original.get("source_pointer"), hit=original.get("hit_ordinal"), hsp=original.get("hsp_ordinal"),
+            module="blast_profile_calculators", function="_source_rows", original_issue=original))
+    if not ok:
+        missing = any(v["code"] == "blast_profile_table_layout_unavailable" for v in local)
+        issues.append(_issue("table_layout_unavailable" if missing else "native_projection_conflict", search["search_key"]))
+        return "unavailable" if missing else "incompatible"
+    return "available"
+
+
+def _counts(search, index, projection, issues):
+    key, raw, norm = search["search_key"], search["native"].get("search"), search["normalized"]
+    path = f"/collection/searches/{index}"
+    native_path = path + "/native/search"
+    values = dict(reported_hit_count=None, reported_hsp_count=None, observed_hsp_count=None,
+                  parsed_hit_count=None, parsed_hsp_count=None, declared_alignment_row_count=None)
+    reasons = {k: "missing_input" for k in values}
+    if norm["format"] == "json2":
+        hits = raw.get("hits") if type(raw) is dict else None
+        if type(hits) is list:
+            values["reported_hit_count"] = len(hits)
+            arrays = [h["hsps"] for h in hits if type(h) is dict and type(h.get("hsps")) is list]
+            if len(arrays) == len(hits):
+                values["reported_hsp_count"] = sum(map(len, arrays))
+            if arrays or not hits:
+                values["observed_hsp_count"] = sum(map(len, arrays))
+            if len(arrays) != len(hits) or any(type(h) is not dict for rows in arrays for h in rows):
+                issues.append(_issue("native_row_invalid", key, pointer=native_path + "/hits"))
+                reasons["reported_hsp_count"] = "invalid_native_row"
+        reasons["declared_alignment_row_count"] = "not_measured"
+    else:
+        rows = raw.get("rows") if type(raw) is dict else None
+        declared = raw.get("declared_alignment_row_count") if type(raw) is dict else None
+        if _integer(declared):
+            values["declared_alignment_row_count"] = declared
+        elif declared is None:
+            reasons["declared_alignment_row_count"] = "not_measured"
+        else:
+            reasons["declared_alignment_row_count"] = "invalid_native_row"
+        if type(rows) is list and (rows or declared == 0):
+            values["reported_hsp_count"] = values["observed_hsp_count"] = len(rows)
+            if projection == "available":
+                mapped = [j for m in search["row_map"] for j in m["hsp_ordinals"]]
+                if sorted(mapped) == list(range(len(rows))):
+                    values["reported_hit_count"] = len(norm["hits"])
+                else:
+                    reasons["reported_hit_count"] = "invalid_native_row"
+                    issues.append(_issue("native_row_invalid", key, pointer=native_path + "/rows"))
+            if declared is not None and declared != len(rows):
+                issues.append(_issue("native_count_conflict", key, declared=declared, observed=len(rows)))
+    explicit = values["reported_hit_count"] is not None or values["observed_hsp_count"] is not None
+    if projection == "available" and explicit:
+        values["parsed_hit_count"] = len(norm["hits"])
+        values["parsed_hsp_count"] = sum(len(h["hsps"]) for h in norm["hits"])
+    if values["reported_hit_count"] is not None and search["reporting"].get("native_hit_count") != values["reported_hit_count"]:
+        issues.append(_issue("native_count_conflict", key, measured=values["reported_hit_count"], reporting=search["reporting"]))
+    result = {}
+    for name, value in values.items():
+        parsed = name.startswith("parsed_")
+        pointer = path + "/normalized/hits" if parsed else native_path + (
+            "/declared_alignment_row_count" if name.startswith("declared_") else "/rows" if norm["format"] == "tabular" else "/hits")
+        # Missing fields are documented by their actual retained container;
+        # an input pointer must never pretend an absent native cell exists.
+        if not parsed and (type(raw) is not dict or pointer.rsplit("/", 1)[-1] not in raw):
+            pointer = native_path
+        result[name] = _cell(value, unit="alignment_row_count" if name.startswith("declared_") else
+                            "hit_record_count" if "hit_count" in name else "hsp_record_count",
+                            origin="derived" if parsed else "native_report", pointers=[pointer],
+                            status=projection if parsed and projection != "available" else None, reason=reasons[name])
+    return result
+
+
+def _stage(sheet, search, binding, association_status, source_status, issues):
+    key, context = search["search_key"], search["program_context"]
+    invocation = sheet["collection"]["invocation"]
+    if binding is None or binding["stage"] is None or binding["provenance"] is None:
+        issues.append(_issue("stage_unavailable", key))
+        return None, association_status if association_status != "available" else "unavailable"
+    conflict = any(context.get(k) != invocation[k] for k in
+                   ("execution_program", "scientific_mode", "query_kind", "reference_kind"))
+    try:
+        resolved = resolve_blast_program_context(**{k: context.get(k) for k in
+            ("execution_program", "reported_program", "scientific_mode", "query_kind", "reference_kind", "native_version")})
+        conflict |= context != resolved or context.get("geometry_program") is None
+    except ValueError:
+        conflict = True
+    if (context.get("reported_program") or "").lower() == "phiblastp":
+        issues.append(_issue("phase_semantics_unavailable", key))
+        return None, "unavailable"
+    stage, db = binding["stage"], binding["database_identity"]
+    conflict |= stage == "domain_database" and invocation["execution_program"] != "deltablast"
+    conflict |= db is not None and ((stage == "sequence_database" and db["preparation_type"] in ("rps", "delta"))
+                                  or stage == "domain_database" and db["preparation_type"] not in ("delta", "unknown"))
+    if conflict:
+        issues.append(_issue("stage_conflict", key, program_context=context, search_binding=binding))
+        return None, "incompatible"
+    if source_status != "available":
+        return None, source_status
+    return stage, "available"
+
+
+def _query_status(search, query, binding, issues):
+    if query is None or search["operand_binding"] is None:
+        return "unavailable"
+    # Reuse the delivered query-axis qualification only; no admission/scoring.
+    local = []
+    axis = _sequence._query_axis({"search": search, "query_binding": query,
+        "search_binding": binding or {"input_pssm_key": None}}, "blastp", local)
+    if axis["full_length"] is None:
+        issues.append(_issue("query_relation_conflict", search["search_key"], dependency_issues=local))
+        return "incompatible"
+    return "available"
+
+
+def _thresholds(sheet, search, index, stage, source, source_status, issues):
+    path = f"/collection/searches/{index}"
+    report = search["native"].get("report", {})
+    parameters = report.get("params", {})
+    candidates = []
+    specifications = []
+    if type(parameters) is dict and "include" in parameters:
+        specifications.append(("reported_include", parameters["include"], "native_report", path + "/native/report/params/include",
+            {"source_ref": source["artifact_ref"], "pointer": search["search_key"]["search_pointer"].split("/results/")[0] + "/params/include"}
+            if source else None))
+    for name, kind in (("inclusion_ethresh", "sequence_inclusion"), ("domain_inclusion_ethresh", "domain_inclusion")):
+        options = sheet["collection"]["invocation"]["effective_options"]
+        if name in options:
+            specifications.append((kind, options[name], "supplied_effective_option", "/collection/invocation/effective_options/" + name, sheet["invocation_source"]))
+    for kind, value, origin, pointer, provenance in specifications:
+        valid = _number(value) and value >= 0
+        state = "available" if valid else "incompatible"
+        reason = None if valid else "invalid_native_row"
+        if not valid:
+            issues.append(_issue("threshold_invalid", search["search_key"], pointer=pointer, value=value, kind=kind))
+        elif origin == "supplied_effective_option" and provenance is None:
+            state, reason = "unavailable", "missing_input"
+            issues.append(_issue("effective_option_source_unavailable", search["search_key"], pointer=pointer, kind=kind))
+        candidates.append(dict(kind=kind, value=value if valid else None, origin=origin,
+            input_pointer=pointer, provenance=deepcopy(provenance), status=state, unavailable_reason=reason))
+    reported = next((c for c in candidates if c["kind"] == "reported_include"), None)
+    cells = {"reported_include": _cell(reported["value"] if reported else None,
+        unit="expected_count_cutoff", origin="native_report", pointers=[reported["input_pointer"]] if reported else [],
+        status=reported["status"] if reported else None, reason=reported["unavailable_reason"] if reported else "not_measured")}
+    for output, required_stage, kinds in (("native_inclusion_threshold", "sequence_database", ("reported_include", "sequence_inclusion")),
+            ("domain_inclusion_threshold", "domain_database", ("domain_inclusion",))):
+        selected = [c for c in candidates if c["kind"] in kinds]
+        origin = "mixed" if len({c["origin"] for c in selected}) > 1 else selected[0]["origin"] if selected else "native_report"
+        value, state, reason = None, "unavailable", "not_measured" if stage and stage != required_stage else "missing_input"
+        if stage == required_stage:
+            if any(c["status"] == "incompatible" for c in selected) or len({c["value"] for c in selected if c["value"] is not None}) > 1:
+                state, reason = "incompatible", "incompatible_input"
+                issues.append(_issue("threshold_conflict", search["search_key"], threshold=output, candidates=selected))
+            elif selected and all(c["status"] == "available" for c in selected) and source_status == "available":
+                value, state, reason = selected[0]["value"], "available", None
+            else:
+                issues.append(_issue("threshold_unavailable", search["search_key"], threshold=output))
+        cells[output] = _cell(value, unit="expected_count_cutoff", origin=origin,
+            pointers=[c["input_pointer"] for c in selected], status=state, reason=reason)
+    return cells, candidates
+
+
+def _dependency(sheet, search, source, query, binding, metadata, role, model, metadata_indices, issues):
+    if role == "sequence":
+        module, populate, calculate = _sequence, _sequence.populate_blast_sequence_database_sheet, _sequence.calculate_blast_sequence_database_components
+        arguments = dict(reference_metadata=[], description_bindings=[], sequence_identity_bindings=[], database_profile=None)
+    else:
+        module, populate, calculate = _profile, _profile_inputs.populate_blast_profile_sheet, _profile.calculate_blast_profile_components
+        arguments = dict(profile_records=[], profile_bindings=[], function_bindings=[], model_relations=[])
+    if metadata is not None:
+        arguments.update({k: v for k, v in metadata.items() if k != "search_key"})
+    arguments.update(report_source=source, search_binding=binding, query_binding=query, target_context=sheet["target_context"])
+    function = populate.__name__
+    try:
+        child_sheet = populate(search, **arguments)
+        function = calculate.__name__
+        result = calculate(child_sheet, **({"model": model} if role == "sequence" else {}))
+    except ValueError as error:
+        if error.args and error.args[0] in ("blast_probability_model_parameters_invalid", "positive_finite_temperature_bits_required",
+                                           "complete_nonnegative_function_priors_required"):
+            raise ValueError("blast_iteration_model_parameters_invalid", *error.args) from error
+        issues.append(_issue("dependency_contract_rejected", search["search_key"],
+            module=populate.__module__ if function == populate.__name__ else module.__name__, function=function,
+            metadata_indices=metadata_indices, error_code=error.args[0] if error.args else "", error_args=list(error.args)))
+        return None, _availability("incompatible", "incompatible_input")
+    for original in result["issues"]:
+        issues.append(_issue("dependency_issue", search["search_key"], pointer=original.get("source_pointer"),
+            hit=original.get("hit_ordinal"), hsp=original.get("hsp_ordinal"),
+            module=module.__name__, function=function, original_issue=original))
+    status = result["status"]
+    availability = "available" if status in ("complete", "partial", "no_reported_hits") else status
+    return result, _availability(availability, None if availability == "available" else
+                                "incompatible_input" if availability == "incompatible" else "missing_input")
+
+
+def _search(sheet, index, associations, model):
+    search = sheet["collection"]["searches"][index]
+    key, issues, selected, indices, states = search["search_key"], [], {}, {}, {}
+    for original in search["issues"]:
+        issues.append(_issue("collector_issue", key, pointer=original.get("pointer"), original_issue=original))
+    for role in _ROLES:
+        selected[role], indices[role], states[role] = _association(sheet, associations, role, key, issues)
+    source = selected["report_sources"]["report_source"] if selected["report_sources"] else None
+    query = selected["query_bindings"]["query_binding"] if selected["query_bindings"] else None
+    binding = selected["search_bindings"]
+    source_status = _source(sheet, search, source, states["report_sources"], issues)
+    projection = _projection(search, source, issues)
+    if projection != "available":
+        source_status = "incompatible" if "incompatible" in (source_status, projection) else "unavailable"
+    counts = _counts(search, index, projection, issues)
+    stage, stage_status = _stage(sheet, search, binding, states["search_bindings"], source_status, issues)
+    query_status = _query_status(search, query, binding, issues)
+    thresholds, candidates = _thresholds(sheet, search, index, stage, source, source_status, issues)
+    components = {"sequence": None, "profile": None}
+    availability = {role: _availability("unavailable", "not_measured" if stage else "missing_input") for role in components}
+    if stage_status == "incompatible":
+        availability = {role: _availability("incompatible", "incompatible_input") for role in components}
+    if stage:
+        role = "sequence" if stage == "sequence_database" else "profile"
+        metadata_role = "sequence_metadata" if role == "sequence" else "profile_metadata"
+        failures = [states[metadata_role], states["query_bindings"]]
+        if any(s != "available" for s in failures):
+            state = "incompatible" if "incompatible" in failures else "unavailable"
+            availability[role] = _availability(state, "incompatible_input" if state == "incompatible" else "missing_input")
+        else:
+            components[role], availability[role] = _dependency(sheet, search, source, query, binding,
+                selected[metadata_role], role, model, indices[metadata_role], issues)
+    number = search["iteration"]
+    if not _integer(number, 1):
+        number = None
+    path = f"/collection/searches/{index}"
+    # Round and stage are separate supplied relations. An unknown stage does
+    # not erase an independently source-qualified biological-round assertion.
+    round_status = states["search_bindings"] if states["search_bindings"] != "available" else source_status
+    biological = binding["biological_round"] if binding and binding["provenance"] is not None and round_status == "available" else None
+    result = dict(search_key=deepcopy(key), status="unavailable", source_status=source_status,
+        native_search=deepcopy(search), report_source=deepcopy(source), query_binding=deepcopy(query), search_binding=deepcopy(binding),
+        association_indices=indices, native_iteration=_cell(number, unit="native_ordinal_label", pointers=[path + "/iteration"],
+            status=projection if projection != "available" else None),
+        stage=stage, biological_round=_cell(biological, unit="supplied_ordinal", origin="supplied_source_record",
+            pointers=[f"/search_bindings/{i}/biological_round" for i in indices["search_bindings"]],
+            status=round_status if round_status != "available" else None),
+        reporting=deepcopy(search["reporting"]), counts=counts, thresholds=thresholds, threshold_candidates=candidates,
+        sequence_components=components["sequence"], profile_components=components["profile"], component_availability=availability,
+        checkpoint_association_indices=[], native_converged=_state(), convergence_observation_indices=[], issues=issues)
+    success = _completed(result)
+    if not success:
+        issues.append(_issue("execution_completion_unqualified", key, reporting=search["reporting"]))
+    readable = any(c["value"] is not None for c in counts.values())
+    if source_status == "incompatible" or stage_status == "incompatible":
+        result["status"] = "incompatible"
+    elif not readable:
+        result["status"] = "unavailable"
+    elif (counts["reported_hit_count"]["value"] == 0 and success and source_status == "available"
+          and stage and query_status != "incompatible" and any(search["normalized"]["query"].get(k) is not None for k in ("id", "title"))
+          and all(states[r] == "available" for r in _ROLES)):
+        result["status"] = "no_reported_hits"
+    else:
+        result["status"] = "partial" if issues or not stage or query_status != "available" else "complete"
+    return result
+
+
+def _completed(search):
+    return search["reporting"].get("native_returncode") == 0 and search["reporting"].get("producer_complete") is True
+
+
+def _pssms(sheet):
+    outputs, locations = [], {}
+    for i, original in enumerate(sheet["pssm_sheets"]):
+        issues = []
+        components = _pssm.calculate_blast_pssm_components(original)
+        for native in components["issues"]:
+            issues.append(_issue("dependency_issue", module=_pssm.__name__, function="calculate_blast_pssm_components",
+                                 sheet_index=i, original_issue=native))
+        outputs.append(dict(sheet_index=i, artifact_key=original["artifact_key"], source_ref=original["source_ref"],
+            input_identity=deepcopy(original["input_identity"]), components=components, status=components["status"], issues=issues))
+        for j, matrix in enumerate(components["matrices"]):
+            locations.setdefault(matrix["pssm_key"], []).append(dict(sheet_index=i, matrix_index=j))
+    return outputs, locations
+
+
+def _checkpoint_associations(sheet, searches, pssms, locations):
+    groups = {}
+    by_search = {_token(s["search_key"]): s for s in searches}
+    for i, binding in enumerate(sheet["checkpoint_bindings"]):
+        group = (binding["pssm_key"], binding["role"], _token(binding["search_key"]))
+        groups.setdefault(group, []).append(i)
+    results = []
+    for indices in groups.values():
+        rows = [sheet["checkpoint_bindings"][i] for i in indices]
+        first = rows[0]
+        key, pkey, role = first["search_key"], first["pssm_key"], first["role"]
+        where, issues, state, reason = locations.get(pkey, []), [], "available", None
+        def mark(code, status="unavailable", **details):
+            nonlocal state, reason
+            state = "incompatible" if "incompatible" in (state, status) else status
+            reason = "incompatible_input" if state == "incompatible" else "missing_input"
+            issues.append(_issue(code, key, binding_indices=indices, pssm_key=pkey, **details))
+        if len(indices) > 1:
+            issues.append(_issue("checkpoint_binding_duplicate", key, binding_indices=indices, pssm_key=pkey))
+            if any(row != first for row in rows[1:]):
+                mark("checkpoint_relation_conflict", "incompatible", assertions=rows)
+        if not where:
+            mark("checkpoint_missing")
+        elif len(where) > 1:
+            mark("checkpoint_key_ambiguous", locations=where)
+        search = by_search.get(_token(key)) if key else None
+        if role == "output" and (key is not None or first["biological_round"] is not None):
+            mark("checkpoint_relation_conflict", "incompatible", role=role)
+        elif key is None:
+            if role == "after_search" or first["biological_round"] is not None:
+                mark("checkpoint_relation_unavailable", role=role)
+        elif search is None:
+            mark("orphan_search_key")
+        else:
+            binding = search["search_binding"]
+            if search["source_status"] != "available":
+                mark("checkpoint_relation_unavailable")
+            else:
+                known = binding["biological_round"] if binding else None
+                if known is not None and first["biological_round"] is not None and known != first["biological_round"]:
+                    mark("checkpoint_relation_conflict", "incompatible", search_round=known, checkpoint_round=first["biological_round"])
+                if role == "input" and binding and binding["input_pssm_key"] is not None and binding["input_pssm_key"] != pkey:
+                    mark("checkpoint_relation_conflict", "incompatible", input_pssm_key=binding["input_pssm_key"])
+                query = search["query_binding"]
+                # Construction/consumption alone supplies no coordinate map.
+                # A pssm_master binding explicitly names this exact positional
+                # axis; never guess whether another PSSM spans full/selected query.
+                if (len(where) == 1 and query is not None and query["axis_kind"] == "pssm_master"
+                        and query["pssm_key"] == pkey and query["master_mapping_ref"] is not None):
+                    matrix = pssms[where[0]["sheet_index"]]["components"]["matrices"][where[0]["matrix_index"]]
+                    lengths = [matrix["dimensions"]["positions"], matrix["master"]["reported_length"], matrix["master"]["decoded_length"]]
+                    if any(n is not None and n != query["full_length"] for n in lengths):
+                        mark("master_axis_conflict", "incompatible", pssm_lengths=lengths, query_full_length=query["full_length"])
+                if query is not None and query["axis_kind"] == "pssm_master" and role == "input" and query["pssm_key"] != pkey:
+                    mark("master_axis_conflict", "incompatible", query_pssm_key=query["pssm_key"])
+            search["checkpoint_association_indices"].append(len(results))
+        results.append(dict(binding_indices=indices, pssm_key=pkey, pssm_locations=deepcopy(where), role=role,
+            search_key=deepcopy(key), biological_round=first["biological_round"] if all(row["biological_round"] == first["biological_round"] for row in rows) else None,
+            status=state, unavailable_reason=reason, issues=issues))
+    for search in searches:
+        binding = search["search_binding"]
+        if binding and binding["input_pssm_key"] is not None:
+            relevant = [r for r in results if r["role"] == "input" and r["search_key"] == search["search_key"]
+                        and r["pssm_key"] == binding["input_pssm_key"] and r["status"] == "available"]
+            if not relevant:
+                search["issues"].append(_issue("checkpoint_relation_unavailable", search["search_key"], pssm_key=binding["input_pssm_key"]))
+                if search["status"] in ("complete", "no_reported_hits"):
+                    search["status"] = "partial"
+    return results
+
+
+def _inclusion(sheet, associations, locations):
+    outputs = []
+    for i, row in enumerate(sheet["inclusion_records"]):
+        key, pkey, evidence = row["search_key"], row["pssm_key"], row["evidence"]
+        issues, groups = [], {}
+        for j, member in enumerate(row["members"]):
+            groups.setdefault(_token(member["identity"]), dict(identity=deepcopy(member["identity"]), member_indices=[]))["member_indices"].append(j)
+        unique = list(groups.values())
+        indices = [j for j, a in enumerate(associations) if a["pssm_key"] == pkey and
+                   (key is None or a["search_key"] == key and a["role"] == "after_search")]
+        status, reason = "available", None
+        # Empty retained records are legal actual data (including complete zero
+        # members). Shape/provenance validation is separate from their contents;
+        # this supplied-record port cannot decode arbitrary source formats.
+        if not indices or not locations.get(pkey):
+            status, reason = "unavailable", "missing_input"
+            issues.append(_issue("checkpoint_relation_unavailable", key, record_index=i, pssm_key=pkey))
+        elif not any(associations[j]["status"] == "available" for j in indices) or len(locations[pkey]) != 1:
+            status = "incompatible" if any(associations[j]["status"] == "incompatible" for j in indices) else "unavailable"
+            reason = "incompatible_input" if status == "incompatible" else "missing_input"
+        if not row["complete"] and status != "incompatible":
+            status, reason = "unavailable", "partial_output"
+            issues.append(_issue("membership_incomplete", key, record_index=i))
+        duplicate = len(row["members"]) - len(unique)
+        if duplicate:
+            issues.append(_issue("membership_duplicate", key, record_index=i,
+                                 member_indices=[g["member_indices"] for g in unique if len(g["member_indices"]) > 1]))
+        pointers, origin = [f"/inclusion_records/{i}/members"], evidence["origin"]
+        outputs.append(dict(record_index=i, record_key=row["record_key"], pssm_key=pkey, search_key=deepcopy(key),
+            query_membership=row["query_membership"], evidence=deepcopy(evidence), checkpoint_association_indices=indices,
+            status=status, unavailable_reason=reason, member_rows=deepcopy(row["members"]), unique_members=unique,
+            member_record_count=_cell(len(row["members"]), origin=origin, pointers=pointers, unit="native_member_identifier_count"),
+            duplicate_member_count=_cell(duplicate, origin=origin, pointers=pointers, unit="native_member_identifier_count"),
+            observed_unique_member_count=_cell(len(unique), origin=origin, pointers=pointers, unit="native_member_identifier_count"),
+            included_sequence_count=_cell(len(unique), origin=origin, pointers=pointers, unit="native_member_identifier_count", status=status, reason=reason), issues=issues))
+    for pkey in dict.fromkeys(r["pssm_key"] for r in outputs):
+        rows = [r for r in outputs if r["pssm_key"] == pkey]
+        complete = [r for r in rows if sheet["inclusion_records"][r["record_index"]]["complete"]]
+        signatures = {(_token(sorted(_token(v["identity"]) for v in r["unique_members"])), r["query_membership"]) for r in complete}
+        if len(signatures) > 1:
+            for r in rows:
+                r.update(status="incompatible", unavailable_reason="incompatible_input")
+                r["included_sequence_count"].update(value=None, status="incompatible", unavailable_reason="incompatible_input")
+                r["issues"].append(_issue("membership_conflict", r["search_key"], record_indices=[v["record_index"] for v in complete], pssm_key=pkey))
+        elif len(complete) > 1:
+            for r in complete:
+                r["issues"].append(_issue("membership_duplicate", r["search_key"], record_indices=[v["record_index"] for v in complete], pssm_key=pkey))
+    return outputs
+
+
+def _convergence(sheet, searches):
+    by_key = {_token(s["search_key"]): s for s in searches}
+    operands = [o for o in sheet["collection"]["invocation"]["operands"] if o["role"] == "query"]
+    outputs, scopes = [], {}
+    for i, row in enumerate(sheet["convergence_records"]):
+        key, operand, evidence = row["search_key"], row["query_operand"], row["evidence"]
+        issues, status, reason = [], "available", None
+        search = by_key.get(_token(key)) if key else None
+        if key is None and operand is None or key is not None and search is None:
+            status, reason = "unavailable", "missing_input"
+            issues.append(_issue("observation_scope_unavailable", key, record_index=i))
+        elif operand is not None and (operand not in operands or search is not None and operand != search["native_search"]["operand_binding"]):
+            status, reason = "incompatible", "incompatible_input"
+            issues.append(_issue("observation_scope_conflict", key, record_index=i))
+        elif search is not None and search["source_status"] != "available":
+            status = search["source_status"]
+            reason = "incompatible_input" if status == "incompatible" else "missing_input"
+            issues.append(_issue("observation_scope_unavailable", key, record_index=i))
+        output = dict(record_index=i, record_key=row["record_key"], search_key=deepcopy(key), query_operand=deepcopy(operand),
+            evidence=deepcopy(evidence), native_converged=_state(row["native_converged"], status=status, reason=reason,
+                origin=evidence["origin"], pointers=[f"/convergence_records/{i}/native_converged"]),
+            status=status, unavailable_reason=reason, issues=issues)
+        outputs.append(output)
+        if status == "available":
+            scope = ("search", _token(key)) if key else ("query", _token(operand))
+            scopes.setdefault(scope, []).append(i)
+    for indices in scopes.values():
+        rows = [outputs[i] for i in indices]
+        conflict = len({r["native_converged"]["value"] for r in rows}) > 1
+        for row in rows:
+            if conflict:
+                row.update(status="incompatible", unavailable_reason="incompatible_input")
+                row["native_converged"].update(value=None, status="incompatible", unavailable_reason="incompatible_input")
+            if len(indices) > 1:
+                row["issues"].append(_issue("convergence_conflict" if conflict else "convergence_duplicate", row["search_key"], record_indices=indices))
+    for search in searches:
+        indices = [i for i, r in enumerate(outputs) if r["search_key"] == search["search_key"]]
+        search["convergence_observation_indices"] = indices
+        rows = [outputs[i] for i in indices]
+        available = [r for r in rows if r["status"] == "available"]
+        if any(r["status"] == "incompatible" for r in rows):
+            search["native_converged"] = _state(status="incompatible", reason="incompatible_input",
+                pointers=[f"/convergence_records/{i}/native_converged" for i in indices])
+            if search["status"] in ("complete", "no_reported_hits"):
+                search["status"] = "partial"
+        elif available:
+            origins = {r["evidence"]["origin"] for r in available}
+            search["native_converged"] = _state(available[0]["native_converged"]["value"], origin=next(iter(origins)) if len(origins) == 1 else "mixed",
+                pointers=[f"/convergence_records/{r['record_index']}/native_converged" for r in available])
+    return outputs
+
+
+def _merge_rows(left, right):
+    result = deepcopy(left)
+    for field in ("row_keys", "profile_keys"):
+        result[field].extend(deepcopy(v) for v in right[field] if v not in result[field])
+    return result
+
+
+def _identity_token(identity):
+    value = deepcopy(identity)
+    if value["kind"] == "profile_model_identifier":
+        value["database_identity"].pop("source")
+    return _token(value)
+
+
+def _targets(search, basis, issues):
+    rows, complete = [], True
+    if search is None:
+        return rows, False
+    key, counts = search["search_key"], search["counts"]
+    complete = (search["source_status"] == "available" and _completed(search)
+        and counts["reported_hit_count"]["value"] is not None
+        and counts["reported_hit_count"]["value"] == counts["parsed_hit_count"]["value"])
+    if basis == "full_sequence_digest":
+        child = search["sequence_components"]
+        data = child["components"]["database_sheet"] if child else None
+        if data is None:
+            return [], False
+        hits = {h["hit_index"]: h for h in data["hits"]}
+        row_keys = {r["row_key"]["hit_ordinal"]: r["row_key"] for r in child["components"]["row_keys"]["hits"]}
+        covered = set()
+        for group in data["sequence_groups"]:
+            signatures, valid = set(), True
+            for h in group["hit_indices"]:
+                bindings = hits[h]["sequence_identity_bindings"]
+                identities = {(b["digest"], b["molecule"], b["sequence_length"]) for b in bindings}
+                if len(identities) != 1:
+                    valid = False
+                signatures.update(identities)
+            if len(signatures) != 1:
+                valid = False
+            if valid:
+                digest, molecule, length = next(iter(signatures))
+                valid = group["identity_basis"] == [{"kind": "sequence_group", "value": "sha256:" + digest}]
+            if valid:
+                rows.append(dict(identity=dict(kind=basis, digest=digest, molecule=molecule, sequence_length=length),
+                    row_keys=[deepcopy(row_keys[h]) for h in group["hit_indices"]], profile_keys=[]))
+                covered.update(group["hit_indices"])
+            else:
+                complete = False
+                issues.append(_issue("returned_identity_unavailable", key, hit_indices=group["hit_indices"]))
+        complete &= covered == set(hits)
+    else:
+        child = search["profile_components"]
+        if child is None:
+            return [], False
+        grouped, covered = {}, set()
+        ordered = sorted(child["models"], key=lambda model: min(
+            ((k["hit_ordinal"], k["hsp_ordinal"]) for k in model["row_keys"]), default=(float("inf"), float("inf"))))
+        for model in ordered:
+            if model["binding_status"] != "available" or not model["row_keys"]:
+                continue
+            record = model["profile_record"]
+            identity = dict(kind=basis, database_identity=deepcopy(record["database_identity"]), model_identifier=deepcopy(record["model_identifier"]))
+            row = dict(identity=identity, row_keys=deepcopy(model["row_keys"]), profile_keys=[model["profile_key"]])
+            token = _identity_token(identity)
+            grouped[token] = _merge_rows(grouped[token], row) if token in grouped else row
+            covered.update(k["hit_ordinal"] for k in model["row_keys"])
+        rows = list(grouped.values())
+        for row in rows:
+            row["row_keys"].sort(key=lambda k: (k["hit_ordinal"], k["hsp_ordinal"]))
+        complete &= covered == {h["hit_index"] for h in search["native_search"]["normalized"]["hits"]}
+    if not complete:
+        issues.append(_issue("returned_set_incomplete", key))
+    return rows, complete
+
+
+def _comparison(sheet, pair, index, by_key):
+    earlier, later = (by_key.get(_token(pair[name])) for name in ("earlier_search_key", "later_search_key"))
+    issues, state, reason = [], "available", None
+    def mark(code, status="unavailable", **details):
+        nonlocal state, reason
+        state = "incompatible" if "incompatible" in (state, status) else status
+        reason = "incompatible_input" if state == "incompatible" else "missing_input"
+        issues.append(_issue(code, pair_index=index, **details))
+    erows, ecomplete = _targets(earlier, pair["identity_basis"], issues)
+    lrows, lcomplete = _targets(later, pair["identity_basis"], issues)
+    if earlier is None or later is None:
+        mark("comparison_search_missing")
+    else:
+        if earlier["search_key"] == later["search_key"]:
+            mark("comparison_order_conflict", "incompatible")
+        eround, lround = earlier["biological_round"]["value"], later["biological_round"]["value"]
+        if eround is not None and lround is not None and eround >= lround:
+            mark("comparison_order_conflict", "incompatible", earlier_round=eround, later_round=lround)
+        expected_stage = "sequence_database" if pair["identity_basis"] == "full_sequence_digest" else "domain_database"
+        if earlier["stage"] is None or later["stage"] is None:
+            mark("stage_unavailable")
+        elif earlier["stage"] != later["stage"] or earlier["stage"] != expected_stage:
+            mark("comparison_basis_incompatible", "incompatible")
+        eq, lq = earlier["query_binding"], later["query_binding"]
+        if eq is None or lq is None:
+            mark("query_relation_unavailable")
+        else:
+            qualified = [_query_status(s["native_search"], s["query_binding"], s["search_binding"], issues) for s in (earlier, later)]
+            incompatible = "incompatible" in qualified
+            incompatible |= any(eq[k] != lq[k] for k in ("coordinate_unit", "full_length"))
+            incompatible |= eq["operand"]["selected_interval"] != lq["operand"]["selected_interval"]
+            incompatible |= eq["sequence_sha256"] is not None and lq["sequence_sha256"] is not None and eq["sequence_sha256"] != lq["sequence_sha256"]
+            if incompatible:
+                mark("query_relation_conflict", "incompatible")
+            else:
+                same_operand = eq["operand"] == lq["operand"] and eq["operand"]["artifact_key"] is not None
+                same_digest = eq["sequence_sha256"] is not None and eq["sequence_sha256"] == lq["sequence_sha256"]
+                same_reference = (eq["operand"]["artifact_key"] is not None and lq["operand"]["artifact_key"] is not None
+                    and (eq["operand"]["subject_ref"] is not None and eq["operand"]["subject_ref"] == lq["operand"]["subject_ref"]
+                         or eq["operand"]["identity"] is not None and eq["operand"]["identity"] == lq["operand"]["identity"]))
+                master_relation = (eq["master_mapping_ref"] is not None and lq["master_mapping_ref"] is not None
+                                   and eq["operand"]["artifact_key"] is not None and lq["operand"]["artifact_key"] is not None)
+                if "unavailable" in qualified or not (same_operand or same_digest or same_reference or master_relation):
+                    mark("query_relation_unavailable")
+        edb = earlier["search_binding"]["database_identity"] if earlier["search_binding"] else None
+        ldb = later["search_binding"]["database_identity"] if later["search_binding"] else None
+        if edb is None or ldb is None:
+            mark("database_relation_unavailable")
+        else:
+            match = _profile._database_match(edb, ldb)
+            if match == "incompatible":
+                mark("database_relation_conflict", "incompatible", earlier_database=edb, later_database=ldb)
+            elif match != "available" or edb["scope"] is None or ldb["scope"] is None:
+                mark("database_relation_unavailable")
+    if not ecomplete or not lcomplete:
+        if state == "available":
+            state, reason = "unavailable", "partial_output"
+        issues.append(_issue("returned_set_incomplete", pair_index=index))
+    if pair["identity_basis"] == "full_sequence_digest":
+        identities = {}
+        for row in erows + lrows:
+            identity = row["identity"]
+            identities.setdefault(identity["digest"], set()).add((identity["molecule"], identity["sequence_length"]))
+        if any(len(values) > 1 for values in identities.values()):
+            mark("returned_identity_conflict", "incompatible", conflicting_digests=[d for d, v in identities.items() if len(v) > 1])
+    added = removed = retained = None
+    if state == "available":
+        eset, lset = ({_identity_token(r["identity"]): r for r in rows} for rows in (erows, lrows))
+        added = [deepcopy(r) for t, r in lset.items() if t not in eset]
+        removed = [deepcopy(r) for t, r in eset.items() if t not in lset]
+        retained = [_merge_rows(r, lset[t]) for t, r in eset.items() if t in lset]
+    output = dict(comparison_key=pair["comparison_key"], pair_index=index,
+        earlier_search_key=deepcopy(pair["earlier_search_key"]), later_search_key=deepcopy(pair["later_search_key"]),
+        identity_basis=pair["identity_basis"], scope="retained_returned_targets", status=state, unavailable_reason=reason,
+        earlier_reporting=deepcopy(earlier["reporting"]) if earlier else None, later_reporting=deepcopy(later["reporting"]) if later else None,
+        earlier_targets=erows, later_targets=lrows, earlier_set_complete=ecomplete, later_set_complete=lcomplete,
+        returned_hit_set_added=added, returned_hit_set_removed=removed, returned_hit_set_retained=retained, issues=issues)
+    for name, rows in (("added", added), ("removed", removed), ("retained", retained)):
+        output[name + "_count"] = _cell(len(rows) if rows is not None else None, unit="target_identity_count",
+            origin="derived", pointers=[f"/comparison_pairs/{index}"], status=state, reason=reason)
+    for name, rows, complete in (("earlier", erows, ecomplete), ("later", lrows, lcomplete)):
+        original = earlier if name == "earlier" else later
+        pointers = ([f"/collection/searches/{sheet['collection']['searches'].index(original['native_search'])}"] if original else [])
+        output[name + "_target_count"] = _cell(len(rows) if complete else None, unit="target_identity_count",
+            origin="derived", pointers=pointers, reason="partial_output")
+    return output
+
+
+def _definitions():
+    return dict(version="blast_iteration_components_v1",
+        coordinates="Native labels are not biological rounds. Native endpoints are unchanged; supplied intervals are zero-based half-open. Full query, selected span and profile/master axes remain distinct.",
+        count_populations=["JSON reported_hit_count counts all raw hit records; reported_hsp_count sums raw HSP-list lengths only when every hit has a list; observed_hsp_count sums present lists, including malformed entries.",
+            "Table reported_hsp_count and observed_hsp_count count original data rows. reported_hit_count uses the collector's original grouping only with every row assignable. Empty undeclared table6 is unknown.",
+            "parsed_hit_count and parsed_hsp_count count validated projection containers, not valid geometry; declared_alignment_row_count preserves the table declaration separately."],
+        threshold_sources="Finite nonnegative native params.include is retained. Only qualified sequence stages apply it and/or agreeing source-qualified effective inclusion_ethresh; DELTA domain stages apply only domain_inclusion_ethresh. Units are expected-count cutoffs; no inclusion decision is inferred.",
+        membership_population="Supplied checkpoint native member identifiers: raw=len(members); unique=distinct(namespace,value,version); duplicate=raw-unique; included=unique only for complete source-qualified consistent associations. No query subtraction, sequence-digest inference or native decoder is supplied.",
+        comparison_population="Only explicitly paired complete retained returned target sets under the supplied identity basis: added=L\\E, removed=E\\L, retained=E intersection L; counts are cardinalities. Reporting limits remain attached. These are not complete database populations or independent evidence.",
+        convergence_meaning="Explicit source-associated native boolean observations only. Missing is unknown; conflicts are incompatible. Query scope is never attached to a guessed final search. No episode continuation/completion meaning.",
+        child_component_definitions=["blast_sequence_database.blast_sequence_database_result_components_v1 embeds unchanged database_sheet, function_weights, coordinate_context, selected_query_coverage and row_keys.",
+            "blast_profile_calculators.blast_profile_components_v1 embeds unchanged per-HSP/model/coverage/threshold/function/dependence/taxonomy fields.",
+            "blast_pssm_calculators.blast_pssm_components_v1 embeds all matrices, diagnostics, statistics, master maps, statuses and definitions unchanged."],
+        missingness="Measured zero, missing_input, not_measured, incompatible_input, invalid_native_row and partial_output are distinct. Native readable scalar cells do not authenticate custody or biological publication.",
+        uncertainty="No new uncertainty model. Counts and set cardinalities have no external denominator; native statistical quantities and any supplied uncertainty remain in the child results and original records.",
+        no_cross_round_combination="No sum, mean, product, final-round selection, drift score or inferred convergence across rounds or checkpoints.",
+        unused_inputs="All native fields, options, unknown extensions, supplied metadata and records remain retained. Child formulas alone specify used/unused measurements; stored taxonomy/source quality does not imply weighting. Observation provenance is not an executable extractor.")
+
+
+def calculate_blast_iteration_components(sheet, *, sequence_model=None) -> dict:
+    """Recalculate saved finite inputs only; preserve every original sibling."""
+    sheet = _validate(sheet)
+    _model(sequence_model)
+    issues = [_issue("collector_issue", pointer=v.get("pointer"), original_issue=v) for v in sheet["collection"]["issues"]]
+    indices = _indices(sheet, issues)
+    searches = [_search(sheet, i, indices, sequence_model) for i in range(len(sheet["collection"]["searches"]))]
+    pssms, locations = _pssms(sheet)
+    checkpoints = _checkpoint_associations(sheet, searches, pssms, locations)
+    inclusion = _inclusion(sheet, checkpoints, locations)
+    convergence = _convergence(sheet, searches)
+    by_key = {_token(s["search_key"]): s for s in searches}
+    comparisons = [_comparison(sheet, pair, i, by_key) for i, pair in enumerate(sheet["comparison_pairs"])]
+    for rows in (searches, pssms, checkpoints, inclusion, convergence, comparisons):
+        issues.extend(issue for row in rows for issue in row["issues"])
+    states = [r["status"] for rows in (searches, pssms, checkpoints, inclusion, convergence, comparisons) for r in rows]
+    readable = any(s["status"] in ("complete", "partial", "no_reported_hits") for s in searches + pssms)
+    if not states or not readable:
+        status = "incompatible" if "incompatible" in states else "unavailable"
+    elif any(s in ("partial", "unavailable", "incompatible") for s in states) or any(
+            i["code"] == "blast_iteration_orphan_search_key" or
+            i["code"] == "blast_iteration_collector_issue" and i["search_key"] is None for i in issues):
+        status = "partial"
+    elif searches and all(s["status"] == "no_reported_hits" for s in searches) and not pssms:
+        status = "no_reported_hits"
+    else:
+        status = "complete"
+    return dict(schema="blast_iteration_components_v1", status=status, searches=searches, pssms=pssms,
+        checkpoint_associations=checkpoints, inclusion_observations=inclusion, convergence_observations=convergence,
+        round_comparisons=comparisons, issues=issues, definitions=_definitions())
+
+
+__all__ = ["calculate_blast_iteration_components"]

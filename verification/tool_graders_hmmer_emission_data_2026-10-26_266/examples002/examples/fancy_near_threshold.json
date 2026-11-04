@@ -1,0 +1,5222 @@
+{
+  "schema": "hmmer_emission_components_v1",
+  "operation": {
+    "program": "hmmemit",
+    "mode": "consensus_thresholded",
+    "engine_version": "3.4",
+    "settings": {
+      "-C": true,
+      "--minl": 0.8,
+      "--minu": 0.9
+    }
+  },
+  "parameters": {
+    "consensus_thresholds": {
+      "minl": 0.6666666666666666,
+      "minu": 0.9
+    },
+    "probability_rounding_tolerance": 1e-05
+  },
+  "rows": [
+    {
+      "kind": "generated_record",
+      "record_key": "output:generated_sequences#fasta/0",
+      "basis": "model_derived",
+      "model_record_key": "input:models#model/0",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "sequence": "ACDExGHIKLMN",
+      "length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "symbol_counts": {
+        "A": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "A"
+            }
+          ]
+        },
+        "C": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "C"
+            }
+          ]
+        },
+        "D": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "D"
+            }
+          ]
+        },
+        "E": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "E"
+            }
+          ]
+        },
+        "G": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "G"
+            }
+          ]
+        },
+        "H": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "H"
+            }
+          ]
+        },
+        "I": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "I"
+            }
+          ]
+        },
+        "K": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "K"
+            }
+          ]
+        },
+        "L": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "L"
+            }
+          ]
+        },
+        "M": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "M"
+            }
+          ]
+        },
+        "N": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "N"
+            }
+          ]
+        },
+        "x": {
+          "value": 1,
+          "state": "present",
+          "unit": "symbol_count",
+          "inputs": [
+            {
+              "record_key": "output:generated_sequences#fasta/0",
+              "field": "sequence",
+              "symbol": "x"
+            }
+          ]
+        }
+      },
+      "canonical_residue_count": {
+        "value": 11,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_residue_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "noncanonical_unambiguous_residue_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "ambiguous_fraction": {
+        "value": 0.08333333333333333,
+        "state": "present",
+        "unit": "fraction_of_ungapped_residues",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "gap_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "gap_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "stop_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "stop_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "missing_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "missing_data_symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "invalid_symbol_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "symbol_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "sequence"
+          },
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "alphabet"
+          }
+        ]
+      },
+      "model_alignment": {
+        "state": "missing",
+        "reason": "no_native_trace_in_fasta"
+      }
+    },
+    {
+      "kind": "model",
+      "model_record_key": "input:models#model/0",
+      "basis": "model_derived",
+      "record_keys": [
+        "output:generated_sequences#fasta/0"
+      ],
+      "input_model_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "model_match_state_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "length"
+          }
+        ]
+      },
+      "selected_N": {
+        "value": null,
+        "state": "missing",
+        "unit": "requested_sample_count",
+        "inputs": [
+          {
+            "field": "operation.settings.-N"
+          }
+        ]
+      },
+      "configured_expected_length": {
+        "value": null,
+        "state": "missing",
+        "unit": "configured_expected_residue_count",
+        "inputs": [
+          {
+            "field": "operation.settings.-L"
+          }
+        ]
+      },
+      "captured_sample_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "captured_generated_record_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "associations.model_population.record_keys",
+            "record_keys": [
+              "output:generated_sequences#fasta/0"
+            ]
+          }
+        ]
+      },
+      "expected_output_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "expected_generated_record_count",
+        "inputs": [
+          {
+            "field": "operation.mode"
+          },
+          {
+            "field": "operation.settings.-N"
+          }
+        ]
+      },
+      "count_difference": {
+        "value": 0,
+        "state": "present",
+        "unit": "captured_minus_expected_record_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "associations.model_population.record_keys",
+            "record_keys": [
+              "output:generated_sequences#fasta/0"
+            ]
+          },
+          {
+            "field": "expected_output_count"
+          }
+        ]
+      },
+      "total_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "denominator": 1,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "minimum_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "denominator": 1,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "maximum_length": {
+        "value": 12,
+        "state": "present",
+        "unit": "residue_count",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "denominator": 1,
+            "population": "captured_generated_records"
+          }
+        ]
+      },
+      "mean_length": {
+        "value": 12.0,
+        "state": "present",
+        "unit": "residues_per_captured_record",
+        "inputs": [
+          {
+            "record_key": "output:generated_sequences#fasta/0",
+            "field": "length"
+          },
+          {
+            "denominator": 1,
+            "population": "captured_generated_records"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "consensus",
+      "model_record_key": "input:models#model/0",
+      "basis": "model_derived",
+      "actual_record_keys": [
+        "output:generated_sequences#fasta/0"
+      ],
+      "expected_sequence": "ACDExGHIKLMN",
+      "actual_sequence": "ACDExGHIKLMN",
+      "positions": [
+        {
+          "position": {
+            "value": 1,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 0
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 0,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 1,
+                "position_ordinal": 0
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "A"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "A",
+          "possible_symbols": [
+            "A"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 2,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 1
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 1,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 2,
+                "position_ordinal": 1
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "C"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "C",
+          "possible_symbols": [
+            "C"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 3,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 2
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 2,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 3,
+                "position_ordinal": 2
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "D"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "D",
+          "possible_symbols": [
+            "D"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 4,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 3
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 3,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 4,
+                "position_ordinal": 3
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "E"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "E",
+          "possible_symbols": [
+            "E"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 5,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 4
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.6666634054134197,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.3333340962235762,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 4,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 0.6666634054134197,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 5,
+                "position_ordinal": 4
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "F"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "x",
+          "possible_symbols": [
+            "f",
+            "x"
+          ],
+          "near_tie": false,
+          "near_threshold": true,
+          "ambiguous": true
+        },
+        {
+          "position": {
+            "value": 6,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 5
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 5,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 6,
+                "position_ordinal": 5
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "G"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "G",
+          "possible_symbols": [
+            "G"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 7,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 6
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 6,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 7,
+                "position_ordinal": 6
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "H"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "H",
+          "possible_symbols": [
+            "H"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 8,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 7
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 7,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 8,
+                "position_ordinal": 7
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "I"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "I",
+          "possible_symbols": [
+            "I"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 9,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 8
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 8,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 9,
+                "position_ordinal": 8
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "K"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "K",
+          "possible_symbols": [
+            "K"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 10,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 9
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 9,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 10,
+                "position_ordinal": 9
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "L"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "L",
+          "possible_symbols": [
+            "L"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 11,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 10
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 10,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 11,
+                "position_ordinal": 10
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "M"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "M",
+          "possible_symbols": [
+            "M"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        },
+        {
+          "position": {
+            "value": 12,
+            "state": "present",
+            "unit": "one_based_model_position",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.position",
+                "position_ordinal": 11
+              }
+            ]
+          },
+          "probabilities": [
+            {
+              "symbol": "A",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 0
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "C",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 1
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "D",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 2
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "E",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 3
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "F",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 4
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "G",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 5
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "H",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 6
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "I",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 7
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "K",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 8
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "L",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 9
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "M",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 10
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "N",
+              "probability": {
+                "value": 1.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 11
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "P",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 12
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Q",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 13
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "R",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 14
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "S",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 15
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "T",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 16
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "V",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 17
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "W",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 18
+                  }
+                ]
+              }
+            },
+            {
+              "symbol": "Y",
+              "probability": {
+                "value": 0.0,
+                "state": "present",
+                "unit": "probability",
+                "inputs": [
+                  {
+                    "record_key": "input:models#model/0",
+                    "field": "positions.match.cells",
+                    "position_ordinal": 11,
+                    "cell_index": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "maximum_probability": {
+            "value": 1.0,
+            "state": "present",
+            "unit": "probability",
+            "inputs": [
+              {
+                "record_key": "input:models#model/0",
+                "field": "positions.match",
+                "position": 12,
+                "position_ordinal": 11
+              },
+              {
+                "field": "parameters.probability_rounding_tolerance"
+              }
+            ]
+          },
+          "maximum_symbols": [
+            "N"
+          ],
+          "mask": "-",
+          "masked": false,
+          "thresholds": {
+            "minl": {
+              "value": 0.6666666666666666,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minl"
+                }
+              ]
+            },
+            "minu": {
+              "value": 0.9,
+              "state": "present",
+              "unit": "probability",
+              "inputs": [
+                {
+                  "field": "parameters.consensus_thresholds.minu"
+                }
+              ]
+            }
+          },
+          "expected_symbol": "N",
+          "possible_symbols": [
+            "N"
+          ],
+          "near_tie": false,
+          "near_threshold": false,
+          "ambiguous": false
+        }
+      ],
+      "mismatch_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "nominal_consensus_mismatch_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "positions"
+          },
+          {
+            "field": "parameters.consensus_thresholds"
+          }
+        ]
+      },
+      "certain_mismatch_count": {
+        "value": 0,
+        "state": "present",
+        "unit": "certain_consensus_mismatch_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "positions"
+          },
+          {
+            "field": "parameters.consensus_thresholds"
+          }
+        ]
+      },
+      "ambiguous_position_count": {
+        "value": 1,
+        "state": "present",
+        "unit": "decoded_ambiguous_position_count",
+        "inputs": [
+          {
+            "record_key": "input:models#model/0",
+            "field": "positions"
+          },
+          {
+            "field": "parameters.consensus_thresholds"
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "code": "sample_population_count",
+      "state": "pass",
+      "record_key": "input:models#model/0",
+      "inputs": [
+        {
+          "record_key": "input:models#model/0",
+          "field": "associations.model_population.record_keys",
+          "record_keys": [
+            "output:generated_sequences#fasta/0"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "consensus_agreement",
+      "state": "unknown",
+      "record_key": "input:models#model/0",
+      "inputs": [
+        {
+          "record_key": "input:models#model/0",
+          "field": "positions"
+        },
+        {
+          "field": "parameters.consensus_thresholds"
+        }
+      ]
+    },
+    {
+      "code": "consensus_length",
+      "state": "pass",
+      "record_key": "input:models#model/0",
+      "inputs": [
+        {
+          "record_key": "input:models#model/0",
+          "field": "positions"
+        },
+        {
+          "field": "parameters.consensus_thresholds"
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "code": "consensus_ambiguous",
+      "stage": "calculation",
+      "record_key": "input:models#model/0",
+      "field": null,
+      "details": {}
+    }
+  ]
+}

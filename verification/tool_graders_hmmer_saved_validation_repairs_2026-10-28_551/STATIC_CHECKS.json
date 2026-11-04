@@ -1,0 +1,45 @@
+{
+  "kind": "static_source_only",
+  "application_imports": false,
+  "tests_run": false,
+  "native_commands_run": false,
+  "files": [
+    {
+      "path": "gene_annotation_episode/hmmer_alignment_input_validation.py",
+      "ast_parsed": true,
+      "changed_functions": [
+        "input_decoding_local_valid",
+        "saved_alignment_decoding_valid"
+      ],
+      "added_functions": [
+        "_population_complete",
+        "_stockholm_encoding_failed"
+      ],
+      "sha256": "e1dbbb2bd0cf00e842aa1a37aa5e771f742be7a4cc8b8fc0856e513df69065e4"
+    },
+    {
+      "path": "tests/test_hmmer_alignment_input_validation.py",
+      "ast_parsed": true,
+      "changed_functions": [
+        "_sheet"
+      ],
+      "added_functions": [
+        "_assert_saved_rejected",
+        "_population_for",
+        "_saved_components",
+        "test_duplicate_native_names_keep_stockholm_output_population_qualification",
+        "test_empty_native_output_without_source_alphabet_remains_unknown",
+        "test_empty_structural_output_without_source_alphabet_is_known_zero",
+        "test_failed_stockholm_output_text_decode_retains_attempted_zero",
+        "test_failed_stockholm_text_decode_retains_attempted_zero_population",
+        "test_format_case_normalization_keeps_malformed_and_conflicting_metadata_invalid",
+        "test_later_map_context_issue_does_not_rewrite_stockholm_population",
+        "test_native_annotation_qualification_does_not_change_population_completeness",
+        "test_native_cli_format_case_is_compared_without_rewriting_settings",
+        "test_native_local_context_still_requires_its_declared_format",
+        "test_stockholm_population_qualifications_are_separate_from_decoding"
+      ],
+      "sha256": "853bc64f37808aee1df89aa0ea068acfe7674bc41a8b5bcea8ea35ed2b845729"
+    }
+  ]
+}

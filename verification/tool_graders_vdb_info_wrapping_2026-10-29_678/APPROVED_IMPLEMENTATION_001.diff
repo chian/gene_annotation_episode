@@ -1,0 +1,127 @@
+--- before/gene_annotation_episode/blast_vdb_utility_inputs.py
++++ after/gene_annotation_episode/blast_vdb_utility_inputs.py
+@@ -308,20 +308,65 @@
+ def _vdb_info(text, oid):
+     fields, failures, active, block = [], [], None, []
+ 
+-    def close():
++    def close(*, terminated=True):
+         nonlocal active, block
+         if active is None:
+             return
+         name, unit, line = active
+         lexeme = "\n".join(block)
+-        value = lexeme.split()
+-        fields.append(_field(name, value if value else None, unit, oid, line=line,
+-            lexeme=lexeme, missing=None if value else "native_field_invalid"))
+-        if not value:
++        padded = block[0].startswith(" ")
++        payload = block[0][1:] if padded else block[0]
++        data_lines = [part for part in [payload, *block[1:]] if part.strip()]
++        value, missing = None, None
++        if not terminated or not padded or not data_lines:
++            missing = "native_field_invalid"
++        elif len(data_lines) > 1:
++            # NStr::Wrap removes a separating space or splits within a token
++            # without recording which happened. Neither split nor join is an
++            # inverse. Keep the report, never manufacture fragment paths.
++            missing = "ambiguous_population"
++        elif len(block) > 1 and not payload.strip():
++            # Header padding is not a data line. A sole continuation cannot
++            # arise from normalized selected tokens without data loss. Path
++            # strings can lose whitespace/backspaces; CSRA also has a final
++            # separator which alone can trigger the out-of-line rendering.
++            missing = ("native_field_invalid" if name == "vdb_selected_inputs"
++                       else "ambiguous_population")
++        elif name == "vdb_resolved_paths":
++            # Native resolution preserves quoted/link-target whitespace, then
++            # joins paths without escaping. Even an inline split is ambiguous.
++            if any(c.isspace() for c in payload):
++                missing = "ambiguous_population"
++            else:
++                value = [payload]
++        else:
++            csra = name == "vdb_csra_inputs"
++            if csra and not payload.endswith(" "):
++                missing = "native_field_invalid"
++            else:
++                tokens = (payload[:-1] if csra else payload).split(" ")
++                if any(not token for token in tokens):
++                    missing = "native_field_invalid"
++                elif any(c.isspace() or ord(c) < 32 or ord(c) == 127
++                         for token in tokens for c in token):
++                    missing = "ambiguous_population" if csra else "native_field_invalid"
++                else:
++                    value = tokens
++        fields.append(_field(name, value, unit, oid, line=line,
++            lexeme=lexeme, missing=missing))
++        if missing == "ambiguous_population":
++            failures.append(_failure("validation", "semantic_validation_unavailable", oid, line_number=line))
++        elif missing is not None:
+             failures.append(_failure("parse", "native_document_invalid", oid, line_number=line))
+         active, block = None, []
+ 
+-    for number, line in enumerate(text.splitlines(), 1):
++    # Native report lines use LF. Preserve path control characters as data;
++    # splitlines() would silently turn form feeds and similar bytes into lines.
++    lines = text.split("\n")
++    if lines[-1] == "":
++        lines.pop()
++    for number, line in enumerate(lines, 1):
++        line = line.removesuffix("\r")
+         label = next((label for label in _INFO_LISTS if line.startswith(label)), None)
+         numerical = next(((re.fullmatch(pattern, line), names) for pattern, names in _INFO_NUMBERS
+                           if re.fullmatch(pattern, line)), None)
+@@ -338,12 +383,14 @@
+                     missing=None if value is not None else "native_field_invalid"))
+                 if value is None:
+                     failures.append(_failure("parse", "native_document_invalid", oid, line_number=number))
+-        elif active is not None and line and not line.startswith(("\t", " ")):
++        elif active is not None and (not line.strip() or not line.startswith(("\t", " "))):
+             block.append(line)
+         elif line.strip():
+-            close()
++            if active is not None:
++                block.append(line)
++            close(terminated=False)
+             failures.append(_failure("parse", "native_document_invalid", oid, line_number=number))
+-    close()
++    close(terminated=False)
+     all_fields = [(name, unit) for name, unit in _INFO_LISTS.values()]
+     all_fields += [item for _, names in _INFO_NUMBERS for item in names]
+     for name, unit in all_fields:
+--- before/tests/test_blast_vdb_utility_inputs_663.py
++++ after/tests/test_blast_vdb_utility_inputs_663.py
+@@ -270,8 +270,9 @@
+ def test_source_derived_info_wrapping_populations_average_and_absent_csra_label():
+     result = parse_blast_vdb_inspection(INFO, **supplied(INFO, mode="info"))
+     fields = {f["field_name"]: f for f in result["native_fields"]}
+-    assert result["completeness"] == "complete" and result["path_records"] == result["path_sections"] == []
+-    assert fields["vdb_selected_inputs"]["value"] == ["/supplied/one", "/supplied/two"]
++    assert result["completeness"] == "partial" and result["path_records"] == result["path_sections"] == []
++    for name in ("vdb_selected_inputs", "vdb_resolved_paths"):
++        assert fields[name]["value"] is None and fields[name]["missing_reason"] == "ambiguous_population"
+     assert fields["vdb_resolved_paths"]["native_lexeme"] == " \n/resolved/one\n/resolved/two"
+     assert fields["vdb_sequence_count"]["value"] == 1002 and fields["vdb_sequence_count"]["native_lexeme"] == "1,002"
+     assert fields["vdb_average_sequence_bases"]["value"] == 99  # Native integer, not 100300 / 1002.
+@@ -310,9 +311,11 @@
+     raw = raw.replace(b"/resolved/one\n/resolved/two", b"/resolved/sequence:one\n/resolved/bases:two")
+     result = parse_blast_vdb_inspection(raw, **supplied(raw, mode="info"))
+     fields = {f["field_name"]: f for f in result["native_fields"]}
+-    assert result["completeness"] == "complete"
+-    assert fields["vdb_selected_inputs"]["value"] == ["/supplied/sequence:one", "/supplied/bases:two"]
+-    assert fields["vdb_resolved_paths"]["value"] == ["/resolved/sequence:one", "/resolved/bases:two"]
++    assert result["completeness"] == "partial"
++    for name in ("vdb_selected_inputs", "vdb_resolved_paths"):
++        assert fields[name]["value"] is None and fields[name]["missing_reason"] == "ambiguous_population"
++    assert fields["vdb_selected_inputs"]["native_lexeme"] == " \n/supplied/sequence:one\n/supplied/bases:two"
++    assert fields["vdb_resolved_paths"]["native_lexeme"] == " \n/resolved/sequence:one\n/resolved/bases:two"
+ 
+ 
+ def test_repeated_and_conflicting_info_fields_keep_all_located_values():
+@@ -434,4 +437,4 @@
+         patch.setattr(subprocess, "Popen", prohibited)
+         parsed = parse_blast_vdb_extraction(raw, **args)
+         assert normalize_blast_vdb_extraction(lexical, **saved) == parsed
+-        assert parse_blast_vdb_inspection(INFO, **info_args)["completeness"] == "complete"
++        assert parse_blast_vdb_inspection(INFO, **info_args)["completeness"] == "partial"

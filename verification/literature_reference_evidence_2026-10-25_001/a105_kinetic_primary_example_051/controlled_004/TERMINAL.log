@@ -1,0 +1,40 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/run_example.py", line 373, in <module>
+    run_example(arguments.repository_root.resolve(), arguments.run_directory.resolve())
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/run_example.py", line 256, in run_example
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/gene_annotation_episode/runtime.py", line 3841, in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/gene_annotation_episode/runtime.py", line 4163, in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/method_loop/episode.py", line 1258, in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/method_loop/episode.py", line 1551, in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/gene_annotation_episode/runtime.py", line 1223, in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/gene_annotation_episode/runtime.py", line 918, in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/test_runtime.py", line 186, in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_kinetic_primary_example_051/controlled_004/pin/run_example.py", line 227, in selected
+    assert not inputs.get('feedback'), inputs.get('feedback')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'category': 'action_contract', 'detail': "'count_extraction_status' is a required property", 'status': 'invalid'}

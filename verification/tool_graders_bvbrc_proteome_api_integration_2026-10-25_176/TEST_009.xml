@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="8" time="822.579" timestamp="2026-10-25T12:01:40.304568-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_saved_replay_and_explicit_recalculation_preserve_original_observations" time="185.609" /><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_latest_recovered_publication_never_revives_old_success[partial]" time="160.579" /><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_latest_recovered_publication_never_revives_old_success[empty]" time="127.140"><failure message="AssertionError: assert ('completed' == 'partial'&#10;  &#10;  - partial&#10;  + completed)">driver = &lt;bvbrc_proteome_host_fixture.ProteomeDriver object at 0x7004ad23ede0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7004f4415310&gt;
+later_kind = 'empty'
+
+    
+    @pytest.mark.parametrize('later_kind', ['partial', 'empty'])
+    def test_latest_recovered_publication_never_revives_old_success(driver, monkeypatch, later_kind):
+        """Two explicit overlapping selections; no model scheduling claim."""
+        d = driver
+        d.start(fields={'mean': MEAN}, supplementary=False)
+        d.acquire_manifest()
+        args = d.native_arguments()
+        _, first_key = d.selection('download', args, context=d.context)
+        _, later_key = d.selection('download', args, context=d.context)
+        download = d.client.download
+        d.client.body = b'{"genome_names":{},"feature_matches":[]}' if later_kind == 'partial' else b'controlled failure'
+        d.client.native_status = 200 if later_kind == 'partial' else 500
+        def interrupted(url, *, byte_range=None):
+            error = KeyboardInterrupt()
+            error.snapshot = download(url, byte_range=byte_range)
+            raise error
+        monkeypatch.setattr(d.client, 'download', interrupted)
+        with pytest.raises(KeyboardInterrupt): d.invoke(d.context, 'download', args, later_key)
+        later_directory = d.api._manifest(d.context) / 'actions' / digest(later_key)
+        retained = _read(later_directory / 'call_response.json')
+        monkeypatch.setattr(d.client, 'download', download)
+        d.client.body, d.client.native_status = raw_native(d.fmt), 200
+        first = d.invoke(d.context, 'download', args, first_key)
+        assert first['status'] == 'completed'
+        d.native = d.records.read(first['result']['support_receipt_ref'])
+        original = deepcopy(d.publication())
+        form, key, refs = d.admit_numeric()
+        proof = d.api._completion(d.context)
+        assert proof['operation_key'] == first_key
+        calls = deepcopy(d.client.calls)
+&gt;       later = d.invoke(d.context, 'download', args, later_key)
+E       AssertionError: assert ('completed' == 'partial'
+E         
+E         - partial
+E         + completed)
+
+tests/test_bvbrc_proteome_host_integration.py:182: AssertionError</failure></testcase><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_required_incomplete_transfer_cannot_complete_narrow_request" time="66.568" /><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_wrong_manifest_task_never_reaches_scientific_download" time="49.934" /><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_actual_typed_boundary_rejects_wrong_owner_source_values_expansion_and_sibling" time="87.221"><failure message="AttributeError: proteome">driver = &lt;bvbrc_proteome_host_fixture.ProteomeDriver object at 0x7004b00a92e0&gt;
+
+    
+    def test_actual_typed_boundary_rejects_wrong_owner_source_values_expansion_and_sibling(driver):
+        d = driver
+        d.start(fields={'mean': MEAN}, supplementary=False)
+        d.acquire_manifest()
+        d.acquire_native()
+        facts = d.family.facts(d.context, {})
+        form = {name: facts[node['x-source']] for name, node in d.schema['properties'].items()}
+        d.family.validate_received_report(d.context, form, d.schema)
+        for key, value in [('run_id', 'wrong-run'), ('episode_id', 'wrong-owner'), ('scope', {}), ('assignment', {})]:
+&gt;           with pytest.raises(ValueError):
+                ^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_host_integration.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.api_service_execution.APIServiceExecution object at 0x7004ad2faea0&gt;
+name = 'proteome'
+
+    def __getattr__(self, name):
+        # Preserve existing inspection ports for the unchanged legacy binding.
+        legacy = self.__dict__.get('legacy')
+        if legacy is not None:
+            return getattr(legacy, name)
+&gt;       raise AttributeError(name)
+E       AttributeError: proteome
+
+gene_annotation_episode/api_service_execution.py:101: AttributeError</failure></testcase><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_actual_saved_return_rejects_tampered_retained_bundle_and_sheet_bytes" time="73.478"><failure message="AttributeError: proteome">driver = &lt;bvbrc_proteome_host_fixture.ProteomeDriver object at 0x7004ae998a40&gt;
+
+    
+    def test_actual_saved_return_rejects_tampered_retained_bundle_and_sheet_bytes(driver):
+        d = driver
+        d.start(fields={'mean': MEAN}, supplementary=False)
+        d.acquire_manifest()
+        body = d.acquire_native()
+        publication = body['publication']
+        targets = [('membership', publication['bundle_content'], body['bundle']),
+            ('source', publication['adapter_result']['sheet_content'], d.sheet),
+            ('primary', publication['adapter_result']['sheet_content'], d.sheet),
+            ('hash', publication['bundle_content'], body['bundle']),
+            ('task', publication['bundle_content'], body['bundle'])]
+        for kind, content, original in targets:
+            changed = deepcopy(original)
+            if kind == 'membership': changed['artifacts'][0]['requirement_ids'] = ['other']
+            elif kind == 'source': changed['input_resolution'][0]['content']['source_ref'] = 'other'
+            elif kind == 'primary': changed['native_sheet_result']['value']['primary_source_ref'] = 'other'
+            elif kind == 'hash': changed['artifacts'][0]['sha256'] = '0' * 64
+            else: changed['original_task']['task_id'] = 'other-task'
+            sha = content['sha256']
+            path = d.store.path / 'artifacts' / sha[:2] / sha
+            retained = path.read_bytes()
+            try:
+                path.write_text(json.dumps(changed))
+&gt;               with pytest.raises(ValueError, match='artifact_digest_mismatch'):
+                    ^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_host_integration.py:279: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.api_service_execution.APIServiceExecution object at 0x7004ad209a30&gt;
+name = 'proteome'
+
+    def __getattr__(self, name):
+        # Preserve existing inspection ports for the unchanged legacy binding.
+        legacy = self.__dict__.get('legacy')
+        if legacy is not None:
+            return getattr(legacy, name)
+&gt;       raise AttributeError(name)
+E       AttributeError: proteome
+
+gene_annotation_episode/api_service_execution.py:101: AttributeError</failure></testcase><testcase classname="tests.test_bvbrc_proteome_host_integration" name="test_later_unrelated_recovered_status_preserves_latest_publication_completion" time="71.024" /></testsuite></testsuites>

@@ -1,0 +1,19 @@
+{
+  "verification_kind": "controlled native-response shared Workflow; no live BV-BRC or model",
+  "command": [
+    ".venv/bin/pytest",
+    "-q",
+    "tests/test_bvbrc_homology_workflow.py",
+    "-x"
+  ],
+  "observed_result": "1 error in 67.37s (0:01:07)",
+  "observed_failure": {
+    "category": "provider",
+    "code": "original_task_mismatch"
+  },
+  "selected_operation": "api.bvbrc_appservice.workspace_metadata",
+  "selected_decision_index": 1,
+  "reason": "Results host supplied the original task handle while workspace_metadata BoundInputs omitted resolved.original_task.",
+  "record_kind": "additive examination summary; original temporary pytest directory was removed by concurrent pytest retention before export",
+  "repair_owner": "root production binding; this test workload has no production file ownership"
+}

@@ -1,0 +1,418 @@
+{
+  "status": "Retrospective source-grounded selections, not executed child episodes or demonstrated prospective performance.",
+  "assemblies": [
+    {
+      "id": "C01",
+      "thought": "P01",
+      "tools": "T02",
+      "case_groups": [
+        "hemk_prmc"
+      ],
+      "question": "Which molecular operation can a useful HemK analogue support?",
+      "parent_inputs": "Exact HemK sequence, the failed short Dam comparison and the recorded reference comparisons.",
+      "narrowed_decision": "Revise the reference toward a meaningful longer core, then distinguish transferable methyl-transfer machinery from the unsupported copied DNA or protein target.",
+      "tool_return": "Sequences, alignment positions and native scores; existing published substrate results remain separate inputs.",
+      "limit": "A useful match does not assign RF1/RF2 or glutamine specificity. These known-outcome comparisons were actually made in the research; no blind annotation is claimed.",
+      "annotation": "A01"
+    },
+    {
+      "id": "C02",
+      "thought": "P02",
+      "tools": "T02",
+      "case_groups": [
+        "seq_hisn_impase_discrimination"
+      ],
+      "question": "Does greater overall similarity predict histidinol-phosphatase function?",
+      "parent_inputs": "Published HisN complementation and similarity rows, including motif-deficient HisN2.",
+      "narrowed_decision": "Seek discordance between the predictor and supported activity instead of another concordant high-scoring match; keep expression and host-context explanations for a complementation negative.",
+      "tool_return": "Selected sequence/motif correspondences; supplied source-table scores are retained as published results.",
+      "limit": "The selected rank inversion does not validate a motif classifier or turn failed complementation into purified-enzyme inactivity.",
+      "annotation": "A02"
+    },
+    {
+      "id": "C03",
+      "thought": "P03",
+      "tools": "T07",
+      "case_groups": [
+        "TM0936_Hermann_2007"
+      ],
+      "question": "Which candidate substrates fit the measured deaminase chemistry?",
+      "parent_inputs": "The broad amidohydrolase relationship and published substrate/condition/product records.",
+      "narrowed_decision": "Choose substrate contrasts whose chemical changes distinguish the competing assignments; retain the tested negative and positive compounds rather than copy the structural template's substrate.",
+      "tool_return": "Condition-indexed apparent kinetic values, ratios and censored bounds.",
+      "limit": "In-vitro substrate discrimination does not establish the dominant cellular substrate. No new assay, docking or kinetic fit was run.",
+      "annotation": "A02"
+    },
+    {
+      "id": "C04",
+      "thought": "P04",
+      "tools": "T01",
+      "case_groups": [
+        "quef"
+      ],
+      "question": "What can replace the failed QueF cyclohydrolase assignment?",
+      "parent_inputs": "Independent queuosine-pathway placement and the authors' biochemical rejection of the inherited reaction.",
+      "narrowed_decision": "Reopen the reaction assignment while retaining the independently grounded pathway constraint; a failure of the reaction does not erase all contextual evidence.",
+      "tool_return": "Exact source windows containing the reported cofactor, product and alternative-reaction observations, with source identity.",
+      "limit": "Reading returns source evidence; the thought pattern supplies the decision about which constraints survive. No biological assay is performed by this selection.",
+      "annotation": "A01"
+    },
+    {
+      "id": "C05",
+      "thought": "P05",
+      "tools": "T03",
+      "case_groups": [
+        "replacement_queH"
+      ],
+      "question": "What must explain mature queuosine when the usual QueG assignment is missing?",
+      "parent_inputs": "Measured mature Q in the specified QueG-lacking organism and the relevant pathway inventory.",
+      "narrowed_decision": "Retain the observed product as a constraint on missing-function hypotheses; consider an unrecognized replacement without assuming identical protein family, cofactor or mechanism.",
+      "tool_return": "Recorded component distributions, neighborhoods and fusions for selected candidates.",
+      "limit": "An absent annotation is not proven gene absence. The QueH cellular result does not establish isolated productive catalysis or a native electron donor.",
+      "annotation": "A10"
+    },
+    {
+      "id": "C06",
+      "thought": "P06",
+      "tools": "T04",
+      "case_groups": [
+        "causal_cas2_spacer_acquisition"
+      ],
+      "question": "What does Cas2 contribute while Cas1 performs the supported integration chemistry?",
+      "parent_inputs": "Published acquisition, defined integration and assembly-perturbation records, including the unresolved E. coli nuclease-null validation.",
+      "narrowed_decision": "Retain integration output while examining positive alternatives for Cas2's contribution: donor engagement, complex assembly and placement, rather than assign the same chemistry to each protein.",
+      "tool_return": "Selected donor-DNA, interface and end-placement distances in the deposited complexes.",
+      "limit": "Geometry does not establish residue necessity, binding energy or catalytic inactivity; those missing measurements remain unknown.",
+      "annotation": "A06"
+    },
+    {
+      "id": "C07",
+      "thought": "P07",
+      "tools": "T06",
+      "case_groups": [
+        "replacement_bioZ",
+        "replacement_thyX"
+      ],
+      "question": "Does restored pathway output imply restoration of the same reaction and metabolic obligations?",
+      "parent_inputs": "Published BioZ and ThyA/ThyX replacement outcomes plus the candidate route equations. The episode must specify the ledger boundary, excluded upstream precursor/regeneration steps, and carrier/donor assumptions before the arithmetic call; unmeasured native donors stay unknown.",
+      "narrowed_decision": "Keep same-reaction rescue, alternate route and changed demand distinct; compare carbon entry or folate return obligations even when the desired end product is shared.",
+      "tool_return": "Explicit carbon, carrier and cofactor ledgers under the supplied boundary.",
+      "limit": "The BioZ carbon ledger and ThyX folate ledger are different biological accounts. Arithmetic does not establish native flux, donor identity or universal interchangeability.",
+      "annotation": "A10"
+    },
+    {
+      "id": "C08",
+      "thought": "P08",
+      "tools": "T11",
+      "case_groups": [
+        "organism_01_ttr",
+        "organism_22_eutc"
+      ],
+      "question": "Which resource makes an established respiratory or nutrient-use capability beneficial?",
+      "parent_inputs": "The known bacterial capabilities, systemic/intestinal outcome differences and source records of resource availability.",
+      "narrowed_decision": "Distinguish missing capacity from absence of the enabling resource; prioritize contrasts that vary the resource-generating context while retaining bacterial genotype and measured resource information.",
+      "tool_return": "Condition-indexed competition, growth and resource/outcome records.",
+      "limit": "The nutrient and electron acceptor cannot be copied between pathways. Published host and bacterial experiments were not reproduced.",
+      "annotation": "A08"
+    },
+    {
+      "id": "C09",
+      "thought": "P09",
+      "tools": "T13",
+      "case_groups": [
+        "spatial_murj_lipidII_access"
+      ],
+      "question": "Does lost cleavage reflect failed substrate translocation or failed reporter access/activity?",
+      "parent_inputs": "Published MurJ inhibition and ColM cleavage observations with separate membrane-barrier controls.",
+      "narrowed_decision": "Keep chemical incompetence, reporter failure and inaccessible substrate live until contrasts bypass the relevant barriers separately.",
+      "tool_return": "Source-bound access, compartment and reporter-competence fields.",
+      "limit": "A topology prediction cannot replace these controls, and 5T77 does not supply deposited lipid II coordinates.",
+      "annotation": "A07"
+    },
+    {
+      "id": "C10",
+      "thought": "P10",
+      "tools": "T06",
+      "case_groups": [
+        "chem_bcd_etf"
+      ],
+      "question": "Which coupled reaction account can supply the driving force missing from the isolated redox interpretation?",
+      "parent_inputs": "Reported reactants, potentials, electron numbers and the selected reaction boundary.",
+      "narrowed_decision": "Compare complete coupled accounts and retain unknown concentration terms; kinetic acceleration alone cannot provide an absent energy contribution.",
+      "tool_return": "Electron/stoichiometric ledgers and conditional energy arithmetic with explicit assumptions.",
+      "limit": "A favorable combined account permits coupling but does not demonstrate its occurrence, ideal ratio or microscopic mechanism.",
+      "annotation": "A04"
+    },
+    {
+      "id": "C11",
+      "thought": "P11",
+      "tools": "T06",
+      "case_groups": [
+        "chem_ubiuv_oxygen_donor"
+      ],
+      "question": "Does a chemically possible oxygen source identify the route actually used in anaerobic ubiquinone synthesis?",
+      "parent_inputs": "The alternative oxygen-source accounts and the authors' isotope/product observations. Candidate atom correspondences for each selected hypothesis are explicit inputs before isotope propagation; the tool does not select a route or atom map.",
+      "narrowed_decision": "Ask which observed labels or dependencies distinguish occurrence from mere feasibility, without treating a balanced route as a measured enzymatic step.",
+      "tool_return": "Conditional isotope expectations and recorded isotope/product comparisons under a supplied atom map.",
+      "limit": "General isotope propagation is a capability specification here. The source does not establish isolated UbiUV hydroxylation or its electron acceptor.",
+      "annotation": "A01"
+    },
+    {
+      "id": "C12",
+      "thought": "P12",
+      "tools": "T11",
+      "case_groups": [
+        "yeag"
+      ],
+      "question": "Does shorter recovery lag establish improved nitrogen-starvation adaptation?",
+      "parent_inputs": "Published early recovery, delayed CFU survival and reporter records.",
+      "narrowed_decision": "Compare consequences over the biologically relevant windows; preserve faster recovery alongside poorer later survival instead of forcing them into one benefit label.",
+      "tool_return": "Outcome-by-condition/time tables with the observed population and reporter definitions.",
+      "limit": "GFP is a reporter, not measured metabolic flux or a direct cell lineage. The inconsistent source timing descriptions remain attached to their observations.",
+      "annotation": "A08"
+    },
+    {
+      "id": "C13",
+      "thought": "P13",
+      "tools": "T10",
+      "case_groups": [
+        "yeag"
+      ],
+      "question": "Does a protein-level phosphorylation claim apply to every AceA site?",
+      "parent_inputs": "The published YeaG/AceA assay and the exact phosphosite workbook with ratio definitions.",
+      "narrowed_decision": "Resolve the pooled protein claim into site/condition/replicate records capable of separating the alternatives; do not infer a missing site ratio from another site's signal.",
+      "tool_return": "Selected native workbook cells, missingness and response-ratio arithmetic.",
+      "limit": "The actual extraction did not assign phosphorylation occupancy, a unique causal site or a growth mechanism. Missing ratios are not zeros.",
+      "annotation": "A02"
+    },
+    {
+      "id": "C14",
+      "thought": "P14",
+      "tools": "T07",
+      "case_groups": [
+        "seq_ptmvd_m3k_picrophilus"
+      ],
+      "question": "Does the observed alkene endpoint identify the protein's own chemical step?",
+      "parent_inputs": "Published enzyme and coupled/product observations behind the historical decarboxylase assignment.",
+      "narrowed_decision": "Separate the reaction attributed to the protein from downstream or spontaneous events producing the readout; ask which intermediate/product evidence distinguishes them.",
+      "tool_return": "Condition-preserving reaction/readout and source-assay comparison records.",
+      "limit": "These are author observations; no new enzyme preparation or product measurement is available from this selection.",
+      "annotation": "A01"
+    },
+    {
+      "id": "C15",
+      "thought": "P15",
+      "tools": "T13",
+      "case_groups": [
+        "archaeal_pibd_flak_recognition_access",
+        "archaeal_hvo_pilin_processing_assembly"
+      ],
+      "question": "Why can processing compatibility coexist with failure of native filament assembly?",
+      "parent_inputs": "Published apparent cleavage shifts, expression controls, assembly and motility/adhesion outcomes.",
+      "narrowed_decision": "Keep the upstream processing support while comparing unresolved product identity, membrane context and downstream assembly compatibility; do not discard or overextend the band-shift observation.",
+      "tool_return": "Leader/mature-domain and source processing-versus-assembly feature records.",
+      "limit": "The exact heterologous cleavage terminus was not mapped; a nonexpressed hybrid cannot establish an assembly-specific defect.",
+      "annotation": "A07"
+    },
+    {
+      "id": "C16",
+      "thought": "P16",
+      "tools": "T12",
+      "case_groups": [
+        "reg_iscR_state_target_specificity"
+      ],
+      "question": "Which input acts through which route to change IscR target control?",
+      "parent_inputs": "Reported atmosphere/cofactor-state, abundance, DNA-binding and target-output observations.",
+      "narrowed_decision": "Compare direct cofactor-state action with cluster loss and indirect resource-demand feedback, retaining the distinction between occupancy and productive activation/repression.",
+      "tool_return": "Exact target/condition correspondence among supplied binding, state and output records.",
+      "limit": "A PMS preparation result does not establish selective PMS binding. Motif matches cannot determine regulatory sign; no new motif scan was run.",
+      "annotation": "A05"
+    },
+    {
+      "id": "C17",
+      "thought": "P17",
+      "tools": "T08",
+      "case_groups": [
+        "causal_envC_activation",
+        "causal_tsaE_turnover"
+      ],
+      "question": "Which linked protein property is required for the supported system contribution?",
+      "parent_inputs": "EnvC stable/localized but defective variants, or TsaE ATPase-active but repeatedly unproductive variants, with their own species and assay conditions.",
+      "narrowed_decision": "Seek a selective dissociation that retains the alternative property; lost output after instability or failed delivery would not isolate activation or reset function.",
+      "tool_return": "Measured perturbation-validation and functional-outcome fields, including unknowns.",
+      "limit": "EnvC localization controls and TsaE repeated-turnover controls are different contrasts. The shared pattern does not transfer their mechanisms or resolve species differences.",
+      "annotation": "A06"
+    },
+    {
+      "id": "C18",
+      "thought": "P18",
+      "tools": "T08",
+      "case_groups": [
+        "causal_tsaE_turnover",
+        "cellular_y_complex"
+      ],
+      "question": "Can apparently conflicting role assignments be explained by the actual system and measurement scope?",
+      "parent_inputs": "The retained conflicting primary results, strain/species, preparation, endpoint and timing information.",
+      "narrowed_decision": "Ask whether a concrete scope difference predicts the conflicting outcomes; retain disagreement when available controls cannot distinguish that explanation from a substantive conflict.",
+      "tool_return": "Source-aligned genotype, preparation and outcome tables; no inferred reconciliation.",
+      "limit": "The E. coli/Thermotoga TsaE discrepancy and historical Y-complex phosphorelay disagreement remain unresolved in these records.",
+      "annotation": "A06"
+    },
+    {
+      "id": "C19",
+      "thought": "P19",
+      "tools": "T08",
+      "case_groups": [
+        "organism_02_xoxf"
+      ],
+      "question": "Which route supports residual methanol function after the proposed route is removed?",
+      "parent_inputs": "Observed residual function, the exact mutant background, metal conditions and published additional-route tests.",
+      "narrowed_decision": "Retain residual function as a constraint and investigate its contributor in that background rather than conclude either universal indispensability or absence of function from a single deletion.",
+      "tool_return": "Background-specific deletion, restoration and independently assayed activity records.",
+      "limit": "Regulation, paralog overlap and metal dependence remain distinct. Neither residual growth nor an addition/rescue result alone identifies direct catalysis.",
+      "annotation": "A09"
+    },
+    {
+      "id": "C20",
+      "thought": "P06",
+      "tools": "T08",
+      "case_groups": [
+        "chem_f420_precursor_partner"
+      ],
+      "question": "Does final-product yield identify the upstream F420 enzyme's precursor specificity?",
+      "parent_inputs": "Published cognate and mixed-partner coupled-assay comparisons.",
+      "narrowed_decision": "Hold upstream identity fixed while reconsidering downstream filtering; retain the final output while assigning specificity only at the component or pair level actually measured.",
+      "tool_return": "Component-mixture-by-input outcome records.",
+      "limit": "An upstream substrate negative cannot be assigned from the coupled endpoint alone. Cas2's same P06 attribution pattern uses different evidence and tools.",
+      "annotation": "A04"
+    },
+    {
+      "id": "C21",
+      "annotation": "A06",
+      "thought": "P13",
+      "tools": "T09",
+      "case_groups": [
+        "cellular_y_complex"
+      ],
+      "question": "Does an aggregate RNase Y association imply dependence of every RNA-processing outcome?",
+      "parent_inputs": "Published Y-complex/RNase Y mutant identities, the exact reference feature table and deposited processed end-signal tracks.",
+      "narrowed_decision": "Resolve the broad RNA-processing claim at particular transcript ends and retained control sites, distinguishing selected target maturation from global equivalence to RNase Y.",
+      "tool_return": "Native coordinate-window values for supplied end/strand/sample selectors, with the processed-track normalization and coordinate frame.",
+      "limit": "The earlier research inspected selected processed windows, not raw-read realignment or a formal genome-wide replicate analysis. The historical phosphorelay disagreement is not resolved by these windows."
+    },
+    {
+      "id": "C22",
+      "annotation": "A02",
+      "thought": "P03",
+      "tools": "T05",
+      "case_groups": [
+        "TM0936_Hermann_2007"
+      ],
+      "question": "Which candidate chemical inputs are compatible with the proposed binding arrangement?",
+      "parent_inputs": "Identified structure/model, a supplied set of candidate compounds, and a declared docking/comparison model with an available implementation.",
+      "narrowed_decision": "Choose rival inputs that distinguish the competing chemistry and use model disagreement to revise the candidate set; keep geometric compatibility separate from measured turnover.",
+      "tool_return": "Conditional modeled poses/scores and the compounds actually searched.",
+      "limit": "This is a capability-specification selection: fresh modeling/docking was not run in this research. Published computational/assay results are evidence; they do not establish an enabled local docking tool or a native substrate."
+    },
+    {
+      "id": "C23",
+      "annotation": "A03",
+      "thought": "P14",
+      "tools": "T07",
+      "case_groups": [
+        "fluc_fluoride_channel"
+      ],
+      "question": "Does a fluoride-resistance phenotype establish the mode of membrane transport?",
+      "parent_inputs": "Published resistance, reconstituted fluoride/chloride flux and channel-current records for the specified homologues.",
+      "narrowed_decision": "Distinguish the protective endpoint from the molecular transport mechanism, and prioritize the readout that separates selective channel activity from an active-carrier interpretation.",
+      "tool_return": "Assay-specific ion, condition and current/flux comparisons from supplied records.",
+      "limit": "The authors performed reconstitution and electrophysiology. This selection does not perform new membrane measurements or transfer one homologue's entire transport profile to every family member."
+    }
+  ],
+  "incompatible_examples": [
+    {
+      "id": "I01",
+      "option_ids": [
+        "A06",
+        "P06",
+        "T04"
+      ],
+      "case_groups": [
+        "causal_cas2_spacer_acquisition"
+      ],
+      "failure_kind": "Evidence limitation",
+      "mismatch": "Deposited contacts/distances alone cannot establish Cas2 residue necessity or an E. coli nuclease-null mutation.",
+      "repair": "Supply the existing functional/complex records or select the appropriate table operations; retain missing nuclease-null validation as unknown."
+    },
+    {
+      "id": "I02",
+      "option_ids": [
+        "A04",
+        "P06",
+        "T06"
+      ],
+      "case_groups": [
+        "chem_bcd_etf"
+      ],
+      "failure_kind": "Thought-pattern mismatch",
+      "mismatch": "Attribution does not provide the energy account needed to decide whether isolated output is feasible. A calculator cannot select the biochemical account.",
+      "repair": "Select P10 for the coupled-account question, specify the reaction boundary and assumptions, and keep feasibility separate from observed occurrence."
+    },
+    {
+      "id": "I03",
+      "option_ids": [
+        "A06",
+        "P03",
+        "T07"
+      ],
+      "case_groups": [
+        "cellular_yihI"
+      ],
+      "failure_kind": "Uninformative contrast",
+      "mismatch": "Comparing rival substrates does not establish whether improved growth restored Der T57I catalytic behavior.",
+      "repair": "Use P07 and the relevant genotype/molecular-activity contrasts; improved endpoint and repair of the proposed molecular defect remain separate."
+    },
+    {
+      "id": "I04",
+      "option_ids": [
+        "A05",
+        "P16",
+        "T12"
+      ],
+      "case_groups": [
+        "reg_iscR_state_target_specificity"
+      ],
+      "failure_kind": "Missing outcome evidence",
+      "mismatch": "A motif match or DNA affinity alone cannot supply activation versus repression or identify a direct environmental ligand.",
+      "repair": "Retain measured state/binding/output records at the same target and condition; leave unmatched causal links or sign unknown."
+    },
+    {
+      "id": "I05",
+      "option_ids": [
+        "A02",
+        "P13",
+        "T10"
+      ],
+      "case_groups": [
+        "yeag"
+      ],
+      "failure_kind": "Invalid measurement interpretation",
+      "mismatch": "Missing phosphosite ratios cannot be filled with zero or interpreted as absent phosphorylation, and a response-ratio cannot silently become absolute occupancy.",
+      "repair": "Preserve native cell definitions, replicate/channel relationships and unknown values; return only the declared transformation."
+    },
+    {
+      "id": "I06",
+      "option_ids": [
+        "A08",
+        "P03",
+        "T07"
+      ],
+      "case_groups": [
+        "spec_suhb_catalysis_vs_rrna"
+      ],
+      "failure_kind": "Native-role mismatch",
+      "mismatch": "Another substrate-kinetics comparison cannot by itself establish whether genuine SuhB IMPase capacity explains its native growth/rRNA role.",
+      "repair": "Consider P17 with functional dissociation and native-context records in T08, or the relevant RNA records. Preserve the abstract-only scope of the older complementation source and the full-section scope of later RNA evidence."
+    }
+  ]
+}

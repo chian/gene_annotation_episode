@@ -1,0 +1,861 @@
+{
+  "schema": "hmmer_alignment_preparation_verification_269_v1",
+  "source_hashes": {
+    "gene_annotation_episode/hmmer_alignment_preparation_data.py": "17177f61891d65eef10086716c4166f9b7338607cbf862c743ac25d1a7ef7975",
+    "gene_annotation_episode/hmmer_alignment_preparation_calculations.py": "94d4c4b4017f79334cdce578497cd5cc7b82e1b8f0e7742827b99e3e2d1a691c",
+    "tests/test_hmmer_alignment_preparation_data.py": "8bcd5af97fbaeaf7ae2554c3d2e4c35403f32ec0daba8235d47cff779761e825",
+    "tests/test_hmmer_alignment_preparation_calculations.py": "bf82903706d6f48a1ba76ae25a3598e866f1e79848114e0ca417daa020204883"
+  },
+  "reused_source_hashes": {
+    "gene_annotation_episode/hmmalign_inputs.py": "c435e6987088d4fd02e48c762a48d4611c4f25f12f4b59c5b08b8208f7660b78",
+    "gene_annotation_episode/hmmer_model_data.py": "10957b8b31595f7084882b6223ef8d002fcb33e58443aeedfa61ec61c2d71c73",
+    "gene_annotation_episode/hmmer_model_calculations.py": "26cf2a788aa6bf629227781217cc5ae3ae0f241641e6e2d15f36c39265173be3",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452"
+  },
+  "verified_259_evidence_hashes": {
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_ali2model/receipt.json": "a04cf0ab2dfc5abf671c648108a748236eb06ff1518053c0c9baee4edfb4e3ac",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_ali2model/stdout.log": "6a7239fea148a1da3cd6f5f4a557c8eadaac77bf4a50e7a555609f77644aace5",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_ali2model/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_alignment/receipt.json": "b904c1e797799b4823f24df17f8fd284dde05e90f20b63a97e91552a00acc99d",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_alignment/masked.sto": "651bd39a5829cd76b0076a5ec06ce3f82a1215326e6c6abada508485162edb94",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_alignment/stdout.log": "d05f8eed138f2eac192be68df303d39447f59835fcb8cded24d6b5abeaaa4f33",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_alignment/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model/receipt.json": "7e36acdcfe5affa1f53ecf7cbda9e0c43c98aa208fbbe86f6e02ae0c73dcb117",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model/masked.sto": "a51fa42ea7c6af8794fff6abb923640ff3ad035a439e7d020a19bcb524b42639",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model/stdout.log": "531e24184d4272bd4a4ceed44f30c2c839af73a5fe1e726e19c299f91f7c3bd0",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model2ali/receipt.json": "64ae42f4eb36386209309728f31ce768d5972684c70cbb6a3f488a4ca0a104f9",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model2ali/stdout.log": "81dd5b3314113e0e298b5521674d355717d70502f5fd5ec08e29515995c14ff4",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model2ali/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/receipt.json": "0b993b737762e98a4aa121e3f974a7e925ab9a100058c69b7865c4975af34905",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_annotated.sto": "8406053ba8a70510125ecdf35624039ccfa05b09b5a54237384851af7affbc83",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/profile.hmm": "b169a75113a5434e6724f06d4d294fdf541bf10c743c69fe36601ce990903011",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/stdout.log": "7bd347f56ccaadc8cbbe502db98010a8d5bf480d7024c1b7b0358b6e149218f7",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/receipt.json": "f075ac3d04c3d97c013250e6e533931bf38915e416f8f5f6697dfc119337d3d1",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/dna.sto": "1a145e913efed325363fee37d6d7e3c48673f9f9580b0775197aa83a666680b1",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/profile.hmm": "c75e9e7e1da3f9d609e768634493e0ee13ea48cd532025610c2aa7d2f6964cab",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/stdout.log": "083cf175010e5c6b725226fc2fcbeb80ef57f58164f0152cd5fc34294a59c7f0",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/receipt.json": "b45bb8c9952a15ba8b535416e59edbb895d3c716475c60b214094d4b2d57b5cf",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/resaved.sto": "70f320b8d94cdb1e879bab81d1ed820cfaf5d647238b813b598c1decde290743",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/stdout.log": "388db1f9a92e707f155ca2438b8e33bca6b35f3689179f339e7e11bd3e42acbd",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_rna/receipt.json": "fe6e4da8c7d116be20801fab534aa4ed2356778d3106adad483805323d4d26b2",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/rna.sto": "9ef300fc67e2766e4591a2cf7b526dc775f117038cd19e3997df733a0889e5fd",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_rna/profile.hmm": "a8577c5ed8817b99e130f53e7098d8d921cb59d04cac701fa1f9e42ca2f87d56",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_rna/stdout.log": "10cf055ec8710a9800c830f48d83f014702024845854f3402271baf381817cf1",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_rna/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_singlemx/receipt.json": "bcf24f706ce2b3374ecbe828ed2d7d86a2a256f4603521b5ef31228e08f64c11",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_single.sto": "709abcece191645c06f53a9779d97309250464f09f2e61722ef17eaa7a3506ea",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_singlemx/profile.hmm": "6afe945d51dfac9c07e8aa793cee51f94d252c42ce3027b1784afe8352b80aed",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_singlemx/stdout.log": "0fcd196da8e4768d81fb26efd3113626f6ac113b7e49285452c51344137f1ee9",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_singlemx/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.fa": "213b29f58b488cac5e86d8c5bee776d871c8452d17bc84760f5133121de9b600",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_ali2model/intent.json": "6c5758b3cc5f823cac4fa205d8d2460548c469b5fe2b4bd98c16f4356ac1453d",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_alignment/intent.json": "476332a1885715b2cda1de1a4bd8da199a6c9df69819fa9099bdc863e1f444bf",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model/intent.json": "1c433bebb12220d0c7f820273ec11ecdca927dc68dc99fb7c1591bd1b8ee1392",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/alimask_model2ali/intent.json": "646df45d816c4149cefc66a4afec39e47800532653ac51f910097cb2c09e95dd",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_annotated/intent.json": "935f0504ca6b1327c43538809e1dbbc817b13076af944878a84a40c5dbf0c03d",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/intent.json": "69ab8d410ebdb8aee00fa872a991c42c0b69c3a8cbd546b88ff4bb4c62541630",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/intent.json": "31dd34f4fe9e937f0d3fd07a29436d587fbdddd5860ed512f4ef687e856df7a1",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_rna/intent.json": "2ed4f373ee3bc6a234180b63f2899e314877261eecddf5490753b6131b8e0fae",
+    "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_singlemx/intent.json": "f57fcc99bfbbedb3a0f02d62e5166eea57079cfa103288a5a4dfcf0ad573177a"
+  },
+  "native_receipts": [
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/receipt.json",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/receipt.json",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/receipt.json",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/receipt.json",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/receipt.json",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/receipt.json",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/receipt.json",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/receipt.json",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/receipt.json",
+      "returncode": 1,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/receipt.json",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    {
+      "receipt": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/receipt.json",
+      "returncode": 0,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    }
+  ],
+  "retained_files": [
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/INTERFACE_AND_NUMERICAL_MEANINGS.md",
+      "size_bytes": 10765,
+      "sha256": "9bc019fba872e8eec02b831e1ba0fec76e63078afd91dbdee9cdc456809f80e6"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/LIVE_EXAMPLES.json",
+      "size_bytes": 18759,
+      "sha256": "8758662e0819ab1464350d1c98e4f5b824c5bd3021f8721907eca48ed6019075"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check001/intent.json",
+      "size_bytes": 1286,
+      "sha256": "e06dbf3039e429d296d504ba3ee9bc8eedfb41917dec18bdbfffbf608d1d1303"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check001/receipt.json",
+      "size_bytes": 2812,
+      "sha256": "5c6c6ab2464ca3a36c4d3e71ac1510cff8085dabbacb2b1f9d9ab41c209c8d3d"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check001/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check001/stdout.log",
+      "size_bytes": 99,
+      "sha256": "d5e78efa2a82eb31c4852bae5faf72c83fad8a8c6ddecdca7768f54ae8fafe83"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check002/intent.json",
+      "size_bytes": 1286,
+      "sha256": "c1615b670943a08639aff5ef1cd79149b85562011263f69a116ea66a54792bab"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check002/receipt.json",
+      "size_bytes": 2812,
+      "sha256": "6c081c8b56cc93bc088a9d2c1349e5d0e4062514be8c34c3b3e17dbaf6025575"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check002/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check002/stdout.log",
+      "size_bytes": 99,
+      "sha256": "36ef858e6dc2c7537f672fc6000e93407ec482e98b7b97d3d0501d39c0e6aea9"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003/intent.json",
+      "size_bytes": 1286,
+      "sha256": "382bca883b4cc2e279844fd20dddfa49af3a2a20d146a37a667012234fd9f5f5"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003/receipt.json",
+      "size_bytes": 2812,
+      "sha256": "103ba5363031d2ced53ba010ddd3d231f159761e0aa061503504a1cf4b80997f"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check003/stdout.log",
+      "size_bytes": 99,
+      "sha256": "763f9e863b37cb6c6244e5f27c07324e9a3a7ae1f024c3f4579e29e1d89d95ae"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check004/intent.json",
+      "size_bytes": 1286,
+      "sha256": "e97835525453797c6503ccd844adeca0c424267526bb0add664fa0eae0825942"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check004/receipt.json",
+      "size_bytes": 2812,
+      "sha256": "f874bb439a72c27dbc225f3676707fc224a29b2e6bd9d8af5d33534563aafd0b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check004/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/check004/stdout.log",
+      "size_bytes": 99,
+      "sha256": "103f7611bbc492fe671acd9aa83b246c20782ac4a39117dd7c80752ea85cf05c"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/examples001/.local-job-cebe65ee2755493b8dce38e561faf79c.handle.json",
+      "size_bytes": 2700,
+      "sha256": "e9854d4ec7d79cefb8060dde35464931b25486f896a07f06244b941e0e2f7e59"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/examples001/intent.json",
+      "size_bytes": 1011,
+      "sha256": "6d8b1e59ade4b5d3be6bdfb606ce690b0fe07b47b1fb0b8cd7fc19d3c8b7abb0"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/examples001/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/examples001/stdout.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wgiven.calculations.json",
+      "size_bytes": 19300,
+      "sha256": "eacf53495e17752535d11032c5b30a4dc54b7913e3da15a03c92a682e1278775"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wgiven.sheet.json",
+      "size_bytes": 18261,
+      "sha256": "b785c1de6db252320c4b11aa9ca4cd6418a77f8de7dcd807acdf9324afa92e33"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wgiven_length_boundary.calculations.json",
+      "size_bytes": 10414,
+      "sha256": "f89b0203fe294e90f64feea48f21120e14fbb003b51d7a550f59e21ce2823f40"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wgiven_length_boundary.sheet.json",
+      "size_bytes": 13648,
+      "sha256": "74dc78a9b865d2cc2580cedd3b2f7681329ff898e7e8f23429a565005b31a6ba"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wnone.calculations.json",
+      "size_bytes": 19209,
+      "sha256": "ef2b5d88fec3c17277f74a602c2189c9bf6dabd5e82418934013bd7dda2b4417"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wnone.sheet.json",
+      "size_bytes": 18260,
+      "sha256": "fdd9d79ef7441727a6d6148b1cf0581d8585e877a997c77ae4711169b024ec8e"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wnone_length_boundary.calculations.json",
+      "size_bytes": 10323,
+      "sha256": "c1c5da230e1eddcfc17e46873f9068658a118f6671c28a2002753ebd0a39beb1"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wnone_length_boundary.sheet.json",
+      "size_bytes": 13647,
+      "sha256": "a8fcd75268f2976394020a80899262db7fc03d5b35e4d6532183df0141cb6b76"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wpb.calculations.json",
+      "size_bytes": 19407,
+      "sha256": "d83cadbafedafc6d04d75463a6f239a94ead5a701c90dd80b9ee502ed6f2a5b5"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wpb.sheet.json",
+      "size_bytes": 18258,
+      "sha256": "de5a750715a0d7767b6332743ccb45e88a472e95b84cd056270b0b19d1a4a144"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wpb_length_boundary.calculations.json",
+      "size_bytes": 10521,
+      "sha256": "930233b354dd14ebbe845dd1ef33e3d939debc125ee1a7e8897434802b9a3c0f"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/fast_wpb_length_boundary.sheet.json",
+      "size_bytes": 13645,
+      "sha256": "a54d9bb09dad97f78959c61b1322467bdeb95ebe5de04eb43a102ab05cf4de07"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hand_adjusted_and_nomap.calculations.json",
+      "size_bytes": 10020,
+      "sha256": "3c39c01b409782e9766f8549e195a68aa4737519acc11995983d206bf900323b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hand_adjusted_and_nomap.sheet.json",
+      "size_bytes": 7879,
+      "sha256": "8f26bafd55bb9c6e625b6edf0ecd084eab35cbda7e7f9daa6251ee04c9e1095b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hand_insert_span.calculations.json",
+      "size_bytes": 14031,
+      "sha256": "fb035378c195025d467f13818fe2979d2f29095eedec895f8d88eb587f1e637a"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hand_insert_span.sheet.json",
+      "size_bytes": 11732,
+      "sha256": "e31804e264f05e8d2c98c6d364288f3f5b61f2c2b2a705d67e2c602a25c95a46"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hand_missing_rf.calculations.json",
+      "size_bytes": 9555,
+      "sha256": "eaf653f7e37989e7d06fb1f1a0a898783d83fccd0385530fe04f52ce660cb0ab"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hand_missing_rf.sheet.json",
+      "size_bytes": 6794,
+      "sha256": "e7e77b5d538da247b48b18129c3590c52ccf8c52a584e6ac5b42e3451757933b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_annotated.calculations.json",
+      "size_bytes": 325069,
+      "sha256": "98de909df7385c6d54e9d70c1a3e433a7955440ac9892dd17554a9552e6abb03"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_annotated.sheet.json",
+      "size_bytes": 185911,
+      "sha256": "bb8f521e5452d118e2a3fae7e794e341d7bdd81548fee9c8ad26d080f20a3e8c"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_dna.calculations.json",
+      "size_bytes": 224474,
+      "sha256": "6c0f617fae4d7567e6d1ed220b192109ede4cc44a97d6ec93a666c4e22ca88d7"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_dna.sheet.json",
+      "size_bytes": 79520,
+      "sha256": "9d0a2b79ad662de2921de420a38bdfa00ed7fa4f3ea04b3608a4eeb8a18adfb1"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_protein.calculations.json",
+      "size_bytes": 335752,
+      "sha256": "66881bc0e81f14cfdaddba71dc17a6e95cc0dc5da53c7f1974d3f22d1230ed5a"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_protein.sheet.json",
+      "size_bytes": 186029,
+      "sha256": "e588d802b2af666f40fab4c62f85c1ecaf8aca1ee0b7813e45dc893b97d2d905"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_rna.calculations.json",
+      "size_bytes": 224658,
+      "sha256": "ea74139265d45a2321f05118c1982f0b21987b122a686a2044eb1d4c68c39c9b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_rna.sheet.json",
+      "size_bytes": 81552,
+      "sha256": "ad4e550c74e6ca74f197e1b61194a69d6e27fc204715b5c0c29f6e485da35e91"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_singlemx.calculations.json",
+      "size_bytes": 322540,
+      "sha256": "c98505faed1ac8b82399fadc95ea2fd3bc5d77f9056a70bcc51a57e5857208d7"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/hmmbuild_singlemx.sheet.json",
+      "size_bytes": 176335,
+      "sha256": "52c7dd1bb6d651cc9cc05e3b2e0bc8f8bbc12fe01b5b115837f0dba017329ff9"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/mask_append.calculations.json",
+      "size_bytes": 14764,
+      "sha256": "193e585c4b1356575f27497e2e7c77b82b61f6b74bf9a591a1effd3b23434759"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/mask_append.sheet.json",
+      "size_bytes": 11107,
+      "sha256": "98042a6eeda95ea07f61b4dc281060967b7dc491802ab0dae7dc1791af1248a2"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/mask_replace.calculations.json",
+      "size_bytes": 14724,
+      "sha256": "d537dc4b2300576a1707c192a7ebccc338f1883c73c5b33cfdbc4f04c6954566"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/filled/mask_replace.sheet.json",
+      "size_bytes": 11108,
+      "sha256": "729fca363d61e0777ae0fcb0e128e6c3d38034f05aacbffdbf79712ca49cdc6f"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/calculations.json",
+      "size_bytes": 15413,
+      "sha256": "7077e0d44b03d0334d813ddea6dcc43c48cada562655f4e10e7f5dcb128d1506"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/input.sto",
+      "size_bytes": 111,
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/intent.json",
+      "size_bytes": 721,
+      "sha256": "7bbd6cf4a497281f2d9ae255404d7e5fa934124114afd7b840372b6a2cb065cb"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/receipt.json",
+      "size_bytes": 2267,
+      "sha256": "49e9a1b39a5e355ef4a433c3f382f56e7918fb523b5c5df0fe9123d1bc568e53"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/sheet.json",
+      "size_bytes": 18204,
+      "sha256": "5c5d1f37c1a375e5a112f3aa5143166b22a6f85783f81176a2fda39c35ef52db"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven/stdout.log",
+      "size_bytes": 923,
+      "sha256": "cc817a54e813af48565e9c5701176c21e097ff16f7a4335e6d4f75eb238de686"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/calculations.json",
+      "size_bytes": 9255,
+      "sha256": "e54277b926f38f0ac139ba4d26c229335a6d9e2a70bf80423b94e74798d2e344"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/input.sto",
+      "size_bytes": 111,
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/intent.json",
+      "size_bytes": 721,
+      "sha256": "701aacdfd424c1ba7065021d26b529ce709a381e4b610c86ab25f7024dc6833b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/receipt.json",
+      "size_bytes": 2301,
+      "sha256": "b26fd4efb7393436c314e7928b38e670c6d66b7c00c13174d3b2ecbae61cbaeb"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/sheet.json",
+      "size_bytes": 13596,
+      "sha256": "28cfe03394397f7f08c4596da1a6e58b3c8f360a811ff23d2003a361cdb785db"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/stderr.log",
+      "size_bytes": 53,
+      "sha256": "5b75ddf155fa65fb59c10af3aeaf46c24a4edcf84bf44053a0238158395550fd"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wgiven_length_boundary/stdout.log",
+      "size_bytes": 674,
+      "sha256": "fe47e3b406175884f0fa5478c30f99a36b28200e61439ee5438ecb9ab5f95e36"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/calculations.json",
+      "size_bytes": 15322,
+      "sha256": "38465982973754f819e49784d52d62f3254b60bb6429ad38254fb3e5d9a1d68e"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/input.sto",
+      "size_bytes": 111,
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/intent.json",
+      "size_bytes": 719,
+      "sha256": "8db040bb31ea4cbaa3a5e59b92403317650baef4644fe6688334b505ec41bd7d"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/receipt.json",
+      "size_bytes": 2263,
+      "sha256": "d829f568ddba82be9327ec62528f77c85082621c80e72743aa0d72d67b5bfe41"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/sheet.json",
+      "size_bytes": 18203,
+      "sha256": "1e0e731768ae83669195c4acc767fed62825a99a0d7f56d76da727b2494c50ea"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone/stdout.log",
+      "size_bytes": 963,
+      "sha256": "115249bfb24ddb52806b2986a58b3b188eee2597b62370704a5a548ddd819a34"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/calculations.json",
+      "size_bytes": 9164,
+      "sha256": "24bfbfbfd815dbf8dd2b4bdc973c0dc0792402d847480709101dd495d6afa327"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/input.sto",
+      "size_bytes": 111,
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/intent.json",
+      "size_bytes": 719,
+      "sha256": "df09c562a8d458ca3a47e1768ca3625be4493178df34086bfa792d935f00ae56"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/receipt.json",
+      "size_bytes": 2297,
+      "sha256": "1b7a5ae110830f6c6f51d008ad0d634153bfe5c1d0985091ba828998e44917ef"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/sheet.json",
+      "size_bytes": 13595,
+      "sha256": "e3c1a3b4e0aed264a1fb6d425e2e4435ba796285118a2cbc2aa58a993b37727e"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/stderr.log",
+      "size_bytes": 53,
+      "sha256": "5b75ddf155fa65fb59c10af3aeaf46c24a4edcf84bf44053a0238158395550fd"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wnone_length_boundary/stdout.log",
+      "size_bytes": 714,
+      "sha256": "ee0eb72a73f62e7a84e93d2676d975288d54578e444da0c54543f21094dc8ff9"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/calculations.json",
+      "size_bytes": 15520,
+      "sha256": "daf75d40c953ddb636db06e4c41a410e151b3934929243362367aebc6f4c36a8"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/input.sto",
+      "size_bytes": 111,
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/intent.json",
+      "size_bytes": 715,
+      "sha256": "b1d784a8acf4b8e490385885bc7738a54185cfe515a313805d0c97316a7c32fc"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/receipt.json",
+      "size_bytes": 2254,
+      "sha256": "b4900301097546bcedca759f8cdfe1db853d11a959433e3c945a0524995d4b98"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/sheet.json",
+      "size_bytes": 18201,
+      "sha256": "3f9d1145bb9fdfb386ad2f1f5db79aea529d69430c2fcb6501278c32fcb04981"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb/stdout.log",
+      "size_bytes": 920,
+      "sha256": "a0bd15e96cbf2938c0d3dd926e5bcaea75d8c59d2d2c09fb65bb4f97c222c351"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/calculations.json",
+      "size_bytes": 9362,
+      "sha256": "624df8a9dfbb6abe1dc8f84adf3991f32c7df8f5035281b29bc033a1e7ef293d"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/input.sto",
+      "size_bytes": 111,
+      "sha256": "c58846d612838f37666a1f6a922cbc73d4777c7cd7b8648ad720ce57b6e53095"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/intent.json",
+      "size_bytes": 715,
+      "sha256": "659efb6df6eb140b611eb35a8314e5cb08971c59e691aff5e1bea7051e981a29"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/receipt.json",
+      "size_bytes": 2289,
+      "sha256": "a3787c87603ce44468df23ca367616609bd41d28862524826037cc37c46bc1ca"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/sheet.json",
+      "size_bytes": 13593,
+      "sha256": "7f2536bb83a5a6318716716d3b43d1f3b8990cd6aafe1246780c15788df8fae7"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/stderr.log",
+      "size_bytes": 53,
+      "sha256": "5b75ddf155fa65fb59c10af3aeaf46c24a4edcf84bf44053a0238158395550fd"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/fast_wpb_length_boundary/stdout.log",
+      "size_bytes": 671,
+      "sha256": "a4ba40923cabc611b36015f22113aa8985c3678961174ca2c838e2fb949a558b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/calculations.json",
+      "size_bytes": 8002,
+      "sha256": "f321ee7e0e05078a6b175f672cffcdd1cdf68ee0e789438c551418dd863ea5a6"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/input.sto",
+      "size_bytes": 43,
+      "sha256": "9cda066ae0bf193b11250fcd11a1c959602a2ec93d5905a835a664192270f8a6"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/intent.json",
+      "size_bytes": 648,
+      "sha256": "204f7b4de09099fb9a3b634356bbef26ee157fe548fd2f94069871cebfd2544f"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/receipt.json",
+      "size_bytes": 2218,
+      "sha256": "b95ca57a3848aee656c36d0401ed5fc7f80497cac7b766a26cc1ddbeca95c74a"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/sheet.json",
+      "size_bytes": 7855,
+      "sha256": "b4d6c6f0694cd0fbc7e58fef47d80085bf4e6d2ad7b8c9d3a222899d3941cc02"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_adjusted_and_nomap/stdout.log",
+      "size_bytes": 838,
+      "sha256": "8328b83c658b3815d6eff24f72b9b825a4de7186a1af23e36097854269bfe44b"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/calculations.json",
+      "size_bytes": 11029,
+      "sha256": "a8640204770783accec2bab73324986e42c0c8a06a8b6cb3cf9b6a200e57ca43"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/input.sto",
+      "size_bytes": 43,
+      "sha256": "a6a0b19d2efa0839bfab746bfcf63338c424115b8f6a931c69f761229f01033d"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/intent.json",
+      "size_bytes": 783,
+      "sha256": "43303bd321844780a864697261cc0d0bcee85c9b431b6b8cf76c4f55b30e4121"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/output.sto",
+      "size_bytes": 65,
+      "sha256": "5d3c35512b4b6c92b5b0bbafecfd2760c833436eec8c02b4084ffc64cc9a8b3a"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/receipt.json",
+      "size_bytes": 2339,
+      "sha256": "61c408b9311911a1e38ffeb0bd9bad4d2f8d93049efa3bf41093a4316fa39bd3"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/sheet.json",
+      "size_bytes": 11686,
+      "sha256": "e8b2410167e9e1e5dcd39f5656b78708e4491d419e067ef1aa0fd17b050442f6"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_insert_span/stdout.log",
+      "size_bytes": 868,
+      "sha256": "5ba9f8ac5fa1888137fcfa76083864ea2daa7338e2e3060f0138990b3885397c"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/calculations.json",
+      "size_bytes": 7588,
+      "sha256": "bddbc46341e06948c2e5c8b8a407d94652966b392e112588d76d066d52eaad9a"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/input.sto",
+      "size_bytes": 43,
+      "sha256": "db6b480bd957c1df1db73226ea1c2f58c334ecfb727a81ec3b96e27d9a1776e0"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/intent.json",
+      "size_bytes": 781,
+      "sha256": "64d510e77cc19733c9792437cfbc96c322a3443fd976c3affb95207e3e00c260"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/output.sto",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/receipt.json",
+      "size_bytes": 2337,
+      "sha256": "5916e75efc61df0020e5aa1fff30fbbfeef87dea3dea366c4093cd4976691dd8"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/sheet.json",
+      "size_bytes": 6770,
+      "sha256": "f912cd870effb5c18e2540ec64991fc2bd1d39643ff2d31af51738ff7aa99023"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/stderr.log",
+      "size_bytes": 70,
+      "sha256": "c11b25d7ea0d25acf9ccdb9f49ac47778f0b08b645f5f94284a32bfe0657fea6"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/hand_missing_rf/stdout.log",
+      "size_bytes": 866,
+      "sha256": "8ae50de05eb06e39af1b108bdeb2317622aca255041f963312d4179d52d18927"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/calculations.json",
+      "size_bytes": 11374,
+      "sha256": "9c2e5671acf13dc1cd5826f7a6ee16579312dad853eccdc62cb001ae54f4700d"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/input.sto",
+      "size_bytes": 43,
+      "sha256": "db6b480bd957c1df1db73226ea1c2f58c334ecfb727a81ec3b96e27d9a1776e0"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/intent.json",
+      "size_bytes": 781,
+      "sha256": "75d32feb1f17bd79b5dd04ba0b0c03c72d5495f738804d05e13acd7c8ff01917"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/output.sto",
+      "size_bytes": 50,
+      "sha256": "42925803cca73d0f6525732c2a22c1114abbbb288b5db94814c2311531c2dcc8"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/receipt.json",
+      "size_bytes": 2327,
+      "sha256": "2108d928f3240337a872b450717904249c3558481de01952307b9959f5d59224"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/sheet.json",
+      "size_bytes": 11065,
+      "sha256": "3723f6f0e53dda2a6233a0b3f8820c3826b38a45be9017ea5152738cd75ae941"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_append/stdout.log",
+      "size_bytes": 835,
+      "sha256": "d56b4c3f9b34e016c3e9055d039022cba896d2bb4e0b46140c993d258fcfa4b1"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/calculations.json",
+      "size_bytes": 11334,
+      "sha256": "c026258e1fcc8ca50e2fc55fae13e201011f6314a91a536894f6e16a733cf332"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/input.sto",
+      "size_bytes": 43,
+      "sha256": "db6b480bd957c1df1db73226ea1c2f58c334ecfb727a81ec3b96e27d9a1776e0"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/intent.json",
+      "size_bytes": 763,
+      "sha256": "b84d75bd75f424594e6928e41972adf6132f42dbc1d7eb0d1d14fee563d3c99c"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/output.sto",
+      "size_bytes": 50,
+      "sha256": "4cc3110522b11f7fa091f19592b058b9eba39053971895945d0b56abc421351c"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/receipt.json",
+      "size_bytes": 2311,
+      "sha256": "c8d00fa73cc2c5c72b54614cd08d953387288e7bbab8ef1ad905459afe078ca0"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/sheet.json",
+      "size_bytes": 11066,
+      "sha256": "05635b0a8b6ffdeb81325ff14c5c3b4df3d4e1a37977c455bd2cc7c8e4c36a3d"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/stderr.log",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/native/mask_replace/stdout.log",
+      "size_bytes": 796,
+      "sha256": "a08d23a7eb7d4acab5c582a4bce3511366611cade81fe6438e62e0e5ef7b7baf"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/run_checks.py",
+      "size_bytes": 2174,
+      "sha256": "2b54e3c3eb747e8322049bf9abbb2d8f2bfca29520ecff38c57ccb4990e0d5a7"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/run_native_examples.py",
+      "size_bytes": 7198,
+      "sha256": "4760f3f7fc8e5ff3bf1f73521b2cbecc25a7c6e8a4c05836de68d030f688a89c"
+    },
+    {
+      "path": "verification/tool_graders_hmmer_alignment_data_2026-10-26_269/write_filled_examples.py",
+      "size_bytes": 6534,
+      "sha256": "1b8f0faf4fad04a8ea46edf7323b05760d1988b19287c674f57f30f19f06ea2a"
+    }
+  ],
+  "qualification": "Pure B1 parsers/calculators and retained/native verification; no episode integration or resource-library completion claimed."
+}

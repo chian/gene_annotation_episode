@@ -1,0 +1,106 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_semantic_actual_map_constructed_child_returns_only_declared_original_forecast _
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x74adc10a3680>, homology=<gene_annotation_episode.homo...nds': ['api'], 'cpu': None}, 'resource_selection': None, 'software_knowledge_refs': [], 'resource_knowledge_refs': []})
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-893/test_semantic_actual_map_const0')
+
+    def test_semantic_actual_map_constructed_child_returns_only_declared_original_forecast(resources, tmp_path):
+        r = resources
+        source = synthetic_ap_source(tmp_path / 'synthetic-options')
+        selected, child_contexts, forms = [], [], []
+        with reported_service() as (http, client):
+            def commission(context):
+                retrieval = context['last_local_outcome']['result']
+                assert retrieval['tools'] == ['execution.estimate', 'sequence.inspect']
+                selected.extend(retrieval['tools'])
+                library = h.workflow.scientific_process_binding.library
+                schema = obj({'forecasts': deepcopy(h.workflow.report_sources('scientific_process')[
+                    'api_reported_execution_forecasts']['report_schema'])})
+                return {'selection': {'kind': 'episode_child', 'role': 'scientific_process',
+                    'goal': 'Assess this proposed search using original timing support', 'scope': r.scope,
+                    'purpose': 'Return only the requested original forecast',
+                    'schema_json': json.dumps(schema), 'initial_report_json': '{}',
+                    'assignment': {'selection': {'version': 'scientific_process_selection_v2',
+                        'annotation_ref': library.reference('A01'), 'thought_ref': library.reference('P01'),
+                        'tools': list(selected)}, 'evidence_refs': r.scope['subject_refs'],
+                        'constraints': {'target_only': True}, 'context': {'fixture': 'prospective'}}},
+                    'report_update': {}}
+    
+            def child_estimate(context):
+                assert 'scientific_process' in context
+                assert context['scientific_process']['selection']['tools'] == selected
+                names = {entry['name'] for entry in context['tools']}
+                assert {'execution.estimate', 'sequence.inspect'} <= names
+                assert 'public.hmmer.search' not in names
+                child_contexts.append(deepcopy(context))
+                return own('execution.estimate', **estimate_arguments(h, r))
+    
+            def child_later(context):
+                assert context['api_execution_proposal']['arguments'] == estimate_arguments(h, r)['arguments']
+                assert context['api_reported_execution_forecasts'][0]['reported_result_support'] == {
+                    'reported_result_count': 0}
+                child_contexts.append(deepcopy(context))
+                return own('episode.history', view='records', decision_indices=[0])
+    
+            def receive(context):
+                form, = context['child_reports']
+                assert set(form) == {'forecasts'}
+                assert form['forecasts'] == child_contexts[-1]['api_reported_execution_forecasts']
+                assert 'api_execution_proposal' not in context
+                assert context['current_credit'] == context['monitoring_information_credit'] == 0
+                forms.append(deepcopy(form))
+                return own('episode.history', view='index')
+    
+            provider = SemanticFixtureProvider([own('process.tools', investigation=
+                'Obtain duration expectations for proposed remote protein homology work'), commission,
+                child_estimate, child_later, receive], ['execution.estimate', 'sequence.inspect'])
+            h = planning_host(r, tmp_path / 'run', client, script=[], provider=provider,
+                              source_directory=source)
+>           closed = close(h)
+                     ^^^^^^^^
+
+tests/test_api_execution_planning_connected.py:283: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_api_execution_planning_connected.py:138: in close
+    record = asyncio.run(h.owner.run_async(h.workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:951: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:851: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_api_execution_planning_connected.py:50: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+context = {'available_report_facts': {'api_execution_measurements': {'meaning': 'Original source-qualified provider-reported sea... denominator is inferred.', 'projector': 'test_api_execution_planning_connected.planning_host.<locals>.<lambda>'}, ...}
+
+    def receive(context):
+>       form, = context['child_reports']
+        ^^^^^
+E       ValueError: not enough values to unpack (expected 1, got 0)
+
+tests/test_api_execution_planning_connected.py:270: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_api_execution_planning_connected.py::test_semantic_actual_map_constructed_child_returns_only_declared_original_forecast
+1 failed, 1 passed in 40.47s

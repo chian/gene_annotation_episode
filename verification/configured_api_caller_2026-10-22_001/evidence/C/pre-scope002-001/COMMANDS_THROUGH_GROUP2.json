@@ -1,0 +1,70 @@
+{
+  "commands": [
+    {
+      "label": "first",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_scientific_checkpoint_fork.py::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "-q",
+        "--basetemp=/tmp/scientific-checkpoint-c006-first-20261022-001",
+        "--junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/first.xml"
+      ],
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "stdout_stderr": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/first.log",
+      "exit_code": 1,
+      "status": "complete"
+    },
+    {
+      "label": "second",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_scientific_checkpoint_fork.py::test_success_exact_checkpoint_and_actual_lineage_readers",
+        "-q",
+        "--basetemp=/tmp/scientific-checkpoint-c006-second-20261022-001",
+        "--junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/second.xml"
+      ],
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "stdout_stderr": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/second.log",
+      "exit_code": 0,
+      "status": "complete"
+    },
+    {
+      "label": "group1",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_scientific_checkpoint_fork.py",
+        "-q",
+        "--basetemp=/tmp/scientific-checkpoint-c006-group1-20261022-001",
+        "--junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/group1.xml"
+      ],
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "stdout_stderr": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group1.log",
+      "exit_code": 1,
+      "status": "complete"
+    },
+    {
+      "label": "group2",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_scientific_checkpoint_fork.py",
+        "-q",
+        "--basetemp=/tmp/scientific-checkpoint-c006-group2-20261022-001",
+        "--junitxml=/tmp/scientific-checkpoint-c006-evidence-20261022-001/group2.xml"
+      ],
+      "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "stdout_stderr": "/tmp/scientific-checkpoint-c006-evidence-20261022-001/group2.log",
+      "exit_code": null,
+      "status": "running"
+    }
+  ],
+  "invocations_overlap": true,
+  "aggregate_unique_count_not_claimed": true
+}

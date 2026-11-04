@@ -1,0 +1,37 @@
+{
+  "commands": [
+    {
+      "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_api_execution_planning_runtime.py::test_selected_forecast_precedes_next_scientific_choice_and_unavailable_replaces_old_context -x",
+      "exit_code": 1,
+      "log": "runtime-first.log",
+      "result": "1 failed in9.24s; actual API producer reached original native-only runtime.py2731 KeyError execution_expectations before R change"
+    },
+    {
+      "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_api_execution_planning_runtime.py -x",
+      "exit_code": 0,
+      "log": "runtime-after-integration.log",
+      "result": "4 passed in42.68s; before added fifth selection/private test"
+    },
+    {
+      "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_api_execution_planning_runtime.py::test_parent_selected_tool_set_and_private_child_proposal_are_separate",
+      "exit_code": 0,
+      "log": "runtime-selected-private-first.log",
+      "result": "1 passed in13.00s; before scope028 actual port assertions"
+    },
+    {
+      "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_api_execution_planning_runtime.py tests/test_api_timing_runtime.py::test_prechoice_forecasts_are_separate_original_snapshots_and_do_not_enter_waits tests/test_scientific_process_runtime.py::test_interrupted_pending_decision_replays_preparation_with_fixed_process_and_form",
+      "exit_code": 0,
+      "log": "runtime-owned-and-compatibility.log",
+      "result": "7 passed in59.95s; five owned cases plus two selected compatibility nodes; before028 port assertions"
+    },
+    {
+      "command": "PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -B -m pytest -q tests/test_api_execution_planning_runtime.py tests/test_api_timing_runtime.py::test_prechoice_forecasts_are_separate_original_snapshots_and_do_not_enter_waits tests/test_scientific_process_runtime.py::test_interrupted_pending_decision_replays_preparation_with_fixed_process_and_form",
+      "exit_code": 0,
+      "log": "runtime-final-after028.log",
+      "result": "7 passed in49.23s; final five owned cases include actual corrected service-port true/false and actual parent next-decision exclusion; plus two compatibility nodes"
+    }
+  ],
+  "counts_overlap": true,
+  "cwd": "/tmp/gene-annotation-hmmer-api-20261022-004",
+  "limits": "Scripted reasoning only; local FixtureClient receives no call. Native compatibility selects execution.estimate only, never sequence.align/worker/lifecycle/native job. Synthetic typed reported-result statistic supplies8s in one history-learning fixture. No public/model/native/scientific process executed."
+}

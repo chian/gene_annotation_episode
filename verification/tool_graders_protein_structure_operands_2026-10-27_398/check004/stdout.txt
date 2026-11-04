@@ -1,0 +1,168 @@
+........................................................................ [ 80%]
+F....FF..........                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_original_immutable_record_tampering_is_not_a_new_grant[source] ______
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7c7e4d30c2c0>, data={'alignments': {'global': {'argum...t_original_immutable_record1'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7c7e4cf26c90>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c7e4ce9ff20>
+which = 'source'
+
+    @pytest.mark.parametrize("which", ["reference", "source"])
+    def test_original_immutable_record_tampering_is_not_a_new_grant(f, monkeypatch, which):
+        ref = desc(f)["reference_ref"] if which == "reference" else desc(f)["custody"]["source_ref"]
+        record = f.store.get(ref)
+        record["label" if which == "reference" else "accession"] = "changed stored payload"
+        f.store.db.execute("UPDATE records SET data=? WHERE id=?", (domain_canonical(record), ref))
+        readonly(f, monkeypatch)
+        with error("conflicting_identity", stage="authority", field="descriptor"):
+>           operands.authenticate_structure_sequence_reference(f.store, f.context, desc(f)["reference_ref"], returns=f.returns)
+
+source_snapshot/tests/test_protein_structure_operands.py:780: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:255: in authenticate_structure_sequence_reference
+    _require(is_protein_structure_sequence_operand(store, reference_ref), "sequence_not_received")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:148: in is_protein_structure_sequence_operand
+    source = _record(store, record["source_ref"], {"source"})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:118: in _record
+    _checked(lambda value: _require(_RECORD_VALIDATORS[kind].is_valid(value),
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:77: in _checked
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:118: in <lambda>
+    _checked(lambda value: _require(_RECORD_VALIDATORS[kind].is_valid(value),
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:70: in _require
+    _fail(code, **where)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'invalid_schema', stage = 'authority', field = 'descriptor', role = None
+artifact_role = None
+
+    def _fail(code, *, stage="authority", field="descriptor", role=None, artifact_role=None):
+>       raise ProteinStructureOperandError(a.issue(code, stage=stage, field=field,
+            role=role, artifact_role=artifact_role))
+E       gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_operands.py:64: ProteinStructureOperandError
+
+During handling of the above exception, another exception occurred:
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7c7e4d30c2c0>, data={'alignments': {'global': {'argum...t_original_immutable_record1'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7c7e4cf26c90>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c7e4ce9ff20>
+which = 'source'
+
+    @pytest.mark.parametrize("which", ["reference", "source"])
+    def test_original_immutable_record_tampering_is_not_a_new_grant(f, monkeypatch, which):
+        ref = desc(f)["reference_ref"] if which == "reference" else desc(f)["custody"]["source_ref"]
+        record = f.store.get(ref)
+        record["label" if which == "reference" else "accession"] = "changed stored payload"
+        f.store.db.execute("UPDATE records SET data=? WHERE id=?", (domain_canonical(record), ref))
+        readonly(f, monkeypatch)
+>       with error("conflicting_identity", stage="authority", field="descriptor"):
+
+source_snapshot/tests/test_protein_structure_operands.py:779: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_protein_structure_operands.error.<locals>.Check object at 0x7c7e4ce9fc50>
+args = (<class 'gene_annotation_episode.protein_structure_authority.ProteinStructureOperandError'>, ProteinStructureOperandError('invalid_schema'), <traceback object at 0x7c7e4a32dac0>)
+
+    def __exit__(self, *args):
+        self.manager.__exit__(*args)
+        e = self.caught.value
+>       assert str(e) == code
+E       AssertionError: assert 'invalid_schema' == 'conflicting_identity'
+E         
+E         - conflicting_identity
+E         + invalid_schema
+
+source_snapshot/tests/test_protein_structure_operands.py:397: AssertionError
+__ test_single_structure_job_authorizes_only_original_explicit_files[inspect] __
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7c7e4cf1ab10>, data={'alignments': {'global': {'argum...t_single_structure_job_auth0'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7c7e4ce6d9d0>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c7e4d1aa540>
+kind = 'inspect'
+
+    @pytest.mark.parametrize("kind", ["inspect", "extract_sequence"])
+    def test_single_structure_job_authorizes_only_original_explicit_files(f, monkeypatch, kind):
+        request = deepcopy(f.data["rows"]["fixed"]["view"]["request"])
+        if kind == "inspect":
+            request = {"version": "protein_structure_inspect_request_v1", "operation": "inspect",
+                "structure_file": request["selection"]["file_identity"],
+                "inventory": {"blocks": {"kind": "all"}, "include": ["models", "chains"]}}
+        files = []
+        for i, (role, file) in enumerate(required_input_files(request)):
+            files.append({"input_id": "selected_" + str(i), "role": role, "file_identity": file,
+                "path": str(f.store.path / "artifacts" / file["sha256"][:2] / file["sha256"]),
+                "staged_relative_path": "inputs/selected_" + str(i)})
+        job = {"version": "native_protein_structure_job_v1", "program": "protein_structure_python", "request": request,
+            "software": f.data["saved"]["view"]["software"], "inputs": files, "outputs": output_files(kind), "environment": {}}
+>       selected = requested_job_from_protein_structure(job)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_operands.py:815: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:593: in requested_job_from_protein_structure
+    job = validate_protein_structure_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:556: in validate_protein_structure_job
+    validate_input_associations(value["request"], value["inputs"])
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:529: in validate_input_associations
+    _require([r["input_id"] for r in inputs] == ["input_" + str(i) for i in range(len(inputs))])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'invalid_schema'
+
+    def _require(condition, code="invalid_schema"):
+        if not condition:
+>           raise ValueError(code)
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:373: ValueError
+_ test_single_structure_job_authorizes_only_original_explicit_files[extract_sequence] _
+
+f = namespace(store=<gene_annotation_episode.state.Store object at 0x7c7e4ce4b560>, data={'alignments': {'global': {'argum...t_single_structure_job_auth1'), returns=<test_protein_structure_operands.ReceivedPortFixture object at 0x7c7e4a22ef00>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c7e4a22efc0>
+kind = 'extract_sequence'
+
+    @pytest.mark.parametrize("kind", ["inspect", "extract_sequence"])
+    def test_single_structure_job_authorizes_only_original_explicit_files(f, monkeypatch, kind):
+        request = deepcopy(f.data["rows"]["fixed"]["view"]["request"])
+        if kind == "inspect":
+            request = {"version": "protein_structure_inspect_request_v1", "operation": "inspect",
+                "structure_file": request["selection"]["file_identity"],
+                "inventory": {"blocks": {"kind": "all"}, "include": ["models", "chains"]}}
+        files = []
+        for i, (role, file) in enumerate(required_input_files(request)):
+            files.append({"input_id": "selected_" + str(i), "role": role, "file_identity": file,
+                "path": str(f.store.path / "artifacts" / file["sha256"][:2] / file["sha256"]),
+                "staged_relative_path": "inputs/selected_" + str(i)})
+        job = {"version": "native_protein_structure_job_v1", "program": "protein_structure_python", "request": request,
+            "software": f.data["saved"]["view"]["software"], "inputs": files, "outputs": output_files(kind), "environment": {}}
+>       selected = requested_job_from_protein_structure(job)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_operands.py:815: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:593: in requested_job_from_protein_structure
+    job = validate_protein_structure_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:556: in validate_protein_structure_job
+    validate_input_associations(value["request"], value["inputs"])
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:529: in validate_input_associations
+    _require([r["input_id"] for r in inputs] == ["input_" + str(i) for i in range(len(inputs))])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'invalid_schema'
+
+    def _require(condition, code="invalid_schema"):
+        if not condition:
+>           raise ValueError(code)
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:373: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_operands.py::test_original_immutable_record_tampering_is_not_a_new_grant[source]
+FAILED source_snapshot/tests/test_protein_structure_operands.py::test_single_structure_job_authorizes_only_original_explicit_files[inspect]
+FAILED source_snapshot/tests/test_protein_structure_operands.py::test_single_structure_job_authorizes_only_original_explicit_files[extract_sequence]
+3 failed, 86 passed in 97.25s (0:01:37)

@@ -1,0 +1,33 @@
+.........F
+=================================== FAILURES ===================================
+_ test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-msa-json15-single] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_database_population_integration_2026-10-26_365/hosts_007/temporary/test_selected_children_preserv9')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7cda8d0a2d50>
+program = 'psiblast', kind = 'msa', fmt = 'json15', layout = 'single'
+
+    @pytest.mark.parametrize("program,kind,fmt,layout", [
+        (p, "sequence", "json15", "single") for p in ("blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast")
+    ] + [("tblastn", "pssm", "json15", "single"), ("psiblast", "pssm", "json15", "single"),
+         ("psiblast", "msa", "json15", "single"), ("blastp", "sequence", "tabular7", "single"),
+         ("blastp", "sequence", "tabular6", "single"), ("psiblast", "sequence", "json15", "rounds"),
+         ("blastp", "sequence", "json15", "queries")])
+    def test_selected_children_preserve_population_numbers_and_original_typed_returns(tmp_path, monkeypatch, program, kind, fmt, layout):
+        h = host(tmp_path, monkeypatch, program, kind=kind, fmt=fmt, layout=layout)
+        try:
+            selected, payload = selection(h)
+            child = h.results(selected)
+            outcome = h.select(child, 0, "execution.results.collect")
+            assert outcome["status"] == "completed", outcome
+            body = outcome["result"]
+            save(tmp_path / "actual-result.json", body)
+            assert body["publication"]["acquisition_complete"], body["failures"]
+>           assert body["complete"] and body["publication"]["projection_complete"], body["failures"]
+E           AssertionError: [{'artifact_key': None, 'code': 'native_blast_metadata_relation_unresolved', 'detail_code': 'metadata_address_unresolv... {'stage': 'publication', 'code': 'native_blast_database_query_unbound', 'artifact_key': None, 'input_key': None, ...}]
+E           assert (False)
+
+../../../tests/test_native_blast_database_population_integration.py:26: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_population_integration.py::test_selected_children_preserve_population_numbers_and_original_typed_returns[psiblast-msa-json15-single]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 9 passed in 312.85s (0:05:12)

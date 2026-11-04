@@ -1,0 +1,49 @@
+............................................F
+=================================== FAILURES ===================================
+_________ test_all_five_bound_schema_and_software_constraints[blastn] __________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_integration_2026-10-26_298/complete_checks/temporary/pytest/test_all_five_bound_schema_and0')
+program = 'blastn'
+
+    @pytest.mark.parametrize('program', ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx'])
+    def test_all_five_bound_schema_and_software_constraints(tmp_path, program):
+        from jsonschema import Draft202012Validator
+        with Store(tmp_path / 'state') as store:
+            request, scope = bound_request(store, program)
+            workspace = tmp_path / 'workspace'
+            workspace.mkdir()
+            configuration = {'kind': 'local', 'workspace': str(workspace), 'policy': POLICY,
+                'native_blast': [{key: request['native_blast'][key] for key in ('program', 'mode', 'software')}]}
+            owner = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=RUN_ID,
+                resources={'here': configuration}, initial_information={}, tool_registry=ToolRegistry(store),
+                handoff_unit=3, acquired_record_unit=2, log_window_bytes=128, log_roles=('stdout', 'stderr'))
+            assignment = practical_assignment(workspace, request)
+            schema = owner._request_schema('here', selected=True)
+            assert Draft202012Validator(schema).is_valid(assignment)
+            assert owner._validate_request(assignment) == assignment
+            changed = deepcopy(assignment)
+            changed['requested_job']['native_blast']['software']['sha256'] = 'f' * 64
+            assert not Draft202012Validator(schema).is_valid(changed)
+            with pytest.raises(ValueError):
+                owner._validate_request(changed)
+            changed = deepcopy(assignment)
+            changed['constraints']['allocation']['memory_bytes'] -= 1
+            with pytest.raises(ValueError, match='allocation'):
+                owner._validate_request(changed)
+            changed = deepcopy(assignment)
+            changed['requested_job']['native_blast']['mode'] = 'database'
+            assert not Draft202012Validator(schema).is_valid(changed)
+            with pytest.raises(ValueError):
+                owner._validate_request(changed)
+            for kind in ('api', 'hpc'):
+                unsupported = {**configuration, 'kind': kind}
+>               with pytest.raises(ValueError, match='native_blast_resource_execution_binding_unfinished'):
+E               AssertionError: Regex pattern did not match.
+E                 Expected regex: 'native_blast_resource_execution_binding_unfinished'
+E                 Actual message: 'explicit_execution_resources_required'
+
+../../../tests/test_blast_native_execution_workflow.py:565: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_native_execution_workflow.py::test_all_five_bound_schema_and_software_constraints[blastn]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 44 passed in 168.07s (0:02:48)

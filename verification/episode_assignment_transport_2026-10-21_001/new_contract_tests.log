@@ -1,0 +1,185 @@
+...FFFFFF.......F....F                                                   [100%]
+=================================== FAILURES ===================================
+_ test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{] _
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_strings_reject0/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+encoded = '{'
+
+    @pytest.mark.parametrize('encoded', [
+        '{', '[]', 'null', '{"duplicate":1,"duplicate":2}',
+        '{"value":NaN}', '{"value":1e10000}',
+    ])
+    def test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json(assembled, encoded):
+        case = assembled
+        generated = _action_generation_schema(case.host)
+        for role in ROOT_ROLES:
+            value = proposal(case, role)
+            value['selection']['assignment'] = encoded
+>           assert Draft202012Validator(generated).is_valid(value), role
+E           AssertionError: scientific_process
+E           assert False
+E            +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_8f7426d5a64d958c8e4b4828']}, ...}, 'report_update': {}})
+E            +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E            +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+
+tests/test_episode_assignment_transport.py:230: AssertionError
+_ test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[[]] _
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_strings_reject1/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+encoded = '[]'
+
+    @pytest.mark.parametrize('encoded', [
+        '{', '[]', 'null', '{"duplicate":1,"duplicate":2}',
+        '{"value":NaN}', '{"value":1e10000}',
+    ])
+    def test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json(assembled, encoded):
+        case = assembled
+        generated = _action_generation_schema(case.host)
+        for role in ROOT_ROLES:
+            value = proposal(case, role)
+            value['selection']['assignment'] = encoded
+>           assert Draft202012Validator(generated).is_valid(value), role
+E           AssertionError: scientific_process
+E           assert False
+E            +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_311a95ae52c7c199fcb10a05']}, ...}, 'report_update': {}})
+E            +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E            +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+
+tests/test_episode_assignment_transport.py:230: AssertionError
+_ test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[null] _
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_strings_reject2/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+encoded = 'null'
+
+    @pytest.mark.parametrize('encoded', [
+        '{', '[]', 'null', '{"duplicate":1,"duplicate":2}',
+        '{"value":NaN}', '{"value":1e10000}',
+    ])
+    def test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json(assembled, encoded):
+        case = assembled
+        generated = _action_generation_schema(case.host)
+        for role in ROOT_ROLES:
+            value = proposal(case, role)
+            value['selection']['assignment'] = encoded
+>           assert Draft202012Validator(generated).is_valid(value), role
+E           AssertionError: scientific_process
+E           assert False
+E            +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_ad2a059a0ab9c9fbad22784c']}, ...}, 'report_update': {}})
+E            +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E            +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+
+tests/test_episode_assignment_transport.py:230: AssertionError
+_ test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{"duplicate":1,"duplicate":2}] _
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_strings_reject3/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+encoded = '{"duplicate":1,"duplicate":2}'
+
+    @pytest.mark.parametrize('encoded', [
+        '{', '[]', 'null', '{"duplicate":1,"duplicate":2}',
+        '{"value":NaN}', '{"value":1e10000}',
+    ])
+    def test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json(assembled, encoded):
+        case = assembled
+        generated = _action_generation_schema(case.host)
+        for role in ROOT_ROLES:
+            value = proposal(case, role)
+            value['selection']['assignment'] = encoded
+>           assert Draft202012Validator(generated).is_valid(value), role
+E           AssertionError: scientific_process
+E           assert False
+E            +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_7da7200494c8b64f1e6edab5']}, ...}, 'report_update': {}})
+E            +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E            +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+
+tests/test_episode_assignment_transport.py:230: AssertionError
+_ test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{"value":NaN}] _
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_strings_reject4/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+encoded = '{"value":NaN}'
+
+    @pytest.mark.parametrize('encoded', [
+        '{', '[]', 'null', '{"duplicate":1,"duplicate":2}',
+        '{"value":NaN}', '{"value":1e10000}',
+    ])
+    def test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json(assembled, encoded):
+        case = assembled
+        generated = _action_generation_schema(case.host)
+        for role in ROOT_ROLES:
+            value = proposal(case, role)
+            value['selection']['assignment'] = encoded
+>           assert Draft202012Validator(generated).is_valid(value), role
+E           AssertionError: scientific_process
+E           assert False
+E            +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_2e181541e97628be1e3d8e5e']}, ...}, 'report_update': {}})
+E            +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E            +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+
+tests/test_episode_assignment_transport.py:230: AssertionError
+_ test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{"value":1e10000}] _
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_strings_reject5/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+encoded = '{"value":1e10000}'
+
+    @pytest.mark.parametrize('encoded', [
+        '{', '[]', 'null', '{"duplicate":1,"duplicate":2}',
+        '{"value":NaN}', '{"value":1e10000}',
+    ])
+    def test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json(assembled, encoded):
+        case = assembled
+        generated = _action_generation_schema(case.host)
+        for role in ROOT_ROLES:
+            value = proposal(case, role)
+            value['selection']['assignment'] = encoded
+>           assert Draft202012Validator(generated).is_valid(value), role
+E           AssertionError: scientific_process
+E           assert False
+E            +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_8a7a4aecaff985cfd4a7ee83']}, ...}, 'report_update': {}})
+E            +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E            +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+
+tests/test_episode_assignment_transport.py:230: AssertionError
+_ test_decoded_assignment_original_typed_form_and_saved_commission_remain_exact[launch] _
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_decoded_assignment_origin2/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+role = 'launch'
+
+    @pytest.mark.parametrize('role', ['scientific_process', 'literature', 'launch'])
+    def test_decoded_assignment_original_typed_form_and_saved_commission_remain_exact(assembled, role):
+        case = assembled
+        value = assignment(case, role)
+        selected = proposal(case, role, value)
+        unit, index = select(case, selected)
+>       assert unit is not None
+E       assert None is not None
+
+tests/test_episode_assignment_transport.py:253: AssertionError
+____ test_assignment_encoding_does_not_relax_parent_return_form_validation _____
+
+assembled = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_encoding_does_0/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+
+    def test_assignment_encoding_does_not_relax_parent_return_form_validation(assembled):
+        case = assembled
+        selected = proposal(case, 'literature')
+        selected['selection']['schema_json'] = canonical({'type': 'object',
+            'properties': {'finding': {'type': 'string'}}, 'required': ['finding'],
+            'additionalProperties': False})
+        selected['selection']['initial_report_json'] = '{"finding":"unrestricted prose"}'
+>       assert Draft202012Validator(_action_generation_schema(case.host)).is_valid(selected)
+E       AssertionError: assert False
+E        +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'literature', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_bfccbca18a8bcf0593c6b8cd']}, ...}, 'report_update': {}})
+E        +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E        +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...ments'], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+E        +        where {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False} = _action_generation_schema({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+E        +          where {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False} = namespace(fixture={'case': PosixPath('/tmp/pytest-of-chia/pytest-808/test_assignment_encoding_does_0/case'), 'workspac...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}).host
+
+tests/test_episode_assignment_transport.py:314: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_episode_assignment_transport.py::test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{]
+FAILED tests/test_episode_assignment_transport.py::test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[[]]
+FAILED tests/test_episode_assignment_transport.py::test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[null]
+FAILED tests/test_episode_assignment_transport.py::test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{"duplicate":1,"duplicate":2}]
+FAILED tests/test_episode_assignment_transport.py::test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{"value":NaN}]
+FAILED tests/test_episode_assignment_transport.py::test_assignment_strings_reject_malformed_duplicate_nonobject_and_nonfinite_json[{"value":1e10000}]
+FAILED tests/test_episode_assignment_transport.py::test_decoded_assignment_original_typed_form_and_saved_commission_remain_exact[launch]
+FAILED tests/test_episode_assignment_transport.py::test_assignment_encoding_does_not_relax_parent_return_form_validation
+8 failed, 14 passed in 244.28s (0:04:04)

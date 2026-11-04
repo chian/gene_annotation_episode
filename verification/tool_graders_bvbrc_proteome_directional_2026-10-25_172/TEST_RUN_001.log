@@ -1,0 +1,25 @@
+...................................................................F..   [100%]
+=================================== FAILURES ===================================
+_________ test_all_six_geometry_issues_are_required_at_saved_boundary __________
+
+    def test_all_six_geometry_issues_are_required_at_saved_boundary():
+        path = Path(__file__).parent / "fixtures/bvbrc_proteome_directional/biopython_text_2221L_blastp_001.txt"
+        data = path.read_bytes().replace(b"Identities = 353/414", b"Identities = 415/413")
+        data = data.replace(b"Query: 1   MENS", b"Query: 99   MENS").replace(b"(600 letters)", b"(80 letters)")
+        source = {"content": {"source_ref": "constructed-geometry", "artifact_field": "artifact_ref", "artifact_ref": "constructed-bytes",
+                              "sha256": hashlib.sha256(data).hexdigest(), "byte_count": len(data)},
+                  "body_complete": True, "object_complete": "yes"}
+        result = parse_genome_comparison_directional_report(data, source=source, declared_format="ncbi_blastall_blastp_pairwise_text_v1", report_key="geometry")
+        target = result["queries"][1]["subjects"][0]["hsps"][0]
+        issues = target["issues"] + [i for b in target["traceback_blocks"] for i in b["issues"]]
+        expected = {"count_out_of_bounds", "alignment_denominator_mismatch", "coordinate_symbol_count_mismatch", "coordinate_out_of_bounds", "nonprotein_coordinate_order", "traceback_width_mismatch"}
+>       assert expected <= {i["code"] for i in issues}
+E       AssertionError: assert {'alignment_d...dth_mismatch'} <= {'alignment_d...e_order', ...}
+E         
+E         Extra items in the left set:
+E         'traceback_width_mismatch'
+
+tests/test_bvbrc_proteome_directional_contracts.py:105: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_directional_contracts.py::test_all_six_geometry_issues_are_required_at_saved_boundary
+1 failed, 69 passed in 7.69s

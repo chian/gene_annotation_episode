@@ -1,0 +1,1789 @@
+[
+  {
+    "required_id": "GenomeAssembly2",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "single_end_libs": [
+        {
+          "read": "/synthetic@bvbrc/home/reads.fastq"
+        }
+      ],
+      "recipe": "spades",
+      "genome_size": 1000,
+      "max_bases": 4000
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "GenomeAssembly2",
+        "native_application_id": "GenomeAssembly2",
+        "native_params": [
+          "GenomeAssembly2",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "single_end_libs": [
+              {
+                "read": "/synthetic@bvbrc/home/reads.fastq"
+              }
+            ],
+            "recipe": "spades",
+            "genome_size": 1000,
+            "max_bases": 4000
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.single_end_libs[0].read",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "duplicate_parameter_declaration",
+          "path": "$.parameters.max_bases",
+          "severity": "qualification",
+          "declarations": [
+            {
+              "id": "max_bases",
+              "default": 10000000000,
+              "desc": "Maximum bases across all input read files triggering downsampling.",
+              "label": "Maximum bases",
+              "required": 0,
+              "type": "int"
+            },
+            {
+              "id": "max_bases",
+              "desc": "Limit on how much data will be allowed.",
+              "label": "Maximum DNA bases",
+              "required": 0,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "GenomeAnnotation",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+      "scientific_name": "Synthetic bacterium",
+      "code": 11,
+      "domain": "Bacteria"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "GenomeAnnotation",
+        "native_application_id": "GenomeAnnotation",
+        "native_params": [
+          "GenomeAnnotation",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+            "scientific_name": "Synthetic bacterium",
+            "code": 11,
+            "domain": "Bacteria"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "duplicate_definition_member",
+          "path": "$.definition.parameters[3].type",
+          "severity": "qualification",
+          "values": [
+            "enum",
+            "int"
+          ]
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.contigs",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "ComprehensiveGenomeAnalysis",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_type": "contigs",
+      "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+      "scientific_name": "Synthetic bacterium",
+      "code": 11,
+      "domain": "Bacteria",
+      "genome_size": 1000
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "ComprehensiveGenomeAnalysis",
+        "native_application_id": "ComprehensiveGenomeAnalysis",
+        "native_params": [
+          "ComprehensiveGenomeAnalysis",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_type": "contigs",
+            "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+            "scientific_name": "Synthetic bacterium",
+            "code": 11,
+            "domain": "Bacteria",
+            "genome_size": 1000
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.contigs",
+          "severity": "qualification"
+        },
+        {
+          "code": "duplicate_parameter_declaration",
+          "path": "$.parameters.genome_size",
+          "severity": "qualification",
+          "declarations": [
+            {
+              "default": 5000000,
+              "desc": "Estimated genome size (used for canu and flye and filtlong)",
+              "id": "genome_size",
+              "label": "Genome Size",
+              "required": 0,
+              "type": "int"
+            },
+            {
+              "default": "5000000",
+              "desc": "Estimated genome size (for canu)",
+              "id": "genome_size",
+              "label": "Genome Size",
+              "required": 0,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "Homology",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_type": "dna",
+      "input_source": "fasta_data",
+      "input_fasta_data": ">query\nACGT\n",
+      "db_type": "fna",
+      "db_source": "fasta_data",
+      "db_fasta_data": ">subject\nACGA\n",
+      "blast_program": "blastn",
+      "blast_max_hits": 2
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "Homology",
+        "native_application_id": "Homology",
+        "native_params": [
+          "Homology",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_type": "dna",
+            "input_source": "fasta_data",
+            "input_fasta_data": ">query\nACGT\n",
+            "db_type": "fna",
+            "db_source": "fasta_data",
+            "db_fasta_data": ">subject\nACGA\n",
+            "blast_program": "blastn",
+            "blast_max_hits": 2
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "Variation",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "single_end_libs": [
+        {
+          "read": "/synthetic@bvbrc/home/reads.fastq"
+        }
+      ],
+      "reference_genome_id": "123.4",
+      "mapper": "BWA-mem",
+      "caller": "FreeBayes"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "Variation",
+        "native_application_id": "Variation",
+        "native_params": [
+          "Variation",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "single_end_libs": [
+              {
+                "read": "/synthetic@bvbrc/home/reads.fastq"
+              }
+            ],
+            "reference_genome_id": "123.4",
+            "mapper": "BWA-mem",
+            "caller": "FreeBayes"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.single_end_libs[0].read",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "duplicate_parameter_declaration",
+          "path": "$.parameters.reference_genome_id",
+          "severity": "qualification",
+          "declarations": [
+            {
+              "id": "reference_genome_id",
+              "label": "Reference genome ID",
+              "desc": "Reference genome ID",
+              "allow_multiple": false,
+              "required": 1,
+              "default": null,
+              "type": "string"
+            },
+            {
+              "id": "reference_genome_id",
+              "required": 0,
+              "default": null,
+              "label": "Reference genome ID",
+              "desc": "Reference genome ID",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "TnSeq",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "reference_genome_id": "123.4",
+      "read_files": {
+        "condition-a": {
+          "replicates": [
+            {
+              "read1": "/synthetic@bvbrc/home/reads.fastq"
+            }
+          ]
+        }
+      },
+      "recipe": "gumbel"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "TnSeq",
+        "native_application_id": "TnSeq",
+        "native_params": [
+          "TnSeq",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "reference_genome_id": "123.4",
+            "read_files": {
+              "condition-a": {
+                "replicates": [
+                  {
+                    "read1": "/synthetic@bvbrc/home/reads.fastq"
+                  }
+                ]
+              }
+            },
+            "recipe": "gumbel"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "source_group_shape_differs_from_declaration",
+          "path": "$.parameters.read_files",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.read_files[\"condition-a\"].replicates[0].read1",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "CodonTree",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "genome_ids": [
+        "123.4",
+        "123.5"
+      ],
+      "number_of_genes": 2,
+      "bootstraps": 10
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "CodonTree",
+        "native_application_id": "CodonTree",
+        "native_params": [
+          "CodonTree",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "genome_ids": [
+              "123.4",
+              "123.5"
+            ],
+            "number_of_genes": 2,
+            "bootstraps": 10
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "array_item_schema_unvalidated",
+          "path": "$.parameters.genome_ids",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "GeneTree",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "sequences": [
+        {
+          "type": "aligned_dna_fasta",
+          "filename": "/synthetic@bvbrc/home/contigs.fasta"
+        }
+      ],
+      "alphabet": "DNA",
+      "recipe": "FastTree"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "GeneTree",
+        "native_application_id": "GeneTree",
+        "native_params": [
+          "GeneTree",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "sequences": [
+              {
+                "type": "aligned_dna_fasta",
+                "filename": "/synthetic@bvbrc/home/contigs.fasta"
+              }
+            ],
+            "alphabet": "DNA",
+            "recipe": "FastTree"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.sequences[0].filename",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "CoreGenomeMLST",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_genome_type": "genome_group",
+      "input_genome_group": "/synthetic@bvbrc/home/genome group",
+      "analysis_type": "chewbbaca",
+      "input_schema_selection": "explicit-selected-schema"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "CoreGenomeMLST",
+        "native_application_id": "CoreGenomeMLST",
+        "native_params": [
+          "CoreGenomeMLST",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_genome_type": "genome_group",
+            "input_genome_group": "/synthetic@bvbrc/home/genome group",
+            "analysis_type": "chewbbaca",
+            "input_schema_selection": "explicit-selected-schema"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "remove_retained_source_trailing_commas",
+          "path": "$.definition.source.content",
+          "severity": "qualification",
+          "byte_offsets": [
+            544,
+            839
+          ]
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "WholeGenomeSNPAnalysis",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_genome_type": "genome_group",
+      "input_genome_group": "/synthetic@bvbrc/home/genome group",
+      "analysis_type": "Whole Genome SNP Analysis",
+      "majority-threshold": 0.5,
+      "min_mid_linkage": 10,
+      "max_mid_linkage": 40
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "WholeGenomeSNPAnalysis",
+        "native_application_id": "WholeGenomeSNPAnalysis",
+        "native_params": [
+          "WholeGenomeSNPAnalysis",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_genome_type": "genome_group",
+            "input_genome_group": "/synthetic@bvbrc/home/genome group",
+            "analysis_type": "Whole Genome SNP Analysis",
+            "majority-threshold": 0.5,
+            "min_mid_linkage": 10,
+            "max_mid_linkage": 40
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "remove_retained_source_trailing_commas",
+          "path": "$.definition.source.content",
+          "severity": "qualification",
+          "byte_offsets": [
+            565,
+            983,
+            1208
+          ]
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "TaxonomicClassification",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_type": "contigs",
+      "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+      "algorithm": "Kraken2",
+      "database": "Kraken2"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "TaxonomicClassification",
+        "native_application_id": "TaxonomicClassification",
+        "native_params": [
+          "TaxonomicClassification",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_type": "contigs",
+            "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+            "algorithm": "Kraken2",
+            "database": "Kraken2"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.contigs",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "MetagenomeBinning",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+      "force_local_assembly": false
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "MetagenomeBinning",
+        "native_application_id": "MetagenomeBinning",
+        "native_params": [
+          "MetagenomeBinning",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "contigs": "/synthetic@bvbrc/home/contigs.fasta",
+            "force_local_assembly": false
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.contigs",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "MetagenomicReadMapping",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "gene_set_type": "feature_group",
+      "gene_set_feature_group": "/synthetic@bvbrc/home/genome group",
+      "single_end_libs": [
+        {
+          "read": "/synthetic@bvbrc/home/reads.fastq"
+        }
+      ]
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "MetagenomicReadMapping",
+        "native_application_id": "MetagenomicReadMapping",
+        "native_params": [
+          "MetagenomicReadMapping",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "gene_set_type": "feature_group",
+            "gene_set_feature_group": "/synthetic@bvbrc/home/genome group",
+            "single_end_libs": [
+              {
+                "read": "/synthetic@bvbrc/home/reads.fastq"
+              }
+            ]
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "readset_collection_shape_unvalidated",
+          "path": "$.parameters.single_end_libs",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.single_end_libs[0].read",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "RNASeq",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "single_end_libs": [
+        {
+          "sample_id": "sample-A",
+          "read": "/synthetic@bvbrc/home/reads.fastq"
+        }
+      ],
+      "reference_genome_id": "123.4",
+      "genome_type": "bacteria",
+      "recipe": "HTSeq-DESeq"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "RNASeq",
+        "native_application_id": "RNASeq",
+        "native_params": [
+          "RNASeq",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "single_end_libs": [
+              {
+                "sample_id": "sample-A",
+                "read": "/synthetic@bvbrc/home/reads.fastq"
+              }
+            ],
+            "reference_genome_id": "123.4",
+            "genome_type": "bacteria",
+            "recipe": "HTSeq-DESeq"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.single_end_libs[0].read",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "ViralAssembly",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "single_end_lib": {
+        "read": "/synthetic@bvbrc/home/reads.fastq"
+      },
+      "strategy": "irma",
+      "module": "FLU"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "ViralAssembly",
+        "native_application_id": "ViralAssembly",
+        "native_params": [
+          "ViralAssembly",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "single_end_lib": {
+              "read": "/synthetic@bvbrc/home/reads.fastq"
+            },
+            "strategy": "irma",
+            "module": "FLU"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.single_end_lib.read",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "GenomeAlignment",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "genome_ids": [
+        "123.4",
+        "123.5"
+      ],
+      "recipe": "progressiveMauve"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "GenomeAlignment",
+        "native_application_id": "GenomeAlignment",
+        "native_params": [
+          "GenomeAlignment",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "genome_ids": [
+              "123.4",
+              "123.5"
+            ],
+            "recipe": "progressiveMauve"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "array_item_schema_unvalidated",
+          "path": "$.parameters.genome_ids",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "SARS2Assembly",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "single_end_libs": [
+        {
+          "read": "/synthetic@bvbrc/home/reads.fastq"
+        }
+      ],
+      "primers": "ARTIC",
+      "recipe": "onecodex"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "SARS2Assembly",
+        "native_application_id": "SARS2Assembly",
+        "native_params": [
+          "SARS2Assembly",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "single_end_libs": [
+              {
+                "read": "/synthetic@bvbrc/home/reads.fastq"
+              }
+            ],
+            "primers": "ARTIC",
+            "recipe": "onecodex"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.single_end_libs[0].read",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "MSA",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_type": "input_sequence",
+      "input_status": "unaligned",
+      "fasta_keyboard_input": ">a\nACGT\n>b\nACGA\n",
+      "alphabet": "dna",
+      "aligner": "Muscle"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "MSA",
+        "native_application_id": "MSA",
+        "native_params": [
+          "MSA",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_type": "input_sequence",
+            "input_status": "unaligned",
+            "fasta_keyboard_input": ">a\nACGT\n>b\nACGA\n",
+            "alphabet": "dna",
+            "aligner": "Muscle"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "MetaCATS",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_type": "files",
+      "alphabet": "na",
+      "p_value": 0.05,
+      "alignment_file": "/synthetic@bvbrc/home/contigs.fasta",
+      "group_file": "/synthetic@bvbrc/home/groups.tsv"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "MetaCATS",
+        "native_application_id": "MetaCATS",
+        "native_params": [
+          "MetaCATS",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_type": "files",
+            "alphabet": "na",
+            "p_value": 0.05,
+            "alignment_file": "/synthetic@bvbrc/home/contigs.fasta",
+            "group_file": "/synthetic@bvbrc/home/groups.tsv"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.alignment_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.group_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "GenomeComparison",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "genome_ids": [
+        "123.4",
+        "123.5"
+      ],
+      "reference_genome_index": 1
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "GenomeComparison",
+        "native_application_id": "GenomeComparison",
+        "native_params": [
+          "GenomeComparison",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "genome_ids": [
+              "123.4",
+              "123.5"
+            ],
+            "reference_genome_index": 1
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "ComparativeSystems",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "genome_ids": [
+        "123.4",
+        "123.5"
+      ]
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "ComparativeSystems",
+        "native_application_id": "ComparativeSystems",
+        "native_params": [
+          "ComparativeSystems",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "genome_ids": [
+              "123.4",
+              "123.5"
+            ]
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "array_item_schema_unvalidated",
+          "path": "$.parameters.genome_ids",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "FastqUtils",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "single_end_libs": [
+        {
+          "read": "/synthetic@bvbrc/home/reads.fastq"
+        }
+      ],
+      "recipe": [
+        "FASTQC"
+      ]
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "FastqUtils",
+        "native_application_id": "FastqUtils",
+        "native_params": [
+          "FastqUtils",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "single_end_libs": [
+              {
+                "read": "/synthetic@bvbrc/home/reads.fastq"
+              }
+            ],
+            "recipe": [
+              "FASTQC"
+            ]
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.single_end_libs[0].read",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "array_item_schema_unvalidated",
+          "path": "$.parameters.recipe",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "InfluenzaHASubtypeConversion",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_source": "fasta_data",
+      "input_fasta_data": ">q\nMKT\n",
+      "types": "H1"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "InfluenzaHASubtypeConversion",
+        "native_application_id": "HASubtypeNumberingConversion",
+        "native_params": [
+          "HASubtypeNumberingConversion",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_source": "fasta_data",
+            "input_fasta_data": ">q\nMKT\n",
+            "types": "H1"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "source_native_identity_mapping",
+          "path": "$.definition.native_id",
+          "severity": "qualification",
+          "required_id": "InfluenzaHASubtypeConversion",
+          "native_id": "HASubtypeNumberingConversion"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  },
+  {
+    "required_id": "SubspeciesClassification",
+    "evidence_kind": "synthetic assignment; external inputs not acquired",
+    "parameters": {
+      "output_path": "/synthetic@bvbrc/home/Selected folder",
+      "output_file": "Original name",
+      "input_source": "fasta_data",
+      "input_fasta_data": ">q\nACGT\n",
+      "virus_type": "DENGUE"
+    },
+    "start_parameters": {
+      "workspace": "/synthetic@bvbrc/home",
+      "parent_id": "original-parent",
+      "disable_preflight": 0
+    },
+    "prepared": {
+      "status": "ok",
+      "value": {
+        "required_id": "SubspeciesClassification",
+        "native_application_id": "SubspeciesClassification",
+        "native_params": [
+          "SubspeciesClassification",
+          {
+            "output_path": "/synthetic@bvbrc/home/Selected folder",
+            "output_file": "Original name",
+            "input_source": "fasta_data",
+            "input_fasta_data": ">q\nACGT\n",
+            "virus_type": "DENGUE"
+          },
+          {
+            "workspace": "/synthetic@bvbrc/home",
+            "parent_id": "original-parent",
+            "disable_preflight": 0
+          }
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "deployment_not_verified",
+          "path": "$.definition.source",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_path",
+          "severity": "qualification"
+        },
+        {
+          "code": "workspace_reference_unverified",
+          "path": "$.parameters.output_file",
+          "severity": "qualification"
+        },
+        {
+          "code": "input_contents_and_reference_release_unverified",
+          "path": "$.parameters",
+          "severity": "qualification"
+        }
+      ]
+    }
+  }
+]

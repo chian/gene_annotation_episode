@@ -1,0 +1,89 @@
+F.F                                                                      [100%]
+=================================== FAILURES ===================================
+___ test_canonical_multi_source_multi_view_reader_roundtrip_and_array_order ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a9e6377f0b0>
+
+    def test_canonical_multi_source_multi_view_reader_roundtrip_and_array_order(monkeypatch):
+        from gene_annotation_episode import literature_ratio_source_inputs as inputs
+        selected, read_source, read_view, calls, data = multi_dependency_fixture()
+        original = deepcopy(selected)
+        expected_calls = [('source', *key) for key in sorted(data)] + [('view', VIEW), ('view', VIEW2)]
+        decode = inputs._view_bytes
+        def guarded(*a):
+            assert calls == expected_calls  # all unique actual callbacks before helper
+            return decode(*a)
+        monkeypatch.setattr(inputs, '_view_bytes', guarded)
+>       extraction = read_relative_signal_source_inputs(selected, read_source=read_source,
+            read_view=read_view, evidence_origin='synthetic_fixture')
+
+tests/test_literature_ratio_source_inputs.py:335: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_ratio_source_inputs.py:421: in read_relative_signal_source_inputs
+    views.append(_view_bytes(ref, raw, artifacts) if raw is not _UNAVAILABLE else {
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ('image_view_dddddddddddddddddddddddd', {'metadata': {'id': 'image_view_dddddddddddddddddddddddd', 'record_type': 'ima...463237112410f36cf28ec0e04869b07968574f83b4a80cb5': 'cf0dd536c1fcb193463237112410f36cf28ec0e04869b07968574f83b4a80cb5'})
+
+    def guarded(*a):
+>       assert calls == expected_calls  # all unique actual callbacks before helper
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert [('source', '...ccccccccccc')] == [('source', '...ddddddddddd')]
+E         
+E         At index 0 diff: ('source', 'source_222222222222222222222222', 'text') != ('source', 'source_111111111111111111111111', 'original')
+E         Use -v to get more diff
+
+tests/test_literature_ratio_source_inputs.py:332: AssertionError
+__ test_canonical_multi_source_multi_view_saved_without_callbacks_or_decoders __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a9e631cfe30>
+
+    def test_canonical_multi_source_multi_view_saved_without_callbacks_or_decoders(monkeypatch):
+        from gene_annotation_episode import literature_ratio_source_inputs as inputs
+        from gene_annotation_episode import literature_ratio_source_calculations as calculations
+        from PIL import Image
+        from test_literature_ratio_source_inputs import multi_dependency_fixture
+        selected, read_source, read_view, calls, data = multi_dependency_fixture()
+        extraction = inputs.read_relative_signal_source_inputs(selected, read_source=read_source,
+            read_view=read_view, evidence_origin='synthetic_fixture')
+        sheet = calculations.populate_relative_signal_v2(extraction)
+        assert sheet['cells']['reported_ratio']['value'] == .6
+        assert sheet['independent_preparation_count'] is None
+        _, _, _, outcome = saved()
+        outcome['result'].update(cells=deepcopy(sheet['cells']))
+        for field in ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict'):
+            outcome['result'][field] = sheet[field]
+        canonical = json.loads(json.dumps({'selection': selected, 'extraction': extraction,
+            'sheet': sheet, 'outcome': outcome}, sort_keys=True))
+        before = deepcopy(canonical)
+        previous_calls = list(calls)
+        def forbidden(*a, **kw):
+            raise AssertionError('canonical saved read reacquired source or recalculated')
+        for module, name in ((inputs, 'read_relative_signal_source_inputs'), (inputs, '_available_call'),
+                (inputs, '_view_bytes'), (inputs, '_jats_expression'), (inputs, '_jats_matches'),
+                (calculations, 'populate_relative_signal_v2'), (calculations, '_component_facts'), (Image, 'open')):
+            monkeypatch.setattr(module, name, forbidden)
+>       validate_relative_signal_saved(canonical['selection'], canonical['extraction'], canonical['sheet'], canonical['outcome'])
+
+tests/test_literature_ratio_source_validation.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_ratio_source_validation.py:639: in validate_relative_signal_saved
+    _validate_extraction(extraction)
+gene_annotation_episode/literature_ratio_source_validation.py:291: in _validate_extraction
+    _same([(s['source_ref'], s['representation']) for s in e['sources']], deps, 'sources.roster')
+gene_annotation_episode/literature_ratio_source_validation.py:28: in _same
+    _fail('saved_relationship_mismatch', field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'saved_relationship_mismatch', field = 'sources.roster'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_relationship_mismatch:sources.roster
+
+gene_annotation_episode/literature_ratio_source_inputs.py:211: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_inputs.py::test_canonical_multi_source_multi_view_reader_roundtrip_and_array_order
+FAILED tests/test_literature_ratio_source_validation.py::test_canonical_multi_source_multi_view_saved_without_callbacks_or_decoders
+2 failed, 1 passed in 0.43s

@@ -1,0 +1,589 @@
+{
+  "schema": "blast_report_collection_v1",
+  "invocation": {
+    "execution_program": "blastn",
+    "scientific_mode": "pairwise",
+    "resource_kind": "local",
+    "query_kind": "sequence",
+    "reference_kind": "sequence",
+    "request": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+        "-task",
+        "blastn",
+        "-dust",
+        "no",
+        "-strand",
+        "both",
+        "-num_threads",
+        "1",
+        "-query",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/query_sequence.fa",
+        "-subject",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/subject_sequence.fa",
+        "-outfmt",
+        "15",
+        "-out",
+        "report.json"
+      ],
+      "environment": {},
+      "native_blast": {
+        "version": "native_blast_job_v1",
+        "program": "blastn",
+        "mode": "pairwise",
+        "software": {
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+          "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+          "engine_version": "2.17.0+"
+        },
+        "environment": {},
+        "operands": [
+          {
+            "role": "query_sequence",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/query_sequence.fa",
+            "sha256": "eb3a2116da3046587f3f52de42c1a7128249436f13f4d9bd93791031cab990e5",
+            "size_bytes": 263,
+            "artifact_ref": null
+          },
+          {
+            "role": "subject_sequence",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/subject_sequence.fa",
+            "sha256": "5c868e6b2a5641d242274c754134cce88994b6a75920683c53649a511ef1cae5",
+            "size_bytes": 265,
+            "artifact_ref": null
+          }
+        ],
+        "operand_bindings": [
+          {
+            "operand_role": "query_sequence",
+            "record_ordinal": 0,
+            "native_name": "query_blastn_reverse",
+            "native_accession": null,
+            "subject_ref": "query_subject",
+            "reference_ref": null
+          },
+          {
+            "operand_role": "subject_sequence",
+            "record_ordinal": 0,
+            "native_name": "subject_blastn_reverse",
+            "native_accession": null,
+            "subject_ref": null,
+            "reference_ref": "paired_reference"
+          }
+        ],
+        "options": [
+          "-task",
+          "blastn",
+          "-dust",
+          "no",
+          "-strand",
+          "both",
+          "-num_threads",
+          "1"
+        ],
+        "outputs": [
+          {
+            "role": "stdout",
+            "format": "text",
+            "relative_path": "stdout.txt",
+            "fields": null,
+            "delimiter": null
+          },
+          {
+            "role": "stderr",
+            "format": "text",
+            "relative_path": "stderr.txt",
+            "fields": null,
+            "delimiter": null
+          },
+          {
+            "role": "primary_report",
+            "format": "json15",
+            "relative_path": "report.json",
+            "fields": null,
+            "delimiter": null
+          }
+        ],
+        "metadata": {
+          "engineering_example": "blastn_reverse_json15",
+          "input_kind": "synthetic_derivative_of_retained_public_sequence"
+        },
+        "grading_parameters": {}
+      }
+    },
+    "effective_options": {
+      "argv": [
+        "-task",
+        "blastn",
+        "-dust",
+        "no",
+        "-strand",
+        "both",
+        "-num_threads",
+        "1"
+      ],
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null
+    },
+    "operands": [
+      {
+        "role": "query",
+        "artifact_key": "query_sequence",
+        "record_ordinal": 0,
+        "native_id": "query_blastn_reverse",
+        "native_title": "query_blastn_reverse",
+        "subject_ref": "query_subject",
+        "molecule": "dna",
+        "length": 240,
+        "selected_interval": null,
+        "identity": null
+      },
+      {
+        "role": "subject",
+        "artifact_key": "subject_sequence",
+        "record_ordinal": 0,
+        "native_id": "subject_blastn_reverse",
+        "native_title": "subject_blastn_reverse",
+        "subject_ref": "paired_reference",
+        "molecule": "dna",
+        "length": 240,
+        "selected_interval": null,
+        "identity": null
+      }
+    ],
+    "completion": {
+      "native_returncode": 0,
+      "producer_complete": true
+    }
+  },
+  "artifacts": [
+    {
+      "artifact_key": "report",
+      "role": "primary_report",
+      "format": "json15",
+      "fields": null,
+      "delimiter": null,
+      "sha256": "069a2be76607df9e8cc0952e6b48fa6d9234f9cfa7d7eecb2f9f6d627bdc7dc4",
+      "size_bytes": 2745
+    }
+  ],
+  "searches": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/bl2seq/0"
+      },
+      "program_context": {
+        "execution_program": "blastn",
+        "reported_program": "blastn",
+        "scientific_mode": "pairwise",
+        "query_kind": "sequence",
+        "reference_kind": "sequence",
+        "native_version": "BLASTN 2.17.0+",
+        "geometry_program": "blastn"
+      },
+      "stage": null,
+      "iteration": null,
+      "normalized": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "json2",
+        "query": {
+          "id": "Query_1",
+          "title": "query_blastn_reverse",
+          "length": 240
+        },
+        "search": {
+          "program": "blastn",
+          "version": "BLASTN 2.17.0+",
+          "database": null,
+          "parameters": {
+            "expect": 10,
+            "sc_match": 2,
+            "sc_mismatch": -3,
+            "gap_open": 5,
+            "gap_extend": 2,
+            "filter": "m;"
+          },
+          "statistics": {
+            "hsp_len": 10,
+            "eff_space": 52900,
+            "kappa": 0.41,
+            "lambda": 0.625,
+            "entropy": 0.78
+          },
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+              "-task",
+              "blastn",
+              "-dust",
+              "no",
+              "-strand",
+              "both",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/subject_sequence.fa",
+              "-outfmt",
+              "15",
+              "-out",
+              "report.json"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "blastn",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+                "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/query_sequence.fa",
+                  "sha256": "eb3a2116da3046587f3f52de42c1a7128249436f13f4d9bd93791031cab990e5",
+                  "size_bytes": 263,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_reverse_json15/subject_sequence.fa",
+                  "sha256": "5c868e6b2a5641d242274c754134cce88994b6a75920683c53649a511ef1cae5",
+                  "size_bytes": 265,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_blastn_reverse",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_blastn_reverse",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-task",
+                "blastn",
+                "-dust",
+                "no",
+                "-strand",
+                "both",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "json15",
+                  "relative_path": "report.json",
+                  "fields": null,
+                  "delimiter": null
+                }
+              ],
+              "metadata": {
+                "engineering_example": "blastn_reverse_json15",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": true,
+          "reported_hit_count": 1
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 240,
+            "descriptions": [
+              {
+                "id": "subject_blastn_reverse",
+                "title": "subject_blastn_reverse"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "num": 1,
+                "bit_score": 434.095,
+                "score": 480,
+                "evalue": 1.11659e-126,
+                "identity": 240,
+                "query_from": 1,
+                "query_to": 240,
+                "query_strand": "Plus",
+                "hit_from": 240,
+                "hit_to": 1,
+                "hit_strand": "Minus",
+                "align_len": 240,
+                "gaps": 0,
+                "qseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                "hseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                "midline": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "document": {
+            "BlastOutput2": [
+              {
+                "report": {
+                  "program": "blastn",
+                  "version": "BLASTN 2.17.0+",
+                  "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+                  "search_target": {
+                    "subjects": [
+                      "Subject_1"
+                    ]
+                  },
+                  "params": {
+                    "expect": 10,
+                    "sc_match": 2,
+                    "sc_mismatch": -3,
+                    "gap_open": 5,
+                    "gap_extend": 2,
+                    "filter": "m;"
+                  },
+                  "results": {
+                    "bl2seq": [
+                      {
+                        "query_id": "Query_1",
+                        "query_title": "query_blastn_reverse",
+                        "query_len": 240,
+                        "hits": [
+                          {
+                            "num": 1,
+                            "description": [
+                              {
+                                "id": "subject_blastn_reverse",
+                                "title": "subject_blastn_reverse"
+                              }
+                            ],
+                            "len": 240,
+                            "hsps": [
+                              {
+                                "num": 1,
+                                "bit_score": 434.095,
+                                "score": 480,
+                                "evalue": 1.11659e-126,
+                                "identity": 240,
+                                "query_from": 1,
+                                "query_to": 240,
+                                "query_strand": "Plus",
+                                "hit_from": 240,
+                                "hit_to": 1,
+                                "hit_strand": "Minus",
+                                "align_len": 240,
+                                "gaps": 0,
+                                "qseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                                "hseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                                "midline": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+                              }
+                            ]
+                          }
+                        ],
+                        "stat": {
+                          "hsp_len": 10,
+                          "eff_space": 52900,
+                          "kappa": 0.41,
+                          "lambda": 0.625,
+                          "entropy": 0.78
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "archive_member": null,
+          "sha256": "069a2be76607df9e8cc0952e6b48fa6d9234f9cfa7d7eecb2f9f6d627bdc7dc4"
+        },
+        "issues": []
+      },
+      "row_map": [
+        {
+          "hit_index": 0,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        }
+      ],
+      "operand_binding": {
+        "role": "query",
+        "artifact_key": "query_sequence",
+        "record_ordinal": 0,
+        "native_id": "query_blastn_reverse",
+        "native_title": "query_blastn_reverse",
+        "subject_ref": "query_subject",
+        "molecule": "dna",
+        "length": 240,
+        "selected_interval": null,
+        "identity": null
+      },
+      "reporting": {
+        "native_hit_array_present": true,
+        "native_hit_count": 1,
+        "requested_hit_limit": null,
+        "requested_hsp_limit": null,
+        "native_returncode": 0,
+        "producer_complete": true
+      },
+      "native": {
+        "report": {
+          "program": "blastn",
+          "version": "BLASTN 2.17.0+",
+          "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+          "search_target": {
+            "subjects": [
+              "Subject_1"
+            ]
+          },
+          "params": {
+            "expect": 10,
+            "sc_match": 2,
+            "sc_mismatch": -3,
+            "gap_open": 5,
+            "gap_extend": 2,
+            "filter": "m;"
+          },
+          "results": {
+            "bl2seq": [
+              {
+                "query_id": "Query_1",
+                "query_title": "query_blastn_reverse",
+                "query_len": 240,
+                "hits": [
+                  {
+                    "num": 1,
+                    "description": [
+                      {
+                        "id": "subject_blastn_reverse",
+                        "title": "subject_blastn_reverse"
+                      }
+                    ],
+                    "len": 240,
+                    "hsps": [
+                      {
+                        "num": 1,
+                        "bit_score": 434.095,
+                        "score": 480,
+                        "evalue": 1.11659e-126,
+                        "identity": 240,
+                        "query_from": 1,
+                        "query_to": 240,
+                        "query_strand": "Plus",
+                        "hit_from": 240,
+                        "hit_to": 1,
+                        "hit_strand": "Minus",
+                        "align_len": 240,
+                        "gaps": 0,
+                        "qseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                        "hseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                        "midline": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+                      }
+                    ]
+                  }
+                ],
+                "stat": {
+                  "hsp_len": 10,
+                  "eff_space": 52900,
+                  "kappa": 0.41,
+                  "lambda": 0.625,
+                  "entropy": 0.78
+                }
+              }
+            ]
+          }
+        },
+        "search": {
+          "query_id": "Query_1",
+          "query_title": "query_blastn_reverse",
+          "query_len": 240,
+          "hits": [
+            {
+              "num": 1,
+              "description": [
+                {
+                  "id": "subject_blastn_reverse",
+                  "title": "subject_blastn_reverse"
+                }
+              ],
+              "len": 240,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 434.095,
+                  "score": 480,
+                  "evalue": 1.11659e-126,
+                  "identity": 240,
+                  "query_from": 1,
+                  "query_to": 240,
+                  "query_strand": "Plus",
+                  "hit_from": 240,
+                  "hit_to": 1,
+                  "hit_strand": "Minus",
+                  "align_len": 240,
+                  "gaps": 0,
+                  "qseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                  "hseq": "ATGCCTGATCAAACTCAACAATTTTCTTTTAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTATGAATTTCTGGCTGATACTATGTGGTCTGAT",
+                  "midline": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+                }
+              ]
+            }
+          ],
+          "stat": {
+            "hsp_len": 10,
+            "eff_space": 52900,
+            "kappa": 0.41,
+            "lambda": 0.625,
+            "entropy": 0.78
+          }
+        },
+        "line_numbers": null
+      },
+      "issues": []
+    }
+  ],
+  "issues": []
+}

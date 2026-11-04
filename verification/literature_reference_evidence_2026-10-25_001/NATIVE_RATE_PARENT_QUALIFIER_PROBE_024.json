@@ -1,0 +1,68 @@
+{
+  "written_utc": "2026-10-26T10:35:25.593436+00:00",
+  "source_sha256": "cf548a7cd0ec19ec8c6d161cd52a7b8252d2ba53d3cc0eefc41235bce9c6be7b",
+  "synthetic_only": true,
+  "source_bytes_and_witnesses_are_not_paper_data": true,
+  "checks": [
+    {
+      "synthetic_text": "reference rate more than 3 nmol/min/mg.",
+      "role": "rate",
+      "expected_relation_or_error": "gt",
+      "expected_approximate": false,
+      "observed": {
+        "value": 3.0,
+        "relation": "gt",
+        "approximate": false
+      },
+      "passed": true
+    },
+    {
+      "synthetic_text": "reference rate roughly 3 nmol/min/mg.",
+      "role": "rate",
+      "expected_relation_or_error": "point",
+      "expected_approximate": true,
+      "observed": {
+        "value": 3.0,
+        "relation": "point",
+        "approximate": true
+      },
+      "passed": true
+    },
+    {
+      "synthetic_text": "reference rate about > 3 nmol/min/mg.",
+      "role": "rate",
+      "expected_relation_or_error": "gt",
+      "expected_approximate": true,
+      "observed": {
+        "value": 3.0,
+        "relation": "gt",
+        "approximate": true
+      },
+      "passed": true
+    },
+    {
+      "synthetic_text": "more than 3 measurements",
+      "role": "condition",
+      "expected_relation_or_error": "error",
+      "expected_approximate": null,
+      "observed": {
+        "error_code": "plain_source_point_required",
+        "field": "number_selector"
+      },
+      "passed": true
+    },
+    {
+      "synthetic_text": "SD roughly 2 nmol/min/mg",
+      "role": "spread",
+      "expected_relation_or_error": "error",
+      "expected_approximate": null,
+      "observed": {
+        "error_code": "plain_source_point_required",
+        "field": "number_selector"
+      },
+      "passed": true
+    }
+  ],
+  "all_passed": true,
+  "no_application_or_model_run": true
+}

@@ -1,0 +1,460 @@
+.............FF.......                                                   [100%]
+=================================== FAILURES ===================================
+____ test_native_limits_and_missing_parts[ND-native_nondetection_not_point] ____
+
+value = {'version': 'a105_measurement_comparison_extraction_v1', 'selection': {'version': 'a105_measurement_comparison_selecti...02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, ...}]}, ...}, ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:extrac...', 'nuisance'], 'additionalProperties': False}, 'relationships': {'$ref': '#/$defs/retained_relationships'}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:588: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'$defs': {'coefficient': {'additionalProperties': False, 'properties': {'implicit_value':...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'version': 'a105_measurement_comparison_extraction_v1', 'selection': {'version': 'a105_measurement_comparison_select...e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, ...}]}, ...}, ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'selection': {'layout': 'labelled_record', 'record': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 168, 'end': 198, 'quote': 'left NADH rate ND umol/min/mg.'}, 'number': {'witness': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 168, 'end': 198, 'quote': 'left NADH rate ND umol/min/mg.'}, 'number_start': 15, 'number_end': 17}, 'row_label': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 168, 'end': 172, 'quote': 'left'}, 'quantity_label': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 178, 'end': 182, 'quote': 'rate'}, 'unit': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 186, 'end': 197, 'quote': 'umol/min/mg'}, 'quantity_kind': {'value': 'specific_activity', 'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}]}, 'estimator_scale': {'value': 'reported_mean', 'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}]}, 'semantics': {'value': 'reported_nondetection', 'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}]}, 'qualification': {'value': 'reported_point', 'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}]}, 'normalization': {'value': 'protein_mass', 'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}]}, 'subject': {'organism': None, 'genotype': None, 'molecule': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}, 'construct': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}, 'expression_host': None, 'arrangement': None}, 'assay': {'assay': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}, 'preparation': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}, 'purification_reconstitution': None, 'partners': None, 'substrates': None, 'conditions': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}, 'direct_endpoint': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 173, 'end': 177, 'quote': 'NADH'}, 'inferred_quantity': None, 'denominator': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}, 'time_window': None, 'fit_basis': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>'}, 'sampling_unit': None, 'intended_change': None, 'additional_differences': None, 'calibration': None, 'blank': None, 'active_fraction': None, 'purity': None}, 'physical_identity': None, 'dependency_witnesses': [], 'uncertainty': {'statistic': {'value': 'unreported', 'witnesses': []}, 'magnitude': None, 'interval': None, 'confidence_level': None, 'unit': None, 'unit_relationship': {'value': 'unknown', 'witnesses': []}, 'count': None, 'repetition_basis': {'value': 'unknown', 'witnesses': []}, 'estimate_basis': {'value': 'unknown', 'witnesses': []}}}, 'number': {'selector': {'witness': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 168, 'end': 198, 'quote': 'left NADH rate ND umol/min/mg.', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}, 'number_start': 15, 'number_end': 17}, 'raw_token': 'ND', 'native_exact': None, 'relation': 'unresolved', 'approximate': False, 'measurement_key': 'literature_measurement_262c81939a55b0a96e248e5d'}, 'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 168, 'end': 198, 'quote': 'left NADH rate ND umol/min/mg.', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}, {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 168, 'end': 172, 'quote': 'left', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}, {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 178, 'end': 182, 'quote': 'rate', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}, {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 186, 'end': 197, 'quote': 'umol/min/mg', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}, {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, 'quote': '<p>Declared synthetic source: same construct and denominator; common unbiased estimate model is supported only inside this synthetic example. Three preparations.</p>', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}, {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 173, 'end': 177, 'quote': 'NADH', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}], 'count_reading': None, 'reported_uncertainty': {'statistic': 'unreported', 'magnitude_exact': None, 'interval_exact': None, 'confidence_level_exact': None, 'unit': 'umol/min/mg', 'meaning': 'reported_spread_not_joint_estimator_covariance'}, 'value': {'role': 'left', 'native_token': 'ND', 'native_value': None, 'native_exact': None, 'canonical_value': None, 'canonical_exact': None, 'canonical_unit': 'umol/min/mg', 'relation': 'unresolved', 'approximate': False, 'estimator_scale': 'reported_mean', 'quantity_kind': 'specific_activity', 'semantics': 'reported_nondetection', 'normalization': 'protein_mass', 'origin': 'synthetic', 'owner_key': 'literature_measurement_262c81939a55b0a96e248e5d', 'physical_owner_key': None, 'dependency_keys': ['literature_measurement_262c81939a55b0a96e248e5d'], 'source_locations': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 183, 'end': 185, 'quote': 'ND', 'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}], 'reasons': {'source': ['native_nondetection_not_point', 'native_nondetection_not_point'], 'relationship': [], 'implementation': [], 'domain': []}}} is not valid under any of the given schemas
+E           
+E           Failed validating 'anyOf' in schema['properties']['quantities']['properties']['left']:
+E               {'anyOf': [{'$ref': '#/$defs/retained_quantity'}, {'type': 'null'}]}
+E           
+E           On instance['quantities']['left']:
+E               {'selection': {'layout': 'labelled_record',
+E                              'record': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                         'representation': 'original',
+E                                         'start': 168,
+E                                         'end': 198,
+E                                         'quote': 'left NADH rate ND umol/min/mg.'},
+E                              'number': {'witness': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                     'representation': 'original',
+E                                                     'start': 168,
+E                                                     'end': 198,
+E                                                     'quote': 'left NADH rate ND '
+E                                                              'umol/min/mg.'},
+E                                         'number_start': 15,
+E                                         'number_end': 17},
+E                              'row_label': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                            'representation': 'original',
+E                                            'start': 168,
+E                                            'end': 172,
+E                                            'quote': 'left'},
+E                              'quantity_label': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                 'representation': 'original',
+E                                                 'start': 178,
+E                                                 'end': 182,
+E                                                 'quote': 'rate'},
+E                              'unit': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                       'representation': 'original',
+E                                       'start': 186,
+E                                       'end': 197,
+E                                       'quote': 'umol/min/mg'},
+E                              'quantity_kind': {'value': 'specific_activity',
+E                                                'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                               'representation': 'original',
+E                                                               'start': 0,
+E                                                               'end': 165,
+E                                                               'quote': '<p>Declared '
+E                                                                        'synthetic '
+E                                                                        'source: same '
+E                                                                        'construct '
+E                                                                        'and '
+E                                                                        'denominator; '
+E                                                                        'common '
+E                                                                        'unbiased '
+E                                                                        'estimate '
+E                                                                        'model is '
+E                                                                        'supported '
+E                                                                        'only inside '
+E                                                                        'this '
+E                                                                        'synthetic '
+E                                                                        'example. '
+E                                                                        'Three '
+E                                                                        'preparations.</p>'}]},
+E                              'estimator_scale': {'value': 'reported_mean',
+E                                                  'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                                 'representation': 'original',
+E                                                                 'start': 0,
+E                                                                 'end': 165,
+E                                                                 'quote': '<p>Declared '
+E                                                                          'synthetic '
+E                                                                          'source: '
+E                                                                          'same '
+E                                                                          'construct '
+E                                                                          'and '
+E                                                                          'denominator; '
+E                                                                          'common '
+E                                                                          'unbiased '
+E                                                                          'estimate '
+E                                                                          'model is '
+E                                                                          'supported '
+E                                                                          'only '
+E                                                                          'inside '
+E                                                                          'this '
+E                                                                          'synthetic '
+E                                                                          'example. '
+E                                                                          'Three '
+E                                                                          'preparations.</p>'}]},
+E                              'semantics': {'value': 'reported_nondetection',
+E                                            'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                           'representation': 'original',
+E                                                           'start': 0,
+E                                                           'end': 165,
+E                                                           'quote': '<p>Declared '
+E                                                                    'synthetic '
+E                                                                    'source: same '
+E                                                                    'construct and '
+E                                                                    'denominator; '
+E                                                                    'common unbiased '
+E                                                                    'estimate model '
+E                                                                    'is supported '
+E                                                                    'only inside this '
+E                                                                    'synthetic '
+E                                                                    'example. Three '
+E                                                                    'preparations.</p>'}]},
+E                              'qualification': {'value': 'reported_point',
+E                                                'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                               'representation': 'original',
+E                                                               'start': 0,
+E                                                               'end': 165,
+E                                                               'quote': '<p>Declared '
+E                                                                        'synthetic '
+E                                                                        'source: same '
+E                                                                        'construct '
+E                                                                        'and '
+E                                                                        'denominator; '
+E                                                                        'common '
+E                                                                        'unbiased '
+E                                                                        'estimate '
+E                                                                        'model is '
+E                                                                        'supported '
+E                                                                        'only inside '
+E                                                                        'this '
+E                                                                        'synthetic '
+E                                                                        'example. '
+E                                                                        'Three '
+E                                                                        'preparations.</p>'}]},
+E                              'normalization': {'value': 'protein_mass',
+E                                                'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                               'representation': 'original',
+E                                                               'start': 0,
+E                                                               'end': 165,
+E                                                               'quote': '<p>Declared '
+E                                                                        'synthetic '
+E                                                                        'source: same '
+E                                                                        'construct '
+E                                                                        'and '
+E                                                                        'denominator; '
+E                                                                        'common '
+E                                                                        'unbiased '
+E                                                                        'estimate '
+E                                                                        'model is '
+E                                                                        'supported '
+E                                                                        'only inside '
+E                                                                        'this '
+E                                                                        'synthetic '
+E                                                                        'example. '
+E                                                                        'Three '
+E                                                                        'preparations.</p>'}]},
+E                              'subject': {'organism': None,
+E                                          'genotype': None,
+E                                          'molecule': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                       'representation': 'original',
+E                                                       'start': 0,
+E                                                       'end': 165,
+E                                                       'quote': '<p>Declared '
+E                                                                'synthetic source: '
+E                                                                'same construct and '
+E                                                                'denominator; common '
+E                                                                'unbiased estimate '
+E                                                                'model is supported '
+E                                                                'only inside this '
+E                                                                'synthetic example. '
+E                                                                'Three '
+E                                                                'preparations.</p>'},
+E                                          'construct': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                        'representation': 'original',
+E                                                        'start': 0,
+E                                                        'end': 165,
+E                                                        'quote': '<p>Declared '
+E                                                                 'synthetic source: '
+E                                                                 'same construct and '
+E                                                                 'denominator; common '
+E                                                                 'unbiased estimate '
+E                                                                 'model is supported '
+E                                                                 'only inside this '
+E                                                                 'synthetic example. '
+E                                                                 'Three '
+E                                                                 'preparations.</p>'},
+E                                          'expression_host': None,
+E                                          'arrangement': None},
+E                              'assay': {'assay': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                  'representation': 'original',
+E                                                  'start': 0,
+E                                                  'end': 165,
+E                                                  'quote': '<p>Declared synthetic '
+E                                                           'source: same construct '
+E                                                           'and denominator; common '
+E                                                           'unbiased estimate model '
+E                                                           'is supported only inside '
+E                                                           'this synthetic example. '
+E                                                           'Three preparations.</p>'},
+E                                        'preparation': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                        'representation': 'original',
+E                                                        'start': 0,
+E                                                        'end': 165,
+E                                                        'quote': '<p>Declared '
+E                                                                 'synthetic source: '
+E                                                                 'same construct and '
+E                                                                 'denominator; common '
+E                                                                 'unbiased estimate '
+E                                                                 'model is supported '
+E                                                                 'only inside this '
+E                                                                 'synthetic example. '
+E                                                                 'Three '
+E                                                                 'preparations.</p>'},
+E                                        'purification_reconstitution': None,
+E                                        'partners': None,
+E                                        'substrates': None,
+E                                        'conditions': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                       'representation': 'original',
+E                                                       'start': 0,
+E                                                       'end': 165,
+E                                                       'quote': '<p>Declared '
+E                                                                'synthetic source: '
+E                                                                'same construct and '
+E                                                                'denominator; common '
+E                                                                'unbiased estimate '
+E                                                                'model is supported '
+E                                                                'only inside this '
+E                                                                'synthetic example. '
+E                                                                'Three '
+E                                                                'preparations.</p>'},
+E                                        'direct_endpoint': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                            'representation': 'original',
+E                                                            'start': 173,
+E                                                            'end': 177,
+E                                                            'quote': 'NADH'},
+E                                        'inferred_quantity': None,
+E                                        'denominator': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                        'representation': 'original',
+E                                                        'start': 0,
+E                                                        'end': 165,
+E                                                        'quote': '<p>Declared '
+E                                                                 'synthetic source: '
+E                                                                 'same construct and '
+E                                                                 'denominator; common '
+E                                                                 'unbiased estimate '
+E                                                                 'model is supported '
+E                                                                 'only inside this '
+E                                                                 'synthetic example. '
+E                                                                 'Three '
+E                                                                 'preparations.</p>'},
+E                                        'time_window': None,
+E                                        'fit_basis': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                      'representation': 'original',
+E                                                      'start': 0,
+E                                                      'end': 165,
+E                                                      'quote': '<p>Declared synthetic '
+E                                                               'source: same '
+E                                                               'construct and '
+E                                                               'denominator; common '
+E                                                               'unbiased estimate '
+E                                                               'model is supported '
+E                                                               'only inside this '
+E                                                               'synthetic example. '
+E                                                               'Three '
+E                                                               'preparations.</p>'},
+E                                        'sampling_unit': None,
+E                                        'intended_change': None,
+E                                        'additional_differences': None,
+E                                        'calibration': None,
+E                                        'blank': None,
+E                                        'active_fraction': None,
+E                                        'purity': None},
+E                              'physical_identity': None,
+E                              'dependency_witnesses': [],
+E                              'uncertainty': {'statistic': {'value': 'unreported',
+E                                                            'witnesses': []},
+E                                              'magnitude': None,
+E                                              'interval': None,
+E                                              'confidence_level': None,
+E                                              'unit': None,
+E                                              'unit_relationship': {'value': 'unknown',
+E                                                                    'witnesses': []},
+E                                              'count': None,
+E                                              'repetition_basis': {'value': 'unknown',
+E                                                                   'witnesses': []},
+E                                              'estimate_basis': {'value': 'unknown',
+E                                                                 'witnesses': []}}},
+E                'number': {'selector': {'witness': {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                    'representation': 'original',
+E                                                    'start': 168,
+E                                                    'end': 198,
+E                                                    'quote': 'left NADH rate ND '
+E                                                             'umol/min/mg.',
+E                                                    'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'},
+E                                        'number_start': 15,
+E                                        'number_end': 17},
+E                           'raw_token': 'ND',
+E                           'native_exact': None,
+E                           'relation': 'unresolved',
+E                           'approximate': False,
+E                           'measurement_key': 'literature_measurement_262c81939a55b0a96e248e5d'},
+E                'witnesses': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                               'representation': 'original',
+E                               'start': 168,
+E                               'end': 198,
+E                               'quote': 'left NADH rate ND umol/min/mg.',
+E                               'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'},
+E                              {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                               'representation': 'original',
+E                               'start': 168,
+E                               'end': 172,
+E                               'quote': 'left',
+E                               'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'},
+E                              {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                               'representation': 'original',
+E                               'start': 178,
+E                               'end': 182,
+E                               'quote': 'rate',
+E                               'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'},
+E                              {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                               'representation': 'original',
+E                               'start': 186,
+E                               'end': 197,
+E                               'quote': 'umol/min/mg',
+E                               'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'},
+E                              {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                               'representation': 'original',
+E                               'start': 0,
+E                               'end': 165,
+E                               'quote': '<p>Declared synthetic source: same construct '
+E                                        'and denominator; common unbiased estimate '
+E                                        'model is supported only inside this '
+E                                        'synthetic example. Three preparations.</p>',
+E                               'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'},
+E                              {'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                               'representation': 'original',
+E                               'start': 173,
+E                               'end': 177,
+E                               'quote': 'NADH',
+E                               'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}],
+E                'count_reading': None,
+E                'reported_uncertainty': {'statistic': 'unreported',
+E                                         'magnitude_exact': None,
+E                                         'interval_exact': None,
+E                                         'confidence_level_exact': None,
+E                                         'unit': 'umol/min/mg',
+E                                         'meaning': 'reported_spread_not_joint_estimator_covariance'},
+E                'value': {'role': 'left',
+E                          'native_token': 'ND',
+E                          'native_value': None,
+E                          'native_exact': None,
+E                          'canonical_value': None,
+E                          'canonical_exact': None,
+E                          'canonical_unit': 'umol/min/mg',
+E                          'relation': 'unresolved',
+E                          'approximate': False,
+E                          'estimator_scale': 'reported_mean',
+E                          'quantity_kind': 'specific_activity',
+E                          'semantics': 'reported_nondetection',
+E                          'normalization': 'protein_mass',
+E                          'origin': 'synthetic',
+E                          'owner_key': 'literature_measurement_262c81939a55b0a96e248e5d',
+E                          'physical_owner_key': None,
+E                          'dependency_keys': ['literature_measurement_262c81939a55b0a96e248e5d'],
+E                          'source_locations': [{'source_ref': 'source_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d',
+E                                                'representation': 'original',
+E                                                'start': 183,
+E                                                'end': 185,
+E                                                'quote': 'ND',
+E                                                'artifact_ref': 'artifact_10d41d07b59e5dc3963c02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d'}],
+E                          'reasons': {'source': ['native_nondetection_not_point',
+E                                                 'native_nondetection_not_point'],
+E                                      'relationship': [],
+E                                      'implementation': [],
+E                                      'domain': []}}}
+
+.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+token = 'ND', expected = 'native_nondetection_not_point'
+
+    @pytest.mark.parametrize('token,expected', [('ND','native_nondetection_not_point'),('< 3','bounded_arithmetic_unimplemented'),('3 to 5','range_arithmetic_unimplemented')])
+    def test_native_limits_and_missing_parts(token,expected):
+        s,docs,read=source_fixture({'left':token})
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:110: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:422: in read_measurement_comparison_inputs
+    return validate_measurement_comparison_extraction(data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:469: in validate_measurement_comparison_extraction
+    data=deepcopy(extraction);validate_schema(data,measurement_comparison_extraction_schema())
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'version': 'a105_measurement_comparison_extraction_v1', 'selection': {'version': 'a105_measurement_comparison_selecti...02e4de607d0148b6a90e38ccf89830bf1dcbcccbf53d', 'representation': 'original', 'start': 0, 'end': 165, ...}]}, ...}, ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:extrac...', 'nuisance'], 'additionalProperties': False}, 'relationships': {'$ref': '#/$defs/retained_relationships'}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:591: ContractError
+__ test_native_limits_and_missing_parts[< 3-bounded_arithmetic_unimplemented] __
+
+token = '< 3', expected = 'bounded_arithmetic_unimplemented'
+
+    @pytest.mark.parametrize('token,expected', [('ND','native_nondetection_not_point'),('< 3','bounded_arithmetic_unimplemented'),('3 to 5','range_arithmetic_unimplemented')])
+    def test_native_limits_and_missing_parts(token,expected):
+        s,docs,read=source_fixture({'left':token})
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:110: in execute
+    extraction=read_measurement_comparison_inputs(selection,read_source=read)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:412: in read_measurement_comparison_inputs
+    quantities={r:_quantity(r,s,sources,origin) for r,s in args['quantities'].items()}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:193: in _quantity
+    number, numeric_reason = (None, 'source_number_unreported') if selected['number'] is None else _read_scalar(selected['number'], sources)
+                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_inputs.py:118: in _read_scalar
+    item = _number(selector, sources, 'rate')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_rate_native_inputs.py:126: in _number
+    _fail("literal_source_number_required", "number_selector")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'literal_source_number_required', field = 'number_selector'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: literal_source_number_required:number_selector
+
+gene_annotation_episode/literature_rate_native_inputs.py:56: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_native_limits_and_missing_parts[ND-native_nondetection_not_point]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_native_limits_and_missing_parts[< 3-bounded_arithmetic_unimplemented]
+2 failed, 20 passed in 3.73s

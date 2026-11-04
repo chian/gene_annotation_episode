@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.799" timestamp="2026-10-25T02:52:52.876213-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_metacats_provider" name="test_unfiltered_native_table_does_not_establish_an_unobserved_category" time="0.050"><failure message="AssertionError: assert ('ok' == 'partial'&#10;  &#10;  - partial&#10;  + ok)">def test_unfiltered_native_table_does_not_establish_an_unobserved_category():
+        sheet, _, _ = retained_sheet('all_missing')
+        original_request = native_family_request(sheet)
+        original = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [original_request]})
+        assert original['results'][0]['value']['total_test_count'] == 0
+        missing = deepcopy(sheet['categories'][0])
+        missing.update(category_id='unobserved', metadata_document_id=None,
+            metadata_column_index_0based=None, raw_heading_token=None,
+            native_category_ordinal_1based=2, native_output_stem='unobserved',
+            group_ids=[], state='missing', evidence=[])
+        sheet['analysis']['category_ids'].append('unobserved')
+        sheet['categories'].append(missing)
+        c.validate_metacats_sheet(sheet)
+        request = native_family_request(sheet)
+        request['family']['category_ids'].append('unobserved')
+        outcome = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})['results'][0]
+&gt;       assert outcome['status'] == 'partial' and outcome['value'] is None
+E       AssertionError: assert ('ok' == 'partial'
+E         
+E         - partial
+E         + ok)
+
+tests/test_bvbrc_metacats_provider.py:325: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,1447 @@
+{
+  "status": "eight_strict_saved_projections_passed",
+  "workflow_started": false,
+  "host_custody_exercised": false,
+  "new_calculation": false,
+  "blocked_implementations_and_aliases": [
+    "gene_annotation_episode.bvbrc_contingency_math._matrix",
+    "gene_annotation_episode.bvbrc_contingency_math._require",
+    "gene_annotation_episode.bvbrc_contingency_math.count_alignment_group_sites",
+    "gene_annotation_episode.bvbrc_contingency_math.expected_contingency_counts",
+    "gene_annotation_episode.bvbrc_contingency_math.pearson_contingency_statistic",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators._cell",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators._finish",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators._id",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators._pairs",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators._requirement",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators.biological_group_counts",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators.biological_group_effects",
+    "gene_annotation_episode.bvbrc_metacats_biological_calculators.biological_group_statistics",
+    "gene_annotation_episode.bvbrc_metacats_calculators._adequacy",
+    "gene_annotation_episode.bvbrc_metacats_calculators._cell",
+    "gene_annotation_episode.bvbrc_metacats_calculators._chi_square",
+    "gene_annotation_episode.bvbrc_metacats_calculators._expected",
+    "gene_annotation_episode.bvbrc_metacats_calculators._id",
+    "gene_annotation_episode.bvbrc_metacats_calculators._pairs",
+    "gene_annotation_episode.bvbrc_metacats_calculators._requirement",
+    "gene_annotation_episode.bvbrc_metacats_calculators.adjust_p_values",
+    "gene_annotation_episode.bvbrc_metacats_calculators.chi_square_tail",
+    "gene_annotation_episode.bvbrc_metacats_calculators.metacats_effects",
+    "gene_annotation_episode.bvbrc_metacats_calculators.metacats_group_counts",
+    "gene_annotation_episode.bvbrc_metacats_calculators.metacats_statistics",
+    "gene_annotation_episode.bvbrc_metacats_formats._Source",
+    "gene_annotation_episode.bvbrc_metacats_formats._counts",
+    "gene_annotation_episode.bvbrc_metacats_formats._diag",
+    "gene_annotation_episode.bvbrc_metacats_formats._fields",
+    "gene_annotation_episode.bvbrc_metacats_formats._invalid",
+    "gene_annotation_episode.bvbrc_metacats_formats._parameter",
+    "gene_annotation_episode.bvbrc_metacats_formats._quoted_end",
+    "gene_annotation_episode.bvbrc_metacats_formats._raw_position",
+    "gene_annotation_episode.bvbrc_metacats_formats._raw_wrapper",
+    "gene_annotation_episode.bvbrc_metacats_formats._source",
+    "gene_annotation_episode.bvbrc_metacats_formats.parse_metacats_adjusted_matrix",
+    "gene_annotation_episode.bvbrc_metacats_formats.parse_metacats_chisq_table",
+    "gene_annotation_episode.bvbrc_metacats_formats.parse_metacats_metadata",
+    "gene_annotation_episode.bvbrc_metacats_formats.parse_metacats_pair_table",
+    "gene_annotation_episode.bvbrc_metacats_formats.parse_metacats_raw_r_table",
+    "gene_annotation_episode.bvbrc_metacats_input_formats._diagnostic",
+    "gene_annotation_episode.bvbrc_metacats_input_formats._result",
+    "gene_annotation_episode.bvbrc_metacats_input_formats.parse_metacats_input_fasta",
+    "gene_annotation_episode.bvbrc_msa_calculators._cell",
+    "gene_annotation_episode.bvbrc_msa_calculators._inputs",
+    "gene_annotation_episode.bvbrc_msa_calculators._need",
+    "gene_annotation_episode.bvbrc_msa_calculators._qualification",
+    "gene_annotation_episode.bvbrc_msa_calculators._scope",
+    "gene_annotation_episode.bvbrc_msa_calculators._state",
+    "gene_annotation_episode.bvbrc_msa_calculators.msa_native_entropy",
+    "gene_annotation_episode.bvbrc_msa_calculators.msa_reference_differences",
+    "gene_annotation_episode.bvbrc_msa_formats.parse_msa_frequency_table",
+    "gene_annotation_episode.phylogeny_calculators._alphabet_symbols",
+    "gene_annotation_episode.phylogeny_calculators._canonical_side",
+    "gene_annotation_episode.phylogeny_calculators._count",
+    "gene_annotation_episode.phylogeny_calculators._finite_sum",
+    "gene_annotation_episode.phylogeny_calculators._interval_union_size",
+    "gene_annotation_episode.phylogeny_calculators._pairs",
+    "gene_annotation_episode.phylogeny_calculators._path_edges",
+    "gene_annotation_episode.phylogeny_calculators._rescaled_support",
+    "gene_annotation_episode.phylogeny_calculators._split_id",
+    "gene_annotation_episode.phylogeny_calculators._state",
+    "gene_annotation_episode.phylogeny_calculators._support_rows",
+    "gene_annotation_episode.phylogeny_calculators._tips",
+    "gene_annotation_episode.phylogeny_calculators._tree_splits",
+    "gene_annotation_episode.phylogeny_calculators.alignment_components",
+    "gene_annotation_episode.phylogeny_calculators.bootstrap_split_frequencies",
+    "gene_annotation_episode.phylogeny_calculators.calculation_requirements",
+    "gene_annotation_episode.phylogeny_calculators.compare_unrooted_relationships",
+    "gene_annotation_episode.phylogeny_calculators.function_composition",
+    "gene_annotation_episode.phylogeny_calculators.original_member_coverage",
+    "gene_annotation_episode.phylogeny_calculators.taxon_components",
+    "gene_annotation_episode.phylogeny_calculators.tree_components",
+    "gene_annotation_episode.phylogeny_calculators.ungapped_coordinate_map",
+    "gene_annotation_episode.phylogeny_formats._NewickReader",
+    "gene_annotation_episode.phylogeny_formats._Syntax",
+    "gene_annotation_episode.phylogeny_formats._Text",
+    "gene_annotation_episode.phylogeny_formats._XMLForbidden",
+    "gene_annotation_episode.phylogeny_formats._XMLReader",
+    "gene_annotation_episode.phylogeny_formats._alignment",
+    "gene_annotation_episode.phylogeny_formats._decode",
+    "gene_annotation_episode.phylogeny_formats._diagnostic",
+    "gene_annotation_episode.phylogeny_formats._input",
+    "gene_annotation_episode.phylogeny_formats._location",
+    "gene_annotation_episode.phylogeny_formats._newick_segments",
+    "gene_annotation_episode.phylogeny_formats._node",
+    "gene_annotation_episode.phylogeny_formats._parameter",
+    "gene_annotation_episode.phylogeny_formats._result",
+    "gene_annotation_episode.phylogeny_formats._sequence",
+    "gene_annotation_episode.phylogeny_formats._xml_name",
+    "gene_annotation_episode.phylogeny_formats._xml_namespace",
+    "gene_annotation_episode.phylogeny_formats._xml_owned",
+    "gene_annotation_episode.phylogeny_formats._xml_property",
+    "gene_annotation_episode.phylogeny_formats._xml_tree",
+    "gene_annotation_episode.phylogeny_formats.parse_aligned_fasta",
+    "gene_annotation_episode.phylogeny_formats.parse_newick",
+    "gene_annotation_episode.phylogeny_formats.parse_phyloxml",
+    "gene_annotation_episode.phylogeny_formats.parse_raxml_partitions",
+    "gene_annotation_episode.phylogeny_formats.parse_relaxed_phylip",
+    "gene_annotation_episode.xmfa_calculation_contracts.complement_intervals",
+    "gene_annotation_episode.xmfa_calculation_contracts.interval_length",
+    "gene_annotation_episode.xmfa_calculation_contracts.multiplicity_bases",
+    "gene_annotation_episode.xmfa_calculation_contracts.union_intervals",
+    "gene_annotation_episode.xmfa_calculation_contracts.validate_xmfa_alignment_components",
+    "gene_annotation_episode.xmfa_calculation_contracts.validate_xmfa_coverage_components",
+    "gene_annotation_episode.xmfa_calculators._block_rows",
+    "gene_annotation_episode.xmfa_calculators._cell",
+    "gene_annotation_episode.xmfa_calculators._coverage_originals",
+    "gene_annotation_episode.xmfa_calculators._entropy",
+    "gene_annotation_episode.xmfa_calculators._fraction",
+    "gene_annotation_episode.xmfa_calculators._population_state",
+    "gene_annotation_episode.xmfa_calculators._selected_placements",
+    "gene_annotation_episode.xmfa_calculators._selection",
+    "gene_annotation_episode.xmfa_calculators.xmfa_alignment_components",
+    "gene_annotation_episode.xmfa_calculators.xmfa_interval_coverage",
+    "gene_annotation_episode.xmfa_coordinates._binding_indexes",
+    "gene_annotation_episode.xmfa_coordinates._binding_reports",
+    "gene_annotation_episode.xmfa_coordinates._block_qualifications",
+    "gene_annotation_episode.xmfa_coordinates._evidence",
+    "gene_annotation_episode.xmfa_coordinates._issue",
+    "gene_annotation_episode.xmfa_coordinates._operands",
+    "gene_annotation_episode.xmfa_coordinates._original_projection",
+    "gene_annotation_episode.xmfa_coordinates._row_positions",
+    "gene_annotation_episode.xmfa_coordinates._source_coordinate",
+    "gene_annotation_episode.xmfa_coordinates._source_issue",
+    "gene_annotation_episode.xmfa_coordinates.xmfa_column_coordinates",
+    "gene_annotation_episode.xmfa_coordinates.xmfa_source_positions",
+    "gene_annotation_episode.xmfa_formats.parse_mauve_xmfa",
+    "gene_annotation_episode.xmfa_sources._add_issue",
+    "gene_annotation_episode.xmfa_sources._bind_member",
+    "gene_annotation_episode.xmfa_sources._check_record",
+    "gene_annotation_episode.xmfa_sources._native_members",
+    "gene_annotation_episode.xmfa_sources._original_map_conflicts",
+    "gene_annotation_episode.xmfa_sources._positive",
+    "gene_annotation_episode.xmfa_sources._registry_complete",
+    "gene_annotation_episode.xmfa_sources._unique_evidence",
+    "gene_annotation_episode.xmfa_sources.bind_xmfa_sources",
+    "gene_annotation_episode.xmfa_sources.validate_xmfa_bindings_for_document",
+    "math.exp",
+    "math.gamma",
+    "math.lgamma",
+    "math.log",
+    "math.log10",
+    "math.log2"
+  ],
+  "barrier_rejection_controls": 7,
+  "source_hashes": {
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/full_xmfa.result.json": "1379bf72d04419589b771e6efce30650aecb77e489bd562d6edb0cd5167832ee",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/full_xmfa.operands.json": "579fcefedd840272f5e731d09d45bc1ae221b6646f62a744bc2acc6e582cbcd7",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/metacats_native.result.json": "070a419647d8a1ed303a40a26bdeb19e9431fa663c871d9e0d05bf94740b3c96",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/metacats_native.operands.json": "e288b07e44487c072ebdf60bf6d0c7d7b867c5d174d20ff7e64863b82e82a23e",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/msa_dna.result.json": "13b2f8625f424f605ed0ad8419035a1871834d1ab62d4b493d79c50517d62adc",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/msa_dna.operands.json": "1c227e94ba632c52f426d5a4eb19bbf9ddd216a9a1a5d355e2b8807eec07265b",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/msa_protein.result.json": "20c4a567669588b2bc9d6419f000cf0cfd85e29425afe6cb38b0feb08dce79ab",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/msa_protein.operands.json": "f7b03d406a3dd86b32acc9ade0c74a379597c81c5c2eeab978406d30d9b05dab",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/requested_missing_alignment.result.json": "1170e345073dfe8c95e688d63a9c8b4db78a55264bc5fc08b4987b189df21b1d",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/requested_missing_alignment.operands.json": "1c7e0a44db54ba40247ce802a3888b02c05d0dc0c587ccadb1022a513e693f62",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/two_analyses_same_category.result.json": "7c303a1fb50a6cc751943ad5e464af8ea0a8272165909a39cc716e3ed006cfd0",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/two_analyses_same_category.operands.json": "78fdb5dfcdf6d064f2efa699e7309ca7b780dfc6917513515a86728d3497da09",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/unrequested_missing_analysis.result.json": "ac00c70c0a19f87a78324437bc92832dfd884f18e48f55d54b1db220d637ba68",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/unrequested_missing_analysis.operands.json": "e0878579a74e744b64f9dda393eaa82f5afb4df0b2e8a1b4c7e93a6567f4ea86",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/xmfa_missing_source.result.json": "252de758a45b7107ad3f58f43fed0bd9b4667db61f4af17e9bba1f0f47daaa3f",
+    "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010/xmfa_missing_source.operands.json": "a59a5e7efc5a9c171e91616b6893bbd86bf2058794b2455601c43633f622419e"
+  },
+  "results": [
+    {
+      "name": "full_xmfa",
+      "facts_sha256": "3f8e5c4e8ed2efef4600e2107bc99a8c29c7f2bdc98c2167a638079af20f141d",
+      "facts": {
+        "cell": [
+          {
+            "aligned_symbol": "A",
+            "cell": {
+              "block_index": 0,
+              "column_0based": 0,
+              "record_index": 0
+            },
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "forward_symbol": "T",
+            "member_number": 1,
+            "native_position_0based": 48,
+            "native_position_1based": 49,
+            "native_strand": "-",
+            "original_coordinates": [],
+            "requirement_refs": [
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fblocks%2F0%2Frecords%2F0%3Axmfa_original_map_missing"
+            ],
+            "source_coordinate": {
+              "entry_1based": 1,
+              "file_ref": "bvbrc_alignment_xmfa_file:analysis/combined.fa",
+              "position_0based": 48,
+              "record_ref": "bvbrc_alignment_xmfa_record:analysis/row%3A0",
+              "strand": "-"
+            },
+            "source_state": "resolved",
+            "state": "residue"
+          }
+        ],
+        "coverage": [
+          {
+            "basis": "represented",
+            "complement_bases": 0,
+            "complement_intervals": [],
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "excess_placement_bases": 0,
+            "known_union_bases": 50,
+            "known_union_intervals": [
+              [
+                0,
+                50
+              ]
+            ],
+            "member_number": 1,
+            "membership_completeness": "complete",
+            "multiply_represented_bases": 0,
+            "original_coverage": null,
+            "placement_bases": 50,
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "requirement_refs": [],
+            "selected_coverage_fraction": 1.0,
+            "source_length": 50
+          },
+          {
+            "basis": "represented",
+            "complement_bases": 0,
+            "complement_intervals": [],
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "excess_placement_bases": 0,
+            "known_union_bases": 41,
+            "known_union_intervals": [
+              [
+                0,
+                41
+              ]
+            ],
+            "member_number": 2,
+            "membership_completeness": "complete",
+            "multiply_represented_bases": 0,
+            "original_coverage": null,
+            "placement_bases": 41,
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "requirement_refs": [],
+            "selected_coverage_fraction": 1.0,
+            "source_length": 41
+          },
+          {
+            "basis": "represented",
+            "complement_bases": 0,
+            "complement_intervals": [],
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "excess_placement_bases": 0,
+            "known_union_bases": 49,
+            "known_union_intervals": [
+              [
+                0,
+                49
+              ]
+            ],
+            "member_number": 3,
+            "membership_completeness": "complete",
+            "multiply_represented_bases": 0,
+            "original_coverage": null,
+            "placement_bases": 49,
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "requirement_refs": [],
+            "selected_coverage_fraction": 1.0,
+            "source_length": 49
+          }
+        ],
+        "inverse": [
+          {
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "matches": [
+              {
+                "block_index": 0,
+                "column_0based": 0,
+                "record_index": 0
+              }
+            ],
+            "member_number": 1,
+            "position_0based": 48,
+            "requirement_refs": [],
+            "search_completeness": "complete",
+            "state": "unique"
+          }
+        ],
+        "metric": [
+          {
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "measurement": {
+              "denominator": null,
+              "method_ref": "bvbrc_alignment_method:analysis/xmfa_identical_canonical_v1",
+              "numerator": null,
+              "origin": "calculated",
+              "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+              "requirement_refs": [],
+              "state": "available",
+              "unit": "columns",
+              "value": 39
+            },
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "selection": {
+              "block_index": 0,
+              "column_0based": null,
+              "member_a": 1,
+              "member_b": 3,
+              "metric": "identical_canonical",
+              "symbol": null
+            }
+          }
+        ]
+      },
+      "original_status": "ok",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    },
+    {
+      "name": "metacats_native",
+      "facts_sha256": "717540bf24d2e8913a9cfddd975ed02b21dfcd9d878a0b70c060b29a521c39cd",
+      "facts": {
+        "biological_counts": [
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "basis": "biological",
+            "category_ref": "bvbrc_alignment_category:analysis/comparison",
+            "column_0based": 1,
+            "count": 6,
+            "group_ref": "bvbrc_alignment_group:analysis/metacats_group%3Acomparison%2FA",
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "state": "available",
+            "symbol": "A"
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "basis": "biological",
+            "category_ref": "bvbrc_alignment_category:analysis/comparison",
+            "column_0based": 1,
+            "count": 0,
+            "group_ref": "bvbrc_alignment_group:analysis/metacats_group%3Acomparison%2FA",
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "state": "available",
+            "symbol": "C"
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "basis": "biological",
+            "category_ref": "bvbrc_alignment_category:analysis/comparison",
+            "column_0based": 1,
+            "count": 0,
+            "group_ref": "bvbrc_alignment_group:analysis/metacats_group%3Acomparison%2FB",
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "state": "available",
+            "symbol": "A"
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "basis": "biological",
+            "category_ref": "bvbrc_alignment_category:analysis/comparison",
+            "column_0based": 1,
+            "count": 6,
+            "group_ref": "bvbrc_alignment_group:analysis/metacats_group%3Acomparison%2FB",
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "state": "available",
+            "symbol": "C"
+          }
+        ],
+        "native_p": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "native_observation",
+          "population_ref": "bvbrc_alignment_population:analysis/native_test%3Ametacats_raw_r_table%253A5251e242be8e132b56a36e37f41b7cc52257d3e1cd972ef40db467905d142039%2F1",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "probability",
+          "value": 0.00389837142433717
+        },
+        "native_test": [
+          {
+            "basis": "native_reproduction",
+            "category_ref": "bvbrc_alignment_category:analysis/comparison",
+            "chi_square": 8.330556481172943,
+            "column_0based": 1,
+            "df": 1,
+            "group_refs": [
+              "bvbrc_alignment_group:analysis/metacats_group%3Acomparison%2FA",
+              "bvbrc_alignment_group:analysis/metacats_group%3Acomparison%2FB"
+            ],
+            "kind": "omnibus",
+            "log_p": -5.547196396562094,
+            "native_zero_rule_p": null,
+            "numerical_state": "finite",
+            "p_value": 0.0038983714243371837,
+            "requirement_refs": [],
+            "test_ref": "bvbrc_alignment_test:analysis/metacats_test%3A107b376a124789eb2809f9ec1af7152d5aefe984806408289874608e6bcdb184"
+          }
+        ]
+      },
+      "original_status": "ok",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    },
+    {
+      "name": "msa_dna",
+      "facts_sha256": "2e9cc46a8dd2c4a4099a3e57722b2309e5f4665da037c051e3eaeaa46ac6c50f",
+      "facts": {
+        "entropy": {
+          "denominator": 3,
+          "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+          "numerator": null,
+          "origin": "calculated",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "bits",
+          "value": 0.9182958340544896
+        },
+        "native_score": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "native_observation",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "hundredths_of_bit",
+          "value": 92.0
+        },
+        "sites": [
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "column_0based": 1,
+            "eligible_count": 3,
+            "internal_gap_count": 1,
+            "literal_entropy_bits": 0.9182958340544896,
+            "native_score_recalculated": 92.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "A",
+            "terminal_gap_excluded_count": 1
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "column_0based": 2,
+            "eligible_count": 4,
+            "internal_gap_count": 0,
+            "literal_entropy_bits": 0.8112781244591328,
+            "native_score_recalculated": 81.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "C",
+            "terminal_gap_excluded_count": 0
+          }
+        ]
+      },
+      "original_status": "ok",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    },
+    {
+      "name": "msa_protein",
+      "facts_sha256": "61d7430895b0b3cc18c60c4a194f592b58e6b0a20d3c1218e14c2e62f143918c",
+      "facts": {
+        "entropy": {
+          "denominator": 3,
+          "method_ref": "bvbrc_alignment_method:analysis/msa_literal_entropy_v1",
+          "numerator": null,
+          "origin": "calculated",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "bits",
+          "value": 0.0
+        },
+        "native_score": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "native_observation",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "hundredths_of_bit",
+          "value": 0.0
+        },
+        "sites": [
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "column_0based": 1,
+            "eligible_count": 3,
+            "internal_gap_count": 0,
+            "literal_entropy_bits": 0.0,
+            "native_score_recalculated": 0.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "C",
+            "terminal_gap_excluded_count": 1
+          },
+          {
+            "alignment_ref": "bvbrc_alignment_alignment:analysis/synthetic%3Aartifact%2Fanalysis%2Falignment%23alignment",
+            "column_0based": 2,
+            "eligible_count": 4,
+            "internal_gap_count": 0,
+            "literal_entropy_bits": 0.8112781244591328,
+            "native_score_recalculated": 81.0,
+            "population_ref": "bvbrc_alignment_population:analysis/whole",
+            "requirement_refs": [],
+            "score_residual": 0.0,
+            "strict_majority_consensus": "D",
+            "terminal_gap_excluded_count": 0
+          }
+        ]
+      },
+      "original_status": "ok",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    },
+    {
+      "name": "requested_missing_alignment",
+      "facts_sha256": "0fc559343117cfa1d739a7505d13e471519b1606300c556d592ec07ca075ced7",
+      "facts": {
+        "n": {
+          "denominator": null,
+          "method_ref": null,
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": null,
+          "requirement_refs": [
+            "bvbrc_alignment_requirement:%40requirements/msa%2Fanalysis%2Falignment%2Falignment_calculation_dependency_unavailable"
+          ],
+          "state": "missing",
+          "unit": "rows",
+          "value": null
+        }
+      },
+      "original_status": "partial",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    },
+    {
+      "name": "two_analyses_same_category",
+      "facts_sha256": "d58c6c5294bca2188ce9f87537a2d1c552d0fb05dbd5f63f6139043b3ce3b006",
+      "facts": {
+        "adjusted": [
+          {
+            "adjusted_p": 0.3154282138505377,
+            "alpha": 0.05,
+            "family_ref": "bvbrc_alignment_family:%40families/pair-family",
+            "input_p": 0.15771410692526885,
+            "method": "holm",
+            "p_value_basis": "biological_mathematical_recalculation",
+            "rejected_at_alpha": false,
+            "requirement_refs": [],
+            "test_ref": "bvbrc_alignment_test:first/biological_group_test%3A3c88ec714961a5d17998e8376259e24c5d3a0cdc8f514643af0544a72b01eef9",
+            "total_test_count": 2
+          },
+          {
+            "adjusted_p": 0.3154282138505377,
+            "alpha": 0.05,
+            "family_ref": "bvbrc_alignment_family:%40families/pair-family",
+            "input_p": 0.15771410692526885,
+            "method": "holm",
+            "p_value_basis": "biological_mathematical_recalculation",
+            "rejected_at_alpha": false,
+            "requirement_refs": [],
+            "test_ref": "bvbrc_alignment_test:second/biological_group_test%3Ac7f87989aad1016fc7af3e4b8e68788ce5cad2e10eadcda72e039460b3dd180e",
+            "total_test_count": 2
+          }
+        ]
+      },
+      "original_status": "ok",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    },
+    {
+      "name": "unrequested_missing_analysis",
+      "facts_sha256": "e7e0d7f0686163eacd37123194c6beb022ee889bf5ced122dd35968db87af5e2",
+      "facts": {
+        "n": {
+          "denominator": null,
+          "method_ref": "bvbrc_alignment_method:analysis/selected_row_count",
+          "numerator": null,
+          "origin": "derived",
+          "population_ref": "bvbrc_alignment_population:analysis/whole",
+          "requirement_refs": [],
+          "state": "available",
+          "unit": "rows",
+          "value": 2
+        }
+      },
+      "original_status": "ok",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    },
+    {
+      "name": "xmfa_missing_source",
+      "facts_sha256": "3b842014938c7498edfc6561c38ea55eb525c30add743c668e074af22ec96ffa",
+      "facts": {
+        "cell": [
+          {
+            "aligned_symbol": "A",
+            "cell": {
+              "block_index": 0,
+              "column_0based": 0,
+              "record_index": 0
+            },
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "forward_symbol": "T",
+            "member_number": 1,
+            "native_position_0based": 48,
+            "native_position_1based": 49,
+            "native_strand": "-",
+            "original_coordinates": [],
+            "requirement_refs": [
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F1%3Axmfa_source_binding_missing"
+            ],
+            "source_coordinate": null,
+            "source_state": "missing",
+            "state": "residue"
+          }
+        ],
+        "coverage": [
+          {
+            "basis": "represented",
+            "complement_bases": null,
+            "complement_intervals": null,
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "excess_placement_bases": 0,
+            "known_union_bases": 50,
+            "known_union_intervals": [
+              [
+                0,
+                50
+              ]
+            ],
+            "member_number": 1,
+            "membership_completeness": "complete",
+            "multiply_represented_bases": 0,
+            "original_coverage": null,
+            "placement_bases": 50,
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "requirement_refs": [
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F1%3Axmfa_source_binding_missing",
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F2%3Axmfa_source_binding_missing",
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F3%3Axmfa_source_binding_missing"
+            ],
+            "selected_coverage_fraction": null,
+            "source_length": null
+          },
+          {
+            "basis": "represented",
+            "complement_bases": null,
+            "complement_intervals": null,
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "excess_placement_bases": 0,
+            "known_union_bases": 41,
+            "known_union_intervals": [
+              [
+                0,
+                41
+              ]
+            ],
+            "member_number": 2,
+            "membership_completeness": "complete",
+            "multiply_represented_bases": 0,
+            "original_coverage": null,
+            "placement_bases": 41,
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "requirement_refs": [
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F2%3Axmfa_source_binding_missing",
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F1%3Axmfa_source_binding_missing",
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F3%3Axmfa_source_binding_missing"
+            ],
+            "selected_coverage_fraction": null,
+            "source_length": null
+          },
+          {
+            "basis": "represented",
+            "complement_bases": null,
+            "complement_intervals": null,
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "excess_placement_bases": 0,
+            "known_union_bases": 49,
+            "known_union_intervals": [
+              [
+                0,
+                49
+              ]
+            ],
+            "member_number": 3,
+            "membership_completeness": "complete",
+            "multiply_represented_bases": 0,
+            "original_coverage": null,
+            "placement_bases": 49,
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "requirement_refs": [
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F3%3Axmfa_source_binding_missing",
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F1%3Axmfa_source_binding_missing",
+              "bvbrc_alignment_requirement:%40requirements/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2%3A%2Fmembers%2F2%3Axmfa_source_binding_missing"
+            ],
+            "selected_coverage_fraction": null,
+            "source_length": null
+          }
+        ],
+        "inverse": [
+          {
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "matches": [
+              {
+                "block_index": 0,
+                "column_0based": 0,
+                "record_index": 0
+              }
+            ],
+            "member_number": 1,
+            "position_0based": 48,
+            "requirement_refs": [],
+            "search_completeness": "complete",
+            "state": "unique"
+          }
+        ],
+        "metric": [
+          {
+            "document_ref": "bvbrc_alignment_xmfa_document:analysis/mauve_xmfa%3A53af025b2f203c5d72d69ea7b9060d96ad00bc1bfbde517919db24e54d7791b2",
+            "measurement": {
+              "denominator": null,
+              "method_ref": "bvbrc_alignment_method:analysis/xmfa_identical_canonical_v1",
+              "numerator": null,
+              "origin": "calculated",
+              "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+              "requirement_refs": [],
+              "state": "available",
+              "unit": "columns",
+              "value": 39
+            },
+            "population_ref": "bvbrc_alignment_population:analysis/xmfa-all",
+            "selection": {
+              "block_index": 0,
+              "column_0based": null,
+              "member_a": 1,
+              "member_b": 3,
+              "metric": "identical_canonical",
+              "symbol": null
+            }
+          }
+        ]
+      },
+      "original_status": "partial",
+      "source_custody": "original E example synthetic custody; pure projection only"
+    }
+  ],
+  "local_calls": [
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 388,
+      "function": "request",
+      "calls": 16,
+      "cumulative_seconds": 4.2122e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 130,
+      "function": "decode_reference",
+      "calls": 320,
+      "cumulative_seconds": 0.005860463000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 214,
+      "function": "parameters_schema",
+      "calls": 8,
+      "cumulative_seconds": 0.023537637
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 181,
+      "function": "_request_schemas",
+      "calls": 48,
+      "cumulative_seconds": 0.0017986200000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 447,
+      "function": "_selection_schemas",
+      "calls": 40,
+      "cumulative_seconds": 0.007153614000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 302,
+      "function": "validate_parameters",
+      "calls": 8,
+      "cumulative_seconds": 0.13779097
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 255,
+      "function": "_refs_in_request",
+      "calls": 32,
+      "cumulative_seconds": 3.9039000000000003e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 77,
+      "function": "_finite_json",
+      "calls": 4874,
+      "cumulative_seconds": 0.008378321000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 477,
+      "function": "validate_selection",
+      "calls": 40,
+      "cumulative_seconds": 0.060739153000000004
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 144,
+      "function": "_reader_schemas",
+      "calls": 8,
+      "cumulative_seconds": 8.6211e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 284,
+      "function": "_family_relations",
+      "calls": 1,
+      "cumulative_seconds": 1.235e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 287,
+      "function": "check_analysis",
+      "calls": 10,
+      "cumulative_seconds": 0.000512925
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 167,
+      "function": "_family",
+      "calls": 18,
+      "cumulative_seconds": 0.000106877
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 101,
+      "function": "_same",
+      "calls": 5426,
+      "cumulative_seconds": 0.003975370000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 1164,
+      "function": "validate_requested_form",
+      "calls": 8,
+      "cumulative_seconds": 0.052506181000000006
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 120,
+      "function": "encode_reference",
+      "calls": 640,
+      "cumulative_seconds": 0.004813156000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 549,
+      "function": "test_row",
+      "calls": 1,
+      "cumulative_seconds": 5.5431000000000005e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 43,
+      "function": "_finite",
+      "calls": 56451,
+      "cumulative_seconds": 0.047088531
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 257,
+      "function": "resolve",
+      "calls": 65,
+      "cumulative_seconds": 0.000117787
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 270,
+      "function": "compile_request",
+      "calls": 32,
+      "cumulative_seconds": 0.0024641890000000003
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 136,
+      "function": "__init__",
+      "calls": 8,
+      "cumulative_seconds": 0.25498120900000004
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 397,
+      "function": "missing",
+      "calls": 1,
+      "cumulative_seconds": 8.1475e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 413,
+      "function": "cell",
+      "calls": 80,
+      "cumulative_seconds": 0.0036865220000000002
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 432,
+      "function": "walk",
+      "calls": 1291,
+      "cumulative_seconds": 0.0009312980000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 304,
+      "function": "population",
+      "calls": 28,
+      "cumulative_seconds": 0.000471933
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 338,
+      "function": "check_result",
+      "calls": 31,
+      "cumulative_seconds": 0.003302474
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 498,
+      "function": "measurement",
+      "calls": 4,
+      "cumulative_seconds": 0.00037465800000000004
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 568,
+      "function": "groups",
+      "calls": 2,
+      "cumulative_seconds": 1.7502e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 446,
+      "function": "scope",
+      "calls": 17,
+      "cumulative_seconds": 0.000319875
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 582,
+      "function": "native",
+      "calls": 3,
+      "cumulative_seconds": 0.001426841
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 802,
+      "function": "multiplicity",
+      "calls": 1,
+      "cumulative_seconds": 0.000546568
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 650,
+      "function": "rows",
+      "calls": 12,
+      "cumulative_seconds": 0.007796196000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 719,
+      "function": "xmfa_rows",
+      "calls": 8,
+      "cumulative_seconds": 0.0051087680000000005
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 779,
+      "function": "family_candidates",
+      "calls": 1,
+      "cumulative_seconds": 1.1533000000000001e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 877,
+      "function": "project",
+      "calls": 8,
+      "cumulative_seconds": 0.056731588000000006
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 45,
+      "function": "<genexpr>",
+      "calls": 58112,
+      "cumulative_seconds": 0.0059944460000000005
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 253,
+      "function": "<genexpr>",
+      "calls": 5,
+      "cumulative_seconds": 1.6948e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 366,
+      "function": "<genexpr>",
+      "calls": 112,
+      "cumulative_seconds": 2.7798e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 820,
+      "function": "<genexpr>",
+      "calls": 4,
+      "cumulative_seconds": 1.1460000000000001e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 72,
+      "function": "<genexpr>",
+      "calls": 843,
+      "cumulative_seconds": 0.004290851
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 77,
+      "function": "_unique",
+      "calls": 141,
+      "cumulative_seconds": 3.4671e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 95,
+      "function": "_document_id",
+      "calls": 33,
+      "cumulative_seconds": 1.0983000000000001e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 245,
+      "function": "requirement_fact",
+      "calls": 28,
+      "cumulative_seconds": 0.0035020280000000003
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 30,
+      "function": "call",
+      "calls": 16,
+      "cumulative_seconds": 0.31376784300000005
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 680,
+      "function": "<genexpr>",
+      "calls": 3,
+      "cumulative_seconds": 5.529000000000001e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 85,
+      "function": "_ref",
+      "calls": 320,
+      "cumulative_seconds": 0.008730549
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 170,
+      "function": "<genexpr>",
+      "calls": 92,
+      "cumulative_seconds": 0.0006298730000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 236,
+      "function": "<genexpr>",
+      "calls": 147,
+      "cumulative_seconds": 2.1312000000000002e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 386,
+      "function": "<genexpr>",
+      "calls": 6,
+      "cumulative_seconds": 2.2810000000000003e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 451,
+      "function": "<genexpr>",
+      "calls": 1,
+      "cumulative_seconds": 7.94e-07
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 24,
+      "function": "_require",
+      "calls": 50373,
+      "cumulative_seconds": 0.002395742
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 188,
+      "function": "<genexpr>",
+      "calls": 43,
+      "cumulative_seconds": 6.603e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 367,
+      "function": "<genexpr>",
+      "calls": 800,
+      "cumulative_seconds": 4.8147000000000005e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 427,
+      "function": "value",
+      "calls": 75,
+      "cumulative_seconds": 0.0034747470000000003
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 435,
+      "function": "<genexpr>",
+      "calls": 167,
+      "cumulative_seconds": 1.8809000000000002e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 483,
+      "function": "<genexpr>",
+      "calls": 4,
+      "cumulative_seconds": 1.123e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 485,
+      "function": "<genexpr>",
+      "calls": 4,
+      "cumulative_seconds": 1.106e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 39,
+      "function": "_shape",
+      "calls": 261,
+      "cumulative_seconds": 0.000351687
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 57,
+      "function": "_same",
+      "calls": 979,
+      "cumulative_seconds": 0.007080652000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 91,
+      "function": "_test_key",
+      "calls": 6,
+      "cumulative_seconds": 5.833000000000001e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 430,
+      "function": "collected_refs",
+      "calls": 17,
+      "cumulative_seconds": 0.0015067140000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 885,
+      "function": "<genexpr>",
+      "calls": 22,
+      "cumulative_seconds": 5.1260000000000006e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 818,
+      "function": "<genexpr>",
+      "calls": 10,
+      "cumulative_seconds": 6.116800000000001e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 910,
+      "function": "project_requested_facts",
+      "calls": 8,
+      "cumulative_seconds": 0.31183088600000003
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 235,
+      "function": "refs",
+      "calls": 124,
+      "cumulative_seconds": 0.001276261
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 903,
+      "function": "<genexpr>",
+      "calls": 22,
+      "cumulative_seconds": 1.4196000000000001e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 239,
+      "function": "reports",
+      "calls": 94,
+      "cumulative_seconds": 0.000999191
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 250,
+      "function": "quarantine",
+      "calls": 1,
+      "cumulative_seconds": 2.285e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 61,
+      "function": "_index",
+      "calls": 75,
+      "cumulative_seconds": 0.000108647
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 362,
+      "function": "<genexpr>",
+      "calls": 80,
+      "cumulative_seconds": 3.4951000000000005e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 920,
+      "function": "validate_projected_facts",
+      "calls": 8,
+      "cumulative_seconds": 0.313750587
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_projection.py",
+      "line": 71,
+      "function": "_one",
+      "calls": 147,
+      "cumulative_seconds": 0.005012481
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 74,
+      "function": "_pair",
+      "calls": 154,
+      "cumulative_seconds": 3.6280000000000005e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 1156,
+      "function": "<genexpr>",
+      "calls": 28,
+      "cumulative_seconds": 5.655e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 1168,
+      "function": "<genexpr>",
+      "calls": 28,
+      "cumulative_seconds": 7.911000000000001e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 105,
+      "function": "<genexpr>",
+      "calls": 2085,
+      "cumulative_seconds": 0.002727002
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 55,
+      "function": "_enum",
+      "calls": 7890,
+      "cumulative_seconds": 0.001413776
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 367,
+      "function": "<genexpr>",
+      "calls": 4,
+      "cumulative_seconds": 1.7220000000000002e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 111,
+      "function": "_enum",
+      "calls": 3392,
+      "cumulative_seconds": 0.009854983000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 66,
+      "function": "_nullable",
+      "calls": 206,
+      "cumulative_seconds": 4.6597e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 70,
+      "function": "_union",
+      "calls": 212,
+      "cumulative_seconds": 5.5481000000000006e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 59,
+      "function": "_array",
+      "calls": 584,
+      "cumulative_seconds": 0.00011779600000000001
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 309,
+      "function": "ref",
+      "calls": 51,
+      "cumulative_seconds": 5.5280000000000006e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 110,
+      "function": "_check",
+      "calls": 48,
+      "cumulative_seconds": 0.162158473
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 162,
+      "function": "_composition",
+      "calls": 16,
+      "cumulative_seconds": 4.1609e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 137,
+      "function": "<genexpr>",
+      "calls": 960,
+      "cumulative_seconds": 0.0022812460000000002
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 107,
+      "function": "<genexpr>",
+      "calls": 1339,
+      "cumulative_seconds": 0.002136512
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 112,
+      "function": "<genexpr>",
+      "calls": 4478,
+      "cumulative_seconds": 0.002588528
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 1154,
+      "function": "requested_form_schema",
+      "calls": 8,
+      "cumulative_seconds": 0.033938841000000004
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 46,
+      "function": "require",
+      "calls": 2812,
+      "cumulative_seconds": 0.00019760800000000002
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 51,
+      "function": "_object",
+      "calls": 4320,
+      "cumulative_seconds": 0.00121808
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 116,
+      "function": "_provider",
+      "calls": 64,
+      "cumulative_seconds": 3.4069e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 308,
+      "function": "<genexpr>",
+      "calls": 31,
+      "cumulative_seconds": 5.769e-06
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 217,
+      "function": "<genexpr>",
+      "calls": 190,
+      "cumulative_seconds": 1.8458000000000002e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 122,
+      "function": "<lambda>",
+      "calls": 1614,
+      "cumulative_seconds": 0.00026938600000000004
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 123,
+      "function": "<lambda>",
+      "calls": 1631,
+      "cumulative_seconds": 0.000325195
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_alignment_bundle_contracts.py",
+      "line": 273,
+      "function": "_request_dependencies",
+      "calls": 74,
+      "cumulative_seconds": 1.2966000000000001e-05
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_appservice_contracts.py",
+      "line": 73,
+      "function": "_pointer",
+      "calls": 4818,
+      "cumulative_seconds": 0.0030202450000000004
+    }
+  ],
+  "test_source_sha256": "f2281206ccab3bb9145169ebbca69f14b03248565478d2a2cf7c6526e866cd8c"
+}

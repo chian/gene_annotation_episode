@@ -1,0 +1,84 @@
+.F....                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_narrower_caller_schema_cannot_authorize_forged_native_or_numeric_value[bvbrc_proteome_associations-native_category-uni (->)] _
+
+run = <test_bvbrc_proteome_returns.ReturnFixture object at 0x7dd83d43bfb0>
+source = 'bvbrc_proteome_associations', field = 'native_category'
+value = 'uni (->)'
+
+    @pytest.mark.parametrize('source,field,value', [
+        (ASSOCIATIONS, 'native_category', 'not_native'),
+        (ASSOCIATIONS, 'native_category', 'uni (->)'),
+        (ASSOCIATIONS, 'subject_identifier', 'made_up_subject'),
+        (ASSOCIATIONS, 'track_key', 'comp_genome_333'),
+        (ASSOCIATIONS, 'association_key', 'comp_genome_2/row/333'),
+        (MEASUREMENTS, 'cell', {'state': 'missing_input', 'value': .4375, 'reason_codes': [], 'source_field_refs': []}),
+    ])
+    def test_narrower_caller_schema_cannot_authorize_forged_native_or_numeric_value(run, source, field, value):
+        fields = {'association': {'kind': 'association', 'association_key': 'comp_genome_2/row/0'}} if source == ASSOCIATIONS else {'mean': MEAN}
+        args = run.example(fields)
+        schema = fact_form(source)
+        if field != 'cell':
+            node = schema['properties']['f0']['items']['properties']['value']['properties'][field]
+            # A caller constrains the carrier's literal to a forged token. The
+            # original semantic schema and exact saved fact still govern admission.
+            node['enum'] = [value]
+>       child = run.child(run.saved.root, 'results', args[0], schema=schema)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_returns_original.py:98: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_proteome_returns.py:254: in child
+    return self.saved.child(parent, role, assignment, index, schema=fact_form(*sources) if schema is None else schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_appservice_custody.py:95: in child
+    contract = TypedReportContract("Return only the requested source references", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:157: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/communication.py:120: in validate_closed_schema
+    check(schema, "report")
+gene_annotation_episode/communication.py:95: in check
+    check(child, path + "." + name)
+gene_annotation_episode/communication.py:99: in check
+    check(node["items"], path + "[]")
+gene_annotation_episode/communication.py:95: in check
+    check(child, path + "." + name)
+gene_annotation_episode/communication.py:95: in check
+    check(child, path + "." + name)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': ['string', 'null'], 'format': 'identifier', 'x-reference-namespace': 'bvbrc_proteome_native_category', 'enum': ['uni (->)']}
+path = 'report.f0[].value.native_category'
+
+    def check(node, path):
+        if not isinstance(node, dict) or set(node) - KEYWORDS:
+            raise ReportBoundaryError(f"{path}: unsupported schema keyword", code="invalid_schema")
+        declared = node.get("type")
+        kinds = set(declared) if isinstance(declared, list) else {declared}
+        if not kinds or len(kinds - {"null"}) > 1 or not kinds <= {"object", "array", "number", "integer", "boolean", "null", "string"}:
+            raise ReportBoundaryError(f"{path}: explicit single type required", code="invalid_schema")
+        if "object" in kinds:
+            props = node.get("properties")
+            if not isinstance(props, dict) or node.get("additionalProperties") is not False or set(node.get("required", [])) != set(props):
+                raise ReportBoundaryError(f"{path}: fields must be explicit, required and closed", code="open_object")
+            for name, child in props.items():
+                if not CODE.fullmatch(name):
+                    raise ReportBoundaryError(f"{path}: invalid field name", code="invalid_schema")
+                check(child, path + "." + name)
+        elif "array" in kinds:
+            if "items" not in node:
+                raise ReportBoundaryError(f"{path}: arrays need item types", code="open_array")
+            check(node["items"], path + "[]")
+        elif "string" in kinds:
+            literals = node.get("enum", [node["const"]] if "const" in node else None)
+            if literals is not None:
+                if not literals or any(v is not None and (not isinstance(v, str) or not CODE.fullmatch(v)) for v in literals):
+>                   raise ReportBoundaryError(f"{path}: string literals must be declared codes", code="unrestricted_string")
+E                   gene_annotation_episode.communication.ReportBoundaryError: report.f0[].value.native_category: string literals must be declared codes
+
+gene_annotation_episode/communication.py:104: ReportBoundaryError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_returns_original.py::test_narrower_caller_schema_cannot_authorize_forged_native_or_numeric_value[bvbrc_proteome_associations-native_category-uni (->)]
+1 failed, 5 passed in 25.89s

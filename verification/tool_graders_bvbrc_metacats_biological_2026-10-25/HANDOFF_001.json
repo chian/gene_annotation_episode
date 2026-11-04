@@ -1,0 +1,126 @@
+{
+  "scope": "Accepted pure MetaCATS biological math workload only",
+  "changed_production_files": [
+    {
+      "path": "gene_annotation_episode/bvbrc_contingency_math.py",
+      "sha256": "cc799e0487ccfb77fa8224b0027e7adb06e9290f85e3c7d40fdc941a408c842c",
+      "bytes": 7857
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_metacats_biological_contracts.py",
+      "sha256": "aea9e3626d93344e08f78fa1078653e5bcccf192b83bd00a65a9695eb43df5c1",
+      "bytes": 26146
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_metacats_biological_calculators.py",
+      "sha256": "4f1d06537f607ac1b7142438795b5929bd190d5d50084f26bb54ed4fbb7b65b8",
+      "bytes": 16346
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_metacats_adequacy.py",
+      "sha256": "396c0ebf4f5c834a6c18271070a52faf14f4a85ea8e9f2e2856d5fa3269d8e0c",
+      "bytes": 6593
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_metacats_calculators.py",
+      "sha256": "7d0a15f763842dc724eeca503605ccd82e729cd3e78e7c16e33235901c8f59bd",
+      "bytes": 22386
+    },
+    {
+      "path": "gene_annotation_episode/bvbrc_metacats_calculation_contracts.py",
+      "sha256": "75f2633a4f16c5b63d15247acde80cc8166f0466eba53d60b85b2e90eb60ac1c",
+      "bytes": 20448
+    }
+  ],
+  "new_test_files": [
+    {
+      "path": "tests/test_bvbrc_metacats_biological_calculators.py",
+      "sha256": "6a7068adc4fec12a2e159efaaf9144b5715f2fd3e34d366756d13164456e6689",
+      "bytes": 30608
+    },
+    {
+      "path": "tests/test_bvbrc_metacats_expected_adequacy.py",
+      "sha256": "d734c0daf77f7f1c70578bde43248bd125c97536e1c74c44a554cec14128325b",
+      "bytes": 9016
+    },
+    {
+      "path": "tests/test_bvbrc_metacats_count_identity_v2.py",
+      "sha256": "74fd16b2ade85874702ead242d724936c251363aa9dc7a5b954ff30761de67da",
+      "bytes": 6884
+    }
+  ],
+  "exports": {
+    "bvbrc_contingency_math": {
+      "count_alignment_group_sites": "(alignment: 'dict', *, population: 'dict', row_groups: 'tuple[dict, ...]', group_count: 'int', groups_complete: 'bool', case_policy: 'str', terminal_gap_policy: 'str', original_hash_policy: 'str') -> 'list[dict]'",
+      "expected_contingency_counts": "(matrix: 'tuple[tuple[float, ...], ...]') -> 'dict'",
+      "pearson_contingency_statistic": "(matrix: 'tuple[tuple[float, ...], ...]', *, expected: 'tuple[tuple[float, ...], ...]', continuity_delta: 'float') -> 'float | None'"
+    },
+    "bvbrc_metacats_biological_contracts": {
+      "validate_biological_group_population": "(value: 'dict', *, category_id: 'str') -> 'dict'",
+      "validate_biological_assignments": "(values, *, alignment: 'dict', category_id: 'str', group_population: 'dict') -> 'list[dict]'",
+      "validate_biological_counts": "(value: 'dict') -> 'dict'",
+      "validate_biological_statistics": "(value: 'dict') -> 'dict'",
+      "validate_biological_effects": "(value: 'dict') -> 'dict'"
+    },
+    "bvbrc_metacats_biological_calculators": {
+      "biological_group_counts": "(alignment: 'dict', *, analysis_id: 'str', population: 'dict', category_id: 'str', assignments: 'tuple[dict, ...]', group_population: 'dict', case_policy: 'str', terminal_gap_policy: 'str', original_hash_policy: 'str') -> 'dict'",
+      "biological_group_statistics": "(counts: 'dict', *, alphabet: 'str', epsilon: 'float', nucleotide_padding: 'str', omnibus_continuity: 'str', pair_df_policy: 'str', selected_pairs: 'tuple[tuple[str, str], ...]', distribution_backend: 'dict') -> 'dict'",
+      "biological_group_effects": "(counts: 'dict', *, selected_pairs: 'tuple[tuple[str, str], ...]', zero_margin_policy: 'str') -> 'dict'"
+    },
+    "bvbrc_metacats_adequacy": {
+      "expected_count_adequacy": "(statistics: 'dict', *, statistics_kind: 'str') -> 'dict'",
+      "validate_expected_count_adequacy": "(value: 'dict') -> 'dict'"
+    }
+  },
+  "contracts": [
+    {
+      "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+      "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+      "bytes": 42174
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_provider_boundaries_2026-10-25/MATH_HANDOFF_001.md",
+      "sha256": "8f11afbfc1042bba9527bace7aaabebbb662130d4a5d3ec983b05e61be59d4c1",
+      "bytes": 14962
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_provider_boundaries_2026-10-25/CALCULATIONS_001.md",
+      "sha256": "26254b26c96ca77a85de880485fc25d7b237f061d0a7d6ef74d476821e74cb5e",
+      "bytes": 24675
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/MATH_CLARIFICATIONS_007.md",
+      "sha256": "4533c00c38134bb4690d3d3f6bdcbdbe4e0d863bbc55214ad0dcaac1b7c65d63",
+      "bytes": 1756
+    }
+  ],
+  "context_reset_record": {
+    "entire_original_goal_read_before_analysis": true,
+    "objective_and_all_16_design_principles_reread_after_native_source_examination_before_calculators": true,
+    "objective_and_all_16_design_principles_and_accepted_math_contracts_reread_before_handoff": true,
+    "no_permanent_goal_design_history_or_fixed_row_edits": true
+  },
+  "verification": {
+    "new_tests": 123,
+    "existing_native_tests": 36,
+    "scoped_tests": 159,
+    "broad_pure_tests": 360,
+    "broad_errors": 0,
+    "broad_failures": 0,
+    "broad_skipped": 0,
+    "test_receipt": "TEST_RESULTS_002.json",
+    "final_saved_replay_receipt": "FINAL_REPLAY_002.json",
+    "initial_failures": "INITIAL_TEST_FAILURES_001.json",
+    "saved_examples": "EXAMPLES_MANIFEST_001.json",
+    "rekey_mappings": "NATIVE_REKEY_MAPPINGS_001.json"
+  },
+  "not_established": [
+    "application-specific provider integration",
+    "selected execution operation binding",
+    "artifact custody and live service result acquisition",
+    "parent requested typed return path",
+    "complete episode-path integration",
+    "live service/HPC execution"
+  ],
+  "new_service_native_hpc_model_calls": 0
+}

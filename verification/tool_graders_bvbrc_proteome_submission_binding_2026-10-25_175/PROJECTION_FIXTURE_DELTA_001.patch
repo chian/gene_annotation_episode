@@ -1,0 +1,45 @@
+--- a/tests/test_bvbrc_proteome_bundle_projection.py
++++ b/tests/test_bvbrc_proteome_bundle_projection.py
+@@ -30,12 +30,22 @@
+     data = case()
+     original_parameters = {"genome_ids": [], "user_genomes": ["/unused.faa", "/ref.faa", "/subject.faa"],
+         "user_feature_groups": [], "reference_genome_index": 2}
++    # This saved-projection fixture has no actual host-retained submission.
++    # Use a separate, explicitly synthetic effective record; the actual request
++    # path is exercised by test_bvbrc_proteome_submitted_parameters instead.
++    parameter_raw = facts.canonical({"parameters": original_parameters}).encode()
++    parameter_content = source(parameter_raw, "synthetic-effective-parameters")["content"]
++    parameter_evidence = dict(content=parameter_content, pointer="/parameters")
+     task = dict(resource_id="synthetic-api", task_id="synthetic-task", required_application_id="GenomeComparison",
+         native_application_id="GenomeComparison", submitted_parameters=original_parameters, submitted_start_parameters={},
+-        scheduler_returned_parameters=None, effective_parameters=None, submission_receipt_ref="synthetic-receipt",
++        scheduler_returned_parameters=None,
++        effective_parameters=dict(value=deepcopy(original_parameters), evidence=parameter_evidence),
++        submission_receipt_ref="synthetic-receipt",
+         submission_operation_key="synthetic-operation", submission_source_ref="synthetic-original-parameters")
+-    parameter_source = deepcopy(data["input_index"]["parameter_source"])
++    parameter_source = dict(kind="effective", source_field=dict(source_ref=parameter_content["source_ref"],
++        sha256=parameter_content["sha256"], pointer=parameter_evidence["pointer"], row_ordinal=None, field_name=None))
+     index_result = inputs.index_original_inputs(task, parameter_source=parameter_source, source_contract=deepcopy(CONTRACT))
++    data["input_index"] = deepcopy(index_result["value"])
+     inventory_results = [inputs.read_protein_fasta(raw, source=source(raw, "synthetic-" + key),
+         declared_format="protein_fasta_utf8_v1", inventory_key=key) for key, raw in (
+             ("ref", b">r1\nACDE\n>r2\nCCCC\n"), ("subject", b">s1\nACDE\n>s2\nAGG\n"))]
+@@ -73,13 +83,15 @@
+         state="resolved" if parsed["status"] == "ok" else "partial", content=binding,
+         construction_evidence=None, result_index=0, requirement_ids=[]),
+         dict(selector_kind="original_input_index", selection_index=0, state="resolved" if index_result["status"] == "ok" else "partial",
+-             content=None, construction_evidence=None, result_index=0, requirement_ids=[])]
++             content=parameter_content, construction_evidence=None, result_index=0, requirement_ids=[])]
+     resolutions.extend(dict(selector_kind="inventory", selection_index=i, state="resolved" if r["status"] == "ok" else "partial",
+         content=r["value"]["source"]["content"], construction_evidence=None, result_index=i, requirement_ids=[])
+         for i, r in enumerate(inventory_results))
+     wrapper = dict(version="bvbrc_proteome_provider_sheet_v1", analysis_id=params["analysis_id"], original_task=task,
+         parameters=params, requested_form=form, bundle_sha256=hashlib.sha256(b"explicitly synthetic bundle").hexdigest(),
+-        supplied_values=[dict(evidence=evidence, value=supplied)], input_resolution=resolutions, native_results=[parsed],
++        supplied_values=[dict(evidence=evidence, value=supplied),
++                         dict(evidence=parameter_evidence, value=deepcopy(original_parameters))],
++        input_resolution=resolutions, native_results=[parsed],
+         input_index_result=index_result, inventory_results=inventory_results, feature_results=[], genome_results=[], sequence_results=[],
+         joins_result=joined, native_sheet_result=result, requirements=[], diagnostics=[])
+     assert contracts.validate_provider_sheet(wrapper) == wrapper

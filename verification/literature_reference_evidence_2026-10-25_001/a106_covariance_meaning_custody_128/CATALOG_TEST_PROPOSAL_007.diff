@@ -1,0 +1,70 @@
+--- a/tests/test_literature_parent_population_information.py
++++ b/tests/test_literature_parent_population_information.py
+@@ -45,11 +45,22 @@
+     return json.loads(raw)
+ 
+ 
++def current_baseline():
++    """Retain the fourteen historical operations and their current input guidance."""
++    from gene_annotation_episode.literature_partner_native_inputs import partner_source_population_schema
++    from gene_annotation_episode.literature_partner_operand_information import partner_source_population_schema_with_information
++    rows = baseline()
++    partner, = [row for row in rows if row["name"] == "literature.partner.source.populate"]
++    assert partner["input_schema"] == partner_source_population_schema()
++    partner["input_schema"] = partner_source_population_schema_with_information()
++    return rows
++
++
+ def native_addition():
+     """Only the new operation is additive; the historical fixture stays exact."""
+-    from gene_annotation_episode.literature_rate_native_inputs import rate_source_population_schema
++    from gene_annotation_episode.literature_native_rate_operand_information import rate_source_population_schema_with_information
+     entry, = [row for row in _population_catalog() if row["name"] == "literature.rate.source.populate"]
+-    assert entry["input_schema"] == rate_source_population_schema()
++    assert entry["input_schema"] == rate_source_population_schema_with_information()
+     assert "without a prepared CSV/TSV" in entry["description"]
+     assert "Source-defined U/mg" in entry["description"]
+     return entry
+@@ -88,6 +99,15 @@
+     return entry
+ 
+ 
++def interaction_addition():
++    """The four-cell source binding comparison is a separate additive operation."""
++    from gene_annotation_episode.literature_binding_interaction_inputs import binding_interaction_arguments_schema
++    entry, = [row for row in _population_catalog() if row["name"] == "literature.binding.interaction.populate"]
++    assert entry["input_schema"] == binding_interaction_arguments_schema()
++    assert "four selected original-image binding cells" in entry["description"]
++    return entry
++
++
+ def enabled_parent(store, child, source):
+     services, _ = service_binding(store, child)
+     binding = LiteratureEpisodes(services, rate_population=True,
+@@ -111,7 +131,7 @@
+         services = binding.services
+         disabled = LiteratureEpisodes(services)
+         ordinary = disabled.catalog(context)
+-        expected = ordinary + baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition()]
++        expected = ordinary + current_baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]
+         before = deepcopy(expected)
+         assert binding.catalog(context) == expected
+         # No schema aliasing between separate catalog construction calls.
+@@ -152,7 +172,7 @@
+         descriptor_info = information["reference_evidence_parent"]
+         assert descriptor_info["source_refs"] == [args["source_ref"]]
+         assert descriptor_info["source_custody"][0]["artifact_ref"] == store.get(args["source_ref"])["artifact_ref"]
+-        expected = [{key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition()]]
++        expected = [{key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]]
+         assert descriptor_info["child_population_operations"] == expected
+         assert all(set(row) == {"name", "description"} for row in expected)
+         assert store.db.total_changes == rows_before
+@@ -315,7 +335,7 @@
+         def commission(inputs):
+             descriptor = inputs["reference_evidence_parent"]
+             assert descriptor["child_population_operations"] == [
+-                {key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition()]]
++                {key: row[key] for key in ("name", "description")} for row in [*current_baseline(), native_addition(), amount_addition(), optical_addition(), kinetic_addition(), interaction_addition()]]
+             assert not any(row["name"].startswith("literature.") for row in inputs["tools"])
+             assert inputs["child_reports"] == []
+             assert not store.list("observation") and not store.list("assessment")

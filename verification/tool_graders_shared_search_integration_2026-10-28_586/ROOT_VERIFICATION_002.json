@@ -1,0 +1,45 @@
+{
+  "record_type": "collected_shared_search_saved_return_repair_evidence",
+  "recorded_at": "2026-10-28T15:46:50.069099+00:00",
+  "previous": "verification/tool_graders_shared_search_integration_2026-10-28_586/ROOT_VERIFICATION_001.json",
+  "goal_or_scope_changed": false,
+  "verification": {
+    "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check040_rfam_saved_return_repairs",
+    "tests": 123,
+    "passed": 122,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "receipt": {
+      "returncode": 1,
+      "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check040_rfam_saved_return_repairs/handle.json",
+      "unit": "gene-local-job-c8370385d0354d778b91253230f7d043.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true
+    },
+    "audit": {
+      "pytest_returncode": 1,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "failed_cases": [
+      {
+        "classname": "tests.test_rfam_saved_live_replay",
+        "name": "test_current_code_replays_original_live_rfam_without_new_work",
+        "time": "1.807"
+      }
+    ],
+    "receipt_sha256": "cff589f7ec8e8ffde472fd0372ffae2a2e36fa231b1a5acac70d4e260347a9b7"
+  },
+  "canonical_return_validation": "All41previous saved-return validation failures pass;81common-core cases also pass.",
+  "remaining_failure": "Original closed live Rfam replay regenerates current scientific mechanics implementation_sha256; all other prepared fields match source-derived comparison.",
+  "diagnostic": "verification/tool_graders_rfam_legacy_replay_copy_2026-10-28_587/CHECK040_BOUNDARY_FINDING.json",
+  "active_repair_contract": "verification/tool_graders_scientific_closed_replay_2026-10-28_588/IMPLEMENTATION_CONTRACT_001.md",
+  "full_rfam_replay_completion": false
+}

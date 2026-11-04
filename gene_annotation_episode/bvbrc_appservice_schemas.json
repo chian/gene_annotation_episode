@@ -1525,6 +1525,10 @@
                 },
                 "declared_format": {
                   "$ref": "#/$defs/DeclaredFormat"
+                },
+                "max_bytes": {
+                  "type": "integer",
+                  "minimum": 1
                 }
               },
               "required": [
@@ -1796,6 +1800,10 @@
         },
         "declared_format": {
           "$ref": "#/$defs/DeclaredFormat"
+        },
+        "max_bytes": {
+          "type": "integer",
+          "minimum": 1
         }
       },
       "required": [
@@ -2529,8 +2537,13 @@
       "properties": {
         "path": {
           "anyOf": [
-            {"type": "string", "minLength": 1},
-            {"type": "null"}
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "uuid": {
@@ -2574,8 +2587,22 @@
         "metadata_receipt_ref"
       ],
       "anyOf": [
-        {"properties": {"path": {"type": "string", "minLength": 1}}},
-        {"properties": {"uuid": {"type": "string", "minLength": 1}}}
+        {
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "uuid": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
       ],
       "additionalProperties": false
     },

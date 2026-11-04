@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="27.358" timestamp="2026-10-26T05:22:59.579452-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmemit-consensus_simple]" time="26.648"><failure message="AssertionError: assert ['length', 'c..._length', ...] == ('length', 'c..._length', ...)&#10;  &#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check003/temporary/test_all_native_modes_through_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x70158472cfb0&gt;
+program = 'hmmemit', mode = 'consensus_simple'
+
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+        assert len(CASES) == len(set(CASES)) == 26
+        case = run_case(tmp_path, program, mode)
+        try:
+            parent, received = assert_accounting(case)
+            body, bundle, sheet, calculations = read_retained(case)
+            assert body['complete'] and case.returned[0]['completed'], body['failures']
+            assert_native_custody(case, bundle)
+&gt;           assert_projected_values(case.returned[0], case.contexts[0].assignment['selector'], calculations)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:577: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'complete...': 'unknown'}, {'name': 'consensus_agreement', 'occurrences': [{...}], 'outcome': 'pass'}], 'kind': 'consensus', ...}]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ount'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'code': 'sample_population_count', 'inputs': [{'field': 'associations.model_population.record_keys', 'rec...'--seed': 42, '-c': True}}, 'parameters': {'consensus_thresholds': None, 'probability_rounding_tolerance': 1e-05}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {row.get('record_key', row.get('row_key')): row for row in calculations['rows']}
+        for row in form['rows']:
+&gt;           assert [q['path'] for q in row['quantities']] == selector['projection']['quantities']
+E           AssertionError: assert ['length', 'c..._length', ...] == ('length', 'c..._length', ...)
+E             
+E             Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:367: AssertionError</failure></testcase></testsuite></testsuites>

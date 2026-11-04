@@ -29,18 +29,25 @@ from .flux_balance_return_views import (
 FACT_SOURCES = tuple(fba_fact_sources())
 PROJECTION_SOURCE = "flux_balance_measurements"
 SAVED_SOURCE = "flux_balance_saved_sheets"
+MODEL_SOURCE = "flux_balance_model_views"
+EDITED_SOURCE = "flux_balance_edited_models"
+ORDINARY_PREFIX = "flux_balance_ordinary_action_prefix"
+ORDINARY_PREFIX_VERSION = "ordinary_flux_balance_action_prefix_v1"
+_LEGACY_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, "flux_balance_failures")
+_FILE_SOURCES = (SAVED_SOURCE, EDITED_SOURCE)
 
 
 _RECEIVING_ROLES = {"annotation", "scientific_process"}
 _CLOSURE_PREFIX = "flux_balance_received_report_prefix"
-_CONTRIBUTION_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE)
+_CONTRIBUTION_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, MODEL_SOURCE, EDITED_SOURCE)
 
 
 class FluxBalanceReturns(EpisodeReturnRecords):
-    def __init__(self, owner):
+    def __init__(self, owner, *, ordinary_backend=None):
         super().__init__(owner.store, owner.run_id, failure_prefix="flux_balance_return_")
         self.results = owner.native_flux_balance_results
         self.declarations = AppServiceCustody(owner.store, owner.run_id)
+        self.ordinary_backend = ordinary_backend
 
     def authenticate(self, context, *, allow_unsaved=False):
         self._require(isinstance(context, BindingContext), "binding_context_required")
@@ -162,12 +169,12 @@ class FluxBalanceReturns(EpisodeReturnRecords):
 
     def _own_facts(self, context, sources, *, verify_artifacts):
         self.authenticate(context, allow_unsaved=True)
-        self._require(context.role == "results" and self.results.applies(context),
+        self._require(context.role == "results" and self.results is not None and self.results.applies(context),
             "original_results_owner_required")
         groups = self.results.own_fact_groups(context, verify_artifacts=verify_artifacts)
-        self._require(type(groups) is dict and all(source in groups for source in FACT_SOURCES),
+        self._require(type(groups) is dict and all(source in groups for source in _LEGACY_SOURCES),
             "original_facts_required")
-        return {source: validate_fba_fact_values(source, groups[source]) for source in sources}
+        return {source: validate_fba_fact_values(source, groups.get(source, [])) for source in sources}
 
     def _attempts(self, context):
         self.authenticate(context, allow_unsaved=True)
@@ -190,6 +197,14 @@ class FluxBalanceReturns(EpisodeReturnRecords):
         return _validate_report_prefix(facts[_CLOSURE_PREFIX])
 
     def _historical(self, context, form, schema, sources):
+        if self._ordinary_prefix(context) is not None:
+            values, metadata = self._historical_ordinary(context, form, schema, sources)
+            origins = {}
+            for source in _CONTRIBUTION_SOURCES:
+                for row, meta in zip(values.get(source, []), metadata.get(source, [])):
+                    owners = origins.setdefault(canonical(row), [])
+                    owners.extend(owner for owner in meta["origins"] if owner not in owners)
+            return values, origins
         self.authenticate(context)
         values = {source: rows for source, rows in self._values(form, schema).items() if source in sources}
         self._require(self._frozen(context, values), "closed_child_facts_required")
@@ -246,6 +261,8 @@ class FluxBalanceReturns(EpisodeReturnRecords):
         sources = requested_fba_sources(schema)
         if not sources:
             return {}
+        if self._uses_ordinary(context):
+            return self.facts(context, schema)
         self.authenticate(context, allow_unsaved=True)
         if context.role == "results":
             groups = self._own_facts(context, sources, verify_artifacts=False)
@@ -263,6 +280,10 @@ class FluxBalanceReturns(EpisodeReturnRecords):
         sources = requested_fba_sources(schema)
         if not sources:
             return {}
+        if self._uses_ordinary(context):
+            # The new private key is supplied only by ordinary_closure_facts,
+            # through the registry's actual-completion callback.
+            return self.facts(context, schema)
         with self.store.read_snapshot():
             self.authenticate(context, allow_unsaved=True)
             if context.role == "results":
@@ -284,6 +305,21 @@ class FluxBalanceReturns(EpisodeReturnRecords):
                 _CLOSURE_PREFIX: deepcopy(_validate_report_prefix(prefix))}
 
     def validate_received_report(self, context, form, schema):
+        if self._uses_ordinary(context):
+            self.authenticate(context, allow_unsaved=True)
+            if self._ordinary_prefix(context) is not None:
+                # A stripped initial form must still authenticate the original
+                # full closed contract and its exact recorded action prefix.
+                groups = self._closed_ordinary(context)[0]
+            else:
+                sources = requested_fba_sources(plain(schema))
+                if not sources:
+                    return
+                groups = self._combined(context, sources, verify_artifacts=True)[0]
+            values = self._values(form, schema)
+            self._require(self._equal(values, {source: groups[source] for source in values}),
+                "returned_facts_conflict")
+            return
         if not requested_fba_sources(plain(schema)):
             return
         self.authenticate(context, allow_unsaved=True)
@@ -304,13 +340,185 @@ class FluxBalanceReturns(EpisodeReturnRecords):
         child, saved, declared = self._attempt(context, self._admission_index(context, operation_key))
         self._require(self._equal(form, saved) and self._equal(schema, declared), "admitted_form_conflict")
         values, _ = self._historical(child, saved, declared, requested_fba_sources(plain(declared)))
-        return list(dict.fromkeys(row["artifact_ref"] for row in values.get(SAVED_SOURCE, [])))
+        return list(dict.fromkeys(row["artifact_ref"] for source in _FILE_SOURCES
+            for row in values.get(source, [])))
 
     def resolve_received(self, context, reference, namespace):
         if namespace not in {None, "artifact"} or context.role not in _RECEIVING_ROLES:
             return False
-        groups, _, _ = self._received(context, (SAVED_SOURCE,))
-        return any(row["artifact_ref"] == reference for row in groups[SAVED_SOURCE])
+        groups = (self._combined(context, _FILE_SOURCES,
+            prefix=self._ordinary_prefix(context), verify_artifacts=False)[0]
+            if self._uses_ordinary(context) else self._received(context, _FILE_SOURCES)[0])
+        return any(row["artifact_ref"] == reference for source in _FILE_SOURCES for row in groups[source])
+
+    def _form_facts(self, context):
+        row = self.db.execute("SELECT facts FROM runtime_forms WHERE run_id=? AND episode_id=?",
+            (self.run_id, context.episode_id)).fetchone()
+        return None if row is None else json.loads(row["facts"])
+
+    def _ordinary_prefix(self, context):
+        facts = self._form_facts(context)
+        if facts is None or ORDINARY_PREFIX not in facts:
+            return None
+        value = facts[ORDINARY_PREFIX]
+        self._require(type(value) is dict
+            and set(value) == {"version", "witnesses", "received_prefix", "identities"}
+            and value["version"] == ORDINARY_PREFIX_VERSION
+            and type(value["witnesses"]) is list and type(value["identities"]) is dict,
+            "ordinary_prefix_conflict")
+        _validate_report_prefix(value["received_prefix"])
+        return deepcopy(value)
+
+    def _uses_ordinary(self, context):
+        if context.role not in _RECEIVING_ROLES:
+            return False
+        facts = self._form_facts(context)
+        return (facts is not None and ORDINARY_PREFIX in facts
+            or facts is None and self.ordinary_backend is not None)
+
+    def _ordinary_records(self, context, sources, *, witnesses=None, verify_artifacts=False):
+        backend = self.ordinary_backend
+        if backend is None:
+            self._require(not witnesses, "ordinary_backend_unavailable")
+            return []
+        if witnesses is None:
+            rows = backend.own_fact_records(context, sources=sources,
+                verify_artifacts=verify_artifacts)
+        else:
+            # The backend's aggregate port is called per witness so that each
+            # source-free public row remains bound to its actual producer.
+            rows = [{"witness": witness, "facts": backend.authenticate_frozen_fact_records(
+                context, witnesses=[witness], sources=sources)} for witness in witnesses]
+        self._require(type(rows) is list, "ordinary_facts_conflict")
+        seen, result = set(), []
+        for row in rows:
+            self._require(type(row) is dict and set(row) == {"witness", "facts"}
+                and type(row["witness"]) is dict and type(row["facts"]) is dict,
+                "ordinary_facts_conflict")
+            witness = plain(row["witness"])
+            self._require(type(witness.get("source_ref")) is str
+                and bool(witness["source_ref"]) and canonical(witness) not in seen,
+                "ordinary_witness_conflict")
+            seen.add(canonical(witness))
+            self._require(all(source in row["facts"] for source in sources), "ordinary_facts_conflict")
+            result.append({"witness": witness, "facts": {source:
+                validate_fba_fact_values(source, row["facts"][source]) for source in sources}})
+        return result
+
+    @staticmethod
+    def _ordinary_identity(source, source_ref, row):
+        # Entire selectors include snapshot, explicit ordinals/duplicates,
+        # filters and local window. File and failure identities stay literal.
+        selected = row.get("selector", row)
+        return canonical({"source": source, "source_ref": source_ref, "selection": selected})
+
+    def _combined(self, context, sources, *, prefix=None, verify_artifacts=False):
+        self.authenticate(context, allow_unsaved=True)
+        self._require(context.role in _RECEIVING_ROLES, "unsupported_return_owner")
+        groups, metadata = {source: [] for source in sources}, {source: [] for source in sources}
+        seen = {source: {} for source in sources}
+
+        def append(source, row, meta):
+            self._require(type(meta) is dict and set(meta) == {"identity", "origins"}
+                and type(meta["identity"]) is str and type(meta["origins"]) is list
+                and all(type(origin) is str for origin in meta["origins"]), "ordinary_identity_conflict")
+            index = seen[source].get(meta["identity"])
+            if index is None:
+                seen[source][meta["identity"]] = len(groups[source])
+                groups[source].append(deepcopy(row))
+                metadata[source].append(deepcopy(meta))
+            else:
+                self._require(self._equal(groups[source][index], row), "ordinary_identity_conflict")
+                owners = metadata[source][index]["origins"]
+                owners.extend(owner for owner in meta["origins"] if owner not in owners)
+
+        allowed = None if prefix is None else prefix["received_prefix"]["attempts"]
+        attempts, witnesses = self._attempts(context), []
+        if allowed is not None:
+            actual = {row["decision_index"]: self._witness(row) for row in attempts}
+            self._require(all(self._equal(saved, actual.get(saved["decision_index"]))
+                for saved in allowed), "return_prefix_conflict")
+        for attempt in attempts:
+            if allowed is not None and not any(self._equal(self._witness(attempt), saved) for saved in allowed):
+                continue
+            schema = json.loads(attempt["contract"]).get("measurements", {}).get("schema", {})
+            wanted = tuple(source for source in requested_fba_sources(schema) if source in sources)
+            if not wanted:
+                continue
+            child, form, schema = self._attempt(context, attempt["decision_index"])
+            if self._ordinary_prefix(child) is not None:
+                values, identities = self._historical_ordinary(child, form, schema, wanted)
+            else:
+                values, origins = self._historical(child, form, schema, wanted)
+                identities = {source: [{"identity": canonical({"legacy_source": source, "value": row}),
+                    "origins": origins.get(canonical(row), [])} for row in rows]
+                    for source, rows in values.items()}
+            witnesses.append(self._witness(attempt))
+            for source, rows in values.items():
+                for row, meta in zip(rows, identities[source]):
+                    append(source, row, meta)
+        own = self._ordinary_records(context, sources,
+            witnesses=None if prefix is None else prefix["witnesses"], verify_artifacts=verify_artifacts)
+        for record in own:
+            for source, rows in record["facts"].items():
+                for row in rows:
+                    append(source, row, {"identity": self._ordinary_identity(
+                        source, record["witness"]["source_ref"], row), "origins": [context.episode_id]})
+        closed = {"version": ORDINARY_PREFIX_VERSION,
+            "witnesses": [deepcopy(row["witness"]) for row in own],
+            "received_prefix": {"version": RECEIVED_REPORT_PREFIX_VERSION, "attempts": witnesses},
+            "identities": metadata}
+        return groups, closed
+
+    def _closed_ordinary(self, context):
+        self.authenticate(context)
+        prefix = self._ordinary_prefix(context)
+        self._require(prefix is not None, "ordinary_prefix_required")
+        schema = plain(context.request).get("report_contract", {}).get("measurements", {}).get("schema", {})
+        sources = requested_fba_sources(schema)
+        self._require(set(prefix["identities"]) == set(sources), "ordinary_prefix_conflict")
+        groups, expected = self._combined(context, sources, prefix=prefix, verify_artifacts=False)
+        self._require(self._equal(prefix, expected), "ordinary_prefix_conflict")
+        frozen = self._form_facts(context)
+        self._require(all(source in frozen and self._equal(frozen[source], rows)
+            for source, rows in groups.items()), "frozen_facts_conflict")
+        return groups, expected
+
+    def _historical_ordinary(self, context, form, schema, sources):
+        groups, prefix = self._closed_ordinary(context)
+        values = {source: rows for source, rows in self._values(form, schema).items() if source in sources}
+        metadata = {}
+        for source, rows in values.items():
+            cursor, metadata[source] = 0, []
+            for row in rows:
+                while cursor < len(groups[source]) and not self._equal(row, groups[source][cursor]):
+                    cursor += 1
+                self._require(cursor < len(groups[source]), "returned_facts_conflict")
+                metadata[source].append(deepcopy(prefix["identities"][source][cursor]))
+                cursor += 1
+        return values, metadata
+
+    def facts(self, context, schema):
+        """Public requested groups from actual own actions and typed child returns."""
+        schema = plain(schema)
+        sources = requested_fba_sources(schema)
+        if not sources:
+            return {}
+        if not self._uses_ordinary(context):
+            return self.received_facts(context, schema)
+        groups = (self._closed_ordinary(context)[0] if self._ordinary_prefix(context) is not None
+            else self._combined(context, sources, verify_artifacts=True)[0])
+        return select_fba_return_facts(groups, schema=schema)
+
+    def ordinary_closure_facts(self, context, schema):
+        """Private action/view associations; called only at actual closure."""
+        sources = requested_fba_sources(plain(schema))
+        if not sources or not self._uses_ordinary(context):
+            return {}
+        with self.store.read_snapshot():
+            prefix = (self._closed_ordinary(context)[1] if self._ordinary_prefix(context) is not None
+                else self._combined(context, sources, verify_artifacts=True)[1])
+            return {ORDINARY_PREFIX: deepcopy(prefix)}
 
     def authenticate_received_saved_sheet(self, context, file: dict) -> tuple[str, ...]:
         file = validate_fba_fact_values(SAVED_SOURCE, [plain(file)])[0]
@@ -350,4 +558,4 @@ class FluxBalanceReturns(EpisodeReturnRecords):
         return tuple(origins)
 
 
-__all__ = ["FluxBalanceReturns"]
+__all__ = ["FluxBalanceReturns", "ORDINARY_PREFIX", "ORDINARY_PREFIX_VERSION"]

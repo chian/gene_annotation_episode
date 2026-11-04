@@ -1,0 +1,72 @@
+{
+  "interface": "optlang.glpk_interface",
+  "glpk_version": "5.0",
+  "libsbml_version": "5.21.2",
+  "model_tolerance": 1e-07,
+  "configuration": {
+    "presolve": "auto",
+    "verbosity": 0,
+    "timeout": null
+  },
+  "public_tolerances": {
+    "feasibility": 1e-07,
+    "integrality": 1e-07
+  },
+  "simplex_control": {
+    "aorn": 2,
+    "excl": 1,
+    "it_lim": 2147483647,
+    "meth": 1,
+    "msg_lev": 0,
+    "obj_ll": -1.7976931348623157e+308,
+    "obj_ul": 1.7976931348623157e+308,
+    "out_dly": 0,
+    "out_frq": 5000,
+    "presolve": 0,
+    "pricing": 34,
+    "r_test": 34,
+    "shift": 1,
+    "tm_lim": 2147483647,
+    "tol_bnd": 1e-07,
+    "tol_dj": 1e-07,
+    "tol_piv": 1e-09
+  },
+  "integer_control": {
+    "alien": 0,
+    "binarize": 0,
+    "br_tech": 4,
+    "bt_tech": 3,
+    "cb_func": null,
+    "cb_info": null,
+    "cb_size": 0,
+    "clq_cuts": 0,
+    "cov_cuts": 0,
+    "flip": 1,
+    "fp_heur": 0,
+    "gmi_cuts": 0,
+    "mip_gap": 0.0,
+    "mir_cuts": 0,
+    "msg_lev": 0,
+    "out_dly": 10000,
+    "out_frq": 5000,
+    "pp_tech": 2,
+    "presolve": 1,
+    "ps_heur": 0,
+    "ps_tm_lim": 60000,
+    "save_sol": null,
+    "sr_heur": 1,
+    "tm_lim": 2147483647,
+    "tol_int": 1e-07,
+    "tol_obj": 1e-07,
+    "use_sol": 0
+  },
+  "distributions": {
+    "cobra": "0.32.1",
+    "optlang": "1.9.1",
+    "swiglpk": "5.0.13",
+    "python-libsbml": "5.21.2",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "sympy": "1.14.0"
+  }
+}

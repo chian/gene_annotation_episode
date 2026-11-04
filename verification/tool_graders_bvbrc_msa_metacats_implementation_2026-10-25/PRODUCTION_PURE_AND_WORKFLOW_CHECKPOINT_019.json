@@ -1,0 +1,170 @@
+{
+  "recorded_at": "2026-10-25T06:20:25.028459+00:00",
+  "completed_host_checks": {
+    "path": "verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/host-integration-tests-002.xml",
+    "sha256": "f97aec1bb874af1fcb0dcdfbcc4dab413c76820cfcb8bc260775b672ee38c58c",
+    "counts": {
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "seconds": 1629.668
+  },
+  "controlled_workflow_modes": [
+    {
+      "mode": "gene_tree",
+      "run_directory": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/gene_tree-51nipzfy",
+      "returned_measurements": {
+        "cells": 16,
+        "gap_fraction": 0.125,
+        "tips": 4
+      },
+      "counts": {
+        "runtime_actions": 12,
+        "runtime_model_calls": 12,
+        "runtime_observations": 12,
+        "runtime_record_receipts": 121,
+        "runtime_report_attempts": 4
+      },
+      "replay": {
+        "path": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/gene_tree-51nipzfy/saved-replay-verification.json",
+        "sha256": "ec2950e555e11536c9f88d38817f297e41f40361e86ca5ebae6764bbe33f473b"
+      },
+      "provenance": {
+        "path": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/gene_tree-51nipzfy/PROVENANCE.json",
+        "sha256": "e278d8409c41dc7b12469276c3d19b27b04328547960b0aac7718553c6bd969c"
+      },
+      "source_before_after_equal": true,
+      "test_result": "3 passed; original wrong count-denominator assertion failed; separate corrected retained check passed",
+      "fixture_overrides": [
+        "controlled decisions",
+        "controlled scientific/root continuation",
+        "scientific/root project_credit=lambda *_: 0",
+        "synthetic NativeClient transport"
+      ]
+    },
+    {
+      "mode": "concatenated_sequence_loci",
+      "run_directory": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/concatenated_sequence_loci-egvkr9x8",
+      "returned_measurements": {
+        "cells": 16,
+        "gap_fraction": 0.125,
+        "tips": 4
+      },
+      "counts": {
+        "runtime_actions": 12,
+        "runtime_model_calls": 12,
+        "runtime_observations": 12,
+        "runtime_record_receipts": 121,
+        "runtime_report_attempts": 4
+      },
+      "replay": {
+        "path": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/concatenated_sequence_loci-egvkr9x8/saved-replay-verification.json",
+        "sha256": "c70f5edbdb17cffb4de42586809d7413c8d94e4d96274a935432c9a00526d18a"
+      },
+      "provenance": {
+        "path": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/concatenated_sequence_loci-egvkr9x8/PROVENANCE.json",
+        "sha256": "1c631d221a1168a6fe3685655c0202b45795b932c970eac7c8deab6cd2caa606"
+      },
+      "source_before_after_equal": true,
+      "test_result": "4 passed",
+      "fixture_overrides": [
+        "controlled decisions",
+        "controlled scientific/root continuation",
+        "scientific/root project_credit=lambda *_: 0",
+        "synthetic NativeClient transport"
+      ]
+    },
+    {
+      "mode": "core_genome_codon_protein",
+      "run_directory": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/core_genome_codon_protein-n031lmae",
+      "returned_measurements": {
+        "cells": 16,
+        "gap_fraction": 0.125,
+        "tips": 4
+      },
+      "counts": {
+        "runtime_actions": 12,
+        "runtime_model_calls": 12,
+        "runtime_observations": 12,
+        "runtime_record_receipts": 117,
+        "runtime_report_attempts": 4
+      },
+      "replay": {
+        "path": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/core_genome_codon_protein-n031lmae/saved-replay-verification.json",
+        "sha256": "0c5b0dcdf5e5622ce19e6d0db09e4d0a2b1ddcc4353bb09378ef94c2ff654aac"
+      },
+      "provenance": {
+        "path": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/core_genome_codon_protein-n031lmae/PROVENANCE.json",
+        "sha256": "ab4d07469b8e6e4d8ee7f3d3f40953091dd531d61e2f0384cca08ef3dabe2dbf"
+      },
+      "source_before_after_equal": true,
+      "test_result": "4 passed",
+      "fixture_overrides": [
+        "controlled decisions",
+        "controlled scientific/root continuation",
+        "scientific/root project_credit=lambda *_: 0",
+        "synthetic NativeClient transport"
+      ]
+    }
+  ],
+  "corrected_gene_numeric_check": {
+    "path": "verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25/runs/gene_tree-51nipzfy/corrected-numeric-retained-verification.json",
+    "sha256": "2c0840951ceca872a7f2cf80ccbceba93589656a989adcd0199dea5d3e4980dc"
+  },
+  "combined_pure_check": {
+    "path": "verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/combined-pure-001.xml",
+    "sha256": "fe274a8eac09d90b2d48700c1546c9653dce8344d585c59763299b3d4f0cdf75",
+    "counts": {
+      "tests": 212,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "seconds": 2.872
+  },
+  "pure_source_before_after_equal_and_still_current": true,
+  "pure_tests_by_module": {
+    "tests.test_bvbrc_alignment_values": 27,
+    "tests.test_bvbrc_msa_formats": 47,
+    "tests.test_bvbrc_msa_calculators": 43,
+    "tests.test_bvbrc_metacats_formats": 32,
+    "tests.test_bvbrc_metacats_format_contracts": 27,
+    "tests.test_bvbrc_metacats_calculators": 36
+  },
+  "native_component_cases": 7,
+  "native_variable_tests_compared_by_production_calculator": 317,
+  "effective_saved_meta_examples": 7,
+  "saved_no_io_replay": {
+    "path": "verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/SAVED_REPLAY_FINAL_003.json",
+    "sha256": "fc6227294d6bd2899a0728cf6d5bfa788afa191d899fe52d8d375ec317b3652b"
+  },
+  "example_provenance_correction": {
+    "path": "verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25/EXAMPLES_002/CORRECTION_002.json",
+    "sha256": "01f04c088fd6935e047d84631cad76f0c42f53e188a44bad5ef2ceafa49f3d4e"
+  },
+  "msa_examples": {
+    "path": "verification/tool_graders_bvbrc_msa_pure_2026-10-25/FILLED_EXAMPLES.json",
+    "sha256": "16dde4d9c782a20d75ab338e6624de11ba8ef2d05c91764cff935e6e656ec1e4"
+  },
+  "msa_saved_no_io_replay": {
+    "path": "verification/tool_graders_bvbrc_msa_pure_2026-10-25/SAVED_REPLAY_RESULT.json",
+    "sha256": "846a8fb7abd46b961547700604820f979d6c1c08ceb22af70bace95ed5f5c24b"
+  },
+  "meta_native_parser_examples": {
+    "path": "verification/tool_graders_bvbrc_metacats_formats_2026-10-25/VERIFICATION_001.json",
+    "sha256": "0486cafc3b94a69ed807e4f1c0cb605caa7da5704ef5434fc513257c76a9cd92"
+  },
+  "scope_and_limits": [
+    "The five host tests manually journal the selected actions; three separate composed Workflow runs verify actual method_loop execution.",
+    "The composed runs use controlled decisions, scientific/root continuation and zero scientific/root projected credit; native transport is synthetic. Practical operation credit and endpoint estimation use production paths.",
+    "The original GeneTree suite remains 3 passed and 1 incorrect test-assertion failure; the correction is verified separately against its saved run, not relabeled as a green original suite.",
+    "No configured model, live BV-BRC, deployed application version, native full phylogeny program, HPC or W05 annotation-credit correctness is established.",
+    "New MSA and MetaCATS scientific parsing/calculation components are installed; provider sheets, source associations, tool information, application binding and requested episode returns remain unfinished.",
+    "Biological group counts must be calculable from known memberships without R-column evidence; the new independent biological-count/standard-statistics contract is being defined. Existing implemented source-reproduction calculations remain distinct.",
+    "MSA XMFA multi-block coordinates, source/definition prealigned mismatch, transformation maps and actual resource execution remain explicit work.",
+    "The initial twelve-group saved numerical example used unpadded matrix tokens in R-column fields. The original remains recorded; EXAMPLES_002 supplies exact observed padded tokens and evidence. All numerical statistics are unchanged.",
+    "Nine new pure modules do not mean nine completed tools. All 308 fixed rows and 288 resource bindings remain tracked; zero complete scientific tools are claimed."
+  ]
+}

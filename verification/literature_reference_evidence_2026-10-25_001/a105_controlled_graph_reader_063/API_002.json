@@ -1,0 +1,16 @@
+{
+  "implementation_release": "controlled_graph_parent_review_061/CONTROLLED_GRAPH_IMPLEMENTATION_RELEASE_003.md",
+  "public_function": "read_controlled_response_rate_figure(arguments, *, read_source) -> GraphResult",
+  "public_exports": ["read_controlled_response_rate_figure"],
+  "request_declaration": "a105_controlled_graph_design_061/GRAPH_REQUEST_SCHEMA_001.json",
+  "result_declaration": "a105_controlled_graph_design_061/GRAPH_RESULT_SCHEMA_002.json",
+  "callback": "read_source(source_ref, representation) -> exactly {artifact_ref: nonempty str, content: built-in immutable bytes}",
+  "private_counter": "_count_bar_runs(*, rgb_bytes: bytes, width: int, height: int, selection: CountSelection) -> CountResult",
+  "private_counter_declarations": ["a105_controlled_graph_design_061/COUNT_INTERFACE_002.json", "a105_controlled_graph_design_061/COUNT_RESULT_SCHEMA_002.json"],
+  "private_decoder": "_strict_decode(content, field): authorized encoded immutable bytes -> native Pillow frame, format, frame_count; internal caller closes the frame",
+  "scope": "A caller-nominated signed linear-bar rate reading with witnessed axis/unit and explicit endpoint. No graph-type discovery, OCR, gel lane/band quantification, score, scientific model, full v2 controlled-response adapter or runtime registration.",
+  "unit_keys": ["umol/min", "nmol/min", "mmol/min", "uM/min", "nM/min", "per_min", "per_s", "umol/min/mg", "nmol/min/mg"],
+  "count_version": "controlled_response_bar_runs_v1",
+  "new_public_schema_or_validation_functions": [],
+  "frozen_existing_helpers_changed": false
+}

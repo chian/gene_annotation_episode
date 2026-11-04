@@ -1,0 +1,44 @@
+...F...................................................                  [100%]
+=================================== FAILURES ===================================
+_ test_all_retained_native_reports_have_complete_content_bound_readers[boundaries/peek10001.sam.samstat.html] _
+
+name = 'bq_R1_MAPQ_gt_30_0'
+
+    @pytest.mark.parametrize('name', sorted(str(p.relative_to(FIXTURES)) for p in FIXTURES.rglob('*.html')))
+    def test_all_retained_native_reports_have_complete_content_bound_readers(name):
+        doc = native(name)
+        raw = (FIXTURES / name).read_bytes()
+        validate_native_document(doc)
+        assert doc['parse_scope'] == 'complete'
+        assert doc['artifact']['actual_format'] == 'samstat_html_2_2_3'
+        assert doc['artifact']['declared_format'] == 'samstat_html'
+        assert doc['artifact']['producer_version'] == '2.2.3'
+        assert doc['artifact']['sha256'] == hashlib.sha256(raw).hexdigest()
+        assert not doc['categories'] and not doc['sequence_records'] and not doc['alignment_records']
+        assert not doc['native_lineage'] and not doc['reference_dictionary']
+        for cell in doc['cells']:
+            loc = cell['locator']
+            assert raw[loc['byte_start']:loc['byte_end']].decode('utf-8') == cell['native_token']
+        # Independently enumerate every literal native y/error array, including
+        # hidden groups. The parser must preserve its entire row order and x labels.
+        for match in re.finditer(rb'var ([A-Za-z0-9_]+)  = \{\nx: \[(.*?)\],\ny: \[(.*?)\],(.*?)\n\};', raw, re.S):
+            name = match[1].decode()
+            axis_labels = [item.strip('"') for item in match[2].decode().split(',')]
+            payloads = [('y', match[3])]
+            sem = re.search(rb'array : \[(.*?)\]', match[4], re.S)
+            if sem:
+                payloads.append(('error_y.array', sem[1]))
+            for field, payload in payloads:
+                retained = [c for c in doc['cells'] if c['locator']['block'] == name and c['locator']['field'] == field]
+                assert [c['native_token'] for c in retained] == payload.decode().split(',')
+                assert [c['axis']['label'] for c in retained] == axis_labels
+                assert [c['locator']['row_ordinal'] for c in retained] == list(range(len(axis_labels)))
+        assert all(p['quality_encoding'] == 'unknown' and not p['member_record_refs'] for p in doc['populations'])
+>       assert all(p['scope'] == ('partial' if name.endswith('peek10001.sam.samstat.html') else 'unknown') for p in doc['populations'])
+E       assert False
+E        +  where False = all(<generator object test_all_retained_native_reports_have_complete_content_bound_readers.<locals>.<genexpr> at 0x7763a471eea0>)
+
+tests/test_bvbrc_fastqutils_samstat_legacy.py:75: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_fastqutils_samstat_legacy.py::test_all_retained_native_reports_have_complete_content_bound_readers[boundaries/peek10001.sam.samstat.html]
+1 failed, 54 passed in 16.19s

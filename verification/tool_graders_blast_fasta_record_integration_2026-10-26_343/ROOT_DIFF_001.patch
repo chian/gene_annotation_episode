@@ -1,0 +1,264 @@
+--- before/gene_annotation_episode/native_blast_standard_database_contracts.py
++++ gene_annotation_episode/native_blast_standard_database_contracts.py
+@@ -27,6 +27,9 @@
+ _ABS = {"type": "string", "minLength": 1}
+ _KEY = {"type": "string", "minLength": 1, "pattern": r"^[^/\\\x00]+$"}
+ _ENV = {"type": "object", "additionalProperties": {"type": "string"}}
++_METADATA_TUPLES = (("query_identity", "native_blast_database_query_metadata_v1"),
++                    ("sequence_database", "native_blast_database_sequence_metadata_v1"),
++                    ("sequence_database", "native_blast_database_sequence_metadata_v2"))
+ 
+ 
+ def _nullable(schema):
+@@ -85,10 +88,9 @@
+     "query": _object({"kind": {"enum": ["sequence", "pssm"]}, "input_key": _KEY}),
+     "databases": _array(DATABASE_OPERAND_SCHEMA, minItems=1, maxItems=1), "options": _array(_STR),
+     "outputs": _array(OUTPUT_SELECTION_SCHEMA, minItems=3, maxItems=3),
+-    "metadata_inputs": _array(_object({"input_key": _KEY,
+-        "consumer": {"enum": ["query_identity", "sequence_database"]},
+-        "schema_id": {"enum": ["native_blast_database_query_metadata_v1",
+-                                "native_blast_database_sequence_metadata_v1"]}}), uniqueItems=True),
++    "metadata_inputs": _array({"oneOf": [_object({"input_key": _KEY,
++        "consumer": {"const": consumer}, "schema_id": {"const": schema}})
++        for consumer, schema in _METADATA_TUPLES]}, uniqueItems=True),
+     "grading_parameters": _object({"sequence_database_model": _nullable(MODEL_SCHEMA)})})
+ NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA = _object({"argv": _array(_STR, minItems=1),
+     "environment": _ENV, "native_blast_standard_database": NATIVE_BLAST_STANDARD_DATABASE_JOB_SCHEMA})
+@@ -289,8 +291,6 @@
+ _TASKS = {"blastn": {"blastn", "blastn-short", "dc-megablast", "megablast", "rmblastn"},
+     "blastp": {"blastp", "blastp-fast", "blastp-short"},
+     "blastx": {"blastx", "blastx-fast"}, "tblastn": {"tblastn", "tblastn-fast"}}
+-_METADATA_TUPLES = (("query_identity", "native_blast_database_query_metadata_v1"),
+-                    ("sequence_database", "native_blast_database_sequence_metadata_v1"))
+ 
+ 
+ def _option_grammar(program):
+@@ -350,7 +350,7 @@
+ 
+ 
+ def standard_blast_database_metadata_registry() -> list[dict]:
+-    """Expose only the two unchanged, existing scientific wire-schema tuples.
++    """Expose the exact supported query and sequence scientific wire tuples.
+ 
+     This registry is descriptive. Invoke the existing public supplied-byte
+     validator; its native6 preparation entry is not a standard job preparer.
+--- before/gene_annotation_episode/native_blast_standard_database_result_views.py
++++ gene_annotation_episode/native_blast_standard_database_result_views.py
+@@ -13,6 +13,7 @@
+ import re
+ 
+ from .domain import ContractError, validate_schema
++from .native_blast_standard_database_contracts import _METADATA_TUPLES
+ 
+ 
+ PROGRAMS = ("blastn", "blastp", "blastx", "tblastn", "tblastx")
+@@ -195,6 +196,7 @@
+         define("pssm_cell", name, "native PSSM array with M rows,N positions,byRow", "raw[r*N+p] if byRow else raw[p*M+r]; require M*N; copy saved normalized array, never divide scores by scalingFactor", origin="native_report")
+     for name in out["pssm_position"]:
+         define("pssm_position", name, "native PSSM intermediateData." + name, "Copy existing N-vector decoding at original position; effective observations are not biological replicates", origin="native_report")
++    out["sequence_record_quality"] = deepcopy(out["sequence_quality"])
+     return out
+ 
+ 
+@@ -228,6 +230,9 @@
+     elif family in ("sequence_taxonomy", "sequence_quality"):
+         fields["function"] = _nullable(ENTITY)
+         fields["rank" if family == "sequence_taxonomy" else "assembly_source"] = TOKEN if family == "sequence_taxonomy" else PROVENANCE_SCHEMA
++    elif family == "sequence_record_quality":
++        fields.update(function=_nullable(ENTITY), assembly_source=_object(dict(source_ref=REF,
++            pointer={"const": ""}, record_locator=_object(dict(kind={"const": "fasta_record"}, record_ordinal=I0)))))
+     elif family.startswith("pssm_"):
+         fields = dict(artifact_key=ARTIFACT, record_ordinal=I0)
+         if family != "pssm_matrix": fields["position"] = I0
+@@ -309,8 +314,8 @@
+ def _selector_schema(program):
+     identity = dict(artifact_ref=REF, sha256=SHA, size_bytes=I0)
+     return _object(dict(version={"const": PREFIX + "selector_v1"}, acquisition={"const": "complete_bound_bundle"},
+-        metadata_inputs=_array(_object(dict(input_key=TOKEN, consumer={"enum": ["query_identity", "sequence_database"]},
+-            schema_id={"enum": ["native_blast_database_query_metadata_v1", "native_blast_database_sequence_metadata_v1"]}, **identity))),
++        metadata_inputs=_array({"oneOf": [_object(dict(input_key=TOKEN, consumer={"const": consumer},
++            schema_id={"const": schema}, **identity)) for consumer, schema in _METADATA_TUPLES]}),
+         retained_sources=_array(_object(dict(source_ref=REF, **identity))),
+         projections=_array({"oneOf": [_object(dict(family={"const": family},
+             rows={"oneOf": [_object(dict(offset=I0, limit={"type": "integer", "minimum": 1})), _object(dict(record_keys=_array(ROW_ID, minItems=1, uniqueItems=True)))]},
+@@ -333,8 +338,7 @@
+         seen, identities = set(), {}
+         for row in selector["metadata_inputs"]:
+             key = row["input_key"], row["consumer"], row["schema_id"]
+-            expected = "native_blast_database_" + ("query" if row["consumer"] == "query_identity" else "sequence") + "_metadata_v1"
+-            if key in seen or row["schema_id"] != expected: raise ValueError("metadata_tuple_invalid")
++            if key in seen or (row["consumer"], row["schema_id"]) not in _METADATA_TUPLES: raise ValueError("metadata_tuple_invalid")
+             seen.add(key)
+             value = tuple(row[k] for k in ("artifact_ref", "sha256", "size_bytes"))
+             if row["input_key"] in identities and identities[row["input_key"]] != value: raise ValueError("metadata_identity_conflict")
+--- before/gene_annotation_episode/native_blast_standard_database_result_worker.py
++++ gene_annotation_episode/native_blast_standard_database_result_worker.py
+@@ -33,9 +33,9 @@
+     "temperature_bits": {"type": "number", "exclusiveMinimum": 0},
+     "function_priors": {"anyOf": [{"type": "null"}, {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}}]}},
+     "additionalProperties": False}]}
+-_DESCRIPTOR = views._object(dict(input_key=views.TOKEN, consumer={"enum": ["query_identity", "sequence_database"]},
+-    schema_id={"enum": ["native_blast_database_query_metadata_v1", "native_blast_database_sequence_metadata_v1"]},
+-    **_FILE_ID, origin={"enum": ["original_job_input", "selected_results_input"]}))
++_DESCRIPTOR = {"oneOf": [views._object(dict(input_key=views.TOKEN, consumer={"const": consumer},
++    schema_id={"const": schema_id}, **_FILE_ID, origin={"enum": ["original_job_input", "selected_results_input"]}))
++    for consumer, schema_id in contracts._METADATA_TUPLES]}
+ _SNAPSHOT = dict(subject_ref=views.REF, record_type={"enum": ["input", "feature", "product", "read_subject"]},
+     molecule={"enum": ["dna", "rna", "protein"]}, length={"type": "integer", "minimum": 1},
+     sequence_sha256=views.SHA, sequence_artifact_ref=views.REF)
+@@ -158,7 +158,7 @@
+ 
+ 
+ _DEPENDENCY_ROOTS = {"Bio", "numpy", "jsonschema", "jsonschema_specifications", "referencing", "rpds", "attr", "attrs"}
+-_PROJECT_MODULES = tuple("native_blast_standard_database_result_worker native_blast_standard_database_result_views native_blast_standard_database_calculators native_blast_standard_database_metadata native_blast_standard_database_contracts native_blast_database_result_worker native_blast_database_result_views native_blast_database_metadata native_blast_database_contracts blast_report_collection blast_grading_inputs blast_program_context blast_sequence_database blast_database_grader blast_pairwise_grader blast_profile_inputs blast_profile_calculators blast_pssm_inputs blast_pssm_calculators blast_pssm_master_inputs blast_iteration_inputs blast_iteration_calculators blast_vdb_inputs blast_vdb_calculators blast_search domain".split())
++_PROJECT_MODULES = tuple("native_blast_standard_database_result_worker native_blast_standard_database_result_views native_blast_standard_database_calculators native_blast_standard_database_metadata native_blast_standard_database_contracts native_blast_database_result_worker native_blast_database_result_views native_blast_database_metadata native_blast_database_contracts blast_report_collection blast_grading_inputs blast_program_context blast_fasta_record_identity blast_sequence_database blast_database_grader blast_pairwise_grader blast_profile_inputs blast_profile_calculators blast_pssm_inputs blast_pssm_calculators blast_pssm_master_inputs blast_iteration_inputs blast_iteration_calculators blast_vdb_inputs blast_vdb_calculators blast_search domain".split())
+ 
+ 
+ def _implementation_modules():
+--- before/gene_annotation_episode/native_blast_standard_database_calculators.py
++++ gene_annotation_episode/native_blast_standard_database_calculators.py
+@@ -16,7 +16,8 @@
+ from . import blast_pssm_calculators as _pssm
+ from .blast_pairwise_grader import alignment_components
+ from .blast_program_context import resolve_blast_program_context
+-from .native_blast_database_result_worker import populate_native_blast_database_search_facts
++from .blast_fasta_record_identity import blast_record_identity
++from .native_blast_database_result_worker import populate_native_blast_database_search_facts, _sequence_quality_source
+ from .domain import validate_schema
+ from . import native_blast_standard_database_result_views as views
+ from .native_blast_standard_database_contracts import IDENTITY_SCHEMA
+@@ -519,17 +520,20 @@
+                         taxa = {a["taxid"] for a in associations if a["description_index"] == association["description_index"] and a["taxid"] is not None}
+                         if not any(a["description_index"] == association["description_index"] and (a["taxid"] == association["taxid"] or
+                                 (a["taxid"] is None or association["taxid"] is None) and len(taxa) <= 1) for a in assigned): continue
++                    source = _sequence_quality_source(database, association)
+                     record = dict(assembly_accession=assembly.get("accession"), source=association["source"], quality_method=assembly.get("quality_method"),
+                         measurement_methods=assembly.get("measurement_methods") or {}, accession=association["accession"] if not assembly.get("accession") else None,
+                         measurements=association["quality_measurements"])
+                     if record == quality:
+-                        metadata = database["reference_metadata"][association["metadata_index"]]
+-                        source = dict(source_ref=metadata["source"], pointer=metadata["native_pointer"])
+-                        item = sources.setdefault(views._hash(source), (source, []))
++                        record_key = blast_record_identity(source_ref=source["source_ref"], pointer=source["pointer"], record_locator=source.get("record_locator"))
++                        item = sources.setdefault(record_key, (source, []))
+                         item[1].append(dict(artifact_role="calculations", pointer=dbbase + f"/hits/{hi}/associations/{ai}"))
++                        if "record_locator" in source:
++                            item[1].append(dict(artifact_role="calculations", pointer=dbbase + f"/reference_metadata/{association['metadata_index']}"))
+             qb = b + f"/source_quality/assembly_measurements/{qi}"
+             for source, refs in sources.values():
+-                builder.add("sequence_quality", dict(search_key=key, function=function, assembly_source=source), qb + "/measurements", quality["measurements"],
++                family = "sequence_record_quality" if "record_locator" in source else "sequence_quality"
++                builder.add(family, dict(search_key=key, function=function, assembly_source=source), qb + "/measurements", quality["measurements"],
+                     key=key, status=result["status"], refs=[dict(artifact_role="calculations", pointer=qb), *refs])
+ 
+ 
+--- before/gene_annotation_episode/native_blast_database_result_worker.py
++++ gene_annotation_episode/native_blast_database_result_worker.py
+@@ -23,6 +23,7 @@
+ from . import blast_vdb_calculators as _vdb
+ from .blast_pairwise_grader import alignment_components
+ from .blast_program_context import resolve_blast_program_context
++from .blast_fasta_record_identity import blast_record_identity
+ from .blast_report_collection import parse_blast_report_collection
+ from .domain import ContractError, canonical, identity, validate_schema
+ from . import native_blast_database_result_views as _views
+@@ -632,6 +633,31 @@
+         _sequence_taxonomy_quality(builder, key, function, owner, b, database, dbase, status)
+ 
+ 
++def _sequence_quality_source(database, association):
++    """Retain the exact saved metadata address and its accepted association."""
++    metadata = database["reference_metadata"][association["metadata_index"]]
++    source = dict(source_ref=metadata["source"], pointer=metadata["native_pointer"])
++    locator = metadata.get("record_locator")
++    if locator is not None:
++        blast_record_identity(**source, record_locator=locator)
++        binding = association.get("description_binding")
++        index = association.get("binding_index")
++        if (database["schema"] != "blast_database_sheet_v2" or type(index) is not int or index < 0
++                or index >= len(database.get("description_bindings", [])) or type(binding) is not dict
++                or database["description_bindings"][index] != binding
++                or any(binding.get(k) != association.get(k) for k in ("report_index", "hit_index", "description_index", "metadata_index"))
++                or binding.get("metadata_source_ref") != source["source_ref"]
++                or binding.get("metadata_pointer") != source["pointer"]
++                or binding.get("metadata_record_locator") != locator
++                or binding.get("metadata_identifier") != dict(namespace=metadata["identifier_namespace"], value=metadata["accession"])
++                or association.get("source") != source["source_ref"] or association.get("assembly") != metadata.get("assembly")
++                or any(value is not None and value != metadata["assembly"].get(name)
++                    for name, value in association["quality_measurements"].items())):
++            raise ValueError("native_blast_database_record_quality_relation_invalid")
++        source["record_locator"] = deepcopy(locator)
++    return source
++
++
+ def _sequence_taxonomy_quality(builder, key, function, owner, base, database, dbase, status):
+     taxonomy = owner["taxonomy"]
+     for i, rank in enumerate(taxonomy["ranks"]):
+@@ -655,18 +681,22 @@
+                     if not any(v["description_index"] == a["description_index"] and (v["taxid"] == a["taxid"] or
+                         (v["taxid"] is None or a["taxid"] is None) and len(taxa) <= 1) for v in assigned):
+                         continue
++                source = _sequence_quality_source(database, a)
+                 expected = dict(assembly_accession=assembly.get("accession"), source=a["source"], quality_method=assembly.get("quality_method"),
+                     measurement_methods=assembly.get("measurement_methods") or {}, accession=a["accession"] if not assembly.get("accession") else None,
+                     measurements=a["quality_measurements"])
+                 if expected != measurement:
+                     continue
+-                metadata = database["reference_metadata"][a["metadata_index"]]
+-                source = dict(source_ref=metadata["source"], pointer=metadata["native_pointer"])
+-                sources.setdefault(canonical(source), (source, []) )[1].append(dict(artifact_role="calculations", pointer=dbase + f"/hits/{hi}/associations/{ai}"))
++                record_key = blast_record_identity(source_ref=source["source_ref"], pointer=source["pointer"], record_locator=source.get("record_locator"))
++                refs = sources.setdefault(record_key, (source, []))[1]
++                refs.append(dict(artifact_role="calculations", pointer=dbase + f"/hits/{hi}/associations/{ai}"))
++                if "record_locator" in source:
++                    refs.append(dict(artifact_role="calculations", pointer=dbase + f"/reference_metadata/{a['metadata_index']}"))
+         for source, refs in sources.values():
+-            builder.add("sequence_quality", dict(search_key=key, function=function, assembly_source=source), b, measurement["measurements"],
+-                key=key, status=status, details={n: dict(pointer=b + "/measurements/" + n) for n in _views._METRICS["sequence_quality"]},
+-                origins={n: "supplied_source_record" for n in _views._METRICS["sequence_quality"]},
++            family = "sequence_record_quality" if "record_locator" in source else "sequence_quality"
++            builder.add(family, dict(search_key=key, function=function, assembly_source=source), b, measurement["measurements"],
++                key=key, status=status, details={n: dict(pointer=b + "/measurements/" + n) for n in _views._METRICS[family]},
++                origins={n: "supplied_source_record" for n in _views._METRICS[family]},
+                 refs=[dict(artifact_role="calculations", pointer=b), *refs])
+ 
+ 
+@@ -983,7 +1013,7 @@
+     """Actual loaded scientific dependency closure, excluding unrelated callers."""
+     names = ["gene_annotation_episode." + name for name in (
+         "native_blast_database_result_worker", "native_blast_database_result_views", "native_blast_database_metadata",
+-        "native_blast_database_contracts", "blast_report_collection", "blast_grading_inputs", "blast_program_context",
++        "native_blast_database_contracts", "blast_report_collection", "blast_grading_inputs", "blast_program_context", "blast_fasta_record_identity",
+         "blast_sequence_database", "blast_database_grader", "blast_pairwise_grader", "blast_profile_inputs", "blast_profile_calculators",
+         "blast_pssm_inputs", "blast_pssm_calculators", "blast_pssm_master_inputs", "blast_iteration_inputs", "blast_iteration_calculators",
+         "blast_vdb_inputs", "blast_vdb_calculators", "blast_search", "domain")]
+--- before/gene_annotation_episode/native_blast_database_result_views.py
++++ gene_annotation_episode/native_blast_database_result_views.py
+@@ -154,6 +154,7 @@
+         out["iteration_inclusion"][name]["formula"] = formula
+     for name, formula in (("added_count", "|L\\E|"), ("removed_count", "|E\\L|"), ("retained_count", "|E intersection L|"), ("earlier_target_count", "|E|"), ("later_target_count", "|L|")):
+         out["iteration_comparison"][name]["formula"] = formula + "; only for the calculator's complete qualified sets"
++    out["sequence_record_quality"] = deepcopy(out["sequence_quality"])
+     return out
+ 
+ 
+@@ -206,6 +207,8 @@
+         "sequence_function": {**search, "function": _ENTITY}, "sequence_population": {**search, "function": _ENTITY},
+         "sequence_taxonomy": {**search, "function": _nullable(_ENTITY), "rank": _TOKEN},
+         "sequence_quality": {**search, "function": _nullable(_ENTITY), "assembly_source": _PROV},
++        "sequence_record_quality": {**search, "function": _nullable(_ENTITY), "assembly_source": _object(dict(
++            source_ref=_REF, pointer={"const": ""}, record_locator=_object(dict(kind={"const": "fasta_record"}, record_ordinal=_I0))))},
+         "profile_model": {**search, "profile_source": _PROV, "model_identifier": _IDENTIFIER},
+         "profile_hsp_model": {**row, "profile_source": _PROV, "model_identifier": _IDENTIFIER},
+         "profile_overlap": {**search, "left_profile_source": _PROV, "right_profile_source": _PROV},
+--- before/gene_annotation_episode/native_blast_database_result_publication.py
++++ gene_annotation_episode/native_blast_database_result_publication.py
+@@ -48,7 +48,7 @@
+     'native_blast_database_result_worker_manifest_v2': _ROLES_V2}
+ _SCIENTIFIC_MODULES = ('native_blast_database_result_worker', 'native_blast_database_result_views',
+     'native_blast_database_metadata', 'native_blast_database_contracts', 'blast_report_collection',
+-    'blast_grading_inputs', 'blast_program_context', 'blast_sequence_database', 'blast_database_grader',
++    'blast_grading_inputs', 'blast_program_context', 'blast_fasta_record_identity', 'blast_sequence_database', 'blast_database_grader',
+     'blast_pairwise_grader', 'blast_profile_inputs', 'blast_profile_calculators', 'blast_pssm_inputs',
+     'blast_pssm_calculators', 'blast_pssm_master_inputs', 'blast_iteration_inputs',
+     'blast_iteration_calculators', 'blast_vdb_inputs', 'blast_vdb_calculators', 'blast_search', 'domain')

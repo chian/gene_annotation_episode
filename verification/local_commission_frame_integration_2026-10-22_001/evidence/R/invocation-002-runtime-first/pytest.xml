@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="42" time="197.397" timestamp="2026-10-22T05:43:08.569750-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_local_commission_frame_runtime" name="test_new_durable_frame_is_saved_before_dispatch_without_changing_model_view[False]" time="7.705" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_new_durable_frame_is_saved_before_dispatch_without_changing_model_view[True]" time="7.929" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[False-legacy]" time="4.262" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[False-v2]" time="4.322" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[False-v3]" time="4.319" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[False-v3-presented]" time="4.335" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[True-legacy]" time="3.918" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[True-v2]" time="3.868" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[True-v3]" time="3.601" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_original_pending_and_completed_requests_replay_verbatim_without_capture[True-v3-presented]" time="3.659" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[extra-False]" time="4.069" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[extra-True]" time="3.691" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[missing-False]" time="3.902" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[missing-True]" time="3.844" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[foreign-run-False]" time="3.701" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[foreign-run-True]" time="3.686" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[foreign-episode-False]" time="4.485" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[foreign-episode-True]" time="3.685" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[no-binding-False]" time="3.492" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_contract_is_checked_before_transport_or_completed_response[no-binding-True]" time="3.813" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_actual_c1_c3_c4_completion_retains_original_frame_and_no_early_payoff" time="6.191" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_missing_after_pending_still_captures_full_population_without_status_probe[missing]" time="5.009"><failure message="sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action">make_host = &lt;function make_host.&lt;locals&gt;.make at 0x7ddf19fbe520&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7ddf19f5ce00&gt;
+pending_mode = 'missing'
+
+    @pytest.mark.parametrize('pending_mode', ['missing', 'null', 'empty'])
+    def test_missing_after_pending_still_captures_full_population_without_status_probe(make_host, monkeypatch,
+                                                                                     pending_mode):
+        h = make_host()
+        selected_child(h)
+        _, index, _, _ = dispatch(h)
+        assert index == 1
+        asyncio.run(h.source.execute(query()['selection'], index))
+        row = h.workflow.journal.row('runtime_actions', h.source.episode_id, index)
+        outcome = json.loads(row['result'])
+        if pending_mode == 'missing':
+            outcome.pop('pending_work_after_action')
+        elif pending_mode == 'null':
+            outcome['pending_work_after_action'] = None
+        else:
+            outcome['pending_work_after_action'] = {'version': 'pending_work_v1', 'captured_at': STAMP, 'items': []}
+&gt;       h.workflow.journal.save('runtime_actions', {'episode_id': h.source.episode_id,
+            'decision_index': index, 'result': canonical(outcome)})
+
+tests/test_local_commission_frame_runtime.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.episode_journal.Journal object at 0x7ddf19f6e3f0&gt;
+table = 'runtime_actions'
+values = {'run_id': 'frame-runtime-fixture', 'episode_id': 'episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a...rce_5f1fe6467d85bd05a0949693","unit":"aa"}],"reference_matches":[],"references":null,"total":1},"status":"completed"}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+&gt;       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError</failure></testcase><testcase classname="tests.test_local_commission_frame_runtime" name="test_missing_after_pending_still_captures_full_population_without_status_probe[null]" time="4.922"><failure message="sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action">make_host = &lt;function make_host.&lt;locals&gt;.make at 0x7ddf1902f2e0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7ddf19f65fd0&gt;
+pending_mode = 'null'
+
+    @pytest.mark.parametrize('pending_mode', ['missing', 'null', 'empty'])
+    def test_missing_after_pending_still_captures_full_population_without_status_probe(make_host, monkeypatch,
+                                                                                     pending_mode):
+        h = make_host()
+        selected_child(h)
+        _, index, _, _ = dispatch(h)
+        assert index == 1
+        asyncio.run(h.source.execute(query()['selection'], index))
+        row = h.workflow.journal.row('runtime_actions', h.source.episode_id, index)
+        outcome = json.loads(row['result'])
+        if pending_mode == 'missing':
+            outcome.pop('pending_work_after_action')
+        elif pending_mode == 'null':
+            outcome['pending_work_after_action'] = None
+        else:
+            outcome['pending_work_after_action'] = {'version': 'pending_work_v1', 'captured_at': STAMP, 'items': []}
+&gt;       h.workflow.journal.save('runtime_actions', {'episode_id': h.source.episode_id,
+            'decision_index': index, 'result': canonical(outcome)})
+
+tests/test_local_commission_frame_runtime.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.episode_journal.Journal object at 0x7ddf19f6ec30&gt;
+table = 'runtime_actions'
+values = {'run_id': 'frame-runtime-fixture', 'episode_id': 'episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a...rce_5f1fe6467d85bd05a0949693","unit":"aa"}],"reference_matches":[],"references":null,"total":1},"status":"completed"}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+&gt;       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError</failure></testcase><testcase classname="tests.test_local_commission_frame_runtime" name="test_missing_after_pending_still_captures_full_population_without_status_probe[empty]" time="4.596"><failure message="sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action">make_host = &lt;function make_host.&lt;locals&gt;.make at 0x7ddf19fbd080&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7ddf37b77320&gt;
+pending_mode = 'empty'
+
+    @pytest.mark.parametrize('pending_mode', ['missing', 'null', 'empty'])
+    def test_missing_after_pending_still_captures_full_population_without_status_probe(make_host, monkeypatch,
+                                                                                     pending_mode):
+        h = make_host()
+        selected_child(h)
+        _, index, _, _ = dispatch(h)
+        assert index == 1
+        asyncio.run(h.source.execute(query()['selection'], index))
+        row = h.workflow.journal.row('runtime_actions', h.source.episode_id, index)
+        outcome = json.loads(row['result'])
+        if pending_mode == 'missing':
+            outcome.pop('pending_work_after_action')
+        elif pending_mode == 'null':
+            outcome['pending_work_after_action'] = None
+        else:
+            outcome['pending_work_after_action'] = {'version': 'pending_work_v1', 'captured_at': STAMP, 'items': []}
+&gt;       h.workflow.journal.save('runtime_actions', {'episode_id': h.source.episode_id,
+            'decision_index': index, 'result': canonical(outcome)})
+
+tests/test_local_commission_frame_runtime.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.episode_journal.Journal object at 0x7ddf19e7ac00&gt;
+table = 'runtime_actions'
+values = {'run_id': 'frame-runtime-fixture', 'episode_id': 'episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a...rce_5f1fe6467d85bd05a0949693","unit":"aa"}],"reference_matches":[],"references":null,"total":1},"status":"completed"}'}
+
+    def save(self, table, values):
+        values = {"run_id": self.run_id, **values}
+        columns = list(values)
+        # An outcome update must not replace independently recorded timing.
+        # Upsert only supplied fields instead of deleting/recreating the row.
+&gt;       self.db.execute(f"INSERT INTO {table} ({','.join(columns)}) "
+                        f"VALUES ({','.join('?' for _ in columns)}) ON CONFLICT DO UPDATE SET "
+                        + ','.join(f'{name}=excluded.{name}' for name in columns), list(values.values()))
+E       sqlite3.IntegrityError: NOT NULL constraint failed: runtime_actions.action
+
+gene_annotation_episode/episode_journal.py:87: IntegrityError</failure></testcase><testcase classname="tests.test_local_commission_frame_runtime" name="test_v6_replay_validates_original_pair_and_rejects_mixed_records_without_repair[old-context]" time="4.642" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v6_replay_validates_original_pair_and_rejects_mixed_records_without_repair[missing-after]" time="4.703" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v6_replay_validates_original_pair_and_rejects_mixed_records_without_repair[changed-selection]" time="4.651" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_v6_replay_validates_original_pair_and_rejects_mixed_records_without_repair[legacy-request]" time="4.386" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[1-False]" time="5.220" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[1-True]" time="4.521" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[2-False]" time="4.679" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[2-True]" time="4.436" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[3-False]" time="7.997" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[3-True]" time="3.978" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[4-False]" time="4.567" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[4-True]" time="4.404" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[5-False]" time="4.279" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_real_legacy_context_versions_replay_under_durable_binding_without_backfill[5-True]" time="4.487" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_completed_helper_requires_pair_and_actual_identity_and_preserves_old_calls" time="3.627" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_transition_preserves_capture_callbacks_without_observation" time="3.403" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_factual_context_preserves_signed_raw_controller_history_and_comparison[False]" time="7.456" /><testcase classname="tests.test_local_commission_frame_runtime" name="test_factual_context_preserves_signed_raw_controller_history_and_comparison[True]" time="8.262" /></testsuite></testsuites>

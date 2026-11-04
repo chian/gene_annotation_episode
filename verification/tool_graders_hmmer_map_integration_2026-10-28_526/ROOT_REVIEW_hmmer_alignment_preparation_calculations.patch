@@ -1,0 +1,336 @@
+--- verification/tool_graders_hmmer_map_integration_2026-10-28_526/before/gene_annotation_episode/hmmer_alignment_preparation_calculations.py
++++ gene_annotation_episode/hmmer_alignment_preparation_calculations.py
+@@ -7,11 +7,11 @@
+ a source column may map to several resaved columns. Model probability arrays and
+ their entropy/KL/mass checks use M1 unchanged, with an explicit background.
+ 
+-The alimask reconstruction mirrors HMMER 3.4 digital semantics for hand, wnone,
+-wgiven and nonsampled PB. PB's fixed span/.5 rule precedes selected residue-count
+-fragment marking; the final occupancy accumulators and threshold are float32.
+-GSC, BLOSUM and PB sampling stay explicit missing calculations. Reconstructing
+-an established map is a calculation on saved data, never another native run.
++The alimask reconstruction mirrors the retained HMMER 3.4 digital semantics.
++PB sampling requires an explicit authenticated producer/configuration context.
++PB's fixed span/.5 rule precedes selected residue-count fragment marking; the
++final occupancy accumulators and threshold are float32. Reconstruction consumes
++saved data, never another native run.
+ """
+ from __future__ import annotations
+ 
+@@ -25,8 +25,12 @@
+ from .hmmer_alignment_preparation_data import (
+     SCHEMA as SHEET_SCHEMA, MODES, ROW_FIELDS as NATIVE_ROW_FIELDS, annotation, finite, gf_value, model_header,
+     selected_alphabet, valid_alignment, _model_map,
++    ALIMASK_PROFILE, ALIMASK_PROFILE_EXECUTABLE_SHA256, _PB_CONFIG,
++    alimask_map_context_shape, alimask_map_context_valid,
+ )
+ from .hmmer_model_data import _occurrence_valid
++from .hmmer_alignment_tree_weights import gsc_raw_weights, blosum_raw_weights
++from .hmmer_alignment_pb_sampling import sample_easel_pb_rows
+ 
+ SCHEMA = "hmmer_alignment_preparation_components_v1"
+ COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
+@@ -37,7 +41,8 @@
+     "weight_invalid", "settings_invalid", "alignment_invalid", "range_out_of_bounds", "range_invalid",
+     "range_capacity_exceeded", "unsafe_native_range", "mapping_mismatch", "mask_mismatch",
+     "mm_invalid", "sequence_membership_mismatch", "sequence_content_mismatch", "source_checksum_mismatch",
+-    "summary_mismatch", "source_binding_invalid", "resaved_unavailable", "model_map_invalid"})
++    "summary_mismatch", "source_binding_invalid", "resaved_unavailable", "model_map_invalid",
++    "map_context_unavailable", "map_context_invalid"})
+ CHECK_CODES = frozenset({"artifact_binding", "source_geometry", "output_geometry", "association",
+     "summary_counts", "summary_eff_nseq", "summary_relative_entropy", "source_checksum", "model_map",
+     "rf_model_length", "sequence_membership", "sequence_content", "alignment_width", "mask_annotation",
+@@ -87,7 +92,103 @@
+     return "".join("-" if symbol in _GAPS else symbol for symbol in text)
+ 
+ 
+-def reconstruct_alimask_model_map(alignment, *, settings):
++def resolve_alimask_map_context(*, operation, software, source_occurrence, requested_options):
++    """Bind only the recorded selected executable to the retained source profile.
++
++    This pure adapter consumes an authenticated bundle's records. In particular,
++    it never uses the installed executable or substitutes expected for an unknown
++    actual digest. The CLI seed and PB's internal seed are distinct operands.
++    """
++    if (type(operation) is not dict or operation.get("program") != "alimask"
++            or operation.get("engine_version") != "3.4" or type(operation.get("settings")) is not dict
++            or type(software) is not dict or set(software) != {
++                "executable", "expected_sha256", "actual_sha256", "declared_engine_version"}
++            or not _occurrence_valid(source_occurrence)
++            or type(requested_options) is not list or any(type(token) is not str for token in requested_options)):
++        raise ValueError("map_context_invalid")
++    positions = [i for i, token in enumerate(requested_options) if token == "--seed"]
++    requested_seed = None
++    if positions:
++        try:
++            if len(positions) != 1 or positions[0] + 1 >= len(requested_options):
++                raise ValueError
++            token = requested_options[positions[0] + 1]
++            if not token.removeprefix("+").isascii() or not token.removeprefix("+").isdigit():
++                raise ValueError
++            requested_seed = int(token)
++        except (ValueError, OverflowError):
++            raise ValueError("map_context_invalid") from None
++    actual = software["actual_sha256"]
++    bound = (actual == software["expected_sha256"] == ALIMASK_PROFILE_EXECUTABLE_SHA256
++             and software["declared_engine_version"] == operation["engine_version"])
++    context = {"version": "hmmer_alignment_map_context_v1",
++        "source_occurrence_id": source_occurrence["occurrence_id"], "source_sha256": source_occurrence["sha256"],
++        "producer": {"program": "alimask", "engine_version": operation["engine_version"], "executable_sha256": actual},
++        "profile": deepcopy(ALIMASK_PROFILE) if bound else None,
++        "binding": "retained_executable_profile" if bound else "unavailable",
++        "requested_cli_seed": requested_seed, "resolved_cli_seed": operation["settings"].get("--seed", 42),
++        "effective_pb_config": {**_PB_CONFIG, "ignore_rf": not bool(operation["settings"].get("--hand"))} if bound else None}
++    if (software["declared_engine_version"] != operation["engine_version"]
++            or not alimask_map_context_valid(context, settings=operation["settings"],
++                source_occurrence=source_occurrence, operation=operation)):
++        raise ValueError("map_context_invalid")
++    return context
++
++
++def _normalize_easel_weights(raw_weights):
++    """Ordered esl_vec_DSum, then DNorm division, then separate DScale."""
++    if not raw_weights or any(not finite(value) or value < 0 for value in raw_weights):
++        raise ValueError("weight_invalid")
++    total = correction = 0.
++    for value in raw_weights:
++        y = value - correction
++        updated = total + y
++        correction = (updated - total) - y
++        total = updated
++    if not finite(total):
++        raise ValueError("weight_invalid")
++    count = len(raw_weights)
++    normalized = [value / total for value in raw_weights] if total != 0. else [1. / count] * count
++    weights = [value * count for value in normalized]
++    if any(not finite(value) or value < 0 for value in weights):
++        raise ValueError("weight_invalid")
++    return weights, {"method": "easel_kahan_divide_then_scale", "sum": total,
++                     "sequence_count": count, "zero_sum": total == 0.}
++
++
++def _pb_counts(sequences, *, width, residues, columns=None):
++    """Native PB span rule; collect all-row counts after choosing a sample map."""
++    counts = [Counter() for _ in range(width)]
++    minspan = math.ceil(_f32(.5 * _f32(width)))
++    fragments = 0
++    for sequence in sequences:
++        left = next((i for i, symbol in enumerate(sequence) if symbol in residues), width)
++        right = next((i for i in range(width - 1, -1, -1) if sequence[i] in residues), -1)
++        if right - left + 1 >= minspan:
++            left, right = 0, width - 1
++        else:
++            fragments += 1
++        for column in range(left, right + 1) if columns is None else columns:
++            if left <= column <= right:
++                counts[column][sequence[column]] += 1
++    return counts, fragments
++
++
++def _pb_consensus(counts, residues):
++    consensus = []
++    for column, counter in enumerate(counts):
++        total = sum(count for symbol, count in counter.items() if symbol in residues or symbol == "-")
++        if total and _f32(_f32(counter["-"]) / _f32(total)) < _f32(.5):
++            consensus.append(column)
++    return consensus
++
++
++def _empty_reconstruction():
++    return {"state": "missing", "map": None, "basis": None, "weights": None,
++            "marked_sequences": None, "column_occupancy": None, "pb_consensus_columns": None, "issues": []}
++
++
++def reconstruct_alimask_model_map(alignment, *, settings, map_reconstruction_context=None):
+     """Return full deterministic map, weights, fragment strings and occupancy.
+ 
+     ``alignment`` is one B1 kind=alignment record with occurrence-keyed rows,
+@@ -98,8 +199,7 @@
+     This public port is usable by a producer without importing driver internals.
+     """
+     key = alignment.get("record_key") if isinstance(alignment, dict) else None
+-    result = {"state": "missing", "map": None, "basis": None, "weights": None,
+-              "marked_sequences": None, "column_occupancy": None, "pb_consensus_columns": None, "issues": []}
++    result = _empty_reconstruction()
+     def fail(code, state="missing", **details):
+         result["state"] = state
+         result["issues"].append(_problem(code, record_key=key, **details))
+@@ -108,6 +208,20 @@
+         return fail("alignment_invalid", "incomplete")
+     if not isinstance(settings, dict):
+         return fail("settings_invalid", "incompatible")
++    local_codes = {problem.get("code") for problem in alignment.get("issues", [])}
++    if "weight_invalid" in local_codes:
++        return fail("weight_invalid", "incompatible")
++    if local_codes & {"alignment_invalid", "alignment_incomplete", "alignment_empty", "row_geometry_invalid",
++            "row_symbols_invalid", "annotation_geometry_invalid", "annotation_join_ambiguous", "duplicate_sequence_name"}:
++        return fail("alignment_invalid", "incomplete")
++    context = map_reconstruction_context
++    retained_context = alignment.get("map_reconstruction_context")
++    if context is None:
++        context = retained_context
++    if ("map_context_invalid" in local_codes or context is not None and
++            (not alimask_map_context_valid(context, settings=settings, alignment=alignment)
++             or retained_context is not None and retained_context != context)):
++        return fail("map_context_invalid", "incompatible")
+     rows, width = alignment["rows"], alignment["column_count"]
+     if settings.get("--hand"):
+         rf = annotation(alignment, "RF")
+@@ -120,7 +234,8 @@
+     if alphabet is None:
+         return fail("alphabet_missing")
+     canonical = "ACDEFGHIKLMNPQRSTVWY" if alphabet == "amino" else "ACGU" if alphabet == "RNA" else "ACGT"
+-    residues = set(canonical + ("BJZOUX" if alphabet == "amino" else "RYMKSWHBVDN"))
++    residue_symbols = canonical + ("BJZOUX" if alphabet == "amino" else "RYMKSWHBVDN")
++    residues = set(residue_symbols)
+     sequences = [_digitize(row["aligned_sequence"], alphabet) for row in rows]
+     if any(set(sequence) - residues - {"-", "~", "*"} for sequence in sequences):
+         return fail("alphabet_incompatible", "incompatible")
+@@ -131,8 +246,7 @@
+     if len(weight_modes) > 1:
+         return fail("settings_invalid", "incompatible")
+     method = weight_modes[0] if weight_modes else "--wpb"
+-    if method in {"--wgsc", "--wblosum"}:
+-        return fail("weighting_unsupported", weighting=method)
++    trace = None
+     if method == "--wnone":
+         weights = [1.] * len(rows)
+     elif method == "--wgiven":
+@@ -143,40 +257,63 @@
+             return fail("weight_invalid", "incompatible")
+         else:
+             weights = [weight["value"] for weight in supplied]
+-    elif len(rows) == 1:
++    elif method == "--wpb" and len(rows) == 1:
+         weights = [1.]
++    elif method in {"--wgsc", "--wblosum"}:
++        try:
++            raw = (gsc_raw_weights(sequences, residue_symbols=residue_symbols) if method == "--wgsc" else
++                blosum_raw_weights(sequences, residue_symbols=residue_symbols, identity_cutoff=settings.get("--wid", .62)))
++            weights, normalization = _normalize_easel_weights(raw["raw_weights"])
++        except ValueError as error:
++            if str(error) not in {"alignment_invalid", "settings_invalid", "weight_invalid"}:
++                raise
++            return fail(str(error), "incompatible")
++        trace = {"method": method[2:], "raw_weights": raw["raw_weights"], "normalization": normalization,
++            "gsc_tree": raw.get("tree"), "blosum_clusters": raw.get("clusters"), "sampling": None}
+     else:
++        consensus, sampling = [], None
+         if len(rows) > 50000:
+-            return fail("pb_sampling_unsupported", sequence_count=len(rows))
+-        # esl_msaweight_PB_adv uses its own defaults, not --fragthresh/--symfrac.
+-        counts = [Counter() for _ in range(width)]
+-        minspan = math.ceil(_f32(.5 * _f32(width)))
+-        for sequence in sequences:
+-            positions = [i for i, symbol in enumerate(sequence) if symbol in residues]
+-            left, right = (positions[0], positions[-1]) if positions else (width, -1)
+-            if right - left + 1 >= minspan:
+-                left, right = 0, width - 1
+-            for column in range(left, right + 1):
+-                counts[column][sequence[column]] += 1
+-        consensus = []
+-        for column, counts_at_column in enumerate(counts):
+-            total = sum(count for symbol, count in counts_at_column.items() if symbol in residues or symbol == "-")
+-            if total and _f32(_f32(counts_at_column["-"]) / _f32(total)) < .5:
+-                consensus.append(column)
++            if context is None or context["binding"] != "retained_executable_profile":
++                return fail("map_context_unavailable", sequence_count=len(rows))
++            config = context["effective_pb_config"]
++            try:
++                indices = sample_easel_pb_rows(len(rows), sample_size=config["nsamp"], seed=config["seed"])
++            except ValueError as error:
++                if str(error) != "settings_invalid":
++                    raise
++                return fail("map_context_invalid", "incompatible")
++            sample_counts, fragments = _pb_counts((sequences[i] for i in indices), width=width, residues=residues)
++            rejected = fragments > config["maxfrag"]
++            if not rejected:
++                consensus = _pb_consensus(sample_counts, residues)
++            sampling = {"basis": "deterministic_source_reconstruction", "seed": config["seed"],
++                "source_row_ordinals": indices, "source_record_keys": [rows[i]["record_key"] for i in indices],
++                "fragment_count": fragments, "rejected": rejected,
++                "consensus_basis": "sample" if consensus else "all_sequences"}
++        # Sample counts never become PB denominators: native resets the matrix.
++        counts, _ = _pb_counts(sequences, width=width, residues=residues, columns=consensus or None)
++        if not consensus:
++            consensus = _pb_consensus(counts, residues)
+         if not consensus:
+             consensus = list(range(width))
++            if sampling is not None:
++                sampling["consensus_basis"] = "all_columns"
+         result["pb_consensus_columns"] = [column + 1 for column in consensus]
+-        weights = []
++        raw_weights = []
++        distinct = [sum(counts[column][symbol] > 0 for symbol in canonical) for column in consensus]
+         for sequence in sequences:
+             value, count = 0., 0
+-            for column in consensus:
++            for column, symbol_count in zip(consensus, distinct):
+                 if sequence[column] in canonical:
+-                    distinct = sum(counts[column][symbol] > 0 for symbol in canonical)
+-                    value += 1. / (distinct * counts[column][sequence[column]])
++                    value += 1. / (symbol_count * counts[column][sequence[column]])
+                     count += 1
+-            weights.append(value / count if count else 0.)
+-        total = sum(weights)  # Same ordered double accumulation as esl_vec_DSum.
+-        weights = [weight / total * len(rows) for weight in weights] if total else [1.] * len(rows)
++            raw_weights.append(value / count if count else 0.)
++        try:
++            weights, normalization = _normalize_easel_weights(raw_weights)
++        except ValueError:
++            return fail("weight_invalid", "incompatible")
++        trace = {"method": "wpb", "raw_weights": raw_weights, "normalization": normalization,
++                 "gsc_tree": None, "blosum_clusters": None, "sampling": sampling}
+     if any(not finite(weight) or weight < 0 for weight in weights):
+         return fail("weight_invalid", "incompatible")
+     marked = []
+@@ -209,6 +346,8 @@
+         weights=[{"record_key": row["record_key"], "weight": weight} for row, weight in zip(rows, weights)],
+         marked_sequences=[{"record_key": row["record_key"], "sequence": text} for row, text in zip(rows, marked)],
+         column_occupancy=occupancy)
++    if trace is not None:
++        result["weighting_trace"] = trace
+     return result
+ 
+ 
+@@ -445,6 +584,13 @@
+         state="incomplete" if mapping_present and mapping_invalid else None, unit="decoded_mapping_row_count",
+         inputs=[{"occurrence_id": a["occurrence_id"], "field": "native_rows.mapping"} for a in mapping_artifacts])
+     reconstruction = reconstruct_alimask_model_map(source, settings=settings) if mode != "mask_alignment" else None
++    context = source.get("map_reconstruction_context") if source else None
++    if reconstruction is not None and context is not None:
++        occurrence = next((item for item in sheet["artifact_occurrences"] if item["occurrence_id"] == source["occurrence_id"]), None)
++        if not alimask_map_context_valid(context, settings=settings, source_occurrence=occurrence,
++                operation=sheet["operation"], alignment=source):
++            reconstruction = _empty_reconstruction()
++            reconstruction.update(state="incompatible", issues=[_problem("map_context_invalid", record_key=key)])
+     row["reconstruction"] = reconstruction
+     if reconstruction:
+         result["issues"].extend(reconstruction["issues"])
+@@ -452,6 +598,8 @@
+     components["mapped_model_position_count"] = _component(len(mapping) if mapping is not None else None,
+         state=reconstruction["state"] if reconstruction else "missing", unit="model_position_count",
+         inputs=([_operand(source, "rows"), _operand(source, "column_annotations.RF"), {"field": "operation.settings"}] if source else []))
++    if context is not None and mode != "mask_alignment":
++        components["mapped_model_position_count"]["inputs"].append(_operand(source, "map_reconstruction_context"))
+     width = source["column_count"] if valid_alignment(source) else None
+     intervals, union, ranges_valid = [], set(), bool(requests) and len(requests) <= 100
+     capacity_state = "pass" if len(requests) <= 100 else "fail"
+@@ -610,6 +758,11 @@
+             ordinal = locator.get("record_ordinal")
+             if type(ordinal) is not int or key != oid + "#" + record["kind"] + "/" + str(ordinal):
+                 return False
++            if "map_reconstruction_context" in record and (record["kind"] != "alignment"
++                    or direction != "input" or operation["program"] != "alimask"
++                    or occurrence["role"] != "alignment" or occurrence["ordinal"] != 0 or ordinal != 0
++                    or not alimask_map_context_shape(record["map_reconstruction_context"])):
++                return False
+             if record["kind"] == "alignment":
+                 if (not isinstance(record.get("rows"), list) or not isinstance(record.get("column_annotations"), dict)
+                         or not isinstance(record.get("original_events"), list) or not isinstance(record.get("issues"), list)
+@@ -694,4 +847,5 @@
+ 
+ 
+ __all__ = ["calculate_hmmer_alignment_preparation_components", "reconstruct_alimask_model_map",
++           "resolve_alimask_map_context",
+            "SCHEMA", "ROW_FIELDS", "COMPONENT_FIELDS", "COMPONENT_STATES", "CHECK_CODES", "CHECK_STATES", "ISSUE_CODES"]

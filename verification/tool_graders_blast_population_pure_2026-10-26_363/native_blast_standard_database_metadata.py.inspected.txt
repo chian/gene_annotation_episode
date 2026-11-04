@@ -1,0 +1,343 @@
+def derive_standard_blast_database_search_binding(search: dict, *, prepared_inputs: dict) -> dict:
+    """Derive only an exact selected sequence DB/report relationship."""
+    prepared, search = _copy(prepared_inputs), _copy(search)
+    result = dict(binding=None, status="unavailable", origin=None, input_pointers=[], issues=[])
+    job, key = _job(prepared), search["search_key"]
+    status, detail = _search_status(search, prepared)
+    if status != "available":
+        result.update(status=status)
+        result["issues"].append(_issue("metadata_relation_conflict" if status == "incompatible" else "metadata_relation_unresolved",
+            key["search_pointer"], search_key=key, detail=detail))
+        return result
+    context = search["program_context"]
+    try:
+        expected = resolve_blast_program_context(execution_program=job["program"],
+            reported_program=search["native"]["report"].get("program"), scientific_mode="database",
+            query_kind=job["query"]["kind"], reference_kind="sequence", native_version=search["native"]["report"].get("version"))
+        if expected != context or context["geometry_program"] != job["program"]:
+            raise ValueError("standard_program_context_conflict")
+    except ValueError:
+        result["status"] = "incompatible"
+        result["issues"].append(_issue("metadata_relation_conflict", key["search_pointer"], search_key=key, detail="standard_program_context_conflict"))
+        return result
+    database = job["databases"][0]
+    relation = _one([r for r in prepared["source_relations"] if r["kind"] == "database" and
+                    r["value"]["database_key"] == database["database_key"]], "database_relation_unavailable")
+    native_db = search["normalized"]["search"]["database"]
+    if relation["status"] != "available":
+        result["status"] = relation["status"]
+        result["issues"].append(_issue("metadata_relation_unresolved", relation["pointer"], search_key=key, detail="database_custody_unavailable"))
+        return result
+    if native_db is not None and native_db not in (database["identity"]["value"], " ".join(database["native_paths"])):
+        result["status"] = "incompatible"
+        result["issues"].append(_issue("metadata_relation_conflict", key["search_pointer"], search_key=key, detail="native_database_identity_conflict"))
+        return result
+    # Headerless table6 still has the explicitly selected invocation and capture.
+    attempt = _attempt(prepared)
+    provenance = _provenance(attempt["bundle_source_ref"], "/requested_job/native_blast_standard_database")
+    pssms = [r for s in prepared["pssm_sheets"] for r in s["pssms"]]
+    pssm_key = pssms[0]["pssm_key"] if job["query"]["kind"] == "pssm" and len(pssms) == 1 else None
+    binding = dict(search_key=deepcopy(key), stage="sequence_database", biological_round=None,
+        database_identity=deepcopy(database["identity"]), input_pssm_key=pssm_key, provenance=provenance)
+    result["input_pointers"] = [provenance, *deepcopy(relation["input_pointers"]),
+        _provenance(_report(search, prepared)["catalog"]["source_ref"], key["search_pointer"])]
+    supplied = [r for v in _valid(prepared, "query_identity") for r in v["normalized"]["search_bindings"] if r["search_key"] == key]
+    if supplied:
+        if len(supplied) != 1 or any(supplied[0][k] != binding[k] for k in binding if k != "provenance") or supplied[0]["provenance"] is None:
+            result["status"] = "incompatible"
+            result["issues"].append(_issue("metadata_relation_conflict", "/search_bindings", search_key=key,
+                detail="supplied_derived_search_binding_conflict"))
+            return result
+        binding, result["origin"] = deepcopy(supplied[0]), "supplied"
+        result["input_pointers"].append(deepcopy(binding["provenance"]))
+    else:
+        result["origin"] = "derived"
+    result.update(binding=binding, status="available")
+    if native_db is not None and native_db != database["identity"]["value"]:
+        result["issues"].append(_issue("metadata_relation_unresolved", key["search_pointer"], search_key=key,
+            detail="native_path_semantic_identity_population_equality_unproven"))
+    return _copy(result)
+
+def qualify_standard_blast_sequence_metadata(search: dict, *, prepared_inputs: dict) -> dict:
+    """Join exact original slots; retain source-qualified missing/conflicting data."""
+    prepared, search = _copy(prepared_inputs), _copy(search)
+    key = search["search_key"]
+    result = dict(search_key=deepcopy(key), reference_metadata=[], description_bindings=[],
+        sequence_identity_bindings=[], target_context=None, database_profile=None, input_pointers=[], issues=[])
+    status, detail = _search_status(search, prepared)
+    if status != "available":
+        result["issues"].append(_issue("metadata_relation_unresolved", key["search_pointer"], search_key=key, detail=detail))
+        return result
+    profiles, record_claims = [], []
+    hits = {h["hit_index"]: h for h in search["normalized"]["hits"]}
+    molecule = standard_blast_database_program_spec(_job(prepared)["program"])["reference_coordinate_unit"]
+    for validation in _valid(prepared, "sequence_database"):
+        for ui, unit in enumerate(validation["normalized"]["searches"]):
+            if unit["search_key"] != key:
+                continue
+            pointer = _original(validation, f"/searches/{ui}")
+            if validation["schema_id"] == _SEQUENCE_V2:
+                record_claims.extend(unit["sequence_identity_bindings"])
+            result["input_pointers"].extend(_metadata_pointers(prepared, validation, pointer))
+            offset = len(result["reference_metadata"])
+            for mi, native in enumerate(unit["reference_metadata"]):
+                row = deepcopy(native)
+                if _feature_scoped(row) and row["functions"]:
+                    row["functions"] = []
+                    result["issues"].append(_issue("metadata_relation_unresolved", pointer + f"/reference_metadata/{mi}/functions",
+                        descriptor=validation, search_key=key, detail="feature_function_is_not_whole_reference_function"))
+                result["reference_metadata"].append(row)
+            for bi, native in enumerate(unit["description_bindings"]):
+                row = deepcopy(native)
+                if row["binding"]["metadata_index"] >= len(unit["reference_metadata"]):
+                    result["issues"].append(_issue("metadata_relation_unresolved", pointer + f"/description_bindings/{bi}",
+                        descriptor=validation, search_key=key, detail="original_metadata_index_unresolved"))
+                    continue
+                if validation["schema_id"] == _SEQUENCE_V2 and (
+                        _record_relation_failed(validation, f"/searches/{ui}/description_bindings/{bi}/binding") or
+                        _record_relation_failed(validation, f"/searches/{ui}/reference_metadata/{row['binding']['metadata_index']}")):
+                    continue
+                row["binding"]["metadata_index"] += offset
+                result["description_bindings"].append(row)
+            for bi, binding in enumerate(unit["sequence_identity_bindings"]):
+                original = _original(validation, f"/searches/{ui}/sequence_identity_bindings/{bi}")
+                proofs = [p for p in prepared["sequence_proofs"] if p["descriptor"] == _owner(validation) and p["pointer"] == original]
+                b = binding["binding"]
+                valid = (len(proofs) == 1 and proofs[0]["status"] == "available" and proofs[0]["binding"] == binding
+                    and binding["search_key"] == key and b["report_index"] == key["report_index"] and b["molecule"] == molecule
+                    and b["hit_index"] in hits and (hits[b["hit_index"]]["length"] is None or hits[b["hit_index"]]["length"] == b["sequence_length"]))
+                if valid:
+                    result["sequence_identity_bindings"].append(deepcopy(binding))
+                else:
+                    result["issues"].append(_issue("metadata_relation_conflict", original, descriptor=validation,
+                        search_key=key, detail="full_reference_sequence_unverified"))
+            if unit["database_profile"] is not None:
+                profiles.append(unit["database_profile"])
+    profiles = _unique(profiles)
+    if len(profiles) == 1:
+        result["database_profile"] = deepcopy(profiles[0])
+    elif profiles:
+        result["issues"].append(_issue("metadata_relation_conflict", "/database_profile", search_key=key, detail="database_population_conflict"))
+    # Exact duplicate links have one meaning; payloads and descriptor addresses
+    # above remain separate. A source/pointer conflict must invalidate both.
+    identities = {}
+    for link in result["sequence_identity_bindings"] + record_claims:
+        b = link["binding"]
+        identities.setdefault(blast_record_identity(source_ref=b["source_ref"], pointer=b["pointer"],
+            record_locator=b.get("record_locator")), set()).add((b["digest"], b["molecule"], b["sequence_length"]))
+    conflict = {identity for identity, values in identities.items() if len(values) > 1}
+    if conflict:
+        result["sequence_identity_bindings"] = [r for r in result["sequence_identity_bindings"] if
+            blast_record_identity(source_ref=r["binding"]["source_ref"], pointer=r["binding"]["pointer"],
+                record_locator=r["binding"].get("record_locator")) not in conflict]
+        result["issues"].append(_issue("metadata_relation_conflict", "/sequence_identity_bindings", search_key=key,
+            detail="full_sequence_source_identity_conflict"))
+    for field in ("description_bindings", "sequence_identity_bindings"):
+        result[field] = _unique(result[field])
+    targets = [(v, i, r) for v in _valid(prepared, "query_identity") for i, r in enumerate(v["normalized"]["target_contexts"])
+               if r["search_key"] == key]
+    query = _query_binding(search, prepared)
+    if len(targets) == 1 and query is not None:
+        validation, index, row = targets[0]
+        result["target_context"] = dict(query_operand=query["operand"], **{k: deepcopy(row[k]) for k in ("taxid", "lineage", "independent_of_search", "source")})
+        result["input_pointers"].extend(_metadata_pointers(prepared, validation, _original(validation, f"/target_contexts/{index}")))
+    elif targets:
+        result["issues"].append(_issue("metadata_relation_conflict" if len(targets) > 1 else "metadata_relation_unresolved",
+            "/target_contexts", search_key=key, detail="target_query_relation_ambiguous" if len(targets) > 1 else "target_query_operand_unresolved"))
+    return _copy(result)
+
+def populate_standard_blast_database_sheets(collection: dict, *, prepared_inputs: dict) -> dict:
+    """One public 303 sequence sheet per original search, even without metadata."""
+    prepared, collection = _copy(prepared_inputs), _copy(collection)
+    if collection.get("schema") != "blast_report_collection_v1" or collection.get("invocation") != prepared["invocation"]:
+        _fail("collection_invocation_conflict")
+    keys = [_token(s["search_key"]) for s in collection["searches"]]
+    if len(set(keys)) != len(keys):
+        _fail("collection_search_key_duplicate")
+    result = dict(schema=SHEET_SET_SCHEMA, collection=collection, prepared_inputs=prepared,
+        search_bindings=[], sequence=[], pssm=deepcopy(prepared["pssm_sheets"]),
+        metadata_parse_results=deepcopy(prepared["metadata"]), metadata_binding_results=[], issues=deepcopy(prepared["issues"]))
+    for search in collection["searches"]:
+        key = search["search_key"]
+        report = _report(search, prepared)["catalog"]
+        binding = derive_standard_blast_database_search_binding(search, prepared_inputs=prepared)
+        metadata = qualify_standard_blast_sequence_metadata(search, prepared_inputs=prepared)
+        result["search_bindings"].append(binding)
+        result["metadata_binding_results"].append(metadata)
+        result["issues"].extend(binding["issues"] + metadata["issues"])
+        unresolved = dict(search_key=deepcopy(key), stage=None, biological_round=None,
+            database_identity=None, input_pssm_key=None, provenance=None)
+        sheet = populate_blast_sequence_database_sheet(search,
+            report_source=dict(artifact_key=key["artifact_key"], artifact_ref=report["artifact_ref"], member_ordinal=None, member_sha256=None),
+            search_binding=binding["binding"] or unresolved, query_binding=_query_binding(search, prepared),
+            **{k: metadata[k] for k in ("reference_metadata", "description_bindings", "sequence_identity_bindings", "target_context", "database_profile")})
+        result["sequence"].append(dict(search_key=deepcopy(key), sheet=sheet))
+    known = set(keys)
+    for validation in prepared["metadata"]:
+        if validation["status"] != "valid" or validation["normalized"] is None:
+            continue
+        for field in ("searches", "search_bindings", "target_contexts"):
+            for i, row in enumerate(validation["normalized"].get(field, [])):
+                if _token(row["search_key"]) not in known:
+                    result["issues"].append(_issue("metadata_relation_unresolved", _original(validation, f"/{field}/{i}/search_key"),
+                        descriptor=validation, search_key=row["search_key"], detail="collection_search_address_unresolved"))
+    return _copy(result)
+
+def validate_standard_blast_sequence_metadata_result(value: dict) -> dict:
+    value = _copy(value)
+    _keys(value, _SEQUENCE, "sequence_metadata_result_fields_invalid")
+    _validate_search_key(value["search_key"])
+    _validate_pointers(value["input_pointers"])
+    _validate_issues(value["issues"])
+    for field in ("reference_metadata", "description_bindings", "sequence_identity_bindings", "issues"):
+        if type(value[field]) is not list or any(type(r) is not dict for r in value[field]):
+            _fail("sequence_metadata_result_array_invalid")
+    for field in ("target_context", "database_profile"):
+        if value[field] is not None and type(value[field]) is not dict:
+            _fail("sequence_metadata_result_context_invalid")
+    for row in value["reference_metadata"]:
+        _validate_reference(row)
+    for field in ("description_bindings", "sequence_identity_bindings"):
+        seen = set()
+        for row in value[field]:
+            _validate_link(row, "description" if field == "description_bindings" else "sequence")
+            if row["search_key"] != value["search_key"] or _token(row) in seen:
+                _fail("sequence_metadata_binding_address_conflict")
+            seen.add(_token(row))
+            if field == "description_bindings" and row["binding"]["metadata_index"] >= len(value["reference_metadata"]):
+                _fail("sequence_metadata_binding_index_invalid")
+    target = value["target_context"]
+    if target is not None:
+        _keys(target, {"query_operand", "taxid", "lineage", "independent_of_search", "source"}, "target_context_fields_invalid")
+        _validate_lineage(target["lineage"])
+        _validate_pointers([target["source"]])
+        _validate_operand(target["query_operand"])
+        if (target["taxid"] is not None and not _integer(target["taxid"], 1)
+                or target["independent_of_search"] is not None and type(target["independent_of_search"]) is not bool):
+            _fail("target_context_invalid")
+    profile = value["database_profile"]
+    if profile is not None:
+        _keys(profile, {"database", "release", "scope", "count_unit", "total_count", "function_counts", "source"}, "database_profile_fields_invalid")
+        if (any(not _text(profile[k]) for k in ("database", "scope", "source"))
+                or profile["release"] is not None and not _text(profile["release"])
+                or profile["count_unit"] not in {"unique_sequences", "sequence_groups"}
+                or not _integer(profile["total_count"], 1) or type(profile["function_counts"]) is not dict
+                or any(not _text(k) or not _integer(v) for k, v in profile["function_counts"].items())):
+            _fail("database_profile_invalid")
+    return value
+
+def _validate_saved_sequence_relations(search, binding_result, metadata, prepared):
+    """Check existing rows against saved originals, without populating any row."""
+    key, status = search["search_key"], _search_status(search, prepared)[0]
+    binding = binding_result["binding"]
+    if binding is not None:
+        job, native_db = _job(prepared), search["normalized"]["search"]["database"]
+        database = job["databases"][0]
+        if (status != "available" or binding["database_identity"] != database["identity"]
+                or native_db is not None and native_db not in {database["identity"]["value"], " ".join(database["native_paths"])}
+                or not any(r["kind"] == "database" and r["status"] == "available"
+                    and r["value"]["database_key"] == database["database_key"] for r in prepared["source_relations"])):
+            _fail("saved_binding_original_database_conflict")
+        expected_context = resolve_blast_program_context(execution_program=job["program"], reported_program=search["native"]["report"].get("program"),
+            scientific_mode="database", query_kind=job["query"]["kind"], reference_kind="sequence", native_version=search["native"]["report"].get("version"))
+        if search["program_context"] != expected_context or expected_context["geometry_program"] != job["program"]:
+            _fail("saved_binding_original_program_conflict")
+        supplied = [r for v in _valid(prepared, "query_identity") for r in v["normalized"]["search_bindings"] if r["search_key"] == key]
+        if binding_result["origin"] == "supplied":
+            if supplied != [binding]:
+                _fail("saved_binding_original_supplied_conflict")
+        elif supplied or binding["provenance"] != _provenance(_attempt(prepared)["bundle_source_ref"], "/requested_job/native_blast_standard_database"):
+            _fail("saved_binding_original_provenance_conflict")
+        keys = [r["pssm_key"] for s in prepared["pssm_sheets"] for r in s["pssms"]]
+        expected_pssm = keys[0] if job["query"]["kind"] == "pssm" and len(keys) == 1 else None
+        if binding["input_pssm_key"] != expected_pssm:
+            _fail("saved_binding_original_pssm_conflict")
+    units = [(v, u) for v in _valid(prepared, "sequence_database") for u in v["normalized"]["searches"] if u["search_key"] == key]
+    if status != "available":
+        units = []
+    total = sum(len(u["reference_metadata"]) for _, u in units)
+    if len(metadata["reference_metadata"]) != total:
+        _fail("saved_reference_metadata_count_conflict")
+    offset = 0
+    allowed_descriptions = []
+    for validation, unit in units:
+        ui = next(i for i, candidate in enumerate(validation["normalized"]["searches"]) if candidate is unit)
+        for index, original in enumerate(unit["reference_metadata"]):
+            saved = metadata["reference_metadata"][offset + index]
+            if any(saved[k] != original[k] for k in original if k != "functions") or saved["functions"] != (
+                    [] if _feature_scoped(original) else original["functions"]):
+                _fail("saved_reference_metadata_original_conflict")
+        for bi, link in enumerate(unit["description_bindings"]):
+            if link["binding"]["metadata_index"] < len(unit["reference_metadata"]) and not (
+                    validation["schema_id"] == _SEQUENCE_V2 and (
+                        _record_relation_failed(validation, f"/searches/{ui}/description_bindings/{bi}/binding") or
+                        _record_relation_failed(validation, f"/searches/{ui}/reference_metadata/{link['binding']['metadata_index']}"))):
+                allowed_descriptions.append((link, offset))
+        offset += len(unit["reference_metadata"])
+    for link in metadata["description_bindings"]:
+        if not any(link["search_key"] == original["search_key"] and all(link["binding"][k] == original["binding"][k]
+            for k in original["binding"] if k != "metadata_index") and link["binding"]["metadata_index"] == original["binding"]["metadata_index"] + offset
+            for original, offset in allowed_descriptions):
+            _fail("saved_description_original_relation_conflict")
+    molecule = standard_blast_database_program_spec(_job(prepared)["program"])["reference_coordinate_unit"]
+    for link in metadata["sequence_identity_bindings"]:
+        if (link["binding"]["molecule"] != molecule or status != "available" or
+                not any(p["status"] == "available" and p["binding"] == link for p in prepared["sequence_proofs"])):
+            _fail("saved_sequence_original_proof_conflict")
+    profiles = _unique([u["database_profile"] for _, u in units if u["database_profile"] is not None])
+    if metadata["database_profile"] != (profiles[0] if len(profiles) == 1 else None):
+        _fail("saved_population_original_relation_conflict")
+    target = metadata["target_context"]
+    if target is not None:
+        originals = [r for v in _valid(prepared, "query_identity") for r in v["normalized"]["target_contexts"] if r["search_key"] == key]
+        if (status != "available" or len(originals) != 1 or target["query_operand"] != search["operand_binding"]
+                or any(target[k] != originals[0][k] for k in ("taxid", "lineage", "independent_of_search", "source"))):
+            _fail("saved_target_original_relation_conflict")
+
+def validate_standard_blast_database_sheet_set(value: dict) -> dict:
+    """Validate saved sheet shape and exact source-qualified component relations."""
+    value = _copy(value)
+    _keys(value, _SHEETS, "sheet_set_fields_invalid")
+    if value["schema"] != SHEET_SET_SCHEMA:
+        _fail("sheet_set_schema_invalid")
+    prepared = validate_standard_blast_database_prepared_inputs(value["prepared_inputs"])
+    if value["collection"]["invocation"] != prepared["invocation"] or value["pssm"] != prepared["pssm_sheets"]:
+        _fail("sheet_set_input_conflict")
+    _keys(value["collection"], {"schema", "invocation", "artifacts", "searches", "issues"}, "collection_fields_invalid")
+    if value["collection"]["schema"] != "blast_report_collection_v1" or value["metadata_parse_results"] != prepared["metadata"]:
+        _fail("sheet_set_collection_metadata_conflict")
+    _validate_issues(value["issues"])
+    searches = value["collection"]["searches"]
+    if len({_token(s["search_key"]) for s in searches}) != len(searches):
+        _fail("sheet_set_search_key_duplicate")
+    if len(value["sequence"]) != len(searches) or len(value["search_bindings"]) != len(searches) or len(value["metadata_binding_results"]) != len(searches):
+        _fail("sheet_set_search_population_conflict")
+    for index, (search, row) in enumerate(zip(searches, value["sequence"])):
+        _keys(row, {"search_key", "sheet"}, "sequence_sheet_entry_fields_invalid")
+        if row["search_key"] != search["search_key"] or row["sheet"]["search"] != search:
+            _fail("sheet_set_search_relation_conflict")
+        binding = validate_standard_blast_database_binding_result(value["search_bindings"][index])
+        metadata = validate_standard_blast_sequence_metadata_result(value["metadata_binding_results"][index])
+        if metadata["search_key"] != row["search_key"] or binding["binding"] is not None and binding["binding"] != row["sheet"]["search_binding"]:
+            _fail("sheet_set_binding_relation_conflict")
+        sheet = row["sheet"]
+        _keys(sheet, {"schema", "search", "report_source", "search_binding", "query_binding", "reference_metadata",
+            "description_bindings", "sequence_identity_bindings", "target_context", "database_profile"}, "sequence_sheet_fields_invalid")
+        if sheet["schema"] not in {"blast_sequence_database_result_sheet_v1", "blast_sequence_database_result_sheet_v2"}:
+            _fail("sequence_sheet_schema_invalid")
+        # The saved declared version is authoritative; never redispatch by fields.
+        from .blast_sequence_database import _validate as validate_sequence_sheet
+        validate_sequence_sheet(sheet)
+        report = _report(search, prepared)["catalog"]
+        expected_source = dict(artifact_key=search["search_key"]["artifact_key"], artifact_ref=report["artifact_ref"],
+                               member_ordinal=None, member_sha256=None)
+        if sheet["report_source"] != expected_source or sheet["query_binding"] != _query_binding(search, prepared):
+            _fail("sequence_sheet_original_source_conflict")
+        _validate_saved_sequence_relations(search, binding, metadata, prepared)
+        if binding["binding"] is None and sheet["search_binding"] != dict(search_key=search["search_key"], stage=None,
+                biological_round=None, database_identity=None, input_pssm_key=None, provenance=None):
+            _fail("sheet_set_unavailable_binding_conflict")
+        for field in ("reference_metadata", "description_bindings", "sequence_identity_bindings", "target_context", "database_profile"):
+            if row["sheet"][field] != metadata[field]:
+                _fail("sheet_set_metadata_relation_conflict")
+    return value

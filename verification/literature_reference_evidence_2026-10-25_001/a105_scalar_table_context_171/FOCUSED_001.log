@@ -1,0 +1,24 @@
+..........................F.F.....FF.........................            [100%]
+=================================== FAILURES ===================================
+_ test_actual_intervals_in_one_field_reject_both_endpoints[10-<em>10</em>\u2013<strong>20</strong>] _
+tests/test_literature_scalar_table_context_171.py:63: in test_actual_intervals_in_one_field_reject_both_endpoints
+    with pytest.raises(ExperimentalContractError, match='interval_source_number_unsupported'):
+E   Failed: DID NOT RAISE ExperimentalContractError
+_ test_actual_intervals_in_one_field_reject_both_endpoints[10-10\u2013<br/>20] _
+tests/test_literature_scalar_table_context_171.py:63: in test_actual_intervals_in_one_field_reject_both_endpoints
+    with pytest.raises(ExperimentalContractError, match='interval_source_number_unsupported'):
+E   Failed: DID NOT RAISE ExperimentalContractError
+_ test_actual_intervals_in_one_field_reject_both_endpoints[20-<em>10</em>\u2013<strong>20</strong>] _
+tests/test_literature_scalar_table_context_171.py:63: in test_actual_intervals_in_one_field_reject_both_endpoints
+    with pytest.raises(ExperimentalContractError, match='interval_source_number_unsupported'):
+E   Failed: DID NOT RAISE ExperimentalContractError
+_ test_actual_intervals_in_one_field_reject_both_endpoints[20-10<br/>\u201320] _
+tests/test_literature_scalar_table_context_171.py:63: in test_actual_intervals_in_one_field_reject_both_endpoints
+    with pytest.raises(ExperimentalContractError, match='interval_source_number_unsupported'):
+E   Failed: DID NOT RAISE ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_scalar_table_context_171.py::test_actual_intervals_in_one_field_reject_both_endpoints[10-<em>10</em>\u2013<strong>20</strong>]
+FAILED tests/test_literature_scalar_table_context_171.py::test_actual_intervals_in_one_field_reject_both_endpoints[10-10\u2013<br/>20]
+FAILED tests/test_literature_scalar_table_context_171.py::test_actual_intervals_in_one_field_reject_both_endpoints[20-<em>10</em>\u2013<strong>20</strong>]
+FAILED tests/test_literature_scalar_table_context_171.py::test_actual_intervals_in_one_field_reject_both_endpoints[20-10<br/>\u201320]
+4 failed, 57 passed in 0.37s

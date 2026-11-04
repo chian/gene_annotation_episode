@@ -1,0 +1,360 @@
+{
+  "returned": {
+    "selected_sites": [
+      {
+        "alignment_ref": "observation_3b4f7c433f9f2745dfcbf79a",
+        "components": {
+          "identical_pairs": null,
+          "paired_columns": null,
+          "paired_identity": {
+            "denominator": null,
+            "numerator": null,
+            "unit": "fraction",
+            "value": null
+          },
+          "query_paired_coverage": {
+            "denominator": 8,
+            "numerator": null,
+            "unit": "fraction",
+            "value": null
+          },
+          "substituted_pairs": null,
+          "window_alignment_columns": null
+        },
+        "data_status": "unavailable",
+        "issue_codes": [
+          "site_component_unavailable",
+          "site_native_geometry_unavailable"
+        ],
+        "operation_status": "completed",
+        "rows": null,
+        "selection": {
+          "column_end": null,
+          "column_limit": 4,
+          "column_offset": 0,
+          "next_column_offset": null,
+          "total_columns": null
+        },
+        "selection_policy": "matching_alignment_window"
+      }
+    ]
+  },
+  "retained_grading": {
+    "grading": {
+      "scores": {
+        "component_status": {
+          "alignment_identity": "unavailable",
+          "identical_pairs": "unavailable",
+          "paired_columns": "unavailable",
+          "paired_identity": "unavailable",
+          "query_gap_columns": "unavailable",
+          "query_paired_coverage": "unavailable",
+          "query_paired_units": "unavailable",
+          "reference_gap_columns": "unavailable",
+          "reference_paired_coverage": "unavailable",
+          "reference_paired_units": "unavailable",
+          "substituted_pairs": "unavailable",
+          "window_alignment_columns": "unavailable"
+        },
+        "definitions": {
+          "alignment_identity": {
+            "coordinate_convention": null,
+            "denominator": "window_alignment_columns",
+            "formula": "identical_pairs/window_alignment_columns",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected realized alignment columns including gaps",
+            "uncertainty": null,
+            "unit": "fraction"
+          },
+          "identical_pairs": {
+            "coordinate_convention": null,
+            "denominator": null,
+            "formula": "count(relationship=identical)",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected paired uppercase native symbols with literal equality",
+            "uncertainty": null,
+            "unit": "pair"
+          },
+          "paired_columns": {
+            "coordinate_convention": null,
+            "denominator": null,
+            "formula": "count(relationship in identical, substituted)",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected paired columns",
+            "uncertainty": null,
+            "unit": "column"
+          },
+          "paired_identity": {
+            "coordinate_convention": null,
+            "denominator": "paired_columns",
+            "formula": "identical_pairs/paired_columns",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected paired columns",
+            "uncertainty": null,
+            "unit": "fraction"
+          },
+          "query_gap_columns": {
+            "coordinate_convention": null,
+            "denominator": null,
+            "formula": "count(relationship=query_gap)",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected columns with a query gap",
+            "uncertainty": null,
+            "unit": "column"
+          },
+          "query_paired_coverage": {
+            "coordinate_convention": "zero_based_half_open_original_operand",
+            "denominator": "operands.query.length",
+            "formula": "query_paired_units/operands.query.length",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "complete original query operand in native coordinate units",
+            "uncertainty": null,
+            "unit": "fraction"
+          },
+          "query_paired_units": {
+            "coordinate_convention": "zero_based_half_open_original_operand",
+            "denominator": null,
+            "formula": "length(union(query_interval for paired columns))",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected checked paired query intervals",
+            "uncertainty": null,
+            "unit": "aa"
+          },
+          "reference_gap_columns": {
+            "coordinate_convention": null,
+            "denominator": null,
+            "formula": "count(relationship=reference_gap)",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected columns with a reference gap",
+            "uncertainty": null,
+            "unit": "column"
+          },
+          "reference_paired_coverage": {
+            "coordinate_convention": "zero_based_half_open_original_operand",
+            "denominator": "operands.reference.length",
+            "formula": "reference_paired_units/operands.reference.length",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "complete original reference operand in native coordinate units",
+            "uncertainty": null,
+            "unit": "fraction"
+          },
+          "reference_paired_units": {
+            "coordinate_convention": "zero_based_half_open_original_operand",
+            "denominator": null,
+            "formula": "length(union(reference_interval for paired columns))",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected checked paired reference intervals",
+            "uncertainty": null,
+            "unit": "aa"
+          },
+          "substituted_pairs": {
+            "coordinate_convention": null,
+            "denominator": null,
+            "formula": "paired_columns-identical_pairs",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected paired uppercase native symbols with literal inequality",
+            "uncertainty": null,
+            "unit": "pair"
+          },
+          "window_alignment_columns": {
+            "coordinate_convention": null,
+            "denominator": null,
+            "formula": "len(columns)",
+            "measurement_kind": "derived_from_retained_native_alignment",
+            "missing_behavior": "null_if_input_unavailable_or_incompatible_or_denominator_zero",
+            "population": "selected realized alignment columns",
+            "uncertainty": null,
+            "unit": "column"
+          }
+        },
+        "issues": [
+          {
+            "code": "traceback_not_reported"
+          },
+          {
+            "code": "site_native_geometry_unavailable"
+          }
+        ],
+        "ratios": {
+          "alignment_identity": {
+            "denominator": null,
+            "numerator": null,
+            "value": null
+          },
+          "paired_identity": {
+            "denominator": null,
+            "numerator": null,
+            "value": null
+          },
+          "query_paired_coverage": {
+            "denominator": 8,
+            "numerator": null,
+            "value": null
+          },
+          "reference_paired_coverage": {
+            "denominator": 8,
+            "numerator": null,
+            "value": null
+          }
+        },
+        "schema": "blast_hsp_column_components_v1",
+        "status": "unavailable",
+        "summary": {
+          "alignment_identity": null,
+          "identical_pairs": null,
+          "paired_columns": null,
+          "paired_identity": null,
+          "query_gap_columns": null,
+          "query_paired_coverage": null,
+          "query_paired_units": null,
+          "reference_gap_columns": null,
+          "reference_paired_coverage": null,
+          "reference_paired_units": null,
+          "substituted_pairs": null,
+          "window_alignment_columns": null
+        }
+      },
+      "sheet": {
+        "availability": {
+          "geometry": "unavailable",
+          "query_length": "available",
+          "query_original_mapping": "unavailable",
+          "reference_length": "available",
+          "reference_original_mapping": "unavailable",
+          "traceback": "unavailable"
+        },
+        "columns": [],
+        "inherited_native_measurements": {
+          "native_scores": {
+            "bit_score": 31.5,
+            "evalue": 1e-05,
+            "score": 60
+          },
+          "reported_counts": {
+            "align_len": 8,
+            "gaps": null,
+            "identity": 6,
+            "positive": null
+          },
+          "reported_percentages": {
+            "identity_percent": null,
+            "query_coverage_percent": null,
+            "query_subject_coverage_percent": null,
+            "query_unique_subject_coverage_percent": null
+          },
+          "scope": "whole_hsp"
+        },
+        "issues": [
+          {
+            "code": "traceback_not_reported"
+          },
+          {
+            "code": "site_native_geometry_unavailable"
+          }
+        ],
+        "measured_counts": {
+          "identical_pairs": null,
+          "paired_columns": null,
+          "query_gap_columns": null,
+          "query_paired_units": null,
+          "reference_gap_columns": null,
+          "reference_paired_units": null,
+          "substituted_pairs": null,
+          "window_alignment_columns": null
+        },
+        "native_input": {
+          "align_len": 8,
+          "bit_score": 31.5,
+          "evalue": 1e-05,
+          "hit_from": 1,
+          "hit_to": 8,
+          "identity": 6,
+          "query_from": 1,
+          "query_to": 8,
+          "score": 60
+        },
+        "native_version": "BLASTP fixture",
+        "next_column_offset": null,
+        "operands": {
+          "query": {
+            "alignment_unit": "aa",
+            "length": 8,
+            "molecule": "protein",
+            "subject_ref": "input_d6ce2ce0555fc4ffda472b28",
+            "unit": "aa"
+          },
+          "reference": {
+            "alignment_unit": "aa",
+            "length": 8,
+            "molecule": "protein",
+            "subject_ref": "reference_757af7bca1bc902be3a5824c",
+            "unit": "aa"
+          }
+        },
+        "original_mapping_inputs": {
+          "query": {
+            "path": [
+              {
+                "end": 8,
+                "start": 0,
+                "strand": "+",
+                "subject_ref": "input_d6ce2ce0555fc4ffda472b28",
+                "unit": "aa"
+              }
+            ],
+            "symbol_length": 8,
+            "units_per_symbol": 1,
+            "version": "oriented_source_subject_path_v2"
+          },
+          "reference": null
+        },
+        "program": "blastp",
+        "realized_window": null,
+        "requested_window": {
+          "column_limit": 4,
+          "column_offset": 0
+        },
+        "schema": "blast_hsp_column_sheet_v1",
+        "source": {
+          "alignment_ref": "observation_3b4f7c433f9f2745dfcbf79a",
+          "format": "ncbi_blast_json_hsp",
+          "native_artifact_ref": "artifact_6f0997f7f7652613cf0d59868fb93e41a4869004f7f306c7ac6e9b43473842d0",
+          "native_locator": {
+            "hit_ordinal": 0,
+            "hsp_ordinal": 0,
+            "report_ordinal": 0
+          },
+          "native_version": "BLASTP fixture",
+          "provider": "ncbi_blast",
+          "source_ref": "source_a17e1c3430dfa3009f83a904"
+        },
+        "status": "unavailable",
+        "total_columns": null
+      }
+    },
+    "native_artifact_ref": "artifact_6f0997f7f7652613cf0d59868fb93e41a4869004f7f306c7ac6e9b43473842d0",
+    "provider": "ncbi_blast",
+    "schema": "tool_grading_artifact_v1"
+  },
+  "provider_calls": [
+    "submit",
+    "fetch"
+  ],
+  "counts": {
+    "parent_actions": 3,
+    "child_site_actions": 1,
+    "scientific_observations": 1
+  },
+  "source_kind": "synthetic_native_api_protocol_through_launch_results"
+}

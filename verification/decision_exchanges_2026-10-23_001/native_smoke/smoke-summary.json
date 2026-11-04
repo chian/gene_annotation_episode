@@ -1,0 +1,45 @@
+{
+  "version": "decision_exchange_native_smoke_v1",
+  "started_at": "2026-10-23T01:56:08.116168+00:00",
+  "scope": "synthetic engineering protocol check; no biological claims",
+  "configured_reasoning": {
+    "model": "gpt-6-sol",
+    "reasoning_effort": "medium"
+  },
+  "decision_protocol": "decision_exchange_v1",
+  "controller": {
+    "fixture": "FixtureController",
+    "stop_after_completed_actions": 1
+  },
+  "goal": "Engineering protocol check using synthetic fixtures only; this is not a\nbiological investigation. For your FIRST response, use request_context with the\nexact own-attempt lookup: view=own_attempts, category=null,\ndecision_indices=null, offset=0, limit=3. After the decision_lookup_result\narrives, use select_action with selection kind=tool, tool=fixture.measure and\narguments result=completed, page=0, and report_update={}. This is the complete\nrequested engineering check; choose no other work. The supplied synthetic\ncontroller will stop after the one completed fixture action.",
+  "automatic_retries": 0,
+  "status": "failed",
+  "failure": {
+    "exception_type": "DurableExecutionError",
+    "message": "unavailable_binding",
+    "diagnostic": null,
+    "structured_failure": {
+      "code": "unavailable_binding",
+      "affected_refs": [
+        "tool_configuration"
+      ],
+      "diagnostic_ref": null,
+      "partial_record_refs": []
+    },
+    "structured_failure_provenance": "read-only reproduction of the same pre-dispatch binding check; no provider call or execution retry"
+  },
+  "counts": {
+    "logical_decisions": 0,
+    "physical_exchanges": 0,
+    "actions": 0,
+    "completion_slots": 0,
+    "observations": 0,
+    "fixture_executions": 0,
+    "fixture_commits": 0,
+    "provider_calls": 0,
+    "native_threads": 0,
+    "public_typed_responses": 0
+  },
+  "public_exchange_results": [],
+  "completed_at": "2026-10-23T01:56:12.153813+00:00"
+}

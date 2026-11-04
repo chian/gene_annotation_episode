@@ -1,0 +1,85 @@
+...................................................F
+=================================== FAILURES ===================================
+_____ test_partial_failure_zero_hits_and_unrequested_data[changed_stdout] ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_integration_2026-10-26_298/second_checks/temporary/pytest/test_partial_failure_zero_hits2')
+kind = 'changed_stdout'
+
+    @pytest.mark.parametrize('kind', ['zero_hits', 'missing_report', 'changed_stdout', 'native_failure',
+        'source_only', 'completion_only'])
+    def test_partial_failure_zero_hits_and_unrequested_data(tmp_path, kind):
+        def alter(store, plan):
+            root = Path(plan['attempt_directory'])
+            job = plan['requested_job']['native_blast']
+            path = root / (next(row['relative_path'] for row in job['outputs']
+                if row['role'] == 'primary_report') if kind == 'missing_report' else 'stdout.log')
+            (tmp_path / 'preserved-original-output').write_bytes(path.read_bytes())
+            if kind == 'missing_report':
+                path.unlink()
+            else:
+                path.write_bytes(b'changed post-seal output\n')
+        failure = kind in {'missing_report', 'changed_stdout', 'native_failure'}
+>       case = run_case(tmp_path, 'blastp' if kind == 'native_failure' else 'blastn',
+            no_hits=kind == 'zero_hits', native_failure=kind == 'native_failure',
+            before_collection=alter if kind in {'missing_report', 'changed_stdout'} else None,
+            include_rows=kind not in {'source_only', 'completion_only'}, include_refs=kind != 'completion_only',
+            include_origin=True, incomplete=failure)
+
+../../../tests/test_blast_native_execution_workflow.py:572: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_native_execution_workflow.py:320: in run_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_blast_native_execution_workflow.py:317: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1223: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:918: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+../../../tests/test_blast_native_execution_workflow.py:281: in complete
+    before_collection(store, self.plan)
+../../../tests/test_blast_native_execution_workflow.py:566: in alter
+    (tmp_path / 'preserved-original-output').write_bytes(path.read_bytes())
+                                                         ^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_integration_2026-10-26_298/second_...9abf56a3974ab11c69f1b638a76/cf84cfb35541c23b5918d3ffc2759fd6b94e95257ab749896052b218c948f30a/blast-attempt/stdout.log')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_integration_2026-10-26_298/second_checks/temporary/pytest/test_partial_failure_zero_hits2/workspace/.episode-operations/978b48989b0927e86d7d80aaece33491744859abf56a3974ab11c69f1b638a76/cf84cfb35541c23b5918d3ffc2759fd6b94e95257ab749896052b218c948f30a/blast-attempt/stdout.log'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_native_execution_workflow.py::test_partial_failure_zero_hits_and_unrequested_data[changed_stdout]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 51 passed in 292.59s (0:04:52)

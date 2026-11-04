@@ -1,0 +1,48 @@
+{
+  "generation": "005",
+  "synthetic_only": true,
+  "model_inference": false,
+  "primary_source_reads": false,
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_literature_rate_storage.py",
+    "tests/test_literature_rate_native_storage.py",
+    "tests/test_literature_rate_episode_integration.py",
+    "tests/test_literature_rate_native_integration.py",
+    "tests/test_literature_optical_storage.py",
+    "tests/test_literature_optical_integration.py",
+    "tests/test_literature_cell_possession.py",
+    "tests/test_literature_cell_possession_integration.py"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 333.52200219302904,
+  "terminal_result": "129 passed in 333.26s (0:05:33)",
+  "source_hashes_before_and_after_equal": true,
+  "owned_source_sha256": {
+    "gene_annotation_episode/literature_rate_storage.py": "171eb81f23bcf5b8c048807a093a066f42674f960ac59826cbcb4ae3d94490b4",
+    "gene_annotation_episode/literature_episodes.py": "831e49fcd159d3cbddab96b9aaa51ed0f02f82122cae61e623ccbd9342cc51ca",
+    "tests/test_literature_cell_possession.py": "a792c5d8e7353c46fa1927dae972dae55af40da965a434d0ae8e1017984531fa",
+    "tests/test_literature_cell_possession_integration.py": "9be5e49829f1e94ddd699d95c5b9b71d58f1ccfa311d8d502748db83437825ed"
+  },
+  "changed_existing_literature_files": [
+    "gene_annotation_episode/literature_episodes.py",
+    "gene_annotation_episode/literature_rate_storage.py"
+  ],
+  "C7_changed_methods": [
+    "LiteratureEpisodes._rate_facts",
+    "LiteratureEpisodes.validate_received_report"
+  ],
+  "catalog_schemas_and_scientific_TASKs_unchanged": true,
+  "optical_source_unchanged": true,
+  "preserved_original_literature_files": 63,
+  "patch_sha256": "1b9c7b91fe72c29f085753a1e6d5a3e24446276cac1ee9d438af60bf0f2b5997",
+  "limits": [
+    "Controlled synthetic fixtures and scripted shared-loop choices; no model-backed scientific claim.",
+    "Separate C4 immutable synthetic-envelope fixture is not a detached worker launch.",
+    "Historical pins/live runs and prior paper packets were not opened or mutated.",
+    "No numerical formula, scientific TASK, typed schema, controller, observation or annotation-credit policy changes."
+  ]
+}

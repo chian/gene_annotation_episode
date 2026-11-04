@@ -1,0 +1,13 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q tests/test_bvbrc_comparative_systems_publication.py tests/test_bvbrc_comparative_systems_tool_info.py tests/test_bvbrc_comparative_systems_host_inputs.py tests/test_bvbrc_comparative_systems_returns.py tests/test_bvbrc_comparative_systems_episode_flow.py -k \"not actual_selected_tool_shared_workflow\" -p no:cacheprovider --basetemp=../evidence_i/pytest_011 --junitxml=../evidence_i/pytest_011.xml",
+  "session_id": 28993,
+  "exit_code": 1,
+  "passed": 43,
+  "failed": 1,
+  "deselected": 1,
+  "seconds": 505.56,
+  "owned_files_unchanged": true,
+  "provider_pin_unchanged": true,
+  "provider_pin": "58ed93dcf6eafd1b7f4b7590cd21b2610794423b5c022f27db728fda10f9d921",
+  "failure": "latest-history test requested a second generation0 capability; actual host returned invalid before second download; no production error shown"
+}

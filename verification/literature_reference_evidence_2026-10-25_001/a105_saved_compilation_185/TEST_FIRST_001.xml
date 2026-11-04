@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="23" time="77.618" timestamp="2026-10-27T18:59:46.711051-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_compiled_assay_185" name="test_true_saved_component_join_has_actual_numerical_sections_and_partials" time="3.499"><failure message="assert None == 0.9070294784580499 ± 9.1e-07&#10;  &#10;  comparison failed&#10;  Obtained: None&#10;  Expected: 0.9070294784580499 ± 9.1e-07">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1963/test_true_saved_component_join0')
+
+    def test_true_saved_component_join_has_actual_numerical_sections_and_partials(tmp_path):
+        store,context,args,outputs=setup(tmp_path)
+        with store:
+            repo,outcome,saved=populate(store,context,args)
+            c=saved['sheet']['cells']
+&gt;           assert c['corrected_activity']['value']==pytest.approx(float(Fraction('1.6')/Fraction('.98')/2/Fraction('.9')))
+E           assert None == 0.9070294784580499 ± 9.1e-07
+E             
+E             comparison failed
+E             Obtained: None
+E             Expected: 0.9070294784580499 ± 9.1e-07
+
+tests/test_literature_compiled_assay_185.py:171: AssertionError</failure></testcase><testcase classname="tests.test_literature_compiled_assay_185" name="test_missing_contaminant_keeps_quantitative_partial_normalizations" time="2.904"><failure message="assert None == 0.9183673469387755 ± 9.2e-07&#10;  &#10;  comparison failed&#10;  Obtained: None&#10;  Expected: 0.9183673469387755 ± 9.2e-07">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1963/test_missing_contaminant_keeps0')
+
+    def test_missing_contaminant_keeps_quantitative_partial_normalizations(tmp_path):
+        store,ctx,args,_=setup(tmp_path)
+        with store:
+            args['operands']['g']=None
+            _,_,saved=populate(store,ctx,args)
+            c=saved['sheet']['cells']
+            assert c['attributed_rate']['value'] is c['corrected_activity']['value'] is None
+            assert c['measured_endpoint_per_selected_amount']['value']==pytest.approx(.9)
+&gt;           assert c['calibrated_measured_endpoint_per_selected_amount']['value']==pytest.approx(.9183673469387755)
+E           assert None == 0.9183673469387755 ± 9.2e-07
+E             
+E             comparison failed
+E             Obtained: None
+E             Expected: 0.9183673469387755 ± 9.2e-07
+
+tests/test_literature_compiled_assay_185.py:192: AssertionError</failure></testcase><testcase classname="tests.test_literature_compiled_assay_185" name="test_activity_spike_cannot_silently_become_instrument_recovery" time="3.388"><failure message="assert None == 0.98">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1963/test_activity_spike_cannot_sil0')
+
+    def test_activity_spike_cannot_silently_become_instrument_recovery(tmp_path):
+        store,ctx,args,_=setup(tmp_path,control_kind='enzyme_activity_spike')
+        with store:
+            _,_,saved=populate(store,ctx,args)
+            cells=saved['sheet']['cells']
+&gt;           assert cells['recovery']['value']==.98
+E           assert None == 0.98
+
+tests/test_literature_compiled_assay_185.py:201: AssertionError</failure></testcase><testcase classname="tests.test_literature_compiled_assay_185" name="test_full_covariance_and_residual_match_independent_gradient_oracle" time="4.823"><failure message="assert None == 0.021396526578989015 ± 2.1e-08&#10;  &#10;  comparison failed&#10;  Obtained: None&#10;  Expected: 0.021396526578989015 ± 2.1e-08">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1963/test_full_covariance_and_resid0')
+
+    def test_full_covariance_and_residual_match_independent_gradient_oracle(tmp_path):
+        store,ctx,args,_=setup(tmp_path)
+        with store:
+            ctx,args,data=with_covariance(store,ctx,args)
+            _,_,saved=populate(store,ctx,args)
+            c=saved['sheet']['cells']; a=Fraction('1.6')/(Fraction('.98')*2*Fraction('.9'))
+            f=Fraction(1)/(Fraction('.98')*2*Fraction('.9'))
+            gradient=[f,-f,-a/Fraction('.98'),-a/2,-a/Fraction('.9'),a]
+            expected=sum(gradient[i]*Fraction(str(data['covariance'][i][j]))*gradient[j] for i in range(6) for j in range(6))+Fraction('.001')
+&gt;           assert c['effect_variance']['value']==pytest.approx(float(expected))
+E           assert None == 0.021396526578989015 ± 2.1e-08
+E             
+E             comparison failed
+E             Obtained: None
+E             Expected: 0.021396526578989015 ± 2.1e-08
+
+tests/test_literature_compiled_assay_185.py:217: AssertionError</failure></testcase><testcase classname="tests.test_literature_compiled_assay_185" name="test_absent_inputs_are_not_zero_or_one[q]" time="3.243" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_absent_inputs_are_not_zero_or_one[g]" time="3.534" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_absent_inputs_are_not_zero_or_one[k]" time="3.384" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_absent_inputs_are_not_zero_or_one[E]" time="4.909" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_absent_inputs_are_not_zero_or_one[u]" time="3.929" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_absent_inputs_are_not_zero_or_one[v]" time="2.651" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_unknown_stage_preserves_native_rows_and_qualifies_combination[background]" time="3.152" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_unknown_stage_preserves_native_rows_and_qualifies_combination[contaminant]" time="3.602" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_unknown_stage_preserves_native_rows_and_qualifies_combination[recovery]" time="2.667" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_unknown_stage_preserves_native_rows_and_qualifies_combination[molecule_amount]" time="4.160" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_unknown_stage_preserves_native_rows_and_qualifies_combination[nuisance_condition]" time="3.419" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_already_normalized_native_result_is_copied_without_a_second_amount_division" time="3.259" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_normalized_native_shortcut_cannot_override_known_wrong_endpoint" time="3.394" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_native_rate_cannot_accept_covariance_declared_as_concentration_rate" time="3.077" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_dependency_selection_omits_optical_wavelength_and_active_spread" time="2.709" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_unadmitted_cell_is_not_acquired_by_possessing_its_sheet_reference" time="2.742" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_no_component_reference_receipt_is_rejected" time="2.752" /><testcase classname="tests.test_literature_compiled_assay_185" name="test_missing_scope_allows_point_arithmetic_but_not_conditional_function_profile" time="3.115"><failure message="assert None is not None">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1963/test_missing_scope_allows_poin0')
+
+    
+    def test_missing_scope_allows_point_arithmetic_but_not_conditional_function_profile(tmp_path):
+        store,ctx,args,_=setup(tmp_path)
+        with store:
+            ctx,args,_=with_covariance(store,ctx,args)
+            args['assay']['molecule']=None
+&gt;           _,_,saved=populate(store,ctx,args)
+E           assert None is not None
+
+tests/test_literature_compiled_assay_185.py:326: AssertionError</failure></testcase><testcase classname="tests.test_literature_compiled_assay_185" name="test_saved_read_and_exact_admitted_subset_are_readonly_without_any_upstream_science" time="2.795"><failure message="ValueError: binding_context_path_must_match_role">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1963/test_saved_read_and_exact_admi0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7469ebf76060&gt;
+
+    
+    def test_saved_read_and_exact_admitted_subset_are_readonly_without_any_upstream_science(tmp_path,monkeypatch):
+        store,ctx,args,_=setup(tmp_path)
+        repo,outcome,saved=populate(store,ctx,args)
+&gt;       ref=outcome['result']['sheet_ref']; rows=repo.project_cells([ref],permitted_record_refs=[ref],components=['corrected_activity'])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_compiled_assay_185.py:345: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:11: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = BindingContext(run_id='compiled-run', episode_id='parent', role='annotation', path=(('literature', 'case'),), scope=ma...a0ba24f1102b2',)}), assignment={}, request=mappingproxy({}), received_record_refs=('source_a553369e05d316bd84e3f3d3',))
+
+    def __post_init__(self):
+        for name in ('run_id', 'episode_id', 'role'):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
+                raise ValueError(f'nonempty_{name}_required')
+        path = tuple(tuple(part) for part in self.path)
+        if (not path or any(len(part) != 2 or any(not isinstance(item, str) or not item
+                for item in part) for part in path) or path[-1][0] != self.role):
+&gt;           raise ValueError('binding_context_path_must_match_role')
+E           ValueError: binding_context_path_must_match_role
+
+gene_annotation_episode/episode_bindings.py:71: ValueError</failure></testcase></testsuite></testsuites>

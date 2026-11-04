@@ -1,0 +1,217 @@
+def _derive_binding(search, prepared, files):
+    invocation = prepared["invocation"]
+    job = invocation["request"]["native_blast_database"]
+    program = job["program"]
+    expected = {"psiblast": ("blast_protein_sequence", "sequence_database"),
+                "rpsblast": ("rps_profile", "domain_database"), "rpstblastn": ("rps_profile", "domain_database")}
+    if program not in expected or len(job["databases"]) != 1:
+        return None
+    database = job["databases"][0]
+    kind, stage = expected[program]
+    context = search["program_context"]
+    if (database["kind"] != kind or database["role"] != "target"
+            or context["reported_program"] is None or context["reported_program"].lower() != program
+            or not context["native_version"] or context["geometry_program"] is None
+            or search["normalized"]["search"]["database"] not in (database["identity"]["value"], " ".join(database["native_paths"]))):
+        return None
+    pointer = "/requested_job/native_blast_database/databases/0"
+    if not any(r["pointer"] == pointer and r["status"] == "available" for r in prepared["source_relations"]):
+        return None
+    manifests = [r for r in files.catalog["entries"] if r["role"] == "database_manifest" and r["database_key"] == database["database_key"]]
+    if len(manifests) != 1:
+        return None
+    try:
+        if files.json(manifests[0]) != database["manifest"]:
+            return None
+    except (_Invalid, ValueError):
+        return None
+    provenance = dict(source_ref=files.catalog["bundle_source_ref"], pointer="/requested_job/native_blast_database")
+    binding = dict(search_key=deepcopy(search["search_key"]), stage=stage, biological_round=None,
+                   database_identity=deepcopy(database["identity"]), input_pssm_key=None, provenance=provenance)
+    report = files.entries.get(search["search_key"]["artifact_key"])
+    if report is None:
+        return None
+    report_pointer = search["search_key"]["search_pointer"].split("/results/")[0]
+    pointers = [provenance, dict(source_ref=files.catalog["bundle_source_ref"], pointer="/database_manifest/0"),
+        dict(source_ref=manifests[0]["source_ref"], pointer="/identity")]
+    if report["format"] == "json15":
+        pointers.extend(dict(source_ref=report["source_ref"], pointer=report_pointer + suffix)
+                        for suffix in ("/program", "/version", "/search_target/db"))
+    else:
+        # The collector's section locator retains the literal program/version
+        # and Database header; text bytes do not have fictional JSON fields.
+        pointers.append(dict(source_ref=report["source_ref"], pointer=search["search_key"]["search_pointer"]))
+    return dict(binding=binding, origin="derived", input_pointers=pointers)
+
+def _sequence_units(search, prepared, files, result, fasta_cache):
+    rows, record_claims = [], []
+    for validation in _valid_payloads(prepared, "sequence_database"):
+        for index, unit in enumerate(validation["normalized"]["searches"]):
+            if unit["search_key"] != search["search_key"]:
+                continue
+            row = {k: deepcopy(v) for k, v in unit.items() if k != "sequence_proofs"}
+            if validation["schema_id"] == _SEQUENCE_V2:
+                record_claims.extend((validation, f"/searches/{index}/sequence_identity_bindings/{bi}", link)
+                    for bi, link in enumerate(unit["sequence_identity_bindings"]))
+                row["description_bindings"] = [deepcopy(link) for bi, link in enumerate(unit["description_bindings"])
+                    if not _record_relation_failed(validation, f"/searches/{index}/description_bindings/{bi}/binding")
+                    and not _record_relation_failed(validation,
+                        f"/searches/{index}/reference_metadata/{link['binding']['metadata_index']}")]
+            row["sequence_identity_bindings"] = _proof_bindings(unit, validation, f"/searches/{index}", search=search,
+                prepared=prepared, files=files, result=result, fasta_cache=fasta_cache)
+            rows.append(row)
+    merged = dict(search_key=search["search_key"], reference_metadata=[], description_bindings=[], sequence_identity_bindings=[], database_profile=None)
+    populations = []
+    for row in rows:
+        offset = len(merged["reference_metadata"])
+        merged["reference_metadata"].extend(row["reference_metadata"])
+        for binding in row["description_bindings"]:
+            binding["binding"]["metadata_index"] += offset
+            merged["description_bindings"].append(binding)
+        merged["sequence_identity_bindings"].extend(row["sequence_identity_bindings"])
+        if row["database_profile"] is not None:
+            populations.append(row["database_profile"])
+    unique = {_token(p): p for p in populations}
+    if len(unique) == 1:
+        merged["database_profile"] = next(iter(unique.values()))
+    elif len(unique) > 1:
+        result["issues"].append(_issue(_input_issue_descriptor(prepared["invocation"]["request"]["native_blast_database"]),
+            "relation_conflict", "/searches", "database_population_conflict"))
+    for field in ("description_bindings", "sequence_identity_bindings"):
+        merged[field] = list({_token(r): r for r in merged[field]}.values())
+    if record_claims:
+        identities = {}
+        def record_key(link):
+            b = link["binding"]
+            return blast_record_identity(source_ref=b["source_ref"], pointer=b["pointer"], record_locator=b.get("record_locator"))
+        for link in [r[2] for r in record_claims] + merged["sequence_identity_bindings"]:
+            b = link["binding"]
+            identities.setdefault(record_key(link), set()).add((b["digest"], b["molecule"], b["sequence_length"]))
+        conflicts = {key for key, values in identities.items() if len(values) > 1}
+        merged["sequence_identity_bindings"] = [r for r in merged["sequence_identity_bindings"] if record_key(r) not in conflicts]
+        for validation, pointer, link in record_claims:
+            if record_key(link) in conflicts:
+                _population_issue(result, validation, pointer, "full_sequence_source_identity_conflict", conflict=True)
+    return merged
+
+def populate_native_blast_database_sheets(collection, *, prepared_inputs, artifact_catalog, native_convergence=None):
+    """Populate the actual public sheets; retain native rows and qualified absences."""
+    prepared = _copy(prepared_inputs)
+    if collection["invocation"] != prepared["invocation"]:
+        raise ValueError("native_blast_metadata_collection_invocation_conflict")
+    files = _Catalog(artifact_catalog)
+    if native_convergence is not None:
+        from .native_blast_database_convergence import validate_native_blast_database_convergence_binding
+        native_convergence = validate_native_blast_database_convergence_binding(native_convergence, collection=collection)
+        captures = {r["artifact_key"]: r for r in native_convergence["source_context"]["bundle"]["artifacts"]}
+        for name in ("report", "query"):
+            state = native_convergence["selected"][name]
+            entry = files.entries.get(state["artifact_key"])
+            actual = {k: entry[k] for k in ("artifact_ref", "source_ref", "sha256", "size_bytes")} if entry is not None else None
+            if actual != state["catalog"]:
+                raise ValueError("native_blast_database_convergence_binding_invalid", "/selected/" + name + "/catalog")
+            if state["status"] == "available" and any(entry[k] != captures[state["artifact_key"]][k]
+                    for k in captures[state["artifact_key"]] if k != "content_assessment"):
+                raise ValueError("native_blast_database_convergence_binding_invalid", "/selected/" + name + "/catalog")
+    result = dict(schema="native_blast_database_sheet_set_v1", collection=_copy(collection), prepared_inputs=prepared,
+        derived_search_bindings=[], sequence=[], profile=[], vdb=[], pssm=deepcopy(prepared["pssm_sheets"]),
+        msa=deepcopy(prepared["msa_sheets"]), iteration=None, metadata_parse_results=[], metadata_binding_results=[], issues=deepcopy(prepared["issues"]))
+    if native_convergence is not None:
+        result.update(schema="native_blast_database_sheet_set_v2", native_convergence=native_convergence)
+    program = prepared["invocation"]["execution_program"]
+    report_sources, query_bindings, search_bindings, targets = [], [], [], []
+    sequence_metadata, profile_metadata, fasta_cache = [], [], {}
+    known_keys = {_token(s["search_key"]) for s in collection["searches"]}
+    query_payloads = _valid_payloads(prepared, "query_identity")
+    pssm_keys = {r["pssm_key"] for s in prepared["pssm_sheets"] for r in s["pssms"]}
+    for validation in prepared["metadata"]:
+        if validation["status"] != "valid" or validation["normalized"] is None:
+            continue
+        for kind, value, pointer in _qualified_addresses(validation["normalized"], _schema_for(validation["consumer"], validation["schema_id"])):
+            if kind == "search" and _token(value) not in known_keys:
+                _population_issue(result, validation, pointer, "collection_search_address_unresolved")
+            if kind == "pssm" and value not in pssm_keys:
+                _population_issue(result, validation, pointer, "pssm_record_address_unresolved")
+    for search in collection["searches"]:
+        key = search["search_key"]
+        report = files.entries.get(key["artifact_key"])
+        if report is None:
+            raise ValueError("native_blast_metadata_report_catalog_unresolved")
+        source = dict(artifact_key=key["artifact_key"], artifact_ref=report["artifact_ref"], member_ordinal=key["member_ordinal"], member_sha256=None)
+        report_sources.append(dict(search_key=key, report_source=source))
+        query = _query_binding(search, prepared)
+        query_bindings.append(dict(search_key=key, query_binding=query))
+        supplied = [deepcopy(r) for v in query_payloads for r in v["normalized"]["search_bindings"] if r["search_key"] == key]
+        derived = _derive_binding(search, prepared, files)
+        bindings = supplied[:]
+        if derived is not None:
+            result["derived_search_bindings"].append(derived)
+            if not supplied:
+                bindings.append(derived["binding"])
+            elif any(r["stage"] != derived["binding"]["stage"] or r["database_identity"] != derived["binding"]["database_identity"] for r in supplied):
+                bindings.append(derived["binding"])
+                result["issues"].append(_issue(_input_issue_descriptor(prepared["invocation"]["request"]["native_blast_database"]),
+                    "relation_conflict", "/search_bindings", "supplied_derived_stage_conflict"))
+        if not bindings:
+            bindings = [_empty_binding(key)]
+        search_bindings.extend(bindings)
+        binding = bindings[0] if len(bindings) == 1 else _empty_binding(key)
+        target_rows = []
+        for validation in query_payloads:
+            for i, row in enumerate(validation["normalized"]["target_contexts"]):
+                if row["search_key"] != key:
+                    continue
+                context = None if query is None else dict(query_operand=query["operand"], **{k: row[k] for k in ("taxid", "lineage", "independent_of_search", "source")})
+                target_rows.append(dict(search_key=key, target_context=context))
+                if query is None:
+                    _population_issue(result, validation, f"/target_contexts/{i}", "target_query_operand_unresolved")
+        targets.extend(target_rows)
+        target = target_rows[0]["target_context"] if len(target_rows) == 1 else None
+        if program in {"psiblast", "deltablast"}:
+            seq = _sequence_units(search, prepared, files, result, fasta_cache)
+            prof = _profile_units(search, prepared, result)
+            sequence_metadata.append(seq)
+            profile_metadata.append(prof)
+            if binding["stage"] == "sequence_database":
+                sheet = _sequence.populate_blast_sequence_database_sheet(search, report_source=source, search_binding=binding,
+                    query_binding=query, target_context=target, **{k: v for k, v in seq.items() if k != "search_key"})
+                result["sequence"].append(dict(search_key=key, sheet=sheet))
+            if program == "deltablast" and binding["stage"] == "domain_database":
+                sheet = _profile.populate_blast_profile_sheet(search, report_source=source, search_binding=binding,
+                    query_binding=query, target_context=target, **{k: v for k, v in prof.items() if k != "search_key"})
+                result["profile"].append(dict(search_key=key, sheet=sheet))
+        elif program in {"rpsblast", "rpstblastn"}:
+            prof = _profile_units(search, prepared, result)
+            sheet = _profile.populate_blast_profile_sheet(search, report_source=source, search_binding=binding,
+                query_binding=query, target_context=target, **{k: v for k, v in prof.items() if k != "search_key"})
+            result["profile"].append(dict(search_key=key, sheet=sheet))
+        else:
+            metadata = _vdb_units(search, prepared, files, result, fasta_cache, query, source)
+            sheet = _vdb.populate_blast_vdb_sheet(search, report_source=source, query_binding=query, target_context=target, **metadata)
+            result["vdb"].append(dict(search_key=key, sheet=sheet))
+    if program in {"psiblast", "deltablast"}:
+        iteration_data = {k: [] for k in ("checkpoint_bindings", "comparison_pairs", "inclusion_records", "convergence_records")}
+        for validation in _valid_payloads(prepared, "iteration"):
+            for field in iteration_data:
+                for index, row in enumerate(validation["normalized"][field]):
+                    value = deepcopy(row)
+                    key_field = "comparison_key" if field == "comparison_pairs" else "record_key" if field.endswith("records") else None
+                    if key_field:
+                        value[key_field] = "metadata-" + _sha(_token([validation["input_key"],
+                            _original_pointer(validation, f"/{field}/{index}"), value[key_field]]).encode())
+                    iteration_data[field].append(value)
+        if native_convergence is not None and native_convergence["extraction"] is not None:
+            iteration_data["convergence_records"].extend(deepcopy(native_convergence["extraction"]["convergence_records"]))
+        # Keep orphan context rows in v2 so its qualifier reports their exact scope.
+        for validation in query_payloads:
+            search_bindings.extend(deepcopy(r) for r in validation["normalized"]["search_bindings"] if _token(r["search_key"]) not in known_keys)
+            for row in validation["normalized"]["target_contexts"]:
+                if _token(row["search_key"]) not in known_keys:
+                    targets.append(dict(search_key=row["search_key"], target_context=dict(query_operand=None,
+                        **{k: row[k] for k in ("taxid", "lineage", "independent_of_search", "source")})))
+        result["iteration"] = _iteration.populate_blast_iteration_sheet(collection, report_sources=report_sources,
+            query_bindings=query_bindings, search_bindings=search_bindings, pssm_sheets=prepared["pssm_sheets"],
+            sequence_metadata=sequence_metadata, profile_metadata=profile_metadata, **iteration_data,
+            invocation_source=dict(source_ref=artifact_catalog["bundle_source_ref"], pointer="/requested_job/native_blast_database"),
+            target_contexts=targets)
+    return _copy(result)

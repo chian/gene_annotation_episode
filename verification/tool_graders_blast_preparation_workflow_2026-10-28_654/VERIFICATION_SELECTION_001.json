@@ -1,0 +1,43 @@
+{
+  "record_type": "native_preparation_workflow_verification_selection_654",
+  "test_sha256": "556c4293f77e39a079da672cdc8539436327080ca7dc11c5cfd6bf1e331dc93a",
+  "argv": [
+    ".venv/bin/python",
+    "-B",
+    "verification/tool_graders_hmmer_map_verification_2026-10-28_529/run_checks.py",
+    "launch",
+    "check113_workflow654",
+    "--test",
+    "test_blast_preparation_workflow_654.py",
+    "--support-tree",
+    "verification/tool_graders_blast_preparation_native_2026-10-28_644",
+    "--support-tree",
+    "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state",
+    "--support-file",
+    "research/slotted_process_library/publications/2026-10-24-001/index.json",
+    "--native-executable",
+    "resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+    "--native-executable",
+    "resources/software/ncbi-blast-2.17.0+/bin/makembindex",
+    "--native-executable",
+    "resources/software/ncbi-blast-2.17.0+/bin/makeprofiledb"
+  ],
+  "scientific_library_tree_supplied_by_runner": "research/slotted_process_library/publications/2026-10-24-001",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null,
+    "swap_bytes": 0
+  },
+  "native_commands_selected": 9,
+  "choices": "scripted fixture using shared Workflow machinery and634 helpers",
+  "prior_result_verification": "root reports check112+check112b all9 success/failure publication paths passed",
+  "binding_verification": "651 reports check110 109passed and check110b 1passed, receipts terminal and clean",
+  "unverified": [
+    "other variants",
+    "HPC",
+    "VDB offline closure",
+    "downstream search compatibility",
+    "live LLM choice quality"
+  ]
+}

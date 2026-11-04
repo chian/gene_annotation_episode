@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/prepare_publication_inputs.py", line 278, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/prepare_publication_inputs.py", line 268, in main
+    value = prepare(json.loads(raw))
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/prepare_publication_inputs.py", line 207, in prepare
+    evidence[owner] = seal_root_handoff(specification)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/prepare_publication_inputs.py", line 77, in seal_root_handoff
+    before = common.snapshot(source)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/build_publication.py", line 128, in snapshot
+    visit(root)
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/build_publication.py", line 122, in visit
+    visit(path)
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/build_publication.py", line 122, in visit
+    visit(path)
+  File "/tmp/factual-frame-007-publication-authoring-hlbf0fm9/build_publication.py", line 127, in visit
+    raise ValueError('special file in engineering evidence: ' + str(path))
+ValueError: special file in engineering evidence: /tmp/factual-frame007-root-checks-20261022-o2gix27z/pytest-fixtures/test_subprocess_reconstructs_o0/turns.jsonl.gate

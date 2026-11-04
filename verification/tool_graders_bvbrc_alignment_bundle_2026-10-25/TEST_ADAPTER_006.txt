@@ -1,0 +1,23 @@
+.....................................F.......                            [100%]
+=================================== FAILURES ===================================
+_____ test_missing_requested_scalar_has_no_invented_method[failed-failed] ______
+
+mode = 'failed', expected = 'failed'
+
+    @pytest.mark.parametrize('mode,expected', [('missing','partial'), ('wrong_hash','invalid'), ('failed','failed')])
+    def test_missing_requested_scalar_has_no_invented_method(mode,expected):
+        f = basic_fixture()
+        if mode == 'wrong_hash': f.raw[f.bundle['artifacts'][0]['raw_artifact_ref']] += b'X'
+        else: f.bundle['artifacts'] = []; f.raw = {}
+        if mode == 'failed': f.bundle['status'] = 'failed'
+        result = f.consume(COUNT_FIELD)
+>       assert result['status'] == expected
+E       AssertionError: assert 'partial' == 'failed'
+E         
+E         - failed
+E         + partial
+
+tests/test_bvbrc_alignment_bundle_resolution.py:599: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_alignment_bundle_resolution.py::test_missing_requested_scalar_has_no_invented_method[failed-failed]
+1 failed, 44 passed, 7 deselected in 2.90s

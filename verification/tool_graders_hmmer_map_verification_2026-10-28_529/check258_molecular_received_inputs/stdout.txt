@@ -1,0 +1,13 @@
+............F...........................                                 [100%]
+=================================== FAILURES ===================================
+_ test_actual_context_commission_inheritance_and_store_scope_fail_without_metadata[role] _
+source_snapshot/tests/test_molecular_sequence_input_bindings.py:207: in test_actual_context_commission_inheritance_and_store_scope_fail_without_metadata
+    context = BindingContext(context.run_id, context.episode_id, "annotation", context.path,
+<string>:11: in __init__
+    ???
+source_snapshot/gene_annotation_episode/episode_bindings.py:71: in __post_init__
+    raise ValueError('binding_context_path_must_match_role')
+E   ValueError: binding_context_path_must_match_role
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_molecular_sequence_input_bindings.py::test_actual_context_commission_inheritance_and_store_scope_fail_without_metadata[role]
+1 failed, 39 passed in 116.56s (0:01:56)

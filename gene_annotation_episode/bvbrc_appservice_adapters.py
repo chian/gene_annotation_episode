@@ -18,9 +18,16 @@ def bind_adapters(configured):
     from . import bvbrc_proteome_bundle_adapter_v2 as proteome_v2
     from . import bvbrc_comparative_systems_bundle_adapter as comparative_systems
     from . import bvbrc_fastqutils_bundle_adapter as fastqutils
+    from . import bvbrc_annotation_bundle_adapter as annotation
+    from . import bvbrc_assembly_bundle_adapter as assembly
+    from . import bvbrc_variation_bundle_adapter as variation
+    from . import bvbrc_influenza_ha_bundle_adapter as influenza_ha
+    from . import bvbrc_subspecies_bundle_adapter as subspecies
+    from . import bvbrc_tnseq_bundle_adapter as tnseq
+    from . import bvbrc_rnaseq_bundle_adapter as rnaseq
 
     installed = {(module.ADAPTER_ID, module.ADAPTER_VERSION): module
-        for module in (homology, gene_tree, codon_tree, msa, metacats, genome_alignment, proteome, proteome_v2, comparative_systems, fastqutils)}
+        for module in (homology, gene_tree, codon_tree, msa, metacats, genome_alignment, proteome, proteome_v2, comparative_systems, fastqutils, annotation, assembly, variation, influenza_ha, subspecies, tnseq, rnaseq)}
     bound, seen = {}, set()
     for row in configured:
         key = row['adapter_id'], row['adapter_version']

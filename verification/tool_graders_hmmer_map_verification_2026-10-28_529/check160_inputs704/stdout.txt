@@ -1,0 +1,17 @@
+...........F...............                                              [100%]
+=================================== FAILURES ===================================
+____ test_original_context_and_launch_job_cannot_be_replaced[wrong_parent] _____
+source_snapshot/tests/test_flux_balance_execution_inputs_704.py:179: in test_original_context_and_launch_job_cannot_be_replaced
+    if fault == 'wrong_parent': context = replace(context, role='launch')
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:11: in __init__
+    ???
+source_snapshot/gene_annotation_episode/episode_bindings.py:71: in __post_init__
+    raise ValueError('binding_context_path_must_match_role')
+E   ValueError: binding_context_path_must_match_role
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_execution_inputs_704.py::test_original_context_and_launch_job_cannot_be_replaced[wrong_parent]
+1 failed, 26 passed in 110.99s (0:01:50)

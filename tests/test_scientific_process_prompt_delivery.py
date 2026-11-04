@@ -34,6 +34,19 @@ class ScientificWire(_SessionConnection):
         return [params for method, params in self.sent if method == "turn/start"]
 
 
+def test_partial_commit_error_details_reach_the_actual_model_input(tmp_path):
+    wire=ScientificWire(tmp_path/'wire')
+    state=snapshot()
+    state['last_local_outcome']={'status':'partial','record_refs':['assessment_saved'],
+        'error_code':'record_contract_error','errors':[{'code':'finding_source_subject_not_in_observation',
+            'section':'assessments','row_index':1,'reference':'reference_unlinked'}],
+        'aliases':{'valid_row':'assessment_saved'}}
+    asyncio.run(complete(wire,state_frame(state)))
+    text=wire.turns_sent()[0]['input'][0]['text']
+    assert 'finding_source_subject_not_in_observation' in text
+    assert 'reference_unlinked' in text and 'assessment_saved' in text
+
+
 def snapshot():
     """Synthetic projection with the same field shapes as DecisionSource.next."""
     reference = {"version": "scientific_process_option_ref_v1", "library_id": "a" * 64,

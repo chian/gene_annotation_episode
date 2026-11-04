@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="1.012" timestamp="2026-10-25T02:55:57.946921-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_metacats_provider" name="test_unfiltered_native_table_does_not_establish_an_unobserved_category" time="0.233" /><testcase classname="tests.test_bvbrc_metacats_provider" name="test_empty_unfiltered_native_table_alone_does_not_establish_zero_tests" time="0.028"><failure message="AssertionError: assert ('ok' == 'partial'&#10;  &#10;  - partial&#10;  + ok)">def test_empty_unfiltered_native_table_alone_does_not_establish_zero_tests():
+        sheet, _, _ = retained_sheet('all_missing')
+        request = native_family_request(sheet)
+        outcome = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})['results'][0]
+&gt;       assert outcome['status'] == 'partial' and outcome['value'] is None
+E       AssertionError: assert ('ok' == 'partial'
+E         
+E         - partial
+E         + ok)
+
+tests/test_bvbrc_metacats_provider.py:355: AssertionError</failure></testcase></testsuite></testsuites>

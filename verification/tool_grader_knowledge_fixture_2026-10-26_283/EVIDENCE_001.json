@@ -1,0 +1,133 @@
+{
+  "scope": "Engineering fixtures only; no scientific credit policy or live model run",
+  "source_changes_between_runs": {
+    "tests/test_tool_knowledge.py": {
+      "before": "01fd91cd0a0c17290147bc2006d0c3af92247a745e14c7f56fe1ea5d247f7465",
+      "after": "6befe59ef19266f168734bcbf4f303a338b363eb523d054da43c732ff15fd223"
+    }
+  },
+  "sources_changed_during_each_run": {
+    "check001": [],
+    "check002": []
+  },
+  "snapshot_exact_match": true,
+  "snapshots_sha256": {
+    "recovery_before.json": "36a2e88f079405cb095b4f5d01fe04dce696da1ea2a1e3fb8983ba6308e806b3",
+    "recovery_after.json": "36a2e88f079405cb095b4f5d01fe04dce696da1ea2a1e3fb8983ba6308e806b3"
+  },
+  "read_owner_path": [
+    [
+      "annotation",
+      "root"
+    ],
+    [
+      "improvement",
+      "child_0"
+    ]
+  ],
+  "original_read": {
+    "status": "completed",
+    "text": "Second λ line\n",
+    "library_id": "tool_knowledge_bc6db76005c40f41c68b344f4f280747ef9c62d873b0b1bbd3deea5b1fd8360e",
+    "library_version": "tool_knowledge_v1",
+    "section_sha256": "a36771bf9807125cc241d24aa7a6305e7d3864edcb0cb80d5d715bd16cd9a2b6",
+    "credit": 0.0,
+    "record_refs": [],
+    "changed_record_refs": []
+  },
+  "read_action_count": 1,
+  "observations": [
+    {
+      "episode_id": "episode_dd488d0f96368c526a1488af48fe3da2806dc73c57cf10a72093c3aeec49c538",
+      "unit_index": 0,
+      "delta": 0.0
+    },
+    {
+      "episode_id": "episode_dd488d0f96368c526a1488af48fe3da2806dc73c57cf10a72093c3aeec49c538",
+      "unit_index": 1,
+      "delta": 0.0
+    },
+    {
+      "episode_id": "episode_fc7ad6a8ea261bbfd5b2172ce22614c4ae4d02cd127937b6d429f657ac00c94a",
+      "unit_index": 0,
+      "delta": 0.0
+    },
+    {
+      "episode_id": "episode_fc7ad6a8ea261bbfd5b2172ce22614c4ae4d02cd127937b6d429f657ac00c94a",
+      "unit_index": 1,
+      "delta": 1.0
+    }
+  ],
+  "returned_forms": [
+    {
+      "changed": []
+    }
+  ],
+  "tests": [
+    {
+      "name": "test_metadata_discovery_does_not_open_manuals_and_reads_page_exact_lines",
+      "failed": false,
+      "time_seconds": 0.002
+    },
+    {
+      "name": "test_frozen_run_keeps_instructions_when_source_changes_and_detects_corruption",
+      "failed": false,
+      "time_seconds": 0.003
+    },
+    {
+      "name": "test_parent_and_child_get_reads_without_scientific_credit_or_manual_prose_in_form",
+      "failed": false,
+      "time_seconds": 6.993
+    },
+    {
+      "name": "test_interrupted_read_recovery_preserves_outcome_and_supplied_library_version",
+      "failed": false,
+      "time_seconds": 18.149
+    },
+    {
+      "name": "test_every_job_role_can_read_knowledge_without_executing_a_job",
+      "failed": false,
+      "time_seconds": 2.55
+    },
+    {
+      "name": "test_bad_request_is_specific_and_does_not_remove_other_manuals",
+      "failed": false,
+      "time_seconds": 0.006
+    },
+    {
+      "name": "test_root_rejects_tools_at_schema_dispatch_and_metadata_surface",
+      "failed": false,
+      "time_seconds": 4.252
+    },
+    {
+      "name": "test_metadata_then_real_child_translation_typed_return_and_root_reason",
+      "failed": true,
+      "time_seconds": 9.565
+    },
+    {
+      "name": "test_parent_can_discover_child_return_facts",
+      "failed": false,
+      "time_seconds": 4.131
+    },
+    {
+      "name": "test_recovery_reuses_metadata_reply_without_an_action_or_duplicate_lookup",
+      "failed": false,
+      "time_seconds": 6.967
+    },
+    {
+      "name": "test_resume_reuses_selected_work_and_controller_observations",
+      "failed": false,
+      "time_seconds": 8.369
+    },
+    {
+      "name": "test_resume_reuses_closed_child_archives_without_duplicate_files",
+      "failed": false,
+      "time_seconds": 14.722
+    },
+    {
+      "name": "test_resume_recovers_published_operation_before_runtime_response",
+      "failed": false,
+      "time_seconds": 10.907
+    }
+  ]
+}

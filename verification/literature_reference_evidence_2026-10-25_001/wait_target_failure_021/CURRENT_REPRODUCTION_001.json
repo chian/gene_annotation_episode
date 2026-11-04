@@ -1,0 +1,287 @@
+{
+  "cases": [
+    {
+      "actions": [
+        {
+          "credit": null,
+          "decision_index": 0,
+          "result": null,
+          "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"raised\",\"owner\":{\"pid\":1445558,\"start_ticks\":\"81816406\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-26T08:50:04.604876+00:00\",\"started_monotonic_ns\":818166302211401,\"ended_at\":\"2026-10-26T08:50:04.772037+00:00\",\"elapsed_seconds\":0.167131479,\"exception_type\":\"KeyError\"}],\"measured_elapsed_seconds\":0.167131479,\"unmeasured_ended_intervals\":0}"
+        }
+      ],
+      "case": "current_source_runtime",
+      "controller_observations": 0,
+      "exception": {
+        "message": "'source_dfd29a9db6490dde8ae1e010'",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/wait_target_failure_021/reproduce_current.py\", line 49, in runtime_case\n    summary = await run_workflow(store, tools, provider=provider, run_dir=directory / 'run',\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 3820, in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 4142, in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1258, in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1560, in _run_loop_async\n    step = await self._acquire_unit_async(ctx, scope, records, item)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 495, in _acquire_unit_async\n    return await super()._acquire_unit_async(ctx, scope, records, item,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1602, in _acquire_unit_async\n    acquired = await acquired\n               ^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1128, in acquire_async\n    return await _leaf_acquisition_async(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1099, in _leaf_acquisition_async\n    extracted = await extracted\n                ^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 1358, in execute\n    result = await self.workflow.perform_selected_wait(self, selection['condition'], index)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 2053, in perform_selected_wait\n    outcome = await self.wait_store.perform_wait(request, self.execution_backend)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/waiting.py\", line 573, in perform_wait\n    received = await event_provider.wait_events(_copy(request[\"condition\"]))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 735, in wait_events\n    events = self._matching_events(condition)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 706, in _matching_events\n    for handle, kind in self._selected_target_kinds(condition).items():\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 697, in _selected_target_kinds\n    self._row(db, handle)\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 407, in _row\n    raise KeyError(handle)\nKeyError: 'source_dfd29a9db6490dde8ae1e010'\n",
+        "type": "KeyError"
+      },
+      "provider_calls": 1,
+      "runtime_observations": 0,
+      "scientific_observations": 0,
+      "selected_condition": {
+        "events": [
+          {
+            "after_cursor": 0,
+            "event": "state_changed",
+            "handle": "source_dfd29a9db6490dde8ae1e010"
+          }
+        ],
+        "reconsider_at": "2026-10-21T12:00:00+00:00",
+        "version": "event_condition_v1"
+      },
+      "selected_handle_kind": "source",
+      "summary": null,
+      "wait_requests": [
+        {
+          "condition": {
+            "events": [
+              {
+                "after_cursor": 0,
+                "event": "state_changed",
+                "handle": "source_dfd29a9db6490dde8ae1e010"
+              }
+            ],
+            "reconsider_at": "2026-10-21T12:00:00+00:00",
+            "version": "event_condition_v1"
+          },
+          "estimate_snapshot": {
+            "captured_at": "2026-10-26T08:50:04.655913+00:00",
+            "condition": {
+              "events": [
+                {
+                  "after_cursor": 0,
+                  "event": "state_changed",
+                  "handle": "source_dfd29a9db6490dde8ae1e010"
+                }
+              ],
+              "reconsider_at": "2026-10-21T12:00:00+00:00",
+              "version": "event_condition_v1"
+            },
+            "duration_expectation_refs": [],
+            "event_expectations": [
+              {
+                "event": "state_changed",
+                "handle": "source_dfd29a9db6490dde8ae1e010",
+                "method": "unavailable",
+                "probability": null,
+                "support_refs": []
+              }
+            ],
+            "local_history_refs": [],
+            "monitoring_gain": null,
+            "progress_refs": [],
+            "scientific_gain": null,
+            "unavailable_reasons": [
+              "scientific_gain_model_unbound",
+              "monitoring_gain_model_unbound",
+              "selected_handle_not_in_pending_snapshot",
+              "no_compatible_duration_support",
+              "event_probability_model_unbound"
+            ],
+            "version": "wait_estimate_v1"
+          },
+          "original_decision_index": 0,
+          "parent_episode_id": "episode_fde7830d06d2cfab84a67af26da3c0045fc859db44b879a55b0d5e0c1cd0d6b8",
+          "version": "wait_request_v1",
+          "wait_id": "wait_0e8365437047a68290fc27991c499b5e237ffecbc18f78af7ab7b90102192fcb"
+        }
+      ],
+      "wait_rows": [
+        {
+          "outcome": null,
+          "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"raised\",\"owner\":{\"pid\":1445558,\"start_ticks\":\"81816406\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-26T08:50:04.705430+00:00\",\"started_monotonic_ns\":818166402759290,\"ended_at\":\"2026-10-26T08:50:04.741001+00:00\",\"elapsed_seconds\":0.035549134,\"exception_type\":\"KeyError\"}],\"measured_elapsed_seconds\":0.035549134,\"unmeasured_ended_intervals\":0}",
+          "wake": null
+        }
+      ]
+    },
+    {
+      "actions": [
+        {
+          "credit": null,
+          "decision_index": 0,
+          "result": null,
+          "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"raised\",\"owner\":{\"pid\":1445558,\"start_ticks\":\"81816406\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-26T08:50:06.761585+00:00\",\"started_monotonic_ns\":818168458935927,\"ended_at\":\"2026-10-26T08:50:06.894922+00:00\",\"elapsed_seconds\":0.133291221,\"exception_type\":\"KeyError\"}],\"measured_elapsed_seconds\":0.133291221,\"unmeasured_ended_intervals\":0}"
+        }
+      ],
+      "case": "current_unknown_runtime",
+      "controller_observations": 0,
+      "exception": {
+        "message": "'unknown_execution_target_synthetic_021'",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/wait_target_failure_021/reproduce_current.py\", line 49, in runtime_case\n    summary = await run_workflow(store, tools, provider=provider, run_dir=directory / 'run',\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 3820, in run_workflow\n    return await _run_bound_workflow(store, tools, **options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 4142, in _run_bound_workflow\n    record = await root.run_async(workflow.context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1258, in run_async\n    record = await self._run_loop_async(ctx, scope)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1560, in _run_loop_async\n    step = await self._acquire_unit_async(ctx, scope, records, item)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 495, in _acquire_unit_async\n    return await super()._acquire_unit_async(ctx, scope, records, item,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1602, in _acquire_unit_async\n    acquired = await acquired\n               ^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1128, in acquire_async\n    return await _leaf_acquisition_async(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/episode.py\", line 1099, in _leaf_acquisition_async\n    extracted = await extracted\n                ^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 1358, in execute\n    result = await self.workflow.perform_selected_wait(self, selection['condition'], index)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/runtime.py\", line 2053, in perform_selected_wait\n    outcome = await self.wait_store.perform_wait(request, self.execution_backend)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/waiting.py\", line 573, in perform_wait\n    received = await event_provider.wait_events(_copy(request[\"condition\"]))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 735, in wait_events\n    events = self._matching_events(condition)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 706, in _matching_events\n    for handle, kind in self._selected_target_kinds(condition).items():\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 697, in _selected_target_kinds\n    self._row(db, handle)\n  File \"/home/chia/repos/gene_annotation_episode/method_loop/durable.py\", line 407, in _row\n    raise KeyError(handle)\nKeyError: 'unknown_execution_target_synthetic_021'\n",
+        "type": "KeyError"
+      },
+      "provider_calls": 1,
+      "runtime_observations": 0,
+      "scientific_observations": 0,
+      "selected_condition": {
+        "events": [
+          {
+            "after_cursor": 0,
+            "event": "state_changed",
+            "handle": "unknown_execution_target_synthetic_021"
+          }
+        ],
+        "reconsider_at": "2026-10-21T12:00:00+00:00",
+        "version": "event_condition_v1"
+      },
+      "selected_handle_kind": "unknown",
+      "summary": null,
+      "wait_requests": [
+        {
+          "condition": {
+            "events": [
+              {
+                "after_cursor": 0,
+                "event": "state_changed",
+                "handle": "unknown_execution_target_synthetic_021"
+              }
+            ],
+            "reconsider_at": "2026-10-21T12:00:00+00:00",
+            "version": "event_condition_v1"
+          },
+          "estimate_snapshot": {
+            "captured_at": "2026-10-26T08:50:06.796651+00:00",
+            "condition": {
+              "events": [
+                {
+                  "after_cursor": 0,
+                  "event": "state_changed",
+                  "handle": "unknown_execution_target_synthetic_021"
+                }
+              ],
+              "reconsider_at": "2026-10-21T12:00:00+00:00",
+              "version": "event_condition_v1"
+            },
+            "duration_expectation_refs": [],
+            "event_expectations": [
+              {
+                "event": "state_changed",
+                "handle": "unknown_execution_target_synthetic_021",
+                "method": "unavailable",
+                "probability": null,
+                "support_refs": []
+              }
+            ],
+            "local_history_refs": [],
+            "monitoring_gain": null,
+            "progress_refs": [],
+            "scientific_gain": null,
+            "unavailable_reasons": [
+              "scientific_gain_model_unbound",
+              "monitoring_gain_model_unbound",
+              "selected_handle_not_in_pending_snapshot",
+              "no_compatible_duration_support",
+              "event_probability_model_unbound"
+            ],
+            "version": "wait_estimate_v1"
+          },
+          "original_decision_index": 0,
+          "parent_episode_id": "episode_7f384b36a82bc13f15b0ef852e38f5a89800a788f1259441ef8ed2abf602bcca",
+          "version": "wait_request_v1",
+          "wait_id": "wait_ed8c9ee2321153f41a8c8d3fefd14620f632da91925e4d0612d924225fbdd981"
+        }
+      ],
+      "wait_rows": [
+        {
+          "outcome": null,
+          "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"raised\",\"owner\":{\"pid\":1445558,\"start_ticks\":\"81816406\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-26T08:50:06.828295+00:00\",\"started_monotonic_ns\":818168525624066,\"ended_at\":\"2026-10-26T08:50:06.862616+00:00\",\"elapsed_seconds\":0.034300005,\"exception_type\":\"KeyError\"}],\"measured_elapsed_seconds\":0.034300005,\"unmeasured_ended_intervals\":0}",
+          "wake": null
+        }
+      ]
+    },
+    {
+      "actions": [
+        {
+          "credit": 0.0,
+          "decision_index": 0,
+          "result": "{\"changed_record_refs\":[],\"pending_work_after_action\":{\"captured_at\":\"2026-10-26T08:50:09.059795+00:00\",\"items\":[],\"version\":\"pending_work_v1\"},\"record_refs\":[],\"result\":{\"condition_sha256\":\"bb13ca18a823932c14d06770d2a808f1f4b3046ebce5296659df9d7b14585569\",\"duration_measure\":\"measured_wait_intervals\",\"measured_duration_seconds\":0.035237624,\"started_at\":\"2026-10-26T08:50:08.968197+00:00\",\"trigger\":null,\"unmeasured_interruption\":false,\"version\":\"wait_outcome_v1\",\"wait_id\":\"wait_c2f48f85d7a3fd637df31701cc9a65eb5b5d6986197248f8846aa04e5ebbe241\",\"wake_reason\":\"reconsideration\",\"woke_at\":\"2026-10-26T08:50:09.003454+00:00\"},\"status\":\"completed\",\"wait_estimate\":{\"captured_at\":\"2026-10-26T08:50:08.935445+00:00\",\"condition\":{\"events\":[],\"reconsider_at\":\"2026-10-21T12:00:00+00:00\",\"version\":\"event_condition_v1\"},\"duration_expectation_refs\":[],\"event_expectations\":[],\"local_history_refs\":[],\"monitoring_gain\":null,\"progress_refs\":[],\"scientific_gain\":null,\"unavailable_reasons\":[\"scientific_gain_model_unbound\",\"monitoring_gain_model_unbound\"],\"version\":\"wait_estimate_v1\"},\"wait_outcome\":{\"condition_sha256\":\"bb13ca18a823932c14d06770d2a808f1f4b3046ebce5296659df9d7b14585569\",\"duration_measure\":\"measured_wait_intervals\",\"measured_duration_seconds\":0.035237624,\"started_at\":\"2026-10-26T08:50:08.968197+00:00\",\"trigger\":null,\"unmeasured_interruption\":false,\"version\":\"wait_outcome_v1\",\"wait_id\":\"wait_c2f48f85d7a3fd637df31701cc9a65eb5b5d6986197248f8846aa04e5ebbe241\",\"wake_reason\":\"reconsideration\",\"woke_at\":\"2026-10-26T08:50:09.003454+00:00\"}}",
+          "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1445558,\"start_ticks\":\"81816406\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-26T08:50:08.901223+00:00\",\"started_monotonic_ns\":818170598558341,\"ended_at\":\"2026-10-26T08:50:09.035087+00:00\",\"elapsed_seconds\":0.133838018,\"exception_type\":null}],\"measured_elapsed_seconds\":0.133838018,\"unmeasured_ended_intervals\":0}"
+        }
+      ],
+      "case": "current_reconsideration_control",
+      "controller_observations": 1,
+      "exception": null,
+      "provider_calls": 1,
+      "runtime_observations": 1,
+      "scientific_observations": 0,
+      "selected_condition": {
+        "events": [],
+        "reconsider_at": "2026-10-21T12:00:00+00:00",
+        "version": "event_condition_v1"
+      },
+      "selected_handle_kind": "reconsideration",
+      "summary": {
+        "annotation_score_status": "unavailable_no_scorer_bound",
+        "completed_actions": 1,
+        "credit": 0.0,
+        "directory": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/wait_target_failure_021/current_reconsideration_control/run",
+        "ended_by": "yield_stop",
+        "episode_count": 1,
+        "pending_handles": [],
+        "pending_report_deliveries": 0,
+        "run_id": "run_b7e9a17bcd734d95a9c2baba6deb8e7f",
+        "scientific_completion": "not_established_by_termination",
+        "state": "yielded"
+      },
+      "wait_requests": [
+        {
+          "condition": {
+            "events": [],
+            "reconsider_at": "2026-10-21T12:00:00+00:00",
+            "version": "event_condition_v1"
+          },
+          "estimate_snapshot": {
+            "captured_at": "2026-10-26T08:50:08.935445+00:00",
+            "condition": {
+              "events": [],
+              "reconsider_at": "2026-10-21T12:00:00+00:00",
+              "version": "event_condition_v1"
+            },
+            "duration_expectation_refs": [],
+            "event_expectations": [],
+            "local_history_refs": [],
+            "monitoring_gain": null,
+            "progress_refs": [],
+            "scientific_gain": null,
+            "unavailable_reasons": [
+              "scientific_gain_model_unbound",
+              "monitoring_gain_model_unbound"
+            ],
+            "version": "wait_estimate_v1"
+          },
+          "original_decision_index": 0,
+          "parent_episode_id": "episode_412b811157e5b840af2b34c340112276bcde0a6bba4a076e82fd9c45bc80b882",
+          "version": "wait_request_v1",
+          "wait_id": "wait_c2f48f85d7a3fd637df31701cc9a65eb5b5d6986197248f8846aa04e5ebbe241"
+        }
+      ],
+      "wait_rows": [
+        {
+          "outcome": "{\"condition_sha256\":\"bb13ca18a823932c14d06770d2a808f1f4b3046ebce5296659df9d7b14585569\",\"duration_measure\":\"measured_wait_intervals\",\"measured_duration_seconds\":0.035237624,\"started_at\":\"2026-10-26T08:50:08.968197+00:00\",\"trigger\":null,\"unmeasured_interruption\":false,\"version\":\"wait_outcome_v1\",\"wait_id\":\"wait_c2f48f85d7a3fd637df31701cc9a65eb5b5d6986197248f8846aa04e5ebbe241\",\"wake_reason\":\"reconsideration\",\"woke_at\":\"2026-10-26T08:50:09.003454+00:00\"}",
+          "timing": "{\"version\":\"measured_episode_execution_intervals_v1\",\"intervals\":[{\"state\":\"returned\",\"owner\":{\"pid\":1445558,\"start_ticks\":\"81816406\",\"boot_id\":\"d53ef063-e9a7-4ae1-99ad-c64c17bdff26\"},\"started_at\":\"2026-10-26T08:50:08.968197+00:00\",\"started_monotonic_ns\":818170665528284,\"ended_at\":\"2026-10-26T08:50:09.003454+00:00\",\"elapsed_seconds\":0.035237624,\"exception_type\":null}],\"measured_elapsed_seconds\":0.035237624,\"unmeasured_ended_intervals\":0}",
+          "wake": "{\"events\":[],\"observed_at\":\"2026-10-26T08:50:09.003182+00:00\",\"reason\":\"reconsideration\",\"reconsider_at\":\"2026-10-21T12:00:00+00:00\",\"version\":\"event_wake_v1\"}"
+        }
+      ]
+    }
+  ],
+  "created_utc": "2026-10-26T08:50:09.656096+00:00",
+  "current_runtime_source_sha256": {
+    "gene_annotation_episode/decision_context.py": "df2e5d8410d9a0e650e54216fe23f92d3c05cfba482580b13f4d4c07a0c0f790",
+    "gene_annotation_episode/episode_completion.py": "54a1a2834e64dadd50b6cddc2063cbceac9f5fdcd44360ea21852b5d2ba9fd33",
+    "gene_annotation_episode/episode_journal.py": "8d74726e913b7c0b62412278f456beb6b4041767097130dc92ca37d3b137eede",
+    "gene_annotation_episode/native_event_information.py": "2349027b72afa3a0ff12110fee3544a5892747a1ae5314f2ec59dd201585fef8",
+    "gene_annotation_episode/runtime.py": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec",
+    "gene_annotation_episode/waiting.py": "c0dce4e3e9565760419303d626e1a13ed0dce994fa0822475b2a2db9b0d87c46",
+    "method_loop/durable.py": "8d7a5eed863737a858a56f34de25672c10954ced999ecc2af2ace25750ae5c8f",
+    "method_loop/episode.py": "b1245fa460a706e291685c80ec8f5703846fd29d25c58fa80346db7ce357c72d",
+    "method_loop/runtime.py": "b3cf99047d90836ee6ba8ccd841cf8d4c991a3d86605f34f44da6f8d67f3ef07"
+  },
+  "direct_backend": {
+    "exception": "KeyError",
+    "message": "'source_34062dfcb91c56513c976b0c'"
+  },
+  "kind": "synthetic_current_runtime_diagnosis_v1",
+  "no_models_native_jobs_or_real_run_reads": true,
+  "production_changes": false
+}

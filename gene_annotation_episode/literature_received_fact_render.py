@@ -88,6 +88,8 @@ class ReceivedFactDisplay:
 
     def identity_ref(self, reference, category):
         """Preserve a received association without hydrating its contents."""
+        if isinstance(reference, (Mapping, tuple, list)):
+            return self.inline(reference)
         if reference is None:
             return 'unknown'
         labels = self.source_labels if category == 'source' else self.sequence_labels
@@ -96,6 +98,11 @@ class ReceivedFactDisplay:
         return labels[reference]
 
     def ref(self, reference):
+        # Canonical finding meanings can expand typed atom, unit and relation
+        # links into semantic records. Display those supplied meanings directly;
+        # only actual handles belong in the local label dictionaries.
+        if isinstance(reference, (Mapping, tuple, list)):
+            return self.inline(reference)
         if reference is None:
             return 'unknown'
         if reference in self.labels:
@@ -146,8 +153,21 @@ class ReceivedFactDisplay:
                     result[name] = self.identity_ref(child, name.removesuffix('_ref'))
                 elif name == 'ref' or name.endswith('_ref'):
                     result[name] = self.ref(child) if isinstance(child, str) or child is None else self.project(child)
+                elif name == 'partial_record_refs' and isinstance(child, (tuple, list)):
+                    # Failure receipts carry recovery addresses, not admitted
+                    # scientific meanings. Keep the actual handles selectable
+                    # without hydrating or interpreting the retained records.
+                    result[name] = [ref if isinstance(ref, str) else self.project(ref) for ref in child]
                 elif name.endswith('_refs') or name == 'dependencies':
-                    result[name] = '; '.join(self.ref(ref) for ref in child) if isinstance(child, (tuple, list)) else self.project(child)
+                    if isinstance(child, (tuple, list)):
+                        links = [self.ref(ref) if isinstance(ref, str) or ref is None
+                                 else self.project(ref) for ref in child]
+                        # Some admitted results expand these links into records.
+                        # Keep that structure instead of using it as a label key.
+                        result[name] = ('; '.join(links) if all(
+                            isinstance(ref, str) or ref is None for ref in child) else links)
+                    else:
+                        result[name] = self.project(child)
                 elif name == 'accession' and _generated_accession(value):
                     continue
                 else:
@@ -170,7 +190,9 @@ class ReceivedFactDisplay:
                 if key == 'ref' or key.endswith('_ref'):
                     text = self.ref(child) if isinstance(child, str) or child is None else self.inline(child)
                 elif key.endswith('_refs') or key == 'dependencies':
-                    text = '; '.join(self.ref(ref) for ref in child) if isinstance(child, (tuple, list)) else self.inline(child)
+                    text = ('; '.join(self.ref(ref) if isinstance(ref, str) or ref is None
+                                     else self.inline(ref) for ref in child)
+                            if isinstance(child, (tuple, list)) else self.inline(child))
                     text = text or 'none supplied'
                 else:
                     text = self.inline(child)

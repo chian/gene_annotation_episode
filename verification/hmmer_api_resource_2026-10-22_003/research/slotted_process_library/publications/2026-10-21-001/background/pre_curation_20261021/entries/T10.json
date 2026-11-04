@@ -1,0 +1,161 @@
+{
+  "slot": "tools",
+  "id": "T10",
+  "name": "Mass-spectrometric identity and site-table operations",
+  "description": "Expose selected published product, peptide or phosphosite identifications and quantify declared table contrasts while preserving analyte/site identity, replicate structure, normalization, censoring and missingness.",
+  "capability_operations": [
+    {
+      "operation": "Extract analyte/site-resolved source rows",
+      "inputs": {
+        "source": "actual table/workbook or supplied identification file",
+        "selector": "exact analyte, peptide/site, protein and sample keys",
+        "metadata": "column meanings, units, ratios, normalization and missingness definitions"
+      },
+      "outputs": {
+        "rows": "native cells with site/analyte identity and replicate/sample correspondence",
+        "missingness": "unmeasured, censored and observed values kept separate"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Compute a declared table transformation",
+      "inputs": {
+        "values": "selected source intensities/ratios/log values",
+        "expression": "explicit ratio, log difference, exponentiation or mass difference",
+        "comparability": "stated reference/channel/replicate relation"
+      },
+      "outputs": {
+        "result": "descriptive derived values with exact inputs",
+        "scope": "response-ratio, abundance or occupancy meaning only when source warrants it"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Analyze raw spectra against selected identities",
+      "inputs": {
+        "spectra": "actual raw/open spectral data and acquisition metadata",
+        "search_or_fit_model": "declared peptide/metabolite library, modification list, scoring and error model"
+      },
+      "outputs": {
+        "candidate_identifications": "matches, ambiguity and support under that model",
+        "quantification": "pipeline-specific estimates with controls and uncertainty"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "source.xlsx.sheets/rows and generic source readers are repository-defined; no raw-MS search/quantification engine confirmed."
+    ],
+    "research_operations_performed": [
+      "organism/yeag/trace.json: six selected 2021 phosphosite rows decoded directly from the workbook; selected response-ratio calculations reproduced.",
+      "cellular YhcB source work extracted processed phenotype/genetic rows, not raw MS."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "Raw proteomics/metabolomics identification, isotope fitting, occupancy correction and new compound identification require files and software not supplied by this catalog."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "LC-MS/NMR/product synthesis, native activity purification and phosphorylation assays are authors evidence; no sample or spectral acquisition is available here."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "Nonzero intensity with missing ratio is not analyte absence or zero effect.",
+    "A normalized ratio is not automatically absolute abundance, occupancy fraction or protein-abundance-corrected phosphorylation.",
+    "Analyte disappearance without identified product does not establish the proposed productive reaction."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "yeag",
+      "use": "Actual AceA/Hfq/YjhQ source rows exposed response-ratio meaning and asymmetric replicate coverage; AceA S398 retained a nonzero mutant intensity despite missing ratios.",
+      "execution_scope": "Six selected source rows; no raw spectra, significance testing or exact causal phosphorylation-site assignment.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "spec_aquifex_hfp_coupling_contamination",
+      "use": "Authors peptideMS attributed recurrent isomerase activity across preparations to host RpiA rather than the candidate HFP.",
+      "execution_scope": "Underlying spectra not reanalyzed; no new contaminant identification.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "use": "Different chemically identified pathway products prevented treating all coupled signals as mature F420.",
+      "execution_scope": "Author LC-MS and structures; no raw spectrum fitting.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "replacement_queH",
+      "use": "A later in-vitro assay lost oQ without detecting Q, limiting the productive-reductase claim.",
+      "execution_scope": "No newly analyzed spectra or demonstrated purified Q synthesis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "use": "Free preQ0 and preQ0-tRNA could both form adducts, while productive archaeosine synthesis depended on the tRNA-bound substrate.",
+      "execution_scope": "Author product/substrate assays; no raw tRNA modification reanalysis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_17_ybts",
+      "use": "Author metabolite identity and copper-loading comparisons constrained the protective role beyond an unspecified siderophore label.",
+      "execution_scope": "No new patient/sample analysis or purified YbtS catalysis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+      "source_locator": "Trace extension organism/yeag/trace.json; Table_1.XLSX sheet 4 Phospho sites table",
+      "observation": "Actual AceA/Hfq/YjhQ source rows exposed response-ratio meaning and asymmetric replicate coverage; AceA S398 retained a nonzero mutant intensity despite missing ratios.",
+      "limit": "Six selected source rows; no raw spectra, significance testing or exact causal phosphorylation-site assignment."
+    },
+    {
+      "case_group": "spec_aquifex_hfp_coupling_contamination",
+      "case_id": "spec_aquifex_hfp_coupling_contamination",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12051542/",
+      "source_locator": "Case-record observation; inspected scope: Primary relevant complete results/discussion and reconstitution/NMR/purification methods inspected. Supplement MS identification accepted as reported; its underlying spectra were not reanalyzed. Current PDB polymer records bind HFP to aq_1744/O67630; gpmA is a record label, not independent mutase evidence.",
+      "observation": "Authors peptideMS attributed recurrent isomerase activity across preparations to host RpiA rather than the candidate HFP.",
+      "limit": "Underlying spectra not reanalyzed; no new contaminant identification."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450877/",
+      "source_locator": "Case-record observation; inspected scope: Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting.",
+      "observation": "Different chemically identified pathway products prevented treating all coupled signals as mature F420.",
+      "limit": "Author LC-MS and structures; no raw spectrum fitting."
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8884141/",
+      "source_locator": "In vitro analysis; case Q6",
+      "observation": "A later in-vitro assay lost oQ without detecting Q, limiting the productive-reductase claim.",
+      "limit": "No newly analyzed spectra or demonstrated purified Q synthesis."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+      "source_locator": "Case-record observation; inspected scope: 2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments.",
+      "observation": "Free preQ0 and preQ0-tRNA could both form adducts, while productive archaeosine synthesis depended on the tRNA-bound substrate.",
+      "limit": "Author product/substrate assays; no raw tRNA modification reanalysis."
+    },
+    {
+      "case_group": "organism_17_ybts",
+      "case_id": "organism_17_ybts",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3600419/",
+      "source_locator": "Case-record observation; inspected scope: Relevant complete Results and quantitative figure captions; no new patient analysis or purified YbtS catalysis.",
+      "observation": "Author metabolite identity and copper-loading comparisons constrained the protective role beyond an unspecified siderophore label.",
+      "limit": "No new patient/sample analysis or purified YbtS catalysis."
+    }
+  ]
+}

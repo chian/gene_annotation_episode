@@ -1,0 +1,201 @@
+.FFF
+=================================== FAILURES ===================================
+____________ test_authenticated_reader_detachment_common_covariance ____________
+
+value = {'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_c292e4b5901041a95311c44e', ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:sheet'...section': {'const': 'measurement_comparison_validity'}, 'assertion_key': {'type': 'string', 'minLength': 1}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:588: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'$defs': {'cell': {'additionalProperties': False, 'allOf': [{'if': {'properties': {...}},...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_c292e4b5901041a95311c44e', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: ['measurement_comparison_conversion_2d968fe5c2786daae80e7590', 'measurement_comparison_conversion_2d968fe5c2786daae80e7590'] has non-unique elements
+E           
+E           Failed validating 'uniqueItems' in schema['properties']['cells']['items']['properties']['model_keys']:
+E               {'items': {'minLength': 1, 'type': 'string'},
+E                'type': 'array',
+E                'uniqueItems': True}
+E           
+E           On instance['cells'][4]['model_keys']:
+E               ['measurement_comparison_conversion_2d968fe5c2786daae80e7590',
+E                'measurement_comparison_conversion_2d968fe5c2786daae80e7590']
+
+.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+    def test_authenticated_reader_detachment_common_covariance():
+        s,docs,read=source_fixture();bind_covariance(s,docs,read,[[4,1],[1,9]])
+>       e,i,c,sheet=execute(s,read)
+                    ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:112: in execute
+    sheet=populate_measurement_comparison(inputs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_calculations.py:309: in populate_measurement_comparison
+    validate_schema(result,measurement_comparison_sheet_schema())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_c292e4b5901041a95311c44e', ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:sheet'...section': {'const': 'measurement_comparison_validity'}, 'assertion_key': {'type': 'string', 'minLength': 1}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:591: ContractError
+____________ test_singular_partials_known_versus_plugin[20-0-known] ____________
+
+value = {'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_55ac7ee481d49a4ed78b05d3', ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:sheet'...section': {'const': 'measurement_comparison_validity'}, 'assertion_key': {'type': 'string', 'minLength': 1}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:588: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'$defs': {'cell': {'additionalProperties': False, 'allOf': [{'if': {'properties': {...}},...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_55ac7ee481d49a4ed78b05d3', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: ['measurement_comparison_conversion_5b307ba47cca9c6e166154db', 'measurement_comparison_conversion_5b307ba47cca9c6e166154db'] has non-unique elements
+E           
+E           Failed validating 'uniqueItems' in schema['properties']['cells']['items']['properties']['model_keys']:
+E               {'items': {'minLength': 1, 'type': 'string'},
+E                'type': 'array',
+E                'uniqueItems': True}
+E           
+E           On instance['cells'][4]['model_keys']:
+E               ['measurement_comparison_conversion_5b307ba47cca9c6e166154db',
+E                'measurement_comparison_conversion_5b307ba47cca9c6e166154db']
+
+.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+status = 'known', v = 0, right = 20
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+        s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:112: in execute
+    sheet=populate_measurement_comparison(inputs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_calculations.py:309: in populate_measurement_comparison
+    validate_schema(result,measurement_comparison_sheet_schema())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_55ac7ee481d49a4ed78b05d3', ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:sheet'...section': {'const': 'measurement_comparison_validity'}, 'assertion_key': {'type': 'string', 'minLength': 1}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:591: ContractError
+__________ test_singular_partials_known_versus_plugin[20-0-estimated] __________
+
+value = {'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_55ac7ee481d49a4ed78b05d3', ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:sheet'...section': {'const': 'measurement_comparison_validity'}, 'assertion_key': {'type': 'string', 'minLength': 1}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+>           _validator(canonical(schema)).validate(value)
+
+gene_annotation_episode/domain.py:588: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'$defs': {'cell': {'additionalProperties': False, 'allOf': [{'if': {'properties': {...}},...ecker=<FormatChecker checkers=['date', 'email', 'idn-email', 'idn-hostname', 'ipv4', 'ipv6', 'regex', 'time', 'uuid']>)
+args = ({'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_55ac7ee481d49a4ed78b05d3', ...},)
+kwargs = {}
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: ['measurement_comparison_conversion_5b307ba47cca9c6e166154db', 'measurement_comparison_conversion_5b307ba47cca9c6e166154db'] has non-unique elements
+E           
+E           Failed validating 'uniqueItems' in schema['properties']['cells']['items']['properties']['model_keys']:
+E               {'items': {'minLength': 1, 'type': 'string'},
+E                'type': 'array',
+E                'uniqueItems': True}
+E           
+E           On instance['cells'][4]['model_keys']:
+E               ['measurement_comparison_conversion_5b307ba47cca9c6e166154db',
+E                'measurement_comparison_conversion_5b307ba47cca9c6e166154db']
+
+.venv/lib/python3.12/site-packages/jsonschema/validators.py:450: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+status = 'estimated', v = 0, right = 20
+
+    @pytest.mark.parametrize('status',('known','estimated'))
+    @pytest.mark.parametrize('v',(0,4))
+    @pytest.mark.parametrize('right',(20,22))
+    def test_singular_partials_known_versus_plugin(status,v,right):
+        s,docs,read=source_fixture({'left':'20','right':str(right)});bind_covariance(s,docs,read,[[v,v],[v,v]],status=status)
+>       _,_,c,_=execute(s,read)
+                ^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_comparison_components_258.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_comparison_components_258.py:112: in execute
+    sheet=populate_measurement_comparison(inputs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_comparison_calculations.py:309: in populate_measurement_comparison
+    validate_schema(result,measurement_comparison_sheet_schema())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = {'version': 'a105_measurement_comparison_sheet_v1', 'axis': 'A105', 'section': 'measurement_comparison_validity', 'assertion_key': 'measurement_comparison_assertion_55ac7ee481d49a4ed78b05d3', ...}
+schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', '$id': 'urn:a105:measurement-comparison:258:plan003:sheet'...section': {'const': 'measurement_comparison_validity'}, 'assertion_key': {'type': 'string', 'minLength': 1}, ...}, ...}
+
+    def validate_schema(value: Any, schema: dict) -> None:
+        try:
+            _validator(canonical(schema)).validate(value)
+            canonical(value)  # reject NaN/Infinity, including numbers nested in atoms.
+        except jsonschema.ValidationError as exc:
+>           raise ContractError("representation_error", detail={"field_path": list(exc.absolute_path),
+                "schema_keyword": exc.validator}) from exc
+E           gene_annotation_episode.domain.ContractError: representation_error
+
+gene_annotation_episode/domain.py:591: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_authenticated_reader_detachment_common_covariance
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[20-0-known]
+FAILED tests/test_literature_measurement_comparison_components_258.py::test_singular_partials_known_versus_plugin[20-0-estimated]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 3 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+3 failed, 1 passed in 0.69s

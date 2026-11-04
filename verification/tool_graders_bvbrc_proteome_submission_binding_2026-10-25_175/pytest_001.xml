@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="8" time="6.795" timestamp="2026-10-25T11:11:38.933705-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_retention_handoff_and_custody_have_original_parameter_pointer" time="5.922" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[source]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[digest]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[length]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[field]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_rejects_changed_content_bindings[artifact]" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_actual_custody_requires_source_possession_and_exact_pointer" time="0.009" /><testcase classname="tests.test_bvbrc_appservice_request_content" name="test_real_receipt_builder_correlates_task_id_with_retained_native_response[event_task]" time="0.038"><failure message="TypeError: SelectedAPIEffects.read() missing 1 required keyword-only argument: 'original_job_owner'">submitted = namespace(driver=&lt;test_bvbrc_appservice_host.ProductionDriver object at 0x7b7ecaf92960&gt;, store=&lt;gene_annotation_episod..., 'status': 200}), arguments={'preparation_receipt_ref': 'source_eda551854a118ceacf9aca90', 'input_evidence_refs': []})
+change = 'event_task'
+
+    @pytest.mark.parametrize("change", ["event_task", "effect_task"])
+    def test_real_receipt_builder_correlates_task_id_with_retained_native_response(submitted, change):
+        s = submitted
+        event = _read(s.action_dir / "event.json")
+        common = deepcopy(s.handoff["value"]["receipt"])
+&gt;       effects = [s.driver.api.selected_effects.read(ref) for ref in common["effect_receipt_refs"]]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: SelectedAPIEffects.read() missing 1 required keyword-only argument: 'original_job_owner'
+
+tests/test_bvbrc_appservice_request_content.py:124: TypeError</failure></testcase></testsuite></testsuites>

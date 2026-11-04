@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 514, in <module>
+    main()
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 494, in main
+    audit_copy(args.reopen_owned_copy.resolve(), args.pin.resolve())
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 274, in audit_copy
+    raw_payload = store.get_artifact(source["artifact_ref"])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_record_reconstruction_001/audit_live_reconstruction.py", line 256, in saved_only
+    return original_get_artifact(ref)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/live_pin_004/gene_annotation_episode/state.py", line 150, in get_artifact
+    raise ContractError("artifact_digest_mismatch")
+gene_annotation_episode.domain.ContractError: artifact_digest_mismatch

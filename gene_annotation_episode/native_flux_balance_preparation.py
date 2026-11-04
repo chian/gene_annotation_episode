@@ -24,7 +24,8 @@ from .flux_balance_worker_contracts import (OUTPUTS, PLAN_VERSION, RESULT_VERSIO
 from .local_jobs import LocalJobPolicy, check_scratch_budget
 from .native_file_capture import (NativeFileCaptureError, capture_native_file,
     capture_declared_native_files, retained_native_file)
-from .native_flux_balance_contracts import POLICY, path_value
+from .native_flux_balance_contracts import (ATTEMPT_DIRECTORY_NAME, POLICY,
+    flux_balance_environment, path_value, validate_flux_balance_software)
 from .native_flux_balance_storage import (_directory_fd, confined_file, decode_json,
     directory, file_pin, immutable_bytes, read_bytes)
 
@@ -36,6 +37,7 @@ WORKER_MODULE = "gene_annotation_episode.flux_balance_result_worker"
 EXECUTION_VERSION = "flux_balance_worker_execution_v1"
 CAPTURE_VERSION = "flux_balance_worker_capture_v1"
 _INTENT_VERSION = "flux_balance_worker_intent_v1"
+_SELECTED_INTENT_VERSION = "flux_balance_worker_intent_v2"
 _CONTROL_NAMES = ("plan.json", "intent.json", "worker.handle.json", "worker.stdout",
     "worker.stderr", "execution.json", "capture.json", ".preparation.lock")
 _CGROUP = {"memory_max": POLICY["memory_bytes"], "memory_swap_max": 0,
@@ -169,7 +171,65 @@ def _environment(root, common, home, dependencies):
         "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"}
 
 
-def _snapshot(plan, policy):
+def _selected_source_pins(software, root):
+    selected_root = Path(software["module_root"])
+    result = []
+    for pin in sorted(software["implementation_files"], key=lambda row: row["path"]):
+        try:
+            relative = Path(pin["path"]).relative_to(selected_root)
+        except ValueError as error:
+            raise ValueError("fba_preparation_selected_source_root_invalid") from error
+        _require(relative.parts and ".." not in relative.parts, "selected_source_root_invalid")
+        result.append({**pin, "path": str(root / "source_snapshot" / relative)})
+    _require({str(root / "source_snapshot" / "gene_annotation_episode" / name)
+              for name in ("__init__.py", "flux_balance_result_worker.py")}
+             <= {pin["path"] for pin in result}, "selected_worker_source_missing")
+    return result
+
+
+def _selected_environment(root, software):
+    environment = flux_balance_environment(software,
+        attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), lifecycle_directory=str(root))
+    # The selected application bytes are copied unchanged; dependency and
+    # interpreter-home identities remain the explicitly selected originals.
+    environment["PYTHONPATH"] = os.pathsep.join(
+        [str(root / "source_snapshot"), *software["dependency_roots"]])
+    return environment
+
+
+def _selected_snapshot(plan, policy, software):
+    from .native_atac_differential_preparation import _source_closure, _copy_exact
+    software = validate_flux_balance_software(software)
+    common, root, _ = _layout(plan)
+    originals = [software["python"], *software["implementation_files"],
+        *software["runtime_files"], *software["solver_runtime_files"]]
+    _require(not any(_overlap(common, pin["path"]) for pin in originals)
+        and not any(_overlap(common, path) for path in
+            (software["python_home"], software["module_root"], *software["dependency_roots"])),
+        "runtime_directory_overlap")
+    for pin in originals:
+        _require(_same(file_pin(pin["path"]), pin), "runtime_changed")
+    sources = _source_closure(Path(software["module_root"]), [WORKER_MODULE])
+    _require({str(path) for path in sources.values()}
+        <= {pin["path"] for pin in software["implementation_files"]}, "selected_source_closure_incomplete")
+    pins = _selected_source_pins(software, root)
+    for original, expected in zip(sorted(software["implementation_files"], key=lambda row: row["path"]), pins):
+        check_scratch_budget(common, policy, additional_bytes=original["size_bytes"])
+        copied = _copy_exact(Path(original["path"]), Path(expected["path"]))
+        _require(_same(copied, expected), "runtime_changed")
+    check_scratch_budget(common, policy, additional_bytes=software["python"]["size_bytes"])
+    interpreter = _copy_exact(Path(software["python"]["path"]), root / "runtime/python", executable=True)
+    _require(_same(interpreter, {**software["python"], "path": str(root / "runtime/python")}), "runtime_changed")
+    directory(root / ATTEMPT_DIRECTORY_NAME / "cache/pip", create=True)
+    return {"version": _SELECTED_INTENT_VERSION, "plan": deepcopy(plan), "execution_directory": str(root),
+        "policy": deepcopy(POLICY), "command": [interpreter["path"], "-B", "-S", "-m", WORKER_MODULE,
+            str(root / "plan.json")], "environment": _selected_environment(root, software),
+        "source_pins": pins, "interpreter": interpreter, "software": software}
+
+
+def _snapshot(plan, policy, *, software=None):
+    if software is not None:
+        return _selected_snapshot(plan, policy, software)
     from .native_atac_differential_preparation import _source_closure, _dependencies, _copy_exact
     common, root, _ = _layout(plan)
     sources = _source_closure(Path(__file__).resolve().parents[1], [WORKER_MODULE])
@@ -200,11 +260,38 @@ def _snapshot(plan, policy):
 
 
 def _all_pins(intent):
+    if intent["version"] == _SELECTED_INTENT_VERSION:
+        return [*intent["source_pins"], intent["interpreter"],
+            *intent["software"]["runtime_files"], *intent["software"]["solver_runtime_files"]]
     return [*intent["source_pins"], intent["interpreter"], *intent["runtime_files"],
         *(pin for row in intent["dependencies"] for pin in row["files"])]
 
 
-def _validate_intent(value, plan):
+def _validate_selected_intent(value, plan):
+    _require(type(value) is dict and set(value) == {"version", "plan", "execution_directory", "policy",
+        "command", "environment", "source_pins", "interpreter", "software"}
+        and value["version"] == _SELECTED_INTENT_VERSION
+        and _same(value["plan"], plan) and _same(value["policy"], POLICY), "intent_mismatch")
+    software = validate_flux_balance_software(value["software"])
+    _, root, _ = _layout(plan)
+    _require(value["execution_directory"] == str(root) and value["command"] ==
+        [str(root / "runtime/python"), "-B", "-S", "-m", WORKER_MODULE, str(root / "plan.json")], "intent_mismatch")
+    _require(_same(value["source_pins"], _selected_source_pins(software, root))
+        and _same(value["interpreter"], {**software["python"], "path": str(root / "runtime/python")}),
+        "selected_runtime_mismatch")
+    pins = [_pin(pin) for pin in _all_pins(value)]
+    _require(len({pin["path"] for pin in pins}) == len(pins), "duplicate_pin")
+    _require(_same(value["environment"], _selected_environment(root, software)), "environment_mismatch")
+    return value
+
+
+def _validate_intent(value, plan, *, software=None):
+    if software is not None:
+        selected = validate_flux_balance_software(software)
+        _require(type(value) is dict and value.get("version") == _SELECTED_INTENT_VERSION
+            and _same(value.get("software"), selected), "selected_software_mismatch")
+    if type(value) is dict and value.get("version") == _SELECTED_INTENT_VERSION:
+        return _validate_selected_intent(value, plan)
     _require(type(value) is dict and set(value) == {"version", "plan", "execution_directory", "policy",
         "command", "environment", "source_pins", "interpreter", "dependencies", "python_version",
         "python_home", "runtime_files"} and value["version"] == _INTENT_VERSION
@@ -378,10 +465,12 @@ def _validate_live_controls(handle, intent):
     return body, raw
 
 
-def prepare_flux_balance_result_worker(store, *, plan, policy):
+def prepare_flux_balance_result_worker(store, *, plan, policy, software=None):
     """Prepare, execute and capture this one finite selected worker operation."""
     plan = validate_flux_balance_worker_plan(plan)
     _require(type(policy) is LocalJobPolicy and _same(policy.to_dict(), POLICY), "policy_mismatch")
+    if software is not None:
+        software = validate_flux_balance_software(software)
     common, root, output = _layout(plan)
     directory(common, create=True)
     directory(root, create=True)
@@ -390,7 +479,12 @@ def prepare_flux_balance_result_worker(store, *, plan, policy):
     with _locked(root):
         saved = _read_control(root, "capture.json")
         if saved is not None:
-            return validate_prepared_flux_balance_worker(store, saved, plan=plan)
+            if software is None:
+                return validate_prepared_flux_balance_worker(store, saved, plan=plan)
+            saved = validate_prepared_flux_balance_worker(store, saved, plan=plan)
+            execution = _retained_json(store, saved["execution_receipt_file"], EXECUTION_VERSION)
+            _validate_intent(execution["intent"], plan, software=software)
+            return saved
         _immutable(root, "plan.json", plan)
         intent = _read_control(root, "intent.json")
         if intent is None:
@@ -398,10 +492,12 @@ def prepare_flux_balance_result_worker(store, *, plan, policy):
             if output.exists() or output.is_symlink():
                 directory(output)
                 _require(not any(output.iterdir()), "unsealed_output")
-            intent = _validate_intent(_snapshot(plan, policy), plan)
+            intent = (_validate_intent(_snapshot(plan, policy), plan) if software is None else
+                _validate_intent(_snapshot(plan, policy, software=software), plan, software=software))
             _immutable(root, "intent.json", intent)
         else:
-            intent = _validate_intent(intent, plan)
+            intent = (_validate_intent(intent, plan) if software is None else
+                _validate_intent(intent, plan, software=software))
         plan_file = _capture(store, root, "plan.json", PLAN_VERSION)
         execution = _read_control(root, "execution.json")
         handle = native.NativeJobHandle(root / "worker.handle.json")

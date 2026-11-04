@@ -1,0 +1,858 @@
+{
+  "operation": "analyze_barcode_sequencing_data",
+  "native_handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_integration_2026-10-27_494/check001/temporary/pytest/barcode4940/project/.episode-operations/7156bad60cec5c32ee252c57d2b584bc41d6b423edc08a770ada8ba5577b0578/282c1feb2ce5b6e60349c59f5bbf6f0bef7396417ab60c543dc567de8ea58d8f/native.json",
+  "observations": 1,
+  "population": {
+    "barcode_order": [
+      "AAAA",
+      "AAAT",
+      "TTTT",
+      "CCCC"
+    ],
+    "distance_population": [
+      "AAAA",
+      "AAAT",
+      "TTTT"
+    ],
+    "distinct_barcodes": 4,
+    "empty_match_records": 0,
+    "extent": "complete",
+    "extracted_records": 10,
+    "input_sha256": "a06097ea45eddf6462c5f1de6f0050899bab3c79146606d5b8408dc93352d369",
+    "last_complete_ordinal": 12,
+    "request_sha256": "f869f5a4733d710b5cf9c6b100f13a7313bfbafb4bc50aac461d7876a025b61e",
+    "retained_barcode_count": 3,
+    "retained_read_count": 9,
+    "sample_key": "sample1",
+    "total_parsed_records": 12,
+    "unmatched_records": 2,
+    "version": "barcode_population_v1"
+  },
+  "calculations": {
+    "version": "barcode_components_v1",
+    "status": "partial",
+    "sheet_sha256": "41c297ab7c3245b3846ec5dd283012eb9f475a8f4f7c42b5191b9d6049c24b5f",
+    "parameters": {
+      "version": "barcode_calculation_parameters_v1",
+      "min_count": 2,
+      "cluster_population": [
+        "AAAA",
+        "AAAT",
+        "TTTT"
+      ],
+      "cut_threshold": 3,
+      "target_aggregation": "unique_mapping_only"
+    },
+    "sample_key": "sample1",
+    "extent": "complete",
+    "summary": {
+      "total_records": {
+        "value": 12,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "parsed_reads",
+        "extent": "complete",
+        "source": "observed",
+        "uncertainty": null
+      },
+      "extracted_records": {
+        "value": 10,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "parsed_reads",
+        "extent": "complete",
+        "source": "observed",
+        "uncertainty": null
+      },
+      "unmatched_records": {
+        "value": 2,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "parsed_reads",
+        "extent": "complete",
+        "source": "observed",
+        "uncertainty": null
+      },
+      "empty_match_records": {
+        "value": 0,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "parsed_reads",
+        "extent": "complete",
+        "source": "observed",
+        "uncertainty": null
+      },
+      "distinct_barcode_count": {
+        "value": 4,
+        "state": "available",
+        "units": "barcode_types",
+        "denominator": null,
+        "population": "extracted_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "retained_barcode_count": {
+        "value": 3,
+        "state": "available",
+        "units": "barcode_types",
+        "denominator": null,
+        "population": "barcode_types",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "retained_read_count": {
+        "value": 9,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "extracted_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "discarded_read_count": {
+        "value": 1,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "extracted_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "extraction_fraction": {
+        "value": 0.8333333333333334,
+        "state": "available",
+        "units": "fraction",
+        "denominator": 12,
+        "population": "parsed_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "retained_fraction_extracted": {
+        "value": 0.9,
+        "state": "available",
+        "units": "fraction",
+        "denominator": 10,
+        "population": "extracted_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "retained_fraction_all_reads": {
+        "value": 0.75,
+        "state": "available",
+        "units": "fraction",
+        "denominator": 12,
+        "population": "parsed_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "pair_count": {
+        "value": 3,
+        "state": "available",
+        "units": "pairs",
+        "denominator": null,
+        "population": "distance_pairs",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "mean_pair_distance": {
+        "value": 2.6666666666666665,
+        "state": "available",
+        "units": "positions",
+        "denominator": 3,
+        "population": "distance_pairs",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "max_pair_distance": {
+        "value": 4,
+        "state": "available",
+        "units": "positions",
+        "denominator": 3,
+        "population": "distance_pairs",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "cluster_count": {
+        "value": 2,
+        "state": "available",
+        "units": "clusters",
+        "denominator": null,
+        "population": "cluster_types",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "largest_cluster_barcode_count": {
+        "value": 2,
+        "state": "available",
+        "units": "barcode_types",
+        "denominator": null,
+        "population": "cluster_types",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "largest_cluster_read_count": {
+        "value": 7,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "cluster_types",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "uniquely_assigned_target_read_count": {
+        "value": 9,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "extracted_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "ambiguous_target_read_count": {
+        "value": 0,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "extracted_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      },
+      "unmapped_target_read_count": {
+        "value": 1,
+        "state": "available",
+        "units": "reads",
+        "denominator": null,
+        "population": "extracted_reads",
+        "extent": "complete",
+        "source": "derived",
+        "uncertainty": null
+      }
+    },
+    "barcodes": [
+      {
+        "sample_key": "sample1",
+        "barcode_sequence": "AAAA",
+        "retained": true,
+        "measurements": {
+          "barcode_read_count": {
+            "value": 4,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "barcode_length": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "fraction_all_reads": {
+            "value": 0.3333333333333333,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_extracted_reads": {
+            "value": 0.4,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 10,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_retained_reads": {
+            "value": 0.4444444444444444,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 9,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      },
+      {
+        "sample_key": "sample1",
+        "barcode_sequence": "AAAT",
+        "retained": true,
+        "measurements": {
+          "barcode_read_count": {
+            "value": 3,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "barcode_length": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "fraction_all_reads": {
+            "value": 0.25,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_extracted_reads": {
+            "value": 0.3,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 10,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_retained_reads": {
+            "value": 0.3333333333333333,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 9,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      },
+      {
+        "sample_key": "sample1",
+        "barcode_sequence": "TTTT",
+        "retained": true,
+        "measurements": {
+          "barcode_read_count": {
+            "value": 2,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "barcode_length": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "fraction_all_reads": {
+            "value": 0.16666666666666666,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_extracted_reads": {
+            "value": 0.2,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 10,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_retained_reads": {
+            "value": 0.2222222222222222,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 9,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      },
+      {
+        "sample_key": "sample1",
+        "barcode_sequence": "CCCC",
+        "retained": false,
+        "measurements": {
+          "barcode_read_count": {
+            "value": 1,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "barcode_length": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "fraction_all_reads": {
+            "value": 0.08333333333333333,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_extracted_reads": {
+            "value": 0.1,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 10,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_retained_reads": {
+            "value": null,
+            "state": "not_applicable",
+            "units": "fraction",
+            "denominator": 9,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      }
+    ],
+    "distances": [
+      {
+        "sample_key": "sample1",
+        "i": 0,
+        "j": 1,
+        "barcode_i": "AAAA",
+        "barcode_j": "AAAT",
+        "measurements": {
+          "shared_position_count": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "terminal_overhang_count": {
+            "value": 0,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "shared_mismatch_count": {
+            "value": 1,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "distance_count": {
+            "value": 1,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "distance_fraction": {
+            "value": 0.25,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 4,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      },
+      {
+        "sample_key": "sample1",
+        "i": 0,
+        "j": 2,
+        "barcode_i": "AAAA",
+        "barcode_j": "TTTT",
+        "measurements": {
+          "shared_position_count": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "terminal_overhang_count": {
+            "value": 0,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "shared_mismatch_count": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "distance_count": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "distance_fraction": {
+            "value": 1.0,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 4,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      },
+      {
+        "sample_key": "sample1",
+        "i": 1,
+        "j": 2,
+        "barcode_i": "AAAT",
+        "barcode_j": "TTTT",
+        "measurements": {
+          "shared_position_count": {
+            "value": 4,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "terminal_overhang_count": {
+            "value": 0,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "shared_mismatch_count": {
+            "value": 3,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "distance_count": {
+            "value": 3,
+            "state": "available",
+            "units": "positions",
+            "denominator": null,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "observed",
+            "uncertainty": null
+          },
+          "distance_fraction": {
+            "value": 0.75,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 4,
+            "population": "indexed_positions",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      }
+    ],
+    "clusters": [
+      {
+        "sample_key": "sample1",
+        "cluster_id": 1,
+        "barcode_keys": [
+          "AAAA",
+          "AAAT"
+        ],
+        "measurements": {
+          "cluster_barcode_count": {
+            "value": 2,
+            "state": "available",
+            "units": "barcode_types",
+            "denominator": null,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "cluster_read_count": {
+            "value": 7,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "cluster_fraction_all_reads": {
+            "value": 0.5833333333333334,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "cluster_fraction_retained_reads": {
+            "value": 0.7777777777777778,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 9,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      },
+      {
+        "sample_key": "sample1",
+        "cluster_id": 2,
+        "barcode_keys": [
+          "TTTT"
+        ],
+        "measurements": {
+          "cluster_barcode_count": {
+            "value": 1,
+            "state": "available",
+            "units": "barcode_types",
+            "denominator": null,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "cluster_read_count": {
+            "value": 2,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "cluster_fraction_all_reads": {
+            "value": 0.16666666666666666,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "cluster_fraction_retained_reads": {
+            "value": 0.2222222222222222,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 9,
+            "population": "retained_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      }
+    ],
+    "targets": [
+      {
+        "sample_key": "sample1",
+        "target_kind": "gene",
+        "target_key": "X",
+        "target_reference_release": "fixture-release",
+        "barcode_keys": [
+          "AAAA",
+          "AAAT"
+        ],
+        "measurements": {
+          "uniquely_assigned_target_read_count": {
+            "value": 7,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_all_reads": {
+            "value": 0.5833333333333334,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_extracted_reads": {
+            "value": 0.7,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 10,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      },
+      {
+        "sample_key": "sample1",
+        "target_kind": "gene",
+        "target_key": "Y",
+        "target_reference_release": "fixture-release",
+        "barcode_keys": [
+          "TTTT"
+        ],
+        "measurements": {
+          "uniquely_assigned_target_read_count": {
+            "value": 2,
+            "state": "available",
+            "units": "reads",
+            "denominator": null,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_all_reads": {
+            "value": 0.16666666666666666,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 12,
+            "population": "parsed_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          },
+          "fraction_extracted_reads": {
+            "value": 0.2,
+            "state": "available",
+            "units": "fraction",
+            "denominator": 10,
+            "population": "extracted_reads",
+            "extent": "complete",
+            "source": "derived",
+            "uncertainty": null
+          }
+        }
+      }
+    ],
+    "issues": [
+      {
+        "code": "duplicate_target_mapping",
+        "stage": "join",
+        "sample_key": "sample1",
+        "barcode_key": "AAAA",
+        "record_ordinal": null,
+        "artifact_ref": null,
+        "field": "target_rows",
+        "requirement": "none"
+      }
+    ]
+  }
+}

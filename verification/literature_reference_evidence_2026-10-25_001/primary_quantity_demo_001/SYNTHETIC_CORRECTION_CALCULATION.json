@@ -1,0 +1,148 @@
+{
+  "origin": "synthetic",
+  "primary_source_measurement": false,
+  "result": {
+    "version": "a105_corrected_activity_v1",
+    "primitive_order": [
+      "q",
+      "g",
+      "k",
+      "E",
+      "u",
+      "v"
+    ],
+    "inputs": {
+      "values": {
+        "q": 1.0,
+        "g": 0.15,
+        "k": 1.0,
+        "E": 1.0,
+        "u": 2.0,
+        "v": 1.6
+      },
+      "covariance": [
+        [
+          0.04,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0225,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0025,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.01,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.01,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.01
+        ]
+      ],
+      "variance_status": "known",
+      "distinct_residual_variance": 0.0625,
+      "observation_model": "known_normal_nonnegative_presence"
+    },
+    "cells": {
+      "corrected_activity": {
+        "value": 0.68,
+        "unit": "per_min",
+        "status": "populated",
+        "formula": "(q-g)*v/(k*E*u)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": []
+      },
+      "effect_variance": {
+        "value": 0.11124225,
+        "unit": "per_min_squared",
+        "status": "populated",
+        "formula": "J*covariance*J_transpose+distinct_residual_variance",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ]
+      },
+      "effect_standard_uncertainty": {
+        "value": 0.3335299836596404,
+        "unit": "per_min",
+        "status": "populated",
+        "formula": "sqrt(effect_variance)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ]
+      },
+      "effect_precision": {
+        "value": 8.989390272131317,
+        "unit": "min_squared",
+        "status": "populated",
+        "formula": "1/effect_variance",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation"
+        ]
+      },
+      "source_profile_log_ratio": {
+        "value": 2.0783470309167607,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation",
+          "known_variance",
+          "known_normal_nonnegative_presence"
+        ]
+      },
+      "source_presence_index": {
+        "value": 0.7775614860794028,
+        "unit": "dimensionless",
+        "status": "populated",
+        "formula": "tanh(source_profile_log_ratio/2)",
+        "origin": "proposed",
+        "unavailable_reason": null,
+        "conditional_on": [
+          "first_order_covariance_propagation",
+          "known_variance",
+          "known_normal_nonnegative_presence"
+        ]
+      }
+    }
+  }
+}

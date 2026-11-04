@@ -1,0 +1,1707 @@
+{
+  "schema_version": "fastqutils_native_v2",
+  "analysis_id": "cutadapt_parser_205",
+  "document_id": "report",
+  "parse_scope": "complete",
+  "artifact": {
+    "id": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+    "source_ref": "source:synthetic",
+    "content_ref": "content:synthetic",
+    "task_ref": "task:synthetic",
+    "sha256": "e430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+    "byte_count": 1380,
+    "native_name": "stdout.log",
+    "declared_format": "native_text",
+    "actual_format": "native_text",
+    "compression": "none",
+    "transfer_scope": "complete",
+    "producer_name": "Cutadapt",
+    "producer_version": "4.9",
+    "identity": "source_executed_synthetic",
+    "document_id": "report",
+    "content_binding": {
+      "source_ref": "source:synthetic",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "content:synthetic",
+      "sha256": "e430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "byte_count": 1380
+    }
+  },
+  "cells": [
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F0",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "Total reads processed",
+        "byte_start": 728,
+        "byte_end": 775
+      },
+      "metric": "cutadapt_processed_count",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 3,
+      "native_token": "3",
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F1",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "Reads with adapters",
+        "byte_start": 775,
+        "byte_end": 830
+      },
+      "metric": "cutadapt_adapter_containing_reads",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 2,
+      "native_token": "2",
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F2",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 2,
+        "field": "Reads with adapters percent",
+        "byte_start": 775,
+        "byte_end": 830
+      },
+      "metric": "cutadapt_reported_percent",
+      "axis": {
+        "kind": "native_label",
+        "label": "Reads with adapters",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 66.7,
+      "native_token": "66.7",
+      "unit": "percent",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F3",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "Reads written (passing filters)",
+        "byte_start": 830,
+        "byte_end": 886
+      },
+      "metric": "cutadapt_written_count",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 3,
+      "native_token": "3",
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F4",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 3,
+        "field": "Reads written (passing filters) percent",
+        "byte_start": 830,
+        "byte_end": 886
+      },
+      "metric": "cutadapt_reported_percent",
+      "axis": {
+        "kind": "native_label",
+        "label": "Reads written (passing filters)",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_reads%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 100.0,
+      "native_token": "100.0",
+      "unit": "percent",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F5",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 5,
+        "field": "Total basepairs processed",
+        "byte_start": 887,
+        "byte_end": 931
+      },
+      "metric": "cutadapt_processed_bases",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 32,
+      "native_token": "32",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F6",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 6,
+        "field": "Total written (filtered)",
+        "byte_start": 931,
+        "byte_end": 983
+      },
+      "metric": "cutadapt_written_bases",
+      "axis": {
+        "kind": "none",
+        "label": null,
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 14,
+      "native_token": "14",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F7",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": 6,
+        "field": "Total written (filtered) percent",
+        "byte_start": 931,
+        "byte_end": 983
+      },
+      "metric": "cutadapt_reported_percent",
+      "axis": {
+        "kind": "native_label",
+        "label": "Total written (filtered)",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_bases%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 43.8,
+      "native_token": "43.8",
+      "unit": "percent",
+      "meaning": "native_normalized",
+      "precision": "native_rounded",
+      "diagnostic_codes": [
+        "rounded_native_value"
+      ],
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F8",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "Length",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "metric": "cutadapt_adapter_length",
+      "axis": {
+        "kind": "native_label",
+        "label": "5'",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F9",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "Length",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "metric": "cutadapt_adapter_length",
+      "axis": {
+        "kind": "native_label",
+        "label": "3'",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F10",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "5' trimmed",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "metric": "cutadapt_adapter_trimmed_count",
+      "axis": {
+        "kind": "native_label",
+        "label": "5' trimmed",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 2,
+      "native_token": "2",
+      "unit": "native_count",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F11",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "3' trimmed",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "metric": "cutadapt_adapter_trimmed_count",
+      "axis": {
+        "kind": "native_label",
+        "label": "3' trimmed",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "native_count",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F12",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "Minimum overlap",
+        "byte_start": 1102,
+        "byte_end": 1123
+      },
+      "metric": "cutadapt_minimum_overlap",
+      "axis": {
+        "kind": "native_label",
+        "label": "5'",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 3,
+      "native_token": "3",
+      "unit": "bases",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F13",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 0,
+        "row_ordinal": 1,
+        "field": "No. of allowed errors",
+        "byte_start": 1146,
+        "byte_end": 1156
+      },
+      "metric": "cutadapt_allowed_errors",
+      "axis": {
+        "kind": "length_closed",
+        "label": "1-6",
+        "lower": 1,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "native_count",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F14",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 1,
+        "row_ordinal": 0,
+        "field": "Minimum overlap",
+        "byte_start": 1102,
+        "byte_end": 1123
+      },
+      "metric": "cutadapt_minimum_overlap",
+      "axis": {
+        "kind": "native_label",
+        "label": "3'",
+        "lower": null,
+        "upper": null
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 3,
+      "native_token": "3",
+      "unit": "bases",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F15",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 1,
+        "row_ordinal": 1,
+        "field": "No. of allowed errors",
+        "byte_start": 1180,
+        "byte_end": 1190
+      },
+      "metric": "cutadapt_allowed_errors",
+      "axis": {
+        "kind": "length_closed",
+        "label": "1-6",
+        "lower": 1,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "native_count",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F16",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "length",
+        "byte_start": 1272,
+        "byte_end": 1284
+      },
+      "metric": "cutadapt_histogram_length",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F17",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "count",
+        "byte_start": 1272,
+        "byte_end": 1284
+      },
+      "metric": "cutadapt_histogram_count",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 2,
+      "native_token": "2",
+      "unit": "native_count",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F18",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "expect",
+        "byte_start": 1272,
+        "byte_end": 1284
+      },
+      "metric": "cutadapt_histogram_expected_count",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0.0,
+      "native_token": "0.0",
+      "unit": "native_count",
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "diagnostic_codes": [
+        "native_estimator"
+      ],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F19",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "max.err",
+        "byte_start": 1272,
+        "byte_end": 1284
+      },
+      "metric": "cutadapt_histogram_max_errors",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "native_count",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F20",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": 0,
+        "field": "error counts",
+        "byte_start": 1272,
+        "byte_end": 1284
+      },
+      "metric": "cutadapt_histogram_error_count",
+      "axis": {
+        "kind": "edit_error_count",
+        "label": "0",
+        "lower": 0,
+        "upper": 0
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "state": "available",
+      "value": 2,
+      "native_token": "2",
+      "unit": "native_count",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F21",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": 0,
+        "field": "length",
+        "byte_start": 1368,
+        "byte_end": 1380
+      },
+      "metric": "cutadapt_histogram_length",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 6,
+      "native_token": "6",
+      "unit": "bases",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F22",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": 0,
+        "field": "count",
+        "byte_start": 1368,
+        "byte_end": 1380
+      },
+      "metric": "cutadapt_histogram_count",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "native_count",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F23",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": 0,
+        "field": "expect",
+        "byte_start": 1368,
+        "byte_end": 1380
+      },
+      "metric": "cutadapt_histogram_expected_count",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0.0,
+      "native_token": "0.0",
+      "unit": "native_count",
+      "meaning": "native_estimate",
+      "precision": "native_estimator",
+      "diagnostic_codes": [
+        "native_estimator"
+      ],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F24",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": 0,
+        "field": "max.err",
+        "byte_start": 1368,
+        "byte_end": 1380
+      },
+      "metric": "cutadapt_histogram_max_errors",
+      "axis": {
+        "kind": "length_closed",
+        "label": "6",
+        "lower": 6,
+        "upper": 6
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 0,
+      "native_token": "0",
+      "unit": "native_count",
+      "meaning": "native_configuration",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F25",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": 0,
+        "field": "error counts",
+        "byte_start": 1368,
+        "byte_end": 1380
+      },
+      "metric": "cutadapt_histogram_error_count",
+      "axis": {
+        "kind": "edit_error_count",
+        "label": "0",
+        "lower": 0,
+        "upper": 0
+      },
+      "population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "state": "available",
+      "value": 1,
+      "native_token": "1",
+      "unit": "native_count",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "diagnostic_codes": [],
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 1
+    }
+  ],
+  "categories": [],
+  "raw_blocks": [
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_embedded",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 0,
+        "byte_end": 1380
+      },
+      "kind": "table",
+      "native_name": "cutadapt_embedded",
+      "parse_status": "complete",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 711,
+        "byte_end": 984
+      },
+      "kind": "table",
+      "native_name": "=== Summary ===",
+      "parse_status": "complete",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 984,
+        "byte_end": 1380
+      },
+      "kind": "table",
+      "native_name": "=== Adapter link ===",
+      "parse_status": "complete",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1102,
+        "byte_end": 1157
+      },
+      "kind": "table",
+      "native_name": "Adapter error configuration",
+      "parse_status": "complete",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1102,
+        "byte_end": 1191
+      },
+      "kind": "table",
+      "native_name": "Adapter error configuration",
+      "parse_status": "complete",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1191,
+        "byte_end": 1287
+      },
+      "kind": "table",
+      "native_name": "Overview of removed sequences at 5' end",
+      "parse_status": "complete",
+      "field_names": []
+    },
+    {
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1287,
+        "byte_end": 1380
+      },
+      "kind": "table",
+      "native_name": "Overview of removed sequences at 3' end",
+      "parse_status": "complete",
+      "field_names": []
+    }
+  ],
+  "sequence_records": [],
+  "alignment_records": [],
+  "diagnostics": [
+    {
+      "code": "native_report_local_lineage",
+      "source_refs": [
+        "source:synthetic"
+      ],
+      "locator": null,
+      "affected_refs": [
+        "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flineage%2F0"
+      ]
+    },
+    {
+      "code": "native_report_local_lineage",
+      "source_refs": [
+        "source:synthetic"
+      ],
+      "locator": null,
+      "affected_refs": [
+        "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flineage%2F1"
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "key": "cutadapt_embedded",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F0",
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F1",
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F2",
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F3"
+      ],
+      "raw_block_ordinals": [
+        0
+      ],
+      "locator": {
+        "member": null,
+        "block": "cutadapt_embedded",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 0,
+        "byte_end": 1380
+      }
+    },
+    {
+      "key": "cutadapt_summary",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F0",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F1",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F2",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F3",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F4",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F5",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F6",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F7"
+      ],
+      "category_refs": [],
+      "label_refs": [],
+      "raw_block_ordinals": [
+        1
+      ],
+      "locator": {
+        "member": null,
+        "block": "cutadapt_summary",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 711,
+        "byte_end": 984
+      }
+    },
+    {
+      "key": "cutadapt_adapter",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F8",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F9",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F10",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F11"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F4",
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F5",
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F6"
+      ],
+      "raw_block_ordinals": [
+        2
+      ],
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 984,
+        "byte_end": 1380
+      }
+    },
+    {
+      "key": "cutadapt_adapter_errors",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F12",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F13"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F7",
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F8"
+      ],
+      "raw_block_ordinals": [
+        3
+      ],
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1102,
+        "byte_end": 1157
+      }
+    },
+    {
+      "key": "cutadapt_adapter_errors",
+      "ordinal": 1,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F14",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F15"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F9",
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F10"
+      ],
+      "raw_block_ordinals": [
+        4
+      ],
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1102,
+        "byte_end": 1191
+      }
+    },
+    {
+      "key": "cutadapt_adapter_histogram",
+      "ordinal": 0,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F16",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F17",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F18",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F19",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F20"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F11"
+      ],
+      "raw_block_ordinals": [
+        5
+      ],
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1191,
+        "byte_end": 1287
+      }
+    },
+    {
+      "key": "cutadapt_adapter_histogram",
+      "ordinal": 1,
+      "state": "complete",
+      "cell_refs": [
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F21",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F22",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F23",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F24",
+        "bvbrc_fastqutils_cell:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fcells%2F25"
+      ],
+      "category_refs": [],
+      "label_refs": [
+        "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F12"
+      ],
+      "raw_block_ordinals": [
+        6
+      ],
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "section",
+        "byte_start": 1287,
+        "byte_end": 1380
+      }
+    }
+  ],
+  "labels": [
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F0",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_embedded",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Cutadapt version",
+        "byte_start": 0,
+        "byte_end": 40
+      },
+      "kind": "producer_version",
+      "value": "4.9",
+      "section_key": "cutadapt_embedded",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F1",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_embedded",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Command line parameters",
+        "byte_start": 40,
+        "byte_end": 606
+      },
+      "kind": "command",
+      "value": "-j 1 -a link=ACGTAC...AGATCG --json /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/linked/native.json -o /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/linked/output.fastq /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/linked/input.fastq",
+      "section_key": "cutadapt_embedded",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F2",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_embedded",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Processing mode",
+        "byte_start": 606,
+        "byte_end": 648
+      },
+      "kind": "native_label",
+      "value": "Processing single-end reads on 1 core ...",
+      "section_key": "cutadapt_embedded",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F3",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_embedded",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Native timing",
+        "byte_start": 648,
+        "byte_end": 710
+      },
+      "kind": "native_label",
+      "value": "Finished in 0.004 s (1312.097 µs/read; 0.05 M reads/minute).",
+      "section_key": "cutadapt_embedded",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F4",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Adapter name",
+        "byte_start": 984,
+        "byte_end": 1005
+      },
+      "kind": "adapter",
+      "value": "link",
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F5",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Sequence",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "kind": "adapter",
+      "value": "ACGTAC...AGATCG",
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F6",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Type",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "kind": "native_label",
+      "value": "linked",
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F7",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Type",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "kind": "native_label",
+      "value": "linked",
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F8",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Adapter end",
+        "byte_start": 1191,
+        "byte_end": 1231
+      },
+      "kind": "native_label",
+      "value": "5'",
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F9",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "Type",
+        "byte_start": 1006,
+        "byte_end": 1101
+      },
+      "kind": "native_label",
+      "value": "linked",
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F10",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_errors",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "Adapter end",
+        "byte_start": 1287,
+        "byte_end": 1327
+      },
+      "kind": "native_label",
+      "value": "3'",
+      "section_key": "cutadapt_adapter_errors",
+      "section_ordinal": 1
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F11",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 0,
+        "row_ordinal": null,
+        "field": "Removed-end heading",
+        "byte_start": 1191,
+        "byte_end": 1231
+      },
+      "kind": "native_label",
+      "value": "Overview of removed sequences at 5' end",
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 0
+    },
+    {
+      "id": "bvbrc_fastqutils_label:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flabels%2F12",
+      "artifact_ref": "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8",
+      "locator": {
+        "member": null,
+        "block": "cutadapt_adapter_histogram",
+        "block_ordinal": 1,
+        "row_ordinal": null,
+        "field": "Removed-end heading",
+        "byte_start": 1287,
+        "byte_end": 1327
+      },
+      "kind": "native_label",
+      "value": "Overview of removed sequences at 3' end",
+      "section_key": "cutadapt_adapter_histogram",
+      "section_ordinal": 1
+    }
+  ],
+  "populations": [
+    {
+      "id": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "cutadapt_input_reads",
+      "population_ordinal": 0,
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_reads%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0"
+      ],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "cutadapt_adapter_reads",
+      "population_ordinal": 0,
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_reads%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0"
+      ],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "cutadapt_output_reads",
+      "population_ordinal": 0,
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_bases%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0"
+      ],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "cutadapt_input_bases",
+      "population_ordinal": 0,
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_bases%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_bases%2F0"
+      ],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "cutadapt_output_bases",
+      "population_ordinal": 0,
+      "section_key": "cutadapt_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0"
+      ],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "cutadapt_adapter_events",
+      "population_ordinal": 0,
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_adapter_events%2F1",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [
+        "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0"
+      ],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "report"
+      ],
+      "population_key": "cutadapt_adapter_events",
+      "population_ordinal": 1,
+      "section_key": "cutadapt_adapter",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    }
+  ],
+  "native_lineage": [
+    {
+      "id": "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flineage%2F0",
+      "kind": "native_report_before_after",
+      "before_population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_reads%2F0",
+      "after_population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_reads%2F0",
+      "document_ids": [
+        "report"
+      ],
+      "source_refs": [
+        "source:synthetic"
+      ],
+      "locators": [
+        {
+          "member": null,
+          "block": "cutadapt_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 1,
+          "field": "Total reads processed",
+          "byte_start": 728,
+          "byte_end": 775
+        },
+        {
+          "member": null,
+          "block": "cutadapt_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 3,
+          "field": "Reads written (passing filters)",
+          "byte_start": 830,
+          "byte_end": 886
+        }
+      ],
+      "scope": "artifact_local",
+      "task_stage_ref": null
+    },
+    {
+      "id": "bvbrc_fastqutils_lineage:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Flineage%2F1",
+      "kind": "native_report_before_after",
+      "before_population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_input_bases%2F0",
+      "after_population_ref": "bvbrc_fastqutils_population:cutadapt_parser_205/%2Fdocuments%2Freport%2Fsha256%2Fe430b345bffd266db768de98ce2d3195531a7120bff5af73d43074ab84aceed8%2Fpopulations%2Fcutadapt_output_bases%2F0",
+      "document_ids": [
+        "report"
+      ],
+      "source_refs": [
+        "source:synthetic"
+      ],
+      "locators": [
+        {
+          "member": null,
+          "block": "cutadapt_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 5,
+          "field": "Total basepairs processed",
+          "byte_start": 887,
+          "byte_end": 931
+        },
+        {
+          "member": null,
+          "block": "cutadapt_summary",
+          "block_ordinal": 0,
+          "row_ordinal": 6,
+          "field": "Total written (filtered)",
+          "byte_start": 931,
+          "byte_end": 983
+        }
+      ],
+      "scope": "artifact_local",
+      "task_stage_ref": null
+    }
+  ],
+  "alignment_headers": [],
+  "reference_dictionary": [],
+  "requirements": []
+}

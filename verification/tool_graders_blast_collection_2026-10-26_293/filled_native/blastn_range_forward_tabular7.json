@@ -1,0 +1,637 @@
+{
+  "schema": "blast_report_collection_v1",
+  "invocation": {
+    "execution_program": "blastn",
+    "scientific_mode": "pairwise",
+    "resource_kind": "local",
+    "query_kind": "sequence",
+    "reference_kind": "sequence",
+    "request": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+        "-task",
+        "blastn",
+        "-dust",
+        "no",
+        "-strand",
+        "plus",
+        "-query_loc",
+        "31-210",
+        "-subject_loc",
+        "31-240",
+        "-num_threads",
+        "1",
+        "-query",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/query_sequence.fa",
+        "-subject",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/subject_sequence.fa",
+        "-outfmt",
+        "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+        "-out",
+        "report.tsv"
+      ],
+      "environment": {},
+      "native_blast": {
+        "version": "native_blast_job_v1",
+        "program": "blastn",
+        "mode": "pairwise",
+        "software": {
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+          "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+          "engine_version": "2.17.0+"
+        },
+        "environment": {},
+        "operands": [
+          {
+            "role": "query_sequence",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/query_sequence.fa",
+            "sha256": "b93426cf0a95f5a48d11869e92e84d4f74d46059c2e1444ee53afe6c72573727",
+            "size_bytes": 269,
+            "artifact_ref": null
+          },
+          {
+            "role": "subject_sequence",
+            "format": "fasta",
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/subject_sequence.fa",
+            "sha256": "4718a8c93aef9137c34ed4f745a2ce49c88e3c92086a1f68e957cd99d0cc1ffc",
+            "size_bytes": 271,
+            "artifact_ref": null
+          }
+        ],
+        "operand_bindings": [
+          {
+            "operand_role": "query_sequence",
+            "record_ordinal": 0,
+            "native_name": "query_blastn_range_forward",
+            "native_accession": null,
+            "subject_ref": "query_subject",
+            "reference_ref": null
+          },
+          {
+            "operand_role": "subject_sequence",
+            "record_ordinal": 0,
+            "native_name": "subject_blastn_range_forward",
+            "native_accession": null,
+            "subject_ref": null,
+            "reference_ref": "paired_reference"
+          }
+        ],
+        "options": [
+          "-task",
+          "blastn",
+          "-dust",
+          "no",
+          "-strand",
+          "plus",
+          "-query_loc",
+          "31-210",
+          "-subject_loc",
+          "31-240",
+          "-num_threads",
+          "1"
+        ],
+        "outputs": [
+          {
+            "role": "stdout",
+            "format": "text",
+            "relative_path": "stdout.txt",
+            "fields": null,
+            "delimiter": null
+          },
+          {
+            "role": "stderr",
+            "format": "text",
+            "relative_path": "stderr.txt",
+            "fields": null,
+            "delimiter": null
+          },
+          {
+            "role": "primary_report",
+            "format": "tabular7",
+            "relative_path": "report.tsv",
+            "fields": [
+              "qseqid",
+              "sseqid",
+              "qlen",
+              "slen",
+              "qstart",
+              "qend",
+              "sstart",
+              "send",
+              "qframe",
+              "sframe",
+              "length",
+              "nident",
+              "gaps",
+              "mismatch",
+              "score",
+              "bitscore",
+              "evalue",
+              "qseq",
+              "sseq",
+              "btop"
+            ],
+            "delimiter": "\t"
+          }
+        ],
+        "metadata": {
+          "engineering_example": "blastn_range_forward_tabular7",
+          "input_kind": "synthetic_derivative_of_retained_public_sequence"
+        },
+        "grading_parameters": {}
+      }
+    },
+    "effective_options": {
+      "argv": [
+        "-task",
+        "blastn",
+        "-dust",
+        "no",
+        "-strand",
+        "plus",
+        "-query_loc",
+        "31-210",
+        "-subject_loc",
+        "31-240",
+        "-num_threads",
+        "1"
+      ],
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null
+    },
+    "operands": [
+      {
+        "role": "query",
+        "artifact_key": "query_sequence",
+        "record_ordinal": 0,
+        "native_id": "query_blastn_range_forward",
+        "native_title": "query_blastn_range_forward",
+        "subject_ref": "query_subject",
+        "molecule": "dna",
+        "length": 240,
+        "selected_interval": [
+          30,
+          210
+        ],
+        "identity": null
+      },
+      {
+        "role": "subject",
+        "artifact_key": "subject_sequence",
+        "record_ordinal": 0,
+        "native_id": "subject_blastn_range_forward",
+        "native_title": "subject_blastn_range_forward",
+        "subject_ref": "paired_reference",
+        "molecule": "dna",
+        "length": 240,
+        "selected_interval": [
+          30,
+          240
+        ],
+        "identity": null
+      }
+    ],
+    "completion": {
+      "native_returncode": 0,
+      "producer_complete": true
+    }
+  },
+  "artifacts": [
+    {
+      "artifact_key": "report",
+      "role": "primary_report",
+      "format": "tabular7",
+      "fields": [
+        "qseqid",
+        "sseqid",
+        "qlen",
+        "slen",
+        "qstart",
+        "qend",
+        "sstart",
+        "send",
+        "qframe",
+        "sframe",
+        "length",
+        "nident",
+        "gaps",
+        "mismatch",
+        "score",
+        "bitscore",
+        "evalue",
+        "qseq",
+        "sseq",
+        "btop"
+      ],
+      "delimiter": "\t",
+      "sha256": "8744bac2639a2b2caeea7f3aba40af7a0b8fdeeea5a027ec885fc31b1719600b",
+      "size_bytes": 1024
+    }
+  ],
+  "searches": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "program_context": {
+        "execution_program": "blastn",
+        "reported_program": "BLASTN",
+        "scientific_mode": "pairwise",
+        "query_kind": "sequence",
+        "reference_kind": "sequence",
+        "native_version": "BLASTN 2.17.0+",
+        "geometry_program": "blastn"
+      },
+      "stage": null,
+      "iteration": null,
+      "normalized": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "tabular",
+        "query": {
+          "id": "query_blastn_range_forward",
+          "title": "query_blastn_range_forward",
+          "length": 180
+        },
+        "search": {
+          "program": "blastn",
+          "version": "BLASTN 2.17.0+",
+          "database": null,
+          "parameters": {},
+          "statistics": {},
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+              "-task",
+              "blastn",
+              "-dust",
+              "no",
+              "-strand",
+              "plus",
+              "-query_loc",
+              "31-210",
+              "-subject_loc",
+              "31-240",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/subject_sequence.fa",
+              "-outfmt",
+              "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+              "-out",
+              "report.tsv"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "blastn",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+                "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/query_sequence.fa",
+                  "sha256": "b93426cf0a95f5a48d11869e92e84d4f74d46059c2e1444ee53afe6c72573727",
+                  "size_bytes": 269,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/subject_sequence.fa",
+                  "sha256": "4718a8c93aef9137c34ed4f745a2ce49c88e3c92086a1f68e957cd99d0cc1ffc",
+                  "size_bytes": 271,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_blastn_range_forward",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_blastn_range_forward",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-task",
+                "blastn",
+                "-dust",
+                "no",
+                "-strand",
+                "plus",
+                "-query_loc",
+                "31-210",
+                "-subject_loc",
+                "31-240",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "tabular7",
+                  "relative_path": "report.tsv",
+                  "fields": [
+                    "qseqid",
+                    "sseqid",
+                    "qlen",
+                    "slen",
+                    "qstart",
+                    "qend",
+                    "sstart",
+                    "send",
+                    "qframe",
+                    "sframe",
+                    "length",
+                    "nident",
+                    "gaps",
+                    "mismatch",
+                    "score",
+                    "bitscore",
+                    "evalue",
+                    "qseq",
+                    "sseq",
+                    "btop"
+                  ],
+                  "delimiter": "\t"
+                }
+              ],
+              "metadata": {
+                "engineering_example": "blastn_range_forward_tabular7",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": true,
+          "reported_hit_count": 1
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 240,
+            "descriptions": [
+              {
+                "id": "subject_blastn_range_forward"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "bit_score": 325.0,
+                "score": 360.0,
+                "evalue": 2.68e-94,
+                "identity": 180,
+                "align_len": 180,
+                "gaps": 0,
+                "query_from": 31,
+                "query_to": 210,
+                "hit_from": 31,
+                "hit_to": 210,
+                "query_frame": 1,
+                "hit_frame": 1,
+                "qseq": "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "hseq": "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "text": "# BLASTN 2.17.0+\n# Query: query_blastn_range_forward\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 1 hits found\nquery_blastn_range_forward\tsubject_blastn_range_forward\t180\t240\t31\t210\t31\t210\t1\t1\t180\t180\t0\t0\t360\t325\t2.68e-94\tAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT\tAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT\t180\n# BLAST processed 1 queries\n",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [
+            {
+              "line": 6,
+              "values": [
+                "query_blastn_range_forward",
+                "subject_blastn_range_forward",
+                "180",
+                "240",
+                "31",
+                "210",
+                "31",
+                "210",
+                "1",
+                "1",
+                "180",
+                "180",
+                "0",
+                "0",
+                "360",
+                "325",
+                "2.68e-94",
+                "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "180"
+              ],
+              "fields": {
+                "qseqid": "query_blastn_range_forward",
+                "sseqid": "subject_blastn_range_forward",
+                "qlen": "180",
+                "slen": "240",
+                "qstart": "31",
+                "qend": "210",
+                "sstart": "31",
+                "send": "210",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "180",
+                "nident": "180",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "360",
+                "bitscore": "325",
+                "evalue": "2.68e-94",
+                "qseq": "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "sseq": "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "btop": "180"
+              }
+            }
+          ],
+          "declared_alignment_row_count": 1,
+          "sha256": "8744bac2639a2b2caeea7f3aba40af7a0b8fdeeea5a027ec885fc31b1719600b"
+        },
+        "issues": []
+      },
+      "row_map": [
+        {
+          "hit_index": 0,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0
+          ]
+        }
+      ],
+      "operand_binding": {
+        "role": "query",
+        "artifact_key": "query_sequence",
+        "record_ordinal": 0,
+        "native_id": "query_blastn_range_forward",
+        "native_title": "query_blastn_range_forward",
+        "subject_ref": "query_subject",
+        "molecule": "dna",
+        "length": 240,
+        "selected_interval": [
+          30,
+          210
+        ],
+        "identity": null
+      },
+      "reporting": {
+        "native_hit_array_present": true,
+        "native_hit_count": 1,
+        "requested_hit_limit": null,
+        "requested_hsp_limit": null,
+        "native_returncode": 0,
+        "producer_complete": true
+      },
+      "native": {
+        "report": {
+          "text": "# BLASTN 2.17.0+\n# Query: query_blastn_range_forward\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 1 hits found\nquery_blastn_range_forward\tsubject_blastn_range_forward\t180\t240\t31\t210\t31\t210\t1\t1\t180\t180\t0\t0\t360\t325\t2.68e-94\tAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT\tAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT\t180\n# BLAST processed 1 queries\n",
+          "program": "BLASTN",
+          "version": "BLASTN 2.17.0+"
+        },
+        "search": {
+          "text": "# BLASTN 2.17.0+\n# Query: query_blastn_range_forward\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 1 hits found\nquery_blastn_range_forward\tsubject_blastn_range_forward\t180\t240\t31\t210\t31\t210\t1\t1\t180\t180\t0\t0\t360\t325\t2.68e-94\tAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT\tAAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT\t180\n# BLAST processed 1 queries\n",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [
+            {
+              "line": 6,
+              "values": [
+                "query_blastn_range_forward",
+                "subject_blastn_range_forward",
+                "180",
+                "240",
+                "31",
+                "210",
+                "31",
+                "210",
+                "1",
+                "1",
+                "180",
+                "180",
+                "0",
+                "0",
+                "360",
+                "325",
+                "2.68e-94",
+                "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "180"
+              ],
+              "fields": {
+                "qseqid": "query_blastn_range_forward",
+                "sseqid": "subject_blastn_range_forward",
+                "qlen": "180",
+                "slen": "240",
+                "qstart": "31",
+                "qend": "210",
+                "sstart": "31",
+                "send": "210",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "180",
+                "nident": "180",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "360",
+                "bitscore": "325",
+                "evalue": "2.68e-94",
+                "qseq": "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "sseq": "AAAGTTCTGACTATTAATATTCATAAAGGTTTTACTGCTTTTAATCGTCGTTTTATTCTGCCTGAACTGCGTGATGCTGTTCGTACTGTTTCTGCTGATATTGTTTGTCTGCAAGAAGTTATGGGTGCTCATGAAGTTCATCCTCTGCATGTTGAAAATTGGCCTGATACTTCTCATTAT",
+                "btop": "180"
+              }
+            }
+          ],
+          "declared_alignment_row_count": 1
+        },
+        "line_numbers": [
+          6
+        ]
+      },
+      "issues": []
+    }
+  ],
+  "issues": []
+}

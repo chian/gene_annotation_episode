@@ -1,0 +1,14 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_live_selected_rhea_non_identifier_search_retains_bounded_native_response_and_replays _
+source_snapshot/tests/test_chemistry_evidence.py:589: in test_live_selected_rhea_non_identifier_search_retains_bounded_native_response_and_replays
+    assert project_credit(store).credit == 0 and store.problem() == original_problem
+           ^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+source_snapshot/gene_annotation_episode/credit.py:34: in _retired
+    raise AnnotationScoringUnavailable(
+E   gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chemistry_evidence.py::test_live_selected_rhea_non_identifier_search_retains_bounded_native_response_and_replays
+1 failed in 160.97s (0:02:40)

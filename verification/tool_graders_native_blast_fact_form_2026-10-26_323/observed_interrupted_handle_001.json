@@ -1,0 +1,26 @@
+{
+  "provenance": "Values read from the original local_jobs handle in the tool output before cancellation. The blocking adapter removed its transient handle during cleanup; this is an additive observation, not a reconstructed native receipt.",
+  "original_handle": ".local-job-6c0b11e7958a4338a3ec7a628d50f76d.handle.json",
+  "unit": "gene-local-job-ad16de595b6c4094954719bc34db8fff.service",
+  "started_at": "2026-10-26T19:36:59.921384+00:00",
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python", "-B", "-m", "pytest",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_fact_forms.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_communication.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_structure_selector_communication.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_form_reference_validation.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_reference_resolution.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_job_communication_failures.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_proteome_fact_contracts.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_bvbrc_proteome_directional_fact_contracts.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_result_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_failure_views.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_episode_yield_reports.py",
+    "-q", "-p", "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_fact_form_2026-10-26_323/check_20261026T193659761061Z/tmp"
+  ],
+  "metadata": {
+    "policy": {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": null},
+    "verified_cgroup": {"memory_max": 21474836480, "memory_swap_max": 0, "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+  }
+}

@@ -1,0 +1,252 @@
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: observe_execution
+583:     def observe_execution(self, assignment, execution_id, *, log_window_bytes=8192,
+584:                           log_roles=('stdout', 'stderr'), attempt_id=None, **identity):
+585:         """Read one selected exact native attempt, without opening episode state."""
+586:         self.validate_assignment(assignment)
+587:         if type(log_window_bytes) is not int or log_window_bytes <= 0:
+588:             raise ValueError('positive_log_window_required')
+589:         if any(role not in {'stdout', 'stderr'} for role in log_roles):
+590:             raise ValueError('unsupported_native_log_role')
+591:         if 'native_barcode' in assignment['requested_job']:
+592:             from .native_barcode_observations import barcode_observed_files
+593:             plan = self._barcode_plan(assignment, execution_id, attempt_id=attempt_id,
+594:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+595:             view = native.status(native.NativeJobHandle(Path(execution_id)))
+596:             metadata = view['metadata']
+597:             rc = metadata.get('native_returncode')
+598:             observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+599:                               'running' if view['state'] == 'running' else
+600:                               'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+601:             failure = None if observed_state != 'failed' else (
+602:                 'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+603:             measurements = []
+604:             if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+605:                 measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+606:             outputs, logs, available = barcode_observed_files(plan, view,
+607:                 log_window_bytes=log_window_bytes, log_roles=log_roles)
+608:             return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+609:                 'returncode': rc, 'failure_code': failure, 'result_available': available,
+610:                 'measurements': measurements, 'outputs': outputs, 'logs': logs,
+611:                 'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+612:         elif 'native_expression_nmf' in assignment['requested_job']:
+613:             from .native_expression_nmf_observations import expression_nmf_observed_files
+614:             plan = self._expression_nmf_plan(assignment, execution_id, attempt_id=attempt_id,
+615:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+616:             view = native.status(native.NativeJobHandle(Path(execution_id)))
+617:             metadata = view['metadata']
+618:             rc = metadata.get('native_returncode')
+619:             observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+620:                               'running' if view['state'] == 'running' else
+621:                               'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+622:             failure = None if observed_state != 'failed' else (
+623:                 'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+624:             measurements = []
+625:             if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+626:                 measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+627:             outputs, logs, available = expression_nmf_observed_files(plan, view,
+628:                 log_window_bytes=log_window_bytes, log_roles=log_roles)
+629:             return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+630:                 'returncode': rc, 'failure_code': failure, 'result_available': available,
+631:                 'measurements': measurements, 'outputs': outputs, 'logs': logs,
+632:                 'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+633:         if 'native_atac_differential' in assignment['requested_job']:
+634:             from .native_atac_differential_observations import atac_observed_files
+635:             plan = self._atac_plan(assignment, execution_id, attempt_id=attempt_id,
+636:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+637:             view = native.status(native.NativeJobHandle(Path(execution_id)))
+638:             metadata = view['metadata']
+639:             rc = metadata.get('native_returncode')
+640:             observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+641:                               'running' if view['state'] == 'running' else
+642:                               'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+643:             failure = None if observed_state != 'failed' else (
+644:                 'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+645:             measurements = []
+646:             if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+647:                 measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+648:             outputs, logs, available = atac_observed_files(plan, view,
+649:                 log_window_bytes=log_window_bytes, log_roles=log_roles)
+650:             return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+651:                 'returncode': rc, 'failure_code': failure, 'result_available': available,
+652:                 'measurements': measurements, 'outputs': outputs, 'logs': logs,
+653:                 'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+654:         if 'native_chromatin_interactions' in assignment['requested_job']:
+655:             from .native_chromatin_interaction_observations import chromatin_observed_files
+656:             plan = self._chromatin_plan(assignment, execution_id, attempt_id=attempt_id,
+657:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+658:             view = native.status(native.NativeJobHandle(Path(execution_id)))
+659:             metadata = view['metadata']
+660:             rc = metadata.get('native_returncode')
+661:             observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+662:                               'running' if view['state'] == 'running' else
+663:                               'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+664:             failure = None if observed_state != 'failed' else (
+665:                 'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+666:             measurements = []
+667:             if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+668:                 measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+669:             outputs, logs, available = chromatin_observed_files(plan, view,
+670:                 log_window_bytes=log_window_bytes, log_roles=log_roles)
+671:             return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+672:                 'returncode': rc, 'failure_code': failure, 'result_available': available,
+673:                 'measurements': measurements, 'outputs': outputs, 'logs': logs,
+674:                 'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+675:         if 'native_genomic_overlap' in assignment['requested_job']:
+676:             from .native_genomic_overlap_observations import genomic_overlap_observed_files
+677:             plan = self._genomic_overlap_plan(assignment, execution_id, attempt_id=attempt_id,
+678:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+679:             view = native.status(native.NativeJobHandle(Path(execution_id)))
+680:             metadata = view['metadata']
+681:             rc = metadata.get('native_returncode')
+682:             observed_state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+683:                               'running' if view['state'] == 'running' else
+684:                               'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+685:             failure = None if observed_state != 'failed' else (
+686:                 'native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+687:             measurements = []
+688:             if view['terminal'] and metadata.get('elapsed_seconds') is not None:
+689:                 measurements.append({'measure': metadata['duration_measure'], 'seconds': metadata['elapsed_seconds']})
+690:             outputs, logs, available = genomic_overlap_observed_files(plan, view,
+691:                 log_window_bytes=log_window_bytes, log_roles=log_roles)
+692:             return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': observed_state,
+693:                 'returncode': rc, 'failure_code': failure, 'result_available': available,
+694:                 'measurements': measurements, 'outputs': outputs, 'logs': logs,
+695:                 'provenance_refs': [], 'native': {'execution_id': execution_id, **view}}
+696:         handle = native.NativeJobHandle(confined(execution_id, assignment['workspace']))
+697:         # The source pins this handle; never replace it with a later receipt.
+698:         body = handle.read()
+699:         request = json.loads((handle.path.parent/'invoke.json').read_text())
+700:         native_plan, native_family = None, None
+701:         if 'native_protein_structure' in assignment['requested_job']:
+702:             native_plan = self._protein_plan(assignment, execution_id, attempt_id=attempt_id,
+703:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+704:             native_family = 'native_protein_structure'
+705:         elif 'native_rna_structure' in assignment['requested_job']:
+706:             native_plan = self._rna_plan(assignment, execution_id, attempt_id=attempt_id,
+707:                 **{key: identity.get(key) for key in ('run_id', 'origin_episode_id', 'original_operation_key', 'resource_id')})
+708:             native_family = 'native_rna_structure'
+709:         elif 'native_blast' in assignment['requested_job']:
+710:             from .native_blast_local import local_blast_plan
+711:             native_plan = local_blast_plan(assignment, execution_id)
+712:             native_family = 'native_blast'
+713:             expected = {'run_id': identity.get('run_id'), 'episode_id': identity.get('origin_episode_id'),
+714:                 'operation_key': identity.get('original_operation_key'), 'attempt_id': attempt_id,
+715:                 'resource_id': identity.get('resource_id')}
+716:             if (native_plan['policy'] != self.policy.to_dict()
+717:                     or any(value is not None and native_plan['identity'][key] != value for key, value in expected.items())):
+718:                 raise ValueError('native_blast_original_owner_conflict')
+719:         elif 'native_hmmer' in assignment['requested_job']:
+720:             from .native_hmmer_local import local_hmmer_plan
+721:             native_plan = local_hmmer_plan(assignment, execution_id)
+722:             native_family = 'native_hmmer'
+723:         elif 'native_hmmer_preparation' in assignment['requested_job']:
+724:             from .native_hmmer_preparation_local import local_hmmer_preparation_plan
+725:             native_plan = local_hmmer_preparation_plan(assignment, execution_id)
+726:             native_family = 'native_hmmer_preparation'
+727:             owner = native_plan['identity']
+728:             expected = {'run_id': identity.get('run_id'),
+729:                 'episode_id': identity.get('origin_episode_id'),
+730:                 'operation_key': identity.get('original_operation_key'), 'attempt_id': attempt_id}
+731:             if any(value is not None and owner[key] != value for key, value in expected.items()):
+732:                 raise ValueError('native_hmmer_preparation_original_owner_conflict')
+733:         elif 'native_infernal' in assignment['requested_job']:
+734:             from .native_infernal_local import local_infernal_plan
+735:             native_plan = local_infernal_plan(assignment, execution_id)
+736:             native_family = 'native_infernal'
+737:         elif 'native_infernal_preparation' in assignment['requested_job']:
+738:             from .native_infernal_preparation_local import local_infernal_preparation_plan
+739:             native_plan = local_infernal_preparation_plan(assignment, execution_id)
+740:             native_family = 'native_infernal_preparation'
+741:         if (request['argv'] != assignment['requested_job']['argv']
+742:                 or request['environment'] != assignment['requested_job']['environment']):
+743:             raise ValueError('practical_execution_request_identity_conflict')
+744:         view = native.status(handle)
+745:         metadata = view['metadata']
+746:         rc = metadata.get('native_returncode')
+747:         state = (('completed' if rc == 0 else 'failed') if view['terminal'] else
+748:                  'running' if view['state'] == 'running' else
+749:                  'submitted' if view['state'] in {'prepared', 'starting'} else 'unknown')
+750:         failure = None
+751:         if state == 'failed':
+752:             failure = ('native_returncode_unavailable' if rc is None else 'native_nonzero_returncode')
+753:         measurements = []
+754:         elapsed = metadata.get('elapsed_seconds')
+755:         if view['terminal'] and elapsed is not None:
+756:             measurements.append({'measure': metadata['duration_measure'], 'seconds': elapsed})
+757:         outputs, logs = [], []
+758:         for role in ('stdout', 'stderr'):
+759:             text_log = True
+760:             if native_plan is not None:
+761:                 native_job = assignment['requested_job'][native_family]
+762:                 selected_role = 'stockholm' if role == 'stdout' and native_job['program'] == 'hmmalign' else role
+763:                 selected_output = next(item for item in native_job['outputs'] if item['role'] == selected_role)
+764:                 path = confined(Path(native_plan['attempt_directory'])/selected_output['relative_path'], assignment['workspace'])
+765:                 if native_family == 'native_blast':
+766:                     from .native_blast_driver import _confined_file
+767:                     path = _confined_file(Path(native_plan['attempt_directory']), selected_output['relative_path'])
+768:                 elif native_family == 'native_rna_structure':
+769:                     from .native_rna_structure_driver import confined_file
+770:                     path = confined_file(Path(native_plan['attempt_directory']), selected_output['relative_path'])
+771:                 elif native_family == 'native_protein_structure':
+772:                     from .native_protein_structure_driver import confined_file
+773:                     path = confined_file(Path(native_plan['attempt_directory']), selected_output['relative_path'])
+774:                 text_log = selected_output['format'] != 'hmmer_binary'
+775:             else:
+776:                 path = confined(body[role], assignment['workspace'])
+777:             tail = _output_details(path, text_log=text_log and role in log_roles, limit=log_window_bytes)
+778:             outputs.append({'role': role, 'available': tail['available'],
+779:                 'bytes': tail.get('bytes'), 'writer_closed': tail['available'] and view['terminal']})
+780:             if text_log and role in log_roles and tail['available']:
+781:                 logs.append({'role': role, 'path': str(path), 'offset': tail['tail_byte_offset'],
+782:                     'observed_size': tail['bytes'], 'bytes_base64': tail['bytes_base64']})
+783:         result_available = False
+784:         paths = sorted(set(path for row in assignment['progress_requirements']
+785:             if row['predicate']['kind'] == 'requested_job_outputs'
+786:             for path in row['predicate']['output_paths']))
+787:         if native_family in {'native_hmmer_preparation', 'native_blast', 'native_rna_structure', 'native_protein_structure'}:
+788:             paths = sorted({str(Path(native_plan['attempt_directory']) / row['relative_path'])
+789:                 for row in assignment['requested_job'][native_family]['outputs']
+790:                 if row['role'] not in {'stdout', 'stderr'}})
+791:         for name in paths:
+792:             path = confined(name, assignment['workspace'])
+793:             if native_family == 'native_blast':
+794:                 from .native_blast_driver import _confined_file
+795:                 path = _confined_file(Path(native_plan['attempt_directory']),
+796:                     str(Path(name).relative_to(native_plan['attempt_directory'])))
+797:             elif native_family == 'native_rna_structure':
+798:                 from .native_rna_structure_driver import confined_file
+799:                 path = confined_file(Path(native_plan['attempt_directory']),
+800:                     str(Path(name).relative_to(native_plan['attempt_directory'])))
+801:             elif native_family == 'native_protein_structure':
+802:                 from .native_protein_structure_driver import confined_file
+803:                 path = confined_file(Path(native_plan['attempt_directory']),
+804:                     str(Path(name).relative_to(native_plan['attempt_directory'])))
+805:             available = path.is_file()
+806:             result_available |= available
+807:             outputs.append({'role': 'requested_output:'+name, 'available': available,
+808:                 'bytes': path.stat().st_size if available else None,
+809:                 'writer_closed': available and view['terminal']})
+810:         if not paths:
+811:             result_available = state == 'completed'
+812:         if native_plan is not None:
+813:             manifest = confined(Path(native_plan['attempt_directory'])/'bundle.json', assignment['workspace'])
+814:             if native_family == 'native_blast':
+815:                 from .native_blast_driver import _confined_file
+816:                 manifest = _confined_file(Path(native_plan['attempt_directory']), 'bundle.json')
+817:             elif native_family == 'native_rna_structure':
+818:                 from .native_rna_structure_contracts import BUNDLE_FILENAME
+819:                 from .native_rna_structure_driver import confined_file
+820:                 manifest = confined_file(Path(native_plan['attempt_directory']), BUNDLE_FILENAME)
+821:             elif native_family == 'native_protein_structure':
+822:                 from .native_protein_structure_contracts import BUNDLE_FILENAME
+823:                 from .native_protein_structure_driver import confined_file
+824:                 manifest = confined_file(Path(native_plan['attempt_directory']), BUNDLE_FILENAME)
+825:             result_available = manifest.is_file()
+826:             outputs.append({'role': native_family+'_bundle', 'available': result_available,
+827:                 'bytes': manifest.stat().st_size if result_available else None,
+828:                 'writer_closed': result_available and view['terminal']})
+829:         return {'observed_at': datetime.now(timezone.utc).isoformat(), 'state': state,
+830:             'returncode': rc, 'failure_code': failure, 'result_available': result_available,
+831:             'measurements': measurements, 'outputs': outputs, 'logs': logs,
+832:             'provenance_refs': [], 'native': {'execution_id': str(handle.path), **view}}

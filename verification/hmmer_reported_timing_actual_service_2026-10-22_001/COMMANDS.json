@@ -1,0 +1,270 @@
+{
+  "publisher_commands": [
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python /tmp/hmmer-reported-timing-publication-20261022-001/inspect_structure.py > /tmp/hmmer-reported-timing-publication-20261022-001/structure.stdout.json",
+      "exit_code": 0
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python /tmp/hmmer-reported-timing-publication-20261022-001/validate_and_stage.py > /tmp/hmmer-reported-timing-publication-20261022-001/validation-001.stdout.log 2> /tmp/hmmer-reported-timing-publication-20261022-001/validation-001.stderr.log",
+      "exit_code": 0
+    },
+    {
+      "command": "/home/chia/repos/gene_annotation_episode/.venv/bin/python /tmp/hmmer-reported-timing-publication-20261022-001/finalize_and_publish.py > /tmp/hmmer-reported-timing-publication-20261022-001/publication-001.stdout.json 2> /tmp/hmmer-reported-timing-publication-20261022-001/publication-001.stderr.log",
+      "meaning": "This exact publication invocation; completion is recorded in its external stdout/exit result."
+    }
+  ],
+  "publisher_probe_failures": [
+    {
+      "meaning": "Read-only stdin schema inspection assumed a mapping for an actual list; no application/service call, no raw data repair.",
+      "metadata": "publisher/inspection-probe-001-failure.json"
+    }
+  ],
+  "service_commands": [
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:order",
+        "prepare-order",
+        "--translation-operation-key",
+        "hmmer-reported-timing-verification-001:translation",
+        "--registry-ref",
+        "execution_registry_hmmer_reported_timing_verification_001",
+        "--resource-id",
+        "hmmer-reported-timing-verification-001"
+      ],
+      "invocation": "20261022T072942_3e824dfe53784dc29f6fc6fb50c3ad83",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:order",
+        "phase": "prepare-order",
+        "registry_ref": "execution_registry_hmmer_reported_timing_verification_001",
+        "resource_id": "hmmer-reported-timing-verification-001",
+        "translation_operation_key": "hmmer-reported-timing-verification-001:translation"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:before-submit-report",
+        "timing-report"
+      ],
+      "invocation": "20261022T073004_bb44fc7aa81f4d39a3064a1c7d81c88d",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:before-submit-report",
+        "phase": "timing-report"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:submit",
+        "submit_once"
+      ],
+      "invocation": "20261022T073021_6f90c310372f429bac5e9c6707152d08",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:submit",
+        "phase": "submit_once"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:status",
+        "status_once"
+      ],
+      "invocation": "20261022T073040_bf876521dd784c3997523908861b1d78",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:status",
+        "phase": "status_once"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:result-page-1",
+        "result_once",
+        "--page",
+        "1"
+      ],
+      "invocation": "20261022T073119_74a18ee38a83460ba79255cebe7c5eed",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:result-page-1",
+        "page": 1,
+        "phase": "result_once"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:after-first-result",
+        "timing-report"
+      ],
+      "invocation": "20261022T073153_e25c0bf34f724744881ca3be4f67646c",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:after-first-result",
+        "phase": "timing-report"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:publish-page-1",
+        "publish",
+        "--receipt-ref",
+        "provider_operation_26bc8bd463741aea924eabd1"
+      ],
+      "invocation": "20261022T073240_6d7a97abe59847b797cea9813e4c4069",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:publish-page-1",
+        "phase": "publish",
+        "receipt_ref": "provider_operation_26bc8bd463741aea924eabd1"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:result-page-2",
+        "result_once",
+        "--page",
+        "2"
+      ],
+      "invocation": "20261022T073248_7d83911f88144c6b950fd18cc2b7cf69",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:result-page-2",
+        "page": 2,
+        "phase": "result_once"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:publish-page-2",
+        "publish",
+        "--receipt-ref",
+        "provider_operation_4e88be472b0304cdea6ed5c3"
+      ],
+      "invocation": "20261022T073310_cec74bf83bc74b0ca772d49445a7f2b0",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:publish-page-2",
+        "phase": "publish",
+        "receipt_ref": "provider_operation_4e88be472b0304cdea6ed5c3"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:after-second-page",
+        "timing-report"
+      ],
+      "invocation": "20261022T073311_27f0ffe680f842b68f1ec0d50000fc15",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:after-second-page",
+        "phase": "timing-report"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:cached-page-1",
+        "result_once",
+        "--page",
+        "1"
+      ],
+      "invocation": "20261022T073326_ced9b1044f6c4d15b043e8441b08e51b",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:cached-page-1",
+        "page": 1,
+        "phase": "result_once"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:submit",
+        "submit_once"
+      ],
+      "invocation": "20261022T073327_be1cb35d68a84007b2af643cfa85975e",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:submit",
+        "phase": "submit_once"
+      }
+    },
+    {
+      "canonical_argv": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "/tmp/hmmer-reported-timing-service-verification-20261022-001/verify_hmmer_reported_timing.py",
+        "--expected-runtime-pin",
+        "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "--operation-key",
+        "hmmer-reported-timing-verification-001:after-replay",
+        "timing-report"
+      ],
+      "invocation": "20261022T073327_ff7c3c123b2c4ac7a29dc38705a27944",
+      "recorded_parsed_arguments": {
+        "expected_runtime_pin": "cde521578e4531b93dcbe9e33eaf58881db867c0664c3cb9af93107d549e2623",
+        "operation_key": "hmmer-reported-timing-verification-001:after-replay",
+        "phase": "timing-report"
+      }
+    }
+  ],
+  "service_commands_representation": "Canonical argv reconstructed from exact parsed intent records; NOT verbatim original shell token order/text. No separate original shell log was retained."
+}

@@ -1,0 +1,33 @@
+--- /home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_directional_integration_2026-10-25_182/candidate/gene_annotation_episode/api_service_execution.py
++++ gene_annotation_episode/api_service_execution.py
+@@ -92,6 +92,8 @@
+         self.genome_alignment_returns = BVBRCGenomeAlignmentReturns(self)
+         from .bvbrc_proteome_returns import BVBRCProteomeReturns
+         self.proteome_returns = BVBRCProteomeReturns(self)
++        from .bvbrc_comparative_systems_returns import BVBRCComparativeSystemsReturns
++        self.comparative_systems_returns = BVBRCComparativeSystemsReturns(self)
+ 
+     def __getattr__(self, name):
+         # Preserve existing inspection ports for the unchanged legacy binding.
+@@ -130,6 +132,9 @@
+         else:
+             service = self.services[resource_id]
+             service.validate_request(assignment['request'], plain(scope) if scope is not None else None)
++            if service.service == 'bvbrc_appservice' and assignment['request'].get('required_application_id') == 'ComparativeSystems':
++                from .bvbrc_comparative_systems_tool_info import validate_comparative_request
++                validate_comparative_request(assignment['request'])
+             for key, value in assignment['constraints'].items():
+                 if key == 'allowed_resource_ids':
+                     valid = isinstance(value, list) and resource_id in value
+@@ -896,6 +901,11 @@
+                 return (self.proteome_returns.resolve_own(context, reference, namespace)
+                     if context.role == 'results' else
+                     self.proteome_returns.resolve_received(context, reference, namespace))
++            from .bvbrc_comparative_systems_returns import IDENTIFIER_NAMESPACES as COMPARATIVE_NAMESPACES
++            if namespace in COMPARATIVE_NAMESPACES:
++                return (self.comparative_systems_returns.resolve_own(context, reference, namespace)
++                    if context.role == 'results' else
++                    self.comparative_systems_returns.resolve_received(context, reference, namespace))
+             resolved = self.appservice.resolve(context, reference, namespace)
+             if resolved is not None:
+                 return resolved

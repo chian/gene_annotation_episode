@@ -1,0 +1,433 @@
+[
+  {
+    "run_directory": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/msa_dna-t3ija19s",
+    "process_id": 1042351,
+    "terminal_state": "SIGTERM exit143; process no longer present",
+    "operator_reason": "parent requested stop for measured repeated pure-validation repair before installing source-sensitive change",
+    "full_workflow_verified": false,
+    "table_counts": {
+      "runtime_episodes": 5,
+      "runtime_actions": 13,
+      "runtime_model_calls": 13,
+      "runtime_observations": 10,
+      "runtime_estimation_contexts": 10,
+      "runtime_report_attempts": 2,
+      "runtime_forms": 2
+    },
+    "state_snapshot": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/msa_dna-t3ija19s-interrupted-state-008.json",
+    "publications": [
+      {
+        "path": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/msa_dna-t3ija19s/run/api-service-execution/b1678481ef0512232db6ded72722b5f6d515b8ce7487d05049ecf3b289b46e65/episodes/7565f439b3f9815f5107e1f98545c4af87a55d286d55e6e61f764d7ee11f52d4/actions/c4f326e1a47a48dccd9a2afcbf56e9563adb225828e56089a4b3a5c5ad100215/bundle_publication.json",
+        "sha256": "330bc874fd0d5de5fcce248cd4a77576ea3bfdc1c3ba65f5fd58e6714fcc9130",
+        "origin": {
+          "arguments_sha256": "3243f5e84a381a6c0e7728c156de35fbbc6cf6d3b9432538d1f86be10ba62d15",
+          "assignment_sha256": "89baabe90115d9ac5b90709f0e3c965f5b5bb3d981eb6f907add03efe5b31d2f",
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "name": "api.bvbrc_appservice.download",
+          "operation_key": "alignment-composed-msa_dna-0:episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5:1",
+          "run_id": "alignment-composed-msa_dna-0",
+          "scope_sha256": "dfc16c3524fd27df023dccf247517dc0f9885e807756d3eea3626c232aabce8d"
+        },
+        "requested_form_status": "partial",
+        "completion_proof": null,
+        "adapter_status": "partial",
+        "numbers": {
+          "cells": 28,
+          "entropy": 0.9182958340544896,
+          "gaps": 0.21428571428571427,
+          "members": 4,
+          "native_score": null
+        },
+        "missing_requirements": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native-1",
+            "role": "analysis/frequency",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native-2",
+            "role": "analysis/consensus",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_slot_missing",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fartifact_selection%2F1/alignment_slot_missing",
+            "role": "frequency",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_slot_missing",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fartifact_selection%2F2/alignment_slot_missing",
+            "role": "consensus",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fanalysis%2Ffrequency_table_id/alignment_document_unavailable",
+            "role": "frequency",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fanalysis%2Fconsensus_alignment_id/alignment_document_unavailable",
+            "role": "consensus",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fcalculation_parameters%2Frequests%2F1%2Fobserved_table_id/alignment_document_unavailable",
+            "role": "frequency",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_deployed_version_unproven",
+            "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+            "role": "run",
+            "source_refs": []
+          }
+        ]
+      },
+      {
+        "path": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/msa_dna-t3ija19s/run/api-service-execution/b1678481ef0512232db6ded72722b5f6d515b8ce7487d05049ecf3b289b46e65/episodes/7565f439b3f9815f5107e1f98545c4af87a55d286d55e6e61f764d7ee11f52d4/actions/4c5afdcf62c4a8ee4eaa10becf77c5090399624929f8a02a46df53c9c82b9e0f/bundle_publication.json",
+        "sha256": "8a34b4edc05f0004fcf1ba2f42907f558f86e604b9830d5029cd00f5fb23a786",
+        "origin": {
+          "arguments_sha256": "870832ad9b4f9f2cdbc2d2d49a0e31bd1f47936ce504b7a1cb669f4da054e36b",
+          "assignment_sha256": "89baabe90115d9ac5b90709f0e3c965f5b5bb3d981eb6f907add03efe5b31d2f",
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "name": "api.bvbrc_appservice.download",
+          "operation_key": "alignment-composed-msa_dna-0:episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5:3",
+          "run_id": "alignment-composed-msa_dna-0",
+          "scope_sha256": "dfc16c3524fd27df023dccf247517dc0f9885e807756d3eea3626c232aabce8d"
+        },
+        "requested_form_status": "partial",
+        "completion_proof": null,
+        "adapter_status": "ok",
+        "numbers": {
+          "cells": 28,
+          "entropy": 0.9182958340544896,
+          "gaps": 0.21428571428571427,
+          "members": 4,
+          "native_score": 92.0
+        },
+        "missing_requirements": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native-2",
+            "role": "analysis/consensus",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_slot_missing",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fartifact_selection%2F2/alignment_slot_missing",
+            "role": "consensus",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/msa/analysis/%2Fanalyses%2F0%2Fanalysis%2Fconsensus_alignment_id/alignment_document_unavailable",
+            "role": "consensus",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_deployed_version_unproven",
+            "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+            "role": "run",
+            "source_refs": []
+          }
+        ]
+      },
+      {
+        "path": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/msa_dna-t3ija19s/run/api-service-execution/b1678481ef0512232db6ded72722b5f6d515b8ce7487d05049ecf3b289b46e65/episodes/7565f439b3f9815f5107e1f98545c4af87a55d286d55e6e61f764d7ee11f52d4/actions/8211986259b5152f43942f888e127707467c02882a67da11e036c24294223afa/bundle_publication.json",
+        "sha256": "d42f5101adbe1586736e08387c995705abd6009788acb87e5f1e94f5c5e7d6fb",
+        "origin": {
+          "arguments_sha256": "11c43e29be17eed85b2f59b0f7be2b9f3f74146c951f36be5c5cca7a0bb96f37",
+          "assignment_sha256": "89baabe90115d9ac5b90709f0e3c965f5b5bb3d981eb6f907add03efe5b31d2f",
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "name": "api.bvbrc_appservice.download",
+          "operation_key": "alignment-composed-msa_dna-0:episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5:5",
+          "run_id": "alignment-composed-msa_dna-0",
+          "scope_sha256": "dfc16c3524fd27df023dccf247517dc0f9885e807756d3eea3626c232aabce8d"
+        },
+        "requested_form_status": "satisfied",
+        "completion_proof": {
+          "assignment_sha256": "89baabe90115d9ac5b90709f0e3c965f5b5bb3d981eb6f907add03efe5b31d2f",
+          "endpoint": "completed_job_outputs",
+          "episode_id": "episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5",
+          "operation_key": "alignment-composed-msa_dna-0:episode_30e6bf631a570dbce887a8a5ba2a5796636d6ab98f77b9a02ab8c8f9ea6711d5:5",
+          "receipt_sha256": "5bdb8cfb9e2907d69bbbb6ddaffb5121d6d1074547995c125c01d8cf6a119844",
+          "run_id": "alignment-composed-msa_dna-0",
+          "validation_keys": [
+            "requested_service_result"
+          ],
+          "version": "practical_completion_v1"
+        },
+        "adapter_status": "ok",
+        "numbers": {
+          "cells": 28,
+          "entropy": 0.9182958340544896,
+          "gaps": 0.21428571428571427,
+          "members": 4,
+          "native_score": 92.0
+        },
+        "missing_requirements": [
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_deployed_version_unproven",
+            "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+            "role": "run",
+            "source_refs": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_directory": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/metacats_files-9rbzqxah",
+    "process_id": 1043087,
+    "terminal_state": "SIGTERM exit143; process no longer present",
+    "operator_reason": "parent requested stop for measured repeated pure-validation repair before installing source-sensitive change",
+    "full_workflow_verified": false,
+    "table_counts": {
+      "runtime_episodes": 5,
+      "runtime_actions": 13,
+      "runtime_model_calls": 13,
+      "runtime_observations": 10,
+      "runtime_estimation_contexts": 10,
+      "runtime_report_attempts": 2,
+      "runtime_forms": 2
+    },
+    "state_snapshot": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/metacats_files-9rbzqxah-interrupted-state-008.json",
+    "publications": [
+      {
+        "path": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/metacats_files-9rbzqxah/run/api-service-execution/0d0dd222e276fffa86ffef87eefa0a332186bb1ca85129c5b95f0cfa9463d1c5/episodes/02d9784bc0c1d00ef780de7bf0cf35bd74d9c60280ea17ff0c9263b48044eea3/actions/9697107da618f5936dc9fec2c952bc4777ba2524ee741b9e7287407d7f22c3a8/bundle_publication.json",
+        "sha256": "a3627539a85fd3886f19cd8a0de3ab2163c4fe6febe26ff429d45fb003f623ff",
+        "origin": {
+          "arguments_sha256": "827c22902c034d32e7d7267f06552b29b8d35678f37ce6b4ceea91584691829d",
+          "assignment_sha256": "71827b653eee48984e07b8766a97dd71a55f3a5925f777fb12dcbc216f07e659",
+          "episode_id": "episode_ef8c02d620d223b153adc19418bcc399949b0c44d80f7021feee63acdf133bd0",
+          "name": "api.bvbrc_appservice.download",
+          "operation_key": "alignment-composed-metacats_files-0:episode_ef8c02d620d223b153adc19418bcc399949b0c44d80f7021feee63acdf133bd0:1",
+          "run_id": "alignment-composed-metacats_files-0",
+          "scope_sha256": "dfc16c3524fd27df023dccf247517dc0f9885e807756d3eea3626c232aabce8d"
+        },
+        "requested_form_status": "partial",
+        "completion_proof": null,
+        "adapter_status": "partial",
+        "numbers": {
+          "chi_square": null,
+          "members": 12,
+          "native_p": null,
+          "p_value": null
+        },
+        "missing_requirements": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native-1",
+            "role": "analysis/metadata",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native-2",
+            "role": "analysis/chisq",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_slot_missing",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fartifact_selection%2F1/alignment_slot_missing",
+            "role": "metadata",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_slot_missing",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fartifact_selection%2F2/alignment_slot_missing",
+            "role": "chisq",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fanalyses%2F0%2Fanalysis%2Fmetadata_document_id/alignment_document_unavailable",
+            "role": "metadata",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fanalyses%2F0%2Fanalysis%2Fchisq_table_ids%2F0/alignment_document_unavailable",
+            "role": "chisq",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fanalyses%2F0%2Fscientific_inputs%2F0%2Fmetadata_joins%2F0%2Fmetadata/alignment_document_unavailable",
+            "role": "metadata",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fanalyses%2F0%2Fscientific_inputs%2F0%2Fcategories%2F0%2Fmetadata/alignment_document_unavailable",
+            "role": "metadata",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "metacats_metadata_join_missing",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fanalyses%2F0%2Fscientific_inputs%2F0%2Fbiological_group_populations%2F0/metacats_metadata_join_missing",
+            "role": "metacats_context",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "biological_row_membership_missing",
+            "requirement_id": "analysis/category/biological_row_membership_missing",
+            "role": "metacats_group_association",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "biological_group_population_required",
+            "requirement_id": "analysis/category/biological_group_population_required",
+            "role": "metacats_group_association",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "native_r_column_identity_required",
+            "requirement_id": "analysis/category/native_r_column_identity_required",
+            "role": "native_r_columns",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "metacats_biological_group_membership_required",
+            "requirement_id": "metacats/analysis/counts/metacats_biological_group_membership_required",
+            "role": "counts",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_calculation_dependency_unavailable",
+            "requirement_id": "metacats/analysis/stats/alignment_calculation_dependency_unavailable",
+            "role": "stats",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_calculation_dependency_unavailable",
+            "requirement_id": "metacats/analysis/effects/alignment_calculation_dependency_unavailable",
+            "role": "effects",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_calculation_dependency_unavailable",
+            "requirement_id": "metacats/analysis/adequacy/alignment_calculation_dependency_unavailable",
+            "role": "adequacy",
+            "source_refs": []
+          }
+        ]
+      },
+      {
+        "path": "verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/runs/metacats_files-9rbzqxah/run/api-service-execution/0d0dd222e276fffa86ffef87eefa0a332186bb1ca85129c5b95f0cfa9463d1c5/episodes/02d9784bc0c1d00ef780de7bf0cf35bd74d9c60280ea17ff0c9263b48044eea3/actions/3b1019bf2173b57d2623b8bfa78327793f1e77a21d92c322590cd7a604372a21/bundle_publication.json",
+        "sha256": "cf9096772b0296f0937a705c1e2b6b72d75c527f7da8e335477a379cf79a97c7",
+        "origin": {
+          "arguments_sha256": "21c830bad8bb23372f8ebe2a6b3a28c91b5e4decd617c247506bad91a32f3983",
+          "assignment_sha256": "71827b653eee48984e07b8766a97dd71a55f3a5925f777fb12dcbc216f07e659",
+          "episode_id": "episode_ef8c02d620d223b153adc19418bcc399949b0c44d80f7021feee63acdf133bd0",
+          "name": "api.bvbrc_appservice.download",
+          "operation_key": "alignment-composed-metacats_files-0:episode_ef8c02d620d223b153adc19418bcc399949b0c44d80f7021feee63acdf133bd0:3",
+          "run_id": "alignment-composed-metacats_files-0",
+          "scope_sha256": "dfc16c3524fd27df023dccf247517dc0f9885e807756d3eea3626c232aabce8d"
+        },
+        "requested_form_status": "partial",
+        "completion_proof": null,
+        "adapter_status": "partial",
+        "numbers": {
+          "chi_square": 8.330556481172943,
+          "members": 12,
+          "native_p": null,
+          "p_value": 0.0038983714243371837
+        },
+        "missing_requirements": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native-2",
+            "role": "analysis/chisq",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "alignment_slot_missing",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fartifact_selection%2F2/alignment_slot_missing",
+            "role": "chisq",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "alignment_document_unavailable",
+            "requirement_id": "alignment-bundle/metacats/analysis/%2Fanalyses%2F0%2Fanalysis%2Fchisq_table_ids%2F0/alignment_document_unavailable",
+            "role": "chisq",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "native_r_column_identity_required",
+            "requirement_id": "analysis/category/native_r_column_identity_required",
+            "role": "native_r_columns",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "nondegenerate_raw_effect_required",
+            "requirement_id": "biological_group_counts:02494bb6c1bb0397ec4d3e2df23078256d9baf09add1dec0ed77f0222028de0e/nondegenerate_raw_effect_required",
+            "role": "biological_group_population",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "nondegenerate_raw_effect_required",
+            "requirement_id": "biological_group_counts:1fae8d83257cec5e3f7bdfd4e9716e3ea38a0a812e7aba3c4f8b1b233773f168/nondegenerate_raw_effect_required",
+            "role": "biological_group_population",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "nondegenerate_raw_effect_required",
+            "requirement_id": "biological_group_counts:64d8aadd1b75fa7c4d2a9302a994df2ba5da5d2658507b2c13b977881db03ba8/nondegenerate_raw_effect_required",
+            "role": "biological_group_population",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "nonempty_resolved_pair_margins_required",
+            "requirement_id": "biological_group_pair:8cad774c333d047c5825648afa71ccd44a92942a3dbe91a1060332ef901ff45d/nonempty_resolved_pair_margins_required",
+            "role": "biological_group_population",
+            "source_refs": []
+          }
+        ]
+      }
+    ]
+  }
+]

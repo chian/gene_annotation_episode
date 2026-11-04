@@ -1,0 +1,809 @@
+{
+  "version": "a105_common_assessment_sheet_v1",
+  "axis": "A105",
+  "evaluation_scope": "common_assertion_contrast",
+  "cells": [
+    {
+      "component": "binding_only_residual_variance",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": 9.861465816221162e-05,
+      "conditional_exact_value": {
+        "numerator": "8119633348003301",
+        "denominator": "82336982141613124368"
+      },
+      "unit": "dimensionless_squared",
+      "status": "conditional_scenario",
+      "formula": "J_D*joint_selected_estimate_covariance*J_D_transpose",
+      "meaning": "First-order variance of that log discrepancy, using the actual joint selected-estimate owners.",
+      "origin": "derived",
+      "input_origins": [
+        "reported",
+        "proposed",
+        "synthetic"
+      ],
+      "source_missing_reasons": [],
+      "relationship_reasons": [],
+      "implementation_reasons": [],
+      "operand_roles": [
+        "product_test",
+        "product_reference",
+        "free_substrate_test",
+        "Kd_test",
+        "free_substrate_reference",
+        "Kd_reference"
+      ],
+      "operand_keys": [
+        "literature_measurement_9b09afd3cb451498df7b7e47",
+        "literature_measurement_11ff5136de7144ea4da862d5",
+        "literature_measurement_5c256320331d52b05c214a0e",
+        "literature_measurement_35e3720284f829c7c2f5712f",
+        "literature_measurement_fcd03b49d6215eedad5193d4"
+      ],
+      "model_keys": [
+        "common_selected_model_ff24b22a8d0d256ee15214ae"
+      ],
+      "contribution_key": "common_contribution_8d59003f4397dfed8fcd0c80",
+      "native_semantics": null,
+      "numeric_origin": "derived",
+      "reported_uncertainty": null,
+      "uncertainty": {
+        "scope": "log_residual_operand_propagation",
+        "variance_status": "known",
+        "covariance_source_ref": "source_5760a615917bc8a1144470a7",
+        "basis": "joint_covariance_of_selected_estimates",
+        "model": "first_order_covariance_propagation"
+      }
+    }
+  ],
+  "context": [
+    {
+      "field": "assessment.assertion.molecule",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3823,
+        "end": 3830
+      },
+      "display_text": "P450cam",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.assertion.conditions",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 57807,
+        "end": 57813
+      },
+      "display_text": "37 °C",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.arms.reference.construct",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74249,
+        "end": 74258
+      },
+      "display_text": "Wild-type",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.arms.test.construct",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74572,
+        "end": 74577
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.subject_relationship.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.product.endpoint.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.product.normalization.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.reporter.endpoint.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.reporter.normalization.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.kinetic.endpoint.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.kinetic.normalization.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.binding.endpoint.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.binding.normalization.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.correction.endpoint.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.relationships.correction.normalization.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.product_reporter_relationship.witnesses.support",
+      "location": {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 3849,
+        "end": 3854
+      },
+      "display_text": "T252N",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.equilibrium.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.one_site.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.free_substrate_treatment.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.binding_catalysis_applicability.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.turnover_proportional_to_occupancy.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.fixed_post_binding_rate.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.equal_recovery.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.equal_active_fraction.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    },
+    {
+      "field": "assessment.model.assumptions.equal_nuisance_response.witnesses.support",
+      "location": {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 39,
+        "end": 115
+      },
+      "display_text": "Model sensitivity stipulates one-site equilibrium and equal other responses.",
+      "implementation_status": "scoped",
+      "implementation_reason": null
+    }
+  ],
+  "numerical_scope_implementation_status": "scoped",
+  "host_custody": {
+    "source_refs": [
+      "source_aac119387c3e0c2362e548a1",
+      "source_f2a1db7c4de8f393629d6919",
+      "source_5760a615917bc8a1144470a7"
+    ],
+    "source_artifacts": [
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "representation": "original",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de"
+      },
+      {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "representation": "original",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233"
+      },
+      {
+        "source_ref": "source_5760a615917bc8a1144470a7",
+        "representation": "original",
+        "artifact_ref": "artifact_73bb492a1a6c1f46a920f3b4c3ae581c95056a94b84f8b46b169b9adec5e1eea"
+      }
+    ],
+    "withheld_locations": [
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74307,
+        "end": 74310
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74359,
+        "end": 74362
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74512,
+        "end": 74514
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74626,
+        "end": 74628
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74677,
+        "end": 74680
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74830,
+        "end": 74832
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74307,
+        "end": 74310
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74359,
+        "end": 74362
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74512,
+        "end": 74514
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74626,
+        "end": 74628
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74677,
+        "end": 74680
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 74830,
+        "end": 74832
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70683,
+        "end": 70686
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70690,
+        "end": 70691
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70860,
+        "end": 70862
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70866,
+        "end": 70867
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70740,
+        "end": 70742
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70746,
+        "end": 70748
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70916,
+        "end": 70918
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 70922,
+        "end": 70924
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 78110,
+        "end": 78113
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 78117,
+        "end": 78120
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 78232,
+        "end": 78234
+      },
+      {
+        "source_ref": "source_aac119387c3e0c2362e548a1",
+        "artifact_ref": "artifact_fe5ba79bc3152f6d94f730cc7e02b43c041fbcb5092afa434386ba3c60c2e7de",
+        "representation": "original",
+        "start": 78238,
+        "end": 78239
+      },
+      {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 25,
+        "end": 29
+      },
+      {
+        "source_ref": "source_f2a1db7c4de8f393629d6919",
+        "artifact_ref": "artifact_5f9eb9f5c5905703074fde7a8bfa946263ade4748d5177cee8da9836fe835233",
+        "representation": "original",
+        "start": 25,
+        "end": 29
+      },
+      {
+        "source_ref": "source_5760a615917bc8a1144470a7",
+        "artifact_ref": "artifact_73bb492a1a6c1f46a920f3b4c3ae581c95056a94b84f8b46b169b9adec5e1eea",
+        "representation": "original",
+        "start": 0,
+        "end": 1026
+      }
+    ]
+  },
+  "assertion_resolution": "binding_occupancy_alternative",
+  "question": "named_alternative",
+  "dependence": [
+    {
+      "roles": [
+        "free_substrate_reference",
+        "free_substrate_test"
+      ],
+      "relation": "shared_primitive"
+    },
+    {
+      "roles": [
+        "product_reference",
+        "product_test",
+        "reporter_reference",
+        "reporter_test",
+        "kcat_reference",
+        "kcat_test",
+        "Km_reference",
+        "Km_test",
+        "Kd_reference",
+        "Kd_test",
+        "free_substrate_reference",
+        "free_substrate_test"
+      ],
+      "relation": "sampling_unknown"
+    },
+    {
+      "roles": [
+        "product_test",
+        "Kd_test"
+      ],
+      "relation": "complementary_endpoint"
+    }
+  ],
+  "relationship_meanings": {
+    "subject": "intended_variant",
+    "product_reporter": "author_assigned_pair",
+    "sampling": "unknown",
+    "groups": {
+      "product": {
+        "endpoint": "same_estimand",
+        "normalization": "compatible_supported",
+        "preparation": "unknown",
+        "conditions": "unknown"
+      },
+      "reporter": {
+        "endpoint": "same_estimand",
+        "normalization": "compatible_supported",
+        "preparation": "unknown",
+        "conditions": "unknown"
+      },
+      "kinetic": {
+        "endpoint": "same_estimand",
+        "normalization": "compatible_supported",
+        "preparation": "unknown",
+        "conditions": "unknown"
+      },
+      "binding": {
+        "endpoint": "same_estimand",
+        "normalization": "compatible_supported",
+        "preparation": "unknown",
+        "conditions": "unknown"
+      },
+      "correction": {
+        "endpoint": "same_estimand",
+        "normalization": "compatible_supported",
+        "preparation": "unknown",
+        "conditions": "unknown"
+      }
+    },
+    "correction_factorization": "unknown",
+    "model_assumptions": {
+      "equilibrium": "stipulated_sensitivity",
+      "one_site": "stipulated_sensitivity",
+      "free_substrate_treatment": "stipulated_sensitivity",
+      "binding_catalysis_applicability": "stipulated_sensitivity",
+      "turnover_proportional_to_occupancy": "stipulated_sensitivity",
+      "fixed_post_binding_rate": "stipulated_sensitivity",
+      "equal_recovery": "stipulated_sensitivity",
+      "equal_active_fraction": "stipulated_sensitivity",
+      "equal_nuisance_response": "stipulated_sensitivity"
+    }
+  },
+  "model_meanings": {
+    "kind": "one_site_equilibrium",
+    "scope": "conditional_sensitivity",
+    "substrate_ownership": "shared_owner",
+    "substrate_uncertainty": "selected_estimate_covariance"
+  },
+  "estimate_bindings": [
+    {
+      "role": "product_reference",
+      "owner_key": "literature_measurement_11ff5136de7144ea4da862d5",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": "common_assay_38c4bd0cc38d5c41ab677272",
+      "unit": "per_min",
+      "numeric_origin": "received_exact_component"
+    },
+    {
+      "role": "product_test",
+      "owner_key": "literature_measurement_9b09afd3cb451498df7b7e47",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": "common_assay_38c4bd0cc38d5c41ab677272",
+      "unit": "per_min",
+      "numeric_origin": "received_exact_component"
+    },
+    {
+      "role": "reporter_reference",
+      "owner_key": "literature_measurement_d892ee74a6d28cef3986c7ae",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": "common_assay_38c4bd0cc38d5c41ab677272",
+      "unit": "per_min",
+      "numeric_origin": "received_exact_component"
+    },
+    {
+      "role": "reporter_test",
+      "owner_key": "literature_measurement_20964a70377f85a73e1ae08c",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": "common_assay_38c4bd0cc38d5c41ab677272",
+      "unit": "per_min",
+      "numeric_origin": "received_exact_component"
+    },
+    {
+      "role": "kcat_reference",
+      "owner_key": "literature_measurement_d96b2f3d41267b50b9136ca9",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "per_min",
+      "numeric_origin": "original_source_token"
+    },
+    {
+      "role": "kcat_test",
+      "owner_key": "literature_measurement_7dbfedcf511274ee23a1952d",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "per_min",
+      "numeric_origin": "original_source_token"
+    },
+    {
+      "role": "Km_reference",
+      "owner_key": "literature_measurement_deedcab1ab5c263efb7b5b7f",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "uM",
+      "numeric_origin": "original_source_token"
+    },
+    {
+      "role": "Km_test",
+      "owner_key": "literature_measurement_6076c5f2a6dea6327ad9b1fe",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "uM",
+      "numeric_origin": "original_source_token"
+    },
+    {
+      "role": "Kd_reference",
+      "owner_key": "literature_measurement_fcd03b49d6215eedad5193d4",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "uM",
+      "numeric_origin": "original_source_token"
+    },
+    {
+      "role": "Kd_test",
+      "owner_key": "literature_measurement_35e3720284f829c7c2f5712f",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "uM",
+      "numeric_origin": "original_source_token"
+    },
+    {
+      "role": "free_substrate_reference",
+      "owner_key": "literature_measurement_5c256320331d52b05c214a0e",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "uM",
+      "numeric_origin": "original_source_token"
+    },
+    {
+      "role": "free_substrate_test",
+      "owner_key": "literature_measurement_5c256320331d52b05c214a0e",
+      "physical_owner_key": null,
+      "population_key": null,
+      "assay_key": null,
+      "unit": "uM",
+      "numeric_origin": "original_source_token"
+    }
+  ],
+  "annotation_credit": null,
+  "remaining_implementation_limits": [
+    "selected_path_binding_is_host_responsibility",
+    "general_quality_compilation_unfinished",
+    "same_estimand_contradiction_compilation_unfinished",
+    "no_target_correspondence_or_final_credit"
+  ]
+}

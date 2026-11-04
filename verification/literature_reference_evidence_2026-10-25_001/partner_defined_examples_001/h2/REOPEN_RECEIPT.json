@@ -1,0 +1,924 @@
+{
+  "case": "h2",
+  "status": "passed",
+  "cells": 8,
+  "selected_outcome_equals_saved": true,
+  "frozen_form_equals_saved": true,
+  "admitted_subset_equals_saved": true,
+  "all_SQL_tables_and_histories_unchanged": true,
+  "SQL_table_count": 60,
+  "counts_before_and_after": {
+    "observations": 3,
+    "population_operations": 1,
+    "parent_receipts": 1
+  },
+  "source_work_disabled": [
+    "gene_annotation_episode.literature_assay_inputs._Sources",
+    "gene_annotation_episode.literature_assay_inputs._fail",
+    "gene_annotation_episode.literature_assay_inputs._index",
+    "gene_annotation_episode.literature_assay_inputs._interpretation",
+    "gene_annotation_episode.literature_assay_inputs._keys",
+    "gene_annotation_episode.literature_assay_inputs._nullable",
+    "gene_annotation_episode.literature_assay_inputs._numeric",
+    "gene_annotation_episode.literature_assay_inputs._text",
+    "gene_annotation_episode.literature_assay_inputs._witness_schema",
+    "gene_annotation_episode.literature_binding_model_storage._Sources",
+    "gene_annotation_episode.literature_binding_model_storage._witness_schema",
+    "gene_annotation_episode.literature_binding_storage._Sources",
+    "gene_annotation_episode.literature_binding_storage._witness_schema",
+    "gene_annotation_episode.literature_context_inputs._Sources",
+    "gene_annotation_episode.literature_context_inputs._fail",
+    "gene_annotation_episode.literature_context_inputs._keys",
+    "gene_annotation_episode.literature_context_inputs._nullable",
+    "gene_annotation_episode.literature_context_inputs._numeric",
+    "gene_annotation_episode.literature_context_inputs._text",
+    "gene_annotation_episode.literature_context_inputs._witness_schema",
+    "gene_annotation_episode.literature_figure_inputs._Sources",
+    "gene_annotation_episode.literature_figure_inputs._fail",
+    "gene_annotation_episode.literature_figure_inputs._keys",
+    "gene_annotation_episode.literature_figure_inputs._nullable",
+    "gene_annotation_episode.literature_figure_inputs._numeric",
+    "gene_annotation_episode.literature_figure_inputs._text",
+    "gene_annotation_episode.literature_figure_inputs._witness_schema",
+    "gene_annotation_episode.literature_partner_calculations._calculate",
+    "gene_annotation_episode.literature_partner_calculations._cell",
+    "gene_annotation_episode.literature_partner_calculations._check",
+    "gene_annotation_episode.literature_partner_calculations._closed",
+    "gene_annotation_episode.literature_partner_calculations._domain",
+    "gene_annotation_episode.literature_partner_calculations._enum",
+    "gene_annotation_episode.literature_partner_calculations._factor_differences",
+    "gene_annotation_episode.literature_partner_calculations._fail",
+    "gene_annotation_episode.literature_partner_calculations._float",
+    "gene_annotation_episode.literature_partner_calculations._native",
+    "gene_annotation_episode.literature_partner_calculations._number",
+    "gene_annotation_episode.literature_partner_calculations._text",
+    "gene_annotation_episode.literature_partner_calculations._unit",
+    "gene_annotation_episode.literature_partner_calculations._validate",
+    "gene_annotation_episode.literature_partner_calculations.populate_partner_components",
+    "gene_annotation_episode.literature_partner_defined_units._contained",
+    "gene_annotation_episode.literature_partner_defined_units._contexts",
+    "gene_annotation_episode.literature_partner_defined_units._definition_scale",
+    "gene_annotation_episode.literature_partner_defined_units._definition_selection",
+    "gene_annotation_episode.literature_partner_defined_units._enriched_schema",
+    "gene_annotation_episode.literature_partner_defined_units._fail",
+    "gene_annotation_episode.literature_partner_defined_units._finite_float",
+    "gene_annotation_episode.literature_partner_defined_units._keys",
+    "gene_annotation_episode.literature_partner_defined_units._normal",
+    "gene_annotation_episode.literature_partner_defined_units._number_fraction",
+    "gene_annotation_episode.literature_partner_defined_units._parsed_number_schema",
+    "gene_annotation_episode.literature_partner_defined_units._quantity_token",
+    "gene_annotation_episode.literature_partner_defined_units._rate_unit",
+    "gene_annotation_episode.literature_partner_defined_units._selected_witness",
+    "gene_annotation_episode.literature_partner_defined_units._source_witness",
+    "gene_annotation_episode.literature_partner_defined_units._unit_continuation",
+    "gene_annotation_episode.literature_partner_defined_units._whole_entity",
+    "gene_annotation_episode.literature_partner_defined_units._witness_schema",
+    "gene_annotation_episode.literature_partner_defined_units._witness_shape",
+    "gene_annotation_episode.literature_partner_defined_units.convert_defined_source_number",
+    "gene_annotation_episode.literature_partner_defined_units.defined_rate_unit_schema",
+    "gene_annotation_episode.literature_partner_defined_units.number_selector_schema",
+    "gene_annotation_episode.literature_partner_defined_units.parsed_defined_rate_unit_schema",
+    "gene_annotation_episode.literature_partner_defined_units.read_defined_rate_unit",
+    "gene_annotation_episode.literature_partner_defined_units.read_source_number",
+    "gene_annotation_episode.literature_partner_defined_units.validate_defined_spread_unit",
+    "gene_annotation_episode.literature_partner_defined_units.validate_source_spread_unit",
+    "gene_annotation_episode.literature_partner_inputs._Sources",
+    "gene_annotation_episode.literature_partner_inputs._fail",
+    "gene_annotation_episode.literature_partner_inputs._json_recipe",
+    "gene_annotation_episode.literature_partner_inputs._keys",
+    "gene_annotation_episode.literature_partner_inputs._nullable",
+    "gene_annotation_episode.literature_partner_inputs._numeric",
+    "gene_annotation_episode.literature_partner_inputs._text",
+    "gene_annotation_episode.literature_partner_inputs._witness_schema",
+    "gene_annotation_episode.literature_partner_inputs.partner_population_schema -> independently frozen shape-only schema",
+    "gene_annotation_episode.literature_partner_inputs.populate_partner_components",
+    "gene_annotation_episode.literature_partner_inputs.read_partner_inputs",
+    "gene_annotation_episode.literature_partner_native_inputs._Sources",
+    "gene_annotation_episode.literature_partner_native_inputs._arm",
+    "gene_annotation_episode.literature_partner_native_inputs._arm_schema",
+    "gene_annotation_episode.literature_partner_native_inputs._conditions",
+    "gene_annotation_episode.literature_partner_native_inputs._convert",
+    "gene_annotation_episode.literature_partner_native_inputs._enriched_witness_schema",
+    "gene_annotation_episode.literature_partner_native_inputs._enum",
+    "gene_annotation_episode.literature_partner_native_inputs._fail",
+    "gene_annotation_episode.literature_partner_native_inputs._identity",
+    "gene_annotation_episode.literature_partner_native_inputs._keys",
+    "gene_annotation_episode.literature_partner_native_inputs._nullable",
+    "gene_annotation_episode.literature_partner_native_inputs._parsed_number_schema",
+    "gene_annotation_episode.literature_partner_native_inputs._rate",
+    "gene_annotation_episode.literature_partner_native_inputs._read_unit",
+    "gene_annotation_episode.literature_partner_native_inputs._text",
+    "gene_annotation_episode.literature_partner_native_inputs._unit_schema",
+    "gene_annotation_episode.literature_partner_native_inputs._witness",
+    "gene_annotation_episode.literature_partner_native_inputs._witness_schema",
+    "gene_annotation_episode.literature_partner_native_inputs.convert_defined_source_number",
+    "gene_annotation_episode.literature_partner_native_inputs.convert_source_number",
+    "gene_annotation_episode.literature_partner_native_inputs.defined_rate_unit_schema",
+    "gene_annotation_episode.literature_partner_native_inputs.native_evidence_schema",
+    "gene_annotation_episode.literature_partner_native_inputs.number_selector_schema",
+    "gene_annotation_episode.literature_partner_native_inputs.parsed_defined_rate_unit_schema",
+    "gene_annotation_episode.literature_partner_native_inputs.partner_source_population_schema -> independently frozen shape-only schema",
+    "gene_annotation_episode.literature_partner_native_inputs.populate_partner_components",
+    "gene_annotation_episode.literature_partner_native_inputs.read_defined_rate_unit",
+    "gene_annotation_episode.literature_partner_native_inputs.read_partner_native_inputs",
+    "gene_annotation_episode.literature_partner_native_inputs.read_source_number",
+    "gene_annotation_episode.literature_partner_native_inputs.read_source_rate_unit",
+    "gene_annotation_episode.literature_partner_native_inputs.validate_defined_spread_unit",
+    "gene_annotation_episode.literature_partner_source_fields._contexts",
+    "gene_annotation_episode.literature_partner_source_fields._fail",
+    "gene_annotation_episode.literature_partner_source_fields._index",
+    "gene_annotation_episode.literature_partner_source_fields._keys",
+    "gene_annotation_episode.literature_partner_source_fields._rate_unit",
+    "gene_annotation_episode.literature_partner_source_fields._relation",
+    "gene_annotation_episode.literature_partner_source_fields._selected_witness",
+    "gene_annotation_episode.literature_partner_source_fields._unit_continuation",
+    "gene_annotation_episode.literature_partner_source_fields._witness_schema",
+    "gene_annotation_episode.literature_partner_source_fields.convert_source_number",
+    "gene_annotation_episode.literature_partner_source_fields.number_selector_schema",
+    "gene_annotation_episode.literature_partner_source_fields.read_source_number",
+    "gene_annotation_episode.literature_partner_source_fields.read_source_rate_unit",
+    "gene_annotation_episode.literature_partner_source_fields.validate_source_spread_unit",
+    "gene_annotation_episode.literature_partner_storage._native_evidence_schema",
+    "gene_annotation_episode.literature_partner_storage._native_population_schema -> independently frozen shape-only schema",
+    "gene_annotation_episode.literature_partner_storage.partner_population_schema -> independently frozen shape-only schema",
+    "gene_annotation_episode.literature_partner_storage.partner_source_population_schema -> independently frozen shape-only schema",
+    "gene_annotation_episode.literature_partner_storage.read_partner_inputs",
+    "gene_annotation_episode.literature_perturbation_inputs._Sources",
+    "gene_annotation_episode.literature_perturbation_inputs._fail",
+    "gene_annotation_episode.literature_perturbation_inputs._keys",
+    "gene_annotation_episode.literature_perturbation_inputs._nullable",
+    "gene_annotation_episode.literature_perturbation_inputs._numeric",
+    "gene_annotation_episode.literature_perturbation_inputs._text",
+    "gene_annotation_episode.literature_perturbation_inputs._witness_schema",
+    "gene_annotation_episode.literature_reaction_inputs._Sources",
+    "gene_annotation_episode.literature_reaction_inputs._fail",
+    "gene_annotation_episode.literature_reaction_inputs._keys",
+    "gene_annotation_episode.literature_reaction_inputs._nullable",
+    "gene_annotation_episode.literature_reaction_inputs._numeric",
+    "gene_annotation_episode.literature_reaction_inputs._text",
+    "gene_annotation_episode.literature_reaction_inputs._witness_schema",
+    "gene_annotation_episode.literature_structure_inputs._Sources",
+    "gene_annotation_episode.literature_structure_inputs._fail",
+    "gene_annotation_episode.literature_structure_inputs._keys",
+    "gene_annotation_episode.literature_structure_inputs._nullable",
+    "gene_annotation_episode.literature_structure_inputs._numeric",
+    "gene_annotation_episode.literature_structure_inputs._text",
+    "gene_annotation_episode.literature_structure_inputs._witness_schema",
+    "gene_annotation_episode.literature_transport_inputs._Sources",
+    "gene_annotation_episode.literature_transport_inputs._fail",
+    "gene_annotation_episode.literature_transport_inputs._keys",
+    "gene_annotation_episode.literature_transport_inputs._nullable",
+    "gene_annotation_episode.literature_transport_inputs._numeric",
+    "gene_annotation_episode.literature_transport_inputs._text",
+    "gene_annotation_episode.literature_transport_inputs._witness_schema"
+  ],
+  "selected_operation_argument_schemas": "retained and native independently frozen shape-only; no source-witness schema helpers",
+  "operation_catalog": "exact retained complete original capability contracts",
+  "SQL_query_only": true,
+  "original_input_bytes_read": false,
+  "original_input_bytes_read_meaning": "No original Store source artifact was read by replay/projection; whole-pin integrity checks separately hash pinned assets as opaque bytes",
+  "reacquisition_host_calls_disabled": true,
+  "attempted_reacquisition_host_events": [],
+  "allowed_saved_artifacts": [
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_a236bd5694a06ab8796aab1217ddb0910cd2f7473ffaf8b4ec3446005338cd07"
+  ],
+  "actual_artifact_reads": [
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_a236bd5694a06ab8796aab1217ddb0910cd2f7473ffaf8b4ec3446005338cd07",
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_a236bd5694a06ab8796aab1217ddb0910cd2f7473ffaf8b4ec3446005338cd07",
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_a236bd5694a06ab8796aab1217ddb0910cd2f7473ffaf8b4ec3446005338cd07",
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517",
+    "artifact_a236bd5694a06ab8796aab1217ddb0910cd2f7473ffaf8b4ec3446005338cd07",
+    "artifact_31067e6946136659ffec4f6ec6e63bbfa1d2f0a8f9ab45a36b0d93f14f1a1517"
+  ],
+  "original_source_artifacts_forbidden": [
+    "artifact_7944c5568b1ee0f8ff343be2a7f57c1b28e2e71d4e480fd984ac668136e0357f",
+    "artifact_91c0ed6ce15d330e4359a231fe593039ebd72459d1ba1f585482f67fa7f66821"
+  ],
+  "runtime": {
+    "interpreter": "/usr/bin/python3.12",
+    "interpreter_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+    "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "Pillow_version": "12.3.0",
+    "imported_module_hashes": [
+      {
+        "module": "PIL",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/__init__.py",
+        "sha256": "7361b6ad3878589affe5956e4a4da24d71398b0891fd3a8c15e9362217b4ca01"
+      },
+      {
+        "module": "PIL.ExifTags",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/ExifTags.py",
+        "sha256": "61c257add6fffd463aa788e37f998b3920c57fe931db10faf9bd921eef36bdf3"
+      },
+      {
+        "module": "PIL.Image",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/Image.py",
+        "sha256": "04af3f2db7ffdd61e829fa7aa8f5481d394a0a4129a8fd8aa5b13908928fcd6d"
+      },
+      {
+        "module": "PIL.ImageMode",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/ImageMode.py",
+        "sha256": "69a6551c088211a9ce0362b58cddc3956dcd3ca6bc0e6e672174d712bcf2166b"
+      },
+      {
+        "module": "PIL.TiffTags",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/TiffTags.py",
+        "sha256": "766dea350424b9a2caab3513be794689403c2b7222cd038006f69cff08edb45d"
+      },
+      {
+        "module": "PIL._binary",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/_binary.py",
+        "sha256": "a6e0e837223ccab3b0e91c77223c951d3b3fb9d69ac2ce52430ced719baf3975"
+      },
+      {
+        "module": "PIL._deprecate",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/_deprecate.py",
+        "sha256": "2a1c8b566418555c30d2b3916d4db84dededf1f3adf46d8b78ce9f24659b974a"
+      },
+      {
+        "module": "PIL._imaging",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/_imaging.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "94310f4a073e9773a067df88513804649f50a974f78bd85a52c52d21170783f2"
+      },
+      {
+        "module": "PIL._util",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/_util.py",
+        "sha256": "7f185676b2c04727363ec3203779bdfd4d5d637a1429b57b9a4a0771782879e0"
+      },
+      {
+        "module": "PIL._version",
+        "path": "/home/chia/repos/gene_annotation_episode/.venv/lib/python3.12/site-packages/PIL/_version.py",
+        "sha256": "fe7d75d4019326aca24ae57d4ab190cd62ba1225b175051119cd61cd87e42b1d"
+      },
+      {
+        "module": "gene_annotation_episode",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/__init__.py",
+        "sha256": "b08e7be9692cc6095dcc1aef62048ed979de4c0ffe5ba610db2f2b0ffc395d5e"
+      },
+      {
+        "module": "gene_annotation_episode._local_job_worker",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/_local_job_worker.py",
+        "sha256": "7e41d5cbf6976eea0f8d9ffaf3d2387e6a7d9e970494af2d6ef608f24bb06504"
+      },
+      {
+        "module": "gene_annotation_episode.acquisition",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/acquisition.py",
+        "sha256": "6b2b9ab690d8e02048fe4920a6635b68f3c542f5cbab84d8c8ed7dced76f27a8"
+      },
+      {
+        "module": "gene_annotation_episode.blast_search",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/blast_search.py",
+        "sha256": "bd5e0c51584c6f9352fc475bacd8edf580d4420d3799b364597e598903589c4c"
+      },
+      {
+        "module": "gene_annotation_episode.boundary_validation",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/boundary_validation.py",
+        "sha256": "23825d5686137c0ef42778a2c292d0247df9ceeb872608275424866fd8947500"
+      },
+      {
+        "module": "gene_annotation_episode.chemistry",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/chemistry.py",
+        "sha256": "b636c4cd42ae5bcc651de65a565373787dae557b4fea7d1a8450bb3c1579f3b8"
+      },
+      {
+        "module": "gene_annotation_episode.communication",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/communication.py",
+        "sha256": "af1ff24e9c524bbf91c456e6b6d3edb152532a1eb717d97b2a10f1d77c030806"
+      },
+      {
+        "module": "gene_annotation_episode.comparative_ops",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/comparative_ops.py",
+        "sha256": "fb0f77ed45e665f8a18877a54ca001747f1cd4b7a61096143c23ac0185d585cc"
+      },
+      {
+        "module": "gene_annotation_episode.composition_information",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/composition_information.py",
+        "sha256": "5bef6abbe7593e249dcff3187678563ef65e188b1f220932196c9c993641140e"
+      },
+      {
+        "module": "gene_annotation_episode.context_masks",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/context_masks.py",
+        "sha256": "7bfe25f1f0b46516a5f8e25b3d707bae808e54f3f778ac7c2700430a6d0bfe40"
+      },
+      {
+        "module": "gene_annotation_episode.decision_context",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/decision_context.py",
+        "sha256": "df2e5d8410d9a0e650e54216fe23f92d3c05cfba482580b13f4d4c07a0c0f790"
+      },
+      {
+        "module": "gene_annotation_episode.decision_exchanges",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/decision_exchanges.py",
+        "sha256": "8c504ce9bdc3833d8bfc17818dce46529c794e7c121d215ef8082d1bd487b977"
+      },
+      {
+        "module": "gene_annotation_episode.decision_history",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/decision_history.py",
+        "sha256": "952b5ad8cbdcfb4baff46aa7028885be0645ff1bb81586a7030402e4a0bc7f25"
+      },
+      {
+        "module": "gene_annotation_episode.document_tools",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/document_tools.py",
+        "sha256": "4a27f7d3c432723c1d12bcc46ab1a516c6aeb62a03be43a8c7f664e86a9df420"
+      },
+      {
+        "module": "gene_annotation_episode.domain",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/domain.py",
+        "sha256": "76a4750e7b23a4db88bc49f66f9e185df39d7fa17ed911db59eb1c9d15481d31"
+      },
+      {
+        "module": "gene_annotation_episode.episode_admission",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_admission.py",
+        "sha256": "cac0fed97a8e25d4612a16e1c01e1b0a59edad3af8f70ba999b762de08aed284"
+      },
+      {
+        "module": "gene_annotation_episode.episode_application_services",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_application_services.py",
+        "sha256": "5b6e225a3c36644eb13d4d772d0abc2e776e2741042f43131acebf98f3464c3a"
+      },
+      {
+        "module": "gene_annotation_episode.episode_bindings",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_bindings.py",
+        "sha256": "dd4994560e96aa84aa45c8fee160670f22930af7d7dbc82ecd30965fcf5ea50d"
+      },
+      {
+        "module": "gene_annotation_episode.episode_commissions",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_commissions.py",
+        "sha256": "5c6f6b5b869d5f6548cf49e8787211d446032527d270c1888a314450919f4ead"
+      },
+      {
+        "module": "gene_annotation_episode.episode_completion",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_completion.py",
+        "sha256": "54a1a2834e64dadd50b6cddc2063cbceac9f5fdcd44360ea21852b5d2ba9fd33"
+      },
+      {
+        "module": "gene_annotation_episode.episode_composition",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_composition.py",
+        "sha256": "8b522c157c5f77105a4713bffe70e6bf0c308ad75c1719019589e27817e4a468"
+      },
+      {
+        "module": "gene_annotation_episode.episode_journal",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_journal.py",
+        "sha256": "8d74726e913b7c0b62412278f456beb6b4041767097130dc92ca37d3b137eede"
+      },
+      {
+        "module": "gene_annotation_episode.episode_monitoring",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_monitoring.py",
+        "sha256": "05e2fdee6f985e54089829be927a12b406a06bff3f650e6f1d67bb60f88960c8"
+      },
+      {
+        "module": "gene_annotation_episode.episode_receipts",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_receipts.py",
+        "sha256": "e6cbe7c939f340eb6766ba6516cb8a860c91bb0355b344ae7aa446a99b1c5331"
+      },
+      {
+        "module": "gene_annotation_episode.episode_reports",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_reports.py",
+        "sha256": "15e021b3e5f129cfa0e756d612a76830d2ac38d202d2065a2d5d27ec4e686f40"
+      },
+      {
+        "module": "gene_annotation_episode.episode_return_records",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_return_records.py",
+        "sha256": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421"
+      },
+      {
+        "module": "gene_annotation_episode.episode_services",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/episode_services.py",
+        "sha256": "b24022af91a3f4380000fa5364965ce2884ee1bc86a84c9549bbf4f34d0b6663"
+      },
+      {
+        "module": "gene_annotation_episode.execution_expectations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/execution_expectations.py",
+        "sha256": "832057bb780d156ee84c155cf6c78a4d931cc2f5741544722f2524f028d35159"
+      },
+      {
+        "module": "gene_annotation_episode.execution_recording",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/execution_recording.py",
+        "sha256": "b7bf9728421e4c51f586956f5dcc2f420c66950668be128524dada85a59057fd"
+      },
+      {
+        "module": "gene_annotation_episode.execution_timing",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/execution_timing.py",
+        "sha256": "325829adb09b769c5497be6baaf0042f2aaef4d0c3070037b0838177fa3a5321"
+      },
+      {
+        "module": "gene_annotation_episode.finding_validity",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/finding_validity.py",
+        "sha256": "3f6c561c60b6b1c7c5b49fe5fd232043bc180166e5703be1baf34973658a827c"
+      },
+      {
+        "module": "gene_annotation_episode.form_reference_validation",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/form_reference_validation.py",
+        "sha256": "d5185145c1a910ca54566980d0f4286be5a902ce67dc2445bd5b0ae7f57c688a"
+      },
+      {
+        "module": "gene_annotation_episode.hmmer_graders",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/hmmer_graders.py",
+        "sha256": "1150cde36a6c01171619d3b7c77b71de838f40fd94f0277a69739ec14768b46c"
+      },
+      {
+        "module": "gene_annotation_episode.hmmer_search_grader",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/hmmer_search_grader.py",
+        "sha256": "f1c6f70874b999b10ce7b2545f2a6b361b0a07da9ed842233336085845767016"
+      },
+      {
+        "module": "gene_annotation_episode.hmmer_search_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/hmmer_search_inputs.py",
+        "sha256": "5db285482087412230ae8b502e1e97008252f5b4133a37d08417349b0a0df85e"
+      },
+      {
+        "module": "gene_annotation_episode.homology_episodes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/homology_episodes.py",
+        "sha256": "e0f16c2643f6c1bb75e60e8b0f985a12ad9e2860f7746cb83b2d8b2776262a4c"
+      },
+      {
+        "module": "gene_annotation_episode.homology_jobs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/homology_jobs.py",
+        "sha256": "e58364a13da8ef27c3f327d7e066b7a356bc0abfd62be149c8b47a96fe2e99b3"
+      },
+      {
+        "module": "gene_annotation_episode.homology_results",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/homology_results.py",
+        "sha256": "f7fb9498609aa5000d75565be8ba66052283a86f42fae2ee5d019af82f6260fc"
+      },
+      {
+        "module": "gene_annotation_episode.image_evidence",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/image_evidence.py",
+        "sha256": "e43c0ab62f23ebe8e677d1e57c69d9841169dba109ed36b9a6e1750d4df1a115"
+      },
+      {
+        "module": "gene_annotation_episode.infernal_result_presentation",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/infernal_result_presentation.py",
+        "sha256": "53d637c8423830ef94a2db8432f4b5306eb11fd8dbdafe178ea6b0b671c2fd69"
+      },
+      {
+        "module": "gene_annotation_episode.investigation_progress",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/investigation_progress.py",
+        "sha256": "0844a62450fb81d867b05324245ce8d5d3246da48a11d5075c4be59fc149abf7"
+      },
+      {
+        "module": "gene_annotation_episode.launch_instructions",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/launch_instructions.py",
+        "sha256": "08ab907b4792d98d336b366b09b96edb2c0f81998b81f0320ff94a48640545e9"
+      },
+      {
+        "module": "gene_annotation_episode.library_targets",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/library_targets.py",
+        "sha256": "20daa03781286adb232aa4e7e7ac1781c9e65bcbd3df5d21ae0a75dca9b26700"
+      },
+      {
+        "module": "gene_annotation_episode.literature_assay_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_assay_inputs.py",
+        "sha256": "5f985e6def1311f07500b835c7c5c624aec986eaca2553d5215fd16905ea343b"
+      },
+      {
+        "module": "gene_annotation_episode.literature_assets",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_assets.py",
+        "sha256": "16e0285dba8f5ea491ddaa02714522081603eab5dcca187d9e5c503f18772682"
+      },
+      {
+        "module": "gene_annotation_episode.literature_binding_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_binding_calculations.py",
+        "sha256": "1b64fb435946843a044387845d6a617c827dc1b8f101fe818cf125e8a1c0910a"
+      },
+      {
+        "module": "gene_annotation_episode.literature_binding_model_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_binding_model_inputs.py",
+        "sha256": "ab003b5bdcdfb7d26bb0097bb7150b8354ca9566cd1b7c74f924222b53b1eaf7"
+      },
+      {
+        "module": "gene_annotation_episode.literature_binding_model_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_binding_model_storage.py",
+        "sha256": "4d78f85e1db0da2a6ea15d053a3318a8a7367d0bbb37c849b9a5df09c739374e"
+      },
+      {
+        "module": "gene_annotation_episode.literature_binding_models",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_binding_models.py",
+        "sha256": "8e2eb3f7624f50f5916ec876adcdb390444a892f41ce5154c48ced537e6225c9"
+      },
+      {
+        "module": "gene_annotation_episode.literature_binding_reader",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_binding_reader.py",
+        "sha256": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1"
+      },
+      {
+        "module": "gene_annotation_episode.literature_binding_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_binding_storage.py",
+        "sha256": "896bd8e0490ce674d65503a0eb463d311e4c74314e4a5fc1aa810200ff7ebaad"
+      },
+      {
+        "module": "gene_annotation_episode.literature_context_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_context_calculations.py",
+        "sha256": "8a3e0df068ef314b20ce37357359590aaff816ecfcd95cfc13292779f19b7f0f"
+      },
+      {
+        "module": "gene_annotation_episode.literature_context_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_context_inputs.py",
+        "sha256": "f3a1a609cbd18cd9c369c33311723ea1c1f907333e21ce10f5c5f9d5c19c392d"
+      },
+      {
+        "module": "gene_annotation_episode.literature_context_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_context_storage.py",
+        "sha256": "f8a4de4be1ab5721563082a2c8b2a2cc3932993e5c3f024ed91b1d5b4d40c59b"
+      },
+      {
+        "module": "gene_annotation_episode.literature_episodes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_episodes.py",
+        "sha256": "b531f177385286b22c0aea17ed67bc395330290fff69cea88b7b9b424ae2ce0c"
+      },
+      {
+        "module": "gene_annotation_episode.literature_experimental_contracts",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_experimental_contracts.py",
+        "sha256": "74a0515db30c96fa1a7071335b7088a6bf9fb11b48ba58347f87c15a105c73d4"
+      },
+      {
+        "module": "gene_annotation_episode.literature_figure_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_figure_inputs.py",
+        "sha256": "45915d9dacd701151a7696d3c8f77e8aa1571fd59718b3a987fd91bf21db5504"
+      },
+      {
+        "module": "gene_annotation_episode.literature_figure_measurements",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_figure_measurements.py",
+        "sha256": "8fae638664e94117842417e1c4c649723c81074b1dd95b7443f64715012cbcf0"
+      },
+      {
+        "module": "gene_annotation_episode.literature_figure_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_figure_storage.py",
+        "sha256": "cc348445891574dfb17f08386a8de88a9cccc6e4aba74a6ad50802110ae99727"
+      },
+      {
+        "module": "gene_annotation_episode.literature_partner_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_partner_calculations.py",
+        "sha256": "c2b05b635b6f9b3f6d1d5045f245a73f7d924fb8a8afe9d0439598a549d8c1b4"
+      },
+      {
+        "module": "gene_annotation_episode.literature_partner_defined_units",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_partner_defined_units.py",
+        "sha256": "cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca"
+      },
+      {
+        "module": "gene_annotation_episode.literature_partner_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_partner_inputs.py",
+        "sha256": "5d7610589dd709b3eca59eb1babf030299cb002ea16b6e24beb4ffa6e4d8ef95"
+      },
+      {
+        "module": "gene_annotation_episode.literature_partner_native_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_partner_native_inputs.py",
+        "sha256": "3502892db3e7b013f0e501cd204e974196b047561a9e437714fb8343445c921b"
+      },
+      {
+        "module": "gene_annotation_episode.literature_partner_source_fields",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_partner_source_fields.py",
+        "sha256": "0b12aa55e1989ff9dae93fa733893052cf59dccd367773fe23b9e8d79085b857"
+      },
+      {
+        "module": "gene_annotation_episode.literature_partner_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_partner_storage.py",
+        "sha256": "d1d0cfac3c02c1f071a52285ceef3ae2413a0bcab3f21a0f3528f36dea6d52b0"
+      },
+      {
+        "module": "gene_annotation_episode.literature_perturbation_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_perturbation_calculations.py",
+        "sha256": "dfede15188bee2dae542b4b03f3e9a3a31a4bdb1fa77bd7d93f14ab0a9b8f7d0"
+      },
+      {
+        "module": "gene_annotation_episode.literature_perturbation_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_perturbation_inputs.py",
+        "sha256": "4f65954e2c24661c89e2e46cac15688bc02030aea724124976d2d0d15df82583"
+      },
+      {
+        "module": "gene_annotation_episode.literature_perturbation_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_perturbation_storage.py",
+        "sha256": "af0c9ad35a6cf4ec29171cf6841c76c77f5545c9b167dbfce6fcd56c50f0e8c5"
+      },
+      {
+        "module": "gene_annotation_episode.literature_prose_reader",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_prose_reader.py",
+        "sha256": "f4280a8a5eb854482eabae5ed539c61c9276e581ddae6e637bd99f9cf1d692f1"
+      },
+      {
+        "module": "gene_annotation_episode.literature_quantity_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_quantity_storage.py",
+        "sha256": "1659d2185882eecc0b9c21a6379b8fc0a1dca680e3027fe060d813a94c08d1a7"
+      },
+      {
+        "module": "gene_annotation_episode.literature_rate_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_rate_calculations.py",
+        "sha256": "b64cd76a93019087fed5b88cccc22dda4078bdfd30e791269911a7c39ab3ffd7"
+      },
+      {
+        "module": "gene_annotation_episode.literature_rate_reader",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_rate_reader.py",
+        "sha256": "f92a36c6ddd72e633854f34ba13ec23d98e18a6f8936eadca6da650ebd751359"
+      },
+      {
+        "module": "gene_annotation_episode.literature_rate_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_rate_storage.py",
+        "sha256": "f3d6882437a63ce67bb787a1e8c79d3d35c2c224065bc282d48d0bc2a239508f"
+      },
+      {
+        "module": "gene_annotation_episode.literature_ratio_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_ratio_calculations.py",
+        "sha256": "b1bbd69bef463835f5eaecc53ddb1c9b06d64fb5922ab950341bbbc8208e2d58"
+      },
+      {
+        "module": "gene_annotation_episode.literature_ratio_reader",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_ratio_reader.py",
+        "sha256": "b356360e6659b759f7eaa289a456d1fe3e95f4a94288f0f4efd1fda0e13e68e3"
+      },
+      {
+        "module": "gene_annotation_episode.literature_ratio_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_ratio_storage.py",
+        "sha256": "898801d7ab4fde40d5b3a230c451c7447f48ffc3a123055b1b19cc43aeabf5cb"
+      },
+      {
+        "module": "gene_annotation_episode.literature_reaction_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_reaction_calculations.py",
+        "sha256": "e6e5e808b7de664bf5db61ed4b4142e518795c8a8d6b6b63d2c37a010e20db50"
+      },
+      {
+        "module": "gene_annotation_episode.literature_reaction_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_reaction_inputs.py",
+        "sha256": "4a9e10fdc53b3c881598d22e5bbaec2e46b2adad0b64c9c571daffc671a4d2ca"
+      },
+      {
+        "module": "gene_annotation_episode.literature_reaction_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_reaction_storage.py",
+        "sha256": "9b7ca6960c70e1332223fd254ec0fa706a632f6add94b7b16be8430c3765ed8a"
+      },
+      {
+        "module": "gene_annotation_episode.literature_structure_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_structure_calculations.py",
+        "sha256": "409ee1f987e1363335188943a40683e36c95c3c10833e28406da1864e2b8b42d"
+      },
+      {
+        "module": "gene_annotation_episode.literature_structure_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_structure_inputs.py",
+        "sha256": "43a775775518053f202ecd741ceb3eb4eb85c5dfdac46db8689606fb4150a050"
+      },
+      {
+        "module": "gene_annotation_episode.literature_structure_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_structure_storage.py",
+        "sha256": "c1096be44c0ae6ad0a62e73436bd8d53de20bfad0cd6b34750da7174637beabe"
+      },
+      {
+        "module": "gene_annotation_episode.literature_transport_calculations",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_transport_calculations.py",
+        "sha256": "afbc2c00c63ea56ff6790298ea3f9fb6b30fe54a696cc1f4fc9211df058d63e4"
+      },
+      {
+        "module": "gene_annotation_episode.literature_transport_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_transport_inputs.py",
+        "sha256": "2e5c31ab6171fd431a3cf6277799663d5f83654213341e0f81a43937d10893e6"
+      },
+      {
+        "module": "gene_annotation_episode.literature_transport_storage",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/literature_transport_storage.py",
+        "sha256": "3158ef8337cf90f8f8d23d2fa28bb9a62f41a1ccf6adbe3adcea1f2b31fb02c8"
+      },
+      {
+        "module": "gene_annotation_episode.local_jobs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/local_jobs.py",
+        "sha256": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452"
+      },
+      {
+        "module": "gene_annotation_episode.local_return_history",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/local_return_history.py",
+        "sha256": "3fc73f919eed4290a28275d58c5ca109bbbc9af9eef29cec1fb150d8a3e95054"
+      },
+      {
+        "module": "gene_annotation_episode.material_parsing",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/material_parsing.py",
+        "sha256": "b9fa5fc19dc88b132240500f49398d8c3a82cf23ff4d62176134bc97c4797b26"
+      },
+      {
+        "module": "gene_annotation_episode.materials",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/materials.py",
+        "sha256": "ad433751338bf78b886190f20d8022fd9c1db502911440106b14b05f36f5d0d9"
+      },
+      {
+        "module": "gene_annotation_episode.materials_packing",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/materials_packing.py",
+        "sha256": "c453e843b1281b4837094b3dfb33fc85dfb02bf7e4fbdda36449a4a9dc183888"
+      },
+      {
+        "module": "gene_annotation_episode.monitoring_credit",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/monitoring_credit.py",
+        "sha256": "5d9f7103461302d65bba629e3a111472c1441bc195aebc892133836b7296b5f6"
+      },
+      {
+        "module": "gene_annotation_episode.native_lifecycle",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/native_lifecycle.py",
+        "sha256": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195"
+      },
+      {
+        "module": "gene_annotation_episode.native_timing_information",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/native_timing_information.py",
+        "sha256": "0a4493abb9d215d3de477397ee623894c1e77795e26c5ff2b7e82ad28f10496a"
+      },
+      {
+        "module": "gene_annotation_episode.numerical",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/numerical.py",
+        "sha256": "a414cfa623ab7ecb1bf129768c58a577bc207c2ddb340fa418b73004590108b0"
+      },
+      {
+        "module": "gene_annotation_episode.phmmer_format",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/phmmer_format.py",
+        "sha256": "a218e4500f9bd36d4445344fcb8436119adf58cd96e05ceb1291b5b3e0ede76e"
+      },
+      {
+        "module": "gene_annotation_episode.phmmer_grading_worker",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/phmmer_grading_worker.py",
+        "sha256": "f78102115959985efb42d6eae823b656e912cc1b187e11f239a93a3f004799d3"
+      },
+      {
+        "module": "gene_annotation_episode.progress_records",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/progress_records.py",
+        "sha256": "763f8cf92f6daf1c599711ea007c19f83595be7d024122982402e7fb45b7f68f"
+      },
+      {
+        "module": "gene_annotation_episode.provider_jobs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/provider_jobs.py",
+        "sha256": "d84a9139aad59aca842e7b9acc8ae08d465cc8f974d15fa8a1b8beb931ec2392"
+      },
+      {
+        "module": "gene_annotation_episode.public_configuration",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/public_configuration.py",
+        "sha256": "f04c8cad67fa85ecad114592ec0142c3a1746ea048fff2ac29478923ea93d714"
+      },
+      {
+        "module": "gene_annotation_episode.read_mapping",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/read_mapping.py",
+        "sha256": "4670bc951a6c12e840abff143dbf3490cc41258daaf7268244ce18d5745059dc"
+      },
+      {
+        "module": "gene_annotation_episode.resource_episodes",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/resource_episodes.py",
+        "sha256": "3e045e2b813d2d1ef05803afc09449953852253642cdd4d4341c0aa5287eb75b"
+      },
+      {
+        "module": "gene_annotation_episode.resource_estimation",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/resource_estimation.py",
+        "sha256": "b3f6fcce8c2993018542ec68fc0e327bb023ac43d619c087d828af999957d19c"
+      },
+      {
+        "module": "gene_annotation_episode.resource_information",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/resource_information.py",
+        "sha256": "94f8f29490acdeb1a9b7fce1e3f55ee440fe779152c4c44fdb17c02a954f5c99"
+      },
+      {
+        "module": "gene_annotation_episode.resource_records",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/resource_records.py",
+        "sha256": "1052a1249037439e8ad61cddea0ab2a9e95d0296b5960de26faa34c70d6365f8"
+      },
+      {
+        "module": "gene_annotation_episode.rfam_discovery",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/rfam_discovery.py",
+        "sha256": "0c5c8a0407da7cb411b3f27b33087a4f61dc5d0744b83d97934b8815db39f214"
+      },
+      {
+        "module": "gene_annotation_episode.rna_evidence",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/rna_evidence.py",
+        "sha256": "aa4c7c24b50248b3870d15f73e7c7cf6d2f331c3b66943bd501dc0b65f63f8ea"
+      },
+      {
+        "module": "gene_annotation_episode.run_statistics",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/run_statistics.py",
+        "sha256": "e3e079c53bf9547cb103bd7f5a5229be2dbb01b12a388b878976de88b8f78298"
+      },
+      {
+        "module": "gene_annotation_episode.runtime",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/runtime.py",
+        "sha256": "3730e815c67776b665170c6d1a645e0bcaa7782ee289d9e26c395715608601ec"
+      },
+      {
+        "module": "gene_annotation_episode.scientific_findings",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/scientific_findings.py",
+        "sha256": "1f2f77db26e6b0df2a0a0664b11358d4c256e0aa83d34a4353f6334d3b100aa7"
+      },
+      {
+        "module": "gene_annotation_episode.sequence_mapping",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/sequence_mapping.py",
+        "sha256": "241195f974b6a8dab6a06434daa47d04bd277c6a584c77a534f30a274fb3c1c3"
+      },
+      {
+        "module": "gene_annotation_episode.sequence_ops",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/sequence_ops.py",
+        "sha256": "2a9c897316465ee54119951b2dc62bac8798ff41b2773dcd2ec9521442792df9"
+      },
+      {
+        "module": "gene_annotation_episode.sequence_views",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/sequence_views.py",
+        "sha256": "5ad12f8ef43d33044dd5cd9662cb9b242af241e0f300fac0353c3130842b9634"
+      },
+      {
+        "module": "gene_annotation_episode.spreadsheet_tools",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/spreadsheet_tools.py",
+        "sha256": "c7b0d121a565d9c1da63c3058b59293ec0d14c478a7b95c49b0df8f5793d97fd"
+      },
+      {
+        "module": "gene_annotation_episode.state",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/state.py",
+        "sha256": "c9bcbf4ba569dd8865c2189944de1f06b81c1000a33c33593bf484d69c8c918d"
+      },
+      {
+        "module": "gene_annotation_episode.tool_grading_artifacts",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/tool_grading_artifacts.py",
+        "sha256": "fe7638d7dbed16d893ba63e054956a139d3949364a8d38303b8cd3abc6a39268"
+      },
+      {
+        "module": "gene_annotation_episode.tool_knowledge",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/tool_knowledge.py",
+        "sha256": "0d8c93b0718d91ba8f5c1861329072667a12f7512d30b46811ef6005d93efa8d"
+      },
+      {
+        "module": "gene_annotation_episode.tools",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/tools.py",
+        "sha256": "b7c2bdd72b9a4f27677fc91f7e4abfbc770da574f837af068306bdb231d74a5d"
+      },
+      {
+        "module": "gene_annotation_episode.vendor",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/vendor/__init__.py",
+        "sha256": "b1e29b020000960852b2b019182165acd01f91a5e31fc587bf84634621014902"
+      },
+      {
+        "module": "gene_annotation_episode.vendor.nano_rarefaction",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/vendor/nano_rarefaction.py",
+        "sha256": "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35"
+      },
+      {
+        "module": "gene_annotation_episode.wait_estimation_inputs",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/wait_estimation_inputs.py",
+        "sha256": "7854dd07cc883980ac3638fa0e9f9630b1f3bbf4dd26c6548bb09b1447d181c3"
+      },
+      {
+        "module": "gene_annotation_episode.waiting",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/gene_annotation_episode/waiting.py",
+        "sha256": "c0dce4e3e9565760419303d626e1a13ed0dce994fa0822475b2a2db9b0d87c46"
+      },
+      {
+        "module": "method_loop",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/__init__.py",
+        "sha256": "26c578540bba572ab67fec9981754525067e9717b70fb040ed193ab9c1e6166d"
+      },
+      {
+        "module": "method_loop.archive",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/archive.py",
+        "sha256": "e28c18b01dd0f7e0d11f9c413442f71a412264066de349b19f73394f718cc5a6"
+      },
+      {
+        "module": "method_loop.binding",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/binding.py",
+        "sha256": "b647c2304c4bae8c5dade5713fe04ea00bd2743f524e1de336c4c846320ca93e"
+      },
+      {
+        "module": "method_loop.communication",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/communication.py",
+        "sha256": "357d4ee021d55b645318f296d1c86fab8c3100d7adf8a3f0f64eb5208c288005"
+      },
+      {
+        "module": "method_loop.durable",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/durable.py",
+        "sha256": "8d7a5eed863737a858a56f34de25672c10954ced999ecc2af2ace25750ae5c8f"
+      },
+      {
+        "module": "method_loop.episode",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/episode.py",
+        "sha256": "b1245fa460a706e291685c80ec8f5703846fd29d25c58fa80346db7ce357c72d"
+      },
+      {
+        "module": "method_loop.identities",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/identities.py",
+        "sha256": "85dbd9747ea95d8c44814ca5614b0d9b0e019d1d01f1a9c4985433f80c2b04e7"
+      },
+      {
+        "module": "method_loop.independent",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/independent.py",
+        "sha256": "0b2cd709cfba7cba98e4ecf4f6b288de465e1961c20ae73cdb787af42138ecd4"
+      },
+      {
+        "module": "method_loop.runtime",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/method_loop/runtime.py",
+        "sha256": "b3cf99047d90836ee6ba8ccd841cf8d4c991a3d86605f34f44da6f8d67f3ef07"
+      },
+      {
+        "module": "test_literature_partner_defined_integration",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/tests/test_literature_partner_defined_integration.py",
+        "sha256": "d8ce809ea4b4407dcc79aa7813d07817182ad6d8dd6e7b96edf988a123e29c8f"
+      },
+      {
+        "module": "test_runtime",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/partner_defined_verification_pin_018/tests/test_runtime.py",
+        "sha256": "5dd5ef0d3fb130344bd0d9e622b5926fbdd64788d3de0ca873f924f72572e35f"
+      }
+    ],
+    "source_manifest_sha256": "cb073c56d38f65b124a7f61d48d673e1eb1a3ec1b568b860e27bb6b5799f409c"
+  }
+}

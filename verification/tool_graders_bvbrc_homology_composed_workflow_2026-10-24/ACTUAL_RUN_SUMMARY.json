@@ -1,0 +1,105 @@
+{
+  "admission_failures": [],
+  "measurements": {
+    "hits": 3,
+    "query_coverage": 0.6,
+    "reference_coverage": 0.75
+  },
+  "own_actions": {
+    "annotation": 1,
+    "launch": 1,
+    "launch_api": 2,
+    "results": 7,
+    "scientific_process": 4
+  },
+  "practical_closure": {
+    "launch": {
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "final_actual_gain": 2.0
+    },
+    "launch_api": {
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "final_actual_gain": 2.0
+    },
+    "results": {
+      "expected_next_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      },
+      "final_actual_gain": 3.0
+    }
+  },
+  "pytest_result": {
+    "command": [
+      "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-vv",
+      "tests/test_bvbrc_homology_composed_workflow.py"
+    ],
+    "elapsed_seconds": 1061.6059339870699,
+    "log": "verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/PYTEST-001.txt",
+    "returncode": 0
+  },
+  "retained_artifacts": {
+    "components.json": {
+      "byte_count": 26626,
+      "sha256": "faa5a7b4a1edc87c01c1da10ffe2643fb1c519f3eabbccabe4cde88349049184"
+    },
+    "native-manifest.json": {
+      "byte_count": 477,
+      "sha256": "8dd90349746d89178a7a6be97530620bdff96f3e75585ed84b02be617786be8f"
+    },
+    "native-raw.json": {
+      "byte_count": 2025,
+      "sha256": "0a811e1540e9ed2db696a72069778cc40d1b94a2ac4420bde84fc90dbe16b753"
+    },
+    "saved-sheet-temperature-1.json": {
+      "byte_count": 57754,
+      "sha256": "bc12f6782c9d923eb0384e24799fe8bc8f54805185e0a28cf23a459cf506f187"
+    },
+    "sheet.json": {
+      "byte_count": 48168,
+      "sha256": "99e07392e4744da9abea1db0f1366387fce5f21d141f15248119065dd1c18055"
+    }
+  },
+  "root_received_form_keys": [
+    "measurements"
+  ],
+  "run_directory": "verification/tool_graders_bvbrc_homology_composed_workflow_2026-10-24/runs/composed-_yt2mpv_",
+  "runtime_counts": {
+    "runtime_actions": 15,
+    "runtime_model_calls": 15,
+    "runtime_observations": 15,
+    "runtime_report_attempts": 4
+  },
+  "scientific_mode": "database_identification",
+  "scope_limits": [
+    "synthetic controlled native responses",
+    "scripted decisions",
+    "fixture root/scientific continuation",
+    "in-process common Workflow",
+    "no live API/model/native BLAST/HPC",
+    "pairwise composed path unverified",
+    "no detached-worker or Workflow restart verification",
+    "existing prompt renderer tested offline only"
+  ]
+}

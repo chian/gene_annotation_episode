@@ -1,0 +1,49 @@
+{
+  "scope": "Pure records/schema/projection only",
+  "authoritative_goal_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "reset_completed": "Original objective and entire DESIGN PRINCIPLES reread verbatim after substantial source inspection and after work; full exact contract reread before completion.",
+  "source_sha256": {
+    "gene_annotation_episode/scientific_process_reports.py": "d0f96123dfddd49a65fb9d84e51e5c5211f01085cb0e5d3b6de0d6bfe97cc4c2",
+    "gene_annotation_episode/scientific_process_records.py": "49bc89d3847975c1e96b53b412250d9ff5443d485a27a17fd88a5dedb6a8104b",
+    "gene_annotation_episode/scientific_process_library.py": "d223f54c2df5b5da19ca5a81230ea200c0b6c8c03d7997a436912a5e752a16f4",
+    "gene_annotation_episode/scientific_tool_library.py": "8936c2bdb1d825c990be22b3461b1988dd3b817fad1060a843d9fdd2eafd7672",
+    "gene_annotation_episode/tool_information.py": "f0ce819051231d0086bf97621a1af7ae93dc4b581b4f9c8ceed4a7ae7c0177c1",
+    "gene_annotation_episode/communication.py": "be5447234cffeb4e167b25310e0cc15643ee28cec34668dacd8b4b1d6284a39c",
+    "gene_annotation_episode/episode_reports.py": "15e021b3e5f129cfa0e756d612a76830d2ac38d202d2065a2d5d27ec4e686f40",
+    "tests/test_scientific_process_reports.py": "ca114d3f4143b31c6db449daef51f3a87aff5e701d178c84c22cb013cd7f3887",
+    "docs/SCIENTIFIC_PROCESS_RETURN_BOUNDARY_CONTRACT_2026-10-24_001.md": "aee82dfe32bfd5335c907881b6111e226e9c35a87a0581685a24ddbe263fc95a",
+    "verification/scientific_process_return_boundary_plan_2026-10-24/literal-legacy-form-schema.json": "6db9bce2b5a6526b4f3000166eed409fe3675e72cdcd266e392ec7a261fcd308",
+    "tests/test_scientific_process_return_records.py": "e807736487fa432454f5cf70850ecffe85957d8c55b6087d1e20576ea0cf65d2",
+    "tests/fixtures/scientific_process_returns/literal-process-options.json": "db41b198e76b7b0b5a8c21516efeb2054ceb6ccbad3ee6cb546e9dab18f17ebe",
+    "tests/fixtures/scientific_process_returns/README.md": "53c5dbc92d957f4696c518eac84567669134063dae96bf450a2edda9cd0172b0",
+    "tests/fixtures/scientific_process_returns/literal-legacy-form-schema.json": "6db9bce2b5a6526b4f3000166eed409fe3675e72cdcd266e392ec7a261fcd308"
+  },
+  "unchanged_protected_files": [
+    "gene_annotation_episode/scientific_process_records.py",
+    "gene_annotation_episode/scientific_process_library.py",
+    "gene_annotation_episode/scientific_tool_library.py",
+    "gene_annotation_episode/tool_information.py",
+    "gene_annotation_episode/communication.py",
+    "gene_annotation_episode/episode_reports.py",
+    "docs/SCIENTIFIC_PROCESS_RETURN_BOUNDARY_CONTRACT_2026-10-24_001.md",
+    "verification/scientific_process_return_boundary_plan_2026-10-24/literal-legacy-form-schema.json"
+  ],
+  "pytest": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -B -m pytest -q tests/test_scientific_process_reports.py tests/test_scientific_process_return_records.py",
+    "exit_code": 0,
+    "result": "146 passed in 2.05s",
+    "log": "pytest-pure-001.log",
+    "log_sha256": "df86505439f71614c1c064cf2cd1f4289067fe46935858aca2eb0d200c0c5210"
+  },
+  "examples": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -B verification/scientific_process_return_records_2026-10-24/check_repaired_records.py",
+    "exit_code": 0,
+    "checks": "checks.json"
+  },
+  "executed": {
+    "api_calls": 0,
+    "model_calls": 0,
+    "native_scientific_jobs": 0,
+    "workflow_integration": false
+  }
+}

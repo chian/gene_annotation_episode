@@ -1,0 +1,234 @@
+{
+  "scope": "actual new calculator results on constructed inputs only",
+  "rows": [
+    {
+      "case": "compatible_canceled_renderings",
+      "e": 0.002,
+      "V": null,
+      "S": null,
+      "B": null,
+      "e_reasons": null,
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "unavailable"
+    },
+    {
+      "case": "active_owner_covariance_only",
+      "e": 0.002,
+      "V": 3e-07,
+      "S": null,
+      "B": null,
+      "e_reasons": null,
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "available"
+    },
+    {
+      "case": "canceled_numbers_AND_units_missing",
+      "e": 0.002,
+      "V": 3e-07,
+      "S": null,
+      "B": null,
+      "e_reasons": null,
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_reading_unavailable",
+        "canceled_unit_unknown",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "available"
+    },
+    {
+      "case": "unknown_control_owner",
+      "e": null,
+      "V": null,
+      "S": null,
+      "B": null,
+      "e_reasons": [
+        "conflicting_control_reuse"
+      ],
+      "e_qualifications": [
+        "approximate_source_reading",
+        "conditional_digitization",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "scientific_blocked"
+    },
+    {
+      "case": "explicit_incompatible_canceled_dimension",
+      "e": null,
+      "V": null,
+      "S": null,
+      "B": null,
+      "e_reasons": [
+        "incompatible_unit_dimension"
+      ],
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_reading_unavailable",
+        "canceled_representation_difference",
+        "canceled_unit_unknown",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "scientific_blocked"
+    },
+    {
+      "case": "whole_control_arm_absent",
+      "e": null,
+      "V": null,
+      "S": null,
+      "B": null,
+      "e_reasons": [
+        "conflicting_control_reuse",
+        "missing_arm",
+        "unknown_endpoint",
+        "unknown_normalization",
+        "unknown_unit"
+      ],
+      "e_qualifications": [
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "scientific_blocked"
+    },
+    {
+      "case": "disjoint_canceled_readings",
+      "e": 0.002,
+      "V": 3e-07,
+      "S": null,
+      "B": null,
+      "e_reasons": null,
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_reading_domain_conflict",
+        "canceled_representation_difference",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "available"
+    },
+    {
+      "case": "canceled_numeric_status_conflicting",
+      "e": 0.002,
+      "V": 3e-07,
+      "S": null,
+      "B": null,
+      "e_reasons": null,
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_reading_unavailable",
+        "canceled_representation_difference",
+        "canceled_source_reading_conflict",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "available"
+    },
+    {
+      "case": "actual_owner_meaning_conflicting",
+      "e": null,
+      "V": null,
+      "S": null,
+      "B": null,
+      "e_reasons": [
+        "conflicting_control_reuse",
+        "conflicting_owner_context"
+      ],
+      "e_qualifications": [
+        "approximate_source_reading",
+        "conditional_digitization",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "scientific_blocked"
+    },
+    {
+      "case": "active_numeric_conflict",
+      "e": null,
+      "V": null,
+      "S": null,
+      "B": null,
+      "e_reasons": [
+        "conflicting_source_literal"
+      ],
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "available"
+    },
+    {
+      "case": "invalid_FULL_covariance_despite_canceled_B",
+      "status": "invalid",
+      "code": "positive_semidefinite_covariance_required"
+    },
+    {
+      "case": "unknown_active_owner_despite_known_id_coverage",
+      "e": 0.00205,
+      "V": null,
+      "S": null,
+      "B": null,
+      "e_reasons": null,
+      "e_qualifications": [
+        "approximate_source_reading",
+        "conditional_digitization",
+        "shared_reference_assumption",
+        "synthetic_fixture",
+        "unknown_control_reuse"
+      ],
+      "covariance_state": "incomplete_active_coverage"
+    },
+    {
+      "case": "exact_decimal_mixed_shared",
+      "e": 0.002,
+      "V": 3e-07,
+      "S": null,
+      "B": null,
+      "e_reasons": null,
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "available"
+    },
+    {
+      "case": "constructed_active_normal_model",
+      "e": 0.002,
+      "V": 3e-07,
+      "S": 6.666666666666667,
+      "B": 0.9974579674738373,
+      "e_reasons": null,
+      "e_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation",
+        "shared_reference_assumption",
+        "synthetic_fixture"
+      ],
+      "covariance_state": "available"
+    }
+  ]
+}

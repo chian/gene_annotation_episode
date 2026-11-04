@@ -1,0 +1,28 @@
+.........................................................FF              [100%]
+=================================== FAILURES ===================================
+_________ test_saved_binding_rejects_changed_declared_invocation_order _________
+
+    def test_saved_binding_rejects_changed_declared_invocation_order():
+        document, operands = native_operands('separate_native')
+        result = binding(document, verify_xmfa_source_inputs(**operands))
+        for field in ('supplied_inputs', 'verified_inputs'):
+            result['verification'][field]['invocation']['ordered_file_ids'].reverse()
+>       with pytest.raises(ValueError, match='bvbrc_msa_xmfa_'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_msa_xmfa_inputs.py:366: Failed
+__________ test_saved_empty_source_verification_cannot_claim_success ___________
+
+    def test_saved_empty_source_verification_cannot_claim_success():
+        _, operands = native_operands()
+        operands['inputs']['files'] = []; operands['source_readers'] = ()
+        result = verify_xmfa_source_inputs(**operands)
+        result.update(requirements=[], diagnostics=[], status='ok')
+>       with pytest.raises(ValueError, match='bvbrc_msa_xmfa_'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_bvbrc_msa_xmfa_inputs.py:375: Failed
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_msa_xmfa_inputs.py::test_saved_binding_rejects_changed_declared_invocation_order
+FAILED tests/test_bvbrc_msa_xmfa_inputs.py::test_saved_empty_source_verification_cannot_claim_success
+2 failed, 57 passed in 0.36s

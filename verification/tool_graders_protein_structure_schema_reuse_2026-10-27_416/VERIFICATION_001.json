@@ -1,0 +1,39 @@
+{
+  "scope": "private strict schema construction reuse; every payload and all relational checks retained",
+  "before_sha256": "13e1f7c4e9e60fed6283ab66aea03dd3b54de4767941d6509f496c2188cdaea0",
+  "source_pins": [
+    {
+      "path": "gene_annotation_episode/native_protein_structure_contracts.py",
+      "sha256": "e40bc91ce1c0c15017ec30b50d5cee1fd6b76e6afc6f1cf2c6637ab4d251a351",
+      "byte_length": 36668
+    },
+    {
+      "path": "tests/test_native_protein_structure_schema_reuse.py",
+      "sha256": "160a9b0ce46b1402ce1215b3c3c1e3ab9a53be1a629a8fe8d219ac716b49cdee",
+      "byte_length": 6766
+    }
+  ],
+  "checks": {
+    "check001": {
+      "passed": 85,
+      "pytest_seconds": 55.2,
+      "new_schema_reuse_cases": 33,
+      "existing_cases": 52,
+      "actual_native_execution": "synthetic PDB/mmCIF inputs through real native workers and local lifecycle; no configured model or whole Workflow in this check"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "executed_source_pins_unchanged": true,
+  "checkout_source_drift_count": 0,
+  "full_protein_tool_accepted": false,
+  "grader_tally_unchanged": 112,
+  "remaining": [
+    "Same retained410/check007 actual-authority profile on new implementation",
+    "410 full Workflow completion",
+    "Receiver message and decision operand selection integration"
+  ]
+}

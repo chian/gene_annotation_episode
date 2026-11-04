@@ -1,0 +1,258 @@
+{
+  "verification_kind": "hand_specified_coordinate_arithmetic",
+  "cases": [
+    {
+      "id": "supplied_hairpin",
+      "sequence": "GGGAAACCC",
+      "structure": "(((...)))",
+      "pairs": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "stems": [
+        3
+      ],
+      "hairpin_sizes": [
+        3
+      ],
+      "internal_sizes": [],
+      "exterior": [],
+      "expected": {
+        "n_nt": 9,
+        "pair_count": 3,
+        "paired_nt": 6,
+        "unpaired_nt": 3,
+        "paired_fraction": 0.6666666666666666,
+        "unpaired_fraction": 0.3333333333333333,
+        "stem_count": 1,
+        "longest_stem_pairs": 3,
+        "mean_stem_pairs": 3.0,
+        "stack_count": 2,
+        "mean_pair_span_nt": 6.0,
+        "hairpin_count": 1,
+        "internal_loop_count": 0,
+        "external_unpaired_nt": 0,
+        "ordered_pair_symbols": {
+          "GC": 3
+        },
+        "mfe_per_nt_kcal_mol_nt": null
+      }
+    },
+    {
+      "id": "supplied_two_hairpins",
+      "sequence": null,
+      "structure": "((...))..((...))",
+      "pairs": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          9,
+          15
+        ],
+        [
+          10,
+          14
+        ]
+      ],
+      "stems": [
+        2,
+        2
+      ],
+      "hairpin_sizes": [
+        3,
+        3
+      ],
+      "internal_sizes": [],
+      "exterior": [
+        7,
+        8
+      ],
+      "expected": {
+        "n_nt": 16,
+        "pair_count": 4,
+        "paired_nt": 8,
+        "unpaired_nt": 8,
+        "paired_fraction": 0.5,
+        "unpaired_fraction": 0.5,
+        "stem_count": 2,
+        "longest_stem_pairs": 2,
+        "mean_stem_pairs": 2.0,
+        "stack_count": 2,
+        "mean_pair_span_nt": 5.0,
+        "hairpin_count": 2,
+        "internal_loop_count": 0,
+        "external_unpaired_nt": 2,
+        "ordered_pair_symbols": null,
+        "mfe_per_nt_kcal_mol_nt": null
+      }
+    },
+    {
+      "id": "supplied_internal_loop",
+      "sequence": null,
+      "structure": "((..((...))..))",
+      "pairs": [
+        [
+          0,
+          14
+        ],
+        [
+          1,
+          13
+        ],
+        [
+          4,
+          10
+        ],
+        [
+          5,
+          9
+        ]
+      ],
+      "stems": [
+        2,
+        2
+      ],
+      "hairpin_sizes": [
+        3
+      ],
+      "internal_sizes": [
+        4
+      ],
+      "exterior": [],
+      "expected": {
+        "n_nt": 15,
+        "pair_count": 4,
+        "paired_nt": 8,
+        "unpaired_nt": 7,
+        "paired_fraction": 0.5333333333333333,
+        "unpaired_fraction": 0.4666666666666667,
+        "stem_count": 2,
+        "longest_stem_pairs": 2,
+        "mean_stem_pairs": 2.0,
+        "stack_count": 2,
+        "mean_pair_span_nt": 9.0,
+        "hairpin_count": 1,
+        "internal_loop_count": 1,
+        "external_unpaired_nt": 0,
+        "ordered_pair_symbols": null,
+        "mfe_per_nt_kcal_mol_nt": null
+      }
+    },
+    {
+      "id": "supplied_unpaired",
+      "sequence": "AAAA",
+      "structure": "....",
+      "pairs": [],
+      "stems": [],
+      "hairpin_sizes": [],
+      "internal_sizes": [],
+      "exterior": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "expected": {
+        "n_nt": 4,
+        "pair_count": 0,
+        "paired_nt": 0,
+        "unpaired_nt": 4,
+        "paired_fraction": 0.0,
+        "unpaired_fraction": 1.0,
+        "stem_count": 0,
+        "longest_stem_pairs": 0,
+        "mean_stem_pairs": null,
+        "stack_count": 0,
+        "mean_pair_span_nt": null,
+        "hairpin_count": 0,
+        "internal_loop_count": 0,
+        "external_unpaired_nt": 4,
+        "ordered_pair_symbols": {},
+        "mfe_per_nt_kcal_mol_nt": null
+      }
+    },
+    {
+      "id": "official_documented_mfe",
+      "sequence": "CUACGGCGCGGCGCCCUUGGCGA",
+      "structure": "...........((((...)))).",
+      "pairs": [
+        [
+          11,
+          21
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          13,
+          19
+        ],
+        [
+          14,
+          18
+        ]
+      ],
+      "stems": [
+        4
+      ],
+      "hairpin_sizes": [
+        3
+      ],
+      "internal_sizes": [],
+      "exterior": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        22
+      ],
+      "documented_mfe_kcal_mol": -5.0,
+      "source_url": "https://www.tbi.univie.ac.at/RNA/ViennaRNA/doc/html/usage/tutorial/RNAfold.html#mfe-structure-of-a-single-sequence",
+      "expected": {
+        "n_nt": 23,
+        "pair_count": 4,
+        "paired_nt": 8,
+        "unpaired_nt": 15,
+        "paired_fraction": 0.34782608695652173,
+        "unpaired_fraction": 0.6521739130434783,
+        "stem_count": 1,
+        "longest_stem_pairs": 4,
+        "mean_stem_pairs": 4.0,
+        "stack_count": 3,
+        "mean_pair_span_nt": 7.0,
+        "hairpin_count": 1,
+        "internal_loop_count": 0,
+        "external_unpaired_nt": 12,
+        "ordered_pair_symbols": {
+          "CG": 3,
+          "GC": 1
+        },
+        "mfe_per_nt_kcal_mol_nt": -0.21739130434782608
+      }
+    }
+  ]
+}

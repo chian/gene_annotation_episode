@@ -1,0 +1,330 @@
+--- before/literature_reference_parent_prompt.py
++++ gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -62,6 +62,9 @@
+     if state.get("literature_completion_time_work", {}).get("version") == "literature_completion_time_task_v1":
+         from .literature_completion_time_prompt import COMPLETION_TIME_TASK
+         parts.extend(["", COMPLETION_TIME_TASK])
++    if state.get("literature_active_site_work", {}).get("version") == "literature_active_site_task_v1":
++        from .literature_active_site_prompt import ACTIVE_SITE_TASK
++        parts.extend(["", ACTIVE_SITE_TASK])
+     if state.get("literature_product_partition_work", {}).get("version") == "literature_product_partition_task_v1":
+         from .literature_product_partition_prompt import PRODUCT_PARTITION_TASK
+         parts.extend(["", PRODUCT_PARTITION_TASK])
+--- before/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -66,7 +66,7 @@
+ }
+ 
+ 
+-def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False):
++def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False, active_site_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
+     from .literature_rate_storage import rate_population_schema
+@@ -164,6 +164,12 @@
+         result.append({"name": "literature.completion_time.populate",
+             "description": COMPLETION_TIME_OPERATION_DESCRIPTION,
+             "input_schema": completion_time_arguments_schema()})
++    if active_site_population:
++        from .literature_active_site_inputs import active_site_arguments_schema
++        from .literature_active_site_prompt import ACTIVE_SITE_OPERATION_DESCRIPTION
++        result.append({"name": "literature.active_site.populate",
++            "description": ACTIVE_SITE_OPERATION_DESCRIPTION,
++            "input_schema": active_site_arguments_schema()})
+     if ratio_source_population:
+         from .literature_ratio_source_storage import ratio_source_population_schema
+         from .literature_ratio_source_prompt import SOURCE_RATIO_OPERATION_DESCRIPTION
+@@ -196,7 +202,7 @@
+                  ratio_source_evidence_origin="reported_source", controlled_response_population=False,
+                  controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
+                  gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source",
+-                 completion_time_population=False, product_partition_population=False):
++                 completion_time_population=False, product_partition_population=False, active_site_population=False):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -209,6 +215,11 @@
+         if completion_time_population and not rate_population:
+             raise ValueError("completion_time_population_requires_rate_population")
+         self.completion_time_population = completion_time_population
++        if type(active_site_population) is not bool:
++            raise ValueError("boolean_active_site_population_binding_required")
++        if active_site_population and not rate_population:
++            raise ValueError("active_site_population_requires_rate_population")
++        self.active_site_population = active_site_population
+         if type(product_partition_population) is not bool:
+             raise ValueError("boolean_product_partition_population_binding_required")
+         if product_partition_population and not rate_population:
+@@ -353,12 +364,16 @@
+                          "literature_completion_time_inputs.py", "literature_completion_time_calculations.py",
+                          "literature_completion_time_storage.py", "literature_completion_time_prompt.py",
+                          "literature_completion_time_render.py",
++                         "literature_active_site_inputs.py", "literature_active_site_calculations.py",
++                         "literature_active_site_storage.py", "literature_active_site_prompt.py", "literature_active_site_render.py",
+                          "literature_product_partition_inputs.py", "literature_product_partition_calculations.py",
+                          "literature_product_partition_storage.py", "literature_product_partition_prompt.py",
+                          "literature_product_partition_render.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.completion_time_population:
+             configuration["completion_time_population"] = True
++        if self.active_site_population:
++            configuration["active_site_population"] = True
+         if self.product_partition_population:
+             configuration["product_partition_population"] = True
+         if self.ratio_source_population:
+@@ -504,6 +519,10 @@
+             from .literature_completion_time_calculations import COMPONENTS as TIME_COMPONENTS
+             schema["properties"]["requested_completion_time_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(TIME_COMPONENTS)}}
++        if self.active_site_population:
++            from .literature_active_site_calculations import COMPONENTS as ACTIVE_SITE_COMPONENTS
++            schema["properties"]["requested_active_site_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(ACTIVE_SITE_COMPONENTS)}}
+         if self.ratio_source_population:
+             from .literature_ratio_source_storage import COMPONENTS as SOURCE_RATIO_COMPONENTS
+             schema["properties"]["requested_ratio_source_components"] = {
+@@ -642,11 +661,14 @@
+                         for entry in _population_catalog(ratio_source_population=self.ratio_source_population,
+                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+                             completion_time_population=self.completion_time_population,
++                            active_site_population=self.active_site_population,
+                             product_partition_population=self.product_partition_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
+         if self.completion_time_population:
+             result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
++        if self.active_site_population:
++            result["literature_active_site_work"] = {"version": "literature_active_site_task_v1"}
+         if self.product_partition_population:
+             result["literature_product_partition_work"] = {"version": "literature_product_partition_task_v1"}
+         if self.ratio_source_population:
+@@ -682,6 +704,8 @@
+                 "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+         if self.completion_time_population:
+             result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
++        if self.active_site_population:
++            result["literature_active_site_work"] = {"version": "literature_active_site_task_v1"}
+         if self.product_partition_population:
+             result["literature_product_partition_work"] = {"version": "literature_product_partition_task_v1"}
+         if self.ratio_source_population:
+@@ -729,6 +753,7 @@
+             populations = _population_catalog(ratio_source_population=self.ratio_source_population,
+                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+                             completion_time_population=self.completion_time_population,
++                            active_site_population=self.active_site_population,
+                             product_partition_population=self.product_partition_population)
+             if self._contract_information_profile is not None:
+                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
+@@ -769,7 +794,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -799,7 +824,7 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+@@ -808,6 +833,7 @@
+                         "literature.assay.populate": self.services.literature_assay_repository,
+                         "literature.amount.populate": self.services.literature_amount_repository,
+                         "literature.completion_time.populate": self._completion_time_repository,
++                        "literature.active_site.populate": self._active_site_repository,
+                         "literature.product_partition.populate": self._product_partition_repository,
+                         "literature.optical.populate": self.services.literature_optical_repository,
+                         "literature.kinetic.populate": self.services.literature_kinetic_repository,
+@@ -867,6 +893,14 @@
+             self._completion_time_repo = LiteratureCompletionTimeRepository(
+                 self.services.workflow.store, self.services.workflow.run_id)
+         return self._completion_time_repo
++
++    def _active_site_repository(self):
++        """Lazy selected-operation adapter; discovery installs no state."""
++        from .literature_active_site_storage import LiteratureActiveSiteRepository
++        if not hasattr(self, "_active_site_repo"):
++            self._active_site_repo = LiteratureActiveSiteRepository(
++                self.services.workflow.store, self.services.workflow.run_id)
++        return self._active_site_repo
+ 
+     def _product_partition_repository(self):
+         """Lazy source-composition adapter; discovery installs no state."""
+@@ -1201,6 +1235,11 @@
+             result[NAMESPACE] = {"type": "array", "meaning":
+                 "Exactly requested source-preparation endpoint-time components, with positive physical-time conditioning, strict reported-limit domains, source-backed endpoint/preparation/condition/change meanings and unknown relationships. The inverse is inverse endpoint time only, not activity retention, intrinsic rate, contaminant fraction, probability, effect isolation or annotation credit. Unrequested time operands are not expanded.",
+                 "report_schema": completion_time_cells_schema()}
++        if self.active_site_population:
++            from .literature_active_site_storage import active_site_cells_schema, NAMESPACE
++            result[NAMESPACE] = {"type": "array", "meaning":
++                "Exactly requested active-site titration amount components, including monomer-basis total concentration, active-site density, conditional one-site fraction and conditional physical denominator conversion. Preserve same preparation/assay linkage, nominal versus standardized titrant basis, titrant-site stoichiometry, source uncertainty, normalization stage and actual scientific meanings. Full joint covariance propagation is unimplemented; unknown input meanings remain unknown. No factor is applied to a rate and no annotation credit is computed.",
++                "report_schema": active_site_cells_schema()}
+         if self.ratio_source_population:
+             from .literature_ratio_source_storage import ratio_source_cells_schema
+             result["literature_ratio_source_cells"] = {"type": "array", "meaning":
+@@ -1304,6 +1343,10 @@
+             from .literature_completion_time_storage import COMPONENTS as TIME_COMPONENTS, PROVIDER as TIME_PROVIDER, NAMESPACE
+             result += ((NAMESPACE, "requested_completion_time_components", TIME_PROVIDER,
+                 (), self._completion_time_repository),)
++        if self.active_site_population:
++            from .literature_active_site_storage import COMPONENTS as ACTIVE_SITE_COMPONENTS, PROVIDER as ACTIVE_SITE_PROVIDER, NAMESPACE
++            result += ((NAMESPACE, "requested_active_site_components", ACTIVE_SITE_PROVIDER,
++                (), self._active_site_repository),)
+         if self.ratio_source_population:
+             from .literature_ratio_source_storage import COMPONENTS as SOURCE_COMPONENTS, PROVIDER as SOURCE_PROVIDER
+             result += (("literature_ratio_source_cells", "requested_ratio_source_components", SOURCE_PROVIDER,
+@@ -1453,6 +1496,11 @@
+             cells = [row for name, node in schema.get("properties", {}).items()
+                 if node.get("x-source") == NAMESPACE for row in form[name]]
+             references.extend(self._completion_time_repository().cell_record_refs(cells))
++        if self.active_site_population:
++            from .literature_active_site_storage import NAMESPACE
++            cells = [row for name, node in schema.get("properties", {}).items()
++                if node.get("x-source") == NAMESPACE for row in form[name]]
++            references.extend(self._active_site_repository().cell_record_refs(cells))
+         if self.controlled_response_population:
+             adapter = self._controlled_response_repository()
+             cells = [row for name, node in schema.get("properties", {}).items()
+@@ -1519,7 +1567,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_completion_time_cells", "literature_product_partition_cells"} else None)
++                        [] if namespace in {"literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                 except ContractError as error:
+--- before/communication.py
++++ gene_annotation_episode/communication.py
+@@ -154,6 +154,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                 raise ReportBoundaryError(f"{path}: completion time fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_active_site_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_active_site_storage import active_site_cells_schema
++            expected = active_site_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: active site fact schema must match its registered source", code="invalid_schema")
+             return
+         if source == "literature_rate_source_meaning_cells":
+             if depth != 1:
+--- before/literature_experimental_prompt.py
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -15,6 +15,8 @@
+ from .literature_gel_prompt import GEL_TASK
+ from . import literature_completion_time_render as _completion_time
+ from .literature_completion_time_prompt import COMPLETION_TIME_TASK
++from . import literature_active_site_render as _active_site
++from .literature_active_site_prompt import ACTIVE_SITE_TASK
+ from . import literature_product_partition_render as _product_partition
+ from .literature_product_partition_prompt import PRODUCT_PARTITION_TASK
+ from . import literature_rate_source_render as _native_rate
+@@ -342,6 +344,8 @@
+         parts.extend(["", CONTROLLED_RESPONSE_TASK])
+     if state.get("literature_completion_time_work", {}).get("version") == "literature_completion_time_task_v1":
+         parts.extend(["", COMPLETION_TIME_TASK])
++    if state.get("literature_active_site_work", {}).get("version") == "literature_active_site_task_v1":
++        parts.extend(["", ACTIVE_SITE_TASK])
+     if state.get("literature_product_partition_work", {}).get("version") == "literature_product_partition_task_v1":
+         parts.extend(["", PRODUCT_PARTITION_TASK])
+     if state.get("literature_gel_work", {}).get("version") == "literature_gel_task_v1":
+@@ -360,7 +364,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_product_partition_components", "requested_completion_time_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
++        "requested_product_partition_components", "requested_completion_time_components", "requested_active_site_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -500,10 +504,18 @@
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _completion_time.render_received(parts, rows, section=_section, table=_table)
+         return
++    if (isinstance(content, Mapping) and "sheet_ref" in content
++            and isinstance(content.get("cells"), (tuple, list)) and content["cells"]
++            and all(_active_site.is_row(row) for row in content["cells"])):
++        requested = (completion_assignment or {}).get("requested_active_site_components", ())
++        rows = [row for row in content["cells"] if row["component"] in requested]
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _active_site.render_received(parts, rows, section=_section, table=_table)
++        return
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if (list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content]))
++    if (list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+             or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+@@ -516,6 +528,7 @@
+             and isinstance(content.get("records"), (tuple, list))
+             and (any(_rate_meanings.rows_from_values(content["records"]))
+                 or any(_completion_time.rows_from_values(content["records"]))
++                or any(_active_site.rows_from_values(content["records"]))
+                 or any(_product_partition.rows_from_values(content["records"]))
+                 or any(isinstance(row, Mapping) and row.get("selection", {}).get("tool") == "literature.product_partition.populate"
+                        for row in content["records"]))):
+@@ -973,6 +986,7 @@
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     completion_times = {}
++    active_sites = {}
+     product_partitions = {}
+     ratio_source = {}
+     kinetic_model = {}
+@@ -1001,6 +1015,9 @@
+             elif isinstance(value, (list, tuple)) and value and all(_completion_time.is_row(row) for row in value):
+                 for row in value:
+                     completion_times.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_active_site.is_row(row) for row in value):
++                for row in value:
++                    active_sites.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(native_context_row(row) for row in value):
+                 for row in value:
+                     native_context.setdefault(row["sheet_ref"], []).append(row)
+@@ -1215,6 +1232,8 @@
+ 
+     for rows in completion_times.values():
+         _completion_time.render_received(parts, rows, section=_section, table=_table)
++    for rows in active_sites.values():
++        _active_site.render_received(parts, rows, section=_section, table=_table)
+     for rows in product_partitions.values():
+         _product_partition.render_received(parts, rows, records or {}, section=_section, table=_table)
+     for rows in ratio_source.values():
+@@ -1277,6 +1296,7 @@
+     if outcome is not None:
+         received_partition_sheets = {row["sheet_ref"] for row in _product_partition.rows_from_reports(state.get("child_reports", ()))}
+         received_completion_time_sheets = {row["sheet_ref"] for row in _completion_time.rows_from_reports(state.get("child_reports", ()))}
++        received_active_site_sheets = {row["sheet_ref"] for row in _active_site.rows_from_reports(state.get("child_reports", ()))}
+         received_interaction_model_sheets = {row["sheet_ref"] for row in _interaction_model.rows_from_reports(state.get("child_reports", ()))}
+         received_kinetic_model_sheets = {row["sheet_ref"] for row in _kinetic_model.rows_from_reports(state.get("child_reports", ()))}
+         received_ratio_sheets = {row['sheet_ref'] for row in _ratio_source_rows(state.get('child_reports', ()))}
+@@ -1288,7 +1308,7 @@
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_meanings.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_partition_sheets | received_completion_time_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1303,6 +1323,7 @@
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+         if (list(_completion_time.rows_from_reports([state["current_report_update"]])) or
++                list(_active_site.rows_from_reports([state["current_report_update"]])) or
+                 list(_product_partition.rows_from_reports([state["current_report_update"]]))):
+             _received_returns(parts, [state["current_report_update"]], records=controlled_records,
+                 ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),

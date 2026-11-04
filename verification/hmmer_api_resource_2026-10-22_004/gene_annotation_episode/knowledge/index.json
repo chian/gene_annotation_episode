@@ -1,0 +1,42 @@
+{
+  "version": "tool_knowledge_v1",
+  "entries": [
+    {
+      "entry_id": "native-phmmer",
+      "title": "Detached single-query phmmer execution",
+      "summary": "Preparing, launching, monitoring and acquiring a parent-assigned local protein search.",
+      "tags": ["homology", "HMMER", "protein", "launch", "monitor", "results"],
+      "tool_names": ["homology.environment", "homology.configure", "homology.stage", "homology.submit", "homology.resume_start", "homology.check_handoff", "homology.sample", "homology.extract", "homology.coverage", "homology.errors"],
+      "provenance": ["gene_annotation_episode/homology_jobs.py", "gene_annotation_episode/homology_episodes.py", "gene_annotation_episode/homology_results.py"],
+      "sections": [
+        {"section_id": "launch", "title": "Assigned inputs, preparation and submission", "path": "phmmer-launch.md"},
+        {"section_id": "monitor", "title": "Durable handoff and measured progress", "path": "phmmer-monitor.md"},
+        {"section_id": "results", "title": "Native output acquisition and limitations", "path": "phmmer-results.md"}
+      ]
+    },
+    {
+      "entry_id": "publication-access",
+      "title": "Europe PMC and PMC publication access",
+      "summary": "Literal literature queries, retained full text, version listings and advertised supplements.",
+      "tags": ["literature", "search", "article", "supplement", "EuropePMC", "PMC"],
+      "tool_names": ["public.literature.search", "public.literature.read", "public.pmc.versions", "public.pmc.files", "public.pmc.asset"],
+      "provenance": ["gene_annotation_episode/acquisition.py", "gene_annotation_episode/tools.py", "gene_annotation_episode/literature_assets.py"],
+      "sections": [
+        {"section_id": "search", "title": "Search and article identity", "path": "publication-search.md"},
+        {"section_id": "access", "title": "Article versions and supplements", "path": "publication-access.md"}
+      ]
+    },
+    {
+      "entry_id": "source-reading",
+      "title": "Reading retained article and supplement representations",
+      "summary": "Choose source windows, PDF text or images, archive members and spreadsheet rows according to the actual material and question.",
+      "tags": ["literature", "reading", "PDF", "XML", "table", "spreadsheet", "XLSX", "image", "archive"],
+      "tool_names": ["source.read", "source.pdf.info", "source.pdf.text", "source.pdf.page", "image.view", "source.xlsx.sheets", "source.xlsx.rows", "source.archive.members", "source.archive.extract"],
+      "provenance": ["gene_annotation_episode/tools.py", "gene_annotation_episode/document_tools.py", "gene_annotation_episode/spreadsheet_tools.py", "gene_annotation_episode/materials.py"],
+      "sections": [
+        {"section_id": "representations", "title": "Exact text, PDF and image reading", "path": "source-representations.md"},
+        {"section_id": "tables", "title": "Archive and spreadsheet context", "path": "source-tables.md"}
+      ]
+    }
+  ]
+}

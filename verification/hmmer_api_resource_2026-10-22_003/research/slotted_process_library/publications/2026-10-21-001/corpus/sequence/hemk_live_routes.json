@@ -1,0 +1,87 @@
+{
+  "case_id": "seq_hemk_prmc_ecoli",
+  "known_answer_disclosed": true,
+  "scope": "Fresh read-only sequence analyses and primary-record queries, performed with HemK's published RF-methyltransferase function already known. These are not blind discovery, historical reproductions or proposed library categories.",
+  "input_acquisition": {
+    "date": "2026-10-21",
+    "service": "https://rest.uniprot.org",
+    "queries_in_actual_call_order": [
+      "organism_id:83333 AND (gene:prmC OR gene:prmB OR gene:dam OR gene:hemG)",
+      "accession:P0ACC1 OR accession:P39199 OR accession:P0AEE8 OR accession:P0ACB4",
+      "protein_name:\"Type II methyltransferase M.TaqI\"",
+      "proteome:UP000000625"
+    ],
+    "limitations": "The M.TaqI name query returned other records as well; only reviewed P14385 from Thermus aquaticus was selected. Modern annotation names were visible, so this is explicitly informed analysis. Current labels were not treated as independent proof of function.",
+    "raw_sequence_files": ["hemk-homology-reference-sequences-20261021.json", "hemk-taqi-reference-20261021.json", "hemk-ecoli-k12-proteome-20261021.fasta"]
+  },
+  "routes": [
+    {
+      "route_id": "A_DNA_methyltransferase_references",
+      "goal_and_start": "Assess how much of a DNA-methyltransferase interpretation is supported by HemK's sequence. Start with the historical NPPY argument and actual E. coli HemK sequence, not its present function label.",
+      "steps": [
+        {
+          "selected_question": "Does the familiar E. coli DNA adenine methylase Dam share a motif and a broader corresponding region?",
+          "actual_probe": "Fetch P0ACC1 and P0AEE8 sequences, search the [SND]PP[YFW] pattern, then compute optimal local BLOSUM62 alignment with gap open -11 and extension -1.",
+          "actual_result": "HemK has NPPY at residue 183; Dam has DPPY at residue 181. The best local alignment instead covered only 19 residue pairs, with 7 identities and raw score 38, and did not pair those two motifs.",
+          "changed_interpretation": "Matching small motifs and similar residue positions did not provide a convincing broad comparison. Dam was an insufficient representative for the particular gamma-class comparison in the papers. A short optimal alignment is not evidence that the proteins lack evolutionary relationship.",
+          "next_selected_probe": "Use the gamma-family DNA enzyme M.TaqI, directly compared with HemK in the 2004 primary structural paper."
+        },
+        {
+          "selected_question": "Does a more relevant DNA reference yield a coherent comparison, and what would that comparison actually establish?",
+          "actual_probe": "Retrieve reviewed Thermus aquaticus P14385 from the M.TaqI name-query results and apply exactly the same local alignment settings.",
+          "actual_result": "M.TaqI contains NPPY at residue 105. Its optimal alignment to HemK had 104 aligned residue pairs, 30 identities, 13 gap characters and raw score 47; the shared NPPY aligned at the end of the region.",
+          "changed_interpretation": "This gives a broader candidate catalytic-region comparison than Dam, but is weak, uncalibrated sequence evidence. It does not discriminate DNA from protein substrate.",
+          "next_selected_probe": "Inspect the primary paper's explicit active-site comparison rather than interpreting the motif as substrate evidence."
+        },
+        {
+          "selected_question": "Can the catalytic motif comparison distinguish the target substrate class?",
+          "actual_probe": "Primary query: HemK M.TaqI NPPY active-site comparison; inspect Yang et al. 2004 results.",
+          "actual_result": "The paper reports superposable NPPY active-site geometry across HemK and DNA amino-methyltransferase M.TaqI, supporting conserved amino-group chemistry despite different substrates.",
+          "changed_interpretation": "The discriminating question is substrate recognition, not whether the short motif exists.",
+          "bounded_conclusion": "The route supplies catalytic-family compatibility and a reason to withhold a DNA-specific annotation. It does not establish release-factor specificity from sequence alone.",
+          "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2713863/"
+        }
+      ]
+    },
+    {
+      "route_id": "B_protein_glutamine_methyltransferase_reference",
+      "goal_and_start": "Ask which E. coli protein is most related in sequence to experimentally characterized L3 glutamine methyltransferase PrmB/YfcB, without presuming that its L3 substrate should transfer.",
+      "steps": [
+        {
+          "selected_question": "Among this retrieved K-12 proteome, is there a nonself protein standing out as a PrmB-related candidate?",
+          "actual_probe": "Retrieve all FASTA records returned for proteome UP000000625 and score P39199 against every nonself sequence using the same local BLOSUM62 settings.",
+          "actual_result": "There were 4403 FASTA records. HemK P0ACC1 ranked first nonself with raw score 254; next was TrmN6 P31825 at 103, then RsmC P39406 at 92. Three selenoproteins contained U outside BLOSUM62 and were scored after masking U to X; their identities are recorded in the score artifact.",
+          "changed_interpretation": "HemK was the outstanding candidate within this one reference/proteome comparison, giving a concrete reason to examine its alignment. These are raw scores, not significance estimates or evidence that no other homolog exists.",
+          "next_selected_probe": "Inspect whether the relationship extends beyond the short NPPY motif."
+        },
+        {
+          "selected_question": "Is the PrmB relationship only a motif coincidence or a wider aligned core?",
+          "actual_probe": "Compute and inspect the full optimal HemK-P39199 local alignment.",
+          "actual_result": "The alignment spans HemK residues 48-239 and PrmB residues 70-263, with 192 aligned residue pairs, 63 identities, two gap characters and raw score 254. Both NPPY motifs align within a wider shared region.",
+          "changed_interpretation": "The sequence relationship supports pursuing related catalytic chemistry; terminal differences remain outside much of the matched core.",
+          "next_selected_probe": "Query the primary substrate evidence to test whether homology justifies copying the reference's L3 specificity."
+        },
+        {
+          "selected_question": "Does the characterized reference's substrate specificity transfer to HemK?",
+          "actual_probe": "Inspect the 2002 EMBO YfcB and HemK substrate experiments and the independent PNAS HemK results.",
+          "actual_result": "YfcB methylated L3 but not RF1/RF2, while HemK preparations methylated release factors; hemK disruption removed RF1 methylation. GGQ replacements prevented the observed HemK-dependent modification in the EMBO tests.",
+          "changed_interpretation": "Shared chemistry survived comparison, while identical substrate specificity did not.",
+          "bounded_conclusion": "The fresh sequence analysis prioritizes a protein-glutamine-methyltransferase relationship. The exact release-factor assignment is accepted from published experiments, not claimed as a new result of this score search.",
+          "sources": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC125846/", "https://pmc.ncbi.nlm.nih.gov/articles/PMC122215/"]
+        }
+      ]
+    }
+  ],
+  "failures_and_missing_data": [
+    "System python lacked Biopython, so the existing repository virtual-environment Python with Biopython was used; no dependency was installed.",
+    "The first proteome score attempt failed on selenocysteine U. The completed analysis explicitly masks nonmatrix symbols to X and records affected proteins.",
+    "The NCBI BLAST skill requires a contact email; NCBI_EMAIL was absent. No address was fabricated, no NCBI job was submitted, and there is no RID or BLAST E-value.",
+    "No wet-lab validation, phylogeny, new annotation run or functional database update occurred."
+  ],
+  "actual_capabilities_used": [
+    "UniProt REST search/stream via the installed uniprot-skill script: accession/name/proteome query in; current sequence records and FASTA out.",
+    "Existing Biopython PairwiseAligner: actual amino-acid sequences plus declared scoring parameters in; coordinates, raw optimal local score and alignment out.",
+    "Web queries of primary papers: targeted biological question in; reported method/result sections out."
+  ],
+  "analysis_artifacts": ["hemk-pairwise-comparisons.json", "hemk-prmb-proteome-comparison.json"]
+}

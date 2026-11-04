@@ -1,0 +1,579 @@
+{
+  "scope": "accepted assembled tree plus remaining model-call entry paths",
+  "templates": [
+    {
+      "template": "annotation__next_decision",
+      "boundary": "within_episode",
+      "sender": "annotation",
+      "receiver": "annotation",
+      "review_number": 1,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_001_annotation_iteration",
+      "task_directness_revision": "001_annotation_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "scientific_process__next_decision",
+      "boundary": "within_episode",
+      "sender": "scientific_process",
+      "receiver": "scientific_process",
+      "review_number": 2,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_002_scientific_iteration",
+      "task_directness_revision": "002_scientific_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature__next_decision",
+      "boundary": "within_episode",
+      "sender": "literature",
+      "receiver": "literature",
+      "review_number": 3,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_003_literature_iteration",
+      "task_directness_revision": "003_literature_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature_strategy__next_decision",
+      "boundary": "within_episode",
+      "sender": "literature_strategy",
+      "receiver": "literature_strategy",
+      "review_number": 4,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_004_strategy_iteration",
+      "task_directness_revision": "004_strategy_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature_search__next_decision",
+      "boundary": "within_episode",
+      "sender": "literature_search",
+      "receiver": "literature_search",
+      "review_number": 5,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_005_search_iteration",
+      "task_directness_revision": "005_search_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature_page__next_decision",
+      "boundary": "within_episode",
+      "sender": "literature_page",
+      "receiver": "literature_page",
+      "review_number": 6,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_006_page_iteration",
+      "task_directness_revision": "006_page_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature_table__next_decision",
+      "boundary": "within_episode",
+      "sender": "literature_table",
+      "receiver": "literature_table",
+      "review_number": 7,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_007_table_iteration",
+      "task_directness_revision": "007_table_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature_ordered__next_decision",
+      "boundary": "within_episode",
+      "sender": "literature_ordered",
+      "receiver": "literature_ordered",
+      "review_number": 8,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_008_ordered_iteration",
+      "task_directness_revision": "008_ordered_iteration_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature_targeted__next_decision",
+      "boundary": "within_episode",
+      "sender": "literature_targeted",
+      "receiver": "literature_targeted",
+      "review_number": 9,
+      "status": "printed_awaiting_user_steering",
+      "latest_draft": "009_targeted_iteration.md",
+      "agent": "/root/template_009_targeted_iteration",
+      "task_directness_status": "drafted_with_direct_task_instructions_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "launch__next_decision",
+      "boundary": "within_episode",
+      "sender": "launch",
+      "receiver": "launch",
+      "review_number": 10,
+      "status": "printed_awaiting_user_steering",
+      "latest_draft": "010_launch_iteration.md",
+      "agent": "/root/template_010_launch_iteration",
+      "task_directness_status": "drafted_with_direct_task_instructions_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "launch_api__next_decision",
+      "boundary": "within_episode",
+      "sender": "launch_api",
+      "receiver": "launch_api",
+      "review_number": 11,
+      "status": "draft_ready_awaiting_presentation",
+      "latest_draft": "011_api_iteration_revision_002.md",
+      "agent": "/root/template_011_api_iteration",
+      "task_directness_status": "generic_service_revision_ready_for_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback",
+      "task_directness_revision": "011_api_iteration_revision_002.md",
+      "service_capability_expansion": "docs/API_SERVICE_EXPANSION_VERIFICATION_2026-10-23_001.md"
+    },
+    {
+      "template": "launch_local__next_decision",
+      "boundary": "within_episode",
+      "sender": "launch_local",
+      "receiver": "launch_local",
+      "review_number": 12,
+      "status": "draft_ready_awaiting_presentation",
+      "agent": "/root/template_012_local_iteration",
+      "task_directness_status": "required_in_current_review",
+      "latest_draft": "012_local_iteration.md"
+    },
+    {
+      "template": "launch_hpc__next_decision",
+      "boundary": "within_episode",
+      "sender": "launch_hpc",
+      "receiver": "launch_hpc",
+      "review_number": 13,
+      "status": "draft_ready_awaiting_presentation",
+      "agent": "/root/template_013_hpc_iteration",
+      "task_directness_status": "required_in_current_review",
+      "latest_draft": "013_hpc_iteration.md"
+    },
+    {
+      "template": "monitor__next_decision",
+      "boundary": "within_episode",
+      "sender": "monitor",
+      "receiver": "monitor",
+      "review_number": 14,
+      "status": "draft_ready_awaiting_presentation",
+      "agent": "/root/template_014_monitor_iteration",
+      "task_directness_status": "required_in_current_review",
+      "latest_draft": "014_monitor_iteration.md"
+    },
+    {
+      "template": "results__next_decision",
+      "boundary": "within_episode",
+      "sender": "results",
+      "receiver": "results",
+      "review_number": 15,
+      "status": "unassigned"
+    },
+    {
+      "template": "annotation__commission__scientific_process",
+      "boundary": "parent_to_child",
+      "sender": "annotation",
+      "receiver": "scientific_process",
+      "review_number": 16,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_016_root_to_scientific",
+      "task_directness_revision": "016_root_to_scientific_revision_002.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "scientific_process__return_to__annotation",
+      "boundary": "child_to_parent",
+      "sender": "scientific_process",
+      "receiver": "annotation",
+      "review_number": 17,
+      "status": "printed_awaiting_user_steering",
+      "agent": "/root/template_017_scientific_to_root",
+      "task_directness_revision": "017_scientific_to_root_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "annotation__commission__literature",
+      "boundary": "parent_to_child",
+      "sender": "annotation",
+      "receiver": "literature",
+      "review_number": 18,
+      "status": "printed_awaiting_user_steering",
+      "task_directness_revision": "018_root_to_literature_revision_003.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "literature__return_to__annotation",
+      "boundary": "child_to_parent",
+      "sender": "literature",
+      "receiver": "annotation",
+      "review_number": 19,
+      "status": "printed_awaiting_user_steering",
+      "task_directness_revision": "019_literature_to_root_revision_002.md",
+      "task_directness_status": "revised_awaiting_user_steering",
+      "runtime_implemented": false,
+      "task_directness_presentation": "printed_in_chat_for_feedback"
+    },
+    {
+      "template": "annotation__commission__launch",
+      "boundary": "parent_to_child",
+      "sender": "annotation",
+      "receiver": "launch",
+      "review_number": 20,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch__return_to__annotation",
+      "boundary": "child_to_parent",
+      "sender": "launch",
+      "receiver": "annotation",
+      "review_number": 21,
+      "status": "unassigned"
+    },
+    {
+      "template": "annotation__commission__monitor",
+      "boundary": "parent_to_child",
+      "sender": "annotation",
+      "receiver": "monitor",
+      "review_number": 22,
+      "status": "unassigned"
+    },
+    {
+      "template": "monitor__return_to__annotation",
+      "boundary": "child_to_parent",
+      "sender": "monitor",
+      "receiver": "annotation",
+      "review_number": 23,
+      "status": "unassigned"
+    },
+    {
+      "template": "annotation__commission__results",
+      "boundary": "parent_to_child",
+      "sender": "annotation",
+      "receiver": "results",
+      "review_number": 24,
+      "status": "unassigned"
+    },
+    {
+      "template": "results__return_to__annotation",
+      "boundary": "child_to_parent",
+      "sender": "results",
+      "receiver": "annotation",
+      "review_number": 25,
+      "status": "unassigned"
+    },
+    {
+      "template": "scientific_process__commission__scientific_process",
+      "boundary": "parent_to_child",
+      "sender": "scientific_process",
+      "receiver": "scientific_process",
+      "review_number": 26,
+      "status": "unassigned"
+    },
+    {
+      "template": "scientific_process__return_to__scientific_process",
+      "boundary": "child_to_parent",
+      "sender": "scientific_process",
+      "receiver": "scientific_process",
+      "review_number": 27,
+      "status": "unassigned"
+    },
+    {
+      "template": "scientific_process__commission__literature",
+      "boundary": "parent_to_child",
+      "sender": "scientific_process",
+      "receiver": "literature",
+      "review_number": 28,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature__return_to__scientific_process",
+      "boundary": "child_to_parent",
+      "sender": "literature",
+      "receiver": "scientific_process",
+      "review_number": 29,
+      "status": "unassigned"
+    },
+    {
+      "template": "scientific_process__commission__launch",
+      "boundary": "parent_to_child",
+      "sender": "scientific_process",
+      "receiver": "launch",
+      "review_number": 30,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch__return_to__scientific_process",
+      "boundary": "child_to_parent",
+      "sender": "launch",
+      "receiver": "scientific_process",
+      "review_number": 31,
+      "status": "unassigned"
+    },
+    {
+      "template": "scientific_process__commission__monitor",
+      "boundary": "parent_to_child",
+      "sender": "scientific_process",
+      "receiver": "monitor",
+      "review_number": 32,
+      "status": "unassigned"
+    },
+    {
+      "template": "monitor__return_to__scientific_process",
+      "boundary": "child_to_parent",
+      "sender": "monitor",
+      "receiver": "scientific_process",
+      "review_number": 33,
+      "status": "unassigned"
+    },
+    {
+      "template": "scientific_process__commission__results",
+      "boundary": "parent_to_child",
+      "sender": "scientific_process",
+      "receiver": "results",
+      "review_number": 34,
+      "status": "unassigned"
+    },
+    {
+      "template": "results__return_to__scientific_process",
+      "boundary": "child_to_parent",
+      "sender": "results",
+      "receiver": "scientific_process",
+      "review_number": 35,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature__commission__literature_strategy",
+      "boundary": "parent_to_child",
+      "sender": "literature",
+      "receiver": "literature_strategy",
+      "review_number": 36,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_strategy__return_to__literature",
+      "boundary": "child_to_parent",
+      "sender": "literature_strategy",
+      "receiver": "literature",
+      "review_number": 37,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_strategy__commission__literature_search",
+      "boundary": "parent_to_child",
+      "sender": "literature_strategy",
+      "receiver": "literature_search",
+      "review_number": 38,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_search__return_to__literature_strategy",
+      "boundary": "child_to_parent",
+      "sender": "literature_search",
+      "receiver": "literature_strategy",
+      "review_number": 39,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_search__commission__literature_page",
+      "boundary": "parent_to_child",
+      "sender": "literature_search",
+      "receiver": "literature_page",
+      "review_number": 40,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_page__return_to__literature_search",
+      "boundary": "child_to_parent",
+      "sender": "literature_page",
+      "receiver": "literature_search",
+      "review_number": 41,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_page__commission__literature_table",
+      "boundary": "parent_to_child",
+      "sender": "literature_page",
+      "receiver": "literature_table",
+      "review_number": 42,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_table__return_to__literature_page",
+      "boundary": "child_to_parent",
+      "sender": "literature_table",
+      "receiver": "literature_page",
+      "review_number": 43,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_page__commission__literature_ordered",
+      "boundary": "parent_to_child",
+      "sender": "literature_page",
+      "receiver": "literature_ordered",
+      "review_number": 44,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_ordered__return_to__literature_page",
+      "boundary": "child_to_parent",
+      "sender": "literature_ordered",
+      "receiver": "literature_page",
+      "review_number": 45,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_page__commission__literature_targeted",
+      "boundary": "parent_to_child",
+      "sender": "literature_page",
+      "receiver": "literature_targeted",
+      "review_number": 46,
+      "status": "unassigned"
+    },
+    {
+      "template": "literature_targeted__return_to__literature_page",
+      "boundary": "child_to_parent",
+      "sender": "literature_targeted",
+      "receiver": "literature_page",
+      "review_number": 47,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch__commission__launch_api",
+      "boundary": "parent_to_child",
+      "sender": "launch",
+      "receiver": "launch_api",
+      "review_number": 48,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch_api__return_to__launch",
+      "boundary": "child_to_parent",
+      "sender": "launch_api",
+      "receiver": "launch",
+      "review_number": 49,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch__commission__launch_local",
+      "boundary": "parent_to_child",
+      "sender": "launch",
+      "receiver": "launch_local",
+      "review_number": 50,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch_local__return_to__launch",
+      "boundary": "child_to_parent",
+      "sender": "launch_local",
+      "receiver": "launch",
+      "review_number": 51,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch__commission__launch_hpc",
+      "boundary": "parent_to_child",
+      "sender": "launch",
+      "receiver": "launch_hpc",
+      "review_number": 52,
+      "status": "unassigned"
+    },
+    {
+      "template": "launch_hpc__return_to__launch",
+      "boundary": "child_to_parent",
+      "sender": "launch_hpc",
+      "receiver": "launch",
+      "review_number": 53,
+      "status": "unassigned"
+    },
+    {
+      "template": "monitor__commission__monitor",
+      "boundary": "parent_to_child",
+      "sender": "monitor",
+      "receiver": "monitor",
+      "review_number": 54,
+      "status": "unassigned"
+    },
+    {
+      "template": "monitor__return_to__monitor",
+      "boundary": "child_to_parent",
+      "sender": "monitor",
+      "receiver": "monitor",
+      "review_number": 55,
+      "status": "unassigned"
+    },
+    {
+      "template": "improvement__next_decision",
+      "boundary": "within_episode_legacy_entry",
+      "sender": "improvement",
+      "receiver": "improvement",
+      "review_number": 56,
+      "status": "unassigned"
+    },
+    {
+      "template": "job_launch__next_decision",
+      "boundary": "within_episode_legacy_entry",
+      "sender": "job_launch",
+      "receiver": "job_launch",
+      "review_number": 57,
+      "status": "unassigned"
+    },
+    {
+      "template": "job_monitor__next_decision",
+      "boundary": "within_episode_legacy_entry",
+      "sender": "job_monitor",
+      "receiver": "job_monitor",
+      "review_number": 58,
+      "status": "unassigned"
+    },
+    {
+      "template": "job_results__next_decision",
+      "boundary": "within_episode_legacy_entry",
+      "sender": "job_results",
+      "receiver": "job_results",
+      "review_number": 59,
+      "status": "unassigned"
+    },
+    {
+      "template": "scientific_tool_retrieval__selection",
+      "boundary": "retrieval_request",
+      "sender": "scientific_parent",
+      "receiver": "tool_retriever",
+      "review_number": 60,
+      "status": "unassigned"
+    },
+    {
+      "template": "local_example__next_decision",
+      "boundary": "within_episode_example",
+      "sender": "local_example",
+      "receiver": "local_example",
+      "review_number": 61,
+      "status": "unassigned"
+    }
+  ],
+  "implementation_started": false,
+  "task_directness_requirement": "All prompts: detailed direct task instructions; terse factual steering. See docs/TASK_AND_STEERING.md."
+}

@@ -1,0 +1,16 @@
+--- verification/tool_graders_hmmer_map_verification_2026-10-28_529/check171c_returns709/source_snapshot/tests/test_flux_balance_returns_709.py
++++ tests/test_flux_balance_returns_709.py
+@@ -539,3 +539,13 @@
+     elif fault == 'unknown_source': schema['properties']['field_0']['x-source'] = 'flux_balance_fabricated_confidence'
+     else: schema = obj({'outer': schema})
+     with pytest.raises(ReportBoundaryError): validate_closed_schema(schema)
++
++
++def test_registered_saved_File_still_requires_actual_artifact_reference_resolution(fixture):
++    f = fixture
++    calls = []
++    def unavailable(reference, namespace):
++        calls.append((reference, namespace)); return False
++    with pytest.raises(ReportBoundaryError):
++        validate_form({'field_0': [f.sheet]}, form_schema(SAVED_SOURCE), unavailable)
++    assert calls == [(f.sheet['artifact_ref'], 'artifact')]

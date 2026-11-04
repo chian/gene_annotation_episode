@@ -1,0 +1,42 @@
+..F
+=================================== FAILURES ===================================
+_____ test_partial_failure_zero_hits_and_unrequested_data[changed_stdout] ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_integration_2026-10-26_298/third_checks/temporary/pytest/test_partial_failure_zero_hits2')
+kind = 'changed_stdout'
+
+    @pytest.mark.parametrize('kind', ['zero_hits', 'missing_report', 'changed_stdout', 'native_failure',
+        'source_only', 'completion_only'])
+    def test_partial_failure_zero_hits_and_unrequested_data(tmp_path, kind):
+        def alter(store, plan):
+            root = Path(plan['attempt_directory'])
+            job = plan['requested_job']['native_blast']
+            role = 'primary_report' if kind == 'missing_report' else 'stdout'
+            path = root / next(row['relative_path'] for row in job['outputs'] if row['role'] == role)
+            (tmp_path / 'preserved-original-output').write_bytes(path.read_bytes())
+            if kind == 'missing_report':
+                path.unlink()
+            else:
+                path.write_bytes(b'changed post-seal output\n')
+        failure = kind in {'missing_report', 'changed_stdout', 'native_failure'}
+        case = run_case(tmp_path, 'blastp' if kind == 'native_failure' else 'blastn',
+            no_hits=kind == 'zero_hits', native_failure=kind == 'native_failure',
+            before_collection=alter if kind in {'missing_report', 'changed_stdout'} else None,
+            include_rows=kind not in {'source_only', 'completion_only'}, include_refs=kind != 'completion_only',
+            include_origin=True, incomplete=failure)
+        try:
+            result, body = case.returned[0], case.outcomes[0]['result']
+            assert result['completed'] is (not failure)
+            assert body['complete'] is (not failure)
+            if failure:
+                assert body['failures'] and not case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+                if kind == 'changed_stdout':
+>                   assert result['rows'][0]['status'] == 'published'
+                           ^^^^^^^^^^^^^^^^^
+E                   IndexError: list index out of range
+
+../../../tests/test_blast_native_execution_workflow.py:584: IndexError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_native_execution_workflow.py::test_partial_failure_zero_hits_and_unrequested_data[changed_stdout]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 2 passed, 14 deselected in 67.17s (0:01:07)

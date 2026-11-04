@@ -1,0 +1,841 @@
+diff --git a/tests/test_hmmer_alignment_input_episode_path.py b/tests/test_hmmer_alignment_input_episode_path.py
+new file mode 100644
+--- /dev/null
++++ b/tests/test_hmmer_alignment_input_episode_path.py
+@@ -0,0 +1,316 @@
++"""Declared alignment inputs through the existing real selected Workflow path.
++
++Every input below is an authored engineering fixture, not an original native
++emission. Scientific choices/controller are the existing scripted harness;
++native execution, custody, shared grading, typed returns and replay are real.
++Run only inside the root's bounded lifecycle, never as host scientific work.
++"""
++import asyncio
++from copy import deepcopy
++import hashlib
++import json
++from pathlib import Path
++import socket
++import sys
++
++import pytest
++
++from gene_annotation_episode import hmmer_alignment_preparation_calculations as calculations
++from gene_annotation_episode import native_hmmer_preparation_acquisition as acquisition
++from gene_annotation_episode import native_hmmer_preparation_worker as worker
++from gene_annotation_episode import native_lifecycle as native
++from gene_annotation_episode.numerical import NumericBand
++from test_native_hmmer_preparation_contracts import job, operand
++from test_native_hmmer_preparation_workflow import (
++    PREFIX, assert_accounting, assert_native_custody, assert_projected_values,
++    choice_for, forbid_work, read_retained, run_case,
++)
++
++
++# These format-specific bytes encode the same three logical rows. The A2M
++# short row has only two consensus residues; literal C--C would be invalid
++# against AaaA. SELEX's two internal spaces occupy actual alignment columns.
++# Clustal's final all-space line is its mandatory, empty consensus display.
++# PHYLIP names occupy exactly ten bytes, including eight spaces after s0/s1/s2.
++AUTHORED_INPUTS = {
++    "afa": b">s0\nAAAA\n>s1\nAAAA\n>s2\nC--C\n",
++    "a2m": b">s0\nAaaA\n>s1\nAaaA\n>s2\nCC\n",
++    "psiblast": b"s0 AaaA\ns1 AaaA\ns2 C--C\n",
++    "selex": b"s0 AAAA\ns1 AAAA\ns2 C  C\n",
++    "clustal": b"CLUSTAL authored alignment\n\ns0 AAAA\ns1 AAAA\ns2 C--C\n       \n",
++    "clustallike": b"AUTHORED alignment\n\ns0 AAAA\ns1 AAAA\ns2 C--C\n       \n",
++    "phylip": b"3 4\ns0        AAAA\ns1        AAAA\ns2        C--C\n",
++    "phylips": b"3 4\ns0        AAAA\ns1        AAAA\ns2        C--C\n",
++}
++AUTHORED_INFERRED_AFA = (
++    b">s0\nACGTACGTACGT\n>s1\nACGTACGTACGT\n>s2\nC--CC--CC--C\n"
++)
++QUANTITIES = [
++    "components.input_sequence_count",
++    "components.input_column_count",
++    "components.mapped_model_position_count",
++    "components.native_mapping_row_count",
++]
++CHECKS = ["native_mapping", "requested_ranges"]
++UNITS = ["sequence_count", "alignment_column_count", "model_position_count",
++         "decoded_mapping_row_count"]
++
++
++def _selected_case(tmp_path, declared_format, content, *, width, infer_alphabet=False):
++    source = tmp_path / ("authored-selected." + declared_format)
++    source.write_bytes(content)
++    options = ([] if infer_alphabet else ["--dna"]) + [
++        "--fast", "--wgsc", "--seed", "17", "--fragthresh", "0",
++        "--symfrac", ".6", "--ali2model", "1-" + str(width),
++    ]
++    selected = job("alimask", "alignment_to_model", options)
++    selected["operands"] = [operand("alignment", source, declared_format)]
++    choice = choice_for(selected)
++    choice["projection"]["quantities"] = list(QUANTITIES)
++    choice["projection"]["checks"] = list(CHECKS)
++    choice["artifacts"] = []
++    case = run_case(
++        tmp_path, "alimask", "alignment_to_model", job_override=selected,
++        selectors=[choice], form_options={"artifacts": False, "population": False},
++    )
++    return source, choice, case
++
++
++def _assert_numbers_and_return(case, choice, bundle, sheet, components, *,
++                               declared_format, expected_rows, expected_map):
++    assert sheet["schema"] == "hmmer_alignment_preparation_sheet_v1"
++    source, = sheet["input_records"]
++    assert source["format"] == declared_format
++    assert [row["name"] for row in source["rows"]] == ["s0", "s1", "s2"]
++    assert [row["aligned_sequence"] for row in source["rows"]] == expected_rows
++    assert source["column_count"] == len(expected_rows[0])
++    assert all(row["weight"] == {"value": None, "state": "missing", "events": []}
++               for row in source["rows"])
++    if declared_format in {"a2m", "psiblast"}:
++        assert source["column_annotations"]["RF"]["text"] == "x..x"
++        assert source["column_annotations"]["RF"]["valid"] is True
++
++    row, = components["rows"]
++    assert row["record_key"] == source["record_key"]
++    reconstruction = row["reconstruction"]
++    assert reconstruction["state"] == "present"
++    assert reconstruction["map"] == expected_map
++    assert reconstruction["weighting_trace"]["method"] == "wgsc"
++    assert [item["weight"] for item in reconstruction["weights"]] == [.75, .75, 1.5]
++    expected_values = [3, len(expected_rows[0]), len(expected_map), 1]
++    for path, expected, unit in zip(QUANTITIES, expected_values, UNITS, strict=True):
++        cell = row["components"][path.removeprefix("components.")]
++        assert (cell["state"], cell["value"], cell["unit"]) == ("present", expected, unit)
++        assert cell["inputs"]
++    native_mapping, = row["native_mappings"]
++    assert native_mapping["valid"] is True
++    assert (native_mapping["returned_source_start"], native_mapping["returned_source_end"]) == (
++        1, len(expected_rows[0]))
++    assert (native_mapping["target_start"], native_mapping["target_end"]) == (1, len(expected_map))
++    for code in CHECKS:
++        checks = [item for item in components["checks"] if item["code"] == code]
++        assert checks and all(item["state"] == "pass" for item in checks)
++    context = source["map_reconstruction_context"]
++    assert context["source_sha256"] == bundle["inputs"][0]["staged_sha256"]
++    assert context["requested_cli_seed"] == context["resolved_cli_seed"] == 17
++
++    form, = case.returned
++    assert set(form) == {"completed", "rows"}
++    assert form["completed"] is True
++    returned_row, = form["rows"]
++    assert [item["value"] for item in returned_row["quantities"]] == expected_values
++    assert_projected_values(form, choice, components)
++
++
++def _runtime_snapshot(case):
++    # Include durable observations, histories and original forms, not only
++    # in-memory copies of the already-closed child record.
++    return {
++        table: [tuple(row) for row in case.store.db.execute(
++            "SELECT * FROM " + table + " ORDER BY rowid").fetchall()]
++        for table in ("runtime_actions", "runtime_observations", "runtime_forms", "runtime_episodes")
++    }
++
++
++def _forbid_saved_work_aliases(guard, forbidden, *, calculations_forbidden=False):
++    # Cover original functions and imports under aliases without depending on
++    # the adapter's optional saved-field spelling. Histogram validation remains
++    # allowed; scanning the original bytes or decoding rows does not.
++    names = {
++        "read_hmmer_alignment_input", "read_hmmer_alignment_output",
++        "infer_hmmer_alignment_alphabet",
++        "decode_native_fasta_alignment", "decode_native_block_alignment",
++        "decode_native_phylip_alignment", "iter_hmmalign_stockholm_records",
++    }
++    if calculations_forbidden:
++        names.update({"recalculate_hmmer_preparation", "reconstruct_alimask_model_map",
++                      "calculate_hmmer_alignment_preparation_components"})
++    for module_name, module in list(sys.modules.items()):
++        if not module_name.startswith("gene_annotation_episode.") or module is None:
++            continue
++        for name, value in list(vars(module).items()):
++            if callable(value) and getattr(value, "__name__", None) in names:
++                guard.setattr(module, name, forbidden)
++
++
++def _assert_saved_recalculation_and_closed_replay(case, source, monkeypatch, body,
++                                                  sheet, components, parent, received):
++    original_sheet = deepcopy(sheet)
++    original_outcome = deepcopy(case.outcomes[0])
++    original_form = deepcopy(case.returned[0])
++    original_history = deepcopy(case.record.controller_state.history)
++    original_runtime = _runtime_snapshot(case)
++    retained_refs = [body["prepared"][name] for name in (
++        "bundle_artifact_ref", "grading_artifact_ref", "sheet_artifact_ref", "calculations_artifact_ref")]
++    retained_bytes = {ref: case.store.get_artifact(ref) for ref in retained_refs}
++    attempt = Path(case.plan["attempt_directory"])
++    unavailable_attempt = attempt.with_name("native-work-unavailable-for-saved-input-check")
++    unavailable_source = source.with_name(source.name + ".unavailable")
++    source.rename(unavailable_source)
++    try:
++        attempt.rename(unavailable_attempt)
++        try:
++            calls = []
++            shared_calculator = calculations.calculate_hmmer_alignment_preparation_components
++
++            def tracked_shared_calculator(saved, *, parameters=None):
++                calls.append((deepcopy(saved), deepcopy(parameters)))
++                return shared_calculator(saved, parameters=parameters)
++
++            with monkeypatch.context() as guard:
++                forbidden = forbid_work(guard)
++                _forbid_saved_work_aliases(guard, forbidden)
++                guard.setattr(native, "wait_job", forbidden)
++                guard.setattr(acquisition, "_capture_file", forbidden)
++                guard.setattr("builtins.open", forbidden)
++                guard.setattr(Path, "open", forbidden)
++                guard.setattr(calculations, "calculate_hmmer_alignment_preparation_components",
++                              tracked_shared_calculator)
++                recalculated = worker.recalculate_hmmer_preparation(
++                    sheet, parameters=case.job["grading_parameters"])
++                assert recalculated == components
++                assert calls == [(sheet, case.job["grading_parameters"])]
++            assert sheet == original_sheet
++            assert _runtime_snapshot(case) == original_runtime
++
++            original_socket = socket.socket
++            with monkeypatch.context() as guard:
++                forbidden = forbid_work(guard, calculations=True)
++                _forbid_saved_work_aliases(guard, forbidden, calculations_forbidden=True)
++                for target, name in (
++                    (native, "wait_job"), (acquisition, "_capture_file"),
++                    (calculations, "calculate_hmmer_alignment_preparation_components"),
++                    (calculations, "reconstruct_alimask_model_map"),
++                ):
++                    guard.setattr(target, name, forbidden)
++
++                def local_socket_only(*args, **kwargs):
++                    family = args[0] if args else kwargs.get("family", socket.AF_INET)
++                    if family != socket.AF_UNIX:
++                        forbidden(*args, **kwargs)
++                    return original_socket(*args, **kwargs)
++
++                guard.setattr(socket, "socket", local_socket_only)
++                replay = asyncio.run(case.owner.execute(
++                    case.contexts[0], "execution.results.collect", {}, body["operation_key"]))
++                assert replay == {key: value for key, value in original_outcome.items()
++                                  if key != "pending_work_after_action"}
++                case.owner.validate_report(case.contexts[0], original_form, case.forms[0])
++                assert_accounting(case)
++                assert case.owner.native_hmmer_preparation_returns.received_context(parent) == received
++            assert _runtime_snapshot(case) == original_runtime
++            assert case.record.controller_state.history == original_history
++            assert case.returned[0] == original_form
++            assert {ref: case.store.get_artifact(ref) for ref in retained_refs} == retained_bytes
++        finally:
++            unavailable_attempt.rename(attempt)
++    finally:
++        unavailable_source.rename(source)
++
++
++def _verify_case(tmp_path, monkeypatch, declared_format, content, *, expected_rows,
++                 expected_map, infer_alphabet=False):
++    source, choice, case = _selected_case(
++        tmp_path, declared_format, content, width=len(expected_rows[0]), infer_alphabet=infer_alphabet)
++    try:
++        parent, received = assert_accounting(case)
++        body, bundle, sheet, components = read_retained(case)
++        assert body["complete"] is True and body["failures"] == []
++        assert_native_custody(case, bundle)
++        assert bundle["inputs"][0]["staged_sha256"] == hashlib.sha256(content).hexdigest()
++        assert sheet["operation"]["settings"]["--informat"] == declared_format
++        alphabet_flags = {"--dna", "--rna", "--amino"}
++        assert set(case.job["options"]) & alphabet_flags == (set() if infer_alphabet else {"--dna"})
++        assert set(bundle["realized_argv"]) & alphabet_flags == (set() if infer_alphabet else {"--dna"})
++        if infer_alphabet:
++            assert not (set(sheet["operation"]["settings"]) & alphabet_flags)
++            decoding = sheet["input_records"][0]["input_decoding"]
++            assert decoding["alphabet_basis"] == "native_source_inference"
++            assert decoding["effective_alphabet"] == "DNA"
++            assert decoding["explicit_alphabet"] is None
++            assert decoding["source_sha256"] == hashlib.sha256(content).hexdigest()
++            probe = decoding["alphabet_probe"]
++            expected_counts = {"A": 6, "C": 12, "G": 6, "T": 6}
++            assert probe["counts_az"] == [expected_counts.get(chr(65 + i), 0) for i in range(26)]
++            assert probe["counted_letters"] == 30
++        _assert_numbers_and_return(
++            case, choice, bundle, sheet, components, declared_format=declared_format,
++            expected_rows=expected_rows, expected_map=expected_map)
++        assert case.owner.native_hmmer_preparation_returns.received_facts(parent, case.forms[0]) == {
++            PREFIX + "rows": case.returned[0]["rows"]}
++        child_record, = case.result_records
++        assert child_record["units_consumed"] == 1
++        assert [unit["controller_step"]["marginal_credit"] for unit in child_record["units"]] == [2]
++        assert child_record["controller_state"]["estimate"]["expected_next_gain"] == NumericBand.exact(0).as_record()
++        root_record = next(item for item in case.records if item["episode_id"] == case.record.episode_id)
++        assert len([unit for unit in root_record["units"]
++                    if (unit.get("child") or {}).get("episode_id") == child_record["episode_id"]]) == 1
++        assert tuple(case.record.controller_state.history) == (0, 0)
++        assert case.store.count("observation") == 0
++        proof = case.owner.completion_for_action(case.contexts[0], body["operation_key"])
++        assert proof and case.owner.verify_completion(case.contexts[0], proof)
++
++        _assert_saved_recalculation_and_closed_replay(
++            case, source, monkeypatch, body, sheet, components, parent, received)
++        (tmp_path / "INPUT_FORMAT_NUMERICAL_EXAMPLE.json").write_text(json.dumps({
++            "fixture_kind": "authored_engineering_input",
++            "declared_format": declared_format,
++            "source_sha256": hashlib.sha256(content).hexdigest(),
++            "source_bytes_hex": content.hex(),
++            "inference_requested": infer_alphabet,
++            "source_input_decoding": sheet["input_records"][0].get("input_decoding"),
++            "original_job": case.job,
++            "native_argv": bundle["realized_argv"],
++            "returncode": bundle["returncode"],
++            "sheet_artifact_ref": body["prepared"]["sheet_artifact_ref"],
++            "calculations_artifact_ref": body["prepared"]["calculations_artifact_ref"],
++            "native_mappings": components["rows"][0]["native_mappings"],
++            "reconstruction": components["rows"][0]["reconstruction"],
++            "typed_return": case.returned[0],
++            "completion_proof": proof,
++            "saved_only_recalculation_equal": True,
++            "closed_replay_equal": True,
++            "closed_histories_unchanged": True,
++            "scientific_observation_count": 0,
++        }, indent=2) + "\n")
++    finally:
++        case.store.close()
++
++
++@pytest.mark.parametrize("declared_format", tuple(AUTHORED_INPUTS))
++def test_declared_input_format_reaches_shared_sheet_return_and_saved_replay(
++        tmp_path, monkeypatch, declared_format):
++    expected_rows = (["AaaA", "AaaA", "C--C"] if declared_format in {"a2m", "psiblast"}
++                     else ["AAAA", "AAAA", "C--C"])
++    _verify_case(tmp_path, monkeypatch, declared_format, AUTHORED_INPUTS[declared_format],
++                 expected_rows=expected_rows, expected_map=[1, 4])
++
++
++def test_original_source_alphabet_inference_reaches_return_and_saved_replay(tmp_path, monkeypatch):
++    # Native AFA counts original sequence lines through EOF: A6 C12 G6 T6,
++    # n=30>10, all four canonical DNA letters, no outside-DNA letters. The
++    # source classifier therefore returns DNA without any selected flag.
++    # This expectation is not a second implementation of that classifier.
++    _verify_case(tmp_path, monkeypatch, "afa", AUTHORED_INFERRED_AFA,
++                 expected_rows=["ACGTACGTACGT", "ACGTACGTACGT", "C--CC--CC--C"],
++                 expected_map=[1, 4, 5, 8, 9, 12], infer_alphabet=True)
+diff --git a/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/HANDOFF.md b/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/HANDOFF.md
+new file mode 100644
+--- /dev/null
++++ b/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/HANDOFF.md
+@@ -0,0 +1,147 @@
++# Authored HMMER input-format episode verification
++
++This packet adds only `tests/test_hmmer_alignment_input_episode_path.py` and
++files in this verification directory. It records authored tests and static
++inspection, not an executed native/integration result or completed inventory
++row. The original user attachment remains authoritative. No goal, scope
++amendment, production code, existing test, prompt, library, runner or progress
++file is changed.
++
++## Exact verification selection
++
++The whole new test file selects nine small cases: eight values of
++`test_declared_input_format_reaches_shared_sheet_return_and_saved_replay`, plus
++`test_original_source_alphabet_inference_reaches_return_and_saved_replay`.
++`TEST_SELECTORS.txt` lists the exact nine selectors. Do not collect or execute
++them on the host. Root owns execution through the existing packet 529 frozen
++lifecycle with 20 GiB RAM, 4 GiB scratch, zero swap and no wall cap. No producer
++fixture is regenerated and no completed Stockholm weighting/sampling case is
++selected by this file.
++
++Every selected operation is real `alimask alignment_to_model`, with selected
++`--fast --wgsc --seed 17 --fragthresh 0 --symfrac .6`. Eight cases select `--dna`
++and range `1-4`; the AFA inference case omits every alphabet flag and selects
++range `1-12`. Compiler-owned `--informat` retains the selected format. Existing
++scientific choices/controller are scripted engineering fixtures; native
++software identity, job, execution, capture, grading and result transport are
++production paths.
++
++## Authored inputs and expected numerical meanings
++
++All inputs are explicitly authored engineering operands, not original native
++emissions or biological measurements. Their exact bytes/hashes and expectations
++are in `FIXTURES.json`, extracted from literal test declarations without
++importing application code.
++
++| Declared format | Source representation of the three logical rows | Expected decoded rows |
++| --- | --- | --- |
++| afa | FASTA names and uppercase rows | AAAA, AAAA, C--C |
++| a2m | AaaA, AaaA, CC; two consensus residues and a two-column insert slot | AaaA, AaaA, C--C |
++| psiblast | Physical AaaA, AaaA, C--C columns with consistent case | AaaA, AaaA, C--C |
++| selex | Third physical sequence uses two internal spaces | AAAA, AAAA, C--C |
++| clustal | Strict CLUSTAL header and a required all-space consensus line | AAAA, AAAA, C--C |
++| clustallike | Generic alignment header and a required all-space consensus line | AAAA, AAAA, C--C |
++| phylip | Header 3 4; exactly ten bytes per name | AAAA, AAAA, C--C |
++| phylips | Header 3 4; exactly ten bytes per name | AAAA, AAAA, C--C |
++
++All eight share the already-established GSC numerical example: weights
++`[0.75, 0.75, 1.5]`, MAP `[1,4]`, native selected range `1-4 -> 1-2`.
++A2M/PSI retain their case-derived RF `x..x`; the selected fast map keeps the same
++existing weighting/occupancy meaning. No second format-specific formula is
++implemented in the tests.
++
++The distinct inference input is AFA with rows `ACGTACGTACGT`,
++`ACGTACGTACGT`, `C--CC--CC--C`. The complete retained native
++`esl_msafile_afa_GuessAlphabet` and `esl_abc_GuessAlphabet` functions establish
++the authored expectation: EOF histogram A6 C12 G6 T6, total 30 (>10), all four
++canonical DNA letters and no outside-DNA letters; expected alphabet DNA.
++The expected GSC weights remain `[0.75,0.75,1.5]`, MAP is
++`[1,4,5,8,9,12]`, and native range `1-12 -> 1-6`. These are expected values
++pending root execution, not observed native results.
++
++Only these existing scalar paths and checks are requested in the returned
++row; the form contains exactly `completed` and `rows`:
++
++| Scalar | Meaning/unit | Eight-format expected value | Inference expected value |
++| --- | --- | --- | --- |
++| components.input_sequence_count | Captured source sequences; sequence_count | 3 | 3 |
++| components.input_column_count | Decoded source width; alignment_column_count | 4 | 12 |
++| components.mapped_model_position_count | Shared reconstructed match-position count; model_position_count | 2 | 6 |
++| components.native_mapping_row_count | Actual parsed native mapping rows; decoded_mapping_row_count | 1 | 1 |
++
++Requested checks are `native_mapping` and `requested_ranges`; both must pass.
++Returned values/state/unit must equal retained calculated cells exactly. The
++actual parsed native source/target range endpoints are checked independently.
++Original native weight annotations remain missing; calculated GSC weights do
++not masquerade as supplied WT annotations.
++
++## Required dependency stages
++
++The public harness ports remain unchanged and have been read completely:
++`tests/test_native_hmmer_preparation_contracts.py` (`job`, `operand`),
++`tests/test_native_hmmer_preparation_workflow.py` (`run_case`, `choice_for`,
++`assert_accounting`, `assert_native_custody`, `assert_projected_values`,
++`read_retained`, `forbid_work`), and
++`tests/test_hmmer_alignment_map_episode_path.py` (the existing weighting and
++closed replay pattern). No replacement runtime is implemented.
++
++| Stage | Existing implementation dependency and required output |
++| --- | --- |
++| Selected invocation | `native_hmmer_preparation_contracts.py:compile_native_hmmer_preparation_job`; exact format/options/software, no injected alphabet flag |
++| Real resource child | Existing Workflow launch/local/results children and `native_hmmer_preparation_local.py`; one chosen job and original attempt identity |
++| MAP safety | `native_hmmer_preparation_driver.py:_alimask_preflight_shared`; new-format source decoding/effective alphabet feed the shared first-record map |
++| Acquired original bytes | `native_hmmer_preparation_acquisition.py` and existing result worker; selected/staged/final source hashes equal authored input hash |
++| Input decoding | Root-owned `hmmer_alignment_preparation_data.py:read_hmmer_alignment_input` adapter and `hmmer_alignment_input_validation.py` over frozen 537/538/540/541 ports; original rows/RF feed the existing sheet |
++| Sheet | `hmmer_alignment_preparation_data.py:populate_hmmer_alignment_preparation_sheet`; schema remains hmmer_alignment_preparation_sheet_v1 |
++| Numerical authority | `hmmer_alignment_preparation_calculations.py:calculate_hmmer_alignment_preparation_components` and `reconstruct_alimask_model_map`; existing numerical meanings and map |
++| Saved-only calculation | `native_hmmer_preparation_worker.py:recalculate_hmmer_preparation`; one call of the same calculator, exact whole result equality |
++| Published/requested return | Existing result publication/views/typed return owner through `run_case`; chosen numerical cells and checks delivered to the scientific parent |
++| Closed replay | Existing saved results collector; original outcome/form/history/artifacts returned unchanged with all fresh scientific work forbidden |
++
++The tests hide both the original input path and native attempt before saved-only
++recalculation. They forbid all file opens, native start/status/wait, subprocess
++start, networking, acquisition, fresh grading, parser entrypoints and known
++imported decoder aliases. Saved histogram validation is allowed; original-byte
++alphabet inference is forbidden. A tracked wrapper verifies the existing shared
++calculator is called once and receives the same sheet/explicit parameters.
++
++Closed replay then additionally forbids the shared calculator, map reconstruction
++and saved recalculation (including loaded imported aliases). Only asyncio's local
++AF_UNIX wakeup socket is permitted. It compares the original returned operation,
++typed form, parent received facts, retained bundle/grade/sheet/calculation bytes,
++and every durable row in runtime_actions/runtime_observations/runtime_forms/
++runtime_episodes. One result child action contributes its existing acquisition
++credit 2; one parent unit contains that result child; the final expected gain is
++exact zero and root history remains `(0,0)`. No scientific Store observation is
++created by these preparation operations.
++
++## Static checks and outstanding ports
++
++Performed by this author: full listed harness/contracts/handoffs reading,
++relevant complete worker/data/calculator/compiler/journal functions and native
++alphabet classifier/scanner reading, stdlib AST syntax inspection, literal
++fixture inspection, text authorship and SHA-256/diff generation. No application
++module import, pytest collection/execution, native/scientific command, compiler,
++network/API/HPC/authentication or producer rerun occurred.
++
++At authorship, the existing `_alignment_records` still admitted only
++Stockholm/Pfam. Root's adapter, saved-fact validation, effective-alphabet
++consumer and native-preflight wiring must land before these cases can pass.
++There is no missing harness port. Root approved packet 542's complete adapter
++contract at SHA-256
++`a69d0e8b2603c3ae5925f546a3ea48ea6d5f95182a05b12402eca1524734d6f2`.
++The inference case now checks only the frozen source decoding basis, effective
++DNA alphabet, null explicit alphabet, original source hash and A6 C12 G6 T6
++histogram (30 letters). No new hmmbuild/masked
++output case is included because root kept this assignment to eight input MAP
++paths plus the distinct source inference path.
++
++All nine native/integration/saved-replay outcomes remain unverified until root
++runs the selectors. Pure parser/oracle conformance, malformed/unsafe native
++corners, additional native modes, historical compatibility and other resource
++bindings belong to their separate owners and are not claimed by this packet.
++
++`OWNED.diff` contains the complete additions for the test, this handoff,
++selectors and fixture manifest. `EVIDENCE.json` records their hashes and the
++diff hash; generated diff/evidence files exclude themselves from recursive
++inputs. Root's eventual run artifacts must remain separate actual evidence.
+diff --git a/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/TEST_SELECTORS.txt b/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/TEST_SELECTORS.txt
+new file mode 100644
+--- /dev/null
++++ b/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/TEST_SELECTORS.txt
+@@ -0,0 +1,9 @@
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[afa]
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[a2m]
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[psiblast]
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[selex]
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[clustal]
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[clustallike]
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[phylip]
++tests/test_hmmer_alignment_input_episode_path.py::test_declared_input_format_reaches_shared_sheet_return_and_saved_replay[phylips]
++tests/test_hmmer_alignment_input_episode_path.py::test_original_source_alphabet_inference_reaches_return_and_saved_replay
+diff --git a/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/FIXTURES.json b/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/FIXTURES.json
+new file mode 100644
+--- /dev/null
++++ b/verification/tool_graders_hmmer_input_episode_path_2026-10-28_544/FIXTURES.json
+@@ -0,0 +1,349 @@
++{
++  "version": "hmmer_input_episode_authored_fixtures_v1",
++  "cases": [
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "afa",
++      "alphabet_selection": "--dna",
++      "content_hex": "3e73300a414141410a3e73310a414141410a3e73320a432d2d430a",
++      "size_bytes": 27,
++      "sha256": "5ee8e7e68cef70371330095797dc5cf285f5aa1782b900c49ae5505d65348a14",
++      "expected_decoded_rows": [
++        "AAAA",
++        "AAAA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "a2m",
++      "alphabet_selection": "--dna",
++      "content_hex": "3e73300a416161410a3e73310a416161410a3e73320a43430a",
++      "size_bytes": 25,
++      "sha256": "070ce3d71c21508880f27183a7d8db8692cd60a45c3de018c190d76d6baad314",
++      "expected_decoded_rows": [
++        "AaaA",
++        "AaaA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "psiblast",
++      "alphabet_selection": "--dna",
++      "content_hex": "733020416161410a733120416161410a733220432d2d430a",
++      "size_bytes": 24,
++      "sha256": "3a0878c30ea2a4e585aacd967eac1836b3c2643f5d98715a1a7e5cb1a6253a00",
++      "expected_decoded_rows": [
++        "AaaA",
++        "AaaA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "selex",
++      "alphabet_selection": "--dna",
++      "content_hex": "733020414141410a733120414141410a733220432020430a",
++      "size_bytes": 24,
++      "sha256": "5798a7f532412df4553b12ff4816dfca61bb2e1d0631ca0ce7e71c044462cd62",
++      "expected_decoded_rows": [
++        "AAAA",
++        "AAAA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "clustal",
++      "alphabet_selection": "--dna",
++      "content_hex": "434c555354414c20617574686f72656420616c69676e6d656e740a0a733020414141410a733120414141410a733220432d2d430a202020202020200a",
++      "size_bytes": 60,
++      "sha256": "f24e2a2732bd3617d2e66903032e48a1e40188f1c43c350c4c89b7e906997424",
++      "expected_decoded_rows": [
++        "AAAA",
++        "AAAA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "clustallike",
++      "alphabet_selection": "--dna",
++      "content_hex": "415554484f52454420616c69676e6d656e740a0a733020414141410a733120414141410a733220432d2d430a202020202020200a",
++      "size_bytes": 52,
++      "sha256": "08eb30ff0cda80fa7c3cb7410789e4810fc6142a7af85675f6487bd800786baa",
++      "expected_decoded_rows": [
++        "AAAA",
++        "AAAA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "phylip",
++      "alphabet_selection": "--dna",
++      "content_hex": "3320340a73302020202020202020414141410a73312020202020202020414141410a73322020202020202020432d2d430a",
++      "size_bytes": 49,
++      "sha256": "0fd5b0d7956cb6522f113a6f454d6c213c84a275cd8b8ce07b2d920fd307e002",
++      "expected_decoded_rows": [
++        "AAAA",
++        "AAAA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "phylips",
++      "alphabet_selection": "--dna",
++      "content_hex": "3320340a73302020202020202020414141410a73312020202020202020414141410a73322020202020202020432d2d430a",
++      "size_bytes": 49,
++      "sha256": "0fd5b0d7956cb6522f113a6f454d6c213c84a275cd8b8ce07b2d920fd307e002",
++      "expected_decoded_rows": [
++        "AAAA",
++        "AAAA",
++        "C--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4
++      ],
++      "requested_alignment_range": [
++        1,
++        4
++      ],
++      "expected_native_model_range": [
++        1,
++        2
++      ],
++      "expected_returned_values": [
++        3,
++        4,
++        2,
++        1
++      ],
++      "execution_state": "unexecuted"
++    },
++    {
++      "fixture_kind": "authored_engineering_input",
++      "declared_format": "afa",
++      "alphabet_selection": null,
++      "content_hex": "3e73300a4143475441434754414347540a3e73310a4143475441434754414347540a3e73320a432d2d43432d2d43432d2d430a",
++      "size_bytes": 51,
++      "sha256": "0e66562deed269ba9e441a97eb0c6f9eea5d81600c7e1a125f71c214f2e09afd",
++      "expected_source_alphabet": "DNA",
++      "expected_source_counts_az": {
++        "A": 6,
++        "C": 12,
++        "G": 6,
++        "T": 6
++      },
++      "expected_decoded_rows": [
++        "ACGTACGTACGT",
++        "ACGTACGTACGT",
++        "C--CC--CC--C"
++      ],
++      "expected_weights": [
++        0.75,
++        0.75,
++        1.5
++      ],
++      "expected_map": [
++        1,
++        4,
++        5,
++        8,
++        9,
++        12
++      ],
++      "requested_alignment_range": [
++        1,
++        12
++      ],
++      "expected_native_model_range": [
++        1,
++        6
++      ],
++      "expected_returned_values": [
++        3,
++        12,
++        6,
++        1
++      ],
++      "execution_state": "unexecuted"
++    }
++  ]
++}

@@ -1,0 +1,35 @@
+{
+  "record_type": "parser_owner_source_freeze",
+  "source_and_test_pins": [
+    {
+      "path": "gene_annotation_episode/fluorescence_fcs_reader.py",
+      "size_bytes": 15850,
+      "sha256": "d08670b8ab58d3291186adc196b1c6a3c25d5672ecd256f67814462692ffc8fc"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "size_bytes": 40161,
+      "sha256": "f38062d66d49777148d3cbc4073b05e0c39ba1914826466d2ad72e9c7d18c188"
+    },
+    {
+      "path": "tests/test_fluorescence_fcs_reader.py",
+      "size_bytes": 21701,
+      "sha256": "8d92de60409442e0f658f9c738c0e37bbc2ea6d22f447ba910d60c6b72c272d7"
+    }
+  ],
+  "exact_bounded_selector": "tests/test_fluorescence_fcs_reader.py",
+  "tests_run_by_owner": false,
+  "runtime_verification_pending": true,
+  "contracts_reread": [
+    "CORE_CONTRACT_001.md",
+    "PORT_CLARIFICATIONS_002.md",
+    "PORT_CLARIFICATIONS_003.md",
+    "PORT_CLARIFICATIONS_004.md",
+    "PORT_CLARIFICATIONS_005.md",
+    "FCS_ENCODED_CONTRACT_006.md",
+    "FCS_METADATA_CLARIFICATION_007.md"
+  ],
+  "original_goal_objective_and_operating_principles_reread": true,
+  "open_review_question": "FlowIO metadata-only constructor attempts ANALYSIS before NEXTDATA bounds are checked; current parser rejects invalid spans before DATA decoding/admission. Coordinator interpretation requested; no alternate metadata decoder introduced.",
+  "full_operation_completion_claimed": false
+}

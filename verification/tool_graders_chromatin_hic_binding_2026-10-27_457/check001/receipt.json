@@ -1,0 +1,61 @@
+{
+  "returncode": 1,
+  "terminal": true,
+  "quiescent": true,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-27T18:52:31.883482+00:00",
+        "monotonic_ns": 940713580811028,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 74.935219567,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 44695552
+  },
+  "source_pins_unchanged": true,
+  "binary_pins_unchanged": true,
+  "checkout_drift": [
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/source_snapshot/gene_annotation_episode/literature_active_site_inputs.py",
+        "sha256": "b720ea0eaa8e13ce3e57329a03c38af473e227d6c8e84a90e6af64c54e5aa78a",
+        "size_bytes": 18599
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_active_site_inputs.py",
+        "sha256": "714e8086c217b2c6353c466f4e366d6bf470f9d98b89fc5d6057170d32d8eb27",
+        "size_bytes": 18718
+      }
+    }
+  ],
+  "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_binding_2026-10-27_457/check001/handle.json",
+  "unit": "gene-local-job-fe292277ab7b4b09bf6f35a0d9f1ab6c.service"
+}

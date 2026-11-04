@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.764" timestamp="2026-10-25T23:58:10.676441-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_reaction_integration" name="test_parent_steering_groups_only_admitted_reaction_cells_and_keeps_own_task" time="4.396"><failure message="AssertionError: assert 0 == 1&#10; +  where 0 = &lt;built-in method count of str object at 0x3e75f5d0&gt;('Admitted requested reaction components')&#10; +    where &lt;built-in method count of str object at 0x3e75f5d0&gt; = '\nOwn action yields\n\nNone supplied.\n\nCalculated source cells\n\n| Component | Value | Unit | Status | Unavailable...m_35b17edb9ea85df6533106ca |\n| condition_ref | unknown |\n| resource_context_ref | context_278740e03cf25a873cb249bc |'.count">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1536/test_parent_steering_groups_on0')
+
+    def test_parent_steering_groups_only_admitted_reaction_cells_and_keeps_own_task(tmp_path):
+        from gene_annotation_episode.literature_reference_parent_prompt import (
+            REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt)
+        store, context, args = setup_case(tmp_path)
+        with store:
+            binding = binding_for(store, context)
+            outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'selected'))
+            assert outcome['status'] == 'completed'
+            repo = LiteratureReactionRepository(store, context.run_id)
+            rows = repo.project_cells([outcome['result']['sheet_ref']],
+                permitted_record_refs=outcome['record_refs'], components=['reaction_comparison', 'resource_coverage'])
+            state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1',
+                'aspect': 'reference_evidence_parent'}, 'reference_evidence_parent': {
+                'version': 'reference_evidence_parent_v1', 'source_refs': [args['source_ref']]},
+                'goal': {'objective': 'Decide which source reaction uncertainty needs further investigation'},
+                'child_reports': [{'measurements': rows}]}
+            text = render_reference_evidence_parent_prompt(state, 'Own parent instructions')
+            task, steering = text.split('\n\nSTEERING\n', 1)
+            assert REFERENCE_PARENT_TASK in task
+            assert state['goal']['objective'] in task
+&gt;           assert steering.count('Admitted requested reaction components') == 1
+E           AssertionError: assert 0 == 1
+E            +  where 0 = &lt;built-in method count of str object at 0x3e75f5d0&gt;('Admitted requested reaction components')
+E            +    where &lt;built-in method count of str object at 0x3e75f5d0&gt; = '\nOwn action yields\n\nNone supplied.\n\nCalculated source cells\n\n| Component | Value | Unit | Status | Unavailable...m_35b17edb9ea85df6533106ca |\n| condition_ref | unknown |\n| resource_context_ref | context_278740e03cf25a873cb249bc |'.count
+
+tests/test_literature_reaction_integration.py:258: AssertionError</failure></testcase></testsuite></testsuites>

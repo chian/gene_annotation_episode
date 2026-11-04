@@ -1,0 +1,62 @@
+......FF................................................................ [ 40%]
+........................................................................ [ 80%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+_ test_cross_entity_assignment_conflict_keeps_independent_scores_without_borrowing[missing_feature] _
+
+destination = 'missing_feature'
+
+    @pytest.mark.parametrize("destination", ["missing_feature", "other_bound_feature"])
+    def test_cross_entity_assignment_conflict_keeps_independent_scores_without_borrowing(destination):
+>       sheet = conflicting_feature_case(destination)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_vdb_function_calculators.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_vdb_function_calculators.py:190: in conflicting_feature_case
+    return populate(original["base_sheet"], [declaration])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+values = {'dataset_records': [{'assembly_links': [], 'dataset_key': 'D0', 'dataset_type': 'csra', 'identifier': {'namespace': '...r_identifier': {'namespace': 'synthetic', 'value': 'member2', 'version': None}, ...}], 'population_records': None, ...}
+assignments = [{'assignment_key': 'feature-assignment:59a098dadd39328657533d4b7f5bff42872815b46e36b6e41485fc93a80af220', 'assignment_scope': 'feature', 'function': {'namespace': 'fixture_function', 'value': 'A'}, 'function_ordinal': 0, ...}]
+dependencies = (), censuses = ()
+
+    def populate(values, assignments=(), dependencies=(), censuses=()):
+>       return module.populate_blast_vdb_function_sheet(v1.populate_blast_vdb_sheet(**values),
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            supplied_assignments=list(assignments), dependency_records=list(dependencies), census_records=list(censuses))
+E       TypeError: populate_blast_vdb_sheet() got an unexpected keyword argument 'schema'
+
+../../../tests/test_blast_vdb_function_inputs.py:77: TypeError
+_ test_cross_entity_assignment_conflict_keeps_independent_scores_without_borrowing[other_bound_feature] _
+
+destination = 'other_bound_feature'
+
+    @pytest.mark.parametrize("destination", ["missing_feature", "other_bound_feature"])
+    def test_cross_entity_assignment_conflict_keeps_independent_scores_without_borrowing(destination):
+>       sheet = conflicting_feature_case(destination)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_vdb_function_calculators.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_vdb_function_calculators.py:190: in conflicting_feature_case
+    return populate(original["base_sheet"], [declaration])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+values = {'dataset_records': [{'assembly_links': [], 'dataset_key': 'D0', 'dataset_type': 'csra', 'identifier': {'namespace': '...r_identifier': {'namespace': 'synthetic', 'value': 'member2', 'version': None}, ...}], 'population_records': None, ...}
+assignments = [{'assignment_key': 'feature-assignment:59a098dadd39328657533d4b7f5bff42872815b46e36b6e41485fc93a80af220', 'assignment_scope': 'feature', 'function': {'namespace': 'fixture_function', 'value': 'A'}, 'function_ordinal': 0, ...}]
+dependencies = (), censuses = ()
+
+    def populate(values, assignments=(), dependencies=(), censuses=()):
+>       return module.populate_blast_vdb_function_sheet(v1.populate_blast_vdb_sheet(**values),
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            supplied_assignments=list(assignments), dependency_records=list(dependencies), census_records=list(censuses))
+E       TypeError: populate_blast_vdb_sheet() got an unexpected keyword argument 'schema'
+
+../../../tests/test_blast_vdb_function_inputs.py:77: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_vdb_function_calculators.py::test_cross_entity_assignment_conflict_keeps_independent_scores_without_borrowing[missing_feature]
+FAILED ../../../tests/test_blast_vdb_function_calculators.py::test_cross_entity_assignment_conflict_keeps_independent_scores_without_borrowing[other_bound_feature]
+2 failed, 178 passed in 3.43s

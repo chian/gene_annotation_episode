@@ -1,0 +1,17 @@
+..........................................F.                             [100%]
+=================================== FAILURES ===================================
+___________ test_saved_recalculation_cannot_replace_original_source ____________
+
+    def test_saved_recalculation_cannot_replace_original_source():
+        case = example("comparison")
+        worker = worker_result(case)
+        worker.update(mode="saved_sheet_recalculation", native_result_file=None)
+>       with pytest.raises(ValueError, match="original_commission_mismatch"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'original_commission_mismatch'
+E         Actual message: 'invalid_schema'
+
+source_snapshot/tests/test_protein_structure_publication.py:77: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_publication.py::test_saved_recalculation_cannot_replace_original_source
+1 failed, 43 passed in 5.47s

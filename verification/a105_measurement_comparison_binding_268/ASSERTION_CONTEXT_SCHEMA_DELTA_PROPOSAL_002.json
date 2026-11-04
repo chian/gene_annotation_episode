@@ -1,0 +1,215 @@
+{
+  "request_add_required_property": {
+    "return_assertion_context": {
+      "type": "object",
+      "properties": {
+        "molecule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "functional_assertion": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "molecule",
+        "functional_assertion"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "return_add_required_property": {
+    "assertion_context": {
+      "type": "object",
+      "properties": {
+        "molecule": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "selected",
+                "not_selected",
+                "source_unavailable"
+              ]
+            },
+            "fragments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "source"
+                      },
+                      "artifact_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "artifact"
+                      },
+                      "representation": {
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "source_ref",
+                      "artifact_ref",
+                      "representation",
+                      "start",
+                      "end"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "text",
+                  "location"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "status",
+            "fragments"
+          ],
+          "additionalProperties": false
+        },
+        "functional_assertion": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "selected",
+                "not_selected",
+                "source_unavailable"
+              ]
+            },
+            "fragments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "source_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "source"
+                      },
+                      "artifact_ref": {
+                        "type": "string",
+                        "format": "reference",
+                        "x-reference-namespace": "artifact"
+                      },
+                      "representation": {
+                        "enum": [
+                          "original",
+                          "text"
+                        ]
+                      },
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "source_ref",
+                      "artifact_ref",
+                      "representation",
+                      "start",
+                      "end"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "text",
+                  "location"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "status",
+            "fragments"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "molecule",
+        "functional_assertion"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "version_proposal": {
+    "population": "literature_measurement_comparison_population_v2",
+    "row": "measurement_comparison_return_v2",
+    "record": "literature_measurement_comparison_record_v2"
+  }
+}

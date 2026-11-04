@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.975" timestamp="2026-10-22T03:30:52.089496-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_model_context_runtime" name="test_pending_legacy_request_text_is_byte_identical_across_fresh_transport" time="1.540"><failure message="assert '{&quot;context&quot;:{...e&quot;:&quot;object&quot;}}' == '{\n   &quot;schem....0\n   }\n}\n'&#10;  &#10;  + {&quot;context&quot;:{&quot;pending_work&quot;:{&quot;captured_at&quot;:&quot;2026-10-22T08:30:53.526795+00:00&quot;,&quot;items&quot;:[],&quot;version&quot;:&quot;pending_work_v1&quot;},&quot;unicode&quot;:&quot;μ&quot;,&quot;visible_record_refs&quot;:[],&quot;waiting_support&quot;:{&quot;duration_expectations&quot;:[],&quot;local_return_history&quot;:{&quot;credit_binding&quot;:{&quot;kind&quot;:&quot;custom&quot;,&quot;meaning&quot;:&quot;Caller-injected projector; no default scientific policy or denominator is inferred.&quot;,&quot;projector&quot;:&quot;test_runtime.fixture_credit&quot;},&quot;credit_kind&quot;:&quot;scientific&quot;,&quot;episode_id&quot;:&quot;episode_4b9142a550dca350cacfc9c1d3e008fe20ef60003d488c92cc1aefa61dd381a9&quot;,&quot;run_id&quot;:&quot;presentation-fixture&quot;,&quot;samples&quot;:[],&quot;unavailable_re...&#10;  &#10;  ...Full output truncated (40 lines hidden), use '-vv' to show">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-904/test_pending_legacy_request_te0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7227b9b2d100&gt;
+
+    def test_pending_legacy_request_text_is_byte_identical_across_fresh_transport(tmp_path, monkeypatch):
+        h = host(tmp_path, mode=False,
+            provider=CapturingProvider([KeyboardInterrupt()], has_session=True))
+        schema = obj({})
+        with pytest.raises(KeyboardInterrupt):
+            asyncio.run(h.source.call({'visible_record_refs': [], 'unicode': 'μ', 'z': -0.0}, schema))
+        first = saved_call(h)
+        original = json.loads(first['request'])
+        assert 'restored_episode_history' not in original['context']
+        # Valid formatting variations are original captured TEXT, not an excuse to
+        # normalize a pending request at the dispatch/response upserts.
+        text = json.dumps({'schema': original['schema'], 'context': original['context']},
+            ensure_ascii=True, indent=3) + '\n'
+        h.store.db.execute('UPDATE runtime_model_calls SET request=?', (text,))
+        provider = CapturingProvider([reason(0)], has_session=False)
+        h.workflow.provider = provider
+        monkeypatch.setattr(h.workflow, 'history_preview', forbidden)
+        monkeypatch.setattr(h.workflow, 'waiting_support', forbidden)
+        monkeypatch.setattr(h.workflow, 'api_execution_planning_context', forbidden)
+        h.source.calls = 0
+        response, index, context, actual_schema = asyncio.run(h.source.call({}, obj({'new': {'type': 'string'}})))
+&gt;       assert saved_call(h)['request'] == text
+E       assert '{"context":{...e":"object"}}' == '{\n   "schem....0\n   }\n}\n'
+E         
+E         + {"context":{"pending_work":{"captured_at":"2026-10-22T08:30:53.526795+00:00","items":[],"version":"pending_work_v1"},"unicode":"μ","visible_record_refs":[],"waiting_support":{"duration_expectations":[],"local_return_history":{"credit_binding":{"kind":"custom","meaning":"Caller-injected projector; no default scientific policy or denominator is inferred.","projector":"test_runtime.fixture_credit"},"credit_kind":"scientific","episode_id":"episode_4b9142a550dca350cacfc9c1d3e008fe20ef60003d488c92cc1aefa61dd381a9","run_id":"presentation-fixture","samples":[],"unavailable_re...
+E         
+E         ...Full output truncated (40 lines hidden), use '-vv' to show
+
+tests/test_model_context_runtime.py:87: AssertionError</failure></testcase></testsuite></testsuites>

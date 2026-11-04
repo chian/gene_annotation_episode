@@ -48,7 +48,7 @@ class APIServiceExecution:
     """Keep service-native protocols behind the shared execution interfaces."""
 
     def __init__(self, store, *, run_id, directory, configuration, tool_registry,
-                 handoff_unit, acquired_record_unit):
+                 handoff_unit, acquired_record_unit, received_input_reader=None):
         from .api_services import build_service
         if not isinstance(run_id, str) or not run_id:
             raise ValueError('explicit_api_execution_run_required')
@@ -56,6 +56,9 @@ class APIServiceExecution:
             if type(unit) not in (int, float) or not math.isfinite(unit) or unit <= 0:
                 raise ValueError('explicit_positive_operational_credit_units_required')
         self.store, self.run_id = store, run_id
+        if received_input_reader is not None and not callable(received_input_reader):
+            raise ValueError('api_received_input_reader_must_be_callable')
+        self.received_input_reader = received_input_reader
         self.directory = Path(directory)/'api-service-execution'/digest(run_id)
         self.configuration = json.loads(canonical(configuration))
         self.tools, self.clients = tool_registry, tool_registry.clients
@@ -96,6 +99,8 @@ class APIServiceExecution:
         self.comparative_systems_returns = BVBRCComparativeSystemsReturns(self)
         from .bvbrc_fastqutils_returns import BVBRCFastqUtilsReturns
         self.fastqutils_returns = BVBRCFastqUtilsReturns(self)
+        from .bvbrc_application_returns import BVBRCApplicationReturns
+        self.application_returns = BVBRCApplicationReturns(self)
 
     @property
     def rfam_returns(self):
@@ -124,6 +129,13 @@ class APIServiceExecution:
         if '_enrichr_returns' not in self.__dict__:
             self._enrichr_returns = EnrichrReturns(self)
         return self._enrichr_returns
+
+    @property
+    def addgene_returns(self):
+        from .addgene_sequence_returns import AddgeneSequenceReturns
+        if '_addgene_returns' not in self.__dict__:
+            self._addgene_returns = AddgeneSequenceReturns(self)
+        return self._addgene_returns
 
     def __getattr__(self, name):
         # Preserve existing inspection ports for the unchanged legacy binding.
@@ -222,7 +234,8 @@ class APIServiceExecution:
             return self.store.get(context.assignment['handoff_ref']).get('provider') == LEGACY_PROVIDER
         return plain(context.assignment).get('version') == 'api_execution_assignment_v1'
 
-    def _context(self, context, *, verify_artifacts=True, _enrichr_history=None):
+    def _context(self, context, *, verify_artifacts=True, _enrichr_history=None,
+                 _completed_appservice_download=False):
         if context.run_id != self.run_id:
             raise ValueError('api_execution_run_conflict')
         if context.role == 'launch_api':
@@ -236,7 +249,8 @@ class APIServiceExecution:
         if set(raw) != {'version', 'handoff_ref', 'selector'} or raw['version'] != 'execution_results_assignment_v1':
             raise ValueError('invalid_api_results_assignment')
         target = self.read_target(raw['handoff_ref'], context.scope,
-            verify_artifacts=verify_artifacts, _enrichr_history=_enrichr_history)
+            verify_artifacts=verify_artifacts, _enrichr_history=_enrichr_history,
+            **({'_completed_appservice_download': True} if _completed_appservice_download else {}))
         self.validate_result_selector(target, raw['selector'])
         return target['assignment'], self.services[target['resource_id']], target
 
@@ -425,9 +439,14 @@ class APIServiceExecution:
         if self._legacy_context(context):
             return await self._legacy_binding().execute(context, name, arguments, operation_key)
         try:
+            arguments = plain(arguments)
+            if (name == 'api.bvbrc_appservice.download' and type(arguments) is dict
+                    and 'max_bytes' not in arguments):
+                cached = self.appservice.legacy_cached_download(context, name, arguments, operation_key)
+                if cached is not None:
+                    return cached
             self.initialize(context)
             assignment, service, target = self._context(context)
-            arguments = plain(arguments)
             entry = next((row for row in self.catalog(context) if row['name'] == name), None)
             if entry is None:
                 raise ValueError('api_operation_not_available')
@@ -769,12 +788,16 @@ class APIServiceExecution:
         body = self._artifact_json(self.store.get(handoff_ref)['artifact_ref'])
         return self._read_handoff(handoff_ref, body['scope'])['scope']
 
-    def read_target(self, handoff_ref, scope, *, verify_artifacts=True, _enrichr_history=None):
+    def read_target(self, handoff_ref, scope, *, verify_artifacts=True, _enrichr_history=None,
+                    _completed_appservice_download=False):
         from .bvbrc_appservice_records import PROVIDER as APPSERVICE_PROVIDER
         if _enrichr_history is not None and self.store.get(handoff_ref).get('provider') != PROVIDER:
             raise ValueError('enrichr_original_context_conflict')
         if self.store.get(handoff_ref).get('provider') == APPSERVICE_PROVIDER:
-            return self.appservice.read_target(handoff_ref, scope)
+            return self.appservice.read_target(handoff_ref, scope,
+                **({'_completed_download': True} if _completed_appservice_download else {}))
+        if _completed_appservice_download:
+            raise ValueError('appservice_cached_download_context_conflict')
         if self.store.get(handoff_ref).get('provider') == LEGACY_PROVIDER:
             return self._legacy_binding().read_target(handoff_ref, scope)
         body = self._read_handoff(handoff_ref, scope,
@@ -1045,11 +1068,11 @@ class APIServiceExecution:
                     self.read_result(reference, context.scope)
                     results.append(reference)
         from .blast_result_views import blast_hsp_facts
-        fields = context.request.get('report_contract', {}).get('measurements', {}).get('schema', {}).get('properties', {})
+        fields = (context.request.get('report_contract') or {}).get('measurements', {}).get('schema', {}).get('properties', {})
         requested_hsps = any(field.get('x-source') == 'execution_blast_hsps' for field in fields.values())
         hsp_facts = blast_hsp_facts(self.store, results) if context.role == 'results' and requested_hsps else []
         bvbrc_facts = self.bvbrc_data.facts(context,
-            plain(context.request).get('report_contract', {}).get('measurements', {}).get('schema', {}))
+            (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {}))
         minhash_facts = self.minhash.facts(context,
             (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {}))
         rfam_schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
@@ -1059,8 +1082,13 @@ class APIServiceExecution:
             if any(service.service == 'uniprot' for service in self.services.values()) else {})
         enrichr_facts = (self.enrichr_returns.facts(context, rfam_schema)
             if any(service.service == 'enrichr' for service in self.services.values()) else {})
+        addgene_facts = {}
+        if any(service.service == 'sequence_support' for service in self.services.values()):
+            closing = completion_snapshot is not None and completion_snapshot.get('completion') is not None
+            addgene_facts = (self.addgene_returns.facts_for_closure(context, rfam_schema) if closing else
+                self.addgene_returns.facts(context, rfam_schema))
         return {'execution_handoff_refs': sorted(set(handoffs)), 'execution_result_refs': sorted(set(results)),
-            **bvbrc_facts, **minhash_facts, **rfam_facts, **uniprot_facts, **enrichr_facts,
+            **bvbrc_facts, **minhash_facts, **rfam_facts, **uniprot_facts, **enrichr_facts, **addgene_facts,
             'execution_blast_hsps': hsp_facts,
             'execution_completed': self._completion(context) is not None}
 
@@ -1163,6 +1191,12 @@ class APIServiceExecution:
                     self.uniprot_returns.resolve_received(context, reference, namespace))
                 if resolved is not None:
                     return resolved
+            if any(service.service == 'sequence_support' for service in self.services.values()):
+                resolved = (self.addgene_returns.resolve_own(context, reference, namespace)
+                    if context.role == 'results' else
+                    self.addgene_returns.resolve_received(context, reference, namespace))
+                if resolved is not None:
+                    return resolved
             if namespace in {'rfam_record', 'rfam_query', 'rfam_family', 'rfam_model'}:
                 return (self.rfam_returns.resolve_own(context, reference, namespace)
                     if context.role == 'results' else
@@ -1202,6 +1236,11 @@ class APIServiceExecution:
                 return (self.fastqutils_returns.resolve_own(context, reference, namespace)
                     if context.role == 'results' else
                     self.fastqutils_returns.resolve_received(context, reference, namespace))
+            from .bvbrc_application_returns import IDENTIFIER_NAMESPACES as APPLICATION_NAMESPACES
+            if namespace in APPLICATION_NAMESPACES:
+                return (self.application_returns.resolve_own(context, reference, namespace)
+                    if context.role == 'results' else
+                    self.application_returns.resolve_received(context, reference, namespace))
             resolved = self.appservice.resolve(context, reference, namespace)
             if resolved is not None:
                 return resolved

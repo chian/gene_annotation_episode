@@ -1,0 +1,21 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0 -- /home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_calculations_projection_2026-10-27_443/check006/source_snapshot
+configfile: pyproject.toml
+plugins: logfire-4.37.0, anyio-4.14.1, zarr-3.2.1, langsmith-0.9.3, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 56 items / 46 deselected / 10 selected
+
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_literal_worked_record_measurements[partial-contact-pairs] PASSED [ 10%]
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_duplicate_native_pixels_are_malformed_without_summation PASSED [ 20%]
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_stable_centered_variance_and_component_specific_overflow PASSED [ 30%]
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_actual440_native_parse_sheet_arrays_calculation_and_saved_rerun[raw-1.5] PASSED [ 40%]
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_actual440_native_parse_sheet_arrays_calculation_and_saved_rerun[weighted-0.8571428571428571] PASSED [ 50%]
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_actual440_sparse_insulation_includes_final_full_window PASSED [ 60%]
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_actual_native_same_bin_and_duplicate_occurrence_population_retained PASSED [ 70%]
+source_snapshot/tests/test_chromatin_interaction_calculations.py::test_actual_lower_triangle_malformed_row_is_retained_and_qualified_not_reinterpreted PASSED [ 80%]
+source_snapshot/tests/test_chromatin_interaction_result_views.py::test_every_worked_projection_has_exact_selected_fields_and_page[partial-partial] PASSED [ 90%]
+source_snapshot/tests/test_chromatin_interaction_result_views.py::test_maximal_population_key_uses_bounded_frozen_ordinal_domain_identity PASSED [100%]
+
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_calculations_projection_2026-10-27_443/check006/junit.xml -
+====================== 10 passed, 46 deselected in 1.17s =======================

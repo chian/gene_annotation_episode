@@ -1,0 +1,225 @@
+........................................................................ [  9%]
+................................FF.FFF.................................. [ 19%]
+........................................................................ [ 28%]
+.................F...................................................... [ 38%]
+........................................................................ [ 47%]
+........................................................................ [ 57%]
+........................................................................ [ 66%]
+........................................................................ [ 76%]
+........................................................................ [ 85%]
+........................................................................ [ 95%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+_________ test_real_retained_native_bytes_parse_into_the_saved_D_data __________
+
+    def test_real_retained_native_bytes_parse_into_the_saved_D_data():
+        from gene_annotation_episode.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
+        from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
+        b, _, _ = native_examples(); data = fixture_data()
+        native = VERIFY / 'tool_graders_mauve_sidecars_2026-10-25/native_examples'
+        checks = [('separate.xmfa.backbone', b['backbone_document'], parse_mauve_backbone, {'dialect': 'libmems_signed_coordinate_pairs_v1'}),
+            ('separate.xmfa.bbcols', b['bbcols_document'], parse_mauve_bbcols, {'dialect': 'libmems_interval_columns_members_v1'}),
+            ('separate.xmfa', b['xmfa_document'], parse_mauve_xmfa, {'dialect': 'mauve1', 'alphabet': 'dna'})]
+        for name, document, parser, options in checks:
+>           raw = (native / name).read_bytes()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_calculators.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.backbone')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.backbone'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_v4_retained_synthetic_reverse_overlap_source_extraction_and_denominators _
+
+    def test_v4_retained_synthetic_reverse_overlap_source_extraction_and_denominators():
+        prefix = 'tool_graders_mauve_v4_2026-10-25/'
+>       document = read(prefix + 'synthetic_reverse_overlap.document.json')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_calculators.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_genome_alignment_sheet.py:20: in read
+    return json.loads((VERIFY / path).read_text())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_v4_2026-10-25/synthetic_reverse_overlap.document.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_v4_2026-10-25/synthetic_reverse_overlap.document.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[bound] ____
+
+witness = 'bound'
+
+    @pytest.mark.parametrize('witness', ['bound', 'missing', 'conflicting'])
+    def test_explicit_internal_seven_to_exported_zero_not_ordinal_guess(witness):
+>       data = internal_seven_data()
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_calculators.py:237: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_genome_alignment_calculators.py:218: in internal_seven_data
+    raw = (VERIFY / 'tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+___ test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[missing] ___
+
+witness = 'missing'
+
+    @pytest.mark.parametrize('witness', ['bound', 'missing', 'conflicting'])
+    def test_explicit_internal_seven_to_exported_zero_not_ordinal_guess(witness):
+>       data = internal_seven_data()
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_calculators.py:237: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_genome_alignment_calculators.py:218: in internal_seven_data
+    raw = (VERIFY / 'tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_ test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[conflicting] _
+
+witness = 'conflicting'
+
+    @pytest.mark.parametrize('witness', ['bound', 'missing', 'conflicting'])
+    def test_explicit_internal_seven_to_exported_zero_not_ordinal_guess(witness):
+>       data = internal_seven_data()
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_calculators.py:237: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_genome_alignment_calculators.py:218: in internal_seven_data
+    raw = (VERIFY / 'tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols').read_bytes()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genome_alignment_requirement_scope_2026-10-25_203/repair_candidate/verification/tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_retained_source_default_is_labelled_expectation_not_deployment ______
+
+    def test_retained_source_default_is_labelled_expectation_not_deployment():
+        task, _, handoff, data = fixture(recipe=...)
+>       source = Path('verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/p3_mauve/scripts/p3-mauve.js').read_bytes()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_genome_alignment_inputs.py:475: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/p3_mauve/scripts/p3-mauve.js')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/p3_mauve/scripts/p3-mauve.js'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_genome_alignment_calculators.py::test_real_retained_native_bytes_parse_into_the_saved_D_data
+FAILED tests/test_bvbrc_genome_alignment_calculators.py::test_v4_retained_synthetic_reverse_overlap_source_extraction_and_denominators
+FAILED tests/test_bvbrc_genome_alignment_calculators.py::test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[bound]
+FAILED tests/test_bvbrc_genome_alignment_calculators.py::test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[missing]
+FAILED tests/test_bvbrc_genome_alignment_calculators.py::test_explicit_internal_seven_to_exported_zero_not_ordinal_guess[conflicting]
+FAILED tests/test_bvbrc_genome_alignment_inputs.py::test_retained_source_default_is_labelled_expectation_not_deployment
+6 failed, 750 passed in 482.43s (0:08:02)

@@ -1,0 +1,73 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmscan_search_ordinary] _
+tests/test_native_hmmer_results_integration.py:257: in test_selected_native_results_reach_requested_parent_form_and_real_credit
+    case = run_case(tmp_path, label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_native_hmmer_results_integration.py:234: in run_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_native_hmmer_results_integration.py:230: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1215: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:912: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_native_hmmer_results_integration.py:192: in complete
+    assert not current.get('feedback'), current.get('feedback')
+E   AssertionError: {'category': 'action_contract', 'detail': 'report.rows[].record_key: unsupported schema keyword', 'status': 'invalid'}
+E   assert not {'category': 'action_contract', 'detail': 'report.rows[].record_key: unsupported schema keyword', 'status': 'invalid'}
+E    +  where {'category': 'action_contract', 'detail': 'report.rows[].record_key: unsupported schema keyword', 'status': 'invalid'} = <built-in method get of dict object at 0x7cc0083c3880>('feedback')
+E    +    where <built-in method get of dict object at 0x7cc0083c3880> = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...s_aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}.get
+_ test_selected_native_results_reach_requested_parent_form_and_real_credit[nhmmer_profile_ordinary] _
+tests/test_native_hmmer_results_integration.py:257: in test_selected_native_results_reach_requested_parent_form_and_real_credit
+    case = run_case(tmp_path, label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_native_hmmer_results_integration.py:137: in run_case
+    request, scope = bound_request(store, label, bind=bind, wrong_sequence=wrong_sequence)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_native_hmmer_results_integration.py:96: in bound_request
+    subject, = store.create_problem(raw_sequence=sequence, molecule=molecule)['subject_refs']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+gene_annotation_episode/materials.py:568: in create_problem
+    raise ContractError("problem_already_exists")
+E   gene_annotation_episode.domain.ContractError: problem_already_exists
+_ test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmalign_align_trim] _
+tests/test_native_hmmer_results_integration.py:257: in test_selected_native_results_reach_requested_parent_form_and_real_credit
+    case = run_case(tmp_path, label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_native_hmmer_results_integration.py:137: in run_case
+    request, scope = bound_request(store, label, bind=bind, wrong_sequence=wrong_sequence)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_native_hmmer_results_integration.py:96: in bound_request
+    subject, = store.create_problem(raw_sequence=sequence, molecule=molecule)['subject_refs']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+gene_annotation_episode/materials.py:568: in create_problem
+    raise ContractError("problem_already_exists")
+E   gene_annotation_episode.domain.ContractError: problem_already_exists
+=========================== short test summary info ============================
+FAILED tests/test_native_hmmer_results_integration.py::test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmscan_search_ordinary]
+FAILED tests/test_native_hmmer_results_integration.py::test_selected_native_results_reach_requested_parent_form_and_real_credit[nhmmer_profile_ordinary]
+FAILED tests/test_native_hmmer_results_integration.py::test_selected_native_results_reach_requested_parent_form_and_real_credit[hmmalign_align_trim]
+3 failed in 15.25s

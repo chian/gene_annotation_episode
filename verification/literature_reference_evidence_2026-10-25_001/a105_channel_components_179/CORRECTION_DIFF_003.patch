@@ -1,0 +1,33 @@
+--- gene_annotation_episode/literature_channel_inputs.py (manifest002)
++++ gene_annotation_episode/literature_channel_inputs.py (correction003)
+@@ -139,7 +139,7 @@
+ 
+ def _unit_continues(suffix):
+     return _unit_continuation(suffix) or bool(re.match(
+-        r"\s*\)*\s*(?:[²³⁰⁴⁵⁶⁷⁸⁹]|per\b|[/^*]|[×⋅·])", suffix))
++        r"\s*\)*\s*(?:[⁰¹²³⁴⁵⁶⁷⁸⁹]|[-−⁻]\s*[0-9⁰¹²³⁴⁵⁶⁷⁸⁹]|per\b|[/^*]|[×⋅·])", suffix))
+ 
+ 
+ def _read_unit(witness, sources, role):
+--- tests/test_literature_channel_components_179.py (manifest002)
++++ tests/test_literature_channel_components_179.py (correction003)
+@@ -272,6 +272,19 @@
+     assert_error("electrical_explicit_unit_mismatch", read_channel_inputs, args, read_source=source.read)
+ 
+ 
++@pytest.mark.parametrize("closure", [")⁻¹", ")−1", ")-1", ") − 1", ") ⁻ ¹", "))⁻¹",
++                                      ")¹", ")²", ")^−1", ")<sup>−1</sup>"])
++def test_inverse_or_power_unit_after_closing_parenthesis_is_not_plain_current(closure):
++    source = Source(current_suffix=" ± 0.2 pA"+closure)
++    assert_error("partial_electrical_unit", read_channel_inputs, source.args(), read_source=source.read)
++
++
++@pytest.mark.parametrize("closure", [")", "))", ").", "),", ");", ") noted", "). Next measurement"])
++def test_ordinary_closing_punctuation_does_not_create_an_inverse_unit(closure):
++    extraction,_ = run(Source(current_suffix=" ± 0.2 pA"+closure))
++    assert extraction["values"]["current"] == 1.8
++
++
+ def test_electrical_dimension_mismatch_is_not_scale_conversion():
+     source = Source(current_unit="mV")
+     assert_error("electrical_unit_dimension_mismatch", read_channel_inputs, source.args(), read_source=source.read)

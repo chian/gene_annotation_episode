@@ -1,0 +1,135 @@
+{
+  "record_type": "bounded_parser_publication_and_selected_api_episode_verification",
+  "recorded_at": "2026-10-28T18:34:07.240706+00:00",
+  "goal_authority": "Original user attachment; this records implementation evidence and changes no goal or scope.",
+  "contract": "verification/tool_graders_uniprot_alias_boundary_2026-10-28_597/CODING_HANDOFF_003.md",
+  "attempts": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check051_uniprot_parser_publication",
+      "counts": {
+        "passed": 150,
+        "failed": 5,
+        "error": 12,
+        "skipped": 1
+      },
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check051_uniprot_parser_publication/receipt.json",
+      "audit": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check051_uniprot_parser_publication/execution_audit.json",
+      "terminal": true,
+      "quiescent": true,
+      "pytest_returncode": 1,
+      "runtime_and_native_pins_unchanged": true,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 622280704
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check052_uniprot_episode_paths",
+      "counts": {
+        "passed": 42,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check052_uniprot_episode_paths/receipt.json",
+      "audit": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check052_uniprot_episode_paths/execution_audit.json",
+      "terminal": true,
+      "quiescent": true,
+      "pytest_returncode": 0,
+      "runtime_and_native_pins_unchanged": true,
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 659156992
+    }
+  ],
+  "latest_distinct_case_outcomes": {
+    "passed": 168,
+    "failed": 0,
+    "error": 0,
+    "skipped": 1
+  },
+  "count_qualification": "168 distinct latest passing outcomes across check051/check052, not a new single 168-case run.",
+  "initial_collection_failure": {
+    "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check050_uniprot_parser_publication",
+    "cause": "Reserved pytest request parameter",
+    "production_changed_for_fix": false
+  },
+  "remaining_skipped_case": {
+    "name": "test_downloaded_reference_replay_pins_source_and_compares_actual_sequences",
+    "cause": "validation/acquisition/uniprot-P0A7V8.json is absent; no replacement was fabricated."
+  },
+  "environment_failure_repair": "check051 omitted examples/api_services.json from the frozen snapshot; the actual file was included in check052.",
+  "fixture_correction": "Restored original decode method between two intentionally interrupted recovery phases; added literal alias shared-loop test.",
+  "owned_source_pins_match_final_snapshot": {
+    "gene_annotation_episode/uniprot_native.py": "81372b8e1856c194f061c87ad35f7579f5f95de025bc770a505acaf91b5fe026",
+    "gene_annotation_episode/uniprot_native_contracts.py": "cc95e7edf6fcb8e23854743589bfd9168e4c56232a9e0bfd6ee90db39547a35b",
+    "gene_annotation_episode/acquisition.py": "24b85cf6974fb13fa24a9b849384b0c78bf92c3eb51398c452134f8ef2592a93",
+    "gene_annotation_episode/api_uniprot.py": "5dd0ec2d83357b5312d1caeda84fc17f0bdb26237b397ab51e9664a260b78d22",
+    "gene_annotation_episode/tools.py": "6327cbd676346b1b036c2b54ed61a9ebc62f1c2ffaa027be6592ebf7c981dc39",
+    "gene_annotation_episode/uniprot_publication.py": "1e6114b3d5fb79c96b41d5e94b6890d94bc224de222c0ef3e1a2caff29f48932",
+    "tests/test_uniprot_native.py": "eef719a71344e0b3f250b52fc3c5bbfb5441fd5ca9eaeac2d865f3d8955a27fa",
+    "tests/test_uniprot_publication.py": "aa69054913a125f26ce7890c5dea6d1708f656921a05a9a6823f55c87677aaf2",
+    "tests/test_uniprot_alias_service.py": "cd9db130c947049dcaea6ed9a50241bd68f7e12b2435231919849f4f9c3948ca",
+    "tests/test_api_uniprot.py": "f72a2b04cfee50918f385100af5c46558053b3535fe984b37a7d35f04c159dc1",
+    "tests/test_public_search.py": "2b2a2178baed6c9a6f5121ea952ff1dc0d1bf0b9a529effda8412faa9e9f3c24"
+  },
+  "retained_authentic_example": {
+    "fixture": "tests/fixtures/uniprot_native/P0AAW1.json",
+    "sha256": "dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e",
+    "primary_accession": "P0AAW1",
+    "secondary_accessions": [
+      "P75772"
+    ],
+    "taxon_id": 83333,
+    "sequence_length_aa": 253,
+    "cross_reference_count": 42,
+    "example_cross_reference_ordinal": 31,
+    "example_cross_reference": {
+      "database": "GO",
+      "id": "GO:0005886",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "C:plasma membrane"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "HDA:EcoCyc"
+        }
+      ],
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007005",
+          "source": "PubMed",
+          "id": "32127419"
+        }
+      ]
+    }
+  },
+  "verified_paths": [
+    "Pure native row/state/metadata parsing and explicit Link continuation handling",
+    "Native record ordinal to actual stored reference and full sequence binding",
+    "Invalid siblings and unrepresentable legacy labels/terms preserve valid native data and explicit partial status",
+    "Literal query_uniprot remains commissioned through selected API resource, not a root ToolRegistry alias",
+    "Existing shared method_loop launch/handoff/results path with original references-only form",
+    "Original-operation acquisition/publication interruption recovery, exact replay, closed history and practical terminal-zero expectation"
+  ],
+  "not_verified_or_not_implemented": [
+    "Selected native fact-family parent returns and forwarding",
+    "Concise own-outcome context and receiver-facing text; raw fallback currently exposes full new publication",
+    "Prospective canonical/alias acquisition identity equivalence",
+    "UniProt modes beyond selected UniProtKB JSON record/search page",
+    "Authentic search-page fixture and new live alias/provider resource call",
+    "Entire R6 provider/wrapper completion"
+  ],
+  "new_live_api_calls": false,
+  "new_scientific_calculator": false,
+  "annotation_credit_changed": false,
+  "whole_tool_or_goal_complete": false,
+  "inventory_completion_increment": 0
+}

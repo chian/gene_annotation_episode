@@ -1,0 +1,24 @@
+.............F
+=================================== FAILURES ===================================
+___________ test_old_v1_rows_and_explicit_null_quality_remain_exact ____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check007/temporary/pytest/test_old_v1_rows_and_explicit_0')
+
+            sw._shape({**item, 'origin': 'selected_results_input'}, sw._DESCRIPTOR)
+    
+    
+    def test_old_v1_rows_and_explicit_null_quality_remain_exact(tmp_path):
+        before = load_before('native_blast_standard_database_calculators')
+        inputs = sf.fixture()
+        payload = sf.numerical_metadata(inputs, census=False)
+        # All assertions reside in the supplied JSON; this is file/pointer provenance.
+        payload['documents'].append(sf.received(inputs, 'record-assignments', sf.encoded({'synthetic': True})))
+>       quality(payload)
+                     ^^^^
+E       TypeError: calculate_standard_blast_database_sheets() missing 1 required keyword-only argument: 'sequence_model'
+
+../../../tests/test_blast_fasta_record_identity_integration.py:321: TypeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_fasta_record_identity_integration.py::test_old_v1_rows_and_explicit_null_quality_remain_exact
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 13 passed in 73.41s (0:01:13)

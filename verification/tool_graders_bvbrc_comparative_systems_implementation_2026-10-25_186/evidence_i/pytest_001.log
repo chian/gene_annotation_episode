@@ -1,0 +1,38 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_actual_preparation_task_manifest_provider_and_two_parent_boundaries ___
+
+driver = <test_bvbrc_comparative_systems_episode_flow.ComparativeDriver object at 0x74f9d0837620>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74f9d08074d0>
+
+    def test_actual_preparation_task_manifest_provider_and_two_parent_boundaries(driver, monkeypatch):
+        d = driver
+>       d.start()
+
+tests/test_bvbrc_comparative_systems_episode_flow.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_comparative_systems_episode_flow.py:128: in start
+    self.api.initialize(self.context)
+gene_annotation_episode/api_service_execution.py:242: in initialize
+    self._context(context)
+gene_annotation_episode/api_service_execution.py:207: in _context
+    self.validate_result_selector(target, raw['selector'])
+gene_annotation_episode/api_service_execution.py:220: in validate_result_selector
+    self.services[target['resource_id']].result_catalog(target['assignment']['request'], value)
+gene_annotation_episode/api_bvbrc_appservice.py:172: in result_catalog
+    implementation.validate_requested_form(selector['requested_schema'])
+gene_annotation_episode/bvbrc_comparative_systems_fact_contracts.py:148: in validate_requested_form
+    require(canonical_sha256(value) == canonical_sha256(expected), "requested_form_noncanonical")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'requested_form_noncanonical'
+
+    def require(condition, code):
+        if not condition:
+>           raise ValueError("comparative_systems_" + code)
+E           ValueError: comparative_systems_requested_form_noncanonical
+
+gene_annotation_episode/bvbrc_comparative_systems_fact_contracts.py:39: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_episode_flow.py::test_actual_preparation_task_manifest_provider_and_two_parent_boundaries
+1 failed in 18.45s

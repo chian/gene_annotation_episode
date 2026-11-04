@@ -1,0 +1,49 @@
+......................................................F......F.......... [ 79%]
+...................                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_native_revision_losses_and_actual_calibration_values ___________
+
+    def test_native_revision_losses_and_actual_calibration_values():
+        result = calculate_hmmer_artifact_components(native_sheet("hmmconvert_annotated_3a"))
+        optional = {row["field"]:row for row in rows(result,"model_comparison")[0]["optional_fields"]}
+        assert optional["header.CONS"]["state"] == optional["header.MM"]["state"] == "lost"
+        assert optional["positions.0.annotations.CONS"]["state"] == "lost"
+        assert optional["positions.0.annotations.MM"]["state"] == "lost"
+        assert optional["header.GA"]["state"] == "retained"
+        stats = optional["header.STATS"]
+        assert stats["state"] == "changed"
+        assert ["LOCAL","VMU","-5.908600"] in stats["output_value"]
+>       assert ["LOCAL","VITERBI","-6.1309","0.74482"] in stats["source_value"]
+E       AssertionError: assert ['LOCAL', 'VITERBI', '-6.1309', '0.74482'] in [['LOCAL', 'MSV', '-5.9086', '0.74188'], ['LOCAL', 'VITERBI', '-6.1309', '0.74188'], ['LOCAL', 'FORWARD', '-4.0342', '0.74188']]
+
+../../../tests/test_hmmer_artifact_calculations.py:51: AssertionError
+_ test_native_fetch_numeric_populations[hmmfetch_unindexed_missing-2-1-1-1-0] __
+
+name = 'hmmfetch_unindexed_missing', requested = 2, resolved = 1, missing = 1
+returned = 1, duplicates = 0
+
+    @pytest.mark.parametrize("name,requested,resolved,missing,returned,duplicates", [
+        ("hmmfetch_single",1,1,0,1,0),("hmmfetch_unindexed_alias",2,2,0,1,0),
+        ("hmmfetch_indexed_alias",2,2,0,2,1),("hmmfetch_unindexed_missing",2,1,1,1,0),
+        ("hmmfetch_indexed_missing",2,1,1,1,0),("hmmfetch_duplicate",2,2,0,1,0)])
+    def test_native_fetch_numeric_populations(name,requested,resolved,missing,returned,duplicates):
+        result = calculate_hmmer_artifact_components(native_sheet(name))
+        row = rows(result,"key_population")[0]
+        expected = {"requested_key_count":requested,"resolved_key_count":resolved,"missing_key_count":missing,
+            "returned_model_occurrence_count":returned,"duplicate_representation_count":duplicates,"selected_source_occurrence_count":1}
+        assert {name:row[name]["value"] for name in expected} == expected
+        assert all(r["compared_cell_count"]["value"] == 611 for r in rows(result,"model_comparison"))
+        if missing:
+            assert check(result,"all_requested_keys_resolved") == ["fail"]
+        if "indexed_missing" in name:
+>           assert check(result,"native_diagnostics") == ["fail"]
+E           AssertionError: assert ['not_applicable'] == ['fail']
+E             
+E             At index 0 diff: 'not_applicable' != 'fail'
+E             Use -v to get more diff
+
+../../../tests/test_hmmer_artifact_calculations.py:101: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_hmmer_artifact_calculations.py::test_native_revision_losses_and_actual_calibration_values
+FAILED ../../../tests/test_hmmer_artifact_calculations.py::test_native_fetch_numeric_populations[hmmfetch_unindexed_missing-2-1-1-1-0]
+2 failed, 89 passed in 2.01s

@@ -1,0 +1,22 @@
+..................F.................................                     [100%]
+=================================== FAILURES ===================================
+___________ test_native_pair_eligibility_needs_positive_df_evidence ____________
+
+    def test_native_pair_eligibility_needs_positive_df_evidence():
+        sheet, parameters, _ = retained_sheet('aa_two_groups')
+        request = native_family_request(sheet, kind='pairwise')
+        result = calculate_metacats(sheet, {'version': c.VERSION, 'requests': [request]})
+        assert result['results'][0]['value'] is None
+        request['p_values']['eligibility_statistics_request_ids'] = ['native:comparison:statistics']
+        parameters['requests'].append(request)
+        result = calculate_metacats(sheet, parameters)
+        family = by_id(result, 'native-observed-family')['value']
+        assert family['total_test_count'] == 1 and family['family']['p_value_basis'] == 'native_unadjusted'
+        observation = next(o for o in sheet['native_observations'] if o['document_id'] in request['p_values']['table_ids'] and o['field'] == 'metacats_p_value')
+>       assert family['results'][0]['input_p']['value'] == observation['number']['value']
+E       assert 0.000533148220906465 == 1.0
+
+tests/test_bvbrc_metacats_provider.py:320: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_metacats_provider.py::test_native_pair_eligibility_needs_positive_df_evidence
+1 failed, 51 passed in 134.70s (0:02:14)

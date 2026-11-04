@@ -1,0 +1,104 @@
+
+FILE: gene_annotation_episode/practical_execution_operations.py FUNCTION: _job_fact
+480:     def _job_fact(self, state, handle, view):
+481:         request = state.assignment['requested_job']
+482:         preparation_plan = None
+483:         blast_plan = None
+484:         rna_plan = None
+485:         protein_plan = None
+486:         overlap_plan = None
+487:         chromatin_plan = None
+488:         atac_plan = None
+489:         expression_nmf_plan = None
+490:         barcode_plan = None
+491:         if 'native_barcode' in request:
+492:             barcode_plan = self._barcode_plan(state.assignment, str(handle.path),
+493:                 run_id=state.run_id, origin_episode_id=state.episode_id)
+494:         elif 'native_expression_nmf' in request:
+495:             expression_nmf_plan = self._expression_nmf_plan(state.assignment, str(handle.path),
+496:                 run_id=state.run_id, origin_episode_id=state.episode_id)
+497:         if 'native_atac_differential' in request:
+498:             atac_plan = self._atac_plan(state.assignment, str(handle.path), run_id=state.run_id,
+499:                 origin_episode_id=state.episode_id)
+500:         if 'native_chromatin_interactions' in request:
+501:             chromatin_plan = self._chromatin_plan(state.assignment, str(handle.path), run_id=state.run_id,
+502:                 origin_episode_id=state.episode_id)
+503:         if 'native_genomic_overlap' in request:
+504:             overlap_plan = self._genomic_overlap_plan(state.assignment, str(handle.path), run_id=state.run_id,
+505:                 origin_episode_id=state.episode_id)
+506:         if 'native_protein_structure' in request:
+507:             protein_plan = self._protein_plan(state.assignment, str(handle.path), run_id=state.run_id,
+508:                 origin_episode_id=state.episode_id)
+509:         if 'native_rna_structure' in request:
+510:             rna_plan = self._rna_plan(state.assignment, str(handle.path), run_id=state.run_id,
+511:                 origin_episode_id=state.episode_id)
+512:         if 'native_blast' in request:
+513:             from .native_blast_local import local_blast_plan
+514:             blast_plan = local_blast_plan(state.assignment, str(handle.path))
+515:             if (blast_plan['identity']['run_id'] != state.run_id
+516:                     or blast_plan['identity']['episode_id'] != state.episode_id
+517:                     or blast_plan['policy'] != self.policy.to_dict()):
+518:                 raise ValueError('native_blast_original_owner_conflict')
+519:         if 'native_hmmer_preparation' in request:
+520:             from .native_hmmer_preparation_local import local_hmmer_preparation_plan
+521:             preparation_plan = local_hmmer_preparation_plan(state.assignment, str(handle.path))
+522:             if (preparation_plan['identity']['run_id'] != state.run_id
+523:                     or preparation_plan['identity']['episode_id'] != state.episode_id):
+524:                 raise ValueError('native_hmmer_preparation_original_owner_conflict')
+525:         if 'native_hmmer' in request:
+526:             from .native_hmmer_local import local_hmmer_plan
+527:             local_hmmer_plan(state.assignment, str(handle.path))
+528:         if 'native_infernal' in request:
+529:             from .native_infernal_local import local_infernal_plan
+530:             local_infernal_plan(state.assignment, str(handle.path))
+531:         if 'native_infernal_preparation' in request:
+532:             from .native_infernal_preparation_local import local_infernal_preparation_plan
+533:             local_infernal_preparation_plan(state.assignment, str(handle.path))
+534:         rc = view['metadata'].get('native_returncode')
+535:         status = ('completed' if rc == 0 else 'failed') if view['terminal'] else (
+536:             'running' if view['state'] == 'running' else 'submitted' if view['state'] == 'starting'
+537:             else 'unknown')
+538:         outputs = [p for r in state.assignment['progress_requirements']
+539:             if r['predicate']['kind'] == 'requested_job_outputs'
+540:             for p in r['predicate']['output_paths']]
+541:         if preparation_plan is not None:
+542:             from .native_hmmer_preparation_driver import BUNDLE_NAME
+543:             attempt = Path(preparation_plan['attempt_directory'])
+544:             outputs = [str(attempt / row['relative_path'])
+545:                 for row in request['native_hmmer_preparation']['outputs']]
+546:             outputs.append(str(attempt / BUNDLE_NAME))
+547:         if blast_plan is not None:
+548:             attempt = Path(blast_plan['attempt_directory'])
+549:             outputs = [str(attempt / row['relative_path']) for row in request['native_blast']['outputs']]
+550:             outputs.append(str(attempt / 'bundle.json'))
+551:         if rna_plan is not None:
+552:             from .native_rna_structure_contracts import BUNDLE_FILENAME
+553:             attempt = Path(rna_plan['attempt_directory'])
+554:             outputs = [str(attempt / row['relative_path']) for row in request['native_rna_structure']['outputs']]
+555:             outputs.append(str(attempt / BUNDLE_FILENAME))
+556:         if protein_plan is not None:
+557:             from .native_protein_structure_contracts import BUNDLE_FILENAME
+558:             attempt = Path(protein_plan['attempt_directory'])
+559:             outputs = [str(attempt / row['relative_path']) for row in request['native_protein_structure']['outputs']]
+560:             outputs.append(str(attempt / BUNDLE_FILENAME))
+561:         if overlap_plan is not None:
+562:             attempt = Path(overlap_plan['attempt_directory'])
+563:             outputs = [str(attempt / row['relative_path']) for row in request['native_genomic_overlap']['outputs']]
+564:         if chromatin_plan is not None:
+565:             attempt = Path(chromatin_plan['attempt_directory'])
+566:             outputs = [str(attempt / row['relative_path']) for row in chromatin_plan['outputs']]
+567:         if atac_plan is not None:
+568:             attempt = Path(atac_plan['attempt_directory'])
+569:             outputs = [str(attempt / row['relative_path']) for row in atac_plan['outputs']]
+570:         if barcode_plan is not None:
+571:             attempt = Path(barcode_plan['attempt_directory'])
+572:             outputs = [str(attempt / row['relative_path']) for row in barcode_plan['outputs']]
+573:         elif expression_nmf_plan is not None:
+574:             attempt = Path(expression_nmf_plan['attempt_directory'])
+575:             outputs = [str(attempt / row['relative_path']) for row in expression_nmf_plan['outputs']]
+576:         return {'requested_job_sha256': digest(request), 'argv': request['argv'],
+577:             'environment': request['environment'], 'resource_kind': 'local',
+578:             'execution_id': str(handle.path), 'status': status, 'returncode': rc,
+579:             'output_paths': sorted(set(outputs)), 'handoff': {
+580:                 'execution_id': str(handle.path), 'monitor_operation': 'practical.job.status',
+581:                 'results_operation': 'practical.job.collect'}}

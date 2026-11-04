@@ -1,0 +1,174 @@
+{
+  "version": "tool_knowledge_v1",
+  "entries": [
+    {
+      "entry_id": "native-blast-pairwise",
+      "title": "Native BLAST correspondence between two supplied sequences",
+      "summary": "Select a configured local BLAST program for two supplied FASTA sequences; retain complete reports, original coordinates, separate full and selected coverage, and requested numerical returns.",
+      "tags": ["BLAST", "pairwise", "blastn", "blastp", "blastx", "tblastn", "tblastx", "local", "launch", "monitoring", "results"],
+      "tool_names": ["native.blastn", "native.blastp", "native.blastx", "native.tblastn", "native.tblastx"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/native_blast_tool_info.py", "gene_annotation_episode/native_blast_contracts.py", "gene_annotation_episode/native_blast_driver.py", "gene_annotation_episode/native_blast_results.py", "gene_annotation_episode/blast_pairwise_results.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Supplied pair, resource launch, native reports and numerical correspondence", "path": "native-blast-pairwise.md"}
+      ]
+    },
+    {
+      "entry_id": "alignment-reference-sites",
+      "title": "Selected reference positions and original-coordinate correspondence",
+      "summary": "Read one retained pairwise alignment or minimap2 placement; preserve requested positions, distinct counting populations, gaps, insertions, original coordinates and read quality.",
+      "tags": ["alignment", "sequence", "minimap2", "sites", "coordinates", "results"],
+      "tool_names": ["sequence.sites"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/alignment_site_native.py", "gene_annotation_episode/alignment_site_inputs.py", "gene_annotation_episode/alignment_site_calculators.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Selected sites, measurements and coordinate meanings", "path": "alignment-reference-sites.md"}
+      ]
+    },
+    {
+      "entry_id": "blast-hsp-columns",
+      "title": "Selected columns of a received BLAST HSP",
+      "summary": "Inspect a received NCBI or native paired BLAST HSP with native operand units, translated/reverse correspondence, gap counts and explicit identity/coverage denominators.",
+      "tags": ["BLAST", "alignment", "HSP", "columns", "coordinates", "results"],
+      "tool_names": ["result.blast.hsp"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/blast_result_views.py", "gene_annotation_episode/native_blast_hsp_views.py", "gene_annotation_episode/blast_hsp_site_inputs.py", "gene_annotation_episode/blast_hsp_site_calculators.py", "gene_annotation_episode/alignment_site_returns.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Received HSP windows and numerical correspondence", "path": "blast-hsp-columns.md"}
+      ]
+    },
+    {
+      "entry_id": "bvbrc-minhash-distance-results",
+      "title": "BV-BRC Similar Genome Finder native distances",
+      "summary": "Direct genome or Workspace FASTA MinHash request; complete native rows, original distance and p-value, and sampled shared-hash fraction.",
+      "tags": ["BV-BRC", "MinHash", "genome", "similarity", "API", "results"],
+      "tool_names": ["api.bvbrc.minhash.genome", "api.bvbrc.minhash.fasta", "api.bvbrc.minhash.result"],
+      "resource_kinds": ["api"],
+      "provenance": ["gene_annotation_episode/api_bvbrc_minhash.py", "gene_annotation_episode/bvbrc_minhash_grader.py", "gene_annotation_episode/bvbrc_minhash_host.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Assigned native request and numerical return", "path": "bvbrc-minhash.md"}
+      ]
+    },
+    {
+      "entry_id": "hmmer-api-numerical-results",
+      "title": "HMMER API domain measurements and exact correspondence",
+      "summary": "Original phmmer/hmmscan page, distinct native scores and identity denominators, model/sequence coverage, posterior bounds and qualified domain publication.",
+      "tags": ["HMMER", "phmmer", "hmmscan", "protein", "profile", "API", "results"],
+      "tool_names": ["api.hmmer.result"],
+      "resource_kinds": ["api"],
+      "provenance": ["gene_annotation_episode/api_execution.py", "gene_annotation_episode/hmmer_search_inputs.py", "gene_annotation_episode/hmmer_search_grader.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "numerical-results", "title": "Retained domain measurements and scientific meanings", "path": "hmmer-api-results.md"}
+      ]
+    },
+    {
+      "entry_id": "minimap2-read-placements",
+      "title": "Selected-read placement and native mapping measurements",
+      "summary": "Six explicitly selected minimap2 presets, complete reported placements, native and path-derived counts, exact query/reference coverage and ambiguity distinctions.",
+      "tags": ["sequence", "reads", "mapping", "minimap2", "results"],
+      "tool_names": ["reads.map"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/read_mapping.py", "gene_annotation_episode/minimap2_grading_inputs.py", "gene_annotation_episode/minimap2_grader.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Selected mapping and numerical placement measurements", "path": "minimap2-placements.md"}
+      ]
+    },
+    {
+      "entry_id": "biopython-pairwise-correspondence",
+      "title": "Pairwise sequence and selected-read correspondence",
+      "summary": "Local/global protein, DNA and RNA alignment with explicit paired positions, gaps, coordinate correspondence and coverage denominators.",
+      "tags": ["sequence", "alignment", "pairwise", "Biopython", "results"],
+      "tool_names": ["sequence.align", "reads.align"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/sequence_ops.py", "gene_annotation_episode/biopython_pairwise_grader.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Native alignment and numerical correspondence", "path": "pairwise-correspondence.md"}
+      ]
+    },
+    {
+      "entry_id": "pyrodigal-predictions",
+      "title": "Single-genome and metagenomic gene prediction",
+      "summary": "Explicit Pyrodigal mode and genetic code, complete candidate intervals and translations, native scores and coding-interval union coverage.",
+      "tags": ["sequence", "gene", "prediction", "Pyrodigal", "results"],
+      "tool_names": ["genes.predict"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/sequence_ops.py", "gene_annotation_episode/prodigal_grader.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Selected prediction and numerical candidate measurements", "path": "gene-prediction.md"}
+      ]
+    },
+    {
+      "entry_id": "sequence-read-composition",
+      "title": "Sequence composition and original read quality",
+      "summary": "Declared-molecule composition, ambiguity and explicit GC denominator; original quality encodings, error probabilities and threshold counts.",
+      "tags": ["sequence", "reads", "composition", "quality", "results"],
+      "tool_names": ["sequence.inspect", "reads.inspect"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/sequence_composition_grader.py", "gene_annotation_episode/materials_packing.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Declared molecule and numerical read measurements", "path": "sequence-read-composition.md"}
+      ]
+    },
+    {
+      "entry_id": "sequence-translation",
+      "title": "Translation with explicit genetic code and source correspondence",
+      "summary": "Translate selected nucleotide intervals with the chosen code, strand, frame and CDS semantics; retain codons, stops, trailing bases and original coordinates.",
+      "tags": ["sequence", "translation", "genetic-code", "coordinates", "preparation", "results"],
+      "tool_names": ["sequence.translate", "translation.codes"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/sequence_ops.py", "gene_annotation_episode/sequence_translation_grader.py", "gene_annotation_episode/sequence_mapping.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Translation settings and numerical correspondence", "path": "sequence-translation.md"}
+      ]
+    },
+    {
+      "entry_id": "sequence-extraction",
+      "title": "Ordered sequence extraction and reverse complements",
+      "summary": "Create reusable DNA, RNA or protein views while preserving ordered and repeated selections, actual symbol correspondence and original source paths.",
+      "tags": ["sequence", "extraction", "coordinates", "reverse-complement", "preparation", "results"],
+      "tool_names": ["sequence.view"],
+      "resource_kinds": ["local"],
+      "provenance": ["gene_annotation_episode/sequence_views.py", "gene_annotation_episode/sequence_extraction_grader.py", "gene_annotation_episode/sequence_mapping.py", "gene_annotation_episode/tools.py"],
+      "sections": [
+        {"section_id": "operation-results", "title": "Selected regions and numerical correspondence", "path": "sequence-extraction.md"}
+      ]
+    },
+    {
+      "entry_id": "native-phmmer",
+      "title": "Detached single-query phmmer execution",
+      "summary": "Preparing, launching, monitoring and acquiring a parent-assigned local protein search.",
+      "tags": ["homology", "HMMER", "protein", "launch", "monitor", "results"],
+      "tool_names": ["homology.environment", "homology.configure", "homology.stage", "homology.submit", "homology.resume_start", "homology.check_handoff", "homology.sample", "homology.extract", "homology.coverage", "homology.errors"],
+      "provenance": ["gene_annotation_episode/homology_jobs.py", "gene_annotation_episode/homology_episodes.py", "gene_annotation_episode/homology_results.py"],
+      "sections": [
+        {"section_id": "launch", "title": "Assigned inputs, preparation and submission", "path": "phmmer-launch.md"},
+        {"section_id": "monitor", "title": "Durable handoff and measured progress", "path": "phmmer-monitor.md"},
+        {"section_id": "results", "title": "Native output acquisition and limitations", "path": "phmmer-results.md"}
+      ]
+    },
+    {
+      "entry_id": "publication-access",
+      "title": "Europe PMC and PMC publication access",
+      "summary": "Literal literature queries, retained full text, version listings and advertised supplements.",
+      "tags": ["literature", "search", "article", "supplement", "EuropePMC", "PMC"],
+      "tool_names": ["public.literature.search", "public.literature.read", "public.pmc.versions", "public.pmc.files", "public.pmc.asset"],
+      "provenance": ["gene_annotation_episode/acquisition.py", "gene_annotation_episode/tools.py", "gene_annotation_episode/literature_assets.py"],
+      "sections": [
+        {"section_id": "search", "title": "Search and article identity", "path": "publication-search.md"},
+        {"section_id": "access", "title": "Article versions and supplements", "path": "publication-access.md"}
+      ]
+    },
+    {
+      "entry_id": "source-reading",
+      "title": "Reading retained article and supplement representations",
+      "summary": "Choose source windows, PDF text or images, archive members and spreadsheet rows according to the actual material and question.",
+      "tags": ["literature", "reading", "PDF", "XML", "table", "spreadsheet", "XLSX", "image", "archive"],
+      "tool_names": ["source.read", "source.pdf.info", "source.pdf.text", "source.pdf.page", "image.view", "source.xlsx.sheets", "source.xlsx.rows", "source.archive.members", "source.archive.extract"],
+      "provenance": ["gene_annotation_episode/tools.py", "gene_annotation_episode/document_tools.py", "gene_annotation_episode/spreadsheet_tools.py", "gene_annotation_episode/materials.py"],
+      "sections": [
+        {"section_id": "representations", "title": "Exact text, PDF and image reading", "path": "source-representations.md"},
+        {"section_id": "tables", "title": "Archive and spreadsheet context", "path": "source-tables.md"}
+      ]
+    }
+  ]
+}

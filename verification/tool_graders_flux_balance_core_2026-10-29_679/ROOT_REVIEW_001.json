@@ -1,0 +1,156 @@
+{
+  "record_type": "root_numerical_component_review_with_specific_remaining_repair",
+  "recorded_at": "2026-10-29T07:09:32.646385+00:00",
+  "goal_sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+  "contracts": [
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_001.md",
+      "sha256": "ce1d66391283c9cf67f3c2be562b7ea493f9c6d8b989d97f49c9851f84aef23e",
+      "size_bytes": 17552
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_002.md",
+      "sha256": "b7c840d7d293904212cb6698136d6dbc963fe3bf0b2b2d6a794029b33ab80da3",
+      "size_bytes": 6379
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_003.md",
+      "sha256": "a660bf19427d9de2431cf4d8f48c5022639f9f0a5dcfb7d54cb00965a3705fb6",
+      "size_bytes": 1802
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_004.md",
+      "sha256": "666d0a79f7a01de67c611f63e37e91843f037bfd4574b54a2d5795867f9e8b8f",
+      "size_bytes": 2055
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_005.md",
+      "sha256": "dfd515f09111b91b531921816f8da5d00016e560f65fcecbab523a47520ecb4c",
+      "size_bytes": 1993
+    }
+  ],
+  "handoff": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/HANDOFF_001.md",
+    "sha256": "f4c90d6ed8177667e99b99276123351a2a901199a2f0091ace8bba5a6f6c4dfe",
+    "size_bytes": 7705
+  },
+  "evidence": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/EVIDENCE_001.json",
+    "sha256": "cc558d4db31acf0cb53faf1873eb2be7c59544d64ec24f67cbba39687b5fd0ce",
+    "size_bytes": 10759
+  },
+  "reviewed_complete_sources": [
+    "gene_annotation_episode/flux_balance_contracts.py",
+    "gene_annotation_episode/flux_balance_sheet.py",
+    "gene_annotation_episode/flux_balance_calculations.py",
+    "tests/test_flux_balance_core_679.py"
+  ],
+  "reviewed_source_versions": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/flux_balance_contracts.py",
+      "sha256": "797f959ea49bbdd03d41025d4418e39755813d916ca1dae764ad48f256bf21f9",
+      "size_bytes": 42832
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/flux_balance_sheet.py",
+      "sha256": "8aa85e857f448609efdf0bb9e6862de8c818fbb0af28965673aeab9fbccf6ce5",
+      "size_bytes": 818
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/flux_balance_calculations.py",
+      "sha256": "8a556152ac672c6e6984f91a422642f7fabbfa63d52d534fb50f389be0c63ef3",
+      "size_bytes": 29133
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/tests/test_flux_balance_core_679.py",
+      "sha256": "cb23b6cf21a8d538c39b3b563ad0ab6801dcf53040fcfd5b7fd948041146f3fa",
+      "size_bytes": 44267
+    }
+  ],
+  "evidence_pins_verified_before_followup": 38,
+  "distinct_passed_cases": 51,
+  "passed_case_executions": 60,
+  "verified_attempts": [
+    {
+      "name": "check142_core679",
+      "cases_passed": 41,
+      "seconds": 1.31
+    },
+    {
+      "name": "check142b_core679",
+      "cases_passed": 16,
+      "seconds": 0.77
+    },
+    {
+      "name": "check142c_core679",
+      "cases_passed": 3,
+      "seconds": 0.44
+    }
+  ],
+  "numerical_examples": {
+    "synthetic_flux_10_10_10": {
+      "balance_residuals": [
+        0,
+        0
+      ],
+      "objective": 10,
+      "active": 3
+    },
+    "synthetic_flux_10_12_12": {
+      "balance_residuals": [
+        -2,
+        0
+      ],
+      "objective": 12,
+      "native_objective": 10,
+      "native_minus_calculated": -2
+    },
+    "test_normalization_of_retained_677": {
+      "new_solve": false,
+      "production_capture": false,
+      "fluxes": [
+        7,
+        6,
+        6
+      ],
+      "auxiliary_primal": 6,
+      "A_activity": 1,
+      "A_equality_residual": 0,
+      "split_cap_activity": 7,
+      "split_cap_upper_slack": 2,
+      "native_basis_objective": -4.25,
+      "full_objective": -2.75
+    }
+  },
+  "review_finding": {
+    "field": "ConstraintCheck.expected_term_count",
+    "incorrect_behavior": "After parser removes invalid terms and marks terms_complete false, calculator reports surviving list length as the expected total.",
+    "accepted_correction": {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_005.md",
+      "sha256": "dfd515f09111b91b531921816f8da5d00016e560f65fcecbab523a47520ecb4c",
+      "size_bytes": 1993
+    },
+    "repair_owner": "/root/flux_balance_partial_term_count_683",
+    "repair_verification": "pending"
+  },
+  "separate_parser_work": {
+    "owner": "/root/flux_balance_readers_680",
+    "final_attempt": "check143e_readers680",
+    "actual_final_passed_cases": 56,
+    "receipt_and_clean_audit_checked": true,
+    "full_root_code_review": "unfinished"
+  },
+  "producer_boundary_owner": "/root/flux_balance_producer_boundary_681",
+  "remaining": [
+    "Verify005 partial-term count correction",
+    "Finish full parser review",
+    "Resolve producer diagnostic storage and original SBML address profile",
+    "Implement native producer and capture",
+    "Bind result worker/publication/typed returns",
+    "Verify real selected execution and saved replay"
+  ],
+  "new_numerical_operation_link_claimed": false,
+  "native_execution_or_full_operation_completion_claimed": false,
+  "goal_and_complete_operating_principles_reread": true,
+  "contracts001_through004_reread": true
+}

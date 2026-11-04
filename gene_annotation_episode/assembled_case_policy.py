@@ -49,10 +49,15 @@ def create_policy(parameters: dict) -> PolicyBindings:
     supplied = parameters['services']
     wired = isinstance(supplied, dict) and supplied.get('version') == WIRED_VERSION
     expected = _WIRED_SERVICE_FIELDS if wired else _SERVICE_FIELDS
-    if (not isinstance(supplied, dict) or set(supplied) != expected
+    optional = {'scientific_contract_information_profile'} | ({'protein_structure_environments'} if wired else set())
+    if (not isinstance(supplied, dict) or not expected <= set(supplied) <= expected | optional
             or supplied.get('version') not in {VERSION, WIRED_VERSION}):
         raise ValueError('explicit_assembled_services_configuration_required')
     services = json.loads(canonical(supplied))
+    if 'scientific_contract_information_profile' in services:
+        from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
+        if services['scientific_contract_information_profile'] != CONTRACT_INFORMATION_PROFILE:
+            raise ValueError('unsupported_scientific_contract_information_profile')
     if not isinstance(services['source_directory'], str) or not services['source_directory']:
         raise ValueError('explicit_scientific_publication_directory_required')
     if not isinstance(services['tool_retrieval'], dict):
@@ -79,7 +84,9 @@ def create_policy(parameters: dict) -> PolicyBindings:
             services['initial_execution_information'], services['handoff_unit'],
             services['acquired_record_unit'], services['monitoring_information_unit'],
             services['log_window_bytes'], tuple(services['log_roles']),
-            services['monitor_outcome_page_size'])
+            services['monitor_outcome_page_size'],
+            **({'protein_structure_environments': services['protein_structure_environments']}
+               if 'protein_structure_environments' in services else {}))
 
     def setup(store, *, run_id, directory, job_episodes, resource_estimator, tool_catalog,
               tool_registry=None):
@@ -95,9 +102,13 @@ def create_policy(parameters: dict) -> PolicyBindings:
             monitor_outcome_page_size=services['monitor_outcome_page_size'],
             log_window_bytes=services['log_window_bytes'],
             log_roles=tuple(services['log_roles']),
+            **({'scientific_contract_information_profile': services['scientific_contract_information_profile']}
+               if 'scientific_contract_information_profile' in services else {}),
             **({'execution_resources': services['execution_resources'],
                 'initial_execution_information': services['initial_execution_information'],
-                'tool_registry': tool_registry} if wired else {}))
+                'tool_registry': tool_registry,
+                **({'protein_structure_environments': services['protein_structure_environments']}
+                   if 'protein_structure_environments' in services else {})} if wired else {}))
 
     return replace(policy, episode_service_factory=setup,
         episode_service_binding=json.loads(canonical(services)),

@@ -1,0 +1,421 @@
+................FFF.....F...FFFF.F                                       [100%]
+=================================== FAILURES ===================================
+_ test_directional_only_calls_real_producers_once_and_never_legacy_projection __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c80c330b30>
+
+    def test_directional_only_calls_real_producers_once_and_never_legacy_projection(monkeypatch):
+        case=fixture(); before=deepcopy(case); calls={}
+        for name in ('parse_genome_comparison_directional_report','build_directional_sheet','calculate_directional_components'):
+            fn=getattr(provider,name)
+            def counted(*args,_name=name,_fn=fn,**kwargs):
+                calls[_name]=calls.get(_name,0)+1
+                return _fn(*args,**kwargs)
+            monkeypatch.setattr(provider,name,counted)
+        def fail(*a,**k):raise AssertionError('legacy consume_bundle is not v2 construction')
+        monkeypatch.setattr(provider.legacy,'consume_bundle',fail)
+>       result=adapter.consume_bundle(**case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'available', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'report_...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 1, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+_____________ test_retained_native_no_hit_zero_is_explicit[False] ______________
+
+exact = False
+
+    @pytest.mark.parametrize('exact',[False,True])
+    def test_retained_native_no_hit_zero_is_explicit(exact):
+>       result=adapter.consume_bundle(**fixture(exact=exact))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'available', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'report_...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 1, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+______________ test_retained_native_no_hit_zero_is_explicit[True] ______________
+
+exact = True
+
+    @pytest.mark.parametrize('exact',[False,True])
+    def test_retained_native_no_hit_zero_is_explicit(exact):
+>       result=adapter.consume_bundle(**fixture(exact=exact))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'available', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'report_...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 1, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+_ test_scoped_document_failures_preserve_selected_empty_sheet[range-nonzero_range_unsupported] _
+
+function = <function validate_contract at 0x76c84feb72e0>, path = '/bundle'
+code = 'proteome_bundle_invalid'
+args = ('ArtifactBundle', {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'synthetic-api'...onal', 'sha256': 'c122ef42cd2d2da7ae5318045aa88a73c84713572a2c14d15c562117f3eec62d', ...}], 'input_bindings': [], ...})
+kwargs = {}
+
+    def _checked(function, *args, path='', code='proteome_directional_saved_identity_conflict', **kwargs):
+        try:
+>           return function(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+gene_annotation_episode/bvbrc_proteome_bundle_v2_contracts.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ArtifactBundle'
+value = {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'synthetic-api', 'task_id': 'synth...ional', 'sha256': 'c122ef42cd2d2da7ae5318045aa88a73c84713572a2c14d15c562117f3eec62d', ...}], 'input_bindings': [], ...}
+
+    def validate_contract(name: str, value: object):
+        """Validate plain finite JSON plus pure relationships; return a fresh copy."""
+        schema = contract_schema(name)
+        try:
+            _finite_json(value)
+            key = _validation_key(schema, value)
+            if _already_validated(key):
+                return deepcopy(value)
+            validator = _Validator(schema)
+            error = next(validator.iter_errors(value), None)
+            if error is not None:
+                path = ""
+                for token in error.absolute_path:
+                    path = _pointer(path, token)
+>               raise ContractValidationError("contract_shape_invalid", path, contract=name)
+E               gene_annotation_episode.bvbrc_appservice_contracts.ContractValidationError: contract_shape_invalid
+
+gene_annotation_episode/bvbrc_appservice_contracts.py:441: ContractValidationError
+
+The above exception was the direct cause of the following exception:
+
+mode = 'range', code = 'nonzero_range_unsupported'
+
+    @pytest.mark.parametrize('mode,code',[('missing','document_missing'),('ambiguous','document_ambiguous'),('digest','artifact_digest_mismatch'),
+        ('role','artifact_binding_conflict'),('format','format_incompatible'),('range','nonzero_range_unsupported'),('request_range','nonzero_range_unsupported'),('near','artifact_binding_conflict')])
+    def test_scoped_document_failures_preserve_selected_empty_sheet(mode,code):
+        case=fixture(exact=mode=='near'); a=case['bundle']['artifacts'][0]
+        if mode=='missing':case['bundle']['artifacts']=[]
+        elif mode=='ambiguous':case['bundle']['artifacts'].append(deepcopy(a))
+        elif mode=='digest':case['artifact_bytes']['directional']=b'wrong bytes'
+        elif mode=='role':a['role']='unrelated'
+        elif mode=='format':a['declared_format']['producer_source_ref']='other-source'
+        elif mode=='range':a['transfer'].update(object_complete='no',observed_range=dict(start=1,end=a['byte_count'],total=a['byte_count']+1),total_size=a['byte_count']+1)
+        elif mode=='request_range':a['transfer'].update(object_complete='unknown',requested_range=[1,None])
+        elif mode=='near':a['raw_artifact_ref']='different-artifact'
+>       result=adapter.consume_bundle(**case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:40: in consume_bundle
+    built = _construct_bundle(bundle, artifact_bytes=artifact_bytes, supplied_values=supplied_values,
+gene_annotation_episode/bvbrc_proteome_bundle_v2_resolution.py:138: in _construct_bundle
+    bundle = c._checked(validate_contract, 'ArtifactBundle', bundle, code='proteome_bundle_invalid', path='/bundle')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+function = <function validate_contract at 0x76c84feb72e0>, path = '/bundle'
+code = 'proteome_bundle_invalid'
+args = ('ArtifactBundle', {'version': 'bvbrc_appservice_artifact_bundle_v1', 'original_task': {'resource_id': 'synthetic-api'...onal', 'sha256': 'c122ef42cd2d2da7ae5318045aa88a73c84713572a2c14d15c562117f3eec62d', ...}], 'input_bindings': [], ...})
+kwargs = {}
+
+    def _checked(function, *args, path='', code='proteome_directional_saved_identity_conflict', **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except ValueError as error:
+>           raise ProteomeBundleV2Error(code, path + getattr(error, 'path', getattr(error, 'pointer', ''))) from error
+E           gene_annotation_episode.bvbrc_proteome_bundle_v2_contracts.ProteomeBundleV2Error: proteome_bundle_invalid
+
+gene_annotation_episode/bvbrc_proteome_bundle_v2_contracts.py:107: ProteomeBundleV2Error
+__________ test_missing_first_document_does_not_shift_logical_target ___________
+
+    def test_missing_first_document_does_not_shift_logical_target():
+        case=fixture(); first=deepcopy(case['parameters']['directional_documents'][0]); first.update(document_id='missing',report_key='missing',requirement_id='absent')
+        case['parameters']['directional_documents'].insert(0,first)
+>       result=adapter.consume_bundle(**case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'available', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'report_...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 1, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+______ test_version_conflict_preserves_native_observation_and_arithmetic _______
+
+    def test_version_conflict_preserves_native_observation_and_arithmetic():
+        case=fixture(); case['parameters']['directional_documents'][0]['declared_format']['version']='2.2.2'
+        case['bundle']['artifacts'][0]['declared_format']['version']='2.2.2'
+>       result=adapter.consume_bundle(**case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'incompatible', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'repo...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 1, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+____________ test_zero_origin_partial_bytes_keep_exact_completeness ____________
+
+    def test_zero_origin_partial_bytes_keep_exact_completeness():
+        case=fixture();case['bundle']['artifacts'][0]['transfer'].update(body_complete=False,object_complete='no')
+>       result=adapter.consume_bundle(**case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'available', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'report_...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 1, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+_ test_malformed_native_result_retained_but_corrupt_reader_object_isolated[False] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c80b694ef0>
+corrupt = False
+
+    @pytest.mark.parametrize('corrupt',[False,True])
+    def test_malformed_native_result_retained_but_corrupt_reader_object_isolated(monkeypatch,corrupt):
+        case=fixture()
+        if corrupt:
+            monkeypatch.setattr(provider,'parse_genome_comparison_directional_report',lambda *a,**k:{'parse_state':'ok'})
+        else:
+            raw=b'<html>this is not BLAST</html>'
+            a=member(raw,name='directional',role='proteome_directional_report')
+            a['declared_format']=case['bundle']['artifacts'][0]['declared_format'];a['requirement_ids']=['directional']
+            case['bundle']['artifacts']=[a];case['artifact_bytes']['directional']=raw
+>       result=adapter.consume_bundle(**case)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'available', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'report_...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 0, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+_________ test_mixed_native_and_directional_preserve_separate_meanings _________
+
+    def test_mixed_native_and_directional_preserve_separate_meanings():
+>       result=adapter.consume_bundle(**fixture(mixed=True,supplementary=True))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_bundle_v2_resolution.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:473: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:270: in validate_directional_fact
+    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'type': 'object', 'properties': {'availability': {'enum': ['available', 'unavailable', 'incompatible', 'invalid']}, '...tionalProperties': False}}, 'required': ['availability', 'quantity', 'context', 'cell'], 'additionalProperties': False}
+value = {'availability': 'available', 'quantity': 'displayed_query_count', 'context': {'target': {'document_id': 'd', 'report_...nents%2Fparameters', ...}, 'cell': {'state': 'value', 'value': 1, 'unit': 'query_occurrence', 'reason_codes': [], ...}}
+code = 'directional_fact_invalid'
+
+    def _validate(schema, value, code):
+        try:
+            _plain_json(value)
+        except ValueError as error:
+            raise ProteomeFactError(code, getattr(error, "path", "")) from error
+        error = next(_Validator(schema).iter_errors(value), None)
+        if error is not None:
+            pointer = "".join("/" + str(k).replace("~", "~0").replace("/", "~1") for k in error.absolute_path)
+>           raise ProteomeFactError(code, pointer)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_fact_invalid
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:128: ProteomeFactError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_directional_only_calls_real_producers_once_and_never_legacy_projection
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_retained_native_no_hit_zero_is_explicit[False]
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_retained_native_no_hit_zero_is_explicit[True]
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_scoped_document_failures_preserve_selected_empty_sheet[range-nonzero_range_unsupported]
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_missing_first_document_does_not_shift_logical_target
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_version_conflict_preserves_native_observation_and_arithmetic
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_zero_origin_partial_bytes_keep_exact_completeness
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_malformed_native_result_retained_but_corrupt_reader_object_isolated[False]
+FAILED tests/test_bvbrc_proteome_bundle_v2_resolution.py::test_mixed_native_and_directional_preserve_separate_meanings
+9 failed, 25 passed in 15.12s

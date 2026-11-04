@@ -1,0 +1,553 @@
+--- /dev/null
++++ gene_annotation_episode/native_flux_balance_local.py
+@@ -0,0 +1,220 @@
++"""Reserve the selected FBA start; authenticate its original local controls.
++
++The caller authenticates the received694 input receipt and its File before
++calling this adapter. These local joins neither authorize arbitrary JSON nor
++grant input references. Preparation never dispatches the reserved command.
++"""
++import hashlib
++from pathlib import Path
++import re
++
++from . import native_lifecycle as native
++from .execution_contracts import canonical, digest
++from .flux_balance_contracts import validate_flux_balance_record
++from .local_jobs import LocalJobPolicy
++from .native_flux_balance_contracts import (
++    ATTEMPT_DIRECTORY_NAME, OWNER_FILENAME, POLICY, RUN_PLAN_FILENAME,
++    STARTED_FILENAME, bind_flux_balance_environment, flux_balance_driver_argv,
++    flux_balance_output_files, path_value, require,
++    validate_flux_balance_requested_job, validate_flux_balance_run_plan,
++)
++from .native_flux_balance_storage import (
++    confined_file, directory, immutable_bytes, read_bytes, read_json,
++)
++
++
++INPUT_BINDING_FILENAME = "flux-balance-input-binding.json"
++_FIXED = (RUN_PLAN_FILENAME, "invoke.json", INPUT_BINDING_FILENAME,
++          "native.json", "stdout.log", "stderr.log")
++
++
++def _root(assignment, owner):
++    return directory(assignment["workspace"]) / ".episode-operations" / digest({
++        "run": owner["run_id"], "episode": owner["episode_id"]}) / digest(owner["operation_key"])
++
++
++def _allocation(assignment, policy):
++    require(assignment.get("resource_kind") == "local" and canonical(policy) == canonical(POLICY)
++            and type(assignment.get("resource_id")) is str and bool(assignment["resource_id"]),
++            "fba_original_allocation_mismatch")
++    constraints = assignment.get("constraints")
++    require(type(constraints) is dict and not set(constraints) - {"allocation", *POLICY},
++            "fba_original_allocation_mismatch")
++    require("allocation" not in constraints or canonical(constraints["allocation"]) == canonical(policy),
++            "fba_original_allocation_mismatch")
++    require(all(k not in constraints or canonical(constraints[k]) == canonical(v) for k, v in policy.items()),
++            "fba_original_allocation_mismatch")
++
++
++def _input_control(receipt, file, *, owner):
++    require(type(receipt) is dict and set(receipt) == {"version", "binding", "witness_records"}
++            and receipt["version"] == "flux_balance_input_binding_receipt_v1"
++            and type(receipt["witness_records"]) is list, "fba_input_control_invalid")
++    binding = receipt["binding"]
++    require(type(binding) is dict and binding.get("version") == "flux_balance_input_binding_v1"
++            and all(binding.get(key) == owner[key] for key in ("run_id", "episode_id", "assignment_sha256")),
++            "fba_input_control_owner_mismatch")
++    file = validate_flux_balance_record("File", file)
++    raw = canonical(receipt).encode("utf-8")
++    require(file["format"] == "flux_balance_input_binding_receipt_v1"
++            and file["sha256"] == hashlib.sha256(raw).hexdigest() and file["size_bytes"] == len(raw)
++            and file["artifact_ref"] == "artifact_" + file["sha256"], "fba_input_control_identity_mismatch")
++    return file, raw
++
++
++def _environment(plan):
++    return (plan["environment_binding"]["realized_environment"]
++            if plan["version"] == "flux_balance_run_plan_v2" else plan["requested_job"]["environment"])
++
++
++def _invoke(plan, file):
++    request = plan["requested_job"]
++    return {"cwd": str(Path(plan["identity"]["execution_id"]).parent), "argv": request["argv"],
++            "environment": request["environment"], "native_flux_balance_plan": RUN_PLAN_FILENAME,
++            "native_flux_balance_input_binding_file": file}
++
++
++def _request(plan, paths):
++    return {"command": flux_balance_driver_argv(plan), "cwd": str(Path(plan["identity"]["execution_id"]).parent),
++            "file_bytes": POLICY["scratch_bytes"], "ready_path": paths["ready"], "release_path": paths["release"],
++            "result_path": paths["result"], "stdin_path": None, "env": _environment(plan)}
++
++
++def _same_or_write(path, raw):
++    if path.exists():
++        require(read_bytes(path) == raw, "fba_original_control_conflict")
++        return
++    try:
++        immutable_bytes(path, raw)
++    except FileExistsError:
++        require(read_bytes(path) == raw, "fba_original_control_conflict")
++
++
++def prepare_local_flux_balance(state, operation_key, *, root, policy,
++                               input_binding_receipt, input_binding_file):
++    """Reserve only the actual pending practical.job.start, without dispatch."""
++    require(isinstance(policy, LocalJobPolicy) and type(operation_key) is str and bool(operation_key),
++            "fba_selected_start_required")
++    request = validate_flux_balance_requested_job(state.assignment["requested_job"])
++    _allocation(state.assignment, policy.to_dict())
++    root = Path(path_value(str(root), absolute=True))
++    handle = native.NativeJobHandle(root / "native.json")
++    owner = {"run_id": state.run_id, "episode_id": state.episode_id,
++             "resource_id": state.assignment["resource_id"], "execution_id": str(handle.path),
++             "attempt_id": digest(operation_key), "operation_key": operation_key,
++             "requested_job_sha256": digest(request), "assignment_sha256": digest(state.assignment)}
++    require(root == _root(state.assignment, owner), "fba_original_attempt_mismatch")
++    selection = state.assignment.get("native_flux_balance_execution")
++    environment = bind_flux_balance_environment(request, execution_id=str(handle.path),
++        attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), selection=selection)
++    plan = {"version": "flux_balance_run_plan_v2" if selection is not None else "flux_balance_run_plan_v1",
++            "identity": owner, "requested_job": request, "attempt_directory": str(root / ATTEMPT_DIRECTORY_NAME),
++            "policy": policy.to_dict(), "outputs": flux_balance_output_files(request["native_flux_balance"])}
++    if selection is not None:
++        plan["environment_binding"] = environment
++    plan = validate_flux_balance_run_plan(plan)
++    file, input_raw = _input_control(input_binding_receipt, input_binding_file, owner=owner)
++    with state._locked():
++        pending = state._load()[4]
++        require(pending is not None and pending["operation_key"] == operation_key
++                and pending["tool_name"] == "practical.job.start" and pending["run_id"] == state.run_id
++                and pending["episode_id"] == state.episode_id
++                and pending["assignment_sha256"] == digest(state.assignment), "fba_selected_pending_start_required")
++        directory(root, create=True)
++        for name in _FIXED:
++            confined_file(root, name)
++        if handle.path.exists():
++            require(local_flux_balance_plan(state.assignment, str(handle.path)) == plan,
++                    "fba_original_attempt_mismatch")
++            require(read_bytes(root / INPUT_BINDING_FILENAME) == input_raw
++                    and read_json(root / "invoke.json") == _invoke(plan, file), "fba_original_control_conflict")
++            return handle
++        attempt = root / ATTEMPT_DIRECTORY_NAME
++        require(not attempt.exists() and not attempt.is_symlink(), "fba_original_attempt_unsealed")
++        for path in root.iterdir():
++            confined_file(root, path.name)
++            if path.name in (RUN_PLAN_FILENAME, "invoke.json", INPUT_BINDING_FILENAME):
++                continue
++            if path.name in ("stdout.log", "stderr.log"):
++                require(len(read_bytes(path)) == 0, "fba_original_attempt_unsealed")
++                continue
++            require(re.fullmatch(r"\.local-job-[0-9a-f]{32}\.request", path.name) is not None,
++                    "fba_original_attempt_unsealed")
++            token = path.name.removesuffix(".request")
++            paths = {name: str(root / (token + "." + name)) for name in ("ready", "release", "result")}
++            require(read_json(path) == _request(plan, paths), "fba_original_attempt_mismatch")
++        _same_or_write(root / RUN_PLAN_FILENAME, canonical(plan).encode("utf-8") + b"\n")
++        _same_or_write(root / "invoke.json", canonical(_invoke(plan, file)).encode("utf-8") + b"\n")
++        _same_or_write(root / INPUT_BINDING_FILENAME, input_raw)
++        native.prepare_job(flux_balance_driver_argv(plan), cwd=root, policy=policy,
++                           handle_path=handle.path, env=_environment(plan))
++        local_flux_balance_plan(state.assignment, str(handle.path))
++        return handle
++
++
++def local_flux_balance_plan(assignment, execution_id):
++    """Read original reservation controls; never start, poll, collect or rebind."""
++    request = validate_flux_balance_requested_job(assignment["requested_job"])
++    execution = path_value(execution_id, absolute=True)
++    require(execution.name == "native.json", "fba_original_attempt_mismatch")
++    root = directory(execution.parent)
++    plan = validate_flux_balance_run_plan(read_json(confined_file(root, RUN_PLAN_FILENAME)))
++    owner = plan["identity"]
++    _allocation(assignment, plan["policy"])
++    require(owner["assignment_sha256"] == digest(assignment) and owner["resource_id"] == assignment["resource_id"]
++            and owner["execution_id"] == execution_id and plan["requested_job"] == request
++            and root == _root(assignment, owner), "fba_original_attempt_mismatch")
++    selection = assignment.get("native_flux_balance_execution")
++    require((selection is None and plan["version"] == "flux_balance_run_plan_v1")
++            or (selection is not None and plan["version"] == "flux_balance_run_plan_v2"
++                and plan["environment_binding"]["selection"] == selection), "fba_environment_selection_invalid")
++    invoke = read_json(confined_file(root, "invoke.json"))
++    require(type(invoke) is dict, "fba_original_control_conflict")
++    input_path = confined_file(root, INPUT_BINDING_FILENAME)
++    file, raw = _input_control(read_json(input_path), invoke.get("native_flux_balance_input_binding_file"), owner=owner)
++    require(read_bytes(input_path) == raw and invoke == _invoke(plan, file), "fba_original_control_conflict")
++    require(read_bytes(root / RUN_PLAN_FILENAME) == canonical(plan).encode("utf-8") + b"\n"
++            and read_bytes(root / "invoke.json") == canonical(invoke).encode("utf-8") + b"\n",
++            "fba_original_control_conflict")
++    original = read_json(confined_file(root, "native.json"))
++    require(type(original) is dict and original.get("version") == native.VERSION
++            and original.get("stage") in ("prepared", "submitting", "released")
++            and original.get("command") == flux_balance_driver_argv(plan) and original.get("cwd") == str(root)
++            and type(original.get("metadata")) is dict
++            and canonical(original.get("metadata", {}).get("policy")) == canonical(plan["policy"]),
++            "fba_original_attempt_mismatch")
++    paths = original.get("paths")
++    required = {"request", "ready", "release", "status", "result", "launcher"}
++    require(type(paths) is dict and required <= set(paths) and not set(paths) - required - {"statistics", "native_events"}
++            and all(type(p) is str and str(path_value(p, absolute=True)) == p and Path(p).parent == root
++                    for p in paths.values()) and len(set(paths.values())) == len(paths), "fba_original_attempt_mismatch")
++    require(not {str(root / name) for name in _FIXED}.intersection(paths.values()), "fba_original_attempt_mismatch")
++    for path in paths.values():
++        confined_file(root, Path(path).name)
++    for role in ("stdout", "stderr"):
++        require(original.get(role) == str(root / (role + ".log")), "fba_original_attempt_mismatch")
++        confined_file(root, role + ".log")
++    require(hashlib.sha256(read_bytes(paths["request"])).hexdigest() == original.get("request_sha256")
++            and read_json(paths["request"]) == _request(plan, paths), "fba_original_attempt_mismatch")
++    attempt = root / ATTEMPT_DIRECTORY_NAME
++    if attempt.exists() or attempt.is_symlink():
++        directory(attempt)
++        owner_file = confined_file(attempt, OWNER_FILENAME)
++        started = confined_file(attempt, STARTED_FILENAME)
++        if owner_file.exists():
++            require(read_json(owner_file) == plan, "fba_original_attempt_mismatch")
++        if started.exists():
++            value = read_json(started)
++            keys = {"plan_sha256", "started_at"} | ({"environment_observation_sha256"}
++                if plan["version"] == "flux_balance_run_plan_v2" else set())
++            require(owner_file.exists() and type(value) is dict and set(value) == keys
++                    and value["plan_sha256"] == digest(plan) and type(value["started_at"]) is str
++                    and bool(value["started_at"]), "fba_original_attempt_mismatch")
++            if plan["version"] == "flux_balance_run_plan_v2":
++                require(type(value["environment_observation_sha256"]) is str
++                        and re.fullmatch(r"[0-9a-f]{64}", value["environment_observation_sha256"]) is not None,
++                        "fba_original_attempt_mismatch")
++    return plan
++
++
++__all__ = ["prepare_local_flux_balance", "local_flux_balance_plan"]
+--- /dev/null
++++ tests/test_flux_balance_local_701.py
+@@ -0,0 +1,327 @@
++"""Real pending/reservation controls with explicitly synthetic custody metadata.
++
++Original688 supplies software/model metadata only. No model is loaded; this
++suite does not authenticate its synthetic receipt as received episode input.
++"""
++from copy import deepcopy
++import hashlib
++import json
++import os
++from pathlib import Path
++import subprocess
++
++import pytest
++
++from gene_annotation_episode import native_lifecycle as native
++from gene_annotation_episode.execution_contracts import canonical, digest
++from gene_annotation_episode.local_jobs import LocalJobPolicy
++from gene_annotation_episode.native_flux_balance_contracts import (
++    ATTEMPT_DIRECTORY_NAME, OWNER_FILENAME, POLICY, RUN_PLAN_FILENAME, STARTED_FILENAME,
++    flux_balance_driver_argv, flux_balance_environment,
++)
++from gene_annotation_episode.native_flux_balance_local import (
++    INPUT_BINDING_FILENAME, local_flux_balance_plan, prepare_local_flux_balance,
++)
++from gene_annotation_episode.practical_execution_state import PracticalState
++
++pytestmark = pytest.mark.skipif('HMMER529_ATTEMPT' not in os.environ, reason='requires bounded529')
++ROOT = Path(__file__).resolve().parents[1]
++ORIGINAL = ROOT / 'verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions/sbml/selected-plan.json'
++SELECTION = {'version': 'flux_balance_execution_selection_v1',
++             'environment_realization': 'operation_scoped_tmp_and_cache_v1'}
++
++
++def _write(path, value):
++    path.chmod(0o600)
++    path.write_text(canonical(value) + '\n')
++
++
++def _control_file(receipt):
++    raw = canonical(receipt).encode('utf-8')
++    sha = hashlib.sha256(raw).hexdigest()
++    return {'artifact_ref': 'artifact_' + sha, 'sha256': sha, 'size_bytes': len(raw),
++            'format': 'flux_balance_input_binding_receipt_v1'}
++
++
++@pytest.fixture(autouse=True)
++def no_dispatch(monkeypatch):
++    def forbidden(*args, **kwargs):
++        raise AssertionError('reservation attempted dispatch, polling, cancellation or scientific execution')
++    for name in ('start_prepared', 'start_job', 'resume_start', 'status', 'collect', 'cancel', 'run_blocking', 'wait_job'):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(subprocess, 'run', forbidden)
++    monkeypatch.setattr(subprocess, 'Popen', forbidden)
++
++
++@pytest.fixture
++def setup(tmp_path):
++    def make(*, literal=False, pending_tool='practical.job.start', pending_key='selected start', pending=True):
++        workspace = tmp_path / ('literal' if literal else 'realized')
++        workspace.mkdir()
++        operation = 'selected start'
++        root = workspace / '.episode-operations' / digest({'run': 'run701', 'episode': 'episode701'}) / digest(operation)
++        job = json.loads(ORIGINAL.read_text())['requested_job']
++        if literal:
++            job['environment'] = flux_balance_environment(job['native_flux_balance']['software'],
++                attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), lifecycle_directory=str(root))
++        assignment = {'version': 'practical_assignment_v1', 'assignment_id': 'assignment701',
++            'resource_kind': 'local', 'resource_id': 'selected-local-701', 'workspace': str(workspace),
++            'endpoint': 'usable_handoff', 'requested_job': job,
++            'progress_requirements': [{'key': 'handoff', 'credit': 1,
++                'predicate': {'kind': 'requested_job_handoff'}}], 'completion_keys': ['handoff'],
++            'initial_context': {'revision': 0, 'cwd': str(workspace), 'environment': {}},
++            'inventory_snapshot': {'fixture': 'synthetic custody; original688 software metadata only'},
++            'constraints': {'allocation': deepcopy(POLICY), **POLICY}}
++        if not literal:
++            assignment['native_flux_balance_execution'] = deepcopy(SELECTION)
++        state = PracticalState(tmp_path / ('state-literal' if literal else 'state-realized'),
++                               'run701', 'episode701', assignment)
++        if pending:
++            state.begin(pending_key, pending_tool, {})
++        # Deliberately synthetic; these values confer no authority or access.
++        receipt = {'version': 'flux_balance_input_binding_receipt_v1', 'binding': {
++            'version': 'flux_balance_input_binding_v1', 'run_id': state.run_id, 'episode_id': state.episode_id,
++            'request_sha256': '7' * 64, 'assignment_sha256': digest(assignment),
++            'scope': {'fixture': 'synthetic701'}, 'inheritance_manifest': {'fixture': 'synthetic701'},
++            'input_versions': [{'reference': 'artifact_' + '8' * 64, 'version': '1', 'content_sha256': '8' * 64}],
++            'model': {'file': {'artifact_ref': 'artifact_' + '8' * 64, 'sha256': '8' * 64,
++                'size_bytes': 1, 'format': 'sbml'}, 'path': '/synthetic701/model', 'uses': [], 'witnesses': []},
++            'prior_sources': []}, 'witness_records': []}
++        return {'state': state, 'operation': operation, 'root': root,
++                'policy': LocalJobPolicy(**POLICY), 'receipt': receipt, 'file': _control_file(receipt)}
++    return make
++
++
++def _prepare(case, **changes):
++    arguments = {'root': case['root'], 'policy': case['policy'],
++                 'input_binding_receipt': case['receipt'], 'input_binding_file': case['file'], **changes}
++    return prepare_local_flux_balance(case['state'], case['operation'], **arguments)
++
++
++@pytest.mark.parametrize('literal', [False, True])
++def test_reservation_preserves_selection_without_execution_or_credit(setup, literal, monkeypatch):
++    case = setup(literal=literal)
++    state = case['state']
++    before = deepcopy(state.assignment)
++    before_credit = state.credit_view()
++    real_prepare = native.prepare_job
++    calls = []
++    def counted(*args, **kwargs):
++        calls.append((args, kwargs))
++        return real_prepare(*args, **kwargs)
++    monkeypatch.setattr(native, 'prepare_job', counted)
++    handle = _prepare(case)
++    plan = local_flux_balance_plan(state.assignment, str(handle.path))
++    assert handle.path == case['root'] / 'native.json'
++    assert plan['version'] == ('flux_balance_run_plan_v1' if literal else 'flux_balance_run_plan_v2')
++    assert plan['requested_job'] == before['requested_job']
++    assert plan['identity']['assignment_sha256'] == digest(before)
++    assert plan['identity']['requested_job_sha256'] == digest(before['requested_job'])
++    assert state.assignment == before and state.receipts() == [] and state.completion_proof() is None
++    assert state.credit_view() == before_credit and len(state._load()[1]) == 1
++    body = handle.read()
++    assert body['stage'] == 'prepared' and body['started_at'] is None and body['boot_id'] is None
++    assert body['command'] == flux_balance_driver_argv(plan)
++    actual_request = json.loads(Path(body['paths']['request']).read_text())
++    invoke = json.loads((case['root'] / 'invoke.json').read_text())
++    assert invoke['argv'] == before['requested_job']['argv']
++    assert invoke['environment'] == before['requested_job']['environment']
++    assert invoke['native_flux_balance_input_binding_file'] == case['file']
++    assert (case['root'] / INPUT_BINDING_FILENAME).read_bytes() == canonical(case['receipt']).encode('utf-8')
++    assert not Path(plan['attempt_directory']).exists()
++    assert actual_request['env']['TMPDIR'] == str(case['root'])
++    assert actual_request['env']['XDG_CACHE_HOME'] == str(case['root'] / ATTEMPT_DIRECTORY_NAME / 'cache')
++    if not literal:
++        assert invoke['environment']['TMPDIR'] != actual_request['env']['TMPDIR']
++        assert plan['environment_binding']['selection'] == SELECTION
++        assert [r['name'] for r in plan['environment_binding']['relocations']] == ['TMPDIR', 'TMP', 'TEMP', 'XDG_CACHE_HOME', 'PIP_CACHE_DIR']
++    assert _prepare(case) == handle and len(calls) == 1
++    assert state.assignment == before and state.credit_view() == before_credit
++
++
++@pytest.mark.parametrize('fault', ['missing', 'wrong_tool', 'wrong_operation', 'wrong_run', 'wrong_episode'])
++def test_actual_pending_start_required(setup, fault):
++    case = setup(pending=fault != 'missing', pending_tool='practical.file.inspect' if fault == 'wrong_tool' else 'practical.job.start',
++                 pending_key='different start' if fault == 'wrong_operation' else 'selected start')
++    if fault == 'wrong_run': case['state'].run_id = 'another-run'
++    if fault == 'wrong_episode': case['state'].episode_id = 'another-episode'
++    with pytest.raises(ValueError): _prepare(case)
++    assert not case['root'].exists()
++
++
++@pytest.mark.parametrize('fault', ['run', 'episode', 'assignment', 'version', 'receipt_keys', 'file_digest', 'file_size', 'file_format', 'file_reference'])
++def test_input_owner_and_canonical_file_identity(setup, fault):
++    case = setup()
++    if fault in ('run', 'episode', 'assignment'):
++        key = {'run': 'run_id', 'episode': 'episode_id', 'assignment': 'assignment_sha256'}[fault]
++        case['receipt']['binding'][key] = 'different' if fault != 'assignment' else 'b' * 64
++        case['file'] = _control_file(case['receipt'])
++    elif fault == 'version': case['receipt']['version'] = 'auto'
++    elif fault == 'receipt_keys': case['receipt']['extra'] = True
++    elif fault == 'file_digest': case['file']['sha256'] = 'c' * 64
++    elif fault == 'file_size': case['file']['size_bytes'] += 1
++    elif fault == 'file_format': case['file']['format'] = 'sbml'
++    else: case['file']['artifact_ref'] = 'artifact_' + 'd' * 64
++    with pytest.raises(ValueError): _prepare(case)
++    assert not case['root'].exists()
++
++
++@pytest.mark.parametrize('fault', ['memory', 'scratch', 'wall', 'root', 'resource', 'constraint'])
++def test_original_allocation_and_directory_exact(setup, fault):
++    case = setup()
++    changes = {}
++    if fault in ('memory', 'scratch', 'wall'):
++        policy = deepcopy(POLICY)
++        policy[{'memory': 'memory_bytes', 'scratch': 'scratch_bytes', 'wall': 'wall_seconds'}[fault]] = 1
++        changes['policy'] = LocalJobPolicy(**policy)
++    elif fault == 'root': changes['root'] = case['root'].parent / 'another'
++    elif fault == 'resource': case['state'].assignment['resource_kind'] = 'hpc'
++    else: case['state'].assignment['constraints']['allocation']['memory_bytes'] = 1
++    with pytest.raises(ValueError): _prepare(case, **changes)
++    assert not case['root'].exists()
++
++
++def test_literal_request_cannot_relocate_without_original_selection(setup):
++    case = setup()
++    del case['state'].assignment['native_flux_balance_execution']
++    with pytest.raises(ValueError, match='fba_runtime_environment_mismatch'): _prepare(case)
++    assert not case['root'].exists()
++
++
++def test_repeated_reservation_cannot_substitute_another_self_consistent_receipt(setup):
++    case = setup()
++    handle = _prepare(case)
++    before = (case['root'] / INPUT_BINDING_FILENAME).read_bytes()
++    case['receipt']['binding']['request_sha256'] = '9' * 64
++    case['file'] = _control_file(case['receipt'])
++    with pytest.raises(ValueError, match='fba_original_control_conflict'):
++        _prepare(case)
++    assert (case['root'] / INPUT_BINDING_FILENAME).read_bytes() == before
++    assert local_flux_balance_plan(case['state'].assignment, str(handle.path))['requested_job'] == case['state'].assignment['requested_job']
++
++
++def test_exact_controls_survive_failure_before_native_reservation(setup, monkeypatch):
++    case = setup()
++    real_prepare = native.prepare_job
++    def failed_before_reservation(*args, **kwargs):
++        raise OSError('explicit fixture failure before native.prepare_job')
++    monkeypatch.setattr(native, 'prepare_job', failed_before_reservation)
++    with pytest.raises(OSError, match='explicit fixture failure'):
++        _prepare(case)
++    assert not (case['root'] / 'native.json').exists()
++    before = {p.name: p.read_bytes() for p in case['root'].iterdir()}
++    monkeypatch.setattr(native, 'prepare_job', real_prepare)
++    handle = _prepare(case)
++    assert handle.read()['stage'] == 'prepared'
++    assert all((case['root'] / name).read_bytes() == raw for name, raw in before.items())
++    assert case['state'].receipts() == [] and case['state'].completion_proof() is None
++
++
++@pytest.mark.parametrize('fault', ['plan', 'invoke', 'input', 'handle_command', 'handle_policy', 'request_hash', 'request_environment', 'duplicate_path', 'outside_path', 'stdout', 'invoke_null', 'invoke_array', 'metadata_null', 'metadata_array'])
++def test_existing_reservation_control_and_wrapper_tamper(setup, fault):
++    case = setup()
++    handle = _prepare(case)
++    body = handle.read()
++    if fault == 'plan':
++        path = case['root'] / RUN_PLAN_FILENAME
++        value = json.loads(path.read_text());value['identity']['resource_id'] = 'another'
++        _write(path, value)
++    elif fault == 'invoke':
++        path = case['root'] / 'invoke.json'
++        value = json.loads(path.read_text());value['environment']['TMPDIR'] = '/another'
++        _write(path, value)
++    elif fault == 'input':
++        path = case['root'] / INPUT_BINDING_FILENAME
++        value = json.loads(path.read_text());value['binding']['input_versions'] = []
++        _write(path, value)
++    elif fault == 'request_hash':
++        path = Path(body['paths']['request']);path.write_text(path.read_text() + ' ')
++    elif fault == 'request_environment':
++        path = Path(body['paths']['request'])
++        value = json.loads(path.read_text());value['env']['TMPDIR'] = '/another'
++        _write(path, value)
++        body['request_sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
++        _write(handle.path, body)
++    elif fault in ('invoke_null', 'invoke_array'):
++        _write(case['root'] / 'invoke.json', None if fault == 'invoke_null' else [])
++    else:
++        if fault == 'handle_command': body['command'][0] = '/unselected/python'
++        elif fault == 'handle_policy': body['metadata']['policy']['scratch_bytes'] = 1
++        elif fault == 'duplicate_path': body['paths']['status'] = body['paths']['request']
++        elif fault == 'outside_path': body['paths']['status'] = str(case['root'].parent / 'status')
++        elif fault == 'stdout': body['stdout'] = str(case['root'] / 'other.log')
++        elif fault == 'metadata_null': body['metadata'] = None
++        elif fault == 'metadata_array': body['metadata'] = []
++        _write(handle.path, body)
++    with pytest.raises(ValueError): local_flux_balance_plan(case['state'].assignment, str(handle.path))
++    with pytest.raises(ValueError): _prepare(case)
++
++
++@pytest.mark.parametrize('target', ['root', 'input', 'handle', 'request', 'attempt'])
++def test_symlink_controls_and_directories_rejected(setup, tmp_path, target):
++    case = setup()
++    if target == 'root':
++        destination = tmp_path / 'elsewhere';destination.mkdir()
++        case['root'].parent.mkdir(parents=True)
++        case['root'].symlink_to(destination, target_is_directory=True)
++        with pytest.raises(OSError): _prepare(case)
++        assert list(destination.iterdir()) == []
++        return
++    handle = _prepare(case)
++    body = handle.read()
++    path = {'input': case['root'] / INPUT_BINDING_FILENAME,
++            'handle': handle.path, 'request': Path(body['paths']['request']),
++            'attempt': case['root'] / ATTEMPT_DIRECTORY_NAME}[target]
++    if target == 'attempt':
++        destination = tmp_path / 'elsewhere';destination.mkdir()
++    else:
++        destination = tmp_path / 'elsewhere';destination.write_bytes(path.read_bytes());path.unlink()
++    path.symlink_to(destination, target_is_directory=target == 'attempt')
++    with pytest.raises((ValueError, OSError)): local_flux_balance_plan(case['state'].assignment, str(handle.path))
++
++
++@pytest.mark.parametrize('fault', ['unsealed_attempt', 'unknown_file', 'nonempty_stdout', 'conflicting_plan'])
++def test_unsealed_work_not_repaired_or_dispatched(setup, fault):
++    case = setup()
++    case['root'].mkdir(parents=True)
++    if fault == 'unsealed_attempt': (case['root'] / ATTEMPT_DIRECTORY_NAME).mkdir()
++    elif fault == 'unknown_file': (case['root'] / 'unknown.bin').write_bytes(b'retained partial work')
++    elif fault == 'nonempty_stdout': (case['root'] / 'stdout.log').write_bytes(b'prior work')
++    else: (case['root'] / RUN_PLAN_FILENAME).write_bytes(b'{}\n')
++    with pytest.raises(ValueError): _prepare(case)
++    assert not (case['root'] / 'native.json').exists()
++
++
++@pytest.mark.parametrize('literal', [False, True])
++def test_owner_started_join_without_environment_reinterpretation(setup, literal):
++    case = setup(literal=literal)
++    handle = _prepare(case)
++    plan = local_flux_balance_plan(case['state'].assignment, str(handle.path))
++    attempt = case['root'] / ATTEMPT_DIRECTORY_NAME;attempt.mkdir()
++    (attempt / OWNER_FILENAME).write_text(canonical(plan) + '\n')
++    started = {'plan_sha256': digest(plan), 'started_at': '2026-10-29T00:00:00+00:00'}
++    if not literal: started['environment_observation_sha256'] = 'e' * 64
++    (attempt / STARTED_FILENAME).write_text(canonical(started) + '\n')
++    assert local_flux_balance_plan(case['state'].assignment, str(handle.path)) == plan
++    started['plan_sha256'] = 'f' * 64
++    _write(attempt / STARTED_FILENAME, started)
++    with pytest.raises(ValueError, match='fba_original_attempt_mismatch'):
++        local_flux_balance_plan(case['state'].assignment, str(handle.path))
++
++
++@pytest.mark.parametrize('fault', ['owner', 'missing_owner', 'started_extra', 'started_v1_shape', 'invalid_environment_pin'])
++def test_owner_started_conflicts_stay_failures(setup, fault):
++    case = setup()
++    handle = _prepare(case)
++    plan = local_flux_balance_plan(case['state'].assignment, str(handle.path))
++    attempt = case['root'] / ATTEMPT_DIRECTORY_NAME;attempt.mkdir()
++    owner = deepcopy(plan)
++    if fault == 'owner': owner['identity']['resource_id'] = 'another'
++    if fault != 'missing_owner': (attempt / OWNER_FILENAME).write_text(canonical(owner) + '\n')
++    started = {'plan_sha256': digest(plan), 'started_at': '2026-10-29T00:00:00+00:00', 'environment_observation_sha256': 'e' * 64}
++    if fault == 'started_extra': started['extra'] = True
++    elif fault == 'started_v1_shape': del started['environment_observation_sha256']
++    elif fault == 'invalid_environment_pin': started['environment_observation_sha256'] = 'missing'
++    (attempt / STARTED_FILENAME).write_text(canonical(started) + '\n')
++    with pytest.raises(ValueError, match='fba_original_attempt_mismatch'):
++        local_flux_balance_plan(case['state'].assignment, str(handle.path))

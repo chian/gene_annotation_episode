@@ -1,0 +1,283 @@
+{
+  "created_at": "2026-10-25T10:23:03.814008+00:00",
+  "scope": "Small offline boundary mechanics; synthetic receipts are NOT host authentication.\n\nThis file is deliberately not a production extractor, receipt authenticator or\ncomplete log parser. It tests the proposed receipt-bytes/task split and records\nexisting public-validator/native-reader behavior. Every write stays beside it.\n",
+  "synthetic_stdout_ascii": "Fetching genomes...\nFetching genome: 123.1\nWriting /task/work/123.1.fasta...\nFetching genome: 456.2\nWriting /task/work/456.2.fasta...\nRunning Mauve...\nRunning progressiveMauve with params:  --output=/task/work/alignment.xmfa\n/task/work/123.1.fasta\n/task/work/456.2.fasta\nSequence loaded successfully.\nchild process exited with code 0\n",
+  "synthetic_retained_record": {
+    "receipt_content": {
+      "source_ref": "synthetic:source:stdout",
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "artifact_050be5462b48c1497f869cc45739d39f9c248c5c0fdb4c6381bf09d63b9e9a9d",
+      "sha256": "050be5462b48c1497f869cc45739d39f9c248c5c0fdb4c6381bf09d63b9e9a9d",
+      "byte_count": 2094
+    },
+    "record": {
+      "source_ref": "synthetic:source:stdout",
+      "contract": "TaskInfoReceipt",
+      "value": {
+        "receipt": {
+          "version": "bvbrc_appservice_support_receipt_v1",
+          "receipt_ref": "synthetic:source:stdout",
+          "purpose": "support",
+          "origin": {
+            "run_id": "synthetic_run",
+            "episode_id": "synthetic_results",
+            "operation_key": "synthetic_run:synthetic_results:1",
+            "name": "api.bvbrc_appservice.task_info",
+            "arguments_sha256": "c96b6e998dbe0663a417a50dbe725eb160ed5f5f5548c27389a35ad420e7a07c",
+            "assignment_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "scope_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "snapshot": {
+            "source_ref": "synthetic:source:stdout:native",
+            "content": {
+              "source_ref": "synthetic:source:stdout:native",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_6967facf8ec961f6ec4ea64fd25885563b44d4b9288ee134fa0358f72c052473",
+              "sha256": "6967facf8ec961f6ec4ea64fd25885563b44d4b9288ee134fa0358f72c052473",
+              "byte_count": 334
+            },
+            "retrieved_at": "2026-10-25T00:00:00Z",
+            "media_type": "text/plain",
+            "transport": {
+              "status": 200,
+              "body_complete": true,
+              "received_body_bytes": 334
+            },
+            "selected_operands": {
+              "operation": "api.bvbrc_appservice.task_info",
+              "request_sha256": "7eb489f84f9509073fcb87e77747c58633809aff5f7dcaa952b5ecf1b099f731",
+              "arguments_sha256": "c96b6e998dbe0663a417a50dbe725eb160ed5f5f5548c27389a35ad420e7a07c",
+              "native_operands": {
+                "request": {
+                  "version": "bvbrc_appservice_request_v1",
+                  "effect_contract": "selected_api_effects_v1",
+                  "required_application_id": "GenomeAlignment",
+                  "parameters": {
+                    "genome_ids": [
+                      "123.1",
+                      "456.2"
+                    ],
+                    "recipe": "progressiveMauve",
+                    "output_path": "/synthetic",
+                    "output_file": "run"
+                  },
+                  "start_parameters": {},
+                  "definition_inputs": [],
+                  "input_bindings": [],
+                  "workspace_targets": []
+                },
+                "arguments": {
+                  "handoff_ref": "synthetic:submission",
+                  "file": "stdout"
+                },
+                "selector": null,
+                "call": {
+                  "task_id": "SYNTHETIC_GA_001",
+                  "file": "stdout"
+                },
+                "local_failure": null
+              }
+            }
+          },
+          "effect_receipt_refs": [],
+          "status": "ok",
+          "diagnostics": []
+        },
+        "original_handoff_ref": "synthetic:submission",
+        "task_id": "SYNTHETIC_GA_001",
+        "file": "stdout",
+        "reported_object_uuid": null,
+        "returned_representation": "signature_redacted_http_bytes",
+        "body_complete": true,
+        "local_window": null
+      }
+    }
+  },
+  "case_count": 13,
+  "passed": true,
+  "results": [
+    {
+      "name": "actual_log_bytes_match_reported_task",
+      "expected_failure": null,
+      "actual_failure": null,
+      "passed": true,
+      "value": [
+        "progressiveMauve",
+        "--output=/task/work/alignment.xmfa",
+        "/task/work/123.1.fasta",
+        "/task/work/456.2.fasta"
+      ],
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "identical_bytes_wrong_task",
+      "expected_failure": "bvbrc_genome_alignment_metadata_task_conflict",
+      "actual_failure": "bvbrc_genome_alignment_metadata_task_conflict",
+      "passed": true,
+      "value": null,
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "native_log_digest_mismatch",
+      "expected_failure": "bvbrc_genome_alignment_content_digest_conflict",
+      "actual_failure": "bvbrc_genome_alignment_content_digest_conflict",
+      "passed": true,
+      "value": null,
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "native_log_bytes_missing",
+      "expected_failure": "bvbrc_genome_alignment_content_missing",
+      "actual_failure": "bvbrc_genome_alignment_content_missing",
+      "passed": true,
+      "value": null,
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "whole_invocation_in_incomplete_transport_stays_unverified",
+      "expected_failure": "bvbrc_genome_alignment_invocation_missing",
+      "actual_failure": "bvbrc_genome_alignment_invocation_missing",
+      "passed": true,
+      "value": null,
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "do_not_select_first_of_multiple_command_groups",
+      "expected_failure": "bvbrc_genome_alignment_invocation_conflict",
+      "actual_failure": "bvbrc_genome_alignment_invocation_conflict",
+      "passed": true,
+      "value": null,
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "typed_value_disagrees_with_retained_envelope",
+      "expected_failure": "bvbrc_genome_alignment_metadata_record_unverified",
+      "actual_failure": "bvbrc_genome_alignment_metadata_record_unverified",
+      "passed": true,
+      "value": null,
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "per_record_recovery_preserves_valid_neighbor",
+      "passed": true,
+      "accepted_tasks": [
+        "SYNTHETIC_GA_001"
+      ],
+      "rejected_codes": [
+        "bvbrc_genome_alignment_metadata_record_unverified"
+      ],
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "shape_valid_same_run_assertion_is_not_admitted_by_custody",
+      "passed": true,
+      "shape_valid_claimed_member_lengths": [
+        6,
+        4
+      ],
+      "after_no_native_witness_member_lengths": [
+        null,
+        null
+      ],
+      "retained_file_record_lengths": [
+        [
+          4,
+          2
+        ],
+        [
+          4
+        ]
+      ],
+      "record_counts": [
+        2,
+        1
+      ],
+      "genome_census_state": "unknown",
+      "provenance": "synthetic task/custody; actual supplied FASTA bytes"
+    },
+    {
+      "name": "injective_typed_interval_map_has_no_native_export_witness",
+      "passed": true,
+      "shape_valid_map": {
+        "bbcols_document_id": "bbcols",
+        "native_interval_index_0based": 7,
+        "xmfa_document_id": "xmfa",
+        "xmfa_block_index": 0,
+        "state": "bound",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "synthetic:source:metadata",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic:artifact:metadata",
+              "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+              "byte_count": 2
+            },
+            "pointer": ""
+          }
+        ],
+        "requirement_ids": []
+      },
+      "admitted_state": "unverified",
+      "admitted_xmfa_block_index": null,
+      "reason_code": "bvbrc_genome_alignment_metadata_record_unverified",
+      "provenance": "synthetic task/custody/association only"
+    },
+    {
+      "name": "manifest_records_object_even_on_failure_and_does_not_bind_bytes",
+      "passed": true,
+      "native_success": 0,
+      "output": {
+        "output_index": 0,
+        "pointer": "/output_files/0",
+        "native_record": [
+          "/synthetic/.run/alignment.xmfa",
+          "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+        ],
+        "valid": true,
+        "association": {
+          "kind": "task_result_manifest",
+          "evidence_ref": "synthetic:manifest",
+          "pointer": "/output_files/0",
+          "task_id": "SYNTHETIC_GA_001",
+          "output_path": "/synthetic/.run/alignment.xmfa",
+          "output_uuid": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "byte_version_status": "unknown",
+          "version_evidence": []
+        }
+      },
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "native_manifest_wrong_task_rejected",
+      "passed": true,
+      "status": "invalid",
+      "provenance": "SYNTHETIC receipt/task/provenance; no host custody or live service proof"
+    },
+    {
+      "name": "authentic_upstream_native_numbers_survive_missing_run_join",
+      "passed": true,
+      "bbcols_column_ranges": [
+        [
+          33,
+          52
+        ],
+        [
+          0,
+          33
+        ]
+      ],
+      "native_interval_indices": [
+        0,
+        0
+      ],
+      "bbcols_unique_columns": 52,
+      "xmfa_observed_blocks": 2,
+      "interval_join_state": "unverified",
+      "bbcols_sha256": "02705f27d4a468ca5736997daf28846ec26c607d0f156da918ed71e3d3be316b",
+      "xmfa_sha256": "dca669592909e796e17d9ff9b7601618743b0f864a83cee05e8564270b5ab75b",
+      "provenance": "Authentic retained upstream bytes; no original BV-BRC task/run/producer proof"
+    }
+  ],
+  "actual_execution": "Offline Python only; existing validators/readers plus small boundary mechanics. No Store authentication, native program, service or episode execution."
+}

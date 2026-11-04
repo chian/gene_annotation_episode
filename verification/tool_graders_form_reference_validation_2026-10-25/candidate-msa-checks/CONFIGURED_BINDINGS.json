@@ -1,0 +1,135 @@
+{
+  "actual_api_configuration": {
+    "selected-api": {
+      "endpoints": {
+        "AppService": "http://127.0.0.1:42801/app",
+        "Workspace": "http://127.0.0.1:42801/workspace"
+      },
+      "execution_contract": "bvbrc_appservice_execution_v1",
+      "kind": "api",
+      "scientific_adapters": [
+        {
+          "adapter_id": "bvbrc_msa",
+          "adapter_version": "1",
+          "implementation_sha256": "b528f6c617d9e08a3068e2abce17f583aa014dfa3eeb72c9dfb643aef54e08ca"
+        },
+        {
+          "adapter_id": "bvbrc_metacats",
+          "adapter_version": "1",
+          "implementation_sha256": "b528f6c617d9e08a3068e2abce17f583aa014dfa3eeb72c9dfb643aef54e08ca"
+        }
+      ],
+      "service": "bvbrc_appservice"
+    }
+  },
+  "actual_scientific_binding": {
+    "binding_id": "scientific_process",
+    "configuration": {
+      "child_roles": [
+        "scientific_process",
+        "launch",
+        "results"
+      ],
+      "library": {
+        "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+        "manifest_sha256": "24e89e053b2c04814885c948c796cb2993fd62dc77867bd462c7badf68c4f9d0",
+        "version": "scientific_process_library_snapshot_v2"
+      },
+      "tool_library": {
+        "catalog_sha256": "8e611d167c8e0980ae9c9741d590456e6d1aafd35f8a59c8d5fa5c1fa92581a9",
+        "version": "scientific_tool_library_v2"
+      }
+    },
+    "implementation_sha256": "3d24bf5740f2b28bc8aa17d34c9ee0ccb680f58875eb409c837dd990cfe45059",
+    "version": "scientific_process_episodes_v8"
+  },
+  "configured_episode_bindings": [
+    {
+      "binding_id": "scientific_process",
+      "configuration": {
+        "child_roles": [
+          "scientific_process",
+          "launch",
+          "results"
+        ],
+        "library": {
+          "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+          "manifest_sha256": "24e89e053b2c04814885c948c796cb2993fd62dc77867bd462c7badf68c4f9d0",
+          "version": "scientific_process_library_snapshot_v2"
+        },
+        "tool_library": {
+          "catalog_sha256": "8e611d167c8e0980ae9c9741d590456e6d1aafd35f8a59c8d5fa5c1fa92581a9",
+          "version": "scientific_tool_library_v2"
+        }
+      },
+      "implementation_sha256": "3d24bf5740f2b28bc8aa17d34c9ee0ccb680f58875eb409c837dd990cfe45059",
+      "version": "scientific_process_episodes_v8"
+    },
+    {
+      "binding_id": "execution_episodes",
+      "configuration": {
+        "acquired_record_unit": 3,
+        "handoff_unit": 2,
+        "initial_information": {},
+        "log_roles": [
+          "stdout",
+          "stderr"
+        ],
+        "log_window_bytes": 8192,
+        "resources": {
+          "selected-api": {
+            "endpoints": {
+              "AppService": "http://127.0.0.1:42801/app",
+              "Workspace": "http://127.0.0.1:42801/workspace"
+            },
+            "execution_contract": "bvbrc_appservice_execution_v1",
+            "kind": "api",
+            "scientific_adapters": [
+              {
+                "adapter_id": "bvbrc_msa",
+                "adapter_version": "1",
+                "implementation_sha256": "b528f6c617d9e08a3068e2abce17f583aa014dfa3eeb72c9dfb643aef54e08ca"
+              },
+              {
+                "adapter_id": "bvbrc_metacats",
+                "adapter_version": "1",
+                "implementation_sha256": "b528f6c617d9e08a3068e2abce17f583aa014dfa3eeb72c9dfb643aef54e08ca"
+              }
+            ],
+            "service": "bvbrc_appservice"
+          }
+        }
+      },
+      "version": "execution_episodes_v1"
+    },
+    {
+      "binding_id": "monitor",
+      "configuration": {
+        "outcome_page_size": 20
+      },
+      "implementation_sha256": "05e2fdee6f985e54089829be927a12b406a06bff3f650e6f1d67bb60f88960c8",
+      "version": "monitor_episode_binding_v1"
+    }
+  ],
+  "service_configuration": {
+    "endpoints": {
+      "AppService": "http://127.0.0.1:42801/app",
+      "Workspace": "http://127.0.0.1:42801/workspace"
+    },
+    "execution_contract": "bvbrc_appservice_execution_v1",
+    "kind": "api",
+    "scientific_adapters": [
+      {
+        "adapter_id": "bvbrc_msa",
+        "adapter_version": "1",
+        "implementation_sha256": "b528f6c617d9e08a3068e2abce17f583aa014dfa3eeb72c9dfb643aef54e08ca"
+      },
+      {
+        "adapter_id": "bvbrc_metacats",
+        "adapter_version": "1",
+        "implementation_sha256": "b528f6c617d9e08a3068e2abce17f583aa014dfa3eeb72c9dfb643aef54e08ca"
+      }
+    ],
+    "service": "bvbrc_appservice"
+  }
+}

@@ -1,0 +1,286 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: resource_tool_contracts
+934:     def resource_tool_contracts(self):
+935:         """Information for commissioning the actual configured resource owners.
+936: 
+937:         These declarations do not enable direct scientific invocation. The
+938:         original launch/results assignment still supplies the job and selector;
+939:         only the selected resource episode can execute each operation.
+940:         """
+941:         contracts = {}
+942:         for resource_id, configuration in self.resources.items():
+943:             kind = KINDS[configuration['kind']]
+944:             resource_role = {'api': 'launch_api', 'local': 'launch_local', 'hpc': 'launch_hpc'}[kind]
+945:             launch = (self.api_execution.operation_contracts(resource_id, 'launch_api')
+946:                       if kind == 'api' else operation_catalog(kind))
+947:             results = (self.api_execution.operation_contracts(resource_id, 'results')
+948:                        if kind == 'api' else native_result_operation_catalog())
+949:             for entry_role, owner_role, entries in (
+950:                     ('launch', resource_role, launch), ('results', 'results', results)):
+951:                 for entry in entries:
+952:                     key = entry['name'], kind
+953:                     route = {'entry_role': entry_role, 'resource_id': resource_id,
+954:                              'resource_role': owner_role}
+955:                     if key not in contracts:
+956:                         contracts[key] = {name: deepcopy(entry[name])
+957:                             for name in ('name', 'description', 'input_schema')}
+958:                         if 'instructions' in entry:
+959:                             contracts[key]['instructions'] = entry['instructions']
+960:                         contracts[key].update(resources=kind,
+961:                             invocation_route={'kind': 'commission', 'routes': []})
+962:                     elif canonical(contracts[key]['input_schema']) != canonical(entry['input_schema']):
+963:                         raise ValueError('execution_resource_operation_contract_conflict:' + entry['name'])
+964:                     if route not in contracts[key]['invocation_route']['routes']:
+965:                         contracts[key]['invocation_route']['routes'].append(route)
+966:             if kind == 'api':
+967:                 service = self.api_execution.services.get(resource_id)
+968:                 if (service is not None and service.service == 'bvbrc_appservice'
+969:                         and ('bvbrc_homology', '1') in service.scientific_adapters):
+970:                     from .bvbrc_homology_tool_info import homology_tool_contracts
+971:                     for entry in homology_tool_contracts(resource_id=resource_id,
+972:                             assignment_schema=self.api_execution.assignment_schema(resource_id)):
+973:                         key = entry['name'], kind
+974:                         if key not in contracts:
+975:                             contracts[key] = entry
+976:                         else:
+977:                             prior = contracts[key]
+978:                             prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+979:                             prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+980:                 if service is not None and service.service == 'bvbrc_appservice':
+981:                     if ('bvbrc_genome_alignment', '1') in service.scientific_adapters:
+982:                         from .bvbrc_genome_alignment_tool_info import genome_alignment_tool_contracts
+983:                         for entry in genome_alignment_tool_contracts(resource_id=resource_id,
+984:                                 assignment_schema=self.api_execution.assignment_schema(resource_id)):
+985:                             key = entry['name'], kind
+986:                             if key not in contracts:
+987:                                 contracts[key] = entry
+988:                             else:
+989:                                 prior = contracts[key]
+990:                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+991:                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+992:                     if ('bvbrc_comparative_systems', '1') in service.scientific_adapters:
+993:                         from .bvbrc_comparative_systems_tool_info import comparative_systems_tool_contracts
+994:                         for entry in comparative_systems_tool_contracts(resource_id=resource_id,
+995:                                 assignment_schema=self.api_execution.assignment_schema(resource_id)):
+996:                             key = entry['name'], kind
+997:                             if key not in contracts:
+998:                                 contracts[key] = entry
+999:                             else:
+1000:                                 prior = contracts[key]
+1001:                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+1002:                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+1003:                     if ('bvbrc_fastqutils', '2') in service.scientific_adapters:
+1004:                         from .bvbrc_fastqutils_tool_info import fastqutils_tool_contracts
+1005:                         for entry in fastqutils_tool_contracts(resource_id=resource_id,
+1006:                                 assignment_schema=self.api_execution.assignment_schema(resource_id)):
+1007:                             key = entry['name'], kind
+1008:                             if key not in contracts:
+1009:                                 contracts[key] = entry
+1010:                             else:
+1011:                                 prior = contracts[key]
+1012:                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+1013:                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+1014:                     proteome_versions = tuple(version for version in ('1', '2')
+1015:                         if ('bvbrc_proteome', version) in service.scientific_adapters)
+1016:                     if proteome_versions:
+1017:                         from .bvbrc_proteome_tool_info import proteome_tool_contracts
+1018:                         for entry in proteome_tool_contracts(resource_id=resource_id,
+1019:                                 assignment_schema=self.api_execution.assignment_schema(resource_id),
+1020:                                 adapter_versions=proteome_versions):
+1021:                             key = entry['name'], kind
+1022:                             if key not in contracts:
+1023:                                 contracts[key] = entry
+1024:                             else:
+1025:                                 prior = contracts[key]
+1026:                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+1027:                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+1028:                     for provider in ('bvbrc_msa', 'bvbrc_metacats'):
+1029:                         if (provider, '1') not in service.scientific_adapters:
+1030:                             continue
+1031:                         from .bvbrc_alignment_tool_info import alignment_tool_contracts
+1032:                         for entry in alignment_tool_contracts(resource_id=resource_id,
+1033:                                 assignment_schema=self.api_execution.assignment_schema(resource_id),
+1034:                                 provider=provider):
+1035:                             key = entry['name'], kind
+1036:                             if key not in contracts:
+1037:                                 contracts[key] = entry
+1038:                             else:
+1039:                                 prior = contracts[key]
+1040:                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+1041:                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+1042:                     for provider in ('bvbrc_gene_tree', 'bvbrc_codon_tree'):
+1043:                         if (provider, '1') not in service.scientific_adapters:
+1044:                             continue
+1045:                         from .bvbrc_phylogeny_tool_info import phylogeny_tool_contracts
+1046:                         for entry in phylogeny_tool_contracts(resource_id=resource_id,
+1047:                                 assignment_schema=self.api_execution.assignment_schema(resource_id),
+1048:                                 provider=provider):
+1049:                             key = entry['name'], kind
+1050:                             if key not in contracts:
+1051:                                 contracts[key] = entry
+1052:                             else:
+1053:                                 prior = contracts[key]
+1054:                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+1055:                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+1056:             native_entries = []
+1057:             if configuration.get('native_barcode'):
+1058:                 from .native_barcode_tool_information import barcode_tool_contracts
+1059:                 native_entries.extend(barcode_tool_contracts(configuration['native_barcode'],
+1060:                     resource_kind=kind, resource_id=resource_id))
+1061:             if configuration.get('native_expression_nmf'):
+1062:                 from .native_expression_nmf_tool_info import expression_nmf_tool_contracts
+1063:                 native_entries.extend(expression_nmf_tool_contracts(configuration['native_expression_nmf'],
+1064:                     resource_kind=kind, resource_id=resource_id))
+1065:             if configuration.get('native_atac_differential'):
+1066:                 from .native_atac_differential_tool_info import atac_tool_contracts
+1067:                 native_entries.extend(atac_tool_contracts(configuration['native_atac_differential'],
+1068:                     resource_kind=kind, resource_id=resource_id))
+1069:             if configuration.get('native_chromatin_interactions'):
+1070:                 from .native_chromatin_interaction_tool_info import chromatin_interaction_tool_contracts
+1071:                 native_entries.extend(chromatin_interaction_tool_contracts(configuration['native_chromatin_interactions'],
+1072:                     resource_kind=kind, resource_id=resource_id))
+1073:             if configuration.get('native_genomic_overlap'):
+1074:                 from .native_genomic_overlap_tool_info import genomic_overlap_tool_contracts
+1075:                 native_entries.extend(genomic_overlap_tool_contracts(configuration['native_genomic_overlap'],
+1076:                     resource_kind=kind, resource_id=resource_id))
+1077:             if configuration.get('native_protein_structure'):
+1078:                 from .native_protein_structure_tool_info import protein_structure_tool_contracts
+1079:                 native_entries.extend(protein_structure_tool_contracts(configuration['native_protein_structure'],
+1080:                     resource_kind='local', resource_id=resource_id))
+1081:             if configuration.get('native_rna_structure'):
+1082:                 from .native_rna_structure_tool_info import rna_structure_tool_contracts
+1083:                 native_entries.extend(rna_structure_tool_contracts(configuration['native_rna_structure'],
+1084:                     resource_kind=kind, resource_id=resource_id))
+1085:             if configuration.get('native_blast_standard_database'):
+1086:                 from .native_blast_standard_database_tool_info import standard_blast_database_tool_contracts
+1087:                 native_entries.extend(standard_blast_database_tool_contracts(configuration['native_blast_standard_database']['bindings'],
+1088:                     resource_kind=kind, resource_id=resource_id))
+1089:             if configuration.get('native_blast_database'):
+1090:                 from .native_blast_database_tool_info import native_blast_database_tool_contracts
+1091:                 native_entries.extend(native_blast_database_tool_contracts(configuration['native_blast_database']['bindings'],
+1092:                     resource_kind=kind, resource_id=resource_id))
+1093:             if configuration.get('native_hmmer'):
+1094:                 from .native_hmmer_tool_info import native_hmmer_tool_contracts
+1095:                 native_entries.extend(native_hmmer_tool_contracts(configuration['native_hmmer'],
+1096:                     resource_kind=kind, resource_id=resource_id))
+1097:             if configuration.get('native_blast'):
+1098:                 from .native_blast_tool_info import native_blast_tool_contracts
+1099:                 native_entries.extend(native_blast_tool_contracts(configuration['native_blast'],
+1100:                     resource_kind=kind, resource_id=resource_id))
+1101:             if configuration.get('native_infernal'):
+1102:                 from .native_infernal_tool_info import native_infernal_tool_contracts
+1103:                 native_entries.extend(native_infernal_tool_contracts(configuration['native_infernal'],
+1104:                     resource_kind=kind, resource_id=resource_id))
+1105:             if configuration.get('native_infernal_preparation'):
+1106:                 from .native_infernal_preparation_tool_info import native_infernal_preparation_tool_contracts
+1107:                 native_entries.extend(native_infernal_preparation_tool_contracts(
+1108:                     configuration['native_infernal_preparation'], resource_kind=kind, resource_id=resource_id))
+1109:             if configuration.get('native_hmmer_preparation'):
+1110:                 from .native_hmmer_preparation_tool_info import native_hmmer_preparation_tool_contracts
+1111:                 native_entries.extend(native_hmmer_preparation_tool_contracts(
+1112:                     configuration['native_hmmer_preparation'], resource_kind=kind, resource_id=resource_id))
+1113:             for entry in native_entries:
+1114:                 key = entry['name'], kind
+1115:                 if key in contracts:
+1116:                     # Different deployment software must remain explicit in
+1117:                     # the bound request schema; combine actual alternatives.
+1118:                     prior = contracts[key]
+1119:                     if prior['description'] != entry['description']:
+1120:                         raise ValueError('execution_native_instruction_conflict:' + entry['name'])
+1121:                     sections = prior.setdefault('_native_instruction_sections', {
+1122:                         route['resource_id']: prior['instructions']
+1123:                         for route in prior['invocation_route']['routes']})
+1124:                     sections[resource_id] = entry['instructions']
+1125:                     if len(set(sections.values())) > 1:
+1126:                         prior['instructions'] = '\n\n'.join('Resource '+key+':\n'+value
+1127:                             for key, value in sections.items())
+1128:                     schemas = prior.setdefault('_native_schemas', [prior['input_schema']])
+1129:                     if entry['input_schema'] not in schemas:
+1130:                         schemas.append(entry['input_schema'])
+1131:                     prior['input_schema'] = {'anyOf': deepcopy(schemas)}
+1132:                     prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+1133:                 else:
+1134:                     contracts[key] = deepcopy(entry)
+1135:         for entry in contracts.values():
+1136:             entry.pop('_native_schemas', None)
+1137:             entry.pop('_native_instruction_sections', None)
+1138:         return [contracts[key] for key in sorted(contracts)]
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: decision_context
+1194:     def decision_context(self, context, current_view):
+1195:         if context.role in {'launch_local', 'launch_hpc'}:
+1196:             return self._delegate(context).decision_context(context, current_view)
+1197:         value = {'execution_assignment': plain(context.assignment),
+1198:                  'execution_progress': self.facts(context, {})}
+1199:         if context.role == 'results':
+1200:             assignment = plain(context.assignment)
+1201:             retained = self._retained_protein_result(context, assignment, context.scope)
+1202:             if self._barcode_selector(assignment):
+1203:                 from .barcode_execution_information import describe_barcode_result
+1204:                 value['execution_target'] = self._target(context)
+1205:                 value['execution_target_description'] = describe_barcode_result(
+1206:                     value['execution_target'], selector=assignment['selector'])
+1207:             elif self._expression_nmf_selector(assignment):
+1208:                 from .expression_nmf_execution_information import describe_expression_nmf_result
+1209:                 value['execution_target'] = self._target(context)
+1210:                 value['execution_target_description'] = describe_expression_nmf_result(
+1211:                     value['execution_target'], selector=assignment['selector'])
+1212:             elif self._atac_selector(assignment):
+1213:                 from .atac_differential_execution_information import describe_atac_result
+1214:                 value['execution_target'] = self._target(context)
+1215:                 value['execution_target_description'] = describe_atac_result(
+1216:                     value['execution_target'], selector=assignment['selector'])
+1217:             elif self._chromatin_selector(assignment):
+1218:                 from .chromatin_interaction_execution_information import describe_chromatin_result
+1219:                 value['execution_target'] = self._target(context)
+1220:                 value['execution_target_description'] = describe_chromatin_result(
+1221:                     value['execution_target'], selector=assignment['selector'])
+1222:             elif self._genomic_overlap_selector(assignment):
+1223:                 from .genomic_overlap_execution_information import describe_genomic_overlap_result
+1224:                 value['execution_target'] = self._target(context)
+1225:                 # Historical target metadata suffices here. No native source
+1226:                 # or current executable/status is needed to describe a saved
+1227:                 # calculation; original receipt authority is checked by _target.
+1228:                 value['execution_target_description'] = describe_genomic_overlap_result(
+1229:                     value['execution_target'], selector=assignment['selector'])
+1230:             elif retained is None:
+1231:                 value['execution_target'] = self._target(context)
+1232:                 value['execution_target_description'] = self.job_progress_provider.targets.describe_target(
+1233:                     value['execution_target']['handle'], context.scope, selector=assignment['selector'])
+1234:             else:
+1235:                 from .protein_structure_execution_information import describe_protein_structure_result
+1236:                 value['execution_target'] = retained['body']['intent']['target']
+1237:                 called = retained['body']['handoff_proof']['body']['receipt']['tool_name']
+1238:                 value['execution_target_description'] = describe_protein_structure_result(
+1239:                     value['execution_target'], called_operation=called, selector=assignment['selector'])
+1240:             from .bvbrc_data_host import is_bvbrc_request
+1241:             if value['execution_target']['resource_kind'] == 'api' and is_bvbrc_request(
+1242:                     value['execution_target']['assignment'].get('request')):
+1243:                 value['own_bvbrc_values'] = self.api_execution.bvbrc_data.own_values(context)
+1244:         if context.role == 'launch_api':
+1245:             callback = getattr(self.api_execution, 'decision_context', None)
+1246:             if callback is not None:
+1247:                 value.update(callback(context, current_view))
+1248:         return value
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _target
+1250:     def _target(self, context):
+1251:         assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
+1252:         barcode = self._retained_barcode_target(context, assignment, context.scope)
+1253:         if barcode is not None:
+1254:             return barcode
+1255:         nmf = self._retained_expression_nmf_target(context, assignment, context.scope)
+1256:         if nmf is not None:
+1257:             return nmf
+1258:         atac = self._retained_atac_target(context, assignment, context.scope)
+1259:         if atac is not None:
+1260:             return atac
+1261:         chromatin = self._retained_chromatin_target(context, assignment, context.scope)
+1262:         if chromatin is not None:
+1263:             return chromatin
+1264:         overlap = self._retained_genomic_overlap_target(context, assignment, context.scope)
+1265:         if overlap is not None:
+1266:             return overlap
+1267:         retained = self._retained_protein_result(context, assignment, context.scope)
+1268:         return (retained['body']['intent']['target'] if retained is not None else
+1269:             self.job_progress_provider.targets.read_target(assignment['handoff_ref'], context.scope))

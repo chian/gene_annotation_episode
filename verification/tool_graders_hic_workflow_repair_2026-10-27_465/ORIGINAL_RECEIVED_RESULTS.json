@@ -1,0 +1,1059 @@
+[
+  {
+    "database": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/temporary/pytest/hic4590/state/state.sqlite3",
+    "result_episodes": [
+      {
+        "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+        "state": "yielded",
+        "completed": true,
+        "rows": [
+          {
+            "population_key": "p1",
+            "promoter": "P",
+            "fields": {
+              "above_fold_threshold": {
+                "population_key": "p1",
+                "reason": null,
+                "state": "derived",
+                "value": false
+              },
+              "expected_contact": {
+                "denominator": 2,
+                "numerator": 6.5,
+                "population_key": "p1",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 3.25
+              },
+              "fold_enrichment": {
+                "denominator": 3.25,
+                "numerator": 6.0,
+                "population_key": "p1",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 1.8461538461538463
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "normalized",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 6.0
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 6.0
+              }
+            }
+          },
+          {
+            "population_key": "p1",
+            "promoter": "Q",
+            "fields": {
+              "above_fold_threshold": {
+                "population_key": "p1",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "value": null
+              },
+              "expected_contact": {
+                "denominator": 1,
+                "numerator": 0,
+                "population_key": "p1",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "fold_enrichment": {
+                "denominator": 0.0,
+                "numerator": 0.0,
+                "population_key": "p1",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "normalized",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              }
+            }
+          }
+        ],
+        "saved_table_count": 8,
+        "failures": [
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": null,
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "calculation"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/1/fields/fold_enrichment",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/1/fields/above_fold_threshold",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          }
+        ],
+        "observations": [
+          {
+            "credit": {
+              "credit": 2,
+              "estimation_action_index": 0,
+              "practical_completion": {
+                "assignment_sha256": "182d93c1f539243b1001d436aff2a8ff542dd3a7bf3fd3137490f16437fe5ddb",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+                "operation_key": "chromatin-hic-workflow459:episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b:0",
+                "receipt_sha256": "1660304bb0be3154764a9c7463b79932b75c0edebc5f78ba0f3adfa48bb0fa00",
+                "run_id": "chromatin-hic-workflow459",
+                "validation_keys": [
+                  "original_chromatin_result_commission",
+                  "closed_original_native_capture",
+                  "qualified_requested_chromatin_delivery"
+                ],
+                "version": "practical_completion_v1"
+              }
+            },
+            "decision_index": 0,
+            "label": "tool:0",
+            "step": {
+              "credit": 2.0,
+              "decision": {
+                "continuation_cost": 0.0,
+                "decision_basis": "current_estimator_marginal_credit_upper_bound",
+                "projected_gain": {
+                  "alpha": 0.0,
+                  "lower": 0.0,
+                  "status_code": 0,
+                  "uncertainty_code": 0,
+                  "upper": 0.0,
+                  "value": 0.0
+                },
+                "stop": true
+              },
+              "estimate": {
+                "diagnostics": {
+                  "completed_acquisition_turns": 1,
+                  "completion_action_index": 0,
+                  "completion_proof": {
+                    "assignment_sha256": "182d93c1f539243b1001d436aff2a8ff542dd3a7bf3fd3137490f16437fe5ddb",
+                    "endpoint": "usable_handoff",
+                    "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+                    "operation_key": "chromatin-hic-workflow459:episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b:0",
+                    "receipt_sha256": "1660304bb0be3154764a9c7463b79932b75c0edebc5f78ba0f3adfa48bb0fa00",
+                    "run_id": "chromatin-hic-workflow459",
+                    "validation_keys": [
+                      "original_chromatin_result_commission",
+                      "closed_original_native_capture",
+                      "qualified_requested_chromatin_delivery"
+                    ],
+                    "version": "practical_completion_v1"
+                  },
+                  "completion_unit_ref": {
+                    "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+                    "unit_id": "unit_99fed99c122b67eba97209c9e570483ce5e6345ee85ab8188459ff895447725d",
+                    "unit_index": 0
+                  },
+                  "fitting_scope": "verified_assignment_endpoint",
+                  "history_used": 1
+                },
+                "expected_next_gain": {
+                  "alpha": 0.0,
+                  "lower": 0.0,
+                  "status_code": 0,
+                  "uncertainty_code": 0,
+                  "upper": 0.0,
+                  "value": 0.0
+                },
+                "parameters": {
+                  "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                  "subsample_size": 50,
+                  "uncertainty_alpha": 0.05,
+                  "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                  "window_size": 100
+                },
+                "provenance": {
+                  "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                  "completion_proof": "practical_completion_v1",
+                  "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+                  "continuation": "existing_available_upper_bound_lte_configured_cost",
+                  "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                  "raw_history": "unchanged_one_observation_per_completed_own_action",
+                  "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                  "version": "verified_practical_endpoint_yield_v1"
+                },
+                "turns": 1
+              },
+              "is_root": false,
+              "marginal_credit": 2.0,
+              "requests_transition": false,
+              "stop": true,
+              "unit_label": "tool:0"
+            },
+            "unit_ref": {
+              "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+              "unit_id": "unit_99fed99c122b67eba97209c9e570483ce5e6345ee85ab8188459ff895447725d",
+              "unit_index": 0
+            }
+          }
+        ],
+        "native_returncode": 0
+      }
+    ]
+  },
+  {
+    "database": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/temporary/pytest/test_native_nonzero_wrong_popu0/wrong_population/state/state.sqlite3",
+    "result_episodes": [
+      {
+        "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+        "state": "yielded",
+        "completed": false,
+        "rows": [
+          {
+            "population_key": "p0",
+            "promoter": "P",
+            "fields": {
+              "above_fold_threshold": {
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "value": false
+              },
+              "expected_contact": {
+                "denominator": 2,
+                "numerator": 6.5,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 3.25
+              },
+              "fold_enrichment": {
+                "denominator": 3.25,
+                "numerator": 6.0,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": 1.8461538461538463
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "normalized",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 6.0
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 6.0
+              }
+            }
+          },
+          {
+            "population_key": "p0",
+            "promoter": "Q",
+            "fields": {
+              "above_fold_threshold": {
+                "population_key": "p0",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "value": null
+              },
+              "expected_contact": {
+                "denominator": 1,
+                "numerator": 0,
+                "population_key": "p0",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "fold_enrichment": {
+                "denominator": 0.0,
+                "numerator": 0.0,
+                "population_key": "p0",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "normalized",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p0",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              }
+            }
+          }
+        ],
+        "saved_table_count": 4,
+        "failures": [
+          {
+            "artifact_ref": "artifact_e77c601db18650754ab3c854db947a6031e53cb04002996d41ff86e5a281e765",
+            "code": "population_unavailable",
+            "element_key": null,
+            "field_path": null,
+            "input_key": "contact0",
+            "locator": {
+              "kind": "hic_bytes",
+              "value": {
+                "offset": 0,
+                "section": "header",
+                "size_bytes": 106
+              }
+            },
+            "pair_key": null,
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "valid_native_structure",
+            "stage": "native_parse"
+          },
+          {
+            "artifact_ref": "artifact_e77c601db18650754ab3c854db947a6031e53cb04002996d41ff86e5a281e765",
+            "code": "reference_conflict",
+            "element_key": null,
+            "field_path": null,
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": null,
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "compatible_reference",
+            "stage": "metadata"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": null,
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p0.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p0",
+            "requirement": "positive_denominator",
+            "stage": "calculation"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/1/fields/fold_enrichment",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p0.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p0",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/1/fields/above_fold_threshold",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p0.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p0",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          }
+        ],
+        "observations": [
+          {
+            "credit": {
+              "credit": 2,
+              "estimation_action_index": 0
+            },
+            "decision_index": 0,
+            "label": "tool:0",
+            "step": {
+              "credit": 2.0,
+              "decision": {
+                "continuation_cost": 1000000000.0,
+                "decision_basis": "current_estimator_marginal_credit_upper_bound",
+                "projected_gain": {
+                  "alpha": -1.0,
+                  "lower": -1.0,
+                  "status_code": -1,
+                  "uncertainty_code": -1,
+                  "upper": -1.0,
+                  "value": -1.0
+                },
+                "stop": false
+              },
+              "estimate": {
+                "diagnostics": {
+                  "completed_acquisition_turns": 1,
+                  "fitting_scope": "full_history",
+                  "history_used": 1,
+                  "initialization": "cold_template_prior"
+                },
+                "expected_next_gain": {
+                  "alpha": -1.0,
+                  "lower": -1.0,
+                  "status_code": -1,
+                  "uncertainty_code": -1,
+                  "upper": -1.0,
+                  "value": -1.0
+                },
+                "parameters": {
+                  "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                  "subsample_size": 1,
+                  "uncertainty_alpha": 0.05,
+                  "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                  "window_size": 2
+                },
+                "provenance": {
+                  "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                  "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                  "kind": "caller_injected",
+                  "template_relationship": "not_inferred"
+                },
+                "turns": 1
+              },
+              "is_root": false,
+              "marginal_credit": 2.0,
+              "requests_transition": false,
+              "stop": false,
+              "unit_label": "tool:0"
+            },
+            "unit_ref": {
+              "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+              "unit_id": "unit_99fed99c122b67eba97209c9e570483ce5e6345ee85ab8188459ff895447725d",
+              "unit_index": 0
+            }
+          },
+          {
+            "credit": {
+              "credit": 2,
+              "estimation_action_index": 1
+            },
+            "decision_index": 1,
+            "label": "tool:1",
+            "step": {
+              "credit": 2.0,
+              "decision": {
+                "continuation_cost": 1000000000.0,
+                "decision_basis": "current_estimator_marginal_credit_upper_bound",
+                "projected_gain": {
+                  "alpha": 0.05,
+                  "lower": 0.0,
+                  "status_code": 0,
+                  "uncertainty_code": 2,
+                  "upper": 3.106707212839038,
+                  "value": 1.0451797995287622
+                },
+                "stop": true
+              },
+              "estimate": {
+                "diagnostics": {
+                  "completed_acquisition_turns": 2,
+                  "fit_objective": 2.803816252014441,
+                  "fitting_scope": "full_history",
+                  "history_used": 2,
+                  "initialization": "cold_template_prior",
+                  "next_gain_variance": 1.1063232678521422,
+                  "rank_decay": 0.05644647043803151,
+                  "yield_intercept": -0.34291813154194195
+                },
+                "expected_next_gain": {
+                  "alpha": 0.05,
+                  "lower": 0.0,
+                  "status_code": 0,
+                  "uncertainty_code": 2,
+                  "upper": 3.106707212839038,
+                  "value": 1.0451797995287622
+                },
+                "parameters": {
+                  "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                  "subsample_size": 1,
+                  "uncertainty_alpha": 0.05,
+                  "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                  "window_size": 2
+                },
+                "provenance": {
+                  "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+                  "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                  "kind": "caller_injected",
+                  "template_relationship": "not_inferred"
+                },
+                "turns": 2
+              },
+              "is_root": false,
+              "marginal_credit": 0.0,
+              "requests_transition": false,
+              "stop": true,
+              "unit_label": "tool:1"
+            },
+            "unit_ref": {
+              "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+              "unit_id": "unit_6c5d98f7ef9582365eb025d0abdfdbe1305ff101bf759f526acb4b3c26c7a3a5",
+              "unit_index": 1
+            }
+          }
+        ],
+        "native_returncode": 1
+      }
+    ]
+  },
+  {
+    "database": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_workflow_2026-10-27_459/check003/temporary/pytest/test_true_present_zero_block_i0/present_zero_block/state/state.sqlite3",
+    "result_episodes": [
+      {
+        "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+        "state": "yielded",
+        "completed": true,
+        "rows": [
+          {
+            "population_key": "p1",
+            "promoter": "P",
+            "fields": {
+              "above_fold_threshold": {
+                "population_key": "p1",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "value": null
+              },
+              "expected_contact": {
+                "denominator": 2,
+                "numerator": 0,
+                "population_key": "p1",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "fold_enrichment": {
+                "denominator": 0.0,
+                "numerator": 0,
+                "population_key": "p1",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "not_measured",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": null
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              }
+            }
+          },
+          {
+            "population_key": "p1",
+            "promoter": "Q",
+            "fields": {
+              "above_fold_threshold": {
+                "population_key": "p1",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "value": null
+              },
+              "expected_contact": {
+                "denominator": 1,
+                "numerator": 0,
+                "population_key": "p1",
+                "reason": null,
+                "state": "derived",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0.0
+              },
+              "fold_enrichment": {
+                "denominator": 0.0,
+                "numerator": 0,
+                "population_key": "p1",
+                "reason": "zero_denominator",
+                "state": "undefined",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "dimensionless",
+                  "source_unit": null
+                },
+                "value": null
+              },
+              "normalized_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "not_measured",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "normalized_contact",
+                  "source_unit": "contacts"
+                },
+                "value": null
+              },
+              "raw_contact": {
+                "denominator": null,
+                "numerator": null,
+                "population_key": "p1",
+                "reason": null,
+                "state": "observed",
+                "uncertainty": {
+                  "kind": "not_measured",
+                  "unit": null,
+                  "value": null
+                },
+                "unit": {
+                  "kind": "source_contact",
+                  "source_unit": "contacts"
+                },
+                "value": 0
+              }
+            }
+          }
+        ],
+        "saved_table_count": 6,
+        "failures": [
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": null,
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p1",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "calculation"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": null,
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "calculation"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/0/fields/fold_enrichment",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p1",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/0/fields/above_fold_threshold",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p1",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/1/fields/fold_enrichment",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          },
+          {
+            "artifact_ref": null,
+            "code": "zero_denominator",
+            "element_key": null,
+            "field_path": "/rows/1/fields/above_fold_threshold",
+            "input_key": "contact0",
+            "locator": null,
+            "pair_key": "p1.e0.p2",
+            "partial_artifact_refs": [],
+            "population_key": "p1",
+            "requirement": "positive_denominator",
+            "stage": "projection"
+          }
+        ],
+        "observations": [
+          {
+            "credit": {
+              "credit": 2,
+              "estimation_action_index": 0,
+              "practical_completion": {
+                "assignment_sha256": "f418038421d7afc09ebbfa53788e8734999b5468635e6dc10c16c036d54916bb",
+                "endpoint": "usable_handoff",
+                "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+                "operation_key": "chromatin-hic-workflow459:episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b:0",
+                "receipt_sha256": "f9d9a636a8ae3617c7fa0456f2ff88932bdae69e534682dad5c8836bc65e6b60",
+                "run_id": "chromatin-hic-workflow459",
+                "validation_keys": [
+                  "original_chromatin_result_commission",
+                  "closed_original_native_capture",
+                  "qualified_requested_chromatin_delivery"
+                ],
+                "version": "practical_completion_v1"
+              }
+            },
+            "decision_index": 0,
+            "label": "tool:0",
+            "step": {
+              "credit": 2.0,
+              "decision": {
+                "continuation_cost": 0.0,
+                "decision_basis": "current_estimator_marginal_credit_upper_bound",
+                "projected_gain": {
+                  "alpha": 0.0,
+                  "lower": 0.0,
+                  "status_code": 0,
+                  "uncertainty_code": 0,
+                  "upper": 0.0,
+                  "value": 0.0
+                },
+                "stop": true
+              },
+              "estimate": {
+                "diagnostics": {
+                  "completed_acquisition_turns": 1,
+                  "completion_action_index": 0,
+                  "completion_proof": {
+                    "assignment_sha256": "f418038421d7afc09ebbfa53788e8734999b5468635e6dc10c16c036d54916bb",
+                    "endpoint": "usable_handoff",
+                    "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+                    "operation_key": "chromatin-hic-workflow459:episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b:0",
+                    "receipt_sha256": "f9d9a636a8ae3617c7fa0456f2ff88932bdae69e534682dad5c8836bc65e6b60",
+                    "run_id": "chromatin-hic-workflow459",
+                    "validation_keys": [
+                      "original_chromatin_result_commission",
+                      "closed_original_native_capture",
+                      "qualified_requested_chromatin_delivery"
+                    ],
+                    "version": "practical_completion_v1"
+                  },
+                  "completion_unit_ref": {
+                    "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+                    "unit_id": "unit_99fed99c122b67eba97209c9e570483ce5e6345ee85ab8188459ff895447725d",
+                    "unit_index": 0
+                  },
+                  "fitting_scope": "verified_assignment_endpoint",
+                  "history_used": 1
+                },
+                "expected_next_gain": {
+                  "alpha": 0.0,
+                  "lower": 0.0,
+                  "status_code": 0,
+                  "uncertainty_code": 0,
+                  "upper": 0.0,
+                  "value": 0.0
+                },
+                "parameters": {
+                  "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                  "subsample_size": 50,
+                  "uncertainty_alpha": 0.05,
+                  "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                  "window_size": 100
+                },
+                "provenance": {
+                  "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+                  "completion_proof": "practical_completion_v1",
+                  "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+                  "continuation": "existing_available_upper_bound_lte_configured_cost",
+                  "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                  "raw_history": "unchanged_one_observation_per_completed_own_action",
+                  "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+                  "version": "verified_practical_endpoint_yield_v1"
+                },
+                "turns": 1
+              },
+              "is_root": false,
+              "marginal_credit": 2.0,
+              "requests_transition": false,
+              "stop": true,
+              "unit_label": "tool:0"
+            },
+            "unit_ref": {
+              "episode_id": "episode_9e9e754f1afbbc8c67ad1d734e389f3774981a1435b93827bce1ee95890c8d3b",
+              "unit_id": "unit_99fed99c122b67eba97209c9e570483ce5e6345ee85ab8188459ff895447725d",
+              "unit_index": 0
+            }
+          }
+        ],
+        "native_returncode": 0
+      }
+    ]
+  }
+]

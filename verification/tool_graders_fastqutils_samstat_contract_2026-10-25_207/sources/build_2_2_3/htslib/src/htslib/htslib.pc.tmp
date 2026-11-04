@@ -1,0 +1,15 @@
+includedir=@-includedir@
+libdir=@-libdir@
+
+# Flags and libraries needed when linking against a static libhts.a
+# (used by manual and semi-manual pkg-config(1)-style enquiries).
+static_ldflags=-L/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu
+static_libs=-lpthread -lz -lm
+
+Name: htslib
+Description: C library for high-throughput sequencing data formats
+Version: @-PACKAGE_VERSION@
+Cflags: -I${includedir}
+Libs: -L${libdir} -lhts
+Libs.private: -L${libdir} -L/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_contract_2026-10-25_207/sources/deps/root/usr/lib/x86_64-linux-gnu -lhts -lm -lpthread
+Requires.private: zlib 

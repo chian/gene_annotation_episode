@@ -1,0 +1,107 @@
+.......F
+=================================== FAILURES ===================================
+_ test_actual_child_worker_original_typed_parent_return_and_frozen_projection[psiblast-True] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check010/temporary/pytest/test_actual_child_worker_origi2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d5c615205f0>
+program = 'psiblast', same = True
+
+    @pytest.mark.parametrize('program,same', [('blastp', True), ('blastp', False), ('psiblast', True), ('deltablast', True)])
+    def test_actual_child_worker_original_typed_parent_return_and_frozen_projection(tmp_path, monkeypatch, program, same):
+        standard = program == 'blastp'
+        host = StandardHost if standard else NativeHost
+        h = host(tmp_path, monkeypatch, program, query_bytes=b'>q\nACDEFGHI\n', sequence='ACDEFGHI',
+            native_report=sf.encoded(sf.report(program)), metadata=dict(schema=V2, documents=[], searches=[]),
+            tuples=[dict(input_key='metadata', consumer='sequence_database', schema_id=V2)])
+        try:
+            selection, payload = host_selection(h, same=same)
+            if not standard:
+                selection['version'] = 'native_blast_database_result_selector_v1'
+            child = h.results(selection)
+            outcome = h.select(child, 0, 'execution.results.collect')
+            assert outcome['status'] == 'completed', outcome
+            body = outcome['result']
+            assert body['complete'], body['failures']
+            family = 'native_blast_standard_database' if standard else 'native_blast_database'
+            returned, schema = h.returned(child)
+            facts = getattr(h.family, family + '_returns').received_facts(h.root, schema)
+            key = 'execution_blast_' + ('standard_database' if standard else 'database') + '_sequence_record_quality_rows'
+            published = facts[key]
+            assert len(published) == len({r['record_key'] for r in published}) == 4
+            for row in published:
+                ordinal = row['identity']['assembly_source']['record_locator']['record_ordinal']
+                assert values(row) == {'completeness_fraction': (.9, .6)[ordinal]}
+                assert row['booleans'] == [] and row['observation_ref'] is None
+                assert row['publication_status'] == 'source_only'
+            function_key = key.replace('sequence_record_quality', 'sequence_function')
+            assert {r['identity']['function']: values(r) for r in facts[function_key]} == (
+                {'synthetic-same-function': {'function_mass': 1.25, 'unadjusted_probability': 1}} if same else
+                {'F': {'function_mass': 1, 'unadjusted_probability': .8}, 'G': {'function_mass': .25, 'unadjusted_probability': .2}})
+            save(tmp_path/'original-parent-form.json', returned)
+            save(tmp_path/'original-parent-schema.json', schema)
+            save(tmp_path/'received-parent-facts.json', facts)
+            save(tmp_path/'selected-v2-wire.json', payload)
+            save(tmp_path/'selected-selector.json', selection)
+            save(tmp_path/'actual-result.json', body)
+            # The native host's fresh import inventory must match the worker closure;
+            # successful actual worker invocation above checks this across processes.
+            count = len(list(h.workspace.rglob('synthetic-emitter-invoked')))
+            assert count == 1
+            module = __import__('gene_annotation_episode.' + family + '_result_publication', fromlist=['x'])
+            prepared = body['preparation']
+            frozen = module._validate_preparation(h.store, child, prepared)
+            request, manifest = frozen['request'], frozen['manifest']
+            revised = sr.reuse(request, manifest, tmp_path/'received-T2') if standard else nr.reuse_request(request, manifest)
+>           reused = fresh_reuse(tmp_path, revised, standard=standard)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_fasta_record_identity_integration.py:311: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check010/temporary/pytest/test_actual_child_worker_origi2')
+request = {'artifacts': [{'artifact_key': 'artifact-4ff8920f21ca67d7f67bcdac7397c8f8a240d274fa9539c34c85a6f72c4c7792', 'artifact...', ...}, ...}, 'bundle_artifact_ref': 'artifact_9c976a2a95b5c4078d60ed49f879589e0c152891dd050d3ab3942bf77e40ed00', ...}
+standard = False
+
+    def fresh_reuse(tmp_path, request, *, standard):
+        """Replay a host's fresh-process closure with forbidden ports in that worker."""
+        request_path = tmp_path/'fresh-reuse-request.json'
+        save(request_path, request)
+        script = tmp_path/'fresh-reuse.py'
+        script.write_text('''import sys
+    from gene_annotation_episode import blast_fasta_record_identity as fasta
+    from gene_annotation_episode import native_blast_standard_database_metadata as sm
+    from gene_annotation_episode import native_blast_database_metadata as nm
+    from gene_annotation_episode import native_blast_standard_database_result_worker as sw
+    from gene_annotation_episode import native_blast_database_result_worker as nw
+    import socket, subprocess
+    def forbidden(*a, **kw):
+        raise AssertionError('saved replay attempted parser, preparation, acquisition or native execution')
+    for module, names in [(fasta, ('parse_blast_fasta_source_records', 'parse_sequences')),
+            (sm, ('parse_sequences', 'prepare_standard_blast_database_inputs', 'populate_standard_blast_database_sheets')),
+            (nm, ('parse_blast_fasta_source_records', 'parse_sequences', 'prepare_native_blast_database_inputs', 'populate_native_blast_database_sheets')),
+            (sw, ('parse_blast_report_collection',)), (nw, ('parse_blast_report_collection',)),
+            (socket, ('socket', 'getaddrinfo')), (subprocess, ('run', 'Popen'))]:
+        for name in names: setattr(module, name, forbidden)
+    function = sw.run_standard_blast_database_result_worker if sys.argv[2] == 'standard' else nw.run_native_blast_database_result_worker
+    result = function(sys.argv[1])
+    assert result['status'] != 'failed', result['failures']
+    ''')
+        completed = subprocess.run([sys.executable, '-B', str(script), str(request_path), 'standard' if standard else 'native'],
+            cwd=tmp_path, capture_output=True, check=False)
+        (tmp_path/'fresh-reuse.stdout').write_bytes(completed.stdout)
+        (tmp_path/'fresh-reuse.stderr').write_bytes(completed.stderr)
+>       assert completed.returncode == 0, completed.stderr.decode()
+E       AssertionError: Traceback (most recent call last):
+E           File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check010/temporary/pytest/test_actual_child_worker_origi2/fresh-reuse.py", line 18, in <module>
+E             assert result['status'] != 'failed', result['failures']
+E                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         AssertionError: [{'stage': 'capture', 'code': 'native_blast_database_worker_failed', 'detail_code': 'implementation_failure', 'pointer': '', 'artifact_key': None, 'input_key': None, 'search_key': None, 'record_key': None}]
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '/home/chia/repos/gene_annot...ure\', \'pointer\': \'\', \'artifact_key\': None, \'input_key\': None, \'search_key\': None, \'record_key\': None}]\n').returncode
+
+../../../tests/test_blast_fasta_record_identity_integration.py:132: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_fasta_record_identity_integration.py::test_actual_child_worker_original_typed_parent_return_and_frozen_projection[psiblast-True]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 7 passed in 74.64s (0:01:14)

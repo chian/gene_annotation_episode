@@ -1,0 +1,174 @@
+{
+  "slot": "tools",
+  "id": "T08",
+  "name": "Genotype, component and functional-perturbation tables",
+  "description": "Represent actual strain/construct/component contrasts and their measured outcomes, preserving the distinction between a perturbation, its validated molecular effect and the endpoint being compared.",
+  "capability_operations": [
+    {
+      "operation": "Extract a genotype/component-by-condition outcome matrix",
+      "inputs": {
+        "records": "identified published or supplied observations",
+        "row_identity": "strain, exact alleles/constructs, component mixture and condition",
+        "outcome": "declared endpoint, units, source support and unknown status"
+      },
+      "outputs": {
+        "matrix": "separate genotype, molecular validation, localization/expression, endpoint and rescue fields",
+        "comparisons": "requested matched contrasts and unresolved confounders"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Select rows satisfying a declared control rule",
+      "inputs": {
+        "matrix": "source-bound rows",
+        "predicate": "explicit conjunction over recorded fields, e.g. stable AND localized AND separation-defective"
+      },
+      "outputs": {
+        "selection": "matching original row IDs and measured values",
+        "unknowns": "rows excluded because a field is unmeasured, not assumed negative"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Tabulate pairwise versus joint-complex evidence",
+      "inputs": {
+        "components": "identified protein/DNA/RNA species",
+        "observations": "pairwise, simultaneous, reconstituted and dependency records with assay conditions"
+      },
+      "outputs": {
+        "relations": "typed measured interactions/dependencies and explicit untested combinations"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "Source readers are repository-defined. No registered genetic-interaction, epistasis or complex-attribution agent is supplied by these operations."
+    ],
+    "research_operations_performed": [
+      "causal EnvC Table 1 parse selected five stable/localized/function-defective variants among 20 rows.",
+      "cellular/yhcB_direct_observations.json extracted source-table and processed fitness/suppressor rows.",
+      "spatial/archaeal_processing/investigation.json contains declared small-panel rule audits, not a validated genome classifier."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "General typed contrast-matrix construction and interaction querying remain capability specifications for runtime."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Deletion, complementation, suppressor selection, purified mixtures, fluorescence reporters, co-IP and interaction measurements are all author experiments here."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "A mutant called catalytic in another species is not a validated catalytic-null mutant in the target assay.",
+    "Overexpression rescue can establish capacity in that construct, not normal native contribution or direct chemistry.",
+    "Pairwise binding does not establish simultaneous occupancy; endpoint rescue does not by itself locate the causal route."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "causal_envC_activation",
+      "use": "Actual Table 1 selection preserved mutants with stable localization yet lost separation/activation, rather than conflating all failures.",
+      "execution_scope": "No new mutagenesis or binding assay; fold similarity alone did not assign peptidase chemistry.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "use": "Source contrasts separated E9-tolerant acquisition/integration from assembly-disrupting variants and Cas1 catalytic dependence.",
+      "execution_scope": "No direct E. coli E9 nuclease-null demonstration; author biological assays.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "causal_nlpI_scaffolding",
+      "use": "Published preformed partner-complex controls distinguished simultaneous assemblies from pairwise interactions.",
+      "execution_scope": "No new pull-down or physiological proof of every proposed ternary arrangement.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "use": "Active heterologous IMPases failed rescue while inactive native D87N retained rescue, bounding the catalysis-to-function transfer.",
+      "execution_scope": "This 2000 finding was primary-abstract-only here; later Nus/RNA results were inspected more fully.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_03_tau_ssu",
+      "use": "Complementation depended on copy number and uptake route, so a failed high-copy rescue did not negate the transporter role.",
+      "execution_scope": "Author growth/uptake comparisons; no new transport experiment.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "replacement_bioK",
+      "use": "Temperature, induction and insolubility separated cellular rescue from unavailable purified chemistry.",
+      "execution_scope": "No purified BioK activity claimed.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_10_hpnn",
+      "use": "Removing hopanoid synthesis suppressed a mislocalization-associated phenotype, separating harmful location from simple absence.",
+      "execution_scope": "Author lipid/growth data; no new localization measurements.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "causal_envC_activation",
+      "case_id": "causal_envC_activation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3923381/",
+      "source_locator": "Table 1; case observations E1–E4",
+      "observation": "Actual Table 1 selection preserved mutants with stable localization yet lost separation/activation, rather than conflating all failures.",
+      "limit": "No new mutagenesis or binding assay; fold similarity alone did not assign peptidase chemistry."
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+      "source_locator": "Fig. 1; Extended Data Figs.2–3; trace C1–C4",
+      "observation": "Source contrasts separated E9-tolerant acquisition/integration from assembly-disrupting variants and Cas1 catalytic dependence.",
+      "limit": "No direct E. coli E9 nuclease-null demonstration; author biological assays."
+    },
+    {
+      "case_group": "causal_nlpI_scaffolding",
+      "case_id": "causal_nlpI_scaffolding",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7049810/",
+      "source_locator": "Case-record observation; inspected scope: Relevant full pull-down, affinity, ternary-complex, activity and synthase-association Results; scaffolding Discussion; corresponding MST/denaturation/complex/PG-digestion Methods inspected. Other proteomics/localization Methods not exhaustively read.",
+      "observation": "Published preformed partner-complex controls distinguished simultaneous assemblies from pairwise interactions.",
+      "limit": "No new pull-down or physiological proof of every proposed ternary arrangement."
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "case_id": "spec_suhb_catalysis_vs_rrna",
+      "source_url": "https://pubs.acs.org/doi/10.1021/bi992424f",
+      "source_locator": "Case-record observation; inspected scope: 2000 primary abstract only; 2016 suppressor, recruitment, reporter/endogenous comparison, genetic-interaction results and relevant methods/discussion inspected; 2019 relevant binding/reconstitution results/methods and stated limitations inspected. Raw data and earlier 1994 activity paper not independently analyzed.",
+      "observation": "Active heterologous IMPases failed rescue while inactive native D87N retained rescue, bounding the catalysis-to-function transfer.",
+      "limit": "This 2000 finding was primary-abstract-only here; later Nus/RNA results were inspected more fully."
+    },
+    {
+      "case_group": "organism_03_tau_ssu",
+      "case_id": "organism_03_tau_ssu",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101965/",
+      "source_locator": "Case-record observation; inspected scope: 2000 complete substrate-specificity, deletion-control and complementation Results/Discussion plus Methods descriptions; 1999 biochemical abstract only. 1996 discovery paper is a separate abstract-level lead.",
+      "observation": "Complementation depended on copy number and uptake route, so a failed high-copy rescue did not negate the transporter role.",
+      "limit": "Author growth/uptake comparisons; no new transport experiment."
+    },
+    {
+      "case_group": "replacement_bioK",
+      "case_id": "replacement_bioK",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3494674/",
+      "source_locator": "Case-record observation; inspected scope: Complete relevant main Results read. Separate family question from BioG; donor species are not counted separately.",
+      "observation": "Temperature, induction and insolubility separated cellular rescue from unavailable purified chemistry.",
+      "limit": "No purified BioK activity claimed."
+    },
+    {
+      "case_group": "organism_10_hpnn",
+      "case_id": "organism_10_hpnn",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3215060/",
+      "source_locator": "Case-record observation; inspected scope: Relevant phylogeny/localization, cell-cycle and temperature Results plus lipid methods; no new localization assay or claim that all RND homologs have this substrate.",
+      "observation": "Removing hopanoid synthesis suppressed a mislocalization-associated phenotype, separating harmful location from simple absence.",
+      "limit": "Author lipid/growth data; no new localization measurements."
+    }
+  ]
+}

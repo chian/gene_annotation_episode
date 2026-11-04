@@ -1,0 +1,31 @@
+........................................................................ [ 54%]
+FF.........................................................              [100%]
+=================================== FAILURES ===================================
+_ test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering[False] _
+
+with_failure = False
+
+    @pytest.mark.parametrize("with_failure", (False, True))
+    def test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering(with_failure):
+        catalog = _population_catalog()
+>       assert len(catalog) == 18
+E       AssertionError: assert 19 == 18
+E        +  where 19 = len([{'name': 'literature.rate.populate', 'description': 'Populate source-preparation rate cells from a selected already a...es': False}}}, 'required': ['source_ref', 'model_source_ref', 'model_witnesses'], 'additionalProperties': False}}, ...])
+
+tests/test_literature_native_rate_operand_information.py:197: AssertionError
+_ test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering[True] _
+
+with_failure = True
+
+    @pytest.mark.parametrize("with_failure", (False, True))
+    def test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering(with_failure):
+        catalog = _population_catalog()
+>       assert len(catalog) == 18
+E       AssertionError: assert 19 == 18
+E        +  where 19 = len([{'name': 'literature.rate.populate', 'description': 'Populate source-preparation rate cells from a selected already a...es': False}}}, 'required': ['source_ref', 'model_source_ref', 'model_witnesses'], 'additionalProperties': False}}, ...])
+
+tests/test_literature_native_rate_operand_information.py:197: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_native_rate_operand_information.py::test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering[False]
+FAILED tests/test_literature_native_rate_operand_information.py::test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_steering[True]
+2 failed, 129 passed in 305.71s (0:05:05)

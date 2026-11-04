@@ -1,0 +1,185 @@
+F
+=================================== FAILURES ===================================
+_ test_selected_forecast_precedes_next_scientific_choice_and_unavailable_replaces_old_context _
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7eff89ad64e0>, homology=<gene_annotation_episode.homo...90>, directory=PosixPath('/tmp/pytest-of-chia/pytest-884/test_selected_forecast_precede0/run'), run_id='setup-fixture')
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-884/test_selected_forecast_precede0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7eff89852090>
+
+    def test_selected_forecast_precedes_next_scientific_choice_and_unavailable_replaces_old_context(
+            resources, tmp_path, monkeypatch):
+        h = planning_host(resources, tmp_path, monkeypatch)
+        second = deepcopy(h.arguments)
+        second['arguments']['parameters'] = {'include_taxonomy': [1]}
+        seen = []
+    
+        def after_first(context):
+            proposal = context['api_execution_proposal']
+            assert proposal['arguments'] == h.arguments['arguments']
+            assert context['api_reported_execution_forecasts'][0]['reported_result_support'] == {
+                'reported_result_count': 0}
+            assert all(context[key] == proposal[key] for key in API_FIELDS)
+            assert context['current_credit'] == context['monitoring_information_credit'] == 0
+            assert context['controller']['scores'] == [0]
+            assert h.client.calls == []
+            assert h.r.store.db.execute('SELECT count(*) FROM public_search_orders').fetchone()[0] == 0
+            seen.append(deepcopy(context))
+            return own('execution.estimate', **second)
+    
+        def after_second(context):
+            proposal = context['api_execution_proposal']
+            assert proposal['arguments'] == second['arguments']
+            assert context['api_reported_execution_forecasts'] == context['api_execution_options'] == []
+            assert context['api_timing_planning_disposition']['code'] == 'unsupported_statistics_configuration'
+            assert all(context[key] == proposal[key] for key in API_FIELDS)
+            assert context['controller']['scores'] == [0, 0]
+            assert h.workflow.waiting_support(h.owner.source, context)['duration_expectations'] == []
+            seen.append(deepcopy(context))
+            return own('state.query', refs=[])
+    
+        h.workflow.provider = ScriptedProvider([own('execution.estimate', **h.arguments),
+            after_first, after_second])
+>       record = run_owner(h)
+                 ^^^^^^^^^^^^
+
+tests/test_api_execution_planning_runtime.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_api_execution_planning_runtime.py:100: in run_owner
+    record = asyncio.run(h.owner.run_async(h.workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:443: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+method_loop/episode.py:1128: in acquire_async
+    return await _leaf_acquisition_async(
+method_loop/episode.py:1099: in _leaf_acquisition_async
+    extracted = await extracted
+                ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1088: in execute
+    result = await result
+             ^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.runtime.Workflow object at 0x7eff898514f0>
+source = <gene_annotation_episode.runtime.DecisionSource object at 0x7eff896d2f60>
+name = 'execution.estimate'
+arguments = {'tool': 'public.hmmer.search', 'arguments': {'subject_ref': 'input_0cf8c100d09446c95154fa4b', 'algorithm': 'phmmer', ...h_bytes': None, 'wall_seconds': None}, 'capability_binding_ref': 'execution_registry_fixture'}, 'constraints': {}, ...}
+decision_index = 0
+operation_key = 'setup-fixture:episode_c014a6781d669d662ae9876d3369348211f6890171b474d967d180ce4b2d2ab8:0'
+
+    async def execute(self, source, name, arguments, *, decision_index, operation_key):
+        if not self.permits_common_action(source, 'tool'):
+            return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
+                'feedback': {'category': 'arguments_or_reference', 'code': 'tool_not_available_to_episode'}}
+        binding = self.specialist(source)
+        if binding is not None and callable(getattr(binding, 'common_tool_names', None)):
+            entry = next((entry for entry in self.catalog(source.scope, source=source)
+                          if entry['name'] == name), None)
+            try:
+                if entry is None:
+                    raise ValueError('tool_not_available_to_episode')
+                Draft202012Validator(entry['input_schema']).validate(arguments)
+            except (ValueError, ValidationError) as error:
+                return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
+                    'feedback': {'category': 'arguments_or_reference',
+                        'code': ('tool_arguments_invalid' if isinstance(error, ValidationError)
+                                 else str(error))}}
+        if self.scientific_process_binding is not None:
+            from .scientific_process_library import catalog as scientific_catalog
+            retriever_catalog = self.scientific_retriever_catalog()
+            if name in {item['name'] for item in scientific_catalog() + retriever_catalog}:
+                if not self.scientific_library_available(source):
+                    return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
+                        'feedback': {'category': 'arguments_or_reference',
+                                     'code': 'tool_not_available_to_episode'}}
+                if name == 'process.tools':
+                    try:
+                        Draft202012Validator(retriever_catalog[0]['input_schema']).validate(arguments)
+                        tools = self.scientific_process_binding.tool_library
+                        # Confirm this run's map still consists of actual callable contracts.
+                        tools.resolve([entry['name'] for entry in tools.catalog()],
+                            self.services.tool_catalog(source.scope))
+                        if self.scientific_tool_retriever is not None:
+                            return await self.scientific_tool_retriever.retrieve(arguments['investigation'],
+                                episode_id=source.episode_id, operation_key=operation_key,
+                                available_catalog=self.services.tool_catalog(source.scope))
+                        result = tools.retrieve_literal_test(arguments['investigation'])
+                        return {'status': 'completed', 'record_refs': [],
+                            'changed_record_refs': [], 'result': result, 'feedback': None}
+                    except (ValueError, ValidationError) as error:
+                        return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [],
+                            'result': None, 'feedback': {'code': str(error)}}
+                outcome = self.scientific_process_binding.library.execute(name, arguments)
+                if name == 'process.entry' and outcome['status'] == 'completed':
+                    from .scientific_support_metadata import (SUPPORT_ENTRY_VERSION,
+                        support_observation_kinds)
+                    result = outcome['result']
+                    if result['entry'].get('entry_version') == SUPPORT_ENTRY_VERSION:
+                        outcome = {**outcome, 'result': {**result,
+                            'annotation_support_routes': self.services.scientific_support_routes(
+                                self.binding_context(source),
+                                observation_kinds=support_observation_kinds(result['entry']))}}
+                return outcome
+        if name == 'episode.estimate_wait':
+            call = self.journal.row('runtime_model_calls', source.episode_id, decision_index)
+            original_context = json.loads(call['request'])['context']
+            return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
+                'result': self.wait_estimate(source, arguments['condition'], original_context)}
+        if name in {item['name'] for item in knowledge_catalog()}:
+            return self.knowledge.execute(name, arguments)
+        if name == "episode.history":
+            return self.history_read(source, arguments, before=decision_index)
+        if name == "episode.credit":
+            return self.credit_read(source, arguments)
+        if name == 'episode.annotation_score':
+            return self.annotation_score_read(source, arguments)
+        if name == 'episode.monitoring_information':
+            return self.projection_read(source, arguments, self.execution_timing_information,
+                channel='native_timing_information', projector_arguments=self.timing_arguments(source))
+        if self.is_job_source(source):
+            result = await self.job_episodes.execute(source, name, arguments, operation_key=operation_key)
+            if self.resource_estimator is not None:
+                call = self.journal.row("runtime_model_calls", source.episode_id, decision_index)
+                context = json.loads(call["request"])["context"]
+                sample = (result.get("result") if result.get("operational_sample_ref") else
+                          self.job_episodes.latest_sample(source, include_inherited=True))
+                result["resource_tool_estimates"] = self.resource_estimator.estimate(
+                    context.get("execution_expectations"), job_ref=self.job_episodes.assignment(source)["job_ref"],
+                    sample=sample)
+            return result
+        specialist = self.specialist(source)
+        if specialist is not None:
+            result = specialist.execute(self.binding_context(source), name, arguments, operation_key)
+            result = await result if inspect.isawaitable(result) else result
+        else:
+            execute = getattr(self.tools, "execute_async", self.tools.execute)
+            result = execute(name, arguments, scope=source.scope, operation_key=operation_key)
+            result = await result if inspect.isawaitable(result) else result
+        if self.resource_estimator is not None:
+            if name == 'execution.estimate' and result.get('status') == 'completed':
+>               original = result['result']['execution_expectations']
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               KeyError: 'execution_expectations'
+
+gene_annotation_episode/runtime.py:2731: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_api_execution_planning_runtime.py::test_selected_forecast_precedes_next_scientific_choice_and_unavailable_replaces_old_context
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 9.24s

@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.25)
+project(hictk_native_fixture_harness LANGUAGES C CXX)
+add_subdirectory("${PINNED_HICTK_SOURCE}" hictk)
+add_executable(writer_harness writer_harness.cpp)
+target_link_libraries(writer_harness PRIVATE hictk::hic)
+target_compile_features(writer_harness PRIVATE cxx_std_17)

@@ -1,0 +1,61 @@
+--- original/tests/test_hmmer_alignment_preparation_data.py
++++ current/tests/test_hmmer_alignment_preparation_data.py
+@@ -104,7 +104,7 @@
+     assert sheet["input_records"][0]["column_count"] == 14
+     assert next(r for r in sheet["output_records"] if r["kind"] == "alignment")["column_count"] == 12
+     source = b"# STOCKHOLM 1.0\n#=GF ID duplicates\n#=GS same WT 1.0\nsame Ac.\nsame aG-\n#=GR same PP 99.\n#=GR same PP 98.\n#=GC RF xx.\n\nsame dE\nsame dF\n#=GR same PP 99\n#=GR same PP 98\n#=GC RF xx\n//\n"
+-    row = mask_sheet(source, **{"--alirange": "1-1"})["input_records"][0]
++    row = mask_sheet(source, **{"--alirange": "1-1", "--amino": True})["input_records"][0]
+     assert [r["aligned_sequence"] for r in row["rows"]] == ["Ac.dE", "aG-dF"]
+     assert [r["occurrence"] for r in row["rows"]] == [0, 1]
+     assert len({r["record_key"] for r in row["rows"]}) == 2
+@@ -175,12 +175,13 @@
+     assert [row["locator"]["record_ordinal"] for row in rows] == [0, 1]
+ 
+ 
+-@pytest.mark.parametrize("content,settings", [(b">a\nACGT\n", {"--informat": "afa"}), (b"# STOCKHOLM 1.0\na ACGT\n", {})])
++# AFA keeps unknown alphabet inference; DNA selects the partial Stockholm reader.
++@pytest.mark.parametrize("content,settings", [(b">a\nACGT\n", {"--informat": "afa"}), (b"# STOCKHOLM 1.0\na ACGT\n", {"--dna": True})])
+ def test_unsupported_and_partial_are_not_empty_success(content, settings):
+     sheet = mask_sheet(content, **{"--alirange": "1-1", **settings})
+     population = next(r for r in sheet["native_rows"] if r["kind"] == "population")
+     assert not population["complete"]
+-    if settings:
++    if settings.get("--informat") == "afa":
+         assert population["decoded_count"] is None and population["state"] == "unsupported"
+     else:
+         assert population["decoded_count"] == 1 and population["state"] == "partial"
+@@ -188,7 +189,7 @@
+ 
+ def test_first_record_only_and_bad_utf8_tail_preserve_valid_prefix():
+     source = b"# STOCKHOLM 1.0\na AC\n//\n"
+-    sheet = mask_sheet(source + source + b"\xffignored", **{"--alirange": "1-1"})
++    sheet = mask_sheet(source + source + b"\xffignored", **{"--alirange": "1-1", "--dna": True})
+     assert len(sheet["input_records"]) == 2
+     assert [a["relation"] for a in sheet["associations"]] == ["mask", "unprocessed"]
+     assert {"first_record_only", "text_encoding_invalid"} <= {i["code"] for i in sheet["issues"]}
+@@ -196,7 +197,7 @@
+ 
+ def test_invalid_payload_and_repeated_ids_do_not_throw_or_merge():
+     value = payload("alignment", b"# STOCKHOLM 1.0\na AC\n//\n")
+-    sheet = populate_hmmer_alignment_preparation_sheet(operation=operation(**{"--alirange": "1-1"}),
++    sheet = populate_hmmer_alignment_preparation_sheet(operation=operation(**{"--alirange": "1-1", "--dna": True}),
+         inputs={"alignment": [value, deepcopy(value), {"content": b"bad", "occurrence": {}}]}, outputs={})
+     assert {"occurrence_duplicate", "occurrence_invalid"} <= {i["code"] for i in sheet["issues"]}
+     assert len(sheet["input_records"]) == 1
+@@ -206,7 +207,7 @@
+ def test_identical_bytes_in_different_input_occurrences_remain_distinct():
+     content = b"# STOCKHOLM 1.0\na AC\n//\n"
+     first, second = payload("alignment", content), payload("alignment", content, ordinal=1)
+-    sheet = populate_hmmer_alignment_preparation_sheet(operation=operation(**{"--alirange": "1-1"}),
++    sheet = populate_hmmer_alignment_preparation_sheet(operation=operation(**{"--alirange": "1-1", "--dna": True}),
+         inputs={"alignment": [first, second]}, outputs={})
+     assert len(sheet["artifact_occurrences"]) == len(sheet["input_records"]) == 2
+     assert len({r["record_key"] for r in sheet["input_records"]}) == 2
+@@ -222,5 +223,5 @@
+     row = next(r for r in sheet["native_rows"] if r["kind"] == "build_summary")
+     assert row["eff_nseq"] is None and not row["valid"]
+     assert row["native_tokens"]["eff_nseq"] == "nan"
+-    malformed = mask_sheet(b"# STOCKHOLM 1.0\na ACGT\nb AC\n#=GC RF xxxx\n#=GC MM m.\n//\n", **{"--alirange": "1-1"})
++    malformed = mask_sheet(b"# STOCKHOLM 1.0\na ACGT\nb AC\n#=GC RF xxxx\n#=GC MM m.\n//\n", **{"--alirange": "1-1", "--dna": True})
+     assert {"row_geometry_invalid", "annotation_geometry_invalid"} <= {i["code"] for i in malformed["issues"]}

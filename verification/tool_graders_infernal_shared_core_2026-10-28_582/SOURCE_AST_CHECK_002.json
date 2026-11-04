@@ -1,0 +1,149 @@
+{
+  "checks": [
+    {
+      "path": "gene_annotation_episode/infernal_search_contracts.py",
+      "sha256": "dcfcaca08785f8d8b20702c8dfd21a435b2d4b5cd17ac4aac25c419bdb87bcaa",
+      "ast": "passed",
+      "functions": [
+        "finite_copy",
+        "sheet_digest",
+        "_require",
+        "_int",
+        "_text",
+        "_closed",
+        "_identity",
+        "_locator",
+        "_length_cell",
+        "_interval",
+        "_correspondence",
+        "_saved_input_links",
+        "validate_infernal_search_sheet",
+        "validate_infernal_search_scores"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/infernal_search_cells.py",
+      "sha256": "ab2e1929e0587c19c2683b030c573593f4c44991c9957eb25136528908b6d082",
+      "ast": "passed",
+      "functions": [
+        "_copy",
+        "_issue",
+        "_positive",
+        "_metadata",
+        "_join",
+        "_length",
+        "_geometry",
+        "_descriptor",
+        "_explicit_record",
+        "_native_association_ambiguity",
+        "_length_agreement",
+        "populate_infernal_search_cells",
+        "upgrade_saved_infernal_search_sheet"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/infernal_search_inputs.py",
+      "sha256": "14d29d95852a77f9e5b9273208147b0bb0b322d5b6df7d75d44cb3cc699acdd7",
+      "ast": "passed",
+      "functions": [
+        "_number",
+        "_columns",
+        "_header",
+        "_token",
+        "_read_artifact",
+        "_resolve_overlaps",
+        "populate_infernal_search_sheet"
+      ]
+    },
+    {
+      "path": "gene_annotation_episode/infernal_search_grader.py",
+      "sha256": "b392ddecc330ac6d3edf4d7836ec7510835515335aefa62f7cbe8b973a558f32",
+      "ast": "passed",
+      "functions": [
+        "_definition",
+        "_definitions",
+        "_number",
+        "_positive",
+        "_length",
+        "_span",
+        "_union",
+        "_correspondence_components",
+        "_hit_components",
+        "_population",
+        "calculate_infernal_search_scores"
+      ]
+    },
+    {
+      "path": "tests/test_infernal_search_graders.py",
+      "sha256": "eb2d877594f8213e7657e032ccb3a4f1567a7671e97d3fe0093c474f584463ab",
+      "ast": "passed",
+      "functions": [
+        "metadata",
+        "artifact",
+        "populate",
+        "codes",
+        "replace_cell",
+        "test_actual_native_formats_roles_numerators_and_denominators",
+        "test_native_reverse_sequence_does_not_reverse_model",
+        "test_actual_native_format2_indices_are_local_to_query_list_and_ditto",
+        "test_actual_native_no_hits_are_available_not_missing",
+        "test_actual_hmm_algorithm_and_reporting_inclusion_are_not_confidence",
+        "test_missing_denominators_and_identity_preserve_native_measurements",
+        "test_native_fmt2_can_define_local_population_without_metadata_but_not_cross_files",
+        "test_native_length_disagrees_with_supplied_does_not_erase_span_score",
+        "test_metadata_ambiguity_and_occurrences_are_not_first_record_joins",
+        "test_wrong_accession_and_scoped_metadata_do_not_join",
+        "test_false_same_name_query_record_association_is_not_resolved_by_visible_order",
+        "test_invalid_native_cells_malformed_rows_and_zero_are_independent",
+        "test_unrepresentable_nonzero_evalue_never_becomes_native_zero",
+        "test_invalid_native_length_cannot_silently_fall_back_to_supplied_denominator",
+        "test_one_supplied_name_cannot_bind_multiple_native_accessions",
+        "test_invalid_coordinates_preserve_other_native_cells",
+        "test_single_base_coordinate_boundary_and_partial_union",
+        "test_native_length_conflict_between_hits_invalidates_all_matching_denominators",
+        "test_contradictory_declarations_are_exposed",
+        "test_unknown_settings_remain_absent_and_unknown_completion_is_not_no_hit",
+        "test_duplicate_artifact_identity_remains_distinct_and_unjoinable",
+        "test_duplicate_representations_across_explicit_shared_input_do_not_double_union",
+        "test_format2_overlap_relationship_validation",
+        "test_format2_omitted_reference_minus_one_is_not_missing_index_or_zero_fraction",
+        "test_header_qualified_legacy_format2_without_lengths_keeps_missing_denominators",
+        "test_format2_missing_index_and_truncated_artifact_never_look_complete",
+        "test_wrong_native_header_program_and_version_do_not_silently_override",
+        "test_artifact_decode_and_format_errors_are_explicit",
+        "test_headerless_native_option_format_resolves_cells_and_exposes_wrong_declaration",
+        "test_format2_cannot_reassign_physical_roles_to_cmsearch",
+        "test_saved_sheet_recalculation_uses_no_native_text_parser_network_or_process",
+        "test_unknown_parameters_are_rejected",
+        "test_all_calculated_cell_definitions_have_meanings_and_native_fixture_hashes_match",
+        "test_no_input_mutation_and_finite_json_validation"
+      ]
+    },
+    {
+      "path": "tests/test_infernal_search_shared_cells.py",
+      "sha256": "720c05f69b35aedb562ba28c9c1ceb92586648f50e27c8df0a25a62edef0ab46",
+      "ast": "passed",
+      "functions": [
+        "supplied",
+        "calculate",
+        "duplicate",
+        "test_nullable_name_source_bound_correspondence_and_declared_empty_population",
+        "test_overlapping_spans_share_one_sum_union_excess_calculation",
+        "test_exact_source_duplicate_is_distinct_from_geometric_and_scientific_duplicates",
+        "test_partial_valid_rows_survive_while_absent_population_stays_unknown",
+        "test_unknown_strand_qualifies_both_declared_axes_without_double_counting",
+        "test_unknown_inclusion_never_becomes_included_or_complete_empty_union",
+        "test_failed_attribution_retains_native_cells_without_attributed_geometry",
+        "test_zero_determinate_pairs_and_partial_unrepresented_omission_are_distinct",
+        "test_source_relationship_geometry_failure_preserves_observed_endpoints",
+        "test_saved_v2_recalculation_and_validation_call_no_parser_io_or_process",
+        "test_saved_source_and_projection_relationship_tampering_rejected",
+        "test_explicit_v1_conversion_keeps_original_cells_and_lineage",
+        "test_authentic_saved_native_v1_conversion_preserves_recorded_calculation"
+      ]
+    }
+  ],
+  "fixture_json": "passed",
+  "application_imports": false,
+  "tests_run_on_host": false
+}

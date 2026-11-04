@@ -464,5 +464,24 @@ class SelectedAPIEffects:
                         return deepcopy(row)
         raise ValueError('api_effect_not_owned_or_recorded')
 
+    def read_completed(self, effect_ref, *, original_job_owner):
+        """Read a closed effect outcome without creating or locking controls.
+
+        The original intent, action owner and full state chain use the same
+        validators as ordinary reads. A confirmed/not-sent effect cannot change
+        under those transition rules. Its state describes that selected effect,
+        not completion of the remote scientific task or the whole original job.
+        """
+        if not isinstance(effect_ref, str) or not effect_ref:
+            raise ValueError('api_effect_reference_required')
+        job = self._job(original_job_owner)
+        for _, receipts in self._all(job):
+            for row in receipts:
+                if row['effect_ref'] == effect_ref:
+                    if row['state'] not in {'confirmed', 'not_sent'}:
+                        raise ValueError('api_effect_completed_outcome_required')
+                    return deepcopy(row)
+        raise ValueError('api_effect_not_owned_or_recorded')
+
 
 __all__ = ['SelectedAPIEffects', 'EffectConflict']

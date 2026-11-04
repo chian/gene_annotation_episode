@@ -1,0 +1,654 @@
+FILE resources/software/infernal-1.1.5/easel/esl_alphabet.c FUNCTION esl_abc_GuessAlphabet LINES 1251-1282
+1251: esl_abc_GuessAlphabet(const int64_t *ct, int *ret_type)
+1252: {
+1253:   int      type = eslUNKNOWN;
+1254:   char     aaonly[]    = "EFIJLOPQZ";
+1255:   char     allcanon[]  = "ACG";
+1256:   char     aacanon[]   = "DHKMRSVWY";
+1257:   int64_t  n1, n2, n3, nn, nt, nu, nx, n; /* n's are counts */
+1258:   int      x1, x2, x3, xn, xt, xu;	  /* x's are how many different residues are represented */
+1259:   int      i, x;
+1260: 
+1261:   x1 = x2 = x3 = xn = xt = xu = 0;
+1262:   n1 = n2 = n3 = n = 0;
+1263:   for (i = 0; i < 26;                i++) n  += ct[i];
+1264:   for (i = 0; aaonly[i]   != '\0'; i++) { x = ct[aaonly[i]   - 'A']; if (x > 0) { n1 += x; x1++; } }
+1265:   for (i = 0; allcanon[i] != '\0'; i++) { x = ct[allcanon[i] - 'A']; if (x > 0) { n2 += x; x2++; } }
+1266:   for (i = 0; aacanon[i]  != '\0'; i++) { x = ct[aacanon[i]  - 'A']; if (x > 0) { n3 += x; x3++; } }
+1267:   nt = ct['T' - 'A']; xt = (nt ? 1 : 0);
+1268:   nu = ct['U' - 'A']; xu = (nu ? 1 : 0);
+1269:   nx = ct['X' - 'A']; 
+1270:   nn = ct['N' - 'A']; xn = (nn ? 1 : 0);
+1271: 
+1272:   if      (n  <= 10)                                                type = eslUNKNOWN;        // small sample, don't guess
+1273:   else if (n  > 2000 && nn == n)                                    type = eslDNA;            // special case of many N's leading a genome assembly
+1274:   else if (n1 > 0)                                                  type = eslAMINO;          // contains giveaway, aa-only chars 
+1275:   else if (n-(n2+nt+nn) <= 0.02*n && x2+xt == 4)                    type = eslDNA;            // nearly all DNA canon (or N), all four seen 
+1276:   else if (n-(n2+nu+nn) <= 0.02*n && x2+xu == 4)                    type = eslRNA;            // nearly all RNA canon (or N), all four seen 
+1277:   else if (n-(n1+n2+n3+nn+nt+nx) <= 0.02*n && n3>n2 && x1+x2+x3+xn+xt >= 15) type = eslAMINO; // nearly all aa canon (or X); more aa canon than ambig; all 20 seen 
+1278:   
+1279:   *ret_type = type;
+1280:   if (type == eslUNKNOWN) return eslENOALPHABET;
+1281:   else                    return eslOK;
+1282: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile.c FUNCTION msafile_OpenBuffer LINES 396-464
+396: msafile_OpenBuffer(ESL_ALPHABET **byp_abc, ESL_BUFFER *bf, int format, ESL_MSAFILE_FMTDATA *fmtd,  ESL_MSAFILE *afp)
+397: {
+398:   ESL_ALPHABET        *abc       = NULL;
+399:   int                  alphatype = eslUNKNOWN;
+400:   int                  status;
+401: 
+402:   /* if caller provided <fmtd>, copy it into afp->fmtd */
+403:   if (fmtd) esl_msafile_fmtdata_Copy(fmtd, &(afp->fmtd));
+404: 
+405:   /* Determine the format */
+406:   if (format == eslMSAFILE_UNKNOWN && 
+407:       (status = esl_msafile_GuessFileFormat(afp->bf, &format, &(afp->fmtd), afp->errmsg)) != eslOK)
+408:     goto ERROR;
+409:   afp->format = format;
+410: 
+411:   /* Determine the alphabet; set <abc>. (<abc> == NULL means text mode.)  */
+412:   /* Note that GuessAlphabet() functions aren't allowed to use the inmap, because it isn't set yet */
+413: 
+414:   if (byp_abc && *byp_abc)	/* Digital mode, and caller provided the alphabet */
+415:     { 
+416:       abc       = *byp_abc;
+417:       alphatype = abc->type;
+418:     } 
+419:   else if (byp_abc)		/* Digital mode, and caller wants us to guess and create an alphabet */
+420:     {
+421:       status = esl_msafile_GuessAlphabet(afp, &alphatype);
+422:       if      (status == eslENOALPHABET) ESL_XFAIL(eslENOALPHABET, afp->errmsg, "couldn't guess alphabet (maybe try --dna/--rna/--amino if available)");
+423:       else if (status != eslOK)          goto ERROR;
+424:       if ( (abc = esl_alphabet_Create(alphatype))                == NULL) { status = eslEMEM; goto ERROR; }
+425:     }    
+426:   afp->abc = abc;	/* with afp->abc set, the inmap config functions know whether to do digital/text    */
+427: 
+428:   /* Configure the format-specific, digital or text mode character
+429:    * input map in afp->inmap.
+430:    * All of these must:
+431:    *    
+432:    *    set inmap[0] to an appropriate 'unknown' character, to replace
+433:    *       invalid input with.
+434:    *    set ' ' to eslDSQ_IGNORE (if we're supposed to accept and skip
+435:    *       it), or map it to a gap, or set it as eslDSQ_ILLEGAL.
+436:    *    in digital mode, copy the abc->inmap
+437:    *    in text mode, decide if we should accept most any
+438:    *        non-whitespace character (isgraph()), or if the format is
+439:    *        inherently restrictive and we should go with isalpha() +
+440:    *        some other valid characters "_-.~*" instead.
+441:    */
+442:   switch (afp->format) {
+443:   case eslMSAFILE_A2M:          if ((status = esl_msafile_a2m_SetInmap(      afp)) != eslOK) goto ERROR; break;
+444:   case eslMSAFILE_AFA:          if ((status = esl_msafile_afa_SetInmap(      afp)) != eslOK) goto ERROR; break;
+445:   case eslMSAFILE_CLUSTAL:      if ((status = esl_msafile_clustal_SetInmap(  afp)) != eslOK) goto ERROR; break;
+446:   case eslMSAFILE_CLUSTALLIKE:  if ((status = esl_msafile_clustal_SetInmap(  afp)) != eslOK) goto ERROR; break;
+447:   case eslMSAFILE_PFAM:         if ((status = esl_msafile_stockholm_SetInmap(afp)) != eslOK) goto ERROR; break;
+448:   case eslMSAFILE_PHYLIP:       if ((status = esl_msafile_phylip_SetInmap(   afp)) != eslOK) goto ERROR; break;
+449:   case eslMSAFILE_PHYLIPS:      if ((status = esl_msafile_phylip_SetInmap(   afp)) != eslOK) goto ERROR; break;
+450:   case eslMSAFILE_PSIBLAST:     if ((status = esl_msafile_psiblast_SetInmap( afp)) != eslOK) goto ERROR; break;
+451:   case eslMSAFILE_SELEX:        if ((status = esl_msafile_selex_SetInmap(    afp)) != eslOK) goto ERROR; break;
+452:   case eslMSAFILE_STOCKHOLM:    if ((status = esl_msafile_stockholm_SetInmap(afp)) != eslOK) goto ERROR; break;
+453:   default: ESL_XEXCEPTION(eslENOFORMAT, "no such alignment file format");
+454:   }
+455: 
+456:   if (esl_byp_IsReturned(byp_abc)) *byp_abc = abc;
+457:   return eslOK;
+458: 
+459:  ERROR:  /* on normal errors, afp is returned in an error state */
+460:   if (abc && ! esl_byp_IsProvided(byp_abc)) { esl_alphabet_Destroy(abc); }
+461:   if (esl_byp_IsReturned(byp_abc)) *byp_abc = NULL;
+462:   afp->abc = NULL;
+463:   return status;
+464: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile.c FUNCTION esl_msafile_GuessAlphabet LINES 894-910
+894: esl_msafile_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+895: {
+896:   int status = eslENOALPHABET;
+897:   switch (afp->format) {
+898:   case eslMSAFILE_STOCKHOLM:   status = esl_msafile_stockholm_GuessAlphabet(afp, ret_type); break;
+899:   case eslMSAFILE_PFAM:        status = esl_msafile_stockholm_GuessAlphabet(afp, ret_type); break;
+900:   case eslMSAFILE_A2M:         status = esl_msafile_a2m_GuessAlphabet      (afp, ret_type); break;
+901:   case eslMSAFILE_PSIBLAST:    status = esl_msafile_psiblast_GuessAlphabet (afp, ret_type); break;
+902:   case eslMSAFILE_SELEX:       status = esl_msafile_selex_GuessAlphabet    (afp, ret_type); break;
+903:   case eslMSAFILE_AFA:         status = esl_msafile_afa_GuessAlphabet      (afp, ret_type); break;
+904:   case eslMSAFILE_CLUSTAL:     status = esl_msafile_clustal_GuessAlphabet  (afp, ret_type); break;
+905:   case eslMSAFILE_CLUSTALLIKE: status = esl_msafile_clustal_GuessAlphabet  (afp, ret_type); break;
+906:   case eslMSAFILE_PHYLIP:      status = esl_msafile_phylip_GuessAlphabet   (afp, ret_type); break; 
+907:   case eslMSAFILE_PHYLIPS:     status = esl_msafile_phylip_GuessAlphabet   (afp, ret_type); break; 
+908:   }
+909:   return status;
+910: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile_afa.c FUNCTION esl_msafile_afa_GuessAlphabet LINES 89-143
+89: esl_msafile_afa_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+90: {
+91:   int       alphatype     = eslUNKNOWN;
+92:   esl_pos_t anchor        = -1;
+93:   int       threshold[3]  = { 500, 5000, 50000 }; /* we check after 500, 5000, 50000 residues; else we go to EOF */
+94:   int       nsteps        = 3;
+95:   int       step          = 0;
+96:   int       nres          = 0;
+97:   int       x;
+98:   int64_t   ct[26];
+99:   char     *p;
+100:   esl_pos_t n, pos;
+101:   int       status;
+102: 
+103:   for (x = 0; x < 26; x++) ct[x] = 0;
+104: 
+105:   anchor = esl_buffer_GetOffset(afp->bf);
+106:   if ((status = esl_buffer_SetAnchor(afp->bf, anchor)) != eslOK) { status = eslEINCONCEIVABLE; goto ERROR; } /* [eslINVAL] can't happen here */
+107: 
+108:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK)
+109:     {
+110:       while (n && isspace(*p)) { p++; n--; }
+111:       if    (!n || *p == '>') continue;
+112: 
+113:       for (pos = 0; pos < n; pos++)
+114: 	if (isalpha(p[pos])) {
+115: 	  x = toupper(p[pos]) - 'A'; 
+116: 	  ct[x]++;
+117: 	  nres++;
+118: 	}
+119: 
+120:       /* try to stop early, checking after 500, 5000, and 50000 residues: */
+121:       if (step < nsteps && nres > threshold[step]) {
+122: 	if ((status = esl_abc_GuessAlphabet(ct, &alphatype)) == eslOK) goto DONE; /* (eslENOALPHABET) */
+123: 	step++;
+124:       }
+125:     }
+126:   if (status != eslEOF) goto ERROR; /* [eslEMEM,eslESYS,eslEINCONCEIVABLE] */
+127:   status = esl_abc_GuessAlphabet(ct, &alphatype); /* (eslENOALPHABET) */
+128: 
+129:   /* deliberate flowthrough...*/
+130:  DONE:
+131:   esl_buffer_SetOffset(afp->bf, anchor);   /* Rewind to where we were. */
+132:   esl_buffer_RaiseAnchor(afp->bf, anchor);
+133:   *ret_type = alphatype;
+134:   return status;
+135: 
+136:  ERROR:
+137:   if (anchor != -1) {
+138:     esl_buffer_SetOffset(afp->bf, anchor);
+139:     esl_buffer_RaiseAnchor(afp->bf, anchor);
+140:   }
+141:   *ret_type = eslUNKNOWN;
+142:   return status;
+143: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile_a2m.c FUNCTION esl_msafile_a2m_GuessAlphabet LINES 113-167
+113: esl_msafile_a2m_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+114: {
+115:   int       alphatype     = eslUNKNOWN;
+116:   esl_pos_t anchor        = -1;
+117:   int       threshold[3]  = { 500, 5000, 50000 }; /* we check after 500, 5000, 50000 residues; else we go to EOF */
+118:   int       nsteps        = 3;
+119:   int       step          = 0;
+120:   int       nres          = 0;
+121:   int       x;
+122:   int64_t   ct[26];
+123:   char     *p;
+124:   esl_pos_t n, pos;
+125:   int       status;
+126: 
+127:   for (x = 0; x < 26; x++) ct[x] = 0;
+128: 
+129:   anchor = esl_buffer_GetOffset(afp->bf);
+130:   if ((status = esl_buffer_SetAnchor(afp->bf, anchor)) != eslOK) { status = eslEINCONCEIVABLE; goto ERROR; } /* [eslINVAL] can't happen here */
+131: 
+132:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK)
+133:     {
+134:       while (n && isspace(*p)) { p++; n--; }
+135:       if    (!n || *p == '>') continue;
+136: 
+137:       for (pos = 0; pos < n; pos++)
+138: 	if (isalpha(p[pos])) {
+139: 	  x = toupper(p[pos]) - 'A'; 
+140: 	  ct[x]++;
+141: 	  nres++;
+142: 	}
+143: 
+144:       /* try to stop early, checking after 500, 5000, and 50000 residues: */
+145:       if (step < nsteps && nres > threshold[step]) {
+146: 	if ((status = esl_abc_GuessAlphabet(ct, &alphatype)) == eslOK) goto DONE; /* (eslENOALPHABET) */
+147: 	step++;
+148:       }
+149:     }
+150:   if (status != eslEOF) goto ERROR; /* [eslEMEM,eslESYS,eslEINCONCEIVABLE] */
+151:   status = esl_abc_GuessAlphabet(ct, &alphatype); /* (eslENOALPHABET) */
+152: 
+153:   /* deliberate flowthrough...*/
+154:  DONE:
+155:   esl_buffer_SetOffset(afp->bf, anchor);   /* Rewind to where we were. */
+156:   esl_buffer_RaiseAnchor(afp->bf, anchor);
+157:   *ret_type = alphatype;
+158:   return status;
+159: 
+160:  ERROR:
+161:   if (anchor != -1) {
+162:     esl_buffer_SetOffset(afp->bf, anchor);
+163:     esl_buffer_RaiseAnchor(afp->bf, anchor);
+164:   }
+165:   *ret_type = eslUNKNOWN;
+166:   return status;
+167: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile_stockholm.c FUNCTION esl_msafile_stockholm_GuessAlphabet LINES 152-206
+152: esl_msafile_stockholm_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+153: {
+154:   int       alphatype     = eslUNKNOWN;
+155:   esl_pos_t anchor        = -1;
+156:   int       threshold[3]  = { 500, 5000, 50000 }; /* we check after 500, 5000, 50000 residues; else we go to EOF */
+157:   int       nsteps        = 3;
+158:   int       step          = 0;
+159:   int       nres          = 0;
+160:   int       x;
+161:   int64_t   ct[26];
+162:   char     *p, *tok;
+163:   esl_pos_t n,  toklen, pos;
+164:   int       status;
+165: 
+166:   for (x = 0; x < 26; x++) ct[x] = 0;
+167: 
+168:   anchor = esl_buffer_GetOffset(afp->bf);
+169:   if ((status = esl_buffer_SetAnchor(afp->bf, anchor)) != eslOK) { status = eslEINCONCEIVABLE; goto ERROR; } /* [eslINVAL] can't happen here */
+170: 
+171:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK)
+172:     {
+173:       if ((status = esl_memtok(&p, &n, " \t", &tok, &toklen)) != eslOK || *tok == '#') continue; /* blank lines, annotation, comments */
+174:       /* p now points to the rest of the sequence line */
+175:       
+176:       /* count characters into ct[] array */
+177:       for (pos = 0; pos < n; pos++)
+178: 	if (isalpha(p[pos])) {
+179: 	  x = toupper(p[pos]) - 'A';
+180: 	  ct[x]++; 
+181: 	  nres++; 
+182: 	}
+183: 
+184:       /* try to stop early, checking after 500, 5000, and 50000 residues: */
+185:       if (step < nsteps && nres > threshold[step]) {
+186: 	if ((status = esl_abc_GuessAlphabet(ct, &alphatype)) == eslOK) goto DONE; /* (eslENOALPHABET) */
+187: 	step++;
+188:       }
+189:     }
+190:   if (status != eslEOF) goto ERROR; /* [eslEMEM,eslESYS,eslEINCONCEIVABLE] */
+191:   status = esl_abc_GuessAlphabet(ct, &alphatype); /* (eslENOALPHABET) */
+192: 
+193:  DONE:
+194:   esl_buffer_SetOffset(afp->bf, anchor);   /* Rewind to where we were. */
+195:   esl_buffer_RaiseAnchor(afp->bf, anchor);
+196:   *ret_type = alphatype;
+197:   return status;
+198: 
+199:  ERROR:
+200:   if (anchor != -1) {
+201:     esl_buffer_SetOffset(afp->bf, anchor);
+202:     esl_buffer_RaiseAnchor(afp->bf, anchor);
+203:   }
+204:   *ret_type = eslUNKNOWN;
+205:   return status;
+206: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile_psiblast.c FUNCTION esl_msafile_psiblast_GuessAlphabet LINES 85-139
+85: esl_msafile_psiblast_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+86: {
+87:   int       alphatype     = eslUNKNOWN;
+88:   esl_pos_t anchor        = -1;
+89:   int       threshold[3]  = { 500, 5000, 50000 }; /* we check after 500, 5000, 50000 residues; else we go to EOF */
+90:   int       nsteps        = 3;
+91:   int       step          = 0;
+92:   int       nres          = 0;
+93:   int       x;
+94:   int64_t   ct[26];
+95:   char     *p, *tok;
+96:   esl_pos_t n,  toklen, pos;
+97:   int       status;
+98: 
+99:   for (x = 0; x < 26; x++) ct[x] = 0;
+100: 
+101:   anchor = esl_buffer_GetOffset(afp->bf);
+102:   if ((status = esl_buffer_SetAnchor(afp->bf, anchor)) != eslOK) { status = eslEINCONCEIVABLE; goto ERROR; } /* [eslINVAL] can't happen here */
+103: 
+104:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK)
+105:     {
+106:       if ((status = esl_memtok(&p, &n, " \t", &tok, &toklen)) != eslOK) continue; /* blank lines */
+107:       /* p now points to the rest of the sequence line, after a name */
+108:       
+109:       /* count characters into ct[] array */
+110:       for (pos = 0; pos < n; pos++)
+111: 	if (isalpha(p[pos])) {
+112: 	  x = toupper(p[pos]) - 'A';
+113: 	  ct[x]++;
+114: 	  nres++; 
+115: 	}
+116: 
+117:       /* try to stop early, checking after 500, 5000, and 50000 residues: */
+118:       if (step < nsteps && nres > threshold[step]) {
+119: 	if ((status = esl_abc_GuessAlphabet(ct, &alphatype)) == eslOK) goto DONE; /* (eslENOALPHABET) */
+120: 	step++;
+121:       }
+122:     }
+123:   if (status != eslEOF) goto ERROR; /* [eslEMEM,eslESYS,eslEINCONCEIVABLE] */
+124:   status = esl_abc_GuessAlphabet(ct, &alphatype); /* (eslENOALPHABET) */
+125: 
+126:  DONE:
+127:   esl_buffer_SetOffset(afp->bf, anchor);   /* Rewind to where we were. */
+128:   esl_buffer_RaiseAnchor(afp->bf, anchor);
+129:   *ret_type = alphatype;
+130:   return status;
+131: 
+132:  ERROR:
+133:   if (anchor != -1) {
+134:     esl_buffer_SetOffset(afp->bf, anchor);
+135:     esl_buffer_RaiseAnchor(afp->bf, anchor);
+136:   }
+137:   *ret_type = eslUNKNOWN;
+138:   return status;
+139: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile_selex.c FUNCTION esl_msafile_selex_GuessAlphabet LINES 140-195
+140: esl_msafile_selex_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+141: {
+142:   int       alphatype     = eslUNKNOWN;
+143:   esl_pos_t anchor        = -1;
+144:   int       threshold[3]  = { 500, 5000, 50000 }; /* we check after 500, 5000, 50000 residues; else we go to EOF */
+145:   int       nsteps        = 3;
+146:   int       step          = 0;
+147:   int       nres          = 0;
+148:   int       x;
+149:   int64_t   ct[26];
+150:   char     *p, *tok;
+151:   esl_pos_t n,  toklen, pos;
+152:   int       status;
+153: 
+154:   for (x = 0; x < 26; x++) ct[x] = 0;
+155: 
+156:   anchor = esl_buffer_GetOffset(afp->bf);
+157:   if ((status = esl_buffer_SetAnchor(afp->bf, anchor)) != eslOK) { status = eslEINCONCEIVABLE; goto ERROR; } /* [eslINVAL] can't happen here */
+158: 
+159:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK)
+160:     {
+161:       if ((status = esl_memtok(&p, &n, " \t", &tok, &toklen)) != eslOK) continue; /* blank lines */
+162:       if (*tok == '#') continue; /* comments and annotation */
+163:       /* p now points to the rest of the sequence line, after a name */
+164:       
+165:       /* count characters into ct[] array */
+166:       for (pos = 0; pos < n; pos++)
+167: 	if (isalpha(p[pos])) {
+168: 	  x = toupper(p[pos]) - 'A';
+169: 	  ct[x]++; 
+170: 	  nres++; 
+171: 	}
+172: 
+173:       /* try to stop early, checking after 500, 5000, and 50000 residues: */
+174:       if (step < nsteps && nres > threshold[step]) {
+175: 	if ((status = esl_abc_GuessAlphabet(ct, &alphatype)) == eslOK) goto DONE; /* (eslENOALPHABET) */
+176: 	step++;
+177:       }
+178:     }
+179:   if (status != eslEOF) goto ERROR; /* [eslEMEM,eslESYS,eslEINCONCEIVABLE] */
+180:   status = esl_abc_GuessAlphabet(ct, &alphatype); /* (eslENOALPHABET) */
+181: 
+182:  DONE:
+183:   esl_buffer_SetOffset(afp->bf, anchor);   /* Rewind to where we were. */
+184:   esl_buffer_RaiseAnchor(afp->bf, anchor);
+185:   *ret_type = alphatype;
+186:   return status;
+187: 
+188:  ERROR:
+189:   if (anchor != -1) {
+190:     esl_buffer_SetOffset(afp->bf, anchor);
+191:     esl_buffer_RaiseAnchor(afp->bf, anchor);
+192:   }
+193:   *ret_type = eslUNKNOWN;
+194:   return status;
+195: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile_clustal.c FUNCTION esl_msafile_clustal_GuessAlphabet LINES 87-149
+87: esl_msafile_clustal_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+88: {
+89:   int       alphatype     = eslUNKNOWN;
+90:   esl_pos_t anchor        = -1;
+91:   int       threshold[3]  = { 500, 5000, 50000 }; /* we check after 500, 5000, 50000 residues; else we go to EOF */
+92:   int       nsteps        = 3;
+93:   int       step          = 0;
+94:   int       nres          = 0;
+95:   int       x;
+96:   int64_t   ct[26];
+97:   char     *p, *tok;
+98:   esl_pos_t n,  toklen, pos;
+99:   int       status;
+100: 
+101:   for (x = 0; x < 26; x++) ct[x] = 0;
+102: 
+103:   anchor = esl_buffer_GetOffset(afp->bf);
+104:   if ((status = esl_buffer_SetAnchor(afp->bf, anchor)) != eslOK) { status = eslEINCONCEIVABLE; goto ERROR; } /* [eslINVAL] can't happen here */
+105: 
+106:   /* Ignore the first nonblank line, which says "CLUSTAL W (1.83) multiple sequence alignment" or some such */
+107:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK  && esl_memspn(p, n, " \t") == n) ;
+108:   if      (status == eslEOF) ESL_XFAIL(eslENOALPHABET, afp->errmsg, "can't determine alphabet: no alignment data found");
+109:   else if (status != eslOK)  goto ERROR;
+110:   
+111:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK)
+112:     {
+113:       if ((status = esl_memtok(&p, &n, " \t", &tok, &toklen)) != eslOK) continue; /* ignore blank lines */
+114:       /* p now points to the rest of the sequence line, after a name */
+115:       
+116:       /* count characters into ct[] array */
+117:       for (pos = 0; pos < n; pos++)
+118: 	if (isalpha(p[pos])) {
+119: 	  x = toupper(p[pos]) - 'A';
+120: 	  ct[x]++;
+121: 	  nres++; 	  
+122: 	} 
+123:       /* note that GuessAlphabet() is robust against the optional coord lines
+124:        * and the annotation lines -- it only counts ascii characters.
+125:        */
+126: 
+127:       /* try to stop early, checking after 500, 5000, and 50000 residues: */
+128:       if (step < nsteps && nres > threshold[step]) {
+129: 	if ((status = esl_abc_GuessAlphabet(ct, &alphatype)) == eslOK) goto DONE; /* (eslENOALPHABET) */
+130: 	step++;
+131:       }
+132:     }
+133:   if (status != eslEOF) goto ERROR; /* [eslEMEM,eslESYS,eslEINCONCEIVABLE] */
+134:   status = esl_abc_GuessAlphabet(ct, &alphatype); /* (eslENOALPHABET) */
+135: 
+136:  DONE:
+137:   esl_buffer_SetOffset(afp->bf, anchor);   /* Rewind to where we were. */
+138:   esl_buffer_RaiseAnchor(afp->bf, anchor);
+139:   *ret_type = alphatype;
+140:   return status;
+141: 
+142:  ERROR:
+143:   if (anchor != -1) {
+144:     esl_buffer_SetOffset(afp->bf, anchor);
+145:     esl_buffer_RaiseAnchor(afp->bf, anchor);
+146:   }
+147:   *ret_type = eslUNKNOWN;
+148:   return status;
+149: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_msafile_phylip.c FUNCTION esl_msafile_phylip_GuessAlphabet LINES 141-208
+141: esl_msafile_phylip_GuessAlphabet(ESL_MSAFILE *afp, int *ret_type)
+142: {
+143:   int       namewidth     = (afp->fmtd.namewidth ? afp->fmtd.namewidth : 10); /* default: strict PHYLIP, namewidth 10 */
+144:   int       alphatype     = eslUNKNOWN;
+145:   int       threshold[3]  = { 500, 5000, 50000 }; /* we check after 500, 5000, 50000 residues; else we go to EOF */
+146:   int       nsteps        = 3;		          /* ...there's 3 threshold[]'s we check */
+147:   int       step          = 0;		          /* ...starting on threshold[0] */
+148:   int64_t   nres          = 0;
+149:   char     *p;
+150:   esl_pos_t n, pos;
+151:   int       x;
+152:   esl_pos_t anchor;
+153:   int64_t   ct[26];
+154:   int       status;
+155: 
+156:   for (x = 0; x < 26; x++) ct[x] = 0;
+157: 
+158:   anchor = esl_buffer_GetOffset(afp->bf);
+159:   if ((status = esl_buffer_SetAnchor(afp->bf, anchor)) != eslOK) { status = eslEINCONCEIVABLE; goto ERROR; } /* [eslINVAL] can't happen here */
+160: 
+161:   /* Find the first nonblank line, which says " <nseq> <alen>" and may also have options. we ignore this header */
+162:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK  && esl_memspn(p, n, " \t") == n) ;
+163:   if      (status == eslEOF) ESL_XFAIL(eslENOALPHABET, afp->errmsg, "can't determine alphabet: no alignment data found");
+164:   else if (status != eslOK)  goto ERROR;
+165: 
+166:   /* Read line by line, just looking for residues, not worrying about nseq/alen or sequential/interleaved 
+167:    * Always skip the name field, even in continuation lines/blocks 
+168:    * This may miss some residues, but it means we work on both sequential and interleaved formats 
+169:    */
+170:   while ( (status = esl_buffer_GetLine(afp->bf, &p, &n)) == eslOK)
+171:     {
+172:       if (esl_memspn(p, n, " \t") == n) continue;
+173:       if (n < namewidth)                continue;
+174: 
+175:       p += namewidth;
+176:       n -= namewidth;
+177:       
+178:       /* count characters into ct[] array */
+179:       for (pos = 0; pos < n; pos++)
+180: 	if (isalpha(p[pos])) {
+181: 	  x = toupper(p[pos]) - 'A';
+182: 	  ct[x]++;
+183: 	  nres++; 
+184: 	}
+185: 
+186:       /* try to stop early, checking after 500, 5000, and 50000 residues: */
+187:       if (step < nsteps && nres > threshold[step]) {
+188: 	if ((status = esl_abc_GuessAlphabet(ct, &alphatype)) == eslOK) goto DONE; /* (eslENOALPHABET) */
+189: 	step++;
+190:       }
+191:     }
+192:   if (status != eslEOF) goto ERROR; /* [eslEMEM,eslESYS,eslEINCONCEIVABLE] */
+193:   status = esl_abc_GuessAlphabet(ct, &alphatype); /* (eslENOALPHABET) */
+194: 
+195:  DONE:
+196:   esl_buffer_SetOffset(afp->bf, anchor);   /* Rewind to where we were. */
+197:   esl_buffer_RaiseAnchor(afp->bf, anchor);
+198:   *ret_type = alphatype;
+199:   return status;
+200: 
+201:  ERROR:
+202:    if (anchor != -1) {
+203:     esl_buffer_SetOffset(afp->bf, anchor);
+204:     esl_buffer_RaiseAnchor(afp->bf, anchor);
+205:   }
+206:   *ret_type = eslUNKNOWN;
+207:   return status;
+208: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_mem.c FUNCTION esl_memnewline LINES 484-491
+484: esl_memnewline(const char *m, esl_pos_t n, esl_pos_t *ret_nline, int *ret_nterm)
+485: {
+486:   char *ptr = memchr(m, '\n', n);
+487:   if      (ptr == NULL)                 { *ret_nline = n;       *ret_nterm = 0; }
+488:   else if (ptr > m && *(ptr-1) == '\r') { *ret_nline = ptr-m-1; *ret_nterm = 2; }
+489:   else                                  { *ret_nline = ptr-m;   *ret_nterm = 1; }
+490:   return eslOK;
+491: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_mem.c FUNCTION esl_memtok LINES 526-537
+526: esl_memtok(char **p, esl_pos_t *n, const char *delim, char **ret_tok, esl_pos_t *ret_toklen)
+527: {
+528:   char     *s   = *p;
+529:   esl_pos_t so, xo, eo;
+530: 
+531:   for (so = 0;  so < *n; so++) if (strchr(delim, s[so]) == NULL)  break;
+532:   for (xo = so; xo < *n; xo++) if (strchr(delim, s[xo]) != NULL)  break; 
+533:   for (eo = xo; eo < *n; eo++) if (strchr(delim, s[eo]) == NULL)  break; 
+534:   
+535:   if (so == *n) {                     *ret_tok = NULL;   *ret_toklen = 0;       return eslEOL; }
+536:   else          { *p += eo; *n -= eo; *ret_tok = s + so; *ret_toklen = xo - so; return eslOK;  }
+537: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_mem.c FUNCTION esl_memspn LINES 551-556
+551: esl_memspn(char *p, esl_pos_t n, const char *allow)
+552: {
+553:   esl_pos_t so;
+554:   for (so = 0; so < n; so++) if (strchr(allow, p[so]) == NULL) break;
+555:   return so;
+556: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_buffer.c FUNCTION esl_buffer_GetLine LINES 988-1021
+988: esl_buffer_GetLine(ESL_BUFFER *bf, char **opt_p, esl_pos_t *opt_n)
+989: {
+990:   int       anch_set = FALSE;
+991:   esl_pos_t nc, nskip;
+992:   esl_pos_t anch;
+993:   int       status;
+994: 
+995:   /* The next line starts at offset <baseoffset + pos> */
+996:   anch = bf->baseoffset + bf->pos;
+997:   status = esl_buffer_SetAnchor(bf, anch);
+998:   if      (status == eslEINVAL) { status = eslEINCONCEIVABLE; goto ERROR; } /* we know bf->pos is in current window */
+999:   else if (status != eslOK)     { goto ERROR; }
+1000:   anch_set = TRUE;
+1001: 
+1002:   if ( (status = buffer_countline(bf, &nc, &nskip)) != eslOK) goto ERROR;  /* includes normal EOF. */
+1003: 
+1004:   status = buffer_refill(bf, nskip);
+1005:   if (status != eslEOF && status != eslOK) goto ERROR; /* accept EOF here, we've already got our line */
+1006:   
+1007:   anch_set = FALSE;
+1008:   status = esl_buffer_RaiseAnchor(bf, anch);
+1009:   if      (status == eslEINVAL) { status = eslEINCONCEIVABLE; goto ERROR; } /* we know bf->pos is in current window */
+1010:   else if (status != eslOK)     { goto ERROR; }
+1011:   if (opt_p) *opt_p = bf->mem + bf->pos;
+1012:   if (opt_n) *opt_n = nc;
+1013:   bf->pos += nskip;
+1014:   return eslOK;
+1015: 
+1016:  ERROR:
+1017:   if (anch_set) esl_buffer_RaiseAnchor(bf, anch);
+1018:   if (opt_p)   *opt_p = NULL;
+1019:   if (opt_n)   *opt_n = 0;
+1020:   return status;
+1021: }
+
+FILE resources/software/infernal-1.1.5/easel/esl_buffer.c FUNCTION buffer_countline LINES 1755-1793
+1755: buffer_countline(ESL_BUFFER *bf, esl_pos_t *opt_nc, esl_pos_t *opt_nskip)
+1756: {
+1757:   esl_pos_t nc;			/* line length exclusive of newline */
+1758:   esl_pos_t nc2;		/* tmp nc for a suffix of the current line */
+1759:   int       nterm;		/* length of newline; 0..2 */
+1760:   int       status;
+1761: 
+1762:   if (bf->pos == bf->n) { status = eslEOF; goto ERROR; } /* normal EOF */
+1763: 
+1764:   nc = 0;
+1765:   do { // Make sure that a complete input line is loaded in buf, up to a newline or EOF.
+1766:     if ( nc && bf->mem[bf->pos+nc-1] == '\r') nc--;  // see iss#23. If \r was last char, back up so esl_memnewline can see \r\n
+1767:     if ((status = esl_memnewline(bf->mem + bf->pos + nc, bf->n - bf->pos - nc, &nc2, &nterm)) != eslOK && status != eslEOD) goto ERROR;
+1768:     nc += nc2;  
+1769:     if (nterm) break;  // esl_memnewline found \n or \r\n. 
+1770:     if (( status = buffer_refill(bf, nc)) != eslOK && status != eslEOF) goto ERROR; // only returns EOF if no data left in buf at all (pos==n)
+1771:   } while (bf->n - bf->pos > nc);
+1772:       
+1773:   /* EOF check. If we get here with status == eslEOF, nc = nterm = 0,
+1774:    * then esl_memnewline found no data for a line and buffer_refill returned EOF.
+1775:    */
+1776:   if (status == eslEOF && nc == 0 && nterm == 0) goto ERROR; 
+1777: 
+1778:    /* Now the line extends from bf->pos..pos+nc-1 in the buffer window 
+1779:     * The newline itself is position pos+nc..pos+nc+nterm-1 (one or two chars) 
+1780:     * The next line starts at pos+nc+nterm
+1781:     * We know that everything up to pos+nc+nterm-1 is in the buffer window.
+1782:     * It's safe to set the current buffer position to pos+nc+nterm, which
+1783:     * may be bf->n; the next buffer_refill() will do the right thing with it.
+1784:     */
+1785:   if (opt_nc)    *opt_nc    = nc;
+1786:   if (opt_nskip) *opt_nskip = nc + nterm;
+1787:   return eslOK;
+1788: 
+1789:  ERROR: /* including normal EOF */
+1790:   if (opt_nc)    *opt_nc    = 0;
+1791:   if (opt_nskip) *opt_nskip = 0;
+1792:   return status;
+1793: }
+

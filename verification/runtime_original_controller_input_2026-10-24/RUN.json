@@ -1,0 +1,48 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_runtime.py::test_resume_reuses_selected_work_and_controller_observations",
+    "tests/test_runtime.py::test_resume_reuses_closed_child_archives_without_duplicate_files",
+    "tests/test_runtime.py::test_resume_recovers_published_operation_before_runtime_response",
+    "tests/test_runtime.py::test_report_repair_resume_preserves_child_science_and_observations",
+    "tests/test_runtime.py::test_actual_default_controller_resume_keeps_unspecified_caller_cost",
+    "tests/test_runtime.py::test_caller_native_resource_changes_preserve_original_history_on_resume",
+    "tests/test_episode_completion.py",
+    "tests/test_scientific_process_return_runtime.py",
+    "--tb=short",
+    "--junitxml=verification/runtime_original_controller_input_2026-10-24/pytest.xml"
+  ],
+  "started_at": "2026-10-24T23:03:52.038349+00:00",
+  "source_sha256_before": {
+    "gene_annotation_episode/runtime.py": "f15783d6068cfda5adbb3a52e91efdf7dd94b85dd7e59e335303218ae3d8cc04",
+    "gene_annotation_episode/episode_bindings.py": "80be5564cdedaca1fe26862bc2e626b661613d6ee472bd5233864722c3e96377",
+    "gene_annotation_episode/episode_services.py": "ed6437ddf64a328f32fe91ded79365d96ae3562ef12a706b981ecbf40c8281ef",
+    "gene_annotation_episode/execution_episodes.py": "b64b8368a6af62ac93d91c320336ade677fa9e207be0c8434ad0f7f3dd7432a2",
+    "gene_annotation_episode/bvbrc_data_host.py": "8385c853b361a5666c25be51a690993701c97dce7a6f25e0f3df19aae1f84011",
+    "method_loop/archive.py": "e28c18b01dd0f7e0d11f9c413442f71a412264066de349b19f73394f718cc5a6",
+    "tests/test_runtime.py": "f12351de1656c4597f5d8860b6ea9fc2636507bd82b8fe9cfacca3c8a96c008a",
+    "tests/test_episode_completion.py": "610677c60ba4128e688f0ba96396b30de969564c0a9227f12495292ace62348e",
+    "tests/test_scientific_process_return_runtime.py": "9da8f5fd81934127aaec4dede3b51ace2105086c4a24eca49eedc3fa8666457a",
+    "docs/RUNTIME_REPLAY_CONTROLLER_INPUT_2026-10-24_001.md": "7c66d08eff5b7ff95c05542f696c9c406249a89ed837989c8369a5dd7bc73331"
+  },
+  "verification_kind": "selected_generic_replay_and_original_completion_regressions",
+  "finished_at": "2026-10-24T23:05:58.671037+00:00",
+  "exit_code": 1,
+  "elapsed_seconds": 126.63201767008286,
+  "source_sha256_after": {
+    "gene_annotation_episode/runtime.py": "f15783d6068cfda5adbb3a52e91efdf7dd94b85dd7e59e335303218ae3d8cc04",
+    "gene_annotation_episode/episode_bindings.py": "80be5564cdedaca1fe26862bc2e626b661613d6ee472bd5233864722c3e96377",
+    "gene_annotation_episode/episode_services.py": "ed6437ddf64a328f32fe91ded79365d96ae3562ef12a706b981ecbf40c8281ef",
+    "gene_annotation_episode/execution_episodes.py": "b64b8368a6af62ac93d91c320336ade677fa9e207be0c8434ad0f7f3dd7432a2",
+    "gene_annotation_episode/bvbrc_data_host.py": "8385c853b361a5666c25be51a690993701c97dce7a6f25e0f3df19aae1f84011",
+    "method_loop/archive.py": "e28c18b01dd0f7e0d11f9c413442f71a412264066de349b19f73394f718cc5a6",
+    "tests/test_runtime.py": "f12351de1656c4597f5d8860b6ea9fc2636507bd82b8fe9cfacca3c8a96c008a",
+    "tests/test_episode_completion.py": "610677c60ba4128e688f0ba96396b30de969564c0a9227f12495292ace62348e",
+    "tests/test_scientific_process_return_runtime.py": "9da8f5fd81934127aaec4dede3b51ace2105086c4a24eca49eedc3fa8666457a",
+    "docs/RUNTIME_REPLAY_CONTROLLER_INPUT_2026-10-24_001.md": "7c66d08eff5b7ff95c05542f696c9c406249a89ed837989c8369a5dd7bc73331"
+  },
+  "source_versions_unchanged": true
+}

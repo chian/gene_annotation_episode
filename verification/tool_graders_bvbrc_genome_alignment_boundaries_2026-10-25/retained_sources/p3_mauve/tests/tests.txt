@@ -1,0 +1,13 @@
+
+# A high level description of the
+# two different ways p3-mauve.js can be used.
+# tests needed
+
+# running directly
+./p3-mauve.js -g 204722.5,224914.11,262698.4,359391.4
+
+# running via app service
+p3-mauve \
+    --jfile '/Users/nc/patric/app_dev/dev_container/modules/app_service/jobdesc.json' \
+    --sstring '{"data_api":"https://p3.theseed.org/services/data_api"}' \
+    -o '/Users/nc/patric/app_dev/dev_container/modules/app_service/work'

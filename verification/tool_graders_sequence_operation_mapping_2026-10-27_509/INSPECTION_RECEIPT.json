@@ -1,0 +1,78 @@
+{
+  "kind": "read_only_mapping_inspection_receipt",
+  "authority_attachment_sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+  "authority_hash_matches": true,
+  "exact_operation_set_matches": true,
+  "upstream_source_checks": [
+    {
+      "operation": "annotate_open_reading_frames",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    },
+    {
+      "operation": "annotate_plasmid",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    },
+    {
+      "operation": "align_sequences",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    },
+    {
+      "operation": "find_sequence_mutations",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    },
+    {
+      "operation": "blast_sequence",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    },
+    {
+      "operation": "annotate_bacterial_genome",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    },
+    {
+      "operation": "analyze_protein_conservation",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    },
+    {
+      "operation": "analyze_protein_phylogeny",
+      "source_file_hash_unchanged": true,
+      "function_range_matches": true
+    }
+  ],
+  "inspections": "Host standard-library file reads, AST parsing, text searches and hash checks only. SOURCE_INDEX indexes source addresses; it is not a runtime test or proof that every indexed function was fully read.",
+  "project_imports_executed": false,
+  "scientific_library_imports_executed": false,
+  "native_analyses_executed": false,
+  "network_calls_executed": false,
+  "new_resource_jobs_submitted": false,
+  "tests_executed": false,
+  "production_or_test_files_written_by_this_agent": false,
+  "written_directory": "verification/tool_graders_sequence_operation_mapping_2026-10-27_509",
+  "numerical_evidence": {
+    "source_deductions": [
+      "ORF ATGATGTAA candidate population",
+      "ACGT palindromic scan duplication",
+      "gapped-column mutation coordinate",
+      "literal-vs-canonical conservation"
+    ],
+    "inherited_verification": [
+      "502 BLAST shared publisher/reader",
+      "504 Biopython shared calculator; final acceptance and 106 latest passing outcomes supplied by root",
+      "505 Prodigal single-mode publication/return"
+    ],
+    "new_execution_claims": []
+  },
+  "packet_file_sha256": {
+    "CODING_BOUNDARIES.md": "9d2344707fe17e1709e67c42552524d779eb94ee9ac830768b0c3f05eefdbb9c",
+    "MAPPING.md": "fd37dd1222d90e843a07f3688d42dd220eea868416a590507a1e97d752ebfe32",
+    "SOURCE_INDEX.json": "d9605a1e0c230e851b10a852b93274601d84e0f88a8b0a865ed5c9432934474f",
+    "UPSTREAM_DESCRIPTORS.txt": "be98b46ce6126567f0735edbaca161e8b8216bada1130e82dbcb85ce2745d1f3",
+    "UPSTREAM_FUNCTIONS.txt": "d7560f07abb1738cf13a03b502b5d62a51d1e7cb3c636adb0b872ee24fe9bd01"
+  }
+}

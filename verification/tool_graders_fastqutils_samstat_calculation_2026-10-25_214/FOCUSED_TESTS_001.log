@@ -1,0 +1,27 @@
+..............FFF.........F................................              [100%]
+=================================== FAILURES ===================================
+_ test_native_table_damage_preserves_actual_partial_operands[missing-truncated] _
+tests/test_bvbrc_fastqutils_samstat_mapping.py:180: in test_native_table_damage_preserves_actual_partial_operands
+    assert row is not None
+E   assert None is not None
+_ test_native_table_damage_preserves_actual_partial_operands[duplicate-incompatible] _
+tests/test_bvbrc_fastqutils_samstat_mapping.py:180: in test_native_table_damage_preserves_actual_partial_operands
+    assert row is not None
+E   assert None is not None
+_ test_native_table_damage_preserves_actual_partial_operands[total-incompatible] _
+tests/test_bvbrc_fastqutils_samstat_mapping.py:180: in test_native_table_damage_preserves_actual_partial_operands
+    assert row is not None
+E   assert None is not None
+_____ test_empty_current_unknown_mode_does_not_invent_alignment_population _____
+tests/test_bvbrc_fastqutils_samstat_mapping.py:230: in test_empty_current_unknown_mode_does_not_invent_alignment_population
+    assert doc['cells'][0]['metric'] == 'samstat_reported_item_count' and doc['cells'][0]['value'] == 0
+E   AssertionError: assert ('samstat_alig...t_total_count' == 'samstat_reported_item_count'
+E     
+E     - samstat_reported_item_count
+E     + samstat_alignment_total_count)
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_fastqutils_samstat_mapping.py::test_native_table_damage_preserves_actual_partial_operands[missing-truncated]
+FAILED tests/test_bvbrc_fastqutils_samstat_mapping.py::test_native_table_damage_preserves_actual_partial_operands[duplicate-incompatible]
+FAILED tests/test_bvbrc_fastqutils_samstat_mapping.py::test_native_table_damage_preserves_actual_partial_operands[total-incompatible]
+FAILED tests/test_bvbrc_fastqutils_samstat_mapping.py::test_empty_current_unknown_mode_does_not_invent_alignment_population
+4 failed, 55 passed in 85.09s (0:01:25)

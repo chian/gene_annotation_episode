@@ -1,0 +1,4276 @@
+{
+  "native_cases": [
+    {
+      "name": "hmmconvert_ascii",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_binary",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 0,
+          "state": "missing",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": null,
+          "state": "missing",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_legacy2",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 0,
+          "state": "missing",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": null,
+          "state": "missing",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_binary_to_ascii",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 0,
+          "state": "missing",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": null,
+          "state": "missing",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_3a",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 45,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_3b",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 46,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_3c",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 46,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_3d",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 46,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_3e",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 59,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 13,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_annotated_3a",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 48,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_annotated_3b",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 49,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_annotated_3c",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 49,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_annotated_3d",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 49,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 26,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_annotated_3e",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 62,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 13,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmconvert_annotated_3f",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/converted_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/converted_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 75,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/converted_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmfetch_single",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/fetched_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [
+        {
+          "kind": "key_population",
+          "row_key": "key_population",
+          "requested_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "requested_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "distinct_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "distinct_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "resolved_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "resolved_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "missing_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "missing_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "ambiguous_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "ambiguous_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "unknown_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "unknown_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "fulfilled_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "fulfilled_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "duplicate_key_occurrence_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_key_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "selected_source_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "selected_source_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "expected_returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "expected_returned_model_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "duplicate_representation_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_representation_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "operation.settings.key"
+              }
+            ]
+          },
+          "returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "output/fetched_models/0"
+              }
+            ]
+          }
+        }
+      ],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmfetch_unindexed_alias",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/fetched_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [
+        {
+          "kind": "key_population",
+          "row_key": "key_population",
+          "requested_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "requested_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "distinct_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "distinct_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "resolved_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "resolved_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "missing_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "missing_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "ambiguous_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "ambiguous_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "unknown_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "unknown_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "fulfilled_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "fulfilled_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_key_occurrence_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_key_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "selected_source_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "selected_source_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "expected_returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "expected_returned_model_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_representation_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_representation_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "output/fetched_models/0"
+              }
+            ]
+          }
+        }
+      ],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmfetch_indexed_alias",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 2,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/fetched_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        },
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/1"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        },
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/1"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          }
+        },
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/1"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/1"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/1"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/1"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [
+        {
+          "kind": "key_population",
+          "row_key": "key_population",
+          "requested_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "requested_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "distinct_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "distinct_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "resolved_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "resolved_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "missing_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "missing_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "ambiguous_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "ambiguous_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "unknown_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "unknown_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "fulfilled_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "fulfilled_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_key_occurrence_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_key_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "selected_source_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "selected_source_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "expected_returned_model_occurrence_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "expected_returned_model_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_representation_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "duplicate_representation_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "returned_model_occurrence_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "output/fetched_models/0"
+              }
+            ]
+          }
+        }
+      ],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmfetch_unindexed_missing",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/fetched_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [
+        {
+          "kind": "key_population",
+          "row_key": "key_population",
+          "requested_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "requested_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "distinct_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "distinct_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "resolved_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "resolved_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "missing_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "missing_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "ambiguous_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "ambiguous_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "unknown_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "unknown_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "fulfilled_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "fulfilled_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_key_occurrence_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_key_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "selected_source_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "selected_source_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "expected_returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "expected_returned_model_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_representation_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_representation_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "output/fetched_models/0"
+              }
+            ]
+          }
+        }
+      ],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmfetch_indexed_missing",
+      "native_returncode": 1,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/fetched_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [
+        {
+          "kind": "key_population",
+          "row_key": "key_population",
+          "requested_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "requested_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "distinct_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "distinct_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "resolved_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "resolved_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "missing_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "missing_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "ambiguous_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "ambiguous_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "unknown_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "unknown_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "fulfilled_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "fulfilled_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_key_occurrence_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_key_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "selected_source_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "selected_source_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "expected_returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "expected_returned_model_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_representation_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_representation_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "output/fetched_models/0"
+              }
+            ]
+          }
+        }
+      ],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmfetch_duplicate",
+      "native_returncode": 1,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/fetched_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [
+        {
+          "value": 611,
+          "state": "present",
+          "unit": "compared_probability_cell_count",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "maximum_differences": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "unit": "absolute_probability_difference",
+          "inputs": [
+            {
+              "field": "model_body",
+              "record_key": "input/models/0#model/0"
+            },
+            {
+              "field": "model_body",
+              "record_key": "output/fetched_models/0#model/0"
+            }
+          ]
+        }
+      ],
+      "optional_field_changes": [
+        {
+          "retained_optional_field_count": {
+            "value": 72,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "lost_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "changed_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          },
+          "gained_optional_field_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "optional_field_path_count",
+            "inputs": [
+              {
+                "field": "model_body",
+                "record_key": "input/models/0#model/0"
+              },
+              {
+                "field": "model_body",
+                "record_key": "output/fetched_models/0#model/0"
+              }
+            ]
+          }
+        }
+      ],
+      "key_population": [
+        {
+          "kind": "key_population",
+          "row_key": "key_population",
+          "requested_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "requested_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "distinct_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "distinct_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "resolved_key_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "resolved_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "missing_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "missing_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "ambiguous_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "ambiguous_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "unknown_key_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "unknown_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "fulfilled_key_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "fulfilled_key_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_key_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "duplicate_key_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "selected_source_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "selected_source_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "expected_returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "expected_returned_model_occurrence_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "duplicate_representation_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "duplicate_representation_count",
+            "inputs": [
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/1"
+              },
+              {
+                "field": "native_rows",
+                "row_key": "input/keys/0#line/2"
+              }
+            ]
+          },
+          "returned_model_occurrence_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "output/fetched_models/0"
+              }
+            ]
+          }
+        }
+      ],
+      "index_summary": [],
+      "bundle": []
+    },
+    {
+      "name": "hmmfetch_index",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": null,
+          "state": "missing",
+          "unit": "decoded_model_count",
+          "inputs": []
+        }
+      },
+      "compared_cells": [],
+      "maximum_differences": [],
+      "optional_field_changes": [],
+      "key_population": [],
+      "index_summary": [
+        {
+          "kind": "index_summary",
+          "row_key": "index_summary",
+          "native_row_key": "output/stdout/0#line/2",
+          "native_model_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "model_count",
+            "inputs": [
+              {
+                "field": "model_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "decoded_input_model_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "model_count_difference": {
+            "value": 0,
+            "state": "present",
+            "unit": "model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              },
+              {
+                "field": "model_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "native_primary_name_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "primary_name_count",
+            "inputs": [
+              {
+                "field": "primary_name_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "decoded_input_primary_name_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "primary_name_occurrence_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "primary_name_count_difference": {
+            "value": 0,
+            "state": "present",
+            "unit": "primary_name_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              },
+              {
+                "field": "primary_name_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "native_accession_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "accession_count",
+            "inputs": [
+              {
+                "field": "accession_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "decoded_input_accession_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "accession_occurrence_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "accession_count_difference": {
+            "value": 0,
+            "state": "present",
+            "unit": "accession_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              },
+              {
+                "field": "accession_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          }
+        }
+      ],
+      "bundle": []
+    },
+    {
+      "name": "hmmpress_success",
+      "native_returncode": 0,
+      "decoded_populations": {
+        "input": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": null,
+          "state": "incompatible",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "output/binary_models/0"
+            }
+          ]
+        }
+      },
+      "compared_cells": [],
+      "maximum_differences": [],
+      "optional_field_changes": [],
+      "key_population": [],
+      "index_summary": [
+        {
+          "kind": "index_summary",
+          "row_key": "index_summary",
+          "native_row_key": "output/stdout/0#line/2",
+          "native_model_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "model_count",
+            "inputs": [
+              {
+                "field": "model_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "decoded_input_model_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "model_count_difference": {
+            "value": 0,
+            "state": "present",
+            "unit": "model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              },
+              {
+                "field": "model_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "native_primary_name_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "primary_name_count",
+            "inputs": [
+              {
+                "field": "primary_name_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "decoded_input_primary_name_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "primary_name_occurrence_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "primary_name_count_difference": {
+            "value": 0,
+            "state": "present",
+            "unit": "primary_name_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              },
+              {
+                "field": "primary_name_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "native_accession_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "accession_count",
+            "inputs": [
+              {
+                "field": "accession_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          },
+          "decoded_input_accession_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "accession_occurrence_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "accession_count_difference": {
+            "value": 0,
+            "state": "present",
+            "unit": "accession_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              },
+              {
+                "field": "accession_count",
+                "row_key": "output/stdout/0#line/2"
+              }
+            ]
+          }
+        }
+      ],
+      "bundle": [
+        {
+          "kind": "bundle",
+          "row_key": "pressed_bundle",
+          "member_occurrence_ids": [
+            "output/binary_models/0",
+            "output/ssi_index/0",
+            "output/msv_profiles/0",
+            "output/remaining_profiles/0"
+          ],
+          "member_count": {
+            "value": 4,
+            "state": "present",
+            "unit": "present_bundle_member_count",
+            "inputs": [
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/binary_models/0"
+              },
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/ssi_index/0"
+              },
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/msv_profiles/0"
+              },
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/remaining_profiles/0"
+              }
+            ]
+          },
+          "bundle_byte_sum": {
+            "value": 16024,
+            "state": "present",
+            "unit": "byte",
+            "inputs": [
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/binary_models/0"
+              },
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/ssi_index/0"
+              },
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/msv_profiles/0"
+              },
+              {
+                "field": "measured_size_bytes",
+                "occurrence_id": "output/remaining_profiles/0"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hmmpress_duplicate",
+      "native_returncode": 1,
+      "decoded_populations": {
+        "input": {
+          "value": 2,
+          "state": "present",
+          "unit": "decoded_model_count",
+          "inputs": [
+            {
+              "field": "population",
+              "occurrence_id": "input/models/0"
+            }
+          ]
+        },
+        "output": {
+          "value": null,
+          "state": "missing",
+          "unit": "decoded_model_count",
+          "inputs": []
+        }
+      },
+      "compared_cells": [],
+      "maximum_differences": [],
+      "optional_field_changes": [],
+      "key_population": [],
+      "index_summary": [
+        {
+          "kind": "index_summary",
+          "row_key": "index_summary",
+          "native_row_key": null,
+          "native_model_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "model_count",
+            "inputs": []
+          },
+          "decoded_input_model_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "decoded_model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "model_count_difference": {
+            "value": null,
+            "state": "missing",
+            "unit": "model_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "native_primary_name_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "primary_name_count",
+            "inputs": []
+          },
+          "decoded_input_primary_name_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "primary_name_occurrence_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "primary_name_count_difference": {
+            "value": null,
+            "state": "missing",
+            "unit": "primary_name_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "native_accession_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "accession_count",
+            "inputs": []
+          },
+          "decoded_input_accession_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "accession_occurrence_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          },
+          "accession_count_difference": {
+            "value": null,
+            "state": "missing",
+            "unit": "accession_count",
+            "inputs": [
+              {
+                "field": "population",
+                "occurrence_id": "input/models/0"
+              }
+            ]
+          }
+        }
+      ],
+      "bundle": [
+        {
+          "kind": "bundle",
+          "row_key": "pressed_bundle",
+          "member_occurrence_ids": [],
+          "member_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "present_bundle_member_count",
+            "inputs": []
+          },
+          "bundle_byte_sum": {
+            "value": 0,
+            "state": "incomplete",
+            "unit": "byte",
+            "inputs": []
+          }
+        }
+      ]
+    }
+  ],
+  "independent_changed_probability_expectation": {
+    "qualification": "Synthetic mutation of one supplied native probability token, not a new native execution.",
+    "source_token": "0.40547",
+    "changed_token": "0.50547",
+    "formula": "abs(exp(-changed_token)-exp(-source_token))",
+    "expected_max_absolute_difference": "0.063441410960080871915681712532032901186354461960509625579033",
+    "expected_mean_absolute_difference": "0.000103832096497677368110772033603981835002216795352716244810201",
+    "compared_cell_denominator": 611,
+    "denominator_formula": "20 composition + 13*20 insert + 12*20 match + 13*7 transition cells"
+  }
+}

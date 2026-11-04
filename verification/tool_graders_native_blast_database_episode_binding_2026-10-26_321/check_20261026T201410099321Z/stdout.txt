@@ -1,0 +1,594 @@
+........................................................................ [ 17%]
+.......F................................................................ [ 35%]
+...........................................F..........FFFFFFF........... [ 53%]
+........................................................................ [ 71%]
+........................................................................ [ 89%]
+...........................................                              [100%]
+=================================== FAILURES ===================================
+_ test_declarations_equal_validated_service_result_contract[bvbrc_data-job_request2-selector2] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_declarations_equal_valida2')
+service = 'bvbrc_data'
+job_request = {'collection': 'genome', 'filters': [], 'fields': ['genome_id'], 'offset': 0, ...}
+selector = {}
+
+    @pytest.mark.parametrize('service,job_request,selector', [
+        ('ncbi_blast', {'subject_ref': 'synthetic-subject', 'program': 'blastp', 'database': 'nr'}, {}),
+        ('uniprot', {'operation': 'record', 'accession': 'P0AAW1'}, {}),
+        ('bvbrc_data', {'collection': 'genome', 'filters': [], 'fields': ['genome_id'],
+                   'offset': 0, 'limit': 1}, {}),
+    ])
+    def test_declarations_equal_validated_service_result_contract(tmp_path, service, job_request, selector):
+        with Store(tmp_path) as store:
+            owner = binding(store, {'selected': {'kind': 'api', 'service': service}})
+            primitive = owner.api_execution.services['selected']
+>           assert owner.api_execution.operation_contracts('selected', 'results') == primitive.result_catalog(job_request, selector)
+E           assert [{'name': 'ap...ies': False}}] == [{'name': 'ap...ies': False}}]
+E             
+E             Left contains one more item: {'name': 'api.bvbrc.data.result', 'description': "Retain the assigned BV-BRC v2 result and its complete numerical shee...e makes one GET.", 'input_schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}
+E             Use -v to get more diff
+
+../../../tests/test_execution_tool_contract_declarations.py:75: AssertionError
+___ test_bound_thresholds_round_trip_without_defaults_through_real_consumers ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bound_thresholds_round_tr0')
+
+    def test_bound_thresholds_round_trip_without_defaults_through_real_consumers(tmp_path):
+        with Store(tmp_path/'state') as store:
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            source, anchor = source_fixture(store)
+            data = empty_commit()
+            for alias, label in [('efficiency_unit', 'M^-1 s^-1'), ('nM', 'nM')]:
+                data['terms'].append({'alias': alias, 'label': label, 'term_type': 'unit',
+                    'source_ref': source['id'], 'anchor': anchor})
+            examples = [numeric(10, 'less_than', '@efficiency_unit'), numeric(37000, 'greater_than'),
+                numeric(26000, 'greater_than'), numeric(1000, 'greater_than', '@nM'),
+                numeric(10, 'less_or_equal'), numeric(26000, 'greater_or_equal'), numeric(10)]
+            # Explicit approximation and uncertainty coexist only as reported;
+            # this synthetic example tests preservation, not interval arithmetic.
+            examples[4].update(qualifier='approximate', uncertainty={
+                'representation': 'plus_minus', 'magnitude': 1, 'statistic': 'unspecified'})
+            data['contexts'] = [{'alias': 'bounded_context', 'context_type': 'assay_condition',
+                'name': 'ConstructX', 'source_ref': source['id'], 'anchor': anchor,
+                'attributes': [{'name': 'concentration', 'value': numeric(1000, 'greater_than', '@nM')}],
+                'related_refs': [target]}]
+            data['hypotheses'] = [{'alias': 'bounded_question', 'subject_refs': [target],
+                'predicate': 'binds', 'value': numeric(1000, 'greater_than', '@nM'),
+                'context_refs': ['@bounded_context']}]
+            for index, value in enumerate(examples):
+                data['observations'].append({'alias': 'o'+str(index), 'subject_refs': [target],
+                    'source_subject_refs': [target], 'kind': 'assay_report', 'source_ref': source['id'],
+                    'measurements': [{'name': 'activity', 'value': value}],
+                    'dependencies': ['@bounded_context'], 'anchor': anchor})
+            host = store.reasoning_schema()
+            transport = _action_generation_schema(host)
+            wire = deepcopy(data)
+            for row in wire['observations']:
+                value = row['measurements'][0]['value']
+                for key in ['bound', 'qualifier', 'uncertainty']:
+                    value.setdefault(key, None)
+                row.update(visual_anchor=None, operand_intervals=None)
+            # Validate the actual numeric transport branch. The full reasoning
+            # schema also has unrelated optional row fields outside this fixture.
+            numeric_wire = transport['properties']['observations']['items']['properties']['measurements']['items']['properties']['value']
+            assert all(Draft202012Validator(numeric_wire).is_valid(row['measurements'][0]['value'])
+                for row in wire['observations'])
+            decoded = _decode_action_response(wire, host)
+            assert decoded == data
+            committed = store.commit_reasoning(decoded, {'subject_refs': [target]}, 'synthetic-bounds')
+            assert committed['status'] == 'completed', committed
+            refs = [committed['aliases']['o'+str(index)] for index in range(len(examples))]
+            expected = deepcopy(examples)
+            expected[0]['unit_ref'] = committed['aliases']['efficiency_unit']
+            expected[3]['unit_ref'] = committed['aliases']['nM']
+            assert [store.get(ref)['measurements'][0]['value'] for ref in refs] == expected
+            context = store.get(committed['aliases']['bounded_context'])
+            question = store.get(committed['aliases']['bounded_question'])
+            assert context['attributes'][0]['value'] == question['value'] == expected[3]
+            assert store.commit_reasoning(decoded, {'subject_refs': [target]}, 'synthetic-bounds') == committed
+            tools = ToolRegistry(store)
+            queried = tools.execute('state.query', {'refs': refs}, operation_key='synthetic-bounds-query')
+            assert queried['status'] == 'completed'
+            assert [row['measurements'][0]['value'] for row in queried['result']['records']] == expected
+            viewed = {row['id']: row for row in store.reasoning_view()['observations']}
+            assert [viewed[ref]['measurements'][0]['value'] for ref in refs] == expected
+            output = export_annotation(store, tmp_path/'bounds.json', include_artifacts=True)
+            exported = {row['id']: row for row in json.loads(Path(output['json']['path']).read_text())['records']}
+            assert [exported[ref]['measurements'][0]['value'] for ref in refs] == expected
+            old = store.get(refs[-1])
+            assert 'bound' not in old['measurements'][0]['value']
+>           assert project_credit(store).credit == 0
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:51: in project_credit
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_coverage-observed_extent] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bounded_extent_is_unavail0')
+metric = 'query_coverage', extent = 'observed_extent'
+
+    @pytest.mark.parametrize('metric,extent', [
+        ('query_coverage', 'observed_extent'), ('target_coverage', 'observed_extent'),
+        ('query_start', 'observed_extent'), ('query_end', 'observed_extent'),
+        ('query_coverage', 'inferred_extent'), ('query_start', 'inferred_extent'),
+        ('query_coverage', 'context_allocation')])
+    def test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive(tmp_path, metric, extent):
+        with Store(tmp_path/'state') as store:
+            Journal(store, 'synthetic-numeric-projection-check')
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            source, anchor = source_fixture(store)
+            hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
+                'value': {'type': 'enum', 'value': 'unknown'}, 'context_refs': []}, origin='reasoning')['id']
+            good = store.put('observation', {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'assay_report', 'source_ref': source['id'], 'anchor': anchor,
+                'measurements': [{'name': 'activity', 'value': numeric(10, 'less_than')}], 'dependencies': []}, origin='extracted')
+            threshold = numeric(.4 if 'coverage' in metric else 2, 'less_than')
+            body = {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'comparison', 'source_ref': source['id'], 'anchor': None,
+                'measurements': [{'name': metric, 'value': threshold}], 'dependencies': []}
+            if metric == 'target_coverage':
+                body['operand_intervals'] = [{'role': 'reference', 'subject_ref': target,
+                    'start': 0, 'end': 5, 'unit': 'aa'}]
+            bad = store.put('observation', body, origin='tool')
+            with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as error:
+                _metric(bad, metric)
+            assert error.value.detail['measurement_value'] == threshold
+            first = assessment(hypothesis, good['id'])
+            first['investigation_finding'] = finding(target, numeric(10, 'less_than'))
+            retained = store.put('assessment', first, origin='reasoning', scope=scope)
+            limited = assessment(hypothesis, bad['id'], extent=extent)
+            limited['investigation_finding'] = finding(target, threshold)
+            if extent == 'inferred_extent':
+                limited['target_footprint'] = [{'target_ref': target, 'start': 0, 'end': 10, 'unit': 'aa'}]
+            if extent == 'context_allocation':
+                limited.update(context_account_scope=scope, context_scope=scope)
+            # Real commit boundary: both valid findings survive. Censored geometry
+            # is unavailable for annotation arithmetic, not invalid science.
+            data = empty_commit()
+            data['assessments'] = [{'alias': 'limited', **limited}]
+            result = store.commit_reasoning(data, scope, 'retain-bounded-finding')
+            assert result['status'] == 'completed', result
+            limited = store.get(result['aliases']['limited'])
+            record = annotation(target, hypothesis, [retained['id'], limited['id']])
+            if extent == 'context_allocation':
+                record.update(footprint_kind='whole_input_context', context_account_scope=scope, context_scope=scope)
+            store.put('annotation', record, origin='reasoning', scope=scope)
+>           scorer = AnnotationSupportScore(CreditPolicy())
+                                            ^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[target_coverage-observed_extent] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bounded_extent_is_unavail1')
+metric = 'target_coverage', extent = 'observed_extent'
+
+    @pytest.mark.parametrize('metric,extent', [
+        ('query_coverage', 'observed_extent'), ('target_coverage', 'observed_extent'),
+        ('query_start', 'observed_extent'), ('query_end', 'observed_extent'),
+        ('query_coverage', 'inferred_extent'), ('query_start', 'inferred_extent'),
+        ('query_coverage', 'context_allocation')])
+    def test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive(tmp_path, metric, extent):
+        with Store(tmp_path/'state') as store:
+            Journal(store, 'synthetic-numeric-projection-check')
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            source, anchor = source_fixture(store)
+            hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
+                'value': {'type': 'enum', 'value': 'unknown'}, 'context_refs': []}, origin='reasoning')['id']
+            good = store.put('observation', {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'assay_report', 'source_ref': source['id'], 'anchor': anchor,
+                'measurements': [{'name': 'activity', 'value': numeric(10, 'less_than')}], 'dependencies': []}, origin='extracted')
+            threshold = numeric(.4 if 'coverage' in metric else 2, 'less_than')
+            body = {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'comparison', 'source_ref': source['id'], 'anchor': None,
+                'measurements': [{'name': metric, 'value': threshold}], 'dependencies': []}
+            if metric == 'target_coverage':
+                body['operand_intervals'] = [{'role': 'reference', 'subject_ref': target,
+                    'start': 0, 'end': 5, 'unit': 'aa'}]
+            bad = store.put('observation', body, origin='tool')
+            with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as error:
+                _metric(bad, metric)
+            assert error.value.detail['measurement_value'] == threshold
+            first = assessment(hypothesis, good['id'])
+            first['investigation_finding'] = finding(target, numeric(10, 'less_than'))
+            retained = store.put('assessment', first, origin='reasoning', scope=scope)
+            limited = assessment(hypothesis, bad['id'], extent=extent)
+            limited['investigation_finding'] = finding(target, threshold)
+            if extent == 'inferred_extent':
+                limited['target_footprint'] = [{'target_ref': target, 'start': 0, 'end': 10, 'unit': 'aa'}]
+            if extent == 'context_allocation':
+                limited.update(context_account_scope=scope, context_scope=scope)
+            # Real commit boundary: both valid findings survive. Censored geometry
+            # is unavailable for annotation arithmetic, not invalid science.
+            data = empty_commit()
+            data['assessments'] = [{'alias': 'limited', **limited}]
+            result = store.commit_reasoning(data, scope, 'retain-bounded-finding')
+            assert result['status'] == 'completed', result
+            limited = store.get(result['aliases']['limited'])
+            record = annotation(target, hypothesis, [retained['id'], limited['id']])
+            if extent == 'context_allocation':
+                record.update(footprint_kind='whole_input_context', context_account_scope=scope, context_scope=scope)
+            store.put('annotation', record, origin='reasoning', scope=scope)
+>           scorer = AnnotationSupportScore(CreditPolicy())
+                                            ^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_start-observed_extent] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bounded_extent_is_unavail2')
+metric = 'query_start', extent = 'observed_extent'
+
+    @pytest.mark.parametrize('metric,extent', [
+        ('query_coverage', 'observed_extent'), ('target_coverage', 'observed_extent'),
+        ('query_start', 'observed_extent'), ('query_end', 'observed_extent'),
+        ('query_coverage', 'inferred_extent'), ('query_start', 'inferred_extent'),
+        ('query_coverage', 'context_allocation')])
+    def test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive(tmp_path, metric, extent):
+        with Store(tmp_path/'state') as store:
+            Journal(store, 'synthetic-numeric-projection-check')
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            source, anchor = source_fixture(store)
+            hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
+                'value': {'type': 'enum', 'value': 'unknown'}, 'context_refs': []}, origin='reasoning')['id']
+            good = store.put('observation', {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'assay_report', 'source_ref': source['id'], 'anchor': anchor,
+                'measurements': [{'name': 'activity', 'value': numeric(10, 'less_than')}], 'dependencies': []}, origin='extracted')
+            threshold = numeric(.4 if 'coverage' in metric else 2, 'less_than')
+            body = {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'comparison', 'source_ref': source['id'], 'anchor': None,
+                'measurements': [{'name': metric, 'value': threshold}], 'dependencies': []}
+            if metric == 'target_coverage':
+                body['operand_intervals'] = [{'role': 'reference', 'subject_ref': target,
+                    'start': 0, 'end': 5, 'unit': 'aa'}]
+            bad = store.put('observation', body, origin='tool')
+            with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as error:
+                _metric(bad, metric)
+            assert error.value.detail['measurement_value'] == threshold
+            first = assessment(hypothesis, good['id'])
+            first['investigation_finding'] = finding(target, numeric(10, 'less_than'))
+            retained = store.put('assessment', first, origin='reasoning', scope=scope)
+            limited = assessment(hypothesis, bad['id'], extent=extent)
+            limited['investigation_finding'] = finding(target, threshold)
+            if extent == 'inferred_extent':
+                limited['target_footprint'] = [{'target_ref': target, 'start': 0, 'end': 10, 'unit': 'aa'}]
+            if extent == 'context_allocation':
+                limited.update(context_account_scope=scope, context_scope=scope)
+            # Real commit boundary: both valid findings survive. Censored geometry
+            # is unavailable for annotation arithmetic, not invalid science.
+            data = empty_commit()
+            data['assessments'] = [{'alias': 'limited', **limited}]
+            result = store.commit_reasoning(data, scope, 'retain-bounded-finding')
+            assert result['status'] == 'completed', result
+            limited = store.get(result['aliases']['limited'])
+            record = annotation(target, hypothesis, [retained['id'], limited['id']])
+            if extent == 'context_allocation':
+                record.update(footprint_kind='whole_input_context', context_account_scope=scope, context_scope=scope)
+            store.put('annotation', record, origin='reasoning', scope=scope)
+>           scorer = AnnotationSupportScore(CreditPolicy())
+                                            ^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_end-observed_extent] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bounded_extent_is_unavail3')
+metric = 'query_end', extent = 'observed_extent'
+
+    @pytest.mark.parametrize('metric,extent', [
+        ('query_coverage', 'observed_extent'), ('target_coverage', 'observed_extent'),
+        ('query_start', 'observed_extent'), ('query_end', 'observed_extent'),
+        ('query_coverage', 'inferred_extent'), ('query_start', 'inferred_extent'),
+        ('query_coverage', 'context_allocation')])
+    def test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive(tmp_path, metric, extent):
+        with Store(tmp_path/'state') as store:
+            Journal(store, 'synthetic-numeric-projection-check')
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            source, anchor = source_fixture(store)
+            hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
+                'value': {'type': 'enum', 'value': 'unknown'}, 'context_refs': []}, origin='reasoning')['id']
+            good = store.put('observation', {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'assay_report', 'source_ref': source['id'], 'anchor': anchor,
+                'measurements': [{'name': 'activity', 'value': numeric(10, 'less_than')}], 'dependencies': []}, origin='extracted')
+            threshold = numeric(.4 if 'coverage' in metric else 2, 'less_than')
+            body = {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'comparison', 'source_ref': source['id'], 'anchor': None,
+                'measurements': [{'name': metric, 'value': threshold}], 'dependencies': []}
+            if metric == 'target_coverage':
+                body['operand_intervals'] = [{'role': 'reference', 'subject_ref': target,
+                    'start': 0, 'end': 5, 'unit': 'aa'}]
+            bad = store.put('observation', body, origin='tool')
+            with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as error:
+                _metric(bad, metric)
+            assert error.value.detail['measurement_value'] == threshold
+            first = assessment(hypothesis, good['id'])
+            first['investigation_finding'] = finding(target, numeric(10, 'less_than'))
+            retained = store.put('assessment', first, origin='reasoning', scope=scope)
+            limited = assessment(hypothesis, bad['id'], extent=extent)
+            limited['investigation_finding'] = finding(target, threshold)
+            if extent == 'inferred_extent':
+                limited['target_footprint'] = [{'target_ref': target, 'start': 0, 'end': 10, 'unit': 'aa'}]
+            if extent == 'context_allocation':
+                limited.update(context_account_scope=scope, context_scope=scope)
+            # Real commit boundary: both valid findings survive. Censored geometry
+            # is unavailable for annotation arithmetic, not invalid science.
+            data = empty_commit()
+            data['assessments'] = [{'alias': 'limited', **limited}]
+            result = store.commit_reasoning(data, scope, 'retain-bounded-finding')
+            assert result['status'] == 'completed', result
+            limited = store.get(result['aliases']['limited'])
+            record = annotation(target, hypothesis, [retained['id'], limited['id']])
+            if extent == 'context_allocation':
+                record.update(footprint_kind='whole_input_context', context_account_scope=scope, context_scope=scope)
+            store.put('annotation', record, origin='reasoning', scope=scope)
+>           scorer = AnnotationSupportScore(CreditPolicy())
+                                            ^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_coverage-inferred_extent] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bounded_extent_is_unavail4')
+metric = 'query_coverage', extent = 'inferred_extent'
+
+    @pytest.mark.parametrize('metric,extent', [
+        ('query_coverage', 'observed_extent'), ('target_coverage', 'observed_extent'),
+        ('query_start', 'observed_extent'), ('query_end', 'observed_extent'),
+        ('query_coverage', 'inferred_extent'), ('query_start', 'inferred_extent'),
+        ('query_coverage', 'context_allocation')])
+    def test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive(tmp_path, metric, extent):
+        with Store(tmp_path/'state') as store:
+            Journal(store, 'synthetic-numeric-projection-check')
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            source, anchor = source_fixture(store)
+            hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
+                'value': {'type': 'enum', 'value': 'unknown'}, 'context_refs': []}, origin='reasoning')['id']
+            good = store.put('observation', {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'assay_report', 'source_ref': source['id'], 'anchor': anchor,
+                'measurements': [{'name': 'activity', 'value': numeric(10, 'less_than')}], 'dependencies': []}, origin='extracted')
+            threshold = numeric(.4 if 'coverage' in metric else 2, 'less_than')
+            body = {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'comparison', 'source_ref': source['id'], 'anchor': None,
+                'measurements': [{'name': metric, 'value': threshold}], 'dependencies': []}
+            if metric == 'target_coverage':
+                body['operand_intervals'] = [{'role': 'reference', 'subject_ref': target,
+                    'start': 0, 'end': 5, 'unit': 'aa'}]
+            bad = store.put('observation', body, origin='tool')
+            with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as error:
+                _metric(bad, metric)
+            assert error.value.detail['measurement_value'] == threshold
+            first = assessment(hypothesis, good['id'])
+            first['investigation_finding'] = finding(target, numeric(10, 'less_than'))
+            retained = store.put('assessment', first, origin='reasoning', scope=scope)
+            limited = assessment(hypothesis, bad['id'], extent=extent)
+            limited['investigation_finding'] = finding(target, threshold)
+            if extent == 'inferred_extent':
+                limited['target_footprint'] = [{'target_ref': target, 'start': 0, 'end': 10, 'unit': 'aa'}]
+            if extent == 'context_allocation':
+                limited.update(context_account_scope=scope, context_scope=scope)
+            # Real commit boundary: both valid findings survive. Censored geometry
+            # is unavailable for annotation arithmetic, not invalid science.
+            data = empty_commit()
+            data['assessments'] = [{'alias': 'limited', **limited}]
+            result = store.commit_reasoning(data, scope, 'retain-bounded-finding')
+            assert result['status'] == 'completed', result
+            limited = store.get(result['aliases']['limited'])
+            record = annotation(target, hypothesis, [retained['id'], limited['id']])
+            if extent == 'context_allocation':
+                record.update(footprint_kind='whole_input_context', context_account_scope=scope, context_scope=scope)
+            store.put('annotation', record, origin='reasoning', scope=scope)
+>           scorer = AnnotationSupportScore(CreditPolicy())
+                                            ^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_start-inferred_extent] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bounded_extent_is_unavail5')
+metric = 'query_start', extent = 'inferred_extent'
+
+    @pytest.mark.parametrize('metric,extent', [
+        ('query_coverage', 'observed_extent'), ('target_coverage', 'observed_extent'),
+        ('query_start', 'observed_extent'), ('query_end', 'observed_extent'),
+        ('query_coverage', 'inferred_extent'), ('query_start', 'inferred_extent'),
+        ('query_coverage', 'context_allocation')])
+    def test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive(tmp_path, metric, extent):
+        with Store(tmp_path/'state') as store:
+            Journal(store, 'synthetic-numeric-projection-check')
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            source, anchor = source_fixture(store)
+            hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
+                'value': {'type': 'enum', 'value': 'unknown'}, 'context_refs': []}, origin='reasoning')['id']
+            good = store.put('observation', {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'assay_report', 'source_ref': source['id'], 'anchor': anchor,
+                'measurements': [{'name': 'activity', 'value': numeric(10, 'less_than')}], 'dependencies': []}, origin='extracted')
+            threshold = numeric(.4 if 'coverage' in metric else 2, 'less_than')
+            body = {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'comparison', 'source_ref': source['id'], 'anchor': None,
+                'measurements': [{'name': metric, 'value': threshold}], 'dependencies': []}
+            if metric == 'target_coverage':
+                body['operand_intervals'] = [{'role': 'reference', 'subject_ref': target,
+                    'start': 0, 'end': 5, 'unit': 'aa'}]
+            bad = store.put('observation', body, origin='tool')
+            with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as error:
+                _metric(bad, metric)
+            assert error.value.detail['measurement_value'] == threshold
+            first = assessment(hypothesis, good['id'])
+            first['investigation_finding'] = finding(target, numeric(10, 'less_than'))
+            retained = store.put('assessment', first, origin='reasoning', scope=scope)
+            limited = assessment(hypothesis, bad['id'], extent=extent)
+            limited['investigation_finding'] = finding(target, threshold)
+            if extent == 'inferred_extent':
+                limited['target_footprint'] = [{'target_ref': target, 'start': 0, 'end': 10, 'unit': 'aa'}]
+            if extent == 'context_allocation':
+                limited.update(context_account_scope=scope, context_scope=scope)
+            # Real commit boundary: both valid findings survive. Censored geometry
+            # is unavailable for annotation arithmetic, not invalid science.
+            data = empty_commit()
+            data['assessments'] = [{'alias': 'limited', **limited}]
+            result = store.commit_reasoning(data, scope, 'retain-bounded-finding')
+            assert result['status'] == 'completed', result
+            limited = store.get(result['aliases']['limited'])
+            record = annotation(target, hypothesis, [retained['id'], limited['id']])
+            if extent == 'context_allocation':
+                record.update(footprint_kind='whole_input_context', context_account_scope=scope, context_scope=scope)
+            store.put('annotation', record, origin='reasoning', scope=scope)
+>           scorer = AnnotationSupportScore(CreditPolicy())
+                                            ^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+_ test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_coverage-context_allocation] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T201410099321Z/tmp/test_bounded_extent_is_unavail6')
+metric = 'query_coverage', extent = 'context_allocation'
+
+    @pytest.mark.parametrize('metric,extent', [
+        ('query_coverage', 'observed_extent'), ('target_coverage', 'observed_extent'),
+        ('query_start', 'observed_extent'), ('query_end', 'observed_extent'),
+        ('query_coverage', 'inferred_extent'), ('query_start', 'inferred_extent'),
+        ('query_coverage', 'context_allocation')])
+    def test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive(tmp_path, metric, extent):
+        with Store(tmp_path/'state') as store:
+            Journal(store, 'synthetic-numeric-projection-check')
+            target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
+            scope = {'subject_refs': [target]}
+            source, anchor = source_fixture(store)
+            hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'binds',
+                'value': {'type': 'enum', 'value': 'unknown'}, 'context_refs': []}, origin='reasoning')['id']
+            good = store.put('observation', {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'assay_report', 'source_ref': source['id'], 'anchor': anchor,
+                'measurements': [{'name': 'activity', 'value': numeric(10, 'less_than')}], 'dependencies': []}, origin='extracted')
+            threshold = numeric(.4 if 'coverage' in metric else 2, 'less_than')
+            body = {'subject_refs': [target], 'source_subject_refs': [target],
+                'kind': 'comparison', 'source_ref': source['id'], 'anchor': None,
+                'measurements': [{'name': metric, 'value': threshold}], 'dependencies': []}
+            if metric == 'target_coverage':
+                body['operand_intervals'] = [{'role': 'reference', 'subject_ref': target,
+                    'start': 0, 'end': 5, 'unit': 'aa'}]
+            bad = store.put('observation', body, origin='tool')
+            with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as error:
+                _metric(bad, metric)
+            assert error.value.detail['measurement_value'] == threshold
+            first = assessment(hypothesis, good['id'])
+            first['investigation_finding'] = finding(target, numeric(10, 'less_than'))
+            retained = store.put('assessment', first, origin='reasoning', scope=scope)
+            limited = assessment(hypothesis, bad['id'], extent=extent)
+            limited['investigation_finding'] = finding(target, threshold)
+            if extent == 'inferred_extent':
+                limited['target_footprint'] = [{'target_ref': target, 'start': 0, 'end': 10, 'unit': 'aa'}]
+            if extent == 'context_allocation':
+                limited.update(context_account_scope=scope, context_scope=scope)
+            # Real commit boundary: both valid findings survive. Censored geometry
+            # is unavailable for annotation arithmetic, not invalid science.
+            data = empty_commit()
+            data['assessments'] = [{'alias': 'limited', **limited}]
+            result = store.commit_reasoning(data, scope, 'retain-bounded-finding')
+            assert result['status'] == 'completed', result
+            limited = store.get(result['aliases']['limited'])
+            record = annotation(target, hypothesis, [retained['id'], limited['id']])
+            if extent == 'context_allocation':
+                record.update(footprint_kind='whole_input_context', context_account_scope=scope, context_scope=scope)
+            store.put('annotation', record, origin='reasoning', scope=scope)
+>           scorer = AnnotationSupportScore(CreditPolicy())
+                                            ^^^^^^^^^^^^^^
+
+../../../tests/test_numeric_bounds.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../gene_annotation_episode/credit.py:42: in __init__
+    _retired()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _retired():
+>       raise AnnotationScoringUnavailable(
+            "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay")
+E       gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay
+
+../../../gene_annotation_episode/credit.py:34: AnnotationScoringUnavailable
+=========================== short test summary info ============================
+FAILED ../../../tests/test_execution_tool_contract_declarations.py::test_declarations_equal_validated_service_result_contract[bvbrc_data-job_request2-selector2]
+FAILED ../../../tests/test_numeric_bounds.py::test_bound_thresholds_round_trip_without_defaults_through_real_consumers
+FAILED ../../../tests/test_numeric_bounds.py::test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_coverage-observed_extent]
+FAILED ../../../tests/test_numeric_bounds.py::test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[target_coverage-observed_extent]
+FAILED ../../../tests/test_numeric_bounds.py::test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_start-observed_extent]
+FAILED ../../../tests/test_numeric_bounds.py::test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_end-observed_extent]
+FAILED ../../../tests/test_numeric_bounds.py::test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_coverage-inferred_extent]
+FAILED ../../../tests/test_numeric_bounds.py::test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_start-inferred_extent]
+FAILED ../../../tests/test_numeric_bounds.py::test_bounded_extent_is_unavailable_while_other_support_and_received_progress_survive[query_coverage-context_allocation]
+9 failed, 394 passed in 781.12s (0:13:01)

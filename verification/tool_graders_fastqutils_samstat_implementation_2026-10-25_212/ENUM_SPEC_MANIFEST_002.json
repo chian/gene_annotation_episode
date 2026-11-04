@@ -1,0 +1,36 @@
+{
+  "additive_to": "ENUM_SPEC_MANIFEST_001.json",
+  "added_metric": {
+    "metric": "samstat_reported_item_count",
+    "formats": [
+      "samstat_html_2_5_0"
+    ],
+    "section_key": "samstat_summary",
+    "native_fields": [
+      "This file contains no reads. banner with native input-mode label absent"
+    ],
+    "units": [
+      "native_count"
+    ],
+    "axis_kinds": [
+      "none"
+    ],
+    "population_keys": [],
+    "meaning": "observed_count",
+    "precision": "exact_for_retained_population",
+    "value_domain": "nonnegative_integer",
+    "interpretation": "Explicit zero contributing items asserted by the native no-reads banner. Sequence versus alignment item type remains unknown; null population. Not a FASTQ/molecule/pair count.",
+    "denominator": null,
+    "coordinates": "none",
+    "uncertainty": "not_reported",
+    "missing_behavior": "Only emitted for the recognized no-reads banner with absent native input-mode label. Source_row_absent plus native_execution_evidence requirement preserves the missing input-kind interpretation. Never a mapping or sequence calculator operand.",
+    "reviewed_source": "212 SOURCE_CLARIFICATION_002.md;207 native2_5_0/empty.fastq.samstat.html and stat_report.c input_format_name/stat_report"
+  },
+  "enum_mirrors": [
+    "/$defs/Cell/properties/metric/enum",
+    "/$defs/MeasurementSelector/oneOf/1/properties/metric/enum",
+    "/$defs/MeasurementPayload/properties/quantity/enum"
+  ],
+  "total_samstat_metrics": 60,
+  "root_direction": "available unknown-kind0; null population; source_row_absent/native_execution_evidence"
+}

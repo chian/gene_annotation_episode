@@ -1,0 +1,809 @@
+{
+  "record_type": "flux_balance_parser_recovery_686",
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "implementation_contracts": [
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_001.md",
+      "sha256": "ce1d66391283c9cf67f3c2be562b7ea493f9c6d8b989d97f49c9851f84aef23e",
+      "size_bytes": 17552
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_002.md",
+      "sha256": "b7c840d7d293904212cb6698136d6dbc963fe3bf0b2b2d6a794029b33ab80da3",
+      "size_bytes": 6379
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_003.md",
+      "sha256": "a660bf19427d9de2431cf4d8f48c5022639f9f0a5dcfb7d54cb00965a3705fb6",
+      "size_bytes": 1802
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_004.md",
+      "sha256": "666d0a79f7a01de67c611f63e37e91843f037bfd4574b54a2d5795867f9e8b8f",
+      "size_bytes": 2055
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_005.md",
+      "sha256": "dfd515f09111b91b531921816f8da5d00016e560f65fcecbab523a47520ecb4c",
+      "size_bytes": 1993
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_006.md",
+      "sha256": "8180913002560dc7503416ac6d459918534207e7b71d987cb89c3e924fe0b39f",
+      "size_bytes": 3076
+    },
+    {
+      "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_007.md",
+      "sha256": "8e234bccda24d4c96a227a73097e79382fb4e07f58b12d0c3571bc2f2de7550b",
+      "size_bytes": 7470
+    }
+  ],
+  "owned_production_changes": [
+    "gene_annotation_episode/flux_balance_readers.py"
+  ],
+  "owned_new_tests": [
+    "tests/test_flux_balance_parser_recovery_686.py"
+  ],
+  "exact_code_diff": {
+    "path": "verification/tool_graders_flux_balance_parser_recovery_2026-10-29_686/EXACT_CODE_DIFF_001.patch",
+    "sha256": "3022e61ca5b336f1f84bdb3079e004cde67666a55e1bbdfbb1e26664a58d3eba",
+    "size_bytes": 47839
+  },
+  "last_refinement_diff": {
+    "path": "verification/tool_graders_flux_balance_parser_recovery_2026-10-29_686/FINAL_REFINEMENT_DIFF_001.patch",
+    "sha256": "c0b7161a973adfb0917318a75c8f8a18d3ba71d22153d28b674b79639fe1d53a",
+    "size_bytes": 2768
+  },
+  "source_comparison": [
+    {
+      "before": {
+        "path": "gene_annotation_episode/flux_balance_readers.py",
+        "sha256": "a45f95fb065c77b39621aec27010e208be87adcaac3400f6581ea7bfc73a059c",
+        "size_bytes": 55939
+      },
+      "after": {
+        "path": "gene_annotation_episode/flux_balance_readers.py",
+        "sha256": "b9b03350d7f906e29b41bbeee2490ee7bbcabc93629340ba5d80fbd8e5bfc0d9",
+        "size_bytes": 59624
+      },
+      "same_bytes": false
+    },
+    {
+      "before": {
+        "path": "gene_annotation_episode/flux_balance_contracts.py",
+        "sha256": "4afa17b742401ce06b81be5ac82536633fdd015fb157a3e46424b5a20ee8e610",
+        "size_bytes": 42888
+      },
+      "after": {
+        "path": "gene_annotation_episode/flux_balance_contracts.py",
+        "sha256": "4afa17b742401ce06b81be5ac82536633fdd015fb157a3e46424b5a20ee8e610",
+        "size_bytes": 42888
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "gene_annotation_episode/flux_balance_calculations.py",
+        "sha256": "5b14acbd8949fc7f5843daea7b8ea4d10ac6efb398dcbf32031610bb36c5ec97",
+        "size_bytes": 29187
+      },
+      "after": {
+        "path": "gene_annotation_episode/flux_balance_calculations.py",
+        "sha256": "5b14acbd8949fc7f5843daea7b8ea4d10ac6efb398dcbf32031610bb36c5ec97",
+        "size_bytes": 29187
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "gene_annotation_episode/flux_balance_sheet.py",
+        "sha256": "8aa85e857f448609efdf0bb9e6862de8c818fbb0af28965673aeab9fbccf6ce5",
+        "size_bytes": 818
+      },
+      "after": {
+        "path": "gene_annotation_episode/flux_balance_sheet.py",
+        "sha256": "8aa85e857f448609efdf0bb9e6862de8c818fbb0af28965673aeab9fbccf6ce5",
+        "size_bytes": 818
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "gene_annotation_episode/execution_contracts.py",
+        "sha256": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+        "size_bytes": 3461
+      },
+      "after": {
+        "path": "gene_annotation_episode/execution_contracts.py",
+        "sha256": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+        "size_bytes": 3461
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "tests/test_flux_balance_readers_680.py",
+        "sha256": "02068db01c395870d59d6662b86af569b01dc655de18a340d70a9c42b551c7c3",
+        "size_bytes": 43354
+      },
+      "after": {
+        "path": "tests/test_flux_balance_readers_680.py",
+        "sha256": "02068db01c395870d59d6662b86af569b01dc655de18a340d70a9c42b551c7c3",
+        "size_bytes": 43354
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "tests/test_flux_balance_partial_terms_683.py",
+        "sha256": "725a9a78dea20699e3d46768da2d0cc7f36f37671b01f7e34fa687a194e5f246",
+        "size_bytes": 9864
+      },
+      "after": {
+        "path": "tests/test_flux_balance_partial_terms_683.py",
+        "sha256": "725a9a78dea20699e3d46768da2d0cc7f36f37671b01f7e34fa687a194e5f246",
+        "size_bytes": 9864
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "tests/test_flux_balance_parser_boundary_684.py",
+        "sha256": "f41b7e1ae00623d496ed16608bb36d1126f3eb65110137d5bff1bbc7507613b9",
+        "size_bytes": 4820
+      },
+      "after": {
+        "path": "tests/test_flux_balance_parser_boundary_684.py",
+        "sha256": "f41b7e1ae00623d496ed16608bb36d1126f3eb65110137d5bff1bbc7507613b9",
+        "size_bytes": 4820
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_001.md",
+        "sha256": "ce1d66391283c9cf67f3c2be562b7ea493f9c6d8b989d97f49c9851f84aef23e",
+        "size_bytes": 17552
+      },
+      "after": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_001.md",
+        "sha256": "ce1d66391283c9cf67f3c2be562b7ea493f9c6d8b989d97f49c9851f84aef23e",
+        "size_bytes": 17552
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_002.md",
+        "sha256": "b7c840d7d293904212cb6698136d6dbc963fe3bf0b2b2d6a794029b33ab80da3",
+        "size_bytes": 6379
+      },
+      "after": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_002.md",
+        "sha256": "b7c840d7d293904212cb6698136d6dbc963fe3bf0b2b2d6a794029b33ab80da3",
+        "size_bytes": 6379
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_003.md",
+        "sha256": "a660bf19427d9de2431cf4d8f48c5022639f9f0a5dcfb7d54cb00965a3705fb6",
+        "size_bytes": 1802
+      },
+      "after": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_003.md",
+        "sha256": "a660bf19427d9de2431cf4d8f48c5022639f9f0a5dcfb7d54cb00965a3705fb6",
+        "size_bytes": 1802
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_004.md",
+        "sha256": "666d0a79f7a01de67c611f63e37e91843f037bfd4574b54a2d5795867f9e8b8f",
+        "size_bytes": 2055
+      },
+      "after": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_004.md",
+        "sha256": "666d0a79f7a01de67c611f63e37e91843f037bfd4574b54a2d5795867f9e8b8f",
+        "size_bytes": 2055
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_005.md",
+        "sha256": "dfd515f09111b91b531921816f8da5d00016e560f65fcecbab523a47520ecb4c",
+        "size_bytes": 1993
+      },
+      "after": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_005.md",
+        "sha256": "dfd515f09111b91b531921816f8da5d00016e560f65fcecbab523a47520ecb4c",
+        "size_bytes": 1993
+      },
+      "same_bytes": true
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_006.md",
+        "sha256": "8180913002560dc7503416ac6d459918534207e7b71d987cb89c3e924fe0b39f",
+        "size_bytes": 3076
+      },
+      "after": {
+        "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_006.md",
+        "sha256": "8180913002560dc7503416ac6d459918534207e7b71d987cb89c3e924fe0b39f",
+        "size_bytes": 3076
+      },
+      "same_bytes": true
+    }
+  ],
+  "final_parser": {
+    "path": "gene_annotation_episode/flux_balance_readers.py",
+    "sha256": "b9b03350d7f906e29b41bbeee2490ee7bbcabc93629340ba5d80fbd8e5bfc0d9",
+    "size_bytes": 59624
+  },
+  "final_tests": {
+    "path": "tests/test_flux_balance_parser_recovery_686.py",
+    "sha256": "de522dce691d766e8e371c366e9958d895f8e73a14a4f42e5baa32a7a1cfdeb0",
+    "size_bytes": 20189
+  },
+  "unchanged_authoritative_reproduction_tests": {
+    "path": "tests/test_flux_balance_parser_boundary_684.py",
+    "sha256": "f41b7e1ae00623d496ed16608bb36d1126f3eb65110137d5bff1bbc7507613b9",
+    "size_bytes": 4820
+  },
+  "historical_failed_reproduction": {
+    "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check147_review684",
+    "receipt": {
+      "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check147_review684/receipt.json",
+      "sha256": "d09cd11ac0ec12d799e69da3686fb5116b5895e8c7a94515455266dc6c365358",
+      "size_bytes": 1627
+    },
+    "expected_failures": 4,
+    "rewritten": false
+  },
+  "changes": [
+    "Local original source-index lists accompany filtered model entities, joins, problem rows, sparse terms and solution rows through later relationship checks.",
+    "Container validator paths are not appended to an original SourceIdJoin element path.",
+    "Typed producer source and File role addresses check exact string type before membership/get; malformed types yield located schema_invalid and unknown strings retain artifact_missing.",
+    "Only007 _keys compatibility seam: all declared required keys remain mandatory; undeclared keys rejected; declared optional keys need not be present."
+  ],
+  "verification_attempts": [
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686",
+      "reason": "Four unchanged684 reproductions,26 new686 cases,18 selected680 cases and4 selected683 cases after the006 repair and007 _keys seam.",
+      "pytest_passed": 52,
+      "pytest_failed": 0,
+      "pytest_seconds": 3.67,
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/handle.json",
+        "unit": "gene-local-job-76b4b9af3faa4aafa730a999363450da.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T07:49:59.748822+00:00",
+              "monotonic_ns": 1073761446147154,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 6.180492716,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 606748672
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "frozen_parser": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/source_snapshot/gene_annotation_episode/flux_balance_readers.py",
+        "sha256": "e3e41eafcffc06c3a8ecb53318bd65e0672abddbb959e4c9b74669bbf3f71625",
+        "size_bytes": 59663
+      },
+      "frozen_contracts": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/source_snapshot/gene_annotation_episode/flux_balance_contracts.py",
+        "sha256": "4afa17b742401ce06b81be5ac82536633fdd015fb157a3e46424b5a20ee8e610",
+        "size_bytes": 42888
+      },
+      "frozen_tests": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/source_snapshot/tests/test_flux_balance_parser_recovery_686.py",
+        "sha256": "e0aa608ba7aa0012dcde17241795ab4baa4ccec3fb1795fd20307c9a0ec473cc",
+        "size_bytes": 19740
+      },
+      "record_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/receipt.json",
+          "sha256": "ca364c34154919d9c242673f64fac947ff0e33a534a6f4d3435f658c2f8232a5",
+          "size_bytes": 1627
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/case_reports.jsonl",
+          "sha256": "5c9aa4bcd19000ebc32fb41c29ee848d04fd4857cb62341bbb87fe3596318ebc",
+          "size_bytes": 10959
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/selected_request.json",
+          "sha256": "27b79e9a1373b8ab335a600ace14bbd1b6d1385d3304250de4bbfb0bd8b681b0",
+          "size_bytes": 4868
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/selected_tests.json",
+          "sha256": "6ad7a0f49e45a94f6355a9a32b1d3280b2b695ea4052d26720147081eb9a0ddb",
+          "size_bytes": 2063
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/stdout.txt",
+          "sha256": "ca8057434ba3af462dc5f6397761478ad6d81e9eb1881c8a404f480754291857",
+          "size_bytes": 99
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/handle.json",
+          "sha256": "daf30ce5009ae183e54a01b548acd29b5f60800fb1e9045763cffd7a0386040c",
+          "size_bytes": 3132
+        }
+      ],
+      "example_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba684_model_join_index.json",
+          "sha256": "4128b4ceee8b2d503c606ee8d46e1238d52719f86f81ee208c6244fad04da8c6",
+          "size_bytes": 55562
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba684_problem_join_index.json",
+          "sha256": "10e9e085cd83449d538684600a2b571aa2c0224be3751d5550a7bbb1f7efc794",
+          "size_bytes": 179285
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba684_source_role_dict.json",
+          "sha256": "0b0363a6872b910068860cacbc6a178e7436495abbb115d8a13b8fdc52cb9c90",
+          "size_bytes": 45946
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba684_source_role_list.json",
+          "sha256": "02a537eb86ba410f70c177ef51e7c9672510a7f213e73461c48b8bea933bd27b",
+          "size_bytes": 45946
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_bundle_model_join_basic_solution.json",
+          "sha256": "5092521f42428f2dbd3934fa5ceaeb1ddc078bb3e7e475823e9de06ace4b93c6",
+          "size_bytes": 134522
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_bundle_model_join_not_established.json",
+          "sha256": "d3f89fc964b2bee00a6aa406f14c58c79e2615ee0a0b3ebcd57475f15004cbf1",
+          "size_bytes": 131156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_cross_model_joins.json",
+          "sha256": "e46fa445e1fd0c8383c616498c68553c180608575dd75e5924fb36f40449d2b0",
+          "size_bytes": 163235
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_missing_model_reaction.json",
+          "sha256": "189d8245f54c167fbe09597abf8406f9cfc6b19d65160ec9fdd4c0ce36251104",
+          "size_bytes": 50765
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_population_compartments.json",
+          "sha256": "a1782321f094bf456357b281b82cfe6ea8980ed31d6a8fa7cdf905ebbe047373",
+          "size_bytes": 53269
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_population_genes.json",
+          "sha256": "6baf5e1531dc81f7d7266b42338e5f34a2e37a2eb58640851ee8d04d4bb440ab",
+          "size_bytes": 53391
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_population_groups.json",
+          "sha256": "c36773550adfa359bba17906da9a992569b1abac689b4833524bd9092fc9a786",
+          "size_bytes": 53826
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_population_metabolites.json",
+          "sha256": "2b9ee32d5e56f1604790adf7f6e0a3c342d42450ef9b931de19e4959fdc3c4d0",
+          "size_bytes": 53808
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_population_reactions.json",
+          "sha256": "c5f15ae0775878983e469c57bd8c6a3d1e7f715d48623f182f6a43fba55b7709",
+          "size_bytes": 54338
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_relationship_compartment_position.json",
+          "sha256": "0fda8cd70428e051322bd59f0e7d0a4f098320e71885d9633887e2a77848acc2",
+          "size_bytes": 52222
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_relationship_gene_positions.json",
+          "sha256": "6e0e861f7aafd65ebcc195277eb7db494a7694ea914b58036dcafe86d54b002b",
+          "size_bytes": 53178
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_relationship_group_members.json",
+          "sha256": "b6f075f84f5622a021ceb102eb535973329ddbc203c9f33c64e16372cd195393",
+          "size_bytes": 54815
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_relationship_medium.json",
+          "sha256": "8835cb1bd5223074ecc98d337bb0fb2e2e578de3186af019c1909d96bcc01783",
+          "size_bytes": 55533
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_model_relationship_stoichiometry.json",
+          "sha256": "5b6eb53edc934328e607e2e229d44126b0dc6b90b194df3055c043f232822ab1",
+          "size_bytes": 52215
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_partial_model_join.json",
+          "sha256": "fe96a55b176875f7e74c498a811c755d9996349124bcc4321b0c627e4c53e75f",
+          "size_bytes": 174079
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_problem_population_constraints.json",
+          "sha256": "185cea4f6cef3f06593f56d63111de408a4fbbe68587cc43f450341ea0187ae3",
+          "size_bytes": 177454
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_problem_population_variables.json",
+          "sha256": "37943d5597e937903a98b210ac810a24e22dcee82caf4d4adb18c27efff41cd6",
+          "size_bytes": 175171
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_role_identity_dict.json",
+          "sha256": "7dce49aa2ec6551c38d6b8779aee9eb93595af91d245bbe445213aedcce9dd64",
+          "size_bytes": 47079
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_role_identity_list.json",
+          "sha256": "00e97b64ab9598f260f8b7702a8cb08aa2d4196c1ae033d99f4687a23eca1eba",
+          "size_bytes": 47079
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_role_identity_str.json",
+          "sha256": "266a762302b3c96ca5d696d59499afff48a31fb5103191d1a354f2d69ea020bc",
+          "size_bytes": 47090
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_role_pointer_dict.json",
+          "sha256": "9ccf46e5fa2dad59fc17d61e2e07f834c9fd795b38a5b077f415ff58ac2288e0",
+          "size_bytes": 44455
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_role_pointer_list.json",
+          "sha256": "2025fc645ecd6a33316071631eee55b25e0fe33bb1b1fcb3022f391a5be5e754",
+          "size_bytes": 44455
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_role_pointer_str.json",
+          "sha256": "e7beca0fec9fb89e0f4d4c48a75c5cb30c895815d0453ea38f279418e9ae8586",
+          "size_bytes": 44466
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_source_join_positions.json",
+          "sha256": "8e02535901e65b91ad770f1030d0b565a42b8be9dbe8a2dd5e0ea6757250fa09",
+          "size_bytes": 53662
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_sparse_indices_constraint.json",
+          "sha256": "6d9ae9aa7f8503910bf86ab4efe7565825d72ed82b9b0afdcb3c6e4d97879729",
+          "size_bytes": 173728
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba686_sparse_indices_objective.json",
+          "sha256": "197da4ebd72a345c05a57a363e1a475cf90255d1aa75981d7d2caec0d162bb9b",
+          "size_bytes": 171109
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba683_complete_expression.json",
+          "sha256": "a0dedf166f0c1adf97073465c7c81ad5be2610db198c1e3ea8370645f6b043a0",
+          "size_bytes": 318798
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba683_malformed_coefficient.json",
+          "sha256": "eda02ca9d6a1b923ab3b7ac049dc55762858d3a029a3a31f2fb82fac1c8b68bd",
+          "size_bytes": 324398
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149_recovery686/fba683_out_of_range_variable.json",
+          "sha256": "d50be60b0573854885399ac9ac719eabef1112285c5042fa902d62f4d78e2429",
+          "size_bytes": 323091
+        }
+      ]
+    },
+    {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686",
+      "reason": "One-line removal of an incidental new partial-flag assignment; two affected population cases plus two no-predecessor counterparts. No unrelated passing cases repeated.",
+      "pytest_passed": 4,
+      "pytest_failed": 0,
+      "pytest_seconds": 0.78,
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/handle.json",
+        "unit": "gene-local-job-40dd04d2f58a47c7b8793d7b2d27114c.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T07:52:51.878821+00:00",
+              "monotonic_ns": 1073933576147013,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 3.356211102,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 603746304
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "frozen_parser": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/source_snapshot/gene_annotation_episode/flux_balance_readers.py",
+        "sha256": "b9b03350d7f906e29b41bbeee2490ee7bbcabc93629340ba5d80fbd8e5bfc0d9",
+        "size_bytes": 59624
+      },
+      "frozen_contracts": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/source_snapshot/gene_annotation_episode/flux_balance_contracts.py",
+        "sha256": "4afa17b742401ce06b81be5ac82536633fdd015fb157a3e46424b5a20ee8e610",
+        "size_bytes": 42888
+      },
+      "frozen_tests": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/source_snapshot/tests/test_flux_balance_parser_recovery_686.py",
+        "sha256": "de522dce691d766e8e371c366e9958d895f8e73a14a4f42e5baa32a7a1cfdeb0",
+        "size_bytes": 20189
+      },
+      "record_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/receipt.json",
+          "sha256": "3d3da285454a7c04e2c34490542f0e7c5e439b073090a19ebcabc25eda60e01e",
+          "size_bytes": 1628
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/case_reports.jsonl",
+          "sha256": "9c1b30e23905eb87ed4e58e93543547d64ced3be0df63ecae4c3bc8db1fcf820",
+          "size_bytes": 920
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/selected_request.json",
+          "sha256": "f959ed02692830ab8cb1ed044c485037a34f2ea019d01e6000b2bb20f9e13ae9",
+          "size_bytes": 2887
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/selected_tests.json",
+          "sha256": "434564819dbe93316fc96553dd6253a12a327b1e21942285c605d3095d1fecdb",
+          "size_bytes": 109
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/stdout.txt",
+          "sha256": "0ba0b96d2dab44af9daf532ad380b84268b972dc08dd196a7cd694b58a1f0057",
+          "size_bytes": 98
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/handle.json",
+          "sha256": "aff121e14679a9c4f649c7cdad6eca3c03e58023ac63d3bd13fadc83bb640935",
+          "size_bytes": 3144
+        }
+      ],
+      "example_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/fba686_problem_population_constraints_False.json",
+          "sha256": "aefcce9ce3f7a24f93d1ddf59a810db243253c4e86867ddd1092b12b0c25d5d3",
+          "size_bytes": 175619
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/fba686_problem_population_constraints_True.json",
+          "sha256": "185cea4f6cef3f06593f56d63111de408a4fbbe68587cc43f450341ea0187ae3",
+          "size_bytes": 177454
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/fba686_problem_population_variables_False.json",
+          "sha256": "341562d94292904b535cd6df76f7d969cfee44fa2b6b9ba3f48a25f7165cf973",
+          "size_bytes": 173338
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check149a_recovery686/fba686_problem_population_variables_True.json",
+          "sha256": "37943d5597e937903a98b210ac810a24e22dcee82caf4d4adb18c27efff41cd6",
+          "size_bytes": 175171
+        }
+      ]
+    }
+  ],
+  "test_selection_limit": "The52-case set ran on the initial repair. The final parser differs by removing one added partial=True assignment. Four directly affected cases ran on that exact final parser. No claim of a full52-case rerun on the final revision.",
+  "verification_resources": {
+    "dependencies_from": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check005/dependencies",
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "swap_bytes": 0,
+    "wall_seconds": null,
+    "same_handle_observed_until_closure_per_attempt": true,
+    "support_tree": "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe"
+  },
+  "examples": {
+    "original_source_join": {
+      "before": {
+        "field": "/source_to_loaded_ids/0/source_to_loaded_ids",
+        "source_row_index": 0
+      },
+      "after": {
+        "field": "/source_to_loaded_ids/1",
+        "source_row_index": 1
+      },
+      "valid_source_record_2_survives": true
+    },
+    "independent_entity_positions": {
+      "issue_field": "/source_to_loaded_ids/1",
+      "source_row_index": 1,
+      "rejected_source_record_index": 41,
+      "rejected_loaded_position": 2,
+      "retained_source_record_index": 81,
+      "retained_loaded_position": 0
+    },
+    "original_reaction_variable_join": {
+      "issue_field": "/effective/reaction_variables/2",
+      "source_row_index": 2,
+      "reaction_position": 2,
+      "retained_reaction_position": 1,
+      "variable_count": 7,
+      "constraint_count": 5
+    },
+    "malformed_role": {
+      "issue_field": "/variable_values/0/primal/source/role",
+      "code": "schema_invalid",
+      "source_row_index": 0,
+      "variable_position": 0,
+      "retained_variable_positions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_reaction_fluxes": [
+        7,
+        6,
+        6
+      ],
+      "retained_constraint_values": 5,
+      "native_glpk_objective": -4.25,
+      "native_cobra_objective": -2.75,
+      "optlang_status": "optimal"
+    },
+    "nested_sparse_terms": {
+      "issue_field": "/effective/constraints/4/terms/1",
+      "source_row_index": 1,
+      "constraint_position": 3,
+      "rejected_variable_position": 9,
+      "retained_variable_position": 4,
+      "retained_coefficient": 2,
+      "retained_source_pointer": "/effective/constraints/4/terms/2/coefficient/value",
+      "terms_complete": false
+    },
+    "shared_683_calculations": {
+      "incomplete_expected_term_count": null,
+      "incomplete_available_term_count": 2,
+      "incomplete_activity": null,
+      "complete_expected_term_count": 4,
+      "complete_available_term_count": 4,
+      "complete_activity": 13,
+      "complete_equality_residual": 12,
+      "saved_sheet_only_recalculation_passed": true
+    }
+  },
+  "new_native_solves": 0,
+  "acquisition": 0,
+  "downloads": 0,
+  "scope_limits": [
+    "Supplied-byte parser recovery only; all malformed/normalized capture examples are controlled tests derived from retained677 evidence.",
+    "Shared schemas/calculator/sheet and all prior tests were unchanged by686. Both attempts froze the pre007 shared contract hash4afa17b742401ce06b81be5ac82536633fdd015fb157a3e46424b5a20ee8e610.",
+    "007 new audit/application/native-evidence parsing and optional-field consumer verification belong to their later assigned owners.",
+    "No production capture, native producer, installed execution operation, publication, requested child return, episode integration or live-resource verification is established here.",
+    "No execution, prompt, goal, inventory, progress or credit changes."
+  ],
+  "read_trace": [
+    "full supplied original goal attachment",
+    "AGENTS.md",
+    "docs/TOOL_GRADER_GOAL_AND_PRINCIPLES_2026-10-24_001.md",
+    "relevant perform_flux_balance_analysis WORK_STATUS row",
+    "full679 contracts001-007 and681 RECORD_ADDITIONS_001.md",
+    "full684 BOUNDARY_REVIEW_001.md and EVIDENCE_001.json",
+    "complete flux_balance_readers.py, flux_balance_contracts.py, flux_balance_sheet.py, flux_balance_calculations.py, execution_contracts.py",
+    "complete680,683,684 tests; complete bounded529 run_checks.py and bounded_entry.py"
+  ]
+}

@@ -1,0 +1,520 @@
+{
+  "status": "partial",
+  "value": {
+    "table": {
+      "table_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics",
+      "artifact": {
+        "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+        "source_ref": "source/native-test",
+        "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+      },
+      "dialect": "current_missing_header_tab",
+      "header_tokens": [
+        "PGFam",
+        "gaps",
+        "sum_squared_freq",
+        "mean_squared_freq",
+        "num_pos",
+        "num_seqs",
+        "worstSeqScoreused_in_tree"
+      ],
+      "rows": [
+        {
+          "row_index": 0,
+          "record_kind": "data",
+          "raw_text": "F_underflow\t0\t1e-999\t-0e-999\t3\t2\tna\tTrue",
+          "fields": [
+            "F_underflow",
+            "0",
+            "1e-999",
+            "-0e-999",
+            "3",
+            "2",
+            "na",
+            "True"
+          ],
+          "family_id": "F_underflow",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+              "source_ref": "source/native-test",
+              "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+            },
+            "byte_start_0based": 89,
+            "byte_end_0based_exclusive": 129,
+            "line_start_1based": 2,
+            "line_end_1based_inclusive": 2,
+            "xml_path": null
+          }
+        },
+        {
+          "row_index": 1,
+          "record_kind": "bad_sequences",
+          "raw_text": "bad seqs: {'valid': 9.0, 'tiny': -1e-999}",
+          "fields": [
+            "bad seqs: {'valid': 9.0, 'tiny': -1e-999}"
+          ],
+          "family_id": "F_underflow",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+              "source_ref": "source/native-test",
+              "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+            },
+            "byte_start_0based": 130,
+            "byte_end_0based_exclusive": 171,
+            "line_start_1based": 3,
+            "line_end_1based_inclusive": 3,
+            "xml_path": null
+          }
+        },
+        {
+          "row_index": 2,
+          "record_kind": "data",
+          "raw_text": "F_small\t0\t5e-324\t-2.5\t3\t2\t+0\tFalse",
+          "fields": [
+            "F_small",
+            "0",
+            "5e-324",
+            "-2.5",
+            "3",
+            "2",
+            "+0",
+            "False"
+          ],
+          "family_id": "F_small",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+              "source_ref": "source/native-test",
+              "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+            },
+            "byte_start_0based": 172,
+            "byte_end_0based_exclusive": 206,
+            "line_start_1based": 4,
+            "line_end_1based_inclusive": 4,
+            "xml_path": null
+          }
+        },
+        {
+          "row_index": 3,
+          "record_kind": "bad_sequences",
+          "raw_text": "bad seqs: {'explicit_negative_zero': -0.000e-999, 'smallest_nonzero': 5e-324, 'signed': +9.5}",
+          "fields": [
+            "bad seqs: {'explicit_negative_zero': -0.000e-999, 'smallest_nonzero': 5e-324, 'signed': +9.5}"
+          ],
+          "family_id": "F_small",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+              "source_ref": "source/native-test",
+              "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+            },
+            "byte_start_0based": 207,
+            "byte_end_0based_exclusive": 300,
+            "line_start_1based": 5,
+            "line_end_1based_inclusive": 5,
+            "xml_path": null
+          }
+        }
+      ],
+      "completeness": "partial"
+    },
+    "observations": [
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_gaps",
+        "field": "family_native_gaps",
+        "value": 0,
+        "raw_token": "0",
+        "state": "available",
+        "unit": "characters",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_underflow",
+        "subject_id": "F_underflow",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 101,
+          "byte_end_0based_exclusive": 102,
+          "line_start_1based": 2,
+          "line_end_1based_inclusive": 2,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_sum_squared_freq",
+        "field": "family_native_sum_squared_freq",
+        "value": null,
+        "raw_token": "1e-999",
+        "state": "failed",
+        "unit": "column_summed_squared_fraction",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_underflow",
+        "subject_id": "F_underflow",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 103,
+          "byte_end_0based_exclusive": 109,
+          "line_start_1based": 2,
+          "line_end_1based_inclusive": 2,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_mean_squared_freq",
+        "field": "family_native_mean_squared_freq",
+        "value": -0.0,
+        "raw_token": "-0e-999",
+        "state": "available",
+        "unit": "mean_squared_fraction",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_underflow",
+        "subject_id": "F_underflow",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 110,
+          "byte_end_0based_exclusive": 117,
+          "line_start_1based": 2,
+          "line_end_1based_inclusive": 2,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_length",
+        "field": "family_native_length",
+        "value": 3,
+        "raw_token": "3",
+        "state": "available",
+        "unit": "columns",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_underflow",
+        "subject_id": "F_underflow",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 118,
+          "byte_end_0based_exclusive": 119,
+          "line_start_1based": 2,
+          "line_end_1based_inclusive": 2,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_sequences",
+        "field": "family_native_sequences",
+        "value": 2,
+        "raw_token": "2",
+        "state": "available",
+        "unit": "sequences",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_underflow",
+        "subject_id": "F_underflow",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 120,
+          "byte_end_0based_exclusive": 121,
+          "line_start_1based": 2,
+          "line_end_1based_inclusive": 2,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_worst_sequence_ratio",
+        "field": "family_native_worst_sequence_ratio",
+        "value": null,
+        "raw_token": "na",
+        "state": "missing",
+        "unit": "ratio",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_underflow",
+        "subject_id": "F_underflow",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 122,
+          "byte_end_0based_exclusive": 124,
+          "line_start_1based": 2,
+          "line_end_1based_inclusive": 2,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_gaps",
+        "field": "family_native_gaps",
+        "value": 0,
+        "raw_token": "0",
+        "state": "available",
+        "unit": "characters",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_small",
+        "subject_id": "F_small",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 180,
+          "byte_end_0based_exclusive": 181,
+          "line_start_1based": 4,
+          "line_end_1based_inclusive": 4,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_sum_squared_freq",
+        "field": "family_native_sum_squared_freq",
+        "value": 5e-324,
+        "raw_token": "5e-324",
+        "state": "available",
+        "unit": "column_summed_squared_fraction",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_small",
+        "subject_id": "F_small",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 182,
+          "byte_end_0based_exclusive": 188,
+          "line_start_1based": 4,
+          "line_end_1based_inclusive": 4,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_mean_squared_freq",
+        "field": "family_native_mean_squared_freq",
+        "value": -2.5,
+        "raw_token": "-2.5",
+        "state": "available",
+        "unit": "mean_squared_fraction",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_small",
+        "subject_id": "F_small",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 189,
+          "byte_end_0based_exclusive": 193,
+          "line_start_1based": 4,
+          "line_end_1based_inclusive": 4,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_length",
+        "field": "family_native_length",
+        "value": 3,
+        "raw_token": "3",
+        "state": "available",
+        "unit": "columns",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_small",
+        "subject_id": "F_small",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 194,
+          "byte_end_0based_exclusive": 195,
+          "line_start_1based": 4,
+          "line_end_1based_inclusive": 4,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_sequences",
+        "field": "family_native_sequences",
+        "value": 2,
+        "raw_token": "2",
+        "state": "available",
+        "unit": "sequences",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_small",
+        "subject_id": "F_small",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 196,
+          "byte_end_0based_exclusive": 197,
+          "line_start_1based": 4,
+          "line_end_1based_inclusive": 4,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      },
+      {
+        "observation_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_worst_sequence_ratio",
+        "field": "family_native_worst_sequence_ratio",
+        "value": 0.0,
+        "raw_token": "+0",
+        "state": "available",
+        "unit": "ratio",
+        "population_id": "raw/codon-numeric-boundary-counterexample#codon_family_statistics/population/family/F_small",
+        "subject_id": "F_small",
+        "method": "codon_tree_native_pretrim_statistics",
+        "location": {
+          "artifact": {
+            "raw_artifact_ref": "raw/codon-numeric-boundary-counterexample",
+            "source_ref": "source/native-test",
+            "sha256": "ad0f54c3c9ab818d749f5bdab8ca424e2d9fff1269b94dca7e969ffbc772962a"
+          },
+          "byte_start_0based": 198,
+          "byte_end_0based_exclusive": 200,
+          "line_start_1based": 4,
+          "line_end_1based_inclusive": 4,
+          "xml_path": null
+        },
+        "evidence": [],
+        "uncertainty": null,
+        "requirement_ids": []
+      }
+    ],
+    "rows": [
+      {
+        "family_id": "F_underflow",
+        "observation_ids": [
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_gaps",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_sum_squared_freq",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_mean_squared_freq",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_length",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_sequences",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/0/family_native_worst_sequence_ratio"
+        ],
+        "used_in_tree": true,
+        "bad_sequence_values": [],
+        "disqualification": null,
+        "source_row_indices": [
+          0,
+          1
+        ]
+      },
+      {
+        "family_id": "F_small",
+        "observation_ids": [
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_gaps",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_sum_squared_freq",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_mean_squared_freq",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_length",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_sequences",
+          "raw/codon-numeric-boundary-counterexample#codon_family_statistics/row/2/family_native_worst_sequence_ratio"
+        ],
+        "used_in_tree": false,
+        "bad_sequence_values": [
+          {
+            "genome_id": "explicit_negative_zero",
+            "value": -0.0
+          },
+          {
+            "genome_id": "smallest_nonzero",
+            "value": 5e-324
+          },
+          {
+            "genome_id": "signed",
+            "value": 9.5
+          }
+        ],
+        "disqualification": null,
+        "source_row_indices": [
+          2,
+          3
+        ]
+      }
+    ],
+    "header_defect": "missing_tab_before_used_in_tree"
+  },
+  "diagnostics": [
+    {
+      "code": "codon_header_missing_tab",
+      "phase": "native_decode",
+      "path": "/value/table/header_tokens/6",
+      "severity": "qualification",
+      "evidence_refs": []
+    },
+    {
+      "code": "codon_native_number_invalid",
+      "phase": "native_decode",
+      "path": "/value/table/rows/0/fields/2",
+      "severity": "error",
+      "evidence_refs": []
+    },
+    {
+      "code": "codon_native_number_missing",
+      "phase": "native_decode",
+      "path": "/value/table/rows/0/fields/6",
+      "severity": "qualification",
+      "evidence_refs": []
+    },
+    {
+      "code": "codon_bad_sequence_map_invalid",
+      "phase": "native_decode",
+      "path": "/value/table/rows/1",
+      "severity": "error",
+      "evidence_refs": []
+    }
+  ]
+}

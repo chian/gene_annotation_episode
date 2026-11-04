@@ -1,0 +1,1074 @@
+{
+  "record_type": "selected_utility_source_material_consumer_verification",
+  "recorded_at": "2026-10-29T04:14:21.504865+00:00",
+  "status": "implemented_all29_new_consumer_cases_have_passing_outcomes",
+  "contract": {
+    "path": "verification/tool_graders_blast_utility_material_access_2026-10-28_666/IMPLEMENTATION_PORT_001.md",
+    "sha256": "3d1013f6bbe3271be6da8f865f747d2171ce42cff836fff256c756a581db2229",
+    "size_bytes": 3921
+  },
+  "source_pins": [
+    {
+      "path": "gene_annotation_episode/episode_services.py",
+      "sha256": "2f0df11f6513fdd9dd1e6b9e98ab87323e982c282532823f9e03e5ec09c21d7c",
+      "size_bytes": 30524
+    },
+    {
+      "path": "gene_annotation_episode/episode_bindings.py",
+      "sha256": "defde2143d3c05f19ba506991ba50beaf97cd3492f229e9e9bc2fd816447d366",
+      "size_bytes": 14723
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_episodes.py",
+      "sha256": "3f894c99272640434fb54386929c036036ce56c96be9a5d70112f3b7d23faad4",
+      "size_bytes": 39281
+    },
+    {
+      "path": "gene_annotation_episode/materials.py",
+      "sha256": "83e82872a5b1f1c8e57b06521c92c20be5703f1a7b64d35faaef26efa3a53e24",
+      "size_bytes": 42654
+    },
+    {
+      "path": "tests/test_blast_utility_material_access_666.py",
+      "sha256": "001232ef7e6938992092d7d1fe83ac81a34eb0fdc513f8b81b80f0f31be5b347",
+      "size_bytes": 12405
+    }
+  ],
+  "owned_production_files_identical_across_passing_attempts": true,
+  "new_consumer_checks": 29,
+  "additional_distinct_regression_checks_passed": 98,
+  "new_passing_cases": [
+    "tests.test_blast_utility_material_access_666.test_artifact_grants_cannot_be_checked_under_another_run",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-material.from_source]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-material.parse]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-material.read]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-source.locate]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-source.read]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-material.from_source]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-material.parse]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-material.read]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-source.locate]",
+    "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-source.read]",
+    "tests.test_blast_utility_material_access_666.test_each_selected_representation_requires_its_own_artifact_grant[stderr]",
+    "tests.test_blast_utility_material_access_666.test_each_selected_representation_requires_its_own_artifact_grant[stdout]",
+    "tests.test_blast_utility_material_access_666.test_each_selected_representation_requires_its_own_artifact_grant[text]",
+    "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[material.from_source]",
+    "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[material.parse]",
+    "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[material.read]",
+    "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[source.locate]",
+    "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[source.read]",
+    "tests.test_blast_utility_material_access_666.test_missing_utility_owner_does_not_make_known_utility_bytes_ordinary",
+    "tests.test_blast_utility_material_access_666.test_ordinary_caller_material_and_source_locate_preserve_behavior",
+    "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.from_source]",
+    "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.parse]",
+    "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.read]",
+    "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[source.locate]",
+    "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[source.read]",
+    "tests.test_blast_utility_material_access_666.test_source_read_text_fallback_checks_the_actual_bundle",
+    "tests.test_blast_utility_material_access_666.test_unavailable_stream_retains_existing_structured_feedback",
+    "tests.test_blast_utility_material_access_666.test_unrelated_auxiliary_grant_does_not_grant_bundle_or_replay"
+  ],
+  "regression_passing_cases": [
+    "tests.test_material_intake.test_auto_unknown_assets_remain_bytes_not_sequences[\\x00\\xff\\x80binary-unknown]",
+    "tests.test_material_intake.test_auto_unknown_assets_remain_bytes_not_sequences[growth\\tph\\nobserved\\t7\\n-unknown]",
+    "tests.test_material_intake.test_auto_unknown_assets_remain_bytes_not_sequences[{\"organism\": \"unknown\"}-unknown]",
+    "tests.test_material_intake.test_caller_can_select_actual_fragment_without_read_role_gate",
+    "tests.test_material_intake.test_explicit_uncertain_single_read_is_target",
+    "tests.test_material_intake.test_failed_independent_entry_retains_other_targets_and_manifest",
+    "tests.test_material_intake.test_gzip_lineage_cache_reopen_and_bounded_members",
+    "tests.test_material_intake.test_invalid_manifest_and_failed_gzip_still_have_original_custody",
+    "tests.test_material_intake.test_malformed_fastq_keeps_valid_prefix_and_marks_remainder_unparsed",
+    "tests.test_material_intake.test_member_reference_rejects_different_same_length_native_sequence",
+    "tests.test_material_intake.test_partial_fasta_retains_independent_records_and_source_ordinals",
+    "tests.test_material_intake.test_portable_export_keeps_material_members_and_quality_reference_closure",
+    "tests.test_material_intake.test_read_library_is_bound_without_per_read_targets",
+    "tests.test_material_intake.test_registered_external_source_reused_without_origin_or_target_relabeling",
+    "tests.test_material_intake.test_unbound_cli_run_reports_missing_binding_without_model_call",
+    "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad0]",
+    "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad1]",
+    "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad2]",
+    "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad3]",
+    "tests.test_scientific_process_episodes.test_catalog_and_execution_enforce_same_selected_schema_scope_and_operation",
+    "tests.test_scientific_process_episodes.test_closing_form_and_credit_use_original_binding_without_reading_private_revisions",
+    "tests.test_scientific_process_episodes.test_declared_child_edges_keep_specialist_branches_separate",
+    "tests.test_scientific_process_episodes.test_evidence_is_validated_and_exposed_only_as_inherited_references",
+    "tests.test_scientific_process_episodes.test_frame_contains_selected_guidance_and_binding_limits_without_source_cases",
+    "tests.test_scientific_process_episodes.test_historical_revision_parser_remains_an_inspection_only_wire_parser",
+    "tests.test_scientific_process_episodes.test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies",
+    "tests.test_scientific_process_episodes.test_one_registered_role_accepts_new_data_defined_thought_without_altering_form",
+    "tests.test_scientific_process_episodes.test_ordinary_child_with_different_process_does_not_infer_revision_origin",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[assignment]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[binding]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[binding_version]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[form]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[initial_report]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[invocation_ref]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[objective]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[purpose]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[scope]",
+    "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[selection]",
+    "tests.test_scientific_process_episodes.test_requested_process_facts_copy_closed_credit_and_merge_only_received_rows",
+    "tests.test_scientific_process_episodes.test_revision_cannot_change_annotation_or_library_or_add_freehand_fields",
+    "tests.test_scientific_process_episodes.test_revision_origin_authenticates_one_preparation_on_fill_and_restoration",
+    "tests.test_scientific_process_episodes.test_revision_origin_is_not_required_for_other_parent_selected_processes",
+    "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[arguments]",
+    "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[digest]",
+    "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[fields]",
+    "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[operation]",
+    "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[origin]",
+    "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[owner]",
+    "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[selection]",
+    "tests.test_scientific_process_episodes.test_revision_prepares_copyable_child_origin_and_leaves_original_frame_fixed",
+    "tests.test_scientific_process_episodes.test_semantic_invocation_and_origin_records_are_finite_exact_and_stable",
+    "tests.test_scientific_process_episodes.test_setup_freezes_descriptor_without_executable_services_and_reopens_original",
+    "tests.test_scientific_process_episodes.test_unbound_tool_context_is_visible_and_does_not_reject_invocation",
+    "tests.test_source_locations.test_binary_and_invalid_utf8_fail[a\\x00-binary]",
+    "tests.test_source_locations.test_binary_and_invalid_utf8_fail[a\\xe2-not_utf8]",
+    "tests.test_source_locations.test_binary_and_invalid_utf8_fail[a\\xff-not_utf8]",
+    "tests.test_source_locations.test_bounded_search_does_not_validate_unexamined_suffix_or_read_full_source",
+    "tests.test_source_locations.test_complete_from_zero_scan_verifies_content_addressed_bytes",
+    "tests.test_source_locations.test_context_cannot_hide_malformed_source_eof_as_a_clipped_character",
+    "tests.test_source_locations.test_explicit_text_does_not_fall_back_to_original",
+    "tests.test_source_locations.test_identity_conflicts_and_storage_failures_are_specific",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[context_bytes--1]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[context_bytes-True]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[limit-0]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[limit-False]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[limit-inf]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[needle-None]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[needle-True]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[needle-]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset--1]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-1.5]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-99]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-True]",
+    "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-nan]",
+    "tests.test_source_locations.test_native_readers_receive_unchanged_witness_and_keep_censor_and_unit_checks",
+    "tests.test_source_locations.test_no_match_exact_eof_and_multibyte_context_clipping",
+    "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[-1]",
+    "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[1.5]",
+    "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[True]",
+    "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[inf]",
+    "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[nan]",
+    "tests.test_source_locations.test_registry_failed_attempt_replays_its_original_failure_details[change0]",
+    "tests.test_source_locations.test_registry_failed_attempt_replays_its_original_failure_details[change1]",
+    "tests.test_source_locations.test_registry_failed_attempt_replays_its_original_failure_details[change2]",
+    "tests.test_source_locations.test_registry_original_arguments_replay_receipts_scope_and_no_publication",
+    "tests.test_source_locations.test_registry_reopens_original_result_read_only_without_source_io",
+    "tests.test_source_locations.test_short_source_or_context_read_is_an_integrity_failure_not_a_loop_or_match[context]",
+    "tests.test_source_locations.test_short_source_or_context_read_is_an_integrity_failure_not_a_loop_or_match[scan]",
+    "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[1]",
+    "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[2]",
+    "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[3]",
+    "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[65536]",
+    "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[7]",
+    "tests.test_source_locations.test_utf8_crlf_markup_and_distinct_representations",
+    "tests.test_source_representations.test_multiple_primary_headers_do_not_silently_choose_an_identity[<front><article-meta><article-id pub-id-type=\"pmcid\">PMC2</article-id></article-meta></front><front><article-meta><article-id pub-id-type=\"pmcid\">PMC3</article-id></article-meta></front>]",
+    "tests.test_source_representations.test_multiple_primary_headers_do_not_silently_choose_an_identity[<front><article-meta><article-id pub-id-type=\"pmcid\">PMC2</article-id></article-meta><article-meta><article-id pub-id-type=\"pmcid\">PMC3</article-id></article-meta></front>]",
+    "tests.test_source_representations.test_oversized_numeric_metadata_cannot_prevent_article_retention",
+    "tests.test_source_representations.test_primary_publication_ids_ignore_citations_subarticles_and_representation_aliases"
+  ],
+  "attempts": [
+    {
+      "attempt": "check127_material_access666_baseline",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127_material_access666_baseline/receipt.json",
+        "sha256": "03b241651031dc6877be01303f982ff77c18543911bc506abbf66a82130f7fc4",
+        "size_bytes": 1645
+      },
+      "junit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127_material_access666_baseline/junit.xml",
+        "sha256": "589c58ebb763accfdc6395ff9a098207b14daeef809dafebefc7770974fe42a6",
+        "size_bytes": 1726
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "returncode": 1,
+      "counts": {
+        "passed": 0,
+        "failed": 0,
+        "error": 1,
+        "skipped": 0
+      },
+      "interpretation": "Fixture selected current tool_info through a legacy frozen catalog; setup failed before consumer execution.",
+      "cases": [
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.from_source]",
+          "outcome": "error",
+          "message": "failed on setup with \"ValueError: scientific_tool_info_not_in_legacy_snapshot\""
+        }
+      ],
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 602910720
+    },
+    {
+      "attempt": "check127b_material_access666_baseline",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127b_material_access666_baseline/receipt.json",
+        "sha256": "a7b468f78c0818e9d32b7955e034ebdd690d13aa8aa19c3aeee8a7e14d71edba",
+        "size_bytes": 1646
+      },
+      "junit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127b_material_access666_baseline/junit.xml",
+        "sha256": "434f9d6385746f592c4f2d3bdacf099a4243bb81c11eaa28f30532b36a3c3443",
+        "size_bytes": 1327
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "returncode": 1,
+      "counts": {
+        "passed": 0,
+        "failed": 1,
+        "error": 0,
+        "skipped": 0
+      },
+      "interpretation": "Corrected current catalog fixture reproduced the actual defect: source-only material.from_source completed and registered a wrapper.",
+      "cases": [
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.from_source]",
+          "outcome": "failed",
+          "message": "AssertionError: {'status': 'completed', 'operation_ref': 'operation_9b6e9e097cd586d220217340', 'record_refs': ['material_ddb7bd9c744ce...a3f57fbb5', 'parse_with': {'material_ref': 'material_ddb7bd9c744ce8eeee6d388f'}, 'target_binding_changed': False}, ...}"
+        }
+      ],
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 603488256
+    },
+    {
+      "attempt": "check127c_material_access666",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127c_material_access666/receipt.json",
+        "sha256": "0bfd3bb10a79dfc4bfa072894543f0765de81eee8685b27095bdc8ccd26e6656",
+        "size_bytes": 1638
+      },
+      "junit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127c_material_access666/junit.xml",
+        "sha256": "836f21ab93ba1ad25b0a47fca261154bfce536fac2792a9381e7cf982cac5929",
+        "size_bytes": 15572
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "returncode": 1,
+      "counts": {
+        "passed": 91,
+        "failed": 1,
+        "error": 0,
+        "skipped": 0
+      },
+      "interpretation": "13 new consumer checks and78 regression checks passed; one separate setup check lacked its staged historical library index.",
+      "cases": [
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.from_source]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.parse]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[source.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[source.locate]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[material.from_source]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[material.parse]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[material.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[source.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_explicit_selected_bundle_bytes_reach_the_same_consumers[source.locate]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_unrelated_auxiliary_grant_does_not_grant_bundle_or_replay",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_source_read_text_fallback_checks_the_actual_bundle",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_ordinary_caller_material_and_source_locate_preserve_behavior",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_utf8_crlf_markup_and_distinct_representations",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[1]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[2]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[3]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[7]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_streaming_overlaps_chunk_spans_and_pagination_without_omissions[65536]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_no_match_exact_eof_and_multibyte_context_clipping",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[needle-]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[needle-None]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[needle-True]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-True]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset--1]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-99]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-1.5]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[offset-nan]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[limit-False]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[limit-0]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[limit-inf]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[context_bytes--1]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_invalid_parameters_are_not_no_match[context_bytes-True]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_binary_and_invalid_utf8_fail[a\\xff-not_utf8]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_binary_and_invalid_utf8_fail[a\\xe2-not_utf8]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_binary_and_invalid_utf8_fail[a\\x00-binary]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_explicit_text_does_not_fall_back_to_original",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_bounded_search_does_not_validate_unexamined_suffix_or_read_full_source",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_context_cannot_hide_malformed_source_eof_as_a_clipped_character",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_native_readers_receive_unchanged_witness_and_keep_censor_and_unit_checks",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_original_arguments_replay_receipts_scope_and_no_publication",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_identity_conflicts_and_storage_failures_are_specific",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_short_source_or_context_read_is_an_integrity_failure_not_a_loop_or_match[scan]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_short_source_or_context_read_is_an_integrity_failure_not_a_loop_or_match[context]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[True]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[nan]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[inf]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[-1]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_bad_indices_are_structured_failures[1.5]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_reopens_original_result_read_only_without_source_io",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_complete_from_zero_scan_verifies_content_addressed_bytes",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_failed_attempt_replays_its_original_failure_details[change0]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_failed_attempt_replays_its_original_failure_details[change1]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_locations.test_registry_failed_attempt_replays_its_original_failure_details[change2]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_one_registered_role_accepts_new_data_defined_thought_without_altering_form",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_evidence_is_validated_and_exposed_only_as_inherited_references",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad0]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad1]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad2]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_assignment_uses_finite_canonical_json_without_key_coercion[bad3]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[objective]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[scope]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[initial_report]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[purpose]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[form]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[assignment]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[binding]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[binding_version]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[selection]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_original_request_digests_detect_changed_parent_inputs[invocation_ref]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_frame_contains_selected_guidance_and_binding_limits_without_source_cases",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_catalog_and_execution_enforce_same_selected_schema_scope_and_operation",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_unbound_tool_context_is_visible_and_does_not_reject_invocation",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_prepares_copyable_child_origin_and_leaves_original_frame_fixed",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_cannot_change_annotation_or_library_or_add_freehand_fields",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_authenticates_one_preparation_on_fill_and_restoration",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[owner]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[operation]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[origin]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[digest]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[arguments]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[selection]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_rejects_foreign_or_mismatched_preparation_records[fields]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_revision_origin_is_not_required_for_other_parent_selected_processes",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_semantic_invocation_and_origin_records_are_finite_exact_and_stable",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_historical_revision_parser_remains_an_inspection_only_wire_parser",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_ordinary_child_with_different_process_does_not_infer_revision_origin",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_closing_form_and_credit_use_original_binding_without_reading_private_revisions",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_requested_process_facts_copy_closed_credit_and_merge_only_received_rows",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_declared_child_edges_keep_specialist_branches_separate",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_setup_freezes_descriptor_without_executable_services_and_reopens_original",
+          "outcome": "failed",
+          "message": "FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127c_material_access666/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/index.json'"
+        }
+      ],
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 621162496
+    },
+    {
+      "attempt": "check127d_material_access666",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127d_material_access666/receipt.json",
+        "sha256": "7ff215611b880e46bd32bc81756f7490f8647956b6178169f7d8fbcf8a566db4",
+        "size_bytes": 1638
+      },
+      "junit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127d_material_access666/junit.xml",
+        "sha256": "989e19ef0f28586e4b702e9303156c3e33efe3f58116975e2a1ed56e83e09352",
+        "size_bytes": 147272
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "returncode": 1,
+      "counts": {
+        "passed": 26,
+        "failed": 14,
+        "error": 0,
+        "skipped": 0
+      },
+      "interpretation": "Six additional consumer checks and20 regression checks passed, including the corrected historical library setup. Five wrapper fixtures lacked required source fields; nine older tests called the deliberately retired scoring API.",
+      "cases": [
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_each_selected_representation_requires_its_own_artifact_grant[text]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_each_selected_representation_requires_its_own_artifact_grant[stdout]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_each_selected_representation_requires_its_own_artifact_grant[stderr]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.from_source]",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.domain.ContractError: representation_error"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.parse]",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.domain.ContractError: representation_error"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.read]",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.domain.ContractError: representation_error"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.read]",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.domain.ContractError: representation_error"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.locate]",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.domain.ContractError: representation_error"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_missing_utility_owner_does_not_make_known_utility_bytes_ordinary",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_unavailable_stream_retains_existing_structured_feedback",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_artifact_grants_cannot_be_checked_under_another_run",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_scientific_process_episodes.test_setup_freezes_descriptor_without_executable_services_and_reopens_original",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_representations.test_saved_primary_original_heading_is_readable_and_anchorable",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_source_representations.test_original_table_paging_preserves_bytes_without_complete_hydration",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_source_representations.test_failed_xml_projection_retains_source_and_replays_partial_outcome",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_source_representations.test_primary_publication_ids_ignore_citations_subarticles_and_representation_aliases",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_representations.test_reacquisition_keeps_publication_identity_without_creating_scientific_credit",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_source_representations.test_invalid_conflicting_or_mismatched_metadata_does_not_discard_article",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_source_representations.test_multiple_primary_headers_do_not_silently_choose_an_identity[<front><article-meta><article-id pub-id-type=\"pmcid\">PMC2</article-id></article-meta><article-meta><article-id pub-id-type=\"pmcid\">PMC3</article-id></article-meta></front>]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_representations.test_multiple_primary_headers_do_not_silently_choose_an_identity[<front><article-meta><article-id pub-id-type=\"pmcid\">PMC2</article-id></article-meta></front><front><article-meta><article-id pub-id-type=\"pmcid\">PMC3</article-id></article-meta></front>]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_source_representations.test_oversized_numeric_metadata_cannot_prevent_article_retention",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_repeated_semantic_target_is_listed_once_with_original_manifest_occurrences",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_material_intake.test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations0]",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_material_intake.test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations1]",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_material_intake.test_explicit_uncertain_single_read_is_target",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_member_reference_rejects_different_same_length_native_sequence",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_auto_unknown_assets_remain_bytes_not_sequences[growth\\tph\\nobserved\\t7\\n-unknown]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_auto_unknown_assets_remain_bytes_not_sequences[{\"organism\": \"unknown\"}-unknown]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_auto_unknown_assets_remain_bytes_not_sequences[\\x00\\xff\\x80binary-unknown]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_mixed_evidence_fastq_order_qualities_links_and_fixed_targets",
+          "outcome": "failed",
+          "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+        },
+        {
+          "name": "tests.test_material_intake.test_partial_fasta_retains_independent_records_and_source_ordinals",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_malformed_fastq_keeps_valid_prefix_and_marks_remainder_unparsed",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_read_library_is_bound_without_per_read_targets",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_caller_can_select_actual_fragment_without_read_role_gate",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_gzip_lineage_cache_reopen_and_bounded_members",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_registered_external_source_reused_without_origin_or_target_relabeling",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_failed_independent_entry_retains_other_targets_and_manifest",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_portable_export_keeps_material_members_and_quality_reference_closure",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_unbound_cli_run_reports_missing_binding_without_model_call",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_material_intake.test_invalid_manifest_and_failed_gzip_still_have_original_custody",
+          "outcome": "passed"
+        }
+      ],
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 625065984
+    },
+    {
+      "attempt": "check127e_material_access666",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127e_material_access666/receipt.json",
+        "sha256": "647c80759416aebaa17697529d545efdee209590a9500183c33de6cb6d198e18",
+        "size_bytes": 1638
+      },
+      "junit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127e_material_access666/junit.xml",
+        "sha256": "0fe75937dd6e2e56f32515361d23c5cbf1c4fff1b0c79461398a48a4cdac459a",
+        "size_bytes": 4670
+      },
+      "audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "returncode": 1,
+      "counts": {
+        "passed": 0,
+        "failed": 5,
+        "error": 0,
+        "skipped": 0
+      },
+      "interpretation": "Wrapper fixtures now valid; all five were rejected by the existing successful-return requirement rather than the test expected artifact error. Test expectations/receipt scenarios needed correction, not a production access relaxation.",
+      "cases": [
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.from_source]",
+          "outcome": "failed",
+          "message": "AssertionError: assert 'native_blast...turn_required' == 'native_blast...t_not_granted'"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.parse]",
+          "outcome": "failed",
+          "message": "AssertionError: assert 'native_blast...turn_required' == 'native_blast...t_not_granted'"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[material.read]",
+          "outcome": "failed",
+          "message": "AssertionError: assert 'native_blast...turn_required' == 'native_blast...t_not_granted'"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.read]",
+          "outcome": "failed",
+          "message": "AssertionError: assert 'native_blast...turn_required' == 'native_blast...t_not_granted'"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[source.locate]",
+          "outcome": "failed",
+          "message": "AssertionError: assert 'native_blast...turn_required' == 'native_blast...t_not_granted'"
+        }
+      ],
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 606539776
+    },
+    {
+      "attempt": "check127f_material_access666",
+      "receipt": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127f_material_access666/receipt.json",
+        "sha256": "56c0e7d4c68788de9d97de3d3009f92e7a184fa2318549f062d2d785610db5a4",
+        "size_bytes": 1636
+      },
+      "junit": {
+        "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check127f_material_access666/junit.xml",
+        "sha256": "15387d8a6b68b3e4d2254ce1434886a4f55d30654d285d625292374664bb5cc1",
+        "size_bytes": 2672
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "returncode": 0,
+      "counts": {
+        "passed": 10,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "interpretation": "Ten explicit wrapper cases passed: metadata-only decision_input receipts lack byte grants; claimed child_form receipts without original successful forms fail the existing return authentication.",
+      "cases": [
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-material.from_source]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-material.parse]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-material.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-source.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[decision_input-native_blast_utility_source_artifact_not_granted-source.locate]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-material.from_source]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-material.parse]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-material.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-source.read]",
+          "outcome": "passed"
+        },
+        {
+          "name": "tests.test_blast_utility_material_access_666.test_different_source_wrapper_does_not_erase_utility_artifact_ownership[child_form-native_blast_utility_return_successful_return_required-source.locate]",
+          "outcome": "passed"
+        }
+      ],
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "observed_scratch_bytes": 610242560
+    }
+  ],
+  "unresolved_older_tests": [
+    {
+      "name": "tests.test_source_representations.test_saved_primary_original_heading_is_readable_and_anchorable",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_source_representations.test_original_table_paging_preserves_bytes_without_complete_hydration",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_source_representations.test_failed_xml_projection_retains_source_and_replays_partial_outcome",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_source_representations.test_reacquisition_keeps_publication_identity_without_creating_scientific_credit",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_source_representations.test_invalid_conflicting_or_mismatched_metadata_does_not_discard_article",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_material_intake.test_repeated_semantic_target_is_listed_once_with_original_manifest_occurrences",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_material_intake.test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations0]",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_material_intake.test_equal_sequences_with_distinct_caller_contexts_remain_distinct_targets[declarations1]",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    {
+      "name": "tests.test_material_intake.test_mixed_evidence_fastq_order_qualities_links_and_fixed_targets",
+      "outcome": "failed",
+      "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    }
+  ],
+  "retired_scoring_source_unchanged_from_before_fix": {
+    "path": "gene_annotation_episode/credit.py",
+    "sha256": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+    "size_bytes": 3948
+  },
+  "behavior": [
+    "Utility source metadata grants no unselected bundle/representation bytes through the five scientific source/material operations.",
+    "The same provider check runs before tool replay and material wrapper/parse/read dispatch.",
+    "Explicit bundle or selected text/stdout/stderr artifacts retain access; unrelated artifacts grant no access to the bundle.",
+    "Ordinary caller material retains behavior; source.locate now receives actual known references and keeps its separate original/text metadata rules.",
+    "Wrapped utility artifacts retain original ownership. Missing provider and wrong run remain explicit failures."
+  ],
+  "verification_limits": [
+    "Controlled inputs and real bindings/Store/provider; no new native scientific command or acquisition and no new scoring calculation.",
+    "127c/d/f are separate bounded attempts, not one all-green broad suite. Their29 new cases all passed across those attempts.",
+    "Nine older source/material tests still fail at calls to the deliberately retired categorical scoring API; these tests and scoring code were not changed.",
+    "VDB producer/publication/full parent integration is separate ongoing work and is not established here."
+  ],
+  "new_numerical_groups": 0,
+  "new_counted_operation_links": 0
+}

@@ -1,0 +1,200 @@
+{
+  "status": "existing_pure_output_not_selected_integration",
+  "source": "verification/a105_measurement_comparison_components_258/ORIGINAL_NFN_SHEET_ACTUAL_010.json",
+  "cells": [
+    {
+      "component": "protocol_ratio",
+      "value": 0.34782608695652173,
+      "exact_value": {
+        "numerator": "8",
+        "denominator": "23"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "dimensionless",
+      "relation": "point",
+      "approximate": true,
+      "interpretation": "descriptive_protocol_comparison",
+      "formula": "L/R",
+      "meaning_code": "protocol_ratio",
+      "origin": "derived",
+      "input_origins": [
+        "reported"
+      ],
+      "operand_roles": [
+        "left",
+        "right"
+      ],
+      "operand_keys": [
+        "literature_measurement_4686b5403d7b14974629275e",
+        "literature_measurement_cbc25026e44928b9aaaf1b05"
+      ],
+      "model_keys": [
+        "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+        "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+      ],
+      "contribution_key": "measurement_comparison_contribution_fe5afa730869b32416224d78",
+      "uncertainty": {
+        "covariance_source_refs": [],
+        "variance_status": "not_selected",
+        "scope": "not_applicable",
+        "sampling_distribution": "not_assumed"
+      },
+      "reasons": {
+        "source": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      }
+    },
+    {
+      "component": "protocol_difference",
+      "value": -15.0,
+      "exact_value": {
+        "numerator": "-15",
+        "denominator": "1"
+      },
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "populated",
+      "unit": "umol/min/mg",
+      "relation": "point",
+      "approximate": true,
+      "interpretation": "descriptive_protocol_comparison",
+      "formula": "L-R",
+      "meaning_code": "protocol_difference",
+      "origin": "derived",
+      "input_origins": [
+        "reported"
+      ],
+      "operand_roles": [
+        "left",
+        "right"
+      ],
+      "operand_keys": [
+        "literature_measurement_4686b5403d7b14974629275e",
+        "literature_measurement_cbc25026e44928b9aaaf1b05"
+      ],
+      "model_keys": [
+        "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+        "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+      ],
+      "contribution_key": "measurement_comparison_contribution_fe5afa730869b32416224d78",
+      "uncertainty": {
+        "covariance_source_refs": [],
+        "variance_status": "not_selected",
+        "scope": "not_applicable",
+        "sampling_distribution": "not_assumed"
+      },
+      "reasons": {
+        "source": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      }
+    },
+    {
+      "component": "required_nuisance_equivalent_scenario",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": 2.0930232558139537,
+      "conditional_exact_value": {
+        "numerator": "90",
+        "denominator": "43"
+      },
+      "status": "conditional_scenario",
+      "unit": "umol_nuisance_equivalent/min/mg_on_apparent_report_scale",
+      "relation": "point",
+      "approximate": true,
+      "interpretation": "stipulated_report_scale_scenario",
+      "formula": "(y-H)/(s*alpha)",
+      "meaning_code": "required_nuisance_equivalent_scenario",
+      "origin": "derived",
+      "input_origins": [
+        "reported"
+      ],
+      "operand_roles": [
+        "left",
+        "right",
+        "epsilon_nuisance",
+        "epsilon_signal"
+      ],
+      "operand_keys": [
+        "literature_measurement_4686b5403d7b14974629275e",
+        "literature_measurement_cbc25026e44928b9aaaf1b05",
+        "literature_measurement_a4b6c9fbdf2a24589cffcea0",
+        "literature_measurement_0fb93a3471fbf85ea3b3f8bf"
+      ],
+      "model_keys": [
+        "measurement_comparison_optical_model_f2618fb528327d2e5b628b4c",
+        "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+        "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+      ],
+      "contribution_key": "measurement_comparison_optical_contribution_0c6ad9f8f7a28dbd84d3b6fa",
+      "uncertainty": {
+        "covariance_source_refs": [],
+        "variance_status": "not_selected",
+        "scope": "not_applicable",
+        "sampling_distribution": "not_assumed"
+      },
+      "reasons": {
+        "source": [],
+        "relationship": [],
+        "implementation": [],
+        "domain": []
+      }
+    },
+    {
+      "component": "combined_estimate",
+      "value": null,
+      "exact_value": null,
+      "conditional_value": null,
+      "conditional_exact_value": null,
+      "status": "unavailable",
+      "unit": "umol/min/mg",
+      "relation": "point",
+      "approximate": true,
+      "interpretation": "unavailable",
+      "formula": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+      "meaning_code": "combined_estimate",
+      "origin": "derived",
+      "input_origins": [
+        "reported"
+      ],
+      "operand_roles": [
+        "left",
+        "right"
+      ],
+      "operand_keys": [
+        "literature_measurement_4686b5403d7b14974629275e",
+        "literature_measurement_cbc25026e44928b9aaaf1b05"
+      ],
+      "model_keys": [
+        "measurement_comparison_conversion_85be12cb6c7fb33822179744",
+        "measurement_comparison_conversion_b1e7191554b37979ad25baa4"
+      ],
+      "contribution_key": "measurement_comparison_contribution_fe5afa730869b32416224d78",
+      "uncertainty": {
+        "covariance_source_refs": [],
+        "variance_status": "unknown",
+        "scope": "selected_estimator_covariance",
+        "sampling_distribution": "not_assumed"
+      },
+      "reasons": {
+        "source": [
+          "covariance_not_supplied"
+        ],
+        "relationship": [
+          "common_model_not_selected",
+          "preparation_target_unknown",
+          "protocols_not_matched",
+          "functional_resolution_not_quantitative",
+          "validity_unresolved"
+        ],
+        "implementation": [],
+        "domain": []
+      }
+    }
+  ]
+}

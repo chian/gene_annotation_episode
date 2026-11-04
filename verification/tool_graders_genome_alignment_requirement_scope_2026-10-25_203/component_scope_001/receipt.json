@@ -1,0 +1,9 @@
+{
+  "status": "diagnostic_setup_failed",
+  "exit_code": 1,
+  "exception": "StopIteration",
+  "at": "source_path = next(path for path in paths(sheet) if path[:2] == ('components', 'source_bindings'))",
+  "cause": "The diagnostic incorrectly expected a requirement_ids array in XMFABindings. Its declared source references are file, record, member and document fields; no such array exists.",
+  "production_or_test_failure": false,
+  "followup": "probe_component_scope_002.py checks the actual declared reference fields and numerical requirement_ids. The original diagnostic script remains unchanged."
+}

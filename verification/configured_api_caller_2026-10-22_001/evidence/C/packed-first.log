@@ -1,0 +1,54 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite _
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-packed-first-20261022-001/test_actual_packed_target_memb0')
+
+    def test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite(tmp_path):
+>       source = checkpoint_source_fixture(tmp_path, packed_target=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_scientific_checkpoint_fork.py:738: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-packed-first-20261022-001/test_actual_packed_target_memb0')
+packed_target = True
+
+    def checkpoint_source_fixture(tmp_path, *, packed_target=False):
+        """Actual source preparation, isolated frozen code authority and raw journals.
+    
+        Shared root-join interface: arguments excludes destination_workspace;
+        case_directory and configuration are the actual prepared case's operands.
+        The frozen authority copy makes later fixture reads independent of edits to
+        the checkout, while the recorded binding is produced by the real binder.
+        """
+        source_root = tmp_path/'original'
+        source_root.mkdir()
+        for package in ('gene_annotation_episode', 'method_loop'):
+            for original in (ROOT/package).rglob('*.py'):
+                relative = original.relative_to(ROOT)
+                destination = source_root/relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(original, destination)
+        case = source_root/'case'
+        run_dir = case/'runs/stopped'
+        run_dir.mkdir(parents=True)
+        workspace = run_dir/'workspace'
+        (case/'target.fna').write_text('@synthetic_single_gene\nATGAAATAA\n+\nIIIIIIIII\n' if packed_target else
+            '>synthetic_single_gene\nATGAAATAA\n')
+        (case/'target.faa').write_text('>synthetic_product\nMK\n')
+        with Store(workspace) as store:
+            problem = store.create_problem(case/'target.fna', molecule='dna', role='gene')
+            target, = problem['subject_refs']
+            translated = ToolRegistry(store).execute('sequence.translate',
+                {'subject_ref': target, 'code': 11, 'cds': True}, scope={'subject_refs': [target]})
+>           assert translated['status'] == 'completed'
+E           AssertionError: assert 'invalid' == 'completed'
+E             
+E             - completed
+E             + invalid
+
+tests/test_scientific_checkpoint_fork.py:87: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_scientific_checkpoint_fork.py::test_actual_packed_target_member_reuses_materialized_sequence_without_row_rewrite
+1 failed in 1.51s

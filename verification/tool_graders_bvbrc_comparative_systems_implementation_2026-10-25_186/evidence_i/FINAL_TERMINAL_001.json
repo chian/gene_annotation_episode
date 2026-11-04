@@ -1,0 +1,189 @@
+{
+  "captured_at": "2026-10-25T20:48:17.765635+00:00",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.:tests /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q tests/test_bvbrc_comparative_systems_publication.py tests/test_bvbrc_comparative_systems_returns.py tests/test_bvbrc_comparative_systems_host_inputs.py -p no:cacheprovider --basetemp=../evidence_i/pytest_012 --junitxml=../evidence_i/pytest_012.xml > ../evidence_i/pytest_012.log 2>&1",
+  "correction": "LATEST_HISTORY_TEST_FIX_003.patch; a partial original assignment with a specific requested unacquired pathway output now tests latest-history behavior. Completed-assignment rejection is tested separately.",
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_comparative_systems_implementation_2026-10-25_186/candidate",
+  "exit_code": 1,
+  "failure_cause": "The test selected another download after validated completion of its original practical assignment. The actual host correctly rejected api_assignment_already_completed before a new publication. No production correction was made.",
+  "junit": {
+    "summary": {
+      "errors": "0",
+      "failures": "1",
+      "hostname": "chia-Z590-UD",
+      "name": "pytest",
+      "skipped": "0",
+      "tests": "32",
+      "time": "190.034",
+      "timestamp": "2026-10-25T15:36:00.441837-05:00"
+    },
+    "testcases": [
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_full_native_arrays_round_trip_with_real_provider_and_saved_validation[False]",
+        "time": "0.526"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_full_native_arrays_round_trip_with_real_provider_and_saved_validation[True]",
+        "time": "0.135"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[partial]",
+        "time": "0.275"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_null_numerical_objects_retain_native_failures_and_pass_saved_semantics[invalid]",
+        "time": "0.278"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_codec_rejects_native_or_summary_loss_and_relabeling[native_requirement]",
+        "time": "0.070"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_codec_rejects_native_or_summary_loss_and_relabeling[native_diagnostic]",
+        "time": "0.083"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_codec_rejects_native_or_summary_loss_and_relabeling[generic_requirement]",
+        "time": "0.094"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_codec_rejects_native_or_summary_loss_and_relabeling[generic_diagnostic]",
+        "time": "0.090"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_codec_rejects_native_or_summary_loss_and_relabeling[unknown_wrapper]",
+        "time": "0.061"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_sheet_without_calculations_retains_exact_original_failure_context",
+        "time": "0.481"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_original_failure_records_equal_to_generated_records_survive_round_trip",
+        "time": "0.068"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_original_failure_context_and_explicit_wrapper_version_required[absent]",
+        "time": "0.273"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_original_failure_context_and_explicit_wrapper_version_required[unknown_key]",
+        "time": "0.271"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_original_failure_context_and_explicit_wrapper_version_required[bad_status]",
+        "time": "0.273"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_original_failure_context_and_explicit_wrapper_version_required[bad_requirement]",
+        "time": "0.273"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_publication",
+        "name": "test_original_failure_context_and_explicit_wrapper_version_required[old_version]",
+        "time": "0.270"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_seven_exact_saved_families_and_closed_identifiers_without_science",
+        "time": "1.644"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[field]",
+        "time": "0.640"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[value]",
+        "time": "0.659"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[source]",
+        "time": "0.322"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[pin]",
+        "time": "0.331"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[parameters]",
+        "time": "0.328"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[form]",
+        "time": "0.868"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[sheet]",
+        "time": "0.346"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[calculation]",
+        "time": "0.346"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[native_diag]",
+        "time": "0.346"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[generic_diag]",
+        "time": "0.476"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[entity]",
+        "time": "0.653"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_original_selection_and_saved_values_cannot_be_relabelled[failure_context]",
+        "time": "0.352"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_empty_requested_sources_do_not_read_or_invent_fields",
+        "time": "0.000"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_returns",
+        "name": "test_latest_invalid_keeps_original_named_history_and_authenticates_whole_parameters",
+        "time": "93.039"
+      },
+      {
+        "classname": "tests.test_bvbrc_comparative_systems_host_inputs",
+        "name": "test_actual_data_read_supplies_exact_retained_bytes_and_rejects_false_wrappers",
+        "time": "84.510"
+      }
+    ]
+  },
+  "junit_sha256": "60ab860a56119a462336ac7b8a4943306d84bd4151cbf9a7f71565c7a8394b16",
+  "log_sha256": "051ce1e5dff0d03e67cc9cd64af2e87ee2d2f0deee9a274116f6e7461b40bc9b",
+  "provider_pin": "118aae7a8a9470b9a7cb2e0f081853ac6730c98e1710ac9018a312312699b68f",
+  "result": "31 passed, 1 failed in 190.03s",
+  "retained_cause_evidence": "LATEST_FAILURE_REASON_001.json",
+  "session_id": 6562,
+  "source_snapshot_unchanged": true
+}

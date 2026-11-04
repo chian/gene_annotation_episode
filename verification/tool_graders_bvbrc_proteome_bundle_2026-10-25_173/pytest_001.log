@@ -1,0 +1,40 @@
+F
+=================================== FAILURES ===================================
+________ test_real_all_constructor_composition_and_saved_recalculation _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c5ddd3e7830>
+
+    def test_real_all_constructor_composition_and_saved_recalculation(monkeypatch):
+        case = fixture()
+        called = Counter()
+        for name in ("parse_genome_comparison", "index_original_inputs", "read_protein_fasta", "read_feature_metadata",
+                     "read_genome_metadata", "read_feature_sequences", "build_native_joins", "build_native_sheet", "calculate_native_components"):
+            actual = getattr(provider, name)
+            def call(*args, _name=name, _actual=actual, **kwargs):
+                called[_name] += 1
+                return _actual(*args, **kwargs)
+            monkeypatch.setattr(provider, name, call)
+        result = consume(case)
+        assert result["status"] == "ok"
+        assert result["facts"]["identity_mean"]["cell"]["value"] == .4375
+        assert result["facts"]["endpoint_mean"]["cell"]["value"] == .625
+        assert result["facts"]["zero_identity"]["cell"]["value"] == 0
+        assert result["facts"]["selected"]["cell"]["value"] == 1
+>       assert called == Counter(parse_genome_comparison=1, index_original_inputs=1, read_protein_fasta=2,
+            read_feature_metadata=1, read_genome_metadata=1, read_feature_sequences=1, build_native_joins=1,
+            build_native_sheet=1, calculate_native_components=1)
+E       AssertionError: assert Counter({'par...mponents': 1}) == Counter({'rea...mponents': 1})
+E         
+E         Omitting 5 identical items, use -vv to show
+E         Right contains 4 more items:
+E         {'read_feature_metadata': 1,
+E          'read_feature_sequences': 1,
+E          'read_genome_metadata': 1,
+E          'read_protein_fasta': 2}
+E         Use -v to get more diff
+
+tests/test_bvbrc_proteome_bundle_resolution.py:163: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_bundle_resolution.py::test_real_all_constructor_composition_and_saved_recalculation
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 1.40s

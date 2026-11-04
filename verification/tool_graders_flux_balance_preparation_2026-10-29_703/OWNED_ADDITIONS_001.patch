@@ -1,0 +1,881 @@
+--- /dev/null
++++ b/gene_annotation_episode/native_flux_balance_preparation.py
+@@ -0,0 +1,473 @@
++"""Run one finite FBA result worker under the existing native boundary.
++
++The selected action owns a common scratch root. Numerical output and immutable
++adapter controls are separate siblings beneath that root; native scratch
++accounting covers both. This adapter neither authenticates episode commissions
++nor performs scientific parsing/calculation in the host.
++"""
++from contextlib import contextmanager
++from copy import deepcopy
++import fcntl
++import hashlib
++import os
++from pathlib import Path
++import re
++import stat
++import sys
++
++from . import native_lifecycle as native
++from .acquisition import AcquisitionError
++from .execution_contracts import canonical, digest
++from .flux_balance_contracts import validate_flux_balance_record
++from .flux_balance_worker_contracts import (OUTPUTS, PLAN_VERSION, RESULT_VERSION,
++    validate_flux_balance_worker_plan, validate_flux_balance_worker_result)
++from .local_jobs import LocalJobPolicy, check_scratch_budget
++from .native_file_capture import (NativeFileCaptureError, capture_native_file,
++    capture_declared_native_files, retained_native_file)
++from .native_flux_balance_contracts import POLICY, path_value
++from .native_flux_balance_storage import (_directory_fd, confined_file, decode_json,
++    directory, file_pin, immutable_bytes, read_bytes)
++
++
++__all__ = ["prepare_flux_balance_result_worker", "validate_prepared_flux_balance_worker",
++    "validate_flux_balance_worker_execution"]
++
++WORKER_MODULE = "gene_annotation_episode.flux_balance_result_worker"
++EXECUTION_VERSION = "flux_balance_worker_execution_v1"
++CAPTURE_VERSION = "flux_balance_worker_capture_v1"
++_INTENT_VERSION = "flux_balance_worker_intent_v1"
++_CONTROL_NAMES = ("plan.json", "intent.json", "worker.handle.json", "worker.stdout",
++    "worker.stderr", "execution.json", "capture.json", ".preparation.lock")
++_CGROUP = {"memory_max": POLICY["memory_bytes"], "memory_swap_max": 0,
++    "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
++
++
++def _require(condition, code):
++    if not condition:
++        raise ValueError("fba_preparation_" + code)
++
++
++def _same(left, right):
++    return canonical(left) == canonical(right)
++
++
++def _json(raw):
++    value = decode_json(raw)
++    canonical(value)
++    return value
++
++
++def _issue(code, field):
++    return validate_flux_balance_record("Issue", {"code": code, "stage": "capture", "field": field,
++        "detail_file": None, "source_row_index": None, "reaction_position": None,
++        "metabolite_position": None, "variable_position": None, "constraint_position": None})
++
++
++def _unique(values):
++    result, seen = [], set()
++    for value in values:
++        key = canonical(value)
++        if key not in seen:
++            seen.add(key)
++            result.append(value)
++    return result
++
++
++def _file(value, format_=None):
++    value = validate_flux_balance_record("File", value)
++    _require(value["artifact_ref"] == "artifact_" + value["sha256"]
++        and (format_ is None or value["format"] == format_), "file_invalid")
++    return value
++
++
++def _pin(value):
++    _require(type(value) is dict and set(value) == {"path", "sha256", "size_bytes"}, "pin_invalid")
++    path_value(value["path"], absolute=True)
++    _file({"artifact_ref": "artifact_" + str(value["sha256"]), "sha256": value["sha256"],
++        "size_bytes": value["size_bytes"], "format": "runtime_file"})
++    return value
++
++
++def _paths(value):
++    if type(value) is dict:
++        for name, child in value.items():
++            if name == "path" and type(child) is str and child.startswith("/"):
++                yield child
++            elif name in ("python_home", "module_root", "attempt_directory") and type(child) is str:
++                yield child
++            elif name == "dependency_roots" and type(child) is list:
++                yield from child
++            else:
++                yield from _paths(child)
++    elif type(value) is list:
++        for child in value:
++            yield from _paths(child)
++
++
++def _overlap(left, right):
++    left, right = Path(left), Path(right)
++    return left == right or left in right.parents or right in left.parents
++
++
++def _layout(plan):
++    output = Path(path_value(plan["directory"], absolute=True))
++    root = Path(path_value(plan["directory"] + ".execution", absolute=True))
++    common = Path(path_value(str(output.parent), absolute=True))
++    selected = (list(_paths(plan["original_plan"])) + list(_paths(plan["capture"]))
++        if plan["mode"] == "native_result" else [plan["sheet"]["path"]])
++    _require(not any(_overlap(common, path) for path in selected), "directory_overlap")
++    _require(output.parent == root.parent == common and not _overlap(root, output), "directory_overlap")
++    return common, root, output
++
++
++@contextmanager
++def _locked(root):
++    with _directory_fd(root) as parent:
++        fd = os.open(".preparation.lock", os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW | os.O_NONBLOCK,
++            0o600, dir_fd=parent)
++    try:
++        _require(stat.S_ISREG(os.fstat(fd).st_mode), "lock_invalid")
++        fcntl.flock(fd, fcntl.LOCK_EX)
++        yield
++    finally:
++        os.close(fd)
++
++
++def _read_control(root, name):
++    path = confined_file(root, name)
++    try:
++        value = _json(read_bytes(path))
++    except FileNotFoundError:
++        return None
++    _require(type(value) is dict, "control_invalid")
++    return value
++
++
++def _immutable(root, name, value):
++    path = confined_file(root, name)
++    raw = canonical(value).encode("utf-8") + b"\n"
++    if path.exists():
++        _require(read_bytes(path) == raw, "control_conflict")
++        return
++    try:
++        immutable_bytes(path, raw)
++    except FileExistsError:
++        _require(read_bytes(path) == raw, "control_conflict")
++
++
++def _dependency_roots(rows):
++    # Existing production dependency definition and import-root interpretation.
++    from .native_atac_differential_contracts import _dependency_roots as roots
++    return roots({"dependencies": rows})
++
++
++def _environment(root, common, home, dependencies):
++    return {"PYTHONPATH": os.pathsep.join([str(root / "source_snapshot"), *_dependency_roots(dependencies)]),
++        "PYTHONHOME": home, "PYTHONNOUSERSITE": "1", "PYTHONSAFEPATH": "1",
++        "PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": str(common), "TMP": str(common), "TEMP": str(common),
++        "XDG_CACHE_HOME": str(root / "cache"), "PIP_CACHE_DIR": str(root / "cache/pip"),
++        "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"}
++
++
++def _snapshot(plan, policy):
++    from .native_atac_differential_preparation import _source_closure, _dependencies, _copy_exact
++    common, root, _ = _layout(plan)
++    sources = _source_closure(Path(__file__).resolve().parents[1], [WORKER_MODULE])
++    binary = Path(sys.executable).resolve(strict=True)
++    home = Path(sys.base_prefix).resolve(strict=True)
++    dependencies = _dependencies()
++    _require(not any(_overlap(common, p) for p in [str(binary), str(home), *map(str, sources.values()),
++        *[pin["path"] for row in dependencies for pin in row["files"]]]), "runtime_directory_overlap")
++    pins = []
++    for name, source in sorted(sources.items()):
++        check_scratch_budget(common, policy, additional_bytes=source.stat().st_size)
++        destination = confined_file(root, "source_snapshot/" + name.replace(".", "/") + ".py", create_parents=True)
++        pins.append(_copy_exact(source, destination))
++    check_scratch_budget(common, policy, additional_bytes=binary.stat().st_size)
++    destination = confined_file(root, "runtime/python", create_parents=True)
++    interpreter = _copy_exact(binary, destination, executable=True)
++    stdlib = home / "lib" / ("python%d.%d" % sys.version_info[:2])
++    runtime_files = [file_pin(path) for path in sorted(stdlib.rglob("*")) if path.is_file()
++        and not any(part in ("site-packages", "dist-packages", "__pycache__") for part in path.relative_to(stdlib).parts)
++        and path.suffix not in (".pyc", ".pyo")]
++    _require(runtime_files, "stdlib_missing")
++    directory(root / "cache/pip", create=True)
++    return {"version": _INTENT_VERSION, "plan": deepcopy(plan), "execution_directory": str(root),
++        "policy": deepcopy(POLICY), "command": [interpreter["path"], "-B", "-S", "-m", WORKER_MODULE,
++            str(root / "plan.json")], "environment": _environment(root, common, str(home), dependencies),
++        "source_pins": pins, "interpreter": interpreter, "dependencies": dependencies,
++        "python_version": sys.version, "python_home": str(home), "runtime_files": runtime_files}
++
++
++def _all_pins(intent):
++    return [*intent["source_pins"], intent["interpreter"], *intent["runtime_files"],
++        *(pin for row in intent["dependencies"] for pin in row["files"])]
++
++
++def _validate_intent(value, plan):
++    _require(type(value) is dict and set(value) == {"version", "plan", "execution_directory", "policy",
++        "command", "environment", "source_pins", "interpreter", "dependencies", "python_version",
++        "python_home", "runtime_files"} and value["version"] == _INTENT_VERSION
++        and _same(value["plan"], plan) and _same(value["policy"], POLICY), "intent_mismatch")
++    common, root, _ = _layout(plan)
++    path_value(value["python_home"], absolute=True)
++    _require(type(value["python_version"]) is str and bool(value["python_version"]), "runtime_invalid")
++    _require(value["execution_directory"] == str(root) and value["command"] ==
++        [str(root / "runtime/python"), "-B", "-S", "-m", WORKER_MODULE, str(root / "plan.json")], "intent_mismatch")
++    for field in ("source_pins", "runtime_files", "dependencies"):
++        _require(type(value[field]) is list and bool(value[field]), "runtime_missing")
++    names = []
++    for row in value["dependencies"]:
++        _require(type(row) is dict and set(row) == {"distribution", "version", "package_root", "files"}
++            and all(type(row[k]) is str and bool(row[k]) for k in ("distribution", "version", "package_root"))
++            and type(row["files"]) is list and bool(row["files"]), "dependency_invalid")
++        path_value(row["package_root"], absolute=True)
++        names.append(row["distribution"])
++    _require(len(names) == len(set(names)), "dependency_invalid")
++    pins = [_pin(pin) for pin in _all_pins(value)]
++    _require(len({p["path"] for p in pins}) == len(pins), "duplicate_pin")
++    source_root = root / "source_snapshot"
++    _require(all(Path(p["path"]).is_relative_to(source_root) for p in value["source_pins"])
++        and str(source_root / "gene_annotation_episode/flux_balance_result_worker.py") in
++            {p["path"] for p in value["source_pins"]}
++        and str(source_root / "gene_annotation_episode/__init__.py") in {p["path"] for p in value["source_pins"]}
++        and value["interpreter"]["path"] == str(root / "runtime/python"), "source_missing")
++    _require(all(Path(p["path"]).is_relative_to(Path(value["python_home"]) / "lib")
++        for p in value["runtime_files"]), "runtime_invalid")
++    _require(_same(value["environment"], _environment(root, common, value["python_home"], value["dependencies"])),
++        "environment_mismatch")
++    return value
++
++
++def _verify_pins(intent):
++    for pin in _all_pins(intent):
++        _require(_same(file_pin(pin["path"]), pin), "runtime_changed")
++
++
++def _controls(body, request, intent):
++    common, root, output = _layout(intent["plan"])
++    _require(type(body) is dict and body.get("version") == native.VERSION
++        and body.get("stage") in ("prepared", "submitting", "released")
++        and body.get("command") == intent["command"] and body.get("cwd") == str(common)
++        and type(body.get("metadata")) is dict and _same(body["metadata"].get("policy"), POLICY)
++        and body.get("stdout") == str(root / "worker.stdout") and body.get("stderr") == str(root / "worker.stderr"),
++        "handle_mismatch")
++    paths = body.get("paths")
++    keys = {"request", "ready", "release", "status", "result", "launcher"}
++    _require(type(paths) is dict and set(paths) == keys and all(type(p) is str for p in paths.values()), "handle_paths_invalid")
++    for path in paths.values():
++        path_value(path, absolute=True)
++    token = Path(paths["request"]).name.removesuffix(".request")
++    _require(re.fullmatch(r"\.local-job-[0-9a-f]{32}", token) is not None
++        and paths == {name: str(common / (token + "." + name)) for name in keys}, "handle_paths_invalid")
++    fixed = {str(root / name) for name in _CONTROL_NAMES} | {str(root), str(output)}
++    _require(len(set(paths.values())) == len(paths) and not fixed.intersection(paths.values()), "handle_paths_invalid")
++    expected = {"command": intent["command"], "cwd": str(common), "file_bytes": POLICY["scratch_bytes"],
++        "ready_path": paths["ready"], "release_path": paths["release"], "result_path": paths["result"],
++        "stdin_path": None, "env": intent["environment"]}
++    _require(_same(request, expected), "request_mismatch")
++    return body
++
++
++def validate_flux_balance_worker_execution(value, *, plan, plan_file):
++    """Validate original frozen execution records without current runtime I/O."""
++    plan = validate_flux_balance_worker_plan(plan)
++    _file(plan_file, PLAN_VERSION)
++    _require(type(value) is dict and set(value) == {"version", "plan_file", "intent", "terminal", "quiescent",
++        "policy", "returncode", "metadata", "failure", "handle_file", "request_file", "stdout_file", "stderr_file",
++        "handle", "request", "request_raw"} and value["version"] == EXECUTION_VERSION
++        and _same(value["plan_file"], plan_file) and value["terminal"] is True and value["quiescent"] is True
++        and _same(value["policy"], POLICY), "execution_mismatch")
++    for name, format_ in (("plan_file", PLAN_VERSION), ("handle_file", native.VERSION),
++            ("request_file", "native_local_job_request"), ("stdout_file", "native_worker_stdout"),
++            ("stderr_file", "native_worker_stderr")):
++        _file(value[name], format_)
++    intent = _validate_intent(value["intent"], plan)
++    body = _controls(value["handle"], value["request"], intent)
++    _require(type(value["request_raw"]) is str, "request_mismatch")
++    raw = value["request_raw"].encode("utf-8")
++    _require(_same(_json(raw), value["request"]) and hashlib.sha256(raw).hexdigest() ==
++        body.get("request_sha256") == value["request_file"]["sha256"]
++        and len(raw) == value["request_file"]["size_bytes"], "request_mismatch")
++    meta = value["metadata"]
++    _require(type(meta) is dict and _same(meta.get("policy"), POLICY) and type(meta.get("service_exit")) is dict
++        and _same(meta.get("verified_cgroup"), _CGROUP), "allocation_mismatch")
++    if value["failure"] is None:
++        _require(type(value["returncode"]) is int and _same(meta.get("native_returncode"), value["returncode"]), "exit_mismatch")
++    else:
++        failure = value["failure"]
++        _require(value["returncode"] is None and type(failure) is dict
++            and set(failure) == {"code", "phase", "diagnostic", "operational"}
++            and type(failure["code"]) is str and bool(failure["code"]), "exit_mismatch")
++    canonical(value)
++    return deepcopy(value)
++
++
++def _retained_json(store, file, format_=None):
++    return _json(read_bytes(retained_native_file(store, _file(file, format_))))
++
++
++def validate_prepared_flux_balance_worker(store, value, *, plan):
++    """Validate retained controls and output identities; never recalculate."""
++    plan = validate_flux_balance_worker_plan(plan)
++    _layout(plan)
++    _require(type(value) is dict and set(value) == {"version", "plan_file", "execution_receipt_file",
++        "worker_result_file", "result", "outputs", "failures"} and value["version"] == CAPTURE_VERSION,
++        "capture_mismatch")
++    _require(_same(_retained_json(store, value["plan_file"], PLAN_VERSION), plan), "plan_mismatch")
++    execution = _retained_json(store, value["execution_receipt_file"], EXECUTION_VERSION)
++    validate_flux_balance_worker_execution(execution, plan=plan, plan_file=value["plan_file"])
++    _require(_same(_retained_json(store, execution["handle_file"], native.VERSION), execution["handle"]), "handle_mismatch")
++    _require(read_bytes(retained_native_file(store, execution["request_file"])).decode("utf-8") == execution["request_raw"],
++        "request_mismatch")
++    for name in ("stdout_file", "stderr_file"):
++        retained_native_file(store, execution[name])
++    result = value["result"]
++    if result is None:
++        _require(value["outputs"] == [], "outputs_mismatch")
++        if value["worker_result_file"] is not None:
++            retained_native_file(store, _file(value["worker_result_file"], RESULT_VERSION))
++    else:
++        result = validate_flux_balance_worker_result(result)
++        _require(_same(_retained_json(store, value["worker_result_file"], RESULT_VERSION), result)
++            and result["plan_sha256"] == digest(plan) and result["mode"] == plan["mode"]
++            and _same(result["selector"], plan["selector"]), "result_mismatch")
++        _require(type(value["outputs"]) is list and len(value["outputs"]) == len(OUTPUTS), "outputs_mismatch")
++        for declared, row in zip(result["outputs"], value["outputs"]):
++            _require(type(row) is dict and set(row) == {"declared", "observed", "outcome", "failure"}
++                and _same(row["declared"], declared["declaration"]), "outputs_mismatch")
++            observed, declaration = row["observed"], row["declared"]
++            if observed is not None:
++                retained_native_file(store, _file(observed))
++            equal = observed is not None and all(_same(observed[k], declaration[k]) for k in ("sha256", "size_bytes", "format"))
++            _require((row["outcome"] == "verified" and declaration["state"] == "present" and equal and row["failure"] is None)
++                or (row["outcome"] == "declared_absent" and declaration["state"] == "absent" and observed is None and row["failure"] is None)
++                or (row["outcome"] == "unavailable" and declaration["state"] == "present" and observed is None and row["failure"] == "capture_file_unavailable")
++                or (row["outcome"] == "digest_mismatch" and declaration["state"] == "present" and observed is not None and not equal
++                    and row["failure"] == "capture_file_digest_mismatch"), "outputs_mismatch")
++    _require(type(value["failures"]) is list, "failures_invalid")
++    for issue in value["failures"]:
++        checked = validate_flux_balance_record("Issue", issue)
++        _require(checked["stage"] == "capture" and type(checked["field"]) is str
++            and checked["field"].startswith("/worker/") and checked["code"] in
++                ("binding_unavailable", "artifact_missing", "artifact_identity_conflict", "schema_invalid")
++            and checked["detail_file"] is None and all(checked[k] is None for k in
++                ("source_row_index", "reaction_position", "metabolite_position", "variable_position", "constraint_position")),
++            "failures_invalid")
++    canonical(value)
++    return deepcopy(value)
++
++
++def _capture(store, root, name, format_):
++    return capture_native_file(store, directory=str(root), relative_path=name, format=format_)
++
++
++def _validate_live_controls(handle, intent):
++    common, root, _ = _layout(intent["plan"])
++    body = _json(read_bytes(confined_file(root, "worker.handle.json")))
++    _require(type(body) is dict and type(body.get("paths")) is dict
++        and set(body["paths"]) == {"request", "ready", "release", "status", "result", "launcher"}
++        and all(type(p) is str for p in body["paths"].values()), "handle_paths_invalid")
++    for path in body["paths"].values():
++        path_value(path, absolute=True)
++        _require(Path(path).parent == common, "handle_paths_invalid")
++        confined_file(common, Path(path).name)
++    raw = read_bytes(confined_file(common, Path(body["paths"]["request"]).name))
++    _controls(body, _json(raw), intent)
++    _require(hashlib.sha256(raw).hexdigest() == body.get("request_sha256"), "request_mismatch")
++    return body, raw
++
++
++def prepare_flux_balance_result_worker(store, *, plan, policy):
++    """Prepare, execute and capture this one finite selected worker operation."""
++    plan = validate_flux_balance_worker_plan(plan)
++    _require(type(policy) is LocalJobPolicy and _same(policy.to_dict(), POLICY), "policy_mismatch")
++    common, root, output = _layout(plan)
++    directory(common, create=True)
++    directory(root, create=True)
++    for name in _CONTROL_NAMES:
++        confined_file(root, name)
++    with _locked(root):
++        saved = _read_control(root, "capture.json")
++        if saved is not None:
++            return validate_prepared_flux_balance_worker(store, saved, plan=plan)
++        _immutable(root, "plan.json", plan)
++        intent = _read_control(root, "intent.json")
++        if intent is None:
++            _require(not (root / "worker.handle.json").exists(), "unowned_handle")
++            if output.exists() or output.is_symlink():
++                directory(output)
++                _require(not any(output.iterdir()), "unsealed_output")
++            intent = _validate_intent(_snapshot(plan, policy), plan)
++            _immutable(root, "intent.json", intent)
++        else:
++            intent = _validate_intent(intent, plan)
++        plan_file = _capture(store, root, "plan.json", PLAN_VERSION)
++        execution = _read_control(root, "execution.json")
++        handle = native.NativeJobHandle(root / "worker.handle.json")
++        if execution is None:
++            if not handle.path.exists():
++                if output.exists() or output.is_symlink():
++                    directory(output)
++                    _require(not any(output.iterdir()), "unsealed_output")
++                _require(not any(path.name.startswith(".local-job-") for path in common.iterdir()),
++                    "unsealed_native_controls")
++            _verify_pins(intent)
++            if not handle.path.exists():
++                native.prepare_job(intent["command"], cwd=common, policy=policy, handle_path=handle.path,
++                    stdout_path=root / "worker.stdout", stderr_path=root / "worker.stderr", env=intent["environment"])
++            _validate_live_controls(handle, intent)
++            native.resume_start(handle)
++            result, failure = None, None
++            try:
++                result = native.wait_job(handle)
++            except AcquisitionError as error:
++                view = native.status(handle)
++                if not view["terminal"] or not view["quiescent"]:
++                    raise
++                failure = {"code": error.code, "phase": error.phase, "diagnostic": error.diagnostic, "operational": error.operational}
++            view = native.status(handle)
++            _require(view["terminal"] and view["quiescent"], "worker_not_closed")
++            _verify_pins(intent)
++            body, raw = _validate_live_controls(handle, intent)
++            execution = {"version": EXECUTION_VERSION, "plan_file": plan_file, "intent": intent,
++                "terminal": True, "quiescent": True, "policy": deepcopy(POLICY),
++                "returncode": result.returncode if result is not None else None, "metadata": view["metadata"],
++                "failure": failure, "handle_file": _capture(store, root, "worker.handle.json", native.VERSION),
++                "request_file": _capture(store, common, Path(body["paths"]["request"]).name, "native_local_job_request"),
++                "stdout_file": _capture(store, root, "worker.stdout", "native_worker_stdout"),
++                "stderr_file": _capture(store, root, "worker.stderr", "native_worker_stderr"),
++                "handle": body, "request": _json(raw), "request_raw": raw.decode("utf-8")}
++            validate_flux_balance_worker_execution(execution, plan=plan, plan_file=plan_file)
++            _immutable(root, "execution.json", execution)
++        else:
++            validate_flux_balance_worker_execution(execution, plan=plan, plan_file=plan_file)
++        execution_file = _capture(store, root, "execution.json", EXECUTION_VERSION)
++        failures, result, result_file, outputs = [], None, None, []
++        if execution["failure"] is not None or execution["returncode"] != 0:
++            failures.append(_issue("binding_unavailable", "/worker/execution"))
++        try:
++            result_file = _capture(store, output, "worker-result.json", RESULT_VERSION)
++            result = validate_flux_balance_worker_result(_retained_json(store, result_file, RESULT_VERSION))
++            _require(result["plan_sha256"] == digest(plan) and result["mode"] == plan["mode"]
++                and _same(result["selector"], plan["selector"]), "result_mismatch")
++        except NativeFileCaptureError as error:
++            if error.code != "capture_file_unavailable":
++                raise
++            failures.append(_issue("artifact_missing", "/worker/result"))
++        except (ValueError, KeyError, TypeError, UnicodeError, OverflowError, RecursionError) as error:
++            result = None
++            failures.append(_issue("artifact_identity_conflict" if str(error) == "fba_preparation_result_mismatch"
++                else "schema_invalid", "/worker/result"))
++        if result is not None:
++            outputs = capture_declared_native_files(store, directory=str(output),
++                declarations=[row["declaration"] for row in result["outputs"]])
++            for spec, captured in zip(OUTPUTS, outputs):
++                if captured["outcome"] not in ("verified", "declared_absent"):
++                    failures.append(_issue("artifact_identity_conflict" if captured["outcome"] == "digest_mismatch"
++                        else "artifact_missing", "/worker/outputs/" + spec[0]))
++        value = validate_prepared_flux_balance_worker(store, {"version": CAPTURE_VERSION,
++            "plan_file": plan_file, "execution_receipt_file": execution_file, "worker_result_file": result_file,
++            "result": result, "outputs": outputs, "failures": _unique(failures)}, plan=plan)
++        _immutable(root, "capture.json", value)
++        return value
+--- /dev/null
++++ b/tests/test_flux_balance_preparation_703.py
+@@ -0,0 +1,402 @@
++"""Production worker custody with two real finite calculations, no FBA solve.
++
++Fault cases explicitly construct synthetic closure records or alter test-only
++controls. They reuse retained bytes, never claim new scientific measurements.
++"""
++from copy import deepcopy
++import hashlib
++import json
++import os
++from pathlib import Path
++import shutil
++
++import pytest
++
++from gene_annotation_episode import native_flux_balance_preparation as prep
++from gene_annotation_episode import native_lifecycle as native
++from gene_annotation_episode.execution_contracts import canonical, digest
++from gene_annotation_episode.flux_balance_worker_contracts import (
++    OUTPUTS, build_native_flux_balance_worker_plan, build_saved_flux_balance_worker_plan,
++)
++from gene_annotation_episode.local_jobs import LocalJobPolicy
++from gene_annotation_episode.native_file_capture import retained_native_file
++from gene_annotation_episode.native_flux_balance_capture import capture_flux_balance_native_files
++from gene_annotation_episode.native_flux_balance_contracts import POLICY
++from gene_annotation_episode.state import Store
++
++pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")
++ROOT = Path(__file__).resolve().parents[1]
++EMISSIONS = ROOT / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions/sbml"
++EXAMPLE = ROOT / "verification/tool_graders_flux_balance_core_2026-10-29_679/VERIFIED_NUMERICAL_EXAMPLE_001.json"
++
++
++def retain(store, raw, format_):
++    reference = store.artifact(raw, "application/octet-stream")
++    file = {"artifact_ref": reference, "sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw), "format": format_}
++    return {"file": file, "path": str(retained_native_file(store, file))}
++
++
++def record(store, value, format_):
++    return retain(store, (canonical(value) + "\n").encode("utf-8"), format_)
++
++
++def selector(parameters, *, saved=None):
++    return {"version": "flux_balance_result_selector_v1", "mode": "native_result" if saved is None else "saved_sheet_recalculation",
++        "saved_sheet_file": saved, "calculation_parameters": deepcopy(parameters), "projection": {
++            "version": "flux_balance_projection_selector_v1", "view": "run_diagnostics",
++            "fields": ["objective", "variable_population", "variable_bound_counts", "candidate_feasibility"],
++            "row_window": {"offset": 0, "limit": 99}}}
++
++
++def load_file(store, file):
++    return json.loads(retained_native_file(store, file).read_bytes())
++
++
++def outputs(prepared):
++    return {spec[0]: row["observed"] for spec, row in zip(OUTPUTS, prepared["outputs"])}
++
++
++def forbidden(*args, **kwargs):
++    raise AssertionError("historical validation attempted dispatch, native observation or scientific work")
++
++
++@pytest.fixture(scope="module")
++def actual_saved(tmp_path_factory):
++    base = tmp_path_factory.mktemp("preparation703-saved")
++    with Store(base / "retained") as store:
++        example = json.loads(EXAMPLE.read_text())
++        # Pretty input bytes differ from the canonical emitted sheet. Removing
++        # this input therefore does not remove an identically addressed output.
++        supplied = retain(store, json.dumps(example["sheet"], indent=2, allow_nan=False).encode(), "flux_balance_sheet_v1")
++        parameters = deepcopy(example["calculations"]["parameters"])
++        for item in parameters["active_flux_thresholds"]:
++            item["value"] = 6.5
++        plan = build_saved_flux_balance_worker_plan(directory=str(base / "action/worker"), sheet=supplied,
++            selector=selector(parameters, saved=supplied["file"]))
++        prepared = prep.prepare_flux_balance_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
++        execution = load_file(store, prepared["execution_receipt_file"])
++        yield {"base": base, "store": store, "plan": plan, "prepared": prepared,
++            "execution": execution, "input": supplied}
++
++
++def test_real_saved_worker_common_scratch_root_parameters_and_native_receipt(actual_saved):
++    case = actual_saved
++    store, plan, prepared, execution = (case[k] for k in ("store", "plan", "prepared", "execution"))
++    assert prepared["failures"] == []
++    assert prepared["result"]["native_association"] == "not_applicable"
++    assert prepared["result"]["new_attempt_evidence_roles"] == []
++    assert prepared["result"]["requested_projection_valid"]
++    files = outputs(prepared)
++    sheet = load_file(store, files["sheet"])
++    calculations = load_file(store, files["calculations"])
++    projection = load_file(store, files["projection"])
++    assert sheet == json.loads(EXAMPLE.read_text())["sheet"]
++    assert calculations["parameters"] == plan["selector"]["calculation_parameters"]
++    assert calculations["active_count"] == 1
++    assert calculations["objective"]["native_basis_calculated"]["value"] == -4.25
++    assert calculations["objective"]["full_calculated"]["value"] == -2.75
++    assert projection["selector"] == plan["selector"]["projection"]
++    assert prepared["result"]["plan_sha256"] == digest(plan)
++    assert execution["terminal"] and execution["quiescent"] and execution["returncode"] == 0
++    assert execution["failure"] is None
++    common, adapter, out = Path(plan["directory"]).parent, Path(plan["directory"] + ".execution"), Path(plan["directory"])
++    assert execution["handle"]["cwd"] == execution["request"]["cwd"] == str(common)
++    assert adapter.parent == out.parent == common
++    assert all(Path(p).parent == common for p in execution["handle"]["paths"].values())
++    assert all(execution["request"]["env"][k] == str(common) for k in ("TMPDIR", "TMP", "TEMP"))
++    assert execution["handle"]["stdout"] == str(adapter / "worker.stdout")
++    assert execution["intent"]["execution_directory"] == str(adapter)
++    assert execution["metadata"]["policy"] == POLICY
++    assert execution["metadata"]["verified_cgroup"] == {"memory_max": 21474836480, "memory_swap_max": 0,
++        "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
++    assert execution["metadata"]["enforcement"]["scratch"] == "monitored_visible_allocated_bytes_with_possible_overshoot"
++    source_names = {Path(p["path"]).name for p in execution["intent"]["source_pins"]}
++    assert "flux_balance_result_worker.py" in source_names
++    assert "native_flux_balance_driver.py" not in source_names and "native_flux_balance_cobra_glpk.py" not in source_names
++    assert prep.validate_prepared_flux_balance_worker(store, prepared, plan=plan) == prepared
++    Path(os.environ["HMMER529_ATTEMPT"]).joinpath("preparation703-saved-result.json").write_text(json.dumps({
++        "prepared": prepared, "execution": execution, "active_count": 1, "native_basis_objective": -4.25,
++        "full_objective": -2.75, "native_solves": 0}, allow_nan=False))
++
++
++def test_real_retained688_native_worker_same_numbers_and_replay(tmp_path, monkeypatch):
++    with Store(tmp_path / "retained") as store:
++        original = json.loads((EMISSIONS / "selected-plan.json").read_text())
++        source = retain(store, b"703 synthetic metadata-only source receipt", "json")
++        closure = retain(store, b"703 synthetic metadata-only closure receipt", "json")
++        binding = retain(store, b"703 synthetic metadata-only binding", "flux_balance_input_binding_receipt_v1")
++        captured = capture_flux_balance_native_files(store, original_plan=original,
++            source_action_receipt_ref=source["file"]["artifact_ref"], writer_closure_receipt_ref=closure["file"]["artifact_ref"],
++            input_binding_file=binding["file"], prior_sources=[], driver_started=True)
++        parameters = json.loads((EMISSIONS / "calculated.json").read_text())["parameters"]
++        plan = build_native_flux_balance_worker_plan(directory=str(tmp_path / "action/worker"), original_plan=original,
++            capture=captured, selector=selector(parameters))
++        prepared = prep.prepare_flux_balance_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
++        assert prepared["failures"] == [] and prepared["result"]["failures"] == []
++        assert prepared["result"]["native_association"] == "verified"
++        files = outputs(prepared)
++        calculated = load_file(store, files["calculations"])
++        assert calculated["objective"]["full_calculated"]["value"] == 10
++        assert [r["flux"]["value"] for r in calculated["reaction_checks"]] == [10, 10, 10]
++        assert calculated["expected_variable_count"] == 6
++        assert calculated["evaluated_variable_bound_count"] == 12
++        assert calculated["violated_variable_bound_count"] == 0
++        execution = load_file(store, prepared["execution_receipt_file"])
++        assert execution["returncode"] == 0 and execution["metadata"]["policy"] == POLICY
++        Path(os.environ["HMMER529_ATTEMPT"]).joinpath("preparation703-native-result.json").write_text(json.dumps({
++            "prepared": prepared, "execution": execution, "objective": 10, "fluxes": [10, 10, 10],
++            "variables": 6, "finite_variable_bound_sides": 12, "violations": 0, "native_solves": 0}, allow_nan=False))
++        # Remove only this test's retained input copies, never original688 files.
++        protected = {file["artifact_ref"] for file in files.values() if file is not None}
++        for row in captured["files"]:
++            file = row["retained"]["file"]
++            if file["artifact_ref"] not in protected:
++                Path(row["retained"]["path"]).unlink(missing_ok=True)
++        Path(execution["intent"]["interpreter"]["path"]).unlink()
++        shutil.rmtree(Path(plan["directory"] + ".execution") / "source_snapshot")
++        for name in ("resume_start", "prepare_job", "status", "wait_job", "start_prepared"):
++            monkeypatch.setattr(native, name, forbidden)
++        monkeypatch.setattr(prep, "_snapshot", forbidden)
++        monkeypatch.setattr(prep, "_verify_pins", forbidden)
++        assert prep.prepare_flux_balance_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY)) == prepared
++
++
++def test_saved_closed_replay_without_input_or_current_runtime(actual_saved, monkeypatch):
++    case = actual_saved
++    assert case["input"]["file"]["artifact_ref"] != outputs(case["prepared"])["sheet"]["artifact_ref"]
++    Path(case["input"]["path"]).unlink()
++    Path(case["execution"]["intent"]["interpreter"]["path"]).unlink()
++    shutil.rmtree(Path(case["plan"]["directory"] + ".execution") / "source_snapshot")
++    for name in ("resume_start", "prepare_job", "status", "wait_job", "start_prepared"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_snapshot", forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    assert prep.prepare_flux_balance_result_worker(case["store"], plan=case["plan"], policy=LocalJobPolicy(**POLICY)) == case["prepared"]
++
++
++@pytest.mark.parametrize("fault", ["swap", "cwd", "request_env", "request_raw", "outside_path", "duplicate_path",
++    "terminal", "returncode_bool", "intent_directory", "duplicate_pin", "source_outside", "file_format", "failure_shape"])
++def test_frozen_execution_contradictions_reject_without_live_work(actual_saved, monkeypatch, fault):
++    execution = deepcopy(actual_saved["execution"])
++    if fault == "swap": execution["metadata"]["verified_cgroup"]["memory_swap_max"] = False
++    elif fault == "cwd": execution["handle"]["cwd"] = execution["intent"]["execution_directory"]
++    elif fault == "request_env": execution["request"]["env"]["OMP_NUM_THREADS"] = "8"
++    elif fault == "request_raw": execution["request_raw"] += " "
++    elif fault == "outside_path": execution["handle"]["paths"]["status"] = "/elsewhere/status"
++    elif fault == "duplicate_path": execution["handle"]["paths"]["result"] = execution["handle"]["paths"]["request"]
++    elif fault == "terminal": execution["terminal"] = False
++    elif fault == "returncode_bool": execution["returncode"] = False
++    elif fault == "intent_directory": execution["intent"]["execution_directory"] += "-other"
++    elif fault == "duplicate_pin": execution["intent"]["source_pins"].append(execution["intent"]["source_pins"][0])
++    elif fault == "source_outside": execution["intent"]["source_pins"][0]["path"] = "/outside/source.py"
++    elif fault == "file_format": execution["request_file"]["format"] = "wrong"
++    else: execution["failure"] = {"code": "synthetic"}
++    monkeypatch.setattr(native, "status", forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    with pytest.raises(ValueError):
++        prep.validate_flux_balance_worker_execution(execution, plan=actual_saved["plan"],
++            plan_file=actual_saved["prepared"]["plan_file"])
++
++
++@pytest.mark.parametrize("fault", ["result_selector", "output_order", "output_missing", "output_format", "failure_locator"])
++def test_prepared_record_contradictions_reject(actual_saved, fault):
++    value = deepcopy(actual_saved["prepared"])
++    if fault == "result_selector": value["result"]["selector"]["calculation_parameters"]["objective_absolute_tolerance"] = 99
++    elif fault == "output_order": value["outputs"].reverse()
++    elif fault == "output_missing": value["outputs"][0]["observed"] = None
++    elif fault == "output_format": value["outputs"][0]["observed"]["format"] = "opaque"
++    else:
++        issue = prep._issue("artifact_missing", "/worker/result")
++        issue["reaction_position"] = 1
++        value["failures"] = [issue]
++    with pytest.raises(ValueError):
++        prep.validate_prepared_flux_balance_worker(actual_saved["store"], value, plan=actual_saved["plan"])
++
++
++def original_execution(request):
++    # Follow-up checks select original completed evidence, avoiding another
++    # actual finite calculation just to exercise malformed control metadata.
++    evidence_path = os.environ.get("HMMER_NATIVE_ORACLE_PREPARATION703_EVIDENCE")
++    return (json.loads(Path(evidence_path).read_text())["execution"] if evidence_path else
++        deepcopy(request.getfixturevalue("actual_saved")["execution"]))
++
++
++@pytest.mark.parametrize("file_value", [None, {}, []])
++def test_malformed_request_File_retains_structured_failure(request, monkeypatch, file_value):
++    execution = original_execution(request)
++    plan, plan_file = execution["intent"]["plan"], execution["plan_file"]
++    execution["request_file"] = file_value
++    for name in ("prepare_job", "resume_start", "status", "wait_job"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    with pytest.raises(ValueError):
++        prep.validate_flux_balance_worker_execution(execution, plan=plan, plan_file=plan_file)
++
++
++def _replace_prefix(value, previous, current):
++    if type(value) is str:
++        return current + value[len(previous):] if value.startswith(previous) else value
++    if type(value) is list:
++        return [_replace_prefix(v, previous, current) for v in value]
++    if type(value) is dict:
++        return {k: _replace_prefix(v, previous, current) for k, v in value.items()}
++    return value
++
++
++def test_lost_handle_with_owned_intent_and_partial_output_cannot_reserve_again(request, tmp_path, monkeypatch):
++    original = original_execution(request)
++    previous = str(Path(original["intent"]["plan"]["directory"]).parent)
++    common = tmp_path / "action"
++    root, out = common / "worker.execution", common / "worker"
++    root.mkdir(parents=True);out.mkdir()
++    plan = _replace_prefix(original["intent"]["plan"], previous, str(common))
++    intent = _replace_prefix(original["intent"], previous, str(common))
++    intent["plan"] = plan
++    (root / "plan.json").write_text(canonical(plan) + "\n")
++    (root / "intent.json").write_text(canonical(intent) + "\n")
++    (out / "partial.json").write_bytes(b'preserved original partial work')
++    for name in ("prepare_job", "resume_start", "wait_job", "status"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    with Store(tmp_path / "store") as store:
++        with pytest.raises(ValueError, match="fba_preparation_unsealed_output"):
++            prep.prepare_flux_balance_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
++    assert (out / "partial.json").read_bytes() == b'preserved original partial work'
++    assert not (root / "worker.handle.json").exists()
++
++
++def test_lost_handle_with_native_controls_and_empty_output_cannot_reserve_again(request, tmp_path, monkeypatch):
++    original = original_execution(request)
++    previous = str(Path(original["intent"]["plan"]["directory"]).parent)
++    common = tmp_path / "action"
++    root, out = common / "worker.execution", common / "worker"
++    root.mkdir(parents=True);out.mkdir()
++    plan = _replace_prefix(original["intent"]["plan"], previous, str(common))
++    intent = _replace_prefix(original["intent"], previous, str(common));intent["plan"] = plan
++    (root / "plan.json").write_text(canonical(plan) + "\n")
++    (root / "intent.json").write_text(canonical(intent) + "\n")
++    previous_request = common / (".local-job-" + "a" * 32 + ".request")
++    previous_request.write_bytes(b'preserved ambiguous native reservation')
++    for name in ("prepare_job", "resume_start", "wait_job", "status"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    with Store(tmp_path / "store") as store:
++        with pytest.raises(ValueError, match="fba_preparation_unsealed_native_controls"):
++            prep.prepare_flux_balance_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
++    assert previous_request.read_bytes() == b'preserved ambiguous native reservation'
++    assert list(out.iterdir()) == [] and not (root / "worker.handle.json").exists()
++
++
++@pytest.mark.parametrize("fault", ["missing_request", "extra_path", "null_request"])
++def test_live_handle_path_shape_fails_before_request_indexing(request, tmp_path, fault, monkeypatch):
++    original = original_execution(request)
++    previous = str(Path(original["intent"]["plan"]["directory"]).parent)
++    common = tmp_path / "action"
++    root = common / "worker.execution";root.mkdir(parents=True)
++    intent = _replace_prefix(original["intent"], previous, str(common))
++    body = _replace_prefix(original["handle"], previous, str(common))
++    if fault == "missing_request": del body["paths"]["request"]
++    elif fault == "extra_path": body["paths"]["extra"] = str(common / "extra")
++    else: body["paths"]["request"] = None
++    (root / "worker.handle.json").write_text(canonical(body) + "\n")
++    for name in ("prepare_job", "resume_start", "wait_job", "status"):
++        monkeypatch.setattr(native, name, forbidden)
++    with pytest.raises(ValueError, match="fba_preparation_handle_paths_invalid"):
++        prep._validate_live_controls(native.NativeJobHandle(root / "worker.handle.json"), intent)
++
++
++def synthetic_closed(actual_saved, tmp_path, *, variant):
++    """Synthetic interrupted-capture fixture, NOT a native execution receipt.
++
++    Shapes/pins and valid scientific output bytes are reused to test adapter
++    failure handling. No new calculation or scientific contribution is claimed.
++    """
++    store = actual_saved["store"]
++    previous = str(Path(actual_saved["plan"]["directory"]).parent)
++    common = tmp_path / "synthetic-action"
++    root, out = common / "worker.execution", common / "worker"
++    root.mkdir(parents=True);out.mkdir()
++    plan = _replace_prefix(actual_saved["plan"], previous, str(common))
++    execution = _replace_prefix(actual_saved["execution"], previous, str(common))
++    intent = execution["intent"]
++    intent["plan"] = plan
++    execution["handle"]["unit"] = "synthetic703-not-a-real-execution.service"
++    execution["request_raw"] = canonical(execution["request"])
++    execution["handle"]["request_sha256"] = hashlib.sha256(execution["request_raw"].encode()).hexdigest()
++    execution["plan_file"] = record(store, plan, "flux_balance_worker_plan_v1")["file"]
++    execution["request_file"] = retain(store, execution["request_raw"].encode(), "native_local_job_request")["file"]
++    execution["handle_file"] = record(store, execution["handle"], native.VERSION)["file"]
++    if variant == "nonzero":
++        execution["returncode"] = execution["metadata"]["native_returncode"] = 5
++    if variant == "resource":
++        execution["returncode"] = None
++        execution["failure"] = {"code": "local_job_resource_limit", "phase": "local_execution",
++            "diagnostic": None, "operational": {"resource": "scratch_bytes", "fixture": "synthetic703"}}
++    for name, value in (("plan.json", plan), ("intent.json", intent), ("execution.json", execution)):
++        (root / name).write_text(canonical(value) + "\n")
++    result = deepcopy(actual_saved["prepared"]["result"])
++    result["plan_sha256"] = digest(plan)
++    for spec, captured in zip(OUTPUTS, actual_saved["prepared"]["outputs"]):
++        if captured["observed"] is not None:
++            (out / spec[1]).write_bytes(retained_native_file(store, captured["observed"]).read_bytes())
++    if variant == "missing_result":
++        pass
++    elif variant == "malformed_result":
++        (out / "worker-result.json").write_bytes(b'{"interrupted":')
++    else:
++        if variant == "wrong_join": result["plan_sha256"] = "f" * 64
++        (out / "worker-result.json").write_text(canonical(result) + "\n")
++    if variant == "missing_output": (out / "calculations.json").unlink()
++    if variant == "changed_output": (out / "calculations.json").write_bytes(b'opaque changed synthetic bytes')
++    return plan
++
++
++@pytest.mark.parametrize("variant", ["nonzero", "resource", "missing_result", "malformed_result", "wrong_join", "missing_output", "changed_output"])
++def test_synthetic_closed_partial_collection_preserves_valid_siblings(actual_saved, tmp_path, monkeypatch, variant):
++    plan = synthetic_closed(actual_saved, tmp_path, variant=variant)
++    for name in ("resume_start", "prepare_job", "wait_job", "status"):
++        monkeypatch.setattr(native, name, forbidden)
++    monkeypatch.setattr(prep, "_verify_pins", forbidden)
++    prepared = prep.prepare_flux_balance_result_worker(actual_saved["store"], plan=plan, policy=LocalJobPolicy(**POLICY))
++    codes = {(r["code"], r["field"]) for r in prepared["failures"]}
++    if variant in ("nonzero", "resource"):
++        assert ("binding_unavailable", "/worker/execution") in codes
++        assert all(r["outcome"] == "verified" for r in prepared["outputs"])
++    elif variant in ("missing_result", "malformed_result", "wrong_join"):
++        expected = {"missing_result": "artifact_missing", "malformed_result": "schema_invalid", "wrong_join": "artifact_identity_conflict"}[variant]
++        assert (expected, "/worker/result") in codes and prepared["result"] is None and prepared["outputs"] == []
++        assert (prepared["worker_result_file"] is None) == (variant == "missing_result")
++    else:
++        expected = "artifact_missing" if variant == "missing_output" else "artifact_identity_conflict"
++        assert (expected, "/worker/outputs/calculations") in codes
++        assert prepared["outputs"][0]["outcome"] == prepared["outputs"][2]["outcome"] == "verified"
++        assert prepared["outputs"][1]["outcome"] == ("unavailable" if variant == "missing_output" else "digest_mismatch")
++    assert prep.prepare_flux_balance_result_worker(actual_saved["store"], plan=plan, policy=LocalJobPolicy(**POLICY)) == prepared
++
++
++@pytest.mark.parametrize("fault", ["memory", "scratch", "wall", "common_overlap", "unsealed", "execution_symlink", "output_symlink", "null_control"])
++def test_preflight_does_not_dispatch_or_repair_wrong_boundary(actual_saved, tmp_path, monkeypatch, fault):
++    plan = deepcopy(actual_saved["plan"])
++    plan["directory"] = str(tmp_path / "action/worker")
++    policy = deepcopy(POLICY)
++    if fault in ("memory", "scratch", "wall"):
++        policy[{"memory": "memory_bytes", "scratch": "scratch_bytes", "wall": "wall_seconds"}[fault]] = 1
++    elif fault == "common_overlap":
++        plan["directory"] = str(actual_saved["store"].path / "worker")
++    else:
++        common = Path(plan["directory"]).parent;common.mkdir()
++        if fault == "unsealed":
++            Path(plan["directory"]).mkdir();Path(plan["directory"], "partial").write_bytes(b'preserved')
++        elif fault == "execution_symlink":
++            destination = tmp_path / "elsewhere";destination.mkdir()
++            Path(plan["directory"] + ".execution").symlink_to(destination, target_is_directory=True)
++        elif fault == "output_symlink":
++            destination = tmp_path / "elsewhere";destination.mkdir()
++            Path(plan["directory"]).symlink_to(destination, target_is_directory=True)
++        else:
++            root = Path(plan["directory"] + ".execution");root.mkdir()
++            (root / "capture.json").write_bytes(b'null')
++    monkeypatch.setattr(native, "prepare_job", forbidden)
++    monkeypatch.setattr(prep, "_snapshot", forbidden)
++    with pytest.raises((ValueError, OSError)):
++        prep.prepare_flux_balance_result_worker(actual_saved["store"], plan=plan, policy=LocalJobPolicy(**policy))

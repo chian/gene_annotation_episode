@@ -1,0 +1,101 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A01",
+  "name": "Direct molecular operation",
+  "description": "Represent what the target itself does: chemical transformation, binding, translocation or physical energy effect; distinguish a downstream consequence.",
+  "claim_scope": "A specified protein/complex acting on material in a stated preparation and condition; the operation may remain unresolved while a narrower binding claim is retained.",
+  "distinctions": [
+    "Fold/motif resemblance versus demonstrated operation.",
+    "Binding versus productive chemical conversion.",
+    "Target-executed step versus spontaneous or partner-executed consequence.",
+    "Model-substrate activity versus solved native function."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "operation_kind": [
+        "covalent_transformation",
+        "noncovalent_binding",
+        "translocation",
+        "physical_energy_dissipation",
+        "unresolved"
+      ],
+      "operation_owner": [
+        "target",
+        "other_component",
+        "unresolved"
+      ],
+      "transformation_examples": [
+        "nitrile_reduction",
+        "phosphorylation",
+        "decarboxylation",
+        "model_ester_hydrolysis"
+      ],
+      "binding_without_demonstrated_conversion": [
+        true,
+        false,
+        "not_assessed"
+      ]
+    },
+    "required_typed_references": [
+      "target_entity_ref",
+      "material_ref",
+      "condition_ref",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "A positive assay does not establish primary native role.",
+    "An incomplete preparation or inappropriate condition does not establish universal inactivity.",
+    "A downstream product does not identify each enzyme-executed step."
+  ],
+  "follow_up_lane_ids": [
+    "F01",
+    "F02",
+    "F03"
+  ],
+  "boundary": "A02 specifies material/features selected; A03 specifies how action works; A06 specifies system responsibility. These are independently representable.",
+  "evidence": [
+    {
+      "case_group": "quef",
+      "case_id": "seq_queF_not_folE",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary Results and Discussion plus alignment and assay descriptions inspected through indexed full-text sections. No sequence alignment or experiments rerun here.",
+      "observation": "Controlled negative cyclohydrolase assays and authentic preQ1 product assign nitrile reduction while retaining the pathway association.",
+      "limit": "Author assays; no universal transfer to every FolE-like protein."
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "case_id": "seq_ptmvd_m3k_picrophilus",
+      "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment.",
+      "observation": "Product analysis assigns phosphorylation; observed alkene follows spontaneous decomposition, not direct enzyme decarboxylation.",
+      "limit": "Sequence sections and product-analysis conclusion inspected; no new experiment."
+    },
+    {
+      "case_group": "MJ0577_Zarembinski_1998",
+      "case_id": "MJ0577_Zarembinski_1998",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC28018/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Full primary text and live 1MJH contact record checked; published answer known.",
+      "observation": "ATP binding, absent appreciable purified-alone hydrolysis and extract-enabled hydrolysis require different annotation claims.",
+      "limit": "Activating extract component and cellular role remain unidentified."
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "case_id": "spec_frsa_disputed_pdc_native_unknown",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450606/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified.",
+      "observation": "Measured model-ester hydrolysis is narrower than a solved native function, particularly with weak kinetic parameters and explicit author qualification.",
+      "limit": "2019 relevant body inspected; original 2011 PDC claim was not independently reverified."
+    },
+    {
+      "case_group": "organism_20_isia",
+      "case_id": "organism_20_isia",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8545134/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete relevant mutant/spectroscopy/growth Results and growth conditions. No new fluorescence-lifetime analysis.",
+      "observation": "C260V removes excitation quenching, supporting physical energy dissipation rather than assigning a new enzymatic reaction.",
+      "limit": "Author spectroscopy; no new lifetime analysis or universal phenotype claim."
+    }
+  ]
+}

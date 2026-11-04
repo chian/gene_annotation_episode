@@ -1,0 +1,84 @@
+{
+  "actual_configuration": {
+    "initial_ref_count": 200,
+    "models": {
+      "FAST": {
+        "model": "gpt-6-luna",
+        "reasoning_effort": "none"
+      },
+      "REASONING": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "medium"
+      },
+      "connection": {
+        "command": [
+          "codex",
+          "app-server",
+          "--stdio"
+        ]
+      },
+      "routing": {
+        "child_interpretation": "REASONING",
+        "decide": "REASONING"
+      }
+    },
+    "restoration": {
+      "model_presentation": "bounded_wait_history_v1",
+      "preview_size": 24
+    },
+    "selected_controller_cost": 0.001
+  },
+  "concrete_source_configuration_blockers": [],
+  "cwd": "/tmp/gene-annotation-configured-caller-20261022-006",
+  "environment": {
+    "PATH": "Saved codex command must resolve; current source-only shutil.which observed /usr/local/bin/codex.",
+    "PYTHONPATH": {
+      "explicit_equivalent": "/tmp/gene-annotation-configured-caller-20261022-006",
+      "minimum": "No change required when cwd is006."
+    },
+    "authentication": "Inherit existing ordinary user environment; no HOME/CODEX_HOME or credential/config override introduced."
+  },
+  "limitations": [
+    "Source/configuration readiness only; no actual model availability, authenticated transport, service availability or remote revision verification.",
+    "Planner availability does not establish scientific selection or actual public-service use.",
+    "No extra authorization gate, wrapper, shim, default mutation or launch was introduced."
+  ],
+  "ordinary_command_not_executed_by_P": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "gene_annotation_episode.case_execution",
+    "run",
+    "--run-dir",
+    "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001",
+    "--policy",
+    "/tmp/gene-annotation-configured-caller-20261022-006/gene_annotation_episode/api_planning_case_policy.py",
+    "--parameters",
+    "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/caller-inputs/parameters.json"
+  ],
+  "public_client": {
+    "actual_class": "gene_annotation_episode.acquisition.PublicClients",
+    "actual_client_not_constructed_by_P": true,
+    "actual_registry_digest_matches": true,
+    "canonical_descriptor_sha256": "7c3113045c9b8bd9d0613e12a5fd16eddbddb06fcb6b748b75f68d51dc1f2eb9",
+    "constructor_access_dir": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/public-access",
+    "constructor_timeout": 90,
+    "descriptor_function": "gene_annotation_episode.public_search_operations.describe_hmmer_client_binding",
+    "digest_function": "gene_annotation_episode.public_search_operations.hmmer_client_binding_sha256",
+    "hash_scope": "Full actual acquisition.py source plus declared implemented URLs and timeout; access_dir/contact are not HMMER descriptor fields.",
+    "source_derived_descriptor_matches_adopted": true
+  },
+  "read_diagnostics": [
+    "One lookup named nonexistent model_bindings.py; actual configuration lives in runtime._effective_models and providers.py and was then read.",
+    "One multi-command lookup stopped after no matches in independent_execution; actual process constructor was found/read in method_loop.durable.start.",
+    "Some combined long reads exceeded output budget; exact affected consumer slices were reread before final report."
+  ],
+  "trace": [
+    "case_execution.main run parses actual parameters then invokes run_prepared_case(resume=False).",
+    "run_prepared_case uses exact prepared settings for build_tools and provider_config models/restoration.",
+    "run_workflow makes actual ModelConnection(settings.models, newproviderpath, newrun).",
+    "ModelConnection.complete owns actual _SessionConnection; transport command is saved connection.command; cwd is newrun.",
+    "_SessionConnection starts exact configured role model/effort, refuses server substitutions, and requests structured output.",
+    "method_loop.durable.start independently constructs worker PYTHONPATH from actual package root and current sys.path."
+  ],
+  "version": "source_only_configured_caller_launch_readiness_v1"
+}

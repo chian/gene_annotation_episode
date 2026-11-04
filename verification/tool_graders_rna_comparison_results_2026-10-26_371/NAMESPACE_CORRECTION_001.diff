@@ -1,0 +1,25 @@
+--- verification/tool_graders_rna_comparison_results_2026-10-26_371/check008/source_snapshot/gene_annotation_episode/rna_structure_comparison_results.py	2026-10-26 23:22:03.206148390 -0500
++++ gene_annotation_episode/rna_structure_comparison_results.py	2026-10-27 00:13:04.390971083 -0500
+@@ -292,17 +292,21 @@
+         if self.applies(context):
+             assignment = plain(context.assignment)
+             selected = [assignment["handoff_ref"]]
++            selected_handoffs = {assignment["handoff_ref"]}
+             for member in assignment["selector"]["question"]["membership"]:
+                 if member["kind"] == "saved_sheet":
+                     selected.extend(member["saved_input"][key] for key in SAVED_REFERENCE_FIELDS)
++                    selected_handoffs.add(member["saved_input"]["handoff_ref"])
+                 elif member["kind"] == "received_failure" and member["failure"]["source_ref"] is not None:
+                     selected.append(member["failure"]["source_ref"])
++            if namespace == "execution_handoff" and reference not in selected_handoffs:
++                return False
+             if reference in selected:
+                 allowed = validate_rna_comparison_selected_inputs(self.store, context, assignment["selector"],
+                     anchor_handoff_ref=assignment["handoff_ref"], returns=self.returns)
+                 record = self.store.get(reference)
+                 return reference in allowed and namespace in {None, "execution_result", record["record_type"],
+-                    *({"execution_handoff"} if reference == assignment["handoff_ref"] else set())}
++                    *({"execution_handoff"} if reference in selected_handoffs else set())}
+         # Comparison artifacts are internal, and are absent from admitted refs.
+         # Recognize exact recorded custody without opening their scientific data.
+         for action in self.store.db.execute("SELECT result FROM runtime_actions WHERE run_id=? AND "

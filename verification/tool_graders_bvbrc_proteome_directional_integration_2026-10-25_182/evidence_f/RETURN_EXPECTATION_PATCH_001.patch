@@ -1,0 +1,10 @@
+--- a/tests/test_bvbrc_proteome_directional_returns.py
++++ b/tests/test_bvbrc_proteome_directional_returns.py
+@@ -211,7 +211,7 @@
+     original = deepcopy(configuration)
+     try:
+         configuration[0]['adapter_version'] = '1'
+-        with pytest.raises(ProteomeReturnError, match='pin_conflict'): d.api.proteome_returns.facts(d.context, d.schema)
++        with pytest.raises(ValueError, match='appservice_publication_adapter_configuration_conflict'): d.api.proteome_returns.facts(d.context, d.schema)
+     finally:
+         configuration[:] = original

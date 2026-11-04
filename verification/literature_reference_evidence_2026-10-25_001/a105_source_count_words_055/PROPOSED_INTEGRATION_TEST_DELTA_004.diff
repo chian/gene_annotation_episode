@@ -1,0 +1,15 @@
+--- a/tests/test_literature_kinetic_integration.py
++++ b/tests/test_literature_kinetic_integration.py
+@@ -176,10 +176,11 @@
+         ratio, = project(repo, outcome, ["parameter_ratio"])
+         for role in ("numerator", "denominator"):
+             assert ratio[role]["uncertainty_values"] == {"delivery_status": "not_requested", "magnitude": None,
+-                "interval": None, "confidence_level": None, "count": None}
++                "interval": None, "confidence_level": None, "count": None, "count_reported_value": None}
+         numerator, = project(repo, outcome, ["numerator_parameter"])
+         values = numerator["numerator"]["uncertainty_values"]
+         assert values["count"] == 73 and values["confidence_level"] == .95
++        assert values["count_reported_value"] == 73
+         assert values["interval"] == pytest.approx([608.147466, 854.808132])
+         assert numerator["denominator"]["uncertainty_values"]["delivery_status"] == "not_requested"
+ 

@@ -1,0 +1,163 @@
+{
+  "native_handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_barcode_shared_registration_2026-10-27_495/check004/temporary/pytest/test_actual_native_results_and0/workspace/.episode-operations/0cf42d15952ed9eb67d7d441471a1f811b3e0f80e1dd33af1e8081e1019aa88d/53ad8ec88e147584724a5d3259bd20594f60cf87eadbee725bee573a8567839a/native.json",
+  "native_returncode": 0,
+  "original_projection": {
+    "components_sha256": "f627460e08e255ea345d506fae5a4c3bc47dcaed25543786deccd2fcee4f6c10",
+    "extent": "complete",
+    "has_more": false,
+    "issues": [
+      {
+        "artifact_ref": null,
+        "barcode_key": "AAAA",
+        "code": "duplicate_target_mapping",
+        "field": "target_rows",
+        "record_ordinal": null,
+        "requirement": "none",
+        "sample_key": "sample1",
+        "stage": "join"
+      }
+    ],
+    "request": {
+      "barcode_keys": null,
+      "cluster_ids": null,
+      "fields": [
+        "total_records",
+        "extracted_records",
+        "extraction_fraction",
+        "mean_pair_distance"
+      ],
+      "include_sample": true,
+      "target_keys": null,
+      "top_k": null,
+      "version": "barcode_projection_request_v1",
+      "view": "summary"
+    },
+    "returned_row_count": 1,
+    "rows": [
+      {
+        "measurements": {
+          "extracted_records": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 10
+          },
+          "extraction_fraction": {
+            "denominator": 12,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "fraction",
+            "value": 0.8333333333333334
+          },
+          "mean_pair_distance": {
+            "denominator": 3,
+            "extent": "complete",
+            "population": "distance_pairs",
+            "source": "derived",
+            "state": "available",
+            "uncertainty": null,
+            "units": "positions",
+            "value": 2.6666666666666665
+          },
+          "total_records": {
+            "denominator": null,
+            "extent": "complete",
+            "population": "parsed_reads",
+            "source": "observed",
+            "state": "available",
+            "uncertainty": null,
+            "units": "reads",
+            "value": 12
+          }
+        },
+        "sample_key": "sample1"
+      }
+    ],
+    "sample": {
+      "biological_replicate_key": null,
+      "condition_key": null,
+      "dependence_group_key": null,
+      "input_file_key": "supplied-reads",
+      "reference_library_key": null,
+      "sample_key": "sample1",
+      "technical_replicate_key": null
+    },
+    "sample_key": "sample1",
+    "selected_row_count": 1,
+    "sheet_sha256": "20f6aca22572247c841ff1b6342847fca9be9cc2ce8fc251140721d2d3f5cbc9",
+    "status": "partial",
+    "total_available_rows": 1,
+    "version": "barcode_projection_v1"
+  },
+  "saved_projection": [
+    {
+      "barcode_keys": [
+        "AAAA",
+        "AAAT",
+        "TTTT"
+      ],
+      "cluster_id": 1,
+      "measurements": {
+        "cluster_read_count": {
+          "denominator": null,
+          "extent": "complete",
+          "population": "retained_reads",
+          "source": "derived",
+          "state": "available",
+          "uncertainty": null,
+          "units": "reads",
+          "value": 9
+        }
+      },
+      "sample_key": "sample1"
+    }
+  ],
+  "original_credit": {
+    "credit": 2,
+    "operational_credit": 2,
+    "new_handoff_count": 0,
+    "new_acquired_record_count": 1,
+    "operational_credit_binding": {
+      "version": "native_barcode_acquired_result_v1",
+      "handoff_unit": 3,
+      "acquired_record_unit": 2,
+      "scientific_credit": false,
+      "monitoring_credit": false
+    }
+  },
+  "saved_credit": {
+    "credit": 0,
+    "operational_credit": 0,
+    "new_handoff_count": 0,
+    "new_acquired_record_count": 0,
+    "operational_credit_binding": {
+      "version": "native_barcode_acquired_result_v1",
+      "handoff_unit": 3,
+      "acquired_record_unit": 2,
+      "scientific_credit": false,
+      "monitoring_credit": false
+    }
+  },
+  "original_completion": {
+    "version": "practical_completion_v1",
+    "run_id": "barcode495-shared",
+    "episode_id": "episode_07cba96938cc33c133e565dc2ca00f31dcf9408e2f9b0d368009ce3a1f795f20",
+    "assignment_sha256": "b96072ee05679b5dd60571217c18b82a45e1fca294304f2a56063b5b596ed852",
+    "endpoint": "usable_handoff",
+    "operation_key": "barcode495-shared:episode_07cba96938cc33c133e565dc2ca00f31dcf9408e2f9b0d368009ce3a1f795f20:0",
+    "receipt_sha256": "bfa1c2a59d74a62d981f6a6f2354506596597b9cec5b896e98c4b63a92cbe62f",
+    "validation_keys": [
+      "original_barcode_result_commission",
+      "closed_original_native_capture",
+      "qualified_requested_barcode_delivery"
+    ]
+  },
+  "scripted_component_observations": 0
+}

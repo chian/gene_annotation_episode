@@ -1,0 +1,487 @@
+--- /dev/null
++++ b/gene_annotation_episode/literature_partner_operand_information.py
+@@ -0,0 +1,122 @@
++"""Operand information for the existing native partner source contract.
++
++Only description keywords are added to a detached schema. No source selection,
++scientific interpretation, parsing, arithmetic or episode behavior occurs here.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++
++from .literature_native_rate_operand_information import (
++    _DEFINITION_GRAMMAR, _number, _witness,
++)
++from .literature_partner_native_inputs import partner_source_population_schema
++
++
++def _unit(node, endpoint_path):
++    plain, defined = node["anyOf"]
++    _witness(plain, (
++        "Select the complete supported printed rate-unit token. A bare U/mg "
++        "witness is rejected by this partner reader; use the source-defined "
++        "unit form only when its actual supported source definition is available."
++    ))
++    defined["description"] = (
++        "Endpoint-specific source definition for the selected U/mg token. "
++        "There is no universal U conversion. Unsupported wording is a reader "
++        "capability limit, not evidence that an experiment is absent."
++    )
++    fields = defined["properties"]
++    _witness(fields["witness"], "Select the full printed U/mg token.")
++    definition = fields["definition"]
++    definition["description"] = (
++        "Keep the source-bound quantity, entity and time basis associated with "
++        "the selected arm endpoint. Equal numbers or entity labels do not "
++        "establish that association."
++    )
++    parts = definition["properties"]
++    _witness(parts["bridge"], (
++        "The complete supported unit-definition statement, including all "
++        "alternative endpoint branches and their quantity/time bases. "
++        "Do not clip a continuation or rewrite source wording."
++    ))
++    _witness(parts["clause"], (
++        "One complete amount–amount-unit–entity–per-time branch contained in "
++        "the bridge. Its positive amount token, amount unit, definition entity "
++        "and time unit must occur within this clause in that actual source order."
++    ))
++    _number(parts["amount"], (
++        "The positive definition amount. Its witness must be contained in the "
++        "bridge and its physical numeric token must be contained in the clause."
++    ))
++    _witness(parts["amount_unit"], (
++        "The clause's complete pmol, nmol or umol amount unit (including "
++        "micro-symbol spellings), at its actual position in that clause."
++    ))
++    _witness(parts["time_unit"], (
++        "The clause's complete time token: min, minute, s or second, at its "
++        "actual position in that clause."
++    ))
++    _witness(parts["endpoint"], (
++        "Copy the exact same witness selected at " + endpoint_path + ": source, "
++        "representation, start, end and quote must all agree. Naming the same "
++        "entity in a different source occurrence or narrower span is insufficient."
++    ))
++    _witness(parts["endpoint_entity"], (
++        "The complete literal molecular entity contained in the selected "
++        "endpoint witness. Use this endpoint occurrence, not an equal string "
++        "elsewhere in the source."
++    ))
++    _witness(parts["definition_entity"], (
++        "The complete literal molecular entity contained in the selected "
++        "definition clause. Its normalized name must match endpoint_entity; "
++        "the reader does not infer chemical aliases or a coupled product."
++    ))
++
++
++def partner_source_population_schema_with_information():
++    """Return the unchanged closed partner schema with descriptions only."""
++    schema = deepcopy(partner_source_population_schema())
++    schema["description"] = (
++        "Witness offsets use zero-based half-open source UTF-8 bytes; inner "
++        "numeric selectors use Unicode characters within quote. Exact bytes "
++        "verify custody, not experimental meaning. " + _DEFINITION_GRAMMAR
++    )
++    fields = schema["properties"]
++    for name, node in fields["literals"]["properties"].items():
++        _witness(node["anyOf"][0], "Source literal for " + name + ".")
++    _witness(fields["interpretation_witnesses"]["items"], (
++        "Source support for the supplied experimental interpretation, including "
++        "any claim of complete condition coverage."
++    ))
++    for role in ("reference", "omitted", "addback"):
++        arm = fields["arms"]["properties"][role]["anyOf"][0]["properties"]
++        for name in ("subject", "partner", "endpoint", "normalization", "measurement_identity"):
++            _witness(arm[name]["anyOf"][0], role + " arm's source-bound " + name + ".")
++        level = arm["conditions"]["properties"]["factors"]["items"]["properties"]["level"]
++        literal, numeric, _null = level["anyOf"]
++        _witness(literal["properties"]["witness"], "The actual literal condition level.")
++        _number(numeric["properties"]["selector"], "The actual numeric condition level.")
++        _witness(numeric["properties"]["unit_witness"]["anyOf"][0], (
++            "The selected numeric condition's printed unit; null retains the "
++            "existing dimensionless interpretation."
++        ))
++        rate = arm["rate"]["anyOf"][0]["properties"]
++        _number(rate["value"], "The arm's reported rate or supported upper-limit token.")
++        endpoint_path = "arguments.arms." + role + ".endpoint"
++        _unit(rate["unit"], endpoint_path)
++        spread = rate["spread"]["properties"]
++        _number(spread["magnitude"]["anyOf"][0], "The reported absolute spread magnitude.")
++        _unit(spread["unit"]["anyOf"][0], endpoint_path)
++        spread["unit"]["description"] = (
++            "Select the spread's own printed unit when supplied. Null retains "
++            "the selected common rate-unit association; any explicit printed "
++            "spread unit is still validated, including its conversion scale."
++        )
++        _witness(spread["witnesses"]["items"], (
++            "Source support for the reported spread meaning; SD, SEM and CI "
++            "require a basis witness and remain distinct."
++        ))
++    return schema
++
++
++__all__ = ["partner_source_population_schema_with_information"]
+--- /dev/null
++++ b/tests/test_literature_partner_operand_information.py
+@@ -0,0 +1,336 @@
++"""Synthetic contract-information checks against the actual partner reader."""
++import asyncio
++from copy import deepcopy
++import json
++from pathlib import Path
++from types import SimpleNamespace
++
++import pytest
++
++from gene_annotation_episode.composition_information import (
++    CONTRACT_ARGUMENT_TRANSPORT, CONTRACT_INFORMATION_PROFILE,
++)
++from gene_annotation_episode.domain import validate_schema
++from gene_annotation_episode.episode_contract_information import operation_contract_information
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes, _population_catalog
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++from gene_annotation_episode.literature_experimental_prompt import (
++    EXPERIMENTAL_TASK, render_literature_experimental_prompt,
++)
++from gene_annotation_episode.literature_native_rate_operand_information import (
++    rate_source_population_schema_with_information,
++)
++from gene_annotation_episode import literature_partner_operand_information as information
++from gene_annotation_episode.literature_partner_native_inputs import (
++    COMPONENTS, partner_source_population_schema, read_partner_native_inputs,
++)
++from gene_annotation_episode.literature_partner_prompt import PARTNER_TASK
++from gene_annotation_episode.schema_information_text import parse_schema_information
++
++
++SOURCE = "source_" + "1" * 24
++
++
++def strip_descriptions(value):
++    if isinstance(value, dict):
++        return {name: strip_descriptions(child) for name, child in value.items()
++                if name != "description"}
++    if isinstance(value, list):
++        return [strip_descriptions(child) for child in value]
++    return value
++
++
++def assert_only_description_additions(before, after):
++    """Keep every existing value, including inherited REF descriptions, exact."""
++    if isinstance(before, dict):
++        assert set(after) - set(before) <= {"description"}
++        assert set(before) <= set(after)
++        for name, value in before.items():
++            assert_only_description_additions(value, after[name])
++    elif isinstance(before, list):
++        assert isinstance(after, list) and len(before) == len(after)
++        for left, right in zip(before, after):
++            assert_only_description_additions(left, right)
++    else:
++        assert type(before) is type(after) and before == after
++
++
++def fixture(*, introduction="One unit was defined as"):
++    """Constructed bytes and supplied synthetic meanings; no paper/Store access."""
++    clause = "2 nmol CompoundQ oxidized per min"
++    bridge = introduction + " " + clause + ", 3 nmol CompoundR formed per second."
++    lines = {role: f"µ {role} rate {token} U/mg +/- 1 U/mg SD."
++             for role, token in (("reference", "8"), ("omitted", "2"), ("addback", "6"))}
++    text = ("µ SubjectS; PartnerP; CompoundQ oxidation. CompoundQ oxidation. "
++            "normalized per mg. complete conditions; nitrogen glutamine; temperature 37 degC.\n"
++            + "\n".join(lines.values()) + "\n" + bridge)
++    raw = text.encode()
++
++    def read_source(ref, representation):
++        assert ref == SOURCE and representation == "original"
++        return {"artifact_ref": "synthetic:partner:artifact", "content": raw}
++
++    def witness(quote, after=0):
++        start = text.index(quote, after)
++        return {"source_ref": SOURCE, "representation": "original",
++                "start": len(text[:start].encode()),
++                "end": len(text[:start + len(quote)].encode()), "quote": quote}
++
++    def number(quote, token, after=0):
++        start = quote.index(token)
++        return {"witness": witness(quote, after), "number_start": start,
++                "number_end": start + len(token)}
++
++    endpoint = witness("CompoundQ oxidation")
++
++    def unit(after):
++        return {"kind": "source_defined_rate_unit", "witness": witness("U/mg", after),
++                "definition": {"bridge": witness(bridge), "clause": witness(clause),
++                    "amount": number(bridge, "2"), "amount_unit": witness("nmol", text.index(bridge)),
++                    "time_unit": witness("min", text.index(bridge)),
++                    "endpoint": deepcopy(endpoint), "endpoint_entity": witness("CompoundQ"),
++                    "definition_entity": witness("CompoundQ", text.index(bridge))}}
++
++    arms = {}
++    for role, token in (("reference", "8"), ("omitted", "2"), ("addback", "6")):
++        after = text.index(lines[role])
++        arms[role] = {"subject": witness("SubjectS"), "partner": witness("PartnerP"),
++            "endpoint": deepcopy(endpoint), "normalization": witness("normalized per mg"),
++            "partner_state": "absent" if role == "omitted" else "present",
++            "conditions": {"coverage": "complete", "factors": [
++                {"factor": "nitrogen", "level": {"kind": "literal", "witness": witness("glutamine")}},
++                {"factor": "temperature", "level": {"kind": "number",
++                    "selector": number("temperature 37 degC", "37"), "unit_witness": witness("degC")}}]},
++            "measurement_identity": witness("µ " + role + " rate"), "origin": "synthetic",
++            "rate": {"value": number(lines[role], token), "unit": unit(after),
++                "spread": {"kind": "SD", "magnitude": number(lines[role], "1"),
++                    "unit": unit(text.index("+/-", after)), "witnesses": [witness("SD", after)]}}}
++    args = {"source_ref": SOURCE, "data_source_ref": SOURCE, "source_kind": "synthetic_fixture",
++        "input_mode": "native_source_spans", "literals": dict.fromkeys(("subject", "partner",
++            "experiment", "endpoint", "normalization", "reference_condition", "omitted_condition",
++            "addback_condition", "function")),
++        "interpretation_witnesses": [witness("complete conditions")], "arms": arms}
++    return args, read_source, witness, text
++
++
++def checked_read(args, read_source, schema):
++    validate_schema(args, schema)
++    return read_partner_native_inputs(args, read_source=read_source)
++
++
++def test_description_only_exact_equality_detachment_no_defaults_and_export():
++    bare = partner_source_population_schema()
++    before = deepcopy(bare)
++    annotated = information.partner_source_population_schema_with_information()
++    assert strip_descriptions(annotated) == strip_descriptions(bare)
++    assert_only_description_additions(bare, annotated)
++    assert bare == before
++    assert "default" not in json.dumps(annotated)
++    assert information.__all__ == ["partner_source_population_schema_with_information"]
++    other = information.partner_source_population_schema_with_information()
++    saved = deepcopy(other)
++    annotated["properties"]["arms"]["properties"]["reference"]["anyOf"][0]["properties"]["rate"]["anyOf"][0]["properties"]["value"]["properties"]["number_start"]["minimum"] = 99
++    assert other == saved
++    assert strip_descriptions(other) == strip_descriptions(partner_source_population_schema())
++
++
++def test_all_103_witnesses_15_number_selectors_and_six_definitions_have_information():
++    counts = dict(witness=0, number=0, definition=0)
++    def walk(node):
++        if isinstance(node, dict):
++            fields = node.get("properties", {})
++            if set(fields) == {"source_ref", "representation", "start", "end", "quote"}:
++                counts["witness"] += 1
++                assert "half-open UTF-8 byte positions" in node["description"]
++            if set(fields) == {"witness", "number_start", "number_end"}:
++                counts["number"] += 1
++                assert "Unicode characters" in node["description"]
++                for name in ("number_start", "number_end"):
++                    assert "Unicode character position inside witness.quote" in fields[name]["description"]
++            if fields.get("kind", {}).get("const") == "source_defined_rate_unit":
++                counts["definition"] += 1
++                assert "no universal U conversion" in node["description"]
++                assert "retains raw inputs" not in node["description"]
++            for child in node.values():
++                walk(child)
++        elif isinstance(node, list):
++            for child in node:
++                walk(child)
++    schema = information.partner_source_population_schema_with_information()
++    walk(schema)
++    assert counts == {"witness": 103, "number": 15, "definition": 6}
++    assert json.dumps(schema).count("one unit was defined as") == 1
++
++
++@pytest.mark.parametrize("role", ("reference", "omitted", "addback"))
++def test_rate_and_spread_definition_instructions_bind_to_exact_role_endpoint(role):
++    schema = information.partner_source_population_schema_with_information()
++    rate = schema["properties"]["arms"]["properties"][role]["anyOf"][0]["properties"]["rate"]["anyOf"][0]["properties"]
++    for unit in (rate["unit"], rate["spread"]["properties"]["unit"]["anyOf"][0]):
++        plain, defined = unit["anyOf"]
++        assert "bare U/mg witness is rejected" in plain["description"]
++        fields = defined["properties"]["definition"]["properties"]
++        assert "arguments.arms." + role + ".endpoint" in fields["endpoint"]["description"]
++        assert "exact same witness" in fields["endpoint"]["description"]
++        assert "different source occurrence" in fields["endpoint"]["description"]
++        assert "all alternative endpoint branches" in fields["bridge"]["description"]
++        assert "contained in the bridge" in fields["clause"]["description"]
++        assert "actual source order" in fields["clause"]["description"]
++        assert "physical numeric token must be contained in the clause" in fields["amount"]["description"]
++        assert "endpoint occurrence" in fields["endpoint_entity"]["description"]
++        assert "does not infer chemical aliases" in fields["definition_entity"]["description"]
++
++
++def test_actual_reader_calculator_success_is_identical_with_either_schema():
++    args, read_source, _witness, _text = fixture()
++    before = deepcopy(args)
++    bare = checked_read(args, read_source, partner_source_population_schema())
++    informed = checked_read(args, read_source, information.partner_source_population_schema_with_information())
++    assert bare == informed
++    assert args == before
++    assert [informed["cells"][name]["value"] for name in COMPONENTS] == [
++        16000, 4000, 12000, 12000, .75, 8000, 2/3, .5]
++    assert all(arm["rate"]["canonical_spread"] == 2000 for arm in informed["native_evidence"].values())
++
++
++FAILURES = (
++    ("endpoint_narrower", "defined_unit_endpoint_mismatch"),
++    ("endpoint_equal_other_occurrence", "defined_unit_endpoint_mismatch"),
++    ("bridge", "defined_unit_bridge_boundary_required"),
++    ("endpoint_entity_elsewhere", "defined_unit_containment_required"),
++    ("definition_entity_elsewhere", "defined_unit_containment_required"),
++    ("time_other_branch", "defined_unit_containment_required"),
++    ("inner_byte_index", "literal_source_number_required"),
++    ("outer_character_index", "source_quote_mismatch"),
++    ("bare_U", "unsupported_source_rate_unit"),
++    ("unsupported_grammar", "defined_unit_bridge_unsupported"),
++)
++
++
++def failure_fixture(case, role="reference", spread=False):
++    args, read_source, witness, text = fixture(introduction=(
++        "One unit corresponds to" if case == "unsupported_grammar" else "One unit was defined as"))
++    arm = args["arms"][role]
++    rate = arm["rate"]
++    selected = rate["spread"] if spread else rate
++    definition = selected["unit"]["definition"]
++    if case == "endpoint_narrower":
++        definition["endpoint"] = witness("CompoundQ")
++    elif case == "endpoint_equal_other_occurrence":
++        definition["endpoint"] = witness("CompoundQ oxidation", text.index("CompoundQ oxidation") + 1)
++    elif case == "bridge":
++        definition["bridge"] = witness("One unit was defined as 2 nmol CompoundQ")
++    elif case == "endpoint_entity_elsewhere":
++        definition["endpoint_entity"] = deepcopy(definition["definition_entity"])
++    elif case == "definition_entity_elsewhere":
++        definition["definition_entity"] = deepcopy(definition["endpoint_entity"])
++    elif case == "time_other_branch":
++        definition["time_unit"] = witness("second")
++    elif case == "inner_byte_index":
++        number = rate["value"]
++        number["number_start"] = len(number["witness"]["quote"][:number["number_start"]].encode())
++        number["number_end"] = number["number_start"] + 1
++    elif case == "outer_character_index":
++        number = rate["value"]["witness"]
++        number["start"] = text.index(number["quote"])
++        number["end"] = number["start"] + len(number["quote"])
++    elif case == "bare_U":
++        selected["unit"] = selected["unit"]["witness"]
++    return args, read_source
++
++
++@pytest.mark.parametrize("case,code", FAILURES)
++def test_actual_partner_failures_keep_exact_same_error_with_either_schema(case, code):
++    args, read_source = failure_fixture(case)
++    before = deepcopy(args)
++    failures = []
++    for schema in (partner_source_population_schema(), information.partner_source_population_schema_with_information()):
++        with pytest.raises(ExperimentalContractError) as caught:
++            checked_read(args, read_source, schema)
++        failures.append((caught.value.code, caught.value.field))
++    assert failures[0] == failures[1]
++    assert failures[0][0] == code
++    assert args == before
++
++
++@pytest.mark.parametrize("role", ("reference", "omitted", "addback"))
++@pytest.mark.parametrize("spread", (False, True))
++def test_exact_endpoint_equality_and_containment_apply_to_every_arm_rate_and_spread(role, spread):
++    for case, code in (("endpoint_equal_other_occurrence", "defined_unit_endpoint_mismatch"),
++                       ("endpoint_entity_elsewhere", "defined_unit_containment_required")):
++        args, read_source = failure_fixture(case, role=role, spread=spread)
++        with pytest.raises(ExperimentalContractError) as caught:
++            checked_read(args, read_source, information.partner_source_population_schema_with_information())
++        assert caught.value.code == code
++
++
++@pytest.mark.parametrize("with_failure", (False, True))
++@pytest.mark.parametrize("profile", (False, True))
++def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_steering_separate(profile, with_failure):
++    catalog = _population_catalog()
++    assert len(catalog) == 19
++    assert next(row for row in catalog if row["name"] == "literature.rate.source.populate")["input_schema"] == rate_source_population_schema_with_information()
++    entry = next(row for row in catalog if row["name"] == "literature.partner.source.populate")
++    assert entry["input_schema"] == information.partner_source_population_schema_with_information()
++    assert strip_descriptions(entry["input_schema"]) == strip_descriptions(partner_source_population_schema())
++    assert_only_description_additions(partner_source_population_schema(), entry["input_schema"])
++    outcome = operation_contract_information(catalog=catalog, operation=entry["name"])
++    assert parse_schema_information(outcome["result"]["text"]) == entry["input_schema"]
++    state = {"literature_experimental_work": {"version": "literature_experimental_task_v1"},
++        "goal": {"objective": "Evaluate a synthetic partner experiment."}, "scope": {},
++        "literature_assignment": {"requested_partner_components": ["partner_loss"]}, "tools": [entry]}
++    if profile:
++        state["contract_information_profile"] = CONTRACT_INFORMATION_PROFILE
++        state["tools"] = [{**entry, "argument_transport": CONTRACT_ARGUMENT_TRANSPORT}]
++    if with_failure:
++        state["last_local_outcome"] = {"status": "invalid", "feedback": {
++            "category": "arguments_or_reference", "code": "defined_unit_endpoint_mismatch",
++            "field": "defined_unit.definition.endpoint"}}
++    rendered = render_literature_experimental_prompt(state, "Synthetic recurring assignment.",
++        lookup_results=[outcome] if profile else ())
++    task, steering = rendered.split("\n\nSTEERING", 1)
++    assert EXPERIMENTAL_TASK in task and PARTNER_TASK in task
++    assert "Synthetic recurring assignment." in task
++    assert "UTF-8 byte positions" in task
++    assert "Unicode character position inside witness.quote" in task
++    for role in ("reference", "omitted", "addback"):
++        assert "arguments.arms." + role + ".endpoint" in task
++    assert "one unit was defined as" in task
++    assert "one unit was defined as" not in steering
++    assert ("defined_unit_endpoint_mismatch" in steering) == with_failure
++    assert "defined_unit_endpoint_mismatch" not in task
++
++
++def test_metadata_module_bytes_participate_in_actual_binding_identity(monkeypatch):
++    binding = LiteratureEpisodes(None, rate_population=True)
++    original = binding.as_record()
++    read_bytes = Path.read_bytes
++    def altered(path):
++        value = read_bytes(path)
++        return value + b"\n# synthetic identity probe\n" if path.name == "literature_partner_operand_information.py" else value
++    monkeypatch.setattr(Path, "read_bytes", altered)
++    assert original["implementation_sha256"] != binding.as_record()["implementation_sha256"]
++    assert len(binding.fact_sources("literature")) == 18
++
++
++def test_dispatch_probe_proves_only_one_selected_repository_route():
++    args, _read_source, _witness, _text = fixture()
++    calls = []
++    outcome = {"status": "completed", "result": {"synthetic_dispatch_probe": True}}
++    class Repository:
++        def populate(self, context, selected, key):
++            calls.append((context, deepcopy(selected), key))
++            return outcome
++    class Services:
++        def tool_catalog(self, scope):
++            return {}
++        def __getattr__(self, name):
++            if name.startswith("literature_") and name.endswith("_repository"):
++                return lambda: Repository()
++            raise AttributeError(name)
++    context = SimpleNamespace(role="literature", scope={}, assignment={
++        "version": "literature_assignment_v1", "question_context_refs": [], "source_refs": []})
++    result = asyncio.run(LiteratureEpisodes(Services(), rate_population=True).execute(
++        context, "literature.partner.source.populate", args, "synthetic:partner:operation"))
++    assert result is outcome
++    assert calls == [(context, args, "synthetic:partner:operation")]
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -120,10 +120,10 @@
+     result.append({"name": "literature.partner.populate",
+         "description": "Populate source experimental partner-removal and addback components from received retained measurements and exact source witnesses. Preserve directed molecule/partner roles, nitrogen and other nonpartner conditions, normalization identity, physical measurement identity and reported spread meanings. Incompatible or incomplete comparisons keep native values and explicit unknown components. Censor domains are not confidence intervals; chemical bypass and partner swaps do not establish universal partner necessity, genomic presence, target transfer or annotation credit.",
+         "input_schema": partner_population_schema()})
+-    from .literature_partner_storage import partner_source_population_schema
++    from .literature_partner_operand_information import partner_source_population_schema_with_information
+     result.append({"name": "literature.partner.source.populate",
+         "description": "Populate the same experimental partner components directly from selected literal source spans. Select complete rate/limit tokens, native units, spread meanings and source-bound entity/physical-measurement identities; do not supply scientific numbers or a prepared numeric JSON dataset. For source-defined activity units such as U/mg, select the endpoint-specific definition, quantity, molecular entity and time basis; no universal U conversion is assumed. Deterministic readers preserve original tokens, convert supported rate units and retain unknown normalization, conditions or observation identity. A repeated representation is not a new measurement. No sampling uncertainty, universal necessity, target correspondence or annotation credit is inferred.",
+-        "input_schema": partner_source_population_schema()})
++        "input_schema": partner_source_population_schema_with_information()})
+     from .literature_native_rate_operand_information import rate_source_population_schema_with_information
+     result.append({"name": "literature.rate.source.populate",
+         "description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request its closed literature_rate_source_cells return projection, which preserves each arm's subject, construct, preparation and approximation; literature_rate_cells is the separate legacy table projection. Select source-backed endpoint/basis relationships and statistical assumptions; different constructs may be the intended comparison. Source-defined U/mg requires its endpoint-specific definition. Missing meanings, unsupported units and censored values retain partial inputs. Exact witnesses verify custody, not causal isolation, target correspondence or annotation credit.",
+@@ -211,6 +211,7 @@
+                          "literature_partner_calculations.py", "literature_partner_inputs.py",
+                          "literature_partner_storage.py", "literature_partner_prompt.py",
+                          "literature_partner_source_fields.py", "literature_partner_native_inputs.py",
++                         "literature_partner_operand_information.py",
+                          "literature_partner_defined_units.py", "literature_amount_inputs.py",
+                          "literature_amount_calculations.py", "literature_amount_storage.py",
+                          "literature_optical_inputs.py", "literature_optical_calculations.py",

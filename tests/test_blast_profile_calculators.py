@@ -526,12 +526,12 @@ def test_functions_are_explicit_and_target_context_does_not_change_calculation()
 @pytest.mark.parametrize("case", ["blastp_gaps", "blastx_reverse"])
 def test_genuine_retained_paired_bytes_only_validate_shared_geometry(case):
     root = Path(__file__).resolve().parents[1]
-    directory = root / "verification/tool_graders_blast_collection_2026-10-26_293/native_fixtures"
+    directory = root / "tests/fixtures/blast_paired_native_reports"
     manifest = json.loads((directory / "manifest.json").read_text())
     measurements = []
     for format_name in ("json15", "tabular7"):
         entry = next(item for item in manifest if item["name"] == case + "_" + format_name)
-        raw = (root / entry["path"]).read_bytes()
+        raw = (directory / entry["name"] / Path(entry["path"]).name).read_bytes()
         assert hashlib.sha256(raw).hexdigest() == entry["sha256"]
         collection = parse_blast_report_collection({"report": raw}, artifacts=[entry["artifact"]], invocation=entry["invocation"])
         search = collection["searches"][0]
@@ -547,3 +547,165 @@ def test_genuine_retained_paired_bytes_only_validate_shared_geometry(case):
     if case == "blastx_reverse":
         assert measurements[0]["pairs"][0]["query_start"] == 239
         assert measurements[0]["counts"]["paired_query_positions"] == 240
+
+
+@pytest.fixture(scope="module")
+def original_profile_calculator():
+    """The preserved original source is a parity oracle, not a new producer."""
+    import importlib.util
+    import os
+    import sys
+    selected = os.environ.get("HMMER_NATIVE_ORACLE_PROFILE_BASELINE_FILE")
+    path = (Path(selected) if selected else
+        Path(__file__).parent / "fixtures/blast_profile_calculator_before_shared_authority.py")
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "2aa12ed2ac298848454f0ce2f12734083e4fa0115cbf1c12cd64f6dd712f321f")
+    name = "gene_annotation_episode._profile_authority_baseline"
+    specification = importlib.util.spec_from_file_location(name, path)
+    assert specification is not None and specification.loader is not None
+    module = importlib.util.module_from_spec(specification)
+    sys.modules[name] = module
+    specification.loader.exec_module(module)
+    return module
+
+
+def shared_authority_inputs(case):
+    """Supplied profile contexts exercise policy boundaries without a search."""
+    if case == "delta_eligible":
+        return make_inputs("deltablast")
+    if case == "translated_reverse":
+        return make_inputs("rpstblastn", reverse=True)
+    if case == "overlapping_hsps":
+        hit = synthetic_hit(positions=30)
+        second = synthetic_hsp(start=21, positions=30, bits=43.12345678901234)
+        second.update(hit_from=21, hit_to=50)
+        hit["hsps"].append(second)
+        return make_inputs(hits=[hit])
+    if case == "selected_original_axis":
+        return make_inputs(hits=[synthetic_hit(start=21, positions=30)],
+            selected=[20, 60], query_length=40, full_length=100)
+    if case == "selected_bounds_conflict":
+        return make_inputs(selected=[20, 60])
+    if case == "partial_empty_clip":
+        return make_inputs(hits=[synthetic_hit(positions=10)], selected=[20, 60])
+    if case == "missing_geometry":
+        hit = synthetic_hit()
+        hit["hsps"].append(dict(bit_score=45, score=105, align_len=20, identity=10, gaps=0))
+        return make_inputs(hits=[hit])
+    if case in {"native_counts_only", "missing_paired_counts", "zero_paired_columns"}:
+        hit = synthetic_hit(positions=5)
+        hsp = hit["hsps"][0]
+        if case == "zero_paired_columns":
+            hsp.update(qseq="-----", hseq="AAAAA", identity=0, positive=0, gaps=5)
+        else:
+            del hsp["qseq"], hsp["hseq"]
+            if case == "missing_paired_counts":
+                del hsp["identity"], hsp["gaps"]
+        return make_inputs(hits=[hit])
+    inputs = make_inputs("deltablast" if case == "delta_ineligible" else "rpsblast")
+    if case == "model_length_conflict":
+        inputs["profile_records"][0]["num_columns"] = 120
+    elif case == "unbound_query":
+        inputs["query_binding"] = None
+    elif case == "missing_digest":
+        inputs = make_inputs(hits=[synthetic_hit(start=21, positions=30)],
+            selected=[20, 60], query_length=40, full_length=100)
+        inputs["query_binding"]["sequence_sha256"] = None
+    elif case == "delta_ineligible":
+        inputs["search_binding"]["stage"] = None
+    elif case == "zero_threshold":
+        inputs = make_inputs(hits=[synthetic_hit(bits=0)])
+        inputs["profile_records"][0].update(specific_bits_threshold=0, reporting_bits_threshold=0)
+    else:
+        assert case == "rps_eligible"
+    return inputs
+
+
+@pytest.mark.parametrize("case", ["rps_eligible", "delta_eligible", "translated_reverse", "overlapping_hsps",
+    "selected_original_axis", "selected_bounds_conflict", "partial_empty_clip", "missing_geometry",
+    "model_length_conflict", "unbound_query", "missing_digest", "native_counts_only",
+    "missing_paired_counts", "zero_paired_columns", "delta_ineligible", "zero_threshold"])
+def test_shared_authority_preserves_whole_original_serialized_profile_result(original_profile_calculator, case):
+    inputs = shared_authority_inputs(case)
+    sheet = populate_blast_profile_sheet(**inputs)
+    before = json.dumps(sheet, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    original = original_profile_calculator.calculate_blast_profile_components(sheet)
+    current = calculate_blast_profile_components(sheet)
+    assert json.dumps(current, sort_keys=True, separators=(",", ":"), allow_nan=False) == json.dumps(
+        original, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    assert json.dumps(sheet, sort_keys=True, separators=(",", ":"), allow_nan=False) == before
+    if case == "partial_empty_clip":
+        model = current["models"][0]
+        assert model["geometry_complete"] is False
+        assert model["selected_query_coverage"] == dict(numerator=0, denominator=40, value=None, unit="fraction")
+        assert model["paired_query_units"] == model["paired_model_positions"] == 10
+    elif case == "zero_paired_columns":
+        assert current["hsps"][0]["representative_symbol_identity"] == dict(
+            numerator=0, denominator=0, value=None, unit="fraction")
+    elif case == "missing_paired_counts":
+        assert current["hsps"][0]["representative_symbol_identity"] == dict(
+            numerator=None, denominator=None, value=None, unit="fraction")
+
+
+@pytest.mark.parametrize("case", ["rps_eligible", "partial_empty_clip", "delta_ineligible"])
+def test_profile_consumes_actual_common_values_and_preserves_complete_gate(monkeypatch, case):
+    from gene_annotation_episode import alignment_correspondence as common
+    from gene_annotation_episode import blast_profile_calculators as profile
+    inputs = shared_authority_inputs(case)
+    native_components, ratios, sizes, lengths, fractions = [], [], [], [], []
+    original_component = profile.alignment_components
+    original_ratio, original_size, original_length = common._ratio, common.interval_union_length, common.interval_length
+    original_fraction, original_profile_size = profile._fraction, profile._size
+
+    def component(*args, **kwargs):
+        value = original_component(*args, **kwargs)
+        native_components.append(deepcopy(value))
+        return value
+
+    def ratio(numerator, denominator):
+        value = original_ratio(numerator, denominator)
+        ratios.append((numerator, denominator, value))
+        return value
+
+    def size(intervals):
+        # Common callers include generators; detach only this observer's input.
+        intervals = list(intervals)
+        value = original_size(intervals)
+        sizes.append((deepcopy(intervals), value))
+        return value
+
+    def length(interval):
+        value = original_length(interval)
+        lengths.append((deepcopy(interval), value))
+        return value
+
+    def fraction(numerator, denominator, *, complete=True):
+        start = len(ratios)
+        value = original_fraction(numerator, denominator, complete=complete)
+        assert ratios[start:] == ([(numerator, denominator, value["value"])] if complete else [])
+        fractions.append(value)
+        return value
+
+    def profile_size(intervals):
+        start = len(sizes)
+        value = original_profile_size(intervals)
+        assert sizes[start:] == [(deepcopy(intervals), value)]
+        return value
+
+    monkeypatch.setattr(profile, "alignment_components", component)
+    monkeypatch.setattr(common, "_ratio", ratio)
+    monkeypatch.setattr(common, "interval_union_length", size)
+    monkeypatch.setattr(common, "interval_length", length)
+    monkeypatch.setattr(profile, "_fraction", fraction)
+    monkeypatch.setattr(profile, "_size", profile_size)
+    result = calculate(inputs)
+    assert len(native_components) == len(result["hsps"]) == 1
+    assert len(fractions) == 3 * len(result["models"]), "HSP identity must be copied, without another division"
+    actual = result["hsps"][0]["representative_symbol_identity"]
+    assert actual["value"] == (None if case == "delta_ineligible" else native_components[0]["fractions"]["paired_identity"])
+    assert actual["numerator"] == (None if case == "delta_ineligible" else native_components[0]["counts"]["identical_pairs"])
+    assert actual["denominator"] == (None if case == "delta_ineligible" else native_components[0]["counts"]["paired_columns"])
+    if case == "partial_empty_clip":
+        assert lengths.count(([20, 60], 40)) == 2  # reported-length qualification and selected denominator
+        assert ([], 0) in sizes
+        assert result["models"][0]["selected_query_coverage"]["numerator"] == 0

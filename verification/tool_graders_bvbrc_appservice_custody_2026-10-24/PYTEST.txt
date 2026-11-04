@@ -1,0 +1,33 @@
+........................................................................ [ 88%]
+.......F.                                                                [100%]
+=================================== FAILURES ===================================
+__ test_packaged_definition_is_configuration_not_fabricated_inherited_source ___
+
+saved = <test_bvbrc_appservice_custody.SavedRecords object at 0x7db5e3225b20>
+
+    def test_results_owner_uses_possessed_handoff_and_exact_callback(saved):
+        results, value = result_context(saved)
+        assert saved.custody.initial_references(results) == [value["reference"]]
+        with pytest.raises(AppServiceCustodyError, match="original_handoff_reader_unbound"):
+            saved.custody.original_job_owner(results)
+        calls = []
+        def read(reference):
+            calls.append(reference)
+>           return {**value, "origin_context": value["origin_context"].as_record()}
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError: assert 1 == 0
+E            +  where 1 = count('source')
+E            +    where count = <gene_annotation_episode.state.Store object at 0x7db5e3224560>.count
+E            +      where <gene_annotation_episode.state.Store object at 0x7db5e3224560> = <test_bvbrc_appservice_custody.SavedRecords object at 0x7db5e3225b20>.store
+
+tests/test_bvbrc_appservice_custody.py:549: AssertionError
+============================= slowest 6 durations ==============================
+21.48s call     tests/test_bvbrc_appservice_custody.py::test_actual_shared_workflow_action_and_ref_only_return_records
+4.33s setup    tests/test_bvbrc_appservice_custody.py::test_source_json_rejects_ambiguous_or_nonfinite_values[{"x":1,"x":2}]
+4.12s setup    tests/test_bvbrc_appservice_custody.py::test_source_json_rejects_ambiguous_or_nonfinite_values[{"x":-Infinity}]
+4.01s setup    tests/test_bvbrc_appservice_custody.py::test_source_json_rejects_ambiguous_or_nonfinite_values[{"x":NaN}]
+3.98s setup    tests/test_bvbrc_appservice_custody.py::test_source_json_rejects_ambiguous_or_nonfinite_values[{"x":{"a":1,"a":2}}]
+3.93s setup    tests/test_bvbrc_appservice_custody.py::test_source_json_rejects_ambiguous_or_nonfinite_values[{"x":Infinity}]
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_custody.py::test_packaged_definition_is_configuration_not_fabricated_inherited_source
+1 failed, 80 passed in 285.58s (0:04:45)

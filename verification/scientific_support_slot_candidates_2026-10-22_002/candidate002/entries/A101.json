@@ -1,0 +1,241 @@
+{
+  "entry_version": "scientific_support_entry_v1",
+  "id": "A101",
+  "slot": "annotation_distinction",
+  "name": "Function transfer from a characterized sequence homolog",
+  "description": "Support a bounded target property through actual sequence correspondence to a separately characterized homolog; preserve family ancestry when exact activity fails to transfer.",
+  "support": {
+    "proposition": "A named, source-characterized property of an identified comparator is relevant to a bounded target hypothesis through demonstrated sequence/domain/site correspondence, with the transferred property and its limits explicitly stated.",
+    "operands": [
+      {
+        "operand_id": "sequence_correspondence",
+        "observation_kinds": [
+          "alignment",
+          "profile_match",
+          "comparison"
+        ],
+        "hypothesis_predicates": [
+          "functional_family",
+          "catalyzes",
+          "binds",
+          "transports",
+          "participates_in",
+          "requires",
+          "uses",
+          "produces"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "different_source_subject",
+          "alternatives_not_discriminated",
+          "conditions_limit_transfer",
+          "prediction_not_measurement"
+        ],
+        "instruction": "Keep query/comparator identities, molecule and domain boundaries, aligned intervals, coverage and relevant site evidence. State which comparator property each target hypothesis seeks to transfer, and identify the separate characterizing observation in existing hypothesis/assumption/dependency references. A coherent family correspondence can strengthen functional_family while does_not_discriminate withholds exact catalyzes/binds/transports support. Discordant tested specificity can weaken the proposed transfer without erasing ancestry. Similarity scores and coverage are not calibrated reliability. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates."
+      },
+      {
+        "operand_id": "characterized_comparator_property",
+        "observation_kinds": [
+          "assay_report",
+          "biochemical_assay",
+          "genetic_phenotype",
+          "growth_assay"
+        ],
+        "hypothesis_predicates": [
+          "functional_family",
+          "catalyzes",
+          "binds",
+          "transports",
+          "participates_in",
+          "requires",
+          "uses",
+          "produces",
+          "growth_capability"
+        ],
+        "assessment_relations": [
+          "strengthens",
+          "weakens",
+          "mixed",
+          "does_not_discriminate"
+        ],
+        "applicabilities": [
+          "transfer",
+          "contextual",
+          "scope_limited",
+          "incomparable"
+        ],
+        "extent_bases": [
+          "inferred_extent",
+          "context_allocation"
+        ],
+        "finding_qualifications": [
+          "different_source_subject",
+          "conditions_limit_transfer",
+          "measurement_does_not_establish_claim",
+          "confounding_unresolved"
+        ],
+        "instruction": "Record the comparator characterization as a separate source-bound assay or phenotype with its actual preparation/organism, inputs, output identity, controls and conditions. Do not relabel that assay as an alignment or a direct target measurement. Failed complementation or expression is not a purified-enzyme null; side activity or heterologous rescue does not establish native responsibility. For another source subject use non-direct applicability. inferred_extent requires an explicit target_footprint bounded by the actual assigned original-input scope; missing target_footprint supplies no invented extent. context_allocation requires explicit context_account_scope and nonempty context_scope on both assessment and compatible account; it cannot carry target_footprint, creates no molecular measurement and is not a sequence map. Source residue numbers never become target coordinates."
+      }
+    ],
+    "qualifications": [
+      "HemK chemistry does not specify RF versus L3 substrate; TriA/AtzA near identity does not transfer the tested specificity. HisN complementation comparisons are selected examples, not a benchmark; host/expression effects remain possible. YadB recognition architecture and the matched Q34 test limit GluRS transfer.",
+      "Retain actual source_ref, source_subject_refs, condition_refs and assumption_refs. The published examples below are instruction provenance about their named subjects; they are not observations of ybhP/b0790 and were not repeated to prepare this draft.",
+      "At construction and in decision context, resolve these observation kinds through annotation_support_routes for the actual caller-bound annotation policy; an entry does not supply universal component labels, select a projector, mask another kind, change a weight, or create a target finding. An unavailable route declaration remains unavailable.",
+      "Use actual retained assessments in a compatible annotation account. Selecting this entry earns nothing. The current caller-owned applicability × relation × extent arithmetic, same-component maximum, coherent-account integration and derived discrimination remain unchanged for this review basis. A finding qualification is not an automatic numeric discount; no independence, confidence or new score dimension is implied."
+    ],
+    "boundary": "This route does not choose a sequence threshold, certify orthology, join characterization to correspondence automatically, or establish exact activity from identity. The current record vocabulary has no dedicated typed characterized-property/correspondence join; the episode must state that relationship through the existing records. Entry suitability and scientifically adequate transfer criteria remain review questions."
+  },
+  "evidence": [
+    {
+      "case_group": "BC1793_Hitchcock_2013",
+      "case_id": "BC1793_Hitchcock_2013",
+      "source_url": "https://doi.org/10.1021/ja4066078",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:23#/actual_observations/paper_reported/0",
+      "observation": "Aligned arginine retained, but SAH was not prioritized by docking or active in assays.",
+      "limit": "Relevant full primary discussion/results read; no new modeling."
+    },
+    {
+      "case_group": "TT1927b_Handa_2005",
+      "case_id": "TT1927b_Handa_2005",
+      "source_url": "https://doi.org/10.1110/ps.041183305",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:19#/actual_observations/paper_reported/1",
+      "observation": "Closest homologs conserve ligand contacts; remote members vary.",
+      "limit": "Primary relevant results plus 1WUB inspected; complete methods not read."
+    },
+    {
+      "case_group": "hemk_prmc",
+      "case_id": "seq_hemk_prmc_ecoli",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/7883187/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:1#/actual_observations/1",
+      "observation": "EMBO study identified YfcB as L3 glutamine methyltransferase but found it did not methylate release factors; HemK was the sole significant YfcB homolog in their E. coli search.",
+      "limit": "Primary results/methods inspected through indexed full-text sections. Fresh UniProt sequences, motif checks, pairwise alignments and a PrmB-versus-K-12-proteome score search were performed; no BLAST E-values were computed."
+    },
+    {
+      "case_group": "pa0142",
+      "case_id": "seq_pa0142_8oxoguanine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2820149/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:14#/actual_observations/0",
+      "observation": "Sequence analysis found a guanine-deaminase-related subgroup in which the characteristic Arg-Phe pair was replaced by Cys-Ser, motivating target selection.",
+      "limit": "Primary paper abstract, target-selection narrative, substrate assay and concluding limitation inspected. Homolog crystal structure was not mislabeled as PA0142's own structure."
+    },
+    {
+      "case_group": "quef",
+      "case_id": "seq_queF_not_folE",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:6#/actual_observations/3",
+      "observation": "FolE/QueF alignments distinguished a QueF motif and missing FolE zinc-binding/catalytic residues.",
+      "limit": "Primary Results and Discussion plus alignment and assay descriptions inspected through indexed full-text sections. No sequence alignment or experiments rerun here."
+    },
+    {
+      "case_group": "seq_hisn_impase_discrimination",
+      "case_id": "seq_hisn_impase_discrimination",
+      "source_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:2#/actual_observations/3",
+      "observation": "A. utahensis KHD72131.1 lacked motif 5 and failed complementation despite greater overall similarity than some successful candidates.",
+      "limit": "Full 2017 methods/results page inspected, including genetic, sequence and structural sections. 2014 primary abstract inspected. No new sequence calculation or wet-lab work."
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "case_id": "seq_hutW_vibrio",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:13#/actual_observations/0",
+      "observation": "HutW shared 39% sequence identity with ChuW; related heme-utilization operons motivated comparison.",
+      "limit": "Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed."
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "case_id": "seq_ptmvd_m3k_picrophilus",
+      "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:17#/actual_observations/1",
+      "observation": "Alignment retained ATP/carboxylate-related regions but diverged in diphosphate-binding and catalytic regions.",
+      "limit": "Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment."
+    },
+    {
+      "case_group": "seq_pucM_transthyretin_like",
+      "case_id": "seq_pucM_transthyretin_like",
+      "source_url": "https://febs.onlinelibrary.wiley.com/doi/10.1016/j.febslet.2005.07.056",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:7#/actual_observations/2",
+      "observation": "Human transthyretin did not reproduce the PucM effect, arguing against function transfer from the family name.",
+      "limit": "Primary abstract, indexed methods for LC-MS and indexed human-TTR control result inspected; direct publisher full-page access was blocked. Kept as a concise verified activity case, not a full investigative reconstruction."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3289047/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:10#/actual_observations/0",
+      "observation": "Comparative analysis identified a QueF-related family and tested Pcal_0221 in engineered E. coli; tRNA acquired archaeosine rather than restoring bacterial queuosine synthesis.",
+      "limit": "2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments."
+    },
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "case_id": "seq_triA_atzA_near_identity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC95154/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:12#/actual_observations/1",
+      "observation": "The proteins differed at nine of 475 residues, despite distinct substrate reactions.",
+      "limit": "Primary introduction, sequence results, substrate table and competition methods/results inspected through indexed full text. Historical organism name preserved explicitly."
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "case_id": "seq_yadB_gluQRS_ecoli",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/15096594/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:11#/actual_observations/0",
+      "observation": "Sequence/domain comparison related YadB to the GluRS catalytic core but showed missing anticodon-binding architecture.",
+      "limit": "Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation."
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "case_id": "seq_ygbP_ispD_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC18359/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:8#/actual_observations/1",
+      "observation": "A CDP/pyrophosphorylase keyword search led to H. influenzae Acs1; its relevant domain resembled unannotated YgbP.",
+      "limit": "Primary results for purification, nucleotide preference, NMR and the database-search narrative inspected through indexed full-text sections; no live pathway analysis."
+    },
+    {
+      "case_group": "seq_yggH_trmB_ecoli",
+      "case_id": "seq_yggH_trmB_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC154064/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:3#/actual_observations/0",
+      "observation": "Sequence similarity supported cofactor-binding function but lacked the catalytic signatures of known RNA methyltransferase families; authors selected YggH for characterization.",
+      "limit": "Primary introduction, cloning methods and positional-assay results inspected through indexed sections; no new analysis performed."
+    },
+    {
+      "case_group": "seq_yjeH_exporter_ecoli",
+      "case_id": "seq_yjeH_exporter_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4616930/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:4#/actual_observations/0",
+      "observation": "Authors compared YjeH with AdiC, PotE and CadB and constructed an APC-transporter tree; YjeH grouped with the amino-acid efflux branch.",
+      "limit": "Primary sequence-modeling methods, phylogenetic results and functional assays inspected through indexed full-text sections. No transport experiment rerun."
+    },
+    {
+      "case_group": "seq_yrdC_tsaC_ecoli",
+      "case_id": "seq_yrdC_tsaC_ecoli",
+      "source_url": "https://academic.oup.com/nar/article/37/9/2894/1153455",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:9#/actual_observations/0",
+      "observation": "YrdC/Sua5 was prioritized using conservation, related HypF chemistry, RNA-binding information and translation-related phenotypes.",
+      "limit": "Primary introduction, candidate-prioritization, LC-MS validation and discussion sections inspected; no new tRNA analysis."
+    },
+    {
+      "case_group": "spatial_ccda_dsbd_acceptor_range",
+      "case_id": "spatial_ccda_dsbd_acceptor_range",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC126151/",
+      "source_locator": "research/slotted_process_library/corpus/spatial/cases.jsonl:4#/actual_observations/1/observation",
+      "observation": "CcdA did not reduce DsbC or DsbD-γ, including when DsbD accessory domains were coexpressed.",
+      "limit": "Main Results and Discussion plus relevant assay methods read. Direct CcdA–HelX chemistry and all homolog functions were inferred, not established by these assays."
+    }
+  ]
+}

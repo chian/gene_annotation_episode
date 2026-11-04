@@ -1,0 +1,602 @@
+{
+  "observations": [
+    {
+      "credit": {
+        "credit": 0.5,
+        "estimation_action_index": 0
+      },
+      "decision_index": 0,
+      "role": "monitor",
+      "step": {
+        "credit": 0.5,
+        "decision": {
+          "continuation_cost": 0.0,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.0,
+            "lower": 1.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 1.0,
+            "value": 1.0
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "fixture": "root_and_monitor_continuation_only"
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 1.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 1.0,
+            "value": 1.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "function": "test_bvbrc_appservice_monitor_workflow._controllers.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 1
+        },
+        "is_root": false,
+        "marginal_credit": 0.5,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "tool:0"
+      },
+      "unit_index": 0
+    },
+    {
+      "credit": {
+        "credit": 1.0,
+        "estimation_action_index": 1
+      },
+      "decision_index": 1,
+      "role": "monitor",
+      "step": {
+        "credit": 1.0,
+        "decision": {
+          "continuation_cost": 0.0,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "stop": true
+        },
+        "estimate": {
+          "diagnostics": {
+            "fixture": "root_and_monitor_continuation_only"
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "function": "test_bvbrc_appservice_monitor_workflow._controllers.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 2
+        },
+        "is_root": false,
+        "marginal_credit": 0.5,
+        "requests_transition": false,
+        "stop": true,
+        "unit_label": "tool:1"
+      },
+      "unit_index": 1
+    },
+    {
+      "credit": {
+        "credit": 0,
+        "estimation_action_index": 0
+      },
+      "decision_index": 0,
+      "role": "launch_api",
+      "step": {
+        "credit": 0.0,
+        "decision": {
+          "continuation_cost": 0.0,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "fitting_scope": "full_history",
+            "history_used": 1,
+            "initialization": "cold_template_prior"
+          },
+          "expected_next_gain": {
+            "alpha": -1.0,
+            "lower": -1.0,
+            "status_code": -1,
+            "uncertainty_code": -1,
+            "upper": -1.0,
+            "value": -1.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 1
+        },
+        "is_root": false,
+        "marginal_credit": 0.0,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "tool:0"
+      },
+      "unit_index": 0
+    },
+    {
+      "credit": {
+        "credit": 2,
+        "estimation_action_index": 1,
+        "practical_completion": {
+          "assignment_sha256": "ecdb609c0feb902b2096cd982ea08e0f245d8e94da16bf8fc0c42d88ee6c4bb3",
+          "endpoint": "usable_handoff",
+          "episode_id": "episode_7fe49b549a8babbdb8076b90448f8e870dabaf5fec044458e9bd1943d2c5f00e",
+          "operation_key": "appservice-monitor-shared-workflow:episode_7fe49b549a8babbdb8076b90448f8e870dabaf5fec044458e9bd1943d2c5f00e:1",
+          "receipt_sha256": "4a3cc66ea08e8b8a9301a7a0db0d698c51818f793aa1df675cc61edff338833b",
+          "run_id": "appservice-monitor-shared-workflow",
+          "validation_keys": [
+            "usable_handoff"
+          ],
+          "version": "practical_completion_v1"
+        }
+      },
+      "decision_index": 1,
+      "role": "launch_api",
+      "step": {
+        "credit": 2.0,
+        "decision": {
+          "continuation_cost": 0.0,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "stop": true
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 2,
+            "completion_action_index": 1,
+            "completion_proof": {
+              "assignment_sha256": "ecdb609c0feb902b2096cd982ea08e0f245d8e94da16bf8fc0c42d88ee6c4bb3",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_7fe49b549a8babbdb8076b90448f8e870dabaf5fec044458e9bd1943d2c5f00e",
+              "operation_key": "appservice-monitor-shared-workflow:episode_7fe49b549a8babbdb8076b90448f8e870dabaf5fec044458e9bd1943d2c5f00e:1",
+              "receipt_sha256": "4a3cc66ea08e8b8a9301a7a0db0d698c51818f793aa1df675cc61edff338833b",
+              "run_id": "appservice-monitor-shared-workflow",
+              "validation_keys": [
+                "usable_handoff"
+              ],
+              "version": "practical_completion_v1"
+            },
+            "completion_unit_ref": {
+              "episode_id": "episode_7fe49b549a8babbdb8076b90448f8e870dabaf5fec044458e9bd1943d2c5f00e",
+              "unit_id": "unit_43e493c4f6bbc24572bd6c3c4c980b6376670f1764c1b41c56e668a0e441a38a",
+              "unit_index": 1
+            },
+            "fitting_scope": "verified_assignment_endpoint",
+            "history_used": 2
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          },
+          "turns": 2
+        },
+        "is_root": false,
+        "marginal_credit": 2.0,
+        "requests_transition": false,
+        "stop": true,
+        "unit_label": "tool:1"
+      },
+      "unit_index": 1
+    },
+    {
+      "credit": {
+        "credit": 2,
+        "estimation_action_index": 0,
+        "practical_completion": {
+          "assignment_sha256": "5e75354498bfe5b236f1047dd1207ce30ad01a3ea64285e077db29b0595ed1e3",
+          "endpoint": "usable_handoff",
+          "episode_id": "episode_db577c4f0c3317c604db04326009a70a4f81a75f711a802e2d5c7df9bf3021a8",
+          "operation_key": "appservice-monitor-shared-workflow:episode_db577c4f0c3317c604db04326009a70a4f81a75f711a802e2d5c7df9bf3021a8:0",
+          "receipt_sha256": "cecf9720b1541fd692bcd895172a5fb2450637e36c8d2616edc91ef910e6a3fb",
+          "run_id": "appservice-monitor-shared-workflow",
+          "validation_keys": [
+            "received_usable_handoff"
+          ],
+          "version": "practical_completion_v1"
+        }
+      },
+      "decision_index": 0,
+      "role": "launch",
+      "step": {
+        "credit": 2.0,
+        "decision": {
+          "continuation_cost": 0.0,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "stop": true
+        },
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "completion_action_index": 0,
+            "completion_proof": {
+              "assignment_sha256": "5e75354498bfe5b236f1047dd1207ce30ad01a3ea64285e077db29b0595ed1e3",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_db577c4f0c3317c604db04326009a70a4f81a75f711a802e2d5c7df9bf3021a8",
+              "operation_key": "appservice-monitor-shared-workflow:episode_db577c4f0c3317c604db04326009a70a4f81a75f711a802e2d5c7df9bf3021a8:0",
+              "receipt_sha256": "cecf9720b1541fd692bcd895172a5fb2450637e36c8d2616edc91ef910e6a3fb",
+              "run_id": "appservice-monitor-shared-workflow",
+              "validation_keys": [
+                "received_usable_handoff"
+              ],
+              "version": "practical_completion_v1"
+            },
+            "completion_unit_ref": {
+              "episode_id": "episode_db577c4f0c3317c604db04326009a70a4f81a75f711a802e2d5c7df9bf3021a8",
+              "unit_id": "unit_b94b8b9de68c23b8e4ffbb89591b3680328a490ba1300446eb8a62b2078f91a4",
+              "unit_index": 0
+            },
+            "fitting_scope": "verified_assignment_endpoint",
+            "history_used": 1
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          },
+          "turns": 1
+        },
+        "is_root": false,
+        "marginal_credit": 2.0,
+        "requests_transition": false,
+        "stop": true,
+        "unit_label": "child_0"
+      },
+      "unit_index": 0
+    },
+    {
+      "credit": {
+        "credit": 0.0,
+        "estimation_action_index": 0
+      },
+      "decision_index": 0,
+      "role": "annotation",
+      "step": {
+        "credit": 0.0,
+        "decision": {
+          "continuation_cost": 0.0,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.0,
+            "lower": 1.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 1.0,
+            "value": 1.0
+          },
+          "stop": false
+        },
+        "estimate": {
+          "diagnostics": {
+            "fixture": "root_and_monitor_continuation_only"
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 1.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 1.0,
+            "value": 1.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "function": "test_bvbrc_appservice_monitor_workflow._controllers.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 1
+        },
+        "is_root": true,
+        "marginal_credit": 0.0,
+        "requests_transition": false,
+        "stop": false,
+        "unit_label": "child_0"
+      },
+      "unit_index": 0
+    },
+    {
+      "credit": {
+        "credit": 0.0,
+        "estimation_action_index": 1
+      },
+      "decision_index": 1,
+      "role": "annotation",
+      "step": {
+        "credit": 0.0,
+        "decision": {
+          "continuation_cost": 0.0,
+          "decision_basis": "current_estimator_marginal_credit_upper_bound",
+          "projected_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "stop": true
+        },
+        "estimate": {
+          "diagnostics": {
+            "fixture": "root_and_monitor_continuation_only"
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "function": "test_bvbrc_appservice_monitor_workflow._controllers.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 2
+        },
+        "is_root": true,
+        "marginal_credit": 0.0,
+        "requests_transition": false,
+        "stop": true,
+        "unit_label": "child_1"
+      },
+      "unit_index": 1
+    }
+  ],
+  "progress": [
+    {
+      "lifecycle_state": "executing",
+      "log_windows": [],
+      "measurements": [],
+      "native": {
+        "diagnostics": [],
+        "handle": {
+          "task_id": "123"
+        },
+        "kind": "job",
+        "native_status": "running",
+        "native_timing": {
+          "completed_time": null,
+          "elapsed_time": "01:02:03",
+          "start_time": "0000-00-00 00:00:00",
+          "submit_time": "2026-10-24 11:59:00"
+        },
+        "operation": "query_tasks",
+        "parse_status": "ok",
+        "qualification_codes": [
+          "task_parameters_echo_unobserved"
+        ],
+        "service": "bvbrc_appservice",
+        "source_ref": "source_d3f9c8de32d432caf781d674",
+        "state_observed": true,
+        "timing_representation": {
+          "elapsed_time_unit": "SQL_TIMEDIFF",
+          "timestamp_timezone": null
+        },
+        "transport": {
+          "body_complete": true,
+          "duration_measure": "client_http_request_turnaround",
+          "http_turnaround_seconds": 0.25,
+          "received_body_bytes": 305,
+          "status": 200
+        }
+      },
+      "observed_at": "2026-10-24T12:00:00+00:00",
+      "progress_ref": "progress_e4455e6d488bbe6584a43be67a699e0cfff0779d9dcb3bb0acf53d0f07385cb8",
+      "target_handle": "source_242facc4194b7e6fa299b292"
+    },
+    {
+      "lifecycle_state": null,
+      "log_windows": [
+        {
+          "artifact_ref": "artifact_3d9b6ea5b04961dd512a4058ab044036f1e1e86d3cdf56aee40b1efe6b92745c",
+          "content_sha256": "3d9b6ea5b04961dd512a4058ab044036f1e1e86d3cdf56aee40b1efe6b92745c",
+          "end_byte": 12,
+          "observed_at": "2026-10-24T12:00:01+00:00",
+          "source_ref": "source_5bd4577fbe196816bd7a4f4a",
+          "start_byte": 0
+        }
+      ],
+      "measurements": [],
+      "native": {
+        "diagnostics": [
+          {
+            "code": "task_info_text_encoding_invalid",
+            "path": "",
+            "severity": "qualification"
+          }
+        ],
+        "handle": {
+          "task_id": "123"
+        },
+        "kind": "job",
+        "log_offset_basis": "retained_response_bytes",
+        "log_representation": "signature_redacted_http_bytes",
+        "operation": "stdout",
+        "parse_status": "ok",
+        "qualification_codes": [
+          "execution_state_not_observed",
+          "signature_redacted_representation"
+        ],
+        "service": "bvbrc_appservice",
+        "source_ref": "source_caed61e3c00b31fe9bc2526e",
+        "state_observed": false,
+        "transport": {
+          "body_complete": true,
+          "duration_measure": "client_http_request_turnaround",
+          "http_turnaround_seconds": 0.125,
+          "received_body_bytes": 42,
+          "status": 200
+        }
+      },
+      "observed_at": "2026-10-24T12:00:01+00:00",
+      "progress_ref": "progress_7402a2ab7ea0fcfa8e05c59cafe0774253984e16e9929a553440e1328976f5fe",
+      "target_handle": "source_242facc4194b7e6fa299b292"
+    }
+  ],
+  "qualification": "Synthetic NativeClient + scripted decisions; actual shared Workflow/Store/Journal; no live service/model/HPC/detached worker",
+  "returns": [
+    {
+      "decision_index": 0,
+      "failure": null,
+      "form": "{\"completed\":true,\"references\":[\"source_242facc4194b7e6fa299b292\"],\"yield\":{\"completed_actions\":2,\"continuation_cost\":0.0,\"expected_next_gain\":{\"alpha\":0.0,\"lower\":0.0,\"status_code\":0,\"uncertainty_code\":0,\"upper\":0.0,\"value\":0.0},\"stop_requested\":true}}",
+      "parent_episode_id": "episode_db577c4f0c3317c604db04326009a70a4f81a75f711a802e2d5c7df9bf3021a8"
+    },
+    {
+      "decision_index": 0,
+      "failure": null,
+      "form": "{\"completed\":true,\"references\":[\"source_242facc4194b7e6fa299b292\"],\"yield\":{\"completed_actions\":1,\"continuation_cost\":0.0,\"expected_next_gain\":{\"alpha\":0.0,\"lower\":0.0,\"status_code\":0,\"uncertainty_code\":0,\"upper\":0.0,\"value\":0.0},\"stop_requested\":true}}",
+      "parent_episode_id": "episode_f6d0276d2895338034244db47cadba33e11f00154ee977954540082bb8774b90"
+    },
+    {
+      "decision_index": 1,
+      "failure": "{\"delivery_ref\":\"delivery_457d0feea42210ebb952473c\",\"field\":\"report.target\",\"kind\":\"report_delivery_failure\",\"reason\":\"unknown_reference\"}",
+      "form": null,
+      "parent_episode_id": "episode_f6d0276d2895338034244db47cadba33e11f00154ee977954540082bb8774b90"
+    }
+  ],
+  "selected_monitor_actions": [
+    {
+      "action": "{\"arguments\":{\"native_operation\":\"query_tasks\",\"requested_fields\":[\"execution_status\",\"measurements\"]},\"kind\":\"tool\",\"tool\":\"progress.observe\"}",
+      "decision_index": 0
+    },
+    {
+      "action": "{\"arguments\":{\"native_operation\":\"stdout\",\"requested_fields\":[\"execution_status\",\"log_windows\"]},\"kind\":\"tool\",\"tool\":\"progress.observe\"}",
+      "decision_index": 1
+    }
+  ],
+  "test_outcome": "failed at requested monitoring_target_handle parent admission after successful interrupted recovery",
+  "test_sha256": "ff337b63f926cf9db8646061d9ef48200754a6ed50bbc974d738080c992eb68a"
+}

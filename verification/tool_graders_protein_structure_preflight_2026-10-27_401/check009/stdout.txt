@@ -1,0 +1,60 @@
+.F
+=================================== FAILURES ===================================
+_ test_selected_scientific_child_returns_qualified_numbers_as_one_parent_action[genes.predict-dna-global] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_preflight_2026-10-27_401/check009/temporary/pytest/test_selected_scientific_child1')
+operation = 'genes.predict', molecule = 'dna', alignment_mode = 'global'
+
+    @pytest.mark.parametrize("operation,molecule,alignment_mode", [
+        *[(operation, "dna", "global") for operation in
+          ("sequence.align", "genes.predict", "sequence.inspect", "reads.inspect", "reads.align")],
+        ("sequence.align", "dna", "local"),
+        ("sequence.align", "rna", "local"), ("sequence.align", "rna", "global"),
+        ("sequence.align", "protein", "local"), ("sequence.align", "protein", "global"),
+    ])
+    def test_selected_scientific_child_returns_qualified_numbers_as_one_parent_action(
+            tmp_path, operation, molecule, alignment_mode):
+        with Store(tmp_path / "state") as store:
+            tools = ToolRegistry(store)
+            if operation.startswith("reads."):
+                target, reads, _ = quality_library(store, tmp_path)
+                supplied = [target, *(row["id"] for row in reads)]
+                args = {"subject_refs": [row["id"] for row in reads]}
+                if operation == "reads.align":
+                    args.update(reference_ref=reads[0]["id"], molecule="dna", mode="global")
+                sequence = None
+            else:
+>               region = (gene_input() if operation == "genes.predict" else
+                          ^^^^^^^^^^^^
+                          {"dna": "ACGTTGCA", "rna": "ACGUUGCA", "protein": "MACDEFGH"}[molecule])
+
+source_snapshot/tests/test_tool_grading_child_returns.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_tool_grading_publication.py:43: in gene_input
+    return "".join(line for line in META_INPUT.read_text().splitlines() if not line.startswith(">"))
+                                    ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_preflight_2026-10-27_401/check009/source_snapshot/verification/tool_graders_batch_001/prodigal/meta.input.fna')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_preflight_2026-10-27_401/check009/source_snapshot/verification/tool_graders_batch_001/prodigal/meta.input.fna'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_tool_grading_child_returns.py::test_selected_scientific_child_returns_qualified_numbers_as_one_parent_action[genes.predict-dna-global]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 10.49s

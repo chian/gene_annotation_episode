@@ -1,0 +1,44 @@
+........................................................................ [ 23%]
+........................................................................ [ 46%]
+........................................................................ [ 70%]
+.................................................................E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_all_finite_metrics_and_families_project_real_saved_fields _
+
+    @pytest.fixture(scope='module')
+    def native_projection():
+        fields = all_selections()
+        for value in fields.values():
+            if value['kind'] == 'directional_issues': value['limit'] = 100
+        fields['status'] = {'kind': 'request_status', 'field': 'directional_native_integer_hsp_gap_count'}
+        case = case_with(fields)
+>       return case, adapter.consume_bundle(**case)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_proteome_directional_projection.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/bvbrc_proteome_bundle_adapter_v2.py:42: in consume_bundle
+    projected = project_requested_facts_v2(**built, requested_form=requested_form, parameters=parameters)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:511: in project_requested_facts_v2
+    return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_projection.py:492: in build
+    if kind in c.FAMILIES: c.validate_directional_fact(kind, fact, selector=selectors[field])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/bvbrc_proteome_directional_fact_contracts.py:329: in validate_directional_fact
+    legacy.require(cell["unit"] == unit, "directional_unit_conflict")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, code = 'directional_unit_conflict', path = ''
+
+    def require(condition, code, path=""):
+        if not condition:
+>           raise ProteomeFactError(code, path)
+E           gene_annotation_episode.bvbrc_proteome_fact_contracts.ProteomeFactError: proteome_projection_directional_unit_conflict
+
+gene_annotation_episode/bvbrc_proteome_fact_contracts.py:27: ProteomeFactError
+=========================== short test summary info ============================
+ERROR tests/test_bvbrc_proteome_directional_projection.py::test_all_finite_metrics_and_families_project_real_saved_fields
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+281 passed, 1 error in 19.94s

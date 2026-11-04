@@ -1,0 +1,5069 @@
+{
+  "sheet": {
+    "schema": "blast_pairwise_result_sheet_v1",
+    "search": {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "program_context": {
+        "execution_program": "blastp",
+        "reported_program": "BLASTP",
+        "scientific_mode": "pairwise",
+        "query_kind": "sequence",
+        "reference_kind": "sequence",
+        "native_version": "BLASTP 2.17.0+",
+        "geometry_program": "blastp"
+      },
+      "stage": null,
+      "iteration": null,
+      "normalized": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "tabular",
+        "query": {
+          "id": "query_blastp_multiple_hsps",
+          "title": "query_blastp_multiple_hsps",
+          "length": 80
+        },
+        "search": {
+          "program": "blastp",
+          "version": "BLASTP 2.17.0+",
+          "database": null,
+          "parameters": {},
+          "statistics": {},
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+              "-seg",
+              "no",
+              "-comp_based_stats",
+              "0",
+              "-max_hsps",
+              "10",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+              "-outfmt",
+              "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+              "-out",
+              "report.tsv"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "blastp",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+                "sha256": "5ce267c04e4988c265357bfbedc64e809545b6fcfae7ff6775266fabbee8ba0e",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+                  "sha256": "6996e2f09e375a11d7d778b764cfcf3da63619e5f7f4697a6ebdec700e1613b1",
+                  "size_bytes": 109,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+                  "sha256": "14043d1edafa3c4cffd7ae3b6d68b24eec826e86178a3d39615ecfe4a5f53dc6",
+                  "size_bytes": 221,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_blastp_multiple_hsps",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_blastp_multiple_hsps",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-seg",
+                "no",
+                "-comp_based_stats",
+                "0",
+                "-max_hsps",
+                "10",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "tabular7",
+                  "relative_path": "report.tsv",
+                  "fields": [
+                    "qseqid",
+                    "sseqid",
+                    "qlen",
+                    "slen",
+                    "qstart",
+                    "qend",
+                    "sstart",
+                    "send",
+                    "qframe",
+                    "sframe",
+                    "length",
+                    "nident",
+                    "gaps",
+                    "mismatch",
+                    "score",
+                    "bitscore",
+                    "evalue",
+                    "qseq",
+                    "sseq",
+                    "btop"
+                  ],
+                  "delimiter": "\t"
+                }
+              ],
+              "metadata": {
+                "engineering_example": "blastp_multiple_hsps_tabular7",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": true,
+          "reported_hit_count": 1
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 190,
+            "descriptions": [
+              {
+                "id": "subject_blastp_multiple_hsps"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "bit_score": 171.0,
+                "score": 432.0,
+                "evalue": 5.09e-61,
+                "identity": 80,
+                "align_len": 80,
+                "gaps": 0,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 1,
+                "hit_to": 80,
+                "query_frame": 1,
+                "hit_frame": 1,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              },
+              {
+                "bit_score": 171.0,
+                "score": 432.0,
+                "evalue": 5.09e-61,
+                "identity": 80,
+                "align_len": 80,
+                "gaps": 0,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 111,
+                "hit_to": 190,
+                "query_frame": 1,
+                "hit_frame": 1,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "text": "# BLASTP 2.17.0+\n# Query: query_blastp_multiple_hsps\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 2 hits found\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t1\t80\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t111\t190\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\n# BLAST processed 1 queries\n",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [
+            {
+              "line": 6,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "1",
+                "80",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "1",
+                "send": "80",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            },
+            {
+              "line": 7,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "111",
+                "190",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "111",
+                "send": "190",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            }
+          ],
+          "declared_alignment_row_count": 2,
+          "sha256": "63f35df734eaea621ac8878ae17271e1d4a3984840ee3d0f1e3689c0d0c8f2f3"
+        },
+        "issues": []
+      },
+      "row_map": [
+        {
+          "hit_index": 0,
+          "description_ordinals": [
+            0
+          ],
+          "hsp_ordinals": [
+            0,
+            1
+          ]
+        }
+      ],
+      "operand_binding": {
+        "role": "query",
+        "subject_ref": "query_subject",
+        "length": 80,
+        "molecule": "protein",
+        "artifact_key": "query_sequence",
+        "native_id": "query_blastp_multiple_hsps",
+        "selected_interval": null,
+        "record_ordinal": 0,
+        "native_title": "query_blastp_multiple_hsps",
+        "identity": null
+      },
+      "reporting": {
+        "native_hit_array_present": true,
+        "native_hit_count": 1,
+        "requested_hit_limit": null,
+        "requested_hsp_limit": 10,
+        "native_returncode": 0,
+        "producer_complete": true
+      },
+      "native": {
+        "report": {
+          "text": "# BLASTP 2.17.0+\n# Query: query_blastp_multiple_hsps\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 2 hits found\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t1\t80\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t111\t190\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\n# BLAST processed 1 queries\n",
+          "program": "BLASTP",
+          "version": "BLASTP 2.17.0+"
+        },
+        "search": {
+          "text": "# BLASTP 2.17.0+\n# Query: query_blastp_multiple_hsps\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 2 hits found\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t1\t80\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t111\t190\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\n# BLAST processed 1 queries\n",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [
+            {
+              "line": 6,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "1",
+                "80",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "1",
+                "send": "80",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            },
+            {
+              "line": 7,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "111",
+                "190",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "111",
+                "send": "190",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            }
+          ],
+          "declared_alignment_row_count": 2
+        },
+        "line_numbers": [
+          6,
+          7
+        ]
+      },
+      "issues": []
+    },
+    "operand_bindings": {
+      "query": {
+        "subject_ref": "query_subject",
+        "length": 80,
+        "molecule": "protein",
+        "artifact_key": "query_sequence",
+        "native_id": "query_blastp_multiple_hsps",
+        "selected_interval": null
+      },
+      "reference": {
+        "subject_ref": "paired_reference",
+        "length": 190,
+        "molecule": "protein",
+        "artifact_key": "subject_sequence",
+        "native_id": "subject_blastp_multiple_hsps",
+        "selected_interval": null
+      }
+    }
+  },
+  "calculation": {
+    "schema": "blast_pairwise_result_components_v1",
+    "components": {
+      "schema": "blast_pairwise_sheet_v1",
+      "status": "partial",
+      "input": {
+        "schema": "blast_normalized_result_v1",
+        "mode": "pairwise",
+        "resource": "local",
+        "format": "tabular",
+        "query": {
+          "id": "query_blastp_multiple_hsps",
+          "title": "query_blastp_multiple_hsps",
+          "length": 80
+        },
+        "search": {
+          "program": "blastp",
+          "version": "BLASTP 2.17.0+",
+          "database": null,
+          "parameters": {},
+          "statistics": {},
+          "request": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+              "-seg",
+              "no",
+              "-comp_based_stats",
+              "0",
+              "-max_hsps",
+              "10",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+              "-outfmt",
+              "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+              "-out",
+              "report.tsv"
+            ],
+            "environment": {},
+            "native_blast": {
+              "version": "native_blast_job_v1",
+              "program": "blastp",
+              "mode": "pairwise",
+              "software": {
+                "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+                "sha256": "5ce267c04e4988c265357bfbedc64e809545b6fcfae7ff6775266fabbee8ba0e",
+                "engine_version": "2.17.0+"
+              },
+              "environment": {},
+              "operands": [
+                {
+                  "role": "query_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/query_sequence.fa",
+                  "sha256": "6996e2f09e375a11d7d778b764cfcf3da63619e5f7f4697a6ebdec700e1613b1",
+                  "size_bytes": 109,
+                  "artifact_ref": null
+                },
+                {
+                  "role": "subject_sequence",
+                  "format": "fasta",
+                  "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/subject_sequence.fa",
+                  "sha256": "14043d1edafa3c4cffd7ae3b6d68b24eec826e86178a3d39615ecfe4a5f53dc6",
+                  "size_bytes": 221,
+                  "artifact_ref": null
+                }
+              ],
+              "operand_bindings": [
+                {
+                  "operand_role": "query_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "query_blastp_multiple_hsps",
+                  "native_accession": null,
+                  "subject_ref": "query_subject",
+                  "reference_ref": null
+                },
+                {
+                  "operand_role": "subject_sequence",
+                  "record_ordinal": 0,
+                  "native_name": "subject_blastp_multiple_hsps",
+                  "native_accession": null,
+                  "subject_ref": null,
+                  "reference_ref": "paired_reference"
+                }
+              ],
+              "options": [
+                "-seg",
+                "no",
+                "-comp_based_stats",
+                "0",
+                "-max_hsps",
+                "10",
+                "-num_threads",
+                "1"
+              ],
+              "outputs": [
+                {
+                  "role": "stdout",
+                  "format": "text",
+                  "relative_path": "stdout.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "stderr",
+                  "format": "text",
+                  "relative_path": "stderr.txt",
+                  "fields": null,
+                  "delimiter": null
+                },
+                {
+                  "role": "primary_report",
+                  "format": "tabular7",
+                  "relative_path": "report.tsv",
+                  "fields": [
+                    "qseqid",
+                    "sseqid",
+                    "qlen",
+                    "slen",
+                    "qstart",
+                    "qend",
+                    "sstart",
+                    "send",
+                    "qframe",
+                    "sframe",
+                    "length",
+                    "nident",
+                    "gaps",
+                    "mismatch",
+                    "score",
+                    "bitscore",
+                    "evalue",
+                    "qseq",
+                    "sseq",
+                    "btop"
+                  ],
+                  "delimiter": "\t"
+                }
+              ],
+              "metadata": {
+                "engineering_example": "blastp_multiple_hsps_tabular7",
+                "input_kind": "synthetic_derivative_of_retained_public_sequence"
+              },
+              "grading_parameters": {}
+            }
+          },
+          "hit_array_present": true,
+          "reported_hit_count": 1
+        },
+        "hits": [
+          {
+            "hit_index": 0,
+            "length": 190,
+            "descriptions": [
+              {
+                "id": "subject_blastp_multiple_hsps"
+              }
+            ],
+            "unpaired_metadata": {},
+            "hsps": [
+              {
+                "bit_score": 171.0,
+                "score": 432.0,
+                "evalue": 5.09e-61,
+                "identity": 80,
+                "align_len": 80,
+                "gaps": 0,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 1,
+                "hit_to": 80,
+                "query_frame": 1,
+                "hit_frame": 1,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              },
+              {
+                "bit_score": 171.0,
+                "score": 432.0,
+                "evalue": 5.09e-61,
+                "identity": 80,
+                "align_len": 80,
+                "gaps": 0,
+                "query_from": 1,
+                "query_to": 80,
+                "hit_from": 111,
+                "hit_to": 190,
+                "query_frame": 1,
+                "hit_frame": 1,
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+              }
+            ]
+          }
+        ],
+        "native": {
+          "text": "# BLASTP 2.17.0+\n# Query: query_blastp_multiple_hsps\n# Database: User specified sequence set (Input: /home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_multiple_hsps_tabular7/attempt/inputs/subject_sequence.fa)\n# Fields: query id, subject id, query length, subject length, q. start, q. end, s. start, s. end, query frame, sbjct frame, alignment length, identical, gaps, mismatches, score, bit score, evalue, query seq, subject seq, BTOP\n# 2 hits found\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t1\t80\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\nquery_blastp_multiple_hsps\tsubject_blastp_multiple_hsps\t80\t190\t1\t80\t111\t190\t1\t1\t80\t80\t0\t0\t432\t171\t5.09e-61\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\tMPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD\t80\n# BLAST processed 1 queries\n",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "rows": [
+            {
+              "line": 6,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "1",
+                "80",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "1",
+                "send": "80",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            },
+            {
+              "line": 7,
+              "values": [
+                "query_blastp_multiple_hsps",
+                "subject_blastp_multiple_hsps",
+                "80",
+                "190",
+                "1",
+                "80",
+                "111",
+                "190",
+                "1",
+                "1",
+                "80",
+                "80",
+                "0",
+                "0",
+                "432",
+                "171",
+                "5.09e-61",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "80"
+              ],
+              "fields": {
+                "qseqid": "query_blastp_multiple_hsps",
+                "sseqid": "subject_blastp_multiple_hsps",
+                "qlen": "80",
+                "slen": "190",
+                "qstart": "1",
+                "qend": "80",
+                "sstart": "111",
+                "send": "190",
+                "qframe": "1",
+                "sframe": "1",
+                "length": "80",
+                "nident": "80",
+                "gaps": "0",
+                "mismatch": "0",
+                "score": "432",
+                "bitscore": "171",
+                "evalue": "5.09e-61",
+                "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "sseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+                "btop": "80"
+              }
+            }
+          ],
+          "declared_alignment_row_count": 2,
+          "sha256": "63f35df734eaea621ac8878ae17271e1d4a3984840ee3d0f1e3689c0d0c8f2f3"
+        },
+        "issues": []
+      },
+      "query": {
+        "id": "query_blastp_multiple_hsps",
+        "title": "query_blastp_multiple_hsps",
+        "length": 80
+      },
+      "reference": {
+        "length": 190,
+        "descriptions": [
+          {
+            "id": "subject_blastp_multiple_hsps"
+          }
+        ],
+        "unpaired_metadata": {}
+      },
+      "hsps": [
+        {
+          "hsp_index": 0,
+          "native": {
+            "bit_score": 171.0,
+            "score": 432.0,
+            "evalue": 5.09e-61,
+            "identity": 80,
+            "align_len": 80,
+            "gaps": 0,
+            "query_from": 1,
+            "query_to": 80,
+            "hit_from": 1,
+            "hit_to": 80,
+            "query_frame": 1,
+            "hit_frame": 1,
+            "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+            "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+          },
+          "components": {
+            "native_scores": {
+              "bit_score": 171.0,
+              "score": 432.0,
+              "evalue": 5.09e-61
+            },
+            "reported_counts": {
+              "align_len": 80,
+              "identity": 80,
+              "positive": null,
+              "gaps": 0
+            },
+            "reported_percentages": {
+              "identity_percent": null,
+              "query_coverage_percent": null,
+              "query_subject_coverage_percent": null,
+              "query_unique_subject_coverage_percent": null
+            },
+            "counts": {
+              "alignment_columns": 80,
+              "paired_columns": 80,
+              "identical_pairs": 80,
+              "query_gap_columns": 0,
+              "reference_gap_columns": 0,
+              "paired_query_positions": 80,
+              "paired_reference_positions": 80
+            },
+            "fractions": {
+              "query_paired_coverage": 1.0,
+              "reference_paired_coverage": 0.42105263157894735,
+              "paired_identity": 1.0,
+              "alignment_identity": 1.0
+            },
+            "denominators": {
+              "query_length": 80,
+              "reference_length": 190,
+              "paired_columns": 80,
+              "alignment_columns": 80
+            },
+            "coordinate_units": {
+              "query": "aa",
+              "reference": "aa",
+              "alignment": "aa"
+            },
+            "traceback_available": true,
+            "geometry_available": true,
+            "pairs": [
+              {
+                "query_start": 0,
+                "query_end": 1,
+                "reference_start": 0,
+                "reference_end": 1,
+                "identical": true
+              },
+              {
+                "query_start": 1,
+                "query_end": 2,
+                "reference_start": 1,
+                "reference_end": 2,
+                "identical": true
+              },
+              {
+                "query_start": 2,
+                "query_end": 3,
+                "reference_start": 2,
+                "reference_end": 3,
+                "identical": true
+              },
+              {
+                "query_start": 3,
+                "query_end": 4,
+                "reference_start": 3,
+                "reference_end": 4,
+                "identical": true
+              },
+              {
+                "query_start": 4,
+                "query_end": 5,
+                "reference_start": 4,
+                "reference_end": 5,
+                "identical": true
+              },
+              {
+                "query_start": 5,
+                "query_end": 6,
+                "reference_start": 5,
+                "reference_end": 6,
+                "identical": true
+              },
+              {
+                "query_start": 6,
+                "query_end": 7,
+                "reference_start": 6,
+                "reference_end": 7,
+                "identical": true
+              },
+              {
+                "query_start": 7,
+                "query_end": 8,
+                "reference_start": 7,
+                "reference_end": 8,
+                "identical": true
+              },
+              {
+                "query_start": 8,
+                "query_end": 9,
+                "reference_start": 8,
+                "reference_end": 9,
+                "identical": true
+              },
+              {
+                "query_start": 9,
+                "query_end": 10,
+                "reference_start": 9,
+                "reference_end": 10,
+                "identical": true
+              },
+              {
+                "query_start": 10,
+                "query_end": 11,
+                "reference_start": 10,
+                "reference_end": 11,
+                "identical": true
+              },
+              {
+                "query_start": 11,
+                "query_end": 12,
+                "reference_start": 11,
+                "reference_end": 12,
+                "identical": true
+              },
+              {
+                "query_start": 12,
+                "query_end": 13,
+                "reference_start": 12,
+                "reference_end": 13,
+                "identical": true
+              },
+              {
+                "query_start": 13,
+                "query_end": 14,
+                "reference_start": 13,
+                "reference_end": 14,
+                "identical": true
+              },
+              {
+                "query_start": 14,
+                "query_end": 15,
+                "reference_start": 14,
+                "reference_end": 15,
+                "identical": true
+              },
+              {
+                "query_start": 15,
+                "query_end": 16,
+                "reference_start": 15,
+                "reference_end": 16,
+                "identical": true
+              },
+              {
+                "query_start": 16,
+                "query_end": 17,
+                "reference_start": 16,
+                "reference_end": 17,
+                "identical": true
+              },
+              {
+                "query_start": 17,
+                "query_end": 18,
+                "reference_start": 17,
+                "reference_end": 18,
+                "identical": true
+              },
+              {
+                "query_start": 18,
+                "query_end": 19,
+                "reference_start": 18,
+                "reference_end": 19,
+                "identical": true
+              },
+              {
+                "query_start": 19,
+                "query_end": 20,
+                "reference_start": 19,
+                "reference_end": 20,
+                "identical": true
+              },
+              {
+                "query_start": 20,
+                "query_end": 21,
+                "reference_start": 20,
+                "reference_end": 21,
+                "identical": true
+              },
+              {
+                "query_start": 21,
+                "query_end": 22,
+                "reference_start": 21,
+                "reference_end": 22,
+                "identical": true
+              },
+              {
+                "query_start": 22,
+                "query_end": 23,
+                "reference_start": 22,
+                "reference_end": 23,
+                "identical": true
+              },
+              {
+                "query_start": 23,
+                "query_end": 24,
+                "reference_start": 23,
+                "reference_end": 24,
+                "identical": true
+              },
+              {
+                "query_start": 24,
+                "query_end": 25,
+                "reference_start": 24,
+                "reference_end": 25,
+                "identical": true
+              },
+              {
+                "query_start": 25,
+                "query_end": 26,
+                "reference_start": 25,
+                "reference_end": 26,
+                "identical": true
+              },
+              {
+                "query_start": 26,
+                "query_end": 27,
+                "reference_start": 26,
+                "reference_end": 27,
+                "identical": true
+              },
+              {
+                "query_start": 27,
+                "query_end": 28,
+                "reference_start": 27,
+                "reference_end": 28,
+                "identical": true
+              },
+              {
+                "query_start": 28,
+                "query_end": 29,
+                "reference_start": 28,
+                "reference_end": 29,
+                "identical": true
+              },
+              {
+                "query_start": 29,
+                "query_end": 30,
+                "reference_start": 29,
+                "reference_end": 30,
+                "identical": true
+              },
+              {
+                "query_start": 30,
+                "query_end": 31,
+                "reference_start": 30,
+                "reference_end": 31,
+                "identical": true
+              },
+              {
+                "query_start": 31,
+                "query_end": 32,
+                "reference_start": 31,
+                "reference_end": 32,
+                "identical": true
+              },
+              {
+                "query_start": 32,
+                "query_end": 33,
+                "reference_start": 32,
+                "reference_end": 33,
+                "identical": true
+              },
+              {
+                "query_start": 33,
+                "query_end": 34,
+                "reference_start": 33,
+                "reference_end": 34,
+                "identical": true
+              },
+              {
+                "query_start": 34,
+                "query_end": 35,
+                "reference_start": 34,
+                "reference_end": 35,
+                "identical": true
+              },
+              {
+                "query_start": 35,
+                "query_end": 36,
+                "reference_start": 35,
+                "reference_end": 36,
+                "identical": true
+              },
+              {
+                "query_start": 36,
+                "query_end": 37,
+                "reference_start": 36,
+                "reference_end": 37,
+                "identical": true
+              },
+              {
+                "query_start": 37,
+                "query_end": 38,
+                "reference_start": 37,
+                "reference_end": 38,
+                "identical": true
+              },
+              {
+                "query_start": 38,
+                "query_end": 39,
+                "reference_start": 38,
+                "reference_end": 39,
+                "identical": true
+              },
+              {
+                "query_start": 39,
+                "query_end": 40,
+                "reference_start": 39,
+                "reference_end": 40,
+                "identical": true
+              },
+              {
+                "query_start": 40,
+                "query_end": 41,
+                "reference_start": 40,
+                "reference_end": 41,
+                "identical": true
+              },
+              {
+                "query_start": 41,
+                "query_end": 42,
+                "reference_start": 41,
+                "reference_end": 42,
+                "identical": true
+              },
+              {
+                "query_start": 42,
+                "query_end": 43,
+                "reference_start": 42,
+                "reference_end": 43,
+                "identical": true
+              },
+              {
+                "query_start": 43,
+                "query_end": 44,
+                "reference_start": 43,
+                "reference_end": 44,
+                "identical": true
+              },
+              {
+                "query_start": 44,
+                "query_end": 45,
+                "reference_start": 44,
+                "reference_end": 45,
+                "identical": true
+              },
+              {
+                "query_start": 45,
+                "query_end": 46,
+                "reference_start": 45,
+                "reference_end": 46,
+                "identical": true
+              },
+              {
+                "query_start": 46,
+                "query_end": 47,
+                "reference_start": 46,
+                "reference_end": 47,
+                "identical": true
+              },
+              {
+                "query_start": 47,
+                "query_end": 48,
+                "reference_start": 47,
+                "reference_end": 48,
+                "identical": true
+              },
+              {
+                "query_start": 48,
+                "query_end": 49,
+                "reference_start": 48,
+                "reference_end": 49,
+                "identical": true
+              },
+              {
+                "query_start": 49,
+                "query_end": 50,
+                "reference_start": 49,
+                "reference_end": 50,
+                "identical": true
+              },
+              {
+                "query_start": 50,
+                "query_end": 51,
+                "reference_start": 50,
+                "reference_end": 51,
+                "identical": true
+              },
+              {
+                "query_start": 51,
+                "query_end": 52,
+                "reference_start": 51,
+                "reference_end": 52,
+                "identical": true
+              },
+              {
+                "query_start": 52,
+                "query_end": 53,
+                "reference_start": 52,
+                "reference_end": 53,
+                "identical": true
+              },
+              {
+                "query_start": 53,
+                "query_end": 54,
+                "reference_start": 53,
+                "reference_end": 54,
+                "identical": true
+              },
+              {
+                "query_start": 54,
+                "query_end": 55,
+                "reference_start": 54,
+                "reference_end": 55,
+                "identical": true
+              },
+              {
+                "query_start": 55,
+                "query_end": 56,
+                "reference_start": 55,
+                "reference_end": 56,
+                "identical": true
+              },
+              {
+                "query_start": 56,
+                "query_end": 57,
+                "reference_start": 56,
+                "reference_end": 57,
+                "identical": true
+              },
+              {
+                "query_start": 57,
+                "query_end": 58,
+                "reference_start": 57,
+                "reference_end": 58,
+                "identical": true
+              },
+              {
+                "query_start": 58,
+                "query_end": 59,
+                "reference_start": 58,
+                "reference_end": 59,
+                "identical": true
+              },
+              {
+                "query_start": 59,
+                "query_end": 60,
+                "reference_start": 59,
+                "reference_end": 60,
+                "identical": true
+              },
+              {
+                "query_start": 60,
+                "query_end": 61,
+                "reference_start": 60,
+                "reference_end": 61,
+                "identical": true
+              },
+              {
+                "query_start": 61,
+                "query_end": 62,
+                "reference_start": 61,
+                "reference_end": 62,
+                "identical": true
+              },
+              {
+                "query_start": 62,
+                "query_end": 63,
+                "reference_start": 62,
+                "reference_end": 63,
+                "identical": true
+              },
+              {
+                "query_start": 63,
+                "query_end": 64,
+                "reference_start": 63,
+                "reference_end": 64,
+                "identical": true
+              },
+              {
+                "query_start": 64,
+                "query_end": 65,
+                "reference_start": 64,
+                "reference_end": 65,
+                "identical": true
+              },
+              {
+                "query_start": 65,
+                "query_end": 66,
+                "reference_start": 65,
+                "reference_end": 66,
+                "identical": true
+              },
+              {
+                "query_start": 66,
+                "query_end": 67,
+                "reference_start": 66,
+                "reference_end": 67,
+                "identical": true
+              },
+              {
+                "query_start": 67,
+                "query_end": 68,
+                "reference_start": 67,
+                "reference_end": 68,
+                "identical": true
+              },
+              {
+                "query_start": 68,
+                "query_end": 69,
+                "reference_start": 68,
+                "reference_end": 69,
+                "identical": true
+              },
+              {
+                "query_start": 69,
+                "query_end": 70,
+                "reference_start": 69,
+                "reference_end": 70,
+                "identical": true
+              },
+              {
+                "query_start": 70,
+                "query_end": 71,
+                "reference_start": 70,
+                "reference_end": 71,
+                "identical": true
+              },
+              {
+                "query_start": 71,
+                "query_end": 72,
+                "reference_start": 71,
+                "reference_end": 72,
+                "identical": true
+              },
+              {
+                "query_start": 72,
+                "query_end": 73,
+                "reference_start": 72,
+                "reference_end": 73,
+                "identical": true
+              },
+              {
+                "query_start": 73,
+                "query_end": 74,
+                "reference_start": 73,
+                "reference_end": 74,
+                "identical": true
+              },
+              {
+                "query_start": 74,
+                "query_end": 75,
+                "reference_start": 74,
+                "reference_end": 75,
+                "identical": true
+              },
+              {
+                "query_start": 75,
+                "query_end": 76,
+                "reference_start": 75,
+                "reference_end": 76,
+                "identical": true
+              },
+              {
+                "query_start": 76,
+                "query_end": 77,
+                "reference_start": 76,
+                "reference_end": 77,
+                "identical": true
+              },
+              {
+                "query_start": 77,
+                "query_end": 78,
+                "reference_start": 77,
+                "reference_end": 78,
+                "identical": true
+              },
+              {
+                "query_start": 78,
+                "query_end": 79,
+                "reference_start": 78,
+                "reference_end": 79,
+                "identical": true
+              },
+              {
+                "query_start": 79,
+                "query_end": 80,
+                "reference_start": 79,
+                "reference_end": 80,
+                "identical": true
+              }
+            ],
+            "issues": []
+          }
+        },
+        {
+          "hsp_index": 1,
+          "native": {
+            "bit_score": 171.0,
+            "score": 432.0,
+            "evalue": 5.09e-61,
+            "identity": 80,
+            "align_len": 80,
+            "gaps": 0,
+            "query_from": 1,
+            "query_to": 80,
+            "hit_from": 111,
+            "hit_to": 190,
+            "query_frame": 1,
+            "hit_frame": 1,
+            "qseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD",
+            "hseq": "MPDQTQQFSFKVLTINIHKGFTAFNRRFILPELRDAVRTVSADIVCLQEVMGAHEVHPLHVENWPDTSHYEFLADTMWSD"
+          },
+          "components": {
+            "native_scores": {
+              "bit_score": 171.0,
+              "score": 432.0,
+              "evalue": 5.09e-61
+            },
+            "reported_counts": {
+              "align_len": 80,
+              "identity": 80,
+              "positive": null,
+              "gaps": 0
+            },
+            "reported_percentages": {
+              "identity_percent": null,
+              "query_coverage_percent": null,
+              "query_subject_coverage_percent": null,
+              "query_unique_subject_coverage_percent": null
+            },
+            "counts": {
+              "alignment_columns": 80,
+              "paired_columns": 80,
+              "identical_pairs": 80,
+              "query_gap_columns": 0,
+              "reference_gap_columns": 0,
+              "paired_query_positions": 80,
+              "paired_reference_positions": 80
+            },
+            "fractions": {
+              "query_paired_coverage": 1.0,
+              "reference_paired_coverage": 0.42105263157894735,
+              "paired_identity": 1.0,
+              "alignment_identity": 1.0
+            },
+            "denominators": {
+              "query_length": 80,
+              "reference_length": 190,
+              "paired_columns": 80,
+              "alignment_columns": 80
+            },
+            "coordinate_units": {
+              "query": "aa",
+              "reference": "aa",
+              "alignment": "aa"
+            },
+            "traceback_available": true,
+            "geometry_available": true,
+            "pairs": [
+              {
+                "query_start": 0,
+                "query_end": 1,
+                "reference_start": 110,
+                "reference_end": 111,
+                "identical": true
+              },
+              {
+                "query_start": 1,
+                "query_end": 2,
+                "reference_start": 111,
+                "reference_end": 112,
+                "identical": true
+              },
+              {
+                "query_start": 2,
+                "query_end": 3,
+                "reference_start": 112,
+                "reference_end": 113,
+                "identical": true
+              },
+              {
+                "query_start": 3,
+                "query_end": 4,
+                "reference_start": 113,
+                "reference_end": 114,
+                "identical": true
+              },
+              {
+                "query_start": 4,
+                "query_end": 5,
+                "reference_start": 114,
+                "reference_end": 115,
+                "identical": true
+              },
+              {
+                "query_start": 5,
+                "query_end": 6,
+                "reference_start": 115,
+                "reference_end": 116,
+                "identical": true
+              },
+              {
+                "query_start": 6,
+                "query_end": 7,
+                "reference_start": 116,
+                "reference_end": 117,
+                "identical": true
+              },
+              {
+                "query_start": 7,
+                "query_end": 8,
+                "reference_start": 117,
+                "reference_end": 118,
+                "identical": true
+              },
+              {
+                "query_start": 8,
+                "query_end": 9,
+                "reference_start": 118,
+                "reference_end": 119,
+                "identical": true
+              },
+              {
+                "query_start": 9,
+                "query_end": 10,
+                "reference_start": 119,
+                "reference_end": 120,
+                "identical": true
+              },
+              {
+                "query_start": 10,
+                "query_end": 11,
+                "reference_start": 120,
+                "reference_end": 121,
+                "identical": true
+              },
+              {
+                "query_start": 11,
+                "query_end": 12,
+                "reference_start": 121,
+                "reference_end": 122,
+                "identical": true
+              },
+              {
+                "query_start": 12,
+                "query_end": 13,
+                "reference_start": 122,
+                "reference_end": 123,
+                "identical": true
+              },
+              {
+                "query_start": 13,
+                "query_end": 14,
+                "reference_start": 123,
+                "reference_end": 124,
+                "identical": true
+              },
+              {
+                "query_start": 14,
+                "query_end": 15,
+                "reference_start": 124,
+                "reference_end": 125,
+                "identical": true
+              },
+              {
+                "query_start": 15,
+                "query_end": 16,
+                "reference_start": 125,
+                "reference_end": 126,
+                "identical": true
+              },
+              {
+                "query_start": 16,
+                "query_end": 17,
+                "reference_start": 126,
+                "reference_end": 127,
+                "identical": true
+              },
+              {
+                "query_start": 17,
+                "query_end": 18,
+                "reference_start": 127,
+                "reference_end": 128,
+                "identical": true
+              },
+              {
+                "query_start": 18,
+                "query_end": 19,
+                "reference_start": 128,
+                "reference_end": 129,
+                "identical": true
+              },
+              {
+                "query_start": 19,
+                "query_end": 20,
+                "reference_start": 129,
+                "reference_end": 130,
+                "identical": true
+              },
+              {
+                "query_start": 20,
+                "query_end": 21,
+                "reference_start": 130,
+                "reference_end": 131,
+                "identical": true
+              },
+              {
+                "query_start": 21,
+                "query_end": 22,
+                "reference_start": 131,
+                "reference_end": 132,
+                "identical": true
+              },
+              {
+                "query_start": 22,
+                "query_end": 23,
+                "reference_start": 132,
+                "reference_end": 133,
+                "identical": true
+              },
+              {
+                "query_start": 23,
+                "query_end": 24,
+                "reference_start": 133,
+                "reference_end": 134,
+                "identical": true
+              },
+              {
+                "query_start": 24,
+                "query_end": 25,
+                "reference_start": 134,
+                "reference_end": 135,
+                "identical": true
+              },
+              {
+                "query_start": 25,
+                "query_end": 26,
+                "reference_start": 135,
+                "reference_end": 136,
+                "identical": true
+              },
+              {
+                "query_start": 26,
+                "query_end": 27,
+                "reference_start": 136,
+                "reference_end": 137,
+                "identical": true
+              },
+              {
+                "query_start": 27,
+                "query_end": 28,
+                "reference_start": 137,
+                "reference_end": 138,
+                "identical": true
+              },
+              {
+                "query_start": 28,
+                "query_end": 29,
+                "reference_start": 138,
+                "reference_end": 139,
+                "identical": true
+              },
+              {
+                "query_start": 29,
+                "query_end": 30,
+                "reference_start": 139,
+                "reference_end": 140,
+                "identical": true
+              },
+              {
+                "query_start": 30,
+                "query_end": 31,
+                "reference_start": 140,
+                "reference_end": 141,
+                "identical": true
+              },
+              {
+                "query_start": 31,
+                "query_end": 32,
+                "reference_start": 141,
+                "reference_end": 142,
+                "identical": true
+              },
+              {
+                "query_start": 32,
+                "query_end": 33,
+                "reference_start": 142,
+                "reference_end": 143,
+                "identical": true
+              },
+              {
+                "query_start": 33,
+                "query_end": 34,
+                "reference_start": 143,
+                "reference_end": 144,
+                "identical": true
+              },
+              {
+                "query_start": 34,
+                "query_end": 35,
+                "reference_start": 144,
+                "reference_end": 145,
+                "identical": true
+              },
+              {
+                "query_start": 35,
+                "query_end": 36,
+                "reference_start": 145,
+                "reference_end": 146,
+                "identical": true
+              },
+              {
+                "query_start": 36,
+                "query_end": 37,
+                "reference_start": 146,
+                "reference_end": 147,
+                "identical": true
+              },
+              {
+                "query_start": 37,
+                "query_end": 38,
+                "reference_start": 147,
+                "reference_end": 148,
+                "identical": true
+              },
+              {
+                "query_start": 38,
+                "query_end": 39,
+                "reference_start": 148,
+                "reference_end": 149,
+                "identical": true
+              },
+              {
+                "query_start": 39,
+                "query_end": 40,
+                "reference_start": 149,
+                "reference_end": 150,
+                "identical": true
+              },
+              {
+                "query_start": 40,
+                "query_end": 41,
+                "reference_start": 150,
+                "reference_end": 151,
+                "identical": true
+              },
+              {
+                "query_start": 41,
+                "query_end": 42,
+                "reference_start": 151,
+                "reference_end": 152,
+                "identical": true
+              },
+              {
+                "query_start": 42,
+                "query_end": 43,
+                "reference_start": 152,
+                "reference_end": 153,
+                "identical": true
+              },
+              {
+                "query_start": 43,
+                "query_end": 44,
+                "reference_start": 153,
+                "reference_end": 154,
+                "identical": true
+              },
+              {
+                "query_start": 44,
+                "query_end": 45,
+                "reference_start": 154,
+                "reference_end": 155,
+                "identical": true
+              },
+              {
+                "query_start": 45,
+                "query_end": 46,
+                "reference_start": 155,
+                "reference_end": 156,
+                "identical": true
+              },
+              {
+                "query_start": 46,
+                "query_end": 47,
+                "reference_start": 156,
+                "reference_end": 157,
+                "identical": true
+              },
+              {
+                "query_start": 47,
+                "query_end": 48,
+                "reference_start": 157,
+                "reference_end": 158,
+                "identical": true
+              },
+              {
+                "query_start": 48,
+                "query_end": 49,
+                "reference_start": 158,
+                "reference_end": 159,
+                "identical": true
+              },
+              {
+                "query_start": 49,
+                "query_end": 50,
+                "reference_start": 159,
+                "reference_end": 160,
+                "identical": true
+              },
+              {
+                "query_start": 50,
+                "query_end": 51,
+                "reference_start": 160,
+                "reference_end": 161,
+                "identical": true
+              },
+              {
+                "query_start": 51,
+                "query_end": 52,
+                "reference_start": 161,
+                "reference_end": 162,
+                "identical": true
+              },
+              {
+                "query_start": 52,
+                "query_end": 53,
+                "reference_start": 162,
+                "reference_end": 163,
+                "identical": true
+              },
+              {
+                "query_start": 53,
+                "query_end": 54,
+                "reference_start": 163,
+                "reference_end": 164,
+                "identical": true
+              },
+              {
+                "query_start": 54,
+                "query_end": 55,
+                "reference_start": 164,
+                "reference_end": 165,
+                "identical": true
+              },
+              {
+                "query_start": 55,
+                "query_end": 56,
+                "reference_start": 165,
+                "reference_end": 166,
+                "identical": true
+              },
+              {
+                "query_start": 56,
+                "query_end": 57,
+                "reference_start": 166,
+                "reference_end": 167,
+                "identical": true
+              },
+              {
+                "query_start": 57,
+                "query_end": 58,
+                "reference_start": 167,
+                "reference_end": 168,
+                "identical": true
+              },
+              {
+                "query_start": 58,
+                "query_end": 59,
+                "reference_start": 168,
+                "reference_end": 169,
+                "identical": true
+              },
+              {
+                "query_start": 59,
+                "query_end": 60,
+                "reference_start": 169,
+                "reference_end": 170,
+                "identical": true
+              },
+              {
+                "query_start": 60,
+                "query_end": 61,
+                "reference_start": 170,
+                "reference_end": 171,
+                "identical": true
+              },
+              {
+                "query_start": 61,
+                "query_end": 62,
+                "reference_start": 171,
+                "reference_end": 172,
+                "identical": true
+              },
+              {
+                "query_start": 62,
+                "query_end": 63,
+                "reference_start": 172,
+                "reference_end": 173,
+                "identical": true
+              },
+              {
+                "query_start": 63,
+                "query_end": 64,
+                "reference_start": 173,
+                "reference_end": 174,
+                "identical": true
+              },
+              {
+                "query_start": 64,
+                "query_end": 65,
+                "reference_start": 174,
+                "reference_end": 175,
+                "identical": true
+              },
+              {
+                "query_start": 65,
+                "query_end": 66,
+                "reference_start": 175,
+                "reference_end": 176,
+                "identical": true
+              },
+              {
+                "query_start": 66,
+                "query_end": 67,
+                "reference_start": 176,
+                "reference_end": 177,
+                "identical": true
+              },
+              {
+                "query_start": 67,
+                "query_end": 68,
+                "reference_start": 177,
+                "reference_end": 178,
+                "identical": true
+              },
+              {
+                "query_start": 68,
+                "query_end": 69,
+                "reference_start": 178,
+                "reference_end": 179,
+                "identical": true
+              },
+              {
+                "query_start": 69,
+                "query_end": 70,
+                "reference_start": 179,
+                "reference_end": 180,
+                "identical": true
+              },
+              {
+                "query_start": 70,
+                "query_end": 71,
+                "reference_start": 180,
+                "reference_end": 181,
+                "identical": true
+              },
+              {
+                "query_start": 71,
+                "query_end": 72,
+                "reference_start": 181,
+                "reference_end": 182,
+                "identical": true
+              },
+              {
+                "query_start": 72,
+                "query_end": 73,
+                "reference_start": 182,
+                "reference_end": 183,
+                "identical": true
+              },
+              {
+                "query_start": 73,
+                "query_end": 74,
+                "reference_start": 183,
+                "reference_end": 184,
+                "identical": true
+              },
+              {
+                "query_start": 74,
+                "query_end": 75,
+                "reference_start": 184,
+                "reference_end": 185,
+                "identical": true
+              },
+              {
+                "query_start": 75,
+                "query_end": 76,
+                "reference_start": 185,
+                "reference_end": 186,
+                "identical": true
+              },
+              {
+                "query_start": 76,
+                "query_end": 77,
+                "reference_start": 186,
+                "reference_end": 187,
+                "identical": true
+              },
+              {
+                "query_start": 77,
+                "query_end": 78,
+                "reference_start": 187,
+                "reference_end": 188,
+                "identical": true
+              },
+              {
+                "query_start": 78,
+                "query_end": 79,
+                "reference_start": 188,
+                "reference_end": 189,
+                "identical": true
+              },
+              {
+                "query_start": 79,
+                "query_end": 80,
+                "reference_start": 189,
+                "reference_end": 190,
+                "identical": true
+              }
+            ],
+            "issues": []
+          }
+        }
+      ],
+      "union": {
+        "pairs": [
+          {
+            "query_start": 0,
+            "query_end": 1,
+            "reference_start": 0,
+            "reference_end": 1,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 0,
+            "query_end": 1,
+            "reference_start": 110,
+            "reference_end": 111,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 1,
+            "query_end": 2,
+            "reference_start": 1,
+            "reference_end": 2,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 1,
+            "query_end": 2,
+            "reference_start": 111,
+            "reference_end": 112,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 2,
+            "query_end": 3,
+            "reference_start": 2,
+            "reference_end": 3,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 2,
+            "query_end": 3,
+            "reference_start": 112,
+            "reference_end": 113,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 3,
+            "query_end": 4,
+            "reference_start": 3,
+            "reference_end": 4,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 3,
+            "query_end": 4,
+            "reference_start": 113,
+            "reference_end": 114,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 4,
+            "query_end": 5,
+            "reference_start": 4,
+            "reference_end": 5,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 4,
+            "query_end": 5,
+            "reference_start": 114,
+            "reference_end": 115,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 5,
+            "query_end": 6,
+            "reference_start": 5,
+            "reference_end": 6,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 5,
+            "query_end": 6,
+            "reference_start": 115,
+            "reference_end": 116,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 6,
+            "query_end": 7,
+            "reference_start": 6,
+            "reference_end": 7,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 6,
+            "query_end": 7,
+            "reference_start": 116,
+            "reference_end": 117,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 7,
+            "query_end": 8,
+            "reference_start": 7,
+            "reference_end": 8,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 7,
+            "query_end": 8,
+            "reference_start": 117,
+            "reference_end": 118,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 8,
+            "query_end": 9,
+            "reference_start": 8,
+            "reference_end": 9,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 8,
+            "query_end": 9,
+            "reference_start": 118,
+            "reference_end": 119,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 9,
+            "query_end": 10,
+            "reference_start": 9,
+            "reference_end": 10,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 9,
+            "query_end": 10,
+            "reference_start": 119,
+            "reference_end": 120,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 10,
+            "query_end": 11,
+            "reference_start": 10,
+            "reference_end": 11,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 10,
+            "query_end": 11,
+            "reference_start": 120,
+            "reference_end": 121,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 11,
+            "query_end": 12,
+            "reference_start": 11,
+            "reference_end": 12,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 11,
+            "query_end": 12,
+            "reference_start": 121,
+            "reference_end": 122,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 12,
+            "query_end": 13,
+            "reference_start": 12,
+            "reference_end": 13,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 12,
+            "query_end": 13,
+            "reference_start": 122,
+            "reference_end": 123,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 13,
+            "query_end": 14,
+            "reference_start": 13,
+            "reference_end": 14,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 13,
+            "query_end": 14,
+            "reference_start": 123,
+            "reference_end": 124,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 14,
+            "query_end": 15,
+            "reference_start": 14,
+            "reference_end": 15,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 14,
+            "query_end": 15,
+            "reference_start": 124,
+            "reference_end": 125,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 15,
+            "query_end": 16,
+            "reference_start": 15,
+            "reference_end": 16,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 15,
+            "query_end": 16,
+            "reference_start": 125,
+            "reference_end": 126,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 16,
+            "query_end": 17,
+            "reference_start": 16,
+            "reference_end": 17,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 16,
+            "query_end": 17,
+            "reference_start": 126,
+            "reference_end": 127,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 17,
+            "query_end": 18,
+            "reference_start": 17,
+            "reference_end": 18,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 17,
+            "query_end": 18,
+            "reference_start": 127,
+            "reference_end": 128,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 18,
+            "query_end": 19,
+            "reference_start": 18,
+            "reference_end": 19,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 18,
+            "query_end": 19,
+            "reference_start": 128,
+            "reference_end": 129,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 19,
+            "query_end": 20,
+            "reference_start": 19,
+            "reference_end": 20,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 19,
+            "query_end": 20,
+            "reference_start": 129,
+            "reference_end": 130,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 20,
+            "query_end": 21,
+            "reference_start": 20,
+            "reference_end": 21,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 20,
+            "query_end": 21,
+            "reference_start": 130,
+            "reference_end": 131,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 21,
+            "query_end": 22,
+            "reference_start": 21,
+            "reference_end": 22,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 21,
+            "query_end": 22,
+            "reference_start": 131,
+            "reference_end": 132,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 22,
+            "query_end": 23,
+            "reference_start": 22,
+            "reference_end": 23,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 22,
+            "query_end": 23,
+            "reference_start": 132,
+            "reference_end": 133,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 23,
+            "query_end": 24,
+            "reference_start": 23,
+            "reference_end": 24,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 23,
+            "query_end": 24,
+            "reference_start": 133,
+            "reference_end": 134,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 24,
+            "query_end": 25,
+            "reference_start": 24,
+            "reference_end": 25,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 24,
+            "query_end": 25,
+            "reference_start": 134,
+            "reference_end": 135,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 25,
+            "query_end": 26,
+            "reference_start": 25,
+            "reference_end": 26,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 25,
+            "query_end": 26,
+            "reference_start": 135,
+            "reference_end": 136,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 26,
+            "query_end": 27,
+            "reference_start": 26,
+            "reference_end": 27,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 26,
+            "query_end": 27,
+            "reference_start": 136,
+            "reference_end": 137,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 27,
+            "query_end": 28,
+            "reference_start": 27,
+            "reference_end": 28,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 27,
+            "query_end": 28,
+            "reference_start": 137,
+            "reference_end": 138,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 28,
+            "query_end": 29,
+            "reference_start": 28,
+            "reference_end": 29,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 28,
+            "query_end": 29,
+            "reference_start": 138,
+            "reference_end": 139,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 29,
+            "query_end": 30,
+            "reference_start": 29,
+            "reference_end": 30,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 29,
+            "query_end": 30,
+            "reference_start": 139,
+            "reference_end": 140,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 30,
+            "query_end": 31,
+            "reference_start": 30,
+            "reference_end": 31,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 30,
+            "query_end": 31,
+            "reference_start": 140,
+            "reference_end": 141,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 31,
+            "query_end": 32,
+            "reference_start": 31,
+            "reference_end": 32,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 31,
+            "query_end": 32,
+            "reference_start": 141,
+            "reference_end": 142,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 32,
+            "query_end": 33,
+            "reference_start": 32,
+            "reference_end": 33,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 32,
+            "query_end": 33,
+            "reference_start": 142,
+            "reference_end": 143,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 33,
+            "query_end": 34,
+            "reference_start": 33,
+            "reference_end": 34,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 33,
+            "query_end": 34,
+            "reference_start": 143,
+            "reference_end": 144,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 34,
+            "query_end": 35,
+            "reference_start": 34,
+            "reference_end": 35,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 34,
+            "query_end": 35,
+            "reference_start": 144,
+            "reference_end": 145,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 35,
+            "query_end": 36,
+            "reference_start": 35,
+            "reference_end": 36,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 35,
+            "query_end": 36,
+            "reference_start": 145,
+            "reference_end": 146,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 36,
+            "query_end": 37,
+            "reference_start": 36,
+            "reference_end": 37,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 36,
+            "query_end": 37,
+            "reference_start": 146,
+            "reference_end": 147,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 37,
+            "query_end": 38,
+            "reference_start": 37,
+            "reference_end": 38,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 37,
+            "query_end": 38,
+            "reference_start": 147,
+            "reference_end": 148,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 38,
+            "query_end": 39,
+            "reference_start": 38,
+            "reference_end": 39,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 38,
+            "query_end": 39,
+            "reference_start": 148,
+            "reference_end": 149,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 39,
+            "query_end": 40,
+            "reference_start": 39,
+            "reference_end": 40,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 39,
+            "query_end": 40,
+            "reference_start": 149,
+            "reference_end": 150,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 40,
+            "query_end": 41,
+            "reference_start": 40,
+            "reference_end": 41,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 40,
+            "query_end": 41,
+            "reference_start": 150,
+            "reference_end": 151,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 41,
+            "query_end": 42,
+            "reference_start": 41,
+            "reference_end": 42,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 41,
+            "query_end": 42,
+            "reference_start": 151,
+            "reference_end": 152,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 42,
+            "query_end": 43,
+            "reference_start": 42,
+            "reference_end": 43,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 42,
+            "query_end": 43,
+            "reference_start": 152,
+            "reference_end": 153,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 43,
+            "query_end": 44,
+            "reference_start": 43,
+            "reference_end": 44,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 43,
+            "query_end": 44,
+            "reference_start": 153,
+            "reference_end": 154,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 44,
+            "query_end": 45,
+            "reference_start": 44,
+            "reference_end": 45,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 44,
+            "query_end": 45,
+            "reference_start": 154,
+            "reference_end": 155,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 45,
+            "query_end": 46,
+            "reference_start": 45,
+            "reference_end": 46,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 45,
+            "query_end": 46,
+            "reference_start": 155,
+            "reference_end": 156,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 46,
+            "query_end": 47,
+            "reference_start": 46,
+            "reference_end": 47,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 46,
+            "query_end": 47,
+            "reference_start": 156,
+            "reference_end": 157,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 47,
+            "query_end": 48,
+            "reference_start": 47,
+            "reference_end": 48,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 47,
+            "query_end": 48,
+            "reference_start": 157,
+            "reference_end": 158,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 48,
+            "query_end": 49,
+            "reference_start": 48,
+            "reference_end": 49,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 48,
+            "query_end": 49,
+            "reference_start": 158,
+            "reference_end": 159,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 49,
+            "query_end": 50,
+            "reference_start": 49,
+            "reference_end": 50,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 49,
+            "query_end": 50,
+            "reference_start": 159,
+            "reference_end": 160,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 50,
+            "query_end": 51,
+            "reference_start": 50,
+            "reference_end": 51,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 50,
+            "query_end": 51,
+            "reference_start": 160,
+            "reference_end": 161,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 51,
+            "query_end": 52,
+            "reference_start": 51,
+            "reference_end": 52,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 51,
+            "query_end": 52,
+            "reference_start": 161,
+            "reference_end": 162,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 52,
+            "query_end": 53,
+            "reference_start": 52,
+            "reference_end": 53,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 52,
+            "query_end": 53,
+            "reference_start": 162,
+            "reference_end": 163,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 53,
+            "query_end": 54,
+            "reference_start": 53,
+            "reference_end": 54,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 53,
+            "query_end": 54,
+            "reference_start": 163,
+            "reference_end": 164,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 54,
+            "query_end": 55,
+            "reference_start": 54,
+            "reference_end": 55,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 54,
+            "query_end": 55,
+            "reference_start": 164,
+            "reference_end": 165,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 55,
+            "query_end": 56,
+            "reference_start": 55,
+            "reference_end": 56,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 55,
+            "query_end": 56,
+            "reference_start": 165,
+            "reference_end": 166,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 56,
+            "query_end": 57,
+            "reference_start": 56,
+            "reference_end": 57,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 56,
+            "query_end": 57,
+            "reference_start": 166,
+            "reference_end": 167,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 57,
+            "query_end": 58,
+            "reference_start": 57,
+            "reference_end": 58,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 57,
+            "query_end": 58,
+            "reference_start": 167,
+            "reference_end": 168,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 58,
+            "query_end": 59,
+            "reference_start": 58,
+            "reference_end": 59,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 58,
+            "query_end": 59,
+            "reference_start": 168,
+            "reference_end": 169,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 59,
+            "query_end": 60,
+            "reference_start": 59,
+            "reference_end": 60,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 59,
+            "query_end": 60,
+            "reference_start": 169,
+            "reference_end": 170,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 60,
+            "query_end": 61,
+            "reference_start": 60,
+            "reference_end": 61,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 60,
+            "query_end": 61,
+            "reference_start": 170,
+            "reference_end": 171,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 61,
+            "query_end": 62,
+            "reference_start": 61,
+            "reference_end": 62,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 61,
+            "query_end": 62,
+            "reference_start": 171,
+            "reference_end": 172,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 62,
+            "query_end": 63,
+            "reference_start": 62,
+            "reference_end": 63,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 62,
+            "query_end": 63,
+            "reference_start": 172,
+            "reference_end": 173,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 63,
+            "query_end": 64,
+            "reference_start": 63,
+            "reference_end": 64,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 63,
+            "query_end": 64,
+            "reference_start": 173,
+            "reference_end": 174,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 64,
+            "query_end": 65,
+            "reference_start": 64,
+            "reference_end": 65,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 64,
+            "query_end": 65,
+            "reference_start": 174,
+            "reference_end": 175,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 65,
+            "query_end": 66,
+            "reference_start": 65,
+            "reference_end": 66,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 65,
+            "query_end": 66,
+            "reference_start": 175,
+            "reference_end": 176,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 66,
+            "query_end": 67,
+            "reference_start": 66,
+            "reference_end": 67,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 66,
+            "query_end": 67,
+            "reference_start": 176,
+            "reference_end": 177,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 67,
+            "query_end": 68,
+            "reference_start": 67,
+            "reference_end": 68,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 67,
+            "query_end": 68,
+            "reference_start": 177,
+            "reference_end": 178,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 68,
+            "query_end": 69,
+            "reference_start": 68,
+            "reference_end": 69,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 68,
+            "query_end": 69,
+            "reference_start": 178,
+            "reference_end": 179,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 69,
+            "query_end": 70,
+            "reference_start": 69,
+            "reference_end": 70,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 69,
+            "query_end": 70,
+            "reference_start": 179,
+            "reference_end": 180,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 70,
+            "query_end": 71,
+            "reference_start": 70,
+            "reference_end": 71,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 70,
+            "query_end": 71,
+            "reference_start": 180,
+            "reference_end": 181,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 71,
+            "query_end": 72,
+            "reference_start": 71,
+            "reference_end": 72,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 71,
+            "query_end": 72,
+            "reference_start": 181,
+            "reference_end": 182,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 72,
+            "query_end": 73,
+            "reference_start": 72,
+            "reference_end": 73,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 72,
+            "query_end": 73,
+            "reference_start": 182,
+            "reference_end": 183,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 73,
+            "query_end": 74,
+            "reference_start": 73,
+            "reference_end": 74,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 73,
+            "query_end": 74,
+            "reference_start": 183,
+            "reference_end": 184,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 74,
+            "query_end": 75,
+            "reference_start": 74,
+            "reference_end": 75,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 74,
+            "query_end": 75,
+            "reference_start": 184,
+            "reference_end": 185,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 75,
+            "query_end": 76,
+            "reference_start": 75,
+            "reference_end": 76,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 75,
+            "query_end": 76,
+            "reference_start": 185,
+            "reference_end": 186,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 76,
+            "query_end": 77,
+            "reference_start": 76,
+            "reference_end": 77,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 76,
+            "query_end": 77,
+            "reference_start": 186,
+            "reference_end": 187,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 77,
+            "query_end": 78,
+            "reference_start": 77,
+            "reference_end": 78,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 77,
+            "query_end": 78,
+            "reference_start": 187,
+            "reference_end": 188,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 78,
+            "query_end": 79,
+            "reference_start": 78,
+            "reference_end": 79,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 78,
+            "query_end": 79,
+            "reference_start": 188,
+            "reference_end": 189,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          },
+          {
+            "query_start": 79,
+            "query_end": 80,
+            "reference_start": 79,
+            "reference_end": 80,
+            "identical": true,
+            "hsp_indices": [
+              0
+            ]
+          },
+          {
+            "query_start": 79,
+            "query_end": 80,
+            "reference_start": 189,
+            "reference_end": 190,
+            "identical": true,
+            "hsp_indices": [
+              1
+            ]
+          }
+        ],
+        "counts": {
+          "distinct_residue_pairs": 160,
+          "paired_query_positions": 80,
+          "paired_reference_positions": 160,
+          "identical_residue_pairs": 160,
+          "hsps_with_geometry": 2,
+          "hsps_without_geometry": 0
+        },
+        "denominators": {
+          "query_length": 80,
+          "reference_length": 190,
+          "distinct_residue_pairs": 160
+        },
+        "fractions": {
+          "query_paired_coverage": 1.0,
+          "reference_paired_coverage": 0.8421052631578947,
+          "paired_identity": null
+        },
+        "complete_for_reported_hsps": true,
+        "identical_mapping_hsp_groups": [],
+        "conflicts": [
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              0,
+              1
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              2,
+              3
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              4,
+              5
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              6,
+              7
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              8,
+              9
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              10,
+              11
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              12,
+              13
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              14,
+              15
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              16,
+              17
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              18,
+              19
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              20,
+              21
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              22,
+              23
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              24,
+              25
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              26,
+              27
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              28,
+              29
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              30,
+              31
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              32,
+              33
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              34,
+              35
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              36,
+              37
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              38,
+              39
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              40,
+              41
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              42,
+              43
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              44,
+              45
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              46,
+              47
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              48,
+              49
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              50,
+              51
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              52,
+              53
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              54,
+              55
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              56,
+              57
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              58,
+              59
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              60,
+              61
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              62,
+              63
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              64,
+              65
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              66,
+              67
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              68,
+              69
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              70,
+              71
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              72,
+              73
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              74,
+              75
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              76,
+              77
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              78,
+              79
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              80,
+              81
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              82,
+              83
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              84,
+              85
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              86,
+              87
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              88,
+              89
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              90,
+              91
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              92,
+              93
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              94,
+              95
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              96,
+              97
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              98,
+              99
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              100,
+              101
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              102,
+              103
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              104,
+              105
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              106,
+              107
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              108,
+              109
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              110,
+              111
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              112,
+              113
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              114,
+              115
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              116,
+              117
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              118,
+              119
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              120,
+              121
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              122,
+              123
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              124,
+              125
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              126,
+              127
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              128,
+              129
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              130,
+              131
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              132,
+              133
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              134,
+              135
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              136,
+              137
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              138,
+              139
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              140,
+              141
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              142,
+              143
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              144,
+              145
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              146,
+              147
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              148,
+              149
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              150,
+              151
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              152,
+              153
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              154,
+              155
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              156,
+              157
+            ]
+          },
+          {
+            "code": "alternative_residue_mapping",
+            "operand": "query",
+            "pair_indices": [
+              158,
+              159
+            ]
+          }
+        ],
+        "meaning": "union_of_observed_correspondences_not_a_selected_global_alignment"
+      },
+      "issues": [
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            2,
+            3
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            4,
+            5
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            6,
+            7
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            8,
+            9
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            10,
+            11
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            12,
+            13
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            16,
+            17
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            18,
+            19
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            20,
+            21
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            22,
+            23
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            24,
+            25
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            26,
+            27
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            28,
+            29
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            30,
+            31
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            32,
+            33
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            34,
+            35
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            36,
+            37
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            38,
+            39
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            40,
+            41
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            42,
+            43
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            44,
+            45
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            46,
+            47
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            48,
+            49
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            50,
+            51
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            52,
+            53
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            54,
+            55
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            56,
+            57
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            58,
+            59
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            60,
+            61
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            62,
+            63
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            64,
+            65
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            66,
+            67
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            68,
+            69
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            70,
+            71
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            72,
+            73
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            74,
+            75
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            76,
+            77
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            78,
+            79
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            80,
+            81
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            82,
+            83
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            84,
+            85
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            86,
+            87
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            88,
+            89
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            90,
+            91
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            92,
+            93
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            94,
+            95
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            96,
+            97
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            98,
+            99
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            100,
+            101
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            102,
+            103
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            104,
+            105
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            106,
+            107
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            108,
+            109
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            110,
+            111
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            112,
+            113
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            114,
+            115
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            116,
+            117
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            118,
+            119
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            120,
+            121
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            122,
+            123
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            124,
+            125
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            126,
+            127
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            128,
+            129
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            130,
+            131
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            132,
+            133
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            134,
+            135
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            136,
+            137
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            138,
+            139
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            140,
+            141
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            142,
+            143
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            144,
+            145
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            146,
+            147
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            148,
+            149
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            150,
+            151
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            152,
+            153
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            154,
+            155
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            156,
+            157
+          ]
+        },
+        {
+          "code": "alternative_residue_mapping",
+          "operand": "query",
+          "pair_indices": [
+            158,
+            159
+          ]
+        }
+      ],
+      "calculations": {
+        "paired_identity": "identical_paired_columns / paired_columns",
+        "alignment_identity": "identical_paired_columns / all_alignment_columns",
+        "query_paired_coverage": "union_of_paired_query_positions / supplied_query_length",
+        "reference_paired_coverage": "union_of_paired_reference_positions / actual_full_reference_length",
+        "native_scores": "preserved_per_HSP_without_summing_alternative_or_overlapping_HSPs"
+      },
+      "coordinate_context": {
+        "query": {
+          "reported_length": 80,
+          "full_length": 80,
+          "selected_interval": null,
+          "coordinate_unit": "aa"
+        },
+        "reference": {
+          "reported_length": 190,
+          "full_length": 190,
+          "selected_interval": null,
+          "coordinate_unit": "aa"
+        }
+      },
+      "selected_operand_coverage": {
+        "query": {
+          "numerator": 80,
+          "denominator": 80,
+          "value": 1.0,
+          "unit": "fraction"
+        },
+        "reference": {
+          "numerator": 160,
+          "denominator": 190,
+          "value": 0.8421052631578947,
+          "unit": "fraction"
+        }
+      }
+    }
+  }
+}

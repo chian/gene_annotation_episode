@@ -1,0 +1,568 @@
+{
+  "kind": "constructed engineering evidence, not published findings or an actual-model run",
+  "native_callable_model_reader_capability": "unimplemented",
+  "current_selected_argument_names": [
+    "comparison",
+    "denominator",
+    "numerator",
+    "source_kind",
+    "source_ref",
+    "version"
+  ],
+  "current_typed_component_names": [
+    "numerator_parameter",
+    "denominator_parameter",
+    "parameter_difference",
+    "parameter_ratio",
+    "log_parameter_contrast"
+  ],
+  "pure_calculator_components_not_exposed_by_native_path": [
+    "log_contrast_variance",
+    "log_contrast_standard_uncertainty",
+    "source_profile_log_ratio",
+    "source_signed_index"
+  ],
+  "inputs": {
+    "version": "a105_kinetic_contrast_inputs_v1",
+    "numerator": {
+      "parameter_kind": "catalytic_efficiency",
+      "unit": "uM^-1min^-1",
+      "value": 12,
+      "status": "point",
+      "relation": "eq",
+      "approximate": false,
+      "origin": "synthetic",
+      "measurement_id": "synthetic-token-numerator",
+      "physical_measurement_id": "synthetic-fit-numerator",
+      "subject": {
+        "organism": "synthetic organism",
+        "genotype": null,
+        "molecule": "synthetic molecule",
+        "construct": "synthetic construct"
+      },
+      "context": {
+        "substrate": "synthetic substrate-numerator",
+        "preparation": "synthetic preparation",
+        "experiment": "synthetic experiment",
+        "experimental_system": "synthetic purified system",
+        "conditions": "synthetic common conditions",
+        "endpoint": "synthetic product rate",
+        "normalization": "synthetic fitted efficiency"
+      },
+      "uncertainty": {
+        "statistic": "unreported",
+        "magnitude": null,
+        "interval": null,
+        "confidence_level": null,
+        "count": null,
+        "repetition_basis": "unspecified",
+        "estimate_basis": "unknown"
+      },
+      "source": {
+        "source_ref": "synthetic-source",
+        "artifact_ref": "synthetic-artifact",
+        "representation": "synthetic",
+        "start": 10,
+        "end": 15
+      },
+      "unavailable_reason": null
+    },
+    "denominator": {
+      "parameter_kind": "catalytic_efficiency",
+      "unit": "uM^-1min^-1",
+      "value": 3,
+      "status": "point",
+      "relation": "eq",
+      "approximate": false,
+      "origin": "synthetic",
+      "measurement_id": "synthetic-token-denominator",
+      "physical_measurement_id": "synthetic-fit-denominator",
+      "subject": {
+        "organism": "synthetic organism",
+        "genotype": null,
+        "molecule": "synthetic molecule",
+        "construct": "synthetic construct"
+      },
+      "context": {
+        "substrate": "synthetic substrate-denominator",
+        "preparation": "synthetic preparation",
+        "experiment": "synthetic experiment",
+        "experimental_system": "synthetic purified system",
+        "conditions": "synthetic common conditions",
+        "endpoint": "synthetic product rate",
+        "normalization": "synthetic fitted efficiency"
+      },
+      "uncertainty": {
+        "statistic": "unreported",
+        "magnitude": null,
+        "interval": null,
+        "confidence_level": null,
+        "count": null,
+        "repetition_basis": "unspecified",
+        "estimate_basis": "unknown"
+      },
+      "source": {
+        "source_ref": "synthetic-source",
+        "artifact_ref": "synthetic-artifact",
+        "representation": "synthetic",
+        "start": 30,
+        "end": 35
+      },
+      "unavailable_reason": null
+    },
+    "subject_relationship": "same_molecule_and_construct",
+    "parameter_definition_relationship": "same",
+    "substrate_arrangement": "separate_assays",
+    "comparison_scope": "common_conditions",
+    "nonintended_conditions_relationship": "matched"
+  },
+  "model": {
+    "version": "a105_kinetic_log_model_v1",
+    "measurement_order": [
+      "numerator",
+      "denominator"
+    ],
+    "measurement_keys": [
+      "kinetic_estimate_bbaa4dde6737772c0c941c014a6c4400865dbca915aee0938eef5245e6e57649",
+      "kinetic_estimate_740d4a3b7a74911cd30e1c137f783038f44f0441387200bce3fa801144d4a94f"
+    ],
+    "covariance": [
+      [
+        0.09,
+        0.02
+      ],
+      [
+        0.02,
+        0.16
+      ]
+    ],
+    "variance_status": "known",
+    "observation_model": "known_normal_log_parameters",
+    "log_basis": "natural_log_canonical_parameter",
+    "origin": "synthetic",
+    "source": {
+      "source_ref": "synthetic-covariance",
+      "artifact_ref": "synthetic-covariance-artifact",
+      "representation": "synthetic",
+      "start": 0,
+      "end": 20
+    }
+  },
+  "without_model": {
+    "numerator_parameter": {
+      "value": 12,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "source_numerator_parameter",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "eq"
+    },
+    "denominator_parameter": {
+      "value": 3,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "source_denominator_parameter",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "eq"
+    },
+    "parameter_difference": {
+      "value": 9.0,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "numerator_parameter-denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "parameter_ratio": {
+      "value": 4.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "numerator_parameter/denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_parameter_contrast": {
+      "value": 1.3862943611198906,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_variance": {
+      "value": null,
+      "unit": "dimensionless_squared",
+      "status": "unavailable",
+      "formula": "Cnn+Cdd-2*Cnd",
+      "origin": "derived",
+      "unavailable_reason": "kinetic_log_model_unreported",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_standard_uncertainty": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "sqrt(Cnn+Cdd-2*Cnd)",
+      "origin": "derived",
+      "unavailable_reason": "kinetic_log_model_unreported",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_profile_log_ratio": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "e*abs(e)/(2*V)",
+      "origin": "derived",
+      "unavailable_reason": "kinetic_log_model_unreported",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_signed_index": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "tanh(source_profile_log_ratio/2)",
+      "origin": "proposed",
+      "unavailable_reason": "kinetic_log_model_unreported",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    }
+  },
+  "with_known_model": {
+    "numerator_parameter": {
+      "value": 12,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "source_numerator_parameter",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "eq"
+    },
+    "denominator_parameter": {
+      "value": 3,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "source_denominator_parameter",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "eq"
+    },
+    "parameter_difference": {
+      "value": 9.0,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "numerator_parameter-denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "parameter_ratio": {
+      "value": 4.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "numerator_parameter/denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_parameter_contrast": {
+      "value": 1.3862943611198906,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_variance": {
+      "value": 0.21,
+      "unit": "dimensionless_squared",
+      "status": "populated",
+      "formula": "Cnn+Cdd-2*Cnd",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_standard_uncertainty": {
+      "value": 0.458257569495584,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "sqrt(Cnn+Cdd-2*Cnd)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_profile_log_ratio": {
+      "value": 4.575742989697156,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "e*abs(e)/(2*V)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_signed_index": {
+      "value": 0.9796126727409161,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "tanh(source_profile_log_ratio/2)",
+      "origin": "proposed",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    }
+  },
+  "with_estimated_covariance": {
+    "numerator_parameter": {
+      "value": 12,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "source_numerator_parameter",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "eq"
+    },
+    "denominator_parameter": {
+      "value": 3,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "source_denominator_parameter",
+      "origin": "synthetic",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "eq"
+    },
+    "parameter_difference": {
+      "value": 9.0,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "numerator_parameter-denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "parameter_ratio": {
+      "value": 4.0,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "numerator_parameter/denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_parameter_contrast": {
+      "value": 1.3862943611198906,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_variance": {
+      "value": 0.21,
+      "unit": "dimensionless_squared",
+      "status": "populated",
+      "formula": "Cnn+Cdd-2*Cnd",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_standard_uncertainty": {
+      "value": 0.458257569495584,
+      "unit": "dimensionless",
+      "status": "populated",
+      "formula": "sqrt(Cnn+Cdd-2*Cnd)",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_profile_log_ratio": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "e*abs(e)/(2*V)",
+      "origin": "derived",
+      "unavailable_reason": "known_log_covariance_required",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_signed_index": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "tanh(source_profile_log_ratio/2)",
+      "origin": "proposed",
+      "unavailable_reason": "known_log_covariance_required",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "declared_common_conditions",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    }
+  },
+  "limits": [
+    "This confirms arithmetic and the callable contract, not paper availability of covariance.",
+    "The declared log-normal model and covariance are synthetic conditions, not inferred facts.",
+    "No assay reliability probability or independent replication follows from this transform.",
+    "Connecting these four cells does not complete A105 scientific validity or assay coverage."
+  ]
+}

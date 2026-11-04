@@ -1,0 +1,19 @@
+{
+  "engineering_only": true,
+  "intermediate": {
+    "sha256": "0c10c41942fa5a28580cbc8f5f669b83a08c091576c0f9e83f0d4c7989ea041a",
+    "result": "416 passed in 93.67s before root found inline exponent edge hole",
+    "superseded_for_final_acceptance": true
+  },
+  "final_soft_breaks": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_structural_scalar_contexts.py -k soft_break",
+    "result": "58 passed, 77 deselected",
+    "seconds": 0.57
+  },
+  "final_affected_group": {
+    "command": ".venv/bin/python -m pytest -q tests/test_literature_structural_scalar_contexts.py tests/test_literature_partner_source_fields.py tests/test_literature_numeric_range_scope.py",
+    "status": "passed",
+    "result": "429 passed",
+    "seconds": 43.5
+  }
+}

@@ -1,0 +1,53 @@
+--- probe_publication_read.py
++++ probe_publication_warm_read.py
+@@ -49,11 +49,11 @@
+ 
+ def main():
+     directory = (BASE / 'final_workflow_001/temporary/test_actual_selected_tool_shar0').resolve()
+-    output = OWN / 'publication_read_probe_001'
++    output = OWN / 'publication_warm_probe_001'
+     output.mkdir()
+     evidence = {'argv': sys.argv, 'cwd': str(Path.cwd()), 'python': sys.executable,
+         'started_at': datetime.now(timezone.utc).isoformat(), 'input_directory': str(directory),
+-        'scope': 'One AppServicePublications.read of a completed original result, no Workflow/native run',
++        'scope': 'A cold priming read followed by one same-process warm AppServicePublications.read, no Workflow/native run',
+         'concurrency_limitation': 'Probe replaces only SelectedAPIEffects._locked with no-write/no-lock context; every opened input file is checked unchanged afterward',
+         'sqlite_uri': (directory / 'state/state.sqlite3').as_uri() + '?mode=ro'}
+     (output / 'command.json').write_text(json.dumps(evidence, indent=2) + '\n')
+@@ -137,6 +137,27 @@
+         reference = next(row[0]['source_ref'] for row in form.values() if isinstance(row, list) and row and isinstance(row[0], dict) and 'source_ref' in row[0])
+         evidence.update(result_reference=reference, episode_id=episode['episode_id'],
+                         input_form_sha256=digest(form), input_schema_sha256=digest(schema))
++        from gene_annotation_episode import bvbrc_appservice_contracts as contracts
++        cache_counts = Counter()
++        original_cache_lookup = contracts._already_validated
++        def counted_cache_lookup(key):
++            hit = original_cache_lookup(key)
++            name = inspect.currentframe().f_back.f_locals.get('name', 'unknown')
++            cache_counts[(name, hit)] += 1
++            return hit
++        contracts._already_validated = counted_cache_lookup
++        active = True
++        warmup_start = time.perf_counter()
++        warmup = api.appservice.publications.read(reference,
++            json.loads(episode['request'])['message']['scope'], episode_id=episode['episode_id'])
++        evidence['cold_priming_seconds_unprofiled'] = time.perf_counter() - warmup_start
++        evidence['cold_priming_cache_checks'] = [{'contract': name, 'hit': hit, 'count': count}
++            for (name, hit), count in cache_counts.items()]
++        evidence['cold_priming_schema_counts'] = dict(Counter(row['sha256'] for row in schema_calls))
++        evidence['cold_priming_schema_validation_seconds'] = sum(row['seconds'] for row in schema_calls)
++        schema_calls.clear()
++        cache_counts.clear()
++        api.selected_effects.probe_lock_entries = 0
+         profiler = cProfile.Profile()
+         start = time.perf_counter()
+         active = True
+@@ -160,6 +181,8 @@
+                  '_job','_all','_intent','_state'}]
+         with (output / 'publication.txt').open('w') as stream:
+             pstats.Stats(profiler,stream=stream).strip_dirs().sort_stats('cumulative').print_stats(70)
++        evidence['warm_equals_cold_result'] = evidence.get('result_sha256') == digest(warmup)
++        evidence['warm_cache_checks'] = [{'contract': name, 'hit': hit, 'count': count} for (name, hit), count in cache_counts.items()]
+         evidence['schema_calls'] = schema_calls
+         evidence['schema_counts'] = dict(Counter(row['sha256'] for row in schema_calls))
+         evidence['schema_validation_seconds'] = sum(row['seconds'] for row in schema_calls)

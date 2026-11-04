@@ -1,0 +1,60 @@
+{
+  "tag": "Cutadapt report",
+  "schema_version": [0, 3],
+  "cutadapt_version": "4.9",
+  "python_version": "3.12.3",
+  "command_line_arguments": [
+    "-j",
+    "1",
+    "--poly-a",
+    "--json",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/poly_a/native.json",
+    "-o",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/poly_a/output.fastq",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/poly_a/input.fastq"
+  ],
+  "cores": 1,
+  "input": {
+    "path1": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/poly_a/input.fastq",
+    "path2": null,
+    "paired": false
+  },
+  "read_counts": {
+    "input": 3,
+    "filtered": {
+      "too_short": null,
+      "too_long": null,
+      "too_many_n": null,
+      "too_many_expected_errors": null,
+      "casava_filtered": null,
+      "discard_trimmed": null,
+      "discard_untrimmed": null
+    },
+    "output": 3,
+    "reverse_complemented": null,
+    "read1_with_adapter": null,
+    "read2_with_adapter": null
+  },
+  "basepair_counts": {
+    "input": 26,
+    "input_read1": 26,
+    "input_read2": null,
+    "quality_trimmed": null,
+    "quality_trimmed_read1": null,
+    "quality_trimmed_read2": null,
+    "poly_a_trimmed": 13,
+    "poly_a_trimmed_read1": 13,
+    "poly_a_trimmed_read2": null,
+    "output": 13,
+    "output_read1": 13,
+    "output_read2": null
+  },
+  "adapters_read1": [],
+  "adapters_read2": null,
+  "poly_a_trimmed_read1": [
+    {"len": 0, "count": 1},
+    {"len": 5, "count": 1},
+    {"len": 8, "count": 1}
+  ],
+  "poly_a_trimmed_read2": null
+}

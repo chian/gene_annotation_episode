@@ -1,0 +1,322 @@
+{
+  "child_form": {
+    "value_0": [
+      {
+        "family": "failure",
+        "issue": {
+          "artifact_role": null,
+          "code": "rna_capture_unavailable",
+          "field": null,
+          "index": null,
+          "record_key": "synthetic-rna",
+          "stage": "capture"
+        },
+        "issue_ordinal": 0,
+        "mode": "supplied_features",
+        "operation": "analyze_rna_secondary_structure_features",
+        "record_key": "synthetic-rna",
+        "result_receipt_key": "rna_result_receipt:bba70ba56f9fae854316233493545028cf2724dd5e975064d4de522a1a0db620",
+        "row_key": "synthetic-rna:failure:0",
+        "source_ref": null
+      },
+      {
+        "family": "failure",
+        "issue": {
+          "artifact_role": null,
+          "code": "rna_requested_row_missing",
+          "field": "/selector/projection/rows/record_keys/1",
+          "index": 1,
+          "record_key": "synthetic-rna",
+          "stage": "selection"
+        },
+        "issue_ordinal": 1,
+        "mode": "supplied_features",
+        "operation": "analyze_rna_secondary_structure_features",
+        "record_key": "synthetic-rna",
+        "result_receipt_key": "rna_result_receipt:bba70ba56f9fae854316233493545028cf2724dd5e975064d4de522a1a0db620",
+        "row_key": "synthetic-rna:failure:1",
+        "source_ref": null
+      }
+    ]
+  },
+  "original_receipt": {
+    "arguments": {},
+    "assignment": {
+      "handoff_ref": "source_a9c49c19ff8f0d93fcc08c76",
+      "selector": {
+        "acquisition": "complete_bound_bundle",
+        "projection": {
+          "family": "failure",
+          "metrics": [],
+          "rows": {
+            "record_keys": [
+              "synthetic-rna:failure:0",
+              "missing"
+            ]
+          }
+        },
+        "version": "native_rna_structure_result_selector_v1"
+      },
+      "version": "execution_results_assignment_v1"
+    },
+    "capture": {
+      "absent_artifacts": [],
+      "artifacts": [],
+      "bundle_artifact_ref": null,
+      "bundle_validated": false,
+      "capture_complete": false,
+      "failures": [
+        {
+          "artifact_role": null,
+          "code": "rna_capture_unavailable",
+          "field": null,
+          "index": null,
+          "record_key": "synthetic-rna",
+          "stage": "capture"
+        }
+      ],
+      "invalid_artifacts": [],
+      "version": "native_rna_structure_capture_v1"
+    },
+    "capture_complete": false,
+    "delivery_complete": false,
+    "episode_id": "episode_5e618b169f116a64edc5aa65948bbaf4bd06bb915a8e97209b26c41130d3abd9",
+    "failure_selection": {
+      "population_count": 1,
+      "requested_rows_accounted_for": true,
+      "selected_ordinals": [
+        0
+      ],
+      "supplemental_issue_ordinals": [
+        1
+      ],
+      "version": "rna_structure_failure_selection_v1"
+    },
+    "failures": [
+      {
+        "artifact_role": null,
+        "code": "rna_capture_unavailable",
+        "field": null,
+        "index": null,
+        "record_key": "synthetic-rna",
+        "stage": "capture"
+      },
+      {
+        "artifact_role": null,
+        "code": "rna_requested_row_missing",
+        "field": "/selector/projection/rows/record_keys/1",
+        "index": 1,
+        "record_key": "synthetic-rna",
+        "stage": "selection"
+      }
+    ],
+    "native_success": false,
+    "observation": {
+      "failure_code": null,
+      "logs": [],
+      "measurements": [],
+      "native": {
+        "fixture": "synthetic_supplied_observation"
+      },
+      "observed_at": "2026-10-26T00:00:03+00:00",
+      "outputs": [],
+      "provenance_refs": [],
+      "result_available": true,
+      "returncode": 0,
+      "state": "completed"
+    },
+    "operation_key": "rna358-synthetic-run:episode_5e618b169f116a64edc5aa65948bbaf4bd06bb915a8e97209b26c41130d3abd9:0",
+    "prepared": null,
+    "record_refs": [],
+    "rows": [],
+    "run_id": "rna358-synthetic-run",
+    "scope": {
+      "subject_refs": [
+        "input_701115a7cb963c5641545008"
+      ]
+    },
+    "source_ref": null,
+    "target": {
+      "assignment": {
+        "assignment_id": "explicitly-synthetic-rna-attempt",
+        "completion_keys": [
+          "handoff"
+        ],
+        "constraints": {
+          "allocation": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          }
+        },
+        "endpoint": "usable_handoff",
+        "initial_context": {
+          "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_results_2026-10-26_358/check_20261027T021057670712Z/tmp/pytest/test_null_source_failure_cross0/fixture/workspace",
+          "environment": {},
+          "revision": 0
+        },
+        "inventory_snapshot": {},
+        "progress_requirements": [
+          {
+            "credit": 1,
+            "key": "handoff",
+            "predicate": {
+              "kind": "requested_job_handoff"
+            }
+          }
+        ],
+        "requested_job": {
+          "argv": [
+            "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+            "-B",
+            "-m",
+            "gene_annotation_episode.native_rna_structure_worker",
+            "--operation",
+            "analyze_rna_secondary_structure_features",
+            "--input-json",
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_results_2026-10-26_358/check_20261027T021057670712Z/tmp/pytest/test_null_source_failure_cross0/fixture/supplied-input.json",
+            "--model-json",
+            "null",
+            "--output-json",
+            "native-result.json",
+            "--record-key",
+            "synthetic-rna",
+            "--software-json",
+            "{\"python_executable\":\"/home/chia/repos/gene_annotation_episode/.venv/bin/python\",\"python_sha256\":\"e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f\",\"python_version\":null,\"rna_extension_sha256\":null,\"rna_module_sha256\":null,\"viennarna_distribution_version\":null,\"worker_module\":\"gene_annotation_episode.native_rna_structure_worker\",\"worker_source_sha256\":\"d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7\"}"
+          ],
+          "environment": {
+            "PYTHONPATH": "/home/chia/repos/gene_annotation_episode"
+          },
+          "native_rna_structure": {
+            "environment": {
+              "PYTHONPATH": "/home/chia/repos/gene_annotation_episode"
+            },
+            "grading_parameters": {
+              "energy": {
+                "normalization": "per_nt"
+              },
+              "pair_composition": {
+                "accepted_ordered_pair_types": [
+                  "AU",
+                  "UA",
+                  "GC",
+                  "CG",
+                  "GU",
+                  "UG"
+                ],
+                "denominator": "unambiguous_pairs"
+              },
+              "schema": "rna_calculation_parameters_v1",
+              "topology": {
+                "include_exterior_in_loop_size_statistics": false,
+                "long_stem_min_pairs": 3
+              }
+            },
+            "mode": "supplied_features",
+            "model": null,
+            "operands": [
+              {
+                "artifact_ref": "artifact_a06e7f139bdfba2d3246d4a5b5f0d7afde68dd182053fba7dd1ddeba302d76bb",
+                "format": "rna_input_json_v1",
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_results_2026-10-26_358/check_20261027T021057670712Z/tmp/pytest/test_null_source_failure_cross0/fixture/supplied-input.json",
+                "role": "input",
+                "sha256": "a06e7f139bdfba2d3246d4a5b5f0d7afde68dd182053fba7dd1ddeba302d76bb",
+                "size_bytes": 285
+              }
+            ],
+            "operation": "analyze_rna_secondary_structure_features",
+            "outputs": [
+              {
+                "format": "rna_native_record_json_v1",
+                "relative_path": "native-result.json",
+                "role": "native_result"
+              },
+              {
+                "format": "text",
+                "relative_path": "stdout.txt",
+                "role": "stdout"
+              },
+              {
+                "format": "text",
+                "relative_path": "stderr.txt",
+                "role": "stderr"
+              }
+            ],
+            "program": "rna_structure_python",
+            "record_key": "synthetic-rna",
+            "software": {
+              "python_executable": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+              "python_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+              "python_version": null,
+              "rna_extension_sha256": null,
+              "rna_module_sha256": null,
+              "viennarna_distribution_version": null,
+              "worker_module": "gene_annotation_episode.native_rna_structure_worker",
+              "worker_source_sha256": "d1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7"
+            },
+            "version": "native_rna_structure_job_v1"
+          }
+        },
+        "resource_id": "local-rna",
+        "resource_kind": "local",
+        "version": "practical_assignment_v1",
+        "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_results_2026-10-26_358/check_20261027T021057670712Z/tmp/pytest/test_null_source_failure_cross0/fixture/workspace"
+      },
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_results_2026-10-26_358/check_20261027T021057670712Z/tmp/pytest/test_null_source_failure_cross0/fixture/workspace/.episode-operations/664ca5d01b543a53c309416449c29caadd0c9ac7cd6e0427306041cf8d5f0a49/920d31d34e8c1a371813efbaaf4cd6f4cd36f201bef66dbee8102f34a17ebba2/native.json",
+      "handle": "source_a9c49c19ff8f0d93fcc08c76",
+      "origin_episode_id": "episode_78731615eabe53f2c27e1ebe0eead44f6338adcc2412664ade4c5bb854583353",
+      "request_sha256": "e3b498d3959d04903fa9b0f63b96bb64fe003d8ec46a5e6ea623a8b644e71d33",
+      "resource_id": "local-rna",
+      "resource_kind": "local",
+      "run_id": "rna358-synthetic-run",
+      "scope": {
+        "subject_refs": [
+          "input_701115a7cb963c5641545008"
+        ]
+      },
+      "version": "execution_target_v1"
+    },
+    "tool_name": "execution.results.collect",
+    "version": "native_rna_structure_acquired_result_v1"
+  },
+  "parent_form": {
+    "value_0": [
+      {
+        "family": "failure",
+        "issue": {
+          "artifact_role": null,
+          "code": "rna_capture_unavailable",
+          "field": null,
+          "index": null,
+          "record_key": "synthetic-rna",
+          "stage": "capture"
+        },
+        "issue_ordinal": 0,
+        "mode": "supplied_features",
+        "operation": "analyze_rna_secondary_structure_features",
+        "record_key": "synthetic-rna",
+        "result_receipt_key": "rna_result_receipt:bba70ba56f9fae854316233493545028cf2724dd5e975064d4de522a1a0db620",
+        "row_key": "synthetic-rna:failure:0",
+        "source_ref": null
+      },
+      {
+        "family": "failure",
+        "issue": {
+          "artifact_role": null,
+          "code": "rna_requested_row_missing",
+          "field": "/selector/projection/rows/record_keys/1",
+          "index": 1,
+          "record_key": "synthetic-rna",
+          "stage": "selection"
+        },
+        "issue_ordinal": 1,
+        "mode": "supplied_features",
+        "operation": "analyze_rna_secondary_structure_features",
+        "record_key": "synthetic-rna",
+        "result_receipt_key": "rna_result_receipt:bba70ba56f9fae854316233493545028cf2724dd5e975064d4de522a1a0db620",
+        "row_key": "synthetic-rna:failure:1",
+        "source_ref": null
+      }
+    ]
+  }
+}

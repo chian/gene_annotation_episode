@@ -1,0 +1,35 @@
+...................................................................F.... [ 81%]
+................                                                         [100%]
+=================================== FAILURES ===================================
+_ test_full_task_matches_root_printed_proposal_and_schema_formulas_are_closed __
+
+    def test_full_task_matches_root_printed_proposal_and_schema_formulas_are_closed():
+>       task=(ROOT/'verification/literature_reference_evidence_2026-10-25_001/a105_ion_discrimination_design_194/PROPOSED_TASK_001.txt').read_text().rstrip()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_components_194.py:264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion...01/verification/literature_reference_evidence_2026-10-25_001/a105_ion_discrimination_design_194/PROPOSED_TASK_001.txt')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ion_discrimination_review_197/pin_001/verification/literature_reference_evidence_2026-10-25_001/a105_ion_discrimination_design_194/PROPOSED_TASK_001.txt'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ion_discrimination_components_194.py::test_full_task_matches_root_printed_proposal_and_schema_formulas_are_closed
+1 failed, 87 passed in 2.08s

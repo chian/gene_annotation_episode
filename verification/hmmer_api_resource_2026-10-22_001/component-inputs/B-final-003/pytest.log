@@ -1,0 +1,32 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /tmp/gene-annotation-hmmer-api-20261022-001
+configfile: pyproject.toml
+collecting ... collected 24 items
+
+tests/test_hmmer_api_adapter.py::test_explicit_order_preparation_initial_zero_proof_and_constraints PASSED [  4%]
+tests/test_hmmer_api_adapter.py::test_pending_job_has_original_receivers_saved_proof_and_replay_without_http PASSED [  8%]
+tests/test_hmmer_api_adapter.py::test_original_job_repair_keeps_same_order_without_submission PASSED [ 12%]
+tests/test_hmmer_api_adapter.py::test_assigned_result_pages_credit_coverage_and_repeat_deduplication PASSED [ 16%]
+tests/test_hmmer_api_adapter.py::test_foreign_adapter_is_noop_and_api_absence_does_not_invoke_native_changes PASSED [ 20%]
+tests/test_hmmer_api_adapter.py::test_no_store_snapshot_can_span_awaited_provider_operation PASSED [ 25%]
+tests/test_hmmer_api_adapter.py::test_partial_projection_keeps_actual_rows_and_reports_acquisition_coverage PASSED [ 29%]
+tests/test_hmmer_api_adapter.py::test_busy_same_key_submission_returns_failed_delivery_without_new_receipt PASSED [ 33%]
+tests/test_hmmer_api_adapter.py::test_busy_status_check_preserves_original_pending_operation_and_recovery PASSED [ 37%]
+tests/test_hmmer_api_adapter.py::test_material_operand_receivers_share_original_scope_and_sequence_port[rooted_feature] PASSED [ 41%]
+tests/test_hmmer_api_adapter.py::test_material_operand_receivers_share_original_scope_and_sequence_port[rootless_reference] PASSED [ 45%]
+tests/test_hmmer_api_information.py::test_reader_explicit_identity_and_unselected_dispatch_before_any_proof PASSED [ 50%]
+tests/test_hmmer_api_information.py::test_checked_receipt_is_separate_deterministic_identity_and_source_is_custodied PASSED [ 54%]
+tests/test_hmmer_api_information.py::test_same_physical_handoff_rechecks_and_inherited_proof_do_not_add_credit PASSED [ 58%]
+tests/test_hmmer_api_information.py::test_initial_qualification_enforces_actual_inputs_without_order_or_http[input_digest] PASSED [ 62%]
+tests/test_hmmer_api_information.py::test_initial_qualification_enforces_actual_inputs_without_order_or_http[version] PASSED [ 66%]
+tests/test_hmmer_api_information.py::test_initial_qualification_enforces_actual_inputs_without_order_or_http[cpu] PASSED [ 70%]
+tests/test_hmmer_api_information.py::test_initial_qualification_enforces_actual_inputs_without_order_or_http[unknown_parameter] PASSED [ 75%]
+tests/test_hmmer_api_information.py::test_initial_qualification_enforces_actual_inputs_without_order_or_http[page_size] PASSED [ 79%]
+tests/test_hmmer_api_information.py::test_initial_qualification_enforces_actual_inputs_without_order_or_http[algorithm] PASSED [ 83%]
+tests/test_hmmer_api_information.py::test_acquisition_rows_require_own_selected_action_and_immutable_publication PASSED [ 87%]
+tests/test_hmmer_api_information.py::test_saved_failure_fact_clears_after_actual_successful_check PASSED [ 91%]
+tests/test_hmmer_api_information.py::test_api_fact_fields_are_closed_parent_types_and_reject_changed_recorded_facts PASSED [ 95%]
+tests/test_hmmer_api_information.py::test_assigned_and_repair_scope_is_original_while_receiving_parent_may_contain_it PASSED [100%]
+
+======================== 24 passed in 62.40s (0:01:02) =========================

@@ -1,0 +1,469 @@
+"""Synthetic information receipt, inheritance and scientific credit integration."""
+import asyncio
+import json
+
+import pytest
+
+from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.runtime import Journal, TypedReportContract, Workflow, WorkflowError, run_workflow
+from gene_annotation_episode.state import Store
+from gene_annotation_episode.tools import ToolRegistry
+from test_investigation_progress import put_finding
+from test_runtime import FixtureController, ScriptedProvider, obj
+from test_scientific_findings import finding, target_question
+from test_scientific_hypervolume_runtime import assessment, evidence
+from gene_annotation_episode.scientific_credit import ScientificEvidenceCredit
+from gene_annotation_episode.credit import CreditPolicy
+
+
+def test_inheritance_freezes_prefix_without_copying_receipts_and_survives_reopen(tmp_path):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        a = put_finding(store, hypothesis, evidence(store, target, 'alignment'), target)
+        b = put_finding(store, hypothesis, evidence(store, target, 'mechanism'), target)
+        receipts = EpisodeReceipts(store, 'synthetic-run')
+        receipts.bind('parent')
+        receipts.receive('parent', [a['id']], kind='initial')
+        first_manifest = receipts.bind('child', 'parent')
+        receipts.bind('grandchild', 'child')
+        receipts.receive('parent', [b['id']], kind='own_action', source_index=0)
+        assert set(receipts.known('child', record_type='assessment')) == {a['id']}
+        assert set(receipts.known('grandchild', record_type='assessment')) == {a['id']}
+        assert set(receipts.known('parent', record_type='assessment')) == {a['id'], b['id']}
+        assert store.db.execute('SELECT count(*) FROM runtime_record_receipts WHERE episode_id IN '
+                                "('child','grandchild')").fetchone()[0] == 0
+        count = store.db.execute('SELECT count(*) FROM runtime_record_receipts').fetchone()[0]
+        receipts.receive('parent', [a['id']], kind='own_action', source_index=1)
+        assert store.db.execute('SELECT count(*) FROM runtime_record_receipts').fetchone()[0] == count
+        # Referenced source metadata can travel with a finding; the reverse
+        # source-to-all-findings direction cannot silently add other work.
+        receipts.bind('reader')
+        receipts.receive('reader', [store.get(a['observation_ref'])['source_ref']], kind='initial')
+        assert list(receipts.known('reader', record_type='assessment')) == []
+    with Store(tmp_path/'workspace') as store:
+        receipts = EpisodeReceipts(store, 'synthetic-run')
+        assert receipts.bind('child', 'parent') == first_manifest
+        assert set(receipts.known('grandchild', record_type='assessment')) == {a['id']}
+
+
+def test_automatic_state_pages_only_known_records_before_pagination(tmp_path):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        values = [put_finding(store, hypothesis, evidence(store, target, kind), target)
+                  for kind in ('alignment', 'mechanism', 'comparison')]
+        # Choose the last globally ordered record so post-pagination filtering
+        # would produce an empty first page instead of the known contribution.
+        all_records = store.query_records('assessment', limit=10, current_only=True)['records']
+        wanted = all_records[-1]
+        receipts = EpisodeReceipts(store, 'synthetic-run')
+        receipts.bind('parent')
+        receipts.receive('parent', [wanted['id']], kind='initial')
+        state = store.reasoning_view({'subject_refs': [target]}, limit=1,
+                                    record_selection=receipts.selection('parent'))
+        assert state['assessments'] == [wanted]
+        assert state['pages']['assessments']['total'] == 1
+        # Explicit discovery remains available through the ordinary read tool.
+        assert store.query_records('assessment', limit=10, current_only=True)['records'] == all_records
+
+
+def test_received_immutable_version_remains_visible_after_an_unreceived_revision(tmp_path):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        observed = evidence(store, target, 'alignment')
+        old = put_finding(store, hypothesis, observed, target)
+        receipts = EpisodeReceipts(store, 'synthetic-run')
+        receipts.bind('parent')
+        receipts.receive('parent', [old['id']], kind='initial')
+        current = put_finding(store, hypothesis, observed, target, revision=old['revision'],
+                              qualification='measurement_does_not_establish_claim')
+        state = store.reasoning_view({'subject_refs': [target]},
+            record_selection=receipts.selection('parent'))
+        assert state['assessments'] == [old]
+        assert state['record_view'] == 'received_immutable_versions'
+        assert state['received_revision_status'] == [{'record_ref': old['id'], 'is_current_revision': False}]
+        assert current['id'] not in set(receipts.known('parent'))
+
+
+def test_initial_form_is_inherited_before_baseline_but_changed_assignment_cannot_add_receipts(tmp_path):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        saved = put_finding(store, hypothesis, evidence(store, target, 'alignment'), target)
+        scope = {'subject_refs': [target]}
+        scorer = ScientificFindingProgress(FindingProgressPolicy(7))
+        workflow = Workflow(store, ToolRegistry(store), ScriptedProvider([]), tmp_path/'run',
+            'synthetic-run', lambda path, initial: FixtureController(str(path), initial, 2), scorer,
+            project_child_credit=scorer, initial_known_record_refs=[])
+        root = workflow.build('annotation', 'root', 'Synthetic investigation', scope)
+        schema = obj({'selected': {'type': 'array', 'items': {'type': 'string',
+            'format': 'reference', 'x-reference-namespace': 'assessment'}}})
+        contract = TypedReportContract('Return selected findings', schema, workflow.resolver(scope))
+        arguments = {'parent': root.request.goal, 'parent_path': root.source.path, 'contract': contract}
+        empty = workflow.build('improvement', 'first', 'Synthetic child investigation', scope,
+                               initial={'selected': []}, **arguments)
+        count = store.db.execute('SELECT count(*) FROM runtime_record_receipts').fetchone()[0]
+        with pytest.raises(WorkflowError, match='immutable assignment differs'):
+            workflow.build('improvement', 'first', 'Synthetic child investigation', scope,
+                           initial={'selected': [saved['id']]}, **arguments)
+        assert store.db.execute('SELECT count(*) FROM runtime_record_receipts').fetchone()[0] == count
+        assert workflow.source_credit_view(empty.source)['credit'] == 0
+        populated = workflow.build('improvement', 'second', 'Synthetic child investigation', scope,
+                                   initial={'selected': [saved['id']]}, **arguments)
+        assert workflow.source_credit_view(populated.source)['credit'] == 7
+        assert workflow.journal.row('runtime_episodes', populated.source.episode_id)['initial_credit'] == 7
+        assert workflow.source_credit_view(root.source)['credit'] == 0
+
+
+@pytest.mark.parametrize('standard_binding', [False, True])
+def test_runtime_credits_only_requested_child_information_and_replay_keeps_history(tmp_path, standard_binding):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        scope = {'subject_refs': [target]}
+        observed = [evidence(store, target, kind) for kind in ('alignment', 'mechanism')]
+        inherited = put_finding(store, hypothesis, evidence(store, target, 'comparison'), target)
+        scorer = ScientificFindingProgress(FindingProgressPolicy(3))  # Explicit fixture unit.
+        form = obj({'selected_findings': {'type': 'array', 'items': {
+            'type': 'string', 'format': 'reference', 'x-reference-namespace': 'assessment'}}})
+        commission = {'selection': {'kind': 'child', 'goal': 'Investigate two synthetic sources iteratively',
+            'scope': scope, 'purpose': 'Return the one source assessment requested by this form',
+            'schema_json': json.dumps(form), 'initial_report_json': json.dumps({'selected_findings': []})},
+            'report_update': {}}
+        written = []
+        def reason(index):
+            def decision(context):
+                assert context['current_credit'] == 3*(index+1)
+                known = {row['id'] for row in context['working_state']['assessments']}
+                assert inherited['id'] in known
+                if index:
+                    written.append(next(row for row in store.current_assessments(scope)
+                        if row['observation_ref'] == observed[0]['id']))
+                payload = {name: [] for name in store.reasoning_schema()['required']}
+                row = assessment(hypothesis, observed[index]['id'], 'incomparable', alias='finding')
+                row['investigation_finding'] = finding(target,
+                    qualification='measurement_does_not_establish_claim' if index else 'none')
+                payload['assessments'] = [row]
+                return {'selection': {'kind': 'reason', 'commit': payload},
+                    # The last reasoning call can return only its earlier
+                    # outcome. Its new result is not silently appended.
+                    'report_update': {'selected_findings': [written[0]['id']] if written else []}}
+            return decision
+        received = []
+        def parent(context):
+            report, = context['child_reports']
+            received.append(report)
+            assert report == {'selected_findings': [written[0]['id']]}
+            assert context['current_credit'] == 6
+            assert {row['id'] for row in context['working_state']['assessments']} == {
+                inherited['id'], written[0]['id']}
+            return {'selection': {'kind': 'tool', 'tool': 'episode.credit',
+                'arguments': {'limit': 10, 'offset': 0}}, 'report_update': {}}
+        controllers = []
+        def factory(path, initial):
+            controller = FixtureController(str(path), initial, 2)
+            controllers.append(controller)
+            return controller
+        arguments = {'run_dir': tmp_path/'run', 'controller_factory': factory,
+            'project_credit': scorer, 'project_child_credit': scorer,
+            'initial_known_record_refs': [inherited['id']],
+            'binding_definitions': {'credit': scorer.as_record(), 'scientific_child_credit': scorer.as_record()}}
+        if standard_binding:
+            arguments = {'run_dir': tmp_path/'run', 'controller_factory': factory,
+                'provider_config': {'scientific_progress': {'finding_unit': 3}},
+                'initial_known_record_refs': [inherited['id']]}
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+            provider=ScriptedProvider([commission, reason(0), reason(1), parent]), **arguments))
+        assert summary['credit'] == 6
+        root, child = controllers
+        assert root.scores == [3, 0] and child.scores == [3, 3]
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4
+        action = json.loads(store.db.execute("SELECT result FROM runtime_actions WHERE json_extract(action,'$.kind')='child'").fetchone()[0])
+        assert action['record_refs'] == received[0]['selected_findings']
+        assert len(store.current_assessments(scope)) == 3  # Unreturned work survives.
+        frozen = store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index').fetchall()
+        replay = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+                                         resume=True, **arguments))
+        assert replay == summary
+        assert [tuple(row) for row in frozen] == [tuple(row) for row in
+            store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
+
+
+def test_receipt_policy_requires_explicit_initial_knowledge(tmp_path):
+    with Store(tmp_path/'workspace') as store:
+        target_question(store)
+        scorer = ScientificFindingProgress(FindingProgressPolicy(2))
+        with pytest.raises(ValueError, match='requires_explicit_initial_known_record_refs'):
+            asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+                run_dir=tmp_path/'run', project_credit=scorer))
+
+
+def test_native_workbook_pages_return_one_finding_through_child_form_and_replay(tmp_path):
+    """Real extraction and runtime, with synthetic evidence/decisions/stopping."""
+    from test_spreadsheet_tools import workbook, replace_part
+
+    path, _ = workbook(tmp_path)
+    replace_part(path, 'book/shared.xml',
+        '<r><t>YB</t></r><r><t>HP</t></r>', '<r><t>positive</t></r>')
+    replace_part(path, 'book/sheets/evidence.xml', '<t>gene</t>', '<t>growth_capability</t>')
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        scope = {'subject_refs': [target]}
+        source = store.put('source', {'provider': 'synthetic_workbook', 'accession': None,
+            'uri': None, 'artifact_ref': store.artifact(path.read_bytes(),
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+            'text_ref': None, 'request_ref': None, 'version': None,
+            'retrieved_at': None}, origin='external')
+        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+        form = obj({'findings': {'type': 'array', 'x-source': 'changed_assessment_refs',
+            'items': {'type': 'string', 'format': 'reference',
+                      'x-reference-namespace': 'assessment'}}})
+        commission = {'selection': {'kind': 'child',
+            'goal': 'Iteratively examine the synthetic workbook evidence and its representations',
+            'scope': scope, 'purpose': 'Return actual source-bound findings for parent integration',
+            'schema_json': json.dumps(form), 'initial_report_json': '{}'}, 'report_update': {}}
+
+        def page(limit):
+            return {'selection': {'kind': 'tool', 'tool': 'source.xlsx.rows',
+                'arguments': {'source_ref': source['id'], 'sheet_key': 'selected',
+                    'offset': 0, 'limit': limit, 'header_row': 1,
+                    'where': {'column': 'A', 'match': 'equals', 'value': 'positive',
+                              'case_sensitive': False}}}, 'report_update': {}}
+
+        selected_sources = []
+        def interpret(context):
+            result = context['last_local_outcome']['result']
+            assert result['total_matches'] == 1 and result['complete'] is True
+            assert result['rows'][0]['row_number'] == 2
+            assert result['rows'][0]['cells'][0]['value'] == 'positive'
+            assert result['provenance']['parent_source_ref'] == source['id']
+            selected_sources.append(result['source_ref'])
+            raw = store.get_artifact(result['artifact_ref']).decode()
+            payload = {name: [] for name in store.reasoning_schema()['required']}
+            payload['observations'] = [{'alias': 'cells', 'subject_refs': [target],
+                'source_subject_refs': [target], 'kind': 'source_content',
+                'source_ref': result['source_ref'], 'measurements': [], 'dependencies': [],
+                'anchor': {'source_ref': result['source_ref'],
+                    'artifact_ref': result['artifact_ref'], 'start': 0,
+                    'end': len(raw.encode()), 'quote': raw}}]
+            row = assessment(hypothesis, '@cells', 'incomparable', alias='finding')
+            row['investigation_finding'] = finding(target)
+            payload['assessments'] = [row]
+            return {'selection': {'kind': 'reason', 'commit': payload}, 'report_update': {}}
+
+        received = []
+        def parent(context):
+            report, = context['child_reports']
+            assert len(report['findings']) == len(set(report['findings'])) == 2
+            assert context['current_credit'] == 1
+            assert context['investigation_progress']['retained_finding_count'] == 1
+            assert {row['id'] for row in context['working_state']['assessments']} == set(report['findings'])
+            received.append(report)
+            return {'selection': {'kind': 'tool', 'tool': 'episode.credit',
+                'arguments': {'limit': 10, 'offset': 0}}, 'report_update': {}}
+
+        controllers = []
+        def factory(path, initial):
+            controller = FixtureController(str(path), initial,
+                2 if path[-1][0] == 'annotation' else 4)
+            controllers.append(controller)
+            return controller
+
+        arguments = {'run_dir': tmp_path/'run', 'controller_factory': factory,
+            'project_credit': scorer, 'project_child_credit': scorer,
+            'initial_known_record_refs': [], 'binding_definitions': {
+                'credit': scorer.as_record(), 'scientific_child_credit': scorer.as_record()}}
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+            provider=ScriptedProvider([commission, page(1), interpret, page(2), interpret, parent]),
+            **arguments))
+        assert summary['credit'] == 1 and summary['completed_actions'] == 2
+        assert len(set(selected_sources)) == 2
+        root, child = controllers
+        assert root.scores == [1, 0] and child.scores == [0, 1, 0, 0]
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 6
+        assert store.db.execute('SELECT count(*) FROM tool_operations').fetchone()[0] == 2
+        details = json.loads(store.db.execute("SELECT result FROM runtime_actions "
+            "WHERE json_extract(action,'$.tool')='episode.credit'").fetchone()[0])['result']
+        assert details['credit'] == 1 and details['retained_finding_count'] == 1
+        assert {row['known_assessment_ref'] for row in details['source_contributions']} == set(received[0]['findings'])
+        frozen = [tuple(row) for row in store.db.execute(
+            'SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
+        replay = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+                                         resume=True, **arguments))
+        assert replay == summary
+        assert store.db.execute('SELECT count(*) FROM tool_operations').fetchone()[0] == 2
+        assert [tuple(row) for row in store.db.execute(
+            'SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')] == frozen
+
+
+@pytest.mark.parametrize('exact', [False, True])
+def test_selected_state_read_delivers_existing_findings_but_detail_read_does_not(tmp_path, exact):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        saved = put_finding(store, hypothesis, evidence(store, target, 'alignment'), target)
+        scorer = ScientificFindingProgress(FindingProgressPolicy(5))
+        def read(context):
+            assert context['current_credit'] == 0 and context['working_state']['assessments'] == []
+            return {'selection': {'kind': 'tool', 'tool': 'state.query',
+                'arguments': {'refs': [saved['id']]} if exact else {'kind': 'assessment',
+                    'current_only': True, 'offset': 0, 'limit': 10}}, 'report_update': {}}
+        def detail(context):
+            assert context['current_credit'] == 5
+            assert context['working_state']['assessments'] == [saved]
+            return {'selection': {'kind': 'tool', 'tool': 'episode.credit',
+                'arguments': {'limit': 10, 'offset': 0}}, 'report_update': {}}
+        controllers = []
+        def factory(path, initial):
+            controller = FixtureController(str(path), initial, 2)
+            controllers.append(controller)
+            return controller
+        result = asyncio.run(run_workflow(store, ToolRegistry(store),
+            provider=ScriptedProvider([read, detail]), run_dir=tmp_path/'run',
+            controller_factory=factory, project_credit=scorer, initial_known_record_refs=[]))
+        assert result['credit'] == 5 and controllers[0].scores == [5, 0]
+        receipts = store.db.execute("SELECT record_ref,source_index FROM runtime_record_receipts "
+            "WHERE record_ref=?", (saved['id'],)).fetchall()
+        assert [tuple(row) for row in receipts] == [(saved['id'], 0)]
+
+
+@pytest.mark.parametrize('crash_after_receipt', [False, True])
+def test_interruption_between_publication_receipt_and_projection_recovers_once(tmp_path, monkeypatch,
+                                                                            crash_after_receipt):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        observed = evidence(store, target, 'alignment')
+        scorer = ScientificFindingProgress(FindingProgressPolicy(4))
+        payload = {name: [] for name in store.reasoning_schema()['required']}
+        row = assessment(hypothesis, observed['id'], 'incomparable', alias='typed')
+        row['investigation_finding'] = finding(target)
+        payload['assessments'] = [row]
+        selected = {'selection': {'kind': 'reason', 'commit': payload}, 'report_update': {}}
+        original = Journal.save
+        crashed = False
+        def save(self, table, values):
+            nonlocal crashed
+            if (not crashed and table == 'runtime_actions' and values.get('result') is not None
+                    and (values.get('credit') is not None) == crash_after_receipt):
+                crashed = True
+                raise RuntimeError('synthetic interruption at receipt boundary')
+            return original(self, table, values)
+        monkeypatch.setattr(Journal, 'save', save)
+        controllers = []
+        def factory(path, initial):
+            controller = FixtureController(str(path), initial, 1)
+            controllers.append(controller)
+            return controller
+        arguments = {'run_dir': tmp_path/'run', 'controller_factory': factory,
+                     'project_credit': scorer, 'initial_known_record_refs': []}
+        with pytest.raises(RuntimeError, match='synthetic interruption'):
+            asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([selected]), **arguments))
+        assert store.db.execute('SELECT count(*) FROM reasoning_commits').fetchone()[0] == 1
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
+        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+                                         resume=True, **arguments))
+        assert result['credit'] == 4 and controllers[-1].scores == [4]
+        assert store.db.execute('SELECT count(*) FROM reasoning_commits').fetchone()[0] == 1
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
+        assert store.db.execute("SELECT count(*) FROM runtime_record_receipts r JOIN records s "
+            "ON s.id=r.record_ref WHERE s.record_type='assessment'").fetchone()[0] == 1
+
+
+def test_different_parent_scalar_does_not_grant_unreceived_information_to_child(tmp_path):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        saved = put_finding(store, hypothesis, evidence(store, target, 'alignment'), target)
+        scientific = ScientificEvidenceCredit(CreditPolicy())
+        progress = ScientificFindingProgress(FindingProgressPolicy(4))
+        scope = {'subject_refs': [target]}
+        commission = {'selection': {'kind': 'child', 'goal': 'Investigate synthetic existing evidence iteratively',
+            'scope': scope, 'purpose': 'Return the requested local progress value',
+            'schema_json': json.dumps(obj({'local_progress': {'type': 'number', 'x-source': 'credit'}})),
+            'initial_report_json': '{}'}, 'report_update': {}}
+        def read(context):
+            assert context['current_credit'] == 0, context.get('feedback')
+            assert context['working_state']['record_view'] == 'received_immutable_versions'
+            assert context['working_state']['assessments'] == []
+            return {'selection': {'kind': 'tool', 'tool': 'episode.credit',
+                'arguments': {'limit': 1, 'offset': 0}}, 'report_update': {}}
+        controllers = []
+        def factory(path, initial):
+            controller = FixtureController(str(path), initial, 1)
+            controllers.append(controller)
+            return controller
+        result = asyncio.run(run_workflow(store, ToolRegistry(store),
+            provider=ScriptedProvider([commission, read]), run_dir=tmp_path/'run',
+            controller_factory=factory, project_credit=scientific, project_child_credit=progress,
+            initial_known_record_refs=[]))
+        assert result['credit'] == 0 and controllers[1].scores == [0]
+
+
+@pytest.mark.parametrize('interrupt_after_redelivery', [False, True])
+def test_failed_form_repair_and_interruption_preserve_work_and_observation_boundary(tmp_path,
+                                                                               interrupt_after_redelivery):
+    with Store(tmp_path/'workspace') as store:
+        target, hypothesis = target_question(store)
+        observed = evidence(store, target, 'alignment')
+        scorer = ScientificFindingProgress(FindingProgressPolicy(3))
+        form = obj({'findings': {'type': 'array', 'maxItems': 0,
+            'x-source': 'changed_assessment_refs', 'items': {'type': 'string',
+                'format': 'reference', 'x-reference-namespace': 'assessment'}}})
+        repaired = json.loads(json.dumps(form))
+        del repaired['properties']['findings']['maxItems']
+        commission = {'selection': {'kind': 'child', 'goal': 'Investigate the synthetic source iteratively',
+            'scope': {'subject_refs': [target]}, 'purpose': 'Return newly assessed source findings',
+            'schema_json': json.dumps(form), 'initial_report_json': '{}'}, 'report_update': {}}
+        payload = {name: [] for name in store.reasoning_schema()['required']}
+        row = assessment(hypothesis, observed['id'], 'incomparable', alias='typed')
+        row['investigation_finding'] = finding(target)
+        payload['assessments'] = [row]
+        reason = {'selection': {'kind': 'reason', 'commit': payload}, 'report_update': {}}
+        detail = {'selection': {'kind': 'tool', 'tool': 'episode.credit',
+                  'arguments': {'limit': 10, 'offset': 0}}, 'report_update': {}}
+        def repair(context):
+            assert context['current_credit'] == 0 and context['child_reports'] == []
+            assert context['working_state']['assessments'] == []
+            assert context['feedback']['reason'] == 'maxItems'
+            assert context['controller']['scores'] == [0]
+            assert len(store.current_assessments()) == 1
+            return {'selection': {'kind': 'redeliver_report',
+                'delivery_ref': context['feedback']['delivery_ref'],
+                'purpose': 'Receive the saved requested findings', 'schema_json': json.dumps(repaired)},
+                'report_update': {}}
+        def parent(context):
+            assert context['current_credit'] == 3
+            assert context['controller']['scores'] == [0]  # Redelivery adds no observation.
+            report, = context['child_reports']
+            assert report['findings'] == [store.current_assessments()[0]['id']]
+            assert context['working_state']['assessments'] == store.current_assessments()
+            return detail
+        controllers = []
+        def factory(path, initial):
+            controller = FixtureController(str(path), initial, 2)
+            controllers.append(controller)
+            return controller
+        arguments = {'run_dir': tmp_path/'run', 'controller_factory': factory,
+            'project_credit': scorer, 'project_child_credit': scorer, 'initial_known_record_refs': []}
+        script = [commission, reason, detail] + ([repair] if interrupt_after_redelivery else [])
+        script.append(KeyboardInterrupt())
+        with pytest.raises(KeyboardInterrupt):
+            asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider(script), **arguments))
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
+        operations = store.db.execute('SELECT count(*) FROM reasoning_commits').fetchone()[0]
+        result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,
+            provider=ScriptedProvider(([] if interrupt_after_redelivery else [repair])+[parent]), **arguments))
+        assert result['credit'] == 3 and result['pending_report_deliveries'] == 0
+        assert store.db.execute('SELECT count(*) FROM reasoning_commits').fetchone()[0] == operations == 1
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4
+        assert store.db.execute('SELECT count(*) FROM runtime_report_attempts').fetchone()[0] == 2
+        root_id = next(row[0] for row in store.db.execute('SELECT episode_id,path FROM runtime_episodes')
+                       if len(json.loads(row[1])) == 1)
+        # Match the template's refresh/observe distinction: the report enters
+        # current knowledge between completed own actions. Preserve its gain
+        # for the next real observation, without inventing a redelivery turn
+        # or attributing new scientific information to the detail-read tool.
+        own = [json.loads(row[0]) for row in store.db.execute(
+            'SELECT observation FROM runtime_observations WHERE episode_id=? ORDER BY unit_index',
+            (root_id,))]
+        assert [row['decision_index'] for row in own] == [0, 2]
+        assert [row['step']['delta'] for row in own] == [0, 3]
+        received = store.db.execute("SELECT receipt_kind FROM runtime_record_receipts WHERE episode_id=? "
+            "AND record_ref=?", (root_id, store.current_assessments()[0]['id'])).fetchone()[0]
+        assert received == 'report_redelivery'

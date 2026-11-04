@@ -1,0 +1,1505 @@
+                                                                                       RESEARCH ARTICLE
+
+
+
+
+                                    HPF1 and nucleosomes mediate a
+                                    dramatic switch in activity of PARP1 from
+                                    polymerase to hydrolase
+                                    Johannes Rudolph1, Genevieve Roberts1, Uma M Muthurajan1, Karolin Luger2*
+                                    1
+                                     Department of Biochemistry, University of Colorado Boulder, Boulder, United
+                                    States; 2Howard Hughes Medical Institute, University of Colorado Boulder, Boulder,
+                                    United States
+
+
+
+                                    Abstract Poly(ADP-ribose) polymerase 1 (PARP1) is an important player in the response to DNA
+                                    damage. Recently, Histone PARylation Factor (HPF1) was shown to be a critical modulator of the
+                                    activity of PARP1 by facilitating PARylation of histones and redirecting the target amino acid
+                                    specificity from acidic to serine residues. Here, we investigate the mechanism and specific
+                                    consequences of HPF1-mediated PARylation using nucleosomes as both activators and substrates
+                                    for PARP1. HPF1 provides that catalytic base Glu284 to substantially redirect PARylation by PARP1
+                                    such that the histones in nucleosomes become the primary recipients of PAR chains. Surprisingly,
+                                    HPF1 partitions most of the reaction product to free ADP-ribose (ADPR), resulting in much shorter
+                                    PAR chains compared to reactions in the absence of HPF1. This HPF1-mediated switch from
+                                    polymerase to hydrolase has important implications for the PARP1-mediated response to DNA
+                                    damage and raises interesting new questions about the role of intracellular ADPR and depletion of
+                                    NAD+.
+
+
+
+
+                                    Introduction
+                                    DNA damage is a frequent occurrence in cells and must be continuously monitored and repaired in
+*For correspondence:                order to maintain genome stability (Peterson and Côté, 2004). The abundant nuclear proteins poly
+karolin.luger@colorado.edu          (ADP-ribose) polymerase 1 and 2 (PARP1 and PARP2) serve as early detectors of DNA damage
+                                    (Gibson and Kraus, 2012; Ray Chaudhuri and Nussenzweig, 2017). PARP1, upon binding to dam-
+Competing interests: The
+                                    aged DNA, binds NAD+ and transfers the ADP-ribose (ADPR) portion onto itself and other proteins.
+authors declare that no
+                                    PARP1 then elongates this ADPR to form a chain in a process termed poly(ADP-ribosyl)ation (PARy-
+competing interests exist.
+                                    lation), which can take place on PARP1 (autoPARylation) or other proteins (transPARylation)
+Funding: See page 18                (Gibson and Kraus, 2012; Morales et al., 2014; Bai, 2015). These PAR chains are attached to thou-
+Received: 15 December 2020          sands of nuclear proteins with histones being the most abundantly PARylated proteins apart from
+Accepted: 07 March 2021             PARP1 (Bonfiglio et al., 2017a; Larsen et al., 2018). More recently it has been shown that histone-
+Published: 08 March 2021            linked PARylation depends on Histone PARylation Factor 1 (HPF1) (Gibbs-Seymour et al., 2016).
+Reviewing editor: Maria Spies,
+                                    Interestingly, HPF1 not only promotes transPARylation of histones but also alters the specificity of
+University of Iowa, United States   the modified residues from aspartate or glutamate to serine (Palazzo et al., 2018). The PAR chains
+                                    attached to PARP1 and other proteins lead to the recruitment of DNA repair factors that contain
+   Copyright Rudolph et al. This
+                                    PAR-binding motifs, such as macrodomains, WWE domains, or PAR-binding zinc fingers (Teloni and
+article is distributed under the
+                                    Altmeyer, 2016). It is thought that different types of PAR chains (i.e., long vs. short, branched vs.
+terms of the Creative Commons
+Attribution License, which          unbranched) may lead to recruitment of different repair factors in a concept termed the PAR code
+permits unrestricted use and        (Aberle et al., 2020; Karlberg et al., 2013). Deletion of PARP1 leads to increased carcinogenesis,
+redistribution provided that the    and deletion of both PARP1 and its most closely related homolog, PARP2, is embryonically lethal
+original author and source are      (Amé et al., 1999; Ménissier de Murcia et al., 2003). PARP1 (and PARP2) are important targets for
+credited.                           cancer therapy with now four clinically approved compounds (olaparib, rucaparib, niraparib, and
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                     1 of 22
+           Research article                                                                                               Biochemistry and Chemical Biology
+
+                                          talazoparib) in use for treatment of breast and ovarian cancer (Yi et al., 2019). Additionally, these
+                                          and other inhibitors of PARP are being investigated as cancer treatments in combination with agents
+                                          that damage DNA (e.g., temozolomide, cis-platinum, checkpoint inhibitors) (Yi et al., 2019). All clini-
+                                          cally relevant inhibitors of PARP bind in the NAD+ binding pocket of the catalytic domain of PARP1
+                                          and PARP2 (Thorsell et al., 2017).
+                                              From a mechanistic point of view, PARP1 is a very complicated enzyme that catalyzes four differ-
+                                          ent reactions (Alemasova and Lavrik, 2019). In the first reaction, NAD+ serves as a substrate for
+                                          ADP-ribosylation of an amino acid side chain wherein the nucleophilic side chain attacks C100 to
+                                          release nicotinamide (Figure 1A). A number of aspartates and glutamates in the BRCT domain of
+                                          PARP1 itself are the primary sites of modification in autoPARylation reactions (Tao et al., 2009;
+                                          Zhang et al., 2013; Vyas et al., 2014; Gagné et al., 2015). The lack of specificity for a particular
+                                          site (or protein) has been frustrating and confusing the field for decades (Tao et al., 2009;
+                                          Suskiewicz et al., 2020a). In the presence of HPF1, the specificity of PARP1 switches to serine side
+                                          chains, again located primarily in the automodification regions between the end of the BRCT domain
+                                          and the WGR domain for autoPARylation, and in histone tails for transPARylation (Larsen et al.,
+                                          2018; Bonfiglio et al., 2017b). In the second reaction catalyzed by PARP1, NAD+ is used to extend
+
+
+
+
+                                                                                                      Nu: = Asp, Glu, Lys, Ser, (Cys)
+                                                                                      O
+   !               O                                   NH2                                                                                 NH2
+                                                                                          NH2
+                                                                 N                                                                                   N
+                                                   N                                                                                   N
+                       NH2
+                                                                              N
+                                                       N         N                                                   O        O            N         N
+                                 O        O
+            N+                                                         nicotinamide
+                             O   P    O   P    O                                                                 O   P    O   P    O            O
+                                                            O
+                 OH OH                                                                                OH OH          O-       O-
+                                 O-       O-
+                  O                                                                                    O
+                                                       OH       OH                               Nu                                        OH       OH
+       !"##                      NAD+
+
+         $##%&'                                $#%&'            PARP1 Nu:                       PARP1
+
+
+   #
+
+
+
+
+   "
+                                                                $%"""""$%         &%"""""""&%                &%"""""""&%
+                       %""""%""           !""""""##                                                       $%"""""""""""""""""$%
+                                                                               %""""""""""""""""%""
+
+                   '()#*! '()#&+                                 '(),%!           '-./012                        -./012
+
+Figure 1. Chemical mechanism of poly(ADP-ribose) polymerase 1 (PARP1) and structures of nucleosomes used here. (A) Chemical mechanism of PARP1
+highlighting in red important groups of NAD+ as related to initiation (C-100 ), elongation (20 -OH), and branching (200 -OH). (B) Cartoon representation of
+the four reactions catalyzed by PARP1 (in light blue): initiation, elongation, branching, and hydrolysis. ADP-ribose (ADPR) monomers (red circles) form
+PAR chains or free ADPR. (C) Cartoon representation of the different nucleosome constructs utilized in this study. The number in the name indicates the
+length of DNA (e.g., Nuc147 has 147 bp of DNA), and the small numbers next to the linkers or ends indicate the length of these regions.
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                            2 of 22
+           Research article                                                                              Biochemistry and Chemical Biology
+
+                                   the initially attached ADPR, wherein the 20 -OH (the acceptor hydroxyl) of this ADPR is deprotonated
+                                   by Glu988 (Ruf et al., 1998; Figure 1B). Repeating this process, PARP1 builds long PAR chains of
+                                   up to 200 units on itself with a large range reported for average chain lengths (Kawaichi et al.,
+                                   1981; Sugimura and Miwa, 1982; Alvarez-Gonzalez and Jacobson, 1987), in competition with
+                                   PARGs (Pascal and Ellenberger, 2015). In a third reaction, PARP1 uses NAD+ to add ADPR to cre-
+                                   ate branch points by generating linkages using the 200 -OH instead of the 20 -OH (Figure 1A). Branch-
+                                   ing has been shown to occur about once every 5–20 residues for autoPARylation (Alvarez-
+                                   Gonzalez and Jacobson, 1987; Miwa et al., 1979) and is mechanistically feasible because of the
+                                   pseudo-symmetry of ADPR that allows for binding of the elongating polymer in the opposite direc-
+                                   tion (Ruf et al., 1998). In the fourth and final reaction, PARP1 hydrolyzes NAD+ to generate free
+                                   ADPR. This ‘treadmilling’ reaction becomes more dominant at extended reaction times and low con-
+                                   centrations of NAD+ (Bauer et al., 1986; Desmarais et al., 1991). We address the mechanism by
+                                   which HPF1 affects initiation, elongation, and treadmilling in this article.
+                                      In our approach, we build on the seminal experiments performed by Ahel’s group, who discov-
+                                   ered HPF1 and validated its effect both in vitro and in vivo (Bonfiglio et al., 2017a; Gibbs-
+                                   Seymour et al., 2016; Suskiewicz et al., 2020b). As we are particularly interested in studying how
+                                   HPF1 mediates PARylation of histones, proteins that do not exist in free form in the cell, we use
+                                   nucleosomes as both substrates and activators of PARP1. We have previously shown that nucleo-
+                                   somes bind tightly to PARP1 (1–13 nM) (Clark et al., 2012; Muthurajan et al., 2014). Of special rel-
+                                   evance to both nucleosomes and HPF1, we have recently shown that HPF1 binds fivefold more
+                                   tightly to a PARP1–nucleosome complex than to PARP1 bound to a DNA oligomer (Rudolph et al.,
+                                   2021). We show that HPF1 not only changes the specificity of PARP1 from autoPARylation and glu-
+                                   tamate modification towards transPARylation and serine modification, it also converts PARP1 into a
+                                   strong NAD+ hydrolase, resulting in much shorter PAR chains and high concentrations of free ADPR.
+                                   Our results have important implications for the cellular role of HPF1 in PARylation, the PAR code,
+                                   and the DNA damage response.
+
+
+
+                                   Results
+                                   Nucleosomes are better activators of PARP1 than free DNA
+                                   Since HPF1 is known to mediate PARylation of histones, proteins that are tethered to the genome in
+                                   the form of chromatin, we set out to test the activity of PARP1 using nucleosome substrates. Under-
+                                   standing how HPF1 modulates the activity of PARP1 towards itself (autoPARylation) and towards his-
+                                   tones (transPARylation) in the context of nucleosomes is complicated by the fact that nucleosomes
+                                   provide both the DNA that activates PARP1 and serve as substrates for histone transPARylation. It is
+                                   possible that different nucleosomes serve these two roles (activator vs. substrate) to different
+                                   extents. Thus, we began our studies of the activity of PARP1 with nucleosomes by first investigating
+                                   the ability of different nucleosomes to serve solely as activators of autoPARylation in the absence of
+                                   HPF1 as under these conditions we do not observe transPARylation of histones (see below). We pre-
+                                   pared a variety of nucleosome constructs, from mononucleosomes (Nuc147, Nuc165) to trinucleo-
+                                   somes (NLE-Tri, LE-Tri; Figure 1C), as well as tested free DNA in comparison (p18mer, p147mer,
+                                   p165mer, p621mer). We found that all nucleosome complexes as well as free DNA bind to PARP1
+                                   with low nanomolar affinity as measured in a competition experiment using fluorescence polarization
+                                   (FP; Table 1, CC50 values).
+                                      AutoPARylation assays are made difficult by the fact that PARP1 is both the enzyme and its own
+                                   substrate, thus limiting the range of enzyme concentrations for which one can detect activity (typi-
+                                   cally >30 nM) and precluding the use of many typical tools available to enzymological studies
+                                   wherein enzyme and substrate concentrations is varied independently. We chose to measure auto-
+                                   PARylation activity by monitoring the incorporation of 32P-ADPR from 32P-NAD+ onto PARP1 as this
+                                   method does not rely on NAD+-analogs, is highly sensitive, and can be implemented in modest
+                                   throughput (Figure 2A). We were able to achieve reproducible and linear rates of autoPARylation
+                                   using a variety of nucleosome and DNA activators (e.g., Figure 2B). As noted many years ago
+                                   (Alvarez-Gonzalez and Jacobson, 1987; Naegeli et al., 1989; Bauer et al., 1990), we find that
+                                   autoPARylation is a robust activity that leads to the addition of >100 ADPRs per PARP1 within 1 min
+                                   at saturating concentrations of NAD+. By varying the concentration of NAD+, we determined that
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                      3 of 22
+           Research article                                                                                          Biochemistry and Chemical Biology
+
+Table 1. Comparison of the binding and activity of PARP1 using nucleosome and free DNA as activators, in the presence or absence
+of HPF1.
+                               PARP1
+PARylation product                                                                                                                            Histones
+± HPF1                         No HPF1                    No HPF1                     No HPF1                     With HPF1                   With HPF1
+                                                                 1
+DNA/nucleosome                 CC50                       kcat (s )                   ADPR (pmol/30 s)            ADPR (pmol/30 s)            ADPR
+                               (nM)                                                                                                           (pmol/30 s)
+p18mer                         11.5 ± 3.2 (n = 6)         2.4 ± 0.8 (n = 14)          6.6 ± 0.9                   8.4 ± 3.8                   5.4 ± 2.4
+                                                                                                                                              (peptide)
+Nuc147                         13.6 ± 6.4 (n = 4)         4.0 ± 0.9 (n = 3)           17.8 ± 2.1                  6.7 ± 1.2                   27 ± 5
+p165mer                        10.1 ± 4.3 (n = 5)         2.7 ± 0.8 (n = 6)           n.d.                        n.d.                        n.d.
+Nuc165                         6.1 ± 2.7 (n = 8)          4.4 ± 1.0 (n = 15)          13.9 ± 2.0                  5.2 ± 1.8                   10.1 ± 1.3
+Nuc207                         n.d.                       n.d.                        17.9 ± 4.5                  8.1 ± 1.7                   28 ± 12
+NLE-Tri                        1.6 ± 0.4 (n = 5)          4.5 ± 1.2 (n = 4)           20.3 ± 4.3                  4.7 ± 1.3                   15 ± 6
+p621mer                        4.2 ± 1.7 (n = 4)          1.6 ± 0.4 (n = 2)           n.d.                        n.d.                        n.d.
+LE-Tri                         1.9 ± 0.7 (n = 6)          5.1 ± 1.3 (n = 3)           18.5 ± 0.5                  9.2 ± 0.2                   29 ± 1
+
+Column 1: The apparent competitive concentration for 50% binding (CC50) values as determined by titrating nucleosomes or free DNA into a solution con-
+taining pre-bound PARP1 bound to fluorescent p18mer (p18mer*) and monitoring the release of p18mer* by fluorescence polarization. Column 2: The
+apparent kcat values (determined at NAD+=40 mM = Km for NAD+) were determined from fitting the measurements of activity for incorporation of ADPR as
+shown in Figure 2B in the plate-based assay at varying concentrations of DNA/nucleosome (Figure 2D). Data reflect at least three different replicates
+wherein each time point was collected in triplicate. Columns 3–6: incorporation of ADPR into PARP1, HPF1, and histones was determined using the gel-
+based assay using 10 mM NAD+ after 30 s of reaction. Data shown are from 3 to 4 replicates for each assay condition. Activation by p18mer monitored
+addition of ADPR onto H3-tail peptide as there are no histones present in this reaction. All indicated errors are standard deviations from the mean. ADPR:
+ADP-ribose; PARP1: poly(ADP-ribose) polymerase 1; HPF1: Histone PARylation Factor 1.
+
+
+
+                                      the Km for NAD+ is not affected by the activator (Figure 2C) and our Km values are in reasonable
+                                      agreement with previous determinations of Km of NAD+ for PARP1 (30–100 mM) using a variety of
+                                      different assay methods (Ruf et al., 1998; Desmarais et al., 1991; Miranda et al., 1995;
+                                      Langelier et al., 2008; Jiang et al., 2010). We noted that Nuc165 consistently yielded a higher turn-
+                                      over number (kcat) than p18mer (p<0.0001), and these values are in reasonable agreement with pre-
+                                      vious determinations (Ruf et al., 1998; Desmarais et al., 1991; Miranda et al., 1995;
+                                      Langelier et al., 2008; Jiang et al., 2010) of kcat for PARP1 (0.3–5 s 1; Table 1). This difference in
+                                      kcat was also determined for other nucleosome vs. free DNA comparisons (Figure 2D, Table 1).
+                                      Note that p165mer and p621mer DNA fragments, used to assemble Nuc165 and LE-Tri nucleo-
+                                      somes, respectively, have kcat values that are similar to p18mer, whereas all the nucleosome com-
+                                      plexes tested have similar, higher values of kcat (Table 1) despite having different lengths of
+                                      overhanging DNA (Figure 1C). Direct comparison of these DNA fragments to their respective nucle-
+                                      osomes yields p values of 0.0024 for p165mer vs. Nuc165 and 0.0387 for 621mer vs. LE-Tri. We con-
+                                      clude that there is a unique aspect of the PARP1–nucleosome interaction compared to the PARP1-
+                                      free DNA interaction that leads to more robust autoPARylation, and that this feature is independent
+                                      of the type of nucleosome.
+
+                                      HPF1 redirects PARylation from PARP1 onto histones
+                                      We next turned towards gaining a better understanding of how HPF1 redirects PARylation from
+                                      PARP1 onto histones, and from modification of Glu/Asp to Ser residues in the context of nucleo-
+                                      somes serving as both activators and substrates of PARP1. Using Nuc165 and adding HPF1 in the
+                                      plate-based assay described above, we saw no significant change in the Km for NAD+ or the kcat for
+                                      incorporation of ADPR into protein compared to the absence of HPF1, although the linearity of the
+                                      assay was significantly reduced compared to assays in the absence of HPF1 (Figure 2C, Figure 2—
+                                      figure supplement 1; note the non-zero intercepts with linear fits from 0 to 100 s). The similar over-
+                                      all levels of incorporation of ADPR in the presence and absence of HPF1 are qualitatively consistent
+                                      with previous in vitro assays (Gibbs-Seymour et al., 2016) and comparisons of PAR levels by western
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                        4 of 22
+                                Research article                                                                                              Biochemistry and Chemical Biology
+
+
+
+
+                                                                                     ADPR incorporated (µM)
+   !                                         !!"#$%&'&(%"                                                         6
+                                                                                                                             1000
+                                                                                                                                                                       "
+                                                                                                                             500
+                                                                                                                  4          250
+                                                                                                                             63
+     )*(%
+
+
+
+
+                                                                                                                             15.6
+                                                                                                                  2          1.0
+
+
+
+                                                                                                                  0
+                                                                                                                      0             50              100             150
+                                                                                                                                         time (s)
+
+
+
+
+                                                                                         ADPR incorporated (µM)
+   #                                                                                                                           p165mer
+                                                                                                                                                                       $
+       obs rate (µM ADPR/min)
+
+
+
+
+                                1.5
+                                                                                                                  10
+                                                                                                                               Nuc165
+                                1.0                             p18mer                                                         p621mer
+                                                                Nuc165                                                         LE-Tri
+                                                                Nuc165/HPF1                                           5
+                                0.5
+
+
+
+                                0.0                                                                                   0
+                                      0             200                400                                             0.1      1            10           100        1000
+                                                   [NAD+] (µM)                                                                  nM DNA/nucleosome
+
+Figure 2. Nucleosomes are better activators of poly(ADP-ribose) polymerase 1 (PARP1) than free DNA. (A) Representative image from the filter binding
+assay monitoring the incorporation of 32P-NAD into PARP1 (autoPARylation) in the presence of Nuc165. Different time points (0, 20, 40, 60, 80, 100, 120,
+and 150 s) are represented in the vertical direction and different concentrations of Nuc165 (0.5–1000 nM by factors of 2 in concentration) are
+represented in the horizontal direction. (B) Representative data from monitoring the incorporation of 32P-NAD into PARP1 (autoPARylation) in the
+presence of Nuc165 (different concentrations indicated in nM). Good linearity of rates is observed at all concentrations of nucleosome up to 150 s. (C)
+Representative curve determining the Km for NAD+ in the presence of p18mer, Nuc165, or Nuc165 in the presence of HPF1. The Km values for p18mer,
+Nuc165, and Nuc165 in the presence of HPF1 are 38 ± 9 mM (n = 8), 39 ± 10 mM (n = 3), and 54 ± 8 mM (n = 3), respectively. The kcat values for p18mer,
+Nuc165, and Nuc165 in the presence of HPF1 are 4.4 ± 1.9 s 1, 2.4 ± 0.8 s 1, and 4.6 ± 1.0 s 1, respectively. (D) Representative activation curves for
+p165mer, Nuc165, p621mer, and LE-Tri demonstrating that nucleosomes lead to greater maximal autoPARylation activity. Indicated error bars are from
+triplicate assay points. Derived apparent values for kcat for these and other activators of PARP1 and their replicates are shown in Table 1.
+The online version of this article includes the following source data and figure supplement(s) for figure 2:
+Source data 1. Nucleosomes are better activators of PARP1 than free DNA.
+Figure supplement 1. Addition of Histone PARylation Factor 1 reduces the linearity of poly(ADP-ribose) polymerase 1 (PARP1 )in a plate-based assay
+monitoring incorporation of ADP-ribose at short times of reaction.
+Figure supplement 1—source data 1. Addition of HPF1 reduces the linearity of PARP1 in a plate-based assay monitoring incorporation of ADPR at
+short times of reaction.
+
+
+
+                                                    blots in wild-type vs. HPF1-/- cells seen previously (Palazzo et al., 2018). However, in these reac-
+                                                    tions, PARylation occurs on PARP1, histones, and HPF1, and this plate-based precipitation assay
+                                                    does not allow for discrimination between the different reaction products. Given the high affinity
+                                                    (low nM) of nucleosomes for PARP1 (Muthurajan et al., 2014), it was not possible to separate
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                                           5 of 22
+                Research article                                                                                                                     Biochemistry and Chemical Biology
+
+                                          different targets of PARylation without denaturation. We thus used SDS-PAGE to analyze auto- vs.
+                                          transPARylation. One complication of this method is the migration of 32P-NAD+ at ~30 kDa in SDS-
+                                          PAGE (Figure 3A). Thus, high concentrations of NAD+ as one might use in a typical kinetic study
+                                          cannot be used since the large signal from unused substrate obliterates the much fainter signal for
+                                          measuring initial rates of PARylation for both PARP1 and histones. In fact, we note that the Ahel
+                                          group typically performs their radioactive PARylation experiments at 5–100 mM 32P-NAD+ for 20
+                                          min, thus ensuring the complete consumption of the potentially interfering substrate
+                                          (Bonfiglio et al., 2017a; Suskiewicz et al., 2020b; Fontana et al., 2017; Bartlett et al., 2018) (see
+                                          also Figure 5B). Alternatively, these types of PARylation assays have been successfully performed
+
+
+
+
+                             )*+%,- )./'012
+                                                                          #                                  10       PARP1 (- HPF1)
+
+
+
+
+                                                                                  ADPR incorporated (pmol)
+    !                ! "#$%&&&'  (&&&&&&' (                                                                           PARP1 (+HPF1)
+                                                                                                              8       histones (+HPF1)
+                                                         !"#!$                                                        HPF1 (+HPF1)
+                                                                                                              6
+                                                         %!&$
+                                                                                                              4
+                                                         '"(!
+                                                                                                              2
+                                                         )*+,-./+
+                                                                                                              0
+                                                         "(!#                                                     0       10        20                               30                 40                              50
+                                                                                                                                     time (s)
+                                                                                                                                                                   1.0
+    "                                                                    $-
+
+
+                                                                                                                                         fraction ADPR remaining
+                                                                                                -             +       + !"#$
+                       PARP1 (- HPF1)
+                                                                              +                 -             +       - !%"%&
+               40      PARP1 (+HPF1)
+                       histones (+HPF1)
+                                                                              -                 +             -       + '!!(!
+                       HPF1 (+HPF1)                                                                                       !"#!$                                    0.5
+               30
+    pmol/30s
+
+
+
+
+               20
+                                                                                                                            '"(!                                   0.0    PARP1 alone
+
+                                                                                                                                                                                        PARP1 + HPF1
+
+                                                                                                                                                                                                       peptide + HPF1
+               10                                                                                                           0/0,*1/
+
+                0
+                                                                                                                            "(!#
+                    p18mer Nuc147 Nuc165 Nuc207 NLE-Tri         LE-Tri
+
+
+Figure 3. Histone PARylation Factor 1 (HPF1) mediates transPARylation onto nucleosomes and serines. (A) Representative autoradiogram from an assay
+gel demonstrating the reduction of autoPARylation in the presence of HPF1 with the concomitant appearance of PARylated histones and HPF1. The
+remaining substrate 32P-NAD+ is by far the most prominent band on the image, indicating that we are monitoring the early time points of the reaction.
+(B) Time dependence of ADP-ribose (ADPR) incorporation onto poly(ADP-ribose) polymerase 1 (PARP1), histones, and HPF1. Note the linearity seen for
+autoPARylation in the absence of HPF1 and the non-linearity seen for PARylation in the presence of HPF1, as emphasized by the dotted line. (C) Bar
+graph of ADPR incorporation onto PARP1, histones, and HPF1 at 30 s demonstrating that in the presence of HPF1 histones become the primary target
+of PARylation to the detriment of PARP1. Levels of HPF1 PARylation are low despite the high concentration of HPF1 (2 mM) compared to nucleosomes
+(300–700 nM) in the reaction mixture. For the reaction indicated with p18mer, activation is by free DNA and the PARylated product is the H3 peptide.
+Each experiment was performed four separate times, and the data shown are mean values with standard deviations. (D) Representative gel
+demonstrating that PARylation in the absence of HPF1 is directed towards hydroxylamine labile Asp/Glu residues and in the presence of HPF1
+becomes stable to this treatment, consistent with PARylation of Ser residues. Quantitation in the bar graph is the summary of 8–12 replicates.
+The online version of this article includes the following source data for figure 3:
+Source data 1. HPF1 mediates transPARylation onto nucleosomes and serines.
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                                                                                            6 of 22
+           Research article                                                                               Biochemistry and Chemical Biology
+
+                                   using antibodies to detect modified proteins following separation on SDS-PAGE (Bonfiglio et al.,
+                                   2017a; Palazzo et al., 2018; Liszczak et al., 2018), which avoids the problem of detecting NAD+
+                                   but is generally not a good quantitative method. Thus, to better compare the relative activities of
+                                   PARylation between PARP1 and nucleosomes, we used multiple turnover conditions with 10 mM 32P-
+                                   NAD+ at short time points (30 s). This method allows for simultaneous detection of PARylation of
+                                   PARP1, HPF1, and histones (Figure 3A). These gels confirm that HPF1 reduces autoPARylation and
+                                   mediates transPARylation of histones and HPF1. It is important to note that we do not detect any
+                                   PARylation of histones (or H3 peptide) in the absence of HPF1.
+                                      To gain quantitative insights, we performed each of these experiments four times to derive values
+                                   for the amount of ADPR incorporated into the various products, PARP1, histones (or H3 peptide),
+                                   and HPF1. Validating our approach, controls in the absence of HPF1 monitoring autoPARylation
+                                   yielded reasonably linear incorporation of ADPR vs. time, similar to what we observed using the
+                                   plate-based assay (Figure 3B, blue circles). Additionally, this gel-based assay compares well with the
+                                   plate assay when comparing levels of ADPR added to PARP1 at 30 s in that we see more total incor-
+                                   poration of ADPR in the presence of nucleosomes than free DNA (in the absence of HPF1) (Table 1,
+                                   column 2, compare p18mer with all nucleosome constructs). We observe that for autoPARylation, in
+                                   the absence of HPF1 and at these low concentrations of NAD+, 3–7 ADPRs are attached per PARP1
+                                   within 30 s, consistent with good enzymological practices wherein one should consume low amounts
+                                   of substrate (<10% of the initial NAD+).
+                                      Strikingly, in the presence of HPF1 and nucleosomes, incorporation of ADPR onto PARP1, HPF1,
+                                   and, most prominently, histones becomes less linear as if a faster ‘burst of activity’ had occurred fol-
+                                   lowed by no further incorporation of ADPR (Figure 3B). This non-linearity correlates in part with the
+                                   reduced linearity seen in the plate-based assay in the presence of HPF1 (Figure 2C, Figure 2—fig-
+                                   ure supplement 1) but may also be due in part to slower quenching kinetics by the use of olaparib
+                                   instead of acid. This non-linearity precluded comparisons of rates of PARylation, and thus we com-
+                                   pared the amounts of ADPR incorporation at 30 s. Because of the ‘burst’ of incorporation of ADPR
+                                   onto histones in the presence of HPF1, this comparison at 30 s serves as a lower limit for the HPF1-
+                                   mediated switch in specificity. AutoPARylation is consistently decreased by factors of 2–4 by the
+                                   addition of HPF1, regardless of which nucleosome is used as an activator (Figure 3B, C, Table 1).
+                                   The presence of HPF1 clearly makes histones in the nucleosome substrates the dominant recipient
+                                   of PARylation (Figure 3B, C, Table 1). Despite the limitations of this assays, we conclude that the
+                                   switch in specificity from autoPARylation towards transPARylation is minimally two- to fourfold
+                                   (Table 1). Neither the HPF1-dependent decrease in autoPARylation nor the large switch in specificity
+                                   is observed using p18mer DNA and H3 tail peptide as a substrate, presumably because of the
+                                   weaker interaction of HPF1 with the PARP1–p18mer complex vs. the PARP1–Nuc165 complex
+                                   (Rudolph et al., 2021). This result emphasizes the importance of studying HPF1 with nucleosomal
+                                   substrates and activators. Additionally, we see a very small amount (<0.1 equivalents) of incorpo-
+                                   ration of ADPR onto HPF1 in the presence of nucleosomes but not free DNA (Figure 3B).
+                                      In addition to the HPF1-mediated switch in specificity from autoPARylation to histone PARylation,
+                                   we also confirmed the concomitant switch in specificity from Glu/Asp modification to Ser modifica-
+                                   tion. PARylation on Glu/Asp residues can be removed by treatment with hydroxylamine (HA) (Cer-
+                                   vantes-Laurean et al., 1997). Prior to loading reaction mixtures with 32P-NAD+ onto gels for
+                                   quantitation, samples were either treated with 1 M HA (pH 7.0) or as a control with 1 M HEPES (pH
+                                   7.0). Treatment with HA removes >90% of ADPR from PARP1 in the absence of HPF1, as seen in a
+                                   representative gel and by quantitation from replicate experiments (Figure 3D). In the presence of
+                                   HPF1, PARylation on both PARP1 and H3 tail peptide is retained (>90%) after exposure to HA
+                                   (Figure 3D), indicating the linkages to ADPR are no longer via Asp/Glu and most likely to Ser, as
+                                   previously reported (Bonfiglio et al., 2017a).
+                                      We conclude that HPF1 significantly suppresses autoPARylation and thus makes histones in the
+                                   nucleosome, and not PARP1, the primary target of PARylation. This effect is unique to nucleosome
+                                   substrates as we do not observe it using activation by p18mer and the histone H3-derived peptide
+                                   as a substrate. In addition to the switch in protein specificity from PARP1 to histones, HPF1 also
+                                   mediates the dramatic switch in specificity from Glu/Asp residues to Ser residues.
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                       7 of 22
+                       Research article                                                                                     Biochemistry and Chemical Biology
+
+                                               Glu284 is the catalytic residue that mediates transPARylation of
+                                               histones
+                                               The discovery that PARylation in response to DNA damage in cells (Larsen et al., 2018;
+                                               Palazzo et al., 2018) and in vitro (see our results above and Bonfiglio et al., 2017a) occurs primarily
+                                               on serine residues instead of glutamate or aspartate requires a fundamental rethinking of the reac-
+                                               tion mechanism of PARP1. Glutamate and aspartate residues are deprotonated under physiological
+                                               conditions and thus primed for nucleophilic attack on the C10 of NAD+ (Figure 4A). However, serine
+                                               as a target for PARylation is protonated, and thus one might expect that deprotonation of serine by
+                                               a catalytic base would be required to initiate the nucleophilic attack (Figure 4A). Deprotonation of
+                                               serine to increase nucleophilicity is a familiar theme in enzymatic catalysis as, for example, in the
+
+
+
+
+    !                                                    O                                                                   O
+
+                                                              NH2                                                                  NH2
+
+                                               N+                                                                  N+
+                                                              O
+                                     O                                                             O
+                              H            H                  C                                                                               Ser
+                                                         -O
+                                                                                             H           H                   O
+                          H                  H                                           H                 H
+                              OH           OH                                                                                H
+                                                                          Glu                OH          OH
+                                                                                                                                   :Base
+
+    " 30000                               WT                                                     #       !"#$###
+                                          D283A
+      FRET corrected
+
+
+
+
+                                          E284A
+                                                                                                                   1000
+                                                                                                         KD (nM)
+
+
+
+                       20000
+
+
+                                                                                                                    500
+                       10000
+
+
+                                                                                                                        0
+                              0
+                                                                                                                             WT
+                                                                                                                                  D283A
+                                                                                                                                          E284A
+                                                                                                                                                  E292A
+                                                                                                                                                          H303Q
+
+
+
+                               10                 100              1000             10000
+                                                        nM HPF1
+
+Figure 4. Glu284 of Histone PARylation Factor 1 (HPF1) is the catalytic base required for transPARylation. (A) Chemical mechanism of PARylation of
+glutamate (Glu, on left) does not require a catalytic base, whereas PARylation of serine (Ser, on right) requires deprotonation of serine by a catalytic
+base. (B) Representative curves demonstrating the binding of HPF1 (WT, D283A, and E284A) to the poly(ADP-ribose) polymerase 1 (PARP1)–Nuc165
+complex using FRET between labeled HPF1 and labeled PARP1. (C) Bar graph for binding of HPF1 to PARP1–Nuc165 complex as determined by FRET
+assay demonstrating that the E284A mutant of HPF1 binds more tightly than WT, and that the D283 mutant does not bind with measurable affinity. The
+E292A and H303Q mutants of HPF1 are shown to bind with similar affinity as WT HPF1. Data for these findings with standard deviations and number of
+replicates can be found in Table 2.
+The online version of this article includes the following source data for figure 4:
+Source data 1. Glu284 of HPF1 is the catalytic base required for transPARylation.
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                                     8 of 22
+           Research article                                                                                    Biochemistry and Chemical Biology
+
+                                   serine proteases, esterases, and lipases (Ser–His–Asp catalytic triad) (Dodson and Wlodawer,
+                                   1998). Although PARP1 has a known catalytic base (Glu988) (Marsischky et al., 1995), this residue
+                                   alone is not capable of mediating PARylation of serines as we see no histone PARylation without the
+                                   addition of HPF1. With the discovery that HPF1 is responsible for the specificity switch from gluta-
+                                   mate to serine residues, as well as mediating transPARylation (Bonfiglio et al., 2017a), we conjec-
+                                   tured that HPF1 could provide the essential catalytic base. Given that we had no structural
+                                   information for HPF1 at the time as our efforts began well before the publication of the crystal struc-
+                                   ture of HPF1 bound to PARP2 (Suskiewicz et al., 2020b), we set out to find the putative catalytic
+                                   base by mutagenesis of likely candidate residues that were either histidines, aspartates, or gluta-
+                                   mates. Our criterion for success was to identify a residue whose mutation abolished transPARylation
+                                   activity without being detrimental to the stability of the protein or its binding to a PARP1–Nuc165
+                                   complex. Site-directed mutagenesis looking for loss of catalytic function with retention of structure
+                                   is a classical approach in enzymology that has been used to successfully identify many catalytic resi-
+                                   dues prior to the determination of three-dimensional structures (Plapp, 1995). We measured activity
+                                   using gel-based PARylation assays as in Figure 3 and stability of the protein using thermal denatur-
+                                   ation experiments. We previously developed a FRET-based assay for quantitating the binding inter-
+                                   action between HPF1 and PARP1, demonstrating that HPF1 prefers the PARP1–Nuc165 complex vs.
+                                   a PARP1–p18mer complex by a factor of five (790 nM vs. 3800 nM) (Rudolph et al., 2021).
+                                       To select potential catalytic base residues, we first aligned the sequences of all known HPF1-like
+                                   proteins using TF317026 from treefam.org as a source for 101 different family members. The family
+                                   tree consists of two major branches, and we noted that the two residues in the C-terminal domain of
+                                   HPF1 (Tyr238 and Arg239) previously identified as important for interaction with PARP1 by the Ahel
+                                   group (Gibbs-Seymour et al., 2016) were conserved in both branches. Given that there are 62 histi-
+                                   dines, aspartates, and glutamates in HPF1, we assumed that a catalytic base would be highly con-
+                                   served, and therefore considered only completely conserved residues in the C-terminal domain that
+                                   had been shown to be critical for the interaction with PARP1. This pruning procedure leaves only
+                                   Asp283, Glu284, Asp286, Glu292, Asp296, and His303, which were individually mutated to alanine.
+                                       We performed transPARylation assays with the mutant proteins as described above, demonstrat-
+                                   ing that the D283A and E284A mutants of HPF1 were unable to mediate histone or HPF1 PARyla-
+                                   tion, in contrast to WT HPF1 or other mutations such as the E292A and His303Q mutations
+                                   (Table 2). All four HPF1 mutants displayed similar protein stability in denaturation assays (Table 2),
+                                   suggesting that the loss of transPARylation for D283A and E284A was not due to misfolding. How-
+                                   ever, only three of these mutants retained their binding to the PARP1–Nuc165 complex
+                                   (Figure 4C, D), with the D283A mutant of HPF1 showing no detectable formation of a complex
+                                   (KD >10,000 nM). Interestingly, the E284A mutant bound significantly tighter (p<0.0001) to the
+
+
+                                   Table 2. HPF1 mutant analysis.
+                                                           Melting temperature                   Histone PARylation
+                                   HPF1                    (˚C)                                  (pmol ADPR/30 s)                     KD (nM)
+                                   WT                      50.6 ± 0.10                           10.1 ± 1.3                           790 ± 147
+                                                           n=5                                   n=4                                  n = 12
+                                   D283A                   50.8 ± 0.11                           0                                    >10,000,000
+                                                           n=5                                                                        n=5
+                                   E284A                   50.3 ± 0.86                           0                                    135 ± 58
+                                                           n=5                                                                        n=4
+                                   E292A                   49.0 ± 0.08                           17.5 ± 2.1                           743 ± 200
+                                                           n=5                                   n=4                                  n=4
+                                   H303Q                   50.2 ± 0.10                           21.1 ± 7.6                           676 ± 427
+                                                           n=5                                   n=4                                  n=3
+                                   Column 1: protein stability was measured by Thermo Fisher Protein Thermal Shift kit. Column 2: incorporation of
+                                   ADPR onto histones was determined using the gel-based assay using 10 mM NAD+ after 30 s of reaction. Data shown
+                                   are from 3 to 4 replicates for each assay condition. Column 3: binding constant of HPF1 to the PARP1–Nuc165
+                                   complex was determined using the FRET assay shown in Figure 4B. Data shown are the mean and standard
+                                   deviation of the indicated number of replicates. HPF1: Histone PARylation Factor 1; PARP1: poly(ADP-ribose)
+                                   polymerase 1; ADPR: ADP-ribose.
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                              9 of 22
+           Research article                                                                                Biochemistry and Chemical Biology
+
+                                   PARP1–Nuc165 complex than wild-type HPF1 (135 vs. 790 nM; Figure 4D, Table 2), validating its
+                                   structural integrity and ability to recognize the PARP1–Nuc165 complex despite not promoting
+                                   transPARylation activity. The loss of transPARylation and the retention of binding to the PARP1–
+                                   Nuc165 complex indicated that Glu284 is the catalytic base required for PARylation of serine resi-
+                                   dues (Figure 4A), whereas Asp283 is required for a productive interaction of HPF1 with the PARP1–
+                                   Nuc165 complex. Our findings are an independent validation of the identification of Glu284 as the
+                                   catalytic base from recent structural and biochemical analyses by the Ahel group (Suskiewicz et al.,
+                                   2020b). Additionally, the discovery of the E284A mutant allowed us to further dissect how HPF1
+                                   modulates the activity of PARP1, namely (1) catalytic, by providing a base for deprotonation of Ser
+                                   residues (Figure 4A), and (2) binding, by perturbing the shared active site formed by direct interac-
+                                   tions with the PARP1–Nuc165 complex.
+
+                                   HPF1 (WT and E284A) converts PARP1 into an NAD+ hydrolase and
+                                   yields much shorter PAR chains
+                                   Although gel-based PARylation assays provide insight into the addition of ADPR onto histones (in
+                                   the context of nucleosomes) vs. PARP1 at short extents of reaction, they do not address the out-
+                                   come of PARylation in terms of chain length. It is important to address the effect of HPF1 on the final
+                                   outcome of PARylation (i.e., short vs. long PAR chains) because the different DNA repair factors may
+                                   be recruited to different modifications (i.e., PAR code; Aberle et al., 2020; Karlberg et al., 2013).
+                                   We therefore developed two novel assays using high pressure liquid chromatography (HPLC). The
+                                   first assay simultaneously quantitates ADPR, NAD+, and nicotinamide with high accuracy and sensi-
+                                   tivity (Figure 5A), which allows us to monitor overall consumption of NAD+ and whether ADPR
+                                   equivalents are attached to protein or released as free ADPR (see Figure 1B). All assays are linear
+                                   with respect to nicotinamide formation for at least 90 s (Figure 5A, inset), and we chose to compare
+                                   PARP1 activity at 60 s under different reaction conditions (i.e., ±HPF1). The second assay again mon-
+                                   itors consumption of NAD+ and formation of ADPR and nicotinamide, this time for the full extent of
+                                   the reaction to where all the NAD+ has been consumed, and then subsequently analyzes chain
+                                   extension via the quantitation of AMP-PR, which reflects the ‘middle’ pieces of PAR chains after
+                                   digestion by phosphodiesterase (Figure 6A). Using these assays, again with Nuc165 as both activa-
+                                   tor and substrate in comparison with oligomeric DNA (and autoPARylation), we made a number of
+                                   surprising discoveries while also confirming our results described above.
+                                       First, in agreement with both the plate-based and gel-based radioactive assays described above,
+                                   Nuc165 (in the absence of HPF1) yields approximately twofold higher turnover of NAD+ and forma-
+                                   tion of nicotinamide than p18mer (12.5 vs. 5.4 mM in 1 min; Figure 5B). Addition of HPF1 increases
+                                   the overall turnover of NAD+ to form free nicotinamide by a factor of four in the presence of
+                                   Nuc165 (47 vs. 12.5 mM in 1 min; Figure 5B). The effect of HPF1 is not as pronounced when using
+                                   p18mer instead of Nuc165 (Figure 5B), presumably because of its weaker interaction with the
+                                   PARP1–p18mer complex compared to the PARP1–Nuc165 complex (Rudolph et al., 2021). Interest-
+                                   ingly, this HPF1-dependent effect (using Nuc165 or p18mer) is at least partially conserved for the
+                                   E284A mutant of HPF1 (Figure 5B), which binds to the PARP1–Nuc165 complex (Figure 4C, D), but
+                                   does not promote transPARylation (Table 2). Very dramatically, the modest HPF1-dependent
+                                   increase in the formation of nicotinamide is eclipsed by a much larger increase in ADPR formation
+                                   (Figure 5C). In the absence of HPF1, we observe 10–14% ‘treadmilling’, while in the presence of
+                                   HPF1, PARP1 spends most of its catalytic power (~90%) consuming NAD+ to form free ADPR. Sur-
+                                   prisingly, the E284A mutant of HPF1, which binds more tightly than wild-type HPF1, has the same
+                                   effect on the hydrolase activity of PARP1, even though it neither promotes transPARylation nor ser-
+                                   ine PARylation (Figure 5C). Control experiments demonstrated that neither wild-type HPF1 nor the
+                                   E284A mutant have detectable levels of NAD+ hydrolase activity on their own. The observed dra-
+                                   matic increase in treadmilling explains the lack of linearity (i.e., the burst in PARylation) seen in the
+                                   gel-based assays with HPF1 above (Figure 3B). That is, although the initiation reaction on serines
+                                   occurs efficiently, PARP1 then spends most of its catalytic power performing hydrolysis of NAD+,
+                                   thereby precluding further attachment of ADPR onto protein in the presence of HPF1. These unex-
+                                   pected results suggest that HPF1 converts PARP1 into a strong NAD+ hydrolase and presumably
+                                   represses formation of long PAR chains on histones.
+                                       For PARP1 alone, autoPARylation is rapid and efficient wherein the end of the growing PAR chain
+                                   is located in a binding pocket adjacent to the primary NAD+ binding site (Ruf et al., 1998). In the
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                       10 of 22
+                          Research article                                                                                                                                                                                                                                   Biochemistry and Chemical Biology
+
+
+
+
+                                                                                                                                                %!"!                                               100
+   !                                                                                                                                                                                                    80
+                                                                                                                                                                                                                                    ADPR
+                                                                                                                                                                                                                                    nicotinamide
+                                                                                                                                                                                                                                                                                               0s
+
+
+
+
+                                                                                                                                                                                    product (µM)
+                                                                                                                                                                                                        60                                                                                     7s
+                          1000                                                                                                                                                                          40                                                                                     15 s
+                                                                                                                                                                                                        20                                                                                     25 s
+                                                                                                                                                                                                             0
+                                                                                                                                                                                                                 0                                             50             100              50 s
+    A260
+
+
+
+
+                                                                                                                                                                                                                                                               time (s)
+                                                                                                                                                                                                                                                                                               120 s
+                                                                                                                                                                                                                                     &'()*'&+,'-.                                              300 s
+                              500                                                              !"#$                                                                                                                                                                                            1200 s
+                                                                                                                                                                                                                                                                                               3600 s
+
+
+
+                                       0
+                                           2                                                            3                                                     4                                                                                     5                                6
+                                                                                                                                 elution time (min)
+    " 60                                                                                                       $                                                                                                                     # 80                                                     -HPF1
+                                                                                                                      100                                                                                                                                                                     +HPF1
+                                                                                                                                                                                                                                      ADPR (percent)
+
+                                                                                                                                                                                                                                                          60
+     nicotinamide (µM)
+
+
+
+
+                                                                                                                                80                                                                                                                        40
+                                                                                                               ADPR (percent)
+
+
+
+
+                         40
+                                                                                                                                60                                                                                                                        20
+
+
+                         20                                                                                                     40                                                                                                                        0
+                                                                                                                                                                                                                                                               0               100            200
+                                                                                                                                                                                                                                                                            H3 peptide (µM)
+                                                                                                                                20
+                                                                                                                                                                                                                                                          40        -HPF1
+                          0
+                                                                                                                                                                                                                                      nicotinamide (µM)
+
+
+
+
+                                                                                                                                                                                                                                                                    +HPF1
+                                                                                                                                 0
+                              Nuc165
+
+                                           Nuc165/HPF1
+
+                                                         Nuc165/E284A
+
+
+
+                                                                                 p18mer/HPF1
+
+                                                                                                p18mer/E284A
+                                                                        p18mer
+
+
+
+
+                                                                                                                                                                                                                                                          30
+                                                                                                                                     Nuc165
+
+                                                                                                                                              Nuc165/HPF1
+
+                                                                                                                                                            Nuc165/E284A
+
+
+
+                                                                                                                                                                                                   p18mer/HPF1
+
+                                                                                                                                                                                                                     p18mer/E284A
+                                                                                                                                                                           p18mer
+
+
+
+
+                                                                                                                                                                                                                                                          20
+
+
+                                                                                                                                                                                                                                                          10
+
+
+                                                                                                                                                                                                                                                           0
+                                                                                                                                                                                                                                                                0              100            200
+                                                                                                                                                                                                                                                                            H3 peptide (µM)
+
+
+Figure 5. Addition of Histone PARylation Factor 1 (HPF1) converts poly(ADP-ribose) polymerase 1 (PARP1) predominantly into an NAD+ hydrolyase. (A)
+Representative HPLC traces from a reaction of PARP1 using p18 as an activator that simultaneously monitors depletion of NAD+ (200 mM initial) and
+formation of both ADP-ribose (ADPR) and nicotinamide. Each successive time point trace is offset in both the x- and y-axis to allow for better
+visualization. The inset shows that the assay is linear with respect to formation of nicotinamide and ADPR for at least 90 s. (B) Comparison of activity of
+PARP1 (100 nM) as measured by formation of nicotinamide using either Nuc165 (300 nM) or p18mer (100 nM) as activators in the presence or absence
+of HPF1 (2 mM, wild-type vs. E284A mutant) after 1 min of reaction time. (C) Comparison of percent of turnover of PARP1 that leads to free ADPR under
+Figure 5 continued on next page
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                                                                                                                                                                         11 of 22
+           Research article                                                                                        Biochemistry and Chemical Biology
+
+Figure 5 continued
+the same conditions as in (B). Error bars in (C) and (D) are derived from three experiments, each performed using four replicates. (D) The hydrolase
+activity of PARP1 (100 nM) is suppressed (top panel) with a modest increase in overall activity as measured by nicotinamide formation (bottom panel) by
+high concentrations of H3 histone tail peptide (varied as indicated), but only in the presence of HPF1 (2 mM). Reactions were performed at 200 mM
+NAD+ for 1 min, and the data and standard deviations shown are derived from four separate experiments.
+The online version of this article includes the following source data for figure 5:
+Source data 1. Addition of HPF1 converts PARP1 predominantly into an NAD+ hydrolyase.
+
+
+
+                                     recent structure of HPF1 bound to PARP2, HPF1 partially occupies the binding site typically associ-
+                                     ated with PAR chain extension (Suskiewicz et al., 2020b). To test whether the increased hydrolase
+                                     activity is due to the lack of readily available substrate for PARylation due to HPF1 blockage of this
+                                     extension site, we performed a titration of the histone H3 tail peptide in the presence of a fixed con-
+                                     centration of p18mer as a DNA activator. Providing high concentrations of the substrate peptide
+                                     suppressed the treadmilling effect to baseline levels in the presence of HPF1 while subtly increasing
+                                     the overall activity of PARP1 (Figure 5D). Control experiments in the absence of HPF1 showed no
+                                     change in the percentage of hydrolysis or total turnover as a function of H3 tail peptide (Figure 5D).
+                                         To more directly address the profound effect of HPF1 on the length of PAR chains, we modified
+                                     our assay conditions by using greater amounts of protein to facilitate quantitation of AMP-PR, the
+                                     product formed after digestion by phosphodiesterase that represents chain ‘middles’ (Figure 6A).
+                                     Monitoring the entire time course of NAD+ disappearance and ADPR formation (Figure 6B), we
+                                     observe faster depletion of NAD+ and much greater formation of ADPR in the presence of HPF1, in
+                                     agreement with the fixed time point results in Figure 5C, D. If we compare the incorporation of
+                                     AMP-PR (‘middles’) at the end of the reaction when all of the NAD+ (200 mM initially) has been con-
+                                     sumed, we confirm that the PAR chains are much shorter in the presence of HPF1 than in its
+                                     absence. This holds true for activation by both nucleosomes and p18mer but is more pronounced
+                                     for nucleosomes, which we again attribute to the higher affinity of HPF1 for the PARP1–Nuc165
+                                     complex compared to the PARP1–p18mer complex. Control experiments demonstrated that HPF1
+                                     or the E284A mutant alone did not exhibit significant phosphodiesterase activity. Given the results
+                                     above, we were not surprised to find that the E284A mutant of HPF1 had a similar effect as wild-
+                                     type HPF1 on PAR chain formation. To be noted, HPF1-mediated PARylation is not limited to addi-
+                                     tion of a single ADPR (MARylation) as we do observe significant concentrations of AMP-PR that can
+                                     arise only through true polymerization (minimally trimers; Figure 6D).
+
+
+
+                                     Discussion
+                                     We began our work by demonstrating that nucleosomes are better activators of PARP1 than free
+                                     DNA (Figure 2, Table 1). Because the tested nucleosomes all activate equally well (regardless of
+                                     overhang length, or mono- vs. tri-nucleosomes), our results extend previous observations about the
+                                     promiscuity of PARP1 with respect to DNA activators (Langelier et al., 2014; D’Silva et al., 1999;
+                                     Liu et al., 2017) using a more physiologically relevant activator. Based on the seminal work by Pascal
+                                     and Black demonstrating that DNA activation of PARP1 is mediated by a series of conformational
+                                     changes that disorder the HD domain and thereby open up the active site for binding of NAD+
+                                     (Dawicki-McKenna et al., 2015; Steffen et al., 2016), we hypothesize that nucleosomes are in
+                                     some way more efficient in this process. Perhaps there are direct interactions between the unfolded
+                                     (or alternatively folded) HD domain and nucleosomes that stabilize the open conformation and pre-
+                                     vent this domain from collapsing back onto the catalytic domain. In fact, just such an interaction is
+                                     observed by the loop in the HD domain of PARP2 (Leu302 and Arg303) with the linker DNA from
+                                     the nucleosome (Bilokapic et al., 2020). Ongoing structural efforts will hopefully show whether this
+                                     or some other interaction exists for PARP1, leading to the enhanced activation of PARP1 by nucleo-
+                                     somes vs. free DNA.
+                                        Upon adding HPF1 to assays using nucleosomes as both activators and substrates of PARP1, we
+                                     show that the activity of PARP1 is significantly redirected towards histones and away from PARP1
+                                     (Figure 3, Table 1). Our results are consistent with those from the Ahel group obtained with free
+                                     DNA and histone-derived peptides (Gibbs-Seymour et al., 2016) as well as from the Muir group
+                                     using nucleosomes (Liszczak et al., 2018), but provide quantitative information regarding the extent
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                  12 of 22
+                        Research article                                                                                 Biochemistry and Chemical Biology
+
+
+
+
+    !                                                           # 800
+                                                                                                                       !"#$#%                 0s
+                                                                                                                                              7s
+                                                                                                                                              15 s
+                                                                       600
+                                                                                                                                              25 s
+                                                                                                                                              50 s
+
+
+
+
+                                                                A260
+                                                                                                                                              120 s
+                                                                       400
+                                                                                  !"#$#%!                                     !"#             300 s
+                                                                                                                                              1200 s
+                                                                                                                                              3600 s
+                                                                       200
+
+
+
+                                                                         0
+                                                                             1           2                     3          4            5            6
+                                                                                                               time (min)
+
+
+     "                          250
+                                           ADPR         ADPR (+HPF1)
+                                                                                             $                 200
+                                           NAD+         NAD+ (+HPF1)
+        reactant/product (µM)
+
+
+
+
+                                                                                                 AMP-PR (µM)
+                                200                                                                            150
+
+                                150                                                                            100
+
+                                100                                                                             50
+
+                                 50                                                                                0
+                                                                                                                             Nuc165
+                                                                                                                        Nuc165/HPF1
+                                                                                                                       Nuc165/E284A
+
+                                                                                                                        p18mer/HPF1
+                                                                                                                       p18mer/E284A
+                                                                                                                             p18mer
+
+
+
+                                  0
+                                      1     10         100              1000
+                                                  time (s)
+
+Figure 6. Addition of Histone PARylation Factor 1 (HPF1) accelerates consumption of NAD+ and leads to significantly shorter PAR chains. (A) Cartoon
+representation of the reaction products generated by phosphodiesterase treatment of PARylated poly(ADP-ribose) polymerase 1 (PARP1). (B)
+Representative HPLC traces from the analysis of PARylated PARP1 that used p18 as an activator, simultaneously monitoring AMP (‘ends’), AMP-PR
+(‘middles’), and AMPR-PR2 (‘branches’). Each successive time point trace is offset in both the x- and y-axis to allow for better visualization. (C)
+Comparison of a time course for accumulation of ADP-ribose (ADPR) and depletion of NAD+ for PARP1 with Nuc165 in the absence (solid symbols and
+lines) or presence (open symbols, dotted lines) of HPF1 (wild-type). Note the faster consumption of NAD+ in the presence of HPF1 and the much higher
+levels of ADPR observed. The appearance of nicotinamide (not shown for clarity) was also monitored in these assays and mirrored the depletion of
+NAD+. (D) Quantitation of AMP-PR (chain middles) released from PARylated PARP1 and histones after complete consumption of 200 mM NAD+. Note
+that in the absence of HPF1 ~90% of the ADPR is attached to protein, indicating long PAR chains. In contrast, the addition of HPF1 (either wild-type or
+Figure 6 continued on next page
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                     13 of 22
+           Research article                                                                                      Biochemistry and Chemical Biology
+
+Figure 6 continued
+E284A mutant) led to much shorter PAR chains, consistent with the high amount of free ADPR formed (Figures 5D, C). Error bars in (D) are derived
+from three experiments.
+The online version of this article includes the following source data for figure 6:
+Source data 1. Addition of HPF1 accelerates consumption of NAD+ and leads to significantly shorter PAR chains.
+
+
+
+                                    of this switch. For example, HPF1 causes transPARylation of histones to be preferred over autoPARy-
+                                    lation of PARP1 minimally by factors of 2–4 (Figure 3C, Table 2), a switch that is particularly dra-
+                                    matic as we observe no histone PARylation in the absence of HPF1 (Figure 3A). This switch in
+                                    specificity is notable as autoPARylation is a simple one-body problem wherein PARP1 modifies itself,
+                                    whereas transPARylation requires the correct interactions between PARP1, HPF1, and the histone
+                                    tails in the nucleosomes. Also, it should be re-emphasized that, in addition to the switch towards
+                                    transPARylation, HPF1 mediates the switch in amino acid specificity away from aspartate/glutamate
+                                    towards serine, even on PARP1 itself (Figure 3D).
+                                        In an independent and unbiased approach to better understand the mechanism of how HPF1
+                                    effects the switch in amino acid specificity from glutamates and aspartates to serines, we have identi-
+                                    fied Glu284 as the catalytic base on HPF1 (Figure 4, Table 2), as also recently published by the Ahel
+                                    (Suskiewicz et al., 2020b) and Yun groups (Sun et al., 2021). Importantly, we demonstrate that the
+                                    E284A mutant has the same stability as wild-type HPF1 and binds even more tightly to the PARP1–
+                                    nucleosome complex than wild-type HPF1. The occurrence of a shared active site formed by PARP1
+                                    and HPF1 is a completely unexpected and novel finding in the field of post-translational modification
+                                    (Suskiewicz et al., 2020a). The PARP1–HPF1 complex has two catalytic bases. Glu284 on HPF1
+                                    mediates the deprotonation and activation of serine residues on acceptor proteins for the initiation
+                                    reaction (Figure 4A), while Glu988 on PARP1 mediates the deprotonation and activation of the 20 -
+                                    or 200 -OH on the acceptor ADPR for PAR chain extension or branching, respectively (Figure 1A, B).
+                                    Glu988 on PARP1 also facilitates the binding of NAD+ via an H-bond to the 30 -OH (Ruf et al., 1998).
+                                    Consistent with Glu284 on HPF1, not Glu988 on PARP1, performing the de-protonation required for
+                                    initiation, Ahel’s group (Fontana et al., 2017) observe HPF1-mediated incorporation of ADPR by
+                                    the E988K mutant of PARP1, albeit at lower levels than wild-type.
+                                        Our most dramatic and unexpected finding is the extent by which HPF1 converts PARP1 from a
+                                    polymerase that adds long polymers of ADPR onto itself or histones, into a hydrolase that generates
+                                    free ADPR. Under our conditions, almost 90% of all the NAD+ consumed by PARP1 in the presence
+                                    of nucleosome activators and HPF1 is converted to free ADPR (Figure 5). This observation holds
+                                    true both at short time points of the reaction (Figure 5D) and at the end of the reaction where all
+                                    the NAD+ has been consumed (Figure 6C). Also, recall that the presence of both nucleosomes and
+                                    HPF1 increases the overall turnover of NAD+ by PARP1 (Figure 5C, Figure 6C). These dual effects
+                                    lead to rapid depletion of NAD+ and formation of high concentrations of free ADPR. Given that
+                                    increasing PARylation acceptor sites (i.e., high concentrations of H3 histone tail peptide, Figure 5D)
+                                    greatly reduces the percentage of free ADPR formed, we conclude that HPF1 blocks PAR chain for-
+                                    mation by occluding the extension site on PARP1 (Suskiewicz et al., 2020b), and thus PARP1, still
+                                    bound to activating DNA (i.e., nucleosome), quickly runs out of suitable PARylation sites and there-
+                                    fore uses water as a nucleophile instead. The affinity of PARP1 for nucleosomes is very high (nM),
+                                    and it is thought that significant PARylation is required for dissociation of DNA from PARP1
+                                    (Rudolph et al., 2021; Langelier et al., 2014). Thus, it is unclear what ratio of treadmilling would
+                                    occur under cellular conditions where rapid exchange of PARP1 to other nucleosomes is most likely
+                                    not occurring, and new methods will be needed to investigate this quantitatively. The high consump-
+                                    tion of NAD+ by PARP1 suggests that PARP1 not only plays a role in the DNA damage response but
+                                    also in metabolic homeostasis (Hurtado-Bagès et al., 2020; Murata et al., 2019). NAD+ is electron
+                                    acceptor in glycolysis and the citric acid cycle. PARP1 is the major consumer of NAD+ in the nucleus,
+                                    and the rapid depletion of the NAD+ pool (50–80%) by PARP1 in response to DNA damage leads to
+                                    ATP depletion, has dramatic consequences for mitochondria, and leads to cell death via apoptosis
+                                    and necrosis (Berger, 1985). The observation of partitioning away from PARylation and towards
+                                    ADPR formation by HPF1 is a novel finding that suggests a more important role for ADPR than antic-
+                                    ipated as a signaling molecule in its own right (Perraud et al., 2001; Qi et al., 2019).
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                               14 of 22
+           Research article                                                                              Biochemistry and Chemical Biology
+
+                                      The conversion of PARP1 into an NAD+ hydrolase is also evident in the much lower incorporation
+                                   of chain ‘middles’ onto histones or PARP1 (Figure 6D), indicating that HPF1-mediated PARylation
+                                   yields much shorter chains than the typical long chains seen during autoPARylation in the absence of
+                                   HPF1. Our quantitative demonstration of these shorter chains is in agreement with previous observa-
+                                   tions that smears of PARP1 typically seen after autoPARylation in SDS-PAGE are reduced in the pres-
+                                   ence of HPF1 (Gibbs-Seymour et al., 2016) and that PAR chains are much reduced in amount and
+                                   length as detected by enzymatic labeling of terminal ADPR (Ando et al., 2019). Additionally, it is
+                                   interesting to compare our findings with a recent demonstration that HPF1-mediated PARylation in
+                                   cells leads primarily to mono-ADPR on serine residues, in part due to the activity of the glycohydro-
+                                   lase PARG (Bonfiglio et al., 2020), which interestingly also generates ADPR. PARG has also been
+                                   shown to mediate transPARylation of histones, in part by competing with PARP1 for PAR chains
+                                   (Ménard et al., 1990; Thomassin et al., 1992; Lagueux et al., 1995). It therefore remains to be elu-
+                                   cidated whether the rapid and sustained depletion of NAD+ after DNA damage in intact cells
+                                   (Juarez-Salinas et al., 1979) is due to PARylation and subsequent dePARylation by PARG, PARyla-
+                                   tion, and futile treadmilling by PARP1 alone, or some combination of these events. As with the
+                                   increased NAD+ hydrolase activity triggered by HPF1, the formation of shorter PAR chains is partially
+                                   preserved using the catalytic HPF1 mutant E284A. As concluded for the high hydrolase activity,
+                                   these shorter PAR chains using either wild-type HPF1 or its E284A mutation are readily understand-
+                                   able given that HPF1 partially occupies the binding site typically associated with PAR chain extension
+                                   (Suskiewicz et al., 2020b). Although our assay did not allow us to measure chain branches with suffi-
+                                   cient sensitivity, we would argue that for this same reason HPF1-mediated PARylation has few if any
+                                   branch points.
+                                      The formation of shorter PAR chains in the presence of HPF1 has important consequences that
+                                   become particularly relevant when considering intracellular concentrations of these proteins. PARP1
+                                   is a very abundant nuclear protein, exceeding the concentration of HPF1 by about twentyfold
+                                   (Gibbs-Seymour et al., 2016). Also, PARP1 is one of the very first proteins recruited to DNA dam-
+                                   age sites induced by laser microirradiation, whereas HPF1 arrives more slowly (Aleksandrov et al.,
+                                   2018; Mahadevan et al., 2019). Thus, it is possible that substantial PARylation at some points in
+                                   time, at some sites, or at some types of damage occurs without HPF1. The consequences for the so-
+                                   called PAR code (Aberle et al., 2020; Karlberg et al., 2013) are immense. PARP1-alone-mediated
+                                   autoPARylation leads to long and branched chains, whereas HPF1-mediated PARylation leads to
+                                   short, most likely unbranched chains. This change in the PARylation pattern may result in the recruit-
+                                   ment of different repair proteins to DNA damage sites with HPF1 vs. those without, and thus in turn
+                                   may direct DNA damage to be repaired by one pathway over another. The differentiation between
+                                   these two outcomes in a cellular context is difficult but worthy of further investigation.
+
+
+
+                                   Materials and methods
+Key resources table
+Reagent type (species)
+or resource                   Designation                  Source or reference Identifiers      Additional information
+Peptide,                      PARP1                        UniProt              P09874          As described in
+recombinant protein                                                                             Rudolph et al., 2018
+Peptide,                      HPF1                         UniProt              Q9NWY4          As described in manuscript
+recombinant protein
+Sequenced-based reagent       p18mer DNA                   IDT                                  50 -phosphate-GGGTTGCGGCCGCTTGGG-30 ;
+                                                                                                double-stranded
+Strain, strain background     Rosetta DE3 pLys             EMD Millipore        70956           Chemically competent cells
+(Escherichia coli)
+Other                         384-well plates              Corning              3575
+Other                         96-well plates               Corning              3898
+Other                         Whatman GF/C glass paper Whatman                  28497-619-PK
+Chemical compound, drug       Olaparib                     SelleckChem          S1060
+Continued on next page
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                     15 of 22
+           Research article                                                                                    Biochemistry and Chemical Biology
+
+Continued
+
+Reagent type (species)
+or resource                   Designation                  Source or reference Identifiers            Additional information
+Commercial assay or kit       QuikChange II                Agilent Technologies 200523
+                              Mutagenesis kit
+Other                         Synergi Fusion-RP column     Phenomenex           00F-4424-EO
+Peptide, recombinant protein Nuc147, Nuc165, Nuc207,       Prepared in-house                          See Muthurajan et al., 2016
+                             NLE-Tri, LE-Tri
+Chemical compound, drug       ADP-ribose                   Sigma-Aldrich        A0752
+Chemical compound, drug       Nicotinamide                 Sigma-Aldrich        N3376
+Chemical compound, drug       NAD+                         Sigma-Aldrich        N0632
+Peptide, recombinant protein H3 peptide                    Anaspec              AS-61701
+                              32
+Chemical compound, drug            P-NAD+                  PerkinElmer          NEG023X
+Chemical compound, drug       Snake venom                  Worthington          LS003926
+                              phosphodiesterase
+Software, algorithm           GraphPad Prism 9.0           GraphPad Prism       Version 9.0.1 (128)
+
+
+
+                                     Materials
+                                     NAD+, nicotinamide, and ADPR were purchased from Sigma-Aldrich. Snake venom phosphodiester-
+                                     ase was purchased from Worthington. DNA oligonucleotides and their complementary strands were
+                                     obtained from IDT: p18mer: 50 -phosphate-GGGTTGCGGCCGCTTGGG-30 . H31-21 peptide was pur-
+                                     chased from Anaspec. 32P-NAD+ was purchased from PerkinElmer. Different nucleosomes
+                                     (Figure 1A) using the Widom601 sequence were prepared as previously described
+                                     (Muthurajan et al., 2016). Wild-type PARP1 was expressed and purified as previously described
+                                     (Rudolph et al., 2018).
+
+                                     Site-directed mutagenesis, expression, and purification of HPF1
+                                     Site-directed mutants for HPF1 were generated using the QuikChange II kit from Agilent Technolo-
+                                     gies according to manufacturer’s specifications. All mutations were verified by DNA sequencing. Par-
+                                     tial purification of HPF1 for initial evaluation of activity was performed as follows. Plasmids were
+                                     transformed into Rosetta DE3 pLys cells (EMD Millipore), and transformants were grown in 100 mL
+                                     2 YT media with 50 mg/mL kanamycin at 37˚C until the OD600 was ~0.6. Induction of protein
+                                     expression was induced by addition of 1 mM IPTG (Gold Biotech), and cells were grown overnight at
+                                     18˚C. Cell pellets collected by centrifugation were lysed by sonication (4 min at 30% power, Branson)
+                                     in buffer containing 500 mM NaCl, 50 mM Tris-HCl (pH 8.0), 20 mM imidazole, 10 mM b-mercaptoe-
+                                     thanol, 1.5 mM MgCl2, 5 mL/5 mL benzonase (Novagen), and 20 mg lysozyme (Sigma-Aldrich).
+                                     Cleared lysate was added to 200 mL of Nickel beads (Gold Biotech) in a small drip column (BioRad),
+                                     reapplied several times, and HPF1 was subsequently recovered using elution buffer (50 mM Tris-HCl
+                                     [pH 8.0], 500 mM NaCl, 250 mM imidazole, and 10 mM b-mercaptoethanol). The partially purified
+                                     protein was concentrated (10 kDa cut-off, EMD Millipore) and exchanged into 100 mM potassium
+                                     phosphate buffer (pH 8.0) prior to flash freezing and storage at 80˚C. Full purification of HPF1 to
+                                     homogeneity was performed essentially as previously described (Gibbs-Seymour et al., 2016), with
+                                     the slight modification of using a gradient for the nickel affinity column from 0% to 40% over 15 CV.
+                                     The stability of HPF1 (WT and all mutants) was evaluated using the ThermoFisher Protein Thermal
+                                     Shift kit according to manufacturer’s instructions using a qPCR. Melting temperatures were deter-
+                                     mined by identifying the low point of the peak after taking the derivative of the data.
+
+                                     Competition experiment for measuring binding of nucleosomes and
+                                     free DNA to PARP1 using FP
+                                     Nucleosomes and free DNA (20–5000 nM) diluted in binding buffer (50 mM Tris-HCl [pH 8.0], 50
+                                     mM NaCl, 1 mM MgCl2, 0.1 mM EDTA, and 0.01% IGEPAL) were titrated across 20 wells of a 384-
+                                     well plate (Corning 3575) using 1.5-fold dilutions with a final volume of 10 mL. Next, 10 mL of PARP1
+                                     (5 nM) premixed with fluorescein labeled p18mer DNA (p18mer*, 2.2 nM) was added to the various
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                           16 of 22
+           Research article                                                                                     Biochemistry and Chemical Biology
+
+                                   dilutions of nucleosomes or DNA, and then incubated for 30 min to ensure complete dissociation of
+                                   p18mer*. FP using excitation at 482 nm (bandwidth 16 nm), dichroic filter at 496 nm, and emission
+                                   at 530 nm (bandwidth 40 nm) was measured from the top of the plate using a BMG Labtech CLAR-
+                                   IOstar plate reader. The concentration of competitor (nucleosome or free DNA) that yielded a 50%
+                                   release of p18mer* (CC50) was calculated by fitting of the data with a four-parameter binding curve
+                                   in Prism. All concentrations noted above reflect the final concentration in the plate.
+
+                                   PARP1 activity as detected by incorporation of 32P-ADPR using filter
+                                   plates
+                                   PARP1 (30 nM) was pre-incubated with varying concentrations of DNA (0.01–200 nM final) or nucleo-
+                                   somes (0.2–500 nM) and/or HPF1 (2 mM) in assay buffer (50 mM Tris-HCl, pH 8.0, 50 mM NaCl, 1
+                                   mM MgCl2, 0.1 mM EDTA, 0.5 mg/mL bovine serum albumin [Ambion]) in 96-well plates (Corn-
+                                   ing3898). Following addition of 32P-NAD+ (40 mM, 1.8  106 cpm/well, PerkinElmer) to yield a final
+                                   volume of 25 mL, reactions were quenched at varying time points (0.33–5 min) by addition of 50 mL
+                                   of 30% trichloracetic acid (TCA). Samples (50 mL of total) were then loaded onto a Whatman Mini-
+                                   Fold Spot-Blot apparatus containing a Whatman GF/C glass microfiber filter. Each well was washed
+                                   three times with 10% TCA (100 mL). After removal of the filter from the apparatus, the filter was
+                                   gently incubated in 10% TCA (20–40 mL) for three more washes. After drying, the filter was exposed
+                                   to a Phosphor screen overnight (GE Healthcare) and imaged using a Typhoon FLA 9500 (GE Health-
+                                   care). Spot intensities were quantitated using ImageQuant. For converting arbitrary pixel intensities
+                                   into molar quantities, a known amount of NAD+(4–6 pmol) was blotted onto a filter paper and
+                                   exposed for the same amount of time. The values for kcat are apparent as they were determined at
+                                   40 mM NAD+, which is at the concentration of the Km for NAD+. The apparent kcat values were deter-
+                                   mined by fitting the observed incorporation of radioactivity (cpmobs) to
+                                                                                            ðcpmmax cpmmin Þ
+                                                                        cpmobs ¼ cpmmin þ                 
+                                                                                                1 þ ½DNA
+                                                                                                     Kact
+                                                                                                          
+
+
+
+                                       where cpmmin is derived from control samples containing no PARP1, cpmmax is the highest
+                                   observed incorporation, [DNA] is the concentration of DNA or nucleosome, and Kact is the concen-
+                                   tration of half-maximal activation. The values for kcat determined from cpmmax after correction of
+                                   amount of PARP1 (30 nM) are apparent as they were determined at 40 mM NAD+, which is at the
+                                   concentration of Km for NAD+. The values for the apparent activation constant Kact were not consid-
+                                   ered meaningful (i.e., titration of enzyme, not substrate) as they were all at or below the concentra-
+                                   tion of PARP1 in the assay (30 nM). This was not unexpected, given the previously reported low nM
+                                   affinity of both free DNA and nucleosome for PARP1 (Clark et al., 2012; Langelier et al., 2008;
+                                   Rudolph et al., 2018; Rudolph et al., 2020).
+
+                                   PARP1 activity as detected by incorporation of 32P-ADPR using SDS-
+                                   PAGE
+                                   PARP1 (100 nM) was combined with nucleosome (300–800 nM) and HPF1 (2 mM) in a total volume of
+                                   20 mL in assay buffer. PARP1 is activated by nucleosomes, so no further activator was needed. For
+                                   assays with the H3 peptide substrate (22.5 mM), 100 nM p18mer DNA was included to trigger activa-
+                                   tion of PARP1. PARylation reactions were initiated by addition of 20 mL of 32P-NAD+ to a final con-
+                                   centration of 10 mM (~5  106 cpm/reaction). Aliquots were removed at 10–40 s and quenched by
+                                   addition of olaparib to 4 mM. For analysis, samples were mixed with Laemmli buffer (2), heated to
+                                   95˚C for 3 min, and proteins were separated by SDS-PAGE (4–12% Bis-Tris, Thermo Fisher using 1
+                                   MES buffer). The gel was exposed to a PhosphorScreen, and then imaged and quantitated as for the
+                                   filter-based assay. Signals for PARP1, HPF1, and cumulative histones were quantitated individually
+                                   and corrected for background using boxes of equivalent area. For converting arbitrary pixel intensi-
+                                   ties into molar quantities, a known amount of NAD+ (4–6 pmol) was spiked into multiple lanes 10
+                                   min after the start of gel electrophoresis for quantitation by ImageQuant.
+
+                                   FRET assays to measure affinity of HPF1 for PARP1
+                                   HPF1 and PARP1 were labeled with Alexa647-C2-maleimide and Alexa488-C4-maleimide, respec-
+                                   tively, and their interaction was detected using FRET as previously described (Rudolph et al., 2021).
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                            17 of 22
+           Research article                                                                                 Biochemistry and Chemical Biology
+
+                                   PARP1 activity as detected by HPLC assays that monitor consumption
+                                   of NAD+, formation of nicotinamide and ADPR, and release of AMP-PR
+                                   following digestion with phosphodiesterase
+                                   PARP1 (100 nM) was pre-incubated with p18mer or Nuc165 (200 nM) with or without HPF1 (wild-
+                                   type or E284 mutant, 2 mM) in assay buffer. Reactions were initiated with NAD+ (200 mM) to yield a
+                                   final volume of 30 mL and were quenched after 1 min with 30 mL of perchloric acid (1 M). After a 15
+                                   min incubation on ice, precipitated protein was removed by centrifugation at 14,000g for 15 min
+                                   at 4˚C. The supernatant was removed and placed into a fresh tube containing 6 mL of sodium acetate
+                                   (1 M, pH 4.5). This mixture was re-neutralized by addition of 11 mL of KOH (5 N), and the precipi-
+                                   tated salts were removed by brief centrifugation at 1000g. The supernatant was removed, loaded
+                                   into HPLC vials, and analyzed on a Synergi Fusion-RP column (Phenomenex, 150  4.6 mm) using
+                                   the following conditions: start = 97% buffer (20 mM ammonium acetate, pH 4.5), 3% acetonitrile; 10
+                                   min gradient to 40% acetonitrile, followed by a 3 min gradient back to 3% acetonitrile; and then a 5
+                                   min re-equilibration under those conditions prior to the next injection. ADPR, NAD+, and nicotin-
+                                   amide eluted at 2.8–2.9, 3.9–4, and 5.0–5.1, respectively. The area under the curve was used to
+                                   determine absolute concentrations by comparison with injection of known amounts of ADPR, NAD+,
+                                   and nicotinamide using extinction coefficients at 260 nm of 17.4, 13.5, and 2.5 mM 1 cm 1,
+                                   respectively.
+                                       The HPLC-based assay above was modified to facilitate the direct measurement of chain length
+                                   extension as follows. Concentrations of p18mer or Nuc165 were increased to 1 mM and were pre-
+                                   incubated with NAD+ in the presence or absence of HPF1 (wild-type or E284A mutant, 2 mM). Reac-
+                                   tion volumes were increased to 450 mL. Following initiation with PARP1 (1 mM), 45 mL aliquots were
+                                   withdrawn and quenched into 45 mL of perchloric acid (1 M). Precipitation, removal of protein, re-
+                                   neutralization, and analysis of ADPR, NAD+, and nicotinamide were performed as above. The precip-
+                                   itated protein pellet (containing PARP1, HPF1, and histones) was resuspended in 30 mL of Tris-HCl
+                                   (100 mM, un-pH’d at ~10) containing 20 mM MgCl2 and 0.6 U/sample of snake venom phosphodies-
+                                   terase. After incubation for 18 hr at RT, the proteins were precipitated, and AMP-PR2 (branches),
+                                   AMP-PR (middles), and AMP (ends) were recovered and analyzed by HPLC as above for ADPR,
+                                   NAD+, and nicotinamide with elution times of 2.0–2.1, 2.9–3.0, and 3.8–3.9 min, respectively.
+                                   Amounts of AMP-PR2 were too low to quantitate accurately, and amounts of AMP were variable due
+                                   to NAD+ contamination of protein precipitates prior to digestion. (The remaining NAD+ from the
+                                   reaction is digested to AMP by phosphodiesterase, and attempts to remove this contaminant by
+                                   acid wash of the protein pellets prior to digestion led to variable results. We thus limited our analysis
+                                   to AMP-PR, which reflects the PAR chain length.)
+
+
+
+                                   Acknowledgements
+                                   No competing financial interests have been declared. Funding was provided by the National Cancer
+                                   Institute R01 CA218255 (to KL) and the Howard Hughes Medical Institute (to KL).
+
+
+
+
+                                   Additional information
+                                   Funding
+                                   Funder                          Grant reference number   Author
+                                   National Cancer Institute       CA218255                 Karolin Luger
+                                   Howard Hughes Medical Insti-                             Karolin Luger
+                                   tute
+                                   National Institutes of Health   T32GM008759              Genevieve Roberts
+
+                                   The funders had no role in study design, data collection and interpretation, or the
+                                   decision to submit the work for publication.
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                        18 of 22
+           Research article                                                                                       Biochemistry and Chemical Biology
+
+                                   Author contributions
+                                   Johannes Rudolph, Conceptualization, Data curation, Formal analysis, Supervision, Funding acquisi-
+                                   tion, Validation, Investigation, Visualization, Methodology, Writing - original draft, Project adminis-
+                                   tration, Writing - review and editing; Genevieve Roberts, Formal analysis, Investigation,
+                                   Methodology; Uma M Muthurajan, Investigation, Methodology, Writing - review and editing; Karolin
+                                   Luger, Conceptualization, Resources, Supervision, Project administration, Writing - review and
+                                   editing
+
+                                   Author ORCIDs
+                                   Johannes Rudolph     https://orcid.org/0000-0003-0230-3323
+                                   Uma M Muthurajan      https://orcid.org/0000-0003-2596-5848
+                                   Karolin Luger  https://orcid.org/0000-0001-5136-5331
+
+                                   Decision letter and Author response
+                                   Decision letter https://doi.org/10.7554/eLife.65773.sa1
+                                   Author response https://doi.org/10.7554/eLife.65773.sa2
+
+
+
+                                   Additional files
+                                   Supplementary files
+                                   . Transparent reporting form
+
+
+
+                                   Data availability
+                                   All data generated or analysed during this study are included in the manuscript and supporting files.
+                                   Source data files have been provided for all Figures.
+
+
+
+                                   References
+                                   Aberle L, Krüger A, Reber JM, Lippmann M, Hufnagel M, Schmalz M, Trussina I, Schlesiger S, Zubel T, Schütz K,
+                                     Marx A, Hartwig A, Ferrando-May E, Bürkle A, Mangerich A. 2020. PARP1 catalytic variants reveal branching
+                                     and chain length-specific functions of poly(ADP-ribose) in cellular physiology and stress response. Nucleic Acids
+                                     Research 48:10015–10033. DOI: https://doi.org/10.1093/nar/gkaa590, PMID: 32667640
+                                   Aleksandrov R, Dotchev A, Poser I, Krastev D, Georgiev G, Panova G, Babukov Y, Danovski G, Dyankova T,
+                                     Hubatsch L, Ivanova A, Atemin A, Nedelcheva-Veleva MN, Hasse S, Sarov M, Buchholz F, Hyman AA, Grill SW,
+                                     Stoynov SS. 2018. Protein dynamics in complex DNA lesions. Molecular Cell 69:1046–1061. DOI: https://doi.
+                                     org/10.1016/j.molcel.2018.02.016, PMID: 29547717
+                                   Alemasova EE, Lavrik OI. 2019. Poly(ADP-ribosyl)ation by PARP1: reaction mechanism and regulatory proteins.
+                                     Nucleic Acids Research 47:3811–3827. DOI: https://doi.org/10.1093/nar/gkz120, PMID: 30799503
+                                   Alvarez-Gonzalez R, Jacobson MK. 1987. Characterization of polymers of adenosine diphosphate ribose
+                                     generated in vitro and in vivo. Biochemistry 26:3218–3224. DOI: https://doi.org/10.1021/bi00385a042,
+                                     PMID: 3038179
+                                   Amé JC, Rolli V, Schreiber V, Niedergang C, Apiou F, Decker P, Muller S, Höger T, Ménissier-de Murcia J, de
+                                     Murcia G. 1999. PARP-2, A novel mammalian DNA damage-dependent poly(ADP-ribose) polymerase. Journal
+                                     of Biological Chemistry 274:17860–17868. DOI: https://doi.org/10.1074/jbc.274.25.17860, PMID: 10364231
+                                   Ando Y, Elkayam E, McPherson RL, Dasovich M, Cheng SJ, Voorneveld J, Filippov DV, Ong SE, Joshua-Tor L,
+                                     Leung AKL. 2019. ELTA: enzymatic labeling of terminal ADP-Ribose. Molecular Cell 73:845–856. DOI: https://
+                                     doi.org/10.1016/j.molcel.2018.12.022, PMID: 30712989
+                                   Bai P. 2015. Biology of Poly(ADP-Ribose) Polymerases: the factotums of cell maintenance. Molecular Cell 58:947–
+                                     958. DOI: https://doi.org/10.1016/j.molcel.2015.01.034, PMID: 26091343
+                                   Bartlett E, Bonfiglio JJ, Prokhorova E, Colby T, Zobel F, Ahel I, Matic I. 2018. Interplay of histone marks with
+                                     serine ADP-Ribosylation. Cell Reports 24:3488–3502. DOI: https://doi.org/10.1016/j.celrep.2018.08.092,
+                                     PMID: 30257210
+                                   Bauer PI, Hakam A, Kun E. 1986. Mechanisms of poly(ADP-ribose) polymerase catalysis; mono-ADP-ribosylation
+                                     of poly(ADP-ribose) polymerase at Nanomolar concentrations of NAD. FEBS Letters 195:331–338. DOI: https://
+                                     doi.org/10.1016/0014-5793(86)80188-0, PMID: 2935422
+                                   Bauer PI, Buki KG, Hakam A, Kun E. 1990. Macromolecular association of ADP-ribosyltransferase and its
+                                     correlation with enzymic activity. Biochemical Journal 270:17–26. DOI: https://doi.org/10.1042/bj2700017,
+                                     PMID: 2144419
+                                   Berger NA. 1985. Poly(ADP-ribose) in the cellular response to DNA damage. Radiation Research 101:4–15.
+                                     DOI: https://doi.org/10.2307/3576299, PMID: 3155867
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                19 of 22
+           Research article                                                                                     Biochemistry and Chemical Biology
+
+                                   Bilokapic S, Suskiewicz MJ, Ahel I, Halic M. 2020. Bridging of DNA breaks activates PARP2-HPF1 to modify
+                                     chromatin. Nature 585:609–613. DOI: https://doi.org/10.1038/s41586-020-2725-7, PMID: 32939087
+                                   Bonfiglio JJ, Fontana P, Zhang Q, Colby T, Gibbs-Seymour I, Atanassov I, Bartlett E, Zaja R, Ahel I, Matic I.
+                                     2017a. Serine ADP-Ribosylation depends on HPF1. Molecular Cell 65:932–940. DOI: https://doi.org/10.1016/j.
+                                     molcel.2017.01.003, PMID: 28190768
+                                   Bonfiglio JJ, Colby T, Matic I. 2017b. Mass spectrometry for serine ADP-ribosylation? think o-glycosylation!.
+                                     Nucleic Acids Research 45:6259–6264. DOI: https://doi.org/10.1093/nar/gkx446, PMID: 28520971
+                                   Bonfiglio JJ, Leidecker O, Dauben H, Longarini EJ, Colby T, San Segundo-Acosta P, Perez KA, Matic I. 2020. An
+                                     HPF1/PARP1-Based chemical biology strategy for exploring ADP-Ribosylation. Cell 183:1086–1102.
+                                     DOI: https://doi.org/10.1016/j.cell.2020.09.055, PMID: 33186521
+                                   Cervantes-Laurean D, Jacobson EL, Jacobson MK. 1997. Preparation of low molecular weight model conjugates
+                                     for ADP-ribose linkages to protein. Methods in Enzymology 280:275–287. DOI: https://doi.org/10.1016/s0076-
+                                     6879(97)80119-x, PMID: 9211323
+                                   Clark NJ, Kramer M, Muthurajan UM, Luger K. 2012. Alternative modes of binding of poly(ADP-ribose)
+                                     polymerase 1 to free DNA and nucleosomes. Journal of Biological Chemistry 287:32430–32439. DOI: https://
+                                     doi.org/10.1074/jbc.M112.397067, PMID: 22854955
+                                   D’Silva I, Pelletier JD, Lagueux J, D’Amours D, Chaudhry MA, Weinfeld M, Lees-Miller SP, Poirier GG. 1999.
+                                     Relative affinities of poly(ADP-ribose) polymerase and DNA-dependent protein kinase for DNA strand
+                                     interruptions. Biochimica Et Biophysica Acta 1430:119–126. DOI: https://doi.org/10.1016/s0167-4838(98)
+                                     00278-7, PMID: 10082940
+                                   Dawicki-McKenna JM, Langelier MF, DeNizio JE, Riccio AA, Cao CD, Karch KR, McCauley M, Steffen JD, Black
+                                     BE, Pascal JM. 2015. PARP-1 activation requires local unfolding of an autoinhibitory domain. Molecular Cell 60:
+                                     755–768. DOI: https://doi.org/10.1016/j.molcel.2015.10.013, PMID: 26626480
+                                   Desmarais Y, Ménard L, Lagueux J, Poirier GG. 1991. Enzymological properties of poly(ADP-ribose)polymerase:
+                                     characterization of automodification sites and NADase activity. Biochimica Et Biophysica Acta (BBA) - Protein
+                                     Structure and Molecular Enzymology 1078:179–186. DOI: https://doi.org/10.1016/0167-4838(91)99007-F,
+                                     PMID: 1648406
+                                   Dodson G, Wlodawer A. 1998. Catalytic triads and their relatives. Trends in Biochemical Sciences 23:347–352.
+                                     DOI: https://doi.org/10.1016/S0968-0004(98)01254-7, PMID: 9787641
+                                   Fontana P, Bonfiglio JJ, Palazzo L, Bartlett E, Matic I, Ahel I. 2017. Serine ADP-ribosylation reversal by the
+                                     hydrolase ARH3. eLife 6:e28533. DOI: https://doi.org/10.7554/eLife.28533, PMID: 28650317
+                                   Gagné JP, Ethier C, Defoy D, Bourassa S, Langelier MF, Riccio AA, Pascal JM, Moon KM, Foster LJ, Ning Z,
+                                     Figeys D, Droit A, Poirier GG. 2015. Quantitative site-specific ADP-ribosylation profiling of DNA-dependent
+                                     PARPs. DNA Repair 30:68–79. DOI: https://doi.org/10.1016/j.dnarep.2015.02.004, PMID: 25800440
+                                   Gibbs-Seymour I, Fontana P, Rack JGM, Ahel I. 2016. HPF1/C4orf27 is a PARP-1-Interacting protein that
+                                     regulates PARP-1 ADP-Ribosylation activity. Molecular Cell 62:432–442. DOI: https://doi.org/10.1016/j.molcel.
+                                     2016.03.008, PMID: 27067600
+                                   Gibson BA, Kraus WL. 2012. New insights into the molecular and cellular functions of poly(ADP-ribose) and
+                                     PARPs. Nature Reviews Molecular Cell Biology 13:411–424. DOI: https://doi.org/10.1038/nrm3376,
+                                     PMID: 22713970
+                                   Hurtado-Bagès S, Knobloch G, Ladurner AG, Buschbeck M. 2020. The taming of PARP1 and its impact on NAD+
+                                     metabolism. Molecular Metabolism 38:100950. DOI: https://doi.org/10.1016/j.molmet.2020.01.014, PMID: 321
+                                     99820
+                                   Jiang H, Kim JH, Frizzell KM, Kraus WL, Lin H. 2010. Clickable NAD analogues for labeling substrate proteins of
+                                     poly(ADP-ribose) polymerases. Journal of the American Chemical Society 132:9363–9372. DOI: https://doi.org/
+                                     10.1021/ja101588r, PMID: 20560583
+                                   Juarez-Salinas H, Sims JL, Jacobson MK. 1979. Poly(ADP-ribose) levels in carcinogen-treated cells. Nature 282:
+                                     740–741. DOI: https://doi.org/10.1038/282740a0, PMID: 229416
+                                   Karlberg T, Langelier MF, Pascal JM, Schüler H. 2013. Structural biology of the writers, readers, and erasers in
+                                     mono- and poly(ADP-ribose) mediated signaling. Molecular Aspects of Medicine 34:1088–1108. DOI: https://
+                                     doi.org/10.1016/j.mam.2013.02.002, PMID: 23458732
+                                   Kawaichi M, Ueda K, Hayaishi O. 1981. Multiple autopoly(ADP-ribosyl)ation of rat liver poly(ADP-ribose)
+                                     synthetase. Mode of modification and properties of automodified synthetase. Journal of Biological Chemistry
+                                     256:9483–9489. DOI: https://doi.org/10.1016/S0021-9258(19)68788-0, PMID: 6270088
+                                   Lagueux J, Ménard L, Candas B, Brochu G, Potvin F, Verreault A, Cook PF, Poirier GG. 1995. Equilibrium model
+                                     in an in vitro poly(ADP-ribose) turnover system. Biochimica Et Biophysica Acta (BBA) - Gene Structure and
+                                     Expression 1264:201–208. DOI: https://doi.org/10.1016/0167-4781(95)00143-5, PMID: 7495864
+                                   Langelier MF, Servent KM, Rogers EE, Pascal JM. 2008. A third zinc-binding domain of human poly(ADP-ribose)
+                                     polymerase-1 coordinates DNA-dependent enzyme activation. Journal of Biological Chemistry 283:4105–4114.
+                                     DOI: https://doi.org/10.1074/jbc.M708558200, PMID: 18055453
+                                   Langelier MF, Riccio AA, Pascal JM. 2014. PARP-2 and PARP-3 are selectively activated by 5’ phosphorylated
+                                     DNA breaks through an allosteric regulatory mechanism shared with PARP-1. Nucleic Acids Research 42:7762–
+                                     7775. DOI: https://doi.org/10.1093/nar/gku474, PMID: 24928857
+                                   Larsen SC, Hendriks IA, Lyon D, Jensen LJ, Nielsen ML. 2018. Systems-wide analysis of serine ADP-Ribosylation
+                                     reveals widespread occurrence and Site-Specific overlap with phosphorylation. Cell Reports 24:2493–2505.
+                                     DOI: https://doi.org/10.1016/j.celrep.2018.07.083, PMID: 30157440
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                               20 of 22
+           Research article                                                                                            Biochemistry and Chemical Biology
+
+                                   Liszczak G, Diehl KL, Dann GP, Muir TW. 2018. Acetylation blocks DNA damage-induced chromatin ADP-
+                                     ribosylation. Nature Chemical Biology 14:837–840. DOI: https://doi.org/10.1038/s41589-018-0097-1,
+                                     PMID: 30013063
+                                   Liu L, Kong M, Gassman NR, Freudenthal BD, Prasad R, Zhen S, Watkins SC, Wilson SH, Van Houten B. 2017.
+                                     PARP1 changes from three-dimensional DNA damage searching to one-dimensional diffusion after auto-
+                                     PARylation or in the presence of APE1. Nucleic Acids Research 45:12834–12847. DOI: https://doi.org/10.1093/
+                                     nar/gkx1047, PMID: 29121337
+                                   Mahadevan J, Rudolph J, Jha A, Tay JW, Dragavon J, Grumstrup EM, Luger K. 2019. Q-FADD: a mechanistic
+                                     approach for modeling the accumulation of proteins at sites of DNA damage. Biophysical Journal 116:2224–
+                                     2233. DOI: https://doi.org/10.1016/j.bpj.2019.04.032, PMID: 31109734
+                                   Marsischky GT, Wilson BA, Collier RJ. 1995. Role of glutamic acid 988 of human poly-ADP-ribose polymerase in
+                                     polymer formation. Evidence for active site similarities to the ADP-ribosylating toxins. The Journal of Biological
+                                     Chemistry 270:3247–3254. DOI: https://doi.org/10.1074/jbc.270.7.3247, PMID: 7852410
+                                   Ménard L, Thibault L, Poirier GG. 1990. Reconstitution of an in vitro poly(ADP-ribose) turnover system.
+                                     Biochimica Et Biophysica Acta (BBA) - Gene Structure and Expression 1049:45–58. DOI: https://doi.org/10.
+                                     1016/0167-4781(90)90083-E, PMID: 2113406
+                                   Ménissier de Murcia J, Ricoul M, Tartier L, Niedergang C, Huber A, Dantzer F, Schreiber V, Amé JC, Dierich A,
+                                     LeMeur M, Sabatier L, Chambon P, de Murcia G. 2003. Functional interaction between PARP-1 and PARP-2 in
+                                     chromosome stability and embryonic development in mouse. The EMBO Journal 22:2255–2263. DOI: https://
+                                     doi.org/10.1093/emboj/cdg206, PMID: 12727891
+                                   Miranda EA, Dantzer F, O’Farrell M, de Murcia G, de Murcia JM. 1995. Characterisation of a gain-of-function
+                                     mutant of poly(ADP-ribose) polymerase. Biochemical and Biophysical Research Communications 212:317–325.
+                                     DOI: https://doi.org/10.1006/bbrc.1995.1972, PMID: 7626044
+                                   Miwa M, Saikawa N, Yamaizumi Z, Nishimura S, Sugimura T. 1979. Structure of poly(adenosine diphosphate
+                                     ribose): identification of 2’-[1’’-ribosyl-2’’-(or 3’’-)(1’’’-ribosyl)]adenosine-5’,5’’,5’’’-tris(phosphate) as a branch
+                                     linkage. PNAS 76:595–599. DOI: https://doi.org/10.1073/pnas.76.2.595, PMID: 218210
+                                   Morales J, Li L, Fattah FJ, Dong Y, Bey EA, Patel M, Gao J, Boothman DA. 2014. Review of poly (ADP-ribose)
+                                     polymerase (PARP) mechanisms of action and rationale for targeting in Cancer and other diseases. Critical
+                                     Reviews in Eukaryotic Gene Expression 24:15–28. DOI: https://doi.org/10.1615/CritRevEukaryotGeneExpr.
+                                     2013006875, PMID: 24579667
+                                   Murata MM, Kong X, Moncada E, Chen Y, Imamura H, Wang P, Berns MW, Yokomori K, Digman MA. 2019.
+                                     NAD+ consumption by PARP1 in response to DNA damage triggers metabolic shift critical for damaged cell
+                                     survival. Molecular Biology of the Cell 30:2584–2597. DOI: https://doi.org/10.1091/mbc.E18-10-0650,
+                                     PMID: 31390283
+                                   Muthurajan UM, Hepler MR, Hieb AR, Clark NJ, Kramer M, Yao T, Luger K. 2014. Automodification switches
+                                     PARP-1 function from chromatin architectural protein to histone chaperone. PNAS 111:12752–12757.
+                                     DOI: https://doi.org/10.1073/pnas.1405005111, PMID: 25136112
+                                   Muthurajan U, Mattiroli F, Bergeron S, Zhou K, Gu Y, Chakravarthy S, Dyer P, Irving T, Luger K. 2016. In vitro
+                                     chromatin assembly: strategies and quality control. Methods in Enzymology 573:3–41. DOI: https://doi.org/10.
+                                     1016/bs.mie.2016.01.002, PMID: 27372747
+                                   Naegeli H, Loetscher P, Althaus FR. 1989. Poly ADP-ribosylation of proteins. Processivity of a post-translational
+                                     modification. The Journal of Biological Chemistry 264:14382–14385. PMID: 2503517
+                                   Palazzo L, Leidecker O, Prokhorova E, Dauben H, Matic I, Ahel I. 2018. Serine is the major residue for ADP-
+                                     ribosylation upon DNA damage. eLife 7:e34334. DOI: https://doi.org/10.7554/eLife.34334, PMID: 29480802
+                                   Pascal JM, Ellenberger T. 2015. The rise and fall of poly(ADP-ribose): An enzymatic perspective. DNA Repair 32:
+                                     10–16. DOI: https://doi.org/10.1016/j.dnarep.2015.04.008, PMID: 25963443
+                                   Perraud AL, Fleig A, Dunn CA, Bagley LA, Launay P, Schmitz C, Stokes AJ, Zhu Q, Bessman MJ, Penner R, Kinet
+                                     JP, Scharenberg AM. 2001. ADP-ribose gating of the calcium-permeable LTRPC2 channel revealed by nudix
+                                     motif homology. Nature 411:595–599. DOI: https://doi.org/10.1038/35079100, PMID: 11385575
+                                   Peterson CL, Côté J. 2004. Cellular machineries for chromosomal DNA repair. Genes & Development 18:602–
+                                     616. DOI: https://doi.org/10.1101/gad.1182704, PMID: 15075289
+                                   Plapp BV. 1995. Site-directed mutagenesis: a tool for studying enzyme catalysis. Methods in Enzymology 249:
+                                     91–119. DOI: https://doi.org/10.1016/0076-6879(95)49032-9, PMID: 7791629
+                                   Qi H, Price BD, Day TA. 2019. Multiple roles for mono- and poly(ADP-Ribose) in regulating stress responses.
+                                     Trends in Genetics 35:159–172. DOI: https://doi.org/10.1016/j.tig.2018.12.002, PMID: 30595401
+                                   Ray Chaudhuri A, Nussenzweig A. 2017. The multifaceted roles of PARP1 in DNA repair and chromatin
+                                     remodelling. Nature Reviews Molecular Cell Biology 18:610–621. DOI: https://doi.org/10.1038/nrm.2017.53,
+                                     PMID: 28676700
+                                   Rudolph J, Mahadevan J, Dyer P, Luger K. 2018. Poly(ADP-ribose) polymerase 1 searches DNA via a ’monkey
+                                     bar’ mechanism. eLife 7:e37818. DOI: https://doi.org/10.7554/eLife.37818, PMID: 30088474
+                                   Rudolph J, Mahadevan J, Luger K. 2020. Probing the conformational changes associated with DNA binding to
+                                     PARP1. Biochemistry 59:2003–2011. DOI: https://doi.org/10.1021/acs.biochem.0c00256, PMID: 32357296
+                                   Rudolph J, Roberts G, Luger K. 2021. Histone parylation factor 1 contributes to the inhibition of PARP1 by
+                                     Cancer drugs. Nature Communications 12:1–11. DOI: https://doi.org/10.1038/s41467-021-20998-8,
+                                     PMID: 33531508
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                                       21 of 22
+           Research article                                                                                      Biochemistry and Chemical Biology
+
+                                   Ruf A, Rolli V, de Murcia G, Schulz GE. 1998. The mechanism of the elongation and branching reaction of poly
+                                     (ADP-ribose) polymerase as derived from crystal structures and mutagenesis. Journal of Molecular Biology 278:
+                                     57–65. DOI: https://doi.org/10.1006/jmbi.1998.1673, PMID: 9571033
+                                   Steffen JD, McCauley MM, Pascal JM. 2016. Fluorescent sensors of PARP-1 structural dynamics and allosteric
+                                     regulation in response to DNA damage. Nucleic Acids Research 44:9771–9783. DOI: https://doi.org/10.1093/
+                                     nar/gkw710, PMID: 27530425
+                                   Sugimura T, Miwa M. 1982. Structure and Properties of Poly(ADP-ribose). In: Hayaishi O, Ueda K (Eds). ADP-
+                                     Ribosylation Reactions, Biology and Medicine. New York: Academic Press. p. 43–62. DOI: https://doi.org/10.
+                                     1016/B978-0-12-333660-6.X5001-2
+                                   Sun FH, Zhao P, Zhang N, Kong LL, Wong CCL, Yun CH. 2021. HPF1 remodels the active site of PARP1 to enable
+                                     the serine ADP-ribosylation of histones. Nature Communications 12:1028. DOI: https://doi.org/10.1038/
+                                     s41467-021-21302-4, PMID: 33589610
+                                   Suskiewicz MJ, Palazzo L, Hughes R, Ahel I. 2020a. Progress and outlook in studying the substrate specificities of
+                                     PARPs and related enzymes. The FEBS Journal 1:15518. DOI: https://doi.org/10.1111/febs.15518
+                                   Suskiewicz MJ, Zobel F, Ogden TEH, Fontana P, Ariza A, Yang JC, Zhu K, Bracken L, Hawthorne WJ, Ahel D,
+                                     Neuhaus D, Ahel I. 2020b. HPF1 completes the PARP active site for DNA damage-induced ADP-ribosylation.
+                                     Nature 579:598–602. DOI: https://doi.org/10.1038/s41586-020-2013-6, PMID: 32028527
+                                   Tao Z, Gao P, Liu HW. 2009. Identification of the ADP-ribosylation sites in the PARP-1 automodification domain:
+                                     analysis and implications. Journal of the American Chemical Society 131:14258–14260. DOI: https://doi.org/10.
+                                     1021/ja906135d, PMID: 19764761
+                                   Teloni F, Altmeyer M. 2016. Readers of poly(ADP-ribose): designed to be fit for purpose. Nucleic Acids Research
+                                     44:993–1006. DOI: https://doi.org/10.1093/nar/gkv1383, PMID: 26673700
+                                   Thomassin H, Ménard L, Hengartner C, Kirkland JB, Poirier GG. 1992. Poly(ADP-ribosyl)ation of chromatin in an
+                                     in-vitro poly(ADP-ribose)-turnover system. Biochimica Et Biophysica Acta (BBA) - Molecular Cell Research 1137:
+                                     171–181. DOI: https://doi.org/10.1016/0167-4889(92)90199-L, PMID: 1420323
+                                   Thorsell AG, Ekblad T, Karlberg T, Löw M, Pinto AF, Trésaugues L, Moche M, Cohen MS, Schüler H. 2017.
+                                     Structural basis for potency and promiscuity in Poly(ADP-ribose) Polymerase (PARP) and tankyrase inhibitors.
+                                     Journal of Medicinal Chemistry 60:1262–1271. DOI: https://doi.org/10.1021/acs.jmedchem.6b00990, PMID: 2
+                                     8001384
+                                   Vyas S, Matic I, Uchima L, Rood J, Zaja R, Hay RT, Ahel I, Chang P. 2014. Family-wide analysis of poly(ADP-
+                                     ribose) polymerase activity. Nature Communications 5:1–13. DOI: https://doi.org/10.1038/ncomms5426
+                                   Yi M, Dong B, Qin S, Chu Q, Wu K, Luo S. 2019. Advances and perspectives of PARP inhibitors. Experimental
+                                     Hematology & Oncology 8:1–12. DOI: https://doi.org/10.1186/s40164-019-0154-9, PMID: 31737426
+                                   Zhang Y, Wang J, Ding M, Yu Y. 2013. Site-specific characterization of the asp- and Glu-ADP-ribosylated
+                                     proteome. Nature Methods 10:981–984. DOI: https://doi.org/10.1038/nmeth.2603, PMID: 23955771
+
+
+
+
+Rudolph et al. eLife 2021;10:e65773. DOI: https://doi.org/10.7554/eLife.65773                                                               22 of 22
+

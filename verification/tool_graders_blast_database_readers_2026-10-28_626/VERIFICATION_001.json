@@ -1,0 +1,504 @@
+{
+  "record_type": "blast_database_reader_component_verification_v1",
+  "implementation_contracts": [
+    "verification/tool_graders_blast_utility_core_2026-10-28_624/CONTRACT_001.md",
+    "verification/tool_graders_blast_utility_core_2026-10-28_624/CONTRACT_002.md",
+    "verification/tool_graders_blast_utility_core_2026-10-28_624/CONTRACT_004.md"
+  ],
+  "source_files": [
+    {
+      "path": "gene_annotation_episode/blast_database_extraction.py",
+      "sha256": "4738ba23f600a0aabfe29421d788d7be62d8db1bd195a4d4432c55170dfa6a61",
+      "size_bytes": 14650,
+      "equals_tested_snapshot": true
+    },
+    {
+      "path": "gene_annotation_episode/blast_database_inspection.py",
+      "sha256": "fd63263bd6eb2d6155917fd57671bd23de1deaf71e194ae63a58676f26192c71",
+      "size_bytes": 20676,
+      "equals_tested_snapshot": true
+    },
+    {
+      "path": "tests/test_blast_database_extraction_626.py",
+      "sha256": "acc02c73aac6c9fd6a16959a6b881f3384006d8347f9f72e9a5f21956266fcc4",
+      "size_bytes": 11355,
+      "equals_tested_snapshot": true
+    },
+    {
+      "path": "tests/test_blast_database_inspection_626.py",
+      "sha256": "c99ef0b109b169366cc3d5d0dcf01787de956ac801085c9f6fac26d87cc230e8",
+      "size_bytes": 14714,
+      "equals_tested_snapshot": true
+    }
+  ],
+  "runner_attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components",
+  "runner_receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/receipt.json",
+  "case_report_source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check086_utility_components/case_reports.jsonl",
+  "e_tests": {
+    "passed": 60,
+    "failed": 0,
+    "skipped": 0,
+    "by_file": {
+      "tests/test_blast_database_extraction_626.py": 29,
+      "tests/test_blast_database_inspection_626.py": 31
+    }
+  },
+  "combined_tests": {
+    "passed": 361,
+    "total": 361,
+    "pytest_seconds": 2.37
+  },
+  "receipt_facts": {
+    "returncode": 0,
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true
+  },
+  "resource_policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "verified_cgroup": {
+    "memory_max": 21474836480,
+    "memory_swap_max": 0,
+    "runtime_max": "infinity",
+    "kill_mode": "control-group",
+    "oom_policy": "kill"
+  },
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "original_native_fixture_provenance": "verification/tool_graders_blast_database_readers_2026-10-28_626/FIXTURE_PROVENANCE_001.json",
+  "native_examples": {
+    "nucleotide_v4_v5": {
+      "native_sequence_count": 3,
+      "native_residue_count": 31,
+      "unit": "nt",
+      "returned_lengths": [
+        12,
+        12,
+        7
+      ]
+    },
+    "protein_v5": {
+      "native_sequence_count": 2,
+      "native_residue_count": 35,
+      "unit": "aa",
+      "returned_lengths": [
+        20,
+        15
+      ]
+    },
+    "seqB_range_2_7": {
+      "native_full_length": 12,
+      "returned_symbol_count": 6,
+      "plus_sequence": "TGCAAT",
+      "minus_sequence": "ATTGCA",
+      "interval_half_open": [
+        1,
+        7
+      ]
+    },
+    "seqA_range_8_99": {
+      "native_full_length": 12,
+      "returned_symbol_count": 5,
+      "sequence": "TACGT",
+      "interval_half_open": [
+        7,
+        12
+      ]
+    },
+    "native_integrity_detail": {
+      "returncode": 1,
+      "observed_checked_count": 3,
+      "oid_passes": [
+        0,
+        1,
+        2
+      ],
+      "scope": "unknown",
+      "overall_reason": "dependency_unavailable",
+      "missing_native_lookup_taxid": 9606,
+      "observed_population_count": null,
+      "realized_seed": null
+    }
+  },
+  "verification_limits": [
+    "No actual successful full or sampled native integrity report obtained: positive-result tests are explicitly synthetic source-grammar cases.",
+    "Only BLAST2.17.0 fixed five-column extraction, info text and native metadata JSON version1.2 exercised.",
+    "Protein range, target_only, duplicate accession retrieval/get_dups, multi-volume integrity and other native inspection/extraction formats not established by these fixtures.",
+    "Actual native commands were captured once by root in084/085; E ran no native command, service/HPC operation or database search.",
+    "Supporting reader component tests do not establish native result publication, requested episode returns or reviewed TASK/STEERING integration.",
+    "Native integrity population/OID/seed fields remain unknown where the selected diagnostic cannot establish them."
+  ],
+  "test_cases": [
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_selected_outputs_retain_lengths_identities_and_saved_copy[extract_dna_v4-lengths0-dna]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.002517936984077096
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_selected_outputs_retain_lengths_identities_and_saved_copy[extract_dna_v5-lengths1-dna]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0024222509237006307
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_selected_outputs_retain_lengths_identities_and_saved_copy[extract_protein_v5-lengths2-protein]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.001984957023523748
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_ranges_keep_full_length_and_actual_fragment[range_plus-CGTACG-interval0-plus]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007629659958183765
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_ranges_keep_full_length_and_actual_fragment[range_minus-CGTACG-interval1-minus]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007638790411874652
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_ranges_keep_full_length_and_actual_fragment[range_past_end-TACGT-interval2-plus]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.001291417982429266
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_ranges_keep_full_length_and_actual_fragment[strand_plus-TGCAAT-interval3-plus]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007449920522049069
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_ranges_keep_full_length_and_actual_fragment[strand_minus-ATTGCA-interval4-minus]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007446439703926444
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_duplicate_requests_and_rows_are_not_deduplicated_or_order_joined",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0009140929905697703
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_authentic_missing_selector_keeps_present_sequence_with_failed_outcome",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007626700680702925
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_row_does_not_renumber_next_native_row[broken\\n]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005910670151934028
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_row_does_not_renumber_next_native_row[\\xff\\n]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005749500123783946
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_row_does_not_renumber_next_native_row[\\n]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.000585694913752377
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_row_does_not_renumber_next_native_row[0\\t\\tseqA\\t12\\tACGTACGTACGT\\n]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0006396020762622356
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_sequence_keeps_original_without_derived_length[AC-T]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.000569926924072206
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_sequence_keeps_original_without_derived_length[AC.T]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005649200174957514
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_sequence_keeps_original_without_derived_length[AC T]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005576710682362318
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_sequence_keeps_original_without_derived_length[AC?T]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005924740107730031
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_sequence_keeps_original_without_derived_length[ACUT]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005682850023731589
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_native_length_conflict_is_retained_without_repair",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005803050007671118
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_native_numeric_cell_qualifies_aggregate_syntax[invalid-4]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0006035920232534409
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_invalid_native_numeric_cell_qualifies_aggregate_syntax[0-invalid]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005666209617629647
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_alias_requires_explicit_binding_and_preserves_that_basis",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0010812720283865929
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_explicit_binding_cannot_omit_exact_duplicate_request",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.000290184048935771
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_duplicate_oid_conflict_retains_both_rows",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0008322260109707713
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_open_last_row_keeps_prior_closed_record",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007781090680509806
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_internal_protein_stop_reuses_existing_symbol_semantics",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005691390251740813
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_bytes_and_supplied_context_are_checked_without_path_io",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0008495220681652427
+    },
+    {
+      "nodeid": "tests/test_blast_database_extraction_626.py::test_synthetic_empty_output_never_proves_absent_database_entry",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00041034305468201637
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_native_database_information_retains_counts_units_locators[info-dna_v4-4-3-31-nt]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0016721070278435946
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_native_database_information_retains_counts_units_locators[info-dna_v5-5-3-31-nt]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0013609059387817979
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_native_database_information_retains_counts_units_locators[info-protein_v5-5-2-35-aa]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.001377173000946641
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_native_database_information_retains_counts_units_locators[metadata-dna_v4-4-3-31-nt]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0015013000229373574
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_native_database_information_retains_counts_units_locators[metadata-dna_v5-5-3-31-nt]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0014772360445931554
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_native_database_information_retains_counts_units_locators[metadata-protein_v5-5-2-35-aa]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0014876939821988344
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_info_without_exact_length_does_not_claim_exact_residue_total",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007008089451119304
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_duplicate_conflicting_json_members_are_preserved",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0008409330621361732
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_invalid_metadata_count_keeps_prior_valid_members[true]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007800930179655552
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_invalid_metadata_count_keeps_prior_valid_members[-1]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007751589873805642
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_invalid_metadata_count_keeps_prior_valid_members[\"three\"]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007746859919279814
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_invalid_metadata_count_keeps_prior_valid_members[NaN]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0006694749463349581
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_truncated_json_keeps_complete_preceding_fields",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007565699052065611
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_molecule_conflict_keeps_native_units[info]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.000716750044375658
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_molecule_conflict_keeps_native_units[metadata]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007739180000498891
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_conflicting_info_counts_have_original_line_positions",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007673380896449089
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_unrecognized_or_prepared_manifest_is_not_native_metadata",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00041119696106761694
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_summary_exception_does_not_prove_database_corruption_or_counts[integrity_full]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0016216390067711473
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_summary_exception_does_not_prove_database_corruption_or_counts[integrity_stride]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0007484930101782084
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_detailed_checks_preserve_three_passes_and_dependency_failure[v4_integrity_full]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0012354410719126463
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_authentic_detailed_checks_preserve_three_passes_and_dependency_failure[v5_integrity_diagnostic]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.001219309982843697
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_full_success_requires_native_full_report_and_leaves_count_unknown",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0004837019369006157
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_zero_exit_or_requested_full_alone_is_not_full_integrity[]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00046183401718735695
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_zero_exit_or_requested_full_alone_is_not_full_integrity[Using `full' mode: every OID will be tested.\\n]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.00043783592991530895
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_zero_exit_or_requested_full_alone_is_not_full_integrity[Using `full' mode: every OID will be tested.\\nTesting 0 volume(s).\\n Result=SUCCESS. No errors reported for 0 volume(s).\\nTesting 0 alias(es).\\n Result=SUCCESS. No errors reported for 0 alias(es).\\n]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0004993759794160724
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_sample_summary_does_not_use_requested_count_as_observed_count",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0004941660445183516
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_sample_oid_statuses_report_actual_distinct_observed_rows",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0005083810538053513
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_sequence_failure_is_distinct_from_missing_input_failure",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0008728940738365054
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_unknown_or_wrong_database_diagnostic_prevents_full_pass",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0009371439227834344
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_synthetic_partial_capture_never_claims_completed_integrity",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0004857160383835435
+    },
+    {
+      "nodeid": "tests/test_blast_database_inspection_626.py::test_inspection_custody_rejects_changed_bytes_and_never_opens_database_paths",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_seconds": 0.0019547089468687773
+    }
+  ]
+}

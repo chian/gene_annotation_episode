@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="39" time="0.439" timestamp="2026-10-25T02:12:34.265600-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_xmfa_sources" name="test_complete_combined_native_entries_and_reverse_complement_checks" time="0.020" /><testcase classname="tests.test_xmfa_sources" name="test_separate_files_use_native_argv_order_not_sorted_labels" time="0.007" /><testcase classname="tests.test_xmfa_sources" name="test_concatenated_file_records_remain_ordered_across_native_span" time="0.004" /><testcase classname="tests.test_xmfa_sources" name="test_missing_or_conflicting_source_evidence_never_uses_likely_match[unknown_mode-xmfa_invocation_mode_missing]" time="0.012" /><testcase classname="tests.test_xmfa_sources" name="test_missing_or_conflicting_source_evidence_never_uses_likely_match[missing_invocation_proof-xmfa_invocation_mode_missing]" time="0.013" /><testcase classname="tests.test_xmfa_sources" name="test_missing_or_conflicting_source_evidence_never_uses_likely_match[missing_path_proof-xmfa_source_binding_missing]" time="0.016" /><testcase classname="tests.test_xmfa_sources" name="test_missing_or_conflicting_source_evidence_never_uses_likely_match[basename_only-xmfa_source_binding_missing]" time="0.011" /><testcase classname="tests.test_xmfa_sources" name="test_missing_or_conflicting_source_evidence_never_uses_likely_match[partial_records-xmfa_input_population_partial]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_missing_or_conflicting_source_evidence_never_uses_likely_match[wrong_format-xmfa_source_binding_conflict]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_input_entry_identity_changes_source_check_and_does_not_join_by_header" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_exact_mismatch_columns_and_other_native_rows_remain_usable" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_outside_source_span_is_not_clipped_or_partially_compared" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_duplicate_same_metadata_retained_but_conflicting_file_not_selected" time="0.011" /><testcase classname="tests.test_xmfa_sources" name="test_missing_entry_remains_missing_without_row_position_fallback" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_entry_tokens_require_native_decimal_ordinal_syntax[1e0]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_entry_tokens_require_native_decimal_ordinal_syntax[+1]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_entry_tokens_require_native_decimal_ordinal_syntax[NA]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_entry_tokens_require_native_decimal_ordinal_syntax[0]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_multiple_candidate_paths_do_not_choose_first_matching_record" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_original_maps_optional_distinct_occurrences_retained_conflicts_qualified" time="0.012" /><testcase classname="tests.test_xmfa_sources" name="test_wrong_original_map_bounds_and_types_fail_explicitly[original_interval_0based_half_open-value0]" time="0.001" /><testcase classname="tests.test_xmfa_sources" name="test_wrong_original_map_bounds_and_types_fail_explicitly[staged_interval_0based_half_open-value1]" time="0.001" /><testcase classname="tests.test_xmfa_sources" name="test_wrong_original_map_bounds_and_types_fail_explicitly[original_length-20]" time="0.000" /><testcase classname="tests.test_xmfa_sources" name="test_wrong_original_map_bounds_and_types_fail_explicitly[strand-unknown]" time="0.000" /><testcase classname="tests.test_xmfa_sources" name="test_saved_binding_internal_relationships_checked[source_length-51]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_saved_binding_internal_relationships_checked[state-unknown]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_saved_binding_internal_relationships_checked[metadata_indices-value2]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_saved_binding_internal_relationships_checked[components-value3]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_saved_match_flag_does_not_override_changed_source_sequence" time="0.008" /><testcase classname="tests.test_xmfa_sources" name="test_saved_original_map_rechecks_bound_source_length" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_malformed_closed_source_operands_are_explicit_errors[duplicate_record]" time="0.000" /><testcase classname="tests.test_xmfa_sources" name="test_malformed_closed_source_operands_are_explicit_errors[source_gap]" time="0.000" /><testcase classname="tests.test_xmfa_sources" name="test_malformed_closed_source_operands_are_explicit_errors[unknown_map_record]" time="0.000" /><testcase classname="tests.test_xmfa_sources" name="test_malformed_closed_source_operands_are_explicit_errors[bad_requirement]" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_saved_binding_does_not_accept_foreign_document_or_entry" time="0.013" /><testcase classname="tests.test_xmfa_sources" name="test_saved_binding_rejects_contradictory_native_metadata[multiple_file_entry]" time="0.007"><failure message="Failed: DID NOT RAISE ValueError">change = 'multiple_file_entry'
+
+    @pytest.mark.parametrize('change', ['multiple_file_entry', 'format_conflict'])
+    def test_saved_binding_rejects_contradictory_native_metadata(change):
+        data=(BASE/'separate.xmfa').read_bytes()
+        extra=(b'#Sequence1Entry\t1\n' if change=='multiple_file_entry'
+               else b'#Sequence1Format\tFastA\n')
+        data=data.replace(b'#FormatVersion Mauve1\n',b'#FormatVersion Mauve1\n'+extra)
+        # Native files use a tab; preserve that delimiter when adding the fixture.
+        if extra not in data:
+            data=data.replace(b'#FormatVersion\tMauve1\n',b'#FormatVersion\tMauve1\n'+extra)
+        assert extra in data
+        document=native_document('metadata-original.xmfa',data)
+        result=bind(document,supplied('multiple_files_concatenated'))
+        assert result['members'][0]['state']=='resolved'
+        replacement=(b'#Sequence1Entry\t9\n' if change=='multiple_file_entry'
+                     else b'#Sequence1Format\tGenBank\n')
+        changed=native_document('metadata-changed.xmfa',data.replace(extra,replacement,1))
+        # Source sequences and coordinate checks are unchanged, but the native
+        # association declaration now contradicts the saved resolved binding.
+        result['document_id']=changed['document_id']
+&gt;       with pytest.raises(ValueError,match='xmfa_source_(entry|format)_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_xmfa_sources.py:306: Failed</failure></testcase><testcase classname="tests.test_xmfa_sources" name="test_saved_binding_rejects_contradictory_native_metadata[format_conflict]" time="0.008"><failure message="Failed: DID NOT RAISE ValueError">change = 'format_conflict'
+
+    @pytest.mark.parametrize('change', ['multiple_file_entry', 'format_conflict'])
+    def test_saved_binding_rejects_contradictory_native_metadata(change):
+        data=(BASE/'separate.xmfa').read_bytes()
+        extra=(b'#Sequence1Entry\t1\n' if change=='multiple_file_entry'
+               else b'#Sequence1Format\tFastA\n')
+        data=data.replace(b'#FormatVersion Mauve1\n',b'#FormatVersion Mauve1\n'+extra)
+        # Native files use a tab; preserve that delimiter when adding the fixture.
+        if extra not in data:
+            data=data.replace(b'#FormatVersion\tMauve1\n',b'#FormatVersion\tMauve1\n'+extra)
+        assert extra in data
+        document=native_document('metadata-original.xmfa',data)
+        result=bind(document,supplied('multiple_files_concatenated'))
+        assert result['members'][0]['state']=='resolved'
+        replacement=(b'#Sequence1Entry\t9\n' if change=='multiple_file_entry'
+                     else b'#Sequence1Format\tGenBank\n')
+        changed=native_document('metadata-changed.xmfa',data.replace(extra,replacement,1))
+        # Source sequences and coordinate checks are unchanged, but the native
+        # association declaration now contradicts the saved resolved binding.
+        result['document_id']=changed['document_id']
+&gt;       with pytest.raises(ValueError,match='xmfa_source_(entry|format)_conflict'):
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_xmfa_sources.py:306: Failed</failure></testcase><testcase classname="tests.test_xmfa_sources" name="test_native_tab_delimiter_preserves_leading_spaces_in_exact_file_token" time="0.006" /><testcase classname="tests.test_xmfa_sources" name="test_pure_binding_and_saved_recheck_without_any_acquisition" time="0.011" /></testsuite></testsuites>

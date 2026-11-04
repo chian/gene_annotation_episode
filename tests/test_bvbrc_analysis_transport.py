@@ -88,7 +88,7 @@ def test_download_retains_actual_range_or_ignored_range_without_trim(monkeypatch
     monkeypatch.setenv('BVBRC_TEST_HEADER', 'fixture-only-secret')
     with server(body, status=status, headers=headers) as (url, calls):
         client = BVBRCAnalysisClient({'Workspace': url + '/workspace'}, authorization_env='BVBRC_TEST_HEADER')
-        snapshot = client.download(url + '/download?key=fixture-capability', byte_range=(2, 4))
+        snapshot = client.download(url + '/download?key=fixture-capability', max_bytes=64, byte_range=(2, 4))
     assert len(calls) == 1 and calls[0]['headers']['Range'] == 'bytes=2-4'
     assert 'Authorization' not in calls[0]['headers']
     assert snapshot.content == body and snapshot.transport['status'] == status
@@ -137,7 +137,7 @@ def test_http_error_retains_body_and_does_not_retry_or_redirect(status):
 def test_truncated_body_retains_received_bytes():
     with server(b'abc', headers={'Content-Length': '10'}) as (url, calls):
         with pytest.raises(AcquisitionError) as raised:
-            BVBRCAnalysisClient({'Workspace': url}).download(url + '/download')
+            BVBRCAnalysisClient({'Workspace': url}).download(url + '/download', max_bytes=64)
     assert len(calls) == 1
     assert raised.value.code == 'bvbrc_response_body_incomplete'
     assert raised.value.snapshot.content == b'abc'
@@ -153,12 +153,16 @@ def test_reader_content_length_mismatch_remains_explicit(monkeypatch):
         def __enter__(self): return self
         def __exit__(self, *_): return False
         def geturl(self): return 'https://workspace.fixture/download'
-        def read(self): return b'abc'
+        def read(self, size):
+            content = getattr(self, 'remaining', b'abc')
+            self.remaining = content[size:]
+            return content[:size]
     monkeypatch.setattr('urllib.request.OpenerDirector.open', lambda *a, **k: Response())
     with pytest.raises(AcquisitionError) as raised:
-        BVBRCAnalysisClient({'Workspace': 'https://workspace.fixture'}).download('https://workspace.fixture/download')
+        BVBRCAnalysisClient({'Workspace': 'https://workspace.fixture'}).download('https://workspace.fixture/download', max_bytes=64)
     assert raised.value.snapshot.content == b'abc'
-    assert raised.value.snapshot.transport['body_capture_error'] == 'content_length_mismatch'
+    assert raised.value.snapshot.transport['body_capture_error'] == 'IncompleteRead'
+    assert raised.value.snapshot.transport['body_capture_failure'] == 'provider_body_capture_failed'
 
 
 def test_missing_endpoint_auth_and_unconfigured_auth_origin_send_nothing(monkeypatch):
@@ -195,4 +199,4 @@ def test_invalid_range_does_not_issue_a_request(byte_range, monkeypatch):
     monkeypatch.setattr('urllib.request.OpenerDirector.open', lambda *a, **k: pytest.fail('unexpected request'))
     with pytest.raises(ValueError, match='range_invalid'):
         BVBRCAnalysisClient({'Workspace': 'https://workspace.fixture'}).download(
-            'https://workspace.fixture/download', byte_range=byte_range)
+            'https://workspace.fixture/download', max_bytes=64, byte_range=byte_range)

@@ -1,0 +1,72 @@
+F..............FFFFFF.........                                           [100%]
+=================================== FAILURES ===================================
+___ test_selected_start_uses_701_and_preserves_input_file_and_original_facts ___
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:92: in test_selected_start_uses_701_and_preserves_input_file_and_original_facts
+    assert c.prepares[0][1]['cwd'] == str(Path(execution).parent)
+E   AssertionError: assert PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/ch...b91b9d64c57446897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755') == '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check163a_op...eb91b9d64c57446897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755'
+E    +  where '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check163a_op...eb91b9d64c57446897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755' = str(PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/ch...b91b9d64c57446897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755'))
+E    +    where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/ch...b91b9d64c57446897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755') = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/ch...46897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755/native.json').parent
+E    +      where PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/ch...46897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755/native.json') = Path('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check163a_op...446897eca497e4078035383286edb75ce5551111f/2ee5e8af70a64c5fcee2ef36c2c48490ef65491aba2bc3b3e49ff946bdb58755/native.json')
+_ test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[wrong_id] _
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:157: in test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing
+    outcome, _, _ = c.action(arguments={'retry_failed_execution_id': execution + '-other' if fault == 'wrong_id' else execution}, finish=False)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:73: in action
+    owner.begin(key, tool, arguments)
+source_snapshot/gene_annotation_episode/practical_execution_state.py:199: in begin
+    raise ValueError('practical_assignment_already_completed')
+E   ValueError: practical_assignment_already_completed
+_ test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[active] _
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:157: in test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing
+    outcome, _, _ = c.action(arguments={'retry_failed_execution_id': execution + '-other' if fault == 'wrong_id' else execution}, finish=False)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:73: in action
+    owner.begin(key, tool, arguments)
+source_snapshot/gene_annotation_episode/practical_execution_state.py:199: in begin
+    raise ValueError('practical_assignment_already_completed')
+E   ValueError: practical_assignment_already_completed
+_ test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[unknown_rc] _
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:157: in test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing
+    outcome, _, _ = c.action(arguments={'retry_failed_execution_id': execution + '-other' if fault == 'wrong_id' else execution}, finish=False)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:73: in action
+    owner.begin(key, tool, arguments)
+source_snapshot/gene_annotation_episode/practical_execution_state.py:199: in begin
+    raise ValueError('practical_assignment_already_completed')
+E   ValueError: practical_assignment_already_completed
+_ test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[killed] _
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:157: in test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing
+    outcome, _, _ = c.action(arguments={'retry_failed_execution_id': execution + '-other' if fault == 'wrong_id' else execution}, finish=False)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:73: in action
+    owner.begin(key, tool, arguments)
+source_snapshot/gene_annotation_episode/practical_execution_state.py:199: in begin
+    raise ValueError('practical_assignment_already_completed')
+E   ValueError: practical_assignment_already_completed
+_ test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[uncertain] _
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:157: in test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing
+    outcome, _, _ = c.action(arguments={'retry_failed_execution_id': execution + '-other' if fault == 'wrong_id' else execution}, finish=False)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:73: in action
+    owner.begin(key, tool, arguments)
+source_snapshot/gene_annotation_episode/practical_execution_state.py:199: in begin
+    raise ValueError('practical_assignment_already_completed')
+E   ValueError: practical_assignment_already_completed
+__ test_explicit_failed_retry_has_new_selected_attempt_and_same_input_control __
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:166: in test_explicit_failed_retry_has_new_selected_attempt_and_same_input_control
+    new, _ = c.action(arguments={'retry_failed_execution_id': execution})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_flux_balance_operation_binding_706.py:73: in action
+    owner.begin(key, tool, arguments)
+source_snapshot/gene_annotation_episode/practical_execution_state.py:199: in begin
+    raise ValueError('practical_assignment_already_completed')
+E   ValueError: practical_assignment_already_completed
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_selected_start_uses_701_and_preserves_input_file_and_original_facts
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[wrong_id]
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[active]
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[unknown_rc]
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[killed]
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_selected_retry_rejects_nonoriginal_or_not_failed_without_replacing[uncertain]
+FAILED source_snapshot/tests/test_flux_balance_operation_binding_706.py::test_explicit_failed_retry_has_new_selected_attempt_and_same_input_control
+7 failed, 23 passed in 80.65s (0:01:20)

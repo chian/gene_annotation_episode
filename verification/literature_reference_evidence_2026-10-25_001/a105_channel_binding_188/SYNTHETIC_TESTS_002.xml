@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="2.421" timestamp="2026-10-27T19:13:33.759238-05:00" hostname="chia-Z590-UD"><testcase classname="" name="tests.test_literature_channel_binding_188" time="0.000"><error message="collection failure">ImportError while importing test module '/home/chia/repos/gene_annotation_episode/tests/test_literature_channel_binding_188.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_channel_binding_188.py:22: in &lt;module&gt;
+    from gene_annotation_episode.state import Store
+gene_annotation_episode/state.py:20: in &lt;module&gt;
+    from . import materials
+gene_annotation_episode/materials.py:20: in &lt;module&gt;
+    from .material_parsing import FORMATS, VERSION, recognize, records
+gene_annotation_episode/material_parsing.py:6: in &lt;module&gt;
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+E   ModuleNotFoundError: No module named 'Bio'</error></testcase></testsuite></testsuites>

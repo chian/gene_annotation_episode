@@ -1,0 +1,124 @@
+--- before/test_runtime_decision_exchanges.py
++++ tests/test_runtime_decision_exchanges.py
+@@ -122,9 +122,12 @@
+ def test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation(tmp_path):
+     with Store(tmp_path / 'state') as store:
+         subject = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs'][0]
+-        provider = ConversationProvider([lookup(), lookup(category='tool/sequence.inspect'),
+-            select({'selection': {'kind': 'tool', 'tool': 'sequence.inspect',
+-                'arguments': {'subject_ref': subject}}, 'report_update': {}})])
++        commit = {name: [] for name in store.reasoning_schema()['required']}
++        commit['hypotheses'] = [{'alias': 'unresolved_from_supplied_target',
++            'subject_refs': [subject], 'predicate': 'biological_role',
++            'value': {'type': 'enum', 'value': 'unresolved'}, 'context_refs': []}]
++        action = {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
++        provider = ConversationProvider([lookup(), lookup(category='reason'), select(action)])
+         workflow = runtime.Workflow(store, ToolRegistry(store), provider, tmp_path / 'run',
+             'synthetic-exchange-run', lambda path, initial: FixtureController(str(path), initial, 1),
+             lambda *_: 0, episode_binding_factories=(), execution_binding={'fixture': True},
+@@ -138,6 +141,7 @@
+         assert count(store, 'runtime_completion_slots') == 1
+         assert count(store, 'runtime_observations') == 1
+         assert count(store, 'runtime_decision_effects') == 1
++        assert count(store, 'reasoning_commits') == 1 and count(store, 'tool_operations') == 0
+         rows = exchanges(store)
+         assert len(rows) == 3 and all(row['timing'] for row in rows)
+         assert [frame['kind'] for frame in provider.contexts] == [
+@@ -150,6 +154,7 @@
+         assert rows[0]['request']['context'] == provider.contexts[0]
+         outer = json.loads(store.db.execute('SELECT response FROM runtime_model_calls').fetchone()[0])
+         assert set(outer) == {'selection', 'report_update'}
++        assert outer == action
+         assert rows[-1]['response']['response']['selection'] == outer['selection']
+         assert set(provider.schemas[0]['properties']) == {'response'}
+ 
+@@ -183,16 +188,18 @@
+ def test_own_input_detail_requests_stay_inside_pending_decision(tmp_path):
+     store, tools = setup(tmp_path)
+     detail = {'response': {'response_type': 'request_context', 'lookup': {
+-        'view': 'own_attempt_detail', 'decision_index': 0, 'pointer': '/arguments/page',
++        'view': 'own_attempt_detail', 'decision_index': 0, 'pointer': '/commit/fixture_value',
+         'offset': 0, 'limit': 1}}}
+-    provider = ConversationProvider([select(tool(page=7)), lookup(decision_indices=[0]), detail,
++    # Seven is a synthetic accounting fixture value, not a scientific score.
++    provider = ConversationProvider([select(reason(7)), lookup(decision_indices=[0]), detail,
+         select(reason(0))])
+     result = run(store, tools, provider, tmp_path / 'run', counts=(2, 2), decision_protocol=PROTOCOL)
+-    assert result['completed_actions'] == 2 and tools.executions == 1
+-    assert provider.contexts[2]['result']['records'][0]['inputs']['arguments']['page'] == 7
++    assert result['completed_actions'] == 2 and tools.executions == 0
++    assert provider.contexts[2]['result']['records'][0]['inputs']['commit']['fixture_value'] == 7
+     assert provider.contexts[3]['result']['view'] == 'own_attempt_detail'
++    assert provider.contexts[3]['result']['pointer'] == '/commit/fixture_value'
+     assert provider.contexts[3]['result']['values'] == 7
+-    assert count(store, 'runtime_model_calls') == count(store, 'runtime_observations') == 2
++    assert count(store, 'runtime_model_calls') == count(store, 'runtime_actions') == count(store, 'runtime_observations') == 2
+     assert len(exchanges(store, 1)) == 3
+ 
+ 
+@@ -234,28 +241,39 @@
+ def test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context(tmp_path):
+     store, tools = setup(tmp_path)
+     for index in range(40):
+-        store.add({'id': f'observation_padding_{index}', 'record_type': 'observation',
++        store.add({'id': f'assessment_padding_{index}', 'record_type': 'assessment',
+             'subject_refs': ['subject_A', 'subject_B']})
+-    provider = ConversationProvider([select(tool()), select(reason(0)), lookup(decision_indices=[0]),
++    provider = ConversationProvider([select(reason(0)), select(reason(0)), lookup(decision_indices=[0]),
+         select(reason(0))])
+     workflow = runtime.Workflow(store, tools, provider, tmp_path / 'run', 'basis-fixture',
+         lambda path, initial: FixtureController(str(path), initial, 3), fixture_credit,
+         decision_protocol=PROTOCOL)
+     root = workflow.build('annotation', 'root', 'Fixture',
+         store.validate_scope({'subject_refs': store.problem()['subject_refs']}))
+-    asyncio.run(root.run_async(workflow.context))
++    result = asyncio.run(root.run_async(workflow.context))
++    assert result.units_consumed == 3 and tools.executions == 0
++    assert count(store, 'runtime_model_calls') == count(store, 'runtime_actions') == count(store, 'runtime_observations') == 3
+     raw = json.loads(store.db.execute('SELECT request FROM runtime_model_calls '
+         'WHERE call_index=2').fetchone()[0])['context']
+-    target = 'observation_1_0_14'
++    first = json.loads(store.db.execute('SELECT result FROM runtime_actions '
++        'WHERE decision_index=0').fetchone()[0])
++    target, = first['record_refs']
++    assert first['changed_record_refs'] == [target]
++    assert store.get(target)['record_type'] == 'assessment'
++    assert provider.contexts[3]['result']['records'][0]['published_references']['values'] == [target]
+     assert target not in raw['visible_record_refs']
+     assert target in root.source.report_basis
+     # Replaying a saved normalized final response recovers the same received
+     # basis without a fresh lookup or a model call.
++    original_exchanges = exchanges(store, 2)
++    original_context_count = len(provider.contexts)
+     root.source.calls = 2
+     _, _, restored_context, _ = asyncio.run(root.source.call({}, {}))
+     assert target in restored_context['visible_record_refs']
+     assert target not in json.loads(store.db.execute('SELECT request FROM runtime_model_calls '
+         'WHERE call_index=2').fetchone()[0])['context']['visible_record_refs']
++    assert exchanges(store, 2) == original_exchanges and len(provider.contexts) == original_context_count
++    assert count(store, 'runtime_observations') == 3 and tools.executions == 0
+ 
+ 
+ @pytest.mark.parametrize('boundary', ['response', 'lookup', 'final'])
+@@ -326,16 +344,19 @@
+ def test_injected_legacy_default_and_markerless_resume_do_not_migrate(tmp_path):
+     store, tools = setup(tmp_path)
+     with pytest.raises(KeyboardInterrupt):
+-        run(store, tools, ScriptedProvider([tool(), KeyboardInterrupt()]), tmp_path / 'run')
++        run(store, tools, ScriptedProvider([reason(0), KeyboardInterrupt()]), tmp_path / 'run')
+     original = store.db.execute('SELECT request FROM runtime_model_calls WHERE response IS NULL').fetchone()[0]
+     settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])
+     assert 'decision_protocol' not in settings
+-    assert 'episode.history' in {item['name'] for item in json.loads(original)['context']['tools']}
++    assert settings['root_action_boundary'] == 'root_episode_commissioning_v1'
++    assert json.loads(original)['context']['tools'] == []
+     with pytest.raises(runtime.WorkflowError, match='original_decision_protocol'):
+         run(store, tools, ScriptedProvider([]), None, resume=True, decision_protocol=PROTOCOL)
+     resumed = ScriptedProvider([reason(0)])
+     result = run(store, tools, resumed, None, resume=True)
+     assert result['completed_actions'] == 2
++    assert count(store, 'runtime_actions') == count(store, 'runtime_observations') == 2
++    assert tools.executions == 0
+     assert resumed.contexts[0] == json.loads(original)['context']
+     assert store.db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_decision_exchanges'").fetchone() is None
+ 

@@ -1,0 +1,55 @@
+{
+  "verification_kind": "local_evidence_integrity_only",
+  "checked_at_utc": "2026-10-24T22:56:49.778641+00:00",
+  "checks": {
+    "json_readable": true,
+    "fixed_primitive_ids_count": 13,
+    "required_handoff_fields_present": true,
+    "source_manifest_files": 36,
+    "source_manifest_bytes": 616340,
+    "all_pinned_source_reference_hashes_match": true,
+    "actual_public_http_response_complete_hash_and_length_match": true,
+    "actual_public_http_status": 403,
+    "effect_gap_rows": [
+      "workspace.get",
+      "workspace.get_download_url",
+      "minhash.compute_genome_distance_for_fasta2"
+    ],
+    "upstream_native_Mash_example": {
+      "not_a_BV_BRC_live_result": true,
+      "raw_row": "genome1.fna\treads\t0.12101\t4.48626e-214\t41/1000",
+      "shared_hashes": 41,
+      "denominator": 1000,
+      "fraction_exact": "41/1000",
+      "fraction_decimal": 0.041
+    }
+  },
+  "not_run": [
+    "No production/native parser or calculator tests",
+    "No credential test",
+    "No upload or submission",
+    "No successful native BV-BRC RPC",
+    "No live MinHash analysis",
+    "No full episode-path integration",
+    "No remote logs or download URL acquisition"
+  ],
+  "final_review_at_utc": "2026-10-24T22:59:39.631823+00:00",
+  "final_review": {
+    "complete_current_contract_reread": true,
+    "fasta2_effect_consistent_with_workspace_get": true,
+    "workspace_get_existing_node_wording_clarified": true,
+    "final_json_readable": true
+  },
+  "final_artifacts": [
+    {
+      "path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/CONTRACT_CANDIDATES.json",
+      "bytes": 115469,
+      "sha256": "39c53099edff6fcc54e9ac9efd5b459b9fc594da9f27bfafa8d91d91460bedf7"
+    },
+    {
+      "path": "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/FINDINGS.md",
+      "bytes": 12161,
+      "sha256": "3a913b589891b2be197055b1ab284a12c3953dd34265045c8501c258a32a9fa0"
+    }
+  ]
+}

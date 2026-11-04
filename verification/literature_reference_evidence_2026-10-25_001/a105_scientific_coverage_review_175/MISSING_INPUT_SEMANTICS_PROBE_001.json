@@ -1,0 +1,493 @@
+{
+  "origin": "synthetic_code_semantics_probe",
+  "original_paper_or_model_content_read": false,
+  "transport": {
+    "inputs": {
+      "values": {
+        "substrate_test": 20.0,
+        "substrate_reference": 10.0,
+        "km": null
+      },
+      "curve_keys": {
+        "substrate_test": "synthetic_same_curve",
+        "substrate_reference": "synthetic_same_curve",
+        "km": "synthetic_same_curve"
+      },
+      "measurement_keys": {
+        "substrate_test": "synthetic_substrate_test",
+        "substrate_reference": "synthetic_substrate_reference",
+        "km": "synthetic_km"
+      },
+      "covariance": null,
+      "variance_status": "unknown",
+      "observation_model": "michaelis_menten",
+      "origin": "synthetic"
+    },
+    "result": {
+      "version": "a105_transport_response_v1",
+      "primitive_order": [
+        "substrate_test",
+        "substrate_reference",
+        "km"
+      ],
+      "inputs": {
+        "values": {
+          "substrate_test": 20.0,
+          "substrate_reference": 10.0,
+          "km": null
+        },
+        "curve_keys": {
+          "substrate_test": "synthetic_same_curve",
+          "substrate_reference": "synthetic_same_curve",
+          "km": "synthetic_same_curve"
+        },
+        "measurement_keys": {
+          "substrate_test": "synthetic_substrate_test",
+          "substrate_reference": "synthetic_substrate_reference",
+          "km": "synthetic_km"
+        },
+        "covariance": null,
+        "variance_status": "unknown",
+        "observation_model": "michaelis_menten",
+        "origin": "synthetic"
+      },
+      "cells": {
+        "substrate_test": {
+          "value": 20.0,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "substrate_test",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "substrate_reference": {
+          "value": 10.0,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "substrate_reference",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "apparent_km": {
+          "value": null,
+          "unit": "uM",
+          "status": "unavailable",
+          "formula": "km",
+          "origin": "synthetic",
+          "unavailable_reason": "concentration_unreported",
+          "conditional_on": []
+        },
+        "test_saturation": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "substrate_test/(km+substrate_test)",
+          "origin": "derived",
+          "unavailable_reason": "concentration_inputs_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "reference_saturation": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "substrate_reference/(km+substrate_reference)",
+          "origin": "derived",
+          "unavailable_reason": "concentration_inputs_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "condition_response": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+          "origin": "derived",
+          "unavailable_reason": "concentration_inputs_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "log_condition_response": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "log(condition_response)",
+          "origin": "derived",
+          "unavailable_reason": "concentration_inputs_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "condition_response_variance": {
+          "value": null,
+          "unit": "dimensionless_squared",
+          "status": "unavailable",
+          "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+          "origin": "derived",
+          "unavailable_reason": "concentration_inputs_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response",
+            "first_order_covariance_propagation"
+          ]
+        },
+        "condition_response_standard_uncertainty": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "sqrt(condition_response_variance)",
+          "origin": "derived",
+          "unavailable_reason": "concentration_inputs_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response",
+            "first_order_covariance_propagation"
+          ]
+        }
+      }
+    },
+    "finding": "Null Km was not supplied to the pure function. The function has no source-absence observation, yet its reason says unreported."
+  },
+  "binding": {
+    "input_extraction": {
+      "version": "binding_parameter_extraction_v1",
+      "parameter_kind": "ic50",
+      "unit": "nM",
+      "uncertainty_basis": "unknown",
+      "minimum_experiment_count": null,
+      "reference_rows": [
+        {
+          "value": 100.0,
+          "relation": "eq",
+          "reported_spread": null,
+          "origin": "synthetic",
+          "subject": "synthetic protein",
+          "state": "synthetic state",
+          "experiment": "synthetic competition",
+          "ligand": "synthetic reference ligand",
+          "source": {
+            "source_ref": "synthetic_source",
+            "artifact_ref": "synthetic_artifact",
+            "representation": "synthetic_fixture",
+            "table_id": "synthetic_table",
+            "row_index": 0,
+            "locator": {
+              "row_index": 0,
+              "column": "IC50"
+            },
+            "expression": "100.0"
+          }
+        }
+      ],
+      "test_rows": [
+        {
+          "value": 200.0,
+          "relation": "eq",
+          "reported_spread": null,
+          "origin": "synthetic",
+          "subject": "synthetic protein",
+          "state": "synthetic state",
+          "experiment": "synthetic competition",
+          "ligand": "synthetic test ligand",
+          "source": {
+            "source_ref": "synthetic_source",
+            "artifact_ref": "synthetic_artifact",
+            "representation": "synthetic_fixture",
+            "table_id": "synthetic_table",
+            "row_index": 1,
+            "locator": {
+              "row_index": 1,
+              "column": "IC50"
+            },
+            "expression": "200.0"
+          }
+        }
+      ]
+    },
+    "native_sheet": {
+      "version": "binding_parameter_sheet_v1",
+      "parameter_kind": "ic50",
+      "unit": "nM",
+      "reference_rows": [
+        {
+          "value": 100.0,
+          "relation": "eq",
+          "reported_spread": null,
+          "origin": "synthetic",
+          "subject": "synthetic protein",
+          "state": "synthetic state",
+          "experiment": "synthetic competition",
+          "ligand": "synthetic reference ligand",
+          "source": {
+            "source_ref": "synthetic_source",
+            "artifact_ref": "synthetic_artifact",
+            "representation": "synthetic_fixture",
+            "table_id": "synthetic_table",
+            "row_index": 0,
+            "locator": {
+              "row_index": 0,
+              "column": "IC50"
+            },
+            "expression": "100.0"
+          }
+        }
+      ],
+      "test_rows": [
+        {
+          "value": 200.0,
+          "relation": "eq",
+          "reported_spread": null,
+          "origin": "synthetic",
+          "subject": "synthetic protein",
+          "state": "synthetic state",
+          "experiment": "synthetic competition",
+          "ligand": "synthetic test ligand",
+          "source": {
+            "source_ref": "synthetic_source",
+            "artifact_ref": "synthetic_artifact",
+            "representation": "synthetic_fixture",
+            "table_id": "synthetic_table",
+            "row_index": 1,
+            "locator": {
+              "row_index": 1,
+              "column": "IC50"
+            },
+            "expression": "200.0"
+          }
+        }
+      ],
+      "uncertainty_basis": "unknown",
+      "minimum_experiment_count": null,
+      "independent_preparation_count": null,
+      "cells": {
+        "reference_parameter": {
+          "value": 100.0,
+          "relation": "eq",
+          "unit": "nM",
+          "status": "populated",
+          "formula": "reference_row.value",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "reference_reported_spread": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "nM",
+          "status": "unavailable",
+          "formula": "reference_row.reported_spread",
+          "origin": "derived",
+          "unavailable_reason": "reported_spread_unavailable",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "reference_relative_spread": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "reference_reported_spread/abs(reference_parameter)",
+          "origin": "derived",
+          "unavailable_reason": "reported_spread_unavailable",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "test_parameter": {
+          "value": 200.0,
+          "relation": "eq",
+          "unit": "nM",
+          "status": "populated",
+          "formula": "test_row.value",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "test_reported_spread": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "nM",
+          "status": "unavailable",
+          "formula": "test_row.reported_spread",
+          "origin": "derived",
+          "unavailable_reason": "reported_spread_unavailable",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "test_relative_spread": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "fraction",
+          "status": "unavailable",
+          "formula": "test_reported_spread/abs(test_parameter)",
+          "origin": "derived",
+          "unavailable_reason": "reported_spread_unavailable",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "native_parameter_ratio": {
+          "value": 2.0,
+          "relation": "eq",
+          "unit": "fraction",
+          "status": "populated",
+          "formula": "test_parameter/reference_parameter",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "log_native_parameter_ratio": {
+          "value": 0.6931471805599445,
+          "relation": "eq",
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "ln(test_parameter)-ln(reference_parameter)",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "source_profile_log_ratio": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "applicable_joint_binding_observation_model",
+          "origin": "derived",
+          "unavailable_reason": "binding_observation_model_unimplemented",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        },
+        "source_signed_index": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "tanh(source_profile_log_ratio/2)",
+          "origin": "proposed",
+          "unavailable_reason": "binding_observation_model_unimplemented",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null
+        }
+      },
+      "annotation_credit": null
+    },
+    "model": null,
+    "result": {
+      "version": "binding_model_sheet_v1",
+      "parameter_kind": "ic50",
+      "contrast_meaning": "test_parameter_exceeds_reference",
+      "measurement_keys": {
+        "reference": "binding_measurement_7a4d4f558d71ddd7ef8c2fcdc47ab4f3b9449f403e8ce505a7b9c6a1b256ff58",
+        "test": "binding_measurement_e87347490b6935792769608b845d2ae9f8b74da7730aca9d14f5c9d143e78bd0"
+      },
+      "model": null,
+      "source_uncertainty_basis": "unknown",
+      "minimum_experiment_count": null,
+      "independent_preparation_count": null,
+      "cells": {
+        "log_parameter_contrast": {
+          "value": 0.6931471805599445,
+          "relation": "eq",
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "ln(test_parameter)-ln(reference_parameter)",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null,
+          "conditional_on": []
+        },
+        "log_contrast_noise_variance": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "log_parameter_squared",
+          "status": "unavailable",
+          "formula": "Crr+Ctt-2*Crt",
+          "origin": "derived",
+          "unavailable_reason": "binding_sampling_model_unreported",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null,
+          "conditional_on": []
+        },
+        "log_contrast_noise_sd": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "sqrt(log_contrast_noise_variance)",
+          "origin": "derived",
+          "unavailable_reason": "binding_sampling_model_unreported",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null,
+          "conditional_on": []
+        },
+        "source_profile_log_ratio": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "sup_mu_test_ge_reference_log_likelihood-sup_mu_test_le_reference_log_likelihood",
+          "origin": "derived",
+          "unavailable_reason": "binding_sampling_model_unreported",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null,
+          "conditional_on": []
+        },
+        "source_signed_index": {
+          "value": null,
+          "relation": "unreported",
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "tanh(source_profile_log_ratio/2)",
+          "origin": "proposed",
+          "unavailable_reason": "binding_sampling_model_unreported",
+          "bound_kind": null,
+          "confidence_bound": null,
+          "parameter_identification_bound": null,
+          "conditional_on": []
+        }
+      },
+      "diagnostics": {
+        "likelihood_case": "none",
+        "boundary_log_likelihood": null,
+        "boundary_standardized_detected_mean_shift": null,
+        "boundary_detected_mean_shift": null,
+        "boundary_log_cdf": null,
+        "conditional_censored_noise_sd": null
+      },
+      "annotation_credit": null
+    },
+    "finding": "No sampling-model argument was supplied. No paper was read. The unavailable reason nevertheless says binding_sampling_model_unreported."
+  },
+  "frozen_code": {
+    "gene_annotation_episode/literature_transport_calculations.py": "afbc2c00c63ea56ff6790298ea3f9fb6b30fe54a696cc1f4fc9211df058d63e4",
+    "gene_annotation_episode/literature_binding_calculations.py": "1b64fb435946843a044387845d6a617c827dc1b8f101fe818cf125e8a1c0910a",
+    "gene_annotation_episode/literature_binding_models.py": "8e2eb3f7624f50f5916ec876adcdb390444a892f41ce5154c48ced537e6225c9"
+  },
+  "prospective_repair_required": "Distinguish absent supplied operands/model from established publication absence; retain original legacy record/version/schema meanings without reinterpreting saved results."
+}

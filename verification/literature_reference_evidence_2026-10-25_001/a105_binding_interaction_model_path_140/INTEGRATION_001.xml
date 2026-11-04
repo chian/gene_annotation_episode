@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="7" time="26.970" timestamp="2026-10-27T11:22:05.731572-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_binding_interaction_model_integration" name="test_selected_child_original_parent_subset_and_one_observation_per_action[known]" time="7.884"><failure message="AssertionError: assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1863/test_selected_child_original_p0')
+status = 'known'
+
+    @pytest.mark.parametrize("status",["known","estimated"])
+    def test_selected_child_original_parent_subset_and_one_observation_per_action(tmp_path,status):
+        store,context,args,model_args,_,_=setup_model(tmp_path/"state",status=status)
+        controllers,received=[],[]
+        selected=["log_interaction_standard_uncertainty","signed_index"]
+        form=obj({"interaction_precision":binding_interaction_model_cells_schema()})
+        try:
+            assignment={**plain(context.assignment),"requested_binding_interaction_model_components":selected}
+            commission={"selection":{"kind":"episode_child","role":"literature","assignment":assignment,
+                "goal":"Evaluate the supplied synthetic binding discrimination interaction using its explicit retained log model.",
+                "scope":plain(context.scope),"purpose":"Return requested precision and conditional interaction index.",
+                "schema_json":json.dumps(form),"initial_report_json":"{}"},"report_update":{}}
+            native={"selection":{"kind":"tool","tool":"literature.binding.interaction.populate","arguments":args},"report_update":{}}
+            def model_action(inputs):
+                prior=inputs["last_local_outcome"]
+                assert prior["status"]=="completed"
+                return {"selection":{"kind":"tool","tool":"literature.binding.interaction.model.populate",
+                    "arguments":{**model_args,"source_ref":prior["result"]["sheet_ref"]}},"report_update":{}}
+            def receive(inputs):
+                report,=inputs["child_reports"];received.append(report)
+                rows=report["interaction_precision"]
+                assert [r["component"] for r in rows]==selected
+                assert rows[0]["value"]==pytest.approx(.4)
+                assert rows[1]["value"]==(pytest.approx(.9950826091535326) if status=="known" else None)
+                assert rows[1]["unavailable_reason"]==(None if status=="known" else "covariance_estimated_not_known")
+                assert all(r["variance_status"]==status and r["source_kind"]=="synthetic_fixture" for r in rows)
+                assert all(r["values"]["delivery_status"]=="not_requested" for r in rows[0]["roles"].values())
+                paper=store.get(args["source_ref"]);raw=store.get_artifact(paper["artifact_ref"])
+                commit={name:[] for name in store.reasoning_schema()["required"]}
+                commit["source_subjects"]=[{"alias":"synthetic_source","reference_type":"assay","source_ref":paper["id"],
+                    "label":"ProteinFixture","anchor":{"source_ref":paper["id"],"artifact_ref":paper["artifact_ref"],"start":0,"end":len(raw),"quote":raw.decode()}}]
+                return {"selection":{"kind":"reason","commit":commit},"report_update":{}}
+            def controller(path,initial):
+                value=FixtureController(str(path),initial,2);controllers.append(value);return value
+            scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,native,model_action,receive]),
+                run_dir=tmp_path/"run",controller_factory=controller,project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True),),binding_definitions={"credit":scorer.as_record()}))
+
+tests/test_literature_binding_interaction_model_integration.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:524: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:389: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1362: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:954: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...ve_observations |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+
+    def model_action(inputs):
+        prior=inputs["last_local_outcome"]
+&gt;       assert prior["status"]=="completed"
+E       AssertionError: assert 'invalid' == 'completed'
+E         
+E         - completed
+E         + invalid
+
+tests/test_literature_binding_interaction_model_integration.py:49: AssertionError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_integration" name="test_selected_child_original_parent_subset_and_one_observation_per_action[estimated]" time="8.399"><failure message="AssertionError: assert 'invalid' == 'completed'&#10;  &#10;  - completed&#10;  + invalid">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1863/test_selected_child_original_p1')
+status = 'estimated'
+
+    @pytest.mark.parametrize("status",["known","estimated"])
+    def test_selected_child_original_parent_subset_and_one_observation_per_action(tmp_path,status):
+        store,context,args,model_args,_,_=setup_model(tmp_path/"state",status=status)
+        controllers,received=[],[]
+        selected=["log_interaction_standard_uncertainty","signed_index"]
+        form=obj({"interaction_precision":binding_interaction_model_cells_schema()})
+        try:
+            assignment={**plain(context.assignment),"requested_binding_interaction_model_components":selected}
+            commission={"selection":{"kind":"episode_child","role":"literature","assignment":assignment,
+                "goal":"Evaluate the supplied synthetic binding discrimination interaction using its explicit retained log model.",
+                "scope":plain(context.scope),"purpose":"Return requested precision and conditional interaction index.",
+                "schema_json":json.dumps(form),"initial_report_json":"{}"},"report_update":{}}
+            native={"selection":{"kind":"tool","tool":"literature.binding.interaction.populate","arguments":args},"report_update":{}}
+            def model_action(inputs):
+                prior=inputs["last_local_outcome"]
+                assert prior["status"]=="completed"
+                return {"selection":{"kind":"tool","tool":"literature.binding.interaction.model.populate",
+                    "arguments":{**model_args,"source_ref":prior["result"]["sheet_ref"]}},"report_update":{}}
+            def receive(inputs):
+                report,=inputs["child_reports"];received.append(report)
+                rows=report["interaction_precision"]
+                assert [r["component"] for r in rows]==selected
+                assert rows[0]["value"]==pytest.approx(.4)
+                assert rows[1]["value"]==(pytest.approx(.9950826091535326) if status=="known" else None)
+                assert rows[1]["unavailable_reason"]==(None if status=="known" else "covariance_estimated_not_known")
+                assert all(r["variance_status"]==status and r["source_kind"]=="synthetic_fixture" for r in rows)
+                assert all(r["values"]["delivery_status"]=="not_requested" for r in rows[0]["roles"].values())
+                paper=store.get(args["source_ref"]);raw=store.get_artifact(paper["artifact_ref"])
+                commit={name:[] for name in store.reasoning_schema()["required"]}
+                commit["source_subjects"]=[{"alias":"synthetic_source","reference_type":"assay","source_ref":paper["id"],
+                    "label":"ProteinFixture","anchor":{"source_ref":paper["id"],"artifact_ref":paper["artifact_ref"],"start":0,"end":len(raw),"quote":raw.decode()}}]
+                return {"selection":{"kind":"reason","commit":commit},"report_update":{}}
+            def controller(path,initial):
+                value=FixtureController(str(path),initial,2);controllers.append(value);return value
+            scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+&gt;           summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,native,model_action,receive]),
+                run_dir=tmp_path/"run",controller_factory=controller,project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True),),binding_definitions={"credit":scorer.as_record()}))
+
+tests/test_literature_binding_interaction_model_integration.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:524: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:389: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1362: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:954: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...ve_observations |', 'child_reports': [], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': []}, ...}
+
+    def model_action(inputs):
+        prior=inputs["last_local_outcome"]
+&gt;       assert prior["status"]=="completed"
+E       AssertionError: assert 'invalid' == 'completed'
+E         
+E         - completed
+E         + invalid
+
+tests/test_literature_binding_interaction_model_integration.py:49: AssertionError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_integration" name="test_catalog_dispatch_exact_return_request_and_page_ancestry" time="1.799"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1863/test_catalog_dispatch_exact_re0')
+
+    def test_catalog_dispatch_exact_return_request_and_page_ancestry(tmp_path):
+        store,context,args,model_args,_,_=setup_model(tmp_path)
+        with store:
+            binding=binding_for(store,context)
+            assert "literature.binding.interaction.model.populate" in {r["name"] for r in binding.catalog(context)}
+            native=asyncio.run(binding.execute(context,"literature.binding.interaction.populate",args,"native"))
+            owner=replace(context,received_record_refs=(*context.received_record_refs,*native["record_refs"]),
+                assignment={**context.assignment,"requested_binding_interaction_model_components":["signed_index"]})
+&gt;           model_args["source_ref"]=native["result"]["sheet_ref"]
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: 'NoneType' object is not subscriptable
+
+tests/test_literature_binding_interaction_model_integration.py:90: TypeError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_integration" name="test_model_and_support_each_require_page_ancestry[model]" time="1.962"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1863/test_model_and_support_each_re0')
+foreign = 'model'
+
+    @pytest.mark.parametrize("foreign",["model","witness"])
+    def test_model_and_support_each_require_page_ancestry(tmp_path,foreign):
+        store,context,args,model_args,_,_=setup_model(tmp_path)
+        with store:
+            binding=binding_for(store,context)
+            native=asyncio.run(binding.execute(context,"literature.binding.interaction.populate",args,"native"))
+            root=store.get(args["source_ref"])
+            page={"version":"page_assignment_v1","source_ref":root["id"],"representation":"original","artifact_ref":root["artifact_ref"],"question_context_refs":[],"prior_delivery_refs":[]}
+            owner=replace(context,role="literature_page",path=(("literature_page","root"),),assignment=page,received_record_refs=(*context.received_record_refs,*native["record_refs"]))
+&gt;           model_args["source_ref"]=native["result"]["sheet_ref"]
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: 'NoneType' object is not subscriptable
+
+tests/test_literature_binding_interaction_model_integration.py:117: TypeError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_integration" name="test_model_and_support_each_require_page_ancestry[witness]" time="1.755"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1863/test_model_and_support_each_re1')
+foreign = 'witness'
+
+    @pytest.mark.parametrize("foreign",["model","witness"])
+    def test_model_and_support_each_require_page_ancestry(tmp_path,foreign):
+        store,context,args,model_args,_,_=setup_model(tmp_path)
+        with store:
+            binding=binding_for(store,context)
+            native=asyncio.run(binding.execute(context,"literature.binding.interaction.populate",args,"native"))
+            root=store.get(args["source_ref"])
+            page={"version":"page_assignment_v1","source_ref":root["id"],"representation":"original","artifact_ref":root["artifact_ref"],"question_context_refs":[],"prior_delivery_refs":[]}
+            owner=replace(context,role="literature_page",path=(("literature_page","root"),),assignment=page,received_record_refs=(*context.received_record_refs,*native["record_refs"]))
+&gt;           model_args["source_ref"]=native["result"]["sheet_ref"]
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: 'NoneType' object is not subscriptable
+
+tests/test_literature_binding_interaction_model_integration.py:117: TypeError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_integration" name="test_full_task_once_and_own_parent_lookup_mask_raw_numbers_and_aliases[False]" time="1.933"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1863/test_full_task_once_and_own_pa0')
+parent = False
+
+    @pytest.mark.parametrize("parent",[False,True])
+    def test_full_task_once_and_own_parent_lookup_mask_raw_numbers_and_aliases(tmp_path,parent):
+        from test_literature_experimental_prompt_delivery import snapshot
+        store,context,args,model_args,_,_=setup_model(tmp_path)
+        with store:
+            context=replace(context,assignment={**context.assignment,"requested_binding_interaction_model_components":["signed_index"]})
+&gt;           repo,owner,_,outcome,_=populate(store,context,args,model_args)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_integration.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase><testcase classname="tests.test_literature_binding_interaction_model_integration" name="test_full_task_once_and_own_parent_lookup_mask_raw_numbers_and_aliases[True]" time="1.876"><failure message="gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1863/test_full_task_once_and_own_pa1')
+parent = True
+
+    @pytest.mark.parametrize("parent",[False,True])
+    def test_full_task_once_and_own_parent_lookup_mask_raw_numbers_and_aliases(tmp_path,parent):
+        from test_literature_experimental_prompt_delivery import snapshot
+        store,context,args,model_args,_,_=setup_model(tmp_path)
+        with store:
+            context=replace(context,assignment={**context.assignment,"requested_binding_interaction_model_components":["signed_index"]})
+&gt;           repo,owner,_,outcome,_=populate(store,context,args,model_args)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_binding_interaction_model_integration.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_binding_interaction_model_storage.py:18: in populate
+    native = LiteratureBindingInteractionRepository(store,context.run_id).populate(context,native_args,"native")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:271: in populate
+    "requested_components": request["requested_components"], "implementation_dependencies": _dependencies()}
+                                                                                            ^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_binding_interaction_storage.py:74: in _dependencies
+    _fail("implementation_dependency_mismatch")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'implementation_dependency_mismatch'
+
+    def _fail(code):
+&gt;       raise ContractError("literature_binding_interaction_" + code)
+E       gene_annotation_episode.domain.ContractError: literature_binding_interaction_implementation_dependency_mismatch
+
+gene_annotation_episode/literature_binding_interaction_storage.py:50: ContractError</failure></testcase></testsuite></testsuites>

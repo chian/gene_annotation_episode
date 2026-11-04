@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="68" time="89.557" timestamp="2026-10-25T21:44:55.603194-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_infernal_decision_presentation" name="test_retained_native_contexts_keep_their_original_bytes_and_separate_requested_quantities" time="0.002" /><testcase classname="tests.test_infernal_decision_presentation" name="test_snapshot_bootstrap_and_update_project_before_hashing_without_changing_saved_operands[scientific]" time="0.055" /><testcase classname="tests.test_infernal_decision_presentation" name="test_snapshot_bootstrap_and_update_project_before_hashing_without_changing_saved_operands[root]" time="0.065" /><testcase classname="tests.test_infernal_decision_presentation" name="test_actual_scientific_provider_preserves_task_and_only_requested_native_numbers[legacy]" time="0.042" /><testcase classname="tests.test_infernal_decision_presentation" name="test_actual_scientific_provider_preserves_task_and_only_requested_native_numbers[framed]" time="0.065" /><testcase classname="tests.test_infernal_decision_presentation" name="test_public_scientific_renderer_filters_the_full_saved_context_without_a_provider" time="0.005" /><testcase classname="tests.test_infernal_decision_presentation" name="test_actual_root_provider_serializes_exact_projected_returns_and_valid_frames[legacy]" time="0.039" /><testcase classname="tests.test_infernal_decision_presentation" name="test_actual_root_provider_serializes_exact_projected_returns_and_valid_frames[framed]" time="0.057" /><testcase classname="tests.test_infernal_decision_presentation" name="test_reference_only_return_never_automatically_expands_native_measurements[legacy-scientific]" time="0.020" /><testcase classname="tests.test_infernal_decision_presentation" name="test_reference_only_return_never_automatically_expands_native_measurements[legacy-root]" time="0.017" /><testcase classname="tests.test_infernal_decision_presentation" name="test_reference_only_return_never_automatically_expands_native_measurements[framed-scientific]" time="0.041" /><testcase classname="tests.test_infernal_decision_presentation" name="test_reference_only_return_never_automatically_expands_native_measurements[framed-root]" time="0.025" /><testcase classname="tests.test_infernal_decision_presentation" name="test_explicit_own_outcome_and_lookup_remain_available_at_actual_model_boundary[scientific]" time="0.035" /><testcase classname="tests.test_infernal_decision_presentation" name="test_explicit_own_outcome_and_lookup_remain_available_at_actual_model_boundary[root]" time="0.027" /><testcase classname="tests.test_infernal_decision_presentation" name="test_runtime_restores_old_pending_snapshot_without_rereading_or_rewriting_answered_lookup[scientific]" time="7.587"><failure message="assert '{&quot;context&quot;:{...e&quot;:&quot;object&quot;}}' == '{&quot;context&quot;: ...&quot;: &quot;object&quot;}}'&#10;  &#10;  - {&quot;context&quot;: {&quot;available_report_facts&quot;: {&quot;changed_annotation_refs&quot;: {&quot;meaning&quot;: &quot;Actual changed annotation revision references from completed work, filtered by semantic record type.&quot;, &quot;type&quot;: &quot;reference_array&quot;}, &quot;changed_assessment_refs&quot;: {&quot;meaning&quot;: &quot;Actual changed assessment revision references from completed work, filtered by semantic record type.&quot;, &quot;type&quot;: &quot;reference_array&quot;}, &quot;changed_interpretation_account_refs&quot;: {&quot;meaning&quot;: &quot;Actual changed episode-owned coherent interpretation accounts; these are not parent annotation revisions.&quot;, &quot;type&quot;: &quot;reference_array&quot;}, &quot;cha...&#10;  &#10;  ...Full output truncated (4 lines hidden), use '-vv' to show">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_001/temporary/pytest/test_runtime_restores_old_pend0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7460d25b1010&gt;
+receiver = 'scientific'
+
+    @pytest.mark.parametrize('receiver', ['scientific', 'root'])
+    def test_runtime_restores_old_pending_snapshot_without_rereading_or_rewriting_answered_lookup(
+            tmp_path, monkeypatch, receiver):
+        """Exercise DecisionSource.call -&gt; exchange_decision with real durable rows.
+    
+        The pre-fix pending snapshot and interrupted second dispatch are seeded using
+        the ordinary immutable journal API. The selected response is not executed;
+        this check concerns decision restoration, not a new scientific investigation.
+        """
+        saved = saved_context(receiver=receiver)
+        raw = saved['context']
+        raw_before = encode(raw)
+        wire = ConversationWire(tmp_path / 'wire')
+        wire.reply = {'response': {'response_type': 'select_action', **reason(0)}}
+        schema = obj({'selection': obj({'kind': {'const': 'reason'},
+            'commit': obj({'fixture_value': {'type': 'number'}})}), 'report_update': obj({})})
+        with Store(tmp_path / 'state') as store:
+            subject = store.create_problem(raw_sequence='ACGU', molecule='rna')['subject_refs'][0]
+            workflow = runtime.Workflow(store, ToolRegistry(store), wire, tmp_path / 'run',
+                'synthetic-infernal-pending-restoration',
+                lambda path, initial: FixtureController(str(path), initial, 1), lambda *_: 0,
+                episode_binding_factories=(), execution_binding={'fixture': True},
+                decision_protocol='decision_exchange_v1')
+            source = workflow.build('annotation', 'root', 'Synthetic pending snapshot restoration',
+                store.validate_scope({'subject_refs': [subject]})).source
+            source.calls = index = 9
+            logical = {'context': raw, 'schema': schema, 'decision_protocol': 'decision_exchange_v1'}
+            workflow.journal.save('runtime_model_calls', {'episode_id': source.episode_id,
+                'call_index': index, 'purpose': 'decision', 'request': encode(logical), 'response': None})
+            old_snapshot = model_snapshot(raw, TABLE)
+            old_snapshot['working_state']['observations'] = deepcopy(raw['working_state']['observations'])
+            frozen_frame = state_frame(old_snapshot)
+            request = {'context': frozen_frame, 'instructions': saved['instructions'],
+                'output_schema': schema, 'restoration': {'snapshot': old_snapshot,
+                    'pending_public_exchanges': []}, 'conversation_key': None}
+            exchanges = workflow.decision_exchanges
+            exchanges.prepare(source.episode_id, index, 0, request)
+            query = {'response': {'response_type': 'request_context', 'lookup': {
+                'view': 'own_attempt_detail', 'decision_index': 4,
+                'pointer': '/result/measurements', 'offset': 0, 'limit': 1}}}
+            answer = {'view': 'own_attempt_detail', 'decision_index': 4,
+                'pointer': '/result/measurements', 'slice_unit': 'array_items',
+                'offset': 0, 'total': 1, 'included': 1, 'has_more': False, 'next_query': None,
+                'values': [{'name': 'explicit_lookup_quantity', 'value': 0.125, 'unit': 'fraction'}]}
+            exchanges.respond(source.episode_id, index, 0, query)
+            exchanges.resolve_lookup(source.episode_id, index, 0, answer)
+            public = [{'exchange_index': 0, 'response': query, 'lookup_result': answer}]
+            exchanges.prepare(source.episode_id, index, 1, {**request,
+                'context': {'version': 'decision_context_v1', 'kind': 'decision_lookup_result',
+                    'decision_index': index, 'exchange_index': 0, 'result': answer},
+                'restoration': {'snapshot': old_snapshot, 'pending_public_exchanges': public}})
+            prior = exchanges.rows(source.episode_id, index)
+            original_request = workflow.journal.row('runtime_model_calls', source.episode_id, index)['request']
+    
+            def no_acquisition(*args, **kwargs):
+                raise AssertionError('Restoration must reuse its answered lookup and saved inputs')
+            monkeypatch.setattr(runtime, 'lookup_attempts', no_acquisition)
+            monkeypatch.setattr(runtime, 'yield_table', no_acquisition)
+            monkeypatch.setattr(workflow, 'execute', no_acquisition)
+            monkeypatch.setattr(workflow.tools, 'execute', no_acquisition)
+            response, returned_index, interpreted, returned_schema = asyncio.run(source.call({}, {}))
+            rows = exchanges.rows(source.episode_id, index)
+            assert rows[:2] == prior
+            assert len(rows) == 3
+            retry = rows[2]['request']
+            assert retry['retry_of_exchange_index'] == 1
+            frame = retry['context']
+            restored = apply_state_frame(None, frame)
+            assert restored == model_snapshot(raw, TABLE)
+            assert frame['kind'] == 'decision_bootstrap'
+            assert frame['restored_pending_decision_index'] == index
+            assert frame['restored_public_exchanges'] == public
+            assert restored['child_reports'] == raw['child_reports']
+            assert restored['working_state']['observations'] == []
+            assert prior[0]['request']['context'] == frozen_frame
+            assert apply_state_frame(None, frozen_frame) == old_snapshot
+            assert response == reason(0) and returned_index == index and returned_schema == schema
+            assert interpreted['working_state']['observations'] == raw['working_state']['observations']
+&gt;           assert workflow.journal.row('runtime_model_calls', source.episode_id, index)['request'] == original_request
+E           assert '{"context":{...e":"object"}}' == '{"context": ...": "object"}}'
+E             
+E             - {"context": {"available_report_facts": {"changed_annotation_refs": {"meaning": "Actual changed annotation revision references from completed work, filtered by semantic record type.", "type": "reference_array"}, "changed_assessment_refs": {"meaning": "Actual changed assessment revision references from completed work, filtered by semantic record type.", "type": "reference_array"}, "changed_interpretation_account_refs": {"meaning": "Actual changed episode-owned coherent interpretation accounts; these are not parent annotation revisions.", "type": "reference_array"}, "cha...
+E             
+E             ...Full output truncated (4 lines hidden), use '-vv' to show
+
+../../../tests/test_infernal_decision_presentation.py:322: AssertionError</failure></testcase><testcase classname="tests.test_infernal_decision_presentation" name="test_runtime_restores_old_pending_snapshot_without_rereading_or_rewriting_answered_lookup[root]" time="7.597"><failure message="assert '{&quot;context&quot;:{...e&quot;:&quot;object&quot;}}' == '{&quot;context&quot;: ...&quot;: &quot;object&quot;}}'&#10;  &#10;  - {&quot;context&quot;: {&quot;available_report_facts&quot;: {&quot;changed_annotation_refs&quot;: {&quot;meaning&quot;: &quot;Actual changed annotation revision references from completed work, filtered by semantic record type.&quot;, &quot;type&quot;: &quot;reference_array&quot;}, &quot;changed_assessment_refs&quot;: {&quot;meaning&quot;: &quot;Actual changed assessment revision references from completed work, filtered by semantic record type.&quot;, &quot;type&quot;: &quot;reference_array&quot;}, &quot;changed_interpretation_account_refs&quot;: {&quot;meaning&quot;: &quot;Actual changed episode-owned coherent interpretation accounts; these are not parent annotation revisions.&quot;, &quot;type&quot;: &quot;reference_array&quot;}, &quot;cha...&#10;  &#10;  ...Full output truncated (4 lines hidden), use '-vv' to show">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_001/temporary/pytest/test_runtime_restores_old_pend1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7460d25b0230&gt;
+receiver = 'root'
+
+    @pytest.mark.parametrize('receiver', ['scientific', 'root'])
+    def test_runtime_restores_old_pending_snapshot_without_rereading_or_rewriting_answered_lookup(
+            tmp_path, monkeypatch, receiver):
+        """Exercise DecisionSource.call -&gt; exchange_decision with real durable rows.
+    
+        The pre-fix pending snapshot and interrupted second dispatch are seeded using
+        the ordinary immutable journal API. The selected response is not executed;
+        this check concerns decision restoration, not a new scientific investigation.
+        """
+        saved = saved_context(receiver=receiver)
+        raw = saved['context']
+        raw_before = encode(raw)
+        wire = ConversationWire(tmp_path / 'wire')
+        wire.reply = {'response': {'response_type': 'select_action', **reason(0)}}
+        schema = obj({'selection': obj({'kind': {'const': 'reason'},
+            'commit': obj({'fixture_value': {'type': 'number'}})}), 'report_update': obj({})})
+        with Store(tmp_path / 'state') as store:
+            subject = store.create_problem(raw_sequence='ACGU', molecule='rna')['subject_refs'][0]
+            workflow = runtime.Workflow(store, ToolRegistry(store), wire, tmp_path / 'run',
+                'synthetic-infernal-pending-restoration',
+                lambda path, initial: FixtureController(str(path), initial, 1), lambda *_: 0,
+                episode_binding_factories=(), execution_binding={'fixture': True},
+                decision_protocol='decision_exchange_v1')
+            source = workflow.build('annotation', 'root', 'Synthetic pending snapshot restoration',
+                store.validate_scope({'subject_refs': [subject]})).source
+            source.calls = index = 9
+            logical = {'context': raw, 'schema': schema, 'decision_protocol': 'decision_exchange_v1'}
+            workflow.journal.save('runtime_model_calls', {'episode_id': source.episode_id,
+                'call_index': index, 'purpose': 'decision', 'request': encode(logical), 'response': None})
+            old_snapshot = model_snapshot(raw, TABLE)
+            old_snapshot['working_state']['observations'] = deepcopy(raw['working_state']['observations'])
+            frozen_frame = state_frame(old_snapshot)
+            request = {'context': frozen_frame, 'instructions': saved['instructions'],
+                'output_schema': schema, 'restoration': {'snapshot': old_snapshot,
+                    'pending_public_exchanges': []}, 'conversation_key': None}
+            exchanges = workflow.decision_exchanges
+            exchanges.prepare(source.episode_id, index, 0, request)
+            query = {'response': {'response_type': 'request_context', 'lookup': {
+                'view': 'own_attempt_detail', 'decision_index': 4,
+                'pointer': '/result/measurements', 'offset': 0, 'limit': 1}}}
+            answer = {'view': 'own_attempt_detail', 'decision_index': 4,
+                'pointer': '/result/measurements', 'slice_unit': 'array_items',
+                'offset': 0, 'total': 1, 'included': 1, 'has_more': False, 'next_query': None,
+                'values': [{'name': 'explicit_lookup_quantity', 'value': 0.125, 'unit': 'fraction'}]}
+            exchanges.respond(source.episode_id, index, 0, query)
+            exchanges.resolve_lookup(source.episode_id, index, 0, answer)
+            public = [{'exchange_index': 0, 'response': query, 'lookup_result': answer}]
+            exchanges.prepare(source.episode_id, index, 1, {**request,
+                'context': {'version': 'decision_context_v1', 'kind': 'decision_lookup_result',
+                    'decision_index': index, 'exchange_index': 0, 'result': answer},
+                'restoration': {'snapshot': old_snapshot, 'pending_public_exchanges': public}})
+            prior = exchanges.rows(source.episode_id, index)
+            original_request = workflow.journal.row('runtime_model_calls', source.episode_id, index)['request']
+    
+            def no_acquisition(*args, **kwargs):
+                raise AssertionError('Restoration must reuse its answered lookup and saved inputs')
+            monkeypatch.setattr(runtime, 'lookup_attempts', no_acquisition)
+            monkeypatch.setattr(runtime, 'yield_table', no_acquisition)
+            monkeypatch.setattr(workflow, 'execute', no_acquisition)
+            monkeypatch.setattr(workflow.tools, 'execute', no_acquisition)
+            response, returned_index, interpreted, returned_schema = asyncio.run(source.call({}, {}))
+            rows = exchanges.rows(source.episode_id, index)
+            assert rows[:2] == prior
+            assert len(rows) == 3
+            retry = rows[2]['request']
+            assert retry['retry_of_exchange_index'] == 1
+            frame = retry['context']
+            restored = apply_state_frame(None, frame)
+            assert restored == model_snapshot(raw, TABLE)
+            assert frame['kind'] == 'decision_bootstrap'
+            assert frame['restored_pending_decision_index'] == index
+            assert frame['restored_public_exchanges'] == public
+            assert restored['child_reports'] == raw['child_reports']
+            assert restored['working_state']['observations'] == []
+            assert prior[0]['request']['context'] == frozen_frame
+            assert apply_state_frame(None, frozen_frame) == old_snapshot
+            assert response == reason(0) and returned_index == index and returned_schema == schema
+            assert interpreted['working_state']['observations'] == raw['working_state']['observations']
+&gt;           assert workflow.journal.row('runtime_model_calls', source.episode_id, index)['request'] == original_request
+E           assert '{"context":{...e":"object"}}' == '{"context": ...": "object"}}'
+E             
+E             - {"context": {"available_report_facts": {"changed_annotation_refs": {"meaning": "Actual changed annotation revision references from completed work, filtered by semantic record type.", "type": "reference_array"}, "changed_assessment_refs": {"meaning": "Actual changed assessment revision references from completed work, filtered by semantic record type.", "type": "reference_array"}, "changed_interpretation_account_refs": {"meaning": "Actual changed episode-owned coherent interpretation accounts; these are not parent annotation revisions.", "type": "reference_array"}, "cha...
+E             
+E             ...Full output truncated (4 lines hidden), use '-vv' to show
+
+../../../tests/test_infernal_decision_presentation.py:322: AssertionError</failure></testcase><testcase classname="tests.test_decision_context" name="test_large_internal_history_is_replaced_without_changing_numeric_operands" time="0.006" /><testcase classname="tests.test_decision_context" name="test_updates_reconstruct_state_with_explicit_removals_and_latest_expectations" time="0.001" /><testcase classname="tests.test_decision_context" name="test_bootstrap_replaces_obsolete_conversation_state_after_restoration" time="0.000" /><testcase classname="tests.test_decision_context" name="test_delta_rejects_conflicting_and_unknown_removal_fields" time="0.000" /><testcase classname="tests.test_decision_context" name="test_restored_pending_exchange_metadata_does_not_change_state_revision" time="0.000" /><testcase classname="tests.test_decision_context" name="test_updates_preserve_json_types_even_when_python_values_compare_equal[1-1.0]" time="0.000" /><testcase classname="tests.test_decision_context" name="test_updates_preserve_json_types_even_when_python_values_compare_equal[1-True]" time="0.000" /><testcase classname="tests.test_decision_context" name="test_updates_preserve_json_types_even_when_python_values_compare_equal[old2-new2]" time="0.000" /><testcase classname="tests.test_decision_provider_frames" name="test_same_native_thread_gets_only_each_exact_frame_and_compaction_is_visible" time="0.002" /><testcase classname="tests.test_decision_provider_frames" name="test_frame_pixels_are_attached_once_and_lookup_replies_do_not_repeat_them" time="0.002" /><testcase classname="tests.test_decision_provider_frames" name="test_connection_key_is_scoped_by_episode_and_role_without_starting_workers" time="0.001" /><testcase classname="tests.test_decision_provider_frames" name="test_native_finite_invalid_exchange_value_reaches_runtime_feedback_path[None]" time="0.002" /><testcase classname="tests.test_decision_provider_frames" name="test_native_finite_invalid_exchange_value_reaches_runtime_feedback_path[value1]" time="0.002" /><testcase classname="tests.test_decision_provider_frames" name="test_native_finite_invalid_exchange_value_reaches_runtime_feedback_path[42]" time="0.002" /><testcase classname="tests.test_decision_provider_frames" name="test_native_finite_invalid_exchange_value_reaches_runtime_feedback_path[invalid envelope]" time="0.001" /><testcase classname="tests.test_decision_provider_frames" name="test_legacy_native_response_still_requires_an_object" time="0.001" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_default_controller" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_declared_caller_layout[False-existing_yield_controller_explicit_parameters_v1]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_declared_caller_layout[False-existing_yield_controller_explicit_role_costs_v2]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_declared_caller_layout[True-existing_yield_controller_explicit_parameters_v1]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_declared_caller_layout[True-existing_yield_controller_explicit_role_costs_v2]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[None]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[binding1]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[binding2]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[binding3]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[binding4]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[binding5]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[binding6]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_category_yield_parameters_unknown_or_incomplete_remains_unbound[binding7]" time="0.000" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation" time="2.665"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7460d25dffe0&gt;
+episode_id = 'episode_fd1748bef851d79735942f1aa25a49a2a19903e5fd1d7b26b959516e5f7c846e'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '7de66b56f3b5e973e52e9fb4025e80c3edfea0d0516c0607611a15bcd17c201b', 'fields': {'action_yields': {'be...seconds': 0, 'records': 0, 'records_with_timing': 0, ...}, ...}}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_001/temporary/pytest/test_multiple_context_exchange0')
+
+    def test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation(tmp_path):
+        with Store(tmp_path / 'state') as store:
+            subject = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs'][0]
+            provider = ConversationProvider([lookup(), lookup(category='tool/sequence.inspect'),
+                select({'selection': {'kind': 'tool', 'tool': 'sequence.inspect',
+                    'arguments': {'subject_ref': subject}}, 'report_update': {}})])
+            workflow = runtime.Workflow(store, ToolRegistry(store), provider, tmp_path / 'run',
+                'synthetic-exchange-run', lambda path, initial: FixtureController(str(path), initial, 1),
+                lambda *_: 0, episode_binding_factories=(), execution_binding={'fixture': True},
+                decision_protocol=PROTOCOL)
+            root = workflow.build('annotation', 'root', 'Fixture investigation',
+                store.validate_scope({'subject_refs': [subject]}))
+&gt;           result = asyncio.run(root.run_async(workflow.context))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_runtime_decision_exchanges.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:887: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1067: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7460d25dffe0&gt;
+episode_id = 'episode_fd1748bef851d79735942f1aa25a49a2a19903e5fd1d7b26b959516e5f7c846e'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '7de66b56f3b5e973e52e9fb4025e80c3edfea0d0516c0607611a15bcd17c201b', 'fields': {'action_yields': {'be...seconds': 0, 'records': 0, 'records_with_timing': 0, ...}, ...}}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+&gt;       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+../../../tests/test_runtime_decision_exchanges.py:100: RuntimeError</failure></testcase><testcase classname="tests.test_runtime_decision_exchanges" name="test_invalid_response_and_lookup_stay_in_one_pending_decision" time="6.203" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_invalid_report_value_preserves_selected_scientific_contribution" time="4.608" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_own_input_detail_requests_stay_inside_pending_decision" time="5.643"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7460aff3e360&gt;
+episode_id = 'episode_a12f1eba0e1e479b3e5f5db36a897dfec37d517dd2c989e34e329a7d15addf7e'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '38216ada1fe279e396506f888e3fecdfa4bc9d5189bb57dfba30b9aa59519669', 'fields': {'action_yields': {'be...}, 'record_refs': ['assessment_2'], 'status': 'completed'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_001/temporary/pytest/test_own_input_detail_requests0')
+
+    def test_own_input_detail_requests_stay_inside_pending_decision(tmp_path):
+        store, tools = setup(tmp_path)
+        detail = {'response': {'response_type': 'request_context', 'lookup': {
+            'view': 'own_attempt_detail', 'decision_index': 0, 'pointer': '/arguments/page',
+            'offset': 0, 'limit': 1}}}
+        provider = ConversationProvider([select(tool(page=7)), lookup(decision_indices=[0]), detail,
+            select(reason(0))])
+&gt;       result = run(store, tools, provider, tmp_path / 'run', counts=(2, 2), decision_protocol=PROTOCOL)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_runtime_decision_exchanges.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_runtime.py:215: in run
+    return asyncio.run(run_workflow(store, tools, provider=provider, run_dir=path,
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:3820: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:4142: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:887: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1067: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7460aff3e360&gt;
+episode_id = 'episode_a12f1eba0e1e479b3e5f5db36a897dfec37d517dd2c989e34e329a7d15addf7e'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '38216ada1fe279e396506f888e3fecdfa4bc9d5189bb57dfba30b9aa59519669', 'fields': {'action_yields': {'be...}, 'record_refs': ['assessment_2'], 'status': 'completed'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+&gt;       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+../../../tests/test_runtime_decision_exchanges.py:100: RuntimeError</failure></testcase><testcase classname="tests.test_runtime_decision_exchanges" name="test_continuing_decisions_use_deltas_and_compaction_restores" time="6.706" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_compaction_during_initial_bootstrap_requires_next_bootstrap" time="4.567" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context" time="10.437"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7460b0355fd0&gt;
+episode_id = 'episode_820f30ab48c56701071bfc839a3427f5cdbf02afdd0259b160f6a71e65bbc20c'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '32bbed1f112798a1c3f5722ce74416797d7913dda42d882468471b115735c7c1', 'fields': {'action_yields': {'be....720233+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        assert role == "REASONING"
+        assert "competing explanations" in instructions
+        self.contexts.append(deepcopy(context))
+&gt;       response = next(self.script)
+                   ^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+../../../tests/test_runtime.py:183: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_001/temporary/pytest/test_lookup_visible_publicatio0')
+
+    def test_lookup_visible_publications_extend_interpretation_basis_without_changing_raw_context(tmp_path):
+        store, tools = setup(tmp_path)
+        for index in range(40):
+            store.add({'id': f'observation_padding_{index}', 'record_type': 'observation',
+                'subject_refs': ['subject_A', 'subject_B']})
+        provider = ConversationProvider([select(tool()), select(reason(0)), lookup(decision_indices=[0]),
+            select(reason(0))])
+        workflow = runtime.Workflow(store, tools, provider, tmp_path / 'run', 'basis-fixture',
+            lambda path, initial: FixtureController(str(path), initial, 3), fixture_credit,
+            decision_protocol=PROTOCOL)
+        root = workflow.build('annotation', 'root', 'Fixture',
+            store.validate_scope({'subject_refs': store.problem()['subject_refs']}))
+&gt;       asyncio.run(root.run_async(workflow.context))
+
+../../../tests/test_runtime_decision_exchanges.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1218: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:887: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1067: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_runtime_decision_exchanges.ConversationProvider object at 0x7460b0355fd0&gt;
+episode_id = 'episode_820f30ab48c56701071bfc839a3427f5cdbf02afdd0259b160f6a71e65bbc20c'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': '32bbed1f112798a1c3f5722ce74416797d7913dda42d882468471b115735c7c1', 'fields': {'action_yields': {'be....720233+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'type': 'object', 'properties': {'response': {'anyOf': [{'type': 'object', 'properties': {'response_type': {...}, 'lo...lection', 'report_update'], 'additionalProperties': False}]}}, 'required': ['response'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        self.schemas.append(deepcopy(output_schema))
+        identity = (episode_id, role)
+        self.keys.setdefault(identity, (episode_id + '-thread', 0))
+        if context['kind'] in {'decision_bootstrap', 'decision_update'}:
+            self.views[episode_id] = apply_state_frame(self.views.get(episode_id), context)
+&gt;       result = await super().complete(episode_id, role, instructions, context, output_schema)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+../../../tests/test_runtime_decision_exchanges.py:100: RuntimeError</failure></testcase><testcase classname="tests.test_runtime_decision_exchanges" name="test_reconstruction_replays_frozen_lookups_and_final_response[response]" time="4.432" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_reconstruction_replays_frozen_lookups_and_final_response[lookup]" time="5.136" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_reconstruction_replays_frozen_lookups_and_final_response[final]" time="4.777" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_interrupted_dispatch_appends_exact_restoration_retry_without_rewriting" time="5.697" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_injected_legacy_default_and_markerless_resume_do_not_migrate" time="2.710"><failure message="AssertionError: assert 'episode.history' in set()">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_presentation_2026-10-26_231/run_001/temporary/pytest/test_injected_legacy_default_a0')
+
+    def test_injected_legacy_default_and_markerless_resume_do_not_migrate(tmp_path):
+        store, tools = setup(tmp_path)
+        with pytest.raises(KeyboardInterrupt):
+            run(store, tools, ScriptedProvider([tool(), KeyboardInterrupt()]), tmp_path / 'run')
+        original = store.db.execute('SELECT request FROM runtime_model_calls WHERE response IS NULL').fetchone()[0]
+        settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])
+        assert 'decision_protocol' not in settings
+&gt;       assert 'episode.history' in {item['name'] for item in json.loads(original)['context']['tools']}
+E       AssertionError: assert 'episode.history' in set()
+
+../../../tests/test_runtime_decision_exchanges.py:333: AssertionError</failure></testcase><testcase classname="tests.test_runtime_decision_exchanges" name="test_common_assembly_loads_saved_protocol_and_rejects_rebinding" time="2.258" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_owned_connection_defaults_new_and_explicit_null_keeps_original[False]" time="3.669" /><testcase classname="tests.test_runtime_decision_exchanges" name="test_owned_connection_defaults_new_and_explicit_null_keeps_original[True]" time="2.902" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_actual_turns_repeat_task_across_update_and_same_decision_lookup" time="0.015" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_reconstruction_restores_answered_lookup_values_without_exchange_transcript" time="0.004" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_own_attempt_lookup_is_a_factual_page_with_actionable_detail_operands" time="0.004" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_frame_validation_and_episode_isolation_precede_dispatch" time="0.006" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_selected_manual_lookup_retains_text_and_page_operands" time="0.004" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_pending_progress_is_the_selected_latest_observation_with_original_units" time="0.004" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_scope_is_published_instructions_and_original_pixel_delivery_is_unchanged[False]" time="0.003" /><testcase classname="tests.test_scientific_process_prompt_delivery" name="test_scope_is_published_instructions_and_original_pixel_delivery_is_unchanged[True]" time="0.004" /></testsuite></testsuites>

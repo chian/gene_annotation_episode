@@ -1,0 +1,45 @@
+{
+  "record_type": "read_only_dynamic_library_audit",
+  "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check017_fluorescence_fcs",
+  "original_execution_audit": {
+    "pytest_returncode": 1,
+    "outside_modules": [],
+    "unbound_mappings": [
+      "/usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2"
+    ],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "before_mdns_pin_present": false,
+  "after_mdns_pin_present": false,
+  "ldd_mdns_resolution_present": false,
+  "current_library": {
+    "path": "/usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2",
+    "size_bytes": 18664,
+    "sha256": "53faea6504231025eaa74458f89690d1c5872d2bbef22c53bbb946696fb58cdf"
+  },
+  "nsswitch_file": {
+    "path": "/etc/nsswitch.conf",
+    "size_bytes": 594,
+    "sha256": "f053e77f9d706a20cb52deecdf9602b1635ea64a3be77a4cb32205bfebb17d3e"
+  },
+  "current_hosts_rule": [
+    "hosts:          files mdns4_minimal [NOTFOUND=return] dns"
+  ],
+  "inspected_harness": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/bounded_entry.py",
+    "size_bytes": 8353,
+    "sha256": "b7559f41ae6216bd8788af0197daee4a3375df6e1feab5c188a9fdb68635a465"
+  },
+  "inspected_acquisition_source": {
+    "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check017_fluorescence_fcs/source_snapshot/tests/fluorescence_flowio_test_support.py",
+    "size_bytes": 11888,
+    "sha256": "e0ec6082e49e753ca0078a40d8ef2e1c8980e4249438c2ed3ffe6a3ceff3fd69"
+  },
+  "inference": "The configured mdns4_minimal NSS provider was dynamically loaded during later hostname resolution for urllib fixture acquisition, after startup mappings and static ldd dependencies were pinned.",
+  "timing_limitation": "The audit has no per-load event trace; exact load timing is inferred, not directly measured.",
+  "historical_hash_limitation": "The current library hash does not supply a missing check017 before-run pin or establish historical before/after equality.",
+  "parser_changed_for_mapping": false,
+  "harness_changed_by_owner": false,
+  "host_native_execution_performed": false
+}

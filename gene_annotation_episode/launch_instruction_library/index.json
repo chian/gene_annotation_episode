@@ -3,21 +3,21 @@
   "entries": [
     {
       "entry_id": "launch-aurora",
-      "title": "Aurora HPC launch instructions",
-      "summary": "User-owned Aurora access, project storage, reusable software, PBS execution and original-job observations. Historical facts do not establish present access or allocation.",
+      "title": "Configured PBS over SSH execution",
+      "summary": "Explicit caller-owned SSH transport, workspace, charging account and job constraints; selected preparation and original PBS execution observations establish actual outcomes.",
       "resource_kinds": [
         "hpc"
       ],
       "tags": [
         "launch",
-        "Aurora",
-        "ALCF",
         "HPC",
         "PBS",
-        "bastion",
-        "Gentner",
-        "BioReason-Aurora-Test",
-        "EpiCalib"
+        "SSH",
+        "configuration",
+        "workspace",
+        "account",
+        "execution",
+        "results"
       ],
       "tool_names": [
         "practical.inspect",
@@ -32,28 +32,25 @@
         "practical.job.collect"
       ],
       "provenance": [
-        "AGENTS.md",
-        "docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md",
         "gene_annotation_episode/practical_resource_episodes.py",
         "gene_annotation_episode/practical_pbs_operations.py",
-        "verification/aurora_bioinformatics_2026-10-22_001/README.md",
         "https://docs.alcf.anl.gov/aurora/running-jobs-aurora/",
         "https://docs.alcf.anl.gov/running-jobs/"
       ],
       "sections": [
         {
           "section_id": "access",
-          "title": "Bastion access and durable authentication",
+          "title": "Configured SSH access and authentication",
           "path": "aurora-access.md"
         },
         {
           "section_id": "storage",
-          "title": "Required storage and charging",
+          "title": "Configured workspace and charging account",
           "path": "aurora-storage.md"
         },
         {
           "section_id": "software",
-          "title": "Existing Gentner setup and environment changes",
+          "title": "Supplied software, preparation and reuse",
           "path": "aurora-software.md"
         },
         {
@@ -109,18 +106,13 @@
         "homology.errors"
       ],
       "provenance": [
-        "docs/PRACTICAL_EXECUTION.md",
-        "docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md",
         "gene_annotation_episode/practical_resource_episodes.py",
         "gene_annotation_episode/practical_execution_operations.py",
         "gene_annotation_episode/native_lifecycle.py",
         "gene_annotation_episode/local_jobs.py",
         "gene_annotation_episode/homology_episodes.py",
         "gene_annotation_episode/homology_jobs.py",
-        "gene_annotation_episode/resource_episodes.py",
-        "gene_annotation_episode/knowledge/phmmer-launch.md",
-        "gene_annotation_episode/knowledge/phmmer-monitor.md",
-        "gene_annotation_episode/knowledge/phmmer-results.md"
+        "gene_annotation_episode/resource_episodes.py"
       ],
       "sections": [
         {
@@ -174,8 +166,6 @@
         "api.hmmer.result"
       ],
       "provenance": [
-        "docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md",
-        "docs/EXECUTION_WIRING_CONTRACT_2026-10-22_001.md",
         "gene_annotation_episode/api_execution.py",
         "gene_annotation_episode/execution_episodes.py",
         "gene_annotation_episode/execution_progress.py",
@@ -228,7 +218,6 @@
         "api.uniprot.collect"
       ],
       "provenance": [
-        "docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md",
         "gene_annotation_episode/api_uniprot.py",
         "gene_annotation_episode/api_service_execution.py",
         "gene_annotation_episode/acquisition.py",
@@ -271,7 +260,6 @@
         "api.bvbrc.result"
       ],
       "provenance": [
-        "docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md",
         "gene_annotation_episode/api_bvbrc.py",
         "https://www.bv-brc.org/api/doc/",
         "https://www.bv-brc.org/api/doc/genome_feature",
@@ -321,7 +309,6 @@
         "api.blast.fetch"
       ],
       "provenance": [
-        "docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md",
         "gene_annotation_episode/api_blast.py",
         "gene_annotation_episode/api_service_execution.py",
         "gene_annotation_episode/acquisition.py",
@@ -371,9 +358,6 @@
         "api.bvbrc.data.result"
       ],
       "provenance": [
-        "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_2026-10-24_001.md",
-        "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_CORRECTIONS_2026-10-24_002.md",
-        "docs/TOOL_GRADER_BVBRC_DATA_UNAVAILABLE_RETURNS_2026-10-24_003.md",
         "gene_annotation_episode/api_bvbrc.py",
         "gene_annotation_episode/bvbrc_data_query.py",
         "gene_annotation_episode/bvbrc_data_readers.py",

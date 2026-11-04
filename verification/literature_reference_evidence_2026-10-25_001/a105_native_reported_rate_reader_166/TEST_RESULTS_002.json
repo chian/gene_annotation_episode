@@ -1,0 +1,33 @@
+{
+  "new_dedicated_suite": {
+    "result": "19 passed",
+    "seconds": 181.93,
+    "limitation": "Before final scoped omission validation; final focused retest covers changed path."
+  },
+  "existing_focused_regressions": {
+    "result": "107 passed",
+    "seconds": 199.58,
+    "files": [
+      "tests/test_literature_rate_replicate_binding_163.py",
+      "tests/test_communication.py",
+      "tests/test_literature_experimental_prompt.py",
+      "tests/test_literature_rate_replicates.py"
+    ]
+  },
+  "final_byte_focused_tests": {
+    "result": "3 passed, 16 deselected",
+    "seconds": 38.62,
+    "selection": "selected_binding_exact or admitted_subset_shared or original_source_shared_episode",
+    "source_hashes_unchanged_during_proof": true
+  },
+  "earlier_repaired_failures": [
+    "BindingContext test fixture changed role without matching path; fixed fixture.",
+    "Cold mode=ro opened WAL sidecars; verification now checkpoints/closes only its completed controlled writer, confirms no outstanding WAL, uses mode=ro&immutable=1/query_only and checks all bytes. No production reader change for this setup."
+  ],
+  "overlap_counts_not_summed": true,
+  "original_source_proof": "original_source_episode_003/PROOF_RESULT_001.json",
+  "actual_model_backed_execution": false,
+  "synthetic_fixture_cases": "missing/ND/censor/formula/text-number, duplicate exact cells, ambiguous reused labels, nonpositive mean/CV, selector layout, source custody, typed omission/subset and prompt transport cases",
+  "a105_adequacy_claim": false,
+  "W05_changed": false
+}

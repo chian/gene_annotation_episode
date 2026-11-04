@@ -1,0 +1,309 @@
+.............FFFFFF                                                      [100%]
+=================================== FAILURES ===================================
+_ test_actual_runtime_pending_replay_completed_authority_and_byte_loss[inspect-structure_inventory-execution_protein_structure_projections] _
+
+store = <gene_annotation_episode.state.Store object at 0x7f3dd12dd310>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check002/temporary/pytest/test_actual_runtime_pending_re0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3dd12ddd60>
+kind = 'inspect', family = 'structure_inventory'
+source = 'execution_protein_structure_projections'
+
+    @pytest.mark.parametrize("kind,family,source", [("inspect", "structure_inventory", PROJECTION_SOURCE),
+        ("extract_sequence", "extracted_sequence", SEQUENCE_SOURCE), ("compare", "comparison_summary", SAVED_SOURCE)])
+    def test_actual_runtime_pending_replay_completed_authority_and_byte_loss(store, tmp_path, monkeypatch, kind, family, source):
+        """Real native launch and host, with real runtime rows; no outer Workflow."""
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind=kind)
+        selected = selector(projection(family), return_saved=kind == "compare",
+                            uses=["sequence_align"] if kind == "extract_sequence" else [])
+>       asyncio.run(f.live())
+
+source_snapshot/tests/test_native_protein_structure_results.py:338: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7f3dd12de600>
+
+    async def live(self):
+        """Actual selected practical launch; no injected native result."""
+        from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
+        from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+        from gene_annotation_episode import native_lifecycle
+        import asyncio
+        binding = PracticalResourceEpisodes(None, directory=self.directory / "practical-runtime",
+            resources={"local": self.config}, store=self.store)
+        binding.initialize(self.launch)
+        selected = await binding.execute(self.launch, "practical.job.start", {}, self.launch_key)
+        assert selected["status"] == "completed", selected
+        self.commit(self.launch, selected)
+        self.handoff = selected["record_refs"][0]
+        self.target = self._target(self.handoff)
+        handle = native_lifecycle.NativeJobHandle(Path(self.target["execution_id"]))
+        await asyncio.to_thread(native_lifecycle.wait_job, handle)
+>       self.owner.job_progress_provider = ExecutionProgressProvider(self.store, run_id=self.run_id,
+            directory=self.directory / "monitor", resources={self.assignment["resource_id"]: self.config}, api_execution=None)
+E       TypeError: ExecutionProgressProvider.__init__() missing 2 required keyword-only arguments: 'log_window_bytes' and 'log_roles'
+
+source_snapshot/verification/tool_graders_protein_structure_result_receipts_2026-10-27_406/fixture_helpers.py:162: TypeError
+_ test_actual_runtime_pending_replay_completed_authority_and_byte_loss[extract_sequence-extracted_sequence-execution_protein_structure_sequences] _
+
+store = <gene_annotation_episode.state.Store object at 0x7f3dd1678590>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check002/temporary/pytest/test_actual_runtime_pending_re1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3dd167b710>
+kind = 'extract_sequence', family = 'extracted_sequence'
+source = 'execution_protein_structure_sequences'
+
+    @pytest.mark.parametrize("kind,family,source", [("inspect", "structure_inventory", PROJECTION_SOURCE),
+        ("extract_sequence", "extracted_sequence", SEQUENCE_SOURCE), ("compare", "comparison_summary", SAVED_SOURCE)])
+    def test_actual_runtime_pending_replay_completed_authority_and_byte_loss(store, tmp_path, monkeypatch, kind, family, source):
+        """Real native launch and host, with real runtime rows; no outer Workflow."""
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind=kind)
+        selected = selector(projection(family), return_saved=kind == "compare",
+                            uses=["sequence_align"] if kind == "extract_sequence" else [])
+>       asyncio.run(f.live())
+
+source_snapshot/tests/test_native_protein_structure_results.py:338: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7f3dd0aaa810>
+
+    async def live(self):
+        """Actual selected practical launch; no injected native result."""
+        from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
+        from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+        from gene_annotation_episode import native_lifecycle
+        import asyncio
+        binding = PracticalResourceEpisodes(None, directory=self.directory / "practical-runtime",
+            resources={"local": self.config}, store=self.store)
+        binding.initialize(self.launch)
+        selected = await binding.execute(self.launch, "practical.job.start", {}, self.launch_key)
+        assert selected["status"] == "completed", selected
+        self.commit(self.launch, selected)
+        self.handoff = selected["record_refs"][0]
+        self.target = self._target(self.handoff)
+        handle = native_lifecycle.NativeJobHandle(Path(self.target["execution_id"]))
+        await asyncio.to_thread(native_lifecycle.wait_job, handle)
+>       self.owner.job_progress_provider = ExecutionProgressProvider(self.store, run_id=self.run_id,
+            directory=self.directory / "monitor", resources={self.assignment["resource_id"]: self.config}, api_execution=None)
+E       TypeError: ExecutionProgressProvider.__init__() missing 2 required keyword-only arguments: 'log_window_bytes' and 'log_roles'
+
+source_snapshot/verification/tool_graders_protein_structure_result_receipts_2026-10-27_406/fixture_helpers.py:162: TypeError
+_ test_actual_runtime_pending_replay_completed_authority_and_byte_loss[compare-comparison_summary-execution_protein_structure_saved_sheets] _
+
+store = <gene_annotation_episode.state.Store object at 0x7f3dd167b0e0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check002/temporary/pytest/test_actual_runtime_pending_re2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3dd1402c60>
+kind = 'compare', family = 'comparison_summary'
+source = 'execution_protein_structure_saved_sheets'
+
+    @pytest.mark.parametrize("kind,family,source", [("inspect", "structure_inventory", PROJECTION_SOURCE),
+        ("extract_sequence", "extracted_sequence", SEQUENCE_SOURCE), ("compare", "comparison_summary", SAVED_SOURCE)])
+    def test_actual_runtime_pending_replay_completed_authority_and_byte_loss(store, tmp_path, monkeypatch, kind, family, source):
+        """Real native launch and host, with real runtime rows; no outer Workflow."""
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind=kind)
+        selected = selector(projection(family), return_saved=kind == "compare",
+                            uses=["sequence_align"] if kind == "extract_sequence" else [])
+>       asyncio.run(f.live())
+
+source_snapshot/tests/test_native_protein_structure_results.py:338: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7f3dd1350080>
+
+    async def live(self):
+        """Actual selected practical launch; no injected native result."""
+        from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
+        from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+        from gene_annotation_episode import native_lifecycle
+        import asyncio
+        binding = PracticalResourceEpisodes(None, directory=self.directory / "practical-runtime",
+            resources={"local": self.config}, store=self.store)
+        binding.initialize(self.launch)
+        selected = await binding.execute(self.launch, "practical.job.start", {}, self.launch_key)
+        assert selected["status"] == "completed", selected
+        self.commit(self.launch, selected)
+        self.handoff = selected["record_refs"][0]
+        self.target = self._target(self.handoff)
+        handle = native_lifecycle.NativeJobHandle(Path(self.target["execution_id"]))
+        await asyncio.to_thread(native_lifecycle.wait_job, handle)
+>       self.owner.job_progress_provider = ExecutionProgressProvider(self.store, run_id=self.run_id,
+            directory=self.directory / "monitor", resources={self.assignment["resource_id"]: self.config}, api_execution=None)
+E       TypeError: ExecutionProgressProvider.__init__() missing 2 required keyword-only arguments: 'log_window_bytes' and 'log_roles'
+
+source_snapshot/verification/tool_graders_protein_structure_result_receipts_2026-10-27_406/fixture_helpers.py:162: TypeError
+__________ test_actual_capture_failure_never_grants_science[missing] ___________
+
+store = <gene_annotation_episode.state.Store object at 0x7f3dd14038f0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check002/temporary/pytest/test_actual_capture_failure_ne0')
+damage = 'missing'
+
+    @pytest.mark.parametrize("damage", ["missing", "changed"])
+    def test_actual_capture_failure_never_grants_science(store, tmp_path, damage):
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind="compare")
+>       asyncio.run(f.live())
+
+source_snapshot/tests/test_native_protein_structure_results.py:400: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7f3dd1353cb0>
+
+    async def live(self):
+        """Actual selected practical launch; no injected native result."""
+        from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
+        from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+        from gene_annotation_episode import native_lifecycle
+        import asyncio
+        binding = PracticalResourceEpisodes(None, directory=self.directory / "practical-runtime",
+            resources={"local": self.config}, store=self.store)
+        binding.initialize(self.launch)
+        selected = await binding.execute(self.launch, "practical.job.start", {}, self.launch_key)
+        assert selected["status"] == "completed", selected
+        self.commit(self.launch, selected)
+        self.handoff = selected["record_refs"][0]
+        self.target = self._target(self.handoff)
+        handle = native_lifecycle.NativeJobHandle(Path(self.target["execution_id"]))
+        await asyncio.to_thread(native_lifecycle.wait_job, handle)
+>       self.owner.job_progress_provider = ExecutionProgressProvider(self.store, run_id=self.run_id,
+            directory=self.directory / "monitor", resources={self.assignment["resource_id"]: self.config}, api_execution=None)
+E       TypeError: ExecutionProgressProvider.__init__() missing 2 required keyword-only arguments: 'log_window_bytes' and 'log_roles'
+
+source_snapshot/verification/tool_graders_protein_structure_result_receipts_2026-10-27_406/fixture_helpers.py:162: TypeError
+__________ test_actual_capture_failure_never_grants_science[changed] ___________
+
+store = <gene_annotation_episode.state.Store object at 0x7f3dd1353470>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check002/temporary/pytest/test_actual_capture_failure_ne1')
+damage = 'changed'
+
+    @pytest.mark.parametrize("damage", ["missing", "changed"])
+    def test_actual_capture_failure_never_grants_science(store, tmp_path, damage):
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind="compare")
+>       asyncio.run(f.live())
+
+source_snapshot/tests/test_native_protein_structure_results.py:400: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7f3dd0bdd5b0>
+
+    async def live(self):
+        """Actual selected practical launch; no injected native result."""
+        from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
+        from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+        from gene_annotation_episode import native_lifecycle
+        import asyncio
+        binding = PracticalResourceEpisodes(None, directory=self.directory / "practical-runtime",
+            resources={"local": self.config}, store=self.store)
+        binding.initialize(self.launch)
+        selected = await binding.execute(self.launch, "practical.job.start", {}, self.launch_key)
+        assert selected["status"] == "completed", selected
+        self.commit(self.launch, selected)
+        self.handoff = selected["record_refs"][0]
+        self.target = self._target(self.handoff)
+        handle = native_lifecycle.NativeJobHandle(Path(self.target["execution_id"]))
+        await asyncio.to_thread(native_lifecycle.wait_job, handle)
+>       self.owner.job_progress_provider = ExecutionProgressProvider(self.store, run_id=self.run_id,
+            directory=self.directory / "monitor", resources={self.assignment["resource_id"]: self.config}, api_execution=None)
+E       TypeError: ExecutionProgressProvider.__init__() missing 2 required keyword-only arguments: 'log_window_bytes' and 'log_roles'
+
+source_snapshot/verification/tool_graders_protein_structure_result_receipts_2026-10-27_406/fixture_helpers.py:162: TypeError
+________ test_actual_saved_action_uses_original_pair_and_later_custody _________
+
+store = <gene_annotation_episode.state.Store object at 0x7f3dd0bde8d0>
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_host_2026-10-27_407/check002/temporary/pytest/test_actual_saved_action_uses_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3dd09fc950>
+
+    def test_actual_saved_action_uses_original_pair_and_later_custody(store, tmp_path, monkeypatch):
+        f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind="compare")
+>       asyncio.run(f.live())
+
+source_snapshot/tests/test_native_protein_structure_results.py:420: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers.HostFixture object at 0x7f3dd09fff50>
+
+    async def live(self):
+        """Actual selected practical launch; no injected native result."""
+        from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
+        from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+        from gene_annotation_episode import native_lifecycle
+        import asyncio
+        binding = PracticalResourceEpisodes(None, directory=self.directory / "practical-runtime",
+            resources={"local": self.config}, store=self.store)
+        binding.initialize(self.launch)
+        selected = await binding.execute(self.launch, "practical.job.start", {}, self.launch_key)
+        assert selected["status"] == "completed", selected
+        self.commit(self.launch, selected)
+        self.handoff = selected["record_refs"][0]
+        self.target = self._target(self.handoff)
+        handle = native_lifecycle.NativeJobHandle(Path(self.target["execution_id"]))
+        await asyncio.to_thread(native_lifecycle.wait_job, handle)
+>       self.owner.job_progress_provider = ExecutionProgressProvider(self.store, run_id=self.run_id,
+            directory=self.directory / "monitor", resources={self.assignment["resource_id"]: self.config}, api_execution=None)
+E       TypeError: ExecutionProgressProvider.__init__() missing 2 required keyword-only arguments: 'log_window_bytes' and 'log_roles'
+
+source_snapshot/verification/tool_graders_protein_structure_result_receipts_2026-10-27_406/fixture_helpers.py:162: TypeError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_runtime_pending_replay_completed_authority_and_byte_loss[inspect-structure_inventory-execution_protein_structure_projections]
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_runtime_pending_replay_completed_authority_and_byte_loss[extract_sequence-extracted_sequence-execution_protein_structure_sequences]
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_runtime_pending_replay_completed_authority_and_byte_loss[compare-comparison_summary-execution_protein_structure_saved_sheets]
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_capture_failure_never_grants_science[missing]
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_capture_failure_never_grants_science[changed]
+FAILED source_snapshot/tests/test_native_protein_structure_results.py::test_actual_saved_action_uses_original_pair_and_later_custody
+6 failed, 13 passed in 173.75s (0:02:53)

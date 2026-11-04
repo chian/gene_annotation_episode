@@ -43,6 +43,9 @@ def bind_assembled_services(
     execution_resources: dict | None = None,
     initial_execution_information: dict | None = None,
     tool_registry=None,
+    protein_structure_environments=(),
+    flux_balance_environments=(),
+    scientific_contract_information_profile=None,
 ) -> EpisodeApplicationServices:
     """Bind exact caller operands without observing or selecting work.
 
@@ -60,25 +63,36 @@ def bind_assembled_services(
         factory = ExecutionServiceFactory(execution_resources,
             initial_execution_information, handoff_unit, acquired_record_unit,
             monitoring_information_unit, log_window_bytes, tuple(log_roles),
-            monitor_outcome_page_size)
+            monitor_outcome_page_size,
+            protein_structure_environments=protein_structure_environments,
+            flux_balance_environments=flux_balance_environments)
+        if factory.protein_structure_environments or factory.flux_balance_environments:
+            factory.configure_tool_registry(tool_registry)
+            tool_catalog = tool_registry.catalog()
         execution = factory(store, run_id=run_id, directory=directory,
             job_episodes=job_episodes, resource_estimator=resource_estimator,
             tool_registry=tool_registry, tool_catalog=tool_catalog)
         scientific = prepare_scientific_binding(run_directory=directory,
             source_directory=source_directory, tool_catalog=tool_catalog,
             child_roles=scientific_child_roles, tool_retrieval=tool_retrieval,
-            resource_catalogs=execution.resource_tool_catalogs)
+            resource_catalogs=execution.resource_tool_catalogs,
+            **({'contract_information_profile': scientific_contract_information_profile}
+               if scientific_contract_information_profile is not None else {}))
         return EpisodeApplicationServices(
             (scientific, literature.as_record(), *execution.episode_binding_descriptors),
             execution.role_credit_bindings, execution.job_progress_provider,
             resource_tool_catalogs=execution.resource_tool_catalogs)
     scientific = prepare_scientific_binding(run_directory=directory,
         source_directory=source_directory, tool_catalog=tool_catalog,
-        child_roles=scientific_child_roles, tool_retrieval=tool_retrieval)
+        child_roles=scientific_child_roles, tool_retrieval=tool_retrieval,
+        **({'contract_information_profile': scientific_contract_information_profile}
+           if scientific_contract_information_profile is not None else {}))
     monitor = MonitorEpisodes(None, outcome_page_size=monitor_outcome_page_size)
     resource = bind_resource_services(store, run_id=run_id, directory=directory,
         job_episodes=job_episodes, resource_estimator=resource_estimator,
-        handoff_unit=handoff_unit, acquired_record_unit=acquired_record_unit)
+        handoff_unit=handoff_unit, acquired_record_unit=acquired_record_unit,
+        **({'contract_information_profile': scientific_contract_information_profile}
+           if scientific_contract_information_profile is not None else {}))
     information = ProgressInformationCredit(_SavedProgressReader(store, run_id),
         information_unit=monitoring_information_unit)
     native_progress = HomologyProgressProvider(store, job_episodes.jobs,

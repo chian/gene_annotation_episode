@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="3.743" timestamp="2026-10-28T22:55:38.891585-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_blast_utility_material_access_666" name="test_source_only_utility_return_cannot_open_or_wrap_unselected_bytes[material.from_source]" time="2.055"><error message="failed on setup with &quot;ValueError: scientific_tool_info_not_in_legacy_snapshot&quot;">source_snapshot/tests/test_blast_utility_material_access_666.py:51: in consumer
+    filled = scientific.prepare_invocation(parent, 'scientific_process', selected,
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:268: in prepare_invocation
+    assignment = self.prepare_assignment(parent, role, inputs, scope, operation_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:234: in prepare_assignment
+    assignment = self._assignment(selection, scope, materialize=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:195: in _assignment
+    selected['child_tool_info'] = self.tool_library.resolve_tool_info(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:257: in resolve_tool_info
+    self._require_tool_info()
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:236: in _require_tool_info
+    raise ValueError('scientific_tool_info_not_in_legacy_snapshot')
+E   ValueError: scientific_tool_info_not_in_legacy_snapshot</error></testcase></testsuite></testsuites>

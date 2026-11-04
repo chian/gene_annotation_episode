@@ -1,0 +1,151 @@
+[
+  {
+    "case": "adjacent_label",
+    "synthetic_source": "<table><tr><td>Partner</td><td>7</td></tr></table>",
+    "selected": "7",
+    "kind": "number",
+    "before": {
+      "status": "rejected",
+      "code": "partial_source_numeric_token",
+      "field": "number_selector"
+    },
+    "after": {
+      "status": "accepted",
+      "raw_number": "7",
+      "value": 7.0,
+      "relation": "point"
+    }
+  },
+  {
+    "case": "adjacent_numeric_first",
+    "synthetic_source": "<table><tr><td>1</td><td>2</td></tr></table>",
+    "selected": "1",
+    "kind": "number",
+    "before": {
+      "status": "rejected",
+      "code": "partial_source_numeric_token",
+      "field": "number_selector"
+    },
+    "after": {
+      "status": "accepted",
+      "raw_number": "1",
+      "value": 1.0,
+      "relation": "point"
+    }
+  },
+  {
+    "case": "adjacent_numeric_second",
+    "synthetic_source": "<table><tr><td>1</td><td>2</td></tr></table>",
+    "selected": "2",
+    "kind": "number",
+    "before": {
+      "status": "rejected",
+      "code": "partial_source_numeric_token",
+      "field": "number_selector"
+    },
+    "after": {
+      "status": "accepted",
+      "raw_number": "2",
+      "value": 2.0,
+      "relation": "point"
+    }
+  },
+  {
+    "case": "inline_fragment_first",
+    "synthetic_source": "<em>1</em><b>2</b>",
+    "selected": "1",
+    "kind": "number",
+    "before": {
+      "status": "rejected",
+      "code": "partial_source_numeric_token",
+      "field": "number_selector"
+    },
+    "after": {
+      "status": "rejected",
+      "code": "partial_source_numeric_token",
+      "field": "number_selector"
+    }
+  },
+  {
+    "case": "inline_fragment_second",
+    "synthetic_source": "<em>1</em><b>2</b>",
+    "selected": "2",
+    "kind": "number",
+    "before": {
+      "status": "rejected",
+      "code": "partial_source_numeric_token",
+      "field": "number_selector"
+    },
+    "after": {
+      "status": "rejected",
+      "code": "partial_source_numeric_token",
+      "field": "number_selector"
+    }
+  },
+  {
+    "case": "same_cell_bound_break",
+    "synthetic_source": "<td>&lt;<br/>7</td>",
+    "selected": "7",
+    "kind": "number",
+    "before": {
+      "status": "accepted",
+      "raw_number": "7",
+      "value": 7.0,
+      "relation": "lt"
+    },
+    "after": {
+      "status": "accepted",
+      "raw_number": "7",
+      "value": 7.0,
+      "relation": "lt"
+    }
+  },
+  {
+    "case": "same_cell_interval_break",
+    "synthetic_source": "<td>between<br>1 and<br>2 nM</td>",
+    "selected": "2",
+    "kind": "number",
+    "before": {
+      "status": "rejected",
+      "code": "interval_source_number_unsupported",
+      "field": "number"
+    },
+    "after": {
+      "status": "rejected",
+      "code": "interval_source_number_unsupported",
+      "field": "number"
+    }
+  },
+  {
+    "case": "single_wrapped_unit",
+    "synthetic_source": "<td>nmol/min/mg</td>",
+    "selected": "<td>nmol/min/mg</td>",
+    "kind": "unit",
+    "before": {
+      "status": "accepted",
+      "canonical_unit": "pmol/min/mg",
+      "multiplier": 1000
+    },
+    "after": {
+      "status": "accepted",
+      "canonical_unit": "pmol/min/mg",
+      "multiplier": 1000
+    }
+  },
+  {
+    "case": "fabricated_cross_cell_unit",
+    "synthetic_source": "<td>nmol</td><td>/min/mg</td>",
+    "selected": "nmol</td><td>/min/mg",
+    "kind": "unit",
+    "before": {
+      "status": "accepted",
+      "canonical_unit": "pmol/min/mg",
+      "multiplier": 1000
+    },
+    "after": {
+      "status": "rejected",
+      "code": "unsupported_source_rate_unit",
+      "field": "unit_witness"
+    }
+  }
+]

@@ -1,0 +1,1553 @@
+[
+  {
+    "booleans": [
+      {
+        "component_pointer": "/collection/searches/0/reporting",
+        "name": "limit_reached",
+        "origin": "derived",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "value": null
+      }
+    ],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/search_facts/0"
+      },
+      {
+        "artifact_role": "sheets",
+        "pointer": "/collection/searches/0/reporting"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "search",
+    "identity": {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/search_facts/0/counts/reported_hit_count",
+        "denominator": null,
+        "name": "reported_hit_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "hit",
+        "value": 2
+      },
+      {
+        "complete": null,
+        "component_pointer": "/search_facts/0/counts/reported_hsp_count",
+        "denominator": null,
+        "name": "reported_hsp_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "hsp",
+        "value": 2
+      },
+      {
+        "complete": null,
+        "component_pointer": "/search_facts/0/counts/observed_hsp_count",
+        "denominator": null,
+        "name": "observed_hsp_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "hsp",
+        "value": 2
+      },
+      {
+        "complete": null,
+        "component_pointer": "/search_facts/0/counts/parsed_hit_count",
+        "denominator": null,
+        "name": "parsed_hit_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "hit",
+        "value": 2
+      },
+      {
+        "complete": null,
+        "component_pointer": "/search_facts/0/counts/parsed_hsp_count",
+        "denominator": null,
+        "name": "parsed_hsp_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "hsp",
+        "value": 2
+      },
+      {
+        "complete": null,
+        "component_pointer": "/search_facts/0/counts/declared_alignment_row_count",
+        "denominator": null,
+        "name": "declared_alignment_row_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "not_measured",
+        "status": "unavailable",
+        "unit": "alignment_row",
+        "value": null
+      }
+    ],
+    "native_status": "partial",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_ef05cf5ec75c5c9d41895a69c3fff5f967aa680ac7fbc668584411ff90f82f53",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  },
+  {
+    "booleans": [],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/native_search_statistics/0"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "search_statistic",
+    "identity": {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/native_search_statistics/0/measurements/native_database_sequences",
+        "denominator": null,
+        "name": "native_database_sequences",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "sequence",
+        "value": 1000
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_search_statistics/0/measurements/native_database_letters",
+        "denominator": null,
+        "name": "native_database_letters",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "native_database_letter",
+        "value": 10000
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_search_statistics/0/measurements/native_hsp_length_adjustment",
+        "denominator": null,
+        "name": "native_hsp_length_adjustment",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "not_measured",
+        "status": "unavailable",
+        "unit": "native_length_adjustment",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_search_statistics/0/measurements/native_effective_search_space",
+        "denominator": null,
+        "name": "native_effective_search_space",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "not_measured",
+        "status": "unavailable",
+        "unit": "native_effective_search_space",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_search_statistics/0/measurements/native_lambda",
+        "denominator": null,
+        "name": "native_lambda",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "not_measured",
+        "status": "unavailable",
+        "unit": "inverse_native_score",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_search_statistics/0/measurements/native_kappa",
+        "denominator": null,
+        "name": "native_kappa",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "not_measured",
+        "status": "unavailable",
+        "unit": "native_statistic",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_search_statistics/0/measurements/native_entropy",
+        "denominator": null,
+        "name": "native_entropy",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "not_measured",
+        "status": "unavailable",
+        "unit": "native_statistic",
+        "value": null
+      }
+    ],
+    "native_status": "available",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_562bb28d7de510d4eb45a2e09dec7d22ba12d8a4eb0e35cae9350d205ce95e60",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  },
+  {
+    "booleans": [
+      {
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/geometry_available",
+        "name": "qualified_geometry_available",
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "value": true
+      }
+    ],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/native_hsp_components/0/component"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/counts/paired_query_positions"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/counts/paired_reference_positions"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/fractions/query_paired_coverage"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/fractions/reference_paired_coverage"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/geometry_available"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "hsp",
+    "identity": {
+      "row_key": {
+        "description_ordinal": null,
+        "hit_ordinal": 0,
+        "hsp_ordinal": 0,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        }
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/native_scores/bit_score",
+        "denominator": null,
+        "name": "native_score_bits",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "bits",
+        "value": 20
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/native_scores/score",
+        "denominator": null,
+        "name": "native_raw_score",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "native_score",
+        "value": 40
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/native_scores/evalue",
+        "denominator": null,
+        "name": "native_evalue",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "expected_count",
+        "value": 0.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_counts/align_len",
+        "denominator": null,
+        "name": "native_reported_alignment_columns",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_counts/identity",
+        "denominator": null,
+        "name": "native_reported_identity_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_counts/positive",
+        "denominator": null,
+        "name": "native_reported_positive_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "alignment_column",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_counts/gaps",
+        "denominator": null,
+        "name": "native_reported_gap_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_percentages/identity_percent",
+        "denominator": null,
+        "name": "native_reported_identity_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_percentages/query_coverage_percent",
+        "denominator": null,
+        "name": "native_reported_query_coverage_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_percentages/query_subject_coverage_percent",
+        "denominator": null,
+        "name": "native_reported_query_subject_coverage_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/reported_percentages/query_unique_subject_coverage_percent",
+        "denominator": null,
+        "name": "native_reported_query_unique_subject_coverage_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/counts/alignment_columns",
+        "denominator": null,
+        "name": "alignment_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/counts/paired_columns",
+        "denominator": null,
+        "name": "paired_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/counts/identical_pairs",
+        "denominator": null,
+        "name": "identical_pairs",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/counts/query_gap_columns",
+        "denominator": null,
+        "name": "query_gap_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/counts/reference_gap_columns",
+        "denominator": null,
+        "name": "reference_gap_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/counts/paired_query_positions",
+        "denominator": null,
+        "name": "paired_query_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/counts/paired_reference_positions",
+        "denominator": null,
+        "name": "paired_reference_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/fractions/paired_identity",
+        "denominator": 4,
+        "name": "paired_identity",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 1.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/fractions/alignment_identity",
+        "denominator": 4,
+        "name": "alignment_identity",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 1.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/denominators/query_length",
+        "denominator": null,
+        "name": "reported_query_length",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 8
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/0/component/denominators/reference_length",
+        "denominator": null,
+        "name": "reported_reference_length",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 10
+      },
+      {
+        "complete": true,
+        "component_pointer": "/native_hsp_components/0/component/fractions/query_paired_coverage",
+        "denominator": 8,
+        "name": "reported_query_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.5
+      },
+      {
+        "complete": true,
+        "component_pointer": "/native_hsp_components/0/component/fractions/reference_paired_coverage",
+        "denominator": 10,
+        "name": "reported_reference_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/counts/paired_query_positions",
+        "denominator": null,
+        "name": "qualified_paired_query_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/counts/paired_reference_positions",
+        "denominator": null,
+        "name": "qualified_paired_reference_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/fractions/query_paired_coverage",
+        "denominator": 8,
+        "name": "full_query_paired_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.5
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/hsp_components/0/fractions/reference_paired_coverage",
+        "denominator": 10,
+        "name": "full_reference_paired_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.4
+      }
+    ],
+    "native_status": "complete",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_b0fd4d3abc21d92ec4ddeaa3fec809eb84947c822a0dd58fc4a33c126d2c2e89",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  },
+  {
+    "booleans": [
+      {
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/geometry_available",
+        "name": "qualified_geometry_available",
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "value": true
+      }
+    ],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/native_hsp_components/1/component"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/counts/paired_query_positions"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/counts/paired_reference_positions"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/fractions/query_paired_coverage"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/fractions/reference_paired_coverage"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/geometry_available"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "hsp",
+    "identity": {
+      "row_key": {
+        "description_ordinal": null,
+        "hit_ordinal": 1,
+        "hsp_ordinal": 0,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        }
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/native_scores/bit_score",
+        "denominator": null,
+        "name": "native_score_bits",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "bits",
+        "value": 18
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/native_scores/score",
+        "denominator": null,
+        "name": "native_raw_score",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "native_score",
+        "value": 40
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/native_scores/evalue",
+        "denominator": null,
+        "name": "native_evalue",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "expected_count",
+        "value": 0.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_counts/align_len",
+        "denominator": null,
+        "name": "native_reported_alignment_columns",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_counts/identity",
+        "denominator": null,
+        "name": "native_reported_identity_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_counts/positive",
+        "denominator": null,
+        "name": "native_reported_positive_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "alignment_column",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_counts/gaps",
+        "denominator": null,
+        "name": "native_reported_gap_count",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_percentages/identity_percent",
+        "denominator": null,
+        "name": "native_reported_identity_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_percentages/query_coverage_percent",
+        "denominator": null,
+        "name": "native_reported_query_coverage_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_percentages/query_subject_coverage_percent",
+        "denominator": null,
+        "name": "native_reported_query_subject_coverage_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/reported_percentages/query_unique_subject_coverage_percent",
+        "denominator": null,
+        "name": "native_reported_query_unique_subject_coverage_percent",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "percent",
+        "value": null
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/counts/alignment_columns",
+        "denominator": null,
+        "name": "alignment_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/counts/paired_columns",
+        "denominator": null,
+        "name": "paired_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/counts/identical_pairs",
+        "denominator": null,
+        "name": "identical_pairs",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/counts/query_gap_columns",
+        "denominator": null,
+        "name": "query_gap_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/counts/reference_gap_columns",
+        "denominator": null,
+        "name": "reference_gap_columns",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "alignment_column",
+        "value": 0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/counts/paired_query_positions",
+        "denominator": null,
+        "name": "paired_query_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/counts/paired_reference_positions",
+        "denominator": null,
+        "name": "paired_reference_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/fractions/paired_identity",
+        "denominator": 4,
+        "name": "paired_identity",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 1.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/fractions/alignment_identity",
+        "denominator": 4,
+        "name": "alignment_identity",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 1.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/denominators/query_length",
+        "denominator": null,
+        "name": "reported_query_length",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 8
+      },
+      {
+        "complete": null,
+        "component_pointer": "/native_hsp_components/1/component/denominators/reference_length",
+        "denominator": null,
+        "name": "reported_reference_length",
+        "numerator": null,
+        "origin": "native_report",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 10
+      },
+      {
+        "complete": true,
+        "component_pointer": "/native_hsp_components/1/component/fractions/query_paired_coverage",
+        "denominator": 8,
+        "name": "reported_query_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.5
+      },
+      {
+        "complete": true,
+        "component_pointer": "/native_hsp_components/1/component/fractions/reference_paired_coverage",
+        "denominator": 10,
+        "name": "reported_reference_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/counts/paired_query_positions",
+        "denominator": null,
+        "name": "qualified_paired_query_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/counts/paired_reference_positions",
+        "denominator": null,
+        "name": "qualified_paired_reference_units",
+        "numerator": null,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/fractions/query_paired_coverage",
+        "denominator": 8,
+        "name": "full_query_paired_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.5
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/hsp_components/0/fractions/reference_paired_coverage",
+        "denominator": 10,
+        "name": "full_reference_paired_coverage",
+        "numerator": 4,
+        "origin": "native_traceback",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.4
+      }
+    ],
+    "native_status": "complete",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_77041c610983e8ca866aac8bf2f9848ad061f4906a44dbd2cebc4d0f83dfb355",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  },
+  {
+    "booleans": [
+      {
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/traceback_complete",
+        "name": "geometry_complete",
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "value": true
+      }
+    ],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/selected_query_coverage/0"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "sequence_hit",
+    "identity": {
+      "row_key": {
+        "description_ordinal": null,
+        "hit_ordinal": 0,
+        "hsp_ordinal": null,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        }
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/maximum_bit_score",
+        "denominator": null,
+        "name": "maximum_bit_score",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "bits",
+        "value": 20
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/minimum_evalue",
+        "denominator": null,
+        "name": "minimum_evalue",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "expected_count",
+        "value": 0.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/hsp_count",
+        "denominator": null,
+        "name": "hsp_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "hsp",
+        "value": 1
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/observed_paired_query_positions",
+        "denominator": null,
+        "name": "observed_paired_query_positions",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/observed_paired_reference_positions",
+        "denominator": null,
+        "name": "observed_paired_reference_positions",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/unique_pair_count",
+        "denominator": null,
+        "name": "unique_pair_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/identical_unique_pair_count",
+        "denominator": null,
+        "name": "identical_unique_pair_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/overlap_pair_representations",
+        "denominator": null,
+        "name": "overlap_pair_representations",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 0
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/query_paired_coverage",
+        "denominator": 8,
+        "name": "query_paired_coverage",
+        "numerator": 4,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.5
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/0/measurements/reference_paired_coverage",
+        "denominator": 10,
+        "name": "reference_paired_coverage",
+        "numerator": 4,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.4
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/selected_query_coverage/0",
+        "denominator": null,
+        "name": "selected_query_coverage",
+        "numerator": null,
+        "origin": "derived",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "fraction",
+        "value": null
+      }
+    ],
+    "native_status": "partial",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_5c4991652b7facd13c0f803dc7e4a536747e10cf60af167a104465d2935ce47e",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  },
+  {
+    "booleans": [
+      {
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/traceback_complete",
+        "name": "geometry_complete",
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "value": true
+      }
+    ],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements"
+      },
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/selected_query_coverage/1"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "sequence_hit",
+    "identity": {
+      "row_key": {
+        "description_ordinal": null,
+        "hit_ordinal": 1,
+        "hsp_ordinal": null,
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        }
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/maximum_bit_score",
+        "denominator": null,
+        "name": "maximum_bit_score",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "bits",
+        "value": 18
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/minimum_evalue",
+        "denominator": null,
+        "name": "minimum_evalue",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "expected_count",
+        "value": 0.0
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/hsp_count",
+        "denominator": null,
+        "name": "hsp_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "hsp",
+        "value": 1
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/observed_paired_query_positions",
+        "denominator": null,
+        "name": "observed_paired_query_positions",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/observed_paired_reference_positions",
+        "denominator": null,
+        "name": "observed_paired_reference_positions",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "aa",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/unique_pair_count",
+        "denominator": null,
+        "name": "unique_pair_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/identical_unique_pair_count",
+        "denominator": null,
+        "name": "identical_unique_pair_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 4
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/overlap_pair_representations",
+        "denominator": null,
+        "name": "overlap_pair_representations",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "paired_column",
+        "value": 0
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/query_paired_coverage",
+        "denominator": 8,
+        "name": "query_paired_coverage",
+        "numerator": 4,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.5
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/database_sheet/hits/1/measurements/reference_paired_coverage",
+        "denominator": 10,
+        "name": "reference_paired_coverage",
+        "numerator": 4,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "fraction",
+        "value": 0.4
+      },
+      {
+        "complete": true,
+        "component_pointer": "/sequence/0/components/components/selected_query_coverage/1",
+        "denominator": null,
+        "name": "selected_query_coverage",
+        "numerator": null,
+        "origin": "derived",
+        "reason": "missing_input",
+        "status": "unavailable",
+        "unit": "fraction",
+        "value": null
+      }
+    ],
+    "native_status": "partial",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_038a2dae22f0f0cd95cc2725de50732c51221e40912929fe195089a3faeb1f23",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  },
+  {
+    "booleans": [],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/sequence_groups/0"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "sequence_group",
+    "identity": {
+      "hit_ordinals": [
+        0
+      ],
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/sequence_groups/0/maximum_bit_score",
+        "denominator": null,
+        "name": "maximum_bit_score",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "bits",
+        "value": 20
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/sequence_groups/0/hit_indices",
+        "denominator": null,
+        "name": "hit_representation_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "hit",
+        "value": 1
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/sequence_groups/0/functions",
+        "denominator": null,
+        "name": "explicit_function_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "count",
+        "value": 0
+      }
+    ],
+    "native_status": "partial",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_97425c145dca984cf2a4a476860aea28474399e308081f9fd7cab18bb26484ee",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  },
+  {
+    "booleans": [],
+    "calculation_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "component_refs": [
+      {
+        "artifact_role": "calculations",
+        "pointer": "/sequence/0/components/components/database_sheet/sequence_groups/1"
+      }
+    ],
+    "context": {
+      "alignment_unit": "aa",
+      "query_axis_kind": "sequence",
+      "query_unit": "aa",
+      "reference_axis_kind": "sequence",
+      "reference_unit": "aa",
+      "stage": "sequence_database"
+    },
+    "family": "sequence_group",
+    "identity": {
+      "hit_ordinals": [
+        1
+      ],
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    },
+    "measurements": [
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/sequence_groups/1/maximum_bit_score",
+        "denominator": null,
+        "name": "maximum_bit_score",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "bits",
+        "value": 18
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/sequence_groups/1/hit_indices",
+        "denominator": null,
+        "name": "hit_representation_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "hit",
+        "value": 1
+      },
+      {
+        "complete": null,
+        "component_pointer": "/sequence/0/components/components/database_sheet/sequence_groups/1/functions",
+        "denominator": null,
+        "name": "explicit_function_count",
+        "numerator": null,
+        "origin": "derived",
+        "reason": null,
+        "status": "available",
+        "unit": "count",
+        "value": 0
+      }
+    ],
+    "native_status": "partial",
+    "program": "blastp",
+    "record_key": "native_blast_standard_database_row_0b1376e408788b6850d16a69c7a5cf455dd70f0b5bc6d2234c5c784e91a41151",
+    "schema": "native_blast_standard_database_numeric_row_v1"
+  }
+]

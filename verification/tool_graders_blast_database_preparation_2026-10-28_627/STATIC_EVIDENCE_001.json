@@ -1,0 +1,40 @@
+{
+  "record_type": "blast_database_preparation_static_evidence_v1",
+  "implementation_contracts": [
+    "verification/tool_graders_blast_utility_core_2026-10-28_624/CONTRACT_001.md",
+    "verification/tool_graders_blast_utility_core_2026-10-28_624/CONTRACT_002.md"
+  ],
+  "files": [
+    {
+      "path": "gene_annotation_episode/blast_database_preparation.py",
+      "sha256": "e8d02e893bed865c47e315071ce93f208d4ff59c63fefe6ecb2bcab0a6653c4f",
+      "size_bytes": 17519,
+      "stdlib_ast_parse": "passed"
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_standard_database_contracts.py",
+      "sha256": "7db4d438fc0f4697688fc91b68b46b99094389a496380d887d07446af6392455",
+      "size_bytes": 63588,
+      "stdlib_ast_parse": "passed"
+    },
+    {
+      "path": "tests/test_blast_database_preparation_627.py",
+      "sha256": "a13ae7bc62804954d6f1d17ca3bf52dca7966098ddce32129ba884d10edcb6f6",
+      "size_bytes": 17675,
+      "stdlib_ast_parse": "passed"
+    }
+  ],
+  "application_imports_on_host": false,
+  "pytest_on_host": false,
+  "native_work_on_host": false,
+  "bounded_test_verification": "pending root-allocated runner529 check",
+  "source_inspected": [
+    "AGENTS.md",
+    "docs/TOOL_GRADER_GOAL_AND_PRINCIPLES_2026-10-24_001.md",
+    "research/tool_grader_inventory_2026-10-24/WORK_STATUS.json relevant native utility rows",
+    "gene_annotation_episode/native_blast_standard_database_contracts.py complete source",
+    "tests/test_native_blast_standard_database_contracts.py complete source",
+    "gene_annotation_episode/blast_utility_contracts.py complete initial source and shared metadata revisions"
+  ],
+  "qualification": "Pure population, relationships and standard prepared-manifest projection only. No production result binding, episode return, search compatibility, remote deployment or full row completion established."
+}

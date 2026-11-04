@@ -1,0 +1,161 @@
+{
+  "version": "case038_research_numeric_example_v1",
+  "origin": "reported_table_inputs_and_deterministic_derived_values",
+  "synthetic_measurements": false,
+  "rows": [
+    {
+      "substrate": "PAP",
+      "Km_uM": {
+        "value": 8.1,
+        "plus_minus": 3.1,
+        "raw": "8.1\u2009\u00b1\u20093.1",
+        "uncertainty_kind": "unspecified"
+      },
+      "kcat_per_s": {
+        "value": 5.4,
+        "plus_minus": 1.1,
+        "raw": "5.4\u2009\u00b1\u20091.1",
+        "uncertainty_kind": "unspecified"
+      },
+      "efficiency_per_uM_per_min": {
+        "value": 42.0,
+        "plus_minus": 8.0,
+        "raw": "42\u2009\u00b1\u20098",
+        "uncertainty_kind": "unspecified"
+      },
+      "quotient_of_reported_parameter_means": 40.0,
+      "reported_efficiency_not_replaced_by_recomputed_quotient": true,
+      "relative_untyped_error_magnitude": 0.19047619047619047
+    },
+    {
+      "substrate": "IMP",
+      "Km_uM": {
+        "value": 7110.0,
+        "plus_minus": 1070.0,
+        "raw": "7110\u2009\u00b1\u20091070",
+        "uncertainty_kind": "unspecified"
+      },
+      "kcat_per_s": {
+        "value": 0.31,
+        "plus_minus": 0.13,
+        "raw": "0.31\u2009\u00b1\u20090.13",
+        "uncertainty_kind": "unspecified"
+      },
+      "efficiency_per_uM_per_min": {
+        "value": 0.0027,
+        "plus_minus": 0.0015,
+        "raw": "0.0027\u2009\u00b1\u20090.0015",
+        "uncertainty_kind": "unspecified"
+      },
+      "quotient_of_reported_parameter_means": 0.0026160337552742618,
+      "reported_efficiency_not_replaced_by_recomputed_quotient": true,
+      "relative_untyped_error_magnitude": 0.5555555555555556
+    },
+    {
+      "substrate": "FBP",
+      "Km_uM": {
+        "value": 566.0,
+        "plus_minus": 107.0,
+        "raw": "566\u2009\u00b1\u2009107",
+        "uncertainty_kind": "unspecified"
+      },
+      "kcat_per_s": {
+        "value": 0.24,
+        "plus_minus": 0.05,
+        "raw": "0.24\u2009\u00b1\u20090.05",
+        "uncertainty_kind": "unspecified"
+      },
+      "efficiency_per_uM_per_min": {
+        "value": 0.025,
+        "plus_minus": 0.001,
+        "raw": "0.025\u2009\u00b1\u20090.001",
+        "uncertainty_kind": "unspecified"
+      },
+      "quotient_of_reported_parameter_means": 0.025441696113074203,
+      "reported_efficiency_not_replaced_by_recomputed_quotient": true,
+      "relative_untyped_error_magnitude": 0.04
+    }
+  ],
+  "contrasts": [
+    {
+      "alternative": "IMP",
+      "numerator_PAP": 42.0,
+      "denominator_alternative": 0.0027,
+      "ratio": 15555.555555555555,
+      "log_ratio": 9.652173124255222,
+      "difference_efficiency": 41.9973,
+      "signed_profile_numerator_e_squared_over_2": 46.58222301029741,
+      "signed_index_inner_numerator_e_squared_over_4": 23.291111505148706,
+      "source_profile_log_ratio": null,
+      "source_signed_index": null,
+      "reason": "reported_plus_minus_statistic_unspecified; joint_observation_model_and_sampling_covariance_unreported; common_condition_mapping_unmeasured"
+    },
+    {
+      "alternative": "FBP",
+      "numerator_PAP": 42.0,
+      "denominator_alternative": 0.025,
+      "ratio": 1680.0,
+      "log_ratio": 7.426549072397305,
+      "difference_efficiency": 41.975,
+      "signed_profile_numerator_e_squared_over_2": 27.576815562362633,
+      "signed_index_inner_numerator_e_squared_over_4": 13.788407781181316,
+      "source_profile_log_ratio": null,
+      "source_signed_index": null,
+      "reason": "reported_plus_minus_statistic_unspecified; joint_observation_model_and_sampling_covariance_unreported; common_condition_mapping_unmeasured"
+    }
+  ],
+  "shared_observation": "PAP efficiency 42 is common numerator; two contrasts are not independent",
+  "condition_difference": {
+    "PAP": {
+      "pH": 8.5,
+      "MgCl2_mM": 0.5,
+      "enzyme_nM": 5,
+      "time_min": 4,
+      "temperature_C": 30,
+      "method": "ESI-MS AMP product quantitation",
+      "substrate_range_uM": [
+        0.625,
+        50
+      ]
+    },
+    "IMP": {
+      "pH": 9.0,
+      "MgCl2_mM": 10,
+      "enzyme_nM": 110,
+      "time_min": 15,
+      "temperature_C": 30,
+      "method": "malachite-green released Pi",
+      "substrate_range_uM": [
+        1000,
+        5500
+      ]
+    },
+    "FBP": {
+      "pH": 9.0,
+      "MgCl2_mM": 10,
+      "enzyme_nM": 110,
+      "time_min": 15,
+      "temperature_C": 30,
+      "method": "malachite-green released Pi",
+      "substrate_range_uM": [
+        90,
+        900
+      ]
+    }
+  },
+  "diagnostics": {
+    "IMP_highest_assayed_concentration_over_reported_Km": 0.7735583684950773,
+    "IMP_reported_Km_over_highest_assayed_concentration": 1.2927272727272727,
+    "MgCl2_alternative_over_PAP": 20.0,
+    "enzyme_concentration_alternative_over_PAP": 22.0,
+    "duration_alternative_over_PAP": 3.75
+  },
+  "score_compilation": {
+    "single_comparison": "S_j=e_j*abs(e_j)/(2*V_j); B_j=tanh(S_j/2), only if supported known-normal log-summary model",
+    "both_preferences": "S_both=min(e_IMP^2/(2*V_IMP),e_FBP^2/(2*V_FBP)) for the positive observed contrasts under the declared unrestricted joint-normal effect model; B_both=tanh(S_both/2)",
+    "source_profile_log_ratio": null,
+    "source_signed_index": null,
+    "uncertainty_or_quality_weights_invented": false,
+    "target_transfer_or_final_annotation_credit": null
+  }
+}

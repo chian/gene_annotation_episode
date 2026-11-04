@@ -90,7 +90,9 @@ if (root/'selection-enabled').exists():
                    FAKE_PBS_ROOT=str(database))
         return REAL_RUN([sys.executable, '-B', '-c', pbs._REMOTE_WORKER], env=env, **kwargs)
 
-    monkeypatch.setattr(pbs.subprocess, 'run', ssh_run)
+    # Replace only this binding's transport, not subprocess.run process-wide:
+    # connected callers still need the real systemd resource-boundary checks.
+    monkeypatch.setattr(pbs, 'subprocess', SimpleNamespace(run=ssh_run, PIPE=subprocess.PIPE))
     configuration = {'kind': 'pbs_ssh', 'workspace': str(workspace),
         'ssh_argv': ['mock-ssh', 'explicit-bastion', 'explicit-aurora'],
         'python_executable': sys.executable, 'account': 'EpiCalib'}

@@ -1,0 +1,65 @@
+{
+  "verification_kind": "SYNTHETIC source-transformation and existing-BLAST-function checks",
+  "native_bvbrc_job_executed": false,
+  "native_bvbrc_job_artifacts_tested": false,
+  "proposed_bvbrc_parsers_tested": false,
+  "production_integration_tested": false,
+  "existing_shared_functions_checked": [
+    "parse_blast_json",
+    "parse_blast_tabular",
+    "alignment_components",
+    "build_pairwise_sheet",
+    "build_database_sheet",
+    "calculate_database_probabilities"
+  ],
+  "native_shaped_report_count": 2,
+  "hit_count_query_0": 3,
+  "hsp_count_query_0": 5,
+  "query_0_hit_0": {
+    "maximum_bit_score": 20,
+    "minimum_evalue": 1e-05,
+    "hsp_count": 3,
+    "traceback_complete": true,
+    "observed_paired_query_positions": 6,
+    "observed_paired_reference_positions": 6,
+    "query_paired_coverage": 0.6,
+    "reference_paired_coverage": 0.75,
+    "unique_pair_count": 6,
+    "identical_unique_pair_count": 6,
+    "overlap_pair_representations": 6
+  },
+  "temperature_2_function_weights": {
+    "SYNTHETIC_FUNCTION_ALPHA": 0.6666666666666666,
+    "SYNTHETIC_FUNCTION_BETA": 0.3333333333333333
+  },
+  "temperature_1_function_weights": {
+    "SYNTHETIC_FUNCTION_ALPHA": 0.8,
+    "SYNTHETIC_FUNCTION_BETA": 0.2
+  },
+  "representation_adjustment": null,
+  "source_transform_sha256": "1171bfcaad076c6e24ce00bc03f1d8367a65a404ed140b015bd9d79fea5d7067",
+  "source_transform_stdout": "id=|SYN_A|ALT_A\nid=|SYN_B|ALT_B\n",
+  "current_reader_rejections": {
+    "multiquery_raw": "blast_single_query_report_required",
+    "processed_array": "blast_single_query_report_required",
+    "database_backed_pairwise": "blast_pairwise_database_mode_conflict"
+  },
+  "checks": [
+    "source query/description transformations",
+    "multiple queries retained in original",
+    "all three hits and five HSPs retained",
+    "overlap and duplicate mapping union",
+    "literal synthetic metadata assignments joined via unique native accessions",
+    "explicit zero-hit query",
+    "missing hits remain unknown",
+    "empty table remains unknown",
+    "table identity percentage available but paired coverage and exact identity count unavailable",
+    "valid partial components survive malformed independent HSP fields",
+    "pairwise calculator shares exact union mathematics",
+    "reverse translated coordinates cover nine original nt",
+    "offline saved-sheet temperature recalculation",
+    "missing database population prevents correction",
+    "source metadata collision demonstrably loses earlier description metadata"
+  ],
+  "all_listed_checks_passed": true
+}

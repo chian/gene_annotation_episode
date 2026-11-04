@@ -1,0 +1,198 @@
+{
+  "source_ref": "source_91e98fe4394a1ed6abd3bf74",
+  "contract": "AcquisitionReceipt",
+  "value": {
+    "version": "bvbrc_appservice_acquisition_v1",
+    "origin": {
+      "run_id": "appservice-custody-fixture",
+      "episode_id": "episode_06bbb1cb11d4c0220c1f84b704bfe44ff6f82a2e8a1e83e8748267d96f9a9c0e",
+      "operation_key": "appservice-custody-fixture:episode_06bbb1cb11d4c0220c1f84b704bfe44ff6f82a2e8a1e83e8748267d96f9a9c0e:2",
+      "name": "api.bvbrc_appservice.download",
+      "arguments_sha256": "7a10a4a5c7f5df7a38ca70337db9a00804f91afa45e23fc88c1df364aa2ea0e4",
+      "assignment_sha256": "146425fab7d44a8aee14dbac7808a4f656d7585f8a14824133dc6b14c2ce528c",
+      "scope_sha256": "e447cde2a82ee7175f6709cb6af241b42bc818425c2864579a4325fcd9465c9f"
+    },
+    "original_handoff_ref": "source_ad5e409a4c92b5319e9a9c1c",
+    "selector_sha256": "e5c2b2665054db145d9de3d586ccb8ecab2fe58788c99e46345dce442324ebc1",
+    "snapshot": {
+      "source_ref": "source_1ae2973f8583d2615bfa7567",
+      "content": {
+        "source_ref": "source_1ae2973f8583d2615bfa7567",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_85da2d9b7620ac8c9ec4292b2ce1399f49ff4199f14d2eda6345cfc9c75ca06c",
+        "sha256": "85da2d9b7620ac8c9ec4292b2ce1399f49ff4199f14d2eda6345cfc9c75ca06c",
+        "byte_count": 9
+      },
+      "retrieved_at": "2026-10-24T12:00:00+00:00",
+      "media_type": "application/json",
+      "transport": {
+        "automatic_redirects": false,
+        "body_complete": true,
+        "effective_url": "https://download.example.invalid/exact-capability",
+        "headers": {
+          "content-length": "9"
+        },
+        "received_body_bytes": 9,
+        "request": {
+          "method": "GET",
+          "url": "https://download.example.invalid/exact-capability"
+        },
+        "status": 200
+      },
+      "selected_operands": {
+        "operation": "api.bvbrc_appservice.download",
+        "request_sha256": "13c247d1ff905aa2255df3f3d236d8fd218960b913279b82bed448e859f22380",
+        "arguments_sha256": "7a10a4a5c7f5df7a38ca70337db9a00804f91afa45e23fc88c1df364aa2ea0e4",
+        "native_operands": {
+          "request": {
+            "definition_inputs": [],
+            "effect_contract": "selected_api_effects_v1",
+            "input_bindings": [],
+            "parameters": {
+              "blast_max_hits": 2,
+              "blast_program": "blastn",
+              "db_fasta_data": ">s\nACGA\n",
+              "db_source": "fasta_data",
+              "db_type": "fna",
+              "input_fasta_data": ">q\nACGT\n",
+              "input_source": "fasta_data",
+              "input_type": "dna",
+              "output_file": "selected",
+              "output_path": "/synthetic/work/output"
+            },
+            "required_application_id": "Homology",
+            "start_parameters": {},
+            "version": "bvbrc_appservice_request_v1",
+            "workspace_targets": []
+          },
+          "arguments": {
+            "object": {
+              "kind": "task_info_object",
+              "receipt_ref": "source_d6ddb9996b8c85cf90fac871"
+            },
+            "capability": {
+              "kind": "acquired",
+              "receipt_ref": "source_16fad08ad82eaa8d74618c09",
+              "input_index": 0
+            },
+            "byte_range": null,
+            "requirement_ids": [
+              "native"
+            ],
+            "role": "native_output",
+            "declared_format": {
+              "format": "json",
+              "version": null,
+              "mode": null,
+              "producer_source_ref": null,
+              "transformation_evidence": []
+            }
+          },
+          "selector": {
+            "version": "bvbrc_appservice_result_selector_v1",
+            "endpoint": "requested_artifacts",
+            "requirements": [
+              {
+                "requirement_id": "native",
+                "role": "native_output",
+                "required": true,
+                "declared_format": {
+                  "format": "json",
+                  "version": null,
+                  "mode": null,
+                  "producer_source_ref": null,
+                  "transformation_evidence": []
+                },
+                "producer_rule_evidence": null,
+                "exact_object": null
+              }
+            ],
+            "adapter": null,
+            "requested_schema": {
+              "type": "object",
+              "properties": {
+                "refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "x-source": "committed_record_refs"
+                }
+              },
+              "required": [
+                "refs"
+              ],
+              "additionalProperties": false
+            },
+            "supplied_metadata": [],
+            "supplied_capabilities": []
+          },
+          "call": {
+            "url": "https://download.example.invalid/exact-capability",
+            "byte_range": null
+          },
+          "local_failure": null
+        }
+      }
+    },
+    "capability_selection": {
+      "kind": "acquired",
+      "receipt_ref": "source_16fad08ad82eaa8d74618c09",
+      "input_index": 0
+    },
+    "object_selection": {
+      "kind": "task_info_object",
+      "receipt_ref": "source_d6ddb9996b8c85cf90fac871"
+    },
+    "artifact": {
+      "role": "native_output",
+      "source_ref": "source_1ae2973f8583d2615bfa7567",
+      "raw_artifact_ref": "artifact_85da2d9b7620ac8c9ec4292b2ce1399f49ff4199f14d2eda6345cfc9c75ca06c",
+      "sha256": "85da2d9b7620ac8c9ec4292b2ce1399f49ff4199f14d2eda6345cfc9c75ca06c",
+      "byte_count": 9,
+      "workspace_object": {
+        "path": null,
+        "uuid": "11111111-1111-1111-1111-111111111111",
+        "type": null,
+        "metadata_receipt_ref": null
+      },
+      "task_association": {
+        "kind": "task_info_object",
+        "evidence_ref": "source_d6ddb9996b8c85cf90fac871",
+        "pointer": "/reported_object_uuid",
+        "task_id": "123",
+        "output_path": null,
+        "output_uuid": "11111111-1111-1111-1111-111111111111",
+        "byte_version_status": "unknown",
+        "version_evidence": []
+      },
+      "transfer": {
+        "body_complete": true,
+        "requested_range": null,
+        "observed_range": null,
+        "total_size": 9,
+        "object_complete": "yes",
+        "receipt_ref": "source_91e98fe4394a1ed6abd3bf74"
+      },
+      "declared_format": {
+        "format": "json",
+        "version": null,
+        "mode": null,
+        "producer_source_ref": null,
+        "transformation_evidence": []
+      }
+    },
+    "requirement_ids": [
+      "native"
+    ],
+    "publication_inputs_sha256": "07f69229bb626c9af97de01789572245889b46a3be146d0fc450ad7b8cec71df",
+    "publication_ref": null,
+    "valid_record_refs": [
+      "source_1ae2973f8583d2615bfa7567"
+    ],
+    "status": "ok",
+    "failure": null
+  }
+}

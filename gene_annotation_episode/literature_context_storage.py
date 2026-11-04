@@ -25,7 +25,7 @@ from .literature_context_inputs import (
 from .literature_context_meanings import (
     INPUT_VERSION as MEANINGS_INPUT_VERSION, RECORD_VERSION as MEANINGS_RECORD_VERSION,
     NAMESPACE as MEANINGS_NAMESPACE, direct_references as meaning_direct_references,
-    publish_meanings, semantic_metadata, binding_references,
+    publish_meanings, semantic_metadata, binding_references, witness_display_label,
 )
 
 
@@ -76,11 +76,13 @@ def _metadata(extraction, sheet):
 
 def _direct_references(args):
     """Fixed semantic order survives canonical JSON object-key reordering."""
+    from .literature_context_source_inputs import selected_source_refs
     return list(dict.fromkeys([args["source_ref"],
         *([args["data_source_ref"]] if args["data_source_ref"] is not None else []),
         *(args["literals"][field]["source_ref"] for field in LITERAL_FIELDS
           if args["literals"][field] is not None),
-        *(entry["source_ref"] for entry in args["interpretation_witnesses"])]))
+        *(entry["source_ref"] for entry in args["interpretation_witnesses"]),
+        *selected_source_refs(args.get("source_selection"))]))
 
 
 def _extraction_direct_references(args, extraction):
@@ -161,6 +163,17 @@ class LiteratureContextRepository(LiteratureRateRepository):
             raise ContractError("operation_key_required")
         args = plain(arguments)
         validate_schema(args, context_population_schema())
+        if "source_selection" in args:
+            question = args["source_selection"]["question"]
+            for name in ("subject_ref", "assertion_ref"):
+                reference = question[name]
+                if reference not in context.received_record_refs:
+                    raise ContractError("context_question_record_not_received")
+                if not self.store.reference_subset([reference], plain(context.scope)):
+                    raise ContractError("context_question_record_outside_scope")
+                record = self.store.get(reference)
+                if name == "assertion_ref" and record["record_type"] != "hypothesis":
+                    raise ContractError("context_question_assertion_required")
         signature = canonical({"arguments": args, "scope": plain(context.scope)})
         old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
             "WHERE run_id=? AND episode_id=? AND operation_key=?",
@@ -235,6 +248,9 @@ class LiteratureContextRepository(LiteratureRateRepository):
                 return row["id"]
             bindings = {}
             for field, (literal, kind) in BINDINGS.items():
+                if field == "experiment_ref" and assessment is not None:
+                    bindings[field] = assessment["experiment_ref"]
+                    continue
                 entry = extraction["literals"][literal]
                 if entry is None:
                     bindings[field] = None
@@ -246,15 +262,15 @@ class LiteratureContextRepository(LiteratureRateRepository):
                 accession = identity("context_literal", {"field": literal, **anchor})
                 if kind == "reference":
                     record = {**common, "reference_type": "assay", "accession": accession,
-                        "label": entry["value"], "sequence_ref": None, "molecule": None,
+                        "label": witness_display_label(entry["value"]), "sequence_ref": None, "molecule": None,
                         "length": None, "term_refs": [], "context_refs": []}
                 elif kind == "term":
                     record = {**common, "namespace": "literature_context_" + literal,
-                        "accession": accession, "label": entry["value"], "term_type": "other"}
+                        "accession": accession, "label": witness_display_label(entry["value"]), "term_type": "other"}
                 else:
                     context_type = {"biological_context": "environment", "sample_frame": "sample",
                                     "condition": "assay_condition"}[literal]
-                    record = {**common, "context_type": context_type, "name": entry["value"],
+                    record = {**common, "context_type": context_type, "name": witness_display_label(entry["value"]),
                         "attributes": [], "related_refs": []}
                 bindings[field] = publish(kind, record)
             if assessment is not None:

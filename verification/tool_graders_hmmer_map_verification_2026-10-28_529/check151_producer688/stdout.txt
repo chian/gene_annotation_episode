@@ -1,0 +1,17 @@
+........................................................................ [ 77%]
+........F...........s                                                    [100%]
+=================================== FAILURES ===================================
+____________ test_native_snapshot_full_variable_basis_without_solve ____________
+source_snapshot/tests/test_native_flux_balance_producer_688.py:188: in test_native_snapshot_full_variable_basis_without_solve
+    model.constraints.A.lb = model.constraints.A.ub = 1
+    ^^^^^^^^^^^^^^^^^^^^^^
+dependencies/optlang/glpk_interface.py:177: in lb
+    super(Constraint, Constraint).lb.fset(self, value)
+dependencies/optlang/interface.py:686: in lb
+    self._check_valid_lower_bound(value)
+dependencies/optlang/interface.py:626: in _check_valid_lower_bound
+    raise ValueError("Cannot set a lower bound that is greater than the upper bound.")
+E   ValueError: Cannot set a lower bound that is greater than the upper bound.
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_flux_balance_producer_688.py::test_native_snapshot_full_variable_basis_without_solve
+1 failed, 91 passed, 1 skipped in 4.07s

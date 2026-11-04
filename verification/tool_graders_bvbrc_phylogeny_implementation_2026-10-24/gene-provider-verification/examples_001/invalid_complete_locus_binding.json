@@ -1,0 +1,1081 @@
+{
+  "evidence_kind": "synthetic wrong membership fixture",
+  "extraction": {
+    "diagnostics": [
+      {
+        "code": "phylogeny_negative_branch_length",
+        "evidence_refs": [
+          "synthetic/tree",
+          "synthetic-source/synthetic/tree"
+        ],
+        "path": "/read_outcomes/0/diagnostics/0",
+        "phase": "native_decode",
+        "severity": "qualification"
+      },
+      {
+        "code": "bvbrc_phylogeny_negative_branch_length",
+        "evidence_refs": [
+          "synthetic-source/synthetic/tree"
+        ],
+        "path": "/documents/store/tree_documents",
+        "phase": "association",
+        "severity": "qualification"
+      },
+      {
+        "code": "gene_tree_locus_join_conflict",
+        "evidence_refs": [],
+        "path": "/joins/input_rows",
+        "phase": "association",
+        "severity": "error"
+      }
+    ],
+    "status": "invalid",
+    "value": null
+  },
+  "input": {
+    "assembly": {
+      "analysis_id": "primary",
+      "caller_populations": {
+        "alignments": [],
+        "bootstraps": [],
+        "composition": [],
+        "families": [],
+        "genomes": [],
+        "leaves": [],
+        "native": [],
+        "taxonomy": []
+      },
+      "family_matrices": [],
+      "genome_request_sets": [],
+      "historical_frequencies": [],
+      "locus_bindings": [
+        {
+          "completeness": "complete",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/locus-a",
+                "byte_count": 185,
+                "sha256": "e8fce9334ae95f08ba4c27ece6f9f91228f6d66092f6f34217df1ec090c37211",
+                "source_ref": "synthetic-source/synthetic/locus-a"
+              },
+              "pointer": ""
+            }
+          ],
+          "input_members": [
+            {
+              "input_binding_id": "file/0",
+              "member_id": "q"
+            },
+            {
+              "input_binding_id": "file/1",
+              "member_id": "q"
+            },
+            {
+              "input_binding_id": "file/2",
+              "member_id": "q"
+            }
+          ],
+          "locus_id": "locus-a"
+        }
+      ],
+      "model_associations": [],
+      "version": "bvbrc_phylogeny_assembly_v1"
+    },
+    "documents": {
+      "parsed": {
+        "analyses": [
+          {
+            "aligned_document_id": "synthetic/alignment#alignment",
+            "analysis_id": "primary",
+            "locus_ids": [
+              "locus-a"
+            ],
+            "mode": "gene_tree",
+            "native_engine_observation_ids": [],
+            "output_role_evidence": [],
+            "phyloxml_tree_id": null,
+            "raw_tree_id": "synthetic/tree#tree_document/tree/0"
+          }
+        ],
+        "store": {
+          "alignments": [
+            {
+              "alignment_id": "synthetic/alignment#alignment",
+              "artifact": {
+                "raw_artifact_ref": "synthetic/alignment",
+                "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                "source_ref": "synthetic-source/synthetic/alignment"
+              },
+              "completeness": "complete",
+              "declared_column_count": null,
+              "declared_row_count": null,
+              "encoding": "ascii",
+              "format": "aligned_fasta",
+              "id_rule": "first_whitespace_token",
+              "layout": "fasta",
+              "observed_column_count": 4,
+              "observed_row_count": 4,
+              "rows": [
+                {
+                  "member_label": "q",
+                  "raw_header": "q retained header",
+                  "row_index": 0,
+                  "sequence": "A-CX",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 24,
+                    "byte_start_0based": 0,
+                    "line_end_1based_inclusive": 2,
+                    "line_start_1based": 1,
+                    "xml_path": null
+                  }
+                },
+                {
+                  "member_label": "q",
+                  "raw_header": "q retained header",
+                  "row_index": 1,
+                  "sequence": "ATCX",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 48,
+                    "byte_start_0based": 24,
+                    "line_end_1based_inclusive": 4,
+                    "line_start_1based": 3,
+                    "xml_path": null
+                  }
+                },
+                {
+                  "member_label": "c",
+                  "raw_header": "c retained header",
+                  "row_index": 2,
+                  "sequence": "ATGX",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 72,
+                    "byte_start_0based": 48,
+                    "line_end_1based_inclusive": 6,
+                    "line_start_1based": 5,
+                    "xml_path": null
+                  }
+                },
+                {
+                  "member_label": "d",
+                  "raw_header": "d retained header",
+                  "row_index": 3,
+                  "sequence": "AT-X",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 96,
+                    "byte_start_0based": 72,
+                    "line_end_1based_inclusive": 8,
+                    "line_start_1based": 7,
+                    "xml_path": null
+                  }
+                }
+              ]
+            }
+          ],
+          "native_tables": [],
+          "partitions": [],
+          "phyloxml": [],
+          "source_records": [],
+          "tree_documents": [
+            {
+              "artifact": {
+                "raw_artifact_ref": "synthetic/tree",
+                "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                "source_ref": "synthetic-source/synthetic/tree"
+              },
+              "completeness": "complete",
+              "dialect": "newick",
+              "document_id": "synthetic/tree#tree_document",
+              "format": "newick",
+              "trees": [
+                {
+                  "document_id": "synthetic/tree#tree_document",
+                  "native_rooted_marker": "unspecified",
+                  "nodes": [
+                    {
+                      "branch_length": null,
+                      "branch_length_token": null,
+                      "child_indices": [
+                        1,
+                        4
+                      ],
+                      "comments": [],
+                      "decoded_label": null,
+                      "label_token": null,
+                      "node_index": 0,
+                      "parent_index": null,
+                      "raw_label": null,
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 39,
+                        "byte_start_0based": 0,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.3,
+                      "branch_length_token": "0.3",
+                      "child_indices": [
+                        2,
+                        3
+                      ],
+                      "comments": [],
+                      "decoded_label": "75",
+                      "label_token": "75",
+                      "node_index": 1,
+                      "parent_index": 0,
+                      "raw_label": "75",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 18,
+                        "byte_start_0based": 1,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.0,
+                      "branch_length_token": "0",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "q",
+                      "label_token": "q",
+                      "node_index": 2,
+                      "parent_index": 1,
+                      "raw_label": "q",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 5,
+                        "byte_start_0based": 2,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.2,
+                      "branch_length_token": "0.2",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "q",
+                      "label_token": "q",
+                      "node_index": 3,
+                      "parent_index": 1,
+                      "raw_label": "q",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 11,
+                        "byte_start_0based": 6,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.2,
+                      "branch_length_token": "0.2",
+                      "child_indices": [
+                        5,
+                        6
+                      ],
+                      "comments": [],
+                      "decoded_label": null,
+                      "label_token": null,
+                      "node_index": 4,
+                      "parent_index": 0,
+                      "raw_label": null,
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 37,
+                        "byte_start_0based": 19,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": -0.1,
+                      "branch_length_token": "-0.1",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "c",
+                      "label_token": "c",
+                      "node_index": 5,
+                      "parent_index": 4,
+                      "raw_label": "c",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 26,
+                        "byte_start_0based": 20,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.4,
+                      "branch_length_token": "0.4",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "d",
+                      "label_token": "d",
+                      "node_index": 6,
+                      "parent_index": 4,
+                      "raw_label": "d",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 32,
+                        "byte_start_0based": 27,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    }
+                  ],
+                  "root_node_index": 0,
+                  "source_format": "newick",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/tree",
+                      "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                      "source_ref": "synthetic-source/synthetic/tree"
+                    },
+                    "byte_end_0based_exclusive": 39,
+                    "byte_start_0based": 0,
+                    "line_end_1based_inclusive": 1,
+                    "line_start_1based": 1,
+                    "xml_path": null
+                  },
+                  "tree_id": "synthetic/tree#tree_document/tree/0",
+                  "tree_index": 0
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "raxml_runs": [],
+      "reads": [
+        {
+          "artifact": {
+            "raw_artifact_ref": "synthetic/tree",
+            "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+            "source_ref": "synthetic-source/synthetic/tree"
+          },
+          "read_id": "read/synthetic/tree",
+          "reader": {
+            "allow_multiple": true,
+            "dialect": "newick",
+            "reader": "newick"
+          },
+          "result": {
+            "diagnostics": [
+              {
+                "code": "phylogeny_negative_branch_length",
+                "evidence_refs": [
+                  "synthetic/tree"
+                ],
+                "path": "/trees/0/nodes/5/branch_length_token",
+                "phase": "native_decode",
+                "severity": "qualification"
+              }
+            ],
+            "status": "ok",
+            "value": {
+              "artifact": {
+                "raw_artifact_ref": "synthetic/tree",
+                "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                "source_ref": "synthetic-source/synthetic/tree"
+              },
+              "completeness": "complete",
+              "dialect": "newick",
+              "document_id": "synthetic/tree#tree_document",
+              "format": "newick",
+              "trees": [
+                {
+                  "document_id": "synthetic/tree#tree_document",
+                  "native_rooted_marker": "unspecified",
+                  "nodes": [
+                    {
+                      "branch_length": null,
+                      "branch_length_token": null,
+                      "child_indices": [
+                        1,
+                        4
+                      ],
+                      "comments": [],
+                      "decoded_label": null,
+                      "label_token": null,
+                      "node_index": 0,
+                      "parent_index": null,
+                      "raw_label": null,
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 39,
+                        "byte_start_0based": 0,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.3,
+                      "branch_length_token": "0.3",
+                      "child_indices": [
+                        2,
+                        3
+                      ],
+                      "comments": [],
+                      "decoded_label": "75",
+                      "label_token": "75",
+                      "node_index": 1,
+                      "parent_index": 0,
+                      "raw_label": "75",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 18,
+                        "byte_start_0based": 1,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.0,
+                      "branch_length_token": "0",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "q",
+                      "label_token": "q",
+                      "node_index": 2,
+                      "parent_index": 1,
+                      "raw_label": "q",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 5,
+                        "byte_start_0based": 2,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.2,
+                      "branch_length_token": "0.2",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "q",
+                      "label_token": "q",
+                      "node_index": 3,
+                      "parent_index": 1,
+                      "raw_label": "q",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 11,
+                        "byte_start_0based": 6,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.2,
+                      "branch_length_token": "0.2",
+                      "child_indices": [
+                        5,
+                        6
+                      ],
+                      "comments": [],
+                      "decoded_label": null,
+                      "label_token": null,
+                      "node_index": 4,
+                      "parent_index": 0,
+                      "raw_label": null,
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 37,
+                        "byte_start_0based": 19,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": -0.1,
+                      "branch_length_token": "-0.1",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "c",
+                      "label_token": "c",
+                      "node_index": 5,
+                      "parent_index": 4,
+                      "raw_label": "c",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 26,
+                        "byte_start_0based": 20,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    },
+                    {
+                      "branch_length": 0.4,
+                      "branch_length_token": "0.4",
+                      "child_indices": [],
+                      "comments": [],
+                      "decoded_label": "d",
+                      "label_token": "d",
+                      "node_index": 6,
+                      "parent_index": 4,
+                      "raw_label": "d",
+                      "source_location": {
+                        "artifact": {
+                          "raw_artifact_ref": "synthetic/tree",
+                          "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                          "source_ref": "synthetic-source/synthetic/tree"
+                        },
+                        "byte_end_0based_exclusive": 32,
+                        "byte_start_0based": 27,
+                        "line_end_1based_inclusive": 1,
+                        "line_start_1based": 1,
+                        "xml_path": null
+                      }
+                    }
+                  ],
+                  "root_node_index": 0,
+                  "source_format": "newick",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/tree",
+                      "sha256": "078820a1afbda5bb1aef5792ccffb6ff47f27cea9076feefc04c496b69299af9",
+                      "source_ref": "synthetic-source/synthetic/tree"
+                    },
+                    "byte_end_0based_exclusive": 39,
+                    "byte_start_0based": 0,
+                    "line_end_1based_inclusive": 1,
+                    "line_start_1based": 1,
+                    "xml_path": null
+                  },
+                  "tree_id": "synthetic/tree#tree_document/tree/0",
+                  "tree_index": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "artifact": {
+            "raw_artifact_ref": "synthetic/alignment",
+            "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+            "source_ref": "synthetic-source/synthetic/alignment"
+          },
+          "read_id": "read/synthetic/alignment",
+          "reader": {
+            "encoding": "ascii",
+            "id_rule": "first_whitespace_token",
+            "reader": "aligned_fasta"
+          },
+          "result": {
+            "diagnostics": [],
+            "status": "ok",
+            "value": {
+              "alignment_id": "synthetic/alignment#alignment",
+              "artifact": {
+                "raw_artifact_ref": "synthetic/alignment",
+                "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                "source_ref": "synthetic-source/synthetic/alignment"
+              },
+              "completeness": "complete",
+              "declared_column_count": null,
+              "declared_row_count": null,
+              "encoding": "ascii",
+              "format": "aligned_fasta",
+              "id_rule": "first_whitespace_token",
+              "layout": "fasta",
+              "observed_column_count": 4,
+              "observed_row_count": 4,
+              "rows": [
+                {
+                  "member_label": "q",
+                  "raw_header": "q retained header",
+                  "row_index": 0,
+                  "sequence": "A-CX",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 24,
+                    "byte_start_0based": 0,
+                    "line_end_1based_inclusive": 2,
+                    "line_start_1based": 1,
+                    "xml_path": null
+                  }
+                },
+                {
+                  "member_label": "q",
+                  "raw_header": "q retained header",
+                  "row_index": 1,
+                  "sequence": "ATCX",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 48,
+                    "byte_start_0based": 24,
+                    "line_end_1based_inclusive": 4,
+                    "line_start_1based": 3,
+                    "xml_path": null
+                  }
+                },
+                {
+                  "member_label": "c",
+                  "raw_header": "c retained header",
+                  "row_index": 2,
+                  "sequence": "ATGX",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 72,
+                    "byte_start_0based": 48,
+                    "line_end_1based_inclusive": 6,
+                    "line_start_1based": 5,
+                    "xml_path": null
+                  }
+                },
+                {
+                  "member_label": "d",
+                  "raw_header": "d retained header",
+                  "row_index": 3,
+                  "sequence": "AT-X",
+                  "source_location": {
+                    "artifact": {
+                      "raw_artifact_ref": "synthetic/alignment",
+                      "sha256": "5f4f5e7d510ff4c27c2c8a7a6432098568afc0ee49aae0edb37fa415dbd4b88d",
+                      "source_ref": "synthetic-source/synthetic/alignment"
+                    },
+                    "byte_end_0based_exclusive": 96,
+                    "byte_start_0based": 72,
+                    "line_end_1based_inclusive": 8,
+                    "line_start_1based": 7,
+                    "xml_path": null
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "inputs": [
+      {
+        "binding_id": "file/0",
+        "content": null,
+        "inline_value": {
+          "sequence": "ACX"
+        },
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/0",
+                "byte_count": 18,
+                "sha256": "4400ca0e1553f8d9defc2dfd05c8991d2813077b2b6efb6a91ca0f0cc931075c",
+                "source_ref": "synthetic-source/synthetic/input/0"
+              },
+              "pointer": "/sequence"
+            },
+            "length": 3,
+            "member_id": "q",
+            "member_pointer": "/sequence",
+            "molecule": "protein",
+            "sequence_sha256": "674cae843e7c847165923201e74bff06dcc8ddf650d84aabf438fc599029c337"
+          }
+        ],
+        "parameter_pointer": "/sequences/0",
+        "workspace_path": null
+      },
+      {
+        "binding_id": "file/1",
+        "content": null,
+        "inline_value": {
+          "sequence": "ATCX"
+        },
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/1",
+                "byte_count": 19,
+                "sha256": "00dc7ef522be90258b27e1e1b5869b283a7fd8419d6aed39d24fd86ac90e5f85",
+                "source_ref": "synthetic-source/synthetic/input/1"
+              },
+              "pointer": "/sequence"
+            },
+            "length": 4,
+            "member_id": "q",
+            "member_pointer": "/sequence",
+            "molecule": "protein",
+            "sequence_sha256": "f7281d76331c03150e3dcf0819dd7b0ebcde364cda9c281357d4c493f5b43e3e"
+          }
+        ],
+        "parameter_pointer": "/sequences/1",
+        "workspace_path": null
+      },
+      {
+        "binding_id": "file/2",
+        "content": null,
+        "inline_value": {
+          "sequence": "ATGX"
+        },
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/2",
+                "byte_count": 19,
+                "sha256": "9aa9a492a8e23067148d84b54ada6507b01c26df81be8c73e40dec0fb436fe52",
+                "source_ref": "synthetic-source/synthetic/input/2"
+              },
+              "pointer": "/sequence"
+            },
+            "length": 4,
+            "member_id": "q",
+            "member_pointer": "/sequence",
+            "molecule": "protein",
+            "sequence_sha256": "678bb8fc6e8b845c01baa0560b52cf9699501ce6524413006bdac9be2b416099"
+          }
+        ],
+        "parameter_pointer": "/sequences/2",
+        "workspace_path": null
+      },
+      {
+        "binding_id": "file/3",
+        "content": null,
+        "inline_value": {
+          "sequence": "ATX"
+        },
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/3",
+                "byte_count": 18,
+                "sha256": "d58d5a0e842fc8f1ef77e49f0fc5273e1b333755e066168f3357d54582ee61a1",
+                "source_ref": "synthetic-source/synthetic/input/3"
+              },
+              "pointer": "/sequence"
+            },
+            "length": 3,
+            "member_id": "q",
+            "member_pointer": "/sequence",
+            "molecule": "protein",
+            "sequence_sha256": "b13e28a0b8cd1ee1f4efbf68e1258b074b0ebe9d35ff3c3a7e9adcf70237d18f"
+          }
+        ],
+        "parameter_pointer": "/sequences/3",
+        "workspace_path": null
+      }
+    ],
+    "joins": {
+      "display_tips": [],
+      "feature_genomes": [],
+      "function_equivalences": [],
+      "functions": [],
+      "input_rows": [
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/0",
+                "byte_count": 18,
+                "sha256": "4400ca0e1553f8d9defc2dfd05c8991d2813077b2b6efb6a91ca0f0cc931075c",
+                "source_ref": "synthetic-source/synthetic/input/0"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "input_binding_id": "file/0",
+          "locus_id": "locus-a",
+          "member_id": "q",
+          "row_index": 0,
+          "transformation_id": null
+        },
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/1",
+                "byte_count": 19,
+                "sha256": "00dc7ef522be90258b27e1e1b5869b283a7fd8419d6aed39d24fd86ac90e5f85",
+                "source_ref": "synthetic-source/synthetic/input/1"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "input_binding_id": "file/1",
+          "locus_id": "locus-a",
+          "member_id": "q",
+          "row_index": 1,
+          "transformation_id": null
+        },
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/2",
+                "byte_count": 19,
+                "sha256": "9aa9a492a8e23067148d84b54ada6507b01c26df81be8c73e40dec0fb436fe52",
+                "source_ref": "synthetic-source/synthetic/input/2"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "input_binding_id": "file/2",
+          "locus_id": "locus-a",
+          "member_id": "q",
+          "row_index": 2,
+          "transformation_id": null
+        },
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/3",
+                "byte_count": 18,
+                "sha256": "d58d5a0e842fc8f1ef77e49f0fc5273e1b333755e066168f3357d54582ee61a1",
+                "source_ref": "synthetic-source/synthetic/input/3"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "input_binding_id": "file/3",
+          "locus_id": "locus-a",
+          "member_id": "q",
+          "row_index": 3,
+          "transformation_id": null
+        }
+      ],
+      "organismal_tips": [],
+      "residues": [],
+      "taxa": [],
+      "tip_rows": [
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/0",
+                "byte_count": 18,
+                "sha256": "4400ca0e1553f8d9defc2dfd05c8991d2813077b2b6efb6a91ca0f0cc931075c",
+                "source_ref": "synthetic-source/synthetic/input/0"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "node_index": 2,
+          "row_index": 0,
+          "tree_id": "synthetic/tree#tree_document/tree/0"
+        },
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/1",
+                "byte_count": 19,
+                "sha256": "00dc7ef522be90258b27e1e1b5869b283a7fd8419d6aed39d24fd86ac90e5f85",
+                "source_ref": "synthetic-source/synthetic/input/1"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "node_index": 3,
+          "row_index": 1,
+          "tree_id": "synthetic/tree#tree_document/tree/0"
+        },
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/2",
+                "byte_count": 19,
+                "sha256": "9aa9a492a8e23067148d84b54ada6507b01c26df81be8c73e40dec0fb436fe52",
+                "source_ref": "synthetic-source/synthetic/input/2"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "node_index": 5,
+          "row_index": 2,
+          "tree_id": "synthetic/tree#tree_document/tree/0"
+        },
+        {
+          "alignment_id": "synthetic/alignment#alignment",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/input/3",
+                "byte_count": 18,
+                "sha256": "d58d5a0e842fc8f1ef77e49f0fc5273e1b333755e066168f3357d54582ee61a1",
+                "source_ref": "synthetic-source/synthetic/input/3"
+              },
+              "pointer": "/sequence"
+            }
+          ],
+          "node_index": 6,
+          "row_index": 3,
+          "tree_id": "synthetic/tree#tree_document/tree/0"
+        }
+      ],
+      "transformations": []
+    },
+    "observed_run": {
+      "commands": [],
+      "completeness": "unknown",
+      "conflicts": [],
+      "engines": [],
+      "original_task_id": null,
+      "settings": [
+        {
+          "evidence": [],
+          "location": null,
+          "name": "recipe",
+          "origin": "requested",
+          "value": "raxml"
+        },
+        {
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic/alphabet",
+                "byte_count": 22,
+                "sha256": "2caaedfda9f8e0a646b36a523dc1a7fa9f0b192a5d33d9a64741c52ad912d500",
+                "source_ref": "synthetic-source/synthetic/alphabet"
+              },
+              "pointer": "/alphabet"
+            }
+          ],
+          "location": null,
+          "name": "alphabet",
+          "origin": "observed",
+          "value": "protein"
+        }
+      ],
+      "source_revision": null
+    },
+    "parameters": {
+      "raw_tree_required_for_branch_facts": false,
+      "source_dialect": "retained_bvbrc_gene_tree"
+    }
+  }
+}

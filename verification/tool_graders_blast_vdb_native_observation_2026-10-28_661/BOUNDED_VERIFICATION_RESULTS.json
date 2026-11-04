@@ -1,0 +1,150 @@
+[
+  {
+    "attempt": "check121_vdb_native661",
+    "handle": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121_vdb_native661/handle.json",
+      "size_bytes": 3156,
+      "sha256": "ac7a08290f45c88ca9bfd2fa155e7fe59cf1b48c18e4c51940337f9e378e82c5"
+    },
+    "receipt": {
+      "returncode": 1,
+      "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121_vdb_native661/handle.json",
+      "unit": "gene-local-job-bc6d68addc1349a0a02b8da362ebdf6d.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "exit-code",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "1",
+          "ended": {
+            "at": "2026-10-29T02:33:42.471453+00:00",
+            "monotonic_ns": 1054784168781009,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 3.491827406,
+        "native_returncode": 1,
+        "observed_scratch_bytes": 602492928
+      }
+    },
+    "receipt_pin": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121_vdb_native661/receipt.json",
+      "size_bytes": 1631,
+      "sha256": "b36b08e79e30d6100a4e0a02c0dc981c937819e9fee5e84fcefe2f3530ee2e26"
+    },
+    "execution_audit": {
+      "pytest_returncode": 1,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "case_reports_pin": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121_vdb_native661/case_reports.jsonl",
+      "size_bytes": 748,
+      "sha256": "93a0cf2ecf3319f1239d5cc213f4edf89ba06f0b651081d676b60f4f54b81ed7"
+    }
+  },
+  {
+    "attempt": "check121b_vdb_native661_saved",
+    "handle": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121b_vdb_native661_saved/handle.json",
+      "size_bytes": 3240,
+      "sha256": "1b9526a1f5e772cc8242145918215d7b710f1cdf01dec2424c9b4fb3d12ce742"
+    },
+    "receipt": {
+      "returncode": 0,
+      "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121b_vdb_native661_saved/handle.json",
+      "unit": "gene-local-job-3defc18497004ac4af9102a18cda662f.service",
+      "terminal": true,
+      "quiescent": true,
+      "source_unchanged": true,
+      "dependency_unchanged": true,
+      "stdlib_unchanged": true,
+      "binary_unchanged": true,
+      "metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        },
+        "duration_measure": "systemd_service_wall_seconds",
+        "service_exit": {
+          "SERVICE_RESULT": "success",
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "ended": {
+            "at": "2026-10-29T02:38:22.734555+00:00",
+            "monotonic_ns": 1055064431889152,
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+          }
+        },
+        "elapsed_seconds": 6.619896486,
+        "native_returncode": 0,
+        "observed_scratch_bytes": 603066368
+      }
+    },
+    "receipt_pin": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121b_vdb_native661_saved/receipt.json",
+      "size_bytes": 1636,
+      "sha256": "7c2aabb6d7ff58e028f8f7b97fbd86f059ba6074aa8fbd1257596a1cf9941e9d"
+    },
+    "execution_audit": {
+      "pytest_returncode": 0,
+      "outside_modules": [],
+      "unbound_mappings": [],
+      "native_unchanged": true,
+      "original_retained_fixtures_unchanged": true
+    },
+    "case_reports_pin": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check121b_vdb_native661_saved/case_reports.jsonl",
+      "size_bytes": 170,
+      "sha256": "99ca6f8b27f3449e886b4552fb4cb67969d363ef8568e421c12289642fa95604"
+    }
+  }
+]

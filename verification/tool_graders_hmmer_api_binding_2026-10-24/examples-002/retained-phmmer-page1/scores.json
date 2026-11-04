@@ -1,0 +1,1860 @@
+{
+  "definitions": {
+    "alignment_columns": {
+      "coordinate_convention": null,
+      "formula": "length of validated aligned model/sequence display",
+      "inputs": [
+        "quantities.alignment_columns"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one validated native alignment display",
+      "uncertainty": null,
+      "units": "columns"
+    },
+    "alignment_identity_fraction": {
+      "coordinate_convention": null,
+      "formula": "identical displayed residues / all alignment columns",
+      "inputs": [
+        "quantities.consensus_identical_positions",
+        "quantities.alignment_columns"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "paired, insertion and deletion columns",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "api_identity_fraction": {
+      "coordinate_convention": null,
+      "formula": "retain provider fraction; independently check alphabetic mline count / min(ungapped model, ungapped sequence)",
+      "inputs": [
+        "alignment.identity[0]",
+        "quantities.api_identity_numerator",
+        "quantities.api_identity_denominator"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native_provider",
+      "population": "minimum ungapped display length",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "consensus_identity_fraction": {
+      "coordinate_convention": null,
+      "formula": "equal uppercase displayed model and sequence residues / paired positions",
+      "inputs": [
+        "quantities.consensus_identical_positions",
+        "quantities.paired_positions"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "paired display columns; model consensus is not an actual reference sequence",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "cutoff_margins": {
+      "coordinate_convention": null,
+      "formula": "score bits - explicitly supplied matching model cutoff bits, separately for GA/TC/NC and sequence/domain scope",
+      "inputs": [
+        "inputs.model_cutoffs",
+        "native.sequence_score_bits",
+        "native.domain_score_bits"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one exact model and score scope; no category confidence",
+      "uncertainty": null,
+      "units": "bits"
+    },
+    "delete_positions": {
+      "coordinate_convention": null,
+      "formula": "count(model != '.' and sequence == '-')",
+      "inputs": [
+        "quantities.delete_positions"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one validated native alignment display",
+      "uncertainty": null,
+      "units": "columns"
+    },
+    "hit_interval_unions": {
+      "coordinate_convention": "zero_based_half_open",
+      "formula": "merge overlapping/adjacent intervals and sum end-start",
+      "inputs": [
+        "same-hit domains.intervals"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "same query occurrence, target occurrence and round; no sums across models or dependent rounds",
+      "uncertainty": null,
+      "units": "positions or residues"
+    },
+    "insert_positions": {
+      "coordinate_convention": null,
+      "formula": "count(model == '.' and sequence != '-')",
+      "inputs": [
+        "quantities.insert_positions"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one validated native alignment display",
+      "uncertainty": null,
+      "units": "columns"
+    },
+    "model_length": {
+      "coordinate_convention": null,
+      "formula": "native full length, or exact-identity supplied operand length",
+      "inputs": [
+        "native.model_length",
+        "joins.model.length"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native_or_supplied",
+      "population": "entire model",
+      "uncertainty": null,
+      "units": "positions"
+    },
+    "model_span_coverage": {
+      "coordinate_convention": null,
+      "formula": "numerator / denominator",
+      "inputs": [
+        "model_span_positions",
+        "model_length"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "model_length",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "model_span_positions": {
+      "coordinate_convention": "zero_based_half_open",
+      "formula": "end - start (native inclusive to - from + 1)",
+      "inputs": [
+        "intervals.model"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one domain model interval",
+      "uncertainty": null,
+      "units": "model positions"
+    },
+    "native_accuracy": {
+      "coordinate_convention": null,
+      "formula": "retain native measurement",
+      "inputs": [
+        "native.accuracy"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "units": "native mean posterior accuracy"
+    },
+    "native_conditional_evalue": {
+      "coordinate_convention": null,
+      "formula": "retain native measurement",
+      "inputs": [
+        "native.conditional_evalue"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "units": "expected chance hit count"
+    },
+    "native_domain_bias_bits": {
+      "coordinate_convention": null,
+      "formula": "native bits unchanged; provider domain_bias_nats / ln(2) when supplied",
+      "inputs": [
+        "native.domain_bias_bits",
+        "native.domain_bias_nats"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "units": "bits"
+    },
+    "native_domain_score_bits": {
+      "coordinate_convention": null,
+      "formula": "retain native measurement",
+      "inputs": [
+        "native.domain_score_bits"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "units": "bits"
+    },
+    "native_hit_measurements": {
+      "coordinate_convention": null,
+      "formula": "retain full sequence score/bias/E-value and native domain counts",
+      "inputs": [
+        "hits.native"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native",
+      "population": "one native target at one search/round",
+      "uncertainty": "native precision; reported domains differ from internal domains",
+      "units": "bits, expected chance hit count, or native count as named"
+    },
+    "native_independent_evalue": {
+      "coordinate_convention": null,
+      "formula": "retain native measurement",
+      "inputs": [
+        "native.independent_evalue"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native",
+      "population": "native domain statistical population; E-values depend on native search space",
+      "uncertainty": "printed precision; zero E-value may be rounded or underflowed",
+      "units": "expected chance hit count"
+    },
+    "paired_model_coverage": {
+      "coordinate_convention": null,
+      "formula": "numerator / denominator",
+      "inputs": [
+        "paired_positions",
+        "model_length"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "model_length",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "paired_positions": {
+      "coordinate_convention": null,
+      "formula": "count(model != '.' and sequence != '-')",
+      "inputs": [
+        "quantities.paired_positions"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one validated native alignment display",
+      "uncertainty": null,
+      "units": "columns"
+    },
+    "paired_sequence_coverage": {
+      "coordinate_convention": null,
+      "formula": "numerator / denominator",
+      "inputs": [
+        "paired_positions",
+        "sequence_length"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "sequence_length",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "posterior_lower_mean": {
+      "coordinate_convention": null,
+      "formula": "sum(character interval lower bounds) / count(sequence residues with available posterior characters)",
+      "inputs": [
+        "alignment.ppline",
+        "alignment.aseq"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "sequence residues with valid PP characters; gap/missing columns excluded with explicit counts",
+      "uncertainty": "0:[0,.05), 1:[.05,.15), ..., 9:[.85,.95), *:[.95,1]; upper endpoint open except *",
+      "units": "posterior bound"
+    },
+    "posterior_upper_mean": {
+      "coordinate_convention": null,
+      "formula": "sum(character interval upper bounds) / count(sequence residues with available posterior characters)",
+      "inputs": [
+        "alignment.ppline",
+        "alignment.aseq"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "sequence residues with valid PP characters; gap/missing columns excluded with explicit counts",
+      "uncertainty": "0:[0,.05), 1:[.05,.15), ..., 9:[.85,.95), *:[.95,1]; upper endpoint open except *",
+      "units": "posterior bound"
+    },
+    "query_and_iteration_counts": {
+      "coordinate_convention": null,
+      "formula": "count retained rows with matching explicit keys and flags; native round measurements retained separately",
+      "inputs": [
+        "rows.query_record_key",
+        "rows.iteration",
+        "rows.is_reported",
+        "rows.is_included"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "acquired rows only; neither database population nor independent evidence",
+      "uncertainty": null,
+      "units": "rows"
+    },
+    "sequence_envelope_coverage": {
+      "coordinate_convention": null,
+      "formula": "numerator / denominator",
+      "inputs": [
+        "sequence_envelope_residues",
+        "sequence_length"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "sequence_length",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "sequence_envelope_residues": {
+      "coordinate_convention": "zero_based_half_open",
+      "formula": "end - start (native inclusive to - from + 1)",
+      "inputs": [
+        "intervals.envelope"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one domain envelope interval",
+      "uncertainty": null,
+      "units": "residues"
+    },
+    "sequence_identity_fraction": {
+      "coordinate_convention": null,
+      "formula": "identical / paired only after exact supplied protein sequence operands agree with native intervals, for phmmer or jackhmmer round 1",
+      "inputs": [
+        "quantities.actual_sequence_correspondence",
+        "quantities.consensus_identical_positions",
+        "quantities.paired_positions"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "paired actual sequence residues",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "sequence_length": {
+      "coordinate_convention": null,
+      "formula": "native full length, or exact-identity supplied operand length",
+      "inputs": [
+        "native.sequence_length",
+        "joins.sequence.length"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "native_or_supplied",
+      "population": "entire sequence",
+      "uncertainty": null,
+      "units": "residues"
+    },
+    "sequence_span_coverage": {
+      "coordinate_convention": null,
+      "formula": "numerator / denominator",
+      "inputs": [
+        "sequence_span_residues",
+        "sequence_length"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "sequence_length",
+      "uncertainty": null,
+      "units": "fraction"
+    },
+    "sequence_span_residues": {
+      "coordinate_convention": "zero_based_half_open",
+      "formula": "end - start (native inclusive to - from + 1)",
+      "inputs": [
+        "intervals.sequence"
+      ],
+      "missing_input_behavior": "null plus scoped unavailable reason; observed zero is retained",
+      "origin": "derived",
+      "population": "one domain sequence interval",
+      "uncertainty": null,
+      "units": "residues"
+    }
+  },
+  "domains": [
+    {
+      "alignment_columns": 35,
+      "alignment_identity_fraction": 0.37142857142857144,
+      "api_identity_fraction": 0.41935483870967744,
+      "api_identity_recalculated_fraction": 0.41935483870967744,
+      "api_identity_reported_count": 13,
+      "availability": "partial",
+      "components": {
+        "alignment_columns": {
+          "definition": "alignment_columns",
+          "denominator": null,
+          "numerator": null,
+          "value": 35
+        },
+        "alignment_identity_fraction": {
+          "definition": "alignment_identity_fraction",
+          "denominator": 35,
+          "numerator": 13,
+          "value": 0.37142857142857144
+        },
+        "api_identity_fraction": {
+          "definition": "api_identity_fraction",
+          "denominator": 31,
+          "numerator": 13,
+          "value": 0.41935483870967744
+        },
+        "consensus_identity_fraction": {
+          "definition": "consensus_identity_fraction",
+          "denominator": 31,
+          "numerator": 13,
+          "value": 0.41935483870967744
+        },
+        "delete_positions": {
+          "definition": "delete_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 4
+        },
+        "insert_positions": {
+          "definition": "insert_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 0
+        },
+        "model_length": {
+          "definition": "model_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 253
+        },
+        "model_span_coverage": {
+          "definition": "model_span_coverage",
+          "denominator": 253,
+          "numerator": 35,
+          "value": 0.1383399209486166
+        },
+        "model_span_positions": {
+          "definition": "model_span_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 35
+        },
+        "native_accuracy": {
+          "definition": "native_accuracy",
+          "denominator": null,
+          "numerator": null,
+          "value": null
+        },
+        "native_conditional_evalue": {
+          "definition": "native_conditional_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 0.1995509914589069
+        },
+        "native_domain_bias_bits": {
+          "definition": "native_domain_bias_bits",
+          "denominator": 0.6931471805599453,
+          "numerator": 0.005970130208879709,
+          "units": "bits",
+          "value": 0.008613077245812149
+        },
+        "native_domain_score_bits": {
+          "definition": "native_domain_score_bits",
+          "denominator": null,
+          "numerator": null,
+          "value": -0.9096836447715759
+        },
+        "native_independent_evalue": {
+          "definition": "native_independent_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 11354.052312028885
+        },
+        "paired_model_coverage": {
+          "definition": "paired_model_coverage",
+          "denominator": 253,
+          "numerator": 31,
+          "value": 0.1225296442687747
+        },
+        "paired_positions": {
+          "definition": "paired_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 31
+        },
+        "paired_sequence_coverage": {
+          "definition": "paired_sequence_coverage",
+          "denominator": 283,
+          "numerator": 31,
+          "value": 0.10954063604240283
+        },
+        "posterior_lower_mean": {
+          "definition": "posterior_lower_mean",
+          "denominator": 31,
+          "numerator": 15.25,
+          "value": 0.49193548387096775
+        },
+        "posterior_upper_mean": {
+          "definition": "posterior_upper_mean",
+          "denominator": 31,
+          "numerator": 18.35,
+          "value": 0.5919354838709678
+        },
+        "sequence_envelope_coverage": {
+          "definition": "sequence_envelope_coverage",
+          "denominator": 283,
+          "numerator": 51,
+          "value": 0.18021201413427562
+        },
+        "sequence_envelope_residues": {
+          "definition": "sequence_envelope_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 51
+        },
+        "sequence_identity_fraction": {
+          "definition": "sequence_identity_fraction",
+          "denominator": 31,
+          "numerator": null,
+          "value": null
+        },
+        "sequence_length": {
+          "definition": "sequence_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 283
+        },
+        "sequence_span_coverage": {
+          "definition": "sequence_span_coverage",
+          "denominator": 283,
+          "numerator": 31,
+          "value": 0.10954063604240283
+        },
+        "sequence_span_residues": {
+          "definition": "sequence_span_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 31
+        }
+      },
+      "consensus_identical_positions": 13,
+      "consensus_identity_fraction": 0.41935483870967744,
+      "coordinate_convention": {
+        "intervals": "zero_based_half_open",
+        "model_axis": "query",
+        "native": "one_based_inclusive",
+        "sequence_axis": "target"
+      },
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "delete_positions": 4,
+      "derived": {
+        "alignment_columns": 35,
+        "alignment_identity_fraction": 0.37142857142857144,
+        "api_identity_fraction": 0.41935483870967744,
+        "consensus_identity_fraction": 0.41935483870967744,
+        "delete_positions": 4,
+        "domain_bias_bits_from_nats": 0.008613077245812149,
+        "insert_positions": 0,
+        "model_length": 253,
+        "model_span_coverage": 0.1383399209486166,
+        "model_span_positions": 35,
+        "paired_model_coverage": 0.1225296442687747,
+        "paired_positions": 31,
+        "paired_sequence_coverage": 0.10954063604240283,
+        "posterior_lower_mean": 0.49193548387096775,
+        "posterior_upper_mean": 0.5919354838709678,
+        "sequence_envelope_coverage": 0.18021201413427562,
+        "sequence_envelope_residues": 51,
+        "sequence_identity_fraction": null,
+        "sequence_length": 283,
+        "sequence_span_coverage": 0.10954063604240283,
+        "sequence_span_residues": 31
+      },
+      "hit_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_hit\",\"/result/hits/0\"]",
+      "insert_positions": 0,
+      "intervals": {
+        "envelope": [
+          20,
+          71
+        ],
+        "model": [
+          127,
+          162
+        ],
+        "sequence": [
+          27,
+          58
+        ]
+      },
+      "is_included": false,
+      "is_reported": true,
+      "issues": [],
+      "iteration": 1,
+      "locator": {
+        "artifact_ref": "artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863",
+        "artifact_role": "api_json",
+        "domain_array_index": 0,
+        "hit_array_index": 0,
+        "json_pointer": "/result/hits/0/domains/0"
+      },
+      "model_length": 253,
+      "model_span_coverage": 0.1383399209486166,
+      "model_span_positions": 35,
+      "native": {
+        "ali_from": 28,
+        "ali_to": 58,
+        "conditional_evalue": 0.1995509914589069,
+        "display_columns": 35,
+        "domain_bias_nats": 0.005970130208879709,
+        "domain_correction_nats": 0.42661961913108826,
+        "domain_score_bits": -0.9096836447715759,
+        "env_from": 21,
+        "env_to": 71,
+        "envelope_score_nats": -4.8253631591796875,
+        "hmm_from": 128,
+        "hmm_to": 162,
+        "independent_evalue": 11354.052312028885,
+        "model_length": 253,
+        "optimal_accuracy_sum": 30.20742416381836,
+        "sequence_bias_bits": 0.12991714477539062,
+        "sequence_evalue": 0.0054053936873063495,
+        "sequence_length": 283,
+        "sequence_score_bits": 19.809377670288086
+      },
+      "native_accuracy": null,
+      "native_conditional_evalue": 0.1995509914589069,
+      "native_domain_bias_bits": 0.008613077245812149,
+      "native_domain_score_bits": -0.9096836447715759,
+      "native_independent_evalue": 11354.052312028885,
+      "paired_model_coverage": 0.1225296442687747,
+      "paired_positions": 31,
+      "paired_sequence_coverage": 0.10954063604240283,
+      "posterior_lower_mean": 0.49193548387096775,
+      "posterior_population": {
+        "character_counts": {
+          "3": 7,
+          "4": 4,
+          "5": 1,
+          "6": 7,
+          "7": 12
+        },
+        "gap_columns": 4,
+        "invalid_column_indices": [],
+        "missing_residues": 0,
+        "observed_residues": 31,
+        "upper_endpoint_closed": false
+      },
+      "posterior_upper_mean": 0.5919354838709678,
+      "query_name": "product_03c3acb11bc333cbc36b076e",
+      "query_occurrence": 0,
+      "query_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_query\",\"/result\"]",
+      "record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/0/domains/0\"]",
+      "sequence_envelope_coverage": 0.18021201413427562,
+      "sequence_envelope_residues": 51,
+      "sequence_identity_fraction": null,
+      "sequence_length": 283,
+      "sequence_span_coverage": 0.10954063604240283,
+      "sequence_span_residues": 31,
+      "target_accession": null,
+      "target_name": "000058351",
+      "unavailable": {
+        "native_accuracy": "native_measurement_unavailable",
+        "sequence_identity_fraction": "actual_sequence_operands_and_correspondence_unavailable"
+      }
+    },
+    {
+      "alignment_columns": 91,
+      "alignment_identity_fraction": 0.27472527472527475,
+      "api_identity_fraction": 0.2808988764044944,
+      "api_identity_recalculated_fraction": 0.2808988764044944,
+      "api_identity_reported_count": 25,
+      "availability": "partial",
+      "components": {
+        "alignment_columns": {
+          "definition": "alignment_columns",
+          "denominator": null,
+          "numerator": null,
+          "value": 91
+        },
+        "alignment_identity_fraction": {
+          "definition": "alignment_identity_fraction",
+          "denominator": 91,
+          "numerator": 25,
+          "value": 0.27472527472527475
+        },
+        "api_identity_fraction": {
+          "definition": "api_identity_fraction",
+          "denominator": 89,
+          "numerator": 25,
+          "value": 0.2808988764044944
+        },
+        "consensus_identity_fraction": {
+          "definition": "consensus_identity_fraction",
+          "denominator": 88,
+          "numerator": 25,
+          "value": 0.2840909090909091
+        },
+        "delete_positions": {
+          "definition": "delete_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 1
+        },
+        "insert_positions": {
+          "definition": "insert_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 2
+        },
+        "model_length": {
+          "definition": "model_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 253
+        },
+        "model_span_coverage": {
+          "definition": "model_span_coverage",
+          "denominator": 253,
+          "numerator": 89,
+          "value": 0.35177865612648224
+        },
+        "model_span_positions": {
+          "definition": "model_span_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 89
+        },
+        "native_accuracy": {
+          "definition": "native_accuracy",
+          "denominator": null,
+          "numerator": null,
+          "value": null
+        },
+        "native_conditional_evalue": {
+          "definition": "native_conditional_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 8.309105481907147e-07
+        },
+        "native_domain_bias_bits": {
+          "definition": "native_domain_bias_bits",
+          "denominator": 0.6931471805599453,
+          "numerator": 0.03572461009025574,
+          "units": "bits",
+          "value": 0.051539717814903775
+        },
+        "native_domain_score_bits": {
+          "definition": "native_domain_score_bits",
+          "denominator": null,
+          "numerator": null,
+          "value": 16.722900390625
+        },
+        "native_independent_evalue": {
+          "definition": "native_independent_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 0.047277148370955285
+        },
+        "paired_model_coverage": {
+          "definition": "paired_model_coverage",
+          "denominator": 253,
+          "numerator": 88,
+          "value": 0.34782608695652173
+        },
+        "paired_positions": {
+          "definition": "paired_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 88
+        },
+        "paired_sequence_coverage": {
+          "definition": "paired_sequence_coverage",
+          "denominator": 283,
+          "numerator": 88,
+          "value": 0.31095406360424027
+        },
+        "posterior_lower_mean": {
+          "definition": "posterior_lower_mean",
+          "denominator": 90,
+          "numerator": 74.5,
+          "value": 0.8277777777777777
+        },
+        "posterior_upper_mean": {
+          "definition": "posterior_upper_mean",
+          "denominator": 90,
+          "numerator": 81.85,
+          "value": 0.9094444444444444
+        },
+        "sequence_envelope_coverage": {
+          "definition": "sequence_envelope_coverage",
+          "denominator": 283,
+          "numerator": 129,
+          "value": 0.4558303886925795
+        },
+        "sequence_envelope_residues": {
+          "definition": "sequence_envelope_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 129
+        },
+        "sequence_identity_fraction": {
+          "definition": "sequence_identity_fraction",
+          "denominator": 88,
+          "numerator": null,
+          "value": null
+        },
+        "sequence_length": {
+          "definition": "sequence_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 283
+        },
+        "sequence_span_coverage": {
+          "definition": "sequence_span_coverage",
+          "denominator": 283,
+          "numerator": 90,
+          "value": 0.31802120141342755
+        },
+        "sequence_span_residues": {
+          "definition": "sequence_span_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 90
+        }
+      },
+      "consensus_identical_positions": 25,
+      "consensus_identity_fraction": 0.2840909090909091,
+      "coordinate_convention": {
+        "intervals": "zero_based_half_open",
+        "model_axis": "query",
+        "native": "one_based_inclusive",
+        "sequence_axis": "target"
+      },
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "delete_positions": 1,
+      "derived": {
+        "alignment_columns": 91,
+        "alignment_identity_fraction": 0.27472527472527475,
+        "api_identity_fraction": 0.2808988764044944,
+        "consensus_identity_fraction": 0.2840909090909091,
+        "delete_positions": 1,
+        "domain_bias_bits_from_nats": 0.051539717814903775,
+        "insert_positions": 2,
+        "model_length": 253,
+        "model_span_coverage": 0.35177865612648224,
+        "model_span_positions": 89,
+        "paired_model_coverage": 0.34782608695652173,
+        "paired_positions": 88,
+        "paired_sequence_coverage": 0.31095406360424027,
+        "posterior_lower_mean": 0.8277777777777777,
+        "posterior_upper_mean": 0.9094444444444444,
+        "sequence_envelope_coverage": 0.4558303886925795,
+        "sequence_envelope_residues": 129,
+        "sequence_identity_fraction": null,
+        "sequence_length": 283,
+        "sequence_span_coverage": 0.31802120141342755,
+        "sequence_span_residues": 90
+      },
+      "hit_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_hit\",\"/result/hits/0\"]",
+      "insert_positions": 2,
+      "intervals": {
+        "envelope": [
+          59,
+          188
+        ],
+        "model": [
+          89,
+          178
+        ],
+        "sequence": [
+          90,
+          180
+        ]
+      },
+      "is_included": true,
+      "is_reported": true,
+      "issues": [],
+      "iteration": 1,
+      "locator": {
+        "artifact_ref": "artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863",
+        "artifact_role": "api_json",
+        "domain_array_index": 1,
+        "hit_array_index": 0,
+        "json_pointer": "/result/hits/0/domains/1"
+      },
+      "model_length": 253,
+      "model_span_coverage": 0.35177865612648224,
+      "model_span_positions": 89,
+      "native": {
+        "ali_from": 91,
+        "ali_to": 180,
+        "conditional_evalue": 8.309105481907147e-07,
+        "display_columns": 91,
+        "domain_bias_nats": 0.03572461009025574,
+        "domain_correction_nats": 2.2308449745178223,
+        "domain_score_bits": 16.722900390625,
+        "env_from": 60,
+        "env_to": 188,
+        "envelope_score_nats": 6.603862762451172,
+        "hmm_from": 90,
+        "hmm_to": 178,
+        "independent_evalue": 0.047277148370955285,
+        "model_length": 253,
+        "optimal_accuracy_sum": 108.7427978515625,
+        "sequence_bias_bits": 0.12991714477539062,
+        "sequence_evalue": 0.0054053936873063495,
+        "sequence_length": 283,
+        "sequence_score_bits": 19.809377670288086
+      },
+      "native_accuracy": null,
+      "native_conditional_evalue": 8.309105481907147e-07,
+      "native_domain_bias_bits": 0.051539717814903775,
+      "native_domain_score_bits": 16.722900390625,
+      "native_independent_evalue": 0.047277148370955285,
+      "paired_model_coverage": 0.34782608695652173,
+      "paired_positions": 88,
+      "paired_sequence_coverage": 0.31095406360424027,
+      "posterior_lower_mean": 0.8277777777777777,
+      "posterior_population": {
+        "character_counts": {
+          "*": 33,
+          "3": 2,
+          "4": 1,
+          "5": 2,
+          "6": 4,
+          "7": 3,
+          "8": 10,
+          "9": 35
+        },
+        "gap_columns": 1,
+        "invalid_column_indices": [],
+        "missing_residues": 0,
+        "observed_residues": 90,
+        "upper_endpoint_closed": false
+      },
+      "posterior_upper_mean": 0.9094444444444444,
+      "query_name": "product_03c3acb11bc333cbc36b076e",
+      "query_occurrence": 0,
+      "query_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_query\",\"/result\"]",
+      "record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/0/domains/1\"]",
+      "sequence_envelope_coverage": 0.4558303886925795,
+      "sequence_envelope_residues": 129,
+      "sequence_identity_fraction": null,
+      "sequence_length": 283,
+      "sequence_span_coverage": 0.31802120141342755,
+      "sequence_span_residues": 90,
+      "target_accession": null,
+      "target_name": "000058351",
+      "unavailable": {
+        "native_accuracy": "native_measurement_unavailable",
+        "sequence_identity_fraction": "actual_sequence_operands_and_correspondence_unavailable"
+      }
+    },
+    {
+      "alignment_columns": 12,
+      "alignment_identity_fraction": 0.5833333333333334,
+      "api_identity_fraction": 0.5833333333333334,
+      "api_identity_recalculated_fraction": 0.5833333333333334,
+      "api_identity_reported_count": 7,
+      "availability": "partial",
+      "components": {
+        "alignment_columns": {
+          "definition": "alignment_columns",
+          "denominator": null,
+          "numerator": null,
+          "value": 12
+        },
+        "alignment_identity_fraction": {
+          "definition": "alignment_identity_fraction",
+          "denominator": 12,
+          "numerator": 7,
+          "value": 0.5833333333333334
+        },
+        "api_identity_fraction": {
+          "definition": "api_identity_fraction",
+          "denominator": 12,
+          "numerator": 7,
+          "value": 0.5833333333333334
+        },
+        "consensus_identity_fraction": {
+          "definition": "consensus_identity_fraction",
+          "denominator": 12,
+          "numerator": 7,
+          "value": 0.5833333333333334
+        },
+        "delete_positions": {
+          "definition": "delete_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 0
+        },
+        "insert_positions": {
+          "definition": "insert_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 0
+        },
+        "model_length": {
+          "definition": "model_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 253
+        },
+        "model_span_coverage": {
+          "definition": "model_span_coverage",
+          "denominator": 253,
+          "numerator": 12,
+          "value": 0.04743083003952569
+        },
+        "model_span_positions": {
+          "definition": "model_span_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 12
+        },
+        "native_accuracy": {
+          "definition": "native_accuracy",
+          "denominator": null,
+          "numerator": null,
+          "value": null
+        },
+        "native_conditional_evalue": {
+          "definition": "native_conditional_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 0.2834845894857768
+        },
+        "native_domain_bias_bits": {
+          "definition": "native_domain_bias_bits",
+          "denominator": 0.6931471805599453,
+          "numerator": 0.007500746753066778,
+          "units": "bits",
+          "value": 0.010821290143613436
+        },
+        "native_domain_score_bits": {
+          "definition": "native_domain_score_bits",
+          "denominator": null,
+          "numerator": null,
+          "value": -1.4093655347824097
+        },
+        "native_independent_evalue": {
+          "definition": "native_independent_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 16129.706172561728
+        },
+        "paired_model_coverage": {
+          "definition": "paired_model_coverage",
+          "denominator": 253,
+          "numerator": 12,
+          "value": 0.04743083003952569
+        },
+        "paired_positions": {
+          "definition": "paired_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 12
+        },
+        "paired_sequence_coverage": {
+          "definition": "paired_sequence_coverage",
+          "denominator": 283,
+          "numerator": 12,
+          "value": 0.04240282685512368
+        },
+        "posterior_lower_mean": {
+          "definition": "posterior_lower_mean",
+          "denominator": 12,
+          "numerator": 9.3,
+          "value": 0.775
+        },
+        "posterior_upper_mean": {
+          "definition": "posterior_upper_mean",
+          "denominator": 12,
+          "numerator": 10.25,
+          "value": 0.8541666666666666
+        },
+        "sequence_envelope_coverage": {
+          "definition": "sequence_envelope_coverage",
+          "denominator": 283,
+          "numerator": 30,
+          "value": 0.10600706713780919
+        },
+        "sequence_envelope_residues": {
+          "definition": "sequence_envelope_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 30
+        },
+        "sequence_identity_fraction": {
+          "definition": "sequence_identity_fraction",
+          "denominator": 12,
+          "numerator": null,
+          "value": null
+        },
+        "sequence_length": {
+          "definition": "sequence_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 283
+        },
+        "sequence_span_coverage": {
+          "definition": "sequence_span_coverage",
+          "denominator": 283,
+          "numerator": 12,
+          "value": 0.04240282685512368
+        },
+        "sequence_span_residues": {
+          "definition": "sequence_span_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 12
+        }
+      },
+      "consensus_identical_positions": 7,
+      "consensus_identity_fraction": 0.5833333333333334,
+      "coordinate_convention": {
+        "intervals": "zero_based_half_open",
+        "model_axis": "query",
+        "native": "one_based_inclusive",
+        "sequence_axis": "target"
+      },
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "delete_positions": 0,
+      "derived": {
+        "alignment_columns": 12,
+        "alignment_identity_fraction": 0.5833333333333334,
+        "api_identity_fraction": 0.5833333333333334,
+        "consensus_identity_fraction": 0.5833333333333334,
+        "delete_positions": 0,
+        "domain_bias_bits_from_nats": 0.010821290143613436,
+        "insert_positions": 0,
+        "model_length": 253,
+        "model_span_coverage": 0.04743083003952569,
+        "model_span_positions": 12,
+        "paired_model_coverage": 0.04743083003952569,
+        "paired_positions": 12,
+        "paired_sequence_coverage": 0.04240282685512368,
+        "posterior_lower_mean": 0.775,
+        "posterior_upper_mean": 0.8541666666666666,
+        "sequence_envelope_coverage": 0.10600706713780919,
+        "sequence_envelope_residues": 30,
+        "sequence_identity_fraction": null,
+        "sequence_length": 283,
+        "sequence_span_coverage": 0.04240282685512368,
+        "sequence_span_residues": 12
+      },
+      "hit_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_hit\",\"/result/hits/0\"]",
+      "insert_positions": 0,
+      "intervals": {
+        "envelope": [
+          250,
+          280
+        ],
+        "model": [
+          239,
+          251
+        ],
+        "sequence": [
+          266,
+          278
+        ]
+      },
+      "is_included": false,
+      "is_reported": true,
+      "issues": [],
+      "iteration": 1,
+      "locator": {
+        "artifact_ref": "artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863",
+        "artifact_role": "api_json",
+        "domain_array_index": 2,
+        "hit_array_index": 0,
+        "json_pointer": "/result/hits/0/domains/2"
+      },
+      "model_length": 253,
+      "model_span_coverage": 0.04743083003952569,
+      "model_span_positions": 12,
+      "native": {
+        "ali_from": 267,
+        "ali_to": 278,
+        "conditional_evalue": 0.2834845894857768,
+        "display_columns": 12,
+        "domain_bias_nats": 0.007500746753066778,
+        "domain_correction_nats": 0.6560739874839783,
+        "domain_score_bits": -1.4093655347824097,
+        "env_from": 251,
+        "env_to": 280,
+        "envelope_score_nats": -4.948742389678955,
+        "hmm_from": 240,
+        "hmm_to": 251,
+        "independent_evalue": 16129.706172561728,
+        "model_length": 253,
+        "optimal_accuracy_sum": 23.90024185180664,
+        "sequence_bias_bits": 0.12991714477539062,
+        "sequence_evalue": 0.0054053936873063495,
+        "sequence_length": 283,
+        "sequence_score_bits": 19.809377670288086
+      },
+      "native_accuracy": null,
+      "native_conditional_evalue": 0.2834845894857768,
+      "native_domain_bias_bits": 0.010821290143613436,
+      "native_domain_score_bits": -1.4093655347824097,
+      "native_independent_evalue": 16129.706172561728,
+      "paired_model_coverage": 0.04743083003952569,
+      "paired_positions": 12,
+      "paired_sequence_coverage": 0.04240282685512368,
+      "posterior_lower_mean": 0.775,
+      "posterior_population": {
+        "character_counts": {
+          "*": 5,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 2
+        },
+        "gap_columns": 0,
+        "invalid_column_indices": [],
+        "missing_residues": 0,
+        "observed_residues": 12,
+        "upper_endpoint_closed": false
+      },
+      "posterior_upper_mean": 0.8541666666666666,
+      "query_name": "product_03c3acb11bc333cbc36b076e",
+      "query_occurrence": 0,
+      "query_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_query\",\"/result\"]",
+      "record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/0/domains/2\"]",
+      "sequence_envelope_coverage": 0.10600706713780919,
+      "sequence_envelope_residues": 30,
+      "sequence_identity_fraction": null,
+      "sequence_length": 283,
+      "sequence_span_coverage": 0.04240282685512368,
+      "sequence_span_residues": 12,
+      "target_accession": null,
+      "target_name": "000058351",
+      "unavailable": {
+        "native_accuracy": "native_measurement_unavailable",
+        "sequence_identity_fraction": "actual_sequence_operands_and_correspondence_unavailable"
+      }
+    },
+    {
+      "alignment_columns": 122,
+      "alignment_identity_fraction": 0.3114754098360656,
+      "api_identity_fraction": 0.3333333333333333,
+      "api_identity_recalculated_fraction": 0.3333333333333333,
+      "api_identity_reported_count": 38,
+      "availability": "partial",
+      "components": {
+        "alignment_columns": {
+          "definition": "alignment_columns",
+          "denominator": null,
+          "numerator": null,
+          "value": 122
+        },
+        "alignment_identity_fraction": {
+          "definition": "alignment_identity_fraction",
+          "denominator": 122,
+          "numerator": 38,
+          "value": 0.3114754098360656
+        },
+        "api_identity_fraction": {
+          "definition": "api_identity_fraction",
+          "denominator": 114,
+          "numerator": 38,
+          "value": 0.3333333333333333
+        },
+        "consensus_identity_fraction": {
+          "definition": "consensus_identity_fraction",
+          "denominator": 114,
+          "numerator": 38,
+          "value": 0.3333333333333333
+        },
+        "delete_positions": {
+          "definition": "delete_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 0
+        },
+        "insert_positions": {
+          "definition": "insert_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 8
+        },
+        "model_length": {
+          "definition": "model_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 253
+        },
+        "model_span_coverage": {
+          "definition": "model_span_coverage",
+          "denominator": 253,
+          "numerator": 114,
+          "value": 0.4505928853754941
+        },
+        "model_span_positions": {
+          "definition": "model_span_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 114
+        },
+        "native_accuracy": {
+          "definition": "native_accuracy",
+          "denominator": null,
+          "numerator": null,
+          "value": null
+        },
+        "native_conditional_evalue": {
+          "definition": "native_conditional_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 2.086961397760585e-06
+        },
+        "native_domain_bias_bits": {
+          "definition": "native_domain_bias_bits",
+          "denominator": 0.6931471805599453,
+          "numerator": 0.00897340476512909,
+          "units": "bits",
+          "value": 0.01294588655454113
+        },
+        "native_domain_score_bits": {
+          "definition": "native_domain_score_bits",
+          "denominator": null,
+          "numerator": null,
+          "value": 15.412179946899414
+        },
+        "native_independent_evalue": {
+          "definition": "native_independent_evalue",
+          "denominator": null,
+          "numerator": null,
+          "value": 0.11874392960978178
+        },
+        "paired_model_coverage": {
+          "definition": "paired_model_coverage",
+          "denominator": 253,
+          "numerator": 114,
+          "value": 0.4505928853754941
+        },
+        "paired_positions": {
+          "definition": "paired_positions",
+          "denominator": null,
+          "numerator": null,
+          "value": 114
+        },
+        "paired_sequence_coverage": {
+          "definition": "paired_sequence_coverage",
+          "denominator": 257,
+          "numerator": 114,
+          "value": 0.44357976653696496
+        },
+        "posterior_lower_mean": {
+          "definition": "posterior_lower_mean",
+          "denominator": 122,
+          "numerator": 87.2,
+          "value": 0.7147540983606557
+        },
+        "posterior_upper_mean": {
+          "definition": "posterior_upper_mean",
+          "denominator": 122,
+          "numerator": 98.1,
+          "value": 0.8040983606557377
+        },
+        "sequence_envelope_coverage": {
+          "definition": "sequence_envelope_coverage",
+          "denominator": 257,
+          "numerator": 138,
+          "value": 0.5369649805447471
+        },
+        "sequence_envelope_residues": {
+          "definition": "sequence_envelope_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 138
+        },
+        "sequence_identity_fraction": {
+          "definition": "sequence_identity_fraction",
+          "denominator": 114,
+          "numerator": null,
+          "value": null
+        },
+        "sequence_length": {
+          "definition": "sequence_length",
+          "denominator": null,
+          "numerator": null,
+          "value": 257
+        },
+        "sequence_span_coverage": {
+          "definition": "sequence_span_coverage",
+          "denominator": 257,
+          "numerator": 122,
+          "value": 0.47470817120622566
+        },
+        "sequence_span_residues": {
+          "definition": "sequence_span_residues",
+          "denominator": null,
+          "numerator": null,
+          "value": 122
+        }
+      },
+      "consensus_identical_positions": 38,
+      "consensus_identity_fraction": 0.3333333333333333,
+      "coordinate_convention": {
+        "intervals": "zero_based_half_open",
+        "model_axis": "query",
+        "native": "one_based_inclusive",
+        "sequence_axis": "target"
+      },
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "delete_positions": 0,
+      "derived": {
+        "alignment_columns": 122,
+        "alignment_identity_fraction": 0.3114754098360656,
+        "api_identity_fraction": 0.3333333333333333,
+        "consensus_identity_fraction": 0.3333333333333333,
+        "delete_positions": 0,
+        "domain_bias_bits_from_nats": 0.01294588655454113,
+        "insert_positions": 8,
+        "model_length": 253,
+        "model_span_coverage": 0.4505928853754941,
+        "model_span_positions": 114,
+        "paired_model_coverage": 0.4505928853754941,
+        "paired_positions": 114,
+        "paired_sequence_coverage": 0.44357976653696496,
+        "posterior_lower_mean": 0.7147540983606557,
+        "posterior_upper_mean": 0.8040983606557377,
+        "sequence_envelope_coverage": 0.5369649805447471,
+        "sequence_envelope_residues": 138,
+        "sequence_identity_fraction": null,
+        "sequence_length": 257,
+        "sequence_span_coverage": 0.47470817120622566,
+        "sequence_span_residues": 122
+      },
+      "hit_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_hit\",\"/result/hits/1\"]",
+      "insert_positions": 8,
+      "intervals": {
+        "envelope": [
+          112,
+          250
+        ],
+        "model": [
+          137,
+          251
+        ],
+        "sequence": [
+          127,
+          249
+        ]
+      },
+      "is_included": false,
+      "is_reported": true,
+      "issues": [],
+      "iteration": 1,
+      "locator": {
+        "artifact_ref": "artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863",
+        "artifact_role": "api_json",
+        "domain_array_index": 0,
+        "hit_array_index": 1,
+        "json_pointer": "/result/hits/1/domains/0"
+      },
+      "model_length": 253,
+      "model_span_coverage": 0.4505928853754941,
+      "model_span_positions": 114,
+      "native": {
+        "ali_from": 128,
+        "ali_to": 249,
+        "conditional_evalue": 2.086961397760585e-06,
+        "display_columns": 122,
+        "domain_bias_nats": 0.00897340476512909,
+        "domain_correction_nats": 0.8356249332427979,
+        "domain_score_bits": 15.412179946899414,
+        "env_from": 113,
+        "env_to": 250,
+        "envelope_score_nats": 5.5219221115112305,
+        "hmm_from": 138,
+        "hmm_to": 251,
+        "independent_evalue": 0.11874392960978178,
+        "model_length": 253,
+        "optimal_accuracy_sum": 106.9904556274414,
+        "sequence_bias_bits": 0.01294708251953125,
+        "sequence_evalue": 0.0798060254073969,
+        "sequence_length": 257,
+        "sequence_score_bits": 15.97773265838623
+      },
+      "native_accuracy": null,
+      "native_conditional_evalue": 2.086961397760585e-06,
+      "native_domain_bias_bits": 0.01294588655454113,
+      "native_domain_score_bits": 15.412179946899414,
+      "native_independent_evalue": 0.11874392960978178,
+      "paired_model_coverage": 0.4505928853754941,
+      "paired_positions": 114,
+      "paired_sequence_coverage": 0.44357976653696496,
+      "posterior_lower_mean": 0.7147540983606557,
+      "posterior_population": {
+        "character_counts": {
+          "*": 26,
+          "1": 2,
+          "2": 5,
+          "3": 1,
+          "4": 5,
+          "5": 6,
+          "6": 2,
+          "7": 25,
+          "8": 29,
+          "9": 21
+        },
+        "gap_columns": 0,
+        "invalid_column_indices": [],
+        "missing_residues": 0,
+        "observed_residues": 122,
+        "upper_endpoint_closed": false
+      },
+      "posterior_upper_mean": 0.8040983606557377,
+      "query_name": "product_03c3acb11bc333cbc36b076e",
+      "query_occurrence": 0,
+      "query_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_query\",\"/result\"]",
+      "record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/1/domains/0\"]",
+      "sequence_envelope_coverage": 0.5369649805447471,
+      "sequence_envelope_residues": 138,
+      "sequence_identity_fraction": null,
+      "sequence_length": 257,
+      "sequence_span_coverage": 0.47470817120622566,
+      "sequence_span_residues": 122,
+      "target_accession": null,
+      "target_name": "000019569",
+      "unavailable": {
+        "native_accuracy": "native_measurement_unavailable",
+        "sequence_identity_fraction": "actual_sequence_operands_and_correspondence_unavailable"
+      }
+    }
+  ],
+  "hits": [
+    {
+      "availability": "native_measurements_available",
+      "components": {},
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "derived": {},
+      "domain_record_keys": [
+        "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/0/domains/0\"]",
+        "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/0/domains/1\"]",
+        "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/0/domains/2\"]"
+      ],
+      "identifiers": {
+        "acc": null,
+        "index": 0,
+        "metadata": {
+          "accession": "6lpm_A",
+          "architecture": "PF03372.29",
+          "architecture_checksum": 3651053098216,
+          "architecture_score": 1,
+          "description": "Exodeoxyribonuclease III",
+          "external_link": "https://www.ebi.ac.uk/pdbe/entry/pdb/6lpm",
+          "identifier": "6lpm",
+          "kingdom": "Thermotogati",
+          "lineage": [
+            2,
+            3384194,
+            1297,
+            188787,
+            118964,
+            183710,
+            1298,
+            1299
+          ],
+          "phylum": "Deinococcota",
+          "species": "Deinococcus radiodurans",
+          "structures": [],
+          "taxonomy_id": 1299,
+          "taxonomy_link": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=1299",
+          "uniprot_accession": "Q9RXF9",
+          "uniprot_identifier": null
+        },
+        "name": "000058351",
+        "seqidx": 58351
+      },
+      "interval_unions": {
+        "envelope": {
+          "intervals": [
+            [
+              20,
+              188
+            ],
+            [
+              250,
+              280
+            ]
+          ],
+          "population": "available domains for this exact hit occurrence and iteration",
+          "positions": 198
+        },
+        "model": {
+          "intervals": [
+            [
+              89,
+              178
+            ],
+            [
+              239,
+              251
+            ]
+          ],
+          "population": "available domains for this exact hit occurrence and iteration",
+          "positions": 101
+        },
+        "sequence": {
+          "intervals": [
+            [
+              27,
+              58
+            ],
+            [
+              90,
+              180
+            ],
+            [
+              266,
+              278
+            ]
+          ],
+          "population": "available domains for this exact hit occurrence and iteration",
+          "positions": 133
+        }
+      },
+      "is_included": true,
+      "is_reported": true,
+      "issues": [],
+      "iteration": 1,
+      "locator": {
+        "artifact_ref": "artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863",
+        "artifact_role": "api_json",
+        "hit_array_index": 0,
+        "json_pointer": "/result/hits/0"
+      },
+      "native": {
+        "clustered_regions": 1,
+        "domains": 3,
+        "envelopes": 3,
+        "expected_domains": 2.304795503616333,
+        "included_domains": 1,
+        "overlapping_envelopes": 1,
+        "regions": 2,
+        "reported_domains": 3,
+        "sequence_bias_bits": 0.12991714477539062,
+        "sequence_evalue": 0.0054053936873063495,
+        "sequence_score_bits": 19.809377670288086
+      },
+      "native_clustered_regions": 1,
+      "native_domains": 3,
+      "native_envelopes": 3,
+      "native_expected_domains": 2.304795503616333,
+      "native_included_domains": 1,
+      "native_overlapping_envelopes": 1,
+      "native_regions": 2,
+      "native_reported_domains": 3,
+      "native_sequence_bias_bits": 0.12991714477539062,
+      "native_sequence_evalue": 0.0054053936873063495,
+      "native_sequence_score_bits": 19.809377670288086,
+      "query_name": "product_03c3acb11bc333cbc36b076e",
+      "query_occurrence": 0,
+      "query_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_query\",\"/result\"]",
+      "record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_hit\",\"/result/hits/0\"]",
+      "retained_domain_count": 3,
+      "target_accession": null,
+      "target_name": "000058351",
+      "unavailable": {}
+    },
+    {
+      "availability": "native_measurements_available",
+      "components": {},
+      "cutoff_margins": {
+        "available": false,
+        "reason": "model_cutoff_unavailable",
+        "values": []
+      },
+      "derived": {},
+      "domain_record_keys": [
+        "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_domain\",\"/result/hits/1/domains/0\"]"
+      ],
+      "identifiers": {
+        "acc": null,
+        "index": 1,
+        "metadata": {
+          "accession": "3l1w_A",
+          "architecture": "PF03372.29",
+          "architecture_checksum": 3651053098216,
+          "architecture_score": 2,
+          "description": "Uncharacterized protein",
+          "external_link": "https://www.ebi.ac.uk/pdbe/entry/pdb/3l1w",
+          "identifier": "3l1w",
+          "kingdom": "Bacillati",
+          "lineage": [
+            2,
+            1783272,
+            1239,
+            91061,
+            186826,
+            81852,
+            1350,
+            1351
+          ],
+          "phylum": "Bacillota",
+          "species": "Enterococcus faecalis",
+          "structures": [],
+          "taxonomy_id": 1351,
+          "taxonomy_link": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=1351",
+          "uniprot_accession": "Q835Y1",
+          "uniprot_identifier": null
+        },
+        "name": "000019569",
+        "seqidx": 19569
+      },
+      "interval_unions": {
+        "envelope": {
+          "intervals": [
+            [
+              112,
+              250
+            ]
+          ],
+          "population": "available domains for this exact hit occurrence and iteration",
+          "positions": 138
+        },
+        "model": {
+          "intervals": [
+            [
+              137,
+              251
+            ]
+          ],
+          "population": "available domains for this exact hit occurrence and iteration",
+          "positions": 114
+        },
+        "sequence": {
+          "intervals": [
+            [
+              127,
+              249
+            ]
+          ],
+          "population": "available domains for this exact hit occurrence and iteration",
+          "positions": 122
+        }
+      },
+      "is_included": false,
+      "is_reported": true,
+      "issues": [],
+      "iteration": 1,
+      "locator": {
+        "artifact_ref": "artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863",
+        "artifact_role": "api_json",
+        "hit_array_index": 1,
+        "json_pointer": "/result/hits/1"
+      },
+      "native": {
+        "clustered_regions": 0,
+        "domains": 1,
+        "envelopes": 1,
+        "expected_domains": 1.1561745405197144,
+        "included_domains": 0,
+        "overlapping_envelopes": 0,
+        "regions": 1,
+        "reported_domains": 1,
+        "sequence_bias_bits": 0.01294708251953125,
+        "sequence_evalue": 0.0798060254073969,
+        "sequence_score_bits": 15.97773265838623
+      },
+      "native_clustered_regions": 0,
+      "native_domains": 1,
+      "native_envelopes": 1,
+      "native_expected_domains": 1.1561745405197144,
+      "native_included_domains": 0,
+      "native_overlapping_envelopes": 0,
+      "native_regions": 1,
+      "native_reported_domains": 1,
+      "native_sequence_bias_bits": 0.01294708251953125,
+      "native_sequence_evalue": 0.0798060254073969,
+      "native_sequence_score_bits": 15.97773265838623,
+      "query_name": "product_03c3acb11bc333cbc36b076e",
+      "query_occurrence": 0,
+      "query_record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_query\",\"/result\"]",
+      "record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_hit\",\"/result/hits/1\"]",
+      "retained_domain_count": 1,
+      "target_accession": null,
+      "target_name": "000019569",
+      "unavailable": {}
+    }
+  ],
+  "issues": [],
+  "iterations": [],
+  "operation": {
+    "alphabet": "amino",
+    "engine_version": null,
+    "format": "hmmer_api_json",
+    "mode": "sequence_database_search",
+    "program": "phmmer"
+  },
+  "parameters": {},
+  "queries": [
+    {
+      "acquired_hit_row_count": 2,
+      "acquired_included_hit_row_count": 1,
+      "acquired_reported_hit_row_count": 2,
+      "acquisition": {
+        "hit_population_complete": false,
+        "output_complete": true,
+        "page_count": 2,
+        "page_size": 2,
+        "page_start": 0
+      },
+      "completion": {
+        "hit_population_complete": null,
+        "output_complete": null,
+        "page_count": 2,
+        "provider_status": "SUCCESS"
+      },
+      "components": {},
+      "count_population": "retained rows across explicitly identified rounds; dependent rounds are not independent evidence",
+      "derived": {},
+      "included_status_unavailable_rows": 0,
+      "issues": [],
+      "length": 253,
+      "locator": {
+        "artifact_ref": "artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863",
+        "artifact_role": "api_json",
+        "json_pointer": "/result",
+        "query_occurrence": 0
+      },
+      "name": "product_03c3acb11bc333cbc36b076e",
+      "native": {},
+      "native_search_statistics": {
+        "Z": 170694.0,
+        "Z_setby": 0,
+        "domZ": 3.0,
+        "domZ_setby": 0,
+        "nhits": 3,
+        "nincluded": 1,
+        "nmodels": 1,
+        "nreported": 3,
+        "nseqs": 170694
+      },
+      "occurrence": 0,
+      "record_key": "[\"artifact_7d3ca54324df5322f62c588e86075a9d406eaa8800c18b2d36b3637afcc5f863\",\"api_query\",\"/result\"]",
+      "reporting_status_unavailable_rows": 0,
+      "unavailable": {}
+    }
+  ],
+  "schema": "hmmer_search_scores_v1"
+}

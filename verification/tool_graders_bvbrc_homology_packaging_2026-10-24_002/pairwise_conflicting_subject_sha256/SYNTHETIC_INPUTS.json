@@ -1,0 +1,505 @@
+{
+  "bundle": {
+    "acquisition_receipt_refs": [
+      "SYNTHETIC-transfer"
+    ],
+    "artifacts": [
+      {
+        "byte_count": 560,
+        "declared_format": {
+          "format": "blast_json15",
+          "mode": "pairwise_correspondence",
+          "producer_source_ref": "SYNTHETIC-retained-source-transform",
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "SYNTHETIC-artifact-blast_json15_raw",
+        "role": "blast_json15_raw",
+        "sha256": "8613dd2f87aab9a89bb0b1f4e60d2565928331c39868e62e237623650b3547f6",
+        "source_ref": "SYNTHETIC-source-blast_json15_raw",
+        "task_association": {
+          "byte_version_status": "producer_bytes_bound",
+          "evidence_ref": "SYNTHETIC-manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/SYNTHETIC/blast_json15_raw",
+          "output_uuid": "SYNTHETIC-uuid-blast_json15_raw",
+          "pointer": "/output_files/0",
+          "task_id": "SYNTHETIC-task",
+          "version_evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "SYNTHETIC-version-artifact",
+                "byte_count": 46,
+                "sha256": "3d781211bca65745b6f25f2b1283e52d1259eca4499e9becbd545edc99af0264",
+                "source_ref": "SYNTHETIC-version"
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "SYNTHETIC-transfer",
+          "requested_range": null,
+          "total_size": 560
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "SYNTHETIC-metadata-receipt",
+          "path": "/SYNTHETIC/blast_json15_raw",
+          "type": "file",
+          "uuid": "SYNTHETIC-uuid-blast_json15_raw"
+        }
+      }
+    ],
+    "diagnostics": [],
+    "input_bindings": [
+      {
+        "binding_id": "query-input",
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "SYNTHETIC-input-artifact",
+          "byte_count": 46,
+          "sha256": "b1b8af22943274f43bce20b8cd6db3fe9a28aa9721f5d157f9c68ea76d516b5b",
+          "source_ref": "SYNTHETIC-input"
+        },
+        "inline_value": null,
+        "kind": "retained_bytes",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": null,
+            "length": 15,
+            "member_id": "SYNTHETIC-member-0",
+            "member_pointer": "/members/0",
+            "molecule": "dna",
+            "sequence_sha256": "3c241acca9814b288c127ad139a05ce7684775be7118d64576493f02bf78875d"
+          }
+        ],
+        "parameter_pointer": "/input_fasta_file",
+        "workspace_path": "/SYNTHETIC/queries"
+      },
+      {
+        "binding_id": "reference-input",
+        "content": null,
+        "inline_value": ">SYNTHETIC-subject\nMKTAA\n",
+        "kind": "supplied_link",
+        "link_evidence": {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "SYNTHETIC-original-reference-artifact",
+            "byte_count": 324,
+            "sha256": "0ad3c6425c6dface1366e5d63d95a155c17732790be362981f4713efa3df4bef",
+            "source_ref": "SYNTHETIC-original-reference"
+          },
+          "pointer": "/fasta"
+        },
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "SYNTHETIC-original-reference-artifact",
+                "byte_count": 324,
+                "sha256": "0ad3c6425c6dface1366e5d63d95a155c17732790be362981f4713efa3df4bef",
+                "source_ref": "SYNTHETIC-original-reference"
+              },
+              "pointer": "/members/0"
+            },
+            "length": 5,
+            "member_id": "SYNTHETIC-member-reference",
+            "member_pointer": "/members/0",
+            "molecule": "protein",
+            "sequence_sha256": "3c0ca5465a4201dc12f1352fdcc45ee1167f1490e284fd76192bd1bc508a13cd"
+          }
+        ],
+        "parameter_pointer": "/db_fasta_data",
+        "workspace_path": null
+      }
+    ],
+    "missing_requirements": [],
+    "original_task": {
+      "effective_parameters": null,
+      "native_application_id": "Homology",
+      "required_application_id": "Homology",
+      "resource_id": "SYNTHETIC-api",
+      "scheduler_returned_parameters": null,
+      "submission_operation_key": "SYNTHETIC-run:launch:0",
+      "submission_receipt_ref": "SYNTHETIC-submit",
+      "submission_source_ref": "SYNTHETIC-submit-body",
+      "submitted_parameters": {
+        "blast_max_hits": 3,
+        "blast_program": "blastx",
+        "db_fasta_data": ">SYNTHETIC-subject\nMKTAA\n",
+        "db_source": "fasta_data",
+        "db_type": "faa",
+        "input_fasta_file": "/SYNTHETIC/queries"
+      },
+      "submitted_start_parameters": {},
+      "task_id": "SYNTHETIC-task"
+    },
+    "query_bindings": [],
+    "requested_selector_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "status": "ok",
+    "supplied_scientific_metadata": [
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "SYNTHETIC-scientific-inputs-artifact",
+          "byte_count": 2267,
+          "sha256": "91098f8c2f48c335258d653be3fbd56c31746be469cebc1fb44c26f4fdbdf2e0",
+          "source_ref": "SYNTHETIC-scientific-inputs"
+        },
+        "pointer": ""
+      },
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "SYNTHETIC-original-reference-artifact",
+          "byte_count": 324,
+          "sha256": "0ad3c6425c6dface1366e5d63d95a155c17732790be362981f4713efa3df4bef",
+          "source_ref": "SYNTHETIC-original-reference"
+        },
+        "pointer": ""
+      }
+    ],
+    "version": "bvbrc_appservice_artifact_bundle_v1"
+  },
+  "case": "pairwise_conflicting_subject_sha256",
+  "parameters": {
+    "artifact_source_refs": {
+      "blast_archive": null,
+      "blast_json15_raw": null,
+      "blast_tabular": null,
+      "blast_tabular_header": null,
+      "homology_metadata_json": null,
+      "homology_processed_json": null
+    },
+    "database_model": null,
+    "primary_representation": "raw",
+    "scientific_inputs": {
+      "content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "SYNTHETIC-scientific-inputs-artifact",
+        "byte_count": 2267,
+        "sha256": "91098f8c2f48c335258d653be3fbd56c31746be469cebc1fb44c26f4fdbdf2e0",
+        "source_ref": "SYNTHETIC-scientific-inputs"
+      },
+      "pointer": ""
+    },
+    "scientific_mode": "pairwise_correspondence",
+    "tabular_fields": [
+      "qseqid",
+      "sseqid",
+      "pident",
+      "length",
+      "mismatch",
+      "gapopen",
+      "qstart",
+      "qend",
+      "sstart",
+      "send",
+      "evalue",
+      "bitscore",
+      "qlen",
+      "slen"
+    ],
+    "version": "bvbrc_homology_bundle_parameters_v1"
+  },
+  "provenance": "SYNTHETIC corrected C4 blastx fixture; no live service or authenticated custody claim",
+  "requested_form": {
+    "additionalProperties": false,
+    "properties": {
+      "hits": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "x-homology-fact": {
+          "metric": "reported_hit_count",
+          "report_index": 0
+        }
+      },
+      "identity": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "x-homology-fact": {
+          "metric": "pairwise_identity",
+          "report_index": 0
+        }
+      },
+      "missing": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "definition",
+                "input_metadata",
+                "input_bytes",
+                "original_task",
+                "task_manifest",
+                "output_metadata",
+                "output_bytes",
+                "byte_version_evidence",
+                "scientific_metadata",
+                "parser_binding"
+              ]
+            },
+            "reason_code": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "requirement_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "role": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_refs": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 0,
+              "type": "array",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "requirement_id",
+            "kind",
+            "role",
+            "source_refs",
+            "reason_code"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-homology-fact": {
+          "metric": "missing_requirements"
+        }
+      },
+      "native_evalue": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "x-homology-fact": {
+          "hit_index": 0,
+          "hsp_index": 0,
+          "metric": "hsp_evalue",
+          "report_index": 0
+        }
+      },
+      "pairs": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "x-homology-fact": {
+          "metric": "pairwise_distinct_pairs",
+          "report_index": 0
+        }
+      },
+      "query_coverage": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "x-homology-fact": {
+          "metric": "pairwise_query_coverage",
+          "report_index": 0
+        }
+      },
+      "query_length": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "x-homology-fact": {
+          "metric": "query_length",
+          "report_index": 0
+        }
+      },
+      "reference_coverage": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "x-homology-fact": {
+          "metric": "pairwise_reference_coverage",
+          "report_index": 0
+        }
+      },
+      "reference_length": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "x-homology-fact": {
+          "hit_index": 0,
+          "metric": "reference_length",
+          "report_index": 0
+        }
+      }
+    },
+    "required": [
+      "hits",
+      "query_length",
+      "reference_length",
+      "pairs",
+      "query_coverage",
+      "reference_coverage",
+      "identity",
+      "native_evalue",
+      "missing"
+    ],
+    "type": "object"
+  },
+  "source_fixture": "tests/test_bvbrc_homology_bundle_adapter.py::c4_fixture(program_document('blastx'), mode='pairwise_correspondence', extras=False)",
+  "supplied_values": [
+    {
+      "evidence": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "SYNTHETIC-scientific-inputs-artifact",
+          "byte_count": 2267,
+          "sha256": "91098f8c2f48c335258d653be3fbd56c31746be469cebc1fb44c26f4fdbdf2e0",
+          "source_ref": "SYNTHETIC-scientific-inputs"
+        },
+        "pointer": ""
+      },
+      "value": {
+        "database_binding": {
+          "actual_database_members": [
+            {
+              "identifier": "SYNTHETIC-member-reference",
+              "length": 5,
+              "molecule": "aa",
+              "sequence_sha256": "3c0ca5465a4201dc12f1352fdcc45ee1167f1490e284fd76192bd1bc508a13cd"
+            }
+          ],
+          "actual_taxon_filter": null,
+          "effective_native_database": "SYNTHETIC_DATABASE_PATH",
+          "effective_parameters_source": null,
+          "input_or_database_sequence_inventory_ref": "SYNTHETIC-original-reference",
+          "reference_release": null,
+          "reference_release_source": null,
+          "requested_selection": {
+            "db_fasta_data": ">SYNTHETIC-subject\nMKTAA\n",
+            "db_source": "fasta_data",
+            "db_type": "faa"
+          }
+        },
+        "metadata": {
+          "bindings": [],
+          "database_profile": null,
+          "description_links": [],
+          "records": [],
+          "schema": "bvbrc_homology_metadata_bindings_v1",
+          "sequence_identity_bindings": [],
+          "target_context_by_query": []
+        },
+        "queries": [
+          {
+            "binding": {
+              "id_mapping_evidence": [
+                {
+                  "pointer": "/queries/0",
+                  "relation": "exact_submitted_member_to_native_query",
+                  "source_ref": "SYNTHETIC-stage-map"
+                }
+              ],
+              "input_source_ref": "SYNTHETIC-input",
+              "member_ref": "SYNTHETIC-member-0",
+              "molecule": "nt",
+              "native_query": {
+                "query_id": "Query_1",
+                "query_len": 15,
+                "query_title": "SYNTHETIC-query",
+                "report_index": 0
+              },
+              "sequence_transform": {
+                "coordinate_map_ref": null,
+                "kind": "identity",
+                "pointer": "/members/0",
+                "source_ref": "SYNTHETIC-input"
+              },
+              "staged_id": "SYNTHETIC-query",
+              "staged_length": 15,
+              "staged_sequence_sha256": "3c241acca9814b288c127ad139a05ce7684775be7118d64576493f02bf78875d",
+              "subject_ref": "SYNTHETIC-subject-0",
+              "supplied_id": "SYNTHETIC-query",
+              "supplied_length": 15,
+              "supplied_sequence_sha256": "3c241acca9814b288c127ad139a05ce7684775be7118d64576493f02bf78875d"
+            },
+            "input_binding_id": "query-input",
+            "input_member_id": "SYNTHETIC-member-0",
+            "representation": "raw"
+          }
+        ],
+        "subject_binding": {
+          "database_membership": {
+            "member_count": 1,
+            "pointer": "/members",
+            "source_ref": "SYNTHETIC-original-reference"
+          },
+          "length": 5,
+          "member_ref": "SYNTHETIC-member-reference",
+          "molecule": "aa",
+          "native_hit_links": [
+            {
+              "description_index": 0,
+              "hit_index": 0,
+              "report_index": 0
+            }
+          ],
+          "sequence_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "source_ref": "SYNTHETIC-original-reference",
+          "subject_ref": "SYNTHETIC-reference-subject"
+        },
+        "version": "bvbrc_homology_scientific_inputs_v1"
+      }
+    },
+    {
+      "evidence": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "SYNTHETIC-original-reference-artifact",
+          "byte_count": 324,
+          "sha256": "0ad3c6425c6dface1366e5d63d95a155c17732790be362981f4713efa3df4bef",
+          "source_ref": "SYNTHETIC-original-reference"
+        },
+        "pointer": ""
+      },
+      "value": {
+        "fasta": ">SYNTHETIC-subject\nMKTAA\n",
+        "members": [
+          {
+            "length": 5,
+            "member_id": "SYNTHETIC-member-reference",
+            "molecule": "protein",
+            "sequence": "MKTAA",
+            "sequence_sha256": "3c0ca5465a4201dc12f1352fdcc45ee1167f1490e284fd76192bd1bc508a13cd",
+            "subject_ref": "SYNTHETIC-reference-subject",
+            "supplied_id": "SYNTHETIC-subject"
+          }
+        ]
+      }
+    }
+  ]
+}

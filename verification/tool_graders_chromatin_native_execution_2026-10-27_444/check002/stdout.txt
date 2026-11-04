@@ -1,0 +1,33 @@
+F
+=================================== FAILURES ===================================
+______________ test_real440_native_producer_and_c1_c2_worker[raw] ______________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check002/pytest/test_real440_native_producer_a0')
+software = {'python_executable': '/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/bin/python', 'python_sha...nnotation_episode/verification/tool_graders_chromatin_native_execution_2026-10-27_444/check002/selected_software', ...}
+case = 'raw'
+
+    @pytest.mark.parametrize("case", ["raw", "weighted", "insulation"])
+    def test_real440_native_producer_and_c1_c2_worker(tmp_path, software, case):
+        plan = make_plan(tmp_path, software, case=case)
+        bundle = complete(plan)
+        assert bundle["extraction"]["populations"][0]["extent"] == "complete"
+        assert all(r["specification"]["relative_path"].startswith("selected-output/") for r in bundle["outputs"])
+        worker_plan = capture_plan(tmp_path, plan, deepcopy(WORKED[case + ".selector"]))
+        result = run_chromatin_result_worker(worker_plan)
+        assert result["state"] == "produced", result
+        components = _read_control(Path(worker_plan["directory"]) / "components.json")
+        (ATTEMPT / (case + "-components.json")).write_text(json.dumps(components, indent=2) + "\n")
+        projection = _read_control(Path(worker_plan["directory"]) / "projection.json")
+        expected = WORKED[case + ".projection"]
+>       assert projection["rows"] == expected["rows"]
+E       AssertionError: assert [{'enhancer_b....e0.p2', ...}] == [{'pair_key':...y': 'Q', ...}]
+E         
+E         At index 0 diff: {'enhancer_bin_id': 0, 'enhancer_element_key': 'E', 'fields': {'above_fold_threshold': {'population_key': 'p0', 'reason': None, 'state': 'derived', 'value': False}, 'expected_contact': {'denominator': 2, 'numerator': 8, 'population_key': 'p0', 'reason': None, 'state': 'derived', 'uncertainty': {'kind': 'not_measured', 'unit': None, 'value': None}, 'unit': {'kind': 'source_contact', 'source_unit': 'contacts'}, 'value': 4.0}, 'fold_enrichment': {'denominator': 4.0, 'numerator': 6, 'population_key': 'p0', 'reason': None, 'state': 'derived', 'uncertainty': ...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+source_snapshot/tests/test_chromatin_native_execution_c3.py:176: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_chromatin_native_execution_c3.py::test_real440_native_producer_and_c1_c2_worker[raw]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 19.49s

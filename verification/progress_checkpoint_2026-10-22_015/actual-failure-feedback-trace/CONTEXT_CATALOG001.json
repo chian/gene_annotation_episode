@@ -1,0 +1,494 @@
+[
+  {
+    "call_index": 0,
+    "catalog": [
+      {
+        "description": "Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ]
+            },
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.read"
+      },
+      {
+        "configuration": {
+          "adapter_version": "xlsx_selected_cells_v1",
+          "execution": "isolated_store_free_worker",
+          "job_limits": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "timing_statistics": {
+            "history_path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite",
+            "phases": [
+              "pairwise_sequence_alignment",
+              "spreadsheet_selection"
+            ],
+            "recovery_directory": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/native-execution-receipts",
+            "resource_id": "local-development",
+            "version": "ordinary_native_statistics_binding_v2"
+          }
+        },
+        "description": "Read the actual sheet names, relationship keys and package parts of a retained XLSX source. No sheet or biological interpretation is selected for you.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.xlsx.sheets"
+      }
+    ],
+    "preserved_fields_exact": {
+      "feedback": true,
+      "last_local_outcome": true,
+      "tool_knowledge": true,
+      "tools": true,
+      "working_state": true
+    },
+    "source_ref_paths": [],
+    "tool_knowledge_keys": [
+      "content_role",
+      "discovery_tool",
+      "entry_count",
+      "library_id",
+      "version"
+    ],
+    "working_state_keys": {
+      "annotations": 11,
+      "assessments": 13,
+      "collections": 1,
+      "contexts": 5,
+      "features": 1,
+      "hypotheses": 10,
+      "interpretation_accounts": 0,
+      "material_links": 0,
+      "materials": 2,
+      "observations": 15,
+      "pages": 15,
+      "parse_attempts": 1,
+      "problem_ref": 32,
+      "products": 1,
+      "read_library_access": 0,
+      "received_revision_status": 24,
+      "record_view": 27,
+      "references": 8,
+      "scope": 1,
+      "sources": 24,
+      "subjects": 1,
+      "supplied_context_source_refs": 1,
+      "target_binding": 16,
+      "terms": 18
+    }
+  },
+  {
+    "call_index": 1,
+    "catalog": [
+      {
+        "description": "Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ]
+            },
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.read"
+      },
+      {
+        "configuration": {
+          "adapter_version": "xlsx_selected_cells_v1",
+          "execution": "isolated_store_free_worker",
+          "job_limits": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "timing_statistics": {
+            "history_path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite",
+            "phases": [
+              "pairwise_sequence_alignment",
+              "spreadsheet_selection"
+            ],
+            "recovery_directory": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/native-execution-receipts",
+            "resource_id": "local-development",
+            "version": "ordinary_native_statistics_binding_v2"
+          }
+        },
+        "description": "Read the actual sheet names, relationship keys and package parts of a retained XLSX source. No sheet or biological interpretation is selected for you.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.xlsx.sheets"
+      }
+    ],
+    "preserved_fields_exact": {
+      "feedback": true,
+      "last_local_outcome": true,
+      "tool_knowledge": true,
+      "tools": true,
+      "working_state": true
+    },
+    "source_ref_paths": [],
+    "tool_knowledge_keys": [
+      "content_role",
+      "discovery_tool",
+      "entry_count",
+      "library_id",
+      "version"
+    ],
+    "working_state_keys": {
+      "annotations": 11,
+      "assessments": 13,
+      "collections": 1,
+      "contexts": 5,
+      "features": 1,
+      "hypotheses": 10,
+      "interpretation_accounts": 0,
+      "material_links": 0,
+      "materials": 2,
+      "observations": 15,
+      "pages": 15,
+      "parse_attempts": 1,
+      "problem_ref": 32,
+      "products": 1,
+      "read_library_access": 0,
+      "received_revision_status": 24,
+      "record_view": 27,
+      "references": 8,
+      "scope": 1,
+      "sources": 24,
+      "subjects": 1,
+      "supplied_context_source_refs": 1,
+      "target_binding": 16,
+      "terms": 18
+    }
+  },
+  {
+    "call_index": 2,
+    "catalog": [
+      {
+        "description": "Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ]
+            },
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.read"
+      },
+      {
+        "configuration": {
+          "adapter_version": "xlsx_selected_cells_v1",
+          "execution": "isolated_store_free_worker",
+          "job_limits": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "timing_statistics": {
+            "history_path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite",
+            "phases": [
+              "pairwise_sequence_alignment",
+              "spreadsheet_selection"
+            ],
+            "recovery_directory": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/native-execution-receipts",
+            "resource_id": "local-development",
+            "version": "ordinary_native_statistics_binding_v2"
+          }
+        },
+        "description": "Read the actual sheet names, relationship keys and package parts of a retained XLSX source. No sheet or biological interpretation is selected for you.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.xlsx.sheets"
+      }
+    ],
+    "preserved_fields_exact": {
+      "feedback": true,
+      "last_local_outcome": true,
+      "tool_knowledge": true,
+      "tools": true,
+      "working_state": true
+    },
+    "source_ref_paths": [],
+    "tool_knowledge_keys": [
+      "content_role",
+      "discovery_tool",
+      "entry_count",
+      "library_id",
+      "version"
+    ],
+    "working_state_keys": {
+      "annotations": 11,
+      "assessments": 13,
+      "collections": 1,
+      "contexts": 5,
+      "features": 1,
+      "hypotheses": 10,
+      "interpretation_accounts": 0,
+      "material_links": 0,
+      "materials": 2,
+      "observations": 15,
+      "pages": 15,
+      "parse_attempts": 1,
+      "problem_ref": 32,
+      "products": 1,
+      "read_library_access": 0,
+      "received_revision_status": 24,
+      "record_view": 27,
+      "references": 8,
+      "scope": 1,
+      "sources": 24,
+      "subjects": 1,
+      "supplied_context_source_refs": 1,
+      "target_binding": 16,
+      "terms": 18
+    }
+  },
+  {
+    "call_index": 3,
+    "catalog": [
+      {
+        "description": "Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ]
+            },
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.read"
+      },
+      {
+        "configuration": {
+          "adapter_version": "xlsx_selected_cells_v1",
+          "execution": "isolated_store_free_worker",
+          "job_limits": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "timing_statistics": {
+            "history_path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/statistics/run_statistics.sqlite",
+            "phases": [
+              "pairwise_sequence_alignment",
+              "spreadsheet_selection"
+            ],
+            "recovery_directory": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/native-execution-receipts",
+            "resource_id": "local-development",
+            "version": "ordinary_native_statistics_binding_v2"
+          }
+        },
+        "description": "Read the actual sheet names, relationship keys and package parts of a retained XLSX source. No sheet or biological interpretation is selected for you.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "source_ref": {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref"
+          ],
+          "type": "object"
+        },
+        "knowledge_entry_ids": [
+          "source-reading"
+        ],
+        "name": "source.xlsx.sheets"
+      }
+    ],
+    "preserved_fields_exact": {
+      "feedback": true,
+      "last_local_outcome": true,
+      "tool_knowledge": true,
+      "tools": true,
+      "working_state": true
+    },
+    "source_ref_paths": [],
+    "tool_knowledge_keys": [
+      "content_role",
+      "discovery_tool",
+      "entry_count",
+      "library_id",
+      "version"
+    ],
+    "working_state_keys": {
+      "annotations": 11,
+      "assessments": 13,
+      "collections": 1,
+      "contexts": 5,
+      "features": 1,
+      "hypotheses": 10,
+      "interpretation_accounts": 0,
+      "material_links": 0,
+      "materials": 2,
+      "observations": 15,
+      "pages": 15,
+      "parse_attempts": 1,
+      "problem_ref": 32,
+      "products": 1,
+      "read_library_access": 0,
+      "received_revision_status": 24,
+      "record_view": 27,
+      "references": 8,
+      "scope": 1,
+      "sources": 24,
+      "subjects": 1,
+      "supplied_context_source_refs": 1,
+      "target_binding": 16,
+      "terms": 18
+    }
+  }
+]

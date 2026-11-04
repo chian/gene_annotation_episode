@@ -1,0 +1,455 @@
+{
+  "schema": "hmmer_alignment_preparation_components_v1",
+  "operation": {
+    "program": "alimask",
+    "mode": "alignment_to_model",
+    "engine_version": "3.4",
+    "settings": {
+      "--amino": true,
+      "--hand": true,
+      "--ali2model": "1-6,3-4"
+    }
+  },
+  "parameters": {
+    "background": null,
+    "probability_tolerance": 0.0001,
+    "summary_rounding_tolerance": {
+      "eff_nseq": 0.005001,
+      "re_per_position": 0.0006
+    }
+  },
+  "rows": [
+    {
+      "record_key": "input:alignment:0#alignment/0",
+      "kind": "mapping",
+      "source_record_key": "input:alignment:0#alignment/0",
+      "output_record_key": null,
+      "model_record_key": null,
+      "summary_record_key": null,
+      "components": {
+        "input_sequence_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "sequence_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "rows"
+            }
+          ]
+        },
+        "input_column_count": {
+          "value": 6,
+          "state": "present",
+          "unit": "alignment_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_count"
+            }
+          ]
+        },
+        "rf_consensus_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "RF_consensus_column_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.RF"
+            }
+          ]
+        },
+        "input_alignment_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "decoded_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#population/0",
+              "field": "decoded_count"
+            }
+          ]
+        },
+        "processed_alignment_count": {
+          "value": 1,
+          "state": "present",
+          "unit": "output_validated_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "output:stdout:0#mapping/0",
+              "field": "valid"
+            },
+            {
+              "record_key": "output:stdout:0#mapping/1",
+              "field": "valid"
+            }
+          ]
+        },
+        "unprocessed_alignment_count": {
+          "value": 0,
+          "state": "present",
+          "unit": "decoded_unprocessed_alignment_record_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#population/0",
+              "field": "decoded_count"
+            },
+            {
+              "record_key": "output:stdout:0#mapping/0",
+              "field": "valid"
+            },
+            {
+              "record_key": "output:stdout:0#mapping/1",
+              "field": "valid"
+            }
+          ]
+        },
+        "requested_interval_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "request_interval_count",
+          "inputs": [
+            {
+              "field": "native_rows.requested_interval"
+            }
+          ]
+        },
+        "native_mapping_row_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "decoded_mapping_row_count",
+          "inputs": [
+            {
+              "occurrence_id": "output:stdout:0",
+              "field": "native_rows.mapping"
+            }
+          ]
+        },
+        "mapped_model_position_count": {
+          "value": 2,
+          "state": "present",
+          "unit": "model_position_count",
+          "inputs": [
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "rows"
+            },
+            {
+              "record_key": "input:alignment:0#alignment/0",
+              "field": "column_annotations.RF"
+            },
+            {
+              "field": "operation.settings"
+            }
+          ]
+        },
+        "requested_union_count": {
+          "value": null,
+          "state": "missing",
+          "unit": "alignment_column_count",
+          "inputs": []
+        }
+      },
+      "coordinates": null,
+      "model_components": null,
+      "source_symbol_counts": null,
+      "intervals": [
+        {
+          "request_record_key": "request#interval/0",
+          "request_ordinal": 0,
+          "requested_start": 1,
+          "requested_end": 6,
+          "requested_coordinate_system": "alignment",
+          "alignment_start": 1,
+          "alignment_end": 6,
+          "state": "present",
+          "inclusive_span": {
+            "value": 6,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "request#interval/0",
+                "field": "start"
+              },
+              {
+                "record_key": "request#interval/0",
+                "field": "end"
+              },
+              {
+                "record_key": "input:alignment:0#alignment/0",
+                "field": "reconstruction.map"
+              }
+            ]
+          },
+          "returned_source_span": {
+            "value": 4,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "output:stdout:0#mapping/0",
+                "field": "returned_source_start"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/0",
+                "field": "returned_source_end"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/0",
+                "field": "native_state"
+              }
+            ]
+          },
+          "returned_target_span": {
+            "value": 2,
+            "state": "present",
+            "unit": "model_position_count",
+            "inputs": [
+              {
+                "record_key": "output:stdout:0#mapping/0",
+                "field": "target_start"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/0",
+                "field": "target_end"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/0",
+                "field": "native_state"
+              }
+            ]
+          }
+        },
+        {
+          "request_record_key": "request#interval/1",
+          "request_ordinal": 1,
+          "requested_start": 3,
+          "requested_end": 4,
+          "requested_coordinate_system": "alignment",
+          "alignment_start": 3,
+          "alignment_end": 4,
+          "state": "present",
+          "inclusive_span": {
+            "value": 2,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "request#interval/1",
+                "field": "start"
+              },
+              {
+                "record_key": "request#interval/1",
+                "field": "end"
+              },
+              {
+                "record_key": "input:alignment:0#alignment/0",
+                "field": "reconstruction.map"
+              }
+            ]
+          },
+          "returned_source_span": {
+            "value": 2,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "output:stdout:0#mapping/1",
+                "field": "returned_source_start"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/1",
+                "field": "returned_source_end"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/1",
+                "field": "native_state"
+              }
+            ]
+          },
+          "returned_target_span": {
+            "value": null,
+            "state": "missing",
+            "unit": "model_position_count",
+            "inputs": [
+              {
+                "record_key": "output:stdout:0#mapping/1",
+                "field": "target_start"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/1",
+                "field": "target_end"
+              },
+              {
+                "record_key": "output:stdout:0#mapping/1",
+                "field": "native_state"
+              }
+            ]
+          }
+        }
+      ],
+      "input_mm": null,
+      "output_mm": null,
+      "reconstruction": {
+        "state": "present",
+        "map": [
+          2,
+          5
+        ],
+        "basis": "hand_RF_nongap",
+        "weights": null,
+        "marked_sequences": null,
+        "column_occupancy": null,
+        "pb_consensus_columns": null,
+        "issues": []
+      },
+      "native_mappings": [
+        {
+          "record_key": "output:stdout:0#mapping/0",
+          "kind": "mapping",
+          "occurrence_id": "output:stdout:0",
+          "locator": {
+            "artifact_ref": "retained:stdout:0",
+            "record_ordinal": 0,
+            "byte_start": 748,
+            "byte_end": 792,
+            "line_start": 13,
+            "line_end": 13
+          },
+          "raw": "          2..5        ->        1..2       \n",
+          "tokens": [
+            "2..5",
+            "->",
+            "1..2"
+          ],
+          "valid": true,
+          "request_ordinal": 0,
+          "requested_start": 1,
+          "requested_end": 6,
+          "returned_source_start": 2,
+          "returned_source_end": 5,
+          "target_start": 1,
+          "target_end": 2,
+          "source_coordinate_system": "alignment",
+          "target_coordinate_system": "model",
+          "native_state": "mapped"
+        },
+        {
+          "record_key": "output:stdout:0#mapping/1",
+          "kind": "mapping",
+          "occurrence_id": "output:stdout:0",
+          "locator": {
+            "artifact_ref": "retained:stdout:0",
+            "record_ordinal": 1,
+            "byte_start": 792,
+            "byte_end": 838,
+            "line_start": 14,
+            "line_end": 14
+          },
+          "raw": "          3..4        ->       -..-  (no map)\n",
+          "tokens": [
+            "3..4",
+            "->",
+            "-..-",
+            "(no",
+            "map)"
+          ],
+          "valid": true,
+          "request_ordinal": 1,
+          "requested_start": 3,
+          "requested_end": 4,
+          "returned_source_start": 3,
+          "returned_source_end": 4,
+          "target_start": null,
+          "target_end": null,
+          "source_coordinate_system": "alignment",
+          "target_coordinate_system": "model",
+          "native_state": "no_map"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "code": "parameter_valid",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "input:alignment:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stdout:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "artifact_binding",
+      "state": "pass",
+      "record_key": null,
+      "inputs": [
+        {
+          "occurrence_id": "output:stderr:0"
+        }
+      ],
+      "details": {}
+    },
+    {
+      "code": "source_geometry",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "input_population_processed",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "range_capacity",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {
+        "capacity": 100,
+        "actual": 2
+      }
+    },
+    {
+      "code": "requested_ranges",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    },
+    {
+      "code": "native_mapping",
+      "state": "pass",
+      "record_key": "input:alignment:0#alignment/0",
+      "inputs": [],
+      "details": {}
+    }
+  ],
+  "issues": []
+}

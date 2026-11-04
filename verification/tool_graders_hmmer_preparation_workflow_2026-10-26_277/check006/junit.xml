@@ -1,0 +1,1004 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="19" skipped="0" tests="32" time="884.943" timestamp="2026-10-26T05:25:15.024282-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[alimask-mask_alignment]" time="19.223" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[alimask-mask_model]" time="18.136" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[alimask-model_to_alignment]" time="23.753" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[alimask-alignment_to_model]" time="31.101" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmbuild-build_alignment]" time="33.545" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmbuild-build_single_sequence_matrix]" time="33.757" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmconvert-ascii]" time="36.781"><failure message="AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}&#10;  &#10;  Omitting 5 identical items, use -vv to show&#10;  Differing items:&#10;  {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_dca78e...ccurrence_id': 'artifact_dca78e648f1c5e9e218caa929e344b95aede59ac382f00bb034be63f17bacdc4#/artifacts/2'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_dca78e648f1c5e9e218caa929...#/artifacts/2'}], 'state': 'present', 'unit': 'decoded_model_count', 'value': 1}, 'format': 'hmmer3_ascii', ...}, ...]}&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_6')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b4f58eae0&gt;
+program = 'hmmconvert', mode = 'ascii'
+
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+        assert len(CASES) == len(set(CASES)) == 26
+        case = run_case(tmp_path, program, mode)
+        try:
+            parent, received = assert_accounting(case)
+            body, bundle, sheet, calculations = read_retained(case)
+            assert body['complete'] and case.returned[0]['completed'], body['failures']
+            assert_native_custody(case, bundle)
+            assert_projected_values(case.returned[0], case.contexts[0].assignment['selector'], calculations)
+            assert_mode_numbers(case.job, bundle, sheet, calculations)
+            assert case.returned[0]['population'] == [body['population']]
+            assert body['population']['total_records'] == len(calculations['rows'])
+            assert body['population']['requested_artifact_count'] == len(case.job['outputs'])
+            # Selected measurements/checks also deliver their actual input operands.
+            # Custody-only bundle, sheet and calculation artifacts stay withheld.
+            expected = {('output', row['role'], 0) for row in case.job['outputs']} | {
+                ('input', row['role'], row['ordinal']) for row in case.job['operands']}
+            assert {(r['direction'], r['role'], r['ordinal']) for r in case.returned[0]['artifacts']} == expected
+            assert body['population']['returned_artifact_count'] == len(expected)
+            assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+            assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+            assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+            assert tuple(case.record.controller_state.history) == (0, 0)
+            proof = case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+            assert proof and case.owner.verify_completion(case.contexts[0], proof)
+            for key in ('run_id', 'episode_id', 'operation_key', 'assignment_sha256', 'receipt_sha256'):
+                invalid = deepcopy(proof)
+                invalid[key] = ('0' * 64 if key.endswith('sha256') else 'different-original-identity')
+                assert not case.owner.verify_completion(case.contexts[0], invalid)
+            expected = {PREFIX + name: case.returned[0][name] for name in ('rows', 'artifacts', 'population')}
+            assert case.owner.native_hmmer_preparation_returns.received_facts(parent, case.forms[0]) == expected
+            known = set(case.flow.receipts.known(parent.episode_id))
+            for name in ('sheet_artifact_ref', 'calculations_artifact_ref'):
+&gt;               withheld = body['prepared'][name]
+E               AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}
+E                 
+E                 Omitting 5 identical items, use -vv to show
+E                 Differing items:
+E                 {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_dca78e...ccurrence_id': 'artifact_dca78e648f1c5e9e218caa929e344b95aede59ac382f00bb034be63f17bacdc4#/artifacts/2'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_dca78e648f1c5e9e218caa929...#/artifacts/2'}], 'state': 'present', 'unit': 'decoded_model_count', 'value': 1}, 'format': 'hmmer3_ascii', ...}, ...]}
+E                 Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:614: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmconvert-binary]" time="35.462"><failure message="AssertionError: assert not [{'association_id': 'conversion/0', 'cell_differences': [], 'changed_optional_field_count': {'inputs': [{'field': 'mod...8ef5dec18a04838#/inputs/0#model/0'}], 'state': 'missing', 'unit': 'compared_probability_cell_count', 'value': 0}, ...}]">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_7')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b4fe56300&gt;
+program = 'hmmconvert', mode = 'binary'
+
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+&gt;       assert len(CASES) == len(set(CASES)) == 26
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_workflow.py:582: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+job = {'version': 'native_hmmer_preparation_job_v1', 'program': 'hmmconvert', 'mode': 'binary', 'software': {'executable': '...mconvert', 'sha256': '906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd', 'engine_version': '3.4'}, ...}
+bundle = {'artifacts': [{'format': 'hmmer_binary', 'relative_path': 'outputs/converted_models', 'role': 'stdout', 'sha256': '4d...c7075246001c/hmmer-preparation-attempt/cache'}, 'failures': [], 'finished_at': '2026-10-26T10:28:40.405134+00:00', ...}
+sheet = {'artifact_bindings': [], 'artifact_occurrences': [{'artifact_ref': 'artifact_f744b16d69df05ddf8239af3bc4a68d36a6e2764... 'state': 'finite', 'token': '2.48491'}, ...], 'line': 21, 'symbols': ['A', 'C', 'D', 'E', 'F', 'G', ...]}, ...}], ...}
+calculations = {'checks': [{'code': 'parameters_valid', 'field': None, 'inputs': [{'parameter': 'probability_tolerance'}, {'parameter...ram': 'hmmconvert', 'settings': {'--outfmt': '3/f', '-b': True}}, 'parameters': {'probability_tolerance': 0.0001}, ...}
+
+                    value = value.get(name) if isinstance(value, dict) else None
+                if value is None:
+                    assert quantity['value'] is None and quantity['state'] == 'missing'
+                else:
+                    assert {key: quantity[key] for key in ('value', 'state', 'unit')} == {
+                        key: value[key] for key in ('value', 'state', 'unit')}
+    
+    
+    def assert_mode_numbers(job, bundle, sheet, calculations):
+        """Independent arithmetic and retained native facts, never expected=calculator."""
+        program, mode = job['program'], job['mode']
+        rows = calculations['rows']
+        if program == 'hmmemit':
+            generated = [r for r in rows if r['kind'] == 'generated_record']
+            lengths = [len(r['sequence'].replace('-', '').replace('.', '')) for r in generated]
+            expected = [15, 72, 39] if mode == 'sample_profile' else [12] * (3 if mode.startswith('sample_') else 1)
+            assert lengths == expected
+            for row, length in zip(generated, lengths):
+                assert row['basis'] == ('model_derived' if mode.startswith('consensus') else 'generated')
+                present(row['length'], length, unit='residue_count')
+            model = kind_row(calculations, 'model')
+            present(model['input_model_length'], 12)
+            present(model['captured_sample_count'], len(expected))
+            present(model['total_length'], sum(expected))
+            present(model['mean_length'], sum(expected) / len(expected))
+            if mode.startswith('consensus'):
+                assert generated[0]['sequence'] == ('ACDEFGHIKLMN' if mode == 'consensus_simple' else 'ACDExGHIKLMN')
+                consensus = kind_row(calculations, 'consensus')
+                present(consensus['mismatch_count'], 0)
+                present(generated[0]['ambiguous_residue_count'], int(mode == 'consensus_thresholded'))
+            elif mode == 'sample_core_aligned':
+                alignment = kind_row(calculations, 'alignment')
+                present(alignment['alignment_width'], 12)
+                present(alignment['captured_row_count'], 3)
+        elif program == 'hmmbuild':
+            row = kind_row(calculations, 'build')
+            c = row['components']
+            n, columns = (1, 12) if mode == 'build_single_sequence_matrix' else (3, 14)
+            present(c['input_sequence_count'], n)
+            present(c['input_column_count'], columns)
+            present(c['model_length'], 12)
+            present(c['model_alignment_fraction'], 12 / columns)
+            present(c['effective_input_sequence_ratio'], 1)
+            output, = [r for r in bundle['artifacts'] if r['role'] == 'resaved_alignment']
+            if mode == 'build_single_sequence_matrix':
+                assert output['size_bytes'] == 0
+                assert c['resaved_column_count']['value'] is None
+            else:
+                present(c['resaved_sequence_count'], 3)
+                present(c['resaved_column_count'], 12)
+        elif program == 'alimask':
+            row, = rows
+            c = row['components']
+            present(c['input_sequence_count'], 3)
+            present(c['input_column_count'], 14)
+            present(c['rf_consensus_count'], 12)
+            if mode.startswith('mask_'):
+                count = 5 if mode == 'mask_alignment' else 3
+                present(c['actual_masked_count'], count)
+                present(c['requested_union_count'], count)
+                present(c['masked_fraction'], count / 14)
+                assert sum(char == 'm' for char in row['output_mm']) == count
+            else:
+                present(c['native_mapping_row_count'], 1)
+                present(c['mapped_model_position_count'], 12)
+                assert c['requested_union_count']['value'] is None
+                assert row['native_mappings']
+        elif program in {'hmmconvert', 'hmmfetch', 'hmmpress'}:
+            inputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'input']
+            outputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'output']
+            present(inputs['decoded_model_count'], 1)
+            if program == 'hmmconvert':
+                aliases = [r for r in bundle['artifacts'] if r['role'] in {'stdout', 'converted_models'}]
+                assert len(aliases) == 2 and aliases[0]['sha256'] == aliases[1]['sha256']
+                if mode == 'ascii':
+                    present(outputs['decoded_model_count'], 1)
+&gt;                   compare = kind_row(calculations, 'model_comparison')
+E                   AssertionError: assert not [{'association_id': 'conversion/0', 'cell_differences': [], 'changed_optional_field_count': {'inputs': [{'field': 'mod...8ef5dec18a04838#/inputs/0#model/0'}], 'state': 'missing', 'unit': 'compared_probability_cell_count', 'value': 0}, ...}]
+
+../../../tests/test_native_hmmer_preparation_workflow.py:460: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmconvert-legacy_hmmer2]" time="35.368"><failure message="AssertionError: assert not [{'association_id': 'conversion/0', 'cell_differences': [], 'changed_optional_field_count': {'inputs': [{'field': 'mod...ea9498617aeef86#/inputs/0#model/0'}], 'state': 'missing', 'unit': 'compared_probability_cell_count', 'value': 0}, ...}]">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_8')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b50f35b50&gt;
+program = 'hmmconvert', mode = 'legacy_hmmer2'
+
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+&gt;       assert len(CASES) == len(set(CASES)) == 26
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_workflow.py:582: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+job = {'version': 'native_hmmer_preparation_job_v1', 'program': 'hmmconvert', 'mode': 'legacy_hmmer2', 'software': {'executa...mconvert', 'sha256': '906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd', 'engine_version': '3.4'}, ...}
+bundle = {'artifacts': [{'format': 'hmmer2_ascii', 'relative_path': 'outputs/converted_models', 'role': 'stdout', 'sha256': '37...c7075246001c/hmmer-preparation-attempt/cache'}, 'failures': [], 'finished_at': '2026-10-26T10:29:17.052277+00:00', ...}
+sheet = {'artifact_bindings': [], 'artifact_occurrences': [{'artifact_ref': 'artifact_f744b16d69df05ddf8239af3bc4a68d36a6e2764... 'state': 'finite', 'token': '2.48491'}, ...], 'line': 21, 'symbols': ['A', 'C', 'D', 'E', 'F', 'G', ...]}, ...}], ...}
+calculations = {'checks': [{'code': 'parameters_valid', 'field': None, 'inputs': [{'parameter': 'probability_tolerance'}, {'parameter...gacy_hmmer2', 'program': 'hmmconvert', 'settings': {'-2': True}}, 'parameters': {'probability_tolerance': 0.0001}, ...}
+
+                    value = value.get(name) if isinstance(value, dict) else None
+                if value is None:
+                    assert quantity['value'] is None and quantity['state'] == 'missing'
+                else:
+                    assert {key: quantity[key] for key in ('value', 'state', 'unit')} == {
+                        key: value[key] for key in ('value', 'state', 'unit')}
+    
+    
+    def assert_mode_numbers(job, bundle, sheet, calculations):
+        """Independent arithmetic and retained native facts, never expected=calculator."""
+        program, mode = job['program'], job['mode']
+        rows = calculations['rows']
+        if program == 'hmmemit':
+            generated = [r for r in rows if r['kind'] == 'generated_record']
+            lengths = [len(r['sequence'].replace('-', '').replace('.', '')) for r in generated]
+            expected = [15, 72, 39] if mode == 'sample_profile' else [12] * (3 if mode.startswith('sample_') else 1)
+            assert lengths == expected
+            for row, length in zip(generated, lengths):
+                assert row['basis'] == ('model_derived' if mode.startswith('consensus') else 'generated')
+                present(row['length'], length, unit='residue_count')
+            model = kind_row(calculations, 'model')
+            present(model['input_model_length'], 12)
+            present(model['captured_sample_count'], len(expected))
+            present(model['total_length'], sum(expected))
+            present(model['mean_length'], sum(expected) / len(expected))
+            if mode.startswith('consensus'):
+                assert generated[0]['sequence'] == ('ACDEFGHIKLMN' if mode == 'consensus_simple' else 'ACDExGHIKLMN')
+                consensus = kind_row(calculations, 'consensus')
+                present(consensus['mismatch_count'], 0)
+                present(generated[0]['ambiguous_residue_count'], int(mode == 'consensus_thresholded'))
+            elif mode == 'sample_core_aligned':
+                alignment = kind_row(calculations, 'alignment')
+                present(alignment['alignment_width'], 12)
+                present(alignment['captured_row_count'], 3)
+        elif program == 'hmmbuild':
+            row = kind_row(calculations, 'build')
+            c = row['components']
+            n, columns = (1, 12) if mode == 'build_single_sequence_matrix' else (3, 14)
+            present(c['input_sequence_count'], n)
+            present(c['input_column_count'], columns)
+            present(c['model_length'], 12)
+            present(c['model_alignment_fraction'], 12 / columns)
+            present(c['effective_input_sequence_ratio'], 1)
+            output, = [r for r in bundle['artifacts'] if r['role'] == 'resaved_alignment']
+            if mode == 'build_single_sequence_matrix':
+                assert output['size_bytes'] == 0
+                assert c['resaved_column_count']['value'] is None
+            else:
+                present(c['resaved_sequence_count'], 3)
+                present(c['resaved_column_count'], 12)
+        elif program == 'alimask':
+            row, = rows
+            c = row['components']
+            present(c['input_sequence_count'], 3)
+            present(c['input_column_count'], 14)
+            present(c['rf_consensus_count'], 12)
+            if mode.startswith('mask_'):
+                count = 5 if mode == 'mask_alignment' else 3
+                present(c['actual_masked_count'], count)
+                present(c['requested_union_count'], count)
+                present(c['masked_fraction'], count / 14)
+                assert sum(char == 'm' for char in row['output_mm']) == count
+            else:
+                present(c['native_mapping_row_count'], 1)
+                present(c['mapped_model_position_count'], 12)
+                assert c['requested_union_count']['value'] is None
+                assert row['native_mappings']
+        elif program in {'hmmconvert', 'hmmfetch', 'hmmpress'}:
+            inputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'input']
+            outputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'output']
+            present(inputs['decoded_model_count'], 1)
+            if program == 'hmmconvert':
+                aliases = [r for r in bundle['artifacts'] if r['role'] in {'stdout', 'converted_models'}]
+                assert len(aliases) == 2 and aliases[0]['sha256'] == aliases[1]['sha256']
+                if mode == 'ascii':
+                    present(outputs['decoded_model_count'], 1)
+&gt;                   compare = kind_row(calculations, 'model_comparison')
+E                   AssertionError: assert not [{'association_id': 'conversion/0', 'cell_differences': [], 'changed_optional_field_count': {'inputs': [{'field': 'mod...ea9498617aeef86#/inputs/0#model/0'}], 'state': 'missing', 'unit': 'compared_probability_cell_count', 'value': 0}, ...}]
+
+../../../tests/test_native_hmmer_preparation_workflow.py:460: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmemit-sample_core_unaligned]" time="36.959"><failure message="KeyError: 'artifact_259c5111e15ad8b42ce04291a84db804a50e26d3dca38d7aff56626e32d8fa0c#/inputs/0#model/0#model'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_9')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b5079eae0&gt;
+program = 'hmmemit', mode = 'sample_core_unaligned'
+
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+&gt;   def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_workflow.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'complete... 'outcome': 'pass'}, {'name': 'consensus_agreement', 'occurrences': [], 'outcome': 'unknown'}], 'kind': 'model', ...}]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ngth'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'code': 'sample_population_count', 'inputs': [{'field': 'associations.model_population.record_keys', 'rec...: {'--seed': 42, '-N': 3}}, 'parameters': {'consensus_thresholds': None, 'probability_rounding_tolerance': 1e-05}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {}
+        for row in calculations['rows']:
+            key = row.get('record_key', row.get('row_key'))
+            if key is None and 'model_record_key' in row:
+                key = row['model_record_key'] + '#' + row['kind']
+&gt;           if key is None and row['kind'] in {'database_summary', 'exactmatch_summary'}:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'artifact_259c5111e15ad8b42ce04291a84db804a50e26d3dca38d7aff56626e32d8fa0c#/inputs/0#model/0#model'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmemit-sample_core_aligned]" time="37.849"><failure message="KeyError: 'artifact_a22e828bf7971036315178b77af883d8d753aaeeb2419c64ac893695fc4fb4ec#/inputs/0#model/0#model'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_10')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b4fe55b20&gt;
+program = 'hmmemit', mode = 'sample_core_aligned'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+&gt;       monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'complete...me': 'unknown'}, {'name': 'consensus_agreement', 'occurrences': [], 'outcome': 'unknown'}], 'kind': 'alignment', ...}]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ount'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'code': 'sample_population_count', 'inputs': [{'field': 'associations.model_population.record_keys', 'rec... 42, '-N': 3, '-a': True}}, 'parameters': {'consensus_thresholds': None, 'probability_rounding_tolerance': 1e-05}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {}
+        for row in calculations['rows']:
+            key = row.get('record_key', row.get('row_key'))
+            if key is None and 'model_record_key' in row:
+                key = row['model_record_key'] + '#' + row['kind']
+&gt;           if key is None and row['kind'] in {'database_summary', 'exactmatch_summary'}:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'artifact_a22e828bf7971036315178b77af883d8d753aaeeb2419c64ac893695fc4fb4ec#/inputs/0#model/0#model'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmemit-consensus_simple]" time="37.919"><failure message="KeyError: 'artifact_4d3dc360576f743eed61a83dbe5fc81f3fa227100b6102edccf4d9d9b742d3bf#/inputs/0#model/0#model'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_11')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b509ac950&gt;
+program = 'hmmemit', mode = 'consensus_simple'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+&gt;       monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'complete...': 'unknown'}, {'name': 'consensus_agreement', 'occurrences': [{...}], 'outcome': 'pass'}], 'kind': 'consensus', ...}]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ount'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'code': 'sample_population_count', 'inputs': [{'field': 'associations.model_population.record_keys', 'rec...'--seed': 42, '-c': True}}, 'parameters': {'consensus_thresholds': None, 'probability_rounding_tolerance': 1e-05}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {}
+        for row in calculations['rows']:
+            key = row.get('record_key', row.get('row_key'))
+            if key is None and 'model_record_key' in row:
+                key = row['model_record_key'] + '#' + row['kind']
+&gt;           if key is None and row['kind'] in {'database_summary', 'exactmatch_summary'}:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'artifact_4d3dc360576f743eed61a83dbe5fc81f3fa227100b6102edccf4d9d9b742d3bf#/inputs/0#model/0#model'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmemit-consensus_thresholded]" time="24.382"><failure message="KeyError: 'artifact_85c92a7a3f853d6351fb423db249cc4a9f2abf54ed54b74a9510c1adf230ae90#/inputs/0#model/0#model'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_12')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b507c4980&gt;
+program = 'hmmemit', mode = 'consensus_thresholded'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+&gt;       monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'complete...': 'unknown'}, {'name': 'consensus_agreement', 'occurrences': [{...}], 'outcome': 'pass'}], 'kind': 'consensus', ...}]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ount'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'code': 'sample_population_count', 'inputs': [{'field': 'associations.model_population.record_keys', 'rec...ue}}, 'parameters': {'consensus_thresholds': {'minl': 0.8, 'minu': 0.9}, 'probability_rounding_tolerance': 1e-05}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {}
+        for row in calculations['rows']:
+            key = row.get('record_key', row.get('row_key'))
+            if key is None and 'model_record_key' in row:
+                key = row['model_record_key'] + '#' + row['kind']
+&gt;           if key is None and row['kind'] in {'database_summary', 'exactmatch_summary'}:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'artifact_85c92a7a3f853d6351fb423db249cc4a9f2abf54ed54b74a9510c1adf230ae90#/inputs/0#model/0#model'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmemit-sample_profile]" time="26.423"><failure message="KeyError: 'artifact_a433e84415243385c232efd5417bab4fb312306a2cea896a4136ee8864d2c764#/inputs/0#model/0#model'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_13')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b4fe7ad50&gt;
+program = 'hmmemit', mode = 'sample_profile'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+&gt;       monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'complete... 'outcome': 'pass'}, {'name': 'consensus_agreement', 'occurrences': [], 'outcome': 'unknown'}], 'kind': 'model', ...}]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ngth'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'code': 'sample_population_count', 'inputs': [{'field': 'associations.model_population.record_keys', 'rec..., '-L': 20, '-N': 3, ...}}, 'parameters': {'consensus_thresholds': None, 'probability_rounding_tolerance': 1e-05}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {}
+        for row in calculations['rows']:
+            key = row.get('record_key', row.get('row_key'))
+            if key is None and 'model_record_key' in row:
+                key = row['model_record_key'] + '#' + row['kind']
+&gt;           if key is None and row['kind'] in {'database_summary', 'exactmatch_summary'}:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'artifact_a433e84415243385c232efd5417bab4fb312306a2cea896a4136ee8864d2c764#/inputs/0#model/0#model'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmfetch-single_key]" time="26.810"><failure message="AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}&#10;  &#10;  Omitting 5 identical items, use -vv to show&#10;  Differing items:&#10;  {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_0ff2e4...ccurrence_id': 'artifact_0ff2e4bdaead10815a1e8a04c06a539380a1e7e699e69d4aec18c90953499231#/artifacts/2'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_0ff2e4bdaead10815a1e8a04c...#/artifacts/2'}], 'state': 'present', 'unit': 'decoded_model_count', 'value': 1}, 'format': 'hmmer3_ascii', ...}, ...]}&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_14')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b73735910&gt;
+program = 'hmmfetch', mode = 'single_key'
+
+        for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+                (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+            monkeypatch.setattr(target, name, forbidden)
+        for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+                worker.simulation_data, worker.statistics_data, worker.fm_data):
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+        assert len(CASES) == len(set(CASES)) == 26
+        case = run_case(tmp_path, program, mode)
+        try:
+            parent, received = assert_accounting(case)
+            body, bundle, sheet, calculations = read_retained(case)
+            assert body['complete'] and case.returned[0]['completed'], body['failures']
+            assert_native_custody(case, bundle)
+            assert_projected_values(case.returned[0], case.contexts[0].assignment['selector'], calculations)
+            assert_mode_numbers(case.job, bundle, sheet, calculations)
+            assert case.returned[0]['population'] == [body['population']]
+            assert body['population']['total_records'] == len(calculations['rows'])
+            assert body['population']['requested_artifact_count'] == len(case.job['outputs'])
+            # Selected measurements/checks also deliver their actual input operands.
+            # Custody-only bundle, sheet and calculation artifacts stay withheld.
+            expected = {('output', row['role'], 0) for row in case.job['outputs']} | {
+                ('input', row['role'], row['ordinal']) for row in case.job['operands']}
+            assert {(r['direction'], r['role'], r['ordinal']) for r in case.returned[0]['artifacts']} == expected
+            assert body['population']['returned_artifact_count'] == len(expected)
+            assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+            assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+            assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+            assert tuple(case.record.controller_state.history) == (0, 0)
+            proof = case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+            assert proof and case.owner.verify_completion(case.contexts[0], proof)
+            for key in ('run_id', 'episode_id', 'operation_key', 'assignment_sha256', 'receipt_sha256'):
+                invalid = deepcopy(proof)
+                invalid[key] = ('0' * 64 if key.endswith('sha256') else 'different-original-identity')
+&gt;               assert not case.owner.verify_completion(case.contexts[0], invalid)
+E               AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}
+E                 
+E                 Omitting 5 identical items, use -vv to show
+E                 Differing items:
+E                 {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_0ff2e4...ccurrence_id': 'artifact_0ff2e4bdaead10815a1e8a04c06a539380a1e7e699e69d4aec18c90953499231#/artifacts/2'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_0ff2e4bdaead10815a1e8a04c...#/artifacts/2'}], 'state': 'present', 'unit': 'decoded_model_count', 'value': 1}, 'format': 'hmmer3_ascii', ...}, ...]}
+E                 Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:614: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmfetch-key_file]" time="25.288"><failure message="AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}&#10;  &#10;  Omitting 5 identical items, use -vv to show&#10;  Differing items:&#10;  {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_97f7a1...ccurrence_id': 'artifact_97f7a1e009c2a6f8366c479f9d1a9a5d6b52d7de80ed050c5cb21ffc0f1fbd60#/artifacts/1'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_97f7a1e009c2a6f8366c479f9...f1fbd60#/artifacts/1'}], 'state': 'missing', 'unit': 'decoded_model_count', 'value': None}, 'format': None, ...}, ...]}&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_15')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b50849e20&gt;
+program = 'hmmfetch', mode = 'key_file'
+
+        for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+                (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+            monkeypatch.setattr(target, name, forbidden)
+        for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+                worker.simulation_data, worker.statistics_data, worker.fm_data):
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+        assert len(CASES) == len(set(CASES)) == 26
+        case = run_case(tmp_path, program, mode)
+        try:
+            parent, received = assert_accounting(case)
+            body, bundle, sheet, calculations = read_retained(case)
+            assert body['complete'] and case.returned[0]['completed'], body['failures']
+            assert_native_custody(case, bundle)
+            assert_projected_values(case.returned[0], case.contexts[0].assignment['selector'], calculations)
+            assert_mode_numbers(case.job, bundle, sheet, calculations)
+            assert case.returned[0]['population'] == [body['population']]
+            assert body['population']['total_records'] == len(calculations['rows'])
+            assert body['population']['requested_artifact_count'] == len(case.job['outputs'])
+            # Selected measurements/checks also deliver their actual input operands.
+            # Custody-only bundle, sheet and calculation artifacts stay withheld.
+            expected = {('output', row['role'], 0) for row in case.job['outputs']} | {
+                ('input', row['role'], row['ordinal']) for row in case.job['operands']}
+            assert {(r['direction'], r['role'], r['ordinal']) for r in case.returned[0]['artifacts']} == expected
+            assert body['population']['returned_artifact_count'] == len(expected)
+            assert body['population']['missing_record_keys'] == body['population']['missing_artifacts'] == []
+            assert [u['controller_step']['marginal_credit'] for u in case.result_records[0]['units']] == [2]
+            assert case.result_records[0]['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
+            assert tuple(case.record.controller_state.history) == (0, 0)
+            proof = case.owner.completion_for_action(case.contexts[0], body['operation_key'])
+            assert proof and case.owner.verify_completion(case.contexts[0], proof)
+            for key in ('run_id', 'episode_id', 'operation_key', 'assignment_sha256', 'receipt_sha256'):
+                invalid = deepcopy(proof)
+                invalid[key] = ('0' * 64 if key.endswith('sha256') else 'different-original-identity')
+&gt;               assert not case.owner.verify_completion(case.contexts[0], invalid)
+E               AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}
+E                 
+E                 Omitting 5 identical items, use -vv to show
+E                 Differing items:
+E                 {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_97f7a1...ccurrence_id': 'artifact_97f7a1e009c2a6f8366c479f9d1a9a5d6b52d7de80ed050c5cb21ffc0f1fbd60#/artifacts/1'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_97f7a1e009c2a6f8366c479f9...f1fbd60#/artifacts/1'}], 'state': 'missing', 'unit': 'decoded_model_count', 'value': None}, 'format': None, ...}, ...]}
+E                 Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:614: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmfetch-index]" time="21.852"><failure message="assert 517 == 165">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_16')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b509b30e0&gt;
+program = 'hmmfetch', mode = 'index'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+        monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+&gt;   return forbidden
+        ^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_workflow.py:582: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+job = {'version': 'native_hmmer_preparation_job_v1', 'program': 'hmmfetch', 'mode': 'index', 'software': {'executable': '/ho...hmmfetch', 'sha256': '87a57888d9bb60fd4be66dc382c7f72d29f0fa1f87e10d012703e6b66da0afb0', 'engine_version': '3.4'}, ...}
+bundle = {'artifacts': [{'format': 'hmmer_stdout', 'relative_path': 'outputs/stdout', 'role': 'stdout', 'sha256': '2df66efcebeb...c7075246001c/hmmer-preparation-attempt/cache'}, 'failures': [], 'finished_at': '2026-10-26T10:33:25.611983+00:00', ...}
+sheet = {'artifact_bindings': [{'actual_relative_path': 'work/models.hmm.ssi', 'artifact_occurrence_id': 'artifact_a36c8b5e85e... 'state': 'finite', 'token': '2.48491'}, ...], 'line': 21, 'symbols': ['A', 'C', 'D', 'E', 'F', 'G', ...]}, ...}], ...}
+calculations = {'checks': [{'code': 'parameters_valid', 'field': None, 'inputs': [{'parameter': 'probability_tolerance'}, {'parameter...: 'index', 'program': 'hmmfetch', 'settings': {'--index': True}}, 'parameters': {'probability_tolerance': 0.0001}, ...}
+
+                    value = value.get(name) if isinstance(value, dict) else None
+                if value is None:
+                    assert quantity['value'] is None and quantity['state'] == 'missing'
+                else:
+                    assert {key: quantity[key] for key in ('value', 'state', 'unit')} == {
+                        key: value[key] for key in ('value', 'state', 'unit')}
+    
+    
+    def assert_mode_numbers(job, bundle, sheet, calculations):
+        """Independent arithmetic and retained native facts, never expected=calculator."""
+        program, mode = job['program'], job['mode']
+        rows = calculations['rows']
+        if program == 'hmmemit':
+            generated = [r for r in rows if r['kind'] == 'generated_record']
+            lengths = [len(r['sequence'].replace('-', '').replace('.', '')) for r in generated]
+            expected = [15, 72, 39] if mode == 'sample_profile' else [12] * (3 if mode.startswith('sample_') else 1)
+            assert lengths == expected
+            for row, length in zip(generated, lengths):
+                assert row['basis'] == ('model_derived' if mode.startswith('consensus') else 'generated')
+                present(row['length'], length, unit='residue_count')
+            model = kind_row(calculations, 'model')
+            present(model['input_model_length'], 12)
+            present(model['captured_sample_count'], len(expected))
+            present(model['total_length'], sum(expected))
+            present(model['mean_length'], sum(expected) / len(expected))
+            if mode.startswith('consensus'):
+                assert generated[0]['sequence'] == ('ACDEFGHIKLMN' if mode == 'consensus_simple' else 'ACDExGHIKLMN')
+                consensus = kind_row(calculations, 'consensus')
+                present(consensus['mismatch_count'], 0)
+                present(generated[0]['ambiguous_residue_count'], int(mode == 'consensus_thresholded'))
+            elif mode == 'sample_core_aligned':
+                alignment = kind_row(calculations, 'alignment')
+                present(alignment['alignment_width'], 12)
+                present(alignment['captured_row_count'], 3)
+        elif program == 'hmmbuild':
+            row = kind_row(calculations, 'build')
+            c = row['components']
+            n, columns = (1, 12) if mode == 'build_single_sequence_matrix' else (3, 14)
+            present(c['input_sequence_count'], n)
+            present(c['input_column_count'], columns)
+            present(c['model_length'], 12)
+            present(c['model_alignment_fraction'], 12 / columns)
+            present(c['effective_input_sequence_ratio'], 1)
+            output, = [r for r in bundle['artifacts'] if r['role'] == 'resaved_alignment']
+            if mode == 'build_single_sequence_matrix':
+                assert output['size_bytes'] == 0
+                assert c['resaved_column_count']['value'] is None
+            else:
+                present(c['resaved_sequence_count'], 3)
+                present(c['resaved_column_count'], 12)
+        elif program == 'alimask':
+            row, = rows
+            c = row['components']
+            present(c['input_sequence_count'], 3)
+            present(c['input_column_count'], 14)
+            present(c['rf_consensus_count'], 12)
+            if mode.startswith('mask_'):
+                count = 5 if mode == 'mask_alignment' else 3
+                present(c['actual_masked_count'], count)
+                present(c['requested_union_count'], count)
+                present(c['masked_fraction'], count / 14)
+                assert sum(char == 'm' for char in row['output_mm']) == count
+            else:
+                present(c['native_mapping_row_count'], 1)
+                present(c['mapped_model_position_count'], 12)
+                assert c['requested_union_count']['value'] is None
+                assert row['native_mappings']
+        elif program in {'hmmconvert', 'hmmfetch', 'hmmpress'}:
+            inputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'input']
+            outputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'output']
+            present(inputs['decoded_model_count'], 1)
+            if program == 'hmmconvert':
+                aliases = [r for r in bundle['artifacts'] if r['role'] in {'stdout', 'converted_models'}]
+                assert len(aliases) == 2 and aliases[0]['sha256'] == aliases[1]['sha256']
+                if mode == 'ascii':
+                    present(outputs['decoded_model_count'], 1)
+                    compare = kind_row(calculations, 'model_comparison')
+                    present(compare['source_length'], 12)
+                    present(compare['output_length'], 12)
+                    present(compare['compared_cell_count'], 611)
+                    present(compare['max_absolute_probability_difference'], 0)
+                else:
+                    assert outputs['decoded_model_count']['value'] is None
+                    assert outputs['decoded_model_count']['state'] != 'present'
+                    compare = kind_row(calculations, 'model_comparison')
+                    assert compare['relationship_state'] == 'unavailable'
+                    assert compare['output_record_key'] is None
+                    assert compare['output_length']['value'] is None
+                    assert compare['max_absolute_probability_difference']['value'] is None
+                    assert compare['compared_cell_count']['state'] == 'missing'
+            elif program == 'hmmfetch' and mode != 'index':
+                c = kind_row(calculations, 'key_population')
+                present(c['requested_key_count'], 2 if mode == 'key_file' else 1)
+                present(c['resolved_key_count'], 2 if mode == 'key_file' else 1)
+                present(c['selected_source_occurrence_count'], 1)
+                present(c['returned_model_occurrence_count'], 1)
+                present(c['duplicate_representation_count'], 0)
+                present(c['missing_key_count'], 0)
+            else:
+&gt;               summary = kind_row(calculations, 'index_summary')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               assert 517 == 165
+
+../../../tests/test_native_hmmer_preparation_workflow.py:483: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmpress-index]" time="18.240"><failure message="assert [517, 2725, 3216, 9918] == [165, 2725, 3216, 9918]&#10;  &#10;  At index 0 diff: 517 != 165&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_17')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b5079cbf0&gt;
+program = 'hmmpress', mode = 'index'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+        monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+&gt;   return forbidden
+        ^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_workflow.py:582: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+job = {'version': 'native_hmmer_preparation_job_v1', 'program': 'hmmpress', 'mode': 'index', 'software': {'executable': '/ho...hmmpress', 'sha256': 'ee2e74d8420c2bdd7cf2809260225c43e99b72daf10d7a2662782aff9704acef', 'engine_version': '3.4'}, ...}
+bundle = {'artifacts': [{'format': 'hmmer_stdout', 'relative_path': 'outputs/stdout', 'role': 'stdout', 'sha256': 'ff11445b8b6b...c7075246001c/hmmer-preparation-attempt/cache'}, 'failures': [], 'finished_at': '2026-10-26T10:33:44.597743+00:00', ...}
+sheet = {'artifact_bindings': [{'actual_relative_path': 'work/models.hmm.h3m', 'artifact_occurrence_id': 'artifact_0ce837bc351... 'state': 'finite', 'token': '2.48491'}, ...], 'line': 21, 'symbols': ['A', 'C', 'D', 'E', 'F', 'G', ...]}, ...}], ...}
+calculations = {'checks': [{'code': 'parameters_valid', 'field': None, 'inputs': [{'parameter': 'probability_tolerance'}, {'parameter...: '3.4', 'mode': 'index', 'program': 'hmmpress', 'settings': {}}, 'parameters': {'probability_tolerance': 0.0001}, ...}
+
+                    value = value.get(name) if isinstance(value, dict) else None
+                if value is None:
+                    assert quantity['value'] is None and quantity['state'] == 'missing'
+                else:
+                    assert {key: quantity[key] for key in ('value', 'state', 'unit')} == {
+                        key: value[key] for key in ('value', 'state', 'unit')}
+    
+    
+    def assert_mode_numbers(job, bundle, sheet, calculations):
+        """Independent arithmetic and retained native facts, never expected=calculator."""
+        program, mode = job['program'], job['mode']
+        rows = calculations['rows']
+        if program == 'hmmemit':
+            generated = [r for r in rows if r['kind'] == 'generated_record']
+            lengths = [len(r['sequence'].replace('-', '').replace('.', '')) for r in generated]
+            expected = [15, 72, 39] if mode == 'sample_profile' else [12] * (3 if mode.startswith('sample_') else 1)
+            assert lengths == expected
+            for row, length in zip(generated, lengths):
+                assert row['basis'] == ('model_derived' if mode.startswith('consensus') else 'generated')
+                present(row['length'], length, unit='residue_count')
+            model = kind_row(calculations, 'model')
+            present(model['input_model_length'], 12)
+            present(model['captured_sample_count'], len(expected))
+            present(model['total_length'], sum(expected))
+            present(model['mean_length'], sum(expected) / len(expected))
+            if mode.startswith('consensus'):
+                assert generated[0]['sequence'] == ('ACDEFGHIKLMN' if mode == 'consensus_simple' else 'ACDExGHIKLMN')
+                consensus = kind_row(calculations, 'consensus')
+                present(consensus['mismatch_count'], 0)
+                present(generated[0]['ambiguous_residue_count'], int(mode == 'consensus_thresholded'))
+            elif mode == 'sample_core_aligned':
+                alignment = kind_row(calculations, 'alignment')
+                present(alignment['alignment_width'], 12)
+                present(alignment['captured_row_count'], 3)
+        elif program == 'hmmbuild':
+            row = kind_row(calculations, 'build')
+            c = row['components']
+            n, columns = (1, 12) if mode == 'build_single_sequence_matrix' else (3, 14)
+            present(c['input_sequence_count'], n)
+            present(c['input_column_count'], columns)
+            present(c['model_length'], 12)
+            present(c['model_alignment_fraction'], 12 / columns)
+            present(c['effective_input_sequence_ratio'], 1)
+            output, = [r for r in bundle['artifacts'] if r['role'] == 'resaved_alignment']
+            if mode == 'build_single_sequence_matrix':
+                assert output['size_bytes'] == 0
+                assert c['resaved_column_count']['value'] is None
+            else:
+                present(c['resaved_sequence_count'], 3)
+                present(c['resaved_column_count'], 12)
+        elif program == 'alimask':
+            row, = rows
+            c = row['components']
+            present(c['input_sequence_count'], 3)
+            present(c['input_column_count'], 14)
+            present(c['rf_consensus_count'], 12)
+            if mode.startswith('mask_'):
+                count = 5 if mode == 'mask_alignment' else 3
+                present(c['actual_masked_count'], count)
+                present(c['requested_union_count'], count)
+                present(c['masked_fraction'], count / 14)
+                assert sum(char == 'm' for char in row['output_mm']) == count
+            else:
+                present(c['native_mapping_row_count'], 1)
+                present(c['mapped_model_position_count'], 12)
+                assert c['requested_union_count']['value'] is None
+                assert row['native_mappings']
+        elif program in {'hmmconvert', 'hmmfetch', 'hmmpress'}:
+            inputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'input']
+            outputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'output']
+            present(inputs['decoded_model_count'], 1)
+            if program == 'hmmconvert':
+                aliases = [r for r in bundle['artifacts'] if r['role'] in {'stdout', 'converted_models'}]
+                assert len(aliases) == 2 and aliases[0]['sha256'] == aliases[1]['sha256']
+                if mode == 'ascii':
+                    present(outputs['decoded_model_count'], 1)
+                    compare = kind_row(calculations, 'model_comparison')
+                    present(compare['source_length'], 12)
+                    present(compare['output_length'], 12)
+                    present(compare['compared_cell_count'], 611)
+                    present(compare['max_absolute_probability_difference'], 0)
+                else:
+                    assert outputs['decoded_model_count']['value'] is None
+                    assert outputs['decoded_model_count']['state'] != 'present'
+                    compare = kind_row(calculations, 'model_comparison')
+                    assert compare['relationship_state'] == 'unavailable'
+                    assert compare['output_record_key'] is None
+                    assert compare['output_length']['value'] is None
+                    assert compare['max_absolute_probability_difference']['value'] is None
+                    assert compare['compared_cell_count']['state'] == 'missing'
+            elif program == 'hmmfetch' and mode != 'index':
+                c = kind_row(calculations, 'key_population')
+                present(c['requested_key_count'], 2 if mode == 'key_file' else 1)
+&gt;               present(c['resolved_key_count'], 2 if mode == 'key_file' else 1)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               assert [517, 2725, 3216, 9918] == [165, 2725, 3216, 9918]
+E                 
+E                 At index 0 diff: 517 != 165
+E                 Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:477: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmsim-viterbi]" time="29.058"><failure message="AssertionError: {'inputs': [{'field': 'payload.values', 'record_key': 'artifact_0177c4de095ca56e49e24fb13de30a9376d5ee1a6eec2b15bee786...arameters.fit_tolerance', 'record_key': None}, ...], 'state': 'present', 'unit': 'sequence', 'value': 16.1745647507907}&#10;assert 16.1745647507907 == 16.174564750739254 ± 1.0e-12&#10;  &#10;  comparison failed&#10;  Obtained: 16.1745647507907&#10;  Expected: 16.174564750739254 ± 1.0e-12">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_18')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b507c6d80&gt;
+program = 'hmmsim', mode = 'viterbi'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+        monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+&gt;   return forbidden
+        ^^^^^^^^^^^^^
+
+../../../tests/test_native_hmmer_preparation_workflow.py:582: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_workflow.py:517: in assert_mode_numbers
+    assert len(data) == 8000 and list(values) == vector['values']
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cell = {'inputs': [{'field': 'payload.values', 'record_key': 'artifact_0177c4de095ca56e49e24fb13de30a9376d5ee1a6eec2b15bee786...arameters.fit_tolerance', 'record_key': None}, ...], 'state': 'present', 'unit': 'sequence', 'value': 16.1745647507907}
+expected = 16.174564750739254, unit = None
+
+    def present(cell, expected, *, unit=None):
+        assert cell['state'] == 'present' and type(cell['value']) in (int, float), cell
+&gt;       assert cell['value'] == pytest.approx(expected, abs=1e-12), cell
+E       AssertionError: {'inputs': [{'field': 'payload.values', 'record_key': 'artifact_0177c4de095ca56e49e24fb13de30a9376d5ee1a6eec2b15bee786...arameters.fit_tolerance', 'record_key': None}, ...], 'state': 'present', 'unit': 'sequence', 'value': 16.1745647507907}
+E       assert 16.1745647507907 == 16.174564750739254 ± 1.0e-12
+E         
+E         comparison failed
+E         Obtained: 16.1745647507907
+E         Expected: 16.174564750739254 ± 1.0e-12
+
+../../../tests/test_native_hmmer_preparation_workflow.py:326: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmsim-msv]" time="29.726"><failure message="AssertionError: assert {('output', '...ary', 0), ...} == {('input', 'm...out', 0), ...}&#10;  &#10;  Extra items in the right set:&#10;  ('input', 'models', 0)&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_19')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b50ded2e0&gt;
+program = 'hmmsim', mode = 'msv'
+
+        for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+                (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+            monkeypatch.setattr(target, name, forbidden)
+        for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+                worker.simulation_data, worker.statistics_data, worker.fm_data):
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+        assert len(CASES) == len(set(CASES)) == 26
+        case = run_case(tmp_path, program, mode)
+        try:
+&gt;           parent, received = assert_accounting(case)
+E           AssertionError: assert {('output', '...ary', 0), ...} == {('input', 'm...out', 0), ...}
+E             
+E             Extra items in the right set:
+E             ('input', 'models', 0)
+E             Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:590: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmsim-forward]" time="28.293"><failure message="AssertionError: assert {('output', '...ary', 0), ...} == {('input', 'm...out', 0), ...}&#10;  &#10;  Extra items in the right set:&#10;  ('input', 'models', 0)&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_20')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b507f1be0&gt;
+program = 'hmmsim', mode = 'forward'
+
+        for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+                (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+            monkeypatch.setattr(target, name, forbidden)
+        for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+                worker.simulation_data, worker.statistics_data, worker.fm_data):
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+        assert len(CASES) == len(set(CASES)) == 26
+        case = run_case(tmp_path, program, mode)
+        try:
+&gt;           parent, received = assert_accounting(case)
+E           AssertionError: assert {('output', '...ary', 0), ...} == {('input', 'm...out', 0), ...}
+E             
+E             Extra items in the right set:
+E             ('input', 'models', 0)
+E             Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:590: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmsim-hybrid]" time="35.766"><failure message="AssertionError: assert {('output', '...ary', 0), ...} == {('input', 'm...out', 0), ...}&#10;  &#10;  Extra items in the right set:&#10;  ('input', 'models', 0)&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_21')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b50802ae0&gt;
+program = 'hmmsim', mode = 'hybrid'
+
+        for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+                (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+            monkeypatch.setattr(target, name, forbidden)
+        for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+                worker.simulation_data, worker.statistics_data, worker.fm_data):
+            for name, value in vars(module).items():
+                if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                    monkeypatch.setattr(module, name, forbidden)
+        if calculations:
+            monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+        return forbidden
+    
+    
+    @pytest.mark.parametrize('program,mode', CASES, ids=['-'.join(r) for r in CASES])
+    def test_all_native_modes_through_workflow_and_requested_typed_form(tmp_path, monkeypatch, program, mode):
+        assert len(CASES) == len(set(CASES)) == 26
+        case = run_case(tmp_path, program, mode)
+        try:
+&gt;           parent, received = assert_accounting(case)
+E           AssertionError: assert {('output', '...ary', 0), ...} == {('input', 'm...out', 0), ...}
+E             
+E             Extra items in the right set:
+E             ('input', 'models', 0)
+E             Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:590: AssertionError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmstat-summary]" time="27.747" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[makehmmerdb-build]" time="38.865" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmerfm-exactmatch-locations]" time="40.702"><failure message="KeyError: 'aggregate/exactmatch_summary'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_24')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b4fea37d0&gt;
+program = 'hmmerfm-exactmatch', mode = 'locations'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+&gt;       monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_87a056864a572fa89f7c14925cabf085ad7ba20f6495d6f67a99be984bd3ff25', 'complete...: 'exhaustive_literal_agreement', 'occurrences': [], 'outcome': 'unknown'}], 'kind': 'location_validation', ...}, ...]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ount'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'inputs': ['source_binding'], 'name': 'source_custody', 'record_key': 'artifact_dfcc234cfb29b475bce76a713...s': {'alphabet_normalization': 'none', 'coordinate_policy': 'native_one_based', 'exhaustive_literal_check': True}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {}
+        for row in calculations['rows']:
+            key = row.get('record_key', row.get('row_key'))
+            if key is None and 'model_record_key' in row:
+                key = row['model_record_key'] + '#' + row['kind']
+&gt;           if key is None and row['kind'] in {'database_summary', 'exactmatch_summary'}:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'aggregate/exactmatch_summary'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_all_native_modes_through_workflow_and_requested_typed_form[hmmerfm-exactmatch-count_only]" time="28.954"><failure message="KeyError: 'aggregate/exactmatch_summary'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_all_native_modes_through_25')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b50ef6c60&gt;
+program = 'hmmerfm-exactmatch', mode = 'count_only'
+
+    for target, name in [(native, 'start_job'), (native, 'status'), (socket, 'socket'),
+            (subprocess, 'Popen'), (worker, 'grade_hmmer_preparation')]:
+        monkeypatch.setattr(target, name, forbidden)
+    for module in (worker.model_data, worker.artifact_data, worker.alignment_data, worker.emission_data,
+            worker.simulation_data, worker.statistics_data, worker.fm_data):
+        for name, value in vars(module).items():
+            if callable(value) and name.startswith(('populate_', 'parse_', 'extract_', 'iter_')):
+                monkeypatch.setattr(module, name, forbidden)
+    if calculations:
+&gt;       monkeypatch.setattr(worker, 'recalculate_hmmer_preparation', forbidden)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:581: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_99ff8177fb7413c1e8a280bd6f5c6a2d5db6cf21de0d8f4f158577ce26e882b7', 'complete...me': 'exhaustive_literal_agreement', 'occurrences': [], 'outcome': 'unknown'}], 'kind': 'query_validation', ...}, ...]}
+selector = mappingproxy({'acquisition': 'complete_bound_bundle', 'artifacts': (mappingproxy({'direction': 'output', 'ordinal': 0,...ount'), 'rows': mappingproxy({'limit': 100, 'offset': 0})}), 'version': 'native_hmmer_preparation_result_selector_v1'})
+calculations = {'checks': [{'inputs': ['source_binding'], 'name': 'source_custody', 'record_key': 'artifact_c6ae02848fc316377d3fa8704...s': {'alphabet_normalization': 'none', 'coordinate_policy': 'native_one_based', 'exhaustive_literal_check': True}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {}
+        for row in calculations['rows']:
+            key = row.get('record_key', row.get('row_key'))
+            if key is None and 'model_record_key' in row:
+                key = row['model_record_key'] + '#' + row['kind']
+&gt;           if key is None and row['kind'] in {'database_summary', 'exactmatch_summary'}:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'aggregate/exactmatch_summary'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError</failure></testcase><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_artifact_only_and_repeated_projection_do_not_manufacture_scientific_progress" time="30.775" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_partial_acquisition_returns_diagnostic_information_without_false_completion[missing_key]" time="15.159" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_partial_acquisition_returns_diagnostic_information_without_false_completion[changed_output]" time="16.917" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_saved_result_replay_never_reopens_native_paths_or_recalculates" time="18.119" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_failed_acquisition_returns_requested_failure_without_inventing_numerical_population[bundle_unavailable]" time="10.254" /><testcase classname="tests.test_native_hmmer_preparation_workflow" name="test_failed_acquisition_returns_requested_failure_without_inventing_numerical_population[grading_unavailable]" time="10.762"><failure message="AssertionError: assert ('native_hmmer...g_unavailable' == 'native_hmmer...ssified_error'&#10;  &#10;  - native_hmmer_preparation_unclassified_error&#10;  + native_hmmer_preparation_retained_grading_unavailable)">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check006/temporary/test_failed_acquisition_return1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x715b50a19190&gt;
+fault = 'grading_unavailable'
+
+    original = deepcopy(case.outcomes[0])
+    body = original['result']
+    attempt.rename(relocated)
+    def forbidden(*args, **kwargs):
+        raise AssertionError('replay performed new native, acquisition or grading work')
+    original_socket = socket.socket
+    def local_socket_only(*args, **kwargs):
+        family = args[0] if args else kwargs.get('family', socket.AF_INET)
+        if family != socket.AF_UNIX:
+            forbidden(*args, **kwargs)
+        return original_socket(*args, **kwargs)
+    monkeypatch.setattr(native, 'start_job', forbidden)
+    monkeypatch.setattr(native, 'status', forbidden)
+    # asyncio's wakeup socket is local plumbing, not result acquisition.
+    monkeypatch.setattr(socket, 'socket', local_socket_only)
+    monkeypatch.setattr(subprocess, 'Popen', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.native_hmmer_preparation_worker.grade_hmmer_preparation', forbidden)
+    replay = asyncio.run(case.owner.execute(case.contexts[0], 'execution.results.collect', {}, body['operation_key']))
+    # Runtime adds its own pending-work snapshot after the operation returns.
+    assert replay == {key: value for key, value in original.items() if key != 'pending_work_after_action'}
+&gt;   saved = json.loads(case.flow.journal.row('runtime_actions', case.contexts[0].episode_id, 0)['result'])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: assert ('native_hmmer...g_unavailable' == 'native_hmmer...ssified_error'
+E     
+E     - native_hmmer_preparation_unclassified_error
+E     + native_hmmer_preparation_retained_grading_unavailable)
+
+../../../tests/test_native_hmmer_preparation_workflow.py:744: AssertionError</failure></testcase></testsuite></testsuites>

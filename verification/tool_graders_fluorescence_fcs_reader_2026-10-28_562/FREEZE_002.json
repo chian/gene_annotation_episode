@@ -1,0 +1,37 @@
+{
+  "record_type": "parser_owner_source_freeze",
+  "revision": 2,
+  "source_and_test_pins": [
+    {
+      "path": "gene_annotation_episode/fluorescence_fcs_reader.py",
+      "size_bytes": 17062,
+      "sha256": "265b8b9d88558813ca05a0f267cfa9b018357701a3b0ecd0a70cb047d101c0cb"
+    },
+    {
+      "path": "gene_annotation_episode/fluorescence_event_contracts.py",
+      "size_bytes": 40161,
+      "sha256": "f38062d66d49777148d3cbc4073b05e0c39ba1914826466d2ad72e9c7d18c188"
+    },
+    {
+      "path": "tests/test_fluorescence_fcs_reader.py",
+      "size_bytes": 27681,
+      "sha256": "2cf9faa7a26f27fda9d5b817d0de4eb9e15af05b256a48ce230742bb5c94ae13"
+    }
+  ],
+  "supersedes_source_freeze": "FREEZE_001.json",
+  "historical_packet_001_preserved": true,
+  "exact_bounded_selector": "tests/test_fluorescence_fcs_reader.py",
+  "tests_run_by_owner": false,
+  "runtime_verification_pending": true,
+  "correction": "Guard actual FlowIO reads once native HEADER/TEXT exist, using the existing segment validator before invalid ANALYSIS bytes can be returned.",
+  "prior_open_review_question_resolved": true,
+  "unchanged_core_validation_extraction": true,
+  "other_seven_core_pins_unchanged": true,
+  "host_validation": "stdlib AST and SHA256 only",
+  "dedicated_guard_test_selectors": [
+    "tests/test_fluorescence_fcs_reader.py::test_invalid_analysis_read_is_prevented_before_facts_are_established",
+    "tests/test_fluorescence_fcs_reader.py::test_valid_analysis_and_selected_values_survive_guard",
+    "tests/test_fluorescence_fcs_reader.py::test_guard_does_not_swallow_resource_failure"
+  ],
+  "full_operation_completion_claimed": false
+}

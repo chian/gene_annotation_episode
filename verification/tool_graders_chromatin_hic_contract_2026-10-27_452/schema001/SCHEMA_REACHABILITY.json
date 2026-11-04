@@ -1,0 +1,212 @@
+{
+  "evidence": "static_literal_and_source_algorithm_only",
+  "production_imported": false,
+  "production_schema_callable_executed": false,
+  "legacy_runtime_acceptance_failure_reproduced": false,
+  "source_pins_before": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_contracts.py",
+      "sha256": "038fa08566f0f3fc078d42925db425c6a2cfa4db2a6f985341df58f8d45680b7",
+      "size_bytes": 123853
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_return_views.py",
+      "sha256": "abcbf1b6bfaf1859a6af1dd2a92db173420573a8510c354f8747dfef8ddcf1dd",
+      "size_bytes": 4948
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py",
+      "sha256": "1467b7d41825667b02ac7cba3a451a42667cd7178580cdf0270e340df8048f93",
+      "size_bytes": 31725
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_returns.py",
+      "sha256": "982bcd4765d81d30c35f017120d663ef1b4b48576184c6c295be3919f5a8f1c9",
+      "size_bytes": 18868
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_contracts.py",
+      "sha256": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+      "size_bytes": 3461
+    }
+  ],
+  "source_pins_after": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_contracts.py",
+      "sha256": "038fa08566f0f3fc078d42925db425c6a2cfa4db2a6f985341df58f8d45680b7",
+      "size_bytes": 123853
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_return_views.py",
+      "sha256": "abcbf1b6bfaf1859a6af1dd2a92db173420573a8510c354f8747dfef8ddcf1dd",
+      "size_bytes": 4948
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py",
+      "sha256": "1467b7d41825667b02ac7cba3a451a42667cd7178580cdf0270e340df8048f93",
+      "size_bytes": 31725
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_returns.py",
+      "sha256": "982bcd4765d81d30c35f017120d663ef1b4b48576184c6c295be3919f5a8f1c9",
+      "size_bytes": 18868
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_contracts.py",
+      "sha256": "31dc146fbf023be601d8cad2c9fd17791f71e3cbf0c4c521a99d0538ef9b0eb8",
+      "size_bytes": 3461
+    }
+  ],
+  "source_pins_unchanged": true,
+  "sources": {
+    "chromatin_interaction_projection": {
+      "record": "RequestedProjection",
+      "reachable_definitions": [
+        "BooleanComponent",
+        "CalculationParameters",
+        "ContactParameters",
+        "Failure",
+        "InsulationParameters",
+        "Locator",
+        "Measurement",
+        "NormalizationSpec",
+        "PageResult",
+        "ProjectionContactPairsRow",
+        "ProjectionDistanceExpectationsRow",
+        "ProjectionDomainsRow",
+        "ProjectionInsulationWindowsRow",
+        "ProjectionPopulationMetricsRow",
+        "RequestedProjection",
+        "RowQualifications",
+        "UncertaintyNotMeasured",
+        "Unit"
+      ],
+      "source_edges": {
+        "BooleanComponent": [],
+        "CalculationParameters": [
+          "ContactParameters",
+          "InsulationParameters",
+          "NormalizationSpec"
+        ],
+        "ContactParameters": [],
+        "Failure": [
+          "Locator"
+        ],
+        "InsulationParameters": [],
+        "Locator": [],
+        "Measurement": [
+          "UncertaintyNotMeasured",
+          "Unit"
+        ],
+        "NormalizationSpec": [],
+        "PageResult": [],
+        "ProjectionContactPairsRow": [
+          "BooleanComponent",
+          "Measurement",
+          "RowQualifications"
+        ],
+        "ProjectionDistanceExpectationsRow": [
+          "Measurement",
+          "RowQualifications"
+        ],
+        "ProjectionDomainsRow": [
+          "Measurement",
+          "RowQualifications"
+        ],
+        "ProjectionInsulationWindowsRow": [
+          "BooleanComponent",
+          "Measurement",
+          "RowQualifications"
+        ],
+        "ProjectionPopulationMetricsRow": [
+          "Measurement",
+          "RowQualifications"
+        ],
+        "RequestedProjection": [
+          "CalculationParameters",
+          "Failure",
+          "PageResult",
+          "ProjectionContactPairsRow",
+          "ProjectionDistanceExpectationsRow",
+          "ProjectionDomainsRow",
+          "ProjectionInsulationWindowsRow",
+          "ProjectionPopulationMetricsRow",
+          "RowQualifications"
+        ],
+        "RowQualifications": [],
+        "UncertaintyNotMeasured": [],
+        "Unit": []
+      },
+      "exported_definitions": [
+        "BooleanComponent",
+        "CalculationParameters",
+        "ContactParameters",
+        "Failure",
+        "InsulationParameters",
+        "Locator",
+        "Measurement",
+        "NormalizationSpec",
+        "PageResult",
+        "ProjectionContactPairsRow",
+        "ProjectionDistanceExpectationsRow",
+        "ProjectionDomainsRow",
+        "ProjectionInsulationWindowsRow",
+        "ProjectionPopulationMetricsRow",
+        "RequestedProjection",
+        "RowQualifications",
+        "UncertaintyNotMeasured",
+        "Unit"
+      ],
+      "mechanically_derived_id": "urn:gene-annotation:chromatin:return:1ba0f49fee68561bf3ce14354a05629212dcb55256d129862a96533396805447",
+      "canonical_complete_schema_sha256": "5213014db818dd2fb577f531eb0d4537ca4087b072db6e19a9813563505eaa9b",
+      "affected_by_proposed_definition_changes": [
+        "Failure",
+        "Locator"
+      ]
+    },
+    "chromatin_interaction_saved_sheets": {
+      "record": "SavedSheetBundle",
+      "reachable_definitions": [
+        "NativeFileIdentity",
+        "SavedSheetBundle"
+      ],
+      "source_edges": {
+        "NativeFileIdentity": [],
+        "SavedSheetBundle": [
+          "NativeFileIdentity"
+        ]
+      },
+      "exported_definitions": [
+        "ChromatinSavedSheetIdentity",
+        "NativeFileIdentity",
+        "SavedSheetBundle"
+      ],
+      "mechanically_derived_id": "urn:gene-annotation:chromatin:return:3c59bfb40181590201fe697182de4b5606df0f033a245fb3ca7b205179174f1b",
+      "canonical_complete_schema_sha256": "38c570f400271d84932f1d6d5407c5a2d03fce41edcc77fef13e5e70710dcd26",
+      "affected_by_proposed_definition_changes": []
+    },
+    "chromatin_interaction_failures": {
+      "record": "Failure",
+      "reachable_definitions": [
+        "Failure",
+        "Locator"
+      ],
+      "source_edges": {
+        "Failure": [
+          "Locator"
+        ],
+        "Locator": []
+      },
+      "exported_definitions": [
+        "Failure",
+        "Locator"
+      ],
+      "mechanically_derived_id": "urn:gene-annotation:chromatin:return:ae45a8a267c4d93d704f92b33e8bf5c903a1e3e70e7042c15b5dafc37318b4c8",
+      "canonical_complete_schema_sha256": "33ad2c3f16a7b9e564fdc24be16e0235577e2e806d3e90b956462e962e202388",
+      "affected_by_proposed_definition_changes": [
+        "Failure",
+        "Locator"
+      ]
+    }
+  }
+}

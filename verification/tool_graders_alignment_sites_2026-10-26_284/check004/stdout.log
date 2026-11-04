@@ -1,0 +1,24 @@
+.......................................F................................ [ 86%]
+...........                                                              [100%]
+=================================== FAILURES ===================================
+_ test_closing_form_and_credit_use_original_binding_without_reading_private_revisions _
+
+mother = (<gene_annotation_episode.scientific_process_episodes.ScientificProcessEpisodes object at 0x71f0673914f0>, <test_scientific_process_episodes.ContractServices object at 0x71f0673927e0>)
+
+    def test_closing_form_and_credit_use_original_binding_without_reading_private_revisions(mother):
+        binding, services = mother
+        child = make_context(binding)
+        binding.validate_report(child, {"status": "qualified", "basis": [EVIDENCE]}, SCHEMA)
+        assert binding.facts(child, {}) == {"scientific_process_results": []}
+>       assert set(binding.fact_sources(child.role)) == {"scientific_process_results"}
+E       AssertionError: assert {'blast_hsp_c...cess_results'} == {'scientific_process_results'}
+E         
+E         Extra items in the left set:
+E         'reference_site_rows'
+E         'blast_hsp_column_rows'
+E         Use -v to get more diff
+
+../../../tests/test_scientific_process_episodes.py:455: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_scientific_process_episodes.py::test_closing_form_and_credit_use_original_binding_without_reading_private_revisions
+1 failed, 82 passed in 224.94s (0:03:44)

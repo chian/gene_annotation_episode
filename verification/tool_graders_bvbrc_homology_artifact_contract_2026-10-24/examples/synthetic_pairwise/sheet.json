@@ -1,0 +1,606 @@
+{
+  "schema": "blast_pairwise_sheet_v1",
+  "status": "complete",
+  "input": {
+    "schema": "blast_normalized_result_v1",
+    "mode": "pairwise",
+    "resource": "api",
+    "format": "json2",
+    "query": {
+      "id": "Query_1",
+      "title": "synthetic_pair_query",
+      "length": 10
+    },
+    "search": {
+      "program": "blastp",
+      "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE",
+      "database": "SYNTHETIC_SINGLE_SUBJECT_DATABASE",
+      "parameters": {
+        "expect": 1e-05
+      },
+      "statistics": {},
+      "request": {},
+      "hit_array_present": true,
+      "reported_hit_count": 1
+    },
+    "hits": [
+      {
+        "hit_index": 0,
+        "length": 8,
+        "descriptions": [
+          {
+            "id": "gnl|BL_ORD_ID|0",
+            "accession": "0",
+            "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "num": 1,
+            "bit_score": 20,
+            "score": 40,
+            "evalue": 1e-05,
+            "identity": 4,
+            "positive": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 2,
+            "hit_to": 5,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "ACDE",
+            "hseq": "ACDE",
+            "midline": "ACDE"
+          },
+          {
+            "num": 2,
+            "bit_score": 18,
+            "score": 36,
+            "evalue": 1e-05,
+            "identity": 4,
+            "positive": 4,
+            "query_from": 3,
+            "query_to": 6,
+            "hit_from": 4,
+            "hit_to": 7,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "DEFG",
+            "hseq": "DEFG",
+            "midline": "DEFG"
+          },
+          {
+            "num": 3,
+            "bit_score": 20,
+            "score": 40,
+            "evalue": 1e-05,
+            "identity": 4,
+            "positive": 4,
+            "query_from": 1,
+            "query_to": 4,
+            "hit_from": 2,
+            "hit_to": 5,
+            "align_len": 4,
+            "gaps": 0,
+            "qseq": "ACDE",
+            "hseq": "ACDE",
+            "midline": "ACDE"
+          }
+        ]
+      }
+    ],
+    "native": {
+      "document": {
+        "BlastOutput2": [
+          {
+            "report": {
+              "program": "blastp",
+              "version": "BLASTP SYNTHETIC_FORMAT_EXAMPLE",
+              "reference": "SYNTHETIC; no algorithm was executed",
+              "search_target": {
+                "db": "SYNTHETIC_SINGLE_SUBJECT_DATABASE"
+              },
+              "params": {
+                "expect": 1e-05
+              },
+              "results": {
+                "search": {
+                  "query_id": "Query_1",
+                  "query_title": "synthetic_pair_query",
+                  "query_len": 10,
+                  "hits": [
+                    {
+                      "num": 1,
+                      "len": 8,
+                      "description": [
+                        {
+                          "id": "gnl|BL_ORD_ID|0",
+                          "accession": "0",
+                          "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+                        }
+                      ],
+                      "hsps": [
+                        {
+                          "num": 1,
+                          "bit_score": 20,
+                          "score": 40,
+                          "evalue": 1e-05,
+                          "identity": 4,
+                          "positive": 4,
+                          "query_from": 1,
+                          "query_to": 4,
+                          "hit_from": 2,
+                          "hit_to": 5,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "ACDE",
+                          "hseq": "ACDE",
+                          "midline": "ACDE"
+                        },
+                        {
+                          "num": 2,
+                          "bit_score": 18,
+                          "score": 36,
+                          "evalue": 1e-05,
+                          "identity": 4,
+                          "positive": 4,
+                          "query_from": 3,
+                          "query_to": 6,
+                          "hit_from": 4,
+                          "hit_to": 7,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "DEFG",
+                          "hseq": "DEFG",
+                          "midline": "DEFG"
+                        },
+                        {
+                          "num": 3,
+                          "bit_score": 20,
+                          "score": 40,
+                          "evalue": 1e-05,
+                          "identity": 4,
+                          "positive": 4,
+                          "query_from": 1,
+                          "query_to": 4,
+                          "hit_from": 2,
+                          "hit_to": 5,
+                          "align_len": 4,
+                          "gaps": 0,
+                          "qseq": "ACDE",
+                          "hseq": "ACDE",
+                          "midline": "ACDE"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "archive_member": null,
+      "sha256": "c0df80ef091b7fec2fc8ea5732485e205e5bbabb9511c172bb155c3a4d89fe3d"
+    },
+    "issues": []
+  },
+  "query": {
+    "id": "Query_1",
+    "title": "synthetic_pair_query",
+    "length": 10
+  },
+  "reference": {
+    "length": 8,
+    "descriptions": [
+      {
+        "id": "gnl|BL_ORD_ID|0",
+        "accession": "0",
+        "title": "fig|999999.1.peg.1|SYN_A|ALT_A   SYNTHETIC_FUNCTION_ALPHA   [SYNTHETIC_ORGANISM_A | 999999.1]"
+      }
+    ],
+    "unpaired_metadata": {}
+  },
+  "hsps": [
+    {
+      "hsp_index": 0,
+      "native": {
+        "num": 1,
+        "bit_score": 20,
+        "score": 40,
+        "evalue": 1e-05,
+        "identity": 4,
+        "positive": 4,
+        "query_from": 1,
+        "query_to": 4,
+        "hit_from": 2,
+        "hit_to": 5,
+        "align_len": 4,
+        "gaps": 0,
+        "qseq": "ACDE",
+        "hseq": "ACDE",
+        "midline": "ACDE"
+      },
+      "components": {
+        "native_scores": {
+          "bit_score": 20,
+          "score": 40,
+          "evalue": 1e-05
+        },
+        "reported_counts": {
+          "align_len": 4,
+          "identity": 4,
+          "positive": 4,
+          "gaps": 0
+        },
+        "reported_percentages": {
+          "identity_percent": null,
+          "query_coverage_percent": null,
+          "query_subject_coverage_percent": null,
+          "query_unique_subject_coverage_percent": null
+        },
+        "counts": {
+          "alignment_columns": 4,
+          "paired_columns": 4,
+          "identical_pairs": 4,
+          "query_gap_columns": 0,
+          "reference_gap_columns": 0,
+          "paired_query_positions": 4,
+          "paired_reference_positions": 4
+        },
+        "fractions": {
+          "query_paired_coverage": 0.4,
+          "reference_paired_coverage": 0.5,
+          "paired_identity": 1.0,
+          "alignment_identity": 1.0
+        },
+        "denominators": {
+          "query_length": 10,
+          "reference_length": 8,
+          "paired_columns": 4,
+          "alignment_columns": 4
+        },
+        "coordinate_units": {
+          "query": "aa",
+          "reference": "aa",
+          "alignment": "aa"
+        },
+        "traceback_available": true,
+        "geometry_available": true,
+        "pairs": [
+          {
+            "query_start": 0,
+            "query_end": 1,
+            "reference_start": 1,
+            "reference_end": 2,
+            "identical": true
+          },
+          {
+            "query_start": 1,
+            "query_end": 2,
+            "reference_start": 2,
+            "reference_end": 3,
+            "identical": true
+          },
+          {
+            "query_start": 2,
+            "query_end": 3,
+            "reference_start": 3,
+            "reference_end": 4,
+            "identical": true
+          },
+          {
+            "query_start": 3,
+            "query_end": 4,
+            "reference_start": 4,
+            "reference_end": 5,
+            "identical": true
+          }
+        ],
+        "issues": []
+      }
+    },
+    {
+      "hsp_index": 1,
+      "native": {
+        "num": 2,
+        "bit_score": 18,
+        "score": 36,
+        "evalue": 1e-05,
+        "identity": 4,
+        "positive": 4,
+        "query_from": 3,
+        "query_to": 6,
+        "hit_from": 4,
+        "hit_to": 7,
+        "align_len": 4,
+        "gaps": 0,
+        "qseq": "DEFG",
+        "hseq": "DEFG",
+        "midline": "DEFG"
+      },
+      "components": {
+        "native_scores": {
+          "bit_score": 18,
+          "score": 36,
+          "evalue": 1e-05
+        },
+        "reported_counts": {
+          "align_len": 4,
+          "identity": 4,
+          "positive": 4,
+          "gaps": 0
+        },
+        "reported_percentages": {
+          "identity_percent": null,
+          "query_coverage_percent": null,
+          "query_subject_coverage_percent": null,
+          "query_unique_subject_coverage_percent": null
+        },
+        "counts": {
+          "alignment_columns": 4,
+          "paired_columns": 4,
+          "identical_pairs": 4,
+          "query_gap_columns": 0,
+          "reference_gap_columns": 0,
+          "paired_query_positions": 4,
+          "paired_reference_positions": 4
+        },
+        "fractions": {
+          "query_paired_coverage": 0.4,
+          "reference_paired_coverage": 0.5,
+          "paired_identity": 1.0,
+          "alignment_identity": 1.0
+        },
+        "denominators": {
+          "query_length": 10,
+          "reference_length": 8,
+          "paired_columns": 4,
+          "alignment_columns": 4
+        },
+        "coordinate_units": {
+          "query": "aa",
+          "reference": "aa",
+          "alignment": "aa"
+        },
+        "traceback_available": true,
+        "geometry_available": true,
+        "pairs": [
+          {
+            "query_start": 2,
+            "query_end": 3,
+            "reference_start": 3,
+            "reference_end": 4,
+            "identical": true
+          },
+          {
+            "query_start": 3,
+            "query_end": 4,
+            "reference_start": 4,
+            "reference_end": 5,
+            "identical": true
+          },
+          {
+            "query_start": 4,
+            "query_end": 5,
+            "reference_start": 5,
+            "reference_end": 6,
+            "identical": true
+          },
+          {
+            "query_start": 5,
+            "query_end": 6,
+            "reference_start": 6,
+            "reference_end": 7,
+            "identical": true
+          }
+        ],
+        "issues": []
+      }
+    },
+    {
+      "hsp_index": 2,
+      "native": {
+        "num": 3,
+        "bit_score": 20,
+        "score": 40,
+        "evalue": 1e-05,
+        "identity": 4,
+        "positive": 4,
+        "query_from": 1,
+        "query_to": 4,
+        "hit_from": 2,
+        "hit_to": 5,
+        "align_len": 4,
+        "gaps": 0,
+        "qseq": "ACDE",
+        "hseq": "ACDE",
+        "midline": "ACDE"
+      },
+      "components": {
+        "native_scores": {
+          "bit_score": 20,
+          "score": 40,
+          "evalue": 1e-05
+        },
+        "reported_counts": {
+          "align_len": 4,
+          "identity": 4,
+          "positive": 4,
+          "gaps": 0
+        },
+        "reported_percentages": {
+          "identity_percent": null,
+          "query_coverage_percent": null,
+          "query_subject_coverage_percent": null,
+          "query_unique_subject_coverage_percent": null
+        },
+        "counts": {
+          "alignment_columns": 4,
+          "paired_columns": 4,
+          "identical_pairs": 4,
+          "query_gap_columns": 0,
+          "reference_gap_columns": 0,
+          "paired_query_positions": 4,
+          "paired_reference_positions": 4
+        },
+        "fractions": {
+          "query_paired_coverage": 0.4,
+          "reference_paired_coverage": 0.5,
+          "paired_identity": 1.0,
+          "alignment_identity": 1.0
+        },
+        "denominators": {
+          "query_length": 10,
+          "reference_length": 8,
+          "paired_columns": 4,
+          "alignment_columns": 4
+        },
+        "coordinate_units": {
+          "query": "aa",
+          "reference": "aa",
+          "alignment": "aa"
+        },
+        "traceback_available": true,
+        "geometry_available": true,
+        "pairs": [
+          {
+            "query_start": 0,
+            "query_end": 1,
+            "reference_start": 1,
+            "reference_end": 2,
+            "identical": true
+          },
+          {
+            "query_start": 1,
+            "query_end": 2,
+            "reference_start": 2,
+            "reference_end": 3,
+            "identical": true
+          },
+          {
+            "query_start": 2,
+            "query_end": 3,
+            "reference_start": 3,
+            "reference_end": 4,
+            "identical": true
+          },
+          {
+            "query_start": 3,
+            "query_end": 4,
+            "reference_start": 4,
+            "reference_end": 5,
+            "identical": true
+          }
+        ],
+        "issues": []
+      }
+    }
+  ],
+  "union": {
+    "pairs": [
+      {
+        "query_start": 0,
+        "query_end": 1,
+        "reference_start": 1,
+        "reference_end": 2,
+        "identical": true,
+        "hsp_indices": [
+          0,
+          2
+        ]
+      },
+      {
+        "query_start": 1,
+        "query_end": 2,
+        "reference_start": 2,
+        "reference_end": 3,
+        "identical": true,
+        "hsp_indices": [
+          0,
+          2
+        ]
+      },
+      {
+        "query_start": 2,
+        "query_end": 3,
+        "reference_start": 3,
+        "reference_end": 4,
+        "identical": true,
+        "hsp_indices": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "query_start": 3,
+        "query_end": 4,
+        "reference_start": 4,
+        "reference_end": 5,
+        "identical": true,
+        "hsp_indices": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "query_start": 4,
+        "query_end": 5,
+        "reference_start": 5,
+        "reference_end": 6,
+        "identical": true,
+        "hsp_indices": [
+          1
+        ]
+      },
+      {
+        "query_start": 5,
+        "query_end": 6,
+        "reference_start": 6,
+        "reference_end": 7,
+        "identical": true,
+        "hsp_indices": [
+          1
+        ]
+      }
+    ],
+    "counts": {
+      "distinct_residue_pairs": 6,
+      "paired_query_positions": 6,
+      "paired_reference_positions": 6,
+      "identical_residue_pairs": 6,
+      "hsps_with_geometry": 3,
+      "hsps_without_geometry": 0
+    },
+    "denominators": {
+      "query_length": 10,
+      "reference_length": 8,
+      "distinct_residue_pairs": 6
+    },
+    "fractions": {
+      "query_paired_coverage": 0.6,
+      "reference_paired_coverage": 0.75,
+      "paired_identity": 1.0
+    },
+    "complete_for_reported_hsps": true,
+    "identical_mapping_hsp_groups": [
+      [
+        0,
+        2
+      ]
+    ],
+    "conflicts": [],
+    "meaning": "union_of_observed_correspondences_not_a_selected_global_alignment"
+  },
+  "issues": [],
+  "calculations": {
+    "paired_identity": "identical_paired_columns / paired_columns",
+    "alignment_identity": "identical_paired_columns / all_alignment_columns",
+    "query_paired_coverage": "union_of_paired_query_positions / supplied_query_length",
+    "reference_paired_coverage": "union_of_paired_reference_positions / reported_reference_length",
+    "native_scores": "preserved_per_HSP_without_summing_alternative_or_overlapping_HSPs"
+  }
+}

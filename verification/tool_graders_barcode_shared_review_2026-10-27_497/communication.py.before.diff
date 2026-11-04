@@ -1,0 +1,76 @@
+--- verification/tool_graders_barcode_shared_registration_2026-10-27_495/before/gene_annotation_episode/communication.py
++++ gene_annotation_episode/communication.py
+@@ -130,11 +130,24 @@
+     chromatin_sources = None
+     atac_sources = None
+     expression_nmf_sources = None
++    barcode_sources = None
+ 
+     def check(node, path, depth=0):
+         nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+-        nonlocal chromatin_sources, atac_sources, expression_nmf_sources
++        nonlocal chromatin_sources, atac_sources, expression_nmf_sources, barcode_sources
+         source = node.get("x-source") if isinstance(node, dict) else None
++        if isinstance(source, str) and source.startswith("barcode_"):
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            if barcode_sources is None:
++                from .barcode_return_views import barcode_fact_sources
++                barcode_sources = barcode_fact_sources()
++            expected = barcode_sources.get(source, {}).get("report_schema")
++            if (expected is None or not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: Barcode fact schema must match its registered source", code="invalid_schema")
++            return
+         if isinstance(source, str) and source.startswith("expression_nmf_"):
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+@@ -170,6 +183,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_channel_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_channel_storage import channel_cells_schema
++            expected = channel_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: channel fact schema must match its registered source", code="invalid_schema")
+             return
+         if source == "literature_compiled_assay_cells":
+             if depth != 1:
+@@ -412,7 +435,7 @@
+     parent_schema = schema
+     native = {name: node for name, node in schema["properties"].items()
+         if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+-        or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))}
++        or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))}
+     if native:
+         parent_schema = {**schema, "properties": dict(schema["properties"])}
+         for name, node in native.items():
+@@ -431,6 +454,12 @@
+                         validate_chromatin_fact_values(node["x-source"], payload[name])
+                     except (ValueError, TypeError, OverflowError, RecursionError) as error:
+                         raise ReportBoundaryError("Invalid recorded chromatin fact", code="invalid_form", field=name) from error
++                elif str(node.get("x-source", "")).startswith("barcode_"):
++                    from .barcode_return_views import validate_barcode_fact_values
++                    try:
++                        validate_barcode_fact_values(node["x-source"], payload[name])
++                    except (ValueError, TypeError, OverflowError, RecursionError) as error:
++                        raise ReportBoundaryError("Invalid recorded barcode fact", code="invalid_form", field=name) from error
+                 elif str(node.get("x-source", "")).startswith("expression_nmf_"):
+                     from .expression_nmf_return_views import validate_expression_nmf_fact_values
+                     try:
+@@ -486,7 +515,7 @@
+         if value is None or not isinstance(node, dict):
+             return
+         if (node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}
+-                or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))):
++                or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_", "barcode_"))):
+             resource = node
+         if resource is not None and "$ref" in node:
+             pointer = node["$ref"]

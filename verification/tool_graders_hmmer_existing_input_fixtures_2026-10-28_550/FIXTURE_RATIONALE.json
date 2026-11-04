@@ -1,0 +1,38 @@
+[
+  {
+    "test": "test_source_resaved_distinct_coordinates_and_gs_gr_events",
+    "fixture": "interleaved duplicate same rows Ac.dE and aG-dF",
+    "selected_flag": "--amino",
+    "reason": "E/F identify protein residues. The fixture checks preserved case/gaps, row occurrences, GR joins and incompatible duplicated-name WT, not inference."
+  },
+  {
+    "test": "test_unsupported_and_partial_are_not_empty_success",
+    "fixture": "unterminated Stockholm row ACGT",
+    "selected_flag": "--dna",
+    "reason": "Select DNA for the four canonical DNA symbols so the parser reaches the deliberately absent terminator. The original decoded_count=1 and partial assertion is unchanged. The AFA ACGT parameter remains unflagged and its decoded_count=None/unsupported assertion is unchanged; the branch now distinguishes its declared format instead of settings truthiness."
+  },
+  {
+    "test": "test_first_record_only_and_bad_utf8_tail_preserve_valid_prefix",
+    "fixture": "two complete AC Stockholm records plus 0xffignored",
+    "selected_flag": "--dna",
+    "reason": "AC is compatible with the explicit DNA test operand. Selection isolates prefix preservation and bad UTF-8 qualification from short-sample inference. The two records, mask/unprocessed association order and both issue assertions are unchanged."
+  },
+  {
+    "test": "test_invalid_payload_and_repeated_ids_do_not_throw_or_merge",
+    "fixture": "one AC Stockholm occurrence, its duplicated identifier and a malformed occurrence",
+    "selected_flag": "--dna",
+    "reason": "Select DNA for the short AC source so this fixture still tests occurrence validation and duplicate suppression. It retains one decoded record and both original occurrence issue assertions."
+  },
+  {
+    "test": "test_identical_bytes_in_different_input_occurrences_remain_distinct",
+    "fixture": "two distinct occurrences containing the same AC Stockholm bytes",
+    "selected_flag": "--dna",
+    "reason": "Select DNA for the short AC source so the fixture tests identity by occurrence, cardinality qualification and refusal to guess an association. Both original distinct records/keys assertions remain."
+  },
+  {
+    "test": "test_malformed_summary_numbers_and_invalid_row_width_remain_partial",
+    "fixture": "Stockholm rows ACGT/AC, RF xxxx and MM m.",
+    "selected_flag": "--dna",
+    "reason": "Select DNA for the A/C/G/T symbols so malformed row and annotation geometry reaches the Stockholm parser. Both geometry issue assertions and the independent retained native nan summary subcase remain unchanged."
+  }
+]

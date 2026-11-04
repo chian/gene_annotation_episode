@@ -281,6 +281,16 @@ class RestrictionMappingReferences(EpisodeReturnRecords):
             self._commission(parent, current)
             current = parent
 
+    def frozen_reference(self, context, reference, namespace):
+        """Resolve a closed scientific return's requested names without live work."""
+        if namespace != "restriction_enzyme":
+            return None
+        self.authenticate(context)
+        if context.role != "scientific_process" or type(reference) is not str or not reference:
+            return False
+        with self.store.read_snapshot():
+            return reference in self._own_frozen_names(context)
+
     def resolve(self, context, reference, namespace):
         if namespace != "restriction_enzyme":
             return None

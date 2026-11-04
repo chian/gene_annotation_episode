@@ -1,0 +1,756 @@
+{
+  "run_id": "run_1713d5f6e0e24f0b9906f9198328b08a",
+  "status": "passed",
+  "actual_source_sha256": "829548287a1dfb0ab8f890de15324e496b73351d2c1dfe4a6182eeeeef71a128",
+  "selected_arguments": {
+    "source_ref": "source_29f86582ecb7f863c255ff42",
+    "source_kind": "primary_html",
+    "section_id": "sec2-4",
+    "paragraph_id": "direct_paragraph:1",
+    "subject": "BtsT",
+    "quantity": "apparent_km",
+    "analyte": "pyruvate"
+  },
+  "actual_outcome": {
+    "changed_record_refs": [
+      "reference_a92fa244063cd1f5ff7eeac3",
+      "term_05296faf20663884038d485d",
+      "term_12cc048340eec72a019877fe",
+      "term_058bb4551728720269d74a0f",
+      "term_2020eef6d5a8a348e093b874",
+      "source_b2e814d603497f4fb5b018d0"
+    ],
+    "feedback": null,
+    "operation_ref": "operation_f8b941199688c21ed3317ec1",
+    "record_refs": [
+      "source_b2e814d603497f4fb5b018d0",
+      "reference_a92fa244063cd1f5ff7eeac3",
+      "term_05296faf20663884038d485d",
+      "term_12cc048340eec72a019877fe",
+      "term_058bb4551728720269d74a0f",
+      "term_2020eef6d5a8a348e093b874"
+    ],
+    "result": {
+      "analyte": "pyruvate",
+      "artifact_ref": "artifact_829548287a1dfb0ab8f890de15324e496b73351d2c1dfe4a6182eeeeef71a128",
+      "cells": {
+        "corrected_activity": {
+          "conditional_on": [],
+          "formula": "(q-g)*v/(k*E*u)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "per_min",
+          "value": null
+        },
+        "effect_precision": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "1/effect_variance",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "min_squared",
+          "value": null
+        },
+        "effect_standard_uncertainty": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "sqrt(effect_variance)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "per_min",
+          "value": null
+        },
+        "effect_variance": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "J*covariance*J_transpose+distinct_residual_variance",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "per_min_squared",
+          "value": null
+        },
+        "relative_reported_spread": {
+          "conditional_on": [],
+          "formula": "reported_spread/abs(reported_value)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.3878787878787879
+        },
+        "reported_spread": {
+          "conditional_on": [],
+          "formula": "literal_source_plus_minus_spread",
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM",
+          "value": 6.4
+        },
+        "reported_value": {
+          "conditional_on": [],
+          "formula": "literal_source_value_with_explicit_unit_conversion",
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM",
+          "value": 16.5
+        },
+        "source_presence_index": {
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "formula": "tanh(source_profile_log_ratio/2)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "source_profile_log_ratio": {
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "dimensionless",
+          "value": null
+        }
+      },
+      "coordinate_unit": "paragraph_unicode_characters",
+      "expression_end": 1338,
+      "expression_start": 1252,
+      "paragraph_id": "direct_paragraph:1",
+      "quantity": "apparent_km",
+      "section_id": "sec2-4",
+      "sheet_ref": "source_b2e814d603497f4fb5b018d0",
+      "source_ref": "source_29f86582ecb7f863c255ff42",
+      "source_uncertainty": {
+        "count": null,
+        "kind": "unspecified",
+        "magnitude": 6.4,
+        "sampling_basis": "unspecified"
+      },
+      "subject": "BtsT",
+      "text": "Additionally, the specificity of BtsT was tested by assaying several compounds with shared structural similarity for the ability to act as competitive inhibitors for the pyruvate binding site when provided in a 100-fold access (Fig. 4B). Br-pyruvate is a synthetic analogue of pyruvate, and was found to act as a competitive inhibitor of BtsT, which is in agreement with earlier studies in E. coli K-12 (16). None of the other compounds used (l-malate, l-lactate, and d-lactate with a C-α hydroxyl group; phosphoenolpyruvate [PEP] with a C-α phosphoryl group; or l-alanine with a positively charged C-α amino group) reduced the rate of pyruvate uptake. We also tested monocarboxylates (acetate and propionate), a dicarboxylate (succinate), and amino acids (l-serine and l-glycine), but the uptake rate was significantly reduced only in the presence of pyruvate or its synthetic analog Br-pyruvate, indicating the narrow specificity of the transporter. In order to determine the Km for pyruvate uptake, we quantified the initial rate of pyruvate uptake by BtsT at different concentrations of pyruvate (Fig. 4C). Pyruvate can enter the cells by diffusion (Fig. S8). Therefore, the uptake rates were corrected by the values determined for pure diffusion. The Km of the transporter BtsT for pyruvate measured in intact cells was 16.5 ± 6.4 μM."
+    },
+    "status": "completed"
+  },
+  "saved_payload": {
+    "experimental_bindings": {
+      "analyte_ref": "term_2020eef6d5a8a348e093b874",
+      "condition_ref": null,
+      "endpoint_ref": "term_05296faf20663884038d485d",
+      "experiment_ref": null,
+      "normalization_ref": "term_12cc048340eec72a019877fe",
+      "quantity_ref": "term_058bb4551728720269d74a0f",
+      "reported_subject_ref": "reference_a92fa244063cd1f5ff7eeac3"
+    },
+    "input_artifact_ref": "artifact_829548287a1dfb0ab8f890de15324e496b73351d2c1dfe4a6182eeeeef71a128",
+    "input_source_ref": "source_29f86582ecb7f863c255ff42",
+    "sheet": {
+      "annotation_credit": null,
+      "axis": "A105",
+      "cells": {
+        "corrected_activity": {
+          "conditional_on": [],
+          "formula": "(q-g)*v/(k*E*u)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "per_min",
+          "value": null
+        },
+        "effect_precision": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "1/effect_variance",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "min_squared",
+          "value": null
+        },
+        "effect_standard_uncertainty": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "sqrt(effect_variance)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "per_min",
+          "value": null
+        },
+        "effect_variance": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "J*covariance*J_transpose+distinct_residual_variance",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "per_min_squared",
+          "value": null
+        },
+        "relative_reported_spread": {
+          "conditional_on": [],
+          "formula": "reported_spread/abs(reported_value)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.3878787878787879
+        },
+        "reported_spread": {
+          "conditional_on": [],
+          "formula": "literal_source_plus_minus_spread",
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM",
+          "value": 6.4
+        },
+        "reported_value": {
+          "conditional_on": [],
+          "formula": "literal_source_value_with_explicit_unit_conversion",
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "uM",
+          "value": 16.5
+        },
+        "source_presence_index": {
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "formula": "tanh(source_profile_log_ratio/2)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "source_profile_log_ratio": {
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "quantity_not_activity_rate",
+          "unit": "dimensionless",
+          "value": null
+        }
+      },
+      "correction": {
+        "cells": {
+          "corrected_activity": {
+            "conditional_on": [],
+            "formula": "(q-g)*v/(k*E*u)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "quantity_not_activity_rate",
+            "unit": "per_min",
+            "value": null
+          },
+          "effect_precision": {
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ],
+            "formula": "1/effect_variance",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "quantity_not_activity_rate",
+            "unit": "min_squared",
+            "value": null
+          },
+          "effect_standard_uncertainty": {
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ],
+            "formula": "sqrt(effect_variance)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "quantity_not_activity_rate",
+            "unit": "per_min",
+            "value": null
+          },
+          "effect_variance": {
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ],
+            "formula": "J*covariance*J_transpose+distinct_residual_variance",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "quantity_not_activity_rate",
+            "unit": "per_min_squared",
+            "value": null
+          },
+          "source_presence_index": {
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ],
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "status": "unavailable",
+            "unavailable_reason": "quantity_not_activity_rate",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "source_profile_log_ratio": {
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ],
+            "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "quantity_not_activity_rate",
+            "unit": "dimensionless",
+            "value": null
+          }
+        },
+        "inputs": {
+          "covariance": null,
+          "distinct_residual_variance": null,
+          "observation_model": "none",
+          "values": {
+            "E": null,
+            "g": null,
+            "k": null,
+            "q": null,
+            "u": null,
+            "v": null
+          },
+          "variance_status": "unknown"
+        },
+        "primitive_order": [
+          "q",
+          "g",
+          "k",
+          "E",
+          "u",
+          "v"
+        ],
+        "version": "a105_corrected_activity_v1"
+      },
+      "extraction": {
+        "analyte": "pyruvate",
+        "normalization": "none",
+        "origin": "reported",
+        "quantity": "apparent_km",
+        "source": {
+          "artifact_ref": "artifact_829548287a1dfb0ab8f890de15324e496b73351d2c1dfe4a6182eeeeef71a128",
+          "expression": "The Km of the transporter BtsT for pyruvate measured in intact cells was 16.5 ± 6.4 μM",
+          "expression_end": 1338,
+          "expression_start": 1252,
+          "paragraph_id": "direct_paragraph:1",
+          "paragraph_text": "Additionally, the specificity of BtsT was tested by assaying several compounds with shared structural similarity for the ability to act as competitive inhibitors for the pyruvate binding site when provided in a 100-fold access (Fig. 4B). Br-pyruvate is a synthetic analogue of pyruvate, and was found to act as a competitive inhibitor of BtsT, which is in agreement with earlier studies in E. coli K-12 (16). None of the other compounds used (l-malate, l-lactate, and d-lactate with a C-α hydroxyl group; phosphoenolpyruvate [PEP] with a C-α phosphoryl group; or l-alanine with a positively charged C-α amino group) reduced the rate of pyruvate uptake. We also tested monocarboxylates (acetate and propionate), a dicarboxylate (succinate), and amino acids (l-serine and l-glycine), but the uptake rate was significantly reduced only in the presence of pyruvate or its synthetic analog Br-pyruvate, indicating the narrow specificity of the transporter. In order to determine the Km for pyruvate uptake, we quantified the initial rate of pyruvate uptake by BtsT at different concentrations of pyruvate (Fig. 4C). Pyruvate can enter the cells by diffusion (Fig. S8). Therefore, the uptake rates were corrected by the values determined for pure diffusion. The Km of the transporter BtsT for pyruvate measured in intact cells was 16.5 ± 6.4 μM.",
+          "representation": "primary_html",
+          "section_id": "sec2-4",
+          "source_ref": "source_29f86582ecb7f863c255ff42"
+        },
+        "subject": "BtsT",
+        "uncertainty": {
+          "count": null,
+          "kind": "unspecified",
+          "magnitude": 6.4,
+          "sampling_basis": "unspecified"
+        },
+        "unit": "uM",
+        "value": 16.5,
+        "version": "a105_html_quantity_v1"
+      },
+      "interpretation_limits": [
+        "subject_token_presence_is_not_experimental_attribution",
+        "reported_specific_activity_does_not_establish_product_identity",
+        "reported_spread_with_unspecified_meaning_is_not_SEM_or_SD",
+        "apparent_km_is_not_affinity_or_an_activity_rate"
+      ],
+      "scope": "reported_source_quantity",
+      "source_conditions": null
+    },
+    "version": "literature_source_quantity_record_v1"
+  },
+  "actual_admitted_parent_subset": [
+    {
+      "analyte_ref": "term_2020eef6d5a8a348e093b874",
+      "component": "reported_value",
+      "condition_ref": null,
+      "conditional_on": [],
+      "endpoint_ref": "term_05296faf20663884038d485d",
+      "evidence_source_ref": "source_29f86582ecb7f863c255ff42",
+      "experiment_ref": null,
+      "normalization_ref": "term_12cc048340eec72a019877fe",
+      "origin": "reported",
+      "quantity_ref": "term_058bb4551728720269d74a0f",
+      "reported_subject_ref": "reference_a92fa244063cd1f5ff7eeac3",
+      "reported_uncertainty_kind": "unspecified",
+      "sheet_ref": "source_b2e814d603497f4fb5b018d0",
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "uM",
+      "value": 16.5
+    },
+    {
+      "analyte_ref": "term_2020eef6d5a8a348e093b874",
+      "component": "reported_spread",
+      "condition_ref": null,
+      "conditional_on": [],
+      "endpoint_ref": "term_05296faf20663884038d485d",
+      "evidence_source_ref": "source_29f86582ecb7f863c255ff42",
+      "experiment_ref": null,
+      "normalization_ref": "term_12cc048340eec72a019877fe",
+      "origin": "reported",
+      "quantity_ref": "term_058bb4551728720269d74a0f",
+      "reported_subject_ref": "reference_a92fa244063cd1f5ff7eeac3",
+      "reported_uncertainty_kind": "unspecified",
+      "sheet_ref": "source_b2e814d603497f4fb5b018d0",
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "uM",
+      "value": 6.4
+    },
+    {
+      "analyte_ref": "term_2020eef6d5a8a348e093b874",
+      "component": "relative_reported_spread",
+      "condition_ref": null,
+      "conditional_on": [],
+      "endpoint_ref": "term_05296faf20663884038d485d",
+      "evidence_source_ref": "source_29f86582ecb7f863c255ff42",
+      "experiment_ref": null,
+      "normalization_ref": "term_12cc048340eec72a019877fe",
+      "origin": "derived",
+      "quantity_ref": "term_058bb4551728720269d74a0f",
+      "reported_subject_ref": "reference_a92fa244063cd1f5ff7eeac3",
+      "reported_uncertainty_kind": "unspecified",
+      "sheet_ref": "source_b2e814d603497f4fb5b018d0",
+      "status": "populated",
+      "unavailable_reason": null,
+      "unit": "dimensionless",
+      "value": 0.3878787878787879
+    },
+    {
+      "analyte_ref": "term_2020eef6d5a8a348e093b874",
+      "component": "source_presence_index",
+      "condition_ref": null,
+      "conditional_on": [
+        "first_order_covariance_propagation",
+        "known_variance",
+        "known_normal_nonnegative_presence"
+      ],
+      "endpoint_ref": "term_05296faf20663884038d485d",
+      "evidence_source_ref": "source_29f86582ecb7f863c255ff42",
+      "experiment_ref": null,
+      "normalization_ref": "term_12cc048340eec72a019877fe",
+      "origin": "proposed",
+      "quantity_ref": "term_058bb4551728720269d74a0f",
+      "reported_subject_ref": "reference_a92fa244063cd1f5ff7eeac3",
+      "reported_uncertainty_kind": "unspecified",
+      "sheet_ref": "source_b2e814d603497f4fb5b018d0",
+      "status": "unavailable",
+      "unavailable_reason": "quantity_not_activity_rate",
+      "unit": "dimensionless",
+      "value": null
+    }
+  ],
+  "observations": 3,
+  "controller_credit": 0.0,
+  "model_backed": false,
+  "target_problem": "synthetic short-sequence fixture in isolated Store",
+  "execution": "ordinary Workflow with scripted decisions and fixture controller",
+  "transport_response_examples": {
+    "actual_different_system_context": {
+      "version": "a105_transport_response_v1",
+      "primitive_order": [
+        "substrate_test",
+        "substrate_reference",
+        "km"
+      ],
+      "inputs": {
+        "values": {
+          "substrate_test": 10.0,
+          "substrate_reference": 40.0,
+          "km": 16.5
+        },
+        "curve_keys": {
+          "substrate_test": "whole_cell_curve",
+          "substrate_reference": "proteoliposome_curve",
+          "km": "whole_cell_curve"
+        },
+        "measurement_keys": {
+          "substrate_test": "whole_cell_substrate",
+          "substrate_reference": "vesicle_substrate",
+          "km": "whole_cell_reported_km"
+        },
+        "covariance": null,
+        "variance_status": "unknown",
+        "observation_model": "michaelis_menten",
+        "origin": "derived"
+      },
+      "cells": {
+        "substrate_test": {
+          "value": 10.0,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "substrate_test",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "substrate_reference": {
+          "value": 40.0,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "substrate_reference",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "apparent_km": {
+          "value": 16.5,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "km",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "test_saturation": {
+          "value": 0.37735849056603776,
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "substrate_test/(km+substrate_test)",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "reference_saturation": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "substrate_reference/(km+substrate_reference)",
+          "origin": "derived",
+          "unavailable_reason": "different_kinetic_curves",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "condition_response": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+          "origin": "derived",
+          "unavailable_reason": "different_kinetic_curves",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "log_condition_response": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "log(condition_response)",
+          "origin": "derived",
+          "unavailable_reason": "different_kinetic_curves",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "condition_response_variance": {
+          "value": null,
+          "unit": "dimensionless_squared",
+          "status": "unavailable",
+          "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+          "origin": "derived",
+          "unavailable_reason": "different_kinetic_curves",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response",
+            "first_order_covariance_propagation"
+          ]
+        },
+        "condition_response_standard_uncertainty": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "sqrt(condition_response_variance)",
+          "origin": "derived",
+          "unavailable_reason": "different_kinetic_curves",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response",
+            "first_order_covariance_propagation"
+          ]
+        }
+      }
+    },
+    "explicitly_hypothetical_same_curve": {
+      "version": "a105_transport_response_v1",
+      "primitive_order": [
+        "substrate_test",
+        "substrate_reference",
+        "km"
+      ],
+      "inputs": {
+        "values": {
+          "substrate_test": 10.0,
+          "substrate_reference": 40.0,
+          "km": 16.5
+        },
+        "curve_keys": {
+          "substrate_test": "illustrative_common_curve",
+          "substrate_reference": "illustrative_common_curve",
+          "km": "illustrative_common_curve"
+        },
+        "measurement_keys": {
+          "substrate_test": "whole_cell_substrate",
+          "substrate_reference": "vesicle_substrate",
+          "km": "whole_cell_reported_km"
+        },
+        "covariance": null,
+        "variance_status": "unknown",
+        "observation_model": "michaelis_menten",
+        "origin": "synthetic"
+      },
+      "cells": {
+        "substrate_test": {
+          "value": 10.0,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "substrate_test",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "substrate_reference": {
+          "value": 40.0,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "substrate_reference",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "apparent_km": {
+          "value": 16.5,
+          "unit": "uM",
+          "status": "populated",
+          "formula": "km",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "test_saturation": {
+          "value": 0.37735849056603776,
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "substrate_test/(km+substrate_test)",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "reference_saturation": {
+          "value": 0.7079646017699115,
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "substrate_reference/(km+substrate_reference)",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "condition_response": {
+          "value": 0.5330188679245284,
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "log_condition_response": {
+          "value": -0.6291984559596719,
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "log(condition_response)",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response"
+          ]
+        },
+        "condition_response_variance": {
+          "value": null,
+          "unit": "dimensionless_squared",
+          "status": "unavailable",
+          "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+          "origin": "derived",
+          "unavailable_reason": "primitive_covariance_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response",
+            "first_order_covariance_propagation"
+          ]
+        },
+        "condition_response_standard_uncertainty": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "sqrt(condition_response_variance)",
+          "origin": "derived",
+          "unavailable_reason": "primitive_covariance_unreported",
+          "conditional_on": [
+            "same_kinetic_curve",
+            "michaelis_menten_response",
+            "first_order_covariance_propagation"
+          ]
+        }
+      }
+    }
+  },
+  "response_calculator_execution": "direct deterministic function, not selected episode integration",
+  "limits": [
+    "No raw transport trace/populated WT restoration calculation",
+    "No known covariance inferred from printed ±",
+    "No actual-model binding/transport execution or live host restart"
+  ]
+}

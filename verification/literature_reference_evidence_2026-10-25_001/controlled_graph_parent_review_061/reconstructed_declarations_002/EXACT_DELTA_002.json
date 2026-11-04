@@ -1,0 +1,34 @@
+{
+  "version": "controlled_response_count_amendment_002",
+  "scope": "only private pixel acquisition and pending counter-provenance fields",
+  "status": "root_selected_new_private_count_helper; overall_schema_and_implementation_not_released",
+  "supersedes": [
+    "001 unresolved pixel-identity reuse choice",
+    "001 artificial minimum height2 caused by identity calibration",
+    "001 PixelResult core_version/core_sha256/core_counting_calibration fields"
+  ],
+  "preserves": [
+    "all sealed001 artifact bytes and manifest",
+    "frozen old figure core",
+    "001 public selection schema proposals",
+    "001 signed-edge/axis/unit/authentication/covariance separation",
+    "two already proposed NEW module/test paths only"
+  ],
+  "public_output_delta": [
+    {
+      "remove": "PixelResult.core_version",
+      "add": "PixelResult.counter_version=controlled_response_bar_runs_v1"
+    },
+    {
+      "remove": "PixelResult.core_sha256",
+      "add": "PixelResult.counter_module_sha256=actual host-bound new module SHA256"
+    },
+    {
+      "remove": "PixelResult.core_counting_calibration",
+      "add": null
+    }
+  ],
+  "schemas": "002 output schema proposes ONLY these changes;001 schemas remain pending overall root review",
+  "no_implementation": true,
+  "no_primary_source_or_model_read": true
+}

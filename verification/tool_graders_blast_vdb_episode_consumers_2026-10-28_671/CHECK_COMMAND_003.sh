@@ -1,0 +1,2 @@
+#!/bin/sh
+python3 verification/tool_graders_hmmer_map_verification_2026-10-28_529/run_checks.py launch check128c_vdb_episode671 --dependencies-from verification/tool_graders_hmmer_map_verification_2026-10-28_529/check005/dependencies --test test_blast_preparation_tool_info_651.py::test_legacy_descriptors_are_exactly_unchanged --support-file verification/tool_graders_blast_preparation_tool_info_2026-10-28_651/LEGACY_INFORMATION_001.json --support-file verification/tool_graders_blast_preparation_tool_info_2026-10-28_651/TOOL_INFO_BEFORE.py.txt

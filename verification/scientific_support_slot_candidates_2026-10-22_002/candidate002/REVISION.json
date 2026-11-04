@@ -1,0 +1,83 @@
+{
+  "status": "review_draft_only_not_adopted",
+  "previous_draft": "/tmp/scientific-support-slot-draft-20261022-001",
+  "previous_manifest_sha256": "c381d7f25cc09cc81e12477c63e7282c1ffd82329440e15341219cff2bff1fef",
+  "independent_review_manifest_sha256": "87899cf28865ab1a3233284135fc073d4b99ecb880e494171b51fec4d00f483b",
+  "changes": [
+    {
+      "id": "D1",
+      "path": "entries/A111.json",
+      "json_pointer": "/support/operands/0/instruction",
+      "operation": "append_exact_text_in_a_new_draft_only",
+      "text": " Here measured_structural_state requires experimental structural data from the actual scoped preparation. An experimentally determined and refined crystallographic or cryo-EM model, a fitted ligand identity and a model-derived contact remain interpretations constrained by those data; retain the actual density, resolution, identity and refinement limits available in the source. A wholly predicted, homology-modeled, docked or simulated state without corresponding experimental structural data is outside this measured operand, even if deposited. The prediction_not_measurement qualification does not supply experimental origin, change applicability or create observed extent. Record such a prediction separately with its actual origin and appropriate non-direct target attribution rather than treating its coordinates as a measured state.",
+      "enum_change": "none required; the qualification may describe an inferred functional claim, but it cannot establish measured structural origin",
+      "scientific_source_basis": [
+        "E-A111-001",
+        "E-A111-004",
+        "E-A111-005",
+        "E-A111-008"
+      ],
+      "previous_value_sha256": "76eb69aeb02265724a7aa7cc81806079cf65d1fbfff8c228e6ab904796ede4b0",
+      "new_value_sha256": "1fda53b47f937ef5025a487d429bc57f6ea2e94cd1de7255f02ef1ec9dfb02b0"
+    },
+    {
+      "id": "D2",
+      "path": "entries/A111.json",
+      "json_pointer": "/support/operands/2/instruction",
+      "operation": "append_exact_text_in_a_new_draft_only",
+      "text": " Preserve whether the input model was experimentally constrained/refined or purely predicted; deposition and a computable coordinate are not experimental measurements. A distance/contact calculation from an experimentally refined model is a dependent derived result under that model's uncertainty. A calculation from purely predicted coordinates remains prediction-derived and cannot gain direct observed_extent by producing numerical geometry. Keep model-dependent contact or ligand interpretations separate from observed affinity, reaction, net transport and energetic necessity.",
+      "scientific_source_basis": [
+        "E-A111-004",
+        "E-A111-005",
+        "E-A111-008"
+      ],
+      "previous_value_sha256": "3daaa08465dfeaf738222b62d44ea33ecb6699a24a30552f6f63876c032f50e1",
+      "new_value_sha256": "ffe46ba3e6aeb583f5089df8c59a18433e1063fd34358da3b877bebb7595d453"
+    },
+    {
+      "id": "D3",
+      "path": "entries/A111.json",
+      "json_pointer": "/support/operands/0/instruction",
+      "operation": "append_exact_text_in_a_new_draft_only",
+      "text": " State the directly constrained structural proposition separately from any functional interpretation. Use feature_structure for an observed tunnel, architecture or contact arrangement and binds only for the source-supported bounded association/occupancy with its actual identity uncertainty. Structural compatibility alone is not a measured transports, catalyzes, requires, partner_dependence or uses event. For those functional hypotheses, retain the explicit structural-to-function assumptions and the precise compatibility or incompatibility established; an assertion of measured occurrence that lacks the corresponding functional observation does_not_discriminate. In LetB, tunnel/contact compatibility leaves net transport, direction and exact physiological lipid identity unresolved. In FrsA, density modeled as hexanoate with unknown ligand identity does not establish specific hexanoate binding.",
+      "numerical_or_schema_change": "none; exact relationship wording only, no new acceptance gate or score",
+      "scientific_source_basis": [
+        "E-A111-006",
+        "E-A111-007",
+        "E-A111-008"
+      ],
+      "previous_value_sha256": "1fda53b47f937ef5025a487d429bc57f6ea2e94cd1de7255f02ef1ec9dfb02b0",
+      "new_value_sha256": "1b5ecac7c8f308538a125bb481e1d960cae4b20a40569334d5d450ec9a941bfd"
+    },
+    {
+      "id": "D4",
+      "path": "entries/A102.json",
+      "json_pointer": "/support/operands/0/instruction",
+      "operation": "replace_exact_text",
+      "old_text": "deposited versus predicted origin",
+      "new_text": "experimentally constrained/refined versus purely predicted origin (deposition is a separate provenance fact)",
+      "basis": "Independent scientific_boundary_review.json other_concrete_boundaries_reviewed A102/A108; deposited and predicted are not exclusive."
+    }
+  ],
+  "unchanged": [
+    "All entry evidence rows and source mappings",
+    "All149 original record identities",
+    "142group review coverage and163 contrasts",
+    "Existing numerical policy",
+    "Active A0/P19/library/tool retriever and all application/scientific state"
+  ],
+  "source_relation_limit": {
+    "exact_source_id_url_rows": 22,
+    "case_or_trace_url_membership_rows": 284,
+    "all_retained_pointer_clause_rows": 306,
+    "independent_primary_source_entailment_for_every_mapping": false
+  },
+  "validator_derivation": {
+    "original_script_sha256": "5aa5b4aa133299835f412d795daf3ab97bc31e97700f8d9fdde7908e33fa7a42",
+    "derived_script_sha256": "e9b30974d5d18e09877c3c6773f4fe0a1ec5687cb904702ecb70e2e1837aa5b1",
+    "only_script_delta": {
+      "old_OUT": "/tmp/scientific-support-slot-draft-20261022-001",
+      "new_OUT": "/tmp/scientific-support-slot-draft-20261022-002"
+    }
+  }
+}

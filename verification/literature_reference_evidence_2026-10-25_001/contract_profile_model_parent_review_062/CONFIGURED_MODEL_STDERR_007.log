@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/runner/run_literature_source_job_062.py", line 377, in <module>
+    main()
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/runner/run_literature_source_job_062.py", line 368, in main
+    asyncio.run(live(pin, destination, args.resume, metadata, job))
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/runner/run_literature_source_job_062.py", line 336, in live
+    result = await run_workflow(store, tools, provider_config=configuration,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/runtime.py", line 4132, in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/runtime.py", line 4454, in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/method_loop/episode.py", line 1258, in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/method_loop/episode.py", line 1551, in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/runtime.py", line 1354, in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/runtime.py", line 920, in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/runtime.py", line 1196, in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/providers.py", line 392, in complete
+    return await self.workers[key].complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/literature_contract_profile_model_run_063/pin_001/gene_annotation_episode/providers.py", line 269, in complete
+    raise ModelCallError(f"Model turn {turn['status']}: {turn.get('error')}")
+gene_annotation_episode.providers.ModelCallError: Model turn failed: {'message': 'Selected model is at capacity. Please try a different model.', 'codexErrorInfo': 'serverOverloaded', 'additionalDetails': None, 'misalignment': None}

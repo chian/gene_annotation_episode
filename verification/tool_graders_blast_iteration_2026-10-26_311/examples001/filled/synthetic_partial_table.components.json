@@ -1,0 +1,3235 @@
+{
+  "schema": "blast_iteration_components_v1",
+  "status": "partial",
+  "searches": [
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "status": "partial",
+      "source_status": "available",
+      "native_search": {
+        "search_key": {
+          "artifact_key": "synthetic-report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/sections/0"
+        },
+        "program_context": {
+          "execution_program": "psiblast",
+          "reported_program": "PSIBLAST",
+          "scientific_mode": "database",
+          "query_kind": "sequence",
+          "reference_kind": "sequence",
+          "native_version": "PSIBLAST 2.17.0+",
+          "geometry_program": "blastp"
+        },
+        "stage": null,
+        "iteration": null,
+        "normalized": {
+          "schema": "blast_normalized_result_v1",
+          "mode": "database",
+          "resource": "hpc",
+          "format": "tabular",
+          "query": {
+            "id": "q",
+            "title": "q",
+            "length": 8
+          },
+          "search": {
+            "program": "psiblast",
+            "version": "PSIBLAST 2.17.0+",
+            "database": "synthetic_db",
+            "parameters": {},
+            "statistics": {},
+            "request": {
+              "selected": "synthetic-only"
+            },
+            "hit_array_present": true,
+            "reported_hit_count": null
+          },
+          "hits": [
+            {
+              "hit_index": 0,
+              "length": 10,
+              "descriptions": [
+                {
+                  "id": "A"
+                }
+              ],
+              "unpaired_metadata": {},
+              "hsps": [
+                {
+                  "bit_score": 40.0,
+                  "query_from": 3,
+                  "query_to": 6,
+                  "hit_from": 2,
+                  "hit_to": 5,
+                  "qseq": "ACDE",
+                  "hseq": "ACDE"
+                },
+                {
+                  "bit_score": 40.0,
+                  "query_from": 3,
+                  "query_to": 6,
+                  "hit_from": 2,
+                  "hit_to": 5,
+                  "qseq": "ACDE",
+                  "hseq": "ACDE"
+                }
+              ]
+            },
+            {
+              "hit_index": 1,
+              "length": 10,
+              "descriptions": [
+                {
+                  "id": "B"
+                }
+              ],
+              "unpaired_metadata": {},
+              "hsps": [
+                {
+                  "bit_score": 40.0,
+                  "query_from": 3,
+                  "query_to": 6,
+                  "hit_from": 2,
+                  "hit_to": 5,
+                  "qseq": "ACDE",
+                  "hseq": "ACDE"
+                }
+              ]
+            }
+          ],
+          "native": {
+            "text": "# PSIBLAST 2.17.0+\n# Query: q\n# Database: synthetic_db\n# 3 hits found\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@B@8@10@3@6@2@5@ACDE@ACDE@40\nunassignable\n",
+            "fields": [
+              "qseqid",
+              "sseqid",
+              "qlen",
+              "slen",
+              "qstart",
+              "qend",
+              "sstart",
+              "send",
+              "qseq",
+              "sseq",
+              "bitscore"
+            ],
+            "rows": [
+              {
+                "line": 5,
+                "values": [
+                  "q",
+                  "A",
+                  "8",
+                  "10",
+                  "3",
+                  "6",
+                  "2",
+                  "5",
+                  "ACDE",
+                  "ACDE",
+                  "40"
+                ],
+                "fields": {
+                  "qseqid": "q",
+                  "sseqid": "A",
+                  "qlen": "8",
+                  "slen": "10",
+                  "qstart": "3",
+                  "qend": "6",
+                  "sstart": "2",
+                  "send": "5",
+                  "qseq": "ACDE",
+                  "sseq": "ACDE",
+                  "bitscore": "40"
+                }
+              },
+              {
+                "line": 6,
+                "values": [
+                  "q",
+                  "A",
+                  "8",
+                  "10",
+                  "3",
+                  "6",
+                  "2",
+                  "5",
+                  "ACDE",
+                  "ACDE",
+                  "40"
+                ],
+                "fields": {
+                  "qseqid": "q",
+                  "sseqid": "A",
+                  "qlen": "8",
+                  "slen": "10",
+                  "qstart": "3",
+                  "qend": "6",
+                  "sstart": "2",
+                  "send": "5",
+                  "qseq": "ACDE",
+                  "sseq": "ACDE",
+                  "bitscore": "40"
+                }
+              },
+              {
+                "line": 7,
+                "values": [
+                  "q",
+                  "B",
+                  "8",
+                  "10",
+                  "3",
+                  "6",
+                  "2",
+                  "5",
+                  "ACDE",
+                  "ACDE",
+                  "40"
+                ],
+                "fields": {
+                  "qseqid": "q",
+                  "sseqid": "B",
+                  "qlen": "8",
+                  "slen": "10",
+                  "qstart": "3",
+                  "qend": "6",
+                  "sstart": "2",
+                  "send": "5",
+                  "qseq": "ACDE",
+                  "sseq": "ACDE",
+                  "bitscore": "40"
+                }
+              },
+              {
+                "line": 8,
+                "values": [
+                  "unassignable"
+                ]
+              }
+            ],
+            "declared_alignment_row_count": 3,
+            "sha256": "2009cc9979b884c699c412951137ed54a41eca520f5b8d6d6d96ebc5f517a1fe",
+            "table_layout": {
+              "format": "tabular7",
+              "declared_fields": [
+                "qseqid",
+                "sseqid",
+                "qlen",
+                "slen",
+                "qstart",
+                "qend",
+                "sstart",
+                "send",
+                "qseq",
+                "sseq",
+                "bitscore"
+              ],
+              "delimiter": "@"
+            }
+          },
+          "issues": [
+            {
+              "code": "blast_tabular_column_count_invalid",
+              "pointer": "/sections/0/lines/8",
+              "field": null,
+              "details": {
+                "expected": 11,
+                "actual": 1
+              }
+            },
+            {
+              "code": "blast_tabular_reported_row_count_mismatch",
+              "pointer": "/sections/0",
+              "field": null,
+              "details": {
+                "reported": 3,
+                "observed": 4
+              }
+            }
+          ]
+        },
+        "row_map": [
+          {
+            "hit_index": 0,
+            "description_ordinals": [
+              0
+            ],
+            "hsp_ordinals": [
+              0,
+              1
+            ]
+          },
+          {
+            "hit_index": 1,
+            "description_ordinals": [
+              0
+            ],
+            "hsp_ordinals": [
+              2
+            ]
+          }
+        ],
+        "operand_binding": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "reporting": {
+          "native_hit_array_present": true,
+          "native_hit_count": null,
+          "requested_hit_limit": 2,
+          "requested_hsp_limit": 4,
+          "native_returncode": 0,
+          "producer_complete": true
+        },
+        "native": {
+          "report": {
+            "text": "# PSIBLAST 2.17.0+\n# Query: q\n# Database: synthetic_db\n# 3 hits found\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@B@8@10@3@6@2@5@ACDE@ACDE@40\nunassignable\n",
+            "program": "PSIBLAST",
+            "version": "PSIBLAST 2.17.0+"
+          },
+          "search": {
+            "text": "# PSIBLAST 2.17.0+\n# Query: q\n# Database: synthetic_db\n# 3 hits found\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@B@8@10@3@6@2@5@ACDE@ACDE@40\nunassignable\n",
+            "fields": [
+              "qseqid",
+              "sseqid",
+              "qlen",
+              "slen",
+              "qstart",
+              "qend",
+              "sstart",
+              "send",
+              "qseq",
+              "sseq",
+              "bitscore"
+            ],
+            "rows": [
+              {
+                "line": 5,
+                "values": [
+                  "q",
+                  "A",
+                  "8",
+                  "10",
+                  "3",
+                  "6",
+                  "2",
+                  "5",
+                  "ACDE",
+                  "ACDE",
+                  "40"
+                ],
+                "fields": {
+                  "qseqid": "q",
+                  "sseqid": "A",
+                  "qlen": "8",
+                  "slen": "10",
+                  "qstart": "3",
+                  "qend": "6",
+                  "sstart": "2",
+                  "send": "5",
+                  "qseq": "ACDE",
+                  "sseq": "ACDE",
+                  "bitscore": "40"
+                }
+              },
+              {
+                "line": 6,
+                "values": [
+                  "q",
+                  "A",
+                  "8",
+                  "10",
+                  "3",
+                  "6",
+                  "2",
+                  "5",
+                  "ACDE",
+                  "ACDE",
+                  "40"
+                ],
+                "fields": {
+                  "qseqid": "q",
+                  "sseqid": "A",
+                  "qlen": "8",
+                  "slen": "10",
+                  "qstart": "3",
+                  "qend": "6",
+                  "sstart": "2",
+                  "send": "5",
+                  "qseq": "ACDE",
+                  "sseq": "ACDE",
+                  "bitscore": "40"
+                }
+              },
+              {
+                "line": 7,
+                "values": [
+                  "q",
+                  "B",
+                  "8",
+                  "10",
+                  "3",
+                  "6",
+                  "2",
+                  "5",
+                  "ACDE",
+                  "ACDE",
+                  "40"
+                ],
+                "fields": {
+                  "qseqid": "q",
+                  "sseqid": "B",
+                  "qlen": "8",
+                  "slen": "10",
+                  "qstart": "3",
+                  "qend": "6",
+                  "sstart": "2",
+                  "send": "5",
+                  "qseq": "ACDE",
+                  "sseq": "ACDE",
+                  "bitscore": "40"
+                }
+              },
+              {
+                "line": 8,
+                "values": [
+                  "unassignable"
+                ]
+              }
+            ],
+            "declared_alignment_row_count": 3
+          },
+          "line_numbers": [
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        "issues": [
+          {
+            "code": "blast_tabular_column_count_invalid",
+            "pointer": "/sections/0/lines/8",
+            "field": null,
+            "details": {
+              "expected": 11,
+              "actual": 1
+            }
+          },
+          {
+            "code": "blast_tabular_reported_row_count_mismatch",
+            "pointer": "/sections/0",
+            "field": null,
+            "details": {
+              "reported": 3,
+              "observed": 4
+            }
+          }
+        ]
+      },
+      "report_source": {
+        "artifact_key": "synthetic-report",
+        "artifact_ref": "retained:synthetic-report",
+        "member_ordinal": null,
+        "member_sha256": null
+      },
+      "query_binding": {
+        "operand": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "axis_kind": "sequence",
+        "full_length": 12,
+        "coordinate_unit": "aa",
+        "sequence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "pssm_key": null,
+        "master_mapping_ref": null
+      },
+      "search_binding": {
+        "search_key": {
+          "artifact_key": "synthetic-report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/sections/0"
+        },
+        "stage": "sequence_database",
+        "biological_round": 1,
+        "database_identity": {
+          "namespace": "native",
+          "value": "synthetic_db",
+          "version": "1",
+          "release": "r1",
+          "scope": "selected_sequences",
+          "preparation_type": "sequence_database",
+          "source": {
+            "source_ref": "manifest",
+            "pointer": "/database"
+          }
+        },
+        "input_pssm_key": null,
+        "provenance": {
+          "source_ref": "producer",
+          "pointer": "/stage"
+        }
+      },
+      "association_indices": {
+        "report_sources": [
+          0
+        ],
+        "query_bindings": [
+          0
+        ],
+        "search_bindings": [
+          0
+        ],
+        "sequence_metadata": [
+          0
+        ],
+        "profile_metadata": []
+      },
+      "native_iteration": {
+        "value": null,
+        "status": "unavailable",
+        "unavailable_reason": "missing_input",
+        "unit": "native_ordinal_label",
+        "origin": "native_report",
+        "input_pointers": [
+          "/collection/searches/0/iteration"
+        ]
+      },
+      "stage": "sequence_database",
+      "biological_round": {
+        "value": 1,
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "supplied_ordinal",
+        "origin": "supplied_source_record",
+        "input_pointers": [
+          "/search_bindings/0/biological_round"
+        ]
+      },
+      "reporting": {
+        "native_hit_array_present": true,
+        "native_hit_count": null,
+        "requested_hit_limit": 2,
+        "requested_hsp_limit": 4,
+        "native_returncode": 0,
+        "producer_complete": true
+      },
+      "counts": {
+        "reported_hit_count": {
+          "value": null,
+          "status": "unavailable",
+          "unavailable_reason": "invalid_native_row",
+          "unit": "hit_record_count",
+          "origin": "native_report",
+          "input_pointers": [
+            "/collection/searches/0/native/search/rows"
+          ]
+        },
+        "reported_hsp_count": {
+          "value": 4,
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "hsp_record_count",
+          "origin": "native_report",
+          "input_pointers": [
+            "/collection/searches/0/native/search/rows"
+          ]
+        },
+        "observed_hsp_count": {
+          "value": 4,
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "hsp_record_count",
+          "origin": "native_report",
+          "input_pointers": [
+            "/collection/searches/0/native/search/rows"
+          ]
+        },
+        "parsed_hit_count": {
+          "value": 2,
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "hit_record_count",
+          "origin": "derived",
+          "input_pointers": [
+            "/collection/searches/0/normalized/hits"
+          ]
+        },
+        "parsed_hsp_count": {
+          "value": 3,
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "hsp_record_count",
+          "origin": "derived",
+          "input_pointers": [
+            "/collection/searches/0/normalized/hits"
+          ]
+        },
+        "declared_alignment_row_count": {
+          "value": 3,
+          "status": "available",
+          "unavailable_reason": null,
+          "unit": "alignment_row_count",
+          "origin": "native_report",
+          "input_pointers": [
+            "/collection/searches/0/native/search/declared_alignment_row_count"
+          ]
+        }
+      },
+      "thresholds": {
+        "reported_include": {
+          "value": null,
+          "status": "unavailable",
+          "unavailable_reason": "not_measured",
+          "unit": "expected_count_cutoff",
+          "origin": "native_report",
+          "input_pointers": []
+        },
+        "native_inclusion_threshold": {
+          "value": null,
+          "status": "unavailable",
+          "unavailable_reason": "missing_input",
+          "unit": "expected_count_cutoff",
+          "origin": "native_report",
+          "input_pointers": []
+        },
+        "domain_inclusion_threshold": {
+          "value": null,
+          "status": "unavailable",
+          "unavailable_reason": "not_measured",
+          "unit": "expected_count_cutoff",
+          "origin": "native_report",
+          "input_pointers": []
+        }
+      },
+      "threshold_candidates": [],
+      "sequence_components": {
+        "schema": "blast_sequence_database_result_components_v1",
+        "search_key": {
+          "artifact_key": "synthetic-report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/sections/0"
+        },
+        "status": "partial",
+        "components": {
+          "database_sheet": {
+            "schema": "blast_database_sheet_v1",
+            "normalized_result": {
+              "schema": "blast_normalized_result_v1",
+              "mode": "database",
+              "resource": "hpc",
+              "format": "tabular",
+              "query": {
+                "id": "q",
+                "title": "q",
+                "length": 12
+              },
+              "search": {
+                "program": "psiblast",
+                "version": "PSIBLAST 2.17.0+",
+                "database": "synthetic_db",
+                "parameters": {},
+                "statistics": {},
+                "request": {
+                  "selected": "synthetic-only"
+                },
+                "hit_array_present": true,
+                "reported_hit_count": null
+              },
+              "hits": [
+                {
+                  "hit_index": 0,
+                  "length": 10,
+                  "descriptions": [
+                    {
+                      "id": "A",
+                      "source_locator": {
+                        "artifact_ref": "retained:synthetic-report",
+                        "report_index": 0,
+                        "pointer": "/sections/0",
+                        "search_key": {
+                          "artifact_key": "synthetic-report",
+                          "member_ordinal": null,
+                          "report_index": 0,
+                          "search_pointer": "/sections/0"
+                        },
+                        "member_ordinal": null,
+                        "member_sha256": null,
+                        "native_format": "tabular",
+                        "hit_index": 0,
+                        "description_index": 0,
+                        "hsp_index": null,
+                        "line_numbers": [
+                          5,
+                          6
+                        ],
+                        "data_row_ordinals": [
+                          0,
+                          1
+                        ]
+                      }
+                    }
+                  ],
+                  "unpaired_metadata": {},
+                  "hsps": [
+                    {
+                      "bit_score": 40.0,
+                      "query_from": 3,
+                      "query_to": 6,
+                      "hit_from": 2,
+                      "hit_to": 5,
+                      "qseq": "ACDE",
+                      "hseq": "ACDE",
+                      "source_locator": {
+                        "artifact_ref": "retained:synthetic-report",
+                        "report_index": 0,
+                        "pointer": "/sections/0",
+                        "search_key": {
+                          "artifact_key": "synthetic-report",
+                          "member_ordinal": null,
+                          "report_index": 0,
+                          "search_pointer": "/sections/0"
+                        },
+                        "member_ordinal": null,
+                        "member_sha256": null,
+                        "native_format": "tabular",
+                        "hit_index": 0,
+                        "description_index": null,
+                        "hsp_index": 0,
+                        "line_numbers": [
+                          5
+                        ],
+                        "data_row_ordinals": [
+                          0
+                        ]
+                      }
+                    },
+                    {
+                      "bit_score": 40.0,
+                      "query_from": 3,
+                      "query_to": 6,
+                      "hit_from": 2,
+                      "hit_to": 5,
+                      "qseq": "ACDE",
+                      "hseq": "ACDE",
+                      "source_locator": {
+                        "artifact_ref": "retained:synthetic-report",
+                        "report_index": 0,
+                        "pointer": "/sections/0",
+                        "search_key": {
+                          "artifact_key": "synthetic-report",
+                          "member_ordinal": null,
+                          "report_index": 0,
+                          "search_pointer": "/sections/0"
+                        },
+                        "member_ordinal": null,
+                        "member_sha256": null,
+                        "native_format": "tabular",
+                        "hit_index": 0,
+                        "description_index": null,
+                        "hsp_index": 1,
+                        "line_numbers": [
+                          6
+                        ],
+                        "data_row_ordinals": [
+                          1
+                        ]
+                      }
+                    }
+                  ],
+                  "source_locator": {
+                    "artifact_ref": "retained:synthetic-report",
+                    "report_index": 0,
+                    "pointer": "/sections/0",
+                    "search_key": {
+                      "artifact_key": "synthetic-report",
+                      "member_ordinal": null,
+                      "report_index": 0,
+                      "search_pointer": "/sections/0"
+                    },
+                    "member_ordinal": null,
+                    "member_sha256": null,
+                    "native_format": "tabular",
+                    "hit_index": 0,
+                    "description_index": null,
+                    "hsp_index": null,
+                    "line_numbers": [
+                      5,
+                      6
+                    ],
+                    "data_row_ordinals": [
+                      0,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "hit_index": 1,
+                  "length": 10,
+                  "descriptions": [
+                    {
+                      "id": "B",
+                      "source_locator": {
+                        "artifact_ref": "retained:synthetic-report",
+                        "report_index": 0,
+                        "pointer": "/sections/0",
+                        "search_key": {
+                          "artifact_key": "synthetic-report",
+                          "member_ordinal": null,
+                          "report_index": 0,
+                          "search_pointer": "/sections/0"
+                        },
+                        "member_ordinal": null,
+                        "member_sha256": null,
+                        "native_format": "tabular",
+                        "hit_index": 1,
+                        "description_index": 0,
+                        "hsp_index": null,
+                        "line_numbers": [
+                          7
+                        ],
+                        "data_row_ordinals": [
+                          2
+                        ]
+                      }
+                    }
+                  ],
+                  "unpaired_metadata": {},
+                  "hsps": [
+                    {
+                      "bit_score": 40.0,
+                      "query_from": 3,
+                      "query_to": 6,
+                      "hit_from": 2,
+                      "hit_to": 5,
+                      "qseq": "ACDE",
+                      "hseq": "ACDE",
+                      "source_locator": {
+                        "artifact_ref": "retained:synthetic-report",
+                        "report_index": 0,
+                        "pointer": "/sections/0",
+                        "search_key": {
+                          "artifact_key": "synthetic-report",
+                          "member_ordinal": null,
+                          "report_index": 0,
+                          "search_pointer": "/sections/0"
+                        },
+                        "member_ordinal": null,
+                        "member_sha256": null,
+                        "native_format": "tabular",
+                        "hit_index": 1,
+                        "description_index": null,
+                        "hsp_index": 2,
+                        "line_numbers": [
+                          7
+                        ],
+                        "data_row_ordinals": [
+                          2
+                        ]
+                      }
+                    }
+                  ],
+                  "source_locator": {
+                    "artifact_ref": "retained:synthetic-report",
+                    "report_index": 0,
+                    "pointer": "/sections/0",
+                    "search_key": {
+                      "artifact_key": "synthetic-report",
+                      "member_ordinal": null,
+                      "report_index": 0,
+                      "search_pointer": "/sections/0"
+                    },
+                    "member_ordinal": null,
+                    "member_sha256": null,
+                    "native_format": "tabular",
+                    "hit_index": 1,
+                    "description_index": null,
+                    "hsp_index": null,
+                    "line_numbers": [
+                      7
+                    ],
+                    "data_row_ordinals": [
+                      2
+                    ]
+                  }
+                }
+              ],
+              "native": {
+                "text": "# PSIBLAST 2.17.0+\n# Query: q\n# Database: synthetic_db\n# 3 hits found\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@A@8@10@3@6@2@5@ACDE@ACDE@40\nq@B@8@10@3@6@2@5@ACDE@ACDE@40\nunassignable\n",
+                "fields": [
+                  "qseqid",
+                  "sseqid",
+                  "qlen",
+                  "slen",
+                  "qstart",
+                  "qend",
+                  "sstart",
+                  "send",
+                  "qseq",
+                  "sseq",
+                  "bitscore"
+                ],
+                "rows": [
+                  {
+                    "line": 5,
+                    "values": [
+                      "q",
+                      "A",
+                      "8",
+                      "10",
+                      "3",
+                      "6",
+                      "2",
+                      "5",
+                      "ACDE",
+                      "ACDE",
+                      "40"
+                    ],
+                    "fields": {
+                      "qseqid": "q",
+                      "sseqid": "A",
+                      "qlen": "8",
+                      "slen": "10",
+                      "qstart": "3",
+                      "qend": "6",
+                      "sstart": "2",
+                      "send": "5",
+                      "qseq": "ACDE",
+                      "sseq": "ACDE",
+                      "bitscore": "40"
+                    }
+                  },
+                  {
+                    "line": 6,
+                    "values": [
+                      "q",
+                      "A",
+                      "8",
+                      "10",
+                      "3",
+                      "6",
+                      "2",
+                      "5",
+                      "ACDE",
+                      "ACDE",
+                      "40"
+                    ],
+                    "fields": {
+                      "qseqid": "q",
+                      "sseqid": "A",
+                      "qlen": "8",
+                      "slen": "10",
+                      "qstart": "3",
+                      "qend": "6",
+                      "sstart": "2",
+                      "send": "5",
+                      "qseq": "ACDE",
+                      "sseq": "ACDE",
+                      "bitscore": "40"
+                    }
+                  },
+                  {
+                    "line": 7,
+                    "values": [
+                      "q",
+                      "B",
+                      "8",
+                      "10",
+                      "3",
+                      "6",
+                      "2",
+                      "5",
+                      "ACDE",
+                      "ACDE",
+                      "40"
+                    ],
+                    "fields": {
+                      "qseqid": "q",
+                      "sseqid": "B",
+                      "qlen": "8",
+                      "slen": "10",
+                      "qstart": "3",
+                      "qend": "6",
+                      "sstart": "2",
+                      "send": "5",
+                      "qseq": "ACDE",
+                      "sseq": "ACDE",
+                      "bitscore": "40"
+                    }
+                  },
+                  {
+                    "line": 8,
+                    "values": [
+                      "unassignable"
+                    ]
+                  }
+                ],
+                "declared_alignment_row_count": 3,
+                "sha256": "2009cc9979b884c699c412951137ed54a41eca520f5b8d6d6d96ebc5f517a1fe",
+                "table_layout": {
+                  "format": "tabular7",
+                  "declared_fields": [
+                    "qseqid",
+                    "sseqid",
+                    "qlen",
+                    "slen",
+                    "qstart",
+                    "qend",
+                    "sstart",
+                    "send",
+                    "qseq",
+                    "sseq",
+                    "bitscore"
+                  ],
+                  "delimiter": "@"
+                }
+              },
+              "issues": [
+                {
+                  "code": "blast_tabular_column_count_invalid",
+                  "pointer": "/sections/0/lines/8",
+                  "field": null,
+                  "details": {
+                    "expected": 11,
+                    "actual": 1
+                  }
+                },
+                {
+                  "code": "blast_tabular_reported_row_count_mismatch",
+                  "pointer": "/sections/0",
+                  "field": null,
+                  "details": {
+                    "reported": 3,
+                    "observed": 4
+                  }
+                }
+              ],
+              "source_locator": {
+                "artifact_ref": "retained:synthetic-report",
+                "report_index": 0,
+                "pointer": "/sections/0",
+                "search_key": {
+                  "artifact_key": "synthetic-report",
+                  "member_ordinal": null,
+                  "report_index": 0,
+                  "search_pointer": "/sections/0"
+                },
+                "member_ordinal": null,
+                "member_sha256": null,
+                "native_format": "tabular",
+                "hit_index": null,
+                "description_index": null,
+                "hsp_index": null,
+                "line_numbers": null,
+                "data_row_ordinals": null
+              }
+            },
+            "reference_metadata": [
+              {
+                "accession": "reference-0",
+                "identifier_namespace": "synthetic",
+                "source": "metadata",
+                "native_pointer": "/records/0",
+                "taxid": null,
+                "functions": [
+                  {
+                    "function": "F",
+                    "evidence": [
+                      "supplied"
+                    ]
+                  }
+                ]
+              },
+              {
+                "accession": "reference-1",
+                "identifier_namespace": "synthetic",
+                "source": "metadata",
+                "native_pointer": "/records/1",
+                "taxid": null,
+                "functions": [
+                  {
+                    "function": "G",
+                    "evidence": [
+                      "supplied"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "target_context": {},
+            "database_profile": null,
+            "hits": [
+              {
+                "hit_index": 0,
+                "length": 10,
+                "associations": [
+                  {
+                    "report_index": 0,
+                    "hit_index": 0,
+                    "description_index": 0,
+                    "metadata_index": 0,
+                    "native_description": {
+                      "id": "A",
+                      "source_locator": {
+                        "artifact_ref": "retained:synthetic-report",
+                        "report_index": 0,
+                        "pointer": "/sections/0",
+                        "search_key": {
+                          "artifact_key": "synthetic-report",
+                          "member_ordinal": null,
+                          "report_index": 0,
+                          "search_pointer": "/sections/0"
+                        },
+                        "member_ordinal": null,
+                        "member_sha256": null,
+                        "native_format": "tabular",
+                        "hit_index": 0,
+                        "description_index": 0,
+                        "hsp_index": null,
+                        "line_numbers": [
+                          5,
+                          6
+                        ],
+                        "data_row_ordinals": [
+                          0,
+                          1
+                        ]
+                      }
+                    },
+                    "source_locator": {
+                      "artifact_ref": "retained:synthetic-report",
+                      "report_index": 0,
+                      "pointer": "/sections/0",
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "member_ordinal": null,
+                      "member_sha256": null,
+                      "native_format": "tabular",
+                      "hit_index": 0,
+                      "description_index": 0,
+                      "hsp_index": null,
+                      "line_numbers": [
+                        5,
+                        6
+                      ],
+                      "data_row_ordinals": [
+                        0,
+                        1
+                      ]
+                    },
+                    "native_identifier": "A",
+                    "accession": "reference-0",
+                    "metadata_identifier": {
+                      "namespace": "synthetic",
+                      "value": "reference-0"
+                    },
+                    "description_binding": {
+                      "report_index": 0,
+                      "hit_index": 0,
+                      "description_index": 0,
+                      "metadata_index": 0,
+                      "native_description": {
+                        "id": "A",
+                        "accession": null,
+                        "title": null,
+                        "taxid": null
+                      },
+                      "metadata_identifier": {
+                        "namespace": "synthetic",
+                        "value": "reference-0"
+                      },
+                      "metadata_source_ref": "metadata",
+                      "metadata_pointer": "/records/0",
+                      "linkage_source_ref": "links",
+                      "linkage_pointer": "/links/0"
+                    },
+                    "binding_index": 0,
+                    "source": "metadata",
+                    "taxid": null,
+                    "lineage": [],
+                    "functions": [
+                      {
+                        "function": "F",
+                        "evidence": [
+                          "supplied"
+                        ]
+                      }
+                    ],
+                    "origin": {},
+                    "assembly": {},
+                    "quality_measurements": {
+                      "completeness_fraction": null,
+                      "contamination_fraction": null,
+                      "contig_count": null,
+                      "contig_n50": null,
+                      "total_sequence_length": null
+                    },
+                    "sequence_group": null,
+                    "reported_sequence_group": null,
+                    "study_groups": []
+                  }
+                ],
+                "unpaired_metadata": {},
+                "hsp_components": [
+                  {
+                    "native_scores": {
+                      "bit_score": 40.0,
+                      "score": null,
+                      "evalue": null
+                    },
+                    "reported_counts": {
+                      "align_len": null,
+                      "identity": null,
+                      "positive": null,
+                      "gaps": null
+                    },
+                    "reported_percentages": {
+                      "identity_percent": null,
+                      "query_coverage_percent": null,
+                      "query_subject_coverage_percent": null,
+                      "query_unique_subject_coverage_percent": null
+                    },
+                    "counts": {
+                      "alignment_columns": 4,
+                      "paired_columns": 4,
+                      "identical_pairs": 4,
+                      "query_gap_columns": 0,
+                      "reference_gap_columns": 0,
+                      "paired_query_positions": 4,
+                      "paired_reference_positions": 4
+                    },
+                    "fractions": {
+                      "query_paired_coverage": 0.3333333333333333,
+                      "reference_paired_coverage": 0.4,
+                      "paired_identity": 1.0,
+                      "alignment_identity": 1.0
+                    },
+                    "denominators": {
+                      "query_length": 12,
+                      "reference_length": 10,
+                      "paired_columns": 4,
+                      "alignment_columns": 4
+                    },
+                    "coordinate_units": {
+                      "query": "aa",
+                      "reference": "aa",
+                      "alignment": "aa"
+                    },
+                    "traceback_available": true,
+                    "geometry_available": true,
+                    "pairs": [
+                      {
+                        "query_start": 2,
+                        "query_end": 3,
+                        "reference_start": 1,
+                        "reference_end": 2,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 3,
+                        "query_end": 4,
+                        "reference_start": 2,
+                        "reference_end": 3,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 4,
+                        "query_end": 5,
+                        "reference_start": 3,
+                        "reference_end": 4,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 5,
+                        "query_end": 6,
+                        "reference_start": 4,
+                        "reference_end": 5,
+                        "identical": true
+                      }
+                    ],
+                    "issues": []
+                  },
+                  {
+                    "native_scores": {
+                      "bit_score": 40.0,
+                      "score": null,
+                      "evalue": null
+                    },
+                    "reported_counts": {
+                      "align_len": null,
+                      "identity": null,
+                      "positive": null,
+                      "gaps": null
+                    },
+                    "reported_percentages": {
+                      "identity_percent": null,
+                      "query_coverage_percent": null,
+                      "query_subject_coverage_percent": null,
+                      "query_unique_subject_coverage_percent": null
+                    },
+                    "counts": {
+                      "alignment_columns": 4,
+                      "paired_columns": 4,
+                      "identical_pairs": 4,
+                      "query_gap_columns": 0,
+                      "reference_gap_columns": 0,
+                      "paired_query_positions": 4,
+                      "paired_reference_positions": 4
+                    },
+                    "fractions": {
+                      "query_paired_coverage": 0.3333333333333333,
+                      "reference_paired_coverage": 0.4,
+                      "paired_identity": 1.0,
+                      "alignment_identity": 1.0
+                    },
+                    "denominators": {
+                      "query_length": 12,
+                      "reference_length": 10,
+                      "paired_columns": 4,
+                      "alignment_columns": 4
+                    },
+                    "coordinate_units": {
+                      "query": "aa",
+                      "reference": "aa",
+                      "alignment": "aa"
+                    },
+                    "traceback_available": true,
+                    "geometry_available": true,
+                    "pairs": [
+                      {
+                        "query_start": 2,
+                        "query_end": 3,
+                        "reference_start": 1,
+                        "reference_end": 2,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 3,
+                        "query_end": 4,
+                        "reference_start": 2,
+                        "reference_end": 3,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 4,
+                        "query_end": 5,
+                        "reference_start": 3,
+                        "reference_end": 4,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 5,
+                        "query_end": 6,
+                        "reference_start": 4,
+                        "reference_end": 5,
+                        "identical": true
+                      }
+                    ],
+                    "issues": []
+                  }
+                ],
+                "measurements": {
+                  "maximum_bit_score": 40.0,
+                  "minimum_evalue": null,
+                  "hsp_count": 2,
+                  "traceback_complete": false,
+                  "observed_paired_query_positions": 4,
+                  "observed_paired_reference_positions": 4,
+                  "query_paired_coverage": null,
+                  "reference_paired_coverage": null,
+                  "unique_pair_count": 4,
+                  "identical_unique_pair_count": 4,
+                  "overlap_pair_representations": 4
+                },
+                "source_locator": {
+                  "artifact_ref": "retained:synthetic-report",
+                  "report_index": 0,
+                  "pointer": "/sections/0",
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "member_ordinal": null,
+                  "member_sha256": null,
+                  "native_format": "tabular",
+                  "hit_index": 0,
+                  "description_index": null,
+                  "hsp_index": null,
+                  "line_numbers": [
+                    5,
+                    6
+                  ],
+                  "data_row_ordinals": [
+                    0,
+                    1
+                  ]
+                },
+                "sequence_identity_bindings": [
+                  {
+                    "report_index": 0,
+                    "hit_index": 0,
+                    "kind": "full_sequence_digest",
+                    "sequence_group": "sha256:559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+                    "algorithm": "sha256",
+                    "digest": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+                    "molecule": "aa",
+                    "sequence_length": 10,
+                    "source_ref": "sequences",
+                    "pointer": "/records/0",
+                    "linkage_source_ref": "links",
+                    "linkage_pointer": "/sequences/0"
+                  }
+                ],
+                "sequence_group_index": 0
+              },
+              {
+                "hit_index": 1,
+                "length": 10,
+                "associations": [
+                  {
+                    "report_index": 0,
+                    "hit_index": 1,
+                    "description_index": 0,
+                    "metadata_index": 1,
+                    "native_description": {
+                      "id": "B",
+                      "source_locator": {
+                        "artifact_ref": "retained:synthetic-report",
+                        "report_index": 0,
+                        "pointer": "/sections/0",
+                        "search_key": {
+                          "artifact_key": "synthetic-report",
+                          "member_ordinal": null,
+                          "report_index": 0,
+                          "search_pointer": "/sections/0"
+                        },
+                        "member_ordinal": null,
+                        "member_sha256": null,
+                        "native_format": "tabular",
+                        "hit_index": 1,
+                        "description_index": 0,
+                        "hsp_index": null,
+                        "line_numbers": [
+                          7
+                        ],
+                        "data_row_ordinals": [
+                          2
+                        ]
+                      }
+                    },
+                    "source_locator": {
+                      "artifact_ref": "retained:synthetic-report",
+                      "report_index": 0,
+                      "pointer": "/sections/0",
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "member_ordinal": null,
+                      "member_sha256": null,
+                      "native_format": "tabular",
+                      "hit_index": 1,
+                      "description_index": 0,
+                      "hsp_index": null,
+                      "line_numbers": [
+                        7
+                      ],
+                      "data_row_ordinals": [
+                        2
+                      ]
+                    },
+                    "native_identifier": "B",
+                    "accession": "reference-1",
+                    "metadata_identifier": {
+                      "namespace": "synthetic",
+                      "value": "reference-1"
+                    },
+                    "description_binding": {
+                      "report_index": 0,
+                      "hit_index": 1,
+                      "description_index": 0,
+                      "metadata_index": 1,
+                      "native_description": {
+                        "id": "B",
+                        "accession": null,
+                        "title": null,
+                        "taxid": null
+                      },
+                      "metadata_identifier": {
+                        "namespace": "synthetic",
+                        "value": "reference-1"
+                      },
+                      "metadata_source_ref": "metadata",
+                      "metadata_pointer": "/records/1",
+                      "linkage_source_ref": "links",
+                      "linkage_pointer": "/links/1"
+                    },
+                    "binding_index": 1,
+                    "source": "metadata",
+                    "taxid": null,
+                    "lineage": [],
+                    "functions": [
+                      {
+                        "function": "G",
+                        "evidence": [
+                          "supplied"
+                        ]
+                      }
+                    ],
+                    "origin": {},
+                    "assembly": {},
+                    "quality_measurements": {
+                      "completeness_fraction": null,
+                      "contamination_fraction": null,
+                      "contig_count": null,
+                      "contig_n50": null,
+                      "total_sequence_length": null
+                    },
+                    "sequence_group": null,
+                    "reported_sequence_group": null,
+                    "study_groups": []
+                  }
+                ],
+                "unpaired_metadata": {},
+                "hsp_components": [
+                  {
+                    "native_scores": {
+                      "bit_score": 40.0,
+                      "score": null,
+                      "evalue": null
+                    },
+                    "reported_counts": {
+                      "align_len": null,
+                      "identity": null,
+                      "positive": null,
+                      "gaps": null
+                    },
+                    "reported_percentages": {
+                      "identity_percent": null,
+                      "query_coverage_percent": null,
+                      "query_subject_coverage_percent": null,
+                      "query_unique_subject_coverage_percent": null
+                    },
+                    "counts": {
+                      "alignment_columns": 4,
+                      "paired_columns": 4,
+                      "identical_pairs": 4,
+                      "query_gap_columns": 0,
+                      "reference_gap_columns": 0,
+                      "paired_query_positions": 4,
+                      "paired_reference_positions": 4
+                    },
+                    "fractions": {
+                      "query_paired_coverage": 0.3333333333333333,
+                      "reference_paired_coverage": 0.4,
+                      "paired_identity": 1.0,
+                      "alignment_identity": 1.0
+                    },
+                    "denominators": {
+                      "query_length": 12,
+                      "reference_length": 10,
+                      "paired_columns": 4,
+                      "alignment_columns": 4
+                    },
+                    "coordinate_units": {
+                      "query": "aa",
+                      "reference": "aa",
+                      "alignment": "aa"
+                    },
+                    "traceback_available": true,
+                    "geometry_available": true,
+                    "pairs": [
+                      {
+                        "query_start": 2,
+                        "query_end": 3,
+                        "reference_start": 1,
+                        "reference_end": 2,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 3,
+                        "query_end": 4,
+                        "reference_start": 2,
+                        "reference_end": 3,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 4,
+                        "query_end": 5,
+                        "reference_start": 3,
+                        "reference_end": 4,
+                        "identical": true
+                      },
+                      {
+                        "query_start": 5,
+                        "query_end": 6,
+                        "reference_start": 4,
+                        "reference_end": 5,
+                        "identical": true
+                      }
+                    ],
+                    "issues": []
+                  }
+                ],
+                "measurements": {
+                  "maximum_bit_score": 40.0,
+                  "minimum_evalue": null,
+                  "hsp_count": 1,
+                  "traceback_complete": false,
+                  "observed_paired_query_positions": 4,
+                  "observed_paired_reference_positions": 4,
+                  "query_paired_coverage": null,
+                  "reference_paired_coverage": null,
+                  "unique_pair_count": 4,
+                  "identical_unique_pair_count": 4,
+                  "overlap_pair_representations": 0
+                },
+                "source_locator": {
+                  "artifact_ref": "retained:synthetic-report",
+                  "report_index": 0,
+                  "pointer": "/sections/0",
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "member_ordinal": null,
+                  "member_sha256": null,
+                  "native_format": "tabular",
+                  "hit_index": 1,
+                  "description_index": null,
+                  "hsp_index": null,
+                  "line_numbers": [
+                    7
+                  ],
+                  "data_row_ordinals": [
+                    2
+                  ]
+                },
+                "sequence_identity_bindings": [
+                  {
+                    "report_index": 0,
+                    "hit_index": 1,
+                    "kind": "full_sequence_digest",
+                    "sequence_group": "sha256:df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+                    "algorithm": "sha256",
+                    "digest": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+                    "molecule": "aa",
+                    "sequence_length": 10,
+                    "source_ref": "sequences",
+                    "pointer": "/records/1",
+                    "linkage_source_ref": "links",
+                    "linkage_pointer": "/sequences/1"
+                  }
+                ],
+                "sequence_group_index": 1
+              }
+            ],
+            "sequence_groups": [
+              {
+                "group_index": 0,
+                "hit_indices": [
+                  0
+                ],
+                "identity_basis": [
+                  {
+                    "kind": "sequence_group",
+                    "value": "sha256:559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd"
+                  }
+                ],
+                "functions": [
+                  "F"
+                ],
+                "function_assignments": [
+                  {
+                    "function": "F",
+                    "accession": "reference-0",
+                    "taxid": null,
+                    "source": "metadata",
+                    "evidence": [
+                      "supplied"
+                    ]
+                  }
+                ],
+                "maximum_bit_score": 40.0,
+                "taxids": [],
+                "study_groups": []
+              },
+              {
+                "group_index": 1,
+                "hit_indices": [
+                  1
+                ],
+                "identity_basis": [
+                  {
+                    "kind": "sequence_group",
+                    "value": "sha256:df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c"
+                  }
+                ],
+                "functions": [
+                  "G"
+                ],
+                "function_assignments": [
+                  {
+                    "function": "G",
+                    "accession": "reference-1",
+                    "taxid": null,
+                    "source": "metadata",
+                    "evidence": [
+                      "supplied"
+                    ]
+                  }
+                ],
+                "maximum_bit_score": 40.0,
+                "taxids": [],
+                "study_groups": []
+              }
+            ],
+            "functions": [
+              {
+                "function": "F",
+                "sequence_group_count": 1,
+                "native_hit_count": 1,
+                "bit_score": {
+                  "count": 1,
+                  "minimum": 40.0,
+                  "maximum": 40.0,
+                  "mean": 40.0
+                },
+                "query_paired_coverage": {
+                  "count": 0,
+                  "minimum": null,
+                  "maximum": null,
+                  "mean": null
+                },
+                "reference_paired_coverage": {
+                  "count": 0,
+                  "minimum": null,
+                  "maximum": null,
+                  "mean": null
+                },
+                "taxonomy": {
+                  "taxa": [],
+                  "ranks": [],
+                  "target_independent_of_search": null,
+                  "ambiguous_target_ranks": [],
+                  "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+                  "sources": [
+                    {
+                      "source": "metadata",
+                      "sequence_group_count": 1,
+                      "sequence_group_indices": [
+                        0
+                      ]
+                    }
+                  ],
+                  "origins": []
+                },
+                "source_quality": {
+                  "assembly_measurements": [],
+                  "numerical_summaries": [],
+                  "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+                }
+              },
+              {
+                "function": "G",
+                "sequence_group_count": 1,
+                "native_hit_count": 1,
+                "bit_score": {
+                  "count": 1,
+                  "minimum": 40.0,
+                  "maximum": 40.0,
+                  "mean": 40.0
+                },
+                "query_paired_coverage": {
+                  "count": 0,
+                  "minimum": null,
+                  "maximum": null,
+                  "mean": null
+                },
+                "reference_paired_coverage": {
+                  "count": 0,
+                  "minimum": null,
+                  "maximum": null,
+                  "mean": null
+                },
+                "taxonomy": {
+                  "taxa": [],
+                  "ranks": [],
+                  "target_independent_of_search": null,
+                  "ambiguous_target_ranks": [],
+                  "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+                  "sources": [
+                    {
+                      "source": "metadata",
+                      "sequence_group_count": 1,
+                      "sequence_group_indices": [
+                        1
+                      ]
+                    }
+                  ],
+                  "origins": []
+                },
+                "source_quality": {
+                  "assembly_measurements": [],
+                  "numerical_summaries": [],
+                  "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+                }
+              }
+            ],
+            "taxonomy": {
+              "taxa": [],
+              "ranks": [],
+              "target_independent_of_search": null,
+              "ambiguous_target_ranks": [],
+              "counts_meaning": "taxon memberships; one sequence may occur in more than one taxon",
+              "sources": [
+                {
+                  "source": "metadata",
+                  "sequence_group_count": 2,
+                  "sequence_group_indices": [
+                    0,
+                    1
+                  ]
+                }
+              ],
+              "origins": []
+            },
+            "source_quality": {
+              "assembly_measurements": [],
+              "numerical_summaries": [],
+              "meaning": "reported measurements, separated by method; not category-derived reliability grades"
+            },
+            "dependence": {
+              "group_count": 2,
+              "duplicate_native_hit_count": 0,
+              "shared_studies": [],
+              "unknown_cross_hit_sequence_identity": false,
+              "meaning": "groups collapse demonstrated sequence identity; distinct groups are not claimed independent experiments"
+            },
+            "database_representation": {
+              "available_for_adjustment": false,
+              "reasons": [
+                "database_profile_not_supplied"
+              ],
+              "function_representation": []
+            },
+            "coverage": {
+              "native_hit_count": 2,
+              "sequence_group_count": 2,
+              "groups_with_explicit_function": 2,
+              "groups_without_explicit_function": 0,
+              "groups_with_native_bit_score": 2,
+              "metadata_row_count": 2,
+              "matched_metadata_row_count": 2,
+              "unmatched_metadata_indices": []
+            },
+            "search_limits": {
+              "requested_hit_limit": 2,
+              "reported_hit_count": null,
+              "limit_reached": null,
+              "hit_array_present": true,
+              "whole_database_result_complete": null,
+              "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness",
+              "requested_hsp_limit": 4
+            },
+            "issues": [
+              {
+                "code": "blast_tabular_column_count_invalid",
+                "pointer": "/sections/0/lines/8",
+                "field": null,
+                "details": {
+                  "expected": 11,
+                  "actual": 1
+                }
+              },
+              {
+                "code": "blast_tabular_reported_row_count_mismatch",
+                "pointer": "/sections/0",
+                "field": null,
+                "details": {
+                  "reported": 3,
+                  "observed": 4
+                }
+              }
+            ],
+            "calculation_context": {
+              "reporting": {
+                "native_hit_array_present": true,
+                "native_hit_count": null,
+                "requested_hit_limit": 2,
+                "requested_hsp_limit": 4,
+                "native_returncode": 0,
+                "producer_complete": true
+              },
+              "database_identity": {
+                "namespace": "native",
+                "value": "synthetic_db",
+                "version": "1",
+                "release": "r1",
+                "scope": "selected_sequences",
+                "preparation_type": "sequence_database",
+                "source": {
+                  "source_ref": "manifest",
+                  "pointer": "/database"
+                }
+              }
+            },
+            "association_mode": "explicit_bindings_v1",
+            "description_bindings": [
+              {
+                "report_index": 0,
+                "hit_index": 0,
+                "description_index": 0,
+                "metadata_index": 0,
+                "native_description": {
+                  "id": "A",
+                  "accession": null,
+                  "title": null,
+                  "taxid": null
+                },
+                "metadata_identifier": {
+                  "namespace": "synthetic",
+                  "value": "reference-0"
+                },
+                "metadata_source_ref": "metadata",
+                "metadata_pointer": "/records/0",
+                "linkage_source_ref": "links",
+                "linkage_pointer": "/links/0"
+              },
+              {
+                "report_index": 0,
+                "hit_index": 1,
+                "description_index": 0,
+                "metadata_index": 1,
+                "native_description": {
+                  "id": "B",
+                  "accession": null,
+                  "title": null,
+                  "taxid": null
+                },
+                "metadata_identifier": {
+                  "namespace": "synthetic",
+                  "value": "reference-1"
+                },
+                "metadata_source_ref": "metadata",
+                "metadata_pointer": "/records/1",
+                "linkage_source_ref": "links",
+                "linkage_pointer": "/links/1"
+              }
+            ],
+            "sequence_identity_bindings": [
+              {
+                "report_index": 0,
+                "hit_index": 0,
+                "kind": "full_sequence_digest",
+                "sequence_group": "sha256:559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+                "algorithm": "sha256",
+                "digest": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+                "molecule": "aa",
+                "sequence_length": 10,
+                "source_ref": "sequences",
+                "pointer": "/records/0",
+                "linkage_source_ref": "links",
+                "linkage_pointer": "/sequences/0"
+              },
+              {
+                "report_index": 0,
+                "hit_index": 1,
+                "kind": "full_sequence_digest",
+                "sequence_group": "sha256:df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+                "algorithm": "sha256",
+                "digest": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+                "molecule": "aa",
+                "sequence_length": 10,
+                "source_ref": "sequences",
+                "pointer": "/records/1",
+                "linkage_source_ref": "links",
+                "linkage_pointer": "/sequences/1"
+              }
+            ]
+          },
+          "function_weights": {
+            "schema": "blast_database_probabilities_v1",
+            "model": "conditional_reference_kernel_v1",
+            "parameters": {
+              "temperature_bits": 1.0,
+              "function_priors": {
+                "F": 0.5,
+                "G": 0.5
+              }
+            },
+            "formula": {
+              "sequence_group_weight": "2 ** ((maximum_bit_score - largest_scored_function_group_bit_score) / temperature_bits)",
+              "all_reference_kernel_weight": "2 ** ((maximum_bit_score - largest_group_bit_score) / temperature_bits)",
+              "function_mass": "sum(group_weight / distinct_function_count_for_group)",
+              "unadjusted": "prior[function] * function_mass / sum(prior * function_mass)",
+              "representation_adjusted": "(prior[function] * function_mass / database_function_sequence_count) / sum(prior * function_mass / database_function_sequence_count)"
+            },
+            "conditioning": "explicit function assignments among the supplied scored reference sequence groups",
+            "calibrated_annotation_probability": false,
+            "largest_group_bit_score": 40.0,
+            "largest_scored_function_group_bit_score": 40.0,
+            "sequence_group_contributions": [
+              {
+                "group_index": 0,
+                "bit_score": 40.0,
+                "kernel_weight": 1.0,
+                "function_kernel_weight": 1.0,
+                "functions": [
+                  "F"
+                ],
+                "mass_per_function": 1.0
+              },
+              {
+                "group_index": 1,
+                "bit_score": 40.0,
+                "kernel_weight": 1.0,
+                "function_kernel_weight": 1.0,
+                "functions": [
+                  "G"
+                ],
+                "mass_per_function": 1.0
+              }
+            ],
+            "function_masses": {
+              "F": 1.0,
+              "G": 1.0
+            },
+            "unadjusted_probabilities": {
+              "F": 0.5,
+              "G": 0.5
+            },
+            "representation_adjusted_probabilities": null,
+            "representation_adjustment_unavailable_reasons": [
+              "database_profile_not_supplied",
+              "positive_database_count_required_for_each_function"
+            ],
+            "unannotated_reference_kernel_mass": 0.0,
+            "unannotated_reference_kernel_fraction": 0.0,
+            "unscored_sequence_group_count": 0,
+            "functions_without_measured_bit_scores": [],
+            "search_limits": {
+              "requested_hit_limit": 2,
+              "reported_hit_count": null,
+              "limit_reached": null,
+              "hit_array_present": true,
+              "whole_database_result_complete": null,
+              "meaning": "all supplied hit rows retained; hitting a limit can censor evidence, fewer hits do not establish database completeness",
+              "requested_hsp_limit": 4
+            },
+            "retained_measurements_not_used_by_this_model": [
+              "taxonomy",
+              "target_taxonomy_agreement",
+              "source_quality",
+              "annotation_evidence_codes",
+              "alignment_coverage",
+              "identity",
+              "shared_studies"
+            ],
+            "assumptions": [
+              "Native bit score differences define a chosen reference-similarity kernel, not a measured functional likelihood.",
+              "A native hit or demonstrated duplicate sequence group contributes once using its strongest HSP.",
+              "Distinct explicit function labels within a sequence group divide its mass equally; this is not a claim that multifunctional proteins have only one function.",
+              "Probabilities are conditional on the supplied candidate functions and returned matches; unreported or unannotated functions remain outside that distribution.",
+              "Representation correction uses independently supplied matching database sequence counts; it is not inferred from returned-hit counts."
+            ]
+          },
+          "coordinate_context": {
+            "query": {
+              "axis_kind": "sequence",
+              "reported_length": 8,
+              "full_length": 12,
+              "selected_interval": [
+                2,
+                10
+              ],
+              "coordinate_unit": "aa"
+            },
+            "references": [
+              {
+                "row_key": {
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "hit_ordinal": 0,
+                  "hsp_ordinal": null,
+                  "description_ordinal": null
+                },
+                "reported_length": 10,
+                "full_length": 10,
+                "coordinate_unit": "aa"
+              },
+              {
+                "row_key": {
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "hit_ordinal": 1,
+                  "hsp_ordinal": null,
+                  "description_ordinal": null
+                },
+                "reported_length": 10,
+                "full_length": 10,
+                "coordinate_unit": "aa"
+              }
+            ]
+          },
+          "selected_query_coverage": [
+            {
+              "row_key": {
+                "search_key": {
+                  "artifact_key": "synthetic-report",
+                  "member_ordinal": null,
+                  "report_index": 0,
+                  "search_pointer": "/sections/0"
+                },
+                "hit_ordinal": 0,
+                "hsp_ordinal": null,
+                "description_ordinal": null
+              },
+              "numerator": 4,
+              "denominator": 8,
+              "value": null,
+              "unit": "fraction",
+              "complete_for_reported_hsps": false,
+              "unavailable_reason": "partial_output"
+            },
+            {
+              "row_key": {
+                "search_key": {
+                  "artifact_key": "synthetic-report",
+                  "member_ordinal": null,
+                  "report_index": 0,
+                  "search_pointer": "/sections/0"
+                },
+                "hit_ordinal": 1,
+                "hsp_ordinal": null,
+                "description_ordinal": null
+              },
+              "numerator": 4,
+              "denominator": 8,
+              "value": null,
+              "unit": "fraction",
+              "complete_for_reported_hsps": false,
+              "unavailable_reason": "partial_output"
+            }
+          ],
+          "row_keys": {
+            "search": {
+              "search_key": {
+                "artifact_key": "synthetic-report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/sections/0"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "description_ordinal": null
+            },
+            "hits": [
+              {
+                "component_index": 0,
+                "row_key": {
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "hit_ordinal": 0,
+                  "hsp_ordinal": null,
+                  "description_ordinal": null
+                },
+                "source_locator": {
+                  "artifact_ref": "retained:synthetic-report",
+                  "report_index": 0,
+                  "pointer": "/sections/0",
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "member_ordinal": null,
+                  "member_sha256": null,
+                  "native_format": "tabular",
+                  "hit_index": 0,
+                  "description_index": null,
+                  "hsp_index": null,
+                  "line_numbers": [
+                    5,
+                    6
+                  ],
+                  "data_row_ordinals": [
+                    0,
+                    1
+                  ]
+                },
+                "hsps": [
+                  {
+                    "component_index": 0,
+                    "row_key": {
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "hit_ordinal": 0,
+                      "hsp_ordinal": 0,
+                      "description_ordinal": null
+                    },
+                    "source_locator": {
+                      "artifact_ref": "retained:synthetic-report",
+                      "report_index": 0,
+                      "pointer": "/sections/0",
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "member_ordinal": null,
+                      "member_sha256": null,
+                      "native_format": "tabular",
+                      "hit_index": 0,
+                      "description_index": null,
+                      "hsp_index": 0,
+                      "line_numbers": [
+                        5
+                      ],
+                      "data_row_ordinals": [
+                        0
+                      ]
+                    }
+                  },
+                  {
+                    "component_index": 1,
+                    "row_key": {
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "hit_ordinal": 0,
+                      "hsp_ordinal": 1,
+                      "description_ordinal": null
+                    },
+                    "source_locator": {
+                      "artifact_ref": "retained:synthetic-report",
+                      "report_index": 0,
+                      "pointer": "/sections/0",
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "member_ordinal": null,
+                      "member_sha256": null,
+                      "native_format": "tabular",
+                      "hit_index": 0,
+                      "description_index": null,
+                      "hsp_index": 1,
+                      "line_numbers": [
+                        6
+                      ],
+                      "data_row_ordinals": [
+                        1
+                      ]
+                    }
+                  }
+                ],
+                "descriptions": [
+                  {
+                    "component_index": 0,
+                    "row_key": {
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "hit_ordinal": 0,
+                      "hsp_ordinal": null,
+                      "description_ordinal": 0
+                    },
+                    "source_locator": {
+                      "artifact_ref": "retained:synthetic-report",
+                      "report_index": 0,
+                      "pointer": "/sections/0",
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "member_ordinal": null,
+                      "member_sha256": null,
+                      "native_format": "tabular",
+                      "hit_index": 0,
+                      "description_index": 0,
+                      "hsp_index": null,
+                      "line_numbers": [
+                        5,
+                        6
+                      ],
+                      "data_row_ordinals": [
+                        0,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "component_index": 1,
+                "row_key": {
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "hit_ordinal": 1,
+                  "hsp_ordinal": null,
+                  "description_ordinal": null
+                },
+                "source_locator": {
+                  "artifact_ref": "retained:synthetic-report",
+                  "report_index": 0,
+                  "pointer": "/sections/0",
+                  "search_key": {
+                    "artifact_key": "synthetic-report",
+                    "member_ordinal": null,
+                    "report_index": 0,
+                    "search_pointer": "/sections/0"
+                  },
+                  "member_ordinal": null,
+                  "member_sha256": null,
+                  "native_format": "tabular",
+                  "hit_index": 1,
+                  "description_index": null,
+                  "hsp_index": null,
+                  "line_numbers": [
+                    7
+                  ],
+                  "data_row_ordinals": [
+                    2
+                  ]
+                },
+                "hsps": [
+                  {
+                    "component_index": 0,
+                    "row_key": {
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "hit_ordinal": 1,
+                      "hsp_ordinal": 2,
+                      "description_ordinal": null
+                    },
+                    "source_locator": {
+                      "artifact_ref": "retained:synthetic-report",
+                      "report_index": 0,
+                      "pointer": "/sections/0",
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "member_ordinal": null,
+                      "member_sha256": null,
+                      "native_format": "tabular",
+                      "hit_index": 1,
+                      "description_index": null,
+                      "hsp_index": 2,
+                      "line_numbers": [
+                        7
+                      ],
+                      "data_row_ordinals": [
+                        2
+                      ]
+                    }
+                  }
+                ],
+                "descriptions": [
+                  {
+                    "component_index": 0,
+                    "row_key": {
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "hit_ordinal": 1,
+                      "hsp_ordinal": null,
+                      "description_ordinal": 0
+                    },
+                    "source_locator": {
+                      "artifact_ref": "retained:synthetic-report",
+                      "report_index": 0,
+                      "pointer": "/sections/0",
+                      "search_key": {
+                        "artifact_key": "synthetic-report",
+                        "member_ordinal": null,
+                        "report_index": 0,
+                        "search_pointer": "/sections/0"
+                      },
+                      "member_ordinal": null,
+                      "member_sha256": null,
+                      "native_format": "tabular",
+                      "hit_index": 1,
+                      "description_index": 0,
+                      "hsp_index": null,
+                      "line_numbers": [
+                        7
+                      ],
+                      "data_row_ordinals": [
+                        2
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "issues": [
+          {
+            "code": "blast_tabular_column_count_invalid",
+            "search_key": {
+              "artifact_key": "synthetic-report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "source_pointer": "/sections/0/lines/8",
+            "details": {
+              "original_issue": {
+                "code": "blast_tabular_column_count_invalid",
+                "pointer": "/sections/0/lines/8",
+                "field": null,
+                "details": {
+                  "expected": 11,
+                  "actual": 1
+                }
+              }
+            }
+          },
+          {
+            "code": "blast_tabular_reported_row_count_mismatch",
+            "search_key": {
+              "artifact_key": "synthetic-report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "source_pointer": "/sections/0",
+            "details": {
+              "original_issue": {
+                "code": "blast_tabular_reported_row_count_mismatch",
+                "pointer": "/sections/0",
+                "field": null,
+                "details": {
+                  "reported": 3,
+                  "observed": 4
+                }
+              }
+            }
+          },
+          {
+            "code": "blast_sequence_database_native_hsp_set_incomplete",
+            "search_key": {
+              "artifact_key": "synthetic-report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 0,
+            "hsp_ordinal": null,
+            "source_pointer": "/sections/0",
+            "details": {}
+          },
+          {
+            "code": "blast_sequence_database_native_hsp_set_incomplete",
+            "search_key": {
+              "artifact_key": "synthetic-report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": 1,
+            "hsp_ordinal": null,
+            "source_pointer": "/sections/0",
+            "details": {}
+          },
+          {
+            "code": "blast_tabular_column_count_invalid",
+            "search_key": {
+              "artifact_key": "synthetic-report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "source_pointer": "/sections/0",
+            "details": {
+              "original_issue": {
+                "code": "blast_tabular_column_count_invalid",
+                "pointer": "/sections/0/lines/8",
+                "field": null,
+                "details": {
+                  "expected": 11,
+                  "actual": 1
+                }
+              }
+            }
+          },
+          {
+            "code": "blast_tabular_reported_row_count_mismatch",
+            "search_key": {
+              "artifact_key": "synthetic-report",
+              "member_ordinal": null,
+              "report_index": 0,
+              "search_pointer": "/sections/0"
+            },
+            "hit_ordinal": null,
+            "hsp_ordinal": null,
+            "source_pointer": "/sections/0",
+            "details": {
+              "original_issue": {
+                "code": "blast_tabular_reported_row_count_mismatch",
+                "pointer": "/sections/0",
+                "field": null,
+                "details": {
+                  "reported": 3,
+                  "observed": 4
+                }
+              }
+            }
+          }
+        ]
+      },
+      "profile_components": null,
+      "component_availability": {
+        "sequence": {
+          "status": "available",
+          "reason": null
+        },
+        "profile": {
+          "status": "unavailable",
+          "reason": "not_measured"
+        }
+      },
+      "checkpoint_association_indices": [],
+      "native_converged": {
+        "value": null,
+        "status": "unavailable",
+        "unavailable_reason": "missing_input",
+        "unit": "native_boolean",
+        "origin": "native_report",
+        "input_pointers": []
+      },
+      "convergence_observation_indices": [],
+      "issues": [
+        {
+          "code": "blast_iteration_collector_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0/lines/8",
+          "details": {
+            "original_issue": {
+              "code": "blast_tabular_column_count_invalid",
+              "pointer": "/sections/0/lines/8",
+              "field": null,
+              "details": {
+                "expected": 11,
+                "actual": 1
+              }
+            }
+          }
+        },
+        {
+          "code": "blast_iteration_collector_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "original_issue": {
+              "code": "blast_tabular_reported_row_count_mismatch",
+              "pointer": "/sections/0",
+              "field": null,
+              "details": {
+                "reported": 3,
+                "observed": 4
+              }
+            }
+          }
+        },
+        {
+          "code": "blast_iteration_native_row_invalid",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/collection/searches/0/native/search/rows",
+          "details": {}
+        },
+        {
+          "code": "blast_iteration_native_count_conflict",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": null,
+          "details": {
+            "declared": 3,
+            "observed": 4
+          }
+        },
+        {
+          "code": "blast_iteration_threshold_unavailable",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": null,
+          "details": {
+            "threshold": "native_inclusion_threshold"
+          }
+        },
+        {
+          "code": "blast_iteration_dependency_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0/lines/8",
+          "details": {
+            "module": "gene_annotation_episode.blast_sequence_database",
+            "function": "calculate_blast_sequence_database_components",
+            "original_issue": {
+              "code": "blast_tabular_column_count_invalid",
+              "search_key": {
+                "artifact_key": "synthetic-report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/sections/0"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "source_pointer": "/sections/0/lines/8",
+              "details": {
+                "original_issue": {
+                  "code": "blast_tabular_column_count_invalid",
+                  "pointer": "/sections/0/lines/8",
+                  "field": null,
+                  "details": {
+                    "expected": 11,
+                    "actual": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "code": "blast_iteration_dependency_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "module": "gene_annotation_episode.blast_sequence_database",
+            "function": "calculate_blast_sequence_database_components",
+            "original_issue": {
+              "code": "blast_tabular_reported_row_count_mismatch",
+              "search_key": {
+                "artifact_key": "synthetic-report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/sections/0"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "source_pointer": "/sections/0",
+              "details": {
+                "original_issue": {
+                  "code": "blast_tabular_reported_row_count_mismatch",
+                  "pointer": "/sections/0",
+                  "field": null,
+                  "details": {
+                    "reported": 3,
+                    "observed": 4
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "code": "blast_iteration_dependency_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "module": "gene_annotation_episode.blast_sequence_database",
+            "function": "calculate_blast_sequence_database_components",
+            "original_issue": {
+              "code": "blast_sequence_database_native_hsp_set_incomplete",
+              "search_key": {
+                "artifact_key": "synthetic-report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/sections/0"
+              },
+              "hit_ordinal": 0,
+              "hsp_ordinal": null,
+              "source_pointer": "/sections/0",
+              "details": {}
+            }
+          }
+        },
+        {
+          "code": "blast_iteration_dependency_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 1,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "module": "gene_annotation_episode.blast_sequence_database",
+            "function": "calculate_blast_sequence_database_components",
+            "original_issue": {
+              "code": "blast_sequence_database_native_hsp_set_incomplete",
+              "search_key": {
+                "artifact_key": "synthetic-report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/sections/0"
+              },
+              "hit_ordinal": 1,
+              "hsp_ordinal": null,
+              "source_pointer": "/sections/0",
+              "details": {}
+            }
+          }
+        },
+        {
+          "code": "blast_iteration_dependency_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "module": "gene_annotation_episode.blast_sequence_database",
+            "function": "calculate_blast_sequence_database_components",
+            "original_issue": {
+              "code": "blast_tabular_column_count_invalid",
+              "search_key": {
+                "artifact_key": "synthetic-report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/sections/0"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "source_pointer": "/sections/0",
+              "details": {
+                "original_issue": {
+                  "code": "blast_tabular_column_count_invalid",
+                  "pointer": "/sections/0/lines/8",
+                  "field": null,
+                  "details": {
+                    "expected": 11,
+                    "actual": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "code": "blast_iteration_dependency_issue",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "module": "gene_annotation_episode.blast_sequence_database",
+            "function": "calculate_blast_sequence_database_components",
+            "original_issue": {
+              "code": "blast_tabular_reported_row_count_mismatch",
+              "search_key": {
+                "artifact_key": "synthetic-report",
+                "member_ordinal": null,
+                "report_index": 0,
+                "search_pointer": "/sections/0"
+              },
+              "hit_ordinal": null,
+              "hsp_ordinal": null,
+              "source_pointer": "/sections/0",
+              "details": {
+                "original_issue": {
+                  "code": "blast_tabular_reported_row_count_mismatch",
+                  "pointer": "/sections/0",
+                  "field": null,
+                  "details": {
+                    "reported": 3,
+                    "observed": 4
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "pssms": [],
+  "checkpoint_associations": [],
+  "inclusion_observations": [],
+  "convergence_observations": [],
+  "round_comparisons": [],
+  "issues": [
+    {
+      "code": "blast_iteration_collector_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0/lines/8",
+      "details": {
+        "original_issue": {
+          "code": "blast_tabular_column_count_invalid",
+          "pointer": "/sections/0/lines/8",
+          "field": null,
+          "details": {
+            "expected": 11,
+            "actual": 1
+          }
+        }
+      }
+    },
+    {
+      "code": "blast_iteration_collector_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {
+        "original_issue": {
+          "code": "blast_tabular_reported_row_count_mismatch",
+          "pointer": "/sections/0",
+          "field": null,
+          "details": {
+            "reported": 3,
+            "observed": 4
+          }
+        }
+      }
+    },
+    {
+      "code": "blast_iteration_native_row_invalid",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/collection/searches/0/native/search/rows",
+      "details": {}
+    },
+    {
+      "code": "blast_iteration_native_count_conflict",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": null,
+      "details": {
+        "declared": 3,
+        "observed": 4
+      }
+    },
+    {
+      "code": "blast_iteration_threshold_unavailable",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": null,
+      "details": {
+        "threshold": "native_inclusion_threshold"
+      }
+    },
+    {
+      "code": "blast_iteration_dependency_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0/lines/8",
+      "details": {
+        "module": "gene_annotation_episode.blast_sequence_database",
+        "function": "calculate_blast_sequence_database_components",
+        "original_issue": {
+          "code": "blast_tabular_column_count_invalid",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0/lines/8",
+          "details": {
+            "original_issue": {
+              "code": "blast_tabular_column_count_invalid",
+              "pointer": "/sections/0/lines/8",
+              "field": null,
+              "details": {
+                "expected": 11,
+                "actual": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "code": "blast_iteration_dependency_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {
+        "module": "gene_annotation_episode.blast_sequence_database",
+        "function": "calculate_blast_sequence_database_components",
+        "original_issue": {
+          "code": "blast_tabular_reported_row_count_mismatch",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "original_issue": {
+              "code": "blast_tabular_reported_row_count_mismatch",
+              "pointer": "/sections/0",
+              "field": null,
+              "details": {
+                "reported": 3,
+                "observed": 4
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "code": "blast_iteration_dependency_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": 0,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {
+        "module": "gene_annotation_episode.blast_sequence_database",
+        "function": "calculate_blast_sequence_database_components",
+        "original_issue": {
+          "code": "blast_sequence_database_native_hsp_set_incomplete",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 0,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {}
+        }
+      }
+    },
+    {
+      "code": "blast_iteration_dependency_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": 1,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {
+        "module": "gene_annotation_episode.blast_sequence_database",
+        "function": "calculate_blast_sequence_database_components",
+        "original_issue": {
+          "code": "blast_sequence_database_native_hsp_set_incomplete",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": 1,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {}
+        }
+      }
+    },
+    {
+      "code": "blast_iteration_dependency_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {
+        "module": "gene_annotation_episode.blast_sequence_database",
+        "function": "calculate_blast_sequence_database_components",
+        "original_issue": {
+          "code": "blast_tabular_column_count_invalid",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "original_issue": {
+              "code": "blast_tabular_column_count_invalid",
+              "pointer": "/sections/0/lines/8",
+              "field": null,
+              "details": {
+                "expected": 11,
+                "actual": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "code": "blast_iteration_dependency_issue",
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/sections/0"
+      },
+      "hit_ordinal": null,
+      "hsp_ordinal": null,
+      "source_pointer": "/sections/0",
+      "details": {
+        "module": "gene_annotation_episode.blast_sequence_database",
+        "function": "calculate_blast_sequence_database_components",
+        "original_issue": {
+          "code": "blast_tabular_reported_row_count_mismatch",
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/sections/0"
+          },
+          "hit_ordinal": null,
+          "hsp_ordinal": null,
+          "source_pointer": "/sections/0",
+          "details": {
+            "original_issue": {
+              "code": "blast_tabular_reported_row_count_mismatch",
+              "pointer": "/sections/0",
+              "field": null,
+              "details": {
+                "reported": 3,
+                "observed": 4
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "version": "blast_iteration_components_v1",
+    "coordinates": "Native labels are not biological rounds. Native endpoints are unchanged; supplied intervals are zero-based half-open. Full query, selected span and profile/master axes remain distinct.",
+    "count_populations": [
+      "JSON reported_hit_count counts all raw hit records; reported_hsp_count sums raw HSP-list lengths only when every hit has a list; observed_hsp_count sums present lists, including malformed entries.",
+      "Table reported_hsp_count and observed_hsp_count count original data rows. reported_hit_count uses the collector's original grouping only with every row assignable. Empty undeclared table6 is unknown.",
+      "parsed_hit_count and parsed_hsp_count count validated projection containers, not valid geometry; declared_alignment_row_count preserves the table declaration separately."
+    ],
+    "threshold_sources": "Finite nonnegative native params.include is retained. Only qualified sequence stages apply it and/or agreeing source-qualified effective inclusion_ethresh; DELTA domain stages apply only domain_inclusion_ethresh. Units are expected-count cutoffs; no inclusion decision is inferred.",
+    "membership_population": "Supplied checkpoint native member identifiers: raw=len(members); unique=distinct(namespace,value,version); duplicate=raw-unique; included=unique only for complete source-qualified consistent associations. No query subtraction, sequence-digest inference or native decoder is supplied.",
+    "comparison_population": "Only explicitly paired complete retained returned target sets under the supplied identity basis: added=L\\E, removed=E\\L, retained=E intersection L; counts are cardinalities. Reporting limits remain attached. These are not complete database populations or independent evidence.",
+    "convergence_meaning": "Explicit source-associated native boolean observations only. Missing is unknown; conflicts are incompatible. Query scope is never attached to a guessed final search. No episode continuation/completion meaning.",
+    "child_component_definitions": [
+      "blast_sequence_database.blast_sequence_database_result_components_v1 embeds unchanged database_sheet, function_weights, coordinate_context, selected_query_coverage and row_keys.",
+      "blast_profile_calculators.blast_profile_components_v1 embeds unchanged per-HSP/model/coverage/threshold/function/dependence/taxonomy fields.",
+      "blast_pssm_calculators.blast_pssm_components_v1 embeds all matrices, diagnostics, statistics, master maps, statuses and definitions unchanged."
+    ],
+    "missingness": "Measured zero, missing_input, not_measured, incompatible_input, invalid_native_row and partial_output are distinct. Native readable scalar cells do not authenticate custody or biological publication.",
+    "uncertainty": "No new uncertainty model. Counts and set cardinalities have no external denominator; native statistical quantities and any supplied uncertainty remain in the child results and original records.",
+    "no_cross_round_combination": "No sum, mean, product, final-round selection, drift score or inferred convergence across rounds or checkpoints.",
+    "unused_inputs": "All native fields, options, unknown extensions, supplied metadata and records remain retained. Child formulas alone specify used/unused measurements; stored taxonomy/source quality does not imply weighting. Observation provenance is not an executable extractor."
+  }
+}

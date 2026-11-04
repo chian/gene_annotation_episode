@@ -1,0 +1,22 @@
+{
+  "observed_at": "2026-10-22T05:52:41.630944+00:00",
+  "meaning": "Constructed schema-admissible object and pure local function calls only; not a fetched service response.",
+  "input": {
+    "status": "PENDING",
+    "result": null,
+    "page_count": null
+  },
+  "schema_pointer": "#/components/schemas/ResultResponseSchema",
+  "schema_validation_errors": [],
+  "actual_validate_remote_identity_result": {
+    "exception_type": "AcquisitionError",
+    "code": "provider_result_representation"
+  },
+  "actual_parse_hmmer_result": {
+    "status": "PENDING",
+    "hits": [],
+    "page_count": null,
+    "stats": null
+  },
+  "operation_wrapper_source_trace": "public_search_operations.py:700 validates result identity before :701 reads status; AcquisitionError is mapped to response_invalid at :730-734, bypassing non-SUCCESS handling at :704-707. Actual operation was not executed."
+}

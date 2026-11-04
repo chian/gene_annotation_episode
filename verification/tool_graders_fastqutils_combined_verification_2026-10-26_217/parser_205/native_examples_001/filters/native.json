@@ -1,0 +1,92 @@
+{
+  "tag": "Cutadapt report",
+  "schema_version": [0, 3],
+  "cutadapt_version": "4.9",
+  "python_version": "3.12.3",
+  "command_line_arguments": [
+    "-j",
+    "1",
+    "-a",
+    "AGATCG",
+    "-m",
+    "5",
+    "-M",
+    "12",
+    "--max-n",
+    "0",
+    "--max-ee",
+    "0.1",
+    "--json",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/filters/native.json",
+    "-o",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/filters/output.fastq",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/filters/input.fastq"
+  ],
+  "cores": 1,
+  "input": {
+    "path1": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/parser_205/native_examples_001/filters/input.fastq",
+    "path2": null,
+    "paired": false
+  },
+  "read_counts": {
+    "input": 5,
+    "filtered": {
+      "too_short": 2,
+      "too_long": 1,
+      "too_many_n": 1,
+      "too_many_expected_errors": 0,
+      "casava_filtered": null,
+      "discard_trimmed": null,
+      "discard_untrimmed": null
+    },
+    "output": 1,
+    "reverse_complemented": null,
+    "read1_with_adapter": 1,
+    "read2_with_adapter": null
+  },
+  "basepair_counts": {
+    "input": 44,
+    "input_read1": 44,
+    "input_read2": null,
+    "quality_trimmed": null,
+    "quality_trimmed_read1": null,
+    "quality_trimmed_read2": null,
+    "poly_a_trimmed": null,
+    "poly_a_trimmed_read1": null,
+    "poly_a_trimmed_read2": null,
+    "output": 6,
+    "output_read1": 6,
+    "output_read2": null
+  },
+  "adapters_read1": [
+    {
+      "name": "1",
+      "total_matches": 1,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": null,
+      "three_prime_end": {
+        "type": "regular_three_prime",
+        "sequence": "AGATCG",
+        "error_rate": 0.1,
+        "indels": true,
+        "error_lengths": [6],
+        "matches": 1,
+        "adjacent_bases": {
+          "A": 0,
+          "C": 1,
+          "G": 0,
+          "T": 0,
+          "": 0
+        },
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 0.0, "counts": [1]}
+        ]
+      }
+    }
+  ],
+  "adapters_read2": null,
+  "poly_a_trimmed_read1": null,
+  "poly_a_trimmed_read2": null
+}

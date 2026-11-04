@@ -1,0 +1,467 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; HMMER web server 1.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'en',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: ''
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/tab.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="next" title="About HMMER" href="about.html" />
+    <link rel="prev" title="Results" href="result.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hmmer-web-docs" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HMMER web server
+          
+
+          
+            
+            <img src="_static/hmmer_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="databases.html">Target databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="searches.html">Searches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="searches.html#advanced-search-options">Advanced search options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="result.html">Results</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-documentation">API Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples-using-curl">Examples using curl</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#available-services">Available services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phmmer-searches">phmmer searches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hmmscan-searches">hmmscan searches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hmmsearch-searches">hmmsearch searches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jackhmmer-searches">jackhmmer searches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#results">Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#taxonomy-and-domain-views">Taxonomy and domain views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#batch-searches">Batch searches</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About HMMER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">The HMMER software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HMMER web server</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="api-documentation">
+<h3>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h3>
+<p>The documentation for the updated API in the form of OpenAPI specs can be found <a class="reference external" href="https://www.ebi.ac.uk/Tools/hmmer/api/v1/docs">here</a></p>
+<p><em>Note: The main difference from the old api is that results are retrieved in an asynchronous manner</em></p>
+</div>
+<div class="section" id="examples-using-curl">
+<h3>Examples using curl<a class="headerlink" href="#examples-using-curl" title="Permalink to this headline">¶</a></h3>
+<p>To start a phmmer search use this command</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span>curl -s -X POST <span class="s2">&quot;https://www.ebi.ac.uk/Tools/hmmer/api/v1/search/phmmer&quot;</span> <span class="se">\</span>
+    -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+    -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+    -d <span class="s1">&#39;{</span>
+<span class="s1">    &quot;database&quot;: &quot;pdb&quot;,</span>
+<span class="s1">    &quot;input&quot;: &quot;&gt;2abl_A mol:protein length:163  ABL TYROSINE KINASE\\nMGPSENDPNLFVALYDFVASGDNTLSITKGEKLRVLGYNHNGEWCEAQTKNGQGWVPS&quot;</span>
+<span class="s1">  }&#39;</span>
+</pre></div>
+</td></tr></table></div>
+<p><em>Note: to preserve new lines use \\n</em></p>
+<p>To retrieve the results from a search use this command</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>curl -s -X GET <span class="se">\</span>
+    <span class="s2">&quot;https://www.ebi.ac.uk/Tools/hmmer/api/v1/result/8ebb1d5f-4457-4da8-808c-f811105c3654&quot;</span> <span class="se">\</span>
+    -H <span class="s2">&quot;Accept: application/json&quot;</span>
+</pre></div>
+</td></tr></table></div>
+<p>The following section demonstrates a more integrated way of starting a phmmer search and retrieving results.</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="c1"># Exit immediately if any command exits with a non-zero status</span>
+<span class="c1"># Treat unset variables as an error, and pipes will fail if any command fails</span>
+<span class="nb">set</span> -euo pipefail
+
+<span class="c1"># Define the path to the input FASTA file</span>
+<span class="nv">FASTA</span><span class="o">=</span><span class="s2">&quot;path/to/input.fasta&quot;</span>
+<span class="c1"># Define the path to the output JSON file</span>
+<span class="nv">OUTPUT</span><span class="o">=</span><span class="s2">&quot;result.json&quot;</span>
+
+<span class="c1"># Perform a POST request to submit the FASTA sequence to the API and run an phmmer search</span>
+<span class="c1"># The sequence is read from the FASTA file and escaped appropriately</span>
+<span class="nv">RESPONSE</span><span class="o">=</span><span class="k">$(</span>curl -s -X POST <span class="se">\</span>
+    <span class="s2">&quot;https://www.ebi.ac.uk/Tools/hmmer/api/v1/search/phmmer&quot;</span> <span class="se">\</span>
+    -H <span class="s2">&quot;Content-Type: application/json&quot;</span> <span class="se">\</span>
+    -H <span class="s2">&quot;Accept: application/json&quot;</span> <span class="se">\</span>
+    -d <span class="s2">&quot;{\&quot;database\&quot;:\&quot;pdb\&quot;,\&quot;input\&quot;:\&quot;</span><span class="k">$(</span>cat <span class="nv">$FASTA</span> <span class="p">|</span> awk <span class="s1">&#39;{printf &quot;%s\\n&quot;, $0}&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/&quot;/\\&quot;/g&#39;</span><span class="k">)</span><span class="s2">\&quot;}&quot;</span><span class="k">)</span>
+
+<span class="c1"># Extract the job ID from the JSON response using grep and sed</span>
+<span class="c1"># The job ID is returned in the response and will be used to check the status later</span>
+<span class="nv">JOB_ID</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$RESPONSE</span> <span class="p">|</span> grep -o <span class="s1">&#39;&quot;id&quot;:[^,}]*&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/&quot;id&quot;: *&quot;//g&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/&quot;//g&#39;</span><span class="k">)</span>
+
+<span class="c1"># Start an infinite loop to periodically check the status of the job</span>
+<span class="k">while</span> true<span class="p">;</span> <span class="k">do</span>
+    <span class="c1"># Perform a GET request to check the status of the job using the job ID</span>
+    <span class="nv">RESPONSE</span><span class="o">=</span><span class="k">$(</span>curl -s -X GET <span class="se">\</span>
+        <span class="s2">&quot;https://www.ebi.ac.uk/Tools/hmmer/api/v1/result/</span><span class="nv">$JOB_ID</span><span class="s2">&quot;</span> <span class="se">\</span>
+        -H <span class="s2">&quot;Accept: application/json&quot;</span><span class="k">)</span>
+
+    <span class="c1"># Extract the status field from the JSON response using grep and sed</span>
+    <span class="nv">STATUS</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$RESPONSE</span><span class="s2">&quot;</span> <span class="p">|</span> grep -o <span class="s1">&#39;&quot;status&quot;[[:space:]]*:[[:space:]]*&quot;[^&quot;]*&quot;&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/.*:[[:space:]]*&quot;//;s/&quot;$//&#39;</span><span class="k">)</span>
+
+    <span class="c1"># Check if the status is &quot;SUCCESS&quot;</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$STATUS</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;SUCCESS&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="c1"># If successful, print a success message and save the response to a file</span>
+        <span class="nb">echo</span> <span class="s2">&quot;Job completed successfully!&quot;</span>
+        <span class="nb">echo</span> <span class="nv">$RESPONSE</span> &gt;<span class="nv">$OUTPUT</span> <span class="c1"># Save the response (JSON) to the output file</span>
+        <span class="nb">break</span>                   <span class="c1"># Exit the loop when the job is successful</span>
+    <span class="k">fi</span>
+
+    <span class="c1"># Print the current status if it&#39;s not &quot;SUCCESS&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Current status: </span><span class="nv">$STATUS</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Sleep for 5 seconds before checking the status again</span>
+    sleep <span class="m">5</span>
+<span class="k">done</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="available-services">
+<h2>Available services<a class="headerlink" href="#available-services" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="phmmer-searches">
+<h3>phmmer searches<a class="headerlink" href="#phmmer-searches" title="Permalink to this headline">¶</a></h3>
+<p>The main two input parameters to a phmmer search are a protein sequence
+and the target database, defined using the input and database parameters
+respectively. Other parameters for controlling the search are defined
+in the search section. If any of these parameters are omitted, then the
+default values for that parameter will be set.</p>
+<p>Searches should be POST-ed to the following url:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">phmmer</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hmmscan-searches">
+<h3>hmmscan searches<a class="headerlink" href="#hmmscan-searches" title="Permalink to this headline">¶</a></h3>
+<p>Hmmscan also has two main parameters - a sequence and a profile HMM
+database - defined using the input and database parameters respectively. We
+currently offer Pfam only.</p>
+<p>Searches should be POST-ed to the following url:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">hmmscan</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hmmsearch-searches">
+<h3>hmmsearch searches<a class="headerlink" href="#hmmsearch-searches" title="Permalink to this headline">¶</a></h3>
+<p>The input to hmmsearch on the web is either a multiple sequence alignment
+or a hidden Markov model in HMMER3 format. We do not support HMMER2 format
+as these HMMs are not forward compatible with HMMER3. When uploading a
+multiple sequence alignment, an HMM is built on the server using hmmbuild
+with the default parameters.</p>
+<p>Searches should be POST-ed to the following url:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">hmmsearch</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="jackhmmer-searches">
+<h3>jackhmmer searches<a class="headerlink" href="#jackhmmer-searches" title="Permalink to this headline">¶</a></h3>
+<p>Jackhmmer is an iterative search algorithm that can be initiated with
+a sequence, multiple sequence alignment or profile HMM. The number of
+iterations to run can be supplied as an additional parameter and will
+perform a succession of searches until the job has completed. Fetching
+the results is a little more complicated, as the search may finish before
+the number of iterations if it converges.</p>
+<p>Searches should be POST-ed to the following url:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">jackhmmer</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="results">
+<h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
+<p>Search results can be retrieved using the job identifier that is returned in your initial search response.
+The job identifier is a UUID (format such as 4162F712-1DD2-11B2-B17E-C09EFE1DC403).
+Thus, to retrieve your job, you can use the following URL in a GET request:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">result</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">//</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">result</span><span class="o">/</span><span class="mi">4162</span><span class="n">F712</span><span class="o">-</span><span class="mi">1</span><span class="n">DD2</span><span class="o">-</span><span class="mi">11</span><span class="n">B2</span><span class="o">-</span><span class="n">B17E</span><span class="o">-</span><span class="n">C09EFE1DC403</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="taxonomy-and-domain-views">
+<h3>Taxonomy and domain views<a class="headerlink" href="#taxonomy-and-domain-views" title="Permalink to this headline">¶</a></h3>
+<p>The API may also be used to retrive the data behind the taxonomy and domain architecture tabs on the results
+page. For taxonomy the URL has the form:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">taxonomy</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span><span class="o">/</span><span class="n">tree</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-type: application/json&quot;</span> <span class="s1">&#39;https://www.ebi.ac.uk/Tools/hmmer/api/v1/taxonomy/8D5B74A0-6158-11E7-B311-1331132D729D/tree&#39;</span>
+</pre></div>
+</div>
+<p>For domain architecture, two endpoints are provided. The first returns an overview of all architectures:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ebi</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">hmmer</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">architecture</span><span class="o">/</span><span class="p">{</span><span class="nb">id</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">H</span> <span class="s2">&quot;Content-type: application/json&quot;</span> <span class="s1">&#39;https://www.ebi.ac.uk/Tools/hmmer/api/v1/architecture/8D5B74A0-6158-11E7-B311-1331132D729D&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="batch-searches">
+<h3>Batch searches<a class="headerlink" href="#batch-searches" title="Permalink to this headline">¶</a></h3>
+<p>Batch searches are currently disabled.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="about.html" class="btn btn-neutral float-right" title="About HMMER" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="result.html" class="btn btn-neutral float-left" title="Results" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, EMBL-EBI
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

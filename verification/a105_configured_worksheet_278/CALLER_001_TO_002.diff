@@ -1,0 +1,122 @@
+--- caller_001.py
++++ caller_002.py
+@@ -61,6 +61,27 @@
+     for row in saved['files']:
+         if digest(PIN/row['path']) != row['sha256']:
+             raise ValueError('frozen_implementation_changed:' + row['path'])
++
++
++def verify_entrypoint():
++    manifest = json.loads((HERE/'ENTRYPOINT_PIN_002.json').read_text())
++    for row in manifest['files']:
++        if digest(HERE/row['path']) != row['sha256']:
++            raise ValueError('original_caller_entrypoint_or_contract_changed')
++
++
++def public_exception(error):
++    """Public type and declared contract identifier only; no provider strings."""
++    import re
++    from gene_annotation_episode.domain import ContractError
++    from gene_annotation_episode.communication import ReportBoundaryError
++    from method_loop.durable import DurableExecutionError
++    code = (error.args[0] if isinstance(error, ContractError) and error.args else
++        error.diagnostic.get('code') if isinstance(error, ReportBoundaryError) else
++        error.failure.get('code') if isinstance(error, DurableExecutionError) else None)
++    if not isinstance(code, str) or re.fullmatch(r'[a-z][a-z0-9_]{0,127}', code) is None:
++        code = None
++    return {'exception_type': type(error).__name__, 'public_contract_code': code}
+ 
+ 
+ def imported_local():
+@@ -255,51 +276,69 @@
+ async def execute():
+     imports()
+     verify_pin()
++    verify_entrypoint()
+     from gene_annotation_episode.state import Store
+     from gene_annotation_episode.providers import ModelConnection
+     from gene_annotation_episode.runtime import _now
++    from gene_annotation_episode.execution_timing import _process_identity
+     prepared = json.loads((CASE/'prepared_caller.json').read_text())
+-    status = {'state': 'started', 'started_at_utc': _now(), 'pid': os.getpid(), 'run_id': prepared['run_id']}
+-    write(HERE/'STATUS_001.json', status)
++    status = {'state': 'started', 'started_at_utc': _now(), 'process_identity': _process_identity(),
++        'run_id': prepared['run_id'], 'entrypoint_manifest': str(HERE/'ENTRYPOINT_PIN_002.json')}
++    write(HERE/'STATUS_002.json', status)
+     with Store(CASE/'state') as store:
+-        from gene_annotation_episode.tool_configuration import build_tools
+-        tools = build_tools(store, prepared['tool_configuration'])
+-        provider = ModelConnection(prepared['settings']['models'], CASE/'run/providers'/uuid.uuid4().hex,
+-            PIN, image_resolver=getattr(tools, 'resolve_image_input', None))
+-        workflow, root, tools = assemble(store, prepared, provider)
++        from gene_annotation_episode.episode_journal import Journal
++        journal = Journal(store, prepared['run_id'])
++
++        def save_state(state, summary=None):
++            prior = journal.row('runtime_runs')
++            journal.save('runtime_runs', {'settings': prior['settings'], 'state': state,
++                'summary': None if summary is None else json.dumps(summary, allow_nan=False),
++                'started_at': prior['started_at'], 'updated_at': _now()})
++
++        workflow = None
++        save_state('running')
+         try:
++            from gene_annotation_episode.tool_configuration import build_tools
++            tools = build_tools(store, prepared['tool_configuration'])
++            provider = ModelConnection(prepared['settings']['models'], CASE/'run/providers'/uuid.uuid4().hex,
++                PIN, image_resolver=getattr(tools, 'resolve_image_input', None))
++            workflow, root, tools = assemble(store, prepared, provider)
+             async with provider:
+                 record = await root.run_async(workflow.context)
+                 result = await root.build_result(record)
+                 value = result.as_record()['form']
+                 root.request.report_contract.admit(value, audit_identifiers=())
+-                write(HERE/'PUBLIC_TYPED_RETURN_001.json', value)
+-                summary = {'state': 'returned', 'ended_by': record.ended_by,
++                write(HERE/'PUBLIC_TYPED_RETURN_002.json', value)
++                pending = workflow.pending_handles(root.source)
++                closed_state = 'yielded_with_pending_work' if pending else 'yielded'
++                summary = {'state': closed_state, 'ended_by': record.ended_by,
+                     'scientific_completion': 'not_established_by_termination',
+                     'root_actions': record.units_consumed,
+                     'actions': store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0],
+                     'observations': store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0],
+                     'episodes': store.db.execute('SELECT count(*) FROM runtime_episodes').fetchone()[0],
+                     'successful_typed_child_deliveries': store.db.execute('SELECT count(*) FROM runtime_report_attempts WHERE failure IS NULL AND form IS NOT NULL').fetchone()[0],
+-                    'pending_handles': workflow.pending_handles(root.source)}
+-                write(HERE/'PUBLIC_SUMMARY_001.json', summary)
+-                write(HERE/'STATUS_001.json', {**status, **summary, 'finished_at_utc': _now()})
++                    'pending_handles': pending}
++                save_state(closed_state, summary)
++                write(HERE/'PUBLIC_SUMMARY_002.json', summary)
++                write(HERE/'STATUS_002.json', {**status, **summary, 'finished_at_utc': _now()})
+         except BaseException as error:
+-            write(HERE/'STATUS_001.json', {**status, 'state': 'failed', 'finished_at_utc': _now(),
+-                'exception_type': type(error).__name__, 'message': str(error), 'failure': getattr(error, 'failure', None)})
++            state = 'interrupted' if isinstance(error, (KeyboardInterrupt, asyncio.CancelledError)) else 'operational_failure'
++            failure = public_exception(error)
++            save_state(state, failure)
++            write(HERE/'STATUS_002.json', {**status, 'state': state, 'finished_at_utc': _now(), **failure})
+             raise
+         finally:
+-            for row in store.db.execute('SELECT episode_id FROM runtime_episodes'):
+-                await workflow.release(row[0])
+-            write(HERE/'ACTUAL_IMPORTS_001.json', imported_local())
++            if workflow is not None:
++                for row in store.db.execute('SELECT episode_id FROM runtime_episodes'):
++                    await workflow.release(row[0])
++            write(HERE/'ACTUAL_IMPORTS_002.json', imported_local())
+             verify_pin()
++            verify_entrypoint()
+ 
+ 
+ if __name__ == '__main__':
+     parser = argparse.ArgumentParser()
+-    parser.add_argument('mode', choices=['prepare', 'execute'])
++    parser.add_argument('mode', choices=['execute'])
+     args = parser.parse_args()
+-    if args.mode == 'prepare':
+-        prepare()
+-    else:
+-        asyncio.run(execute())
++    asyncio.run(execute())

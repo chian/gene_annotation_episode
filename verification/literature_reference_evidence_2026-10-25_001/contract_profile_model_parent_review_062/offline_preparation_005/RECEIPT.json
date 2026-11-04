@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "model_backed": false,
+  "meaning": "Actual source registration and prospective operation/catalog/schema/TASK construction; no scientific execution",
+  "declared_source_count": 1,
+  "registered_source_count": 1,
+  "native_operation_available": true,
+  "source_defined_rate_unit_available": true,
+  "full_parent_and_child_tasks_with_original_and_optional_text_custody": true,
+  "prospective_requested_partner_components": [
+    "reference_rate",
+    "omitted_rate",
+    "addback_rate",
+    "partner_loss",
+    "partner_loss_fraction",
+    "addback_gain",
+    "addback_fraction",
+    "restored_reference_fraction"
+  ],
+  "models": {
+    "REASONING": {
+      "model": "gpt-6-sol",
+      "reasoning_effort": "medium"
+    },
+    "FAST": {
+      "model": "gpt-6-luna",
+      "reasoning_effort": "none"
+    }
+  },
+  "disabled_model_entrypoints": [
+    "ModelConnection.__init__",
+    "ModelConnection.__aenter__",
+    "ModelConnection.complete",
+    "ModelConnection.catalog",
+    "_SessionConnection.__init__",
+    "_SessionConnection.__aenter__",
+    "_SessionConnection.complete",
+    "_SessionConnection.catalog",
+    "_SessionConnection._rpc"
+  ],
+  "attempted_model_calls": [],
+  "runtime_counts": {},
+  "implementation_sha256": "5e98c2f1fa0f75ce0f7500fc7fa7c40135e36b912daa64d8214797c63bebba24",
+  "pin_manifest_sha256": "b09dfaa37615ab6f9ff02a18fd864d0c696a59ee11622cdf039a5c4a3319ef9c",
+  "live_run_launched": false,
+  "prepared_numeric_operands_supplied": false,
+  "files": [
+    {
+      "path": "ASSIGNMENT_SCHEMA.json",
+      "sha256": "e901845ea1e71d87aaa31a02407e62c855e76cc11270019b13298c54f43570d2"
+    },
+    {
+      "path": "BINDING_DESCRIPTOR.json",
+      "sha256": "dcdfffbf81beb0e1d447556fdfda8e40ad2e8783e5b48a6cc18c6cdd48e12211"
+    },
+    {
+      "path": "CUSTODY_CHECKS.json",
+      "sha256": "937f0922654c307a7da89f08d5fef6fe6c8cab705ad948890bf0b41bfe559483"
+    },
+    {
+      "path": "NUMERICAL_RETURN_SCHEMA.json",
+      "sha256": "5f5d5cf77858cab62a6e25d27769ef14f2957f0f7a51c0a50f0906a1ad964087"
+    },
+    {
+      "path": "OPERATION_CATALOG.json",
+      "sha256": "af1e70edd54ca980fb16691c00972d63199ab036e85d52303e671afadcc9863b"
+    },
+    {
+      "path": "PROSPECTIVE_PARENT_TASK_AND_STEERING.txt",
+      "sha256": "51ea270300f67598d7cc5714b3d9f183765dd2aaeef5fd5ecd330735ecceb316"
+    },
+    {
+      "path": "PROSPECTIVE_TASK_AND_STEERING.txt",
+      "sha256": "e90948da82dd83bfb2984cf4c73cc10b190ec5052df3f868ffa1a742254964df"
+    },
+    {
+      "path": "SOURCE_CATALOG.json",
+      "sha256": "fef68726574563aabf8419425487c9db851f3d25410541cf7a0239d66ae6b819"
+    }
+  ]
+}

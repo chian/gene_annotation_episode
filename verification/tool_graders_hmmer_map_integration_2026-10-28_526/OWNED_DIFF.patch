@@ -1,0 +1,1574 @@
+--- before/gene_annotation_episode/hmmer_alignment_preparation_data.py
++++ gene_annotation_episode/hmmer_alignment_preparation_data.py
+@@ -44,6 +44,7 @@
+     "model_extraction_mismatch", "model_extraction_issue", "association_incomplete",
+     "association_conflict", "model_map_invalid", "first_record_only",
+     "unexpected_output", "resaved_alignment_empty", "mm_symbol_invalid",
++    "map_context_unavailable", "map_context_invalid",
+ })
+ ROW_FIELDS = {
+     "population": frozenset({"record_key", "kind", "occurrence_id", "format", "decoded_count", "complete", "state"}),
+@@ -57,6 +58,83 @@
+ _NUMBER = re.compile(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\Z")
+ _INTEGER = re.compile(r"[0-9]+\Z")
+ _MAPPING = re.compile(r"\s*(\d+)\.\.(\d+)\s+->\s+(?:(\d+)\.\.(\d+)|-\.\.-\s+\(no map\))\s*\Z")
++
++# A retained implementation association, not a guess from a version banner or
++# the installation on the machine reading a saved sheet. No file is opened.
++ALIMASK_PROFILE_EXECUTABLE_SHA256 = "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547"
++ALIMASK_PROFILE = {"name": "infernal_1_1_5_hmmer_3_4_alimask", "source_sha256s": {
++    "hmmer/src/alimask.c": "504e52c49a249facca5887d96f5efeaaf8012820b47bbe75e782aa14af7034ab",
++    "easel/esl_msaweight.c": "0195e7c2a4428f02a84e3c239922090e72a5a72a5cc5de8a3a5551f06b6efe68",
++    "easel/esl_msaweight.h": "caf345d5c9053af80e899b697a648430306f2db6240f8724b017490b94ffb106",
++    "easel/esl_rand64.c": "abd4b05b7bf619f196b1ca99c0de452e0fe38b3ffa0f7e2f5991d88d763e5359",
++    "easel/esl_vectorops.c": "6226cb25818a1319811f7fdec2aa590df0b60f40aa01521a806cf484ea117463",
++}}
++MAP_CONTEXT_FIELDS = frozenset({"version", "source_occurrence_id", "source_sha256", "producer", "profile",
++    "binding", "requested_cli_seed", "resolved_cli_seed", "effective_pb_config"})
++_PB_CONFIG = {"fragthresh": .5, "symfrac": .5, "ignore_rf": True, "allow_samp": True,
++    "sampthresh": 50000, "nsamp": 10000, "maxfrag": 5000, "seed": 42,
++    "rng": "easel_mt19937_64", "sampler": "esl_rand64_Deal_vitter_D_A"}
++
++
++def alimask_map_context_shape(context):
++    """Closed JSON operand shape, separate from its semantic association."""
++    digest = lambda value: type(value) is str and re.fullmatch(r"[0-9a-f]{64}", value) is not None
++    integer = lambda value: type(value) is int and 0 <= value <= 2147483647
++    if (type(context) is not dict or set(context) != MAP_CONTEXT_FIELDS
++            or context["version"] != "hmmer_alignment_map_context_v1"
++            or type(context["source_occurrence_id"]) is not str or not context["source_occurrence_id"]
++            or not digest(context["source_sha256"])
++            or type(context["binding"]) is not str or context["binding"] not in {"retained_executable_profile", "unavailable"}
++            or context["requested_cli_seed"] is not None and not integer(context["requested_cli_seed"])
++            or not integer(context["resolved_cli_seed"])):
++        return False
++    producer = context["producer"]
++    if (type(producer) is not dict or set(producer) != {"program", "engine_version", "executable_sha256"}
++            or producer["program"] != "alimask" or producer["engine_version"] != "3.4"
++            or producer["executable_sha256"] is not None and not digest(producer["executable_sha256"])):
++        return False
++    profile, config = context["profile"], context["effective_pb_config"]
++    if profile is not None and (type(profile) is not dict or set(profile) != {"name", "source_sha256s"}
++            or type(profile["name"]) is not str or not profile["name"]
++            or type(profile["source_sha256s"]) is not dict
++            or set(profile["source_sha256s"]) != set(ALIMASK_PROFILE["source_sha256s"])
++            or any(not digest(value) for value in profile["source_sha256s"].values())):
++        return False
++    if config is not None and (type(config) is not dict or set(config) != set(_PB_CONFIG)
++            or any(type(config[k]) is not bool for k in ("ignore_rf", "allow_samp"))
++            or any(not integer(config[k]) for k in ("sampthresh", "nsamp", "maxfrag", "seed"))
++            or any(not finite(config[k]) or not 0 <= config[k] <= 1 for k in ("fragthresh", "symfrac"))
++            or any(type(config[k]) is not str for k in ("rng", "sampler"))):
++        return False
++    return True
++
++
++def alimask_map_context_valid(context, *, settings, source_occurrence=None, operation=None, alignment=None):
++    """Validate retained identities/settings; never resolve a source or profile."""
++    if not alimask_map_context_shape(context) or type(settings) is not dict:
++        return False
++    if operation is not None and (operation.get("program") != "alimask" or operation.get("engine_version") != "3.4"):
++        return False
++    if source_occurrence is not None and (not _occurrence_valid(source_occurrence)
++            or source_occurrence["direction"] != "input" or source_occurrence["role"] != "alignment"
++            or source_occurrence["ordinal"] != 0
++            or context["source_occurrence_id"] != source_occurrence["occurrence_id"]
++            or context["source_sha256"] != source_occurrence["sha256"]):
++        return False
++    if alignment is not None and (context["source_occurrence_id"] != alignment.get("occurrence_id")
++            or alignment.get("record_key") != context["source_occurrence_id"] + "#alignment/0"
++            or alignment.get("engine_version") != "3.4"):
++        return False
++    resolved = settings.get("--seed", 42)
++    if (type(resolved) is not int or context["resolved_cli_seed"] != resolved
++            or context["requested_cli_seed"] is not None and context["requested_cli_seed"] != resolved
++            or context["requested_cli_seed"] is None and resolved != 42):
++        return False
++    if context["binding"] == "unavailable":
++        return context["profile"] is None and context["effective_pb_config"] is None
++    return (context["producer"]["executable_sha256"] == ALIMASK_PROFILE_EXECUTABLE_SHA256
++        and context["profile"] == ALIMASK_PROFILE
++        and context["effective_pb_config"] == {**_PB_CONFIG, "ignore_rf": not bool(settings.get("--hand"))})
+ 
+ 
+ def issue(code, *, record_key=None, occurrence_id=None, field=None, stage="extraction", **details):
+@@ -195,6 +273,12 @@
+                              "events": deepcopy(weight_events)}
+             if weights and not valid:
+                 local.append(issue("weight_invalid", record_key=row["record_key"], occurrence_id=oid))
++        weight_events = [event for event in events if event["kind"] == "GS" and event["tag"] == "WT"]
++        malformed_weight = any(event["kind"] == "malformed_annotation" and
++            re.match(r"#=GS\s+\S+\s+WT(?:\s|$)", event["raw"]) for event in events)
++        if malformed_weight or weight_events and (len(weight_events) != len(record["rows"])
++                or any(row["weight"]["state"] != "present" for row in record["rows"])):
++            local.append(issue("weight_invalid", record_key=key, occurrence_id=oid))
+         record["issues"] = local
+         sheet["issues"].extend(local)
+     complete = encoding_complete and occurrence["completeness"] == "complete" and all(valid_alignment(r) and not r["issues"] for r in records)
+@@ -381,7 +465,8 @@
+             sheet["issues"].append(issue("association_incomplete", record_key=summary["record_key"], field="summary"))
+ 
+ 
+-def populate_hmmer_alignment_preparation_sheet(*, operation, inputs, outputs, model_extraction=None):
++def populate_hmmer_alignment_preparation_sheet(*, operation, inputs, outputs, model_extraction=None,
++                                               map_reconstruction_context=None):
+     """Read supplied bytes only; failures preserve complete prefix records.
+ 
+     Operation settings use native flag spellings. The selected summary artifact
+@@ -439,6 +524,19 @@
+         sheet["issues"].append(issue("role_missing" if not source_payloads else "role_cardinality_invalid", field="input.alignment", count=len(source_payloads)))
+     for payload in source_payloads:
+         sheet["input_records"].extend(_alignment_records(payload, settings.get("--informat"), operation, sheet))
++    if map_reconstruction_context is not None:
++        first = next((r for r in sheet["input_records"] if len(source_payloads) == 1 and
++            r["record_key"] == source_payloads[0]["occurrence"]["occurrence_id"] + "#alignment/0"), None)
++        occurrence = source_payloads[0]["occurrence"] if len(source_payloads) == 1 else None
++        if first is not None and operation["program"] == "alimask":
++            first["map_reconstruction_context"] = deepcopy(map_reconstruction_context)
++        if not alimask_map_context_valid(map_reconstruction_context, settings=settings,
++                source_occurrence=occurrence, operation=operation, alignment=first):
++            problem = issue("map_context_invalid", record_key=first["record_key"] if first else None,
++                            occurrence_id=occurrence["occurrence_id"] if occurrence else None)
++            sheet["issues"].append(problem)
++            if first is not None:
++                first["issues"].append(problem)
+     output_role = "resaved_alignment" if operation["program"] == "hmmbuild" else "masked_alignment"
+     transformed = payloads["output"].get(output_role, [])
+     if len(transformed) > 1:
+--- before/gene_annotation_episode/hmmer_alignment_preparation_calculations.py
++++ gene_annotation_episode/hmmer_alignment_preparation_calculations.py
+@@ -7,11 +7,11 @@
+ a source column may map to several resaved columns. Model probability arrays and
+ their entropy/KL/mass checks use M1 unchanged, with an explicit background.
+ 
+-The alimask reconstruction mirrors HMMER 3.4 digital semantics for hand, wnone,
+-wgiven and nonsampled PB. PB's fixed span/.5 rule precedes selected residue-count
+-fragment marking; the final occupancy accumulators and threshold are float32.
+-GSC, BLOSUM and PB sampling stay explicit missing calculations. Reconstructing
+-an established map is a calculation on saved data, never another native run.
++The alimask reconstruction mirrors the retained HMMER 3.4 digital semantics.
++PB sampling requires an explicit authenticated producer/configuration context.
++PB's fixed span/.5 rule precedes selected residue-count fragment marking; the
++final occupancy accumulators and threshold are float32. Reconstruction consumes
++saved data, never another native run.
+ """
+ from __future__ import annotations
+ 
+@@ -25,8 +25,12 @@
+ from .hmmer_alignment_preparation_data import (
+     SCHEMA as SHEET_SCHEMA, MODES, ROW_FIELDS as NATIVE_ROW_FIELDS, annotation, finite, gf_value, model_header,
+     selected_alphabet, valid_alignment, _model_map,
++    ALIMASK_PROFILE, ALIMASK_PROFILE_EXECUTABLE_SHA256, _PB_CONFIG,
++    alimask_map_context_shape, alimask_map_context_valid,
+ )
+ from .hmmer_model_data import _occurrence_valid
++from .hmmer_alignment_tree_weights import gsc_raw_weights, blosum_raw_weights
++from .hmmer_alignment_pb_sampling import sample_easel_pb_rows
+ 
+ SCHEMA = "hmmer_alignment_preparation_components_v1"
+ COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
+@@ -37,7 +41,8 @@
+     "weight_invalid", "settings_invalid", "alignment_invalid", "range_out_of_bounds", "range_invalid",
+     "range_capacity_exceeded", "unsafe_native_range", "mapping_mismatch", "mask_mismatch",
+     "mm_invalid", "sequence_membership_mismatch", "sequence_content_mismatch", "source_checksum_mismatch",
+-    "summary_mismatch", "source_binding_invalid", "resaved_unavailable", "model_map_invalid"})
++    "summary_mismatch", "source_binding_invalid", "resaved_unavailable", "model_map_invalid",
++    "map_context_unavailable", "map_context_invalid"})
+ CHECK_CODES = frozenset({"artifact_binding", "source_geometry", "output_geometry", "association",
+     "summary_counts", "summary_eff_nseq", "summary_relative_entropy", "source_checksum", "model_map",
+     "rf_model_length", "sequence_membership", "sequence_content", "alignment_width", "mask_annotation",
+@@ -87,7 +92,103 @@
+     return "".join("-" if symbol in _GAPS else symbol for symbol in text)
+ 
+ 
+-def reconstruct_alimask_model_map(alignment, *, settings):
++def resolve_alimask_map_context(*, operation, software, source_occurrence, requested_options):
++    """Bind only the recorded selected executable to the retained source profile.
++
++    This pure adapter consumes an authenticated bundle's records. In particular,
++    it never uses the installed executable or substitutes expected for an unknown
++    actual digest. The CLI seed and PB's internal seed are distinct operands.
++    """
++    if (type(operation) is not dict or operation.get("program") != "alimask"
++            or operation.get("engine_version") != "3.4" or type(operation.get("settings")) is not dict
++            or type(software) is not dict or set(software) != {
++                "executable", "expected_sha256", "actual_sha256", "declared_engine_version"}
++            or not _occurrence_valid(source_occurrence)
++            or type(requested_options) is not list or any(type(token) is not str for token in requested_options)):
++        raise ValueError("map_context_invalid")
++    positions = [i for i, token in enumerate(requested_options) if token == "--seed"]
++    requested_seed = None
++    if positions:
++        try:
++            if len(positions) != 1 or positions[0] + 1 >= len(requested_options):
++                raise ValueError
++            token = requested_options[positions[0] + 1]
++            if not token.removeprefix("+").isascii() or not token.removeprefix("+").isdigit():
++                raise ValueError
++            requested_seed = int(token)
++        except (ValueError, OverflowError):
++            raise ValueError("map_context_invalid") from None
++    actual = software["actual_sha256"]
++    bound = (actual == software["expected_sha256"] == ALIMASK_PROFILE_EXECUTABLE_SHA256
++             and software["declared_engine_version"] == operation["engine_version"])
++    context = {"version": "hmmer_alignment_map_context_v1",
++        "source_occurrence_id": source_occurrence["occurrence_id"], "source_sha256": source_occurrence["sha256"],
++        "producer": {"program": "alimask", "engine_version": operation["engine_version"], "executable_sha256": actual},
++        "profile": deepcopy(ALIMASK_PROFILE) if bound else None,
++        "binding": "retained_executable_profile" if bound else "unavailable",
++        "requested_cli_seed": requested_seed, "resolved_cli_seed": operation["settings"].get("--seed", 42),
++        "effective_pb_config": {**_PB_CONFIG, "ignore_rf": not bool(operation["settings"].get("--hand"))} if bound else None}
++    if (software["declared_engine_version"] != operation["engine_version"]
++            or not alimask_map_context_valid(context, settings=operation["settings"],
++                source_occurrence=source_occurrence, operation=operation)):
++        raise ValueError("map_context_invalid")
++    return context
++
++
++def _normalize_easel_weights(raw_weights):
++    """Ordered esl_vec_DSum, then DNorm division, then separate DScale."""
++    if not raw_weights or any(not finite(value) or value < 0 for value in raw_weights):
++        raise ValueError("weight_invalid")
++    total = correction = 0.
++    for value in raw_weights:
++        y = value - correction
++        updated = total + y
++        correction = (updated - total) - y
++        total = updated
++    if not finite(total):
++        raise ValueError("weight_invalid")
++    count = len(raw_weights)
++    normalized = [value / total for value in raw_weights] if total != 0. else [1. / count] * count
++    weights = [value * count for value in normalized]
++    if any(not finite(value) or value < 0 for value in weights):
++        raise ValueError("weight_invalid")
++    return weights, {"method": "easel_kahan_divide_then_scale", "sum": total,
++                     "sequence_count": count, "zero_sum": total == 0.}
++
++
++def _pb_counts(sequences, *, width, residues, columns=None):
++    """Native PB span rule; collect all-row counts after choosing a sample map."""
++    counts = [Counter() for _ in range(width)]
++    minspan = math.ceil(_f32(.5 * _f32(width)))
++    fragments = 0
++    for sequence in sequences:
++        left = next((i for i, symbol in enumerate(sequence) if symbol in residues), width)
++        right = next((i for i in range(width - 1, -1, -1) if sequence[i] in residues), -1)
++        if right - left + 1 >= minspan:
++            left, right = 0, width - 1
++        else:
++            fragments += 1
++        for column in range(left, right + 1) if columns is None else columns:
++            if left <= column <= right:
++                counts[column][sequence[column]] += 1
++    return counts, fragments
++
++
++def _pb_consensus(counts, residues):
++    consensus = []
++    for column, counter in enumerate(counts):
++        total = sum(count for symbol, count in counter.items() if symbol in residues or symbol == "-")
++        if total and _f32(_f32(counter["-"]) / _f32(total)) < _f32(.5):
++            consensus.append(column)
++    return consensus
++
++
++def _empty_reconstruction():
++    return {"state": "missing", "map": None, "basis": None, "weights": None,
++            "marked_sequences": None, "column_occupancy": None, "pb_consensus_columns": None, "issues": []}
++
++
++def reconstruct_alimask_model_map(alignment, *, settings, map_reconstruction_context=None):
+     """Return full deterministic map, weights, fragment strings and occupancy.
+ 
+     ``alignment`` is one B1 kind=alignment record with occurrence-keyed rows,
+@@ -98,8 +199,7 @@
+     This public port is usable by a producer without importing driver internals.
+     """
+     key = alignment.get("record_key") if isinstance(alignment, dict) else None
+-    result = {"state": "missing", "map": None, "basis": None, "weights": None,
+-              "marked_sequences": None, "column_occupancy": None, "pb_consensus_columns": None, "issues": []}
++    result = _empty_reconstruction()
+     def fail(code, state="missing", **details):
+         result["state"] = state
+         result["issues"].append(_problem(code, record_key=key, **details))
+@@ -108,6 +208,20 @@
+         return fail("alignment_invalid", "incomplete")
+     if not isinstance(settings, dict):
+         return fail("settings_invalid", "incompatible")
++    local_codes = {problem.get("code") for problem in alignment.get("issues", [])}
++    if "weight_invalid" in local_codes:
++        return fail("weight_invalid", "incompatible")
++    if local_codes & {"alignment_invalid", "alignment_incomplete", "alignment_empty", "row_geometry_invalid",
++            "row_symbols_invalid", "annotation_geometry_invalid", "annotation_join_ambiguous", "duplicate_sequence_name"}:
++        return fail("alignment_invalid", "incomplete")
++    context = map_reconstruction_context
++    retained_context = alignment.get("map_reconstruction_context")
++    if context is None:
++        context = retained_context
++    if ("map_context_invalid" in local_codes or context is not None and
++            (not alimask_map_context_valid(context, settings=settings, alignment=alignment)
++             or retained_context is not None and retained_context != context)):
++        return fail("map_context_invalid", "incompatible")
+     rows, width = alignment["rows"], alignment["column_count"]
+     if settings.get("--hand"):
+         rf = annotation(alignment, "RF")
+@@ -120,7 +234,8 @@
+     if alphabet is None:
+         return fail("alphabet_missing")
+     canonical = "ACDEFGHIKLMNPQRSTVWY" if alphabet == "amino" else "ACGU" if alphabet == "RNA" else "ACGT"
+-    residues = set(canonical + ("BJZOUX" if alphabet == "amino" else "RYMKSWHBVDN"))
++    residue_symbols = canonical + ("BJZOUX" if alphabet == "amino" else "RYMKSWHBVDN")
++    residues = set(residue_symbols)
+     sequences = [_digitize(row["aligned_sequence"], alphabet) for row in rows]
+     if any(set(sequence) - residues - {"-", "~", "*"} for sequence in sequences):
+         return fail("alphabet_incompatible", "incompatible")
+@@ -131,8 +246,7 @@
+     if len(weight_modes) > 1:
+         return fail("settings_invalid", "incompatible")
+     method = weight_modes[0] if weight_modes else "--wpb"
+-    if method in {"--wgsc", "--wblosum"}:
+-        return fail("weighting_unsupported", weighting=method)
++    trace = None
+     if method == "--wnone":
+         weights = [1.] * len(rows)
+     elif method == "--wgiven":
+@@ -143,40 +257,63 @@
+             return fail("weight_invalid", "incompatible")
+         else:
+             weights = [weight["value"] for weight in supplied]
+-    elif len(rows) == 1:
++    elif method == "--wpb" and len(rows) == 1:
+         weights = [1.]
++    elif method in {"--wgsc", "--wblosum"}:
++        try:
++            raw = (gsc_raw_weights(sequences, residue_symbols=residue_symbols) if method == "--wgsc" else
++                blosum_raw_weights(sequences, residue_symbols=residue_symbols, identity_cutoff=settings.get("--wid", .62)))
++            weights, normalization = _normalize_easel_weights(raw["raw_weights"])
++        except ValueError as error:
++            if str(error) not in {"alignment_invalid", "settings_invalid", "weight_invalid"}:
++                raise
++            return fail(str(error), "incompatible")
++        trace = {"method": method[2:], "raw_weights": raw["raw_weights"], "normalization": normalization,
++            "gsc_tree": raw.get("tree"), "blosum_clusters": raw.get("clusters"), "sampling": None}
+     else:
++        consensus, sampling = [], None
+         if len(rows) > 50000:
+-            return fail("pb_sampling_unsupported", sequence_count=len(rows))
+-        # esl_msaweight_PB_adv uses its own defaults, not --fragthresh/--symfrac.
+-        counts = [Counter() for _ in range(width)]
+-        minspan = math.ceil(_f32(.5 * _f32(width)))
+-        for sequence in sequences:
+-            positions = [i for i, symbol in enumerate(sequence) if symbol in residues]
+-            left, right = (positions[0], positions[-1]) if positions else (width, -1)
+-            if right - left + 1 >= minspan:
+-                left, right = 0, width - 1
+-            for column in range(left, right + 1):
+-                counts[column][sequence[column]] += 1
+-        consensus = []
+-        for column, counts_at_column in enumerate(counts):
+-            total = sum(count for symbol, count in counts_at_column.items() if symbol in residues or symbol == "-")
+-            if total and _f32(_f32(counts_at_column["-"]) / _f32(total)) < .5:
+-                consensus.append(column)
++            if context is None or context["binding"] != "retained_executable_profile":
++                return fail("map_context_unavailable", sequence_count=len(rows))
++            config = context["effective_pb_config"]
++            try:
++                indices = sample_easel_pb_rows(len(rows), sample_size=config["nsamp"], seed=config["seed"])
++            except ValueError as error:
++                if str(error) != "settings_invalid":
++                    raise
++                return fail("map_context_invalid", "incompatible")
++            sample_counts, fragments = _pb_counts((sequences[i] for i in indices), width=width, residues=residues)
++            rejected = fragments > config["maxfrag"]
++            if not rejected:
++                consensus = _pb_consensus(sample_counts, residues)
++            sampling = {"basis": "deterministic_source_reconstruction", "seed": config["seed"],
++                "source_row_ordinals": indices, "source_record_keys": [rows[i]["record_key"] for i in indices],
++                "fragment_count": fragments, "rejected": rejected,
++                "consensus_basis": "sample" if consensus else "all_sequences"}
++        # Sample counts never become PB denominators: native resets the matrix.
++        counts, _ = _pb_counts(sequences, width=width, residues=residues, columns=consensus or None)
++        if not consensus:
++            consensus = _pb_consensus(counts, residues)
+         if not consensus:
+             consensus = list(range(width))
++            if sampling is not None:
++                sampling["consensus_basis"] = "all_columns"
+         result["pb_consensus_columns"] = [column + 1 for column in consensus]
+-        weights = []
++        raw_weights = []
++        distinct = [sum(counts[column][symbol] > 0 for symbol in canonical) for column in consensus]
+         for sequence in sequences:
+             value, count = 0., 0
+-            for column in consensus:
++            for column, symbol_count in zip(consensus, distinct):
+                 if sequence[column] in canonical:
+-                    distinct = sum(counts[column][symbol] > 0 for symbol in canonical)
+-                    value += 1. / (distinct * counts[column][sequence[column]])
++                    value += 1. / (symbol_count * counts[column][sequence[column]])
+                     count += 1
+-            weights.append(value / count if count else 0.)
+-        total = sum(weights)  # Same ordered double accumulation as esl_vec_DSum.
+-        weights = [weight / total * len(rows) for weight in weights] if total else [1.] * len(rows)
++            raw_weights.append(value / count if count else 0.)
++        try:
++            weights, normalization = _normalize_easel_weights(raw_weights)
++        except ValueError:
++            return fail("weight_invalid", "incompatible")
++        trace = {"method": "wpb", "raw_weights": raw_weights, "normalization": normalization,
++                 "gsc_tree": None, "blosum_clusters": None, "sampling": sampling}
+     if any(not finite(weight) or weight < 0 for weight in weights):
+         return fail("weight_invalid", "incompatible")
+     marked = []
+@@ -209,6 +346,8 @@
+         weights=[{"record_key": row["record_key"], "weight": weight} for row, weight in zip(rows, weights)],
+         marked_sequences=[{"record_key": row["record_key"], "sequence": text} for row, text in zip(rows, marked)],
+         column_occupancy=occupancy)
++    if trace is not None:
++        result["weighting_trace"] = trace
+     return result
+ 
+ 
+@@ -445,6 +584,13 @@
+         state="incomplete" if mapping_present and mapping_invalid else None, unit="decoded_mapping_row_count",
+         inputs=[{"occurrence_id": a["occurrence_id"], "field": "native_rows.mapping"} for a in mapping_artifacts])
+     reconstruction = reconstruct_alimask_model_map(source, settings=settings) if mode != "mask_alignment" else None
++    context = source.get("map_reconstruction_context") if source else None
++    if reconstruction is not None and context is not None:
++        occurrence = next((item for item in sheet["artifact_occurrences"] if item["occurrence_id"] == source["occurrence_id"]), None)
++        if not alimask_map_context_valid(context, settings=settings, source_occurrence=occurrence,
++                operation=sheet["operation"], alignment=source):
++            reconstruction = _empty_reconstruction()
++            reconstruction.update(state="incompatible", issues=[_problem("map_context_invalid", record_key=key)])
+     row["reconstruction"] = reconstruction
+     if reconstruction:
+         result["issues"].extend(reconstruction["issues"])
+@@ -452,6 +598,8 @@
+     components["mapped_model_position_count"] = _component(len(mapping) if mapping is not None else None,
+         state=reconstruction["state"] if reconstruction else "missing", unit="model_position_count",
+         inputs=([_operand(source, "rows"), _operand(source, "column_annotations.RF"), {"field": "operation.settings"}] if source else []))
++    if context is not None and mode != "mask_alignment":
++        components["mapped_model_position_count"]["inputs"].append(_operand(source, "map_reconstruction_context"))
+     width = source["column_count"] if valid_alignment(source) else None
+     intervals, union, ranges_valid = [], set(), bool(requests) and len(requests) <= 100
+     capacity_state = "pass" if len(requests) <= 100 else "fail"
+@@ -610,6 +758,11 @@
+             ordinal = locator.get("record_ordinal")
+             if type(ordinal) is not int or key != oid + "#" + record["kind"] + "/" + str(ordinal):
+                 return False
++            if "map_reconstruction_context" in record and (record["kind"] != "alignment"
++                    or direction != "input" or operation["program"] != "alimask"
++                    or occurrence["role"] != "alignment" or occurrence["ordinal"] != 0 or ordinal != 0
++                    or not alimask_map_context_shape(record["map_reconstruction_context"])):
++                return False
+             if record["kind"] == "alignment":
+                 if (not isinstance(record.get("rows"), list) or not isinstance(record.get("column_annotations"), dict)
+                         or not isinstance(record.get("original_events"), list) or not isinstance(record.get("issues"), list)
+@@ -694,4 +847,5 @@
+ 
+ 
+ __all__ = ["calculate_hmmer_alignment_preparation_components", "reconstruct_alimask_model_map",
++           "resolve_alimask_map_context",
+            "SCHEMA", "ROW_FIELDS", "COMPONENT_FIELDS", "COMPONENT_STATES", "CHECK_CODES", "CHECK_STATES", "ISSUE_CODES"]
+--- before/gene_annotation_episode/native_hmmer_preparation_driver.py
++++ gene_annotation_episode/native_hmmer_preparation_driver.py
+@@ -7,10 +7,8 @@
+ from __future__ import annotations
+ 
+ from datetime import datetime
+-from collections import Counter
+ import ctypes
+ import json
+-import math
+ import os
+ from pathlib import Path
+ import re
+@@ -82,7 +80,7 @@
+ }
+ FAILURE_CODES = frozenset(_PREFIX + code for code in _FAILURES)
+ PREFLIGHT_REASONS = frozenset({"alignment_format_not_established", "malformed_stockholm", "multiple_alignments",
+-    "rf_required", "empty_model_map", "weighted_map_not_established", "pb_subsampling_not_established",
++    "rf_required", "empty_model_map", "weighted_map_not_established", "pb_subsampling_not_established", "map_configuration_unavailable",
+     "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights", "range_outside_alignment",
+     "query_requires_final_lf", "query_empty", "query_exceeds_254_symbols", "query_requires_literal_canonical_dna",
+     "producer_byte_order_mismatch", "producer_integer_width_mismatch", "invalid_fm_framing", "dna_only_reader", "fm_reader_header_incompatible",
+@@ -93,7 +91,7 @@
+         "reasons": frozenset({"malformed_stockholm", "multiple_alignments", "invalid_weights", "range_outside_alignment", "empty_model_map"})},
+     "unsupported_alimask_model_map": {"role": "alignment", "programs": frozenset({"alimask"}),
+         "reasons": frozenset({"alignment_format_not_established", "rf_required", "weighted_map_not_established",
+-            "pb_subsampling_not_established", "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights"})},
++            "pb_subsampling_not_established", "map_configuration_unavailable", "explicit_alphabet_required", "unsupported_alignment_symbols", "invalid_weights"})},
+     "unsafe_alimask_range": {"role": "alignment", "programs": frozenset({"alimask"}), "reasons": None},
+     "invalid_exactmatch_queries": {"role": "queries", "programs": frozenset({"hmmerfm-exactmatch"}),
+         "reasons": frozenset({"query_requires_final_lf", "query_empty", "query_exceeds_254_symbols", "query_requires_literal_canonical_dna"})},
+@@ -264,150 +262,88 @@
+             _failure(bundle, "staging", "working_copy_identity_mismatch", role, **detail)
+ 
+ 
+-def _stockholm_for_map(content):
+-    """Read the first native MSA for safety; later supplied bytes stay retained."""
+-    try:
+-        lines = []
+-        for raw in content.splitlines():
+-            lines.append(raw.decode("ascii"))
+-            if raw.strip() == b"//":
+-                break  # alimask calls esl_msafile_Read exactly once
+-    except UnicodeDecodeError:
+-        return None, "malformed_stockholm"
+-    sequences, weights, rf = {}, {}, ""
+-    started = ended = False
+-    for line in lines:
+-        if not line.strip():
+-            continue
+-        if line == "# STOCKHOLM 1.0":
+-            if started:
+-                return None, "multiple_alignments"
+-            started = True
+-            continue
+-        if not started or ended:
+-            return None, "malformed_stockholm"
+-        if line.strip() == "//":
+-            ended = True
+-        elif line.startswith("#=GC RF "):
+-            tokens = line.split()
+-            if len(tokens) != 3:
+-                return None, "malformed_stockholm"
+-            rf += tokens[2]
+-        elif line.startswith("#=GS "):
+-            tokens = line.split()
+-            if len(tokens) >= 3 and tokens[2] == "WT":
+-                try:
+-                    if len(tokens) != 4 or tokens[1] in weights:
+-                        raise ValueError
+-                    weights[tokens[1]] = float(tokens[3])
+-                    if not math.isfinite(weights[tokens[1]]) or weights[tokens[1]] < 0:
+-                        raise ValueError
+-                except ValueError:
+-                    return None, "invalid_weights"
+-        elif not line.startswith("#"):
+-            tokens = line.split()
+-            if len(tokens) != 2:
+-                return None, "malformed_stockholm"
+-            name, seq = tokens
+-            sequences[name] = sequences.get(name, "") + seq
+-    widths = {len(s) for s in sequences.values()}
+-    if not ended or len(widths) != 1 or not sequences or 0 in widths or rf and len(rf) not in widths:
+-        return None, "malformed_stockholm"
+-    if weights and set(weights) != set(sequences):
+-        return None, "invalid_weights"
+-    return {"sequences": sequences, "weights": weights, "rf": rf, "alen": next(iter(widths))}, None
+-
+-
+-def _f32(value):
+-    return struct.unpack("=f", struct.pack("=f", value))[0]
+-
+-
+-def _alimask_map(alignment, settings):
+-    """Exact hand/unweighted/given/PB construction for established input branches.
+-
+-    PB uses Easel's *own* fixed .5 fragment and consensus defaults, then the
+-    selected alimask fragment marking and float32 weighted occupancy. These
+-    distinct definitions must not be collapsed into one occupancy fraction.
+-    """
+-    gaps = {"-", ".", "_"}
+-    if settings.get("--hand"):
+-        if not alignment["rf"]:
+-            return None, "rf_required"
+-        return [i + 1 for i, c in enumerate(alignment["rf"]) if c not in gaps], None
+-    if any(k in settings for k in ("--wgsc", "--wblosum")):
+-        return None, "weighted_map_not_established"
+-    selected_alphabet = next((a for a in ("amino", "dna", "rna") if "--" + a in settings), None)
+-    if selected_alphabet is None:
+-        return None, "explicit_alphabet_required"
+-    canonical = "ACDEFGHIKLMNPQRSTVWY" if selected_alphabet == "amino" else "ACGT"
+-    residues = set(canonical + ("BJZOUX" if selected_alphabet == "amino" else "RYMKSWHBVDN"))
+-    sequences = []
+-    for original in alignment["sequences"].values():
+-        sequence = original.upper()
+-        if selected_alphabet != "amino":
+-            sequence = sequence.replace("U", "T").replace("X", "N").replace("I", "A")
+-        sequence = "".join("-" if c in gaps else c for c in sequence)
+-        if set(sequence) - residues - {"-", "~", "*"}:
+-            return None, "unsupported_alignment_symbols"
+-        sequences.append(sequence)
+-    count, width = len(sequences), alignment["alen"]
+-    if settings.get("--wnone"):
+-        weights = [1.] * count
+-    elif settings.get("--wgiven"):
+-        weights = [alignment["weights"].get(name, 1.) for name in alignment["sequences"]]
+-    else:
+-        if count > 50000:
+-            return None, "pb_subsampling_not_established"
+-        counts = [Counter() for _ in range(width)]
+-        # Easel collect_counts uses span, not residue count, and strict < .5.
+-        for sequence in sequences:
+-            positions = [i for i, c in enumerate(sequence) if c in residues]
+-            left, right = (positions[0], positions[-1]) if positions else (width, -1)
+-            if right - left + 1 >= math.ceil(_f32(.5 * _f32(width))):
+-                left, right = 0, width - 1
+-            for i in range(left, right + 1):
+-                counts[i][sequence[i]] += 1
+-        consensus = []
+-        for i, counter in enumerate(counts):
+-            total = sum(v for c, v in counter.items() if c in residues or c == "-")
+-            # Native PB tests gap_fraction < .5 (strict), not residue >= .5.
+-            if total and _f32(_f32(counter["-"]) / _f32(total)) < .5:
+-                consensus.append(i)
+-        if not consensus:
+-            consensus = list(range(width))
+-        weights = []
+-        for sequence in sequences:
+-            value, length = 0., 0
+-            for i in consensus:
+-                if sequence[i] in canonical:
+-                    distinct = sum(1 for c in canonical if counts[i][c] > 0)
+-                    value += 1. / (distinct * counts[i][sequence[i]])
+-                    length += 1
+-            weights.append(value / length if length else 0.)
+-        total = sum(weights)
+-        weights = [v / total * count for v in weights] if total else [1.] * count
+-    if any(not math.isfinite(w) or w < 0 for w in weights):
+-        return None, "invalid_weights"
+-    fragment = settings.get("--fragthresh", .5)
+-    marked = []
+-    for sequence in sequences:
+-        positions = [i for i, c in enumerate(sequence) if c in residues]
+-        if len(positions) <= fragment * width:
+-            left, right = (positions[0], positions[-1]) if positions else (width, -1)
+-            sequence = "".join(c if left <= i <= right else "~" for i, c in enumerate(sequence))
+-        marked.append(sequence)
+-    result, threshold = [], _f32(settings.get("--symfrac", .5))
+-    for i in range(width):
+-        residue = total = 0.
+-        for sequence, weight in zip(marked, weights):
+-            if sequence[i] in residues:
+-                residue = _f32(residue + weight)
+-                total = _f32(total + weight)
+-            elif sequence[i] == "-":
+-                total = _f32(total + weight)
+-        if residue > 0 and total > 0 and _f32(residue / total) >= threshold:
+-            result.append(i + 1)
+-    return result, None
++def _alimask_preflight_shared(root, job, bundle):
++    """Validate the first native MSA through the same reader and map calculator."""
++    from .hmmer_alignment_preparation_data import (
++        populate_hmmer_alignment_preparation_sheet, valid_alignment)
++    from .hmmer_alignment_preparation_calculations import (
++        reconstruct_alimask_model_map, resolve_alimask_map_context)
++
++    entries = [(i, row) for i, row in enumerate(bundle["inputs"])
++               if row["role"] == "alignment" and row["ordinal"] == 0]
++    if len(entries) != 1:
++        _error("alimask_input_slot_conflict")
++    input_index, retained = entries[0]
++    if retained["format"] not in {"stockholm", "pfam"}:
++        _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment",
++                 reason="alignment_format_not_established")
++        return
++    path = _confined_file(root, retained["relative_path"])
++    occurrence = {"occurrence_id": "preflight:" + bundle["identity"]["attempt_id"] + "#/inputs/" + str(input_index),
++        "direction": "input", "role": "alignment", "ordinal": 0,
++        "artifact_ref": retained["artifact_ref"] or str(path), "sha256": retained["staged_sha256"],
++        "size_bytes": retained["staged_size_bytes"], "completeness": "complete"}
++    operation = bundle["operation"]
++    parsed = populate_hmmer_alignment_preparation_sheet(operation=operation,
++        inputs={"alignment": [{"occurrence": occurrence, "content": path.read_bytes()}]}, outputs={})
++    if any(item["code"] in {"occurrence_size_mismatch", "occurrence_digest_mismatch"} for item in parsed["issues"]):
++        _failure(bundle, "inputs", "input_identity_mismatch", "alignment", ordinal=0)
++        return
++    first_key = occurrence["occurrence_id"] + "#alignment/0"
++    candidates = [row for row in parsed["input_records"] if row["record_key"] == first_key
++                  and row["occurrence_id"] == occurrence["occurrence_id"]]
++    first = candidates[0] if len(candidates) == 1 else None
++    # Later MSAs or invalid suffix bytes remain retained, unprocessed evidence.
++    if first is not None and not first["complete"] and any(
++            row["record_key"] == occurrence["occurrence_id"] + "#alignment/1"
++            and row["occurrence_id"] == occurrence["occurrence_id"]
++            and row["original_events"][0]["kind"] == "header" for row in parsed["input_records"]):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="multiple_alignments")
++        return
++    if not valid_alignment(first):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++        return
++    first_codes = {item["code"] for item in first["issues"]}
++    weight_events = [event for event in first["original_events"] if event["kind"] == "GS" and event["tag"] == "WT"]
++    if "weight_invalid" in first_codes or weight_events and (len(weight_events) != len(first["rows"])
++            or any(row["weight"]["state"] != "present" for row in first["rows"])):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="invalid_weights")
++        return
++    syntax_codes = {"alignment_invalid", "alignment_incomplete", "alignment_empty", "row_geometry_invalid",
++        "row_symbols_invalid", "annotation_geometry_invalid", "annotation_join_ambiguous", "duplicate_sequence_name"}
++    if first_codes & syntax_codes:
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++        return
++    settings = operation["settings"]
++    ranges = parse_ranges(settings[RANGE_FLAGS[job["mode"]]])
++    if job["mode"] in {"mask_alignment", "alignment_to_model"} and any(end > first["column_count"] for _, end in ranges):
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="range_outside_alignment")
++        return
++    if job["mode"] != "alignment_to_model":
++        return
++    context = resolve_alimask_map_context(operation=operation, software=bundle["software"],
++        source_occurrence=occurrence, requested_options=job["options"])
++    reconstructed = reconstruct_alimask_model_map(first, settings=settings, map_reconstruction_context=context)
++    if reconstructed["map"] is None:
++        reasons = {"rf_missing": "rf_required", "alphabet_missing": "explicit_alphabet_required",
++            "alphabet_incompatible": "unsupported_alignment_symbols", "weight_invalid": "invalid_weights",
++            "weighting_unsupported": "weighted_map_not_established", "pb_sampling_unsupported": "pb_subsampling_not_established",
++            "map_context_unavailable": "map_configuration_unavailable", "map_context_invalid": "map_configuration_unavailable"}
++        code = reconstructed["issues"][0]["code"] if reconstructed["issues"] else None
++        if code in {"alignment_invalid", "settings_invalid"}:
++            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="malformed_stockholm")
++        elif code in reasons:
++            _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason=reasons[code])
++        else:
++            _error("alimask_reconstruction_failure_contract")
++        return
++    mapping = reconstructed["map"]
++    if not mapping:
++        _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="empty_model_map")
++        return
++    for start, end in ranges:
++        if start > mapping[-1]:
++            _failure(bundle, "preflight", "unsafe_alimask_range", "alignment", start=start, end=end, last_match=mapping[-1])
+ 
+ 
+ def _preflight(root, job, bundle):
+@@ -425,29 +361,7 @@
+         if not valid:
+             _failure(bundle, "preflight", "invalid_model_format", "models", reason="wrong_model_signature" if prefix else "no_model_bytes")
+     if job["program"] == "alimask":
+-        fmt = next(r["format"] for r in job["operands"] if r["role"] == "alignment")
+-        if fmt not in {"stockholm", "pfam"}:
+-            _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason="alignment_format_not_established")
+-            return
+-        alignment, problem = _stockholm_for_map(paths["alignment"].read_bytes())
+-        if problem:
+-            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason=problem)
+-            return
+-        settings = native_options(job)
+-        ranges = parse_ranges(settings[RANGE_FLAGS[job["mode"]]])
+-        if job["mode"] in {"mask_alignment", "alignment_to_model"} and any(end > alignment["alen"] for _, end in ranges):
+-            _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="range_outside_alignment")
+-            return
+-        if job["mode"] == "alignment_to_model":
+-            mapping, problem = _alimask_map(alignment, settings)
+-            if problem:
+-                _failure(bundle, "preflight", "unsupported_alimask_model_map", "alignment", reason=problem)
+-            elif not mapping:
+-                _failure(bundle, "preflight", "invalid_alimask_input", "alignment", reason="empty_model_map")
+-            else:
+-                for start, end in ranges:
+-                    if start > mapping[-1]:
+-                        _failure(bundle, "preflight", "unsafe_alimask_range", "alignment", start=start, end=end, last_match=mapping[-1])
++        _alimask_preflight_shared(root, job, bundle)
+     if job["program"] == "hmmerfm-exactmatch":
+         _preflight_exactmatch(root, job, bundle, paths)
+ 
+--- before/gene_annotation_episode/native_hmmer_preparation_worker.py
++++ gene_annotation_episode/native_hmmer_preparation_worker.py
+@@ -157,9 +157,12 @@
+     result = _json_copy(value, "metadata")
+     _object(result, "metadata")
+     allowed = ({"artifact_bindings"} if program in _ARTIFACT_PROGRAMS else
+-               {"producer_contract", "source_binding"} if program in _FM_PROGRAMS else set())
++               {"producer_contract", "source_binding"} if program in _FM_PROGRAMS else
++               {"map_reconstruction_context"} if program == "alimask" else set())
+     if set(result) - allowed:
+         _error("metadata_unrelated", "metadata")
++    if "map_reconstruction_context" in result and not alignment_data.alimask_map_context_shape(result["map_reconstruction_context"]):
++        _error("metadata_invalid", "metadata.map_reconstruction_context")
+     bindings = result.get("artifact_bindings")
+     if bindings is not None:
+         if type(bindings) is not list:
+@@ -306,7 +309,8 @@
+                     artifact_bindings=metadata.get("artifact_bindings"))
+     elif program in _ALIGNMENT_PROGRAMS:
+         extraction = _single_model(_models(outputs, formats, {"models"})) if program == "hmmbuild" else None
+-        sheet = alignment_data.populate_hmmer_alignment_preparation_sheet(**common, model_extraction=extraction)
++        sheet = alignment_data.populate_hmmer_alignment_preparation_sheet(**common, model_extraction=extraction,
++                    map_reconstruction_context=metadata.get("map_reconstruction_context"))
+     elif program == "hmmemit":
+         sheet = emission_data.populate_hmmemit_sheet(**common,
+                     model_extraction=_single_model(_models(inputs, formats, {"models"})))
+--- before/gene_annotation_episode/native_hmmer_preparation_result_worker.py
++++ gene_annotation_episode/native_hmmer_preparation_result_worker.py
+@@ -123,17 +123,27 @@
+     return result, unique_failures(problems)
+ 
+ 
+-def effective_metadata(bundle, occurrences):
++def effective_metadata(bundle, occurrences, *, include_map_context=True):
+     """Project original producer facts; imported declarations stay explicit.
+ 
+     This function authenticates no external producer history. A current build
+     has its own recorded ABI, attempt and input/output association. A caller's
+     imported declaration remains a declaration, including any mismatch.
+     """
++    if type(include_map_context) is not bool:
++        raise ContractError(PREFIX + "map_context_selection_invalid")
+     job = bundle["requested_job"]["native_hmmer_preparation"]
+     original = deepcopy(job["input_metadata"])
+     metadata, problems = deepcopy(original), []
+     lookup = {(r["direction"], r["role"], r["ordinal"]): r for r in occurrences}
++    if bundle["program"] == "alimask" and include_map_context:
++        from .hmmer_alignment_preparation_calculations import resolve_alimask_map_context
++        alignment = lookup.get(("input", "alignment", 0))
++        if alignment is not None and alignment["completeness"] == "complete":
++            occurrence = {key: alignment[key] for key in ("occurrence_id", "direction", "role", "ordinal",
++                "artifact_ref", "sha256", "size_bytes", "completeness")}
++            metadata["map_reconstruction_context"] = resolve_alimask_map_context(operation=bundle["operation"],
++                software=bundle["software"], source_occurrence=occurrence, requested_options=job["options"])
+     source = lookup.get(("input", "models", 0))
+     copy = lookup.get(("working_copy", "models", 0))
+     valid_copy = (source is not None and copy is not None
+@@ -215,7 +225,7 @@
+     from .native_hmmer_preparation_worker import grade_hmmer_preparation
+     bundle = validate_original_bundle(plan["bundle"], plan["original_plan"])
+     occurrences, problems = qualified_occurrences(bundle, plan["bundle_artifact_ref"], plan["capture"])
+-    metadata, metadata_failures = effective_metadata(bundle, occurrences)
++    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+     if (native_infernal_digest(plan["occurrences"]) != native_infernal_digest(occurrences)
+             or native_infernal_digest(plan["effective_metadata"]) != native_infernal_digest(metadata)
+             or native_infernal_digest(plan["failures"]) != native_infernal_digest(unique_failures([*problems, *metadata_failures]))):
+--- before/gene_annotation_episode/hmmer_preparation_result_views.py
++++ gene_annotation_episode/hmmer_preparation_result_views.py
+@@ -718,6 +718,8 @@
+         if self.sheet is None or self.calculations is None:
+             if self.sheet is not None or self.calculations is not None:
+                 _error("grading_availability_inconsistent")
++            if self.program == "alimask":
++                self._map_context()
+             return
+         _fields(self.sheet, {"schema", "operation", "artifact_occurrences", "issues"} | _SHEET_EXTRA[self.family], "sheet_fields_invalid")
+         if self.sheet["schema"] != "hmmer_" + self.family + "_sheet_v1" or self.sheet["operation"] != operation:
+@@ -747,6 +749,8 @@
+             seen.add(oid)
+         if seen != set(grading["formats"]):
+             _error("sheet_format_population_mismatch")
++        if self.program == "alimask":
++            self._map_context()
+         for collection, kinds in self.definitions.items():
+             source = self.calculations["rows"] if collection == "calculations" else self.sheet[collection]
+             if type(source) is not list:
+@@ -757,6 +761,9 @@
+                 key, kind = _key(row, self.family, collection), _kind(row, self.family, collection)
+                 if kind not in kinds:
+                     _error("row_kind_not_in_operation_collection")
++                if "map_reconstruction_context" in row and (self.program != "alimask"
++                        or collection != "input_records" or kind != "alignment"):
++                    _error("map_context_metadata_mismatch")
+                 if key in keys:
+                     _error("record_key_ambiguous")
+                 keys.add(key)
+@@ -790,7 +797,9 @@
+         }
+         if set(self.grading["requested_parameters"]) - parameters[self.family]:
+             _error("requested_parameters_undeclared")
+-        allowed = {"artifact_bindings"} if self.family == "artifact" else {"producer_contract", "source_binding"} if self.family == "fm" else set()
++        allowed = ({"artifact_bindings"} if self.family == "artifact" else
++            {"producer_contract", "source_binding"} if self.family == "fm" else
++            {"map_reconstruction_context"} if self.program == "alimask" else set())
+         if set(metadata) - allowed:
+             _error("metadata_unrelated")
+         for binding in metadata.get("artifact_bindings", []):
+@@ -816,6 +825,32 @@
+                 _text(oid)
+                 if type(digest) is not str or re.fullmatch("[0-9a-fA-F]{64}", digest) is None:
+                     _error("source_binding_digest_invalid")
++
++    def _map_context(self):
++        # Validate retained operands only. This never invokes reconstruction or
++        # resolves a currently installed executable to populate missing context.
++        from .hmmer_alignment_preparation_data import alimask_map_context_valid
++        metadata = self.grading["metadata"]
++        present = "map_reconstruction_context" in metadata
++        context = metadata.get("map_reconstruction_context")
++        source = self.slots.get(("input", "alignment", 0))
++        if present and (source is None or not alimask_map_context_valid(context,
++                settings=self.grading["operation"]["settings"], operation=self.grading["operation"],
++                source_occurrence={key: source[key] for key in _M1_FIELDS})):
++            _error("map_context_invalid")
++        if self.sheet is None:
++            return
++        first_key = source["occurrence_id"] + "#alignment/0" if source else None
++        for direction in ("input_records", "output_records"):
++            for record in self.sheet[direction]:
++                first = direction == "input_records" and record.get("kind") == "alignment" and record.get("record_key") == first_key
++                if first and ("map_reconstruction_context" in record) != present:
++                    _error("map_context_metadata_mismatch")
++                if "map_reconstruction_context" in record:
++                    if not first or record["map_reconstruction_context"] != context:
++                        _error("map_context_metadata_mismatch")
++                    if not alimask_map_context_valid(context, settings=self.grading["operation"]["settings"], alignment=record):
++                        _error("map_context_invalid")
+ 
+     def add_record(self, key, row, oid, *, model=False):
+         _text(key)
+--- before/tests/test_hmmer_alignment_preparation_calculations.py
++++ tests/test_hmmer_alignment_preparation_calculations.py
+@@ -208,8 +208,7 @@
+     assert pb["pb_consensus_columns"] == [1, 4]  # PB strict gap fraction < .5.
+ 
+ 
+-@pytest.mark.parametrize("settings,reason", [({"--dna": True, "--wgsc": True}, "weighting_unsupported"),
+-                                           ({"--wpb": True}, "alphabet_missing")])
++@pytest.mark.parametrize("settings,reason", [({"--wpb": True}, "alphabet_missing")])
+ def test_unknown_fast_branches_are_explicit(settings, reason):
+     source = mask_sheet(stockholm(sequence="ACGT", rf="xxxx"), **{"--alirange": "1-1"})["input_records"][0]
+     result = reconstruct_alimask_model_map(source, settings=settings)
+@@ -221,7 +220,7 @@
+     source = mask_sheet(stockholm(sequence="A", rf="x"), **{"--alirange": "1-1"})["input_records"][0]
+     source["rows"] *= 50001
+     result = reconstruct_alimask_model_map(source, settings={"--amino": True, "--wpb": True})
+-    assert result["map"] is None and result["issues"][0]["code"] == "pb_sampling_unsupported"
++    assert result["map"] is None and result["issues"][0]["code"] == "map_context_unavailable"
+ 
+ 
+ def test_wrong_source_bytes_width_mm_bounds_and_capacity():
+--- before/tests/test_native_hmmer_preparation_driver.py
++++ tests/test_native_hmmer_preparation_driver.py
+@@ -184,10 +184,13 @@
+     source.write_text("# STOCKHOLM 1.0\n#=GS s1 WT 0.7\n#=GS s2 WT 2.3\n#=GS s3 WT 0.2\ns1 --ACGT-A--\ns2 --A-GTTC--\ns3 -----TTC--\n#=GC RF ..xxxxxx..\n//\n")
+     selected = job("alimask", "model_to_alignment", ["--dna", "--fast", weight, "--model2ali", "1-1", "--symfrac", ".65", "--fragthresh", ".6"])
+     selected["operands"] = [operand("alignment", source, "stockholm")]
+-    msa, problem = driver._stockholm_for_map(source.read_bytes())
+-    assert problem is None
+-    mapping, problem = driver._alimask_map(msa, {"--dna": True, "--fast": True, weight: True, "--symfrac": .65, "--fragthresh": .6})
+-    assert problem is None and mapping
++    from gene_annotation_episode.hmmer_alignment_preparation_calculations import reconstruct_alimask_model_map
++    from test_hmmer_alignment_preparation_data import mask_sheet
++    msa = mask_sheet(source.read_bytes(), **{"--alirange": "1-1"})["input_records"][0]
++    reconstruction = reconstruct_alimask_model_map(msa,
++        settings={"--dna": True, "--fast": True, weight: True, "--symfrac": .65, "--fragthresh": .6})
++    mapping = reconstruction["map"]
++    assert not reconstruction["issues"] and mapping
+     selected["options"][selected["options"].index("--model2ali") + 1] = ",".join(f"{i}-{i}" for i in range(1, len(mapping)+1))
+     plan, bundle = run_actual(tmp_path, selected)
+     assert not bundle["failures"]
+@@ -212,8 +215,6 @@
+ 
+ @pytest.mark.parametrize("options,reason", [
+     (["--hand", "--ali2model", "13-14"], "unsafe_alimask_range"),
+-    (["--fast", "--wgsc", "--ali2model", "2-4"], "unsupported_alimask_model_map"),
+-    (["--fast", "--wblosum", "--ali2model", "2-4"], "unsupported_alimask_model_map"),
+     (["--fast", "--wnone", "--ali2model", "13-14"], "unsafe_alimask_range"),
+ ])
+ def test_unsafe_or_unestablished_map_never_invokes_native(tmp_path, monkeypatch, options, reason):
+--- before/tests/test_native_hmmer_preparation_result_worker.py
++++ tests/test_native_hmmer_preparation_result_worker.py
+@@ -182,3 +182,26 @@
+         (Path(plan["directory"]) / "sheet.json").write_text("{}")
+         with pytest.raises(ValueError, match="retained_bytes_mismatch"):
+             worker.run(plan)
++
++
++def test_effective_alimask_context_is_optional_only_for_saved_legacy_validation(tmp_path, monkeypatch):
++    with Store(tmp_path / "store") as store:
++        _, _, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, "alimask", "alignment_to_model")
++        occurrences, _ = worker.qualified_occurrences(bundle, capture["bundle_artifact_ref"], capture)
++        current, failures = worker.effective_metadata(bundle, occurrences, include_map_context=True)
++        old, old_failures = worker.effective_metadata(bundle, occurrences, include_map_context=False)
++        assert not failures and not old_failures and old == {}
++        source = next(r for r in occurrences if (r["direction"], r["role"], r["ordinal"]) == ("input", "alignment", 0))
++        context = current["map_reconstruction_context"]
++        assert context["source_occurrence_id"] == source["occurrence_id"]
++        assert context["source_sha256"] == source["sha256"]
++        missing = [r for r in occurrences if r is not source]
++        assert worker.effective_metadata(bundle, missing)[0] == {}
++        partial = deepcopy(occurrences)
++        next(r for r in partial if r["occurrence_id"] == source["occurrence_id"])["completeness"] = "partial"
++        assert worker.effective_metadata(bundle, partial)[0] == {}
++        unavailable = deepcopy(bundle)
++        unavailable["software"]["actual_sha256"] = None
++        unknown = worker.effective_metadata(unavailable, occurrences)[0]["map_reconstruction_context"]
++        assert unknown["producer"]["executable_sha256"] is None
++        assert unknown["binding"] == "unavailable" and unknown["profile"] is unknown["effective_pb_config"] is None
+--- before/gene_annotation_episode/native_hmmer_preparation_result_publication.py
++++ gene_annotation_episode/native_hmmer_preparation_result_publication.py
+@@ -115,7 +115,10 @@
+     if verify_files:
+         _validate_rows(store, capture, bundle)
+     occurrences, custody_failures = qualified_occurrences(bundle, prepared["bundle_artifact_ref"], capture)
+-    metadata, metadata_failures = effective_metadata(bundle, occurrences)
++    # A saved publication keeps its original interpretation. Absence of this
++    # optional field is historical absence, never permission to upgrade it.
++    metadata, metadata_failures = effective_metadata(bundle, occurrences,
++        include_map_context="map_reconstruction_context" in stable["effective_metadata"])
+     if (native_infernal_digest(occurrences) != native_infernal_digest(prepared["occurrences"])
+             or native_infernal_digest(stable["effective_metadata"]) != native_infernal_digest(metadata)
+             or native_infernal_digest(stable["grading_context"]) != native_infernal_digest(grading_context(bundle, occurrences, metadata))
+@@ -259,7 +262,7 @@
+     original_plan = _read_record(capture_directory, "capture-plan.json")
+     bundle = validate_original_bundle(bundle, original_plan)
+     occurrences, problems = qualified_occurrences(bundle, capture["bundle_artifact_ref"], capture)
+-    metadata, metadata_failures = effective_metadata(bundle, occurrences)
++    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+     failures = unique_failures([*problems, *metadata_failures])
+     files = [{"occurrence_id": r["occurrence_id"], "path": str(_artifact_path(store, r["artifact_ref"]))}
+              for r in eligible_occurrences(occurrences)]
+--- before/tests/test_native_hmmer_preparation_result_publication.py
++++ tests/test_native_hmmer_preparation_result_publication.py
+@@ -155,3 +155,72 @@
+             publication.publish_selected_preparation_result(store, source_ref=source,
+                 prepared=prepared, selector=selector(quantities=["length"]),
+                 directory=tmp_path / "numeric-projection", policy=POLICY)
++
++
++def test_original_saved_alimask_publication_keeps_absent_context_and_frozen_numbers(tmp_path, monkeypatch):
++    """Reuse the actual 277 closed publication; never rerun its native job/grade."""
++    import hashlib
++    from gene_annotation_episode import native_hmmer_preparation_result_worker as worker
++    from gene_annotation_episode import hmmer_alignment_preparation_calculations as calculations
++    root = Path(__file__).resolve().parents[1]
++    original = root / "verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3"
++    prepared_path, = original.rglob("prepared.json")
++    projection_path, = original.rglob("native-hmmer-preparation-projection/publication.json")
++    prepared_bytes, projection_bytes = prepared_path.read_bytes(), projection_path.read_bytes()
++    assert hashlib.sha256(prepared_bytes).hexdigest() == "85824c53c759e26aacebed9d8ad295578f3fbf3b9b208ee985d633678441652c"
++    assert hashlib.sha256(projection_bytes).hexdigest() == "43ce501621049bc2c2c3b838fb958fab91a0b1acaa835eb6ff53d9d9714d94b0"
++    shutil.copytree(original / "state", tmp_path / "state")
++    shutil.copytree(projection_path.parent, tmp_path / "projection/native-hmmer-preparation-projection")
++    prepared = json.loads(prepared_bytes)
++    selected = json.loads(projection_bytes)
++    intent = json.loads((projection_path.parent / "intent.json").read_bytes())
++    def forbidden(*args, **kwargs):
++        raise AssertionError("old publication replay performed native work, acquisition or numerical grading")
++    for module, name in ((publication, "run_local_job"), (publication, "capture_local_bundle"),
++                         (worker, "_grade"), (calculations, "reconstruct_alimask_model_map")):
++        monkeypatch.setattr(module, name, forbidden)
++    with Store(tmp_path / "state") as store:
++        stable = publication._stable(store, prepared)
++        assert stable["effective_metadata"] == {}
++        frozen = store.get_artifact(prepared["grading_artifact_ref"])
++        assert json.loads(frozen)["metadata"] == {}
++        bundle = json.loads(store.get_artifact(prepared["bundle_artifact_ref"]))
++        assert publication.validate_prepared_grading(store, prepared, bundle=bundle) == prepared
++        assert publication.validate_publication(store, selected, source_ref=intent["source_ref"],
++            prepared=prepared, selector=intent["selector"], directory=tmp_path / "projection", policy=POLICY) == selected
++        assert store.get_artifact(prepared["grading_artifact_ref"]) == frozen
++        assert publication._stable(store, prepared)["effective_metadata"] == {}
++        assert [q["value"] for q in selected["rows"][0]["quantities"]] == [3, 14, 12, 1, 1, None]
++    assert prepared_path.read_bytes() == prepared_bytes and projection_path.read_bytes() == projection_bytes
++
++
++def test_new_alimask_context_is_bound_in_publication_and_checked_on_replay(tmp_path, monkeypatch):
++    from gene_annotation_episode import native_hmmer_preparation_result_worker as worker
++    with Store(tmp_path / "store") as store:
++        bundle, _, _, prepared, source = prepare(store, tmp_path, monkeypatch, "alimask", "alignment_to_model")
++        stable = publication._stable(store, prepared)
++        context = stable["effective_metadata"]["map_reconstruction_context"]
++        alignment = next(r for r in prepared["occurrences"] if (r["direction"], r["role"], r["ordinal"]) == ("input", "alignment", 0))
++        assert context["source_occurrence_id"] == alignment["occurrence_id"]
++        assert context["source_sha256"] == alignment["sha256"]
++        assert context["producer"]["executable_sha256"] == bundle["software"]["actual_sha256"]
++        assert context["effective_pb_config"]["seed"] == 42
++        grading = json.loads(store.get_artifact(prepared["grading_artifact_ref"]))
++        assert grading["metadata"]["map_reconstruction_context"] == context
++        assert grading["sheet"]["input_records"][0]["map_reconstruction_context"] == context
++        choice = selector(quantities=["components.mapped_model_position_count"])
++        result = publication.publish_selected_preparation_result(store, source_ref=source,
++            prepared=prepared, selector=choice, directory=tmp_path / "projection", policy=POLICY)
++        frozen = store.get_artifact(prepared["grading_artifact_ref"])
++        monkeypatch.setattr(publication, "run_local_job", lambda *a, **kw: pytest.fail("replay started worker"))
++        monkeypatch.setattr(worker, "_grade", lambda *a, **kw: pytest.fail("replay recomputed grade"))
++        assert publication.validate_publication(store, result, source_ref=source, prepared=prepared,
++            selector=choice, directory=tmp_path / "projection", policy=POLICY) == result
++        altered = deepcopy(stable)
++        altered["effective_metadata"]["map_reconstruction_context"]["source_sha256"] = "0" * 64
++        changed = deepcopy(prepared)
++        changed["source_grading_artifact_ref"] = publication.retain_tool_grading(store,
++            provider="episode.execution_result", native_artifact_ref=prepared["bundle_artifact_ref"], grading=altered)
++        with pytest.raises(ValueError, match="prepared_grading_custody_conflict"):
++            publication.validate_prepared_grading(store, changed, bundle=bundle)
++        assert store.get_artifact(prepared["grading_artifact_ref"]) == frozen
+--- /dev/null
++++ tests/test_hmmer_alignment_map_context.py
+@@ -0,0 +1,384 @@
++"""Source-defined map examples, not substitutes for pending native conformance.
++
++Large populations below are deliberately constructed numerical operands. The
++sampler's native oracle lives with its primitive; forced samples here isolate
++PB consensus, all-row denominators, and fallback semantics.
++"""
++import builtins
++from copy import deepcopy
++import hashlib
++import json
++from pathlib import Path
++import socket
++import subprocess
++
++import pytest
++
++from gene_annotation_episode import hmmer_alignment_preparation_calculations as calc
++from gene_annotation_episode import hmmer_alignment_preparation_data as data
++from gene_annotation_episode import native_hmmer_preparation_driver as driver
++from gene_annotation_episode import native_hmmer_preparation_worker as worker
++from gene_annotation_episode import hmmer_preparation_result_views as views
++from gene_annotation_episode.domain import ContractError
++from test_hmmer_alignment_preparation_data import operation, payload
++from test_hmmer_preparation_result_views import prepared, project, selection
++
++
++PROFILE_DIGEST = data.ALIMASK_PROFILE_EXECUTABLE_SHA256
++
++
++def software(actual=PROFILE_DIGEST, expected=PROFILE_DIGEST):
++    return {"executable": "/synthetic/retained/alimask", "expected_sha256": expected,
++            "actual_sha256": actual, "declared_engine_version": "3.4"}
++
++
++def synthetic_alignment(sequences):
++    """Shape-compatible input rows, explicitly not parsed native observations."""
++    key = "input:alignment:0#alignment/0"
++    return {"kind": "alignment", "record_key": key, "occurrence_id": "input:alignment:0",
++        "engine_version": "3.4", "header_valid": True, "complete": True,
++        "column_count": len(sequences[0]), "column_annotations": {}, "issues": [],
++        "rows": [{"record_key": key + "/sequence/" + str(i), "name": "s" + str(i),
++            "aligned_sequence": sequence, "geometry_valid": True, "symbols_valid": True,
++            "identity_unambiguous": True, "weight": {"state": "missing", "value": None}}
++            for i, sequence in enumerate(sequences)]}
++
++
++def context_for(settings, *, occurrence=None, actual=PROFILE_DIGEST, expected=PROFILE_DIGEST, requested_seed=None):
++    occurrence = occurrence or payload("alignment", b"explicit synthetic numerical fixture")["occurrence"]
++    return calc.resolve_alimask_map_context(operation=operation(mode="alignment_to_model", **settings),
++        software=software(actual, expected), source_occurrence=occurrence,
++        requested_options=[] if requested_seed is None else ["--seed", str(requested_seed)])
++
++
++def sheet_with_context(*, settings=None, context_change=None, suffix=b""):
++    settings = settings or {"--dna": True, "--wgsc": True, "--fragthresh": 0,
++                            "--symfrac": .6, "--ali2model": "1-4", "--informat": "stockholm"}
++    content = b"# STOCKHOLM 1.0\na AAAA\nb AAAA\nc C--C\n//\n" + suffix
++    source = payload("alignment", content)
++    selected = operation(mode="alignment_to_model", **settings)
++    context = context_for(settings, occurrence=source["occurrence"])
++    if context_change:
++        context_change(context)
++    stdout = payload("stdout", b"alignment coordinates model coordinates\n1..4 -> 1..2\n", "output")
++    sheet = data.populate_hmmer_alignment_preparation_sheet(operation=selected,
++        inputs={"alignment": [source]}, outputs={"stdout": [stdout]},
++        map_reconstruction_context=context)
++    return sheet, context, source, stdout
++
++
++@pytest.mark.parametrize("seed", [None, 0, 42, 17])
++def test_recorded_cli_seed_is_distinct_from_effective_pb_seed(seed):
++    settings = {"--dna": True, "--wpb": True, "--seed": 42 if seed is None else seed}
++    context = context_for(settings, requested_seed=seed)
++    assert context["requested_cli_seed"] == seed
++    assert context["resolved_cli_seed"] == settings["--seed"]
++    assert context["effective_pb_config"]["seed"] == 42
++    assert context["binding"] == "retained_executable_profile"
++    assert set(context) == data.MAP_CONTEXT_FIELDS
++    assert data.alimask_map_context_valid(context, settings=settings)
++
++
++@pytest.mark.parametrize("actual,expected", [(None, PROFILE_DIGEST), ("1" * 64, PROFILE_DIGEST),
++                                             (PROFILE_DIGEST, "1" * 64)])
++def test_unobserved_or_unbound_actual_executable_stays_unavailable(actual, expected):
++    context = context_for({"--dna": True}, actual=actual, expected=expected)
++    assert context["producer"]["executable_sha256"] is actual or context["producer"]["executable_sha256"] == actual
++    assert context["binding"] == "unavailable"
++    assert context["profile"] is context["effective_pb_config"] is None
++    record = synthetic_alignment(["A"] * 50001)
++    result = calc.reconstruct_alimask_model_map(record, settings={"--dna": True}, map_reconstruction_context=context)
++    assert result["map"] is None
++    assert result["issues"][0]["code"] == "map_context_unavailable"
++
++
++def test_shared_kahan_and_divide_then_scale_normalizer():
++    raw = [1., 2. ** -53, 2. ** -53]
++    weights, retained = calc._normalize_easel_weights(raw)
++    total = 1. + 2. ** -52
++    assert retained == {"method": "easel_kahan_divide_then_scale", "sum": total,
++                        "sequence_count": 3, "zero_sum": False}
++    assert weights == [(value / total) * 3 for value in raw]
++    zeros, retained = calc._normalize_easel_weights([0.] * 49)
++    assert zeros == [(1. / 49) * 49] * 49
++    assert retained["sum"] == 0 and retained["zero_sum"] is True
++
++
++@pytest.mark.parametrize("method,raw", [("--wgsc", [.25, .25, .5]), ("--wblosum", [.5, .5, 1.])])
++def test_gsc_blosum_weighting_changes_gap_map_and_retains_raw_operands(method, raw):
++    record = synthetic_alignment(["AAAA", "AAAA", "C--C"])
++    settings = {"--dna": True, method: True, "--symfrac": .6, "--fragthresh": 0}
++    result = calc.reconstruct_alimask_model_map(record, settings=settings)
++    assert [r["weight"] for r in result["weights"]] == [.75, .75, 1.5]
++    assert result["map"] == [1, 4]
++    trace = result["weighting_trace"]
++    assert set(trace) == {"method", "raw_weights", "normalization", "gsc_tree", "blosum_clusters", "sampling"}
++    assert trace["raw_weights"] == raw
++    assert trace["normalization"]["sum"] == sum(raw)
++    assert trace["sampling"] is None
++    assert bool(trace["gsc_tree"]) == (method == "--wgsc")
++    assert bool(trace["blosum_clusters"]) == (method == "--wblosum")
++    unweighted = calc.reconstruct_alimask_model_map(record,
++        settings={"--dna": True, "--wnone": True, "--symfrac": .6, "--fragthresh": 0})
++    assert unweighted["map"] == [1, 2, 3, 4]
++
++
++def test_one_shared_digitization_reaches_raw_helpers(monkeypatch):
++    observed = []
++    original = calc.gsc_raw_weights
++    def raw(sequences, *, residue_symbols):
++        observed.append((sequences, residue_symbols))
++        return original(sequences, residue_symbols=residue_symbols)
++    monkeypatch.setattr(calc, "gsc_raw_weights", raw)
++    record = synthetic_alignment(["uiX._", "taN--"])
++    result = calc.reconstruct_alimask_model_map(record, settings={"--dna": True, "--wgsc": True})
++    assert result["state"] == "present"
++    assert observed == [(["TAN--", "TAN--"], "ACGTRYMKSWHBVDN")]
++
++
++@pytest.mark.parametrize("size", [50000, 50001, 130001])
++def test_sampling_threshold_and_sample_record_keys_are_source_ordered(size):
++    settings = {"--dna": True, "--wpb": True}
++    record = synthetic_alignment(["A"] * size)
++    result = calc.reconstruct_alimask_model_map(record, settings=settings,
++        map_reconstruction_context=context_for(settings))
++    assert result["map"] == [1]
++    trace = result["weighting_trace"]
++    sample = trace["sampling"]
++    if size == 50000:
++        assert sample is None
++    else:
++        assert sample["basis"] == "deterministic_source_reconstruction"
++        assert sample["seed"] == 42 and sample["consensus_basis"] == "sample"
++        ordinals = sample["source_row_ordinals"]
++        assert len(ordinals) == len(set(ordinals)) == 10000
++        assert ordinals == sorted(ordinals) and 0 <= ordinals[0] <= ordinals[-1] < size
++        assert sample["source_record_keys"] == [record["rows"][i]["record_key"] for i in ordinals]
++    assert len(trace["raw_weights"]) == size
++    assert trace["raw_weights"][0] == 1. / size
++
++
++@pytest.mark.parametrize("fragment_count,rejected", [(5000, False), (5001, True)])
++def test_sample_fragment_rejection_is_strictly_more_than_half(monkeypatch, fragment_count, rejected):
++    monkeypatch.setattr(calc, "sample_easel_pb_rows", lambda *a, **kw: list(range(10000)))
++    record = synthetic_alignment(["--A-"] * fragment_count + ["AAAA"] * (50001 - fragment_count))
++    settings = {"--dna": True, "--wpb": True}
++    result = calc.reconstruct_alimask_model_map(record, settings=settings,
++        map_reconstruction_context=context_for(settings))
++    sample = result["weighting_trace"]["sampling"]
++    assert sample["fragment_count"] == fragment_count and sample["rejected"] is rejected
++    assert sample["consensus_basis"] == ("all_sequences" if rejected else "sample")
++
++
++@pytest.mark.parametrize("all_columns", [False, True])
++def test_empty_sample_consensus_falls_back_through_all_rows(monkeypatch, all_columns):
++    monkeypatch.setattr(calc, "sample_easel_pb_rows", lambda *a, **kw: list(range(10000)))
++    rows = ["A--A", "-AA-"] * (25001 if all_columns else 5000)
++    if not all_columns:
++        rows += ["AAAA"] * 40001
++    settings = {"--dna": True, "--wpb": True}
++    result = calc.reconstruct_alimask_model_map(synthetic_alignment(rows), settings=settings,
++        map_reconstruction_context=context_for(settings))
++    sample = result["weighting_trace"]["sampling"]
++    assert sample["fragment_count"] == 0 and sample["rejected"] is False
++    assert sample["consensus_basis"] == ("all_columns" if all_columns else "all_sequences")
++    assert result["pb_consensus_columns"] == [1, 2, 3, 4]
++
++
++def test_sample_selects_columns_but_pb_denominators_use_all_rows(monkeypatch):
++    monkeypatch.setattr(calc, "sample_easel_pb_rows", lambda *a, **kw: list(range(10000)))
++    settings = {"--dna": True, "--wpb": True, "--fragthresh": 0, "--symfrac": .6}
++    record = synthetic_alignment(["A--A"] * 10000 + ["CCCC"] * 40001)
++    result = calc.reconstruct_alimask_model_map(record, settings=settings,
++        map_reconstruction_context=context_for(settings))
++    assert result["pb_consensus_columns"] == [1, 4]
++    raw = result["weighting_trace"]["raw_weights"]
++    assert raw[:10000] == [1. / (2 * 10000)] * 10000
++    assert raw[10000:] == [1. / (2 * 40001)] * 40001
++    assert result["map"] == [1, 4]
++
++
++@pytest.mark.parametrize("change", [
++    lambda c: c.update(source_sha256="0" * 64),
++    lambda c: c.update(source_occurrence_id="other:alignment:0"),
++    lambda c: c["effective_pb_config"].update(seed=17),
++    lambda c: c["profile"]["source_sha256s"].update({"hmmer/src/alimask.c": "0" * 64}),
++    lambda c: c.update(requested_cli_seed=17),
++])
++def test_semantic_context_conflicts_preserve_counts_and_native_endpoints(change):
++    sheet, _, _, _ = sheet_with_context(context_change=change)
++    result = calc.calculate_hmmer_alignment_preparation_components(sheet)
++    row = result["rows"][0]
++    assert row["components"]["input_sequence_count"]["value"] == 3
++    assert row["components"]["input_column_count"]["value"] == 4
++    assert row["components"]["native_mapping_row_count"]["value"] == 1
++    assert row["intervals"][0]["returned_source_span"]["value"] == 4
++    assert row["intervals"][0]["returned_target_span"]["value"] == 2
++    assert row["components"]["mapped_model_position_count"]["value"] is None
++    assert "map_context_invalid" in {i["code"] for i in result["issues"]}
++
++
++def test_structural_context_failure_is_not_a_semantic_unknown():
++    sheet, _, _, _ = sheet_with_context()
++    sheet["input_records"][0]["map_reconstruction_context"]["unexpected"] = True
++    result = calc.calculate_hmmer_alignment_preparation_components(sheet)
++    assert not result["rows"] and result["issues"][0]["code"] == "sheet_invalid"
++
++
++def test_saved_recalculation_uses_retained_context_without_io_or_acquisition(monkeypatch):
++    sheet, _, _, _ = sheet_with_context()
++    sheet = json.loads(json.dumps(sheet))
++    expected = calc.calculate_hmmer_alignment_preparation_components(sheet)
++    original = deepcopy(sheet)
++    def forbidden(*args, **kwargs):
++        raise AssertionError("saved reconstruction attempted acquisition or parsing")
++    for target, name in ((builtins, "open"), (Path, "open"), (Path, "read_bytes"),
++                         (socket, "socket"), (subprocess, "run"), (subprocess, "Popen"),
++                         (data, "populate_hmmer_alignment_preparation_sheet"),
++                         (calc, "resolve_alimask_map_context")):
++        monkeypatch.setattr(target, name, forbidden)
++    assert calc.calculate_hmmer_alignment_preparation_components(sheet) == expected
++    assert sheet == original
++
++
++def projection_fixture():
++    sheet, context, source, stdout = sheet_with_context()
++    args = {"operation": sheet["operation"], "inputs": {"alignment": [source]},
++        "outputs": {"stdout": [stdout]}, "formats": {source["occurrence"]["occurrence_id"]: "stockholm",
++            stdout["occurrence"]["occurrence_id"]: "hmmer_stdout"},
++        "metadata": {"map_reconstruction_context": context}, "parameters": {}}
++    return prepared(args)
++
++
++@pytest.mark.parametrize("location", ["metadata", "sheet", "both", "artifact_only"])
++def test_saved_projection_rejects_context_disagreement(location):
++    grading, occurrences = projection_fixture()
++    if location in {"metadata", "both", "artifact_only"}:
++        grading["metadata"]["map_reconstruction_context"]["source_sha256"] = "0" * 64
++    if location in {"sheet", "both"}:
++        grading["sheet"]["input_records"][0]["map_reconstruction_context"]["source_sha256"] = "0" * 64
++    if location == "artifact_only":
++        grading["sheet"] = grading["calculations"] = None
++    with pytest.raises(ContractError, match="map_context"):
++        project(grading, occurrences, selection(None))
++
++
++def test_saved_projection_copies_frozen_values_without_reconstruction(monkeypatch):
++    grading, occurrences = projection_fixture()
++    choice = selection(quantities=["components.mapped_model_position_count", "components.input_sequence_count"])
++    expected = project(grading, occurrences, choice)
++    def forbidden(*args, **kwargs):
++        raise AssertionError("saved projection recomputed numerical values")
++    monkeypatch.setattr(calc, "reconstruct_alimask_model_map", forbidden)
++    monkeypatch.setattr(worker, "recalculate_hmmer_preparation", forbidden)
++    monkeypatch.setattr(data, "populate_hmmer_alignment_preparation_sheet", forbidden)
++    assert project(grading, occurrences, choice) == expected
++    assert [q["value"] for q in expected["rows"][0]["quantities"]] == [2, 3]
++
++
++def preflight_fixture(tmp_path, content, *, settings=None, actual=PROFILE_DIGEST):
++    settings = settings or {"--dna": True, "--wgsc": True, "--ali2model": "1-4", "--symfrac": .6, "--fragthresh": 0}
++    staged = tmp_path / "source.sto"
++    staged.write_bytes(content)
++    job = {"mode": "alignment_to_model", "options": []}
++    bundle = {"identity": {"attempt_id": "synthetic-preflight"}, "operation": operation(mode=job["mode"], **settings),
++        "inputs": [{"role": "alignment", "ordinal": 0, "relative_path": "source.sto", "format": "stockholm",
++            "artifact_ref": None, "staged_sha256": hashlib.sha256(content).hexdigest(), "staged_size_bytes": len(content)}],
++        "software": software(actual), "failures": []}
++    return staged, job, bundle
++
++
++@pytest.mark.parametrize("suffix", [b"", b"# STOCKHOLM 1.0\nlate AC\n", b"# STOCKHOLM 1.0\nbad\n//\n", b"\xffinvalid suffix\n"])
++def test_driver_reuses_shared_first_msa_and_keeps_original_suffix(tmp_path, monkeypatch, suffix):
++    original = b"# STOCKHOLM 1.0\na AAAA\nb AAAA\nc C--C\n//\n" + suffix
++    staged, job, bundle = preflight_fixture(tmp_path, original)
++    calls = []
++    parse, reconstruct = data.populate_hmmer_alignment_preparation_sheet, calc.reconstruct_alimask_model_map
++    def reader(**kwargs):
++        calls.append("reader")
++        assert kwargs["inputs"]["alignment"][0]["content"] == original
++        return parse(**kwargs)
++    def mapper(record, **kwargs):
++        calls.append("map")
++        assert len(record["rows"]) == 3
++        return reconstruct(record, **kwargs)
++    monkeypatch.setattr(data, "populate_hmmer_alignment_preparation_sheet", reader)
++    monkeypatch.setattr(calc, "reconstruct_alimask_model_map", mapper)
++    monkeypatch.setattr(driver.subprocess, "run", lambda *a, **k: pytest.fail("preflight executed native work"))
++    driver._alimask_preflight_shared(tmp_path, job, bundle)
++    assert calls == ["reader", "map"] and not bundle["failures"]
++    assert staged.read_bytes() == original
++    assert not hasattr(driver, "_stockholm_for_map") and not hasattr(driver, "_alimask_map")
++
++
++@pytest.mark.parametrize("content,reason", [
++    (b"# STOCKHOLM 1.0\na AAAA\n", "malformed_stockholm"),
++    (b"# STOCKHOLM 1.0\na AAAA\n# STOCKHOLM 1.0\nb AAAA\n//\n", "multiple_alignments"),
++    (b"# STOCKHOLM 1.0\na AAAA\n#=GC RF xx\n//\n", "malformed_stockholm"),
++    (b"# STOCKHOLM 1.0\n#=GS a WT\na AAAA\n//\n", "invalid_weights"),
++    (b"# STOCKHOLM 1.0\n#=GS absent WT 1\na AAAA\n//\n", "invalid_weights"),
++    (b"# STOCKHOLM 1.0\n#=GS a WT 1\na AAAA\nb AAAA\n//\n", "invalid_weights"),
++    (b"# STOCKHOLM 1.0\na AAAA\na CCCC\n//\n", "malformed_stockholm"),
++    (b"# STOCKHOLM 1.0\na ----\n//\n", "empty_model_map"),
++])
++def test_driver_first_record_failures_remain_specific(tmp_path, content, reason):
++    _, job, bundle = preflight_fixture(tmp_path, content)
++    driver._alimask_preflight_shared(tmp_path, job, bundle)
++    assert bundle["failures"][0]["detail"]["reason"] == reason
++
++
++def test_driver_after_last_match_is_rejected_and_mm_symbols_are_not_a_new_gate(tmp_path):
++    content = b"# STOCKHOLM 1.0\na AAAA\n#=GC RF xx..\n#=GC MM XXXX\n//\n"
++    _, job, bundle = preflight_fixture(tmp_path, content,
++        settings={"--hand": True, "--ali2model": "3-4"})
++    driver._alimask_preflight_shared(tmp_path, job, bundle)
++    assert bundle["failures"][0]["code"].endswith("unsafe_alimask_range")
++    bundle["failures"] = []
++    bundle["operation"]["settings"]["--ali2model"] = "1-2"
++    driver._alimask_preflight_shared(tmp_path, job, bundle)
++    assert not bundle["failures"]
++
++
++def test_final_float32_occupancy_preserves_source_row_accumulation_order():
++    first = synthetic_alignment(["AA", "A-", "-A"])
++    for row, weight in zip(first["rows"], [16777216., 1., 1.]):
++        row["weight"] = {"state": "present", "value": weight}
++    second = deepcopy(first)
++    second["rows"] = second["rows"][1:] + second["rows"][:1]
++    for ordinal, row in enumerate(second["rows"]):
++        row["record_key"] = second["record_key"] + "/sequence/" + str(ordinal)
++    settings = {"--dna": True, "--wgiven": True, "--fragthresh": 0, "--symfrac": 1}
++    original = calc.reconstruct_alimask_model_map(first, settings=settings)
++    reordered = calc.reconstruct_alimask_model_map(second, settings=settings)
++    assert original["map"] == [1, 2]
++    assert reordered["map"] == []
++    assert original["column_occupancy"][0]["weighted_residue_gap_count"] == 16777216.
++    assert reordered["column_occupancy"][0]["weighted_residue_gap_count"] == 16777218.
++    assert reordered["state"] == "present"  # An established empty map is not unavailable.
++
++
++def test_driver_unknown_sampled_profile_has_closed_configuration_failure(tmp_path):
++    content = ("# STOCKHOLM 1.0\n" + "".join("s" + str(i) + " A\n" for i in range(50001)) + "//\n").encode()
++    _, job, bundle = preflight_fixture(tmp_path, content, actual=None,
++        settings={"--dna": True, "--wpb": True, "--ali2model": "1-1"})
++    driver._alimask_preflight_shared(tmp_path, job, bundle)
++    problem, = bundle["failures"]
++    assert problem["code"].endswith("unsupported_alimask_model_map")
++    assert problem["detail"]["reason"] == "map_configuration_unavailable"
++    assert "map_configuration_unavailable" in driver.PREFLIGHT_REASONS
++    from gene_annotation_episode import native_hmmer_preparation_acquisition as acquisition
++    acquisition._validate_preflight_failure(problem, {"program": "alimask", "mode": "alignment_to_model"}, {})
++
++
++@pytest.mark.parametrize("program,collection", [("hmmbuild", "input_records"), ("alimask", "native_rows")])
++def test_direct_saved_projection_rejects_illegally_placed_context(program, collection):
++    if program == "hmmbuild":
++        from test_native_hmmer_preparation_worker import selected
++        grading, occurrences = prepared(selected("hmmbuild", "build_alignment"))
++        context = context_for({"--dna": True})
++    else:
++        grading, occurrences = projection_fixture()
++        context = grading["metadata"]["map_reconstruction_context"]
++    grading["sheet"][collection][0]["map_reconstruction_context"] = deepcopy(context)
++    with pytest.raises(ContractError, match="map_context_metadata_mismatch"):
++        project(grading, occurrences, selection(None))
+--- /dev/null
++++ tests/test_hmmer_alignment_map_episode_path.py
+@@ -0,0 +1,99 @@
++"""New declared weighting branches through the existing child-owned harness.
++
++These are unexecuted native recipes until the bounded root verification runs.
++The harness's scripted scientific choices are fixtures; local selection,
++execution, capture, shared grading, requested returns and replay are production.
++No completed original tool case is rerun by this module.
++"""
++import asyncio
++from copy import deepcopy
++import json
++from pathlib import Path
++import socket
++import subprocess
++
++import pytest
++
++from gene_annotation_episode import native_lifecycle as native
++from gene_annotation_episode import native_hmmer_preparation_worker as worker
++from gene_annotation_episode import hmmer_alignment_preparation_calculations as calculations
++from gene_annotation_episode import hmmer_alignment_preparation_data as data
++from gene_annotation_episode import native_hmmer_preparation_acquisition as acquisition
++from test_native_hmmer_preparation_contracts import job, operand
++from test_native_hmmer_preparation_workflow import (
++    run_case, choice_for, assert_accounting, assert_native_custody,
++    assert_projected_values, read_retained,
++)
++
++
++@pytest.mark.parametrize("weight", ["--wgsc", "--wblosum", "--wpb"])
++def test_new_weighting_branch_reaches_requested_child_return_and_closed_replay(tmp_path, monkeypatch, weight):
++    source = tmp_path / "selected.sto"
++    rows = (["A--A"] * 10000 + ["CCCC"] * 40001 if weight == "--wpb"
++            else ["AAAA", "AAAA", "C--C"])
++    source.write_text("# STOCKHOLM 1.0\n" + "".join("s" + str(i) + " " + sequence + "\n"
++        for i, sequence in enumerate(rows)) + "//\n")
++    selected = job("alimask", "alignment_to_model", ["--dna", "--fast", weight,
++        "--seed", "17", "--fragthresh", "0", "--symfrac", ".65" if weight == "--wpb" else ".6",
++        "--ali2model", "1-4"])
++    selected["operands"] = [operand("alignment", source, "stockholm")]
++    choice = choice_for(selected)
++    choice["projection"]["quantities"] = ["components.input_sequence_count", "components.input_column_count",
++        "components.mapped_model_position_count", "components.native_mapping_row_count"]
++    choice["projection"]["checks"] = ["native_mapping", "requested_ranges"]
++    case = run_case(tmp_path, "alimask", "alignment_to_model", job_override=selected, selectors=[choice])
++    try:
++        parent, received = assert_accounting(case)
++        body, bundle, sheet, components = read_retained(case)
++        assert_native_custody(case, bundle)
++        assert_projected_values(case.returned[0], choice, components)
++        assert case.returned[0]["completed"] is True
++        row, = components["rows"]
++        assert row["reconstruction"]["map"] == [1, 4]
++        assert row["components"]["mapped_model_position_count"]["value"] == 2
++        assert row["components"]["input_sequence_count"]["value"] == len(rows)
++        assert all(item["state"] == "pass" for item in components["checks"] if item["code"] == "native_mapping")
++        context = sheet["input_records"][0]["map_reconstruction_context"]
++        assert context["source_sha256"] == bundle["inputs"][0]["staged_sha256"]
++        assert context["requested_cli_seed"] == context["resolved_cli_seed"] == 17
++        assert context["effective_pb_config"]["seed"] == 42
++        trace = row["reconstruction"]["weighting_trace"]
++        assert trace["method"] == weight[2:]
++        if weight == "--wpb":
++            assert len(trace["sampling"]["source_row_ordinals"]) == 10000
++            assert trace["sampling"]["seed"] == 42
++        else:
++            assert [r["weight"] for r in row["reconstruction"]["weights"]] == [.75, .75, 1.5]
++        assert case.store.count("observation") == 0
++        original = deepcopy(case.outcomes[0])
++        saved_history = deepcopy(case.record.controller_state.history)
++        attempt = Path(case.plan["attempt_directory"])
++        unavailable = attempt.with_name("original-unavailable-for-replay")
++        attempt.rename(unavailable)
++        def forbidden(*args, **kwargs):
++            raise AssertionError("closed replay performed native work, acquisition, parsing or recalculation")
++        original_socket = socket.socket
++        def local_socket_only(*args, **kwargs):
++            family = args[0] if args else kwargs.get("family", socket.AF_INET)
++            if family != socket.AF_UNIX:
++                forbidden(*args, **kwargs)
++            return original_socket(*args, **kwargs)
++        monkeypatch.setattr(socket, "socket", local_socket_only)
++        for target, name in ((native, "start_job"), (native, "status"), (subprocess, "Popen"),
++                (worker, "grade_hmmer_preparation"), (worker, "recalculate_hmmer_preparation"),
++                (calculations, "reconstruct_alimask_model_map"),
++                (data, "populate_hmmer_alignment_preparation_sheet"), (acquisition, "_capture_file")):
++            monkeypatch.setattr(target, name, forbidden)
++        try:
++            replay = asyncio.run(case.owner.execute(case.contexts[0], "execution.results.collect", {}, body["operation_key"]))
++            assert replay == {key: value for key, value in original.items() if key != "pending_work_after_action"}
++            case.owner.validate_report(case.contexts[0], case.returned[0], case.forms[0])
++            assert_accounting(case)
++            assert case.record.controller_state.history == saved_history
++            saved = json.loads(case.flow.journal.row("runtime_actions", case.contexts[0].episode_id, 0)["result"])
++            assert saved == original
++            assert case.owner.native_hmmer_preparation_returns.received_context(parent) == received
++        finally:
++            unavailable.rename(attempt)
++    finally:
++        case.store.close()

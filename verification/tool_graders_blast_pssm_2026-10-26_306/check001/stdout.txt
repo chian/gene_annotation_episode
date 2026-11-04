@@ -1,0 +1,48 @@
+..................FF.........................................            [100%]
+=================================== FAILURES ===================================
+_ test_upstream_complete_clustal_membership_lengths_and_map[msa.clustalw.txt-25-151] _
+
+filename = 'msa.clustalw.txt', count = 25, length = 151
+
+    @pytest.mark.parametrize("filename,count,length", [("msa.clustalw.txt", 25, 151), ("sample_msa.txt", 14, 176)])
+    def test_upstream_complete_clustal_membership_lengths_and_map(filename, count, length):
+        raw = (SOURCES / filename).read_bytes()
+        sheet = read_blast_msa_master(raw, format="clustal", artifact_key="upstream:" + filename,
+            source_ref="pinned-primary-source", master_record_ordinal=0, ignore_master_for_profile=False)
+>       assert sheet["status"] == "complete"
+E       AssertionError: assert 'incompatible' == 'complete'
+E         
+E         - complete
+E         + incompatible
+
+../../../tests/test_blast_pssm_inputs.py:142: AssertionError
+_ test_upstream_complete_clustal_membership_lengths_and_map[sample_msa.txt-14-176] _
+
+filename = 'sample_msa.txt', count = 14, length = 176
+
+    @pytest.mark.parametrize("filename,count,length", [("msa.clustalw.txt", 25, 151), ("sample_msa.txt", 14, 176)])
+    def test_upstream_complete_clustal_membership_lengths_and_map(filename, count, length):
+        raw = (SOURCES / filename).read_bytes()
+        sheet = read_blast_msa_master(raw, format="clustal", artifact_key="upstream:" + filename,
+            source_ref="pinned-primary-source", master_record_ordinal=0, ignore_master_for_profile=False)
+        assert sheet["status"] == "complete"
+        assert sheet["native_text"] == raw.decode()
+        assert len(sheet["records"]) == count
+        assert len(sheet["records"][0]["ungapped_sequence"]) == length
+        assert len(sheet["master_column_map"]) == sheet["alignment_columns"]
+        mapped = [c for c in sheet["master_column_map"] if c["master_position"] is not None]
+        assert [c["master_position"] for c in mapped] == list(range(length))
+        assert "".join(c["symbol"] for c in mapped) == sheet["records"][0]["ungapped_sequence"]
+        if filename == "sample_msa.txt":
+            assert mapped[22]["uppercase_selected"] is True
+            assert mapped[23]["symbol"] == "d" and mapped[23]["uppercase_selected"] is False
+>           assert mapped[93]["symbol"].islower()
+E           AssertionError: assert False
+E            +  where False = <built-in method islower of str object at 0xb464f8>()
+E            +    where <built-in method islower of str object at 0xb464f8> = 'R'.islower
+
+../../../tests/test_blast_pssm_inputs.py:153: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_pssm_inputs.py::test_upstream_complete_clustal_membership_lengths_and_map[msa.clustalw.txt-25-151]
+FAILED ../../../tests/test_blast_pssm_inputs.py::test_upstream_complete_clustal_membership_lengths_and_map[sample_msa.txt-14-176]
+2 failed, 59 passed in 2.09s

@@ -1,0 +1,18 @@
+...........................FF....                                        [100%]
+=================================== FAILURES ===================================
+________ test_frozen_receiving_selection_and_scope_must_be_exact[scope] ________
+source_snapshot/tests/test_flux_balance_input_versions_708.py:175: in test_frozen_receiving_selection_and_scope_must_be_exact
+    with pytest.raises(ValueError, match='flux_balance_input_(version|scope)_conflict'):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'flux_balance_input_(version|scope)_conflict'
+E     Actual message: 'unknown_or_empty_scope'
+______ test_unrelated_selected_content_still_reads_generic_primary_bytes _______
+source_snapshot/tests/test_flux_balance_input_versions_708.py:194: in test_unrelated_selected_content_still_reads_generic_primary_bytes
+    with pytest.raises(ValueError, match='execution_input_version_conflict'):
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'execution_input_version_conflict'
+E     Actual message: 'artifact_digest_mismatch'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_input_versions_708.py::test_frozen_receiving_selection_and_scope_must_be_exact[scope]
+FAILED source_snapshot/tests/test_flux_balance_input_versions_708.py::test_unrelated_selected_content_still_reads_generic_primary_bytes
+2 failed, 31 passed in 200.32s (0:03:20)

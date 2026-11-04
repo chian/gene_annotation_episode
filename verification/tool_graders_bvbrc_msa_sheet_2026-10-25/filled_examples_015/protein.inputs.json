@@ -1,0 +1,902 @@
+{
+  "case": "protein",
+  "provenance": "Retained native MSA frequency/consensus/FASTA output from earlier execution on synthetic sequence inputs; no new native run.",
+  "extract_operands": {
+    "analysis": {
+      "analysis_id": "analysis",
+      "mode": "ordinary_new_alignment",
+      "alignment_id": "protein.afa#alignment",
+      "frequency_table_id": "msa_frequency_table:573fb6ca1375b4d5f838114be7e7a84c6ccf8a2595e40b2919eb4be59ac53088",
+      "consensus_alignment_id": "protein.cons.fasta#alignment",
+      "tree_id": null,
+      "full_xmfa_slot_id": null,
+      "xmfa_document_id": null,
+      "segment_ids": [],
+      "reference": null,
+      "output_role_evidence": []
+    },
+    "inputs": [],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "protein.afa#alignment",
+          "artifact": {
+            "raw_artifact_ref": "protein.afa",
+            "source_ref": "source:protein.afa",
+            "sha256": "241949e3595548d79ae627ec603e220f6819056c40da133ae49b2308bdc1e45d"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 4,
+          "observed_column_count": 6,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "m1|example",
+              "member_label": "m1|example",
+              "sequence": "ACD-EF",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.afa",
+                  "source_ref": "source:protein.afa",
+                  "sha256": "241949e3595548d79ae627ec603e220f6819056c40da133ae49b2308bdc1e45d"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 19,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "m2|example",
+              "member_label": "m2|example",
+              "sequence": "ACE-EF",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.afa",
+                  "source_ref": "source:protein.afa",
+                  "sha256": "241949e3595548d79ae627ec603e220f6819056c40da133ae49b2308bdc1e45d"
+                },
+                "byte_start_0based": 19,
+                "byte_end_0based_exclusive": 38,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 2,
+              "raw_header": "m3|example",
+              "member_label": "m3|example",
+              "sequence": "ACDGEF",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.afa",
+                  "source_ref": "source:protein.afa",
+                  "sha256": "241949e3595548d79ae627ec603e220f6819056c40da133ae49b2308bdc1e45d"
+                },
+                "byte_start_0based": 38,
+                "byte_end_0based_exclusive": 57,
+                "line_start_1based": 5,
+                "line_end_1based_inclusive": 6,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 3,
+              "raw_header": "m4|example",
+              "member_label": "m4|example",
+              "sequence": "--DGEF",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.afa",
+                  "source_ref": "source:protein.afa",
+                  "sha256": "241949e3595548d79ae627ec603e220f6819056c40da133ae49b2308bdc1e45d"
+                },
+                "byte_start_0based": 57,
+                "byte_end_0based_exclusive": 76,
+                "line_start_1based": 7,
+                "line_end_1based_inclusive": 8,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "msa_frequency",
+        "value": {
+          "table_id": "msa_frequency_table:573fb6ca1375b4d5f838114be7e7a84c6ccf8a2595e40b2919eb4be59ac53088",
+          "artifact": {
+            "raw_artifact_ref": "protein.table",
+            "source_ref": "source:protein.table",
+            "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+          },
+          "alphabet": "protein",
+          "layout": "current_without_reference",
+          "encoding": "ascii",
+          "header_tokens": [
+            "Position in Alignment",
+            "Score",
+            "Consensus",
+            "Detail",
+            "Number of Sequences"
+          ],
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.table",
+                  "source_ref": "source:protein.table",
+                  "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                },
+                "byte_start_0based": 65,
+                "byte_end_0based_exclusive": 81,
+                "line_start_1based": 2,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              },
+              "alignment_position": {
+                "raw_token": "1",
+                "value": 1,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 65,
+                  "byte_end_0based_exclusive": 66,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "reference_position": null,
+              "reference_character": null,
+              "score": {
+                "raw_token": "0",
+                "value": 0.0,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 67,
+                  "byte_end_0based_exclusive": 68,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "consensus_token": "Ala",
+              "n_sequences": {
+                "raw_token": "3",
+                "value": 3,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 79,
+                  "byte_end_0based_exclusive": 80,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "dna_counts": null,
+              "protein_detail": [
+                {
+                  "raw_token": "Ala=3",
+                  "raw_residue_token": "Ala",
+                  "symbol": "A",
+                  "count": {
+                    "raw_token": "3",
+                    "value": 3,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 77,
+                      "byte_end_0based_exclusive": 78,
+                      "line_start_1based": 2,
+                      "line_end_1based_inclusive": 2,
+                      "xml_path": null
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "row_index": 1,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.table",
+                  "source_ref": "source:protein.table",
+                  "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                },
+                "byte_start_0based": 81,
+                "byte_end_0based_exclusive": 97,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 3,
+                "xml_path": null
+              },
+              "alignment_position": {
+                "raw_token": "2",
+                "value": 2,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 81,
+                  "byte_end_0based_exclusive": 82,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 3,
+                  "xml_path": null
+                }
+              },
+              "reference_position": null,
+              "reference_character": null,
+              "score": {
+                "raw_token": "0",
+                "value": 0.0,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 83,
+                  "byte_end_0based_exclusive": 84,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 3,
+                  "xml_path": null
+                }
+              },
+              "consensus_token": "Cys",
+              "n_sequences": {
+                "raw_token": "3",
+                "value": 3,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 95,
+                  "byte_end_0based_exclusive": 96,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 3,
+                  "xml_path": null
+                }
+              },
+              "dna_counts": null,
+              "protein_detail": [
+                {
+                  "raw_token": "Cys=3",
+                  "raw_residue_token": "Cys",
+                  "symbol": "C",
+                  "count": {
+                    "raw_token": "3",
+                    "value": 3,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 93,
+                      "byte_end_0based_exclusive": 94,
+                      "line_start_1based": 3,
+                      "line_end_1based_inclusive": 3,
+                      "xml_path": null
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "row_index": 2,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.table",
+                  "source_ref": "source:protein.table",
+                  "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                },
+                "byte_start_0based": 97,
+                "byte_end_0based_exclusive": 120,
+                "line_start_1based": 4,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              },
+              "alignment_position": {
+                "raw_token": "3",
+                "value": 3,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 97,
+                  "byte_end_0based_exclusive": 98,
+                  "line_start_1based": 4,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              },
+              "reference_position": null,
+              "reference_character": null,
+              "score": {
+                "raw_token": "81",
+                "value": 81.0,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 99,
+                  "byte_end_0based_exclusive": 101,
+                  "line_start_1based": 4,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              },
+              "consensus_token": "Asp",
+              "n_sequences": {
+                "raw_token": "4",
+                "value": 4,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 118,
+                  "byte_end_0based_exclusive": 119,
+                  "line_start_1based": 4,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              },
+              "dna_counts": null,
+              "protein_detail": [
+                {
+                  "raw_token": "Asp=3",
+                  "raw_residue_token": "Asp",
+                  "symbol": "D",
+                  "count": {
+                    "raw_token": "3",
+                    "value": 3,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 110,
+                      "byte_end_0based_exclusive": 111,
+                      "line_start_1based": 4,
+                      "line_end_1based_inclusive": 4,
+                      "xml_path": null
+                    }
+                  }
+                },
+                {
+                  "raw_token": "Glu=1",
+                  "raw_residue_token": "Glu",
+                  "symbol": "E",
+                  "count": {
+                    "raw_token": "1",
+                    "value": 1,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 116,
+                      "byte_end_0based_exclusive": 117,
+                      "line_start_1based": 4,
+                      "line_end_1based_inclusive": 4,
+                      "xml_path": null
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "row_index": 3,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.table",
+                  "source_ref": "source:protein.table",
+                  "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                },
+                "byte_start_0based": 120,
+                "byte_end_0based_exclusive": 144,
+                "line_start_1based": 5,
+                "line_end_1based_inclusive": 5,
+                "xml_path": null
+              },
+              "alignment_position": {
+                "raw_token": "4",
+                "value": 4,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 120,
+                  "byte_end_0based_exclusive": 121,
+                  "line_start_1based": 5,
+                  "line_end_1based_inclusive": 5,
+                  "xml_path": null
+                }
+              },
+              "reference_position": null,
+              "reference_character": null,
+              "score": {
+                "raw_token": "100",
+                "value": 100.0,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 122,
+                  "byte_end_0based_exclusive": 125,
+                  "line_start_1based": 5,
+                  "line_end_1based_inclusive": 5,
+                  "xml_path": null
+                }
+              },
+              "consensus_token": "Xaa",
+              "n_sequences": {
+                "raw_token": "4",
+                "value": 4,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 142,
+                  "byte_end_0based_exclusive": 143,
+                  "line_start_1based": 5,
+                  "line_end_1based_inclusive": 5,
+                  "xml_path": null
+                }
+              },
+              "dna_counts": null,
+              "protein_detail": [
+                {
+                  "raw_token": "Del=2",
+                  "raw_residue_token": "Del",
+                  "symbol": "-",
+                  "count": {
+                    "raw_token": "2",
+                    "value": 2,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 134,
+                      "byte_end_0based_exclusive": 135,
+                      "line_start_1based": 5,
+                      "line_end_1based_inclusive": 5,
+                      "xml_path": null
+                    }
+                  }
+                },
+                {
+                  "raw_token": "Gly=2",
+                  "raw_residue_token": "Gly",
+                  "symbol": "G",
+                  "count": {
+                    "raw_token": "2",
+                    "value": 2,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 140,
+                      "byte_end_0based_exclusive": 141,
+                      "line_start_1based": 5,
+                      "line_end_1based_inclusive": 5,
+                      "xml_path": null
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "row_index": 4,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.table",
+                  "source_ref": "source:protein.table",
+                  "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                },
+                "byte_start_0based": 144,
+                "byte_end_0based_exclusive": 160,
+                "line_start_1based": 6,
+                "line_end_1based_inclusive": 6,
+                "xml_path": null
+              },
+              "alignment_position": {
+                "raw_token": "5",
+                "value": 5,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 144,
+                  "byte_end_0based_exclusive": 145,
+                  "line_start_1based": 6,
+                  "line_end_1based_inclusive": 6,
+                  "xml_path": null
+                }
+              },
+              "reference_position": null,
+              "reference_character": null,
+              "score": {
+                "raw_token": "0",
+                "value": 0.0,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 146,
+                  "byte_end_0based_exclusive": 147,
+                  "line_start_1based": 6,
+                  "line_end_1based_inclusive": 6,
+                  "xml_path": null
+                }
+              },
+              "consensus_token": "Glu",
+              "n_sequences": {
+                "raw_token": "4",
+                "value": 4,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 158,
+                  "byte_end_0based_exclusive": 159,
+                  "line_start_1based": 6,
+                  "line_end_1based_inclusive": 6,
+                  "xml_path": null
+                }
+              },
+              "dna_counts": null,
+              "protein_detail": [
+                {
+                  "raw_token": "Glu=4",
+                  "raw_residue_token": "Glu",
+                  "symbol": "E",
+                  "count": {
+                    "raw_token": "4",
+                    "value": 4,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 156,
+                      "byte_end_0based_exclusive": 157,
+                      "line_start_1based": 6,
+                      "line_end_1based_inclusive": 6,
+                      "xml_path": null
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "row_index": 5,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.table",
+                  "source_ref": "source:protein.table",
+                  "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                },
+                "byte_start_0based": 160,
+                "byte_end_0based_exclusive": 176,
+                "line_start_1based": 7,
+                "line_end_1based_inclusive": 7,
+                "xml_path": null
+              },
+              "alignment_position": {
+                "raw_token": "6",
+                "value": 6,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 160,
+                  "byte_end_0based_exclusive": 161,
+                  "line_start_1based": 7,
+                  "line_end_1based_inclusive": 7,
+                  "xml_path": null
+                }
+              },
+              "reference_position": null,
+              "reference_character": null,
+              "score": {
+                "raw_token": "0",
+                "value": 0.0,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 162,
+                  "byte_end_0based_exclusive": 163,
+                  "line_start_1based": 7,
+                  "line_end_1based_inclusive": 7,
+                  "xml_path": null
+                }
+              },
+              "consensus_token": "Phe",
+              "n_sequences": {
+                "raw_token": "4",
+                "value": 4,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "protein.table",
+                    "source_ref": "source:protein.table",
+                    "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                  },
+                  "byte_start_0based": 174,
+                  "byte_end_0based_exclusive": 175,
+                  "line_start_1based": 7,
+                  "line_end_1based_inclusive": 7,
+                  "xml_path": null
+                }
+              },
+              "dna_counts": null,
+              "protein_detail": [
+                {
+                  "raw_token": "Phe=4",
+                  "raw_residue_token": "Phe",
+                  "symbol": "F",
+                  "count": {
+                    "raw_token": "4",
+                    "value": 4,
+                    "state": "available",
+                    "token_kind": "finite",
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "protein.table",
+                        "source_ref": "source:protein.table",
+                        "sha256": "8f75f7dcc8e79fad67437ff7800845d633c4f1b28171aba7146221c0be52ba3e"
+                      },
+                      "byte_start_0based": 172,
+                      "byte_end_0based_exclusive": 173,
+                      "line_start_1based": 7,
+                      "line_end_1based_inclusive": 7,
+                      "xml_path": null
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "protein.cons.fasta#alignment",
+          "artifact": {
+            "raw_artifact_ref": "protein.cons.fasta",
+            "source_ref": "source:protein.cons.fasta",
+            "sha256": "fdc4a8b6b9381f29ff5a72ad162acd44c65eb8b2acf12d7b0a01eb7880a11ccd"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 1,
+          "observed_column_count": 6,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "consensus|number_sequences:4|alignment_length:6|consensus_length:6",
+              "member_label": "consensus|number_sequences:4|alignment_length:6|consensus_length:6",
+              "sequence": "ACDXEF",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "protein.cons.fasta",
+                  "source_ref": "source:protein.cons.fasta",
+                  "sha256": "fdc4a8b6b9381f29ff5a72ad162acd44c65eb8b2acf12d7b0a01eb7880a11ccd"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 75,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "read_outcomes": [],
+    "run": {
+      "original_task_id": "task",
+      "settings": [],
+      "commands": [],
+      "versions": [],
+      "conflicts": [],
+      "completeness": "unknown"
+    },
+    "associations": {
+      "original_members": [],
+      "inline_inputs": [],
+      "row_members": [],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "populations": {
+      "alignments": [
+        {
+          "population_id": "all",
+          "alignment_id": "protein.afa#alignment",
+          "row_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "columns_0based": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "completeness": "complete",
+          "evidence": []
+        }
+      ],
+      "composition": [],
+      "taxonomy": [],
+      "leaves": []
+    },
+    "segments": [],
+    "tree_bindings": [],
+    "parameters": {
+      "source_dialect": "retained_bvbrc_msa"
+    },
+    "xmfa_bindings": []
+  },
+  "calculation_parameters": {
+    "version": "bvbrc_msa_components_v1",
+    "requests": [
+      {
+        "kind": "msa_entropy",
+        "request_id": "msa_entropy",
+        "population_id": "all",
+        "alphabet": "protein",
+        "case_policy": "uppercase",
+        "terminal_gap": "-",
+        "observed_table_id": "msa_frequency_table:573fb6ca1375b4d5f838114be7e7a84c6ccf8a2595e40b2919eb4be59ac53088",
+        "native_rounding": "binary64_fixed_2_ties_to_even"
+      }
+    ]
+  },
+  "changed_parameters": {
+    "version": "bvbrc_msa_components_v1",
+    "requests": [
+      {
+        "kind": "msa_entropy",
+        "request_id": "msa_entropy",
+        "population_id": "all",
+        "alphabet": "protein",
+        "case_policy": "uppercase",
+        "terminal_gap": "-",
+        "observed_table_id": "msa_frequency_table:573fb6ca1375b4d5f838114be7e7a84c6ccf8a2595e40b2919eb4be59ac53088",
+        "native_rounding": null
+      }
+    ]
+  }
+}

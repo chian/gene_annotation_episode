@@ -1,0 +1,117 @@
+{
+  "schema": "bvbrc_minhash_episode_verification_v1",
+  "command": ".venv/bin/python -m pytest -q -x tests/test_bvbrc_minhash_episode_path.py --basetemp=verification/tool_graders_bvbrc_minhash_episode_path_2026-10-24/pytest-run-003 --junitxml=verification/tool_graders_bvbrc_minhash_episode_path_2026-10-24/pytest-run-003.xml",
+  "result": {
+    "passed": 7,
+    "failed": 0,
+    "errors": 0,
+    "elapsed_seconds_reported_by_pytest": 257.05
+  },
+  "junit_attributes": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "7",
+    "time": "257.043",
+    "timestamp": "2026-10-24T18:46:15.374080-05:00",
+    "hostname": "chia-Z590-UD"
+  },
+  "test_cases": [
+    {
+      "classname": "tests.test_bvbrc_minhash_episode_path",
+      "name": "test_selected_minhash_modes_return_matches_to_science_and_only_counts_to_root[genome]",
+      "time": "37.838"
+    },
+    {
+      "classname": "tests.test_bvbrc_minhash_episode_path",
+      "name": "test_selected_minhash_modes_return_matches_to_science_and_only_counts_to_root[fasta]",
+      "time": "31.473"
+    },
+    {
+      "classname": "tests.test_bvbrc_minhash_episode_path",
+      "name": "test_minhash_reopen_and_selected_action_replay_do_not_call_http_or_regrade",
+      "time": "51.707"
+    },
+    {
+      "classname": "tests.test_bvbrc_minhash_episode_path",
+      "name": "test_source_only_and_unrelated_receivers_cannot_expand_minhash_measurements",
+      "time": "31.188"
+    },
+    {
+      "classname": "tests.test_bvbrc_minhash_episode_path",
+      "name": "test_minhash_forged_count_match_and_row_association_are_rejected_without_credit",
+      "time": "37.196"
+    },
+    {
+      "classname": "tests.test_bvbrc_minhash_episode_path",
+      "name": "test_minhash_received_values_require_successful_original_immediate_child_return",
+      "time": "40.558"
+    },
+    {
+      "classname": "tests.test_bvbrc_minhash_episode_path",
+      "name": "test_partial_minhash_retains_native_cells_and_unknowns_without_claiming_completion",
+      "time": "26.749"
+    }
+  ],
+  "filled_examples": [
+    "pytest-run-003/test_minhash_forged_count_matc0/run/verification_summary.json",
+    "pytest-run-003/test_minhash_received_values_r0/run/verification_summary.json",
+    "pytest-run-003/test_minhash_reopen_and_select0/run/verification_summary.json",
+    "pytest-run-003/test_selected_minhash_modes_re0/run/verification_summary.json",
+    "pytest-run-003/test_selected_minhash_modes_re1/run/verification_summary.json",
+    "pytest-run-003/test_source_only_and_unrelated0/run/verification_summary.json"
+  ],
+  "http": "explicit retained synthetic response interception at urllib.request.OpenerDirector.open; all socket creation forbidden",
+  "model": "scripted fixture choices; no model call",
+  "execution": "existing in-process Workflow and shared method_loop; no independent subprocess verification",
+  "numerical_example": {
+    "reported_distance": 0.02,
+    "reported_pvalue": 0.001,
+    "shared_hashes": 41,
+    "compared_union_hashes": 1000,
+    "shared_hash_fraction": 0.041,
+    "duplicate_genome_row_indices": [
+      0,
+      1
+    ],
+    "scientific_return": [
+      "matches",
+      "counts"
+    ],
+    "root_return": [
+      "counts"
+    ],
+    "returned_row_count": 2,
+    "population_size": null,
+    "truncated": null,
+    "recomputed_distance": null,
+    "recomputed_pvalue": null
+  },
+  "observations_per_complete_run": {
+    "annotation": 2,
+    "scientific_process": 3,
+    "launch": 1,
+    "launch_api": 1,
+    "results": 1
+  },
+  "final_actual_gain": {
+    "launch": 3,
+    "launch_api": 3,
+    "results": 2
+  },
+  "future_resource_expected_gain": 0,
+  "replay": "provider decisions, HTTP, parsing and calculation forbidden; frozen library hashes and all run-owned runtime rows unchanged",
+  "latest_handoff_file_sha256": {
+    "gene_annotation_episode/bvbrc_minhash_host.py": "628d949593a377387c88229a1ea580a9523ad1cc89ba6a2eb96b577986763a0a",
+    "gene_annotation_episode/api_service_execution.py": "28339f9448e4fea9cba12aa8b45402bb4ef1b3dc2154db858609bb0e51227d9b"
+  },
+  "hash_qualification": "These are latest on-disk handoff hashes, not a claim that the already-running test process imported these exact bytes. Root added the optional API.read_result episode_id owner filter and matching host call while suite003 was in flight. Separate worker096 owns its fresh duplicate-owner regression; this report does not claim that new filter was tested by suite003.",
+  "immutable_goal_reset": "Full authoritative goal read initially; objective and all sixteen principles reread verbatim after source study and before handoff, followed by current MinHash input/output/sheet contracts.",
+  "remaining": [
+    "Authorized live BV-BRC execution and retained actual native responses",
+    "Production acquisition and binding of pair metadata needed to recompute distance and p-value",
+    "All other fixed unfinished section-C application and artifact rows",
+    "No new model-directed annotation or independent subprocess execution verification"
+  ]
+}

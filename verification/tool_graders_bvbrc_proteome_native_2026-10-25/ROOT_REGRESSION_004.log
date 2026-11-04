@@ -1,0 +1,23 @@
+...F...F................................................................ [ 76%]
+......................                                                   [100%]
+=================================== FAILURES ===================================
+_ test_saved_record_keys_cannot_claim_another_native_row_or_track[genome_comparison_json_v1-associations-association_key-comp_genome_4/row/0-association_key_conflict] _
+tests/test_bvbrc_proteome_native.py:104: in test_saved_record_keys_cannot_claim_another_native_row_or_track
+    with pytest.raises(NativeValidationError, match="^native_projection_" + code + "$"):
+E   AssertionError: 
+E   - native_projection_duplicate_association_key
+E   ?                   ----------
+E   + native_projection_association_key_conflict
+E   ?                                  +++++++++
+_ test_saved_record_keys_cannot_claim_another_native_row_or_track[genome_comparison_tsv_v1-associations-association_key-comp_genome_4/row/0-association_key_conflict] _
+tests/test_bvbrc_proteome_native.py:104: in test_saved_record_keys_cannot_claim_another_native_row_or_track
+    with pytest.raises(NativeValidationError, match="^native_projection_" + code + "$"):
+E   AssertionError: 
+E   - native_projection_duplicate_association_key
+E   ?                   ----------
+E   + native_projection_association_key_conflict
+E   ?                                  +++++++++
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_proteome_native.py::test_saved_record_keys_cannot_claim_another_native_row_or_track[genome_comparison_json_v1-associations-association_key-comp_genome_4/row/0-association_key_conflict]
+FAILED tests/test_bvbrc_proteome_native.py::test_saved_record_keys_cannot_claim_another_native_row_or_track[genome_comparison_tsv_v1-associations-association_key-comp_genome_4/row/0-association_key_conflict]
+2 failed, 92 passed in 2.92s

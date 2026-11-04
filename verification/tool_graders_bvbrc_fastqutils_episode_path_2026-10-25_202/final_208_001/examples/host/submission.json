@@ -1,0 +1,201 @@
+{
+  "source_ref": "source_af0cc1c9bb2169d6f9b0aa4e",
+  "contract": "TaskHandoff",
+  "value": {
+    "definition_evidence": {
+      "content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_5ef1c0e754a83ee1180a89c14f420954de05eaa589709519625708672c56b917",
+        "byte_count": 2001,
+        "sha256": "5ef1c0e754a83ee1180a89c14f420954de05eaa589709519625708672c56b917",
+        "source_ref": "source_caef133b4d7a6db70fdfc6a8"
+      },
+      "pointer": ""
+    },
+    "effect_receipt_ref": "api_effect_a464291530dc8b6820b216ebb4145e9e5dc13b08409b0164daac228edecf7555",
+    "input_evidence_refs": [],
+    "native_submission_record": {
+      "application_id": "FastqUtils",
+      "id": "123",
+      "state_code": "Q"
+    },
+    "original_job_owner": {
+      "launch_episode_id": "episode_de40d798360bff6797230f5c4f7e1e9a87e9adbbf1935970b3299dca1d32a29f",
+      "original_launch_assignment_sha256": "511f78d2b1eebced0e48aba6ca0bb6467d0a334e425b4c8f199a2afdc126d71a",
+      "parent_commission_operation_key": "appservice-custody-fixture:episode_a261530f86f4daac9ff22d837d84b868979cfff3150bfe28f7a67b02fbe27b62:10",
+      "run_id": "appservice-custody-fixture"
+    },
+    "original_task": {
+      "effective_parameters": null,
+      "native_application_id": "FastqUtils",
+      "required_application_id": "FastqUtils",
+      "resource_id": "selected-api",
+      "scheduler_returned_parameters": null,
+      "submission_operation_key": "appservice-custody-fixture:episode_af1faa598130d395bc1c19cf7c1e12a7aa0016b4e9a8b2ce5785005eef03dce0:1",
+      "submission_source_ref": "source_16feed33c9e243627161213b",
+      "submitted_parameters": {
+        "output_file": "fixture",
+        "output_path": "/fixture/output",
+        "paired_end_libs": [
+          {
+            "platform": "illumina",
+            "read1": "/fixture/input_R1.fastq",
+            "read2": "/fixture/input_R2.fastq"
+          }
+        ],
+        "recipe": [
+          "TRIM",
+          "PAIRED_FILTER",
+          "FASTQC",
+          "ALIGN",
+          "SCRUB_HUMAN",
+          "SCRUB_HUMAN"
+        ],
+        "reference_genome_id": "synthetic_reference195",
+        "single_end_libs": [],
+        "srr_libs": []
+      },
+      "submitted_start_parameters": {},
+      "task_id": "123",
+      "submission_receipt_ref": "source_af0cc1c9bb2169d6f9b0aa4e"
+    },
+    "receipt": {
+      "diagnostics": [
+        {
+          "code": "submission_parameters_echo_unobserved",
+          "evidence_refs": [
+            "source_16feed33c9e243627161213b"
+          ],
+          "path": "/result/0",
+          "phase": "native_decode",
+          "severity": "qualification"
+        }
+      ],
+      "effect_receipt_refs": [
+        "api_effect_a464291530dc8b6820b216ebb4145e9e5dc13b08409b0164daac228edecf7555"
+      ],
+      "origin": {
+        "arguments_sha256": "4e99a27db18c0734b8c43ce10826de69f345d76f21945434971bd0a8d16642bc",
+        "assignment_sha256": "f5dd4ca66dd287280d1ce4997f478c088fb41690287b65057b2c0c8b6a4b5bd2",
+        "episode_id": "episode_af1faa598130d395bc1c19cf7c1e12a7aa0016b4e9a8b2ce5785005eef03dce0",
+        "name": "api.bvbrc_appservice.submit",
+        "operation_key": "appservice-custody-fixture:episode_af1faa598130d395bc1c19cf7c1e12a7aa0016b4e9a8b2ce5785005eef03dce0:1",
+        "run_id": "appservice-custody-fixture",
+        "scope_sha256": "e447cde2a82ee7175f6709cb6af241b42bc818425c2864579a4325fcd9465c9f"
+      },
+      "purpose": "handoff",
+      "snapshot": {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_e388c863fa7b4dd674926abde042eaffabf26a8fe9d1300f1e0e50d592a1fe96",
+          "byte_count": 180,
+          "sha256": "e388c863fa7b4dd674926abde042eaffabf26a8fe9d1300f1e0e50d592a1fe96",
+          "source_ref": "source_16feed33c9e243627161213b"
+        },
+        "media_type": "application/json",
+        "retrieved_at": "2026-10-24T12:00:00+00:00",
+        "selected_operands": {
+          "arguments_sha256": "4e99a27db18c0734b8c43ce10826de69f345d76f21945434971bd0a8d16642bc",
+          "native_operands": {
+            "arguments": {
+              "input_evidence_refs": [],
+              "preparation_receipt_ref": "source_594d0d39a1ccdcf2b4c50be1"
+            },
+            "call": {
+              "rpc_request": {
+                "id": "bvbrc_rpc_75722d2db58abbe74c3af7b1b043cf76368e67a0fb2f48a1860c5d44bcb10831",
+                "method": "AppService.start_app2",
+                "params": [
+                  "FastqUtils",
+                  {
+                    "output_file": "fixture",
+                    "output_path": "/fixture/output",
+                    "paired_end_libs": [
+                      {
+                        "platform": "illumina",
+                        "read1": "/fixture/input_R1.fastq",
+                        "read2": "/fixture/input_R2.fastq"
+                      }
+                    ],
+                    "recipe": [
+                      "TRIM",
+                      "PAIRED_FILTER",
+                      "FASTQC",
+                      "ALIGN",
+                      "SCRUB_HUMAN",
+                      "SCRUB_HUMAN"
+                    ],
+                    "reference_genome_id": "synthetic_reference195",
+                    "single_end_libs": [],
+                    "srr_libs": []
+                  },
+                  {}
+                ],
+                "version": "1.1"
+              }
+            },
+            "local_failure": null,
+            "request": {
+              "definition_inputs": [],
+              "effect_contract": "selected_api_effects_v1",
+              "input_bindings": [],
+              "parameters": {
+                "output_file": "fixture",
+                "output_path": "/fixture/output",
+                "paired_end_libs": [
+                  {
+                    "platform": "illumina",
+                    "read1": "/fixture/input_R1.fastq",
+                    "read2": "/fixture/input_R2.fastq"
+                  }
+                ],
+                "recipe": [
+                  "TRIM",
+                  "PAIRED_FILTER",
+                  "FASTQC",
+                  "ALIGN",
+                  "SCRUB_HUMAN",
+                  "SCRUB_HUMAN"
+                ],
+                "reference_genome_id": "synthetic_reference195",
+                "single_end_libs": [],
+                "srr_libs": []
+              },
+              "required_application_id": "FastqUtils",
+              "start_parameters": {},
+              "version": "bvbrc_appservice_request_v1",
+              "workspace_targets": []
+            },
+            "selector": null
+          },
+          "operation": "api.bvbrc_appservice.submit",
+          "request_sha256": "10fb0de661505c81c20bb3b06b5e695c3d70f0c8faec2d3d35589f3895c938ca"
+        },
+        "source_ref": "source_16feed33c9e243627161213b",
+        "transport": {
+          "automatic_redirects": false,
+          "body_complete": true,
+          "duration_measure": "client_http_request_turnaround",
+          "effective_url": "https://app.example.invalid/rpc",
+          "headers": {},
+          "http_turnaround_seconds": 0.25,
+          "received_body_bytes": 180,
+          "request": {
+            "body_bytes": 490,
+            "body_sha256": "43b6b52c558e5687b8a6d1248f7b599368bbb62ab72aafe30892121abcbbb4b2",
+            "headers": [],
+            "method": "POST",
+            "url": "https://app.example.invalid/rpc"
+          },
+          "status": 200
+        }
+      },
+      "status": "ok",
+      "version": "bvbrc_appservice_support_receipt_v1",
+      "receipt_ref": "source_af0cc1c9bb2169d6f9b0aa4e"
+    },
+    "state": "submitted",
+    "usable_handoff": true,
+    "version": "bvbrc_appservice_task_handoff_v1"
+  }
+}

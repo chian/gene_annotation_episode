@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.056" timestamp="2026-10-29T14:05:53.776594-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_restriction_mapping_construction_732" name="test_actual_initial_received_name_uses_saved_context_and_original_commission" time="4.683"><failure message="ValueError: restriction_mapping_reference_saved_context_required">source_snapshot/tests/test_restriction_mapping_construction_732.py:61: in test_actual_initial_received_name_uses_saved_context_and_original_commission
+    unit=workflow.selected(parent.source,selected,1)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3751: in selected
+    child = self.build(role, f"child_{index}", selection["goal"], scope,
+source_snapshot/gene_annotation_episode/runtime.py:4046: in build
+    admitted = validate_form(message['initial_report'], initial_schema,
+source_snapshot/gene_annotation_episode/communication.py:590: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/communication.py:680: in _validate_form
+    _validate_form_semantics(payload, schema, reference_resolver)
+source_snapshot/gene_annotation_episode/communication.py:784: in _validate_form_semantics
+    visit(payload, schema, path, resource)
+source_snapshot/gene_annotation_episode/communication.py:746: in visit
+    visit(child, properties[key], f"{path}.{key}", resource)
+source_snapshot/gene_annotation_episode/communication.py:764: in visit
+    if reference_resolver is None or not reference_resolver(value, node.get("x-reference-namespace")):
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:3043: in resolve
+    received = self.episode_bindings.resolve_received_reference(context, reference, namespace)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_bindings.py:273: in resolve_received_reference
+    value = callback(context, reference, namespace)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_process_episodes.py:676: in resolve_received_reference
+    return self.services.restriction_mapping_reference(context, reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/episode_services.py:510: in restriction_mapping_reference
+    return RestrictionMappingReferences(self.workflow.store, self.workflow.run_id).resolve(
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:222: in resolve
+    self.authenticate(context)
+source_snapshot/gene_annotation_episode/restriction_mapping_references.py:30: in authenticate
+    super().authenticate(context, allow_unsaved=allow_unsaved)
+source_snapshot/gene_annotation_episode/episode_return_records.py:90: in authenticate
+    self._require(row is not None or allow_unsaved, 'saved_context_required')
+source_snapshot/gene_annotation_episode/episode_return_records.py:79: in _require
+    raise ValueError(self.failure_prefix + code)
+E   ValueError: restriction_mapping_reference_saved_context_required</failure></testcase></testsuite></testsuites>

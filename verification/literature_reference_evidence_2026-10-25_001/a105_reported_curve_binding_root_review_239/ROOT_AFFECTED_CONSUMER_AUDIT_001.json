@@ -1,0 +1,85 @@
+{
+  "status": "verified_bounded_result_not_clean_full_suite",
+  "unique_current_checks": 328,
+  "passed": 326,
+  "remaining_fixture_failures": [
+    {
+      "identity": [
+        "tests.test_literature_experimental_prompt_delivery",
+        "test_only_enabled_literature_binding_supplies_experimental_marker"
+      ],
+      "outcome": [
+        {
+          "kind": "failure",
+          "message": "AttributeError: 'EmptyServices' object has no attribute 'literature_rate_observation_repository'"
+        }
+      ]
+    },
+    {
+      "identity": [
+        "tests.test_literature_reference_parent_delivery",
+        "test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed"
+      ],
+      "outcome": [
+        {
+          "kind": "failure",
+          "message": "gene_annotation_episode.domain.ContractError: unknown_reference"
+        }
+      ]
+    }
+  ],
+  "baseline_comparisons": [
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/BASELINE_JUNIT_001.xml",
+      "sha256": "b3820174ab638e5374a43f22207153c0f3584c98a33c75075083d9053e7cef15",
+      "identity": [
+        "tests.test_literature_experimental_prompt_delivery",
+        "test_only_enabled_literature_binding_supplies_experimental_marker"
+      ],
+      "failure_messages": [
+        "AttributeError: 'EmptyServices' object has no attribute 'workflow'"
+      ]
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/BASELINE_JUNIT_002.xml",
+      "sha256": "1ac0d60980d55d5d21e7faa1f393fbd841c9b0ce9bb0d921270be48f8c06827c",
+      "identity": [
+        "tests.test_literature_reference_parent_delivery",
+        "test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed"
+      ],
+      "failure_messages": [
+        "gene_annotation_episode.domain.ContractError: unknown_reference"
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/FINAL_JUNIT_002.xml",
+      "sha256": "5a1baf293c70918cda4efe24dd9df3a1b1dae1cdaddaa8844db3d3dd7954c909",
+      "cases": 327
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/FINAL_JUNIT_003.xml",
+      "sha256": "d28a2bc8e6288bb76b20eaa44b9d6c82e7271f1ab9d782b9c6f4d7442b6794b6",
+      "cases": 1
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/FINAL_JUNIT_004.xml",
+      "sha256": "76f761a652a320b837650c1a6e2cb3952a33bc7a266b878af6a80658b34c4cb4",
+      "cases": 3
+    }
+  ],
+  "final_pin_files": 2038,
+  "all_final_pin_and_external_hashes_verified": true,
+  "pin004_only_two_retained_data_additions_over_root_tested_pin003": [
+    "verification/literature_reference_evidence_2026-10-25_001/primary_yeag/PMC4664914_original.xml",
+    "verification/literature_reference_evidence_2026-10-25_001/primary_yeag/srep17524-f3.jpg"
+  ],
+  "root_independent_module_checks": 32,
+  "do_not_add_overlapping_counts": true,
+  "production_fix_required_for_this_workload": false,
+  "fixture_failure_note": "EmptyServices was already incomplete on the pre231 baseline and now reaches a different absent service first; the unknown_reference failure reproduces unchanged. This is not a fully green suite.",
+  "actual_model_execution": false,
+  "A105_complete": false,
+  "goal_complete": false
+}

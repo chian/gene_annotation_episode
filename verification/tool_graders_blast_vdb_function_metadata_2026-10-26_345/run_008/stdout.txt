@@ -1,0 +1,24 @@
+............................................F........................... [ 31%]
+........................................................................ [ 63%]
+........................................................................ [ 95%]
+..........                                                               [100%]
+=================================== FAILURES ===================================
+___ test_feature_mismatch_retains_failed_assignment_and_other_features[True] ___
+
+same_key = True
+
+    @pytest.mark.parametrize("same_key", [False, True])
+    def test_feature_mismatch_retains_failed_assignment_and_other_features(same_key):
+        case = wire_case(fixture("translated_features.json"))
+        original = case["payload"]["searches"][0]["supplied_assignments"][0]
+        if not same_key:
+            original["assignment_key"] += "-separate-supplied-declaration"
+        original["target"]["feature_identifier"]["value"] = "different-feature"
+>       out = populate(case); sheet = out["sheets"][0]["sheet"]
+                                      ^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+../../../tests/test_native_blast_vdb_function_metadata.py:443: IndexError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_vdb_function_metadata.py::test_feature_mismatch_retains_failed_assignment_and_other_features[True]
+1 failed, 225 passed in 5.18s

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="17" time="50.033" timestamp="2026-10-27T19:13:42.226185-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_channel_binding_188" name="test_selected_numerical_sections_preserve_meanings_without_private_operands" time="3.955" /><testcase classname="tests.test_literature_channel_binding_188" name="test_native_requested_reading_exposes_only_its_own_point_and_preserves_conversion" time="3.411" /><testcase classname="tests.test_literature_channel_binding_188" name="test_reported_spread_is_preserved_only_for_requested_native_quantity" time="2.242" /><testcase classname="tests.test_literature_channel_binding_188" name="test_known_joint_covariance_populates_conditional_uncertainty_without_changing_scope" time="2.736" /><testcase classname="tests.test_literature_channel_binding_188" name="test_incompatible_or_unknown_reversal_keeps_native_measurement_and_blocks_chord[different_electrical_arrangements-different_electrical_arrangements]" time="2.367" /><testcase classname="tests.test_literature_channel_binding_188" name="test_incompatible_or_unknown_reversal_keeps_native_measurement_and_blocks_chord[unknown-reversal_condition_applicability_not_supplied]" time="2.544" /><testcase classname="tests.test_literature_channel_binding_188" name="test_genuine_empty_constructor_and_fact_view_do_not_install_state" time="2.744" /><testcase classname="tests.test_literature_channel_binding_188" name="test_parent_receives_only_the_actual_admitted_component_and_no_reference_expansion" time="2.363" /><testcase classname="tests.test_literature_channel_binding_188" name="test_replay_and_readonly_reconstruction_never_reacquire_or_recalculate" time="3.860" /><testcase classname="tests.test_literature_channel_binding_188" name="test_selected_operation_and_exact_saved_result_are_required[signature]" time="6.045" /><testcase classname="tests.test_literature_channel_binding_188" name="test_selected_operation_and_exact_saved_result_are_required[value]" time="2.764" /><testcase classname="tests.test_literature_channel_binding_188" name="test_selected_operation_and_exact_saved_result_are_required[meaning]" time="2.673" /><testcase classname="tests.test_literature_channel_binding_188" name="test_selected_operation_and_exact_saved_result_are_required[omission]" time="2.123" /><testcase classname="tests.test_literature_channel_binding_188" name="test_selected_operation_and_exact_saved_result_are_required[operation]" time="3.982" /><testcase classname="tests.test_literature_channel_binding_188" name="test_selected_operation_and_exact_saved_result_are_required[unselected_copy]" time="2.139" /><testcase classname="tests.test_literature_channel_binding_188" name="test_source_scope_and_original_selection_must_still_be_authorized_on_replay" time="2.189" /><testcase classname="tests.test_literature_channel_binding_188" name="test_pure_render_uses_exact_requested_rows_and_no_host_identifiers" time="1.372"><failure message="AssertionError: assert ('1.8' not in 'Source elec...erification.'&#10;  &#10;  '1.8' is contained here:&#10;    rification. and '53' not in 'Source elec...erification.'&#10;  &#10;  '53' is contained here:&#10;    245059288535 | pS | populated | None | derived&#10;  ?           ++&#10;    charge_attribution_limit | charge_equivalent_rate | 11234716.334029373 | elementary_charge_equivalents_per_s | populated | None | derived&#10;    measurement_uncertainty | chord_conductance_variance | None | pS_squared | unavailable | primitive_covariance_not_supplied | derived&#10;    Electrical interpretation...&#10;  &#10;  ...Full output truncated (17 lines hidden), use '-vv' to show)">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1971/test_pure_render_uses_exact_re0')
+
+    def test_pure_render_uses_exact_requested_rows_and_no_host_identifiers(tmp_path):
+        store, context, args = setup(tmp_path, broad=True)
+        with store:
+            rows = LiteratureChannelRepository(store, context.run_id).populate(context, args, 'selected')['result']['cells']
+            parts = []
+            def section(target, title, text): target.append(title + '\n' + text)
+            def table(headers, items): return '\n'.join(' | '.join(str(v) for v in row) for row in [headers, *items])
+            render.render_received(parts, rows + rows, section=section, table=table)
+            text = '\n'.join(parts)
+            assert 'source_' not in text and 'artifact_' not in text and 'literature_measurement_' not in text
+&gt;           assert '1.8' not in text and '53' not in text and '−200' not in text
+E           AssertionError: assert ('1.8' not in 'Source elec...erification.'
+E             
+E             '1.8' is contained here:
+E               rification. and '53' not in 'Source elec...erification.'
+E             
+E             '53' is contained here:
+E               245059288535 | pS | populated | None | derived
+E             ?           ++
+E               charge_attribution_limit | charge_equivalent_rate | 11234716.334029373 | elementary_charge_equivalents_per_s | populated | None | derived
+E               measurement_uncertainty | chord_conductance_variance | None | pS_squared | unavailable | primitive_covariance_not_supplied | derived
+E               Electrical interpretation...
+E             
+E             ...Full output truncated (17 lines hidden), use '-vv' to show)
+
+tests/test_literature_channel_binding_188.py:276: AssertionError</failure></testcase></testsuite></testsuites>

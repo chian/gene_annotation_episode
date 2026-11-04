@@ -1,0 +1,9 @@
+{
+  "version": "progress019_metadata_discovery_failure_v1",
+  "command_kind": "metadata_summary",
+  "exit_code": 1,
+  "exception": "TypeError: object of type int has no len()",
+  "cause": "C manifest regular_members is a count rather than a member collection; metadata summary assumed list/dict. No file mutation or publication occurred.",
+  "correction": "Normalize only actual files/list and members/dict manifest collections; treat count fields as counts.",
+  "partial_stdout_preserved_in_tool_history": true
+}

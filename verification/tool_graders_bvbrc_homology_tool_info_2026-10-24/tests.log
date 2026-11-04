@@ -1,0 +1,47 @@
+..........F
+=================================== FAILURES ===================================
+__ test_library_retrieval_separates_parent_information_and_child_instructions __
+
+factory = (<function factory.<locals>.create at 0x798651d0ec00>, <gene_annotation_episode.tools.ToolRegistry object at 0x798651d41550>)
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1358/test_library_retrieval_separat0')
+
+    def test_library_retrieval_separates_parent_information_and_child_instructions(factory, tmp_path):
+        create, _ = factory
+        family = create({'selected-api': configuration()})
+        available = family.resource_tool_contracts()
+        library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[], tool_info=True,
+            resource_catalogs={'api': available})
+        retrieved = library.retrieve_literal_test('BV-BRC Homology aligned residues functions', available)
+        picked = [row for row in retrieved['child_tool_info'] if row['name'].startswith('bvbrc.homology.')]
+        assert len(picked) == 2
+        assert all(set(row) == {'name', 'description', 'resources'} for row in picked)
+>       instructions = library.resolve_tool_info(picked, available)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_homology_tool_info.py:149: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/scientific_tool_library.py:258: in resolve_tool_info
+    supplied = tool_info_selection(selection)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = [{'name': 'bvbrc.homology.database_identification', 'description': 'Identify candidate functions from the complete ret...ed sequences using BV-BRC Homology BLAST with an explicitly evidenced single-sequence reference.', 'resources': 'api'}]
+
+    def tool_info_selection(value):
+        if not isinstance(value, list):
+            raise ValueError('scientific_child_tool_info_invalid')
+        result, seen = [], set()
+        for item in value:
+            if (not isinstance(item, Mapping) or set(item) not in (SELECTOR_FIELDS, INFO_FIELDS)
+                    or not isinstance(item.get('name'), str) or not item['name'].strip()
+                    or item.get('resources') not in RESOURCE_KINDS
+                    or any(not isinstance(item.get(field), str) or not item[field].strip()
+                           for field in set(item) - SELECTOR_FIELDS)):
+>               raise ValueError('scientific_child_tool_info_invalid')
+E               ValueError: scientific_child_tool_info_invalid
+
+gene_annotation_episode/tool_information.py:32: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_homology_tool_info.py::test_library_retrieval_separates_parent_information_and_child_instructions
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 10 passed in 35.68s

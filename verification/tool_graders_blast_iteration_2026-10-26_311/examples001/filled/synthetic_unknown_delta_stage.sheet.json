@@ -1,0 +1,3754 @@
+{
+  "schema": "blast_iteration_sheet_v1",
+  "collection": {
+    "schema": "blast_report_collection_v1",
+    "invocation": {
+      "execution_program": "deltablast",
+      "scientific_mode": "database",
+      "resource_kind": "hpc",
+      "query_kind": "sequence",
+      "reference_kind": "sequence",
+      "request": {
+        "selected": "synthetic-only"
+      },
+      "effective_options": {
+        "requested_hit_limit": 9,
+        "requested_hsp_limit": 8,
+        "inclusion_ethresh": 0.002,
+        "domain_inclusion_ethresh": 0.05
+      },
+      "operands": [
+        {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        }
+      ],
+      "completion": {
+        "native_returncode": 0,
+        "producer_complete": true
+      }
+    },
+    "artifacts": [
+      {
+        "artifact_key": "synthetic-report",
+        "role": "primary_report",
+        "format": "json15",
+        "fields": null,
+        "delimiter": null,
+        "sha256": "82be4e0bb6b4a8520259fb0d0b5ae35cb0b138fea1dfa8eac3b4b233e1761bfa",
+        "size_bytes": 1397
+      }
+    ],
+    "searches": [
+      {
+        "search_key": {
+          "artifact_key": "synthetic-report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/iterations/0/search"
+        },
+        "program_context": {
+          "execution_program": "deltablast",
+          "reported_program": "deltablast",
+          "scientific_mode": "database",
+          "query_kind": "sequence",
+          "reference_kind": "sequence",
+          "native_version": "DELTABLAST 2.17.0+",
+          "geometry_program": "blastp"
+        },
+        "stage": null,
+        "iteration": 7,
+        "normalized": {
+          "schema": "blast_normalized_result_v1",
+          "mode": "database",
+          "resource": "hpc",
+          "format": "json2",
+          "query": {
+            "id": "q",
+            "title": "q",
+            "length": 8
+          },
+          "search": {
+            "program": "deltablast",
+            "version": "DELTABLAST 2.17.0+",
+            "database": "synthetic_db",
+            "parameters": {
+              "include": 0.002
+            },
+            "statistics": {},
+            "request": {
+              "selected": "synthetic-only"
+            },
+            "hit_array_present": true,
+            "reported_hit_count": 1
+          },
+          "hits": [
+            {
+              "hit_index": 0,
+              "length": 10,
+              "descriptions": [
+                {
+                  "id": "A",
+                  "accession": "A.1",
+                  "title": "synthetic A",
+                  "taxid": 1
+                }
+              ],
+              "unpaired_metadata": {},
+              "hsps": [
+                {
+                  "num": 1,
+                  "query_from": 3,
+                  "query_to": 6,
+                  "hit_from": 2,
+                  "hit_to": 5,
+                  "score": 40,
+                  "bit_score": 40,
+                  "evalue": 0.0,
+                  "qseq": "ACDE",
+                  "hseq": "ACDE",
+                  "align_len": 4,
+                  "identity": 4,
+                  "gaps": 0
+                }
+              ]
+            }
+          ],
+          "native": {
+            "document": {
+              "BlastOutput2": [
+                {
+                  "report": {
+                    "program": "deltablast",
+                    "version": "DELTABLAST 2.17.0+",
+                    "search_target": {
+                      "db": "synthetic_db"
+                    },
+                    "params": {
+                      "include": 0.002
+                    },
+                    "results": {
+                      "iterations": [
+                        {
+                          "iter_num": 7,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "iter_num": 7,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "iter_num": 11,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "archive_member": null,
+            "sha256": "82be4e0bb6b4a8520259fb0d0b5ae35cb0b138fea1dfa8eac3b4b233e1761bfa"
+          },
+          "issues": []
+        },
+        "row_map": [
+          {
+            "hit_index": 0,
+            "description_ordinals": [
+              0
+            ],
+            "hsp_ordinals": [
+              0
+            ]
+          }
+        ],
+        "operand_binding": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "reporting": {
+          "native_hit_array_present": true,
+          "native_hit_count": 1,
+          "requested_hit_limit": 9,
+          "requested_hsp_limit": 8,
+          "native_returncode": 0,
+          "producer_complete": true
+        },
+        "native": {
+          "report": {
+            "program": "deltablast",
+            "version": "DELTABLAST 2.17.0+",
+            "search_target": {
+              "db": "synthetic_db"
+            },
+            "params": {
+              "include": 0.002
+            },
+            "results": {
+              "iterations": [
+                {
+                  "iter_num": 7,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "iter_num": 7,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "iter_num": 11,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "search": {
+            "query_id": "q",
+            "query_title": "q",
+            "query_len": 8,
+            "hits": [
+              {
+                "num": 1,
+                "len": 10,
+                "description": [
+                  {
+                    "id": "A",
+                    "accession": "A.1",
+                    "title": "synthetic A",
+                    "taxid": 1
+                  }
+                ],
+                "hsps": [
+                  {
+                    "num": 1,
+                    "query_from": 3,
+                    "query_to": 6,
+                    "hit_from": 2,
+                    "hit_to": 5,
+                    "score": 40,
+                    "bit_score": 40,
+                    "evalue": 0.0,
+                    "qseq": "ACDE",
+                    "hseq": "ACDE",
+                    "align_len": 4,
+                    "identity": 4,
+                    "gaps": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "line_numbers": null
+        },
+        "issues": []
+      },
+      {
+        "search_key": {
+          "artifact_key": "synthetic-report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/iterations/1/search"
+        },
+        "program_context": {
+          "execution_program": "deltablast",
+          "reported_program": "deltablast",
+          "scientific_mode": "database",
+          "query_kind": "sequence",
+          "reference_kind": "sequence",
+          "native_version": "DELTABLAST 2.17.0+",
+          "geometry_program": "blastp"
+        },
+        "stage": null,
+        "iteration": 7,
+        "normalized": {
+          "schema": "blast_normalized_result_v1",
+          "mode": "database",
+          "resource": "hpc",
+          "format": "json2",
+          "query": {
+            "id": "q",
+            "title": "q",
+            "length": 8
+          },
+          "search": {
+            "program": "deltablast",
+            "version": "DELTABLAST 2.17.0+",
+            "database": "synthetic_db",
+            "parameters": {
+              "include": 0.002
+            },
+            "statistics": {},
+            "request": {
+              "selected": "synthetic-only"
+            },
+            "hit_array_present": true,
+            "reported_hit_count": 1
+          },
+          "hits": [
+            {
+              "hit_index": 0,
+              "length": 10,
+              "descriptions": [
+                {
+                  "id": "A",
+                  "accession": "A.1",
+                  "title": "synthetic A",
+                  "taxid": 1
+                }
+              ],
+              "unpaired_metadata": {},
+              "hsps": [
+                {
+                  "num": 1,
+                  "query_from": 3,
+                  "query_to": 6,
+                  "hit_from": 2,
+                  "hit_to": 5,
+                  "score": 40,
+                  "bit_score": 40,
+                  "evalue": 0.0,
+                  "qseq": "ACDE",
+                  "hseq": "ACDE",
+                  "align_len": 4,
+                  "identity": 4,
+                  "gaps": 0
+                }
+              ]
+            }
+          ],
+          "native": {
+            "document": {
+              "BlastOutput2": [
+                {
+                  "report": {
+                    "program": "deltablast",
+                    "version": "DELTABLAST 2.17.0+",
+                    "search_target": {
+                      "db": "synthetic_db"
+                    },
+                    "params": {
+                      "include": 0.002
+                    },
+                    "results": {
+                      "iterations": [
+                        {
+                          "iter_num": 7,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "iter_num": 7,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "iter_num": 11,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "archive_member": null,
+            "sha256": "82be4e0bb6b4a8520259fb0d0b5ae35cb0b138fea1dfa8eac3b4b233e1761bfa"
+          },
+          "issues": [
+            {
+              "code": "blast_iteration_number_duplicate",
+              "pointer": "/BlastOutput2/0/report/results/iterations/1/iter_num",
+              "field": "iter_num",
+              "details": {
+                "value": 7
+              }
+            }
+          ]
+        },
+        "row_map": [
+          {
+            "hit_index": 0,
+            "description_ordinals": [
+              0
+            ],
+            "hsp_ordinals": [
+              0
+            ]
+          }
+        ],
+        "operand_binding": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "reporting": {
+          "native_hit_array_present": true,
+          "native_hit_count": 1,
+          "requested_hit_limit": 9,
+          "requested_hsp_limit": 8,
+          "native_returncode": 0,
+          "producer_complete": true
+        },
+        "native": {
+          "report": {
+            "program": "deltablast",
+            "version": "DELTABLAST 2.17.0+",
+            "search_target": {
+              "db": "synthetic_db"
+            },
+            "params": {
+              "include": 0.002
+            },
+            "results": {
+              "iterations": [
+                {
+                  "iter_num": 7,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "iter_num": 7,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "iter_num": 11,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "search": {
+            "query_id": "q",
+            "query_title": "q",
+            "query_len": 8,
+            "hits": [
+              {
+                "num": 1,
+                "len": 10,
+                "description": [
+                  {
+                    "id": "A",
+                    "accession": "A.1",
+                    "title": "synthetic A",
+                    "taxid": 1
+                  }
+                ],
+                "hsps": [
+                  {
+                    "num": 1,
+                    "query_from": 3,
+                    "query_to": 6,
+                    "hit_from": 2,
+                    "hit_to": 5,
+                    "score": 40,
+                    "bit_score": 40,
+                    "evalue": 0.0,
+                    "qseq": "ACDE",
+                    "hseq": "ACDE",
+                    "align_len": 4,
+                    "identity": 4,
+                    "gaps": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "line_numbers": null
+        },
+        "issues": [
+          {
+            "code": "blast_iteration_number_duplicate",
+            "pointer": "/BlastOutput2/0/report/results/iterations/1/iter_num",
+            "field": "iter_num",
+            "details": {
+              "value": 7
+            }
+          }
+        ]
+      },
+      {
+        "search_key": {
+          "artifact_key": "synthetic-report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/iterations/2/search"
+        },
+        "program_context": {
+          "execution_program": "deltablast",
+          "reported_program": "deltablast",
+          "scientific_mode": "database",
+          "query_kind": "sequence",
+          "reference_kind": "sequence",
+          "native_version": "DELTABLAST 2.17.0+",
+          "geometry_program": "blastp"
+        },
+        "stage": null,
+        "iteration": 11,
+        "normalized": {
+          "schema": "blast_normalized_result_v1",
+          "mode": "database",
+          "resource": "hpc",
+          "format": "json2",
+          "query": {
+            "id": "q",
+            "title": "q",
+            "length": 8
+          },
+          "search": {
+            "program": "deltablast",
+            "version": "DELTABLAST 2.17.0+",
+            "database": "synthetic_db",
+            "parameters": {
+              "include": 0.002
+            },
+            "statistics": {},
+            "request": {
+              "selected": "synthetic-only"
+            },
+            "hit_array_present": true,
+            "reported_hit_count": 1
+          },
+          "hits": [
+            {
+              "hit_index": 0,
+              "length": 10,
+              "descriptions": [
+                {
+                  "id": "A",
+                  "accession": "A.1",
+                  "title": "synthetic A",
+                  "taxid": 1
+                }
+              ],
+              "unpaired_metadata": {},
+              "hsps": [
+                {
+                  "num": 1,
+                  "query_from": 3,
+                  "query_to": 6,
+                  "hit_from": 2,
+                  "hit_to": 5,
+                  "score": 40,
+                  "bit_score": 40,
+                  "evalue": 0.0,
+                  "qseq": "ACDE",
+                  "hseq": "ACDE",
+                  "align_len": 4,
+                  "identity": 4,
+                  "gaps": 0
+                }
+              ]
+            }
+          ],
+          "native": {
+            "document": {
+              "BlastOutput2": [
+                {
+                  "report": {
+                    "program": "deltablast",
+                    "version": "DELTABLAST 2.17.0+",
+                    "search_target": {
+                      "db": "synthetic_db"
+                    },
+                    "params": {
+                      "include": 0.002
+                    },
+                    "results": {
+                      "iterations": [
+                        {
+                          "iter_num": 7,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "iter_num": 7,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "iter_num": 11,
+                          "search": {
+                            "query_id": "q",
+                            "query_title": "q",
+                            "query_len": 8,
+                            "hits": [
+                              {
+                                "num": 1,
+                                "len": 10,
+                                "description": [
+                                  {
+                                    "id": "A",
+                                    "accession": "A.1",
+                                    "title": "synthetic A",
+                                    "taxid": 1
+                                  }
+                                ],
+                                "hsps": [
+                                  {
+                                    "num": 1,
+                                    "query_from": 3,
+                                    "query_to": 6,
+                                    "hit_from": 2,
+                                    "hit_to": 5,
+                                    "score": 40,
+                                    "bit_score": 40,
+                                    "evalue": 0.0,
+                                    "qseq": "ACDE",
+                                    "hseq": "ACDE",
+                                    "align_len": 4,
+                                    "identity": 4,
+                                    "gaps": 0
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "archive_member": null,
+            "sha256": "82be4e0bb6b4a8520259fb0d0b5ae35cb0b138fea1dfa8eac3b4b233e1761bfa"
+          },
+          "issues": []
+        },
+        "row_map": [
+          {
+            "hit_index": 0,
+            "description_ordinals": [
+              0
+            ],
+            "hsp_ordinals": [
+              0
+            ]
+          }
+        ],
+        "operand_binding": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "reporting": {
+          "native_hit_array_present": true,
+          "native_hit_count": 1,
+          "requested_hit_limit": 9,
+          "requested_hsp_limit": 8,
+          "native_returncode": 0,
+          "producer_complete": true
+        },
+        "native": {
+          "report": {
+            "program": "deltablast",
+            "version": "DELTABLAST 2.17.0+",
+            "search_target": {
+              "db": "synthetic_db"
+            },
+            "params": {
+              "include": 0.002
+            },
+            "results": {
+              "iterations": [
+                {
+                  "iter_num": 7,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "iter_num": 7,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "iter_num": 11,
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "num": 1,
+                        "len": 10,
+                        "description": [
+                          {
+                            "id": "A",
+                            "accession": "A.1",
+                            "title": "synthetic A",
+                            "taxid": 1
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "num": 1,
+                            "query_from": 3,
+                            "query_to": 6,
+                            "hit_from": 2,
+                            "hit_to": 5,
+                            "score": 40,
+                            "bit_score": 40,
+                            "evalue": 0.0,
+                            "qseq": "ACDE",
+                            "hseq": "ACDE",
+                            "align_len": 4,
+                            "identity": 4,
+                            "gaps": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "search": {
+            "query_id": "q",
+            "query_title": "q",
+            "query_len": 8,
+            "hits": [
+              {
+                "num": 1,
+                "len": 10,
+                "description": [
+                  {
+                    "id": "A",
+                    "accession": "A.1",
+                    "title": "synthetic A",
+                    "taxid": 1
+                  }
+                ],
+                "hsps": [
+                  {
+                    "num": 1,
+                    "query_from": 3,
+                    "query_to": 6,
+                    "hit_from": 2,
+                    "hit_to": 5,
+                    "score": 40,
+                    "bit_score": 40,
+                    "evalue": 0.0,
+                    "qseq": "ACDE",
+                    "hseq": "ACDE",
+                    "align_len": 4,
+                    "identity": 4,
+                    "gaps": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "line_numbers": null
+        },
+        "issues": []
+      }
+    ],
+    "issues": []
+  },
+  "report_sources": [
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/0/search"
+      },
+      "report_source": {
+        "artifact_key": "synthetic-report",
+        "artifact_ref": "retained:synthetic-report",
+        "member_ordinal": null,
+        "member_sha256": null
+      }
+    },
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/1/search"
+      },
+      "report_source": {
+        "artifact_key": "synthetic-report",
+        "artifact_ref": "retained:synthetic-report",
+        "member_ordinal": null,
+        "member_sha256": null
+      }
+    },
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/2/search"
+      },
+      "report_source": {
+        "artifact_key": "synthetic-report",
+        "artifact_ref": "retained:synthetic-report",
+        "member_ordinal": null,
+        "member_sha256": null
+      }
+    }
+  ],
+  "query_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/0/search"
+      },
+      "query_binding": {
+        "operand": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "axis_kind": "sequence",
+        "full_length": 12,
+        "coordinate_unit": "aa",
+        "sequence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "pssm_key": null,
+        "master_mapping_ref": null
+      }
+    },
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/1/search"
+      },
+      "query_binding": {
+        "operand": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "axis_kind": "sequence",
+        "full_length": 12,
+        "coordinate_unit": "aa",
+        "sequence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "pssm_key": null,
+        "master_mapping_ref": null
+      }
+    },
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/2/search"
+      },
+      "query_binding": {
+        "operand": {
+          "role": "query",
+          "artifact_key": "query.fa",
+          "record_ordinal": 0,
+          "native_id": "q",
+          "native_title": "q",
+          "subject_ref": "query",
+          "molecule": "protein",
+          "length": 12,
+          "selected_interval": [
+            2,
+            10
+          ],
+          "identity": null
+        },
+        "axis_kind": "sequence",
+        "full_length": 12,
+        "coordinate_unit": "aa",
+        "sequence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "pssm_key": null,
+        "master_mapping_ref": null
+      }
+    }
+  ],
+  "search_bindings": [],
+  "pssm_sheets": [
+    {
+      "schema": "blast_pssm_sheet_v1",
+      "artifact_key": "unassociated-0",
+      "source_ref": "synthetic:checkpoint",
+      "format": "scoremat_asn_text",
+      "input_identity": {
+        "sha256": "84a9fa6c162f203dcf1fbe77e103ec2d12ad76d37ffd16bab9b440db9e247d7f",
+        "size_bytes": 328
+      },
+      "status": "complete",
+      "native_text": "PssmWithParameters ::= { pssm { numRows 2, numColumns 12, rowLabels { \"A\", \"C\" }, query seq { inst { repr raw, mol aa, length 12, seq-data ncbieaa \"AAAAAAAAAAAA\" } }, finalData { scores { -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 }, lambda { 3, 10, -1 }, kappa { 4, 10, -2 }, h 1 } } }",
+      "pssms": [
+        {
+          "record_ordinal": 0,
+          "pssm_key": "[\"unassociated-0\",0]",
+          "character_span": [
+            0,
+            328
+          ],
+          "native_type": "PssmWithParameters",
+          "native_record": {
+            "kind": "group",
+            "items": [
+              {
+                "kind": "choice",
+                "name": "pssm",
+                "value": {
+                  "kind": "group",
+                  "items": [
+                    {
+                      "kind": "choice",
+                      "name": "numRows",
+                      "value": {
+                        "kind": "integer",
+                        "value": 2,
+                        "token": "2",
+                        "character_span": [
+                          40,
+                          41
+                        ]
+                      },
+                      "character_span": [
+                        32,
+                        41
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "numColumns",
+                      "value": {
+                        "kind": "integer",
+                        "value": 12,
+                        "token": "12",
+                        "character_span": [
+                          54,
+                          56
+                        ]
+                      },
+                      "character_span": [
+                        43,
+                        56
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "rowLabels",
+                      "value": {
+                        "kind": "group",
+                        "items": [
+                          {
+                            "kind": "string",
+                            "value": "A",
+                            "token": "\"A\"",
+                            "character_span": [
+                              70,
+                              73
+                            ]
+                          },
+                          {
+                            "kind": "string",
+                            "value": "C",
+                            "token": "\"C\"",
+                            "character_span": [
+                              75,
+                              78
+                            ]
+                          }
+                        ],
+                        "complete": true,
+                        "character_span": [
+                          68,
+                          80
+                        ]
+                      },
+                      "character_span": [
+                        58,
+                        80
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "query",
+                      "value": {
+                        "kind": "choice",
+                        "name": "seq",
+                        "value": {
+                          "kind": "group",
+                          "items": [
+                            {
+                              "kind": "choice",
+                              "name": "inst",
+                              "value": {
+                                "kind": "group",
+                                "items": [
+                                  {
+                                    "kind": "choice",
+                                    "name": "repr",
+                                    "value": {
+                                      "kind": "identifier",
+                                      "value": "raw",
+                                      "token": "raw",
+                                      "character_span": [
+                                        106,
+                                        109
+                                      ]
+                                    },
+                                    "character_span": [
+                                      101,
+                                      109
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "mol",
+                                    "value": {
+                                      "kind": "identifier",
+                                      "value": "aa",
+                                      "token": "aa",
+                                      "character_span": [
+                                        115,
+                                        117
+                                      ]
+                                    },
+                                    "character_span": [
+                                      111,
+                                      117
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "length",
+                                    "value": {
+                                      "kind": "integer",
+                                      "value": 12,
+                                      "token": "12",
+                                      "character_span": [
+                                        126,
+                                        128
+                                      ]
+                                    },
+                                    "character_span": [
+                                      119,
+                                      128
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "seq-data",
+                                    "value": {
+                                      "kind": "choice",
+                                      "name": "ncbieaa",
+                                      "value": {
+                                        "kind": "string",
+                                        "value": "AAAAAAAAAAAA",
+                                        "token": "\"AAAAAAAAAAAA\"",
+                                        "character_span": [
+                                          147,
+                                          161
+                                        ]
+                                      },
+                                      "character_span": [
+                                        139,
+                                        161
+                                      ]
+                                    },
+                                    "character_span": [
+                                      130,
+                                      161
+                                    ]
+                                  }
+                                ],
+                                "complete": true,
+                                "character_span": [
+                                  99,
+                                  163
+                                ]
+                              },
+                              "character_span": [
+                                94,
+                                163
+                              ]
+                            }
+                          ],
+                          "complete": true,
+                          "character_span": [
+                            92,
+                            165
+                          ]
+                        },
+                        "character_span": [
+                          88,
+                          165
+                        ]
+                      },
+                      "character_span": [
+                        82,
+                        165
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "finalData",
+                      "value": {
+                        "kind": "group",
+                        "items": [
+                          {
+                            "kind": "choice",
+                            "name": "scores",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": -2,
+                                  "token": "-2",
+                                  "character_span": [
+                                    188,
+                                    190
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -1,
+                                  "token": "-1",
+                                  "character_span": [
+                                    192,
+                                    194
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 0,
+                                  "token": "0",
+                                  "character_span": [
+                                    196,
+                                    197
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 1,
+                                  "token": "1",
+                                  "character_span": [
+                                    199,
+                                    200
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 2,
+                                  "token": "2",
+                                  "character_span": [
+                                    202,
+                                    203
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 3,
+                                  "token": "3",
+                                  "character_span": [
+                                    205,
+                                    206
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 4,
+                                  "token": "4",
+                                  "character_span": [
+                                    208,
+                                    209
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 5,
+                                  "token": "5",
+                                  "character_span": [
+                                    211,
+                                    212
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 6,
+                                  "token": "6",
+                                  "character_span": [
+                                    214,
+                                    215
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 7,
+                                  "token": "7",
+                                  "character_span": [
+                                    217,
+                                    218
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 8,
+                                  "token": "8",
+                                  "character_span": [
+                                    220,
+                                    221
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 9,
+                                  "token": "9",
+                                  "character_span": [
+                                    223,
+                                    224
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    226,
+                                    228
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 11,
+                                  "token": "11",
+                                  "character_span": [
+                                    230,
+                                    232
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 12,
+                                  "token": "12",
+                                  "character_span": [
+                                    234,
+                                    236
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 13,
+                                  "token": "13",
+                                  "character_span": [
+                                    238,
+                                    240
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 14,
+                                  "token": "14",
+                                  "character_span": [
+                                    242,
+                                    244
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 15,
+                                  "token": "15",
+                                  "character_span": [
+                                    246,
+                                    248
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 16,
+                                  "token": "16",
+                                  "character_span": [
+                                    250,
+                                    252
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 17,
+                                  "token": "17",
+                                  "character_span": [
+                                    254,
+                                    256
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 18,
+                                  "token": "18",
+                                  "character_span": [
+                                    258,
+                                    260
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 19,
+                                  "token": "19",
+                                  "character_span": [
+                                    262,
+                                    264
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 20,
+                                  "token": "20",
+                                  "character_span": [
+                                    266,
+                                    268
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 21,
+                                  "token": "21",
+                                  "character_span": [
+                                    270,
+                                    272
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                186,
+                                274
+                              ]
+                            },
+                            "character_span": [
+                              179,
+                              274
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "lambda",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": 3,
+                                  "token": "3",
+                                  "character_span": [
+                                    285,
+                                    286
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    288,
+                                    290
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -1,
+                                  "token": "-1",
+                                  "character_span": [
+                                    292,
+                                    294
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                283,
+                                296
+                              ]
+                            },
+                            "character_span": [
+                              276,
+                              296
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "kappa",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": 4,
+                                  "token": "4",
+                                  "character_span": [
+                                    306,
+                                    307
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    309,
+                                    311
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -2,
+                                  "token": "-2",
+                                  "character_span": [
+                                    313,
+                                    315
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                304,
+                                317
+                              ]
+                            },
+                            "character_span": [
+                              298,
+                              317
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "h",
+                            "value": {
+                              "kind": "integer",
+                              "value": 1,
+                              "token": "1",
+                              "character_span": [
+                                321,
+                                322
+                              ]
+                            },
+                            "character_span": [
+                              319,
+                              322
+                            ]
+                          }
+                        ],
+                        "complete": true,
+                        "character_span": [
+                          177,
+                          324
+                        ]
+                      },
+                      "character_span": [
+                        167,
+                        324
+                      ]
+                    }
+                  ],
+                  "complete": true,
+                  "character_span": [
+                    30,
+                    326
+                  ]
+                },
+                "character_span": [
+                  25,
+                  326
+                ]
+              }
+            ],
+            "complete": true,
+            "character_span": [
+              23,
+              328
+            ]
+          },
+          "native_pssm": {
+            "numRows": 2,
+            "numColumns": 12,
+            "rowLabels": [
+              "A",
+              "C"
+            ],
+            "query": {
+              "seq": [
+                {
+                  "inst": [
+                    {
+                      "repr": "raw"
+                    },
+                    {
+                      "mol": "aa"
+                    },
+                    {
+                      "length": 12
+                    },
+                    {
+                      "seq-data": {
+                        "ncbieaa": "AAAAAAAAAAAA"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "finalData": {
+              "scores": [
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "lambda": [
+                3,
+                10,
+                -1
+              ],
+              "kappa": [
+                4,
+                10,
+                -2
+              ],
+              "h": 1
+            }
+          },
+          "native_params": null,
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "schema": "blast_pssm_sheet_v1",
+      "artifact_key": "unassociated-1",
+      "source_ref": "synthetic:checkpoint",
+      "format": "scoremat_asn_text",
+      "input_identity": {
+        "sha256": "84a9fa6c162f203dcf1fbe77e103ec2d12ad76d37ffd16bab9b440db9e247d7f",
+        "size_bytes": 328
+      },
+      "status": "complete",
+      "native_text": "PssmWithParameters ::= { pssm { numRows 2, numColumns 12, rowLabels { \"A\", \"C\" }, query seq { inst { repr raw, mol aa, length 12, seq-data ncbieaa \"AAAAAAAAAAAA\" } }, finalData { scores { -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 }, lambda { 3, 10, -1 }, kappa { 4, 10, -2 }, h 1 } } }",
+      "pssms": [
+        {
+          "record_ordinal": 0,
+          "pssm_key": "[\"unassociated-1\",0]",
+          "character_span": [
+            0,
+            328
+          ],
+          "native_type": "PssmWithParameters",
+          "native_record": {
+            "kind": "group",
+            "items": [
+              {
+                "kind": "choice",
+                "name": "pssm",
+                "value": {
+                  "kind": "group",
+                  "items": [
+                    {
+                      "kind": "choice",
+                      "name": "numRows",
+                      "value": {
+                        "kind": "integer",
+                        "value": 2,
+                        "token": "2",
+                        "character_span": [
+                          40,
+                          41
+                        ]
+                      },
+                      "character_span": [
+                        32,
+                        41
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "numColumns",
+                      "value": {
+                        "kind": "integer",
+                        "value": 12,
+                        "token": "12",
+                        "character_span": [
+                          54,
+                          56
+                        ]
+                      },
+                      "character_span": [
+                        43,
+                        56
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "rowLabels",
+                      "value": {
+                        "kind": "group",
+                        "items": [
+                          {
+                            "kind": "string",
+                            "value": "A",
+                            "token": "\"A\"",
+                            "character_span": [
+                              70,
+                              73
+                            ]
+                          },
+                          {
+                            "kind": "string",
+                            "value": "C",
+                            "token": "\"C\"",
+                            "character_span": [
+                              75,
+                              78
+                            ]
+                          }
+                        ],
+                        "complete": true,
+                        "character_span": [
+                          68,
+                          80
+                        ]
+                      },
+                      "character_span": [
+                        58,
+                        80
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "query",
+                      "value": {
+                        "kind": "choice",
+                        "name": "seq",
+                        "value": {
+                          "kind": "group",
+                          "items": [
+                            {
+                              "kind": "choice",
+                              "name": "inst",
+                              "value": {
+                                "kind": "group",
+                                "items": [
+                                  {
+                                    "kind": "choice",
+                                    "name": "repr",
+                                    "value": {
+                                      "kind": "identifier",
+                                      "value": "raw",
+                                      "token": "raw",
+                                      "character_span": [
+                                        106,
+                                        109
+                                      ]
+                                    },
+                                    "character_span": [
+                                      101,
+                                      109
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "mol",
+                                    "value": {
+                                      "kind": "identifier",
+                                      "value": "aa",
+                                      "token": "aa",
+                                      "character_span": [
+                                        115,
+                                        117
+                                      ]
+                                    },
+                                    "character_span": [
+                                      111,
+                                      117
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "length",
+                                    "value": {
+                                      "kind": "integer",
+                                      "value": 12,
+                                      "token": "12",
+                                      "character_span": [
+                                        126,
+                                        128
+                                      ]
+                                    },
+                                    "character_span": [
+                                      119,
+                                      128
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "seq-data",
+                                    "value": {
+                                      "kind": "choice",
+                                      "name": "ncbieaa",
+                                      "value": {
+                                        "kind": "string",
+                                        "value": "AAAAAAAAAAAA",
+                                        "token": "\"AAAAAAAAAAAA\"",
+                                        "character_span": [
+                                          147,
+                                          161
+                                        ]
+                                      },
+                                      "character_span": [
+                                        139,
+                                        161
+                                      ]
+                                    },
+                                    "character_span": [
+                                      130,
+                                      161
+                                    ]
+                                  }
+                                ],
+                                "complete": true,
+                                "character_span": [
+                                  99,
+                                  163
+                                ]
+                              },
+                              "character_span": [
+                                94,
+                                163
+                              ]
+                            }
+                          ],
+                          "complete": true,
+                          "character_span": [
+                            92,
+                            165
+                          ]
+                        },
+                        "character_span": [
+                          88,
+                          165
+                        ]
+                      },
+                      "character_span": [
+                        82,
+                        165
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "finalData",
+                      "value": {
+                        "kind": "group",
+                        "items": [
+                          {
+                            "kind": "choice",
+                            "name": "scores",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": -2,
+                                  "token": "-2",
+                                  "character_span": [
+                                    188,
+                                    190
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -1,
+                                  "token": "-1",
+                                  "character_span": [
+                                    192,
+                                    194
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 0,
+                                  "token": "0",
+                                  "character_span": [
+                                    196,
+                                    197
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 1,
+                                  "token": "1",
+                                  "character_span": [
+                                    199,
+                                    200
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 2,
+                                  "token": "2",
+                                  "character_span": [
+                                    202,
+                                    203
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 3,
+                                  "token": "3",
+                                  "character_span": [
+                                    205,
+                                    206
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 4,
+                                  "token": "4",
+                                  "character_span": [
+                                    208,
+                                    209
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 5,
+                                  "token": "5",
+                                  "character_span": [
+                                    211,
+                                    212
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 6,
+                                  "token": "6",
+                                  "character_span": [
+                                    214,
+                                    215
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 7,
+                                  "token": "7",
+                                  "character_span": [
+                                    217,
+                                    218
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 8,
+                                  "token": "8",
+                                  "character_span": [
+                                    220,
+                                    221
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 9,
+                                  "token": "9",
+                                  "character_span": [
+                                    223,
+                                    224
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    226,
+                                    228
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 11,
+                                  "token": "11",
+                                  "character_span": [
+                                    230,
+                                    232
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 12,
+                                  "token": "12",
+                                  "character_span": [
+                                    234,
+                                    236
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 13,
+                                  "token": "13",
+                                  "character_span": [
+                                    238,
+                                    240
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 14,
+                                  "token": "14",
+                                  "character_span": [
+                                    242,
+                                    244
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 15,
+                                  "token": "15",
+                                  "character_span": [
+                                    246,
+                                    248
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 16,
+                                  "token": "16",
+                                  "character_span": [
+                                    250,
+                                    252
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 17,
+                                  "token": "17",
+                                  "character_span": [
+                                    254,
+                                    256
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 18,
+                                  "token": "18",
+                                  "character_span": [
+                                    258,
+                                    260
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 19,
+                                  "token": "19",
+                                  "character_span": [
+                                    262,
+                                    264
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 20,
+                                  "token": "20",
+                                  "character_span": [
+                                    266,
+                                    268
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 21,
+                                  "token": "21",
+                                  "character_span": [
+                                    270,
+                                    272
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                186,
+                                274
+                              ]
+                            },
+                            "character_span": [
+                              179,
+                              274
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "lambda",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": 3,
+                                  "token": "3",
+                                  "character_span": [
+                                    285,
+                                    286
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    288,
+                                    290
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -1,
+                                  "token": "-1",
+                                  "character_span": [
+                                    292,
+                                    294
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                283,
+                                296
+                              ]
+                            },
+                            "character_span": [
+                              276,
+                              296
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "kappa",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": 4,
+                                  "token": "4",
+                                  "character_span": [
+                                    306,
+                                    307
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    309,
+                                    311
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -2,
+                                  "token": "-2",
+                                  "character_span": [
+                                    313,
+                                    315
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                304,
+                                317
+                              ]
+                            },
+                            "character_span": [
+                              298,
+                              317
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "h",
+                            "value": {
+                              "kind": "integer",
+                              "value": 1,
+                              "token": "1",
+                              "character_span": [
+                                321,
+                                322
+                              ]
+                            },
+                            "character_span": [
+                              319,
+                              322
+                            ]
+                          }
+                        ],
+                        "complete": true,
+                        "character_span": [
+                          177,
+                          324
+                        ]
+                      },
+                      "character_span": [
+                        167,
+                        324
+                      ]
+                    }
+                  ],
+                  "complete": true,
+                  "character_span": [
+                    30,
+                    326
+                  ]
+                },
+                "character_span": [
+                  25,
+                  326
+                ]
+              }
+            ],
+            "complete": true,
+            "character_span": [
+              23,
+              328
+            ]
+          },
+          "native_pssm": {
+            "numRows": 2,
+            "numColumns": 12,
+            "rowLabels": [
+              "A",
+              "C"
+            ],
+            "query": {
+              "seq": [
+                {
+                  "inst": [
+                    {
+                      "repr": "raw"
+                    },
+                    {
+                      "mol": "aa"
+                    },
+                    {
+                      "length": 12
+                    },
+                    {
+                      "seq-data": {
+                        "ncbieaa": "AAAAAAAAAAAA"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "finalData": {
+              "scores": [
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "lambda": [
+                3,
+                10,
+                -1
+              ],
+              "kappa": [
+                4,
+                10,
+                -2
+              ],
+              "h": 1
+            }
+          },
+          "native_params": null,
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "schema": "blast_pssm_sheet_v1",
+      "artifact_key": "unassociated-2",
+      "source_ref": "synthetic:checkpoint",
+      "format": "scoremat_asn_text",
+      "input_identity": {
+        "sha256": "84a9fa6c162f203dcf1fbe77e103ec2d12ad76d37ffd16bab9b440db9e247d7f",
+        "size_bytes": 328
+      },
+      "status": "complete",
+      "native_text": "PssmWithParameters ::= { pssm { numRows 2, numColumns 12, rowLabels { \"A\", \"C\" }, query seq { inst { repr raw, mol aa, length 12, seq-data ncbieaa \"AAAAAAAAAAAA\" } }, finalData { scores { -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 }, lambda { 3, 10, -1 }, kappa { 4, 10, -2 }, h 1 } } }",
+      "pssms": [
+        {
+          "record_ordinal": 0,
+          "pssm_key": "[\"unassociated-2\",0]",
+          "character_span": [
+            0,
+            328
+          ],
+          "native_type": "PssmWithParameters",
+          "native_record": {
+            "kind": "group",
+            "items": [
+              {
+                "kind": "choice",
+                "name": "pssm",
+                "value": {
+                  "kind": "group",
+                  "items": [
+                    {
+                      "kind": "choice",
+                      "name": "numRows",
+                      "value": {
+                        "kind": "integer",
+                        "value": 2,
+                        "token": "2",
+                        "character_span": [
+                          40,
+                          41
+                        ]
+                      },
+                      "character_span": [
+                        32,
+                        41
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "numColumns",
+                      "value": {
+                        "kind": "integer",
+                        "value": 12,
+                        "token": "12",
+                        "character_span": [
+                          54,
+                          56
+                        ]
+                      },
+                      "character_span": [
+                        43,
+                        56
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "rowLabels",
+                      "value": {
+                        "kind": "group",
+                        "items": [
+                          {
+                            "kind": "string",
+                            "value": "A",
+                            "token": "\"A\"",
+                            "character_span": [
+                              70,
+                              73
+                            ]
+                          },
+                          {
+                            "kind": "string",
+                            "value": "C",
+                            "token": "\"C\"",
+                            "character_span": [
+                              75,
+                              78
+                            ]
+                          }
+                        ],
+                        "complete": true,
+                        "character_span": [
+                          68,
+                          80
+                        ]
+                      },
+                      "character_span": [
+                        58,
+                        80
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "query",
+                      "value": {
+                        "kind": "choice",
+                        "name": "seq",
+                        "value": {
+                          "kind": "group",
+                          "items": [
+                            {
+                              "kind": "choice",
+                              "name": "inst",
+                              "value": {
+                                "kind": "group",
+                                "items": [
+                                  {
+                                    "kind": "choice",
+                                    "name": "repr",
+                                    "value": {
+                                      "kind": "identifier",
+                                      "value": "raw",
+                                      "token": "raw",
+                                      "character_span": [
+                                        106,
+                                        109
+                                      ]
+                                    },
+                                    "character_span": [
+                                      101,
+                                      109
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "mol",
+                                    "value": {
+                                      "kind": "identifier",
+                                      "value": "aa",
+                                      "token": "aa",
+                                      "character_span": [
+                                        115,
+                                        117
+                                      ]
+                                    },
+                                    "character_span": [
+                                      111,
+                                      117
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "length",
+                                    "value": {
+                                      "kind": "integer",
+                                      "value": 12,
+                                      "token": "12",
+                                      "character_span": [
+                                        126,
+                                        128
+                                      ]
+                                    },
+                                    "character_span": [
+                                      119,
+                                      128
+                                    ]
+                                  },
+                                  {
+                                    "kind": "choice",
+                                    "name": "seq-data",
+                                    "value": {
+                                      "kind": "choice",
+                                      "name": "ncbieaa",
+                                      "value": {
+                                        "kind": "string",
+                                        "value": "AAAAAAAAAAAA",
+                                        "token": "\"AAAAAAAAAAAA\"",
+                                        "character_span": [
+                                          147,
+                                          161
+                                        ]
+                                      },
+                                      "character_span": [
+                                        139,
+                                        161
+                                      ]
+                                    },
+                                    "character_span": [
+                                      130,
+                                      161
+                                    ]
+                                  }
+                                ],
+                                "complete": true,
+                                "character_span": [
+                                  99,
+                                  163
+                                ]
+                              },
+                              "character_span": [
+                                94,
+                                163
+                              ]
+                            }
+                          ],
+                          "complete": true,
+                          "character_span": [
+                            92,
+                            165
+                          ]
+                        },
+                        "character_span": [
+                          88,
+                          165
+                        ]
+                      },
+                      "character_span": [
+                        82,
+                        165
+                      ]
+                    },
+                    {
+                      "kind": "choice",
+                      "name": "finalData",
+                      "value": {
+                        "kind": "group",
+                        "items": [
+                          {
+                            "kind": "choice",
+                            "name": "scores",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": -2,
+                                  "token": "-2",
+                                  "character_span": [
+                                    188,
+                                    190
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -1,
+                                  "token": "-1",
+                                  "character_span": [
+                                    192,
+                                    194
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 0,
+                                  "token": "0",
+                                  "character_span": [
+                                    196,
+                                    197
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 1,
+                                  "token": "1",
+                                  "character_span": [
+                                    199,
+                                    200
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 2,
+                                  "token": "2",
+                                  "character_span": [
+                                    202,
+                                    203
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 3,
+                                  "token": "3",
+                                  "character_span": [
+                                    205,
+                                    206
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 4,
+                                  "token": "4",
+                                  "character_span": [
+                                    208,
+                                    209
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 5,
+                                  "token": "5",
+                                  "character_span": [
+                                    211,
+                                    212
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 6,
+                                  "token": "6",
+                                  "character_span": [
+                                    214,
+                                    215
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 7,
+                                  "token": "7",
+                                  "character_span": [
+                                    217,
+                                    218
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 8,
+                                  "token": "8",
+                                  "character_span": [
+                                    220,
+                                    221
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 9,
+                                  "token": "9",
+                                  "character_span": [
+                                    223,
+                                    224
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    226,
+                                    228
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 11,
+                                  "token": "11",
+                                  "character_span": [
+                                    230,
+                                    232
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 12,
+                                  "token": "12",
+                                  "character_span": [
+                                    234,
+                                    236
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 13,
+                                  "token": "13",
+                                  "character_span": [
+                                    238,
+                                    240
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 14,
+                                  "token": "14",
+                                  "character_span": [
+                                    242,
+                                    244
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 15,
+                                  "token": "15",
+                                  "character_span": [
+                                    246,
+                                    248
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 16,
+                                  "token": "16",
+                                  "character_span": [
+                                    250,
+                                    252
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 17,
+                                  "token": "17",
+                                  "character_span": [
+                                    254,
+                                    256
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 18,
+                                  "token": "18",
+                                  "character_span": [
+                                    258,
+                                    260
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 19,
+                                  "token": "19",
+                                  "character_span": [
+                                    262,
+                                    264
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 20,
+                                  "token": "20",
+                                  "character_span": [
+                                    266,
+                                    268
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 21,
+                                  "token": "21",
+                                  "character_span": [
+                                    270,
+                                    272
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                186,
+                                274
+                              ]
+                            },
+                            "character_span": [
+                              179,
+                              274
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "lambda",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": 3,
+                                  "token": "3",
+                                  "character_span": [
+                                    285,
+                                    286
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    288,
+                                    290
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -1,
+                                  "token": "-1",
+                                  "character_span": [
+                                    292,
+                                    294
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                283,
+                                296
+                              ]
+                            },
+                            "character_span": [
+                              276,
+                              296
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "kappa",
+                            "value": {
+                              "kind": "group",
+                              "items": [
+                                {
+                                  "kind": "integer",
+                                  "value": 4,
+                                  "token": "4",
+                                  "character_span": [
+                                    306,
+                                    307
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": 10,
+                                  "token": "10",
+                                  "character_span": [
+                                    309,
+                                    311
+                                  ]
+                                },
+                                {
+                                  "kind": "integer",
+                                  "value": -2,
+                                  "token": "-2",
+                                  "character_span": [
+                                    313,
+                                    315
+                                  ]
+                                }
+                              ],
+                              "complete": true,
+                              "character_span": [
+                                304,
+                                317
+                              ]
+                            },
+                            "character_span": [
+                              298,
+                              317
+                            ]
+                          },
+                          {
+                            "kind": "choice",
+                            "name": "h",
+                            "value": {
+                              "kind": "integer",
+                              "value": 1,
+                              "token": "1",
+                              "character_span": [
+                                321,
+                                322
+                              ]
+                            },
+                            "character_span": [
+                              319,
+                              322
+                            ]
+                          }
+                        ],
+                        "complete": true,
+                        "character_span": [
+                          177,
+                          324
+                        ]
+                      },
+                      "character_span": [
+                        167,
+                        324
+                      ]
+                    }
+                  ],
+                  "complete": true,
+                  "character_span": [
+                    30,
+                    326
+                  ]
+                },
+                "character_span": [
+                  25,
+                  326
+                ]
+              }
+            ],
+            "complete": true,
+            "character_span": [
+              23,
+              328
+            ]
+          },
+          "native_pssm": {
+            "numRows": 2,
+            "numColumns": 12,
+            "rowLabels": [
+              "A",
+              "C"
+            ],
+            "query": {
+              "seq": [
+                {
+                  "inst": [
+                    {
+                      "repr": "raw"
+                    },
+                    {
+                      "mol": "aa"
+                    },
+                    {
+                      "length": 12
+                    },
+                    {
+                      "seq-data": {
+                        "ncbieaa": "AAAAAAAAAAAA"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "finalData": {
+              "scores": [
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "lambda": [
+                3,
+                10,
+                -1
+              ],
+              "kappa": [
+                4,
+                10,
+                -2
+              ],
+              "h": 1
+            }
+          },
+          "native_params": null,
+          "issues": []
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "checkpoint_bindings": [],
+  "sequence_metadata": [
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/0/search"
+      },
+      "reference_metadata": [
+        {
+          "accession": "reference-0",
+          "identifier_namespace": "synthetic",
+          "source": "metadata",
+          "native_pointer": "/records/0",
+          "taxid": 1,
+          "functions": [
+            {
+              "function": "F",
+              "evidence": [
+                "supplied"
+              ]
+            }
+          ]
+        }
+      ],
+      "description_bindings": [
+        {
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/iterations/0/search"
+          },
+          "binding": {
+            "report_index": 0,
+            "hit_index": 0,
+            "description_index": 0,
+            "metadata_index": 0,
+            "native_description": {
+              "id": "A",
+              "accession": "A.1",
+              "title": "synthetic A",
+              "taxid": 1
+            },
+            "metadata_identifier": {
+              "namespace": "synthetic",
+              "value": "reference-0"
+            },
+            "metadata_source_ref": "metadata",
+            "metadata_pointer": "/records/0",
+            "linkage_source_ref": "links",
+            "linkage_pointer": "/links/0"
+          }
+        }
+      ],
+      "sequence_identity_bindings": [
+        {
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/iterations/0/search"
+          },
+          "binding": {
+            "report_index": 0,
+            "hit_index": 0,
+            "kind": "full_sequence_digest",
+            "sequence_group": "sha256:559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "algorithm": "sha256",
+            "digest": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "molecule": "aa",
+            "sequence_length": 10,
+            "source_ref": "sequences",
+            "pointer": "/records/0",
+            "linkage_source_ref": "links",
+            "linkage_pointer": "/sequences/0"
+          }
+        }
+      ],
+      "database_profile": null
+    },
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/1/search"
+      },
+      "reference_metadata": [
+        {
+          "accession": "reference-0",
+          "identifier_namespace": "synthetic",
+          "source": "metadata",
+          "native_pointer": "/records/0",
+          "taxid": 1,
+          "functions": [
+            {
+              "function": "F",
+              "evidence": [
+                "supplied"
+              ]
+            }
+          ]
+        }
+      ],
+      "description_bindings": [
+        {
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/iterations/1/search"
+          },
+          "binding": {
+            "report_index": 0,
+            "hit_index": 0,
+            "description_index": 0,
+            "metadata_index": 0,
+            "native_description": {
+              "id": "A",
+              "accession": "A.1",
+              "title": "synthetic A",
+              "taxid": 1
+            },
+            "metadata_identifier": {
+              "namespace": "synthetic",
+              "value": "reference-0"
+            },
+            "metadata_source_ref": "metadata",
+            "metadata_pointer": "/records/0",
+            "linkage_source_ref": "links",
+            "linkage_pointer": "/links/0"
+          }
+        }
+      ],
+      "sequence_identity_bindings": [
+        {
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/iterations/1/search"
+          },
+          "binding": {
+            "report_index": 0,
+            "hit_index": 0,
+            "kind": "full_sequence_digest",
+            "sequence_group": "sha256:559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "algorithm": "sha256",
+            "digest": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "molecule": "aa",
+            "sequence_length": 10,
+            "source_ref": "sequences",
+            "pointer": "/records/0",
+            "linkage_source_ref": "links",
+            "linkage_pointer": "/sequences/0"
+          }
+        }
+      ],
+      "database_profile": null
+    },
+    {
+      "search_key": {
+        "artifact_key": "synthetic-report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/iterations/2/search"
+      },
+      "reference_metadata": [
+        {
+          "accession": "reference-0",
+          "identifier_namespace": "synthetic",
+          "source": "metadata",
+          "native_pointer": "/records/0",
+          "taxid": 1,
+          "functions": [
+            {
+              "function": "F",
+              "evidence": [
+                "supplied"
+              ]
+            }
+          ]
+        }
+      ],
+      "description_bindings": [
+        {
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/iterations/2/search"
+          },
+          "binding": {
+            "report_index": 0,
+            "hit_index": 0,
+            "description_index": 0,
+            "metadata_index": 0,
+            "native_description": {
+              "id": "A",
+              "accession": "A.1",
+              "title": "synthetic A",
+              "taxid": 1
+            },
+            "metadata_identifier": {
+              "namespace": "synthetic",
+              "value": "reference-0"
+            },
+            "metadata_source_ref": "metadata",
+            "metadata_pointer": "/records/0",
+            "linkage_source_ref": "links",
+            "linkage_pointer": "/links/0"
+          }
+        }
+      ],
+      "sequence_identity_bindings": [
+        {
+          "search_key": {
+            "artifact_key": "synthetic-report",
+            "member_ordinal": null,
+            "report_index": 0,
+            "search_pointer": "/BlastOutput2/0/report/results/iterations/2/search"
+          },
+          "binding": {
+            "report_index": 0,
+            "hit_index": 0,
+            "kind": "full_sequence_digest",
+            "sequence_group": "sha256:559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "algorithm": "sha256",
+            "digest": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "molecule": "aa",
+            "sequence_length": 10,
+            "source_ref": "sequences",
+            "pointer": "/records/0",
+            "linkage_source_ref": "links",
+            "linkage_pointer": "/sequences/0"
+          }
+        }
+      ],
+      "database_profile": null
+    }
+  ],
+  "profile_metadata": [],
+  "comparison_pairs": [],
+  "inclusion_records": [],
+  "convergence_records": [],
+  "invocation_source": {
+    "source_ref": "synthetic:retained-producer-record",
+    "pointer": "/effective_options"
+  },
+  "target_context": null
+}

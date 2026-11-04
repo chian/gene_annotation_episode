@@ -1,0 +1,100 @@
+{
+  "record_type": "uniprot_host_return_static_checkpoint",
+  "authority": "Original user-supplied goal; this file records implementation evidence only.",
+  "goal_attachment": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "bytes": 22676,
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc"
+  },
+  "owned_sources": [
+    {
+      "path": "gene_annotation_episode/uniprot_returns.py",
+      "bytes": 43952,
+      "sha256": "c3099116a97402a889b62435ed77fbff9c05aae0ff0f0552ded6a8ed99f83d79"
+    },
+    {
+      "path": "gene_annotation_episode/api_service_execution.py",
+      "bytes": 67022,
+      "sha256": "944ea2466d99ea44190b2405298f9a5fd9ce01bce4ee6140680769fbf521c610"
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "bytes": 220432,
+      "sha256": "0772ef025e0f99dc12cefedfd126381ceb7070ff15583a76227ebc3b3bb8859d"
+    },
+    {
+      "path": "tests/test_uniprot_returns.py",
+      "bytes": 35068,
+      "sha256": "1fb09d4292b606c135486ae6f7cd76f34c89a2203ac1275c6021202febb044b6"
+    }
+  ],
+  "shared_dependencies": [
+    {
+      "path": "gene_annotation_episode/uniprot_return_contracts.py",
+      "bytes": 113765,
+      "sha256": "11b34eee305f01ad763397a0ac465f3ca2cc6e7a6aef369a7e24b095ee31fae0"
+    },
+    {
+      "path": "gene_annotation_episode/uniprot_return_projection.py",
+      "bytes": 39597,
+      "sha256": "62e8e24165ddd58ca3d46270bbb8cab87fba885c57958cf721a3e64b5ae5a2ee"
+    },
+    {
+      "path": "gene_annotation_episode/communication.py",
+      "bytes": 47971,
+      "sha256": "367448efa11ebf78b8778f8f36eee3d5ff52a2dcdfc017a7819946715a492a5b"
+    },
+    {
+      "path": "gene_annotation_episode/episode_return_records.py",
+      "bytes": 8876,
+      "sha256": "80bd5a64ccbd854c2d87698bd5720cc215cee9e9a088a2d748db6f22e9bf6421"
+    },
+    {
+      "path": "gene_annotation_episode/episode_receipts.py",
+      "bytes": 11839,
+      "sha256": "523e29fc44d9ecbe074e57d650425dd8ac90311d96de280a3411e205427caeba"
+    },
+    {
+      "path": "gene_annotation_episode/episode_contract_information.py",
+      "bytes": 14772,
+      "sha256": "6a7c66ffbb37c6c584e6781bedbc302bcdcf3d686ad30c3340fea3493855c14b"
+    }
+  ],
+  "implementation_contracts": [
+    {
+      "path": "verification/tool_graders_uniprot_requested_returns_2026-10-28_601/CONTRACT_002.md",
+      "bytes": 54432,
+      "sha256": "d29cb9168e3715ef1a3ff40b1a3c2bf49ca318a587d6228e71f6d719de2b00da"
+    },
+    {
+      "path": "verification/tool_graders_uniprot_requested_returns_2026-10-28_601/ROOT_CODING_PORTS_003.md",
+      "bytes": 5626,
+      "sha256": "04d2fb97641e6b5ad9964540e4fdde0a6f6e0a7e2073e152f234d23da17ef0ae"
+    },
+    {
+      "path": "verification/tool_graders_uniprot_requested_returns_2026-10-28_601/HOST_RETURN_HANDOFF_005.md",
+      "bytes": 5851,
+      "sha256": "bd6092633a05fc8846e239eae9615216aee49057e66dbc7b9434c106726a528c"
+    },
+    {
+      "path": "verification/tool_graders_uniprot_requested_returns_2026-10-28_601/PROPOSED_SELECTED_RETURN_SCHEMA_002.json",
+      "bytes": 481695,
+      "sha256": "be54202925b12c016861aeb7507a56301b4fd38d8641dd385885b074148b3de2"
+    }
+  ],
+  "checks": {
+    "ast_parse_owned_and_shared_sources": "passed",
+    "fixture_manifest_json": "passed",
+    "application_imports_on_host": 0,
+    "application_tests_on_host": 0,
+    "database_reads_on_host": 0,
+    "external_requests": 0,
+    "hpc_jobs": 0
+  },
+  "boundary_notes": [
+    "C owns selected-schema authority and communication registration; P owns pure page projection imported and re-exported by H.",
+    "H edits are limited to its new module, UniProt-specific API/execution binding consumers, test module and this evidence directory.",
+    "Root alone owns bounded application verification; check059 uses the same production source hashes but earlier test assertions.",
+    "Identity policy, model-facing presentation and actual downstream material-consumer enforcement remain separate unfinished integration boundaries."
+  ]
+}

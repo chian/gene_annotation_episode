@@ -20,6 +20,7 @@ from .domain import (ContractError, MOLECULES, ROLES, RECORD_SCHEMAS, REASONING_
 from . import materials
 from . import library_targets as libraries
 from . import context_masks
+from .journal_metadata import ROOT_FLAG as JOURNAL_METADATA_MARKER,restore_request
 from .sequence_mapping import (VERSION as MAPPING_VERSION, extract_path, map_interval,
                                mapping_footprint, validate_mapping)
 
@@ -37,7 +38,7 @@ class Store:
         self.path.mkdir(parents=True, exist_ok=True)
         (self.path / "artifacts").mkdir(exist_ok=True)
         self.db = sqlite3.connect(self.path / "state.sqlite3", isolation_level=None, timeout=30)
-        self.db.row_factory = sqlite3.Row
+        self.db.row_factory = self._row
         self.db.execute("PRAGMA journal_mode=WAL")
         self.db.execute("PRAGMA foreign_keys=ON")
         self.db.execute("PRAGMA synchronous=FULL")
@@ -73,7 +74,19 @@ class Store:
         self.close()
 
     def close(self):
+        self.db.row_factory = sqlite3.Row
         self.db.close()
+
+    def _row(self,cursor,values):
+        # Keep sqlite3.Row and ordinary JSON request semantics for every reader.
+        # SQL-visible tools/scopes remain inline; full contract dictionaries are
+        # restored from their immutable, verified artifacts on materialization.
+        if any(description[0]=='request' and isinstance(value,str) and JOURNAL_METADATA_MARKER in value
+                for description,value in zip(cursor.description,values)):
+            values=tuple(restore_request(self,value) if description[0]=='request'
+                and isinstance(value,str) and JOURNAL_METADATA_MARKER in value else value
+                for description,value in zip(cursor.description,values))
+        return sqlite3.Row(cursor,values)
 
     @contextmanager
     def transaction(self):

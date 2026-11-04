@@ -1,0 +1,538 @@
+{
+  "version": "flux_balance_operands_verification_v1",
+  "implementation_contract": {
+    "path": "verification/tool_graders_flux_balance_core_2026-10-29_679/IMPLEMENTATION_CONTRACT_014.md",
+    "sha256": "6f3aaf377725b9978d06d45c28b54d9e8395a7bef993710aa7b2717705691458",
+    "size_bytes": 3284
+  },
+  "authority": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc",
+    "size_bytes": 22676
+  },
+  "owned_additions": [
+    {
+      "path": "gene_annotation_episode/flux_balance_operands.py",
+      "sha256": "22c9f52dcddceb8e48334005a85ed54bc7d9935063bc1c5d52fafe3e6ddb4603",
+      "size_bytes": 19131
+    },
+    {
+      "path": "tests/test_flux_balance_operands_694.py",
+      "sha256": "ff0117111fa481991c5928d2e5ff205341ced4792dd4c07d7fa4d3985bf2e2cc",
+      "size_bytes": 19959
+    }
+  ],
+  "owned_current_bytes_equal_final_snapshot": true,
+  "final_unique_passing_cases": 43,
+  "check_counts_overlap": true,
+  "checks": [
+    {
+      "attempt": "check155_operands694",
+      "test_case_counts": {
+        "passed": 7,
+        "failed": 30,
+        "skipped": 0
+      },
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_operands694/handle.json",
+        "unit": "gene-local-job-95aaf777cfb448788b2be42e1e91c394.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-29T13:48:08.025348+00:00",
+              "monotonic_ns": 1095249722677001,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 829.015172222,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 765923328
+        }
+      },
+      "audit": null,
+      "evidence_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_operands694/receipt.json",
+          "sha256": "41b1425d7b8ac3e6dcd7afec518c9a7cea9b8997bfb694e9cb70892625594e58",
+          "size_bytes": 1631
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_operands694/case_reports.jsonl",
+          "sha256": "9955d627a7466a75fe6ed1d473d211a1a9748929ed61930a6fdee9e5da2c5a2d",
+          "size_bytes": 22480
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_operands694/junit.xml",
+          "sha256": "5a620df78221f1add7554b56130f4ded39c716986a35733ade22f047aaea7900",
+          "size_bytes": 22347
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_operands694/stdout.txt",
+          "sha256": "9e0322d57db0f9a20ad59727ad2fe5d411698e0f371312d1e984d387450fa01c",
+          "size_bytes": 21121
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_operands694/stderr.txt",
+          "sha256": "67d0b268825c0cacb2652ecb811a725b4ecb752a19f57217fa384c71754949fe",
+          "size_bytes": 1305
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155_operands694/selected_request.json",
+          "sha256": "7d0ffedb47aa86190efabf804104825d92edd682ebd84f46f9aa6a1156b43416",
+          "size_bytes": 2722
+        }
+      ]
+    },
+    {
+      "attempt": "check155b_operands694",
+      "test_case_counts": {
+        "passed": 38,
+        "failed": 0,
+        "skipped": 0
+      },
+      "receipt": {
+        "returncode": 1,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155b_operands694/handle.json",
+        "unit": "gene-local-job-60ecb20e5f7a47279f3ac64aa5413907.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "exit-code",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "1",
+            "ended": {
+              "at": "2026-10-29T13:48:26.990360+00:00",
+              "monotonic_ns": 1095268687688446,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 708.11022082,
+          "native_returncode": 1,
+          "observed_scratch_bytes": 766468096
+        }
+      },
+      "audit": null,
+      "evidence_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155b_operands694/receipt.json",
+          "sha256": "c0d768d778e5a57aebf5db27a49fd1e9918615f016864e930a176fb8e3fa1ad3",
+          "size_bytes": 1631
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155b_operands694/case_reports.jsonl",
+          "sha256": "6a7caadd1e96188b8992c957265a025e60ad8fb823c5b12dbcf555fdc82c8c6c",
+          "size_bytes": 7659
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155b_operands694/junit.xml",
+          "sha256": "e43b4a31d11cb7e9d3ffb2c966a4ba9beb1bd0362ab19b8e47d657326d31358c",
+          "size_bytes": 5957
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155b_operands694/stdout.txt",
+          "sha256": "a437a61da1718ce977462d62f521eaaf1e44ca747876b2a955f1611f54de063a",
+          "size_bytes": 111
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155b_operands694/stderr.txt",
+          "sha256": "26866fe50b12c4f53000d8e4e33b8942d3a9dce0d84ba88d7e0f1fd92ca06d0a",
+          "size_bytes": 1314
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155b_operands694/selected_request.json",
+          "sha256": "4dee42f2e2d669468841a9874e4669b60bc0b4c554b1ddfa040c74a56a09ace5",
+          "size_bytes": 2735
+        }
+      ]
+    },
+    {
+      "attempt": "check155c_operands694",
+      "test_case_counts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/handle.json",
+        "unit": "gene-local-job-bda396762d7341bcb2c80542448e1006.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T13:40:10.003920+00:00",
+              "monotonic_ns": 1094771701246294,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 70.557876548,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 755847168
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/receipt.json",
+          "sha256": "fcbad02140548ba5507dcd627f6da63e4d8b7711d347d4770fd263dc90afa697",
+          "size_bytes": 1629
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/case_reports.jsonl",
+          "sha256": "60a566e18524d32c30750448e019124a46b42e47ce439f038ca5dce42e6d3810",
+          "size_bytes": 404
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/junit.xml",
+          "sha256": "b3537c8eb9f50ed44b9099e1f9f3b4dfbd0d256eb7ef70ba31a0e2f7a6e5cefb",
+          "size_bytes": 551
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/stdout.txt",
+          "sha256": "ebcaaec9bde9317ee3c2ce902852da009fbdc12d3b6fb4733a373fbb11101db7",
+          "size_bytes": 109
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/selected_request.json",
+          "sha256": "5adf8586e332b98976d8bd39fde56e22fe7869d6aaaa4c999cc2356e030fe961",
+          "size_bytes": 2916
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155c_operands694/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        }
+      ]
+    },
+    {
+      "attempt": "check155d_operands694",
+      "test_case_counts": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/handle.json",
+        "unit": "gene-local-job-356d6a054b2d4e8b8985a41e9711fc34.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T13:42:27.456159+00:00",
+              "monotonic_ns": 1094909153486687,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 127.912375137,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 756457472
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/receipt.json",
+          "sha256": "bb8ed104d37bf31309faa9834393fc93f64bbf947d7ca0d2b0fee1c2d65299ff",
+          "size_bytes": 1630
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/case_reports.jsonl",
+          "sha256": "cece929e8aa1e0b09916ecf204465e9c328390c64304712780ff604565243667",
+          "size_bytes": 875
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/junit.xml",
+          "sha256": "668bb49227baf1a5eae4fd6b7636e0145eeec243abc68af4c01a923ed26ce2d3",
+          "size_bytes": 918
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/stdout.txt",
+          "sha256": "dce4510bb2ee6f7ac72b2c7691eb066ec2e311d46c05b6f0498687f797782076",
+          "size_bytes": 110
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/selected_request.json",
+          "sha256": "56c79bc1c05415d6bb88f23d02347aea40bbfcdc759d7f8b4fe1959521098b15",
+          "size_bytes": 2923
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155d_operands694/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        }
+      ]
+    },
+    {
+      "attempt": "check155e_operands694",
+      "test_case_counts": {
+        "passed": 43,
+        "failed": 0,
+        "skipped": 0
+      },
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/handle.json",
+        "unit": "gene-local-job-9eb85026df6a4d2e9dba5388ca6d42e2.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-29T13:52:08.229688+00:00",
+              "monotonic_ns": 1095489927016710,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 86.415699123,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 767913984
+        }
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "evidence_pins": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/receipt.json",
+          "sha256": "c7b2006a85fe0a3f69de348523e0c415f931f51de1ad65437af6348ccc146a64",
+          "size_bytes": 1629
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/case_reports.jsonl",
+          "sha256": "a6fb5b73ff48eaf0a17a30f46363a4323b0a7e763136ff29144d2f9152ae109f",
+          "size_bytes": 8755
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/junit.xml",
+          "sha256": "9029d13f1f030132b4cdcfb04ce695c73be08dece7fd289bbaf1f85e4eb48e95",
+          "size_bytes": 6739
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/stdout.txt",
+          "sha256": "498cd983e66e820c1544a5a58a495a922ff2e81a4049d82cf3832c3608a4681e",
+          "size_bytes": 110
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/selected_request.json",
+          "sha256": "3c8c74192716e4b5e364f49dc67f234096c64a7c8a77fd7ff0be5f7d9cdd50b8",
+          "size_bytes": 2735
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check155e_operands694/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        }
+      ]
+    }
+  ],
+  "scientific_execution": {
+    "new_fba_solves": 0,
+    "new_acquisition": 0,
+    "installs": 0,
+    "scientific_stack_modules_loaded": [],
+    "qualification": "Synthetic custody fixtures using real Store/BindingContext/receipt primitives; no scientific model parsing, grading, optimization or Workflow invocation."
+  },
+  "historical_failures": {
+    "check155": "30 fixture errors: source fixture used Store.put record dictionary as a receipt reference; corrected to its id. Seven cases passed. Production behavior was not the cause.",
+    "check155b": {
+      "pytest_passed": 38,
+      "native_receipt_returncode": 1,
+      "post_test_audit_available": false,
+      "exception": "FileNotFoundError: [Errno 2] No such file or directory: '/usr/lib/x86_64-linux-gnu/libpthread.so.0 (deleted)'",
+      "qualification": "Deleted mapping during post-test mapped() observation. Original outcome preserved; native runtime unchanged was not established for this original run. Final155e reverified all43 cases with clean current-runtime audit."
+    }
+  },
+  "status_observation_qualification": "Two original c/d systemctl status observations timed out at5 seconds; same handles were reobserved and collected without relaunch. Both original receipts returned0 and terminal/quiescent.",
+  "scope_limits": [
+    "Immutable control-artifact authentication and persistence belong to the selected host action. Self-consistent supplied receipt JSON alone is not historical source-record authenticity.",
+    "Actual launch commission/request matching, resource registration, bounded worker byte reads and prior-source parser binding remain root integration work.",
+    "No scientific-parent typed return, full Workflow, closed scientific replay, tool-message template or live FBA episode completion is claimed.",
+    "No shared numerical schema/sheet/calculator/reader/producer or progress/inventory/prompt/historical file was edited by694."
+  ],
+  "whole_tool_completion_increment": 0
+}

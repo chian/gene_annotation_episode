@@ -1,0 +1,23 @@
+--- verification/tool_graders_hmmer_map_integration_2026-10-28_526/before/gene_annotation_episode/native_hmmer_preparation_result_publication.py
++++ gene_annotation_episode/native_hmmer_preparation_result_publication.py
+@@ -115,7 +115,10 @@
+     if verify_files:
+         _validate_rows(store, capture, bundle)
+     occurrences, custody_failures = qualified_occurrences(bundle, prepared["bundle_artifact_ref"], capture)
+-    metadata, metadata_failures = effective_metadata(bundle, occurrences)
++    # A saved publication keeps its original interpretation. Absence of this
++    # optional field is historical absence, never permission to upgrade it.
++    metadata, metadata_failures = effective_metadata(bundle, occurrences,
++        include_map_context="map_reconstruction_context" in stable["effective_metadata"])
+     if (native_infernal_digest(occurrences) != native_infernal_digest(prepared["occurrences"])
+             or native_infernal_digest(stable["effective_metadata"]) != native_infernal_digest(metadata)
+             or native_infernal_digest(stable["grading_context"]) != native_infernal_digest(grading_context(bundle, occurrences, metadata))
+@@ -259,7 +262,7 @@
+     original_plan = _read_record(capture_directory, "capture-plan.json")
+     bundle = validate_original_bundle(bundle, original_plan)
+     occurrences, problems = qualified_occurrences(bundle, capture["bundle_artifact_ref"], capture)
+-    metadata, metadata_failures = effective_metadata(bundle, occurrences)
++    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+     failures = unique_failures([*problems, *metadata_failures])
+     files = [{"occurrence_id": r["occurrence_id"], "path": str(_artifact_path(store, r["artifact_ref"]))}
+              for r in eligible_occurrences(occurrences)]

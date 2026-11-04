@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P11",
+  "name": "Distinguish a possible route from the route actually used",
+  "description": "Keep feasibility or measured capacity separate from native use. Contrast ordinary use, conditional backup, side activity and unused capacity without forcing a single-role explanation.",
+  "use_when": "A reaction, model, structure or environmental gene detection is being promoted to main native role or actual flux.",
+  "live_alternatives": [
+    "Capacity supplies the proposed native contribution.",
+    "It supplies a conditional backup/secondary role.",
+    "It is side activity or possible chemistry without demonstrated use.",
+    "Another route supplies the native output."
+  ],
+  "decision_guidance": [
+    "Select observations with different expected consequences for native use and mere capacity: endogenous products, demand-specific perturbations or competing routes.",
+    "Retain genuine earlier side activity when a better native role appears; compatible conditional roles need not be exclusive.",
+    "Compare plausible exposure/kinetics without inventing concentrations or native substrates."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Independent native observations agree",
+      "then_consider": "Support use under those conditions, not total flux or exclusivity."
+    },
+    {
+      "if_observed": "Only overexpression/high-dose/artificial activity is positive",
+      "then_consider": "Retain bounded capacity with ordinary responsibility unresolved."
+    },
+    {
+      "if_observed": "A stronger native explanation is established",
+      "then_consider": "Revise priority/scope without deleting genuine prior chemistry."
+    }
+  ],
+  "boundary": "This supplies a discriminating question, not an acceptance gate. P08 tests prerequisites and P10 feasibility; a stronger library label cannot replace native evidence.",
+  "evidence": [
+    {
+      "case_group": "spec_yihu_native_sulfonate",
+      "case_id": "spec_yihu_native_sulfonate",
+      "source_url": "https://doi.org/10.1021/acscatal.9b04427",
+      "source_locator": "Case-record observation; inspected scope: 2009 relevant whole results/discussion and reaction methods; 2014 primary main results, enzyme methods and relevant extended-data legends; 2020 accepted manuscript sequence, kinetics, structure and conclusion sections inspected. Supporting spectra/kinetic fits were not reanalyzed.",
+      "observation": "Real SSA reduction coexists with stronger native sulfoglycolysis evidence and much higher SLA efficiency.",
+      "limit": "An earlier secondary stress role is not categorically excluded; no flux recomputation."
+    },
+    {
+      "case_group": "replacement_folM",
+      "case_id": "replacement_folM",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2805310/",
+      "source_locator": "Case-record observation; inspected scope: Complete relevant main texts/methods. P. aeruginosa validation deletes folX, not folM; natural E. coli use of exported monapterin remains unresolved in this study.",
+      "observation": "Perturbed-system DHFR rescue coexists with stronger monapterin-pathway evidence and substrate preference.",
+      "limit": "Natural E. coli use of exported monapterin remained unresolved."
+    },
+    {
+      "case_group": "spec_yigl_conditional_b6",
+      "case_id": "spec_yigl_conditional_b6",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11409668/",
+      "source_locator": "Case-record observation; inspected scope: 2024 relevant complete results/discussion and assay/genotype methods inspected; 2013 relevant regulation, competition and growth results inspected. Supplements not independently analyzed. Fresh public-record probe documented in raw/live_probe_summary.json.",
+      "observation": "Direct PNP hydrolysis plus native load/deletion contrasts supports conditional protection, not primary normal-state catabolism.",
+      "limit": "Established sugar-stress participation is retained."
+    },
+    {
+      "case_group": "organism_21_vcra",
+      "case_id": "organism_21_vcra",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC492378/",
+      "source_locator": "Case-record observation; inspected scope: Main purification/substrate/gene-identification/transcription Results and cultivation/assay Methods. GenBank AY322364 reported; no new field dechlorination or sequence analysis.",
+      "observation": "Activity-linked peptide identity supports VcrA; field vcrAB DNA alone is capacity evidence, not field flux.",
+      "limit": "Partial purification and absence of knockout retain assignment limits."
+    }
+  ]
+}

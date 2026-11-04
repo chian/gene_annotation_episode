@@ -1,0 +1,595 @@
+# Copyright (C) 2022 Roberto Rossini <roberros@uio.no>
+# SPDX-License-Identifier: MIT
+
+name: MacOS CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/cache-test-dataset.yml"
+      - ".github/workflows/macos-ci.yml"
+      - "cmake/**"
+      - "examples/**"
+      - "src/**"
+      - "test/integration/**"
+      - "test/units/**"
+      - "utils/devel/build_dependencies.py"
+      - "CMakeLists.txt"
+      - "conanfile.py"
+
+  pull_request:
+    paths:
+      - ".github/workflows/cache-test-dataset.yml"
+      - ".github/workflows/macos-ci.yml"
+      - "cmake/**"
+      - "examples/**"
+      - "src/**"
+      - "test/integration/**"
+      - "test/units/**"
+      - "utils/devel/build_dependencies.py"
+      - "CMakeLists.txt"
+      - "conanfile.py"
+
+# https://stackoverflow.com/a/72408109
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  matrix-factory:
+    name: Generate job matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-result.outputs.result }}
+    steps:
+      - uses: actions/github-script@v8
+        id: set-result
+        with:
+          script: |
+            // Documentation
+            // https://docs.github.com/en/actions/learn-github-actions/contexts#fromjson
+            // https://github.com/actions/runner/issues/982#issuecomment-809360765
+
+            var includes = []
+
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '15', os: 'macos-14', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '16', os: 'macos-15', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '16', os: 'macos-15-intel', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '17', os: 'macos-26', cmake: '4.1.*', build_type: 'Release', developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '15', os: 'macos-14', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '16', os: 'macos-15', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '16', os: 'macos-15-intel', cmake: '4.1.*', build_type: 'Debug', developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '17', os: 'macos-26', cmake: '4.1.*', build_type: 'Debug',   developer_mode: 'OFF' })
+            includes.push({ compiler_name: 'apple-clang', compiler_version: '17', os: 'macos-26', cmake: '4.1.*', build_type: 'Release', developer_mode: 'ON' })
+
+            return { include: includes }
+
+  cache-test-dataset:
+    name: Cache test dataset
+    uses: paulsengroup/hictk/.github/workflows/cache-test-dataset.yml@ec6c8c43e445043aa05d189aa2799c949166cf27
+
+  build-deps-dbg-x86:
+    name: Build Conan deps (Debug; x86)
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-macos.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: Debug
+      conan-version: "2.21.*"
+      cppstd: 17
+      os: macos-15-intel
+      ref: main
+
+  build-deps-rel-x86:
+    name: Build Conan deps (Release; x86)
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-macos.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: Release
+      conan-version: "2.21.*"
+      cppstd: 17
+      os: macos-15-intel
+      ref: main
+
+  build-deps-dbg-arm64:
+    name: Build Conan deps (Debug; arm64)
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-macos.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: Debug
+      conan-version: "2.21.*"
+      cppstd: 17
+      os: macos-26
+      ref: main
+
+  build-deps-rel-arm64:
+    name: Build Conan deps (Release; arm64)
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-macos.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: Release
+      conan-version: "2.21.*"
+      cppstd: 17
+      os: macos-26
+      ref: main
+
+  build-project:
+    name: Build project
+    needs:
+      - matrix-factory
+      - build-deps-dbg-arm64
+      - build-deps-dbg-x86
+      - build-deps-rel-arm64
+      - build-deps-rel-x86
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix-factory.outputs.matrix) }}
+
+    env:
+      CCACHE_DIR: "${{ github.workspace }}/ccache-cache"
+      CCACHE_COMPILERCHECK: "content"
+      CCACHE_COMPRESSLEVEL: "1"
+      CCACHE_MAXSIZE: "10G"
+      TMPDIR: "/tmp/"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Detect number available CPUs
+        run: |
+          ncpus="$(python -c 'import multiprocessing as mp; print(mp.cpu_count())')"
+
+          {
+            echo "NPROC=$ncpus"
+            echo "CMAKE_BUILD_PARALLEL_LEVEL=$ncpus"
+            echo "CTEST_PARALLEL_LEVEL=$ncpus"
+          } | tee -a "$GITHUB_ENV"
+
+      - name: Install build deps
+        run: |
+          pip install 'cmake==${{ matrix.cmake }}'
+          brew install ccache
+
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          set -u
+
+          os='${{ matrix.os }}'
+          compiler='${{ matrix.compiler_name }}'
+          compiler_version='${{ matrix.compiler_version }}'
+          build_type='${{ matrix.build_type }}'
+          if [ '${{ matrix.developer_mode }}' = ON ]; then
+            suffix=-devel
+          else
+            suffix=''
+          fi
+
+          if [[ "$build_type" == Debug && "$os" == *-intel ]]; then
+            deps_cache_key='${{ needs.build-deps-dbg-x86.outputs.cache-key }}'
+            deps_cache_path='${{ needs.build-deps-dbg-x86.outputs.tar }}'
+          elif [[ "$build_type" == Release && "$os" == *-intel ]]; then
+            deps_cache_key='${{ needs.build-deps-rel-x86.outputs.cache-key }}'
+            deps_cache_path='${{ needs.build-deps-rel-x86.outputs.tar }}'
+          elif [[ "$build_type" == Debug && "$os" != *-intel ]]; then
+            deps_cache_key='${{ needs.build-deps-dbg-arm64.outputs.cache-key }}'
+            deps_cache_path='${{ needs.build-deps-dbg-arm64.outputs.tar }}'
+          elif [[ "$build_type" == Release && "$os" != *-intel ]]; then
+            deps_cache_key='${{ needs.build-deps-rel-arm64.outputs.cache-key }}'
+            deps_cache_path='${{ needs.build-deps-rel-arm64.outputs.tar }}'
+          else
+            1>&2 echo 'Unknown build type "${{ matrix.build_type }}" and/or os "${{ matrix.os }}"'
+            exit 1
+          fi
+
+          deps_hash="$(echo "$deps_cache_key" | shasum -a256 | cut -f 1 -d ' ')"
+
+          # This can be used by to always update a cache entry (useful e.g. for ccache)
+          current_date="$(date '+%Y-%m-%d-%H:%M:%S')"
+
+          ccache_key_prefix="ccache-$os-$compiler-$compiler_version-$deps_hash-$build_type$suffix"
+          ccache_key_prefix="$(echo "$ccache_key_prefix" |
+                               tr -c '[:alnum:]._-' '-' |
+                               sed -E 's/-+/-/g' |
+                               sed 's/-$//' |
+                               tr '[:upper:]' '[:lower:]'
+                             )"
+
+          {
+            echo "deps-key=${deps_cache_key}"
+            echo "deps-path=${deps_cache_path}"
+            echo "ccache-key=${ccache_key_prefix}-$GITHUB_REF-${current_date}"
+            echo "ccache-restore-key-1=$ccache_key_prefix-$GITHUB_REF"
+            echo "ccache-restore-key-2=$ccache_key_prefix"
+          } | tee -a "$GITHUB_OUTPUT"
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ steps.cache-key.outputs.deps-key }}
+          path: ${{ steps.cache-key.outputs.deps-path }}
+          fail-on-cache-miss: true
+
+      - name: Unpack dependencies
+        run: gtar -C "$TMPDIR" -xf '${{ steps.cache-key.outputs.deps-path }}'
+
+      - name: Configure project
+        run: |
+          # shellcheck disable=SC2193
+          if [[ '${{ matrix.os }}' == *14* ]]; then
+            ASAN_SYMBOLIZER_PATH="$(brew --prefix llvm@15)/bin/llvm-symbolizer"
+          elif [[ '${{ matrix.os }}' == *15* ]]; then
+            ASAN_SYMBOLIZER_PATH="$(brew --prefix llvm@18)/bin/llvm-symbolizer"
+          else
+            ASAN_SYMBOLIZER_PATH="$(brew --prefix llvm@20)/bin/llvm-symbolizer"
+          fi
+
+          export ASAN_SYMBOLIZER_PATH
+          which "$ASAN_SYMBOLIZER_PATH"
+
+          cmake -DCMAKE_BUILD_TYPE='${{ matrix.build_type }}'          \
+                -DCMAKE_C_STANDARD=17                                  \
+                -DCMAKE_CXX_STANDARD=17                                \
+                -DCMAKE_PREFIX_PATH="$TMPDIR/deps/cmake/"              \
+                -DENABLE_DEVELOPER_MODE='${{ matrix.developer_mode }}' \
+                -DHICTK_ENABLE_TESTING=ON                              \
+                -DHICTK_BUILD_EXAMPLES=ON                              \
+                -DOPT_ENABLE_CLANG_TIDY=OFF                            \
+                -DOPT_ENABLE_CPPCHECK=OFF                              \
+                -DHICTK_DOWNLOAD_TEST_DATASET=OFF                      \
+                -DHICTK_ENABLE_GIT_VERSION_TRACKING=OFF                \
+                -DCMAKE_INSTALL_PREFIX=dest                            \
+                -DCMAKE_C_FLAGS='-g'                                   \
+                -DCMAKE_CXX_FLAGS='-g'                                 \
+                -S '${{ github.workspace }}'                           \
+                -B '${{ github.workspace }}/build'
+
+      - name: Restore Ccache folder
+        id: cache-ccache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ steps.cache-key.outputs.ccache-restore-key-1 }}
+          restore-keys: ${{ steps.cache-key.outputs.ccache-restore-key-2 }}
+          path: ${{ env.CCACHE_DIR }}
+
+      - name: Reset Ccache stats
+        run: ccache --zero-stats
+
+      - name: Build project
+        id: cmake-build
+        run: |
+          echo "start=$(date +%s)" >> "$GITHUB_OUTPUT"
+          cmake --build '${{ github.workspace }}/build'
+
+      - name: Package binaries
+        run: |
+          cmake --install build
+
+          gtar -cf - -C dest/ bin | zstd -T0 -13 -o binaries.tar.zst
+
+      - name: Package unit tests
+        run: |
+          rm -r build/src
+          gtar --exclude='*.o' -cf - build/ | zstd -T0 -13 -o unit-tests.tar.zst
+
+      - name: Upload unit tests
+        uses: actions/upload-artifact@v5
+        with:
+          name: "unit-tests-${{ matrix.os }}-\
+            ${{ matrix.compiler_name }}-\
+            ${{ matrix.compiler_version }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+          path: unit-tests.tar.zst
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v5
+        with:
+          name: "binaries-${{ matrix.os }}-\
+            ${{ matrix.compiler_name }}-\
+            ${{ matrix.compiler_version }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+          path: binaries.tar.zst
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Print Ccache statistics (pre-cleanup)
+        run: |
+          ccache --show-stats \
+                 --show-compression \
+                 --verbose
+
+      - name: Cleanup Ccache folder
+        run: |
+          timestamp="$(date +%s)"
+          time_delta="$(( timestamp - ${{ steps.cmake-build.outputs.start }} + 60 ))"
+          ccache --evict-older-than="${time_delta}s"
+          ccache --recompress=19 --recompress-threads="$NPROC"
+          ccache --cleanup --max-size 1G
+
+      - name: Print Ccache statistics (post-cleanup)
+        run: |
+          ccache --show-stats \
+                 --show-compression \
+                 --verbose
+
+      - name: Save Ccache folder
+        uses: actions/cache/save@v4
+        with:
+          key: ${{ steps.cache-key.outputs.ccache-key }}
+          path: ${{ env.CCACHE_DIR }}
+        env:
+          ZSTD_CLEVEL: 1
+
+      - name: Generate list of stale cache entries
+        id: stale-cache
+        if: steps.cache-ccache.outputs.cache-matched-key != ''
+        run: |
+          fname='stale-cache-${{ matrix.os }}-${{ matrix.compiler_name }}-${{ matrix.compiler_version }}-${{ matrix.build_type }}-${{ matrix.developer_mode }}.txt'
+          echo '${{ steps.cache-ccache.outputs.cache-matched-key }}' > "$fname"
+
+          echo "name=$fname" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Upload stale cache entries
+        if: steps.cache-ccache.outputs.cache-matched-key != ''
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ steps.stale-cache.outputs.name }}
+          path: "${{ steps.stale-cache.outputs.name }}"
+          if-no-files-found: error
+          retention-days: 1
+
+  purge-stale-ccache-entries:
+    name: Purge stale CCache entries
+    needs: [build-project]
+    uses: paulsengroup/hictk/.github/workflows/purge-stale-ccache-entries.yml@18f6815c7416feef4b4bd9ceffe69baae7fefabb
+    permissions:
+      contents: read
+      actions: write
+
+  run-unit-tests:
+    name: Run unit tests
+    needs: [matrix-factory, cache-test-dataset, build-project]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix-factory.outputs.matrix) }}
+
+    env:
+      HICTK_CI: "1"
+      ASAN_OPTIONS: "detect_container_overflow=0"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Restore test dataset
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.cache-test-dataset.outputs.cache-key }}
+          path: test/data/hictk_test_data.tar.zst
+          fail-on-cache-miss: true
+
+      - name: Download unit tests artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: "unit-tests-${{ matrix.os }}-\
+            ${{ matrix.compiler_name }}-\
+            ${{ matrix.compiler_version }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+
+      - name: Extract binaries test dataset
+        run: |
+          gtar -xf unit-tests.tar.zst
+          gtar -xf test/data/hictk_test_data.tar.zst
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install test dependencies
+        run: pip install 'cmake==${{ matrix.cmake }}'
+
+      - name: Run unit tests
+        run: |
+          # shellcheck disable=SC2193
+          if [[ '${{ matrix.os }}' == *14* ]]; then
+            ASAN_SYMBOLIZER_PATH="$(brew --prefix llvm@15)/bin/llvm-symbolizer"
+          elif [[ '${{ matrix.os }}' == *15* ]]; then
+            ASAN_SYMBOLIZER_PATH="$(brew --prefix llvm@18)/bin/llvm-symbolizer"
+          else
+            ASAN_SYMBOLIZER_PATH="$(brew --prefix llvm@20)/bin/llvm-symbolizer"
+          fi
+
+          export ASAN_SYMBOLIZER_PATH
+          which "$ASAN_SYMBOLIZER_PATH"
+          ctest --test-dir build/   \
+                --schedule-random   \
+                --output-on-failure \
+                --no-tests=error    \
+                --timeout 240
+
+  run-integration-tests:
+    name: Run integration tests
+    needs: [matrix-factory, cache-test-dataset, build-project]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix-factory.outputs.matrix) }}
+
+    env:
+      HICTK_CI: "1"
+      ASAN_OPTIONS: "detect_container_overflow=0"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache-dependency-path: "test/integration/pyproject.toml"
+
+      - name: Restore test dataset
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.cache-test-dataset.outputs.cache-key }}
+          path: test/data/hictk_test_data.tar.zst
+          fail-on-cache-miss: true
+
+      - name: Download binaries artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: "binaries-${{ matrix.os }}-\
+            ${{ matrix.compiler_name }}-\
+            ${{ matrix.compiler_version }}-\
+            ${{ matrix.build_type }}-\
+            ${{ matrix.developer_mode }}"
+
+      - name: Extract binaries test dataset
+        run: |
+          gtar -xf binaries.tar.zst
+          gtar -xf test/data/hictk_test_data.tar.zst
+
+      - name: Install test suite
+        run: |
+          python3.12 -m venv venv --upgrade
+          venv/bin/pip install test/integration
+
+      - name: Detect number available CPUs
+        run: |
+          ncpus="$(python -c 'import multiprocessing as mp; print(mp.cpu_count())')"
+
+          echo "NPROC=$ncpus" | tee -a "$GITHUB_ENV"
+
+      - name: Test hictk balance
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.balance.json \
+            --suites=balance
+
+      - name: Test hictk convert
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.convert.json \
+            --suites=convert
+
+      - name: Test hictk dump
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.dump.json \
+            --suites=dump
+
+      - name: Test hictk fix-mcool
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.fix-mcool.json \
+            --suites=fix-mcool
+
+      - name: Test hictk load
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.load.json \
+            --suites=load
+
+      - name: Test hictk merge
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.merge.json \
+            --suites=merge
+
+      - name: Test hictk metadata
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.metadata.json \
+            --suites=metadata
+
+      - name: Test hictk rename-chromosomes
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.rename-chromosomes.json \
+            --suites=rename-chromosomes
+
+      - name: Test hictk validate
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.validate.json \
+            --suites=validate
+
+      - name: Test hictk zoomify
+        run: |
+          venv/bin/hictk_integration_suite \
+            bin/hictk \
+            test/integration/config.toml \
+            --data-dir test/data \
+            --threads "$NPROC" \
+            --result-file integration-test-report.zoomify.json \
+            --suites=zoomify
+
+  macos-ci-status-check:
+    name: Status Check (MacOS CI)
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    needs:
+      - build-project
+      - run-unit-tests
+      - run-integration-tests
+
+    steps:
+      - name: Collect job results
+        if: |
+          needs.build-project.result != 'success'      ||
+          needs.run-unit-tests.result != 'success'     ||
+          needs.run-integration-tests.result != 'success'
+        run: exit 1

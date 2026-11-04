@@ -1,0 +1,102 @@
+"""Select full literature TASK inserts from actual requested or received work.
+
+Pure instructional selection only: no source access, sheet loading, scientific
+calculation, action selection or observations. Capability catalogues and legacy
+work booleans are deliberately not evidence that a method was selected.
+"""
+from collections.abc import Mapping
+from dataclasses import dataclass
+from importlib import import_module
+import json
+
+from .literature_numerical_contracts import is_registered_schema
+
+from .literature_kinetic_summary_precision_prompt import KINETIC_SUMMARY_PRECISION_TASK
+from .literature_endpoint_signal_prompt import ENDPOINT_SIGNAL_TASK
+from .literature_measurement_comparison_prompt import MEASUREMENT_COMPARISON_TASK
+from .literature_product_coupling_prompt import PRODUCT_COUPLING_TASK
+from .literature_calibration_recovery_prompt import CALIBRATION_RECOVERY_TASK
+from .literature_measurement_validation_prompt import MEASUREMENT_VALIDATION_TASK
+from .literature_compiled_assay_prompt import COMPILED_ASSAY_TASK
+from .literature_compiled_assay_prompt import COMMON_ASSESSMENT_TASK
+from .literature_rate_observation_prompt import RATE_OBSERVATION_TASK
+from .literature_rate_observation_prompt import REPORTED_CURVE_TASK
+from .literature_rate_replicate_prompt import RATE_REPLICATE_TASK
+from .literature_assay_prompt import ASSAY_TASK
+from .literature_binding_prompt import BINDING_TASK
+from .literature_binding_prompt import BINDING_MODEL_TASK
+from .literature_binding_interaction_model_prompt import BINDING_INTERACTION_MODEL_TASK
+from .literature_kinetic_model_prompt import KINETIC_MODEL_TASK
+from .literature_transport_prompt import TRANSPORT_TASK
+from .literature_perturbation_prompt import PERTURBATION_TASK
+from .literature_structure_prompt import STRUCTURE_TASK
+from .literature_reaction_prompt import REACTION_TASK
+from .literature_context_prompt import CONTEXT_TASK
+from .literature_figure_prompt import FIGURE_TASK
+from .literature_partner_prompt import PARTNER_TASK
+from .literature_ratio_source_prompt import SOURCE_RATIO_TASK
+from .literature_controlled_response_prompt import CONTROLLED_RESPONSE_TASK
+from .literature_gel_prompt import GEL_TASK
+from .literature_completion_time_prompt import COMPLETION_TIME_TASK
+from .literature_active_site_prompt import ACTIVE_SITE_TASK
+from .literature_product_partition_prompt import PRODUCT_PARTITION_TASK
+from .literature_channel_prompt import CHANNEL_TASK
+from .literature_ion_discrimination_prompt import ION_DISCRIMINATION_TASK
+from .literature_rate_observation_prompt import REPORTED_CURVE_SCOPE_TASK
+
+NATIVE_KINETIC_TASK = 'Read the selected source-reported kinetic parameter or requested descriptive parameter comparison for the assayed reference molecule. Identify the exact source row or passage, parameter definition, organism, molecule, construct, substrate, preparation, experimental system, endpoint, conditions and normalization. Keep Km, kcat and kcat/KM distinct. A single parameter can answer a magnitude question without a second comparison arm; preserve a missing denominator rather than inventing a reference, zero, affinity or preference contrast. Possible functions can emerge from supplied sequence, selected contents or snippets; an initial candidate annotation or searchable name is not required.\n\nSelect the complete native number, its actual unit and the source-qualified uncertainty and count with their exact meanings. Preserve bounds, approximations and untyped spread; do not borrow units, uncertainty or repetition meaning from a neighboring parameter or assay. When a comparison is requested, establish the actual molecule/construct relationship, separately assayed substrates, parameter definitions, normalization and protocols. A reported-protocol ratio is not automatically common-condition preference, higher Km is not automatically stronger affinity, and missing comparison relationships do not erase a valid individual parameter. Nominate source-supported selectors; deterministic readers and calculators perform parsing, validation, conversion and available arithmetic.\n\nKeep the parameter magnitude, reported SD, physical preparation count and statistical estimator meaning separate. If summary precision for the same report is requested, preserve shared source and measurement ownership without counting its parameter, spread, count or derived precision as independent evidence. Physical preparation count alone does not establish statistical n, central-value mean identity, covariance or total accuracy. A supplemental kinetic log model requires its own actual two-estimate assignment, received sheet and supported uncertainty-model inputs; do not invoke it merely because a native parameter or descriptive contrast is requested. Return exactly the requested numerical components and necessary scientific qualifications, retaining valid partials and distinguishing missing source information from unimplemented functions. No overall category grade, function probability, target-transfer weight or final annotation credit is inferred.'
+
+@dataclass(frozen=True)
+class _Family:
+    source: str
+    task: str
+    storage_module: str
+    repository_class: str
+    requested: str
+    operation: str
+
+
+# These describe existing instructions and selected-operation metadata only.
+# They do not register capabilities or expand any numerical return.
+_FAMILIES = (
+    _Family("literature_kinetic_cells", NATIVE_KINETIC_TASK, "literature_kinetic_storage", "LiteratureKineticRepository", "requested_kinetic_components", "literature.kinetic.populate"),
+    _Family("literature_kinetic_summary_precision_cells", KINETIC_SUMMARY_PRECISION_TASK, "literature_kinetic_summary_precision_storage", "LiteratureKineticSummaryPrecisionRepository", "requested_kinetic_summary_precision_components", "literature.kinetic.populate"),
+    _Family("literature_endpoint_signal_cells", ENDPOINT_SIGNAL_TASK, "literature_endpoint_signal_storage", "LiteratureEndpointSignalRepository", "requested_endpoint_signal_components", "literature.figure.populate"),
+    _Family("literature_measurement_comparison_cells", MEASUREMENT_COMPARISON_TASK, "literature_measurement_comparison_storage", "LiteratureMeasurementComparisonRepository", "requested_measurement_comparison_components", "literature.measurement_comparison.populate"),
+    _Family("literature_product_coupling_cells", PRODUCT_COUPLING_TASK, "literature_product_coupling_storage", "LiteratureProductCouplingRepository", "requested_product_coupling_components", "literature.product_coupling.populate"),
+    _Family("literature_calibration_recovery_cells", CALIBRATION_RECOVERY_TASK, "literature_calibration_recovery_storage", "LiteratureCalibrationRecoveryRepository", "requested_calibration_recovery_components", "literature.calibration.recovery.populate"),
+    _Family("literature_measurement_validation_cells", MEASUREMENT_VALIDATION_TASK, "literature_measurement_validation_storage", "LiteratureMeasurementValidationRepository", "requested_measurement_validation_components", "literature.measurement_validation.populate"),
+    _Family("literature_compiled_assay_cells", COMPILED_ASSAY_TASK, "literature_compiled_assay_storage", "LiteratureCompiledAssayRepository", "requested_compiled_assay_components", "literature.assay.components.populate"),
+    _Family("literature_compiled_assay_v2_cells", COMPILED_ASSAY_TASK, "literature_compiled_assay_storage", "LiteratureCompiledAssayRepository", "requested_compiled_assay_components_v2", "literature.assay.components.populate"),
+    _Family("literature_compiled_assay_v3_cells", COMMON_ASSESSMENT_TASK, "literature_compiled_assay_storage", "LiteratureCompiledAssayRepository", "requested_compiled_assay_components_v3", "literature.assay.components.populate"),
+    _Family("literature_rate_observation_cells", RATE_OBSERVATION_TASK, "literature_rate_observation_storage", "LiteratureRateObservationRepository", "requested_rate_observation_components", "literature.rate.observations.populate"),
+    _Family("literature_rate_grid_cells", REPORTED_CURVE_TASK, "literature_rate_observation_storage", "LiteratureReportedCurveRepository", "requested_rate_grid_components", "literature.rate.observations.populate"),
+    _Family("literature_rate_replicate_cells", RATE_REPLICATE_TASK, "literature_rate_replicate_storage", "LiteratureRateReplicateRepository", "requested_rate_replicate_components", "literature.rate.replicates.populate"),
+    _Family("literature_assay_cells", ASSAY_TASK, "literature_assay_storage", "LiteratureAssayRepository", "requested_assay_components", "literature.assay.populate"),
+    _Family("literature_binding_cells", BINDING_TASK, "literature_binding_storage", "LiteratureBindingRepository", "requested_binding_components", "literature.binding.populate"),
+    _Family("literature_binding_model_cells", BINDING_MODEL_TASK, "literature_binding_model_storage", "LiteratureBindingModelRepository", "requested_binding_model_components", "literature.binding.model.populate"),
+    _Family("literature_binding_interaction_cells", BINDING_TASK, "literature_binding_interaction_storage", "LiteratureBindingInteractionRepository", "requested_binding_interaction_components", "literature.binding.interaction.populate"),
+    _Family("literature_binding_interaction_model_cells", BINDING_INTERACTION_MODEL_TASK, "literature_binding_interaction_model_storage", "LiteratureBindingInteractionModelRepository", "requested_binding_interaction_model_components", "literature.binding.interaction.model.populate"),
+    _Family("literature_kinetic_model_cells", KINETIC_MODEL_TASK, "literature_kinetic_model_storage", "LiteratureKineticModelRepository", "requested_kinetic_model_components", "literature.kinetic.model.populate"),
+    _Family("literature_transport_cells", TRANSPORT_TASK, "literature_transport_storage", "LiteratureTransportRepository", "requested_transport_components", "literature.transport.response.populate"),
+    _Family("literature_perturbation_cells", PERTURBATION_TASK, "literature_perturbation_storage", "LiteraturePerturbationRepository", "requested_perturbation_components", "literature.perturbation.populate"),
+    _Family("literature_structure_cells", STRUCTURE_TASK, "literature_structure_storage", "LiteratureStructureRepository", "requested_structure_components", "literature.structure.populate"),
+    _Family("literature_reaction_cells", REACTION_TASK, "literature_reaction_storage", "LiteratureReactionRepository", "requested_reaction_components", "literature.reaction.populate"),
+    _Family("literature_context_cells", CONTEXT_TASK, "literature_context_storage", "LiteratureContextRepository", "requested_context_components", "literature.context.populate"),
+    _Family("literature_figure_cells", FIGURE_TASK, "literature_figure_storage", "LiteratureFigureRepository", "requested_figure_components", "literature.figure.populate"),
+    _Family("literature_partner_cells", PARTNER_TASK, "literature_partner_storage", "LiteraturePartnerRepository", "requested_partner_components", "literature.partner.populate"),
+    _Family("literature_ratio_source_cells", SOURCE_RATIO_TASK, "literature_ratio_source_storage", "LiteratureRatioSourceRepository", "requested_ratio_source_components", "literature.ratio.source.populate"),
+    _Family("literature_controlled_response_component_cells", CONTROLLED_RESPONSE_TASK, "literature_controlled_response_storage", "LiteratureControlledResponseRepository", "requested_controlled_response_components", "literature.controlled_response.source_v3.populate"),
+    _Family("literature_gel_component_cells", GEL_TASK, "literature_gel_storage", "LiteratureGelRepository", "requested_gel_components", "literature.gel.populate"),
+    _Family("literature_completion_time_cells", COMPLETION_TIME_TASK, "literature_completion_time_storage", "LiteratureCompletionTimeRepository", "requested_completion_time_components", "literature.completion_time.populate"),
+    _Family("literature_active_site_cells", ACTIVE_SITE_TASK, "literature_active_site_storage", "LiteratureActiveSiteRepository", "requested_active_site_components", "literature.active_site.populate"),
+    _Family("literature_product_partition_cells", PRODUCT_PARTITION_TASK, "literature_product_partition_storage", "LiteratureProductPartitionRepository", "requested_product_partition_components", "literature.product_partition.populate"),
+    _Family("literature_channel_cells", CHANNEL_TASK, "literature_channel_storage", "LiteratureChannelRepository", "requested_channel_components", "literature.channel.populate"),
+    _Family("literature_ion_discrimination_cells", ION_DISCRIMINATION_TASK, "literature_ion_discrimination_storage", "LiteratureIonDiscriminationRepository", "requested_ion_discrimination_components", "literature.ion_discrimination.populate"),
+)
+_BY_SOURCE = {f.source: f for f in _FAMILIES}
+_BY_REQUEST = {f.requested: f.source for f in _FAMILIES}
+_BY_REQUEST.update({"requested_perturbation_summary_components": "literature_perturbation_cells",
+    "requested_gel_views": "literature_gel_component_cells",
+    "requested_controlled_response_views": "literature_controlled_response_component_cells"})
+

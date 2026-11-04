@@ -1,0 +1,28 @@
+--- check168/tests/test_flux_balance_input_versions_708.py
++++ tests/test_flux_balance_input_versions_708.py
+@@ -171,7 +171,9 @@
+     if fault == 'hash': versions[0]['content_sha256'] = 'f' * 64
+     elif fault == 'revision': versions[0]['version'] = 'another'
+     elif fault == 'order': versions = [*versions, deepcopy(versions[0])]
+-    else: scope = {'subject_refs': []}
++    else:
++        span = deepcopy(f.store.coverage(scope['subject_refs'][0])[0]);span['end'] -= 1
++        scope['segments'] = [span]
+     with pytest.raises(ValueError, match='flux_balance_input_(version|scope)_conflict'):
+         check(f, owner=owner, context=context, versions=versions, scope=scope)
+ 
+@@ -191,11 +193,12 @@
+     assert reads == [unrelated['artifact_ref']]
+     path = f.store.path / 'artifacts' / unrelated['sha256'][:2] / unrelated['sha256']
+     path.write_bytes(b'different synthetic bytes with unchanged metadata')
+-    with pytest.raises(ValueError, match='execution_input_version_conflict'):
++    with pytest.raises(ValueError, match='^artifact_digest_mismatch$'):
+         check(f, owner=owner)
+     # With no FBA assignment the original generic implementation owns failure.
++    path.write_bytes(b'unrelated synthetic primary708')
+     with pytest.raises(ValueError, match='execution_input_version_conflict'):
+-        check(f, owner=owner, versions=f.versions[-1:], assignments=[])
++        check(f, owner=owner, versions=[dict(f.versions[-1], content_sha256='f' * 64)], assignments=[])
+     assert reads == [unrelated['artifact_ref']] * 3
+ 
+ 

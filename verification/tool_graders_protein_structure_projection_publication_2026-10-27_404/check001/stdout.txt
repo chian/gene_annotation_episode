@@ -1,0 +1,310 @@
+.F.F..F.F.F.F.F.F.............                                           [100%]
+=================================== FAILURES ===================================
+_ test_selected_values_preserve_native_rows_and_never_access_store[extraction] _
+
+kind = 'extraction'
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    def test_selected_values_preserve_native_rows_and_never_access_store(kind):
+>       rows, calculation = selected(kind)
+                            ^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': None, 'delivery_kind': 'values', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+_ test_selected_values_preserve_native_rows_and_never_access_store[unavailable] _
+
+kind = 'unavailable'
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    def test_selected_values_preserve_native_rows_and_never_access_store(kind):
+>       rows, calculation = selected(kind)
+                            ^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': None, 'delivery_kind': 'values', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+____ test_artifact_retains_exact_selected_rows_and_replays[None-extraction] ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/check001/temporary/pytest/test_artifact_retains_exact_se1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78eacaa6bbc0>
+kind = 'extraction', window = None
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    @pytest.mark.parametrize("window", [None, {"offset_0based": 1, "limit": 2}, {"offset_0based": 100, "limit": 1}])
+    def test_artifact_retains_exact_selected_rows_and_replays(tmp_path, monkeypatch, kind, window):
+>       rows, calculation = selected(kind, "artifact", window)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': None, 'delivery_kind': 'artifact', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+___ test_artifact_retains_exact_selected_rows_and_replays[None-unavailable] ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/check001/temporary/pytest/test_artifact_retains_exact_se3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78eaca854830>
+kind = 'unavailable', window = None
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    @pytest.mark.parametrize("window", [None, {"offset_0based": 1, "limit": 2}, {"offset_0based": 100, "limit": 1}])
+    def test_artifact_retains_exact_selected_rows_and_replays(tmp_path, monkeypatch, kind, window):
+>       rows, calculation = selected(kind, "artifact", window)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': None, 'delivery_kind': 'artifact', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+__ test_artifact_retains_exact_selected_rows_and_replays[window1-extraction] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/check001/temporary/pytest/test_artifact_retains_exact_se5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78eaca91e8d0>
+kind = 'extraction', window = {'offset_0based': 1, 'limit': 2}
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    @pytest.mark.parametrize("window", [None, {"offset_0based": 1, "limit": 2}, {"offset_0based": 100, "limit": 1}])
+    def test_artifact_retains_exact_selected_rows_and_replays(tmp_path, monkeypatch, kind, window):
+>       rows, calculation = selected(kind, "artifact", window)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': {'offset_0based': 1, 'limit': 2}, 'delivery_kind': 'artifact', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+__ test_artifact_retains_exact_selected_rows_and_replays[window1-unavailable] __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/check001/temporary/pytest/test_artifact_retains_exact_se7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78eaca91cef0>
+kind = 'unavailable', window = {'offset_0based': 1, 'limit': 2}
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    @pytest.mark.parametrize("window", [None, {"offset_0based": 1, "limit": 2}, {"offset_0based": 100, "limit": 1}])
+    def test_artifact_retains_exact_selected_rows_and_replays(tmp_path, monkeypatch, kind, window):
+>       rows, calculation = selected(kind, "artifact", window)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': {'offset_0based': 1, 'limit': 2}, 'delivery_kind': 'artifact', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+__ test_artifact_retains_exact_selected_rows_and_replays[window2-extraction] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/check001/temporary/pytest/test_artifact_retains_exact_se9')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78eacaa6cef0>
+kind = 'extraction', window = {'offset_0based': 100, 'limit': 1}
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    @pytest.mark.parametrize("window", [None, {"offset_0based": 1, "limit": 2}, {"offset_0based": 100, "limit": 1}])
+    def test_artifact_retains_exact_selected_rows_and_replays(tmp_path, monkeypatch, kind, window):
+>       rows, calculation = selected(kind, "artifact", window)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': {'offset_0based': 100, 'limit': 1}, 'delivery_kind': 'artifact', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+__ test_artifact_retains_exact_selected_rows_and_replays[window2-unavailable] __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_projection_publication_2026-10-27_404/check001/temporary/pytest/test_artifact_retains_exact_se11')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78eacaa84ef0>
+kind = 'unavailable', window = {'offset_0based': 100, 'limit': 1}
+
+    @pytest.mark.parametrize("kind", ["comparison", "extraction", "inspection", "unavailable"])
+    @pytest.mark.parametrize("window", [None, {"offset_0based": 1, "limit": 2}, {"offset_0based": 100, "limit": 1}])
+    def test_artifact_retains_exact_selected_rows_and_replays(tmp_path, monkeypatch, kind, window):
+>       rows, calculation = selected(kind, "artifact", window)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_projection_publication.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_protein_structure_projection_publication.py:66: in selected
+    return project_protein_structure_results(value, selection=[selection])[0], calculation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:1058: in project_protein_structure_results
+    selected = [validate_protein_structure_projection_selection(s) for s in selection]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:552: in validate_protein_structure_projection_selection
+    _shape("ProjectionSelection", value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'ProjectionSelection'
+value = {'projection_id': 'parent_selected', 'window': {'offset_0based': 100, 'limit': 1}, 'delivery_kind': 'artifact', 'family': 'extracted_sequence', ...}
+
+    def _shape(name, value):
+        _json(value)
+        try:
+            valid = _VALIDATORS[name].is_valid(value)
+        except (TypeError, KeyError, RecursionError, OverflowError) as error:
+            raise ValueError("invalid_schema") from error
+        if not valid:
+>           raise ValueError("invalid_schema")
+E           ValueError: invalid_schema
+
+source_snapshot/gene_annotation_episode/protein_structure_result_views.py:486: ValueError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_selected_values_preserve_native_rows_and_never_access_store[extraction]
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_selected_values_preserve_native_rows_and_never_access_store[unavailable]
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_artifact_retains_exact_selected_rows_and_replays[None-extraction]
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_artifact_retains_exact_selected_rows_and_replays[None-unavailable]
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_artifact_retains_exact_selected_rows_and_replays[window1-extraction]
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_artifact_retains_exact_selected_rows_and_replays[window1-unavailable]
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_artifact_retains_exact_selected_rows_and_replays[window2-extraction]
+FAILED source_snapshot/tests/test_protein_structure_projection_publication.py::test_artifact_retains_exact_selected_rows_and_replays[window2-unavailable]
+8 failed, 22 passed in 23.19s

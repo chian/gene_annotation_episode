@@ -1,0 +1,152 @@
+"""Source-level A105 rate extraction contracts, separate from annotation credit.
+
+This first contract describes already acquired experimental summaries. It does
+not acquire papers, infer subjects, choose a statistical model or transfer a
+reference annotation to another molecule. Source tokens remain supporting
+records; numerical calculators consume the validated measurements separately.
+"""
+from __future__ import annotations
+
+from copy import deepcopy
+import math
+
+
+VERSION = "a105_rate_extraction_v1"
+REPRESENTATIONS = ("primary_table", "retained_extraction", "synthetic_fixture")
+ORIGINS = ("reported", "graph_derived", "synthetic")
+SAMPLING_BASES = ("biological_preparations", "technical_measurements", "unspecified")
+UNCERTAINTY_KINDS = ("sd", "sem", "unspecified", "unreported")
+HEADERS = ("subject", "experiment", "arm", "condition", "endpoint", "normalization",
+           "value", "unit", "uncertainty_kind", "uncertainty_magnitude", "count",
+           "sampling_basis", "origin")
+
+# Values are (physical dimension, multiplier into that dimension's base unit).
+# Concentration/time and amount/time intentionally have different dimensions.
+RATE_UNITS = {
+    "umol/min": ("amount_rate", 1.0),
+    "nmol/min": ("amount_rate", 0.001),
+    "mmol/min": ("amount_rate", 1000.0),
+    "uM/min": ("concentration_rate", 1.0),
+    "nM/min": ("concentration_rate", 0.001),
+    "per_min": ("turnover_rate", 1.0),
+    "per_s": ("turnover_rate", 60.0),
+    "umol/min/mg": ("specific_amount_rate", 1.0),
+    "nmol/min/mg": ("specific_amount_rate", 0.001),
+}
+RATE_UNIT_ALIASES = {**{unit: unit for unit in RATE_UNITS},
+    "µmol/min": "umol/min", "μmol/min": "umol/min",
+    "µM/min": "uM/min", "μM/min": "uM/min"}
+RATE_UNIT_ALIASES.update({
+    "µmol/min/mg": "umol/min/mg", "μmol/min/mg": "umol/min/mg",
+    "µmol min−1 mg−1": "umol/min/mg", "μmol min−1 mg−1": "umol/min/mg",
+    "nmol min−1 mg−1": "nmol/min/mg",
+})
+
+
+class ExperimentalContractError(ValueError):
+    """A repairable field/relationship failure; never an overall evidence grade."""
+
+    def __init__(self, code, field):
+        self.code, self.field = code, field
+        super().__init__(f"{code}:{field}")
+
+
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+
+
+def _keys(value, names, field):
+    if not isinstance(value, dict) or set(value) != set(names):
+        _fail("closed_fields_required", field)
+
+
+def _text(value, field):
+    if not isinstance(value, str) or not value.strip():
+        _fail("nonempty_source_token_required", field)
+
+
+def _number(value, field, *, nullable=False, nonnegative=False):
+    if value is None and nullable:
+        return
+    try:
+        finite = type(value) in (int, float) and math.isfinite(value)
+    except OverflowError:
+        finite = False
+    if not finite:
+        _fail("finite_number_required", field)
+    if nonnegative and value < 0:
+        _fail("negative_uncertainty", field)
+
+
+def validate_rate_extraction(value):
+    """Validate a detached source record, including its uncertainty relationships.
+
+    These checks validate representation, not the truth of a paper's assay.
+    Conditions/arms are matched to a commissioned comparison by the calculator.
+    A reader additionally binds every row to its literal source table fields.
+    """
+    _keys(value, ("version", "subject", "experiment", "rows"), "extraction")
+    if value["version"] != VERSION:
+        _fail("unsupported_extraction_version", "version")
+    for field in ("subject", "experiment"):
+        _text(value[field], field)
+    if not isinstance(value["rows"], list):
+        _fail("rows_required", "rows")
+    for index, row in enumerate(value["rows"]):
+        path = f"rows[{index}]"
+        _keys(row, ("arm", "condition", "endpoint", "normalization", "value", "unit",
+            "status", "bound", "approximate", "uncertainty", "origin", "source"), path)
+        for field in ("arm", "condition", "endpoint", "normalization"):
+            _text(row[field], path + "." + field)
+        if not isinstance(row["unit"], str) or row["unit"] not in RATE_UNITS:
+            _fail("unsupported_rate_unit", path + ".unit")
+        if row["status"] not in ("observed", "unavailable", "censored", "conflicting"):
+            _fail("unknown_measurement_status", path + ".status")
+        if row["bound"] not in ("none", "lt", "le", "gt", "ge"):
+            _fail("unknown_censor_relation", path + ".bound")
+        if type(row["approximate"]) is not bool:
+            _fail("boolean_required", path + ".approximate")
+        _number(row["value"], path + ".value", nullable=True)
+        if row["status"] in ("observed", "censored"):
+            if row["value"] is None:
+                _fail("observed_value_required", path + ".value")
+        elif row["value"] is not None:
+            _fail("unavailable_point_must_be_null", path + ".value")
+        if (row["bound"] != "none") != (row["status"] == "censored"):
+            _fail("censor_status_mismatch", path + ".bound")
+        if row["origin"] not in ORIGINS:
+            _fail("unknown_value_origin", path + ".origin")
+        uncertainty = row["uncertainty"]
+        _keys(uncertainty, ("kind", "magnitude", "count", "sampling_basis"),
+              path + ".uncertainty")
+        if uncertainty["kind"] not in UNCERTAINTY_KINDS:
+            _fail("unsupported_uncertainty_kind", path + ".uncertainty.kind")
+        _number(uncertainty["magnitude"], path + ".uncertainty.magnitude",
+                nullable=True, nonnegative=True)
+        if uncertainty["kind"] == "unreported":
+            if uncertainty["magnitude"] is not None:
+                _fail("unreported_uncertainty_has_magnitude", path + ".uncertainty")
+        elif uncertainty["magnitude"] is None:
+            _fail("uncertainty_magnitude_required", path + ".uncertainty.magnitude")
+        count = uncertainty["count"]
+        if count is not None and (type(count) is not int or count < 1):
+            _fail("positive_integer_count_required", path + ".uncertainty.count")
+        if uncertainty["sampling_basis"] not in SAMPLING_BASES:
+            _fail("unknown_sampling_basis", path + ".uncertainty.sampling_basis")
+        source = row["source"]
+        _keys(source, ("source_ref", "artifact_ref", "representation", "row_number",
+                      "header", "raw_row"), path + ".source")
+        for field in ("source_ref", "artifact_ref", "header", "raw_row"):
+            _text(source[field], path + ".source." + field)
+        if source["representation"] not in REPRESENTATIONS:
+            _fail("unknown_source_representation", path + ".source.representation")
+        if type(source["row_number"]) is not int or source["row_number"] < 2:
+            _fail("source_data_row_required", path + ".source.row_number")
+        if source["representation"] == "synthetic_fixture" and row["origin"] != "synthetic":
+            _fail("synthetic_origin_required", path + ".origin")
+    return deepcopy(value)
+
+
+__all__ = ["VERSION", "HEADERS", "RATE_UNITS", "RATE_UNIT_ALIASES", "ORIGINS",
+           "REPRESENTATIONS", "SAMPLING_BASES", "UNCERTAINTY_KINDS",
+           "ExperimentalContractError", "validate_rate_extraction"]

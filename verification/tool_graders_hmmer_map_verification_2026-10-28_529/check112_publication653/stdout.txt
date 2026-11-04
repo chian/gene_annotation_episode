@@ -1,0 +1,22 @@
+...F........F.....F                                                      [100%]
+=================================== FAILURES ===================================
+_ test_all_modes_retain_results_and_publish_selected_saved_values[0-create_subset_alias] _
+source_snapshot/tests/test_blast_preparation_publication_653.py:129: in test_all_modes_retain_results_and_publish_selected_saved_values
+    for f in result['detail']['volumes'][0]['native_fields'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'volumes'
+_ test_all_modes_retain_results_and_publish_selected_saved_values[2-create_subset_alias] _
+source_snapshot/tests/test_blast_preparation_publication_653.py:129: in test_all_modes_retain_results_and_publish_selected_saved_values
+    for f in result['detail']['volumes'][0]['native_fields'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'volumes'
+_ test_missing_original_identifier_file_preserves_inspection_and_denies_artifact _
+source_snapshot/tests/test_blast_preparation_publication_653.py:154: in test_missing_original_identifier_file_preserves_inspection_and_denies_artifact
+    assert any(r['code'] == 'input_population_unavailable' for r in result['failures'])
+E   assert False
+E    +  where False = any(<generator object test_missing_original_identifier_file_preserves_inspection_and_denies_artifact.<locals>.<genexpr> at 0x794dc1c06c20>)
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_preparation_publication_653.py::test_all_modes_retain_results_and_publish_selected_saved_values[0-create_subset_alias]
+FAILED source_snapshot/tests/test_blast_preparation_publication_653.py::test_all_modes_retain_results_and_publish_selected_saved_values[2-create_subset_alias]
+FAILED source_snapshot/tests/test_blast_preparation_publication_653.py::test_missing_original_identifier_file_preserves_inspection_and_denies_artifact
+3 failed, 16 passed in 208.38s (0:03:28)

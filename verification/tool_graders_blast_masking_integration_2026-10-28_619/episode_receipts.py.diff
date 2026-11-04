@@ -1,0 +1,10 @@
+--- before/episode_receipts.py
++++ episode_receipts.py
+@@ -195,6 +195,7 @@
+                 if (record.get('provider') == 'episode.execution_result'
+                         and record.get('version') in {'native_infernal_preparation_bundle_v1',
+                                                      'native_hmmer_preparation_bundle_v1',
++                                                     'native_blast_masking_bundle_v1',
+                                                      'native_blast_database_bundle_v1',
+                                                      'native_protein_structure_bundle_v1',
+                                                      'native_rna_structure_bundle_v1'}):

@@ -1,0 +1,20 @@
+...............................F
+=================================== FAILURES ===================================
+___________ test_local_fact_is_usable_when_original_history_missing ____________
+
+tmp_path = PosixPath('/tmp/direct-hmmer-timing-b-008-evidence-cfaehck6/invocation-001/fixtures/test_local_fact_is_usable_when0')
+
+    def test_local_fact_is_usable_when_original_history_missing(tmp_path):
+        h=build(tmp_path,history=False)
+        try:
+            result=search(h)
+            assert result['status']=='completed' and len(result['api_timing_refs'])==1, result
+            assert result['api_timing_disposition']['state']=='unavailable'
+>           assert h.reader.read_source(result['api_timing_refs'][0],scope=h.scope)['witness']['start_context'] is None
+E           AssertionError: assert {'condition_capture': 'unavailable_before_submission', 'condition_ref': None, 'execution_class': {'backend': 'https', ..., ...}, 'execution_class_ref': 'execution_class_8235ae60b7e754fd41143b4b6e74f9ef6ae4b0ad6f21dfc6dd0852e83f35c55f', ...} is None
+
+tests/test_direct_hmmer_timing_tools.py:306: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_direct_hmmer_timing_tools.py::test_local_fact_is_usable_when_original_history_missing
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 31 passed in 153.88s (0:02:33)

@@ -1,0 +1,10 @@
+{
+  "status": "diagnostic_rejection",
+  "error": "Stronger diagnostic: retained-operand validation arithmetic denied",
+  "calls": [
+    "gene_annotation_episode.literature_rate_domains.native_domain_trace"
+  ],
+  "traceback": "Traceback (most recent call last):\n  File \"/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_primary_control_delivery_139/diagnose_saved_boundary_139.py\", line 52, in <module>\n    LiteratureRateRepository(store, operation['run_id']).read(sheet_ref)\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_rate_storage.py\", line 432, in read\n    self._validate_native_saved(payload, request, json.loads(operation[\"outcome\"]))\n  File \"/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_rate_storage.py\", line 458, in _validate_native_saved\n    expected_trace = native_domain_trace(extraction, payload[\"sheet\"][\"cells\"])\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_primary_control_delivery_139/diagnose_saved_boundary_139.py\", line 48, in arithmetic_denied\n    raise AssertionError('Stronger diagnostic: retained-operand validation arithmetic denied')\nAssertionError: Stronger diagnostic: retained-operand validation arithmetic denied\n",
+  "meaning": "Saved native read validates retained exact operands through native_domain_trace. This is not reacquisition, statistical refitting, or scientific reinterpretation and is not by itself a goal failure.",
+  "database_changes": 0
+}

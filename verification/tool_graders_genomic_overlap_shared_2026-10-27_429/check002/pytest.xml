@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="73" time="109.585" timestamp="2026-10-27T08:33:42.771519-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_genomic_overlap_shared" name="test_shared_request_and_explicit_local_binding" time="0.228" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_empty_pair_file_available_without_final_batch" time="0.158" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_failed_driver_logs_use_original_lifecycle_paths" time="0.162" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_selected_file_window_and_path_exclusion" time="0.228" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_bounded_output_window_required[True-1]" time="0.115" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_bounded_output_window_required[-1-1]" time="0.123" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_bounded_output_window_required[0-True]" time="0.116" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_bounded_output_window_required[0-0]" time="0.115" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_bounded_output_window_required[0-1048577]" time="0.115" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_shared_observation_calls_status_once_and_preserves_failed_partial_output" time="0.154" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_selected_start_dispatches_overlap_reservation_and_records_original_identity" time="0.114" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_bound_overlap_is_a_launch_contract_and_reopens_without_native_work" time="2.376"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'binding'&#10;  Actual message: 'native_genomic_overlap_operation_mode_software_not_bound'">selected = namespace(plan={'version': 'native_genomic_overlap_run_plan_v1', 'identity': {'run_id': 'synthetic:run:425', 'episode_... operations=&lt;gene_annotation_episode.practical_execution_operations.LocalPracticalOperations object at 0x77ad96311850&gt;)
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/temporary/pytest/test_bound_overlap_is_a_launch0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x77ad96360770&gt;
+
+    def test_bound_overlap_is_a_launch_contract_and_reopens_without_native_work(selected, tmp_path, monkeypatch):
+        resource_id = selected.assignment['resource_id']
+        resources = {resource_id: _resource(selected)}
+        def deny(*args, **kwargs):
+            raise AssertionError('resource registration must not execute or observe native work')
+        monkeypatch.setattr('gene_annotation_episode.practical_execution_operations.native.status', deny)
+        monkeypatch.setattr('gene_annotation_episode.practical_execution_operations.native.start_prepared', deny)
+        with Store(tmp_path / 'store') as store:
+            family = _family(store, tmp_path / 'run', resources)
+            launch = {'version': 'execution_launch_assignment_v1', 'requests': {
+                resource_id: deepcopy(selected.assignment)}, 'immutable_input_versions': [], 'constraints': {}}
+            assert Draft202012Validator(family.assignment_schema('launch')).is_valid(launch)
+            assert Draft202012Validator(family.assignment_schema('launch_local')).is_valid(selected.assignment)
+            assert family._validate_request(selected.assignment) == selected.assignment
+            row, = [row for row in family.resource_tool_contracts() if row['name'] == 'analyze_genomic_region_overlap']
+            assert row['description'] and row['instructions'] and row['resources'] == 'local'
+            assert row['invocation_route'] == {'kind': 'commission', 'routes': [{
+                'entry_role': 'launch', 'resource_id': resource_id, 'resource_role': 'launch_local'}]}
+            assert 'analyze_genomic_region_overlap' not in ToolRegistry(store).catalog()
+            restored = ExecutionEpisodes(None, store=store, directory=tmp_path / 'restored',
+                run_id='overlap-registration', tool_registry=ToolRegistry(store), **family.as_record()['configuration'])
+            assert restored.as_record() == family.as_record()
+            assert restored.resource_tool_contracts() == family.resource_tool_contracts()
+            wrong = deepcopy(selected.assignment)
+            wrong['requested_job']['native_genomic_overlap']['software']['bedtools_sha256'] = '0' * 64
+            assert not Draft202012Validator(family.assignment_schema('launch_local')).is_valid(wrong)
+&gt;           with pytest.raises(ValueError, match='binding'):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'binding'
+E             Actual message: 'native_genomic_overlap_operation_mode_software_not_bound'
+
+source_snapshot/tests/test_native_genomic_overlap_shared.py:215: AssertionError</failure></testcase><testcase classname="tests.test_native_genomic_overlap_shared" name="test_unbound_overlap_does_not_appear_as_available[False]" time="1.696" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_unbound_overlap_does_not_appear_as_available[True]" time="1.682" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_overlap_binding_cannot_claim_an_unimplemented_resource[api]" time="1.715" /><testcase classname="tests.test_native_genomic_overlap_shared" name="test_overlap_binding_cannot_claim_an_unimplemented_resource[pbs_ssh]" time="2.007" /><testcase classname="tests.test_practical_execution_state" name="test_baseline_is_initial_credit_and_cannot_be_replaced_on_reopen" time="0.338" /><testcase classname="tests.test_practical_execution_state" name="test_baseline_cannot_inherit_requested_job_completion" time="0.002" /><testcase classname="tests.test_practical_execution_state" name="test_interruption_retains_uncertain_intent_without_resubmitting" time="0.307" /><testcase classname="tests.test_practical_execution_state" name="test_receipt_replay_keeps_original_bytes_times_and_context" time="0.288" /><testcase classname="tests.test_practical_execution_state" name="test_context_is_explicit_durable_and_revision_checked" time="0.548" /><testcase classname="tests.test_practical_execution_state" name="test_progress_deduplicates_and_losses_remain_signed" time="1.258" /><testcase classname="tests.test_practical_execution_state" name="test_executed_unsuccessful_command_has_receipt_and_assessed_diagnostic" time="0.284" /><testcase classname="tests.test_practical_execution_state" name="test_unrelated_actions_do_not_erase_or_recredit_prior_command_progress" time="0.862" /><testcase classname="tests.test_practical_execution_state" name="test_unrelated_action_preserves_handoff_progress_when_other_endpoint_keys_pending" time="0.520" /><testcase classname="tests.test_practical_execution_state" name="test_cannot_drop_an_actual_negative_assessment_to_preserve_credit" time="0.451" /><testcase classname="tests.test_practical_execution_state" name="test_model_flags_and_matching_generic_command_cannot_complete_job" time="0.302" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[wrong_argv]" time="0.252" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[wrong_environment]" time="0.190" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[wrong_digest]" time="0.248" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[wrong_kind]" time="0.227" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[failed]" time="0.167" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[nonzero]" time="0.171" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[missing_output]" time="0.293" /><testcase classname="tests.test_practical_execution_state" name="test_endpoint_requires_actual_requested_work_and_outputs[unlisted_output]" time="0.184" /><testcase classname="tests.test_practical_execution_state" name="test_exact_completion_proof_is_recovered_and_tampering_or_later_action_invalidates" time="0.199" /><testcase classname="tests.test_practical_execution_state" name="test_launch_handoff_is_different_from_physical_job_completion" time="0.706" /><testcase classname="tests.test_practical_execution_state" name="test_false_validation_is_rejected_before_receipt_publication" time="0.248" /><testcase classname="tests.test_practical_execution_state" name="test_receipt_integrity_is_checked_before_projection_or_completion" time="0.340" /><testcase classname="tests.test_practical_execution_state" name="test_assignment_requires_closed_predicates_unique_keys_and_job_endpoint" time="0.006" /><testcase classname="tests.test_execution_progress" name="test_old_pbs_target_survives_retry_and_corrupt_current_pointer" time="5.429" /><testcase classname="tests.test_execution_progress" name="test_raw_log_bytes_custody_and_selected_output_read_do_not_touch_launch" time="6.659" /><testcase classname="tests.test_execution_progress" name="test_scope_original_request_and_supplied_target_identity_are_qualified" time="4.888" /><testcase classname="tests.test_execution_progress" name="test_one_real_dependency_is_exposed_after_committed_native_handoff" time="4.118" /><testcase classname="tests.test_execution_progress" name="test_receipt_aliases_share_first_durable_physical_dependency_and_retry_is_distinct" time="8.180" /><testcase classname="tests.test_execution_progress" name="test_resource_capture_survives_later_c8_publication_failure" time="5.803" /><testcase classname="tests.test_execution_progress" name="test_resource_credit_excludes_bytes_read_times_and_open_elapsed" time="6.436" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;0]" time="0.001" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;1]" time="0.001" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;2]" time="0.001" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;3]" time="0.001" /><testcase classname="tests.test_execution_progress" name="test_resource_observation_rejects_unqualified_time_bytes_and_finite_values[&lt;lambda&gt;4]" time="0.001" /><testcase classname="tests.test_execution_progress" name="test_real_api_port_delegation_commits_get_intent_before_progress_projection[SUCCESS-returned]" time="5.330" /><testcase classname="tests.test_execution_progress" name="test_real_api_port_delegation_commits_get_intent_before_progress_projection[STARTED-executing]" time="3.660" /><testcase classname="tests.test_execution_progress" name="test_real_local_closed_launch_is_observed_without_reopening_history" time="5.199" /><testcase classname="tests.test_execution_episodes_family" name="test_one_owner_and_data_descriptor_reconstruct_all_operands" time="1.534" /><testcase classname="tests.test_execution_episodes_family" name="test_dynamic_resources_keep_several_hpcs_and_explicit_selected_request" time="1.812" /><testcase classname="tests.test_execution_episodes_family" name="test_api_request_keeps_typed_service_job_and_its_explicit_resource" time="1.737" /><testcase classname="tests.test_execution_episodes_family" name="test_parent_constraints_input_versions_and_instruction_pins_are_preserved" time="1.611" /><testcase classname="tests.test_execution_episodes_family" name="test_actual_local_delegation_received_credit_and_parent_endpoint_proof" time="2.907" /><testcase classname="tests.test_execution_episodes_family" name="test_results_actual_bounded_windows_exact_replay_completion_and_unchanged_launch" time="4.694" /><testcase classname="tests.test_execution_episodes_family" name="test_result_selector_rejects_escape_and_altered_window_before_read" time="2.957" /><testcase classname="tests.test_execution_episodes_family" name="test_preterminal_bytes_stay_partial_and_repeated_final_bytes_add_no_credit" time="4.314" /><testcase classname="tests.test_execution_episodes_family" name="test_overwritten_path_is_current_filesystem_acquisition_without_attempt_output_claim" time="3.435" /><testcase classname="tests.test_execution_episodes_family" name="test_pending_handle_resolution_uses_scoped_durable_service_before_store_lookup" time="1.185" /><testcase classname="tests.test_execution_tool_contract_declarations" name="test_configured_catalog_has_exact_owners_without_query_or_execution" time="2.312" /><testcase classname="tests.test_execution_tool_contract_declarations" name="test_declarations_equal_validated_service_result_contract[ncbi_blast-job_request0-selector0]" time="1.295" /><testcase classname="tests.test_execution_tool_contract_declarations" name="test_declarations_equal_validated_service_result_contract[uniprot-job_request1-selector1]" time="0.976" /><testcase classname="tests.test_execution_tool_contract_declarations" name="test_bvbrc_declares_both_versions_but_request_selects_exactly_one[job_request0-selector0-api.bvbrc.result]" time="0.985" /><testcase classname="tests.test_execution_tool_contract_declarations" name="test_bvbrc_declares_both_versions_but_request_selects_exactly_one[job_request1-selector1-api.bvbrc.data.result]" time="1.060" /><testcase classname="tests.test_execution_tool_contract_declarations" name="test_hmmer_declaration_is_an_independent_copy" time="0.001" /><testcase classname="tests.test_execution_tool_contract_declarations" name="test_distinct_bound_native_modes_preserve_resource_specific_instructions" time="0.003"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/plan.json'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/temporary/pytest/test_distinct_bound_native_mod0')
+
+    def test_distinct_bound_native_modes_preserve_resource_specific_instructions(tmp_path):
+        from jsonschema import Draft202012Validator
+&gt;       requests = {name: _native_request('nhmmer_'+name+'_ordinary') for name in ('sequence', 'profile')}
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_execution_tool_contract_declarations.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_execution_tool_contract_declarations.py:126: in _native_request
+    'runs'/label/'plan.json').read_text())['requested_job']
+                              ^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/ch...02/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/plan.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/plan.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError</failure></testcase><testcase classname="tests.test_execution_tool_contract_declarations" name="test_native_launch_map_supplies_resource_identity_without_rewriting_request" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_search_ordinary/plan.json'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/temporary/pytest/test_native_launch_map_supplie0')
+
+    def test_native_launch_map_supplies_resource_identity_without_rewriting_request(tmp_path):
+&gt;       request = _native_request('hmmscan_search_ordinary')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_execution_tool_contract_declarations.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/tests/test_execution_tool_contract_declarations.py:126: in _native_request
+    'runs'/label/'plan.json').read_text())['requested_job']
+                              ^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_search_ordinary/plan.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_shared_2026-10-27_429/check002/source_snapshot/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_search_ordinary/plan.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError</failure></testcase></testsuite></testsuites>

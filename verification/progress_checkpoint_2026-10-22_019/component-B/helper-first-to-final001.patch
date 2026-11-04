@@ -1,0 +1,16 @@
+--- /tmp/direct-hmmer-timing-b-008-evidence-cfaehck6/direct_hmmer_timing-first001.py
++++ /tmp/gene-annotation-configured-caller-20261022-008/gene_annotation_episode/direct_hmmer_timing.py
+@@ -249,8 +249,11 @@
+         scope = self.planner.store.validate_scope(plain(scope))
+         operations = self.planner.ports.operations
+         if tool == 'public.hmmer.search':
+-            prepared = prepare_hmmer_request(arguments,
+-                sequence_symbols=self.planner.ports.sequence_symbols, scope=scope)
++            try:
++                prepared = prepare_hmmer_request(arguments,
++                    sequence_symbols=self.planner.ports.sequence_symbols, scope=scope)
++            except ValueError as error:
++                raise ContractError('direct_hmmer_protocol_arguments_invalid') from error
+             order = operations.order(operation_key=operation_key, provider='hmmer',
+                 query_fasta=prepared.query_fasta, scope=scope, **plain(prepared.normalized_arguments))
+             job = order['job_ref']

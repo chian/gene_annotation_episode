@@ -1,0 +1,89 @@
+{
+  "schema_count": 7,
+  "schemas": [
+    "SELECTION_SCHEMA_V3_006.json",
+    "EXTRACTION_SCHEMA_V3_006.json",
+    "LOCAL_INPUT_SCHEMA_006.json",
+    "LOCAL_OUTPUT_SCHEMA_006.json",
+    "POPULATION_SCHEMA_V3_006.json",
+    "NATIVE_FACT_SCHEMA_V3_006.json",
+    "NATIVE_RETURN_SCHEMA_V3_006.json"
+  ],
+  "complete_constructor_reconstruction": true,
+  "exact_v2_base_preserved": true,
+  "all_local_ref_targets_present": true,
+  "actual_source_backed_local_input_schema": true,
+  "actual_source_backed_expected_local_result_schema": true,
+  "actual_local_numeric_primitives": true,
+  "proposed_local_API_executed": false,
+  "proposed_v3_reader_executed": false,
+  "actual_pair_difference": {
+    "value": 0.00395,
+    "lower": 0.00385,
+    "upper": 0.00405,
+    "relation": "interval",
+    "approximate": true,
+    "unit": "umol/min",
+    "status": "available",
+    "origin": "synthetic",
+    "unavailable_reason": null,
+    "formula_code": "condition_control_difference",
+    "conditional_on": [
+      "approximate_source_reading",
+      "conditional_digitization",
+      "shared_reference_assumption",
+      "synthetic_fixture"
+    ],
+    "bound_kind": "conditional_digitization",
+    "bound_state": {
+      "lower": "available",
+      "upper": "available"
+    }
+  },
+  "actual_pair_variance": {
+    "value": 4.5e-07,
+    "lower": null,
+    "upper": null,
+    "relation": "eq",
+    "approximate": true,
+    "unit": "(umol/min)^2",
+    "status": "available",
+    "origin": "synthetic",
+    "unavailable_reason": null,
+    "formula_code": "local_joint_covariance",
+    "conditional_on": [
+      "approximate_source_reading",
+      "conditional_digitization",
+      "shared_reference_assumption",
+      "synthetic_fixture"
+    ],
+    "bound_kind": "none",
+    "bound_state": {
+      "lower": "not_applicable",
+      "upper": "not_applicable"
+    }
+  },
+  "actual_pair_standard_uncertainty": {
+    "value": 0.0006708203932499369,
+    "lower": null,
+    "upper": null,
+    "relation": "eq",
+    "approximate": true,
+    "unit": "umol/min",
+    "status": "available",
+    "origin": "synthetic",
+    "unavailable_reason": null,
+    "formula_code": "local_square_root_variance",
+    "conditional_on": [
+      "approximate_source_reading",
+      "conditional_digitization",
+      "shared_reference_assumption",
+      "synthetic_fixture"
+    ],
+    "bound_kind": "none",
+    "bound_state": {
+      "lower": "not_applicable",
+      "upper": "not_applicable"
+    }
+  }
+}

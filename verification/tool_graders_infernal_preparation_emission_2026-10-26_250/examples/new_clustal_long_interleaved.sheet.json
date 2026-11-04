@@ -1,0 +1,1713 @@
+{
+  "schema": "infernal_preparation_sheet_v1",
+  "operation": {
+    "program": "cmemit",
+    "mode": "sample_aligned",
+    "engine_version": "1.1.5",
+    "settings": {
+      "-N": 2,
+      "--idx": 1,
+      "--seed": 181,
+      "--rna": true,
+      "--dna": false,
+      "--hmmonly": false,
+      "--nohmmonly": false,
+      "-l": false,
+      "--iid": false,
+      "--u5p": false,
+      "--u3p": false,
+      "--outformat": "Clustal"
+    }
+  },
+  "artifacts": [
+    {
+      "role": "models",
+      "format": "infernal_cm_ascii",
+      "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+      "sha256": "b5ed07f9f442d7e639b3324f79ae6209b956a57426174bec1d7f441af6785450",
+      "size_bytes": 50009,
+      "completeness": "complete"
+    },
+    {
+      "role": "generated_alignment",
+      "format": "clustal",
+      "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+      "sha256": "38e73055c801d84b0bafbbbbe35093d7740e324194ef626cbd2268efd20f5c1e",
+      "size_bytes": 354,
+      "completeness": "complete"
+    }
+  ],
+  "input_records": [
+    {
+      "kind": "model",
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm#model/0",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+        "record_ordinal": 0,
+        "line_start": 1,
+        "line_end": 563,
+        "byte_start": 0,
+        "byte_end": 50009
+      },
+      "format": "infernal_cm_ascii",
+      "writer_version": "1.1.4 | Dec 2020",
+      "model_type": "cm",
+      "name": "tRNA5",
+      "accession": null,
+      "description": null,
+      "alphabet": "RNA",
+      "content_validation": "parsed_headers_and_boundaries",
+      "fields": {
+        "CLEN": {
+          "value": 72,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 5,
+                "line_end": 5,
+                "byte_start": 71,
+                "byte_end": 83
+              },
+              "field": "CLEN"
+            }
+          ],
+          "native_token": "72"
+        },
+        "W": {
+          "value": 89,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 6,
+                "line_end": 6,
+                "byte_start": 83,
+                "byte_end": 95
+              },
+              "field": "W"
+            }
+          ],
+          "native_token": "89"
+        },
+        "NSEQ": {
+          "value": 5,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 22,
+                "line_end": 22,
+                "byte_start": 399,
+                "byte_end": 410
+              },
+              "field": "NSEQ"
+            }
+          ],
+          "native_token": "5"
+        },
+        "EFFN": {
+          "value": 3.725586,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 23,
+                "line_end": 23,
+                "byte_start": 410,
+                "byte_end": 428
+              },
+              "field": "EFFN"
+            }
+          ],
+          "native_token": "3.725586"
+        },
+        "STATES": {
+          "value": 230,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 3,
+                "byte_start": 46,
+                "byte_end": 59
+              },
+              "field": "STATES"
+            }
+          ],
+          "native_token": "230"
+        },
+        "NODES": {
+          "value": 61,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 4,
+                "line_end": 4,
+                "byte_start": 59,
+                "byte_end": 71
+              },
+              "field": "NODES"
+            }
+          ],
+          "native_token": "61"
+        },
+        "CKSUM": {
+          "value": 3535941971,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "dimensionless",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 24,
+                "line_end": 24,
+                "byte_start": 428,
+                "byte_end": 448
+              },
+              "field": "CKSUM"
+            }
+          ],
+          "native_token": "3535941971"
+        },
+        "GA": {
+          "value": null,
+          "state": "missing",
+          "basis": "model_header",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "TC": {
+          "value": null,
+          "state": "missing",
+          "basis": "model_header",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        },
+        "NC": {
+          "value": null,
+          "state": "missing",
+          "basis": "model_header",
+          "unit": "bit",
+          "inputs": [],
+          "native_token": null
+        }
+      },
+      "flags": {
+        "RF": "no",
+        "CONS": "yes",
+        "MAP": "yes"
+      },
+      "null_background": [
+        {
+          "value": 0.0,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "log2_odds",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 25,
+                "line_end": 25,
+                "byte_start": 448,
+                "byte_end": 485
+              },
+              "field": "NULL.0"
+            }
+          ],
+          "native_token": "0.000"
+        },
+        {
+          "value": 0.0,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "log2_odds",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 25,
+                "line_end": 25,
+                "byte_start": 448,
+                "byte_end": 485
+              },
+              "field": "NULL.1"
+            }
+          ],
+          "native_token": "0.000"
+        },
+        {
+          "value": 0.0,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "log2_odds",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 25,
+                "line_end": 25,
+                "byte_start": 448,
+                "byte_end": 485
+              },
+              "field": "NULL.2"
+            }
+          ],
+          "native_token": "0.000"
+        },
+        {
+          "value": 0.0,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "log2_odds",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 25,
+                "line_end": 25,
+                "byte_start": 448,
+                "byte_end": 485
+              },
+              "field": "NULL.3"
+            }
+          ],
+          "native_token": "0.000"
+        }
+      ],
+      "calibration": {
+        "ECMLC": {
+          "algorithm": "cm_local_cyk",
+          "locator": {
+            "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+            "record_ordinal": 0,
+            "line_start": 27,
+            "line_end": 27,
+            "byte_start": 510,
+            "byte_end": 585
+          },
+          "lambda": {
+            "value": 0.85463,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "inverse_bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 27,
+                  "byte_start": 510,
+                  "byte_end": 585
+                },
+                "field": "ECMLC.lambda"
+              }
+            ],
+            "native_token": "0.85463"
+          },
+          "mu_extrap": {
+            "value": -4.0261,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 27,
+                  "byte_start": 510,
+                  "byte_end": 585
+                },
+                "field": "ECMLC.mu_extrap"
+              }
+            ],
+            "native_token": "-4.02610"
+          },
+          "mu_orig": {
+            "value": 2.43529,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 27,
+                  "byte_start": 510,
+                  "byte_end": 585
+                },
+                "field": "ECMLC.mu_orig"
+              }
+            ],
+            "native_token": "2.43529"
+          },
+          "calibration_dbsize_nt": {
+            "value": 1600000,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 27,
+                  "byte_start": 510,
+                  "byte_end": 585
+                },
+                "field": "ECMLC.calibration_dbsize_nt"
+              }
+            ],
+            "native_token": "1600000"
+          },
+          "random_hit_count": {
+            "value": 300199,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 27,
+                  "byte_start": 510,
+                  "byte_end": 585
+                },
+                "field": "ECMLC.random_hit_count"
+              }
+            ],
+            "native_token": "300199"
+          },
+          "tail_probability_mass": {
+            "value": 0.003997,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "fraction",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 27,
+                  "line_end": 27,
+                  "byte_start": 510,
+                  "byte_end": 585
+                },
+                "field": "ECMLC.tail_probability_mass"
+              }
+            ],
+            "native_token": "0.003997"
+          }
+        },
+        "ECMGC": {
+          "algorithm": "cm_glocal_cyk",
+          "locator": {
+            "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+            "record_ordinal": 0,
+            "line_start": 28,
+            "line_end": 28,
+            "byte_start": 585,
+            "byte_end": 660
+          },
+          "lambda": {
+            "value": 0.39488,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "inverse_bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 28,
+                  "line_end": 28,
+                  "byte_start": 585,
+                  "byte_end": 660
+                },
+                "field": "ECMGC.lambda"
+              }
+            ],
+            "native_token": "0.39488"
+          },
+          "mu_extrap": {
+            "value": -17.39027,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 28,
+                  "line_end": 28,
+                  "byte_start": 585,
+                  "byte_end": 660
+                },
+                "field": "ECMGC.mu_extrap"
+              }
+            ],
+            "native_token": "-17.39027"
+          },
+          "mu_orig": {
+            "value": -4.06373,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 28,
+                  "line_end": 28,
+                  "byte_start": 585,
+                  "byte_end": 660
+                },
+                "field": "ECMGC.mu_orig"
+              }
+            ],
+            "native_token": "-4.06373"
+          },
+          "calibration_dbsize_nt": {
+            "value": 1600000,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 28,
+                  "line_end": 28,
+                  "byte_start": 585,
+                  "byte_end": 660
+                },
+                "field": "ECMGC.calibration_dbsize_nt"
+              }
+            ],
+            "native_token": "1600000"
+          },
+          "random_hit_count": {
+            "value": 77177,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 28,
+                  "line_end": 28,
+                  "byte_start": 585,
+                  "byte_end": 660
+                },
+                "field": "ECMGC.random_hit_count"
+              }
+            ],
+            "native_token": "77177"
+          },
+          "tail_probability_mass": {
+            "value": 0.005183,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "fraction",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 28,
+                  "line_end": 28,
+                  "byte_start": 585,
+                  "byte_end": 660
+                },
+                "field": "ECMGC.tail_probability_mass"
+              }
+            ],
+            "native_token": "0.005183"
+          }
+        },
+        "ECMLI": {
+          "algorithm": "cm_local_inside",
+          "locator": {
+            "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+            "record_ordinal": 0,
+            "line_start": 29,
+            "line_end": 29,
+            "byte_start": 660,
+            "byte_end": 735
+          },
+          "lambda": {
+            "value": 0.73029,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "inverse_bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 29,
+                  "line_end": 29,
+                  "byte_start": 660,
+                  "byte_end": 735
+                },
+                "field": "ECMLI.lambda"
+              }
+            ],
+            "native_token": "0.73029"
+          },
+          "mu_extrap": {
+            "value": -3.71128,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 29,
+                  "line_end": 29,
+                  "byte_start": 660,
+                  "byte_end": 735
+                },
+                "field": "ECMLI.mu_extrap"
+              }
+            ],
+            "native_token": "-3.71128"
+          },
+          "mu_orig": {
+            "value": 3.57687,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 29,
+                  "line_end": 29,
+                  "byte_start": 660,
+                  "byte_end": 735
+                },
+                "field": "ECMLI.mu_orig"
+              }
+            ],
+            "native_token": "3.57687"
+          },
+          "calibration_dbsize_nt": {
+            "value": 1600000,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 29,
+                  "line_end": 29,
+                  "byte_start": 660,
+                  "byte_end": 735
+                },
+                "field": "ECMLI.calibration_dbsize_nt"
+              }
+            ],
+            "native_token": "1600000"
+          },
+          "random_hit_count": {
+            "value": 245858,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 29,
+                  "line_end": 29,
+                  "byte_start": 660,
+                  "byte_end": 735
+                },
+                "field": "ECMLI.random_hit_count"
+              }
+            ],
+            "native_token": "245858"
+          },
+          "tail_probability_mass": {
+            "value": 0.004881,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "fraction",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 29,
+                  "line_end": 29,
+                  "byte_start": 660,
+                  "byte_end": 735
+                },
+                "field": "ECMLI.tail_probability_mass"
+              }
+            ],
+            "native_token": "0.004881"
+          }
+        },
+        "ECMGI": {
+          "algorithm": "cm_glocal_inside",
+          "locator": {
+            "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+            "record_ordinal": 0,
+            "line_start": 30,
+            "line_end": 30,
+            "byte_start": 735,
+            "byte_end": 810
+          },
+          "lambda": {
+            "value": 0.43914,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "inverse_bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 30,
+                  "line_end": 30,
+                  "byte_start": 735,
+                  "byte_end": 810
+                },
+                "field": "ECMGI.lambda"
+              }
+            ],
+            "native_token": "0.43914"
+          },
+          "mu_extrap": {
+            "value": -12.19064,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 30,
+                  "line_end": 30,
+                  "byte_start": 735,
+                  "byte_end": 810
+                },
+                "field": "ECMGI.mu_extrap"
+              }
+            ],
+            "native_token": "-12.19064"
+          },
+          "mu_orig": {
+            "value": -0.87377,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "bit",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 30,
+                  "line_end": 30,
+                  "byte_start": 735,
+                  "byte_end": 810
+                },
+                "field": "ECMGI.mu_orig"
+              }
+            ],
+            "native_token": "-0.87377"
+          },
+          "calibration_dbsize_nt": {
+            "value": 1600000,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 30,
+                  "line_end": 30,
+                  "byte_start": 735,
+                  "byte_end": 810
+                },
+                "field": "ECMGI.calibration_dbsize_nt"
+              }
+            ],
+            "native_token": "1600000"
+          },
+          "random_hit_count": {
+            "value": 57594,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 30,
+                  "line_end": 30,
+                  "byte_start": 735,
+                  "byte_end": 810
+                },
+                "field": "ECMGI.random_hit_count"
+              }
+            ],
+            "native_token": "57594"
+          },
+          "tail_probability_mass": {
+            "value": 0.006945,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "fraction",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 30,
+                  "line_end": 30,
+                  "byte_start": 735,
+                  "byte_end": 810
+                },
+                "field": "ECMGI.tail_probability_mass"
+              }
+            ],
+            "native_token": "0.006945"
+          }
+        }
+      },
+      "efp7gf": {
+        "locator": {
+          "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+          "record_ordinal": 0,
+          "line_start": 26,
+          "line_end": 26,
+          "byte_start": 485,
+          "byte_end": 510
+        },
+        "location": {
+          "value": -5.5308,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "bit",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 26,
+                "line_end": 26,
+                "byte_start": 485,
+                "byte_end": 510
+              },
+              "field": "EFP7GF.location"
+            }
+          ],
+          "native_token": "-5.5308"
+        },
+        "scale": {
+          "value": 0.72956,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "inverse_bit",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 26,
+                "line_end": 26,
+                "byte_start": 485,
+                "byte_end": 510
+              },
+              "field": "EFP7GF.scale"
+            }
+          ],
+          "native_token": "0.72956"
+        }
+      },
+      "filter_hmm": {
+        "locator": {
+          "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+          "record_ordinal": 0,
+          "line_start": 324,
+          "line_end": 563,
+          "byte_start": 36633,
+          "byte_end": 50009
+        },
+        "writer_version": "3.3.2 | Nov 2020",
+        "name": "tRNA5",
+        "accession": null,
+        "description": null,
+        "alphabet": "RNA",
+        "fields": {
+          "LENG": {
+            "value": 72,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 326,
+                  "line_end": 326,
+                  "byte_start": 36673,
+                  "byte_end": 36682
+                },
+                "field": "LENG"
+              }
+            ],
+            "native_token": "72"
+          },
+          "MAXL": {
+            "value": 152,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "nt",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 327,
+                  "line_end": 327,
+                  "byte_start": 36682,
+                  "byte_end": 36692
+                },
+                "field": "MAXL"
+              }
+            ],
+            "native_token": "152"
+          },
+          "NSEQ": {
+            "value": 5,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 336,
+                  "line_end": 336,
+                  "byte_start": 36827,
+                  "byte_end": 36835
+                },
+                "field": "NSEQ"
+              }
+            ],
+            "native_token": "5"
+          },
+          "EFFN": {
+            "value": 4.575195,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "count",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 337,
+                  "line_end": 337,
+                  "byte_start": 36835,
+                  "byte_end": 36850
+                },
+                "field": "EFFN"
+              }
+            ],
+            "native_token": "4.575195"
+          },
+          "CKSUM": {
+            "value": 3535941971,
+            "state": "present",
+            "basis": "model_header",
+            "unit": "dimensionless",
+            "inputs": [
+              {
+                "locator": {
+                  "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                  "record_ordinal": 0,
+                  "line_start": 338,
+                  "line_end": 338,
+                  "byte_start": 36850,
+                  "byte_end": 36867
+                },
+                "field": "CKSUM"
+              }
+            ],
+            "native_token": "3535941971"
+          }
+        },
+        "stats": [
+          {
+            "locator": {
+              "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+              "record_ordinal": 0,
+              "line_start": 339,
+              "line_end": 339,
+              "byte_start": 36867,
+              "byte_end": 36906
+            },
+            "mode": "LOCAL",
+            "algorithm": "MSV",
+            "location": {
+              "value": -8.3699,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "bit",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                    "record_ordinal": 0,
+                    "line_start": 339,
+                    "line_end": 339,
+                    "byte_start": 36867,
+                    "byte_end": 36906
+                  },
+                  "field": "STATS.MSV.location"
+                }
+              ],
+              "native_token": "-8.3699"
+            },
+            "scale": {
+              "value": 0.72956,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "inverse_bit",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                    "record_ordinal": 0,
+                    "line_start": 339,
+                    "line_end": 339,
+                    "byte_start": 36867,
+                    "byte_end": 36906
+                  },
+                  "field": "STATS.MSV.scale"
+                }
+              ],
+              "native_token": "0.72956"
+            }
+          },
+          {
+            "locator": {
+              "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+              "record_ordinal": 0,
+              "line_start": 340,
+              "line_end": 340,
+              "byte_start": 36906,
+              "byte_end": 36945
+            },
+            "mode": "LOCAL",
+            "algorithm": "VITERBI",
+            "location": {
+              "value": -9.7413,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "bit",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                    "record_ordinal": 0,
+                    "line_start": 340,
+                    "line_end": 340,
+                    "byte_start": 36906,
+                    "byte_end": 36945
+                  },
+                  "field": "STATS.VITERBI.location"
+                }
+              ],
+              "native_token": "-9.7413"
+            },
+            "scale": {
+              "value": 0.72956,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "inverse_bit",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                    "record_ordinal": 0,
+                    "line_start": 340,
+                    "line_end": 340,
+                    "byte_start": 36906,
+                    "byte_end": 36945
+                  },
+                  "field": "STATS.VITERBI.scale"
+                }
+              ],
+              "native_token": "0.72956"
+            }
+          },
+          {
+            "locator": {
+              "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+              "record_ordinal": 0,
+              "line_start": 341,
+              "line_end": 341,
+              "byte_start": 36945,
+              "byte_end": 36984
+            },
+            "mode": "LOCAL",
+            "algorithm": "FORWARD",
+            "location": {
+              "value": -2.8399,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "bit",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                    "record_ordinal": 0,
+                    "line_start": 341,
+                    "line_end": 341,
+                    "byte_start": 36945,
+                    "byte_end": 36984
+                  },
+                  "field": "STATS.FORWARD.location"
+                }
+              ],
+              "native_token": "-2.8399"
+            },
+            "scale": {
+              "value": 0.72956,
+              "state": "present",
+              "basis": "model_header",
+              "unit": "inverse_bit",
+              "inputs": [
+                {
+                  "locator": {
+                    "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                    "record_ordinal": 0,
+                    "line_start": 341,
+                    "line_end": 341,
+                    "byte_start": 36945,
+                    "byte_end": 36984
+                  },
+                  "field": "STATS.FORWARD.scale"
+                }
+              ],
+              "native_token": "0.72956"
+            }
+          }
+        ]
+      },
+      "topology": {
+        "base_pair_nodes": {
+          "value": 21,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 32,
+                "line_end": 322,
+                "byte_start": 813,
+                "byte_end": 36630
+              },
+              "field": "base_pair_nodes"
+            }
+          ],
+          "native_token": null
+        },
+        "bifurcation_nodes": {
+          "value": 2,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 32,
+                "line_end": 322,
+                "byte_start": 813,
+                "byte_end": 36630
+              },
+              "field": "bifurcation_nodes"
+            }
+          ],
+          "native_token": null
+        },
+        "total_nodes": {
+          "value": 61,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 32,
+                "line_end": 322,
+                "byte_start": 813,
+                "byte_end": 36630
+              },
+              "field": "total_nodes"
+            }
+          ],
+          "native_token": null
+        },
+        "total_states": {
+          "value": 230,
+          "state": "present",
+          "basis": "model_header",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm",
+                "record_ordinal": 0,
+                "line_start": 32,
+                "line_end": 322,
+                "byte_start": 813,
+                "byte_end": 36630
+              },
+              "field": "total_states"
+            }
+          ],
+          "native_token": null
+        }
+      },
+      "source_fields": {
+        "date": [
+          "Mon Nov 30 12:13:44 2020"
+        ],
+        "commands": [
+          "[1] cmbuild tRNA5.cm tutorial/tRNA5.sto",
+          "[2] cmcalibrate tRNA5.cm"
+        ],
+        "other_headers": [
+          {
+            "tag": "PBEGIN",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "PEND",
+            "tokens": [
+              "0.05"
+            ]
+          },
+          {
+            "tag": "WBETA",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA1",
+            "tokens": [
+              "1e-07"
+            ]
+          },
+          {
+            "tag": "QDBBETA2",
+            "tokens": [
+              "1e-15"
+            ]
+          },
+          {
+            "tag": "N2OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "N3OMEGA",
+            "tokens": [
+              "1.52588e-05"
+            ]
+          },
+          {
+            "tag": "ELSELF",
+            "tokens": [
+              "-0.08926734"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "output_records": [
+    {
+      "kind": "generated_alignment",
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_alignment/0",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+        "record_ordinal": 0,
+        "line_start": 1,
+        "line_end": 9,
+        "byte_start": 0,
+        "byte_end": 354
+      },
+      "model_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm#model/0"
+      ],
+      "origin": "generated_sample",
+      "format": "clustal",
+      "sequence_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_sequence/0",
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_sequence/1"
+      ],
+      "annotations": {
+        "gf": [],
+        "gs": [],
+        "gr": [],
+        "gc": []
+      },
+      "values": {
+        "row_count": {
+          "value": 2,
+          "state": "present",
+          "basis": "derived",
+          "unit": "count",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 9,
+                "byte_start": 0,
+                "byte_end": 354
+              },
+              "field": "sequence_rows"
+            }
+          ],
+          "native_token": null
+        },
+        "column_count": {
+          "value": 74,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 1,
+                "line_end": 9,
+                "byte_start": 0,
+                "byte_end": 354
+              },
+              "field": "alignment_columns"
+            }
+          ],
+          "native_token": null
+        }
+      }
+    },
+    {
+      "kind": "generated_sequence",
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_sequence/0",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+        "record_ordinal": 0,
+        "line_start": 3,
+        "line_end": 7,
+        "byte_start": 41,
+        "byte_end": 296
+      },
+      "model_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm#model/0"
+      ],
+      "origin": "generated_sample",
+      "name": "tRNA5-sample1",
+      "description": null,
+      "sequence": "GGGAGUAUAGUGUACUaGGU.AACACGUAUGGGUUCAGACCGUACGGUCCUGGGUUC--UCCCCAGUACGCACA",
+      "alphabet": "RNA",
+      "residue_sha256": "b1ea83fceef7bf332e3266ffce57525479b137f2557ef2a2f48ca185709cb9d2",
+      "sample_index": 1,
+      "embedded_interval": null,
+      "alignment_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_alignment/0",
+      "values": {
+        "residue_count": {
+          "value": 71,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 7,
+                "byte_start": 41,
+                "byte_end": 296
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": 71,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 7,
+                "byte_start": 41,
+                "byte_end": 296
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": 38,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 7,
+                "byte_start": 41,
+                "byte_end": 296
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 7,
+                "byte_start": 41,
+                "byte_end": 296
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": 3,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 7,
+                "byte_start": 41,
+                "byte_end": 296
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "column_count": {
+          "value": 74,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 0,
+                "line_start": 3,
+                "line_end": 7,
+                "byte_start": 41,
+                "byte_end": 296
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        }
+      }
+    },
+    {
+      "kind": "generated_sequence",
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_sequence/1",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+        "record_ordinal": 1,
+        "line_start": 4,
+        "line_end": 8,
+        "byte_start": 116,
+        "byte_end": 325
+      },
+      "model_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm#model/0"
+      ],
+      "origin": "generated_sample",
+      "name": "tRNA5-sample2",
+      "description": null,
+      "sequence": "GCGAAUCUGGCCUAGU.GGCaAUGGCGGACUACUAGAAUUAGCCAGAUCAUUUGAUCGAUCCAAGUGAUUUGUA",
+      "alphabet": "RNA",
+      "residue_sha256": "a3e495140581d217d62ee63914368233d5218448f006b985280a0d3314ed69bc",
+      "sample_index": 2,
+      "embedded_interval": null,
+      "alignment_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_alignment/0",
+      "values": {
+        "residue_count": {
+          "value": 73,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 4,
+                "line_end": 8,
+                "byte_start": 116,
+                "byte_end": 325
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "canonical_count": {
+          "value": 73,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 4,
+                "line_end": 8,
+                "byte_start": 116,
+                "byte_end": 325
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "gc_count": {
+          "value": 33,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 4,
+                "line_end": 8,
+                "byte_start": 116,
+                "byte_end": 325
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "ambiguity_count": {
+          "value": 0,
+          "state": "present",
+          "basis": "derived",
+          "unit": "nt",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 4,
+                "line_end": 8,
+                "byte_start": 116,
+                "byte_end": 325
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "gap_count": {
+          "value": 1,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 4,
+                "line_end": 8,
+                "byte_start": 116,
+                "byte_end": 325
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        },
+        "column_count": {
+          "value": 74,
+          "state": "present",
+          "basis": "derived",
+          "unit": "column",
+          "inputs": [
+            {
+              "locator": {
+                "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+                "record_ordinal": 1,
+                "line_start": 4,
+                "line_end": 8,
+                "byte_start": 116,
+                "byte_end": 325
+              },
+              "field": "sequence"
+            }
+          ],
+          "native_token": null
+        }
+      }
+    }
+  ],
+  "native_rows": [],
+  "associations": [
+    {
+      "relation": "generated_from",
+      "input_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm#model/0"
+      ],
+      "output_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_sequence/0"
+      ],
+      "status": "validated"
+    },
+    {
+      "relation": "generated_from",
+      "input_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm#model/0"
+      ],
+      "output_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_sequence/1"
+      ],
+      "status": "validated"
+    },
+    {
+      "relation": "generated_from",
+      "input_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/model.cm#model/0"
+      ],
+      "output_keys": [
+        "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_alignment/0"
+      ],
+      "status": "validated"
+    }
+  ],
+  "issues": [
+    {
+      "stage": "extraction",
+      "code": "cmemit_annotations_not_measured",
+      "severity": "information",
+      "artifact_ref": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+      "record_key": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out#generated_alignment/0",
+      "field": null
+    }
+  ]
+}

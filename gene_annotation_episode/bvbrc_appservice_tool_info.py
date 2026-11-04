@@ -75,9 +75,11 @@ _DETAILS = {
         "internal; this operation downloads no bytes and never refreshes a capability automatically."),
     "download": (
         "Acquire one exact capability's output bytes and enable same-action deterministic publication.",
-        "Select the possessed capability entry, exact object, inclusive byte range or null, requirement IDs, "
-        "role and declared format. One GET preserves all received bytes, HTTP 200/206, Content-Range, "
-        "Content-Length and separate body/object completeness. A 200 response ignoring Range remains intact. "
+        "Select the possessed capability entry, exact object, positive integer max_bytes, inclusive byte range "
+        "or null, requirement IDs, role and declared format. One GET retains the exact response prefix within "
+        "that byte cap, with observed-versus-retained counts, HTTP 200/206, Content-Range, Content-Length "
+        "and separate body/object completeness. A 200 response ignoring Range keeps its actual prefix; "
+        "hitting the cap leaves the object incomplete. "
         "Do not follow redirects, refresh capabilities or fetch another file. The host publishes from frozen "
         "dependencies; an explicitly bound scientific adapter may parse and calculate without acquisition. "
         "Missing sidecars, unknown producer-byte version and unavailable adapters remain qualified partials."),
@@ -92,6 +94,10 @@ RESULT_OPERATIONS = tuple(PREFIX + suffix for suffix in (
 
 def _schema(suffix):
     schema = contract_schema("Arguments_" + suffix)
+    if suffix == "download":
+        # Retained contracts accept the exact old shape. Current selections
+        # always name their cap; no default or historical rewrite is supplied.
+        schema["$defs"]["Arguments_download"]["required"].append("max_bytes")
     # An explicit resource boundary keeps local refs correct when the common
     # episode embeds this schema inside its operation-selection schema.
     schema["$id"] = "urn:gene-annotation:bvbrc-appservice:arguments:" + suffix

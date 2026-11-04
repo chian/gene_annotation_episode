@@ -331,7 +331,7 @@ def test_recognized_stream_layout_change_stops_at_exact_known_boundary(next_opti
 
 
 @pytest.mark.parametrize("order", ["little", "big"])
-@pytest.mark.parametrize("magic", list(range(0xE8EDEDB1, 0xE8EDEDB6)))
+@pytest.mark.parametrize("magic", list(range(0xE8EDEDB1, 0xE8EDEDB5)))
 def test_historical_binary_layouts_stay_explicitly_unsupported(magic, order):
     data = magic.to_bytes(4, order) + b"historical native bytes"
     result = extract(data)

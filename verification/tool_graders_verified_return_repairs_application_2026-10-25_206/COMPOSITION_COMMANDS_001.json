@@ -1,0 +1,60 @@
+{
+  "commands": [
+    {
+      "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/prepare_composition_001.py",
+      "exit_code": 0,
+      "receipt": "COMPOSITION_PREPARATION_RECEIPT_001.json",
+      "script_sha256": "4ed46b1af51d5367953bb8f53e400515417871312d3f48018fa7fc910ace3466"
+    },
+    {
+      "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/probe_composition_pins_001.py verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_candidate COMPOSITION_CANDIDATE_PINS_001.json",
+      "exit_code": 1,
+      "receipt": "COMPOSITION_PIN_PROBE_FAILURE_001.json",
+      "script_sha256": "91a10e55aea2525a60b2fcdc8250234db7ea553a0b4d1a3118f6dd75ab07cce1"
+    },
+    {
+      "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/probe_composition_pins_002.py verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_candidate COMPOSITION_CANDIDATE_PINS_002.json",
+      "exit_code": 0,
+      "receipt": "COMPOSITION_CANDIDATE_PINS_002.json",
+      "script_sha256": "804a0347a2cb726d220ca23731b1426e23fdaf9b62c356e3614d325c7402ea75"
+    },
+    {
+      "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/probe_composition_pins_002.py /home/chia/repos/gene_annotation_episode COMPOSITION_PRODUCTION_PINS_002.json",
+      "exit_code": 0,
+      "receipt": "COMPOSITION_PRODUCTION_PINS_002.json",
+      "script_sha256": "804a0347a2cb726d220ca23731b1426e23fdaf9b62c356e3614d325c7402ea75"
+    },
+    {
+      "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/run_composition_checks_001.py",
+      "exit_code": 0,
+      "receipt": "composition_checks_001/receipt.json",
+      "script_sha256": "5dcf322cc25764c5b23dfc4e490a3589d573f8634429c159e33c4e8102bae5ed"
+    },
+    {
+      "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/audit_composition_001.py",
+      "exit_code": 0,
+      "receipt": "COMPOSITION_FINAL_AUDIT_001.json",
+      "script_sha256": "303fc0fb80dc8506edab2c68c9d2601561e75a725d494200172e03344a1f913c"
+    },
+    {
+      "command": ".venv/bin/python -B verification/tool_graders_verified_return_repairs_application_2026-10-25_206/seal_composition_001.py",
+      "exit_code": 0,
+      "receipt": "COMPOSITION_SEAL_RECEIPT_001.json",
+      "script_sha256": "d83fde348fc3865016edf94b922b96868c294f046f329a9d4bac9251d55e29fe"
+    }
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode",
+  "executable": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+  "poll_expiry_action": "Continue the same original process",
+  "pytest_arguments": [
+    "-vv",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_form_reference_validation.py::test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics",
+    "tests/test_bvbrc_genome_alignment_episode_flow.py",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_checks_001/temporary",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_verified_return_repairs_application_2026-10-25_206/composition_checks_001/tests.xml"
+  ],
+  "test_process_restarts": 0,
+  "wall_time_limit": null
+}

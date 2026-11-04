@@ -8,7 +8,8 @@ from .resource_operational_credit import ResourceOperationalCredit
 
 
 def bind_resource_services(store, *, run_id, directory, job_episodes,
-                           resource_estimator, handoff_unit, acquired_record_unit
+                           resource_estimator, handoff_unit, acquired_record_unit,
+                           contract_information_profile=None,
                            ) -> EpisodeApplicationServices:
     """Prepare resource descriptors and projections without observing work.
 
@@ -26,7 +27,8 @@ def bind_resource_services(store, *, run_id, directory, job_episodes,
     adapter = HomologyResourceAdapter(job_episodes, store, journal, resource_estimator)
     projector = ResourceOperationalCredit(adapter.information,
         handoff_unit=handoff_unit, acquired_record_unit=acquired_record_unit)
-    binding = ResourceEpisodes(None, resource_adapters=(adapter,))
+    binding = ResourceEpisodes(None, resource_adapters=(adapter,),
+        contract_information_profile=contract_information_profile)
     return EpisodeApplicationServices((binding.as_record(),), {
         role: {'definition': projector.as_record(), 'project': projector}
         for role in binding.roles

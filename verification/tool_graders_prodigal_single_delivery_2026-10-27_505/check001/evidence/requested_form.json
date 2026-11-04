@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "reference"
+      },
+      "x-source": "committed_record_refs",
+      "description": "Records actually returned by this child's completed selected operation."
+    }
+  },
+  "required": [
+    "records"
+  ]
+}

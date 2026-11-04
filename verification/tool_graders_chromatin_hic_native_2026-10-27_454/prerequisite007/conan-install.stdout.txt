@@ -1,0 +1,3273 @@
+{
+    "graph": {
+        "nodes": {
+            "0": {
+                "ref": "hictk/None",
+                "id": "0",
+                "recipe": "Consumer",
+                "package_id": "a61f87dbdd61732d2c901aa6ae1b8e0e2e310831",
+                "prev": null,
+                "rrev": null,
+                "rrev_timestamp": null,
+                "prev_timestamp": null,
+                "remote": null,
+                "binary_remote": null,
+                "build_id": null,
+                "binary": null,
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "hictk",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/paulsengroup/hictk",
+                "license": "MIT",
+                "author": null,
+                "description": "Blazing fast toolkit to work with .hic and .cool files.",
+                "homepage": "https://github.com/paulsengroup/hictk",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "with_cli_tool_deps": true,
+                    "with_benchmark_deps": false,
+                    "with_arrow": false,
+                    "with_eigen": false,
+                    "with_telemetry_deps": true,
+                    "with_unit_testing_deps": true,
+                    "with_fuzzy_testing_deps": false
+                },
+                "options_description": null,
+                "version": null,
+                "topics": [
+                    "hictk",
+                    "bioinformatics"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "with_arrow": "False",
+                    "with_benchmark_deps": "False",
+                    "with_cli_tool_deps": "False",
+                    "with_eigen": "False",
+                    "with_fuzzy_testing_deps": "False",
+                    "with_telemetry_deps": "False",
+                    "with_unit_testing_deps": "False"
+                },
+                "options_definitions": {
+                    "with_cli_tool_deps": [
+                        "True",
+                        "False"
+                    ],
+                    "with_benchmark_deps": [
+                        "True",
+                        "False"
+                    ],
+                    "with_arrow": [
+                        "True",
+                        "False"
+                    ],
+                    "with_eigen": [
+                        "True",
+                        "False"
+                    ],
+                    "with_telemetry_deps": [
+                        "True",
+                        "False"
+                    ],
+                    "with_unit_testing_deps": [
+                        "True",
+                        "False"
+                    ],
+                    "with_fuzzy_testing_deps": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [
+                    "CMakeDeps"
+                ],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/source",
+                "source_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/source",
+                "build_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/build",
+                "generators_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/build",
+                "package_folder": null,
+                "immutable_package_folder": null,
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "lib"
+                        ],
+                        "resdirs": null,
+                        "bindirs": [
+                            "bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": null,
+                        "properties": null,
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "conanfile.py (hictk/None)",
+                "info": {
+                    "settings": {
+                        "os": "Linux",
+                        "arch": "x86_64",
+                        "compiler": "gcc",
+                        "compiler.cppstd": "17",
+                        "compiler.libcxx": "libstdc++11",
+                        "compiler.version": "13",
+                        "build_type": "Release"
+                    },
+                    "options": {
+                        "with_arrow": "False",
+                        "with_benchmark_deps": "False",
+                        "with_cli_tool_deps": "False",
+                        "with_eigen": "False",
+                        "with_fuzzy_testing_deps": "False",
+                        "with_telemetry_deps": "False",
+                        "with_unit_testing_deps": "False"
+                    },
+                    "requires": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ]
+                },
+                "vendor": false,
+                "dependencies": {
+                    "1": {
+                        "ref": "bshoshany-thread-pool/5.0.0",
+                        "require": "bshoshany-thread-pool/5.0.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "2": {
+                        "ref": "concurrentqueue/1.0.4",
+                        "require": "concurrentqueue/1.0.4",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "3": {
+                        "ref": "fast_float/8.1.0",
+                        "require": "fast_float/8.1.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "8": {
+                        "ref": "highfive/3.1.1",
+                        "require": "highfive/3.1.1",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "5": {
+                        "ref": "hdf5/1.14.6",
+                        "require": "hdf5/1.14.6",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": true,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "9": {
+                        "ref": "libdeflate/1.25",
+                        "require": "libdeflate/1.25",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "10": {
+                        "ref": "parallel-hashmap/2.0.0",
+                        "require": "parallel-hashmap/2.0.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "11": {
+                        "ref": "readerwriterqueue/1.0.6",
+                        "require": "readerwriterqueue/1.0.6",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "12": {
+                        "ref": "span-lite/0.11.0",
+                        "require": "span-lite/0.11.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "13": {
+                        "ref": "spdlog/1.16.0",
+                        "require": "spdlog/1.16.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "4": {
+                        "ref": "fmt/12.1.0",
+                        "require": "fmt/12.1.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": true,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "14": {
+                        "ref": "zstd/1.5.7",
+                        "require": "zstd/1.5.7",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": true,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "15": {
+                        "ref": "boost/1.89.0",
+                        "require": "boost/1.89.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": true,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "6": {
+                        "ref": "zlib/1.3.1",
+                        "require": "zlib/1.3.1",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": true,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    }
+                },
+                "context": "host",
+                "test": false
+            },
+            "1": {
+                "ref": "bshoshany-thread-pool/5.0.0#d94da300363f0c35b8f41b2c5490c94d",
+                "id": "1",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "97739a2d693ef762e87869abb6ee8f74",
+                "rrev": "d94da300363f0c35b8f41b2c5490c94d",
+                "rrev_timestamp": 1734666454.544,
+                "prev_timestamp": 1734666519.465,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "bshoshany-thread-pool",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "MIT",
+                "author": null,
+                "description": "BS::thread_pool: a fast, lightweight, modern, and easy-to-use C++17 / C++20 / C++23 thread pool library",
+                "homepage": "https://github.com/bshoshany/thread-pool",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": null,
+                "options_description": null,
+                "version": "5.0.0",
+                "topics": [
+                    "concurrency",
+                    "cpp17",
+                    "cpp20",
+                    "cpp23",
+                    "header-only",
+                    "library",
+                    "multi-threading",
+                    "parallel-computing",
+                    "thread-pool",
+                    "threads",
+                    "module",
+                    "modules"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {},
+                "options_definitions": {},
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/bshosced112d04ddcf/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/bshosf4c24b2e229ea/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/bshosf4c24b2e229ea/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/bshosf4c24b2e229ea/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": [
+                            "pthread"
+                        ],
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": null,
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "bshoshany-thread-pool/5.0.0",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "5.0.0": {
+                            "sha256": "617a8fbc2c360577f498998f336777c73d581810831d4ce9c920f11ec680b07b",
+                            "url": "https://github.com/bshoshany/thread-pool/archive/refs/tags/v5.0.0.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "2": {
+                "ref": "concurrentqueue/1.0.4#1e48e1c712bcfd892087c9c622a51502",
+                "id": "2",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "d76553f653b5b8bdf7b424d83820fea4",
+                "rrev": "1e48e1c712bcfd892087c9c622a51502",
+                "rrev_timestamp": 1687274728.048,
+                "prev_timestamp": 1687275199.316,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "concurrentqueue",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": [
+                    "BSD-2-Clause",
+                    "BSL-1.0"
+                ],
+                "author": null,
+                "description": "A fast multi-producer, multi-consumer lock-free concurrent queue for C++11",
+                "homepage": "https://github.com/cameron314/concurrentqueue",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": null,
+                "options_description": null,
+                "version": "1.0.4",
+                "topics": [
+                    "cpp11",
+                    "cpp14",
+                    "cpp17",
+                    "queue",
+                    "lock-free"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {},
+                "options_definitions": {},
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/concuedb009e905e62/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/concu0e8c745f17630/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/concu0e8c745f17630/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/concu0e8c745f17630/p/include",
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/concu0e8c745f17630/p/include/moodycamel"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": [
+                            "pthread"
+                        ],
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "concurrentqueue",
+                            "cmake_target_name": "concurrentqueue::concurrentqueue"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "concurrentqueue/1.0.4",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "1.0.4": {
+                            "sha256": "87fbc9884d60d0d4bf3462c18f4c0ee0a9311d0519341cac7cbd361c885e5281",
+                            "url": "https://github.com/cameron314/concurrentqueue/archive/refs/tags/v1.0.4.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "3": {
+                "ref": "fast_float/8.1.0#bbf67486bec084d167da0f3e13eee534",
+                "id": "3",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "8a554434b58b3006a526fbd26beca6dd",
+                "rrev": "bbf67486bec084d167da0f3e13eee534",
+                "rrev_timestamp": 1760601631.678,
+                "prev_timestamp": 1760601684.995,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "fast_float",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": [
+                    "Apache-2.0",
+                    "MIT",
+                    "BSL-1.0"
+                ],
+                "author": null,
+                "description": "Fast and exact implementation of the C++ from_chars functions for float and double types.",
+                "homepage": "https://github.com/fastfloat/fast_float",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": null,
+                "options_description": null,
+                "version": "8.1.0",
+                "topics": [
+                    "conversion",
+                    "from_chars",
+                    "header-only"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {},
+                "options_definitions": {},
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fast_f7265c0de6f3e/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fast_7004c9a1e0b13/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fast_7004c9a1e0b13/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fast_7004c9a1e0b13/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "FastFloat",
+                            "cmake_target_name": "FastFloat::fast_float"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "fastfloat": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fast_7004c9a1e0b13/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": [],
+                        "bindirs": [],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [],
+                        "frameworks": [],
+                        "libs": [],
+                        "defines": [],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_target_name": "FastFloat::fast_float"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "fast_float/8.1.0",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "8.1.0": {
+                            "sha256": "4bfabb5979716995090ce68dce83f88f99629bc17ae280eae79311c5340143e1",
+                            "url": "https://github.com/fastfloat/fast_float/archive/refs/tags/v8.1.0.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "4": {
+                "ref": "fmt/12.1.0#50abab23274d56bb8f42c94b3b9a40c7",
+                "id": "4",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "05ac3803fc0dadeb4338173547869831",
+                "rrev": "50abab23274d56bb8f42c94b3b9a40c7",
+                "rrev_timestamp": 1761885265.231,
+                "prev_timestamp": 1761885383.426,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "fmt",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "MIT",
+                "author": null,
+                "description": "A safe and fast alternative to printf and IOStreams.",
+                "homepage": "https://github.com/fmtlib/fmt",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "header_only": false,
+                    "shared": false,
+                    "fPIC": true,
+                    "with_fmt_alias": false,
+                    "with_os_api": true,
+                    "with_unicode": true
+                },
+                "options_description": null,
+                "version": "12.1.0",
+                "topics": [
+                    "format",
+                    "iostream",
+                    "printf"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "header_only": "True",
+                    "with_fmt_alias": "False",
+                    "with_unicode": "True"
+                },
+                "options_definitions": {
+                    "header_only": [
+                        "True",
+                        "False"
+                    ],
+                    "with_fmt_alias": [
+                        "True",
+                        "False"
+                    ],
+                    "with_unicode": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fmt7077568c63747/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fmtfe0978ffd6af6/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fmtfe0978ffd6af6/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fmtfe0978ffd6af6/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fmtfe0978ffd6af6/p/lib"
+                        ],
+                        "resdirs": null,
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fmtfe0978ffd6af6/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "fmt",
+                            "cmake_target_name": "fmt::fmt-header-only",
+                            "cmake_config_version_compat": "AnyNewerVersion",
+                            "pkg_config_name": "fmt"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "_fmt": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/fmtfe0978ffd6af6/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": [],
+                        "bindirs": [],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [],
+                        "frameworks": [],
+                        "libs": [],
+                        "defines": [
+                            "FMT_HEADER_ONLY=1"
+                        ],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_target_name": "fmt::fmt-header-only"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "fmt/12.1.0",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "12.1.0": {
+                            "sha256": "695fd197fa5aff8fc67b5f2bbc110490a875cdf7a41686ac8512fb480fa8ada7",
+                            "url": "https://github.com/fmtlib/fmt/releases/download/12.1.0/fmt-12.1.0.zip"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "5": {
+                "ref": "hdf5/1.14.6#0b780319690d537e6cb0683244919955",
+                "id": "5",
+                "recipe": "Downloaded",
+                "package_id": "2d2aaecc66fbec15b63bf5b114a97e73cc265322",
+                "prev": "dfbda02dc72d9437849c5d346e3daf34",
+                "rrev": "0b780319690d537e6cb0683244919955",
+                "rrev_timestamp": 1757751075.707,
+                "prev_timestamp": null,
+                "remote": "conancenter",
+                "binary_remote": null,
+                "build_id": null,
+                "binary": "Build",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "hdf5",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "BSD-3-Clause",
+                "author": null,
+                "description": "HDF5 is a data model, library, and file format for storing and managing data.",
+                "homepage": "https://www.hdfgroup.org/solutions/hdf5/",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "shared": false,
+                    "fPIC": true,
+                    "enable_cxx": true,
+                    "hl": true,
+                    "threadsafe": false,
+                    "with_zlib": true,
+                    "with_zlibng": false,
+                    "szip_support": null,
+                    "szip_encoding": false,
+                    "parallel": false,
+                    "enable_unsupported": false
+                },
+                "options_description": null,
+                "version": "1.14.6",
+                "topics": [
+                    "hdf",
+                    "data"
+                ],
+                "package_type": "static-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "enable_cxx": "False",
+                    "enable_unsupported": "False",
+                    "fPIC": "True",
+                    "hl": "False",
+                    "parallel": "False",
+                    "shared": "False",
+                    "szip_support": null,
+                    "threadsafe": "False",
+                    "with_zlib": "True",
+                    "with_zlibng": "False"
+                },
+                "options_definitions": {
+                    "shared": [
+                        "True",
+                        "False"
+                    ],
+                    "fPIC": [
+                        "True",
+                        "False"
+                    ],
+                    "enable_cxx": [
+                        "True",
+                        "False"
+                    ],
+                    "hl": [
+                        "True",
+                        "False"
+                    ],
+                    "threadsafe": [
+                        "True",
+                        "False"
+                    ],
+                    "with_zlib": [
+                        "True",
+                        "False"
+                    ],
+                    "with_zlibng": [
+                        "True",
+                        "False"
+                    ],
+                    "szip_support": [
+                        null,
+                        "with_libaec",
+                        "with_szip"
+                    ],
+                    "parallel": [
+                        "True",
+                        "False"
+                    ],
+                    "enable_unsupported": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/hdf52d273e219320d/e",
+                "source_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/b/src",
+                "build_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/b/build/Release",
+                "generators_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/b/build/Release/generators",
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/lib"
+                        ],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_find_mode": "both",
+                            "cmake_file_name": "HDF5",
+                            "cmake_target_name": "HDF5::HDF5",
+                            "pkg_config_name": "hdf5-all-do-not-use",
+                            "cmake_build_modules": [
+                                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/lib/cmake/conan-official-hdf5-variables.cmake"
+                            ]
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "hdf5_c": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/include",
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/include/hdf5",
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/include/hdf5"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/lib"
+                        ],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/hdf5001d2d7fba790/p/bin"
+                        ],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [
+                            "dl",
+                            "m"
+                        ],
+                        "frameworks": [],
+                        "libs": [
+                            "hdf5"
+                        ],
+                        "defines": [],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [
+                            "zlib::zlib"
+                        ],
+                        "properties": {
+                            "cmake_target_name": "hdf5::hdf5",
+                            "pkg_config_name": "hdf5"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "hdf5/1.14.6",
+                "info": {
+                    "settings": {
+                        "os": "Linux",
+                        "arch": "x86_64",
+                        "compiler": "gcc",
+                        "compiler.version": "13",
+                        "build_type": "Release"
+                    },
+                    "options": {
+                        "enable_cxx": "False",
+                        "enable_unsupported": "False",
+                        "fPIC": "True",
+                        "hl": "False",
+                        "parallel": "False",
+                        "shared": "False",
+                        "szip_support": null,
+                        "threadsafe": "False",
+                        "with_zlib": "True",
+                        "with_zlibng": "False"
+                    },
+                    "requires": [
+                        "zlib/1.3.Z"
+                    ]
+                },
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "1.14.6": {
+                            "sha256": "09ee1c671a87401a5201c06106650f62badeea5a3b3941e9b1e2e1e08317357f",
+                            "url": "https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.6.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {
+                    "6": {
+                        "ref": "zlib/1.3.1",
+                        "require": "zlib/[>=1.2.11 <2]",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": null,
+                        "transitive_libs": null,
+                        "headers": true,
+                        "package_id_mode": "minor_mode",
+                        "visible": true
+                    },
+                    "7": {
+                        "ref": "cmake/3.31.12",
+                        "require": "cmake/[>=3.18 <4]",
+                        "run": true,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": true,
+                        "transitive_headers": null,
+                        "transitive_libs": null,
+                        "headers": false,
+                        "package_id_mode": null,
+                        "visible": false
+                    }
+                },
+                "context": "host",
+                "test": false
+            },
+            "6": {
+                "ref": "zlib/1.3.1#b8bc2603263cf7eccbd6e17e66b0ed76",
+                "id": "6",
+                "recipe": "Downloaded",
+                "package_id": "c81087b06d1a5beef0ad711fc32d45f7a425a8f3",
+                "prev": "20550845a3d8adfe1ee248c0dd61e7b2",
+                "rrev": "b8bc2603263cf7eccbd6e17e66b0ed76",
+                "rrev_timestamp": 1733936244.862,
+                "prev_timestamp": null,
+                "remote": "conancenter",
+                "binary_remote": null,
+                "build_id": null,
+                "binary": "Build",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "zlib",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "Zlib",
+                "author": null,
+                "description": "A Massively Spiffy Yet Delicately Unobtrusive Compression Library (Also Free, Not to Mention Unencumbered by Patents)",
+                "homepage": "https://zlib.net",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "shared": false,
+                    "fPIC": true
+                },
+                "options_description": null,
+                "version": "1.3.1",
+                "topics": [
+                    "zlib",
+                    "compression"
+                ],
+                "package_type": "static-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "fPIC": "True",
+                    "shared": "False"
+                },
+                "options_definitions": {
+                    "shared": [
+                        "True",
+                        "False"
+                    ],
+                    "fPIC": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/zlib204752602052d/e",
+                "source_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/b/src",
+                "build_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/b/build/Release",
+                "generators_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/b/build/Release/generators",
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/p/lib"
+                        ],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zlib2a1f8e239d854/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": [
+                            "z"
+                        ],
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_find_mode": "both",
+                            "cmake_file_name": "ZLIB",
+                            "cmake_target_name": "ZLIB::ZLIB",
+                            "pkg_config_name": "zlib"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "zlib/1.3.1",
+                "info": {
+                    "settings": {
+                        "os": "Linux",
+                        "arch": "x86_64",
+                        "compiler": "gcc",
+                        "compiler.version": "13",
+                        "build_type": "Release"
+                    },
+                    "options": {
+                        "fPIC": "True",
+                        "shared": "False"
+                    }
+                },
+                "vendor": false,
+                "conandata": {
+                    "patches": {
+                        "1.3.1": [
+                            {
+                                "patch_description": "separate static/shared builds, disable debug suffix",
+                                "patch_file": "patches/1.3.1/0001-fix-cmake.patch",
+                                "patch_type": "conan"
+                            }
+                        ]
+                    },
+                    "sources": {
+                        "1.3.1": {
+                            "sha256": "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23",
+                            "url": [
+                                "https://zlib.net/fossils/zlib-1.3.1.tar.gz",
+                                "https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz"
+                            ]
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "7": {
+                "ref": "cmake/3.31.12#5c883f7908780190d9d4ab52e0da7bfd",
+                "id": "7",
+                "recipe": "Downloaded",
+                "package_id": "63fead0844576fc02943e16909f08fcdddd6f44b",
+                "prev": "06f702c609492bb6b8043df0e26fcc47",
+                "rrev": "5c883f7908780190d9d4ab52e0da7bfd",
+                "rrev_timestamp": 1789658723.981,
+                "prev_timestamp": 1789658864.533,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "cmake",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "BSD-3-Clause",
+                "author": null,
+                "description": "CMake, the cross-platform, open-source build system.",
+                "homepage": "https://github.com/Kitware/CMake",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": null,
+                "options_description": null,
+                "version": "3.31.12",
+                "topics": [
+                    "build",
+                    "installer"
+                ],
+                "package_type": "application",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64"
+                },
+                "options": {},
+                "options_definitions": {},
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/cmake1a7defa2c34e0/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/cmake63b78bdad54d9/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/cmake63b78bdad54d9/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/cmake63b78bdad54d9/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": null,
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "cmake/3.31.12",
+                "info": {
+                    "settings": {
+                        "os": "Linux",
+                        "arch": "x86_64"
+                    }
+                },
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "3.31.12": {
+                            "Linux": {
+                                "armv8": {
+                                    "sha256": "83f8fd91d2038a56556e1400390fcfe42f79602940c494f6c6f1cdae7f9e7f40",
+                                    "url": [
+                                        "https://cmake.org/files/v3.31/cmake-3.31.12-linux-aarch64.tar.gz",
+                                        "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-linux-aarch64.tar.gz"
+                                    ]
+                                },
+                                "x86_64": {
+                                    "sha256": "0dc2e9a6860f06bf10bd8fadc03e35d9eeb4df46e33763a7e480e987758f385c",
+                                    "url": [
+                                        "https://cmake.org/files/v3.31/cmake-3.31.12-linux-x86_64.tar.gz",
+                                        "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-linux-x86_64.tar.gz"
+                                    ]
+                                }
+                            },
+                            "Macos": {
+                                "universal": {
+                                    "sha256": "cf096d869d45b79f5ce82f3d6abffa44f983fc146fee13cfe59024911e6975af",
+                                    "url": [
+                                        "https://cmake.org/files/v3.31/cmake-3.31.12-macos10.10-universal.tar.gz",
+                                        "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-macos10.10-universal.tar.gz"
+                                    ]
+                                }
+                            },
+                            "Windows": {
+                                "armv8": {
+                                    "sha256": "e4160c1842dea858ad376ff2ec17587104515b51714eca5963b8bdd798105553",
+                                    "url": [
+                                        "https://cmake.org/files/v3.31/cmake-3.31.12-windows-arm64.zip",
+                                        "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-windows-arm64.zip"
+                                    ]
+                                },
+                                "x86_64": {
+                                    "sha256": "0c4baa40f28b3f8225eb3fdf6946c987b4fe901403b4eaf2fbbd9378100aaa0c",
+                                    "url": [
+                                        "https://cmake.org/files/v3.31/cmake-3.31.12-windows-x86_64.zip",
+                                        "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-windows-x86_64.zip"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "build",
+                "test": false
+            },
+            "8": {
+                "ref": "highfive/3.1.1#d0c724526ebc8ce396ffa1bf7f3c7b64",
+                "id": "8",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "3d2f1c012badd5088e3451ef020afe64",
+                "rrev": "d0c724526ebc8ce396ffa1bf7f3c7b64",
+                "rrev_timestamp": 1756911041.2,
+                "prev_timestamp": 1756911099.003,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "highfive",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "BSL-1.0",
+                "author": null,
+                "description": "User-friendly, header-only, C++14 wrapper for HDF5.",
+                "homepage": "https://github.com/highfive-devs/highfive",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "with_boost": true,
+                    "with_eigen": true,
+                    "with_xtensor": true,
+                    "with_opencv": false
+                },
+                "options_description": null,
+                "version": "3.1.1",
+                "topics": [
+                    "hdf5",
+                    "hdf",
+                    "data",
+                    "header-only"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "with_eigen": "False",
+                    "with_opencv": "False",
+                    "with_xtensor": "False"
+                },
+                "options_definitions": {
+                    "with_eigen": [
+                        "True",
+                        "False"
+                    ],
+                    "with_xtensor": [
+                        "True",
+                        "False"
+                    ],
+                    "with_opencv": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/highf685d44acc5160/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/highf00ce1b31b7185/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/highf00ce1b31b7185/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/highf00ce1b31b7185/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [
+                            "hdf5::hdf5"
+                        ],
+                        "properties": {
+                            "cmake_file_name": "HighFive",
+                            "cmake_target_name": "HighFive::HighFive"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "highfive/3.1.1",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "3.1.1": {
+                            "sha256": "c0bc76b01868a133bf4550a07321923c5582fe3967edc102864b082e40799914",
+                            "url": "https://github.com/highfive-devs/highfive/archive/refs/tags/v.3.1.1.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {
+                    "5": {
+                        "ref": "hdf5/1.14.6",
+                        "require": "hdf5/1.14.3",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    },
+                    "6": {
+                        "ref": "zlib/1.3.1",
+                        "require": "zlib/1.3.1",
+                        "run": false,
+                        "libs": true,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": false,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": false,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    }
+                },
+                "context": "host",
+                "test": false
+            },
+            "9": {
+                "ref": "libdeflate/1.25#49fcd3fe6c130c2ec5a01cabb0481ded",
+                "id": "9",
+                "recipe": "Downloaded",
+                "package_id": "c81087b06d1a5beef0ad711fc32d45f7a425a8f3",
+                "prev": "2c2d73956d890466c963ea1e94ff9544",
+                "rrev": "49fcd3fe6c130c2ec5a01cabb0481ded",
+                "rrev_timestamp": 1761981110.678,
+                "prev_timestamp": 1765384236.631,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "libdeflate",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "MIT",
+                "author": null,
+                "description": "Heavily optimized library for DEFLATE/zlib/gzip compression and decompression.",
+                "homepage": "https://github.com/ebiggers/libdeflate",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "shared": false,
+                    "fPIC": true
+                },
+                "options_description": null,
+                "version": "1.25",
+                "topics": [
+                    "compression",
+                    "decompression",
+                    "deflate",
+                    "zlib",
+                    "gzip"
+                ],
+                "package_type": "static-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "fPIC": "True",
+                    "shared": "False"
+                },
+                "options_definitions": {
+                    "shared": [
+                        "True",
+                        "False"
+                    ],
+                    "fPIC": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde624fd67119c38/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p/lib"
+                        ],
+                        "resdirs": null,
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "libdeflate",
+                            "cmake_target_name": "libdeflate::libdeflate_static",
+                            "cmake_target_aliases": [
+                                "libdeflate::libdeflate"
+                            ],
+                            "pkg_config_name": "libdeflate"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "_libdeflate": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p/lib"
+                        ],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/libde970c09990970d/p/bin"
+                        ],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [],
+                        "frameworks": [],
+                        "libs": [
+                            "deflate"
+                        ],
+                        "defines": [],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_target_name": "libdeflate::libdeflate_static",
+                            "pkg_config_name": "libdeflate"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "libdeflate/1.25",
+                "info": {
+                    "settings": {
+                        "os": "Linux",
+                        "arch": "x86_64",
+                        "compiler": "gcc",
+                        "compiler.version": "13",
+                        "build_type": "Release"
+                    },
+                    "options": {
+                        "fPIC": "True",
+                        "shared": "False"
+                    }
+                },
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "1.25": {
+                            "sha256": "d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d",
+                            "url": "https://github.com/ebiggers/libdeflate/archive/refs/tags/v1.25.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "10": {
+                "ref": "parallel-hashmap/2.0.0#82acae64ffe2693fff5fb3f9df8e1746",
+                "id": "10",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "4e55822c19c91463e20e418d07bb83c0",
+                "rrev": "82acae64ffe2693fff5fb3f9df8e1746",
+                "rrev_timestamp": 1737476425.041,
+                "prev_timestamp": 1737476471.788,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "parallel-hashmap",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "Apache-2.0",
+                "author": null,
+                "description": "A family of header-only, very fast and memory-friendly hashmap and btree containers.",
+                "homepage": "https://github.com/greg7mdp/parallel-hashmap",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": null,
+                "options_description": null,
+                "version": "2.0.0",
+                "topics": [
+                    "parallel",
+                    "hashmap",
+                    "btree",
+                    "header-only"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {},
+                "options_definitions": {},
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/paral0bd8ab22320ad/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/paral39ec75baf77f3/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/paral39ec75baf77f3/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/paral39ec75baf77f3/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "phmap",
+                            "cmake_target_name": "phmap"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "parallel-hashmap/2.0.0",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "2.0.0": {
+                            "sha256": "4f462f51a3468166ea4cf87c80e001dc1999093264cf55cbda3492ca39a7730b",
+                            "url": "https://github.com/greg7mdp/parallel-hashmap/archive/refs/tags/v2.0.0.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "11": {
+                "ref": "readerwriterqueue/1.0.6#aaa5ff6fac60c2aee591e9e51b063b83",
+                "id": "11",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "ecdfc46fa6d77a9ac39568d286082d22",
+                "rrev": "aaa5ff6fac60c2aee591e9e51b063b83",
+                "rrev_timestamp": 1679587692.891,
+                "prev_timestamp": 1679587933.572,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "readerwriterqueue",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "BSD-2-Clause",
+                "author": null,
+                "description": "A fast single-producer, single-consumer lock-free queue for C++",
+                "homepage": "https://github.com/cameron314/readerwriterqueue",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": null,
+                "options_description": null,
+                "version": "1.0.6",
+                "topics": [
+                    "cpp11",
+                    "cpp14",
+                    "cpp17",
+                    "queue",
+                    "lock-free"
+                ],
+                "package_type": "unknown",
+                "languages": [],
+                "settings": {
+                    "os": "Linux"
+                },
+                "options": {},
+                "options_definitions": {},
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/readeda3ada91166ab/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/reade50dacf22d86c8/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/reade50dacf22d86c8/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/reade50dacf22d86c8/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": [
+                            "pthread"
+                        ],
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": null,
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "readerwriterqueue/1.0.6",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "1.0.6": {
+                            "sha256": "fc68f55bbd49a8b646462695e1777fb8f2c0b4f342d5e6574135211312ba56c1",
+                            "url": "https://github.com/cameron314/readerwriterqueue/archive/v1.0.6.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "12": {
+                "ref": "span-lite/0.11.0#519fd49fff711674cfed8cd17d4ed422",
+                "id": "12",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "4688663223fa1898bdb770089ef588f0",
+                "rrev": "519fd49fff711674cfed8cd17d4ed422",
+                "rrev_timestamp": 1707092488.237,
+                "prev_timestamp": 1707092683.712,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "span-lite",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "BSL-1.0",
+                "author": null,
+                "description": "A C++20-like span for C++98, C++11 and later in a single-file header-only library",
+                "homepage": "https://github.com/martinmoene/span-lite",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": null,
+                "options_description": null,
+                "version": "0.11.0",
+                "topics": [
+                    "cpp98",
+                    "cpp11",
+                    "cpp14",
+                    "cpp17",
+                    "span",
+                    "span-implementations",
+                    "header-only"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {},
+                "options_definitions": {},
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/span-71ee36151f12b/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/span-484170b3e63a0/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/span-484170b3e63a0/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/span-484170b3e63a0/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": null,
+                        "bindirs": [],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "span-lite",
+                            "cmake_target_name": "nonstd::span-lite"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "spanlite": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/span-484170b3e63a0/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/span-484170b3e63a0/p/bin"
+                        ],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [],
+                        "frameworks": [],
+                        "libs": [],
+                        "defines": [],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_target_name": "nonstd::span-lite"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "span-lite/0.11.0",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "0.11.0": {
+                            "sha256": "ef4e028e18ff21044da4b4641ca1bc8a2e2d656e2028322876c0e1b9b6904f9d",
+                            "url": "https://github.com/martinmoene/span-lite/archive/v0.11.0.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "13": {
+                "ref": "spdlog/1.16.0#942c2c39562ae25ba575d9c8e2bdf3b6",
+                "id": "13",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "e28b8d4d35c8263a70e6bf1db8eb35b2",
+                "rrev": "942c2c39562ae25ba575d9c8e2bdf3b6",
+                "rrev_timestamp": 1760375663.769,
+                "prev_timestamp": 1760375806.334,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "spdlog",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "MIT",
+                "author": null,
+                "description": "Fast C++ logging library",
+                "homepage": "https://github.com/gabime/spdlog",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "shared": false,
+                    "fPIC": true,
+                    "header_only": false,
+                    "wchar_support": false,
+                    "wchar_filenames": false,
+                    "wchar_console": false,
+                    "no_exceptions": false,
+                    "use_std_fmt": false
+                },
+                "options_description": null,
+                "version": "1.16.0",
+                "topics": [
+                    "logger",
+                    "logging",
+                    "log-filtering",
+                    "file sink",
+                    "header-only"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "header_only": "True",
+                    "no_exceptions": "False",
+                    "use_std_fmt": "False"
+                },
+                "options_definitions": {
+                    "header_only": [
+                        "True",
+                        "False"
+                    ],
+                    "no_exceptions": [
+                        "True",
+                        "False"
+                    ],
+                    "use_std_fmt": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdloef3ae8d29d12b/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdlo7193b7305b40e/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdlo7193b7305b40e/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdlo7193b7305b40e/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdlo7193b7305b40e/p/lib"
+                        ],
+                        "resdirs": null,
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdlo7193b7305b40e/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "spdlog",
+                            "cmake_target_name": "spdlog::spdlog_header_only",
+                            "pkg_config_name": "spdlog"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "libspdlog": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdlo7193b7305b40e/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/spdlo7193b7305b40e/p/bin"
+                        ],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [
+                            "pthread"
+                        ],
+                        "frameworks": [],
+                        "libs": [],
+                        "defines": [
+                            "SPDLOG_FMT_EXTERNAL"
+                        ],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [
+                            "fmt::fmt"
+                        ],
+                        "properties": {
+                            "cmake_target_name": "spdlog::spdlog_header_only"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "spdlog/1.16.0",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "fmt_version_mapping": {
+                        "1.16.0": "12.0.0"
+                    },
+                    "sources": {
+                        "1.16.0": {
+                            "sha256": "8741753e488a78dd0d0024c980e1fb5b5c85888447e309d9cb9d949bdb52aa3e",
+                            "url": "https://github.com/gabime/spdlog/archive/v1.16.0.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {
+                    "4": {
+                        "ref": "fmt/12.1.0",
+                        "require": "fmt/12.0.0",
+                        "run": false,
+                        "libs": false,
+                        "skip": false,
+                        "test": false,
+                        "force": false,
+                        "direct": true,
+                        "build": false,
+                        "transitive_headers": true,
+                        "transitive_libs": true,
+                        "headers": true,
+                        "package_id_mode": "unrelated_mode",
+                        "visible": true
+                    }
+                },
+                "context": "host",
+                "test": false
+            },
+            "14": {
+                "ref": "zstd/1.5.7#fde461c0d847a22f16d3066774f61b11",
+                "id": "14",
+                "recipe": "Downloaded",
+                "package_id": "8d61242b40d1fd1e269071097a22e6a6cadcf1ee",
+                "prev": "1929a90266226da4724c76f2c704ac4b",
+                "rrev": "fde461c0d847a22f16d3066774f61b11",
+                "rrev_timestamp": 1744114235.235,
+                "prev_timestamp": null,
+                "remote": "conancenter",
+                "binary_remote": null,
+                "build_id": null,
+                "binary": "Build",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "zstd",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "BSD-3-Clause",
+                "author": null,
+                "description": "Zstandard - Fast real-time compression algorithm",
+                "homepage": "https://github.com/facebook/zstd",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "shared": false,
+                    "fPIC": true,
+                    "threading": true,
+                    "build_programs": true
+                },
+                "options_description": null,
+                "version": "1.5.7",
+                "topics": [
+                    "zstandard",
+                    "compression",
+                    "algorithm",
+                    "decoder"
+                ],
+                "package_type": "static-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "build_programs": "False",
+                    "fPIC": "True",
+                    "shared": "False",
+                    "threading": "True"
+                },
+                "options_definitions": {
+                    "shared": [
+                        "True",
+                        "False"
+                    ],
+                    "fPIC": [
+                        "True",
+                        "False"
+                    ],
+                    "threading": [
+                        "True",
+                        "False"
+                    ],
+                    "build_programs": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/zstdeed99db05b3ea/e",
+                "source_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/b/src",
+                "build_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/b/build/Release",
+                "generators_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/b/build/Release/generators",
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p/lib"
+                        ],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "zstd",
+                            "cmake_target_name": "zstd::libzstd_static",
+                            "pkg_config_name": "libzstd"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "zstdlib": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p/lib"
+                        ],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/b/zstd41d89916869d5/p/bin"
+                        ],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [
+                            "pthread"
+                        ],
+                        "frameworks": [],
+                        "libs": [
+                            "zstd"
+                        ],
+                        "defines": [],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_target_name": "zstd::libzstd_static",
+                            "pkg_config_name": "libzstd"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {},
+                "label": "zstd/1.5.7",
+                "info": {
+                    "settings": {
+                        "os": "Linux",
+                        "arch": "x86_64",
+                        "compiler": "gcc",
+                        "compiler.version": "13",
+                        "build_type": "Release"
+                    },
+                    "options": {
+                        "build_programs": "False",
+                        "fPIC": "True",
+                        "shared": "False",
+                        "threading": "True"
+                    }
+                },
+                "vendor": false,
+                "conandata": {
+                    "sources": {
+                        "1.5.7": {
+                            "sha256": "eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3",
+                            "url": "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz"
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            },
+            "15": {
+                "ref": "boost/1.89.0#010f59feedfd171b15f467b42f723d13",
+                "id": "15",
+                "recipe": "Downloaded",
+                "package_id": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "prev": "e5ad54760850a62ccaa907fbaf115877",
+                "rrev": "010f59feedfd171b15f467b42f723d13",
+                "rrev_timestamp": 1761718317.562,
+                "prev_timestamp": 1761719690.626,
+                "remote": "conancenter",
+                "binary_remote": "conancenter",
+                "build_id": null,
+                "binary": "Download",
+                "invalid_build": false,
+                "info_invalid": null,
+                "name": "boost",
+                "user": null,
+                "channel": null,
+                "url": "https://github.com/conan-io/conan-center-index",
+                "license": "BSL-1.0",
+                "author": null,
+                "description": "Boost provides free peer-reviewed portable C++ source libraries",
+                "homepage": "https://www.boost.org",
+                "build_policy": null,
+                "upload_policy": null,
+                "revision_mode": "hash",
+                "provides": null,
+                "deprecated": null,
+                "win_bash": null,
+                "win_bash_run": null,
+                "default_options": {
+                    "shared": false,
+                    "fPIC": true,
+                    "header_only": false,
+                    "error_code_header_only": false,
+                    "system_no_deprecated": false,
+                    "asio_no_deprecated": false,
+                    "filesystem_no_deprecated": false,
+                    "filesystem_use_std_fs": false,
+                    "filesystem_version": null,
+                    "layout": "system",
+                    "magic_autolink": false,
+                    "diagnostic_definitions": false,
+                    "python_executable": null,
+                    "python_version": null,
+                    "namespace": "boost",
+                    "namespace_alias": false,
+                    "multithreading": true,
+                    "numa": true,
+                    "zlib": true,
+                    "bzip2": true,
+                    "lzma": false,
+                    "zstd": false,
+                    "segmented_stacks": false,
+                    "debug_level": 0,
+                    "pch": true,
+                    "extra_b2_flags": null,
+                    "i18n_backend": "deprecated",
+                    "i18n_backend_iconv": "libc",
+                    "i18n_backend_icu": false,
+                    "visibility": "hidden",
+                    "addr2line_location": "/usr/bin/addr2line",
+                    "with_stacktrace_backtrace": true,
+                    "buildid": null,
+                    "python_buildid": null,
+                    "system_use_utf8": false,
+                    "without_atomic": false,
+                    "without_charconv": false,
+                    "without_chrono": false,
+                    "without_cobalt": false,
+                    "without_container": false,
+                    "without_context": false,
+                    "without_contract": false,
+                    "without_coroutine": false,
+                    "without_date_time": false,
+                    "without_exception": false,
+                    "without_fiber": false,
+                    "without_filesystem": false,
+                    "without_graph": false,
+                    "without_graph_parallel": true,
+                    "without_iostreams": false,
+                    "without_json": false,
+                    "without_locale": false,
+                    "without_log": false,
+                    "without_math": false,
+                    "without_mpi": true,
+                    "without_nowide": false,
+                    "without_process": false,
+                    "without_program_options": false,
+                    "without_python": true,
+                    "without_random": false,
+                    "without_regex": false,
+                    "without_serialization": false,
+                    "without_stacktrace": false,
+                    "without_system": false,
+                    "without_test": false,
+                    "without_thread": false,
+                    "without_timer": false,
+                    "without_type_erasure": false,
+                    "without_url": false,
+                    "without_wave": false
+                },
+                "options_description": null,
+                "version": "1.89.0",
+                "topics": [
+                    "libraries",
+                    "cpp"
+                ],
+                "package_type": "header-library",
+                "languages": [],
+                "settings": {
+                    "os": "Linux",
+                    "arch": "x86_64",
+                    "compiler": "gcc",
+                    "compiler.cppstd": "17",
+                    "compiler.libcxx": "libstdc++11",
+                    "compiler.version": "13",
+                    "build_type": "Release"
+                },
+                "options": {
+                    "asio_no_deprecated": "True",
+                    "buildid": null,
+                    "bzip2": "False",
+                    "debug_level": "0",
+                    "diagnostic_definitions": "False",
+                    "error_code_header_only": "False",
+                    "extra_b2_flags": null,
+                    "filesystem_no_deprecated": "True",
+                    "filesystem_use_std_fs": "False",
+                    "filesystem_version": "4",
+                    "header_only": "True",
+                    "i18n_backend": "deprecated",
+                    "layout": "system",
+                    "lzma": "False",
+                    "magic_autolink": "False",
+                    "multithreading": "True",
+                    "namespace": "boost",
+                    "namespace_alias": "False",
+                    "pch": "True",
+                    "python_executable": null,
+                    "python_version": null,
+                    "segmented_stacks": "False",
+                    "system_no_deprecated": "True",
+                    "system_use_utf8": "False",
+                    "visibility": "hidden",
+                    "without_atomic": "False",
+                    "without_charconv": "True",
+                    "without_chrono": "True",
+                    "without_cobalt": "True",
+                    "without_container": "True",
+                    "without_context": "False",
+                    "without_contract": "True",
+                    "without_coroutine": "True",
+                    "without_date_time": "False",
+                    "without_exception": "True",
+                    "without_fiber": "True",
+                    "without_filesystem": "False",
+                    "without_graph": "True",
+                    "without_graph_parallel": "True",
+                    "without_iostreams": "True",
+                    "without_json": "True",
+                    "without_locale": "True",
+                    "without_log": "True",
+                    "without_math": "True",
+                    "without_mpi": "True",
+                    "without_nowide": "True",
+                    "without_process": "True",
+                    "without_program_options": "True",
+                    "without_python": "True",
+                    "without_random": "True",
+                    "without_regex": "True",
+                    "without_serialization": "True",
+                    "without_stacktrace": "True",
+                    "without_test": "True",
+                    "without_thread": "True",
+                    "without_timer": "True",
+                    "without_type_erasure": "True",
+                    "without_url": "True",
+                    "without_wave": "True",
+                    "zlib": "False",
+                    "zstd": "False"
+                },
+                "options_definitions": {
+                    "header_only": [
+                        "True",
+                        "False"
+                    ],
+                    "error_code_header_only": [
+                        "True",
+                        "False"
+                    ],
+                    "system_no_deprecated": [
+                        "True",
+                        "False"
+                    ],
+                    "asio_no_deprecated": [
+                        "True",
+                        "False"
+                    ],
+                    "filesystem_no_deprecated": [
+                        "True",
+                        "False"
+                    ],
+                    "filesystem_use_std_fs": [
+                        "True",
+                        "False"
+                    ],
+                    "filesystem_version": [
+                        null,
+                        "3",
+                        "4"
+                    ],
+                    "layout": [
+                        "system",
+                        "versioned",
+                        "tagged"
+                    ],
+                    "magic_autolink": [
+                        "True",
+                        "False"
+                    ],
+                    "diagnostic_definitions": [
+                        "True",
+                        "False"
+                    ],
+                    "python_executable": [
+                        null,
+                        "ANY"
+                    ],
+                    "python_version": [
+                        null,
+                        "ANY"
+                    ],
+                    "namespace": [
+                        "ANY"
+                    ],
+                    "namespace_alias": [
+                        "True",
+                        "False"
+                    ],
+                    "multithreading": [
+                        "True",
+                        "False"
+                    ],
+                    "zlib": [
+                        "True",
+                        "False"
+                    ],
+                    "bzip2": [
+                        "True",
+                        "False"
+                    ],
+                    "lzma": [
+                        "True",
+                        "False"
+                    ],
+                    "zstd": [
+                        "True",
+                        "False"
+                    ],
+                    "segmented_stacks": [
+                        "True",
+                        "False"
+                    ],
+                    "debug_level": [
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13"
+                    ],
+                    "pch": [
+                        "True",
+                        "False"
+                    ],
+                    "extra_b2_flags": [
+                        null,
+                        "ANY"
+                    ],
+                    "i18n_backend": [
+                        "iconv",
+                        "icu",
+                        null,
+                        "deprecated"
+                    ],
+                    "visibility": [
+                        "global",
+                        "protected",
+                        "hidden"
+                    ],
+                    "buildid": [
+                        null,
+                        "ANY"
+                    ],
+                    "system_use_utf8": [
+                        "True",
+                        "False"
+                    ],
+                    "without_atomic": [
+                        "True",
+                        "False"
+                    ],
+                    "without_charconv": [
+                        "True",
+                        "False"
+                    ],
+                    "without_chrono": [
+                        "True",
+                        "False"
+                    ],
+                    "without_cobalt": [
+                        "True",
+                        "False"
+                    ],
+                    "without_container": [
+                        "True",
+                        "False"
+                    ],
+                    "without_context": [
+                        "True",
+                        "False"
+                    ],
+                    "without_contract": [
+                        "True",
+                        "False"
+                    ],
+                    "without_coroutine": [
+                        "True",
+                        "False"
+                    ],
+                    "without_date_time": [
+                        "True",
+                        "False"
+                    ],
+                    "without_exception": [
+                        "True",
+                        "False"
+                    ],
+                    "without_fiber": [
+                        "True",
+                        "False"
+                    ],
+                    "without_filesystem": [
+                        "True",
+                        "False"
+                    ],
+                    "without_graph": [
+                        "True",
+                        "False"
+                    ],
+                    "without_graph_parallel": [
+                        "True",
+                        "False"
+                    ],
+                    "without_iostreams": [
+                        "True",
+                        "False"
+                    ],
+                    "without_json": [
+                        "True",
+                        "False"
+                    ],
+                    "without_locale": [
+                        "True",
+                        "False"
+                    ],
+                    "without_log": [
+                        "True",
+                        "False"
+                    ],
+                    "without_math": [
+                        "True",
+                        "False"
+                    ],
+                    "without_mpi": [
+                        "True",
+                        "False"
+                    ],
+                    "without_nowide": [
+                        "True",
+                        "False"
+                    ],
+                    "without_process": [
+                        "True",
+                        "False"
+                    ],
+                    "without_program_options": [
+                        "True",
+                        "False"
+                    ],
+                    "without_python": [
+                        "True",
+                        "False"
+                    ],
+                    "without_random": [
+                        "True",
+                        "False"
+                    ],
+                    "without_regex": [
+                        "True",
+                        "False"
+                    ],
+                    "without_serialization": [
+                        "True",
+                        "False"
+                    ],
+                    "without_stacktrace": [
+                        "True",
+                        "False"
+                    ],
+                    "without_test": [
+                        "True",
+                        "False"
+                    ],
+                    "without_thread": [
+                        "True",
+                        "False"
+                    ],
+                    "without_timer": [
+                        "True",
+                        "False"
+                    ],
+                    "without_type_erasure": [
+                        "True",
+                        "False"
+                    ],
+                    "without_url": [
+                        "True",
+                        "False"
+                    ],
+                    "without_wave": [
+                        "True",
+                        "False"
+                    ]
+                },
+                "generators": [],
+                "python_requires": null,
+                "system_requires": {},
+                "recipe_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost61fe6f8ad3d4b/e",
+                "source_folder": null,
+                "build_folder": null,
+                "generators_folder": null,
+                "package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p",
+                "immutable_package_folder": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p",
+                "cpp_info": {
+                    "root": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p/lib"
+                        ],
+                        "resdirs": null,
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p/bin"
+                        ],
+                        "builddirs": null,
+                        "frameworkdirs": null,
+                        "system_libs": null,
+                        "frameworks": null,
+                        "libs": null,
+                        "defines": null,
+                        "cflags": null,
+                        "cxxflags": null,
+                        "sharedlinkflags": null,
+                        "exelinkflags": null,
+                        "objects": null,
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_file_name": "Boost"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "headers": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p/bin"
+                        ],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [],
+                        "frameworks": [],
+                        "libs": [],
+                        "defines": [
+                            "BOOST_SYSTEM_NO_DEPRECATED",
+                            "BOOST_ASIO_NO_DEPRECATED",
+                            "BOOST_FILESYSTEM_NO_DEPRECATED",
+                            "BOOST_FILESYSTEM_VERSION=4"
+                        ],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [],
+                        "properties": {
+                            "cmake_target_name": "Boost::headers"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    },
+                    "_boost_cmake": {
+                        "includedirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p/include"
+                        ],
+                        "srcdirs": null,
+                        "libdirs": [],
+                        "resdirs": [],
+                        "bindirs": [
+                            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/prerequisite007/conan/p/boost1c0f876c7db04/p/bin"
+                        ],
+                        "builddirs": [],
+                        "frameworkdirs": [],
+                        "system_libs": [],
+                        "frameworks": [],
+                        "libs": [],
+                        "defines": [],
+                        "cflags": [],
+                        "cxxflags": [],
+                        "sharedlinkflags": [],
+                        "exelinkflags": [],
+                        "objects": [],
+                        "sources": null,
+                        "sysroot": null,
+                        "requires": [
+                            "headers"
+                        ],
+                        "properties": {
+                            "cmake_target_name": "Boost::boost"
+                        },
+                        "exe": null,
+                        "type": null,
+                        "location": null,
+                        "link_location": null,
+                        "languages": null
+                    }
+                },
+                "conf_info": {
+                    "user.boost:stacktrace_addr2line_available": false
+                },
+                "label": "boost/1.89.0",
+                "info": {},
+                "vendor": false,
+                "conandata": {
+                    "patches": {
+                        "1.89.0": [
+                            {
+                                "patch_description": "Optional flag to specify iconv from either libc of libiconv",
+                                "patch_file": "patches/1.88.0-locale-iconv-library-option.patch",
+                                "patch_type": "conan"
+                            }
+                        ]
+                    },
+                    "sources": {
+                        "1.89.0": {
+                            "sha256": "85a33fa22621b4f314f8e85e1a5e2a9363d22e4f4992925d4bb3bc631b5a0c7a",
+                            "url": [
+                                "https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.bz2",
+                                "https://sourceforge.net/projects/boost/files/boost/1.89.0/boost_1_89_0.tar.bz2"
+                            ]
+                        }
+                    }
+                },
+                "dependencies": {},
+                "context": "host",
+                "test": false
+            }
+        },
+        "root": {
+            "0": "hictk/None"
+        },
+        "overrides": {
+            "zlib/[>=1.2.11 <2]": [
+                "zlib/1.3.1#b8bc2603263cf7eccbd6e17e66b0ed76"
+            ],
+            "hdf5/1.14.3": [
+                "hdf5/1.14.6#0b780319690d537e6cb0683244919955"
+            ],
+            "fmt/12.0.0": [
+                "fmt/12.1.0#50abab23274d56bb8f42c94b3b9a40c7"
+            ]
+        },
+        "resolved_ranges": {
+            "cmake/[>=3.18 <4]": "cmake/3.31.12"
+        },
+        "replaced_requires": {},
+        "error": null
+    }
+}

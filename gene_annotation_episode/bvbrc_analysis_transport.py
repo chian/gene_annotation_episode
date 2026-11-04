@@ -17,7 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from .acquisition import AcquisitionError, SourceSnapshot
+from .acquisition import AcquisitionError, PublicClients, SourceSnapshot
 
 
 SERVICE = 'bvbrc_analysis'
@@ -119,7 +119,9 @@ class BVBRCAnalysisClient:
         return self._request(address, 'GET', {'kind': 'task_info', 'task_id': task_id,
             'file': file})
 
-    def download(self, url, *, byte_range=None):
+    def download(self, url, *, max_bytes, byte_range=None):
+        if type(max_bytes) is not int or max_bytes <= 0:
+            raise ValueError('bvbrc_download_byte_limit_required')
         address = _url(url)
         headers = {}
         if byte_range is not None:
@@ -131,8 +133,9 @@ class BVBRCAnalysisClient:
             start, end = byte_range
             headers['Range'] = f'bytes={start}-' + ('' if end is None else str(end))
         return self._request(address, 'GET', {'kind': 'download', 'url': address,
-            'requested_byte_range': None if byte_range is None else list(byte_range)},
-            headers=headers, authorize=False)
+            'requested_byte_range': None if byte_range is None else list(byte_range),
+            'max_bytes': max_bytes}, headers=headers, authorize=False,
+            response_max_bytes=max_bytes)
 
     def upload(self, node_url, content, *, filename):
         address = _url(node_url)
@@ -162,7 +165,8 @@ class BVBRCAnalysisClient:
             content_type='multipart/form-data; boundary=' + boundary)
 
     def _request(self, address, method, operands, *, headers=None, body=None,
-                 content_type=None, body_length=None, body_sha256=None, authorize=True):
+                 content_type=None, body_length=None, body_sha256=None, authorize=True,
+                 response_max_bytes=None):
         outgoing = {'User-Agent': 'gene-annotation-episode/0.2', 'Accept': '*/*', **(headers or {})}
         if content_type is not None:
             outgoing['Content-Type'] = content_type
@@ -192,15 +196,24 @@ class BVBRCAnalysisClient:
                 'effective_url': response.geturl(), 'request': recorded,
                 'automatic_redirects': False, 'representation': 'http_response_bytes',
                 'body_complete': True, 'http_error_response': http_error}
-            failure = None
-            try:
-                content = response.read()
-            except Exception as error:
-                content = getattr(error, 'partial', b'')
-                if not isinstance(content, bytes):
-                    content = b''
-                transport.update(body_complete=False, body_capture_error=type(error).__name__)
-                failure = error
+            failure, failure_code = None, 'bvbrc_response_body_incomplete'
+            if response_max_bytes is None:
+                try:
+                    content = response.read()
+                except Exception as error:
+                    content = getattr(error, 'partial', b'')
+                    if not isinstance(content, bytes):
+                        content = b''
+                    transport.update(body_complete=False, body_capture_error=type(error).__name__)
+                    failure = error
+            else:
+                content, capture, capture_failure = PublicClients._read_bounded_response(
+                    response, response_max_bytes)
+                transport.update(capture)
+                if capture_failure is not None:
+                    failure = ValueError(capture_failure)
+                    if capture_failure == 'provider_response_byte_limit':
+                        failure_code = 'bvbrc_response_byte_limit'
             if not isinstance(content, bytes):
                 transport.update(body_complete=False, body_capture_error='non_bytes_response')
                 content, failure = b'', ValueError('non_bytes_response')
@@ -216,7 +229,7 @@ class BVBRCAnalysisClient:
                 datetime.now(timezone.utc).isoformat(), content,
                 observed_headers.get('content-type', 'application/octet-stream'), transport)
             if failure is not None:
-                raise AcquisitionError('bvbrc_response_body_incomplete', snapshot=snapshot,
+                raise AcquisitionError(failure_code, snapshot=snapshot,
                     phase='http_response', submission_outcome='unknown') from failure
             return snapshot
 

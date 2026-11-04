@@ -1,0 +1,719 @@
+{
+  "attempt": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682",
+  "test": "tests/test_vdb_info_corrected_workflow_682.py::test_corrected_info_full_workflow",
+  "pytest_result": "1 passed in 597.50s",
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/handle.json",
+    "unit": "gene-local-job-a2e1fdf4c9a844d7a263e8e23c89d261.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-29T07:13:04.231371+00:00",
+          "monotonic_ns": 1071545928697609,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 600.856646202,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 629067776
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "case_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820",
+  "native_invocations": 1,
+  "native_retries": 0,
+  "native_unit": "gene-local-job-53066b63313942b294f5f8b9d964c10c.service",
+  "values": {
+    "mode": "info",
+    "native_commands": 1,
+    "native_returncode": 0,
+    "native_stdout": {
+      "sha256": "cb65d0f9b71a60a74dcbabb602dcd86cdc29e6b5d65c2d0ec3d7c7235c174e0a",
+      "size_bytes": 423,
+      "artifact_ref": "artifact_cb65d0f9b71a60a74dcbabb602dcd86cdc29e6b5d65c2d0ec3d7c7235c174e0a"
+    },
+    "native_fields": [
+      {
+        "field_name": "vdb_selected_inputs",
+        "json_pointer": null,
+        "line_number": 1,
+        "missing_reason": "ambiguous_population",
+        "native_lexeme": " \n/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_\nfixture_acquisition_2026-10-28_658/retained/fixture/ERR3487613",
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "native_input_tokens",
+        "value": null,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_resolved_paths",
+        "json_pointer": null,
+        "line_number": 4,
+        "missing_reason": "ambiguous_population",
+        "native_lexeme": " \n/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_vdb_\nfixture_acquisition_2026-10-28_658/retained/fixture/ERR3487613",
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "paths",
+        "value": null,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_sequence_count",
+        "json_pointer": null,
+        "line_number": 7,
+        "missing_reason": null,
+        "native_lexeme": "20",
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "sequences",
+        "value": 20,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_total_unclipped_bases",
+        "json_pointer": null,
+        "line_number": 7,
+        "missing_reason": null,
+        "native_lexeme": "5,000",
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "nt",
+        "value": 5000,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_longest_sequence_bases",
+        "json_pointer": null,
+        "line_number": 8,
+        "missing_reason": null,
+        "native_lexeme": "250",
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "nt",
+        "value": 250,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_average_sequence_bases",
+        "json_pointer": null,
+        "line_number": 9,
+        "missing_reason": null,
+        "native_lexeme": "250",
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "nt",
+        "value": 250,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_csra_inputs",
+        "json_pointer": "",
+        "line_number": null,
+        "missing_reason": "native_field_absent",
+        "native_lexeme": null,
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "paths",
+        "value": null,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_reference_sequence_count",
+        "json_pointer": "",
+        "line_number": null,
+        "missing_reason": "native_field_absent",
+        "native_lexeme": null,
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "sequences",
+        "value": null,
+        "value_basis": "native_reported"
+      },
+      {
+        "field_name": "vdb_reference_total_bases",
+        "json_pointer": "",
+        "line_number": null,
+        "missing_reason": "native_field_absent",
+        "native_lexeme": null,
+        "occurrence_id": "native_blast_utility_occurrence_34c200df0b226ddf08b0b4a0675c198a317a5298c2a079ced50b4acbb42ec0d3",
+        "unit": "nt",
+        "value": null,
+        "value_basis": "native_reported"
+      }
+    ],
+    "inspection_completeness": "partial",
+    "delivery_state": "complete",
+    "context_authenticated": true,
+    "typed_immediate_parent_and_root_admission": true,
+    "publication_equal": true,
+    "inferred_biological_identities": false,
+    "average_recomputed_or_substituted": false,
+    "one_observation_per_selected_action": true,
+    "accounting": [
+      {
+        "role": "annotation",
+        "episode_id": "episode_a010c2522adc27d119e6508019bd36441b6b64f299278a557ab3e5e875861ced",
+        "own_actions": 1,
+        "raw_history": [
+          0.0
+        ],
+        "estimate": {
+          "turns": 1,
+          "expected_next_gain": {
+            "value": 0.0,
+            "lower": 0.0,
+            "upper": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "alpha": 0.0
+          },
+          "parameters": {
+            "window_size": 100,
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit"
+          },
+          "diagnostics": {
+            "fixture": "scripted_scientific_and_monitor_continuation_not_production_stopping"
+          },
+          "provenance": {
+            "kind": "caller_injected",
+            "function": "test_blast_vdb_workflow_673.run_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "template_relationship": "not_inferred"
+          }
+        }
+      },
+      {
+        "role": "scientific_process",
+        "episode_id": "episode_63fe9a9bc25748942a1d1a4284b99863a570dd124ae6026f902fd010206e57b7",
+        "own_actions": 3,
+        "raw_history": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "estimate": {
+          "diagnostics": {
+            "fixture": "scripted_scientific_and_monitor_continuation_not_production_stopping"
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "function": "test_blast_vdb_workflow_673.run_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 3
+        }
+      },
+      {
+        "role": "launch",
+        "episode_id": "episode_22377c76ca90c8db4c0fc85a344f74437e0b5d613c68278d008c10da39d6d9a7",
+        "own_actions": 1,
+        "raw_history": [
+          3.0
+        ],
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "completion_action_index": 0,
+            "completion_proof": {
+              "assignment_sha256": "829065d3a0c8525e7c62a1c4e86bcfe935a9f19cbd08ed0cb6cb2fb1a216f3d1",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_22377c76ca90c8db4c0fc85a344f74437e0b5d613c68278d008c10da39d6d9a7",
+              "operation_key": "vdb-workflow673-info:episode_22377c76ca90c8db4c0fc85a344f74437e0b5d613c68278d008c10da39d6d9a7:0",
+              "receipt_sha256": "217bcb5d20108009ff50fffba9e3f4e022d995b37a2e1d1ca04465f8c76a39de",
+              "run_id": "vdb-workflow673-info",
+              "validation_keys": [
+                "received_usable_handoff"
+              ],
+              "version": "practical_completion_v1"
+            },
+            "completion_unit_ref": {
+              "episode_id": "episode_22377c76ca90c8db4c0fc85a344f74437e0b5d613c68278d008c10da39d6d9a7",
+              "unit_id": "unit_4cab6386bf9a15ac873220d780f11d824fa82441d46122b24c5d45e566ce5b23",
+              "unit_index": 0
+            },
+            "fitting_scope": "verified_assignment_endpoint",
+            "history_used": 1
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          },
+          "turns": 1
+        }
+      },
+      {
+        "role": "launch_local",
+        "episode_id": "episode_cb2f88aae15492d130a4758c8337175d0faa031b622fdb24f406f714871d3398",
+        "own_actions": 1,
+        "raw_history": [
+          7.0
+        ],
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "completion_action_index": 0,
+            "completion_proof": {
+              "assignment_sha256": "255dfe743d0d467d506e684e776595b1b604b82084ee9b49930dd949038dedec",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_cb2f88aae15492d130a4758c8337175d0faa031b622fdb24f406f714871d3398",
+              "operation_key": "vdb-workflow673-info:episode_cb2f88aae15492d130a4758c8337175d0faa031b622fdb24f406f714871d3398:0",
+              "receipt_sha256": "eaa91ecb611a04fcaf8dfeaacd8da5913f096ebb46a99f1333c3550d642c8801",
+              "run_id": "vdb-workflow673-info",
+              "validation_keys": [
+                "handoff"
+              ],
+              "version": "practical_completion_v1"
+            },
+            "completion_unit_ref": {
+              "episode_id": "episode_cb2f88aae15492d130a4758c8337175d0faa031b622fdb24f406f714871d3398",
+              "unit_id": "unit_bdff9f10f96da6440d9dfa31f1c055d2214de25c2ccd0e21f813a3b042fe5b29",
+              "unit_index": 0
+            },
+            "fitting_scope": "verified_assignment_endpoint",
+            "history_used": 1
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.practical_execution_state.PracticalState.verify_completion",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          },
+          "turns": 1
+        }
+      },
+      {
+        "role": "monitor",
+        "episode_id": "episode_762387f7c9507e4c170d952831d40b168df31af3ef88a746d584e5a9c64e2b7c",
+        "own_actions": 1,
+        "raw_history": [
+          1.0
+        ],
+        "estimate": {
+          "diagnostics": {
+            "fixture": "scripted_scientific_and_monitor_continuation_not_production_stopping"
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "function": "test_blast_vdb_workflow_673.run_case.<locals>.controller.<locals>.estimate",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "kind": "caller_injected",
+            "template_relationship": "not_inferred"
+          },
+          "turns": 1
+        }
+      },
+      {
+        "role": "results",
+        "episode_id": "episode_845b5870658f175733a5e80751848828ed74d8942b5aa69ba104189544c55be5",
+        "own_actions": 1,
+        "raw_history": [
+          2.0
+        ],
+        "estimate": {
+          "diagnostics": {
+            "completed_acquisition_turns": 1,
+            "completion_action_index": 0,
+            "completion_proof": {
+              "assignment_sha256": "c983a3b86b1a0163856589fb5e1d56a1d0fc234d4c102a2d645c011ed1e11f28",
+              "endpoint": "usable_handoff",
+              "episode_id": "episode_845b5870658f175733a5e80751848828ed74d8942b5aa69ba104189544c55be5",
+              "operation_key": "vdb-workflow673-info:episode_845b5870658f175733a5e80751848828ed74d8942b5aa69ba104189544c55be5:0",
+              "receipt_sha256": "6fe1597e248f255489067894dd466863dac8fcffcfb4cf60034ee2fc5bcccffe",
+              "run_id": "vdb-workflow673-info",
+              "validation_keys": [
+                "original_native_attempt",
+                "retained_bundle_custody",
+                "requested_utility_projection"
+              ],
+              "version": "practical_completion_v1"
+            },
+            "completion_unit_ref": {
+              "episode_id": "episode_845b5870658f175733a5e80751848828ed74d8942b5aa69ba104189544c55be5",
+              "unit_id": "unit_692d9525c88759471e59ebb9b81cb35e12027653e7dd7627a700d1de26c0a26b",
+              "unit_index": 0
+            },
+            "fitting_scope": "verified_assignment_endpoint",
+            "history_used": 1
+          },
+          "expected_next_gain": {
+            "alpha": 0.0,
+            "lower": 0.0,
+            "status_code": 0,
+            "uncertainty_code": 0,
+            "upper": 0.0,
+            "value": 0.0
+          },
+          "parameters": {
+            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "subsample_size": 50,
+            "uncertainty_alpha": 0.05,
+            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+            "window_size": 100
+          },
+          "provenance": {
+            "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+            "completion_proof": "practical_completion_v1",
+            "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+            "continuation": "existing_available_upper_bound_lte_configured_cost",
+            "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+            "raw_history": "unchanged_one_observation_per_completed_own_action",
+            "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+            "version": "verified_practical_endpoint_yield_v1"
+          },
+          "turns": 1
+        }
+      }
+    ],
+    "operational_acquisition_credit": 2,
+    "practical_future_expected_credit": 0,
+    "monitor_received_original_target": true,
+    "requested_artifact_grants": [
+      "artifact_3f33081c4f6d81ef15ec9958f5806ded9d726c24e376ed9f651583b63460a4f7",
+      "artifact_cb65d0f9b71a60a74dcbabb602dcd86cdc29e6b5d65c2d0ec3d7c7235c174e0a"
+    ],
+    "raw_bundle_granted": false,
+    "corrected_saved_result_artifact_ref": "artifact_3f33081c4f6d81ef15ec9958f5806ded9d726c24e376ed9f651583b63460a4f7",
+    "native_handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/workspace/.episode-operations/3aac44546d686880f258f0d8dd203aa0375a06dc06231c9222473eb1396d2f96/3d9ce5a6832b637b3bc5b3320c290da82fe8ea5105d76f5e1231bb3fac3e2f74/native.json"
+  },
+  "saved_replay": {
+    "native_commands": 0,
+    "native_parsing": 0,
+    "new_acquisitions": 0,
+    "shared_recalculated_counts": [],
+    "projection_equal": true,
+    "closed_collect_equal": true,
+    "typed_root_redelivery_equal": true,
+    "store_dump_equal": true,
+    "protected_immutable_files": 202,
+    "original_path_open_guard": true,
+    "immutable_writer_adapter": "read_existing_and_assert_exact_canonical_bytes_only",
+    "adapter_paths": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/run/execution-results/715aedb5402c0c8bf8ae60149aeee7880dafbb56f989a9b823aac644585ac19d/native-blast-utility-actions/2c58560b567f6fce9f585506ffd461d6b862c63609ef6827a9dc48df52f88585/capture/capture-intent.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/run/execution-results/715aedb5402c0c8bf8ae60149aeee7880dafbb56f989a9b823aac644585ac19d/native-blast-utility-actions/2c58560b567f6fce9f585506ffd461d6b862c63609ef6827a9dc48df52f88585/intent.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/run/native-blast-utility-result-index/0c79ec7a39a97235a1967898b160ee68a203907c95c90938e53719a6d74243db/2c58560b567f6fce9f585506ffd461d6b862c63609ef6827a9dc48df52f88585.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/run/native-blast-utility-result-index/1f320d56bf1bd0aef193d3f91352a1186e342c5c4397918344fd03dc9fbde4f1/2c58560b567f6fce9f585506ffd461d6b862c63609ef6827a9dc48df52f88585.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/run/native-blast-utility-result-index/e9992cd485ca6642b6776b50833180ce746066911d420dc3b2cd1db11a4654ea/2c58560b567f6fce9f585506ffd461d6b862c63609ef6827a9dc48df52f88585.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/run/native-blast-utility-result-index/ecf38d713ecb70b1b2057627e642c9b058bf83848ee216ed38b7b208d63171fd/2c58560b567f6fce9f585506ffd461d6b862c63609ef6827a9dc48df52f88585.json",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/run/native-blast-utility-target-index/9c3f3ec253dcdadb4653cce61acceeff99da2df0c762aae35cbb03e919e5face/2c58560b567f6fce9f585506ffd461d6b862c63609ef6827a9dc48df52f88585.json"
+    ],
+    "unmodified_no_write_replay_claimed": false
+  },
+  "historical_store_opened": false,
+  "protected_pins_unchanged": true,
+  "original_authority_pin": {
+    "path": "/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt",
+    "size_bytes": 22676,
+    "sha256": "f43e46c2433c44d320d1bbdb4e08f6cb85608a29d50911c2be28eb963581b6dc"
+  },
+  "approved_contract_pin": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_wrapping_2026-10-29_678/DECODING_CONTRACT_PROPOSAL_002.md",
+    "size_bytes": 21223,
+    "sha256": "14ab8df1d230f109f9f23743df158e60d6f17c0d143c6b75155b8a803a6b6fb7"
+  },
+  "artifact_pins": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/receipt.json",
+      "size_bytes": 1625,
+      "sha256": "d340a151f77ac18846361b6fb68f6b3d79e1f4c6f38dae49c2fc01b531405f4b"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/execution_audit.json",
+      "size_bytes": 156,
+      "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/stdout.txt",
+      "size_bytes": 110,
+      "sha256": "051e348e9a17f33cd989cb2ddd9a74fb4a392cdee9892d7e405aef6c9a1f49e1"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/stderr.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/junit.xml",
+      "size_bytes": 373,
+      "sha256": "52d67bf79ee44ab46d8dbabc8d566e830699fe2f7021c742925653fb40e81612"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/case_reports.jsonl",
+      "size_bytes": 172,
+      "sha256": "a89cbb60cd9ab33e4e90ce0ca29e23a7e84b54124619022f95ad9cb9518c2cc7"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/selected_request.json",
+      "size_bytes": 5862,
+      "sha256": "4116aababbf0f07fd33b29e067c671aa5e7d6bd27b8e3b200acb5647d6de70ed"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/selected_native_executables.json",
+      "size_bytes": 105,
+      "sha256": "529662b992a3055364f4948dc28f7dca4700117288732a4c01e84b3760781076"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/selected_existing_native_executables.json",
+      "size_bytes": 233,
+      "sha256": "91903d11d92825107725c9574907996d76d432ee15a22b92ffe40a5080358259"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/selected_native_libraries.json",
+      "size_bytes": 2526,
+      "sha256": "def2a29daac452227026313da78071d4eec3e673a145bb9a5885b8d3554b4b2d"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/native_library_pins_before.json",
+      "size_bytes": 82814,
+      "sha256": "55f0de7e825dfe1d3972feb7a58e7876b1ba98a18bb8e30f2df944d435846413"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/native_library_pins_after.json",
+      "size_bytes": 82814,
+      "sha256": "55f0de7e825dfe1d3972feb7a58e7876b1ba98a18bb8e30f2df944d435846413"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/original_retained_fixture_pins_before.json",
+      "size_bytes": 2475,
+      "sha256": "92963beeaa56260e818cb7e987b5e3f531c11d5caeb15d3db2e4537690e89244"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/original_retained_fixture_pins_after.json",
+      "size_bytes": 2475,
+      "sha256": "92963beeaa56260e818cb7e987b5e3f531c11d5caeb15d3db2e4537690e89244"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/source_pins_before.json",
+      "size_bytes": 2317526,
+      "sha256": "60e72da3aa56ac0f1bd1da0725b014d2398b5fcdcfd5405690059395dd65a2ba"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/source_pins_after.json",
+      "size_bytes": 2317526,
+      "sha256": "60e72da3aa56ac0f1bd1da0725b014d2398b5fcdcfd5405690059395dd65a2ba"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/dependency_pins_before.json",
+      "size_bytes": 1593594,
+      "sha256": "6ab2f075e4e931753c9c55b8eb81343a23bd82a19044511dcf3f427755acf5fa"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/dependency_pins_after.json",
+      "size_bytes": 1593594,
+      "sha256": "6ab2f075e4e931753c9c55b8eb81343a23bd82a19044511dcf3f427755acf5fa"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/stdlib_pins_before.json",
+      "size_bytes": 191368,
+      "sha256": "3125ebb0763bc07ded352c34f68c543966344c5af8cc83060a0a0d0f2b233472"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/stdlib_pins_after.json",
+      "size_bytes": 191368,
+      "sha256": "3125ebb0763bc07ded352c34f68c543966344c5af8cc83060a0a0d0f2b233472"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/binary_pins_before.json",
+      "size_bytes": 544,
+      "sha256": "236d5b8a6f1e0a03d2fde90edb77da714492b5d1d177ba3ec55eb9e6b129d436"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/binary_pins_after.json",
+      "size_bytes": 544,
+      "sha256": "236d5b8a6f1e0a03d2fde90edb77da714492b5d1d177ba3ec55eb9e6b129d436"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/INPUT_SELECTION.json",
+      "size_bytes": 9366,
+      "sha256": "8fb058ae72ec3bf269747eb8f0d8b6fa7299d425eee85c1eac89a15445809d9c"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/SELECTED_JOB.json",
+      "size_bytes": 16673,
+      "sha256": "b4eb6815415501587125c09b403265b1ddd0e648e7d5671cfc432131e9af93da"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/NATIVE_HANDLE.json",
+      "size_bytes": 18245,
+      "sha256": "b4f0e980eded805126ad7188ffb6209e35d45268e4a32b61a229581d18063d8d"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/NATIVE_CLOSURE.json",
+      "size_bytes": 1245,
+      "sha256": "89ab70a89d81368dd2a2810f1f75ac944da01ca8583bdb2587eac8dba9d73c7c"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/MONITOR_RETURN.json",
+      "size_bytes": 209,
+      "sha256": "ba21f68e2549daa283a98223b806ce0566e6d683c0ef96d16c19fd4c47b8ac8d"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/DECISION_CALLS.json",
+      "size_bytes": 1019,
+      "sha256": "daf163d1ce965c114f03969e3341b652c41b5ee948434cc15b667f0f923eeb5d"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/CASE.json",
+      "size_bytes": 3470933,
+      "sha256": "6c580b5ca7c1ecd6b0d5c610306533ee521912be801903823b0f6d2d056b25a4"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/VERIFIED_VALUES_682.json",
+      "size_bytes": 16934,
+      "sha256": "152ca0bd475b106167b3e17a217578e20e04ce9be75947b687dc05932f1ece1a"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check145_info682/temporary/pytest/vdb-info-corrected6820/SAVED_REPLAY.json",
+      "size_bytes": 2917,
+      "sha256": "5b1cb5168abb88dd58d5705604231bfaf82533afec9371a0e1ae743902013a3c"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_corrected_workflow_2026-10-29_682/CHILD_RETURNS_001.json",
+      "size_bytes": 15671,
+      "sha256": "689f2cfb493944b15790ec5d1518d0adbde822470cda0e37475618ac463eb1bb"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_corrected_workflow_2026-10-29_682/NATIVE_CHAIN_001.json",
+      "size_bytes": 36826,
+      "sha256": "74c2a649aa88cff8b106fc043c2bf2723b8cd8b3197d4ba04e0ded2a6f563503"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_corrected_workflow_2026-10-29_682/LAUNCH_COMMAND_001.sh",
+      "size_bytes": 1615,
+      "sha256": "70eca066f8d44e20fd85a5d6e5d9a022fb769aa325facc2de2cd5b94ce0e408a"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_corrected_workflow_2026-10-29_682/VERIFICATION_BOUNDARY_001.json",
+      "size_bytes": 3005,
+      "sha256": "ae2c7dd775781fb1d3851025818c487e572fcb27d25cb5dfbb3225b4acf3d4c0"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_corrected_workflow_2026-10-29_682/INSPECTED_SOURCE_PINS_001.json",
+      "size_bytes": 6950,
+      "sha256": "fd1fa483458356dc4f98cbb0449b10632162fdad0d4ae7f1d5a15fc3cb006274"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_corrected_workflow_2026-10-29_682/PROTECTED_PINS_BEFORE.json",
+      "size_bytes": 1320,
+      "sha256": "3e6403c272e3a067eb421cbb7af7fbe71b453ade243ada81bcc823eccda8725a"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_vdb_info_corrected_workflow_2026-10-29_682/PROTECTED_PINS_AFTER.json",
+      "size_bytes": 1320,
+      "sha256": "3e6403c272e3a067eb421cbb7af7fbe71b453ade243ada81bcc823eccda8725a"
+    }
+  ],
+  "limitations": {
+    "scripted_episode_choices": true,
+    "scientific_and_monitor_continuation_scripted": true,
+    "production_practical_estimator_used": true,
+    "annotation_confidence_created": false,
+    "info_selected_db_path_only": true,
+    "other_vdb_modes_or_resources_claimed": false,
+    "unmodified_no_write_replay_claimed": false,
+    "operation_count_changed": false
+  }
+}

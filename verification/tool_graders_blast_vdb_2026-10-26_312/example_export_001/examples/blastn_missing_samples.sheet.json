@@ -1,0 +1,737 @@
+{
+  "schema": "blast_vdb_search_sheet_v1",
+  "search": {
+    "search_key": {
+      "artifact_key": "report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "program_context": {
+      "execution_program": "blastn_vdb",
+      "reported_program": "blastn",
+      "scientific_mode": "database",
+      "query_kind": "sequence",
+      "reference_kind": "vdb_mixed",
+      "native_version": "BLASTN 2.17.0+",
+      "geometry_program": "blastn"
+    },
+    "stage": null,
+    "iteration": null,
+    "normalized": {
+      "schema": "blast_normalized_result_v1",
+      "mode": "database",
+      "resource": "hpc",
+      "format": "json2",
+      "query": {
+        "id": "q",
+        "title": "q",
+        "length": 8
+      },
+      "search": {
+        "program": "blastn_vdb",
+        "version": "BLASTN 2.17.0+",
+        "database": "synthetic-selected",
+        "parameters": {},
+        "statistics": {
+          "db_num": 123,
+          "db_len": 999,
+          "eff_space": 4242
+        },
+        "request": {
+          "synthetic": true
+        },
+        "hit_array_present": true,
+        "reported_hit_count": 2
+      },
+      "hits": [
+        {
+          "hit_index": 0,
+          "length": 8,
+          "descriptions": [
+            {
+              "id": "r1",
+              "accession": "r1",
+              "title": "synthetic read"
+            }
+          ],
+          "unpaired_metadata": {},
+          "hsps": [
+            {
+              "query_from": 1,
+              "query_to": 8,
+              "hit_from": 1,
+              "hit_to": 8,
+              "qseq": "ACGTACGT",
+              "hseq": "ACGTACGT",
+              "align_len": 8,
+              "identity": 8,
+              "gaps": 0,
+              "score": 16,
+              "bit_score": 20,
+              "evalue": 0.001
+            }
+          ]
+        },
+        {
+          "hit_index": 1,
+          "length": 8,
+          "descriptions": [
+            {
+              "id": "r2",
+              "accession": "r2",
+              "title": "synthetic read"
+            }
+          ],
+          "unpaired_metadata": {},
+          "hsps": [
+            {
+              "query_from": 1,
+              "query_to": 8,
+              "hit_from": 1,
+              "hit_to": 8,
+              "qseq": "ACGTACGT",
+              "hseq": "ACGTACGT",
+              "align_len": 8,
+              "identity": 8,
+              "gaps": 0,
+              "score": 16,
+              "bit_score": 20,
+              "evalue": 0.001
+            }
+          ]
+        }
+      ],
+      "native": {
+        "document": {
+          "BlastOutput2": [
+            {
+              "report": {
+                "program": "blastn",
+                "version": "BLASTN 2.17.0+",
+                "search_target": {
+                  "db": "synthetic-selected"
+                },
+                "params": {},
+                "results": {
+                  "search": {
+                    "query_id": "q",
+                    "query_title": "q",
+                    "query_len": 8,
+                    "hits": [
+                      {
+                        "len": 8,
+                        "description": [
+                          {
+                            "id": "r1",
+                            "accession": "r1",
+                            "title": "synthetic read"
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "query_from": 1,
+                            "query_to": 8,
+                            "hit_from": 1,
+                            "hit_to": 8,
+                            "qseq": "ACGTACGT",
+                            "hseq": "ACGTACGT",
+                            "align_len": 8,
+                            "identity": 8,
+                            "gaps": 0,
+                            "score": 16,
+                            "bit_score": 20,
+                            "evalue": 0.001
+                          }
+                        ]
+                      },
+                      {
+                        "len": 8,
+                        "description": [
+                          {
+                            "id": "r2",
+                            "accession": "r2",
+                            "title": "synthetic read"
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "query_from": 1,
+                            "query_to": 8,
+                            "hit_from": 1,
+                            "hit_to": 8,
+                            "qseq": "ACGTACGT",
+                            "hseq": "ACGTACGT",
+                            "align_len": 8,
+                            "identity": 8,
+                            "gaps": 0,
+                            "score": 16,
+                            "bit_score": 20,
+                            "evalue": 0.001
+                          }
+                        ]
+                      }
+                    ],
+                    "stat": {
+                      "db_num": 123,
+                      "db_len": 999,
+                      "eff_space": 4242
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "archive_member": null,
+        "sha256": "5b69efbceef7bfa1d091b7d464d38cc4263da06c7f95e480c41fb2e85e20a992"
+      },
+      "issues": []
+    },
+    "row_map": [
+      {
+        "hit_index": 0,
+        "description_ordinals": [
+          0
+        ],
+        "hsp_ordinals": [
+          0
+        ]
+      },
+      {
+        "hit_index": 1,
+        "description_ordinals": [
+          0
+        ],
+        "hsp_ordinals": [
+          0
+        ]
+      }
+    ],
+    "operand_binding": {
+      "role": "query",
+      "artifact_key": "synthetic:query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic:query",
+      "molecule": "dna",
+      "length": 8,
+      "selected_interval": null,
+      "identity": null
+    },
+    "reporting": {
+      "native_hit_array_present": true,
+      "native_hit_count": 2,
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null,
+      "native_returncode": 0,
+      "producer_complete": true
+    },
+    "native": {
+      "report": {
+        "program": "blastn",
+        "version": "BLASTN 2.17.0+",
+        "search_target": {
+          "db": "synthetic-selected"
+        },
+        "params": {},
+        "results": {
+          "search": {
+            "query_id": "q",
+            "query_title": "q",
+            "query_len": 8,
+            "hits": [
+              {
+                "len": 8,
+                "description": [
+                  {
+                    "id": "r1",
+                    "accession": "r1",
+                    "title": "synthetic read"
+                  }
+                ],
+                "hsps": [
+                  {
+                    "query_from": 1,
+                    "query_to": 8,
+                    "hit_from": 1,
+                    "hit_to": 8,
+                    "qseq": "ACGTACGT",
+                    "hseq": "ACGTACGT",
+                    "align_len": 8,
+                    "identity": 8,
+                    "gaps": 0,
+                    "score": 16,
+                    "bit_score": 20,
+                    "evalue": 0.001
+                  }
+                ]
+              },
+              {
+                "len": 8,
+                "description": [
+                  {
+                    "id": "r2",
+                    "accession": "r2",
+                    "title": "synthetic read"
+                  }
+                ],
+                "hsps": [
+                  {
+                    "query_from": 1,
+                    "query_to": 8,
+                    "hit_from": 1,
+                    "hit_to": 8,
+                    "qseq": "ACGTACGT",
+                    "hseq": "ACGTACGT",
+                    "align_len": 8,
+                    "identity": 8,
+                    "gaps": 0,
+                    "score": 16,
+                    "bit_score": 20,
+                    "evalue": 0.001
+                  }
+                ]
+              }
+            ],
+            "stat": {
+              "db_num": 123,
+              "db_len": 999,
+              "eff_space": 4242
+            }
+          }
+        }
+      },
+      "search": {
+        "query_id": "q",
+        "query_title": "q",
+        "query_len": 8,
+        "hits": [
+          {
+            "len": 8,
+            "description": [
+              {
+                "id": "r1",
+                "accession": "r1",
+                "title": "synthetic read"
+              }
+            ],
+            "hsps": [
+              {
+                "query_from": 1,
+                "query_to": 8,
+                "hit_from": 1,
+                "hit_to": 8,
+                "qseq": "ACGTACGT",
+                "hseq": "ACGTACGT",
+                "align_len": 8,
+                "identity": 8,
+                "gaps": 0,
+                "score": 16,
+                "bit_score": 20,
+                "evalue": 0.001
+              }
+            ]
+          },
+          {
+            "len": 8,
+            "description": [
+              {
+                "id": "r2",
+                "accession": "r2",
+                "title": "synthetic read"
+              }
+            ],
+            "hsps": [
+              {
+                "query_from": 1,
+                "query_to": 8,
+                "hit_from": 1,
+                "hit_to": 8,
+                "qseq": "ACGTACGT",
+                "hseq": "ACGTACGT",
+                "align_len": 8,
+                "identity": 8,
+                "gaps": 0,
+                "score": 16,
+                "bit_score": 20,
+                "evalue": 0.001
+              }
+            ]
+          }
+        ],
+        "stat": {
+          "db_num": 123,
+          "db_len": 999,
+          "eff_space": 4242
+        }
+      },
+      "line_numbers": null
+    },
+    "issues": []
+  },
+  "report_source": {
+    "artifact_key": "report",
+    "artifact_ref": "synthetic:report",
+    "member_ordinal": null,
+    "member_sha256": null
+  },
+  "query_binding": {
+    "operand": {
+      "role": "query",
+      "artifact_key": "synthetic:query",
+      "record_ordinal": 0,
+      "native_id": "q",
+      "native_title": "q",
+      "subject_ref": "synthetic:query",
+      "molecule": "dna",
+      "length": 8,
+      "selected_interval": null,
+      "identity": null
+    },
+    "axis_kind": "sequence",
+    "full_length": 8,
+    "coordinate_unit": "nt",
+    "sequence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pssm_key": null,
+    "master_mapping_ref": null
+  },
+  "dataset_records": [
+    {
+      "dataset_key": "D0",
+      "identifier": {
+        "namespace": "synthetic",
+        "value": "D0",
+        "version": null
+      },
+      "dataset_type": "sra",
+      "selected_input": {
+        "kind": "alias",
+        "value": "synthetic-selected"
+      },
+      "snapshot": {
+        "release": "r1",
+        "snapshot_id": null,
+        "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "search_context": {
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "sra_mode": 0,
+        "include_filtered_reads": false,
+        "subject_genetic_code": null,
+        "input_pssm_key": null,
+        "source": {
+          "source_ref": "synthetic:supplied",
+          "pointer": "/invocation"
+        },
+        "query_extent": {
+          "mode": "full",
+          "interval": null,
+          "source": {
+            "source_ref": "synthetic:supplied",
+            "pointer": "/invocation/query_extent"
+          }
+        }
+      },
+      "run_identifiers": [],
+      "sample_links": [],
+      "assembly_links": [],
+      "metadata_keys": [
+        "member0"
+      ],
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/datasets/D0"
+      }
+    },
+    {
+      "dataset_key": "D1",
+      "identifier": {
+        "namespace": "synthetic",
+        "value": "D1",
+        "version": null
+      },
+      "dataset_type": "sra",
+      "selected_input": {
+        "kind": "alias",
+        "value": "synthetic-selected"
+      },
+      "snapshot": {
+        "release": "r1",
+        "snapshot_id": null,
+        "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "search_context": {
+        "search_key": {
+          "artifact_key": "report",
+          "member_ordinal": null,
+          "report_index": 0,
+          "search_pointer": "/BlastOutput2/0/report/results/search"
+        },
+        "sra_mode": 0,
+        "include_filtered_reads": false,
+        "subject_genetic_code": null,
+        "input_pssm_key": null,
+        "source": {
+          "source_ref": "synthetic:supplied",
+          "pointer": "/invocation"
+        },
+        "query_extent": {
+          "mode": "full",
+          "interval": null,
+          "source": {
+            "source_ref": "synthetic:supplied",
+            "pointer": "/invocation/query_extent"
+          }
+        }
+      },
+      "run_identifiers": [],
+      "sample_links": [],
+      "assembly_links": [],
+      "metadata_keys": [
+        "member1"
+      ],
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/datasets/D1"
+      }
+    }
+  ],
+  "member_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": 0,
+      "description_ordinal": 0,
+      "native_description": {
+        "id": "r1",
+        "accession": "r1",
+        "title": "synthetic read",
+        "taxid": null
+      },
+      "dataset_key": "D0",
+      "member_kind": "read",
+      "member_identifier": {
+        "namespace": "synthetic",
+        "value": "r1",
+        "version": null
+      },
+      "relationship": "reported_origin",
+      "read_identity": {
+        "native_read_name": "r1",
+        "spot_id": null,
+        "read_index": null,
+        "source": {
+          "source_ref": "synthetic:supplied",
+          "pointer": "/members/0"
+        }
+      },
+      "reference_identity": null,
+      "sample_key": null,
+      "provenance": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/members/0"
+      }
+    },
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "hit_ordinal": 1,
+      "description_ordinal": 0,
+      "native_description": {
+        "id": "r2",
+        "accession": "r2",
+        "title": "synthetic read",
+        "taxid": null
+      },
+      "dataset_key": "D1",
+      "member_kind": "read",
+      "member_identifier": {
+        "namespace": "synthetic",
+        "value": "r2",
+        "version": null
+      },
+      "relationship": "reported_origin",
+      "read_identity": {
+        "native_read_name": "r2",
+        "spot_id": null,
+        "read_index": null,
+        "source": {
+          "source_ref": "synthetic:supplied",
+          "pointer": "/members/1"
+        }
+      },
+      "reference_identity": null,
+      "sample_key": null,
+      "provenance": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/members/1"
+      }
+    }
+  ],
+  "sequence_identity_bindings": [
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "binding": {
+        "report_index": 0,
+        "hit_index": 0,
+        "kind": "full_sequence_digest",
+        "sequence_group": "sha256:b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+        "algorithm": "sha256",
+        "digest": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+        "molecule": "nt",
+        "sequence_length": 8,
+        "source_ref": "synthetic:sequences",
+        "pointer": "/0",
+        "linkage_source_ref": "synthetic:relations",
+        "linkage_pointer": "/0"
+      }
+    },
+    {
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      },
+      "binding": {
+        "report_index": 0,
+        "hit_index": 1,
+        "kind": "full_sequence_digest",
+        "sequence_group": "sha256:b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+        "algorithm": "sha256",
+        "digest": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b",
+        "molecule": "nt",
+        "sequence_length": 8,
+        "source_ref": "synthetic:sequences",
+        "pointer": "/1",
+        "linkage_source_ref": "synthetic:relations",
+        "linkage_pointer": "/1"
+      }
+    }
+  ],
+  "feature_bindings": [],
+  "reference_metadata": [
+    {
+      "metadata_key": "member0",
+      "entity": {
+        "kind": "member",
+        "dataset_key": "D0",
+        "member_identifier": {
+          "namespace": "synthetic",
+          "value": "r1",
+          "version": null
+        },
+        "sample_key": null,
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "supplied_explicit",
+      "source_version": null,
+      "native_record": {
+        "fixture_kind": "synthetic_explicit"
+      },
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/member0"
+      },
+      "linkage_source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/links/member0"
+      },
+      "identifiers": [
+        {
+          "namespace": "synthetic",
+          "value": "r1",
+          "version": null
+        }
+      ],
+      "sequence": {
+        "symbols": "ACGTACGT",
+        "molecule": "nt",
+        "length": 8,
+        "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b"
+      },
+      "functions": [],
+      "taxid": null,
+      "taxid_scope": "unknown",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "supplied_explicit",
+      "issues": []
+    },
+    {
+      "metadata_key": "member1",
+      "entity": {
+        "kind": "member",
+        "dataset_key": "D1",
+        "member_identifier": {
+          "namespace": "synthetic",
+          "value": "r2",
+          "version": null
+        },
+        "sample_key": null,
+        "feature_identifier": null,
+        "pssm_key": null
+      },
+      "source_format": "supplied_explicit",
+      "source_version": null,
+      "native_record": {
+        "fixture_kind": "synthetic_explicit"
+      },
+      "source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/member1"
+      },
+      "linkage_source": {
+        "source_ref": "synthetic:supplied",
+        "pointer": "/links/member1"
+      },
+      "identifiers": [
+        {
+          "namespace": "synthetic",
+          "value": "r2",
+          "version": null
+        }
+      ],
+      "sequence": {
+        "symbols": "ACGTACGT",
+        "molecule": "nt",
+        "length": 8,
+        "sha256": "b28b7e7e6b70661dfee15d5290c4bca097ca145f721c4fbc4de73ad1d1660b8b"
+      },
+      "functions": [],
+      "taxid": null,
+      "taxid_scope": "unknown",
+      "lineage": [],
+      "assembly": null,
+      "feature": null,
+      "master_mapping": null,
+      "extraction_method": "supplied_explicit",
+      "issues": []
+    }
+  ],
+  "target_context": null,
+  "population_records": null
+}

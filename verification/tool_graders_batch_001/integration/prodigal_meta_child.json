@@ -1,0 +1,502 @@
+{
+  "representation": "b001_integration_verification_example_v1",
+  "input_provenance": "synthetic test operand; native local execution",
+  "test_directory": "test_selected_scientific_child1",
+  "operation": "genes.predict",
+  "arguments": {
+    "code": 11,
+    "end": 319,
+    "mode": "meta",
+    "start": 13,
+    "subject_ref": "input_cad9de77e8e69fcb8c617af9"
+  },
+  "scope": {
+    "subject_refs": [
+      "input_cad9de77e8e69fcb8c617af9"
+    ]
+  },
+  "selected_response": {
+    "feedback": null,
+    "operation_ref": "operation_a5a3765c5d6ed7c4cf95bf39",
+    "published_batch": {
+      "failure_rows_total": null,
+      "observation_query": {
+        "kind": "observation",
+        "offset": 0,
+        "references": [
+          "source_109aed440fcb7d7db16c508a"
+        ]
+      },
+      "published_rows_total": 1,
+      "representation": "native_publications_v1"
+    },
+    "record_refs": [
+      "source_109aed440fcb7d7db16c508a",
+      "context_a93a14a76612012a69a6c7a9",
+      "feature_8ec4d3ca1991f04990a14fb9",
+      "product_b52f739a586984f85009cc2a",
+      "observation_b8cbbb81894d75fab39200b9"
+    ],
+    "result": {
+      "count": 1,
+      "limitations": [
+        "native_confidence_is_not_calibrated_annotation_accuracy",
+        "circular_origin_spanning_models_not_searched",
+        "programmed_recoding_not_resolved_by_this_operation"
+      ],
+      "more_records_available_through_state_query": false,
+      "preview_limit": 12,
+      "records": [
+        {
+          "feature_ref": "feature_8ec4d3ca1991f04990a14fb9",
+          "observation_ref": "observation_b8cbbb81894d75fab39200b9",
+          "product_ref": "product_b52f739a586984f85009cc2a"
+        }
+      ],
+      "source_ref": "source_109aed440fcb7d7db16c508a"
+    },
+    "status": "completed"
+  },
+  "sources": [
+    {
+      "source_record": {
+        "accession": null,
+        "artifact_ref": "artifact_f0cfd10a1f8d33c715ff9b030909f3423eb4b601ae980989d3f17ee84e4b66ba",
+        "auxiliary_artifact_refs": [
+          "artifact_bfc9ab21d3b990e02ecfad427e7830eb42c253b43768afcec73f1dbb44589c7b"
+        ],
+        "id": "source_109aed440fcb7d7db16c508a",
+        "origin": "tool",
+        "provider": "genes.predict",
+        "record_type": "source",
+        "request_ref": null,
+        "retrieved_at": "2026-10-24T19:14:00.951431+00:00",
+        "text_ref": null,
+        "uri": null,
+        "version": "3.7.1"
+      },
+      "stored_native_file": "prodigal_meta_child.source0.native.json",
+      "stored_native_sha256": "f0cfd10a1f8d33c715ff9b030909f3423eb4b601ae980989d3f17ee84e4b66ba",
+      "gradings": [
+        {
+          "scores": {
+            "calculations": {
+              "coding_coverage": "union_coding_bases / input_length; dimensionless; null for zero denominator or unknown numerator",
+              "combinations": "interval union only; no overall score, annotation confidence or mean native score",
+              "component_counts": "counts of valid/missing/invalid for each of eight independently validated candidate components",
+              "internal_stop_count": "count('*' in protein_sequence[:-1]); literal markers; zero-based positions retained",
+              "interval_length_nt": "validated relative end - start; nt; null for missing/invalid interval",
+              "native_confidence_percent": "native_confidence; native prediction percent; null outside [0,100] or missing",
+              "native_score": "native_score; native model-score units; no aggregation or normalization",
+              "partial_candidate_count": "count with at least one native partial flag true; unknown flags are not false; known and unknown denominators retained",
+              "population": "all reported candidate rows, including duplicates and invalid rows; order preserved",
+              "protein_length_aa": "len(native protein_sequence) - count('*'); amino-acid symbols, including ambiguous symbols",
+              "span_symbol_length_delta_nt": "interval_length_nt - 3 * translated_symbol_count; arithmetic consistency only, not codon verification",
+              "terminal_stop_count": "1 if actual protein_sequence ends in '*' else 0; null if string unavailable",
+              "translated_symbol_count": "len(native protein_sequence); residue/stop symbols; null for missing/invalid string",
+              "union_coding_bases": "size of union(valid relative candidate intervals), independent of strand; null if reported candidates exist but no interval is valid"
+            },
+            "candidates": [
+              {
+                "candidate_index": 0,
+                "component_status": {
+                  "code": "valid",
+                  "interval": "valid",
+                  "native_confidence": "valid",
+                  "native_score": "valid",
+                  "partial_begin": "valid",
+                  "partial_end": "valid",
+                  "protein_sequence": "valid",
+                  "strand": "valid"
+                },
+                "internal_stop_count": 0,
+                "internal_stop_positions": [],
+                "interval_length_nt": 303,
+                "issues": [],
+                "native_confidence_percent": 99.99933317172413,
+                "native_score": 51.84391561353229,
+                "parent_interval": [
+                  15,
+                  318
+                ],
+                "partial": true,
+                "partial_begin": true,
+                "partial_end": true,
+                "protein_length_aa": 101,
+                "relative_interval": [
+                  2,
+                  305
+                ],
+                "span_symbol_length_delta_nt": 0,
+                "status": "complete",
+                "strand": "+",
+                "terminal_stop": false,
+                "terminal_stop_count": 0,
+                "translated_symbol_count": 101,
+                "translation_code": 11
+              }
+            ],
+            "issues": [],
+            "mode": "meta",
+            "schema": "prodigal_scores_v1",
+            "status": "complete",
+            "summary": {
+              "candidate_with_invalid_component_count": 0,
+              "candidate_with_missing_component_count": 0,
+              "coding_coverage": 0.9901960784313726,
+              "coding_coverage_denominator_nt": 306,
+              "complete_candidate_count": 1,
+              "component_counts": {
+                "code": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                },
+                "interval": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                },
+                "native_confidence": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                },
+                "native_score": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                },
+                "partial_begin": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                },
+                "partial_end": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                },
+                "protein_sequence": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                },
+                "strand": {
+                  "invalid": 0,
+                  "missing": 0,
+                  "valid": 1
+                }
+              },
+              "coverage_complete_for_reported_candidates": true,
+              "invalid_component_count": 0,
+              "missing_component_count": 0,
+              "partial_candidate_count": 1,
+              "partial_status_known_candidate_count": 1,
+              "partial_status_unknown_candidate_count": 0,
+              "relative_coding_intervals": [
+                [
+                  2,
+                  305
+                ]
+              ],
+              "reported_candidate_count": 1,
+              "union_coding_bases": 303,
+              "valid_interval_candidate_count": 1
+            },
+            "translation_code": 11
+          },
+          "sheet": {
+            "candidates": [
+              {
+                "candidate_index": 0,
+                "component_status": {
+                  "code": "valid",
+                  "interval": "valid",
+                  "native_confidence": "valid",
+                  "native_score": "valid",
+                  "partial_begin": "valid",
+                  "partial_end": "valid",
+                  "protein_sequence": "valid",
+                  "strand": "valid"
+                },
+                "issues": [],
+                "native_candidate": {
+                  "code": 11,
+                  "end": 305,
+                  "native_confidence": 99.99933317172413,
+                  "native_score": 51.84391561353229,
+                  "partial_begin": true,
+                  "partial_end": true,
+                  "protein_sequence": "EKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKI",
+                  "start": 2,
+                  "strand": "+"
+                },
+                "native_confidence_percent": 99.99933317172413,
+                "native_frame": null,
+                "native_score": 51.84391561353229,
+                "parent_interval": [
+                  15,
+                  318
+                ],
+                "partial_begin": true,
+                "partial_end": true,
+                "protein_sequence": "EKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKI",
+                "relative_interval": [
+                  2,
+                  305
+                ],
+                "status": "complete",
+                "strand": "+",
+                "translation_code": 11
+              }
+            ],
+            "coordinate_basis": "unshifted_sequence_ops_predict_genes_worker_contract",
+            "coordinate_system": "zero_based_half_open",
+            "input_interval": [
+              13,
+              319
+            ],
+            "input_length": 306,
+            "input_start": 13,
+            "issues": [],
+            "measurement_meanings": {
+              "intervals": "predicted nucleotide spans; relative to submitted region and its supplied parent",
+              "native_confidence_percent": "native gene-calling confidence percentage in [0,100]; not function-annotation accuracy",
+              "native_frame": "not reported by sequence_ops.predict_genes; remains unknown",
+              "native_score": "unaltered Pyrodigal Gene.score model score; not a calibrated probability",
+              "partial_flags": "native overlap with lower/upper sequence boundary, not biological 5-prime/3-prime labels",
+              "protein_sequence": "exact native translated symbols, including any literal stop markers",
+              "uncertainty": "no interval or translation uncertainty reported beyond native confidence and partial flags"
+            },
+            "mode": "meta",
+            "native_result": {
+              "candidates": [
+                {
+                  "code": 11,
+                  "end": 305,
+                  "native_confidence": 99.99933317172413,
+                  "native_score": 51.84391561353229,
+                  "partial_begin": true,
+                  "partial_end": true,
+                  "protein_sequence": "EKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKI",
+                  "start": 2,
+                  "strand": "+"
+                }
+              ],
+              "coordinate_system": "zero_based_half_open",
+              "limitations": [
+                "native_confidence_is_not_calibrated_annotation_accuracy",
+                "circular_origin_spanning_models_not_searched",
+                "programmed_recoding_not_resolved_by_this_operation"
+              ],
+              "mode": "meta",
+              "pyrodigal_version": "3.7.1",
+              "translation_code": 11
+            },
+            "pyrodigal_version": "3.7.1",
+            "schema": "prodigal_sheet_v1",
+            "status": "complete",
+            "translation_code": 11
+          }
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "anchor": null,
+      "dependencies": [
+        "input_cad9de77e8e69fcb8c617af9",
+        "context_a93a14a76612012a69a6c7a9"
+      ],
+      "id": "observation_b8cbbb81894d75fab39200b9",
+      "kind": "gene_prediction",
+      "measurements": [
+        {
+          "name": "genetic_code",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 11
+          }
+        },
+        {
+          "name": "start",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 15
+          }
+        },
+        {
+          "name": "end",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 318
+          }
+        },
+        {
+          "name": "native_confidence",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 99.99933317172413
+          }
+        },
+        {
+          "name": "model_score",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 51.84391561353229
+          }
+        },
+        {
+          "name": "interval_length_nt",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 303
+          }
+        },
+        {
+          "name": "protein_length_aa",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 101
+          }
+        },
+        {
+          "name": "internal_stop_count",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        },
+        {
+          "name": "terminal_stop_count",
+          "value": {
+            "type": "number",
+            "unit_ref": null,
+            "value": 0
+          }
+        }
+      ],
+      "origin": "tool",
+      "record_type": "observation",
+      "source_ref": "source_109aed440fcb7d7db16c508a",
+      "source_subject_refs": [],
+      "subject_refs": [
+        "feature_8ec4d3ca1991f04990a14fb9",
+        "product_b52f739a586984f85009cc2a"
+      ]
+    }
+  ],
+  "versions": {
+    "biopython": "1.88",
+    "pyrodigal": "3.7.1"
+  },
+  "episodes": [
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ],
+      "selected_actions": [
+        {
+          "assignment": {
+            "constraints": {
+              "no_external_acquisition": true
+            },
+            "context": {
+              "molecule": "dna",
+              "supplied_sequence": "NNNNNNNNNNNNNATGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATAANNNNNNNNNNN"
+            },
+            "evidence_refs": [
+              "input_cad9de77e8e69fcb8c617af9"
+            ],
+            "selection": {
+              "child_tool_info": [
+                {
+                  "name": "genes.predict",
+                  "resources": "local"
+                }
+              ],
+              "evidence_axis": {
+                "entry_sha256": "5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e",
+                "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+                "option_id": "A101",
+                "slot": "evidence_axis",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "thought_pattern": {
+                "entry_sha256": "f606127c4b69f07eff5cbfd5282ce623df2d667df4bee7dfa48ef3544c4ea732",
+                "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+                "option_id": "P01",
+                "slot": "thought_pattern",
+                "version": "scientific_process_option_ref_v1"
+              },
+              "version": "scientific_process_selection_v3"
+            }
+          },
+          "goal": "Measure the supplied sequence material with the assigned native operation.",
+          "initial_report_json": "{}",
+          "kind": "episode_child",
+          "purpose": "Return the recorded native numerical evidence, with function unresolved.",
+          "role": "scientific_process",
+          "schema_json": "{\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"records\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"format\": \"reference\"}, \"x-source\": \"committed_record_refs\", \"description\": \"Records actually returned by this child's completed selected operation.\"}}, \"required\": [\"records\"]}",
+          "scope": {
+            "subject_refs": [
+              "input_cad9de77e8e69fcb8c617af9"
+            ]
+          }
+        }
+      ],
+      "action_count": 1,
+      "runtime_observation_count": 1,
+      "returned_form": null
+    },
+    {
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "child_0"
+        ]
+      ],
+      "selected_actions": [
+        {
+          "arguments": {
+            "code": 11,
+            "end": 319,
+            "mode": "meta",
+            "start": 13,
+            "subject_ref": "input_cad9de77e8e69fcb8c617af9"
+          },
+          "kind": "tool",
+          "tool": "genes.predict"
+        }
+      ],
+      "action_count": 1,
+      "runtime_observation_count": 1,
+      "returned_form": {
+        "records": [
+          "source_109aed440fcb7d7db16c508a",
+          "context_a93a14a76612012a69a6c7a9",
+          "feature_8ec4d3ca1991f04990a14fb9",
+          "product_b52f739a586984f85009cc2a",
+          "observation_b8cbbb81894d75fab39200b9"
+        ]
+      }
+    }
+  ]
+}

@@ -30,7 +30,7 @@ ROOT_ROLES = ('scientific_process', 'literature', 'launch', 'monitor', 'results'
 OPERATIONAL_ROLES = ('launch', 'launch_api', 'launch_local', 'launch_hpc', 'results')
 RETRIEVAL = {'version': 'scientific_tool_retrieval_v1', 'mode': 'semantic_fast_v1',
     'model': {'model': 'gpt-6-luna', 'reasoning_effort': 'none'}}
-CATALOG = {'fixture.read': {'description': 'Engineering fixture reader contract.',
+CATALOG = {'fixture.read': {'description': 'Engineering fixture reader contract.', 'resources': 'local',
     'input_schema': {'type': 'object', 'properties': {'offset': {'type': 'integer', 'minimum': 0}},
         'required': ['offset'], 'additionalProperties': False},
     'configuration': {'reader': 'explicit-engineering-reader-v1', 'page': 7}}}
@@ -115,7 +115,7 @@ def test_setup_returns_exact_existing_descriptors_six_bindings_and_actual_reader
     tools = ScientificToolLibrary(r.directory/'scientific-tool-library')
     assert scientific == ScientificProcessEpisodes(None, library=library, tool_library=tools,
         child_roles=ROOT_ROLES, tool_retrieval=RETRIEVAL).as_record()
-    assert scientific['version'] == 'scientific_process_episodes_v6'
+    assert scientific['version'] == 'scientific_process_episodes_v8'
     assert scientific['configuration'] == {'library': library.as_record(),
         'tool_library': tools.as_record(), 'child_roles': list(ROOT_ROLES), 'tool_retrieval': RETRIEVAL}
     assert literature == LiteratureEpisodes(None, outcome_page_size=7).as_record()

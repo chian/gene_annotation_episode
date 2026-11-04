@@ -1,0 +1,320 @@
+........................................................................ [ 57%]
+...............FF........FFFFFFFFFFFFF.....FFFFFFF..F                    [100%]
+=================================== FAILURES ===================================
+____________ test_original_record_ordinal_not_tblout_query_position ____________
+source_snapshot/tests/test_native_infernal_result_worker.py:227: in test_original_record_ordinal_not_tblout_query_position
+    replace_bytes(plan, "sequences", ">no_hit_original_first\nAAAA\n" + text, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_original_record_ordinal_n0/captured/inputs/sequences.fa'
+__________ test_duplicate_search_names_unbound_without_ordinal_guess ___________
+source_snapshot/tests/test_native_infernal_result_worker.py:243: in test_duplicate_search_names_unbound_without_ordinal_guess
+    replace_bytes(plan, "sequences", text + ">mrum-tRNA.1\nAAAA\n", "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_duplicate_search_names_un0/captured/inputs/sequences.fa'
+________ test_no_hit_output_is_zero_rows_not_a_biological_absence_score ________
+source_snapshot/tests/test_native_infernal_result_worker.py:302: in test_no_hit_output_is_zero_rows_not_a_biological_absence_score
+    replace_bytes(plan, "tblout", (SEARCHES / "cmsearch_no_hits.hits.tbl").read_bytes())
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_no_hit_output_is_zero_row0/captured/hits.tblout'
+____ test_invalid_native_cell_preserves_other_components_and_truncated_rows ____
+source_snapshot/tests/test_native_infernal_result_worker.py:312: in test_invalid_native_cell_preserves_other_components_and_truncated_rows
+    replace_bytes(plan, "tblout", table.replace("71.4", "invalid", 1).replace("# [ok]", "truncated row\n# [ok]"))
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_invalid_native_cell_prese0/captured/hits.tblout'
+_______ test_selected_native_modes_preserved_without_changing_parameters _______
+source_snapshot/tests/test_native_infernal_result_worker.py:326: in test_selected_native_modes_preserved_without_changing_parameters
+    replace_bytes(plan, "tblout", table.replace("# Option settings:", "# Option settings: --oskip --anytrunc "))
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_selected_native_modes_pre0/captured/hits.tblout'
+___ test_selected_oskip_without_footer_still_qualifies_aggregate_population ____
+source_snapshot/tests/test_native_infernal_result_worker.py:341: in test_selected_oskip_without_footer_still_qualifies_aggregate_population
+    replace_bytes(plan, "tblout", "\n".join(line for line in table.splitlines() if not line.startswith("# Option settings:")) + "\n")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_selected_oskip_without_fo0/captured/hits.tblout'
+_____ test_alignment_native_modes_and_unknown_cells_are_preserved[global] ______
+source_snapshot/tests/test_native_infernal_result_worker.py:350: in test_alignment_native_modes_and_unknown_cells_are_preserved
+    plan = alignment_case(tmp_path, case)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_alignment_native_modes_an0/captured/inputs/sequences.fa'
+____ test_alignment_native_modes_and_unknown_cells_are_preserved[submodel] _____
+source_snapshot/tests/test_native_infernal_result_worker.py:350: in test_alignment_native_modes_and_unknown_cells_are_preserved
+    plan = alignment_case(tmp_path, case)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_alignment_native_modes_an1/captured/inputs/sequences.fa'
+____ test_alignment_native_modes_and_unknown_cells_are_preserved[matchonly] ____
+source_snapshot/tests/test_native_infernal_result_worker.py:350: in test_alignment_native_modes_and_unknown_cells_are_preserved
+    plan = alignment_case(tmp_path, case)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_alignment_native_modes_an2/captured/inputs/sequences.fa'
+_____ test_alignment_native_modes_and_unknown_cells_are_preserved[noprob] ______
+source_snapshot/tests/test_native_infernal_result_worker.py:350: in test_alignment_native_modes_and_unknown_cells_are_preserved
+    plan = alignment_case(tmp_path, case)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_alignment_native_modes_an3/captured/inputs/sequences.fa'
+__ test_alignment_native_modes_and_unknown_cells_are_preserved[sample_serial] __
+source_snapshot/tests/test_native_infernal_result_worker.py:350: in test_alignment_native_modes_and_unknown_cells_are_preserved
+    plan = alignment_case(tmp_path, case)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_alignment_native_modes_an4/captured/inputs/sequences.fa'
+_ test_same_name_mapali_inherited_prefix_and_new_input_have_distinct_bindings __
+source_snapshot/tests/test_native_infernal_result_worker.py:373: in test_same_name_mapali_inherited_prefix_and_new_input_have_distinct_bindings
+    plan = alignment_case(tmp_path, "mapali_collision")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_same_name_mapali_inherite0/captured/inputs/sequences.fa'
+_________ test_alignment_population_uses_original_calculator_parameter _________
+source_snapshot/tests/test_native_infernal_result_worker.py:393: in test_alignment_population_uses_original_calculator_parameter
+    plan = alignment_case(tmp_path, "mapali", family="alignment_column")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_alignment_population_uses0/captured/inputs/sequences.fa'
+________ test_original_tu_xn_ia_identity_survives_native_normalization _________
+source_snapshot/tests/test_native_infernal_result_worker.py:408: in test_original_tu_xn_ia_identity_survives_native_normalization
+    replace_bytes(plan, "sequences", sequences, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_original_tu_xn_ia_identit0/captured/inputs/sequences.fa'
+_ test_missing_matchonly_sidecar_preserves_native_score_without_invented_subject _
+source_snapshot/tests/test_native_infernal_result_worker.py:418: in test_missing_matchonly_sidecar_preserves_native_score_without_invented_subject
+    plan = alignment_case(tmp_path, "matchonly")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_infernal_result_worker.py:95: in alignment_case
+    replace_bytes(plan, "sequences", fasta, "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_missing_matchonly_sidecar0/captured/inputs/sequences.fa'
+_ test_missing_or_malformed_model_keeps_native_values_and_sequence_binding[unreadable_capture] _
+source_snapshot/tests/test_native_infernal_result_worker.py:467: in test_missing_or_malformed_model_keeps_native_values_and_sequence_binding
+    Path(captured(plan, "models", "input")["path"]).unlink()
+runtime/lib/python3.12/pathlib.py:1344: in unlink
+    os.unlink(self)
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_missing_or_malformed_mode1/captured/inputs/models.cm'
+_ test_missing_or_malformed_model_keeps_native_values_and_sequence_binding[truncated_cm_filter] _
+source_snapshot/tests/test_native_infernal_result_worker.py:470: in test_missing_or_malformed_model_keeps_native_values_and_sequence_binding
+    replace_bytes(plan, "models", original[:original.index("HMMER3/")], "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_missing_or_malformed_mode2/captured/inputs/models.cm'
+_______ test_search_reverse_coordinates_are_physical_half_open_intervals _______
+source_snapshot/tests/test_native_infernal_result_worker.py:485: in test_search_reverse_coordinates_are_physical_half_open_intervals
+    replace_bytes(plan, "tblout", "\n".join(table) + "\n")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_search_reverse_coordinate0/captured/hits.tblout'
+____ test_out_of_range_native_interval_is_not_attached_to_physical_subject _____
+source_snapshot/tests/test_native_infernal_result_worker.py:498: in test_out_of_range_native_interval_is_not_attached_to_physical_subject
+    replace_bytes(plan, "tblout", "\n".join(table) + "\n")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_out_of_range_native_inter0/captured/hits.tblout'
+_________ test_alignment_wrong_original_sequence_does_not_bind_by_name _________
+source_snapshot/tests/test_native_infernal_result_worker.py:508: in test_alignment_wrong_original_sequence_does_not_bind_by_name
+    replace_bytes(plan, "sequences", sequence.replace("GGAGCUA", "AAAGCUA", 1), "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_alignment_wrong_original_0/captured/inputs/sequences.fa'
+________ test_x_to_n_output_matching_keeps_original_x_sequence_identity ________
+source_snapshot/tests/test_native_infernal_result_worker.py:521: in test_x_to_n_output_matching_keeps_original_x_sequence_identity
+    replace_bytes(plan, "sequences", sequence.replace("GGAGCUA", "XGAGCUA", 1), "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_x_to_n_output_matching_ke0/captured/inputs/sequences.fa'
+____ test_model_accession_disambiguates_same_name_without_guessing_ordinal _____
+source_snapshot/tests/test_native_infernal_result_worker.py:539: in test_model_accession_disambiguates_same_name_without_guessing_ordinal
+    replace_bytes(plan, "models", accession(first, "RF00005") + remainder + accession(first, "RF99999"), "input")
+source_snapshot/tests/test_native_infernal_result_worker.py:50: in replace_bytes
+    Path(row["path"]).write_bytes(raw)
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_model_accession_disambigu0/captured/inputs/models.cm'
+_______ test_changed_captured_table_cannot_claim_verified_original_bytes _______
+source_snapshot/tests/test_native_infernal_shared_search.py:52: in test_changed_captured_table_cannot_claim_verified_original_bytes
+    path.write_bytes(path.read_bytes().replace(b"71.4", b"91.4"))
+runtime/lib/python3.12/pathlib.py:1038: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check035_native_infernal_shared_binding/temporary/pytest/test_changed_captured_table_ca0/captured/hits.tblout'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_original_record_ordinal_not_tblout_query_position
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_duplicate_search_names_unbound_without_ordinal_guess
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_no_hit_output_is_zero_rows_not_a_biological_absence_score
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_invalid_native_cell_preserves_other_components_and_truncated_rows
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_selected_native_modes_preserved_without_changing_parameters
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_selected_oskip_without_footer_still_qualifies_aggregate_population
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_alignment_native_modes_and_unknown_cells_are_preserved[global]
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_alignment_native_modes_and_unknown_cells_are_preserved[submodel]
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_alignment_native_modes_and_unknown_cells_are_preserved[matchonly]
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_alignment_native_modes_and_unknown_cells_are_preserved[noprob]
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_alignment_native_modes_and_unknown_cells_are_preserved[sample_serial]
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_same_name_mapali_inherited_prefix_and_new_input_have_distinct_bindings
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_alignment_population_uses_original_calculator_parameter
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_original_tu_xn_ia_identity_survives_native_normalization
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_missing_matchonly_sidecar_preserves_native_score_without_invented_subject
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_missing_or_malformed_model_keeps_native_values_and_sequence_binding[unreadable_capture]
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_missing_or_malformed_model_keeps_native_values_and_sequence_binding[truncated_cm_filter]
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_search_reverse_coordinates_are_physical_half_open_intervals
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_out_of_range_native_interval_is_not_attached_to_physical_subject
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_alignment_wrong_original_sequence_does_not_bind_by_name
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_x_to_n_output_matching_keeps_original_x_sequence_identity
+FAILED source_snapshot/tests/test_native_infernal_result_worker.py::test_model_accession_disambiguates_same_name_without_guessing_ordinal
+FAILED source_snapshot/tests/test_native_infernal_shared_search.py::test_changed_captured_table_cannot_claim_verified_original_bytes
+23 failed, 102 passed in 3.60s

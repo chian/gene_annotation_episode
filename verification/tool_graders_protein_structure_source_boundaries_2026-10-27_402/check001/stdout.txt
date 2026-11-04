@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_source_boundaries_2026-10-27_402/check001/source_snapshot
+configfile: pyproject.toml
+collecting ... collected 26 items
+
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[initial] PASSED [  3%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[decision_input] PASSED [  7%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[own_action] PASSED [ 11%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[child_form] PASSED [ 15%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_protein_source_receipt_is_not_an_auxiliary_grant_and_freezes_inheritance[report_redelivery] PASSED [ 19%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_explicit_artifact_in_same_delivery_survives_source_exclusion[False] PASSED [ 23%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_explicit_artifact_in_same_delivery_survives_source_exclusion[True] PASSED [ 26%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_unrelated_source_dependencies_are_unchanged[caller-native_protein_structure_bundle_v1] PASSED [ 30%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_unrelated_source_dependencies_are_unchanged[episode.execution_result-ordinary_source_v1] PASSED [ 34%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_existing_native_receipt_exclusions_are_unchanged[native_infernal_preparation_bundle_v1] PASSED [ 38%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_existing_native_receipt_exclusions_are_unchanged[native_hmmer_preparation_bundle_v1] PASSED [ 42%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_existing_native_receipt_exclusions_are_unchanged[native_blast_database_bundle_v1] PASSED [ 46%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_existing_native_receipt_exclusions_are_unchanged[native_rna_structure_bundle_v1] PASSED [ 50%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_hmmer_bundle_v1] PASSED [ 53%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_blast_bundle_v1] PASSED [ 57%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_blast_database_bundle_v1] PASSED [ 61%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_blast_standard_database_bundle_v1] PASSED [ 65%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_infernal_bundle_v1] PASSED [ 69%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_infernal_preparation_bundle_v1] PASSED [ 73%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_hmmer_preparation_bundle_v1] PASSED [ 76%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_rna_structure_bundle_v1] PASSED [ 80%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_native_source_never_enters_generic_result_reader[native_protein_structure_bundle_v1] PASSED [ 84%]
+source_snapshot/tests/test_protein_structure_source_boundaries.py::test_same_version_from_unrelated_provider_remains_an_ordinary_source PASSED [ 88%]
+source_snapshot/tests/test_episode_receipts.py::test_inheritance_freezes_prefix_without_copying_receipts_and_survives_reopen PASSED [ 92%]
+source_snapshot/tests/test_execution_episodes_family.py::test_results_actual_bounded_windows_exact_replay_completion_and_unchanged_launch PASSED [ 96%]
+source_snapshot/tests/test_execution_episodes_family.py::test_result_selector_rejects_escape_and_altered_window_before_read PASSED [100%]
+
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_source_boundaries_2026-10-27_402/check001/junit.xml -
+============================= 26 passed in 54.20s ==============================

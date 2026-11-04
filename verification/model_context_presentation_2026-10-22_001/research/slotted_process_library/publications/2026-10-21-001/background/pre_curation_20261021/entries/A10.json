@@ -1,0 +1,107 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A10",
+  "name": "Functional replacement and route equivalence",
+  "description": "Represent whether an alternative replaces the same reaction, one reference activity, a different route to the same product or demand for the missing function.",
+  "claim_scope": "A reference-function/route relationship with restored outcome, unfilled activities and changed resource demands explicit.",
+  "distinctions": [
+    "Same product versus same reaction.",
+    "One activity versus whole multifunctional reference.",
+    "Catalytic repair versus salvage/demand-reducing suppression.",
+    "One-condition rescue versus complete native interchangeability.",
+    "Equivalent product versus changed recycling/donor demands."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "replacement_relation": [
+        "same_reaction",
+        "subset_of_reference_activities",
+        "different_route_same_output",
+        "demand_reducing_bypass",
+        "partial_context_specific_substitution",
+        "unresolved"
+      ],
+      "restored_outcome": [
+        "specified_molecular_product",
+        "growth_under_test",
+        "native_process_under_test",
+        "subset_only"
+      ],
+      "unfilled_demand": [
+        "known_remaining_activity",
+        "new_recycling_requirement",
+        "remaining_external_supply",
+        "none_demonstrated",
+        "unresolved"
+      ],
+      "equivalence_scope": [
+        "tested_condition_only",
+        "multiple_tested_conditions",
+        "unresolved"
+      ]
+    },
+    "required_typed_references": [
+      "reference_function_or_route_ref",
+      "alternative_entity_or_route_ref",
+      "restored_outcome_ref",
+      "remaining_requirement_refs",
+      "condition_and_background_ref",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "Rescue does not establish the same reaction/all reference activities.",
+    "No annotated known-family enzyme does not establish absent function.",
+    "Bookkeeping equivalence depends on stated boundaries/donor assumptions.",
+    "Heterologous substitution does not establish primary native role."
+  ],
+  "follow_up_lane_ids": [
+    "F02",
+    "F05"
+  ],
+  "boundary": "A09 asks whether an alternative makes a target dispensable; A10 asks what contribution it provides; A04 gives the resulting requirements. This is a relation to annotate, not a prescribed comparison procedure.",
+  "evidence": [
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "source_locator": "Figs. 3–9; native deletion/C115S, reconstitution/MS and CaiB Results.",
+      "observation": "BioZ bypasses BioC plus BioH using a glutaryl-CoA/malonyl-ACP entry route, restoring precursor output without BioH chemistry.",
+      "limit": "No independent raw spectral/isotope analysis."
+    },
+    {
+      "case_group": "replacement_cobY",
+      "case_id": "replacement_cobY",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101920/",
+      "source_locator": "Purified H6MTH1152/complementation Results; Figures 6–7.",
+      "observation": "CobY supplies guanylyltransferase but not detected kinase; de novo rescue does not replace the CobU salvage kinase demand.",
+      "limit": "Negative assay is condition-bounded."
+    },
+    {
+      "case_group": "replacement_thyX",
+      "case_id": "replacement_thyX",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "source_locator": "Table 2; Figures 3–4; main Results/Methods.",
+      "observation": "ThyA alone incompletely replaces ThyX; adding FolA exposes the folate-recycling demand despite shared dTMP output.",
+      "limit": "No specific native backup reductase identified; authors’ simulations not rerun."
+    },
+    {
+      "case_group": "replacement_folA_bypass",
+      "case_id": "replacement_folA_bypass",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6828540/",
+      "source_locator": "Evolution of D27G; Figures 4–6; ThyA/DeoB re-expression contrasts.",
+      "observation": "Some evolved lineages partly restore catalysis; others lose thyA/deoB and retain supplementation, separating repair and salvage compensation.",
+      "limit": "No evolution/sequencing/omics reanalysis; suppressors do not remove every external requirement."
+    },
+    {
+      "case_group": "replacement_hemJ",
+      "case_id": "replacement_hemJ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6093240/",
+      "source_locator": "HemJ not fully replaceable and in-vitro assay subsections.",
+      "observation": "HemG supports HemJ substitution in glucose growth but not photoautotrophy, bounding native interchangeability.",
+      "limit": "Isolated productive HemJ catalysis and proposed coupling remain unresolved."
+    }
+  ]
+}

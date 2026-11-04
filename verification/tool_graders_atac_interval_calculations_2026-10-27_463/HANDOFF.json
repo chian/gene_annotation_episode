@@ -1,0 +1,88 @@
+{
+  "recorded_at": "2026-10-27T20:21:51.836797+00:00",
+  "component": "atac_interval_and_region_calculations",
+  "tool_row": "B-L125-analyze_atac_seq_differential_accessibility",
+  "original_goal": {
+    "path": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+    "sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+    "size_bytes": 42174
+  },
+  "verbatim_resets": {
+    "after_native_inspection_before_coding": true,
+    "after_component_verification_before_handoff": true,
+    "sections": "original objective and complete sixteen-principle block"
+  },
+  "contracts_read_in_full_and_reread": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_differential_plan_2026-10-27_460/NUMERICAL_LEAF_CONTRACT_004.md",
+      "sha256": "e9ba8b58a3e9c71e9d229b94f16e6471d86b770b394da7bb1fbd663b381369da",
+      "size_bytes": 7950
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_differential_plan_2026-10-27_460/INTERVAL_CALCULATION_CONTRACT_005.md",
+      "sha256": "6a5f6b2607bf267347843a97d4a2f4cc436233748f94cc2b9d54639afcd323a7",
+      "size_bytes": 10938
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_differential_plan_2026-10-27_460/INTERVAL_EDGE_CLARIFICATIONS_006.md",
+      "sha256": "417876d5ff483dd3d25592108492d92c962faa7661e3a9bb645f771ccd5bd140",
+      "size_bytes": 3109
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_native_contract_2026-10-27_461/CONTRACT.md",
+      "sha256": "64f7704c3b5f41506bb661fe1e7b5f7122093466b30ac969210b10713abddd7b",
+      "size_bytes": 63758
+    }
+  ],
+  "owned_production_sources": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/atac_differential_calculations.py",
+      "sha256": "813d06b766286f2aefe2c213cf81ee1e28cdff663bb78d3fc10482e7e7119f7c",
+      "size_bytes": 18374
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/tests/test_atac_differential_calculations.py",
+      "sha256": "71d892159a7f36fe9c4ef3ffacc9d6fa5212cfba52d78c486187e7fdb04e7f5e",
+      "size_bytes": 32618
+    }
+  ],
+  "current_owned_sources_equal_tested_snapshot": true,
+  "functions": [
+    "iter_atac_track_segments",
+    "iter_atac_interval_components",
+    "iter_atac_differential_regions"
+  ],
+  "bounded_verification": {
+    "attempt": "check001",
+    "tests": 87,
+    "retained_native_tests": 2,
+    "saved_native_recalculation_tests": 1,
+    "synthetic_checks": 84,
+    "returncode": 0,
+    "receipt": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_interval_calculations_2026-10-27_463/check001/receipt.json",
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_interval_calculations_2026-10-27_463/check001/handle.json",
+    "unit": "gene-local-job-5352366ed01e4606ba07ce15f19cfac2.service"
+  },
+  "filled_native_example": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_atac_interval_calculations_2026-10-27_463/check001/FILLED_NATIVE_EXAMPLE.json",
+    "sha256": "e47df064ef01bb6062c51b71fee700befb1ae9f1450f1becad29a6471a6b0ce9",
+    "size_bytes": 33353
+  },
+  "no_new_native_execution": true,
+  "no_network_acquisition": true,
+  "production_parser_sheet_integration_verified": false,
+  "worker_return_episode_path_verified": false,
+  "tool_completion_count_increment": 0,
+  "admin_command_failures": [
+    {
+      "command": "python standard-library inventory read",
+      "exit_code": 127,
+      "resolution": "Used installed python3 for standard-library read"
+    },
+    {
+      "command": "git status on owned files",
+      "exit_code": 128,
+      "resolution": "Checkout has no .git; used immutable before/after file pins"
+    }
+  ]
+}

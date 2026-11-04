@@ -1,0 +1,126 @@
+{
+  "sequence_sets_membership": {
+    "raw_hits": [
+      3,
+      2
+    ],
+    "target_counts_and_changes": {
+      "earlier_target_count": 2,
+      "later_target_count": 2,
+      "added_count": 1,
+      "removed_count": 1,
+      "retained_count": 1
+    },
+    "first_search_function_weights": {
+      "F": 0.6666666666666666,
+      "G": 0.3333333333333333
+    },
+    "membership_counts": {
+      "member_record_count": 3,
+      "observed_unique_member_count": 2,
+      "duplicate_member_count": 1,
+      "included_sequence_count": 2
+    },
+    "native_state_in_supplied_record": {
+      "value": true,
+      "status": "available",
+      "unavailable_reason": null,
+      "unit": "native_boolean",
+      "origin": "supplied_source_record",
+      "input_pointers": [
+        "/convergence_records/0/native_converged"
+      ]
+    }
+  },
+  "incomplete_identity": {
+    "earlier_known_rows": 2,
+    "added_count": {
+      "value": null,
+      "status": "unavailable",
+      "unavailable_reason": "partial_output",
+      "unit": "target_identity_count",
+      "origin": "derived",
+      "input_pointers": [
+        "/comparison_pairs/0"
+      ]
+    }
+  },
+  "delta_domains": {
+    "bits": 42,
+    "threshold_margin": 2,
+    "query_coverage": {
+      "numerator": 50,
+      "denominator": 100,
+      "value": 0.5,
+      "unit": "fraction"
+    },
+    "model_coverage": {
+      "numerator": 50,
+      "denominator": 100,
+      "value": 0.5,
+      "unit": "fraction"
+    },
+    "differences": [
+      1,
+      1,
+      1
+    ]
+  },
+  "malformed_rows": {
+    "reported_hit_count": 2,
+    "reported_hsp_count": null,
+    "observed_hsp_count": 2,
+    "parsed_hit_count": 1,
+    "parsed_hsp_count": 1,
+    "declared_alignment_row_count": null
+  },
+  "partial_table": {
+    "reported_hit_count": null,
+    "reported_hsp_count": 4,
+    "observed_hsp_count": 4,
+    "parsed_hit_count": 2,
+    "parsed_hsp_count": 3,
+    "declared_alignment_row_count": 3
+  },
+  "unknown_stage": {
+    "native_labels": [
+      7,
+      7,
+      11
+    ],
+    "biological_rounds": [
+      null,
+      null,
+      null
+    ],
+    "pssm_artifacts": 3
+  },
+  "empty_membership": {
+    "value": 0,
+    "status": "available",
+    "unavailable_reason": null,
+    "unit": "native_member_identifier_count",
+    "origin": "supplied_source_record",
+    "input_pointers": [
+      "/inclusion_records/0/members"
+    ]
+  },
+  "upstream_pssms": [
+    {
+      "artifact": "pssm_freq_ratios.asn",
+      "dimensions": {
+        "residue_rows": 26,
+        "positions": 232
+      },
+      "master_length": 232
+    },
+    {
+      "artifact": "pssm_zero_fratios.asn",
+      "dimensions": {
+        "residue_rows": 28,
+        "positions": 232
+      },
+      "master_length": null
+    }
+  ]
+}

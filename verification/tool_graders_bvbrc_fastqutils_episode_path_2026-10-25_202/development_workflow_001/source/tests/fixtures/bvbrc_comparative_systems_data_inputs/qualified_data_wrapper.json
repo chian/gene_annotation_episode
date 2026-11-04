@@ -1,0 +1,1427 @@
+{
+  "example_id": "qualified_data_wrapper",
+  "schema_name": "QualifiedDataInputV1",
+  "basis": "synthetic_existing_Data_encoder_reader_output_with_hypothetical_host_flags_NO_REAL_ADMISSION",
+  "value": {
+    "qualified_result": {
+      "version": "bvbrc_data_qualified_result_v1",
+      "service": "bvbrc_data",
+      "binding": {
+        "source_ref": "synthetic_data_pathway",
+        "native_artifact_ref": "synthetic_data_pathway_bytes",
+        "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+        "grading_artifact_ref": "synthetic_data_pathway_grade",
+        "collection": "pathway",
+        "acquisition_assignment_sha256": "a8198524f58e72b56283ab71ebddada22840f108b46ef7165bb3fca9919c5558",
+        "selector_sha256": "9259b25cd3cbc050a1354eb22f0dfe6d5427309aed4cc29b2e9f70979f2923ca"
+      },
+      "host_qualification": {
+        "run_id": "SYNTHETIC_NO_HOST_ADMISSION",
+        "source_episode_id": "synthetic_data_results",
+        "receiver_episode_id": "synthetic_comparative_results",
+        "scope_sha256": "a8198524f58e72b56283ab71ebddada22840f108b46ef7165bb3fca9919c5558",
+        "receipt_verified": true,
+        "native_bytes_verified": true,
+        "grading_custody_verified": true,
+        "original_selection_verified": true,
+        "input_bindings_verified": true,
+        "receiver_possession_verified": true,
+        "possession_basis": "admitted_return"
+      },
+      "grading": {
+        "version": "bvbrc_data_grading_v1",
+        "prepared": {
+          "version": "bvbrc_data_prepared_v2",
+          "service": "bvbrc_data",
+          "original_request": {
+            "version": "bvbrc_data_request_v2",
+            "collection": "pathway",
+            "mode": "page",
+            "filters": [
+              {
+                "field": "genome_id",
+                "operator": "in",
+                "value": [
+                  "1.1",
+                  "2.1",
+                  "3.1"
+                ]
+              }
+            ],
+            "fields": [
+              "id",
+              "annotation",
+              "ec_description",
+              "ec_number",
+              "feature_id",
+              "genome_id",
+              "pathway_class",
+              "pathway_id",
+              "pathway_name",
+              "patric_id",
+              "product"
+            ],
+            "sort": [
+              {
+                "field": "id",
+                "direction": "asc"
+              }
+            ],
+            "offset": 0,
+            "limit": 100
+          },
+          "page_selector": null,
+          "effective_request": {
+            "version": "bvbrc_data_effective_query_v2",
+            "collection": "pathway",
+            "mode": "page",
+            "filters": [
+              {
+                "field": "genome_id",
+                "operator": "in",
+                "value": [
+                  "1.1",
+                  "2.1",
+                  "3.1"
+                ]
+              }
+            ],
+            "fields": [
+              "id",
+              "annotation",
+              "ec_description",
+              "ec_number",
+              "feature_id",
+              "genome_id",
+              "pathway_class",
+              "pathway_id",
+              "pathway_name",
+              "patric_id",
+              "product"
+            ],
+            "sort": [
+              {
+                "field": "id",
+                "direction": "asc"
+              }
+            ],
+            "offset": 0,
+            "limit": 100,
+            "facet": null
+          },
+          "query_population": {
+            "version": "bvbrc_data_population_v1",
+            "base_url": "https://www.bv-brc.org/api",
+            "collection": "pathway",
+            "filters": [
+              {
+                "field": "genome_id",
+                "operator": "in",
+                "value": [
+                  "1.1",
+                  "2.1",
+                  "3.1"
+                ]
+              }
+            ],
+            "visibility": "public_unauthenticated",
+            "compiler_version": "bvbrc_solr_compiler_v1",
+            "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+            "population_key": "b2828e19de6d541338f8a3b7147789a41e8925e72d1a2390d08fe4329a98ed3e"
+          },
+          "field_selection": {
+            "requested_fields": [
+              "id",
+              "annotation",
+              "ec_description",
+              "ec_number",
+              "feature_id",
+              "genome_id",
+              "pathway_class",
+              "pathway_id",
+              "pathway_name",
+              "patric_id",
+              "product"
+            ],
+            "defaulted_fields": [],
+            "custody_added_fields": []
+          },
+          "sort_selection": {
+            "requested_sort": [
+              {
+                "field": "id",
+                "direction": "asc"
+              }
+            ],
+            "defaulted_sort": [],
+            "tie_breaker_added": null
+          },
+          "request_profile": "solr_query_solr_json_v1",
+          "native_request": {
+            "method": "GET",
+            "url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
+            "headers": [
+              {
+                "name": "User-Agent",
+                "value": "gene-annotation-episode/0.2"
+              },
+              {
+                "name": "Accept",
+                "value": "application/solr+json"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/solrquery+x-www-form-urlencoded"
+              }
+            ],
+            "body": null,
+            "query_parameters": [
+              {
+                "name": "q",
+                "value": "genome_id:(\"1.1\" OR \"2.1\" OR \"3.1\")"
+              },
+              {
+                "name": "rows",
+                "value": "100"
+              },
+              {
+                "name": "start",
+                "value": "0"
+              },
+              {
+                "name": "fl",
+                "value": "id,annotation,ec_description,ec_number,feature_id,genome_id,pathway_class,pathway_id,pathway_name,patric_id,product"
+              },
+              {
+                "name": "sort",
+                "value": "id asc"
+              }
+            ]
+          }
+        },
+        "selector": {
+          "version": "bvbrc_data_result_selector_v2",
+          "page": null,
+          "projection": {
+            "family": "query_metadata"
+          },
+          "inputs": [],
+          "supplied_metadata": []
+        },
+        "parse_result": {
+          "version": "bvbrc_data_parse_result_v1",
+          "status": "complete",
+          "sheet": {
+            "version": "bvbrc_data_sheet_v1",
+            "collection": "pathway",
+            "mode": "page",
+            "custody": {
+              "native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+              "retrieved_at": "SYNTHETIC_CONTRACT_EXAMPLE_NOT_RETRIEVED",
+              "requested_url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
+              "effective_url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
+              "media_type": "application/solr+json",
+              "native_profile": "solr_json_envelope_v1",
+              "prepared_sha256": "4e90c63dec5d9bd125f002531c895a47188fa339240b0ee5941d26fdd846fe17",
+              "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+            },
+            "transport": {
+              "http_status": 200,
+              "body_complete": true,
+              "headers": [],
+              "failure_code": null,
+              "automatic_redirects": false,
+              "native_query_time_ms": null
+            },
+            "qualification": {
+              "service_matches": true,
+              "request_matches": true,
+              "transport_complete": true,
+              "http_success": true,
+              "format_valid": true,
+              "population_metadata_valid": true,
+              "native_partial_results": null,
+              "requested_fields_valid": true,
+              "status": "complete"
+            },
+            "population": {
+              "population_key": "b2828e19de6d541338f8a3b7147789a41e8925e72d1a2390d08fe4329a98ed3e",
+              "compiled_query": "genome_id:(\"1.1\" OR \"2.1\" OR \"3.1\")",
+              "echoed_query": null,
+              "echoed_filter_queries": [],
+              "reported_total": 5,
+              "native_num_found_exact": true,
+              "exactness": "exact",
+              "native_location": "/response/numFound"
+            },
+            "selected_fields": [
+              "id",
+              "annotation",
+              "ec_description",
+              "ec_number",
+              "feature_id",
+              "genome_id",
+              "pathway_class",
+              "pathway_id",
+              "pathway_name",
+              "patric_id",
+              "product"
+            ],
+            "page": {
+              "mode": "page",
+              "requested_offset": 0,
+              "requested_limit": 100,
+              "response_start": 0,
+              "native_content_range": null,
+              "returned_row_count": 5,
+              "valid_row_count": 5,
+              "invalid_row_count": 0,
+              "reported_total": 5,
+              "count_exactness": "exact",
+              "response_complete": true,
+              "population_coverage": "complete",
+              "next_offset": null,
+              "next_offset_basis": null
+            },
+            "count": {
+              "population_key": "b2828e19de6d541338f8a3b7147789a41e8925e72d1a2390d08fe4329a98ed3e",
+              "reported_value": 5,
+              "exactness": "exact",
+              "availability": "available",
+              "reason": null,
+              "native_location": "/response/numFound"
+            },
+            "rows": [
+              {
+                "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0",
+                "row_index": 0,
+                "native_path": "/response/docs/0",
+                "native_id": "pw_f1",
+                "status": "valid",
+                "cells": [
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/id",
+                    "field": "id",
+                    "native_path": "/response/docs/0/id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "pw_f1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/annotation",
+                    "field": "annotation",
+                    "native_path": "/response/docs/0/annotation",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "PATRIC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/ec_description",
+                    "field": "ec_description",
+                    "native_path": "/response/docs/0/ec_description",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic EC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/ec_number",
+                    "field": "ec_number",
+                    "native_path": "/response/docs/0/ec_number",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "1.1.1.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/feature_id",
+                    "field": "feature_id",
+                    "native_path": "/response/docs/0/feature_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "f1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/genome_id",
+                    "field": "genome_id",
+                    "native_path": "/response/docs/0/genome_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "1.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/pathway_class",
+                    "field": "pathway_class",
+                    "native_path": "/response/docs/0/pathway_class",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic class",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/pathway_id",
+                    "field": "pathway_id",
+                    "native_path": "/response/docs/0/pathway_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "P_TEST",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/pathway_name",
+                    "field": "pathway_name",
+                    "native_path": "/response/docs/0/pathway_name",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic pathway",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/patric_id",
+                    "field": "patric_id",
+                    "native_path": "/response/docs/0/patric_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "fig|f1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/0/field/product",
+                    "field": "product",
+                    "native_path": "/response/docs/0/product",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic product",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  }
+                ],
+                "numerical_cells": [],
+                "issues": []
+              },
+              {
+                "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1",
+                "row_index": 1,
+                "native_path": "/response/docs/1",
+                "native_id": "pw_f2",
+                "status": "valid",
+                "cells": [
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/id",
+                    "field": "id",
+                    "native_path": "/response/docs/1/id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "pw_f2",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/annotation",
+                    "field": "annotation",
+                    "native_path": "/response/docs/1/annotation",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "PATRIC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/ec_description",
+                    "field": "ec_description",
+                    "native_path": "/response/docs/1/ec_description",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic EC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/ec_number",
+                    "field": "ec_number",
+                    "native_path": "/response/docs/1/ec_number",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "2.2.2.2",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/feature_id",
+                    "field": "feature_id",
+                    "native_path": "/response/docs/1/feature_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "f2",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/genome_id",
+                    "field": "genome_id",
+                    "native_path": "/response/docs/1/genome_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "1.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/pathway_class",
+                    "field": "pathway_class",
+                    "native_path": "/response/docs/1/pathway_class",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic class",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/pathway_id",
+                    "field": "pathway_id",
+                    "native_path": "/response/docs/1/pathway_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "P_TEST",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/pathway_name",
+                    "field": "pathway_name",
+                    "native_path": "/response/docs/1/pathway_name",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic pathway",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/patric_id",
+                    "field": "patric_id",
+                    "native_path": "/response/docs/1/patric_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "fig|f2",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/1/field/product",
+                    "field": "product",
+                    "native_path": "/response/docs/1/product",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic product",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  }
+                ],
+                "numerical_cells": [],
+                "issues": []
+              },
+              {
+                "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2",
+                "row_index": 2,
+                "native_path": "/response/docs/2",
+                "native_id": "pw_f3",
+                "status": "valid",
+                "cells": [
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/id",
+                    "field": "id",
+                    "native_path": "/response/docs/2/id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "pw_f3",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/annotation",
+                    "field": "annotation",
+                    "native_path": "/response/docs/2/annotation",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "PATRIC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/ec_description",
+                    "field": "ec_description",
+                    "native_path": "/response/docs/2/ec_description",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic EC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/ec_number",
+                    "field": "ec_number",
+                    "native_path": "/response/docs/2/ec_number",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "1.1.1.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/feature_id",
+                    "field": "feature_id",
+                    "native_path": "/response/docs/2/feature_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "f3",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/genome_id",
+                    "field": "genome_id",
+                    "native_path": "/response/docs/2/genome_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "2.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/pathway_class",
+                    "field": "pathway_class",
+                    "native_path": "/response/docs/2/pathway_class",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic class",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/pathway_id",
+                    "field": "pathway_id",
+                    "native_path": "/response/docs/2/pathway_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "P_TEST",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/pathway_name",
+                    "field": "pathway_name",
+                    "native_path": "/response/docs/2/pathway_name",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic pathway",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/patric_id",
+                    "field": "patric_id",
+                    "native_path": "/response/docs/2/patric_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "fig|f3",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/2/field/product",
+                    "field": "product",
+                    "native_path": "/response/docs/2/product",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic product",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  }
+                ],
+                "numerical_cells": [],
+                "issues": []
+              },
+              {
+                "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3",
+                "row_index": 3,
+                "native_path": "/response/docs/3",
+                "native_id": "pw_f4",
+                "status": "valid",
+                "cells": [
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/id",
+                    "field": "id",
+                    "native_path": "/response/docs/3/id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "pw_f4",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/annotation",
+                    "field": "annotation",
+                    "native_path": "/response/docs/3/annotation",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "PATRIC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/ec_description",
+                    "field": "ec_description",
+                    "native_path": "/response/docs/3/ec_description",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic EC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/ec_number",
+                    "field": "ec_number",
+                    "native_path": "/response/docs/3/ec_number",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "1.1.1.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/feature_id",
+                    "field": "feature_id",
+                    "native_path": "/response/docs/3/feature_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "f4",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/genome_id",
+                    "field": "genome_id",
+                    "native_path": "/response/docs/3/genome_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "1.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/pathway_class",
+                    "field": "pathway_class",
+                    "native_path": "/response/docs/3/pathway_class",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic class",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/pathway_id",
+                    "field": "pathway_id",
+                    "native_path": "/response/docs/3/pathway_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "P_TEST",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/pathway_name",
+                    "field": "pathway_name",
+                    "native_path": "/response/docs/3/pathway_name",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic pathway",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/patric_id",
+                    "field": "patric_id",
+                    "native_path": "/response/docs/3/patric_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "fig|f4",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/3/field/product",
+                    "field": "product",
+                    "native_path": "/response/docs/3/product",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic product",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  }
+                ],
+                "numerical_cells": [],
+                "issues": []
+              },
+              {
+                "row_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4",
+                "row_index": 4,
+                "native_path": "/response/docs/4",
+                "native_id": "pw_lost",
+                "status": "valid",
+                "cells": [
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/id",
+                    "field": "id",
+                    "native_path": "/response/docs/4/id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "pw_lost",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/annotation",
+                    "field": "annotation",
+                    "native_path": "/response/docs/4/annotation",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "PATRIC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/ec_description",
+                    "field": "ec_description",
+                    "native_path": "/response/docs/4/ec_description",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic EC",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/ec_number",
+                    "field": "ec_number",
+                    "native_path": "/response/docs/4/ec_number",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "3.3.3.3",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/feature_id",
+                    "field": "feature_id",
+                    "native_path": "/response/docs/4/feature_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "lost",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/genome_id",
+                    "field": "genome_id",
+                    "native_path": "/response/docs/4/genome_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "3.1",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/pathway_class",
+                    "field": "pathway_class",
+                    "native_path": "/response/docs/4/pathway_class",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic class",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/pathway_id",
+                    "field": "pathway_id",
+                    "native_path": "/response/docs/4/pathway_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "P_TEST",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/pathway_name",
+                    "field": "pathway_name",
+                    "native_path": "/response/docs/4/pathway_name",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic pathway",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/patric_id",
+                    "field": "patric_id",
+                    "native_path": "/response/docs/4/patric_id",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "fig|lost",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  },
+                  {
+                    "cell_key": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f/row/4/field/product",
+                    "field": "product",
+                    "native_path": "/response/docs/4/product",
+                    "presence": "present",
+                    "native_shape": "scalar",
+                    "atoms": [
+                      {
+                        "kind": "string",
+                        "string_value": "Synthetic product",
+                        "number_value": null,
+                        "boolean_value": null,
+                        "number_lexeme": null
+                      }
+                    ],
+                    "status": "valid",
+                    "field_schema_status": "match",
+                    "issue_codes": []
+                  }
+                ],
+                "numerical_cells": [],
+                "issues": []
+              }
+            ],
+            "facets": [],
+            "issues": []
+          },
+          "failures": [],
+          "retained_native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f"
+        },
+        "page_components": {
+          "version": "bvbrc_data_page_components_v1",
+          "native_row_count": 5,
+          "valid_row_count": 5,
+          "invalid_row_count": 0,
+          "reported_population_count": 5,
+          "population_exactness": "exact"
+        },
+        "facet_components": null,
+        "feature_sequence_sheet": null,
+        "feature_sequence_components": null,
+        "molecular_sheet": null,
+        "input_bindings": [],
+        "metadata_bindings": []
+      },
+      "input_results": []
+    },
+    "raw_binding": {
+      "source_ref": "synthetic_data_pathway",
+      "raw_artifact_ref": "synthetic_data_pathway_bytes",
+      "sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f",
+      "byte_count": 1448,
+      "bytes_key": "synthetic_data_pathway_bytes"
+    }
+  }
+}

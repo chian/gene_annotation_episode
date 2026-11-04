@@ -1,0 +1,1332 @@
+{
+  "source_7db13a7b6ef6a0210adde928": {
+    "direct_input_source_refs": [
+      "source_7a80e9912304c013360669cc"
+    ],
+    "input_artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+    "input_source_ref": "source_7a80e9912304c013360669cc",
+    "input_source_refs": [
+      "source_7a80e9912304c013360669cc"
+    ],
+    "selection": {
+      "analyte": {
+        "end": 49030,
+        "quote": "NADPH",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 49025
+      },
+      "applicability": {
+        "value": "unknown",
+        "witnesses": []
+      },
+      "blank_treatment": null,
+      "control_kind": {
+        "value": "reporter_standard",
+        "witnesses": [
+          {
+            "end": 23815,
+            "quote": "<p id=\"Par31\">The linear response curve for formazan absorbance (450\u2009nm) at varying NAD(P)H concentrations was constructed. NADH and NADPH were treated with WST-8. The total volume of 150\u2009\u03bcL contained 20\u2009mM Tris-HCl (pH\u20099.0 for NADH and pH\u20098.0 for NADPH), 200\u2009\u03bcM WST-8/8\u2009\u03bcM 1-mPMS, and varying amounts of NAD(P)H (0\u201333 nmole). Formazan absorbance at 450\u2009nm was plotted versus the amount of NAD(P)H and the linear range with a correlation coefficient\u2009&gt;\u20090.99 was selected [<xref ref-type=\"bibr\" rid=\"CR34\">34</xref>].</p>",
+            "representation": "original",
+            "source_ref": "source_7a80e9912304c013360669cc",
+            "start": 23268
+          }
+        ]
+      },
+      "endpoint": {
+        "end": 23331,
+        "quote": "formazan absorbance",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 23312
+      },
+      "expected_quantity_basis": {
+        "end": 23963,
+        "quote": "known NAD(P)H amounts",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 23942
+      },
+      "experiment": {
+        "end": 47707,
+        "quote": "Accuracy and precision for measurement of NAD(P)H by colorimetric WST-8 and UV spectrophotometry methods",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 47603
+      },
+      "matrix": {
+        "end": 23490,
+        "quote": "Tris-HCl",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 23482
+      },
+      "measured": {
+        "number_end": 72,
+        "number_start": 68,
+        "witness": {
+          "end": 49485,
+          "quote": "<tr><td colspan=\"1\" rowspan=\"1\">8.6</td><td colspan=\"1\" rowspan=\"1\">8.72</td><td colspan=\"1\" rowspan=\"1\">1.4</td><td colspan=\"1\" rowspan=\"1\">0.8</td><td colspan=\"1\" rowspan=\"1\">1.7</td><td colspan=\"1\" rowspan=\"1\">0.99</td></tr>",
+          "representation": "original",
+          "source_ref": "source_7a80e9912304c013360669cc",
+          "start": 49258
+        }
+      },
+      "measured_spread": null,
+      "nominal": {
+        "number_end": 35,
+        "number_start": 32,
+        "witness": {
+          "end": 49485,
+          "quote": "<tr><td colspan=\"1\" rowspan=\"1\">8.6</td><td colspan=\"1\" rowspan=\"1\">8.72</td><td colspan=\"1\" rowspan=\"1\">1.4</td><td colspan=\"1\" rowspan=\"1\">0.8</td><td colspan=\"1\" rowspan=\"1\">1.7</td><td colspan=\"1\" rowspan=\"1\">0.99</td></tr>",
+          "representation": "original",
+          "source_ref": "source_7a80e9912304c013360669cc",
+          "start": 49258
+        }
+      },
+      "reported_recovery": null,
+      "reported_recovery_unit": null,
+      "shared_unit": {
+        "end": 47887,
+        "quote": "nmole",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 47882
+      },
+      "source_kind": "primary_source",
+      "source_ref": "source_7a80e9912304c013360669cc",
+      "spread_kind": {
+        "value": "unknown",
+        "witnesses": []
+      }
+    },
+    "sheet": {
+      "annotation_credit": null,
+      "axis": "A105",
+      "cells": {
+        "correction_for_other_measurement": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "requires_linked_target_measurement_and_applicable_recovery",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "no_target_measurement_supplied",
+          "unit": null,
+          "value": null
+        },
+        "displayed_minus_reported_recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "measured/nominal-reported_recovery",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "reported_recovery_not_supplied",
+          "unit": "fraction",
+          "value": null
+        },
+        "inverse_recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "218",
+            "numerator": "215"
+          },
+          "formula": "nominal/measured",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 0.9862385321100917
+        },
+        "measured": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "25",
+            "numerator": "218"
+          },
+          "formula": "source_measured_quantity",
+          "input_measurement_keys": [
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol",
+          "value": 8.72
+        },
+        "measured_cv": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "measured_SD/measured",
+          "input_measurement_keys": [
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "measured_spread_not_supplied",
+          "unit": "fraction",
+          "value": null
+        },
+        "measured_sd": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "source_measured_spread_when_explicitly_SD",
+          "input_measurement_keys": [],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "measured_spread_not_supplied",
+          "unit": "nmol",
+          "value": null
+        },
+        "nominal": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "5",
+            "numerator": "43"
+          },
+          "formula": "source_expected_quantity",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol",
+          "value": 8.6
+        },
+        "percent_bias": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "43",
+            "numerator": "60"
+          },
+          "formula": "100*(measured/nominal-1)",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "percent",
+          "value": 1.3953488372093024
+        },
+        "recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "215",
+            "numerator": "218"
+          },
+          "formula": "measured/nominal",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 1.013953488372093
+        },
+        "recovery_variance": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "requires_measured_and_nominal_uncertainty_and_covariance",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "denominator_uncertainty_and_covariance_not_supplied",
+          "unit": "fraction_squared",
+          "value": null
+        },
+        "relative_bias": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "215",
+            "numerator": "3"
+          },
+          "formula": "measured/nominal-1",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 0.013953488372093023
+        },
+        "reported_measured_spread": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "source_measured_spread",
+          "input_measurement_keys": [],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "measured_spread_not_supplied",
+          "unit": "nmol",
+          "value": null
+        },
+        "reported_recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "source_reported_recovery_as_fraction",
+          "input_measurement_keys": [],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "unavailable",
+          "unavailable_reason": "reported_recovery_not_supplied",
+          "unit": "fraction",
+          "value": null
+        },
+        "signed_difference": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "25",
+            "numerator": "3"
+          },
+          "formula": "measured-nominal",
+          "input_measurement_keys": [
+            "literature_measurement_19eccdf9642b99042374ffbb",
+            "literature_measurement_d0c9ea428e62af1186154bb9"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol",
+          "value": 0.12
+        }
+      },
+      "extraction": {
+        "applicability": {
+          "kind": "source_interpretation",
+          "value": "unknown",
+          "witnesses": []
+        },
+        "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+        "control_kind": {
+          "kind": "source_interpretation",
+          "value": "reporter_standard",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 23815,
+              "quote": "<p id=\"Par31\">The linear response curve for formazan absorbance (450\u2009nm) at varying NAD(P)H concentrations was constructed. NADH and NADPH were treated with WST-8. The total volume of 150\u2009\u03bcL contained 20\u2009mM Tris-HCl (pH\u20099.0 for NADH and pH\u20098.0 for NADPH), 200\u2009\u03bcM WST-8/8\u2009\u03bcM 1-mPMS, and varying amounts of NAD(P)H (0\u201333 nmole). Formazan absorbance at 450\u2009nm was plotted versus the amount of NAD(P)H and the linear range with a correlation coefficient\u2009&gt;\u20090.99 was selected [<xref ref-type=\"bibr\" rid=\"CR34\">34</xref>].</p>",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 23268
+            }
+          ]
+        },
+        "input_origins": [
+          "reported"
+        ],
+        "interpretation_limits": [
+          "source_quotes_do_not_prove_scientific_roles",
+          "shared_units_do_not_establish_comparison_linkage",
+          "no_target_measurement_supplied",
+          "replicate_independence_not_established",
+          "denominator_uncertainty_and_covariance_not_supplied"
+        ],
+        "literals": {
+          "analyte": {
+            "value": "NADPH",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 49030,
+              "quote": "NADPH",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 49025
+            }
+          },
+          "blank_treatment": null,
+          "endpoint": {
+            "value": "formazan absorbance",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 23331,
+              "quote": "formazan absorbance",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 23312
+            }
+          },
+          "expected_quantity_basis": {
+            "value": "known NAD(P)H amounts",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 23963,
+              "quote": "known NAD(P)H amounts",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 23942
+            }
+          },
+          "experiment": {
+            "value": "Accuracy and precision for measurement of NAD(P)H by colorimetric WST-8 and UV spectrophotometry methods",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 47707,
+              "quote": "Accuracy and precision for measurement of NAD(P)H by colorimetric WST-8 and UV spectrophotometry methods",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 47603
+            }
+          },
+          "matrix": {
+            "value": "Tris-HCl",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 23490,
+              "quote": "Tris-HCl",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 23482
+            }
+          }
+        },
+        "observations": {
+          "measured": {
+            "exact_value": {
+              "denominator": "25",
+              "numerator": "218"
+            },
+            "measurement_key": "literature_measurement_d0c9ea428e62af1186154bb9",
+            "native_exact_value": {
+              "denominator": "25",
+              "numerator": "218"
+            },
+            "native_value": 8.72,
+            "number_end_bytes": 49330,
+            "number_start_bytes": 49326,
+            "origin": "reported",
+            "raw_number": "8.72",
+            "selector": {
+              "number_end": 72,
+              "number_start": 68,
+              "witness": {
+                "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+                "end": 49485,
+                "quote": "<tr><td colspan=\"1\" rowspan=\"1\">8.6</td><td colspan=\"1\" rowspan=\"1\">8.72</td><td colspan=\"1\" rowspan=\"1\">1.4</td><td colspan=\"1\" rowspan=\"1\">0.8</td><td colspan=\"1\" rowspan=\"1\">1.7</td><td colspan=\"1\" rowspan=\"1\">0.99</td></tr>",
+                "representation": "original",
+                "source_ref": "source_7a80e9912304c013360669cc",
+                "start": 49258
+              }
+            },
+            "unit": "nmol",
+            "value": 8.72
+          },
+          "measured_spread": null,
+          "nominal": {
+            "exact_value": {
+              "denominator": "5",
+              "numerator": "43"
+            },
+            "measurement_key": "literature_measurement_19eccdf9642b99042374ffbb",
+            "native_exact_value": {
+              "denominator": "5",
+              "numerator": "43"
+            },
+            "native_value": 8.6,
+            "number_end_bytes": 49293,
+            "number_start_bytes": 49290,
+            "origin": "reported",
+            "raw_number": "8.6",
+            "selector": {
+              "number_end": 35,
+              "number_start": 32,
+              "witness": {
+                "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+                "end": 49485,
+                "quote": "<tr><td colspan=\"1\" rowspan=\"1\">8.6</td><td colspan=\"1\" rowspan=\"1\">8.72</td><td colspan=\"1\" rowspan=\"1\">1.4</td><td colspan=\"1\" rowspan=\"1\">0.8</td><td colspan=\"1\" rowspan=\"1\">1.7</td><td colspan=\"1\" rowspan=\"1\">0.99</td></tr>",
+                "representation": "original",
+                "source_ref": "source_7a80e9912304c013360669cc",
+                "start": 49258
+              }
+            },
+            "unit": "nmol",
+            "value": 8.6
+          },
+          "reported_recovery": null
+        },
+        "reported_recovery_unit": null,
+        "shared_unit": {
+          "multiplier": {
+            "denominator": "1",
+            "numerator": "1"
+          },
+          "raw_unit": "nmole",
+          "unit": "nmol",
+          "witness": {
+            "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+            "end": 47887,
+            "quote": "nmole",
+            "representation": "original",
+            "source_ref": "source_7a80e9912304c013360669cc",
+            "start": 47882
+          }
+        },
+        "source_kind": "primary_source",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "source_refs": [
+          "source_7a80e9912304c013360669cc"
+        ],
+        "spread_kind": {
+          "kind": "source_interpretation",
+          "value": "unknown",
+          "witnesses": []
+        },
+        "version": "a105_calibration_recovery_inputs_v1"
+      },
+      "interpretation_scope_unavailable_reason": null,
+      "precision_components": [
+        "reported_measured_spread",
+        "measured_sd",
+        "measured_cv"
+      ],
+      "qualifications": [
+        "source_quotes_do_not_prove_scientific_roles",
+        "shared_units_do_not_establish_comparison_linkage",
+        "no_target_measurement_supplied",
+        "replicate_independence_not_established",
+        "denominator_uncertainty_and_covariance_not_supplied",
+        "recovery_bias_and_inverse_share_original_operands",
+        "no_overall_reliability_grade",
+        "no_annotation_credit"
+      ],
+      "scope": "source_recovery_control",
+      "section": "calibration_validity",
+      "version": "a105_calibration_recovery_components_v1"
+    },
+    "version": "literature_calibration_recovery_record_v1"
+  },
+  "source_49f2ac4931d079469644b3cf": {
+    "direct_input_source_refs": [
+      "source_7a80e9912304c013360669cc"
+    ],
+    "input_artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+    "input_source_ref": "source_7a80e9912304c013360669cc",
+    "input_source_refs": [
+      "source_7a80e9912304c013360669cc"
+    ],
+    "selection": {
+      "analyte": {
+        "end": 59071,
+        "quote": "G6PD",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 59067
+      },
+      "applicability": {
+        "value": "unknown",
+        "witnesses": []
+      },
+      "blank_treatment": {
+        "end": 29198,
+        "quote": "The rate of NAD(P)H production measured from the spiked samples was subtracted with that from the FBS.",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 29096
+      },
+      "control_kind": {
+        "value": "enzyme_activity_spike",
+        "witnesses": [
+          {
+            "end": 29260,
+            "quote": "<p id=\"Par37\">One microgram of GDH or 0.2\u2009\u03bcg of G6PD was spiked into 1.5\u2009\u03bcL of fetal bovine serum (FBS). The dehydrogenase activity of the spiked samples was monitored at 450\u2009nm in triplicate. The rate of NAD(P)H production measured from the spiked samples was subtracted with that from the FBS. The %recovery\u2009=\u2009100% x (measured rate/expected rate).</p>",
+            "representation": "original",
+            "source_ref": "source_7a80e9912304c013360669cc",
+            "start": 28895
+          }
+        ]
+      },
+      "endpoint": {
+        "end": 29126,
+        "quote": "rate of NAD(P)H production",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 29100
+      },
+      "expected_quantity_basis": {
+        "end": 58743,
+        "quote": "Expected",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 58735
+      },
+      "experiment": {
+        "end": 58496,
+        "quote": "Spike recoveries of GDH and G6PD in FBS using colorimetric WST-8 assay",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 58426
+      },
+      "matrix": {
+        "end": 29004,
+        "quote": "fetal bovine serum (FBS)",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 28980
+      },
+      "measured": {
+        "number_end": 134,
+        "number_start": 129,
+        "witness": {
+          "end": 59262,
+          "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+          "representation": "original",
+          "source_ref": "source_7a80e9912304c013360669cc",
+          "start": 59035
+        }
+      },
+      "measured_spread": {
+        "number_end": 142,
+        "number_start": 137,
+        "witness": {
+          "end": 59262,
+          "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+          "representation": "original",
+          "source_ref": "source_7a80e9912304c013360669cc",
+          "start": 59035
+        }
+      },
+      "nominal": {
+        "number_end": 96,
+        "number_start": 91,
+        "witness": {
+          "end": 59262,
+          "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+          "representation": "original",
+          "source_ref": "source_7a80e9912304c013360669cc",
+          "start": 59035
+        }
+      },
+      "reported_recovery": {
+        "number_end": 203,
+        "number_start": 197,
+        "witness": {
+          "end": 59262,
+          "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+          "representation": "original",
+          "source_ref": "source_7a80e9912304c013360669cc",
+          "start": 59035
+        }
+      },
+      "reported_recovery_unit": {
+        "value": "percent",
+        "witness": {
+          "end": 29223,
+          "quote": "%",
+          "representation": "original",
+          "source_ref": "source_7a80e9912304c013360669cc",
+          "start": 29222
+        }
+      },
+      "shared_unit": {
+        "end": 58650,
+        "quote": "nmole/min",
+        "representation": "original",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "start": 58641
+      },
+      "source_kind": "primary_source",
+      "source_ref": "source_7a80e9912304c013360669cc",
+      "spread_kind": {
+        "value": "SD",
+        "witnesses": [
+          {
+            "end": 32642,
+            "quote": "standard deviation",
+            "representation": "original",
+            "source_ref": "source_7a80e9912304c013360669cc",
+            "start": 32624
+          }
+        ]
+      }
+    },
+    "sheet": {
+      "annotation_credit": null,
+      "axis": "A105",
+      "cells": {
+        "correction_for_other_measurement": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "requires_linked_target_measurement_and_applicable_recovery",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "no_target_measurement_supplied",
+          "unit": null,
+          "value": null
+        },
+        "displayed_minus_reported_recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "640000",
+            "numerator": "227"
+          },
+          "formula": "measured/nominal-reported_recovery",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c",
+            "literature_measurement_63afbdb1f1d159e1f04a7213"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 0.0003546875
+        },
+        "inverse_recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "1235",
+            "numerator": "1024"
+          },
+          "formula": "nominal/measured",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 0.8291497975708502
+        },
+        "measured": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "200",
+            "numerator": "247"
+          },
+          "formula": "source_measured_quantity",
+          "input_measurement_keys": [
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol/min",
+          "value": 1.235
+        },
+        "measured_cv": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "1235",
+            "numerator": "4"
+          },
+          "formula": "measured_SD/measured",
+          "input_measurement_keys": [
+            "literature_measurement_3435b5b78cb1f810deadaf76",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 0.0032388663967611335
+        },
+        "measured_sd": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "250",
+            "numerator": "1"
+          },
+          "formula": "source_measured_spread_when_explicitly_SD",
+          "input_measurement_keys": [
+            "literature_measurement_3435b5b78cb1f810deadaf76"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol/min",
+          "value": 0.004
+        },
+        "nominal": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "125",
+            "numerator": "128"
+          },
+          "formula": "source_expected_quantity",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol/min",
+          "value": 1.024
+        },
+        "percent_bias": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "256",
+            "numerator": "5275"
+          },
+          "formula": "100*(measured/nominal-1)",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "percent",
+          "value": 20.60546875
+        },
+        "recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "1024",
+            "numerator": "1235"
+          },
+          "formula": "measured/nominal",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 1.2060546875
+        },
+        "recovery_variance": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": null,
+          "formula": "requires_measured_and_nominal_uncertainty_and_covariance",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c",
+            "literature_measurement_3435b5b78cb1f810deadaf76"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "denominator_uncertainty_and_covariance_not_supplied",
+          "unit": "fraction_squared",
+          "value": null
+        },
+        "relative_bias": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "1024",
+            "numerator": "211"
+          },
+          "formula": "measured/nominal-1",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 0.2060546875
+        },
+        "reported_measured_spread": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "250",
+            "numerator": "1"
+          },
+          "formula": "source_measured_spread",
+          "input_measurement_keys": [
+            "literature_measurement_3435b5b78cb1f810deadaf76"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol/min",
+          "value": 0.004
+        },
+        "reported_recovery": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "10000",
+            "numerator": "12057"
+          },
+          "formula": "source_reported_recovery_as_fraction",
+          "input_measurement_keys": [
+            "literature_measurement_63afbdb1f1d159e1f04a7213"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "reported",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "fraction",
+          "value": 1.2057
+        },
+        "signed_difference": {
+          "conditional_on": [
+            "source_role_assignments"
+          ],
+          "exact_value": {
+            "denominator": "1000",
+            "numerator": "211"
+          },
+          "formula": "measured-nominal",
+          "input_measurement_keys": [
+            "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "literature_measurement_735c1d0b9a4b001d3ad5ef8c"
+          ],
+          "input_origins": [
+            "reported"
+          ],
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "nmol/min",
+          "value": 0.211
+        }
+      },
+      "extraction": {
+        "applicability": {
+          "kind": "source_interpretation",
+          "value": "unknown",
+          "witnesses": []
+        },
+        "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+        "control_kind": {
+          "kind": "source_interpretation",
+          "value": "enzyme_activity_spike",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 29260,
+              "quote": "<p id=\"Par37\">One microgram of GDH or 0.2\u2009\u03bcg of G6PD was spiked into 1.5\u2009\u03bcL of fetal bovine serum (FBS). The dehydrogenase activity of the spiked samples was monitored at 450\u2009nm in triplicate. The rate of NAD(P)H production measured from the spiked samples was subtracted with that from the FBS. The %recovery\u2009=\u2009100% x (measured rate/expected rate).</p>",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 28895
+            }
+          ]
+        },
+        "input_origins": [
+          "reported"
+        ],
+        "interpretation_limits": [
+          "source_quotes_do_not_prove_scientific_roles",
+          "shared_units_do_not_establish_comparison_linkage",
+          "no_target_measurement_supplied",
+          "replicate_independence_not_established",
+          "denominator_uncertainty_and_covariance_not_supplied"
+        ],
+        "literals": {
+          "analyte": {
+            "value": "G6PD",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 59071,
+              "quote": "G6PD",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 59067
+            }
+          },
+          "blank_treatment": {
+            "value": "The rate of NAD(P)H production measured from the spiked samples was subtracted with that from the FBS.",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 29198,
+              "quote": "The rate of NAD(P)H production measured from the spiked samples was subtracted with that from the FBS.",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 29096
+            }
+          },
+          "endpoint": {
+            "value": "rate of NAD(P)H production",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 29126,
+              "quote": "rate of NAD(P)H production",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 29100
+            }
+          },
+          "expected_quantity_basis": {
+            "value": "Expected",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 58743,
+              "quote": "Expected",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 58735
+            }
+          },
+          "experiment": {
+            "value": "Spike recoveries of GDH and G6PD in FBS using colorimetric WST-8 assay",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 58496,
+              "quote": "Spike recoveries of GDH and G6PD in FBS using colorimetric WST-8 assay",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 58426
+            }
+          },
+          "matrix": {
+            "value": "fetal bovine serum (FBS)",
+            "witness": {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 29004,
+              "quote": "fetal bovine serum (FBS)",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 28980
+            }
+          }
+        },
+        "observations": {
+          "measured": {
+            "exact_value": {
+              "denominator": "200",
+              "numerator": "247"
+            },
+            "measurement_key": "literature_measurement_735c1d0b9a4b001d3ad5ef8c",
+            "native_exact_value": {
+              "denominator": "200",
+              "numerator": "247"
+            },
+            "native_value": 1.235,
+            "number_end_bytes": 59169,
+            "number_start_bytes": 59164,
+            "origin": "reported",
+            "raw_number": "1.235",
+            "selector": {
+              "number_end": 134,
+              "number_start": 129,
+              "witness": {
+                "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+                "end": 59262,
+                "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+                "representation": "original",
+                "source_ref": "source_7a80e9912304c013360669cc",
+                "start": 59035
+              }
+            },
+            "unit": "nmol/min",
+            "value": 1.235
+          },
+          "measured_spread": {
+            "exact_value": {
+              "denominator": "250",
+              "numerator": "1"
+            },
+            "measurement_key": "literature_measurement_3435b5b78cb1f810deadaf76",
+            "native_exact_value": {
+              "denominator": "250",
+              "numerator": "1"
+            },
+            "native_value": 0.004,
+            "number_end_bytes": 59180,
+            "number_start_bytes": 59175,
+            "origin": "reported",
+            "raw_number": "0.004",
+            "selector": {
+              "number_end": 142,
+              "number_start": 137,
+              "witness": {
+                "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+                "end": 59262,
+                "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+                "representation": "original",
+                "source_ref": "source_7a80e9912304c013360669cc",
+                "start": 59035
+              }
+            },
+            "unit": "nmol/min",
+            "value": 0.004
+          },
+          "nominal": {
+            "exact_value": {
+              "denominator": "125",
+              "numerator": "128"
+            },
+            "measurement_key": "literature_measurement_3f7ac2045ab07af7081c0a6a",
+            "native_exact_value": {
+              "denominator": "125",
+              "numerator": "128"
+            },
+            "native_value": 1.024,
+            "number_end_bytes": 59131,
+            "number_start_bytes": 59126,
+            "origin": "reported",
+            "raw_number": "1.024",
+            "selector": {
+              "number_end": 96,
+              "number_start": 91,
+              "witness": {
+                "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+                "end": 59262,
+                "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+                "representation": "original",
+                "source_ref": "source_7a80e9912304c013360669cc",
+                "start": 59035
+              }
+            },
+            "unit": "nmol/min",
+            "value": 1.024
+          },
+          "reported_recovery": {
+            "exact_value": {
+              "denominator": "10000",
+              "numerator": "12057"
+            },
+            "measurement_key": "literature_measurement_63afbdb1f1d159e1f04a7213",
+            "native_exact_value": {
+              "denominator": "100",
+              "numerator": "12057"
+            },
+            "native_value": 120.57,
+            "number_end_bytes": 59242,
+            "number_start_bytes": 59236,
+            "origin": "reported",
+            "raw_number": "120.57",
+            "selector": {
+              "number_end": 203,
+              "number_start": 197,
+              "witness": {
+                "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+                "end": 59262,
+                "quote": "<tr><td colspan=\"1\" rowspan=\"1\">G6PD</td><td char=\".\" align=\"char\" colspan=\"1\" rowspan=\"1\">1.024</td><td colspan=\"1\" rowspan=\"1\">1.235\u00a0\u00b1\u00a00.004</td><td char=\"\u00b1\" align=\"char\" colspan=\"1\" rowspan=\"1\">120.57\u00a0\u00b1\u00a00.33</td></tr>",
+                "representation": "original",
+                "source_ref": "source_7a80e9912304c013360669cc",
+                "start": 59035
+              }
+            },
+            "unit": "fraction",
+            "value": 1.2057
+          }
+        },
+        "reported_recovery_unit": {
+          "multiplier": {
+            "denominator": "100",
+            "numerator": "1"
+          },
+          "raw_unit": "%",
+          "unit": "fraction",
+          "value": "percent",
+          "witness": {
+            "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+            "end": 29223,
+            "quote": "%",
+            "representation": "original",
+            "source_ref": "source_7a80e9912304c013360669cc",
+            "start": 29222
+          }
+        },
+        "shared_unit": {
+          "multiplier": {
+            "denominator": "1",
+            "numerator": "1"
+          },
+          "raw_unit": "nmole/min",
+          "unit": "nmol/min",
+          "witness": {
+            "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+            "end": 58650,
+            "quote": "nmole/min",
+            "representation": "original",
+            "source_ref": "source_7a80e9912304c013360669cc",
+            "start": 58641
+          }
+        },
+        "source_kind": "primary_source",
+        "source_ref": "source_7a80e9912304c013360669cc",
+        "source_refs": [
+          "source_7a80e9912304c013360669cc"
+        ],
+        "spread_kind": {
+          "kind": "source_interpretation",
+          "value": "SD",
+          "witnesses": [
+            {
+              "artifact_ref": "artifact_86896c47556f7eeef975856dbbe2d3bab3b6143b91d1f826078e29771761b698",
+              "end": 32642,
+              "quote": "standard deviation",
+              "representation": "original",
+              "source_ref": "source_7a80e9912304c013360669cc",
+              "start": 32624
+            }
+          ]
+        },
+        "version": "a105_calibration_recovery_inputs_v1"
+      },
+      "interpretation_scope_unavailable_reason": null,
+      "precision_components": [
+        "reported_measured_spread",
+        "measured_sd",
+        "measured_cv"
+      ],
+      "qualifications": [
+        "source_quotes_do_not_prove_scientific_roles",
+        "shared_units_do_not_establish_comparison_linkage",
+        "no_target_measurement_supplied",
+        "replicate_independence_not_established",
+        "denominator_uncertainty_and_covariance_not_supplied",
+        "recovery_bias_and_inverse_share_original_operands",
+        "no_overall_reliability_grade",
+        "no_annotation_credit"
+      ],
+      "scope": "source_recovery_control",
+      "section": "matrix_activity_response",
+      "version": "a105_calibration_recovery_components_v1"
+    },
+    "version": "literature_calibration_recovery_record_v1"
+  }
+}

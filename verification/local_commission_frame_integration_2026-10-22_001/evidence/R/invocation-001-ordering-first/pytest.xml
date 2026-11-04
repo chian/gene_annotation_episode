@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="8.739" timestamp="2026-10-22T05:41:44.028387-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_pending_retry_preserves_actual_provider_serialization[False]" time="3.774"><failure message="assert ['{&quot;alpha_fix...ll, &quot;z&quot;: 1}}'] == ['{&quot;zeta_fixt...story_v1&quot;}}}']&#10;  &#10;  At index 0 diff: '{&quot;alpha_fixture&quot;: &quot;\\u03bc&quot;, &quot;pending_work&quot;: {&quot;captured_at&quot;: &quot;2026-10-22T10:41:47.711817+00:00&quot;, &quot;items&quot;: [], &quot;version&quot;: &quot;pending_work_v1&quot;}, &quot;waiting_support&quot;: {&quot;duration_expectations&quot;: [], &quot;local_return_history&quot;: {&quot;credit_binding&quot;: {&quot;kind&quot;: &quot;fixture_received_form_units&quot;, &quot;unit&quot;: 2}, &quot;credit_kind&quot;: &quot;scientific&quot;, &quot;episode_id&quot;: &quot;episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a143c0&quot;, &quot;run_id&quot;: &quot;frame-runtime-fixture&quot;, &quot;samples&quot;: [], &quot;unavailable_reasons&quot;: [&quot;return_admissions_unavailable&quot;], &quot;version&quot;: &quot;local_parent_return_history_v1&quot;}, ...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">make_host = &lt;function make_host.&lt;locals&gt;.make at 0x7388ff6dd1c0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x73891e1d5550&gt;
+presentation = False
+
+    @pytest.mark.parametrize('presentation', [False, True])
+    def test_v3_pending_retry_preserves_actual_provider_serialization(make_host, monkeypatch, presentation):
+        h = make_host(presentation=presentation, script=[Interrupted('first attempt')])
+        context = {'zeta_fixture': {'z': 1, 'a': None}, 'alpha_fixture': 'μ'}
+        schema = obj({'zeta_fixture': {'type': 'string'}, 'alpha_fixture': {'type': 'boolean'}})
+        with pytest.raises(Interrupted):
+            dispatch(h, context, schema)
+        text = saved(h)['request']
+        first_context_text = h.provider.texts[0]
+        first_schema_text = json.dumps(h.provider.schemas[0], allow_nan=False)
+        fresh = Provider([query()], session=False)
+        h.workflow.provider = fresh
+        monkeypatch.setattr(h.workflow, 'capture_local_commission_frame', forbidden)
+        monkeypatch.setattr(h.workflow, 'pending_work', forbidden)
+        h.source.calls = 0
+        dispatch(h, {'different': True}, obj({}))
+        assert saved(h)['request'] == text
+&gt;       assert fresh.texts == [first_context_text]
+E       assert ['{"alpha_fix...ll, "z": 1}}'] == ['{"zeta_fixt...story_v1"}}}']
+E         
+E         At index 0 diff: '{"alpha_fixture": "\\u03bc", "pending_work": {"captured_at": "2026-10-22T10:41:47.711817+00:00", "items": [], "version": "pending_work_v1"}, "waiting_support": {"duration_expectations": [], "local_return_history": {"credit_binding": {"kind": "fixture_received_form_units", "unit": 2}, "credit_kind": "scientific", "episode_id": "episode_5bc397a4438d4c02499cba6b811c1b3f20e22a87cbccd83233a3db8884a143c0", "run_id": "frame-runtime-fixture", "samples": [], "unavailable_reasons": ["return_admissions_unavailable"], "version": "local_parent_return_history_v1"}, ...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests/test_local_commission_frame_runtime.py:249: AssertionError</failure></testcase><testcase classname="tests.test_local_commission_frame_runtime" name="test_v3_pending_retry_preserves_actual_provider_serialization[True]" time="4.385" /></testsuite></testsuites>

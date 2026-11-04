@@ -1,0 +1,17 @@
+{
+  "argv": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_xmfa_sources.py",
+    "-q",
+    "--junitxml=verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/initial-review-001.xml"
+  ],
+  "returncode": 1,
+  "purpose": "Reproduce missing saved multi-file Entry and conflicting Format checks before root correction; no original artifacts modified.",
+  "source_hashes": {
+    "gene_annotation_episode/xmfa_sources.py": "d6c77266a3b2638aafbe4ae3632365b2883c96e214973680caeed6986e9f4f5e",
+    "gene_annotation_episode/xmfa_source_contracts.py": "90fdeebd16fec15eca882911981372cf033ae7de879773f811e24c186cf18398",
+    "tests/test_xmfa_sources.py": "945816836491286a65781b2cc38cf43d008b8f1d136cab351b0dafe20d3318cb"
+  }
+}

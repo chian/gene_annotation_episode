@@ -1,0 +1,220 @@
+{
+  "result": {
+    "schema": "blast_normalized_result_v1",
+    "mode": "database",
+    "resource": "api",
+    "format": "json2",
+    "source_locator": {
+      "artifact_ref": "synthetic-native-json",
+      "report_index": 7,
+      "pointer": "/BlastOutput2/7/report"
+    },
+    "query": {
+      "id": "synthetic-query",
+      "title": null,
+      "length": 10
+    },
+    "search": {
+      "program": "blastp",
+      "database": "synthetic-db",
+      "request": {},
+      "hit_array_present": true,
+      "reported_hit_count": 10
+    },
+    "hits": [
+      {
+        "hit_index": 4,
+        "length": 10,
+        "source_locator": {
+          "artifact_ref": "synthetic-native-json",
+          "report_index": 7,
+          "pointer": "/BlastOutput2/7/report/results/search/hits/4",
+          "hit_index": 4
+        },
+        "descriptions": [
+          {
+            "id": "gnl|BL_ORD_ID|4",
+            "accession": "4",
+            "title": "Synthetic native description",
+            "taxid": 562,
+            "source_locator": {
+              "artifact_ref": "synthetic-native-json",
+              "report_index": 7,
+              "pointer": "/BlastOutput2/7/report/results/search/hits/4/description/2",
+              "hit_index": 4,
+              "description_index": 2
+            }
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "bit_score": 20,
+            "score": 40,
+            "evalue": 0.0,
+            "query_from": 1,
+            "query_to": 5,
+            "hit_from": 1,
+            "hit_to": 5,
+            "align_len": 5,
+            "identity": 5,
+            "gaps": 0,
+            "qseq": "ACDEF",
+            "hseq": "ACDEF",
+            "source_locator": {
+              "artifact_ref": "synthetic-native-json",
+              "report_index": 7,
+              "pointer": "/BlastOutput2/7/report/results/search/hits/4/hsps/6",
+              "hit_index": 4,
+              "hsp_index": 6
+            }
+          }
+        ]
+      },
+      {
+        "hit_index": 9,
+        "length": 10,
+        "source_locator": {
+          "artifact_ref": "synthetic-native-json",
+          "report_index": 7,
+          "pointer": "/BlastOutput2/7/report/results/search/hits/9",
+          "hit_index": 9
+        },
+        "descriptions": [
+          {
+            "id": "gnl|BL_ORD_ID|9",
+            "accession": "9",
+            "title": "Synthetic native description",
+            "taxid": 562,
+            "source_locator": {
+              "artifact_ref": "synthetic-native-json",
+              "report_index": 7,
+              "pointer": "/BlastOutput2/7/report/results/search/hits/9/description/3",
+              "hit_index": 9,
+              "description_index": 3
+            }
+          }
+        ],
+        "unpaired_metadata": {},
+        "hsps": [
+          {
+            "bit_score": 18,
+            "score": 36,
+            "evalue": 0.0,
+            "query_from": 1,
+            "query_to": 5,
+            "hit_from": 1,
+            "hit_to": 5,
+            "align_len": 5,
+            "identity": 5,
+            "gaps": 0,
+            "qseq": "ACDEF",
+            "hseq": "ACDEF",
+            "source_locator": {
+              "artifact_ref": "synthetic-native-json",
+              "report_index": 7,
+              "pointer": "/BlastOutput2/7/report/results/search/hits/9/hsps/6",
+              "hit_index": 9,
+              "hsp_index": 6
+            }
+          }
+        ]
+      }
+    ],
+    "native": {
+      "synthetic": true
+    },
+    "issues": []
+  },
+  "reference_metadata": [
+    {
+      "accession": "fig|562.1.peg.7",
+      "identifier_namespace": "patric_id",
+      "source": "synthetic-metadata",
+      "native_pointer": "/records/0",
+      "taxid": 562,
+      "functions": [
+        {
+          "function": "F",
+          "source": "synthetic-metadata"
+        }
+      ],
+      "lineage": [
+        {
+          "taxid": 562,
+          "rank": "species"
+        }
+      ],
+      "assembly": {},
+      "origin": {},
+      "sequence_group": "unverified-shared-label",
+      "study_groups": []
+    },
+    {
+      "accession": "fig|562.2.peg.7",
+      "identifier_namespace": "patric_id",
+      "source": "synthetic-metadata",
+      "native_pointer": "/records/1",
+      "taxid": 562,
+      "functions": [
+        {
+          "function": "G",
+          "source": "synthetic-metadata"
+        }
+      ],
+      "lineage": [
+        {
+          "taxid": 562,
+          "rank": "species"
+        }
+      ],
+      "assembly": {},
+      "origin": {},
+      "sequence_group": "unverified-shared-label",
+      "study_groups": []
+    }
+  ],
+  "description_bindings": [
+    {
+      "report_index": 7,
+      "hit_index": 4,
+      "description_index": 2,
+      "metadata_index": 0,
+      "native_description": {
+        "id": "gnl|BL_ORD_ID|4",
+        "accession": "4",
+        "title": "Synthetic native description",
+        "taxid": 562
+      },
+      "metadata_identifier": {
+        "namespace": "patric_id",
+        "value": "fig|562.1.peg.7"
+      },
+      "metadata_source_ref": "synthetic-metadata",
+      "metadata_pointer": "/records/0",
+      "linkage_source_ref": "synthetic-record-links",
+      "linkage_pointer": "/links/0"
+    },
+    {
+      "report_index": 7,
+      "hit_index": 9,
+      "description_index": 3,
+      "metadata_index": 1,
+      "native_description": {
+        "id": "gnl|BL_ORD_ID|9",
+        "accession": "9",
+        "title": "Synthetic native description",
+        "taxid": 562
+      },
+      "metadata_identifier": {
+        "namespace": "patric_id",
+        "value": "fig|562.2.peg.7"
+      },
+      "metadata_source_ref": "synthetic-metadata",
+      "metadata_pointer": "/records/1",
+      "linkage_source_ref": "synthetic-record-links",
+      "linkage_pointer": "/links/1"
+    }
+  ],
+  "sequence_identity_bindings": []
+}

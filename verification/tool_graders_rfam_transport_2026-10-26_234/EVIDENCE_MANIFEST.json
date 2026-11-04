@@ -1,0 +1,545 @@
+{
+  "created_at": "2026-10-26T03:29:43.530163+00:00",
+  "authority_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7",
+  "closure_reread": "Objective and all sixteen principles read verbatim, then full final 493-line contract; no change to authority",
+  "production_files": [
+    "gene_annotation_episode/rfam_batch_transport.py",
+    "tests/test_rfam_batch_transport.py"
+  ],
+  "live_actions": [
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/snapshot.json",
+      "request_method": "POST",
+      "url": "https://batch.rfam.org/submit-job",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 155,
+      "body_sha256": "b246a6a477052f33da216a64166343beb290727ba64032b00cbe07bff7ca07ab"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/status/infernal_cmscan-R20261026-031924-0036-5332137-p1m",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 8,
+      "body_sha256": "20797ee0657b01c990353bc9862562fb29998b8b26a69d59c5db31cfc42dba26"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/result/infernal_cmscan-R20261026-031924-0036-5332137-p1m",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 646,
+      "body_sha256": "7ac4c5f1baf8cbb531879d0268d1c09ddca59be9e6fe92dab079e5b31c3650ea"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/result/infernal_cmscan-R20261026-031924-0036-5332137-p1m/tblout",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 2062,
+      "body_sha256": "46b3e1c6554f1f20d7869e447298beb782ad2cf6735196bd11a39be80e5fad25"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/result/infernal_cmscan-R20261026-031924-0036-5332137-p1m/out",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 18519,
+      "body_sha256": "61e8f39517f480efd4388a91f6096500c13e120d658eec75bcdf343db4105c63"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/001-submit/snapshot.json",
+      "request_method": "POST",
+      "url": "https://batch.rfam.org/submit-job",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 157,
+      "body_sha256": "e0cfc21c40d6f73fa65dcee823e81611e9187287cd51002f476cd39829634034"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/002-status/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/status/infernal_cmscan-R20261026-031913-0510-39226191-p1m",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 8,
+      "body_sha256": "20797ee0657b01c990353bc9862562fb29998b8b26a69d59c5db31cfc42dba26"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/result/infernal_cmscan-R20261026-031913-0510-39226191-p1m",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 1343,
+      "body_sha256": "8e6bf28e2e95b3ff2ab47bb2b23d00c5f3914eef80988a70a7eff582a779dd47"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/004-fetch-tblout/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/result/infernal_cmscan-R20261026-031913-0510-39226191-p1m/tblout",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 1202,
+      "body_sha256": "97a99297d8c8c21eeae86afee14ec505c03c53dc20bb37d801f4e979d9b0a2b4"
+    },
+    {
+      "snapshot": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/005-fetch-out/snapshot.json",
+      "request_method": "GET",
+      "url": "https://batch.rfam.org/result/infernal_cmscan-R20261026-031913-0510-39226191-p1m/out",
+      "http_status": 200,
+      "body_complete": true,
+      "body_bytes": 3779,
+      "body_sha256": "05c308e2a9325969f106b70cf0bb83083fb6bba4955da89872e8180ec3ccf216"
+    }
+  ],
+  "live_post_count": 2,
+  "live_get_count": 8,
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "files": [
+    {
+      "path": "gene_annotation_episode/rfam_batch_transport.py",
+      "bytes": 12163,
+      "sha256": "81972a351f8f2f8b0c58ee4055ff5b574270ce214affeb397351cba9aec10e62"
+    },
+    {
+      "path": "tests/test_rfam_batch_transport.py",
+      "bytes": 13210,
+      "sha256": "039f46cc666f7c18b016d2c4fd1737e5dd5e40b993b0696fb6b3d4ecf2cbd938"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/BATCH_NATIVE_CONTRACT.md",
+      "bytes": 15461,
+      "sha256": "05d633c098361e574c1711ba74043b6044a690e568dfa21ee5d86585908f326a"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/capture_action.py",
+      "bytes": 2787,
+      "sha256": "b05098308c1d233515c065f8731aa6fab5fbcfeeeded571f76329db7507088ae"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/intent.json",
+      "bytes": 1373,
+      "sha256": "36b827fb07094ae9d25f7e80e88481794b27f6dec2aa2d34d496d2e933a4482f"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/response.body",
+      "bytes": 155,
+      "sha256": "b246a6a477052f33da216a64166343beb290727ba64032b00cbe07bff7ca07ab"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/snapshot.json",
+      "bytes": 4621,
+      "sha256": "9da0b65636fe65a8440da1c1be03089ab6d368870eb01afbcec0f84ba671e02a"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/stdout.log",
+      "bytes": 414,
+      "sha256": "1d80c663607449c1dd57ad13d8ddbb124cd35de849eb95b49d8d72a3cf31d9d5"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/001-submit/verification-receipt.json",
+      "bytes": 2913,
+      "sha256": "1c4a9cea912b0eb6a532efbf94111e159ee209d629a139640d5bdf214d3fb865"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/intent.json",
+      "bytes": 1373,
+      "sha256": "a997899a782e83276c9926bea4db55674afdef7cd822f6de0613b5229db4574d"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/response.body",
+      "bytes": 8,
+      "sha256": "20797ee0657b01c990353bc9862562fb29998b8b26a69d59c5db31cfc42dba26"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/snapshot.json",
+      "bytes": 3287,
+      "sha256": "dcfa7b5283622f6ee430b6a9760bbaeb593e3ef23af1ad2ccb85649af83e16a3"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/stdout.log",
+      "bytes": 209,
+      "sha256": "79a9524504b6c64aaea92599a78ef0c28fa8e2cdd81e88760c7b3a16c26dd7b6"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/002-status/verification-receipt.json",
+      "bytes": 2913,
+      "sha256": "26cef8a6860b5937134dbaf993f4445f06d74de683f2f282d6d901b785a9d787"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/intent.json",
+      "bytes": 1397,
+      "sha256": "69702410204cc163fcae4743ad9c2085d42c146b897361a803aa7078f6a65aa8"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/response.body",
+      "bytes": 646,
+      "sha256": "7ac4c5f1baf8cbb531879d0268d1c09ddca59be9e6fe92dab079e5b31c3650ea"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/snapshot.json",
+      "bytes": 2989,
+      "sha256": "777a7c96f9e0a15ecc6ba5d594bc66e785ac8acd4d315635dfc9bceea9aea84c"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/stdout.log",
+      "bytes": 215,
+      "sha256": "5673fdd19745950fd6e8ca9540e90a2e304d84e7a9dd5b607a94191ccd660ff9"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/003-fetch-json/verification-receipt.json",
+      "bytes": 2945,
+      "sha256": "c20c3916ce53fb63da44b01e7db96c60212bea22fcbb450e1c0a8b215e0d12f1"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/intent.json",
+      "bytes": 1409,
+      "sha256": "8fad074ba0c32ecc510472487e0d976d371a53c177de4d87eda0922c562752f1"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/response.body",
+      "bytes": 2062,
+      "sha256": "46b3e1c6554f1f20d7869e447298beb782ad2cf6735196bd11a39be80e5fad25"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/snapshot.json",
+      "bytes": 3416,
+      "sha256": "320f28e6f6f13c3874310e995bfea0dc7ce94cc773d4a640942cc785715239da"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/stdout.log",
+      "bytes": 218,
+      "sha256": "bd05f2aa8c27d31d8e22212ea72c07983f470728b2f1d1cfca765ec57f00ec5c"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/004-fetch-tblout/verification-receipt.json",
+      "bytes": 2961,
+      "sha256": "3cdf1e0fb06e16050e468a3d0304c0ff8e06a7902ee231b86a982080019d2034"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/intent.json",
+      "bytes": 1391,
+      "sha256": "7fdfb845d7150f404c2016ae20e6c8d344bbd16e119805d671605e4ff41d4af9"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/response.body",
+      "bytes": 18519,
+      "sha256": "61e8f39517f480efd4388a91f6096500c13e120d658eec75bcdf343db4105c63"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/snapshot.json",
+      "bytes": 3405,
+      "sha256": "bdbca2262bcdcc652dc37aedbf9d45ad239f74624cdee7df4eeea46fba4c40d1"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/stdout.log",
+      "bytes": 216,
+      "sha256": "df487109aa532fc0e60945f1ff536e5b7bf0374f2e9860fe9d964d1b6e7a273d"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/005-fetch-out/verification-receipt.json",
+      "bytes": 2937,
+      "sha256": "fd5bd40d3df2783626fcd953fa4c6779ec71839e2fe6004b7de9a0148e761c4b"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/input-manifest.json",
+      "bytes": 3640,
+      "sha256": "8c40c28e7c0d3a4d3d278e934aab9b7abad9436447dcb47a0a58e2f9f34ae055"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/input.seq",
+      "bytes": 818,
+      "sha256": "4dc1529db76f089ec36caf8f3d176028d3bb5c828a1d04bfd130e72f92f515f4"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi/original_handle.json",
+      "bytes": 167,
+      "sha256": "911846a96dbf5ff6816a7913fd4cdfae71418aef328d51b959a015ecaf0c4486"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/001-submit/intent.json",
+      "bytes": 1379,
+      "sha256": "66f8ba9dda32ffad6de9f94884ae0a03c322bf67c40cf6988e63b09ff3a1c4ed"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/001-submit/response.body",
+      "bytes": 157,
+      "sha256": "e0cfc21c40d6f73fa65dcee823e81611e9187287cd51002f476cd39829634034"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/001-submit/snapshot.json",
+      "bytes": 3763,
+      "sha256": "2822272c1eaf2ee7fa475ad62612f6fad1b8f4e98510fa332c3218fec4ccf59e"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/001-submit/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/001-submit/stdout.log",
+      "bytes": 419,
+      "sha256": "d65ef01d4326a519bf7424e0fcaaf6334f46bd7a3fe0e47ede177659923d28e0"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/001-submit/verification-receipt.json",
+      "bytes": 2919,
+      "sha256": "72120c139c8fb950653a21e1b5b0f7ec1f3b12508b20dd34543c4ff6879f20f2"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/002-status/intent.json",
+      "bytes": 1379,
+      "sha256": "3c72faa650b747fb32ee18fc714e1931b28057f05196a305fafeac962b2505cc"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/002-status/response.body",
+      "bytes": 8,
+      "sha256": "20797ee0657b01c990353bc9862562fb29998b8b26a69d59c5db31cfc42dba26"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/002-status/snapshot.json",
+      "bytes": 3291,
+      "sha256": "2915d857b110d423f4d2f80309e05354ad1a4d8ced44fbaea074756b7f7ee9b9"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/002-status/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/002-status/stdout.log",
+      "bytes": 209,
+      "sha256": "70920d62311168b6682147aec701f9764dfa835271005b2e4cb11a3d7413d56d"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/002-status/verification-receipt.json",
+      "bytes": 2921,
+      "sha256": "da6a247c3cf07724741a8c587f09d510e760b1726c6e7d9f92754e8c3b6c29ce"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/intent.json",
+      "bytes": 1403,
+      "sha256": "7be1c2b1356d182d5f334476a9b911ff2af10630d1acea798f7ec41da9c1e0cc"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/response.body",
+      "bytes": 1343,
+      "sha256": "8e6bf28e2e95b3ff2ab47bb2b23d00c5f3914eef80988a70a7eff582a779dd47"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/snapshot.json",
+      "bytes": 2998,
+      "sha256": "02335f0d2cd504e5bb8effa396668e380478d1f589c3d47953dc14d3f8ca9663"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/stdout.log",
+      "bytes": 217,
+      "sha256": "fc9bfa899c658936581e72a5e14c7a0b104214b09087cfc14ed359cdf64eebed"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/verification-receipt.json",
+      "bytes": 2952,
+      "sha256": "e4cb76e557eac2085c17079b972f7cc3438557d27c3cbb3e787c332f4f23deac"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/004-fetch-tblout/intent.json",
+      "bytes": 1415,
+      "sha256": "bcb0e0414cb9b6ad1227b080d7d4ee522217f5d63d03c935e4fefd41b46f04d4"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/004-fetch-tblout/response.body",
+      "bytes": 1202,
+      "sha256": "97a99297d8c8c21eeae86afee14ec505c03c53dc20bb37d801f4e979d9b0a2b4"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/004-fetch-tblout/snapshot.json",
+      "bytes": 3421,
+      "sha256": "9ab08e31588b73f83015da4eea1bf3b49e5bdf88bd6b9a322ba933b131fdc688"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/004-fetch-tblout/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/004-fetch-tblout/stdout.log",
+      "bytes": 219,
+      "sha256": "c653da62204a7c544368f36778a4f51faf896cd424ace5f05e10a74953ffa7d6"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/004-fetch-tblout/verification-receipt.json",
+      "bytes": 2969,
+      "sha256": "c78761d581bf27cefdc70db2b95d5d0d067a6d1e6a75e5b13750ce82bb89c3c5"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/005-fetch-out/intent.json",
+      "bytes": 1397,
+      "sha256": "d473dddfabdf96b7ce9cd4592a6cef73714a7e11bad2b5fc2738b54943d057c2"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/005-fetch-out/response.body",
+      "bytes": 3779,
+      "sha256": "05c308e2a9325969f106b70cf0bb83083fb6bba4955da89872e8180ec3ccf216"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/005-fetch-out/snapshot.json",
+      "bytes": 3406,
+      "sha256": "c80c2863590d50d7c8e8d7e7c89af3be6649706e157890b7982ddb1ffbbd52f0"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/005-fetch-out/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/005-fetch-out/stdout.log",
+      "bytes": 216,
+      "sha256": "1595939f95304f19acbfd38479591ab09bdd3594ba9368d857104f338214c247"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/005-fetch-out/verification-receipt.json",
+      "bytes": 2945,
+      "sha256": "50a568dbbf903afb4edc7d47fda141ac75a4319b5b1b7a29b18514459f1ebbba"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/input-manifest.json",
+      "bytes": 1024,
+      "sha256": "1323cdc2b1f50a22054d58f9055490f38bd7463224f4685287ce4d28799f3147"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/input.seq",
+      "bytes": 120,
+      "sha256": "8508569f33879187cad73ffe82946886770d13fc3641b7109759c7c957a76859"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/original_handle.json",
+      "bytes": 169,
+      "sha256": "cb738d22ec041f6a701326a43ad54d9d066db957458b0ad28aa0ad9e4f7c753e"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/native_checks_001/native-format-reuse.json",
+      "bytes": 143299,
+      "sha256": "bfec83b269d7410f0fd20c95253f2bcd71d57f4e9583b1a9ce054e61f318a615"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/native_checks_001/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/native_checks_001/stdout.log",
+      "bytes": 621,
+      "sha256": "5379db05f10ffe7e94a883e2422a802300390f4c51cf7eaaef9e96354c23b2a3"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/native_checks_001/verification-receipt.json",
+      "bytes": 2978,
+      "sha256": "cf6e15572c6ed5ccc0e082ac2f1421bac5da5fc6b989987ec739f56dacb20c5c"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/prepare_public_inputs.py",
+      "bytes": 2828,
+      "sha256": "c7e6fa48d29d761d335594aeb2b0f444b6700877f96871eed2b3827275767abb"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/run_live_action.py",
+      "bytes": 1989,
+      "sha256": "ba5b6220063efaa6cedea505a6130ba4aaaa74a545b0433191a5457e1567f5dd"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/run_native_checks.py",
+      "bytes": 1625,
+      "sha256": "d9cf972f011f8209cc532390dafebf1c20ad7d9b2a4edf9d551e2614e8c63ef6"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/run_tests.py",
+      "bytes": 1932,
+      "sha256": "63022e36a4c2112557be801d6054606e4bd5510f2391f0a6a498cdb2a156907c"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_001/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_001/stdout.log",
+      "bytes": 99,
+      "sha256": "795c527215ebbf83849be8acb9d3464b82868260bacf728b6324d215da52f727"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_001/tests.xml",
+      "bytes": 5416,
+      "sha256": "6feaf46b5934164d5bbfaa1b2cef1933fb6027d7eee8910b9b28d8decff4f973"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_001/verification-receipt.json",
+      "bytes": 2797,
+      "sha256": "db94e9e610f6139b4c57f37d287bc65dd331366de8d8989437e9989a07b5eaf1"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_002/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_002/stdout.log",
+      "bytes": 99,
+      "sha256": "795c527215ebbf83849be8acb9d3464b82868260bacf728b6324d215da52f727"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_002/tests.xml",
+      "bytes": 5416,
+      "sha256": "67a2bcb0d178575343ebf5a305a941487dc1caa28f28d8bac06e109ca011b3f0"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/tests_002/verification-receipt.json",
+      "bytes": 3055,
+      "sha256": "001a1b6911bc346035b227836fb7c7e4a063852d6eddb4d0d935930f20197c4b"
+    },
+    {
+      "path": "verification/tool_graders_rfam_transport_2026-10-26_234/verify_native_formats.py",
+      "bytes": 5497,
+      "sha256": "7d9934ea0410c283b2a9bd76598325bad6d82ee5582d5278030beadfec3fb82c"
+    }
+  ]
+}

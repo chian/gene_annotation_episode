@@ -1,0 +1,15 @@
+.F.............                                                          [100%]
+=================================== FAILURES ===================================
+_____ test_retained_parameter_form_received_and_onward_in_actual_workflow ______
+source_snapshot/tests/test_itc_parameter_returns.py:279: in test_retained_parameter_form_received_and_onward_in_actual_workflow
+    assert set(isolated.receipts.known(receiver.source.episode_id)) == {*scope["subject_refs"], ORIGINAL, SAVED}
+E   AssertionError: assert {'artifact_f1...89f75c3d2605'} == {'input_0cf8c...89f75c3d2605'}
+E     
+E     Extra items in the left set:
+E     'source_170d96ee6be90c3b9485e4b0'
+E     'material_0fa139234021ad47c408ca39'
+E     'artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5'
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_itc_parameter_returns.py::test_retained_parameter_form_received_and_onward_in_actual_workflow
+1 failed, 14 passed in 17.02s

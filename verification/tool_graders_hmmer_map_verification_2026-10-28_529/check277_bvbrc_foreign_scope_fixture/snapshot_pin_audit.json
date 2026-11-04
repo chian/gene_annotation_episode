@@ -1,0 +1,106 @@
+{
+  "preflight": {
+    "source": {
+      "count": 2889,
+      "sha256": "030bb0d2b8dfaca659d4ef541c8619d3f0227e9f0fa440d81e2159055d121513"
+    },
+    "dependencies": {
+      "count": 10754,
+      "sha256": "5388ef67c710c1b093d2de4f18e80c958ef66de00d6c5f5c3025887238838cf3"
+    },
+    "stdlib": {
+      "count": 643,
+      "sha256": "7ffff7ea6e3f2cf2d2de650ac6d54b92ce85fdd91752f098f5e1af5de4964cea"
+    },
+    "selected_python": {
+      "count": 1,
+      "sha256": "c85e081df94686b9428ce4d08612bfb33903dfabd567f067343299ee1a6124d6"
+    }
+  },
+  "preflight_checks": {
+    "source": true,
+    "dependencies": true,
+    "stdlib": true,
+    "selected_python": true,
+    "one_failed_parameter_only": true,
+    "no_retained_supports": true
+  },
+  "counts": {
+    "source": 2889,
+    "dependency": 10754,
+    "stdlib": 644,
+    "binary": 2,
+    "selected_stdlib_originals": 643
+  },
+  "runtime_pin_count": 14289,
+  "failures": [],
+  "reviewed_files": {
+    "gene_annotation_episode/execution_episodes.py": {
+      "size_bytes": 262095,
+      "sha256": "a132c5a93903ebb6612601b68bca81125da59006ab7f95b4ce086a3139439761"
+    },
+    "tests/test_execution_local_file_sources.py": {
+      "size_bytes": 43382,
+      "sha256": "97176a92749b374b48950993c2f27af178e791b87b4caee2e8abc49de839fe8b"
+    },
+    "tests/test_bvbrc_appservice_custody.py": {
+      "size_bytes": 33617,
+      "sha256": "2924d420b1fb41d83dc59bd04df33d1968133ac3712b773041fa34d68f3a2f50"
+    },
+    "tests/test_bvbrc_received_presentation.py": {
+      "size_bytes": 14856,
+      "sha256": "20442c05a02caa2ab0e40691ca8d07ab17c127eb7c7db298cbc2b741ca7ca80c"
+    },
+    "gene_annotation_episode/scientific_process_prompt.py": {
+      "size_bytes": 26773,
+      "sha256": "3ea5238ab7382b29236d9bcd9071b9d10b970854bdc765c8f8614e1df3e5194a"
+    },
+    "tests/bvbrc_selected_process_fixture.py": {
+      "size_bytes": 13325,
+      "sha256": "235578d9408a0429f43578043861b02fa09a2a96e73d4a9984acb2982a6930af"
+    },
+    "gene_annotation_episode/scientific_process_episodes.py": {
+      "size_bytes": 44213,
+      "sha256": "85ab11468adba5466eb742a6d4d955b08dcd09f8b43376c6b2699b8ec1bff68d"
+    }
+  },
+  "external_current_metadata": [
+    {
+      "path": "gene_annotation_episode/literature_experimental_prompt.py",
+      "size_bytes": 127104,
+      "sha256": "f9dd5e3963b992437f8261e513babf375bf5eced954315755123d9cf0bd0b349"
+    },
+    {
+      "path": "gene_annotation_episode/literature_reference_parent_prompt.py",
+      "size_bytes": 15490,
+      "sha256": "36db2bddf3a4711a935759c7d5d6a76a1fb35360d0aca30924761f36192f3dba"
+    },
+    {
+      "path": "gene_annotation_episode/literature_selection_references.py",
+      "size_bytes": 7772,
+      "sha256": "f990b9729b430ebc957a2e86d8d55f314aec8101b36305c45bc10db041203c45"
+    },
+    {
+      "path": "gene_annotation_episode/providers.py",
+      "size_bytes": 24613,
+      "sha256": "fed345fd4086788a9586c49f9a8136c70b2807348972a011aca442fe1c3227d1"
+    },
+    {
+      "path": "tests/test_literature_selection_references_333.py",
+      "size_bytes": 14836,
+      "sha256": "bab44b6f0e895b4d06d2fb07c8efae7566c024276d7f6d9c04e9dccb2e07e000"
+    }
+  ],
+  "external_review_scope": "Root reviewed providers and actual routing predicate; new external helper/test changes accepted as metadata-only unselected inputs. No presentation called; final loaded-map verification required.",
+  "selected_tests": [
+    "test_execution_local_file_sources.py::test_local_file_source_probe_preserves_registered_capture_authority[foreign_scope]"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "swap_bytes": 0,
+  "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check277_bvbrc_foreign_scope_fixture/handle.json",
+  "unit": "gene-local-job-8acf59a3f0764f75bb3625351f6f0d3e.service"
+}

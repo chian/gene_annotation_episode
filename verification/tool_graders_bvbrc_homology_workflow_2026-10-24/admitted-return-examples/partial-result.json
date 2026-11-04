@@ -1,0 +1,1347 @@
+{
+  "assignment": {
+    "handoff_ref": "source_efa7ab22854f60e2df8cc5aa",
+    "selector": {
+      "adapter": {
+        "adapter_id": "bvbrc_homology",
+        "adapter_version": "1",
+        "parameters": {
+          "artifact_source_refs": {
+            "blast_archive": null,
+            "blast_json15_raw": null,
+            "blast_tabular": null,
+            "blast_tabular_header": null,
+            "homology_metadata_json": null,
+            "homology_processed_json": null
+          },
+          "database_model": {
+            "function_priors": null,
+            "temperature_bits": 2
+          },
+          "primary_representation": "raw",
+          "scientific_inputs": {
+            "content": {
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+              "byte_count": 1455,
+              "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+              "source_ref": "source_b57b702776a64081b306b8b9"
+            },
+            "pointer": ""
+          },
+          "scientific_mode": "database_identification",
+          "tabular_fields": [
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen"
+          ],
+          "version": "bvbrc_homology_bundle_parameters_v1"
+        }
+      },
+      "endpoint": "requested_projection",
+      "requested_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "hits": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "x-homology-fact": {
+              "metric": "reported_hit_count",
+              "report_index": 0
+            }
+          },
+          "missing": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "definition",
+                    "input_metadata",
+                    "input_bytes",
+                    "original_task",
+                    "task_manifest",
+                    "output_metadata",
+                    "output_bytes",
+                    "byte_version_evidence",
+                    "scientific_metadata",
+                    "parser_binding"
+                  ]
+                },
+                "reason_code": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "requirement_id": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "role": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "source_refs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 0,
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "requirement_id",
+                "kind",
+                "role",
+                "source_refs",
+                "reason_code"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "x-homology-fact": {
+              "metric": "missing_requirements"
+            }
+          },
+          "query_coverage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "x-homology-fact": {
+              "hit_index": 0,
+              "metric": "query_paired_coverage",
+              "report_index": 0
+            }
+          },
+          "reference_coverage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "x-homology-fact": {
+              "hit_index": 0,
+              "metric": "reference_paired_coverage",
+              "report_index": 0
+            }
+          }
+        },
+        "required": [
+          "hits",
+          "query_coverage",
+          "reference_coverage",
+          "missing"
+        ],
+        "type": "object"
+      },
+      "requirements": [
+        {
+          "declared_format": {
+            "format": "bvbrc_job_result_json",
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": null
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": false,
+          "requirement_id": "manifest",
+          "role": "job_result_manifest"
+        },
+        {
+          "declared_format": {
+            "format": "blast_json15",
+            "mode": "database_identification",
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": null
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": true,
+          "requirement_id": "native",
+          "role": "blast_json15_raw"
+        }
+      ],
+      "supplied_capabilities": [],
+      "supplied_metadata": [
+        {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+            "byte_count": 1455,
+            "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+            "source_ref": "source_b57b702776a64081b306b8b9"
+          },
+          "pointer": ""
+        }
+      ],
+      "version": "bvbrc_appservice_result_selector_v1"
+    },
+    "version": "execution_results_assignment_v1"
+  },
+  "bundle": {
+    "acquisition_receipt_refs": [
+      "source_69f2ad86267e7924f5600c5a"
+    ],
+    "artifacts": [
+      {
+        "byte_count": 477,
+        "declared_format": {
+          "format": "bvbrc_job_result_json",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "artifact_8dd90349746d89178a7a6be97530620bdff96f3e75585ed84b02be617786be8f",
+        "role": "job_result_manifest",
+        "sha256": "8dd90349746d89178a7a6be97530620bdff96f3e75585ed84b02be617786be8f",
+        "source_ref": "source_28a67b2a1d5aae2291f5d5e1",
+        "task_association": {
+          "byte_version_status": "unknown",
+          "evidence_ref": "source_2b52ef96d5e1cd5897aca62f",
+          "kind": "task_info_object",
+          "output_path": "/synthetic/work/output/selected.job_result",
+          "output_uuid": "11111111-1111-1111-1111-111111111111",
+          "pointer": "/reported_object_uuid",
+          "task_id": "123",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "source_69f2ad86267e7924f5600c5a",
+          "requested_range": null,
+          "total_size": 477
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": "source_6f6348c118524e277dbe8523",
+          "path": "/synthetic/work/output/selected.job_result",
+          "type": "job_result",
+          "uuid": "11111111-1111-1111-1111-111111111111"
+        }
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "output_version_unproven",
+        "evidence_refs": [
+          "source_28a67b2a1d5aae2291f5d5e1"
+        ],
+        "path": "",
+        "phase": "association",
+        "severity": "qualification"
+      }
+    ],
+    "input_bindings": [
+      {
+        "binding_id": "query-input",
+        "content": null,
+        "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                "byte_count": 681,
+                "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                "source_ref": "source_d78d274d4d0faac91d82eb4d"
+              },
+              "pointer": "/members/0"
+            },
+            "length": 10,
+            "member_id": "supplied-query-0",
+            "member_pointer": "/members/0",
+            "molecule": "protein",
+            "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+          }
+        ],
+        "parameter_pointer": "/input_fasta_data",
+        "workspace_path": null
+      }
+    ],
+    "missing_requirements": [
+      {
+        "kind": "output_bytes",
+        "reason_code": "output_bytes_missing",
+        "requirement_id": "native",
+        "role": "blast_json15_raw",
+        "source_refs": []
+      }
+    ],
+    "original_task": {
+      "effective_parameters": null,
+      "native_application_id": "Homology",
+      "required_application_id": "Homology",
+      "resource_id": "selected-api",
+      "scheduler_returned_parameters": null,
+      "submission_operation_key": "homology-selected-workflow:episode_0f68d8a74af91c59bfd70df0ef816914d340638179b831d6d227c4de80506913:1",
+      "submission_receipt_ref": "source_efa7ab22854f60e2df8cc5aa",
+      "submission_source_ref": "source_aab3cec0686ca2188ff039c8",
+      "submitted_parameters": {
+        "blast_max_hits": 3,
+        "blast_program": "blastp",
+        "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+        "db_source": "precomputed_database",
+        "db_type": "faa",
+        "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+        "input_source": "fasta_data",
+        "input_type": "aa",
+        "output_file": "selected",
+        "output_path": "/synthetic/work/output"
+      },
+      "submitted_start_parameters": {},
+      "task_id": "123"
+    },
+    "query_bindings": [],
+    "requested_selector_sha256": "9df9261d9cab05dc6364f970904c98ee7a14942a20df2cdf844b3f415ae13e70",
+    "status": "partial",
+    "supplied_scientific_metadata": [
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+          "byte_count": 1455,
+          "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+          "source_ref": "source_b57b702776a64081b306b8b9"
+        },
+        "pointer": ""
+      }
+    ],
+    "version": "bvbrc_appservice_artifact_bundle_v1"
+  },
+  "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+  "publication": {
+    "adapter_result": {
+      "adapter_id": "bvbrc_homology",
+      "adapter_version": "1",
+      "components_content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_8c7b0a5bff53d95fef5051ba08264901a0cc170f23415a0b6bf044979f8263f5",
+        "byte_count": 184,
+        "sha256": "8c7b0a5bff53d95fef5051ba08264901a0cc170f23415a0b6bf044979f8263f5",
+        "source_ref": "source_31e4bdc8bbe5a3a837a3a5bd"
+      },
+      "diagnostics": [
+        {
+          "code": "output_version_unproven",
+          "evidence_refs": [
+            "source_28a67b2a1d5aae2291f5d5e1"
+          ],
+          "path": "",
+          "phase": "association",
+          "severity": "qualification"
+        },
+        {
+          "code": "homology_primary_representation_unavailable",
+          "evidence_refs": [],
+          "path": "",
+          "phase": "native_decode",
+          "severity": "error"
+        },
+        {
+          "code": "homology_requested_query_unavailable",
+          "evidence_refs": [],
+          "path": "/facts/hits",
+          "phase": "return",
+          "severity": "error"
+        },
+        {
+          "code": "homology_requested_query_unavailable",
+          "evidence_refs": [],
+          "path": "/facts/query_coverage",
+          "phase": "return",
+          "severity": "error"
+        },
+        {
+          "code": "homology_requested_query_unavailable",
+          "evidence_refs": [],
+          "path": "/facts/reference_coverage",
+          "phase": "return",
+          "severity": "error"
+        }
+      ],
+      "facts": {
+        "hits": null,
+        "missing": [
+          {
+            "kind": "output_bytes",
+            "reason_code": "output_bytes_missing",
+            "requirement_id": "native",
+            "role": "blast_json15_raw",
+            "source_refs": []
+          },
+          {
+            "kind": "output_bytes",
+            "reason_code": "homology_selected_artifact_missing",
+            "requirement_id": "homology:86faecfd7e33d79fff8b",
+            "role": "blast_json15_raw",
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:a9bd2a10d91b9c2abe7b",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:3f1b7a57a1ef3cfd1d54",
+            "role": null,
+            "source_refs": []
+          },
+          {
+            "kind": "scientific_metadata",
+            "reason_code": "homology_requested_query_unavailable",
+            "requirement_id": "homology:60a473a215417477c393",
+            "role": null,
+            "source_refs": []
+          }
+        ],
+        "query_coverage": null,
+        "reference_coverage": null
+      },
+      "missing_requirements": [
+        {
+          "kind": "output_bytes",
+          "reason_code": "output_bytes_missing",
+          "requirement_id": "native",
+          "role": "blast_json15_raw",
+          "source_refs": []
+        },
+        {
+          "kind": "output_bytes",
+          "reason_code": "homology_selected_artifact_missing",
+          "requirement_id": "homology:86faecfd7e33d79fff8b",
+          "role": "blast_json15_raw",
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_requested_query_unavailable",
+          "requirement_id": "homology:a9bd2a10d91b9c2abe7b",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_requested_query_unavailable",
+          "requirement_id": "homology:3f1b7a57a1ef3cfd1d54",
+          "role": null,
+          "source_refs": []
+        },
+        {
+          "kind": "scientific_metadata",
+          "reason_code": "homology_requested_query_unavailable",
+          "requirement_id": "homology:60a473a215417477c393",
+          "role": null,
+          "source_refs": []
+        }
+      ],
+      "sheet_content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_45fae91eca62832b5c0c8fa333362d3597bbfcc990ab367b597e2271eec2bd45",
+        "byte_count": 9181,
+        "sha256": "45fae91eca62832b5c0c8fa333362d3597bbfcc990ab367b597e2271eec2bd45",
+        "source_ref": "source_ec0a441abcba907a14808b81"
+      },
+      "status": "partial"
+    },
+    "bundle_content": {
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "artifact_7f8450f8da8fee1c89499144e10b95488ed23c91631675902c872d7b57ab0c79",
+      "byte_count": 3525,
+      "sha256": "7f8450f8da8fee1c89499144e10b95488ed23c91631675902c872d7b57ab0c79",
+      "source_ref": "source_af3df1531c4d2849a53f054c"
+    },
+    "completion_proof": null,
+    "current_acquisition_receipt_ref": "source_69f2ad86267e7924f5600c5a",
+    "dependency_receipt_refs": [],
+    "missing_requirements": [
+      {
+        "kind": "output_bytes",
+        "reason_code": "output_bytes_missing",
+        "requirement_id": "native",
+        "role": "blast_json15_raw",
+        "source_refs": []
+      },
+      {
+        "kind": "output_bytes",
+        "reason_code": "homology_selected_artifact_missing",
+        "requirement_id": "homology:86faecfd7e33d79fff8b",
+        "role": "blast_json15_raw",
+        "source_refs": []
+      },
+      {
+        "kind": "scientific_metadata",
+        "reason_code": "homology_requested_query_unavailable",
+        "requirement_id": "homology:a9bd2a10d91b9c2abe7b",
+        "role": null,
+        "source_refs": []
+      },
+      {
+        "kind": "scientific_metadata",
+        "reason_code": "homology_requested_query_unavailable",
+        "requirement_id": "homology:3f1b7a57a1ef3cfd1d54",
+        "role": null,
+        "source_refs": []
+      },
+      {
+        "kind": "scientific_metadata",
+        "reason_code": "homology_requested_query_unavailable",
+        "requirement_id": "homology:60a473a215417477c393",
+        "role": null,
+        "source_refs": []
+      }
+    ],
+    "origin": {
+      "arguments_sha256": "37aec9acc3abbe636fab3a2afe4cbbbb136ff88d7549a87355d28ea38d5b236f",
+      "assignment_sha256": "c983a239f7fbe7455ba94b8067e26947aa24cf132f33d72479bf8311db47bf59",
+      "episode_id": "episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5",
+      "name": "api.bvbrc_appservice.download",
+      "operation_key": "homology-selected-workflow:episode_73649263cd2d18bfedca73f2f0f21010acfaf916392bfae982de6d8f9d454ae5:3",
+      "run_id": "homology-selected-workflow",
+      "scope_sha256": "30be0f26747daa83372d1398ef93226da2513b3e71b98cb28d4a3d84a761c8d0"
+    },
+    "publication_inputs_content": {
+      "artifact_field": "artifact_ref",
+      "artifact_ref": "artifact_69c945e87b8149fb92f6532b6b5745a5c38665fa9ccf35ef664803c5264ec1ce",
+      "byte_count": 12184,
+      "sha256": "69c945e87b8149fb92f6532b6b5745a5c38665fa9ccf35ef664803c5264ec1ce",
+      "source_ref": "source_a3ebde7a58bdb0e0b4dad0d9"
+    },
+    "requested_form_status": "partial",
+    "result_record_refs": [
+      "source_af3df1531c4d2849a53f054c"
+    ],
+    "support_record_refs": [
+      "source_69f2ad86267e7924f5600c5a",
+      "source_28a67b2a1d5aae2291f5d5e1",
+      "source_a3ebde7a58bdb0e0b4dad0d9",
+      "source_ec0a441abcba907a14808b81",
+      "source_31e4bdc8bbe5a3a837a3a5bd"
+    ],
+    "version": "bvbrc_appservice_bundle_publication_v1"
+  },
+  "publication_inputs": {
+    "adapter": {
+      "adapter_id": "bvbrc_homology",
+      "adapter_version": "1",
+      "parameters": {
+        "artifact_source_refs": {
+          "blast_archive": null,
+          "blast_json15_raw": null,
+          "blast_tabular": null,
+          "blast_tabular_header": null,
+          "homology_metadata_json": null,
+          "homology_processed_json": null
+        },
+        "database_model": {
+          "function_priors": null,
+          "temperature_bits": 2
+        },
+        "primary_representation": "raw",
+        "scientific_inputs": {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+            "byte_count": 1455,
+            "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+            "source_ref": "source_b57b702776a64081b306b8b9"
+          },
+          "pointer": ""
+        },
+        "scientific_mode": "database_identification",
+        "tabular_fields": [
+          "qseqid",
+          "sseqid",
+          "pident",
+          "length",
+          "mismatch",
+          "gapopen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "evalue",
+          "bitscore",
+          "qlen",
+          "slen"
+        ],
+        "version": "bvbrc_homology_bundle_parameters_v1"
+      }
+    },
+    "adapter_implementation_sha256": "0e12e3f2bf4a0f29d38a7108a22214ec58160f1e7d638d34d12350f3c90e85e1",
+    "current_operation": {
+      "arguments": {
+        "byte_range": null,
+        "capability": {
+          "input_index": 0,
+          "kind": "acquired",
+          "receipt_ref": "source_091746c47af4fb7a03d8ee17"
+        },
+        "declared_format": {
+          "format": "bvbrc_job_result_json",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "object": {
+          "kind": "receipt_row",
+          "receipt_ref": "source_6f6348c118524e277dbe8523",
+          "row_pointer": "/result/0/0"
+        },
+        "requirement_ids": [
+          "manifest"
+        ],
+        "role": "job_result_manifest"
+      },
+      "name": "api.bvbrc_appservice.download"
+    },
+    "current_snapshot": {
+      "content": {
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "artifact_8dd90349746d89178a7a6be97530620bdff96f3e75585ed84b02be617786be8f",
+        "byte_count": 477,
+        "sha256": "8dd90349746d89178a7a6be97530620bdff96f3e75585ed84b02be617786be8f",
+        "source_ref": "source_28a67b2a1d5aae2291f5d5e1"
+      },
+      "media_type": "application/json",
+      "retrieved_at": "2026-10-24T12:00:00+00:00",
+      "selected_operands": {
+        "arguments_sha256": "37aec9acc3abbe636fab3a2afe4cbbbb136ff88d7549a87355d28ea38d5b236f",
+        "native_operands": {
+          "arguments": {
+            "byte_range": null,
+            "capability": {
+              "input_index": 0,
+              "kind": "acquired",
+              "receipt_ref": "source_091746c47af4fb7a03d8ee17"
+            },
+            "declared_format": {
+              "format": "bvbrc_job_result_json",
+              "mode": null,
+              "producer_source_ref": null,
+              "transformation_evidence": [],
+              "version": null
+            },
+            "object": {
+              "kind": "receipt_row",
+              "receipt_ref": "source_6f6348c118524e277dbe8523",
+              "row_pointer": "/result/0/0"
+            },
+            "requirement_ids": [
+              "manifest"
+            ],
+            "role": "job_result_manifest"
+          },
+          "call": {
+            "byte_range": null,
+            "url": "https://fixture.invalid/manifest"
+          },
+          "local_failure": null,
+          "request": {
+            "definition_inputs": [],
+            "effect_contract": "selected_api_effects_v1",
+            "input_bindings": [
+              {
+                "binding_id": "query-input",
+                "content": null,
+                "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+                "kind": "inline_parameter",
+                "link_evidence": null,
+                "members": [
+                  {
+                    "evidence": {
+                      "content": {
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                        "byte_count": 681,
+                        "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                        "source_ref": "source_d78d274d4d0faac91d82eb4d"
+                      },
+                      "pointer": "/members/0"
+                    },
+                    "length": 10,
+                    "member_id": "supplied-query-0",
+                    "member_pointer": "/members/0",
+                    "molecule": "protein",
+                    "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+                  }
+                ],
+                "parameter_pointer": "/input_fasta_data",
+                "workspace_path": null
+              }
+            ],
+            "parameters": {
+              "blast_max_hits": 3,
+              "blast_program": "blastp",
+              "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+              "db_source": "precomputed_database",
+              "db_type": "faa",
+              "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+              "input_source": "fasta_data",
+              "input_type": "aa",
+              "output_file": "selected",
+              "output_path": "/synthetic/work/output"
+            },
+            "required_application_id": "Homology",
+            "start_parameters": {},
+            "version": "bvbrc_appservice_request_v1",
+            "workspace_targets": []
+          },
+          "selector": {
+            "adapter": {
+              "adapter_id": "bvbrc_homology",
+              "adapter_version": "1",
+              "parameters": {
+                "artifact_source_refs": {
+                  "blast_archive": null,
+                  "blast_json15_raw": null,
+                  "blast_tabular": null,
+                  "blast_tabular_header": null,
+                  "homology_metadata_json": null,
+                  "homology_processed_json": null
+                },
+                "database_model": {
+                  "function_priors": null,
+                  "temperature_bits": 2
+                },
+                "primary_representation": "raw",
+                "scientific_inputs": {
+                  "content": {
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                    "byte_count": 1455,
+                    "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                    "source_ref": "source_b57b702776a64081b306b8b9"
+                  },
+                  "pointer": ""
+                },
+                "scientific_mode": "database_identification",
+                "tabular_fields": [
+                  "qseqid",
+                  "sseqid",
+                  "pident",
+                  "length",
+                  "mismatch",
+                  "gapopen",
+                  "qstart",
+                  "qend",
+                  "sstart",
+                  "send",
+                  "evalue",
+                  "bitscore",
+                  "qlen",
+                  "slen"
+                ],
+                "version": "bvbrc_homology_bundle_parameters_v1"
+              }
+            },
+            "endpoint": "requested_projection",
+            "requested_schema": {
+              "additionalProperties": false,
+              "properties": {
+                "hits": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "x-homology-fact": {
+                    "metric": "reported_hit_count",
+                    "report_index": 0
+                  }
+                },
+                "missing": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": {
+                        "enum": [
+                          "definition",
+                          "input_metadata",
+                          "input_bytes",
+                          "original_task",
+                          "task_manifest",
+                          "output_metadata",
+                          "output_bytes",
+                          "byte_version_evidence",
+                          "scientific_metadata",
+                          "parser_binding"
+                        ]
+                      },
+                      "reason_code": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "requirement_id": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "role": {
+                        "anyOf": [
+                          {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "source_refs": {
+                        "items": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "minItems": 0,
+                        "type": "array",
+                        "uniqueItems": true
+                      }
+                    },
+                    "required": [
+                      "requirement_id",
+                      "kind",
+                      "role",
+                      "source_refs",
+                      "reason_code"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "x-homology-fact": {
+                    "metric": "missing_requirements"
+                  }
+                },
+                "query_coverage": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "x-homology-fact": {
+                    "hit_index": 0,
+                    "metric": "query_paired_coverage",
+                    "report_index": 0
+                  }
+                },
+                "reference_coverage": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "x-homology-fact": {
+                    "hit_index": 0,
+                    "metric": "reference_paired_coverage",
+                    "report_index": 0
+                  }
+                }
+              },
+              "required": [
+                "hits",
+                "query_coverage",
+                "reference_coverage",
+                "missing"
+              ],
+              "type": "object"
+            },
+            "requirements": [
+              {
+                "declared_format": {
+                  "format": "bvbrc_job_result_json",
+                  "mode": null,
+                  "producer_source_ref": null,
+                  "transformation_evidence": [],
+                  "version": null
+                },
+                "exact_object": null,
+                "producer_rule_evidence": null,
+                "required": false,
+                "requirement_id": "manifest",
+                "role": "job_result_manifest"
+              },
+              {
+                "declared_format": {
+                  "format": "blast_json15",
+                  "mode": "database_identification",
+                  "producer_source_ref": null,
+                  "transformation_evidence": [],
+                  "version": null
+                },
+                "exact_object": null,
+                "producer_rule_evidence": null,
+                "required": true,
+                "requirement_id": "native",
+                "role": "blast_json15_raw"
+              }
+            ],
+            "supplied_capabilities": [],
+            "supplied_metadata": [
+              {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                  "byte_count": 1455,
+                  "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+                  "source_ref": "source_b57b702776a64081b306b8b9"
+                },
+                "pointer": ""
+              }
+            ],
+            "version": "bvbrc_appservice_result_selector_v1"
+          }
+        },
+        "operation": "api.bvbrc_appservice.download",
+        "request_sha256": "b5f8e59258b01141477ac96e3035273be8dbc1a3a5cbe3fddea8e3e80d481470"
+      },
+      "source_ref": "source_28a67b2a1d5aae2291f5d5e1",
+      "transport": {
+        "automatic_redirects": false,
+        "body_complete": true,
+        "effective_url": "https://fixture.invalid/manifest",
+        "headers": {
+          "content-length": "477"
+        },
+        "received_body_bytes": 477,
+        "request": {
+          "method": "GET",
+          "url": "https://fixture.invalid/manifest"
+        },
+        "status": 200
+      }
+    },
+    "original_handoff_ref": "source_efa7ab22854f60e2df8cc5aa",
+    "prior_acquisition_receipt_refs": [],
+    "request": {
+      "definition_inputs": [],
+      "effect_contract": "selected_api_effects_v1",
+      "input_bindings": [
+        {
+          "binding_id": "query-input",
+          "content": null,
+          "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+          "kind": "inline_parameter",
+          "link_evidence": null,
+          "members": [
+            {
+              "evidence": {
+                "content": {
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                  "byte_count": 681,
+                  "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                  "source_ref": "source_d78d274d4d0faac91d82eb4d"
+                },
+                "pointer": "/members/0"
+              },
+              "length": 10,
+              "member_id": "supplied-query-0",
+              "member_pointer": "/members/0",
+              "molecule": "protein",
+              "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+            }
+          ],
+          "parameter_pointer": "/input_fasta_data",
+          "workspace_path": null
+        }
+      ],
+      "parameters": {
+        "blast_max_hits": 3,
+        "blast_program": "blastp",
+        "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+        "db_source": "precomputed_database",
+        "db_type": "faa",
+        "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+        "input_source": "fasta_data",
+        "input_type": "aa",
+        "output_file": "selected",
+        "output_path": "/synthetic/work/output"
+      },
+      "required_application_id": "Homology",
+      "start_parameters": {},
+      "version": "bvbrc_appservice_request_v1",
+      "workspace_targets": []
+    },
+    "selector": {
+      "adapter": {
+        "adapter_id": "bvbrc_homology",
+        "adapter_version": "1",
+        "parameters": {
+          "artifact_source_refs": {
+            "blast_archive": null,
+            "blast_json15_raw": null,
+            "blast_tabular": null,
+            "blast_tabular_header": null,
+            "homology_metadata_json": null,
+            "homology_processed_json": null
+          },
+          "database_model": {
+            "function_priors": null,
+            "temperature_bits": 2
+          },
+          "primary_representation": "raw",
+          "scientific_inputs": {
+            "content": {
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+              "byte_count": 1455,
+              "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+              "source_ref": "source_b57b702776a64081b306b8b9"
+            },
+            "pointer": ""
+          },
+          "scientific_mode": "database_identification",
+          "tabular_fields": [
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen"
+          ],
+          "version": "bvbrc_homology_bundle_parameters_v1"
+        }
+      },
+      "endpoint": "requested_projection",
+      "requested_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "hits": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "x-homology-fact": {
+              "metric": "reported_hit_count",
+              "report_index": 0
+            }
+          },
+          "missing": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "definition",
+                    "input_metadata",
+                    "input_bytes",
+                    "original_task",
+                    "task_manifest",
+                    "output_metadata",
+                    "output_bytes",
+                    "byte_version_evidence",
+                    "scientific_metadata",
+                    "parser_binding"
+                  ]
+                },
+                "reason_code": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "requirement_id": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "role": {
+                  "anyOf": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "source_refs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 0,
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "requirement_id",
+                "kind",
+                "role",
+                "source_refs",
+                "reason_code"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "x-homology-fact": {
+              "metric": "missing_requirements"
+            }
+          },
+          "query_coverage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "x-homology-fact": {
+              "hit_index": 0,
+              "metric": "query_paired_coverage",
+              "report_index": 0
+            }
+          },
+          "reference_coverage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "x-homology-fact": {
+              "hit_index": 0,
+              "metric": "reference_paired_coverage",
+              "report_index": 0
+            }
+          }
+        },
+        "required": [
+          "hits",
+          "query_coverage",
+          "reference_coverage",
+          "missing"
+        ],
+        "type": "object"
+      },
+      "requirements": [
+        {
+          "declared_format": {
+            "format": "bvbrc_job_result_json",
+            "mode": null,
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": null
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": false,
+          "requirement_id": "manifest",
+          "role": "job_result_manifest"
+        },
+        {
+          "declared_format": {
+            "format": "blast_json15",
+            "mode": "database_identification",
+            "producer_source_ref": null,
+            "transformation_evidence": [],
+            "version": null
+          },
+          "exact_object": null,
+          "producer_rule_evidence": null,
+          "required": true,
+          "requirement_id": "native",
+          "role": "blast_json15_raw"
+        }
+      ],
+      "supplied_capabilities": [],
+      "supplied_metadata": [
+        {
+          "content": {
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+            "byte_count": 1455,
+            "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+            "source_ref": "source_b57b702776a64081b306b8b9"
+          },
+          "pointer": ""
+        }
+      ],
+      "version": "bvbrc_appservice_result_selector_v1"
+    },
+    "supplied_evidence": [
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+          "byte_count": 1455,
+          "sha256": "098199c95731dc29f6e95207701130a76e10f408d7e350003f681ba33ffaa28a",
+          "source_ref": "source_b57b702776a64081b306b8b9"
+        },
+        "pointer": ""
+      }
+    ],
+    "support_receipt_refs": [
+      "source_efa7ab22854f60e2df8cc5aa",
+      "source_6f6348c118524e277dbe8523",
+      "source_091746c47af4fb7a03d8ee17"
+    ],
+    "version": "bvbrc_appservice_publication_inputs_v1"
+  },
+  "record_refs": [
+    "source_af3df1531c4d2849a53f054c"
+  ],
+  "reference": "source_af3df1531c4d2849a53f054c",
+  "run_id": "homology-selected-workflow",
+  "scope": {
+    "subject_refs": [
+      "input_048f7c753880f0569b84b34b"
+    ]
+  },
+  "service_request": {
+    "definition_inputs": [],
+    "effect_contract": "selected_api_effects_v1",
+    "input_bindings": [
+      {
+        "binding_id": "query-input",
+        "content": null,
+        "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+        "kind": "inline_parameter",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                "byte_count": 681,
+                "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                "source_ref": "source_d78d274d4d0faac91d82eb4d"
+              },
+              "pointer": "/members/0"
+            },
+            "length": 10,
+            "member_id": "supplied-query-0",
+            "member_pointer": "/members/0",
+            "molecule": "protein",
+            "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+          }
+        ],
+        "parameter_pointer": "/input_fasta_data",
+        "workspace_path": null
+      }
+    ],
+    "parameters": {
+      "blast_max_hits": 3,
+      "blast_program": "blastp",
+      "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+      "db_source": "precomputed_database",
+      "db_type": "faa",
+      "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+      "input_source": "fasta_data",
+      "input_type": "aa",
+      "output_file": "selected",
+      "output_path": "/synthetic/work/output"
+    },
+    "required_application_id": "Homology",
+    "start_parameters": {},
+    "version": "bvbrc_appservice_request_v1",
+    "workspace_targets": []
+  },
+  "source_ref": "source_af3df1531c4d2849a53f054c",
+  "status": "partial",
+  "target": {
+    "assignment": {
+      "constraints": {},
+      "endpoint": "usable_handoff",
+      "request": {
+        "definition_inputs": [],
+        "effect_contract": "selected_api_effects_v1",
+        "input_bindings": [
+          {
+            "binding_id": "query-input",
+            "content": null,
+            "inline_value": ">synthetic_query_hit\nACDEFGHIKL\n",
+            "kind": "inline_parameter",
+            "link_evidence": null,
+            "members": [
+              {
+                "evidence": {
+                  "content": {
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "artifact_6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                    "byte_count": 681,
+                    "sha256": "6947cbf1aaac9ec5563434bf15c9162c1f6adfc1b952a11793c2cdec01f04d7d",
+                    "source_ref": "source_d78d274d4d0faac91d82eb4d"
+                  },
+                  "pointer": "/members/0"
+                },
+                "length": 10,
+                "member_id": "supplied-query-0",
+                "member_pointer": "/members/0",
+                "molecule": "protein",
+                "sequence_sha256": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b"
+              }
+            ],
+            "parameter_pointer": "/input_fasta_data",
+            "workspace_path": null
+          }
+        ],
+        "parameters": {
+          "blast_max_hits": 3,
+          "blast_program": "blastp",
+          "db_precomputed_database": "SYNTHETIC_DATABASE_PATH",
+          "db_source": "precomputed_database",
+          "db_type": "faa",
+          "input_fasta_data": ">synthetic_query_hit\nACDEFGHIKL\n",
+          "input_source": "fasta_data",
+          "input_type": "aa",
+          "output_file": "selected",
+          "output_path": "/synthetic/work/output"
+        },
+        "required_application_id": "Homology",
+        "start_parameters": {},
+        "version": "bvbrc_appservice_request_v1",
+        "workspace_targets": []
+      },
+      "resource_id": "selected-api",
+      "service": "bvbrc_appservice",
+      "version": "api_service_assignment_v1"
+    },
+    "execution_id": "123",
+    "handle": "source_efa7ab22854f60e2df8cc5aa",
+    "origin_episode_id": "episode_0f68d8a74af91c59bfd70df0ef816914d340638179b831d6d227c4de80506913",
+    "request_sha256": "686d1a036ed3e948f3bc81099b7da69b78013759e716f496be9e78a9d2edda53",
+    "resource_id": "selected-api",
+    "resource_kind": "api",
+    "run_id": "homology-selected-workflow",
+    "scope": {
+      "subject_refs": [
+        "input_048f7c753880f0569b84b34b"
+      ]
+    },
+    "version": "execution_target_v1"
+  },
+  "version": "bvbrc_appservice_acquired_bundle_v1"
+}

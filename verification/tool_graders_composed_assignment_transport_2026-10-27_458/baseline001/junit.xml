@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="40.350" timestamp="2026-10-27T14:37:06.126330-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_episode_assignment_transport" name="test_all_five_assignments_roundtrip_without_normalizing_nested_nulls_or_literals" time="29.706"><failure message="AssertionError: scientific_process&#10;assert False&#10; +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_b6e2e723fd96628058601c27']}, ...}, 'report_update': {}})&#10; +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid&#10; +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})&#10; +        where {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False} = namespace(fixture={'case': PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_composed_assi...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}).host">source_snapshot/tests/test_episode_assignment_transport.py:216: in test_all_five_assignments_roundtrip_without_normalizing_nested_nulls_or_literals
+    assert Draft202012Validator(case.host).is_valid(decoded), role
+E   AssertionError: scientific_process
+E   assert False
+E    +  where False = is_valid({'selection': {'kind': 'episode_child', 'role': 'scientific_process', 'goal': 'Inspect the isolated transport fixture within its assigned scope.', 'scope': {'subject_refs': ['input_b6e2e723fd96628058601c27']}, ...}, 'report_update': {}})
+E    +    where is_valid = Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None).is_valid
+E    +      where Draft202012Validator(schema={'additionalProperties': False, 'properties': {'report_update': {'additionalProperties': F...', ...], 'type': 'object'}, ...]}}, 'required': ['selection', 'report_update'], 'type': 'object'}, format_checker=None) = Draft202012Validator({'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+E    +        where {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False} = namespace(fixture={'case': PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_composed_assi...ired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}).host</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#/$defs/shared]" time="3.237"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">source_snapshot/tests/test_scientific_process_schema_transport.py:76: in test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase><testcase classname="tests.test_scientific_process_schema_transport" name="test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport[#shared]" time="5.604"><failure message="ValueError: scientific_tool_resource_kind_required:fixture.inspect">source_snapshot/tests/test_scientific_process_schema_transport.py:76: in test_local_definitions_and_anchors_survive_standalone_host_and_generated_transport
+    case, workflow, _, child = configured_child(tmp_path, store, actual, restriction)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_schema_transport.py:40: in configured_child
+    case = Scenario(tmp_path, store, tools=ContractTools(contract))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:88: in __init__
+    descriptor = prepare_scientific_binding(run_directory=self.directory, source_directory=self.source,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:13: in prepare_scientific_binding
+    tools = ScientificToolLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:148: in freeze
+    information, contracts = _tool_information(content['tools'], resource_catalogs)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:89: in _tool_information
+    profiles.update(_profiles(catalog))
+                    ^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_tool_library.py:66: in _profiles
+    kind = resource or entry.get('resources') or resource_kind(entry['name'])
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/tool_information.py:61: in resource_kind
+    raise ValueError('scientific_tool_resource_kind_required:' + name)
+E   ValueError: scientific_tool_resource_kind_required:fixture.inspect</failure></testcase></testsuite></testsuites>

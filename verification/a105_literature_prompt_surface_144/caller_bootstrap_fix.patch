@@ -1,0 +1,64 @@
+--- verification/literature_reference_evidence_2026-10-25_001/a105_joined_control_binding_review_141/pin_004/verification/a105_literature_prompt_surface_144/run_configured_primary_144.py	2026-10-27 11:57:40.420551829 -0500
++++ verification/a105_literature_prompt_surface_144/run_configured_primary_144.py	2026-10-27 12:04:31.364218551 -0500
+@@ -22,9 +22,10 @@
+ 
+ from gene_annotation_episode.literature_episodes import LiteratureEpisodes
+ from gene_annotation_episode.providers import default_config_path
++from gene_annotation_episode.public_configuration import configured_tools
+ from gene_annotation_episode.runtime import run_workflow
+ from gene_annotation_episode.state import Store
+-from gene_annotation_episode.tools import ToolRegistry
++from gene_annotation_episode.tool_configuration import build_tools
+ 
+ 
+ def prepare(directory: Path, *, source: Path, source_sha256: str, question: str, media_type: str = 'text/html'):
+@@ -50,7 +51,11 @@
+             'text_ref': None, 'request_ref': None, 'version': None,
+             'retrieved_at': None}, origin='caller')['id']
+         descriptor = LiteratureEpisodes.reference_evidence(None, source_refs=[supplied]).as_record()
+-        record = {'version': 'literature_source_caller_144_v1',
++        configuration = tomllib.loads(default_config_path().read_text())
++        tool_configuration = configured_tools({key: configuration[key] for key in (
++            'public', 'local_tools', 'local_jobs', 'knowledge_library_directory',
++            'history', 'resource_id') if key in configuration})
++        record = {'version': 'literature_source_caller_144_v2',
+             'source_path': str(source), 'source_sha256': actual, 'source_media_type': media_type,
+             'source_ref': supplied, 'artifact_ref': artifact,
+             'scope': store.validate_scope(), 'scientific_question': question,
+@@ -58,7 +63,7 @@
+             'received_source_meaning': 'Caller-supplied exact original bytes; no extracted measurements or interpretations inherited.',
+             'episode_binding_descriptor': descriptor,
+             'decision_protocol': 'decision_exchange_v1',
+-            'configuration': tomllib.loads(default_config_path().read_text())}
++            'configuration': configuration, 'tool_configuration': tool_configuration}
+         (directory/'prepared_caller.json').write_text(json.dumps(record, indent=2)+'\n')
+         return record
+     finally:
+@@ -78,13 +83,20 @@
+ async def execute(directory: Path, prepared: dict):
+     """Start one ordinary Workflow; its configured controller owns continuation."""
+     with Store(directory/'state') as store:
+-        return await run_workflow(store, ToolRegistry(store), run_dir=directory/'run',
+-            goal=assignment_text(prepared),
+-            initial_known_record_refs=[prepared['source_ref']],
+-            episode_binding_descriptors=[prepared['episode_binding_descriptor']],
+-            provider_config=prepared['configuration'],
+-            annotation_child_roles=('literature',),
+-            decision_protocol=prepared['decision_protocol'])
++        tools = build_tools(store, prepared['tool_configuration'])
++        try:
++            return await run_workflow(store, tools, run_dir=directory/'run',
++                goal=assignment_text(prepared),
++                initial_known_record_refs=[prepared['source_ref']],
++                episode_binding_descriptors=[prepared['episode_binding_descriptor']],
++                provider_config=prepared['configuration'],
++                annotation_child_roles=('literature',),
++                decision_protocol=prepared['decision_protocol'])
++        except Exception as error:
++            diagnostic = {'exception_type': type(error).__name__, 'message': str(error),
++                'failure': getattr(error, 'failure', None)}
++            (directory/'execution_failure.json').write_text(json.dumps(diagnostic, indent=2)+'\n')
++            raise
+ 
+ 
+ def main():

@@ -1,0 +1,111 @@
+....................................FFF....                              [100%]
+=================================== FAILURES ===================================
+_ test_selected_child_original_parent_subset_and_one_observation_per_action[known] _
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/tests/test_literature_binding_interaction_model_integration.py:69: in test_selected_child_original_parent_subset_and_one_observation_per_action
+    summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,native,model_action,receive]),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:1364: in next
+    unit = self.apply_response(response, index, actual_context, schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:1429: in apply_response
+    unit = self.workflow.selected(self, selection, index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:3534: in selected
+    child = self.build(role, f"child_{index}", selection["goal"], scope,
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:3825: in build
+    self.validate_report(admitted, scope, grain=name, schema=initial_schema, source=source)
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:2619: in validate_report
+    self.episode_bindings.validate_received_report(received_context, value, schema)
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/episode_bindings.py:283: in validate_received_report
+    callback(context, form, schema)
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/literature_episodes.py:1329: in validate_received_report
+    for namespace, requested_field, _, _, repository in self._population_routes():
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/literature_episodes.py:1114: in _population_routes
+    COMPONENTS, self.services.literature_rate_repository().source_domain_projection),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'LiteratureRateRepository' object has no attribute 'source_domain_projection'. Did you mean: 'source_projection'?
+_ test_selected_child_original_parent_subset_and_one_observation_per_action[estimated] _
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/tests/test_literature_binding_interaction_model_integration.py:69: in test_selected_child_original_parent_subset_and_one_observation_per_action
+    summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,native,model_action,receive]),
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:4140: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:4462: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:1364: in next
+    unit = self.apply_response(response, index, actual_context, schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:1429: in apply_response
+    unit = self.workflow.selected(self, selection, index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:3534: in selected
+    child = self.build(role, f"child_{index}", selection["goal"], scope,
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:3825: in build
+    self.validate_report(admitted, scope, grain=name, schema=initial_schema, source=source)
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/runtime.py:2619: in validate_report
+    self.episode_bindings.validate_received_report(received_context, value, schema)
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/episode_bindings.py:283: in validate_received_report
+    callback(context, form, schema)
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/literature_episodes.py:1329: in validate_received_report
+    for namespace, requested_field, _, _, repository in self._population_routes():
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/literature_episodes.py:1114: in _population_routes
+    COMPONENTS, self.services.literature_rate_repository().source_domain_projection),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'LiteratureRateRepository' object has no attribute 'source_domain_projection'. Did you mean: 'source_projection'?
+_________ test_catalog_dispatch_exact_return_request_and_page_ancestry _________
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/tests/test_literature_binding_interaction_model_integration.py:95: in test_catalog_dispatch_exact_return_request_and_page_ancestry
+    returned=form_with_facts({},form,binding.facts(owner,{"committed_record_refs":[modeled["result"]["sheet_ref"]]}))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/literature_episodes.py:786: in facts
+    return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/literature_episodes.py:1182: in _rate_facts
+    for namespace, requested_field, provider, defaults, repository in self._population_routes():
+                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/gene_annotation_episode/literature_episodes.py:1114: in _population_routes
+    COMPONENTS, self.services.literature_rate_repository().source_domain_projection),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'LiteratureRateRepository' object has no attribute 'source_domain_projection'. Did you mean: 'source_projection'?
+=========================== short test summary info ============================
+FAILED verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/tests/test_literature_binding_interaction_model_integration.py::test_selected_child_original_parent_subset_and_one_observation_per_action[known]
+FAILED verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/tests/test_literature_binding_interaction_model_integration.py::test_selected_child_original_parent_subset_and_one_observation_per_action[estimated]
+FAILED verification/literature_reference_evidence_2026-10-25_001/a105_binding_interaction_model_path_140/pin_001/tests/test_literature_binding_interaction_model_integration.py::test_catalog_dispatch_exact_return_request_and_page_ancestry
+3 failed, 40 passed in 104.64s (0:01:44)

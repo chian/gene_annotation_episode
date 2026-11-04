@@ -1,0 +1,73 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_authentic_tool_portion_and_full_original_runtime_digest[runtime-pending-addition] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1708/test_authentic_tool_portion_an1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7955dcf394c0>
+pending = True
+
+    @pytest.mark.parametrize('pending', [False, True], ids=['legacy-original', 'runtime-pending-addition'])
+    def test_authentic_tool_portion_and_full_original_runtime_digest(tmp_path, monkeypatch, pending):
+        store, context, selection, native = native_case(tmp_path)
+        try:
+            result = runtime_result(store, native, pending=pending)
+            repo = repository(store, context)
+            runtime_before = store.db.execute('SELECT result FROM runtime_actions WHERE decision_index=4').fetchone()[0]
+            native_before = store.db.execute('SELECT result FROM tool_operations').fetchone()[0]
+>           outcome = repo.populate(context, selection, 'original-runtime')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_runtime_receipt.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_ratio_source_storage.py:328: in populate
+    receipts = {view_ref: self._own_view_receipt(context, view_ref) for view_ref in views}
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_ratio_source_storage.LiteratureRatioSourceRepository object at 0x7955bd04b3e0>
+context = BindingContext(run_id='fixture-run', episode_id='fixture-child', role='literature_page', path=(('literature_page', 'sy...6c4de21', 'source_707f100ade4fc2e55a774302', 'image_view_1e6bc2d15ced51f8ef29ee17', 'source_4fd98bf0292387100a41d2af'))
+view_ref = 'image_view_1e6bc2d15ced51f8ef29ee17', saved_receipt = None
+
+    def _own_view_receipt(self, context, view_ref, *, saved_receipt=None):
+        view, display = self._view_records(view_ref)
+        body = {key: value for key, value in view.items()
+                if key not in ('id', 'record_type', 'origin', 'source_ref')}
+        if display.get('request_ref') is None or self._json(display['request_ref']) != body:
+            raise ContractError('relative_signal_native_view_request_mismatch')
+        if not self._has_table('runtime_actions') or not self._has_table('tool_operations'):
+            raise ContractError('relative_signal_own_view_action_required')
+        rows = self.store.db.execute("SELECT decision_index,action,result FROM runtime_actions WHERE run_id=? AND episode_id=? "
+            "AND json_extract(action,'$.kind')='tool' AND json_extract(action,'$.tool')='image.view' "
+            "AND json_extract(result,'$.status')='completed' ORDER BY decision_index",
+            (self.run_id, context.episode_id))
+        for row in rows:
+            action, result = json.loads(row['action']), json.loads(row['result'])
+            if result.get('result', {}).get('view_ref') != view_ref:
+                continue
+            index = row['decision_index']
+            if type(index) is not int or index < 0:
+                raise ContractError('relative_signal_own_view_action_mismatch')
+            key = f'{self.run_id}:{context.episode_id}:{index}'
+            native = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (key,)).fetchone()
+            args = action.get('arguments')
+            if (set(action) != {'kind', 'tool', 'arguments'} or not isinstance(args, dict)
+                    or set(args) - {'source_ref', 'frame', 'colour_conversion'}
+                    or args.get('source_ref') != view['input_source_ref']
+                    or args.get('frame', 0) != view['frame']
+                    or args.get('colour_conversion', 'preserve') != view['colour_conversion']
+                    or native is None or native['name'] != 'image.view'
+                    or native['arguments'] != canonical(args) or native['scope'] != canonical(plain(context.scope))
+                    or canonical(result) != native['result']
+                    or result.get('operation_ref') != native['id']
+                    or native['id'] != identity('operation', {'key': key, 'name': 'image.view', 'arguments': args})
+                    or result.get('result') != {'view_ref': view_ref, 'view': view}
+                    or result.get('visual_inputs') != [view]
+                    or result.get('feedback') is not None
+                    or result.get('record_refs') != [view['source_ref'], view_ref]):
+>               raise ContractError('relative_signal_own_view_action_mismatch')
+E               gene_annotation_episode.domain.ContractError: relative_signal_own_view_action_mismatch
+
+gene_annotation_episode/literature_ratio_source_storage.py:247: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_runtime_receipt.py::test_authentic_tool_portion_and_full_original_runtime_digest[runtime-pending-addition]
+1 failed, 1 passed, 20 deselected in 5.22s

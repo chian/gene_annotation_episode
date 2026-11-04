@@ -1,0 +1,138 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_current_code_replays_original_live_rfam_without_new_work _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7cae6c9e0c80>
+
+    def test_current_code_replays_original_live_rfam_without_new_work(monkeypatch):
+        before = _hashes()
+        expected_archive = _load("archive.json")
+        expected_history = _load("history.json")
+        expected_publication = _load("publication.json")
+        scope = _load("caller-selected-inputs.json")["scope"]
+        run_directory = LIVE / "run"
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError("Saved live replay attempted new network, parsing, calculation, model or execution work")
+    
+        for name in ("socket.create_connection", "socket.socket.connect", "socket.socket.connect_ex",
+                     "urllib.request.OpenerDirector.open", "subprocess.run", "subprocess.Popen",
+                     "gene_annotation_episode.rfam_batch_table.populate_rfam_batch_tblout_sheet",
+                     "gene_annotation_episode.rfam_batch_table_grader.calculate_rfam_batch_table_components",
+                     "gene_annotation_episode.infernal_search_inputs.populate_infernal_search_sheet",
+                     "gene_annotation_episode.infernal_search_grader.calculate_infernal_search_scores",
+                     "gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet",
+                     "gene_annotation_episode.rfam_batch_report_grader.calculate_rfam_batch_report_components"):
+            monkeypatch.setattr(name, forbidden)
+        monkeypatch.setattr(RfamBatchHTTP, "_request", forbidden)
+    
+        class NoModel:
+            async def complete(self, *args, **kwargs):
+                forbidden()
+    
+            async def release(self, episode_id):
+                pass
+    
+        def controllers(path, initial):
+            def estimate(values, parameters, contexts):
+                count = {"annotation": 1, "scientific_process": 2}[path[-1][0]]
+                return YieldEstimate(len(values), NumericBand.exact(0 if len(values) >= count else 1),
+                    parameters, {"fixture": "root_and_scientific_continuation_only"})
+            return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+                estimate_with_context=estimate if path[-1][0] in {"annotation", "scientific_process"} else None)
+    
+        with Store(LIVE / "state") as store:
+            assert _history(store) == expected_history
+            tools = ToolRegistry(store)
+            factory = ExecutionServiceFactory(
+                {"rfam": {"kind": "api", "service": "rfam_batch", "timeout": 90.0}}, {}, 3, 2, .5)
+            application = factory(store, run_id=RUN_ID, directory=run_directory,
+                tool_registry=tools, tool_catalog=tools.catalog())
+            descriptor = ScientificProcessEpisodes(None,
+                library=ScientificProcessLibrary(run_directory / "scientific-process-library"),
+                tool_library=ScientificToolLibrary(run_directory / "scientific-tool-library"),
+                child_roles=("scientific_process", "launch", "results")).as_record()
+            workflow = Workflow(store, tools, NoModel(), run_directory, RUN_ID,
+                controller_factory=controllers, project_credit=lambda *_: 0,
+                episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
+                role_credit_bindings=application.role_credit_bindings,
+                job_progress_provider=application.job_progress_provider,
+                annotation_child_roles=("scientific_process",), episode_record_receipts=True,
+                initial_known_record_refs=[])
+            root = workflow.build("annotation", "root", GOAL, scope)
+    
+            async def execute():
+                record = await root.run_async(workflow.context)
+                await root.build_result(record)
+                return json.loads("".join(iter_json(record.as_record())))
+    
+>           assert asyncio.run(execute()) == expected_archive
+                   ^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rfam_saved_live_replay.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/test_rfam_saved_live_replay.py:105: in execute
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:356: in acquire_async
+    return await super().acquire_async(ctx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:495: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1611: in _acquire_unit_async
+    result = self.on_unit(item, contribution, unit_view)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = TimedChildUnit(child=FeedbackEpisode(grain=Grain(name='launch', unit='One completed selected improvement action', resu...isode_id='episode_96e7a7c7ef716b0192af215f7ed982fa3bafc27085a1a9355402ec3afcefcc75', decision_index=0, scheduled=False)
+contribution = Contribution(controller_input=Record(value={'credit': 0.0, 'estimation_action_index': 0}), episode_update=EpisodeUpdat...certainty_code': 0, 'upper': 0.0, 'value': 0.0}), 'stop_requested': True})})), delivery_failures=()), goal_result=None)
+view = UnitView(unit_label='child_0', controller_input=Record(value={'credit': 0.0, 'estimation_action_index': 0}), controlle...certainty_code': 0, 'upper': 0.0, 'value': 0.0}), 'stop_requested': True})})), delivery_failures=()), goal_result=None)
+
+    def on_unit(item, contribution, view):
+        if view.episode_update is not None and view.episode_update.delivery_failures:
+            source.feedback = view.episode_update.delivery_failures[-1].as_record()
+        data = {"label": view.unit_label, "credit": _plain(view.controller_input),
+                "step": _plain(view.controller_step), "unit_ref": view.unit_ref.as_record(),
+                "decision_index": item.decision_index}
+        if self.execution_binding is not None:
+            self.completions.confirm_observed(identity.episode_id, view.unit_ref.unit_index, data)
+            self.publish_outcome(source, item.decision_index)
+            return
+        old = self.journal.row("runtime_observations", identity.episode_id, view.unit_ref.unit_index)
+        if old and json.loads(old["observation"]) != data:
+>           raise WorkflowError("reconstructed controller observation differs")
+E           gene_annotation_episode.episode_journal.WorkflowError: reconstructed controller observation differs
+
+../../../gene_annotation_episode/runtime.py:3535: WorkflowError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_rfam_saved_live_replay.py::test_current_code_replays_original_live_rfam_without_new_work
+1 failed in 3.80s

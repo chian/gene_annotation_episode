@@ -1,0 +1,58 @@
+{
+  "goal_status": "unfinished",
+  "groups": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_reference_parent_delivery.py tests/test_literature_ratio_reader.py tests/test_literature_ratio_calculations.py tests/test_literature_experimental_prompt_delivery.py",
+      "passed": 159,
+      "seconds": 3.64
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_ratio_integration.py",
+      "passed": 6,
+      "seconds": 21.03,
+      "scope": "after correcting actual image-region bounds; before added invalid-region case"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_rate_storage.py tests/test_literature_rate_episode_integration.py tests/test_literature_quantity_integration.py tests/test_literature_reference_parent_delivery.py tests/test_episode_composition.py",
+      "passed": 44,
+      "seconds": 107.64
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_literature_ratio_integration.py tests/test_literature_reference_parent_delivery.py tests/test_literature_assay_integration.py",
+      "passed": 25,
+      "seconds": 80.73,
+      "scope": "final targeted ratio, caller presentation and endpoint-model integration"
+    }
+  ],
+  "counts_overlap": true,
+  "primary_demo": {
+    "command": ".venv/bin/python verification/literature_reference_evidence_2026-10-25_001/run_primary_ratio_example.py --output verification/literature_reference_evidence_2026-10-25_001/primary_ratio_demo_001",
+    "exit_code": 0,
+    "model_inference": false,
+    "visual_origin": "manual_visual_transcription"
+  },
+  "live_model_run": {
+    "directory": "live_yeag_004",
+    "pin": "live_pin_004",
+    "pid": 1169747,
+    "execution_session": 86783,
+    "latest_observation_file": "LIVE_STATUS_001.json",
+    "status_at_observation": "live; scientific completion unverified",
+    "uses_scripted_model_or_fixed_turn_controller": false,
+    "package_pin_changed_files_at_observation": []
+  },
+  "development_failure_corrected": "Initial retained visual region end563 exceeded original image height557. Original image unchanged; region metadata corrected.",
+  "file_sha256": {
+    "gene_annotation_episode/literature_ratio_reader.py": "b356360e6659b759f7eaa289a456d1fe3e95f4a94288f0f4efd1fda0e13e68e3",
+    "gene_annotation_episode/literature_ratio_calculations.py": "b1bbd69bef463835f5eaecc53ddb1c9b06d64fb5922ab950341bbbc8208e2d58",
+    "gene_annotation_episode/literature_ratio_storage.py": "898801d7ab4fde40d5b3a230c451c7447f48ffc3a123055b1b19cc43aeabf5cb",
+    "gene_annotation_episode/literature_reference_parent_prompt.py": "79203553c0142b7cb404ec6c576bf77be56dbfe6b75b9f6f6518d1abc5c851ed",
+    "gene_annotation_episode/literature_episodes.py": "88397c7d94eee9967aa5682891585488b262a63da0e440221e768f996bcacfa5",
+    "gene_annotation_episode/episode_services.py": "a4efd6baa1b389c0075258f561f4048f4eb7673f058cd95e3c3ca4ddc760db06",
+    "gene_annotation_episode/literature_experimental_prompt.py": "1a8712f796ca7c981c900c398571287cdcb9e3e7205174c718a790f7db0e4242",
+    "gene_annotation_episode/literature_assay_storage.py": "7066583c16cf8bef99d7161f9e902aea5a0e68ac602dd329ca56c3ed88aef291",
+    "gene_annotation_episode/credit.py": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+    "gene_annotation_episode/scientific_credit.py": "d510fd1d6f14dcf3f2fe69d8879463433f716b77022a2ba229af58d7bd152255",
+    "method_loop/episode.py": "b1245fa460a706e291685c80ec8f5703846fd29d25c58fa80346db7ce357c72d"
+  }
+}

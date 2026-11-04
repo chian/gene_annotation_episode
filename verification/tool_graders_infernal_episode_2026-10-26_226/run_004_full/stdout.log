@@ -1,0 +1,42 @@
+..............................F
+=================================== FAILURES ===================================
+____ test_same_native_row_source_and_observation_survive_metrics_and_pages _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_004_full/temporary/pytest/test_same_native_row_source_an0')
+
+    def test_same_native_row_source_and_observation_survive_metrics_and_pages(tmp_path):
+        first = selector('search_hit', rows={'offset': 0, 'limit': 1}, metrics=['bitscore'])
+        def duplicate(previous):
+            return selector('search_hit', rows={'record_keys': [previous['rows'][0]['record_key']]}, metrics=['evalue'])
+        second = selector('search_hit', rows={'offset': 1, 'limit': 1}, metrics=['bitscore'])
+        case = run_case(tmp_path, 'cmsearch', selectors=[first, duplicate, second], nested=True)
+        try:
+            one, again, two = [form['rows'][0] for form in case.returned]
+            assert one['source_ref'] == again['source_ref'] == two['source_ref']
+            assert one['record_key'] == again['record_key'] != two['record_key']
+            assert one['observation_ref'] == again['observation_ref'] != two['observation_ref']
+            assert values(one) == {'bitscore': 71.4} and values(again) == {'evalue': 3.6e-22}
+            assert history(case.child_records[1]) == [0]
+            assert case.record.controller_state.history == (2,)
+            assert case.record.units_consumed == 1
+            assert case.store.count('observation') == 2
+            full = json.loads(case.store.get_artifact(case.outcomes[0]['result']['prepared']['scores_artifact_ref']))
+            assert len(full['hits']) == 10
+            retained = case.store.get(one['observation_ref'])
+            assert len(retained['measurements']) > 1
+            first_receipt = next((current, instructions) for _, _, current, instructions in case.provider.calls
+                if 'scientific_process' in current and current.get('child_reports')
+                and current['child_reports'][-1].get('rows') == [one])
+            steering = render_scientific_process_prompt(*first_receipt).split('\n\nSTEERING', 1)[1]
+            assert 'bitscore' in steering
+>           assert all(metric not in steering for metric in NATIVE_INFERNAL_METRICS['search_hit']
+                if metric != 'bitscore'), 'unrequested saved native measurements reintroduced into scientific STEERING'
+E               AssertionError: unrequested saved native measurements reintroduced into scientific STEERING
+E               assert False
+E                +  where False = all(<generator object test_same_native_row_source_and_observation_survive_metrics_and_pages.<locals>.<genexpr> at 0x76613487c2b0>)
+
+../../../tests/test_native_infernal_results_integration.py:650: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_results_integration.py::test_same_native_row_source_and_observation_survive_metrics_and_pages
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 30 passed in 228.45s (0:03:48)

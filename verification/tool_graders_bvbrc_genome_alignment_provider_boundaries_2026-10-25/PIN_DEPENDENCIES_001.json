@@ -1,0 +1,145 @@
+{
+  "algorithm": "sha256 concatenation of sorted filename UTF8 + NUL + decimal byte_count ASCII + NUL + exact content bytes",
+  "excluded_unless_actual_dependency": [
+    "bvbrc_alignment_bundle_*",
+    "bvbrc_msa_*",
+    "bvbrc_metacats_*",
+    "blast_*",
+    "phylogeny_calculators.py",
+    "phylogeny_formats.py",
+    "bvbrc_genome_alignment_returns.py",
+    "host/execution/tool-library modules"
+  ],
+  "external_runtime": "Python stdlib and installed jsonschema; jsonschema bundled vocabularies initialized before no-I/O grading probe; no package installation performed",
+  "implementation_pin": null,
+  "must_audit_when_implemented": "actual local transitive imports, lazy imports and file-loaded data; include every dependency actually reached by consume/validation/projection, and no unrelated whole-provider lists",
+  "non_module_resource_edges": {
+    "bvbrc_appservice_contracts.py": [
+      "bvbrc_appservice_schemas.json"
+    ]
+  },
+  "observed_local_import_edges": {
+    "bvbrc_alignment_values.py": [
+      "phylogeny_calculation_contracts.py"
+    ],
+    "bvbrc_appservice_contracts.py": [],
+    "bvbrc_genome_alignment_input_contracts.py": [
+      "bvbrc_appservice_contracts.py",
+      "phylogeny_calculation_contracts.py",
+      "phylogeny_format_contracts.py",
+      "xmfa_source_contracts.py"
+    ],
+    "mauve_backbone_calculators.py": [
+      "bvbrc_alignment_values.py",
+      "bvbrc_genome_alignment_input_contracts.py",
+      "mauve_backbone_contracts.py",
+      "xmfa_calculation_contracts.py",
+      "xmfa_format_contracts.py"
+    ],
+    "mauve_backbone_contracts.py": [
+      "bvbrc_alignment_values.py",
+      "phylogeny_calculation_contracts.py",
+      "xmfa_calculation_contracts.py",
+      "xmfa_format_contracts.py"
+    ],
+    "mauve_backbone_formats.py": [
+      "bvbrc_alignment_values.py",
+      "mauve_backbone_contracts.py",
+      "xmfa_format_contracts.py"
+    ],
+    "mauve_v4_calculation_contracts.py": [
+      "bvbrc_alignment_values.py",
+      "mauve_v4_format_contracts.py",
+      "phylogeny_calculation_contracts.py",
+      "xmfa_calculation_contracts.py"
+    ],
+    "mauve_v4_calculators.py": [
+      "bvbrc_alignment_values.py",
+      "bvbrc_genome_alignment_input_contracts.py",
+      "mauve_v4_calculation_contracts.py",
+      "mauve_v4_format_contracts.py",
+      "xmfa_calculation_contracts.py"
+    ],
+    "mauve_v4_format_contracts.py": [
+      "bvbrc_alignment_values.py",
+      "phylogeny_calculation_contracts.py",
+      "xmfa_format_contracts.py"
+    ],
+    "mauve_v4_formats.py": [
+      "bvbrc_alignment_values.py",
+      "mauve_v4_format_contracts.py"
+    ],
+    "phylogeny_calculation_contracts.py": [],
+    "phylogeny_format_contracts.py": [],
+    "xmfa_calculation_contracts.py": [
+      "bvbrc_alignment_values.py",
+      "phylogeny_calculation_contracts.py"
+    ],
+    "xmfa_calculators.py": [
+      "bvbrc_alignment_values.py",
+      "xmfa_calculation_contracts.py",
+      "xmfa_coordinates.py",
+      "xmfa_format_contracts.py",
+      "xmfa_sources.py"
+    ],
+    "xmfa_coordinates.py": [
+      "bvbrc_alignment_values.py",
+      "xmfa_calculation_contracts.py",
+      "xmfa_format_contracts.py",
+      "xmfa_sources.py"
+    ],
+    "xmfa_format_contracts.py": [
+      "bvbrc_alignment_values.py",
+      "phylogeny_format_contracts.py"
+    ],
+    "xmfa_formats.py": [
+      "bvbrc_alignment_values.py",
+      "xmfa_format_contracts.py"
+    ],
+    "xmfa_source_contracts.py": [
+      "bvbrc_alignment_values.py",
+      "phylogeny_calculation_contracts.py",
+      "phylogeny_format_contracts.py"
+    ],
+    "xmfa_sources.py": [
+      "bvbrc_alignment_values.py",
+      "xmfa_format_contracts.py",
+      "xmfa_source_contracts.py"
+    ]
+  },
+  "recorded_utc": "2026-10-25T10:45:26.238799+00:00",
+  "required_existing_files": [
+    "bvbrc_alignment_values.py",
+    "bvbrc_appservice_contracts.py",
+    "bvbrc_genome_alignment_input_contracts.py",
+    "mauve_backbone_calculators.py",
+    "mauve_backbone_contracts.py",
+    "mauve_backbone_formats.py",
+    "mauve_v4_calculation_contracts.py",
+    "mauve_v4_calculators.py",
+    "mauve_v4_format_contracts.py",
+    "mauve_v4_formats.py",
+    "phylogeny_calculation_contracts.py",
+    "phylogeny_format_contracts.py",
+    "xmfa_calculation_contracts.py",
+    "xmfa_calculators.py",
+    "xmfa_coordinates.py",
+    "xmfa_format_contracts.py",
+    "xmfa_formats.py",
+    "xmfa_source_contracts.py",
+    "xmfa_sources.py",
+    "bvbrc_appservice_schemas.json"
+  ],
+  "required_new_files": [
+    "bvbrc_genome_alignment_associations.py",
+    "bvbrc_genome_alignment_bundle_adapter.py",
+    "bvbrc_genome_alignment_bundle_contracts.py",
+    "bvbrc_genome_alignment_bundle_projection.py",
+    "bvbrc_genome_alignment_bundle_resolution.py",
+    "bvbrc_genome_alignment_calculation_contracts.py",
+    "bvbrc_genome_alignment_calculators.py",
+    "bvbrc_genome_alignment_inputs.py",
+    "bvbrc_genome_alignment_sheet.py"
+  ],
+  "status": "observed existing neutral/shared closure plus exact planned C/D/E roots; final closure awaits actual C/D/E imports"
+}

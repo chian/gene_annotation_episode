@@ -17,24 +17,28 @@ import os
 from pathlib import Path, PurePosixPath
 import re
 import secrets
-import site
 import stat
 import sys
-from typing import Literal, TypedDict
+from typing import Literal, NotRequired, TypedDict
 
 from . import native_lifecycle
 from .acquisition import AcquisitionError
-from .genomic_overlap_contracts import _finite_json_copy, validate_genomic_overlap_record
+from .genomic_overlap_contracts import _finite_json_copy, _StrictValidator, validate_genomic_overlap_record
 from .genomic_overlap_inputs import _failure, _unique_issues
 from .genomic_overlap_result_worker import (
     validate_genomic_overlap_result_worker_plan,
     validate_genomic_overlap_result_worker_result,
 )
 from .local_jobs import LocalJobPolicy, check_scratch_budget
+from .native_atac_differential_contracts import (
+    REQUIRED_DEPENDENCIES, _dependency_roots, driver_runtime_schema,
+)
+from .native_atac_differential_preparation import _dependencies as _runtime_dependencies
 from .native_file_capture import (
     NativeFileCaptureError, capture_declared_native_files, capture_native_file,
     retained_native_file,
 )
+from .native_flux_balance_storage import file_pin as _runtime_file_pin
 
 
 class WorkerExecution(TypedDict):
@@ -50,6 +54,7 @@ class WorkerExecution(TypedDict):
     stderr_file: dict | None
     source_pins: list[dict]
     interpreter: dict
+    dependencies: NotRequired[list[dict]]
 
 
 class WorkerCapture(TypedDict):
@@ -296,12 +301,31 @@ def _stage(store, identity, target, policy, directory, *, executable=False):
             os.unlink(temporary, dir_fd=parent)
 
 
-def _environment(directory, dependency_paths, runtime_root):
-    return {"PYTHONPATH": os.pathsep.join([directory + "/source_snapshot", *dependency_paths]),
+def _environment(directory, dependency_paths, runtime_root, *, dependencies=None):
+    environment = {"PYTHONPATH": os.pathsep.join([directory + "/source_snapshot", *dependency_paths]),
         "PYTHONHOME": runtime_root, "PYTHONNOUSERSITE": "1", "PYTHONSAFEPATH": "1",
         "PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": directory, "TMP": directory, "TEMP": directory,
         "XDG_CACHE_HOME": directory + "/cache", "PIP_CACHE_DIR": directory + "/cache/pip",
         "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1"}
+    if dependencies is not None:
+        environment["GENOMIC_OVERLAP_DEPENDENCIES_SHA256"] = hashlib.sha256(
+            _canonical(_validated_dependencies(dependencies))).hexdigest()
+    return environment
+
+
+def _validated_dependencies(value):
+    """Check the existing driver dependency records without importing packages."""
+    schema = driver_runtime_schema()["properties"]["dependencies"]
+    _require(_StrictValidator(schema).is_valid(value),
+             "genomic_overlap_preparation_dependency_binding")
+    names = [row["distribution"].lower().replace("_", "-") for row in value]
+    _require(len(names) == len(set(names)) and REQUIRED_DEPENDENCIES <= set(names),
+             "genomic_overlap_preparation_dependency_binding")
+    for row in value:
+        _path(row["package_root"])
+        paths = [_path(pin["path"]) for pin in row["files"]]
+        _require(len(paths) == len(set(paths)), "genomic_overlap_preparation_dependency_binding")
+    return value
 
 
 def _snapshot(store, plan, policy):
@@ -324,17 +348,16 @@ def _snapshot(store, plan, policy):
         path.chmod(0o555)
     root.chmod(0o555)
     target.parent.chmod(0o555)
-    # External packages/stdlib remain the explicitly recorded existing runtime;
-    # they are not represented as snapshotted project source.
-    user_site = Path(site.getusersitepackages()).resolve()
-    dependencies = sorted({str(Path(p).resolve(strict=True)) for p in sys.path if p and
-        any(part in ("site-packages", "dist-packages") for part in Path(p).parts)
-        and not Path(p).resolve().is_relative_to(user_site)})
-    environment = _environment(directory, dependencies, str(Path(sys.base_prefix).resolve(strict=True)))
+    # The selected packages may be exposed by .pth files, which -S deliberately
+    # disables. Bind their actual distribution files and explicit import roots;
+    # do not borrow unrelated site directories from the parent's sys.path.
+    dependencies = _validated_dependencies(_runtime_dependencies())
+    environment = _environment(directory, _dependency_roots({"dependencies": dependencies}),
+        str(Path(sys.base_prefix).resolve(strict=True)), dependencies=dependencies)
     return {"version": "genomic_overlap_worker_intent_v1", "plan": plan, "policy": deepcopy(_POLICY),
         "command": [interpreter["path"], "-B", "-S", "-m", _MODULE, directory + "/plan.json"],
         "environment": environment, "source_pins": sorted(pins, key=lambda row: row["path"]),
-        "interpreter": interpreter}
+        "interpreter": interpreter, "dependencies": dependencies}
 
 
 def _pins(execution, plan):
@@ -352,6 +375,8 @@ def _pins(execution, plan):
     _require(paths == sorted(set(paths)) and {str(root / "gene_annotation_episode" / (name + ".py"))
         for name in _REQUIRED_SOURCES}.issubset(paths))
     _require(execution["interpreter"]["path"] == plan["directory"] + "/runtime/python")
+    if "dependencies" in execution:
+        _validated_dependencies(execution["dependencies"])
 
 
 def _verify_snapshot(store, plan, intent):
@@ -365,6 +390,49 @@ def _verify_snapshot(store, plan, intent):
                  "genomic_overlap_preparation_snapshot_conflict")
         with _directory(str(path.parent)) as parent, _regular(parent, path.name) as item:
             _require(os.fstat(item).st_mode & 0o222 == 0, "genomic_overlap_preparation_snapshot_mutable")
+    for row in intent.get("dependencies", ()):
+        for pin in row["files"]:
+            try:
+                actual = _runtime_file_pin(pin["path"])
+            except (OSError, ValueError) as error:
+                raise ValueError("genomic_overlap_preparation_dependency_conflict") from error
+            _require(actual == pin, "genomic_overlap_preparation_dependency_conflict")
+
+
+def _checked_environment(directory, env, execution):
+    _require(type(env) is dict and type(env.get("PYTHONPATH")) is str and type(env.get("PYTHONHOME")) is str)
+    paths = env["PYTHONPATH"].split(os.pathsep)
+    _require(paths[0] == directory + "/source_snapshot" and len(set(paths)) == len(paths))
+    if "dependencies" in execution:
+        dependencies = _validated_dependencies(execution["dependencies"])
+        _require(paths[1:] == _dependency_roots({"dependencies": dependencies}),
+                 "genomic_overlap_preparation_dependency_binding")
+    else:
+        # Legacy receipts retain exactly their original environment. Absence of
+        # declarations is not retroactive dependency verification.
+        for item in paths[1:]:
+            path = _path(item)
+            _require(path.name in ("site-packages", "dist-packages") and ".local" not in path.parts)
+    _path(env["PYTHONHOME"])
+    _require(_same(env, _environment(directory, paths[1:], env["PYTHONHOME"],
+        dependencies=execution.get("dependencies"))), "genomic_overlap_preparation_dependency_binding")
+    return env
+
+
+def _validate_intent(intent, plan):
+    fields = {"version", "plan", "policy", "command", "environment", "source_pins", "interpreter"}
+    if type(intent) is dict and "dependencies" in intent:
+        fields.add("dependencies")
+    _closed(intent, fields)
+    _require(intent["version"] == "genomic_overlap_worker_intent_v1"
+        and _same(intent["plan"], plan) and _same(intent["policy"], _POLICY),
+        "genomic_overlap_preparation_intent_conflict")
+    _require(type(intent["source_pins"]) is list)
+    _pins(intent, plan)
+    _require(intent["command"] == [intent["interpreter"]["path"], "-B", "-S", "-m", _MODULE,
+        plan["directory"] + "/plan.json"], "genomic_overlap_preparation_intent_conflict")
+    _checked_environment(plan["directory"], intent["environment"], intent)
+    return intent
 
 
 def _check_handle(body, request, request_raw, plan, execution):
@@ -385,15 +453,7 @@ def _check_handle(body, request, request_raw, plan, execution):
     _require(all(body["paths"][name] == prefix + name for name in body["paths"]))
     _require(hashlib.sha256(request_raw).hexdigest() == body["request_sha256"],
              "genomic_overlap_preparation_request_digest")
-    env = request.get("env") if type(request) is dict else None
-    _require(type(env) is dict and type(env.get("PYTHONPATH")) is str and type(env.get("PYTHONHOME")) is str)
-    paths = env["PYTHONPATH"].split(os.pathsep)
-    _require(paths[0] == directory + "/source_snapshot" and len(set(paths)) == len(paths))
-    for item in paths[1:]:
-        path = _path(item)
-        _require(path.name in ("site-packages", "dist-packages") and ".local" not in path.parts)
-    _path(env["PYTHONHOME"])
-    _require(_same(env, _environment(directory, paths[1:], env["PYTHONHOME"])))
+    env = _checked_environment(directory, request.get("env") if type(request) is dict else None, execution)
     expected = {"command": command, "cwd": directory, "file_bytes": _POLICY["scratch_bytes"],
         "ready_path": body["paths"]["ready"], "release_path": body["paths"]["release"],
         "result_path": body["paths"]["result"], "stdin_path": None, "env": env}
@@ -430,8 +490,17 @@ def _live_handle(fd, plan, intent):
     return body
 
 
+def _execution_fields(execution):
+    """Exact private legacy/new fields, shared with historical receipt readers."""
+    fields = set(WorkerExecution.__annotations__)
+    if type(execution) is dict and "dependencies" not in execution:
+        fields.remove("dependencies")
+    return fields
+
+
 def _validate_execution(store, execution, plan, plan_file):
-    _closed(execution, WorkerExecution.__annotations__)
+    fields = _execution_fields(execution)
+    _closed(execution, fields)
     _finite_json_copy(execution)
     _require(execution["version"] == _EXECUTION and execution["outcome"] in ("returned", "failed")
         and _same(execution["plan_file"], plan_file), "genomic_overlap_preparation_execution_binding")
@@ -757,15 +826,15 @@ def prepare_genomic_overlap_worker(store, *, plan: dict, policy: LocalJobPolicy)
                 _immutable(fd, "intent.json", intent)
             else:
                 intent = _decode(intent_raw)
-                _require(_same(intent["plan"], plan) and _same(intent["policy"], _POLICY),
-                         "genomic_overlap_preparation_intent_conflict")
+            _validate_intent(intent, plan)
             plan_file = _capture(store, plan["directory"], "plan.json", _PLAN)
             completed = _read(fd, "execution.json")
             if completed is None:
                 _verify_snapshot(store, plan, intent)
                 execution = {"version": _EXECUTION, "plan_file": plan_file,
                     **_run(fd, plan, intent, policy), "source_pins": deepcopy(intent["source_pins"]),
-                    "interpreter": deepcopy(intent["interpreter"])}
+                    "interpreter": deepcopy(intent["interpreter"]),
+                    **({"dependencies": deepcopy(intent["dependencies"])} if "dependencies" in intent else {})}
                 body = _live_handle(fd, plan, intent) if _read(fd, "worker.handle.json") is not None else None
                 for field, (filename, format_name) in _CONTROLS.items():
                     name = PurePosixPath(body["paths"]["request"]).name if field == "request_file" and body else filename

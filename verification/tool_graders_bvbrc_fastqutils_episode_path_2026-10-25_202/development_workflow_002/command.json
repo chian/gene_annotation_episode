@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/pytest-tmp",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/junit.xml",
+    "tests/test_bvbrc_fastqutils_episode_flow.py",
+    "-k",
+    "actual_selected_tool"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/source",
+  "environment": {
+    "FASTQUTILS_EXAMPLE_DIRECTORY": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/examples",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/source",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_fastqutils_episode_path_2026-10-25_202/development_workflow_002/tmp"
+  },
+  "ram_limit_bytes": 21474836480,
+  "scratch_enforcement": "bounded fixture data plus final aggregate measurement; 4 GiB per-file process limit",
+  "scratch_limit_bytes": 4294967296,
+  "start_utc": "2026-10-25T22:10:45.183538+00:00",
+  "walltime_limit": null
+}

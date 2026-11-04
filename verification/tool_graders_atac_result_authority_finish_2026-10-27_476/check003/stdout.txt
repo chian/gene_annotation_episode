@@ -1,0 +1,19 @@
+E                                                                        [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_selected_nonterminal_collection_freezes_exact_action_and_replays_without_current_binding _
+source_snapshot/tests/test_atac_differential_result_receipts.py:55: in h
+    launch = f.child(f.root, schema_for(), role='launch', index=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_atac_differential_returns.py:198: in child
+    contract = TypedReportContract("Return requested ATAC facts", schema, lambda *_: True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:167: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+source_snapshot/method_loop/communication.py:36: in __post_init__
+    raise ValueError("parent must declare the information its child returns")
+E   ValueError: parent must declare the information its child returns
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_atac_differential_result_receipts.py::test_selected_nonterminal_collection_freezes_exact_action_and_replays_without_current_binding
+1 error in 7.11s

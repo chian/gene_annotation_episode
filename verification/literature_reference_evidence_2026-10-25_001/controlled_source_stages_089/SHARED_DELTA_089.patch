@@ -1,0 +1,427 @@
+--- shared_before_089.py
++++ gene_annotation_episode/literature_controlled_response_inputs.py
+@@ -15,6 +15,7 @@
+ import json
+ import math
+ import re
++from types import MappingProxyType
+ 
+ from jsonschema import Draft202012Validator
+ from .domain import REF, ContractError, identity
+@@ -1798,6 +1799,10 @@
+             super().__init__(self.arguments, callback)
+             _authenticate_request(self, self.arguments, "arguments")
+             self.relationships = _relationships(self, self.arguments["relationships"])
++            if self.profile == "v3":
++                self._v3_relationships = _frozen_json(self.relationships)
++                self.cache = MappingProxyType({key: value if isinstance(value, _Unavailable)
++                    else MappingProxyType(value) for key, value in self.cache.items()})
+         except BaseException:
+             self.close()
+             raise
+@@ -1811,9 +1816,20 @@
+         value = self.source(source_ref, representation)
+         return dict(value)
+ 
++    def source(self, reference, representation):
++        value = super().source(reference, representation)
++        # Native helpers receive their ordinary dictionary interface, while v3's
++        # original authorized cache remains immutable and cannot be rebound.
++        return dict(value) if self.profile == "v3" else value
++
+     def _active(self):
+         if self.closed:
+             _fail("source_context_closed", "context")
++        if hasattr(self, "_original_v3_request") and (
++                self._profile != "v3" or _frozen_json(self.arguments) != self._original_v3_request):
++            _fail("source_context_nomination_mismatch", "arguments")
++        if hasattr(self, "_v3_relationships") and _frozen_json(self.relationships) != self._v3_relationships:
++            _fail("source_context_science_mismatch", "relationships")
+ 
+     def close(self):
+         if self.closed:
+@@ -1825,7 +1841,10 @@
+             self.visual.decoded.clear()
+             self.visual.images.clear()
+         if hasattr(self, "cache"):
+-            self.cache.clear()
++            if isinstance(self.cache, MappingProxyType):
++                self.cache = MappingProxyType({})
++            else:
++                self.cache.clear()
+         if hasattr(self, "native"):
+             self.native.cache.clear()
+             self.native.references.clear()
+@@ -1834,10 +1853,13 @@
+         if hasattr(self, "unavailable_errors"):
+             self.unavailable_errors.clear()
+         self._endpoints.clear()
+-        for name in ("_reading_registry", "_scope_registry", "_stage_records", "_document_records"):
++        for name in ("_stage_records", "_document_records", "_covariance_facts"):
+             value = getattr(self, name, None)
+             if value is not None:
+                 value.clear()
++        for name in ("_reading_registry", "_scope_registry"):
++            if hasattr(self, name):
++                setattr(self, name, MappingProxyType({}))
+         self.closed = True
+ 
+     def __enter__(self):
+@@ -1897,7 +1919,7 @@
+         "meanings": meanings, "intended_factor_level": context.witness(selected_arm["intended_factor_level"], field + ".intended_factor_level")})
+     context._endpoints[id(science["meanings"]["endpoint"])] = (science["meanings"]["endpoint"], field)
+     if context.profile == "v3":
+-        _mark_reading_stage(context, science, reading_selector)
++        _mark_reading_stage(context, science, reading_selector, kind="science")
+         context._endpoints[id(science["meanings"]["endpoint"])] = (
+             science["meanings"]["endpoint"], field, _selector_key(reading_selector), science)
+     return science
+@@ -1950,7 +1972,8 @@
+         if selected is not None and selected.get("kind") != "source_literal":
+             _fail("source_text_measurement_required", "selected")
+         reading = _reading_from_text(context, selected, _measurement(context, selected, endpoint, field + ".measurement"))
+-        return _mark_reading_stage(context, reading, reading_selector)
++        return _mark_reading_stage(context, reading, reading_selector, kind="measurement",
++            endpoint_science=context._endpoints[id(endpoint)][3])
+     if reading_selector is not None:
+         _fail("unsupported_stage_selector", "reading_selector")
+     if selected is not None and selected.get("kind") != "source_literal":
+@@ -1977,8 +2000,10 @@
+     selected = arm_science["selection"]
+     field = _reading_field(context, selected, reading_selector)
+     if context.profile == "v3":
+-        _owned_reading(context, arm_science, reading_selector, "arm_science")
+-        _owned_reading(context, measurement, reading_selector, "measurement")
++        _owned_reading(context, arm_science, reading_selector, "arm_science", kind="science")
++        _owned_reading(context, measurement, reading_selector, "measurement", kind="measurement")
++        if context._stage_records[id(measurement)][4] is not arm_science:
++            _fail("source_stage_endpoint_mismatch", "measurement")
+     if selected["measurement"] != measurement["selection"]:
+         _fail("source_stage_measurement_mismatch", field)
+     result = deepcopy(dict(arm_science))
+@@ -2011,7 +2036,7 @@
+     result["diagnostics"] = _unique_diagnostics([result["context"], result["meanings"], result["protein_arrangement"],
+         result["measurement"], result["reported_uncertainty"]], stable=context.profile in ("v2", "v3"))
+     stage = _StageValue(context, result)
+-    return _mark_reading_stage(context, stage, reading_selector) if context.profile == "v3" else stage
++    return _mark_reading_stage(context, stage, reading_selector, kind="arm") if context.profile == "v3" else stage
+ 
+ 
+ def _project_owner_covariance(result, matrix, arms, relationships):
+@@ -2490,6 +2515,7 @@
+ 
+ def _initialize_v3_registries(context):
+     arguments = context.arguments
++    context._original_v3_request = _frozen_json(arguments)
+     context._reading_registry = {}
+     for role in PRIMITIVE_ORDER:
+         context._reading_registry[(role, None)] = (_frozen_json(arguments["arms"][role]), "arms." + role, object())
+@@ -2516,7 +2542,9 @@
+             if _selector_key(selector) not in context._reading_registry:
+                 _fail("source_reading_selector_unresolved", "local_pair_assignments")
+         context._scope_registry[("local", i)] = (_frozen_json(pair["covariance_selection"]), _frozen_json(selectors))
+-    context._stage_records, context._document_records = {}, {}
++    context._reading_registry = MappingProxyType(context._reading_registry)
++    context._scope_registry = MappingProxyType(context._scope_registry)
++    context._stage_records, context._document_records, context._covariance_facts = {}, {}, {}
+ 
+ 
+ def _reading_entry(context, selector):
+@@ -2541,17 +2569,18 @@
+     return entry[1]
+ 
+ 
+-def _mark_reading_stage(context, stage, selector):
++def _mark_reading_stage(context, stage, selector, *, kind, endpoint_science=None):
+     entry = _reading_entry(context, selector)
+-    context._stage_records[id(stage)] = (stage, entry[2], _frozen_json(dict(stage)))
++    context._stage_records[id(stage)] = (stage, entry[2], _frozen_json(dict(stage)), kind, endpoint_science)
+     return stage
+ 
+ 
+-def _owned_reading(context, stage, selector, field):
++def _owned_reading(context, stage, selector, field, *, kind=None):
+     _owned(context, stage, field)
+     entry = _reading_entry(context, selector)
+     record = context._stage_records.get(id(stage))
+-    if record is None or record[0] is not stage or record[1] is not entry[2] or record[2] != _frozen_json(dict(stage)):
++    if (record is None or record[0] is not stage or record[1] is not entry[2]
++            or record[2] != _frozen_json(dict(stage)) or kind is not None and record[3] != kind):
+         _fail("source_stage_selector_mismatch", field)
+ 
+ 
+@@ -2565,7 +2594,7 @@
+         _fail("source_stage_context_mismatch", "endpoint")
+     if len(binding) != 4 or binding[2] != _selector_key(selector):
+         _fail("source_stage_endpoint_mismatch", "endpoint")
+-    _owned_reading(context, binding[3], selector, "endpoint")
++    _owned_reading(context, binding[3], selector, "endpoint", kind="science")
+     return arm, entry[1]
+ 
+ 
+@@ -2578,7 +2607,8 @@
+     if selected is None or selected["kind"] != "linear_bar":
+         _fail("source_graph_measurement_required", "selected")
+     from .literature_controlled_response_v2_inputs import _read_graph
+-    return _mark_reading_stage(context, _read_graph(context, selected), reading_selector)
++    return _mark_reading_stage(context, _read_graph(context, selected), reading_selector,
++        kind="measurement", endpoint_science=context._endpoints[id(endpoint)][3])
+ 
+ 
+ def _scope_entry(context, scope):
+@@ -2618,17 +2648,21 @@
+     selected, selectors = _scope_entry(context, scope_key)
+     if selected is None:
+         return None
+-    try:
+-        facts = _covariance_document_facts(context, selected)
+-    except _SavedUnsupportedCovariance:
+-        saved = context.documents[(selected["source_ref"], "original")]
+-        source = context.sources[(selected["source_ref"], "original")]
+-        facts = _empty_covariance(selected)
+-        facts.update(artifact_ref=source["artifact_ref"], byte_sha256=source["byte_sha256"],
+-            projection_state="unsupported_format", diagnostics=[_diag("unsupported_covariance_representation",
+-                "covariance", "reader_capability", [selected["source_ref"]])])
+-        if saved["document_state"] != "unsupported_format":
+-            _fail("saved_covariance_invalid_state_mismatch", "covariance")
++    source_key = selected["source_ref"], "original"
++    facts = context._covariance_facts.get(source_key)
++    if facts is None:
++        try:
++            facts = _covariance_document_facts(context, selected)
++        except _SavedUnsupportedCovariance:
++            saved = context.documents[source_key]
++            source = context.sources[source_key]
++            facts = _empty_covariance(selected)
++            facts.update(artifact_ref=source["artifact_ref"], byte_sha256=source["byte_sha256"],
++                projection_state="unsupported_format", diagnostics=[_diag("unsupported_covariance_representation",
++                    "covariance", "reader_capability", [selected["source_ref"]])])
++            if saved["document_state"] != "unsupported_format":
++                _fail("saved_covariance_invalid_state_mismatch", "covariance")
++        context._covariance_facts[source_key] = facts
+     document = {key: deepcopy(facts[key]) for key in _DOCUMENT_FIELDS}
+     document["document_state"] = ("unavailable" if facts["artifact_ref"] is None else
+         "unsupported_format" if facts["projection_state"] == "unsupported_format" else "available")
+@@ -2663,6 +2697,42 @@
+     return binding
+ 
+ 
++def _check_local_owner_rows(bindings, readings, document):
++    """Retain pair binding conflicts without consulting unrelated role bindings."""
++    if document is None or document["exact_matrix"] is None:
++        return
++    known = [(row["binding"], arm) for row, (_, arm) in zip(bindings, readings)
++        if row["binding"]["state"] == "known"]
++    matrix = [[_fraction(v) for v in row] for row in document["exact_matrix"]]
++    problem = None
++    for binding, arm in known:
++        variable = document["variables"][binding["source_variable_index"]]
++        operand_unit = arm["calculation_operand"]["unit"]
++        source_unit = variable["native_registry_unit"]
++        if (source_unit is not None and operand_unit is not None
++                and RATE_UNITS[source_unit][0] != RATE_UNITS[operand_unit][0]):
++            problem = "covariance_owner_dimension_conflict"
++    for i, (left, _) in enumerate(known):
++        for right, _ in known[:i]:
++            a, b = left["source_variable_index"], right["source_variable_index"]
++            if a == b and left["resolved_owner_id"] != right["resolved_owner_id"]:
++                problem = "covariance_owner_conflicting"
++            if left["resolved_owner_id"] != right["resolved_owner_id"]:
++                continue
++            va, vb = document["variables"][a], document["variables"][b]
++            if va["native_registry_unit"] is None or vb["native_registry_unit"] is None:
++                continue
++            if RATE_UNITS[va["native_registry_unit"]][0] != RATE_UNITS[vb["native_registry_unit"]][0]:
++                problem = "covariance_owner_dimension_conflict"
++            elif any(_fraction(va["exact_scale"]) * matrix[a][k] !=
++                    _fraction(vb["exact_scale"]) * matrix[b][k] for k in range(len(matrix))):
++                problem = "covariance_shared_rows_conflicting"
++    if problem is not None:
++        for binding, _ in known:
++            binding.update(state="conflicting", resolved_owner_id=None)
++            binding["diagnostics"].append(_diag(problem, "covariance.bindings", "source_binding", [document["source_ref"]]))
++
++
+ def bind_controlled_response_covariance_scope(context, scope_key, document, *, readings):
+     """Bind only this scope's actual original-order readings; local needs two."""
+     selected, expected = _scope_entry(context, scope_key)
+@@ -2677,7 +2747,7 @@
+             if arm is not None:
+                 _fail("source_stage_arm_mismatch", "readings")
+         else:
+-            _owned_reading(context, arm, selector, "readings")
++            _owned_reading(context, arm, selector, "readings", kind="arm")
+     if selected is None:
+         if document is not None:
+             _fail("source_covariance_document_mismatch", "document")
+@@ -2693,6 +2763,8 @@
+         bindings.append({"reading": deepcopy(selector), "binding": _scope_binding(context,
+             selected["bindings"][role] if selected is not None else None,
+             arm, document, "covariance.bindings." + role)})
++    if scope_key["kind"] == "local":
++        _check_local_owner_rows(bindings, readings, document)
+     whole = None
+     if scope_key["kind"] != "local" and document is not None:
+         whole = _empty_covariance(selected)
+@@ -2721,14 +2793,14 @@
+             if arms[role] is not None:
+                 _fail("source_stage_arm_mismatch", "arms." + role)
+         else:
+-            _owned_reading(context, arms[role], selector, "arms." + role)
++            _owned_reading(context, arms[role], selector, "arms." + role, kind="arm")
+     expected = [dict(role=row["primary_role"], reading_key=row["reading_key"]) for row in context.arguments["companion_readings"]]
+     if not isinstance(companions, (tuple, list)) or len(companions) != len(expected):
+         _fail("source_companion_roster_mismatch", "companion_arms")
+     for pair, selector in zip(companions, expected):
+         if not isinstance(pair, (tuple, list)) or len(pair) != 2 or pair[0] != selector:
+             _fail("source_companion_roster_mismatch", "companion_arms")
+-        _owned_reading(context, pair[1], selector, "companion_arms")
++        _owned_reading(context, pair[1], selector, "companion_arms", kind="arm")
+     if not isinstance(scopes, (tuple, list)) or len(scopes) != len(context._scope_registry):
+         _fail("source_covariance_scope_roster_mismatch", "covariance_scopes")
+     for scope, key in zip(scopes, context._scope_registry):
+@@ -2761,6 +2833,21 @@
+                 if previous is not None and previous != document:
+                     _fail("saved_covariance_document_conflict", "covariance_document_scopes")
+                 self.documents[key] = document
++
++    def _active(self):
++        super()._active()
++        if self.profile != "v3" or _frozen_json(self.arguments) != self._original_v3_request:
++            _fail("source_context_nomination_mismatch", "arguments")
++
++    def close(self):
++        if self.closed:
++            return
++        for name in ("_endpoints", "_stage_records", "_document_records", "_covariance_facts",
++                "documents", "witnesses", "sources"):
++            getattr(self, name).clear()
++        self._reading_registry = MappingProxyType({})
++        self._scope_registry = MappingProxyType({})
++        self.closed = True
+ 
+     def source(self, reference, representation):
+         key = reference, representation
+@@ -2811,61 +2898,65 @@
+                 check_witnesses(item)
+     check_witnesses(extraction)
+     context = _SavedV3SourceContext(selected, extraction)
+-    arms, companions, readings = {}, [], {}
+-    retained_companions = extraction["companion_extractions"]
+-    if len(retained_companions) != len(selected["companion_readings"]):
+-        _fail("saved_companion_roster_mismatch", "companion_extractions")
+-    for i, row in enumerate(retained_companions):
+-        nominated = selected["companion_readings"][i]
+-        if (row["reading_key"], row["primary_role"]) != (nominated["reading_key"], nominated["primary_role"]):
++    try:
++        arms, companions, readings = {}, [], {}
++        retained_companions = extraction["companion_extractions"]
++        if len(retained_companions) != len(selected["companion_readings"]):
+             _fail("saved_companion_roster_mismatch", "companion_extractions")
+-    for key, entry in context._reading_registry.items():
+-        selector = {"role": key[0], "reading_key": key[1]}
+-        nomination = json.loads(entry[0])
+-        field = entry[1]
+-        arm = (extraction["arms"][key[0]] if key[1] is None else
+-            next(row["reading"] for row in retained_companions if row["reading_key"] == key[1] and row["primary_role"] == key[0]))
+-        if nomination is None:
+-            if arm is not None:
+-                _fail("saved_selection_mismatch", field)
+-            rebuilt = None
+-        else:
+-            if arm is None or arm["selection"] != nomination:
+-                _fail("saved_selection_mismatch", field)
+-            for name in _MEANINGS:
+-                _saved_meaning(arm["meanings"][name], nomination[name], sources, name, field + "." + name)
+-            _saved_interpretation(arm["protein_arrangement"], nomination["protein_arrangement"], sources, field)
+-            if not callable(measurement_checks):
+-                _fail("saved_measurement_checks_required", "measurement_checks")
+-            reading = measurement_checks(selector, nomination["measurement"], arm["measurement"],
+-                source_records=extraction["sources"], image_records=extraction["images"])
+-            if reading["graph_details"] != arm["graph_details"]:
+-                _fail("saved_graph_measurement_mismatch", field)
+-            reading = _mark_reading_stage(context, _StageValue(context, dict(reading)), selector)
+-            context.saved_uncertainty = {"selection": nomination["reported_uncertainty"],
+-                "value": _saved_uncertainty_v2(nomination["reported_uncertainty"], arm["reported_uncertainty"],
+-                    reading, sources, field + ".reported_uncertainty")}
+-            science = read_controlled_response_arm_science(context, nomination, reading_selector=selector)
+-            rebuilt = finish_controlled_response_arm(context, science, measurement=reading, reading_selector=selector)
+-            if dict(rebuilt) != arm:
+-                _fail("saved_operand_projection_mismatch", field)
+-        readings[key] = rebuilt
+-        if key[1] is None:
+-            arms[key[0]] = rebuilt
+-        else:
+-            companions.append((selector, rebuilt))
+-    context.relationships = _relationships(context, selected["relationships"])
+-    scopes = []
+-    for key in context._scope_registry:
+-        scope = {"kind": key[0], "index": key[1]}
+-        document = read_controlled_response_covariance_document(context, scope)
+-        expected_document = next(row["document"] for row in extraction["covariance_document_scopes"] if row["scope"] == scope)
+-        if document != expected_document:
+-            _fail("saved_covariance_document_mismatch", "covariance_document_scopes")
+-        _, selectors = _scope_entry(context, scope)
+-        scopes.append(bind_controlled_response_covariance_scope(context, scope, document,
+-            readings=[(s, readings[_selector_key(s)]) for s in selectors]))
+-    expected = finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=scopes)
+-    if expected != extraction:
+-        _fail("saved_source_projection_mismatch", "extraction")
+-    return deepcopy(extraction)
++        for i, row in enumerate(retained_companions):
++            nominated = selected["companion_readings"][i]
++            if (row["reading_key"], row["primary_role"]) != (nominated["reading_key"], nominated["primary_role"]):
++                _fail("saved_companion_roster_mismatch", "companion_extractions")
++        for key, entry in context._reading_registry.items():
++            selector = {"role": key[0], "reading_key": key[1]}
++            nomination = json.loads(entry[0])
++            field = entry[1]
++            arm = (extraction["arms"][key[0]] if key[1] is None else
++                next(row["reading"] for row in retained_companions if row["reading_key"] == key[1] and row["primary_role"] == key[0]))
++            if nomination is None:
++                if arm is not None:
++                    _fail("saved_selection_mismatch", field)
++                rebuilt = None
++            else:
++                if arm is None or arm["selection"] != nomination:
++                    _fail("saved_selection_mismatch", field)
++                for name in _MEANINGS:
++                    _saved_meaning(arm["meanings"][name], nomination[name], sources, name, field + "." + name)
++                _saved_interpretation(arm["protein_arrangement"], nomination["protein_arrangement"], sources, field)
++                if not callable(measurement_checks):
++                    _fail("saved_measurement_checks_required", "measurement_checks")
++                reading = measurement_checks(selector, nomination["measurement"], arm["measurement"],
++                    source_records=extraction["sources"], image_records=extraction["images"])
++                if reading["graph_details"] != arm["graph_details"]:
++                    _fail("saved_graph_measurement_mismatch", field)
++                science = read_controlled_response_arm_science(context, nomination, reading_selector=selector)
++                reading = _mark_reading_stage(context, _StageValue(context, dict(reading)), selector,
++                    kind="measurement", endpoint_science=science)
++                context.saved_uncertainty = {"selection": nomination["reported_uncertainty"],
++                    "value": _saved_uncertainty_v2(nomination["reported_uncertainty"], arm["reported_uncertainty"],
++                        reading, sources, field + ".reported_uncertainty")}
++                rebuilt = finish_controlled_response_arm(context, science, measurement=reading, reading_selector=selector)
++                if dict(rebuilt) != arm:
++                    _fail("saved_operand_projection_mismatch", field)
++            readings[key] = rebuilt
++            if key[1] is None:
++                arms[key[0]] = rebuilt
++            else:
++                companions.append((selector, rebuilt))
++        context.relationships = _relationships(context, selected["relationships"])
++        scopes = []
++        for key in context._scope_registry:
++            scope = {"kind": key[0], "index": key[1]}
++            document = read_controlled_response_covariance_document(context, scope)
++            expected_document = next(row["document"] for row in extraction["covariance_document_scopes"] if row["scope"] == scope)
++            if document != expected_document:
++                _fail("saved_covariance_document_mismatch", "covariance_document_scopes")
++            _, selectors = _scope_entry(context, scope)
++            scopes.append(bind_controlled_response_covariance_scope(context, scope, document,
++                readings=[(s, readings[_selector_key(s)]) for s in selectors]))
++        expected = finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=scopes)
++        if expected != extraction:
++            _fail("saved_source_projection_mismatch", "extraction")
++        return deepcopy(extraction)
++    finally:
++        context.close()

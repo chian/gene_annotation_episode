@@ -1,0 +1,15 @@
+{
+  "production_path": "gene_annotation_episode/literature_perturbation_summary.py",
+  "before_sha256": "390248307fe77847b6d0d9e4101c3dbf9fbaccb296274afffcc88b0fe8645694",
+  "after_sha256": "2113fe200f548095ffa796b2797bf8b079f7da3d7ab6130a5a8ba1a314c527d3",
+  "changed_function_asts": [
+    "_entry",
+    "read_summary_measurements"
+  ],
+  "all_other_function_asts_unchanged": true,
+  "schemas_unchanged": true,
+  "v1_reader_unchanged": true,
+  "new_test_path": "tests/test_literature_perturbation_missing_amount_unit.py",
+  "closed_missingness_behavior": "Only when both A entries lack value/raw_units/graph/digitization and uncertainty value/lower/upper. Zero still numerical. Dimensionless counts/coverage and nonnumerical descriptors are retained.",
+  "no_source_explicitness_gate_or_arithmetic_change": true
+}

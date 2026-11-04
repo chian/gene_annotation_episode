@@ -1,0 +1,1451 @@
+[
+  {
+    "information_kind": "return_contract_information_v1",
+    "meaning": "Explicitly requested source-reported context points, separate spread/count meanings and actual biological settings. Nominal culture settings remain distinct from measured local/habitat exposures. Repeated representations retain physical measurement identity; reported n is not a context-sampling denominator. These reader facts come from the same committed sheet and add no assay, score or credit.",
+    "report_schema": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "basis_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "bound_kind": {
+            "const": "reported_point_not_operating_domain",
+            "type": "string"
+          },
+          "cluster_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "context_kind": {
+            "enum": [
+              "sample",
+              "environment",
+              "growth_condition",
+              "assay_condition",
+              "organism"
+            ],
+            "type": "string"
+          },
+          "context_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "context"
+          },
+          "count_relation": {
+            "enum": [
+              "exact",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "data_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "lower": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "lower_closed": {
+            "type": "boolean"
+          },
+          "measurement_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "reference"
+          },
+          "observation_position": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "synthetic"
+            ],
+            "type": "string"
+          },
+          "pairing": {
+            "enum": [
+              "paired",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "replicate_kind": {
+            "enum": [
+              "biological",
+              "technical",
+              "timepoint",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "reported_count": {
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "reported_plusminus": {
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "reported_relation": {
+            "enum": [
+              "point",
+              "unknown",
+              "not_extracted"
+            ],
+            "type": "string"
+          },
+          "reported_sd": {
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "reported_sem": {
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "requirement_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "reference"
+          },
+          "sample_unit_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "scope_match": {
+            "enum": [
+              "matched",
+              "unresolved",
+              "conflicting"
+            ],
+            "type": "string"
+          },
+          "setting_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "context"
+          },
+          "sheet_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "unit": {
+            "enum": [
+              "ppbv_H2_gas",
+              "ppmv_H2_gas",
+              "uM_H2_solution",
+              "percent_O2_gas",
+              "percent_O2_saturation_solution",
+              "mM",
+              "uM",
+              "nm",
+              "minutes",
+              "state"
+            ],
+            "type": "string"
+          },
+          "upper": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "upper_closed": {
+            "type": "boolean"
+          },
+          "value_basis": {
+            "enum": [
+              "source_reported_measurement",
+              "source_reported_setting",
+              "source_supported_inference",
+              "conditional_assumption",
+              "unresolved",
+              "source_value_not_extracted"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "data_source_ref",
+          "context_ref",
+          "setting_ref",
+          "requirement_ref",
+          "measurement_ref",
+          "basis_ref",
+          "sample_unit_ref",
+          "cluster_ref",
+          "observation_position",
+          "unit",
+          "lower",
+          "upper",
+          "lower_closed",
+          "upper_closed",
+          "reported_relation",
+          "reported_sd",
+          "reported_sem",
+          "reported_plusminus",
+          "reported_count",
+          "count_relation",
+          "replicate_kind",
+          "value_basis",
+          "origin",
+          "scope_match",
+          "pairing",
+          "context_kind",
+          "bound_kind"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "x-source": "literature_context_native_observations"
+    },
+    "role": "literature",
+    "schema_sha256": "48e15f92be4e915db6270444e22d671b4f9243b3af9a0bef6ac92787f6ece4f3",
+    "source": "literature_context_native_observations",
+    "text": "Schema information\nTitle: \"Return source literature_context_native_observations for literature\"\nRoot: reference Definition1\n\nLocal definitions retain every declared field, constraint and literal. A reference reuses its complete named structure. Literal scalar cells use explicit quoted-string, null, boolean or number spelling. Array positions preserve order; no schema reference is resolved.\n\nDefinition1 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition2 |\n| \"type\" | literal | \"array\" |\n| \"x-source\" | literal | \"literature_context_native_observations\" |\n\nDefinition2 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition3 |\n| \"required\" | reference | Definition36 |\n| \"type\" | literal | \"object\" |\n\nDefinition3 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"basis_ref\" | reference | Definition4 |\n| \"bound_kind\" | reference | Definition6 |\n| \"cluster_ref\" | reference | Definition4 |\n| \"context_kind\" | reference | Definition7 |\n| \"context_ref\" | reference | Definition9 |\n| \"count_relation\" | reference | Definition10 |\n| \"data_source_ref\" | reference | Definition12 |\n| \"evidence_source_ref\" | reference | Definition12 |\n| \"lower\" | reference | Definition13 |\n| \"lower_closed\" | reference | Definition15 |\n| \"measurement_ref\" | reference | Definition16 |\n| \"observation_position\" | reference | Definition17 |\n| \"origin\" | reference | Definition18 |\n| \"pairing\" | reference | Definition20 |\n| \"replicate_kind\" | reference | Definition22 |\n| \"reported_count\" | reference | Definition24 |\n| \"reported_plusminus\" | reference | Definition26 |\n| \"reported_relation\" | reference | Definition27 |\n| \"reported_sd\" | reference | Definition26 |\n| \"reported_sem\" | reference | Definition26 |\n| \"requirement_ref\" | reference | Definition16 |\n| \"sample_unit_ref\" | reference | Definition4 |\n| \"scope_match\" | reference | Definition29 |\n| \"setting_ref\" | reference | Definition31 |\n| \"sheet_ref\" | reference | Definition12 |\n| \"unit\" | reference | Definition32 |\n| \"upper\" | reference | Definition13 |\n| \"upper_closed\" | reference | Definition15 |\n| \"value_basis\" | reference | Definition34 |\n\nDefinition4 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | reference | Definition5 |\n| \"x-reference-namespace\" | literal | \"reference\" |\n\nDefinition5 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"string\" |\n| 1 | literal | \"null\" |\n\nDefinition6 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"const\" | literal | \"reported_point_not_operating_domain\" |\n| \"type\" | literal | \"string\" |\n\nDefinition7 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition8 |\n| \"type\" | literal | \"string\" |\n\nDefinition8 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"sample\" |\n| 1 | literal | \"environment\" |\n| 2 | literal | \"growth_condition\" |\n| 3 | literal | \"assay_condition\" |\n| 4 | literal | \"organism\" |\n\nDefinition9 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | literal | \"string\" |\n| \"x-reference-namespace\" | literal | \"context\" |\n\nDefinition10 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition11 |\n| \"type\" | literal | \"string\" |\n\nDefinition11 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"exact\" |\n| 1 | literal | \"unknown\" |\n\nDefinition12 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | literal | \"string\" |\n| \"x-reference-namespace\" | literal | \"source\" |\n\nDefinition13 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"type\" | reference | Definition14 |\n\nDefinition14 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"number\" |\n| 1 | literal | \"null\" |\n\nDefinition15 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"type\" | literal | \"boolean\" |\n\nDefinition16 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | literal | \"string\" |\n| \"x-reference-namespace\" | literal | \"reference\" |\n\nDefinition17 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minimum\" | literal | 0 |\n| \"type\" | literal | \"integer\" |\n\nDefinition18 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition19 |\n| \"type\" | literal | \"string\" |\n\nDefinition19 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"reported\" |\n| 1 | literal | \"synthetic\" |\n\nDefinition20 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition21 |\n| \"type\" | literal | \"string\" |\n\nDefinition21 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"paired\" |\n| 1 | literal | \"unknown\" |\n\nDefinition22 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition23 |\n| \"type\" | literal | \"string\" |\n\nDefinition23 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"biological\" |\n| 1 | literal | \"technical\" |\n| 2 | literal | \"timepoint\" |\n| 3 | literal | \"unknown\" |\n\nDefinition24 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minimum\" | literal | 0 |\n| \"type\" | reference | Definition25 |\n\nDefinition25 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"integer\" |\n| 1 | literal | \"null\" |\n\nDefinition26 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minimum\" | literal | 0 |\n| \"type\" | reference | Definition14 |\n\nDefinition27 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition28 |\n| \"type\" | literal | \"string\" |\n\nDefinition28 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"point\" |\n| 1 | literal | \"unknown\" |\n| 2 | literal | \"not_extracted\" |\n\nDefinition29 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition30 |\n| \"type\" | literal | \"string\" |\n\nDefinition30 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"matched\" |\n| 1 | literal | \"unresolved\" |\n| 2 | literal | \"conflicting\" |\n\nDefinition31 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | reference | Definition5 |\n| \"x-reference-namespace\" | literal | \"context\" |\n\nDefinition32 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition33 |\n| \"type\" | literal | \"string\" |\n\nDefinition33 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"ppbv_H2_gas\" |\n| 1 | literal | \"ppmv_H2_gas\" |\n| 2 | literal | \"uM_H2_solution\" |\n| 3 | literal | \"percent_O2_gas\" |\n| 4 | literal | \"percent_O2_saturation_solution\" |\n| 5 | literal | \"mM\" |\n| 6 | literal | \"uM\" |\n| 7 | literal | \"nm\" |\n| 8 | literal | \"minutes\" |\n| 9 | literal | \"state\" |\n\nDefinition34 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition35 |\n| \"type\" | literal | \"string\" |\n\nDefinition35 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"source_reported_measurement\" |\n| 1 | literal | \"source_reported_setting\" |\n| 2 | literal | \"source_supported_inference\" |\n| 3 | literal | \"conditional_assumption\" |\n| 4 | literal | \"unresolved\" |\n| 5 | literal | \"source_value_not_extracted\" |\n\nDefinition36 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"sheet_ref\" |\n| 1 | literal | \"evidence_source_ref\" |\n| 2 | literal | \"data_source_ref\" |\n| 3 | literal | \"context_ref\" |\n| 4 | literal | \"setting_ref\" |\n| 5 | literal | \"requirement_ref\" |\n| 6 | literal | \"measurement_ref\" |\n| 7 | literal | \"basis_ref\" |\n| 8 | literal | \"sample_unit_ref\" |\n| 9 | literal | \"cluster_ref\" |\n| 10 | literal | \"observation_position\" |\n| 11 | literal | \"unit\" |\n| 12 | literal | \"lower\" |\n| 13 | literal | \"upper\" |\n| 14 | literal | \"lower_closed\" |\n| 15 | literal | \"upper_closed\" |\n| 16 | literal | \"reported_relation\" |\n| 17 | literal | \"reported_sd\" |\n| 18 | literal | \"reported_sem\" |\n| 19 | literal | \"reported_plusminus\" |\n| 20 | literal | \"reported_count\" |\n| 21 | literal | \"count_relation\" |\n| 22 | literal | \"replicate_kind\" |\n| 23 | literal | \"value_basis\" |\n| 24 | literal | \"origin\" |\n| 25 | literal | \"scope_match\" |\n| 26 | literal | \"pairing\" |\n| 27 | literal | \"context_kind\" |\n| 28 | literal | \"bound_kind\" |\n\nEnd schema information\n"
+  },
+  {
+    "information_kind": "return_contract_information_v1",
+    "meaning": "The same A108 numerical components with distinct scoped requirements and alternative routes, source-supported entity/property/biological-setting/function meanings, exact route membership and joint-scope evidence. Missing meanings remain unknown; unnamed handles assert no substance or independent evidence. Logical domains, source relations and capability-versus-coverage distinctions retain their existing conditional meanings. This is a closed return view, not another sheet or axis.",
+    "report_schema": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actual_sampling_n": {
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "alpha": {
+            "exclusiveMaximum": 1,
+            "exclusiveMinimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "assayed_subject_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "biological_context_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "context"
+          },
+          "bound_kind": {
+            "enum": [
+              "logical_domain_not_confidence_interval"
+            ],
+            "type": "string"
+          },
+          "component": {
+            "enum": [
+              "sample_weight",
+              "supported_weight",
+              "unresolved_weight",
+              "incompatible_weight",
+              "coverage_lower",
+              "coverage_upper",
+              "coverage_point",
+              "capability_lower",
+              "capability_upper",
+              "capability_point",
+              "selected_lower",
+              "selected_upper",
+              "selected_point",
+              "sampling_lower",
+              "sampling_upper"
+            ],
+            "type": "string"
+          },
+          "condition_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "context"
+          },
+          "conditional_on": {
+            "items": {
+              "enum": [
+                "native_unit_bases_as_declared",
+                "explicit_domain_union",
+                "declared_joint_support",
+                "declared_scope",
+                "known_positive_weights_only",
+                "fixed_paired_sample_frame",
+                "logical_domain_not_confidence_interval",
+                "necessary_same_frame_marginals",
+                "declared_permitted_remainder",
+                "requested_question_kind",
+                "independent_equal_weight_units",
+                "unique_known_sampling_clusters",
+                "specified_alpha",
+                "deterministic_model_domains",
+                "hoeffding_outer_sampling_enclosure"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "context_units": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "data_source_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "source"
+          },
+          "distinct_known_clusters": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "endpoint_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "term"
+          },
+          "evaluation_scope": {
+            "enum": [
+              "reference_organism_sample_compatibility"
+            ],
+            "type": "string"
+          },
+          "evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "experiment_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "formula_code": {
+            "enum": [
+              "context_sample_weight_v1",
+              "context_supported_weight_v1",
+              "context_unresolved_weight_v1",
+              "context_incompatible_weight_v1",
+              "context_coverage_lower_v1",
+              "context_coverage_upper_v1",
+              "context_coverage_point_v1",
+              "context_capability_lower_v1",
+              "context_capability_upper_v1",
+              "context_capability_point_v1",
+              "context_selected_lower_v1",
+              "context_selected_upper_v1",
+              "context_selected_point_v1",
+              "context_sampling_lower_v1",
+              "context_sampling_upper_v1"
+            ],
+            "type": "string"
+          },
+          "frame_status": {
+            "enum": [
+              "defined",
+              "unreported"
+            ],
+            "type": "string"
+          },
+          "function_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "term"
+          },
+          "measurement_corrections": {
+            "enum": [
+              "not_applied"
+            ],
+            "type": "string"
+          },
+          "native_unit_bases": {
+            "items": {
+              "enum": [
+                "ppbv_H2_gas",
+                "ppmv_H2_gas",
+                "uM_H2_solution",
+                "percent_O2_gas",
+                "percent_O2_saturation_solution",
+                "mM",
+                "uM",
+                "nm",
+                "minutes",
+                "state"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "operand_origin": {
+            "enum": [
+              "reported",
+              "graph_derived",
+              "synthetic"
+            ],
+            "type": "string"
+          },
+          "organism_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "graph_derived",
+              "synthetic",
+              "derived",
+              "proposed"
+            ],
+            "type": "string"
+          },
+          "pairing": {
+            "enum": [
+              "paired",
+              "unpaired_marginals",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "permitted_remainder": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "qualifications": {
+            "items": {
+              "enum": [
+                "question_unreported",
+                "scope_unreported",
+                "scope_unresolved",
+                "scope_conflicting",
+                "frame_unreported",
+                "sample_denominator_requires_paired_contexts",
+                "requirement_unobserved",
+                "unit_basis_mismatch",
+                "value_unreported",
+                "domain_conflict",
+                "domain_membership_unresolved",
+                "state_relation_unresolved",
+                "routes_unreported",
+                "requirements_incomplete",
+                "joint_support_unresolved",
+                "joint_support_conflicting",
+                "weight_unreported",
+                "no_context_units",
+                "pairing_unknown",
+                "unpaired_capability_unavailable",
+                "unpaired_route_design_unsupported",
+                "marginal_unreported",
+                "coverage_unresolved",
+                "capability_unresolved",
+                "permitted_remainder_unexamined",
+                "duplicate_context_coalesced",
+                "shared_measurement_dependency",
+                "sampling_question_not_coverage",
+                "sampling_requires_paired_contexts",
+                "sampling_requires_defined_scope",
+                "sampling_requires_defined_frame",
+                "sampling_requires_equal_weights",
+                "sampling_census",
+                "sampling_design_unknown",
+                "sampling_cluster_unreported",
+                "sampling_clusters_not_unique",
+                "sampling_alpha_unreported",
+                "sampling_no_context_units",
+                "numerical_model_range"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "question_kind": {
+            "enum": [
+              "organism_capability",
+              "sample_context_coverage",
+              "unreported"
+            ],
+            "type": "string"
+          },
+          "requirement_count": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "requirement_definitions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "biological_setting_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "context"
+                },
+                "definition_reported": {
+                  "type": "boolean"
+                },
+                "entity_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "term"
+                },
+                "function_relation_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "term"
+                },
+                "incompatible": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "lower": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "lower_closed": {
+                        "type": "boolean"
+                      },
+                      "upper": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "upper_closed": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "lower",
+                      "upper",
+                      "lower_closed",
+                      "upper_closed"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "property_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "term"
+                },
+                "requirement_ref": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "reference"
+                },
+                "supported": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "lower": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "lower_closed": {
+                        "type": "boolean"
+                      },
+                      "upper": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "upper_closed": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "lower",
+                      "upper",
+                      "lower_closed",
+                      "upper_closed"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "unit": {
+                  "enum": [
+                    "ppbv_H2_gas",
+                    "ppmv_H2_gas",
+                    "uM_H2_solution",
+                    "percent_O2_gas",
+                    "percent_O2_saturation_solution",
+                    "mM",
+                    "uM",
+                    "nm",
+                    "minutes",
+                    "state"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "unit",
+                "supported",
+                "incompatible",
+                "requirement_ref",
+                "definition_reported",
+                "entity_ref",
+                "property_ref",
+                "biological_setting_ref",
+                "function_relation_ref"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "route_count": {
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "route_definitions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "biological_setting_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "context"
+                },
+                "definition_reported": {
+                  "type": "boolean"
+                },
+                "function_relation_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "term"
+                },
+                "joint_scope_evidence_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "reference"
+                },
+                "joint_support": {
+                  "enum": [
+                    "established",
+                    "unresolved",
+                    "conflicting"
+                  ],
+                  "type": "string"
+                },
+                "membership_evidence_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "reference"
+                },
+                "requirement_refs": {
+                  "items": {
+                    "format": "reference",
+                    "type": "string",
+                    "x-reference-namespace": "reference"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "requirements": {
+                  "items": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "requirements_complete": {
+                  "type": "boolean"
+                },
+                "route_ref": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "reference"
+                }
+              },
+              "required": [
+                "requirements",
+                "requirements_complete",
+                "joint_support",
+                "route_ref",
+                "definition_reported",
+                "biological_setting_ref",
+                "function_relation_ref",
+                "membership_evidence_ref",
+                "joint_scope_evidence_ref",
+                "requirement_refs"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "sample_frame_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "context"
+          },
+          "sampling_design": {
+            "enum": [
+              "census",
+              "independent_equal_weight",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "scope_status": {
+            "enum": [
+              "defined",
+              "unreported"
+            ],
+            "type": "string"
+          },
+          "sheet_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "status": {
+            "enum": [
+              "populated",
+              "unavailable"
+            ],
+            "type": "string"
+          },
+          "strain_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "target_correspondence": {
+            "enum": [
+              "not_evaluated"
+            ],
+            "type": "string"
+          },
+          "unavailable_reason": {
+            "enum": [
+              null,
+              "question_unreported",
+              "scope_unreported",
+              "scope_unresolved",
+              "scope_conflicting",
+              "frame_unreported",
+              "sample_denominator_requires_paired_contexts",
+              "requirement_unobserved",
+              "unit_basis_mismatch",
+              "value_unreported",
+              "domain_conflict",
+              "domain_membership_unresolved",
+              "state_relation_unresolved",
+              "routes_unreported",
+              "requirements_incomplete",
+              "joint_support_unresolved",
+              "joint_support_conflicting",
+              "weight_unreported",
+              "no_context_units",
+              "pairing_unknown",
+              "unpaired_capability_unavailable",
+              "unpaired_route_design_unsupported",
+              "marginal_unreported",
+              "coverage_unresolved",
+              "capability_unresolved",
+              "permitted_remainder_unexamined",
+              "duplicate_context_coalesced",
+              "shared_measurement_dependency",
+              "sampling_question_not_coverage",
+              "sampling_requires_paired_contexts",
+              "sampling_requires_defined_scope",
+              "sampling_requires_defined_frame",
+              "sampling_requires_equal_weights",
+              "sampling_census",
+              "sampling_design_unknown",
+              "sampling_cluster_unreported",
+              "sampling_clusters_not_unique",
+              "sampling_alpha_unreported",
+              "sampling_no_context_units",
+              "numerical_model_range"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "context_weight",
+              "dimensionless"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "weight_basis": {
+            "enum": [
+              "equal_units",
+              "measured_duration",
+              "measured_volume",
+              "inclusion_weight"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "data_source_ref",
+          "assayed_subject_ref",
+          "organism_ref",
+          "strain_ref",
+          "experiment_ref",
+          "function_ref",
+          "biological_context_ref",
+          "sample_frame_ref",
+          "endpoint_ref",
+          "condition_ref",
+          "component",
+          "value",
+          "unit",
+          "status",
+          "formula_code",
+          "origin",
+          "unavailable_reason",
+          "conditional_on",
+          "question_kind",
+          "operand_origin",
+          "scope_status",
+          "frame_status",
+          "pairing",
+          "weight_basis",
+          "sampling_design",
+          "alpha",
+          "permitted_remainder",
+          "context_units",
+          "distinct_known_clusters",
+          "requirement_count",
+          "actual_sampling_n",
+          "route_count",
+          "requirement_definitions",
+          "route_definitions",
+          "native_unit_bases",
+          "qualifications",
+          "evaluation_scope",
+          "bound_kind",
+          "measurement_corrections",
+          "target_correspondence"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "x-source": "literature_context_semantic_cells"
+    },
+    "role": "literature",
+    "schema_sha256": "939191fcce417e06601cd0e71021e661a0cb7da172c64f335f1093888ca74b48",
+    "source": "literature_context_semantic_cells",
+    "text": "Schema information\nTitle: \"Return source literature_context_semantic_cells for literature\"\nRoot: reference Definition1\n\nLocal definitions retain every declared field, constraint and literal. A reference reuses its complete named structure. Literal scalar cells use explicit quoted-string, null, boolean or number spelling. Array positions preserve order; no schema reference is resolved.\n\nDefinition1 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition2 |\n| \"type\" | literal | \"array\" |\n| \"x-source\" | literal | \"literature_context_semantic_cells\" |\n\nDefinition2 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition3 |\n| \"required\" | reference | Definition78 |\n| \"type\" | literal | \"object\" |\n\nDefinition3 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"actual_sampling_n\" | reference | Definition4 |\n| \"alpha\" | reference | Definition6 |\n| \"assayed_subject_ref\" | reference | Definition8 |\n| \"biological_context_ref\" | reference | Definition10 |\n| \"bound_kind\" | reference | Definition11 |\n| \"component\" | reference | Definition13 |\n| \"condition_ref\" | reference | Definition10 |\n| \"conditional_on\" | reference | Definition15 |\n| \"context_units\" | reference | Definition18 |\n| \"data_source_ref\" | reference | Definition19 |\n| \"distinct_known_clusters\" | reference | Definition18 |\n| \"endpoint_ref\" | reference | Definition20 |\n| \"evaluation_scope\" | reference | Definition21 |\n| \"evidence_source_ref\" | reference | Definition23 |\n| \"experiment_ref\" | reference | Definition8 |\n| \"formula_code\" | reference | Definition24 |\n| \"frame_status\" | reference | Definition26 |\n| \"function_ref\" | reference | Definition20 |\n| \"measurement_corrections\" | reference | Definition28 |\n| \"native_unit_bases\" | reference | Definition30 |\n| \"operand_origin\" | reference | Definition33 |\n| \"organism_ref\" | reference | Definition8 |\n| \"origin\" | reference | Definition35 |\n| \"pairing\" | reference | Definition37 |\n| \"permitted_remainder\" | reference | Definition39 |\n| \"qualifications\" | reference | Definition41 |\n| \"question_kind\" | reference | Definition44 |\n| \"requirement_count\" | reference | Definition18 |\n| \"requirement_definitions\" | reference | Definition46 |\n| \"route_count\" | reference | Definition4 |\n| \"route_definitions\" | reference | Definition57 |\n| \"sample_frame_ref\" | reference | Definition10 |\n| \"sampling_design\" | reference | Definition66 |\n| \"scope_status\" | reference | Definition26 |\n| \"sheet_ref\" | reference | Definition23 |\n| \"status\" | reference | Definition68 |\n| \"strain_ref\" | reference | Definition8 |\n| \"target_correspondence\" | reference | Definition70 |\n| \"unavailable_reason\" | reference | Definition72 |\n| \"unit\" | reference | Definition74 |\n| \"value\" | reference | Definition53 |\n| \"weight_basis\" | reference | Definition76 |\n\nDefinition4 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minimum\" | literal | 1 |\n| \"type\" | reference | Definition5 |\n\nDefinition5 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"integer\" |\n| 1 | literal | \"null\" |\n\nDefinition6 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"exclusiveMaximum\" | literal | 1 |\n| \"exclusiveMinimum\" | literal | 0 |\n| \"type\" | reference | Definition7 |\n\nDefinition7 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"number\" |\n| 1 | literal | \"null\" |\n\nDefinition8 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | reference | Definition9 |\n| \"x-reference-namespace\" | literal | \"reference\" |\n\nDefinition9 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"string\" |\n| 1 | literal | \"null\" |\n\nDefinition10 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | reference | Definition9 |\n| \"x-reference-namespace\" | literal | \"context\" |\n\nDefinition11 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition12 |\n| \"type\" | literal | \"string\" |\n\nDefinition12 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"logical_domain_not_confidence_interval\" |\n\nDefinition13 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition14 |\n| \"type\" | literal | \"string\" |\n\nDefinition14 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"sample_weight\" |\n| 1 | literal | \"supported_weight\" |\n| 2 | literal | \"unresolved_weight\" |\n| 3 | literal | \"incompatible_weight\" |\n| 4 | literal | \"coverage_lower\" |\n| 5 | literal | \"coverage_upper\" |\n| 6 | literal | \"coverage_point\" |\n| 7 | literal | \"capability_lower\" |\n| 8 | literal | \"capability_upper\" |\n| 9 | literal | \"capability_point\" |\n| 10 | literal | \"selected_lower\" |\n| 11 | literal | \"selected_upper\" |\n| 12 | literal | \"selected_point\" |\n| 13 | literal | \"sampling_lower\" |\n| 14 | literal | \"sampling_upper\" |\n\nDefinition15 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition16 |\n| \"type\" | literal | \"array\" |\n| \"uniqueItems\" | literal | true |\n\nDefinition16 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition17 |\n| \"type\" | literal | \"string\" |\n\nDefinition17 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"native_unit_bases_as_declared\" |\n| 1 | literal | \"explicit_domain_union\" |\n| 2 | literal | \"declared_joint_support\" |\n| 3 | literal | \"declared_scope\" |\n| 4 | literal | \"known_positive_weights_only\" |\n| 5 | literal | \"fixed_paired_sample_frame\" |\n| 6 | literal | \"logical_domain_not_confidence_interval\" |\n| 7 | literal | \"necessary_same_frame_marginals\" |\n| 8 | literal | \"declared_permitted_remainder\" |\n| 9 | literal | \"requested_question_kind\" |\n| 10 | literal | \"independent_equal_weight_units\" |\n| 11 | literal | \"unique_known_sampling_clusters\" |\n| 12 | literal | \"specified_alpha\" |\n| 13 | literal | \"deterministic_model_domains\" |\n| 14 | literal | \"hoeffding_outer_sampling_enclosure\" |\n\nDefinition18 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minimum\" | literal | 0 |\n| \"type\" | literal | \"integer\" |\n\nDefinition19 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | reference | Definition9 |\n| \"x-reference-namespace\" | literal | \"source\" |\n\nDefinition20 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | reference | Definition9 |\n| \"x-reference-namespace\" | literal | \"term\" |\n\nDefinition21 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition22 |\n| \"type\" | literal | \"string\" |\n\nDefinition22 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"reference_organism_sample_compatibility\" |\n\nDefinition23 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | literal | \"string\" |\n| \"x-reference-namespace\" | literal | \"source\" |\n\nDefinition24 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition25 |\n| \"type\" | literal | \"string\" |\n\nDefinition25 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"context_sample_weight_v1\" |\n| 1 | literal | \"context_supported_weight_v1\" |\n| 2 | literal | \"context_unresolved_weight_v1\" |\n| 3 | literal | \"context_incompatible_weight_v1\" |\n| 4 | literal | \"context_coverage_lower_v1\" |\n| 5 | literal | \"context_coverage_upper_v1\" |\n| 6 | literal | \"context_coverage_point_v1\" |\n| 7 | literal | \"context_capability_lower_v1\" |\n| 8 | literal | \"context_capability_upper_v1\" |\n| 9 | literal | \"context_capability_point_v1\" |\n| 10 | literal | \"context_selected_lower_v1\" |\n| 11 | literal | \"context_selected_upper_v1\" |\n| 12 | literal | \"context_selected_point_v1\" |\n| 13 | literal | \"context_sampling_lower_v1\" |\n| 14 | literal | \"context_sampling_upper_v1\" |\n\nDefinition26 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition27 |\n| \"type\" | literal | \"string\" |\n\nDefinition27 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"defined\" |\n| 1 | literal | \"unreported\" |\n\nDefinition28 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition29 |\n| \"type\" | literal | \"string\" |\n\nDefinition29 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"not_applied\" |\n\nDefinition30 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition31 |\n| \"type\" | literal | \"array\" |\n| \"uniqueItems\" | literal | true |\n\nDefinition31 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition32 |\n| \"type\" | literal | \"string\" |\n\nDefinition32 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"ppbv_H2_gas\" |\n| 1 | literal | \"ppmv_H2_gas\" |\n| 2 | literal | \"uM_H2_solution\" |\n| 3 | literal | \"percent_O2_gas\" |\n| 4 | literal | \"percent_O2_saturation_solution\" |\n| 5 | literal | \"mM\" |\n| 6 | literal | \"uM\" |\n| 7 | literal | \"nm\" |\n| 8 | literal | \"minutes\" |\n| 9 | literal | \"state\" |\n\nDefinition33 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition34 |\n| \"type\" | literal | \"string\" |\n\nDefinition34 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"reported\" |\n| 1 | literal | \"graph_derived\" |\n| 2 | literal | \"synthetic\" |\n\nDefinition35 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition36 |\n| \"type\" | literal | \"string\" |\n\nDefinition36 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"reported\" |\n| 1 | literal | \"graph_derived\" |\n| 2 | literal | \"synthetic\" |\n| 3 | literal | \"derived\" |\n| 4 | literal | \"proposed\" |\n\nDefinition37 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition38 |\n| \"type\" | literal | \"string\" |\n\nDefinition38 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"paired\" |\n| 1 | literal | \"unpaired_marginals\" |\n| 2 | literal | \"unknown\" |\n\nDefinition39 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"type\" | reference | Definition40 |\n\nDefinition40 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"boolean\" |\n| 1 | literal | \"null\" |\n\nDefinition41 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition42 |\n| \"type\" | literal | \"array\" |\n| \"uniqueItems\" | literal | true |\n\nDefinition42 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition43 |\n| \"type\" | literal | \"string\" |\n\nDefinition43 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"question_unreported\" |\n| 1 | literal | \"scope_unreported\" |\n| 2 | literal | \"scope_unresolved\" |\n| 3 | literal | \"scope_conflicting\" |\n| 4 | literal | \"frame_unreported\" |\n| 5 | literal | \"sample_denominator_requires_paired_contexts\" |\n| 6 | literal | \"requirement_unobserved\" |\n| 7 | literal | \"unit_basis_mismatch\" |\n| 8 | literal | \"value_unreported\" |\n| 9 | literal | \"domain_conflict\" |\n| 10 | literal | \"domain_membership_unresolved\" |\n| 11 | literal | \"state_relation_unresolved\" |\n| 12 | literal | \"routes_unreported\" |\n| 13 | literal | \"requirements_incomplete\" |\n| 14 | literal | \"joint_support_unresolved\" |\n| 15 | literal | \"joint_support_conflicting\" |\n| 16 | literal | \"weight_unreported\" |\n| 17 | literal | \"no_context_units\" |\n| 18 | literal | \"pairing_unknown\" |\n| 19 | literal | \"unpaired_capability_unavailable\" |\n| 20 | literal | \"unpaired_route_design_unsupported\" |\n| 21 | literal | \"marginal_unreported\" |\n| 22 | literal | \"coverage_unresolved\" |\n| 23 | literal | \"capability_unresolved\" |\n| 24 | literal | \"permitted_remainder_unexamined\" |\n| 25 | literal | \"duplicate_context_coalesced\" |\n| 26 | literal | \"shared_measurement_dependency\" |\n| 27 | literal | \"sampling_question_not_coverage\" |\n| 28 | literal | \"sampling_requires_paired_contexts\" |\n| 29 | literal | \"sampling_requires_defined_scope\" |\n| 30 | literal | \"sampling_requires_defined_frame\" |\n| 31 | literal | \"sampling_requires_equal_weights\" |\n| 32 | literal | \"sampling_census\" |\n| 33 | literal | \"sampling_design_unknown\" |\n| 34 | literal | \"sampling_cluster_unreported\" |\n| 35 | literal | \"sampling_clusters_not_unique\" |\n| 36 | literal | \"sampling_alpha_unreported\" |\n| 37 | literal | \"sampling_no_context_units\" |\n| 38 | literal | \"numerical_model_range\" |\n\nDefinition44 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition45 |\n| \"type\" | literal | \"string\" |\n\nDefinition45 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"organism_capability\" |\n| 1 | literal | \"sample_context_coverage\" |\n| 2 | literal | \"unreported\" |\n\nDefinition46 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition47 |\n| \"type\" | literal | \"array\" |\n\nDefinition47 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition48 |\n| \"required\" | reference | Definition56 |\n| \"type\" | literal | \"object\" |\n\nDefinition48 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"biological_setting_ref\" | reference | Definition10 |\n| \"definition_reported\" | reference | Definition49 |\n| \"entity_ref\" | reference | Definition20 |\n| \"function_relation_ref\" | reference | Definition20 |\n| \"incompatible\" | reference | Definition50 |\n| \"property_ref\" | reference | Definition20 |\n| \"requirement_ref\" | reference | Definition55 |\n| \"supported\" | reference | Definition50 |\n| \"unit\" | reference | Definition31 |\n\nDefinition49 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"type\" | literal | \"boolean\" |\n\nDefinition50 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition51 |\n| \"type\" | literal | \"array\" |\n\nDefinition51 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition52 |\n| \"required\" | reference | Definition54 |\n| \"type\" | literal | \"object\" |\n\nDefinition52 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"lower\" | reference | Definition53 |\n| \"lower_closed\" | reference | Definition49 |\n| \"upper\" | reference | Definition53 |\n| \"upper_closed\" | reference | Definition49 |\n\nDefinition53 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"type\" | reference | Definition7 |\n\nDefinition54 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"lower\" |\n| 1 | literal | \"upper\" |\n| 2 | literal | \"lower_closed\" |\n| 3 | literal | \"upper_closed\" |\n\nDefinition55 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"format\" | literal | \"reference\" |\n| \"type\" | literal | \"string\" |\n| \"x-reference-namespace\" | literal | \"reference\" |\n\nDefinition56 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"unit\" |\n| 1 | literal | \"supported\" |\n| 2 | literal | \"incompatible\" |\n| 3 | literal | \"requirement_ref\" |\n| 4 | literal | \"definition_reported\" |\n| 5 | literal | \"entity_ref\" |\n| 6 | literal | \"property_ref\" |\n| 7 | literal | \"biological_setting_ref\" |\n| 8 | literal | \"function_relation_ref\" |\n\nDefinition57 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition58 |\n| \"minItems\" | literal | 1 |\n| \"type\" | reference | Definition65 |\n\nDefinition58 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition59 |\n| \"required\" | reference | Definition64 |\n| \"type\" | literal | \"object\" |\n\nDefinition59 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"biological_setting_ref\" | reference | Definition10 |\n| \"definition_reported\" | reference | Definition49 |\n| \"function_relation_ref\" | reference | Definition20 |\n| \"joint_scope_evidence_ref\" | reference | Definition8 |\n| \"joint_support\" | reference | Definition60 |\n| \"membership_evidence_ref\" | reference | Definition8 |\n| \"requirement_refs\" | reference | Definition62 |\n| \"requirements\" | reference | Definition63 |\n| \"requirements_complete\" | reference | Definition49 |\n| \"route_ref\" | reference | Definition55 |\n\nDefinition60 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition61 |\n| \"type\" | literal | \"string\" |\n\nDefinition61 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"established\" |\n| 1 | literal | \"unresolved\" |\n| 2 | literal | \"conflicting\" |\n\nDefinition62 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition55 |\n| \"type\" | literal | \"array\" |\n| \"uniqueItems\" | literal | true |\n\nDefinition63 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition18 |\n| \"type\" | literal | \"array\" |\n| \"uniqueItems\" | literal | true |\n\nDefinition64 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"requirements\" |\n| 1 | literal | \"requirements_complete\" |\n| 2 | literal | \"joint_support\" |\n| 3 | literal | \"route_ref\" |\n| 4 | literal | \"definition_reported\" |\n| 5 | literal | \"biological_setting_ref\" |\n| 6 | literal | \"function_relation_ref\" |\n| 7 | literal | \"membership_evidence_ref\" |\n| 8 | literal | \"joint_scope_evidence_ref\" |\n| 9 | literal | \"requirement_refs\" |\n\nDefinition65 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"array\" |\n| 1 | literal | \"null\" |\n\nDefinition66 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition67 |\n| \"type\" | literal | \"string\" |\n\nDefinition67 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"census\" |\n| 1 | literal | \"independent_equal_weight\" |\n| 2 | literal | \"unknown\" |\n\nDefinition68 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition69 |\n| \"type\" | literal | \"string\" |\n\nDefinition69 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"populated\" |\n| 1 | literal | \"unavailable\" |\n\nDefinition70 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition71 |\n| \"type\" | literal | \"string\" |\n\nDefinition71 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"not_evaluated\" |\n\nDefinition72 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition73 |\n| \"type\" | reference | Definition9 |\n\nDefinition73 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | null |\n| 1 | literal | \"question_unreported\" |\n| 2 | literal | \"scope_unreported\" |\n| 3 | literal | \"scope_unresolved\" |\n| 4 | literal | \"scope_conflicting\" |\n| 5 | literal | \"frame_unreported\" |\n| 6 | literal | \"sample_denominator_requires_paired_contexts\" |\n| 7 | literal | \"requirement_unobserved\" |\n| 8 | literal | \"unit_basis_mismatch\" |\n| 9 | literal | \"value_unreported\" |\n| 10 | literal | \"domain_conflict\" |\n| 11 | literal | \"domain_membership_unresolved\" |\n| 12 | literal | \"state_relation_unresolved\" |\n| 13 | literal | \"routes_unreported\" |\n| 14 | literal | \"requirements_incomplete\" |\n| 15 | literal | \"joint_support_unresolved\" |\n| 16 | literal | \"joint_support_conflicting\" |\n| 17 | literal | \"weight_unreported\" |\n| 18 | literal | \"no_context_units\" |\n| 19 | literal | \"pairing_unknown\" |\n| 20 | literal | \"unpaired_capability_unavailable\" |\n| 21 | literal | \"unpaired_route_design_unsupported\" |\n| 22 | literal | \"marginal_unreported\" |\n| 23 | literal | \"coverage_unresolved\" |\n| 24 | literal | \"capability_unresolved\" |\n| 25 | literal | \"permitted_remainder_unexamined\" |\n| 26 | literal | \"duplicate_context_coalesced\" |\n| 27 | literal | \"shared_measurement_dependency\" |\n| 28 | literal | \"sampling_question_not_coverage\" |\n| 29 | literal | \"sampling_requires_paired_contexts\" |\n| 30 | literal | \"sampling_requires_defined_scope\" |\n| 31 | literal | \"sampling_requires_defined_frame\" |\n| 32 | literal | \"sampling_requires_equal_weights\" |\n| 33 | literal | \"sampling_census\" |\n| 34 | literal | \"sampling_design_unknown\" |\n| 35 | literal | \"sampling_cluster_unreported\" |\n| 36 | literal | \"sampling_clusters_not_unique\" |\n| 37 | literal | \"sampling_alpha_unreported\" |\n| 38 | literal | \"sampling_no_context_units\" |\n| 39 | literal | \"numerical_model_range\" |\n\nDefinition74 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition75 |\n| \"type\" | literal | \"string\" |\n\nDefinition75 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"context_weight\" |\n| 1 | literal | \"dimensionless\" |\n\nDefinition76 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition77 |\n| \"type\" | literal | \"string\" |\n\nDefinition77 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"equal_units\" |\n| 1 | literal | \"measured_duration\" |\n| 2 | literal | \"measured_volume\" |\n| 3 | literal | \"inclusion_weight\" |\n\nDefinition78 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"sheet_ref\" |\n| 1 | literal | \"evidence_source_ref\" |\n| 2 | literal | \"data_source_ref\" |\n| 3 | literal | \"assayed_subject_ref\" |\n| 4 | literal | \"organism_ref\" |\n| 5 | literal | \"strain_ref\" |\n| 6 | literal | \"experiment_ref\" |\n| 7 | literal | \"function_ref\" |\n| 8 | literal | \"biological_context_ref\" |\n| 9 | literal | \"sample_frame_ref\" |\n| 10 | literal | \"endpoint_ref\" |\n| 11 | literal | \"condition_ref\" |\n| 12 | literal | \"component\" |\n| 13 | literal | \"value\" |\n| 14 | literal | \"unit\" |\n| 15 | literal | \"status\" |\n| 16 | literal | \"formula_code\" |\n| 17 | literal | \"origin\" |\n| 18 | literal | \"unavailable_reason\" |\n| 19 | literal | \"conditional_on\" |\n| 20 | literal | \"question_kind\" |\n| 21 | literal | \"operand_origin\" |\n| 22 | literal | \"scope_status\" |\n| 23 | literal | \"frame_status\" |\n| 24 | literal | \"pairing\" |\n| 25 | literal | \"weight_basis\" |\n| 26 | literal | \"sampling_design\" |\n| 27 | literal | \"alpha\" |\n| 28 | literal | \"permitted_remainder\" |\n| 29 | literal | \"context_units\" |\n| 30 | literal | \"distinct_known_clusters\" |\n| 31 | literal | \"requirement_count\" |\n| 32 | literal | \"actual_sampling_n\" |\n| 33 | literal | \"route_count\" |\n| 34 | literal | \"requirement_definitions\" |\n| 35 | literal | \"route_definitions\" |\n| 36 | literal | \"native_unit_bases\" |\n| 37 | literal | \"qualifications\" |\n| 38 | literal | \"evaluation_scope\" |\n| 39 | literal | \"bound_kind\" |\n| 40 | literal | \"measurement_corrections\" |\n| 41 | literal | \"target_correspondence\" |\n\nEnd schema information\n"
+  },
+  {
+    "information_kind": "operation_contract_information_v1",
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "data_source_ref": {
+          "anyOf": [
+            {
+              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interpretation_witnesses": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "end": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "quote": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "representation": {
+                "enum": [
+                  "original",
+                  "text"
+                ]
+              },
+              "source_ref": {
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "start": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "source_ref",
+              "representation",
+              "start",
+              "end",
+              "quote"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "literals": {
+          "additionalProperties": false,
+          "properties": {
+            "biological_context": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "condition": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "endpoint": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "experiment": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "function": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "molecule": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "organism": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sample_frame": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "strain": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "quote": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "source_ref": {
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "type": "string"
+                    },
+                    "start": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "molecule",
+            "organism",
+            "strain",
+            "experiment",
+            "function",
+            "biological_context",
+            "sample_frame",
+            "endpoint",
+            "condition"
+          ],
+          "type": "object"
+        },
+        "source_kind": {
+          "enum": [
+            "primary_source",
+            "retained_extraction",
+            "graph_extraction",
+            "synthetic_fixture"
+          ]
+        },
+        "source_ref": {
+          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_ref",
+        "data_source_ref",
+        "source_kind",
+        "literals",
+        "interpretation_witnesses"
+      ],
+      "type": "object"
+    },
+    "meaning": "Populate biological context compatibility from source-bound retained observations and domain/route meanings. Keep organism capability distinct from fixed-sample coverage; preserve physical unit bases, missing local mapping, unexamined states, sample weights, pairing and conditional sampling design. Logical domain bounds are not confidence intervals or intuitive quality grades. Purified-enzyme assays are not automatically organism witnesses or habitat samples. No target correspondence or annotation credit is calculated.",
+    "operation": "literature.context.populate",
+    "schema_sha256": "ae58b7aabb263c95c9dd897b8a79a74385c41dbce9195ca5d2142111611be09f",
+    "text": "Schema information\nTitle: \"Arguments for literature.context.populate\"\nRoot: reference Definition1\n\nLocal definitions retain every declared field, constraint and literal. A reference reuses its complete named structure. Literal scalar cells use explicit quoted-string, null, boolean or number spelling. Array positions preserve order; no schema reference is resolved.\n\nDefinition1 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition2 |\n| \"required\" | reference | Definition23 |\n| \"type\" | literal | \"object\" |\n\nDefinition2 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"data_source_ref\" | reference | Definition3 |\n| \"interpretation_witnesses\" | reference | Definition7 |\n| \"literals\" | reference | Definition16 |\n| \"source_kind\" | reference | Definition21 |\n| \"source_ref\" | reference | Definition5 |\n\nDefinition3 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"anyOf\" | reference | Definition4 |\n\nDefinition4 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | reference | Definition5 |\n| 1 | reference | Definition6 |\n\nDefinition5 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"description\" | literal | \"An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.\" |\n| \"pattern\" | literal | \"^(?:[a-z][a-z_]*_[a-f0-9]{24,64}\\u007c@[A-Za-z][A-Za-z0-9_]*)$\" |\n| \"type\" | literal | \"string\" |\n\nDefinition6 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"type\" | literal | \"null\" |\n\nDefinition7 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"items\" | reference | Definition8 |\n| \"type\" | literal | \"array\" |\n\nDefinition8 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition9 |\n| \"required\" | reference | Definition15 |\n| \"type\" | literal | \"object\" |\n\nDefinition9 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"end\" | reference | Definition10 |\n| \"quote\" | reference | Definition11 |\n| \"representation\" | reference | Definition12 |\n| \"source_ref\" | reference | Definition5 |\n| \"start\" | reference | Definition14 |\n\nDefinition10 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minimum\" | literal | 1 |\n| \"type\" | literal | \"integer\" |\n\nDefinition11 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minLength\" | literal | 1 |\n| \"type\" | literal | \"string\" |\n\nDefinition12 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition13 |\n\nDefinition13 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"original\" |\n| 1 | literal | \"text\" |\n\nDefinition14 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"minimum\" | literal | 0 |\n| \"type\" | literal | \"integer\" |\n\nDefinition15 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"source_ref\" |\n| 1 | literal | \"representation\" |\n| 2 | literal | \"start\" |\n| 3 | literal | \"end\" |\n| 4 | literal | \"quote\" |\n\nDefinition16 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"additionalProperties\" | literal | false |\n| \"properties\" | reference | Definition17 |\n| \"required\" | reference | Definition20 |\n| \"type\" | literal | \"object\" |\n\nDefinition17 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"biological_context\" | reference | Definition18 |\n| \"condition\" | reference | Definition18 |\n| \"endpoint\" | reference | Definition18 |\n| \"experiment\" | reference | Definition18 |\n| \"function\" | reference | Definition18 |\n| \"molecule\" | reference | Definition18 |\n| \"organism\" | reference | Definition18 |\n| \"sample_frame\" | reference | Definition18 |\n| \"strain\" | reference | Definition18 |\n\nDefinition18 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"anyOf\" | reference | Definition19 |\n\nDefinition19 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | reference | Definition8 |\n| 1 | reference | Definition6 |\n\nDefinition20 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"molecule\" |\n| 1 | literal | \"organism\" |\n| 2 | literal | \"strain\" |\n| 3 | literal | \"experiment\" |\n| 4 | literal | \"function\" |\n| 5 | literal | \"biological_context\" |\n| 6 | literal | \"sample_frame\" |\n| 7 | literal | \"endpoint\" |\n| 8 | literal | \"condition\" |\n\nDefinition21 \u2014 object\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| \"enum\" | reference | Definition22 |\n\nDefinition22 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"primary_source\" |\n| 1 | literal | \"retained_extraction\" |\n| 2 | literal | \"graph_extraction\" |\n| 3 | literal | \"synthetic_fixture\" |\n\nDefinition23 \u2014 array\n\n| Field or position | Entry kind | Declared value or structure |\n| --- | --- | --- |\n| 0 | literal | \"source_ref\" |\n| 1 | literal | \"data_source_ref\" |\n| 2 | literal | \"source_kind\" |\n| 3 | literal | \"literals\" |\n| 4 | literal | \"interpretation_witnesses\" |\n\nEnd schema information\n"
+  }
+]

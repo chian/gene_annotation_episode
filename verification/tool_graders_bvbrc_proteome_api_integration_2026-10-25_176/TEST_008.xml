@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.141" timestamp="2026-10-25T11:58:01.252987-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_bvbrc_appservice_contracts" name="test_all_frozen_schemas_are_self_contained_and_exactly_reachable" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_api_integration_2026-10-25_176/candidate/verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/CONTRACT_SCHEMA.json'">def test_all_frozen_schemas_are_self_contained_and_exactly_reachable():
+        package = Path(__file__).parents[1] / "gene_annotation_episode/bvbrc_appservice_schemas.json"
+        frozen = Path(__file__).parents[1] / "verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/CONTRACT_SCHEMA.json"
+        definitions = json.loads(package.read_text())["$defs"]
+&gt;       original = json.loads(frozen.read_text())["$defs"]
+                              ^^^^^^^^^^^^^^^^^^
+
+tests/test_bvbrc_appservice_contracts.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_api_integration_2026-10-25_176/candidate/verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/CONTRACT_SCHEMA.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_proteome_api_integration_2026-10-25_176/candidate/verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/CONTRACT_SCHEMA.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError</failure></testcase></testsuite></testsuites>

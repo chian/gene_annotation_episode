@@ -1,0 +1,342 @@
+{
+  "artifact_files": {
+    "synthetic:artifact/analysis/alignment": {
+      "byte_count": 12,
+      "path": "verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_015/bytes/0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be.bin",
+      "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+    }
+  },
+  "bundle": {
+    "acquisition_receipt_refs": [
+      "synthetic:acquisition/analysis/alignment"
+    ],
+    "artifacts": [
+      {
+        "byte_count": 12,
+        "declared_format": {
+          "format": "aligned_fasta",
+          "mode": null,
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "raw_artifact_ref": "synthetic:artifact/analysis/alignment",
+        "role": "analysis/alignment",
+        "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be",
+        "source_ref": "synthetic:source/analysis/alignment",
+        "task_association": {
+          "byte_version_status": "current_bytes_observed",
+          "evidence_ref": "synthetic:manifest",
+          "kind": "task_result_manifest",
+          "output_path": "/synthetic/analysis/alignment",
+          "output_uuid": "synthetic-object:analysis/alignment",
+          "pointer": "",
+          "task_id": "synthetic-custody-task",
+          "version_evidence": []
+        },
+        "transfer": {
+          "body_complete": true,
+          "object_complete": "yes",
+          "observed_range": null,
+          "receipt_ref": "synthetic:acquisition/analysis/alignment",
+          "requested_range": null,
+          "total_size": 12
+        },
+        "workspace_object": {
+          "metadata_receipt_ref": null,
+          "path": "/synthetic/analysis/alignment",
+          "type": "file",
+          "uuid": "synthetic-object:analysis/alignment"
+        }
+      }
+    ],
+    "diagnostics": [],
+    "input_bindings": [],
+    "missing_requirements": [],
+    "original_task": {
+      "effective_parameters": null,
+      "native_application_id": "MSA",
+      "required_application_id": "MSA",
+      "resource_id": "synthetic-custody-api",
+      "scheduler_returned_parameters": null,
+      "submission_operation_key": "synthetic:operation:0",
+      "submission_receipt_ref": "synthetic:submission",
+      "submission_source_ref": "synthetic:source",
+      "submitted_parameters": {},
+      "submitted_start_parameters": {},
+      "task_id": "synthetic-custody-task"
+    },
+    "query_bindings": [],
+    "requested_selector_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "status": "ok",
+    "supplied_contents": [],
+    "supplied_scientific_metadata": [],
+    "version": "bvbrc_appservice_artifact_bundle_v1"
+  },
+  "parameters": {
+    "analyses": [
+      {
+        "analysis": {
+          "alignment_id": {
+            "analysis_id": "analysis",
+            "slot_id": "alignment"
+          },
+          "analysis_id": "analysis",
+          "consensus_alignment_id": null,
+          "frequency_table_id": null,
+          "full_xmfa_slot_id": null,
+          "mode": "ordinary_new_alignment",
+          "output_role_evidence": [],
+          "reference": null,
+          "segment_ids": [],
+          "tree_id": null,
+          "xmfa_document_id": null
+        },
+        "calculation_parameters": {
+          "requests": [
+            {
+              "alphabet": "dna",
+              "case_policy": "uppercase",
+              "kind": "alignment",
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ],
+              "population_id": "whole",
+              "request_id": "alignment"
+            }
+          ],
+          "version": "bvbrc_msa_components_v1"
+        },
+        "population_plans": [
+          {
+            "alignment": {
+              "analysis_id": "analysis",
+              "slot_id": "alignment"
+            },
+            "kind": "whole_alignment",
+            "population_id": "whole"
+          }
+        ],
+        "read_parameters": {
+          "source_dialect": "retained_bvbrc_msa"
+        },
+        "scientific_inputs": []
+      },
+      {
+        "analysis": {
+          "alignment_id": {
+            "analysis_id": "unfinished",
+            "slot_id": "missing"
+          },
+          "analysis_id": "unfinished",
+          "consensus_alignment_id": null,
+          "frequency_table_id": null,
+          "full_xmfa_slot_id": null,
+          "mode": "ordinary_new_alignment",
+          "output_role_evidence": [],
+          "reference": null,
+          "segment_ids": [],
+          "tree_id": null,
+          "xmfa_document_id": null
+        },
+        "calculation_parameters": {
+          "requests": [],
+          "version": "bvbrc_msa_components_v1"
+        },
+        "population_plans": [],
+        "read_parameters": {
+          "source_dialect": "retained_bvbrc_msa"
+        },
+        "scientific_inputs": []
+      }
+    ],
+    "artifact_selection": [
+      {
+        "analysis_id": "analysis",
+        "reader": {
+          "encoding": "ascii",
+          "id_rule": "first_whitespace_token",
+          "reader": "aligned_fasta"
+        },
+        "semantic_role": "alignment",
+        "slot_id": "alignment",
+        "source": {
+          "bundle_role": "analysis/alignment",
+          "kind": "acquired_role"
+        }
+      },
+      {
+        "analysis_id": "unfinished",
+        "reader": {
+          "encoding": "ascii",
+          "id_rule": "first_whitespace_token",
+          "reader": "aligned_fasta"
+        },
+        "semantic_role": "alignment",
+        "slot_id": "missing",
+        "source": {
+          "bundle_role": "not_acquired",
+          "kind": "acquired_role"
+        }
+      }
+    ],
+    "multiplicity_families": [],
+    "version": "bvbrc_alignment_bundle_parameters_v1"
+  },
+  "provenance": "retained native bytes or explicitly synthetic small input; synthetic AppService and custody fixtures; no live job",
+  "provider": "msa",
+  "requested_form": {
+    "additionalProperties": false,
+    "properties": {
+      "n": {
+        "additionalProperties": false,
+        "properties": {
+          "denominator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "method_ref": {
+            "anyOf": [
+              {
+                "pattern": "^bvbrc_alignment_method:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "numerator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "origin": {
+            "enum": [
+              "native_observation",
+              "calculated",
+              "fitted",
+              "derived",
+              "native_observed",
+              "native_fitted"
+            ]
+          },
+          "population_ref": {
+            "anyOf": [
+              {
+                "pattern": "^bvbrc_alignment_population:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requirement_refs": {
+            "items": {
+              "pattern": "^bvbrc_alignment_requirement:(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+/(?:[A-Za-z0-9._~-]|%[0-9A-F]{2})+$",
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "state": {
+            "enum": [
+              "available",
+              "missing",
+              "not_measured",
+              "failed",
+              "truncated",
+              "incompatible"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "rows",
+              "columns",
+              "characters",
+              "positions",
+              "sequences",
+              "observations",
+              "members",
+              "taxa",
+              "pairs",
+              "tips",
+              "nodes",
+              "edges",
+              "splits",
+              "fraction",
+              "signed_fraction",
+              "bits",
+              "hundredths_of_bit",
+              "pseudocount_per_cell",
+              "augmented_observations",
+              "expected_observations",
+              "cells",
+              "chi_square",
+              "degrees_of_freedom",
+              "probability",
+              "natural_log_probability",
+              "expected_substitutions_per_model_site",
+              "joint_mixed_partition_model_site",
+              "native_unknown",
+              "percent",
+              "native_statistic",
+              "nucleotides",
+              "nucleotide_placements"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "state",
+          "unit",
+          "origin",
+          "method_ref",
+          "population_ref",
+          "numerator",
+          "denominator",
+          "requirement_refs"
+        ],
+        "type": "object",
+        "x-alignment-fact": {
+          "analysis_id": "analysis",
+          "kind": "measurement",
+          "metric": "member_count",
+          "request_id": "alignment",
+          "selector": {}
+        }
+      }
+    },
+    "required": [
+      "n"
+    ],
+    "type": "object"
+  },
+  "supplied_values": []
+}

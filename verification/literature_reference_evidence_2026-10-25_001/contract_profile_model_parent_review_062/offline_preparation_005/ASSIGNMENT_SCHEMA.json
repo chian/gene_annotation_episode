@@ -1,0 +1,320 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "literature_assignment_v1"
+    },
+    "question_context_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+      },
+      "uniqueItems": true
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+        "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+      },
+      "uniqueItems": true
+    },
+    "requested_rate_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "reference_rate",
+          "test_rate",
+          "rate_difference",
+          "retained_fraction",
+          "fractional_decrease",
+          "reference_mean_se",
+          "test_mean_se",
+          "difference_se",
+          "signed_profile_log_ratio",
+          "source_signed_index"
+        ]
+      }
+    },
+    "requested_quantity_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "reported_value",
+          "reported_spread",
+          "relative_reported_spread",
+          "corrected_activity",
+          "effect_variance",
+          "effect_standard_uncertainty",
+          "effect_precision",
+          "source_profile_log_ratio",
+          "source_presence_index"
+        ]
+      }
+    },
+    "requested_assay_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "net_rate",
+          "contaminant_rate",
+          "recovery",
+          "protein_amount",
+          "condition_test_rate",
+          "condition_reference_rate",
+          "attributed_rate",
+          "condition_response",
+          "corrected_activity",
+          "effect_variance",
+          "effect_standard_uncertainty",
+          "effect_precision",
+          "source_profile_log_ratio",
+          "source_presence_index"
+        ]
+      }
+    },
+    "requested_ratio_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "reported_ratio",
+          "difference_from_reference",
+          "log_reported_ratio",
+          "calibrated_amount_ratio",
+          "amount_adjusted_effect",
+          "source_profile_log_ratio",
+          "source_signed_index"
+        ]
+      }
+    },
+    "requested_binding_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "reference_parameter",
+          "test_parameter",
+          "reference_reported_spread",
+          "test_reported_spread",
+          "reference_relative_spread",
+          "test_relative_spread",
+          "native_parameter_ratio",
+          "log_native_parameter_ratio",
+          "source_profile_log_ratio",
+          "source_signed_index"
+        ]
+      }
+    },
+    "requested_binding_model_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "log_parameter_contrast",
+          "log_contrast_noise_variance",
+          "log_contrast_noise_sd",
+          "source_profile_log_ratio",
+          "source_signed_index"
+        ]
+      }
+    },
+    "requested_transport_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "substrate_test",
+          "substrate_reference",
+          "apparent_km",
+          "test_saturation",
+          "reference_saturation",
+          "condition_response",
+          "log_condition_response",
+          "condition_response_variance",
+          "condition_response_standard_uncertainty"
+        ]
+      }
+    },
+    "requested_perturbation_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "reference_endpoint",
+          "perturbed_endpoint",
+          "restored_endpoint",
+          "perturbation_difference",
+          "symmetric_effect",
+          "restoration_fraction_raw",
+          "restoration_agreement",
+          "amount_comparability",
+          "perturbation_isolation",
+          "restoration_isolation",
+          "effect_isolation",
+          "reference_restoration_index",
+          "reference_index_lower",
+          "reference_index_upper"
+        ]
+      }
+    },
+    "requested_structure_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "local_fit_index",
+          "geometry_support_fraction",
+          "geometry_opposition_fraction",
+          "source_geometry_positive",
+          "source_geometry_opposing",
+          "source_geometry_signed"
+        ]
+      }
+    },
+    "requested_reaction_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ratio_mean",
+          "claim_nominal_squared_error",
+          "claim_mean_squared_error",
+          "reaction_comparison",
+          "reaction_comparison_lower",
+          "reaction_comparison_upper",
+          "resource_capacity",
+          "resource_capacity_lower",
+          "resource_capacity_upper",
+          "resource_coverage",
+          "resource_coverage_lower",
+          "resource_coverage_upper",
+          "resource_comparison",
+          "resource_comparison_lower",
+          "resource_comparison_upper"
+        ]
+      }
+    },
+    "requested_context_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "sample_weight",
+          "supported_weight",
+          "unresolved_weight",
+          "incompatible_weight",
+          "coverage_lower",
+          "coverage_upper",
+          "coverage_point",
+          "capability_lower",
+          "capability_upper",
+          "capability_point",
+          "selected_lower",
+          "selected_upper",
+          "selected_point",
+          "sampling_lower",
+          "sampling_upper"
+        ]
+      }
+    },
+    "requested_figure_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "first_ordinate",
+          "second_ordinate",
+          "ordinate_difference"
+        ]
+      }
+    },
+    "requested_partner_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "reference_rate",
+          "omitted_rate",
+          "addback_rate",
+          "partner_loss",
+          "partner_loss_fraction",
+          "addback_gain",
+          "addback_fraction",
+          "restored_reference_fraction"
+        ]
+      }
+    },
+    "requested_amount_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "numerator_amount",
+          "denominator_amount",
+          "amount_difference",
+          "amount_ratio",
+          "reciprocal_amount_ratio",
+          "conditional_mass_denominator_factor",
+          "amount_difference_variance",
+          "amount_difference_standard_uncertainty",
+          "amount_ratio_variance",
+          "amount_ratio_standard_uncertainty",
+          "reciprocal_amount_ratio_variance",
+          "reciprocal_amount_ratio_standard_uncertainty"
+        ]
+      }
+    },
+    "requested_optical_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "net_rate",
+          "variance_net_rate"
+        ]
+      }
+    },
+    "requested_kinetic_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "numerator_parameter",
+          "denominator_parameter",
+          "parameter_difference",
+          "parameter_ratio",
+          "log_parameter_contrast"
+        ]
+      }
+    },
+    "requested_binding_interaction_components": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "parameter_rr",
+          "parameter_rt",
+          "parameter_tr",
+          "parameter_tt",
+          "reference_subject_ratio",
+          "test_subject_ratio",
+          "interaction_ratio",
+          "log_interaction"
+        ]
+      }
+    }
+  },
+  "required": [
+    "version",
+    "question_context_refs",
+    "source_refs"
+  ],
+  "additionalProperties": false
+}

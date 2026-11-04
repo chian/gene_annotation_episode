@@ -1,0 +1,9 @@
+{
+  "operation": "final source guard, initial scan",
+  "exit_code": 1,
+  "assertion": "production_added == []",
+  "actual": [
+    "pyproject.toml"
+  ],
+  "cause": "The scanner included the root pyproject.toml, which is outside the recorded baseline scope of gene_annotation_episode, method_loop and tests. Production baseline hashes already matched. No mutation took place. The corrected scan uses the original baseline scope and separately compares root/candidate pyproject.toml."
+}

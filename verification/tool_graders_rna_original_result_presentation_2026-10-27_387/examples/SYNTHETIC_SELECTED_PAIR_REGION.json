@@ -1,0 +1,138 @@
+[
+  {
+    "fact_source": "execution_rna_structure_pair_rows",
+    "facts": [
+      {
+        "family": "pair",
+        "record_key": "synthetic-rna",
+        "row_key": "synthetic-rna:pair:2:6",
+        "source_ref": "source_synthetic",
+        "operation": "analyze_rna_secondary_structure_features",
+        "mode": "supplied_features",
+        "structure_key": "synthetic-rna:structure",
+        "subject_ref": null,
+        "sequence_id": "Synthetic RNA",
+        "structure_id": "Supplied hairpin",
+        "structure_origin": "supplied_unknown",
+        "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+        "status": "unbound",
+        "measurements": [
+          {
+            "name": "pair_span_nt",
+            "value": 4,
+            "unit": "nt",
+            "numerator": null,
+            "denominator": null,
+            "origin": "derived_topology"
+          }
+        ],
+        "unavailable": [],
+        "qualification_codes": [],
+        "calculation_key": "rna_calculation:1111111111111111111111111111111111111111111111111111111111111111",
+        "calculation_parameters": {
+          "schema": "rna_calculation_parameters_v1",
+          "topology": {
+            "long_stem_min_pairs": 3,
+            "include_exterior_in_loop_size_statistics": false
+          },
+          "pair_composition": {
+            "accepted_ordered_pair_types": [
+              "AU",
+              "UA",
+              "GC",
+              "CG",
+              "GU",
+              "UG"
+            ],
+            "denominator": "unambiguous_pairs"
+          },
+          "energy": {
+            "normalization": "per_nt"
+          }
+        },
+        "pair_key": "pair:2:6",
+        "indices": [
+          2,
+          6
+        ],
+        "symbol_i": "G",
+        "symbol_j": "C",
+        "ordered_pair": "GC"
+      }
+    ]
+  },
+  {
+    "fact_source": "execution_rna_structure_region_rows",
+    "facts": [
+      {
+        "family": "region",
+        "record_key": "synthetic-rna",
+        "row_key": "synthetic-rna:region:2:6",
+        "source_ref": "source_synthetic",
+        "operation": "analyze_rna_secondary_structure_features",
+        "mode": "supplied_features",
+        "structure_key": "synthetic-rna:structure",
+        "subject_ref": null,
+        "sequence_id": "Synthetic RNA",
+        "structure_id": "Supplied hairpin",
+        "structure_origin": "supplied_unknown",
+        "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+        "status": "unbound",
+        "measurements": [
+          {
+            "name": "loop_unpaired_nt",
+            "value": 3,
+            "unit": "nt",
+            "numerator": null,
+            "denominator": null,
+            "origin": "derived_topology"
+          }
+        ],
+        "unavailable": [
+          {
+            "name": "five_prime_unpaired_nt",
+            "unit": "nt",
+            "numerator": null,
+            "denominator": null,
+            "origin": "derived_topology",
+            "state": "incompatible",
+            "reason": "rna_region_side_not_defined"
+          }
+        ],
+        "qualification_codes": [],
+        "calculation_key": "rna_calculation:1111111111111111111111111111111111111111111111111111111111111111",
+        "calculation_parameters": {
+          "schema": "rna_calculation_parameters_v1",
+          "topology": {
+            "long_stem_min_pairs": 3,
+            "include_exterior_in_loop_size_statistics": false
+          },
+          "pair_composition": {
+            "accepted_ordered_pair_types": [
+              "AU",
+              "UA",
+              "GC",
+              "CG",
+              "GU",
+              "UG"
+            ],
+            "denominator": "unambiguous_pairs"
+          },
+          "energy": {
+            "normalization": "per_nt"
+          }
+        },
+        "region_key": "region:2:6",
+        "region_kind": "hairpin",
+        "closing_pair_key": "pair:2:6",
+        "immediate_branch_pair_keys": [],
+        "unpaired_intervals": [
+          [
+            3,
+            6
+          ]
+        ]
+      }
+    ]
+  }
+]

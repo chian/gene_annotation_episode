@@ -1,0 +1,63 @@
+F.......F....                                                            [100%]
+=================================== FAILURES ===================================
+____ test_seven_exact_saved_families_and_closed_identifiers_without_science ____
+
+retained = ({'version': 'bvbrc_appservice_acquired_bundle_v1', 'source_ref': 'source_cdd0bc21f8554049f35422e1', 'reference': 'sou...ry_completeness_unknown', 'phase': 'calculation', 'document_id': 'families_document', 'row_ordinal': None, ...}, ...]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75602f220860>
+
+    def test_seven_exact_saved_families_and_closed_identifiers_without_science(retained,monkeypatch):
+        expected=projected(retained)
+        forbid_science(monkeypatch)
+        assert projected(retained)==expected
+        body,sheet,components=retained
+        schema=parent_form_schema(requested_selection(body['publication_inputs']['selector']['requested_schema']))
+        form={name:expected[node['x-source']] for name,node in schema['properties'].items()}
+>       validate_form(form,schema,lambda ref,namespace=None:BVBRCComparativeSystemsReturns._has_reference(expected,ref,namespace))
+
+tests/test_bvbrc_comparative_systems_returns.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/communication.py:129: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'facts_0': [{'source_ref': 'source_cdd0bc21f8554049f35422e1', 'field': 'member', 'value': {'field_id': 'member', 'val...ed_genomes', 'raw_occurrence_count': {...}, 'distinct_valid_member_count': {...}, ...}], 'status': 'satisfied'}}], ...}
+schema = {'type': 'object', 'properties': {'facts_0': {'type': 'array', 'items': {'type': 'object', 'properties': {'source_ref'....}, 'required': ['facts_0', 'facts_1', 'facts_2', 'facts_3', 'facts_4', 'facts_5', ...], 'additionalProperties': False}
+reference_resolver = <function test_seven_exact_saved_families_and_closed_identifiers_without_science.<locals>.<lambda> at 0x75602e2f2020>
+
+    def _validate_form(payload, schema, reference_resolver):
+        schema = validate_closed_schema(schema)
+        payload = plain(payload)
+        _finite(payload)
+        errors = list(Draft202012Validator(schema).iter_errors(payload))
+        if errors:
+            error = errors[0]
+>           raise ReportBoundaryError(error.message, code=error.validator, field=".".join(map(str, error.absolute_path)))
+E           gene_annotation_episode.communication.ReportBoundaryError: [{'requirement_id': 'comparative:495cac4d2dcc5fe4ce8bfe3d713e6c4652c573a3bc2067d6ed814f83d11a0903', 'code': 'missing_required_field', 'required_input_role': 'native_document', 'document_id': None, 'affected_field_ids': ['qualification'], 'source_refs': []}] is expected to be empty
+
+gene_annotation_episode/communication.py:139: ReportBoundaryError
+__ test_original_selection_and_saved_values_cannot_be_relabelled[calculation] __
+
+retained = ({'version': 'bvbrc_appservice_acquired_bundle_v1', 'source_ref': 'source_cdd0bc21f8554049f35422e1', 'reference': 'sou...ry_completeness_unknown', 'phase': 'calculation', 'document_id': 'families_document', 'row_ordinal': None, ...}, ...]})
+change = 'calculation'
+
+    @pytest.mark.parametrize('change',['field','value','source','pin','parameters','form','sheet','calculation','native_diag','generic_diag','entity'])
+    def test_original_selection_and_saved_values_cannot_be_relabelled(retained,change):
+        body,sheet,components=deepcopy(retained)
+        saved=body['publication']['adapter_result']
+        if change=='field': saved['facts']['occurrences']['field_id']='substituted'
+        elif change=='value': saved['facts']['occurrences']['values'][0]['value']=999
+        elif change=='source': body['source_ref']='source_'+'0'*24
+        elif change=='pin': body['publication_inputs']['adapter_implementation_sha256']='not-a-pin'
+        elif change=='parameters': body['publication_inputs']['adapter']=deepcopy(body['publication_inputs']['adapter']); body['publication_inputs']['adapter']['parameters']['analysis_id']='substituted'
+        elif change=='form': body['publication_inputs']['selector']['requested_schema']['properties']['occurrences']['x-bvbrc-comparative-systems']['expected_cardinality']=2
+        elif change=='sheet': sheet['analysis_id']='substituted'
+>       elif change=='calculation': components['calculations']['components'][0]['output']['value']=.5
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'output'
+
+tests/test_bvbrc_comparative_systems_returns.py:75: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_comparative_systems_returns.py::test_seven_exact_saved_families_and_closed_identifiers_without_science
+FAILED tests/test_bvbrc_comparative_systems_returns.py::test_original_selection_and_saved_values_cannot_be_relabelled[calculation]
+2 failed, 11 passed in 8.13s

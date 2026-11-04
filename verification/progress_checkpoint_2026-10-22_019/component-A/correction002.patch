@@ -1,0 +1,22 @@
+--- first3906/public_search_operations.py
++++ corrected/public_search_operations.py
+@@ -414,6 +414,7 @@
+             receipt_by_ref[row['id']], receipt_by_key[row['operation_key']] = receipt, receipt
+ 
+         def linked_receipt(reference):
++            check(text(reference))
+             if reference not in receipt_by_ref:
+                 row = db.execute('SELECT job_ref FROM public_search_operations WHERE id=?', (reference,)).fetchone()
+                 if row is None:
+@@ -445,7 +446,10 @@
+             check(receipt['selection_sha256'] == self._selection(job_ref, 'result', receipt['operation_key'], operands)
+                   and captured.request == {**request, 'job_id': job['remote_id'], **operands}
+                   and captured.transport.get('job_ref') == job_ref)
+-            native = _registration_json(captured.content)
++            # Retain the existing provider parser's raw-body semantics. A
++            # duration value is not itself registration identity validation.
++            native = json.loads(captured.content)
++            check(isinstance(native, dict))
+             validate_remote_identity(native, request, job['remote_id'], result=True)
+             check(native['status'] == 'SUCCESS' and isinstance(native['result']['hits'], list))
+             cache_refs.add(row['snapshot_ref'])

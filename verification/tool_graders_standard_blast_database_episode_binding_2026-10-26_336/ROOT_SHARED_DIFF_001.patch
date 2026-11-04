@@ -1,0 +1,1050 @@
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/alignment_site_native.py
++++ gene_annotation_episode/alignment_site_native.py
+@@ -32,10 +32,14 @@
+     if record['id'] != expected:
+         raise ContractError('site_record_identity_conflict')
+ 
+ 
+ def source_descriptor(store, source, alignment):
++    if alignment.get('native_blast_standard_database') is not None:
++        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
++        validate_standard_blast_database_observation(store, alignment)
++        raise ContractError('native_blast_standard_database_biological_reference_unavailable')
+     if alignment.get('native_blast_database') is not None:
+         from .native_blast_database_result_publication import validate_native_blast_database_observation
+         validate_native_blast_database_observation(store, alignment)
+         raise ContractError('native_blast_database_biological_reference_unavailable')
+     provider = source['provider']
+@@ -274,10 +278,14 @@
+     return {'sheet': sheet, 'scores': calculate_blast_hsp_column_components(sheet)}
+ 
+ 
+ def blast_grading(store, observation, source, reference, native, offset, limit, *, grade_result):
+     from .blast_search import PROGRAM_UNITS
++    if observation.get('native_blast_standard_database') is not None:
++        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
++        validate_standard_blast_database_observation(store, observation)
++        raise ContractError('native_blast_standard_database_biological_reference_unavailable')
+     if observation.get('native_blast_database') is not None:
+         from .native_blast_database_result_publication import validate_native_blast_database_observation
+         validate_native_blast_database_observation(store, observation)
+         raise ContractError('native_blast_database_biological_reference_unavailable')
+     if observation.get('native_blast_pairwise'):
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/blast_result_views.py
++++ gene_annotation_episode/blast_result_views.py
+@@ -37,10 +37,14 @@
+ 
+ def _original_hsp(store, observation_ref, permitted_inputs, scope):
+     require_permitted_hsp(observation_ref, permitted_inputs)
+     scope = store.validate_scope(scope)
+     observation = store.get(observation_ref)
++    if observation.get('native_blast_standard_database') is not None:
++        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
++        validate_standard_blast_database_observation(store, observation)
++        raise ContractError('native_blast_standard_database_biological_reference_unavailable')
+     if observation.get('native_blast_database') is not None:
+         from .native_blast_database_result_publication import validate_native_blast_database_observation
+         validate_native_blast_database_observation(store, observation)
+         raise ContractError('native_blast_database_biological_reference_unavailable')
+     if (observation.get("record_type") != "observation" or observation.get("origin") != "tool"
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/communication.py
++++ gene_annotation_episode/communication.py
+@@ -121,14 +121,31 @@
+         Draft202012Validator.check_schema(schema)
+     except SchemaError as exc:
+         raise ReportBoundaryError(exc.message, code="invalid_schema") from exc
+ 
+     native_blast_sources = None
++    standard_blast_sources = None
+ 
+     def check(node, path, depth=0):
+-        nonlocal native_blast_sources
++        nonlocal native_blast_sources, standard_blast_sources
+         source = node.get("x-source") if isinstance(node, dict) else None
++        if isinstance(source, str) and source.startswith("execution_blast_standard_database_"):
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            if standard_blast_sources is None:
++                from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
++                standard_blast_sources = standard_blast_database_fact_sources()
++            expected = standard_blast_sources.get(source, {}).get("report_schema")
++            # These recorded contracts contain native strings, tagged identities,
++            # tuples and numerical relationships outside the generic grammar.
++            # Match the complete detached JSON tree, including scalar types;
++            # Python equality alone would treat True, 1 and 1.0 as equal.
++            if (expected is None or not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: native BLAST fact schema must match its registered source", code="invalid_schema")
++            return
+         if isinstance(source, str) and source.startswith("execution_blast_database_"):
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+             if native_blast_sources is None:
+                 from .native_blast_database_result_views import native_blast_database_fact_sources
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/domain.py
++++ gene_annotation_episode/domain.py
+@@ -277,10 +277,21 @@
+                 "report_index": {"type": "integer", "minimum": 0},
+                 "search_pointer": {"type": "string", "pattern": "^/"}}),
+             "hit_ordinal": {"type": "integer", "minimum": 0},
+             "hsp_ordinal": {"type": "integer", "minimum": 0}, "bundle_artifact_ref": REF}),
+             "description": "Host-authored original native paired BLAST HSP identity; not an NCBI service marker or a union observation."},
++        "native_blast_standard_database": obj({"version": {"const": "native_blast_standard_database_observation_v1"},
++            "program": {"enum": ["blastn", "blastp", "blastx", "tblastn", "tblastx"]},
++            "record_key": {"type": "string", "minLength": 1},
++            "search_key": obj({"artifact_key": {"type": "string", "minLength": 1},
++                "member_ordinal": {"type": ["integer", "null"], "minimum": 0},
++                "report_index": {"type": "integer", "minimum": 0},
++                "search_pointer": {"type": "string", "pattern": r"^(?:$|/(?:[^~]|~[01])*)$"}}),
++            "hit_ordinal": {"type": "integer", "minimum": 0},
++            "hsp_ordinal": {"type": "integer", "minimum": 0}, "bundle_artifact_ref": REF,
++            "query_axis_kind": {"enum": ["sequence", "pssm_master"]},
++            "reference_axis_kind": {"enum": ["sequence"]}}),
+         "native_blast_database": obj({"version": {"const": "native_blast_database_observation_v1"},
+             "program": {"enum": ["psiblast", "deltablast", "rpsblast", "rpstblastn", "blastn_vdb", "tblastn_vdb"]},
+             "record_key": {"type": "string", "minLength": 1},
+             "search_key": obj({"artifact_key": {"type": "string", "minLength": 1},
+                 "member_ordinal": {"type": ["integer", "null"], "minimum": 0},
+@@ -557,10 +568,11 @@
+ # Native output is published by the adapter, never synthesized by the model.
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_cmsearch", None)
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_blast", None)
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_blast_pairwise", None)
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_blast_database", None)
++REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_blast_standard_database", None)
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_minimap2", None)
+ 
+ 
+ @lru_cache(maxsize=64)
+ def _validator(serialized_schema: str):
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/evidence_axis_contracts.py
++++ gene_annotation_episode/evidence_axis_contracts.py
+@@ -303,10 +303,13 @@
+     observations = []
+     for reference in dict.fromkeys(observation_refs):
+         row = store.get(reference)
+         if row.get('record_type') != 'observation':
+             raise ValueError('evidence_axis_observation_required')
++        if row.get('native_blast_standard_database') is not None:
++            from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
++            validate_standard_blast_database_observation(store, row)
+         if row.get('native_blast_database') is not None:
+             from .native_blast_database_result_publication import validate_native_blast_database_observation
+             validate_native_blast_database_observation(store, row)
+         observations.append(row)
+     facts, unavailable = [], []
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/evidence_geometry.py
++++ gene_annotation_episode/evidence_geometry.py
+@@ -94,10 +94,13 @@
+     query coverage continues to scale the evidence operand rather than invent
+     coordinates. An exactly mapped interval is not scaled by coverage again.
+     Reported external experiments cannot supply native target coordinates by
+     reusing their reported query start/end numbers.
+     """
++    if observation.get('native_blast_standard_database') is not None:
++        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
++        validate_standard_blast_database_observation(store, observation)
+     if observation.get('native_blast_database') is not None:
+         from .native_blast_database_result_publication import validate_native_blast_database_observation
+         validate_native_blast_database_observation(store, observation)
+     footprint = _mapped_coverage(store, observation["subject_refs"])
+     if observation["kind"] not in {"alignment", "profile_match", "comparison", "structure_match"}:
+@@ -153,10 +156,13 @@
+     Both actual operands may occupy original input units. Each uses its own
+     interval and mapping, so an external query cannot turn the whole reference
+     input into alignment coverage. Exact physical paths on external references
+     and their derivatives do not supply any original-input footprint.
+     """
++    if observation.get('native_blast_standard_database') is not None:
++        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
++        validate_standard_blast_database_observation(store, observation)
+     if observation.get('native_blast_database') is not None:
+         from .native_blast_database_result_publication import validate_native_blast_database_observation
+         validate_native_blast_database_observation(store, observation)
+     intervals = observation.get("operand_intervals")
+     if observation.get("origin") != "tool" or intervals is None:
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/execution_episodes.py
++++ gene_annotation_episode/execution_episodes.py
+@@ -24,10 +24,11 @@
+ from .practical_resource_episodes import PracticalResourceEpisodes, operation_catalog
+ from .resource_records import INPUT_VERSION_SCHEMA
+ from .native_hmmer_acquisition import is_native_hmmer_target
+ from .native_blast_acquisition import is_native_blast_target
+ from .native_blast_database_acquisition import is_native_blast_database_target
++from .native_blast_standard_database_acquisition import is_standard_blast_database_target
+ from .native_infernal_acquisition import is_native_infernal_target
+ from .native_infernal_preparation_acquisition import is_native_infernal_preparation_target
+ from .native_hmmer_preparation_acquisition import is_native_hmmer_preparation_target
+ 
+ 
+@@ -109,10 +110,12 @@
+         self.handoff_unit, self.acquired_record_unit = handoff_unit, acquired_record_unit
+         self.log_window_bytes, self.log_roles = log_window_bytes, tuple(log_roles)
+         self._practical = {}
+         for resource_id, configuration in self.resources.items():
+             kind = KINDS[configuration['kind']]
++            if 'native_blast_standard_database' in configuration and kind != 'hpc':
++                raise ValueError('native_blast_standard_database_hpc_resource_required')
+             if 'native_blast_database' in configuration and kind != 'hpc':
+                 raise ValueError('native_blast_database_hpc_resource_required')
+             if 'native_hmmer' in configuration and kind != 'local':
+                 raise ValueError('native_hmmer_resource_execution_binding_unfinished:' + kind)
+             if 'native_hmmer' in configuration:
+@@ -155,10 +158,16 @@
+             directory=self.directory, resources=self.resources, api_execution=self.api_execution,
+             log_window_bytes=log_window_bytes, log_roles=self.log_roles)
+         from .native_hmmer_results import NativeHMMERResults
+         self.native_hmmer_results = NativeHMMERResults(self)
+         self.native_blast_results = self.native_blast_returns = None
++        self.native_blast_standard_database_results = self.native_blast_standard_database_returns = None
++        if any(configuration.get('native_blast_standard_database') for configuration in self.resources.values()):
++            from .native_blast_standard_database_results import StandardBLASTDatabaseResults
++            from .native_blast_standard_database_returns import StandardBLASTDatabaseReturns
++            self.native_blast_standard_database_results = StandardBLASTDatabaseResults(self)
++            self.native_blast_standard_database_returns = StandardBLASTDatabaseReturns(self)
+         self.native_blast_database_results = self.native_blast_database_returns = None
+         if any(configuration.get('native_blast_database') for configuration in self.resources.values()):
+             from .native_blast_database_results import NativeBLASTDatabaseResults
+             from .native_blast_database_returns import NativeBLASTDatabaseReturns
+             self.native_blast_database_results = NativeBLASTDatabaseResults(self)
+@@ -209,10 +218,15 @@
+             raise ValueError('concrete_execution_assignment_schema_required')
+         schema['properties']['resource_id'] = {'type': 'string', 'const': resource_id}
+         if kind != 'api':
+             schema['properties']['resource_kind'] = {'type': 'string', 'const': kind}
+             alternatives = []
++            database = self.resources[resource_id].get('native_blast_standard_database')
++            if database:
++                from .native_blast_standard_database_tool_info import standard_blast_database_tool_contracts
++                alternatives.extend(row['input_schema'] for row in standard_blast_database_tool_contracts(
++                    database['bindings'], resource_kind=kind, resource_id=resource_id))
+             database = self.resources[resource_id].get('native_blast_database')
+             if database:
+                 from .native_blast_database_tool_info import native_blast_database_tool_contracts
+                 alternatives.extend(row['input_schema'] for row in native_blast_database_tool_contracts(
+                     database['bindings'], resource_kind=kind, resource_id=resource_id))
+@@ -359,16 +373,21 @@
+         selected = checked(selection, self.assignment_schema(role), 'invalid_execution_assignment')
+         if role == 'launch':
+             selected = self._launch(selected, scope=scope)
+             self._versions(selected['immutable_input_versions'], scope)
+             from .native_blast_database_result_publication import validate_native_job_inputs
++            from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             for request in selected['requests'].values():
+                 validate_native_job_inputs(self.store, parent, request)
++                validate_standard_blast_job_inputs(self.store, parent, request)
+             return selected
+         if role == 'results':
+             target = self.job_progress_provider.targets.read_target(selected['handoff_ref'], scope)
+             self._selector(selected, target)
++            if is_standard_blast_database_target(target):
++                from .native_blast_standard_database_result_publication import validate_standard_blast_selected_inputs
++                validate_standard_blast_selected_inputs(self.store, parent, selected['selector'], handoff_ref=selected['handoff_ref'])
+             if is_native_blast_database_target(target):
+                 from .native_blast_database_result_publication import validate_selected_inputs
+                 validate_selected_inputs(self.store, parent, selected['selector'], handoff_ref=selected['handoff_ref'])
+             from .bvbrc_data_host import is_bvbrc_request
+             if target['resource_kind'] == 'api' and is_bvbrc_request(target['assignment'].get('request')):
+@@ -384,11 +403,13 @@
+             raise ValueError('resource_child_role_owned_by_launch')
+         original = self._launch(plain(parent.assignment))
+         self._match_request(original, selected)
+         self._versions(original['immutable_input_versions'], scope)
+         from .native_blast_database_result_publication import validate_native_job_inputs
++        from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+         validate_native_job_inputs(self.store, parent, selected)
++        validate_standard_blast_job_inputs(self.store, parent, selected)
+         return selected
+ 
+     def _delegate(self, context):
+         assignment = self._validate_request(plain(context.assignment))
+         return self.api_execution if context.role == 'launch_api' else self._practical[assignment['resource_id']]
+@@ -415,11 +436,13 @@
+         if row is not None:
+             original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
+             self._match_request(original, plain(context.assignment))
+             self._versions(original['immutable_input_versions'], context.scope)
+             from .native_blast_database_result_publication import validate_native_job_inputs
++            from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+             validate_native_job_inputs(self.store, context, plain(context.assignment))
++            validate_standard_blast_job_inputs(self.store, context, plain(context.assignment))
+             return
+         raise ValueError('execution_original_launch_assignment_unavailable')
+ 
+     def state(self, context):
+         """Expose the original practical state for its original resource role."""
+@@ -592,10 +615,14 @@
+                             else:
+                                 prior = contracts[key]
+                                 prior['input_schema'] = {'anyOf': [prior['input_schema'], entry['input_schema']]}
+                                 prior['invocation_route']['routes'].extend(entry['invocation_route']['routes'])
+             native_entries = []
++            if configuration.get('native_blast_standard_database'):
++                from .native_blast_standard_database_tool_info import standard_blast_database_tool_contracts
++                native_entries.extend(standard_blast_database_tool_contracts(configuration['native_blast_standard_database']['bindings'],
++                    resource_kind=kind, resource_id=resource_id))
+             if configuration.get('native_blast_database'):
+                 from .native_blast_database_tool_info import native_blast_database_tool_contracts
+                 native_entries.extend(native_blast_database_tool_contracts(configuration['native_blast_database']['bindings'],
+                     resource_kind=kind, resource_id=resource_id))
+             if configuration.get('native_hmmer'):
+@@ -711,10 +738,16 @@
+         return self.job_progress_provider.targets.read_target(assignment['handoff_ref'], context.scope)
+ 
+     def _selector(self, assignment, target):
+         if target['resource_kind'] == 'api':
+             return self.api_execution.validate_result_selector(target, assignment['selector'])
++        if is_standard_blast_database_target(target):
++            if self.native_blast_standard_database_results is None:
++                raise ValueError('native_blast_standard_database_results_binding_unavailable')
++            from .native_blast_standard_database_result_views import validate_standard_blast_database_selector
++            return validate_standard_blast_database_selector(assignment['selector'],
++                program=target['assignment']['requested_job']['native_blast_standard_database']['program'])
+         if is_native_blast_database_target(target):
+             if self.native_blast_database_results is None:
+                 raise ValueError('native_blast_database_results_binding_unavailable')
+             from .native_blast_database_result_views import validate_native_blast_database_result_selector
+             return validate_native_blast_database_result_selector(assignment['selector'],
+@@ -763,10 +796,14 @@
+         if context.role in ROLE_KINDS:
+             return self._delegate(context).catalog(context)
+         if context.role == 'launch':
+             return launch_operation_catalog()
+         target = self._target(context)
++        if is_standard_blast_database_target(target):
++            self._selector(plain(context.assignment), target)
++            from .native_blast_standard_database_results import operation_catalog as database_catalog
++            return database_catalog()
+         if is_native_blast_database_target(target):
+             self._selector(plain(context.assignment), target)
+             from .native_blast_database_results import operation_catalog as database_catalog
+             return database_catalog()
+         if target['resource_kind'] == 'api':
+@@ -806,10 +843,12 @@
+                 raise ValueError('execution_operation_not_available')
+             arguments = checked(arguments, catalog[tool_name]['input_schema'], 'invalid_execution_operation_arguments')
+             if context.role == 'launch':
+                 return _outcome(self.initial_decision_context(context))
+             target = self._target(context)
++            if is_standard_blast_database_target(target):
++                return await self.native_blast_standard_database_results.execute(context, target, tool_name, arguments, operation_key)
+             if is_native_blast_database_target(target):
+                 return await self.native_blast_database_results.execute(context, target, tool_name, arguments, operation_key)
+             if target['resource_kind'] == 'api':
+                 return await self.api_execution.execute(context, tool_name, arguments, operation_key)
+             if is_native_hmmer_preparation_target(target):
+@@ -1036,11 +1075,11 @@
+         selection = self._selection(context, selection)
+         handoffs, results = {}, {}
+         for reference in dict.fromkeys(selection['known_record_refs']):
+             source = self.store.get(reference)
+             if source.get('provider') == RESULT_PROVIDER:
+-                if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_infernal_bundle_v1',
++                if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+                         'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1'}:
+                     # Original bundle acquisitions have their own exact-row
+                     # receipts; they are not current-filesystem byte windows.
+                     continue
+                 body = self._read_result(reference, context.scope)
+@@ -1074,10 +1113,13 @@
+         return (role in {'annotation', 'scientific_process'} and self.api_execution is not None
+             and any(service.service == 'bvbrc_minhash' for service in self.api_execution.services.values()))
+ 
+     def received_report_sources(self, role):
+         result = {}
++        if self.native_blast_standard_database_returns is not None and role in {'annotation', 'scientific_process'}:
++            from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
++            result.update(standard_blast_database_fact_sources())
+         if self.native_blast_database_returns is not None and role in {'annotation', 'scientific_process'}:
+             from .native_blast_database_result_views import native_blast_database_fact_sources
+             result.update(native_blast_database_fact_sources())
+         if self.native_hmmer_preparation_returns is not None and role in {'annotation', 'scientific_process'}:
+             from .hmmer_preparation_result_views import preparation_fact_sources
+@@ -1107,10 +1149,12 @@
+         return result
+ 
+     def received_report_facts(self, context):
+         schema = (plain(context.request).get('report_contract') or {}).get('measurements', {}).get('schema', {})
+         result = {}
++        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
++            result.update(self.native_blast_standard_database_returns.received_facts(context, schema))
+         if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             result.update(self.native_blast_database_returns.received_facts(context, schema))
+         if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             result.update(self.native_hmmer_preparation_returns.received_facts(context, schema))
+         if self.native_infernal_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+@@ -1148,10 +1192,14 @@
+                 raise ValueError('received_report_fact_conflict')
+             result.update(fastqutils)
+         return result
+ 
+     def resolve_received_reference(self, context, reference, namespace):
++        if self.native_blast_standard_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
++            resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
++            if resolved is not None:
++                return resolved
+         if self.native_blast_database_returns is not None and context.role in {'annotation', 'scientific_process'}:
+             resolved = self.native_blast_database_returns.resolve_received(context, reference, namespace)
+             if resolved is not None:
+                 return resolved
+         if self.native_hmmer_preparation_returns is not None and context.role in {'annotation', 'scientific_process'}:
+@@ -1229,10 +1277,12 @@
+                 if resolved is not None:
+                     return resolved
+         return None
+ 
+     def validate_received_report(self, context, form, schema):
++        if self.native_blast_standard_database_returns is not None:
++            self.native_blast_standard_database_returns.validate_received_report(context, form, schema)
+         if self.native_blast_database_returns is not None:
+             self.native_blast_database_returns.validate_received_report(context, form, schema)
+         if self.native_hmmer_preparation_returns is not None:
+             self.native_hmmer_preparation_returns.validate_received_report(context, form, schema)
+         if self.native_infernal_preparation_returns is not None:
+@@ -1258,10 +1308,13 @@
+             self.api_execution.minhash.validate_received_report(context, form, schema)
+ 
+     def fact_sources(self, role):
+         from .hmmer_native_result_views import native_hmmer_fact_sources
+         values = native_hmmer_fact_sources()
++        if self.native_blast_standard_database_results is not None:
++            from .native_blast_standard_database_result_views import standard_blast_database_fact_sources
++            values.update(standard_blast_database_fact_sources())
+         if self.native_blast_database_results is not None:
+             from .native_blast_database_result_views import native_blast_database_fact_sources
+             values.update(native_blast_database_fact_sources())
+         if self.native_hmmer_preparation_results is not None:
+             from .hmmer_preparation_result_views import preparation_fact_sources
+@@ -1356,10 +1409,15 @@
+                 'x-source': 'bvbrc_appservice_support_refs'}}}
+ 
+     def facts(self, context, completion_snapshot):
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         native_empty = {source: [] for source in FAMILY_SOURCES.values()}
++        if self.native_blast_standard_database_results is not None:
++            from .native_blast_standard_database_results import empty_facts
++            native_empty.update(empty_facts())
++            if self.native_blast_standard_database_results.applies(context):
++                return {**native_empty, **self.native_blast_standard_database_results.facts(context)}
+         if self.native_blast_database_results is not None:
+             from .native_blast_database_results import empty_facts
+             native_empty.update(empty_facts())
+             if self.native_blast_database_results.applies(context):
+                 return {**native_empty, **self.native_blast_database_results.facts(context)}
+@@ -1417,10 +1475,14 @@
+         from .hmmer_native_result_views import FAMILY_SOURCES
+         references = []
+         if self._has_rfam():
+             references.extend(self.api_execution.rfam_returns.record_admission(context, form, schema, operation_key))
+         native_references = set()
++        if self.native_blast_standard_database_returns is not None:
++            admitted = self.native_blast_standard_database_returns.record_admission(context, form, schema, operation_key)
++            native_references.update(admitted)
++            references.extend(admitted)
+         if self.native_blast_database_returns is not None:
+             admitted = self.native_blast_database_returns.record_admission(context, form, schema, operation_key)
+             native_references.update(admitted)
+             references.extend(admitted)
+         if self.native_hmmer_preparation_returns is not None:
+@@ -1486,10 +1548,13 @@
+         if context.role != 'results':
+             return []
+         assignment = plain(context.assignment)
+         selected = [assignment['handoff_ref']]
+         target = self._target(context)
++        if is_standard_blast_database_target(target):
++            from .native_blast_standard_database_result_publication import validate_standard_blast_selected_inputs
++            selected.extend(validate_standard_blast_selected_inputs(self.store, context, assignment['selector'], handoff_ref=assignment['handoff_ref']))
+         if is_native_blast_database_target(target):
+             from .native_blast_database_result_publication import validate_selected_inputs
+             selected.extend(validate_selected_inputs(self.store, context, assignment['selector'], handoff_ref=assignment['handoff_ref']))
+         from .bvbrc_data_host import is_bvbrc_request
+         if target['resource_kind'] == 'api' and is_bvbrc_request(target['assignment'].get('request')):
+@@ -1501,10 +1566,21 @@
+             selected.extend(extra)
+         return selected
+ 
+     def resolve(self, context, reference, namespace):
+         try:
++            if self.native_blast_standard_database_results is not None:
++                from .native_blast_standard_database_results import IDENTIFIER_NAMESPACES as DATABASE_NAMESPACES
++                if namespace in DATABASE_NAMESPACES:
++                    return (self.native_blast_standard_database_results.resolve(context, reference, namespace)
++                        if context.role == 'results' else self.native_blast_standard_database_returns.resolve_received(context, reference, namespace))
++                if self.native_blast_standard_database_results.resolve(context, reference, namespace):
++                    return True
++                if context.role in {'annotation', 'scientific_process'}:
++                    resolved = self.native_blast_standard_database_returns.resolve_received(context, reference, namespace)
++                    if resolved is not None:
++                        return resolved
+             if self.native_blast_database_results is not None:
+                 from .native_blast_database_results import IDENTIFIER_NAMESPACES as DATABASE_NAMESPACES
+                 if namespace in DATABASE_NAMESPACES:
+                     return (self.native_blast_database_results.resolve(context, reference, namespace)
+                         if context.role == 'results' else self.native_blast_database_returns.resolve_received(context, reference, namespace))
+@@ -1625,11 +1701,11 @@
+                 return self._delegate(context).resolve(context, reference, namespace)
+             if self.native_hmmer_results.resolve(context, reference, namespace):
+                 return True
+             source = self.store.get(reference)
+             if source.get('provider') == RESULT_PROVIDER:
+-                if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_infernal_bundle_v1',
++                if source.get('version') in {'native_hmmer_bundle_v1', 'native_blast_bundle_v1', 'native_blast_database_bundle_v1', 'native_blast_standard_database_bundle_v1', 'native_infernal_bundle_v1',
+                         'native_infernal_preparation_bundle_v1', 'native_hmmer_preparation_bundle_v1'}:
+                     return False
+                 if namespace not in {None, 'source', 'execution_result'}:
+                     return False
+                 body = self._read_result(reference, context.scope)
+@@ -1674,10 +1750,12 @@
+             source = declared.get('x-source')
+             if source in facts and form[name] != facts[source]:
+                 raise ValueError('execution_report_disagrees_with_recorded_facts')
+ 
+     def project_credit(self, context, receiver_selection):
++        if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
++            return self.native_blast_standard_database_results.credit_view(context, receiver_selection)
+         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+             return self.native_blast_database_results.credit_view(context, receiver_selection)
+         if self.native_hmmer_preparation_results is not None and self.native_hmmer_preparation_results.applies(context):
+             return self.native_hmmer_preparation_results.credit_view(context, receiver_selection)
+         if self.native_infernal_preparation_results is not None and self.native_infernal_preparation_results.applies(context):
+@@ -1718,10 +1796,12 @@
+ 
+     def credit_view(self, context, receiver_selection):
+         return self.project_credit(context, receiver_selection)
+ 
+     def _native_results_complete(self, context, bodies):
++        if is_standard_blast_database_target(self._target(context)):
++            return False  # Only its original frozen publication proves this endpoint.
+         if is_native_blast_database_target(self._target(context)):
+             return False  # Only its original frozen publication proves this endpoint.
+         if not bodies:
+             return False
+         closed = [body for body in bodies if body['observation']['state'] == 'completed'
+@@ -1749,10 +1829,13 @@
+             if cursor < end:
+                 return False
+         return True
+ 
+     def _proof_for_action(self, context, operation_key):
++        if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
++            proof = self.native_blast_standard_database_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+             proof = self.native_blast_database_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+         prefix = context.run_id+':'+context.episode_id+':'
+         index = operation_key.removeprefix(prefix)
+@@ -1807,10 +1890,13 @@
+             'episode_id': context.episode_id, 'assignment_sha256': digest(context.assignment),
+             'endpoint': endpoint, 'operation_key': operation_key, 'receipt_sha256': digest(receipt),
+             'validation_keys': keys}
+ 
+     def completion_for_action(self, context, operation_key):
++        if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
++            proof = self.native_blast_standard_database_results.completion(context)
++            return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+             proof = self.native_blast_database_results.completion(context)
+             return proof if proof is not None and proof['operation_key'] == operation_key else None
+         if context.role in ROLE_KINDS:
+             return self._delegate(context).completion_for_action(context, operation_key)
+@@ -1836,10 +1922,12 @@
+     def verify_completion(self, context, proof):
+         try:
+             proof = validate_completion_proof(plain(proof))
+         except (ValueError, TypeError):
+             return False
++        if self.native_blast_standard_database_results is not None and self.native_blast_standard_database_results.applies(context):
++            return proof == self.native_blast_standard_database_results.completion(context)
+         if self.native_blast_database_results is not None and self.native_blast_database_results.applies(context):
+             return proof == self.native_blast_database_results.completion(context)
+         if context.role in {'launch_local', 'launch_hpc'}:
+             return self.state(context).verify_completion(proof)
+         if context.role == 'launch_api' or context.role == 'results' and self._target(context)['resource_kind'] == 'api':
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/execution_progress.py
++++ gene_annotation_episode/execution_progress.py
+@@ -102,10 +102,14 @@
+                 'expected_response_media_type': 'application/solr+json',
+                 'output_format': 'solr_json_envelope_v1'}
+         operation = request.get('program', request.get('operation', request.get('collection', assignment.get('algorithm'))))
+         return {'resource_kind': 'api', 'service_or_program': service,
+                 'operation': operation, 'output_format': formats.get(service)}
++    database = assignment['requested_job'].get('native_blast_standard_database')
++    if database is not None:
++        return {'resource_kind': target['resource_kind'], 'service_or_program': database['program'],
++            'operation': database['mode'], 'mode': database['mode'], 'output_format': 'native_blast_standard_database_bundle_v1'}
+     database = assignment['requested_job'].get('native_blast_database')
+     if database is not None:
+         return {'resource_kind': target['resource_kind'], 'service_or_program': database['program'],
+             'operation': database['mode'], 'mode': database['mode'], 'output_format': 'native_blast_database_bundle_v1'}
+     native_blast = assignment['requested_job'].get('native_blast')
+@@ -218,10 +222,23 @@
+             if (not isinstance(detail, dict) or detail.get('pbs_job_id') != job['execution_id']
+                     or not isinstance(detail.get('attempt_id'), str)
+                     or len(detail['attempt_id']) != 64
+                     or detail.get('account') != config['account']):
+                 raise ValueError('practical_execution_original_attempt_required')
++            if 'native_blast_standard_database' in assignment['requested_job']:
++                if config.get('native_blast_standard_database') is None:
++                    raise ValueError('native_blast_standard_database_hpc_binding_required')
++                self.operations[resource_id].validate_assignment(assignment)
++                key = detail.get('attempt_operation_key')
++                root = (Path(assignment['workspace']) / '.episode-jobs' /
++                    digest({'run_id': self.run_id, 'episode_id': body['episode_id']}) /
++                    digest(assignment) / 'attempts' / detail['attempt_id'])
++                sha = detail.get('native_blast_standard_database_plan_sha256')
++                if (type(key) is not str or digest(key) != detail['attempt_id']
++                        or detail.get('native_blast_standard_database_plan_path') != str(root / 'native-blast-standard-database-plan.json')
++                        or type(sha) is not str or len(sha) != 64 or any(c not in '0123456789abcdef' for c in sha)):
++                    raise ValueError('native_blast_standard_database_original_plan_required')
+             if 'native_blast_database' in assignment['requested_job']:
+                 if config.get('native_blast_database') is None:
+                     raise ValueError('native_blast_database_hpc_binding_required')
+                 self.operations[resource_id].validate_assignment(assignment)
+                 key = detail.get('attempt_operation_key')
+@@ -292,10 +309,35 @@
+                 'operation': 'execution.results.read',
+                 'implementation': implementation.__module__+'.'+implementation.__qualname__+'.read_output',
+                 'return_fields': ['path', 'offset', 'returned_bytes', 'size_bytes', 'bytes_base64', 'text_utf8'],
+                 'return_fact_sources': ['execution_result_refs', 'execution_result_origin'],
+             }]
++            if 'native_blast_standard_database' in target['assignment']['requested_job']:
++                from .native_blast_standard_database_result_views import (standard_blast_database_fact_sources,
++                    standard_blast_database_metric_definitions, validate_standard_blast_database_selector)
++                job = target['assignment']['requested_job']['native_blast_standard_database']
++                value['selected_outputs'] = deepcopy(job['outputs'])
++                value['database_manifests'] = [deepcopy(row['manifest_file']) for row in job['databases']]
++                value['status_meanings'] = {'observed_state': 'original_selected_pbs_attempt',
++                    'logs': 'selected_original_stdout_stderr_windows',
++                    'result_available': 'observed_attempt_availability',
++                    'scientific_result_validation': 'complete_authenticated_capture_and_requested_frozen_projection',
++                    'process_liveness_establishes_productive_work': False}
++                value['numerical_metric_catalog'] = standard_blast_database_metric_definitions()
++                if selector is not None:
++                    value['result_selection'] = validate_standard_blast_database_selector(plain(selector), program=job['program'])
++                value['acquisition_operations'] = ['execution.results.status', 'execution.results.collect']
++                value['extractors'][1] = {'operation': 'execution.results.collect',
++                    'implementation': 'gene_annotation_episode.native_blast_standard_database_results.StandardBLASTDatabaseResults.execute',
++                    'parser': 'gene_annotation_episode.blast_report_collection.parse_blast_report_collection',
++                    'input_population': 'gene_annotation_episode.native_blast_standard_database_metadata.prepare_standard_blast_database_inputs',
++                    'sheet_population': 'gene_annotation_episode.native_blast_standard_database_metadata.populate_standard_blast_database_sheets',
++                    'calculators': ['gene_annotation_episode.native_blast_standard_database_calculators.calculate_standard_blast_database_sheets'],
++                    'return_fields': ['capture', 'preparation', 'publication', 'record_refs', 'failures', 'complete'],
++                    'return_fact_sources': list(standard_blast_database_fact_sources()),
++                    'scientific_publication': ['qualified_query_hsp', 'source_only'],
++                    'observation_validator': 'gene_annotation_episode.native_blast_standard_database_result_publication.validate_standard_blast_database_observation'}
+             if 'native_blast_database' in target['assignment']['requested_job']:
+                 from .native_blast_database_result_views import (native_blast_database_fact_sources,
+                     native_blast_database_metric_definitions, validate_native_blast_database_result_selector)
+                 job = target['assignment']['requested_job']['native_blast_database']
+                 value['selected_outputs'] = deepcopy(job['outputs'])
+@@ -652,11 +694,11 @@
+         """An authenticated failed database attempt can own partial outputs."""
+         target = self._qualified(target)
+         if self.usable_handoff(target):
+             return True
+         if (target['resource_kind'] != 'hpc'
+-                or 'native_blast_database' not in target['assignment']['requested_job']):
++                or not ({'native_blast_database', 'native_blast_standard_database'} & set(target['assignment']['requested_job']))):
+             return False
+         _, body = self._native(target['handle'], target['scope'])
+         return body['receipt']['outcome']['facts']['requested_job']['status'] == 'failed'
+ 
+     def observe_target(self, target, *, operation_key, native_operation=None,
+@@ -684,10 +726,27 @@
+         if target['resource_kind'] == 'api':
+             raise ContractError('native_output_target_required')
+         return self.operations[target['resource_id']].read_output(target['assignment'],
+             target['execution_id'], path=path, offset=offset, limit=limit,
+             **self._native_identity(target))
++
++    def authenticate_native_blast_standard_database_attempt(self, target):
++        """Authenticate the original remote ledger before interpreting its bundle."""
++        target = self._qualified(target)
++        if (target['resource_kind'] != 'hpc'
++                or 'native_blast_standard_database' not in target['assignment']['requested_job']):
++            raise ContractError('native_blast_standard_database_target_required')
++        witness = self.operations[target['resource_id']].authenticate_native_blast_standard_database_attempt(
++            target['assignment'], target['execution_id'], **self._native_identity(target))
++        _, body = self._native(target['handle'], target['scope'])
++        detail = body['receipt']['outcome']['native_outcome']
++        attempt = witness['authenticated_attempt']
++        if (witness['plan_path'] != detail.get('native_blast_standard_database_plan_path')
++                or attempt['plan_sha256'] != detail.get('native_blast_standard_database_plan_sha256')):
++            raise ContractError('native_blast_standard_database_original_receipt_plan_conflict')
++        return witness
++
+ 
+     def authenticate_native_blast_database_attempt(self, target):
+         """Authenticate the original remote ledger before interpreting its bundle."""
+         target = self._qualified(target)
+         if (target['resource_kind'] != 'hpc'
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/infernal_result_presentation.py
++++ gene_annotation_episode/infernal_result_presentation.py
+@@ -37,10 +37,11 @@
+             and any(isinstance(row.get(marker), Mapping)
+                 and row[marker].get("version") == version
+                 for marker, version in (
+                     ("native_infernal", "native_infernal_observation_v1"),
+                     ("native_blast_database", "native_blast_database_observation_v1"),
++                    ("native_blast_standard_database", "native_blast_standard_database_observation_v1"),
+                     ("native_blast_pairwise", "native_blast_pairwise_observation_v1")))
+         )
+     ]
+     return projected
+ 
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/practical_execution_operations.py
++++ gene_annotation_episode/practical_execution_operations.py
+@@ -111,10 +111,12 @@
+     def initial_outcome(self, assignment):
+         self.validate_assignment(assignment)
+         return {'facts': {'paths': path_facts(assignment)}}
+ 
+     def validate_assignment(self, assignment):
++        if 'native_blast_standard_database' in assignment['requested_job']:
++            raise ValueError('native_blast_standard_database_hpc_resource_required')
+         if 'native_blast_database' in assignment['requested_job']:
+             raise ValueError('native_blast_database_hpc_resource_required')
+         if 'native_blast' in assignment['requested_job']:
+             from .native_blast_contracts import validate_native_blast_requested_job
+             job = validate_native_blast_requested_job(assignment['requested_job'])['native_blast']
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/practical_execution_records.py
++++ gene_annotation_episode/practical_execution_records.py
+@@ -56,15 +56,16 @@
+ from .native_hmmer_preparation_job_schema import NATIVE_HMMER_PREPARATION_REQUESTED_JOB_SCHEMA
+ from .native_infernal_contracts import NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA
+ from .native_infernal_preparation_job_schema import NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA
+ from .native_blast_contracts import NATIVE_BLAST_REQUESTED_JOB_SCHEMA
+ from .native_blast_database_contracts import NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA
++from .native_blast_standard_database_contracts import NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA
+ REQUESTED_JOB_SCHEMA = {'anyOf': [GENERIC_REQUESTED_JOB_SCHEMA,
+     NATIVE_HMMER_REQUESTED_JOB_SCHEMA, NATIVE_HMMER_PREPARATION_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_REQUESTED_JOB_SCHEMA,
+     NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_REQUESTED_JOB_SCHEMA,
+-    NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA]}
++    NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA]}
+ _PREDICATE_OPERANDS = {
+     'context_cwd': {'path': _PATH_SCHEMA},
+     'context_environment': {'name': {'type': 'string', 'pattern': '^[A-Za-z_][A-Za-z0-9_]*$'},
+         'value': {'type': 'string'}},
+     'path_exists': {'path': _PATH_SCHEMA, 'object_type': {'enum': ['file', 'directory']}},
+@@ -231,11 +232,18 @@
+             or value['resource_kind'] not in {'local', 'hpc'}
+             or value['endpoint'] not in {'usable_handoff', 'completed_job_outputs'}):
+         raise ValueError('invalid_practical_assignment')
+     _path(value['workspace'])
+     job = _object(value['requested_job'], code='invalid_practical_job')
+-    if 'native_blast_database' in job:
++    if 'native_blast_standard_database' in job:
++        from .native_blast_standard_database_contracts import validate_standard_blast_database_requested_job
++        job = validate_standard_blast_database_requested_job(job)
++        if value['resource_kind'] != 'hpc':
++            raise ValueError('native_blast_standard_database_hpc_resource_required')
++        if not value.get('resource_id'):
++            raise ValueError('native_blast_standard_database_resource_identity_required')
++    elif 'native_blast_database' in job:
+         from .native_blast_database_contracts import validate_native_blast_database_requested_job
+         job = validate_native_blast_database_requested_job(job)
+         if value['resource_kind'] != 'hpc':
+             raise ValueError('native_blast_database_hpc_resource_required')
+         if not value.get('resource_id'):
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/practical_pbs_operations.py
++++ gene_annotation_episode/practical_pbs_operations.py
+@@ -202,11 +202,11 @@
+         'status_query_returncode':None if observation is None else observation['returncode'],
+         'status_query_stderr':None if observation is None else observation['stderr'],
+         'exit_receipt':exit_receipt,'stdout':log(os.path.join(job_directory,'stdout')),
+         'stderr':log(os.path.join(job_directory,'stderr')),
+         'submission_outcome':ledger.get('submission_outcome')}
+-    for key in ('native_blast_database_plan_path','native_blast_database_plan_sha256'):
++    for key in ('native_blast_database_plan_path','native_blast_database_plan_sha256','native_blast_standard_database_plan_path','native_blast_standard_database_plan_sha256'):
+         if key in ledger:detail[key]=ledger[key]
+     return fact,detail
+ def prepare_attempt(directory,selected,retry_of):
+     os.makedirs(directory,exist_ok=True)
+     token=digest({'run_id':request['run_id'],'episode_id':request['episode_id'],
+@@ -217,10 +217,29 @@
+         'attempt_id':digest(request['operation_key']),'operation_key':request['operation_key'],
+         'assignment_sha256':digest(assignment),'retry_of_execution_id':retry_of}
+     logical=assignment['requested_job']
+     argv=logical['argv'];extra={}
+     overrides=logical['environment']
++    if 'native_blast_standard_database' in logical:
++        binding=configuration['native_blast_standard_database'];job=logical['native_blast_standard_database']
++        plan={'version':'native_blast_standard_database_run_plan_v1',
++            'identity':{'run_id':request['run_id'],'episode_id':request['episode_id'],
++                'resource_id':assignment['resource_id'],'operation_key':request['operation_key'],
++                'attempt_id':ledger['attempt_id'],'assignment_sha256':digest(assignment),
++                'requested_job_sha256':digest(logical),'submission_token':token,'execution_id':None},
++            'requested_job':logical,'attempt_directory':directory,
++            'input_paths':{row['input_key']:os.path.join(directory,'inputs',row['input_key']) for row in job['inputs']},
++            'database_paths':{row['database_key']:row['native_paths'] for row in job['databases']},
++            'output_directory':os.path.join(directory,'outputs'),
++            'resource_environment':binding['environment'],'producer_manifest':binding['producer']['manifest']}
++        plan_path=os.path.join(directory,'native-blast-standard-database-plan.json')
++        write(plan_path,plan)
++        extra={'native_blast_standard_database_plan_path':plan_path,'native_blast_standard_database_plan_sha256':digest(plan)}
++        ledger.update(extra)
++        argv=[configuration['python_executable'],'-B','-m','gene_annotation_episode.native_blast_standard_database_driver',plan_path]
++        overrides={**binding['environment'],**logical['environment'],
++            'PYTHONPATH':binding['producer']['module_root'],'PYTHONDONTWRITEBYTECODE':'1'}
+     if 'native_blast_database' in logical:
+         binding=configuration['native_blast_database'];job=logical['native_blast_database']
+         plan={'version':'native_blast_database_run_plan_v1',
+             'identity':{'run_id':request['run_id'],'episode_id':request['episode_id'],
+                 'resource_id':assignment['resource_id'],'operation_key':request['operation_key'],
+@@ -285,11 +304,11 @@
+     print(canonical({'version':'practical_pbs_reply_v1','request_sha256':digest(request),'result':reply}));sys.exit(0)
+ assignment=request['assignment']
+ if not os.path.isabs(configuration['workspace']) or os.path.commonpath([workspace,os.path.realpath(assignment['workspace'])])!=workspace:
+     raise ValueError('practical_workspace_configuration_conflict')
+ workspace=os.path.realpath(assignment['workspace']);context=request['context'];cwd=confined(context['cwd'])
+-if request['mode'] in ('observe_execution','read_output','native_blast_database_attempt'):
++if request['mode'] in ('observe_execution','read_output','native_blast_database_attempt','native_blast_standard_database_attempt'):
+     # This branch is deliberately before the operation-intent/working-directory
+     # branch. Observations neither edit launch history nor follow current.json.
+     owner=digest({'run_id':request['run_id'],'episode_id':request['episode_id']})
+     job_root=confined(os.path.join(workspace,'.episode-jobs',owner,digest(assignment)))
+     original_key=request['original_operation_key']
+@@ -306,10 +325,31 @@
+             or ledger.get('job_name')!='ep'+expected_token[:24]
+             or ledger.get('selection',{}).get('account')!=configuration['account']
+             or ledger.get('selection',{}).get('requested_job_sha256')!=digest(assignment['requested_job'])):
+         raise ValueError('practical_pbs_execution_identity_conflict')
+     database_attempt='native_blast_database' in assignment['requested_job']
++    standard_database_attempt='native_blast_standard_database' in assignment['requested_job']
++    if standard_database_attempt:
++        plan_path=os.path.join(job_directory,'native-blast-standard-database-plan.json')
++        job_request_path=os.path.join(job_directory,'job-request.json')
++        if confined(job_request_path)!=job_request_path:
++            raise ValueError('native_blast_standard_database_original_request_path_conflict')
++        job_request=json.load(open(job_request_path))
++        plan_sha256=ledger.get('native_blast_standard_database_plan_sha256')
++        for value in (ledger,job_request):
++            if (value.get('native_blast_standard_database_plan_path')!=plan_path
++                    or value.get('native_blast_standard_database_plan_sha256')!=plan_sha256
++                    or not isinstance(plan_sha256,str) or re.fullmatch('[0-9a-f]{64}',plan_sha256) is None):
++                raise ValueError('native_blast_standard_database_original_plan_identity_conflict')
++        original_identity={'run_id':request['run_id'],'episode_id':request['episode_id'],
++            'resource_id':assignment['resource_id'],'operation_key':original_key,
++            'attempt_id':ledger['attempt_id'],'assignment_sha256':digest(assignment),
++            'requested_job_sha256':digest(assignment['requested_job']),
++            'submission_token':expected_token,'execution_id':request['execution_id']}
++        if (job_request.get('job_request_sha256')!=original_identity['requested_job_sha256']
++                or job_request.get('submission_token')!=expected_token):
++            raise ValueError('native_blast_standard_database_original_attempt_identity_conflict')
+     if database_attempt:
+         plan_path=os.path.join(job_directory,'native-blast-database-plan.json')
+         job_request_path=os.path.join(job_directory,'job-request.json')
+         if confined(job_request_path)!=job_request_path:
+             raise ValueError('native_blast_database_original_request_path_conflict')
+@@ -326,11 +366,16 @@
+             'requested_job_sha256':digest(assignment['requested_job']),
+             'submission_token':expected_token,'execution_id':request['execution_id']}
+         if (job_request.get('job_request_sha256')!=original_identity['requested_job_sha256']
+                 or job_request.get('submission_token')!=expected_token):
+             raise ValueError('native_blast_database_original_attempt_identity_conflict')
+-    if request['mode']=='native_blast_database_attempt':
++    if request['mode']=='native_blast_standard_database_attempt':
++        if not standard_database_attempt:raise ValueError('native_blast_standard_database_target_required')
++        detail={'authenticated_attempt':{'identity':original_identity,'attempt_directory':job_directory,
++            'plan_sha256':plan_sha256},'plan_path':plan_path,'ledger':ledger,'job_request':job_request}
++        reply={'outcome':{'facts':{},'native_outcome':detail},'context_after':None}
++    elif request['mode']=='native_blast_database_attempt':
+         if not database_attempt:raise ValueError('native_blast_database_target_required')
+         detail={'authenticated_attempt':{'identity':original_identity,'attempt_directory':job_directory,
+             'plan_sha256':plan_sha256},'plan_path':plan_path,'ledger':ledger,'job_request':job_request}
+         reply={'outcome':{'facts':{},'native_outcome':detail},'context_after':None}
+     elif request['mode']=='observe_execution':
+@@ -343,10 +388,26 @@
+                 'writer_closed':available and fact['status'] in ('completed','failed')})
+         detail['observed_outputs']=observed_outputs
+         reply={'outcome':{'facts':{'requested_job':fact},'native_outcome':detail},'context_after':None}
+     else:
+         path=confined(request['path'])
++        if standard_database_attempt:
++            bundle_path=os.path.join(job_directory,'bundle.json')
++            permitted={plan_path,bundle_path}
++            if path not in permitted:
++                if confined(bundle_path)!=bundle_path:
++                    raise ValueError('native_blast_standard_database_original_bundle_path_conflict')
++                bundle=json.load(open(bundle_path))
++                if bundle.get('identity')!=original_identity or digest(bundle.get('plan'))!=plan_sha256:
++                    raise ValueError('native_blast_standard_database_read_manifest_identity_conflict')
++                for row in bundle.get('artifacts',[]):
++                    relative=row['relative_path']
++                    if os.path.isabs(relative) or '..' in relative.split('/'):
++                        raise ValueError('native_blast_standard_database_read_path_escape')
++                    permitted.add(os.path.join(job_directory,relative))
++            if request['path']!=path or path not in permitted:
++                raise ValueError('native_blast_standard_database_unselected_output_path')
+         if database_attempt:
+             bundle_path=os.path.join(job_directory,'bundle.json')
+             permitted={plan_path,bundle_path}
+             if path not in permitted:
+                 if confined(bundle_path)!=bundle_path:
+@@ -364,11 +425,11 @@
+         try:
+             with open(path,'rb') as stream:
+                 size=os.fstat(stream.fileno()).st_size;stream.seek(request['offset'])
+                 data=stream.read(min(request['limit'],max(0,size-request['offset'])))
+         except FileNotFoundError:
+-            if not database_attempt:raise
++            if not (database_attempt or standard_database_attempt):raise
+             detail={'path':path,'read_failure':'file_missing'}
+         else:
+             detail={'path':path,'offset':request['offset'],'returned_bytes':len(data),'size_bytes':size,
+                 'bytes_base64':base64.b64encode(data).decode('ascii'),'text_utf8':data.decode('utf-8','replace')}
+         reply={'outcome':{'facts':{},'native_outcome':detail},'context_after':None}
+@@ -516,10 +577,39 @@
+     reply={'outcome':outcome,'context_after':after};write(result_path,reply)
+ print(canonical({'version':'practical_pbs_reply_v1','request_sha256':digest(request),'result':reply}))
+ '''
+ 
+ 
++def validate_standard_blast_database_resource(configuration):
++    """Validate declared deployment identities; perform no deployment or I/O."""
++    from .native_blast_standard_database_tool_info import standard_blast_database_tool_contracts
++    from .native_blast_standard_database_contracts import FILE_IDENTITY_SCHEMA
++    from .domain import validate_schema
++    value = configuration['native_blast_standard_database']
++    if (type(value) is not dict or set(value) != {'version', 'producer', 'environment', 'bindings'}
++            or value['version'] != 'native_blast_standard_database_resource_v1'
++            or type(value['producer']) is not dict or set(value['producer']) != {'module_root', 'manifest'}
++            or type(value['environment']) is not dict
++            or any(type(k) is not str or not k or type(v) is not str or '\0' in k + v
++                for k, v in value['environment'].items())):
++        raise ValueError('native_blast_standard_database_resource_invalid')
++    validate_schema(value['producer']['manifest'], FILE_IDENTITY_SCHEMA)
++    standard_blast_database_tool_contracts(value['bindings'], resource_kind='hpc', resource_id='configuration-validation')
++    paths = [value['producer']['module_root'], value['producer']['manifest']['path']]
++    paths.extend(row['software']['executable'] for row in value['bindings'])
++    paths.extend(item['path'] for row in value['bindings'] for item in row['database_manifests'])
++    if any(type(path) is not str or not PurePosixPath(path).is_absolute() or '..' in PurePosixPath(path).parts
++            or '\0' in path for path in paths):
++        raise ValueError('native_blast_standard_database_resource_path_invalid')
++    aurora = PurePosixPath('/lus/flare/projects/BioReason-Aurora-Test')
++    if PurePosixPath(configuration['workspace']).is_relative_to(aurora):
++        if configuration['account'] != 'EpiCalib' or any(not PurePosixPath(path).is_relative_to(aurora)
++                for path in [*paths, configuration['python_executable']]):
++            raise ValueError('native_blast_standard_database_aurora_storage_or_account_conflict')
++    return deepcopy(value)
++
++
+ def validate_native_blast_database_resource(configuration):
+     """Validate declared deployment identities; perform no deployment or I/O."""
+     from .native_blast_database_tool_info import native_blast_database_tool_contracts
+     from .native_blast_database_contracts import FILE_IDENTITY_SCHEMA
+     from .domain import validate_schema
+@@ -548,11 +638,11 @@
+ 
+ 
+ class PBSPracticalOperations:
+     def __init__(self, configuration):
+         expected = {'kind', 'workspace', 'ssh_argv', 'python_executable', 'account'}
+-        if (not isinstance(configuration, dict) or set(configuration) - expected - {'native_blast_database'}
++        if (not isinstance(configuration, dict) or set(configuration) - expected - {'native_blast_database', 'native_blast_standard_database'}
+                 or not expected <= set(configuration)
+                 or configuration['kind'] != 'pbs_ssh'):
+             raise ValueError('explicit_pbs_practical_configuration_required')
+         for field in ('workspace', 'python_executable'):
+             value = configuration[field]
+@@ -563,16 +653,39 @@
+                 or any(not isinstance(value, str) or not value or '\0' in value
+                     for value in configuration['ssh_argv'])
+                 or not isinstance(configuration['account'], str)
+                 or re.fullmatch(r'[A-Za-z0-9_.-]+', configuration['account']) is None):
+             raise ValueError('invalid_pbs_practical_configuration')
++        if 'native_blast_standard_database' in configuration:
++            validate_standard_blast_database_resource(configuration)
+         if 'native_blast_database' in configuration:
+             validate_native_blast_database_resource(configuration)
+         self.configuration = deepcopy(configuration)
+ 
+     def validate_assignment(self, assignment):
+         assignment = validate_assignment(assignment)
++        if 'native_blast_standard_database' in assignment['requested_job']:
++            binding = self.configuration.get('native_blast_standard_database')
++            if binding is None:
++                raise ValueError('native_blast_standard_database_hpc_binding_required')
++            job = assignment['requested_job']['native_blast_standard_database']
++            selected = [row for row in binding['bindings'] if row['program'] == job['program']]
++            if (len(selected) != 1 or selected[0]['software'] != job['software']
++                    or any(row['manifest_file'] not in selected[0]['database_manifests'] for row in job['databases'])):
++                raise ValueError('native_blast_standard_database_selected_binding_conflict')
++            root = PurePosixPath(self.configuration['workspace'])
++            paths = [job['software']['executable'], *[row['path'] for row in job['inputs']]]
++            for db in job['databases']:
++                paths.extend(db['native_paths'])
++                paths.append(db['manifest_file']['path'])
++                paths.extend(row['path'] for row in db['manifest']['files'])
++                manifest = db['manifest']
++                paths.extend(row['path'] for row in manifest['metadata_manifests'])
++                paths.extend(row['path'] for row in (manifest['preparation']['receipt'],
++                    manifest['preparation']['input_manifest'], manifest['access']['offline_configuration']) if row is not None)
++            if any(not PurePosixPath(path).is_relative_to(root) for path in paths):
++                raise ValueError('native_blast_standard_database_selected_path_outside_workspace')
+         if 'native_blast_database' in assignment['requested_job']:
+             binding = self.configuration.get('native_blast_database')
+             if binding is None:
+                 raise ValueError('native_blast_database_hpc_binding_required')
+             job = assignment['requested_job']['native_blast_database']
+@@ -709,10 +822,17 @@
+         request = self._target_request(assignment, execution_id, attempt_id=attempt_id,
+             mode='read_output', path=path, offset=offset, limit=limit, **identity)
+         outcome, _ = self._invoke(request)
+         if outcome['native_outcome'].get('read_failure') == 'file_missing':
+             raise FileNotFoundError(path)
++        return outcome['native_outcome']
++
++    def authenticate_native_blast_standard_database_attempt(self, assignment, execution_id, *, attempt_id=None, **identity):
++        """Read the actual original ledger, never a bundle's asserted owner."""
++        request = self._target_request(assignment, execution_id, attempt_id=attempt_id,
++            mode='native_blast_standard_database_attempt', **identity)
++        outcome, _ = self._invoke(request)
+         return outcome['native_outcome']
+ 
+     def authenticate_native_blast_database_attempt(self, assignment, execution_id, *, attempt_id=None, **identity):
+         """Read the actual original ledger, never a bundle's asserted owner."""
+         request = self._target_request(assignment, execution_id, attempt_id=attempt_id,
+--- verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/shared_before/state.py
++++ gene_annotation_episode/state.py
+@@ -981,10 +981,36 @@
+                     raise ContractError("product_mapping_footprint_mismatch")
+                 if not any(self.get(ref)["record_type"] == "context"
+                     and self.get(ref)["source_ref"] == source_ref for ref in data["context_refs"]):
+                     raise ContractError("mapping_source_not_derivation_context")
+         if kind == "observation":
++            native_database = data.get("native_blast_standard_database")
++            if native_database is not None:
++                if any(key.startswith('native_') and key != 'native_blast_standard_database' for key in data):
++                    raise ContractError('native_blast_standard_database_mixed_native_markers')
++                source = self._require(data['source_ref'], {'source'})
++                if (origin != 'tool' or source['origin'] != 'tool'
++                        or source['provider'] != 'episode.execution_result'
++                        or source.get('version') != 'native_blast_standard_database_bundle_v1'):
++                    raise ContractError('native_blast_standard_database_requires_native_tool_source')
++                if source['artifact_ref'] != native_database['bundle_artifact_ref']:
++                    raise ContractError('native_blast_standard_database_bundle_source_mismatch')
++                bundle = json.loads(materials.artifact_path(self, source['artifact_ref']).read_bytes())
++                job = bundle.get('requested_job', {}).get('native_blast_standard_database', {})
++                if (bundle.get('version') != 'native_blast_standard_database_bundle_v1'
++                        or bundle.get('mode') != 'database' or job.get('mode') != 'database'
++                        or bundle.get('program') != native_database['program']
++                        or job.get('program') != native_database['program']):
++                    raise ContractError('native_blast_standard_database_bundle_program_or_mode_mismatch')
++                expected_axis = {'sequence': 'sequence', 'pssm': 'pssm_master'}.get(job.get('query', {}).get('kind'))
++                if (native_database['query_axis_kind'] != expected_axis
++                        or data['kind'] != 'comparison'
++                        or len(data['subject_refs']) != 1 or data['source_subject_refs']
++                        or not data.get('operand_intervals')
++                        or any(row['role'] != 'query' for row in data['operand_intervals'])):
++                    raise ContractError('native_blast_standard_database_query_operand_conflict')
++                self._require(data['subject_refs'][0], {'input', 'feature', 'product', 'read_subject'})
+             native_database = data.get("native_blast_database")
+             if native_database is not None:
+                 if any(key.startswith('native_') and key != 'native_blast_database' for key in data):
+                     raise ContractError('native_blast_database_mixed_native_markers')
+                 source = self._require(data['source_ref'], {'source'})

@@ -1,0 +1,37 @@
+{
+  "source": "/usr/share/man/man1/strace.1.gz",
+  "source_sha256": "9814b84c7335e78f3918e9e9f6bc93cd6bb9aa47fe494d3efa68f4bb6995747c",
+  "excerpts": [
+    {
+      "term": "--follow-forks",
+      "start_line": 415,
+      "text": ".B \\-f\n.TQ\n.BR \\-\\-follow\\-forks\nTrace child processes as they are created by currently traced\nprocesses as a result of the\n.BR fork (2),\n.BR vfork (2)\nand\n.BR clone (2)\nsystem calls.  Note that\n.B \\-p\n.I PID\n.B \\-f\nwill attach all threads of process\n.I PID"
+    },
+    {
+      "term": "%network",
+      "start_line": 584,
+      "text": ".B %net\n.TQ\n.B %network\n.TQ\n.B network\nTrace all the network related system calls.\nThe syntax without a preceding percent sign\n.RB (\\[dq] \"-e trace\" = network \\[dq])\nis deprecated.\n.TP\n.BR %signal\n.TQ\n.BR signal\nTrace all signal related system calls.\nThe syntax without a preceding percent sign"
+    },
+    {
+      "term": "%file",
+      "start_line": 558,
+      "text": ".BR regex (7)).\n.TP\n.B %file\n.TQ\n.BR file\nTrace all system calls which take a file name as an argument.  You\ncan think of this as an abbreviation for\n.BR \"\\-e\\ trace\" = open , stat , chmod , unlink ,...\nwhich is useful to seeing what files the process is referencing.\nFurthermore, using the abbreviation will ensure that you don't\naccidentally forget to include a call like\n.BR lstat (2)\nin the list.  Betchya woulda forgot that one.\nThe syntax without a preceding percent sign\n.RB (\\[dq] \"-e trace\" = file \\[dq])"
+    },
+    {
+      "term": "decode-fds",
+      "start_line": 274,
+      "text": ".BR quiet \" (or \" silent \" or \" silence \" or \" q ),\n.if ''#' .BR secontext ,\n.BR decode\\-fds \" (or \" decode\\-fd ),\n.BR decode\\-pids \" (or \" decode\\-pid ),\nor\n.BR kvm ,\nand\n.I value\nis a qualifier-dependent symbol or number.  The default\nqualifier is\n.BR trace .\nUsing an exclamation mark negates the set of values.  For example,\n.BR \\-e \"\\ \" open\nmeans literally\n.BR \\-e \"\\ \" trace = open"
+    },
+    {
+      "term": "--string-limit",
+      "start_line": 1092,
+      "text": ".BI \"\\-s \" strsize\n.TQ\n.BR \"\\-\\-string\\-limit\" = \\fIstrsize\\fR\nSpecify the maximum string size to print (the default is 32).  Note\nthat filenames are not considered strings and are always printed in\nfull.\n.TP\n.BR \\-\\-absolute\\-timestamps [=[[ format: ] \\fIformat\\fR ],[[ precision: ] \\fIprecision ]]\n.TQ\n.BR \\-\\-timestamps [=[[ format: ] \\fIformat\\fR ],[[ precision: ] \\fIprecision ]]\nPrefix each line of the trace with the wall clock time in the specified\n.I format\nwith the specified\n.IR precision .\n.I format"
+    },
+    {
+      "term": "--output",
+      "start_line": 431,
+      "text": ".IR thread_id \" = \" PID .\n.TP\n.B \\-\\-output\\-separately\nIf the\n.BR \\-\\-output = \\fIfilename\\fR\noption is in effect, each processes trace is written to\n.IR filename . pid\nwhere\n.I pid\nis the numeric process id of each process.\n.TP\n.B \\-ff\n.TQ\n.B \\-\\-follow\\-forks \\-\\-output\\-separately\nCombine the effects of"
+    }
+  ],
+  "invoked": false
+}

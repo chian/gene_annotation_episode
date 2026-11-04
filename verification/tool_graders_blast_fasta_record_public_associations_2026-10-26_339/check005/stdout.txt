@@ -1,0 +1,36 @@
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 23%]
+........................................................................ [ 31%]
+........................................................................ [ 38%]
+........................................................................ [ 46%]
+........................................................................ [ 54%]
+........................................................................ [ 62%]
+...........................F............................................ [ 69%]
+........................................................................ [ 77%]
+........................................................................ [ 85%]
+........................................................................ [ 93%]
+...............................................................          [100%]
+=================================== FAILURES ===================================
+________ test_saved_sheet_recalculation_forbids_io_and_sequence_scoring ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d907870cf50>
+
+    def test_saved_sheet_recalculation_forbids_io_and_sequence_scoring(monkeypatch):
+        sheet = json.loads(json.dumps(populate(**translated_case())))
+        expected = calculate(sheet)
+        def forbidden(*args, **kwargs):
+            raise AssertionError("I/O or wrong scoring path attempted")
+        from gene_annotation_episode import blast_sequence_database, blast_database_grader
+        for module, names in [(builtins, ["open"]), (Path, ["open", "read_text", "read_bytes"]),
+                              (socket, ["socket", "create_connection"]), (subprocess, ["Popen", "run"]),
+                              (blast_sequence_database, ["_admit", "build_database_sheet", "calculate_database_probabilities"]),
+                              (blast_database_grader, ["build_database_sheet", "calculate_database_probabilities"])]:
+            for name in names:
+>               monkeypatch.setattr(module, name, forbidden)
+E               AttributeError: <module 'gene_annotation_episode.blast_sequence_database' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/blast_sequence_database.py'> has no attribute 'build_database_sheet'
+
+../../../tests/test_blast_vdb_calculators.py:607: AttributeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_vdb_calculators.py::test_saved_sheet_recalculation_forbids_io_and_sequence_scoring
+1 failed, 926 passed in 11.62s

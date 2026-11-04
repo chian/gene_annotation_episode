@@ -1,0 +1,65 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_lifecycle_failures_2026-10-26_341/success_return_check_20261026T223714614770Z/tmp",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_blast_database_results.py",
+    "-k",
+    "received_complete_query and psiblast"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_lifecycle_failures_2026-10-26_341/success_return_check_20261026T223714614770Z",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "pins_before": [
+    {
+      "path": "gene_annotation_episode/native_blast_database_result_publication.py",
+      "sha256": "24343190ba76a4926a689fe236a7d8e4fe551d89dd3fe630b17f2c60932449a5",
+      "size_bytes": 66847
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_results.py",
+      "sha256": "51480aea3a9cf063ab519675bc39706e46fc0917cfee52971331586f69f6f068",
+      "size_bytes": 21709
+    },
+    {
+      "path": "tests/test_native_blast_database_results.py",
+      "sha256": "908fad09c0b8d0b67cd854b2baef38695bd60b5532c01fbe2a721f7e9b314cce",
+      "size_bytes": 35795
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_metadata.py",
+      "sha256": "4292386638f1a624358d52109914d54d34562741c4d5eeada753465d4b29a19b",
+      "size_bytes": 114033
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_standard_database_metadata.py",
+      "sha256": "f378270daadb53b6925664934b951a6a09295b3ba77e65aa169eb5abdbfaccc3",
+      "size_bytes": 106119
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_database_result_worker.py",
+      "sha256": "f710aecc86eabc12c3319b91405e7504f9b3276e9647d52b3ef84fa21699b19a",
+      "size_bytes": 94931
+    },
+    {
+      "path": "gene_annotation_episode/local_jobs.py",
+      "sha256": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+      "size_bytes": 5167
+    },
+    {
+      "path": "gene_annotation_episode/native_lifecycle.py",
+      "sha256": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+      "size_bytes": 21489
+    }
+  ],
+  "started_at": "2026-10-26T22:37:14.615467+00:00"
+}

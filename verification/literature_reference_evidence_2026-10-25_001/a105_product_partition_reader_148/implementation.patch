@@ -1,0 +1,1578 @@
+--- /dev/null
++++ b/gene_annotation_episode/literature_product_partition_calculations.py
+@@ -0,0 +1,86 @@
++"""Basic arithmetic on reported fractions; no confidence or annotation credit."""
++from fractions import Fraction
++import math
++from .literature_product_partition_inputs import validate_product_partition_extraction
++
++VERSION = "a105_product_partition_components_v1"
++COMPONENTS = ("partition_a_fraction", "partition_b_fraction", "selected_fraction_sum",
++              "selected_closure_deviation", "partition_a_over_b")
++REASONS = ("source_measurement_unavailable", "source_fraction_unit_unreported",
++    "unsupported_source_fraction_unit", "censored_measurement", "basis_unknown", "basis_conflicting",
++    "incompatible_fraction_bases", "same_preparation_unknown", "same_preparation_conflicting",
++    "same_endpoint_unknown", "same_endpoint_conflicting", "shared_denominator_unknown",
++    "shared_denominator_conflicting", "reused_source_observation", "zero_denominator_fraction",
++    "numerical_model_range", "qualification_unknown", "qualification_conflicting")
++CONDITIONS = ("source_reported_fraction_scale", "same_selected_preparation_and_endpoint",
++              "shared_selected_denominator", "dependent_transforms_not_independent_evidence")
++
++
++def component_roles(component):
++    return ("a",) if component == "partition_a_fraction" else ("b",) if component == "partition_b_fraction" else ("a", "b")
++
++
++def populate_product_partition_components(extraction):
++    validate_product_partition_extraction(extraction)
++    rows = extraction["quantities"]
++    def reason(row):
++        return "source_measurement_unavailable" if row is None else row["unavailable_reason"] or (
++            "censored_measurement" if row["status"] == "censored" else None)
++    reasons = {role: reason(rows[role]) for role in ("a", "b")}
++    paired = next((v for v in reasons.values() if v), None)
++    if paired is None:
++        for role in ("a", "b"):
++            if rows[role]["qualification"] in ("unknown", "conflicting"):
++                paired = "qualification_" + rows[role]["qualification"]; break
++    if paired is None:
++        for name, relationship in extraction["selection"]["relationships"].items():
++            if relationship["value"] != "supported":
++                paired = name + "_" + relationship["value"]; break
++    if paired is None:
++        for role in ("a", "b"):
++            if rows[role]["basis"] in ("unknown", "conflicting"):
++                paired = "basis_" + rows[role]["basis"]; break
++    if paired is None and rows["a"]["basis"] != rows["b"]["basis"]:
++        paired = "incompatible_fraction_bases"
++    if paired is None and rows["a"]["measurement_key"] == rows["b"]["measurement_key"]:
++        paired = "reused_source_observation"
++    # A physical species-contribution witness can identify repeated
++    # representations; it is not a replicate count or a spectrum count.
++    if paired is None:
++        a, b = (extraction["selection"]["quantities"][r]["meanings"]["measurement_identity"] for r in ("a", "b"))
++        if a is not None and b is not None and all(a[k] == b[k] for k in ("source_ref", "artifact_ref", "start", "end")):
++            paired = "reused_source_observation"
++    values = {role: Fraction(row["exact_fraction"]) if row and row["exact_fraction"] is not None else None for role, row in rows.items()}
++    cells = {}
++    def cell(component, value, unavailable, formula):
++        roles = component_roles(component)
++        selected = [rows[role] for role in roles]
++        if value is not None:
++            try:
++                converted = float(value)
++                if not math.isfinite(converted) or converted == 0 and value != 0:
++                    value, unavailable = None, "numerical_model_range"
++                else:
++                    value = converted
++            except (ValueError, OverflowError):
++                value, unavailable = None, "numerical_model_range"
++        return {"value": value, "unit": "dimensionless" if component == "partition_a_over_b" else "fraction",
++            "status": "populated" if value is not None else "unavailable", "unavailable_reason": unavailable,
++            "formula": formula, "origin": selected[0]["origin"] if len(roles) == 1 and selected[0] else "derived",
++            "approximate": any(row and row["approximate"] for row in selected),
++            "threshold": selected[0]["value"] if len(roles) == 1 and selected[0] and selected[0]["status"] == "censored" else None,
++            "bound": selected[0]["bound"] if len(roles) == 1 and selected[0] else "none",
++            "outside_reported_fraction_range": any(row and row["value"] is not None and not 0 <= row["value"] <= 1 for row in selected),
++            "conditional_on": [CONDITIONS[0]] if len(roles) == 1 else list(CONDITIONS)}
++    for role in ("a", "b"):
++        name = "partition_" + role + "_fraction"
++        cells[name] = cell(name, values[role] if reasons[role] is None else None, reasons[role], "reported_fraction_unit_conversion")
++    total = values["a"] + values["b"] if paired is None else None
++    cells["selected_fraction_sum"] = cell("selected_fraction_sum", total, paired, "a+b")
++    cells["selected_closure_deviation"] = cell("selected_closure_deviation", total - 1 if total is not None else None, paired, "(a+b)-1")
++    ratio_reason = paired or ("zero_denominator_fraction" if values["b"] == 0 else None)
++    cells["partition_a_over_b"] = cell("partition_a_over_b", values["a"] / values["b"] if ratio_reason is None else None, ratio_reason, "a/b")
++    return {"version": VERSION, "axis": "A105", "evaluation_scope": "reported_selected_product_partition",
++        "cells": cells, "uncertainty_calculation": "not_implemented",
++        "interpretation_limits": ["selected_closure_is_not_independent_mass_balance",
++            "partition_is_not_rate_specificity_or_molecular_attribution", "no_independence_or_variance_assumption"]}
+--- /dev/null
++++ b/gene_annotation_episode/literature_product_partition_inputs.py
+@@ -0,0 +1,249 @@
++"""Exact source selections for two reported composition fractions.
++
++Scientific meanings are witnessed interpretations. The reader verifies custody,
++scalar syntax and unit conversion, without assigning catalytic attribution.
++"""
++from copy import deepcopy
++from fractions import Fraction
++import html
++import math
++import re
++
++from .domain import REF, canonical, identity, obj, validate_schema
++from .literature_assay_inputs import _Sources, _nullable, _witness_schema, _keys, _fail, _index
++from .literature_partner_source_fields import _NUMBER, _relation, _unit_continuation
++from .literature_rate_native_inputs import _field_contexts, _APPROX, _UPPER, _LOWER, _saved_number, _saved_witness
++
++VERSION = "a105_product_partition_inputs_v1"
++ROLES = ("a", "b")
++SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
++MEANINGS = ("subject", "organism", "construct", "preparation", "compound", "endpoint",
++            "condition", "stage", "time", "denominator", "measurement_basis", "measurement_identity")
++RELATIONSHIPS = ("supported", "unknown", "conflicting")
++RELATIONS = ("same_preparation", "same_endpoint", "shared_denominator")
++BASES = ("amount_fraction", "signal_fraction", "unknown", "conflicting")
++STAGES = ("equilibrium", "timepoint", "endpoint", "unknown", "conflicting")
++QUALIFICATIONS = ("reported_point", "source_qualified_approximate", "unknown", "conflicting")
++EVIDENCE_ROLES = ("composition", "identity_confirmation", "competing_contribution",
++                  "preparation_change", "repetition_basis", "uncertainty")
++
++
++def product_partition_arguments_schema():
++    witness = _witness_schema()
++    def meaning(values):
++        return obj({"value": {"type": "string", "enum": list(values)},
++                    "witnesses": {"type": "array", "items": deepcopy(witness)}})
++    number = obj({"witness": deepcopy(witness), "number_start": {"type": "integer", "minimum": 0},
++                  "number_end": {"type": "integer", "minimum": 1}})
++    quantity = obj({"meanings": obj({name: _nullable(deepcopy(witness)) for name in MEANINGS}),
++        "measurement": _nullable(obj({"number": number, "unit": _nullable(deepcopy(witness))})),
++        "basis": meaning(BASES), "stage": meaning(STAGES), "qualification": meaning(QUALIFICATIONS)})
++    return obj({"source_ref": deepcopy(REF), "source_kind": {"enum": list(SOURCE_KINDS)},
++        "experiment": _nullable(deepcopy(witness)),
++        "quantities": obj({role: _nullable(deepcopy(quantity)) for role in ROLES}),
++        "relationships": obj({name: meaning(RELATIONSHIPS) for name in RELATIONS}),
++        "evidence": {"type": "array", "items": obj({"role": {"enum": list(EVIDENCE_ROLES)},
++                      "witness": deepcopy(witness)})}})
++
++
++def _interpret(value, sources, field):
++    witnesses = [sources.witness(w, field) for w in value["witnesses"]]
++    required = 2 if value["value"] == "conflicting" else 0 if value["value"] == "unknown" else 1
++    if len({(w["source_ref"], w["artifact_ref"], w["start"], w["end"]) for w in witnesses}) < required:
++        _fail("interpretation_witness_required", field)
++    return {"value": value["value"], "witnesses": witnesses}
++
++
++def _number(selection, sources):
++    """Fraction scalar syntax; shared lexical guards, with explicit percent units.
++
++    The older rate scalar deliberately rejects percentages. This reader retains
++    that dimension and its bounds rather than relabeling it as a rate.
++    """
++    witness = sources.witness(selection["witness"], "number.witness")
++    start, end = selection["number_start"], selection["number_end"]
++    _index(start, "number_start"); _index(end, "number_end")
++    if not 0 <= start < end <= len(witness["quote"]):
++        _fail("source_number_span_order_invalid", "number")
++    token = witness["quote"][start:end]
++    if not _NUMBER.fullmatch(token):
++        _fail("literal_source_number_required", "number")
++    prefix, suffix = _field_contexts(sources, witness, start, end)
++    operator = r"(?:[/×⋅·*+^]|\btimes\b|\bx\b)"
++    if (re.search(r"\d\s*" + operator + r"\s*$", prefix, re.I) or
++            re.match(r"\s*" + operator + r"\s*[+−-]?(?:\d|\.\d)", suffix, re.I)):
++        _fail("source_arithmetic_expression_unsupported", "number")
++    remaining, relations, approximate = prefix, [], False
++    while True:
++        approx, upper, lower = _APPROX.search(remaining), _UPPER.search(remaining), _LOWER.search(remaining)
++        if approx:
++            approximate = True; remaining = remaining[:approx.start()]
++        elif upper or lower:
++            match = upper or lower
++            marker = re.sub(r"\s+", " ", match.group(1).lower())
++            inclusive = marker in ("<=", "≤", "at most", "no more than", ">=", "≥", "at least", "no less than") or "equal" in marker
++            relations.append(("l" if upper else "g") + ("e" if inclusive else "t"))
++            remaining = remaining[:match.start()]
++        else:
++            break
++    if len(set(relations)) > 1:
++        _fail("composite_source_comparator_unsupported", "number")
++    if re.search(r"\bnot\s*(?:(?:significantly|substantially|clearly)\s*)?$", remaining, re.I):
++        _fail("negated_source_comparator_unsupported", "number")
++    if re.search(r"(?:±|\+\s*/\s*-)\s*$", remaining) or re.search(r"\b(?:SD|SEM|standard deviation|standard error)\s*[:=]?\s*$", remaining, re.I):
++        _fail("uncertainty_is_not_fraction_point", "number")
++    relation = _relation(remaining, suffix, role="condition")
++    before, after = prefix[-1:], suffix[:1]
++    stop = after == "." and (len(suffix) == 1 or suffix[1].isspace() or suffix[1] in ")]};:")
++    if (before and (before.isalnum() or before in ".eE+−-_") or
++            after and (after in ".eE+−-" or after.isdigit()) and not stop):
++        _fail("partial_source_numeric_token", "number")
++    if re.search(r"\d,\s*$", prefix) or re.match(r",\s*\d", suffix):
++        _fail("comma_source_number_unsupported", "number")
++    value = float(token.replace("−", "-"))
++    if not math.isfinite(value) or value == 0 and Fraction(token.replace("−", "-")) != 0:
++        _fail("numerical_model_range", "number")
++    return {"selector": {**deepcopy(selection), "witness": witness}, "raw_number": token,
++            "value": value, "relation": relations[0] if relations else relation, "approximate": approximate}
++
++
++def _unit_scale(raw):
++    clean = html.unescape(re.sub(r"</?[A-Za-z_][^<>]*>", "", raw)).strip().lower()
++    return {"%": Fraction(1, 100), "percent": Fraction(1, 100), "per cent": Fraction(1, 100),
++            "fraction": Fraction(1), "dimensionless": Fraction(1)}.get(clean)
++
++
++def _unit(selection, sources, number):
++    if selection is None:
++        return None
++    witness = sources.witness(selection, "fraction.unit")
++    prefix, suffix = _field_contexts(sources, witness, 0, len(witness["quote"]))
++    if (prefix[-1:] and (prefix[-1:].isalpha() or prefix[-1:] in "/_^") or
++            _unit_continuation(suffix) or re.match(r"\s+per\b", suffix)):
++        _fail("partial_source_fraction_unit", "fraction.unit")
++    scale = _unit_scale(witness["quote"])
++    if number is not None:
++        ns = number["selector"]
++        _, adjacent = _field_contexts(sources, ns["witness"], ns["number_start"], ns["number_end"])
++        printed = re.match(r"\s*(%|percent\b|per\s+cent\b|fraction\b|dimensionless\b)", adjacent, re.I)
++        if printed is not None and (_unit_scale(printed.group(1)) != scale or _unit_continuation(adjacent[printed.end():])):
++            _fail("source_fraction_unit_mismatch", "fraction.unit")
++        if printed is None and re.match(r"\s*(?:[pnumµμk]?M|[pnumµμk]?mol|[pnumµμk]?g|[pnumµμk]?L|ml|mL|s|sec(?:ond)?s?|min(?:ute)?s?|h|hr|hours?|days?|U)(?![A-Za-z_µμ])", adjacent):
++            _fail("source_fraction_unit_mismatch", "fraction.number")
++    return {"witness": witness, "raw_unit": witness["quote"],
++            "multiplier": float(scale) if scale is not None else None}
++
++
++def _quantity(number, unit, selected, origin):
++    scale = _unit_scale(unit["raw_unit"]) if unit else None
++    exact = Fraction(number["raw_number"].replace("−", "-")) * scale if number and scale is not None else None
++    value = float(exact) if exact is not None else None
++    if value is not None and (not math.isfinite(value) or value == 0 and exact != 0):
++        _fail("numerical_model_range", "fraction")
++    key = None
++    if number:
++        ns, w = number["selector"], number["selector"]["witness"]
++        key = identity("partition_measurement", {"source_ref": w["source_ref"], "artifact_ref": w["artifact_ref"],
++            "start": w["start"] + len(w["quote"][:ns["number_start"]].encode()),
++            "end": w["start"] + len(w["quote"][:ns["number_end"]].encode())})
++    return {"value": value, "exact_fraction": str(exact) if exact is not None else None,
++        "status": "unavailable" if value is None else "observed" if number["relation"] == "point" else "censored",
++        "bound": number["relation"] if number and number["relation"] != "point" else "none",
++        "approximate": bool(number and number["approximate"] or selected["qualification"]["value"] == "source_qualified_approximate"), "origin": origin,
++        "qualification": selected["qualification"]["value"],
++        "measurement_key": key, "basis": selected["basis"]["value"], "stage": selected["stage"]["value"],
++        "unavailable_reason": "source_measurement_unavailable" if number is None else
++            "source_fraction_unit_unreported" if unit is None else "unsupported_source_fraction_unit" if scale is None else None}
++
++
++def read_product_partition_inputs(arguments, *, read_source):
++    validate_schema(arguments, product_partition_arguments_schema())
++    sources = _Sources(read_source)
++    sources.source(arguments["source_ref"], "original")
++    witness = lambda w, field: sources.witness(w, field) if w is not None else None
++    selection = deepcopy(arguments)
++    selection["experiment"] = witness(arguments["experiment"], "experiment")
++    selection["relationships"] = {name: _interpret(v, sources, name) for name, v in arguments["relationships"].items()}
++    selection["evidence"] = [{"role": row["role"], "witness": sources.witness(row["witness"], "evidence")} for row in arguments["evidence"]]
++    quantities = {}
++    for role in ROLES:
++        selected = arguments["quantities"][role]
++        if selected is None:
++            quantities[role] = None
++            continue
++        row = {"meanings": {name: witness(w, name) for name, w in selected["meanings"].items()},
++               **{name: _interpret(selected[name], sources, role + "." + name) for name in ("basis", "stage", "qualification")}}
++        measurement = selected["measurement"]
++        number = _number(measurement["number"], sources) if measurement else None
++        unit = _unit(measurement["unit"], sources, number) if measurement else None
++        row["measurement"] = {"number": number, "unit": unit} if measurement else None
++        selection["quantities"][role] = row
++        quantities[role] = _quantity(number, unit, row,
++            "synthetic" if arguments["source_kind"] == "synthetic_fixture" else "reported")
++    return {"version": VERSION, "selection": selection, "quantities": quantities, "source_refs": list(sources.references)}
++
++
++def strip_witnesses(value):
++    if isinstance(value, dict):
++        if set(value) == {"source_ref", "artifact_ref", "representation", "start", "end", "quote"}:
++            return {k: v for k, v in value.items() if k != "artifact_ref"}
++        return {k: strip_witnesses(v) for k, v in value.items()}
++    if isinstance(value, list):
++        return [strip_witnesses(v) for v in value]
++    return value
++
++
++def validate_product_partition_extraction(extraction, arguments=None):
++    """Check stored associations and arithmetic without source IO/classification."""
++    _keys(extraction, ("version", "selection", "quantities", "source_refs"), "extraction")
++    if extraction["version"] != VERSION:
++        _fail("partition_extraction_version_mismatch", "extraction")
++    selected = deepcopy(extraction["selection"])
++    for role in ROLES:
++        row = selected["quantities"][role]
++        if row and row["measurement"]:
++            _keys(row["measurement"], ("number", "unit"), role + ".measurement")
++            number, unit = row["measurement"]["number"], row["measurement"]["unit"]
++            _saved_number(number, role)
++            if unit is not None:
++                _keys(unit, ("witness", "raw_unit", "multiplier"), role + ".unit")
++            row["measurement"] = {"number": number["selector"], "unit": unit["witness"] if unit else None}
++    original = strip_witnesses(selected)
++    validate_schema(original, product_partition_arguments_schema())
++    if arguments is None:
++        arguments = original
++    if original != arguments:
++        _fail("partition_saved_selection_mismatch", "selection")
++    refs = {arguments["source_ref"]}
++    def visit(value):
++        if isinstance(value, dict):
++            if set(value) == {"value", "witnesses"}:
++                required = 2 if value["value"] == "conflicting" else 0 if value["value"] == "unknown" else 1
++                distinct = {(w["source_ref"], w["artifact_ref"], w["start"], w["end"]) for w in value["witnesses"]}
++                if len(distinct) < required:
++                    _fail("interpretation_witness_required", "selection")
++            if set(value) == {"source_ref", "artifact_ref", "representation", "start", "end", "quote"}:
++                _saved_witness(value, "witness"); refs.add(value["source_ref"])
++            else:
++                for child in value.values(): visit(child)
++        elif isinstance(value, list):
++            for child in value: visit(child)
++    visit(extraction["selection"])
++    if (len(extraction["source_refs"]) != len(set(extraction["source_refs"])) or set(extraction["source_refs"]) != refs):
++        _fail("partition_source_roster_mismatch", "source_refs")
++    expected = {}
++    for role in ROLES:
++        row = extraction["selection"]["quantities"][role]
++        measurement = row["measurement"] if row else None
++        expected[role] = _quantity(measurement["number"] if measurement else None,
++            measurement["unit"] if measurement else None, row,
++            "synthetic" if arguments["source_kind"] == "synthetic_fixture" else "reported") if row else None
++        if measurement and measurement["unit"]:
++            unit = measurement["unit"]
++            scale = _unit_scale(unit["raw_unit"])
++            if (unit["raw_unit"] != unit["witness"]["quote"] or
++                    canonical(unit["multiplier"]) != canonical(float(scale) if scale is not None else None)):
++                _fail("partition_saved_unit_mismatch", role)
++    if canonical(extraction["quantities"]) != canonical(expected):
++        _fail("partition_saved_quantity_mismatch", "quantities")
++    return extraction
+--- /dev/null
++++ b/gene_annotation_episode/literature_product_partition_prompt.py
+@@ -0,0 +1,9 @@
++"""Recurring scientific TASK insert; numerical sheet stays outside the prompt."""
++
++PRODUCT_PARTITION_TASK = """Examine which products or substrate forms were identified in the selected preparation and what their reported fractions actually measure. Keep assayed molecule, organism, construct, preparation, each compound, endpoint, measurement basis, denominator, endpoint stage and time linked to exact source passages. Determine whether the selected fractions describe the same mixture at the same endpoint and share the same denominator; retain unknown or conflicting relationships without discarding each reported quantity. Distinguish amount composition, instrument-signal partition and an unresolved basis. Equilibrium composition is not a molecular formation rate, substrate specificity or enzyme-specific attribution. Product coexistence does not imply molecular replacement.
++
++Examine contaminating contributors, matched controls and preparation changes separately: changed purification, tags, temperatures or times may alter comparability while a contaminant separately limits effect isolation. Retain the paper's uncertainty and repetition meaning; scans, repeated representations and complementary identity measurements are not independent preparations. A sum of selected fractions equal to one is numerical closure of that selected report, not an independent mass balance or proof that side products are absent.
++
++Use available source reading or permitted narrower investigations to resolve these questions; choose supported number/unit spans and constrained experimental meanings for the deterministic reader. A reported point does not mean exact physical measurement. Select a species-specific measurement identity rather than labeling both different species with one scalar identity. Preserve lower/upper limits and approximation. Requesting a derived component does not request its native operands; select concise scientific-meaning witnesses so an unrequested numerical operand need not be disclosed. Return only the parent's requested components and their needed scientific meanings. Missing measurements remain unknown. Unimplemented numerical uncertainty propagation is an implementation limit, not proof that the source omitted uncertainty. Keep reference evidence separate from target correspondence and annotation credit."""
++
++__all__ = ["PRODUCT_PARTITION_TASK"]
+--- /dev/null
++++ b/gene_annotation_episode/literature_product_partition_render.py
+@@ -0,0 +1,86 @@
++"""Render only exact admitted partition rows; never load a complete child sheet."""
++from collections.abc import Mapping
++from functools import lru_cache
++
++from jsonschema import Draft202012Validator
++
++from .communication import plain
++from .domain import ContractError
++from .literature_product_partition_storage import product_partition_cells_schema, binding_references
++from .literature_product_partition_calculations import COMPONENTS
++from .literature_product_partition_inputs import MEANINGS
++
++
++@lru_cache(maxsize=1)
++def _validator():
++    return Draft202012Validator(product_partition_cells_schema()["items"])
++
++
++def is_row(value):
++    return (isinstance(value, Mapping) and value.get("evaluation_scope") == "reported_selected_product_partition"
++        and isinstance(value.get("component"), str) and value["component"] in COMPONENTS
++        and _validator().is_valid(plain(value)))
++
++
++def rows_from_values(value):
++    if is_row(value):
++        yield value
++    elif isinstance(value, Mapping):
++        for child in value.values(): yield from rows_from_values(child)
++    elif isinstance(value, (tuple, list)):
++        for child in value: yield from rows_from_values(child)
++
++
++def rows_from_reports(reports):
++    for report in reports:
++        if isinstance(report, Mapping):
++            for value in report.values():
++                if isinstance(value, (list, tuple)) and value and all(is_row(row) for row in value):
++                    yield from value
++
++
++def hidden_records(rows):
++    """Dedicated tables render these exact meanings without host identities."""
++    return set(binding_references(list(rows)))
++
++
++def render_received(parts, rows, records=None, *, section, table):
++    rows = list(rows)
++    if any(not is_row(row) for row in rows):
++        raise ContractError("literature_product_partition_display_contract_mismatch")
++    if not rows:
++        return
++    records = records or {}
++    def label(ref):
++        record = records.get(ref)
++        return record.get("label", "unknown") if isinstance(record, Mapping) else "not received or withheld"
++    def meaning(quantity, name):
++        status = quantity["meaning_status"][name]
++        return label(quantity[name + "_ref"]) if status == "selected" else status.replace("_", " ")
++    section(parts, "Requested product partition components", table(
++        ("Component", "Value", "Unit", "Status", "Origin", "Bound threshold", "Bound", "Approximate", "Out of reported fraction range", "Unavailable reason"),
++        ((row["component"], row["value"], row["unit"], row["status"], row["origin"], row["threshold"], row["bound"],
++          row["approximate"], row["outside_reported_fraction_range"], row["unavailable_reason"]) for row in rows)))
++    for row in rows:
++        section(parts, "Recorded partition experiment", label(row["experiment_ref"]) if row["experiment_status"] == "selected"
++            else row["experiment_status"].replace("_", " "))
++        section(parts, row["component"] + " scientific meanings", table(
++            ("Fraction role", "Scientific aspect", "Recorded source meaning"),
++            ((q["role"], name.replace("_", " "), meaning(q, name))
++             for q in row["quantities"] for name in MEANINGS)))
++        section(parts, "Fraction interpretation qualifications", table(
++            ("Fraction role", "Basis", "Endpoint stage", "Source qualification"),
++            ((q["role"], q["basis"], q["stage"], q["qualification"]) for q in row["quantities"])))
++        section(parts, "Selected fraction relationships", table(
++            ("Same preparation", "Same endpoint", "Shared denominator"),
++            [(row["relationships"]["same_preparation"], row["relationships"]["same_endpoint"], row["relationships"]["shared_denominator"])]))
++        if row["evidence"]:
++            section(parts, "Requested partition qualifications", table(
++                ("Evidence role", "Recorded passage", "Availability"),
++                ((e["role"], label(e["witness_ref"]), e["availability"]) for e in row["evidence"])))
++    section(parts, "Partition interpretation limits", "Selected-fraction closure is not independent mass balance. "
++        "Composition is not rate, specificity or molecular attribution. These dependent transforms add no independent replication. "
++        "Numerical uncertainty propagation is not implemented in this route.")
++
++
++__all__ = ["is_row", "rows_from_values", "rows_from_reports", "hidden_records", "render_received"]
+--- /dev/null
++++ b/gene_annotation_episode/literature_product_partition_storage.py
+@@ -0,0 +1,291 @@
++"""Selected A105 partition custody and exact typed subsets, with no credit policy."""
++from copy import deepcopy
++import hashlib
++import json
++import re
++
++from .communication import plain
++from .domain import ContractError, canonical, identity, obj, validate_schema
++from .literature_rate_storage import LiteratureRateRepository
++from .literature_product_partition_inputs import (MEANINGS, ROLES, BASES, STAGES, RELATIONS,
++    RELATIONSHIPS, QUALIFICATIONS, EVIDENCE_ROLES, product_partition_arguments_schema,
++    read_product_partition_inputs, validate_product_partition_extraction)
++from .literature_product_partition_calculations import (COMPONENTS, REASONS, CONDITIONS,
++    component_roles, populate_product_partition_components)
++
++PROVIDER = "literature.a105.product_partition_population"
++VERSION = "literature_product_partition_population_record_v1"
++NAMESPACE = "literature_product_partition_cells"
++
++
++def _number_spans(extraction):
++    result = {}
++    for role, quantity in extraction["selection"]["quantities"].items():
++        if quantity and quantity["measurement"]:
++            number = quantity["measurement"]["number"]
++            selector, witness = number["selector"], number["selector"]["witness"]
++            result[role] = (witness["source_ref"], witness["artifact_ref"], witness["representation"],
++                witness["start"] + len(witness["quote"][:selector["number_start"]].encode()),
++                witness["start"] + len(witness["quote"][:selector["number_end"]].encode()))
++    return result
++
++
++def _bindings(extraction, component, publish):
++    """Withhold exact witnesses overlapping unrequested numerical operands.
++
++    Never rewrite a source quote. Derived-only requests carry no native numbers.
++    The child can select a smaller meaningful literal in a later own action.
++    """
++    allowed = component_roles(component) if component in ("partition_a_fraction", "partition_b_fraction") else ()
++    forbidden = [span for role, span in _number_spans(extraction).items() if role not in allowed]
++    def reference(witness, name, *, global_evidence=False):
++        if witness is None:
++            return None
++        if any((witness["source_ref"], witness["artifact_ref"], witness["representation"]) == span[:3]
++               and witness["start"] < span[4] and span[3] < witness["end"] for span in forbidden):
++            return None
++        anchor = {key: witness[key] for key in ("source_ref", "artifact_ref", "start", "end", "quote")}
++        return publish("reference", {"reference_type": "literature_result", "source_ref": witness["source_ref"],
++            "accession": identity("partition_" + name, witness), "label": witness["quote"],
++            "sequence_ref": None, "molecule": None, "length": None, "term_refs": [], "context_refs": [], "anchor": anchor})
++    quantities = []
++    for role in component_roles(component):
++        quantity = extraction["selection"]["quantities"][role]
++        refs = {name + "_ref": reference(quantity["meanings"][name], name) if quantity else None for name in MEANINGS}
++        quantities.append({"role": role, **refs,
++            "meaning_status": {name: "not_selected" if quantity is None or quantity["meanings"][name] is None else
++                "selected" if refs[name + "_ref"] is not None else "withheld_unrequested_numbers" for name in MEANINGS},
++            "basis": quantity["basis"]["value"] if quantity else "unknown",
++            "stage": quantity["stage"]["value"] if quantity else "unknown",
++            "qualification": quantity["qualification"]["value"] if quantity else "unknown"})
++    evidence = []
++    for row in extraction["selection"]["evidence"]:
++        ref = reference(row["witness"], row["role"], global_evidence=True)
++        evidence.append({"role": row["role"], "witness_ref": ref,
++                         "availability": "recorded" if ref else "withheld_unrequested_numbers"})
++    experiment = reference(extraction["selection"]["experiment"], "experiment")
++    return {"experiment_ref": experiment,
++        "experiment_status": "not_selected" if extraction["selection"]["experiment"] is None else "selected" if experiment else "withheld_unrequested_numbers",
++        "quantities": quantities, "evidence": evidence}
++
++
++class LiteratureProductPartitionRepository(LiteratureRateRepository):
++    provider = PROVIDER
++    record_version = VERSION
++    components = COMPONENTS
++    operations_table = "literature_product_partition_operations"
++    received_table = "literature_product_partition_received"
++    binding_fields = ()
++
++    def __init__(self, store, run_id):
++        if not isinstance(run_id, str) or not run_id:
++            raise ValueError("explicit_literature_run_required")
++        self.store, self.run_id = store, run_id
++
++    def _installed(self):
++        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
++            (self.operations_table,)).fetchone() is not None
++
++    def _install(self):
++        LiteratureRateRepository.__init__(self, self.store, self.run_id)
++
++    def receive_cells(self, context, cells, operation_key):
++        with self.store.transaction():
++            self._install()
++            return super().receive_cells(context, cells, operation_key)
++
++    def received_cells(self, context):
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        return super().received_cells(context) if self._installed() else []
++
++    def validate_empty_return_family(self, context):
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++
++    @staticmethod
++    def cell_record_refs(cells):
++        """Only scientific dependencies in these exact selected rows."""
++        return binding_references(cells)
++
++    def populate(self, context, arguments, operation_key):
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        if not isinstance(operation_key, str) or not operation_key:
++            raise ContractError("operation_key_required")
++        args = plain(arguments)
++        validate_schema(args, product_partition_arguments_schema())
++        requested = list(context.assignment.get("requested_product_partition_components", ()))
++        self.project_cells([], permitted_record_refs=(), components=requested)
++        signature = canonical({"arguments": args, "scope": plain(context.scope), "requested_components": requested})
++        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed() else None
++        if old is not None:
++            if signature != old["signature"]:
++                raise ContractError("operation_key_reused_for_different_work")
++            outcome = json.loads(old["outcome"])
++            saved = self.read(outcome["result"]["sheet_ref"])
++            for reference in saved["direct_input_source_refs"]:
++                self._native_source(context, reference)
++            for reference in saved["input_source_refs"]:
++                self._native_provenance(context.scope, reference)
++            return outcome
++        def read_source(reference, representation):
++            source = self._native_source(context, reference)
++            artifact = source["artifact_ref"] if representation == "original" else source.get("text_ref")
++            if artifact is None:
++                raise ContractError("literature_source_representation_unavailable")
++            return {"artifact_ref": artifact, "content": self.store.get_artifact(artifact)}
++        extraction = read_product_partition_inputs(args, read_source=read_source)
++        sheet = populate_product_partition_components(extraction)
++        parents = list(extraction["source_refs"])
++        for ref in parents:
++            for ancestor in self._native_provenance(context.scope, ref).get("parent_source_refs", ()):
++                self._native_provenance(context.scope, ancestor)
++                if ancestor not in parents:
++                    parents.append(ancestor)
++        root = self._native_source(context, args["source_ref"])
++        with self.store.transaction():
++            self._install()
++            created = []
++            def publish(kind, record):
++                candidate = identity(kind, {"origin": "tool", "record": record})
++                existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
++                result = self.store.put(kind, record, origin="tool", scope=plain(context.scope))
++                if existed is None: created.append(result["id"])
++                return result["id"]
++            bindings = {name: _bindings(extraction, name, publish) for name in COMPONENTS}
++            payload = {"version": VERSION, "selection": args, "extraction": extraction, "sheet": sheet,
++                "input_source_ref": args["source_ref"], "input_artifact_ref": root["artifact_ref"],
++                "direct_input_source_refs": extraction["source_refs"], "input_source_refs": parents, "bindings": bindings}
++            artifact = self.store.artifact(canonical(payload), "application/json")
++            request = self.store.artifact(canonical({"run_id": self.run_id, "episode_id": context.episode_id,
++                "operation_key": operation_key, "arguments": args, "scope": plain(context.scope),
++                "requested_components": requested}), "application/json")
++            ref = publish("source", {"provider": PROVIDER, "accession": None, "uri": None,
++                "artifact_ref": artifact, "text_ref": artifact, "request_ref": request, "version": VERSION,
++                "retrieved_at": None, "parent_source_refs": parents})
++            rows = self._project_saved(payload, ref, requested)
++            references = list(dict.fromkeys([ref, *self.cell_record_refs(rows)]))
++            outcome = {"status": "completed", "operation_ref": identity("operation", {"run_id": self.run_id,
++                "episode_id": context.episode_id, "key": operation_key}), "record_refs": references,
++                "changed_record_refs": [r for r in created if r in references],
++                "result": {"view": "reported_product_partition_components", "sheet_ref": ref, "cells": rows}, "feedback": None}
++            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
++        return outcome
++
++    def read(self, sheet_ref):
++        if not self._installed():
++            raise ContractError("literature_sheet_not_selected_output")
++        saved = super().read(sheet_ref)
++        source = self.store.get(sheet_ref)
++        request = json.loads(self.store.get_artifact(source["request_ref"]))
++        operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
++        raw = self.store.get_artifact(source["artifact_ref"])
++        if ("artifact_" + hashlib.sha256(raw).hexdigest() != source["artifact_ref"] or source["version"] != VERSION
++                or "artifact_" + hashlib.sha256(self.store.get_artifact(source["request_ref"])).hexdigest() != source["request_ref"]
++                or saved["selection"] != request["arguments"]
++                or operation["signature"] != canonical({"arguments": request["arguments"], "scope": request["scope"], "requested_components": request["requested_components"]})
++                or saved["direct_input_source_refs"] != saved["extraction"]["source_refs"]
++                or saved["input_artifact_ref"] != self.store.get(saved["input_source_ref"])["artifact_ref"]):
++            raise ContractError("literature_product_partition_saved_mismatch")
++        validate_product_partition_extraction(saved["extraction"], saved["selection"])
++        def custody(value):
++            if isinstance(value, dict):
++                if set(value) == {"source_ref", "artifact_ref", "representation", "start", "end", "quote"}:
++                    row = self.store.get(value["source_ref"])
++                    artifact = row["artifact_ref"] if value["representation"] == "original" else row.get("text_ref")
++                    if artifact != value["artifact_ref"] or value["source_ref"] not in saved["direct_input_source_refs"]:
++                        raise ContractError("literature_product_partition_source_mismatch")
++                else:
++                    for child in value.values(): custody(child)
++            elif isinstance(value, list):
++                for child in value: custody(child)
++        custody(saved["extraction"])
++        # This validates original arithmetic only. No source bytes are read and
++        # no scientific meaning, lexical qualification or observation is changed.
++        if saved["sheet"] != populate_product_partition_components(saved["extraction"]):
++            raise ContractError("literature_product_partition_saved_arithmetic_mismatch")
++        def expected(kind, record):
++            ref = identity(kind, {"origin": "tool", "record": record})
++            actual = self.store.get(ref)
++            if actual.get("origin") != "tool" or actual.get("record_type") != kind or any(actual.get(k) != v for k, v in record.items()):
++                raise ContractError("literature_product_partition_binding_mismatch")
++            return ref
++        if saved["bindings"] != {name: _bindings(saved["extraction"], name, expected) for name in COMPONENTS}:
++            raise ContractError("literature_product_partition_binding_mismatch")
++        if json.loads(operation["outcome"])["result"]["cells"] != self._project_saved(saved, sheet_ref, request["requested_components"]):
++            raise ContractError("literature_product_partition_saved_return_mismatch")
++        return saved
++
++    @staticmethod
++    def _project_saved(saved, ref, selected):
++        result = []
++        for name in selected:
++            cell = {k: deepcopy(v) for k, v in saved["sheet"]["cells"][name].items() if k != "formula"}
++            result.append({"sheet_ref": ref, "evidence_source_ref": saved["input_source_ref"],
++                "component": name, **cell, **deepcopy(saved["bindings"][name]),
++                "relationships": {field: saved["extraction"]["selection"]["relationships"][field]["value"] for field in RELATIONS},
++                "evaluation_scope": "reported_selected_product_partition", "uncertainty_calculation": "not_implemented"})
++        validate_schema(result, product_partition_cells_schema())
++        return result
++
++    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
++        # Parent-owned selections default to empty. A caller can explicitly
++        # request every component using COMPONENTS.
++        selected = () if components is None else components
++        if (not isinstance(selected, (tuple, list)) or any(name not in COMPONENTS for name in selected)
++                or len(selected) != len(set(selected))):
++            raise ContractError("literature_product_partition_component_selection_invalid")
++        result = []
++        for ref in dict.fromkeys(sheet_refs):
++            if ref not in permitted_record_refs:
++                raise ContractError("literature_sheet_not_received")
++            saved = self.read(ref)
++            result.extend(self._project_saved(saved, ref, selected))
++        validate_schema(result, product_partition_cells_schema())
++        return result
++
++    def validate_returned_values(self, cells, *, permitted_record_refs):
++        validate_schema(cells, product_partition_cells_schema())
++        return super().validate_returned_values(cells, permitted_record_refs=permitted_record_refs)
++
++
++def binding_references(value):
++    result = []
++    def visit(node):
++        if isinstance(node, dict):
++            for key, child in node.items():
++                if key.endswith("_ref") and child is not None: result.append(child)
++                else: visit(child)
++        elif isinstance(node, list):
++            for child in node: visit(child)
++    visit(value)
++    return list(dict.fromkeys(result))
++
++
++def product_partition_cells_schema():
++    def reference(namespace, nullable=True):
++        return {"type": ["string", "null"] if nullable else "string", "format": "reference", "x-reference-namespace": namespace}
++    def enum(values): return {"type": "string", "enum": list(values)}
++    quantity = obj({"role": enum(ROLES), **{name + "_ref": reference("reference") for name in MEANINGS},
++                    "meaning_status": obj({name: enum(("selected", "not_selected", "withheld_unrequested_numbers")) for name in MEANINGS}),
++                    "basis": enum(BASES), "stage": enum(STAGES), "qualification": enum(QUALIFICATIONS)})
++    return {"type": "array", "x-source": NAMESPACE, "items": obj({
++        "sheet_ref": reference("source", False), "evidence_source_ref": reference("source", False),
++        "experiment_ref": reference("reference"), "component": enum(COMPONENTS),
++        "experiment_status": enum(("selected", "not_selected", "withheld_unrequested_numbers")),
++        "value": {"type": ["number", "null"]}, "unit": enum(("fraction", "dimensionless")),
++        "status": enum(("populated", "unavailable")), "origin": enum(("reported", "synthetic", "derived")),
++        "unavailable_reason": {"type": ["string", "null"], "enum": [*REASONS, None]},
++        "conditional_on": {"type": "array", "uniqueItems": True, "items": enum(CONDITIONS)},
++        "approximate": {"type": "boolean"}, "threshold": {"type": ["number", "null"]},
++        "bound": enum(("none", "lt", "le", "gt", "ge")), "outside_reported_fraction_range": {"type": "boolean"},
++        "quantities": {"type": "array", "maxItems": 2, "items": quantity},
++        "relationships": obj({name: enum(RELATIONSHIPS) for name in RELATIONS}),
++        "evidence": {"type": "array", "items": obj({"role": enum(EVIDENCE_ROLES),
++            "witness_ref": reference("reference"), "availability": enum(("recorded", "withheld_unrequested_numbers"))})},
++        "evaluation_scope": {"type": "string", "const": "reported_selected_product_partition"},
++        "uncertainty_calculation": {"type": "string", "const": "not_implemented"}})}
+--- /dev/null
++++ b/tests/test_literature_product_partition_inputs.py
+@@ -0,0 +1,182 @@
++"""Original PMC12051542 numeric spans and explicitly synthetic contrasts."""
++from copy import deepcopy
++from pathlib import Path
++import hashlib
++
++import pytest
++
++from gene_annotation_episode.literature_product_partition_inputs import (MEANINGS,
++    read_product_partition_inputs, validate_product_partition_extraction)
++from gene_annotation_episode.literature_product_partition_calculations import populate_product_partition_components
++
++SOURCE = "source_" + "a" * 64
++PRIMARY = Path(__file__).resolve().parents[1] / "research/experimental_scoring_review_2026-10-23/a105_assay_validity_case_145/primary.xml"
++PRIMARY_SHA = "da929d9013cedb766ca861164e5c67f35bdbca891b6e1f5826df24c3eda873db"
++TEXT = b"<p>Synthetic HFP preparation. Equilibrium mixture: R5P 60.3% and Ru5P 39.7%. NMR composition.</p>"
++
++
++def fixture(raw=TEXT, *, primary=False, a_token="60.3", a_unit="%"):
++    def witness(text, occurrence=0):
++        encoded = text.encode()
++        start = -1
++        for _ in range(occurrence + 1): start = raw.index(encoded, start + 1)
++        return {"source_ref": SOURCE, "representation": "original", "start": start,
++                "end": start + len(encoded), "quote": text}
++    def meaning(value, text=None):
++        return {"value": value, "witnesses": [witness(text)] if text else []}
++    def fraction(token, compound, unit="%"):
++        w = witness(token)
++        unit_start = w["end"]
++        while raw[unit_start:unit_start + 1] == b" ": unit_start += 1
++        meanings = {name: None for name in MEANINGS}
++        meanings.update(subject=witness("HFP"), compound=witness(compound),
++            denominator=witness("equilibrium mixture" if primary else "Equilibrium mixture"),
++            stage=witness("equilibrium" if primary else "Equilibrium"),
++            measurement_basis=witness("NMR"), preparation=witness("HFP"))
++        return {"meanings": meanings, "measurement": {
++            "number": {"witness": w, "number_start": 0, "number_end": len(token)},
++            "unit": {"source_ref": SOURCE, "representation": "original", "start": unit_start,
++                     "end": unit_start + len(unit.encode()), "quote": unit}},
++            "basis": meaning("amount_fraction", "mixture"),
++            "stage": meaning("equilibrium", "equilibrium" if primary else "Equilibrium"),
++            "qualification": meaning("reported_point", token)}
++    args = {"source_ref": SOURCE, "source_kind": "primary_source" if primary else "synthetic_fixture",
++        "experiment": witness("equilibrium mixture" if primary else "Equilibrium mixture"),
++        "quantities": {"a": fraction(a_token, "R5P", a_unit), "b": fraction("39.7", "Ru5P")},
++        "relationships": {name: meaning("supported", "equilibrium mixture" if primary else "Equilibrium mixture")
++            for name in ("same_preparation", "same_endpoint", "shared_denominator")}, "evidence": []}
++    artifact = "artifact_" + hashlib.sha256(raw).hexdigest()
++    def read(ref, representation):
++        assert ref == SOURCE and representation == "original"
++        return {"artifact_ref": artifact, "content": raw}
++    return args, read, witness
++
++
++def test_original_primary_percentages_preserve_selected_partition_and_not_attribution():
++    raw = PRIMARY.read_bytes()
++    assert hashlib.sha256(raw).hexdigest() == PRIMARY_SHA
++    args, read, witness = fixture(raw, primary=True)
++    # Exact source roles are qualifications, not independent numerical proofs.
++    args["evidence"] = [
++        {"role": "competing_contribution", "witness": witness("RpiA in the HFP sample was confirmed by mass spectrometry")},
++        {"role": "composition", "witness": witness("39.7% ketose (ribulose) and 60.3% aldose (ribose)")},
++    ]
++    extraction = read_product_partition_inputs(args, read_source=read)
++    validate_product_partition_extraction(extraction, args)
++    sheet = populate_product_partition_components(extraction)
++    assert [sheet["cells"][name]["value"] for name in ("partition_a_fraction", "partition_b_fraction",
++        "selected_fraction_sum", "selected_closure_deviation")] == [.603, .397, 1., 0.]
++    assert sheet["cells"]["partition_a_over_b"]["value"] == pytest.approx(.603 / .397)
++    assert sheet["uncertainty_calculation"] == "not_implemented"
++    assert extraction["quantities"]["a"]["origin"] == "reported"
++
++
++@pytest.mark.parametrize("relationship", ["same_preparation", "same_endpoint", "shared_denominator"])
++@pytest.mark.parametrize("value", ["unknown", "conflicting"])
++def test_unresolved_pair_preserves_individual_source_numbers(relationship, value):
++    args, read, witness = fixture()
++    args["relationships"][relationship] = {"value": value, "witnesses": [] if value == "unknown" else [witness("R5P"), witness("Ru5P")]}
++    cells = populate_product_partition_components(read_product_partition_inputs(args, read_source=read))["cells"]
++    assert cells["partition_a_fraction"]["value"] == .603
++    assert cells["partition_b_fraction"]["value"] == .397
++    assert cells["partition_a_over_b"]["unavailable_reason"] == relationship + "_" + value
++
++
++@pytest.mark.parametrize("prefix,bound,approx", [("< ", "lt", False), (">= ", "ge", False), ("approximately ", "none", True), ("about > ", "gt", True)])
++def test_fraction_bounds_and_approximation_are_not_exact_points(prefix, bound, approx):
++    raw = TEXT.replace(b"R5P 60.3", ("R5P " + prefix + "60.3").encode())
++    args, read, _ = fixture(raw)
++    cells = populate_product_partition_components(read_product_partition_inputs(args, read_source=read))["cells"]
++    assert cells["partition_a_fraction"]["bound"] == bound
++    assert cells["partition_a_fraction"]["approximate"] is approx
++    if bound != "none":
++        assert cells["partition_a_fraction"]["value"] is None
++        assert cells["partition_a_fraction"]["threshold"] == .603
++        assert cells["partition_a_over_b"]["value"] is None
++
++
++def test_remote_source_approximation_has_explicit_witness_and_literal_cannot_be_overridden():
++    raw = TEXT.replace(b"Equilibrium mixture", b"Estimated Equilibrium mixture")
++    args, read, witness = fixture(raw)
++    args["quantities"]["a"]["qualification"] = {"value": "source_qualified_approximate", "witnesses": [witness("Estimated")]}
++    extraction = read_product_partition_inputs(args, read_source=read)
++    assert extraction["quantities"]["a"]["approximate"]
++    raw = TEXT.replace(b"R5P 60.3", b"R5P about 60.3")
++    args, read, _ = fixture(raw)
++    assert args["quantities"]["a"]["qualification"]["value"] == "reported_point"
++    assert read_product_partition_inputs(args, read_source=read)["quantities"]["a"]["approximate"]
++
++
++def test_percent_to_fraction_conversion_and_unsupported_units_remain_partial():
++    raw = TEXT.replace(b"60.3%", b"0.603 fraction")
++    args, read, _ = fixture(raw, a_token="0.603", a_unit="fraction")
++    assert read_product_partition_inputs(args, read_source=read)["quantities"]["a"]["value"] == .603
++    args["quantities"]["a"]["measurement"]["unit"] = None
++    extraction = read_product_partition_inputs(args, read_source=read)
++    cells = populate_product_partition_components(extraction)["cells"]
++    assert cells["partition_a_fraction"]["unavailable_reason"] == "source_fraction_unit_unreported"
++    assert cells["partition_b_fraction"]["value"] == .397
++
++
++@pytest.mark.parametrize("mutation", [
++    lambda a: a["quantities"]["a"]["measurement"]["number"].update(number_start=1),
++    lambda a: a["quantities"]["a"]["measurement"]["number"]["witness"].update(quote="60.4"),
++    lambda a: a["quantities"]["a"]["measurement"].update(value=60.3),
++])
++def test_clipped_forged_or_model_authored_numbers_are_rejected(mutation):
++    args, read, _ = fixture()
++    mutation(args)
++    with pytest.raises(ValueError): read_product_partition_inputs(args, read_source=read)
++
++
++def test_duplicate_source_expression_cannot_manufacture_ratio_one():
++    args, read, _ = fixture()
++    args["quantities"]["b"] = deepcopy(args["quantities"]["a"])
++    cells = populate_product_partition_components(read_product_partition_inputs(args, read_source=read))["cells"]
++    assert cells["partition_a_over_b"]["unavailable_reason"] == "reused_source_observation"
++
++
++def test_calculator_validates_saved_extraction_before_using_numbers():
++    args, read, _ = fixture()
++    extraction = read_product_partition_inputs(args, read_source=read)
++    extraction["quantities"]["a"]["value"] = 99
++    with pytest.raises(ValueError, match="partition_saved_quantity_mismatch"):
++        populate_product_partition_components(extraction)
++
++
++@pytest.mark.parametrize("unit", ["h", "hours", "days", "U/mg", "mM", "mg"])
++def test_explicit_physical_units_cannot_be_relabelled_percent(unit):
++    raw = TEXT.replace(b"60.3%", ("60.3 " + unit).encode())
++    args, read, witness = fixture(raw, a_unit=unit)
++    args["quantities"]["a"]["measurement"]["unit"] = witness("%")
++    with pytest.raises(ValueError, match="source_fraction_unit_mismatch"):
++        read_product_partition_inputs(args, read_source=read)
++
++
++def test_unsupported_reported_fraction_unit_is_an_input_limit_not_paper_omission():
++    raw = TEXT.replace(b"60.3%", b"60.3 share")
++    args, read, _ = fixture(raw, a_unit="share")
++    extraction = read_product_partition_inputs(args, read_source=read)
++    cells = populate_product_partition_components(extraction)["cells"]
++    assert cells["partition_a_fraction"]["unavailable_reason"] == "unsupported_source_fraction_unit"
++    assert extraction["selection"]["quantities"]["a"]["measurement"]["unit"]["raw_unit"] == "share"
++    assert cells["partition_b_fraction"]["value"] == .397
++
++
++def test_out_of_range_report_is_retained_flagged_and_never_clamped():
++    raw = TEXT.replace(b"60.3%", b"160.3%")
++    args, read, _ = fixture(raw, a_token="160.3")
++    cells = populate_product_partition_components(read_product_partition_inputs(args, read_source=read))["cells"]
++    assert cells["partition_a_fraction"]["value"] == 1.603
++    assert cells["partition_a_fraction"]["outside_reported_fraction_range"]
++    assert cells["selected_fraction_sum"]["value"] == 2
++
++
++@pytest.mark.parametrize("qualification", ["unknown", "conflicting"])
++def test_unresolved_source_qualification_retains_fraction_and_blocks_pair(qualification):
++    args, read, witness = fixture()
++    args["quantities"]["a"]["qualification"] = {"value": qualification,
++        "witnesses": [] if qualification == "unknown" else [witness("R5P"), witness("Ru5P")]}
++    cells = populate_product_partition_components(read_product_partition_inputs(args, read_source=read))["cells"]
++    assert cells["partition_a_fraction"]["value"] == .603
++    assert cells["partition_a_over_b"]["unavailable_reason"] == "qualification_" + qualification
+--- /dev/null
++++ b/tests/test_literature_product_partition_integration.py
+@@ -0,0 +1,148 @@
++"""Selected primary spans and controlled shared Episode integration."""
++import asyncio
++from dataclasses import replace
++from functools import partial
++import json
++from types import SimpleNamespace
++
++import pytest
++
++from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain
++from gene_annotation_episode.domain import obj
++from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
++from gene_annotation_episode.episode_services import WorkflowServices
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_experimental_prompt import render_literature_experimental_prompt
++from gene_annotation_episode.literature_product_partition_prompt import PRODUCT_PARTITION_TASK
++from gene_annotation_episode.literature_product_partition_storage import LiteratureProductPartitionRepository, product_partition_cells_schema
++from gene_annotation_episode.runtime import run_workflow
++from gene_annotation_episode.tools import ToolRegistry
++from test_literature_product_partition_inputs import fixture, PRIMARY, TEXT
++from test_literature_product_partition_storage import setup
++from test_runtime import FixtureController, ScriptedProvider
++
++COMPONENTS = ["selected_fraction_sum", "partition_a_over_b"]
++FORM = obj({"partition": product_partition_cells_schema()})
++
++
++def binding_for(store, context, enabled=True):
++    host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
++    binding = LiteratureEpisodes(WorkflowServices(host), rate_population=True, product_partition_population=enabled)
++    host.episode_bindings = EpisodeBindingRegistry((binding,))
++    return binding
++
++
++def test_original_source_selected_population_c7_exact_return_and_default_exclusion(tmp_path):
++    raw = PRIMARY.read_bytes()
++    args = fixture(raw, primary=True)[0]
++    store, context, args = setup(tmp_path, raw=raw, arguments=args)
++    try:
++        binding = binding_for(store, context)
++        legacy = binding_for(store, context, False)
++        assert "literature.product_partition.populate" not in {row["name"] for row in legacy.catalog(context)}
++        assert "product_partition_population" not in legacy.as_record()["configuration"]
++        assert "requested_product_partition_components" not in legacy.assignment_schema("literature")["properties"]
++        context = replace(context, assignment={**plain(context.assignment), "requested_product_partition_components": COMPONENTS})
++        outcome = asyncio.run(binding.execute(context, "literature.product_partition.populate", args, "selected"))
++        assert outcome["status"] == "completed", outcome
++        assert [row["component"] for row in outcome["result"]["cells"]] == COMPONENTS
++        current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]))
++        facts = binding.facts(current, {"committed_record_refs": outcome["record_refs"]})
++        form = form_with_facts({}, FORM, facts)
++        assert [row["value"] for row in form["partition"]] == [1, pytest.approx(.603 / .397)]
++        binding.validate_report(current, form, FORM)
++        omitted = replace(current, assignment={key: value for key, value in current.assignment.items() if key != "requested_product_partition_components"})
++        assert binding.facts(omitted, {"committed_record_refs": outcome["record_refs"]})["literature_product_partition_cells"] == []
++        with pytest.raises(ReportBoundaryError, match="unrequested"):
++            binding.validate_report(omitted, form, FORM)
++        parent = replace(current, episode_id="parent", role="annotation", path=(("annotation", "parent"),), assignment={})
++        refs = binding.received_form_references(parent, form, FORM, "trusted_manual_delivery")
++        assert refs and binding.received_report_facts(parent)["literature_product_partition_cells"] == form["partition"]
++        assert binding.as_record()["configuration"]["product_partition_population"] is True
++    finally: store.close()
++
++
++def test_full_scientific_task_and_exact_subset_in_current_own_history_lookup_and_mixed_return(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        context = replace(context, assignment={**plain(context.assignment), "requested_product_partition_components": ["selected_fraction_sum"]})
++        repo = LiteratureProductPartitionRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        rows = outcome["result"]["cells"]
++        records = [store.get(ref) for ref in repo.cell_record_refs(rows) if store.get(ref)["record_type"] == "reference"]
++        state = {"literature_experimental_work": {"version": "literature_experimental_task_v1"},
++            "literature_product_partition_work": {"version": "literature_product_partition_task_v1"},
++            "literature_assignment": plain(context.assignment), "last_local_outcome": outcome,
++            "working_state": {"references": records}, "requested_form": FORM,
++            "child_reports": [{"partition": rows, "interpretation": "partial"}],
++            "current_report_update": {"partition": rows, "interpretation": "partial"}}
++        history = {"result": {"view": "records", "records": [{"selection": {"kind": "tool", "tool": "literature.product_partition.populate", "arguments": args},
++            "outcome": outcome, "admitted_report": {"partition": rows, "interpretation": "partial"}}]}}
++        prompt = render_literature_experimental_prompt(state, "Evaluate the synthetic composition experiment.", lookup_results=[history, {"result": {"partition": rows, "interpretation": "partial"}}])
++        task, steering = prompt.split("\n\nSTEERING\n")
++        assert PRODUCT_PARTITION_TASK in task
++        assert "60.3" not in steering and "39.7" not in steering and "0.603" not in steering and "0.397" not in steering
++        assert "R5P" in steering and "Ru5P" in steering and "partial" in steering
++        assert "number_start" not in steering and "partition_subject_" not in steering
++        assert "withheld unrequested numbers" in steering
++        without = {key: value for key, value in state.items() if key != "literature_product_partition_work"}
++        assert PRODUCT_PARTITION_TASK not in render_literature_experimental_prompt(without, "Evaluate the experiment.").split("\n\nSTEERING\n")[0]
++    finally: store.close()
++
++
++def test_controlled_child_population_parent_return_one_action_and_source_free_reconstruction(tmp_path, monkeypatch):
++    store, context, args = setup(tmp_path / "state")
++    assignment = {**plain(context.assignment), "requested_product_partition_components": COMPONENTS}
++    child = {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
++        "goal": "Evaluate the selected reported product composition.", "scope": plain(context.scope),
++        "purpose": "Return only requested partition components and their meanings.",
++        "schema_json": json.dumps(FORM), "initial_report_json": "{}"}, "report_update": {}}
++    work = {"selection": {"kind": "tool", "tool": "literature.product_partition.populate", "arguments": args}, "report_update": {}}
++    received, controllers = [], []
++    def receives(inputs):
++        form, = inputs["child_reports"]
++        assert [row["component"] for row in form["partition"]] == COMPONENTS
++        assert form["partition"][0]["value"] == 1
++        received.append(form)
++        commit = {field: [] for field in store.reasoning_schema()["required"]}
++        source = store.get(args["source_ref"])
++        start = TEXT.index(b"Equilibrium")
++        commit["source_subjects"] = [{"alias": "synthetic_partition_endpoint", "reference_type": "assay",
++            "source_ref": args["source_ref"], "label": "Equilibrium", "anchor": {
++                "source_ref": args["source_ref"], "artifact_ref": source["artifact_ref"],
++                "start": start, "end": start + len("Equilibrium"), "quote": "Equilibrium"}}]
++        return {"selection": {"kind": "reason", "commit": commit}, "report_update": {}}
++    def controller(path, initial):
++        result = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
++        controllers.append(result)
++        return result
++    try:
++        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
++        factories = (partial(LiteratureEpisodes, rate_population=True, product_partition_population=True,
++            reference_parent_sources=[args["source_ref"]]),)
++        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, work, receives]),
++            run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
++            initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=factories,
++            binding_definitions={"credit": scorer.as_record()}))
++        assert len(received) == 1 and summary["credit"] == 0
++        assert [row.scores for row in controllers] == [[0, 0], [0]]
++        assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 3
++        assert store.db.execute("SELECT count(*) FROM literature_product_partition_operations").fetchone()[0] == 1
++        assert not store.list("observation") and not store.list("assessment")
++        run_id, = store.db.execute("SELECT run_id FROM literature_product_partition_operations").fetchone()
++        episode_id, = store.db.execute("SELECT episode_id FROM literature_product_partition_received").fetchone()
++        artifact = store.get(args["source_ref"])["artifact_ref"]
++        original = store.get_artifact
++        def get(ref):
++            assert ref != artifact, "Reconstruction cannot reread scientific source"
++            return original(ref)
++        monkeypatch.setattr(store, "get_artifact", get)
++        monkeypatch.setattr("gene_annotation_episode.literature_product_partition_storage.read_product_partition_inputs", lambda *a, **k: pytest.fail("Source reader rerun"))
++        repo = LiteratureProductPartitionRepository(store, run_id)
++        parent = replace(context, run_id=run_id, episode_id=episode_id, role="annotation", path=(("annotation", episode_id),),
++            assignment={}, received_record_refs=(received[0]["partition"][0]["sheet_ref"],))
++        store.db.execute("PRAGMA query_only=ON")
++        assert repo.received_cells(parent) == received[0]["partition"]
++        assert repo.fact_cells(parent, [received[0]["partition"][0]["sheet_ref"]], components=list(repo.components)) == received[0]["partition"]
++    finally: store.close()
+--- /dev/null
++++ b/tests/test_literature_product_partition_storage.py
+@@ -0,0 +1,163 @@
++"""Synthetic custody, exact-subset communication, rendering and source-free replay."""
++from copy import deepcopy
++from dataclasses import replace
++import json
++
++import pytest
++
++from gene_annotation_episode.communication import plain, validate_form, validate_closed_schema
++from gene_annotation_episode.domain import ContractError, obj, validate_schema
++from gene_annotation_episode.episode_bindings import BindingContext
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.literature_product_partition_storage import (LiteratureProductPartitionRepository,
++    product_partition_cells_schema, binding_references)
++from gene_annotation_episode.literature_product_partition_render import render_received, is_row
++from test_literature_product_partition_inputs import fixture, SOURCE, TEXT
++
++
++def setup(path, raw=TEXT, arguments=None):
++    store = Store(path)
++    store.create_problem(raw_sequence="ATGGCT", molecule="dna")
++    artifact = store.artifact(raw, "text/plain")
++    source = store.put("source", {"provider": "retained_primary_pmc12051542" if arguments and arguments["source_kind"] == "primary_source" else "synthetic_partition_fixture", "accession": None,
++        "uri": None, "artifact_ref": artifact, "text_ref": artifact, "request_ref": None,
++        "version": None, "retrieved_at": None}, origin="caller")["id"]
++    args, _, witness = fixture(raw) if arguments is None else (deepcopy(arguments), None, None)
++    # A deliberately overbroad witness containing both native operands must
++    # never disclose them through a derived-only or one-fraction typed return.
++    if arguments is None:
++        args["quantities"]["a"]["meanings"]["denominator"] = witness("R5P 60.3% and Ru5P 39.7%")
++        args["evidence"] = [{"role": "composition", "witness": witness("R5P 60.3% and Ru5P 39.7%")},
++                            {"role": "competing_contribution", "witness": witness("HFP preparation")}]
++    def replace_ref(value):
++        if isinstance(value, dict): return {k: replace_ref(v) for k, v in value.items()}
++        if isinstance(value, list): return [replace_ref(v) for v in value]
++        return source if value == SOURCE else value
++    args = replace_ref(args)
++    context = BindingContext("partition-run", "partition-child", "literature", (("literature", "case"),),
++        store.validate_scope(), {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": [source]}, {}, [source])
++    return store, context, args
++
++
++def test_exact_parent_subset_keeps_meaning_without_disclosing_unrequested_operands(tmp_path):
++    validate_closed_schema(obj({"partition": product_partition_cells_schema()}))
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureProductPartitionRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        ref, refs = outcome["result"]["sheet_ref"], outcome["record_refs"]
++        assert repo.project_cells([ref], permitted_record_refs=refs) == []
++        rows = repo.project_cells([ref], permitted_record_refs=refs, components=["selected_fraction_sum"])
++        validate_schema(rows, product_partition_cells_schema())
++        validate_form({"partition": rows}, obj({"partition": product_partition_cells_schema()}),
++            lambda reference, namespace: store.reference_subset([reference], plain(context.scope)))
++        assert len(rows) == 1 and rows[0]["value"] == 1
++        assert rows[0]["quantities"][0]["denominator_ref"] is None
++        assert rows[0]["evidence"][0]["witness_ref"] is None
++        assert rows[0]["evidence"][0]["availability"] == "withheld_unrequested_numbers"
++        assert rows[0]["evidence"][1]["witness_ref"] is not None
++        assert all("value" not in q for q in rows[0]["quantities"])
++        records = {r: store.get(r) for r in binding_references(rows)}
++        display = []
++        render_received(display, rows, records,
++            section=lambda parts, title, value: parts.append(title + "\n" + str(value)),
++            table=lambda header, body: str(list(header)) + str(list(body)))
++        text = "\n".join(display)
++        assert "60.3" not in text and "39.7" not in text and "0.603" not in text and "0.397" not in text
++        assert "R5P" in text and "Ru5P" in text and "equilibrium" in text
++        assert is_row(rows[0])
++        assert not store.list("observation") and not store.list("assessment")
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("mutation", [lambda r: r.update(value=99),
++    lambda r: r["quantities"][0].update(basis="signal_fraction"),
++    lambda r: r["relationships"].update(shared_denominator="unknown")])
++def test_changed_returned_number_or_meaning_is_rejected(tmp_path, mutation):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureProductPartitionRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        rows = repo.project_cells([outcome["result"]["sheet_ref"]], permitted_record_refs=outcome["record_refs"], components=["partition_a_over_b"])
++        mutation(rows[0])
++        with pytest.raises(ContractError, match="differs_from_saved"):
++            repo.validate_returned_values(rows, permitted_record_refs=outcome["record_refs"])
++    finally: store.close()
++
++
++def test_source_free_read_reconstruction_and_replay_preserve_only_admitted_subset(tmp_path, monkeypatch):
++    store, context, args = setup(tmp_path)
++    repo = LiteratureProductPartitionRepository(store, context.run_id)
++    outcome = repo.populate(context, args, "selected")
++    ref = outcome["result"]["sheet_ref"]
++    rows = repo.project_cells([ref], permitted_record_refs=outcome["record_refs"], components=["partition_a_over_b"])
++    parent = replace(context, episode_id="parent", role="annotation", path=(("annotation", "parent"),), assignment={}, received_record_refs=[ref])
++    repo.receive_cells(parent, rows, "delivery")
++    repo.receive_cells(parent, rows, "delivery")
++    artifact = store.get(args["source_ref"])["artifact_ref"]
++    assert repo.fact_cells(parent, [ref], components=["partition_a_fraction", "partition_a_over_b"]) == rows
++    store.close()
++    def forbidden(*args, **kwargs): raise AssertionError("Source reader must not run on replay")
++    monkeypatch.setattr("gene_annotation_episode.literature_product_partition_storage.read_product_partition_inputs", forbidden)
++    with Store(tmp_path) as reopened:
++        original = reopened.get_artifact
++        def get(reference):
++            assert reference != artifact, "Scientific source bytes must not be reopened"
++            return original(reference)
++        monkeypatch.setattr(reopened, "get_artifact", get)
++        repo = LiteratureProductPartitionRepository(reopened, context.run_id)
++        reopened.db.execute("PRAGMA query_only=ON")
++        before = reopened.db.total_changes
++        assert repo.populate(context, args, "selected") == outcome
++        assert repo.received_cells(parent) == rows
++        assert repo.fact_cells(parent, [ref], components=["selected_fraction_sum"]) == []
++        assert reopened.db.total_changes == before
++        with pytest.raises(ContractError, match="not_received"):
++            repo.populate(replace(context, received_record_refs=[]), args, "selected")
++
++
++def test_source_scope_and_assigned_page_limit_access(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureProductPartitionRepository(store, context.run_id)
++        with pytest.raises(ContractError, match="not_received"):
++            repo.populate(replace(context, received_record_refs=[]), args, "no-receipt")
++        artifact = store.artifact("Other paper", "text/plain")
++        other = store.put("source", {"provider": "other", "accession": None, "uri": None,
++            "artifact_ref": artifact, "text_ref": artifact, "request_ref": None, "version": None, "retrieved_at": None}, origin="caller")["id"]
++        with pytest.raises(ContractError, match="outside_assigned_source"):
++            repo.populate(replace(context, role="literature_page", path=(("literature_page", "page"),), assignment={"source_ref": other}), args, "outside")
++        assert not repo._installed()
++    finally: store.close()
++
++
++def test_cold_query_only_discovery_and_received_lookup_create_no_tables(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        store.db.execute("PRAGMA query_only=ON")
++        before = store.db.total_changes
++        repo = LiteratureProductPartitionRepository(store, context.run_id)
++        assert repo.received_cells(context) == []
++        assert repo.project_cells([], permitted_record_refs=[]) == []
++        assert not repo._installed()
++        assert store.db.total_changes == before
++    finally: store.close()
++
++
++def test_own_population_outcome_has_only_original_requested_typed_subset(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        context = replace(context, assignment={**plain(context.assignment),
++            "requested_product_partition_components": ["selected_fraction_sum"]})
++        repo = LiteratureProductPartitionRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        assert [row["component"] for row in outcome["result"]["cells"]] == ["selected_fraction_sum"]
++        assert outcome["result"]["cells"][0]["quantities"][0]["meaning_status"]["denominator"] == "withheld_unrequested_numbers"
++        assert len(repo.read(outcome["result"]["sheet_ref"])["sheet"]["cells"]) == 5
++        records = [store.get(ref) for ref in outcome["record_refs"] if store.get(ref)["record_type"] == "reference"]
++        assert all("60.3" not in row["label"] and "39.7" not in row["label"] for row in records)
++        changed = replace(context, assignment={**plain(context.assignment), "requested_product_partition_components": ["partition_a_fraction"]})
++        with pytest.raises(ContractError, match="operation_key_reused"):
++            repo.populate(changed, args, "selected")
++    finally: store.close()
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -66,7 +66,7 @@
+ }
+ 
+ 
+-def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False):
++def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False, completion_time_population=False, product_partition_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
+     from .literature_rate_storage import rate_population_schema
+@@ -153,6 +153,11 @@
+     result.append({"name": "literature.binding.interaction.model.populate",
+         "description": "Populate the existing four conditional binding interaction log-model cells from an actually received committed native interaction sheet and an optional explicit received model packet. The prepared binding_interaction_log_model_v1 JSON omits source; provenance is bound from actual bytes. Keep four exact physical fit owners and canonical estimate keys, natural-log nM basis, full covariance, known/estimated/unknown status and source-defined reporting-event support. No paper-covariance packet producer is supplied here. SD/SEM/counts and distinct preparations do not establish covariance or independence. These dependent parameter-interaction statistics are not intrinsic affinity, reliability, function probabilities, target transfer or annotation credit.",
+         "input_schema": binding_interaction_model_population_schema()})
++    if product_partition_population:
++        from .literature_product_partition_inputs import product_partition_arguments_schema
++        result.append({"name": "literature.product_partition.populate",
++            "description": "Populate selected A105 reported product-composition fractions and their dependent sum, signed numerical closure and relative partition. Read exact original number/unit spans; retain basis, preparation, endpoint, stage, denominator, source qualification and competing-contribution evidence. These quantities are not rate, specificity, independent mass balance or molecule-specific attribution. Numerical uncertainty propagation is not implemented.",
++            "input_schema": product_partition_arguments_schema()})
+     if completion_time_population:
+         from .literature_completion_time_inputs import completion_time_arguments_schema
+         from .literature_completion_time_prompt import COMPLETION_TIME_OPERATION_DESCRIPTION
+@@ -191,7 +196,7 @@
+                  ratio_source_evidence_origin="reported_source", controlled_response_population=False,
+                  controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
+                  gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source",
+-                 completion_time_population=False):
++                 completion_time_population=False, product_partition_population=False):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -204,6 +209,11 @@
+         if completion_time_population and not rate_population:
+             raise ValueError("completion_time_population_requires_rate_population")
+         self.completion_time_population = completion_time_population
++        if type(product_partition_population) is not bool:
++            raise ValueError("boolean_product_partition_population_binding_required")
++        if product_partition_population and not rate_population:
++            raise ValueError("product_partition_population_requires_rate_population")
++        self.product_partition_population = product_partition_population
+         if type(ratio_source_population) is not bool:
+             raise ValueError("boolean_ratio_source_population_binding_required")
+         if ratio_source_population and not rate_population:
+@@ -342,10 +352,15 @@
+                          "literature_ratio_source_prompt.py", "literature_ratio_source_render.py",
+                          "literature_completion_time_inputs.py", "literature_completion_time_calculations.py",
+                          "literature_completion_time_storage.py", "literature_completion_time_prompt.py",
+-                         "literature_completion_time_render.py"):
++                         "literature_completion_time_render.py",
++                         "literature_product_partition_inputs.py", "literature_product_partition_calculations.py",
++                         "literature_product_partition_storage.py", "literature_product_partition_prompt.py",
++                         "literature_product_partition_render.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.completion_time_population:
+             configuration["completion_time_population"] = True
++        if self.product_partition_population:
++            configuration["product_partition_population"] = True
+         if self.ratio_source_population:
+             configuration.update(ratio_source_population=True,
+                 ratio_source_evidence_origin=self.ratio_source_evidence_origin)
+@@ -481,6 +496,10 @@
+             from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS
+             schema["properties"]["requested_binding_interaction_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(INTERACTION_COMPONENTS)}}
++        if self.product_partition_population:
++            from .literature_product_partition_calculations import COMPONENTS as PARTITION_COMPONENTS
++            schema["properties"]["requested_product_partition_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(PARTITION_COMPONENTS)}}
+         if self.completion_time_population:
+             from .literature_completion_time_calculations import COMPONENTS as TIME_COMPONENTS
+             schema["properties"]["requested_completion_time_components"] = {
+@@ -622,11 +641,14 @@
+                         {name: entry[name] for name in ("name", "description")}
+                         for entry in _population_catalog(ratio_source_population=self.ratio_source_population,
+                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+-                            completion_time_population=self.completion_time_population)]},
++                            completion_time_population=self.completion_time_population,
++                            product_partition_population=self.product_partition_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
+         if self.completion_time_population:
+             result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
++        if self.product_partition_population:
++            result["literature_product_partition_work"] = {"version": "literature_product_partition_task_v1"}
+         if self.ratio_source_population:
+             from .literature_ratio_source_render import admitted_return_meanings
+             result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
+@@ -660,6 +682,8 @@
+                 "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+         if self.completion_time_population:
+             result["literature_completion_time_work"] = {"version": "literature_completion_time_task_v1"}
++        if self.product_partition_population:
++            result["literature_product_partition_work"] = {"version": "literature_product_partition_task_v1"}
+         if self.ratio_source_population:
+             from .literature_ratio_source_render import admitted_return_meanings
+             result["literature_ratio_source_work"] = {"version": "literature_ratio_source_task_v1"}
+@@ -704,7 +728,8 @@
+         if self.rate_population:
+             populations = _population_catalog(ratio_source_population=self.ratio_source_population,
+                             controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+-                            completion_time_population=self.completion_time_population)
++                            completion_time_population=self.completion_time_population,
++                            product_partition_population=self.product_partition_population)
+             if self._contract_information_profile is not None:
+                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
+                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
+@@ -744,7 +769,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -774,7 +799,7 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+@@ -783,6 +808,7 @@
+                         "literature.assay.populate": self.services.literature_assay_repository,
+                         "literature.amount.populate": self.services.literature_amount_repository,
+                         "literature.completion_time.populate": self._completion_time_repository,
++                        "literature.product_partition.populate": self._product_partition_repository,
+                         "literature.optical.populate": self.services.literature_optical_repository,
+                         "literature.kinetic.populate": self.services.literature_kinetic_repository,
+                         "literature.kinetic.model.populate": self._kinetic_model_repository,
+@@ -841,6 +867,14 @@
+             self._completion_time_repo = LiteratureCompletionTimeRepository(
+                 self.services.workflow.store, self.services.workflow.run_id)
+         return self._completion_time_repo
++
++    def _product_partition_repository(self):
++        """Lazy source-composition adapter; discovery installs no state."""
++        from .literature_product_partition_storage import LiteratureProductPartitionRepository
++        if not hasattr(self, "_product_partition_repo"):
++            self._product_partition_repo = LiteratureProductPartitionRepository(
++                self.services.workflow.store, self.services.workflow.run_id)
++        return self._product_partition_repo
+ 
+     def _binding_interaction_model_repository(self):
+         """Optional adapter; construction and saved reads install no tables."""
+@@ -1157,6 +1191,11 @@
+             "literature_binding_interaction_cells": {"type": "array", "meaning":
+                 "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
+                 "report_schema": binding_interaction_cells_schema()}}
++        if self.product_partition_population:
++            from .literature_product_partition_storage import product_partition_cells_schema, NAMESPACE
++            result[NAMESPACE] = {"type": "array", "meaning":
++                "Exactly requested reported product-composition fractions and dependent sum, signed closure deviation or relative partition, with actual species, preparation, endpoint, stage, denominator, basis and source qualifications. Selected numerical closure is not independent mass balance, rate, specificity or molecular attribution. Unknown relationships preserve individual fractions; numerical uncertainty propagation is not implemented. Unrequested native operands are not expanded.",
++                "report_schema": product_partition_cells_schema()}
+         if self.completion_time_population:
+             from .literature_completion_time_storage import completion_time_cells_schema, NAMESPACE
+             result[NAMESPACE] = {"type": "array", "meaning":
+@@ -1257,6 +1296,10 @@
+                  INTERACTION_COMPONENTS, self.services.literature_binding_interaction_repository),
+                 ("literature_binding_interaction_model_cells", "requested_binding_interaction_model_components", INTERACTION_MODEL_PROVIDER,
+                  INTERACTION_MODEL_COMPONENTS, self._binding_interaction_model_repository))
++        if self.product_partition_population:
++            from .literature_product_partition_storage import PROVIDER as PARTITION_PROVIDER, NAMESPACE
++            result += ((NAMESPACE, "requested_product_partition_components", PARTITION_PROVIDER,
++                (), self._product_partition_repository),)
+         if self.completion_time_population:
+             from .literature_completion_time_storage import COMPONENTS as TIME_COMPONENTS, PROVIDER as TIME_PROVIDER, NAMESPACE
+             result += ((NAMESPACE, "requested_completion_time_components", TIME_PROVIDER,
+@@ -1400,6 +1443,11 @@
+             if cells:
+                 repository().receive_cells(context, cells, operation_key)
+         references = []
++        if self.product_partition_population:
++            from .literature_product_partition_storage import NAMESPACE
++            cells = [row for name, node in schema.get("properties", {}).items()
++                if node.get("x-source") == NAMESPACE for row in form[name]]
++            references.extend(self._product_partition_repository().cell_record_refs(cells))
+         if self.completion_time_population:
+             from .literature_completion_time_storage import NAMESPACE
+             cells = [row for name, node in schema.get("properties", {}).items()
+@@ -1471,7 +1519,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace == "literature_completion_time_cells" else None)
++                        [] if namespace in {"literature_completion_time_cells", "literature_product_partition_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                 except ContractError as error:
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -15,6 +15,8 @@
+ from .literature_gel_prompt import GEL_TASK
+ from . import literature_completion_time_render as _completion_time
+ from .literature_completion_time_prompt import COMPLETION_TIME_TASK
++from . import literature_product_partition_render as _product_partition
++from .literature_product_partition_prompt import PRODUCT_PARTITION_TASK
+ from . import literature_rate_source_render as _native_rate
+ from . import literature_rate_domains as _rate_domains
+ from . import literature_rate_meaning_render as _rate_meanings
+@@ -245,11 +247,14 @@
+     meaning_rows.extend(_rate_meanings.own_rows(own, state.get("literature_rate_source_meaning_display", {}).get("cells", ())))
+     native_rows.extend(_rate_domains.base_rows(_rate_meanings.base_rows(meaning_rows)))
+     hidden_native_rate = _native_rate.hidden_records(native_rows)
++    partition_rows = list(_product_partition.rows_from_values((state.get("last_local_outcome", {}),
++        state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results)))
++    hidden_partition = _product_partition.hidden_records(partition_rows)
+     covariance_support = set(_covariance_support_refs((state.get("last_local_outcome", {}),
+         state.get("child_reports", ()), state.get("current_report_update", {}), lookup_results), records))
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate or reference in hidden_partition:
+             continue
+         row = records[reference]
+         if reference in covariance_support:
+@@ -337,6 +342,8 @@
+         parts.extend(["", CONTROLLED_RESPONSE_TASK])
+     if state.get("literature_completion_time_work", {}).get("version") == "literature_completion_time_task_v1":
+         parts.extend(["", COMPLETION_TIME_TASK])
++    if state.get("literature_product_partition_work", {}).get("version") == "literature_product_partition_task_v1":
++        parts.extend(["", PRODUCT_PARTITION_TASK])
+     if state.get("literature_gel_work", {}).get("version") == "literature_gel_task_v1":
+         parts.extend(["", GEL_TASK])
+     profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
+@@ -353,7 +360,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_completion_time_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
++        "requested_product_partition_components", "requested_completion_time_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -479,6 +486,12 @@
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if isinstance(content, Mapping) and content.get("view") == "reported_product_partition_components":
++        requested = (completion_assignment or {}).get("requested_product_partition_components", ())
++        rows = [row for row in content["cells"] if row["component"] in requested]
++        _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
++        _product_partition.render_received(parts, rows, controlled_records or {}, section=_section, table=_table)
++        return
+     if (isinstance(content, Mapping) and "sheet_ref" in content
+             and isinstance(content.get("cells"), (tuple, list)) and content["cells"]
+             and all(_completion_time.is_row(row) for row in content["cells"])):
+@@ -490,7 +503,8 @@
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])):
++    if (list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content]))
++            or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+             controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records,
+@@ -501,7 +515,10 @@
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+             and (any(_rate_meanings.rows_from_values(content["records"]))
+-                or any(_completion_time.rows_from_values(content["records"])))):
++                or any(_completion_time.rows_from_values(content["records"]))
++                or any(_product_partition.rows_from_values(content["records"]))
++                or any(isinstance(row, Mapping) and row.get("selection", {}).get("tool") == "literature.product_partition.populate"
++                       for row in content["records"]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         for record in content["records"]:
+             if not isinstance(record, Mapping):
+@@ -956,6 +973,7 @@
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     completion_times = {}
++    product_partitions = {}
+     ratio_source = {}
+     kinetic_model = {}
+     interaction_model = {}
+@@ -977,7 +995,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_completion_time.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_product_partition.is_row(row) for row in value):
++                for row in value:
++                    product_partitions.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_completion_time.is_row(row) for row in value):
+                 for row in value:
+                     completion_times.setdefault(row["sheet_ref"], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(native_context_row(row) for row in value):
+@@ -1194,6 +1215,8 @@
+ 
+     for rows in completion_times.values():
+         _completion_time.render_received(parts, rows, section=_section, table=_table)
++    for rows in product_partitions.values():
++        _product_partition.render_received(parts, rows, records or {}, section=_section, table=_table)
+     for rows in ratio_source.values():
+         _ratio_source_received(parts, rows, ratio_source_meanings or {}, section=_section, table=_table, values=_values)
+     for rows in controlled.values():
+@@ -1252,6 +1275,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_partition_sheets = {row["sheet_ref"] for row in _product_partition.rows_from_reports(state.get("child_reports", ()))}
+         received_completion_time_sheets = {row["sheet_ref"] for row in _completion_time.rows_from_reports(state.get("child_reports", ()))}
+         received_interaction_model_sheets = {row["sheet_ref"] for row in _interaction_model.rows_from_reports(state.get("child_reports", ()))}
+         received_kinetic_model_sheets = {row["sheet_ref"] for row in _kinetic_model.rows_from_reports(state.get("child_reports", ()))}
+@@ -1264,7 +1288,7 @@
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_domains.rows_from_reports(state.get('child_reports', ())))
+         received_native_rate_sheets.update(row['sheet_ref'] for row in _rate_meanings.rows_from_reports(state.get('child_reports', ())))
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_completion_time_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_partition_sheets | received_completion_time_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1278,7 +1302,8 @@
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+-        if list(_completion_time.rows_from_reports([state["current_report_update"]])):
++        if (list(_completion_time.rows_from_reports([state["current_report_update"]])) or
++                list(_product_partition.rows_from_reports([state["current_report_update"]]))):
+             _received_returns(parts, [state["current_report_update"]], records=controlled_records,
+                 ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
+                 controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records,
+--- a/gene_annotation_episode/literature_reference_parent_prompt.py
++++ b/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -62,6 +62,9 @@
+     if state.get("literature_completion_time_work", {}).get("version") == "literature_completion_time_task_v1":
+         from .literature_completion_time_prompt import COMPLETION_TIME_TASK
+         parts.extend(["", COMPLETION_TIME_TASK])
++    if state.get("literature_product_partition_work", {}).get("version") == "literature_product_partition_task_v1":
++        from .literature_product_partition_prompt import PRODUCT_PARTITION_TASK
++        parts.extend(["", PRODUCT_PARTITION_TASK])
+     additional = normalized.replace(REFERENCE_PARENT_TASK, "").replace(SAVED_NUMERICAL_RETURN_TASK, "").strip()
+     if additional:
+         parts.extend(["", additional])

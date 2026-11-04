@@ -1,0 +1,101 @@
+{
+  "active_files_after": {
+    "state.sqlite3": {
+      "bytes": 273891328,
+      "device": 2050,
+      "inode": 69804190,
+      "mode": "0600",
+      "mtime_ns": 1792668947051505089,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/state.sqlite3"
+    },
+    "state.sqlite3-shm": {
+      "bytes": 32768,
+      "device": 2050,
+      "inode": 69804213,
+      "mode": "0600",
+      "mtime_ns": 1792668946397506528,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/state.sqlite3-shm"
+    },
+    "state.sqlite3-wal": {
+      "bytes": 6274792,
+      "device": 2050,
+      "inode": 69804212,
+      "mode": "0600",
+      "mtime_ns": 1792668946977505251,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/state.sqlite3-wal"
+    }
+  },
+  "active_files_before": {
+    "state.sqlite3": {
+      "bytes": 273891328,
+      "device": 2050,
+      "inode": 69804190,
+      "mode": "0600",
+      "mtime_ns": 1792668947051505089,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/state.sqlite3"
+    },
+    "state.sqlite3-shm": {
+      "bytes": 32768,
+      "device": 2050,
+      "inode": 69804213,
+      "mode": "0600",
+      "mtime_ns": 1792668946397506528,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/state.sqlite3-shm"
+    },
+    "state.sqlite3-wal": {
+      "bytes": 6274792,
+      "device": 2050,
+      "inode": 69804212,
+      "mode": "0600",
+      "mtime_ns": 1792668946977505251,
+      "path": "/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/state.sqlite3-wal"
+    }
+  },
+  "concurrency_limit": "WAL files may grow through the independent active run; selected rows belong to one SQLite read snapshot.",
+  "connection_closed_at": "2026-10-22T11:36:43.815119+00:00",
+  "explicit_begin": true,
+  "finally_rollback_and_close": true,
+  "query_only": true,
+  "snapshot_payload_captured_at": "2026-10-22T11:36:43.814647+00:00",
+  "sql_statements": [
+    "PRAGMA query_only=ON",
+    "PRAGMA query_only",
+    "BEGIN",
+    "SELECT count(*) FROM runtime_actions WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac'",
+    "SELECT count(*) FROM runtime_observations WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac'",
+    "SELECT count(*) FROM runtime_episodes WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac'",
+    "SELECT count(*) FROM runtime_commission_intents WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac'",
+    "SELECT count(*) FROM runtime_model_calls WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac'",
+    "SELECT * FROM runtime_actions WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND decision_index=35",
+    "SELECT * FROM runtime_actions WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND decision_index=37",
+    "SELECT * FROM runtime_actions WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND decision_index=38",
+    "SELECT * FROM runtime_actions WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND decision_index=39",
+    "SELECT * FROM runtime_actions WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND decision_index=40",
+    "SELECT * FROM runtime_actions WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND decision_index=41",
+    "SELECT * FROM runtime_observations WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' ORDER BY unit_index",
+    "SELECT * FROM records WHERE id='assessment_40b9f1991d5139c31739e6fd'",
+    "SELECT * FROM records WHERE id='source_827720648609fb105f7af587'",
+    "SELECT * FROM records WHERE id='observation_3971ded7cade6cc8aeae3788'",
+    "SELECT * FROM records WHERE id='reference_08a1efd2c6cbb8e40a053a31'",
+    "SELECT * FROM records WHERE id='annotation_d119928935b17e0260a7c2dd'",
+    "SELECT * FROM records WHERE id='context_8d22034762de8ef95506b280'",
+    "SELECT * FROM records WHERE id='term_5f0910bfdf9799ca5b5781ab'",
+    "SELECT * FROM records WHERE id='hypothesis_c8c174d0b7c4cc862723f8b2'",
+    "SELECT * FROM records WHERE id='term_1f995b3c0cc9bd6e5caad493'",
+    "SELECT * FROM records WHERE id='assessment_2a06237e8cdc683a7c0eeff5'",
+    "SELECT * FROM records WHERE id='assessment_bf30b5213fa3a24a42a20e93'",
+    "SELECT * FROM records WHERE id='context_10fbca90ff6c6ecdeb5e3468'",
+    "SELECT * FROM records WHERE id='reference_de93d8f10f1d30740c09f5a5'",
+    "SELECT * FROM runtime_record_receipts WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND record_ref IN ('assessment_40b9f1991d5139c31739e6fd','source_827720648609fb105f7af587','observation_3971ded7cade6cc8aeae3788','reference_08a1efd2c6cbb8e40a053a31','annotation_d119928935b17e0260a7c2dd','context_8d22034762de8ef95506b280','term_5f0910bfdf9799ca5b5781ab','hypothesis_c8c174d0b7c4cc862723f8b2','term_1f995b3c0cc9bd6e5caad493','assessment_2a06237e8cdc683a7c0eeff5','assessment_bf30b5213fa3a24a42a20e93','context_10fbca90ff6c6ecdeb5e3468','reference_de93d8f10f1d30740c09f5a5') ORDER BY receipt_index",
+    "SELECT call_index,purpose,request,response FROM runtime_model_calls WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND call_index=35",
+    "SELECT call_index,purpose,request,response FROM runtime_model_calls WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND call_index=39",
+    "SELECT call_index,purpose,request,response FROM runtime_model_calls WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND call_index=40",
+    "SELECT call_index,purpose,request,response FROM runtime_model_calls WHERE run_id='run_23b029a976e343e2bf3957dcc5d0d2ac' AND episode_id='episode_3f296d8c6dbd96a740157d29eceda747dd4cc7b19d97b4763735999fe99b1979' AND call_index=41",
+    "SELECT * FROM artifacts WHERE id='artifact_a2194447b305d39b9c959eaa52c678c78103e9cd40f260669f3a4ea994e8ff36'",
+    "ROLLBACK"
+  ],
+  "sqlite_total_changes": 0,
+  "transaction_started_at": "2026-10-22T11:36:43.463830+00:00",
+  "uri": "file:/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001/workspace/state.sqlite3?mode=ro",
+  "whole_database_hash_or_unchanged_claim": false
+}

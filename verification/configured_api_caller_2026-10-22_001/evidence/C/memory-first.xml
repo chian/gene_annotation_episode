@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="16.970" timestamp="2026-10-22T04:32:07.414403-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_scientific_checkpoint_fork" name="test_success_exact_checkpoint_and_actual_lineage_readers" time="5.643" /><testcase classname="tests.test_scientific_checkpoint_fork" name="test_packed_component_corruption_is_not_materialized_or_repaired" time="5.481" /><testcase classname="tests.test_scientific_checkpoint_fork" name="test_actual_destination_constructor_must_not_change_schema_or_old_data[table]" time="5.496"><failure message="AssertionError: assert ['destination...aa1bd5ea4cdd'] == ['destination...hema_or_rows']&#10;  &#10;  Left contains one more item: '/tmp/scientific-checkpoint-c006-memory-first-20261022-001/test_actual_destination_constr0/.new.checkpoint-a3b7885b013b4e0db092aa1bd5ea4cdd'&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/scientific-checkpoint-c006-memory-first-20261022-001/test_actual_destination_constr0')
+delta = 'table'
+
+    @pytest.mark.parametrize('delta', ['table', 'index', 'artifact', 'old_row'])
+    def test_actual_destination_constructor_must_not_change_schema_or_old_data(tmp_path, delta):
+        source = checkpoint_source_fixture(tmp_path)
+        original = Store.__init__
+        def changed(self, path):
+            original(self, path)
+            if delta == 'table':
+                self.db.execute('CREATE TABLE implicit_upgrade(value)')
+            elif delta == 'index':
+                self.db.execute('CREATE INDEX implicit_upgrade ON fixture_typed_cells(value)')
+            elif delta == 'artifact':
+                self.artifact(b'not declared lineage')
+            else:
+                self.db.execute('UPDATE fixture_typed_cells SET value=2 WHERE typeof(value)=\'integer\'')
+        with patch.object(Store, '__init__', changed):
+            value = failure(source, tmp_path/'new', 'snapshot_mismatch')
+        assert value['publication_state'] == 'retained_stage'
+&gt;       assert value['affected_refs'] == ['destination_constructor_schema_or_rows']
+E       AssertionError: assert ['destination...aa1bd5ea4cdd'] == ['destination...hema_or_rows']
+E         
+E         Left contains one more item: '/tmp/scientific-checkpoint-c006-memory-first-20261022-001/test_actual_destination_constr0/.new.checkpoint-a3b7885b013b4e0db092aa1bd5ea4cdd'
+E         Use -v to get more diff
+
+tests/test_scientific_checkpoint_fork.py:438: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,31 @@
+....................F..........................                          [100%]
+=================================== FAILURES ===================================
+_______ test_null_pssm_calculation_is_unavailable_without_recalculation ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_standard_blast_database_episode_binding_2026-10-26_336/check_20261026T214905364549Z/tmp/test_null_pssm_calculation_is_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d7c78a628d0>
+
+    def test_null_pssm_calculation_is_unavailable_without_recalculation(tmp_path, monkeypatch):
+        from gene_annotation_episode.native_blast_standard_database_result_publication import (
+            _validate_preparation, _full_rows, _hsp_payload, _QueryQualification)
+        h = SyntheticHost(tmp_path, monkeypatch, program='tblastn', query_kind='pssm', sequence='AC')
+        try:
+            child = h.results(query_selection(h, kind='pssm'))
+            body = h.select(child, 0, 'execution.results.collect')['result']
+            assert body['complete'], body['failures']
+            prepared = body['preparation']; frozen = _validate_preparation(h.store, child, prepared)
+            rows = _full_rows(h.store, prepared, frozen)
+            full = next(row for row in rows if row['family'] == 'hsp')
+            artifacts = frozen['grading']['artifact_refs']
+            inputs, collection, calculations, sheets = [json.loads(h.store.get_artifact(artifacts[role]))
+                for role in ('inputs', 'collection', 'calculations', 'sheets')]
+            calculations['pssm'][0]['components'] = None
+>           with pytest.raises(_QueryQualification, match='master_positional_map_unavailable'):
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'master_positional_map_unavailable'
+E             Actual message: 'query_operand_unresolved'
+
+../../../tests/test_native_blast_standard_database_results.py:430: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_standard_database_results.py::test_null_pssm_calculation_is_unavailable_without_recalculation
+1 failed, 46 passed in 861.16s (0:14:21)

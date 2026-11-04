@@ -1,0 +1,79 @@
+{
+  "performed_at_utc": "2026-10-21T21:07:32.085155+00:00",
+  "scope": "Read-only current public records and arithmetic. Known published outcomes disclosed in advance. No biological measurements, map refinement or wet-lab experiments.",
+  "yihu": {
+    "uniprot": "P0A9V8",
+    "length": 298,
+    "sequence_sha256": "f1a47f2b816543c61a622e810878a56ef6152fede889baa26b0868a2a94bdb90",
+    "published_sulfonate_motif_regex": "[DE]VPVGRT...A..G",
+    "hits": [
+      {
+        "start_1based": 118,
+        "sequence": "DVPVGRTSANAITG"
+      }
+    ],
+    "residues_at_published_positions": {
+      "123": "R",
+      "174": "N",
+      "178": "S"
+    },
+    "pdb": "6SMY",
+    "resolution_A": [
+      2.45
+    ],
+    "product_component": {
+      "formula": "C3 H8 O5 S",
+      "formula_weight": 156.158,
+      "id": "LLQ",
+      "name": "(2~{S})-2,3-bis(oxidanyl)propane-1-sulfonic acid",
+      "pdbx_ambiguous_flag": "N",
+      "pdbx_formal_charge": 0,
+      "pdbx_initial_date": "2019-08-23T00:00:00.000+00:00",
+      "pdbx_modified_date": "2020-06-19T00:00:00.000+00:00",
+      "pdbx_processing_site": "EBI",
+      "pdbx_release_status": "REL",
+      "three_letter_code": "LLQ",
+      "type": "non-polymer"
+    },
+    "interpretation": "Product component has sulfonate plus two hydroxy groups, supporting DHPS identity, rather than GHB. Sequence confirms the published motif at residues118-131. This corroborates the assignment with known answer; it does not demonstrate native flux. PDB labels the dinucleotide NAD despite a title describing NADH, so its oxidation state is not newly established here."
+  },
+  "yigl": {
+    "pdb": "3PGV",
+    "protein_source": "Klebsiella pneumoniae KPN_04322, UniProt A6TGK6; not E. coli YigL",
+    "components": [
+      {
+        "comp_id": "CA",
+        "entity_id": "2",
+        "name": "CALCIUM ION"
+      },
+      {
+        "comp_id": "EPE",
+        "entity_id": "3",
+        "name": "4-(2-HYDROXYETHYL)-1-PIPERAZINE ETHANESULFONIC ACID"
+      },
+      {
+        "comp_id": "GOL",
+        "entity_id": "4",
+        "name": "GLYCEROL"
+      },
+      {
+        "comp_id": "EDO",
+        "entity_id": "5",
+        "name": "1,2-ETHANEDIOL"
+      }
+    ],
+    "interpretation": "The reference structure used to orient docking contains HEPES/EPE and cryoprotectants, not PNP/PLP. It cannot serve as crystallographic evidence of vitamin substrate recognition by E. coli YigL. Published genotype/metabolite experiments supply the relevant evidence."
+  },
+  "yihu_arithmetic": {
+    "inputs": {
+      "Vmax_umol_min_mg": 0.2,
+      "monomer_molecular_weight_g_mol": 31154,
+      "Km_SSA_M": 0.0043,
+      "SLA_efficiency_M_inv_s_inv": 1090000.0
+    },
+    "calculated_kcat_SSA_s_inv": 0.10384666666666666,
+    "calculated_SSA_efficiency_M_inv_s_inv": 24.150387596899222,
+    "SLA_over_SSA_ratio": 45133.851190858324,
+    "limitations": "Approximately45,000 with the original paper molecular weight versus the later paper reported~42,000. Different preparations, NADH concentrations and rounded parameters prevent a matched-condition precision claim; monomer-active-site normalization assumed. The qualitative disparity is the useful result."
+  }
+}

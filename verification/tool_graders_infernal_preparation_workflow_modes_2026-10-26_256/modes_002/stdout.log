@@ -1,0 +1,80 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/chia/repos/gene_annotation_episode/.venv/bin/python
+rootdir: /home/chia/repos/gene_annotation_episode
+configfile: pyproject.toml
+collecting ... collected 20 items
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmbuild-refine] PASSED [  5%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-legacy_ascii] PASSED [ 10%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-maximum_likelihood_hmm] PASSED [ 15%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-filter_hmm] PASSED [ 20%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmconvert-binary] PASSED [ 25%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmemit-sample_unaligned] PASSED [ 30%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmemit-sample_aligned] PASSED [ 35%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-key_file] FAILED [ 40%]
+RETAINED FAILURE tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-key_file]
+../../../tests/test_native_infernal_preparation_workflow_modes.py:377: in test_remaining_native_preparation_modes_through_workflow
+    assert_native_custody(case, bundle)
+../../../tests/test_native_infernal_preparation_workflow_modes.py:238: in assert_mode_numbers
+    ???
+../../../tests/test_native_infernal_preparation_workflow_modes.py:104: in present
+    assert cell['value'] == pytest.approx(expected), cell
+E   AssertionError: {'basis': 'derived', 'inputs': [{'field': 'model_record', 'locator': {'artifact_ref': 'artifact_5d0dc3a22883c5d1d17b44d608c22bc2545aa6bf9509ba82a0577bbf566bc336#/inputs/0', 'byte_end': 50009, 'byte_start': 0, 'line_end': 563, ...}}, {'field': 'model_record', 'locator': {'artifact_ref': 'artifact_5d0dc3a22883c5d1d17b44d608c22bc2545aa6bf9509ba82a0577bbf566bc336#/inputs/0', 'byte_end': 101414, 'byte_start': 50009, 'line_end': 1140, ...}}], 'native_token': None, 'state': 'present', ...}
+E   assert 2 == 1 ± 1.0e-06
+E     
+E     comparison failed
+E     Obtained: 2
+E     Expected: 1 ± 1.0e-06
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-index] PASSED [ 45%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-forecast] PASSED [ 50%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-memory_estimate] PASSED [ 55%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-split_commands] FAILED [ 60%]
+RETAINED FAILURE tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-split_commands]
+../../../tests/test_native_infernal_preparation_workflow_modes.py:377: in test_remaining_native_preparation_modes_through_workflow
+    for statistic in statistics:
+../../../tests/test_native_infernal_preparation_workflow_modes.py:308: in assert_mode_numbers
+    present(components['actual_sequence_count'], 2)
+    ^^^^^^^^^
+E   ValueError: too many values to unpack (expected 1)
+
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-partition_scores] PASSED [ 65%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-merge_scores] PASSED [ 70%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_evalue] PASSED [ 75%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-scores_at_pvalue] PASSED [ 80%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_score] PASSED [ 85%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_ga] PASSED [ 90%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_nc] PASSED [ 95%]
+../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmstat-evalues_at_tc] PASSED [100%]
+
+=================================== FAILURES ===================================
+__ test_remaining_native_preparation_modes_through_workflow[cmfetch-key_file] __
+../../../tests/test_native_infernal_preparation_workflow_modes.py:377: in test_remaining_native_preparation_modes_through_workflow
+    assert_native_custody(case, bundle)
+../../../tests/test_native_infernal_preparation_workflow_modes.py:238: in assert_mode_numbers
+    ???
+../../../tests/test_native_infernal_preparation_workflow_modes.py:104: in present
+    assert cell['value'] == pytest.approx(expected), cell
+E   AssertionError: {'basis': 'derived', 'inputs': [{'field': 'model_record', 'locator': {'artifact_ref': 'artifact_5d0dc3a22883c5d1d17b44d608c22bc2545aa6bf9509ba82a0577bbf566bc336#/inputs/0', 'byte_end': 50009, 'byte_start': 0, 'line_end': 563, ...}}, {'field': 'model_record', 'locator': {'artifact_ref': 'artifact_5d0dc3a22883c5d1d17b44d608c22bc2545aa6bf9509ba82a0577bbf566bc336#/inputs/0', 'byte_end': 101414, 'byte_start': 50009, 'line_end': 1140, ...}}], 'native_token': None, 'state': 'present', ...}
+E   assert 2 == 1 ± 1.0e-06
+E     
+E     comparison failed
+E     Obtained: 2
+E     Expected: 1 ± 1.0e-06
+_ test_remaining_native_preparation_modes_through_workflow[cmcalibrate-split_commands] _
+../../../tests/test_native_infernal_preparation_workflow_modes.py:377: in test_remaining_native_preparation_modes_through_workflow
+    for statistic in statistics:
+../../../tests/test_native_infernal_preparation_workflow_modes.py:308: in assert_mode_numbers
+    present(components['actual_sequence_count'], 2)
+    ^^^^^^^^^
+E   ValueError: too many values to unpack (expected 1)
+- generated xml file: /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_workflow_modes_2026-10-26_256/modes_002/tests.xml -
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmfetch-key_file] - AssertionError: {'basis': 'derived', 'inputs': [{'field': 'model_record', 'locator': {'artifact_ref': 'artifact_5d0dc3a22883c5d1d17b44d608c22bc2545aa6bf9509ba82a0577bbf566bc336#/inputs/0', 'byte_end': 50009, 'byte_start': 0, 'line_end': 563, ...}}, {'field': 'model_record', 'locator': {'artifact_ref': 'artifact_5d0dc3a22883c5d1d17b44d608c22bc2545aa6bf9509ba82a0577bbf566bc336#/inputs/0', 'byte_end': 101414, 'byte_start': 50009, 'line_end': 1140, ...}}], 'native_token': None, 'state': 'present', ...}
+assert 2 == 1 ± 1.0e-06
+  
+  comparison failed
+  Obtained: 2
+  Expected: 1 ± 1.0e-06
+FAILED ../../../tests/test_native_infernal_preparation_workflow_modes.py::test_remaining_native_preparation_modes_through_workflow[cmcalibrate-split_commands] - ValueError: too many values to unpack (expected 1)
+=================== 2 failed, 18 passed in 536.05s (0:08:56) ===================

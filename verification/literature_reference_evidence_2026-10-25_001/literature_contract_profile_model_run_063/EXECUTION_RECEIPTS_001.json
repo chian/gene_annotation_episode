@@ -1,0 +1,89 @@
+{
+  "interpreter": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+  "python_flags": [
+    "-P",
+    "-B"
+  ],
+  "executions": [
+    {
+      "script": "generate_pin_001.py",
+      "invocation": "Exact reviewed Python block extracted from GENERATION_RECIPE_001.md, AST parsed, executed with existing .venv/bin/python -P -B; block retained as generate_pin_001.py after success",
+      "exit_code": 0,
+      "result": {
+        "status": "metadata_generation_only",
+        "files": 1432,
+        "application_imported": false,
+        "inputs_decoded": false
+      }
+    },
+    {
+      "script": "verify_preparation_001.py",
+      "arguments": [
+        "--snapshot",
+        "pin_001",
+        "--output",
+        "verification_001/CONTRACT_SNAPSHOT_NEW_001.json"
+      ],
+      "exit_code": 0,
+      "result": {
+        "operations": 19,
+        "returns": 18,
+        "project_imports": 142,
+        "model_entries": 0
+      }
+    },
+    {
+      "script": "verify_preparation_001.py",
+      "arguments": [
+        "--snapshot",
+        "../a105_contract_information_design_059/connected_stage_004/pin_010",
+        "--output",
+        "verification_001/CONTRACT_SNAPSHOT_ACCEPTED_001.json"
+      ],
+      "exit_code": 0,
+      "result": {
+        "operations": 19,
+        "returns": 18,
+        "project_imports": 142,
+        "model_entries": 0
+      }
+    },
+    {
+      "script": "bind_runtime_001.py",
+      "exit_code": 0,
+      "result": {
+        "worker_import_paths": 4,
+        "distributions": 13,
+        "external_loaded_modules": 886,
+        "authoritative_file_rows_reverified": 4274,
+        "project_imports": 142,
+        "model_entries": 0
+      }
+    },
+    {
+      "script": "verify_descriptor_reconstruction_002.py",
+      "exit_code": 0,
+      "result": {
+        "descriptor_reconstruction_paths": 2,
+        "substituted_implementation_rejected": true,
+        "model_entries": 0,
+        "source_registration": false,
+        "runtime_observations": 0
+      }
+    },
+    {
+      "script": "bind_runtime_002.py",
+      "exit_code": 0,
+      "result": {
+        "worker_import_paths": 4,
+        "distributions": 13,
+        "external_loaded_modules": 886,
+        "authoritative_file_rows_reverified": 4274,
+        "project_imports": 160,
+        "model_entries": 0
+      }
+    }
+  ],
+  "no_model_or_scientific_execution": true,
+  "meaning": "Actual successful no-model process completions; counts overlap and are not summed as unique tests."
+}

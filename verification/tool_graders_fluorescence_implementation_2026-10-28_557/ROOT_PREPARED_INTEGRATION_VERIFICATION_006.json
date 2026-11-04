@@ -1,0 +1,81 @@
+{
+  "record_type": "prepared_fluorescence_producer_and_result_integration_verification",
+  "recorded_at": "2026-10-28T17:16:07.890422+00:00",
+  "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check047_fluorescence_prepared_integration",
+  "passed": 313,
+  "failed": 0,
+  "receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check047_fluorescence_prepared_integration/handle.json",
+    "unit": "gene-local-job-4b60079934f1441083964f4f7e93ca53.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true
+  },
+  "execution_audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "cases_by_file": {
+    "tests.test_native_fluorescence_prepared": 70,
+    "tests.test_native_fluorescence_contracts": 52,
+    "tests.test_native_fluorescence_driver": 15,
+    "tests.test_native_fluorescence_capture": 11,
+    "tests.test_fluorescence_tool_info": 6,
+    "tests.test_fluorescence_prepared_results": 37,
+    "tests.test_fluorescence_result_worker": 22,
+    "tests.test_fluorescence_result_contracts": 24,
+    "tests.test_fluorescence_result_receipts": 19,
+    "tests.test_fluorescence_worker_preparation": 20,
+    "tests.test_fluorescence_episode_routing": 37
+  },
+  "current_source_hashes": {
+    "gene_annotation_episode/native_fluorescence_contracts.py": "3b5703437ee1dbd28f572699adab891d4ae095eb57ad36cd4b242cd56da56495",
+    "gene_annotation_episode/native_fluorescence_driver.py": "44cedb02a90fccee8ab0e8e13a1bf792f6334d9426552479d3fb5868464fb573",
+    "gene_annotation_episode/fluorescence_execution_common.py": "82d8a47544ba54f3ac5a455b19b61a179c59d6e4f46394ee3b1b81e295827db2",
+    "gene_annotation_episode/native_fluorescence_tool_info.py": "7b285b06c6c832970697e8f849b6cdc9c83e5e6550d664ca09bf21fecadd654f",
+    "gene_annotation_episode/native_fluorescence_prepared_contracts.py": "477b3ec622ef2217b5dcab6f9999c16ead779dd2730d2cab44014324bd3a95e0",
+    "gene_annotation_episode/native_fluorescence_prepared_driver.py": "3381e9057aee0ad0db8bc101de0f8e6f5f10b9e7da1fc6ab991bbfd1c352b377",
+    "gene_annotation_episode/fluorescence_prepared_results.py": "288f6fc2e86152439393e29aa0e8b015ad254ff66eabe860753cbc4c41832511",
+    "gene_annotation_episode/fluorescence_result_worker.py": "34ea7f456a9a2b2f374cf84fce55dd485d641a7e23270ca47f66713058dad1f0",
+    "gene_annotation_episode/fluorescence_result_contracts.py": "47b0d2e25dcd66ef3fdb755922891999dd61af203da3f662ae254c7abcf252ef",
+    "gene_annotation_episode/fluorescence_operands.py": "b0722a19444f298a41b0c323c454702d1d312a2ea000f454bd95f8ec50965267",
+    "gene_annotation_episode/fluorescence_result_receipts.py": "758813a5666290a2e03e2ea472d4ff3af950ad417225d8bc7507fc6ba79f9973",
+    "gene_annotation_episode/fluorescence_tool_guidance.py": "69ea732d0f27b43668f7c281c9f3f9f8246fe0149da850a281e7638b2df2f8be",
+    "tests/test_native_fluorescence_prepared.py": "031cef8ed5de5c619fdae029aa0436cd34b2baad18e4086256c61346de57a332",
+    "tests/native_fluorescence_prepared_test_support.py": "34c60492a018c726591d0ecde3f99f3ee9868baef2afeaa8a375b6b70c0dcfd9",
+    "tests/test_fluorescence_prepared_results.py": "354fef767602fc8f423784b6997a1466eae2b76efcb1ddf40c41953d1a6eeae5"
+  },
+  "current_sources_match_tested_snapshot": true,
+  "actual_native_producer_cases": [
+    {
+      "classname": "tests.test_native_fluorescence_prepared",
+      "name": "test_actual_selected_producer_authenticates_installed_native_closure[perform_facs_cell_sorting]",
+      "time": "7.133"
+    },
+    {
+      "classname": "tests.test_native_fluorescence_prepared",
+      "name": "test_actual_selected_producer_authenticates_installed_native_closure[analyze_cytokine_production_in_cd4_tcells]",
+      "time": "6.846"
+    }
+  ],
+  "qualifications": [
+    "Actual FlowIO/FlowUtils compute on explicitly synthetic FCS inputs with full producer software verification in two selected subprocess cases.",
+    "Other focused fixture cases explicitly control source execution/receipt ports; those do not establish complete Workflow delivery.",
+    "Report-format fixture bytes remain received-supplied with unverified original producer execution. Authentic prior FACS CSV branch execution remains check044 evidence.",
+    "No new annotation result, API/HPC execution or whole inventory completion claim."
+  ],
+  "remaining": [
+    "Full prepared/report Workflow delivery, saved-only recalculation and closed replay under020",
+    "Direct practical v2 capability and report input-version consumer corrections under021",
+    "Unfinished receiver TASK/STEERING presentation and whole-operation closure"
+  ],
+  "inventory_completion_increment": 0,
+  "counts_overlap_prior_checks": true
+}

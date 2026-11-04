@@ -1,0 +1,1584 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="70" failures="8" skipped="0" tests="108" time="244.999" timestamp="2026-10-28T10:51:33.654459-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_scientific_closed_replay" name="test_fresh_scientific_episode_keeps_current_full_mechanics" time="4.106" /><testcase classname="tests.test_scientific_closed_replay" name="test_closed_replay_preserves_original_identity_form_credit_history_and_archive" time="2.996"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_active_or_incomplete_history_cannot_restore_old_mechanics[episode]" time="2.732"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_active_or_incomplete_history_cannot_restore_old_mechanics[active]" time="2.850"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_active_or_incomplete_history_cannot_restore_old_mechanics[completion]" time="3.045"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_active_or_incomplete_history_cannot_restore_old_mechanics[archive]" time="2.954"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_active_or_incomplete_history_cannot_restore_old_mechanics[closing]" time="8.067"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_active_or_incomplete_history_cannot_restore_old_mechanics[form]" time="2.847"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[scope]" time="2.861"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[goal]" time="2.870"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[purpose]" time="2.850"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[assignment]" time="2.752"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[context]" time="2.971"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[initial_report]" time="3.022"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[requested_form]" time="3.258"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[selected_tool]" time="3.592"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_reconstruction_rejects_changed_parent_operands[selected_thought]" time="3.682"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_context_rejects_changed_current_binding_configuration" time="3.340"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_exact_run_episode_and_path[run]" time="3.696"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_exact_run_episode_and_path[episode]" time="2.905"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_exact_run_episode_and_path[path]" time="4.426"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_exact_run_episode_and_path[journal_path]" time="3.465"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_valid_original_hash[None]" time="2.973"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_valid_original_hash[23]" time="3.101"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_valid_original_hash[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]" time="3.210"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_valid_original_hash[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="3.040"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_requires_valid_original_hash[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]" time="3.374"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_closed_request_does_not_accept_an_unrelated_candidate_hash" time="3.014"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_lightweight_services_without_closed_port_keep_strict_binding" time="3.286"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_historical_identity_cannot_authorize_new_dispatch[model]" time="3.232"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_historical_identity_cannot_authorize_new_dispatch[action]" time="2.905"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_historical_identity_cannot_authorize_new_dispatch[child]" time="2.802"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_historical_identity_cannot_authorize_new_dispatch[workflow_tool]" time="4.254"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_historical_identity_cannot_authorize_new_dispatch[binding_tool]" time="3.705"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_scientific_closed_replay" name="test_saved_model_and_action_replay_do_not_require_current_execution_identity" time="3.377"><error message="failed on setup with &quot;RuntimeError: coroutine raised StopIteration&quot;">source_snapshot/tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+source_snapshot/tests/test_scientific_closed_replay.py:86: in closed_case
+    record = asyncio.run(root.run_async(original.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</error></testcase><testcase classname="tests.test_rfam_saved_live_replay" name="test_current_code_replays_original_live_rfam_without_new_work" time="10.205" /><testcase classname="tests.test_scientific_process_episodes" name="test_one_registered_role_accepts_new_data_defined_thought_without_altering_form" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_evidence_is_validated_and_exposed_only_as_inherited_references" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_assignment_uses_finite_canonical_json_without_key_coercion[bad0]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_assignment_uses_finite_canonical_json_without_key_coercion[bad1]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_assignment_uses_finite_canonical_json_without_key_coercion[bad2]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_assignment_uses_finite_canonical_json_without_key_coercion[bad3]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[objective]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[scope]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[initial_report]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[purpose]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[form]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[assignment]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[binding]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[binding_version]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[selection]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_original_request_digests_detect_changed_parent_inputs[invocation_ref]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_frame_contains_selected_guidance_and_binding_limits_without_source_cases" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_catalog_and_execution_enforce_same_selected_schema_scope_and_operation" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_unbound_tool_context_is_visible_and_does_not_reject_invocation" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_prepares_copyable_child_origin_and_leaves_original_frame_fixed" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_cannot_change_annotation_or_library_or_add_freehand_fields" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_authenticates_one_preparation_on_fill_and_restoration" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_rejects_foreign_or_mismatched_preparation_records[owner]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_rejects_foreign_or_mismatched_preparation_records[operation]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_rejects_foreign_or_mismatched_preparation_records[origin]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_rejects_foreign_or_mismatched_preparation_records[digest]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_rejects_foreign_or_mismatched_preparation_records[arguments]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_rejects_foreign_or_mismatched_preparation_records[selection]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_rejects_foreign_or_mismatched_preparation_records[fields]" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_revision_origin_is_not_required_for_other_parent_selected_processes" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_semantic_invocation_and_origin_records_are_finite_exact_and_stable" time="0.001" /><testcase classname="tests.test_scientific_process_episodes" name="test_historical_revision_parser_remains_an_inspection_only_wire_parser" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_ordinary_child_with_different_process_does_not_infer_revision_origin" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_closing_form_and_credit_use_original_binding_without_reading_private_revisions" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_requested_process_facts_copy_closed_credit_and_merge_only_received_rows" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_mother_report_resolver_honors_process_metadata_and_validates_result_bodies" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_declared_child_edges_keep_specialist_branches_separate" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'&quot;">source_snapshot/tests/test_scientific_process_episodes.py:174: in mother
+    library, services = ContractLibrary(), ContractServices()
+                        ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_episodes.py:51: in __init__
+    "P01": json.loads((CATALOG / "entries/P01.json").read_text())}
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/entries/P01.json'</error></testcase><testcase classname="tests.test_scientific_process_episodes" name="test_setup_freezes_descriptor_without_executable_services_and_reopens_original" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/index.json'">source_snapshot/tests/test_scientific_process_episodes.py:568: in test_setup_freezes_descriptor_without_executable_services_and_reopens_original
+    descriptor = prepare_scientific_binding(run_directory=tmp_path, source_directory=CATALOG,
+source_snapshot/gene_annotation_episode/scientific_process_setup.py:11: in prepare_scientific_binding
+    library = ScientificProcessLibrary.freeze(
+source_snapshot/gene_annotation_episode/scientific_process_library.py:292: in freeze
+    specification, index_bytes = _load(source / "index.json", "scientific_process_source_index_invalid")
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/scientific_process_library.py:109: in _load
+    data = path.read_bytes()
+           ^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check041_scientific_closed_replay/source_snapshot/research/slotted_process_library/publications/2026-10-21-001/index.json'</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_constructor_iteration_prepares_revision_with_fixed_process_and_original_return" time="2.792"><failure message="AssertionError: assert None == {'type': 'object', 'properties': {'status': {'type': 'string', 'enum': ['unresolved', 'qualified']}, 'sources': {'type...ace': 'source'}, 'x-source': 'changed_record_refs'}}, 'required': ['status', 'sources'], 'additionalProperties': False}">source_snapshot/tests/test_scientific_process_runtime.py:167: in test_constructor_iteration_prepares_revision_with_fixed_process_and_original_return
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:133: in first
+    assert context['requested_form'] == FORM
+E   AssertionError: assert None == {'type': 'object', 'properties': {'status': {'type': 'string', 'enum': ['unresolved', 'qualified']}, 'sources': {'type...ace': 'source'}, 'x-source': 'changed_record_refs'}}, 'required': ['status', 'sources'], 'additionalProperties': False}</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_nested_revision_returns_existing_local_results_only_through_requested_forms[requested_lineage]" time="3.291"><failure message="KeyError: 'scientific_process'">source_snapshot/tests/test_scientific_process_runtime.py:310: in test_nested_revision_returns_existing_local_results_only_through_requested_forms
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:261: in select_revision
+    assert context['scientific_process']['selection'] == case.selection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'scientific_process'</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_nested_revision_returns_existing_local_results_only_through_requested_forms[unrequested_lineage]" time="2.702"><failure message="KeyError: 'scientific_process'">source_snapshot/tests/test_scientific_process_runtime.py:310: in test_nested_revision_returns_existing_local_results_only_through_requested_forms
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:261: in select_revision
+    assert context['scientific_process']['selection'] == case.selection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'scientific_process'</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_nested_revision_returns_existing_local_results_only_through_requested_forms[metadata_only]" time="2.871"><failure message="KeyError: 'scientific_process'">source_snapshot/tests/test_scientific_process_runtime.py:310: in test_nested_revision_returns_existing_local_results_only_through_requested_forms
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:261: in select_revision
+    assert context['scientific_process']['selection'] == case.selection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'scientific_process'</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_nested_revision_returns_existing_local_results_only_through_requested_forms[ordinary_changed_selection]" time="2.513"><failure message="KeyError: 'scientific_process'">source_snapshot/tests/test_scientific_process_runtime.py:310: in test_nested_revision_returns_existing_local_results_only_through_requested_forms
+    record = asyncio.run(root.run_async(workflow.context))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+runtime/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1499: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1090: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_scientific_process_runtime.py:261: in select_revision
+    assert context['scientific_process']['selection'] == case.selection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'scientific_process'</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_final_catalog_and_direct_dispatch_keep_selected_choices_narrow" time="2.004" /><testcase classname="tests.test_scientific_process_runtime" name="test_revision_preparation_reconstructs_origin_without_changing_original_process" time="2.232" /><testcase classname="tests.test_scientific_process_runtime" name="test_scientific_library_does_not_add_slots_or_choices_to_literature" time="1.956"><failure message="AssertionError: assert 'process.search' in set()">source_snapshot/tests/test_scientific_process_runtime.py:444: in test_scientific_library_does_not_add_slots_or_choices_to_literature
+    assert 'process.search' in {entry['name'] for entry in workflow.catalog(source.scope, source=source)}
+E   AssertionError: assert 'process.search' in set()</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_initial_filled_request_is_required_before_credit_or_decisions" time="1.955" /><testcase classname="tests.test_scientific_process_runtime" name="test_interrupted_pending_decision_replays_preparation_with_fixed_process_and_form" time="3.759"><failure message="TypeError: 'NoneType' object is not subscriptable">source_snapshot/tests/test_scientific_process_runtime.py:485: in test_interrupted_pending_decision_replays_preparation_with_fixed_process_and_form
+    identity = child['episode_id']
+               ^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable</failure></testcase><testcase classname="tests.test_scientific_process_runtime" name="test_failed_commission_construction_can_roll_back_its_receipt_prefix" time="2.579" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_saved_factory_uses_original_snapshot_and_literal_mapping[changed]" time="2.093" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_saved_factory_uses_original_snapshot_and_literal_mapping[deleted]" time="1.900" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_known_scientific_descriptor_restores_standard_capability_without_executing" time="2.042" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_reopening_descriptor_requires_actual_run_directory" time="1.811" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_descriptor_identity_drift_is_rejected_by_known_factory[library]" time="2.011" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_descriptor_identity_drift_is_rejected_by_known_factory[tool_library]" time="1.989" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_descriptor_identity_drift_is_rejected_by_known_factory[mother]" time="1.881" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_descriptor_identity_drift_is_rejected_by_known_factory[old_v1]" time="2.050" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_snapshot_or_original_mapping_drift_before_provider_entry[entry]" time="3.050" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_snapshot_or_original_mapping_drift_before_provider_entry[sources]" time="2.621" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_snapshot_or_original_mapping_drift_before_provider_entry[manifest]" time="2.378" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_snapshot_or_original_mapping_drift_before_provider_entry[missing_snapshot]" time="2.758" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_snapshot_or_original_mapping_drift_before_provider_entry[caller_mapping]" time="2.666" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_snapshot_or_original_mapping_drift_before_provider_entry[old_v1]" time="2.773" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_open_commission_preserves_full_filled_request_after_source_deletion[ordinary]" time="2.643" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_open_commission_preserves_full_filled_request_after_source_deletion[revision]" time="3.286" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_replaced_original_revision_origin_before_provider_entry[parent_invocation_ref]" time="2.966" /><testcase classname="tests.test_scientific_process_reconstruction" name="test_commission_rejects_replaced_original_revision_origin_before_provider_entry[preparation_operation_ref]" time="3.267" /><testcase classname="tests.test_scientific_process_return_runtime" name="test_current_tool_information_reaches_child_and_compact_return_matches_frozen_source" time="4.969" /><testcase classname="tests.test_scientific_process_return_runtime" name="test_current_nested_returns_preserve_each_closure_without_extra_credit[revision]" time="7.403" /><testcase classname="tests.test_scientific_process_return_runtime" name="test_current_nested_returns_preserve_each_closure_without_extra_credit[no_approaches_requested]" time="6.978" /><testcase classname="tests.test_scientific_process_return_runtime" name="test_current_nested_returns_preserve_each_closure_without_extra_credit[metadata_only]" time="7.178" /><testcase classname="tests.test_scientific_process_return_runtime" name="test_current_nested_returns_preserve_each_closure_without_extra_credit[ordinary_child]" time="7.101" /></testsuite></testsuites>

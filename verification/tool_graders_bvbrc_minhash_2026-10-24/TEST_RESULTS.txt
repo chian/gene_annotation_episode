@@ -1,0 +1,28 @@
+Observed local verification, 2026-10-24 task date
+
+Command:
+.venv/bin/python -m pytest -q tests/test_bvbrc_minhash_grader.py
+
+Result:
+90 passed in 0.72s
+
+Command:
+.venv/bin/python verification/tool_graders_bvbrc_minhash_2026-10-24/verify_offline.py
+
+Result:
+5 filled examples generated; all independent numerical assertions passed.
+SciPy version: 1.18.1.
+Retained upstream Mash counts 41/1000 -> shared fraction 0.041.
+Synthetic counts 2/3, k=1, lengths=2/2, alphabet=2:
+  distance = 0.22314355131420976
+  binomial tail = 0.2592592592592592 (independent exact value 7/27)
+Saved sheet, explicit replacement k=2:
+  distance = 0.11157177565710488
+  binomial tail = 0.10400000000000001 (independent exact value 13/125)
+Saved numerical sheet and native reported values remain unchanged.
+
+Tests prevent socket connections and subprocess launches.
+No network/model/job/credential operation was performed by this workload.
+Native Mash values were placed in explicitly synthetic BV-BRC wrappers.
+No successful retained BV-BRC response, live resource, receipt path, or episode
+communication was verified here. C4 owns those integration responsibilities.

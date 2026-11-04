@@ -1,0 +1,1728 @@
+{
+  "contexts": [
+    {
+      "available_report_facts": {
+        "changed_annotation_refs": {
+          "meaning": "Actual changed annotation revision references from completed work, filtered by semantic record type.",
+          "type": "reference_array"
+        },
+        "changed_assessment_refs": {
+          "meaning": "Actual changed assessment revision references from completed work, filtered by semantic record type.",
+          "type": "reference_array"
+        },
+        "changed_interpretation_account_refs": {
+          "meaning": "Actual changed episode-owned coherent interpretation accounts; these are not parent annotation revisions.",
+          "type": "reference_array"
+        },
+        "changed_record_refs": {
+          "meaning": "New or revised semantic records explicitly identified as changed by recorded work.",
+          "type": "reference_array"
+        },
+        "committed_record_refs": {
+          "meaning": "Semantic records returned by completed own work and completed child investigations.",
+          "type": "reference_array"
+        },
+        "credit": {
+          "meaning": "Projected credit at child completion for its fixed assigned scope; redelivery preserves that snapshot.",
+          "type": "number"
+        },
+        "episode_yield": {
+          "meaning": "Recorded closing local numerical forecast and continuation decision, in the child's configured controller units. It is not task credit, a job ETA, a parent instruction or goal completion. Null when the controller does not expose the supported typed numerical state. Normal status is 0; -1 means insufficient observations and -2 means unidentifiable, not negative predicted gain.",
+          "report_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "completed_actions": {
+                "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "continuation_cost": {
+                "description": "The actual child's decision threshold in its configured controller units.",
+                "minimum": 0,
+                "type": "number"
+              },
+              "expected_next_gain": {
+                "additionalProperties": false,
+                "properties": {
+                  "alpha": {
+                    "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                    "type": "number"
+                  },
+                  "lower": {
+                    "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                    "type": "number"
+                  },
+                  "status_code": {
+                    "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                    "enum": [
+                      0,
+                      -1,
+                      -2
+                    ],
+                    "type": "integer"
+                  },
+                  "uncertainty_code": {
+                    "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                    "enum": [
+                      -1,
+                      0,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "upper": {
+                    "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                    "type": "number"
+                  },
+                  "value": {
+                    "description": "The original band point in this child's configured controller units.",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "value",
+                  "lower",
+                  "upper",
+                  "status_code",
+                  "uncertainty_code",
+                  "alpha"
+                ],
+                "type": "object"
+              },
+              "stop_requested": {
+                "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "completed_actions",
+              "expected_next_gain",
+              "continuation_cost",
+              "stop_requested"
+            ],
+            "type": [
+              "object",
+              "null"
+            ],
+            "x-source": "episode_yield"
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "interpretation_basis_refs": {
+          "meaning": "Semantic references visible to the last admitted report interpretation response and available at this report boundary, including source-window custody and admitted typed forms. A visible handle does not establish that its full record or source body was read.",
+          "type": "reference_array"
+        },
+        "last_outcome_refs": {
+          "meaning": "Semantic records returned by the last completed own ordinary action.",
+          "type": "reference_array"
+        },
+        "observations_after_report_basis": {
+          "meaning": "Last ordinary-action observations not supplied to that interpretation response.",
+          "type": "reference_array"
+        },
+        "pending_handles": {
+          "meaning": "Original selected child executions still pending when this episode closed. These handles survive parent closure; closure does not cancel them or establish scientific completion.",
+          "report_schema": {
+            "items": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_handle"
+            },
+            "type": "array",
+            "uniqueItems": true,
+            "x-source": "pending_handles"
+          },
+          "type": "array"
+        },
+        "subject_refs": {
+          "meaning": "Original input subjects assigned by the parent.",
+          "type": "reference_array"
+        }
+      },
+      "child_options": "| Child | Construction | Required assignment fields | Return facts |\n| --- | --- | --- | --- |\n| improvement | available | see declared child contract | changed_annotation_refs, changed_assessment_refs, changed_interpretation_account_refs, changed_record_refs, committed_record_refs, credit, interpretation_basis_refs, last_outcome_refs, observations_after_report_basis, subject_refs, episode_yield, pending_handles |\n| literature | available | version, question_context_refs, source_refs | changed_annotation_refs, changed_assessment_refs, changed_interpretation_account_refs, changed_record_refs, committed_record_refs, credit, interpretation_basis_refs, last_outcome_refs, observations_after_report_basis, subject_refs, episode_yield, pending_handles |",
+      "child_reports": [],
+      "controller": {
+        "credit": 0.0,
+        "decision": {
+          "stop": false
+        },
+        "scores": []
+      },
+      "current_credit": 0.0,
+      "current_report_basis_refs": [],
+      "current_report_update": {},
+      "feedback": null,
+      "goal": {
+        "goal_id": "goal_3df9471552a7476f960fa493",
+        "objective": "Retain the caller-selected Human Protein Atlas gene record ENSG00000141510 for a later investigation. Preserve native fields; correspondence with the supplied protein remains unresolved.",
+        "parent_goal_id": "",
+        "result_contract": {
+          "role": "improvement"
+        },
+        "task_context": {
+          "root_objective": "Retain the caller-selected Human Protein Atlas gene record ENSG00000141510 for a later investigation. Preserve native fields; correspondence with the supplied protein remains unresolved.",
+          "root_result_contract": {
+            "role": "improvement"
+          }
+        }
+      },
+      "job_episode_options": null,
+      "last_local_outcome": null,
+      "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.",
+      "requested_form": null,
+      "requested_report_purpose": null,
+      "scope": {
+        "subject_refs": [
+          "input_0cf8c100d09446c95154fa4b"
+        ]
+      },
+      "tools": [
+        {
+          "description": "Read an exact page of typed scientific records, current revisions, or records referring to actual references. Follow the returned next_query for the same selection and order. Exact refs is a separate mode and cannot be combined with page selectors.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "current_only": {
+                "type": "boolean"
+              },
+              "kind": {
+                "enum": [
+                  "source",
+                  "term",
+                  "reference",
+                  "context",
+                  "feature",
+                  "product",
+                  "observation",
+                  "hypothesis",
+                  "assessment",
+                  "annotation",
+                  "native_execution",
+                  "image_view",
+                  "material",
+                  "material_link",
+                  "collection",
+                  "parse_attempt",
+                  "read_selection",
+                  "reaction_record",
+                  "chemical_record",
+                  "pmc_version",
+                  "pmc_catalog",
+                  "pmc_object",
+                  "pmc_asset",
+                  "archive_member",
+                  "source_derivative",
+                  "interpretation_account",
+                  "subject"
+                ]
+              },
+              "limit": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "offset": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "references": {
+                "items": {
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "refs": {
+                "description": "Exact reference mode: supply refs alone, including an empty array for no records. Omit kind, offset, limit, current_only and references in this mode.",
+                "items": {
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "name": "state.query"
+        },
+        {
+          "description": "Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "offset": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "representation": {
+                "enum": [
+                  "text",
+                  "original",
+                  "stdout",
+                  "stderr"
+                ]
+              },
+              "source_ref": {
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_ref"
+            ],
+            "type": "object"
+          },
+          "knowledge_entry_ids": [
+            "source-reading"
+          ],
+          "name": "source.read"
+        },
+        {
+          "description": "Acquire the Human Protein Atlas gene JSON for one explicitly selected Ensembl gene identifier within the supplied byte limit. Return controlled confirmation that the requested data was acquired, with its data reference or failure code.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "gene_id": {
+                "pattern": "^ENSG[0-9]{11}$",
+                "type": "string"
+              },
+              "max_bytes": {
+                "maximum": 8388608,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "gene_id",
+              "max_bytes"
+            ],
+            "type": "object"
+          },
+          "name": "public.hpa.gene"
+        },
+        {
+          "description": "Retrieve one explicitly selected molecular NCBI Entrez response for later analysis; return an acquisition receipt and original data handles.",
+          "input_schema": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "enum": [
+                      "protein",
+                      "nuccore",
+                      "gene",
+                      "taxonomy",
+                      "assembly",
+                      "gds",
+                      "sra",
+                      "snp"
+                    ]
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "json"
+                  },
+                  "operation": {
+                    "const": "search"
+                  },
+                  "retmax": {
+                    "maximum": 100,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "retstart": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "term": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "term",
+                  "retstart",
+                  "retmax",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "enum": [
+                      "protein",
+                      "nuccore",
+                      "gene",
+                      "taxonomy",
+                      "assembly",
+                      "gds",
+                      "sra",
+                      "snp"
+                    ]
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "json"
+                  },
+                  "operation": {
+                    "const": "summary"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "protein"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "genpept"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "nuccore"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "genbank"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "gene"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "gene_xml"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "taxonomy"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "taxonomy_xml"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "sra"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^(?:SRR|ERR|DRR)[0-9]+$",
+                      "type": "string"
+                    },
+                    "maxItems": 1,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "sra_experiment_package_xml"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "instructions": "Retrieval STEP: use the supplied search, summary or fetch request exactly as selected. The database is protein, nuccore, gene, taxonomy, assembly, gds, sra or snp; the literal query or ordered IDs, supported native format, search window and byte limit are explicit operands. For snp, only search and summary are supported; summary IDs are supplied decimal Entrez UIDs. Execute one request without redirects, retries, page traversal or follow-up requests. Retain the original native response bytes and their Source provenance for future analysis. Return only acquired, source_ref, data_ref and failure_code. On acquisition, data_ref is the original response File, explicitly delivered with its Source. Empty successful queries are data. Native duplicates, literal number tokens, annotation qualifications and unknown units remain in that data and do not become acceptance thresholds. On failure, retain any actual Source and captured prefix, return data_ref=null and preserve the failure code. Request controls and diagnostics remain private. This step supplies no analysis, numerical summary, target annotation or stored gene/reaction/sequence mapping.",
+          "name": "public.ncbi.entrez",
+          "resources": "api"
+        }
+      ],
+      "visible_record_refs": [
+        "input_0cf8c100d09446c95154fa4b",
+        "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+        "material_0fa139234021ad47c408ca39",
+        "source_170d96ee6be90c3b9485e4b0"
+      ],
+      "working_state": {
+        "annotations": [],
+        "assessments": [],
+        "collections": [],
+        "contexts": [],
+        "features": [],
+        "hypotheses": [],
+        "interpretation_accounts": [],
+        "material_links": [],
+        "materials": [
+          {
+            "context_source_refs": [],
+            "id": "material_0fa139234021ad47c408ca39",
+            "library_ref": null,
+            "molecule": "protein",
+            "name": "input",
+            "origin": "caller",
+            "quality_encoding": "unspecified",
+            "record_type": "material",
+            "requested_format": "raw",
+            "role": "unspecified",
+            "sample_ref": null,
+            "source_ref": "source_170d96ee6be90c3b9485e4b0",
+            "use": "target"
+          }
+        ],
+        "observations": [],
+        "pages": {
+          "annotations": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "assessments": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "collections": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "contexts": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "features": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "hypotheses": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "interpretation_accounts": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "material_links": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "materials": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 1
+          },
+          "observations": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "parse_attempts": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "products": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "references": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "sources": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 1
+          },
+          "terms": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          }
+        },
+        "parse_attempts": [],
+        "problem_ref": "problem_e63b7445d57efaf1c4ab88cd",
+        "products": [],
+        "read_library_access": [],
+        "received_revision_status": [],
+        "record_view": "received_immutable_versions",
+        "references": [],
+        "scope": {
+          "subject_refs": [
+            "input_0cf8c100d09446c95154fa4b"
+          ]
+        },
+        "sources": [
+          {
+            "accession": null,
+            "artifact_ref": "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+            "id": "source_170d96ee6be90c3b9485e4b0",
+            "origin": "caller",
+            "provider": "caller",
+            "record_type": "source",
+            "request_ref": null,
+            "retrieved_at": null,
+            "text_ref": "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+            "uri": null,
+            "version": null
+          }
+        ],
+        "subjects": [
+          {
+            "context_source_refs": [],
+            "description_preview": {
+              "characters": 0,
+              "complete": true,
+              "text": "",
+              "utf8_bytes": 0
+            },
+            "header": {
+              "read_with": {
+                "limit": 12000,
+                "member_ref": "member_f37d02a9d0cad48e9e0bf28e",
+                "offset": 0
+              },
+              "representation": "caller_material_name",
+              "utf8_bytes": 5
+            },
+            "id": "input_0cf8c100d09446c95154fa4b",
+            "input_issues": [],
+            "length": 5,
+            "metadata_preview_characters": 256,
+            "molecule": "protein",
+            "name_preview": {
+              "characters": 5,
+              "complete": true,
+              "text": "input",
+              "utf8_bytes": 5
+            },
+            "origin": "caller",
+            "record_type": "input",
+            "role": "unspecified",
+            "sample_ref": null,
+            "sequence_ref": "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+            "source_record": {
+              "identifier_preview": {
+                "characters": 5,
+                "complete": true,
+                "text": "input",
+                "utf8_bytes": 5
+              },
+              "material_ref": "material_0fa139234021ad47c408ca39",
+              "member_ref": "member_f37d02a9d0cad48e9e0bf28e",
+              "occurrence": 0,
+              "ordinal": 0
+            },
+            "source_ref": "source_170d96ee6be90c3b9485e4b0",
+            "unit": "aa"
+          }
+        ],
+        "supplied_context_source_refs": [],
+        "target_binding": "sequence_targets",
+        "terms": []
+      }
+    },
+    {
+      "available_report_facts": {
+        "changed_annotation_refs": {
+          "meaning": "Actual changed annotation revision references from completed work, filtered by semantic record type.",
+          "type": "reference_array"
+        },
+        "changed_assessment_refs": {
+          "meaning": "Actual changed assessment revision references from completed work, filtered by semantic record type.",
+          "type": "reference_array"
+        },
+        "changed_interpretation_account_refs": {
+          "meaning": "Actual changed episode-owned coherent interpretation accounts; these are not parent annotation revisions.",
+          "type": "reference_array"
+        },
+        "changed_record_refs": {
+          "meaning": "New or revised semantic records explicitly identified as changed by recorded work.",
+          "type": "reference_array"
+        },
+        "committed_record_refs": {
+          "meaning": "Semantic records returned by completed own work and completed child investigations.",
+          "type": "reference_array"
+        },
+        "credit": {
+          "meaning": "Projected credit at child completion for its fixed assigned scope; redelivery preserves that snapshot.",
+          "type": "number"
+        },
+        "episode_yield": {
+          "meaning": "Recorded closing local numerical forecast and continuation decision, in the child's configured controller units. It is not task credit, a job ETA, a parent instruction or goal completion. Null when the controller does not expose the supported typed numerical state. Normal status is 0; -1 means insufficient observations and -2 means unidentifiable, not negative predicted gain.",
+          "report_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "completed_actions": {
+                "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "continuation_cost": {
+                "description": "The actual child's decision threshold in its configured controller units.",
+                "minimum": 0,
+                "type": "number"
+              },
+              "expected_next_gain": {
+                "additionalProperties": false,
+                "properties": {
+                  "alpha": {
+                    "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                    "type": "number"
+                  },
+                  "lower": {
+                    "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                    "type": "number"
+                  },
+                  "status_code": {
+                    "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                    "enum": [
+                      0,
+                      -1,
+                      -2
+                    ],
+                    "type": "integer"
+                  },
+                  "uncertainty_code": {
+                    "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                    "enum": [
+                      -1,
+                      0,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "upper": {
+                    "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                    "type": "number"
+                  },
+                  "value": {
+                    "description": "The original band point in this child's configured controller units.",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "value",
+                  "lower",
+                  "upper",
+                  "status_code",
+                  "uncertainty_code",
+                  "alpha"
+                ],
+                "type": "object"
+              },
+              "stop_requested": {
+                "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "completed_actions",
+              "expected_next_gain",
+              "continuation_cost",
+              "stop_requested"
+            ],
+            "type": [
+              "object",
+              "null"
+            ],
+            "x-source": "episode_yield"
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "interpretation_basis_refs": {
+          "meaning": "Semantic references visible to the last admitted report interpretation response and available at this report boundary, including source-window custody and admitted typed forms. A visible handle does not establish that its full record or source body was read.",
+          "type": "reference_array"
+        },
+        "last_outcome_refs": {
+          "meaning": "Semantic records returned by the last completed own ordinary action.",
+          "type": "reference_array"
+        },
+        "observations_after_report_basis": {
+          "meaning": "Last ordinary-action observations not supplied to that interpretation response.",
+          "type": "reference_array"
+        },
+        "pending_handles": {
+          "meaning": "Original selected child executions still pending when this episode closed. These handles survive parent closure; closure does not cancel them or establish scientific completion.",
+          "report_schema": {
+            "items": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_handle"
+            },
+            "type": "array",
+            "uniqueItems": true,
+            "x-source": "pending_handles"
+          },
+          "type": "array"
+        },
+        "subject_refs": {
+          "meaning": "Original input subjects assigned by the parent.",
+          "type": "reference_array"
+        }
+      },
+      "child_options": "| Child | Construction | Required assignment fields | Return facts |\n| --- | --- | --- | --- |\n| improvement | available | see declared child contract | changed_annotation_refs, changed_assessment_refs, changed_interpretation_account_refs, changed_record_refs, committed_record_refs, credit, interpretation_basis_refs, last_outcome_refs, observations_after_report_basis, subject_refs, episode_yield, pending_handles |\n| literature | available | version, question_context_refs, source_refs | changed_annotation_refs, changed_assessment_refs, changed_interpretation_account_refs, changed_record_refs, committed_record_refs, credit, interpretation_basis_refs, last_outcome_refs, observations_after_report_basis, subject_refs, episode_yield, pending_handles |",
+      "child_reports": [],
+      "controller": {
+        "credit": 0.0,
+        "decision": {
+          "stop": false
+        },
+        "scores": [
+          0.0
+        ]
+      },
+      "current_credit": 0.0,
+      "current_report_basis_refs": [
+        "input_0cf8c100d09446c95154fa4b",
+        "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+        "material_0fa139234021ad47c408ca39",
+        "source_170d96ee6be90c3b9485e4b0"
+      ],
+      "current_report_update": {},
+      "feedback": null,
+      "goal": {
+        "goal_id": "goal_3df9471552a7476f960fa493",
+        "objective": "Retain the caller-selected Human Protein Atlas gene record ENSG00000141510 for a later investigation. Preserve native fields; correspondence with the supplied protein remains unresolved.",
+        "parent_goal_id": "",
+        "result_contract": {
+          "role": "improvement"
+        },
+        "task_context": {
+          "root_objective": "Retain the caller-selected Human Protein Atlas gene record ENSG00000141510 for a later investigation. Preserve native fields; correspondence with the supplied protein remains unresolved.",
+          "root_result_contract": {
+            "role": "improvement"
+          }
+        }
+      },
+      "job_episode_options": null,
+      "last_local_outcome": {
+        "feedback": null,
+        "operation_ref": "operation_d445e916646c3bbdb43de996",
+        "pending_work_after_action": {
+          "captured_at": "2026-11-02T12:50:58.828278+00:00",
+          "items": [],
+          "version": "pending_work_v1"
+        },
+        "record_refs": [
+          "source_28898538d38162c700fda28c",
+          "artifact_ab75a8987ac2754757cd4f11406b535a1e33c8cae6823c387b9eb63310842146"
+        ],
+        "result": {
+          "acquired": true,
+          "data_ref": "artifact_ab75a8987ac2754757cd4f11406b535a1e33c8cae6823c387b9eb63310842146",
+          "failure_code": null,
+          "source_ref": "source_28898538d38162c700fda28c"
+        },
+        "status": "completed"
+      },
+      "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.",
+      "requested_form": null,
+      "requested_report_purpose": null,
+      "scope": {
+        "subject_refs": [
+          "input_0cf8c100d09446c95154fa4b"
+        ]
+      },
+      "tools": [
+        {
+          "description": "Read an exact page of typed scientific records, current revisions, or records referring to actual references. Follow the returned next_query for the same selection and order. Exact refs is a separate mode and cannot be combined with page selectors.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "current_only": {
+                "type": "boolean"
+              },
+              "kind": {
+                "enum": [
+                  "source",
+                  "term",
+                  "reference",
+                  "context",
+                  "feature",
+                  "product",
+                  "observation",
+                  "hypothesis",
+                  "assessment",
+                  "annotation",
+                  "native_execution",
+                  "image_view",
+                  "material",
+                  "material_link",
+                  "collection",
+                  "parse_attempt",
+                  "read_selection",
+                  "reaction_record",
+                  "chemical_record",
+                  "pmc_version",
+                  "pmc_catalog",
+                  "pmc_object",
+                  "pmc_asset",
+                  "archive_member",
+                  "source_derivative",
+                  "interpretation_account",
+                  "subject"
+                ]
+              },
+              "limit": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "offset": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "references": {
+                "items": {
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "refs": {
+                "description": "Exact reference mode: supply refs alone, including an empty array for no records. Omit kind, offset, limit, current_only and references in this mode.",
+                "items": {
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "name": "state.query"
+        },
+        {
+          "description": "Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "offset": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "representation": {
+                "enum": [
+                  "text",
+                  "original",
+                  "stdout",
+                  "stderr"
+                ]
+              },
+              "source_ref": {
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_ref"
+            ],
+            "type": "object"
+          },
+          "knowledge_entry_ids": [
+            "source-reading"
+          ],
+          "name": "source.read"
+        },
+        {
+          "description": "Acquire the Human Protein Atlas gene JSON for one explicitly selected Ensembl gene identifier within the supplied byte limit. Return controlled confirmation that the requested data was acquired, with its data reference or failure code.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "gene_id": {
+                "pattern": "^ENSG[0-9]{11}$",
+                "type": "string"
+              },
+              "max_bytes": {
+                "maximum": 8388608,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "gene_id",
+              "max_bytes"
+            ],
+            "type": "object"
+          },
+          "name": "public.hpa.gene"
+        },
+        {
+          "description": "Retrieve one explicitly selected molecular NCBI Entrez response for later analysis; return an acquisition receipt and original data handles.",
+          "input_schema": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "enum": [
+                      "protein",
+                      "nuccore",
+                      "gene",
+                      "taxonomy",
+                      "assembly",
+                      "gds",
+                      "sra",
+                      "snp"
+                    ]
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "json"
+                  },
+                  "operation": {
+                    "const": "search"
+                  },
+                  "retmax": {
+                    "maximum": 100,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "retstart": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "term": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "term",
+                  "retstart",
+                  "retmax",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "enum": [
+                      "protein",
+                      "nuccore",
+                      "gene",
+                      "taxonomy",
+                      "assembly",
+                      "gds",
+                      "sra",
+                      "snp"
+                    ]
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "json"
+                  },
+                  "operation": {
+                    "const": "summary"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "protein"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "genpept"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "nuccore"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "genbank"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "gene"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "gene_xml"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "taxonomy"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}$",
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "taxonomy_xml"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "database": {
+                    "const": "sra"
+                  },
+                  "ids": {
+                    "items": {
+                      "pattern": "^(?:SRR|ERR|DRR)[0-9]+$",
+                      "type": "string"
+                    },
+                    "maxItems": 1,
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "max_bytes": {
+                    "maximum": 8388608,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "native_format": {
+                    "const": "sra_experiment_package_xml"
+                  },
+                  "operation": {
+                    "const": "fetch"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "database",
+                  "max_bytes",
+                  "ids",
+                  "native_format"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "instructions": "Retrieval STEP: use the supplied search, summary or fetch request exactly as selected. The database is protein, nuccore, gene, taxonomy, assembly, gds, sra or snp; the literal query or ordered IDs, supported native format, search window and byte limit are explicit operands. For snp, only search and summary are supported; summary IDs are supplied decimal Entrez UIDs. Execute one request without redirects, retries, page traversal or follow-up requests. Retain the original native response bytes and their Source provenance for future analysis. Return only acquired, source_ref, data_ref and failure_code. On acquisition, data_ref is the original response File, explicitly delivered with its Source. Empty successful queries are data. Native duplicates, literal number tokens, annotation qualifications and unknown units remain in that data and do not become acceptance thresholds. On failure, retain any actual Source and captured prefix, return data_ref=null and preserve the failure code. Request controls and diagnostics remain private. This step supplies no analysis, numerical summary, target annotation or stored gene/reaction/sequence mapping.",
+          "name": "public.ncbi.entrez",
+          "resources": "api"
+        }
+      ],
+      "visible_record_refs": [
+        "input_0cf8c100d09446c95154fa4b",
+        "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+        "material_0fa139234021ad47c408ca39",
+        "source_170d96ee6be90c3b9485e4b0",
+        "source_28898538d38162c700fda28c",
+        "artifact_ab75a8987ac2754757cd4f11406b535a1e33c8cae6823c387b9eb63310842146",
+        "artifact_c811e9bc3bcf0f50048a6978184c8ecec3d8df7020fde4708da6f68c6b73396a",
+        "artifact_745d3c67ac641ab3ced7d4fa46c976a4a59c74d7ab1429f7e6daa695a050afb7"
+      ],
+      "working_state": {
+        "annotations": [],
+        "assessments": [],
+        "collections": [],
+        "contexts": [],
+        "features": [],
+        "hypotheses": [],
+        "interpretation_accounts": [],
+        "material_links": [],
+        "materials": [
+          {
+            "context_source_refs": [],
+            "id": "material_0fa139234021ad47c408ca39",
+            "library_ref": null,
+            "molecule": "protein",
+            "name": "input",
+            "origin": "caller",
+            "quality_encoding": "unspecified",
+            "record_type": "material",
+            "requested_format": "raw",
+            "role": "unspecified",
+            "sample_ref": null,
+            "source_ref": "source_170d96ee6be90c3b9485e4b0",
+            "use": "target"
+          }
+        ],
+        "observations": [],
+        "pages": {
+          "annotations": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "assessments": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "collections": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "contexts": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "features": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "hypotheses": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "interpretation_accounts": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "material_links": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "materials": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 1
+          },
+          "observations": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "parse_attempts": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "products": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "references": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          },
+          "sources": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 2
+          },
+          "terms": {
+            "current_only": false,
+            "limit": 24,
+            "next_offset": null,
+            "next_query": null,
+            "offset": 0,
+            "total": 0
+          }
+        },
+        "parse_attempts": [],
+        "problem_ref": "problem_e63b7445d57efaf1c4ab88cd",
+        "products": [],
+        "read_library_access": [],
+        "received_revision_status": [],
+        "record_view": "received_immutable_versions",
+        "references": [],
+        "scope": {
+          "subject_refs": [
+            "input_0cf8c100d09446c95154fa4b"
+          ]
+        },
+        "sources": [
+          {
+            "accession": null,
+            "artifact_ref": "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+            "id": "source_170d96ee6be90c3b9485e4b0",
+            "origin": "caller",
+            "provider": "caller",
+            "record_type": "source",
+            "request_ref": null,
+            "retrieved_at": null,
+            "text_ref": "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+            "uri": null,
+            "version": null
+          },
+          {
+            "accession": "ENSG00000141510",
+            "artifact_ref": "artifact_ab75a8987ac2754757cd4f11406b535a1e33c8cae6823c387b9eb63310842146",
+            "auxiliary_artifact_refs": [
+              "artifact_c811e9bc3bcf0f50048a6978184c8ecec3d8df7020fde4708da6f68c6b73396a"
+            ],
+            "id": "source_28898538d38162c700fda28c",
+            "origin": "external",
+            "provider": "hpa",
+            "record_type": "source",
+            "request_ref": "artifact_745d3c67ac641ab3ced7d4fa46c976a4a59c74d7ab1429f7e6daa695a050afb7",
+            "retrieved_at": "2026-11-02T12:50:58.285491+00:00",
+            "text_ref": null,
+            "uri": "https://www.proteinatlas.org/ENSG00000141510.json",
+            "version": null
+          }
+        ],
+        "subjects": [
+          {
+            "context_source_refs": [],
+            "description_preview": {
+              "characters": 0,
+              "complete": true,
+              "text": "",
+              "utf8_bytes": 0
+            },
+            "header": {
+              "read_with": {
+                "limit": 12000,
+                "member_ref": "member_f37d02a9d0cad48e9e0bf28e",
+                "offset": 0
+              },
+              "representation": "caller_material_name",
+              "utf8_bytes": 5
+            },
+            "id": "input_0cf8c100d09446c95154fa4b",
+            "input_issues": [],
+            "length": 5,
+            "metadata_preview_characters": 256,
+            "molecule": "protein",
+            "name_preview": {
+              "characters": 5,
+              "complete": true,
+              "text": "input",
+              "utf8_bytes": 5
+            },
+            "origin": "caller",
+            "record_type": "input",
+            "role": "unspecified",
+            "sample_ref": null,
+            "sequence_ref": "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+            "source_record": {
+              "identifier_preview": {
+                "characters": 5,
+                "complete": true,
+                "text": "input",
+                "utf8_bytes": 5
+              },
+              "material_ref": "material_0fa139234021ad47c408ca39",
+              "member_ref": "member_f37d02a9d0cad48e9e0bf28e",
+              "occurrence": 0,
+              "ordinal": 0
+            },
+            "source_ref": "source_170d96ee6be90c3b9485e4b0",
+            "unit": "aa"
+          }
+        ],
+        "supplied_context_source_refs": [],
+        "target_binding": "sequence_targets",
+        "terms": []
+      }
+    }
+  ],
+  "instructions": "You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within the parent's fixed subject and optional original-coordinate\nsegments. Those bounds set this investigation's credit denominator; naming a new\ncandidate or interpretation cannot expand them. Consider the working\nhypotheses, assumptions, prior results and biological/experimental context. Ask\nwhat would usually support an explanation, when that cue could mislead, what\ncompeting explanations remain, and which different outcomes would change your\ninterpretation. Revise your next useful work from actual outcomes.\nSelect one ordinary tool, one typed reasoning commitment based on available\nexisting evidence, or one substantive child improvement. A tool lookup alone is\nnot a child Episode. There are no biological departments or compulsory stages.\nReasoning owns scientific interpretation and selected work; only the numerical\ncontroller owns scientific continuation. Do not emit a stop action or invent a\nturn budget, approval review, quality gate, experiment, term or observation.\nText reading may produce typed extracted terms, source subjects, contexts and observations only with the\nregistered source, exact artifact byte span and quote, and actual source-subject\nidentity. An assay on a reference protein is not an assay on the input target.\nimage.view supplies actual selected pixels in visual_evidence to this reasoning\ncall. A plot or gel interpretation is a reasoned visual observation, not a\nperformed experiment or a literal text extraction. For that observation use\nanchor=null and visual_anchor with the actual view_ref, image_artifact_ref and\npixel region (top-left x,y,width,height); source_ref is the view's display source.\nThe recorded origin distinguishes your interpretation. Preserve the actual\nassayed source subjects and relevant text-anchored conditions. A selected image\nalone establishes no biological role or target measurement.\nFor a scientific claim, examine the relevant primary methods, results and\nqualifications to identify its actual subject, construct and conditions. A title,\nsearch snippet or copied annotation label does not establish that claim. Use\nsource.read for the available pages; missing access is a limitation, not rejection.\nWhen an outcome differs between relevant constructs or conditions, retain the\nseparate source-bound observations and conditions needed to interpret that\ncontrast. A reported negative with data not shown remains that reported result.\nA global alignment's full coverage does not establish orthology, significance\nor substrate specificity; consider what the actual comparison distinguishes.\nA reasoned commitment can improve an annotation using existing evidence; a new\nexternal measurement is not required. Private planning and report formatting are\nnot completed acquisitions. Retain alternatives and uncertainty rather than\ncopying a public target annotation or manufacturing precision.\ncurrent_evidence_vector contains the current projector's available component\nvalues from the same projection as current_credit. Interpret these using the\nrecorded credit_binding; they describe the progress proxy, not biological truth.\nWhen working_state.record_view is received_immutable_versions, its scientific\nrecords are the versions delivered to this episode. received_revision_status\ndistinguishes their current revision membership; it does not assert their\nscientific validity. Investigation-progress loss fields and episode.credit\nprovide current correction provenance. Ordinary state.query remains available\nto discover or read other shared records explicitly.\nFor a received-scientific-finding progress binding, assessment.investigation_finding\nrecords the actual source proposition and a typed qualification of its relevance\nto the target hypothesis. Preserve the observed source subjects and conditions.\nThe selected observation must witness that source proposition. For example,\na sequence-identity alignment witnesses identity; it does not contain a family\nannotation read in another source. Record that other source's actual assertion\nas a source-bound observation and retain the alignment as supporting identity\nevidence. Source annotations remain reported predictions, not measured target\nfunction. Preserve the source's term category, including domain versus family.\nA useful negative or nontransferability finding can remain retained information;\nwithdrawn means the finding itself is no longer valid, with its declared reason.\nRepeated wording, quotations or opinion-only revisions do not make new findings.\nAn article table and its supplement can report the same underlying observation.\nKeep each representation's actual source, subjects and quotation, but do not\ncount the same source proposition, target question and qualification again merely\nbecause its source records or condition labels differ. When you establish that\ntwo representations express the same source proposition, declare\nsame_source_claim_as_ref using the earlier assessment reference. That link shares\nthe source-claim identity only: an unchanged qualification must also retain its\nestablished context_refs and assumption_refs. A new context record naming the\nsame condition is not by itself a new qualification. Preserve genuinely different\nconditions, observations and qualifications; matching labels, rounded values or\na shared publication alone do not establish equivalence. Determining what is the\nsame remains part of your scientific reasoning. The host does not make that\njudgment or require a separate review. Additional source reading is not a new\nfinding unless it adds or corrects information relevant to the target question.\nWhen annotation_score is supplied, it is a separate annotation-support measure\nwith its own annotation_score_binding and annotation_evidence_vector. Useful new\ninformation can lower annotation support while advancing investigation progress.\nOnly current_credit supplies this episode's numerical yield observations.\nscientific_child_credit_binding describes the configured scientific-child score\nbefore you choose a commission. It does not choose a child, scope or next action.\nresource_tool_estimates, when supplied, describe expected execution time and\nconfigured resources for the declared execution classes. Use these expectations\nwith your own yield estimate and prior outcomes to choose useful work. A timing\nexperiment earns monitoring credit for timing information learned and updates\nexecution expectations. Missing history means duration is unknown. Job elapsed\ntime and the duration of an own monitoring action are distinct measurements.\nDefine local rows with a bare alias, for example {\"alias\":\"role\"}, and use\n\"@role\" to reference an earlier successful row within this same commit. Later\ncommits use the returned persistent IDs, not aliases from earlier commits.\nSections resolve in this order: structural_proposals, terms, source_subjects,\ncontexts, observations, hypotheses, assessments, interpretation_accounts,\nannotation_updates. An interpretation_account records your coherent evidence\ninterpretation with runtime-bound episode ownership and assigned scope. It does\nnot replace the parent's annotation. A binding admitting these accounts uses\nthe same source-linked projection; copying an existing account adds no progress.\nParent annotation integration remains a separate reasoning decision. After a\npartial result, read aliases and errors; independent successful rows persist.\ncontext_refs permits context or hypothesis records, not sources, protein/profile\nreferences or features. condition_refs permits context, hypothesis, observation\nor term records. assumption_refs permits only hypotheses. Do not invent contexts\nto make a source citation fit. Extracted labels and context names must occur\nliterally in the exact anchored quote; e.g. DUF8182 is different from the composed\nlabel DUF8182 (Pfam PF26554). Retain identifiers and qualifications separately.\nFor applicability, distinguish what an observation measures directly from what\nyou infer for this particular hypothesis. Sequence identity establishes sequence\nequivalence; a reference's predicted functional label remains a prediction when\ntransferred to that sequence. Preserve the source assertion and its dependencies.\nEach assessment explicitly chooses extent_basis. observed_extent projects only\nthe observation's measured input/source extent; optional target_footprint can\nrestrict it. inferred_extent records a non-direct reasoned attribution to an\nexplicit bounded target_footprint independently of source coordinates. Preserve\nthe actual source subjects and measurements. Missing inferred target_footprint\nkeeps the assessment recorded but supplies no invented target extent; the\ncompleted commit returns a notice naming that assessment and missing field.\ndirect applicability and inferred_extent are contradictory representations.\nFor a nonmolecular sample/handling/physiology interpretation, context_allocation\nretains actual source subjects, observation kind and applicability while binding\nits contribution to fixed original material positions. Supply nonempty immutable\ncontext_account_scope for lineage identity, and context_scope for actual allocated\npositions. The latter may be {\"subject_refs\":[]} to withdraw only that allocation;\nmissing allocation stays unlocalized with a notice. A context annotation uses\nwhole_input_context and the actual sample/context subject; it has no invented\nphysical sequence footprint. Frozen same-library read selections union in these\nmasks, not in Episode scopes. Each revision must own both prior and proposed\nallocations; the immutable domain alone grants no edit permission. Reuse the same\naccount domain and expected_revision when correcting an existing allocation.\nA commissioned child returns ONLY the parent's typed form. Fill report_update\ninside this existing reasoning response. It describes your actual interpretation\nof the supplied state BEFORE the selected next action. The result of a later tool\nhas not thereby been interpreted. At yielding, recorded fact fields describe\nactual work, while interpretive fields retain their latest actual basis; prefer\nactual assessment/annotation references where those express the requested meaning.\nrequested_report_purpose is the parent's actual information need. current_report_update\ncontains the latest admitted interpretation fields, initially the parent's supplied\ninitial values. Those initial values are not a new child judgment. Preserve their\ndeclared meanings when revising the form; neither input chooses your scientific action.\nAs parent, request source-bound outcome and basis fields when needed to distinguish\nnew observations from prior interpretations. There is no separate report composer.\nA report_delivery_failure is operational feedback about an already completed\nchild. You can select redeliver_report with a revised closed contract. It reuses\nsaved facts and exactly the child's existing interpretation fields; it performs\nno new scientific work and cannot answer a new interpretive question. Do not\nrecommission the same investigation merely to fix its representation.\nOn a fresh provider conversation, restored_episode_history is a bounded index\nof your own actual prior decisions, not a generated scientific summary. Use the\nordinary episode.history tool when an older selected action, exact outcome or\nadmitted direct-child form matters. Its indices belong only to this Episode;\nanother Episode's same index names different work. A failed saved outcome stays\nfailed. Reading history does not execute that work again. A selected history\nread is one ordinary action with its actual zero or changed progress, while\nautomatic context restoration creates no completed action. Current report\nvalues retain their actual current_report_basis_refs, not a later tool result.\nDo not execute native provider tools. The host executes your selected action.\n Tool-specific and resource instructions are available through knowledge.search, knowledge.entry and knowledge.read. The tool_knowledge context identifies the run-frozen library. Retrieve sections when useful; these instructions do not select work, supply scientific evidence or add execution capabilities. Use the actual tool schemas and caller-owned configuration for execution. Knowledge reads use line coordinates, not scientific source-byte anchors. No manual read is mandatory. Launch software/resource instructions have their own run-frozen library: launch.instructions.search, launch.instructions.entry, launch.instructions.read and launch.instructions.select. The launch_instruction_library context gives its identity. Select any relevant sections from one or several entries; pass the returned selection as launch_instructions in the child assignment. selected_launch_instructions contains exact sections already selected for this assignment. Instructions describe ways to work; they do not select resources, enable tools, override caller constraints, establish current availability or supply scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.",
+  "version": "runtime_receiver_retained569_v1"
+}

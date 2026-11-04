@@ -21,7 +21,9 @@ from .literature_task_selection import A105_ASSAY_SELECTION_TASK, selected_liter
 
 VERSION = "reference_evidence_parent_v1"
 
-REFERENCE_PARENT_TASK = """Evaluate what the assigned experimental sources establish about the reference molecule and its possible function. Keep the actual caller question, supplied material, scientific scope and constraints below as your job. A function can emerge from the evidence; an initial annotation or public searchable name is not required. Decide which uncertainty is useful to resolve next, choose among the permitted source operations and literature investigations, and revise your interpretation using actual outcomes.
+REFERENCE_PARENT_TASK = """Find and evaluate experimental sources bearing on the supplied molecule and its possible function. Supplied material can be a raw sequence, publication metadata or an acquired experimental source; establish its representation and which evidence still needs discovery. Keep the actual caller question, supplied material, scientific scope and constraints below as your job. A function can emerge from the evidence; an initial annotation or public searchable name is not required. Decide which uncertainty is useful to resolve next, choose among the permitted source operations and literature investigations, and revise your interpretation using actual outcomes.
+
+Your own operation catalog defines the actions available at this parent level. The A105 source-search, reading and assay-population capabilities described below belong to the literature investigations you commission. Give a literature child the supplied molecule, experimental question and requested saved assay and aggregate components; it selects and executes its own available searches, readers and graders. Use its returned evidence to revise the parent interpretation.
 
 Establish which organism, genotype, molecule, construct, preparation and experimental system each result concerns. Distinguish the source organism from an expression host, a tagged construct from a native molecule, and a reference preparation from the supplied annotation target. Preserve the actual measured entity, endpoint, units, normalization, comparison numerator and denominator, conditions, intended experimental change and controls. A shared name, source paper or equal number does not establish a common experiment or molecular identity.
 
@@ -47,7 +49,7 @@ def _descriptor(state):
             or not isinstance(descriptor, Mapping) or descriptor.get("version") != VERSION):
         raise ValueError("reference_evidence_parent_context_required")
     references = descriptor.get("source_refs")
-    if (not isinstance(references, (list, tuple)) or not references
+    if (not isinstance(references, (list, tuple))
             or any(not isinstance(reference, str) or not reference for reference in references)
             or len(set(references)) != len(references)):
         raise ValueError("reference_evidence_parent_source_assignment_required")
@@ -60,7 +62,35 @@ def _text_or_values(value):
 
 def _task(state, instructions, descriptor, *, selected_sections=None):
     normalized = text_instructions(instructions)
-    parts = ["TASK", "", REFERENCE_PARENT_TASK, "", A105_ASSAY_SELECTION_TASK,
+    parent_task, axis_task = REFERENCE_PARENT_TASK, A105_ASSAY_SELECTION_TASK
+    if descriptor.get("evidence_axis") == "A108":
+        from .literature_context_prompt import A108_INVESTIGATION_TASK, CONTEXT_TASK
+        from .literature_a108_subscore import TASK as SUBSCORE_TASK
+        parent_task = ("Investigate the assigned A108 organism/sample compatibility question. "
+            "Your own catalog supplies parent reasoning and commissioning operations. Commission "
+            "a literature child with the supplied material, legitimate context, scientific question "
+            "and requested literature_a108_subscore_cells. The child owns its searches, source "
+            "interpretation, context assessment and final subscore publication. Consume its actual "
+            "typed result, assess the conclusion and limitations, and preserve the exact assertion, "
+            "question and biological scope. A108 capability and sample coverage are different "
+            "questions. Preserve the caller's requested question when its required observations "
+            "are missing; those missing observations qualify the answer. Carry the supplied context "
+            "sources into the child assignment. When the task input is only partly visible, let the "
+            "child read its complete source before fixing an interpretation. Neither question is a "
+            "probability that the annotation is correct. Preserve bounds "
+            "and unavailable point values. For unfinished or failed child work, carry forward the "
+            "exact received subject, assertion, question kind and scope together with retained "
+            "assessment/publication sources through the commission. Failure feedback's "
+            "partial_record_refs are addresses for retained work that a recovery child can "
+            "select through its existing reading operations. They preserve recovery options; "
+            "their contents still require interpretation and typed delivery. When that question is only "
+            "present in retained records, ask the child to recover it before extending the "
+            "assessment. Distinguish completing its numerical delivery from proposing a different "
+            "biological question. Relate any changed scope explicitly to the previous result when "
+            "interpreting the return. The child tools described below are available through "
+            "the commissioned literature investigation.")
+        axis_task = "\n\n".join((A108_INVESTIGATION_TASK, CONTEXT_TASK, SUBSCORE_TASK))
+    parts = ["TASK", "", parent_task, "", axis_task,
              "", SAVED_NUMERICAL_RETURN_TASK]
     sections = selected_literature_task_sections(state) if selected_sections is None else selected_sections
     for aspect, task in sections:
@@ -81,7 +111,11 @@ def _task(state, instructions, descriptor, *, selected_sections=None):
             and goal['result_contract'] != state.get('requested_form')):
         _section(parts, 'Assigned result contract', render_schema_information(goal['result_contract'], title='Assigned result contract'))
     _section(parts, "Assigned scientific scope", _values(state.get("scope", {})))
-    _section(parts, "Caller-selected source assignment", _values({"source_refs": descriptor["source_refs"]}))
+    if descriptor['source_refs']:
+        _section(parts, "Caller-selected source assignment", _values({"source_refs": descriptor["source_refs"]}))
+    else:
+        _section(parts, 'Experimental source discovery',
+            'The caller supplied target material and no experimental source. Discover relevant publications using the target material below. Target sequence sources are query material; assign acquired publications as experimental sources once available.')
     references = set(descriptor["source_refs"])
     custody = [_pick(row, ("source_ref", "artifact_ref", "text_ref", "stdout_ref", "stderr_ref", "version"))
         for row in descriptor.get("source_custody", ())
@@ -94,6 +128,9 @@ def _task(state, instructions, descriptor, *, selected_sections=None):
     material.update(_pick(working, ("target_binding", "read_library_access", "supplied_context_source_refs")))
     if material:
         _section(parts, "Supplied material and scoped access", _values(material))
+    if descriptor.get("supplied_context"):
+        _section(parts, "Original caller-provided biological question and context",
+            _values(descriptor["supplied_context"]))
     constraints = _pick(state, ("constraints", "selected_constraints"))
     if constraints:
         _section(parts, "Caller constraints", _values(constraints))

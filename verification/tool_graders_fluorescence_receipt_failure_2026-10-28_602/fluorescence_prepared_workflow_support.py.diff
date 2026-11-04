@@ -1,0 +1,54 @@
+--- check049/source_snapshot/tests/fluorescence_prepared_workflow_support.py
++++ tests/fluorescence_prepared_workflow_support.py
+@@ -9,6 +9,7 @@
+ 
+ import asyncio
+ from copy import deepcopy
++import hashlib
+ import json
+ from pathlib import Path
+ from types import SimpleNamespace
+@@ -50,6 +51,7 @@
+     'missing values without substituting another measurement domain.'
+ )
+ INPUT_ROWS = ((220, 120, 10), (40, 200, 20))
++TARGET_SEQUENCE = 'ACGTACGT'
+ INTENSITIES = (
+     ('domain-0', 'raw.c0'), ('scaled', 'scaled.c0'),
+     ('compensated', 'compensated.c0'), ('scaled', 'scaled.c2'),
+@@ -92,6 +94,17 @@
+         (row['file'], row['path']) for row in (*job['support_inputs'], *job['report_inputs'])]
+ 
+ 
++def assert_initial_input_custody(baseline, initial_refs, target_record_refs, supplied):
++    # Derive this one artifact from the declared target bytes, never from the
++    # actual receipt set or from all artifacts retained by the Workflow.
++    target_artifact_ref = 'artifact_' + hashlib.sha256(TARGET_SEQUENCE.encode('utf-8')).hexdigest()
++    assert set(initial_refs) <= baseline
++    assert target_artifact_ref in baseline
++    assert baseline <= (set(target_record_refs) | {target_artifact_ref}
++        | {file['artifact_ref'] for file in supplied})
++    return target_artifact_ref
++
++
+ def register_supplied(store, directory, software, *, operation):
+     job = prepared_job(directory, operation=operation, rows=INPUT_ROWS)
+     job['software'] = deepcopy(software)
+@@ -115,7 +128,7 @@
+     directory.mkdir(parents=True, exist_ok=True)
+     software = actual_software(directory / 'original-software')
+     store = Store(directory / 'state')
+-    store.create_problem(raw_sequence='ACGTACGT', molecule='dna')
++    store.create_problem(raw_sequence=TARGET_SEQUENCE, molecule='dna')
+     scope = store.validate_scope()
+     target_record_refs = [row['id'] for row in store.db.execute('SELECT id FROM inputs UNION SELECT id FROM records')]
+     job, supplied = register_supplied(store, directory / 'supplied', software, operation=operation)
+@@ -148,7 +161,7 @@
+         evidence_axis=library.reference('A101'), thought_pattern=library.reference('P01'),
+         child_tool_info=[dict(name=operation, resources='local')]), evidence_refs=scope['subject_refs'],
+         constraints=dict(no_external_acquisition=True, allocation=deepcopy(POLICY)),
+-        context=dict(supplied_sequence='ACGTACGT', molecule='dna', supplied_fluorescence_files=supplied,
++        context=dict(supplied_sequence=TARGET_SEQUENCE, molecule='dna', supplied_fluorescence_files=supplied,
+             candidate_annotation_required=False))
+     configuration = dict(factory=factory.as_record(), scientific_binding=binding, goal=TASK, scope=scope,
+         initial_refs=list(dict.fromkeys([*scope['subject_refs'], *[file['artifact_ref'] for file in supplied]])))

@@ -1,0 +1,294 @@
+{
+  "assignment_rosters": {
+    "requested_kinetic_components": [
+      "numerator_parameter"
+    ],
+    "requested_kinetic_summary_precision_components": [
+      "source_reported_parameter",
+      "source_reported_sd",
+      "source_independent_preparation_count",
+      "source_statistical_estimator_count",
+      "source_mean_standard_error",
+      "scenario_mean_variance",
+      "scenario_mean_standard_error"
+    ]
+  },
+  "section_roles": [
+    {
+      "components": [
+        "numerator_parameter"
+      ],
+      "field": "native_parameter",
+      "numerical_role": "reported_kinetic_estimates_and_descriptive_contrasts",
+      "source": "literature_kinetic_cells"
+    },
+    {
+      "components": [
+        "source_reported_parameter",
+        "source_reported_sd",
+        "source_independent_preparation_count",
+        "source_statistical_estimator_count",
+        "source_mean_standard_error",
+        "scenario_mean_variance",
+        "scenario_mean_standard_error"
+      ],
+      "field": "precision",
+      "numerical_role": "summary_random_precision",
+      "source": "literature_kinetic_summary_precision_cells"
+    }
+  ],
+  "submitted_form": {
+    "additionalProperties": false,
+    "properties": {
+      "assessment_context": {
+        "additionalProperties": false,
+        "properties": {
+          "assertion_links": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "assertion_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "hypothesis"
+                },
+                "relation": {
+                  "enum": [
+                    "measures_asserted_endpoint",
+                    "addresses_named_weakness",
+                    "does_not_establish_assertion",
+                    "unknown",
+                    "conflicting"
+                  ],
+                  "type": "string"
+                },
+                "selector": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "component": {
+                      "enum": [
+                        "numerator_parameter",
+                        "source_reported_parameter",
+                        "source_reported_sd",
+                        "source_independent_preparation_count",
+                        "source_statistical_estimator_count",
+                        "source_mean_standard_error",
+                        "scenario_mean_variance",
+                        "scenario_mean_standard_error"
+                      ],
+                      "type": "string"
+                    },
+                    "field": {
+                      "enum": [
+                        "native_parameter",
+                        "precision"
+                      ],
+                      "type": "string"
+                    },
+                    "quantity": {
+                      "enum": [
+                        "cell_value",
+                        "reported_spread",
+                        "reported_count"
+                      ],
+                      "type": "string"
+                    },
+                    "sheet_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "source"
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "sheet_ref",
+                    "component",
+                    "quantity"
+                  ],
+                  "type": "object"
+                },
+                "support_record_refs": {
+                  "items": {
+                    "format": "reference",
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "selector",
+                "assertion_ref",
+                "relation",
+                "support_record_refs"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "assertion_refs": {
+            "items": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "hypothesis"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "quantity_links": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "left": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "component": {
+                      "enum": [
+                        "numerator_parameter",
+                        "source_reported_parameter",
+                        "source_reported_sd",
+                        "source_independent_preparation_count",
+                        "source_statistical_estimator_count",
+                        "source_mean_standard_error",
+                        "scenario_mean_variance",
+                        "scenario_mean_standard_error"
+                      ],
+                      "type": "string"
+                    },
+                    "field": {
+                      "enum": [
+                        "native_parameter",
+                        "precision"
+                      ],
+                      "type": "string"
+                    },
+                    "quantity": {
+                      "enum": [
+                        "cell_value",
+                        "reported_spread",
+                        "reported_count"
+                      ],
+                      "type": "string"
+                    },
+                    "sheet_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "source"
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "sheet_ref",
+                    "component",
+                    "quantity"
+                  ],
+                  "type": "object"
+                },
+                "relation": {
+                  "enum": [
+                    "same_reported_parameter",
+                    "same_reported_spread",
+                    "same_count_report",
+                    "conditional_precision_of_report",
+                    "unresolved",
+                    "conflicting"
+                  ],
+                  "type": "string"
+                },
+                "right": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "component": {
+                      "enum": [
+                        "numerator_parameter",
+                        "source_reported_parameter",
+                        "source_reported_sd",
+                        "source_independent_preparation_count",
+                        "source_statistical_estimator_count",
+                        "source_mean_standard_error",
+                        "scenario_mean_variance",
+                        "scenario_mean_standard_error"
+                      ],
+                      "type": "string"
+                    },
+                    "field": {
+                      "enum": [
+                        "native_parameter",
+                        "precision"
+                      ],
+                      "type": "string"
+                    },
+                    "quantity": {
+                      "enum": [
+                        "cell_value",
+                        "reported_spread",
+                        "reported_count"
+                      ],
+                      "type": "string"
+                    },
+                    "sheet_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "source"
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "sheet_ref",
+                    "component",
+                    "quantity"
+                  ],
+                  "type": "object"
+                },
+                "support_record_refs": {
+                  "items": {
+                    "format": "reference",
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "left",
+                "right",
+                "relation",
+                "support_record_refs"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "version": {
+            "const": "a105_source_evidence_worksheet_v1",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "assertion_refs",
+          "quantity_links",
+          "assertion_links"
+        ],
+        "type": "object"
+      },
+      "native_parameter": {
+        "$ref": "episode-fact:literature_kinetic_cells"
+      },
+      "precision": {
+        "$ref": "episode-fact:literature_kinetic_summary_precision_cells"
+      }
+    },
+    "required": [
+      "native_parameter",
+      "precision",
+      "assessment_context"
+    ],
+    "type": "object"
+  }
+}

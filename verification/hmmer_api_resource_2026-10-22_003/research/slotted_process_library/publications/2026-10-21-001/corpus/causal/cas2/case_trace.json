@@ -1,0 +1,232 @@
+{
+  "case_id": "causal_cas2_spacer_acquisition",
+  "status": "One linked published case used to test reuse of contributor-attribution reasoning; not an active annotation target, new lane, or slot declaration",
+  "known_outcome_disclosed": true,
+  "scope": "E. coli K12 Cas1/Cas2 in the specified overexpression, purified integration, and protospacer-capture studies; earlier nuclease results from other species are separate comparators",
+  "duplicate_check": {
+    "corpus": "/tmp/episode-published-cases",
+    "search": "Case-insensitive cas1, cas2, spacer-acquisition and CRISPR-adaptation searches in existing JSON/JSONL/Markdown/text research records",
+    "result": "No existing Cas1-Cas2 spacer-acquisition case found. Incidental Cas12a use in the IsiA strain-construction methods was not counted as a duplicate."
+  },
+  "primary_sources": [
+    {
+      "source_id": "complex2014",
+      "title": "Cas1-Cas2 complex formation mediates spacer acquisition during CRISPR-Cas adaptive immunity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4075942/",
+      "doi_url": "https://doi.org/10.1038/nsmb.2820",
+      "organism_and_system": "cas1/cas2 cloned from E. coli K12 MG1655; acquisition and lysate experiments in E. coli BL21-AI, which lacks the other cas genes",
+      "actual_access": "Complete main Results, Discussion and Online Methods read from NCBI Entrez efetch full author-manuscript XML. Supplementary references and main captions were present; separate uncropped supplementary gels were not downloaded or quantified.",
+      "assay_scope": "Induced Cas1/Cas2 overexpression; PCR-detected array expansion normalized to culture OD; selected expanded clones sequenced; co-immunoprecipitation, purified-complex work and lysate DNA-affinity comparisons. Host factors remain present: only Cas proteins required is not only biological factors required."
+    },
+    {
+      "source_id": "integration2015",
+      "title": "Integrase-mediated spacer acquisition during CRISPR-Cas adaptive immunity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+      "doi_url": "https://doi.org/10.1038/nature14237",
+      "organism_and_system": "Purified E. coli K12 MG1655 Cas1/Cas2; synthetic protospacers and supercoiled plasmid targets, including a BL21-AI CRISPR locus inserted into pUC19",
+      "actual_access": "Complete main narrative, Methods and Extended Data captions read from NCBI Entrez efetch full author-manuscript XML; no independent gel densitometry or sequencing reanalysis.",
+      "assay_scope": "Defined in vitro strand-transfer/integration readouts, primarily with Mg2+ unless specified; Cas1-only low integration occurs with Mn2+. In vitro products predominantly trap the first integration step, and completion/repair and in vivo targeting specificity are not fully recapitulated."
+    },
+    {
+      "source_id": "capture2015",
+      "title": "Foreign DNA capture during CRISPR-Cas adaptive immunity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4662619/",
+      "doi_url": "https://doi.org/10.1038/nature15760",
+      "organism_and_system": "E. coli K12 MG1655 Cas1/Cas2, synthetic protospacer substrates, in vivo acquisition mutants and purified integration/capture assays",
+      "actual_access": "Complete main narrative, Methods, Extended Data captions and crystallography table read from NCBI Entrez efetch full author-manuscript XML. Deposited 5DS4/5DS5 coordinates were independently downloaded and analysed descriptively.",
+      "assay_scope": "Structures bind donor protospacer DNA rather than a complete authentic integration target; some target-positioning proposals use crystal symmetry contacts/modeling. Cas2 R16/R78 mutations were tested for acquisition; the reported direct fluorescence-polarization mutant binding tests discussed in the main text concern Cas1 R59D/R66D, not an independent measurement of each Cas2 clamp mutant's affinity."
+    },
+    {
+      "source_id": "ssRNase2008_comparator",
+      "title": "A novel family of sequence-specific endoribonucleases associated with the clustered regularly interspaced short palindromic repeats",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2459268/",
+      "doi_url": "https://doi.org/10.1074/jbc.M803225200",
+      "organism_and_assay": "Purified Cas2 homologs, including SSO1404 from Sulfolobus solfataricus; ssRNA cleavage and SSO1404 mutagenesis, not E. coli array acquisition",
+      "actual_access": "Primary abstract and available indexed HTML including assay-method sections inspected. Entrez efetch supplied metadata rather than body XML because the publisher disallows full XML downloading. Further public-page access became a browser challenge; complete mutation Results were not independently read here.",
+      "bounded_use": "Supports why a Cas2-family acidic-site/nuclease interpretation was plausible. Does not demonstrate that E. coli E9A/E9R/E9Q is nuclease-null in the E. coli acquisition/integration buffers."
+    },
+    {
+      "source_id": "dsDNase2012_comparator",
+      "title": "Double-stranded endonuclease activity in Bacillus halodurans CRISPR-associated Cas2 protein",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3476262/",
+      "doi_url": "https://doi.org/10.1074/jbc.M112.382598",
+      "organism_and_assay": "Bacillus halodurans subtype I-C Cas2; purified dsDNA-cleavage, metal-binding and acidic-site mutant assays; Thermus thermophilus homolog also examined",
+      "actual_access": "Primary abstract and indexed primary Results passages inspected, including the distinction from ssRNase behavior. Full XML downloading was disallowed by the publisher, PMC page access returned a browser challenge and a publisher full-text request returned 403. Complete Results/Methods were not independently inspected here.",
+      "bounded_use": "Different-species biochemical expectation only; neither the same protein nor a direct test of E. coli spacer-acquisition chemistry."
+    }
+  ],
+  "key_observations": [
+    {
+      "observation_id": "C1",
+      "owner": "authors",
+      "source_id": "complex2014",
+      "source_locator": "Cas1-Cas2 complex formation is required in vivo; Fig. 3 and supplementary stability comparison",
+      "observation": "Cas2 C-terminal beta6-beta7 deletion prevents detectable acquisition and stable co-precipitation with Cas1. Cas1 R252E similarly loses stable complex formation and acquisition, while purified R252E retains the expected Cas1-dimer gel-filtration behavior. Single Cas2 E65R is tolerated; E65R/D84R double substitution abolishes acquisition. Tolerated Cas1-tail deletion and Cas2 E65R retain complex formation.",
+      "limit": "A deletion can affect more than one local contact. The study does not provide a complete independent folding/stability assay for every Cas2 variant, so these are not all proven interface-only perturbations."
+    },
+    {
+      "observation_id": "C2",
+      "owner": "authors",
+      "source_id": "complex2014",
+      "source_locator": "The catalytic activity of Cas2 is dispensable in vivo; Fig. 4c-d,g-h",
+      "observation": "E. coli Cas2 E9A and E9R support PCR-detected spacer acquisition at levels described as similar to wild type; E9 mutation also retains complex formation and lysate CRISPR-bait recognition. Cas2 R14A retains acquisition, whereas interface-associated R18A has low acquisition. Cas1 conserved active-site alanine substitutions abolish acquisition.",
+      "limit": "The directly measured result is acquisition/assembly/bait behavior of E. coli mutants. The loss-of-nuclease expectation relies on the conserved-site interpretation and earlier other-species assays; no direct E. coli E9-mutant nuclease-null assay is demonstrated by this reading. No new quantitative frequency or statistical equivalence was calculated here."
+    },
+    {
+      "observation_id": "C3",
+      "owner": "authors",
+      "source_id": "integration2015",
+      "source_locator": "Protospacer DNA integration by Cas1-Cas2; Fig. 1 and Extended Data Figs. 2-3",
+      "observation": "Purified Cas1/Cas2 joins labelled protospacers covalently to plasmid DNA. Cas1 H208A and D221A are defective; Cas2 E9Q supports integration. Cas2 beta6-beta7 deletion fails to support the reaction. Cas1 alone gives low integration with Mn2+, and Cas2 substantially enhances integration.",
+      "limit": "Cas2 is required for efficient tested complex behavior, not for every detectable Cas1 strand-transfer event under all conditions. These integration assays do not demonstrate every stage of immune protection or protospacer generation."
+    },
+    {
+      "observation_id": "C4",
+      "owner": "authors",
+      "source_id": "integration2015",
+      "source_locator": "Integration and disintegration products; Integration requires 3-prime-OH protospacer ends",
+      "observation": "Radiolabel incorporation and product analysis distinguish integration products from plasmid topoisomers. Band X is not radiolabelled and is interpreted through disintegration/topology experiments. Blocking both protospacer 3-prime hydroxyls prevents integration; Cas1 also catalyses disintegration of a defined half-site substrate.",
+      "limit": "A change in plasmid migration is not automatically covalent spacer integration. Cas1's demonstrated integrase strand-transfer role must not be collapsed into an unsupported requirement that Cas1 or Cas2 cuts donor DNA to generate all prespacers."
+    },
+    {
+      "observation_id": "C5",
+      "owner": "authors",
+      "source_id": "complex2014",
+      "source_locator": "The Cas1-Cas2 complex is essential for CRISPR locus binding",
+      "observation": "Purified complexes were not sequence-specific in the tested EMSA. In lysate CRISPR-target-bait precipitation, Cas1 preference depends on Cas2 and a compatible complex, although Cas2 itself is not detected in washed eluates.",
+      "limit": "No Cas2 in a washed target-bait eluate does not establish absence of all direct Cas2-DNA contacts. This is target-locus DNA in lysate, distinct from the donor protospacer captured in the later structure."
+    },
+    {
+      "observation_id": "C6",
+      "owner": "authors",
+      "source_id": "capture2015",
+      "source_locator": "Main structural analysis and Fig. 2",
+      "observation": "A four-Cas1/two-Cas2 complex positions the central donor duplex over Cas2 and terminal donor 3-prime ends in two Cas1 sites. Cas2 R16/R78 are part of a phosphate-backbone clamp; R16E and R78E strongly reduce in vivo acquisition, whereas R77E is tolerated. Cas1 clamp/channel and end-splaying mutants supply additional functional comparisons.",
+      "limit": "Contact presence alone does not establish functional necessity: R77 is an explicit tolerated contact-site example. Not every Cas2 contact mutant was directly assayed for binding affinity in isolation."
+    },
+    {
+      "observation_id": "C7",
+      "owner": "our_new_descriptive_coordinate_analysis",
+      "source_id": "capture2015",
+      "inputs": ["raw/5DS4.cif", "raw/5DS5.cif"],
+      "method": "Biopython 1.88 reads model 1, author chain/residue numbering. Euclidean nearest-heavy-atom comparisons within deposited assembly-1 atoms; no added symmetry mates. Polar groups are Glu OE1/OE2, Asp OD1/OD2 and Arg NE/NH1/NH2. DNA phosphate targets are OP1/OP2. Full atom-pair records and file hashes are saved.",
+      "actual_results": [
+        "Across both Cas2 copies and both structures, R16 terminal-polar-group to DNA phosphate oxygen minima are 2.490-2.879 A; R78 minima are 2.378-3.017 A.",
+        "Cas2 R18 side-chain to Cas1 minima are 2.726-3.070 A, consistently at the Cas1 backbone near residue 4. The E9 side-chain to Cas1 minima are 13.834-14.602 A, spatially separating the signature acidic site from this direct inter-protein contact in these models.",
+        "The two donor terminal O3-prime atoms lie 2.879-3.558 A from H208 NE2 in Cas1 chains A/C. Cas2 E9 carboxylate-to-nearest donor terminal O3-prime distances are 47.547-50.240 A.",
+        "E9 is not simply remote from every DNA atom: all-side-chain nearest-DNA distances range from 3.902 to 4.213 A, and terminal-carboxylate to phosphate-oxygen minima range from 4.511 to 5.822 A. Geometry therefore cannot be used as a proof of no DNA interaction or no nuclease chemistry."
+      ],
+      "changed_inference": "The deposited models support spatially distinct contributions: a Cas2 central donor-DNA surface and Cas1-assembly interface versus Cas1 integration-end positioning. This is a positive structural explanation compatible with the functional mutant results, rather than inferring a scaffold solely from a catalytic-site mutant that still works.",
+      "limits": "Static 2.951/3.2-A models, approximate distances, no energetic or hydrogen-bond inference, no density/refinement analysis, no binding measurement, no mutant structural simulation and no independent proof that E9 is catalytically inactive. The two structures are related preparations from one study, not independent biological replications."
+    }
+  ],
+  "two_played_out_evidence_routes": [
+    {
+      "route_id": "A_signature_chemistry_versus_required_assembly",
+      "starting_question": "Does acquisition require a nuclease contribution from each protein named in the system, or does Cas2 contribute differently?",
+      "epistemic_status": "Actual source-selection and comparison performed here, with published outcomes known; laboratory sequence and observations belong to authors",
+      "steps": [
+        {
+          "question_before": "Can Cas2's required participation be equated with its family-associated nuclease chemistry?",
+          "our_action": "Locate and read the complete 2014 primary study, comparing the E9 active-site, interface and tolerated-mutant sections rather than only its abstract.",
+          "observations": ["C1", "C2"],
+          "change_in_question": "E9 integrity is dispensable for the tested acquisition endpoint while assembly-disrupting perturbations are not. The next useful question is whether the contrast survives in a defined DNA-integration reaction, rather than whether another homolog can cleave nucleic acid."
+        },
+        {
+          "question_before": "Could cellular processing or a misleading endpoint hide the actual catalytic contributor?",
+          "our_action": "Read the complete 2015 reconstitution study, including covalent-product controls, purified mutants, metal conditions and the Cas1-only comparison.",
+          "observations": ["C3", "C4"],
+          "change_in_question": "Cas1 active-site dependence and Cas2 E9Q tolerance are retained in purified integration. Preserve Cas2's contribution to efficient integration while assigning the tested strand-transfer catalysis to Cas1. Do not require Cas2 for every trace Mn2+-supported Cas1 activity or equate Band X with integration."
+        },
+        {
+          "question_before": "Has the E. coli Cas2 mutant actually been shown nuclease-null, or is that expectation transferred from other species?",
+          "our_action": "Follow the 2014 paper's nuclease references, retrieve comparator metadata, and inspect available primary abstracts/indexed methods/results for Sulfolobus and Bacillus Cas2.",
+          "observations": ["C2"],
+          "change_in_question": "Separate the direct E. coli E9 acquisition/integration result from the cross-species catalytic expectation. No direct E. coli nuclease-null validation was established by this bounded access, so the conclusion concerns the signature residue and supported role, not universal absence of Cas2 chemistry."
+        }
+      ],
+      "bounded_result": "Strongly supports a required non-integrase contribution of Cas2 within the tested E. coli acquisition machinery, with signature E9 dispensable; Cas1 supplies demonstrated strand-transfer catalysis."
+    },
+    {
+      "route_id": "B_positive_DNA_and_interface_contribution",
+      "starting_question": "If signature-site chemistry is dispensable, what positive contribution explains Cas2 participation, and is a direct DNA role actually demonstrated?",
+      "epistemic_status": "Retrospective source inquiry plus a new limited calculation on deposited coordinates; not structure determination or experimental validation",
+      "steps": [
+        {
+          "question_before": "Does failure to recover Cas2 with a target-locus bait mean Cas2 does not directly contact DNA?",
+          "our_action": "Read the complete 2014 target-bait experiment with its purified EMSA and washing limitations, then inspect the later donor-protospacer capture study.",
+          "observations": ["C5", "C6"],
+          "change_in_question": "The earlier bait is a different DNA species and experimental context. The captured donor duplex supplies a positive Cas2 contact model, so the next distinction is whether contact, interface and catalytic-site residues occupy separable positions and have separable functional outcomes."
+        },
+        {
+          "question_before": "Do the deposited models support distinct donor-clamp, assembly-interface and integration-end contributions?",
+          "our_action": "Retrieve current 5DS4/5DS5 entries and coordinate files; map Cas1/Cas2/DNA chains; run the saved distance analysis on both models instead of merely verifying entry identity.",
+          "observations": ["C7"],
+          "change_in_question": "R16/R78 donor-phosphate proximity, R18-Cas1 proximity and terminal donor ends at Cas1 support distinct positive roles. E9 proximity to some DNA atoms cautions against using a simple distance cutoff as proof of catalytic silence."
+        },
+        {
+          "question_before": "Can every contact now be called essential or every loss-of-acquisition mutant a clean binding defect?",
+          "our_action": "Return to the published R16/R77/R78 mutant outcomes and to the stated mutant-binding assays and structural limits.",
+          "observations": ["C1", "C6", "C7"],
+          "change_in_question": "R77E retains acquisition despite a modeled contact. Keep residue necessity separate from contact geometry and Cas2 mutant acquisition separate from directly measured affinity. The case supports a functional scaffold/DNA-capture contribution without attributing every observed phenotype to one exact interaction."
+        }
+      ],
+      "bounded_result": "Positive evidence supports Cas2 as an assembly and donor-DNA-positioning contributor, beyond the negative claim that an E9 mutation is tolerated. Its direct target-locus recruitment mechanism and universal role across species remain outside the demonstrated scope."
+    }
+  ],
+  "modularity_test": {
+    "existing_pattern_under_test": "F01/F03 contributor-attribution pattern requested by parent; no new category or lane is proposed",
+    "parent_scientific_question": "What does Cas2 contribute to spacer acquisition in the specified system? This is the scoped job, not a thought-pattern value.",
+    "reused_thought": "Keep the system's measured acquisition/integration output; distinguish catalytic, assembly and substrate-positioning contributions, and revise only the contribution contradicted by the selective evidence.",
+    "child_choices_this_constrains": [
+      "Select a Cas2 signature-site versus assembly-interface contrast rather than infer two catalytic requirements from two nuclease names.",
+      "Seek a defined integration product and Cas1/Cas2 mutant comparison rather than call any plasmid mobility change integration.",
+      "Seek positive Cas2 substrate/assembly evidence rather than conclude an inert scaffold solely from E9 tolerance.",
+      "Withhold a nuclease-null claim when the direct protein/assay-specific catalytic-loss validation is missing."
+    ],
+    "experimental_layout_not_thought_unit": "Point substitutions, truncation, co-immunoprecipitation, PCR, purified integration and crystallography are author experimental layouts/operations. No wet lab was available here. Our tools retrieved their records and made descriptive coordinate calculations.",
+    "ordinary_metadata_not_thought_unit": "Donor species, recipient strain, metal condition, protein construct, DNA substrate, numbering and deposited model identity must travel with the observation; these are not selectable reasoning patterns.",
+    "analogy_supported": "Like the earlier coupled-reaction/activator cases, a real system endpoint cannot be assigned to every participating protein as the same catalytic contribution. Selectively retained activity distinguishes required participation from requirement for one proposed chemistry. The same inference can guide a source inquiry outside metabolic enzymes.",
+    "where_analogy_breaks": [
+      "Cas2 is not being assigned a replacement metabolic reaction or a consumed-substrate-supply role. Its supported contribution concerns complex assembly and donor-DNA geometry.",
+      "Cas1 catalysis is integrase strand transfer in the defined reaction. The fact that both proteins have been called nucleases does not establish that both must cleave donor nucleic acid during acquisition.",
+      "The E. coli E9 mutant phenotype is direct, but a complete loss of its nuclease chemistry is not directly established here; cross-species Cas2 cleavage results must stay separate.",
+      "Overexpression acquisition, purified half-site/full-site reactions and captured donor complexes are different endpoints. None alone demonstrates complete naturally regulated immunity, prespacer production, gap filling or all CRISPR subtypes.",
+      "Cas2 can have active substrate contacts while contributing noncatalytically to integration; structural contribution does not mean an inert spacer, and contact presence does not guarantee necessity."
+    ],
+    "verdict": "Supports reuse of contributor-attribution reasoning beyond metabolic enzymes, with stronger positive-role evidence from complex/DNA studies. It does not establish a universal Cas2 nuclease-null claim, an automatic episode implementation, or a new slot taxonomy."
+  },
+  "actual_work": [
+    "Duplicate search of the existing research corpus",
+    "Primary web discovery followed by Entrez efetch of three complete E. coli author manuscripts",
+    "Complete relevant primary narratives/Methods and available extended-data captions read for the three E. coli studies",
+    "Bounded comparator-source audit, retaining format/access limits",
+    "Current RCSB entry retrieval plus archival coordinate downloads for 5DS4 and 5DS5",
+    "New reproducible nearest-atom calculations on the two deposited coordinate models using the existing repository virtual-environment Python/Biopython",
+    "One integrated case/trace written under the requested cas2 directory"
+  ],
+  "not_performed": [
+    "No bacteria, viruses, editing, protein expression, nuclease assay, DNA integration experiment or new annotation run",
+    "No gel digitization, new kinetic fitting, raw sequencing reprocessing, crystallographic refinement, density validation, docking or mutant simulation",
+    "No full audit of every Cas2 homolog, other CRISPR subtype or current Cas2 literature",
+    "No additional model agents, repository implementation/design edits, root causal record changes or central-table changes"
+  ],
+  "access_and_record_limits": [
+    "PMC web opens for the main 2014/2015 articles returned browser challenges; ordinary Entrez retrieval supplied complete author manuscripts. No access control was bypassed.",
+    "The two earlier comparator articles supplied metadata-only efetch XML, explicitly noting the publisher's full-XML download restriction. Accessible primary abstract/indexed HTML was used at the stated limited scope; complete comparator Results were not claimed.",
+    "The accessed 2015 integration author manuscript leaves its sequencing GEO accession as XXXXX; no validated raw-read deposition was resolved or reanalysed here.",
+    "The capture manuscript labels 5DS4 with Mg2+ and 5DS5 without, while current coordinate/entry contents are 5DS4 at 3.2 A with no Mg atoms and 5DS5 at 2.951 A with deposited Mg atoms. Calculations use actual files and analyse both; no conclusion about the cause of the mapping discrepancy is asserted.",
+    "The coordinate calculation supplies geometric support, not biochemical proof, and does not substitute for protein-specific catalytic-null validation."
+  ],
+  "artifacts": {
+    "integrated_case": "case_trace.json",
+    "reproducible_analysis": "analyze_coordinates.py",
+    "analysis_command_from_repository": ".venv/bin/python /tmp/episode-published-cases/causal/cas2/analyze_coordinates.py",
+    "new_calculation_results": "raw/coordinate_comparisons.json",
+    "full_primary_source_bundle": "raw/three_primary_articles.xml",
+    "comparator_metadata_only_bundle": "raw/nuclease_comparator_articles.xml",
+    "extracted_full_primary_texts": ["raw/PMC4075942.sections.txt", "raw/PMC4359072.sections.txt", "raw/PMC4662619.sections.txt"],
+    "coordinates": ["raw/5DS4.cif", "raw/5DS5.cif"],
+    "entry_metadata": ["raw/5DS4_entry.json", "raw/5DS5_entry.json"]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "version": "chromatin_interaction_request_v1",
+  "operation": "analyze_chromatin_interactions",
+  "analysis_modes": [
+    "cross_window_insulation_heuristic"
+  ],
+  "contact": {
+    "input_key": "contact0",
+    "file": {
+      "artifact_ref": "artifact_0dacdd21298e113d800ae8c1f92c44c233a73c99dae691fbdd0c3ca95daa678b",
+      "sha256": "0dacdd21298e113d800ae8c1f92c44c233a73c99dae691fbdd0c3ca95daa678b",
+      "size_bytes": 12684,
+      "format": "cooler_hdf5_v3"
+    },
+    "source_ref": "fixture:contact",
+    "format": "cooler_hdf5_v3",
+    "group_path": "/",
+    "resolution_bp": 10,
+    "value_field": "count",
+    "value_kind": "contact_count",
+    "value_unit": "contacts",
+    "specimen_key": "sample0"
+  },
+  "populations": [
+    {
+      "population_key": "p0",
+      "chromosome": "chrA",
+      "start_bp": 0,
+      "end_bp": 40
+    }
+  ],
+  "elements": null,
+  "normalization": {
+    "kind": "raw",
+    "weight_column": null,
+    "convention": null
+  },
+  "supplied_metadata": {
+    "reference": {
+      "assembly_accession": null,
+      "assembly_label": null,
+      "contigs": [
+        {
+          "chromosome": "chrA",
+          "length_bp": 40
+        }
+      ],
+      "source_ref": "fixture:reference"
+    },
+    "samples": [
+      {
+        "sample_key": "sample0",
+        "condition_key": null,
+        "replicate_key": null,
+        "assay": "Hi-C",
+        "source_ref": "fixture:metadata"
+      }
+    ],
+    "contact_sample_links": [
+      {
+        "contact_input_key": "contact0",
+        "sample_key": "sample0",
+        "fraction": null,
+        "source_ref": "fixture:metadata"
+      }
+    ],
+    "dependence_groups": [],
+    "native_attribute_bindings": [],
+    "supplied_uncertainty": []
+  },
+  "output_prefix": "chromatin"
+}

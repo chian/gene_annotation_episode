@@ -105,11 +105,11 @@ def composed_homology_run():
                     raise AssertionError(command)
                 return super().rpc(command)
 
-            def download(self, url, *, byte_range=None):
+            def download(self, url, *, max_bytes, byte_range=None):
                 assert byte_range is None
                 assert url in ('https://fixture.invalid/manifest', 'https://fixture.invalid/raw')
                 self.body = manifest_bytes if url.endswith('/manifest') else supplied.raw
-                return super().download(url, byte_range=byte_range)
+                return super().download(url, max_bytes=max_bytes, byte_range=byte_range)
 
         native = Responses()
         constructor = BVBRCAppServiceService.__init__
@@ -211,7 +211,7 @@ def composed_homology_run():
                         manifest = count == 4
                         return selected(PREFIX + 'download', {'object': self.result_objects[count - 1],
                             'capability': {'kind': 'acquired', 'receipt_ref': previous['support_receipt_ref'], 'input_index': 0},
-                            'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
+                            'max_bytes': 1024 * 1024, 'byte_range': None, 'requirement_ids': ['manifest' if manifest else 'native'],
                             'role': 'job_result_manifest' if manifest else 'blast_json15_raw',
                             'declared_format': supplied.manifest_format if manifest else supplied.raw_format})
                     assert count == 5

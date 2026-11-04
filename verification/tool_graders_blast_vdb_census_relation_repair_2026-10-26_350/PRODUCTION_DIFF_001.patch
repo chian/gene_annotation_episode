@@ -1,0 +1,48 @@
+--- before/gene_annotation_episode/blast_vdb_function_inputs.py
++++ after/gene_annotation_episode/blast_vdb_function_inputs.py
+@@ -313,12 +313,17 @@
+ 
+ 
+ def _link(kind, key, pointers, issues):
+-    conflicts = [i for i in issues if (i["code"].removeprefix(_PREFIX) in _CONFLICTS and not
++    # Optional unresolved census edges qualify the selected dependence model,
++    # not the enumeration or exact membership. Keep them in the saved issues
++    # for the calculator's policy; actual conflicts still invalidate the link.
++    qualifying = [i for i in issues if not (kind == "census"
++        and i["code"] == _PREFIX + "dependency_relation_unresolved")]
++    conflicts = [i for i in qualifying if (i["code"].removeprefix(_PREFIX) in _CONFLICTS and not
+         (i["code"].removeprefix(_PREFIX) in {"census_filter_mismatch", "census_snapshot_mismatch"} and i["details"].get("missing_input") is True))
+         or i["code"] == _PREFIX + "census_membership_unverified" and any(i["details"].get(k) is True
+             for k in ("identity_proof_conflict", "coding_proof_conflict", "parent_identity_conflict", "membership_conflict"))]
+-    status = "incompatible" if conflicts else "unavailable" if issues else "available"
+-    reason = conflicts[0]["code"] if conflicts else issues[0]["code"] if issues else None
++    status = "incompatible" if conflicts else "unavailable" if qualifying else "available"
++    reason = conflicts[0]["code"] if conflicts else qualifying[0]["code"] if qualifying else None
+     return dict(record_kind=kind, record_key=key, status=status, reason_code=reason,
+                 input_pointers=pointers, issues=issues)
+ 
+@@ -773,8 +778,8 @@
+     for entity in census["entities"]:
+         by_address.setdefault(_token(entity["address"]), []).append(entity)
+     for dep in census["dependency_records"]:
+-        if _dependency_issues(sheet, dep, set(by_address)):
+-            add("census_membership_unverified", dependency_key=dep["dependency_key"])
++        for issue in _dependency_issues(sheet, dep, set(by_address)):
++            add(issue["code"].removeprefix(_PREFIX), **issue["details"])
+     actual_assignments = {}
+     for assignment in assignments:
+         actual_assignments.setdefault(assignment["assignment_key"], []).append(assignment)
+@@ -799,6 +804,13 @@
+         if (len(matches) != 1 or matches[0]["target_identity"] != entity["target_identity"]
+                 or matches[0]["parent_sequence_identity"] != entity["parent_sequence_identity"]):
+             add("census_membership_unverified", entity_key=entity["entity_key"], membership_conflict=bool(matches))
++        if (len(matches) == 1 and entity["sample_relation_status"] == "available"
++                and matches[0]["sample_relation_status"] == "available"
++                and set(entity["origin_sample_keys"]) != set(matches[0]["origin_sample_keys"])):
++            add("census_membership_unverified", entity_key=entity["entity_key"],
++                census_entity_key=matches[0]["entity_key"], membership_conflict=True,
++                observed_origin_sample_keys=_deepcopy(entity["origin_sample_keys"]),
++                census_origin_sample_keys=_deepcopy(matches[0]["origin_sample_keys"]))
+     for observation in selected_observations:
+         entity = observed.get(observation["entity_key"])
+         if entity is None:

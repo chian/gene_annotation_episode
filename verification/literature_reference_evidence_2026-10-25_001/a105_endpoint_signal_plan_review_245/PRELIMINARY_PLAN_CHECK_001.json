@@ -1,0 +1,59 @@
+{
+  "status": "preliminary_not_released",
+  "observed_unix": 1793171265.3606706,
+  "files": [
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/build_plan_001.py",
+      "sha256": "0782c8ddb3850b32d00c276558d17354d6da2c3ff4e1db0e02290cbf1772cb75",
+      "bytes": 14399
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/EXACT_SCHEMAS_001.json",
+      "sha256": "0ffacc9f19db827e9cefc7750198f864227791ed68f59aa9293cdfc364829827",
+      "bytes": 274469
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/PAIRED_SELECTED_INPUT_001.json",
+      "sha256": "9a6b80daea25b2129c693422231e19e5c95797808cf616b1aa040d83aa7a9ba4",
+      "bytes": 12085
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/PAIRED_SELECTED_OUTPUT_001.json",
+      "sha256": "a8c717ab84235ca21a7449006d36ff1b389ff5d1cd6f6c88578d6a9dd433aea9",
+      "bytes": 43929
+    },
+    {
+      "path": "verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/PLAN_ARTIFACT_CUSTODY_001.json",
+      "sha256": "ef5319df1c5cc646ff40dcd279c73b342f723418257dd7fc9bb4af3eb537be4e",
+      "bytes": 735
+    }
+  ],
+  "inspected": "Complete build_plan_001.py lines1-through-end; generated fields for operation, assignment and rows; reviewed pure002 schemas are unchanged dependencies.",
+  "executed_checks": {
+    "Draft202012Validator_check_schema": [
+      "operation_schema",
+      "legacy_request_schema",
+      "endpoint_request_schema",
+      "assignment_selector_schema",
+      "return_schema"
+    ],
+    "actual_domain_validate_schema": [
+      "endpoint_request",
+      "assignment_selector",
+      "normal_return",
+      "nested_return"
+    ],
+    "initial_ordered_roster_equals_assignment": true,
+    "normal_rows": 2,
+    "nested_rows": 1
+  },
+  "pending": [
+    "complete PLAN/TASK/consumer trace",
+    "controlled generic-read ownership/admission trace",
+    "independent exact-plan review before production release"
+  ],
+  "pure_dependency_root_verified": "a105_endpoint_signal_components_241/implementation_005/MANIFEST_003.json",
+  "no_selected_or_model_execution": true,
+  "A105_complete": false,
+  "goal_changed": false
+}

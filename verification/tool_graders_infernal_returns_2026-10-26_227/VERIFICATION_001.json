@@ -1,0 +1,252 @@
+{
+  "failure_count": 0,
+  "final_run": "run_005",
+  "native_integration_owner": "226; not executed by this workload",
+  "original_goal_reset_before_handoff": "/home/chia/.codex/attachments/e94d8875-9d86-482e-9bb3-8887aa457b88/pasted-text-1.txt",
+  "resource_enforcement": {
+    "filesystem_sandbox": false,
+    "memory": "systemd_cgroup_v2_memory_max",
+    "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+    "process_tree": "systemd_control_group",
+    "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+    "swap": "systemd_memory_swap_max_zero",
+    "wall_time": "unset"
+  },
+  "resource_policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "scientific_programs_executed": [],
+  "source_sha256": {
+    "gene_annotation_episode/native_infernal_returns.py": "0dc0a84ed029502e6fbb06aa091feab87c0c6ac8c9074c618305121a9d178f26",
+    "tests/test_native_infernal_returns.py": "399aa53aee5dce9142074190bb7ac3fe8a585c33ba6d75e1a29e442a56025d4f"
+  },
+  "test_cases": [
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[search_hit-False]",
+      "time": "3.945"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[search_hit-True]",
+      "time": "4.125"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[search_sequence-False]",
+      "time": "4.383"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[search_sequence-True]",
+      "time": "3.847"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[alignment_sequence-False]",
+      "time": "3.855"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[alignment_sequence-True]",
+      "time": "4.146"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[alignment_column-True]",
+      "time": "3.955"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_five_families_keep_exact_numbers_and_missing_states[alignment_pair-True]",
+      "time": "3.789"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_reference_only_receives_exact_refs_without_numerical_access",
+      "time": "3.846"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_scientific_boundary_forwards_only_its_requested_received_information[execution_infernal_result_refs]",
+      "time": "3.984"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_scientific_boundary_forwards_only_its_requested_received_information[execution_completed]",
+      "time": "3.814"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_completion_only_and_store_possession_do_not_deliver_records",
+      "time": "3.219"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_other_provider_generic_refs_remain_unhandled",
+      "time": "2.956"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_results_owner_aliases_validate_exact_reference_set[execution_result_refs]",
+      "time": "2.947"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_results_owner_aliases_validate_exact_reference_set[execution_infernal_result_refs]",
+      "time": "4.316"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_forged_rows_fail_even_when_frozen_forms_and_attempts_agree[measurements]",
+      "time": "3.118"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_forged_rows_fail_even_when_frozen_forms_and_attempts_agree[unavailable]",
+      "time": "3.101"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_forged_rows_fail_even_when_frozen_forms_and_attempts_agree[source_ref]",
+      "time": "3.328"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_forged_rows_fail_even_when_frozen_forms_and_attempts_agree[record_key]",
+      "time": "3.218"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_forged_rows_fail_even_when_frozen_forms_and_attempts_agree[sequence_name]",
+      "time": "2.887"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_forged_rows_fail_even_when_frozen_forms_and_attempts_agree[subject_ref]",
+      "time": "3.000"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_sibling_records_cannot_be_forwarded_by_source_possession",
+      "time": "3.139"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[False-scope]",
+      "time": "3.146"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[False-assignment]",
+      "time": "3.189"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[False-role]",
+      "time": "2.869"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[False-purpose]",
+      "time": "3.395"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[False-schema]",
+      "time": "3.128"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[True-scope]",
+      "time": "3.035"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[True-assignment]",
+      "time": "3.294"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[True-role]",
+      "time": "3.194"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[True-purpose]",
+      "time": "3.331"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_original_commission_is_checked_on_delivery_and_redelivery[True-schema]",
+      "time": "3.617"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_saved_ownership_and_closure_changes_are_rejected[frozen_form]",
+      "time": "4.900"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_saved_ownership_and_closure_changes_are_rejected[frozen_facts]",
+      "time": "3.103"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_saved_ownership_and_closure_changes_are_rejected[request]",
+      "time": "3.327"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_saved_ownership_and_closure_changes_are_rejected[child]",
+      "time": "4.373"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_saved_ownership_and_closure_changes_are_rejected[delivery]",
+      "time": "3.782"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_saved_ownership_and_closure_changes_are_rejected[closure]",
+      "time": "3.552"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_exact_redelivery_deduplicates_without_new_action_or_observation",
+      "time": "4.244"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_reference_redelivery_cannot_recover_unrequested_numerical_rows",
+      "time": "3.791"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_reference_redelivery_deduplicates_exact_received_references",
+      "time": "3.808"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_changed_live_context_role_and_conflicting_reference_fields_reject",
+      "time": "3.707"
+    },
+    {
+      "classname": "tests.test_native_infernal_returns",
+      "name": "test_authentication_snapshot_is_reused_only_within_one_form_validation",
+      "time": "3.465"
+    }
+  ],
+  "test_count": 43,
+  "verification_kind": "controlled_validated_result_inputs_with_real_Store_Journal_and_typed_forms",
+  "verified_cgroup": {
+    "kill_mode": "control-group",
+    "memory_max": 21474836480,
+    "memory_swap_max": 0,
+    "oom_policy": "kill",
+    "runtime_max": "infinity"
+  },
+  "version": "native_infernal_return_verification_v1"
+}

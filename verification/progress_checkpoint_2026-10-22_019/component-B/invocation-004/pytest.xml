@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="9.522" timestamp="2026-10-22T07:51:41.856487-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_direct_hmmer_timing_tools" name="test_bound_collect_missing_job_uses_actual_membership_without_legacy[False]" time="4.706"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_58a12296d7f5ad4f403c56c1', 'record_refs': [], 'result': None, ...}&#10;assert 'unknown_provider_job' == 'unknown_job'&#10;  &#10;  - unknown_job&#10;  + unknown_provider_job">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7a974e7f2cc0&gt;, client=&lt;test_direct_hmmer_timing_tools...rithm': 'phmmer', 'database': 'swissprot', 'page_size': 2}, scope={'subject_refs': ['input_d6ce2ce0555fc4ffda472b28']})
+orphan = False
+
+    @pytest.mark.parametrize('orphan',[False,True])
+    def test_bound_collect_missing_job_uses_actual_membership_without_legacy(host,orphan):
+        h=host
+        job=order(h)['job_ref'] if orphan else 'provider_job_'+'0'*24
+        if orphan:
+            with h.store.transaction():
+                h.store.db.execute('DELETE FROM provider_jobs WHERE id=?',(job,))
+        result=h.tools.execute('public.hmmer.collect',{'job_ref':job},scope=h.scope,operation_key='missing-collect')
+&gt;       assert result['feedback']['code']==('public_search_registration_incomplete' if orphan else 'unknown_job'),result
+E       AssertionError: {'status': 'invalid', 'operation_ref': 'operation_58a12296d7f5ad4f403c56c1', 'record_refs': [], 'result': None, ...}
+E       assert 'unknown_provider_job' == 'unknown_job'
+E         
+E         - unknown_job
+E         + unknown_provider_job
+
+tests/test_direct_hmmer_timing_tools.py:411: AssertionError</failure></testcase><testcase classname="tests.test_direct_hmmer_timing_tools" name="test_bound_collect_missing_job_uses_actual_membership_without_legacy[True]" time="4.138"><failure message="AssertionError: {'status': 'invalid', 'operation_ref': 'operation_417d16ca4f9f7773857b11c1', 'record_refs': [], 'result': None, ...}&#10;assert 'unknown_provider_job' == 'public_searc...on_incomplete'&#10;  &#10;  - public_search_registration_incomplete&#10;  + unknown_provider_job">host = namespace(store=&lt;gene_annotation_episode.state.Store object at 0x7a974e17da60&gt;, client=&lt;test_direct_hmmer_timing_tools...rithm': 'phmmer', 'database': 'swissprot', 'page_size': 2}, scope={'subject_refs': ['input_d6ce2ce0555fc4ffda472b28']})
+orphan = True
+
+    @pytest.mark.parametrize('orphan',[False,True])
+    def test_bound_collect_missing_job_uses_actual_membership_without_legacy(host,orphan):
+        h=host
+        job=order(h)['job_ref'] if orphan else 'provider_job_'+'0'*24
+        if orphan:
+            with h.store.transaction():
+                h.store.db.execute('DELETE FROM provider_jobs WHERE id=?',(job,))
+        result=h.tools.execute('public.hmmer.collect',{'job_ref':job},scope=h.scope,operation_key='missing-collect')
+&gt;       assert result['feedback']['code']==('public_search_registration_incomplete' if orphan else 'unknown_job'),result
+E       AssertionError: {'status': 'invalid', 'operation_ref': 'operation_417d16ca4f9f7773857b11c1', 'record_refs': [], 'result': None, ...}
+E       assert 'unknown_provider_job' == 'public_searc...on_incomplete'
+E         
+E         - public_search_registration_incomplete
+E         + unknown_provider_job
+
+tests/test_direct_hmmer_timing_tools.py:411: AssertionError</failure></testcase></testsuite></testsuites>

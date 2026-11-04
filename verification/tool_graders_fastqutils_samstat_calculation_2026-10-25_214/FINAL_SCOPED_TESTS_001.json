@@ -1,0 +1,39 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_bvbrc_fastqutils_samstat_mapping.py",
+    "tests/test_bvbrc_fastqutils_metadata.py",
+    "tests/test_bvbrc_fastqutils_sequence_calculators.py",
+    "tests/test_bvbrc_fastqutils_report_calculators.py",
+    "tests/test_bvbrc_fastqutils_projection.py",
+    "tests/test_bvbrc_fastqutils_provider.py",
+    "tests/test_bvbrc_fastqutils_returns.py",
+    "tests/test_bvbrc_fastqutils_saved_form_evolution.py",
+    "tests/test_bvbrc_fastqutils_cutadapt_provider.py",
+    "-k",
+    "not test_module_facade_pins_exact_scientific_dependency_bytes",
+    "-q",
+    "--tb=short",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/scratch_FINAL_SCOPED_TESTS_001/pytest"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_fastqutils_samstat_implementation_2026-10-25_212/candidate",
+  "started_at": "2026-10-26T00:26:54.909481+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 171.95614693907555,
+  "log": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/FINAL_SCOPED_TESTS_001.log",
+  "log_sha256": "d0899e4496eecfd55f67a45dbeb47491b2cc89ffef6d574ea1eeb8ff30fbc187",
+  "source_manifest": "verification/tool_graders_fastqutils_samstat_calculation_2026-10-25_214/FINAL_SCOPED_TESTS_001_SOURCE.json",
+  "source_manifest_sha256": "625f98226f7b02497a4e218b0619c5c2e8acf0e05cdc225b18ffc24a3038efcc",
+  "source_unchanged": true,
+  "changed_files": [],
+  "limits": {
+    "address_space_bytes": 21474836480,
+    "per_file_bytes": 4294967296,
+    "scratch_budget_bytes": 4294967296,
+    "measured_scratch_bytes": 0,
+    "wall_time_cap": null
+  },
+  "max_child_rss_kib": 54740
+}

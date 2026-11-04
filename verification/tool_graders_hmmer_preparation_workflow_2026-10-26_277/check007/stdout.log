@@ -1,0 +1,267 @@
+.................F...........F..F...F.F...........................       [100%]
+=================================== FAILURES ===================================
+_ test_saved_sheet_recalculation_keeps_native_work_and_prior_facts_unchanged[hmmconvert-ascii] _
+
+native_case = namespace(store=<gene_annotation_episode.state.Store object at 0x73c9cea50170>, flow=<gene_annotation_episode.runtime....e/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check007/temporary/hmmconvert-ascii0/workspace'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73c9cf6d7530>
+
+    def test_frozen_original_child_form_cannot_be_replaced(native_case):
+        case = native_case
+        reader = case.owner.native_hmmer_preparation_returns
+        original = case.flow.journal.row('runtime_forms', case.results_context.episode_id)['form']
+        altered = json.loads(original)
+        altered['population'][0]['returned_records'] += 1
+        try:
+            case.store.db.execute('UPDATE runtime_forms SET form=? WHERE run_id=? AND episode_id=?',
+                (json.dumps(altered), RUN_ID, case.results_context.episode_id))
+            case.store.db.commit()
+            with pytest.raises(ValueError):
+                reader.received_context(case.root_context)
+        finally:
+>           case.store.db.execute('UPDATE runtime_forms SET form=? WHERE run_id=? AND episode_id=?',
+                (original, RUN_ID, case.results_context.episode_id))
+E           AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}
+E             
+E             Omitting 5 identical items, use -vv to show
+E             Differing items:
+E             {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_f3321f...ccurrence_id': 'artifact_f3321f95b53cecfcacf4328e5a14c280d20eb933259d56b5bcedb3d7d8204195#/artifacts/2'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_f3321f95b53cecfcacf4328e5...#/artifacts/2'}], 'state': 'present', 'unit': 'decoded_model_count', 'value': 1}, 'format': 'hmmer3_ascii', ...}, ...]}
+E             Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_nested_workflow.py:601: AssertionError
+_ test_saved_sheet_recalculation_keeps_native_work_and_prior_facts_unchanged[hmmfetch-single_key] _
+
+native_case = namespace(store=<gene_annotation_episode.state.Store object at 0x73c9cf85e060>, flow=<gene_annotation_episode.runtime....erification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check007/temporary/hmmfetch-single_key0/workspace'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73c9cf5cadb0>
+
+    def test_frozen_original_child_form_cannot_be_replaced(native_case):
+        case = native_case
+        reader = case.owner.native_hmmer_preparation_returns
+        original = case.flow.journal.row('runtime_forms', case.results_context.episode_id)['form']
+        altered = json.loads(original)
+        altered['population'][0]['returned_records'] += 1
+        try:
+            case.store.db.execute('UPDATE runtime_forms SET form=? WHERE run_id=? AND episode_id=?',
+                (json.dumps(altered), RUN_ID, case.results_context.episode_id))
+            case.store.db.commit()
+            with pytest.raises(ValueError):
+                reader.received_context(case.root_context)
+        finally:
+>           case.store.db.execute('UPDATE runtime_forms SET form=? WHERE run_id=? AND episode_id=?',
+                (original, RUN_ID, case.results_context.episode_id))
+E           AssertionError: assert {'schema': 'h....}, ...], ...} == {'checks': [{... 0.0001}, ...}
+E             
+E             Omitting 5 identical items, use -vv to show
+E             Differing items:
+E             {'rows': [{'kind': 'population', 'row_key': 'input_population', 'direction': 'input', 'record_keys': ['artifact_cc25ca...ccurrence_id': 'artifact_cc25ca29f64baa7ee18b414e1c349f34e2578d9d41a51960d64c0474b8697e40#/artifacts/2'}]}, ...}, ...]} != {'rows': [{'accession_count': {'inputs': [{'field': 'population', 'occurrence_id': 'artifact_cc25ca29f64baa7ee18b414e1...#/artifacts/2'}], 'state': 'present', 'unit': 'decoded_model_count', 'value': 1}, 'format': 'hmmer3_ascii', ...}, ...]}
+E             Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_nested_workflow.py:601: AssertionError
+__ test_independent_numeric_examples_and_practical_exact_zero[hmmpress-index] __
+
+native_case = namespace(store=<gene_annotation_episode.state.Store object at 0x73c9cfbd8260>, flow=<gene_annotation_episode.runtime....ode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check007/temporary/hmmpress-index0/workspace'))
+
+    def test_independent_numeric_examples_and_practical_exact_zero(native_case):
+        case = native_case
+        body = case.outcome['result']
+        prepared = body['prepared']
+        bundle = json.loads(case.store.get_artifact(body['capture']['bundle_artifact_ref']))
+        sheet = json.loads(case.store.get_artifact(prepared['sheet_artifact_ref']))
+        calculations = json.loads(case.store.get_artifact(prepared['calculations_artifact_ref']))
+>       assert_mode_numbers(case.job, bundle, sheet, calculations)
+
+../../../tests/test_native_hmmer_preparation_nested_workflow.py:394: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+job = {'version': 'native_hmmer_preparation_job_v1', 'program': 'hmmpress', 'mode': 'index', 'software': {'executable': '/ho...hmmpress', 'sha256': 'ee2e74d8420c2bdd7cf2809260225c43e99b72daf10d7a2662782aff9704acef', 'engine_version': '3.4'}, ...}
+bundle = {'artifacts': [{'format': 'hmmer_stdout', 'relative_path': 'outputs/stdout', 'role': 'stdout', 'sha256': '820cdc8774f7...a351071a7319/hmmer-preparation-attempt/cache'}, 'failures': [], 'finished_at': '2026-10-26T10:30:01.609525+00:00', ...}
+sheet = {'artifact_bindings': [{'actual_relative_path': 'work/models.hmm.h3m', 'artifact_occurrence_id': 'artifact_ff4ddd4676c... 'state': 'finite', 'token': '2.48491'}, ...], 'line': 21, 'symbols': ['A', 'C', 'D', 'E', 'F', 'G', ...]}, ...}], ...}
+calculations = {'checks': [{'code': 'parameters_valid', 'field': None, 'inputs': [{'parameter': 'probability_tolerance'}, {'parameter...: '3.4', 'mode': 'index', 'program': 'hmmpress', 'settings': {}}, 'parameters': {'probability_tolerance': 0.0001}, ...}
+
+    def assert_mode_numbers(job, bundle, sheet, calculations):
+        """Independent arithmetic and retained native facts, never expected=calculator."""
+        program, mode = job['program'], job['mode']
+        rows = calculations['rows']
+        if program == 'hmmemit':
+            generated = [r for r in rows if r['kind'] == 'generated_record']
+            lengths = [len(r['sequence'].replace('-', '').replace('.', '')) for r in generated]
+            expected = [15, 72, 39] if mode == 'sample_profile' else [12] * (3 if mode.startswith('sample_') else 1)
+            assert lengths == expected
+            for row, length in zip(generated, lengths):
+                assert row['basis'] == ('model_derived' if mode.startswith('consensus') else 'generated')
+                present(row['length'], length, unit='residue_count')
+            model = kind_row(calculations, 'model')
+            present(model['input_model_length'], 12)
+            present(model['captured_sample_count'], len(expected))
+            present(model['total_length'], sum(expected))
+            present(model['mean_length'], sum(expected) / len(expected))
+            if mode.startswith('consensus'):
+                assert generated[0]['sequence'] == ('ACDEFGHIKLMN' if mode == 'consensus_simple' else 'ACDExGHIKLMN')
+                consensus = kind_row(calculations, 'consensus')
+                present(consensus['mismatch_count'], 0)
+                present(generated[0]['ambiguous_residue_count'], int(mode == 'consensus_thresholded'))
+            elif mode == 'sample_core_aligned':
+                alignment = kind_row(calculations, 'alignment')
+                present(alignment['alignment_width'], 12)
+                present(alignment['captured_row_count'], 3)
+        elif program == 'hmmbuild':
+            row = kind_row(calculations, 'build')
+            c = row['components']
+            n, columns = (1, 12) if mode == 'build_single_sequence_matrix' else (3, 14)
+            present(c['input_sequence_count'], n)
+            present(c['input_column_count'], columns)
+            present(c['model_length'], 12)
+            present(c['model_alignment_fraction'], 12 / columns)
+            present(c['effective_input_sequence_ratio'], 1)
+            output, = [r for r in bundle['artifacts'] if r['role'] == 'resaved_alignment']
+            if mode == 'build_single_sequence_matrix':
+                assert output['size_bytes'] == 0
+                assert c['resaved_column_count']['value'] is None
+            else:
+                present(c['resaved_sequence_count'], 3)
+                present(c['resaved_column_count'], 12)
+        elif program == 'alimask':
+            row, = rows
+            c = row['components']
+            present(c['input_sequence_count'], 3)
+            present(c['input_column_count'], 14)
+            present(c['rf_consensus_count'], 12)
+            if mode.startswith('mask_'):
+                count = 5 if mode == 'mask_alignment' else 3
+                present(c['actual_masked_count'], count)
+                present(c['requested_union_count'], count)
+                present(c['masked_fraction'], count / 14)
+                assert sum(char == 'm' for char in row['output_mm']) == count
+            else:
+                present(c['native_mapping_row_count'], 1)
+                present(c['mapped_model_position_count'], 12)
+                assert c['requested_union_count']['value'] is None
+                assert row['native_mappings']
+        elif program in {'hmmconvert', 'hmmfetch', 'hmmpress'}:
+            inputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'input']
+            outputs, = [r for r in rows if r['kind'] == 'population' and r['direction'] == 'output']
+            present(inputs['decoded_model_count'], 1)
+            if program == 'hmmconvert':
+                aliases = [r for r in bundle['artifacts'] if r['role'] in {'stdout', 'converted_models'}]
+                assert len(aliases) == 2 and aliases[0]['sha256'] == aliases[1]['sha256']
+                if mode == 'ascii':
+                    present(outputs['decoded_model_count'], 1)
+                    compare = kind_row(calculations, 'model_comparison')
+                    present(compare['source_length'], 12)
+                    present(compare['output_length'], 12)
+                    present(compare['compared_cell_count'], 611)
+                    present(compare['max_absolute_probability_difference'], 0)
+                else:
+                    assert outputs['decoded_model_count']['value'] is None
+                    assert outputs['decoded_model_count']['state'] != 'present'
+                    compare = kind_row(calculations, 'model_comparison')
+                    assert compare['relationship_state'] == 'unavailable'
+                    assert compare['output_record_key'] is None
+                    assert compare['output_length']['value'] is None
+                    assert compare['max_absolute_probability_difference']['value'] is None
+                    assert compare['compared_cell_count']['state'] == 'missing'
+            elif program == 'hmmfetch' and mode != 'index':
+                c = kind_row(calculations, 'key_population')
+                present(c['requested_key_count'], 2 if mode == 'key_file' else 1)
+                present(c['resolved_key_count'], 2 if mode == 'key_file' else 1)
+                present(c['selected_source_occurrence_count'], 1)
+                present(c['returned_model_occurrence_count'], 1)
+                present(c['duplicate_representation_count'], 0)
+                present(c['missing_key_count'], 0)
+            else:
+                summary = kind_row(calculations, 'index_summary')
+                for field in ['native_model_count', 'decoded_input_model_count', 'native_primary_name_count', 'native_accession_count']:
+>                   present(summary[field], 1)
+E                   assert [500, 2725, 3216, 9918] == [165, 2725, 3216, 9918]
+E                     
+E                     At index 0 diff: 500 != 165
+E                     Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_workflow.py:485: AssertionError
+_ test_selected_native_preparation_and_both_original_typed_forms[hmmsim-viterbi] _
+
+native_case = namespace(store=<gene_annotation_episode.state.Store object at 0x73c9cd606570>, flow=<gene_annotation_episode.runtime....ode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check007/temporary/hmmsim-viterbi0/workspace'))
+
+    def test_selected_native_preparation_and_both_original_typed_forms(native_case):
+        case = native_case
+        body = case.outcome['result']
+        assert case.outcome['status'] == 'completed' and body['complete'], body['failures']
+        assert case.returned['completed'] and case.returned['rows']
+        case.owner.validate_report(case.results_context, case.returned, case.results_form)
+        case.owner.validate_received_report(case.science_context, case.forwarded, case.science_form)
+        assert case.forwarded == {name: case.returned[name] for name in ('rows', 'population')}
+        assert case.returned['population'] == [body['population']]
+        assert all(row['source_ref'] == body['source_ref'] for rows in (
+            case.returned['rows'], case.returned['artifacts'], case.returned['population']) for row in rows)
+        received = {row['fact_source']: row['facts'] for row in
+            case.owner.native_hmmer_preparation_returns.received_context(case.root_context)}
+        assert received == {PREFIX + name: case.forwarded[name] for name in ('rows', 'population')}
+        bundle = json.loads(case.store.get_artifact(body['capture']['bundle_artifact_ref']))
+        assert bundle['requested_job'] == case.request and bundle['identity'] == case.plan['identity']
+        assert bundle['returncode'] == 0 and bundle['failures'] == []
+        assert bundle['program'] == case.job['program'] and bundle['mode'] == case.job['mode']
+        assert bundle['software']['actual_sha256'] == hashlib.sha256(
+            Path(case.job['software']['executable']).read_bytes()).hexdigest()
+        prepared = body['prepared']
+        sheet = json.loads(case.store.get_artifact(prepared['sheet_artifact_ref']))
+        calculations = json.loads(case.store.get_artifact(prepared['calculations_artifact_ref']))
+        assert prepared['sheet_artifact_ref'] != prepared['calculations_artifact_ref']
+        assert sheet['operation'] == calculations['operation'] == bundle['operation']
+        assert_projected_values(case.returned, case.selector, calculations)
+        occurrences = {(r['direction'], r['role'], r['ordinal'], r['artifact_ref'])
+            for r in prepared['occurrences']}
+        for row in case.returned['rows']:
+            for check in row['checks']:
+                assert all((r['direction'], r['role'], r['ordinal'], r['artifact_ref']) in occurrences
+                    for r in check['occurrences'])
+        explicit = [(r['direction'], r['role'], r['ordinal']) for r in case.selector['artifacts']]
+        actual = [(r['direction'], r['role'], r['ordinal']) for r in case.returned['artifacts']]
+        assert actual[:len(explicit)] == explicit
+>       assert set(actual[len(explicit):]) == {
+            ('input', r['role'], r['ordinal']) for r in case.job['operands']}
+E       AssertionError: assert set() == {('input', 'models', 0)}
+E         
+E         Extra items in the right set:
+E         ('input', 'models', 0)
+E         Use -v to get more diff
+
+../../../tests/test_native_hmmer_preparation_nested_workflow.py:338: AssertionError
+__ test_independent_numeric_examples_and_practical_exact_zero[hmmsim-viterbi] __
+
+native_case = namespace(store=<gene_annotation_episode.state.Store object at 0x73c9cd606570>, flow=<gene_annotation_episode.runtime....ode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check007/temporary/hmmsim-viterbi0/workspace'))
+
+    def test_independent_numeric_examples_and_practical_exact_zero(native_case):
+        case = native_case
+        body = case.outcome['result']
+        prepared = body['prepared']
+        bundle = json.loads(case.store.get_artifact(body['capture']['bundle_artifact_ref']))
+        sheet = json.loads(case.store.get_artifact(prepared['sheet_artifact_ref']))
+        calculations = json.loads(case.store.get_artifact(prepared['calculations_artifact_ref']))
+>       assert_mode_numbers(case.job, bundle, sheet, calculations)
+
+../../../tests/test_native_hmmer_preparation_nested_workflow.py:394: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_native_hmmer_preparation_workflow.py:525: in assert_mode_numbers
+    present(c['mean'], -5.619071923450204)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cell = {'inputs': [{'field': 'payload.values', 'record_key': 'artifact_675b987ff25a1281e406dd3471c52b5f89bd203e06f733d834673f...arameters.fit_tolerance', 'record_key': None}, ...], 'state': 'present', 'unit': 'sequence', 'value': 16.1745647507907}
+expected = 16.174564750739254, unit = None
+
+    def present(cell, expected, *, unit=None):
+        assert cell['state'] == 'present' and type(cell['value']) in (int, float), cell
+>       assert cell['value'] == pytest.approx(expected, abs=1e-12), cell
+E       AssertionError: {'inputs': [{'field': 'payload.values', 'record_key': 'artifact_675b987ff25a1281e406dd3471c52b5f89bd203e06f733d834673f...arameters.fit_tolerance', 'record_key': None}, ...], 'state': 'present', 'unit': 'sequence', 'value': 16.1745647507907}
+E       assert 16.1745647507907 == 16.174564750739254 ± 1.0e-12
+E         
+E         comparison failed
+E         Obtained: 16.1745647507907
+E         Expected: 16.174564750739254 ± 1.0e-12
+
+../../../tests/test_native_hmmer_preparation_workflow.py:326: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_hmmer_preparation_nested_workflow.py::test_saved_sheet_recalculation_keeps_native_work_and_prior_facts_unchanged[hmmconvert-ascii]
+FAILED ../../../tests/test_native_hmmer_preparation_nested_workflow.py::test_saved_sheet_recalculation_keeps_native_work_and_prior_facts_unchanged[hmmfetch-single_key]
+FAILED ../../../tests/test_native_hmmer_preparation_nested_workflow.py::test_independent_numeric_examples_and_practical_exact_zero[hmmpress-index]
+FAILED ../../../tests/test_native_hmmer_preparation_nested_workflow.py::test_selected_native_preparation_and_both_original_typed_forms[hmmsim-viterbi]
+FAILED ../../../tests/test_native_hmmer_preparation_nested_workflow.py::test_independent_numeric_examples_and_practical_exact_zero[hmmsim-viterbi]
+5 failed, 61 passed in 708.15s (0:11:48)

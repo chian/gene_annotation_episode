@@ -1,0 +1,92 @@
+--- a/gene_annotation_episode/literature_numerical_return_presentation.py
++++ b/gene_annotation_episode/literature_numerical_return_presentation.py
+@@ -1,18 +1,24 @@
+ """Present registered numerical returns without reproducing a scoring sheet.
+ 
+-Only exact channel, compiled-assay and ion-discrimination declarations receive this treatment.
++Only exact registered A105 numerical declarations receive this treatment.
+ The original closed contracts remain with the host; this pure detached view is
+ neither a schema accepted by validation nor a replacement return contract.
+ """
+ from collections.abc import Mapping
+-from .domain import canonical
++from .literature_numerical_contracts import RETURN_MEANINGS, is_registered_schema
+ 
+ 
+-MEANINGS = {
+-    'literature_ion_discrimination_cells': 'Requested source ion-discrimination numerical components with actual biological/ion/construct meanings, source scope, distinct reported/estimator/nominal/conditional physical domains, dependencies and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+-    'literature_channel_cells': 'Requested source electrical numerical sections with actual experimental meanings, measurement dependencies, applicability and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+-    'literature_compiled_assay_cells': 'Requested within-assay numerical sections with actual subject, endpoint, corrections, normalization, controls, measurement dependencies and uncertainty qualifications. The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.',
+-}
++MEANINGS = {source: meaning + ' The host supplies the saved values under the original complete closed type; do not author or alter this recorded field.'
++    for source, meaning in RETURN_MEANINGS.items()}
++
++
++def _declaration_text(source):
++    return ('To request this recorded return from a child, choose a top-level field whose declaration '
++        'contains only $ref with the exact value episode-fact:' + source
++        + '. The host expands that explicit reference to the original complete closed type before commissioning. '
++        'Select the needed numerical components through the child assignment. '
++        'Keep model-authored interpretations in separate fields with their original constrained meanings.')
++
+ 
+ 
+ def _copy(value):
+@@ -23,27 +29,15 @@
+     return value
+ 
+ 
+-def _registered(source):
+-    if source == 'literature_ion_discrimination_cells':
+-        from .literature_ion_discrimination_storage import ion_discrimination_cells_schema
+-        return ion_discrimination_cells_schema()
+-    if source == 'literature_channel_cells':
+-        from .literature_channel_storage import channel_cells_schema
+-        return channel_cells_schema()
+-    if source == 'literature_compiled_assay_cells':
+-        from .literature_compiled_assay_storage import compiled_assay_cells_schema
+-        return compiled_assay_cells_schema()
+-    return None
+-
+-
+ def _compact(node):
+     if not isinstance(node, Mapping) or node.get('x-source') not in MEANINGS:
+         return node
+     source = node['x-source']
+-    if canonical(_copy(node)) != canonical(_registered(source)):
++    if not is_registered_schema(node):
+         return node
+-    shown = {name: _copy(value) for name, value in node.items() if name != 'items'}
+-    shown['description'] = MEANINGS[source]
++    shown = {name: _copy(node[name]) for name in ('type', 'x-source', 'minItems', 'maxItems', 'uniqueItems')
++        if name in node}
++    shown['description'] = MEANINGS[source] + ' ' + _declaration_text(source)
+     return shown
+ 
+ 
+@@ -93,20 +87,17 @@
+ 
+ 
+ def requested_return_text(result):
+-    """Profile-only presentation of an exact requested registered return type.
++    """Present an exact requested return without exposing its numerical sheet.
+ 
+     The original lookup retains its complete schema/text for host custody.
+-    Existing profile expansion resolves the explicit fact reference unchanged.
+-    Legacy expanded presentation does not call this function.
++    The same explicit fact reference preserves the original requested type.
+     """
+     source = result.get('source')
+     if (result.get('information_kind') != 'return_contract_information_v1' or source not in MEANINGS
+-            or canonical(_copy(result.get('report_schema'))) != canonical(_registered(source))):
++            or not is_registered_schema(result.get('report_schema'), source=source)):
+         return None
+-    return (MEANINGS[source] + '\n\nChoose a top-level field name for this recorded return. '
+-        'Its declaration contains only $ref with the exact value episode-fact:' + source
+-        + '. The existing contract-information profile expands that reference to the original complete closed type. '
+-        'Keep model-authored interpretations in separate fields with their original constrained meanings.')
++    return MEANINGS[source] + '\n\n' + _declaration_text(source)
++
+ 
+ 
+ __all__ = ['return_schema_view', 'state_view', 'lookup_task_kind', 'requested_return_text']

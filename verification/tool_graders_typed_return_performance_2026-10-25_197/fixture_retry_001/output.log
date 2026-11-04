@@ -1,0 +1,64 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/fixture_retry_001/temporary/test_public_genome_resolvers_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a10eb9538c0>
+
+    def test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics(tmp_path, monkeypatch):
+        """Real selected-operation host and custody; controlled transport, no Workflow."""
+        from collections import Counter
+        from copy import deepcopy
+        from gene_annotation_episode.state import Store
+        from test_bvbrc_genome_alignment_host import GenomeDriver, MEASUREMENTS
+        from test_genome_alignment_saved_structure import scientific_barrier
+    
+        def forbidden(*args, **kwargs):
+            raise AssertionError("unexpected live transport")
+        monkeypatch.setattr("socket.create_connection", forbidden)
+        monkeypatch.setattr("urllib.request.OpenerDirector.open", forbidden)
+        with Store(tmp_path / "state") as store:
+            driver = GenomeDriver(store, tmp_path)
+>           driver.start()
+
+tests/test_form_reference_validation.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_bvbrc_genome_alignment_host.py:166: in start
+    selected = selection(fmt, fields=fields)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_host.py:71: in selection
+    requests = [r for r in all_requests() if r['document_slot_id'] == chosen['slot_id']]
+                           ^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_sheet.py:96: in all_requests
+    b, _, vc = native_examples()
+               ^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_sheet.py:25: in native_examples
+    v = read('tool_graders_mauve_v4_2026-10-25/official_small.document.json')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bvbrc_genome_alignment_sheet.py:20: in read
+    return json.loads((VERIFY / path).read_text())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_mauve_v4_2026-10-25/official_small.document.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_typed_return_performance_2026-10-25_197/candidate/verification/tool_graders_mauve_v4_2026-10-25/official_small.document.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_form_reference_validation.py::test_public_genome_resolvers_reuse_facts_but_preserve_possession_and_semantics
+1 failed in 15.82s

@@ -1,0 +1,26 @@
+.F
+=================================== FAILURES ===================================
+_ test_numerical_source_does_not_grant_retained_artifacts_or_unrequested_fields _
+../../../tests/test_native_rna_structure_nested_workflow.py:178: in test_numerical_source_does_not_grant_retained_artifacts_or_unrequested_fields
+    assert resolver(source, 'execution_result')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:2824: in resolve
+    received = self.episode_bindings.resolve_received_reference(context, reference, namespace)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/episode_bindings.py:269: in resolve_received_reference
+    value = callback(context, reference, namespace)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/execution_episodes.py:1258: in resolve_received_reference
+    access = self.native_rna_structure_results.retained_reference_access(context, reference, namespace)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:391: in retained_reference_access
+    return retained_reference_access(self, context, reference, namespace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_rna_structure_results.py:440: in retained_reference_access
+    requested = {node.get("x-source") for node in plain(context.request).get("report_contract", {}).get("measurements", {}).get("schema", {}).get("properties", {}).values()}
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_rna_structure_nested_workflow.py::test_numerical_source_does_not_grant_retained_artifacts_or_unrequested_fields
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed, 2 deselected in 35.10s

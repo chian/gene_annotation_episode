@@ -1,0 +1,823 @@
+{
+  "version": "blast_vdb_publication_returns_verification669_v1",
+  "modified_sources": [
+    {
+      "path": "gene_annotation_episode/native_blast_utility_result_publication.py",
+      "sha256": "352ebc44d02f7f9f128267cbc90ab58e80c5e10d026f154fd1df24e441089454",
+      "size_bytes": 26953
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_utility_results.py",
+      "sha256": "6a9fe4a86888706821a5325b98d3d56f43be748ff370a7948dcb7c320d7dbedd",
+      "size_bytes": 33173
+    },
+    {
+      "path": "tests/test_blast_vdb_publication_returns_669.py",
+      "sha256": "c046349c6efffb6300be372742f332012bf64e6e07c65ca6a2fd7f7f9e1bb68d",
+      "size_bytes": 35973
+    }
+  ],
+  "reused_unchanged_source": [
+    {
+      "path": "gene_annotation_episode/native_blast_utility_returns.py",
+      "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+      "size_bytes": 17257
+    }
+  ],
+  "contracts": [
+    {
+      "path": "verification/tool_graders_blast_vdb_return_ports_2026-10-28_665/INTERFACE_PORT_001.md",
+      "sha256": "f72398d548c327983eab3171523aab11daa9518baf77684f760697b445c9cf38",
+      "size_bytes": 43528
+    },
+    {
+      "path": "verification/tool_graders_blast_vdb_return_ports_2026-10-28_665/CONSUMER_TRACE_002.md",
+      "sha256": "6e7115c727ee0a8c115abadd9268b4f6cc3a49ea05e08899937f15790975580a",
+      "size_bytes": 18834
+    },
+    {
+      "path": "verification/tool_graders_blast_vdb_native_ports_2026-10-28_664/IMPLEMENTATION_PORT_001.md",
+      "sha256": "52284963ee9129e43ad2c89b6fa1621d848058d9c0dfa7290fb0c01a411f63a2",
+      "size_bytes": 45815
+    }
+  ],
+  "runs": [
+    {
+      "attempt": "check126_vdb_publication669",
+      "handle": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/handle.json",
+      "unit": "gene-local-job-b401288abc2946f28101339db61915ff.service",
+      "selected_tests": [
+        "test_blast_vdb_publication_returns_669.py"
+      ],
+      "summary": "13 passed in 38.79s",
+      "call_counts": {
+        "passed": 13,
+        "failed": 0,
+        "skipped": 0
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "enforced_metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        }
+      },
+      "evidence_files": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/handle.json",
+          "sha256": "03d7160f4c2c304940827c4403e095d9c8f43c520f53c2af55a8aee28b07067a",
+          "size_bytes": 3216
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/selected_tests.json",
+          "sha256": "f03635da852663dc33e20a3ee13706fa83345c9fb4fae8943b47aff2153132ac",
+          "size_bytes": 50
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/case_reports.jsonl",
+          "sha256": "1f3d47db89148e7dc100d3d75d8d0c3fe0be39a98ebbc1d7588f2830c9e21149",
+          "size_bytes": 2913
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/stdout.txt",
+          "sha256": "d5577016ec2b7b70237d2d2616faacf60e0ecde756b6843700f49a884c3e6e08",
+          "size_bytes": 100
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/loaded_module_pins.json",
+          "sha256": "e8fc2f91de0ede7990faf8872a2714966adfeb68bbcb15f28e41a8eea3bc3f88",
+          "size_bytes": 238878
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_pins_before.json",
+          "sha256": "44d02106e4be7488e7cb2310ed4832873174f9ba9b32cdd6e700e9e911aa678c",
+          "size_bytes": 2374289
+        }
+      ],
+      "loaded_modules": {
+        "gene_annotation_episode.native_blast_utility_result_publication": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py",
+          "sha256": "0d7c353886fd5919d77b723163f10c17fcb4d1b39bff05580b6d414eb0749f3e",
+          "size_bytes": 26904
+        },
+        "gene_annotation_episode.native_blast_utility_results": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_results.py",
+          "sha256": "6a9fe4a86888706821a5325b98d3d56f43be748ff370a7948dcb7c320d7dbedd",
+          "size_bytes": 33173
+        },
+        "gene_annotation_episode.native_blast_utility_returns": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_returns.py",
+          "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+          "size_bytes": 17257
+        },
+        "gene_annotation_episode.native_blast_utility_result_worker": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_worker.py",
+          "sha256": "0ce82cbcad7d4002d9c7d01968f3c4f9ac2690f6ba0f90283a4a77f535486fe0",
+          "size_bytes": 33223
+        },
+        "gene_annotation_episode.blast_utility_result_views": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_result_views.py",
+          "sha256": "6b662b0f00e64935892063a0b481c017ee2a71b2cc615d1b4d3cf9dd099848c6",
+          "size_bytes": 90057
+        },
+        "gene_annotation_episode.blast_utility_contracts": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_contracts.py",
+          "sha256": "28cf67559ecfe776ed5bf00dd093349c87a13583d9159e9be61e8baaba207a0c",
+          "size_bytes": 41121
+        },
+        "gene_annotation_episode.blast_vdb_utility_inputs": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/gene_annotation_episode/blast_vdb_utility_inputs.py",
+          "sha256": "5609c2b203d95c7dc9cf11c005af81800d1f44fefedb1538a9c818ef66b3f35e",
+          "size_bytes": 26709
+        },
+        "test_blast_vdb_publication_returns_669": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126_vdb_publication669/source_snapshot/tests/test_blast_vdb_publication_returns_669.py",
+          "sha256": "90e0432be5014f82824f2a5a88f342b6f4a42e2f5b331456c5ef1a3bd565c46b",
+          "size_bytes": 14534
+        }
+      },
+      "collection": {
+        "terminal": true,
+        "quiescent": true,
+        "returncode": 0,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      }
+    },
+    {
+      "attempt": "check126b_vdb_publication669",
+      "handle": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/handle.json",
+      "unit": "gene-local-job-fbe37616c74d42b49e4299c41e20dd6f.service",
+      "selected_tests": [
+        "test_blast_vdb_publication_returns_669.py"
+      ],
+      "summary": "13 failed, 13 passed in 94.92s (0:01:34)",
+      "call_counts": {
+        "passed": 13,
+        "failed": 13,
+        "skipped": 0
+      },
+      "execution_audit": {
+        "pytest_returncode": 1,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "enforced_metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        }
+      },
+      "evidence_files": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/handle.json",
+          "sha256": "62a9acaea4f5a5aa26ded07e00b11a2d1096fc60bcf0c03a4abbd856cd9cb203",
+          "size_bytes": 3228
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/selected_tests.json",
+          "sha256": "f03635da852663dc33e20a3ee13706fa83345c9fb4fae8943b47aff2153132ac",
+          "size_bytes": 50
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/case_reports.jsonl",
+          "sha256": "34c3051bf8812be40d3604c1ecfd98442eabae50f3b35816f0af62b42eaf3d6b",
+          "size_bytes": 36692
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/stdout.txt",
+          "sha256": "6d8ed688f07c5f6a93da6677a16675a6baab5431c36a0a29a46f29588f63cb10",
+          "size_bytes": 33646
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/execution_audit.json",
+          "sha256": "db7732f183ccd7dd634d27bb0f3ad0221ab88d75883c8417aee35b429f19b20b",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/loaded_module_pins.json",
+          "sha256": "ac376f9ad7cbd01fb823367d9b19926876f77b8df4bbf268841fad4497a7a1fb",
+          "size_bytes": 241150
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_pins_before.json",
+          "sha256": "4db3fab652151e205a2be9e9fd4feb4394688f4945cafabf23e49affb344739b",
+          "size_bytes": 2380992
+        }
+      ],
+      "loaded_modules": {
+        "gene_annotation_episode.native_blast_utility_result_publication": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py",
+          "sha256": "059235b4816a78e542f45f2de097b052d77e5627b2f7f939d57d003d046ebc4f",
+          "size_bytes": 26953
+        },
+        "gene_annotation_episode.native_blast_utility_results": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_results.py",
+          "sha256": "6a9fe4a86888706821a5325b98d3d56f43be748ff370a7948dcb7c320d7dbedd",
+          "size_bytes": 33173
+        },
+        "gene_annotation_episode.native_blast_utility_returns": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_returns.py",
+          "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+          "size_bytes": 17257
+        },
+        "gene_annotation_episode.native_blast_utility_result_worker": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_worker.py",
+          "sha256": "5e889cfeae6c43f9dd57af30cbeb90dbbd672aa1646381bbf5ec006532548875",
+          "size_bytes": 40358
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_context": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_context.py",
+          "sha256": "178d25e2f8daff90f81230bdba0af161c3545a0cf48504d87f2186d5b3e4e8cb",
+          "size_bytes": 35673
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_execution": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py",
+          "sha256": "ad81254161079696286f0df39cd17a4912b022b55f66533074071687b382b2ee",
+          "size_bytes": 16421
+        },
+        "gene_annotation_episode.blast_utility_result_views": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_result_views.py",
+          "sha256": "4568199e8639fd39f6663f81d5c6187768c81e8557e1559102694af49385809d",
+          "size_bytes": 90671
+        },
+        "gene_annotation_episode.blast_utility_contracts": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_contracts.py",
+          "sha256": "28cf67559ecfe776ed5bf00dd093349c87a13583d9159e9be61e8baaba207a0c",
+          "size_bytes": 41121
+        },
+        "gene_annotation_episode.blast_vdb_utility_inputs": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/gene_annotation_episode/blast_vdb_utility_inputs.py",
+          "sha256": "5609c2b203d95c7dc9cf11c005af81800d1f44fefedb1538a9c818ef66b3f35e",
+          "size_bytes": 26709
+        },
+        "test_blast_vdb_publication_returns_669": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/tests/test_blast_vdb_publication_returns_669.py",
+          "sha256": "bb77eb21318b9d9f4f90d259521052dc3be0c8f061789e801b08bec8c5cbd0bf",
+          "size_bytes": 33037
+        },
+        "test_blast_vdb_native_context_668": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126b_vdb_publication669/source_snapshot/tests/test_blast_vdb_native_context_668.py",
+          "sha256": "59ab2abd245acbf5141314e1d4bae2abf87bb6aab2c3c5086b6ab35f01408710",
+          "size_bytes": 20986
+        }
+      },
+      "collection": {
+        "terminal": true,
+        "quiescent": true,
+        "returncode": 1,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      }
+    },
+    {
+      "attempt": "check126c_vdb_publication669",
+      "handle": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/handle.json",
+      "unit": "gene-local-job-ba328ec1051648489e491c5219126d79.service",
+      "selected_tests": [
+        "test_blast_vdb_publication_returns_669.py::test_saved_vdb_publisher_authenticates_original_receipt_and_never_rereads_metadata",
+        "test_blast_vdb_publication_returns_669.py::test_vdb_prepared_rejects_original_proof_plan_or_result_hash_tampering",
+        "test_blast_vdb_publication_returns_669.py::test_vdb_saved_result_from_other_context_rejects_even_with_consistent_replacement_hashes",
+        "test_blast_vdb_publication_returns_669.py::test_saved_projection_proof_cannot_be_replaced_by_self_consistent_other_request_digest",
+        "test_blast_vdb_publication_returns_669.py::test_native_failed_saved_vdb_rows_remain_deliverable_with_explicit_bytes_only",
+        "test_blast_vdb_publication_returns_669.py::test_selected_vdb_repair_reuses_original_capture_and_keeps_failure_history_and_credit",
+        "test_blast_vdb_publication_returns_669.py::test_selected_vdb_partial_parsed_result_is_never_reparsed_on_later_collect"
+      ],
+      "summary": "13 passed in 139.60s (0:02:19)",
+      "call_counts": {
+        "passed": 13,
+        "failed": 0,
+        "skipped": 0
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "enforced_metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        }
+      },
+      "evidence_files": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/handle.json",
+          "sha256": "658f8a253faa98ae03def56272d5c38a5acadc96c96046cce71368e9325d9fa5",
+          "size_bytes": 3228
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/selected_tests.json",
+          "sha256": "88b16e394a31a6d66ed5dc7548b652132de13bfd537d7072bab31bce5b5fa5aa",
+          "size_bytes": 908
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/case_reports.jsonl",
+          "sha256": "1124ddb06ecf92f650f51e4f7da7fa3d731ba7625adaccdccbe1e931ebb45b11",
+          "size_bytes": 2917
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/stdout.txt",
+          "sha256": "bb3d299a6cdbf5e40f929e6eeb9ed8c5c9306f26d0c3903fcb84f8a80dcdfad1",
+          "size_bytes": 111
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/loaded_module_pins.json",
+          "sha256": "ec2c36082f0e75a90c7b9539ae7282390855d9122fbcb58e96d6f9a3c347dba7",
+          "size_bytes": 240739
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_pins_before.json",
+          "sha256": "baa5fb692c4317d0a025cbb9c94debc69b63891d526ca09d29dde86dccfa3671",
+          "size_bytes": 2380992
+        }
+      ],
+      "loaded_modules": {
+        "gene_annotation_episode.native_blast_utility_result_publication": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py",
+          "sha256": "352ebc44d02f7f9f128267cbc90ab58e80c5e10d026f154fd1df24e441089454",
+          "size_bytes": 26953
+        },
+        "gene_annotation_episode.native_blast_utility_results": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_results.py",
+          "sha256": "6a9fe4a86888706821a5325b98d3d56f43be748ff370a7948dcb7c320d7dbedd",
+          "size_bytes": 33173
+        },
+        "gene_annotation_episode.native_blast_utility_returns": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_returns.py",
+          "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+          "size_bytes": 17257
+        },
+        "gene_annotation_episode.native_blast_utility_result_worker": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_worker.py",
+          "sha256": "5e889cfeae6c43f9dd57af30cbeb90dbbd672aa1646381bbf5ec006532548875",
+          "size_bytes": 40358
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_context": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_context.py",
+          "sha256": "178d25e2f8daff90f81230bdba0af161c3545a0cf48504d87f2186d5b3e4e8cb",
+          "size_bytes": 35673
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_execution": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py",
+          "sha256": "2f4b0394add1048929b40e59b6e806147ce037cc28433812915137d9780add47",
+          "size_bytes": 16578
+        },
+        "gene_annotation_episode.blast_utility_result_views": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_result_views.py",
+          "sha256": "4568199e8639fd39f6663f81d5c6187768c81e8557e1559102694af49385809d",
+          "size_bytes": 90671
+        },
+        "gene_annotation_episode.blast_utility_contracts": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_contracts.py",
+          "sha256": "28cf67559ecfe776ed5bf00dd093349c87a13583d9159e9be61e8baaba207a0c",
+          "size_bytes": 41121
+        },
+        "gene_annotation_episode.blast_vdb_utility_inputs": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/gene_annotation_episode/blast_vdb_utility_inputs.py",
+          "sha256": "5609c2b203d95c7dc9cf11c005af81800d1f44fefedb1538a9c818ef66b3f35e",
+          "size_bytes": 26709
+        },
+        "test_blast_vdb_publication_returns_669": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/tests/test_blast_vdb_publication_returns_669.py",
+          "sha256": "99801e327fd73fb9baa30e1b9ac2fbb82d6a2d52eccd6359ddef2ada8d0a5afa",
+          "size_bytes": 32985
+        },
+        "test_blast_vdb_native_context_668": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126c_vdb_publication669/source_snapshot/tests/test_blast_vdb_native_context_668.py",
+          "sha256": "59ab2abd245acbf5141314e1d4bae2abf87bb6aab2c3c5086b6ab35f01408710",
+          "size_bytes": 20986
+        }
+      },
+      "collection": {
+        "terminal": true,
+        "quiescent": true,
+        "returncode": 0,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      }
+    },
+    {
+      "attempt": "check126d_vdb_publication669",
+      "handle": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/handle.json",
+      "unit": "gene-local-job-09ee239972e84f7db93c941f4d8a2e8c.service",
+      "selected_tests": [
+        "test_blast_vdb_publication_returns_669.py::test_controlled_saved_collection_reaches_actual_immediate_child_admission"
+      ],
+      "summary": "1 passed in 24.71s",
+      "call_counts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "enforced_metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        }
+      },
+      "evidence_files": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/handle.json",
+          "sha256": "43f2a25cdc0ba75ef3f1574091207adfb4ec066bde972031e95fa0b615a24fd6",
+          "size_bytes": 3228
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/selected_tests.json",
+          "sha256": "f0a51a021a9848193302426879a4408b0d325e5a8aa258a6992a58d806150442",
+          "size_bytes": 125
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/case_reports.jsonl",
+          "sha256": "cdad90dddac7c50f8c560e90675f671e9562d9a2fbf22cb82bea18bcec820a04",
+          "size_bytes": 215
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/stdout.txt",
+          "sha256": "b978d4b3615ca297aa9fcc2023d326d44f31b8541e1a2e03349f6bd61808bc4c",
+          "size_bytes": 99
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/loaded_module_pins.json",
+          "sha256": "625688fb6c4bf93dee05c0976695c47cca5b6583494b52c0ed26089851db86a7",
+          "size_bytes": 241150
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_pins_before.json",
+          "sha256": "ac5c278571ba6e3d4a1833adbbcc639c179e8020d0f6fe8ccb6e678779769390",
+          "size_bytes": 2380992
+        }
+      ],
+      "loaded_modules": {
+        "gene_annotation_episode.native_blast_utility_result_publication": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py",
+          "sha256": "352ebc44d02f7f9f128267cbc90ab58e80c5e10d026f154fd1df24e441089454",
+          "size_bytes": 26953
+        },
+        "gene_annotation_episode.native_blast_utility_results": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_results.py",
+          "sha256": "6a9fe4a86888706821a5325b98d3d56f43be748ff370a7948dcb7c320d7dbedd",
+          "size_bytes": 33173
+        },
+        "gene_annotation_episode.native_blast_utility_returns": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_returns.py",
+          "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+          "size_bytes": 17257
+        },
+        "gene_annotation_episode.native_blast_utility_result_worker": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_worker.py",
+          "sha256": "5e889cfeae6c43f9dd57af30cbeb90dbbd672aa1646381bbf5ec006532548875",
+          "size_bytes": 40358
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_context": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_context.py",
+          "sha256": "753385894533107575c70d163987f3d15a22d7c7203cacb104b7aded80a326b8",
+          "size_bytes": 36009
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_execution": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py",
+          "sha256": "9ccaa294bf7e84ac9852562949f0936fe78202a33eb7148a3a2123a6127e7db4",
+          "size_bytes": 16778
+        },
+        "gene_annotation_episode.blast_utility_result_views": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_result_views.py",
+          "sha256": "54c1d4fb07098f82bc6f7f46599391fd764a74741bde053d98ad14ae2625c28b",
+          "size_bytes": 92525
+        },
+        "gene_annotation_episode.blast_utility_contracts": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_contracts.py",
+          "sha256": "28cf67559ecfe776ed5bf00dd093349c87a13583d9159e9be61e8baaba207a0c",
+          "size_bytes": 41121
+        },
+        "gene_annotation_episode.blast_vdb_utility_inputs": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/gene_annotation_episode/blast_vdb_utility_inputs.py",
+          "sha256": "5609c2b203d95c7dc9cf11c005af81800d1f44fefedb1538a9c818ef66b3f35e",
+          "size_bytes": 26709
+        },
+        "test_blast_vdb_publication_returns_669": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/tests/test_blast_vdb_publication_returns_669.py",
+          "sha256": "c046349c6efffb6300be372742f332012bf64e6e07c65ca6a2fd7f7f9e1bb68d",
+          "size_bytes": 35973
+        },
+        "test_blast_vdb_native_context_668": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126d_vdb_publication669/source_snapshot/tests/test_blast_vdb_native_context_668.py",
+          "sha256": "59ab2abd245acbf5141314e1d4bae2abf87bb6aab2c3c5086b6ab35f01408710",
+          "size_bytes": 20986
+        }
+      },
+      "collection": {
+        "terminal": true,
+        "quiescent": true,
+        "returncode": 0,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      }
+    },
+    {
+      "attempt": "check126e_vdb_publication669",
+      "handle": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/handle.json",
+      "unit": "gene-local-job-c505b3104a6540ad8f95b55c37cc5a73.service",
+      "selected_tests": [
+        "test_blast_vdb_publication_returns_669.py::test_saved_vdb_publisher_authenticates_original_receipt_and_never_rereads_metadata",
+        "test_blast_vdb_publication_returns_669.py::test_controlled_saved_collection_reaches_actual_immediate_child_admission"
+      ],
+      "summary": "2 passed in 48.09s",
+      "call_counts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      "execution_audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "enforced_metadata": {
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "enforcement": {
+          "memory": "systemd_cgroup_v2_memory_max",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "filesystem_sandbox": false
+        },
+        "verified_cgroup": {
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "runtime_max": "infinity",
+          "kill_mode": "control-group",
+          "oom_policy": "kill"
+        }
+      },
+      "evidence_files": [
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/handle.json",
+          "sha256": "fbcaa6baf48b5a72a564e4b87e33c027f9b5857fcf160336807e7b680b07bc6e",
+          "size_bytes": 3228
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/selected_tests.json",
+          "sha256": "da06dfa7a4bfb9ef705144971027d5164924ae1da5d4fa492c90e7b2986dfb8f",
+          "size_bytes": 256
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/case_reports.jsonl",
+          "sha256": "187dd510631ce3c286775581409247303dfc28ee4a5bfc86f89191b7f4f8e396",
+          "size_bytes": 438
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/stdout.txt",
+          "sha256": "61d526f4365e17f0d818c5637398ce1bb8f17c7a38e1f3aab3cc18b2866da123",
+          "size_bytes": 99
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/execution_audit.json",
+          "sha256": "b4e92bf4efcd322ddee93c2a75dfa03f2ecff354ed53894f90448914711e61b0",
+          "size_bytes": 156
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/loaded_module_pins.json",
+          "sha256": "9e8330c8af7589db9ed72eac89c301ce8ac4b7931afcb79b6b456644f3d1baf8",
+          "size_bytes": 241150
+        },
+        {
+          "path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_pins_before.json",
+          "sha256": "53ef89f30c4414262238a9b07a05f2ed7f2338a4ecea2a947767db4c32fcfccd",
+          "size_bytes": 2380992
+        }
+      ],
+      "loaded_modules": {
+        "gene_annotation_episode.native_blast_utility_result_publication": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_publication.py",
+          "sha256": "352ebc44d02f7f9f128267cbc90ab58e80c5e10d026f154fd1df24e441089454",
+          "size_bytes": 26953
+        },
+        "gene_annotation_episode.native_blast_utility_results": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_results.py",
+          "sha256": "6a9fe4a86888706821a5325b98d3d56f43be748ff370a7948dcb7c320d7dbedd",
+          "size_bytes": 33173
+        },
+        "gene_annotation_episode.native_blast_utility_returns": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_returns.py",
+          "sha256": "b22827a2144c95ab5db7e2ff61982c00fa3ac94abdb3becb9ddfedbc33d7e223",
+          "size_bytes": 17257
+        },
+        "gene_annotation_episode.native_blast_utility_result_worker": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_utility_result_worker.py",
+          "sha256": "ab429120ef7a15aa9a444729d00c2237b5f31325b4c0bbf43f2759df9229d6fd",
+          "size_bytes": 40478
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_context": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_context.py",
+          "sha256": "731c3f067aa193b8425210236052fee1784f8fc6b1e306fc585b56f8bfd27318",
+          "size_bytes": 36107
+        },
+        "gene_annotation_episode.native_blast_vdb_utility_execution": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py",
+          "sha256": "d772becaac472be8b1b4b60972e46b955ad2036db3f788f0c4db28bbf7662aa2",
+          "size_bytes": 17368
+        },
+        "gene_annotation_episode.blast_utility_result_views": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_result_views.py",
+          "sha256": "54c1d4fb07098f82bc6f7f46599391fd764a74741bde053d98ad14ae2625c28b",
+          "size_bytes": 92525
+        },
+        "gene_annotation_episode.blast_utility_contracts": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/blast_utility_contracts.py",
+          "sha256": "28cf67559ecfe776ed5bf00dd093349c87a13583d9159e9be61e8baaba207a0c",
+          "size_bytes": 41121
+        },
+        "gene_annotation_episode.blast_vdb_utility_inputs": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/gene_annotation_episode/blast_vdb_utility_inputs.py",
+          "sha256": "5609c2b203d95c7dc9cf11c005af81800d1f44fefedb1538a9c818ef66b3f35e",
+          "size_bytes": 26709
+        },
+        "test_blast_vdb_publication_returns_669": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/tests/test_blast_vdb_publication_returns_669.py",
+          "sha256": "c046349c6efffb6300be372742f332012bf64e6e07c65ca6a2fd7f7f9e1bb68d",
+          "size_bytes": 35973
+        },
+        "test_blast_vdb_native_context_668": {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check126e_vdb_publication669/source_snapshot/tests/test_blast_vdb_native_context_668.py",
+          "sha256": "f518b70f731ea6d7be757125a97dbc849a723767ee09e866f99eb35407253524",
+          "size_bytes": 34236
+        }
+      },
+      "collection": {
+        "terminal": true,
+        "quiescent": true,
+        "returncode": 0,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true
+      },
+      "rerun_reason": "668 tightened full original-context reconstruction, runtime identity validation and byte-failure mapping after d. Only two affected saved publisher/admission consumers rerun."
+    }
+  ],
+  "distinct_passing_tests": 27,
+  "failure_resolution": {
+    "attempt": "check126b_vdb_publication669",
+    "failed_count": 13,
+    "cause": "Native offline launcher argv environment ordering was not stable after canonical JSON roundtrip. Native668 owner sorted environment items in compile_vdb_offline_argv.",
+    "verified_by": "check126c_vdb_publication669"
+  },
+  "current_ports_missing": [],
+  "evidence_classification": {
+    "controlled": "All669 native captures and return-target ports use explicitly constructed engineering fixtures. The real Store, publisher, worker, receipt validators, selected result provider, typed return reader and controller run inside bounded529.",
+    "authentic_native": "No native VDB command, external acquisition or authentic VDB episode was run by669. Existing661 evidence is not relabelled as this task evidence.",
+    "historical": "Original652/654 Stores were not opened or modified by669. Root owns their complete-boundary preservation verification."
+  },
+  "limitations": [
+    "This result does not establish authentic production VDB local/resource/episode completion.",
+    "Root-owned generic consumers and resource binding require their own integrated verification.",
+    "Standalone pure projection uses shared validators; no new scientific calculator or numerical score is introduced."
+  ],
+  "final_consumer_run": "check126e_vdb_publication669"
+}

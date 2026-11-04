@@ -32,6 +32,7 @@ from .genomic_overlap_result_receipts import (GenomicOverlapResultReceipts as _S
 
 VERSION = 'native_expression_nmf_acquired_result_v1'
 _READING = ContextVar('expression_nmf_reading', default=())
+_CLOSED_PATHS = ContextVar('expression_nmf_closed_read_paths', default=())
 
 def empty_facts():
     return {source: [] for source in FACT_SOURCES}
@@ -287,7 +288,13 @@ class ExpressionNMFResultReceipts:
             return
         plan = validate_expression_nmf_worker_plan(plan)
         intent, selector = receipt['intent'], receipt['intent']['assignment']['selector']
-        require(plan['directory'] == str(self.action_directory(intent['episode_id'], intent['operation_key']) / 'worker')
+        identity = (id(self), intent['episode_id'], intent['operation_key'], digest(receipt))
+        recorded = [roots for key, roots in _CLOSED_PATHS.get() if key == identity]
+        require(len(recorded) <= 1, 'nmf_closed_worker_context_mismatch')
+        worker_directory = (recorded[0]['worker_directory'] if recorded else
+            str(self.action_directory(intent['episode_id'], intent['operation_key']) / 'worker'))
+        store_root = Path(recorded[0]['store_root']) if recorded else self.store.path
+        require(plan['directory'] == worker_directory
             and same(plan['selector'], selector), 'nmf_worker_selection_mismatch')
         if plan['mode'] == 'native_result':
             require(same(plan['original_plan'], receipt['native']['original_plan']) and same(plan['capture'], receipt['capture']),
@@ -299,7 +306,7 @@ class ExpressionNMFResultReceipts:
         for row in retained:
             if row is not None:
                 file = self.file_metadata(row['file'])
-                require(row['path'] == str(self.store.path / 'artifacts' / file['sha256'][:2] / file['sha256']), 'nmf_worker_input_path_mismatch')
+                require(row['path'] == str(store_root / 'artifacts' / file['sha256'][:2] / file['sha256']), 'nmf_worker_input_path_mismatch')
         require(type(capture) is dict and execution is not None, 'nmf_worker_receipt_mismatch')
         closed(capture, ('version', 'plan_file', 'execution_receipt_file', 'worker_result_file', 'result', 'outputs', 'failures'))
         require(capture['version'] == 'expression_nmf_worker_capture_v1', 'nmf_worker_receipt_mismatch')
@@ -451,7 +458,7 @@ class ExpressionNMFResultReceipts:
             validate_pending(actual.pop('pending_work_after_action'))
         require(same(actual, outcome(receipt)), 'nmf_completed_result_mismatch')
 
-    def controls(self, intent):
+    def _read_controls(self, intent):
         root = self.action_directory(intent['episode_id'], intent['operation_key'])
         receipt = read_control(root / 'receipt.json')
         if receipt is None:
@@ -461,7 +468,87 @@ class ExpressionNMFResultReceipts:
         for name, key in (('observation.json', 'observation'), ('native-snapshot.json', 'native'), ('capture.json', 'capture'),
                 ('worker-plan.json', 'worker_plan'), ('worker-capture.json', 'worker_capture'), ('worker-execution.json', 'worker_execution')):
             require(same(read_control(root / name), receipt[key]), 'nmf_result_control_mismatch')
-        return self.validate(receipt, intent)
+        return receipt
+
+    def controls(self, intent):
+        receipt = self._read_controls(intent)
+        return None if receipt is None else self.validate(receipt, intent)
+
+    def _closed_read_roots(self, context, receipt):
+        """Authenticate literal producer roots for one actually closed receipt.
+
+        Physical controls and metadata are still read from the current owner.
+        These original lexical roots neither select a filesystem reader nor
+        authorize preparation, a live worker or another action.
+        """
+        row = self.store.db.execute('SELECT * FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+            (self.owner.run_id, context.episode_id)).fetchone()
+        if (row is None or row['state'] != 'yielded'
+                or row['completion'] is None or row['archive'] is None):
+            return None
+        require(same(json.loads(row['request']), plain(context.request))
+            and same(json.loads(row['path']), plain(context.path)), 'nmf_closed_context_mismatch')
+        completion, descriptor = json.loads(row['completion']), json.loads(row['archive'])
+        closed(completion, ('ended_by', 'actions'))
+        require(type(completion['actions']) is int and completion['actions'] >= 0,
+            'nmf_closed_context_mismatch')
+        closed(descriptor, ('file', 'sha256', 'index_sha256'))
+        require(type(descriptor['file']) is str and Path(descriptor['file']).name == descriptor['file']
+            and descriptor['file'].endswith('.json') and all(type(descriptor[key]) is str
+                and re.fullmatch(r'[0-9a-f]{64}', descriptor[key]) is not None
+                for key in ('sha256', 'index_sha256')), 'nmf_closed_archive_mismatch')
+        from method_loop.archive import ArchivedRecord
+        archive = ArchivedRecord(self.owner.directory / 'archive' / descriptor['file'],
+            descriptor['sha256'], descriptor['index_sha256']).load()
+        require(archive['run_id'] == self.owner.run_id and archive['episode_id'] == context.episode_id
+            and same(archive['path'], plain(context.path))
+            and same(archive['request'], plain(context.request))
+            and archive['ended_by'] == completion['ended_by']
+            and type(archive['units_consumed']) is int
+            and archive['units_consumed'] == completion['actions'] == len(archive['units']),
+            'nmf_closed_archive_mismatch')
+        schema = plain(context.request)['report_contract']['measurements']['schema']
+        wanted = requested_expression_nmf_sources(schema)
+        frozen = self.store.db.execute('SELECT form FROM runtime_forms WHERE run_id=? AND episode_id=?',
+            (self.owner.run_id, context.episode_id)).fetchone()
+        require(frozen is not None and frozen['form'] is not None, 'nmf_closed_facts_mismatch')
+        final_values = self.returns._values(json.loads(frozen['form']), schema)
+        require(self.returns._frozen(context, final_values)
+            and all(any(same(value, final) for final in final_values[source])
+                for source in wanted for value in receipt['facts'][source]),
+            'nmf_closed_facts_mismatch')
+        if receipt['worker_plan'] is None:
+            return None
+        plan = validate_expression_nmf_worker_plan(receipt['worker_plan'])
+        capture, execution = receipt['worker_capture'], receipt['worker_execution']
+        require(type(capture) is dict and execution is not None, 'nmf_worker_receipt_mismatch')
+        self.file_metadata(capture['plan_file'], value=plan, newline=True)
+        self.file_metadata(capture['execution_receipt_file'], value=execution, newline=True)
+        validate_worker_execution(execution, plan=plan, plan_file=capture['plan_file'])
+        intent = receipt['intent']
+        suffix = Path('execution-results') / digest([intent['run_id'], intent['episode_id']]) / \
+            'native-expression-nmf-actions' / digest(intent['operation_key']) / 'worker'
+        directory = Path(plan['directory'])
+        require(directory.is_absolute() and str(directory) == plan['directory']
+            and '..' not in directory.parts
+            and directory.parts[-len(suffix.parts):] == suffix.parts,
+            'nmf_closed_worker_directory_mismatch')
+        selected = (intent['target']['assignment']['requested_job']['native_expression_nmf']['input']
+            if plan['mode'] == 'native_result' else plan['sheet']['file'])
+        selected_path = (selected['path'] if plan['mode'] == 'native_result' else plan['sheet']['path'])
+        if plan['mode'] == 'native_result':
+            from .native_file_capture import _metadata
+            metadata = _metadata(self.store, selected['artifact_ref'])
+            require(metadata['sha256'] == selected['sha256'] and metadata['size'] == selected['size_bytes'],
+                'nmf_closed_worker_input_path_mismatch')
+            selected_file = selected
+        else:
+            selected_file = self.file_metadata(selected)
+        path = Path(selected_path)
+        require(path.is_absolute() and str(path) == selected_path and '..' not in path.parts
+            and path.parts[-3:] == ('artifacts', selected_file['sha256'][:2], selected_file['sha256']),
+            'nmf_closed_worker_input_path_mismatch')
+        return dict(worker_directory=plan['directory'], store_root=str(path.parents[2]))
 
     def read_staged(self, action):
         self.require_action(action)
@@ -495,10 +582,19 @@ class ExpressionNMFResultReceipts:
                     episode_id=episode_id, assignment=plain(context.assignment), scope=plain(context.scope))), 'nmf_assignment_control_mismatch')
                 row = self._selected(intent)
                 require(row['result'] is not None, 'nmf_completed_result_required')
-                receipt = self.controls(intent)
+                receipt = self._read_controls(intent)
                 require(receipt is not None, 'nmf_result_receipt_required')
                 self.match_outcome(row, receipt)
-                return deepcopy(receipt)
+                roots = self._closed_read_roots(context, receipt)
+                paths_token = None
+                if roots is not None:
+                    identity = (id(self), episode_id, operation_key, digest(receipt))
+                    paths_token = _CLOSED_PATHS.set((*_CLOSED_PATHS.get(), (identity, roots)))
+                try:
+                    return deepcopy(self.validate(receipt, intent))
+                finally:
+                    if paths_token is not None:
+                        _CLOSED_PATHS.reset(paths_token)
         finally:
             _READING.reset(token)
 

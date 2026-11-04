@@ -25,13 +25,18 @@ LITERAL_FIELDS = ("subject", "partner", "experiment", "endpoint", "normalization
 _ARGS = ("source_ref", "data_source_ref", "source_kind", "literals", "interpretation_witnesses")
 
 
-def partner_population_schema():
+def partner_population_schema(*, include_assessment=False):
     """Closed selected arguments; scientific numbers stay in retained sources."""
     witness = _witness_schema()
-    return obj({"source_ref": deepcopy(REF), "data_source_ref": deepcopy(REF),
+    schema = obj({"source_ref": deepcopy(REF), "data_source_ref": deepcopy(REF),
         "source_kind": {"enum": list(SOURCE_KINDS)},
         "literals": obj({name: _nullable(deepcopy(witness)) for name in LITERAL_FIELDS}),
         "interpretation_witnesses": {"type": "array", "items": deepcopy(witness)}})
+    if include_assessment:
+        from .literature_experiment_assessments import assessment_schema
+        from .literature_partner_types import EXPERIMENT_TYPES
+        schema["properties"]["experiment_assessment"] = assessment_schema(EXPERIMENT_TYPES)
+    return schema
 
 
 def _json_recipe(raw):
@@ -67,7 +72,12 @@ def read_partner_inputs(arguments, *, read_source):
     if isinstance(arguments, dict) and "input_mode" in arguments:
         from .literature_partner_native_inputs import read_partner_native_inputs
         return read_partner_native_inputs(arguments, read_source=read_source)
-    _keys(arguments, _ARGS, "arguments")
+    extra = ("experiment_assessment",) if "experiment_assessment" in arguments else ()
+    _keys(arguments, (*_ARGS, *extra), "arguments")
+    if extra:
+        from .literature_experiment_assessments import validate_assessment
+        from .literature_partner_types import EXPERIMENT_TYPES
+        validate_assessment(arguments["experiment_assessment"], EXPERIMENT_TYPES)
     _text(arguments["source_ref"], "source_ref")
     _text(arguments["data_source_ref"], "data_source_ref")
     if not isinstance(arguments["source_kind"], str) or arguments["source_kind"] not in SOURCE_KINDS:

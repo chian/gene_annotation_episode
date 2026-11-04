@@ -1,0 +1,374 @@
+{
+  "original_evidence_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/workflow-evidence.json",
+  "target": {
+    "assignment": {
+      "assignment_id": "paired-blast296",
+      "completion_keys": [
+        "handoff"
+      ],
+      "constraints": {
+        "allocation": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        }
+      },
+      "endpoint": "usable_handoff",
+      "initial_context": {
+        "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project",
+        "environment": {
+          "UNRELATED_CONTEXT": "not-in-native-job"
+        },
+        "revision": 0
+      },
+      "inventory_snapshot": {},
+      "progress_requirements": [
+        {
+          "credit": 7,
+          "key": "handoff",
+          "predicate": {
+            "kind": "requested_job_handoff"
+          }
+        }
+      ],
+      "requested_job": {
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+          "-num_threads",
+          "1",
+          "-query",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/query_sequence.fa",
+          "-subject",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/subject_sequence.fa",
+          "-outfmt",
+          "15",
+          "-out",
+          "report.json"
+        ],
+        "environment": {},
+        "native_blast": {
+          "environment": {},
+          "grading_parameters": {},
+          "metadata": {
+            "engineering_example": "blastp_gaps_json15",
+            "input_kind": "synthetic_derivative_of_retained_public_sequence"
+          },
+          "mode": "pairwise",
+          "operand_bindings": [
+            {
+              "native_accession": null,
+              "native_name": "query_blastp_gaps",
+              "operand_role": "query_sequence",
+              "record_ordinal": 0,
+              "reference_ref": null,
+              "subject_ref": "query_subject"
+            },
+            {
+              "native_accession": null,
+              "native_name": "subject_blastp_gaps",
+              "operand_role": "subject_sequence",
+              "record_ordinal": 0,
+              "reference_ref": "paired_reference",
+              "subject_ref": null
+            }
+          ],
+          "operands": [
+            {
+              "artifact_ref": null,
+              "format": "fasta",
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/query_sequence.fa",
+              "role": "query_sequence",
+              "sha256": "65dd36a6600456a98d1d4896d17d6ecdc2b8db1edf8e25408c7038365de4837a",
+              "size_bytes": 273
+            },
+            {
+              "artifact_ref": null,
+              "format": "fasta",
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/subject_sequence.fa",
+              "role": "subject_sequence",
+              "sha256": "a5d7553f32fc34d4bae894b104f3b575743a3b2db65948f237fe1168472be565",
+              "size_bytes": 265
+            }
+          ],
+          "options": [
+            "-num_threads",
+            "1"
+          ],
+          "outputs": [
+            {
+              "delimiter": null,
+              "fields": null,
+              "format": "text",
+              "relative_path": "stdout.txt",
+              "role": "stdout"
+            },
+            {
+              "delimiter": null,
+              "fields": null,
+              "format": "text",
+              "relative_path": "stderr.txt",
+              "role": "stderr"
+            },
+            {
+              "delimiter": null,
+              "fields": null,
+              "format": "json15",
+              "relative_path": "report.json",
+              "role": "primary_report"
+            }
+          ],
+          "program": "blastp",
+          "software": {
+            "engine_version": "2.17.0+",
+            "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+            "sha256": "5ce267c04e4988c265357bfbedc64e809545b6fcfae7ff6775266fabbee8ba0e"
+          },
+          "version": "native_blast_job_v1"
+        }
+      },
+      "resource_id": "here",
+      "resource_kind": "local",
+      "version": "practical_assignment_v1",
+      "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project"
+    },
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/native.json",
+    "handle": "source_8e1c96951c513502e672d3fd",
+    "origin_episode_id": "episode_86880ec8645ba0d06a0cd2ae3784308e5a789e8df338a809390160c690430290",
+    "request_sha256": "3d0171c84a7897ec1f5b2b8aaf2e520f61ab55a965f2ca5db696c7cb964dacc9",
+    "resource_id": "here",
+    "resource_kind": "local",
+    "run_id": "workflow296",
+    "scope": {
+      "subject_refs": [
+        "input_7dbb579aca201ae35fba0ee9"
+      ]
+    },
+    "version": "execution_target_v1"
+  },
+  "capture": {
+    "version": "native_blast_capture_v1",
+    "bundle_artifact_ref": "artifact_f750c162e48222998b014c79759adb8508132d1437d154b29f3de4ea4633308b",
+    "bundle_validated": true,
+    "artifacts": [
+      {
+        "role": "query_sequence",
+        "format": "fasta",
+        "relative_path": "inputs/query_sequence.fa",
+        "artifact_ref": "artifact_65dd36a6600456a98d1d4896d17d6ecdc2b8db1edf8e25408c7038365de4837a"
+      },
+      {
+        "role": "subject_sequence",
+        "format": "fasta",
+        "relative_path": "inputs/subject_sequence.fa",
+        "artifact_ref": "artifact_a5d7553f32fc34d4bae894b104f3b575743a3b2db65948f237fe1168472be565"
+      },
+      {
+        "role": "stdout",
+        "format": "text",
+        "relative_path": "stdout.txt",
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "role": "stderr",
+        "format": "text",
+        "relative_path": "stderr.txt",
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "role": "primary_report",
+        "format": "json15",
+        "relative_path": "report.json",
+        "artifact_ref": "artifact_09037263ffcce001e901af38ccf957f05cc8dde3db15e482ea7dfa80e9dc6241"
+      }
+    ],
+    "invalid_artifacts": [],
+    "failures": [],
+    "complete": true
+  },
+  "original_receipts": [
+    {
+      "arguments": {},
+      "assignment_sha256": "37d0467830f4c7e391b8f4b25b2227aa521766d338dc6f968c6ffcd08d84a4c0",
+      "context_after": {
+        "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project",
+        "environment": {
+          "UNRELATED_CONTEXT": "not-in-native-job"
+        },
+        "revision": 0
+      },
+      "context_before": {
+        "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project",
+        "environment": {
+          "UNRELATED_CONTEXT": "not-in-native-job"
+        },
+        "revision": 0
+      },
+      "episode_id": "episode_86880ec8645ba0d06a0cd2ae3784308e5a789e8df338a809390160c690430290",
+      "finished_at": "2026-10-26T14:02:34.090234+00:00",
+      "operation_key": "workflow296:episode_86880ec8645ba0d06a0cd2ae3784308e5a789e8df338a809390160c690430290:0",
+      "outcome": {
+        "facts": {
+          "paths": [],
+          "requested_job": {
+            "argv": [
+              "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+              "-num_threads",
+              "1",
+              "-query",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/query_sequence.fa",
+              "-subject",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/subject_sequence.fa",
+              "-outfmt",
+              "15",
+              "-out",
+              "report.json"
+            ],
+            "environment": {},
+            "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/native.json",
+            "handoff": {
+              "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/native.json",
+              "monitor_operation": "practical.job.status",
+              "results_operation": "practical.job.collect"
+            },
+            "output_paths": [
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/bundle.json",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/report.json",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/stderr.txt",
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/stdout.txt"
+            ],
+            "requested_job_sha256": "3d0171c84a7897ec1f5b2b8aaf2e520f61ab55a965f2ca5db696c7cb964dacc9",
+            "resource_kind": "local",
+            "returncode": null,
+            "status": "running"
+          }
+        },
+        "native_outcome": {
+          "attempt_id": "162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed",
+          "attempt_operation_key": "workflow296:episode_86880ec8645ba0d06a0cd2ae3784308e5a789e8df338a809390160c690430290:0",
+          "files": {
+            "stderr": {
+              "available": true,
+              "bytes": 0
+            },
+            "stdout": {
+              "available": true,
+              "bytes": 0
+            }
+          },
+          "metadata": {
+            "duration_measure": "systemd_service_wall_seconds",
+            "elapsed_seconds": 0.358249272,
+            "enforcement": {
+              "filesystem_sandbox": false,
+              "memory": "systemd_cgroup_v2_memory_max",
+              "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+              "process_tree": "systemd_control_group",
+              "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+              "swap": "systemd_memory_swap_max_zero",
+              "wall_time": "unset"
+            },
+            "native_lifecycle_version": "durable_systemd_native_job_v2",
+            "native_returncode": null,
+            "observed_scratch_bytes": null,
+            "policy": {
+              "memory_bytes": 21474836480,
+              "scratch_bytes": 4294967296,
+              "wall_seconds": null
+            },
+            "service_exit": null,
+            "verified_cgroup": {
+              "kill_mode": "control-group",
+              "memory_max": 21474836480,
+              "memory_swap_max": 0,
+              "oom_policy": "kill",
+              "runtime_max": "infinity"
+            }
+          },
+          "native_receipt": null,
+          "quiescent": false,
+          "state": "running",
+          "terminal": false,
+          "version": "durable_systemd_native_job_v2"
+        }
+      },
+      "run_id": "workflow296",
+      "started_at": "2026-10-26T14:02:33.428266+00:00",
+      "tool_name": "practical.job.start",
+      "validations": [
+        {
+          "checked_at": "2026-10-26T14:02:34.081443+00:00",
+          "evidence": {
+            "source": "outcome",
+            "value": {
+              "argv": [
+                "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastp",
+                "-num_threads",
+                "1",
+                "-query",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/query_sequence.fa",
+                "-subject",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastp_gaps_json15/subject_sequence.fa",
+                "-outfmt",
+                "15",
+                "-out",
+                "report.json"
+              ],
+              "environment": {},
+              "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/native.json",
+              "handoff": {
+                "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/native.json",
+                "monitor_operation": "practical.job.status",
+                "results_operation": "practical.job.collect"
+              },
+              "output_paths": [
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/bundle.json",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/report.json",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/stderr.txt",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_local_2026-10-26_296/final_checks/temporary/pytest/test_actual_practical_workflow0/project/.episode-operations/926e1190d9cc5b920a01936a25f5c48e66dce723b6465492734aee2034f4c079/162a21a1ab35ca5e56e369c13cc045dd5d227461b9ba7bf69bd4f174148246ed/blast-attempt/stdout.txt"
+              ],
+              "requested_job_sha256": "3d0171c84a7897ec1f5b2b8aaf2e520f61ab55a965f2ca5db696c7cb964dacc9",
+              "resource_kind": "local",
+              "returncode": null,
+              "status": "running"
+            }
+          },
+          "evidence_refs": [],
+          "key": "handoff",
+          "predicate": {
+            "kind": "requested_job_handoff"
+          },
+          "satisfied": true
+        }
+      ],
+      "version": "practical_action_receipt_v1"
+    }
+  ],
+  "native_metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    }
+  },
+  "workflow_units": 1,
+  "receiver_units": 1,
+  "closed_history_unchanged": true,
+  "physical_handles": 1
+}

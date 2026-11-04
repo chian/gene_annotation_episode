@@ -1,0 +1,5432 @@
+{
+  "schema": "hmmer_emission_sheet_v1",
+  "operation": {
+    "program": "hmmemit",
+    "mode": "consensus_thresholded",
+    "engine_version": "3.4",
+    "settings": {
+      "-C": true,
+      "--minl": 0.8,
+      "--minu": 0.9
+    }
+  },
+  "artifact_occurrences": [
+    {
+      "occurrence_id": "input:models",
+      "direction": "input",
+      "role": "models",
+      "ordinal": 0,
+      "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+      "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+      "size_bytes": 6670,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:generated_sequences",
+      "direction": "output",
+      "role": "generated_sequences",
+      "ordinal": 0,
+      "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+      "sha256": "17a097277caf5dc0a02d6647603bc36f2749b6e2ee1ac25e5f585ecd56139bc1",
+      "size_bytes": 37,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:stdout",
+      "direction": "output",
+      "role": "stdout",
+      "ordinal": 0,
+      "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+      "sha256": "17a097277caf5dc0a02d6647603bc36f2749b6e2ee1ac25e5f585ecd56139bc1",
+      "size_bytes": 37,
+      "completeness": "complete"
+    },
+    {
+      "occurrence_id": "output:stderr",
+      "direction": "output",
+      "role": "stderr",
+      "ordinal": 0,
+      "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "completeness": "complete"
+    }
+  ],
+  "model_extraction": {
+    "schema": "hmmer_model_extraction_v1",
+    "occurrence": {
+      "occurrence_id": "input:models",
+      "direction": "input",
+      "role": "models",
+      "ordinal": 0,
+      "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+      "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+      "size_bytes": 6670,
+      "completeness": "complete"
+    },
+    "format": "hmmer3_ascii",
+    "records": [
+      {
+        "record_key": "input:models#model/0",
+        "locator": {
+          "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+          "record_ordinal": 0,
+          "byte_start": 0,
+          "byte_end": 6670,
+          "line_start": 1,
+          "line_end": 60
+        },
+        "format_tag": "HMMER3/f",
+        "engine_text": "[3.4 | Aug 2023]",
+        "headers": [
+          {
+            "tag": "NAME",
+            "value": "tiny_protein",
+            "tokens": [
+              "tiny_protein"
+            ],
+            "line": 2
+          },
+          {
+            "tag": "ACC",
+            "value": "TINY001",
+            "tokens": [
+              "TINY001"
+            ],
+            "line": 3
+          },
+          {
+            "tag": "DESC",
+            "value": "Synthetic preparation example, not biological evidence",
+            "tokens": [
+              "Synthetic",
+              "preparation",
+              "example,",
+              "not",
+              "biological",
+              "evidence"
+            ],
+            "line": 4
+          },
+          {
+            "tag": "LENG",
+            "value": "12",
+            "tokens": [
+              "12"
+            ],
+            "line": 5
+          },
+          {
+            "tag": "ALPH",
+            "value": "amino",
+            "tokens": [
+              "amino"
+            ],
+            "line": 6
+          },
+          {
+            "tag": "RF",
+            "value": "yes",
+            "tokens": [
+              "yes"
+            ],
+            "line": 7
+          },
+          {
+            "tag": "MM",
+            "value": "no",
+            "tokens": [
+              "no"
+            ],
+            "line": 8
+          },
+          {
+            "tag": "CONS",
+            "value": "yes",
+            "tokens": [
+              "yes"
+            ],
+            "line": 9
+          },
+          {
+            "tag": "CS",
+            "value": "no",
+            "tokens": [
+              "no"
+            ],
+            "line": 10
+          },
+          {
+            "tag": "MAP",
+            "value": "yes",
+            "tokens": [
+              "yes"
+            ],
+            "line": 11
+          },
+          {
+            "tag": "DATE",
+            "value": "Mon Oct 26 02:21:51 2026",
+            "tokens": [
+              "Mon",
+              "Oct",
+              "26",
+              "02:21:51",
+              "2026"
+            ],
+            "line": 12
+          },
+          {
+            "tag": "NSEQ",
+            "value": "3",
+            "tokens": [
+              "3"
+            ],
+            "line": 13
+          },
+          {
+            "tag": "EFFN",
+            "value": "3.000000",
+            "tokens": [
+              "3.000000"
+            ],
+            "line": 14
+          },
+          {
+            "tag": "CKSUM",
+            "value": "1992437505",
+            "tokens": [
+              "1992437505"
+            ],
+            "line": 15
+          },
+          {
+            "tag": "STATS",
+            "value": "LOCAL MSV       -5.2332  0.72057",
+            "tokens": [
+              "LOCAL",
+              "MSV",
+              "-5.2332",
+              "0.72057"
+            ],
+            "line": 16
+          },
+          {
+            "tag": "STATS",
+            "value": "LOCAL VITERBI   -5.4838  0.72057",
+            "tokens": [
+              "LOCAL",
+              "VITERBI",
+              "-5.4838",
+              "0.72057"
+            ],
+            "line": 17
+          },
+          {
+            "tag": "STATS",
+            "value": "LOCAL FORWARD   -4.8052  0.72057",
+            "tokens": [
+              "LOCAL",
+              "FORWARD",
+              "-4.8052",
+              "0.72057"
+            ],
+            "line": 18
+          },
+          {
+            "tag": "HMM",
+            "value": "A        C        D        E        F        G        H        I        K        L        M        N        P        Q        R        S        T        V        W        Y",
+            "tokens": [
+              "A",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "K",
+              "L",
+              "M",
+              "N",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "V",
+              "W",
+              "Y"
+            ],
+            "line": 19
+          }
+        ],
+        "alphabet": {
+          "kind": "amino",
+          "symbols": [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "V",
+            "W",
+            "Y"
+          ]
+        },
+        "length": 12,
+        "sequence_count": 3,
+        "effective_sequence_count": 3.0,
+        "maximum_length": null,
+        "checksum": 1992437505,
+        "flags": {
+          "RF": true,
+          "MM": false,
+          "CONS": true,
+          "CS": false,
+          "MAP": true
+        },
+        "cutoffs": {},
+        "calibration": [
+          {
+            "mode": "LOCAL",
+            "statistic": "MSV",
+            "tokens": [
+              "LOCAL",
+              "MSV",
+              "-5.2332",
+              "0.72057"
+            ],
+            "parameters": [
+              {
+                "name": "mu",
+                "token": "-5.2332",
+                "value": -5.2332,
+                "unit": "bit"
+              },
+              {
+                "name": "lambda",
+                "token": "0.72057",
+                "value": 0.72057,
+                "unit": "inverse_bit"
+              }
+            ],
+            "line": 16
+          },
+          {
+            "mode": "LOCAL",
+            "statistic": "VITERBI",
+            "tokens": [
+              "LOCAL",
+              "VITERBI",
+              "-5.4838",
+              "0.72057"
+            ],
+            "parameters": [
+              {
+                "name": "mu",
+                "token": "-5.4838",
+                "value": -5.4838,
+                "unit": "bit"
+              },
+              {
+                "name": "lambda",
+                "token": "0.72057",
+                "value": 0.72057,
+                "unit": "inverse_bit"
+              }
+            ],
+            "line": 17
+          },
+          {
+            "mode": "LOCAL",
+            "statistic": "FORWARD",
+            "tokens": [
+              "LOCAL",
+              "FORWARD",
+              "-4.8052",
+              "0.72057"
+            ],
+            "parameters": [
+              {
+                "name": "tau",
+                "token": "-4.8052",
+                "value": -4.8052,
+                "unit": "bit"
+              },
+              {
+                "name": "lambda",
+                "token": "0.72057",
+                "value": 0.72057,
+                "unit": "inverse_bit"
+              }
+            ],
+            "line": 18
+          }
+        ],
+        "composition": {
+          "symbols": [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "V",
+            "W",
+            "Y"
+          ],
+          "cells": [
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.89037",
+              "negative_log_probability": 2.89037,
+              "probability": 0.05555565321653944,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "2.48491",
+              "negative_log_probability": 2.48491,
+              "probability": 0.08333305414946768,
+              "state": "finite"
+            },
+            {
+              "token": "*",
+              "negative_log_probability": null,
+              "probability": 0.0,
+              "state": "structural_zero"
+            },
+            {
+              "token": "*",
+              "negative_log_probability": null,
+              "probability": 0.0,
+              "state": "structural_zero"
+            },
+            {
+              "token": "*",
+              "negative_log_probability": null,
+              "probability": 0.0,
+              "state": "structural_zero"
+            },
+            {
+              "token": "*",
+              "negative_log_probability": null,
+              "probability": 0.0,
+              "state": "structural_zero"
+            },
+            {
+              "token": "*",
+              "negative_log_probability": null,
+              "probability": 0.0,
+              "state": "structural_zero"
+            },
+            {
+              "token": "*",
+              "negative_log_probability": null,
+              "probability": 0.0,
+              "state": "structural_zero"
+            },
+            {
+              "token": "*",
+              "negative_log_probability": null,
+              "probability": 0.0,
+              "state": "structural_zero"
+            },
+            {
+              "token": "3.58352",
+              "negative_log_probability": 3.58352,
+              "probability": 0.02777774829046315,
+              "state": "finite"
+            }
+          ],
+          "line": 21
+        },
+        "initial": {
+          "insert": {
+            "symbols": [
+              "A",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "K",
+              "L",
+              "M",
+              "N",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "V",
+              "W",
+              "Y"
+            ],
+            "cells": [
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              },
+              {
+                "token": "2.99573",
+                "negative_log_probability": 2.99573,
+                "probability": 0.05000011367782878,
+                "state": "finite"
+              }
+            ],
+            "line": 22
+          },
+          "transitions": {
+            "symbols": [
+              "m->m",
+              "m->i",
+              "m->d",
+              "i->m",
+              "i->i",
+              "d->m",
+              "d->d"
+            ],
+            "cells": [
+              {
+                "token": "0.00000",
+                "negative_log_probability": 0.0,
+                "probability": 1.0,
+                "state": "finite"
+              },
+              {
+                "token": "*",
+                "negative_log_probability": null,
+                "probability": 0.0,
+                "state": "structural_zero"
+              },
+              {
+                "token": "*",
+                "negative_log_probability": null,
+                "probability": 0.0,
+                "state": "structural_zero"
+              },
+              {
+                "token": "0.69315",
+                "negative_log_probability": 0.69315,
+                "probability": 0.4999985902819599,
+                "state": "finite"
+              },
+              {
+                "token": "0.69315",
+                "negative_log_probability": 0.69315,
+                "probability": 0.4999985902819599,
+                "state": "finite"
+              },
+              {
+                "token": "0.69315",
+                "negative_log_probability": 0.69315,
+                "probability": 0.4999985902819599,
+                "state": "finite"
+              },
+              {
+                "token": "0.69315",
+                "negative_log_probability": 0.69315,
+                "probability": 0.4999985902819599,
+                "state": "finite"
+              }
+            ],
+            "line": 23
+          }
+        },
+        "positions": [
+          {
+            "position": 1,
+            "position_token": "1",
+            "line": 24,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 24
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 25
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 26
+            },
+            "annotations": {
+              "MAP": {
+                "token": "1",
+                "value": 1
+              },
+              "CONS": {
+                "token": "A",
+                "value": "A"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 2,
+            "position_token": "2",
+            "line": 27,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 27
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 28
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 29
+            },
+            "annotations": {
+              "MAP": {
+                "token": "2",
+                "value": 2
+              },
+              "CONS": {
+                "token": "C",
+                "value": "C"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 3,
+            "position_token": "3",
+            "line": 30,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 30
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 31
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 32
+            },
+            "annotations": {
+              "MAP": {
+                "token": "3",
+                "value": 3
+              },
+              "CONS": {
+                "token": "D",
+                "value": "D"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 4,
+            "position_token": "4",
+            "line": 33,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 33
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 34
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 35
+            },
+            "annotations": {
+              "MAP": {
+                "token": "4",
+                "value": 4
+              },
+              "CONS": {
+                "token": "E",
+                "value": "E"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 5,
+            "position_token": "5",
+            "line": 36,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.40547",
+                  "negative_log_probability": 0.40547,
+                  "probability": 0.6666634054134197,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "1.09861",
+                  "negative_log_probability": 1.09861,
+                  "probability": 0.3333340962235762,
+                  "state": "finite"
+                }
+              ],
+              "line": 36
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 37
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 38
+            },
+            "annotations": {
+              "MAP": {
+                "token": "5",
+                "value": 5
+              },
+              "CONS": {
+                "token": "F",
+                "value": "F"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 6,
+            "position_token": "6",
+            "line": 39,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 39
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 40
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 41
+            },
+            "annotations": {
+              "MAP": {
+                "token": "6",
+                "value": 6
+              },
+              "CONS": {
+                "token": "G",
+                "value": "G"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 7,
+            "position_token": "7",
+            "line": 42,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 42
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 43
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 44
+            },
+            "annotations": {
+              "MAP": {
+                "token": "7",
+                "value": 7
+              },
+              "CONS": {
+                "token": "H",
+                "value": "H"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 8,
+            "position_token": "8",
+            "line": 45,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 45
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 46
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 47
+            },
+            "annotations": {
+              "MAP": {
+                "token": "8",
+                "value": 8
+              },
+              "CONS": {
+                "token": "I",
+                "value": "I"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 9,
+            "position_token": "9",
+            "line": 48,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 48
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 49
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 50
+            },
+            "annotations": {
+              "MAP": {
+                "token": "9",
+                "value": 9
+              },
+              "CONS": {
+                "token": "K",
+                "value": "K"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 10,
+            "position_token": "10",
+            "line": 51,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 51
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 52
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 53
+            },
+            "annotations": {
+              "MAP": {
+                "token": "10",
+                "value": 10
+              },
+              "CONS": {
+                "token": "L",
+                "value": "L"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 11,
+            "position_token": "11",
+            "line": 54,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 54
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 55
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                }
+              ],
+              "line": 56
+            },
+            "annotations": {
+              "MAP": {
+                "token": "11",
+                "value": 11
+              },
+              "CONS": {
+                "token": "M",
+                "value": "M"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          },
+          {
+            "position": 12,
+            "position_token": "12",
+            "line": 57,
+            "match": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 57
+            },
+            "insert": {
+              "symbols": [
+                "A",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "K",
+                "L",
+                "M",
+                "N",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "V",
+                "W",
+                "Y"
+              ],
+              "cells": [
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                },
+                {
+                  "token": "2.99573",
+                  "negative_log_probability": 2.99573,
+                  "probability": 0.05000011367782878,
+                  "state": "finite"
+                }
+              ],
+              "line": 58
+            },
+            "transitions": {
+              "symbols": [
+                "m->m",
+                "m->i",
+                "m->d",
+                "i->m",
+                "i->i",
+                "d->m",
+                "d->d"
+              ],
+              "cells": [
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.69315",
+                  "negative_log_probability": 0.69315,
+                  "probability": 0.4999985902819599,
+                  "state": "finite"
+                },
+                {
+                  "token": "0.00000",
+                  "negative_log_probability": 0.0,
+                  "probability": 1.0,
+                  "state": "finite"
+                },
+                {
+                  "token": "*",
+                  "negative_log_probability": null,
+                  "probability": 0.0,
+                  "state": "structural_zero"
+                }
+              ],
+              "line": 59
+            },
+            "annotations": {
+              "MAP": {
+                "token": "12",
+                "value": 12
+              },
+              "CONS": {
+                "token": "N",
+                "value": "N"
+              },
+              "RF": {
+                "token": "x",
+                "value": "x"
+              },
+              "MM": {
+                "token": "-",
+                "value": "-"
+              },
+              "CS": {
+                "token": "-",
+                "value": "-"
+              }
+            },
+            "extra_tokens": []
+          }
+        ],
+        "terminated": true,
+        "issues": []
+      }
+    ],
+    "population": {
+      "decoded_count": 1,
+      "complete": true,
+      "state": "decoded"
+    },
+    "issues": []
+  },
+  "output_records": [
+    {
+      "record_key": "output:generated_sequences#fasta/0",
+      "kind": "fasta",
+      "basis": "model_derived",
+      "occurrence_id": "output:generated_sequences",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+        "byte_start": 0,
+        "byte_end": 37,
+        "line_start": 1,
+        "line_end": 2,
+        "record_ordinal": 0
+      },
+      "name": "tiny_protein-consensus",
+      "description": null,
+      "sequence": "ACDExGHIKLMN",
+      "alphabet": {
+        "kind": "amino",
+        "symbols": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "K",
+          "L",
+          "M",
+          "N",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "V",
+          "W",
+          "Y"
+        ]
+      },
+      "model_record_key": "input:models#model/0",
+      "sample_ordinal": 1,
+      "alignment_record_key": null,
+      "fragments": [
+        {
+          "native_row_key": "output:generated_sequences#native/1",
+          "value": "ACDExGHIKLMN",
+          "locator": {
+            "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+            "byte_start": 24,
+            "byte_end": 37,
+            "line_start": 2,
+            "line_end": 2,
+            "record_ordinal": 1
+          }
+        }
+      ],
+      "state": "complete",
+      "native": {
+        "header": "tiny_protein-consensus"
+      }
+    }
+  ],
+  "native_rows": [
+    {
+      "record_key": "output:generated_sequences#native/0",
+      "occurrence_id": "output:generated_sequences",
+      "kind": "fasta_header",
+      "raw": ">tiny_protein-consensus\n",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+        "byte_start": 0,
+        "byte_end": 24,
+        "line_start": 1,
+        "line_end": 1,
+        "record_ordinal": 0
+      },
+      "output_record_key": "output:generated_sequences#fasta/0"
+    },
+    {
+      "record_key": "output:generated_sequences#native/1",
+      "occurrence_id": "output:generated_sequences",
+      "kind": "fasta_sequence",
+      "raw": "ACDExGHIKLMN\n",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+        "byte_start": 24,
+        "byte_end": 37,
+        "line_start": 2,
+        "line_end": 2,
+        "record_ordinal": 1
+      },
+      "output_record_key": "output:generated_sequences#fasta/0",
+      "value": "ACDExGHIKLMN"
+    },
+    {
+      "record_key": "output:stdout#native/0",
+      "occurrence_id": "output:stdout",
+      "kind": "line",
+      "raw": ">tiny_protein-consensus\n",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+        "byte_start": 0,
+        "byte_end": 24,
+        "line_start": 1,
+        "line_end": 1,
+        "record_ordinal": 0
+      }
+    },
+    {
+      "record_key": "output:stdout#native/1",
+      "occurrence_id": "output:stdout",
+      "kind": "line",
+      "raw": "ACDExGHIKLMN\n",
+      "locator": {
+        "artifact_ref": "verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmemit_fancy/stdout.log",
+        "byte_start": 24,
+        "byte_end": 37,
+        "line_start": 2,
+        "line_end": 2,
+        "record_ordinal": 1
+      }
+    }
+  ],
+  "associations": [
+    {
+      "kind": "record",
+      "record_key": "output:generated_sequences#fasta/0",
+      "state": "resolved",
+      "model_record_key": "input:models#model/0",
+      "sample_ordinal": 1,
+      "candidate_model_record_keys": [
+        "input:models#model/0"
+      ],
+      "basis": "ordered_complete_population"
+    },
+    {
+      "kind": "model_population",
+      "model_record_key": "input:models#model/0",
+      "state": "complete",
+      "record_keys": [
+        "output:generated_sequences#fasta/0"
+      ],
+      "expected_count": 1,
+      "captured_count": 1,
+      "output_available": true,
+      "output_complete": true
+    }
+  ],
+  "issues": []
+}

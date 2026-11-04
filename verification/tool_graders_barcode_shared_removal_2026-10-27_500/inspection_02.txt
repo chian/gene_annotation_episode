@@ -1,0 +1,262 @@
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: assignment_schema
+384:     def assignment_schema(self, role):
+385:         self.credit_kind(role)
+386:         if role == 'results':
+387:             schema = deepcopy(RESULTS_SCHEMA)
+388:             if self.native_barcode_results is not None:
+389:                 from .barcode_result_contracts import BARCODE_RESULT_SELECTOR_SCHEMA
+390:                 schema['properties']['selector'].setdefault('allOf', []).append({
+391:                     'if': {'required': ['version'], 'properties': {'version': {
+392:                         'const': 'barcode_result_selector_v1'}}},
+393:                     'then': deepcopy(BARCODE_RESULT_SELECTOR_SCHEMA)})
+394:             if self.native_expression_nmf_results is not None:
+395:                 from .expression_nmf_result_contracts import EXPRESSION_NMF_RESULT_SELECTOR_SCHEMA
+396:                 schema['properties']['selector'].setdefault('allOf', []).append({
+397:                     'if': {'required': ['version'], 'properties': {'version': {
+398:                         'const': 'expression_nmf_result_selector_v1'}}},
+399:                     'then': deepcopy(EXPRESSION_NMF_RESULT_SELECTOR_SCHEMA)})
+400:             if self.atac_results is not None:
+401:                 from .atac_differential_execution_information import atac_result_selector_schema
+402:                 schema['properties']['selector'].setdefault('allOf', []).append({
+403:                     'if': {'required': ['version'], 'properties': {'version': {
+404:                         'const': 'atac_differential_result_selector_v1'}}},
+405:                     'then': atac_result_selector_schema()})
+406:             if self.native_chromatin_interaction_results is not None:
+407:                 from .chromatin_interaction_execution_information import chromatin_result_selector_schema
+408:                 schema['properties']['selector'].setdefault('allOf', []).append({
+409:                     'if': {'required': ['version'], 'properties': {'version': {
+410:                         'const': 'chromatin_interaction_result_selector_v1'}}},
+411:                     'then': chromatin_result_selector_schema()})
+412:             if self.native_rna_structure_results is not None:
+413:                 from .rna_structure_result_views import RESULT_SELECTOR_SCHEMA
+414:                 from .rna_structure_comparison_contracts import RNA_COMPARISON_SELECTOR_SCHEMA
+415:                 alternatives = [*deepcopy(RESULT_SELECTOR_SCHEMA['oneOf']),
+416:                     deepcopy(RNA_COMPARISON_SELECTOR_SCHEMA)]
+417:                 versions = [branch['properties']['version']['const'] for branch in alternatives]
+418:                 schema['properties']['selector'].setdefault('allOf', []).append({
+419:                     'if': {'required': ['version'], 'properties': {'version': {'enum': versions}}},
+420:                     'then': {'oneOf': alternatives}})
+421:             if any(configuration.get('native_protein_structure') for configuration in self.resources.values()):
+422:                 from .protein_structure_selection import protein_structure_result_selector_schema
+423:                 schema['properties']['selector'].setdefault('allOf', []).append({
+424:                     'if': {'required': ['version'], 'properties': {'version': {
+425:                         'const': 'protein_structure_result_selector_v1'}}},
+426:                     'then': protein_structure_result_selector_schema()})
+427:             if self.native_genomic_overlap_results is not None:
+428:                 from .genomic_overlap_execution_information import genomic_overlap_result_selector_schema
+429:                 schema['properties']['selector'].setdefault('allOf', []).append({
+430:                     'if': {'required': ['version'], 'properties': {'version': {
+431:                         'const': 'genomic_overlap_result_selector_v1'}}},
+432:                     'then': genomic_overlap_result_selector_schema()})
+433:             return schema
+434:         if role == 'launch':
+435:             schema = obj({'version': {'const': LAUNCH_VERSION},
+436:                 'requests': {'type': 'object', 'properties': {key: self._request_schema(key, selected=False)
+437:                     for key in self.resources}, 'minProperties': 1, 'additionalProperties': False},
+438:                 'immutable_input_versions': {'type': 'array', 'items': deepcopy(INPUT_VERSION_SCHEMA)},
+439:                 'constraints': {'type': 'object'}})
+440:             schema['properties']['launch_instructions'] = deepcopy(SELECTION_SCHEMA)
+441:             return schema
+442:         alternatives = [self._request_schema(key, selected=True) for key, config in self.resources.items()
+443:                         if KINDS[config['kind']] == ROLE_KINDS[role]]
+444:         return {'anyOf': alternatives} if alternatives else {'not': {}}
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _barcode_reference_access
+544:     def _barcode_reference_access(self, context, reference, namespace):
+545:         host = self.native_barcode_results
+546:         if host is None or not host.owns_reference(reference):
+547:             return None
+548:         if namespace not in {None, 'artifact'}:
+549:             return False
+550:         if host.applies(context):
+551:             if host.resolve_own(context, reference, namespace):
+552:                 return True
+553:             selector = plain(context.assignment)['selector']
+554:             supplied = selector.get('saved_sheet_file')
+555:             if (selector.get('mode') == 'saved_sheet_recalculation' and isinstance(supplied, dict)
+556:                     and supplied.get('artifact_ref') == reference):
+557:                 self.native_barcode_returns.authenticate_received_saved_sheet(context, supplied)
+558:                 return True
+559:         return self.native_barcode_returns.resolve_received(context, reference, namespace)
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _barcode_selector
+562:     def _barcode_selector(assignment):
+563:         return assignment.get('selector', {}).get('version') == 'barcode_result_selector_v1'
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _retained_barcode_target
+565:     def _retained_barcode_target(self, context, assignment, scope):
+566:         if not self._barcode_selector(assignment):
+567:             return None
+568:         if self.native_barcode_results is None:
+569:             raise ValueError('native_barcode_results_binding_unavailable')
+570:         return self.native_barcode_results.retained_target(context, assignment, scope)
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _versions
+676:     def _versions(self, versions, scope, *, context, atac_assignments=(), nmf_assignments=(), barcode_assignments=()):
+677:         from .execution_input_versions import validate_execution_input_versions
+678:         return validate_execution_input_versions(self, versions, scope, context=context,
+679:             atac_assignments=atac_assignments, nmf_assignments=nmf_assignments,
+680:             barcode_assignments=barcode_assignments)
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _barcode_inputs
+682:     def _barcode_inputs(self, context, assignment):
+683:         if 'native_barcode' not in assignment.get('requested_job', {}):
+684:             return []
+685:         from .barcode_operands import validate_barcode_job_inputs
+686:         return validate_barcode_job_inputs(self.store, context, assignment,
+687:             reference_access=self.resolve_received_reference)
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: prepare_assignment
+726:     def prepare_assignment(self, parent, role, selection, scope, operation_key):
+727:         selected = checked(selection, self.assignment_schema(role), 'invalid_execution_assignment')
+728:         if role == 'launch':
+729:             selected = self._launch(selected, scope=scope)
+730:             from .protein_structure_operands import validate_protein_structure_job_inputs
+731:             for request in selected['requests'].values():
+732:                 self._barcode_inputs(parent, request)
+733:                 self._expression_nmf_inputs(parent, request)
+734:                 self._atac_inputs(parent, request)
+735:                 self._chromatin_inputs(parent, request)
+736:                 self._genomic_overlap_inputs(parent, request)
+737:                 validate_protein_structure_job_inputs(self.store, parent, request,
+738:                     returns=self.native_protein_structure_returns)
+739:             self._versions(selected['immutable_input_versions'], scope, context=parent,
+740:                 atac_assignments=selected['requests'].values(), nmf_assignments=selected['requests'].values(),
+741:                 barcode_assignments=selected['requests'].values())
+742:             from .native_blast_database_result_publication import validate_native_job_inputs
+743:             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+744:             for request in selected['requests'].values():
+745:                 validate_native_job_inputs(self.store, parent, request)
+746:                 validate_standard_blast_job_inputs(self.store, parent, request)
+747:                 from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
+748:                 validate_rna_structure_job_inputs(self.store, parent, request)
+749:             return selected
+750:         if role == 'results':
+751:             barcode_target = self._retained_barcode_target(parent, selected, scope)
+752:             nmf_target = self._retained_expression_nmf_target(parent, selected, scope)
+753:             atac_target = self._retained_atac_target(parent, selected, scope)
+754:             chromatin_target = self._retained_chromatin_target(parent, selected, scope)
+755:             overlap_target = self._retained_genomic_overlap_target(parent, selected, scope)
+756:             retained = self._retained_protein_result(parent, selected, scope)
+757:             target = (barcode_target if barcode_target is not None else
+758:                 nmf_target if nmf_target is not None else
+759:                 atac_target if atac_target is not None else
+760:                 chromatin_target if chromatin_target is not None else
+761:                 overlap_target if overlap_target is not None else
+762:                 retained['body']['intent']['target'] if retained is not None else
+763:                 self.job_progress_provider.targets.read_target(selected['handoff_ref'], scope))
+764:             self._selector(selected, target)
+765:             if is_native_protein_structure_target(target):
+766:                 from .protein_structure_operands import validate_protein_structure_selected_inputs
+767:                 validate_protein_structure_selected_inputs(self.store, parent, selected['selector'],
+768:                     handoff_ref=selected['handoff_ref'], returns=self.native_protein_structure_returns)
+769:             if self._comparison_selector(selected):
+770:                 from .rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
+771:                 validate_rna_comparison_selected_inputs(self.store, parent, selected['selector'],
+772:                     anchor_handoff_ref=selected['handoff_ref'], returns=self.native_rna_structure_returns)
+773:             elif is_native_rna_structure_target(target):
+774:                 from .native_rna_structure_result_publication import validate_rna_structure_selected_inputs
+775:                 validate_rna_structure_selected_inputs(self.store, parent, selected['selector'],
+776:                     handoff_ref=selected['handoff_ref'], returns=self.native_rna_structure_returns)
+777:             if is_standard_blast_database_target(target):
+778:                 from .native_blast_standard_database_result_publication import validate_standard_blast_selected_inputs
+779:                 validate_standard_blast_selected_inputs(self.store, parent, selected['selector'], handoff_ref=selected['handoff_ref'])
+780:             if is_native_blast_database_target(target):
+781:                 from .native_blast_database_result_publication import validate_selected_inputs
+782:                 validate_selected_inputs(self.store, parent, selected['selector'], handoff_ref=selected['handoff_ref'])
+783:             from .bvbrc_data_host import is_bvbrc_request
+784:             if target['resource_kind'] == 'api' and is_bvbrc_request(target['assignment'].get('request')):
+785:                 self.api_execution.bvbrc_data.validate_inputs(parent, selected['selector'],
+786:                     request=target['assignment']['request'])
+787:             return selected
+788:         selected = self._validate_request(selected)
+789:         if ROLE_KINDS[role] == 'api':
+790:             selected = self.api_execution.validate_assignment(selected, scope=scope)
+791:         if ROLE_KINDS[role] != KINDS[self.resources[selected['resource_id']]['kind']]:
+792:             raise ValueError('execution_resource_kind_conflict')
+793:         if parent.role != 'launch':
+794:             raise ValueError('resource_child_role_owned_by_launch')
+795:         original = self._launch(plain(parent.assignment))
+796:         self._match_request(original, selected)
+797:         self._barcode_inputs(parent, selected)
+798:         self._expression_nmf_inputs(parent, selected)
+799:         self._atac_inputs(parent, selected)
+800:         self._chromatin_inputs(parent, selected)
+801:         self._genomic_overlap_inputs(parent, selected)
+802:         from .protein_structure_operands import validate_protein_structure_job_inputs
+803:         validate_protein_structure_job_inputs(self.store, parent, selected,
+804:             returns=self.native_protein_structure_returns)
+805:         self._versions(original['immutable_input_versions'], scope, context=parent,
+806:             atac_assignments=[selected], nmf_assignments=[selected],
+807:             barcode_assignments=[selected])
+808:         from .native_blast_database_result_publication import validate_native_job_inputs
+809:         from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+810:         validate_native_job_inputs(self.store, parent, selected)
+811:         validate_standard_blast_job_inputs(self.store, parent, selected)
+812:         from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
+813:         validate_rna_structure_job_inputs(self.store, parent, selected)
+814:         return selected
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: initialize
+820:     def initialize(self, context):
+821:         if context.role in ROLE_KINDS:
+822:             self._check_parent_inputs(context)
+823:             return self._delegate(context).initialize(context)
+824:         if context.role == 'launch':
+825:             value = self._launch(plain(context.assignment), scope=context.scope)
+826:             from .protein_structure_operands import validate_protein_structure_job_inputs
+827:             for request in value['requests'].values():
+828:                 self._barcode_inputs(context, request)
+829:                 self._expression_nmf_inputs(context, request)
+830:                 self._atac_inputs(context, request)
+831:                 self._chromatin_inputs(context, request)
+832:                 self._genomic_overlap_inputs(context, request)
+833:                 validate_protein_structure_job_inputs(self.store, context, request,
+834:                     returns=self.native_protein_structure_returns)
+835:             self._versions(value['immutable_input_versions'], context.scope, context=context,
+836:                 atac_assignments=value['requests'].values(), nmf_assignments=value['requests'].values(),
+837:                 barcode_assignments=value['requests'].values())
+838:         else:
+839:             target = self._target(context)
+840:             self._selector(plain(context.assignment), target)
+841:             if (self._barcode_selector(plain(context.assignment))
+842:                     or self._expression_nmf_selector(plain(context.assignment))
+843:                     or self._atac_selector(plain(context.assignment))
+844:                     or self._chromatin_selector(plain(context.assignment))
+845:                     or self._genomic_overlap_selector(plain(context.assignment))
+846:                     or self._comparison_selector(plain(context.assignment))
+847:                     or is_native_protein_structure_target(target)):
+848:                 self.initial_references(context)
+849:             if target['resource_kind'] == 'api':
+850:                 return self.api_execution.initialize(context)
+851:             self._result_directory(context)
+
+FILE: gene_annotation_episode/execution_episodes.py FUNCTION: _check_parent_inputs
+853:     def _check_parent_inputs(self, context):
+854:         if len(context.path) < 2 or context.path[-2][0] != 'launch':
+855:             return
+856:         row = self.store.db.execute('SELECT request FROM runtime_episodes WHERE run_id=? AND path=?',
+857:             (self.run_id, canonical(context.path[:-1]))).fetchone()
+858:         if row is not None:
+859:             original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
+860:             self._match_request(original, plain(context.assignment))
+861:             self._barcode_inputs(context, plain(context.assignment))
+862:             self._expression_nmf_inputs(context, plain(context.assignment))
+863:             self._atac_inputs(context, plain(context.assignment))
+864:             self._chromatin_inputs(context, plain(context.assignment))
+865:             self._genomic_overlap_inputs(context, plain(context.assignment))
+866:             from .protein_structure_operands import validate_protein_structure_job_inputs
+867:             validate_protein_structure_job_inputs(self.store, context, plain(context.assignment),
+868:                 returns=self.native_protein_structure_returns)
+869:             self._versions(original['immutable_input_versions'], context.scope, context=context,
+870:                 atac_assignments=[plain(context.assignment)], nmf_assignments=[plain(context.assignment)],
+871:                 barcode_assignments=[plain(context.assignment)])
+872:             from .native_blast_database_result_publication import validate_native_job_inputs
+873:             from .native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+874:             validate_native_job_inputs(self.store, context, plain(context.assignment))
+875:             validate_standard_blast_job_inputs(self.store, context, plain(context.assignment))
+876:             from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
+877:             validate_rna_structure_job_inputs(self.store, context, plain(context.assignment))
+878:             return
+879:         raise ValueError('execution_original_launch_assignment_unavailable')

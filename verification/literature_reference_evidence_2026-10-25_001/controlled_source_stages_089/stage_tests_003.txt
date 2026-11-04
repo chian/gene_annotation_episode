@@ -1,0 +1,212 @@
+.........................F.F....                                         [100%]
+=================================== FAILURES ===================================
+___ test_v3_availability_and_unsupported_bytes_reconstruct_as_partials[root] ___
+
+dependency = 'root'
+
+    @pytest.mark.parametrize("dependency", ["root", "covariance", "image", "covariance_utf8"])
+    def test_v3_availability_and_unsupported_bytes_reconstruct_as_partials(dependency):
+        f = fixture(7, companion=True)
+        reference = {"root": f.main_ref, "covariance": f.cov_ref,
+            "image": f.args["images"][0]["source_ref"], "covariance_utf8": f.cov_ref}[dependency]
+        if dependency == "covariance_utf8":
+            f.data[reference] = b"\xff\xfe unsupported source"
+        def source(ref, representation):
+            if ref == reference and dependency != "covariance_utf8":
+                raise EOFError("retained source unavailable")
+            return f.source(ref, representation)
+>       result = v3.read_controlled_response_v3_inputs(f.args, read_source=source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_controlled_response_v3_stages.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_controlled_response_v3_inputs.py:309: in read_controlled_response_v3_inputs
+    return shared.finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=scopes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2139: in finish_controlled_response_inputs
+    return _finish_v3(context, arms=arms, companion_arms=companion_arms, covariance_scopes=covariance_scopes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v3_inputs.py:485: in _finish_v3
+    masked_arms = {r: cp(dict(a)) if a is not None else None for r, a in arms.items()}
+                  ^^^^^^^^
+/usr/lib/python3.12/copy.py:136: in deepcopy
+    y = copier(x, memo)
+        ^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:221: in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:162: in deepcopy
+    y = _reconstruct(x, memo, *rv)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:259: in _reconstruct
+    state = deepcopy(state, memo)
+            ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:136: in deepcopy
+    y = copier(x, memo)
+        ^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:221: in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:162: in deepcopy
+    y = _reconstruct(x, memo, *rv)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:259: in _reconstruct
+    state = deepcopy(state, memo)
+            ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:136: in deepcopy
+    y = copier(x, memo)
+        ^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:221: in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({('protein_condition1', None): ('{"condition": {"canonical_correspondence": {"value": "same", "witnesses"...rce_b9ec5aa7e0fe1832c6cbd24e", "start": 143}]}}', 'companion_readings[0].reading', <object object at 0x78e96cd7b780>)})
+memo = {132943897968320: {}, 132943899511696: {}, 132943900016768: {}, 132943933399328: <gene_annotation_episode.literature_controlled_response_inputs.SourceContext object at 0x78e96a8ccb60>, ...}
+_nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+__ test_v3_availability_and_unsupported_bytes_reconstruct_as_partials[image] ___
+
+dependency = 'image'
+
+    @pytest.mark.parametrize("dependency", ["root", "covariance", "image", "covariance_utf8"])
+    def test_v3_availability_and_unsupported_bytes_reconstruct_as_partials(dependency):
+        f = fixture(7, companion=True)
+        reference = {"root": f.main_ref, "covariance": f.cov_ref,
+            "image": f.args["images"][0]["source_ref"], "covariance_utf8": f.cov_ref}[dependency]
+        if dependency == "covariance_utf8":
+            f.data[reference] = b"\xff\xfe unsupported source"
+        def source(ref, representation):
+            if ref == reference and dependency != "covariance_utf8":
+                raise EOFError("retained source unavailable")
+            return f.source(ref, representation)
+>       result = v3.read_controlled_response_v3_inputs(f.args, read_source=source)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_controlled_response_v3_stages.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_controlled_response_v3_inputs.py:309: in read_controlled_response_v3_inputs
+    return shared.finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=scopes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2139: in finish_controlled_response_inputs
+    return _finish_v3(context, arms=arms, companion_arms=companion_arms, covariance_scopes=covariance_scopes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v3_inputs.py:485: in _finish_v3
+    masked_arms = {r: cp(dict(a)) if a is not None else None for r, a in arms.items()}
+                  ^^^^^^^^
+/usr/lib/python3.12/copy.py:136: in deepcopy
+    y = copier(x, memo)
+        ^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:221: in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:162: in deepcopy
+    y = _reconstruct(x, memo, *rv)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:259: in _reconstruct
+    state = deepcopy(state, memo)
+            ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:136: in deepcopy
+    y = copier(x, memo)
+        ^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:221: in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:162: in deepcopy
+    y = _reconstruct(x, memo, *rv)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:259: in _reconstruct
+    state = deepcopy(state, memo)
+            ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:136: in deepcopy
+    y = copier(x, memo)
+        ^^^^^^^^^^^^^^^
+/usr/lib/python3.12/copy.py:221: in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+                             ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = mappingproxy({('protein_condition1', None): ('{"condition": {"canonical_correspondence": {"value": "same", "witnesses"...rce_b9ec5aa7e0fe1832c6cbd24e", "start": 143}]}}', 'companion_readings[0].reading', <object object at 0x78e96cd79520>)})
+memo = {132943897499392: {}, 132943895412976: {}, 132943891180672: {}, 132943928632592: <gene_annotation_episode.literature_controlled_response_inputs.SourceContext object at 0x78e96bd95640>, ...}
+_nil = []
+
+    def deepcopy(x, memo=None, _nil=[]):
+        """Deep copy operation on arbitrary Python objects.
+    
+        See the module's __doc__ string for more info.
+        """
+    
+        if memo is None:
+            memo = {}
+    
+        d = id(x)
+        y = memo.get(d, _nil)
+        if y is not _nil:
+            return y
+    
+        cls = type(x)
+    
+        copier = _deepcopy_dispatch.get(cls)
+        if copier is not None:
+            y = copier(x, memo)
+        else:
+            if issubclass(cls, type):
+                y = _deepcopy_atomic(x, memo)
+            else:
+                copier = getattr(x, "__deepcopy__", None)
+                if copier is not None:
+                    y = copier(memo)
+                else:
+                    reductor = dispatch_table.get(cls)
+                    if reductor:
+                        rv = reductor(x)
+                    else:
+                        reductor = getattr(x, "__reduce_ex__", None)
+                        if reductor is not None:
+>                           rv = reductor(4)
+                                 ^^^^^^^^^^^
+E                           TypeError: cannot pickle 'mappingproxy' object
+
+/usr/lib/python3.12/copy.py:151: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_literature_controlled_response_v3_stages.py::test_v3_availability_and_unsupported_bytes_reconstruct_as_partials[root]
+FAILED tests/test_literature_controlled_response_v3_stages.py::test_v3_availability_and_unsupported_bytes_reconstruct_as_partials[image]
+2 failed, 30 passed in 10.51s

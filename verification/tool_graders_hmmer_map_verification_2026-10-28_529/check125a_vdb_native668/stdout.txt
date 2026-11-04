@@ -1,0 +1,84 @@
+....................FFFF.                                                [100%]
+=================================== FAILURES ===================================
+_ test_wrapper_attempt_is_not_automatically_successful_exec[status0-1-bwrap: Creating new namespace failed\n-False] _
+source_snapshot/tests/test_blast_vdb_native_context_668.py:283: in test_wrapper_attempt_is_not_automatically_successful_exec
+    bundle = driver.run_native_blast_utility(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:363: in run_native_blast_utility
+    validate_native_blast_utility_bundle_files(bundle, root)
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:239: in validate_native_blast_utility_bundle_files
+    bundle = validate_native_blast_utility_bundle(bundle, plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_wrapper_attempt_is_not_automatically_successful_exec[status1-127-bwrap: execvp /selected/helper: No such file\n-False] _
+source_snapshot/tests/test_blast_vdb_native_context_668.py:283: in test_wrapper_attempt_is_not_automatically_successful_exec
+    bundle = driver.run_native_blast_utility(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:363: in run_native_blast_utility
+    validate_native_blast_utility_bundle_files(bundle, root)
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:239: in validate_native_blast_utility_bundle_files
+    bundle = validate_native_blast_utility_bundle(bundle, plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_wrapper_attempt_is_not_automatically_successful_exec[status2-0--False] __
+source_snapshot/tests/test_blast_vdb_native_context_668.py:283: in test_wrapper_attempt_is_not_automatically_successful_exec
+    bundle = driver.run_native_blast_utility(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:363: in run_native_blast_utility
+    validate_native_blast_utility_bundle_files(bundle, root)
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:239: in validate_native_blast_utility_bundle_files
+    bundle = validate_native_blast_utility_bundle(bundle, plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+_ test_wrapper_attempt_is_not_automatically_successful_exec[status3-2-native diagnostic\n-True] _
+source_snapshot/tests/test_blast_vdb_native_context_668.py:283: in test_wrapper_attempt_is_not_automatically_successful_exec
+    bundle = driver.run_native_blast_utility(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:363: in run_native_blast_utility
+    validate_native_blast_utility_bundle_files(bundle, root)
+source_snapshot/gene_annotation_episode/native_blast_utility_driver.py:239: in validate_native_blast_utility_bundle_files
+    bundle = validate_native_blast_utility_bundle(bundle, plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py:678: in validate_native_blast_utility_bundle
+    receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:183: in validate_vdb_offline_receipt
+    _require(receipt["launcher_argv"] == compile_vdb_offline_argv(job, attempt_directory=attempt_directory,
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:49: in _require
+    _error(code)
+source_snapshot/gene_annotation_episode/native_blast_vdb_utility_execution.py:44: in _error
+    raise ContractError("native_blast_utility_" + code)
+E   gene_annotation_episode.domain.ContractError: native_blast_utility_offline_configuration_conflict
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_vdb_native_context_668.py::test_wrapper_attempt_is_not_automatically_successful_exec[status0-1-bwrap: Creating new namespace failed\n-False]
+FAILED source_snapshot/tests/test_blast_vdb_native_context_668.py::test_wrapper_attempt_is_not_automatically_successful_exec[status1-127-bwrap: execvp /selected/helper: No such file\n-False]
+FAILED source_snapshot/tests/test_blast_vdb_native_context_668.py::test_wrapper_attempt_is_not_automatically_successful_exec[status2-0--False]
+FAILED source_snapshot/tests/test_blast_vdb_native_context_668.py::test_wrapper_attempt_is_not_automatically_successful_exec[status3-2-native diagnostic\n-True]
+4 failed, 21 passed in 23.51s

@@ -1,0 +1,132 @@
+{
+  "status": "draft_for_user_feedback_not_production_prompt",
+  "boundary": "existing_results_recurring_decision_for_native_blast_masking_selector",
+  "check": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check081_masking_decision_snapshot",
+  "check_receipt": {
+    "returncode": 0,
+    "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check081_masking_decision_snapshot/handle.json",
+    "unit": "gene-local-job-da994172389f45c3905bdab2596e1424.service",
+    "terminal": true,
+    "quiescent": true,
+    "source_unchanged": true,
+    "dependency_unchanged": true,
+    "stdlib_unchanged": true,
+    "binary_unchanged": true,
+    "metadata": {
+      "native_lifecycle_version": "durable_systemd_native_job_v2",
+      "policy": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      },
+      "enforcement": {
+        "memory": "systemd_cgroup_v2_memory_max",
+        "swap": "systemd_memory_swap_max_zero",
+        "wall_time": "unset",
+        "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+        "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+        "process_tree": "systemd_control_group",
+        "filesystem_sandbox": false
+      },
+      "verified_cgroup": {
+        "memory_max": 21474836480,
+        "memory_swap_max": 0,
+        "runtime_max": "infinity",
+        "kill_mode": "control-group",
+        "oom_policy": "kill"
+      },
+      "duration_measure": "systemd_service_wall_seconds",
+      "service_exit": {
+        "SERVICE_RESULT": "success",
+        "EXIT_CODE": "exited",
+        "EXIT_STATUS": "0",
+        "ended": {
+          "at": "2026-10-28T21:37:05.039023+00:00",
+          "monotonic_ns": 1036986736349241,
+          "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+        }
+      },
+      "elapsed_seconds": 3.019110133,
+      "native_returncode": 0,
+      "observed_scratch_bytes": 606646272
+    }
+  },
+  "audit": {
+    "pytest_returncode": 0,
+    "outside_modules": [],
+    "unbound_mappings": [],
+    "native_unchanged": true,
+    "original_retained_fixtures_unchanged": true
+  },
+  "read_only_evidence_test": "1 passed in 0.45s",
+  "native_commands_run_by621": 0,
+  "model_calls_run_by621": 0,
+  "production_source_edits_by621": 0,
+  "pins": [
+    {
+      "path": "tests/test_masking_decision_snapshot_621.py",
+      "sha256": "74458b6ffd874966ee38e20cf86931e3e02e552213a972f7cd5eeb7317b48bae",
+      "size_bytes": 4295
+    },
+    {
+      "path": "verification/tool_graders_masking_results_message_2026-10-28_621/DRAFT_TASK_STEERING_001.md",
+      "sha256": "763a93999e71a7b0d4546148119b6c64c3799e4cb4eb190348f5bd394bef1e44",
+      "size_bytes": 6458
+    },
+    {
+      "path": "verification/tool_graders_masking_results_message_2026-10-28_621/REVIEW_001.md",
+      "sha256": "2a9f1269df4bdadfb2d2440ad745144e5faae245b45c9a8f363a2282f4e57f2e",
+      "size_bytes": 15485
+    },
+    {
+      "path": "verification/tool_graders_masking_results_message_2026-10-28_621/ORIGINAL_DECISION_EVIDENCE_001.json",
+      "sha256": "d2de1cf965940dd43614abebb2770f3610160015aa50e23509669717e8944907",
+      "size_bytes": 13125413
+    },
+    {
+      "path": "gene_annotation_episode/providers.py",
+      "sha256": "59d332a14b97e9f2a7de3a5565bb83c93ad343f32b292b486c04877fd9c71df1",
+      "size_bytes": 23296
+    },
+    {
+      "path": "gene_annotation_episode/decision_context.py",
+      "sha256": "df2e5d8410d9a0e650e54216fe23f92d3c05cfba482580b13f4d4c07a0c0f790",
+      "size_bytes": 9716
+    },
+    {
+      "path": "gene_annotation_episode/decision_history.py",
+      "sha256": "952b5ad8cbdcfb4baff46aa7028885be0645ff1bb81586a7030402e4a0bc7f25",
+      "size_bytes": 31595
+    },
+    {
+      "path": "gene_annotation_episode/runtime.py",
+      "sha256": "e04cb6901cadff47322d76ddfc840eb8f7d1c6015225e73c3bb26df1ddf878ea",
+      "size_bytes": 312099
+    },
+    {
+      "path": "gene_annotation_episode/execution_episodes.py",
+      "sha256": "4812c22538f9b41f755d84b3df9bde9400df30be81f8a4d6dfd4c5e096b7f839",
+      "size_bytes": 228292
+    },
+    {
+      "path": "gene_annotation_episode/execution_progress.py",
+      "sha256": "7ee5b2a52881938982b4e341812411041042614946467a1b3ae5a6f24c4c190b",
+      "size_bytes": 101083
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_results.py",
+      "sha256": "a5785f9e4b58c7e500e79857d88ee000ab86cdb5cdab67c1a94276ca69cb03cb",
+      "size_bytes": 35788
+    },
+    {
+      "path": "gene_annotation_episode/scientific_process_prompt.py",
+      "sha256": "3acc1b73d2b4455d476a88f31af92d4cc648c68cafe3d42d2db4f7f057420ed9",
+      "size_bytes": 26513
+    },
+    {
+      "path": "method_loop/episode.py",
+      "sha256": "b1245fa460a706e291685c80ec8f5703846fd29d25c58fa80346db7ce357c72d",
+      "size_bytes": 80544
+    }
+  ]
+}

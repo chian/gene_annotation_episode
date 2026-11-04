@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/profile_saved_return_010.py", line 75, in <module>
+    family = ExecutionEpisodes(None, store=store, run_id=row['run_id'], directory=snapshot / 'run',
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_episodes.py", line 127, in __init__
+    self.job_progress_provider = ExecutionProgressProvider(store, run_id=run_id,
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/execution_progress.py", line 531, in __init__
+    with store.transaction():
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/state.py", line 83, in transaction
+    self.db.execute("BEGIN IMMEDIATE" if own else f"SAVEPOINT {name}")
+sqlite3.OperationalError: attempt to write a readonly database

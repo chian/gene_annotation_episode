@@ -1,0 +1,915 @@
+{
+  "optlang_json": {
+    "name": null,
+    "variables": [
+      {
+        "name": "IN",
+        "lb": 0,
+        "ub": 8.0,
+        "type": "continuous"
+      },
+      {
+        "name": "IN_reverse_c86ee",
+        "lb": 0,
+        "ub": 10.0,
+        "type": "continuous"
+      },
+      {
+        "name": "AB",
+        "lb": 0,
+        "ub": null,
+        "type": "continuous"
+      },
+      {
+        "name": "AB_reverse_b86fc",
+        "lb": 0,
+        "ub": -0.0,
+        "type": "continuous"
+      },
+      {
+        "name": "OUT",
+        "lb": 0,
+        "ub": null,
+        "type": "continuous"
+      },
+      {
+        "name": "OUT_reverse_ef373",
+        "lb": 0,
+        "ub": -0.0,
+        "type": "continuous"
+      },
+      {
+        "name": "aux",
+        "lb": 0,
+        "ub": null,
+        "type": "continuous"
+      }
+    ],
+    "constraints": [
+      {
+        "name": "A_c",
+        "expression": {
+          "type": "Add",
+          "args": [
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "AB_reverse_b86fc"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": -1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "AB"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": -1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "IN_reverse_c86ee"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "IN"
+                }
+              ]
+            }
+          ]
+        },
+        "lb": 1.0,
+        "ub": 1.0,
+        "indicator_variable": null,
+        "active_when": 1
+      },
+      {
+        "name": "B_c",
+        "expression": {
+          "type": "Add",
+          "args": [
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "OUT_reverse_ef373"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": -1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "OUT"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": -1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "AB_reverse_b86fc"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "AB"
+                }
+              ]
+            }
+          ]
+        },
+        "lb": 0,
+        "ub": 0,
+        "indicator_variable": null,
+        "active_when": 1
+      },
+      {
+        "name": "net_cap",
+        "expression": {
+          "type": "Add",
+          "args": [
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": -1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "OUT_reverse_ef373"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": -1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "AB_reverse_b86fc"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "OUT"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "AB"
+                }
+              ]
+            }
+          ]
+        },
+        "lb": null,
+        "ub": 12.0,
+        "indicator_variable": null,
+        "active_when": 1
+      },
+      {
+        "name": "split_cap",
+        "expression": {
+          "type": "Add",
+          "args": [
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "IN_reverse_c86ee"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "IN"
+                }
+              ]
+            }
+          ]
+        },
+        "lb": null,
+        "ub": 9,
+        "indicator_variable": null,
+        "active_when": 1
+      },
+      {
+        "name": "aux_link",
+        "expression": {
+          "type": "Add",
+          "args": [
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "aux"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": -1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "OUT"
+                }
+              ]
+            },
+            {
+              "type": "Mul",
+              "args": [
+                {
+                  "type": "Number",
+                  "value": 1.0
+                },
+                {
+                  "type": "Symbol",
+                  "name": "OUT_reverse_ef373"
+                }
+              ]
+            }
+          ]
+        },
+        "lb": 0,
+        "ub": 0,
+        "indicator_variable": null,
+        "active_when": 1
+      }
+    ],
+    "objective": {
+      "name": "18533f83-d35b-11f1-8057-18c04d8e9fcb",
+      "expression": {
+        "type": "Add",
+        "args": [
+          {
+            "type": "Number",
+            "value": 1.5
+          },
+          {
+            "type": "Mul",
+            "args": [
+              {
+                "type": "Number",
+                "value": 0.25
+              },
+              {
+                "type": "Symbol",
+                "name": "IN"
+              }
+            ]
+          },
+          {
+            "type": "Mul",
+            "args": [
+              {
+                "type": "Number",
+                "value": 1.0
+              },
+              {
+                "type": "Symbol",
+                "name": "OUT_reverse_ef373"
+              }
+            ]
+          },
+          {
+            "type": "Mul",
+            "args": [
+              {
+                "type": "Number",
+                "value": -0.25
+              },
+              {
+                "type": "Symbol",
+                "name": "IN_reverse_c86ee"
+              }
+            ]
+          },
+          {
+            "type": "Mul",
+            "args": [
+              {
+                "type": "Number",
+                "value": -1.0
+              },
+              {
+                "type": "Symbol",
+                "name": "OUT"
+              }
+            ]
+          }
+        ]
+      },
+      "direction": "min"
+    }
+  },
+  "variables": [
+    {
+      "position": 0,
+      "name": "IN",
+      "type": "continuous",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": 8.0,
+        "state": "finite",
+        "native_token": "8.0",
+        "float_hex": "0x1.0000000000000p+3"
+      }
+    },
+    {
+      "position": 1,
+      "name": "IN_reverse_c86ee",
+      "type": "continuous",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": 10.0,
+        "state": "finite",
+        "native_token": "10.0",
+        "float_hex": "0x1.4000000000000p+3"
+      }
+    },
+    {
+      "position": 2,
+      "name": "AB",
+      "type": "continuous",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": null,
+        "state": "missing",
+        "native_token": null,
+        "float_hex": null
+      }
+    },
+    {
+      "position": 3,
+      "name": "AB_reverse_b86fc",
+      "type": "continuous",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": -0.0,
+        "state": "finite",
+        "native_token": "-0.0",
+        "float_hex": "-0x0.0p+0"
+      }
+    },
+    {
+      "position": 4,
+      "name": "OUT",
+      "type": "continuous",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": null,
+        "state": "missing",
+        "native_token": null,
+        "float_hex": null
+      }
+    },
+    {
+      "position": 5,
+      "name": "OUT_reverse_ef373",
+      "type": "continuous",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": -0.0,
+        "state": "finite",
+        "native_token": "-0.0",
+        "float_hex": "-0x0.0p+0"
+      }
+    },
+    {
+      "position": 6,
+      "name": "aux",
+      "type": "continuous",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": null,
+        "state": "missing",
+        "native_token": null,
+        "float_hex": null
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "position": 0,
+      "name": "A_c",
+      "lower": {
+        "value": 1.0,
+        "state": "finite",
+        "native_token": "1.0",
+        "float_hex": "0x1.0000000000000p+0"
+      },
+      "upper": {
+        "value": 1.0,
+        "state": "finite",
+        "native_token": "1.0",
+        "float_hex": "0x1.0000000000000p+0"
+      },
+      "indicator_variable": null,
+      "active_when": 1,
+      "expression": "-1.0*AB + 1.0*AB_reverse_b86fc + 1.0*IN - 1.0*IN_reverse_c86ee",
+      "is_linear": true,
+      "offset": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "terms": [
+        {
+          "variable_position": 3,
+          "variable_name": "AB_reverse_b86fc",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 2,
+          "variable_name": "AB",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 1,
+          "variable_name": "IN_reverse_c86ee",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 0,
+          "variable_name": "IN",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        }
+      ],
+      "quadratic_term_count": 0
+    },
+    {
+      "position": 1,
+      "name": "B_c",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "indicator_variable": null,
+      "active_when": 1,
+      "expression": "1.0*AB - 1.0*AB_reverse_b86fc - 1.0*OUT + 1.0*OUT_reverse_ef373",
+      "is_linear": true,
+      "offset": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "terms": [
+        {
+          "variable_position": 5,
+          "variable_name": "OUT_reverse_ef373",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 4,
+          "variable_name": "OUT",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 3,
+          "variable_name": "AB_reverse_b86fc",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 2,
+          "variable_name": "AB",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        }
+      ],
+      "quadratic_term_count": 0
+    },
+    {
+      "position": 2,
+      "name": "net_cap",
+      "lower": {
+        "value": null,
+        "state": "missing",
+        "native_token": null,
+        "float_hex": null
+      },
+      "upper": {
+        "value": 12.0,
+        "state": "finite",
+        "native_token": "12.0",
+        "float_hex": "0x1.8000000000000p+3"
+      },
+      "indicator_variable": null,
+      "active_when": 1,
+      "expression": "1.0*AB - 1.0*AB_reverse_b86fc + 1.0*OUT - 1.0*OUT_reverse_ef373",
+      "is_linear": true,
+      "offset": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "terms": [
+        {
+          "variable_position": 5,
+          "variable_name": "OUT_reverse_ef373",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 3,
+          "variable_name": "AB_reverse_b86fc",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 4,
+          "variable_name": "OUT",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 2,
+          "variable_name": "AB",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        }
+      ],
+      "quadratic_term_count": 0
+    },
+    {
+      "position": 3,
+      "name": "split_cap",
+      "lower": {
+        "value": null,
+        "state": "missing",
+        "native_token": null,
+        "float_hex": null
+      },
+      "upper": {
+        "value": 9.0,
+        "state": "finite",
+        "native_token": "9.0",
+        "float_hex": "0x1.2000000000000p+3"
+      },
+      "indicator_variable": null,
+      "active_when": 1,
+      "expression": "1.0*IN + 1.0*IN_reverse_c86ee",
+      "is_linear": true,
+      "offset": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "terms": [
+        {
+          "variable_position": 1,
+          "variable_name": "IN_reverse_c86ee",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 0,
+          "variable_name": "IN",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        }
+      ],
+      "quadratic_term_count": 0
+    },
+    {
+      "position": 4,
+      "name": "aux_link",
+      "lower": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "upper": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "indicator_variable": null,
+      "active_when": 1,
+      "expression": "-1.0*OUT + 1.0*OUT_reverse_ef373 + 1.0*aux",
+      "is_linear": true,
+      "offset": {
+        "value": 0.0,
+        "state": "finite",
+        "native_token": "0.0",
+        "float_hex": "0x0.0p+0"
+      },
+      "terms": [
+        {
+          "variable_position": 6,
+          "variable_name": "aux",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 4,
+          "variable_name": "OUT",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "variable_position": 5,
+          "variable_name": "OUT_reverse_ef373",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        }
+      ],
+      "quadratic_term_count": 0
+    }
+  ],
+  "objective": {
+    "direction": "min",
+    "expression": "0.25*IN - 0.25*IN_reverse_c86ee - 1.0*OUT + 1.0*OUT_reverse_ef373 + 1.5",
+    "is_linear": true,
+    "offset": {
+      "value": 1.5,
+      "state": "finite",
+      "native_token": "1.5",
+      "float_hex": "0x1.8000000000000p+0"
+    },
+    "terms": [
+      {
+        "variable_position": 0,
+        "variable_name": "IN",
+        "coefficient": {
+          "value": 0.25,
+          "state": "finite",
+          "native_token": "0.25",
+          "float_hex": "0x1.0000000000000p-2"
+        }
+      },
+      {
+        "variable_position": 5,
+        "variable_name": "OUT_reverse_ef373",
+        "coefficient": {
+          "value": 1.0,
+          "state": "finite",
+          "native_token": "1.0",
+          "float_hex": "0x1.0000000000000p+0"
+        }
+      },
+      {
+        "variable_position": 1,
+        "variable_name": "IN_reverse_c86ee",
+        "coefficient": {
+          "value": -0.25,
+          "state": "finite",
+          "native_token": "-0.25",
+          "float_hex": "-0x1.0000000000000p-2"
+        }
+      },
+      {
+        "variable_position": 4,
+        "variable_name": "OUT",
+        "coefficient": {
+          "value": -1.0,
+          "state": "finite",
+          "native_token": "-1.0",
+          "float_hex": "-0x1.0000000000000p+0"
+        }
+      }
+    ],
+    "quadratic_term_count": 0
+  },
+  "reaction_variables": [
+    {
+      "reaction_position": 0,
+      "reaction_id": "IN",
+      "forward_position": 0,
+      "forward_name": "IN",
+      "reverse_position": 1,
+      "reverse_name": "IN_reverse_c86ee"
+    },
+    {
+      "reaction_position": 1,
+      "reaction_id": "AB",
+      "forward_position": 2,
+      "forward_name": "AB",
+      "reverse_position": 3,
+      "reverse_name": "AB_reverse_b86fc"
+    },
+    {
+      "reaction_position": 2,
+      "reaction_id": "OUT",
+      "forward_position": 4,
+      "forward_name": "OUT",
+      "reverse_position": 5,
+      "reverse_name": "OUT_reverse_ef373"
+    }
+  ]
+}

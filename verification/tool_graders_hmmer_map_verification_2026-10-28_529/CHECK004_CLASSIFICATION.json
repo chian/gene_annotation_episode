@@ -1,0 +1,16 @@
+{
+  "attempt": "check004",
+  "passed": 6,
+  "failed": 1,
+  "new_native_workflow_cases_passed": [
+    "wgsc",
+    "wblosum",
+    "wpb_sampled_N50001"
+  ],
+  "failure": "Copied frozen historical state database retained read-only permissions; Store constructor requires writable temporary DB for WAL initialization.",
+  "repair": "Make only newly copied temporary state tree writable; historical inputs remain pinned and unmodified.",
+  "production_failure_demonstrated": false,
+  "failed_selectors": [
+    "tests/test_native_hmmer_preparation_result_publication.py::test_original_saved_alimask_publication_keeps_absent_context_and_frozen_numbers"
+  ]
+}

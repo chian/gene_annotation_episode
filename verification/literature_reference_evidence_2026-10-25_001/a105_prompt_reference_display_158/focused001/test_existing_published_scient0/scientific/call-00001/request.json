@@ -1,0 +1,327 @@
+{
+  "episode_id": "scientific-episode",
+  "role": "REASONING",
+  "model": "gpt-6-sol",
+  "effort": "medium",
+  "instructions": "Evaluate the reference experiment iteratively within its assigned source scope.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After its decision_lookup_result arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\ndecision_bootstrap supplies an authoritative scoped model state. decision_update\nreplaces the listed top-level fields and removes exactly removed_fields; omitted\nfields keep their previous values. base_revision identifies the previous state\nand revision identifies the resulting state. Newer state replaces older values,\nincluding yield expectations; older estimates remain historical. A bootstrap\nafter conversation loss or compaction replaces earlier presentation state.\ndecision_lookup_result supplies only the requested own historical information.\nRestored public exchanges preserve the requests and results of an unfinished\ndecision; do not repeat their already answered lookups merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.",
+  "context": {
+    "version": "decision_context_v1",
+    "kind": "decision_bootstrap",
+    "base_revision": null,
+    "revision": "789e3b45fc7c1b6b834ecf025e95359f24df8f457f654129d7338922d1378892",
+    "fields": {
+      "action_yields": {
+        "before": 5,
+        "rows": [
+          {
+            "attempted_uncompleted": 1,
+            "category": "tool/source.read",
+            "completed_actions": 2,
+            "expected_yield": {
+              "band": null,
+              "status": "unavailable",
+              "unavailable_reason": "parameters_unbound"
+            },
+            "total_yield": -0.25
+          }
+        ],
+        "version": "own_decision_yield_table_v1"
+      },
+      "annotation_score": 2,
+      "available_report_facts": {
+        "changed_record_refs": {
+          "meaning": "Actual records changed by own completed work."
+        },
+        "unrequested_fact": {
+          "meaning": "UNREQUESTED_FACT_DEFINITION"
+        }
+      },
+      "child_reports": [],
+      "controller": {
+        "decision": {
+          "continuation_cost": 0.001
+        },
+        "epoch": "PRIVATE_EPOCH",
+        "estimate": {
+          "diagnostics": {
+            "private_fit": "PRIVATE_FIT"
+          },
+          "expected_next_gain": {
+            "alpha": 0.05,
+            "lower": -0.1,
+            "status_code": 0,
+            "uncertainty_code": 2,
+            "upper": 0.9,
+            "value": 0.5
+          },
+          "turns": 2
+        },
+        "scores": [
+          999
+        ]
+      },
+      "current_credit": 4,
+      "current_report_basis_refs": [],
+      "current_report_update": {
+        "conclusion": "unresolved"
+      },
+      "feedback": null,
+      "goal": {
+        "goal_id": "private-goal",
+        "objective": "Determine what the supplied unnamed protein does.",
+        "parent_goal_id": "private-parent-goal",
+        "task_context": {
+          "assignment": "Use only the selected supplied region."
+        }
+      },
+      "last_local_outcome": null,
+      "pending_work": {
+        "items": []
+      },
+      "requested_form": {
+        "additionalProperties": false,
+        "properties": {
+          "conclusion": {
+            "description": "Whether the evidence supports a qualified functional interpretation.",
+            "enum": [
+              "unresolved",
+              "qualified"
+            ],
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "format": "reference",
+              "type": "string"
+            },
+            "type": "array",
+            "x-source": "changed_record_refs"
+          }
+        },
+        "required": [
+          "conclusion",
+          "sources"
+        ],
+        "type": "object"
+      },
+      "requested_report_purpose": "Return supported interpretations and their retained qualifications.",
+      "restored_episode_history": {
+        "entries": [
+          "PRIVATE_RESTORE_HISTORY"
+        ]
+      },
+      "scientific_process": {
+        "assignment": {
+          "constraints": {
+            "target_only": true
+          },
+          "context": {
+            "complete": false,
+            "snippet": "MKWAA"
+          },
+          "evidence_refs": [],
+          "selection": {
+            "child_tool_info": [
+              {
+                "name": "source.read",
+                "resources": "local"
+              }
+            ],
+            "evidence_axis": {
+              "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "option_id": "A105",
+              "slot": "evidence_axis",
+              "version": "scientific_process_option_ref_v1"
+            },
+            "thought_pattern": {
+              "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "option_id": "P01",
+              "slot": "thought_pattern",
+              "version": "scientific_process_option_ref_v1"
+            },
+            "version": "scientific_process_selection_v3"
+          }
+        },
+        "child_tool_info": [
+          {
+            "description": "Read the selected source window.",
+            "instructions": "Use source_ref with exact offset and limit.\nRetain source coordinates and report partial windows.",
+            "name": "source.read",
+            "resources": "local"
+          }
+        ],
+        "evidence_axis": {
+          "id": "A105",
+          "instruction_status": "published_investigation_instructions",
+          "investigation_instructions": "Read the supplied sequence or selected file contents.\nSeparate the measured activity, assayed subject, conditions and controls.\nCandidate functions may emerge from these findings.",
+          "name": "Experimental results"
+        },
+        "initial_selection_sha256": "PRIVATE_PIN",
+        "permitted_children": [
+          "scientific_process",
+          "literature"
+        ],
+        "selection": {
+          "child_tool_info": [
+            {
+              "name": "source.read",
+              "resources": "local"
+            }
+          ],
+          "evidence_axis": {
+            "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "option_id": "A105",
+            "slot": "evidence_axis",
+            "version": "scientific_process_option_ref_v1"
+          },
+          "thought_pattern": {
+            "entry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "library_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "option_id": "P01",
+            "slot": "thought_pattern",
+            "version": "scientific_process_option_ref_v1"
+          },
+          "version": "scientific_process_selection_v3"
+        },
+        "thought_pattern": {
+          "boundary": "A tool score is not the transfer conclusion.",
+          "decision_guidance": [
+            "Inspect the measured comparison before transferring function."
+          ],
+          "description": "Choose a comparison that distinguishes the functional explanations.",
+          "id": "P01",
+          "live_alternatives": [
+            "Shared activity",
+            "Different recognition"
+          ],
+          "name": "Compare informative alternatives",
+          "outcome_contingencies": [
+            {
+              "if_observed": "Different specificity",
+              "then_consider": "Retain only the supported relationship."
+            }
+          ],
+          "use_when": "The reference is informative but the function remains uncertain."
+        }
+      },
+      "scope": {
+        "segments": [
+          {
+            "end": 5,
+            "start": 2,
+            "subject_ref": "input_target"
+          }
+        ],
+        "subject_refs": [
+          "input_target"
+        ]
+      },
+      "tools": [
+        {
+          "description": "Read an exact source byte window.",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "offset": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "source_ref": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_ref",
+              "offset",
+              "limit"
+            ],
+            "type": "object"
+          },
+          "name": "source.read"
+        }
+      ],
+      "waiting_support": {
+        "local_return_history": {
+          "samples": [
+            "PRIVATE_CHILD_HISTORY"
+          ]
+        },
+        "own_completed_action_history": [
+          "PRIVATE_HISTORY"
+        ]
+      },
+      "working_state": {
+        "annotations": [],
+        "interpretation_accounts": [],
+        "materials": [
+          {
+            "id": "material_target",
+            "name": "selected.faa",
+            "record_type": "material",
+            "source_ref": "source_supplied",
+            "use": "target"
+          }
+        ],
+        "observations": [
+          {
+            "id": "observation_received",
+            "qualification": "Measured on a reference protein, not this target.",
+            "unit": "nmol/min",
+            "value": 7
+          },
+          {
+            "id": "observation_unrequested",
+            "value": "UNREQUESTED_OBSERVATION"
+          }
+        ],
+        "problem_ref": "private-problem",
+        "sources": [
+          {
+            "id": "source_unrequested",
+            "uri": "UNREQUESTED_SOURCE_INVENTORY"
+          }
+        ],
+        "subjects": [
+          {
+            "id": "input_target",
+            "length": 5,
+            "molecule": "protein",
+            "name": "private label only",
+            "record_type": "input",
+            "sequence_ref": "artifact_target",
+            "source_ref": "source_supplied",
+            "unit": "aa"
+          }
+        ]
+      }
+    },
+    "removed_fields": []
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "fixture": {
+        "const": true
+      }
+    },
+    "required": [
+      "fixture"
+    ],
+    "additionalProperties": false
+  },
+  "started_at": "2026-10-27T20:29:10.854324+00:00",
+  "input": [
+    {
+      "type": "text",
+      "text": "TASK\n\nEvaluate the reference experiment iteratively within its assigned source scope.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After the requested information arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\nEach request supplies the complete task and current decision-relevant information. Current values replace earlier values, including yield expectations; prior estimates remain historical. A requested own-history lookup continues this same pending decision. Previously answered lookups remain answered after reconstruction; do not repeat them merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.\n\nAssigned work\n\n| Field | Supplied value |\n| --- | --- |\n| objective | Determine what the supplied unnamed protein does. |\n| task_context.assignment | Use only the selected supplied region. |\n\nFixed scope\n\n| Field | Supplied value |\n| --- | --- |\n| segments[0].end | 5 |\n| segments[0].start | 2 |\n| segments[0].subject_ref | input_target |\n| subject_refs[0] | input_target |\n\nParent constraints\n\n| Field | Supplied value |\n| --- | --- |\n| target_only | true |\n\nParent-supplied context\n\n| Field | Supplied value |\n| --- | --- |\n| complete | false |\n| snippet | MKWAA |\n\nSupplied material and scoped access\n\n| Field | Supplied value |\n| --- | --- |\n| subjects[0].id | input_target |\n| subjects[0].length | 5 |\n| subjects[0].molecule | protein |\n| subjects[0].name | private label only |\n| subjects[0].sequence_ref | artifact_target |\n| subjects[0].source_ref | source_supplied |\n| subjects[0].unit | aa |\n| materials[0].id | material_target |\n| materials[0].name | selected.faa |\n| materials[0].source_ref | source_supplied |\n| materials[0].use | target |\n\nInvestigate the supplied target: Experimental results\n\nRead the supplied sequence or selected file contents.\nSeparate the measured activity, assayed subject, conditions and controls.\nCandidate functions may emerge from these findings.\n\nReason about the evidence: Compare informative alternatives\n\nChoose a comparison that distinguishes the functional explanations.\n\nThe reference is informative but the function remains uncertain.\n\nAlternatives to distinguish\n\n- Shared activity\n- Different recognition\n\nHow to choose and revise the investigation\n\n- Inspect the measured comparison before transferring function.\n\nHow outcomes affect the next choice\n\n| If observed | Then consider |\n| --- | --- |\n| Different specificity | Retain only the supported relationship. |\n\nLimits of this reasoning approach\n\nA tool score is not the transfer conclusion.\n\nSelected tool: source.read (local)\n\nRead the selected source window.\n\nUse source_ref with exact offset and limit.\nRetain source coordinates and report partial windows.\n\nCallable operations\n\n| Operation | Meaning |\n| --- | --- |\n| source.read | Read an exact source byte window. |\n\nOperands for source.read\n\n| Field | Presence | Type or constraint | Meaning or value |\n| --- | --- | --- | --- |\n| arguments | required | object |  |\n| arguments | constraint | additionalProperties | false |\n| arguments.limit | required | integer |  |\n| arguments.limit | constraint | minimum | 1 |\n| arguments.offset | required | integer |  |\n| arguments.offset | constraint | minimum | 0 |\n| arguments.source_ref | required | string |  |\n\nPermitted child roles\n\n| Field | Supplied value |\n| --- | --- |\n| [0] | scientific_process |\n| [1] | literature |\n\nInformation requested by the parent\n\nReturn supported interpretations and their retained qualifications.\n\nParent return form\n\n| Field | Presence | Type or constraint | Meaning or value |\n| --- | --- | --- | --- |\n| return | required | object |  |\n| return | constraint | additionalProperties | false |\n| return.conclusion | required | string | Whether the evidence supports a qualified functional interpretation. |\n| return.conclusion | constraint | enum[0] | unresolved |\n| return.conclusion | constraint | enum[1] | qualified |\n| return.sources | required | array | recorded fact from changed_record_refs |\n| return.sources[] | each item | string; reference |  |\n\nMeaning of requested recorded facts\n\n| Source | Meaning |\n| --- | --- |\n| changed_record_refs | Actual records changed by own completed work. |\n\nCallable selection operands for child assignment (copy exact values)\n\n| Field | Supplied value |\n| --- | --- |\n| child_tool_info[0].name | source.read |\n| child_tool_info[0].resources | local |\n| evidence_axis.entry_sha256 | bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb |\n| evidence_axis.library_id | aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa |\n| evidence_axis.option_id | A105 |\n| evidence_axis.slot | evidence_axis |\n| evidence_axis.version | scientific_process_option_ref_v1 |\n| thought_pattern.entry_sha256 | bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb |\n| thought_pattern.library_id | aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa |\n| thought_pattern.option_id | P01 |\n| thought_pattern.slot | thought_pattern |\n| thought_pattern.version | scientific_process_option_ref_v1 |\n| version | scientific_process_selection_v3 |\n\nSTEERING\n\nOwn completed actions\n\n| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |\n| --- | --- | --- | --- | --- | --- |\n| tool/source.read | 2 | -0.25 | unavailable | parameters_unbound | 1 |\n\nCurrent continuation expectation\n\n| Completed actions | Expected next gain | Uncertainty | Continuation cost |\n| --- | --- | --- | --- |\n| 2 | 0.5 | lower=-0.1; upper=0.9; approximate Laplace model band; alpha=0.05 | 0.001 |\n\nCurrent separate measures\n\n| Field | Supplied value |\n| --- | --- |\n| current_credit | 4 |\n| annotation_score | 2 |\n\nCurrent return interpretation\n\n| Field | Supplied value |\n| --- | --- |\n| conclusion | unresolved |"
+    }
+  ],
+  "model_instructions": "Evaluate the reference experiment iteratively within its assigned source scope.\nYour internal decision may take several model exchanges. Return the required\nclosed response object. Use response_type=request_context to request your own\nprior attempts through the declared lookup form. This only retrieves information\nyou already received; it does not perform new scientific work or complete an\naction. After the requested information arrives, continue the SAME decision.\nFor this protocol, use request_context for own history; episode.history is not\nan available action. This replaces the older history-tool instruction.\nUse response_type=select_action with selection and report_update when ready to\ndispatch an actual action. Only that action's actual completion supplies an\nobservation to your configured continuation controller.\n\nEach request supplies the complete task and current decision-relevant information. Current values replace earlier values, including yield expectations; prior estimates remain historical. A requested own-history lookup continues this same pending decision. Previously answered lookups remain answered after reconstruction; do not repeat them merely to restore memory.\n\naction_yields describes your OWN completed action categories. total_yield is\nobserved signed gain, excluding inherited credit. Expected category yield is\nconditional on choosing and completing that category again; unavailable is not\nzero. Approximate model bands are not calibrated next-outcome guarantees. Useful\nevidence acquisition can have zero immediate credit when a later interpretation\nearns the credit. Failed or unexecuted attempts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts."
+}

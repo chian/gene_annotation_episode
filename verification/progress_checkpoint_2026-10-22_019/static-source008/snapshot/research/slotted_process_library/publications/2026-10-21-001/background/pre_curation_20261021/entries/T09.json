@@ -1,0 +1,145 @@
+{
+  "slot": "tools",
+  "id": "T09",
+  "name": "RNA and genomic-signal coordinate windows",
+  "description": "Read selected deposited signal tracks against the exact reference feature frame and calculate stated local contrasts; keep processed tracks distinct from raw-read reconstruction and transcript-processing evidence distinct from ordinary abundance.",
+  "capability_operations": [
+    {
+      "operation": "Retrieve selected study metadata and track files",
+      "inputs": {
+        "study": "exact accession and sample/file IDs",
+        "selection": "specific processed tracks and reference feature version"
+      },
+      "outputs": {
+        "files": "identified track/reference bytes and sample metadata",
+        "coverage": "available processed versus missing/raw files"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Summarize a declared genomic window",
+      "inputs": {
+        "track": "identified bedGraph/wig-like or explicit coordinate signal table",
+        "reference": "exact accession/version, strand and coordinate convention",
+        "window": "explicit genomic intervals and statistic"
+      },
+      "outputs": {
+        "values": "per-position/interval values and declared local summary",
+        "comparison": "selected sample contrasts with reference and normalization provenance"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Reconstruct a new RNA profile from reads",
+      "inputs": {
+        "reads": "actual FASTQ files and sample designs",
+        "reference_model": "chosen mapping/processing method and parameters"
+      },
+      "outputs": {
+        "profile": "processed coverage/ends/counts with normalization and uncertainty under that pipeline"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "public.ncbi.search/sequence and reference.neighborhood can provide selected source/reference context. The catalog defines generic reads.map, but that does not establish an RNA-seq/Rend-seq analysis pipeline or GEO acquisition adapter."
+    ],
+    "research_operations_performed": [
+      "cellular/ylbF_probe_provenance.json and ylbF_rendseq_control_observations.json:76-file GSE108295 processed-track archive and exact reference table; selected cggR/gapA,glnR/glnA,rpoB,rnpB windows examined.",
+      "organism GcsR trace: GSE76522 metadata only; no read reprocessing."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "New RNA-seq/Rend-seq mapping, processing-site inference, differential analysis and formal replication statistics were not performed or established as registered tools."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "RNA purification, sequencing, Northern assays and reporter measurements are author experiments/data generation."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "A processed end signal is not ordinary gene-expression abundance and its normalization is source-specific.",
+    "No window or reference remapping without explicit accession/coordinate correspondence.",
+    "Metadata-only access or an accession listing supplies no new biological signal."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "cellular_y_complex",
+      "use": "Actual processed-track inspection found the cggR/gapA 5-prime signal strongly reduced in Y-complex deletions while a distinct rnpB control retained signal.",
+      "execution_scope": "Selected known windows, no raw realignment, new processing-site discovery or formal replication analysis.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "cellular_ybeY",
+      "use": "Published swapped-subunit and rRNA-terminus evidence distinguished a 30S-associated degradation route from general ribosome impairment.",
+      "execution_scope": "Author experiments; no raw sequencing profile or ribosome data reanalysis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "cellular_yqfG",
+      "use": "Published end-specific controls restricted the phenotype to 16S 3-prime maturation among tested ends.",
+      "execution_scope": "No newly computed RNA profile; linked homolog does not independently validate all E. coli claims.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "use": "Reporter antitermination and endogenous RNAP-occupancy results differed in scope, limiting reliance on an ordinary reporter alone.",
+      "execution_scope": "E-MTAB-4240 was identified, not newly fetched/reanalyzed; ordinary counts do not establish rRNA maturation.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_04_gcsr",
+      "use": "Actual metadata established four RNA-seq samples, two per genotype, while source Results described a narrower clean-deletion regulatory effect.",
+      "execution_scope": "Metadata inspection only for the deposition; no raw or processed RNA-seq reanalysis.",
+      "use_status": "research_read_only_operation_performed"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "cellular_y_complex",
+      "case_id": "cellular_y_complex",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4989519/",
+      "source_locator": "Case-record observation; inspected scope: Three full primary papers inspected. Downloaded 76-file GEO processed-track archive and exact reference feature table; interrogated selected tracks in known cggR/gapA, glnR/glnA, rpoB and rnpB windows. No raw-read realignment or formal replication statistics.",
+      "observation": "Actual processed-track inspection found the cggR/gapA 5-prime signal strongly reduced in Y-complex deletions while a distinct rnpB control retained signal.",
+      "limit": "Selected known windows, no raw realignment, new processing-site discovery or formal replication analysis."
+    },
+    {
+      "case_group": "cellular_ybeY",
+      "case_id": "cellular_ybeY",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2959132/",
+      "source_locator": "Case-record observation; inspected scope: Both primary full texts obtained through PMC BioC and relevant Results/figure descriptions examined. Linked homolog case: cellular_yqfG, not independent evidence for an arbitrary protein.",
+      "observation": "Published swapped-subunit and rRNA-terminus evidence distinguished a 30S-associated degradation route from general ribosome impairment.",
+      "limit": "Author experiments; no raw sequencing profile or ribosome data reanalysis."
+    },
+    {
+      "case_group": "cellular_yqfG",
+      "case_id": "cellular_yqfG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6144821/",
+      "source_locator": "Case-record observation; inspected scope: Full Results examined, including specificity controls and rescue. Same protein-family investigation group as cellular_ybeY; not independent replication of all E. coli claims.",
+      "observation": "Published end-specific controls restricted the phenotype to 16S 3-prime maturation among tested ends.",
+      "limit": "No newly computed RNA profile; linked homolog does not independently validate all E. coli claims."
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "case_id": "spec_suhb_catalysis_vs_rrna",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4807359/",
+      "source_locator": "Case-record observation; inspected scope: 2000 primary abstract only; 2016 suppressor, recruitment, reporter/endogenous comparison, genetic-interaction results and relevant methods/discussion inspected; 2019 relevant binding/reconstitution results/methods and stated limitations inspected. Raw data and earlier 1994 activity paper not independently analyzed.",
+      "observation": "Reporter antitermination and endogenous RNAP-occupancy results differed in scope, limiting reliance on an ordinary reporter alone.",
+      "limit": "E-MTAB-4240 was identified, not newly fetched/reanalyzed; ordinary counts do not establish rRNA maturation."
+    },
+    {
+      "case_group": "organism_04_gcsr",
+      "case_id": "organism_04_gcsr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4894688/",
+      "source_locator": "Case-record observation; inspected scope: Main Results, growth and RNA-seq/accession Methods; live GSE76522 metadata: four RNA-seq samples, two WT/two deletion, SRA SRP068065. No reads reprocessed.",
+      "observation": "Actual metadata established four RNA-seq samples, two per genotype, while source Results described a narrower clean-deletion regulatory effect.",
+      "limit": "Metadata inspection only for the deposition; no raw or processed RNA-seq reanalysis."
+    }
+  ]
+}

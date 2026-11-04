@@ -1,0 +1,84 @@
+{
+  "returncode": 1,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-27T08:47:51.800043+00:00",
+        "monotonic_ns": 904433497368966,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 179.732234438,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 72650752
+  },
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_returns_2026-10-27_397/check001/stdout.txt",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_returns_2026-10-27_397/check001/stderr.txt",
+  "executed_snapshot_pins_unchanged": true,
+  "live_source_drift": [
+    {
+      "before": {
+        "path": "gene_annotation_episode/native_protein_structure_returns.py",
+        "sha256": "46317b9d99363b800a8e2bed484aff9750860e8564bab37ee2ab9627c21fec29",
+        "byte_length": 31743
+      },
+      "after": {
+        "path": "gene_annotation_episode/native_protein_structure_returns.py",
+        "sha256": "491a410809bff8ffe179b5e9c9541ab847eecb01779ef49f0bd3eb190567c988",
+        "byte_length": 31499
+      }
+    },
+    {
+      "before": {
+        "path": "gene_annotation_episode/communication.py",
+        "sha256": "2ef013096676db1035db86f866705b95f19e445aaee0894adf5790f164b456f1",
+        "byte_length": 24395
+      },
+      "after": {
+        "path": "gene_annotation_episode/communication.py",
+        "sha256": "02324204fa586f404ba8f6a1ce92c2dd2f386ddb427ea653fe39b9a508057746",
+        "byte_length": 27068
+      }
+    },
+    {
+      "before": {
+        "path": "verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py",
+        "sha256": "d15661235e0975445759a00aee59dfa61c56db3b8db0588bb1dff34c6e33d5f0",
+        "byte_length": 20247
+      },
+      "after": {
+        "path": "verification/tool_graders_protein_structure_returns_2026-10-27_397/fixture_helpers.py",
+        "sha256": "62875cacf10d106fdace43ab82663f57ae632997d012ce01cfb4fc3a2f27f815",
+        "byte_length": 20651
+      }
+    }
+  ],
+  "owned_live_source_pins_unchanged": false,
+  "local_jobs_module": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_returns_2026-10-27_397/check001/source_snapshot/gene_annotation_episode/local_jobs.py"
+}

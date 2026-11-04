@@ -1,0 +1,101 @@
+{
+  "status": "partial",
+  "diagnostics": [
+    {
+      "code": "phylogeny_negative_branch_length",
+      "phase": "native_decode",
+      "path": "/read_outcomes/1/diagnostics/0",
+      "severity": "qualification",
+      "evidence_refs": [
+        "raw/synthetic-tree",
+        "source/synthetic-tree"
+      ]
+    },
+    {
+      "code": "codon_header_missing_tab",
+      "phase": "native_decode",
+      "path": "/read_outcomes/3/diagnostics/0",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source/synthetic-stats"
+      ]
+    },
+    {
+      "code": "codon_native_number_missing",
+      "phase": "native_decode",
+      "path": "/read_outcomes/3/diagnostics/1",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source/synthetic-stats"
+      ]
+    },
+    {
+      "code": "codon_reported_cds_uses_protein_count",
+      "phase": "native_decode",
+      "path": "/read_outcomes/5/diagnostics/0",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source/synthetic-report"
+      ]
+    },
+    {
+      "code": "codon_uninterpreted_report_row",
+      "phase": "native_decode",
+      "path": "/read_outcomes/5/diagnostics/1",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source/synthetic-report"
+      ]
+    },
+    {
+      "code": "codon_reported_command_role_unknown",
+      "phase": "native_decode",
+      "path": "/read_outcomes/5/diagnostics/2",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source/synthetic-report"
+      ]
+    },
+    {
+      "code": "codon_uninterpreted_report_row",
+      "phase": "native_decode",
+      "path": "/read_outcomes/5/diagnostics/3",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source/synthetic-report"
+      ]
+    },
+    {
+      "code": "bvbrc_phylogeny_negative_branch_length",
+      "phase": "association",
+      "path": "/documents/store/tree_documents",
+      "severity": "qualification",
+      "evidence_refs": [
+        "source/synthetic-tree"
+      ]
+    },
+    {
+      "code": "codon_provider_native_stage_conflict",
+      "phase": "association",
+      "path": "/families",
+      "severity": "error",
+      "evidence_refs": [
+        "source/synthetic-stats"
+      ]
+    },
+    {
+      "code": "codon_provider_final_family_coordinates_required",
+      "phase": "association",
+      "path": "/joins/family_blocks",
+      "severity": "qualification",
+      "evidence_refs": []
+    },
+    {
+      "code": "codon_provider_member_genome_association_required",
+      "phase": "association",
+      "path": "/inputs",
+      "severity": "qualification",
+      "evidence_refs": []
+    }
+  ]
+}

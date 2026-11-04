@@ -1,0 +1,55 @@
+F
+=================================== FAILURES ===================================
+_ test_selected_native_preparation_and_both_original_typed_forms[hmmemit-consensus_simple] _
+
+native_case = namespace(store=<gene_annotation_episode.state.Store object at 0x7f62dab339b0>, flow=<gene_annotation_episode.runtime....cation/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check005/temporary/hmmemit-consensus_simple0/workspace'))
+
+    def test_selected_native_preparation_and_both_original_typed_forms(native_case):
+        case = native_case
+        body = case.outcome['result']
+        assert case.outcome['status'] == 'completed' and body['complete'], body['failures']
+        assert case.returned['completed'] and case.returned['rows']
+        case.owner.validate_report(case.results_context, case.returned, case.results_form)
+        case.owner.validate_received_report(case.science_context, case.forwarded, case.science_form)
+        assert case.forwarded == {name: case.returned[name] for name in ('rows', 'population')}
+        assert case.returned['population'] == [body['population']]
+        assert all(row['source_ref'] == body['source_ref'] for rows in (
+            case.returned['rows'], case.returned['artifacts'], case.returned['population']) for row in rows)
+        received = {row['fact_source']: row['facts'] for row in
+            case.owner.native_hmmer_preparation_returns.received_context(case.root_context)}
+        assert received == {PREFIX + name: case.forwarded[name] for name in ('rows', 'population')}
+        bundle = json.loads(case.store.get_artifact(body['capture']['bundle_artifact_ref']))
+        assert bundle['requested_job'] == case.request and bundle['identity'] == case.plan['identity']
+        assert bundle['returncode'] == 0 and bundle['failures'] == []
+        assert bundle['program'] == case.job['program'] and bundle['mode'] == case.job['mode']
+        assert bundle['software']['actual_sha256'] == hashlib.sha256(
+            Path(case.job['software']['executable']).read_bytes()).hexdigest()
+        prepared = body['prepared']
+        sheet = json.loads(case.store.get_artifact(prepared['sheet_artifact_ref']))
+        calculations = json.loads(case.store.get_artifact(prepared['calculations_artifact_ref']))
+        assert prepared['sheet_artifact_ref'] != prepared['calculations_artifact_ref']
+        assert sheet['operation'] == calculations['operation'] == bundle['operation']
+>       assert_projected_values(case.returned, case.selector, calculations)
+
+../../../tests/test_native_hmmer_preparation_nested_workflow.py:328: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+form = {'artifacts': [{'artifact_ref': 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'complete...d36a6e2764f31ad1b8274507e958056ea5', 'artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'], ...}
+selector = {'version': 'native_hmmer_preparation_result_selector_v1', 'acquisition': 'complete_bound_bundle', 'projection': {'col...ion': 'output', 'role': 'stderr', 'ordinal': 0}, {'direction': 'output', 'role': 'generated_sequences', 'ordinal': 0}]}
+calculations = {'checks': [{'code': 'sample_population_count', 'inputs': [{'field': 'associations.model_population.record_keys', 'rec...'--seed': 42, '-c': True}}, 'parameters': {'consensus_thresholds': None, 'probability_rounding_tolerance': 1e-05}, ...}
+
+    def assert_projected_values(form, selector, calculations):
+        saved = {row.get('record_key', row.get('row_key')): row for row in calculations['rows']}
+        for row in form['rows']:
+            assert [q['path'] for q in row['quantities']] == list(selector['projection']['quantities'])
+            assert {check['name'] for check in row['checks']} == set(selector['projection']['checks'])
+            for quantity in row['quantities']:
+>               value = saved[row['record_key']]
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E               KeyError: 'artifact_6a362a2994d0c533ce4d8a363be7c9544df37ecd399771206175aecfaf536689#/inputs/0#model/0#model'
+
+../../../tests/test_native_hmmer_preparation_workflow.py:374: KeyError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_hmmer_preparation_nested_workflow.py::test_selected_native_preparation_and_both_original_typed_forms[hmmemit-consensus_simple]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 60 deselected in 34.62s

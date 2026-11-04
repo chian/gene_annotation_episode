@@ -1,0 +1,33 @@
+{
+  "receipt_kind": "executor_trace",
+  "received": true,
+  "trace": {
+    "steps": [
+      {
+        "index": 0,
+        "kind": "script",
+        "language": "python",
+        "module": null,
+        "function_name": null,
+        "invocation_kwargs": {},
+        "code": "from pathlib import Path\nimport json\nfrom Bio import SeqIO\nfrom Bio.Align import PairwiseAligner, substitution_matrices\nrun_dir = Path('/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-aurora-20261022T151552Z')\nquery = SeqIO.read(run_dir / 'target.faa', 'fasta')\nreferences = list(SeqIO.parse(run_dir / 'reported-references.faa', 'fasta'))\nif not query.seq or not references:\n    raise ValueError('A nonempty query and at least one reference are required')\nif any(not reference.seq for reference in references):\n    raise ValueError('Empty reference sequence')\naligner = PairwiseAligner(mode='global',\n    substitution_matrix=substitution_matrices.load('BLOSUM62'),\n    open_gap_score=-10, extend_gap_score=-0.5)\nrows = [{'reference_id': reference.id, 'query_length': len(query),\n         'reference_length': len(reference),\n         'alignment_score': float(aligner.score(str(query.seq), str(reference.seq)))}\n        for reference in references]\nrows.sort(key=lambda row: (-row['alignment_score'], row['reference_id']))\noutput = {'query_id': query.id, 'reference_count': len(references),\n    'method': {'algorithm': 'pairwise alignment', 'mode': 'global',\n        'substitution_matrix': 'BLOSUM62', 'open_gap_score': -10,\n        'extend_gap_score': -0.5}, 'comparisons': rows}\n(run_dir / 'alignment_scores.json').write_text(\n    json.dumps(output, indent=2, allow_nan=False) + '\\n')\nprint(json.dumps({'reference_count': len(rows), 'top_matches': rows[:3]}))\n",
+        "result": {
+          "status": "ok",
+          "stdout": "{\"reference_count\": 17, \"top_matches\": [{\"reference_id\": \"sp|P0AAW1|YBHP_ECOLI\", \"query_length\": 253, \"reference_length\": 253, \"alignment_score\": 1361.0}, {\"reference_id\": \"sp|P0AAW2|YBHP_ECOL6\", \"query_length\": 253, \"reference_length\": 253, \"alignment_score\": 1361.0}, {\"reference_id\": \"sp|P0AAW3|YBHP_ECO57\", \"query_length\": 253, \"reference_length\": 253, \"alignment_score\": 1361.0}]}\n",
+          "error": null,
+          "result_repr": null,
+          "result_var": null,
+          "duration_s": 6.796
+        }
+      }
+    ],
+    "namespace_summary": {
+      "run_dir": "PosixPath",
+      "query": "SeqRecord",
+      "references": "list(len=17)",
+      "aligner": "PairwiseAligner",
+      "rows": "list(len=17)",
+      "output": "dict(len=4)"
+    }
+  }
+}

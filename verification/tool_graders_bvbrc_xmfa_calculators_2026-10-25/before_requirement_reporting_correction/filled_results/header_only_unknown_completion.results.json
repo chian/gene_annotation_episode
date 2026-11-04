@@ -1,0 +1,686 @@
+{
+  "coordinates": {
+    "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+    "status": "ok",
+    "cells": [],
+    "requirements": [],
+    "diagnostics": []
+  },
+  "inverse": {
+    "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+    "status": "partial",
+    "queries": [
+      {
+        "member_number": 1,
+        "position_0based": 0,
+        "state": "unknown",
+        "matches": [],
+        "search_completeness": "unknown",
+        "evidence": []
+      },
+      {
+        "member_number": 1,
+        "position_0based": 1,
+        "state": "unknown",
+        "matches": [],
+        "search_completeness": "unknown",
+        "evidence": []
+      }
+    ],
+    "requirements": [],
+    "diagnostics": [
+      {
+        "code": "xmfa_selected_population_partial",
+        "phase": "association",
+        "path": "/queries/0",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "xmfa_selected_population_partial",
+        "phase": "association",
+        "path": "/queries/1",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "alignment": {
+    "schema_version": "mauve_xmfa_alignment_components_v1",
+    "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+    "status": "partial",
+    "selection": {
+      "population_id": "explicit-test-selection",
+      "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+      "member_numbers": [
+        1
+      ],
+      "block_columns": [],
+      "completeness": "complete",
+      "evidence": []
+    },
+    "parameters": {
+      "case_policy": "uppercase",
+      "selected_pairs": []
+    },
+    "blocks": [],
+    "requirements": [],
+    "diagnostics": [
+      {
+        "code": "xmfa_selected_population_partial",
+        "phase": "association",
+        "path": "/selection",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "coverage": {
+    "represented": {
+      "schema_version": "mauve_xmfa_coverage_components_v1",
+      "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+      "status": "partial",
+      "selection": {
+        "population_id": "explicit-test-selection",
+        "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+        "member_numbers": [
+          1
+        ],
+        "block_columns": [],
+        "completeness": "complete",
+        "evidence": []
+      },
+      "parameters": {
+        "basis": "represented"
+      },
+      "members": [
+        {
+          "member_number": 1,
+          "source_length": {
+            "value": 2,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_represented_source_length_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "placements": [],
+          "known_union_intervals": [],
+          "membership_completeness": "unknown",
+          "selected_coverage_fraction": {
+            "value": null,
+            "state": "truncated",
+            "unit": "fraction",
+            "origin": "calculated",
+            "numerator": 0,
+            "denominator": 2,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_represented_selected_coverage_fraction_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "complement_intervals": null,
+          "complement_bases": {
+            "value": null,
+            "state": "truncated",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_represented_complement_bases_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "known_union_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_represented_known_union_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "placement_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotide_placements",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_represented_placement_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "multiply_represented_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_represented_multiply_represented_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "excess_placement_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotide_placements",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_represented_excess_placement_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "original_coverage": []
+        }
+      ],
+      "requirements": [],
+      "diagnostics": [
+        {
+          "code": "xmfa_selected_population_partial",
+          "phase": "association",
+          "path": "/members/1",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "multi_member_block": {
+      "schema_version": "mauve_xmfa_coverage_components_v1",
+      "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+      "status": "partial",
+      "selection": {
+        "population_id": "explicit-test-selection",
+        "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+        "member_numbers": [
+          1
+        ],
+        "block_columns": [],
+        "completeness": "complete",
+        "evidence": []
+      },
+      "parameters": {
+        "basis": "multi_member_block"
+      },
+      "members": [
+        {
+          "member_number": 1,
+          "source_length": {
+            "value": 2,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_multi_member_block_source_length_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "placements": [],
+          "known_union_intervals": [],
+          "membership_completeness": "unknown",
+          "selected_coverage_fraction": {
+            "value": null,
+            "state": "truncated",
+            "unit": "fraction",
+            "origin": "calculated",
+            "numerator": 0,
+            "denominator": 2,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_multi_member_block_selected_coverage_fraction_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "complement_intervals": null,
+          "complement_bases": {
+            "value": null,
+            "state": "truncated",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_multi_member_block_complement_bases_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "known_union_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_multi_member_block_known_union_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "placement_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotide_placements",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_multi_member_block_placement_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "multiply_represented_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_multi_member_block_multiply_represented_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "excess_placement_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotide_placements",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_multi_member_block_excess_placement_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "original_coverage": []
+        }
+      ],
+      "requirements": [],
+      "diagnostics": [
+        {
+          "code": "xmfa_selected_population_partial",
+          "phase": "association",
+          "path": "/members/1",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "cooccupied_column": {
+      "schema_version": "mauve_xmfa_coverage_components_v1",
+      "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+      "status": "partial",
+      "selection": {
+        "population_id": "explicit-test-selection",
+        "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+        "member_numbers": [
+          1
+        ],
+        "block_columns": [],
+        "completeness": "complete",
+        "evidence": []
+      },
+      "parameters": {
+        "basis": "cooccupied_column"
+      },
+      "members": [
+        {
+          "member_number": 1,
+          "source_length": {
+            "value": 2,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_cooccupied_column_source_length_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "placements": [],
+          "known_union_intervals": [],
+          "membership_completeness": "unknown",
+          "selected_coverage_fraction": {
+            "value": null,
+            "state": "truncated",
+            "unit": "fraction",
+            "origin": "calculated",
+            "numerator": 0,
+            "denominator": 2,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_cooccupied_column_selected_coverage_fraction_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "complement_intervals": null,
+          "complement_bases": {
+            "value": null,
+            "state": "truncated",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_cooccupied_column_complement_bases_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:synthetic-argv",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "synthetic-argv",
+                  "sha256": "7d24a22f5f729df20edea238f2598ed3464d1423ab911e1f4d2d7925858569b6",
+                  "byte_count": 30
+                },
+                "pointer": ""
+              },
+              {
+                "content": {
+                  "source_ref": "source:x.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "x.fa",
+                  "sha256": "a92a7784c6152d0767401cd99697fa90ac81f65f558251cd2190b3927cf00741",
+                  "byte_count": 6
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "known_union_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_cooccupied_column_known_union_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "placement_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotide_placements",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_cooccupied_column_placement_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "multiply_represented_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotides",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_cooccupied_column_multiply_represented_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "excess_placement_bases": {
+            "value": 0,
+            "state": "available",
+            "unit": "nucleotide_placements",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "explicit-test-selection",
+            "method_id": "xmfa_cooccupied_column_excess_placement_bases_v1",
+            "evidence": [],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "original_coverage": []
+        }
+      ],
+      "requirements": [],
+      "diagnostics": [
+        {
+          "code": "xmfa_selected_population_partial",
+          "phase": "association",
+          "path": "/members/1",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    }
+  },
+  "changed_case_alignment": {
+    "schema_version": "mauve_xmfa_alignment_components_v1",
+    "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+    "status": "partial",
+    "selection": {
+      "population_id": "explicit-test-selection",
+      "document_id": "mauve_xmfa:d5d4357deb53220070b41f2adc3941fa91894f3c6953db0e5184ca4525969b8c",
+      "member_numbers": [
+        1
+      ],
+      "block_columns": [],
+      "completeness": "complete",
+      "evidence": []
+    },
+    "parameters": {
+      "case_policy": "preserve",
+      "selected_pairs": []
+    },
+    "blocks": [],
+    "requirements": [],
+    "diagnostics": [
+      {
+        "code": "xmfa_selected_population_partial",
+        "phase": "association",
+        "path": "/selection",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  }
+}

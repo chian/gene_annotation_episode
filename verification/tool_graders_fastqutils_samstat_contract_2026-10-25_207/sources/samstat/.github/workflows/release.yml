@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    tags: [ "v*" ]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake zlib1g-dev libbz2-dev liblzma-dev libcurl4-openssl-dev
+
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build -j4
+
+    - name: Test
+      working-directory: build
+      run: ctest --output-on-failure --no-tests=error -j4
+
+    # The source archive GitHub attaches to every release is complete (no submodules).
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v2.2.2
+      with:
+        generate_release_notes: true

@@ -1,0 +1,217 @@
+{
+  "version": "masking_host_returns_handoff_004",
+  "files": [
+    {
+      "path": "gene_annotation_episode/native_blast_masking_results.py",
+      "sha256": "78726f54938a5194109d33c55834bbd184a823aecbd0c64910b74aa1e9361837",
+      "size_bytes": 35725,
+      "matches_snapshot": {
+        "check072_masking_host_returns": false,
+        "check076_masking_partial_statistics_admission": false,
+        "check078_masking_statistics_provenance_admission": true
+      }
+    },
+    {
+      "path": "gene_annotation_episode/native_blast_masking_returns.py",
+      "sha256": "73fb3fdb5b7dacacbb49691fafcc5d320b648907458713fc92bb011994bb5ef6",
+      "size_bytes": 17586,
+      "matches_snapshot": {
+        "check072_masking_host_returns": true,
+        "check076_masking_partial_statistics_admission": true,
+        "check078_masking_statistics_provenance_admission": true
+      }
+    },
+    {
+      "path": "tests/test_native_blast_masking_host_returns.py",
+      "sha256": "079b731a832940676b57fbb6ce5a3165d5fa11ac9db7db169aaeedf9d208d047",
+      "size_bytes": 21627,
+      "matches_snapshot": {
+        "check072_masking_host_returns": true,
+        "check076_masking_partial_statistics_admission": true,
+        "check078_masking_statistics_provenance_admission": true
+      }
+    },
+    {
+      "path": "tests/test_native_blast_masking_generated_partial_admission.py",
+      "sha256": "6eac308e31c6318f5bccf5c7884b039d464c0d24a201e30035ff03b00d630a5a",
+      "size_bytes": 2228,
+      "matches_snapshot": {
+        "check072_masking_host_returns": false,
+        "check076_masking_partial_statistics_admission": false,
+        "check078_masking_statistics_provenance_admission": true
+      }
+    }
+  ],
+  "checks": [
+    {
+      "attempt": "check072_masking_host_returns",
+      "receipt_path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check072_masking_host_returns/receipt.json",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check072_masking_host_returns/handle.json",
+        "unit": "gene-local-job-704b69af99814cda9b9a7965adaf6b8a.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T21:18:58.199457+00:00",
+              "monotonic_ns": 1035899896782462,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 88.533597811,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 607502336
+        }
+      },
+      "stdout": "........                                                                 [100%]\n8 passed in 85.48s (0:01:25)\n",
+      "correctness_evidence": true
+    },
+    {
+      "attempt": "check076_masking_partial_statistics_admission",
+      "receipt_path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_partial_statistics_admission/receipt.json",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check076_masking_partial_statistics_admission/handle.json",
+        "unit": "gene-local-job-8630f69ca7bd4a3599eda41fc8ba12a6.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T21:24:09.553306+00:00",
+              "monotonic_ns": 1036211250632444,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 28.207378801,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 602210304
+        }
+      },
+      "stdout": ".                                                                        [100%]\n1 passed in 25.06s\n",
+      "correctness_evidence": false
+    },
+    {
+      "attempt": "check078_masking_statistics_provenance_admission",
+      "receipt_path": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check078_masking_statistics_provenance_admission/receipt.json",
+      "receipt": {
+        "returncode": 0,
+        "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check078_masking_statistics_provenance_admission/handle.json",
+        "unit": "gene-local-job-887d26e0f9b8433f849a5746d07a179f.service",
+        "terminal": true,
+        "quiescent": true,
+        "source_unchanged": true,
+        "dependency_unchanged": true,
+        "stdlib_unchanged": true,
+        "binary_unchanged": true,
+        "metadata": {
+          "native_lifecycle_version": "durable_systemd_native_job_v2",
+          "policy": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "enforcement": {
+            "memory": "systemd_cgroup_v2_memory_max",
+            "swap": "systemd_memory_swap_max_zero",
+            "wall_time": "unset",
+            "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+            "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+            "process_tree": "systemd_control_group",
+            "filesystem_sandbox": false
+          },
+          "verified_cgroup": {
+            "memory_max": 21474836480,
+            "memory_swap_max": 0,
+            "runtime_max": "infinity",
+            "kill_mode": "control-group",
+            "oom_policy": "kill"
+          },
+          "duration_measure": "systemd_service_wall_seconds",
+          "service_exit": {
+            "SERVICE_RESULT": "success",
+            "EXIT_CODE": "exited",
+            "EXIT_STATUS": "0",
+            "ended": {
+              "at": "2026-10-28T21:25:45.331101+00:00",
+              "monotonic_ns": 1036307028426543,
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+            }
+          },
+          "elapsed_seconds": 15.064694131,
+          "native_returncode": 0,
+          "observed_scratch_bytes": 601980928
+        }
+      },
+      "stdout": ".                                                                        [100%]\n1 passed in 12.22s\n",
+      "correctness_evidence": true
+    }
+  ],
+  "limitations": [
+    "Focused adapter checks use controlled target/observation/producer envelopes around retained612 native bytes.",
+    "Full shared Workflow, resource deployment and prompt presentation remain root-owned.",
+    "Check076 encoded an incorrect generated-provenance expectation; preserved but excluded."
+  ]
+}

@@ -1,0 +1,408 @@
+[
+  {
+    "case_id": "complete_main_subset_with_external_memberships",
+    "component": {
+      "family_population_id": "returned",
+      "genome_population_id": "main",
+      "population_genomes": {
+        "value": 2,
+        "state": "available",
+        "unit": "genomes",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "main",
+        "method": "selected_genome_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "population_families": {
+        "value": 1,
+        "state": "available",
+        "unit": "families",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "returned",
+        "method": "selected_family_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "rows": [
+        {
+          "family_id": "F1",
+          "present_genomes": {
+            "value": 1,
+            "state": "available",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_present_genomes",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "missing_genomes": {
+            "value": 1,
+            "state": "available",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_missing_genomes",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "extra_copies": {
+            "value": 1,
+            "state": "available",
+            "unit": "features",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_extra_copies",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "presence_fraction": {
+            "value": 0.5,
+            "state": "available",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": 1,
+            "denominator": 2,
+            "population_ref": "main",
+            "method": "family_presence_fraction",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "native_initial_family_rank": {
+            "value": 0,
+            "state": "available",
+            "unit": "count",
+            "origin": "derived",
+            "numerator": 0,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "native_initial_family_rank",
+            "evidence": [],
+            "requirement_ids": []
+          }
+        }
+      ]
+    },
+    "requirements": []
+  },
+  {
+    "case_id": "complete_empty_main_with_unrelated_memberships",
+    "component": {
+      "family_population_id": "returned",
+      "genome_population_id": "main",
+      "population_genomes": {
+        "value": 0,
+        "state": "available",
+        "unit": "genomes",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "main",
+        "method": "selected_genome_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "population_families": {
+        "value": 1,
+        "state": "available",
+        "unit": "families",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "returned",
+        "method": "selected_family_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "rows": [
+        {
+          "family_id": "F1",
+          "present_genomes": {
+            "value": 0,
+            "state": "available",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_present_genomes",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "missing_genomes": {
+            "value": 0,
+            "state": "available",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_missing_genomes",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "extra_copies": {
+            "value": 0,
+            "state": "available",
+            "unit": "features",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_extra_copies",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "presence_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": 0,
+            "denominator": 0,
+            "population_ref": "main",
+            "method": "family_presence_fraction",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "native_initial_family_rank": {
+            "value": 0,
+            "state": "available",
+            "unit": "count",
+            "origin": "derived",
+            "numerator": 0,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "native_initial_family_rank",
+            "evidence": [],
+            "requirement_ids": []
+          }
+        }
+      ]
+    },
+    "requirements": []
+  },
+  {
+    "case_id": "external_optional_scope_without_matrix_rows",
+    "component": {
+      "family_population_id": "returned",
+      "genome_population_id": "optional",
+      "population_genomes": {
+        "value": 1,
+        "state": "available",
+        "unit": "genomes",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "optional",
+        "method": "selected_genome_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "population_families": {
+        "value": 1,
+        "state": "available",
+        "unit": "families",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "returned",
+        "method": "selected_family_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "rows": [
+        {
+          "family_id": "F1",
+          "present_genomes": {
+            "value": null,
+            "state": "missing",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "optional",
+            "method": "family_present_genomes",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/returned/family/F1/genome_population/optional/family_membership_required"
+            ]
+          },
+          "missing_genomes": {
+            "value": null,
+            "state": "missing",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "optional",
+            "method": "family_missing_genomes",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/returned/family/F1/genome_population/optional/family_membership_required"
+            ]
+          },
+          "extra_copies": {
+            "value": null,
+            "state": "missing",
+            "unit": "features",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "optional",
+            "method": "family_extra_copies",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/returned/family/F1/genome_population/optional/family_membership_required"
+            ]
+          },
+          "presence_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": 1,
+            "population_ref": "optional",
+            "method": "family_presence_fraction",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/returned/family/F1/genome_population/optional/family_membership_required"
+            ]
+          },
+          "native_initial_family_rank": {
+            "value": null,
+            "state": "missing",
+            "unit": "count",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "optional",
+            "method": "native_initial_family_rank",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/returned/family/F1/genome_population/optional/family_membership_required"
+            ]
+          }
+        }
+      ]
+    },
+    "requirements": [
+      {
+        "requirement_id": "phylogeny/returned/family/F1/genome_population/optional/family_membership_required",
+        "kind": "scientific_metadata",
+        "role": "family_genome_membership",
+        "source_refs": [],
+        "reason_code": "family_membership_required"
+      }
+    ]
+  },
+  {
+    "case_id": "retained_memberships_explicit_single_genome_scope",
+    "component": {
+      "family_population_id": "returned",
+      "genome_population_id": "main",
+      "population_genomes": {
+        "value": 1,
+        "state": "available",
+        "unit": "genomes",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "main",
+        "method": "selected_genome_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "population_families": {
+        "value": 1,
+        "state": "available",
+        "unit": "families",
+        "origin": "derived",
+        "numerator": null,
+        "denominator": null,
+        "population_ref": "returned",
+        "method": "selected_family_count",
+        "evidence": [],
+        "requirement_ids": []
+      },
+      "rows": [
+        {
+          "family_id": "PGF_00017063",
+          "present_genomes": {
+            "value": 1,
+            "state": "available",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_present_genomes",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "missing_genomes": {
+            "value": 0,
+            "state": "available",
+            "unit": "genomes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_missing_genomes",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "extra_copies": {
+            "value": 0,
+            "state": "available",
+            "unit": "features",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "family_extra_copies",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "presence_fraction": {
+            "value": 1.0,
+            "state": "available",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": 1,
+            "denominator": 1,
+            "population_ref": "main",
+            "method": "family_presence_fraction",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "native_initial_family_rank": {
+            "value": 1,
+            "state": "available",
+            "unit": "count",
+            "origin": "derived",
+            "numerator": 1,
+            "denominator": null,
+            "population_ref": "main",
+            "method": "native_initial_family_rank",
+            "evidence": [],
+            "requirement_ids": []
+          }
+        }
+      ]
+    },
+    "requirements": []
+  }
+]

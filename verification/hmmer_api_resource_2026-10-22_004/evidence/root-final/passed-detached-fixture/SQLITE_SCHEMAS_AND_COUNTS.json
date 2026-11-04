@@ -1,0 +1,801 @@
+{
+  "databases": {
+    "api-timing.sqlite": {
+      "api_timing_bindings": {
+        "columns": [
+          "run_id",
+          "binding_ref",
+          "registry_ref",
+          "data"
+        ],
+        "rows": 1
+      },
+      "api_timing_export_dispositions": {
+        "columns": [
+          "measurement_ref",
+          "revision",
+          "data"
+        ],
+        "rows": 0
+      },
+      "api_timing_measurements": {
+        "columns": [
+          "registry_ref",
+          "remote_id",
+          "measurement_ref",
+          "data"
+        ],
+        "rows": 0
+      },
+      "api_timing_orders": {
+        "columns": [
+          "registry_ref",
+          "job_ref",
+          "data"
+        ],
+        "rows": 0
+      },
+      "api_timing_submission_bindings": {
+        "columns": [
+          "registry_ref",
+          "remote_id",
+          "binding_ref",
+          "data"
+        ],
+        "rows": 0
+      },
+      "api_timing_submission_intents": {
+        "columns": [
+          "registry_ref",
+          "job_ref",
+          "submission_operation_key",
+          "data"
+        ],
+        "rows": 0
+      }
+    },
+    "case/global.sqlite": {
+      "execution_classes": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "rows": 0
+      },
+      "execution_conditions": {
+        "columns": [
+          "sequence",
+          "id",
+          "operation_sha256",
+          "resource_id",
+          "data"
+        ],
+        "rows": 0
+      },
+      "expectation_snapshots": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "rows": 1
+      },
+      "reported_result_statistics": {
+        "columns": [
+          "sequence",
+          "observation_sha256",
+          "class_ref",
+          "condition_state",
+          "data"
+        ],
+        "rows": 0
+      },
+      "run_statistics": {
+        "columns": [
+          "sequence",
+          "attempt_sha256",
+          "class_ref",
+          "condition_state",
+          "data"
+        ],
+        "rows": 0
+      }
+    },
+    "case/workspace/state.sqlite3": {
+      "artifacts": {
+        "columns": [
+          "id",
+          "sha256",
+          "media_type",
+          "size"
+        ],
+        "rows": 7
+      },
+      "current_revisions": {
+        "columns": [
+          "record_type",
+          "key_ref",
+          "revision",
+          "record_ref"
+        ],
+        "rows": 0
+      },
+      "episode_waits": {
+        "columns": [
+          "run_id",
+          "wait_id",
+          "parent_episode_id",
+          "original_decision_index",
+          "request_sha256",
+          "request",
+          "selected_at",
+          "timing",
+          "wake",
+          "outcome"
+        ],
+        "rows": 0
+      },
+      "inputs": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "rows": 1
+      },
+      "library_selection_members": {
+        "columns": [
+          "selection_ref",
+          "read_ref"
+        ],
+        "rows": 0
+      },
+      "material_annotations": {
+        "columns": [
+          "parse_key",
+          "record_ordinal",
+          "entry_kind",
+          "entry_ordinal",
+          "byte_start",
+          "byte_end",
+          "preview"
+        ],
+        "rows": 0
+      },
+      "material_component_spans": {
+        "columns": [
+          "member_ref",
+          "component",
+          "part",
+          "chunk_index",
+          "start",
+          "end"
+        ],
+        "rows": 0
+      },
+      "material_errors": {
+        "columns": [
+          "parse_key",
+          "error_index",
+          "data"
+        ],
+        "rows": 0
+      },
+      "material_members": {
+        "columns": [
+          "id",
+          "parse_key",
+          "ordinal",
+          "collection_ref",
+          "data"
+        ],
+        "rows": 1
+      },
+      "material_name_counts": {
+        "columns": [
+          "parse_key",
+          "name",
+          "next_occurrence"
+        ],
+        "rows": 0
+      },
+      "material_pack_chunks": {
+        "columns": [
+          "parse_key",
+          "chunk_index",
+          "artifact_ref"
+        ],
+        "rows": 0
+      },
+      "problem": {
+        "columns": [
+          "singleton",
+          "data"
+        ],
+        "rows": 1
+      },
+      "proposals": {
+        "columns": [
+          "id",
+          "record_type",
+          "key_ref",
+          "expected_revision",
+          "data"
+        ],
+        "rows": 0
+      },
+      "provider_job_failures": {
+        "columns": [
+          "job_ref",
+          "data"
+        ],
+        "rows": 0
+      },
+      "provider_jobs": {
+        "columns": [
+          "id",
+          "operation_key",
+          "request",
+          "state",
+          "remote_id",
+          "submission",
+          "latest_status",
+          "result",
+          "error_code"
+        ],
+        "rows": 0
+      },
+      "public_search_claims": {
+        "columns": [
+          "id",
+          "job_ref",
+          "predecessor",
+          "data"
+        ],
+        "rows": 0
+      },
+      "public_search_operations": {
+        "columns": [
+          "id",
+          "operation_key",
+          "job_ref",
+          "data"
+        ],
+        "rows": 0
+      },
+      "public_search_order_scopes": {
+        "columns": [
+          "job_ref",
+          "data"
+        ],
+        "rows": 0
+      },
+      "public_search_orders": {
+        "columns": [
+          "job_ref",
+          "data"
+        ],
+        "rows": 0
+      },
+      "public_search_publications": {
+        "columns": [
+          "operation_key",
+          "signature",
+          "data"
+        ],
+        "rows": 0
+      },
+      "public_search_registries": {
+        "columns": [
+          "registry_ref",
+          "data"
+        ],
+        "rows": 1
+      },
+      "public_search_results": {
+        "columns": [
+          "job_ref",
+          "page",
+          "page_size",
+          "receipt_ref",
+          "snapshot_ref"
+        ],
+        "rows": 0
+      },
+      "public_search_selections": {
+        "columns": [
+          "operation_key",
+          "selection_sha256"
+        ],
+        "rows": 0
+      },
+      "reasoning_commits": {
+        "columns": [
+          "operation_key",
+          "signature",
+          "result"
+        ],
+        "rows": 0
+      },
+      "record_roots": {
+        "columns": [
+          "record_ref",
+          "target_ref"
+        ],
+        "rows": 4
+      },
+      "records": {
+        "columns": [
+          "id",
+          "record_type",
+          "origin",
+          "data"
+        ],
+        "rows": 11
+      },
+      "runtime_actions": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "decision_index",
+          "action",
+          "result",
+          "credit",
+          "timing"
+        ],
+        "rows": 3
+      },
+      "runtime_commission_intents": {
+        "columns": [
+          "run_id",
+          "parent_episode_id",
+          "original_decision_index",
+          "handle",
+          "operation_key",
+          "commission_sha256",
+          "spec",
+          "selection",
+          "selected_at"
+        ],
+        "rows": 1
+      },
+      "runtime_completion_slots": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "sequence",
+          "original_decision_index",
+          "slot"
+        ],
+        "rows": 2
+      },
+      "runtime_decision_effects": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "decision_index",
+          "effect"
+        ],
+        "rows": 3
+      },
+      "runtime_episodes": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "path",
+          "request",
+          "initial_credit",
+          "state",
+          "completion",
+          "archive"
+        ],
+        "rows": 2
+      },
+      "runtime_estimation_contexts": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "decision_index",
+          "data"
+        ],
+        "rows": 2
+      },
+      "runtime_forms": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "facts",
+          "form"
+        ],
+        "rows": 1
+      },
+      "runtime_hmmer_progress_dependencies": {
+        "columns": [
+          "run_id",
+          "registry_ref",
+          "signature",
+          "source_ref",
+          "observed_at"
+        ],
+        "rows": 0
+      },
+      "runtime_hmmer_progress_dependency_operations": {
+        "columns": [
+          "run_id",
+          "operation_key",
+          "signature",
+          "result"
+        ],
+        "rows": 0
+      },
+      "runtime_hmmer_progress_operations": {
+        "columns": [
+          "run_id",
+          "operation_key",
+          "signature",
+          "status_receipt_ref",
+          "result"
+        ],
+        "rows": 0
+      },
+      "runtime_hmmer_progress_snapshots": {
+        "columns": [
+          "run_id",
+          "registry_ref",
+          "target_handle",
+          "scope",
+          "signature",
+          "progress_ref",
+          "snapshot"
+        ],
+        "rows": 0
+      },
+      "runtime_homology_progress_custody": {
+        "columns": [
+          "run_id",
+          "registry_ref",
+          "target_handle",
+          "kind",
+          "signature",
+          "source_ref",
+          "observed_at"
+        ],
+        "rows": 0
+      },
+      "runtime_homology_progress_operations": {
+        "columns": [
+          "run_id",
+          "operation_key",
+          "signature",
+          "result"
+        ],
+        "rows": 0
+      },
+      "runtime_homology_progress_snapshots": {
+        "columns": [
+          "run_id",
+          "registry_ref",
+          "target_handle",
+          "scope",
+          "signature",
+          "progress_ref",
+          "snapshot"
+        ],
+        "rows": 0
+      },
+      "runtime_model_calls": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "call_index",
+          "purpose",
+          "request",
+          "response",
+          "timing"
+        ],
+        "rows": 3
+      },
+      "runtime_observations": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "unit_index",
+          "observation"
+        ],
+        "rows": 2
+      },
+      "runtime_progress_deliveries": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "operation_key",
+          "signature",
+          "progress_refs"
+        ],
+        "rows": 2
+      },
+      "runtime_progress_exposures": {
+        "columns": [
+          "run_id",
+          "target_handle",
+          "operation_key",
+          "signature",
+          "payload"
+        ],
+        "rows": 0
+      },
+      "runtime_progress_notifications": {
+        "columns": [
+          "run_id",
+          "target_handle",
+          "operation_key",
+          "publication_ref",
+          "published"
+        ],
+        "rows": 0
+      },
+      "runtime_progress_observations": {
+        "columns": [
+          "run_id",
+          "progress_ref",
+          "target_handle",
+          "scope",
+          "signature",
+          "snapshot",
+          "observation_identity"
+        ],
+        "rows": 0
+      },
+      "runtime_progress_receipts": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "progress_ref",
+          "operation_key"
+        ],
+        "rows": 0
+      },
+      "runtime_progress_selections": {
+        "columns": [
+          "run_id",
+          "operation_key",
+          "signature",
+          "selection",
+          "progress_ref"
+        ],
+        "rows": 0
+      },
+      "runtime_receipt_inheritance": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "parent_episode_id",
+          "through_receipt_index"
+        ],
+        "rows": 2
+      },
+      "runtime_record_receipts": {
+        "columns": [
+          "receipt_index",
+          "run_id",
+          "episode_id",
+          "record_ref",
+          "receipt_kind",
+          "source_index"
+        ],
+        "rows": 23
+      },
+      "runtime_report_attempts": {
+        "columns": [
+          "run_id",
+          "parent_episode_id",
+          "decision_index",
+          "delivery_ref",
+          "child_episode_id",
+          "contract",
+          "form",
+          "failure",
+          "timing_receipts"
+        ],
+        "rows": 0
+      },
+      "runtime_runs": {
+        "columns": [
+          "run_id",
+          "settings",
+          "state",
+          "summary",
+          "started_at",
+          "updated_at"
+        ],
+        "rows": 1
+      },
+      "runtime_source_states": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "source_state"
+        ],
+        "rows": 2
+      },
+      "runtime_timed_commissions": {
+        "columns": [
+          "run_id",
+          "parent_episode_id",
+          "decision_index",
+          "selection_digest",
+          "child_episode_id",
+          "scheduled_at",
+          "due_at",
+          "fired_at",
+          "returned_at"
+        ],
+        "rows": 0
+      },
+      "runtime_tool_retrievals": {
+        "columns": [
+          "run_id",
+          "episode_id",
+          "operation_key",
+          "request_sha256",
+          "request",
+          "dispatch_token",
+          "response",
+          "result"
+        ],
+        "rows": 0
+      },
+      "tool_operations": {
+        "columns": [
+          "operation_key",
+          "id",
+          "name",
+          "arguments",
+          "scope",
+          "result"
+        ],
+        "rows": 2
+      }
+    },
+    "reported-history.sqlite": {
+      "execution_classes": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "rows": 0
+      },
+      "execution_conditions": {
+        "columns": [
+          "sequence",
+          "id",
+          "operation_sha256",
+          "resource_id",
+          "data"
+        ],
+        "rows": 0
+      },
+      "expectation_snapshots": {
+        "columns": [
+          "id",
+          "data"
+        ],
+        "rows": 1
+      },
+      "reported_result_statistics": {
+        "columns": [
+          "sequence",
+          "observation_sha256",
+          "class_ref",
+          "condition_state",
+          "data"
+        ],
+        "rows": 0
+      },
+      "run_statistics": {
+        "columns": [
+          "sequence",
+          "attempt_sha256",
+          "class_ref",
+          "condition_state",
+          "data"
+        ],
+        "rows": 0
+      }
+    },
+    "run/episode-execution/executions.sqlite": {
+      "commissions": {
+        "columns": [
+          "handle",
+          "operation_key",
+          "parent_episode_id",
+          "commission_sha256",
+          "spec",
+          "execution_token",
+          "lifecycle_state",
+          "execution_identity",
+          "return_id",
+          "acknowledgment",
+          "failure"
+        ],
+        "rows": 1
+      },
+      "events": {
+        "columns": [
+          "cursor",
+          "handle",
+          "event",
+          "record_ref",
+          "operation_key",
+          "observed_at"
+        ],
+        "rows": 4
+      },
+      "native_publications": {
+        "columns": [
+          "handle",
+          "record_ref",
+          "publication",
+          "receipt_bytes",
+          "cursor"
+        ],
+        "rows": 0
+      },
+      "native_targets": {
+        "columns": [
+          "handle",
+          "registration"
+        ],
+        "rows": 0
+      },
+      "returns": {
+        "columns": [
+          "handle",
+          "return_id",
+          "returned_at",
+          "envelope",
+          "cursor"
+        ],
+        "rows": 1
+      },
+      "sqlite_sequence": {
+        "columns": [
+          "name",
+          "seq"
+        ],
+        "rows": 1
+      }
+    },
+    "run/native-jobs/jobs.sqlite": {
+      "handoffs": {
+        "columns": [
+          "receipt_ref",
+          "job_ref",
+          "body"
+        ],
+        "rows": 0
+      },
+      "orders": {
+        "columns": [
+          "job_ref",
+          "operation_key",
+          "query_ref",
+          "query_fasta",
+          "cpu",
+          "staged",
+          "submission_requested"
+        ],
+        "rows": 0
+      },
+      "samples": {
+        "columns": [
+          "sample_ref",
+          "operation_key",
+          "job_ref",
+          "body"
+        ],
+        "rows": 0
+      }
+    }
+  },
+  "read_only_copy_only": true,
+  "version": "copied_fixture_schema_counts_v1"
+}

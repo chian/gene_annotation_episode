@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.494" timestamp="2026-10-25T21:29:57.970999-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_infernal_results_integration" name="test_saved_actual_scientific_prompt_keeps_requested_native_metrics[6-allowed0]" time="0.010"><failure message="assert False&#10; +  where False = all(&lt;generator object test_saved_actual_scientific_prompt_keeps_requested_native_metrics.&lt;locals&gt;.&lt;genexpr&gt; at 0x77beac2d67a0&gt;)">decision = 6, allowed = {'bitscore'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x77beac8629f0&gt;
+
+    @pytest.mark.parametrize('decision,allowed', [(6, {'bitscore'}), (8, {'bitscore', 'evalue'})])
+    def test_saved_actual_scientific_prompt_keeps_requested_native_metrics(decision, allowed, monkeypatch):
+        saved = json.loads((ROOT / 'tests/fixtures/native_infernal_episode' /
+            f'scientific-decision-{decision}.json').read_text())
+        original = deepcopy(saved)
+        assert len(saved['context']['working_state']['observations'][0]['measurements']) &gt; len(allowed)
+        connection = object.__new__(_SessionConnection)
+        connection.scientific_prompt_states = {}
+        def forbidden(*args, **kwargs):
+            raise AssertionError('saved receiver presentation attempted acquisition or native work')
+        with monkeypatch.context() as isolated:
+            isolated.setattr(socket, 'socket', forbidden)
+            isolated.setattr(subprocess, 'Popen', forbidden)
+            isolated.setattr(Store, 'get', forbidden)
+            isolated.setattr(Store, 'get_artifact', forbidden)
+            isolated.setattr('gene_annotation_episode.native_infernal_result_worker.run', forbidden)
+            isolated.setattr('gene_annotation_episode.native_infernal_result_worker.populate_infernal_search_sheet', forbidden)
+            isolated.setattr('gene_annotation_episode.native_infernal_result_worker.calculate_infernal_search_scores', forbidden)
+            text, _ = connection._presentation(saved['episode_id'], saved['role'],
+                saved['instructions'], saved['context'])
+            assert text == render_scientific_process_prompt(saved['context'], saved['instructions'])
+        steering = text.split('\n\nSTEERING', 1)[1]
+        assert all(metric in steering for metric in allowed)
+&gt;       assert all(metric not in steering for metric in NATIVE_INFERNAL_METRICS['search_hit'] if metric not in allowed)
+E       assert False
+E        +  where False = all(&lt;generator object test_saved_actual_scientific_prompt_keeps_requested_native_metrics.&lt;locals&gt;.&lt;genexpr&gt; at 0x77beac2d67a0&gt;)
+
+../../../tests/test_native_infernal_results_integration.py:719: AssertionError</failure></testcase><testcase classname="tests.test_native_infernal_results_integration" name="test_saved_actual_scientific_prompt_keeps_requested_native_metrics[8-allowed1]" time="0.007"><failure message="assert False&#10; +  where False = all(&lt;generator object test_saved_actual_scientific_prompt_keeps_requested_native_metrics.&lt;locals&gt;.&lt;genexpr&gt; at 0x77beac2d7920&gt;)">decision = 8, allowed = {'bitscore', 'evalue'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x77beac2f0c50&gt;
+
+    @pytest.mark.parametrize('decision,allowed', [(6, {'bitscore'}), (8, {'bitscore', 'evalue'})])
+    def test_saved_actual_scientific_prompt_keeps_requested_native_metrics(decision, allowed, monkeypatch):
+        saved = json.loads((ROOT / 'tests/fixtures/native_infernal_episode' /
+            f'scientific-decision-{decision}.json').read_text())
+        original = deepcopy(saved)
+        assert len(saved['context']['working_state']['observations'][0]['measurements']) &gt; len(allowed)
+        connection = object.__new__(_SessionConnection)
+        connection.scientific_prompt_states = {}
+        def forbidden(*args, **kwargs):
+            raise AssertionError('saved receiver presentation attempted acquisition or native work')
+        with monkeypatch.context() as isolated:
+            isolated.setattr(socket, 'socket', forbidden)
+            isolated.setattr(subprocess, 'Popen', forbidden)
+            isolated.setattr(Store, 'get', forbidden)
+            isolated.setattr(Store, 'get_artifact', forbidden)
+            isolated.setattr('gene_annotation_episode.native_infernal_result_worker.run', forbidden)
+            isolated.setattr('gene_annotation_episode.native_infernal_result_worker.populate_infernal_search_sheet', forbidden)
+            isolated.setattr('gene_annotation_episode.native_infernal_result_worker.calculate_infernal_search_scores', forbidden)
+            text, _ = connection._presentation(saved['episode_id'], saved['role'],
+                saved['instructions'], saved['context'])
+            assert text == render_scientific_process_prompt(saved['context'], saved['instructions'])
+        steering = text.split('\n\nSTEERING', 1)[1]
+        assert all(metric in steering for metric in allowed)
+&gt;       assert all(metric not in steering for metric in NATIVE_INFERNAL_METRICS['search_hit'] if metric not in allowed)
+E       assert False
+E        +  where False = all(&lt;generator object test_saved_actual_scientific_prompt_keeps_requested_native_metrics.&lt;locals&gt;.&lt;genexpr&gt; at 0x77beac2d7920&gt;)
+
+../../../tests/test_native_infernal_results_integration.py:719: AssertionError</failure></testcase></testsuite></testsuites>
